@@ -902,7 +902,9 @@ var SrcParseS = {
                                 log('判断多线路地址对象有错：'+e.message);
                             }
                         }else{
+                            log(beurls[k]);
                             let MulUrl = this.formatMulUrl(beurls[k], urls.length);
+                            log(MulUrl);
                             urls.push(MulUrl.url);
                             names.push('线路'+urls.length);
                             headers.push(MulUrl.header);
