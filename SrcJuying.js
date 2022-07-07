@@ -2370,10 +2370,7 @@ function erji() {
             //input=fetch(input,{}).split("replace('")[1].split("')")[0];
             //log(input)
             if(!/^http/.test(input)){
-                input=fetch(sgurl.replace('https://v.sogou.com/vc/np','https://waptv.sogou.com/play'),{}).split("('")[1].split("'")[0];
-                if(!/^http/.test(input)){
-                    return "toast://本集无播放地址，可从更多片源中寻找";
-                }
+                return "toast://本集无播放地址，可从更多片源中寻找";
             }
             if(input.match(/ixigua|iqiyi|qq.com|mgtv|le\.com|bili|sohu|youku|pptv|cctv|1905\.com/)){
                 input=input.split("?")[0];
