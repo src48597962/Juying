@@ -678,7 +678,7 @@ var SrcParseS = {
                                     }else{
                                         var tstime = urlcode.body.match(/#EXT-X-TARGETDURATION:(.*?)\n/)[1];
                                         var urltss = urlcode.body.replace(/#.*?\n/g,'').replace('#EXT-X-ENDLIST','').split('\n');
-                                        if(parseInt(tstime)*parseInt(urltss.length)<300){
+                                        if(parseInt(tstime)*parseInt(urltss.length)<66){
                                             log(name+'>播放地址疑似跳舞小姐姐或防盗小视频，不信去验证一下>'+url);
                                             return 0;
                                         }else{
@@ -775,7 +775,7 @@ var SrcParseS = {
                 }
             }
             //log(Uparselist);
-            
+            var isrecord = 0;
             for (var i=0;i<Uparselist.length;i++) {
                 if(contain.test(url)){break;}
                 let UrlList = [];
@@ -834,15 +834,13 @@ var SrcParseS = {
                     }
                 });
                 
-
-                var isrecord = 0;
                 for(let k in beparses){
                     var parseurl = beparses[k].parse;
                     if(url==""){url = beurls[k];}
-                    if(beerrors[k]==null&&contain.test(url)&&!exclude.test(url)&&excludeurl.indexOf(url)==-1){
+                    if(beerrors[k]==null&&contain.test(beurls[k])&&!exclude.test(beurls[k])&&excludeurl.indexOf(beurls[k])==-1){
                         //记录除断插线程以外最快的，做为下次优先
                         if(beparses[k].type!="dn"){
-                            if(printlog==1){log(beparses[k].name+'-解析成功>'+url)};
+                            if(printlog==1){log(beparses[k].name+'-解析成功>'+beurls[k])};
                             if(isrecord==0){
                                 if(printlog==1){log(beparses[k].name+'，记录为片源'+from+'的优先')};
                                 recordlist['parse'] = recordlist['parse']||{};
@@ -889,7 +887,7 @@ var SrcParseS = {
                                 let mnames = JSON.parse(beurls[k]).names||[];
                                 let mheaders = JSON.parse(beurls[k]).headers;
                                 for(var j=0;j<murls.length;j++){
-                                    let MulUrl = this.formatMulUrl(murls[j].replace(/;{.*}/,""), urls.length);
+                                    let MulUrl = this.formatMulUrl(murls[j].replace(/;{.*}/g,""), urls.length);
                                     urls.push(MulUrl.url);
                                     if(mnames.length>0){
                                         names.push(mnames[j]);
@@ -902,9 +900,7 @@ var SrcParseS = {
                                 log('判断多线路地址对象有错：'+e.message);
                             }
                         }else{
-                            log(beurls[k]);
-                            let MulUrl = this.formatMulUrl(beurls[k], urls.length);
-                            log(MulUrl);
+                            let MulUrl = this.formatMulUrl(beurls[k].replace(/;{.*}/g,""), urls.length);
                             urls.push(MulUrl.url);
                             names.push('线路'+urls.length);
                             headers.push(MulUrl.header);
