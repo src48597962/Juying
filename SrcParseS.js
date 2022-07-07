@@ -914,11 +914,11 @@ var SrcParseS = {
                     }
                 }//解析结果循环
             }//解析接口列表循环
-            var failedmyjx = [];
+
             //失败的解析，处理
             for(var p=0;p<dellist.length;p++){
+                /*
                 if(dellist[p].type=="myjx"){
-                    failedmyjx.push(dellist[p].name);
                     for(var j=0;j<myJXlist.length;j++){
                         if(dellist[p].parse==myJXlist[j].parse){
                             //解析失败的从私有中排除片源
@@ -929,7 +929,7 @@ var SrcParseS = {
                             break;
                         }
                     }
-                }
+                }*/
                 if(dellist[p].type=="apps"){
                     for(var j=0;j<appJXlist.length;j++){
                         if(dellist[p].parse==appJXlist[j].parse){
