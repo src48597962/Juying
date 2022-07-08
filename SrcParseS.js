@@ -386,7 +386,6 @@ var SrcParseS = {
             url = vipUrl;
         }
         for (var i = 0; i < Uparselist.length; i++) {
-            log('较验url地址：'+url)
             if (contain.test(url)) { break; }
             if (x5jxlist.length >= 3) { break; }
             let UrlList = [];
@@ -788,6 +787,7 @@ var SrcParseS = {
 
             var isrecord = 0;
             for (var i=0;i<Uparselist.length;i++) {
+                log('较验url地址：'+url);
                 if(contain.test(url)){break;}
                 let UrlList = [];
                 let Namelist = [];
