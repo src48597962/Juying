@@ -824,6 +824,7 @@ var SrcParseS = {
                 be(Urlparses, {
                     func: function(obj, id, error, taskResult) {
                         let beurl = taskResult.url;
+                        log(taskResult.ulist.name + '>'+beurl);
                         if(needparse.test(beurl)&&beurl.indexOf('?')==-1){
                             beurl = "";
                         }
@@ -920,7 +921,7 @@ var SrcParseS = {
                         }
                         //if(ismul==0){break;}
                     }else{
-                        if(printlog==1){log(beparses[k].name+'-解析失败>'+beurls[k])};
+                        //if(printlog==1){log(beparses[k].name+'-解析失败>'+beurls[k])};
                         if((beparses[k].type=="apps"||beparses[k].type=="myjx")&&beparses[k].x5==0){dellist.push(beparses[k])};
                         url = "";
                     }
