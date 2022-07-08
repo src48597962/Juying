@@ -842,7 +842,7 @@ var SrcParseS = {
                                 return "break";
                             }
                         }else{
-                            if(printlog==1&&taskResult.ulist.x5==0){log(taskResult.ulist.name + '>解析失败');}
+                            //if(printlog==1&&taskResult.ulist.x5==0){log(taskResult.ulist.name + '>解析失败');}
                         }
                     },
                     param: {
@@ -958,10 +958,10 @@ var SrcParseS = {
                             //解析失败的,且排序大于5次从私有中排除片源
                             myJXlist[j]['sort'] = myJXlist[j]['sort']||0;
                             myJXlist[j].sort = myJXlist[j].sort + 1;
-                            if(printlog==1){log(myJXlist[j].name+'>私有解析失败，排序-1')};
+                            if(printlog==1){log(myJXlist[j].name+'>解析失败排序-1，当前排序'+myJXlist[j].sort)};
                             if(myJXlist[j].sort>5 && myJXlist[j].stopfrom.indexOf(from)==-1){
                                 myJXlist[j].stopfrom[myJXlist[j].stopfrom.length] = from;
-                                if(printlog==1){log(myJXlist[j].name+'>私有解析失败大于5次，排除片源'+from)};
+                                if(printlog==1){log(myJXlist[j].name+'>解析失败大于5次，排除片源'+from)};
                             }
                             myJXchange = 1;
                             break;
