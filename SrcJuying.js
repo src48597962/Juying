@@ -2678,7 +2678,7 @@ function yiji() {
         try{
             var nowtime = Date.now();
             var oldtime = parseInt(getItem('dingyuetime','0').replace('time',''));
-            if(nowtime > (oldtime+180*60*1000)){
+            if(nowtime > (oldtime+6*60*60*1000)){
                 let pasteurl = JYconfig['codeid2'];
                 let text = parsePaste('https://netcut.cn/p/'+aesDecode('Juying', pasteurl));
                 if(pasteurl&&!/^error/.test(text)){
@@ -2799,7 +2799,7 @@ function sousuo2() {
     }
     var nowtime = Date.now();
     var oldtime = JYresou.updatetime||0;
-    if(list.length==0||nowtime > (oldtime+0.1*60*60*1000)){
+    if(list.length==0||nowtime > (oldtime+24*60*60*1000)){
         var html = request("https://waptv.sogou.com/hotsugg");
         var list = pdfa(html, "body&&.hot-list&&li");
         JYresou['resoulist'] = list;
