@@ -615,6 +615,7 @@ var SrcParseS = {
 
             var url = "";//视频地址
             var x5jxlist = []; //x5嗅探接口存放数组
+            var x5namelist = [];//x5解析名称
             var urls = [];//多线路地址
             var names = [];//多线路名称
             var headers = [];//多线路头信息
@@ -664,6 +665,8 @@ var SrcParseS = {
                         if(!/404 /.test(gethtml)){
                             if(x5jxlist.length<=5){
                                 x5jxlist.push(obj.ulist.parse);
+                                if(printlog==1&&taskResult.ulist.x5==1){log(obj.ulist.name + '>加入x5嗅探列表');}
+                                x5namelist.push(obj.ulist.name);
                             }
                             x5 = 1;
                         }
@@ -824,8 +827,7 @@ var SrcParseS = {
                 be(Urlparses, {
                     func: function(obj, id, error, taskResult) {
                         let beurl = taskResult.url;
-                        log(taskResult.ulist.name + '>'+beurl);
-                        if(needparse.test(beurl)&&beurl.indexOf('?')==-1){
+                        if(beurl!=""&&needparse.test(beurl)&&beurl.indexOf('?')==-1){
                             beurl = "";
                         }
                         obj.results.push(beurl);
@@ -895,7 +897,13 @@ var SrcParseS = {
                         }
                         
                         //组一个多线路播放地址备用，log($.type(beurls[k]));
-                        if(/^{/.test(beurls[k])){
+                        try{
+                            var isjson = $.type(JSON.parse(beurls[k]));
+                            log(isjson);
+                        }catch(e){
+                            var isjson = "string";
+                        }
+                        if(isjson != "string"){
                             try {
                                 let murls = JSON.parse(beurls[k]).urls;
                                 let mnames = JSON.parse(beurls[k]).names||[];
@@ -925,8 +933,8 @@ var SrcParseS = {
                         if((beparses[k].type=="apps"||beparses[k].type=="myjx")&&beparses[k].x5==0){dellist.push(beparses[k])};
                         url = "";
                     }
-                }//解析结果循环
-            }//解析接口列表循环
+                }//排队解析结果循环
+            }//解析全列表循环
 
             //失败的解析，处理
             for(var p=0;p<dellist.length;p++){
@@ -986,7 +994,7 @@ var SrcParseS = {
                 }
                 return this.聚嗅(vipUrl, x5jxlist);
             }
-        }//需要解析的视频
+        }
     },
     //处理多线路播放地址
     formatMulUrl: function (url,i) {
