@@ -613,7 +613,7 @@ var SrcParseS = {
             }
             //log(Uparselist)
 
-            var url = "";//视频地址
+            var playurl = "";//视频地址
             var x5jxlist = []; //x5嗅探接口存放数组
             var x5namelist = [];//x5解析名称
             var urls = [];//多线路地址
@@ -731,13 +731,13 @@ var SrcParseS = {
 
             if(recordparse&&forcedn==0&&mulnum<=1){
                 //优先上次成功的
-                url = task({ulist:{parse:recordparse, name:recordname}, vipUrl:vipUrl}).url;
+                playurl = task({ulist:{parse:recordparse, name:recordname}, vipUrl:vipUrl}).url;
                 
-                if(contain.test(url)&&!exclude.test(url)&&excludeurl.indexOf(url)==-1){
-                    if(printlog==1){log("优先上次解析("+recordname+")成功>"+url)}; 
+                if(contain.test(playurl)&&!exclude.test(playurl)&&excludeurl.indexOf(playurl)==-1){
+                    if(printlog==1){log("优先上次解析("+recordname+")成功>"+playurl)}; 
                 }else{
                     if(printlog==1){log("优先上次解析("+recordname+")失败，无效视频地址")}; 
-                    url = "";
+                    playurl = "";
                     delete recordlist.parse[from];
                     writeFile(recordfile, JSON.stringify(recordlist));
                     //失败的从待解列表中去除
@@ -766,7 +766,7 @@ var SrcParseS = {
                     }
                 }
             }
-            if(url==""){
+            if(playurl==""){
                 if(forcedn==1){
                     if(printlog==1){log("开启强制断插解析模式")};
                     Uparselist = [{type:'dn'}];
@@ -790,7 +790,8 @@ var SrcParseS = {
 
             var isrecord = 0;
             for (var i=0;i<Uparselist.length;i++) {
-                if(contain.test(url)){break;}
+                log('cccc'+playurl);
+                if(contain.test(playurl)){break;}
                 let UrlList = [];
                 let Namelist = [];
                 var beurls = [];//用于存储多线程返回url
@@ -852,8 +853,10 @@ var SrcParseS = {
                 
                 for(let k in beparses){
                     var parseurl = beparses[k].parse;
+                    log('aaaa'+beurls[k]);
                     if(beerrors[k]==null&&contain.test(beurls[k])&&!exclude.test(beurls[k])&&excludeurl.indexOf(beurls[k])==-1){
-                        if(url==""){url = beurls[k];}
+                        if(playurl==""){playurl = beurls[k];}
+                        log('bbbb'+playurl);
                         //记录除断插线程以外最快的，做为下次优先
                         if(beparses[k].type!="dn"){
                             if(printlog==1){log(beparses[k].name+'-解析成功>'+beurls[k])};
@@ -899,7 +902,6 @@ var SrcParseS = {
                         //组一个多线路播放地址备用，log($.type(beurls[k]));
                         try{
                             var isjson = $.type(JSON.parse(beurls[k]));
-                            log(isjson);
                         }catch(e){
                             var isjson = "string";
                         }
@@ -931,7 +933,7 @@ var SrcParseS = {
                     }else{
                         //if(printlog==1){log(beparses[k].name+'-解析失败>'+beurls[k])};
                         if((beparses[k].type=="apps"||beparses[k].type=="myjx")&&beparses[k].x5==0){dellist.push(beparses[k])};
-                        url = "";
+                        playurl = "";
                     }
                 }//排队解析结果循环
             }//解析全列表循环
@@ -975,7 +977,7 @@ var SrcParseS = {
             if(appJXchange == 1){writeFile(appJXfile, JSON.stringify(appJXlist))};
             //if(printlog==1&&failedmyjx.length>0){log('本次失败的私有解析有：' + failedmyjx)};
             //播放
-            if(url!=""){
+            if(playurl!=""){
                 if(urls.length>1){
                     if(printlog==1){log('解析完成，进入播放2')};
                     return JSON.stringify({
@@ -985,7 +987,7 @@ var SrcParseS = {
                     }); 
                 }else{
                     if(printlog==1){log('解析完成，进入播放1')};
-                    return this.formatUrl(url);
+                    return this.formatUrl(playurl);
                 }
             }else{
                 if(printlog==1){
