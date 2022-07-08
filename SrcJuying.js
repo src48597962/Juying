@@ -2777,16 +2777,28 @@ function sousuo2() {
     var Juyingcfg=fetch(cfgfile);
     if(Juyingcfg != ""){
         eval("var JYconfig=" + Juyingcfg+ ";");
-        var list = JYconfig['resoulist'] || [];
     }else{
         var JYconfig= {};
+    }
+    try{
+        delete JYconfig['resoulist'];
+    }catch(e){
+        //过几个版本后删除
+    }
+    var resoufile = "hiker://files/rules/Src/Juying/resou.json";
+    var Juyingresou=fetch(resoufile);
+    if(Juyingresou != ""){
+        eval("var JYresou=" + Juyingresou+ ";");
+        var list = JYresou['resoulist'] || [];
+    }else{
+        var JYresou= {};
         var list = [];
     }
     if(list.length==0||getVar('SrcJuying-VersionCheck', '0')=="0"){
         var html = request("https://waptv.sogou.com/hotsugg");
         var list = pdfa(html, "body&&.hot-list&&li");
-        JYconfig['resoulist'] = list;
-        writeFile(cfgfile, JSON.stringify(JYconfig));
+        JYresou['resoulist'] = list;
+        writeFile(resoufile, JSON.stringify(JYresou));
     }
 
     for (var i in list) {
@@ -3109,7 +3121,7 @@ function Version() {
     var nowVersion = 2.1;//现在版本
     var nowtime = Date.now();
     var oldtime = parseInt(getItem('VersionChecktime','0').replace('time',''));
-    if (getVar('SrcJuying-VersionCheck', '0') == '0' && nowtime > (oldtime+180*60*1000)) {
+    if (getVar('SrcJuying-VersionCheck', '0') == '0' && nowtime > (oldtime+6*60*60*1000)) {
         try {
             eval(fetch(config.依赖.match(/https.*\//)[0] + 'SrcTmplVersion.js'))
             if (newVersion.SrcJuying > nowVersion) {
