@@ -961,9 +961,9 @@ var SrcParseS = {
                             if(printlog==1){log(myJXlist[j].name+'>私有解析失败，排序-1')};
                             if(myJXlist[j].sort>5 && myJXlist[j].stopfrom.indexOf(from)==-1){
                                 myJXlist[j].stopfrom[myJXlist[j].stopfrom.length] = from;
-                                myJXchange = 1;
                                 if(printlog==1){log(myJXlist[j].name+'>私有解析失败大于5次，排除片源'+from)};
                             }
+                            myJXchange = 1;
                             break;
                         }
                     }
