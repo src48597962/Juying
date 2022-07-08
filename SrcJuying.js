@@ -2782,6 +2782,7 @@ function sousuo2() {
     }
     try{
         delete JYconfig['resoulist'];
+        writeFile(cfgfile, JSON.stringify(JYconfig));
     }catch(e){
         //过几个版本后删除
     }
@@ -2794,10 +2795,13 @@ function sousuo2() {
         var JYresou= {};
         var list = [];
     }
-    if(list.length==0||getVar('SrcJuying-VersionCheck', '0')=="0"){
+    var nowtime = Date.now();
+    var oldtime = JYresou.updatetime||0;
+    if(list.length==0||nowtime > (oldtime+0.1*60*60*1000)){
         var html = request("https://waptv.sogou.com/hotsugg");
         var list = pdfa(html, "body&&.hot-list&&li");
         JYresou['resoulist'] = list;
+        JYresou['updatetime'] = nowtime;
         writeFile(resoufile, JSON.stringify(JYresou));
     }
 
