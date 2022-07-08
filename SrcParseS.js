@@ -794,7 +794,7 @@ var SrcParseS = {
                 var beparses = [];//用于存储多线程解析地址
                 var beerrors = [];//用于存储多线程是否有错误
                 var sccess = 0;//计算成功的结果数
-                let p = i + mulnum;
+                let p = i + mulnum + 2;
                 if(p>Uparselist.length){p=Uparselist.length}
                 for(let s=i;s<p;s++){
                     UrlList.push(Uparselist[s]);
