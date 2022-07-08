@@ -850,8 +850,8 @@ var SrcParseS = {
                 
                 for(let k in beparses){
                     var parseurl = beparses[k].parse;
-                    if(url==""){url = beurls[k];}
                     if(beerrors[k]==null&&contain.test(beurls[k])&&!exclude.test(beurls[k])&&excludeurl.indexOf(beurls[k])==-1){
+                        if(url==""){url = beurls[k];}
                         //记录除断插线程以外最快的，做为下次优先
                         if(beparses[k].type!="dn"){
                             if(printlog==1){log(beparses[k].name+'-解析成功>'+beurls[k])};
