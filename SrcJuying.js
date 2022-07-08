@@ -1303,13 +1303,28 @@ function SRCSet() {
 
                 })
             }else{
+                //定义排序函数
+                function sortData(a, b) {
+                    try{
+                        if(a.sort!=b.sort){
+                            return a.sort - b.sort
+                        }else{
+                            return a.id - b.id;
+                        }
+                    }catch(e){
+                        return a.id - b.id;
+                    }
+                };
+                if(data.length > 0){data.sort(sortData)};
+
                 var czdatalist = data.map((datalist)=>{
                     let dataurl = datalist.parse;
                     let dataname = datalist.name;
                     let datastopfrom = datalist.stopfrom||[];
                     let datapriorfrom = datalist.priorfrom||"";
+                    let datasort = datalist.sort||1;
                     return {
-                        title: dataname+'-'+dataurl,
+                        title: datasort+'-'+dataname+'-'+dataurl,
                         desc: "优先强制：" + datapriorfrom + "" + "\n排除片源：" + datastopfrom + "",
                         url: getMyVar('guanlicz','0')=="1"?$('#noLoading#').lazyRule((name,url)=>{
                                 copy(name+"#"+url);
