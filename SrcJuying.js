@@ -2781,8 +2781,10 @@ function sousuo2() {
         var JYconfig= {};
     }
     try{
-        delete JYconfig['resoulist'];
-        writeFile(cfgfile, JSON.stringify(JYconfig));
+        if(JYconfig.resoulist){
+            delete JYconfig['resoulist'];
+            writeFile(cfgfile, JSON.stringify(JYconfig));
+        }
     }catch(e){
         //过几个版本后删除
     }
