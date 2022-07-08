@@ -790,7 +790,6 @@ var SrcParseS = {
 
             var isrecord = 0;
             for (var i=0;i<Uparselist.length;i++) {
-                log('cccc'+playurl);
                 if(contain.test(playurl)){break;}
                 let UrlList = [];
                 let Namelist = [];
@@ -853,10 +852,8 @@ var SrcParseS = {
                 
                 for(let k in beparses){
                     var parseurl = beparses[k].parse;
-                    log('aaaa'+beurls[k]);
                     if(beerrors[k]==null&&contain.test(beurls[k])&&!exclude.test(beurls[k])&&excludeurl.indexOf(beurls[k])==-1){
                         if(playurl==""){playurl = beurls[k];}
-                        log('bbbb'+playurl);
                         //记录除断插线程以外最快的，做为下次优先
                         if(beparses[k].type!="dn"){
                             if(printlog==1){log(beparses[k].name+'-解析成功>'+beurls[k])};
@@ -932,8 +929,9 @@ var SrcParseS = {
                         //if(ismul==0){break;}
                     }else{
                         //if(printlog==1){log(beparses[k].name+'-解析失败>'+beurls[k])};
-                        if((beparses[k].type=="apps"||beparses[k].type=="myjx")&&beparses[k].x5==0){dellist.push(beparses[k])};
-                        playurl = "";
+                        if((beparses[k].type=="apps"||beparses[k].type=="myjx")&&beparses[k].x5==0){
+                            dellist.push(beparses[k])
+                        };
                     }
                 }//排队解析结果循环
             }//解析全列表循环
