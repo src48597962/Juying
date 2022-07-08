@@ -787,7 +787,6 @@ var SrcParseS = {
 
             var isrecord = 0;
             for (var i=0;i<Uparselist.length;i++) {
-                log('较验url地址：'+url);
                 if(contain.test(url)){break;}
                 let UrlList = [];
                 let Namelist = [];
@@ -795,7 +794,7 @@ var SrcParseS = {
                 var beparses = [];//用于存储多线程解析地址
                 var beerrors = [];//用于存储多线程是否有错误
                 var sccess = 0;//计算成功的结果数
-                let p = i+3;
+                let p = i + mulnum;
                 if(p>Uparselist.length){p=Uparselist.length}
                 for(let s=i;s<p;s++){
                     UrlList.push(Uparselist[s]);
@@ -921,7 +920,7 @@ var SrcParseS = {
                         }
                         //if(ismul==0){break;}
                     }else{
-                        if(printlog==1){log(beparses[k].name+'-解析未知>'+beurls[k])};
+                        if(printlog==1){log(beparses[k].name+'-解析失败>'+beurls[k])};
                         if((beparses[k].type=="apps"||beparses[k].type=="myjx")&&beparses[k].x5==0){dellist.push(beparses[k])};
                         url = "";
                     }
