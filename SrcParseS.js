@@ -554,8 +554,8 @@ var SrcParseS = {
                 appParselist = uniq(appParselist);//去重
                 for (var i in appParselist) {
                     if(excludeparse.indexOf(appParselist[i])==-1){
-                        Uparselist.push({type:'appz',name:'appz'+appParselist.length,parse:appParselist[i]});
-                        Nparselist.push('appz'+appParselist.length);
+                        Uparselist.push({type:'appz',name:'appz'+i,parse:appParselist[i]});
+                        Nparselist.push('appz'+i);
                     }
                 }
                 if(printlog==1){log("接口自带的解析数："+Uparselist.length)}; 
@@ -569,8 +569,8 @@ var SrcParseS = {
                 var apjxnum = 0;
                 for(var j=0;j<appJXlist.length;j++){
                     if(appJXlist[j].from.indexOf(from)>-1&&excludeparse.indexOf(appJXlist[j].parse)==-1&&!Uparselist.some(item => item.parse ==appJXlist[j].parse)){
-                        Uparselist.push({type:'apps',name:'apps'+appJXlist.length,parse:appJXlist[j].parse});
-                        Nparselist.push('apps'+appJXlist.length);
+                        Uparselist.push({type:'apps',name:'apps'+j,parse:appJXlist[j].parse});
+                        Nparselist.push('apps'+j);
                         var apjxnum = apjxnum + 1;
                     }
                 }
