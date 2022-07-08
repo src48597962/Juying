@@ -386,6 +386,7 @@ var SrcParseS = {
             url = vipUrl;
         }
         for (var i = 0; i < Uparselist.length; i++) {
+            log('较验url地址：'+url)
             if (contain.test(url)) { break; }
             if (x5jxlist.length >= 3) { break; }
             let UrlList = [];
@@ -687,9 +688,9 @@ var SrcParseS = {
                                                 let http = urlcode.url.match(/http.*\//)[0];//.match(/http(s)?:\/\/.*?\//)[0];
                                                 urlts = http + urlts;
                                             }    
-                                            var tscode = JSON.parse(fetch(urlts,{onlyHeaders:true,timeout:1000}));
+                                            var tscode = JSON.parse(fetch(urlts,{onlyHeaders:true,timeout:2000}));
                                             if(tscode.statusCode!=200){
-                                                log(name+'>ts段地址疑似失效或网络无法访问，不信去验证一下>'+url+'\nts>'+urlts);
+                                                log(name+'>ts段地址疑似失效或网络无法访问，不信去验证一下>'+url);
                                                 return 0;
                                             }
                                         }
