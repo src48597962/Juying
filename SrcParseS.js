@@ -667,7 +667,7 @@ var SrcParseS = {
                         if(!/404 /.test(gethtml)){
                             if(x5jxlist.length<=5){
                                 x5jxlist.push(obj.ulist.parse);
-                                if(printlog==1&&taskResult.ulist.x5==1){log(obj.ulist.name + '>加入x5嗅探列表');}
+                                if(printlog==1){log(obj.ulist.name + '>加入x5嗅探列表');}
                                 x5namelist.push(obj.ulist.name);
                             }
                             x5 = 1;
