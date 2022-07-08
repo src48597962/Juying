@@ -501,7 +501,7 @@ function SRCSet() {
                                         for (var i=0;i<jiexi.length;i++) {
                                             if(/^http/.test(jiexi[i])&&!jxdatalist.some(item => item.parse ==jiexi[i])){
                                                 let namebh = parseInt(jxdatalist.length)+parseInt(jiexi.length);
-                                                let arr  = { "name": "bb"+namebh, "parse": jiexi[i], "stopfrom": [], "priorfrom": [] };
+                                                let arr  = { "name": "bb"+namebh, "parse": jiexi[i], "stopfrom": [], "priorfrom": [], "sort": 1 };
                                                 jxdatalist.push(arr);
                                                 jxnum = jxnum + 1;
                                             }
@@ -578,7 +578,7 @@ function SRCSet() {
                                     var jxnum = 0;
                                     for (var i=0;i<jiexi.length;i++) {
                                         if(/^http/.test(jiexi[i].url)&&!jxdatalist.some(item => item.parse ==jiexi[i].url)){
-                                            let arr  = { "name": jiexi[i].name, "parse": jiexi[i].url, "stopfrom": [], "priorfrom": [] };
+                                            let arr  = { "name": jiexi[i].name, "parse": jiexi[i].url, "stopfrom": [], "priorfrom": [], "sort": 1 };
                                             jxdatalist.push(arr);
                                             jxnum = jxnum + 1;
                                         }
@@ -1228,7 +1228,7 @@ function SRCSet() {
                         stopfrom = stopfrom.filter(n => n);
                         let priorfrom = pasrepriorfrom.replace('，',',').split(',');
                         priorfrom = priorfrom.filter(n => n);
-                        let arr  = { "name": parsename, "parse": parseurl, "stopfrom": stopfrom, "priorfrom": priorfrom };
+                        let arr  = { "name": parsename, "parse": parseurl, "stopfrom": stopfrom, "priorfrom": priorfrom, "sort": 1 };
                         datalist.unshift(arr);
                         writeFile(filepath, JSON.stringify(datalist));
                         back(true);
@@ -1244,7 +1244,7 @@ function SRCSet() {
                         let urlname = urls[i].split('#')[0];
                         let urlurl = urls[i].split('#')[1];
                         if(!datalist.some(item => item.url ==urlurl)&&urlname&&/^http/.test(urlurl)){
-                            let arr  = { "name": urlname, "parse": urlurl, "stopfrom": [], "priorfrom": [] };
+                            let arr  = { "name": urlname, "parse": urlurl, "stopfrom": [], "priorfrom": [], "sort": 1 };
                             datalist.push(arr);
                             urlnum = urlnum + 1;
                         }
