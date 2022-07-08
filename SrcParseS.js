@@ -554,8 +554,8 @@ var SrcParseS = {
                 appParselist = uniq(appParselist);//去重
                 for (var i in appParselist) {
                     if(excludeparse.indexOf(appParselist[i])==-1){
-                        Uparselist.push({type:'appz',name:'appz'+i,parse:appParselist[i]});
-                        Nparselist.push('appz'+i);
+                        Uparselist.push({type:'appz',name:'appz'+i,parse:appParselist[i],sort:0});
+                        //Nparselist.push('appz'+i);
                     }
                 }
                 if(printlog==1){log("接口自带的解析数："+Uparselist.length)}; 
@@ -569,8 +569,8 @@ var SrcParseS = {
                 var apjxnum = 0;
                 for(var j=0;j<appJXlist.length;j++){
                     if(appJXlist[j].from.indexOf(from)>-1&&excludeparse.indexOf(appJXlist[j].parse)==-1&&!Uparselist.some(item => item.parse ==appJXlist[j].parse)){
-                        Uparselist.push({type:'apps',name:'apps'+j,parse:appJXlist[j].parse});
-                        Nparselist.push('apps'+j);
+                        Uparselist.push({type:'apps',name:'apps'+j,parse:appJXlist[j].parse,sort:0});
+                        //Nparselist.push('apps'+j);
                         var apjxnum = apjxnum + 1;
                     }
                 }
@@ -591,18 +591,18 @@ var SrcParseS = {
                             for(var i=0;i<Uparselist.length;i++){
                                 if(Uparselist[i].parse==myJXlist[j].parse){
                                     Uparselist.splice(i,1);
-                                    removeByValue(Nparselist,myJXlist[j].name);
+                                    //removeByValue(Nparselist,myJXlist[j].name);
                                     break;
                                 }
                             }
                         }
-                        Uparselist.unshift({type:'myjx',name:myJXlist[j].name,parse:myJXlist[j].parse});
-                        Nparselist.unshift(myJXlist[j].name);
+                        Uparselist.unshift({type:'myjx',name:myJXlist[j].name,parse:myJXlist[j].parse,sort:-1});
+                        //Nparselist.unshift(myJXlist[j].name);
                         myjxnum = myjxnum + 1;
                     }else{
                         if(myJXlist[j].stopfrom.indexOf(from)==-1&&excludeparse.indexOf(myJXlist[j].parse)==-1&&!Uparselist.some(item => item.parse ==myJXlist[j].parse)){
-                            Uparselist.push({type:'myjx',name:myJXlist[j].name,parse:myJXlist[j].parse});
-                            Nparselist.push(myJXlist[j].name);
+                            Uparselist.push({type:'myjx',name:myJXlist[j].name,parse:myJXlist[j].parse,sort:1});
+                            //Nparselist.push(myJXlist[j].name);
                             myjxnum = myjxnum + 1;
                         }
                     }
@@ -741,7 +741,7 @@ var SrcParseS = {
                     for(var i=0;i<Uparselist.length;i++){
                         if(Uparselist[i].parse==recordparse){
                             Uparselist.splice(i,1);
-                            removeByValue(Nparselist,recordname);
+                            //removeByValue(Nparselist,recordname);
                             break;
                         }
                     }
@@ -768,17 +768,28 @@ var SrcParseS = {
                     if(printlog==1){log("开启强制断插解析模式")};
                     Uparselist = [{type:'dn'}];
                 }else{
-                    if(printlog==1){log("待命解析："+Nparselist)};
+                    //定义排序函数
+                    function sortData(a, b) {
+                        if(a.sort!=b.sort){
+                            return a.sort - b.sort
+                        }else{
+                            return a.id - b.id;
+                        }
+                    };
+                    if(Uparselist.length > 0){Uparselist.sort(sortData)};
+
+                    //if(printlog==1){log("待命解析："+Nparselist)};
                     if(isdn==1&&Uparselist.length==0){
                         Uparselist.push({type:'dn'});
                     }
                 }
             }
-            //log(Uparselist);
+
             var isrecord = 0;
             for (var i=0;i<Uparselist.length;i++) {
                 if(contain.test(url)){break;}
                 let UrlList = [];
+                let Namelist = [];
                 var beurls = [];//用于存储多线程返回url
                 var beparses = [];//用于存储多线程解析地址
                 var beerrors = [];//用于存储多线程是否有错误
@@ -787,8 +798,10 @@ var SrcParseS = {
                 if(p>Uparselist.length){p=Uparselist.length}
                 for(let s=i;s<p;s++){
                     UrlList.push(Uparselist[s]);
+                    Namelist.push(Uparselist[s].name);
                     i=s;
                 }
+                if(printlog==1){log("本轮排队解析："+Namelist)};
                 if(isdn==1&&Uparselist.length>0){
                     UrlList.push({type:'dn'});
                 }
