@@ -683,7 +683,7 @@ var SrcParseS = {
                                     }else{
                                         var tstime = urlcode.body.match(/#EXT-X-TARGETDURATION:(.*?)\n/)[1];
                                         var urltss = urlcode.body.replace(/#.*?\n/g,'').replace('#EXT-X-ENDLIST','').split('\n');
-                                        if(parseInt(tstime)*parseInt(urltss.length)<66){
+                                        if(parseInt(tstime)*parseInt(urltss.length)<120){
                                             log(name+'>播放地址疑似跳舞小姐姐或防盗小视频，不信去验证一下>'+url);
                                             return 0;
                                         }else{
