@@ -601,7 +601,8 @@ var SrcParseS = {
                         myjxnum = myjxnum + 1;
                     }else{
                         if(myJXlist[j].stopfrom.indexOf(from)==-1&&excludeparse.indexOf(myJXlist[j].parse)==-1&&!Uparselist.some(item => item.parse ==myJXlist[j].parse)){
-                            Uparselist.push({type:'myjx',name:myJXlist[j].name,parse:myJXlist[j].parse,sort:1});
+                            let sort = myJXlist[j]['sort']||1;
+                            Uparselist.push({type:'myjx',name:myJXlist[j].name,parse:myJXlist[j].parse,sort:sort});
                             //Nparselist.push(myJXlist[j].name);
                             myjxnum = myjxnum + 1;
                         }
@@ -622,6 +623,7 @@ var SrcParseS = {
             var dellist = [];//需从本地解析中删除列表
             var appJXchange = 0;//app解析是否有发现新的或增加可解片源
             var myJXchange = 0;//私有解析是否排除片源
+            var appzdchange = 0;//app自带解析是否加入黑名单
 
             //断插线程代码
             var dnaytmParse = function(vipUrl) {
@@ -856,7 +858,7 @@ var SrcParseS = {
                         if(playurl==""){playurl = beurls[k];}
                         //记录除断插线程以外最快的，做为下次优先
                         if(beparses[k].type!="dn"){
-                            if(printlog==1){log(beparses[k].name+'-解析成功>'+beurls[k])};
+                            if(printlog==1){log(beparses[k].name+'>解析成功>'+beurls[k])};
                             if(isrecord==0){
                                 if(printlog==1){log(beparses[k].name+'，记录为片源'+from+'的优先')};
                                 recordlist['parse'] = recordlist['parse']||{};
@@ -890,6 +892,19 @@ var SrcParseS = {
                                     appJXlist.unshift(arr);//新解析放在前面
                                     appJXchange = 1;
                                     if(printlog==1){log('发现新解析，自动保存，当前解析数：' + appJXlist.length)};
+                                }
+                            }else{
+                                //私有解析成功的，提升一下排序
+                                for(var j=0;j<myJXlist.length;j++){
+                                    if(parseurl==myJXlist[j].parse){
+                                        //解析成功的,排序+1
+                                        myJXlist[j]['sort'] = myJXlist[j]['sort']||0;
+                                        if(myJXlist[j].sort>0){
+                                            myJXlist[j].sort = myJXlist[j].sort - 1;
+                                            myJXchange = 1;
+                                        }
+                                        break;
+                                    }
                                 }
                             }
                         }else{
@@ -928,8 +943,7 @@ var SrcParseS = {
                         }
                         //if(ismul==0){break;}
                     }else{
-                        //if(printlog==1){log(beparses[k].name+'-解析失败>'+beurls[k])};
-                        if((beparses[k].type=="apps"||beparses[k].type=="myjx")&&beparses[k].x5==0){
+                        if(beparses[k].x5==0){
                             dellist.push(beparses[k])
                         };
                     }
@@ -938,29 +952,40 @@ var SrcParseS = {
 
             //失败的解析，处理
             for(var p=0;p<dellist.length;p++){
-                /*
                 if(dellist[p].type=="myjx"){
                     for(var j=0;j<myJXlist.length;j++){
                         if(dellist[p].parse==myJXlist[j].parse){
-                            //解析失败的从私有中排除片源
-                            if(myJXlist[j].stopfrom.indexOf(from)==-1){
+                            //解析失败的,且排序大于5次从私有中排除片源
+                            myJXlist[j]['sort'] = myJXlist[j]['sort']||0;
+                            myJXlist[j].sort = myJXlist[j].sort + 1;
+                            if(printlog==1){log(myJXlist[j].name+'>私有解析失败，排序-1')};
+                            if(myJXlist[j].sort>5 && myJXlist[j].stopfrom.indexOf(from)==-1){
                                 myJXlist[j].stopfrom[myJXlist[j].stopfrom.length] = from;
                                 myJXchange = 1;
+                                if(printlog==1){log(myJXlist[j].name+'>私有解析失败大于5次，排除片源'+from)};
                             }
                             break;
                         }
                     }
-                }*/
+                }
+                if(dellist[p].type=="appz"){
+                    //app自带的解析在解析失败时，直接加入黑名单
+                    recordlist['excludeparse'] = recordlist['excludeparse']||[];
+                    if(recordlist['excludeparse'].indexOf(dellist[p].parse)==-1){
+                        recordlist['excludeparse'].push(dellist[p].parse);
+                        appzdchange = 1;
+                    }
+                }
                 if(dellist[p].type=="apps"){
                     for(var j=0;j<appJXlist.length;j++){
                         if(dellist[p].parse==appJXlist[j].parse){
                             //解析失败的从app本地删除
                             if(appJXlist[j].from.length>1){
-                                if(printlog==1){log('发现失效解析，自动删除解析片源'+from)};
+                                //if(printlog==1){log('发现失效app保存解析，自动删除解析片源'+from)};
                                 removeByValue(appJXlist[j].from,from);
                                 appJXchange = 1;
                             }else{
-                                if(printlog==1){log('发现失效解析，自动删除解析')};
+                                //if(printlog==1){log('发现失效app保存解析，自动删除解析')};
                                 appJXlist.splice(j,1);
                                 appJXchange = 1;
                             }
@@ -968,12 +993,16 @@ var SrcParseS = {
                         }
                     }  
                 }
+
             }
+            
             //私有解析有排除片源
-            if(myJXchange == 1){writeFile(myJXfile, JSON.stringify(myJXlist))};
+            if(myJXchange == 1){writeFile(myJXfile, JSON.stringify(myJXlist));}
             //app有发现或修改解析时保存本地
-            if(appJXchange == 1){writeFile(appJXfile, JSON.stringify(appJXlist))};
-            //if(printlog==1&&failedmyjx.length>0){log('本次失败的私有解析有：' + failedmyjx)};
+            if(appJXchange == 1){writeFile(appJXfile, JSON.stringify(appJXlist));}
+            //app自带解析是否加入黑名单
+            if(appzdchange==1){writeFile(recordfile, JSON.stringify(recordlist));}
+
             //播放
             if(playurl!=""){
                 if(urls.length>1){
@@ -990,7 +1019,7 @@ var SrcParseS = {
             }else{
                 if(printlog==1){
                     log('明码解析失败，转嗅探备用解析');
-                    log('进入嗅探解析列表：' + x5jxlist)
+                    log('进入嗅探解析列表：' + x5namelist)
                 }
                 return this.聚嗅(vipUrl, x5jxlist);
             }
