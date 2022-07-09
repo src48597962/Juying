@@ -1702,7 +1702,7 @@ function xunmi(name,data) {
             if(/v1|app|iptv|v2|cms/.test(obj.type)){
                 try {
                     var gethtml = request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 });
-                    if(/{|}/.test(data)){
+                    if(/data|list|{|}/.test(data)){
                         var html = JSON.parse(gethtml);
                     }else{
                         var decfile = "hiker://files/rules/Src/Juying/appdec.js";
