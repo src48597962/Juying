@@ -2017,8 +2017,10 @@ function xunmierji(type,ua) {
             var arts = html.videolist;
             var conts = arts;
         }else if (/xpath/.test(type)) {
-            let xpjson = MY_PARAMS.xpjson;
+            let xpjson = JSON.parse(MY_PARAMS.xpjson);
+            log(xpjson.dtActor);
             let actor = xpath(html, xpjson.dtActor) || "内详";
+            log(actor);
             let director = xpath(html, xpjson.dtDirector) || "内详";
             let area = xpath(html, xpjson.dtArea) || "未知";
             let year = xpath(html, xpjson.dtYear) || "未知";
