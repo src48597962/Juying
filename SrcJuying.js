@@ -1683,7 +1683,7 @@ function xunmi(name,data) {
                 var ssurl = url_api + '?ac=videolist&wd='+name;
                 var lists = "html.list";
             } else if (obj.type=="xpath") {
-                eval("var xpjson = " + fetch(url_api))
+                eval("var xpjson = " + fetchCache(url_api,48))
             } else {
 
             }
@@ -1812,6 +1812,7 @@ function xunmi(name,data) {
                                         pic: vodpic,
                                         name: vodname,
                                         title: vodname+'-'+obj.name,
+                                        xpjson: xpjson,
                                         cls: 'xunmilist'
                                     }
                                 }
@@ -1954,8 +1955,14 @@ function xunmierji(type,ua) {
             } catch (e) {
                 var html = "";
             }
+        }else if (/xpath/.test(type)) {
+            try{
+                var html = request(MY_URL.split('##')[1], { headers: { 'User-Agent': ua } });
+            } catch (e) {
+                var html = "";
+            }
         }else{
-            //后续网页类
+            //后续
         }
         var zt = 1;
         putMyVar('myurl', MY_URL);
@@ -2009,6 +2016,20 @@ function xunmierji(type,ua) {
             var desc = html.intro || '...';
             var arts = html.videolist;
             var conts = arts;
+        }else if (/xpath/.test(type)) {
+            let xpjson = MY_PARAMS.xpjson;
+            let actor = xpath(html, xpjson.dtActor) || "内详";
+            let director = xpath(html, xpjson.dtDirector) || "内详";
+            let area = xpath(html, xpjson.dtArea) || "未知";
+            let year = xpath(html, xpjson.dtYear) || "未知";
+            let remarks = xpath(html, xpjson.dtCate) || "";
+            let pubdate = xpath(html, xpjson.dtMark) || "";
+            var details1 = '主演：' + actor.substring(0, 12) + '\n导演：' + director.substring(0, 12) + '\n地区：' + area + '   年代：' + year;
+            var details2 = remarks + '\n' + pubdate;
+            var pic = MY_PARAMS.pic || xpath(html, xpjson.dtImg);
+            var desc = xpath(html, xpjson.dtDesc) || '...';
+            var arts = [];
+            var conts = [];
         }else{
             //网页
         }
