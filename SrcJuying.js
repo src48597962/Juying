@@ -977,7 +977,7 @@ function SRCSet() {
                     for(var i in froms){
                         d.push({
                             title:froms[i],
-                            col_type:'text_3',
+                            col_type:'text_4',
                             url: $('#noLoading#').lazyRule((from)=>{
                                     let priorfrom = getMyVar('priorfrom','')?getMyVar('priorfrom','').replace(/,|，/g,",").split(','):[];
                                     if(priorfrom.indexOf(from)==-1){
@@ -1663,6 +1663,11 @@ function xunmi(name,data) {
                 let mm = date.getMonth()+1;
                 let dd = date.getDate();
                 let key = (mm<10?"0"+mm:mm)+""+(dd<10?"0"+dd:dd);
+                //mm<10?"0"+mm+""+dd:mm+""+dd;
+                /*
+                if(url_api.substr(url_api.length-1,1)=="/"){
+                    url_api = url_api.substr(0,url_api.length-1);
+                }*/
                 var url = url_api + '/detail?&key='+key+'&vod_id=';
                 var ssurl = url_api + '?ac=videolist&limit=10&wd='+name+'&key='+key;
                 var lists = "html.data.list";
@@ -1682,9 +1687,7 @@ function xunmi(name,data) {
                 var url = url_api + '?ac=detail&ids=';
                 var ssurl = url_api + '?ac=videolist&wd='+name;
                 var lists = "html.list";
-            } else if (obj.type=="xpath") {
-                eval("var xpjson = " + fetchCache(url_api,48))
-            } else {
+            }else{
 
             }
             updateItem('loading', {
@@ -1781,53 +1784,8 @@ function xunmi(name,data) {
                     log(obj.name+'>'+e.message);
                     return {result:0, url:ssurl, apiurl:url_api};
                 }
-            }else if(obj.type='xpath'){
-                var ssurl = xpjson.searchUrl.replace('{wd}',name);
-                try {
-                    var html = JSON.parse(request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 }));
-                    var list = html.list||[];
-                } catch (e) {
-                    log(e.message);
-                    var list = [];
-                }
-                if(list.length>0){
-                    try {
-                        let search = list.map((list)=>{
-                            let vodname = list.name;
-                            if(vodname.indexOf(name)>-1){
-                                let vodpic = list.pic;
-                                let voddesc = "";
-                                let appname = '‘‘’’<font color=#f13b66a>'+obj.name+'</font>';
-                                let vodurl = xpjson.dtUrl.replace('{vid}',list.id);
-                                return {
-                                    title: vodname,
-                                    desc: voddesc + '\n\n' + appname + ' ('+obj.type+')'+(obj.group?' ['+obj.group+']':''),
-                                    pic_url: vodpic?vodpic + "@Referer=":"https://www.xawqxh.net/mxtheme/images/loading.gif",
-                                    url: $("hiker://empty##" + vodurl + "#immersiveTheme#").rule((type,ua) => {
-                                            require(config.依赖);
-                                            xunmierji(type,ua)
-                                        },obj.type, urlua),
-                                    col_type: "movie_1_vertical_pic",
-                                    extra: {
-                                        pic: vodpic,
-                                        name: vodname,
-                                        title: vodname+'-'+obj.name,
-                                        xpjson: xpjson,
-                                        cls: 'xunmilist'
-                                    }
-                                }
-                            }
-                        });
-                        search = search.filter(n => n);
-                        if(search.length>0){
-                            return {result:1, apiurl:url_api, add:search};
-                        }
-                    } catch (e) {
-                        log(obj.name+'>'+e.message);
-                    }
-                }
-                return {result:0, url:ssurl, apiurl:url_api};
-            }//网页
+            }
+            //网页
         };
 
         let Jklist = datalist.map((parse)=>{
@@ -1955,14 +1913,8 @@ function xunmierji(type,ua) {
             } catch (e) {
                 var html = "";
             }
-        }else if (/xpath/.test(type)) {
-            try{
-                var html = request(MY_URL.split('##')[1], { headers: { 'User-Agent': ua } });
-            } catch (e) {
-                var html = "";
-            }
         }else{
-            //后续
+            //后续网页类
         }
         var zt = 1;
         putMyVar('myurl', MY_URL);
@@ -2016,22 +1968,6 @@ function xunmierji(type,ua) {
             var desc = html.intro || '...';
             var arts = html.videolist;
             var conts = arts;
-        }else if (/xpath/.test(type)) {
-            let xpjson = MY_PARAMS.xpjson;
-            log(xpjson.dtActor);
-            let actor = xpath(html, xpjson.dtActor) || "内详";
-            log(actor);
-            let director = xpath(html, xpjson.dtDirector) || "内详";
-            let area = xpath(html, xpjson.dtArea) || "未知";
-            let year = xpath(html, xpjson.dtYear) || "未知";
-            let remarks = xpath(html, xpjson.dtCate) || "";
-            let pubdate = xpath(html, xpjson.dtMark) || "";
-            var details1 = '主演：' + actor.substring(0, 12) + '\n导演：' + director.substring(0, 12) + '\n地区：' + area + '   年代：' + year;
-            var details2 = remarks + '\n' + pubdate;
-            var pic = MY_PARAMS.pic || xpath(html, xpjson.dtImg);
-            var desc = xpath(html, xpjson.dtDesc) || '...';
-            var arts = [];
-            var conts = [];
         }else{
             //网页
         }
