@@ -465,8 +465,8 @@ function SRCSet() {
                                 return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
                             }).replace(/\\ '/g,"\'").replace(/\\ "/g,`\"`).replace(/\\>/g,">").replace(/\\'"/g,`'"`);
                             var bbdata = JSON.parse(html);
-                            var bbjiekou = bbdata.zhuyejiekou;
-                            var bbcaiji = bbdata.caijizhan;
+                            var bbjiekou = bbdata.zhuyejiekou||[];
+                            var bbcaiji = bbdata.caijizhan||[];
                         } catch (e) {
                             log('接口导入失败：'+e.message); 
                             return "toast://导入失败：连接无效或内容有错";
@@ -483,9 +483,11 @@ function SRCSet() {
                         if(jknum<0){
                             return'toast://导入失败，内容异常';
                         }else{
-                            var bbzhujiexi = bbdata.zhujiexi.split('#');
-                            var bbbeiyongjiexi = bbdata.beiyongjiexi.split('#');
-                            var jiexi = bbzhujiexi.concat(bbbeiyongjiexi);
+                            let zhujiexi = bbdata.zhujiexi||"";
+                            let zjiexi = zhujiexi.split('#');
+                            let beiyongjiexi = bbdata.beiyongjiexi||"";
+                            let bjiexi = beiyongjiexi.split('#');
+                            var jiexi = zjiexi.concat(bjiexi);
                             if(jiexi.length>0){
                                 return $("接口导入已完成，成功保存："+jknum+ "，确定要继续导入解析吗？\n不建议导入，因为99%是失效的").confirm((jiexi)=>{
                                     try{
