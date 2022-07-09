@@ -1663,11 +1663,6 @@ function xunmi(name,data) {
                 let mm = date.getMonth()+1;
                 let dd = date.getDate();
                 let key = (mm<10?"0"+mm:mm)+""+(dd<10?"0"+dd:dd);
-                //mm<10?"0"+mm+""+dd:mm+""+dd;
-                /*
-                if(url_api.substr(url_api.length-1,1)=="/"){
-                    url_api = url_api.substr(0,url_api.length-1);
-                }*/
                 var url = url_api + '/detail?&key='+key+'&vod_id=';
                 var ssurl = url_api + '?ac=videolist&limit=10&wd='+name+'&key='+key;
                 var lists = "html.data.list";
@@ -1687,7 +1682,9 @@ function xunmi(name,data) {
                 var url = url_api + '?ac=detail&ids=';
                 var ssurl = url_api + '?ac=videolist&wd='+name;
                 var lists = "html.list";
-            }else{
+            } else if (obj.type=="xpath") {
+                eval("var xpjson = " + fetch(url_api))
+            } else {
 
             }
             updateItem('loading', {
@@ -1784,8 +1781,53 @@ function xunmi(name,data) {
                     log(obj.name+'>'+e.message);
                     return {result:0, url:ssurl, apiurl:url_api};
                 }
-            }
-            //网页
+            }else if(obj.type='xpath'){
+                var ssurl = xpjson.searchUrl.replace('{wd}',name);
+                try {
+                    var html = JSON.parse(request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 }));
+                    var list = html.list||[];
+                    log(list)
+                } catch (e) {
+                    log(e.message);
+                    var list = [];
+                }
+                if(list.length>0){
+                    try {
+                        let search = list.map((list)=>{
+                            let vodname = list.name;
+                            if(vodname.indexOf(name)>-1){
+                                let vodpic = list.pic;
+                                let voddesc = "";
+                                let appname = '‘‘’’<font color=#f13b66a>'+obj.name+'</font>';
+                                let vodurl = xpjson.dtUrl.replace('{vid}',id);
+                                return {
+                                    title: vodname,
+                                    desc: voddesc + '\n\n' + appname + ' ('+obj.type+')'+(obj.group?' ['+obj.group+']':''),
+                                    pic_url: vodpic?vodpic + "@Referer=":"https://www.xawqxh.net/mxtheme/images/loading.gif",
+                                    url: $("hiker://empty##" + vodurl + "#immersiveTheme#").rule((type,ua) => {
+                                            require(config.依赖);
+                                            xunmierji(type,ua)
+                                        },obj.type, urlua),
+                                    col_type: "movie_1_vertical_pic",
+                                    extra: {
+                                        pic: vodpic,
+                                        name: vodname,
+                                        title: vodname+'-'+obj.name,
+                                        cls: 'xunmilist'
+                                    }
+                                }
+                            }
+                        });
+                        search = search.filter(n => n);
+                        if(search.length>0){
+                            return {result:1, apiurl:url_api, add:search};
+                        }
+                    } catch (e) {
+                        log(obj.name+'>'+e.message);
+                    }
+                }
+                return {result:0, url:ssurl, apiurl:url_api};
+            }//网页
         };
 
         let Jklist = datalist.map((parse)=>{
