@@ -1701,20 +1701,17 @@ function xunmi(name,data) {
             var urlua = obj.ua=="MOBILE_UA"?MOBILE_UA:obj.ua=="PC_UA"?PC_UA:obj.ua;
             if(/v1|app|iptv|v2|cms/.test(obj.type)){
                 try {
-                    log('a');
-                    var gethtml = fetch(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 });
-                    log(gethtml);
-                    if(/data|list|{|}/.test(data)){
-                        var html = JSON.parse(gethtml);
-                    }else{
+                    var gethtml = request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 });
+                    if(!/{|}/.test(gethtml)&&gethtml!=""){
                         var decfile = "hiker://files/rules/Src/Juying/appdec.js";
                         var Juyingdec=fetch(decfile);
                         if(Juyingdec != ""){
                             eval(Juyingdec);
                             var html = JSON.parse(xgdec(gethtml));
                         }
+                    }else{
+                        var html = JSON.parse(gethtml);
                     }
-                    log(html);
                 } catch (e) {
                     var html = { data: [] };
                 }
