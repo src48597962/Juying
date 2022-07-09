@@ -1702,7 +1702,7 @@ function xunmi(name,data) {
             if(/v1|app|iptv|v2|cms/.test(obj.type)){
                 try {
                     log('a');
-                    var gethtml = request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 });
+                    var gethtml = fetch(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 });
                     log(gethtml);
                     if(/data|list|{|}/.test(data)){
                         var html = JSON.parse(gethtml);
