@@ -1786,7 +1786,6 @@ function xunmi(name,data) {
                 try {
                     var html = JSON.parse(request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 }));
                     var list = html.list||[];
-                    log(list)
                 } catch (e) {
                     log(e.message);
                     var list = [];
@@ -1799,7 +1798,7 @@ function xunmi(name,data) {
                                 let vodpic = list.pic;
                                 let voddesc = "";
                                 let appname = '‘‘’’<font color=#f13b66a>'+obj.name+'</font>';
-                                let vodurl = xpjson.dtUrl.replace('{vid}',id);
+                                let vodurl = xpjson.dtUrl.replace('{vid}',list.id);
                                 return {
                                     title: vodname,
                                     desc: voddesc + '\n\n' + appname + ' ('+obj.type+')'+(obj.group?' ['+obj.group+']':''),
