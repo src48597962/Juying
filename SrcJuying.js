@@ -1699,80 +1699,93 @@ function xunmi(name,data) {
                 }
             });
             var urlua = obj.ua=="MOBILE_UA"?MOBILE_UA:obj.ua=="PC_UA"?PC_UA:obj.ua;
-            try {
-                var html = JSON.parse(request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 }));
-            } catch (e) {
-                var html = { data: [] };
-            }
-            try{
-                try{
-                    var list = eval(lists)||html.list||html.data.list||html.data||[];
-                } catch (e) {
-                    var list = html.list||html.data.list||html.data||[];
-                }
-                
-                if(list.length==0&&obj.type=="iptv"){
-                    try {
-                        ssurl = ssurl.replace('&zm='+name,'');
-                        html = JSON.parse(request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 }));
-                        list = html.data||[];
-                    } catch (e) {
-                        list = [];
+            if(/v1|app|iptv|v2|cms/.test(obj.type)){
+                try {
+                    var gethtml = request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 });
+                    if(/{|}/.test(data)){
+                        var html = JSON.parse(gethtml);
+                    }else{
+                        var decfile = "hiker://files/rules/Src/Juying/appdec.js";
+                        var Juyingdec=fetch(decfile);
+                        if(Juyingdec != ""){
+                            eval(Juyingdec);
+                            var html = JSON.parse(xgdec(gethtml));
+                        }
                     }
+                } catch (e) {
+                    var html = { data: [] };
                 }
-                
-                if(list.length>0&&obj.type=="cms"){
-                    if(list[0].vod_name.indexOf(name)==-1){
+                try{
+                    try{
+                        var list = eval(lists)||html.list||html.data.list||html.data||[];
+                    } catch (e) {
+                        var list = html.list||html.data.list||html.data||[];
+                    }
+                    
+                    if(list.length==0&&obj.type=="iptv"){
                         try {
-                            ssurl = ssurl.replace('videolist','list');
+                            ssurl = ssurl.replace('&zm='+name,'');
                             html = JSON.parse(request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 }));
-                            list = html.list||[];
+                            list = html.data||[];
                         } catch (e) {
                             list = [];
                         }
                     }
-                }
-                
-                if(list.length>0){
-                    try {
-                        let search = list.map((list)=>{
-                            let vodname = list.vod_name||list.title;
-                            if(vodname.indexOf(name)>-1){
-                                let vodpic = list.vod_pic||list.pic;
-                                let voddesc = list.vod_remarks||list.state||"";
-                                let appname = '‘‘’’<font color=#f13b66a>'+obj.name+'</font>';
-                                let vodurl = list.vod_id?url + list.vod_id:list.nextlink;
-                                return {
-                                    title: vodname,
-                                    desc: voddesc + '\n\n' + appname + ' ('+obj.type+')'+(obj.group?' ['+obj.group+']':''),
-                                    pic_url: vodpic?vodpic + "@Referer=":"https://www.xawqxh.net/mxtheme/images/loading.gif",
-                                    url: $("hiker://empty##" + vodurl + "#immersiveTheme#").rule((type,ua) => {
-                                            require(config.依赖);
-                                            xunmierji(type,ua)
-                                        },obj.type, urlua),
-                                    col_type: "movie_1_vertical_pic",
-                                    extra: {
-                                        pic: vodpic,
-                                        name: vodname,
-                                        title: vodname+'-'+obj.name,
-                                        cls: 'xunmilist'
+                    
+                    if(list.length>0&&obj.type=="cms"){
+                        if(list[0].vod_name.indexOf(name)==-1){
+                            try {
+                                ssurl = ssurl.replace('videolist','list');
+                                html = JSON.parse(request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 }));
+                                list = html.list||[];
+                            } catch (e) {
+                                list = [];
+                            }
+                        }
+                    }
+                    
+                    if(list.length>0){
+                        try {
+                            let search = list.map((list)=>{
+                                let vodname = list.vod_name||list.title;
+                                if(vodname.indexOf(name)>-1){
+                                    let vodpic = list.vod_pic||list.pic;
+                                    let voddesc = list.vod_remarks||list.state||"";
+                                    let appname = '‘‘’’<font color=#f13b66a>'+obj.name+'</font>';
+                                    let vodurl = list.vod_id?url + list.vod_id:list.nextlink;
+                                    return {
+                                        title: vodname,
+                                        desc: voddesc + '\n\n' + appname + ' ('+obj.type+')'+(obj.group?' ['+obj.group+']':''),
+                                        pic_url: vodpic?vodpic + "@Referer=":"https://www.xawqxh.net/mxtheme/images/loading.gif",
+                                        url: $("hiker://empty##" + vodurl + "#immersiveTheme#").rule((type,ua) => {
+                                                require(config.依赖);
+                                                xunmierji(type,ua)
+                                            },obj.type, urlua),
+                                        col_type: "movie_1_vertical_pic",
+                                        extra: {
+                                            pic: vodpic,
+                                            name: vodname,
+                                            title: vodname+'-'+obj.name,
+                                            cls: 'xunmilist'
+                                        }
                                     }
                                 }
+                            });
+                            search = search.filter(n => n);
+                            if(search.length>0){
+                                return {result:1, apiurl:url_api, add:search};
                             }
-                        });
-                        search = search.filter(n => n);
-                        if(search.length>0){
-                            return {result:1, apiurl:url_api, add:search};
+                        } catch (e) {
+                            log(obj.name+'>'+e.message);
                         }
-                    } catch (e) {
-                        log(obj.name+'>'+e.message);
                     }
+                    return {result:0, url:ssurl, apiurl:url_api};
+                } catch (e) {
+                    log(obj.name+'>'+e.message);
+                    return {result:0, url:ssurl, apiurl:url_api};
                 }
-                return {result:0, url:ssurl, apiurl:url_api};
-            } catch (e) {
-                log(obj.name+'>'+e.message);
-                return {result:0, url:ssurl, apiurl:url_api};
             }
+            //网页
         };
 
         let Jklist = datalist.map((parse)=>{
