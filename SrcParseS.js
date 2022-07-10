@@ -50,7 +50,7 @@ var SrcParseS = {
     },
     嗅探: function (vipUrl) {
         showLoading('√嗅探解析中，请稍候');
-        return (getMyVar('SrcXTNH', 'web') == 'x5' ? 'x5Rule://' : 'webRule://') + vipUrl + '@' + $.toString((formatUrl) => {
+        return (getMyVar('SrcXTNH', 'web') == 'x5' ? 'x5Rule://' : 'webRule://') + vipUrl + '@' + $.toString((formatUrl,vipUrl) => {
             if (typeof (request) == 'undefined' || !request) {
                 eval(fba.getInternalJs());
             };
@@ -60,7 +60,11 @@ var SrcParseS = {
             window.c++;
             if (window.c * 250 >= 15 * 1000) {
                 fba.hideLoading();
-                return "toast://解析超时，建议切换线路或更换解析方式";
+                if(/^http/.test(vipUrl)){
+                    return vipUrl;
+                }else{
+                    return "toast://解析超时，建议切换线路或更换解析方式";
+                }
             }
             //fba.log(fy_bridge_app.getUrls());
             var urls = _getUrls();
@@ -70,10 +74,12 @@ var SrcParseS = {
                 if (!exclude.test(urls[i]) && contain.test(urls[i])) {
                     //fba.log(urls[i]);
                     if(fy_bridge_app.getHeaderUrl)
-                        //return fy_bridge_app.getHeaderUrl(urls[i]).replace(";{", "#isVideo=true#;{");
-                        
                         return $$$("#noLoading#").lazyRule((url) => {
-                            return cacheM3u8(url.split(";{")[0], {timeout: 2000})+"#isVideo=true#;{"+url.split(";{")[1];
+                            if (getMyVar('SrcM3U8', '1') == "1") {
+                                return cacheM3u8(url.split(";{")[0], {timeout: 2000})+"#isVideo=true#;{"+url.split(";{")[1];
+                            }else{
+                                return url.replace(";{", "#isVideo=true#;{");
+                            }
                         }, fy_bridge_app.getHeaderUrl(urls[i]));
                     else {
                         return $$$("#noLoading#").lazyRule((url, formatUrl) => {
@@ -83,7 +89,7 @@ var SrcParseS = {
                     }
                 }
             }
-        }, this.formatUrl)
+        }, this.formatUrl, vipUrl)
     },
     智能: function (vipUrl, input) {
         showLoading('√智能解析中，请稍候');
