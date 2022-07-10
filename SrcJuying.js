@@ -2391,14 +2391,17 @@ function erji() {
             })
         }
     }
-    //var easy = `@lazyRule=.js:try{var input=fetch(input,{}).split("('")[1].split("',")[0];evalPrivateJS("OjB3OHrVodkVQlHIU8UUAC5W0ZBgTQEC4h9eUEcAT9kEM0hY/45YOxs7PDeQEnxjVhaWW2tIqO5GQimD4ssHKSka505+O0avEtQQZ9zRy6GxaBZdTHrbCPcoNIajmr3+JG22tRswOJFYDX5aYk0PfUDEFsZa2OjZbz+xTthnoUPLNm0R2g1kBFnWwGKBWUxEhEsFwFruhFSaxJi1E1WZ7WlbP0v4OpoQgn6M7UXGahP9h2fHi8UBVDGfjzIuVuJSCgICLlVGaAbT0ghic+Kfbp3TmjRhAo1DKretYp1U53apDMvO2Q+6oAyO1js5TJwx51ygFSUqVGAu0C2DLxkG0Z3+L8UPZyJa4KVDlqq/goE=");if(input.match(/ixigua|iqiyi|qq.com|mgtv|le.com|bili|sohu|youku|pptv|cctv|1905.com/)){var input=input.split("?")[0];aytmParse(input)}else if(input.match(/huanxi/)){var input=input.split("&")[0];aytmParse(input)}else if(input.match(/migu/)){var input=input.replace(/\\?.*cid/,'?cid').replace(/http/,'https').split("&")[0];aytmParse(input)}else{aytmParse(input)}}catch(e){input}`;
     var easy = $("").lazyRule(() => {
         try{
-            let sgurl = input;
-            input=fetch(sgurl,{}).split("('")[1].split("'")[0];
-            //input=fetch(input,{}).match(/replace\('(.*?)'\);/)[1];
-            //input=fetch(input,{}).split("replace('")[1].split("')")[0];
-            //log(input)
+            //input=fetch(input,{}).split("('")[1].split("'")[0];
+            if (input.indexOf('sa.sogou') != -1) {
+                input = parseDomForHtml(request(input), 'video&&src');
+            } else {
+                input = request(input, {}).split("('")[1].split("',")[0];
+            }
+            
+            log(input)
+
             if(!/^http/.test(input)){
                 return "toast://本集无播放地址，可从更多片源中寻找";
             }
