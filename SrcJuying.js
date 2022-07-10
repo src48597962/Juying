@@ -2394,6 +2394,7 @@ function erji() {
     var easy = $("").lazyRule(() => {
         try{
             input=fetch(input,{}).split("('")[1].split("'")[0];
+            log(input);
             /*
             if(input.match(/ixigua|iqiyi|qq.com|mgtv|le\.com|bili|sohu|youku|pptv|cctv|1905\.com/)){
                 input=input.split("?")[0];
