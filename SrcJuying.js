@@ -2394,9 +2394,7 @@ function erji() {
     var easy = $("").lazyRule(() => {
         try{
             /*input=fetch(input,{}).split("('")[1].split("'")[0];
-            if(!/^http/.test(input)){
-                return "toast://本集无播放地址，可从更多片源中寻找";
-            }
+            
             if(input.match(/ixigua|iqiyi|qq.com|mgtv|le\.com|bili|sohu|youku|pptv|cctv|1905\.com/)){
                 input=input.split("?")[0];
             }else if(input.match(/huanxi/)){
@@ -2416,7 +2414,10 @@ function erji() {
             } else {
                 input = input.split("?")[0];
             }
-            log(input)
+            if(!/^http/.test(input)){
+                return "toast://本集无播放地址，可从更多片源中寻找";
+            }
+            //log(input)
             require(config.依赖.match(/https.*\//)[0] + 'SrcParseS.js');
             return SrcParseS.聚影(input);
         }catch(e){
