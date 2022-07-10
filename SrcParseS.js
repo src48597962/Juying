@@ -640,7 +640,7 @@ var SrcParseS = {
                     var gethtml = getjson.body;
                     var rurl = "";
                     try {
-                        rurl = JSON.parse(gethtml).url||JSON.parse(gethtml).data||JSON.parse(gethtml).data.url;
+                        rurl = JSON.parse(gethtml).url||JSON.parse(gethtml).data.url||JSON.parse(gethtml).data;
                     } catch (e) {
                         if(/\.m3u8|\.mp4/.test(getjson.url)&&getjson.url.indexOf('=http')==-1){
                             rurl = getjson.url;
