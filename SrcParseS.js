@@ -60,11 +60,13 @@ var SrcParseS = {
             window.c++;
             if (window.c * 250 >= 15 * 1000) {
                 fba.hideLoading();
-                if(/^http/.test(vipUrl)){
-                    return vipUrl;
-                }else{
-                    return "toast://解析超时，建议切换线路或更换解析方式";
-                }
+                try{
+                    let videourl = vipUrl.split('url=')[1];
+                    if(/^http/.test(videourl)){
+                        return videourl;
+                    }
+                }catch(e){ }
+                return "toast://解析超时，建议切换线路或更换解析方式";
             }
             //fba.log(fy_bridge_app.getUrls());
             var urls = _getUrls();
