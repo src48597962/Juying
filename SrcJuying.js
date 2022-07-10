@@ -2393,8 +2393,8 @@ function erji() {
     }
     var easy = $("").lazyRule(() => {
         try{
-            /*input=fetch(input,{}).split("('")[1].split("'")[0];
-            
+            input=fetch(input,{}).split("('")[1].split("'")[0];
+            /*
             if(input.match(/ixigua|iqiyi|qq.com|mgtv|le\.com|bili|sohu|youku|pptv|cctv|1905\.com/)){
                 input=input.split("?")[0];
             }else if(input.match(/huanxi/)){
@@ -2402,11 +2402,13 @@ function erji() {
             }else if(input.match(/migu/)){
                 input=input.replace(/http/,'https').split("&from")[0];
             }*/
+            /*
             if (input.indexOf('sa.sogou') != -1) {
                 input = parseDomForHtml(request(input), 'video&&src');
             } else {
                 input = request(input, {}).split("('")[1].split("',")[0];
             }
+            */
             if (input.match(/huanxi/)) {
                 input = input.split("&")[0];
             } else if (input.match(/migu/)) {
