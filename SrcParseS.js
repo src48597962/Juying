@@ -620,7 +620,7 @@ var SrcParseS = {
                     if(printlog==1){log("私有的可用解析数：" + myjxnum)}; 
                 }
             }
-            //log(Uparselist)
+            log(Uparselist)
 
             var playurl = "";//视频地址
             var x5jxlist = []; //x5嗅探接口存放数组
