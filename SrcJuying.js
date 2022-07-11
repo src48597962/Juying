@@ -885,6 +885,7 @@ function SRCSet() {
             clearMyVar('addtype');
             clearMyVar('stopfrom');
             clearMyVar('priorfrom');
+            clearMyVar('parseheader');
             //refreshPage(false);
         }));
         var d = [];
@@ -929,11 +930,11 @@ function SRCSet() {
                 }
             });
             
-            let apipriorfrom = getMyVar('priorfrom', data&&data.priorfrom?data.priorfrom:"");
+            let priorfrom = getMyVar('priorfrom', data&&data.priorfrom?data.priorfrom:"");
             d.push({
-                title:'优先片源：' + apipriorfrom,
+                title:'优先片源：' + priorfrom,
                 col_type: 'text_1',
-                url:$('hiker://empty#noRecordHistory##noHistory#').rule((apipriorfrom) => {
+                url:$('hiker://empty#noRecordHistory##noHistory#').rule((priorfrom) => {
                     var d = [];
                     d.push({
                         title: '优先片源标识不为空时，优先级在上次优先之后',
@@ -948,7 +949,7 @@ function SRCSet() {
                         desc: getMyVar('priorfrom',''),
                         extra: {
                             titleVisible: false,
-                            defaultValue: getMyVar('priorfrom', apipriorfrom),
+                            defaultValue: getMyVar('priorfrom', priorfrom),
                             onChange: 'putMyVar("priorfrom",input)'
                         }
                     });
@@ -1006,13 +1007,13 @@ function SRCSet() {
                         })
                     });
                     setHomeResult(d);
-                },apipriorfrom)
+                },priorfrom)
             });
-            let apistopfrom = getMyVar('stopfrom', lx=="update"?data.stopfrom:"");
+            let stopfrom = getMyVar('stopfrom', lx=="update"?data.stopfrom:"");
             d.push({
-                title:'排除片源：' + apistopfrom,
+                title:'排除片源：' + stopfrom,
                 col_type: 'text_1',
-                url:$(apistopfrom,"输入排除的片源标识，以逗号隔开，为空则自动管理").input(()=>{
+                url:$(stopfrom,"输入排除的片源标识，以逗号隔开，为空则自动管理").input(()=>{
                     putMyVar('stopfrom', input);
                     refreshPage(false);
                     return "toast://"+input;
@@ -1026,16 +1027,17 @@ function SRCSet() {
                     if(host){host = `,"Host": "`+host+`"`;}
                     let referer = parse.match(/http(s)?:\/\/(.*?)\//)[0]||"";
                     if(referer){referer = `,"Referer": "`+referer+`"`;}
-                    let head = `{headers: {"User-Agent": "Dalvik/2.1.0"`+host+referer+`}`;
+                    let head = `"User-Agent": "Dalvik/2.1.0"`+host+referer;
                     return head;
                 }
             }
+            let parseheader = getMyVar('parseheader', lx=="update"?data.header:"");
             d.push({
-                title:'添加header：根据实际需要自行调整',
+                title:'header信息：' + parseheader,
                 col_type: 'text_1',
-                url:$(sethead(getMyVar("parseurl","")),"链接地址有变化时，先下拉刷新再来点击").input(()=>{
+                url:$(parseheader?parseheader:sethead(getMyVar("parseurl","")),"链接地址有变化时，先下拉刷新再来点击").input(()=>{
                     if(getMyVar("parseurl")&&/{|}/.test(input)){
-                        putMyVar("parseurl",getMyVar("parseurl")+'#'+input);
+                        putMyVar("parseheader",input);
                         refreshPage(false);
                         return "hiker://empty";
                     }else{
@@ -1239,8 +1241,9 @@ function SRCSet() {
                 let parseurls = getMyVar('parseurls');
                 let parsestopfrom = getMyVar('stopfrom',"");
                 let pasrepriorfrom = getMyVar('priorfrom',"");
+                let parseheader = getMyVar('parseheader',"");
                 if(getMyVar('addtype', '1')=="1"&&parseurl&&parsename){
-                    if(lx=="update"&&(parseurl!=data.url||parsename!=data.name||parsestopfrom!=data.stopfrom||pasrepriorfrom!=data.priorfrom)){
+                    if(lx=="update"&&(parseurl!=data.url||parsename!=data.name||parsestopfrom!=data.stopfrom||pasrepriorfrom!=data.priorfrom||parseheader!=data.header)){
                         for(var i=0;i<datalist.length;i++){
                             if(datalist[i].parse==data.url){
                                 datalist.splice(i,1);
@@ -1253,7 +1256,7 @@ function SRCSet() {
                         stopfrom = stopfrom.filter(n => n);
                         let priorfrom = pasrepriorfrom.replace('，',',').split(',');
                         priorfrom = priorfrom.filter(n => n);
-                        let arr  = { "name": parsename, "parse": parseurl, "stopfrom": stopfrom, "priorfrom": priorfrom, "sort": 1 };
+                        let arr  = { "name": parsename, "parse": parseurl, "stopfrom": stopfrom, "priorfrom": priorfrom, "sort": 1, "header": parseheader };
                         datalist.unshift(arr);
                         writeFile(filepath, JSON.stringify(datalist));
                         back(true);
