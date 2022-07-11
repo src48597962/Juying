@@ -647,8 +647,8 @@ var SrcParseS = {
             //明码解析线程代码
             var task = function(obj) {
                 var taskheader = {withStatusCode:true,timeout:5000};
-                let head = obj.ulist.header||"";
-                if(head){
+                let head = obj.ulist.header||{};
+                if(JSON.stringify(head) != "{}"){
                     taskheader['header'] = head;
                 }
                 var getjson = JSON.parse(request(obj.ulist.parse+obj.vipUrl,taskheader));
