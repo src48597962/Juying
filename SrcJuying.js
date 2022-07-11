@@ -1020,7 +1020,7 @@ function SRCSet() {
                 })
             });
             log('1')
-            let parseheader = getMyVar('parseheader', lx=="update"?data.header:"");
+            let parseheader = getMyVar('parseheader', lx=="update"?JSON.stringify(data.header):"");
             log('2')
             d.push({
                 title:'header信息：' + parseheader,
