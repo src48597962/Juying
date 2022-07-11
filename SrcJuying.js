@@ -1041,7 +1041,7 @@ function SRCSet() {
                 title:'header信息：' + parseheader,
                 col_type: 'text_1',
                 url:$(parseheader?parseheader:sethead(parseurl),"链接地址有变化时，先下拉刷新再来点击").input(()=>{
-                    if(getMyVar("parseurl")&&/{|}/.test(input)){
+                    if((getMyVar("parseurl")&&/{|}/.test(input))||input==""){
                         putMyVar("parseheader",input);
                         refreshPage(false);
                         return "hiker://empty";
@@ -1069,7 +1069,7 @@ function SRCSet() {
             url: $().lazyRule(()=>{
                 var dataurl = getMyVar('parseurl');
                 var dataname = getMyVar('parsename','测试');
-                var datahead = getMyVar('parseheader','');
+                var datahead = getMyVar('parseheader')||{};
                 if(!dataurl||!/^http/.test(dataurl)){
                     return "toast://获取解析地址失败，无法测试";
                 }
