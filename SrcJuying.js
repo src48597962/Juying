@@ -919,13 +919,14 @@ function SRCSet() {
                     onChange: 'putMyVar("parsename",input)'
                 }
             });
+            let parseurl = getMyVar('parseurl', lx=="update"?data.url:"");
             d.push({
                 title:'parseurl',
                 col_type: 'input',
                 desc: "链接地址",
                 extra: {
                     titleVisible: false,
-                    defaultValue: getMyVar('parseurl', lx=="update"?data.url:""),
+                    defaultValue: parseurl,
                     onChange: 'putMyVar("parseurl",input)'
                 }
             });
@@ -1039,7 +1040,7 @@ function SRCSet() {
             d.push({
                 title:'header信息：' + parseheader,
                 col_type: 'text_1',
-                url:$(parseheader?parseheader:sethead(getMyVar("parseurl","")),"链接地址有变化时，先下拉刷新再来点击").input(()=>{
+                url:$(parseheader?parseheader:sethead(parseurl),"链接地址有变化时，先下拉刷新再来点击").input(()=>{
                     if(getMyVar("parseurl")&&/{|}/.test(input)){
                         putMyVar("parseheader",input);
                         refreshPage(false);
@@ -1260,8 +1261,12 @@ function SRCSet() {
                         stopfrom = stopfrom.filter(n => n);
                         let priorfrom = pasrepriorfrom.replace('，',',').split(',');
                         priorfrom = priorfrom.filter(n => n);
-                        log(parseheader);
-                        let arr  = { "name": parsename, "parse": parseurl, "stopfrom": stopfrom, "priorfrom": priorfrom, "sort": 1, "header": parseheader };
+                        try{
+                            var parsehead = JSON.parse(parseheader);
+                        }catch(e){
+                            var parsehead = {};
+                        }
+                        let arr  = { "name": parsename, "parse": parseurl, "stopfrom": stopfrom, "priorfrom": priorfrom, "sort": 1, "header": parsehead };
                         datalist.unshift(arr);
                         writeFile(filepath, JSON.stringify(datalist));
                         back(true);
