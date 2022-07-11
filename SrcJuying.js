@@ -1140,21 +1140,24 @@ function SRCSet() {
                             */
                             require(config.依赖.match(/https.*\//)[0] + 'SrcParseS.js');
                             return SrcParseS.聚影(vipUrl, parseStr);
-                        },urls[key],{name:dataname,parse:dataurl,header:JSON.parse(datahead)}):$("","输入自定义播放地址").input((parseurl) => {
+                        },urls[key],{name:dataname,parse:dataurl,header:JSON.parse(datahead)}):$("","输入自定义播放地址").input((parseStr) => {
                             if(input==""){
                                 return "toast://未输入自定义地址，无法测试";
                             }else{
-                                return $().lazyRule((vipUrl,parseurl)=>{
+                                return $().lazyRule((vipUrl,parseStr)=>{
+                                    /*
                                     try{
                                         eval("var config =" + fetch("hiker://files/cache/MyParseSet.json"));
                                         eval(fetch(config.cj));
-                                        return aytmParse(vipUrl,parseurl);
+                                        return aytmParse(vipUrl,parseStr);
                                     }catch(e){
                                         return "toast://没有断插，无法测试";
-                                    };
-                                }, input, parseurl)
+                                    };*/
+                                    require(config.依赖.match(/https.*\//)[0] + 'SrcParseS.js');
+                                    return SrcParseS.聚影(vipUrl, parseStr);
+                                }, input, parseStr)
                             }
-                        }, dataurl),
+                        }, {name:dataname,parse:dataurl,header:JSON.parse(datahead)}),
                         col_type: "text_3",
                         extra:{
                             cls: 'jxtest'
