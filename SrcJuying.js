@@ -2405,7 +2405,7 @@ function erji() {
             }*/
             
             if (input.indexOf('sa.sogou') != -1) {
-                input = parseDomForHtml(request(input), 'video&&src');
+                input = fetch(input,{}).split("('")[1].split("'")[0];
             } else {
                 input = request(input, {}).split("('")[1].split("',")[0];
                 if (input.match(/huanxi/)) {
