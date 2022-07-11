@@ -1020,35 +1020,37 @@ function SRCSet() {
                     return "toast://"+input;
                 })
             });
-            function sethead(parse){
-                if(!/^http/.test(parse)){
-                    return "";
-                }else{
-                    let head = {"User-Agent": "Dalvik/2.1.0"};
-                    let host = parse.match(/\/\/(.*?)\//)[1]||"";
-                    if(host){
-                        head["Host"] = host;
-                    }
-                    let referer = parse.match(/http(s)?:\/\/(.*?)\//)[0]||"";
-                    if(referer){
-                        head["referer"] = referer;
-                    }
-                    return head;
-                }
-            }
             let parseheader = getMyVar('parseheader', lx=="update"?data.header:"");
             d.push({
                 title:'header信息：' + parseheader,
                 col_type: 'text_1',
-                url:$(parseheader?parseheader:sethead(parseurl),"链接地址有变化时，先下拉刷新再来点击").input(()=>{
-                    if((getMyVar("parseurl")&&/{|}/.test(input))||input==""){
-                        putMyVar("parseheader",input);
-                        refreshPage(false);
-                        return "hiker://empty";
-                    }else{
-                        return "toast://链接地址不能为空，或输入信息不正常"
+                url:$().lazyRule((parseheader)=>{
+                    function sethead(parse){
+                        if(!/^http/.test(parse)){
+                            return "";
+                        }else{
+                            let head = {"User-Agent": "Dalvik/2.1.0"};
+                            let host = parse.match(/\/\/(.*?)\//)[1]||"";
+                            if(host){
+                                head["Host"] = host;
+                            }
+                            let referer = parse.match(/http(s)?:\/\/(.*?)\//)[0]||"";
+                            if(referer){
+                                head["referer"] = referer;
+                            }
+                            return head;
+                        }
                     }
-                })
+                    return $(parseheader?parseheader:sethead(parseurl),"需要的header头相关信息，比如Referer").input(()=>{
+                        if((getMyVar("parseurl")&&/{|}/.test(input))||input==""){
+                            putMyVar("parseheader",input);
+                            refreshPage(false);
+                            return "hiker://empty";
+                        }else{
+                            return "toast://链接地址不能为空，或输入信息不正常"
+                        }
+                    })
+                }, parseheader)
             });
         }else{
             d.push({
