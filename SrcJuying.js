@@ -1023,11 +1023,15 @@ function SRCSet() {
                 if(!/^http/.test(parse)){
                     return "";
                 }else{
+                    let head = {"User-Agent": "Dalvik/2.1.0"};
                     let host = parse.match(/\/\/(.*?)\//)[1]||"";
-                    if(host){host = `,"Host": "`+host+`"`;}
+                    if(host){
+                        head["Host"] = host;
+                    }
                     let referer = parse.match(/http(s)?:\/\/(.*?)\//)[0]||"";
-                    if(referer){referer = `,"Referer": "`+referer+`"`;}
-                    let head = `"User-Agent": "Dalvik/2.1.0"`+host+referer;
+                    if(referer){
+                        head["referer"] = referer;
+                    }
                     return head;
                 }
             }
@@ -1243,7 +1247,7 @@ function SRCSet() {
                 let pasrepriorfrom = getMyVar('priorfrom',"");
                 let parseheader = getMyVar('parseheader',"");
                 if(getMyVar('addtype', '1')=="1"&&parseurl&&parsename){
-                    if(lx=="update"&&(parseurl!=data.url||parsename!=data.name||parsestopfrom!=data.stopfrom||pasrepriorfrom!=data.priorfrom||parseheader!=data.header)){
+                    if(lx=="update"){
                         for(var i=0;i<datalist.length;i++){
                             if(datalist[i].parse==data.url){
                                 datalist.splice(i,1);
@@ -1256,6 +1260,7 @@ function SRCSet() {
                         stopfrom = stopfrom.filter(n => n);
                         let priorfrom = pasrepriorfrom.replace('，',',').split(',');
                         priorfrom = priorfrom.filter(n => n);
+                        log(parseheader);
                         let arr  = { "name": parsename, "parse": parseurl, "stopfrom": stopfrom, "priorfrom": priorfrom, "sort": 1, "header": parseheader };
                         datalist.unshift(arr);
                         writeFile(filepath, JSON.stringify(datalist));
