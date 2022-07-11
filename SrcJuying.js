@@ -1029,10 +1029,6 @@ function SRCSet() {
                             return "";
                         }else{
                             let head = {"User-Agent": "Dalvik/2.1.0"};
-                            let host = parse.match(/\/\/(.*?)\//)[1]||"";
-                            if(host){
-                                head["Host"] = host;
-                            }
                             let referer = parse.match(/http(s)?:\/\/(.*?)\//)[0]||"";
                             if(referer){
                                 head["referer"] = referer;
@@ -1071,7 +1067,7 @@ function SRCSet() {
             url: $().lazyRule(()=>{
                 var dataurl = getMyVar('parseurl');
                 var dataname = getMyVar('parsename')||'测试';
-                var datahead = getMyVar('parseheader')||'{}';
+                var datahead = getMyVar('parseheader',data.header?JSON.stringify(data.header):"{}");
                 if(!dataurl||!/^http/.test(dataurl)){
                     return "toast://获取解析地址失败，无法测试";
                 }
