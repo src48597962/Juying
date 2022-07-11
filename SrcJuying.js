@@ -1068,7 +1068,7 @@ function SRCSet() {
             col_type:'text_3',
             url: $().lazyRule(()=>{
                 var dataurl = getMyVar('parseurl');
-                var dataname = getMyVar('parsename','测试');
+                var dataname = getMyVar('parsename')||'测试';
                 var datahead = getMyVar('parseheader')||'{}';
                 if(!dataurl||!/^http/.test(dataurl)){
                     return "toast://获取解析地址失败，无法测试";
