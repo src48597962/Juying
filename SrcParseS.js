@@ -544,27 +544,27 @@ var SrcParseS = {
             var Nparselist = [];
             var appJXlist= [];
             var myJXlist= [];
-
+            var recordfile = "hiker://files/rules/Src/Juying/parse.json";
+            var parserecord=fetch(recordfile);
+            if(parserecord!=""){
+                eval("var recordlist=" + parserecord+ ";");
+            }else{
+                var recordlist={};
+            }
+            var excludeurl = recordlist.excludeurl||[];
+            var excludeparse = recordlist.excludeparse||[];
+            try {
+                var recordparse = recordlist.parse[from];
+                var recordname = recordlist.name[from]||"***";
+            } catch (e) {
+                var recordparse = "";
+                var recordname = "***";
+            }
+            
             if(parseStr){
                 //指定解析用于测试
                 Uparselist.push({type:'test',name:parseStr.name,parse:parseStr.parse,header:parseStr.header,sort:0});
             }else{
-                var recordfile = "hiker://files/rules/Src/Juying/parse.json";
-                var parserecord=fetch(recordfile);
-                if(parserecord!=""){
-                    eval("var recordlist=" + parserecord+ ";");
-                }else{
-                    var recordlist={};
-                }
-                var excludeurl = recordlist.excludeurl||[];
-                var excludeparse = recordlist.excludeparse||[];
-                try {
-                    var recordparse = recordlist.parse[from];
-                    var recordname = recordlist.name[from]||"***";
-                } catch (e) {
-                    var recordparse = "";
-                    var recordname = "***";
-                }
                 //读取app自带的解析，将未屏蔽的入备选
                 var appParses = getMyVar('parse_api', '');
                 if(appParses){
