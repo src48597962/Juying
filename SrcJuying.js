@@ -1040,7 +1040,7 @@ function SRCSet() {
                             return head;
                         }
                     }
-                    return $(parseheader?parseheader:sethead(getMyVar('parseurl', '')),"需要的header头相关信息，比如Referer").input(()=>{
+                    return $(parseheader?parseheader:sethead(getMyVar('parseurl', '')),"提示防盗的解析可能就是需要header，比如Referer、UA").input(()=>{
                         if((getMyVar("parseurl")&&/{|}/.test(input))||input==""){
                             putMyVar("parseheader",input);
                             refreshPage(false);
