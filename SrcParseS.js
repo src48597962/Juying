@@ -473,7 +473,6 @@ var SrcParseS = {
         }
     },
     聚影: function (vipUrl,parseStr) {
-        log(parseStr)
         //聚影采用新的、独立的解析逻辑
         var cfgfile = "hiker://files/rules/Src/Juying/config.json";
         var Juyingcfg=fetch(cfgfile);
@@ -553,13 +552,10 @@ var SrcParseS = {
             }
             var excludeurl = recordlist.excludeurl||[];
             var excludeparse = recordlist.excludeparse||[];
-            try {
-                var recordparse = recordlist.parse[from];
-                var recordname = recordlist.name[from]||"***";
-            } catch (e) {
-                var recordparse = "";
-                var recordname = "***";
-            }
+            var recordparse = recordlist.parse[from];
+            var recordname = recordlist.name[from]||"***";
+            var recordhead = recordlist.head[from]||{};
+            
             
             if(parseStr){
                 //指定解析用于测试
@@ -753,7 +749,7 @@ var SrcParseS = {
 
             if(recordparse&&forcedn==0&&mulnum<=1&&!parseStr){
                 //优先上次成功的
-                playurl = task({ulist:{parse:recordparse, name:recordname}, vipUrl:vipUrl}).url;
+                playurl = task({ulist:{parse:recordparse, name:recordname, header:recordhead}, vipUrl:vipUrl}).url;
                 
                 if(contain.test(playurl)&&!exclude.test(playurl)&&excludeurl.indexOf(playurl)==-1){
                     if(printlog==1){log("优先上次解析("+recordname+")成功>"+playurl)}; 
@@ -886,9 +882,10 @@ var SrcParseS = {
                                 if(printlog==1){log(beparses[k].name+'，记录为片源'+from+'的优先')};
                                 recordlist['parse'] = recordlist['parse']||{};
                                 recordlist['parse'][from] = parseurl;
-
                                 recordlist['name'] = recordlist['name']||{};
                                 recordlist['name'][from] = beparses[k].name;
+                                recordlist['head'] = recordlist['head']||{};
+                                recordlist['head'][from] = beparses[k].header;
                                 recordlist['from']= recordlist['from']||[];
                                 if(recordlist['from'].indexOf(from)==-1){recordlist['from'].push(from)}
                                 writeFile(recordfile, JSON.stringify(recordlist));
