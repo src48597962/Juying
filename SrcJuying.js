@@ -919,14 +919,13 @@ function SRCSet() {
                     onChange: 'putMyVar("parsename",input)'
                 }
             });
-            let parseurl = getMyVar('parseurl', lx=="update"?data.url:"");
             d.push({
                 title:'parseurl',
                 col_type: 'input',
                 desc: "链接地址",
                 extra: {
                     titleVisible: false,
-                    defaultValue: parseurl,
+                    defaultValue: getMyVar('parseurl', lx=="update"?data.url:""),
                     onChange: 'putMyVar("parseurl",input)'
                 }
             });
@@ -1041,7 +1040,7 @@ function SRCSet() {
                             return head;
                         }
                     }
-                    return $(parseheader?parseheader:sethead(parseurl),"需要的header头相关信息，比如Referer").input(()=>{
+                    return $(parseheader?parseheader:sethead(getMyVar('parseurl', lx=="update"?data.url:"")),"需要的header头相关信息，比如Referer").input(()=>{
                         if((getMyVar("parseurl")&&/{|}/.test(input))||input==""){
                             putMyVar("parseheader",input);
                             refreshPage(false);
