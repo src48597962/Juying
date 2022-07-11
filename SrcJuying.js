@@ -907,7 +907,7 @@ function SRCSet() {
         }else{
             setPageTitle("♥解析管理-变更");
         }
-        
+        log(data)
         if(getMyVar('addtype', '1')=="1"){
             d.push({
                 title:'parseurl',
