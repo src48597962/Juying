@@ -599,6 +599,10 @@ var SrcParseS = {
                     var myjxnum = 0;
                     for(var j=0;j<myJXlist.length;j++){
                         let priorfrom = myJXlist[j].priorfrom || [];
+                        let head = myJXlist[j].header;
+                        let arr = {type:'myjx',name:myJXlist[j].name,parse:myJXlist[j].parse};
+                        if(head){arr["header"] = myJXlist[j].header}
+
                         if(priorfrom.indexOf(from)>-1){
                             if(Uparselist.some(item => item.parse ==myJXlist[j].parse)){
                                 for(var i=0;i<Uparselist.length;i++){
@@ -608,15 +612,15 @@ var SrcParseS = {
                                     }
                                 }
                             }
-                            let arr = {type:'myjx',name:myJXlist[j].name,parse:myJXlist[j].parse,sort:-1};
-                            let head = myJXlist[j].header || "";
-                            if(head){arr["header"] = myJXlist[j].header}
+                            arr["sort"] = -1;
                             Uparselist.unshift(arr);
                             myjxnum = myjxnum + 1;
                         }else{
                             if(myJXlist[j].stopfrom.indexOf(from)==-1&&excludeparse.indexOf(myJXlist[j].parse)==-1&&!Uparselist.some(item => item.parse ==myJXlist[j].parse)){
                                 let sort = myJXlist[j]['sort']||1;
                                 Uparselist.push({type:'myjx',name:myJXlist[j].name,parse:myJXlist[j].parse,sort:sort});
+                                arr["sort"] = sort;
+                                Uparselist.unshift(arr);
                                 myjxnum = myjxnum + 1;
                             }
                         }
@@ -652,9 +656,7 @@ var SrcParseS = {
                 if(JSON.stringify(head) != "{}"){
                     taskheader['header'] = head;
                 }
-                log(taskheader);
                 var getjson = JSON.parse(request(obj.ulist.parse+obj.vipUrl,taskheader));
-                log(getjson);
                 if (getjson.body&&getjson.statusCode==200){
                     var gethtml = getjson.body;
                     var rurl = "";
