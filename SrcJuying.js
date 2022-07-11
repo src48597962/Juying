@@ -1066,12 +1066,10 @@ function SRCSet() {
         d.push({
             title:'测试',
             col_type:'text_3',
-            url: $().lazyRule((data)=>{
-                if(data){
-                    var dataurl = data.url.split("#")[0];
-                }else{
-                    var dataurl = getMyVar('parseurl').split("#")[0];
-                }
+            url: $().lazyRule(()=>{
+                var dataurl = getMyVar('parseurl');
+                var dataname = getMyVar('parsename','测试');
+                var datahead = getMyVar('parseheader','');
                 if(!dataurl||!/^http/.test(dataurl)){
                     return "toast://获取解析地址失败，无法测试";
                 }
@@ -1128,7 +1126,8 @@ function SRCSet() {
 
                     addItemBefore('jxline2', {
                         title: key,
-                        url: key!="自定义"?$('#noRecordHistory##noHistory#').lazyRule((vipUrl,parseurl)=>{
+                        url: key!="自定义"?$('#noRecordHistory##noHistory#').lazyRule((vipUrl,parseStr)=>{
+                            /*
                             try{
                                 eval("var config =" + fetch("hiker://files/cache/MyParseSet.json"));
                                 eval(fetch(config.cj));
@@ -1136,7 +1135,10 @@ function SRCSet() {
                             }catch(e){
                                 return "toast://没有断插，无法测试";
                             };
-                        },urls[key],dataurl):$("","输入自定义播放地址").input((parseurl) => {
+                            */
+                            require(config.依赖.match(/https.*\//)[0] + 'SrcParseS.js');
+                            return SrcParseS.聚影(vipUrl, parseStr);
+                        },urls[key],{name:dataname,parse:dataurl,header:datahead}):$("","输入自定义播放地址").input((parseurl) => {
                             if(input==""){
                                 return "toast://未输入自定义地址，无法测试";
                             }else{
@@ -1173,7 +1175,7 @@ function SRCSet() {
                     url: "hiker://empty"
                 })
                 return "hiker://empty";
-            },data),
+            }),
             extra:{
                 id: 'jxtest'
             }
