@@ -928,16 +928,7 @@ function SRCSet() {
                     onChange: 'putMyVar("parseurl",input)'
                 }
             });
-            let apistopfrom = getMyVar('stopfrom', lx=="update"?data.stopfrom:"");
-            d.push({
-                title:'排除片源：' + apistopfrom,
-                col_type: 'text_1',
-                url:$(apistopfrom,"输入排除的片源标识，以逗号隔开，为空则自动管理").input(()=>{
-                    putMyVar('stopfrom', input);
-                    refreshPage(false);
-                    return "toast://"+input;
-                })
-            });
+            
             let apipriorfrom = getMyVar('priorfrom', data&&data.priorfrom?data.priorfrom:"");
             d.push({
                 title:'优先片源：' + apipriorfrom,
@@ -1016,6 +1007,41 @@ function SRCSet() {
                     });
                     setHomeResult(d);
                 },apipriorfrom)
+            });
+            let apistopfrom = getMyVar('stopfrom', lx=="update"?data.stopfrom:"");
+            d.push({
+                title:'排除片源：' + apistopfrom,
+                col_type: 'text_1',
+                url:$(apistopfrom,"输入排除的片源标识，以逗号隔开，为空则自动管理").input(()=>{
+                    putMyVar('stopfrom', input);
+                    refreshPage(false);
+                    return "toast://"+input;
+                })
+            });
+            function sethead(parse){
+                if(!/^http/.test(parse)){
+                    return "";
+                }else{
+                    let host = parse.match(/\/\/(.*?)\//)[1]||"";
+                    if(host){host = `,"Host": "`+host+`"`;}
+                    let referer = parse.match(/http(s)?:\/\/(.*?)\//)[0]||"";
+                    if(referer){referer = `,"Referer": "`+referer+`"`;}
+                    let head = `{headers: {"User-Agent": "Dalvik/2.1.0"`+host+referer+`}`;
+                    return head;
+                }
+            }
+            d.push({
+                title:'添加header：根据实际需要自行调整',
+                col_type: 'text_1',
+                url:$(sethead(getMyVar("parseurl","")),"输入解析需要的header信息{}").input(()=>{
+                    if(getMyVar("parseurl")&&/{|}/.test(input)){
+                        putMyVar("parseurl",getMyVar("parseurl")+'#'+input);
+                        refreshPage(false);
+                        return "hiker://empty";
+                    }else{
+                        return "toast://链接地址不能为空，或输入信息不正常"
+                    }
+                })
             });
         }else{
             d.push({
