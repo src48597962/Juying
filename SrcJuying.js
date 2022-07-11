@@ -1018,8 +1018,7 @@ function SRCSet() {
                     return "toast://"+input;
                 })
             });
-            let parseheader = getMyVar('parseheader', lx=="update"?JSON.stringify(data.header):"");
-
+            let parseheader = getMyVar('parseheader', lx=="update"?JSON.stringify(data.header)=="{}"?"":JSON.stringify(data.header):"");
             d.push({
                 title:'header信息：' + parseheader,
                 col_type: 'text_1',
@@ -1359,7 +1358,7 @@ function SRCSet() {
                     let datastopfrom = datalist.stopfrom||[];
                     let datapriorfrom = datalist.priorfrom||"";
                     let datasort = datalist.sort||1;
-                    let datahead = datalist.header||"";
+                    let datahead = datalist.header||{};
                     return {
                         title: datasort+'-'+dataname+'-'+dataurl,
                         desc: "优先强制：" + datapriorfrom + "" + "\n排除片源：" + datastopfrom + "",
