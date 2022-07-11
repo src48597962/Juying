@@ -552,10 +552,15 @@ var SrcParseS = {
             }
             var excludeurl = recordlist.excludeurl||[];
             var excludeparse = recordlist.excludeparse||[];
-            var recordparse = recordlist.parse[from];
-            var recordname = recordlist.name[from]||"***";
-            var recordhead = recordlist.head[from]||{};
-            
+            try{
+                var recordparse = recordlist.parse[from];
+                var recordname = recordlist.name[from]||"***";
+                var recordhead = recordlist.head[from]||{};
+            }catch(e){
+                var recordparse = "";
+                var recordname = "***";
+                var recordhead = {};
+            }
             
             if(parseStr){
                 //指定解析用于测试
