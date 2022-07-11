@@ -790,7 +790,7 @@ var SrcParseS = {
             if(playurl==""){
                 if(forcedn==1){
                     if(printlog==1){log("开启强制断插解析模式")};
-                    Uparselist = [{type:'dn'}];
+                    Uparselist = [{type:'dn',name:'断插'}];
                 }else{
                     //定义排序函数
                     function sortData(a, b) {
@@ -804,7 +804,7 @@ var SrcParseS = {
 
                     //if(printlog==1){log("待命解析："+Nparselist)};
                     if(isdn==1&&Uparselist.length==0){
-                        Uparselist.push({type:'dn'});
+                        Uparselist.push({type:'dn',name:'断插'});
                     }
                 }
             }
