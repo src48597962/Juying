@@ -607,7 +607,10 @@ var SrcParseS = {
                                     }
                                 }
                             }
-                            Uparselist.unshift({type:'myjx',name:myJXlist[j].name,parse:myJXlist[j].parse,sort:-1});
+                            let arr = {type:'myjx',name:myJXlist[j].name,parse:myJXlist[j].parse,sort:-1};
+                            let head = myJXlist[j].header || "";
+                            if(head){arr["header"] = myJXlist[j].header}
+                            Uparselist.unshift(arr);
                             myjxnum = myjxnum + 1;
                         }else{
                             if(myJXlist[j].stopfrom.indexOf(from)==-1&&excludeparse.indexOf(myJXlist[j].parse)==-1&&!Uparselist.some(item => item.parse ==myJXlist[j].parse)){
