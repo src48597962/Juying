@@ -907,7 +907,6 @@ function SRCSet() {
         }else{
             setPageTitle("♥解析管理-变更");
         }
-        log(data)
         if(getMyVar('addtype', '1')=="1"){
             d.push({
                 title:'parseurl',
@@ -1019,9 +1018,8 @@ function SRCSet() {
                     return "toast://"+input;
                 })
             });
-            log('1')
             let parseheader = getMyVar('parseheader', lx=="update"?JSON.stringify(data.header):"");
-            log('2')
+
             d.push({
                 title:'header信息：' + parseheader,
                 col_type: 'text_1',
@@ -1066,7 +1064,7 @@ function SRCSet() {
                 }
             });
         }
-        log('3')
+
         d.push({
             title:'测试',
             col_type:'text_3',
@@ -1235,8 +1233,7 @@ function SRCSet() {
                     return "toast://已清空";
                 })
             });
-        }
-        log('4')   
+        } 
         d.push({
             title:'保存',
             col_type:'text_3',
@@ -1253,7 +1250,7 @@ function SRCSet() {
                 let parseurls = getMyVar('parseurls');
                 let parsestopfrom = getMyVar('stopfrom',"");
                 let pasrepriorfrom = getMyVar('priorfrom',"");
-                let parseheader = getMyVar('parseheader')||"{}";
+                let parseheader = getMyVar('parseheader',data.header?JSON.stringify(data.header):"{}");
                 if(getMyVar('addtype', '1')=="1"&&parseurl&&parsename){
                     if(lx=="update"){
                         for(var i=0;i<datalist.length;i++){
