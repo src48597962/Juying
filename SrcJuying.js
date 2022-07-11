@@ -1033,7 +1033,7 @@ function SRCSet() {
             d.push({
                 title:'添加header：根据实际需要自行调整',
                 col_type: 'text_1',
-                url:$(sethead(getMyVar("parseurl","")),"输入解析需要的header信息{}").input(()=>{
+                url:$(sethead(getMyVar("parseurl","")),"链接地址有变化时，先下拉刷新再来点击").input(()=>{
                     if(getMyVar("parseurl")&&/{|}/.test(input)){
                         putMyVar("parseurl",getMyVar("parseurl")+'#'+input);
                         refreshPage(false);
@@ -1061,108 +1061,105 @@ function SRCSet() {
             col_type:'text_3',
             url: $().lazyRule((data)=>{
                 if(data){
-                    var dataurl = data.url;
+                    var dataurl = data.url.split("#")[0];
                 }else{
-                    var dataurl = getMyVar('parseurl');
+                    var dataurl = getMyVar('parseurl').split("#")[0];
                 }
                 if(!dataurl||!/^http/.test(dataurl)){
                     return "toast://获取解析地址失败，无法测试";
                 }
-                //if(findItem('jxfrom')){
-                //    deleteItemByCls('jxtest');
-                //}else{
-                    addItemAfter('jxline',{
-                        title: '选择测试片源',
-                        col_type: "rich_text",
-                        extra:{
-                            id: 'jxfrom',
-                            cls: 'jxtest'
-                        }
-                    })
-                    addItemAfter('jxfrom',{
-                        col_type: "line",
-                        extra:{
-                            id: 'jxline2',
-                            cls: 'jxtest'
-                        }
-                    })
-                    var filepath = 'hiker://files/rules/Src/Juying/testurls.json';
-                    var datafile = fetch(filepath);
-                    if(datafile != ""){
-                        eval("var urls=" + datafile+ ";");
-                    }else{
-                        var urls = {
-                            "1905": "https://vip.1905.com/m/play/1566444.shtml",
-                            "爱奇艺": "https://m.iqiyi.com/v_sa04mvdzk8.html",
-                            "优酷": "https://v.youku.com/v_show/id_XNDc0MDE1NTk1Mg==.html",
-                            "腾讯": "https://v.qq.com/x/cover/mzc00200frpbpgb/r0042i6x2xp.html",
-                            "芒果": "https://www.mgtv.com/b/349253/10424300.html",
-                            "哔哩哔哩": "https://m.bilibili.com/bangumi/play/ep471494",
-                            "搜狐": "https://m.tv.sohu.com/v/MjAyMjAxMDkvbjYwMTE1MjExMy5zaHRtbA==.html",
-                            "西瓜": "https://www.ixigua.com/6532733952283640333?logTag=fbbfc792d3498d67c0fd",
-                            "PPTV": "https://v.pptv.com/show/zVn3dJXt1xV49l4.html",
-                            "咪咕": "https://m.miguvideo.com/mgs/msite/prd/detail.html?cid=676935232&mgdbid=&channelId=CAAAB000902015500000000",
-                            "乐视": "http://www.le.com/ptv/vplay/26958608.html",
-                            "融兴": "RongXingVR-5145649549215",
-                            "龙腾": "LT-2a2ac4570caa6b6e987b05371d8a945e",
-                            "旋风": "xfy-3be76512eb721f0b",
-                            "五毒云": "wuduyun-90db2047aa43104c8821468d03258c52",
-                            "思古": "sigu-1359862022c153dc90285a5a07ca42fda894ff0ee5_1",
-                            "人人迷": "renrenmi-3bcde575190081f6",
-                            "CL4K": "https://3.ruifenglb.com/play/1650861537.m3u8",
-                            "多多": "https://m3u8.cache.suoyo.cc/m3u8/202206/3/e04f658333a07ef659d77cf7c2546400aee0f6bd.m3u8",
-                            "新苍蓝": "canglan-42d3f9790dcdc5adc1345516174b6823",
-                            "乐多": "XMMTk2Mzk5MDAwMF8xMA==",
-                            "雪人": "xueren-1653287099"
-                        }
-                        writeFile(filepath, JSON.stringify(urls));
-                    }
-                    
-                    urls['自定义'] = "";
-                    for(var key in urls){
 
-                        addItemBefore('jxline2', {
-                            title: key,
-                            url: key!="自定义"?$('#noRecordHistory##noHistory#').lazyRule((vipUrl,parseurl)=>{
-                                try{
-                                    eval("var config =" + fetch("hiker://files/cache/MyParseSet.json"));
-                                    eval(fetch(config.cj));
-                                    return aytmParse(vipUrl,parseurl);
-                                }catch(e){
-                                    return "toast://没有断插，无法测试";
-                                };
-                            },urls[key],dataurl):$("","输入自定义播放地址").input((parseurl) => {
-                                if(input==""){
-                                    return "toast://未输入自定义地址，无法测试";
-                                }else{
-                                    return $().lazyRule((vipUrl,parseurl)=>{
-                                        try{
-                                            eval("var config =" + fetch("hiker://files/cache/MyParseSet.json"));
-                                            eval(fetch(config.cj));
-                                            return aytmParse(vipUrl,parseurl);
-                                        }catch(e){
-                                            return "toast://没有断插，无法测试";
-                                        };
-                                    }, input, parseurl)
-                                }
-                            }, dataurl),
-                            col_type: "text_3",
-                            extra:{
-                                cls: 'jxtest'
-                            }
-                        })
+                addItemAfter('jxline',{
+                    title: '选择测试片源',
+                    col_type: "rich_text",
+                    extra:{
+                        id: 'jxfrom',
+                        cls: 'jxtest'
                     }
+                })
+                addItemAfter('jxfrom',{
+                    col_type: "line",
+                    extra:{
+                        id: 'jxline2',
+                        cls: 'jxtest'
+                    }
+                })
+                var filepath = 'hiker://files/rules/Src/Juying/testurls.json';
+                var datafile = fetch(filepath);
+                if(datafile != ""){
+                    eval("var urls=" + datafile+ ";");
+                }else{
+                    var urls = {
+                        "1905": "https://vip.1905.com/m/play/1566444.shtml",
+                        "爱奇艺": "https://m.iqiyi.com/v_sa04mvdzk8.html",
+                        "优酷": "https://v.youku.com/v_show/id_XNDc0MDE1NTk1Mg==.html",
+                        "腾讯": "https://v.qq.com/x/cover/mzc00200frpbpgb/r0042i6x2xp.html",
+                        "芒果": "https://www.mgtv.com/b/349253/10424300.html",
+                        "哔哩哔哩": "https://m.bilibili.com/bangumi/play/ep471494",
+                        "搜狐": "https://m.tv.sohu.com/v/MjAyMjAxMDkvbjYwMTE1MjExMy5zaHRtbA==.html",
+                        "西瓜": "https://www.ixigua.com/6532733952283640333?logTag=fbbfc792d3498d67c0fd",
+                        "PPTV": "https://v.pptv.com/show/zVn3dJXt1xV49l4.html",
+                        "咪咕": "https://m.miguvideo.com/mgs/msite/prd/detail.html?cid=676935232&mgdbid=&channelId=CAAAB000902015500000000",
+                        "乐视": "http://www.le.com/ptv/vplay/26958608.html",
+                        "融兴": "RongXingVR-5145649549215",
+                        "龙腾": "LT-2a2ac4570caa6b6e987b05371d8a945e",
+                        "旋风": "xfy-3be76512eb721f0b",
+                        "五毒云": "wuduyun-90db2047aa43104c8821468d03258c52",
+                        "思古": "sigu-1359862022c153dc90285a5a07ca42fda894ff0ee5_1",
+                        "人人迷": "renrenmi-3bcde575190081f6",
+                        "CL4K": "https://3.ruifenglb.com/play/1650861537.m3u8",
+                        "多多": "https://m3u8.cache.suoyo.cc/m3u8/202206/3/e04f658333a07ef659d77cf7c2546400aee0f6bd.m3u8",
+                        "新苍蓝": "canglan-42d3f9790dcdc5adc1345516174b6823",
+                        "乐多": "XMMTk2Mzk5MDAwMF8xMA==",
+                        "雪人": "xueren-1653287099"
+                    }
+                    writeFile(filepath, JSON.stringify(urls));
+                }
+                
+                urls['自定义'] = "";
+                for(var key in urls){
+
                     addItemBefore('jxline2', {
-                        title: '编辑测试',
-                        url: $('#noRecordHistory##noHistory#').lazyRule(()=>{
-                            return "editFile://hiker://files/rules/Src/Juying/testurls.json";
-                        }),
+                        title: key,
+                        url: key!="自定义"?$('#noRecordHistory##noHistory#').lazyRule((vipUrl,parseurl)=>{
+                            try{
+                                eval("var config =" + fetch("hiker://files/cache/MyParseSet.json"));
+                                eval(fetch(config.cj));
+                                return aytmParse(vipUrl,parseurl);
+                            }catch(e){
+                                return "toast://没有断插，无法测试";
+                            };
+                        },urls[key],dataurl):$("","输入自定义播放地址").input((parseurl) => {
+                            if(input==""){
+                                return "toast://未输入自定义地址，无法测试";
+                            }else{
+                                return $().lazyRule((vipUrl,parseurl)=>{
+                                    try{
+                                        eval("var config =" + fetch("hiker://files/cache/MyParseSet.json"));
+                                        eval(fetch(config.cj));
+                                        return aytmParse(vipUrl,parseurl);
+                                    }catch(e){
+                                        return "toast://没有断插，无法测试";
+                                    };
+                                }, input, parseurl)
+                            }
+                        }, dataurl),
                         col_type: "text_3",
                         extra:{
                             cls: 'jxtest'
                         }
                     })
-                //}
+                }
+                addItemBefore('jxline2', {
+                    title: '编辑测试',
+                    url: $('#noRecordHistory##noHistory#').lazyRule(()=>{
+                        return "editFile://hiker://files/rules/Src/Juying/testurls.json";
+                    }),
+                    col_type: "text_3",
+                    extra:{
+                        cls: 'jxtest'
+                    }
+                })
                 updateItem('jxtest', {
                     title:'测试',
                     col_type:'text_3',
