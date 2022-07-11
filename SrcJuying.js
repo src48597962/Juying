@@ -1364,6 +1364,7 @@ function SRCSet() {
                     let datastopfrom = datalist.stopfrom||[];
                     let datapriorfrom = datalist.priorfrom||"";
                     let datasort = datalist.sort||1;
+                    let datahead = datalist.header||{};
                     return {
                         title: datasort+'-'+dataname+'-'+dataurl,
                         desc: "优先强制：" + datapriorfrom + "" + "\n排除片源：" + datastopfrom + "",
@@ -1372,7 +1373,7 @@ function SRCSet() {
                                 return "hiker://empty";
                             },dataname,dataurl):getMyVar('guanlicz','0')=="2"?$('hiker://empty#noRecordHistory##noHistory#').rule((jiexi,data) => {
                                 jiexi('update', data);
-                            }, jiexi, {name:dataname, url:dataurl, stopfrom:datastopfrom+"", priorfrom:datapriorfrom+""}):$("确定删除解析："+dataname).confirm((dataurl)=>{
+                            }, jiexi, {name:dataname, url:dataurl, stopfrom:datastopfrom+"", priorfrom:datapriorfrom+"", header:datahead}):$("确定删除解析："+dataname).confirm((dataurl)=>{
                                 var filepath = "hiker://files/rules/Src/Juying/myjiexi.json";
                                 var datafile = fetch(filepath);
                                 eval("var datalist=" + datafile+ ";");
@@ -3086,7 +3087,7 @@ var erjimenu = [
 
                         writeFile(recordfile, JSON.stringify(recordlist));   
                         refreshPage(false);
-                        log('已屏蔽'+input+'优先解析：'+sm);
+                        log('已屏蔽'+input+' 优先解析：'+sm);
                         return 'toast://已屏蔽'+input+'优先解析';
                     }),
                     col_type: "text_2"
