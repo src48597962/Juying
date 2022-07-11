@@ -2237,47 +2237,23 @@ function erji() {
         clearMyVar('SrcM3U8');
     }));
     var d = [];
-    //加载本地自定义变量缓存文件
-    //var configfile = config.依赖.match(/https.*\//)[0] + 'srcconfig.js';
-    //require(configfile);
+    var html = fetch(MY_URL.split('##')[1]);
+    var json = JSON.parse(html.match(/INITIAL_STATE.*?({.*});/)[1]).detail.itemData;
+    var plays = json.play.item_list;
+    //log(plays);
+    var shows = json.play_from_open_index;
+    //log(shows);
+    
+    let actor = json.starring?'演员：'+json.starring : json.emcee?'主持：'+json.emcee:'内详';
+    let director = json.director?'导演：'+json.director : json.tv_station?json.tv_station:'内详';
+    let area = json.zone?'地区：'+json.zone:'';
+    let year = json.year?'   年代：' + json.year:'';
+    let remarks = json.style ? json.style : '';
+    let pubdate = json.update_wordstr ? json.update_wordstr : '';
 
-    //自动判断是否需要更新请求
-    //if (getMyVar('myurl', '0') != MY_URL || !configvar.详情1 || configvar.标识 != MY_URL) {
-        var html = fetch(MY_URL.split('##')[1]);
-    //    var zt = 1;
-    //    putMyVar('myurl', MY_URL);
-    //} else {
-    //    var zt = 0;
-    //}
-
-    //影片详情
-    //if (zt == 1) {
-        var json = JSON.parse(html.match(/INITIAL_STATE.*?({.*});/)[1]).detail.itemData;
-        var plays = json.play.item_list;
-        //log(plays);
-        var shows = json.play_from_open_index;
-        //log(shows);
-        
-        let actor = json.starring?'演员：'+json.starring : json.emcee?'主持：'+json.emcee:'内详';
-        let director = json.director?'导演：'+json.director : json.tv_station?json.tv_station:'内详';
-        let area = json.zone?'地区：'+json.zone:'';
-        let year = json.year?'   年代：' + json.year:'';
-        let remarks = json.style ? json.style : '';
-        let pubdate = json.update_wordstr ? json.update_wordstr : '';
-
-        var details1 = director.substring(0, 15) + '\n' + actor.substring(0, 15) + '\n' + area + year;
-        var details2 = remarks + '\n' + pubdate;
-        var pic = MY_PARAMS.pic;
-    /*    var newconfig = { 详情1: details1, 详情2: details2, 图片: pic, 标识: MY_URL, plays: plays, shows: shows };
-        var libsfile = 'hiker://files/libs/' + md5(configfile) + '.js';
-        writeFile(libsfile, 'var configvar = ' + JSON.stringify(newconfig));
-    } else {
-        var details1 = configvar.详情1;
-        var details2 = configvar.详情2;
-        var pic = configvar.图片;
-        var plays = configvar.plays;
-        var shows = configvar.shows;
-    }*/
+    var details1 = director.substring(0, 15) + '\n' + actor.substring(0, 15) + '\n' + area + year;
+    var details2 = remarks + '\n' + pubdate;
+    var pic = MY_PARAMS.pic;
     d.push({
         title: details1,//详情1
         desc: details2,//详情2
@@ -2393,17 +2369,17 @@ function erji() {
     }
     var easy = $("").lazyRule(() => {
         try{
-            //input=fetch(input,{}).split("('")[1].split("'")[0];
-            //log(input);
-            /*
+            input=fetch(input,{}).split("('")[1].split("'")[0];
+            log(input);
+            
             if(input.match(/ixigua|iqiyi|qq.com|mgtv|le\.com|bili|sohu|youku|pptv|cctv|1905\.com/)){
                 input=input.split("?")[0];
             }else if(input.match(/huanxi/)){
                 input=input.split("&")[0];
             }else if(input.match(/migu/)){
                 input=input.replace(/http/,'https').split("&from")[0];
-            }*/
-            
+            }
+            /*
             if (input.indexOf('sa.sogou') != -1) {
                 input = fetch(input,{}).split("('")[1].split("'")[0];
             } else {
@@ -2416,7 +2392,7 @@ function erji() {
                     input = input.split("?")[0];
                 }
             }
-            
+            */
             if(!/^http/.test(input)){
                 return "toast://本集无播放地址，可从更多片源中寻找";
             }
