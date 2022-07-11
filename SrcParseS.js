@@ -601,7 +601,7 @@ var SrcParseS = {
                         let priorfrom = myJXlist[j].priorfrom || [];
                         let head = myJXlist[j].header;
                         let arr = {type:'myjx',name:myJXlist[j].name,parse:myJXlist[j].parse};
-                        if(head){arr["header"] = myJXlist[j].header}
+                        if(head){arr["header"] = head}
 
                         if(priorfrom.indexOf(from)>-1){
                             if(Uparselist.some(item => item.parse ==myJXlist[j].parse)){
@@ -618,9 +618,8 @@ var SrcParseS = {
                         }else{
                             if(myJXlist[j].stopfrom.indexOf(from)==-1&&excludeparse.indexOf(myJXlist[j].parse)==-1&&!Uparselist.some(item => item.parse ==myJXlist[j].parse)){
                                 let sort = myJXlist[j]['sort']||1;
-                                Uparselist.push({type:'myjx',name:myJXlist[j].name,parse:myJXlist[j].parse,sort:sort});
                                 arr["sort"] = sort;
-                                Uparselist.unshift(arr);
+                                Uparselist.push(arr);
                                 myjxnum = myjxnum + 1;
                             }
                         }
