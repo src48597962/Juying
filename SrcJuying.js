@@ -1069,7 +1069,7 @@ function SRCSet() {
             url: $().lazyRule(()=>{
                 var dataurl = getMyVar('parseurl');
                 var dataname = getMyVar('parsename','测试');
-                var datahead = getMyVar('parseheader')||{};
+                var datahead = getMyVar('parseheader')||'{}';
                 if(!dataurl||!/^http/.test(dataurl)){
                     return "toast://获取解析地址失败，无法测试";
                 }
@@ -1138,7 +1138,7 @@ function SRCSet() {
                             */
                             require(config.依赖.match(/https.*\//)[0] + 'SrcParseS.js');
                             return SrcParseS.聚影(vipUrl, parseStr);
-                        },urls[key],{name:dataname,parse:dataurl,header:datahead}):$("","输入自定义播放地址").input((parseurl) => {
+                        },urls[key],{name:dataname,parse:dataurl,header:JSON.parse(datahead)}):$("","输入自定义播放地址").input((parseurl) => {
                             if(input==""){
                                 return "toast://未输入自定义地址，无法测试";
                             }else{
