@@ -1364,7 +1364,7 @@ function SRCSet() {
                     let datastopfrom = datalist.stopfrom||[];
                     let datapriorfrom = datalist.priorfrom||"";
                     let datasort = datalist.sort||1;
-                    let datahead = datalist.header||"";
+                    let datahead = datalist.header||{};
                     return {
                         title: datasort+'-'+dataname+'-'+dataurl,
                         desc: "优先强制：" + datapriorfrom + "" + "\n排除片源：" + datastopfrom + "",
