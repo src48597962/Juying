@@ -1064,7 +1064,7 @@ function SRCSet() {
         d.push({
             title:'测试',
             col_type:'text_3',
-            url: $().lazyRule(()=>{
+            url: $().lazyRule((data)=>{
                 var dataurl = getMyVar('parseurl');
                 var dataname = getMyVar('parsename')||'测试';
                 var datahead = getMyVar('parseheader',data.header?JSON.stringify(data.header):"{}");
@@ -1176,7 +1176,7 @@ function SRCSet() {
                     url: "hiker://empty"
                 })
                 return "hiker://empty";
-            }),
+            }, data),
             extra:{
                 id: 'jxtest'
             }
