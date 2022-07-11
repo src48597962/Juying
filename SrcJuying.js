@@ -1019,7 +1019,9 @@ function SRCSet() {
                     return "toast://"+input;
                 })
             });
+            log('1')
             let parseheader = getMyVar('parseheader', lx=="update"?data.header:"");
+            log('2')
             d.push({
                 title:'header信息：' + parseheader,
                 col_type: 'text_1',
@@ -1064,6 +1066,7 @@ function SRCSet() {
                 }
             });
         }
+        log('3')
         d.push({
             title:'测试',
             col_type:'text_3',
@@ -1232,7 +1235,8 @@ function SRCSet() {
                     return "toast://已清空";
                 })
             });
-        }        
+        }
+        log('4')   
         d.push({
             title:'保存',
             col_type:'text_3',
@@ -1249,7 +1253,7 @@ function SRCSet() {
                 let parseurls = getMyVar('parseurls');
                 let parsestopfrom = getMyVar('stopfrom',"");
                 let pasrepriorfrom = getMyVar('priorfrom',"");
-                let parseheader = getMyVar('parseheader',"");
+                let parseheader = getMyVar('parseheader')||"{}";
                 if(getMyVar('addtype', '1')=="1"&&parseurl&&parsename){
                     if(lx=="update"){
                         for(var i=0;i<datalist.length;i++){
@@ -1264,12 +1268,7 @@ function SRCSet() {
                         stopfrom = stopfrom.filter(n => n);
                         let priorfrom = pasrepriorfrom.replace('，',',').split(',');
                         priorfrom = priorfrom.filter(n => n);
-                        try{
-                            var parsehead = JSON.parse(parseheader);
-                        }catch(e){
-                            var parsehead = {};
-                        }
-                        let arr  = { "name": parsename, "parse": parseurl, "stopfrom": stopfrom, "priorfrom": priorfrom, "sort": 1, "header": parsehead };
+                        let arr  = { "name": parsename, "parse": parseurl, "stopfrom": stopfrom, "priorfrom": priorfrom, "sort": 1, "header": JSON.parse(parseheader) };
                         datalist.unshift(arr);
                         writeFile(filepath, JSON.stringify(datalist));
                         back(true);
