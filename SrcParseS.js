@@ -473,6 +473,7 @@ var SrcParseS = {
         }
     },
     聚影: function (vipUrl,parseStr) {
+        log(parseStr)
         //聚影采用新的、独立的解析逻辑
         var cfgfile = "hiker://files/rules/Src/Juying/config.json";
         var Juyingcfg=fetch(cfgfile);
@@ -651,7 +652,9 @@ var SrcParseS = {
                 if(JSON.stringify(head) != "{}"){
                     taskheader['header'] = head;
                 }
+                log(taskheader);
                 var getjson = JSON.parse(request(obj.ulist.parse+obj.vipUrl,taskheader));
+                log(getjson);
                 if (getjson.body&&getjson.statusCode==200){
                     var gethtml = getjson.body;
                     var rurl = "";
