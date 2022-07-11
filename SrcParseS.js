@@ -869,7 +869,7 @@ var SrcParseS = {
                     var parseurl = beparses[k].parse;
                     if(beerrors[k]==null&&contain.test(beurls[k])&&!exclude.test(beurls[k])&&excludeurl.indexOf(beurls[k])==-1){
                         if(playurl==""){playurl = beurls[k];}
-                        if(beparses[k].type="test"){
+                        if(beparses[k].type=="test"){
                             //当前为测试
                             if(printlog==1){log(beparses[k].name+'>测试成功>'+beurls[k])};
                         }else if(beparses[k].type!="dn"){
