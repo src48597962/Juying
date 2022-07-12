@@ -1,6 +1,7 @@
 function SRCSet() {
     addListener("onClose", $.toString(() => {
         clearMyVar('guanlicz');
+        clearMyVar('duoselect');
         //refreshPage(false);
     }));
     setPageTitle("♥管理"+getVar('SrcJuying-Version', ''));
@@ -11,13 +12,13 @@ function SRCSet() {
     var d = [];
     d.push({
         title: getMyVar('guanli', 'jk')=="jk"?getTitle('接口管理', '#f13b66a'):'接口管理',
-        url: `#noLoading#@lazyRule=.js:putMyVar('guanli','jk');refreshPage(false);'toast://已切换到接口管理';`,
+        url: `#noLoading#@lazyRule=.js:putMyVar('guanli','jk');clearMyVar('duoselect');refreshPage(false);'toast://已切换到接口管理';`,
         img: "https://lanmeiguojiang.com/tubiao/movie/98.svg",
         col_type: "icon_small_3"
     });
     d.push({
         title: getMyVar('guanli', 'jk')=="jk"?'解析管理':getTitle('解析管理', '#f13b66a'),
-        url: `#noLoading#@lazyRule=.js:putMyVar('guanli','jx');refreshPage(false);'toast://已切换到解析管理';`,
+        url: `#noLoading#@lazyRule=.js:putMyVar('guanli','jx');clearMyVar('duoselect');refreshPage(false);'toast://已切换到解析管理';`,
         img: "https://lanmeiguojiang.com/tubiao/movie/105.svg",
         col_type: "icon_small_3"
     });
@@ -586,7 +587,7 @@ function SRCSet() {
                             },dataname, dataurl):getMyVar('guanlicz')=="2"?$('hiker://empty#noRecordHistory##noHistory#').rule((data) => {
                                 require(config.依赖.match(/https.*\//)[0] + 'SrcJySet.js');
                                 jiekou('update', data);
-                            }, {name:dataname, url:dataurl, ua:dataua, type:datatype, group:datagroup}):$("确定删除接口："+dataname).confirm((dataurl)=>{
+                            }, {name:dataname, url:dataurl, ua:dataua, type:datatype, group:datagroup}):getMyVar('guanlicz')=="3"?$("确定删除接口："+dataname).confirm((dataurl)=>{
                                 var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
                                 var datafile = fetch(filepath);
                                 eval("var datalist=" + datafile+ ";");
@@ -599,7 +600,26 @@ function SRCSet() {
                                 writeFile(filepath, JSON.stringify(datalist));
                                 refreshPage(false);
                                 return "toast://已删除";
-                            }, dataurl),
+                            }, dataurl):getMyVar('guanlicz')=="4"?$('#noLoading#').lazyRule((datatitle,dataurl)=>{
+                                let duoselect = getMyVar('duoselect','')?getMyVar('duoselect','').split(','):[];
+                                if(duoselect.indexOf(dataurl)==-1){
+                                    duoselect.push(dataurl);
+                                    updateItem(dataurl,{title:'‘‘’’<span style="color:red">'+datatitle})
+                                }else{
+                                    function removeByValue(arr, val) {
+                                        for(var i = 0; i < arr.length; i++) {
+                                            if(arr[i] == val) {
+                                            arr.splice(i, 1);
+                                            break;
+                                            }
+                                        }
+                                    }
+                                    removeByValue(duoselect,dataurl);
+                                    updateItem(dataurl,{title:datatitle})
+                                }
+                                putMyVar('duoselect',duoselect.join(','));
+                                return "hiker://empty";
+                            }, datatitle,dataurl):"toast://功能异常",
                         col_type: 'text_1',
                         extra: {
                             id: dataurl,
