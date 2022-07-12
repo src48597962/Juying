@@ -639,7 +639,7 @@ function SRCSet() {
                             },dataname,dataurl):getMyVar('guanlicz')=="2"?$('hiker://empty#noRecordHistory##noHistory#').rule((data) => {
                                 require(config.依赖.match(/https.*\//)[0] + 'SrcJySet.js');
                                 jiexi('update', data);
-                            }, dataarr):$("确定删除解析："+dataname).confirm((dataurl)=>{
+                            }, dataarr):getMyVar('guanlicz')=="3"?$("确定删除解析："+dataname).confirm((dataurl)=>{
                                 var filepath = "hiker://files/rules/Src/Juying/myjiexi.json";
                                 var datafile = fetch(filepath);
                                 eval("var datalist=" + datafile+ ";");
@@ -672,7 +672,9 @@ function SRCSet() {
                                 }
                                 refreshPage(false);
                                 return "toast://已删除";
-                            }, dataurl),
+                            }, dataurl):getMyVar('guanlicz')=="4"?$('#noLoading#').lazyRule(()=>{
+                                
+                            }):"toast://功能异常",
                         col_type: 'text_1',
                         extra: {
                             cls: "guanlidatalist"
@@ -736,7 +738,7 @@ function SRCSet() {
                     })
                 }
             }),
-        img: getMyVar('guanlicz')=="1"?"https://lanmeiguojiang.com/tubiao/more/292.png":getMyVar('guanlicz')=="2"?"https://lanmeiguojiang.com/tubiao/more/275.png":getMyVar('guanlicz')=="3"?"https://lanmeiguojiang.com/tubiao/more/216.png":getMyVar('guanlicz')=="3"?"https://lanmeiguojiang.com/tubiao/more/213.png":"https://lanmeiguojiang.com/tubiao/more/290.png",
+        img: getMyVar('guanlicz')=="1"?"https://lanmeiguojiang.com/tubiao/more/292.png":getMyVar('guanlicz')=="2"?"https://lanmeiguojiang.com/tubiao/more/275.png":getMyVar('guanlicz')=="3"?"https://lanmeiguojiang.com/tubiao/more/216.png":getMyVar('guanlicz')=="4"?"https://lanmeiguojiang.com/tubiao/more/213.png":"https://lanmeiguojiang.com/tubiao/more/290.png",
         col_type: "icon_small_4"
     });
     d.push({
@@ -1476,8 +1478,10 @@ function jiexi(lx,data) {
                 }
             })
             updateItem('jxtest', {
+                /*
                 title:'测试',
                 col_type:'text_3',
+                */
                 url: "hiker://empty"
             })
             return "hiker://empty";
