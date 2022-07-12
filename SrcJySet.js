@@ -578,8 +578,9 @@ function SRCSet() {
                     let dataua = datalist.ua;
                     let datatype = datalist.type;
                     let datagroup = datalist.group;
+                    let datatitle = dataname + ' ('+datatype+')' + (datagroup&&datagroup!=datatype?' [' + datagroup + ']':"");
                     return {
-                        title: dataname + ' ('+datatype+')' + (datagroup&&datagroup!=datatype?' [' + datagroup + ']':""),
+                        title: datatitle,
                         desc: dataurl,
                         url: getMyVar('guanlicz')=="1"?$('#noLoading#').lazyRule((name,url)=>{
                                 copy(name+'#'+url);
@@ -865,6 +866,22 @@ function SRCSet() {
                 }
                 var datafile = fetch(filepath);
                 eval("var datalist=" + datafile+ ";");
+                var sm2 = "聚影分享口令已生成";
+                let duoselect = getMyVar('duoselect','')?getMyVar('duoselect','').split(','):[];
+                if(duoselect.length>0){
+                    var lists = datalist.filter(item => {
+                        if(item.url){
+                            return duoselect.indexOf(item.url)>-1;
+                        }else{
+                            return duoselect.indexOf(item.parse)>-1;
+                        }
+                    })
+                    if(lists.length>0){
+                        var datalist = lists;
+                        sm2 = "(选定)聚影分享口令已生成";
+                    }
+                }
+                
                 let text = JSON.stringify(datalist);
                 var num = ''; 
                 for (var i = 0; i < 6; i++) {
