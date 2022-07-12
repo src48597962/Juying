@@ -678,7 +678,7 @@ function SRCSet() {
                                 let duoselect = getMyVar('duoselect','')?getMyVar('duoselect','').split(','):[];
                                 if(duoselect.indexOf(dataurl)==-1){
                                     duoselect.push(dataurl);
-                                    updateItem(dataurl,{title:datatitle+"<已选择>"})
+                                    updateItem(dataurl,{title:'‘‘’’<span style="color:red">'+datatitle})
                                 }else{
                                     function removeByValue(arr, val) {
                                         for(var i = 0; i < arr.length; i++) {
@@ -692,6 +692,7 @@ function SRCSet() {
                                     updateItem(dataurl,{title:datatitle})
                                 }
                                 putMyVar('duoselect',duoselect.join(','));
+                                return "hiker://empty";
                             }, datatitle,dataurl):"toast://功能异常",
                         col_type: 'text_1',
                         extra: {
