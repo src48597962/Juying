@@ -1153,7 +1153,7 @@ function jiekou(lx,data) {
                     }else{
                         return "toast://无法测试，检查项目填写完整性";
                     }
-                    require(config.依赖);
+                    require(config.依赖.match(/https.*\//)[0] + 'SrcJyXunmi.js');
                     xunmi(name, datalist);
                 },input, jiekouchuli);
             },jiekouchuli)
