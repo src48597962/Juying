@@ -568,7 +568,6 @@ function SRCSet() {
         col_type: "line_blank"
     });
 
-    
     function guanlidata(data) {
         try{
             if(getMyVar('guanli', 'jk')=="jk"){
@@ -1551,7 +1550,7 @@ function jiexi(lx,data) {
             let parseurls = getMyVar('parseurls');
             let parsestopfrom = getMyVar('stopfrom',"");
             let pasrepriorfrom = getMyVar('priorfrom',"");
-            let parseheader = getMyVar('parseheader',data.header?JSON.stringify(data.header):"");
+            let parseheader = getMyVar('parseheader',data&&data.header?JSON.stringify(data.header):"");
             if(getMyVar('addtype', '1')=="1"&&parseurl&&parsename){
                 if(lx=="update"){
                     for(var i=0;i<datalist.length;i++){
