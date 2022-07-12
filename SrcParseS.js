@@ -564,7 +564,9 @@ var SrcParseS = {
             
             if(parseStr){
                 //指定解析用于测试
-                Uparselist.push({type:'test',name:parseStr.name,parse:parseStr.parse,header:parseStr.header,sort:0});
+                let arr = {type:'test',name:parseStr.name,parse:parseStr.parse,sort:0};
+                if(parseStr.header){arr['header'] = parseStr.header}
+                Uparselist.push(arr);
             }else{
                 //读取app自带的解析，将未屏蔽的入备选
                 var appParses = getMyVar('parse_api', '');
@@ -600,9 +602,8 @@ var SrcParseS = {
                     var myjxnum = 0;
                     for(var j=0;j<myJXlist.length;j++){
                         let priorfrom = myJXlist[j].priorfrom || [];
-                        let head = myJXlist[j].header;
                         let arr = {type:'myjx',name:myJXlist[j].name,parse:myJXlist[j].parse};
-                        if(head){arr["header"] = head}
+                        if(myJXlist[j].header){arr["header"] = myJXlist[j].header}
 
                         if(priorfrom.indexOf(from)>-1){
                             if(Uparselist.some(item => item.parse ==myJXlist[j].parse)){
