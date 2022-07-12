@@ -580,15 +580,10 @@ function SRCSet() {
                     return {
                         title: dataname + ' ('+datatype+')' + (datagroup&&datagroup!=datatype?' [' + datagroup + ']':""),
                         desc: dataurl,
-                        url: $(["复制","变更","删除"],2,"需要操作的项").select(()=>{
-                                if(input=="复制"){
-                                    return "";
-                                }
-                            })
-                        /*getMyVar('guanlicz','0')=="1"?$('#noLoading#').lazyRule((name,url)=>{
+                        url: getMyVar('guanlicz')=="1"?$('#noLoading#').lazyRule((name,url)=>{
                                 copy(name+'#'+url);
                                 return "hiker://empty";
-                            },dataname, dataurl):getMyVar('guanlicz','0')=="2"?$('hiker://empty#noRecordHistory##noHistory#').rule((data) => {
+                            },dataname, dataurl):getMyVar('guanlicz')=="2"?$('hiker://empty#noRecordHistory##noHistory#').rule((data) => {
                                 require(config.依赖.match(/https.*\//)[0] + 'SrcJySet.js');
                                 jiekou('update', data);
                             }, {name:dataname, url:dataurl, ua:dataua, type:datatype, group:datagroup}):$("确定删除接口："+dataname).confirm((dataurl)=>{
@@ -604,7 +599,7 @@ function SRCSet() {
                                 writeFile(filepath, JSON.stringify(datalist));
                                 refreshPage(false);
                                 return "toast://已删除";
-                            }, dataurl)*/,
+                            }, dataurl),
                         col_type: 'text_1',
                         extra: {
                             cls: "guanlidatalist"
@@ -638,10 +633,10 @@ function SRCSet() {
                     return {
                         title: datasort+'-'+dataname+'-'+dataurl,
                         desc: "优先强制：" + datapriorfrom + "" + "\n排除片源：" + datastopfrom + "",
-                        url: getMyVar('guanlicz','0')=="1"?$('#noLoading#').lazyRule((name,url)=>{
+                        url: getMyVar('guanlicz')=="1"?$('#noLoading#').lazyRule((name,url)=>{
                                 copy(name+"#"+url);
                                 return "hiker://empty";
-                            },dataname,dataurl):getMyVar('guanlicz','0')=="2"?$('hiker://empty#noRecordHistory##noHistory#').rule((data) => {
+                            },dataname,dataurl):getMyVar('guanlicz')=="2"?$('hiker://empty#noRecordHistory##noHistory#').rule((data) => {
                                 require(config.依赖.match(/https.*\//)[0] + 'SrcJySet.js');
                                 jiexi('update', data);
                             }, dataarr):$("确定删除解析："+dataname).confirm((dataurl)=>{
@@ -704,8 +699,8 @@ function SRCSet() {
         col_type: "icon_small_4"
     });
     d.push({
-        title: getMyVar('guanlicz','0')=="1"?'复制':getMyVar('guanlicz','0')=="2"?'变更':getMyVar('guanlicz','0')=="3"?'删除':'操作',
-        url: $(["复制","变更","删除","清空"],2,"选择操作功能项").select(()=>{
+        title: getMyVar('guanlicz')=="1"?'复制':getMyVar('guanlicz')=="2"?'变更':getMyVar('guanlicz')=="3"?'删除':getMyVar('guanlicz')=="4"?'多选':'操作',
+        url: $(["复制","变更","删除","清空","多选"],2,"选择操作功能项").select(()=>{
                 if(input=="复制"){
                     putMyVar('guanlicz','1');
                     refreshPage(false);
@@ -718,6 +713,10 @@ function SRCSet() {
                     putMyVar('guanlicz','3');
                     refreshPage(false);
                     return 'toast://已切换到删除模式';
+                }else if(input=="多选"){
+                    putMyVar('guanlicz','4');
+                    refreshPage(false);
+                    return 'toast://已切换到多选模式';
                 }else if(input=="清空"){
                     if(getMyVar('guanli', 'jk')=="jk"){
                         var sm = "接口";
@@ -737,7 +736,7 @@ function SRCSet() {
                     })
                 }
             }),
-        img: getMyVar('guanlicz','0')=="1"?"https://lanmeiguojiang.com/tubiao/more/292.png":getMyVar('guanlicz','0')=="2"?"https://lanmeiguojiang.com/tubiao/more/275.png":getMyVar('guanlicz','0')=="3"?"https://lanmeiguojiang.com/tubiao/more/216.png":"https://lanmeiguojiang.com/tubiao/more/290.png",
+        img: getMyVar('guanlicz')=="1"?"https://lanmeiguojiang.com/tubiao/more/292.png":getMyVar('guanlicz')=="2"?"https://lanmeiguojiang.com/tubiao/more/275.png":getMyVar('guanlicz')=="3"?"https://lanmeiguojiang.com/tubiao/more/216.png":getMyVar('guanlicz')=="3"?"https://lanmeiguojiang.com/tubiao/more/213.png":"https://lanmeiguojiang.com/tubiao/more/290.png",
         col_type: "icon_small_4"
     });
     d.push({
