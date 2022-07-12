@@ -602,6 +602,7 @@ function SRCSet() {
                             }, dataurl),
                         col_type: 'text_1',
                         extra: {
+                            id: dataurl,
                             cls: "guanlidatalist"
                         }
                     }
@@ -630,8 +631,9 @@ function SRCSet() {
                     let datasort = datalist.sort||1;
                     let dataarr = {name:dataname, url:dataurl, stopfrom:datastopfrom+"", priorfrom:datapriorfrom+""};
                     if(datalist.header){dataarr['header'] = datalist.header}
+                    let datatitle = datasort+'-'+dataname+'-'+dataurl;
                     return {
-                        title: datasort+'-'+dataname+'-'+dataurl,
+                        title: datatitle,
                         desc: "优先强制：" + datapriorfrom + "" + "\n排除片源：" + datastopfrom + "",
                         url: getMyVar('guanlicz')=="1"?$('#noLoading#').lazyRule((name,url)=>{
                                 copy(name+"#"+url);
@@ -672,11 +674,28 @@ function SRCSet() {
                                 }
                                 refreshPage(false);
                                 return "toast://已删除";
-                            }, dataurl):getMyVar('guanlicz')=="4"?$('#noLoading#').lazyRule(()=>{
-                                
-                            }):"toast://功能异常",
+                            }, dataurl):getMyVar('guanlicz')=="4"?$('#noLoading#').lazyRule((datatitle,dataurl)=>{
+                                let duoselect = getMyVar('duoselect','')?getMyVar('duoselect','').split(','):[];
+                                if(duoselect.indexOf(dataurl)==-1){
+                                    duoselect.push(dataurl);
+                                    updateItem(dataurl,{title:datatitle+"<已选择>"})
+                                }else{
+                                    function removeByValue(arr, val) {
+                                        for(var i = 0; i < arr.length; i++) {
+                                            if(arr[i] == val) {
+                                            arr.splice(i, 1);
+                                            break;
+                                            }
+                                        }
+                                    }
+                                    removeByValue(duoselect,dataurl);
+                                    updateItem(dataurl,{title:datatitle})
+                                }
+                                putMyVar('duoselect',duoselect.join(','));
+                            }, datatitle,dataurl):"toast://功能异常",
                         col_type: 'text_1',
                         extra: {
+                            id: dataurl,
                             cls: "guanlidatalist"
                         }
                     }
