@@ -1018,7 +1018,7 @@ function SRCSet() {
                     return "toast://"+input;
                 })
             });
-            let parseheader = getMyVar('parseheader', lx=="update"?JSON.stringify(data.header)=="{}"?"":JSON.stringify(data.header):"");
+            let parseheader = getMyVar('parseheader', lx=="update"&&data.header?JSON.stringify(data.header):"");
             d.push({
                 title:'header信息：' + parseheader,
                 col_type: 'text_1',
@@ -1066,7 +1066,7 @@ function SRCSet() {
             url: $().lazyRule((data)=>{
                 var dataurl = getMyVar('parseurl');
                 var dataname = getMyVar('parsename')||'测试';
-                var datahead = getMyVar('parseheader',data.header?JSON.stringify(data.header):"{}");
+                var datahead = getMyVar('parseheader',data.header?JSON.stringify(data.header):"");
                 if(!dataurl||!/^http/.test(dataurl)){
                     return "toast://获取解析地址失败，无法测试";
                 }
@@ -1117,42 +1117,27 @@ function SRCSet() {
                     }
                     writeFile(filepath, JSON.stringify(urls));
                 }
-                
+                let parsearr = {name:dataname,parse:dataurl};
+                try{
+                    if(datahead){parsearr['header']= JSON.parse(datahead)}
+                }catch(e){     }
                 urls['自定义'] = "";
                 for(var key in urls){
-
                     addItemBefore('jxline2', {
                         title: key,
                         url: key!="自定义"?$('#noRecordHistory##noHistory#').lazyRule((vipUrl,parseStr)=>{
-                            /*
-                            try{
-                                eval("var config =" + fetch("hiker://files/cache/MyParseSet.json"));
-                                eval(fetch(config.cj));
-                                return aytmParse(vipUrl,parseurl);
-                            }catch(e){
-                                return "toast://没有断插，无法测试";
-                            };
-                            */
                             require(config.依赖.match(/https.*\//)[0] + 'SrcParseS.js');
                             return SrcParseS.聚影(vipUrl, parseStr);
-                        },urls[key],{name:dataname,parse:dataurl,header:JSON.parse(datahead)}):$("","输入自定义播放地址").input((parseStr) => {
+                        },urls[key],parsearr):$("","输入自定义播放地址").input((parseStr) => {
                             if(input==""){
                                 return "toast://未输入自定义地址，无法测试";
                             }else{
                                 return $().lazyRule((vipUrl,parseStr)=>{
-                                    /*
-                                    try{
-                                        eval("var config =" + fetch("hiker://files/cache/MyParseSet.json"));
-                                        eval(fetch(config.cj));
-                                        return aytmParse(vipUrl,parseStr);
-                                    }catch(e){
-                                        return "toast://没有断插，无法测试";
-                                    };*/
                                     require(config.依赖.match(/https.*\//)[0] + 'SrcParseS.js');
                                     return SrcParseS.聚影(vipUrl, parseStr);
                                 }, input, parseStr)
                             }
-                        }, {name:dataname,parse:dataurl,header:JSON.parse(datahead)}),
+                        }, parsearr),
                         col_type: "text_3",
                         extra:{
                             cls: 'jxtest'
@@ -1248,7 +1233,7 @@ function SRCSet() {
                 let parseurls = getMyVar('parseurls');
                 let parsestopfrom = getMyVar('stopfrom',"");
                 let pasrepriorfrom = getMyVar('priorfrom',"");
-                let parseheader = getMyVar('parseheader',data.header?JSON.stringify(data.header):"{}");
+                let parseheader = getMyVar('parseheader',data.header?JSON.stringify(data.header):"");
                 if(getMyVar('addtype', '1')=="1"&&parseurl&&parsename){
                     if(lx=="update"){
                         for(var i=0;i<datalist.length;i++){
@@ -1263,7 +1248,10 @@ function SRCSet() {
                         stopfrom = stopfrom.filter(n => n);
                         let priorfrom = pasrepriorfrom.replace('，',',').split(',');
                         priorfrom = priorfrom.filter(n => n);
-                        let arr  = { "name": parsename, "parse": parseurl, "stopfrom": stopfrom, "priorfrom": priorfrom, "sort": 1, "header": JSON.parse(parseheader) };
+                        let arr  = { "name": parsename, "parse": parseurl, "stopfrom": stopfrom, "priorfrom": priorfrom, "sort": 1};
+                        try{
+                            if(parseheader){arr['header']= JSON.parse(parseheader)}
+                        }catch(e){     }
                         datalist.unshift(arr);
                         writeFile(filepath, JSON.stringify(datalist));
                         back(true);
@@ -1358,7 +1346,8 @@ function SRCSet() {
                     let datastopfrom = datalist.stopfrom||[];
                     let datapriorfrom = datalist.priorfrom||"";
                     let datasort = datalist.sort||1;
-                    let datahead = datalist.header||{};
+                    let dataarr = {name:dataname, url:dataurl, stopfrom:datastopfrom+"", priorfrom:datapriorfrom+""};
+                    if(datalist.header){dataarr['header'] = datalist.header}
                     return {
                         title: datasort+'-'+dataname+'-'+dataurl,
                         desc: "优先强制：" + datapriorfrom + "" + "\n排除片源：" + datastopfrom + "",
@@ -1367,7 +1356,7 @@ function SRCSet() {
                                 return "hiker://empty";
                             },dataname,dataurl):getMyVar('guanlicz','0')=="2"?$('hiker://empty#noRecordHistory##noHistory#').rule((jiexi,data) => {
                                 jiexi('update', data);
-                            }, jiexi, {name:dataname, url:dataurl, stopfrom:datastopfrom+"", priorfrom:datapriorfrom+"", header:datahead}):$("确定删除解析："+dataname).confirm((dataurl)=>{
+                            }, jiexi, dataarr):$("确定删除解析："+dataname).confirm((dataurl)=>{
                                 var filepath = "hiker://files/rules/Src/Juying/myjiexi.json";
                                 var datafile = fetch(filepath);
                                 eval("var datalist=" + datafile+ ";");
