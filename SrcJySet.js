@@ -570,7 +570,131 @@ function SRCSet() {
     });
 
     function guanlidata(data) {
+        function sortData(a, b) {
+            try{
+                if((a.sort?a.sort:1)!=(b.sort?b.sort:1)){
+                    return a.sort - b.sort
+                }else{
+                    return a.id - b.id;
+                }
+            }catch(e){
+                return a.id - b.id;
+            }
+        };
         try{
+            if(getMyVar('guanli', 'jk')=="jx"&&data.length > 0){
+                data.sort(sortData);
+            }
+            var czdatalist = data.map((datalist)=>{
+                if(getMyVar('guanli', 'jk')=="jk"){
+                    var dataurl = datalist.url;
+                    var dataname = datalist.name;
+                    var dataua = datalist.ua;
+                    var datatype = datalist.type;
+                    var datagroup = datalist.group;
+                    var datatitle = dataname + ' ('+datatype+')' + (datagroup&&datagroup!=datatype?' [' + datagroup + ']':"");
+                    var datadesc = dataurl;
+                    var dataarr = {name:dataname, url:dataurl, ua:dataua, type:datatype, group:datagroup};
+                    var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
+                }else{
+                    var dataurl = datalist.parse;
+                    var dataname = datalist.name;
+                    var datastopfrom = datalist.stopfrom||[];
+                    var datapriorfrom = datalist.priorfrom||"";
+                    var datasort = datalist.sort||1;
+                    var datatitle = datasort+'-'+dataname+'-'+dataurl;
+                    var datadesc = "优先强制：" + datapriorfrom + "" + "\n排除片源：" + datastopfrom + "";
+                    var dataarr = {name:dataname, url:dataurl, stopfrom:datastopfrom+"", priorfrom:datapriorfrom+""};
+                    if(datalist.header){dataarr['header'] = datalist.header}
+                    var filepath = "hiker://files/rules/Src/Juying/myjiexi.json";
+                }
+                
+                return {
+                    title: datatitle,
+                    desc: datadesc,
+                    url: getMyVar('guanlicz')=="1"?$('#noLoading#').lazyRule((name,url)=>{
+                            copy(name+'#'+url);
+                            return "hiker://empty";
+                        },dataname, dataurl):getMyVar('guanlicz')=="2"?$('hiker://empty#noRecordHistory##noHistory#').rule((data) => {
+                            require(config.依赖.match(/https.*\//)[0] + 'SrcJySet.js');
+                            if(getMyVar('guanli', 'jk')=="jk"){
+                                jiekou('update', data);
+                            }else{
+                                jiexi('update', data);
+                            }
+                        }, dataarr):getMyVar('guanlicz')=="3"?$("确定删除接口："+dataname).confirm((dataurl,filepath)=>{
+                            var datafile = fetch(filepath);
+                            eval("var datalist=" + datafile+ ";");
+                            if(getMyVar('guanli', 'jk')=="jk"){
+                                for(var i=0;i<datalist.length;i++){
+                                    if(datalist[i].url==dataurl){
+                                        datalist.splice(i,1);
+                                        break;
+                                    }
+                                }
+                                writeFile(filepath, JSON.stringify(datalist));
+                            }else{
+                                for(var i=0;i<datalist.length;i++){
+                                    if(datalist[i].parse==dataurl){
+                                        datalist.splice(i,1);
+                                        break;
+                                    }
+                                }
+                                writeFile(filepath, JSON.stringify(datalist));
+                                var recordfile = "hiker://files/rules/Src/Juying/parse.json";
+                                var recordparse=fetch(recordfile);
+                                if(recordparse!=""){
+                                    eval("var recordlist=" + recordparse+ ";");
+                                }else{
+                                    var recordlist={};
+                                }
+                                var excludeparse = recordlist.excludeparse||[];
+                                if(excludeparse.length>0){
+                                    function removeByValue(arr, val) {
+                                        for(var i = 0; i < arr.length; i++) {
+                                            if(arr[i] == val) {
+                                            arr.splice(i, 1);
+                                            break;
+                                            }
+                                        }
+                                    }
+                                    removeByValue(excludeparse,dataurl);
+                                    writeFile(recordfile, JSON.stringify(recordlist));
+                                }
+                            }
+                            
+                            refreshPage(false);
+                            return "toast://已删除";
+                        }, dataurl,filepath):getMyVar('guanlicz')=="4"?$('#noLoading#').lazyRule((datatitle,dataurl)=>{
+                            let duoselect = getMyVar('duoselect','')?getMyVar('duoselect','').split(','):[];
+                            if(duoselect.indexOf(dataurl)==-1){
+                                duoselect.push(dataurl);
+                                updateItem(dataurl,{title:'‘‘’’<span style="color:red">'+datatitle})
+                            }else{
+                                function removeByValue(arr, val) {
+                                    for(var i = 0; i < arr.length; i++) {
+                                        if(arr[i] == val) {
+                                        arr.splice(i, 1);
+                                        break;
+                                        }
+                                    }
+                                }
+                                removeByValue(duoselect,dataurl);
+                                updateItem(dataurl,{title:datatitle})
+                            }
+                            putMyVar('duoselect',duoselect.join(','));
+                            return "hiker://empty";
+                        }, datatitle,dataurl):"toast://功能异常",
+                    col_type: 'text_1',
+                    extra: {
+                        id: dataurl,
+                        cls: "guanlidatalist"
+                    }
+                }
+            })
+
+
+            /*
             if(getMyVar('guanli', 'jk')=="jk"){
                 var czdatalist = data.map((datalist)=>{
                     let dataurl = datalist.url;
@@ -631,18 +755,8 @@ function SRCSet() {
                 })
             }else{
                 //定义排序函数
-                function sortData(a, b) {
-                    try{
-                        if((a.sort?a.sort:1)!=(b.sort?b.sort:1)){
-                            return a.sort - b.sort
-                        }else{
-                            return a.id - b.id;
-                        }
-                    }catch(e){
-                        return a.id - b.id;
-                    }
-                };
-                if(data.length > 0){data.sort(sortData)};
+                
+                
 
                 var czdatalist = data.map((datalist)=>{
                     let dataurl = datalist.parse;
@@ -722,7 +836,7 @@ function SRCSet() {
                         }
                     }
                 })
-            }
+            }*/
             return czdatalist;
         } catch (e) {
             log(e.message);
