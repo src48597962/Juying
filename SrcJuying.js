@@ -406,7 +406,7 @@ function yiji() {
     }
     var seachurl = $('').lazyRule(() => {
         return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
-            require(config.依赖);
+            require(config.依赖.match(/https.*\//)[0] + 'SrcJyXunmi.js');
             xunmi(name);
         }, input);
     });
@@ -471,7 +471,7 @@ function sousuo2() {
     }));
     var seachurl = $('').lazyRule(() => {
             return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
-                require(config.依赖);
+                require(config.依赖.match(/https.*\//)[0] + 'SrcJyXunmi.js');
                 xunmi(name);
             }, input);
         });
