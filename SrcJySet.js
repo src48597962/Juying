@@ -5,7 +5,7 @@ function SRCSet() {
         //refreshPage(false);
     }));
     setPageTitle("♥管理"+getVar('SrcJuying-Version', ''));
-
+    clearMyVar('duoselect');
     function getTitle(title, Color) {
         return '<font color="' + Color + '">' + title + '</font>';
     }
@@ -896,7 +896,7 @@ function SRCSet() {
                 if(pasteurl){
                     let code = sm+'￥'+aesEncode('Juying', pasteurl)+'￥1小时内有效';
                     copy(code);
-                    return "toast://聚影分享口令已生成";
+                    return "toast://"+sm2;
                 }else{
                     return "toast://分享失败，剪粘板异常";
                 }
