@@ -580,7 +580,12 @@ function SRCSet() {
                     return {
                         title: dataname + ' ('+datatype+')' + (datagroup&&datagroup!=datatype?' [' + datagroup + ']':""),
                         desc: dataurl,
-                        url: getMyVar('guanlicz','0')=="1"?$('#noLoading#').lazyRule((name,url)=>{
+                        url: $(["复制","变更","删除"],2,"需要操作的项").select(()=>{
+                                if(input=="复制"){
+                                    return "";
+                                }
+                            })
+                        /*getMyVar('guanlicz','0')=="1"?$('#noLoading#').lazyRule((name,url)=>{
                                 copy(name+'#'+url);
                                 return "hiker://empty";
                             },dataname, dataurl):getMyVar('guanlicz','0')=="2"?$('hiker://empty#noRecordHistory##noHistory#').rule((data) => {
@@ -599,7 +604,7 @@ function SRCSet() {
                                 writeFile(filepath, JSON.stringify(datalist));
                                 refreshPage(false);
                                 return "toast://已删除";
-                            }, dataurl),
+                            }, dataurl)*/,
                         col_type: 'text_1',
                         extra: {
                             cls: "guanlidatalist"
