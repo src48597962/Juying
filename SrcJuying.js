@@ -970,8 +970,7 @@ function yiji() {
         d.push({
             title: "管理",
             url: $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
-                    require(config.依赖);
-                    SRCSet();
+                    require(config.依赖.match(/https.*\//)[0] + 'SrcJySet.js');
                 }),
             pic_url: 'https://lanmeiguojiang.com/tubiao/more/129.png',
             col_type: 'icon_small_4'
