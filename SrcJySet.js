@@ -608,11 +608,10 @@ function SRCSet() {
 
                 })
             }else{
-                log(data)
                 //定义排序函数
                 function sortData(a, b) {
                     try{
-                        if(a.sort!=b.sort){
+                        if((a.sort?a.sort:1)!=(b.sort?b.sort:1){
                             return a.sort - b.sort
                         }else{
                             return a.id - b.id;
@@ -622,7 +621,7 @@ function SRCSet() {
                     }
                 };
                 if(data.length > 0){data.sort(sortData)};
-                log(data)
+
                 var czdatalist = data.map((datalist)=>{
                     let dataurl = datalist.parse;
                     let dataname = datalist.name;
