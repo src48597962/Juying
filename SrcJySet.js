@@ -616,7 +616,7 @@ function SRCSet() {
                 //定义排序函数
                 function sortData(a, b) {
                     try{
-                        if((a.sort?a.sort:1)!=(b.sort?b.sort:1){
+                        if((a.sort?a.sort:1)!=(b.sort?b.sort:1)){
                             return a.sort - b.sort
                         }else{
                             return a.id - b.id;
