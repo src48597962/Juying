@@ -608,6 +608,7 @@ function SRCSet() {
 
                 })
             }else{
+                log(data)
                 //定义排序函数
                 function sortData(a, b) {
                     try{
@@ -621,7 +622,7 @@ function SRCSet() {
                     }
                 };
                 if(data.length > 0){data.sort(sortData)};
-
+                log(data)
                 var czdatalist = data.map((datalist)=>{
                     let dataurl = datalist.parse;
                     let dataname = datalist.name;
