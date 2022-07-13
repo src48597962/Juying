@@ -722,9 +722,32 @@ function SRCSet() {
                     refreshPage(false);
                     return 'toast://已切换到变更模式';
                 }else if(input=="删除"){
-                    putMyVar('guanlicz','3');
-                    refreshPage(false);
-                    return 'toast://已切换到删除模式';
+                    let duoselect = getMyVar('duoselect','')?getMyVar('duoselect','').split(','):[];
+                    if(duoselect.length>0){
+                        if(getMyVar('guanli', 'jk')=="jk"){
+                            var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
+                            var sm = "确定删除选定的接口吗？";
+                        }else if(getMyVar('guanli', 'jk')=="jx"){
+                            var filepath = "hiker://files/rules/Src/Juying/myjiexi.json";
+                            var sm = "确定删除选定的解析吗？";
+                        }
+                        return $(sm).confirm((duoselect, filepath)=>{
+                            var datafile = fetch(filepath);
+                            eval("var datalist=" + datafile+ ";");
+                            for(var i=0;i<datalist.length;i++){
+                                if(duoselect.indexOf(datalist[i].url?datalist[i].url:datalist[i].parse)>-1){
+                                    datalist.splice(i,1);
+                                }
+                            }
+                            writeFile(filepath, JSON.stringify(datalist));
+                            back(true);
+                            return "toast://已批量删除解析"+duoselect.length;
+                        }, duoselect, filepath)
+                    }else{
+                        putMyVar('guanlicz','3');
+                        refreshPage(false);
+                        return 'toast://已切换到删除模式';
+                    }
                 }else if(input=="多选"){
                     putMyVar('guanlicz','4');
                     refreshPage(false);
@@ -848,6 +871,7 @@ function SRCSet() {
                     if(lists.length>0){
                         var datalist = lists;
                         sm2 = "(选定)聚影分享口令已生成";
+                        clearMyVar('duoselect');
                     }
                 }
                 
