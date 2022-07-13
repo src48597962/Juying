@@ -622,7 +622,7 @@ var SrcParseS = {
                             myjxnum = myjxnum + 1;
                         }else{
                             if(myJXlist[j].stopfrom.indexOf(from)==-1&&excludeparse.indexOf(myJXlist[j].parse)==-1&&!Uparselist.some(item => item.parse ==myJXlist[j].parse)){
-                                let sort = myJXlist[j]['sort']||1;
+                                let sort = myJXlist[j]['sort']||0;
                                 arr["sort"] = sort;
                                 Uparselist.push(arr);
                                 myjxnum = myjxnum + 1;
@@ -806,9 +806,12 @@ var SrcParseS = {
                             return a.id - b.id;
                         }
                     };
-                    if(Uparselist.length > 0){Uparselist.sort(sortData)};
+                    if(Uparselist.length > 0){
+                        Uparselist.sort((a, b) => {
+                            return a.sort-b.sort // 升序
+                        })
+                    };
 
-                    //if(printlog==1){log("待命解析："+Nparselist)};
                     if(isdn==1&&Uparselist.length==0){
                         Uparselist.push({type:'dn',name:'断插'});
                     }
