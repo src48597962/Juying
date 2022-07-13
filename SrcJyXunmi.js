@@ -157,8 +157,8 @@ function xunmi(name,data) {
                         }
                     }
                     
-                    if(list.length>0&&obj.type=="cms"){
-                        if(list[0].vod_name.indexOf(name)==-1){
+                    if(obj.type=="cms"){
+                        if((list.length>0&&list[0].vod_name.indexOf(name)==-1)||html.code=="0"){
                             try {
                                 ssurl = ssurl.replace('videolist','list');
                                 html = JSON.parse(request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 }));
