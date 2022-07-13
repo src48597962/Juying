@@ -808,7 +808,11 @@ var SrcParseS = {
                     };
                     if(Uparselist.length > 0){
                         Uparselist.sort((a, b) => {
-                            return a.sort-b.sort // 升序
+                            if(a.sort!=b.sort){
+                                return a.sort - b.sort
+                            }else{
+                                return a.id - b.id;
+                            }
                         })
                     };
 
