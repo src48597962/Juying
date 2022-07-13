@@ -75,6 +75,7 @@ var SrcParseS = {
             for (var i in urls) {
                 if (!exclude.test(urls[i]) && contain.test(urls[i])) {
                     //fba.log(urls[i]);
+                    /*
                     if(fy_bridge_app.getHeaderUrl)
                         return $$$("#noLoading#").lazyRule((url) => {
                             if (getMyVar('SrcM3U8', '1') == "1") {
@@ -89,6 +90,7 @@ var SrcParseS = {
                             return formatUrl(url);
                         }, urls[i], formatUrl);
                     }
+                    */
                 }
             }
         }, this.formatUrl, vipUrl)
@@ -343,7 +345,7 @@ var SrcParseS = {
     },
     聚嗅: function (vipUrl, x5jxlist) {
         var jxhtml = config.依赖.match(/https.*\//)[0] + 'SrcJiexi.html';
-        fc(jxhtml, 48);
+        fc(jxhtml, 96);
         let libsjxjs = fetch("hiker://files/libs/" + md5(jxhtml) + ".js");
         if (x5jxlist != undefined) {
             if (x5jxlist.length > 0) {
