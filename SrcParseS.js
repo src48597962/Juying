@@ -6,7 +6,7 @@ var SrcParseS = {
             } else {
                 if (url[0] == '/') { url = 'https:' + url }
                 if (i == undefined) {
-                    if (getMyVar('SrcM3U8', '1') == "1") {
+                    if (getMyVar('SrcM3U8', '1') == "1"||url.indexOf('vkey=')>-1) {
                         url = cacheM3u8(url, {timeout: 2000});
                     }
                     if(url.indexOf('User-Agent')==-1){
@@ -23,7 +23,7 @@ var SrcParseS = {
                         }*/
                     }
                 } else {
-                    if (getMyVar('SrcM3U8', '1') == "1") {
+                    if (getMyVar('SrcM3U8', '1') == "1"||url.indexOf('vkey=')>-1) {
                         url = cacheM3u8(url, {timeout: 2000}, 'video' + parseInt(i) + '.m3u8') + '#pre#';
                     }
                 }
@@ -77,7 +77,7 @@ var SrcParseS = {
                     //fba.log(urls[i]);
                     if(fy_bridge_app.getHeaderUrl)
                         return $$$("#noLoading#").lazyRule((url) => {
-                            if (getMyVar('SrcM3U8', '1') == "1") {
+                            if (getMyVar('SrcM3U8', '1') == "1"||url.indexOf('vkey=')>-1) {
                                 return cacheM3u8(url.split(";{")[0], {timeout: 2000})+"#isVideo=true#;{"+url.split(";{")[1];
                             }else{
                                 return url.replace(";{", "#isVideo=true#;{");
@@ -698,6 +698,7 @@ var SrcParseS = {
                             x5 = 1;
                         }
                     }else{
+                        /*
                         function testurl(url,name){
                             try {
                                 if (/\.m3u8/.test(url)) {
@@ -714,7 +715,7 @@ var SrcParseS = {
                                         }else{
                                             var urlts = urltss[0];
                                             if(!/^http/.test(urlts)){
-                                                let http = urlcode.url.match(/http.*\//)[0];//.match(/http(s)?:\/\/.*?\//)[0];
+                                                let http = urlcode.url.match(/http.*\//)[0];
                                                 urlts = http + urlts;
                                             }    
                                             var tscode = JSON.parse(fetch(urlts,{onlyHeaders:true,timeout:2000}));
@@ -743,8 +744,8 @@ var SrcParseS = {
                                 log(name+'>错误：探测超时未拦截，有可能是失败的')
                                 return 1;
                             }
-                        }
-                        if(testurl(rurl,obj.ulist.name)==0){
+                        }*/
+                        if(obj.testurl(rurl,obj.ulist.name)==0){
                             rurl = "";
                         }
                     }
@@ -758,7 +759,7 @@ var SrcParseS = {
 
             if(recordparse&&forcedn==0&&mulnum<=1&&!parseStr){
                 //优先上次成功的
-                playurl = task({ulist:{parse:recordparse, name:recordname, header:recordhead}, vipUrl:vipUrl}).url;
+                playurl = task({ulist:{parse:recordparse, name:recordname, header:recordhead}, vipUrl:vipUrl, testurl:this.testvideourl}).url;
                 
                 if(contain.test(playurl)&&!exclude.test(playurl)&&excludeurl.indexOf(playurl)==-1){
                     if(printlog==1){log("优先上次解析("+recordname+")成功>"+playurl)}; 
@@ -839,7 +840,8 @@ var SrcParseS = {
                             func: task,
                             param: {
                                 ulist: list,
-                                vipUrl: vipUrl
+                                vipUrl: vipUrl,
+                                testurl: this.testvideourl
                             },
                             id: list.parse
                         }
@@ -1066,7 +1068,7 @@ var SrcParseS = {
                 var header = {'User-Agent': 'Mozilla/5.0'};
             }
 
-            if (getMyVar('SrcM3U8', '1') == "1") {
+            if (getMyVar('SrcM3U8', '1') == "1"||url.indexOf('vkey=')>-1) {
                 var name = 'video'+parseInt(i)+'.m3u8';
                 url = cacheM3u8(url, {headers: header, timeout: 2000}, name)+'#pre#';
             }
@@ -1077,33 +1079,51 @@ var SrcParseS = {
         }   
     },
     //测试视频地址有效性
-    testvideourl: function (url) {
+    testvideourl: function (url,name) {
         try {
             if (/\.m3u8/.test(url)) {
-                var header = this.getheader(url);
-                var urlcode = JSON.parse(fetch(url,{header:header,withStatusCode:true,timeout:1000}));
+                var urlcode = JSON.parse(fetch(url,{withStatusCode:true,timeout:2000}));
                 if(urlcode.statusCode!=200){
-                    log('test>播放地址无法连接');
+                    log(name+'>播放地址疑似失效或网络无法访问，不信去验证一下>'+url);
                     return 0;
                 }else{
-                    var urlts = urlcode.body.replace(/#.*?\n/g,'').split('\n')[0];
-                    if(!/^http/.test(urlts)){
-                        let http = urlcode.url.match(/http(s)?:\/\/.*?\//)[0];
-                        urlts = http + urlts;
-                    }    
-                    var tscode = JSON.parse(fetch(urlts,{onlyHeaders:true,timeout:1000}));
-                    if(tscode.statusCode!=200){
-                        log('test>ts段无法连接');
+                    var tstime = urlcode.body.match(/#EXT-X-TARGETDURATION:(.*?)\n/)[1];
+                    var urltss = urlcode.body.replace(/#.*?\n/g,'').replace('#EXT-X-ENDLIST','').split('\n');
+                    if(parseInt(tstime)*parseInt(urltss.length)<120){
+                        log(name+'>播放地址疑似跳舞小姐姐或防盗小视频，不信去验证一下>'+url);
+                        return 0;
+                    }else{
+                        var urlts = urltss[0];
+                        if(!/^http/.test(urlts)){
+                            let http = urlcode.url.match(/http.*\//)[0];
+                            urlts = http + urlts;
+                        }    
+                        var tscode = JSON.parse(fetch(urlts,{onlyHeaders:true,timeout:2000}));
+                        if(tscode.statusCode!=200){
+                            log(name+'>ts段地址疑似失效或网络无法访问，不信去验证一下>'+url);
+                            return 0;
+                        }
+                    }
+                }
+                //log('test>播放地址连接正常');
+            }else if (/\.mp4/.test(url)) {
+                var urlheader = JSON.parse(fetch(url,{onlyHeaders:true,timeout:2000}));
+                if(urlheader.statusCode!=200){
+                    log(name+'>播放地址疑似失效或网络无法访问，不信去验证一下>'+url);
+                    return 0;
+                }else{
+                    var filelength = urlheader.headers['content-length'];
+                    if(parseInt(filelength[0])/1024/1024 < 80){
+                        log(name+'>播放地址疑似跳舞小姐姐或防盗小视频，不信去验证一下>'+url);
                         return 0;
                     }
                 }
-                log('test>播放地址连接正常');
             }
             return 1;
         } catch (e) {
-            log('test>错误：'+e.message)
+            log(name+'>错误：探测超时未拦截，有可能是失败的')
             return 1;
-        }   
+        }
     }
     
 }
