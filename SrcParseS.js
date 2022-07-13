@@ -75,6 +75,10 @@ var SrcParseS = {
             for (var i in urls) {
                 if (!exclude.test(urls[i]) && contain.test(urls[i])) {
                     //fba.log(urls[i]);
+                    return $$$("#noLoading#").lazyRule((url, formatUrl) => {
+                        //url = url.replace(/http.*?\?url=/, '');
+                        return formatUrl(url);
+                    }, urls[i], formatUrl);
                     /*
                     if(fy_bridge_app.getHeaderUrl)
                         return $$$("#noLoading#").lazyRule((url) => {
