@@ -504,6 +504,9 @@ var SrcParseS = {
         }else if (vipUrl.indexOf('sa.sogou') != -1) {
             if(printlog==1){log("优看视频，直接明码解析")}; 
             return unescape(fetch(vipUrl).match(/"url":"([^"]*)"/)[1].replace(/\\u/g, "%u"));
+        }else if (/^magnet/.test(vipUrl)) {
+            if(printlog==1){log("磁力视频地址，直接播放")}; 
+            return vipUrl;
         }else{
             var from = "";
             if(vipUrl.indexOf('-yanaifei.html') != -1){
