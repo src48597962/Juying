@@ -573,6 +573,7 @@ function SRCSet() {
         try{
             if(getMyVar('guanli', 'jk')=="jx"&&data.length > 0){
                 for(var i in data){
+                    data[i]['id'] = i;
                     data[i]['sort'] = data[i]['sort']||0;
                 }
                 data.sort((a, b) => {
