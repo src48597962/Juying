@@ -504,8 +504,8 @@ var SrcParseS = {
         }else if (vipUrl.indexOf('sa.sogou') != -1) {
             if(printlog==1){log("优看视频，直接明码解析")}; 
             return unescape(fetch(vipUrl).match(/"url":"([^"]*)"/)[1].replace(/\\u/g, "%u"));
-        }else if (/^magnet/.test(vipUrl)) {
-            if(printlog==1){log("磁力视频地址，直接播放")}; 
+        }else if (/^magnet/.test(vipUrl)||/torrent^/.test(vipUrl)) {
+            if(printlog==1){log("磁力/BT视频地址，由视界解析")}; 
             return vipUrl;
         }else{
             var from = "";
