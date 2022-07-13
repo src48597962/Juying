@@ -573,15 +573,19 @@ function SRCSet() {
         try{
             if(getMyVar('guanli', 'jk')=="jx"&&data.length > 0){
                 for(var i in data){
-                    data[i]['id'] = i;
+                    //data[i]['id'] = i;
                     data[i]['sort'] = data[i]['sort']||0;
                 }
                 data.sort((a, b) => {
+                    /*
                     if(a.sort!=b.sort){
                         return a.sort - b.sort
                     }else{
                         return a.id - b.id;
-                    }
+                    }*/
+                    if (a.sort < b.sort) return -1;
+                    if (a.sort > b.sort) return 1;
+                    return 0;
                 });
             }
             var czdatalist = data.map((datalist)=>{
