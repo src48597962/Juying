@@ -1080,6 +1080,7 @@ var SrcParseS = {
     },
     //测试视频地址有效性
     testvideourl: function (url,name) {
+        if(!name){name = "解析"}
         try {
             if (/\.m3u8/.test(url)) {
                 var urlcode = JSON.parse(fetch(url,{withStatusCode:true,timeout:2000}));
