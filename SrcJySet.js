@@ -570,20 +570,14 @@ function SRCSet() {
     });
 
     function guanlidata(data) {
-        function sortData(a, b) {
-            try{
-                if((a.sort?a.sort:1)!=(b.sort?b.sort:1)){
-                    return a.sort - b.sort
-                }else{
-                    return a.id - b.id;
-                }
-            }catch(e){
-                return a.id - b.id;
-            }
-        };
         try{
             if(getMyVar('guanli', 'jk')=="jx"&&data.length > 0){
-                data.sort(sortData);
+                for(var i in data){
+                    data[i]['sort'] = data[i]['sort']||0;
+                }
+                data.sort((a, b) => {
+                    return a.sort-b.sort // 升序
+                });
             }
             var czdatalist = data.map((datalist)=>{
                 if(getMyVar('guanli', 'jk')=="jk"){
@@ -1619,7 +1613,7 @@ function jiexi(lx,data) {
                     let urlname = urls[i].split('#')[0];
                     let urlurl = urls[i].split('#')[1];
                     if(!datalist.some(item => item.url ==urlurl)&&urlname&&/^http/.test(urlurl)){
-                        let arr  = { "name": urlname, "parse": urlurl, "stopfrom": [], "priorfrom": [], "sort": 1 };
+                        let arr  = { "name": urlname, "parse": urlurl, "stopfrom": [], "priorfrom": [], "sort": 0 };
                         datalist.push(arr);
                         urlnum = urlnum + 1;
                     }
