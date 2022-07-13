@@ -740,7 +740,7 @@ function SRCSet() {
                                 }
                             }
                             writeFile(filepath, JSON.stringify(datalist));
-                            back(true);
+                            refreshPage(false);
                             return "toast://已批量删除解析"+duoselect.length;
                         }, duoselect, filepath)
                     }else{
