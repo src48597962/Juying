@@ -726,10 +726,10 @@ function SRCSet() {
                     if(duoselect.length>0){
                         if(getMyVar('guanli', 'jk')=="jk"){
                             var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
-                            var sm = "确定删除选定的接口吗？";
+                            var sm = "确定删除选定的"+duoselect.length+"个接口吗？";
                         }else if(getMyVar('guanli', 'jk')=="jx"){
                             var filepath = "hiker://files/rules/Src/Juying/myjiexi.json";
-                            var sm = "确定删除选定的解析吗？";
+                            var sm = "确定删除选定的"+duoselect.length+"个解析吗？";
                         }
                         return $(sm).confirm((duoselect, filepath)=>{
                             var datafile = fetch(filepath);
