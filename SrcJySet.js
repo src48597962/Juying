@@ -570,7 +570,6 @@ function SRCSet() {
     });
 
     function guanlidata(data) {
-        log(data)
         function sortData(a, b) {
             try{
                 if((a.sort?a.sort:1)!=(b.sort?b.sort:1)){
@@ -586,7 +585,6 @@ function SRCSet() {
             if(getMyVar('guanli', 'jk')=="jx"&&data.length > 0){
                 data.sort(sortData);
             }
-            log(data)
             var czdatalist = data.map((datalist)=>{
                 if(getMyVar('guanli', 'jk')=="jk"){
                     var dataurl = datalist.url;
@@ -603,7 +601,7 @@ function SRCSet() {
                     var dataname = datalist.name;
                     var datastopfrom = datalist.stopfrom||[];
                     var datapriorfrom = datalist.priorfrom||"";
-                    var datasort = datalist.sort||1;
+                    var datasort = datalist.sort||0;
                     var datatitle = datasort+'-'+dataname+'-'+dataurl;
                     var datadesc = "优先强制：" + datapriorfrom + "" + "\n排除片源：" + datastopfrom + "";
                     var dataarr = {name:dataname, url:dataurl, stopfrom:datastopfrom+"", priorfrom:datapriorfrom+""};
@@ -1602,7 +1600,7 @@ function jiexi(lx,data) {
                     stopfrom = stopfrom.filter(n => n);
                     let priorfrom = pasrepriorfrom.replace('，',',').split(',');
                     priorfrom = priorfrom.filter(n => n);
-                    let arr  = { "name": parsename, "parse": parseurl, "stopfrom": stopfrom, "priorfrom": priorfrom, "sort": 1};
+                    let arr  = { "name": parsename, "parse": parseurl, "stopfrom": stopfrom, "priorfrom": priorfrom, "sort": 0};
                     try{
                         if(parseheader){arr['header']= JSON.parse(parseheader)}
                     }catch(e){     }
