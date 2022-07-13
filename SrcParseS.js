@@ -798,21 +798,9 @@ var SrcParseS = {
                     if(printlog==1){log("开启强制断插解析模式")};
                     Uparselist = [{type:'dn',name:'断插'}];
                 }else{
-                    //定义排序函数
-                    function sortData(a, b) {
-                        if(a.sort!=b.sort){
-                            return a.sort - b.sort
-                        }else{
-                            return a.id - b.id;
-                        }
-                    };
                     if(Uparselist.length > 0){
                         Uparselist.sort((a, b) => {
-                            if(a.sort!=b.sort){
-                                return a.sort - b.sort
-                            }else{
-                                return a.id - b.id;
-                            }
+                            return a.sort - b.sort
                         })
                     };
 
