@@ -576,7 +576,11 @@ function SRCSet() {
                     data[i]['sort'] = data[i]['sort']||0;
                 }
                 data.sort((a, b) => {
-                    return a.sort-b.sort // 升序
+                    if(a.sort!=b.sort){
+                        return a.sort - b.sort
+                    }else{
+                        return a.id - b.id;
+                    }
                 });
             }
             var czdatalist = data.map((datalist)=>{
