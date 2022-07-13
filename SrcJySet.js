@@ -570,6 +570,7 @@ function SRCSet() {
     });
 
     function guanlidata(data) {
+        log(data)
         function sortData(a, b) {
             try{
                 if((a.sort?a.sort:1)!=(b.sort?b.sort:1)){
@@ -585,6 +586,7 @@ function SRCSet() {
             if(getMyVar('guanli', 'jk')=="jx"&&data.length > 0){
                 data.sort(sortData);
             }
+            log(data)
             var czdatalist = data.map((datalist)=>{
                 if(getMyVar('guanli', 'jk')=="jk"){
                     var dataurl = datalist.url;
