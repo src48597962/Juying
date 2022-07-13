@@ -975,7 +975,7 @@ var SrcParseS = {
                     }
                 }//排队解析结果循环
             }//解析全列表循环
-
+            var failparse = [];
             //失败的解析，处理
             for(var p=0;p<dellist.length;p++){
                 if(dellist[p].type=="myjx"){
@@ -984,7 +984,8 @@ var SrcParseS = {
                             //解析失败的,且排序大于5次从私有中排除片源
                             myJXlist[j]['sort'] = myJXlist[j]['sort']||0;
                             myJXlist[j].sort = myJXlist[j].sort + 1;
-                            if(printlog==1){log(myJXlist[j].name+'>解析失败排序-1，当前排序'+myJXlist[j].sort)};
+                            //if(printlog==1){log(myJXlist[j].name+'>解析失败排序-1，当前排序'+myJXlist[j].sort)};
+                            failparse.push(myJXlist[j].name);
                             if(myJXlist[j].sort>5 && myJXlist[j].stopfrom.indexOf(from)==-1){
                                 myJXlist[j].stopfrom[myJXlist[j].stopfrom.length] = from;
                                 if(printlog==1){log(myJXlist[j].name+'>解析失败大于5次，排除片源'+from)};
@@ -1028,6 +1029,8 @@ var SrcParseS = {
             if(appJXchange == 1){writeFile(appJXfile, JSON.stringify(appJXlist));}
             //app自带解析是否加入黑名单
             if(appzdchange==1){writeFile(recordfile, JSON.stringify(recordlist));}
+            //私有解析失败的统一提示
+            if(failparse.length>0&&printlog==1){log(failparse+'<以上私有解析失败，排序-1')}
 
             //播放
             if(playurl!=""){
@@ -1079,8 +1082,9 @@ var SrcParseS = {
         }   
     },
     //测试视频地址有效性
-    testvideourl: function (url,name) {
+    testvideourl: function (url,name,times) {
         if(!name){name = "解析"}
+        if(!times){times = 120}
         try {
             if (/\.m3u8/.test(url)) {
                 var urlcode = JSON.parse(fetch(url,{withStatusCode:true,timeout:2000}));
@@ -1090,7 +1094,7 @@ var SrcParseS = {
                 }else{
                     var tstime = urlcode.body.match(/#EXT-X-TARGETDURATION:(.*?)\n/)[1];
                     var urltss = urlcode.body.replace(/#.*?\n/g,'').replace('#EXT-X-ENDLIST','').split('\n');
-                    if(parseInt(tstime)*parseInt(urltss.length)<120){
+                    if(parseInt(tstime)*parseInt(urltss.length)<times){
                         log(name+'>播放地址疑似跳舞小姐姐或防盗小视频，不信去验证一下>'+url);
                         return 0;
                     }else{
