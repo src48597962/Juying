@@ -205,8 +205,8 @@ var erjimenu = [
                         }else{
                             //app自带的解析在屏蔽优先时，直接加入黑名单
                             recordlist['excludeparse'] = recordlist['excludeparse']||[];
-                            if(recordlist['excludeparse'].indexOf(recordlist.parse[input])==-1){
-                                recordlist['excludeparse'].push(recordlist.parse[input]);
+                            if(parseurl&&recordlist['excludeparse'].indexOf(parseurl)==-1){
+                                recordlist['excludeparse'].push(parseurl);
                             }
                             var sm = parsename+'>加入全局黑名单';
                         }
