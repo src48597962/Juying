@@ -1226,7 +1226,7 @@ function jiekou(lx,data) {
             }else{
                 return "toast://无法保存，检查项目填写完整性";
             }
-        }, lx, data)
+        }, lx, data, jiekouchuli)
     });
     setHomeResult(d);
 }
