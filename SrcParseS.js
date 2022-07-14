@@ -59,6 +59,7 @@ var SrcParseS = {
             };
             window.c++;
             if (window.c * 250 >= 15 * 1000) {
+                fba.log("嗅探失改>超过15秒未获取到");
                 fba.hideLoading();
                 try{
                     let videourl = vipUrl.split('url=')[1];
@@ -70,11 +71,11 @@ var SrcParseS = {
             }
             //fba.log(fy_bridge_app.getUrls());
             var urls = _getUrls();
-            var exclude = /m3u8\.tv/;
-            var contain = /\.mp4|\.m3u8|\.flv|\.avi|\.mpeg|\.wmv|\.mov|\.rmvb|\.dat|qqBFdownload|mime=video%2F|video_mp4/;
+            var exclude = /404\.m3u8|xiajia\.mp4|余额不足\.m3u8|m3u8\.tv/;//设置排除地址
+            var contain = /\.mp4|\.m3u8|\.flv|\.avi|\.mpeg|\.wmv|\.mov|\.rmvb|\.dat|qqBFdownload|mime=video%2F|video_mp4/;//设置符合条件的正确地址
             for (var i in urls) {
                 if (!exclude.test(urls[i]) && contain.test(urls[i])) {
-                    //fba.log(urls[i]);
+                    fba.log("嗅探成功>"+urls[i]);
                     if(fy_bridge_app.getHeaderUrl)
                         return $$$("#noLoading#").lazyRule((url) => {
                             if (getMyVar('SrcM3U8', '1') == "1"||url.indexOf('vkey=')>-1) {
