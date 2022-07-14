@@ -640,26 +640,6 @@ function SRCSet() {
                                     }
                                 }
                                 writeFile(filepath, JSON.stringify(datalist));
-                                var recordfile = "hiker://files/rules/Src/Juying/parse.json";
-                                var recordparse=fetch(recordfile);
-                                if(recordparse!=""){
-                                    eval("var recordlist=" + recordparse+ ";");
-                                }else{
-                                    var recordlist={};
-                                }
-                                var excludeparse = recordlist.excludeparse||[];
-                                if(excludeparse.length>0){
-                                    function removeByValue(arr, val) {
-                                        for(var i = 0; i < arr.length; i++) {
-                                            if(arr[i] == val) {
-                                            arr.splice(i, 1);
-                                            break;
-                                            }
-                                        }
-                                    }
-                                    removeByValue(excludeparse,dataurl);
-                                    writeFile(recordfile, JSON.stringify(recordlist));
-                                }
                             }
                             
                             refreshPage(false);
@@ -1558,26 +1538,6 @@ function jiexi(lx,data) {
                     }
                 }
                 writeFile(filepath, JSON.stringify(datalist));
-                var recordfile = "hiker://files/rules/Src/Juying/parse.json";
-                var recordparse=fetch(recordfile);
-                if(recordparse!=""){
-                    eval("var recordlist=" + recordparse+ ";");
-                }else{
-                    var recordlist={};
-                }
-                var excludeparse = recordlist.excludeparse||[];
-                if(excludeparse.length>0){
-                    function removeByValue(arr, val) {
-                        for(var i = 0; i < arr.length; i++) {
-                            if(arr[i] == val) {
-                            arr.splice(i, 1);
-                            break;
-                            }
-                        }
-                    }
-                    removeByValue(excludeparse,dataurl);
-                    writeFile(recordfile, JSON.stringify(recordlist));
-                }
                 back(true);
                 return "toast://已删除";
             }, data.url)
