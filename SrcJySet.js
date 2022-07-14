@@ -1513,7 +1513,10 @@ function jiexi(lx,data) {
                     }, parsearr),
                     col_type: "text_3",
                     extra:{
-                        cls: 'jxtest'
+                        cls: 'jxtest',
+                        ua: PC_UA,
+                        jsLoadingInject: true,
+                        blockRules: ['.m4a', '.mp3', '.mp4', '.m3u8', '.flv', '.avi', '.3gp', '.mpeg', '.wmv', '.mov', '.rmvb', '.gif', '.jpg', '.jpeg', '.png', '.ico', '.svg', '.css'] 
                     }
                 })
             }
