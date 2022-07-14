@@ -69,15 +69,14 @@ var SrcParseS = {
                 }catch(e){ }
                 return "toast://解析超时，建议切换线路或更换解析方式";
             }
-            fba.log(vipUrl);
-            fba.log(fy_bridge_app.getUrls());
+            //fba.log(fy_bridge_app.getUrls());
             var urls = _getUrls();
             var exclude = /404\.m3u8|xiajia\.mp4|余额不足\.m3u8|m3u8\.tv/;//设置排除地址
             var contain = /\.mp4|\.m3u8|\.flv|\.avi|\.mpeg|\.wmv|\.mov|\.rmvb|\.dat|qqBFdownload|mime=video%2F|video_mp4/;//设置符合条件的正确地址
             for (var i in urls) {
                 if (!exclude.test(urls[i]) && contain.test(urls[i])) {
-                    fba.log("嗅探成功>"+urls[i]);
-                    if(fy_bridge_app.getHeaderUrl)
+                    //fba.log("嗅探成功>"+urls[i]);
+                    if(fy_bridge_app.getHeaderUrl&&vipUrl.indexOf("=http")==-1)
                         return $$$("#noLoading#").lazyRule((url) => {
                             if (getMyVar('SrcM3U8', '1') == "1"||url.indexOf('vkey=')>-1) {
                                 return cacheM3u8(url.split(";{")[0], {timeout: 2000})+"#isVideo=true#;{"+url.split(";{")[1];
@@ -1054,7 +1053,7 @@ var SrcParseS = {
                     log('进入嗅探解析列表：' + x5namelist)
                 }
                 if(parseStr){
-                    return this.嗅探(parseStr+vipUrl);
+                    return this.嗅探(parseStr.parse+vipUrl);
                 }else{
                     return this.聚嗅(vipUrl, x5jxlist);
                 }
