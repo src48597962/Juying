@@ -768,6 +768,8 @@ var SrcParseS = {
                     if(printlog==1){log("优先上次解析("+recordname+")失败，无效视频地址")}; 
                     playurl = "";
                     delete recordlist.parse[from];
+                    delete recordlist.name[from];
+                    delete recordlist.head[from];
                     writeFile(recordfile, JSON.stringify(recordlist));
                     //失败的从待解列表中去除
                     for(var i=0;i<Uparselist.length;i++){
