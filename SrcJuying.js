@@ -159,7 +159,7 @@ function erji() {
             return input;
         }
     });
-    var block = ['.m4a', '.mp3', '.mp4', '.m3u8', '.flv', '.avi', '.3gp', '.mpeg', '.wmv', '.mov', '.rmvb', '.gif', '.jpg', '.jpeg', '.png', '.ico', '.svg', '.css'];
+    var block = ['.m4a', '.mp3', '.mp4', '.m3u8', '.flv', '.avi', '.3gp', '.mpeg', '.wmv', '.mov', '.rmvb', '.gif', '.jpg', '.jpeg', '.png', '.ico', '.svg', 'hm.baidu.com', '/ads/*.js', 'hm.baidu.com', '/ads/*.js', '.css'];
     //选集部份
     function setLists(lists, index) {
         var list = lists[index];
