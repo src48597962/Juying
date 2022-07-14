@@ -794,7 +794,7 @@ var SrcParseS = {
                     }
                 }
             }
-            if(playurl==""){
+            if(playurl==""&&!parseStr){
                 if(forcedn==1){
                     if(printlog==1){log("开启强制断插解析模式")};
                     Uparselist = [{type:'dn',name:'断插'}];
@@ -828,7 +828,7 @@ var SrcParseS = {
                     i=s;
                 }
                 if(printlog==1){log("本轮排队解析："+Namelist)};
-                if(isdn==1&&Uparselist.length>0){
+                if(isdn==1&&Uparselist.length>0&&!parseStr){
                     UrlList.push({type:'dn'});
                 }
                 let Urlparses = UrlList.map((list)=>{
@@ -1022,15 +1022,16 @@ var SrcParseS = {
                 }
 
             }
-            
-            //私有解析有排除片源
-            if(myJXchange == 1){writeFile(myJXfile, JSON.stringify(myJXlist));}
-            //app有发现或修改解析时保存本地
-            if(appJXchange == 1){writeFile(appJXfile, JSON.stringify(appJXlist));}
-            //app自带解析是否加入黑名单
-            if(appzdchange==1){writeFile(recordfile, JSON.stringify(recordlist));}
-            //私有解析失败的统一提示
-            if(failparse.length>0&&printlog==1){log(failparse+'<以上私有解析失败，排序-1')}
+            if(!parseStr){
+                //私有解析有排除片源
+                if(myJXchange == 1){writeFile(myJXfile, JSON.stringify(myJXlist));}
+                //app有发现或修改解析时保存本地
+                if(appJXchange == 1){writeFile(appJXfile, JSON.stringify(appJXlist));}
+                //app自带解析是否加入黑名单
+                if(appzdchange==1){writeFile(recordfile, JSON.stringify(recordlist));}
+                //私有解析失败的统一提示
+                if(failparse.length>0&&printlog==1){log(failparse+'<以上私有解析失败，排序-1')}
+            } 
 
             //播放
             if(playurl!=""){
