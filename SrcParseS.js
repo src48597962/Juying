@@ -49,7 +49,7 @@ var SrcParseS = {
         return header;
     },
     嗅探: function (vipUrl) {
-        showLoading('√嗅探解析中，请稍候');
+        showLoading('√解析载入中，请稍候');
         return (getMyVar('SrcXTNH', 'web') == 'x5' ? 'x5Rule://' : 'webRule://') + vipUrl + '@' + $.toString((formatUrl,vipUrl) => {
             if (typeof (request) == 'undefined' || !request) {
                 eval(fba.getInternalJs());
