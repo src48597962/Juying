@@ -705,7 +705,7 @@ function xunmierji(type,ua) {
                 d.push({
                     title: playtitle.replace(/第|集|话|期|-/g, ''),
                     url: playurl + DTJX,
-                    extra: { id: playurl, referer: playurl, ua: PC_UA, jsLoadingInject: true, blockRules: ['.m4a', '.mp3', '.mp4', '.flv', '.avi', '.mpeg', '.wmv', '.mov', '.rmvb', '.gif', '.jpg', '.jpeg', '.png', '.ico', '.svg', 'hm.baidu.com', '/ads/*.js', '.css'] },
+                    extra: { id: playurl, referer: playurl, ua: PC_UA, jsLoadingInject: true, blockRules: ['.m4a','.mp3','.mp4','.flv','.avi','.mpeg','.wmv','.mov','.rmvb','.gif','.jpg','.jpeg','.png','.ico','.svg','hm.baidu.com','/ads/*.js','.51.la','.css'] },
                     col_type: list.length > 4 && len < 7 ? 'text_4' : 'text_3'
                 });
             } else {
