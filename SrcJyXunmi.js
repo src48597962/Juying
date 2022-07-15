@@ -481,7 +481,7 @@ function xunmierji(type,ua) {
                 //log(contname)
                 let cont = [];
                 for (let j = 0; j < contname.length; j++) {
-                    cont.push(contname[j]+"$"+conturl[j])
+                    cont.push(contname[j]+"$"+jsondata.homeUrl+conturl[j])
                 }
                 //log(cont)
                 conts.push(cont.join("#"))
