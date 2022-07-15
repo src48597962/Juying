@@ -443,6 +443,8 @@ function xunmierji(type,ua) {
             var conts = arts;
         }else if (/xpath/.test(type)) {
             eval("var xpfile = " + fetchCache(MY_PARAMS.api,48))
+            log(xpfile.dtActor)
+            log(xpath(html, JSON.stringify(xpfile.dtActor)))
             var actor = xpath(html, xpfile.dtActor) || "内详";
             var director = xpath(html, xpfile.dtDirector) || "内详";
             var area = xpath(html, xpfile.dtArea) || "未知";
@@ -456,8 +458,6 @@ function xunmierji(type,ua) {
         }else{
             //网页
         }
-        log(actor)
-        log(director)
         var details1 = '主演：' + actor.substring(0, 12) + '\n导演：' + director.substring(0, 12) + '\n地区：' + area + '   年代：' + year;
         var details2 = remarks + '\n' + pubdate;
         var newconfig = { 详情1: details1, 详情2: details2, 图片: pic, 简介: desc, 线路: arts, 影片: conts, 标识: MY_URL };
