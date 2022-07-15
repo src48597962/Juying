@@ -20,8 +20,8 @@ function xunmi(name,data) {
         eval("var jyfile = " + fetchCache("https://src48597962.coding.net/p/src/d/hktest/git/raw/master/SrcJyJiekou.json",48))
         if(jyfile != ""){
             for(let k in jyfile){
-                log(jyfile[k]);
-                datalist.push({"name":k,"type":jyfile[k].type,"url":"jy"+k,"data":jyfile[k]})
+                let ua = jyfile[k].ua||"Dalvik/2.1.0";
+                datalist.push({"name":k,"type":jyfile[k].type,"ua":ua,"url":"jy"+k,"data":jyfile[k]})
             }
         }
     }catch(e){
@@ -280,7 +280,8 @@ function xunmi(name,data) {
                     url: parse.url,
                     ua: parse.ua,
                     type: parse.type,
-                    group: parse.group||""
+                    group: parse.group||"",
+                    data: parse.data||{}
                 },
                 id: parse.name
             }
