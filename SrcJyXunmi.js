@@ -470,10 +470,12 @@ function xunmierji(type,ua) {
             for (let i = 0; i < arts.length; i++) {
                 let contname = xpathArray(html, xpfile.dtUrlNode+'['+i+']'+xpfile.dtUrlSubNode+xpfile.dtUrlName);
                 let conturl = xpathArray(html, xpfile.dtUrlNode+'['+i+']'+xpfile.dtUrlSubNode+xpfile.dtUrlId);
+                log(contname)
                 let cont = [];
                 for (let j = 0; j < contname.length; j++) {
                     cont.push(contname[j]+"$"+conturl[j])
                 }
+                log(cont)
                 conts.push(cont.join("#"))
             }
             log(conts);
