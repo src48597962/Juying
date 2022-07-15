@@ -448,13 +448,11 @@ function xunmierji(type,ua) {
             var arts = html.videolist;
             var conts = arts;
         }else if (/xpath/.test(type)) {
-            log(html)
             eval("var xpfile = " + fetchCache(MY_PARAMS.api,48))
-            log(xpfile)
             var actor = xpath(html, xpfile.dtActor) || "内详";
-            log(xpfile.dtActor)
-            log(xpath(html, xpfile.dtActor))
             var director = xpath(html, xpfile.dtDirector) || "内详";
+            log(xpfile.director)
+            log(xpath(html, xpfile.director))
             var area = xpath(html, xpfile.dtArea) || "未知";
             var year = xpath(html, xpfile.dtYear) || "未知";
             var remarks = xpath(html, xpfile.dtCate) || "";
