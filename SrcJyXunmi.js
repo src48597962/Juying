@@ -87,11 +87,6 @@ function xunmi(name,data) {
                 let mm = date.getMonth()+1;
                 let dd = date.getDate();
                 let key = (mm<10?"0"+mm:mm)+""+(dd<10?"0"+dd:dd);
-                //mm<10?"0"+mm+""+dd:mm+""+dd;
-                /*
-                if(url_api.substr(url_api.length-1,1)=="/"){
-                    url_api = url_api.substr(0,url_api.length-1);
-                }*/
                 var url = url_api + '/detail?&key='+key+'&vod_id=';
                 var ssurl = url_api + '?ac=videolist&limit=10&wd='+name+'&key='+key;
                 var lists = "html.data.list";
