@@ -475,7 +475,7 @@ function xunmierji(type,ua) {
             }
             removeByValue(arts,"猜你喜欢");
             var conts = [];
-            for (let i = 0; i < arts.length; i++) {
+            for (let i = 1; i < arts.length+1; i++) {
                 let contname = xpathArray(html, jsondata.dtUrlNode+'['+i+']'+jsondata.dtUrlSubNode+jsondata.dtUrlName);
                 let conturl = xpathArray(html, jsondata.dtUrlNode+'['+i+']'+jsondata.dtUrlSubNode+jsondata.dtUrlId);
                 //log(contname)
@@ -483,7 +483,7 @@ function xunmierji(type,ua) {
                 for (let j = 0; j < contname.length; j++) {
                     cont.push(contname[j]+"$"+conturl[j])
                 }
-                log(cont)
+                //log(cont)
                 conts.push(cont.join("#"))
             }
             log(conts);
@@ -593,7 +593,7 @@ function xunmierji(type,ua) {
                 }
                 lists.push(si);
             };
-        }else if (/cms/.test(type)) {
+        }else if (/cms|tvbox/.test(type)) {
             let single = conts[i]||"";
             if(single){lists.push(single.split('#'))};
         }else{
