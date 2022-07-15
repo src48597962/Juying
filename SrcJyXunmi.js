@@ -457,6 +457,19 @@ function xunmierji(type,ua) {
             var pic = MY_PARAMS.pic || xpath(html, xpfile.dtImg);
             var desc = String(xpath(html, xpfile.dtDesc)) || '...';
             var arts = xpathArray(html, xpfile.dtFromNode+xpfile.dtFromName);
+            function removeByValue(arr, val) {
+                for(var i = 0; i < arr.length; i++) {
+                    if(arr[i] == val) {
+                    arr.splice(i, 1);
+                    break;
+                    }
+                }
+            }
+            removeByValue(arts,"猜你喜欢");
+            var contname = xpathArray(html, xpfile.dtUrlNode+xpfile.dtUrlName);
+            var conturl = xpathArray(html, xpfile.dtUrlNode+xpfile.dtUrlSubNode);
+            log(contname);
+            log(conturl);
             var conts = [];
         }else{
             //网页
