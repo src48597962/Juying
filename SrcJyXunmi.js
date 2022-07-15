@@ -486,7 +486,7 @@ function xunmierji(type,ua) {
                 //log(cont)
                 conts.push(cont.join("#"))
             }
-            log(conts);
+            //log(conts);
         }else{
             //网页
         }
