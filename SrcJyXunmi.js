@@ -21,7 +21,7 @@ function xunmi(name,data) {
         if(jyfile != ""){
             for(let k in jyfile){
                 let ua = jyfile[k].ua||"Dalvik/2.1.0";
-                datalist.push({"name":k,"type":jyfile[k].type,"ua":ua,"url":"jy"+k,"data":jyfile[k]})
+                datalist.push({"name":jyfile[k].name,"type":jyfile[k].type,"ua":ua,"url":k,"data":jyfile[k]})
             }
         }
     }catch(e){
