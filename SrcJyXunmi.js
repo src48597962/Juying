@@ -112,7 +112,9 @@ function xunmi(name,data) {
                 var url = url_api + '?ac=detail&ids=';
                 var ssurl = url_api + '?ac=videolist&wd='+name;
                 var lists = "html.list";
-            }else{
+            } else if (obj.type=="xpath") {
+                eval("var xpfile = " + fetchCache(url_api,48))
+            } else {
 
             }
             updateItem('loading', {
@@ -209,8 +211,58 @@ function xunmi(name,data) {
                     log(obj.name+'>'+e.message);
                     return {result:0, url:ssurl, apiurl:url_api};
                 }
+            }else if(obj.type=="xpath"){
+                var ssurl = xpflie.searchUrl.replace('{wd}',name);
+                try {
+                    if(xpflie.scVodNode=="json:list"){
+                        var html = JSON.parse(request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 }));
+                        var list = html.list||[];
+                    }
+                        
+                } catch (e) {
+                    log(e.message);
+                    var list = [];
+                }
+                if(list.length>0){
+                    try {
+                        let search = list.map((list)=>{
+                            let vodname = list.name;
+                            if(vodname.indexOf(name)>-1){
+                                let vodpic = list.pic;
+                                let voddesc = "";
+                                let appname = '‘‘’’<font color=#f13b66a>'+obj.name+'</font>';
+                                let vodurl = xpflie.dtUrl.replace('{vid}',list.id);
+                                return {
+                                    title: vodname,
+                                    desc: voddesc + '\n\n' + appname + ' ('+obj.type+')'+(obj.group?' ['+obj.group+']':''),
+                                    pic_url: vodpic?vodpic + "@Referer=":"https://www.xawqxh.net/mxtheme/images/loading.gif",
+                                    url: $("hiker://empty##" + vodurl + "#immersiveTheme#").rule((type,ua) => {
+                                            require(config.依赖);
+                                            xunmierji(type,ua)
+                                        },obj.type, urlua),
+                                    col_type: "movie_1_vertical_pic",
+                                    extra: {
+                                        pic: vodpic,
+                                        name: vodname,
+                                        title: vodname+'-'+obj.name,
+                                        api: url_api,
+                                        cls: 'xunmilist'
+                                    }
+                                }
+                            }
+                        });
+                        search = search.filter(n => n);
+                        if(search.length>0){
+                            return {result:1, apiurl:url_api, add:search};
+                        }
+                    } catch (e) {
+                        log(obj.name+'>'+e.message);
+                    }
+                }
+                return {result:0, url:ssurl, apiurl:url_api};
+            }else{
+
             }
-            //网页
         };
 
         let Jklist = datalist.map((parse)=>{
