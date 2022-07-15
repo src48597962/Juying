@@ -451,10 +451,12 @@ function xunmierji(type,ua) {
             eval("var xpfile = " + fetchCache(MY_PARAMS.api,48))
             var actor = xpath(html, xpfile.dtActor) || "内详";
             var director = xpath(html, xpfile.dtDirector) || "内详";
-            log(xpfile.director)
-            log(xpath(html, xpfile.director))
+            log(xpfile.dtDirector)
+            log(xpath(html, xpfile.dtDirector))
             var area = xpath(html, xpfile.dtArea) || "未知";
+            log(area)
             var year = xpath(html, xpfile.dtYear) || "未知";
+            log(year)
             var remarks = xpath(html, xpfile.dtCate) || "";
             var pubdate = xpath(html, xpfile.dtMark) || "";
             var pic = MY_PARAMS.pic || xpath(html, xpfile.dtImg);
