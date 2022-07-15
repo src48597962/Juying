@@ -20,7 +20,7 @@ function xunmi(name,data) {
         eval("var jyfile = " + fetchCache("https://src48597962.coding.net/p/src/d/hktest/git/raw/master/SrcJyJiekou.json",48))
         if(jyfile != ""){
             for(let k in jyfile){
-                datalist.push({"name":k,"type":jyfile[k].type,"data":jyfile[k]})
+                datalist.push({"name":k,"type":jyfile[k].type,"url":"jy"+k,"data":jyfile[k]})
             }
         }
     }catch(e){}
@@ -115,8 +115,8 @@ function xunmi(name,data) {
                 var url = url_api + '?ac=detail&ids=';
                 var ssurl = url_api + '?ac=videolist&wd='+name;
                 var lists = "html.list";
-            } else if (obj.type=="xpath") {
-                eval("var xpfile = " + fetchCache(url_api,48))
+            } else if (obj.type=="xpath"||obj.type=="biubiu") {
+                var jsondata = obj.data;
             } else {
                 log('api类型错误')
             }
@@ -216,8 +216,8 @@ function xunmi(name,data) {
                 }
             }else if(obj.type=="xpath"){
                 try {
-                    var ssurl = xpfile.searchUrl.replace('{wd}',name);
-                    if(xpfile.scVodNode=="json:list"){
+                    var ssurl = jsondata.searchUrl.replace('{wd}',name);
+                    if(jsondata.scVodNode=="json:list"){
                         var html = JSON.parse(request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 }));
                         var list = html.list||[];
                     }
@@ -234,7 +234,7 @@ function xunmi(name,data) {
                                 let vodpic = list.pic;
                                 let voddesc = "";
                                 let appname = '‘‘’’<font color=#f13b66a>'+obj.name+'</font>';
-                                let vodurl = xpfile.dtUrl.replace('{vid}',list.id);
+                                let vodurl = jsondata.dtUrl.replace('{vid}',list.id);
                                 return {
                                     title: vodname,
                                     desc: voddesc + '\n\n' + appname + ' ('+obj.type+')'+(obj.group?' ['+obj.group+']':''),
@@ -248,7 +248,7 @@ function xunmi(name,data) {
                                         pic: vodpic,
                                         name: vodname,
                                         title: vodname+'-'+obj.name,
-                                        api: url_api,
+                                        data: jsondata,
                                         cls: 'xunmilist'
                                     }
                                 }
@@ -451,16 +451,16 @@ function xunmierji(type,ua) {
             var arts = html.videolist;
             var conts = arts;
         }else if (/xpath/.test(type)) {
-            eval("var xpfile = " + fetchCache(MY_PARAMS.api,48))
-            var actor = String(xpathArray(html, xpfile.dtActor).join(',')) || "内详";
-            var director = String(xpathArray(html, xpfile.dtDirector).join(',')) || "内详";
-            var area = String(xpath(html, xpfile.dtArea)).replace('地区：','') || "未知";
-            var year = String(xpath(html, xpfile.dtYear)).replace('年份：','') || "未知";
-            var remarks = String(xpath(html, xpfile.dtCate)).split('/')[0] || "";
-            var pubdate = String(xpath(html, xpfile.dtMark)) || "";
-            var pic = MY_PARAMS.pic || xpath(html, xpfile.dtImg);
-            var desc = String(xpath(html, xpfile.dtDesc)) || '...';
-            var arts = xpathArray(html, xpfile.dtFromNode+xpfile.dtFromName);
+            var jsondata = MY_PARAMS.data;
+            var actor = String(xpathArray(html, jsondata.dtActor).join(',')) || "内详";
+            var director = String(xpathArray(html, jsondata.dtDirector).join(',')) || "内详";
+            var area = String(xpath(html, jsondata.dtArea)).replace('地区：','') || "未知";
+            var year = String(xpath(html, jsondata.dtYear)).replace('年份：','') || "未知";
+            var remarks = String(xpath(html, jsondata.dtCate)).split('/')[0] || "";
+            var pubdate = String(xpath(html, jsondata.dtMark)) || "";
+            var pic = MY_PARAMS.pic || xpath(html, jsondata.dtImg);
+            var desc = String(xpath(html, jsondata.dtDesc)) || '...';
+            var arts = xpathArray(html, jsondata.dtFromNode+jsondata.dtFromName);
             function removeByValue(arr, val) {
                 for(var i = 0; i < arr.length; i++) {
                     if(arr[i] == val) {
@@ -472,8 +472,8 @@ function xunmierji(type,ua) {
             removeByValue(arts,"猜你喜欢");
             var conts = [];
             for (let i = 0; i < arts.length; i++) {
-                let contname = xpathArray(html, xpfile.dtUrlNode+'['+i+']'+xpfile.dtUrlSubNode+xpfile.dtUrlName);
-                let conturl = xpathArray(html, xpfile.dtUrlNode+'['+i+']'+xpfile.dtUrlSubNode+xpfile.dtUrlId);
+                let contname = xpathArray(html, jsondata.dtUrlNode+'['+i+']'+jsondata.dtUrlSubNode+jsondata.dtUrlName);
+                let conturl = xpathArray(html, jsondata.dtUrlNode+'['+i+']'+jsondata.dtUrlSubNode+jsondata.dtUrlId);
                 log(contname)
                 let cont = [];
                 for (let j = 0; j < contname.length; j++) {
