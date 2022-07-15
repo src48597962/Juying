@@ -1,4 +1,3 @@
-
 //寻觅片源
 function xunmi(name,data) {
     addListener("onClose", $.toString(() => {
@@ -452,7 +451,7 @@ function xunmierji(type,ua) {
             var actor = xpath(html, xpfile.dtActor) || "内详";
             var director = xpath(html, xpfile.dtDirector) || "内详";
             var area = xpath(html, xpfile.dtArea).replace('地区：','') || "未知";
-            var year = xpath(html, xpfile.dtYear).replace('年代：','') || "未知";
+            var year = xpath(html, xpfile.dtYear).replace('年份：','') || "未知";
             var remarks = xpath(html, xpfile.dtCate) || "";
             var pubdate = xpath(html, xpfile.dtMark) || "";
             var pic = MY_PARAMS.pic || xpath(html, xpfile.dtImg);
@@ -463,6 +462,8 @@ function xunmierji(type,ua) {
             //网页
         }
         log(actor)
+        log(actor.toString().substring(0, 12))
+        log(actor.substring(0, 12))
         log(director)
         log(area)
         log(year)
