@@ -456,7 +456,7 @@ function xunmierji(type,ua) {
             var pubdate = String(xpath(html, xpfile.dtMark)) || "";
             var pic = MY_PARAMS.pic || xpath(html, xpfile.dtImg);
             var desc = String(xpath(html, xpfile.dtDesc)) || '...';
-            var arts = [];
+            var arts = xpathArray(html, xpfile.dtFromNode+xpfile.dtFromName);
             var conts = [];
         }else{
             //网页
@@ -529,7 +529,7 @@ function xunmierji(type,ua) {
             let line = i;
             tabs.push(line);
             var linecode = i;
-        }else if (/cms/.test(type)) {
+        }else if (/cms|xpath/.test(type)) {
             tabs.push(arts[i]);
             var linecode = arts[i];
         }else{
