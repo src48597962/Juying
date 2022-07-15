@@ -214,11 +214,11 @@ function xunmi(name,data) {
                 }
             }else if(obj.type=="xpath"){
                 log('进来了')
-                var ssurl = xpflie.searchUrl.replace('{wd}',name);
-                log(xpflie.scVodNode)
+                var ssurl = xpfile.searchUrl.replace('{wd}',name);
+                log(xpfile.scVodNode)
                 try {
-                    log(xpflie.scVodNode)
-                    if(xpflie.scVodNode=="json:list"){
+                    log(xpfile.scVodNode)
+                    if(xpfile.scVodNode=="json:list"){
                         var html = JSON.parse(request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 }));
                         log(html)
                         var list = html.list||[];
@@ -236,7 +236,7 @@ function xunmi(name,data) {
                                 let vodpic = list.pic;
                                 let voddesc = "";
                                 let appname = '‘‘’’<font color=#f13b66a>'+obj.name+'</font>';
-                                let vodurl = xpflie.dtUrl.replace('{vid}',list.id);
+                                let vodurl = xpfile.dtUrl.replace('{vid}',list.id);
                                 return {
                                     title: vodname,
                                     desc: voddesc + '\n\n' + appname + ' ('+obj.type+')'+(obj.group?' ['+obj.group+']':''),
