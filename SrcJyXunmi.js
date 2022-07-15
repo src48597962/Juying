@@ -213,9 +213,12 @@ function xunmi(name,data) {
                 }
             }else if(obj.type=="xpath"){
                 var ssurl = xpflie.searchUrl.replace('{wd}',name);
+                log(xpflie.scVodNode)
                 try {
+                    log(xpflie.scVodNode)
                     if(xpflie.scVodNode=="json:list"){
                         var html = JSON.parse(request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 }));
+                        log(html)
                         var list = html.list||[];
                     }
                         
