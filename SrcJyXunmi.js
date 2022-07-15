@@ -462,8 +462,8 @@ function xunmierji(type,ua) {
         }else{
             //网页
         }
-        log(actor.substring(0, 12))
-        log(director.substring(0, 12))
+        log(actor)
+        log(director)
         log(area)
         log(year)
         var details1 = '主演：' + actor.substring(0, 12) + '\n导演：' + director.substring(0, 12) + '\n地区：' + area + '   年代：' + year;
