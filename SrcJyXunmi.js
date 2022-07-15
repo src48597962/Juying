@@ -20,10 +20,13 @@ function xunmi(name,data) {
         eval("var jyfile = " + fetchCache("https://src48597962.coding.net/p/src/d/hktest/git/raw/master/SrcJyJiekou.json",48))
         if(jyfile != ""){
             for(let k in jyfile){
+                log(jyfile[k]);
                 datalist.push({"name":k,"type":jyfile[k].type,"url":"jy"+k,"data":jyfile[k]})
             }
         }
-    }catch(e){}
+    }catch(e){
+        log(e.message)
+    }
         
     var count = datalist.length;
 
@@ -117,6 +120,7 @@ function xunmi(name,data) {
                 var lists = "html.list";
             } else if (obj.type=="tvbox"||obj.type=="biubiu") {
                 var jsondata = obj.data;
+                log(obj.data);
             } else {
                 log('api类型错误')
             }
