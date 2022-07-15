@@ -49,7 +49,7 @@ var SrcParseS = {
         return header;
     },
     嗅探: function (vipUrl) {
-        showLoading('√解析载入中，请稍候');
+        showLoading('√视频解析中，请稍候');
         return (getMyVar('SrcXTNH', 'web') == 'x5' ? 'x5Rule://' : 'webRule://') + vipUrl + '@' + $.toString((formatUrl,vipUrl) => {
             if (window.c == null) {
                 if (typeof (request) == 'undefined' || !request) {
