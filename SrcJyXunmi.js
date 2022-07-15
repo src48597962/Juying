@@ -120,7 +120,6 @@ function xunmi(name,data) {
                 var lists = "html.list";
             } else if (obj.type=="tvbox"||obj.type=="biubiu") {
                 var jsondata = obj.data;
-                log(obj.data);
             } else {
                 log('api类型错误')
             }
@@ -479,7 +478,7 @@ function xunmierji(type,ua) {
             for (let i = 0; i < arts.length; i++) {
                 let contname = xpathArray(html, jsondata.dtUrlNode+'['+i+']'+jsondata.dtUrlSubNode+jsondata.dtUrlName);
                 let conturl = xpathArray(html, jsondata.dtUrlNode+'['+i+']'+jsondata.dtUrlSubNode+jsondata.dtUrlId);
-                log(contname)
+                //log(contname)
                 let cont = [];
                 for (let j = 0; j < contname.length; j++) {
                     cont.push(contname[j]+"$"+conturl[j])
