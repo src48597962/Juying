@@ -451,12 +451,8 @@ function xunmierji(type,ua) {
             eval("var xpfile = " + fetchCache(MY_PARAMS.api,48))
             var actor = xpath(html, xpfile.dtActor) || "内详";
             var director = xpath(html, xpfile.dtDirector) || "内详";
-            log(xpfile.dtDirector)
-            log(xpath(html, xpfile.dtDirector))
-            var area = xpath(html, xpfile.dtArea) || "未知";
-            log(area.replace(/eval(xpfile.dtAreaR)/,$1))
-            var year = xpath(html, xpfile.dtYear) || "未知";
-            log(year)
+            var area = xpath(html, xpfile.dtArea).replace('地区：','') || "未知";
+            var year = xpath(html, xpfile.dtYear).replace('年代：','') || "未知";
             var remarks = xpath(html, xpfile.dtCate) || "";
             var pubdate = xpath(html, xpfile.dtMark) || "";
             var pic = MY_PARAMS.pic || xpath(html, xpfile.dtImg);
@@ -466,6 +462,10 @@ function xunmierji(type,ua) {
         }else{
             //网页
         }
+        log(actor.substring(0, 12))
+        log(director.substring(0, 12))
+        log(area)
+        log(year)
         var details1 = '主演：' + actor.substring(0, 12) + '\n导演：' + director.substring(0, 12) + '\n地区：' + area + '   年代：' + year;
         var details2 = remarks + '\n' + pubdate;
         var newconfig = { 详情1: details1, 详情2: details2, 图片: pic, 简介: desc, 线路: arts, 影片: conts, 标识: MY_URL };
