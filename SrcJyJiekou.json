@@ -1,6 +1,7 @@
 {
-    "剧白白":{
-        "type":"tvbox",
+    "csp_xpath_jbb":{
+        "name": "剧白白",
+        "type": "tvbox",
         "ua": "",
         "homeUrl": "https://www.jubaibai.cc/",
         "homeVodNode": "//ul[contains(@class,'stui-vodlist')]/li/div/a",
