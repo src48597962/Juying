@@ -448,11 +448,11 @@ function xunmierji(type,ua) {
             var conts = arts;
         }else if (/xpath/.test(type)) {
             eval("var xpfile = " + fetchCache(MY_PARAMS.api,48))
-            var actor = String(xpath(html, xpfile.dtActor)) || "内详";
-            var director = String(xpath(html, xpfile.dtDirector)) || "内详";
+            var actor = String(xpathArray(html, xpfile.dtActor).join(',')) || "内详";
+            var director = String(xpathArray(html, xpfile.dtDirector).join(',')) || "内详";
             var area = String(xpath(html, xpfile.dtArea)).replace('地区：','') || "未知";
             var year = String(xpath(html, xpfile.dtYear)).replace('年份：','') || "未知";
-            var remarks = String(xpath(html, xpfile.dtCate)) || "";
+            var remarks = String(xpath(html, xpfile.dtCate)).split('/')[0] || "";
             var pubdate = String(xpath(html, xpfile.dtMark)) || "";
             var pic = MY_PARAMS.pic || xpath(html, xpfile.dtImg);
             var desc = String(xpath(html, xpfile.dtDesc)) || '...';
