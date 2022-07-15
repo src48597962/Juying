@@ -16,6 +16,15 @@ function xunmi(name,data) {
             var datalist = [];
         }
     }
+    try{
+        eval("var jyfile = " + fetchCache("https://src48597962.coding.net/p/src/d/hktest/git/raw/master/SrcJyJiekou.json",48))
+        if(jyfile != ""){
+            for(let k in jyfile){
+                datalist.push({"name":k,"type":jyfile[k].type,"data":jyfile[k]})
+            }
+        }
+    }catch(e){}
+        
     var count = datalist.length;
 
     var d = [];
