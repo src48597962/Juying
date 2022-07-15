@@ -114,7 +114,6 @@ function xunmi(name,data) {
                 var lists = "html.list";
             } else if (obj.type=="xpath") {
                 eval("var xpfile = " + fetchCache(url_api,48))
-                log('xpath')
             } else {
                 log('api类型错误')
             }
@@ -215,11 +214,8 @@ function xunmi(name,data) {
             }else if(obj.type=="xpath"){
                 try {
                     var ssurl = xpfile.searchUrl.replace('{wd}',name);
-                    log(xpfile.scVodNode)
-                    log(xpfile.scVodNode)
                     if(xpfile.scVodNode=="json:list"){
                         var html = JSON.parse(request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 }));
-                        log(html)
                         var list = html.list||[];
                     }
                         
@@ -241,7 +237,7 @@ function xunmi(name,data) {
                                     desc: voddesc + '\n\n' + appname + ' ('+obj.type+')'+(obj.group?' ['+obj.group+']':''),
                                     pic_url: vodpic?vodpic + "@Referer=":"https://www.xawqxh.net/mxtheme/images/loading.gif",
                                     url: $("hiker://empty##" + vodurl + "#immersiveTheme#").rule((type,ua) => {
-                                            require(config.依赖);
+                                            require(config.依赖.match(/https.*\//)[0] + 'SrcJyXunmi.js');
                                             xunmierji(type,ua)
                                         },obj.type, urlua),
                                     col_type: "movie_1_vertical_pic",
