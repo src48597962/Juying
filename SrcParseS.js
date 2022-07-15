@@ -51,10 +51,10 @@ var SrcParseS = {
     嗅探: function (vipUrl) {
         showLoading('√解析载入中，请稍候');
         return (getMyVar('SrcXTNH', 'web') == 'x5' ? 'x5Rule://' : 'webRule://') + vipUrl + '@' + $.toString((formatUrl,vipUrl) => {
-            if (typeof (request) == 'undefined' || !request) {
-                eval(fba.getInternalJs());
-            };
             if (window.c == null) {
+                if (typeof (request) == 'undefined' || !request) {
+                    eval(fba.getInternalJs());
+                };
                 window.c = 0;
             };
             window.c++;
@@ -71,7 +71,7 @@ var SrcParseS = {
             }
             //fba.log(fy_bridge_app.getUrls());
             var urls = _getUrls();
-            var exclude = /404\.m3u8|xiajia\.mp4|余额不足\.m3u8|m3u8\.tv/;//设置排除地址
+            var exclude = /404\.m3u8|xiajia\.mp4|余额不足\.m3u8/;//设置排除地址
             var contain = /\.mp4|\.m3u8|\.flv|\.avi|\.mpeg|\.wmv|\.mov|\.rmvb|\.dat|qqBFdownload|mime=video%2F|video_mp4/;//设置符合条件的正确地址
             for (var i in urls) {
                 if (!exclude.test(urls[i]) && contain.test(urls[i]) && urls[i].indexOf('=http')==-1) {
