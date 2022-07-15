@@ -114,8 +114,9 @@ function xunmi(name,data) {
                 var lists = "html.list";
             } else if (obj.type=="xpath") {
                 eval("var xpfile = " + fetchCache(url_api,48))
+                log('xpath')
             } else {
-
+                log('api类型错误')
             }
             updateItem('loading', {
                 title: beresults.length+'/'+count+'，加载中...',
@@ -212,6 +213,7 @@ function xunmi(name,data) {
                     return {result:0, url:ssurl, apiurl:url_api};
                 }
             }else if(obj.type=="xpath"){
+                log('进来了')
                 var ssurl = xpflie.searchUrl.replace('{wd}',name);
                 log(xpflie.scVodNode)
                 try {
