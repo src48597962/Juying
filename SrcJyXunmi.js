@@ -448,26 +448,19 @@ function xunmierji(type,ua) {
             var conts = arts;
         }else if (/xpath/.test(type)) {
             eval("var xpfile = " + fetchCache(MY_PARAMS.api,48))
-            var actor = xpath(html, xpfile.dtActor) || "内详";
-            var director = xpath(html, xpfile.dtDirector) || "内详";
-            var area = xpath(html, xpfile.dtArea).replace('地区：','') || "未知";
-            var year = xpath(html, xpfile.dtYear).replace('年份：','') || "未知";
-            var remarks = xpath(html, xpfile.dtCate) || "";
-            var pubdate = xpath(html, xpfile.dtMark) || "";
+            var actor = String(xpath(html, xpfile.dtActor)) || "内详";
+            var director = String(xpath(html, xpfile.dtDirector)) || "内详";
+            var area = String(xpath(html, xpfile.dtArea)).replace('地区：','') || "未知";
+            var year = String(xpath(html, xpfile.dtYear)).replace('年份：','') || "未知";
+            var remarks = String(xpath(html, xpfile.dtCate)) || "";
+            var pubdate = String(xpath(html, xpfile.dtMark)) || "";
             var pic = MY_PARAMS.pic || xpath(html, xpfile.dtImg);
-            var desc = xpath(html, xpfile.dtDesc) || '...';
+            var desc = String(xpath(html, xpfile.dtDesc)) || '...';
             var arts = [];
             var conts = [];
         }else{
             //网页
         }
-        log(actor)
-        let str = actor.toString();
-        log(str.substring(0, 12))
-        log(actor.substring(0, 12))
-        log(director)
-        log(area)
-        log(year)
         var details1 = '主演：' + actor.substring(0, 12) + '\n导演：' + director.substring(0, 12) + '\n地区：' + area + '   年代：' + year;
         var details2 = remarks + '\n' + pubdate;
         var newconfig = { 详情1: details1, 详情2: details2, 图片: pic, 简介: desc, 线路: arts, 影片: conts, 标识: MY_URL };
