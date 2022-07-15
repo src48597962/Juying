@@ -115,7 +115,7 @@ function xunmi(name,data) {
                 var url = url_api + '?ac=detail&ids=';
                 var ssurl = url_api + '?ac=videolist&wd='+name;
                 var lists = "html.list";
-            } else if (obj.type=="xpath"||obj.type=="biubiu") {
+            } else if (obj.type=="tvbox"||obj.type=="biubiu") {
                 var jsondata = obj.data;
             } else {
                 log('api类型错误')
@@ -214,7 +214,7 @@ function xunmi(name,data) {
                     log(obj.name+'>'+e.message);
                     return {result:0, url:ssurl, apiurl:url_api};
                 }
-            }else if(obj.type=="xpath"){
+            }else if(obj.type=="tvbox"){
                 try {
                     var ssurl = jsondata.searchUrl.replace('{wd}',name);
                     if(jsondata.scVodNode=="json:list"){
@@ -393,7 +393,7 @@ function xunmierji(type,ua) {
             } catch (e) {
                 var html = "";
             }
-        } else if (/xpath/.test(type)) {
+        } else if (/tvbox/.test(type)) {
             try{
                 var html = request(MY_URL.split('##')[1], { headers: { 'User-Agent': ua } });
             } catch (e) {
@@ -450,7 +450,7 @@ function xunmierji(type,ua) {
             var desc = html.intro || '...';
             var arts = html.videolist;
             var conts = arts;
-        }else if (/xpath/.test(type)) {
+        }else if (/tvbox/.test(type)) {
             var jsondata = MY_PARAMS.data;
             var actor = String(xpathArray(html, jsondata.dtActor).join(',')) || "内详";
             var director = String(xpathArray(html, jsondata.dtDirector).join(',')) || "内详";
@@ -554,7 +554,7 @@ function xunmierji(type,ua) {
             let line = i;
             tabs.push(line);
             var linecode = i;
-        }else if (/cms|xpath/.test(type)) {
+        }else if (/cms|tvbox/.test(type)) {
             tabs.push(arts[i]);
             var linecode = arts[i];
         }else{
