@@ -692,6 +692,13 @@ function xunmierji(type,ua) {
                         require(config.依赖.match(/https.*\//)[0] + 'SrcParseS.js');
                         return SrcParseS.聚影(input);
                     });
+                }else if (/tvbox/.test(type)) {
+                    var playtitle = list[j].split('$')[0];
+                    var playurl = list[j].split('$')[1];
+                    var DTJX = $("").lazyRule(() => {
+                        require(config.依赖.match(/https.*\//)[0] + 'SrcParseS.js');
+                        return SrcParseS.嗅探(input);
+                    });
                 }else{
                     //网页
                 }
