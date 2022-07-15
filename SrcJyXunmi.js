@@ -466,7 +466,7 @@ function xunmierji(type,ua) {
                 }
             }
             removeByValue(arts,"猜你喜欢");
-            var contname = xpathArray(html, xpfile.dtUrlNode+xpfile.dtUrlName+xpfile.dtUrlName);
+            var contname = xpathArray(html, xpfile.dtUrlNode+xpfile.dtUrlSubNode+xpfile.dtUrlName);
             var conturl = xpathArray(html, xpfile.dtUrlNode+xpfile.dtUrlSubNode+xpfile.dtUrlId);
             log(contname);
             log(conturl);
