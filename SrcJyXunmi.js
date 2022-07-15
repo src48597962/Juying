@@ -213,10 +213,9 @@ function xunmi(name,data) {
                     return {result:0, url:ssurl, apiurl:url_api};
                 }
             }else if(obj.type=="xpath"){
-                log('进来了')
-                var ssurl = xpfile.searchUrl.replace('{wd}',name);
-                log(xpfile.scVodNode)
                 try {
+                    var ssurl = xpfile.searchUrl.replace('{wd}',name);
+                    log(xpfile.scVodNode)
                     log(xpfile.scVodNode)
                     if(xpfile.scVodNode=="json:list"){
                         var html = JSON.parse(request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 }));
