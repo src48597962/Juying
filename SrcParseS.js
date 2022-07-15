@@ -71,10 +71,10 @@ var SrcParseS = {
             }
             //fba.log(fy_bridge_app.getUrls());
             var urls = _getUrls();
-            var exclude = /404\.m3u8|xiajia\.mp4|余额不足\.m3u8|m3u8\.tv|http.*?=http/;//设置排除地址
+            var exclude = /404\.m3u8|xiajia\.mp4|余额不足\.m3u8|m3u8\.tv/;//设置排除地址
             var contain = /\.mp4|\.m3u8|\.flv|\.avi|\.mpeg|\.wmv|\.mov|\.rmvb|\.dat|qqBFdownload|mime=video%2F|video_mp4/;//设置符合条件的正确地址
             for (var i in urls) {
-                if (!exclude.test(urls[i]) && contain.test(urls[i])) {
+                if (!exclude.test(urls[i]) && contain.test(urls[i]) && urls[i].indexOf('=http')==-1) {
                     //fba.log("嗅探成功>"+urls[i]);
                     if(fy_bridge_app.getHeaderUrl&&vipUrl.indexOf("=http")==-1)
                         return $$$("#noLoading#").lazyRule((url) => {
