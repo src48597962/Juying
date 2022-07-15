@@ -390,7 +390,13 @@ function xunmierji(type,ua) {
             } catch (e) {
                 var html = "";
             }
-        }else{
+        } else if (/xpath/.test(type)) {
+            try{
+                var html = request(MY_URL.split('##')[1], { headers: { 'User-Agent': ua } });
+            } catch (e) {
+                var html = "";
+            }
+        } else {
             //后续网页类
         }
         var zt = 1;
@@ -443,8 +449,6 @@ function xunmierji(type,ua) {
             var conts = arts;
         }else if (/xpath/.test(type)) {
             eval("var xpfile = " + fetchCache(MY_PARAMS.api,48))
-            log(xpfile.dtActor)
-            log(xpath(html, JSON.stringify(xpfile.dtActor)))
             var actor = xpath(html, xpfile.dtActor) || "内详";
             var director = xpath(html, xpfile.dtDirector) || "内详";
             var area = xpath(html, xpfile.dtArea) || "未知";
