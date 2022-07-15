@@ -466,11 +466,17 @@ function xunmierji(type,ua) {
                 }
             }
             removeByValue(arts,"猜你喜欢");
-            var contname = xpathArray(html, xpfile.dtUrlNode+xpfile.dtUrlSubNode+xpfile.dtUrlName);
-            var conturl = xpathArray(html, xpfile.dtUrlNode+xpfile.dtUrlSubNode+xpfile.dtUrlId);
-            log(contname);
-            log(conturl);
             var conts = [];
+            for (let i = 0; i < arts.length; i++) {
+                let contname = xpathArray(html, xpfile.dtUrlNode+'['+i+']'+xpfile.dtUrlSubNode+xpfile.dtUrlName);
+                let conturl = xpathArray(html, xpfile.dtUrlNode+'['+i+']'+xpfile.dtUrlSubNode+xpfile.dtUrlId);
+                let cont = [];
+                for (let j = 0; j < contname.length; j++) {
+                    cont.push(contname[j]+"$"+conturl[j])
+                }
+                conts.push(cont.join("#"))
+            }
+            log(conts);
         }else{
             //网页
         }
