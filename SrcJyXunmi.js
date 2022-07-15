@@ -426,32 +426,42 @@ function xunmierji(type,ua) {
                 var arts = json.vod_play_list || json.vod_url_with_player;
                 var conts = arts;
             }
-            let actor = json.vod_actor || "内详";
-            let director = json.vod_director || "内详";
-            let area = json.vod_area || "未知";
-            let year = json.vod_year || "未知";
-            let remarks = json.vod_remarks || "";
-            let pubdate = json.vod_pubdate || json.vod_class || "";
-            var details1 = '主演：' + actor.substring(0, 12) + '\n导演：' + director.substring(0, 12) + '\n地区：' + area + '   年代：' + year;
-            var details2 = remarks + '\n' + pubdate;
+            var actor = json.vod_actor || "内详";
+            var director = json.vod_director || "内详";
+            var area = json.vod_area || "未知";
+            var year = json.vod_year || "未知";
+            var remarks = json.vod_remarks || "";
+            var pubdate = json.vod_pubdate || json.vod_class || "";
             var pic = MY_PARAMS.pic || json.vod_pic;
             var desc = json.vod_blurb || '...';
         }else if (/iptv/.test(type)) {
-            let actor = html.actor.join(",") || "内详";
-            let director = html.director.join(",") || "内详";
-            let area = html.area.join(",") || "未知";
-            let year = html.pubtime || "未知";
-            let remarks = html.trunk || "";
-            let pubdate = html.type.join(",") || "";
-            var details1 = '主演：' + actor.substring(0, 12) + '\n导演：' + director.substring(0, 12) + '\n地区：' + area + '   年代：' + year;
-            var details2 = remarks + '\n' + pubdate;
+            var actor = html.actor.join(",") || "内详";
+            var director = html.director.join(",") || "内详";
+            var area = html.area.join(",") || "未知";
+            var year = html.pubtime || "未知";
+            var remarks = html.trunk || "";
+            var pubdate = html.type.join(",") || "";
             var pic = MY_PARAMS.pic || html.img_url;
             var desc = html.intro || '...';
             var arts = html.videolist;
             var conts = arts;
+        }else if (/xpath/.test(type)) {
+            eval("var xpfile = " + fetchCache(MY_PARAMS.api,48))
+            var actor = xpath(html, xpfile.dtActor) || "内详";
+            var director = xpath(html, xpfile.dtDirector) || "内详";
+            var area = xpath(html, xpfile.dtArea) || "未知";
+            var year = xpath(html, xpfile.dtYear) || "未知";
+            var remarks = xpath(html, xpfile.dtCate) || "";
+            var pubdate = xpath(html, xpfile.dtMark) || "";
+            var pic = MY_PARAMS.pic || xpath(html, xpfile.dtImg);
+            var desc = xpath(html, xpfile.dtDesc) || '...';
+            var arts = [];
+            var conts = [];
         }else{
             //网页
         }
+        var details1 = '主演：' + actor.substring(0, 12) + '\n导演：' + director.substring(0, 12) + '\n地区：' + area + '   年代：' + year;
+        var details2 = remarks + '\n' + pubdate;
         var newconfig = { 详情1: details1, 详情2: details2, 图片: pic, 简介: desc, 线路: arts, 影片: conts, 标识: MY_URL };
         var libsfile = 'hiker://files/libs/' + md5(configfile) + '.js';
         writeFile(libsfile, 'var configvar = ' + JSON.stringify(newconfig));
