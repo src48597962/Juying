@@ -69,7 +69,7 @@ var SrcParseS = {
                 }catch(e){ }
                 return "toast://解析超时，建议切换线路或更换解析方式";
             }
-            fba.log(fy_bridge_app.getUrls());
+            //fba.log(fy_bridge_app.getUrls());
             var urls = _getUrls();
             var exclude = /\/404\.m3u8|\/xiajia\.mp4|\/余额不足\.m3u8/;//设置排除地址
             var contain = /\.mp4|\.m3u8|\.flv|\.avi|\.mpeg|\.wmv|\.mov|\.rmvb|\.dat|qqBFdownload|mime=video%2F|video_mp4/;//设置符合条件的正确地址
