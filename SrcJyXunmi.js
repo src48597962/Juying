@@ -462,7 +462,8 @@ function xunmierji(type,ua) {
             //网页
         }
         log(actor)
-        log(actor.toString().substring(0, 12))
+        let str = actor.toString();
+        log(str.substring(0, 12))
         log(actor.substring(0, 12))
         log(director)
         log(area)
