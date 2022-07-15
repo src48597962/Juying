@@ -454,7 +454,7 @@ function xunmierji(type,ua) {
             log(xpfile.dtDirector)
             log(xpath(html, xpfile.dtDirector))
             var area = xpath(html, xpfile.dtArea) || "未知";
-            log(area)
+            log(area.replace(/eval(xpfile.dtAreaR)/,"$1"))
             var year = xpath(html, xpfile.dtYear) || "未知";
             log(year)
             var remarks = xpath(html, xpfile.dtCate) || "";
