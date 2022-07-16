@@ -1173,10 +1173,12 @@ function jiekou(lx,data) {
                         let urlgroup = getMyVar('apigroup');
                         let arr = {"name": apiname, "url": apiurl, "ua": apiua, "type": urltype };
                         if(urlgroup){arr['group'] = urlgroup}
-                        try{
-                            arr['data'] = JSON.parse(getMyVar('apixpath'));
-                        }catch(e){
-                            return "toast://xpath数据异常";
+                        if(getMyVar('apixpath')){
+                            try{
+                                arr['data'] = JSON.parse(getMyVar('apixpath'));
+                            }catch(e){
+                                return "toast://xpath数据异常";
+                            }
                         }
                         datalist.push(arr);
                     }else if(getMyVar('addtype', '1')=="2"&&apiurls){
@@ -1256,10 +1258,12 @@ function jiekou(lx,data) {
                 }
                 let arr = {"name": apiname, "url": apiurl, "ua": apiua, "type": urltype };
                 if(apigroup){arr['group'] = apigroup}
-                try{
-                    arr['data'] = JSON.parse(apixpath);
-                }catch(e){
-                    return "toast://xpath数据异常";
+                if(apixpath){
+                    try{
+                        arr['data'] = JSON.parse(apixpath);
+                    }catch(e){
+                        return "toast://xpath数据异常";
+                    }
                 }
                 urls.push(arr);
                 /*
