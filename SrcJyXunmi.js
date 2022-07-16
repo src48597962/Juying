@@ -16,9 +16,9 @@ function xunmi(name,data) {
             var datalist = [];
         }
     }
-    try{
-        eval("var jyfile = " + fetchCache("https://src48597962.coding.net/p/src/d/hktest/git/raw/master/SrcJyJiekou.json",48))
-        if(jyfile != ""){
+    try{//"var jyfile = " + 
+        eval(fetchCache("https://src48597962.coding.net/p/src/d/hktest/git/raw/master/SrcJyJiekou.json",48))
+        if(jyfile){
             for(let k in jyfile){
                 let ua = jyfile[k].ua||MOBILE_UA;
                 datalist.push({"name":jyfile[k].name,"type":jyfile[k].type,"ua":ua,"url":k,"data":jyfile[k]})
