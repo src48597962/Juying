@@ -549,8 +549,8 @@ function SRCSet() {
                 col_type: "text_3"
             });
             d.push({
-                title: 'JYxpath导入',
-                url:$("","输入JY自定义的xpath资源地址").input((jiekouchuli) => {
+                title: 'xpath导入',
+                url:$("","仅支持输入JY自定义的xpath资源地址").input((jiekouchuli) => {
                         try{
                             eval(fetch(input))
                             var urls= [];
@@ -985,7 +985,7 @@ function jiekouchuli(lx,urls) {
                 let urlua = urls[i].ua||"Dalvik/2.1.0";
                 let urltype = urls[i].type||apitype(urlurl);
                 let urlgroup = urls[i].group||"";
-                if(!datalist.some(item => item.url ==urlurl)&&urlname&&/^http/.test(urlurl)&&urltype){
+                if(!datalist.some(item => item.url ==urlurl)&&urlname&&/^http|^csp/.test(urlurl)&&urltype){
                     let arr  = { "name": urlname, "url": urlurl, "ua": urlua, "type": urltype, "group": urlgroup };
                     if(urls[i].data){arr['data'] = urls[i].data}
                     datalist.push(arr);
