@@ -1174,9 +1174,8 @@ function jiekou(lx,data) {
                         let arr = {"name": apiname, "url": apiurl, "ua": apiua, "type": urltype };
                         if(urlgroup){arr['group'] = urlgroup}
                         try{
-                            log(getMyVar('apixpath'))
                             let xpathdata = eval("("+getMyVar('apixpath')+")");
-                            arr['data'] = getMyVar('apixpath');
+                            arr['data'] = JSON.parse(getMyVar('apixpath'));
                         }catch(e){
                             return "toast://xpath数据异常";
                         }
