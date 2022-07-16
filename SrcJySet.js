@@ -560,7 +560,8 @@ function SRCSet() {
                             for(let k in jyjiekou){
                                 let xpua = jyjiekou[k].ua||"MOBILE_UA";
                                 let xptype = jyjiekou[k].type||"xpath"
-                                urls.push({"name":jyjiekou[k].name,"type":xptype,"ua":xpua,"url":k,"data":jyjiekou[k]})
+                                urls.push({"name":jyjiekou[k].name,"type":xptype,"ua":xpua,"url":k})
+                                if(jyjiekou[k]){urls['data'] = JSON.parse(jyjiekou[k])}
                             }
                         } catch (e) {
                             log('接口导入失败：'+e.message); 
@@ -1170,17 +1171,25 @@ function jiekou(lx,data) {
                     require(config.依赖.match(/https.*\//)[0] + 'SrcJySet.js');
                     if(getMyVar('addtype', '1')=="1"&&apiname&&apiurl){
                         let urltype = getMyVar('apitype')||getapitype(apiurl);
-                        let urlgroup = getMyVar('apigroup','');
-                        datalist.push({"name": apiname, "url": apiurl, "ua": apiua, "type": urltype, "group": urlgroup });
+                        let urlgroup = getMyVar('apigroup');
+                        datalist.push({"name": apiname, "url": apiurl, "ua": apiua, "type": urltype });
+                        if(urlgroup){datalist['group'] = urlgroup}
+                        try{
+                            let xpathdata = JSON.parse(getMyVar('apixpath'));
+                            if(xpathdata){datalist['data'] = xpathdata}
+                        }catch(e){
+                            return "toast://xpath数据异常";
+                        }
                     }else if(getMyVar('addtype', '1')=="2"&&apiurls){
                         var urls = apiurls.replace(/,|，/g,"#").split('\n');
                         for (var i in urls) {
                             let urlname = urls[i].split('#')[0];
                             let urlurl = urls[i].split('#')[1];
                             let urltype = urls[i].split('#')[2]||getapitype(urlurl);
-                            let urlgroup = urls[i].split('#')[3]||getMyVar('apigroup','');
+                            let urlgroup = urls[i].split('#')[3]||getMyVar('apigroup');
                             if(!datalist.some(item => item.url ==urlurl)&&urlname&&/^http/.test(urlurl)&&urltype){
-                                let arr  = { "name": urlname, "url": urlurl, "ua": apiua, "type": urltype, "group": urlgroup };
+                                let arr  = { "name": urlname, "url": urlurl, "ua": apiua, "type": urltype };
+                                if(urlgroup){datalist['group'] = urlgroup}
                                 datalist.push(arr);
                             }
                         }
@@ -1228,7 +1237,7 @@ function jiekou(lx,data) {
         title:'保存',
         col_type:'text_3',
         url: $().lazyRule((lx,data)=>{
-            if(getMyVar('addtype', '1')=="1"&&!/^http/.test(getMyVar('apiurl',''))){return "toast://接口地址不正确"}
+            if(getMyVar('addtype', '1')=="1"&&!/^http|^csp/.test(getMyVar('apiurl',''))){return "toast://接口地址不正确"}
             require(config.依赖.match(/https.*\//)[0] + 'SrcJySet.js');
             var urls= [];
             let apiurl = getMyVar('apiurl');
@@ -1245,8 +1254,14 @@ function jiekou(lx,data) {
                         return "toast://未修改";
                     }
                 }
-                urls.push({ "name": apiname, "url": apiurl, "ua": apiua,"type": urltype, "group":apigroup})
-
+                urls.push({ "name": apiname, "url": apiurl, "ua": apiua,"type": urltype})
+                if(apigroup){urls['group'] = apigroup}
+                try{
+                    let xpathdata = JSON.parse(getMyVar('apixpath'));
+                    if(xpathdata){urls['data'] = xpathdata}
+                }catch(e){
+                    return "toast://xpath数据异常";
+                }
                 /*
                 if(lx=="update"&&(apiurl!=data.url||apiname!=data.name||apiua!=data.ua||urltype!=data.type||apigroup!=data.group)){
                     for(var i=0;i<datalist.length;i++){
@@ -1277,7 +1292,8 @@ function jiekou(lx,data) {
                     let urlurl = list[i].split('#')[1];
                     let urltype = list[i].split('#')[2]||getapitype(urlurl);
                     let urlgroup = list[i].split('#')[3]||urltype;
-                    urls.push({ "name": urlname, "url": urlurl, "ua": apiua,"type": urltype, "group":urlgroup})
+                    urls.push({ "name": urlname, "url": urlurl, "ua": apiua,"type": urltype})
+                    if(urlgroup){urls['group'] = urlgroup}
                 }
                 
                 /*
