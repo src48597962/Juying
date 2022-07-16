@@ -1156,7 +1156,7 @@ function jiekou(lx,data) {
         col_type:'text_3',
         url: $(getMyVar("testkey","我的"),"输入测试搜索关键字").input(()=>{
                 putMyVar("testkey",input);
-                if(getMyVar('addtype', '1')=="1"&&!/^http/.test(getMyVar('apiurl',''))){return "toast://接口地址不正确"}
+                if(getMyVar('addtype', '1')=="1"&&!/^http||^csp/.test(getMyVar('apiurl',''))){return "toast://接口地址不正确"}
                 return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
                     let apiurl = getMyVar('apiurl');
                     let apiname = getMyVar('apiname');
