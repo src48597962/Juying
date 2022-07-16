@@ -1247,16 +1247,17 @@ function jiekou(lx,data) {
             if(getMyVar('addtype', '1')=="1"&&apiname&&apiurl){
                 let urltype = getMyVar('apitype');
                 let apigroup = getMyVar('apigroup');
+                let apixpath = getMyVar('apixpath');
                 if(lx=="update"){
                     isupdate = 1;
-                    if((apiurl==data.url&&apiname==data.name&&apiua==data.ua&&urltype==data.type&&apigroup==(data.group?data.group:''))){
+                    if((apiurl==data.url&&apiname==data.name&&apiua==data.ua&&urltype==data.type&&apigroup==(data.group?data.group:'')&&apixpath==(data.data?data.data:''))){
                         return "toast://未修改";
                     }
                 }
                 let arr = {"name": apiname, "url": apiurl, "ua": apiua, "type": urltype };
                 if(apigroup){arr['group'] = apigroup}
                 try{
-                    arr['data'] = JSON.parse(getMyVar('apixpath'));
+                    arr['data'] = JSON.parse(apixpath);
                 }catch(e){
                     return "toast://xpath数据异常";
                 }
