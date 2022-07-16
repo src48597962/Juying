@@ -1,4 +1,4 @@
-{
+var jyfile = {
     "csp_xpath_jbb":{
         "name": "剧白白",
         "type": "tvbox",
@@ -93,12 +93,18 @@
         "bfjiequhou": "空",
         "bfjiequshuzuqian": "class=\"stui-content__playlist",
         "bfjiequshuzuhou": "</ul>",
-        "zhuangtaiqian": "class=\"data\">总集数：",
-        "zhuangtaihou": "</p>",
-        "daoyanqian": "class=\"data\">类型：",
+        "zhuangtaiqian": "类型：",
+        "zhuangtaihou": " \/",
+        "daoyanqian": "导演：",
         "daoyanhou": "</p>",
         "zhuyanqian": "class=\"data\">主演：",
         "zhuyanhou": "</p>",
+        "diquqian": "地区：",
+        "diquhouhou": " \/",
+        "nianfenqian": "年份：",
+        "nianfenhou": " \/",
+        "genxinqian": "最后更新：<a style=.*?>",
+        "genxinhou": "</a>",
         "juqingqian": "class=\"detail-content\"",
         "juqinghou": "</span>",
         "bfyshifouercijiequ": "0",
@@ -110,5 +116,5 @@
         "bfbiaotihou": "<",
         "bflianjieqian": "href=\"",
         "bflianjiehou": "\""
-        }
+    }
 }
