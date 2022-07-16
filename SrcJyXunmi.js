@@ -19,7 +19,7 @@ function xunmi(name,data) {
     try{
         var jyhtml = fetch("https://src48597962.coding.net/p/src/d/hktest/git/raw/master/SrcJyJiekou.js");
         if(jyhtml != ""){
-            eval("var jyfile = " + jyhtml);
+            eval(jyhtml);
             for(let k in jyfile){
                 let xpua = jyfile[k].ua||MOBILE_UA;
                 let xptype = jyfile[k].type||"xpath"
