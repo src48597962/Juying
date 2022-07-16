@@ -622,7 +622,9 @@ function SRCSet() {
                     var datagroup = datalist.group;
                     var datatitle = dataname + ' ('+datatype+')' + (datagroup&&datagroup!=datatype?' [' + datagroup + ']':"");
                     var datadesc = dataurl;
-                    var dataarr = {name:dataname, url:dataurl, ua:dataua, type:datatype, group:datagroup};
+                    var dataarr = {name:dataname, url:dataurl, ua:dataua, type:datatype};
+                    if(datagroup){dataarr['group'] = datagroup}
+                    if(datalist.data){dataarr['data'] = datalist.data}
                     var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
                 }else{
                     var dataurl = datalist.parse;
@@ -948,64 +950,7 @@ function SRCSet() {
     });
     setResult(d);
 }
-/*
-function jiekouchuli(lx,urls) {
-    function apitype(apiurl) {
-        if(apiurl){
-            if(apiurl.includes('.vod')){
-                return "v1";
-            }else if(apiurl.includes('/app/')){
-                return "app";
-            }else if(apiurl.includes('app.php')){
-                return "v2";
-            }else if(/iptv|Chengcheng/.test(apiurl)){
-                return "iptv";
-            }else if(apiurl.includes('provide/vod/')){
-                return "cms";
-            }else{
-                return "";
-            }
-        }else{
-            return "";
-        }
-    }
-    if(lx=="type"){
-        return apitype(urls);
-    }else if(lx=="save"){
-        try{
-            var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
-            var datafile = fetch(filepath);
-            if(datafile != ""){
-                eval("var datalist=" + datafile+ ";");
-            }else{
-                var datalist = [];
-            }
-            
-            var num = 0;
-            for (var i in urls) {
-                let urlname = urls[i].name;
-                let urlurl = urls[i].url;
-                let urlua = urls[i].ua||"Dalvik/2.1.0";
-                let urltype = urls[i].type||apitype(urlurl);
-                let urlgroup = urls[i].group||"";
-                if(!datalist.some(item => item.url ==urlurl)&&urlname&&/^http|^csp/.test(urlurl)&&urltype){
-                    let arr  = { "name": urlname, "url": urlurl, "ua": urlua, "type": urltype, "group": urlgroup };
-                    if(urls[i].data){arr['data'] = urls[i].data}
-                    datalist.push(arr);
-                    num = num + 1;
-                }
-            }
-            if(num>0){writeFile(filepath, JSON.stringify(datalist));}
-        } catch (e) {
-            log('导入失败：'+e.message); 
-            return -1;
-        }
-        return num;
-    }else{
-        return "toast://接口处理类型不正确";
-    }
-}
-*/
+
 function getapitype(apiurl) {
     if(apiurl){
         if(apiurl.includes('.vod')){
@@ -1080,6 +1025,7 @@ function jiekou(lx,data) {
         clearMyVar('addtype');
         clearMyVar('isload');
         clearMyVar('apigroup');
+        clearMyVar('apixpath');
     }));
 
     var d = [];
@@ -1109,6 +1055,7 @@ function jiekou(lx,data) {
             putMyVar('isload', '1');
         }
     }
+    
     if(getMyVar('addtype', '1')=="1"){
         d.push({
             title:'apiname',
@@ -1126,16 +1073,31 @@ function jiekou(lx,data) {
             desc: "接口地址",
             extra: {
                 titleVisible: false,
-                defaultValue: getMyVar('apiurl', ''),
+                defaultValue: getMyVar('apitype')=="xpath"?getMyVar('apiurl', 'csp_xpath_'):getMyVar('apiurl', ''),
                 onChange: 'putMyVar("apiurl",input)'
             }
         });
+        if(getMyVar('apitype')=="xpath"){
+            d.push({
+                title:'xpath代码',
+                col_type: 'input',
+                desc: "xpath接口门槛相对较高，推荐大佬使用",
+                extra: {
+                    titleVisible: false,
+                    defaultValue: data.data?data.data:getMyVar('apixpath', ''),
+                    type: "textarea",
+                    height: 8,
+                    onChange: 'putMyVar("apixpath",input)'
+                }
+            });
+        }
         d.push({
             title: getMyVar('apitype', '')==""?'类型：自动识别':'类型：'+getMyVar('apitype'),
             col_type:'text_1',
-            url:$(["v1","app","v2","iptv","cms","自动"],3).select(()=>{
+            url:$(["v1","app","v2","iptv","cms","xpath","自动"],3).select(()=>{
                 if(input=="自动"){
                     clearMyVar('apitype');
+                    clearMyVar('apixpath');
                 }else{
                     putMyVar('apitype', input);
                 }
