@@ -553,15 +553,15 @@ function SRCSet() {
                 url:$("","输入JY自定义的xpath资源地址").input((jiekouchuli) => {
                         try{
                             eval(fetch(input))
-                            var xpjiekou = jyfile;
+                            var urls= [];
+                            for(let k in jyjiekou){
+                                let xpua = jyjiekou[k].ua||MOBILE_UA;
+                                let xptype = jyjiekou[k].type||"xpath"
+                                urls.push({"name":jyjiekou[k].name,"type":xptype,"ua":xpua,"url":k,"data":jyjiekou[k]})
+                            }
                         } catch (e) {
                             log('接口导入失败：'+e.message); 
                             return "toast://导入失败：连接无效或内容有错";
-                        }
-
-                        var urls= [];
-                        for(var k in xpjiekou){
-                            urls.push({ "name" : xpjiekou[i].name, "url" : k})
                         }
                         
                         var jknum = jiekouchuli('save',urls);
@@ -987,6 +987,7 @@ function jiekouchuli(lx,urls) {
                 let urlgroup = urls[i].group||"";
                 if(!datalist.some(item => item.url ==urlurl)&&urlname&&/^http/.test(urlurl)&&urltype){
                     let arr  = { "name": urlname, "url": urlurl, "ua": urlua, "type": urltype, "group": urlgroup };
+                    if(urls[i].data){arr['data'] = urls[i].data}
                     datalist.push(arr);
                     num = num + 1;
                 }
