@@ -16,14 +16,14 @@ function xunmi(name,data) {
             var datalist = [];
         }
     }
-    try{//"var jyfile = " + 
-        eval(fetch("https://src48597962.coding.net/p/src/d/hktest/git/raw/master/SrcJyJiekou.json"))
-        //if(jyfile){
+    try{
+        eval(fetch("https://src48597962.coding.net/p/src/d/hktest/git/raw/master/SrcJyJiekou.js"))
+        if(jyfile){
             for(let k in jyfile){
                 let ua = jyfile[k].ua||MOBILE_UA;
                 datalist.push({"name":jyfile[k].name,"type":jyfile[k].type,"ua":ua,"url":k,"data":jyfile[k]})
             }
-        //}
+        }
     }catch(e){
         log(e.message)
     }
