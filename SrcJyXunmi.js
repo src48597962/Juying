@@ -16,6 +16,7 @@ function xunmi(name,data) {
             var datalist = [];
         }
     }
+    /*
     try{
         var jyfile = fetch("https://src48597962.coding.net/p/src/d/hktest/git/raw/master/SrcJyJiekou.js");
         if(jyfile != ""){
@@ -29,6 +30,7 @@ function xunmi(name,data) {
     }catch(e){
         log(e.message)
     }
+    */
         
     var count = datalist.length;
 
