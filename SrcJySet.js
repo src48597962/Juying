@@ -367,7 +367,7 @@ function SRCSet() {
                             return 'toast://每次搜索成功线程数已设置为：'+input;
                         }
                     }, JYconfig, cfgfile),
-                col_type: "text_2"
+                col_type: "text_3"
             });
             d.push({
                 title: '搜索时长',
@@ -379,7 +379,7 @@ function SRCSet() {
                             return 'toast://接口搜索超时时长已设置为：'+input+'秒';
                         }
                     }, JYconfig, cfgfile),
-                col_type: "text_2"
+                col_type: "text_3"
             });
             d.push({
                 title: '解析保留',
@@ -391,7 +391,7 @@ function SRCSet() {
                             return 'toast://app自带解析保留数量已设置为：'+input;
                         }
                     }, JYconfig, cfgfile),
-                col_type: "text_2"
+                col_type: "text_3"
             });
             d.push({
                 title: '其他资源',
@@ -555,7 +555,7 @@ function SRCSet() {
                             eval(fetch(input))
                             var urls= [];
                             for(let k in jyjiekou){
-                                let xpua = jyjiekou[k].ua||MOBILE_UA;
+                                let xpua = jyjiekou[k].ua||"MOBILE_UA";
                                 let xptype = jyjiekou[k].type||"xpath"
                                 urls.push({"name":jyjiekou[k].name,"type":xptype,"ua":xpua,"url":k,"data":jyjiekou[k]})
                             }
