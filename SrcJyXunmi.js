@@ -481,6 +481,14 @@ function xunmierji(type,ua) {
                 //log(contname)
                 let cont = [];
                 for (let j = 0; j < contname.length; j++) {
+                    
+                    try{
+                        let str = '/'+JSON.stringify(jsondata.playUrl)+'/';
+                        log(conturl[j].match(eval(str))[1])
+                    }catch(e){
+                        log(e.message)
+                    }
+
                     cont.push(contname[j]+"$"+jsondata.playUrl.replace('{playUrl}',conturl[j]))
                 }
                 //log(cont)
