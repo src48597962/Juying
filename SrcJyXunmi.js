@@ -21,8 +21,9 @@ function xunmi(name,data) {
         if(jyhtml != ""){
             eval("var jyfile = " + jyhtml);
             for(let k in jyfile){
-                let ua = jyfile[k].ua||MOBILE_UA;
-                datalist.push({"name":jyfile[k].name,"type":jyfile[k].type,"ua":ua,"url":k,"data":jyfile[k]})
+                let xpua = jyfile[k].ua||MOBILE_UA;
+                let xptype = jyfile[k].type||"xpath"
+                datalist.push({"name":jyfile[k].name,"type":xptype,"ua":xpua,"url":k,"data":jyfile[k]})
             }
         }
     }catch(e){
