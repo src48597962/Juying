@@ -478,23 +478,12 @@ function xunmierji(type,ua) {
             for (let i = 1; i < arts.length+1; i++) {
                 let contname = xpathArray(html, jsondata.dtUrlNode+'['+i+']'+jsondata.dtUrlSubNode+jsondata.dtUrlName);
                 let conturl = xpathArray(html, jsondata.dtUrlNode+'['+i+']'+jsondata.dtUrlSubNode+jsondata.dtUrlId);
-                //log(contname)
                 let cont = [];
                 for (let j = 0; j < contname.length; j++) {
-                    
-                    try{
-                        let str = '/'+JSON.stringify(jsondata.playUrl)+'/';
-                        log(conturl[j].match(eval(str))[1])
-                    }catch(e){
-                        log(e.message)
-                    }
-
                     cont.push(contname[j]+"$"+jsondata.playUrl.replace('{playUrl}',conturl[j]))
                 }
-                //log(cont)
                 conts.push(cont.join("#"))
             }
-            //log(conts);
         }else{
             //网页
         }
