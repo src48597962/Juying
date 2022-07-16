@@ -42,7 +42,7 @@
         "dtActor": "//p[contains(@class,'data')][5]/text()",
         "dtDesc": "//span[@class='detail-content']/text()",
         "dtFromNode": "//h3[contains(text(), '播')]",
-        "dtFromName": "concat('播放源',count(parent::*/preceding::*//h3[contains(text(), '播')]) + 1)",
+        "dtFromName": "/text()",
         "dtUrlNode": "//ul[contains(@class,'stui-content__playlist')]",
         "dtUrlSubNode": "/li/a",
         "dtUrlId": "/@href",
