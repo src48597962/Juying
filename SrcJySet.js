@@ -24,7 +24,7 @@ function SRCSet() {
     });
     d.push({
         title: '扩展中心',
-        url: $('hiker://empty#noRecordHistory##noHistory#').rule((jiekouchuli) => {
+        url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
             addListener("onClose", $.toString(() => {
                 refreshPage(false);
             }));
@@ -403,8 +403,9 @@ function SRCSet() {
             
             d.push({
                 title: 'biu导入',
-                url:$("","输入biu资源地址").input((jiekouchuli) => {
+                url:$("","输入biu资源地址").input(() => {
                         try{
+                            require(config.依赖.match(/https.*\//)[0] + 'SrcJySet.js');
                             var html = fetch(input);
                             var reg = /("([^\\\"]*(\\.)?)*")|('([^\\\']*(\\.)?)*')|(\/{2,}.*?(\r|\n|$))|(\/\*(\n|.)*?\*\/)/g;
                             html = html.replace(reg, function(word) { 
@@ -425,7 +426,7 @@ function SRCSet() {
                         for(var i in bbcaiji){
                             urls.push({ "name" : bbcaiji[i].name, "url" : /\/api.php^/.test(bbcaiji[i].url)?bbcaiji[i].url+"/provide/vod":bbcaiji[i].url})
                         }
-                        var jknum = jiekouchuli('save',urls);
+                        var jknum = jiekousave(urls);
                         if(jknum<0){
                             return'toast://导入失败，内容异常';
                         }else{
@@ -469,13 +470,14 @@ function SRCSet() {
                                 return "接口导入已完成，成功保存："+jknum;
                             }
                         }
-                }, jiekouchuli),
+                }),
                 col_type: "text_3"
             });
             d.push({
                 title: 'TVb导入',
-                url:$("","输入TVb资源地址").input((jiekouchuli) => {
+                url:$("","输入TVb资源地址").input(() => {
                     try{
+                        require(config.依赖.match(/https.*\//)[0] + 'SrcJySet.js');
                         var html = fetch(input);
                         if(!/https:\/\/i.*memory.coding.net/.test(input)){
                             var lx ="TVb";
@@ -509,7 +511,7 @@ function SRCSet() {
                             }
                         }
                     }
-                    var jknum = jiekouchuli('save',urls);
+                    var jknum = jiekousave(urls);
                     if(jknum<0){
                         return'toast://导入失败，内容异常';
                     }else{
@@ -545,13 +547,14 @@ function SRCSet() {
                             return "接口导入已完成，成功保存："+jknum;
                         }
                     }
-                }, jiekouchuli),
+                }),
                 col_type: "text_3"
             });
             d.push({
                 title: 'xpath导入',
-                url:$("","仅支持输入JY自定义的xpath资源地址").input((jiekouchuli) => {
+                url:$("","仅支持输入JY自定义的xpath资源地址").input(() => {
                         try{
+                            require(config.依赖.match(/https.*\//)[0] + 'SrcJySet.js');
                             eval(fetch(input))
                             var urls= [];
                             for(let k in jyjiekou){
@@ -564,17 +567,17 @@ function SRCSet() {
                             return "toast://导入失败：连接无效或内容有错";
                         }
                         
-                        var jknum = jiekouchuli('save',urls);
+                        var jknum = jiekousave(urls);
                         if(jknum<0){
                             return'toast://导入失败，内容异常';
                         }else{
                             return "toast://导入完成，接口保存："+jknum;
                         }
-                }, jiekouchuli),
+                }),
                 col_type: "text_3"
             });
             setHomeResult(d);
-        }, jiekouchuli),
+        }),
         img: "https://lanmeiguojiang.com/tubiao/ke/156.png",
         col_type: "icon_small_3"
     });
@@ -945,7 +948,7 @@ function SRCSet() {
     });
     setResult(d);
 }
-
+/*
 function jiekouchuli(lx,urls) {
     function apitype(apiurl) {
         if(apiurl){
@@ -1001,6 +1004,65 @@ function jiekouchuli(lx,urls) {
     }else{
         return "toast://接口处理类型不正确";
     }
+}
+*/
+function getapitype(apiurl) {
+    if(apiurl){
+        if(apiurl.includes('.vod')){
+            return "v1";
+        }else if(apiurl.includes('/app/')){
+            return "app";
+        }else if(apiurl.includes('app.php')){
+            return "v2";
+        }else if(/iptv|Chengcheng/.test(apiurl)){
+            return "iptv";
+        }else if(apiurl.includes('provide/vod/')){
+            return "cms";
+        }else{
+            return "";
+        }
+    }else{
+        return "";
+    }
+}
+function jiekousave(urls,isupdate) {
+    try{
+        var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
+        var datafile = fetch(filepath);
+        if(datafile != ""){
+            eval("var datalist=" + datafile+ ";");
+        }else{
+            var datalist = [];
+        }
+        if(isupdate==1){
+            for(var j=0;j<datalist.length;j++){
+                if(datalist[j].url==urls[0].url){
+                    datalist.splice(j,1);
+                    break;
+                }
+            }
+        }
+        var num = 0;
+        for (var i in urls) {
+            let urlname = urls[i].name;
+            let urlurl = urls[i].url;
+            let urlua = urls[i].ua||"Dalvik/2.1.0";
+            let urltype = urls[i].type||getapitype(urlurl);
+            let urlgroup = urls[i].group||"";
+            
+            if(!datalist.some(item => item.url ==urlurl)&&urlname&&/^http|^csp/.test(urlurl)&&urltype){
+                let arr  = { "name": urlname, "url": urlurl, "ua": urlua, "type": urltype, "group": urlgroup };
+                if(urls[i].data){arr['data'] = urls[i].data}
+                datalist.push(arr);
+                num = num + 1;
+            }
+        }
+        if(num>0){writeFile(filepath, JSON.stringify(datalist));}
+    } catch (e) {
+        log('导入失败：'+e.message); 
+        return -1;
+    }
+    return num;
 }
 
 function jiekou(lx,data) {
@@ -1125,17 +1187,18 @@ function jiekou(lx,data) {
     d.push({
         title:'测试',
         col_type:'text_3',
-        url: $(getMyVar("testkey","我的"),"输入测试搜索关键字").input((jiekouchuli)=>{
+        url: $(getMyVar("testkey","我的"),"输入测试搜索关键字").input(()=>{
                 putMyVar("testkey",input);
                 if(getMyVar('addtype', '1')=="1"&&!/^http/.test(getMyVar('apiurl',''))){return "toast://接口地址不正确"}
-                return $('hiker://empty#noRecordHistory##noHistory#').rule((name,jiekouchuli) => {
+                return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
                     let apiurl = getMyVar('apiurl');
                     let apiname = getMyVar('apiname');
                     let apiurls = getMyVar('apiurls');
                     let apiua = getMyVar('apiua','Dalvik/2.1.0');
                     let datalist = [];
+                    require(config.依赖.match(/https.*\//)[0] + 'SrcJySet.js');
                     if(getMyVar('addtype', '1')=="1"&&apiname&&apiurl){
-                        let urltype = getMyVar('apitype')||jiekouchuli("type",apiurl);
+                        let urltype = getMyVar('apitype')||getapitype(apiurl);
                         let urlgroup = getMyVar('apigroup','');
                         datalist.push({"name": apiname, "url": apiurl, "ua": apiua, "type": urltype, "group": urlgroup });
                     }else if(getMyVar('addtype', '1')=="2"&&apiurls){
@@ -1143,7 +1206,7 @@ function jiekou(lx,data) {
                         for (var i in urls) {
                             let urlname = urls[i].split('#')[0];
                             let urlurl = urls[i].split('#')[1];
-                            let urltype = urls[i].split('#')[2]||jiekouchuli("type",urlurl);
+                            let urltype = urls[i].split('#')[2]||getapitype(urlurl);
                             let urlgroup = urls[i].split('#')[3]||getMyVar('apigroup','');
                             if(!datalist.some(item => item.url ==urlurl)&&urlname&&/^http/.test(urlurl)&&urltype){
                                 let arr  = { "name": urlname, "url": urlurl, "ua": apiua, "type": urltype, "group": urlgroup };
@@ -1155,8 +1218,8 @@ function jiekou(lx,data) {
                     }
                     require(config.依赖.match(/https.*\//)[0] + 'SrcJyXunmi.js');
                     xunmi(name, datalist);
-                },input, jiekouchuli);
-            },jiekouchuli)
+                },input);
+            })
     });
     if(lx=="update"){
         d.push({
@@ -1193,23 +1256,27 @@ function jiekou(lx,data) {
     d.push({
         title:'保存',
         col_type:'text_3',
-        url: $().lazyRule((lx,data,jiekouchuli)=>{
+        url: $().lazyRule((lx,data)=>{
             if(getMyVar('addtype', '1')=="1"&&!/^http/.test(getMyVar('apiurl',''))){return "toast://接口地址不正确"}
-            var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
-            var datafile = fetch(filepath);
-            if(datafile != ""){
-                eval("var datalist=" + datafile+ ";");
-            }else{
-                var datalist = [];
-            }
-
+            require(config.依赖.match(/https.*\//)[0] + 'SrcJySet.js');
+            var urls= [];
             let apiurl = getMyVar('apiurl');
             let apiname = getMyVar('apiname');
             let apiurls = getMyVar('apiurls');
             let apiua = getMyVar('apiua','Dalvik/2.1.0');
+            let isupdate = 0;
             if(getMyVar('addtype', '1')=="1"&&apiname&&apiurl){
-                let urltype = getMyVar('apitype')||jiekouchuli("type",apiurl);
+                let urltype = getMyVar('apitype');
                 let apigroup = getMyVar('apigroup','');
+                if(lx=="update"){
+                    isupdate = 1;
+                    if((apiurl==data.url&&apiname==data.name&&apiua==data.ua&&urltype==data.type&&apigroup==data.group)){
+                        return "toast://未修改";
+                    }
+                }
+                urls.push({ "name": apiname, "url": apiurl, "ua": apiua,"type": urltype, "group":apigroup})
+
+                /*
                 if(lx=="update"&&(apiurl!=data.url||apiname!=data.name||apiua!=data.ua||urltype!=data.type||apigroup!=data.group)){
                     for(var i=0;i<datalist.length;i++){
                         if(datalist[i].url==data.url){
@@ -1231,15 +1298,23 @@ function jiekou(lx,data) {
                     }
                 }else{
                     return "toast://暂不支持的api接口类型";
-                }
+                }*/
             }else if(getMyVar('addtype', '1')=="2"&&apiurls){
-                var urls = apiurls.replace(/,|，/g,"#").split('\n');
+                let list = apiurls.replace(/,|，/g,"#").split('\n');
+                for (var i in list) {
+                    let urlname = list[i].split('#')[0];
+                    let urlurl = list[i].split('#')[1];
+                    let urltype = list[i].split('#')[2]||getapitype(urlurl);
+                    let urlgroup = list[i].split('#')[3]||urltype;
+                    urls.push({ "name": urlname, "url": urlurl, "ua": apiua,"type": urltype, "group":urlgroup})
+                }
+                
+                /*
                 var urlnum = 0;
-
                 for (var i in urls) {
                     let urlname = urls[i].split('#')[0];
                     let urlurl = urls[i].split('#')[1];
-                    let urltype = urls[i].split('#')[2]||jiekouchuli("type",urlurl);
+                    let urltype = urls[i].split('#')[2]||getapitype(urlurl);
                     let urlgroup = urls[i].split('#')[3]||urltype;
                     if(!datalist.some(item => item.url ==urlurl)&&urlname&&/^http/.test(urlurl)&&urltype){
                         let arr  = { "name": urlname, "url": urlurl, "ua": apiua, "type": urltype, "group": urlgroup };
@@ -1248,15 +1323,29 @@ function jiekou(lx,data) {
                     }
                 }
                 if(urlnum>0){writeFile(filepath, JSON.stringify(datalist));}
+                
                 back(true);
                 return "toast://合计："+urls.length+"，保存："+urlnum;
+                */
             }else{
                 return "toast://无法保存，检查项目填写完整性";
             }
-        }, lx, data, jiekouchuli)
+            if(urls.length==0){
+                    return'toast://失败>无数据';
+            }else{
+                var jknum = jiekousave(urls, 0);
+                if(jknum<0){
+                    return'toast://失败>内容异常';
+                }else{
+                    back(true);
+                    return "toast://合计："+urls.length+"，保存："+jknum;
+                }
+            } 
+        }, lx, data)
     });
     setHomeResult(d);
 }
+
 function jiexi(lx,data) {
     addListener("onClose", $.toString(() => {
         clearMyVar('parsename');
