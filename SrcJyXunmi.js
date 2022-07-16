@@ -690,6 +690,15 @@ function xunmierji(type,ua) {
                         return SrcParseS.聚影(input);
                     });
                 }else if (/tvbox/.test(type)) {
+                    try{
+                        var cfgfile = "hiker://files/rules/Src/Juying/config.json";
+                        var Juyingcfg=fetch(cfgfile);
+                        if(Juyingcfg != ""){
+                            eval("var JYconfig=" + Juyingcfg+ ";");
+                        }
+                        let iscachem3u8 = JYconfig.cachem3u8||1;
+                        putMyVar('SrcM3U8',iscachem3u8);
+                    }catch(e){}
                     var playtitle = list[j].split('$')[0];
                     var playurl = list[j].split('$')[1];
                     var DTJX = $("").lazyRule(() => {
