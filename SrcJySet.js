@@ -1077,7 +1077,7 @@ function jiekou(lx,data) {
             desc: getMyVar('apitype')=="xpath"?"接口地址以csp_xpath_为前缀":"接口地址",
             extra: {
                 titleVisible: false,
-                defaultValue: getMyVar('apitype')=="xpath"?getMyVar('apiurl', 'csp_xpath_'):getMyVar('apiurl', ''),
+                defaultValue: getMyVar('apitype')=="xpath"&&getMyVar('apiurl', '')==""?'csp_xpath_':getMyVar('apiurl', ''),
                 onChange: 'putMyVar("apiurl",input)'
             }
         });
@@ -1085,7 +1085,7 @@ function jiekou(lx,data) {
             d.push({
                 title:'xpath代码',
                 col_type: 'input',
-                desc: "xpath接口门槛相对较高，推荐大佬使用",
+                desc: "xpath接口对数据格式要求非常高\n大佬来偿试写接口呀",
                 extra: {
                     titleVisible: false,
                     defaultValue: data&&data.data?data.data:getMyVar('apixpath', ''),
