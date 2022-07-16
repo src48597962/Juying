@@ -510,13 +510,21 @@ function xunmierji(type,ua) {
         }else if (/biubiu/.test(type)) {
             var jsondata = MY_PARAMS.data;
             var actor = html.match(eval('/'+jsondata.zhuyanqian+'(\S*)'+jsondata.zhuyanhou+'/'))[1] || "内详";
+            log(actor)
             var director = html.match(eval('/'+jsondata.daoyanqian+'(\S*)'+jsondata.daoyanhou+'/'))[1] || "内详";
+            log(director)
             var area = html.match(eval('/'+jsondata.diquqian+'(\S*)'+jsondata.diquhou+'/'))[1] || "未知";
+            log(area)
             var year = html.match(eval('/'+jsondata.nianfenqian+'(\S*)'+jsondata.nianfenhou+'/'))[1] || "未知";
+            log(year)
             var remarks = html.match(eval('/'+jsondata.zhuangtaiqian+'(\S*)'+jsondata.zhuangtaihou+'/'))[1] || "";
+            log(remarks)
             var pubdate = html.match(eval('/'+jsondata.gengxinqian+'(\S*)'+jsondata.gengxinhou+'/'))[1] || "";
+            log(pubdate)
             var pic = MY_PARAMS.pic || html.match(eval('/'+jsondata.tupianqian+'(\S*)'+jsondata.tupianhou+'/'))[1];
+            log(pic)
             var desc = html.match(eval('/'+jsondata.juqingqian+'(\S*)'+jsondata.juqinghou+'/'))[1] || '...';
+            log(desc)
             var arts = [];
             var conts = [];
             
