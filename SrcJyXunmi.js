@@ -514,7 +514,7 @@ function xunmierji(type,ua) {
             }
         }else if (/biubiu/.test(type)) {
             var jsondata = MY_PARAMS.data;
-            let tmpstr = '/'+jsondata.zhuyanqian+'(.*?)'+jsondata.zhuyanhou+'/';
+            let tmpstr = '/'+jsondata.zhuyanqian.replace(/\//g,"\/")+'(.*?)'+jsondata.zhuyanhou.replace(/\//g,"\/")+'/';
             log(tmpstr)
             var actor = html.match(eval(tmpstr))[1] || "内详";
             log(actor)
