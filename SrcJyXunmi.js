@@ -479,7 +479,7 @@ function xunmierji(type,ua) {
             var remarks = String(xpath(html, jsondata.dtNode+jsondata.dtCate)).split(' / ')[0].replace(jsondata.filter?eval(jsondata.filter):"","") || "";
             var pubdate = String(xpath(html, jsondata.dtNode+jsondata.dtMark)) || "";
             var pic = MY_PARAMS.pic || xpath(html, jsondata.dtNode+jsondata.dtImg);
-            var desc = String(xpath(html, jsondata.dtNode+jsondata.dtDesc)).replace(jsondata.filter?eval(jsondata.filter):"","") || '...';
+            var desc = String(xpath(html, jsondata.dtNode+jsondata.dtDesc)).replace(jsondata.filter?eval(jsondata.filter):"","").replace(/&ldquo;/g,'“').replace(/&rdquo;/g,'”') || '...';
             var arts = xpathArray(html, jsondata.dtNode+jsondata.dtFromNode+jsondata.dtFromName);
             function removeByValue(arr, val) {
                 for(var i = 0; i < arr.length; i++) {
