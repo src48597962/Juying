@@ -1025,7 +1025,7 @@ function getapitype(apiurl) {
         return "";
     }
 }
-function jiekousave(urls,isupdate) {
+function jiekousave(urls,update) {
     try{
         var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
         var datafile = fetch(filepath);
@@ -1034,7 +1034,7 @@ function jiekousave(urls,isupdate) {
         }else{
             var datalist = [];
         }
-        if(isupdate==1){
+        if(update==1){
             for(var j=0;j<datalist.length;j++){
                 if(datalist[j].url==urls[0].url){
                     datalist.splice(j,1);
@@ -1053,7 +1053,11 @@ function jiekousave(urls,isupdate) {
             if(!datalist.some(item => item.url ==urlurl)&&urlname&&/^http|^csp/.test(urlurl)&&urltype){
                 let arr  = { "name": urlname, "url": urlurl, "ua": urlua, "type": urltype, "group": urlgroup };
                 if(urls[i].data){arr['data'] = urls[i].data}
-                datalist.push(arr);
+                if(urls.length == 1){
+                    datalist.unshift(arr);
+                }else{
+                    datalist.push(arr);
+                }
                 num = num + 1;
             }
         }
