@@ -1,4 +1,4 @@
-var jyfile = {
+{
     "csp_xpath_jbb":{//接口标识不能重复
         "name": "剧白白",//接口名称
         "type": "tvbox",//接口类型，tvbox或biubiu
