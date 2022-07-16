@@ -509,7 +509,9 @@ function xunmierji(type,ua) {
             }
         }else if (/biubiu/.test(type)) {
             var jsondata = MY_PARAMS.data;
-            var actor = html.match(eval('/'+jsondata.zhuyanqian+'(\S*)'+jsondata.zhuyanhou+'/'))[1] || "内详";
+            let tmpstr = '/'+jsondata.zhuyanqian+'(.*?)'+jsondata.zhuyanhou+'/';
+            log(tmpstr)
+            var actor = html.match(eval(tmpstr))[1] || "内详";
             log(actor)
             var director = html.match(eval('/'+jsondata.daoyanqian+'(\S*)'+jsondata.daoyanhou+'/'))[1] || "内详";
             log(director)
