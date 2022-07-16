@@ -1074,7 +1074,7 @@ function jiekou(lx,data) {
         d.push({
             title:'apiurl',
             col_type: 'input',
-            desc: "接口地址",
+            desc: getMyVar('apitype')=="xpath"?"接口地址以csp_xpath_为前缀":"接口地址",
             extra: {
                 titleVisible: false,
                 defaultValue: getMyVar('apitype')=="xpath"?getMyVar('apiurl', 'csp_xpath_'):getMyVar('apiurl', ''),
@@ -1160,7 +1160,7 @@ function jiekou(lx,data) {
         col_type:'text_3',
         url: $(getMyVar("testkey","我的"),"输入测试搜索关键字").input(()=>{
                 putMyVar("testkey",input);
-                if(getMyVar('addtype', '1')=="1"&&!/^http||^csp/.test(getMyVar('apiurl',''))){return "toast://接口地址不正确"}
+                if(getMyVar('addtype', '1')=="1"&&!/^http|^csp/.test(getMyVar('apiurl',''))){return "toast://接口地址不正确"}
                 return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
                     let apiurl = getMyVar('apiurl');
                     let apiname = getMyVar('apiname');
