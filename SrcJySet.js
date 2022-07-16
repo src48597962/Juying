@@ -1337,12 +1337,16 @@ function jiekou(lx,data) {
             if(urls.length==0){
                     return'toast://失败>无数据';
             }else{
-                var jknum = jiekousave(urls, 0);
+                var jknum = jiekousave(urls, isupdate);
                 if(jknum<0){
                     return'toast://失败>内容异常';
                 }else{
                     back(true);
-                    return "toast://合计："+urls.length+"，保存："+jknum;
+                    if(urls.length==1){
+                        return "toast://保存成功";
+                    }else{
+                        return "toast://合计："+urls.length+"，保存："+jknum;
+                    }
                 }
             } 
         }, lx, data)
