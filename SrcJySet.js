@@ -1174,11 +1174,13 @@ function jiekou(lx,data) {
                         datalist.push({"name": apiname, "url": apiurl, "ua": apiua, "type": urltype });
                         if(urlgroup){datalist['group'] = urlgroup}
                         try{
+                            log(getMyVar('apixpath'))
                             let xpathdata = JSON.parse(getMyVar('apixpath'));
                             if(xpathdata){datalist['data'] = xpathdata}
                         }catch(e){
                             return "toast://xpath数据异常";
                         }
+                        log(datalist)
                     }else if(getMyVar('addtype', '1')=="2"&&apiurls){
                         var urls = apiurls.replace(/,|，/g,"#").split('\n');
                         for (var i in urls) {
