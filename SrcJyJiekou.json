@@ -47,7 +47,7 @@
         "dtUrlSubNode": "/li/a",
         "dtUrlId": "/@href",
         "dtUrlName": "/text()",
-        "playUrl": "http://www.dadagui.com/vodplay/{playUrl}.html",
+        "playUrl": "http://www.dadagui.com{playUrl}",
         "searchUrl": "http://www.dadagui.com/index.php/ajax/suggest?mid=1&wd={wd}&limit=10",
         "scVodNode": "json:list",
         "scVodName": "name",
