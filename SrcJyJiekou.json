@@ -92,26 +92,26 @@
         "bfjiequqian": "空",
         "bfjiequhou": "空",
         "bfjiequshuzuqian": "class=\"stui-content__playlist",
-        "bfjiequshuzuhou": "</ul>",
+        "bfjiequshuzuhou": "<\/ul>",
         "zhuangtaiqian": "类型：",//状态、备注前
         "zhuangtaihou": " \/",//状态、备注后
         "daoyanqian": "导演：",//导演前
-        "daoyanhou": "</p>",//导演后
+        "daoyanhou": "<\/p>",//导演后
         "zhuyanqian": "class=\"data\">主演：",//主演前
-        "zhuyanhou": "</p>",//主演后
+        "zhuyanhou": "<\/p>",//主演后
         "diquqian": "地区：",//地区前
         "diquhouhou": " \/",//地区后
         "nianfenqian": "年份：",//年份前
         "nianfenhou": " \/",//年份后
         "genxinqian": "最后更新：<a style=.*?>",
-        "genxinhou": "</a>",
+        "genxinhou": "<\/a>",
         "juqingqian": "class=\"detail-content\"",//简介前
-        "juqinghou": "</span>",//简介后
+        "juqinghou": "<\/span>",//简介后
         "bfyshifouercijiequ": "0",
         "bfyjiequqian": "空",
         "bfyjiequhou": "空",
         "bfyjiequshuzuqian": "<a",
-        "bfyjiequshuzuhou": "/a>",
+        "bfyjiequshuzuhou": "\/a>",
         "bfbiaotiqian": ">",
         "bfbiaotihou": "<",
         "bflianjieqian": "href=\"",
@@ -158,10 +158,10 @@
         "bfjiequshuzuhou": "</div>", //播放截取的列表数组的后关键词
         "zhuangtaiqian": "video-info-item\">", //状态前关键词
         "zhuangtaihou": "</div>", //状态后关键词
-        "daoyanqian": "导演：</span>", //导演前关键词
-        "daoyanhou": "</div>", //导演态后关键词
-        "zhuyanqian": "主演：</span>", //主演前关键词
-        "zhuyanhou": "</div>", //主演后关键词
+        "daoyanqian": "导演：<\/span>", //导演前关键词
+        "daoyanhou": "<\/div>", //导演态后关键词
+        "zhuyanqian": "主演：<\/span>", //主演前关键词
+        "zhuyanhou": "<\/div>", //主演后关键词
         "juqingqian": "class=\"zkjj_a\">", //剧情前关键词
         "juqinghou": "<span", //剧情后关键词
         "bfyshifouercijiequ": "0", //截取的播放列表数组是否需要二次截取，0不需要，1需要
