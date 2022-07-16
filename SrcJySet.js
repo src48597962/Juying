@@ -1176,7 +1176,8 @@ function jiekou(lx,data) {
                         try{
                             log(getMyVar('apixpath'))
                             let xpathdata = JSON.parse(getMyVar('apixpath'));
-                            if(xpathdata){datalist['data'] = xpathdata}
+                            log(xpathdata)
+                            datalist['data'] = xpathdata;
                         }catch(e){
                             return "toast://xpath数据异常";
                         }
