@@ -576,6 +576,10 @@ function SRCSet() {
                 }),
                 col_type: "text_3"
             });
+            d.push({
+                title: '<br>',
+                col_type: 'rich_text'
+            });
             setHomeResult(d);
         }),
         img: "https://lanmeiguojiang.com/tubiao/ke/156.png",
