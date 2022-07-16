@@ -1171,15 +1171,16 @@ function jiekou(lx,data) {
                     if(getMyVar('addtype', '1')=="1"&&apiname&&apiurl){
                         let urltype = getMyVar('apitype')||getapitype(apiurl);
                         let urlgroup = getMyVar('apigroup');
-                        datalist.push({"name": apiname, "url": apiurl, "ua": apiua, "type": urltype });
-                        if(urlgroup){datalist['group'] = urlgroup}
+                        let arr = {"name": apiname, "url": apiurl, "ua": apiua, "type": urltype };
+                        if(urlgroup){arr['group'] = urlgroup}
                         try{
                             log(getMyVar('apixpath'))
                             let xpathdata = eval("("+getMyVar('apixpath')+")");
-                            datalist['data'] = xpathdata;
+                            arr['data'] = getMyVar('apixpath');
                         }catch(e){
                             return "toast://xpath数据异常";
                         }
+                        datalist.push(arr);
                         log(datalist)
                     }else if(getMyVar('addtype', '1')=="2"&&apiurls){
                         var urls = apiurls.replace(/,|，/g,"#").split('\n');
