@@ -1084,7 +1084,7 @@ function jiekou(lx,data) {
                 desc: "xpath接口门槛相对较高，推荐大佬使用",
                 extra: {
                     titleVisible: false,
-                    defaultValue: data.data?data.data:getMyVar('apixpath', ''),
+                    defaultValue: data&&data.data?data.data:getMyVar('apixpath', ''),
                     type: "textarea",
                     height: 8,
                     onChange: 'putMyVar("apixpath",input)'
