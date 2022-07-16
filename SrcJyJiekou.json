@@ -25,7 +25,8 @@
         "scVodName": "name",
         "scVodId": "id",
         "scVodImg": "pic",
-        "scVodMark": ""
+        "scVodMark": "",
+        "filter": ""
     },
     "csp_xpath_ddg":{
         "name": "达达龟",
@@ -53,7 +54,8 @@
         "scVodName": "name",
         "scVodId": "id",
         "scVodImg": "pic",
-        "scVodMark": ""
+        "scVodMark": "",
+        "filter": ""
     }
 
 }
