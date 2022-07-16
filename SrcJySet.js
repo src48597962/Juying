@@ -548,11 +548,37 @@ function SRCSet() {
                 }, jiekouchuli),
                 col_type: "text_3"
             });
+            d.push({
+                title: 'JYxpath导入',
+                url:$("","输入JY自定义的xpath资源地址").input((jiekouchuli) => {
+                        try{
+                            eval(fetch(input))
+                            var xpjiekou = jyfile;
+                        } catch (e) {
+                            log('接口导入失败：'+e.message); 
+                            return "toast://导入失败：连接无效或内容有错";
+                        }
+
+                        var urls= [];
+                        for(var k in xpjiekou){
+                            urls.push({ "name" : xpjiekou[i].name, "url" : k})
+                        }
+                        
+                        var jknum = jiekouchuli('save',urls);
+                        if(jknum<0){
+                            return'toast://导入失败，内容异常';
+                        }else{
+                            return "toast://导入完成，接口保存："+jknum;
+                        }
+                }, jiekouchuli),
+                col_type: "text_3"
+            });
             setHomeResult(d);
         }, jiekouchuli),
         img: "https://lanmeiguojiang.com/tubiao/ke/156.png",
         col_type: "icon_small_3"
     });
+
     if(getMyVar('guanli', 'jk')=="jk"){
         var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
     }else if(getMyVar('guanli', 'jk')=="jx"){
