@@ -1275,10 +1275,7 @@ function jiekou(lx,data) {
                 let apigroup = getMyVar('apigroup');
                 if(lx=="update"){
                     isupdate = 1;
-                    log(data)
-                    log(urltype)
-                    log(apigroup)
-                    if((apiurl==data.url&&apiname==data.name&&apiua==data.ua&&urltype==data.type&&apigroup==data.group)){
+                    if((apiurl==data.url&&apiname==data.name&&apiua==data.ua&&urltype==data.type&&apigroup==(data.group?data.group:''))){
                         return "toast://未修改";
                     }
                 }
