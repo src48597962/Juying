@@ -1341,6 +1341,8 @@ function jiekou(lx,data) {
                 var jknum = jiekousave(urls, isupdate);
                 if(jknum<0){
                     return'toast://失败>内容异常';
+                }else if(jknum==0&&urls.length==1){
+                    return'toast://已存在';
                 }else{
                     back(true);
                     if(urls.length==1){
