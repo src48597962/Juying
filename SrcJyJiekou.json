@@ -2,6 +2,7 @@
     "csp_xpath_jbb":{
         "name": "剧白白",
         "type": "tvbox",
+        "filter": "",
         "ua": "",
         "dtUrl": "https://www.jubaibai.cc/vod/{vid}.html",
         "dtNode": "//body",
@@ -25,12 +26,12 @@
         "scVodName": "name",
         "scVodId": "id",
         "scVodImg": "pic",
-        "scVodMark": "",
-        "filter": ""
+        "scVodMark": ""
     },
     "csp_xpath_ddg":{
         "name": "达达龟",
         "type": "tvbox",
+        "filter": "",
         "ua": "",
         "dtUrl": "http://www.dadagui.com/voddetail/{vid}.html",
         "dtNode": "//body",
@@ -54,8 +55,7 @@
         "scVodName": "name",
         "scVodId": "id",
         "scVodImg": "pic",
-        "scVodMark": "",
-        "filter": ""
+        "scVodMark": ""
     }
 
 }
