@@ -1051,8 +1051,9 @@ function jiekousave(urls,update) {
             let urlgroup = urls[i].group||"";
             
             if(!datalist.some(item => item.url ==urlurl)&&urlname&&/^http|^csp/.test(urlurl)&&urltype){
-                let arr  = { "name": urlname, "url": urlurl, "ua": urlua, "type": urltype, "group": urlgroup };
+                let arr  = { "name": urlname, "url": urlurl, "ua": urlua, "type": urltype };
                 if(urls[i].data){arr['data'] = urls[i].data}
+                if(urlgroup){arr['group'] = urlgroup}
                 if(urls.length == 1){
                     datalist.unshift(arr);
                 }else{
@@ -1271,7 +1272,7 @@ function jiekou(lx,data) {
             let isupdate = 0;
             if(getMyVar('addtype', '1')=="1"&&apiname&&apiurl){
                 let urltype = getMyVar('apitype');
-                let apigroup = getMyVar('apigroup','');
+                let apigroup = getMyVar('apigroup');
                 if(lx=="update"){
                     isupdate = 1;
                     if((apiurl==data.url&&apiname==data.name&&apiua==data.ua&&urltype==data.type&&apigroup==data.group)){
