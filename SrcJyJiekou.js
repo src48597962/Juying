@@ -119,6 +119,8 @@ var jyfile = {
     },
     "csp_biubiu_szw":{
         "name": "森之屋",
+        "type": "biubiu",//接口类型，tvbox或biubiu
+        "filter": "",//过虑字符，使用正则表达式/过虑1|过虑2/g
         "url": "https://www.senfun.net",
         "shifouercijiequ": "0", //截取的列表数组是否需要二次截取，0不需要，1需要
         "jiequqian": "空", //不需要二次截取就填空
