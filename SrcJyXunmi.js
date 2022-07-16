@@ -20,7 +20,7 @@ function xunmi(name,data) {
         eval("var jyfile = " + fetchCache("https://src48597962.coding.net/p/src/d/hktest/git/raw/master/SrcJyJiekou.json",48))
         if(jyfile != ""){
             for(let k in jyfile){
-                let ua = jyfile[k].ua||"Dalvik/2.1.0";
+                let ua = jyfile[k].ua||MOBILE_UA;
                 datalist.push({"name":jyfile[k].name,"type":jyfile[k].type,"ua":ua,"url":k,"data":jyfile[k]})
             }
         }
@@ -217,10 +217,24 @@ function xunmi(name,data) {
                     log(obj.name+'>'+e.message);
                     return {result:0, url:ssurl, apiurl:url_api};
                 }
-            }else if(obj.type=="tvbox"){
+            }else if(obj.type=="tvbox"||obj.type=="biubiu"){
                 try {
-                    var ssurl = jsondata.searchUrl.replace('{wd}',name);
-                    if(jsondata.scVodNode=="json:list"){
+                    var ssjosn = 1;
+                    if(obj.type=="tvbox"){
+                        var ssurl = jsondata.searchUrl.replace('{wd}',name);
+                        if(jsondata.scVodNode!="json:list"){
+                            ssjosn = 0;
+                        }
+                        var ssvodurl = `jsondata.dtUrl.replace('{vid}',list.id)`;
+                    }else{
+                        var ssurl = jsondata.url+jsondata.sousuoqian+name+jsondata.sousuohou;
+                        if(jsondata.ssmoshi=="1"){
+                            ssjosn = 0;
+                        }
+                        var ssvodurl = `jsondata.url+jsondata.urlsousuohouzhui+list.id+jsondata.houzhui`;
+                    }
+                    
+                    if(ssjosn==1){
                         var html = JSON.parse(request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 }));
                         var list = html.list||[];
                     }
@@ -237,7 +251,7 @@ function xunmi(name,data) {
                                 let vodpic = list.pic;
                                 let voddesc = "";
                                 let appname = '‘‘’’<font color=#f13b66a>'+obj.name+'</font>';
-                                let vodurl = jsondata.dtUrl.replace('{vid}',list.id);
+                                let vodurl = eval(ssvodurl);
                                 return {
                                     title: vodname,
                                     desc: voddesc + '\n\n' + appname + ' ('+obj.type+')'+(obj.group?' ['+obj.group+']':''),
