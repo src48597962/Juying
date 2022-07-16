@@ -123,12 +123,7 @@ function xunmi(name,data) {
                 var ssurl = url_api + '?ac=videolist&wd='+name;
                 var lists = "html.list";
             } else if (obj.type=="xpath") {
-                log(obj.data)
-                try{
-                    var jsondata = JSON.parse(obj.data);
-                }catch(e){
-                    var jsondata = obj.data;
-                }
+                var jsondata = obj.data;
             } else {
                 log('api类型错误')
             }
