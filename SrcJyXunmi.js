@@ -231,7 +231,7 @@ function xunmi(name,data) {
                         if(jsondata.ssmoshi=="1"){
                             ssjosn = 0;
                         }
-                        var ssvodurl = `jsondata.url+jsondata.urlsousuohouzhui+list.id+'.html'`;
+                        var ssvodurl = `jsondata.url+jsondata.sousuohouzhui+list.id+'.html'`;
                     }
                     
                     if(ssjosn==1){
@@ -411,7 +411,7 @@ function xunmierji(type,ua) {
             } catch (e) {
                 var html = "";
             }
-        } else if (/tvbox/.test(type)) {
+        } else if (/tvbox|biubiu/.test(type)) {
             try{
                 var html = request(MY_URL.split('##')[1], { headers: { 'User-Agent': ua } });
             } catch (e) {
@@ -507,6 +507,19 @@ function xunmierji(type,ua) {
                 }
                 conts.push(cont.join("#"))
             }
+        }else if (/biubiu/.test(type)) {
+            var jsondata = MY_PARAMS.data;
+            var actor = html.match(eval('/'+jsondata.zhuyanqian+'(\S*)'+jsondata.zhuyanhou+'/'))[1] || "内详";
+            var director = html.match(eval('/'+jsondata.daoyanqian+'(\S*)'+jsondata.daoyanhou+'/'))[1] || "内详";
+            var area = html.match(eval('/'+jsondata.diquqian+'(\S*)'+jsondata.diquhou+'/'))[1] || "未知";
+            var year = html.match(eval('/'+jsondata.nianfenqian+'(\S*)'+jsondata.nianfenhou+'/'))[1] || "未知";
+            var remarks = html.match(eval('/'+jsondata.zhuangtaiqian+'(\S*)'+jsondata.zhuangtaihou+'/'))[1] || "";
+            var pubdate = html.match(eval('/'+jsondata.gengxinqian+'(\S*)'+jsondata.gengxinhou+'/'))[1] || "";
+            var pic = MY_PARAMS.pic || html.match(eval('/'+jsondata.tupianqian+'(\S*)'+jsondata.tupianhou+'/'))[1];
+            var desc = html.match(eval('/'+jsondata.juqingqian+'(\S*)'+jsondata.juqinghou+'/'))[1] || '...';
+            var arts = [];
+            var conts = [];
+            
         }else{
             //网页
         }
