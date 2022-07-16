@@ -1174,13 +1174,11 @@ function jiekou(lx,data) {
                         let arr = {"name": apiname, "url": apiurl, "ua": apiua, "type": urltype };
                         if(urlgroup){arr['group'] = urlgroup}
                         try{
-                            let xpathdata = eval("("+getMyVar('apixpath')+")");
                             arr['data'] = JSON.parse(getMyVar('apixpath'));
                         }catch(e){
                             return "toast://xpath数据异常";
                         }
                         datalist.push(arr);
-                        log(datalist)
                     }else if(getMyVar('addtype', '1')=="2"&&apiurls){
                         var urls = apiurls.replace(/,|，/g,"#").split('\n');
                         for (var i in urls) {
@@ -1255,14 +1253,14 @@ function jiekou(lx,data) {
                         return "toast://未修改";
                     }
                 }
-                urls.push({ "name": apiname, "url": apiurl, "ua": apiua,"type": urltype})
-                if(apigroup){urls['group'] = apigroup}
+                let arr = {"name": apiname, "url": apiurl, "ua": apiua, "type": urltype };
+                if(apigroup){arr['group'] = apigroup}
                 try{
-                    let xpathdata = JSON.parse(getMyVar('apixpath'));
-                    if(xpathdata){urls['data'] = xpathdata}
+                    arr['data'] = JSON.parse(getMyVar('apixpath'));
                 }catch(e){
                     return "toast://xpath数据异常";
                 }
+                urls.push(arr);
                 /*
                 if(lx=="update"&&(apiurl!=data.url||apiname!=data.name||apiua!=data.ua||urltype!=data.type||apigroup!=data.group)){
                     for(var i=0;i<datalist.length;i++){
@@ -1293,8 +1291,9 @@ function jiekou(lx,data) {
                     let urlurl = list[i].split('#')[1];
                     let urltype = list[i].split('#')[2]||getapitype(urlurl);
                     let urlgroup = list[i].split('#')[3]||urltype;
-                    urls.push({ "name": urlname, "url": urlurl, "ua": apiua,"type": urltype})
-                    if(urlgroup){urls['group'] = urlgroup}
+                    let arr  = { "name": urlname, "url": urlurl, "ua": apiua, "type": urltype };
+                    if(urlgroup){arr['group'] = urlgroup}
+                    urls.push(arr);
                 }
                 
                 /*
