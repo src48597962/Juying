@@ -1250,7 +1250,7 @@ function jiekou(lx,data) {
                 let apixpath = getMyVar('apixpath');
                 if(lx=="update"){
                     isupdate = 1;
-                    if((apiurl==data.url&&apiname==data.name&&apiua==data.ua&&urltype==data.type&&apigroup==(data.group?data.group:'')&&apixpath==(data.data?data.data:''))){
+                    if((apiurl==data.url&&apiname==data.name&&apiua==data.ua&&urltype==data.type&&apigroup==(data.group?data.group:'')&&apixpath==(data.data?JSON.stringify(data.data):''))){
                         return "toast://未修改";
                     }
                 }
