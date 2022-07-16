@@ -60,12 +60,12 @@ var jyfile = {
     "csp_biubiu_libvio":{//接口标识不能重复
         "name": "LIBVIO",//接口名称
         "type": "biubiu",//接口类型，tvbox或biubiu
-        "filter": "",
-        "url": "https://www.libvio.com",
+        "filter": "",//过虑字符，使用正则表达式/过虑1|过虑2/g
+        "url": "https://www.libvio.com",//视频地址前缀
         "jiequshuzuqian": "data",
         "jiequshuzuhou": "</h4>",
-        "tupianqian": "original=\"",
-        "tupianhou": "\"",
+        "tupianqian": "original=\"",//图片前
+        "tupianhou": "\"",//图片后
         "biaotiqian": "title=\"",
         "biaotihou": "\"",
         "lianjieqian": "href=\"",
@@ -93,20 +93,20 @@ var jyfile = {
         "bfjiequhou": "空",
         "bfjiequshuzuqian": "class=\"stui-content__playlist",
         "bfjiequshuzuhou": "</ul>",
-        "zhuangtaiqian": "类型：",
-        "zhuangtaihou": " \/",
-        "daoyanqian": "导演：",
-        "daoyanhou": "</p>",
-        "zhuyanqian": "class=\"data\">主演：",
-        "zhuyanhou": "</p>",
-        "diquqian": "地区：",
-        "diquhouhou": " \/",
-        "nianfenqian": "年份：",
-        "nianfenhou": " \/",
+        "zhuangtaiqian": "类型：",//状态、备注前
+        "zhuangtaihou": " \/",//状态、备注后
+        "daoyanqian": "导演：",//导演前
+        "daoyanhou": "</p>",//导演后
+        "zhuyanqian": "class=\"data\">主演：",//主演前
+        "zhuyanhou": "</p>",//主演后
+        "diquqian": "地区：",//地区前
+        "diquhouhou": " \/",//地区后
+        "nianfenqian": "年份：",//年份前
+        "nianfenhou": " \/",//年份后
         "genxinqian": "最后更新：<a style=.*?>",
         "genxinhou": "</a>",
-        "juqingqian": "class=\"detail-content\"",
-        "juqinghou": "</span>",
+        "juqingqian": "class=\"detail-content\"",//简介前
+        "juqinghou": "</span>",//简介后
         "bfyshifouercijiequ": "0",
         "bfyjiequqian": "空",
         "bfyjiequhou": "空",
