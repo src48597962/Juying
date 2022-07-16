@@ -6,7 +6,7 @@ var jyfile = {
         "dtUrl": "https://www.jubaibai.cc/vod/{vid}.html",//视频地址
         "dtNode": "//body",//xpath最顶层节点
         "dtImg": "//div[contains(@class,'stui-content__thumb')]/a/img/@data-original",//图片
-        "dtCate": "//p[contains(@class,'data')][1]/text()",
+        "dtCate": "//p[contains(@class,'data')][1]/text()",//类型
         "dtYear": "//p[contains(@class,'data')][5]/text()",//年份
         "dtArea": "//p[contains(@class,'data')][3]/text()",//地区
         "dtMark": "//p[contains(@class,'data')][8]/span/text()",//状态、备注
