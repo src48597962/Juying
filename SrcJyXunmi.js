@@ -17,9 +17,13 @@ function xunmi(name,data) {
         }
     }
     try{
-        eval("var jyfile = " + fetch("https://src48597962.coding.net/p/src/d/hktest/git/raw/master/SrcJyJiekou.json"))
-        if(jyfile != ""){
-            
+        var jyhtml = fetch("https://src48597962.coding.net/p/src/d/hktest/git/raw/master/SrcJyJiekou.json");
+        if(jyhtml != ""){
+            var reg = /("([^\\\"]*(\\.)?)*")|('([^\\\']*(\\.)?)*')|(\/{2,}.*?(\r|\n|$))|(\/\*(\n|.)*?\*\/)/g;
+            jyhtml = jyhtml.replace(reg, function(word) { 
+                return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
+            });
+            var jyfile = JSON.parse(jyhtml);
             for(let k in jyfile){
                 let ua = jyfile[k].ua||MOBILE_UA;
                 datalist.push({"name":jyfile[k].name,"type":jyfile[k].type,"ua":ua,"url":k,"data":jyfile[k]})
