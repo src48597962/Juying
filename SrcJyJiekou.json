@@ -30,7 +30,7 @@
         "dtUrlIdR": "/play/(\\S+).html",
         "dtUrlName": "/text()",
         "dtUrlNameR": "",
-        "playUrl": "https://www.jubaibai.cc/play/{playUrl}.html",
+        "playUrl": "https://www.jubaibai.cc{playUrl}",
         "playUa": "",
         "searchUrl": "https://www.jubaibai.cc/index.php/ajax/suggest?mid=1&wd={wd}&limit=10",
         "scVodNode": "json:list",
