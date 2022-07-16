@@ -560,8 +560,7 @@ function SRCSet() {
                             for(let k in jyjiekou){
                                 let xpua = jyjiekou[k].ua||"MOBILE_UA";
                                 let xptype = jyjiekou[k].type||"xpath"
-                                urls.push({"name":jyjiekou[k].name,"type":xptype,"ua":xpua,"url":k})
-                                if(jyjiekou[k]){urls['data'] = JSON.parse(jyjiekou[k])}
+                                urls.push({"name":jyjiekou[k].name,"type":xptype,"ua":xpua,"url":k,"data":jyjiekou[k]})
                             }
                         } catch (e) {
                             log('接口导入失败：'+e.message); 
