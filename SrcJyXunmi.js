@@ -456,15 +456,15 @@ function xunmierji(type,ua) {
             var conts = arts;
         }else if (/tvbox/.test(type)) {
             var jsondata = MY_PARAMS.data;
-            var actor = String(xpathArray(html, jsondata.dtActor).join(',')) || "内详";
-            var director = String(xpathArray(html, jsondata.dtDirector).join(',')) || "内详";
-            var area = String(xpath(html, jsondata.dtArea)).replace('地区：','') || "未知";
-            var year = String(xpath(html, jsondata.dtYear)).replace('年份：','') || "未知";
-            var remarks = String(xpath(html, jsondata.dtCate)).split('/')[0] || "";
-            var pubdate = String(xpath(html, jsondata.dtMark)) || "";
-            var pic = MY_PARAMS.pic || xpath(html, jsondata.dtImg);
-            var desc = String(xpath(html, jsondata.dtDesc)) || '...';
-            var arts = xpathArray(html, jsondata.dtFromNode+jsondata.dtFromName);
+            var actor = String(xpathArray(html, jsondata.dtNode+jsondata.dtActor).join(',')) || "内详";
+            var director = String(xpathArray(html, jsondata.dtNode+jsondata.dtDirector).join(',')) || "内详";
+            var area = String(xpath(html, jsondata.dtNode+jsondata.dtArea)).replace('地区：','') || "未知";
+            var year = String(xpath(html, jsondata.dtNode+jsondata.dtYear)).replace('年份：','') || "未知";
+            var remarks = String(xpath(html, jsondata.dtNode+jsondata.dtCate)).split('/')[0] || "";
+            var pubdate = String(xpath(html, jsondata.dtNode+jsondata.dtMark)) || "";
+            var pic = MY_PARAMS.pic || xpath(html, jsondata.dtNode+jsondata.dtImg);
+            var desc = String(xpath(html, jsondata.dtNode+jsondata.dtDesc)) || '...';
+            var arts = xpathArray(html, jsondata.dtNode+jsondata.dtFromNode+jsondata.dtFromName);
             function removeByValue(arr, val) {
                 for(var i = 0; i < arr.length; i++) {
                     if(arr[i] == val) {
@@ -476,8 +476,8 @@ function xunmierji(type,ua) {
             //removeByValue(arts,"猜你喜欢");
             var conts = [];
             for (let i = 1; i < arts.length+1; i++) {
-                let contname = xpathArray(html, jsondata.dtUrlNode+'['+i+']'+jsondata.dtUrlSubNode+jsondata.dtUrlName);
-                let conturl = xpathArray(html, jsondata.dtUrlNode+'['+i+']'+jsondata.dtUrlSubNode+jsondata.dtUrlId);
+                let contname = xpathArray(html, jsondata.dtNode+jsondata.dtUrlNode+'['+i+']'+jsondata.dtUrlSubNode+jsondata.dtUrlName);
+                let conturl = xpathArray(html, jsondata.dtNode+jsondata.dtUrlNode+'['+i+']'+jsondata.dtUrlSubNode+jsondata.dtUrlId);
                 let cont = [];
                 for (let j = 0; j < contname.length; j++) {
                     cont.push(contname[j]+"$"+jsondata.playUrl.replace('{playUrl}',conturl[j]))
