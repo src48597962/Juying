@@ -231,7 +231,7 @@ function xunmi(name,data) {
                         if(jsondata.ssmoshi=="1"){
                             ssjosn = 0;
                         }
-                        var ssvodurl = `jsondata.url+jsondata.urlsousuohouzhui+list.id+jsondata.houzhui`;
+                        var ssvodurl = `jsondata.url+jsondata.urlsousuohouzhui+list.id+'.html'`;
                     }
                     
                     if(ssjosn==1){
