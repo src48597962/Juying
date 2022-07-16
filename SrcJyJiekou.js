@@ -1,4 +1,4 @@
-var jyfile = {
+var jyjiekou = {
     "csp_xpath_jbb":{//接口标识不能重复
         "name": "剧白白",//接口名称
         "filter": "",//过虑字符，使用正则表达式/过虑1|过虑2/g
