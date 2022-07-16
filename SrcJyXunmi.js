@@ -16,22 +16,7 @@ function xunmi(name,data) {
             var datalist = [];
         }
     }
-    /*
-    try{
-        var jyfile = fetch("https://src48597962.coding.net/p/src/d/hktest/git/raw/master/SrcJyJiekou.js");
-        if(jyfile != ""){
-            eval(jyhtml);
-            for(let k in jyjiekou){
-                let xpua = jyjiekou[k].ua||MOBILE_UA;
-                let xptype = jyjiekou[k].type||"xpath"
-                datalist.push({"name":jyjiekou[k].name,"type":xptype,"ua":xpua,"url":k,"data":jyjiekou[k]})
-            }
-        }
-    }catch(e){
-        log(e.message)
-    }
-    */
-    log(datalist)
+
     var count = datalist.length;
 
     var d = [];
