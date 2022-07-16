@@ -456,14 +456,14 @@ function xunmierji(type,ua) {
             var conts = arts;
         }else if (/tvbox/.test(type)) {
             var jsondata = MY_PARAMS.data;
-            var actor = String(xpathArray(html, jsondata.dtNode+jsondata.dtActor).join(',')).replace('主演：','').replace(jsondta.filter?eval(jsondta.filter):"","") || "内详";
-            var director = String(xpathArray(html, jsondata.dtNode+jsondata.dtDirector).join(',')).replace('导演：','').replace(jsondta.filter?eval(jsondta.filter):"","") || "内详";
-            var area = String(xpath(html, jsondata.dtNode+jsondata.dtArea)).replace('地区：','').replace(jsondta.filter?eval(jsondta.filter):"","") || "未知";
-            var year = String(xpath(html, jsondata.dtNode+jsondata.dtYear)).replace('年份：','').replace(jsondta.filter?eval(jsondta.filter):"","") || "未知";
-            var remarks = String(xpath(html, jsondata.dtNode+jsondata.dtCate)).split(' / ')[0].replace(jsondta.filter?eval(jsondta.filter):"","") || "";
+            var actor = String(xpathArray(html, jsondata.dtNode+jsondata.dtActor).join(',')).replace('主演：','').replace(jsondata.filter?eval(jsondata.filter):"","") || "内详";
+            var director = String(xpathArray(html, jsondata.dtNode+jsondata.dtDirector).join(',')).replace('导演：','').replace(jsondata.filter?eval(jsondata.filter):"","") || "内详";
+            var area = String(xpath(html, jsondata.dtNode+jsondata.dtArea)).replace('地区：','').replace(jsondata.filter?eval(jsondata.filter):"","") || "未知";
+            var year = String(xpath(html, jsondata.dtNode+jsondata.dtYear)).replace('年份：','').replace(jsondata.filter?eval(jsondata.filter):"","") || "未知";
+            var remarks = String(xpath(html, jsondata.dtNode+jsondata.dtCate)).split(' / ')[0].replace(jsondata.filter?eval(jsondata.filter):"","") || "";
             var pubdate = String(xpath(html, jsondata.dtNode+jsondata.dtMark)) || "";
             var pic = MY_PARAMS.pic || xpath(html, jsondata.dtNode+jsondata.dtImg);
-            var desc = String(xpath(html, jsondata.dtNode+jsondata.dtDesc)).replace(jsondta.filter?eval(jsondta.filter):"","") || '...';
+            var desc = String(xpath(html, jsondata.dtNode+jsondata.dtDesc)).replace(jsondata.filter?eval(jsondata.filter):"","") || '...';
             var arts = xpathArray(html, jsondata.dtNode+jsondata.dtFromNode+jsondata.dtFromName);
             function removeByValue(arr, val) {
                 for(var i = 0; i < arr.length; i++) {
