@@ -529,7 +529,7 @@ function SRCSet() {
                                     xpdata.dtActor = xpjson.dtActor;
                                     xpdata.dtDesc = xpjson.dtDesc;
                                     xpdata.dtFromNode = xpjson.dtFromNode;
-                                    xpdata.dtFromName = xpjosn.dtFromName;
+                                    xpdata.dtFromName = xpjson.dtFromName;
                                     xpdata.dtUrlNode = xpjson.dtUrlNode;
                                     xpdata.dtUrlSubNode = xpjson.dtUrlSubNode;
                                     xpdata.dtUrlId = xpjson.dtUrlId;
@@ -545,7 +545,7 @@ function SRCSet() {
                                     let xpua = xpjson.ua || "MOBILE_UA";
                                     urls.push({ "name": jiekou[i].name, "url": jiekou[i].key, "type": "xpath", "ua": xpua, "data": xpdata})
                                 }catch(e){
-                                    log(jiekou[i].name + '>' + e.message)
+                                    log(jiekou[i].name + '>抓取失败>' + e.message)
                                 }
                             }
                         }
