@@ -213,7 +213,7 @@ function xunmi(name,data) {
                         var html = JSON.parse(request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 }));
                         var list = html.list||[];
                     }else{
-                        
+                        //http://www.lezhutv.com/index.php?m=vod-search?wd={wd};post
                     } 
                 } catch (e) {
                     log(e.message);
