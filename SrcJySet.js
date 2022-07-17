@@ -406,7 +406,7 @@ function SRCSet() {
                 url:$("","输入biubiu资源地址").input(() => {
                         try{
                             require(config.依赖.match(/https.*\//)[0] + 'SrcJySet.js');
-                            var html = fetch(input);
+                            var html = fetch(input,{timeout:2000});
                             var reg = /("([^\\\"]*(\\.)?)*")|('([^\\\']*(\\.)?)*')|(\/{2,}.*?(\r|\n|$))|(\/\*(\n|.)*?\*\/)/g;
                             html = html.replace(reg, function(word) { 
                                 return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
@@ -478,7 +478,7 @@ function SRCSet() {
                 url:$("","输入TVbox/beibei资源地址").input(() => {
                     try{
                         require(config.依赖.match(/https.*\//)[0] + 'SrcJySet.js');
-                        var html = fetch(input);
+                        var html = fetch(input,{timeout:2000});
                         if(!/https:\/\/i.*memory.coding.net/.test(input)){
                             var lx ="TVb";
                             var reg = /("([^\\\"]*(\\.)?)*")|('([^\\\']*(\\.)?)*')|(\/{2,}.*?(\r|\n|$))|(\/\*(\n|.)*?\*\/)/g;
@@ -497,7 +497,7 @@ function SRCSet() {
                         log('接口导入失败：'+e.message); 
                         return "toast://导入失败：连接无效或内容有错";
                     }
-
+                    showLoading('正在抓取数据中')
                     var urls= [];
                     for(var i in jiekou){
                         if(lx=="."){
@@ -511,7 +511,7 @@ function SRCSet() {
                             }
                             if(jiekou[i].type==3&&/^csp_XPath/.test(jiekou[i].api)&&/^http/.test(jiekou[i].ext)){
                                 try{
-                                    let xphtml = fetch(jiekou[i].ext);
+                                    let xphtml = fetch(jiekou[i].ext,{timeout:2000});
                                     eval("var xpjson = " + xphtml)
                                     let xpdata = {};
                                     xpdata.filter = "";
@@ -542,7 +542,7 @@ function SRCSet() {
                                     let xpua = xpjson.ua || "MOBILE_UA";
                                     urls.push({ "name": jiekou[i].name, "url": jiekou[i].key, "type": "xpath", "ua": xpua, "data": xpdata})
                                 }catch(e){
-
+                                    log(jiekou[i].name + '>' + e.message)
                                 }
                             }
                         }
@@ -591,7 +591,7 @@ function SRCSet() {
                 url:$("","仅支持输入JY自定义的xpath资源地址").input(() => {
                         try{
                             require(config.依赖.match(/https.*\//)[0] + 'SrcJySet.js');
-                            eval(fetch(input))
+                            eval(fetch(input,{timeout:2000}))
                             var urls= [];
                             for(let k in jyjiekou){
                                 let xpua = jyjiekou[k].ua||"MOBILE_UA";
