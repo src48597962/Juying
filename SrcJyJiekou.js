@@ -61,7 +61,7 @@ var jyjiekou = {
         "name": "乐猪TV",
         "filter": "",
         "ua": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1",
-        "dtUrl": "http://www.lezhutv.com/detail/{vid}.html",
+        "dtUrl": "http://www.lezhutv.com{vid}",
         "dtNode": "//body",
         "dtImg": "//div[@class='dbox']/div[contains(@class,'img item-lazy')]/@data-original",
         "dtCate": "//span[contains(text(), '分类')]/following-sibling::*/text()",
@@ -79,11 +79,11 @@ var jyjiekou = {
         "dtUrlIdR": "/play/(\\S+).html",
         "dtUrlName": "/text()",
         "playUrl": "http://www.lezhutv.com/play/{playUrl}.html",
-        "searchUrl": "http://www.lezhutv.com/index.php/ajax/suggest?mid=1&wd={wd}&limit=10",
-        "scVodNode": "json:list",
-        "scVodName": "name",
-        "scVodId": "id",
-        "scVodImg": "pic",
-        "scVodMark": ""
+        "searchUrl": "http://www.lezhutv.com/index.php?m=vod-search?wd={wd};post",
+        "scVodNode": "//ul[contains(@class,'tbox_m')]/li",
+        "scVodName": "//a/@title",
+        "scVodId": "//a/@href",
+        "scVodImg": "//a/@data-original",
+        "scVodMark": "//span/Text()"
     }
 }
