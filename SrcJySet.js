@@ -529,7 +529,7 @@ function SRCSet() {
                                     xpdata.dtActor = xpjson.dtActor.replace('parent::text()','parent::*/text()');
                                     xpdata.dtDesc = xpjson.dtDesc.replace('parent::text()','parent::*/text()');
                                     xpdata.dtFromNode = xpjson.dtFromNode;
-                                    xpdata.dtFromName = xpjson.dtFromName;
+                                    xpdata.dtFromName = xpjson.dtFromName[0]!="/"?"/text()":xpjson.dtFromName;
                                     xpdata.dtUrlNode = xpjson.dtUrlNode;
                                     xpdata.dtUrlSubNode = xpjson.dtUrlSubNode;
                                     xpdata.dtUrlId = xpjson.dtUrlId[0]!="/"?"/"+xpjson.dtUrlId:xpjson.dtUrlId;
