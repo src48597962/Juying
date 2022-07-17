@@ -208,17 +208,13 @@ function xunmi(name,data) {
                 }
             }else if(obj.type=="xpath"){
                 try {
-                    var ssjosn = 1;
                     var ssurl = jsondata.searchUrl.replace('{wd}',name);
-                    if(jsondata.scVodNode!="json:list"){
-                        ssjosn = 0;
-                    }
-                    
-                    if(ssjosn==1){
+                    if(jsondata.scVodNode=="json:list"){
                         var html = JSON.parse(request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 }));
                         var list = html.list||[];
-                    }
+                    }else{
                         
+                    } 
                 } catch (e) {
                     log(e.message);
                     var list = [];
