@@ -458,47 +458,61 @@ function xunmierji(type,ua) {
             var arts = html.videolist;
             var conts = arts;
         }else if (/xpath/.test(type)) {
-            var jsondata = MY_PARAMS.data;
-            var actor = String(xpathArray(html, jsondata.dtNode+jsondata.dtActor).join(',')).replace('主演：','').replace(jsondata.filter?eval(jsondata.filter):"","") || "内详";
-            var director = String(xpathArray(html, jsondata.dtNode+jsondata.dtDirector).join(',')).replace('导演：','').replace(jsondata.filter?eval(jsondata.filter):"","") || "内详";
-            var area = String(xpath(html, jsondata.dtNode+jsondata.dtArea)).replace('地区：','').replace(jsondata.filter?eval(jsondata.filter):"","") || "未知";
-            var year = String(xpath(html, jsondata.dtNode+jsondata.dtYear)).replace('年份：','').replace(jsondata.filter?eval(jsondata.filter):"","") || "未知";
-            var remarks = String(xpath(html, jsondata.dtNode+jsondata.dtCate)).split(' / ')[0].replace(jsondata.filter?eval(jsondata.filter):"","") || "";
-            var pubdate = String(xpath(html, jsondata.dtNode+jsondata.dtMark)) || "";
-            var pic = MY_PARAMS.pic || xpath(html, jsondata.dtNode+jsondata.dtImg);
-            var desc = String(xpath(html, jsondata.dtNode+jsondata.dtDesc)).replace(jsondata.filter?eval(jsondata.filter):"","").replace(/&ldquo;/g,'“').replace(/&rdquo;/g,'”') || '...';
-            var arts = xpathArray(html, jsondata.dtNode+jsondata.dtFromNode+jsondata.dtFromName);
-            function removeByValue(arr, val) {
-                for(var i = 0; i < arr.length; i++) {
-                    if(arr[i] == val) {
-                    arr.splice(i, 1);
-                    break;
+            try{
+                var jsondata = MY_PARAMS.data;
+                var actor = String(xpathArray(html, jsondata.dtNode+jsondata.dtActor).join(',')).replace('主演：','').replace(jsondata.filter?eval(jsondata.filter):"","") || "内详";
+                var director = String(xpathArray(html, jsondata.dtNode+jsondata.dtDirector).join(',')).replace('导演：','').replace(jsondata.filter?eval(jsondata.filter):"","") || "内详";
+                var area = String(xpath(html, jsondata.dtNode+jsondata.dtArea)).replace('地区：','').replace(jsondata.filter?eval(jsondata.filter):"","") || "未知";
+                var year = String(xpath(html, jsondata.dtNode+jsondata.dtYear)).replace('年份：','').replace(jsondata.filter?eval(jsondata.filter):"","") || "未知";
+                var remarks = String(xpath(html, jsondata.dtNode+jsondata.dtCate)).split(' / ')[0].replace(jsondata.filter?eval(jsondata.filter):"","") || "";
+                var pubdate = String(xpath(html, jsondata.dtNode+jsondata.dtMark)) || "";
+                var pic = MY_PARAMS.pic || xpath(html, jsondata.dtNode+jsondata.dtImg);
+                var desc = String(xpath(html, jsondata.dtNode+jsondata.dtDesc)).replace(jsondata.filter?eval(jsondata.filter):"","").replace(/&ldquo;/g,'“').replace(/&rdquo;/g,'”') || '...';
+                var arts = xpathArray(html, jsondata.dtNode+jsondata.dtFromNode+jsondata.dtFromName);
+                function removeByValue(arr, val) {
+                    for(var i = 0; i < arr.length; i++) {
+                        if(arr[i] == val) {
+                        arr.splice(i, 1);
+                        break;
+                        }
                     }
                 }
-            }
-            //removeByValue(arts,"猜你喜欢");
-            var conts = [];
-            for (let i = 1; i < arts.length+1; i++) {
-                let contname = xpathArray(html, jsondata.dtNode+jsondata.dtUrlNode+'['+i+']'+jsondata.dtUrlSubNode+jsondata.dtUrlName);
-                let conturl = xpathArray(html, jsondata.dtNode+jsondata.dtUrlNode+'['+i+']'+jsondata.dtUrlSubNode+jsondata.dtUrlId);
-                let cont = [];
-                for (let j = 0; j < contname.length; j++) {
-                    let urlid = jsondata.dtUrlIdR;
-                    if(urlid){
-                        let urlidl = urlid.split('(\\S+)')[0];
-                        let urlidr = urlid.split('(\\S+)')[1];
-                        var playUrl = conturl[j].replace(urlidl,'').replace(urlidr,'');
-                    }else{
-                        var playUrl = conturl[j];
+                //removeByValue(arts,"猜你喜欢");
+                var conts = [];
+                for (let i = 1; i < arts.length+1; i++) {
+                    let contname = xpathArray(html, jsondata.dtNode+jsondata.dtUrlNode+'['+i+']'+jsondata.dtUrlSubNode+jsondata.dtUrlName);
+                    let conturl = xpathArray(html, jsondata.dtNode+jsondata.dtUrlNode+'['+i+']'+jsondata.dtUrlSubNode+jsondata.dtUrlId);
+                    let cont = [];
+                    for (let j = 0; j < contname.length; j++) {
+                        let urlid = jsondata.dtUrlIdR;
+                        if(urlid){
+                            let urlidl = urlid.split('(\\S+)')[0];
+                            let urlidr = urlid.split('(\\S+)')[1];
+                            var playUrl = conturl[j].replace(urlidl,'').replace(urlidr,'');
+                        }else{
+                            var playUrl = conturl[j];
+                        }
+                        cont.push(contname[j]+"$"+jsondata.playUrl.replace('{playUrl}',playUrl))
                     }
-                    cont.push(contname[j]+"$"+jsondata.playUrl.replace('{playUrl}',playUrl))
+                    conts.push(cont.join("#"))
                 }
-                conts.push(cont.join("#"))
-            }
+            }catch(e){
+                var actor = actor||"抓取失败";
+                var director = director||"";
+                var area = area||"";
+                var year = year||"";
+                var remarks = remarks||"xpath数据异常";
+                var pubdate = pubdate||"此接口需要修改，或删除";
+                var pic = MY_PARAMS.pic;
+                var desc = desc||'...';
+                var arts = arts||[];
+                var conts = conts||[];
+                log(e.message)
+            }    
         }else{
             //网页
         }
-        var details1 = '主演：' + actor.substring(0, 12) + '\n导演：' + director.substring(0, 12) + '\n地区：' + area + '   年代：' + year;
+        var details1 = '主演：' + actor.substring(0, actor.length<12?actor.length:12) + '\n导演：' + director.substring(0, director.length<12?director.length:12) + '\n地区：' + area + '   年代：' + year;
         var details2 = remarks + '\n' + pubdate;
         var newconfig = { 详情1: details1, 详情2: details2, 图片: pic, 简介: desc, 线路: arts, 影片: conts, 标识: MY_URL };
         var libsfile = 'hiker://files/libs/' + md5(configfile) + '.js';
