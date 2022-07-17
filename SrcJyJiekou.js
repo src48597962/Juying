@@ -19,7 +19,8 @@ var jyjiekou = {
         "dtUrlSubNode": "/ul/li/a",//单集
         "dtUrlId": "/@href",//单集链接
         "dtUrlName": "/text()",//单集名称
-        "playUrl": "https://www.jubaibai.cc{playUrl}",//播放地址
+        "dtUrlIdR": "/play/(\\S+).html",//播地址格式
+        "playUrl": "https://www.jubaibai.cc/play/{playUrl}.html",//播放地址
         "searchUrl": "https://www.jubaibai.cc/index.php/ajax/suggest?mid=1&wd={wd}&limit=10",//搜索地址
         "scVodNode": "json:list",//搜索数据类型
         "scVodName": "name",//搜索数据-影片名
@@ -47,7 +48,8 @@ var jyjiekou = {
         "dtUrlSubNode": "/li/a",
         "dtUrlId": "/@href",
         "dtUrlName": "/text()",
-        "playUrl": "http://www.dadagui.com{playUrl}",
+        "dtUrlIdR": "/vodplay/(\\S+).html",
+        "playUrl": "http://www.dadagui.com/vodplay/{playUrl}.html",
         "searchUrl": "http://www.dadagui.com/index.php/ajax/suggest?mid=1&wd={wd}&limit=10",
         "scVodNode": "json:list",
         "scVodName": "name",
