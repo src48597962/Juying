@@ -403,7 +403,7 @@ function SRCSet() {
             
             d.push({
                 title: 'biu导入',
-                url:$("","输入biu资源地址").input(() => {
+                url:$("","输入biubiu资源地址").input(() => {
                         try{
                             require(config.依赖.match(/https.*\//)[0] + 'SrcJySet.js');
                             var html = fetch(input);
@@ -475,7 +475,7 @@ function SRCSet() {
             });
             d.push({
                 title: 'TVb导入',
-                url:$("","输入TVb资源地址").input(() => {
+                url:$("","输入TVbox/beibei资源地址").input(() => {
                     try{
                         require(config.依赖.match(/https.*\//)[0] + 'SrcJySet.js');
                         var html = fetch(input);
@@ -508,6 +508,41 @@ function SRCSet() {
                             }
                             if(jiekou[i].type==1){
                                 urls.push({ "name": jiekou[i].name, "url": jiekou[i].api})
+                            }
+                            if(jiekou[i].type==3&&/^csp_XPath/.test(jiekou[i].api)&&/^http/.test(jiekou[i].ext)){
+                                try{
+                                    let xphtml = fetch(jiekou[i].ext);
+                                    eval("var xpjson = " + xphtml)
+                                    let xpdata = {};
+                                    xpdata.filter = "";
+                                    xpdata.dtUrl = xpjson.dtUrl;
+                                    xpdata.dtNode = xpjson.dtNode;
+                                    xpdata.dtImg = xpjson.dtImg;
+                                    xpdata.dtCate = xpjson.dtCate;
+                                    xpdata.dtYear = xpjson.dtYear;
+                                    xpdata.dtArea = xpjson.dtArea;
+                                    xpdata.dtMark = xpjson.dtMark;
+                                    xpdata.dtDirector = xpjson.dtDirector;
+                                    xpdata.dtActor = xpjson.dtActor;
+                                    xpdata.dtDesc = xpjson.dtDesc;
+                                    xpdata.dtFromNode = xpjson.dtFromNode;
+                                    xpdata.dtFromName = xpjosn.dtFromName;
+                                    xpdata.dtUrlNode = xpjson.dtUrlNode;
+                                    xpdata.dtUrlSubNode = xpjson.dtUrlSubNode;
+                                    xpdata.dtUrlId = xpjson.dtUrlId;
+                                    xpdata.dtUrlName =xpjson.dtUrlName;
+                                    xpdata.playUrl = xpjson.playUrl;
+                                    xpdata.searchUrl = xpjson.searchUrl;
+                                    xpdata.scVodNode = xpjson.scVodNode;
+                                    xpdata.scVodName = xpjson.scVodName;
+                                    xpdata.scVodId = xpjson.scVodId;
+                                    xpdata.scVodImg = xpjson.scVodImg;
+                                    xpdata.scVodMark = xpjson.scVodMark;
+                                    let xpua = xpjson.ua || "MOBILE_UA";
+                                    urls.push({ "name": jiekou[i].name, "url": jiekou[i].key, "type": "xpath", "ua": xpua, "data": xpdata})
+                                }catch(e){
+
+                                }
                             }
                         }
                     }
