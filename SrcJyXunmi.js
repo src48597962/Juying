@@ -483,7 +483,15 @@ function xunmierji(type,ua) {
                 let conturl = xpathArray(html, jsondata.dtNode+jsondata.dtUrlNode+'['+i+']'+jsondata.dtUrlSubNode+jsondata.dtUrlId);
                 let cont = [];
                 for (let j = 0; j < contname.length; j++) {
-                    cont.push(contname[j]+"$"+jsondata.playUrl.replace('{playUrl}',conturl[j]))
+                    let urlid = jsondata.dtUrlIdR;
+                    if(urlid){
+                        let urlidl = urlid.split('(\\S+)')[0];
+                        let urlidr = urlid.split('(\\S+)')[1];
+                        var playUrl = conturl[j].replace(urlidl,'').replace(urlidr,'');
+                    }else{
+                        var playUrl = conturl[j];
+                    }
+                    cont.push(contname[j]+"$"+jsondata.playUrl.replace('{playUrl}',playUrl))
                 }
                 conts.push(cont.join("#"))
             }
