@@ -532,7 +532,7 @@ function SRCSet() {
                                     xpdata.dtFromName = xpjson.dtFromName;
                                     xpdata.dtUrlNode = xpjson.dtUrlNode;
                                     xpdata.dtUrlSubNode = xpjson.dtUrlSubNode;
-                                    xpdata.dtUrlId = xpjson.dtUrlId;
+                                    xpdata.dtUrlId = xpjson.dtUrlId[0]!="/"?"/"+xpjson.dtUrlId:xpjson.dtUrlId;
                                     xpdata.dtUrlName =xpjson.dtUrlName;
                                     xpdata.dtUrlIdR = xpjson.dtUrlIdR;
                                     xpdata.playUrl = xpjson.playUrl;
