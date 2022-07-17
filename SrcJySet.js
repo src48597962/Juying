@@ -512,7 +512,10 @@ function SRCSet() {
                             if(jiekou[i].type==3&&/^csp_XPath/.test(jiekou[i].api)&&/^http/.test(jiekou[i].ext)){
                                 try{
                                     let xphtml = fetch(jiekou[i].ext,{timeout:2000});
-                                    eval("var xpjson = " + xphtml)
+                                    xphtml = xphtml.replace(reg, function(word) { 
+                                        return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
+                                    }).replace(/#.*?\n/g,"");
+                                    var xpjson = JSON.parse(xphtml);
                                     let xpdata = {};
                                     xpdata.filter = "";
                                     xpdata.dtUrl = xpjson.dtUrl;
@@ -548,6 +551,7 @@ function SRCSet() {
                         }
                     }
                     var jknum = jiekousave(urls);
+                    hideLoading();
                     if(jknum<0){
                         return'toast://导入失败，内容异常';
                     }else{
