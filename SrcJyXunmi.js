@@ -482,15 +482,7 @@ function xunmierji(type,ua) {
                 var pic = MY_PARAMS.pic || xpath(html, jsondata.dtNode+jsondata.dtImg);
                 var desc = String(xpath(html, jsondata.dtNode+jsondata.dtDesc)).replace(jsondata.filter?eval(jsondata.filter):"","").replace(/&ldquo;/g,'“').replace(/&rdquo;/g,'”') || '...';
                 var arts = xpathArray(html, jsondata.dtNode+jsondata.dtFromNode+jsondata.dtFromName);
-                function removeByValue(arr, val) {
-                    for(var i = 0; i < arr.length; i++) {
-                        if(arr[i] == val) {
-                        arr.splice(i, 1);
-                        break;
-                        }
-                    }
-                }
-                //removeByValue(arts,"猜你喜欢");
+
                 var conts = [];
                 for (let i = 1; i < arts.length+1; i++) {
                     if(arts[i]=="1.在线视频"){arts[i] = '播放源'+i;}
