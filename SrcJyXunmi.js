@@ -226,10 +226,10 @@ function xunmi(name,data) {
                         let title = xpathArray(html, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodName);
                         let href = xpathArray(html, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodId);
                         let img = xpathArray(html, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodImg);
-                        let mark = xpathArray(html, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodMark);
+                        let mark = xpathArray(html, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodMark)||"";
                         var list = [];
                         for(var j in title){
-                            list.push({"id":href,"name":title,"pic":img,"desc":mark})
+                            list.push({"id":href[j],"name":title[j],"pic":img[j],"desc":mark[j]})
                         }
                     } 
                 } catch (e) {
