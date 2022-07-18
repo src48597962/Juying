@@ -213,7 +213,24 @@ function xunmi(name,data) {
                         var html = JSON.parse(request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 }));
                         var list = html.list||[];
                     }else{
-                        //http://www.lezhutv.com/index.php?m=vod-search?wd={wd};post
+                        var sstype = ssurl.indexOf(';post')>-1?"post":"get";
+                        if(sstype == "post"){
+                            let ssstr = ssurl.replace(';post','').split('?');
+                            var postcs = ssstr[ssstr.length-1];
+                            if(ssstr.length>2){
+                                ssstr.length = ssstr.length-1;
+                            }
+                            ssurl = ssstr.join('?');
+                        }
+                        var html = request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000, method: 'POST', body: postcs  });
+                        let title = xpathArray(html, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodName);
+                        let href = xpathArray(html, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodId);
+                        let img = xpathArray(html, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodImg);
+                        let mark = xpathArray(html, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodMark);
+                        var list = [];
+                        for(var j in title){
+                            list.push({"id":href,"name":title,"pic":img,"desc":mark})
+                        }
                     } 
                 } catch (e) {
                     log(e.message);
@@ -225,7 +242,7 @@ function xunmi(name,data) {
                             let vodname = list.name;
                             if(vodname.indexOf(name)>-1){
                                 let vodpic = list.pic;
-                                let voddesc = "";
+                                let voddesc = list.desc?list.desc:"";
                                 let appname = '‘‘’’<font color=#f13b66a>'+obj.name+'</font>';
                                 let vodurl = jsondata.dtUrl.replace('{vid}',list.id);
                                 return {
