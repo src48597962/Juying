@@ -75,15 +75,15 @@ var jyjiekou = {
         "dtFromName": "/text()",
         "dtUrlNode": "//div[contains(@class,'tabs_block')]/ul[contains(@class, 'list_block show')]",
         "dtUrlSubNode": "/li/a",
-        "dtUrlId": "@href",
+        "dtUrlId": "/@href",
         "dtUrlIdR": "/play/(\\S+).html",
         "dtUrlName": "/text()",
         "playUrl": "http://www.lezhutv.com/play/{playUrl}.html",
         "searchUrl": "http://www.lezhutv.com/index.php?m=vod-search?wd={wd};post",
         "scVodNode": "//ul[contains(@class,'tbox_m')]/li",
-        "scVodName": "//a/@title",
-        "scVodId": "//a/@href",
-        "scVodImg": "//a/@data-original",
-        "scVodMark": "//span/Text()"
+        "scVodName": "/a[contains(@class,'item-lazy')]/@title",
+        "scVodId": "/a[contains(@class,'item-lazy')]/@href",
+        "scVodImg": "/a[contains(@class,'item-lazy')]/@data-original",
+        "scVodMark": "/a[contains(@class,'item-lazy')]/span/text()"
     }
 }
