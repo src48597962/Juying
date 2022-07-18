@@ -509,48 +509,6 @@ function SRCSet() {
                             if(jiekou[i].type==1){
                                 urls.push({ "name": jiekou[i].name, "url": jiekou[i].api})
                             }
-                            if(jiekou[i].type==3&&/^csp_XPath/.test(jiekou[i].api)&&/^http/.test(jiekou[i].ext)){
-                                try{
-                                    let xphtml = fetch(jiekou[i].ext,{timeout:2000});
-                                    xphtml = xphtml.replace(reg, function(word) { 
-                                        return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
-                                    }).replace(/#.*?\n/g,"");
-                                    var xpjson = JSON.parse(xphtml);
-                                    let xpdata = {};
-                                    xpdata.filter = "";
-                                    xpdata.dtUrl = xpjson.dtUrl;
-                                    xpdata.dtNode = xpjson.dtNode;
-                                    xpdata.dtImg = xpjson.dtImg;
-                                    xpdata.dtCate = xpjson.dtCate.replace('parent::text()','parent::*/text()');
-                                    xpdata.dtYear = xpjson.dtYear.replace('parent::text()','parent::*/text()');
-                                    xpdata.dtArea = xpjson.dtArea.replace('parent::text()','parent::*/text()');
-                                    xpdata.dtMark = xpjson.dtMark.replace('parent::text()','parent::*/text()');
-                                    xpdata.dtDirector = xpjson.dtDirector.replace('parent::text()','parent::*/text()');
-                                    xpdata.dtActor = xpjson.dtActor.replace('parent::text()','parent::*/text()');
-                                    xpdata.dtDesc = xpjson.dtDesc.replace('parent::text()','parent::*/text()');
-                                    xpdata.dtFromNode = xpjson.dtFromNode;
-                                    xpdata.dtFromName = xpjson.dtFromName[0]!="/"?"/text()":xpjson.dtFromName;
-                                    xpdata.dtUrlNode = xpjson.dtUrlNode;
-                                    xpdata.dtUrlSubNode = xpjson.dtUrlSubNode;
-                                    xpdata.dtUrlId = xpjson.dtUrlId[0]!="/"?"/"+xpjson.dtUrlId:xpjson.dtUrlId;
-                                    xpdata.dtUrlName =xpjson.dtUrlName;
-                                    xpdata.dtUrlIdR = xpjson.dtUrlIdR;
-                                    xpdata.playUrl = xpjson.playUrl;
-                                    xpdata.searchUrl = xpjson.searchUrl;
-                                    xpdata.scVodNode = xpjson.scVodNode;
-                                    xpdata.scVodName = xpjson.scVodName;
-                                    xpdata.scVodId = xpjson.scVodId;
-                                    xpdata.scVodImg = xpjson.scVodImg;
-                                    xpdata.scVodMark = xpjson.scVodMark;
-                                    let xpua = xpjson.ua || "MOBILE_UA";
-                                    if(xpjson.scVodNode=="json:list"){
-                                        urls.push({ "name": jiekou[i].name, "url": jiekou[i].key, "type": "xpath", "ua": xpua, "data": xpdata})
-                                    }
-                                }catch(e){
-                                    log(jiekou[i].name + '>抓取失败>' + e.message)
-                                    log(xphtml)
-                                }
-                            }
                         }
                     }
                     var jknum = jiekousave(urls);
