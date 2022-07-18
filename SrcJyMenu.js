@@ -91,8 +91,10 @@ var erjimenu = [
                     url: $('#noLoading#').lazyRule((JYconfig,cfgfile) => {
                             if(JYconfig['cachem3u8'] == 0){
                                 JYconfig['cachem3u8'] = 1;
+                                putMyVar('SrcM3U8','1');
                             }else{
                                 JYconfig['cachem3u8'] = 0;
+                                putMyVar('SrcM3U8','0');
                             }
                             writeFile(cfgfile, JSON.stringify(JYconfig));
                             refreshPage(false);
