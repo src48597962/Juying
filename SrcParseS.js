@@ -84,7 +84,7 @@ var SrcParseS = {
                             }else{
                                 return url.replace(";{", "#isVideo=true#;{");
                             }
-                        }, window0.btoa(fy_bridge_app.getHeaderUrl(urls[i])));
+                        }, fy_bridge_app.base64Encode(fy_bridge_app.getHeaderUrl(urls[i])));
                     else {
                         return $$$("#noLoading#").lazyRule((url, formatUrl) => {
                             //url = url.replace(/http.*?\?url=/, '');
