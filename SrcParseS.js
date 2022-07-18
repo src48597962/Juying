@@ -76,16 +76,15 @@ var SrcParseS = {
             for (var i in urls) {
                 if (!exclude.test(urls[i]) && contain.test(urls[i]) && urls[i].indexOf('=http')==-1) {
                     //fba.log("嗅探成功>"+urls[i]);
-                    fba.log(fy_bridge_app.getHeaderUrl(urls[i]));
                     if(fy_bridge_app.getHeaderUrl&&vipUrl.indexOf("=http")==-1&&urls[i].indexOf(".m3u8?")>-1)
                         return $$$("#noLoading#").lazyRule((url) => {
-                            log(url);
+                            url = base64Decode(url);
                             if (getMyVar('SrcM3U8', '1') == "1"&&url.indexOf('.m3u8')>-1) {
                                 return cacheM3u8(url.split(";{")[0], {timeout: 2000})+"#isVideo=true#;{"+url.split(";{")[1];
                             }else{
                                 return url.replace(";{", "#isVideo=true#;{");
                             }
-                        }, fy_bridge_app.getHeaderUrl(urls[i]));
+                        }, base64Encode(fy_bridge_app.getHeaderUrl(urls[i])));
                     else {
                         return $$$("#noLoading#").lazyRule((url, formatUrl) => {
                             //url = url.replace(/http.*?\?url=/, '');
