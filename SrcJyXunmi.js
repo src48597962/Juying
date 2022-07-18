@@ -493,6 +493,7 @@ function xunmierji(type,ua) {
                 //removeByValue(arts,"猜你喜欢");
                 var conts = [];
                 for (let i = 1; i < arts.length+1; i++) {
+                    if(arts[i]=="1.在线视频"){arts[i] = '播放源'+i;}
                     let contname = xpathArray(html, jsondata.dtNode+jsondata.dtUrlNode+'['+i+']'+jsondata.dtUrlSubNode+jsondata.dtUrlName);
                     let conturl = xpathArray(html, jsondata.dtNode+jsondata.dtUrlNode+'['+i+']'+jsondata.dtUrlSubNode+jsondata.dtUrlId);
                     let cont = [];
