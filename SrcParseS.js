@@ -6,7 +6,7 @@ var SrcParseS = {
             } else {
                 if (url[0] == '/') { url = 'https:' + url }
                 if (i == undefined) {
-                    if ((getMyVar('SrcM3U8', '1') == "1"||url.indexOf('vkey=')>-1)&&url.indexOf('.m3u8')>-1) {
+                    if (getMyVar('SrcM3U8', '1') == "1"&&url.indexOf('.m3u8')>-1) {
                         url = cacheM3u8(url, {timeout: 2000});
                     }
                     if(url.indexOf('User-Agent')==-1){
@@ -78,7 +78,7 @@ var SrcParseS = {
                     //fba.log("嗅探成功>"+urls[i]);
                     if(fy_bridge_app.getHeaderUrl&&vipUrl.indexOf("=http")==-1&&urls[i].indexOf(".m3u8?")>-1)
                         return $$$("#noLoading#").lazyRule((url) => {
-                            if ((getMyVar('SrcM3U8', '1') == "1"||url.indexOf('vkey=')>-1)&&url.indexOf('.m3u8')>-1) {
+                            if (getMyVar('SrcM3U8', '1') == "1"&&url.indexOf('.m3u8')>-1) {
                                 return cacheM3u8(url.split(";{")[0], {timeout: 2000})+"#isVideo=true#;{"+url.split(";{")[1];
                             }else{
                                 return url.replace(";{", "#isVideo=true#;{");
