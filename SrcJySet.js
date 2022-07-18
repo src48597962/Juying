@@ -543,7 +543,9 @@ function SRCSet() {
                                     xpdata.scVodImg = xpjson.scVodImg;
                                     xpdata.scVodMark = xpjson.scVodMark;
                                     let xpua = xpjson.ua || "MOBILE_UA";
-                                    urls.push({ "name": jiekou[i].name, "url": jiekou[i].key, "type": "xpath", "ua": xpua, "data": xpdata})
+                                    if(xpjson.scVodNode=="json:list"){
+                                        urls.push({ "name": jiekou[i].name, "url": jiekou[i].key, "type": "xpath", "ua": xpua, "data": xpdata})
+                                    }
                                 }catch(e){
                                     log(jiekou[i].name + '>抓取失败>' + e.message)
                                     log(xphtml)
