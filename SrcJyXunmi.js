@@ -107,7 +107,7 @@ function xunmi(name,data) {
                 var url = url_api + '?ac=detail&ids=';
                 var ssurl = url_api + '?ac=videolist&wd='+name;
                 var lists = "html.list";
-            } else if (obj.type=="xpath") {
+            } else if (obj.type=="xpath"||obj.type=="biubiu") {
                 var jsondata = obj.data;
             } else {
                 log('api类型错误')
@@ -206,32 +206,63 @@ function xunmi(name,data) {
                     log(obj.name+'>'+e.message);
                     return {result:0, url:ssurl, apiurl:url_api};
                 }
-            }else if(obj.type=="xpath"){
+            }else if(obj.type=="xpath"||obj.type=="biubiu"){
                 try {
-                    var ssurl = jsondata.searchUrl.replace('{wd}',name);
-                    if(jsondata.scVodNode=="json:list"){
-                        var html = JSON.parse(request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 }));
-                        var list = html.list||[];
-                    }else{
-                        var sstype = ssurl.indexOf(';post')>-1?"post":"get";
-                        if(sstype == "post"){
-                            let ssstr = ssurl.replace(';post','').split('?');
-                            var postcs = ssstr[ssstr.length-1];
-                            if(ssstr.length>2){
-                                ssstr.length = ssstr.length-1;
+                    if(obj.type=="xpath"){
+                        var ssurl = jsondata.searchUrl.replace('{wd}',name);
+                        if(jsondata.scVodNode=="json:list"){
+                            var html = JSON.parse(request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 }));
+                            var list = html.list||[];
+                        }else{
+                            var sstype = ssurl.indexOf(';post')>-1?"post":"get";
+                            if(sstype == "post"){
+                                let ssstr = ssurl.replace(';post','').split('?');
+                                var postcs = ssstr[ssstr.length-1];
+                                if(ssstr.length>2){
+                                    ssstr.length = ssstr.length-1;
+                                }
+                                ssurl = ssstr.join('?');
                             }
-                            ssurl = ssstr.join('?');
+                            var html = request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000, method: 'POST', body: postcs  });
+                            let title = xpathArray(html, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodName);
+                            let href = xpathArray(html, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodId);
+                            let img = xpathArray(html, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodImg);
+                            let mark = xpathArray(html, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodMark)||"";
+                            var list = [];
+                            for(var j in title){
+                                list.push({"id":href[j],"name":title[j],"pic":img[j],"desc":mark[j]})
+                            }
                         }
-                        var html = request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000, method: 'POST', body: postcs  });
-                        let title = xpathArray(html, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodName);
-                        let href = xpathArray(html, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodId);
-                        let img = xpathArray(html, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodImg);
-                        let mark = xpathArray(html, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodMark)||"";
-                        var list = [];
-                        for(var j in title){
-                            list.push({"id":href[j],"name":title[j],"pic":img[j],"desc":mark[j]})
+                        var ssvodurl = `jsondata.dtUrl.replace('{vid}',list.id)`;
+                    }else{
+                        var ssurl = jsondata.url+jsondata.sousuoqian+name+jsondata.sousuohou;
+                        if(jsondata.ssmoshi=="0"){
+                            var html = JSON.parse(request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 }));
+                            var list = html.list||[];
+                        }else{
+                            /*
+                            var sstype = ssurl.indexOf(';post')>-1?"post":"get";
+                            if(sstype == "post"){
+                                let ssstr = ssurl.replace(';post','').split('?');
+                                var postcs = ssstr[ssstr.length-1];
+                                if(ssstr.length>2){
+                                    ssstr.length = ssstr.length-1;
+                                }
+                                ssurl = ssstr.join('?');
+                            }
+                            var html = request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000, method: 'POST', body: postcs  });
+                            let title = xpathArray(html, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodName);
+                            let href = xpathArray(html, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodId);
+                            let img = xpathArray(html, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodImg);
+                            let mark = xpathArray(html, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodMark)||"";
+                            var list = [];
+                            for(var j in title){
+                                list.push({"id":href[j],"name":title[j],"pic":img[j],"desc":mark[j]})
+                            }
+                            */
                         }
-                    } 
+                        var ssvodurl = `jsondata.url+jsondata.sousuohouzhui+list.id+'.html'`;
+                    }
                 } catch (e) {
                     log(e.message);
                     var list = [];
@@ -244,7 +275,7 @@ function xunmi(name,data) {
                                 let vodpic = list.pic;
                                 let voddesc = list.desc?list.desc:"";
                                 let appname = '‘‘’’<font color=#f13b66a>'+obj.name+'</font>';
-                                let vodurl = jsondata.dtUrl.replace('{vid}',list.id);
+                                let vodurl = eval(ssvodurl);
                                 return {
                                     title: vodname,
                                     desc: voddesc + '\n\n' + appname + ' ('+obj.type+')'+(obj.group?' ['+obj.group+']':''),
