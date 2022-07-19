@@ -485,7 +485,7 @@ function xunmierji(type,ua) {
 
                 var conts = [];
                 for (let i = 1; i < arts.length+1; i++) {
-                    if(arts[i].indexOf("在线视频")){arts[i] = '播放源'+i;}
+                    if(arts[i-1].indexOf("在线视频")){arts[i-1] = '播放源'+i;}
                     let contname = xpathArray(html, jsondata.dtNode+jsondata.dtUrlNode+'['+i+']'+jsondata.dtUrlSubNode+jsondata.dtUrlName);
                     let conturl = xpathArray(html, jsondata.dtNode+jsondata.dtUrlNode+'['+i+']'+jsondata.dtUrlSubNode+jsondata.dtUrlId);
                     let cont = [];
