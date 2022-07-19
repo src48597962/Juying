@@ -358,7 +358,43 @@ function SRCSet() {
                 col_type: "text_center_1"
             });
             d.push({
-                title: JYconfig['recordentry']!=2?'记录入口-历史':'记录入口-收藏',
+                title: '搜索线程',
+                url: $(JYconfig['xunminum']?JYconfig['xunminum']:"10","每次搜索成功停止线程数").input((JYconfig,cfgfile) => {
+                        if(!parseInt(input)||parseInt(input)<1||parseInt(input)>100){return 'toast://输入有误，请输入1-100数字'}else{
+                            JYconfig['xunminum'] = parseInt(input);
+                            writeFile(cfgfile, JSON.stringify(JYconfig));
+                            refreshPage(false);
+                            return 'toast://每次搜索成功线程数已设置为：'+input;
+                        }
+                    }, JYconfig, cfgfile),
+                col_type: "text_3"
+            });
+            d.push({
+                title: '搜索时长',
+                url: $(JYconfig['xunmitimeout']?JYconfig['xunmitimeout']:"5","设置接口搜索超时时长(秒)").input((JYconfig,cfgfile) => {
+                        if(!parseInt(input)||parseInt(input)<1||parseInt(input)>10){return 'toast://输入有误，请输入1-10数字'}else{
+                            JYconfig['xunmitimeout'] = parseInt(input);
+                            writeFile(cfgfile, JSON.stringify(JYconfig));
+                            refreshPage(false);
+                            return 'toast://接口搜索超时时长已设置为：'+input+'秒';
+                        }
+                    }, JYconfig, cfgfile),
+                col_type: "text_3"
+            });
+            d.push({
+                title: '解析保留',
+                url: $(JYconfig['appjiexinum']?JYconfig['appjiexinum']:"50","app自带解析保留数量").input((JYconfig,cfgfile) => {
+                        if(!parseInt(input)||parseInt(input)<1||parseInt(input)>100){return 'toast://输入有误，请输入1-100数字'}else{
+                            JYconfig['appjiexinum'] = parseInt(input);
+                            writeFile(cfgfile, JSON.stringify(JYconfig));
+                            refreshPage(false);
+                            return 'toast://app自带解析保留数量已设置为：'+input;
+                        }
+                    }, JYconfig, cfgfile),
+                col_type: "text_3"
+            });
+            d.push({
+                title: JYconfig['recordentry']!=2?'历史记录':'收藏记录',
                 url: $('#noLoading#').lazyRule((JYconfig,cfgfile) => {
                         if(JYconfig['recordentry'] == 2){
                             JYconfig['recordentry'] = 1;
@@ -371,43 +407,7 @@ function SRCSet() {
                         refreshPage(false);
                         return 'toast://' + sm + '，返回主页后刷新生效';
                     }, JYconfig, cfgfile),
-                col_type: "text_2"
-            });
-            d.push({
-                title: '搜索线程',
-                url: $(JYconfig['xunminum']?JYconfig['xunminum']:"10","每次搜索成功停止线程数").input((JYconfig,cfgfile) => {
-                        if(!parseInt(input)||parseInt(input)<1||parseInt(input)>100){return 'toast://输入有误，请输入1-100数字'}else{
-                            JYconfig['xunminum'] = parseInt(input);
-                            writeFile(cfgfile, JSON.stringify(JYconfig));
-                            refreshPage(false);
-                            return 'toast://每次搜索成功线程数已设置为：'+input;
-                        }
-                    }, JYconfig, cfgfile),
-                col_type: "text_2"
-            });
-            d.push({
-                title: '搜索时长',
-                url: $(JYconfig['xunmitimeout']?JYconfig['xunmitimeout']:"5","设置接口搜索超时时长(秒)").input((JYconfig,cfgfile) => {
-                        if(!parseInt(input)||parseInt(input)<1||parseInt(input)>10){return 'toast://输入有误，请输入1-10数字'}else{
-                            JYconfig['xunmitimeout'] = parseInt(input);
-                            writeFile(cfgfile, JSON.stringify(JYconfig));
-                            refreshPage(false);
-                            return 'toast://接口搜索超时时长已设置为：'+input+'秒';
-                        }
-                    }, JYconfig, cfgfile),
-                col_type: "text_2"
-            });
-            d.push({
-                title: '解析保留',
-                url: $(JYconfig['appjiexinum']?JYconfig['appjiexinum']:"50","app自带解析保留数量").input((JYconfig,cfgfile) => {
-                        if(!parseInt(input)||parseInt(input)<1||parseInt(input)>100){return 'toast://输入有误，请输入1-100数字'}else{
-                            JYconfig['appjiexinum'] = parseInt(input);
-                            writeFile(cfgfile, JSON.stringify(JYconfig));
-                            refreshPage(false);
-                            return 'toast://app自带解析保留数量已设置为：'+input;
-                        }
-                    }, JYconfig, cfgfile),
-                col_type: "text_2"
+                col_type: "text_3"
             });
             d.push({
                 title: '其他资源',
