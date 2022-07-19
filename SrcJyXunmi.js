@@ -435,7 +435,7 @@ function xunmierji(type,ua) {
             } catch (e) {
                 var html = "";
             }
-        } else if (/xpath/.test(type)) {
+        } else if (/xpath|biubiu/.test(type)) {
             try{
                 var html = request(MY_URL.split('##')[1], { headers: { 'User-Agent': ua } });
             } catch (e) {
@@ -516,7 +516,53 @@ function xunmierji(type,ua) {
 
                 var conts = [];
                 for (let i = 1; i < arts.length+1; i++) {
-                    if(arts[i-1].indexOf("在线视频")){arts[i-1] = '播放源'+i;}
+                    if(arts[i-1].indexOf("在线视频")>-1){arts[i-1] = '播放源'+i;}
+                    let contname = xpathArray(html, jsondata.dtNode+jsondata.dtUrlNode+'['+i+']'+jsondata.dtUrlSubNode+jsondata.dtUrlName);
+                    let conturl = xpathArray(html, jsondata.dtNode+jsondata.dtUrlNode+'['+i+']'+jsondata.dtUrlSubNode+jsondata.dtUrlId);
+                    let cont = [];
+                    for (let j = 0; j < contname.length; j++) {
+                        let urlid = jsondata.dtUrlIdR;
+                        if(urlid){
+                            let urlidl = urlid.split('(\\S+)')[0];
+                            let urlidr = urlid.split('(\\S+)')[1];
+                            var playUrl = conturl[j].replace(urlidl,'').replace(urlidr,'');
+                        }else{
+                            var playUrl = conturl[j];
+                        }
+                        cont.push(contname[j]+"$"+jsondata.playUrl.replace('{playUrl}',playUrl))
+                    }
+                    conts.push(cont.join("#"))
+                }
+            }catch(e){
+                var actor = actor||"抓取失败";
+                var director = director||"";
+                var area = area||"";
+                var year = year||"";
+                var remarks = remarks||"xpath数据异常";
+                var pubdate = pubdate||"此接口需要修改，或删除";
+                var pic = MY_PARAMS.pic;
+                var desc = desc||'...';
+                var arts = arts||[];
+                var conts = conts||[];
+                log(e.message)
+            }    
+        }else if (/biubiu/.test(type)) {
+            try{
+                var jsondata = MY_PARAMS.data;
+                var actor = html.split(jsondata.zhuyanqian)[1].split(jsondata.zhuyanhou)[0] || "内详";
+                log(actor);
+                var director = String(xpathArray(html, jsondata.dtNode+jsondata.dtDirector).join(',')).replace('导演：','').replace(jsondata.filter?eval(jsondata.filter):"","") || "内详";
+                var area = String(xpath(html, jsondata.dtNode+jsondata.dtArea)).replace('地区：','').replace(jsondata.filter?eval(jsondata.filter):"","") || "未知";
+                var year = String(xpath(html, jsondata.dtNode+jsondata.dtYear)).replace('年份：','').replace(jsondata.filter?eval(jsondata.filter):"","") || "未知";
+                var remarks = String(xpath(html, jsondata.dtNode+jsondata.dtCate)).split(' / ')[0].replace(jsondata.filter?eval(jsondata.filter):"","") || "";
+                var pubdate = String(xpath(html, jsondata.dtNode+jsondata.dtMark)) || "";
+                var pic = MY_PARAMS.pic || xpath(html, jsondata.dtNode+jsondata.dtImg);
+                var desc = String(xpath(html, jsondata.dtNode+jsondata.dtDesc)).replace(jsondata.filter?eval(jsondata.filter):"","").replace(/&ldquo;/g,'“').replace(/&rdquo;/g,'”') || '...';
+                var arts = xpathArray(html, jsondata.dtNode+jsondata.dtFromNode+jsondata.dtFromName);
+
+                var conts = [];
+                for (let i = 1; i < arts.length+1; i++) {
+                    if(arts[i-1].indexOf("在线视频")>-1){arts[i-1] = '播放源'+i;}
                     let contname = xpathArray(html, jsondata.dtNode+jsondata.dtUrlNode+'['+i+']'+jsondata.dtUrlSubNode+jsondata.dtUrlName);
                     let conturl = xpathArray(html, jsondata.dtNode+jsondata.dtUrlNode+'['+i+']'+jsondata.dtUrlSubNode+jsondata.dtUrlId);
                     let cont = [];
