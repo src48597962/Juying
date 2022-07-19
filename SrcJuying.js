@@ -313,15 +313,14 @@ function yiji() {
     if(排序 != ""){
         MY_URL = MY_URL + "&order=" + (排序=="最新"?"time":"score");
     }
-
+    var cfgfile = "hiker://files/rules/Src/Juying/config.json";
+    var Juyingcfg=fetch(cfgfile);
+    if(Juyingcfg != ""){
+        eval("var JYconfig=" + Juyingcfg+ ";");
+    }else{
+        var JYconfig= {};
+    }
     if(MY_PAGE==1){
-        var cfgfile = "hiker://files/rules/Src/Juying/config.json";
-        var Juyingcfg=fetch(cfgfile);
-        if(Juyingcfg != ""){
-            eval("var JYconfig=" + Juyingcfg+ ";");
-        }else{
-            var JYconfig= {};
-        }
         d.push({
             title: "管理",
             url: $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
