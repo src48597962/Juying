@@ -332,8 +332,8 @@ function yiji() {
             col_type: 'icon_small_4'
         });
         d.push({
-            title: JYconfig['recordentry']==1?"历史":"收藏",
-            url: JYconfig['recordentry']==1?"hiker://history":"hiker://collection",
+            title: JYconfig['recordentry']!=2?"历史":"收藏",
+            url: JYconfig['recordentry']!=2?"hiker://history":"hiker://collection",
             pic_url: 'https://lanmeiguojiang.com/tubiao/more/109.png',
             col_type: 'icon_small_4'
         });
