@@ -485,7 +485,7 @@ function xunmierji(type,ua) {
 
                 var conts = [];
                 for (let i = 1; i < arts.length+1; i++) {
-                    if(arts[i]=="1.在线视频"){arts[i] = '播放源'+i;}
+                    if(arts[i].indexOf("在线视频")){arts[i] = '播放源'+i;}
                     let contname = xpathArray(html, jsondata.dtNode+jsondata.dtUrlNode+'['+i+']'+jsondata.dtUrlSubNode+jsondata.dtUrlName);
                     let conturl = xpathArray(html, jsondata.dtNode+jsondata.dtUrlNode+'['+i+']'+jsondata.dtUrlSubNode+jsondata.dtUrlId);
                     let cont = [];
@@ -754,11 +754,9 @@ function xunmierji(type,ua) {
                 try{
                     let list1 = list[0].split('$')[0];
                     let list2 = list[list.length-1].split('$')[0];
-                    log(list);
-                    if(parseInt(list1)>parseInt(list2)){
+                    if(parseInt(list1.match(/(\d+)/)[0])>parseInt(list2.match(/(\d+)/)[0])){
                         list.reverse();
                     }
-                    log(list);
                 }catch(e){
                     log('修正选集顺序失败>'+e.message)
                 }
