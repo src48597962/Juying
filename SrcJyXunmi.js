@@ -730,7 +730,7 @@ function xunmierji(type,ua) {
                 }else{
                     //网页
                 }
-                setLastChapterRule('js:' + $.toString(param=>{ setResult('更新至'+param) }, list[list.length-1].split('$')[0]))
+                setLastChapterRule('js:' + $.toString(param=>{ setResult('更新至：'+param) }, list[list.length-1].split('$')[0]))
                 d.push({
                     title: playtitle.replace(/第|集|话|期|-/g, ''),
                     url: playurl + DTJX,
