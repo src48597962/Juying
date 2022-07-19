@@ -247,7 +247,7 @@ function erji() {
         } else if (plays.length==0) {
             nolist();
         } else {
-            setLastChapterRule('js:' + $.toString(param=>{ setResult('更新至：'+param) }, plays[plays.length-1].flag_list.indexOf('trailer') == -1?plays[plays.length-1].sitename[0]:plays[plays.length-1].sitename[0] + '—预告'))
+            setLastChapterRule('js:' + $.toString(param=>{ setResult(param) }, ""))
             for (var m in plays) {
                 let url = "https://v.sogou.com" + plays[m].url;
                 d.push({
