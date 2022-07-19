@@ -754,9 +754,11 @@ function xunmierji(type,ua) {
                 try{
                     let list1 = list[0].split('$')[0];
                     let list2 = list[list.length-1].split('$')[0];
+                    log(list);
                     if(parseInt(list1)>parseInt(list2)){
                         list.reverse();
                     }
+                    log(list);
                 }catch(e){
                     log('修正选集顺序失败>'+e.message)
                 }
