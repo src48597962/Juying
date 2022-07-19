@@ -176,6 +176,7 @@ function erji() {
             if (list.length == 0) {
                 nolist();
             } else {
+                setLastChapterRule('js:' + $.toString(param=>{ setResult('更新至：'+param) }, list[list.length-1].index))
                 if (getMyVar('shsort') == '1') {
                     try {
                         for (var j = list.length - 1; j >= 0; j--) {
@@ -231,6 +232,7 @@ function erji() {
                     }
                 }
             }
+            setLastChapterRule('js:' + $.toString(param=>{ setResult('更新至：'+param) }, "第" + arr[arr.length-1] + "期"))
             for (var k = 0; k < arr.length; k++) {
                 let url = "https://v.sogou.com/vc/eplay?query=" + arr[k] + "&date=" + arr[k] + "&key=" + json.dockey + "&st=5&tvsite=" + plays[index].site;
                 d.push({
@@ -245,6 +247,7 @@ function erji() {
         } else if (plays.length==0) {
             nolist();
         } else {
+            setLastChapterRule('js:' + $.toString(param=>{ setResult('更新至：'+param) }, plays[plays.length-1].flag_list.indexOf('trailer') == -1?plays[plays.length-1].sitename[0]:plays[plays.length-1].sitename[0] + '—预告'))
             for (var m in plays) {
                 let url = "https://v.sogou.com" + plays[m].url;
                 d.push({
