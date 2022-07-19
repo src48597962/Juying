@@ -315,6 +315,13 @@ function yiji() {
     }
 
     if(MY_PAGE==1){
+        var cfgfile = "hiker://files/rules/Src/Juying/config.json";
+        var Juyingcfg=fetch(cfgfile);
+        if(Juyingcfg != ""){
+            eval("var JYconfig=" + Juyingcfg+ ";");
+        }else{
+            var JYconfig= {};
+        }
         d.push({
             title: "管理",
             url: $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
@@ -325,8 +332,8 @@ function yiji() {
             col_type: 'icon_small_4'
         });
         d.push({
-            title: "历史",
-            url: "hiker://history",
+            title: JYconfig['recordentry']==1?"历史":"收藏",
+            url: JYconfig['recordentry']==1?"hiker://history":"hiker://collection",
             pic_url: 'https://lanmeiguojiang.com/tubiao/more/109.png',
             col_type: 'icon_small_4'
         });
@@ -413,13 +420,7 @@ function yiji() {
             xunmi(name);
         }, input);
     });
-    var cfgfile = "hiker://files/rules/Src/Juying/config.json";
-    var Juyingcfg=fetch(cfgfile);
-    if(Juyingcfg != ""){
-        eval("var JYconfig=" + Juyingcfg+ ";");
-    }else{
-        var JYconfig= {};
-    }
+    
     var list = html.listData.results;
     for (var i in list) {
         d.push({
