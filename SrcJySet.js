@@ -358,6 +358,22 @@ function SRCSet() {
                 col_type: "text_center_1"
             });
             d.push({
+                title: JYconfig['recordentry']!=2?'记录入口-历史':'记录入口-收藏',
+                url: $('#noLoading#').lazyRule((JYconfig,cfgfile) => {
+                        if(JYconfig['recordentry'] == 2){
+                            JYconfig['recordentry'] = 1;
+                            var sm = "首页观看记录入口改为历史列表";
+                        }else{
+                            JYconfig['recordentry'] = 2;
+                            var sm = "首页观看记录入口改为收藏列表";
+                        }
+                        writeFile(cfgfile, JSON.stringify(JYconfig));
+                        refreshPage(false);
+                        return 'toast://' + sm + '，返回主页后刷新生效';
+                    }, JYconfig, cfgfile),
+                col_type: "text_2"
+            });
+            d.push({
                 title: '搜索线程',
                 url: $(JYconfig['xunminum']?JYconfig['xunminum']:"10","每次搜索成功停止线程数").input((JYconfig,cfgfile) => {
                         if(!parseInt(input)||parseInt(input)<1||parseInt(input)>100){return 'toast://输入有误，请输入1-100数字'}else{
@@ -367,7 +383,7 @@ function SRCSet() {
                             return 'toast://每次搜索成功线程数已设置为：'+input;
                         }
                     }, JYconfig, cfgfile),
-                col_type: "text_3"
+                col_type: "text_2"
             });
             d.push({
                 title: '搜索时长',
@@ -379,7 +395,7 @@ function SRCSet() {
                             return 'toast://接口搜索超时时长已设置为：'+input+'秒';
                         }
                     }, JYconfig, cfgfile),
-                col_type: "text_3"
+                col_type: "text_2"
             });
             d.push({
                 title: '解析保留',
@@ -391,7 +407,7 @@ function SRCSet() {
                             return 'toast://app自带解析保留数量已设置为：'+input;
                         }
                     }, JYconfig, cfgfile),
-                col_type: "text_3"
+                col_type: "text_2"
             });
             d.push({
                 title: '其他资源',
