@@ -549,15 +549,14 @@ function xunmierji(type,ua) {
         }else if (/biubiu/.test(type)) {
             try{
                 var jsondata = MY_PARAMS.data;
-                var actor = html.split(jsondata.zhuyanqian)[1].split(jsondata.zhuyanhou)[0] || "内详";
-                log(actor);
-                var director = String(xpathArray(html, jsondata.dtNode+jsondata.dtDirector).join(',')).replace('导演：','').replace(jsondata.filter?eval(jsondata.filter):"","") || "内详";
-                var area = String(xpath(html, jsondata.dtNode+jsondata.dtArea)).replace('地区：','').replace(jsondata.filter?eval(jsondata.filter):"","") || "未知";
-                var year = String(xpath(html, jsondata.dtNode+jsondata.dtYear)).replace('年份：','').replace(jsondata.filter?eval(jsondata.filter):"","") || "未知";
-                var remarks = String(xpath(html, jsondata.dtNode+jsondata.dtCate)).split(' / ')[0].replace(jsondata.filter?eval(jsondata.filter):"","") || "";
-                var pubdate = String(xpath(html, jsondata.dtNode+jsondata.dtMark)) || "";
-                var pic = MY_PARAMS.pic || xpath(html, jsondata.dtNode+jsondata.dtImg);
-                var desc = String(xpath(html, jsondata.dtNode+jsondata.dtDesc)).replace(jsondata.filter?eval(jsondata.filter):"","").replace(/&ldquo;/g,'“').replace(/&rdquo;/g,'”') || '...';
+                var actor = pdfh(html.split(jsondata.zhuyanqian.replace(/\\/g,""))[1].split(jsondata.zhuyanhou.replace(/\\/g,""))[0],"Text") || "内详";
+                var director = pdfh(html.split(jsondata.daoyanqian.replace(/\\/g,""))[1].split(jsondata.daoyanhou.replace(/\\/g,""))[0],"Text") || "内详";
+                var area = "未知";
+                var year = "未知";
+                var remarks = pdfh(html.split(jsondata.zhuangtaiqian.replace(/\\/g,""))[1].split(jsondata.zhuangtaihou.replace(/\\/g,""))[0],"Text") || "";
+                var pubdate = "";
+                var pic = MY_PARAMS.pic || "";
+                var desc = pdfh(html.split(jsondata.juqingqian.replace(/\\/g,""))[1].split(jsondata.juqinghou.replace(/\\/g,""))[0],"Text") || '...';
                 var arts = xpathArray(html, jsondata.dtNode+jsondata.dtFromNode+jsondata.dtFromName);
 
                 var conts = [];
@@ -584,7 +583,7 @@ function xunmierji(type,ua) {
                 var director = director||"";
                 var area = area||"";
                 var year = year||"";
-                var remarks = remarks||"xpath数据异常";
+                var remarks = remarks||"biubiu数据异常";
                 var pubdate = pubdate||"此接口需要修改，或删除";
                 var pic = MY_PARAMS.pic;
                 var desc = desc||'...';
