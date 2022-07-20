@@ -568,23 +568,23 @@ function SRCSet() {
                 col_type: "text_3"
             });
             d.push({
-                title: 'xpath导入',
-                url:$("","仅支持输入JY自定义的xpath资源地址").input(() => {
+                title: '其他导入',
+                url:$("","仅支持输入JY自定义的资源地址").input(() => {
                         try{
                             require(config.依赖.match(/https.*\//)[0] + 'SrcJySet.js');
                             eval(fetch(input,{timeout:2000}))
                             var urls= [];
                             for(let k in jyjiekou){
-                                let xpua = jyjiekou[k].ua||"MOBILE_UA";
-                                let xptype = jyjiekou[k].type||"xpath"
-                                urls.push({"name":jyjiekou[k].name,"type":xptype,"ua":xpua,"url":k,"data":jyjiekou[k]})
+                                let jyua = jyjiekou[k].ua||"MOBILE_UA";
+                                let jytype = /csp_biubiu_/.test(jyjiekou[k].type)?"biubiu":"xpath"
+                                urls.push({"name":jyjiekou[k].name,"type":jytype,"ua":jyua,"url":k,"data":jyjiekou[k]})
                             }
                         } catch (e) {
                             log('接口导入失败：'+e.message); 
                             return "toast://导入失败：连接无效或内容有错";
                         }
                         
-                        var jknum = jiekousave(urls);
+                        var jknum = jiekousave(urls,1);
                         if(jknum<0){
                             return'toast://导入失败，内容异常';
                         }else{
@@ -1000,16 +1000,17 @@ function jiekousave(urls,update) {
         }else{
             var datalist = [];
         }
-        if(update==1){
-            for(var j=0;j<datalist.length;j++){
-                if(datalist[j].url==urls[0].url){
-                    datalist.splice(j,1);
-                    break;
-                }
-            }
-        }
+        
         var num = 0;
         for (var i in urls) {
+            if(update==1){
+                for(var j=0;j<datalist.length;j++){
+                    if(datalist[j].url==urls[i].url){
+                        datalist.splice(j,1);
+                        break;
+                    }
+                }
+            }
             let urlname = urls[i].name;
             let urlurl = urls[i].url;
             let urlua = urls[i].ua||"Dalvik/2.1.0";
