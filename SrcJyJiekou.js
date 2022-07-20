@@ -122,7 +122,7 @@ var jyjiekou = {
         "daoyanhou": "</p>",
         "zhuyanqian": "主演：</span>",
         "zhuyanhou": "</p>",
-        "juqingqian": "class=\"sketch content hide\"> ",
+        "juqingqian": "class=\"sketch content\"> ",
         "juqinghou": "</span>",
         "bfyshifouercijiequ": "0",
         "bfyjiequqian": "空",
