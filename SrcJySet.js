@@ -430,7 +430,7 @@ function SRCSet() {
                             var bbdata = JSON.parse(html);
                             var bbjiekou = bbdata.zhuyejiekou||[];
                             var bbcaiji = bbdata.caijizhan||[];
-                            var bbzidingyi = bdata.zidingyi||[];
+                            var bbzidingyi = bbdata.zidingyi||[];
                         } catch (e) {
                             log('接口导入失败：'+e.message); 
                             return "toast://导入失败：连接无效或内容有错";
