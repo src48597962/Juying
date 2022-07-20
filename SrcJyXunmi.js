@@ -547,17 +547,24 @@ function xunmierji(type,ua) {
                 log(e.message)
             }    
         }else if (/biubiu/.test(type)) {
+            var getsm = "";
             try{
+                getsm = "获取传递数据";
                 var jsondata = MY_PARAMS.data;
+                getsm = "获取主演zhuyanqian";
                 var actor = pdfh(html.split(jsondata.zhuyanqian.replace(/\\/g,""))[1].split(jsondata.zhuyanhou.replace(/\\/g,""))[0],"Text") || "内详";
+                getsm = "获取导演daoyanqian";
                 var director = pdfh(html.split(jsondata.daoyanqian.replace(/\\/g,""))[1].split(jsondata.daoyanhou.replace(/\\/g,""))[0],"Text") || "内详";
                 var area = "未知";
                 var year = "未知";
+                getsm = "获取备注zhuangtaiqian";
                 var remarks = pdfh(html.split(jsondata.zhuangtaiqian.replace(/\\/g,""))[1].split(jsondata.zhuangtaihou.replace(/\\/g,""))[0],"Text").split('/')[0] || "内详";
+                getsm = "获取更新zhuangtaiqian";
                 var pubdate = pdfh(html.split(jsondata.zhuangtaiqian.replace(/\\/g,""))[1].split(jsondata.zhuangtaihou.replace(/\\/g,""))[0],"Text").split('/')[1] || "内详";
                 var pic = MY_PARAMS.pic || "";
+                getsm = "获取剧情简介juqingqian";
                 var desc = pdfh(html.split(jsondata.juqingqian.replace(/\\/g,""))[1].split(jsondata.juqinghou.replace(/\\/g,""))[0],"Text") || '...';
-                log('11');
+                getsm = "获取播放地址数组bfjiequshuzuqian";
                 let bfs = html.split(jsondata.bfjiequshuzuqian.replace(/\\/g,""));
                 bfs.splice(0,1);
                 var arts = [];
@@ -586,7 +593,7 @@ function xunmierji(type,ua) {
                 var desc = desc||'...';
                 var arts = arts||[];
                 var conts = conts||[];
-                log(e.message)
+                log(getsm+'失败>'+e.message)
             }    
         }else{
             //网页
