@@ -140,8 +140,6 @@ var jyjiekou = {
     "tihuan": "aliyundrive",
     "User": "空",
     "shouye": "1",
-    //"fenlei": "电视剧$/dsj/page/#电影$/zuixindianying/page/#番剧$/fanju/page/#动漫$/dm/page/#国产剧$/gcj/page/#美剧$/meijutt/page/#韩剧$/hanjutv/page/",
-    "fenlei": "本月热门$/benyueremen/page/#高分影视$/gaofenyingshi/page/#豆瓣电影TOP250$/dbtop250/page/#最新电影$/zuixindianying/page/#电视剧$/dsj/page/#国产剧$/gcj/page/#美剧$/meijutt/page/#韩剧$/hanjutv/page/#日剧$/movie_bt_series/rj/page/#海外剧$/movie_bt_series/hwj/page/#番剧$/fanju/page/#动漫$/dm/page/#韩国电影$/movie_bt_series/hanguodianying/page/#纪录片$/movie_bt/movie_bt_tags/jlpp/page/",
     "houzhui": "",
     "shifouercijiequ": "0",
     "jiequqian": "空",
