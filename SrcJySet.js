@@ -576,7 +576,7 @@ function SRCSet() {
                             var urls= [];
                             for(let k in jyjiekou){
                                 let jyua = jyjiekou[k].ua||"MOBILE_UA";
-                                let jytype = /csp_biubiu_/.test(jyjiekou[k].type)?"biubiu":"xpath"
+                                let jytype = /csp_biubiu_/.test(k)?"biubiu":"xpath"
                                 urls.push({"name":jyjiekou[k].name,"type":jytype,"ua":jyua,"url":k,"data":jyjiekou[k]})
                             }
                         } catch (e) {
