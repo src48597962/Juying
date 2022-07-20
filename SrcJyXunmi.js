@@ -503,14 +503,22 @@ function xunmierji(type,ua) {
             var conts = arts;
         }else if (/xpath/.test(type)) {
             try{
+                getsm = "获取传递数据";
                 var jsondata = MY_PARAMS.data;
+                getsm = "获取主演dtActor";
                 var actor = String(xpathArray(html, jsondata.dtNode+jsondata.dtActor).join(',')).replace('主演：','').replace(jsondata.filter?eval(jsondata.filter):"","") || "内详";
+                getsm = "获取导演dtDirector";
                 var director = String(xpathArray(html, jsondata.dtNode+jsondata.dtDirector).join(',')).replace('导演：','').replace(jsondata.filter?eval(jsondata.filter):"","") || "内详";
+                getsm = "获取地区dtArea";
                 var area = String(xpath(html, jsondata.dtNode+jsondata.dtArea)).replace('地区：','').replace(jsondata.filter?eval(jsondata.filter):"","") || "未知";
+                getsm = "获取年份dtYear";
                 var year = String(xpath(html, jsondata.dtNode+jsondata.dtYear)).replace('年份：','').replace(jsondata.filter?eval(jsondata.filter):"","") || "未知";
+                getsm = "获取类型dtCate";
                 var remarks = String(xpath(html, jsondata.dtNode+jsondata.dtCate)).split(' / ')[0].replace(jsondata.filter?eval(jsondata.filter):"","") || "";
+                getsm = "获取备份dtMark";
                 var pubdate = String(xpath(html, jsondata.dtNode+jsondata.dtMark)) || "";
                 var pic = MY_PARAMS.pic || xpath(html, jsondata.dtNode+jsondata.dtImg);
+                getsm = "获取简介dtDesc";
                 var desc = String(xpath(html, jsondata.dtNode+jsondata.dtDesc)).replace(jsondata.filter?eval(jsondata.filter):"","").replace(/&ldquo;/g,'“').replace(/&rdquo;/g,'”') || '...';
                 var arts = xpathArray(html, jsondata.dtNode+jsondata.dtFromNode+jsondata.dtFromName);
 
@@ -544,7 +552,7 @@ function xunmierji(type,ua) {
                 var desc = desc||'...';
                 var arts = arts||[];
                 var conts = conts||[];
-                log(e.message)
+                log(getsm+'失败>'+e.message)
             }    
         }else if (/biubiu/.test(type)) {
             var getsm = "";
@@ -570,16 +578,15 @@ function xunmierji(type,ua) {
                 var arts = [];
                 var conts = [];
                 for (let i = 0; i < bfs.length; i++) {
-                    arts[i] = '播放源'+i+1;
+                    arts[i] = '播放源'+(i+1);
                     bfs[i] = bfs[i].split(jsondata.bfjiequshuzuhou.replace(/\\/g,""))[0];
-                    let bfline = pdfa(bfs[i],"a");
+                    let bfline = pdfa(bfs[i],"body&&a");
                     let cont = [];
                     for (let j = 0; j < bfline.length; j++) {
-                        let contname = pdfh(bfs[i],"a&&Text");
-                        let conturl = pd(bfs[i],"a&&href");
-                        cont.push(contname[j]+"$"+jsondata.url+conturl[j])
+                        let contname = pdfh(bfline[j],"a&&Text");
+                        let conturl = pd(bfline[j],"a&&href");
+                        cont.push(contname+"$"+conturl)
                     }
-                    log(cont)
                     conts.push(cont.join("#"))
                 }
             }catch(e){
@@ -666,7 +673,7 @@ function xunmierji(type,ua) {
             let line = i;
             tabs.push(line);
             var linecode = i;
-        }else if (/cms|xpath/.test(type)) {
+        }else if (/cms|xpath|biubiu/.test(type)) {
             tabs.push(arts[i]);
             var linecode = arts[i];
         }else{
@@ -701,7 +708,7 @@ function xunmierji(type,ua) {
                 }
                 lists.push(si);
             };
-        }else if (/cms|xpath/.test(type)) {
+        }else if (/cms|xpath|biubiu/.test(type)) {
             let single = conts[i]||"";
             if(single){lists.push(single.split('#'))};
         }else{
@@ -800,7 +807,7 @@ function xunmierji(type,ua) {
                         require(config.依赖.match(/https.*\//)[0] + 'SrcParseS.js');
                         return SrcParseS.聚影(input);
                     });
-                }else if (/xpath/.test(type)) {
+                }else if (/xpath|biubiu/.test(type)) {
                     var playtitle = list[j].split('$')[0];
                     var playurl = list[j].split('$')[1];
                     var DTJX = $("").lazyRule(() => {
@@ -829,7 +836,7 @@ function xunmierji(type,ua) {
         if (list == undefined || list.length == 0) {
             playlist('0');
         } else {
-            if (/v1|app|v2|iptv|xpath/.test(type)) {
+            if (/v1|app|v2|iptv|xpath|biubiu/.test(type)) {
                 var listone = list[0].split('$')[0];
                 try{
                     let list1 = list[0].split('$')[0];
