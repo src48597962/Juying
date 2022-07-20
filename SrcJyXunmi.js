@@ -572,13 +572,14 @@ function xunmierji(type,ua) {
                 for (let i = 0; i < bfs.length; i++) {
                     arts[i] = '播放源'+i+1;
                     bfs[i] = bfs[i].split(jsondata.bfjiequshuzuhou.replace(/\\/g,""))[0];
-                    let contname = pdfa(bfs[i],"a&&Text");
-                    log(contname)
-                    let conturl = pdfa(bfs[i],"a&&href");
+                    let bfline = pdfa(bfs[i],"a");
                     let cont = [];
-                    for (let j = 0; j < contname.length; j++) {
+                    for (let j = 0; j < bfline.length; j++) {
+                        let contname = pdfh(bfs[i],"a&&Text");
+                        let conturl = pd(bfs[i],"a&&href");
                         cont.push(contname[j]+"$"+jsondata.url+conturl[j])
                     }
+                    log(cont)
                     conts.push(cont.join("#"))
                 }
             }catch(e){
