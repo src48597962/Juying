@@ -466,6 +466,7 @@ function xunmierji(type,ua) {
     }
     //影片详情
     if (zt == 1) {
+        var dqnf = "";
         if (/v1|app|v2|cms/.test(type)) {
             if (/cms/.test(type)) {
                 try{
@@ -490,23 +491,27 @@ function xunmierji(type,ua) {
             }
             var actor = json.vod_actor || "内详";
             var director = json.vod_director || "内详";
-            var area = json.vod_area || "未知";
-            var year = json.vod_year || "未知";
+            var area = json.vod_area;
+            var year = json.vod_year;
             var remarks = json.vod_remarks || "";
             var pubdate = json.vod_pubdate || json.vod_class || "";
             var pic = MY_PARAMS.pic || json.vod_pic;
             var desc = json.vod_blurb || '...';
+            if(area){ dqnf = '\n地区：' + area}
+            if(year){ dqnf = '   年代：' + year}
         }else if (/iptv/.test(type)) {
             var actor = html.actor.join(",") || "内详";
             var director = html.director.join(",") || "内详";
-            var area = html.area.join(",") || "未知";
-            var year = html.pubtime || "未知";
+            var area = html.area.join(",");
+            var year = html.pubtime;
             var remarks = html.trunk || "";
             var pubdate = html.type.join(",") || "";
             var pic = MY_PARAMS.pic || html.img_url;
             var desc = html.intro || '...';
             var arts = html.videolist;
             var conts = arts;
+            if(area){ dqnf = '\n地区：' + area}
+            if(year){ dqnf = '   年代：' + year}
         }else if (/xpath/.test(type)) {
             try{
                 getsm = "获取传递数据";
@@ -516,9 +521,9 @@ function xunmierji(type,ua) {
                 getsm = "获取导演dtDirector";
                 var director = String(xpathArray(html, jsondata.dtNode+jsondata.dtDirector).join(',')).replace('导演：','').replace(jsondata.filter?eval(jsondata.filter):"","") || "内详";
                 getsm = "获取地区dtArea";
-                var area = String(xpath(html, jsondata.dtNode+jsondata.dtArea)).replace('地区：','').replace(jsondata.filter?eval(jsondata.filter):"","") || "未知";
+                var area = String(xpath(html, jsondata.dtNode+jsondata.dtArea)).replace('地区：','').replace(jsondata.filter?eval(jsondata.filter):"","");
                 getsm = "获取年份dtYear";
-                var year = String(xpath(html, jsondata.dtNode+jsondata.dtYear)).replace('年份：','').replace(jsondata.filter?eval(jsondata.filter):"","") || "未知";
+                var year = String(xpath(html, jsondata.dtNode+jsondata.dtYear)).replace('年份：','').replace(jsondata.filter?eval(jsondata.filter):"","");
                 getsm = "获取类型dtCate";
                 var remarks = String(xpath(html, jsondata.dtNode+jsondata.dtCate)).split(' / ')[0].replace(jsondata.filter?eval(jsondata.filter):"","") || "";
                 getsm = "获取备份dtMark";
@@ -527,7 +532,8 @@ function xunmierji(type,ua) {
                 getsm = "获取简介dtDesc";
                 var desc = String(xpath(html, jsondata.dtNode+jsondata.dtDesc)).replace(jsondata.filter?eval(jsondata.filter):"","").replace(/&ldquo;/g,'“').replace(/&rdquo;/g,'”') || '...';
                 var arts = xpathArray(html, jsondata.dtNode+jsondata.dtFromNode+jsondata.dtFromName);
-
+                if(area){ dqnf = '\n地区：' + area}
+                if(year){ dqnf = '   年代：' + year}
                 var conts = [];
                 for (let i = 1; i < arts.length+1; i++) {
                     if(arts[i-1].indexOf("在线视频")>-1){arts[i-1] = '播放源'+i;}
@@ -569,8 +575,6 @@ function xunmierji(type,ua) {
                 var actor = pdfh(html.split(jsondata.zhuyanqian.replace(/\\/g,""))[1].split(jsondata.zhuyanhou.replace(/\\/g,""))[0],"Text") || "内详";
                 getsm = "获取导演daoyanqian";
                 var director = pdfh(html.split(jsondata.daoyanqian.replace(/\\/g,""))[1].split(jsondata.daoyanhou.replace(/\\/g,""))[0],"Text") || "内详";
-                var area = "未知";
-                var year = "未知";
                 getsm = "获取备注zhuangtaiqian";
                 var remarks = pdfh(html.split(jsondata.zhuangtaiqian.replace(/\\/g,""))[1].split(jsondata.zhuangtaihou.replace(/\\/g,""))[0],"Text").split('/')[0] || "内详";
                 getsm = "获取更新zhuangtaiqian";
@@ -579,6 +583,7 @@ function xunmierji(type,ua) {
                 getsm = "获取剧情简介juqingqian";
                 var desc = pdfh(html.split(jsondata.juqingqian.replace(/\\/g,""))[1].split(jsondata.juqinghou.replace(/\\/g,""))[0],"Text") || '...';
                 getsm = "获取播放地址数组bfjiequshuzuqian";
+
                 let bflist = html.split(jsondata.bfjiequshuzuqian.replace(/\\/g,""));
                 bflist.splice(0,1);
                 var arts = [];
@@ -598,8 +603,6 @@ function xunmierji(type,ua) {
             }catch(e){
                 var actor = actor||"抓取失败";
                 var director = director||"";
-                var area = area||"";
-                var year = year||"";
                 var remarks = remarks||"biubiu数据异常";
                 var pubdate = pubdate||"此接口需要修改，或删除";
                 var pic = MY_PARAMS.pic;
@@ -611,7 +614,7 @@ function xunmierji(type,ua) {
         }else{
             //网页
         }
-        var details1 = '主演：' + actor.substring(0, actor.length<12?actor.length:12) + '\n导演：' + director.substring(0, director.length<12?director.length:12) + '\n地区：' + area + '   年代：' + year;
+        var details1 = '主演：' + actor.substring(0, actor.length<12?actor.length:12) + '\n导演：' + director.substring(0, director.length<12?director.length:12) + dqnf;
         var details2 = remarks + '\n' + pubdate;
         var newconfig = { 详情1: details1, 详情2: details2, 图片: pic, 简介: desc, 线路: arts, 影片: conts, 标识: MY_URL };
         var libsfile = 'hiker://files/libs/' + md5(configfile) + '.js';
