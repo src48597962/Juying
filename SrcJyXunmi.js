@@ -222,8 +222,10 @@ function xunmi(name,data) {
                                     ssstr.length = ssstr.length-1;
                                 }
                                 ssurl = ssstr.join('?');
+                                var html = request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000, method: 'POST', body: postcs  });
+                            }else{
+                                var html = request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 });
                             }
-                            var html = request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000, method: 'POST', body: postcs  });
                             let title = xpathArray(html, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodName);
                             let href = xpathArray(html, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodId);
                             let img = xpathArray(html, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodImg);
@@ -240,26 +242,30 @@ function xunmi(name,data) {
                             var html = JSON.parse(request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 }));
                             var list = html.list||[];
                         }else{
-                            /*
                             var sstype = ssurl.indexOf(';post')>-1?"post":"get";
                             if(sstype == "post"){
+                                /*
                                 let ssstr = ssurl.replace(';post','').split('?');
                                 var postcs = ssstr[ssstr.length-1];
                                 if(ssstr.length>2){
                                     ssstr.length = ssstr.length-1;
                                 }
-                                ssurl = ssstr.join('?');
-                            }
-                            var html = request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000, method: 'POST', body: postcs  });
-                            let title = xpathArray(html, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodName);
-                            let href = xpathArray(html, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodId);
-                            let img = xpathArray(html, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodImg);
-                            let mark = xpathArray(html, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodMark)||"";
-                            var list = [];
-                            for(var j in title){
-                                list.push({"id":href[j],"name":title[j],"pic":img[j],"desc":mark[j]})
-                            }
+                               var html = request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000, method: 'POST', body: postcs  });
                             */
+                            }else{
+                                var html = request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 });
+                            }
+                            let sslist = html.split(jsondata.jiequshuzuqian.replace(/\\/g,""));
+                            sslist.splice(0,1);
+                            var list = [];
+                            for (let i = 0; i < sslist.length; i++) {
+                                sslist[i] = sslist[i].split(jsondata.jiequshuzuhou.replace(/\\/g,""))[0];
+                                let title = sslist[i].split(jsondata.biaotiqian.replace(/\\/g,""))[1].split(jsondata.biaotihou.replace(/\\/g,""))[0];
+                                let href = sslist[i].split(jsondata.lianjieqian.replace(/\\/g,""))[1].split(jsondata.lianjiehou.replace(/\\/g,""))[0];
+                                let img = sslist[i].split(jsondata.tupianqian.replace(/\\/g,""))[1].split(jsondata.tupianhou.replace(/\\/g,""))[0];
+                                let mark = "";
+                                list.push({"id":href,"name":title,"pic":img,"desc":mark})
+                            }
                         }
                         var ssvodurl = `jsondata.url+jsondata.sousuohouzhui+list.id+'.html'`;
                     }
@@ -573,14 +579,14 @@ function xunmierji(type,ua) {
                 getsm = "获取剧情简介juqingqian";
                 var desc = pdfh(html.split(jsondata.juqingqian.replace(/\\/g,""))[1].split(jsondata.juqinghou.replace(/\\/g,""))[0],"Text") || '...';
                 getsm = "获取播放地址数组bfjiequshuzuqian";
-                let bfs = html.split(jsondata.bfjiequshuzuqian.replace(/\\/g,""));
-                bfs.splice(0,1);
+                let bflist = html.split(jsondata.bfjiequshuzuqian.replace(/\\/g,""));
+                bflist.splice(0,1);
                 var arts = [];
                 var conts = [];
-                for (let i = 0; i < bfs.length; i++) {
+                for (let i = 0; i < bflist.length; i++) {
                     arts[i] = '播放源'+(i+1);
-                    bfs[i] = bfs[i].split(jsondata.bfjiequshuzuhou.replace(/\\/g,""))[0];
-                    let bfline = pdfa(bfs[i],"body&&a");
+                    bflist[i] = bflist[i].split(jsondata.bfjiequshuzuhou.replace(/\\/g,""))[0];
+                    let bfline = pdfa(bflist[i],"body&&a");
                     let cont = [];
                     for (let j = 0; j < bfline.length; j++) {
                         let contname = pdfh(bfline[j],"a&&Text");
