@@ -430,6 +430,7 @@ function SRCSet() {
                             var bbdata = JSON.parse(html);
                             var bbjiekou = bbdata.zhuyejiekou||[];
                             var bbcaiji = bbdata.caijizhan||[];
+                            var bbzidingyi = bdata.zidingyi||[];
                         } catch (e) {
                             log('接口导入失败：'+e.message); 
                             return "toast://导入失败：连接无效或内容有错";
@@ -441,6 +442,37 @@ function SRCSet() {
                         }
                         for(var i in bbcaiji){
                             urls.push({ "name" : bbcaiji[i].name, "url" : /\/api.php^/.test(bbcaiji[i].url)?bbcaiji[i].url+"/provide/vod":bbcaiji[i].url})
+                        }
+                        for(var i in bbzidingyi){
+                            try{
+                                let biudata = {};
+                                biudata.url = bbzidingyi[i].url;
+                                biudata.jiequshuzuqian = bbzidingyi[i].jiequshuzuqian;
+                                biudata.jiequshuzuhou = bbzidingyi[i].jiequshuzuhou;
+                                biudata.tupianqian = bbzidingyi[i].tupianqian;
+                                biudata.tupianhou = bbzidingyi[i].tupianhou;
+                                biudata.biaotiqian = bbzidingyi[i].biaotiqian;
+                                biudata.biaotihou = bbzidingyi[i].biaotihou;
+                                biudata.lianjieqian = bbzidingyi[i].lianjieqian;
+                                biudata.lianjiehou = bbzidingyi[i].lianjiehou;
+                                biudata.sousuoqian = bbzidingyi[i].sousuoqian;
+                                biudata.sousuohou = bbzidingyi[i].sousuohou;
+                                biudata.sousuohouzhui = bbzidingyi[i].sousuohouzhui;
+                                biudata.ssmoshi = bbzidingyi[i].ssmoshi;
+                                biudata.bfjiequshuzuqian = bbzidingyi[i].bfjiequshuzuqian;
+                                biudata.bfjiequshuzuhou = bbzidingyi[i].bfjiequshuzuhou;
+                                biudata.zhuangtaiqian = bbzidingyi[i].zhuangtaiqian;
+                                biudata.zhuangtaihou = bbzidingyi[i].zhuangtaihou;
+                                biudata.daoyanqian = bbzidingyi[i].daoyanqian;
+                                biudata.daoyanhou = bbzidingyi[i].daoyanhou;
+                                biudata.zhuyanqian = bbzidingyi[i].zhuyanqian;
+                                biudata.zhuyanhou = bbzidingyi[i].zhuyanhou;
+                                biudata.juqingqian = bbzidingyi[i].juqingqianurl;
+                                biudata.juqinghou = bbzidingyi[i].juqinghou;
+                                urls.push({ "name": biudata.name, "url": biudata.url, "type": "biubiu", "ua": "MOBILE_UA", "data": biudata})
+                            }catch(e){
+                                log(bbzidingyi[i].name + '>抓取失败>' + e.message)
+                            }
                         }
                         var jknum = jiekousave(urls);
                         if(jknum<0){
