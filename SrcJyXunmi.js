@@ -557,24 +557,17 @@ function xunmierji(type,ua) {
                 var pubdate = "";
                 var pic = MY_PARAMS.pic || "";
                 var desc = pdfh(html.split(jsondata.juqingqian.replace(/\\/g,""))[1].split(jsondata.juqinghou.replace(/\\/g,""))[0],"Text") || '...';
-                var arts = xpathArray(html, jsondata.dtNode+jsondata.dtFromNode+jsondata.dtFromName);
-
+                let bfs = html.split(jsondata.bfjiequshuzuqian.replace(/\\/g,""));
+                bfs.splice(0,1);
+                var arts = [];
                 var conts = [];
-                for (let i = 1; i < arts.length+1; i++) {
-                    if(arts[i-1].indexOf("在线视频")>-1){arts[i-1] = '播放源'+i;}
-                    let contname = xpathArray(html, jsondata.dtNode+jsondata.dtUrlNode+'['+i+']'+jsondata.dtUrlSubNode+jsondata.dtUrlName);
-                    let conturl = xpathArray(html, jsondata.dtNode+jsondata.dtUrlNode+'['+i+']'+jsondata.dtUrlSubNode+jsondata.dtUrlId);
+                for (let i = 0; i < bfs.length; i++) {
+                    arts[i] = '播放源'+i+1;
+                    let contname = pdfa(bfs[i],"a&&Text");
+                    let conturl = pdfa(bfs[i],"a&&href");
                     let cont = [];
                     for (let j = 0; j < contname.length; j++) {
-                        let urlid = jsondata.dtUrlIdR;
-                        if(urlid){
-                            let urlidl = urlid.split('(\\S+)')[0];
-                            let urlidr = urlid.split('(\\S+)')[1];
-                            var playUrl = conturl[j].replace(urlidl,'').replace(urlidr,'');
-                        }else{
-                            var playUrl = conturl[j];
-                        }
-                        cont.push(contname[j]+"$"+jsondata.playUrl.replace('{playUrl}',playUrl))
+                        cont.push(contname[j]+"$"+jsondata.url+conturl[j])
                     }
                     conts.push(cont.join("#"))
                 }
