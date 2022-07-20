@@ -76,7 +76,7 @@ var SrcParseS = {
             for (var i in urls) {
                 if (!exclude.test(urls[i]) && contain.test(urls[i]) && urls[i].indexOf('=http')==-1) {
                     //fba.log("嗅探成功>"+urls[i]);
-                    if(fy_bridge_app.getHeaderUrl&&vipUrl.indexOf("=http")==-1&&urls[i].indexOf(".m3u8?")>-1)
+                    if(fy_bridge_app.getHeaderUrl&&vipUrl.indexOf("=http")==-1)
                         return $$$("#noLoading#").lazyRule((url) => {
                             url = base64Decode(url);
                             if (getMyVar('SrcM3U8', '1') == "1"&&url.indexOf('.m3u8')>-1) {
