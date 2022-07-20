@@ -561,8 +561,11 @@ function xunmierji(type,ua) {
                 bfs.splice(0,1);
                 var arts = [];
                 var conts = [];
+
                 for (let i = 0; i < bfs.length; i++) {
                     arts[i] = '播放源'+i+1;
+                    bfs[i] = bfs[i].split(jsondata.bfjiequshuzuhou.replace(/\\/g,""))[0];
+                    log(bfs[i]);
                     let contname = pdfa(bfs[i],"a&&Text");
                     let conturl = pdfa(bfs[i],"a&&href");
                     let cont = [];
