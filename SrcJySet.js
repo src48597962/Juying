@@ -1079,7 +1079,7 @@ function jiekou(lx,data) {
         clearMyVar('addtype');
         clearMyVar('isload');
         clearMyVar('apigroup');
-        clearMyVar('apixpath');
+        clearMyVar('apidata');
     }));
 
     var d = [];
@@ -1124,34 +1124,34 @@ function jiekou(lx,data) {
         d.push({
             title:'apiurl',
             col_type: 'input',
-            desc: getMyVar('apitype')=="xpath"?"接口地址以csp_xpath_为前缀":"接口地址",
+            desc: getMyVar('apitype')=="xpath"?"接口地址以csp_xpath_为前缀":getMyVar('apitype')=="biubiu"?"接口地址以csp_biubiu_为前缀":"接口地址",
             extra: {
                 titleVisible: false,
-                defaultValue: getMyVar('apitype')=="xpath"&&getMyVar('apiurl', '')==""?'csp_xpath_':getMyVar('apiurl', ''),
+                defaultValue: getMyVar('apitype')=="xpath"&&getMyVar('apiurl', '')==""?'csp_xpath_':getMyVar('apitype')=="biubiu"&&getMyVar('apiurl', '')==""?'csp_biubiu_':getMyVar('apiurl', ''),
                 onChange: 'putMyVar("apiurl",input)'
             }
         });
-        if(getMyVar('apitype')=="xpath"){
+        if(getMyVar('apitype')=="xpath"||getMyVar('apitype')=="biubiu"){
             d.push({
-                title:'xpath代码',
+                title:'data代码',
                 col_type: 'input',
-                desc: "xpath接口对数据格式要求非常高\n大佬来偿试写接口呀",
+                desc: "xpath/biubiu接口对数据格式要求非常高\n大佬来偿试写接口呀",
                 extra: {
                     titleVisible: false,
-                    defaultValue: data&&data.data?data.data:getMyVar('apixpath', ''),
+                    defaultValue: data&&data.data?data.data:getMyVar('apidata', ''),
                     type: "textarea",
                     height: 8,
-                    onChange: 'putMyVar("apixpath",input)'
+                    onChange: 'putMyVar("apidata",input)'
                 }
             });
         }
         d.push({
             title: getMyVar('apitype', '')==""?'类型：自动识别':'类型：'+getMyVar('apitype'),
             col_type:'text_1',
-            url:$(["v1","app","v2","iptv","cms","xpath","自动"],3).select(()=>{
+            url:$(["v1","app","v2","iptv","cms","xpath","biubiu","自动"],3).select(()=>{
                 if(input=="自动"){
                     clearMyVar('apitype');
-                    clearMyVar('apixpath');
+                    clearMyVar('apidata');
                 }else{
                     putMyVar('apitype', input);
                 }
@@ -1223,11 +1223,11 @@ function jiekou(lx,data) {
                         let urlgroup = getMyVar('apigroup');
                         let arr = {"name": apiname, "url": apiurl, "ua": apiua, "type": urltype };
                         if(urlgroup){arr['group'] = urlgroup}
-                        if(getMyVar('apixpath')){
+                        if(getMyVar('apidata')){
                             try{
-                                arr['data'] = JSON.parse(getMyVar('apixpath'));
+                                arr['data'] = JSON.parse(getMyVar('apidata'));
                             }catch(e){
-                                return "toast://xpath数据异常";
+                                return "toast://data对象数据异常";
                             }
                         }
                         datalist.push(arr);
@@ -1299,46 +1299,23 @@ function jiekou(lx,data) {
             if(getMyVar('addtype', '1')=="1"&&apiname&&apiurl){
                 let urltype = getMyVar('apitype');
                 let apigroup = getMyVar('apigroup');
-                let apixpath = getMyVar('apixpath');
+                let apidata = getMyVar('apidata');
                 if(lx=="update"){
                     isupdate = 1;
-                    if((apiurl==data.url&&apiname==data.name&&apiua==data.ua&&urltype==data.type&&apigroup==(data.group?data.group:'')&&apixpath==(data.data?JSON.stringify(data.data):''))){
+                    if((apiurl==data.url&&apiname==data.name&&apiua==data.ua&&urltype==data.type&&apigroup==(data.group?data.group:'')&&apidata==(data.data?JSON.stringify(data.data):''))){
                         return "toast://未修改";
                     }
                 }
                 let arr = {"name": apiname, "url": apiurl, "ua": apiua, "type": urltype };
                 if(apigroup){arr['group'] = apigroup}
-                if(apixpath){
+                if(apidata){
                     try{
-                        arr['data'] = JSON.parse(apixpath);
+                        arr['data'] = JSON.parse(apidata);
                     }catch(e){
-                        return "toast://xpath数据异常";
+                        return "toast://data对象数据异常";
                     }
                 }
                 urls.push(arr);
-                /*
-                if(lx=="update"&&(apiurl!=data.url||apiname!=data.name||apiua!=data.ua||urltype!=data.type||apigroup!=data.group)){
-                    for(var i=0;i<datalist.length;i++){
-                        if(datalist[i].url==data.url){
-                            datalist.splice(i,1);
-                            break;
-                        }
-                    }
-                }
-                
-                if(urltype !=""){
-                    if(!datalist.some(item => item.url ==apiurl)){
-                        let arr  = { "name": apiname, "url": apiurl, "ua": apiua, "type": urltype, "group": apigroup };
-                        datalist.unshift(arr);
-                        writeFile(filepath, JSON.stringify(datalist));
-                        back(true);
-                        return "toast://已保存";
-                    }else{
-                        return "toast://已存在";
-                    }
-                }else{
-                    return "toast://暂不支持的api接口类型";
-                }*/
             }else if(getMyVar('addtype', '1')=="2"&&apiurls){
                 let list = apiurls.replace(/,|，/g,"#").split('\n');
                 for (var i in list) {
@@ -1350,25 +1327,6 @@ function jiekou(lx,data) {
                     if(urlgroup){arr['group'] = urlgroup}
                     urls.push(arr);
                 }
-                
-                /*
-                var urlnum = 0;
-                for (var i in urls) {
-                    let urlname = urls[i].split('#')[0];
-                    let urlurl = urls[i].split('#')[1];
-                    let urltype = urls[i].split('#')[2]||getapitype(urlurl);
-                    let urlgroup = urls[i].split('#')[3]||urltype;
-                    if(!datalist.some(item => item.url ==urlurl)&&urlname&&/^http/.test(urlurl)&&urltype){
-                        let arr  = { "name": urlname, "url": urlurl, "ua": apiua, "type": urltype, "group": urlgroup };
-                        datalist.push(arr);
-                        urlnum = urlnum + 1;
-                    }
-                }
-                if(urlnum>0){writeFile(filepath, JSON.stringify(datalist));}
-                
-                back(true);
-                return "toast://合计："+urls.length+"，保存："+urlnum;
-                */
             }else{
                 return "toast://无法保存，检查项目填写完整性";
             }
