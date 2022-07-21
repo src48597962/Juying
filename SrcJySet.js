@@ -1047,7 +1047,7 @@ function SRCSet() {
                 d.push({
                     title: grouplist[i]+'('+lists.length+')',
                     url: $('#noLoading#').lazyRule((guanlidata,lists)=>{
-                            if(datalist.length>0){
+                            if(lists.length>0){
                                 deleteItemByCls('guanlidatalist');
                                 let gldatalist = guanlidata(lists);
                                 addItemBefore('guanliloading', gldatalist);
