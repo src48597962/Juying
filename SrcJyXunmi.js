@@ -203,7 +203,7 @@ function xunmi(name,data) {
                     }
                     return {result:0, url:ssurl, apiurl:url_api};
                 } catch (e) {
-                    log(obj.name+'>'+e.message);
+                    //log(obj.name+'>'+e.message);
                     return {result:0, url:ssurl, apiurl:url_api};
                 }
             }else if(obj.type=="xpath"||obj.type=="biubiu"){
@@ -270,7 +270,7 @@ function xunmi(name,data) {
                         var ssvodurl = `jsondata.url+jsondata.sousuohouzhui+list.id+'.html'`;
                     }
                 } catch (e) {
-                    log(obj.name+'>'+e.message);
+                    //log(obj.name+'>'+e.message);
                     var list = [];
                 }
                 if(list.length>0){
