@@ -615,7 +615,7 @@ function xunmierji(type,ua) {
         }else{
             //网页
         }
-        var details1 = '导演：' + director.substring(0, director.length<12?director.length:12) + '主演：' + actor.substring(0, actor.length<12||dqnf==""?actor.length:12) +'\n'+ dqnf;
+        var details1 = '导演：' + director.substring(0, director.length<12?director.length:12) + '\n主演：' + actor.substring(0, actor.length<12||dqnf==""?actor.length:12) + dqnf;
         var details2 = remarks + '\n' + pubdate;
         var newconfig = { 详情1: details1, 详情2: details2, 图片: pic, 简介: desc, 线路: arts, 影片: conts, 标识: MY_URL };
         var libsfile = 'hiker://files/libs/' + md5(configfile) + '.js';
