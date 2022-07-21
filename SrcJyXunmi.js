@@ -581,7 +581,6 @@ function xunmierji(type,ua) {
                 var pubdate = pdfh(html.split(jsondata.zhuangtaiqian.replace(/\\/g,""))[1].split(jsondata.zhuangtaihou.replace(/\\/g,""))[0],"Text").split('/')[1] || "内详";
                 var pic = MY_PARAMS.pic || "";
                 getsm = "获取剧情简介juqingqian";
-                log(html.split(jsondata.juqingqian.replace(/\\/g,""))[1]);
                 var desc = pdfh(html.split(jsondata.juqingqian.replace(/\\/g,""))[1].split(jsondata.juqinghou.replace(/\\/g,""))[0],"Text") || '...';
                 getsm = "获取播放地址数组bfjiequshuzuqian";
 
