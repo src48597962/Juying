@@ -557,6 +557,42 @@ function SRCSet() {
                             if(jiekou[i].type==1){
                                 urls.push({ "name": jiekou[i].name, "url": jiekou[i].api})
                             }
+                            if(/^csp_XBiubiu/.test(jiekou[i].api)){
+                                try{
+                                    let biuhtml = fetch(jiekou[i].ext,{timeout:2000});
+                                    biuhtml = biuhtml.replace(reg, function(word) { 
+                                        return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
+                                    }).replace(/#.*?\n/g,"");
+                                    let biujson = JSON.parse(biuhtml);
+                                    let biudata = {};
+                                    biudata.url = biujson.url;
+                                    biudata.jiequshuzuqian = biujson.jiequshuzuqian;
+                                    biudata.jiequshuzuhou = biujson.jiequshuzuhou;
+                                    biudata.tupianqian = biujson.tupianqian;
+                                    biudata.tupianhou = biujson.tupianhou;
+                                    biudata.biaotiqian = biujson.biaotiqian;
+                                    biudata.biaotihou = biujson.biaotihou;
+                                    biudata.lianjieqian = biujson.lianjieqian;
+                                    biudata.lianjiehou = biujson.lianjiehou;
+                                    biudata.sousuoqian = biujson.sousuoqian;
+                                    biudata.sousuohou = biujson.sousuohou;
+                                    biudata.sousuohouzhui = biujson.sousuohouzhui;
+                                    biudata.ssmoshi = biujson.ssmoshi;
+                                    biudata.bfjiequshuzuqian = biujson.bfjiequshuzuqian;
+                                    biudata.bfjiequshuzuhou = biujson.bfjiequshuzuhou;
+                                    biudata.zhuangtaiqian = biujson.zhuangtaiqian;
+                                    biudata.zhuangtaihou = biujson.zhuangtaihou;
+                                    biudata.daoyanqian = biujson.daoyanqian;
+                                    biudata.daoyanhou = biujson.daoyanhou;
+                                    biudata.zhuyanqian = biujson.zhuyanqian;
+                                    biudata.zhuyanhou = biujson.zhuyanhou;
+                                    biudata.juqingqian = biujson.juqingqian;
+                                    biudata.juqinghou = biujson.juqinghou;
+                                    urls.push({ "name": jiekou[i].name, "url": jiekou[i].key, "type": "biubiu", "ua": "MOBILE_UA", "data": biudata})
+                                }catch(e){
+                                    //log(bbzidingyi[i].name + '>抓取失败>' + e.message)
+                                }
+                            }
                         }
                     }
                     var jknum = jiekousave(urls);
