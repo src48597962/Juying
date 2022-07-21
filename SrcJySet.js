@@ -1209,10 +1209,10 @@ function jiekou(lx,data) {
                 desc: "对象数据格式要求非常高\n大佬来偿试写接口呀",
                 extra: {
                     titleVisible: false,
-                    defaultValue: data&&data.data?data.data:getMyVar('apidata', ''),
+                    defaultValue: data&&data.data?JSON.stringify(data.data, null, "\t"):getMyVar('apidata', ''),
                     type: "textarea",
                     height: 8,
-                    onChange: 'putMyVar("apidata",input)'
+                    onChange: 'putMyVar("apidata",JSON.stringify(JSON.parse(input)))'
                 }
             });
         }
