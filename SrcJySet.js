@@ -469,9 +469,9 @@ function SRCSet() {
                                 biudata.zhuyanhou = bbzidingyi[i].zhuyanhou;
                                 biudata.juqingqian = bbzidingyi[i].juqingqian;
                                 biudata.juqinghou = bbzidingyi[i].juqinghou;
-                                urls.push({ "name": bbzidingyi[i].name, "url": bbzidingyi[i].url, "type": "biubiu", "ua": "MOBILE_UA", "data": biudata, "group": "新导入"})
+                                urls.push({ "name": bbzidingyi[i].name, "url": bbzidingyi[i].url, "type": "biubiu", "ua": "PC_UA", "data": biudata, "group": "新导入"})
                             }catch(e){
-                                log(bbzidingyi[i].name + '>抓取失败>' + e.message)
+                                //log(bbzidingyi[i].name + '>抓取失败>' + e.message)
                             }
                         }
                         var jknum = jiekousave(urls);
@@ -588,7 +588,7 @@ function SRCSet() {
                                     biudata.zhuyanhou = biujson.zhuyanhou;
                                     biudata.juqingqian = biujson.juqingqian;
                                     biudata.juqinghou = biujson.juqinghou;
-                                    urls.push({ "name": jiekou[i].name, "url": jiekou[i].key, "type": "biubiu", "ua": "MOBILE_UA", "data": biudata, "group": "新导入"})
+                                    urls.push({ "name": jiekou[i].name, "url": jiekou[i].key, "type": "biubiu", "ua": "PC_UA", "data": biudata, "group": "新导入"})
                                 }catch(e){
                                     //log(bbzidingyi[i].name + '>抓取失败>' + e.message)
                                 }
@@ -643,7 +643,7 @@ function SRCSet() {
                             eval(fetch(input,{timeout:2000}))
                             var urls= [];
                             for(let k in jyjiekou){
-                                let jyua = jyjiekou[k].ua||"MOBILE_UA";
+                                let jyua = jyjiekou[k].ua||"PC_UA";
                                 let jytype = /csp_biubiu_/.test(k)?"biubiu":"xpath"
                                 urls.push({"name":jyjiekou[k].name,"type":jytype,"ua":jyua,"url":k,"data":jyjiekou[k], "group": "新导入"})
                             }
