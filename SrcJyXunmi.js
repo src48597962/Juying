@@ -278,7 +278,7 @@ function xunmi(name,data) {
                         let search = list.map((list)=>{
                             let vodname = list.name;
                             if(vodname.indexOf(name)>-1){
-                                let vodpic = list.pic;
+                                let vodpic = list.pic.replace('/tu.php?tu=','');
                                 let voddesc = list.desc?list.desc:"";
                                 let appname = '‘‘’’<font color=#f13b66a>'+obj.name+'</font>';
                                 let vodurl = eval(ssvodurl);
