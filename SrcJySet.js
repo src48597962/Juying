@@ -467,7 +467,7 @@ function SRCSet() {
                                 biudata.daoyanhou = bbzidingyi[i].daoyanhou;
                                 biudata.zhuyanqian = bbzidingyi[i].zhuyanqian;
                                 biudata.zhuyanhou = bbzidingyi[i].zhuyanhou;
-                                biudata.juqingqian = bbzidingyi[i].juqingqianurl;
+                                biudata.juqingqian = bbzidingyi[i].juqingqian;
                                 biudata.juqinghou = bbzidingyi[i].juqinghou;
                                 urls.push({ "name": bbzidingyi[i].name, "url": bbzidingyi[i].url, "type": "biubiu", "ua": "MOBILE_UA", "data": biudata})
                             }catch(e){
