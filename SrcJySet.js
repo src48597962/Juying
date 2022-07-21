@@ -522,8 +522,8 @@ function SRCSet() {
                 col_type: "text_3"
             });
             d.push({
-                title: 'TVb导入',
-                url:$("","输入TVbox/beibei资源地址").input(() => {
+                title: 'TVBox导入',
+                url:$("","输入TVBox/beibei资源地址").input(() => {
                     try{
                         require(config.依赖.match(/https.*\//)[0] + 'SrcJySet.js');
                         var html = fetch(input,{timeout:2000});
@@ -659,6 +659,16 @@ function SRCSet() {
                             return "toast://导入完成，接口保存："+jknum;
                         }
                 }),
+                col_type: "text_3"
+            });
+            d.push({
+                title: 'TVBox订阅',
+                url: $(JYconfig['TVBoxDY']?JYconfig['TVBoxDY']:"","输入TVBox在线接口，在搜索时自动加载").input((JYconfig,cfgfile) => {
+                        JYconfig['TVBoxDY'] = input;
+                        writeFile(cfgfile, JSON.stringify(JYconfig));
+                        refreshPage(false);
+                        return 'toast://已保存';
+                    }, JYconfig, cfgfile),
                 col_type: "text_3"
             });
             d.push({
