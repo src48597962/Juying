@@ -1025,7 +1025,7 @@ function SRCSet() {
                 titleVisible: true
             }
         });
-        if(getMyVar('guanlicz','0')=="1"){
+        if(getMyVar('guanli', 'jk')=="jk"){
             let grouplist = datalist.map((list)=>{
                 return list.group||list.type;
             })
