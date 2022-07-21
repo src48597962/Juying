@@ -532,8 +532,7 @@ function SRCSet() {
                             var reg = /("([^\\\"]*(\\.)?)*")|('([^\\\']*(\\.)?)*')|(\/{2,}.*?(\r|\n|$))|(\/\*(\n|.)*?\*\/)/g;
                             html = html.replace(reg, function(word) { 
                                 return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
-                            }).replace(/#.*?\n/g,"");
-                            log(html)
+                            }).replace(/^.*#.*$/mg,"");
                             var data = JSON.parse(html);
                             var jiekou = data.sites;
                             var jiexi = data.parses;
@@ -552,7 +551,7 @@ function SRCSet() {
                         if(lx=="."){
                             urls.push({ "name": jiekou[i].split('@')[1].split('=')[0], "url": jiekou[i].split('@')[1].split('=')[1].split('#')[0], "group":jiekou[i].split('@')[0]})
                         }else{
-                            if(jiekou[i].api=="csp_AppYsV2"){
+                            if(/^csp_AppYs/.test(jiekou[i].api)){
                                 urls.push({ "name": jiekou[i].name, "url": jiekou[i].ext})
                             }
                             if(jiekou[i].type==1){
@@ -563,7 +562,7 @@ function SRCSet() {
                                     let biuhtml = fetch(jiekou[i].ext,{timeout:2000});
                                     biuhtml = biuhtml.replace(reg, function(word) { 
                                         return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
-                                    }).replace(/#.*?\n/g,"");
+                                    }).replace(/^.*#.*$/mg,"");
                                     let biujson = JSON.parse(biuhtml);
                                     let biudata = {};
                                     biudata.url = biujson.url;
@@ -1026,7 +1025,42 @@ function SRCSet() {
                 titleVisible: true
             }
         });
-        
+        if(getMyVar('guanlicz','0')=="1"){
+            let grouplist = datalist.map((list)=>{
+                return list.group||list.type;
+            })
+            //去重复
+            function uniq(array){
+                var temp = []; //一个新的临时数组
+                for(var i = 0; i < array.length; i++){
+                    if(temp.indexOf(array[i]) == -1){
+                        temp.push(array[i]);
+                    }
+                }
+                return temp;
+            }
+            grouplist = uniq(grouplist);
+            for(var i in grouplist){
+                var lists = datalist.filter(item => {
+                    return item.group==grouplist[i] || item.type==grouplist[i];
+                })
+                d.push({
+                    title: grouplist[i]+'('+lists.length+')',
+                    url: $('#noLoading#').lazyRule((guanlidata,lists)=>{
+                            if(datalist.length>0){
+                                deleteItemByCls('guanlidatalist');
+                                let gldatalist = guanlidata(lists);
+                                addItemBefore('guanliloading', gldatalist);
+                            }
+                            return "hiker://empty";
+                        },guanlidata,lists),
+                    col_type: "scroll_button",
+                    extra: {
+                        id: "grouplist"
+                    }
+                });
+            }
+        }
         let gldatalist = guanlidata(datalist);
         d = d.concat(gldatalist);
     }
