@@ -15,8 +15,70 @@ function xunmi(name,data) {
         }else{
             var datalist = [];
         }
-    }
+        try{
+            var dyhtml = fetchCache("http://home.jundie.top:81/666.json",48, { timeout:2000 });
+            var reg = /("([^\\\"]*(\\.)?)*")|('([^\\\']*(\\.)?)*')|(\/{2,}.*?(\r|\n|$))|(\/\*(\n|.)*?\*\/)/g;
+            dyhtml = dyhtml.replace(reg, function(word) { 
+                return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
+            }).replace(/^.*#.*$/mg,"");
+            var dydata = JSON.parse(dyhtml);
+            var dyjiekou = dydata.sites;
+            require(config.依赖.match(/https.*\//)[0] + 'SrcJySet.js');
+            showLoading('正在加载TVBox订阅接口')
+            for(var i in dyjiekou){
+                if(/^csp_AppYs/.test(dyjiekou[i].api)){
+                    let dytype = getapitype(dyjiekou[i].ext);
+                    if(dytype&&dyjiekou[i].name&&dyjiekou[i].ext){
+                        datalist.push({ "name": dyjiekou[i].name, "url": dyjiekou[i].ext, "ua":"MOBILE_UA", "type":dytype, "group": "TVBox订阅"})
+                    }
+                }
+                if(dyjiekou[i].type==1&&dyjiekou[i].name&&dyjiekou[i].api){
+                    datalist.push({ "name": dyjiekou[i].name, "url": dyjiekou[i].api, "ua":"MOBILE_UA", "type":"cms", "group": "TVBox订阅"})
+                }
+                if(/^csp_XBiubiu/.test(dyjiekou[i].api)){
+                    try{
+                        let biuhtml = fetchCache(dyjiekou[i].ext,48,{timeout:2000});
+                        biuhtml = biuhtml.replace(reg, function(word) { 
+                            return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
+                        }).replace(/^.*#.*$/mg,"");
+                        let biujson = JSON.parse(biuhtml);
+                        let biudata = {};
+                        biudata.url = biujson.url;
+                        biudata.jiequshuzuqian = biujson.jiequshuzuqian;
+                        biudata.jiequshuzuhou = biujson.jiequshuzuhou;
+                        biudata.tupianqian = biujson.tupianqian;
+                        biudata.tupianhou = biujson.tupianhou;
+                        biudata.biaotiqian = biujson.biaotiqian;
+                        biudata.biaotihou = biujson.biaotihou;
+                        biudata.lianjieqian = biujson.lianjieqian;
+                        biudata.lianjiehou = biujson.lianjiehou;
+                        biudata.sousuoqian = biujson.sousuoqian;
+                        biudata.sousuohou = biujson.sousuohou;
+                        biudata.sousuohouzhui = biujson.sousuohouzhui;
+                        biudata.ssmoshi = biujson.ssmoshi;
+                        biudata.bfjiequshuzuqian = biujson.bfjiequshuzuqian;
+                        biudata.bfjiequshuzuhou = biujson.bfjiequshuzuhou;
+                        biudata.zhuangtaiqian = biujson.zhuangtaiqian;
+                        biudata.zhuangtaihou = biujson.zhuangtaihou;
+                        biudata.daoyanqian = biujson.daoyanqian;
+                        biudata.daoyanhou = biujson.daoyanhou;
+                        biudata.zhuyanqian = biujson.zhuyanqian;
+                        biudata.zhuyanhou = biujson.zhuyanhou;
+                        biudata.juqingqian = biujson.juqingqian;
+                        biudata.juqinghou = biujson.juqinghou;
+                        datalist.push({ "name": dyjiekou[i].name, "url": dyjiekou[i].key, "type": "biubiu", "ua": "PC_UA", "data": biudata, "group": "TVBox订阅"})
+                    }catch(e){
+                        //log(bbzidingyi[i].name + '>抓取失败>' + e.message)
+                    }
+                }
+            }
 
+        }catch(e){
+            log(e.message)
+        }
+        hideLoading();
+    }
+    
     var count = datalist.length;
 
     var d = [];
