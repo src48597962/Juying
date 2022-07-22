@@ -542,9 +542,10 @@ function SRCSet() {
                 url:$("","输入TVBox/beibei资源地址").input(() => {
                     try{
                         require(config.依赖.match(/https.*\//)[0] + 'SrcJySet.js');
+                        if(/\/storage\/emulated\//.test(input)){input = "file://" + input}
                         var html = fetch(input,{timeout:2000});
                         log(html)
-                        if(!/https:\/\/i.*memory.coding.net/.test(input)||/\/storage\/emulated\/0\//.test(input)){
+                        if(!/https:\/\/i.*memory.coding.net/.test(input)||/^file:/.test(input)){
                             var lx ="TVb";
                             var reg = /("([^\\\"]*(\\.)?)*")|('([^\\\']*(\\.)?)*')|(\/{2,}.*?(\r|\n|$))|(\/\*(\n|.)*?\*\/)/g;
                             html = html.replace(reg, function(word) { 
