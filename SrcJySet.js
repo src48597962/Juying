@@ -543,7 +543,8 @@ function SRCSet() {
                     try{
                         require(config.依赖.match(/https.*\//)[0] + 'SrcJySet.js');
                         var html = fetch(input,{timeout:2000});
-                        if(!/https:\/\/i.*memory.coding.net/.test(input)){
+                        log(html)
+                        if(!/https:\/\/i.*memory.coding.net/.test(input)||/\/storage\/emulated\/0\//.test(input)){
                             var lx ="TVb";
                             var reg = /("([^\\\"]*(\\.)?)*")|('([^\\\']*(\\.)?)*')|(\/{2,}.*?(\r|\n|$))|(\/\*(\n|.)*?\*\/)/g;
                             html = html.replace(reg, function(word) { 
@@ -551,6 +552,7 @@ function SRCSet() {
                             }).replace(/^.*#.*$/mg,"");
                             var data = JSON.parse(html);
                             var jiekou = data.sites;
+                            log(jiekou)
                             var jiexi = data.parses;
                         }else{
                             var lx =".";
