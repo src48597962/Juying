@@ -544,7 +544,6 @@ function SRCSet() {
                         require(config.依赖.match(/https.*\//)[0] + 'SrcJySet.js');
                         if(/\/storage\/emulated\//.test(input)){input = "file://" + input}
                         var html = fetch(input,{timeout:2000});
-                        log(html)
                         if(!/https:\/\/i.*memory.coding.net/.test(input)||/^file:/.test(input)){
                             var lx ="TVb";
                             var reg = /("([^\\\"]*(\\.)?)*")|('([^\\\']*(\\.)?)*')|(\/{2,}.*?(\r|\n|$))|(\/\*(\n|.)*?\*\/)/g;
@@ -553,7 +552,6 @@ function SRCSet() {
                             }).replace(/^.*#.*$/mg,"");
                             var data = JSON.parse(html);
                             var jiekou = data.sites;
-                            log(jiekou)
                             var jiexi = data.parses;
                         }else{
                             var lx =".";
@@ -578,7 +576,12 @@ function SRCSet() {
                             }
                             if(/^csp_XBiubiu/.test(jiekou[i].api)){
                                 try{
-                                    let biuhtml = fetch(jiekou[i].ext,{timeout:2000});
+                                    let urlfile = jiekou[i].ext;
+                                    if(/^clan:/.test(urlfile)){
+                                        urlfile = urlfile.replace("clan://TVBox/",input.match(/file.*\//)[0]);
+                                        log(urlfile)
+                                    }
+                                    let biuhtml = fetch(urlfile,{timeout:2000});
                                     biuhtml = biuhtml.replace(reg, function(word) { 
                                         return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
                                     }).replace(/^.*#.*$/mg,"");
