@@ -54,9 +54,9 @@ function xunmi(name,data) {
                                 urlfile = urlfile.replace("clan://TVBox/",TVBoxDY.match(/file.*\//)[0]);
                             }
                             if(/^http/.test(urlfile)){
-                                let biuhtml = fetchCache(urlfile,48,{timeout:2000});
+                                var biuhtml = fetchCache(urlfile,48,{timeout:2000});
                             }else{
-                                let biuhtml = fetch(urlfile);
+                                var biuhtml = fetch(urlfile);
                             }
                             biuhtml = biuhtml.replace(reg, function(word) { 
                                 return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
@@ -88,7 +88,7 @@ function xunmi(name,data) {
                             biudata.juqinghou = biujson.juqinghou;
                             datalist.push({ "name": dyjiekou[i].name, "url": dyjiekou[i].key, "type": "biubiu", "ua": "PC_UA", "data": biudata, "group": "TVBox订阅"})
                         }catch(e){
-                            //log(bbzidingyi[i].name + '>抓取失败>' + e.message)
+                            //log(e.message)
                         }
                     }
                 }
