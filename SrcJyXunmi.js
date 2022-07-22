@@ -22,7 +22,13 @@ function xunmi(name,data) {
                 eval("var JYconfig=" + Juyingcfg+ ";");
             }
             if(JYconfig.TVBoxDY){
-                var dyhtml = fetchCache(JYconfig.TVBoxDY,48, { timeout:2000 });
+                let TVBoxDY = JYconfig.TVBoxDY;
+                if(/\/storage\/emulated\//.test(TVBoxDY)){TVBoxDY = "file://" + TVBoxDY}
+                if(/^http/.test(TVBoxDY)){
+                    var dyhtml = fetchCache(TVBoxDY,48, { timeout:2000 });
+                }else{
+                    var dyhtml = fetch(TVBoxDY);
+                }
                 var reg = /("([^\\\"]*(\\.)?)*")|('([^\\\']*(\\.)?)*')|(\/{2,}.*?(\r|\n|$))|(\/\*(\n|.)*?\*\/)/g;
                 dyhtml = dyhtml.replace(reg, function(word) { 
                     return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
@@ -43,7 +49,15 @@ function xunmi(name,data) {
                     }
                     if(/^csp_XBiubiu/.test(dyjiekou[i].api)){
                         try{
-                            let biuhtml = fetchCache(dyjiekou[i].ext,48,{timeout:2000});
+                            let urlfile = dyjiekou[i].ext;
+                            if(/^clan:/.test(urlfile)){
+                                urlfile = urlfile.replace("clan://TVBox/",TVBoxDY.match(/file.*\//)[0]);
+                            }
+                            if(/^http/.test(urlfile)){
+                                let biuhtml = fetchCache(urlfile,48,{timeout:2000});
+                            }else{
+                                let biuhtml = fetch(urlfile);
+                            }
                             biuhtml = biuhtml.replace(reg, function(word) { 
                                 return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
                             }).replace(/^.*#.*$/mg,"");
