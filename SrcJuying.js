@@ -604,7 +604,7 @@ function sousuo() {
     } catch (e) { }
     if(fileExist('hiker://files/rules/Src/Juying/jiekou.json')){
         try{
-            let name = MY_URL.match(/query(.*?)&/)[1];
+            let name = encodeURIComponent(MY_URL.match(/query(.*?)&/)[1]);
             d.push({
                 title: "点击调用聚影接口进行聚合搜索",
                 url: $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
