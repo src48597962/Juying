@@ -410,6 +410,22 @@ function SRCSet() {
                 col_type: "text_3"
             });
             d.push({
+                title: JYconfig['sousuoms']!=2?'视界搜索':'聚合搜索',
+                url: $('#noLoading#').lazyRule((JYconfig,cfgfile) => {
+                        if(JYconfig['sousuoms'] == 2){
+                            JYconfig['sousuoms'] = 1;
+                            var sm = "视界搜索改为调用原始搜索搜狗";
+                        }else{
+                            JYconfig['sousuoms'] = 2;
+                            var sm = "视界搜索改为调用聚影接口聚合搜索";
+                        }
+                        writeFile(cfgfile, JSON.stringify(JYconfig));
+                        refreshPage(false);
+                        return 'toast://' + sm + '，返回主页后刷新生效';
+                    }, JYconfig, cfgfile),
+                col_type: "text_3"
+            });
+            d.push({
                 title: '其他资源',
                 col_type: "rich_text"
             });
