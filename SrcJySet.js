@@ -1011,18 +1011,22 @@ function SRCSet() {
                 for (var i = 0; i < 6; i++) {
                     num += Math.floor(Math.random() * 10);
                 }
-                var pasteurl = JSON.parse(request('https://netcut.cn/api/note/create/', {
-                    headers: { 'Referer': 'https://netcut.cn/' },
-                    body: 'note_name=Juying'+num+'&note_content='+base64Encode(text)+'&note_pwd=0&expire_time=3600',
-                    method: 'POST'
-                })).data.note_id || "";
+                try{
+                    var pasteurl = JSON.parse(request('https://netcut.cn/api/note/create/', {
+                        headers: { 'Referer': 'https://netcut.cn/' },
+                        body: 'note_name=Juying'+num+'&note_content='+base64Encode(text)+'&note_pwd=0&expire_time=3600',
+                        method: 'POST'
+                    })).data.note_id || "";
+                }catch(e){
+                    var pasteurl = "";
+                }
 
                 if(pasteurl){
                     let code = sm+'￥'+aesEncode('Juying', pasteurl)+'￥1小时内有效';
                     copy(code);
                     return "toast://"+sm2;
                 }else{
-                    return "toast://分享失败，剪粘板异常";
+                    return "toast://分享失败，剪粘板或网络异常";
                 }
             }),
         img: "https://lanmeiguojiang.com/tubiao/more/3.png",
