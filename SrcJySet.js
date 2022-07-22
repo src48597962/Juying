@@ -579,7 +579,6 @@ function SRCSet() {
                                     let urlfile = jiekou[i].ext;
                                     if(/^clan:/.test(urlfile)){
                                         urlfile = urlfile.replace("clan://TVBox/",input.match(/file.*\//)[0]);
-                                        log(urlfile)
                                     }
                                     let biuhtml = fetch(urlfile,{timeout:2000});
                                     biuhtml = biuhtml.replace(reg, function(word) { 
