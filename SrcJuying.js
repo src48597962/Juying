@@ -583,30 +583,37 @@ function sousuo2() {
 //搜索
 function sousuo() {
     var d = [];
-    var html = getResCode();
-    try {
-        var list = JSON.parse(html.match(/INITIAL_STATE.*?({.*});/)[1]).result.longVideo.results;
-        for (var i = 0; i < list.length; i++) {
-            if (list[i].play.item_list){
-                d.push({
-                    title: list[i].name.replace(/|/g,''),
-                    url: 'hiker://empty##https://v.sogou.com' + list[i].tiny_url + "#immersiveTheme#",
-                    desc: list[i].list_category.join(','),
-                    content: list[i].introduction,
-                    pic_url: list[i].v_picurl,
-                    extra: {
-                        pic: list[i].v_picurl,
-                        name: list[i].name.replace(/|/g,'')
-                    }
-                })
+    var cfgfile = "hiker://files/rules/Src/Juying/config.json";
+    var Juyingcfg=fetch(cfgfile);
+    if(Juyingcfg != ""){
+        eval("var JYconfig=" + Juyingcfg+ ";");
+    }
+    if(JYconfig.sousuoms!=2){
+        var html = getResCode();
+        try {
+            var list = JSON.parse(html.match(/INITIAL_STATE.*?({.*});/)[1]).result.longVideo.results;
+            for (var i = 0; i < list.length; i++) {
+                if (list[i].play.item_list){
+                    d.push({
+                        title: list[i].name.replace(/|/g,''),
+                        url: 'hiker://empty##https://v.sogou.com' + list[i].tiny_url + "#immersiveTheme#",
+                        desc: list[i].list_category.join(','),
+                        content: list[i].introduction,
+                        pic_url: list[i].v_picurl,
+                        extra: {
+                            pic: list[i].v_picurl,
+                            name: list[i].name.replace(/|/g,'')
+                        }
+                    })
+                }
             }
-        }
-    } catch (e) { }
+        } catch (e) { }
+    }
     if(fileExist('hiker://files/rules/Src/Juying/jiekou.json')){
         try{
-            let name = encodeURIComponent(MY_URL.match(/query(.*?)&/)[1]);
+            let name = MY_URL.match(/query=(.*?)&/)[1];
             d.push({
-                title: "点击调用聚影接口进行聚合搜索",
+                title: "调用聚影接口聚合搜索>"+name,
                 url: $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
                     require(config.依赖.match(/https.*\//)[0] + 'SrcJyXunmi.js');
                     xunmi(name);
