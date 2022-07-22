@@ -4,7 +4,7 @@ function xunmi(name,data) {
         clearMyVar('moviemore');
     }));
     putMyVar('moviemore','1');
-    
+    setPageTitle('聚合搜索>'+name);
     if(data){
         var datalist = data;
     }else{
