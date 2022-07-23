@@ -1014,7 +1014,11 @@ var SrcParseS = {
                     log('进入嗅探解析列表：' + x5namelist)
                 }
                 if(parseStr){
-                    return this.嗅探(parseStr.parse+vipUrl);
+                    if(x5jxlist.length>0){
+                        return this.嗅探(parseStr.parse+vipUrl);
+                    }else{
+                        return "toast://解析失败";
+                    }
                 }else{
                     return this.聚嗅(vipUrl, x5jxlist);
                 }
