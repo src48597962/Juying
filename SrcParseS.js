@@ -509,6 +509,9 @@ var SrcParseS = {
         }else if (/magnet|torrent/.test(vipUrl)) {
             if(printlog==1){log("磁力/BT视频地址，由视界解析")}; 
             return vipUrl;
+        }else if (/\/share\//.test(vipUrl)) {
+            if(printlog==1){log("资源网云播地址")}; 
+            return this.嗅探(vipUrl);
         }else{
             var from = "";
             if(vipUrl.indexOf('-yanaifei.html') != -1){
@@ -700,53 +703,6 @@ var SrcParseS = {
                             x5 = 1;
                         }
                     }else{
-                        /*
-                        function testurl(url,name){
-                            try {
-                                if (/\.m3u8/.test(url)) {
-                                    var urlcode = JSON.parse(fetch(url,{withStatusCode:true,timeout:2000}));
-                                    if(urlcode.statusCode!=200){
-                                        log(name+'>播放地址疑似失效或网络无法访问，不信去验证一下>'+url);
-                                        return 0;
-                                    }else{
-                                        var tstime = urlcode.body.match(/#EXT-X-TARGETDURATION:(.*?)\n/)[1];
-                                        var urltss = urlcode.body.replace(/#.*?\n/g,'').replace('#EXT-X-ENDLIST','').split('\n');
-                                        if(parseInt(tstime)*parseInt(urltss.length)<120){
-                                            log(name+'>播放地址疑似跳舞小姐姐或防盗小视频，不信去验证一下>'+url);
-                                            return 0;
-                                        }else{
-                                            var urlts = urltss[0];
-                                            if(!/^http/.test(urlts)){
-                                                let http = urlcode.url.match(/http.*\//)[0];
-                                                urlts = http + urlts;
-                                            }    
-                                            var tscode = JSON.parse(fetch(urlts,{onlyHeaders:true,timeout:2000}));
-                                            if(tscode.statusCode!=200){
-                                                log(name+'>ts段地址疑似失效或网络无法访问，不信去验证一下>'+url);
-                                                return 0;
-                                            }
-                                        }
-                                    }
-                                    //log('test>播放地址连接正常');
-                                }else if (/\.mp4/.test(url)) {
-                                    var urlheader = JSON.parse(fetch(url,{onlyHeaders:true,timeout:2000}));
-                                    if(urlheader.statusCode!=200){
-                                        log(name+'>播放地址疑似失效或网络无法访问，不信去验证一下>'+url);
-                                        return 0;
-                                    }else{
-                                        var filelength = urlheader.headers['content-length'];
-                                        if(parseInt(filelength[0])/1024/1024 < 80){
-                                            log(name+'>播放地址疑似跳舞小姐姐或防盗小视频，不信去验证一下>'+url);
-                                            return 0;
-                                        }
-                                    }
-                                }
-                                return 1;
-                            } catch (e) {
-                                log(name+'>错误：探测超时未拦截，有可能是失败的')
-                                return 1;
-                            }
-                        }*/
                         if(obj.testurl(rurl,obj.ulist.name)==0){
                             rurl = "";
                         }
