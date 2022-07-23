@@ -261,6 +261,9 @@ function xunmi(name,data) {
                                     if(/^\/upload|^upload/.test(vodpic)){
                                         vodpic = vodurl.match(/http(s)?:\/\/(.*?)\//)[0] + vodpic;
                                     }
+                                    if(/^\/\//.test(vodpic)){
+                                        vodpic = "https" + vodpic;
+                                    }
                                     return {
                                         title: vodname,
                                         desc: voddesc + '\n\n' + appname + ' ('+obj.type+')'+(obj.group?' ['+obj.group+']':''),
@@ -371,6 +374,9 @@ function xunmi(name,data) {
                                 let vodurl = eval(ssvodurl);
                                 if(/^\/upload|^upload/.test(vodpic)){
                                     vodpic = vodurl.match(/http(s)?:\/\/(.*?)\//)[0] + vodpic;
+                                }
+                                if(/^\/\//.test(vodpic)){
+                                    vodpic = "https" + vodpic;
                                 }
                                 return {
                                     title: vodname,
