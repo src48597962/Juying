@@ -257,10 +257,14 @@ function xunmi(name,data) {
                                     let voddesc = list.vod_remarks||list.state||"";
                                     let appname = '‘‘’’<font color=#f13b66a>'+obj.name+'</font>';
                                     let vodurl = list.vod_id?url + list.vod_id:list.nextlink;
+                                    vodpic = vodpic?vodpic.replace('/img.php?url=','').replace('/tu.php?tu=','') + "@Referer=":"https://www.xawqxh.net/mxtheme/images/loading.gif";
+                                    if(/^\/upload|^upload/.test(vodpic)){
+                                        vodpic = vodurl.match(/http.*\//)[0] + vodpic;
+                                    }
                                     return {
                                         title: vodname,
                                         desc: voddesc + '\n\n' + appname + ' ('+obj.type+')'+(obj.group?' ['+obj.group+']':''),
-                                        pic_url: vodpic?vodpic + "@Referer=":"https://www.xawqxh.net/mxtheme/images/loading.gif",
+                                        pic_url: vodpic,
                                         url: $("hiker://empty##" + vodurl + "#immersiveTheme#").rule((type,ua) => {
                                                 require(config.依赖.match(/https.*\//)[0] + 'SrcJyXunmi.js');
                                                 xunmierji(type,ua)
@@ -361,10 +365,13 @@ function xunmi(name,data) {
                         let search = list.map((list)=>{
                             let vodname = list.name;
                             if(vodname.indexOf(name)>-1){
-                                let vodpic = list.pic.replace('/tu.php?tu=','');
+                                let vodpic = list.pic.replace('/tu.php?tu=','').replace('/img.php?url=','');
                                 let voddesc = list.desc?list.desc:"";
                                 let appname = '‘‘’’<font color=#f13b66a>'+obj.name+'</font>';
                                 let vodurl = eval(ssvodurl);
+                                if(/^\/upload|^upload/.test(vodpic)){
+                                    vodpic = vodurl.match(/http.*\//)[0] + vodpic;
+                                }
                                 return {
                                     title: vodname,
                                     desc: voddesc + '\n\n' + appname + ' ('+obj.type+')'+(obj.group?' ['+obj.group+']':''),
@@ -581,7 +588,7 @@ function xunmierji(type,ua) {
             var pic = MY_PARAMS.pic || json.vod_pic;
             var desc = json.vod_blurb || '...';
             if(area){ dqnf = '\n地区：' + area}
-            if(year){ dqnf = '   年代：' + year}
+            if(year){ dqnf = dqnf + '   年代：' + year}
         }else if (/iptv/.test(type)) {
             var actor = html.actor.join(",") || "内详";
             var director = html.director.join(",") || "内详";
@@ -594,7 +601,7 @@ function xunmierji(type,ua) {
             var arts = html.videolist;
             var conts = arts;
             if(area){ dqnf = '\n地区：' + area}
-            if(year){ dqnf = '   年代：' + year}
+            if(year){ dqnf = dqnf + '   年代：' + year}
         }else if (/xpath/.test(type)) {
             try{
                 getsm = "获取传递数据";
@@ -636,7 +643,7 @@ function xunmierji(type,ua) {
                 getsm = "获取简介dtDesc";
                 var desc = String(xpath(html, jsondata.dtNode+jsondata.dtDesc)).replace(jsondata.filter?eval(jsondata.filter):"","").replace(/&ldquo;/g,'“').replace(/&rdquo;/g,'”') || '...';
                 if(area){ dqnf = '\n地区：' + area}
-                if(year){ dqnf = '   年代：' + year}
+                if(year){ dqnf = dqnf + '   年代：' + year}
             }catch(e){
                 var actor = actor||"抓取失败";
                 var director = director||"";
