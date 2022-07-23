@@ -432,7 +432,7 @@ function erji() {
         if (getMyVar('islazy') == "0" || getMyVar('SrcQJJX', '1') == "2") {//调用模板自带嗅探
             if (isAPP == 0) {
                 var DTJX = $("").lazyRule(() => {
-                    require(config.依赖);
+                    require(config.依赖.match(/https.*\//)[0] + 'SrcParseS.js');
                     return SrcParseS.嗅探(input);
                 });
             } else {
