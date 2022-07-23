@@ -694,7 +694,7 @@ var SrcParseS = {
                     }
                     var x5 = 0;
                     if(rurl == ""){
-                        if(!/404 /.test(gethtml)){
+                        if(!/404 /.test(gethtml)&&obj.ulist.parse.indexOf('key=')==-1){
                             if(x5jxlist.length<=5){
                                 x5jxlist.push(obj.ulist.parse);
                                 if(printlog==1){log(obj.ulist.name + '>加入x5嗅探列表');}
