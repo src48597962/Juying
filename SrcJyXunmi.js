@@ -259,7 +259,7 @@ function xunmi(name,data) {
                                     let vodurl = list.vod_id?url + list.vod_id:list.nextlink;
                                     vodpic = vodpic?vodpic.replace('/img.php?url=','').replace('/tu.php?tu=','') + "@Referer=":"https://www.xawqxh.net/mxtheme/images/loading.gif";
                                     if(/^\/upload|^upload/.test(vodpic)){
-                                        vodpic = vodurl.match(/http.*\//)[0] + vodpic;
+                                        vodpic = vodurl.match(/http(s)?:\/\/(.*?)\//)[0] + vodpic;
                                     }
                                     return {
                                         title: vodname,
@@ -370,7 +370,7 @@ function xunmi(name,data) {
                                 let appname = '‘‘’’<font color=#f13b66a>'+obj.name+'</font>';
                                 let vodurl = eval(ssvodurl);
                                 if(/^\/upload|^upload/.test(vodpic)){
-                                    vodpic = vodurl.match(/http.*\//)[0] + vodpic;
+                                    vodpic = vodurl.match(/http(s)?:\/\/(.*?)\//)[0] + vodpic;
                                 }
                                 return {
                                     title: vodname,
