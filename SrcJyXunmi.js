@@ -1,10 +1,22 @@
 //寻觅片源
 function xunmi(name,data) {
+    setPageTitle('聚搜>'+name);
     addListener("onClose", $.toString(() => {
         clearMyVar('moviemore');
+        clearMyVar('xunminum');
+        clearMyVar('xunmitimeout');
+        clearMyVar('starttask');
+        clearMyVar('stoptask');
     }));
     putMyVar('moviemore','1');
-    setPageTitle('聚搜>'+name);
+    var cfgfile = "hiker://files/rules/Src/Juying/config.json";
+    var Juyingcfg=fetch(cfgfile);
+    if(Juyingcfg != ""){
+        eval("var JYconfig=" + Juyingcfg+ ";");
+        putMyVar('xunminum',JYconfig['xunminum']?JYconfig['xunminum']:"10");
+        putMyVar('xunmitimeout',JYconfig['xunmitimeout']?JYconfig['xunmitimeout']:"5");
+
+    }
     if(data){
         var datalist = data;
     }else{
@@ -16,11 +28,6 @@ function xunmi(name,data) {
             var datalist = [];
         }
         try{
-            var cfgfile = "hiker://files/rules/Src/Juying/config.json";
-            var Juyingcfg=fetch(cfgfile);
-            if(Juyingcfg != ""){
-                eval("var JYconfig=" + Juyingcfg+ ";");
-            }
             if(JYconfig.TVBoxDY){
                 let TVBoxDY = JYconfig.TVBoxDY;
                 if(/\/storage\/emulated\//.test(TVBoxDY)){TVBoxDY = "file://" + TVBoxDY}
@@ -124,7 +131,7 @@ function xunmi(name,data) {
             title: grouplist[i]+'('+lists.length+')',
             url: $('#noLoading#').lazyRule((bess,datalist,name,count)=>{
                     if(getMyVar("starttask","0")=="1"){putMyVar("stoptask","1");}
-                    for (let i = 0; i < 5; i++) {
+                    for (let i = 0; i < parseInt(getMyVar("xunmitimeout","5"))+1; i++) {
                         if(getMyVar("starttask","0")=="0"){
                             break;
                         }
@@ -164,15 +171,8 @@ function xunmi(name,data) {
         var beerrors = [];
         var success = 0;
         var num = 0;
-        var cfgfile = "hiker://files/rules/Src/Juying/config.json";
-        var Juyingcfg=fetch(cfgfile);
-        if(Juyingcfg != ""){
-            eval("var JYconfig=" + Juyingcfg+ ";");
-            var xunminum = JYconfig['xunminum'] || 10;
-            var xunmitimeout = JYconfig['xunmitimeout'] || 5;
-        }else{
-            var xunmitimeout = 5;
-        }
+        var xunminum = parseInt(getMyVar("xunminum","10"));
+        var xunmitimeout = parseInt(getMyVar("xunmitimeout","5"));
         var task = function(obj) {
             let url_api = obj.url;
             if (obj.type=="v1") {
