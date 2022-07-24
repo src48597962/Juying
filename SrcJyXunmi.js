@@ -4,7 +4,7 @@ function xunmi(name,data) {
         clearMyVar('moviemore');
     }));
     putMyVar('moviemore','1');
-    setPageTitle('聚合搜索>'+name);
+    setPageTitle('聚搜>'+name);
     if(data){
         var datalist = data;
     }else{
@@ -123,6 +123,15 @@ function xunmi(name,data) {
         d.push({
             title: grouplist[i]+'('+lists.length+')',
             url: $('#noLoading#').lazyRule((bess,datalist,name,count)=>{
+                    putMyVar("stoptask","1");
+                    for (let i = 0; i < 5; i++) {
+                        if(getMyVar("starttask","0")=="0"){
+                            break;
+                        }
+                        showLoading('等待之前的线程结束');
+                        java.lang.Thread.sleep(1000);
+                    }
+                    hideLoading();
                     let beresults = [];
                     deleteItemByCls('xunmilist');
                     bess(datalist,beresults,name,count);
@@ -447,9 +456,11 @@ function xunmi(name,data) {
                     }
                 });
                 
-                if (success>=xunminum) {
+                if (success>=xunminum||getMyVar("stoptask","0")=="1") {
                     //toast("我主动中断了");
                     //log("√线程中止");
+                    putMyVar("starttask","0");
+                    putMyVar("stoptask","0");
                     return "break";
                 }
                 if(error){log(id+"-错误信息："+error);}
@@ -503,6 +514,7 @@ function xunmi(name,data) {
                         }
                     }
                     //var arr3 = datalist.filter(list => !beresults.includes(list.url));
+                    putMyVar("starttask","1");
                     bess(datalist,beresults,name,count);
                     return "hiker://empty";
                 },bess,datalist,beresults,name,count),
@@ -512,7 +524,10 @@ function xunmi(name,data) {
             }
         });
     }
-    if(count>0){bess(datalist,beresults,name,count);}
+    if(count>0){
+        putMyVar("starttask","1");
+        bess(datalist,beresults,name,count);
+    }
 }
 
 function xunmierji(type,ua) {
