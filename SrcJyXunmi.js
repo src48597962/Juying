@@ -276,6 +276,7 @@ function xunmi(name,data) {
                             let search = list.map((list)=>{
                                 let vodname = list.vod_name||list.title;
                                 if(vodname.indexOf(name)>-1){
+                                    if(vodname!=name){vodname = vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>')}
                                     let vodpic = list.vod_pic||list.pic;
                                     let voddesc = list.vod_remarks||list.state||"";
                                     let appname = '‘‘’’<font color=#f13b66a>'+obj.name+'</font>';
