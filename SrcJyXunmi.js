@@ -134,6 +134,7 @@ function xunmi(name,data) {
                     hideLoading();
                     let beresults = [];
                     deleteItemByCls('xunmilist');
+                    putMyVar("starttask","1");
                     bess(datalist,beresults,name,count);
                     return'hiker://empty';
                 },bess,lists,name,lists.length),
