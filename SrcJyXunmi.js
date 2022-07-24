@@ -7,6 +7,7 @@ function xunmi(name,data) {
         clearMyVar('xunmitimeout');
         clearMyVar('starttask');
         clearMyVar('stoptask');
+        clearMyVar('groupmenu');
     }));
     putMyVar('moviemore','1');
     var cfgfile = "hiker://files/rules/Src/Juying/config.json";
@@ -127,9 +128,21 @@ function xunmi(name,data) {
         var lists = datalist.filter(item => {
             return item.group==grouplist[i] || item.type==grouplist[i];
         })
+        let groupname = grouplist[i]+'('+lists.length+')';
+        let groupmenu = getMyVar('groupmenu')?getMyVar('groupmenu').split(','):[];
+        groupmenu.push(groupname);
+        putMyVar('groupmenu',groupmenu.join(','));
         d.push({
-            title: grouplist[i]+'('+lists.length+')',
-            url: $('#noLoading#').lazyRule((bess,datalist,name,count)=>{
+            title: groupname,
+            url: $('#noLoading#').lazyRule((bess,datalist,name,count,groupname)=>{
+                    let groupmenu = getMyVar('groupmenu')?getMyVar('groupmenu').split(','):[];
+                    for(let i in groupmenu){
+                        if(groupmenu[i]==groupname){
+                            updateItem(groupname,{title:'‘‘’’<span style="color:#f13b66a">'+groupmenu[i]})
+                        }else{
+                            updateItem(groupmenu[i],{title:groupmenu[i]})
+                        }
+                    }
                     if(getMyVar("starttask","0")=="1"){putMyVar("stoptask","1");}
                     let waittime = parseInt(getMyVar("xunmitimeout","5"))+1;
                     for (let i = 0; i < waittime; i++) {
@@ -145,10 +158,10 @@ function xunmi(name,data) {
                     putMyVar("starttask","1");
                     bess(datalist,beresults,name,count);
                     return'hiker://empty';
-                },bess,lists,name,lists.length),
+                },bess,lists,name,lists.length,groupname),
             col_type: "scroll_button",
             extra: {
-                id: "grouplist"
+                id: groupname
             }
         });
     }
