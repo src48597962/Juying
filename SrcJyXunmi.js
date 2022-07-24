@@ -136,7 +136,7 @@ function xunmi(name,data) {
                         if(getMyVar("starttask","0")=="0"){
                             break;
                         }
-                        showLoading('等待'+(waittime-i)+'s后上次线程结束');
+                        showLoading('等待上次线程结束，'+(waittime-i-1)+'s');
                         java.lang.Thread.sleep(1000);
                     }
                     hideLoading();
