@@ -170,7 +170,6 @@ function xunmi(name,data) {
     function bess(datalist,beresults,name,count) {
         var beerrors = [];
         var success = 0;
-        var num = 0;
         var xunminum = parseInt(getMyVar("xunminum","10"));
         var xunmitimeout = parseInt(getMyVar("xunmitimeout","5"));
         var task = function(obj) {
@@ -438,7 +437,6 @@ function xunmi(name,data) {
         
         be(Jklist, {
             func: function(obj, id, error, taskResult) {
-                num = num + 1;
                 let i = taskResult.result;
                 if(i==1){
                     success = success + i;
@@ -457,7 +455,7 @@ function xunmi(name,data) {
                     }
                 });
                 if(error){log(id+"-错误信息："+error);}
-                if (success>=xunminum||success>=obj.results.length||getMyVar("stoptask","0")=="1") {
+                if (success>=xunminum||obj.results.length==count||getMyVar("stoptask","0")=="1") {
                     //toast("我主动中断了");
                     //log("√线程中止");
                     putMyVar("starttask","0");
