@@ -131,11 +131,12 @@ function xunmi(name,data) {
             title: grouplist[i]+'('+lists.length+')',
             url: $('#noLoading#').lazyRule((bess,datalist,name,count)=>{
                     if(getMyVar("starttask","0")=="1"){putMyVar("stoptask","1");}
-                    for (let i = 0; i < parseInt(getMyVar("xunmitimeout","5"))+1; i++) {
+                    let waittime = parseInt(getMyVar("xunmitimeout","5"))+1;
+                    for (let i = 0; i < waittime; i++) {
                         if(getMyVar("starttask","0")=="0"){
                             break;
                         }
-                        showLoading('等待之前的线程结束');
+                        showLoading('等待'+(waittime-i)+'s后上次线程结束');
                         java.lang.Thread.sleep(1000);
                     }
                     hideLoading();
