@@ -456,6 +456,7 @@ function xunmi(name,data) {
                         id: "loading"
                     }
                 });
+                log(success+'<>'+xunminum);
                 
                 if (success>=xunminum||getMyVar("stoptask","0")=="1") {
                     //toast("我主动中断了");
