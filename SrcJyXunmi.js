@@ -456,16 +456,14 @@ function xunmi(name,data) {
                         id: "loading"
                     }
                 });
-                log(success+'<>'+xunminum);
-                
-                if (success>=xunminum||getMyVar("stoptask","0")=="1") {
+                if(error){log(id+"-错误信息："+error);}
+                if (success>=xunminum||success>=obj.results.length||getMyVar("stoptask","0")=="1") {
                     //toast("我主动中断了");
                     //log("√线程中止");
                     putMyVar("starttask","0");
                     putMyVar("stoptask","0");
                     return "break";
                 }
-                if(error){log(id+"-错误信息："+error);}
             },
             param: {
                 results: beresults,
