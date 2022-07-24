@@ -123,7 +123,7 @@ function xunmi(name,data) {
         d.push({
             title: grouplist[i]+'('+lists.length+')',
             url: $('#noLoading#').lazyRule((bess,datalist,name,count)=>{
-                    putMyVar("stoptask","1");
+                    if(getMyVar("starttask","0")=="1"){putMyVar("stoptask","1");}
                     for (let i = 0; i < 5; i++) {
                         if(getMyVar("starttask","0")=="0"){
                             break;
