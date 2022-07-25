@@ -287,14 +287,6 @@ var SrcParseS = {
     DD: function (vipUrl, apiUrl, ref) {
         try {
             if (apiUrl == "" || apiUrl == undefined) { 
-                /*
-                if(getMyVar('ddfrom', '')=="duoduozy"){
-                    apiUrl = "https://player.tjomet.com/ysgc/qa9ty92aTSGHwn3X.jpg" 
-                }else{
-                    apiUrl = "https://ysgc.tjomet.com/qa9ty92aTSGHwn3X.jpg" 
-                }
-                clearMyVar('ddfrom');
-                */
                 apiUrl = "https://ysgc.tjomet.com/gTko58tsjpjPcRmh.jpg" ;
             }
             var html = request("https://ysgc.tjomet.com/?url="+vipUrl,{timeout:5000});
@@ -303,17 +295,7 @@ var SrcParseS = {
             var json = JSON.parse(request(apiUrl, { method: 'POST', body: bod }));
             eval(fetch("https://vkceyugu.cdn.bspapp.com/VKCEYUGU-03ee1f89-f0d4-49aa-a2b3-50e203514d8a/2e54cc42-9b4c-457d-b2de-0cdf3e2aeeaa.js"));//https://p.tjomet.com/duoduo/js/decode.js
             let url = getVideoInfo(json.url);
-            if(/^http/.test(url)){
-                return url;
-            }else{
-                var jsonstr = JSON.parse(request("https://p.tjomet.com/lff/api.php", { headers: { 'Referer': ref }, method: 'POST', body: 'url=' + vipUrl }));
-                eval(getCryptoJS());
-                return CryptoJS.AES.decrypt(jsonstr.url, CryptoJS.enc.Utf8.parse(CryptoJS.MD5('rXjWvXl6')), {
-                    'iv': CryptoJS.enc.Utf8.parse('NXbHoWJbpsEOin8b'),
-                    'mode': CryptoJS.mode.CBC,
-                    'padding': CryptoJS.pad.ZeroPadding
-                }).toString(CryptoJS.enc.Utf8);
-            }
+            return url;
         } catch (e) {
             return '';
         }
