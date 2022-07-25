@@ -1717,7 +1717,7 @@ var verify = {
 }
 //版本检测
 function Version() {
-    var nowVersion = 5.4;//现在版本
+    var nowVersion = 5.5;//现在版本
     if (getVar('srcDyTmpl-VersionCheck', '0') == '0') {
         try {
             eval(fetch(config.依赖.match(/https.*\//)[0] + 'SrcTmplVersion.js'))
