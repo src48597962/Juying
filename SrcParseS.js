@@ -295,11 +295,11 @@ var SrcParseS = {
                 }
                 clearMyVar('ddfrom');
                 */
-                apiUrl = "https://ysgc.tjomet.com/qa9ty92aTSGHwn3X.jpg" ;
+                apiUrl = "https://ysgc.tjomet.com/gTko58tsjpjPcRmh.jpg" ;
             }
             var html = request("https://ysgc.tjomet.com/?url="+vipUrl,{timeout:5000});
             eval(html.match(/var config = {[\s\S]*?}/)[0] + '');
-            var bod = 'url=' + config.url + "&vkey=" + config.vkey + "&token=" + config.token + "&sign=bKvCXSsVjPyTNr9R";
+            var bod = 'url=' + config.url + "&vkey=" + config.vkey + "&token=" + config.token + "&sign=TzNHJtiW8aWDtUMS";
             var json = JSON.parse(request(apiUrl, { method: 'POST', body: bod }));
             eval(fetch("https://vkceyugu.cdn.bspapp.com/VKCEYUGU-03ee1f89-f0d4-49aa-a2b3-50e203514d8a/2e54cc42-9b4c-457d-b2de-0cdf3e2aeeaa.js"));//https://p.tjomet.com/duoduo/js/decode.js
             let url = getVideoInfo(json.url);
