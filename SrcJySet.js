@@ -363,7 +363,7 @@ function SRCSet() {
                         JYconfig['xunmigroup'] = input;
                         writeFile(cfgfile, JSON.stringify(JYconfig));
                         refreshPage(false);
-                        return 'toast://默认搜索分组已设置为：'+input;
+                        return 'toast://默认搜索分组'+(input?'已设置为：'+input:'已清空');
                     }, JYconfig, cfgfile),
                 col_type: "text_3"
             });
@@ -698,7 +698,7 @@ function SRCSet() {
                         JYconfig['TVBoxDY'] = input;
                         writeFile(cfgfile, JSON.stringify(JYconfig));
                         refreshPage(false);
-                        return 'toast://已保存';
+                        return 'toast://'+(input?'已保存':'已取消');
                     }, JYconfig, cfgfile),
                 col_type: "text_3"
             });
