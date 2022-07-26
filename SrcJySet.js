@@ -360,7 +360,7 @@ function SRCSet() {
             d.push({
                 title: '搜索分组',
                 url: $(JYconfig['xunmigroup']?JYconfig['xunmigroup']:"全部","设置搜索时默认分组").input((JYconfig,cfgfile) => {
-                        JYconfig['xunmigroup'] = parseInt(input);
+                        JYconfig['xunmigroup'] = input;
                         writeFile(cfgfile, JSON.stringify(JYconfig));
                         refreshPage(false);
                         return 'toast://默认搜索分组已设置为：'+input;
