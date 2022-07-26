@@ -10,14 +10,17 @@ function xunmi(name,data) {
         clearMyVar('groupmenu');
     }));
     putMyVar('moviemore','1');
-    var cfgfile = "hiker://files/rules/Src/Juying/config.json";
-    var Juyingcfg=fetch(cfgfile);
-    if(Juyingcfg != ""){
-        eval("var JYconfig=" + Juyingcfg+ ";");
-        putMyVar('xunminum',JYconfig['xunminum']?JYconfig['xunminum']:"10");
-        putMyVar('xunmitimeout',JYconfig['xunmitimeout']?JYconfig['xunmitimeout']:"5");
-
-    }
+    try{
+        var cfgfile = "hiker://files/rules/Src/Juying/config.json";
+        var Juyingcfg=fetch(cfgfile);
+        if(Juyingcfg != ""){
+            eval("var JYconfig=" + Juyingcfg+ ";");
+            putMyVar('xunminum',JYconfig['xunminum']?JYconfig['xunminum']:"10");
+            putMyVar('xunmitimeout',JYconfig['xunmitimeout']?JYconfig['xunmitimeout']:"5");
+        }
+        var xunmigroup = JYconfig.xunmigroup||"";
+    }catch(e){}
+    
     if(data){
         var datalist = data;
     }else{
@@ -124,6 +127,15 @@ function xunmi(name,data) {
         return temp;
     }
     grouplist = uniq(grouplist);
+    if(xunmigroup&&grouplist.indexOf(xunmigroup)>-1&&grouplist.indexOf(xunmigroup)!=0){
+        for (var i = 0; i < grouplist.length; i++) {
+            if (grouplist[i] === xunmigroup) {
+                grouplist.splice(i, 1);
+                break;
+            }
+        }
+        grouplist.unshift(xunmigroup);
+    }
     for(var i in grouplist){
         var lists = datalist.filter(item => {
             return item.group==grouplist[i] || item.type==grouplist[i];
@@ -133,7 +145,7 @@ function xunmi(name,data) {
         groupmenu.push(groupname);
         putMyVar('groupmenu',groupmenu.join(','));
         d.push({
-            title: groupname,
+            title: grouplist[i]===xunmigroup?'‘‘’’<span style="color:#f13b66a">'+groupmenu:groupname,
             url: $('#noLoading#').lazyRule((bess,datalist,name,count,groupname)=>{
                     let groupmenu = getMyVar('groupmenu')?getMyVar('groupmenu').split(','):[];
                     for(let i in groupmenu){
