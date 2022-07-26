@@ -145,12 +145,12 @@ function xunmi(name,data) {
         groupmenu.push(groupname);
         putMyVar('groupmenu',groupmenu.join(','));
         d.push({
-            title: grouplist[i]==xunmigroup?'‘‘’’<span style="color:#3399cc">'+groupname:groupname,
+            title: grouplist[i]==xunmigroup?'‘‘’’<b><span style="color:#3399cc">'+groupname:groupname,
             url: $('#noLoading#').lazyRule((bess,datalist,name,count,groupname)=>{
                     let groupmenu = getMyVar('groupmenu')?getMyVar('groupmenu').split(','):[];
                     for(let i in groupmenu){
                         if(groupmenu[i]==groupname){
-                            updateItem(groupname,{title:'‘‘’’<span style="color:#3399cc">'+groupmenu[i]})
+                            updateItem(groupname,{title:'‘‘’’<b><span style="color:#3399cc">'+groupmenu[i]})
                         }else{
                             updateItem(groupmenu[i],{title:groupmenu[i]})
                         }
