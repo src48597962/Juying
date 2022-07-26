@@ -129,7 +129,7 @@ function xunmi(name,data) {
     grouplist = uniq(grouplist);
     if(xunmigroup&&grouplist.indexOf(xunmigroup)>-1&&grouplist.indexOf(xunmigroup)!=0){
         for (var i = 0; i < grouplist.length; i++) {
-            if (grouplist[i] === xunmigroup) {
+            if (grouplist[i] == xunmigroup) {
                 grouplist.splice(i, 1);
                 break;
             }
@@ -145,7 +145,7 @@ function xunmi(name,data) {
         groupmenu.push(groupname);
         putMyVar('groupmenu',groupmenu.join(','));
         d.push({
-            title: grouplist[i]===xunmigroup?'‘‘’’<span style="color:#f13b66a">'+groupmenu:groupname,
+            title: grouplist[i]==xunmigroup?'‘‘’’<span style="color:#f13b66a">'+groupname:groupname,
             url: $('#noLoading#').lazyRule((bess,datalist,name,count,groupname)=>{
                     let groupmenu = getMyVar('groupmenu')?getMyVar('groupmenu').split(','):[];
                     for(let i in groupmenu){
