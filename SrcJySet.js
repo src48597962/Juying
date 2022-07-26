@@ -358,6 +358,16 @@ function SRCSet() {
                 col_type: "text_center_1"
             });
             d.push({
+                title: '搜索分组',
+                url: $(JYconfig['xunmigroup']?JYconfig['xunmigroup']:"全部","设置搜索时默认分组").input((JYconfig,cfgfile) => {
+                        JYconfig['xunmigroup'] = parseInt(input);
+                        writeFile(cfgfile, JSON.stringify(JYconfig));
+                        refreshPage(false);
+                        return 'toast://默认搜索分组已设置为：'+input;
+                    }, JYconfig, cfgfile),
+                col_type: "text_3"
+            });
+            d.push({
                 title: '搜索线程',
                 url: $(JYconfig['xunminum']?JYconfig['xunminum']:"10","每次搜索成功停止线程数").input((JYconfig,cfgfile) => {
                         if(!parseInt(input)||parseInt(input)<1||parseInt(input)>100){return 'toast://输入有误，请输入1-100数字'}else{
