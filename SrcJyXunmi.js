@@ -110,8 +110,6 @@ function xunmi(name,data) {
         hideLoading();
     }
     
-    var count = datalist.length;
-
     var d = [];
     let grouplist = datalist.map((list)=>{
         return list.group||list.type;
@@ -136,21 +134,23 @@ function xunmi(name,data) {
         }
         grouplist.unshift(xunmigroup);
     }
+    var datalist2 = [];
     for(var i in grouplist){
         var lists = datalist.filter(item => {
             return item.group==grouplist[i] || item.type==grouplist[i];
         })
+        if(grouplist[i]==xunmigroup){datalist2 = lists;}
         let groupname = grouplist[i]+'('+lists.length+')';
         let groupmenu = getMyVar('groupmenu')?getMyVar('groupmenu').split(','):[];
         groupmenu.push(groupname);
         putMyVar('groupmenu',groupmenu.join(','));
         d.push({
-            title: grouplist[i]==xunmigroup?'‘‘’’<span style="color:#f13b66a">'+groupname:groupname,
+            title: grouplist[i]==xunmigroup?'‘‘’’<span style="color:#3399cc">'+groupname:groupname,
             url: $('#noLoading#').lazyRule((bess,datalist,name,count,groupname)=>{
                     let groupmenu = getMyVar('groupmenu')?getMyVar('groupmenu').split(','):[];
                     for(let i in groupmenu){
                         if(groupmenu[i]==groupname){
-                            updateItem(groupname,{title:'‘‘’’<span style="color:#f13b66a">'+groupmenu[i]})
+                            updateItem(groupname,{title:'‘‘’’<span style="color:#3399cc">'+groupmenu[i]})
                         }else{
                             updateItem(groupmenu[i],{title:groupmenu[i]})
                         }
@@ -191,8 +191,11 @@ function xunmi(name,data) {
     });
     setHomeResult(d);
 
+    if(datalist2.length>0){
+        datalist = datalist2;
+    }
+    var count = datalist.length;
     var beresults = [];
-
     function bess(datalist,beresults,name,count) {
         var beerrors = [];
         var success = 0;
