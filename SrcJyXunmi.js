@@ -291,7 +291,6 @@ function xunmi(name,data) {
                             let search = list.map((list)=>{
                                 let vodname = list.vod_name||list.title;
                                 if(vodname.indexOf(name)>-1){
-                                    if(vodname!=name){vodname = vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>')}
                                     let vodpic = list.vod_pic||list.pic;
                                     let voddesc = list.vod_remarks||list.state||"";
                                     let appname = '‘‘’’<font color=#f13b66a>'+obj.name+'</font>';
@@ -304,7 +303,7 @@ function xunmi(name,data) {
                                         vodpic = "https" + vodpic;
                                     }
                                     return {
-                                        title: vodname,
+                                        title: vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):vodname,
                                         desc: voddesc + '\n\n' + appname + ' ('+obj.type+')'+(obj.group?' ['+obj.group+']':''),
                                         pic_url: vodpic,
                                         url: $("hiker://empty##" + vodurl + "#immersiveTheme#").rule((type,ua) => {
@@ -407,7 +406,6 @@ function xunmi(name,data) {
                         let search = list.map((list)=>{
                             let vodname = list.name;
                             if(vodname.indexOf(name)>-1){
-                                if(vodname!=name){vodname = vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>')}
                                 let vodpic = list.pic.replace('/tu.php?tu=','').replace('/img.php?url=','');
                                 let voddesc = list.desc?list.desc:"";
                                 let appname = '‘‘’’<font color=#f13b66a>'+obj.name+'</font>';
@@ -419,7 +417,7 @@ function xunmi(name,data) {
                                     vodpic = "https" + vodpic;
                                 }
                                 return {
-                                    title: vodname,
+                                    title: vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):vodname,
                                     desc: voddesc + '\n\n' + appname + ' ('+obj.type+')'+(obj.group?' ['+obj.group+']':''),
                                     pic_url: vodpic?vodpic + "@Referer=":"https://www.xawqxh.net/mxtheme/images/loading.gif",
                                     url: $("hiker://empty##" + vodurl + "#immersiveTheme#").rule((type,ua) => {
