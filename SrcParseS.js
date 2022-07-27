@@ -771,7 +771,7 @@ var SrcParseS = {
                     i=s;
                 }
                 if(printlog==1){log("本轮排队解析："+Namelist)};
-                if(isdn==1&&iscalldn==0&&Uparselist.length>0&&!parseStr){
+                if(forcedn==0&&isdn==1&&iscalldn==0&&Uparselist.length>0&&!parseStr){
                     iscalldn = 1;//断插辅助只调用一轮
                     UrlList.push({type:'dn'});
                 }
