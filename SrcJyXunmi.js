@@ -139,7 +139,7 @@ function xunmi(name,data) {
     var datalist2 = [];
     for(var i in grouplist){
         var lists = datalist.filter(item => {
-            return item.group==grouplist[i] || item.type==grouplist[i];
+            return item.group==grouplist[i] || !item.group&&item.type==grouplist[i];
         })
         if(grouplist[i]==xunmigroup){datalist2 = lists;}
         let groupname = grouplist[i]+'('+lists.length+')';
@@ -316,7 +316,7 @@ function xunmi(name,data) {
                                     }
                                     return {
                                         title: vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):vodname,
-                                        desc: voddesc + '\n\n' + appname + ' ('+obj.type+')'+(obj.group?' ['+obj.group+']':''),
+                                        desc: voddesc + '\n\n' + appname + ' ('+obj.type+')'+(obj.group&&obj.group!=obj.type?' ['+obj.group+']':''),
                                         pic_url: vodpic,
                                         url: $("hiker://empty##" + vodurl + "#immersiveTheme#").rule((type,ua) => {
                                                 require(config.依赖.match(/https.*\//)[0] + 'SrcJyXunmi.js');
