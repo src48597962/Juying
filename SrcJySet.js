@@ -392,6 +392,18 @@ function SRCSet() {
                 col_type: "text_3"
             });
             d.push({
+                title: '失败次数',
+                url: $(JYconfig['failnum']?JYconfig['failnum']:"10","设置接口搜索失败多少次，转移到失败待处理分组").input((JYconfig,cfgfile) => {
+                        if(!parseInt(input)||parseInt(input)<1||parseInt(input)>100){return 'toast://输入有误，请输入1-100数字'}else{
+                            JYconfig['failnum'] = parseInt(input);
+                            writeFile(cfgfile, JSON.stringify(JYconfig));
+                            refreshPage(false);
+                            return 'toast://接口搜索失败'+input+'次，转移到失败待处理分组';
+                        }
+                    }, JYconfig, cfgfile),
+                col_type: "text_3"
+            });
+            d.push({
                 title: '解析保留',
                 url: $(JYconfig['appjiexinum']?JYconfig['appjiexinum']:"50","app自带解析保留数量").input((JYconfig,cfgfile) => {
                         if(!parseInt(input)||parseInt(input)<1||parseInt(input)>100){return 'toast://输入有误，请输入1-100数字'}else{
