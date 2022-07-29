@@ -197,11 +197,10 @@ function xunmi(name,data) {
     if(datalist2.length>0){
         datalist = datalist2;
     }
-    if(getMyVar('selectgroup','a').indexOf('失败待处理')==-1&&xunmigroup!="失败待处理"){
+    if(getMyVar('selectgroup','a').indexOf('失败待处理')==-1&&xunmigroup!="失败待处理"&&grouplist.length>1){
         for(var i=0;i<datalist.length;i++){
             if(datalist[i].group=="失败待处理"){
                 datalist.splice(i,1);
-                break;
             }
         }
     }
