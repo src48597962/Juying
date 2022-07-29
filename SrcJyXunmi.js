@@ -17,6 +17,7 @@ function xunmi(name,data) {
             eval("var JYconfig=" + Juyingcfg+ ";");
             putMyVar('xunminum',JYconfig['xunminum']?JYconfig['xunminum']:"10");
             putMyVar('xunmitimeout',JYconfig['xunmitimeout']?JYconfig['xunmitimeout']:"5");
+            putMyVar('failnum',JYconfig['failnum']?JYconfig['failnum']:"10");
         }
         var xunmigroup = JYconfig.xunmigroup||"";
     }catch(e){}
@@ -503,8 +504,8 @@ function xunmi(name,data) {
         for (let k in beerrors) {
             for(var i=0;i<jiekoulist.length;i++){
                 if(jiekoulist[i].url==beerrors[k].apiurl){
-                    jiekoulist[i].fail = jiekoulist[i].fail + 1 || 1;
-                    if(jiekoulist[i].fail>3){jiekoulist[i].group = "失败待处理";}
+                    jiekoulist[i].failnum = jiekoulist[i].failnum + 1 || 1;
+                    if(jiekoulist[i].failnum>=parseInt(getMyVar("failnum","10"))){jiekoulist[i].group = "失败待处理";}
                     break;
                 }
             }
