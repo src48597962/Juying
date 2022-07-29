@@ -1146,9 +1146,6 @@ function SRCSet() {
                     col_type: "scroll_button"
                 });
             }
-            d.push({
-                col_type: "line"
-            });
         }
         if(getMyVar('guanli', 'jk')=="jk"){
             let grouplist = datalist.map((list)=>{
