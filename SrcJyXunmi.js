@@ -8,6 +8,7 @@ function xunmi(name,data) {
         clearMyVar('starttask');
         clearMyVar('stoptask');
         clearMyVar('groupmenu');
+        clearMyVar('selectgroup');
     }));
     putMyVar('moviemore','1');
     try{
@@ -19,7 +20,7 @@ function xunmi(name,data) {
             putMyVar('xunmitimeout',JYconfig['xunmitimeout']?JYconfig['xunmitimeout']:"5");
             putMyVar('failnum',JYconfig['failnum']?JYconfig['failnum']:"10");
         }
-        var xunmigroup = JYconfig.xunmigroup||"";
+        var xunmigroup = JYconfig.xunmigroup&&JYconfig.xunmigroup!="全部"?JYconfig.xunmigroup:"";
     }catch(e){}
     
     if(data){
@@ -151,6 +152,7 @@ function xunmi(name,data) {
                     let groupmenu = getMyVar('groupmenu')?getMyVar('groupmenu').split(','):[];
                     for(let i in groupmenu){
                         if(groupmenu[i]==groupname){
+                            putMyVar("selectgroup",groupname);
                             updateItem(groupname,{title:'‘‘’’<b><span style="color:#3399cc">'+groupmenu[i]})
                         }else{
                             updateItem(groupmenu[i],{title:groupmenu[i]})
@@ -195,6 +197,13 @@ function xunmi(name,data) {
     if(datalist2.length>0){
         datalist = datalist2;
     }
+    for(var i=0;i<datalist.length;i++){
+        if(datalist[i].group=="失败待处理"&&getMyVar('selectgroup','a').indexOf('失败待处理')==-1&&xunmigroup!="失败待处理"){
+            datalist.splice(i,1);
+            break;
+        }
+    }
+
     var count = datalist.length;
     var beresults = [];
     function bess(datalist,beresults,name,count) {
