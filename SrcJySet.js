@@ -1099,7 +1099,7 @@ function SRCSet() {
             grouplist = uniq(grouplist);
             for(var i in grouplist){
                 var lists = datalist.filter(item => {
-                    return item.group==grouplist[i] || item.type==grouplist[i];
+                    return item.group==grouplist[i] || !item.group&&item.type==grouplist[i];
                 })
                 d.push({
                     title: grouplist[i]+'('+lists.length+')',
