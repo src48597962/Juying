@@ -1451,7 +1451,7 @@ function jiekou(lx,data) {
                     let urlname = list[i].split('#')[0];
                     let urlurl = list[i].split('#')[1];
                     let urltype = list[i].split('#')[2]||getapitype(urlurl);
-                    let urlgroup = list[i].split('#')[3]||urltype;
+                    let urlgroup = list[i].split('#')[3]||"";
                     let arr  = { "name": urlname, "url": urlurl, "ua": apiua, "type": urltype };
                     if(urlgroup){arr['group'] = urlgroup}
                     urls.push(arr);
