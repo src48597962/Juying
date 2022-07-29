@@ -251,6 +251,7 @@ function xunmi(name,data) {
                     id: "loading"
                 }
             });
+            var geterror = 0;
             var urlua = obj.ua=="MOBILE_UA"?MOBILE_UA:obj.ua=="PC_UA"?PC_UA:obj.ua;
             if(/v1|app|iptv|v2|cms/.test(obj.type)){
                 try {
@@ -267,6 +268,7 @@ function xunmi(name,data) {
                     }
                 } catch (e) {
                     var html = { data: [] };
+                    geterror = 1;
                 }
                 try{
                     try{
@@ -339,10 +341,11 @@ function xunmi(name,data) {
                             log(obj.name+'>'+e.message);
                         }
                     }
-                    return {result:0, url:ssurl, apiurl:url_api};
+                    return {result:0, url:ssurl, apiurl:url_api, error:geterror};
                 } catch (e) {
                     //log(obj.name+'>'+e.message);
-                    return {result:0, url:ssurl, apiurl:url_api};
+                    geterror = 1;
+                    return {result:0, url:ssurl, apiurl:url_api, error:geterror};
                 }
             }else if(obj.type=="xpath"||obj.type=="biubiu"){
                 try {
@@ -411,6 +414,7 @@ function xunmi(name,data) {
                 } catch (e) {
                     //log(obj.name+'>'+e.message);
                     var list = [];
+                    geterror = 1;
                 }
                 if(list.length>0){
                     try {
@@ -454,7 +458,7 @@ function xunmi(name,data) {
                         log(obj.name+'>'+e.message);
                     }
                 }
-                return {result:0, url:ssurl, apiurl:url_api};
+                return {result:0, url:ssurl, apiurl:url_api, error:geterror};
             }else{
 
             }
@@ -482,7 +486,7 @@ function xunmi(name,data) {
                     success = success + i;
                     addItemBefore('loading', taskResult.add);
                 }else{
-                    obj.errors.push({name:id,url:taskResult.url,apiurl:taskResult.apiurl});
+                    obj.errors.push({name:id,url:taskResult.url,apiurl:taskResult.apiurl,error:taskResult.error});
                 }
                 if(obj.results.indexOf(taskResult.apiurl)==-1){obj.results.push(taskResult.apiurl);}
                 
@@ -515,7 +519,8 @@ function xunmi(name,data) {
             for(var i=0;i<jiekoulist.length;i++){
                 if(jiekoulist[i].url==beerrors[k].apiurl){
                     jiekoulist[i].failnum = jiekoulist[i].failnum + 1 || 1;
-                    if(jiekoulist[i].failnum>=parseInt(getMyVar("failnum","10"))){jiekoulist[i].group = "失败待处理";}
+                    let failnum = beerrors[k].error==0?parseInt(getMyVar("failnum","10"))+20:parseInt(getMyVar("failnum","10"));
+                    if(jiekoulist[i].failnum>=failnum){jiekoulist[i].group = "失败待处理";}
                     break;
                 }
             }
