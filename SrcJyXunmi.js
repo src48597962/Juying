@@ -268,7 +268,7 @@ function xunmi(name,data) {
                     }
                 } catch (e) {
                     var html = { data: [] };
-                    geterror = 1;
+                    if(gethtml){geterror = 1;}
                 }
                 try{
                     try{
@@ -352,7 +352,8 @@ function xunmi(name,data) {
                     if(obj.type=="xpath"){
                         var ssurl = jsondata.searchUrl.replace('{wd}',name);
                         if(jsondata.scVodNode=="json:list"){
-                            var html = JSON.parse(request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 }));
+                            var gethtml = request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 });
+                            var html = JSON.parse(gethtml);
                             var list = html.list||[];
                         }else{
                             var sstype = ssurl.indexOf(';post')>-1?"post":"get";
@@ -363,14 +364,15 @@ function xunmi(name,data) {
                                     ssstr.length = ssstr.length-1;
                                 }
                                 ssurl = ssstr.join('?');
-                                var html = request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000, method: 'POST', body: postcs  });
+                                var gethtml = request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000, method: 'POST', body: postcs  });
                             }else{
-                                var html = request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 });
+                                var gethtml = request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 });
                             }
-                            let title = xpathArray(html, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodName);
-                            let href = xpathArray(html, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodId);
-                            let img = xpathArray(html, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodImg);
-                            let mark = xpathArray(html, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodMark)||"";
+
+                            let title = xpathArray(gethtml, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodName);
+                            let href = xpathArray(gethtml, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodId);
+                            let img = xpathArray(gethtml, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodImg);
+                            let mark = xpathArray(gethtml, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodMark)||"";
                             var list = [];
                             for(var j in title){
                                 list.push({"id":href[j],"name":title[j],"pic":img[j],"desc":mark[j]})
@@ -380,7 +382,8 @@ function xunmi(name,data) {
                     }else{
                         var ssurl = jsondata.url+jsondata.sousuoqian+name+jsondata.sousuohou;
                         if(jsondata.ssmoshi=="0"){
-                            var html = JSON.parse(request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 }));
+                            var gethtml = request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 });
+                            var html = JSON.parse(gethtml);
                             var list = html.list||[];
                         }else{
                             var sstype = ssurl.indexOf(';post')>-1?"post":"get";
@@ -391,12 +394,12 @@ function xunmi(name,data) {
                                 if(ssstr.length>2){
                                     ssstr.length = ssstr.length-1;
                                 }
-                               var html = request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000, method: 'POST', body: postcs  });
+                               var gethtml = request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000, method: 'POST', body: postcs  });
                             */
                             }else{
-                                var html = request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 });
+                                var gethtml = request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 });
                             }
-                            let sslist = html.split(jsondata.jiequshuzuqian.replace(/\\/g,""));
+                            let sslist = gethtml.split(jsondata.jiequshuzuqian.replace(/\\/g,""));
                             sslist.splice(0,1);
                             var list = [];
                             for (let i = 0; i < sslist.length; i++) {
@@ -414,7 +417,7 @@ function xunmi(name,data) {
                 } catch (e) {
                     //log(obj.name+'>'+e.message);
                     var list = [];
-                    geterror = 1;
+                    if(gethtml){geterror = 1;}
                 }
                 if(list.length>0){
                     try {
