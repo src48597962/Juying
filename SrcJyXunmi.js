@@ -504,6 +504,7 @@ function xunmi(name,data) {
             for(var i=0;i<jiekoulist.length;i++){
                 if(jiekoulist[i].url==beerrors[k].apiurl){
                     jiekoulist[i].fail = jiekoulist[i].fail + 1 || 1;
+                    if(jiekoulist[i].fail>3){jiekoulist[i].group = "失败待处理";}
                     break;
                 }
             }
