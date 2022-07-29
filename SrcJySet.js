@@ -875,32 +875,9 @@ function SRCSet() {
                     refreshPage(false);
                     return 'toast://已切换到变更模式';
                 }else if(input=="删除"){
-                    let duoselect = getMyVar('duoselect','')?getMyVar('duoselect','').split(','):[];
-                    if(duoselect.length>0){
-                        if(getMyVar('guanli', 'jk')=="jk"){
-                            var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
-                            var sm = "确定删除选定的"+duoselect.length+"个接口吗？";
-                        }else if(getMyVar('guanli', 'jk')=="jx"){
-                            var filepath = "hiker://files/rules/Src/Juying/myjiexi.json";
-                            var sm = "确定删除选定的"+duoselect.length+"个解析吗？";
-                        }
-                        return $(sm).confirm((duoselect, filepath)=>{
-                            var datafile = fetch(filepath);
-                            eval("var datalist=" + datafile+ ";");
-                            for(var i=0;i<datalist.length;i++){
-                                if(duoselect.indexOf(datalist[i].url?datalist[i].url:datalist[i].parse)>-1){
-                                    datalist.splice(i,1);
-                                }
-                            }
-                            writeFile(filepath, JSON.stringify(datalist));
-                            refreshPage(false);
-                            return "toast://已批量删除解析"+duoselect.length;
-                        }, duoselect, filepath)
-                    }else{
-                        putMyVar('guanlicz','3');
-                        refreshPage(false);
-                        return 'toast://已切换到删除模式';
-                    }
+                    putMyVar('guanlicz','3');
+                    refreshPage(false);
+                    return 'toast://已切换到删除模式';
                 }else if(input=="多选"){
                     putMyVar('guanlicz','4');
                     refreshPage(false);
@@ -1082,6 +1059,69 @@ function SRCSet() {
                 titleVisible: true
             }
         });
+        if(getMyVar('guanlicz')=="4"){
+            d.push({
+                title: "删除",
+                url: $('#noLoading#').lazyRule(()=>{
+                        let duoselect = getMyVar('duoselect','')?getMyVar('duoselect','').split(','):[];
+                        if(duoselect.length>0){
+                            if(getMyVar('guanli', 'jk')=="jk"){
+                                var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
+                                var sm = "确定删除选定的"+duoselect.length+"个接口吗？";
+                            }else if(getMyVar('guanli', 'jk')=="jx"){
+                                var filepath = "hiker://files/rules/Src/Juying/myjiexi.json";
+                                var sm = "确定删除选定的"+duoselect.length+"个解析吗？";
+                            }
+                            return $(sm).confirm((duoselect, filepath)=>{
+                                var datafile = fetch(filepath);
+                                eval("var datalist=" + datafile+ ";");
+                                for(var i=0;i<datalist.length;i++){
+                                    if(duoselect.indexOf(datalist[i].url?datalist[i].url:datalist[i].parse)>-1){
+                                        datalist.splice(i,1);
+                                    }
+                                }
+                                writeFile(filepath, JSON.stringify(datalist));
+                                refreshPage(false);
+                                return "toast://已批量删除解析"+duoselect.length;
+                            }, duoselect, filepath)
+                        }else{
+                            return "toast://请选择";
+                        }
+                    }),
+                col_type: "scroll_button"
+            });
+            if(getMyVar('guanli', 'jk')=="jk"){
+                d.push({
+                    title: "分组",
+                    url: $('#noLoading#').lazyRule(()=>{
+                            let duoselect = getMyVar('duoselect','')?getMyVar('duoselect','').split(','):[];
+                            if(duoselect.length>0){
+                                return $("","输入选定的"+duoselect.length+"个接口新分组名").input((duoselect)=>{
+                                    var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
+                                    var datafile = fetch(filepath);
+                                    eval("var datalist=" + datafile+ ";");
+                                    for(var i=0;i<datalist.length;i++){
+                                        if(duoselect.indexOf(datalist[i].url)>-1){
+                                            if(input){
+                                                datalist[i].group  = input;
+                                            }else{
+                                                delete datalist[i].group;
+                                            }
+                                            delete datalist[i].failnum;
+                                        }
+                                    }
+                                    writeFile(filepath, JSON.stringify(datalist));
+                                    refreshPage(false);
+                                    return "toast://已批量调整接口分组";
+                                }, duoselect)
+                            }else{
+                                return "toast://请选择";
+                            }
+                        }),
+                    col_type: "scroll_button"
+                });
+            }
+        }
         if(getMyVar('guanli', 'jk')=="jk"){
             let grouplist = datalist.map((list)=>{
                 return list.group||list.type;
