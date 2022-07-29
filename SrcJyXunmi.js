@@ -521,7 +521,7 @@ function xunmi(name,data) {
             for(var i=0;i<jiekoulist.length;i++){
                 if(jiekoulist[i].url==beerrors[k].apiurl){
                     jiekoulist[i].failnum = jiekoulist[i].failnum + 1 || 1;
-                    if(beerrors[k].error==0&&jiekoulist[i].failnum>=parseInt(getMyVar("failnum","10"))){jiekoulist[i].group = "失败待处理";}
+                    if(beerrors[k].error==1&&jiekoulist[i].failnum>=parseInt(getMyVar("failnum","10"))){jiekoulist[i].group = "失败待处理";}
                     break;
                 }
             }
