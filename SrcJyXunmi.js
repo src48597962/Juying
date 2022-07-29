@@ -497,8 +497,16 @@ function xunmi(name,data) {
                 errors: beerrors
             }
         });
-
+        var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
+        var datafile = fetch(filepath);
+        eval("var jiekoulist=" + datafile+ ";");
         for (let k in beerrors) {
+            for(var i=0;i<jiekoulist.length;i++){
+                if(jiekoulist[i].url==beerrors[k].apiurl){
+                    jiekoulist[i].fail = jiekoulist[i].fail + 1 || 1;
+                    break;
+                }
+            }
             addItemBefore('loading', {
                 title: beerrors[k].name,
                 desc: "加载失败，点击操作",
@@ -529,6 +537,7 @@ function xunmi(name,data) {
                 }
             });
         }
+        writeFile(filepath, JSON.stringify(jiekoulist));
         updateItem('loading', {
             title: beresults.length+'/'+count+',我是有底线的',
             url: beresults.length==count?"hiker://empty":$('#noLoading#').lazyRule((bess,datalist,beresults,name,count)=>{
