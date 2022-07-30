@@ -638,8 +638,9 @@ var SrcParseS = {
                 evalPrivateJS("OjB3OHrVodkVQlHIU8UUAC5W0ZBgTQEC4h9eUEcAT9kEM0hY/45YOxs7PDeQEnxjVhaWW2tIqO5GQimD4ssHKSka505+O0avEtQQZ9zRy6GxaBZdTHrbCPcoNIajmr3+JG22tRswOJFYDX5aYk0PfUDEFsZa2OjZbz+xTthnoUPLNm0R2g1kBFnWwGKBWUxEhEsFwFruhFSaxJi1E1WZ7WlbP0v4OpoQgn6M7UXGahP9h2fHi8UBVDGfjzIuVuJSCgICLlVGaAbT0ghic+Kfbp3TmjRhAo1DKretYp1U53apDMvO2Q+6oAyO1js5TJwx51ygFSUqVGAu0C2DLxkG0Z3+L8UPZyJa4KVDlqq/goE=")
                 log('b');*/
                 
-                eval("var config =" + fetch("hiker://files/cache/MyParseSet.json"));
-                eval(fetch(config.cj));
+                //eval("var config =" + fetch("hiker://files/cache/MyParseSet.json"));
+                //eval(fetch(config.cj));
+                requireCache("https://code.aliyun.com/48597962/Hiker/raw/master/parse/srcauto.js",48);
                 var url = aytmParse(vipUrl);
                 return {url: url, ulist: {type:"dn",name:'dn',parse:'dn',x5:0}}; 
             }
