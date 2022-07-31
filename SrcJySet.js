@@ -105,11 +105,15 @@ function SRCSet() {
                     }else{
                         text['jiexi'] = [];
                     }
-
+                    let textcontent = base64Encode(JSON.stringify(text));
+                    if(textcontent.length>=200000){
+                        log('分享失败：接口字符数超过最大限制，请精简接口，重点减少xpath和biubiu类型'); 
+                        return 'toast://分享同步失败，接口字符数超过最大限制';
+                    }
                     try{
                         var pasteupdate = JSON.parse(request('https://netcut.cn/api/note/update/', {
                             headers: { 'Referer': 'https://netcut.cn/' },
-                            body: 'note_id='+aesDecode('Juying', JYconfig['codeid'])+'&note_content='+base64Encode(JSON.stringify(text)),
+                            body: 'note_id='+aesDecode('Juying', JYconfig['codeid'])+'&note_content='+textcontent,
                             method: 'POST'
                         }));
                         var status = pasteupdate.status
@@ -1010,10 +1014,15 @@ function SRCSet() {
                 for (var i = 0; i < 6; i++) {
                     num += Math.floor(Math.random() * 10);
                 }
+                let textcontent = base64Encode(text);
+                if(textcontent.length>=200000){
+                    log('分享失败：接口字符数超过最大限制，请精简接口，重点减少xpath和biubiu类型'); 
+                    return 'toast://分享同步失败，接口字符数超过最大限制';
+                }
                 try{
                     var pasteurl = JSON.parse(request('https://netcut.cn/api/note/create/', {
                         headers: { 'Referer': 'https://netcut.cn/' },
-                        body: 'note_name=Juying'+num+'&note_content='+base64Encode(text)+'&note_pwd=0&expire_time=3600',
+                        body: 'note_name=Juying'+num+'&note_content='+textcontent+'&note_pwd=0&expire_time=3600',
                         method: 'POST'
                     })).data.note_id || "";
                 }catch(e){
