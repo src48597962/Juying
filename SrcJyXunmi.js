@@ -136,6 +136,15 @@ function xunmi(name,data) {
         }
         grouplist.unshift(xunmigroup);
     }
+    if(grouplist.indexOf('失败待处理')!=grouplist.length-1){
+        for (var i = 0; i < grouplist.length; i++) {
+            if (grouplist[i] == '失败待处理') {
+                grouplist.splice(i, 1);
+                break;
+            }
+        }
+        grouplist.push('失败待处理');
+    }
     var datalist2 = [];
     for(var i in grouplist){
         var lists = datalist.filter(item => {
@@ -169,9 +178,10 @@ function xunmi(name,data) {
                     }
                     hideLoading();
                     let beresults = [];
+                    let beerrors = [];
                     deleteItemByCls('xunmilist');
                     putMyVar("starttask","1");
-                    bess(datalist,beresults,name,count);
+                    bess(datalist,beresults,beerrors,name,count);
                     return'hiker://empty';
                 },bess,lists,name,lists.length,groupname),
             col_type: "scroll_button",
@@ -563,7 +573,7 @@ function xunmi(name,data) {
                         addItemAfter('loading', {
                             title: beerrors[k].name,
                             desc: "加载失败，点击操作",
-                            url: $(["查看原网页","修改此接口","加入待处理","删除此接口","保留此接口","删除全部失败"],2).select((name,url,api,beerrors)=>{
+                            url: $(["查看原网页","加入待处理","删除此接口","保留此接口","删除全部失败"],2).select((name,url,api,beerrors)=>{
                                 if(input=="查看原网页"){
                                     return url;
                                 }else if(input=="删除此接口"){
@@ -590,26 +600,6 @@ function xunmi(name,data) {
                                         }
                                     }
                                     writeFile(filepath, JSON.stringify(datalist));
-                                    deleteItem('xumi-'+api);
-                                    let baoliujk = getMyVar('baoliujk','')?getMyVar('baoliujk','').split(','):[];
-                                    if(baoliujk.indexOf(api)==-1){
-                                        baoliujk.push(api);
-                                        putMyVar('baoliujk',baoliujk.join(','));
-                                    }
-                                    return "toast://已将“"+name+"”，调整到失败待处理分组";
-                                }else if(input=="修改此接口"){
-                                    var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
-                                    var datafile = fetch(filepath);
-                                    eval("var datalist=" + datafile+ ";");
-                                    for(var i=0;i<datalist.length;i++){
-                                        if(datalist[i].url==api){
-                                            return $('hiker://empty#noRecordHistory##noHistory#').rule((data) => {
-                                                require(config.依赖.match(/https.*\//)[0] + 'SrcJySet.js');
-                                                jiekou('update', data);
-                                            }, datalist[i])
-                                            break;
-                                        }
-                                    }
                                     deleteItem('xumi-'+api);
                                     let baoliujk = getMyVar('baoliujk','')?getMyVar('baoliujk','').split(','):[];
                                     if(baoliujk.indexOf(api)==-1){
