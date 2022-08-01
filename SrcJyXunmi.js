@@ -603,8 +603,10 @@ function xunmi(name,data) {
                                     eval("var datalist=" + datafile+ ";");
                                     for(var i=0;i<datalist.length;i++){
                                         if(datalist[i].url==api){
-                                            require(config.依赖.match(/https.*\//)[0] + 'SrcJySet.js');
-                                            jiekou('update', datalist[i]);
+                                            return $('hiker://empty#noRecordHistory##noHistory#').rule((data) => {
+                                                require(config.依赖.match(/https.*\//)[0] + 'SrcJySet.js');
+                                                jiekou('update', data);
+                                            }, datalist[i])
                                             break;
                                         }
                                     }
