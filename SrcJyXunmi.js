@@ -563,9 +563,7 @@ function xunmi(name,data) {
                         addItemBefore('loading', {
                             title: beerrors[k].name,
                             desc: "加载失败，点击操作",
-                            url: $(["查看原网页","删除此接口","加入待处理","删除全部失败"],2).select((name,url,api,errors)=>{
-                                log(errors.length)
-                                /*
+                            url: $(["查看原网页","删除此接口","加入待处理","删除全部失败"],2).select((name,url,api,beerrors)=>{
                                 if(input=="查看原网页"){
                                     return url;
                                 }else if(input=="删除此接口"){
@@ -611,8 +609,8 @@ function xunmi(name,data) {
                                         writeFile(filepath, JSON.stringify(datalist));
                                         return "toast://已删除全部失败的接口";
                                     }, beerrors)
-                                }*/
-                            }, beerrors[k].name, beerrors[k].url, beerrors[k].beerrors[k].apiurl, beerrors),
+                                }
+                            }, beerrors[k].name, beerrors[k].url, beerrors[k].apiurl, beerrors),
                             col_type: "text_1",
                             extra: {
                                 id: 'xumi-'+beerrors[k].apiurl,
