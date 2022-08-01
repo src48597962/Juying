@@ -618,6 +618,9 @@ function xunmi(name,data) {
                             }
                         });
                     }
+                    updateItem('lookerror', {
+                        url: "hiker://empty"
+                    });
                     return "hiker://empty";
                 },beerrors),
                 col_type: "text_center_1",
@@ -625,10 +628,6 @@ function xunmi(name,data) {
                     id: 'lookerror',
                     cls: 'xunmilist'
                 }
-            });
-
-            updateItem('lookerror', {
-                url: "hiker://empty"
             });
         }
     }
