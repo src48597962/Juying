@@ -245,7 +245,7 @@ function xunmi(name,data) {
                 log('api类型错误')
             }
             updateItem('loading', {
-                title: beresults.length+'/'+count+'，加载中...',
+                title: (beresults.length-beerrors.length)+'/'+beerrors.length+'/'+count+'，加载中...',
                 url: "hiker://empty",
                 col_type: "text_center_1",
                 extra: {
@@ -495,7 +495,7 @@ function xunmi(name,data) {
                 if(obj.results.indexOf(taskResult.apiurl)==-1){obj.results.push(taskResult.apiurl);}
                 
                 updateItem('loading', {
-                    title: obj.results.length+'/'+count+'，加载中...',
+                    title: (obj.results.length-obj.errors.length)+'/'+obj.errors.length+'/'+count+'，加载中...',
                     url: "hiker://empty",
                     col_type: "text_center_1",
                     extra: {
