@@ -583,6 +583,52 @@ function xunmi(name,data) {
                 id: "loading"
             }
         });
+        if(beresults.length==count){
+            addItemAfter('loading', {
+                title: "查看失败接口",
+                url: $('#noLoading#').lazyRule((beerrors)=>{
+                    addItemBefore('loading', {
+                        title: beerrors[k].name,
+                        desc: "加载失败，点击操作",
+                        url: $(["查看原网页","删除此接口"],2).select((name,url,api)=>{
+                            if(input=="查看原网页"){
+                                return url;
+                            }else{
+                                return $("确定删除接口："+name).confirm((dataurl)=>{
+                                    var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
+                                    var datafile = fetch(filepath);
+                                    eval("var datalist=" + datafile+ ";");
+                                    for(var i=0;i<datalist.length;i++){
+                                        if(datalist[i].url==dataurl){
+                                            datalist.splice(i,1);
+                                            break;
+                                        }
+                                    }
+                                    writeFile(filepath, JSON.stringify(datalist));
+                                    deleteItem('xumi-'+dataurl);
+                                    return "toast://已删除";
+                                }, api)
+                            }
+                        }, beerrors[k].name, beerrors[k].url, beerrors[k].apiurl),
+                        col_type: "text_1",
+                        extra: {
+                            id: 'xumi-'+beerrors[k].apiurl,
+                            cls: 'xunmilist'
+                        }
+                    });
+                    return "hiker://empty";
+                },beerrors),
+                col_type: "text_center_1",
+                extra: {
+                    id: 'lookerror',
+                    cls: 'xunmilist'
+                }
+            });
+
+            updateItem('lookerror', {
+                url: "hiker://empty"
+            });
+        }
     }
     if(count>0){
         putMyVar("starttask","1");
