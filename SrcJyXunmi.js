@@ -255,8 +255,9 @@ function xunmi(name,data) {
             } else {
                 log('api类型错误')
             }
+            let successnum = beresults.length-beerrors.length;
             updateItem('loading', {
-                title: (beresults.length-beerrors.length)+'/'+beerrors.length+'/'+count+'，加载中...',
+                title: (successnum<0?0:successnum)+'/'+beerrors.length+'/'+count+'，加载中...',
                 url: "hiker://empty",
                 col_type: "text_center_1",
                 extra: {
@@ -504,9 +505,9 @@ function xunmi(name,data) {
                     obj.errors.push({name:id,url:taskResult.url,apiurl:taskResult.apiurl,error:taskResult.error});
                 }
                 if(obj.results.indexOf(taskResult.apiurl)==-1){obj.results.push(taskResult.apiurl);}
-                
+                let successnum = obj.results.length-obj.errors.length;
                 updateItem('loading', {
-                    title: (obj.results.length-obj.errors.length)+'/'+obj.errors.length+'/'+count+'，加载中...',
+                    title: (successnum<0?0:successnum)+'/'+obj.errors.length+'/'+count+'，加载中...',
                     url: "hiker://empty",
                     col_type: "text_center_1",
                     extra: {
