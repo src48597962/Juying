@@ -593,6 +593,7 @@ function xunmi(name,data) {
                                     deleteItem('xumi-'+api);
                                     return "toast://已将“"+name+"”，调整到失败待处理分组";
                                 }else if(input=="删除全部失败"){
+                                    /*
                                     return $("确定要删除失败的"+beerrors.length+"个接口吗？").confirm((beerrors)=>{
                                         var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
                                         var datafile = fetch(filepath);
@@ -609,6 +610,7 @@ function xunmi(name,data) {
                                         writeFile(filepath, JSON.stringify(datalist));
                                         return "toast://已删除全部失败的接口";
                                     }, beerrors)
+                                    */
                                 }
                             }, beerrors[k].name, beerrors[k].url, beerrors[k].beerrors[k].apiurl, beerrors),
                             col_type: "text_1",
