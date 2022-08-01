@@ -519,49 +519,21 @@ function xunmi(name,data) {
         var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
         var datafile = fetch(filepath);
         eval("var jiekoulist=" + datafile+ ";");
+        let tzgroup = 0;
         for (let k in errorlist) {
             for(var i=0;i<jiekoulist.length;i++){
                 if(jiekoulist[i].url==errorlist[k].apiurl){
                     jiekoulist[i].failnum = jiekoulist[i].failnum + 1 || 1;
                     if(errorlist[k].error==1&&jiekoulist[i].failnum>=parseInt(getMyVar("failnum","10"))){
                         jiekoulist[i].group = "失败待处理";
+                        tzgroup = 1;
                     }
                     break;
                 }
             }
-            /*
-            addItemBefore('loading', {
-                title: beerrors[k].name,
-                desc: "加载失败，点击操作",
-                url: $(["查看原网页","删除此接口"],2).select((name,url,api)=>{
-                    if(input=="查看原网页"){
-                        return url;
-                    }else{
-                        return $("确定删除接口："+name).confirm((dataurl)=>{
-                            var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
-                            var datafile = fetch(filepath);
-                            eval("var datalist=" + datafile+ ";");
-                            for(var i=0;i<datalist.length;i++){
-                                if(datalist[i].url==dataurl){
-                                    datalist.splice(i,1);
-                                    break;
-                                }
-                            }
-                            writeFile(filepath, JSON.stringify(datalist));
-                            deleteItem('xumi-'+dataurl);
-                            return "toast://已删除";
-                        }, api)
-                    }
-                }, beerrors[k].name, beerrors[k].url, beerrors[k].apiurl),
-                col_type: "text_1",
-                extra: {
-                    id: 'xumi-'+beerrors[k].apiurl,
-                    cls: 'xunmilist'
-                }
-            });
-            */
         }
-        writeFile(filepath, JSON.stringify(jiekoulist));
+        if(tzgroup == 1){writeFile(filepath, JSON.stringify(jiekoulist));}
+        
         updateItem('loading', {
             title: (beresults.length-beerrors.length)+'/'+beerrors.length+'/'+count+',我是有底线的',
             url: beresults.length==count?"hiker://empty":$('#noLoading#').lazyRule((bess,datalist,beresults,beerrors,name,count)=>{
