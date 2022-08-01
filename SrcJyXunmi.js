@@ -563,26 +563,54 @@ function xunmi(name,data) {
                         addItemBefore('loading', {
                             title: beerrors[k].name,
                             desc: "加载失败，点击操作",
-                            url: $(["查看原网页","删除此接口"],2).select((name,url,api)=>{
+                            url: $(["查看原网页","删除此接口","加入待处理","删除全部失败"],2).select((name,url,api,beerrors)=>{
                                 if(input=="查看原网页"){
                                     return url;
-                                }else{
-                                    return $("确定删除接口："+name).confirm((dataurl)=>{
+                                }else if(input=="删除此接口"){
+                                    var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
+                                    var datafile = fetch(filepath);
+                                    eval("var datalist=" + datafile+ ";");
+                                    for(var i=0;i<datalist.length;i++){
+                                        if(datalist[i].url==dataurl){
+                                            datalist.splice(i,1);
+                                            break;
+                                        }
+                                    }
+                                    writeFile(filepath, JSON.stringify(datalist));
+                                    deleteItem('xumi-'+dataurl);
+                                    return "toast://已删除";
+                                }else if(input=="加入待处理"){
+                                    var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
+                                    var datafile = fetch(filepath);
+                                    eval("var datalist=" + datafile+ ";");
+                                    for(var i=0;i<datalist.length;i++){
+                                        if(datalist[i].url==dataurl){
+                                            datalist[i].group = "失败待处理";
+                                            break;
+                                        }
+                                    }
+                                    writeFile(filepath, JSON.stringify(datalist));
+                                    deleteItem('xumi-'+dataurl);
+                                    return "toast://已将“"+name+"”，调整到失败待处理分组";
+                                }else if(input=="删除全部失败"){
+                                    return $("确定要删除失败的"+beerrors.length+"个接口吗？").confirm((beerrors)=>{
                                         var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
                                         var datafile = fetch(filepath);
                                         eval("var datalist=" + datafile+ ";");
-                                        for(var i=0;i<datalist.length;i++){
-                                            if(datalist[i].url==dataurl){
-                                                datalist.splice(i,1);
-                                                break;
+                                        for (let k in beerrors) {
+                                            for(var i=0;i<datalist.length;i++){
+                                                if(datalist[i].url==beerrors[k]){
+                                                    datalist.splice(i,1);
+                                                    break;
+                                                }
                                             }
                                         }
                                         writeFile(filepath, JSON.stringify(datalist));
                                         deleteItem('xumi-'+dataurl);
                                         return "toast://已删除";
-                                    }, api)
+                                    }, beerrors)
                                 }
-                            }, beerrors[k].name, beerrors[k].url, beerrors[k].apiurl),
+                            }, beerrors[k].name, beerrors[k].url, beerrors[k].apiurl, beerrors),
                             col_type: "text_1",
                             extra: {
                                 id: 'xumi-'+beerrors[k].apiurl,
