@@ -207,8 +207,9 @@ function xunmi(name,data) {
 
     var count = datalist.length;
     var beresults = [];
-    function bess(datalist,beresults,name,count) {
-        var beerrors = [];
+    var beerrors = [];
+    function bess(datalist,beresults,beerrors,name,count) {
+        var errorlist = [];
         var success = 0;
         var xunminum = parseInt(getMyVar("xunminum","10"));
         var xunmitimeout = parseInt(getMyVar("xunmitimeout","5"));
@@ -488,6 +489,7 @@ function xunmi(name,data) {
                     success = success + i;
                     addItemBefore('loading', taskResult.add);
                 }else{
+                    errorlist.push({name:id,url:taskResult.url,apiurl:taskResult.apiurl,error:taskResult.error});
                     obj.errors.push({name:id,url:taskResult.url,apiurl:taskResult.apiurl,error:taskResult.error});
                 }
                 if(obj.results.indexOf(taskResult.apiurl)==-1){obj.results.push(taskResult.apiurl);}
@@ -517,16 +519,17 @@ function xunmi(name,data) {
         var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
         var datafile = fetch(filepath);
         eval("var jiekoulist=" + datafile+ ";");
-        for (let k in beerrors) {
+        for (let k in errorlist) {
             for(var i=0;i<jiekoulist.length;i++){
-                if(jiekoulist[i].url==beerrors[k].apiurl){
+                if(jiekoulist[i].url==errorlist[k].apiurl){
                     jiekoulist[i].failnum = jiekoulist[i].failnum + 1 || 1;
-                    if(beerrors[k].error==1&&jiekoulist[i].failnum>=parseInt(getMyVar("failnum","10"))){
+                    if(errorlist[k].error==1&&jiekoulist[i].failnum>=parseInt(getMyVar("failnum","10"))){
                         jiekoulist[i].group = "失败待处理";
                     }
                     break;
                 }
             }
+            /*
             addItemBefore('loading', {
                 title: beerrors[k].name,
                 desc: "加载失败，点击操作",
@@ -556,11 +559,12 @@ function xunmi(name,data) {
                     cls: 'xunmilist'
                 }
             });
+            */
         }
         writeFile(filepath, JSON.stringify(jiekoulist));
         updateItem('loading', {
-            title: beresults.length+'/'+count+',我是有底线的',
-            url: beresults.length==count?"hiker://empty":$('#noLoading#').lazyRule((bess,datalist,beresults,name,count)=>{
+            title: (beresults.length-beerrors.length)+'/'+beerrors.length+'/'+count+',我是有底线的',
+            url: beresults.length==count?"hiker://empty":$('#noLoading#').lazyRule((bess,datalist,beresults,beerrors,name,count)=>{
                     for (let j = 0; j < beresults.length; j++) {
                         for(var i = 0; i < datalist.length; i++){
                             if(beresults[j] == datalist[i].url){
@@ -571,9 +575,9 @@ function xunmi(name,data) {
                     }
                     //var arr3 = datalist.filter(list => !beresults.includes(list.url));
                     putMyVar("starttask","1");
-                    bess(datalist,beresults,name,count);
+                    bess(datalist,beresults,beerrors,name,count);
                     return "hiker://empty";
-                },bess,datalist,beresults,name,count),
+                },bess,datalist,beresults,beerrors,name,count),
             col_type: "text_center_1",
             extra: {
                 id: "loading"
@@ -582,7 +586,7 @@ function xunmi(name,data) {
     }
     if(count>0){
         putMyVar("starttask","1");
-        bess(datalist,beresults,name,count);
+        bess(datalist,beresults,beerrors,name,count);
     }
 }
 
