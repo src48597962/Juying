@@ -600,8 +600,8 @@ function xunmi(name,data) {
                                         for (let k in beerrors) {
                                             for(var i=0;i<datalist.length;i++){
                                                 if(datalist[i].url==beerrors[k].apiurl){
-                                                    datalist.splice(i,1);
                                                     deleteItem('xumi-'+datalist[i].url);
+                                                    datalist.splice(i,1);
                                                     break;
                                                 }
                                             }
