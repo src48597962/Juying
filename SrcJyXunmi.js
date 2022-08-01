@@ -590,9 +590,7 @@ function xunmi(name,data) {
                             }
                         });
                     }
-                    updateItem('lookerror', {
-                        url: "hiker://empty"
-                    });
+                    deleteItem('lookerror');
                     return "hiker://empty";
                 },beerrors),
                 col_type: "text_center_1",
