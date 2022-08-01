@@ -591,7 +591,38 @@ function xunmi(name,data) {
                                     }
                                     writeFile(filepath, JSON.stringify(datalist));
                                     deleteItem('xumi-'+api);
+                                    let baoliujk = getMyVar('baoliujk','')?getMyVar('baoliujk','').split(','):[];
+                                    if(baoliujk.indexOf(api)==-1){
+                                        baoliujk.push(api);
+                                        putMyVar('baoliujk',baoliujk.join(','));
+                                    }
                                     return "toast://已将“"+name+"”，调整到失败待处理分组";
+                                }else if(input=="修改此接口"){
+                                    var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
+                                    var datafile = fetch(filepath);
+                                    eval("var datalist=" + datafile+ ";");
+                                    for(var i=0;i<datalist.length;i++){
+                                        if(datalist[i].url==api){
+                                            require(config.依赖.match(/https.*\//)[0] + 'SrcJySet.js');
+                                            jiekou('update', datalist[i]);
+                                            break;
+                                        }
+                                    }
+                                    deleteItem('xumi-'+api);
+                                    let baoliujk = getMyVar('baoliujk','')?getMyVar('baoliujk','').split(','):[];
+                                    if(baoliujk.indexOf(api)==-1){
+                                        baoliujk.push(api);
+                                        putMyVar('baoliujk',baoliujk.join(','));
+                                    }
+                                    return "toast://已将“"+name+"”，调整到失败待处理分组";
+                                }else if(input=="保留此接口"){
+                                    deleteItem('xumi-'+api);
+                                    let baoliujk = getMyVar('baoliujk','')?getMyVar('baoliujk','').split(','):[];
+                                    if(baoliujk.indexOf(api)==-1){
+                                        baoliujk.push(api);
+                                        putMyVar('baoliujk',baoliujk.join(','));
+                                    }
+                                    return "toast://全部删除失败时保留“"+name+"”";
                                 }else if(input=="删除全部失败"){
                                     return $("确定要删除失败的"+beerrors.length+"个接口吗？").confirm((beerrors)=>{
                                         var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
@@ -599,7 +630,7 @@ function xunmi(name,data) {
                                         eval("var datalist=" + datafile+ ";");
                                         for (let k in beerrors) {
                                             for(var i=0;i<datalist.length;i++){
-                                                if(datalist[i].url==beerrors[k].apiurl){
+                                                if(datalist[i].url==beerrors[k].apiurl&&getMyVar('baoliujk','').indexOf(datalist[i].url)==-1){
                                                     deleteItem('xumi-'+datalist[i].url);
                                                     datalist.splice(i,1);
                                                     break;
