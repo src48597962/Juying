@@ -9,6 +9,7 @@ function xunmi(name,data) {
         clearMyVar('stoptask');
         clearMyVar('groupmenu');
         clearMyVar('selectgroup');
+        clearMyVar('baoliujk');
     }));
     putMyVar('moviemore','1');
     try{
