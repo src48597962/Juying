@@ -571,26 +571,26 @@ function xunmi(name,data) {
                                     var datafile = fetch(filepath);
                                     eval("var datalist=" + datafile+ ";");
                                     for(var i=0;i<datalist.length;i++){
-                                        if(datalist[i].url==dataurl){
+                                        if(datalist[i].url==api){
                                             datalist.splice(i,1);
                                             break;
                                         }
                                     }
                                     writeFile(filepath, JSON.stringify(datalist));
-                                    deleteItem('xumi-'+dataurl);
+                                    deleteItem('xumi-'+api);
                                     return "toast://已删除";
                                 }else if(input=="加入待处理"){
                                     var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
                                     var datafile = fetch(filepath);
                                     eval("var datalist=" + datafile+ ";");
                                     for(var i=0;i<datalist.length;i++){
-                                        if(datalist[i].url==dataurl){
+                                        if(datalist[i].url==api){
                                             datalist[i].group = "失败待处理";
                                             break;
                                         }
                                     }
                                     writeFile(filepath, JSON.stringify(datalist));
-                                    deleteItem('xumi-'+dataurl);
+                                    deleteItem('xumi-'+api);
                                     return "toast://已将“"+name+"”，调整到失败待处理分组";
                                 }else if(input=="删除全部失败"){
                                     return $("确定要删除失败的"+beerrors.length+"个接口吗？").confirm((beerrors)=>{
@@ -599,18 +599,18 @@ function xunmi(name,data) {
                                         eval("var datalist=" + datafile+ ";");
                                         for (let k in beerrors) {
                                             for(var i=0;i<datalist.length;i++){
-                                                if(datalist[i].url==beerrors[k]){
+                                                if(datalist[i].url==beerrors[k].apiurl){
                                                     datalist.splice(i,1);
+                                                    deleteItem('xumi-'+datalist[i].url);
                                                     break;
                                                 }
                                             }
                                         }
                                         writeFile(filepath, JSON.stringify(datalist));
-                                        deleteItem('xumi-'+dataurl);
-                                        return "toast://已删除";
+                                        return "toast://已删除全部失败的接口";
                                     }, beerrors)
                                 }
-                            }, beerrors[k].name, beerrors[k].url, beerrors[k].apiurl, beerrors),
+                            }, beerrors[k].name, beerrors[k].url, beerrors[k].beerrors[k].apiurl, beerrors),
                             col_type: "text_1",
                             extra: {
                                 id: 'xumi-'+beerrors[k].apiurl,
