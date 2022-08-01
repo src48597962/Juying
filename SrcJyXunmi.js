@@ -563,8 +563,8 @@ function xunmi(name,data) {
                         addItemBefore('loading', {
                             title: beerrors[k].name,
                             desc: "加载失败，点击操作",
-                            url: $(["查看原网页","删除此接口","加入待处理","删除全部失败"],2).select((name,url,api,beerrors)=>{
-                                log(beerrors.length)
+                            url: $(["查看原网页","删除此接口","加入待处理","删除全部失败"],2).select((name,url,api,errors)=>{
+                                log(errors.length)
                                 /*
                                 if(input=="查看原网页"){
                                     return url;
