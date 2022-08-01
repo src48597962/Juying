@@ -617,8 +617,8 @@ function xunmi(name,data) {
                                 cls: 'xunmilist'
                             }
                         });
-                        return "hiker://empty";
                     }
+                    return "hiker://empty";
                 },beerrors),
                 col_type: "text_center_1",
                 extra: {
