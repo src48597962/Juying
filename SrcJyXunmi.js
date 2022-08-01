@@ -555,7 +555,7 @@ function xunmi(name,data) {
                 id: "loading"
             }
         });
-        if(beresults.length==count){
+        if(beresults.length==count&&beerrors.length>0){
             addItemAfter('loading', {
                 title: "👀查看失败接口",
                 url: $('#noLoading#').lazyRule((beerrors)=>{
@@ -564,6 +564,8 @@ function xunmi(name,data) {
                             title: beerrors[k].name,
                             desc: "加载失败，点击操作",
                             url: $(["查看原网页","删除此接口","加入待处理","删除全部失败"],2).select((name,url,api,beerrors)=>{
+                                log(beerrors.length)
+                                /*
                                 if(input=="查看原网页"){
                                     return url;
                                 }else if(input=="删除此接口"){
@@ -593,7 +595,6 @@ function xunmi(name,data) {
                                     deleteItem('xumi-'+api);
                                     return "toast://已将“"+name+"”，调整到失败待处理分组";
                                 }else if(input=="删除全部失败"){
-                                    /*
                                     return $("确定要删除失败的"+beerrors.length+"个接口吗？").confirm((beerrors)=>{
                                         var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
                                         var datafile = fetch(filepath);
@@ -610,8 +611,7 @@ function xunmi(name,data) {
                                         writeFile(filepath, JSON.stringify(datalist));
                                         return "toast://已删除全部失败的接口";
                                     }, beerrors)
-                                    */
-                                }
+                                }*/
                             }, beerrors[k].name, beerrors[k].url, beerrors[k].beerrors[k].apiurl, beerrors),
                             col_type: "text_1",
                             extra: {
