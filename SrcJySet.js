@@ -1,3 +1,4 @@
+//个人学习代码
 function SRCSet() {
     addListener("onClose", $.toString(() => {
         clearMyVar('guanlicz');
