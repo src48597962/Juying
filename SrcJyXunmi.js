@@ -1102,7 +1102,7 @@ function xunmierji(type,ua) {
         if (list == undefined || list.length == 0) {
             playlist('0');
         } else {
-            if (/v1|app|v2|iptv|xpath|biubiu/.test(type)) {
+            if (/v1|app|v2|iptv|cms|xpath|biubiu/.test(type)) {
                 var listone = list[0].split('$')[0];
                 try{
                     let list1 = list[0].split('$')[0];
@@ -1114,7 +1114,7 @@ function xunmierji(type,ua) {
                     //log('修正选集顺序失败>'+e.message)
                 }
             }else{
-                //cms
+                
             }
             
             if (listone) {
