@@ -137,7 +137,7 @@ function xunmi(name,data) {
         }
         grouplist.unshift(xunmigroup);
     }
-    if(grouplist.indexOf('失败待处理')!=grouplist.length-1){
+    if(grouplist.indexOf('失败待处理')!=-1&&grouplist.indexOf('失败待处理')!=grouplist.length-1){
         for (var i = 0; i < grouplist.length; i++) {
             if (grouplist[i] == '失败待处理') {
                 grouplist.splice(i, 1);
@@ -715,9 +715,23 @@ function xunmierji(type,ua) {
                 }catch(e){
                     var json = html.data.list[0];
                 }
-                
-                var arts = json.vod_play_from.split('$$$');
-                var conts = json.vod_play_url.split('$$$');
+                if(json.vod_play_from&&json.vod_play_url){
+                    var arts = json.vod_play_from.split('$$$');
+                    var conts = json.vod_play_url.split('$$$');
+                }else if(json.from&&json.play){
+                    var arts = json.from;
+                    var conts = [];
+                    for (let i = 0; i < json.play.length; i++) {
+                        let cont = json.play[i];
+                        for (let j = 0; j < cont.length; j++) {
+                            cont.push(cont[j][0]+"$"+cont[j][1])
+                        }
+                        conts.push(cont.join("#"))
+                    }
+                }else{
+                    var arts = [];
+                    var conts = [];
+                }
             }else{
                 if($.type(html.data)=="array"){
                     var json = html.data[0];
