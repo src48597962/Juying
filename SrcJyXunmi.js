@@ -718,13 +718,14 @@ function xunmierji(type,ua) {
                 if(json.vod_play_from&&json.vod_play_url){
                     var arts = json.vod_play_from.split('$$$');
                     var conts = json.vod_play_url.split('$$$');
-                }else if(json.from&&json.play){
-                    var arts = json.from;
+                }else if(html.from&&html.play){
+                    var arts = html.from;
                     var conts = [];
-                    for (let i = 0; i < json.play.length; i++) {
-                        let cont = json.play[i];
-                        for (let j = 0; j < cont.length; j++) {
-                            cont.push(cont[j][0]+"$"+cont[j][1])
+                    for (let i = 0; i < html.play.length; i++) {
+                        let cont = [];
+                        let plays = html.play[i];
+                        for (let j = 0; j < plays.length; j++) {
+                            cont.push(plays[j][0]+"$"+plays[j][1])
                         }
                         conts.push(cont.join("#"))
                     }
