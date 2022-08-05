@@ -435,7 +435,7 @@ function yiji() {
     }
 
     setResult(d);
-    if(getMyVar('jydingyue','0')=="0"&&JYconfig['codeid2']){
+    if(getMyVar('jydingyue','0')=="0"&&JYconfig['codeid2']&&JYconfig['codeid']!=JYconfig['codeid2']){
         putMyVar('jydingyue','1');
         try{
             var nowtime = Date.now();
@@ -628,7 +628,7 @@ function sousuo() {
 
 //版本检测
 function Version() {
-    var nowVersion = 3.5;//现在版本
+    var nowVersion = 3.6;//现在版本
     var nowtime = Date.now();
     var oldtime = parseInt(getItem('VersionChecktime','0').replace('time',''));
     if (getVar('SrcJuying-VersionCheck', '0') == '0' && nowtime > (oldtime+6*60*60*1000)) {
