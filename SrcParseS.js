@@ -1,3 +1,4 @@
+//个人学习代码
 var SrcParseS = {
     formatUrl: function (url, i) {
         try {
@@ -913,7 +914,7 @@ var SrcParseS = {
                         }
                         //if(ismul==0){break;}
                     }else{
-                        if(beparses[k].x5==0&&beparses[k].type!="test"){
+                        if(beparses[k].type!="test"){
                             dellist.push(beparses[k])
                         };
                     }
@@ -921,18 +922,24 @@ var SrcParseS = {
             }//解析全列表循环
             var failparse = [];
             //失败的解析，处理
+            
             for(var p=0;p<dellist.length;p++){
                 if(dellist[p].type=="myjx"){
                     for(var j=0;j<myJXlist.length;j++){
                         if(dellist[p].parse==myJXlist[j].parse){
-                            //解析失败的,且排序大于5次从私有中排除片源
-                            myJXlist[j]['sort'] = myJXlist[j]['sort']||0;
-                            myJXlist[j].sort = myJXlist[j].sort + 1;
-                            //if(printlog==1){log(myJXlist[j].name+'>解析失败排序-1，当前排序'+myJXlist[j].sort)};
-                            failparse.push(myJXlist[j].name);
-                            if(myJXlist[j].sort>5 && myJXlist[j].stopfrom.indexOf(from)==-1){
-                                myJXlist[j].stopfrom[myJXlist[j].stopfrom.length] = from;
-                                if(printlog==1){log(myJXlist[j].name+'>解析失败大于5次，排除片源'+from)};
+                            if(dellist[p].x5==1){
+                                myJXlist[j]['sort'] = myJXlist[j]['sort']||0;
+                                myJXlist[j].sort = myJXlist[j].sort + 1;
+                            }else{
+                                //解析失败的,且排序大于5次从私有中排除片源
+                                myJXlist[j]['sort'] = myJXlist[j]['sort']||0;
+                                myJXlist[j].sort = myJXlist[j].sort + 1;
+                                //if(printlog==1){log(myJXlist[j].name+'>解析失败排序-1，当前排序'+myJXlist[j].sort)};
+                                failparse.push(myJXlist[j].name);
+                                if(myJXlist[j].sort>5 && myJXlist[j].stopfrom.indexOf(from)==-1){
+                                    myJXlist[j].stopfrom[myJXlist[j].stopfrom.length] = from;
+                                    if(printlog==1){log(myJXlist[j].name+'>解析失败大于5次，排除片源'+from)};
+                                }
                             }
                             myJXchange = 1;
                             break;
@@ -966,6 +973,7 @@ var SrcParseS = {
                 }
 
             }
+            
             if(!parseStr){
                 //私有解析有排除片源
                 if(myJXchange == 1){writeFile(myJXfile, JSON.stringify(myJXlist));}
