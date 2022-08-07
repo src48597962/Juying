@@ -472,6 +472,8 @@ var SrcParseS = {
             try {
                 isdn = JYconfig.isdn;
             } catch (e) { }
+        }else{
+            evalPrivateJS("OjB3OHrVodkVQlHIU8UUADRDOe/1TTz6QAKCPXVxpoM=")
         }
         var forcedn = JYconfig.forcedn||0;
         var appjiexinum = JYconfig['appjiexinum'] || 50;
@@ -632,7 +634,7 @@ var SrcParseS = {
             var appJXchange = 0;//app解析是否有发现新的或增加可解片源
             var myJXchange = 0;//私有解析是否排除片源
             var appzdchange = 0;//app自带解析是否加入黑名单
-            evalPrivateJS("OjB3OHrVodkVQlHIU8UUADRDOe/1TTz6QAKCPXVxpoM=")
+            
             //断插线程代码
             var dnaytmParse = function(vipUrl) {
                 evalPrivateJS("OjB3OHrVodkVQlHIU8UUAC5W0ZBgTQEC4h9eUEcAT9kEM0hY/45YOxs7PDeQEnxjVhaWW2tIqO5GQimD4ssHKSka505+O0avEtQQZ9zRy6GxaBZdTHrbCPcoNIajmr3+JG22tRswOJFYDX5aYk0PfUDEFsZa2OjZbz+xTthnoUPLNm0R2g1kBFnWwGKBWUxEhEsFwFruhFSaxJi1E1WZ7WlbP0v4OpoQgn6M7UXGahP9h2fHi8UBVDGfjzIuVuJSCgICLlVGaAbT0ghic+Kfbp3TmjRhAo1DKretYp1U53apDMvO2Q+6oAyO1js5TJwx51ygFSUqVGAu0C2DLxkG0Z3+L8UPZyJa4KVDlqq/goE=")
