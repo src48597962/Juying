@@ -480,7 +480,7 @@ var SrcParseS = {
         putMyVar('SrcM3U8',JYconfig.cachem3u8);
         var mulnum = JYconfig.mulnum||1;
         if(printlog==1){log("影片地址："+vipUrl)}; 
-        var exclude = /404\.m3u8|xiajia\.mp4|余额不足\.m3u8|m3u8\.tv/;//设置排除地址
+        var exclude = /404\.m3u8|xiajia\.mp4|余额不足\.m3u8|\.m3u8\.tv/;//设置排除地址
         var contain = /\.mp4|\.m3u8|\.flv|\.avi|\.mpeg|\.wmv|\.mov|\.rmvb|\.dat|qqBFdownload|mime=video%2F|video_mp4/;//设置符合条件的正确地址
         var needparse = /suoyo\.cc|fen\.laodi|ruifenglb/;//设置需要解析的视频地址
 
