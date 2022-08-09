@@ -6,6 +6,13 @@ function jiekouyiji() {
         clearMyVar('isverifyA');
     }));
 */
+    var cfgfile = "hiker://files/rules/Src/Juying/config.json";
+    var Juyingcfg=fetch(cfgfile);
+    if(Juyingcfg != ""){
+        eval("var JYconfig=" + Juyingcfg+ ";");
+    }else{
+        var JYconfig= {};
+    }
     var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
     var datafile = fetch(filepath);
     if(datafile != ""){
@@ -37,13 +44,14 @@ function jiekouyiji() {
         var url = api_url + '?ac=detail&ids=';
         
     } else if (api_type=="cms") {
+        var url = api_url + '?ac=detail&ids=';
         var classurl = api_url + "?ac=list";
-        var listurl = api_url + '?ac=videolist';
+        var listurl = api_url + '?ac=videolist&pg='+MY_PAGE;
     } else {
         log('api类型错误')
     }
     let api_class = JSON.parse(request(classurl, { headers: { 'User-Agent': api_ua }, timeout:xunmitimeout*1000 })).class;
-    log(api_class);
+    listurl = listurl + '&t=' + getMyVar('type_id',''+api_class[0].type_id);
     let type_pids = [];
     for(let i in api_class){
         if(type_pids.indexOf(api_class[i].type_pid)==-1){type_pids.push(api_class[i].type_pid)}
@@ -53,7 +61,6 @@ function jiekouyiji() {
             return a - b
         })
     };
-    log(type_pids);
 
     var d = [];
     const Color = "#3399cc";
@@ -67,28 +74,51 @@ function jiekouyiji() {
                     col_type: 'scroll_button'
                 });
             }
-            
         }
         d.push({
             col_type: "blank_block"
         });
     }
     
-
-
+    var html  = JSON.parse(request(listurl, { headers: { 'User-Agent': api_ua }, timeout:xunmitimeout*1000 }));
+    var list = html.list;
+    let videolist = list.map((list)=>{
+        let vodname = list.vod_name||list.title;
+        if(vodname.indexOf(name)>-1){
+            let vodpic = list.vod_pic||list.pic;
+            let voddesc = list.vod_remarks||list.state||"";
+            let vodurl = list.vod_id?url + list.vod_id:list.nextlink;
+            vodpic = vodpic?vodpic.replace('/img.php?url=','').replace('/tu.php?tu=','') + "@Referer=":"https://www.xawqxh.net/mxtheme/images/loading.gif";
+            if(/^\/upload|^upload/.test(vodpic)){
+                vodpic = vodurl.match(/http(s)?:\/\/(.*?)\//)[0] + vodpic;
+            }
+            if(/^\/\//.test(vodpic)){
+                vodpic = "https" + vodpic;
+            }
+            return {
+                title: vodname,
+                desc: voddesc,
+                pic_url: vodpic,
+                url: $("hiker://empty##" + vodurl + "#immersiveTheme#").rule((type,ua) => {
+                        require(config.依赖.match(/https.*\//)[0] + 'SrcJyXunmi.js');
+                        xunmierji(type,ua)
+                    },api_type, api_ua),
+                extra: {
+                    pic: vodpic,
+                    name: vodname
+                }
+            }
+        }
+    });
+    videolist = videolist.filter(n => n);
+    d.push(videolist);
 
     //const categorys = ['电视剧','电影','动漫','综艺','纪录片'];
     //const listTabs = ['teleplay','film','cartoon','tvshow','documentary'];
 
     //MY_URL = "https://waptv.sogou.com/napi/video/classlist?abtest=0&iploc=CN1304&spver=&listTab=" + getMyVar('SrcJuying$listTab', 'teleplay') + "&filter=&start="+ (MY_PAGE-1)*15 +"&len=15&fr=filter";
     /*
-    var cfgfile = "hiker://files/rules/Src/Juying/config.json";
-    var Juyingcfg=fetch(cfgfile);
-    if(Juyingcfg != ""){
-        eval("var JYconfig=" + Juyingcfg+ ";");
-    }else{
-        var JYconfig= {};
-    }
+    
     if(MY_PAGE==1){
         
         d.push({
