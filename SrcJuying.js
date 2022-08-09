@@ -114,7 +114,7 @@ function jiekouyiji() {
     });
     videolist = videolist.filter(n => n);
     log(videolist);
-    d.concat(videolist);
+    d = d.concat(videolist);
 
     //const categorys = ['电视剧','电影','动漫','综艺','纪录片'];
     //const listTabs = ['teleplay','film','cartoon','tvshow','documentary'];
