@@ -669,7 +669,7 @@ function xunmierji(type,ua) {
     }));
 
     var d = [];
-    setPageTitle(MY_PARAMS.title);
+    if(MY_PARAMS.title){setPageTitle(MY_PARAMS.title);}
     //加载本地自定义变量缓存文件
     var configfile = config.依赖.match(/https.*\//)[0] + 'srcconfig.js';
     require(configfile);
