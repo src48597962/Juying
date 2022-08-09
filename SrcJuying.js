@@ -46,7 +46,7 @@ function jiekouyiji() {
     log(api_class);
     let type_pids = [];
     for(let i in api_class){
-        if(type_pids.indexOf(api_class[i].type_pid)){type_pids.push(api_class[i].type_pid)}
+        if(type_pids.indexOf(api_class[i].type_pid)==-1){type_pids.push(api_class[i].type_pid)}
     }
     if(type_pids.length > 0){
         type_pids.sort((a, b) => {
