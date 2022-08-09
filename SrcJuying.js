@@ -14,16 +14,8 @@ function jiekouyiji() {
     }else{
         var JYconfig= {};
     }
-    var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
-    var datafile = fetch(filepath);
-    if(datafile != ""){
-        eval("var datalist=" + datafile+ ";");
-    }else{
-        var datalist = [];
-    }
-    datalist = datalist.filter(item => {
-        return item.type!="xpath" && item.type!="biubiu";
-    })
+    
+    var api_name = getMyVar('api_name', '');
     var api_type = "cms";
     var api_url = "http://49.232.165.26/hi.php/provide/vod/";
     var api_ua = MOBILE_UA;
@@ -57,6 +49,24 @@ function jiekouyiji() {
         log('api类型错误')
     }
     if(MY_PAGE==1){
+        var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
+        var datafile = fetch(filepath);
+        if(datafile != ""){
+            eval("var datalist=" + datafile+ ";");
+        }else{
+            var datalist = [];
+        }
+        datalist = datalist.filter(item => {
+            return item.type!="xpath" && item.type!="biubiu";
+        })
+        for(let i in datalist){
+            d.push({
+                title: datalist[i].name,
+                col_type: 'scroll_button',
+                url: "hiker://empty"
+            });
+        }
+        
         const Color = "#3399cc";
         try{
             var typehtml = JSON.parse(request(typeurl, { headers: { 'User-Agent': api_ua }, timeout:xunmitimeout*1000 }));
@@ -138,7 +148,8 @@ function jiekouyiji() {
                 col_type: 'movie_3',
                 extra: {
                     pic: vodpic,
-                    name: vodname
+                    name: vodname,
+                    title: vodname+'-'+api_name
                 }
             }
         }
