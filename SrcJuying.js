@@ -53,6 +53,7 @@ function jiekouyiji() {
             log('api类型错误')
         }
         var api_class = JSON.parse(request(classurl, { headers: { 'User-Agent': api_ua }, timeout:xunmitimeout*1000 })).class;
+        putMyVar('type_id',''+api_class[0].type_id)
         let type_pids = [];
         for(let i in api_class){
             if(type_pids.indexOf(api_class[i].type_pid)==-1){type_pids.push(api_class[i].type_pid)}
@@ -77,7 +78,7 @@ function jiekouyiji() {
             });
         }
     }
-    MY_URL = listurl + MY_PAGE + '&t=' + getMyVar('type_id',''+api_class[0].type_id);
+    MY_URL = listurl + MY_PAGE + '&t=' + getMyVar('type_id','1');
 
     
     const Color = "#3399cc";
