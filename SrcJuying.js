@@ -38,7 +38,7 @@ function jiekouyiji() {
         
     } else if (api_type=="cms") {
         var classurl = api_url + "?ac=list";
-        var listurl = api_url + '?ac=videolist&wd='+name;
+        var listurl = api_url + '?ac=videolist';
     } else {
         log('api类型错误')
     }
