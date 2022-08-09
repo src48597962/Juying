@@ -43,6 +43,7 @@ function jiekouyiji() {
         log('api类型错误')
     }
     let api_class = JSON.parse(request(classurl, { headers: { 'User-Agent': api_ua }, timeout:xunmitimeout*1000 })).class;
+    log(api_class);
     let type_pids = [];
     for(let i in api_class){
         if(type_pids.indexOf(api_class[i].type_pid)){type_pids.push(api_class[i].type_pid)}
@@ -52,7 +53,7 @@ function jiekouyiji() {
             return a - b
         })
     };
-
+    log(type_pids);
 
     var d = [];
     const Color = "#3399cc";
