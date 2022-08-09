@@ -26,20 +26,20 @@ function jiekouyiji() {
         let mm = date.getMonth()+1;
         let dd = date.getDate();
         let key = (mm<10?"0"+mm:mm)+""+(dd<10?"0"+dd:dd);
-        var classurl = url_api + '/detail?&key='+key+'&vod_id=';
-        var listurl = url_api + '?ac=videolist&limit=10&wd='+name+'&key='+key;
+        var classurl = api_url + '/detail?&key='+key+'&vod_id=';
+        var listurl = api_url + '?ac=videolist&limit=10&wd='+name+'&key='+key;
     } else if (api_type=="app") {
-        var url = url_api + 'video_detail?id=';
-        var ssurl = url_api + 'search?limit=10&text='+name;
+        var url = api_url + 'video_detail?id=';
+        var ssurl = api_url + 'search?limit=10&text='+name;
     } else if (api_type=="v2") {
-        var url = url_api + 'video_detail?id=';
-        var ssurl = url_api + 'search?limit=10&text='+name;
+        var url = api_url + 'video_detail?id=';
+        var ssurl = api_url + 'search?limit=10&text='+name;
     } else if (api_type=="iptv") {
-        var url = url_api + '?ac=detail&ids=';
-        var ssurl = url_api + '?ac=list&zm='+name+'&wd='+name; 
+        var url = api_url + '?ac=detail&ids=';
+        var ssurl = api_url + '?ac=list&zm='+name+'&wd='+name; 
     } else if (api_type=="cms") {
         var classurl = api_url + "?ac=list";
-        var listurl = url_api + '?ac=videolist&wd='+name;
+        var listurl = api_url + '?ac=videolist&wd='+name;
     } else {
         log('api类型错误')
     }
@@ -469,13 +469,13 @@ function yiji() {
                     SRCSet();
                 }),
             pic_url: 'https://lanmeiguojiang.com/tubiao/more/129.png',
-            col_type: 'icon_small_5'
+            col_type: 'icon_5'
         });
         d.push({
             title: JYconfig['recordentry']!=2?"历史":"收藏",
             url: JYconfig['recordentry']!=2?"hiker://history":"hiker://collection",
             pic_url: 'https://lanmeiguojiang.com/tubiao/more/109.png',
-            col_type: 'icon_small_5'
+            col_type: 'icon_5'
         });
         d.push({
             title: "搜索",
@@ -484,7 +484,7 @@ function yiji() {
                     sousuo2();
                 }),
             pic_url: 'https://lanmeiguojiang.com/tubiao/more/101.png',
-            col_type: 'icon_small_5'
+            col_type: 'icon_5'
         });
         d.push({
             title: "筛选",
@@ -494,7 +494,7 @@ function yiji() {
                     return "hiker://empty";
                 }, fold),
             pic_url: fold === '1'?'https://lanmeiguojiang.com/tubiao/more/213.png':'https://lanmeiguojiang.com/tubiao/more/172.png',
-            col_type: 'icon_small_5'
+            col_type: 'icon_5'
         });
         d.push({
             title: "进入",
@@ -503,7 +503,7 @@ function yiji() {
                     jiekouyiji();
                 }),
             pic_url: 'https://lanmeiguojiang.com/tubiao/more/213.png',
-            col_type: 'icon_small_5'
+            col_type: 'icon_5'
         });
         d.push({
             col_type: 'line'
