@@ -52,9 +52,9 @@ function jiekouyiji() {
             log('api类型错误')
         }
     if(MY_PAGE==1){
-
+        const Color = "#3399cc";
         var api_class = JSON.parse(request(classurl, { headers: { 'User-Agent': api_ua }, timeout:xunmitimeout*1000 })).class;
-        putMyVar('type_id',''+api_class[0].type_id)
+        if(!getMyVar('SrcJuying$api_type_id')){putMyVar('SrcJuying$api_type_id',''+api_class[0].type_id)}
         let type_pids = [];
         for(let i in api_class){
             if(type_pids.indexOf(api_class[i].type_pid)==-1){type_pids.push(api_class[i].type_pid)}
@@ -68,8 +68,12 @@ function jiekouyiji() {
             for (var i in api_class) {
                 if(api_class[i].type_pid==type_pids[j]){
                     d.push({
-                        title: api_class[i].type_name,
-                        url: "hiker://empty",
+                        title: getMyVar('SrcJuying$api_type_id')==api_class[i].type_id?'““””<b><span style="color:' + Color + '">' + api_class[i].type_name + '</span></b>':api_class[i].type_name,
+                        url: $('#noLoading#').lazyRule((type_id) => {
+                            putMyVar('SrcJuying$api_type_id', type_id);
+                            refreshPage(false);
+                            return "hiker://empty";
+                        }, api_class[i].type_id),
                         col_type: 'scroll_button'
                     });
                 }
@@ -79,15 +83,10 @@ function jiekouyiji() {
             });
         }
     }
-    MY_URL = listurl + MY_PAGE + '&t=' + getMyVar('type_id','1');
+    MY_URL = listurl + MY_PAGE + '&t=' + getMyVar('SrcJuying$api_type_id','1');
 
-    
-    const Color = "#3399cc";
-
-    
     
     var html  = request(MY_URL, { headers: { 'User-Agent': api_ua }, timeout:xunmitimeout*1000 });
-    log(html)
     var list = JSON.parse(html).list;
 
     let videolist = list.map((list)=>{
@@ -120,65 +119,7 @@ function jiekouyiji() {
         }
     });
     videolist = videolist.filter(n => n);
-    log(videolist)
     d = d.concat(videolist);
-
-    //const categorys = ['电视剧','电影','动漫','综艺','纪录片'];
-    //const listTabs = ['teleplay','film','cartoon','tvshow','documentary'];
-
-    //MY_URL = "https://waptv.sogou.com/napi/video/classlist?abtest=0&iploc=CN1304&spver=&listTab=" + getMyVar('SrcJuying$listTab', 'teleplay') + "&filter=&start="+ (MY_PAGE-1)*15 +"&len=15&fr=filter";
-    /*
-    
-    if(MY_PAGE==1){
-        
-        d.push({
-            col_type: 'line'
-        });
-        for (let i = 0; i < 10; i++) {
-            d.push({
-                col_type: "blank_block"
-            })
-        }
-
-        for (var i in categorys) {
-            d.push({
-                title: getMyVar('SrcJuying$listTab', 'teleplay') === listTabs[i] ? '““””<b><span style="color:' + Color + '">' + categorys[i] + '</span></b>' : categorys[i],
-                url: $('#noLoading#').lazyRule((listTab) => {
-                        putMyVar('SrcJuying$listTab', listTab);
-                        refreshPage(false);
-                        return "hiker://empty";
-                    }, listTabs[i]),
-                col_type: 'scroll_button'
-            });
-        }
-        d.push({
-            col_type: "blank_block"
-        });
-
-    }
-    var html = JSON.parse(request(MY_URL));
-    
-    var seachurl = $('').lazyRule(() => {
-        return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
-            require(config.依赖.match(/https.*\//)[0] + 'SrcJyXunmi.js');
-            xunmi(name);
-        }, input);
-    });
-    
-    var list = html.listData.results;
-    for (var i in list) {
-        d.push({
-            title: list[i].name,
-            img: list[i].v_picurl + '@Referer=',
-            url: JYconfig['erjimode']!=2?"hiker://empty##https://v.sogou.com" + list[i].url.replace('teleplay', 'series').replace('cartoon', 'series') + "#immersiveTheme#":list[i].name + seachurl,
-            desc: list[i].ipad_play_for_list.finish_episode?list[i].ipad_play_for_list.episode==list[i].ipad_play_for_list.finish_episode?"全集"+list[i].ipad_play_for_list.finish_episode:"连载"+list[i].ipad_play_for_list.episode+"/"+list[i].ipad_play_for_list.finish_episode:"",
-            extra: {
-                pic: list[i].v_picurl,
-                name: list[i].name
-            }
-        });
-    }
-    */
     setResult(d);
 }
 //二级
