@@ -25,10 +25,10 @@ function jiekouyiji() {
         datalist = datalist.filter(item => {
             return item.type!="xpath" && item.type!="biubiu";
         })
-        let api_type = "cms";
-        let api_url = "http://49.232.165.26/hi.php/provide/vod/";
-        let api_ua = MOBILE_UA;
-        let xunmitimeout = 5;
+        var api_type = "cms";
+        var api_url = "http://49.232.165.26/hi.php/provide/vod/";
+        var api_ua = MOBILE_UA;
+        var xunmitimeout = 5;
         
         if (api_type=="v1") {
             let date = new Date();
