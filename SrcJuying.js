@@ -7,8 +7,7 @@ function jiekouyiji() {
     }));
 */
     var d = [];
-    if(MY_PAGE==1){
-            var cfgfile = "hiker://files/rules/Src/Juying/config.json";
+    var cfgfile = "hiker://files/rules/Src/Juying/config.json";
         var Juyingcfg=fetch(cfgfile);
         if(Juyingcfg != ""){
             eval("var JYconfig=" + Juyingcfg+ ";");
@@ -25,7 +24,7 @@ function jiekouyiji() {
         datalist = datalist.filter(item => {
             return item.type!="xpath" && item.type!="biubiu";
         })
-        var api_type = "cms";
+    var api_type = "cms";
         var api_url = "http://49.232.165.26/hi.php/provide/vod/";
         var api_ua = MOBILE_UA;
         var xunmitimeout = 5;
@@ -52,6 +51,8 @@ function jiekouyiji() {
         } else {
             log('api类型错误')
         }
+    if(MY_PAGE==1){
+
         var api_class = JSON.parse(request(classurl, { headers: { 'User-Agent': api_ua }, timeout:xunmitimeout*1000 })).class;
         putMyVar('type_id',''+api_class[0].type_id)
         let type_pids = [];
