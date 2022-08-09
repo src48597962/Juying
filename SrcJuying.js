@@ -84,7 +84,7 @@ function jiekouyiji() {
     var list = html.list;
     let videolist = list.map((list)=>{
         let vodname = list.vod_name||list.title;
-        if(vodname.indexOf(name)>-1){
+        if(vodname){
             let vodpic = list.vod_pic||list.pic;
             let voddesc = list.vod_remarks||list.state||"";
             let vodurl = list.vod_id?url + list.vod_id:list.nextlink;
