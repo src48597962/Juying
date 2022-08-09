@@ -104,6 +104,7 @@ function jiekouyiji() {
                         require(config.依赖.match(/https.*\//)[0] + 'SrcJyXunmi.js');
                         xunmierji(type,ua)
                     },api_type, api_ua),
+                col_type: 'movie_3',
                 extra: {
                     pic: vodpic,
                     name: vodname
