@@ -82,7 +82,7 @@ function jiekouyiji() {
     
     var html  = JSON.parse(request(listurl, { headers: { 'User-Agent': api_ua }, timeout:xunmitimeout*1000 }));
     var list = html.list;
-    log(list);
+    //log(list);
     let videolist = list.map((list)=>{
         let vodname = list.vod_name||list.title;
         if(vodname){
@@ -112,6 +112,7 @@ function jiekouyiji() {
         }
     });
     videolist = videolist.filter(n => n);
+    log(videolist);
     d.push(videolist);
 
     //const categorys = ['电视剧','电影','动漫','综艺','纪录片'];
