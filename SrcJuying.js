@@ -17,7 +17,7 @@ function jiekouyiji() {
     
     var api_name = getMyVar('api_name', '');
     var api_type = "cms";
-    var api_url = "http://49.232.165.26/hi.php/provide/vod/";
+    var api_url = getMyVar('SrcJuying$api_url', "http://49.232.165.26/hi.php/provide/vod/");
     var api_ua = MOBILE_UA;
     var xunmitimeout = 5;
     
@@ -61,9 +61,13 @@ function jiekouyiji() {
         })
         for(let i in datalist){
             d.push({
-                title: datalist[i].name,
+                title: getMyVar('SrcJuying$api_url')==datalist[i].url?'““””<b><span style="color:green">' + datalist[i].name + '</span></b>':datalist[i].name,
                 col_type: 'scroll_button',
-                url: "hiker://empty"
+                url: $('#noLoading#').lazyRule((api_url) => {
+                    putMyVar('SrcJuying$api_url', api_url);
+                    refreshPage(false);
+                    return "hiker://empty";
+                }, datalist[i].url)
             });
         }
         
