@@ -52,6 +52,7 @@ function jiekouyiji() {
     }
     let api_class = JSON.parse(request(classurl, { headers: { 'User-Agent': api_ua }, timeout:xunmitimeout*1000 })).class;
     MY_URL = listurl + MY_PAGE + '&t=' + getMyVar('type_id',''+api_class[0].type_id);
+    log(MY_URL)
     let type_pids = [];
     for(let i in api_class){
         if(type_pids.indexOf(api_class[i].type_pid)==-1){type_pids.push(api_class[i].type_pid)}
@@ -530,7 +531,7 @@ function yiji() {
         });
         d.push({
             title: "进入",
-            url: $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
+            url: $("hiker://empty##fypage#noRecordHistory##noHistory#").rule(() => {
                     require(config.依赖);
                     jiekouyiji();
                 }),
