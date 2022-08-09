@@ -46,12 +46,12 @@ function jiekouyiji() {
     } else if (api_type=="cms") {
         var url = api_url + '?ac=detail&ids=';
         var classurl = api_url + "?ac=list";
-        var listurl = api_url + '?ac=videolist&pg='+MY_PAGE;
+        var listurl = api_url + '?ac=videolist&pg=';
     } else {
         log('api类型错误')
     }
     let api_class = JSON.parse(request(classurl, { headers: { 'User-Agent': api_ua }, timeout:xunmitimeout*1000 })).class;
-    listurl = listurl + '&t=' + getMyVar('type_id',''+api_class[0].type_id);
+    MY_URL = listurl + MY_PAGE + '&t=' + getMyVar('type_id',''+api_class[0].type_id);
     let type_pids = [];
     for(let i in api_class){
         if(type_pids.indexOf(api_class[i].type_pid)==-1){type_pids.push(api_class[i].type_pid)}
@@ -113,7 +113,6 @@ function jiekouyiji() {
         }
     });
     videolist = videolist.filter(n => n);
-    log(videolist);
     d = d.concat(videolist);
 
     //const categorys = ['电视剧','电影','动漫','综艺','纪录片'];
