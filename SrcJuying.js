@@ -6,82 +6,86 @@ function jiekouyiji() {
         clearMyVar('isverifyA');
     }));
 */
-    var cfgfile = "hiker://files/rules/Src/Juying/config.json";
-    var Juyingcfg=fetch(cfgfile);
-    if(Juyingcfg != ""){
-        eval("var JYconfig=" + Juyingcfg+ ";");
-    }else{
-        var JYconfig= {};
-    }
-    var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
-    var datafile = fetch(filepath);
-    if(datafile != ""){
-        eval("var datalist=" + datafile+ ";");
-    }else{
-        var datalist = [];
-    }
-    datalist = datalist.filter(item => {
-        return item.type!="xpath" && item.type!="biubiu";
-    })
-    let api_type = "cms";
-    let api_url = "http://49.232.165.26/hi.php/provide/vod/";
-    let api_ua = MOBILE_UA;
-    let xunmitimeout = 5;
-    
-    if (api_type=="v1") {
-        let date = new Date();
-        let mm = date.getMonth()+1;
-        let dd = date.getDate();
-        let key = (mm<10?"0"+mm:mm)+""+(dd<10?"0"+dd:dd);
-
-    } else if (api_type=="app") {
-        var url = api_url + 'video_detail?id=';
-        
-    } else if (api_type=="v2") {
-        var url = api_url + 'video_detail?id=';
-        
-    } else if (api_type=="iptv") {
-        var url = api_url + '?ac=detail&ids=';
-        
-    } else if (api_type=="cms") {
-        var url = api_url + '?ac=detail&ids=';
-        var classurl = api_url + "?ac=list";
-        var listurl = api_url + '?ac=videolist&pg=';
-    } else {
-        log('api类型错误')
-    }
-    let api_class = JSON.parse(request(classurl, { headers: { 'User-Agent': api_ua }, timeout:xunmitimeout*1000 })).class;
-    MY_URL = listurl + MY_PAGE + '&t=' + getMyVar('type_id',''+api_class[0].type_id);
-    log(MY_URL)
-    let type_pids = [];
-    for(let i in api_class){
-        if(type_pids.indexOf(api_class[i].type_pid)==-1){type_pids.push(api_class[i].type_pid)}
-    }
-    if(type_pids.length > 0){
-        type_pids.sort((a, b) => {
-            return a - b
+    if(MY_PAGE==1){
+            var cfgfile = "hiker://files/rules/Src/Juying/config.json";
+        var Juyingcfg=fetch(cfgfile);
+        if(Juyingcfg != ""){
+            eval("var JYconfig=" + Juyingcfg+ ";");
+        }else{
+            var JYconfig= {};
+        }
+        var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
+        var datafile = fetch(filepath);
+        if(datafile != ""){
+            eval("var datalist=" + datafile+ ";");
+        }else{
+            var datalist = [];
+        }
+        datalist = datalist.filter(item => {
+            return item.type!="xpath" && item.type!="biubiu";
         })
-    };
+        let api_type = "cms";
+        let api_url = "http://49.232.165.26/hi.php/provide/vod/";
+        let api_ua = MOBILE_UA;
+        let xunmitimeout = 5;
+        
+        if (api_type=="v1") {
+            let date = new Date();
+            let mm = date.getMonth()+1;
+            let dd = date.getDate();
+            let key = (mm<10?"0"+mm:mm)+""+(dd<10?"0"+dd:dd);
+
+        } else if (api_type=="app") {
+            var url = api_url + 'video_detail?id=';
+            
+        } else if (api_type=="v2") {
+            var url = api_url + 'video_detail?id=';
+            
+        } else if (api_type=="iptv") {
+            var url = api_url + '?ac=detail&ids=';
+            
+        } else if (api_type=="cms") {
+            var url = api_url + '?ac=detail&ids=';
+            var classurl = api_url + "?ac=list";
+            var listurl = api_url + '?ac=videolist&pg=';
+        } else {
+            log('api类型错误')
+        }
+        let api_class = JSON.parse(request(classurl, { headers: { 'User-Agent': api_ua }, timeout:xunmitimeout*1000 })).class;
+        
+        log(MY_URL)
+        let type_pids = [];
+        for(let i in api_class){
+            if(type_pids.indexOf(api_class[i].type_pid)==-1){type_pids.push(api_class[i].type_pid)}
+        }
+        if(type_pids.length > 0){
+            type_pids.sort((a, b) => {
+                return a - b
+            })
+        };
+        for (var j in type_pids) {
+            for (var i in api_class) {
+                if(api_class[i].type_pid==type_pids[j]){
+                    d.push({
+                        title: api_class[i].type_name,
+                        url: "hiker://empty",
+                        col_type: 'scroll_button'
+                    });
+                }
+            }
+            d.push({
+                col_type: "blank_block"
+            });
+        }
+    }
+    MY_URL = listurl + MY_PAGE + '&t=' + getMyVar('type_id',''+api_class[0].type_id);
 
     var d = [];
     const Color = "#3399cc";
 
-    for (var j in type_pids) {
-        for (var i in api_class) {
-            if(api_class[i].type_pid==type_pids[j]){
-                d.push({
-                    title: api_class[i].type_name,
-                    url: "hiker://empty",
-                    col_type: 'scroll_button'
-                });
-            }
-        }
-        d.push({
-            col_type: "blank_block"
-        });
-    }
     
-    var html  = JSON.parse(request(listurl, { headers: { 'User-Agent': api_ua }, timeout:xunmitimeout*1000 }));
+    
+    var html  = JSON.parse(request(MY_URL, { headers: { 'User-Agent': api_ua }, timeout:xunmitimeout*1000 }));
     var list = html.list;
     log(list);
     let videolist = list.map((list)=>{
