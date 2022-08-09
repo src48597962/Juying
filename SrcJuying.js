@@ -6,6 +6,7 @@ function jiekouyiji() {
         clearMyVar('isverifyA');
     }));
 */
+    var d = [];
     if(MY_PAGE==1){
             var cfgfile = "hiker://files/rules/Src/Juying/config.json";
         var Juyingcfg=fetch(cfgfile);
@@ -52,8 +53,6 @@ function jiekouyiji() {
             log('api类型错误')
         }
         let api_class = JSON.parse(request(classurl, { headers: { 'User-Agent': api_ua }, timeout:xunmitimeout*1000 })).class;
-        
-        log(MY_URL)
         let type_pids = [];
         for(let i in api_class){
             if(type_pids.indexOf(api_class[i].type_pid)==-1){type_pids.push(api_class[i].type_pid)}
@@ -80,7 +79,7 @@ function jiekouyiji() {
     }
     MY_URL = listurl + MY_PAGE + '&t=' + getMyVar('type_id',''+api_class[0].type_id);
 
-    var d = [];
+    
     const Color = "#3399cc";
 
     
