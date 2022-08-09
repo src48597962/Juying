@@ -85,9 +85,10 @@ function jiekouyiji() {
 
     
     
-    var html  = JSON.parse(request(MY_URL, { headers: { 'User-Agent': api_ua }, timeout:xunmitimeout*1000 }));
-    var list = html.list;
-    log(list);
+    var html  = request(MY_URL, { headers: { 'User-Agent': api_ua }, timeout:xunmitimeout*1000 });
+    log(html)
+    var list = JSON.parse(html).list;
+
     let videolist = list.map((list)=>{
         let vodname = list.vod_name||list.title;
         if(vodname){
