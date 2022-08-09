@@ -60,7 +60,7 @@ function jiekouyiji() {
 
     for (var j in type_pids) {
         for (var i in api_class) {
-            if(api_class.type_pid==type_pids[j]){
+            if(api_class[i].type_pid==type_pids[j]){
                 d.push({
                     title: api_class[i].type_name,
                     url: "hiker://empty",
