@@ -52,7 +52,7 @@ function jiekouyiji() {
         } else {
             log('api类型错误')
         }
-        let api_class = JSON.parse(request(classurl, { headers: { 'User-Agent': api_ua }, timeout:xunmitimeout*1000 })).class;
+        var api_class = JSON.parse(request(classurl, { headers: { 'User-Agent': api_ua }, timeout:xunmitimeout*1000 })).class;
         let type_pids = [];
         for(let i in api_class){
             if(type_pids.indexOf(api_class[i].type_pid)==-1){type_pids.push(api_class[i].type_pid)}
