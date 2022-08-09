@@ -26,17 +26,16 @@ function jiekouyiji() {
         let mm = date.getMonth()+1;
         let dd = date.getDate();
         let key = (mm<10?"0"+mm:mm)+""+(dd<10?"0"+dd:dd);
-        var classurl = api_url + '/detail?&key='+key+'&vod_id=';
-        var listurl = api_url + '?ac=videolist&limit=10&wd='+name+'&key='+key;
+
     } else if (api_type=="app") {
         var url = api_url + 'video_detail?id=';
-        var ssurl = api_url + 'search?limit=10&text='+name;
+        
     } else if (api_type=="v2") {
         var url = api_url + 'video_detail?id=';
-        var ssurl = api_url + 'search?limit=10&text='+name;
+        
     } else if (api_type=="iptv") {
         var url = api_url + '?ac=detail&ids=';
-        var ssurl = api_url + '?ac=list&zm='+name+'&wd='+name; 
+        
     } else if (api_type=="cms") {
         var classurl = api_url + "?ac=list";
         var listurl = api_url + '?ac=videolist&wd='+name;
