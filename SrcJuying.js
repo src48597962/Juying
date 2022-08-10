@@ -175,7 +175,7 @@ function jiekouyiji() {
             let type_ids = [];
             for(let i in typeclass){
                 if(type_pids.indexOf(typeclass[i].type_pid)==-1){type_pids.push(typeclass[i].type_pid)}
-                if(type_ids.indexOf(typeclass[i].type_id)==-1){type_ids.push(typeclass[i].type_id)}
+                if(type_ids.indexOf(typeclass[i].type_id)==-1){type_ids.push(''+typeclass[i].type_id)}
             }
             if(type_pids.length > 0){
                 type_pids.sort((a, b) => {
