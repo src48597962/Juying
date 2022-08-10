@@ -205,7 +205,8 @@ function jiekouyiji() {
     try{
         MY_URL = listurl + MY_PAGE;
         var html  = JSON.parse(request(MY_URL, { headers: { 'User-Agent': api_ua }, timeout:xunmitimeout*1000 }));
-        log(html)
+        loet(MY_URL)
+        log(request(MY_URL, { headers: { 'User-Agent': api_ua }, timeout:xunmitimeout*1000 }))
         try{
             var list = eval(lists)||html.list||html.data.list||html.data||[];
         } catch (e) {
