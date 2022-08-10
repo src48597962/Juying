@@ -66,36 +66,42 @@ function jiekouyiji() {
         datalist = datalist.filter(item => {
             return item.type!="xpath" && item.type!="biubiu";
         })
-        if(datalist.length>0&&!api_url){
-            var cfgfile = "hiker://files/rules/Src/Juying/config.json";
-            var Juyingcfg=fetch(cfgfile);
-            if(Juyingcfg != ""){
-                eval("var JYconfig=" + Juyingcfg+ ";");
-            }else{
-                var JYconfig= {};
+        if(datalist.length>0){
+            if(!api_url){
+                var cfgfile = "hiker://files/rules/Src/Juying/config.json";
+                var Juyingcfg=fetch(cfgfile);
+                if(Juyingcfg != ""){
+                    eval("var JYconfig=" + Juyingcfg+ ";");
+                }else{
+                    var JYconfig= {};
+                }
+                JYconfig['Jydouli'] = {api_name:datalist[0].name, api_type:datalist[0].type, api_url:datalist[0].url, api_ua:datalist[0].ua};
+                writeFile(cfgfile, JSON.stringify(JYconfig));
+                log('未指定接口，默认第一个>'+datalist[0].name+datalist[0].url);
+                refreshPage(true);
             }
-            JYconfig['Jydouli'] = {api_name:datalist[0].name, api_type:datalist[0].type, api_url:datalist[0].url, api_ua:datalist[0].ua};
-            writeFile(cfgfile, JSON.stringify(JYconfig));
-            log('未指定接口，默认第一个>'+datalist[0].name+datalist[0].url);
-            refreshPage(true);
-        }
-        for(let i in datalist){
+
+            for(let i in datalist){
+                d.push({
+                    title: api_url==datalist[i].url?'““””<b><span style="color:#008B45">' + datalist[i].name + '</span></b>':datalist[i].name,
+                    col_type: 'scroll_button',
+                    url: $('#noLoading#').lazyRule((Jydouli) => {
+                        var cfgfile = "hiker://files/rules/Src/Juying/config.json";
+                        var Juyingcfg=fetch(cfgfile);
+                        if(Juyingcfg != ""){
+                            eval("var JYconfig=" + Juyingcfg+ ";");
+                        }else{
+                            var JYconfig= {};
+                        }
+                        JYconfig['Jydouli'] = Jydouli;
+                        writeFile(cfgfile, JSON.stringify(JYconfig));
+                        refreshPage(false);
+                        return "hiker://empty";
+                    }, {api_name:datalist[i].name, api_type:datalist[i].type, api_url:datalist[i].url, api_ua:datalist[i].ua})
+                });
+            }
             d.push({
-                title: api_url==datalist[i].url?'““””<b><span style="color:#008B45">' + datalist[i].name + '</span></b>':datalist[i].name,
-                col_type: 'scroll_button',
-                url: $('#noLoading#').lazyRule((Jydouli) => {
-                    var cfgfile = "hiker://files/rules/Src/Juying/config.json";
-                    var Juyingcfg=fetch(cfgfile);
-                    if(Juyingcfg != ""){
-                        eval("var JYconfig=" + Juyingcfg+ ";");
-                    }else{
-                        var JYconfig= {};
-                    }
-                    JYconfig['Jydouli'] = Jydouli;
-                    writeFile(cfgfile, JSON.stringify(JYconfig));
-                    refreshPage(false);
-                    return "hiker://empty";
-                }, {api_name:datalist[i].name, api_type:datalist[i].type, api_url:datalist[i].url, api_ua:datalist[i].ua})
+                col_type: "blank_block"
             });
         }
         
