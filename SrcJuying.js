@@ -206,6 +206,7 @@ function jiekouyiji() {
     try{
         MY_URL = listurl + MY_PAGE;
         MY_URL = MY_URL.replace('@type_id',getMyVar('SrcJydouli$type_id','1'));
+        log(MY_URL)
         var html  = JSON.parse(request(MY_URL, { headers: { 'User-Agent': api_ua }, timeout:xunmitimeout*1000 }));
         
         try{
