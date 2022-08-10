@@ -35,11 +35,11 @@ function jiekouyiji() {
             var listurl = api_url + '/video?tid=' + getMyVar('SrcJuying$type_id','1') + '&pg=';
         } else if (api_type=="v2") {
             var url = api_url + 'video_detail?id=';
-            var typeurl = api_url + "?ac=list";
+            var typeurl = api_url + "nav";
             var listurl = api_url + '?ac=videolist&t=' + getMyVar('SrcJuying$type_id','1') + '&pg=';
         } else if (api_type=="iptv") {
             var url = api_url + '?ac=detail&ids=';
-            var typeurl = api_url + "/?ac=flitter";
+            var typeurl = api_url + "?ac=flitter";
             var listurl = api_url + '?ac=list&class=' + getMyVar('SrcJuying$type_id','1') + '&page=';
         } else if (api_type=="cms") {
             var url = api_url + '?ac=detail&ids=';
@@ -149,7 +149,7 @@ function jiekouyiji() {
                 log('api类型错误')
             }
         }catch(e){
-            log(api_name+' 接口访问异常，请更换接口！'+e.message);
+            log(api_name+' 接口访问异常，请更换接口！获取分类失败>'+e.message);
             var typeclass = [];
         }
         if(typeclass&&typeclass.length>0){
@@ -224,12 +224,12 @@ function jiekouyiji() {
     }catch(e){
         if(!list){
            d.push({
-                title: api_name+' 接口访问异常，请更换接口！',
+                title: '接口访问异常，请更换接口！',
                 url: '#noHistory#hiker://empty',
                 col_type: 'text_center_1'
             }); 
         }
-        log(api_name+' 接口访问异常，请更换接口！'+e.message)
+        log(api_name+' 接口访问异常，请更换接口！获取影片失败>'+e.message)
     }
     setResult(d);
 }
