@@ -39,22 +39,22 @@ function jiekouyiji() {
         } else if (api_type=="app") {
             var url = api_url + 'video_detail?id=';
             var typeurl = api_url + "/nav";
-            var listurl = api_url + '/video?tid=' + getMyVar('SrcJydouli$type_id','1') + '&pg=';
+            var listurl = api_url + '/video?tid=@type_id&pg=';
             var lists = "html.list";
         } else if (api_type=="v2") {
             var url = api_url + 'video_detail?id=';
             var typeurl = api_url + "nav";
-            var listurl = api_url + 'video?tid=' + getMyVar('SrcJydouli$type_id','1') + '&pg=';
+            var listurl = api_url + 'video?tid=@type_id&pg=';
             var lists = "html.data";
         } else if (api_type=="iptv") {
             var url = api_url + '?ac=detail&ids=';
             var typeurl = api_url + "?ac=flitter";
-            var listurl = api_url + '?ac=list&class=' + getMyVar('SrcJydouli$type_id','1') + '&page=';
+            var listurl = api_url + '?ac=list&class=@type_id&page=';
             var lists = "html.data";
         } else if (api_type=="cms") {
             var url = api_url + '?ac=detail&ids=';
             var typeurl = api_url + "?ac=list";
-            var listurl = api_url + '?ac=videolist&t=' + getMyVar('SrcJydouli$type_id','1') + '&pg=';
+            var listurl = api_url + '?ac=videolist&t=@type_id&pg=';
             var lists = "html.list";
         } else {
             log('api类型错误')
@@ -205,8 +205,7 @@ function jiekouyiji() {
     
     try{
         MY_URL = listurl + MY_PAGE;
-        log(MY_URL)
-        log(request(MY_URL, { headers: { 'User-Agent': api_ua }, timeout:xunmitimeout*1000 }))
+        MY_URL = MY_URL.replace('@type_id',getMyVar('SrcJydouli$type_id','1'));
         var html  = JSON.parse(request(MY_URL, { headers: { 'User-Agent': api_ua }, timeout:xunmitimeout*1000 }));
         
         try{
