@@ -15,39 +15,41 @@ function jiekouyiji() {
         var JYconfig= {};
     }
     
-    var api_name = getMyVar('api_name', '');
-    var api_type = "cms";
-    var api_url = getMyVar('SrcJuying$api_url', "http://49.232.165.26/hi.php/provide/vod/");
-    var api_ua = MOBILE_UA;
-    var xunmitimeout = 5;
-    
-    if (api_type=="v1") {
-        let date = new Date();
-        let mm = date.getMonth()+1;
-        let dd = date.getDate();
-        let key = (mm<10?"0"+mm:mm)+""+(dd<10?"0"+dd:dd);
-        var url = api_url + '/detail?&key='+key+'&vod_id=';
-        var typeurl = api_url + "/types";
-        var listurl = api_url + '?type=' + getMyVar('SrcJuying$type_id','1') + '&page=';
-    } else if (api_type=="app") {
-        var url = api_url + 'video_detail?id=';
-        var typeurl = api_url + "/nav";
-        var listurl = api_url + '/video?tid=' + getMyVar('SrcJuying$type_id','1') + '&pg=';
-    } else if (api_type=="v2") {
-        var url = api_url + 'video_detail?id=';
-        var typeurl = api_url + "?ac=list";
-        var listurl = api_url + '?ac=videolist&t=' + getMyVar('SrcJuying$type_id','1') + '&pg=';
-    } else if (api_type=="iptv") {
-        var url = api_url + '?ac=detail&ids=';
-        var typeurl = api_url + "/?ac=flitter";
-        var listurl = api_url + '?ac=list&class=' + getMyVar('SrcJuying$type_id','1') + '&page=';
-    } else if (api_type=="cms") {
-        var url = api_url + '?ac=detail&ids=';
-        var typeurl = api_url + "?ac=list";
-        var listurl = api_url + '?ac=videolist&t=' + getMyVar('SrcJuying$type_id','1') + '&pg=';
-    } else {
-        log('api类型错误')
+    var api_name = JYconfig.Jydouli.api_name||"";
+    var api_type = JYconfig.Jydouli.api_type||"";
+    var api_url = JYconfig.Jydouli.api_url||"";
+    var api_ua = JYconfig.Jydouli.api_ua||MOBILE_UA;
+    var xunmitimeout = JYconfig.xunmitimeout||5;
+    if(api_name&&api_type&&api_url){
+        if (api_type=="v1") {
+            let date = new Date();
+            let mm = date.getMonth()+1;
+            let dd = date.getDate();
+            let key = (mm<10?"0"+mm:mm)+""+(dd<10?"0"+dd:dd);
+            var url = api_url + '/detail?&key='+key+'&vod_id=';
+            var typeurl = api_url + "/types";
+            var listurl = api_url + '?type=' + getMyVar('SrcJuying$type_id','1') + '&page=';
+        } else if (api_type=="app") {
+            var url = api_url + 'video_detail?id=';
+            var typeurl = api_url + "/nav";
+            var listurl = api_url + '/video?tid=' + getMyVar('SrcJuying$type_id','1') + '&pg=';
+        } else if (api_type=="v2") {
+            var url = api_url + 'video_detail?id=';
+            var typeurl = api_url + "?ac=list";
+            var listurl = api_url + '?ac=videolist&t=' + getMyVar('SrcJuying$type_id','1') + '&pg=';
+        } else if (api_type=="iptv") {
+            var url = api_url + '?ac=detail&ids=';
+            var typeurl = api_url + "/?ac=flitter";
+            var listurl = api_url + '?ac=list&class=' + getMyVar('SrcJuying$type_id','1') + '&page=';
+        } else if (api_type=="cms") {
+            var url = api_url + '?ac=detail&ids=';
+            var typeurl = api_url + "?ac=list";
+            var listurl = api_url + '?ac=videolist&t=' + getMyVar('SrcJuying$type_id','1') + '&pg=';
+        } else {
+            log('api类型错误')
+        }
     }
+    
     if(MY_PAGE==1){
         var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
         var datafile = fetch(filepath);
@@ -59,15 +61,35 @@ function jiekouyiji() {
         datalist = datalist.filter(item => {
             return item.type!="xpath" && item.type!="biubiu";
         })
+        if(datalist.length>0&&!api_url){
+            var cfgfile = "hiker://files/rules/Src/Juying/config.json";
+            var Juyingcfg=fetch(cfgfile);
+            if(Juyingcfg != ""){
+                eval("var JYconfig=" + Juyingcfg+ ";");
+            }else{
+                var JYconfig= {};
+            }
+            JYconfig['Jydouli'] = {api_name:datalist[0].name, api_type:datalist[0].type, api_url:datalist[0].url, api_ua:datalist[0].ua};
+            writeFile(cfgfile, JSON.stringify(JYconfig));
+            refreshPage(true);
+        }
         for(let i in datalist){
             d.push({
-                title: getMyVar('SrcJuying$api_url')==datalist[i].url?'““””<b><span style="color:#006400">' + datalist[i].name + '</span></b>':datalist[i].name,
+                title: api_url==datalist[i].url?'““””<b><span style="color:#006400">' + datalist[i].name + '</span></b>':datalist[i].name,
                 col_type: 'scroll_button',
-                url: $('#noLoading#').lazyRule((api_url) => {
-                    putMyVar('SrcJuying$api_url', api_url);
+                url: $('#noLoading#').lazyRule((Jydouli) => {
+                    var cfgfile = "hiker://files/rules/Src/Juying/config.json";
+                    var Juyingcfg=fetch(cfgfile);
+                    if(Juyingcfg != ""){
+                        eval("var JYconfig=" + Juyingcfg+ ";");
+                    }else{
+                        var JYconfig= {};
+                    }
+                    JYconfig['Jydouli'] = Jydouli;
+                    writeFile(cfgfile, JSON.stringify(JYconfig));
                     refreshPage(false);
                     return "hiker://empty";
-                }, datalist[i].url)
+                }, {api_name:datalist[i].name, api_type:datalist[i].type, api_url:datalist[i].url, api_ua:datalist[i].ua})
             });
         }
         
@@ -88,8 +110,8 @@ function jiekouyiji() {
                 log('api类型错误')
             }
         }catch(e){
-            log(e.message);
-            return "toast://访问异常，请更换接口";
+            log("访问异常，请更换接口 "+e.message);
+            var typeclass = [];
         }
         if(typeclass.length>0){
             if(!getMyVar('SrcJuying$type_id')){putMyVar('SrcJuying$type_id',''+typeclass[0].type_id)}
@@ -122,44 +144,54 @@ function jiekouyiji() {
             }   
         }
     }
-    MY_URL = listurl + MY_PAGE;
 
     
-    var html  = request(MY_URL, { headers: { 'User-Agent': api_ua }, timeout:xunmitimeout*1000 });
-    var list = JSON.parse(html).list;
-
-    let videolist = list.map((list)=>{
-        let vodname = list.vod_name||list.title;
-        if(vodname){
-            let vodpic = list.vod_pic||list.pic;
-            let voddesc = list.vod_remarks||list.state||"";
-            let vodurl = list.vod_id?url + list.vod_id:list.nextlink;
-            vodpic = vodpic?vodpic.replace('/img.php?url=','').replace('/tu.php?tu=','') + "@Referer=":"https://www.xawqxh.net/mxtheme/images/loading.gif";
-            if(/^\/upload|^upload/.test(vodpic)){
-                vodpic = vodurl.match(/http(s)?:\/\/(.*?)\//)[0] + vodpic;
-            }
-            if(/^\/\//.test(vodpic)){
-                vodpic = "https" + vodpic;
-            }
-            return {
-                title: vodname,
-                desc: voddesc,
-                pic_url: vodpic,
-                url: $("hiker://empty##" + vodurl + "#immersiveTheme#").rule((type,ua) => {
-                        require(config.依赖.match(/https.*\//)[0] + 'SrcJyXunmi.js');
-                        xunmierji(type,ua)
-                    },api_type, api_ua),
-                col_type: 'movie_3',
-                extra: {
-                    pic: vodpic,
-                    name: vodname,
-                    title: vodname+'-'+api_name
+    try{
+        MY_URL = listurl + MY_PAGE;
+        var html  = request(MY_URL, { headers: { 'User-Agent': api_ua }, timeout:xunmitimeout*1000 });
+        var list = JSON.parse(html).list;
+        let videolist = list.map((list)=>{
+            let vodname = list.vod_name||list.title;
+            if(vodname){
+                let vodpic = list.vod_pic||list.pic;
+                let voddesc = list.vod_remarks||list.state||"";
+                let vodurl = list.vod_id?url + list.vod_id:list.nextlink;
+                vodpic = vodpic?vodpic.replace('/img.php?url=','').replace('/tu.php?tu=','') + "@Referer=":"https://www.xawqxh.net/mxtheme/images/loading.gif";
+                if(/^\/upload|^upload/.test(vodpic)){
+                    vodpic = vodurl.match(/http(s)?:\/\/(.*?)\//)[0] + vodpic;
+                }
+                if(/^\/\//.test(vodpic)){
+                    vodpic = "https" + vodpic;
+                }
+                return {
+                    title: vodname,
+                    desc: voddesc,
+                    pic_url: vodpic,
+                    url: $("hiker://empty##" + vodurl + "#immersiveTheme#").rule((type,ua) => {
+                            require(config.依赖.match(/https.*\//)[0] + 'SrcJyXunmi.js');
+                            xunmierji(type,ua)
+                        },api_type, api_ua),
+                    col_type: 'movie_3',
+                    extra: {
+                        pic: vodpic,
+                        name: vodname,
+                        title: vodname+'-'+api_name
+                    }
                 }
             }
+        });
+        videolist = videolist.filter(n => n);
+        d = d.concat(videolist);
+    }catch(e){
+        if(!list){
+           d.push({
+                title: api_type+' 接口访问异常，请更换接口！',
+                url: '#noHistory#hiker://empty',
+                col_type: 'text_center_1'
+            }); 
         }
-    });
-    videolist = videolist.filter(n => n);
-    d = d.concat(videolist);
+        log(e.message)
+    }
     setResult(d);
 }
 //二级
