@@ -182,8 +182,7 @@ function jiekouyiji() {
                     return a - b
                 })
             };
-            if(type_pids.indexOf(getMyVar('SrcJydouli$type_id',''))==-1){putMyVar('SrcJydouli$type_id',''+type_pids[0])}
-            
+            if(!getMyVar('SrcJydouli$type_id')||type_pids.indexOf(getMyVar('SrcJydouli$type_id',''))==-1){putMyVar('SrcJydouli$type_id',''+type_pids[0])}
             for (var j in type_pids) {
                 for (var i in typeclass) {
                     if(typeclass[i].type_pid==type_pids[j]){
