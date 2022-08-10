@@ -6,6 +6,7 @@ function jiekouyiji() {
         clearMyVar('isverifyA');
     }));
 */
+    setPageTitle('接口独立展示');
     var d = [];
     for (let i = 0; i < 9; i++) {
         d.push({
@@ -615,12 +616,12 @@ function yiji() {
             col_type: 'icon_5'
         });
         d.push({
-            title: "进入",
+            title: "独立",
             url: $("hiker://empty##fypage#noRecordHistory##noHistory#").rule(() => {
                     require(config.依赖);
                     jiekouyiji();
                 }),
-            pic_url: 'https://lanmeiguojiang.com/tubiao/more/213.png',
+            pic_url: 'https://lanmeiguojiang.com/tubiao/more/30.png',
             col_type: 'icon_5'
         });
         d.push({
