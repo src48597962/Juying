@@ -111,10 +111,10 @@ function jiekouyiji() {
                 log('api类型错误')
             }
         }catch(e){
-            log("访问异常，请更换接口 "+e.message);
+            log(api_name+' 接口访问异常，请更换接口！'+e.message);
             var typeclass = [];
         }
-        if(typeclass.length>0){
+        if(typeclass&&typeclass.length>0){
             if(!getMyVar('SrcJuying$type_id')){putMyVar('SrcJuying$type_id',''+typeclass[0].type_id)}
             let type_pids = [];
             for(let i in typeclass){
@@ -186,12 +186,12 @@ function jiekouyiji() {
     }catch(e){
         if(!list){
            d.push({
-                title: api_type+' 接口访问异常，请更换接口！',
+                title: api_name+' 接口访问异常，请更换接口！',
                 url: '#noHistory#hiker://empty',
                 col_type: 'text_center_1'
             }); 
         }
-        log(e.message)
+        log(api_name+' 接口访问异常，请更换接口！'+e.message)
     }
     setResult(d);
 }
