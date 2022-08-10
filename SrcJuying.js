@@ -169,8 +169,9 @@ function jiekouyiji() {
             log(api_name+' 接口访问异常，请更换接口！获取分类失败>'+e.message);
             var typeclass = [];
         }
-
+        
         if(typeclass&&typeclass.length>0){
+            if(typeclass.indexOf(getMyVar('SrcJydouli$type_id',''))==-1){clearMyVar('SrcJydouli$type_id')}
             if(!getMyVar('SrcJydouli$type_id')){putMyVar('SrcJydouli$type_id',''+typeclass[0].type_id)}
             let type_pids = [];
             for(let i in typeclass){
