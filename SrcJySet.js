@@ -1088,6 +1088,7 @@ function SRCSet() {
                                 for(var i=0;i<datalist.length;i++){
                                     if(duoselect.indexOf(datalist[i].url?datalist[i].url:datalist[i].parse)>-1){
                                         datalist.splice(i,1);
+                                        i = i - 1;
                                     }
                                 }
                                 writeFile(filepath, JSON.stringify(datalist));
