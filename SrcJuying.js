@@ -44,7 +44,7 @@ function jiekouyiji() {
         } else if (api_type=="v2") {
             var url = api_url + 'video_detail?id=';
             var typeurl = api_url + "nav";
-            var listurl = api_url + '?ac=videolist&t=' + getMyVar('SrcJydouli$type_id','1') + '&pg=';
+            var listurl = api_url + 'video?tid=' + getMyVar('SrcJydouli$type_id','1') + '&pg=';
             var lists = "html.data";
         } else if (api_type=="iptv") {
             var url = api_url + '?ac=detail&ids=';
