@@ -15,10 +15,10 @@ function jiekouyiji() {
         var JYconfig= {};
     }
     
-    var api_name = JYconfig.Jydouli.api_name||"";
-    var api_type = JYconfig.Jydouli.api_type||"";
-    var api_url = JYconfig.Jydouli.api_url||"";
-    var api_ua = JYconfig.Jydouli.api_ua||MOBILE_UA;
+    var api_name = JYconfig.Jydouli?JYconfig.Jydouli.api_name||"":"";
+    var api_type = JYconfig.Jydouli?JYconfig.Jydouli.api_type||"":"";
+    var api_url = JYconfig.Jydouli?JYconfig.Jydouli.api_url||"":"";
+    var api_ua = JYconfig.Jydouli?JYconfig.Jydouli.api_ua||MOBILE_UA:MOBILE_UA;
     var xunmitimeout = JYconfig.xunmitimeout||5;
     if(api_name&&api_type&&api_url){
         if (api_type=="v1") {
