@@ -182,7 +182,7 @@ function jiekouyiji() {
                     return a - b
                 })
             };
-            if(type_ids.indexOf(getMyVar('SrcJydouli$type_id',''))==-1){putMyVar('SrcJydouli$type_id',''+type_ids[0])}
+            if(!getMyVar('SrcJydouli$type_id')||type_ids.indexOf(getMyVar('SrcJydouli$type_id',''))==-1){putMyVar('SrcJydouli$type_id',''+type_ids[0])}
             //if(!getMyVar('SrcJydouli$type_id')){putMyVar('SrcJydouli$type_id',''+type_pids[0])}
             for (var j in type_pids) {
                 for (var i in typeclass) {
@@ -209,6 +209,9 @@ function jiekouyiji() {
     try{
         MY_URL = listurl + MY_PAGE;
         MY_URL = MY_URL.replace('@type_id',getMyVar('SrcJydouli$type_id','1'));
+        log(getMyVar('SrcJydouli$type_id'))
+        log(MY_URL)
+        log(typeclass)
         var html  = JSON.parse(request(MY_URL, { headers: { 'User-Agent': api_ua }, timeout:xunmitimeout*1000 }));
         
         try{
