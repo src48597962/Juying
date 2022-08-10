@@ -34,7 +34,7 @@ function jiekouyiji() {
             let key = (mm<10?"0"+mm:mm)+""+(dd<10?"0"+dd:dd);
             var url = api_url + '/detail?&key='+key+'&vod_id=';
             var typeurl = api_url + "/types";
-            var listurl = api_url + '?type=' + getMyVar('SrcJydouli$type_id','1') + '&page=';
+            var listurl = api_url + '?type=@type_id&page=';
             var lists = "html.data.list";
         } else if (api_type=="app") {
             var url = api_url + 'video_detail?id=';
@@ -101,7 +101,7 @@ function jiekouyiji() {
                         }
                         JYconfig['Jydouli'] = Jydouli;
                         writeFile(cfgfile, JSON.stringify(JYconfig));
-                        refreshPage(false);
+                        refreshPage(true);
                         return "hiker://empty";
                     }, {api_name:datalist[i].name, api_type:datalist[i].type, api_url:datalist[i].url, api_ua:datalist[i].ua})
                 });
