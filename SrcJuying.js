@@ -7,6 +7,11 @@ function jiekouyiji() {
     }));
 */
     var d = [];
+    for (let i = 0; i < 9; i++) {
+        d.push({
+            col_type: "blank_block"
+        })
+    }
     var cfgfile = "hiker://files/rules/Src/Juying/config.json";
     var Juyingcfg=fetch(cfgfile);
     if(Juyingcfg != ""){
@@ -20,6 +25,7 @@ function jiekouyiji() {
     var api_url = JYconfig.Jydouli?JYconfig.Jydouli.api_url||"":"";
     var api_ua = JYconfig.Jydouli?JYconfig.Jydouli.api_ua||MOBILE_UA:MOBILE_UA;
     var xunmitimeout = JYconfig.xunmitimeout||5;
+
     if(api_name&&api_type&&api_url){
         if (api_type=="v1") {
             let date = new Date();
@@ -195,11 +201,11 @@ function jiekouyiji() {
             }   
         }
     }
-
     
     try{
         MY_URL = listurl + MY_PAGE;
         var html  = JSON.parse(request(MY_URL, { headers: { 'User-Agent': api_ua }, timeout:xunmitimeout*1000 }));
+        log(html)
         try{
             var list = eval(lists)||html.list||html.data.list||html.data||[];
         } catch (e) {
