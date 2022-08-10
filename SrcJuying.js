@@ -172,15 +172,18 @@ function jiekouyiji() {
         
         if(typeclass&&typeclass.length>0){
             let type_pids = [];
+            let type_ids = [];
             for(let i in typeclass){
                 if(type_pids.indexOf(typeclass[i].type_pid)==-1){type_pids.push(typeclass[i].type_pid)}
+                if(type_ids.indexOf(typeclass[i].type_id)==-1){type_ids.push(typeclass[i].type_id)}
             }
             if(type_pids.length > 0){
                 type_pids.sort((a, b) => {
                     return a - b
                 })
             };
-            let type_ids = [];
+            if(type_pids.indexOf(getMyVar('SrcJydouli$type_id',''))==-1){putMyVar('SrcJydouli$type_id',''+type_pids[0])}
+            
             for (var j in type_pids) {
                 for (var i in typeclass) {
                     if(typeclass[i].type_pid==type_pids[j]){
@@ -193,22 +196,19 @@ function jiekouyiji() {
                             }, typeclass[i].type_id),
                             col_type: 'scroll_button'
                         });
-                        if(type_ids.indexOf(typeclass[i].type_id)==-1){type_ids.push(typeclass[i].type_id)}
                     }
                 }
                 d.push({
                     col_type: "blank_block"
                 });
             }
-            if(type_pids.indexOf(getMyVar('SrcJydouli$type_id',''))==-1){clearMyVar('SrcJydouli$type_id')}
-            if(!getMyVar('SrcJydouli$type_id')){putMyVar('SrcJydouli$type_id',''+type_pids[0])}
+            
         }
     }
     
     try{
         MY_URL = listurl + MY_PAGE;
         MY_URL = MY_URL.replace('@type_id',getMyVar('SrcJydouli$type_id','1'));
-        log(MY_URL)
         var html  = JSON.parse(request(MY_URL, { headers: { 'User-Agent': api_ua }, timeout:xunmitimeout*1000 }));
         
         try{
