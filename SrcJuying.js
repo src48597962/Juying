@@ -35,7 +35,7 @@ function jiekouyiji() {
             let key = (mm<10?"0"+mm:mm)+""+(dd<10?"0"+dd:dd);
             var url = api_url + '/detail?&key='+key+'&vod_id=';
             var typeurl = api_url + "/types";
-            var listurl = api_url + '?type=@type_id&page=';
+            var listurl = api_url + '?key='+key+'&type=@type_id&page=';
             var lists = "html.data.list";
         } else if (api_type=="app") {
             var url = api_url + 'video_detail?id=';
@@ -89,6 +89,9 @@ function jiekouyiji() {
             }
 
             for(let i in datalist){
+                if(api_url==datalist[i].url){
+                    var sousuodata = datalist[i];
+                }
                 d.push({
                     title: api_url==datalist[i].url?'““””<b><span style="color:#3CB371">' + datalist[i].name + '</span></b>':datalist[i].name,
                     col_type: 'scroll_button',
@@ -205,6 +208,35 @@ function jiekouyiji() {
             }
             
         }
+        var seachurl = $('').lazyRule((data) => {
+            if(data){
+                return $('hiker://empty#noRecordHistory##noHistory#').rule((name,data) => {
+                    require(config.依赖.match(/https.*\//)[0] + 'SrcJyXunmi.js');
+                    xunmi(name,data);
+                }, input,data);
+            }else{
+                return 'toast://未找到接口数据'
+            }
+        },sousuodata);
+        d.push({
+            title: "🔍",
+            url: $.toString((seachurl) => {
+                    return input + seachurl;
+                },seachurl),
+            desc: "搜你想看的...",
+            col_type: "input",
+            extra: {
+                titleVisible: true,
+                id: "input",
+                onChange: $.toString(() => {
+                    if(input.length==1){deleteItemByCls('SrcJydoulivideo');}
+                    if(input.length>1&&input!=getMyVar('SrcJydouli$input', '')){
+                        putMyVar('SrcJydouli$input', input);
+                        deleteItemByCls('SrcJydoulivideo');
+                    }
+                })
+            }
+        });
     }
     
     try{
@@ -241,7 +273,8 @@ function jiekouyiji() {
                     extra: {
                         pic: vodpic,
                         name: vodname,
-                        title: vodname+'-'+api_name
+                        title: vodname+'-'+api_name,
+                        cls: 'SrcJydoulivideo'
                     }
                 }
             }
@@ -616,12 +649,12 @@ function yiji() {
             col_type: 'icon_5'
         });
         d.push({
-            title: "独立",
+            title: "接口",
             url: $("hiker://empty##fypage#noRecordHistory##noHistory#").rule(() => {
                     require(config.依赖);
                     jiekouyiji();
                 }),
-            pic_url: 'https://lanmeiguojiang.com/tubiao/more/30.png',
+            pic_url: 'https://lanmeiguojiang.com/tubiao/more/105.png',
             col_type: 'icon_5'
         });
         d.push({
