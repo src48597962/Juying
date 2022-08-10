@@ -208,8 +208,10 @@ function jiekouyiji() {
             }
             
         }
+        log(sousuodata);
         var seachurl = $('').lazyRule((data) => {
             if(data){
+                log(data);
                 return $('hiker://empty#noRecordHistory##noHistory#').rule((name,data) => {
                     require(config.依赖.match(/https.*\//)[0] + 'SrcJyXunmi.js');
                     xunmi(name,data);
@@ -227,14 +229,14 @@ function jiekouyiji() {
             col_type: "input",
             extra: {
                 titleVisible: true,
-                id: "input",
+                /*id: "input",
                 onChange: $.toString(() => {
                     if(input.length==1){deleteItemByCls('SrcJydoulivideo');}
                     if(input.length>1&&input!=getMyVar('SrcJydouli$input', '')){
                         putMyVar('SrcJydouli$input', input);
                         deleteItemByCls('SrcJydoulivideo');
                     }
-                })
+                })*/
             }
         });
     }
@@ -274,7 +276,7 @@ function jiekouyiji() {
                         pic: vodpic,
                         name: vodname,
                         title: vodname+'-'+api_name,
-                        cls: 'SrcJydoulivideo'
+                        //cls: 'SrcJydoulivideo'
                     }
                 }
             }
