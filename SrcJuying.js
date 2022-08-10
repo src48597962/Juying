@@ -76,7 +76,7 @@ function jiekouyiji() {
         }
         for(let i in datalist){
             d.push({
-                title: api_url==datalist[i].url?'““””<b><span style="color:#006400">' + datalist[i].name + '</span></b>':datalist[i].name,
+                title: api_url==datalist[i].url?'““””<b><span style="color:#008B45">' + datalist[i].name + '</span></b>':datalist[i].name,
                 col_type: 'scroll_button',
                 url: $('#noLoading#').lazyRule((Jydouli) => {
                     var cfgfile = "hiker://files/rules/Src/Juying/config.json";
@@ -98,13 +98,51 @@ function jiekouyiji() {
         try{
             var typehtml = JSON.parse(request(typeurl, { headers: { 'User-Agent': api_ua }, timeout:xunmitimeout*1000 }));
             if (api_type=="v1") {
-                
+                let typelist = typehtml.data.list||typehtml.data.typelist;
+                var typeclass = typelist.map((list)=>{
+                    return {
+                        "type_id": list.type_id,
+                        "type_pid": list.type_pid,
+                        "type_name": list.type_name
+                    }
+                })
             } else if (api_type=="app") {
-                
+                var typeclass = typehtml.list.map((list)=>{
+                    return {
+                        "type_id": list.type_id,
+                        "type_pid": 0,
+                        "type_name": list.type_name
+                    }
+                })
             } else if (api_type=="v2") {
-                
+                var typeclass = typehtml.data.map((list)=>{
+                    return {
+                        "type_id": list.type_id,
+                        "type_pid": 0,
+                        "type_name": list.type_name
+                    }
+                })
             } else if (api_type=="iptv") {
-                
+                let type_dict = {
+                    comic: '动漫',
+                    movie: '电影',
+                    tvplay: '电视剧',
+                    tvshow: '综艺',
+                    movie_4k: '4k',
+                    hanguoju: '韩剧',
+                    oumeiju: '欧美剧',
+                    tiyu: '体育'
+                };
+                var typeclass = typehtml.map((list)=>{
+                    if(type_dict[list]){
+                        return {
+                            "type_id": list,
+                            "type_pid": 0,
+                            "type_name": type_dict[list]
+                        }
+                    }
+                })
+                typeclass = typeclass.filter(n => n);
             } else if (api_type=="cms") {
                 var typeclass = typehtml.class;
             } else {
