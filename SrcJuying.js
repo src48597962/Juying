@@ -208,11 +208,10 @@ function jiekouyiji() {
             }
             
         }
-        log(sousuodata);
         var seachurl = $('').lazyRule((data) => {
             if(data){
-                log(data);
                 return $('hiker://empty#noRecordHistory##noHistory#').rule((name,data) => {
+                    log(data);
                     require(config.依赖.match(/https.*\//)[0] + 'SrcJyXunmi.js');
                     xunmi(name,data);
                 }, input,data);
