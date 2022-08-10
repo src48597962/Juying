@@ -164,10 +164,10 @@ function jiekouyiji() {
                     return a - b
                 })
             };
-            log(type_pids)
-            log(typeclass)
             for (var j in type_pids) {
+                log('type_pids'+j)
                 for (var i in typeclass) {
+                    log('typeclass'+i)
                     if(typeclass[i].type_pid==type_pids[j]){
                         d.push({
                             title: getMyVar('SrcJydouli$type_id')==typeclass[i].type_id?'““””<b><span style="color:' + Color + '">' + typeclass[i].type_name + '</span></b>':typeclass[i].type_name,
