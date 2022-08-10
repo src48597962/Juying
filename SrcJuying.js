@@ -182,6 +182,7 @@ function jiekouyiji() {
                     return a - b
                 })
             };
+            log(getMyVar('SrcJydouli$type_id'))
             if(!getMyVar('SrcJydouli$type_id')||type_ids.indexOf(getMyVar('SrcJydouli$type_id',''))==-1){putMyVar('SrcJydouli$type_id',''+type_ids[0])}
             //if(!getMyVar('SrcJydouli$type_id')){putMyVar('SrcJydouli$type_id',''+type_pids[0])}
             for (var j in type_pids) {
@@ -191,7 +192,7 @@ function jiekouyiji() {
                             title: getMyVar('SrcJydouli$type_id')==typeclass[i].type_id?'““””<b><span style="color:' + Color + '">' + typeclass[i].type_name + '</span></b>':typeclass[i].type_name,
                             url: $('#noLoading#').lazyRule((type_id) => {
                                 putMyVar('SrcJydouli$type_id', type_id);
-                                refreshPage(false);
+                                refreshPage(true);
                                 return "hiker://empty";
                             }, typeclass[i].type_id),
                             col_type: 'scroll_button'
