@@ -171,8 +171,6 @@ function jiekouyiji() {
         }
         
         if(typeclass&&typeclass.length>0){
-            if(typeclass.indexOf(getMyVar('SrcJydouli$type_id',''))==-1){clearMyVar('SrcJydouli$type_id')}
-            if(!getMyVar('SrcJydouli$type_id')){putMyVar('SrcJydouli$type_id',''+typeclass[0].type_id)}
             let type_pids = [];
             for(let i in typeclass){
                 if(type_pids.indexOf(typeclass[i].type_pid)==-1){type_pids.push(typeclass[i].type_pid)}
@@ -182,6 +180,7 @@ function jiekouyiji() {
                     return a - b
                 })
             };
+            let type_ids = [];
             for (var j in type_pids) {
                 for (var i in typeclass) {
                     if(typeclass[i].type_pid==type_pids[j]){
@@ -194,12 +193,15 @@ function jiekouyiji() {
                             }, typeclass[i].type_id),
                             col_type: 'scroll_button'
                         });
+                        if(type_ids.indexOf(typeclass[i].type_id)==-1){type_ids.push(typeclass[i].type_id)}
                     }
                 }
                 d.push({
                     col_type: "blank_block"
                 });
-            }   
+            }
+            if(type_pids.indexOf(getMyVar('SrcJydouli$type_id',''))==-1){clearMyVar('SrcJydouli$type_id')}
+            if(!getMyVar('SrcJydouli$type_id')){putMyVar('SrcJydouli$type_id',''+type_pids[0])}
         }
     }
     
