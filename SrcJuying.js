@@ -61,7 +61,7 @@ function jiekouyiji() {
         })
         for(let i in datalist){
             d.push({
-                title: getMyVar('SrcJuying$api_url')==datalist[i].url?'““””<b><span style="color:green">' + datalist[i].name + '</span></b>':datalist[i].name,
+                title: getMyVar('SrcJuying$api_url')==datalist[i].url?'““””<b><span style="color:#006400">' + datalist[i].name + '</span></b>':datalist[i].name,
                 col_type: 'scroll_button',
                 url: $('#noLoading#').lazyRule((api_url) => {
                     putMyVar('SrcJuying$api_url', api_url);
