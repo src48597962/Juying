@@ -71,6 +71,7 @@ function jiekouyiji() {
             }
             JYconfig['Jydouli'] = {api_name:datalist[0].name, api_type:datalist[0].type, api_url:datalist[0].url, api_ua:datalist[0].ua};
             writeFile(cfgfile, JSON.stringify(JYconfig));
+            log('未指定接口，默认第一个>'+datalist[0].name+datalist[0].url);
             refreshPage(true);
         }
         for(let i in datalist){
