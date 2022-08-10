@@ -90,7 +90,8 @@ function jiekouyiji() {
 
             for(let i in datalist){
                 if(api_url==datalist[i].url){
-                    var sousuodata = datalist[i];
+                    var SrcJydoulisousuodata = [];
+                    SrcJydoulisousuodata.push(datalist[i]);
                 }
                 d.push({
                     title: api_url==datalist[i].url?'““””<b><span style="color:#3CB371">' + datalist[i].name + '</span></b>':datalist[i].name,
@@ -211,14 +212,13 @@ function jiekouyiji() {
         var seachurl = $('').lazyRule((data) => {
             if(data){
                 return $('hiker://empty#noRecordHistory##noHistory#').rule((name,data) => {
-                    log(data);
                     require(config.依赖.match(/https.*\//)[0] + 'SrcJyXunmi.js');
                     xunmi(name,data);
                 }, input,data);
             }else{
                 return 'toast://未找到接口数据'
             }
-        },sousuodata);
+        },SrcJydoulisousuodata);
         d.push({
             title: "🔍",
             url: $.toString((seachurl) => {
