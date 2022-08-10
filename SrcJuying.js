@@ -28,23 +28,23 @@ function jiekouyiji() {
             let key = (mm<10?"0"+mm:mm)+""+(dd<10?"0"+dd:dd);
             var url = api_url + '/detail?&key='+key+'&vod_id=';
             var typeurl = api_url + "/types";
-            var listurl = api_url + '?type=' + getMyVar('SrcJuying$type_id','1') + '&page=';
+            var listurl = api_url + '?type=' + getMyVar('SrcJydouli$type_id','1') + '&page=';
         } else if (api_type=="app") {
             var url = api_url + 'video_detail?id=';
             var typeurl = api_url + "/nav";
-            var listurl = api_url + '/video?tid=' + getMyVar('SrcJuying$type_id','1') + '&pg=';
+            var listurl = api_url + '/video?tid=' + getMyVar('SrcJydouli$type_id','1') + '&pg=';
         } else if (api_type=="v2") {
             var url = api_url + 'video_detail?id=';
             var typeurl = api_url + "nav";
-            var listurl = api_url + '?ac=videolist&t=' + getMyVar('SrcJuying$type_id','1') + '&pg=';
+            var listurl = api_url + '?ac=videolist&t=' + getMyVar('SrcJydouli$type_id','1') + '&pg=';
         } else if (api_type=="iptv") {
             var url = api_url + '?ac=detail&ids=';
             var typeurl = api_url + "?ac=flitter";
-            var listurl = api_url + '?ac=list&class=' + getMyVar('SrcJuying$type_id','1') + '&page=';
+            var listurl = api_url + '?ac=list&class=' + getMyVar('SrcJydouli$type_id','1') + '&page=';
         } else if (api_type=="cms") {
             var url = api_url + '?ac=detail&ids=';
             var typeurl = api_url + "?ac=list";
-            var listurl = api_url + '?ac=videolist&t=' + getMyVar('SrcJuying$type_id','1') + '&pg=';
+            var listurl = api_url + '?ac=videolist&t=' + getMyVar('SrcJydouli$type_id','1') + '&pg=';
         } else {
             log('api类型错误')
         }
@@ -152,8 +152,9 @@ function jiekouyiji() {
             log(api_name+' 接口访问异常，请更换接口！获取分类失败>'+e.message);
             var typeclass = [];
         }
+
         if(typeclass&&typeclass.length>0){
-            if(!getMyVar('SrcJuying$type_id')){putMyVar('SrcJuying$type_id',''+typeclass[0].type_id)}
+            if(!getMyVar('SrcJydouli$type_id')){putMyVar('SrcJydouli$type_id',''+typeclass[0].type_id)}
             let type_pids = [];
             for(let i in typeclass){
                 if(type_pids.indexOf(typeclass[i].type_pid)==-1){type_pids.push(typeclass[i].type_pid)}
@@ -163,13 +164,15 @@ function jiekouyiji() {
                     return a - b
                 })
             };
+            log(type_pids)
+            log(typeclass)
             for (var j in type_pids) {
                 for (var i in typeclass) {
                     if(typeclass[i].type_pid==type_pids[j]){
                         d.push({
-                            title: getMyVar('SrcJuying$type_id')==typeclass[i].type_id?'““””<b><span style="color:' + Color + '">' + typeclass[i].type_name + '</span></b>':typeclass[i].type_name,
+                            title: getMyVar('SrcJydouli$type_id')==typeclass[i].type_id?'““””<b><span style="color:' + Color + '">' + typeclass[i].type_name + '</span></b>':typeclass[i].type_name,
                             url: $('#noLoading#').lazyRule((type_id) => {
-                                putMyVar('SrcJuying$type_id', type_id);
+                                putMyVar('SrcJydouli$type_id', type_id);
                                 refreshPage(false);
                                 return "hiker://empty";
                             }, typeclass[i].type_id),
