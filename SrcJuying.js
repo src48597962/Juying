@@ -29,22 +29,27 @@ function jiekouyiji() {
             var url = api_url + '/detail?&key='+key+'&vod_id=';
             var typeurl = api_url + "/types";
             var listurl = api_url + '?type=' + getMyVar('SrcJydouli$type_id','1') + '&page=';
+            var lists = "html.data.list";
         } else if (api_type=="app") {
             var url = api_url + 'video_detail?id=';
             var typeurl = api_url + "/nav";
             var listurl = api_url + '/video?tid=' + getMyVar('SrcJydouli$type_id','1') + '&pg=';
+            var lists = "html.list";
         } else if (api_type=="v2") {
             var url = api_url + 'video_detail?id=';
             var typeurl = api_url + "nav";
             var listurl = api_url + '?ac=videolist&t=' + getMyVar('SrcJydouli$type_id','1') + '&pg=';
+            var lists = "html.data";
         } else if (api_type=="iptv") {
             var url = api_url + '?ac=detail&ids=';
             var typeurl = api_url + "?ac=flitter";
             var listurl = api_url + '?ac=list&class=' + getMyVar('SrcJydouli$type_id','1') + '&page=';
+            var lists = "html.data";
         } else if (api_type=="cms") {
             var url = api_url + '?ac=detail&ids=';
             var typeurl = api_url + "?ac=list";
             var listurl = api_url + '?ac=videolist&t=' + getMyVar('SrcJydouli$type_id','1') + '&pg=';
+            var lists = "html.list";
         } else {
             log('api类型错误')
         }
@@ -165,9 +170,7 @@ function jiekouyiji() {
                 })
             };
             for (var j in type_pids) {
-                log('type_pids'+j)
                 for (var i in typeclass) {
-                    log('typeclass'+i)
                     if(typeclass[i].type_pid==type_pids[j]){
                         d.push({
                             title: getMyVar('SrcJydouli$type_id')==typeclass[i].type_id?'““””<b><span style="color:' + Color + '">' + typeclass[i].type_name + '</span></b>':typeclass[i].type_name,
@@ -190,8 +193,12 @@ function jiekouyiji() {
     
     try{
         MY_URL = listurl + MY_PAGE;
-        var html  = request(MY_URL, { headers: { 'User-Agent': api_ua }, timeout:xunmitimeout*1000 });
-        var list = JSON.parse(html).list;
+        var html  = JSON.parse(request(MY_URL, { headers: { 'User-Agent': api_ua }, timeout:xunmitimeout*1000 }));
+        try{
+            var list = eval(lists)||html.list||html.data.list||html.data||[];
+        } catch (e) {
+            var list = html.list||html.data.list||html.data||[];
+        }
         let videolist = list.map((list)=>{
             let vodname = list.vod_name||list.title;
             if(vodname){
