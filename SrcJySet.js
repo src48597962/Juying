@@ -1160,8 +1160,8 @@ function SRCSet() {
         }
         if(getMyVar('guanli', 'jk')=="jk"){
             d.push({
-                col_type: "line_blank"
-            });
+                col_type: "blank_block"
+            })
             let grouplist = datalist.map((list)=>{
                 return list.group||list.type;
             })
