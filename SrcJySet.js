@@ -1159,6 +1159,9 @@ function SRCSet() {
             }
         }
         if(getMyVar('guanli', 'jk')=="jk"){
+            d.push({
+                col_type: "line_blank"
+            });
             let grouplist = datalist.map((list)=>{
                 return list.group||list.type;
             })
