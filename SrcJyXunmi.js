@@ -270,24 +270,17 @@ function xunmi(name,data) {
                 try {
                     var gethtml = request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 });
                     if(/cms/.test(obj.type)&&/^<\?xml/.test(gethtml)){
+                        let xmllist = [];
                         require(config.依赖.match(/https.*\//)[0] + 'SrcXPath.js');
                         let videos = pdfa(gethtml,'list&&video');
                         for(let i in videos){
                             let id = SrcXPath(videos[i],`//video/id/text()`);
                             let name = SrcXPath(videos[i],`//video/name/text()`).match(/\[.*\[(.*?)\]\.*]/)[1];
-                            log(name);
+                            let pic = SrcXPath(videos[i],`//video/pic/text()`);
+                            let note = SrcXPath(videos[i],`//video/note/text()`).match(/\[.*\[(.*?)\]\.*]/)[1];
+                            xmllist.push({"vod_id":id,"vod_name":name,"vod_remarks":note,"vod_pic":pic})
                         }
-                        return "";
-                        /*
-                        let title = xpathArray(gethtml, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodName);
-                        let href = xpathArray(gethtml, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodId);
-                        let img = xpathArray(gethtml, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodImg);
-                        let mark = xpathArray(gethtml, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodMark)||"";
-                        var list = [];
-                        for(var j in title){
-                            list.push({"id":href[j],"name":title[j],"pic":img[j],"desc":mark[j]})
-                        }
-                        */
+                        var html = {"list":xmllist};
                     }else if(!/{|}/.test(gethtml)&&gethtml!=""){
                         var decfile = "hiker://files/rules/Src/Juying/appdec.js";
                         var Juyingdec=fetch(decfile);
