@@ -5,9 +5,11 @@ function SRCSet() {
     let xmlhtml = fetch('http://f2dcj6.com/sapi?ac=videolist&pg=1&t=3');
     function xml_2_json(xmlhtml) {
         eval(fetch('https://www.w3cschool.cn/statics/tools/xmljson/ObjTree.js'))
+        log(xmlhtml)
         var space = "  ";
+        var xotree = new XML.ObjTree();
         var inputdata = xmlhtml;
-        var tree = parseXML(inputdata);
+        var tree = xotree.parseXML(inputdata);
         if (!tree.html) {
             try{
                 var josnhtml= JSON.stringify(tree, null, space);
