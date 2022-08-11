@@ -268,10 +268,26 @@ function xunmi(name,data) {
             var urlua = obj.ua=="MOBILE_UA"?MOBILE_UA:obj.ua=="PC_UA"?PC_UA:obj.ua;
             if(/v1|app|iptv|v2|cms/.test(obj.type)){
                 try {
-                    log(ssurl);
                     var gethtml = request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 });
-                    log(gethtml);
-                    if(!/{|}/.test(gethtml)&&gethtml!=""){
+                    if(/cms/.test(obj.type)&&/^<\?xml/.test(gethtml)){
+                        require(config.依赖.match(/https.*\//)[0] + 'SrcXPath.js');
+                        let videos = pdfa(gethtml,'list&&video');
+                        for(let i in videos){
+                            let id = SrcXPath(videos[i],`//video/id/text()`);
+                            log(id);
+                        }
+                        return "";
+                        /*
+                        let title = xpathArray(gethtml, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodName);
+                        let href = xpathArray(gethtml, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodId);
+                        let img = xpathArray(gethtml, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodImg);
+                        let mark = xpathArray(gethtml, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodMark)||"";
+                        var list = [];
+                        for(var j in title){
+                            list.push({"id":href[j],"name":title[j],"pic":img[j],"desc":mark[j]})
+                        }
+                        */
+                    }else if(!/{|}/.test(gethtml)&&gethtml!=""){
                         var decfile = "hiker://files/rules/Src/Juying/appdec.js";
                         var Juyingdec=fetch(decfile);
                         if(Juyingdec != ""){
@@ -279,29 +295,7 @@ function xunmi(name,data) {
                             var html = JSON.parse(xgdec(gethtml));
                         }
                     }else{
-                        log('1');
-                        if(/cms/.test(obj.type)&&/^<\?xml/.test(gethtml)){
-                            log('2');
-                            require(config.依赖.match(/https.*\//)[0] + 'SrcXPath.js');
-                            let videos = pdfa(gethtml,'list&&video');
-                            for(let i in videos){
-                                let id = SrcXPath(videos[i],`//video/id/text()`);
-                                log(id);
-                            }
-                            return "";
-                            /*
-                            let title = xpathArray(gethtml, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodName);
-                            let href = xpathArray(gethtml, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodId);
-                            let img = xpathArray(gethtml, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodImg);
-                            let mark = xpathArray(gethtml, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodMark)||"";
-                            var list = [];
-                            for(var j in title){
-                                list.push({"id":href[j],"name":title[j],"pic":img[j],"desc":mark[j]})
-                            }
-                            */
-                        }else{
-                            var html = JSON.parse(gethtml);
-                        }
+                        var html = JSON.parse(gethtml);
                     }
                 } catch (e) {
                     var html = { data: [] };
