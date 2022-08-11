@@ -269,7 +269,7 @@ function xunmi(name,data) {
             if(/v1|app|iptv|v2|cms/.test(obj.type)){
                 try {
                     var gethtml = request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 });
-                    if(/cms/.test(obj.type)&&/^<\?xml/.test(gethtml)){
+                    if(/cms/.test(obj.type)&&/<\?xml/.test(gethtml)){
                         let xmllist = [];
                         let videos = pdfa(gethtml,'list&&video');
                         for(let i in videos){
@@ -690,7 +690,7 @@ function xunmierji(type,ua) {
         if (/v1|app|v2|iptv|cms/.test(type)) {
             try{
                 var gethtml = request(MY_URL.split('##')[1], { headers: { 'User-Agent': ua } });
-                if(/cms/.test(type)&&/^<\?xml/.test(gethtml)){
+                if(/cms/.test(type)&&/<\?xml/.test(gethtml)){
                     var html = gethtml;
                     var isxml = 1;
                 }else{
