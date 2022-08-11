@@ -2,10 +2,10 @@
 function SRCSet() {
 
     
-    let xmlhtml = fetch('http://f2dcj6.com/sapi?ac=videolist&pg=1&t=3');
+    let xmlhtml = request('http://f2dcj6.com/sapi?ac=videolist&pg=1&t=3');
+    log(xmlhtml)
     function xml_2_json(xmlhtml) {
         eval(fetch('https://www.w3cschool.cn/statics/tools/xmljson/ObjTree.js'))
-        log(xmlhtml)
         var space = "  ";
         var xotree = new XML.ObjTree();
         var inputdata = xmlhtml;
