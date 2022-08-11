@@ -244,21 +244,18 @@ function jiekouyiji() {
         try {
             var gethtml = request(MY_URL, { headers: { 'User-Agent': api_ua }, timeout:xunmitimeout*1000 });
             if(/cms/.test(api_type)&&/<\?xml/.test(gethtml)){
+                gethtml = gethtml.replace(/&lt;!\[CDATA\[|\]\]&gt;/g,'');
                 let xmllist = [];
                 let videos = pdfa(gethtml,'list&&video');
                 for(let i in videos){
                     let id = String(xpath(videos[i],`//video/id/text()`)).trim();
-                    let name = String(xpath(videos[i],`//video/name/text()`)).replace(/&lt;!\[CDATA\[|\]\]&gt;/g,'');
+                    let name = String(xpath(videos[i],`//video/name/text()`)).trim();
                     let pic = String(xpath(videos[i],`//video/pic/text()`)).trim();
-                    let note = String(xpath(videos[i],`//video/note/text()`)).replace(/&lt;!\[CDATA\[|\]\]&gt;/g,'');
+                    let note = String(xpath(videos[i],`//video/note/text()`)).trim();
                     let arr = {"vod_id":id,"vod_name":name,"vod_remarks":note,"vod_pic":pic};
                     let plays = xpathArray(videos[i],`//video/dl/dd/text()`);
                     if(plays.length==1){
-                        try{
-                            var play = plays[0].replace(/&lt;!\[CDATA\[|\]\]&gt;/g,'');
-                        }catch(e){ }
-                    }
-                    if(play){
+                        let play = plays[0];
                         if(play.indexOf('$')==-1&&play.indexOf('m3u8')>-1){
                             arr['play'] = play;
                         }
