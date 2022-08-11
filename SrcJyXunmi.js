@@ -271,13 +271,12 @@ function xunmi(name,data) {
                     var gethtml = request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 });
                     if(/cms/.test(obj.type)&&/^<\?xml/.test(gethtml)){
                         let xmllist = [];
-                        require(config.依赖.match(/https.*\//)[0] + 'SrcXPath.js');
                         let videos = pdfa(gethtml,'list&&video');
                         for(let i in videos){
-                            let id = SrcXPath(videos[i],`//video/id/text()`);
-                            let name = SrcXPath(videos[i],`//video/name/text()`).match(/\[.*\[(.*?)\]\.*]/)[1];
-                            let pic = SrcXPath(videos[i],`//video/pic/text()`);
-                            let note = SrcXPath(videos[i],`//video/note/text()`).match(/\[.*\[(.*?)\]\.*]/)[1];
+                            let id = xpath(videos[i],`//video/id/text()`).trim();
+                            let name = xpath(videos[i],`//video/name/text()`).match(/\[.*\[(.*?)\]\.*]/)[1];
+                            let pic = xpath(videos[i],`//video/pic/text()`);
+                            let note = xpath(videos[i],`//video/note/text()`).match(/\[.*\[(.*?)\]\.*]/)[1];
                             xmllist.push({"vod_id":id,"vod_name":name,"vod_remarks":note,"vod_pic":pic})
                         }
                         var html = {"list":xmllist};
@@ -690,23 +689,13 @@ function xunmierji(type,ua) {
     if (getMyVar('myurl', '0') != MY_URL || !configvar.详情1 || configvar.标识 != MY_URL) {
         if (/v1|app|v2|iptv|cms/.test(type)) {
             try{
-
-
-
-                if(/cms/.test(obj.type)&&/^<\?xml/.test(gethtml)){
-                        let xmllist = [];
-                        require(config.依赖.match(/https.*\//)[0] + 'SrcXPath.js');
-                        let videos = pdfa(gethtml,'list&&video');
-                        for(let i in videos){
-                            let id = SrcXPath(videos[i],`//video/id/text()`);
-                            let name = SrcXPath(videos[i],`//video/name/text()`).match(/\[.*\[(.*?)\]\.*]/)[1];
-                            let pic = SrcXPath(videos[i],`//video/pic/text()`);
-                            let note = SrcXPath(videos[i],`//video/note/text()`).match(/\[.*\[(.*?)\]\.*]/)[1];
-                            xmllist.push({"vod_id":id,"vod_name":name,"vod_remarks":note,"vod_pic":pic})
-                        }
-                        var html = {"list":xmllist};
-                    }
-                var html = JSON.parse(request(MY_URL.split('##')[1], { headers: { 'User-Agent': ua } }));
+                if(/cms/.test(type)&&/^<\?xml/.test(gethtml)){
+                    var html = request(MY_URL.split('##')[1], { headers: { 'User-Agent': ua } });
+                    var isxml = 1;
+                }else{
+                    var html = JSON.parse(request(MY_URL.split('##')[1], { headers: { 'User-Agent': ua } }));
+                    var isxml = 0;
+                }
             } catch (e) {
                 var html = "";
             }
@@ -736,7 +725,23 @@ function xunmierji(type,ua) {
     //影片详情
     if (zt == 1) {
         var dqnf = "";
-        if (/v1|app|v2|cms/.test(type)) {
+        if(/cms/.test(type)&&isxml==1){
+            var arts = xpathArray(html,`//video/dl/dt/@name`);
+            var conts = xpathArray(html,`//video/dl/dd/text()`);
+            for(let i in conts){
+                conts[i] = conts[i].match(/\[.*\[(.*?)\]\.*]/)[1];
+            }
+            var actor = xpath(html,`//video/actor/text()`).match(/\[.*\[(.*?)\]\.*]/)[1] || "内详";
+            var director = xpath(html,`//video/director/text()`).match(/\[.*\[(.*?)\]\.*]/)[1] || "内详";
+            var area = xpath(html,`//video/area/text()`);
+            var year = xpath(html,`//video/year/text()`);
+            var remarks = xpath(html,`//video/note/text()`).match(/\[.*\[(.*?)\]\.*]/)[1] || "";
+            var pubdate = xpath(html,`//video/type/text()`) || "";
+            var pic = MY_PARAMS.pic || xpath(html,`//video/pic/text()`);
+            var desc = xpath(html,`//video/des/text()`).match(/\[.*\[(.*?)\]\.*]/)[1] || '...';
+            if(area){ dqnf = '\n地区：' + area}
+            if(year){ dqnf = dqnf + '   年代：' + year}
+        }else if (/v1|app|v2|cms/.test(type)) {
             if (/cms/.test(type)) {
                 try{
                     var json = html.list[0];
