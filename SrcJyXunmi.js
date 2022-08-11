@@ -735,8 +735,6 @@ function xunmierji(type,ua) {
             for(let i in conts){
                 conts[i] = conts[i].match(/\[.*\[(.*?)\]\.*]/)[1];
             }
-            log(arts)
-            log(conts)
             var actor = xpath(html,`//video/actor/text()`).match(/\[.*\[(.*?)\]\.*]/)[1] || "内详";
             var director = xpath(html,`//video/director/text()`).match(/\[.*\[(.*?)\]\.*]/)[1] || "内详";
             var area = xpath(html,`//video/area/text()`);
@@ -1025,9 +1023,8 @@ function xunmierji(type,ua) {
                             break;
                         }
                     }
-                }else{
-                    lists.push(lines)
                 }
+                lists.push(lines)
             };
         }else{
             //网页
