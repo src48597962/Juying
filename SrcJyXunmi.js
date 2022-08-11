@@ -689,12 +689,12 @@ function xunmierji(type,ua) {
     if (getMyVar('myurl', '0') != MY_URL || !configvar.详情1 || configvar.标识 != MY_URL) {
         if (/v1|app|v2|iptv|cms/.test(type)) {
             try{
+                var gethtml = request(MY_URL.split('##')[1], { headers: { 'User-Agent': ua } });
                 if(/cms/.test(type)&&/^<\?xml/.test(gethtml)){
-                    var html = request(MY_URL.split('##')[1], { headers: { 'User-Agent': ua } });
+                    var html = gethtml;
                     var isxml = 1;
-                    log(html)
                 }else{
-                    var html = JSON.parse(request(MY_URL.split('##')[1], { headers: { 'User-Agent': ua } }));
+                    var html = JSON.parse(gethtml);
                     var isxml = 0;
                 }
             } catch (e) {
@@ -727,7 +727,6 @@ function xunmierji(type,ua) {
     if (zt == 1) {
         var dqnf = "";
         if(/cms/.test(type)&&isxml==1){
-            log('1');
             var arts = xpathArray(html,`//video/dl/dt/@name`);
             var conts = xpathArray(html,`//video/dl/dd/text()`);
             for(let i in conts){
@@ -744,7 +743,6 @@ function xunmierji(type,ua) {
             if(area){ dqnf = '\n地区：' + area}
             if(year){ dqnf = dqnf + '   年代：' + year}
         }else if (/v1|app|v2|cms/.test(type)) {
-            log('2');
             if (/cms/.test(type)) {
                 try{
                     var json = html.list[0];
