@@ -251,7 +251,17 @@ function jiekouyiji() {
                     let name = String(xpath(videos[i],`//video/name/text()`)).match(/\[.*\[(.*?)\]\.*]/)[1];
                     let pic = String(xpath(videos[i],`//video/pic/text()`)).trim();
                     let note = String(xpath(videos[i],`//video/note/text()`)).match(/\[.*\[(.*?)\]\.*]/)[1];
-                    xmllist.push({"vod_id":id,"vod_name":name,"vod_remarks":note,"vod_pic":pic})
+                    let plays = xpartArray(videos[i],`//video/dl/dd/text()`);
+                    if(plays.length==1){
+                        try{
+                            var play = plays[0].match(/\[.*\[(.*?)\]\.*]/)[1];
+                        }catch(e){ }
+                    }
+                    let arr = {"vod_id":id,"vod_name":name,"vod_remarks":note,"vod_pic":pic};
+                    if(play&&play.indexOf('$')==-1&&play.indexOf('m3u8')>-1){
+                        arr['play'] = play;
+                    }
+                    xmllist.push(arr)
                 }
                 var html = {"list":xmllist};
             }else if(!/{|}/.test(gethtml)&&gethtml!=""){
@@ -290,7 +300,7 @@ function jiekouyiji() {
                     title: vodname,
                     desc: voddesc,
                     pic_url: vodpic,
-                    url: $("hiker://empty##" + vodurl + "#immersiveTheme#").rule((type,ua) => {
+                    url: list.play?list.play:$("hiker://empty##" + vodurl + "#immersiveTheme#").rule((type,ua) => {
                             require(config.依赖.match(/https.*\//)[0] + 'SrcJyXunmi.js');
                             xunmierji(type,ua)
                         },api_type, api_ua),
