@@ -845,7 +845,7 @@ function xunmierji(type,ua) {
                 var pubdate = String(xpath(html, jsondata.dtNode+jsondata.dtMark)) || "";
                 var pic = MY_PARAMS.pic || xpath(html, jsondata.dtNode+jsondata.dtImg);
                 getsm = "获取简介dtDesc";
-                var desc = String(xpath(html, jsondata.dtNode+jsondata.dtDesc)).replace(jsondata.filter?eval(jsondata.filter):"","").replace(/&ldquo;/g,'“').replace(/&rdquo;/g,'”') || '...';
+                var desc = String(xpath(html, jsondata.dtNode+jsondata.dtDesc)).replace(jsondata.filter?eval(jsondata.filter):"","") || '...';
                 if(area){ dqnf = '\n地区：' + area}
                 if(year){ dqnf = dqnf + '   年代：' + year}
             }catch(e){
@@ -911,7 +911,7 @@ function xunmierji(type,ua) {
         }
         var details1 = '导演：' + director.substring(0, director.length<12?director.length:12) + '\n主演：' + actor.substring(0, actor.length<12||dqnf==""?actor.length:12) + dqnf;
         var details2 = remarks + '\n' + pubdate;
-        desc = desc.replace('&ldquo;','“').replace('&rdquo;','”');
+        desc = desc.replace(/&ldquo;/g,'“').replace(/&rdquo;/g,'”');
         var newconfig = { 详情1: details1, 详情2: details2, 图片: pic, 简介: desc, 线路: arts, 影片: conts, 标识: MY_URL };
         var libsfile = 'hiker://files/libs/' + md5(configfile) + '.js';
         writeFile(libsfile, 'var configvar = ' + JSON.stringify(newconfig));
