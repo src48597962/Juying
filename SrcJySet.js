@@ -1,5 +1,74 @@
 //个人学习代码
 function SRCSet() {
+
+/**
+* xml字符串转换xml对象数据
+* @param {Object} xmlStr
+*/
+function xmlStr2XmlObj(xmlStr) {
+var xmlObj = {};
+if (document.all) {
+var xmlDom = new ActiveXObject("Microsoft.XMLDOM");
+xmlDom.loadXML(xmlStr);
+xmlObj = xmlDom;
+} else {
+xmlObj = new DOMParser().parseFromString(xmlStr, "text/xml");
+}
+return xmlObj;
+}
+
+/**
+* xml字符串转换json数据
+* @param {Object} xml
+*/
+function xmlObj2json(xml) {
+var xmlObj = xmlStr2XmlObj(xml);
+var jsonObj = {};
+if (xmlObj.childNodes.length > 0) {
+jsonObj = xml2json(xmlObj);
+}
+return jsonObj;
+}
+
+/**
+* xml转换json数据
+* @param {Object} xml
+*/
+function xml2json(xml) {
+try {
+var obj = {};
+if (xml.children.length > 0) {
+for (var i = 0; i < xml.children.length; i++) {
+var item = xml.children.item(i);
+var nodeName = item.nodeName;
+if (typeof(obj[nodeName]) == "undefined") {
+obj[nodeName] = xml2json(item);
+} else {
+if (typeof(obj[nodeName].push) == "undefined") {
+var old = obj[nodeName];
+obj[nodeName] = [];
+obj[nodeName].push(old);
+}
+obj[nodeName].push(xml2json(item));
+}
+}
+} else {
+obj = xml.textContent;
+}
+return obj;
+} catch (e) {
+log(e.message);
+}
+}
+
+let xmlhtml = request('http://f2dcj6.com/sapi?ac=videolist&pg=1&t=3');
+let jsonhtml = xmlObj2json(xmlhtml);
+log(jsonhtml);
+
+
+
+
+
     addListener("onClose", $.toString(() => {
         clearMyVar('guanlicz');
         clearMyVar('duoselect');
