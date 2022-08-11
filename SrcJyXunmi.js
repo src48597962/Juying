@@ -743,6 +743,7 @@ function xunmierji(type,ua) {
             var pubdate = xpath(html,`//video/type/text()`).trim() || "";
             var pic = MY_PARAMS.pic || xpath(html,`//video/pic/text()`);
             var desc = xpath(html,`//video/des/text()`).trim().match(/\[.*\[(.*?)\]\.*]/)[1] || '...';
+            log('1'+area+'2')
             if(area){ dqnf = '\n地区：' + area}
             if(year){ dqnf = dqnf + '   年代：' + year}
         }else if (/v1|app|v2|cms/.test(type)) {
@@ -910,6 +911,7 @@ function xunmierji(type,ua) {
         }
         var details1 = '导演：' + director.substring(0, director.length<12?director.length:12) + '\n主演：' + actor.substring(0, actor.length<12||dqnf==""?actor.length:12) + dqnf;
         var details2 = remarks + '\n' + pubdate;
+        desc = desc.replace('&ldquo;','“').replace('&rdquo;','”');
         var newconfig = { 详情1: details1, 详情2: details2, 图片: pic, 简介: desc, 线路: arts, 影片: conts, 标识: MY_URL };
         var libsfile = 'hiker://files/libs/' + md5(configfile) + '.js';
         writeFile(libsfile, 'var configvar = ' + JSON.stringify(newconfig));
