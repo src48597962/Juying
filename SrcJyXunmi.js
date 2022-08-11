@@ -726,6 +726,7 @@ function xunmierji(type,ua) {
     if (zt == 1) {
         var dqnf = "";
         if(/cms/.test(type)&&isxml==1){
+            log('1');
             var arts = xpathArray(html,`//video/dl/dt/@name`);
             var conts = xpathArray(html,`//video/dl/dd/text()`);
             for(let i in conts){
@@ -742,6 +743,7 @@ function xunmierji(type,ua) {
             if(area){ dqnf = '\n地区：' + area}
             if(year){ dqnf = dqnf + '   年代：' + year}
         }else if (/v1|app|v2|cms/.test(type)) {
+            log('2');
             if (/cms/.test(type)) {
                 try{
                     var json = html.list[0];
