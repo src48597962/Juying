@@ -1,12 +1,7 @@
 //个人学习代码
 function SRCSet() {
 
-/*	This work is licensed under Creative Commons GNU LGPL License.
-	License: http://creativecommons.org/licenses/LGPL/2.1/
-   Version: 0.9
-	Author:  Stefan Goessner/2006
-	Web:     http://goessner.net/ 
-*/
+
 function xml2json(xml, tab) {
    var X = {
       toObj: function(xml) {
@@ -157,6 +152,7 @@ function xml2json(xml, tab) {
 }
 
 let xmlhtml = request('http://f2dcj6.com/sapi?ac=videolist&pg=1&t=3');
+log(xmlhtml);
 let jsonhtml = xml2json(xmlhtml,'   ');
 log(jsonhtml);
 
