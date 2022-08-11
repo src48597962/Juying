@@ -650,7 +650,7 @@ function yiji() {
             col_type: 'icon_5'
         });
         d.push({
-            title: "接口",
+            title: "展示",
             url: $("hiker://empty##fypage#noRecordHistory##noHistory#").rule(() => {
                     require(config.依赖);
                     jiekouyiji();
