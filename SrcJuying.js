@@ -35,27 +35,27 @@ function jiekouyiji() {
             let key = (mm<10?"0"+mm:mm)+""+(dd<10?"0"+dd:dd);
             var url = api_url + '/detail?&key='+key+'&vod_id=';
             var typeurl = api_url + "/types";
-            var listurl = api_url + '?key='+key+'&type=@type_id&page=';
+            var listurl = api_url + '?key='+key+'&limit=12&type=@type_id&page=';
             var lists = "html.data.list";
         } else if (api_type=="app") {
             var url = api_url + 'video_detail?id=';
             var typeurl = api_url + "/nav";
-            var listurl = api_url + '/video?tid=@type_id&pg=';
+            var listurl = api_url + '/video?tid=@type_id&limit=12&pg=';
             var lists = "html.list";
         } else if (api_type=="v2") {
             var url = api_url + 'video_detail?id=';
             var typeurl = api_url + "nav";
-            var listurl = api_url + 'video?tid=@type_id&pg=';
+            var listurl = api_url + 'video?tid=@type_id&limit=12&pg=';
             var lists = "html.data";
         } else if (api_type=="iptv") {
             var url = api_url + '?ac=detail&ids=';
             var typeurl = api_url + "?ac=flitter";
-            var listurl = api_url + '?ac=list&class=@type_id&page=';
+            var listurl = api_url + '?ac=list&class=@type_id&limit=12&page=';
             var lists = "html.data";
         } else if (api_type=="cms") {
             var url = api_url + '?ac=videolist&ids=';
             var typeurl = api_url + "?ac=list";
-            var listurl = api_url + '?ac=videolist&t=@type_id&pg=';
+            var listurl = api_url + '?ac=videolist&t=@type_id&limit=12&pg=';
             var lists = "html.list";
         } else {
             log('api类型错误')
