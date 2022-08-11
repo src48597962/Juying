@@ -244,7 +244,7 @@ function jiekouyiji() {
         try {
             var gethtml = request(MY_URL, { headers: { 'User-Agent': api_ua }, timeout:xunmitimeout*1000 });
             if(/cms/.test(api_type)&&/<\?xml/.test(gethtml)){
-                gethtml = gethtml.replace(/&lt;!\[CDATA\[|\]\]&gt;/g,'');
+                gethtml = gethtml.replace(/&lt;!\[CDATA\[|\]\]&gt;|<!\[CDATA\[|\]\]>/g,'');
                 let xmllist = [];
                 let videos = pdfa(gethtml,'list&&video');
                 for(let i in videos){
