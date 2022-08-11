@@ -1018,7 +1018,7 @@ function xunmierji(type,ua) {
                 if(isxml==1){
                     for(let i in lines){
                         if(lines[i].indexOf('$')==-1){
-                            let ii = i+1;
+                            let ii = parseInt(i)+1;
                             lines[i] = ii+'$'+lines[i];
                         }else{
                             break;
