@@ -274,9 +274,9 @@ function xunmi(name,data) {
                         let videos = pdfa(gethtml,'list&&video');
                         for(let i in videos){
                             let id = String(xpath(videos[i],`//video/id/text()`)).trim();
-                            let name = String(xpath(videos[i],`//video/name/text()`)).match(/\[.*\[(.*?)\]\.*]/)[1];
+                            let name = String(xpath(videos[i],`//video/name/text()`)).replace(/&lt;!\[CDATA\[|\]\]&gt;/g,'');
                             let pic = String(xpath(videos[i],`//video/pic/text()`)).trim();
-                            let note = String(xpath(videos[i],`//video/note/text()`)).match(/\[.*\[(.*?)\]\.*]/)[1];
+                            let note = String(xpath(videos[i],`//video/note/text()`)).replace(/&lt;!\[CDATA\[|\]\]&gt;/g,'');
                             xmllist.push({"vod_id":id,"vod_name":name,"vod_remarks":note,"vod_pic":pic})
                         }
                         var html = {"list":xmllist};
@@ -733,16 +733,16 @@ function xunmierji(type,ua) {
             }
             var conts = xpathArray(html,`//video/dl/dd/text()`);
             for(let i in conts){
-                conts[i] = conts[i].match(/\[.*\[(.*?)\]\.*]/)[1];
+                conts[i] = conts[i].replace(/&lt;!\[CDATA\[|\]\]&gt;/g,'');
             }
-            var actor = String(xpath(html,`//video/actor/text()`)).trim().match(/\[.*\[(.*?)\]\.*]/)[1] || "内详";
-            var director = String(xpath(html,`//video/director/text()`)).trim().match(/\[.*\[(.*?)\]\.*]/)[1] || "内详";
+            var actor = String(xpath(html,`//video/actor/text()`)).trim().replace(/&lt;!\[CDATA\[|\]\]&gt;/g,'') || "内详";
+            var director = String(xpath(html,`//video/director/text()`)).trim().replace(/&lt;!\[CDATA\[|\]\]&gt;/g,'') || "内详";
             var area = String(xpath(html,`//video/area/text()`)).trim();
             var year = String(xpath(html,`//video/year/text()`)).trim();
-            var remarks = String(xpath(html,`//video/note/text()`)).trim().match(/\[.*\[(.*?)\]\.*]/)[1] || "";
+            var remarks = String(xpath(html,`//video/note/text()`)).trim().replace(/&lt;!\[CDATA\[|\]\]&gt;/g,'') || "";
             var pubdate = String(xpath(html,`//video/type/text()`)).trim() || "";
             var pic = MY_PARAMS.pic || xpath(html,`//video/pic/text()`);
-            var desc = String(xpath(html.replace('<p>','').replace('</p>',''),`//video/des/text()`)).replace(/&lt;!\[CDATA\[|\]\]&gt;/g,'') || '...';//.match(/\[.*\[(.*?)\]\.*]/)[1]
+            var desc = String(xpath(html.replace('<p>','').replace('</p>',''),`//video/des/text()`)).replace(/&lt;!\[CDATA\[|\]\]&gt;/g,'') || '...';
             if(area){ dqnf = '\n地区：' + area}
             if(year){ dqnf = dqnf + '   年代：' + year}
         }else if (/v1|app|v2|cms/.test(type)) {
@@ -910,7 +910,7 @@ function xunmierji(type,ua) {
         }
         var details1 = '导演：' + director.substring(0, director.length<12?director.length:12) + '\n主演：' + actor.substring(0, actor.length<12||dqnf==""?actor.length:12) + dqnf;
         var details2 = remarks + '\n' + pubdate;
-        desc = desc.replace(/&ldquo;/g,'“').replace(/&rdquo;/g,'”');
+        desc = desc.replace(/&ldquo;/g,'“').replace(/&rdquo;/g,'”').replace(/&middot;/g,'·').replace(/&hellip;/g,'…');
         var newconfig = { 详情1: details1, 详情2: details2, 图片: pic, 简介: desc, 线路: arts, 影片: conts, 标识: MY_URL };
         var libsfile = 'hiker://files/libs/' + md5(configfile) + '.js';
         writeFile(libsfile, 'var configvar = ' + JSON.stringify(newconfig));
