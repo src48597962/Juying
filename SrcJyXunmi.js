@@ -274,7 +274,7 @@ function xunmi(name,data) {
                         let videos = pdfa(gethtml,'list&&video');
                         for(let i in videos){
                             let id = SrcXPath(videos[i],`//video/id/text()`);
-                            let name = SrcXPath(videos[i],`//video/name/text()`).match(/(?<=\[.*\[).+?(?=\]\])/)[0];
+                            let name = SrcXPath(videos[i],`//video/name/text()`).match(/\[.*\[(.*?)\]\.*]/)[1];
                             log(name);
                         }
                         return "";
