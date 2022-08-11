@@ -3,7 +3,7 @@ function SRCSet() {
 
 
 //let xmlhtml = request('http://f2dcj6.com/sapi?ac=videolist&pg=1&t=3');
-const X2JS = require('../../utils/x2js/we-x2js');
+const X2JS = require('https://gitcode.net/src48597962/hktest/-/raw/master/we-x2js.js');
 let x2js = new X2JS();
 let xmlStr = '<xml><appId><![CDATA[wx123456]]></appId><nonceStr><![CDATA[123456789]]></nonceStr></xml>'
 let myJson = x2js.xml2js(xmlStr);
