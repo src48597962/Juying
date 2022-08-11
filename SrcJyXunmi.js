@@ -742,8 +742,6 @@ function xunmierji(type,ua) {
             var pubdate = String(xpath(html,`//video/type/text()`)).trim() || "";
             var pic = MY_PARAMS.pic || xpath(html,`//video/pic/text()`);
             var desc = String(xpath(html.replace('<p>','').replace('</p>',''),`//video/des/text()`)) || '...';
-            if(area){ dqnf = '\n地区：' + area}
-            if(year){ dqnf = dqnf + '   年代：' + year}
         }else if (/v1|app|v2|cms/.test(type)) {
             if (/cms/.test(type)) {
                 try{
@@ -789,8 +787,6 @@ function xunmierji(type,ua) {
             var pubdate = json.vod_pubdate || json.vod_class || "";
             var pic = MY_PARAMS.pic || json.vod_pic;
             var desc = json.vod_blurb || '...';
-            if(area){ dqnf = '\n地区：' + area}
-            if(year){ dqnf = dqnf + '   年代：' + year}
         }else if (/iptv/.test(type)) {
             var actor = html.actor.join(",") || "内详";
             var director = html.director.join(",") || "内详";
@@ -802,8 +798,6 @@ function xunmierji(type,ua) {
             var desc = html.intro || '...';
             var arts = html.videolist;
             var conts = arts;
-            if(area){ dqnf = '\n地区：' + area}
-            if(year){ dqnf = dqnf + '   年代：' + year}
         }else if (/xpath/.test(type)) {
             try{
                 getsm = "获取传递数据";
@@ -844,8 +838,6 @@ function xunmierji(type,ua) {
                 var pic = MY_PARAMS.pic || xpath(html, jsondata.dtNode+jsondata.dtImg);
                 getsm = "获取简介dtDesc";
                 var desc = String(xpath(html, jsondata.dtNode+jsondata.dtDesc)).replace(jsondata.filter?eval(jsondata.filter):"","") || '...';
-                if(area){ dqnf = '\n地区：' + area}
-                if(year){ dqnf = dqnf + '   年代：' + year}
             }catch(e){
                 var actor = actor||"抓取失败";
                 var director = director||"";
@@ -906,6 +898,11 @@ function xunmierji(type,ua) {
             }    
         }else{
             //网页
+        }
+        if(area){
+            dqnf = '\n地区：' + area + (year?'   年代：' + year:'')
+        }else{
+            dqnf = year?'\n年代：' + year:''
         }
         var details1 = '导演：' + director.substring(0, director.length<12?director.length:12) + '\n主演：' + actor.substring(0, actor.length<12||dqnf==""?actor.length:12) + dqnf;
         var details2 = remarks + '\n' + pubdate;
