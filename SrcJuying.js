@@ -945,7 +945,7 @@ function Version() {
                 })
                 log('检测到新版本！\nV'+newVersion.SrcJuying+'版本》'+newVersion.SrcJuyingdesc[eval(newVersion.SrcJuying)]);
             }
-            putVar('SrcJuying-Version', '-V'+newVersion.SrcJuying);
+            putMyVar('SrcJuying-Version', '-V'+newVersion.SrcJuying);
         } catch (e) { }
         putVar('SrcJuying-VersionCheck', '1');
         setItem('VersionChecktime',nowtime+"time");
