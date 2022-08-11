@@ -67,7 +67,7 @@ function xml2json(xml, tab) {
             o = X.toObj(xml.documentElement);
          }
          else
-            alert("unhandled node type: " + xml.nodeType);
+            log("unhandled node type: " + xml.nodeType);
          return o;
       },
       toJson: function(o, name, ind) {
