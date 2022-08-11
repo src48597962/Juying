@@ -275,7 +275,7 @@ function xunmi(name,data) {
                         for(let i in videos){
                             let id = xpath(videos[i],`//video/id/text()`).trim();
                             let name = xpath(videos[i],`//video/name/text()`).match(/\[.*\[(.*?)\]\.*]/)[1];
-                            let pic = xpath(videos[i],`//video/pic/text()`).trim();
+                            let pic = String(xpath(videos[i],`//video/pic/text()`));
                             let note = xpath(videos[i],`//video/note/text()`).match(/\[.*\[(.*?)\]\.*]/)[1];
                             xmllist.push({"vod_id":id,"vod_name":name,"vod_remarks":note,"vod_pic":pic})
                         }
