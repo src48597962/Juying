@@ -1,5 +1,30 @@
 //个人学习代码
 function SRCSet() {
+
+    
+    let xmlhtml = fetch('http://f2dcj6.com/sapi?ac=videolist&pg=1&t=3');
+    function xml_2_json(xmlhtml) {
+        eval(fetch('https://www.w3cschool.cn/statics/tools/xmljson/ObjTree.js'))
+        var space = "  ";
+        var inputdata = xmlhtml;
+        var tree = parseXML(inputdata);
+        if (!tree.html) {
+            try{
+                var josnhtml= JSON.stringify(tree, null, space);
+                log('成功')
+                return josnhtml;
+            }catch(e){
+                log('失败')
+            }
+            
+        } else {
+            log('xml格式有误')
+        }
+        return "";
+    }
+    log(xml_2_json(xmlhtml));
+
+
     addListener("onClose", $.toString(() => {
         clearMyVar('guanlicz');
         clearMyVar('duoselect');
