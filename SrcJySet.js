@@ -1,15 +1,5 @@
 //个人学习代码
 function SRCSet() {
-
-
-let xmlhtml = request('http://f2dcj6.com/sapi?ac=videolist&pg=1&t=3');
-let video = pdfa(xmlhtml,'list&&video');
-log(video)
-
-
-
-
-
     addListener("onClose", $.toString(() => {
         clearMyVar('guanlicz');
         clearMyVar('duoselect');
