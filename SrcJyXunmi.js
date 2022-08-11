@@ -742,7 +742,8 @@ function xunmierji(type,ua) {
             var remarks = String(xpath(html,`//video/note/text()`)).trim().match(/\[.*\[(.*?)\]\.*]/)[1] || "";
             var pubdate = String(xpath(html,`//video/type/text()`)).trim() || "";
             var pic = MY_PARAMS.pic || xpath(html,`//video/pic/text()`);
-            var desc = String(xpath(html,`//video/des/text()`)).trim().match(/\[.*\[(.*?)\]\.*]/)[1] || '...';
+            log(xpath(html,`//video/des/text()`))
+            var desc = String(xpath(html,`//video/des/text()`)).match(/\[.*\[(.*?)\]\.*]/)[1] || '...';
             if(area){ dqnf = '\n地区：' + area}
             if(year){ dqnf = dqnf + '   年代：' + year}
         }else if (/v1|app|v2|cms/.test(type)) {
