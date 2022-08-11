@@ -160,7 +160,7 @@ function jiekouyiji() {
                 })
                 typeclass = typeclass.filter(n => n);
             } else if (api_type=="cms") {
-                if(/^<\?xml/.test(gethtml)){
+                if(/<\?xml/.test(gethtml)){
                     let typelist = pdfa(gethtml,'class&&ty');
                     var typeclass = typelist.map((list)=>{
                         return {
@@ -243,7 +243,7 @@ function jiekouyiji() {
         MY_URL = MY_URL.replace('@type_id',getMyVar('SrcJydouli$type_id','1'));
         try {
             var gethtml = request(MY_URL, { headers: { 'User-Agent': api_ua }, timeout:xunmitimeout*1000 });
-            if(/cms/.test(api_type)&&/^<\?xml/.test(gethtml)){
+            if(/cms/.test(api_type)&&/<\?xml/.test(gethtml)){
                 let xmllist = [];
                 let videos = pdfa(gethtml,'list&&video');
                 for(let i in videos){
