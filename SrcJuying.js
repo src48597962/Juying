@@ -8,11 +8,6 @@ function jiekouyiji() {
 */
     setPageTitle('接口独立展示');
     var d = [];
-    for (let i = 0; i < 9; i++) {
-        d.push({
-            col_type: "blank_block"
-        })
-    }
     var cfgfile = "hiker://files/rules/Src/Juying/config.json";
     var Juyingcfg=fetch(cfgfile);
     if(Juyingcfg != ""){
@@ -87,7 +82,11 @@ function jiekouyiji() {
                 log('未指定接口，默认第一个>'+datalist[0].name+datalist[0].url);
                 refreshPage(true);
             }
-
+            for (let i = 0; i < 9; i++) {
+                d.push({
+                    col_type: "blank_block"
+                })
+            }
             for(let i in datalist){
                 if(api_url==datalist[i].url){
                     var SrcJydoulisousuodata = [];
@@ -234,15 +233,7 @@ function jiekouyiji() {
             desc: "搜你想看的...",
             col_type: "input",
             extra: {
-                titleVisible: true,
-                /*id: "input",
-                onChange: $.toString(() => {
-                    if(input.length==1){deleteItemByCls('SrcJydoulivideo');}
-                    if(input.length>1&&input!=getMyVar('SrcJydouli$input', '')){
-                        putMyVar('SrcJydouli$input', input);
-                        deleteItemByCls('SrcJydoulivideo');
-                    }
-                })*/
+                titleVisible: true
             }
         });
     }
@@ -281,6 +272,7 @@ function jiekouyiji() {
         } catch (e) {
             var list = html.list||html.data.list||html.data||[];
         }
+
         let videolist = list.map((list)=>{
             let vodname = list.vod_name||list.title;
             if(vodname){
@@ -306,8 +298,7 @@ function jiekouyiji() {
                     extra: {
                         pic: vodpic,
                         name: vodname,
-                        title: vodname+'-'+api_name,
-                        //cls: 'SrcJydoulivideo'
+                        title: vodname+'-'+api_name
                     }
                 }
             }
