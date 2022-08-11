@@ -927,11 +927,11 @@ function sousuo() {
     }
     setResult(d);
 }
-
-
+log(parseFloat('3.7'))
+log(parseFloat('4.0')>parseFloat('3.7'))
 //版本检测
 function Version() {
-    var nowVersion = 3.6;//现在版本
+    var nowVersion = 3.7;//现在版本
     var nowtime = Date.now();
     var oldtime = parseInt(getItem('VersionChecktime','0').replace('time',''));
     if (getVar('SrcJuying-VersionCheck', '0') == '0' && nowtime > (oldtime+6*60*60*1000)) {
