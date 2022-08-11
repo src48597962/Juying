@@ -252,21 +252,17 @@ function jiekouyiji() {
                     let pic = String(xpath(videos[i],`//video/pic/text()`)).trim();
                     let note = String(xpath(videos[i],`//video/note/text()`)).replace(/&lt;!\[CDATA\[|\]\]&gt;/g,'');
                     let arr = {"vod_id":id,"vod_name":name,"vod_remarks":note,"vod_pic":pic};
-                    let plays = xpartArray(videos[i],`//video/dl/dd/text()`);
-                    log(plays)
-                    /*
+                    let plays = xpathArray(videos[i],`//video/dl/dd/text()`);
                     if(plays.length==1){
                         try{
                             var play = plays[0].replace(/&lt;!\[CDATA\[|\]\]&gt;/g,'');
                         }catch(e){ }
                     }
                     if(play){
-                        log(play)
                         if(play.indexOf('$')==-1&&play.indexOf('m3u8')>-1){
                             arr['play'] = play;
                         }
                     }
-                    */
                     xmllist.push(arr)
                 }
                 var html = {"list":xmllist};
@@ -304,8 +300,8 @@ function jiekouyiji() {
                 return {
                     title: vodname,
                     desc: voddesc,
-                    pic_url: vodpic,//list.play?list.play:
-                    url: $("hiker://empty##" + vodurl + "#immersiveTheme#").rule((type,ua) => {
+                    pic_url: vodpic,
+                    url: list.play?list.play:$("hiker://empty##" + vodurl + "#immersiveTheme#").rule((type,ua) => {
                             require(config.依赖.match(/https.*\//)[0] + 'SrcJyXunmi.js');
                             xunmierji(type,ua)
                         },api_type, api_ua),
