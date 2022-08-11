@@ -273,10 +273,10 @@ function xunmi(name,data) {
                         let xmllist = [];
                         let videos = pdfa(gethtml,'list&&video');
                         for(let i in videos){
-                            let id = xpath(videos[i],`//video/id/text()`).trim();
-                            let name = xpath(videos[i],`//video/name/text()`).match(/\[.*\[(.*?)\]\.*]/)[1];
-                            let pic = String(xpath(videos[i],`//video/pic/text()`));
-                            let note = xpath(videos[i],`//video/note/text()`).match(/\[.*\[(.*?)\]\.*]/)[1];
+                            let id = String(xpath(videos[i],`//video/id/text()`)).trim();
+                            let name = String(xpath(videos[i],`//video/name/text()`)).match(/\[.*\[(.*?)\]\.*]/)[1];
+                            let pic = String(xpath(videos[i],`//video/pic/text()`)).trim();
+                            let note = String(xpath(videos[i],`//video/note/text()`)).match(/\[.*\[(.*?)\]\.*]/)[1];
                             xmllist.push({"vod_id":id,"vod_name":name,"vod_remarks":note,"vod_pic":pic})
                         }
                         var html = {"list":xmllist};
@@ -743,7 +743,6 @@ function xunmierji(type,ua) {
             var pubdate = String(xpath(html,`//video/type/text()`)).trim() || "";
             var pic = MY_PARAMS.pic || xpath(html,`//video/pic/text()`);
             var desc = String(xpath(html,`//video/des/text()`)).trim().match(/\[.*\[(.*?)\]\.*]/)[1] || '...';
-            log('1'+area+'2')
             if(area){ dqnf = '\n地区：' + area}
             if(year){ dqnf = dqnf + '   年代：' + year}
         }else if (/v1|app|v2|cms/.test(type)) {
