@@ -728,10 +728,12 @@ function xunmierji(type,ua) {
         var dqnf = "";
         if(/cms/.test(type)&&isxml==1){
             var arts = xpathArray(html,`//video/dl/dt/@name`);
+            log(arts)
             var conts = xpathArray(html,`//video/dl/dd/text()`);
             for(let i in conts){
                 conts[i] = conts[i].match(/\[.*\[(.*?)\]\.*]/)[1];
             }
+            log(conts)
             var actor = xpath(html,`//video/actor/text()`).match(/\[.*\[(.*?)\]\.*]/)[1] || "内详";
             var director = xpath(html,`//video/director/text()`).match(/\[.*\[(.*?)\]\.*]/)[1] || "内详";
             var area = xpath(html,`//video/area/text()`);
