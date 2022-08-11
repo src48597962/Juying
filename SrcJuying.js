@@ -250,7 +250,32 @@ function jiekouyiji() {
     try{
         MY_URL = listurl + MY_PAGE;
         MY_URL = MY_URL.replace('@type_id',getMyVar('SrcJydouli$type_id','1'));
-        var html  = JSON.parse(request(MY_URL, { headers: { 'User-Agent': api_ua }, timeout:xunmitimeout*1000 }));
+        try {
+            var gethtml = request(MY_URL, { headers: { 'User-Agent': api_ua }, timeout:xunmitimeout*1000 });
+            if(/cms/.test(api_type)&&/^<\?xml/.test(gethtml)){
+                let xmllist = [];
+                let videos = pdfa(gethtml,'list&&video');
+                for(let i in videos){
+                    let id = String(xpath(videos[i],`//video/id/text()`)).trim();
+                    let name = String(xpath(videos[i],`//video/name/text()`)).match(/\[.*\[(.*?)\]\.*]/)[1];
+                    let pic = String(xpath(videos[i],`//video/pic/text()`)).trim();
+                    let note = String(xpath(videos[i],`//video/note/text()`)).match(/\[.*\[(.*?)\]\.*]/)[1];
+                    xmllist.push({"vod_id":id,"vod_name":name,"vod_remarks":note,"vod_pic":pic})
+                }
+                var html = {"list":xmllist};
+            }else if(!/{|}/.test(gethtml)&&gethtml!=""){
+                var decfile = "hiker://files/rules/Src/Juying/appdec.js";
+                var Juyingdec=fetch(decfile);
+                if(Juyingdec != ""){
+                    eval(Juyingdec);
+                    var html = JSON.parse(xgdec(gethtml));
+                }
+            }else{
+                var html = JSON.parse(gethtml);
+            }
+        } catch (e) {
+            var html = { data: [] };
+        }
         try{
             var list = eval(lists)||html.list||html.data.list||html.data||[];
         } catch (e) {
