@@ -933,7 +933,7 @@ function Version() {
     var nowVersion = '3.7';//现在版本
     var nowtime = Date.now();
     var oldtime = parseInt(getItem('VersionChecktime','0').replace('time',''));
-    if (getVar('SrcJuying-VersionCheck', '0') == '0' && nowtime > (oldtime+6*60*60*1000)) {
+    if (getMyVar('SrcJuying-VersionCheck', '0') == '0' && nowtime > (oldtime+6*60*60*1000)) {
         try {
             eval(fetch(config.依赖.match(/https.*\//)[0] + 'SrcTmplVersion.js'))
             if (parseFloat(newVersion.SrcJuying) > parseFloat(nowVersion)) {
@@ -947,9 +947,9 @@ function Version() {
             }
             putMyVar('SrcJuying-Version', '-V'+newVersion.SrcJuying);
         } catch (e) { }
-        putVar('SrcJuying-VersionCheck', '1');
+        putMyVar('SrcJuying-VersionCheck', '1');
         setItem('VersionChecktime',nowtime+"time");
     }else{
-        putVar('SrcJuying-Version', '-V'+nowVersion);
+        putMyVar('SrcJuying-Version', '-V'+nowVersion);
     }
 }
