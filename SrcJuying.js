@@ -119,16 +119,7 @@ function jiekouyiji() {
         const Color = "#3399cc";
         try{
             let gethtml = request(typeurl, { headers: { 'User-Agent': api_ua }, timeout:xunmitimeout*1000 });
-            if(api_type=="cms"&&/^<\?xml/.test(gethtml)){
-                let typelist = pdfa(gethtml,'class&&ty');
-                var typeclass = typelist.map((list)=>{
-                    return {
-                        "type_id": String(xpath(list,`//ty/@id`)).trim(),
-                        "type_pid": 0,
-                        "type_name": String(xpath(list,`//ty/text()`)).trim()
-                    }
-                })
-            }else if (api_type=="v1") {
+            if (api_type=="v1") {
                 let typehtml = JSON.parse(gethtml);
                 let typelist = typehtml.data.list||typehtml.data.typelist;
                 var typeclass = typelist.map((list)=>{
@@ -170,8 +161,19 @@ function jiekouyiji() {
                 })
                 typeclass = typeclass.filter(n => n);
             } else if (api_type=="cms") {
-                let typehtml = JSON.parse(gethtml);
-                var typeclass = typehtml.class;
+                if(/^<\?xml/.test(gethtml)){
+                    let typelist = pdfa(gethtml,'class&&ty');
+                    var typeclass = typelist.map((list)=>{
+                        return {
+                            "type_id": String(xpath(list,`//ty/@id`)).trim(),
+                            "type_pid": 0,
+                            "type_name": String(xpath(list,`//ty/text()`)).trim()
+                        }
+                    })
+                }else{
+                    let typehtml = JSON.parse(gethtml);
+                    var typeclass = typehtml.class;
+                }
             } else {
                 log('api类型错误')
             }
@@ -179,7 +181,7 @@ function jiekouyiji() {
             log(api_name+' 接口访问异常，请更换接口！获取分类失败>'+e.message);
             var typeclass = [];
         }
-        log(typeclass)
+
         if(typeclass&&typeclass.length>0){
             let type_pids = [];
             let type_ids = [];
