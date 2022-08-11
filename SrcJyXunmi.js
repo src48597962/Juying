@@ -735,8 +735,8 @@ function xunmierji(type,ua) {
             for(let i in conts){
                 conts[i] = conts[i].replace(/&lt;!\[CDATA\[|\]\]&gt;/g,'');
             }
-            var actor = String(xpath(html,`//video/actor/text()`)).trim().replace(/&lt;!\[CDATA\[|\]\]&gt;/g,'') || "内详";
-            var director = String(xpath(html,`//video/director/text()`)).trim().replace(/&lt;!\[CDATA\[|\]\]&gt;/g,'') || "内详";
+            var actor = String(xpath(html,`//video/actor/text()`)).trim().replace(/&lt;!\[CDATA\[|\]\]&gt;/g,'').replace(/&middot;/g,'·') || "内详";
+            var director = String(xpath(html,`//video/director/text()`)).trim().replace(/&lt;!\[CDATA\[|\]\]&gt;/g,'').replace(/&middot;/g,'·') || "内详";
             var area = String(xpath(html,`//video/area/text()`)).trim();
             var year = String(xpath(html,`//video/year/text()`)).trim();
             var remarks = String(xpath(html,`//video/note/text()`)).trim().replace(/&lt;!\[CDATA\[|\]\]&gt;/g,'') || "";
