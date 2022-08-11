@@ -270,11 +270,9 @@ function xunmi(name,data) {
                 try {
                     var gethtml = request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 });
                     if(/cms/.test(obj.type)&&/<\?xml/.test(gethtml)){
-                        log('aa')
                         gethtml = gethtml.replace(/&lt;!\[CDATA\[|\]\]&gt;|<!\[CDATA\[|\]\]>/g,'');
                         let xmllist = [];
                         let videos = pdfa(gethtml,'list&&video');
-                        log(videos)
                         for(let i in videos){
                             let id = String(xpath(videos[i],`//video/id/text()`)).trim();
                             let name = String(xpath(videos[i],`//video/name/text()`)).trim();
@@ -282,6 +280,7 @@ function xunmi(name,data) {
                             let note = String(xpath(videos[i],`//video/note/text()`)).trim();
                             xmllist.push({"vod_id":id,"vod_name":name,"vod_remarks":note,"vod_pic":pic})
                         }
+                        log(xmllist)
                         var html = {"list":xmllist};
                     }else if(!/{|}/.test(gethtml)&&gethtml!=""){
                         var decfile = "hiker://files/rules/Src/Juying/appdec.js";
