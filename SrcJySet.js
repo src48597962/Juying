@@ -3,7 +3,7 @@ function SRCSet() {
 
 
 let xmlhtml = request('http://f2dcj6.com/sapi?ac=videolist&pg=1&t=3');
-let video = phda(xmlhtml,'list&&video');
+let video = pdha(xmlhtml,'list&&video');
 log(video)
 
 
