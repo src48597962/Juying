@@ -728,11 +728,14 @@ function xunmierji(type,ua) {
         var dqnf = "";
         if(/cms/.test(type)&&isxml==1){
             var arts = xpathArray(html,`//video/dl/dt/@name`);
-            log(arts)
+            if(arts.length>0){
+                arts = xpathArray(html,`//video/dl/dd/@flag`);
+            }
             var conts = xpathArray(html,`//video/dl/dd/text()`);
             for(let i in conts){
                 conts[i] = conts[i].match(/\[.*\[(.*?)\]\.*]/)[1];
             }
+            log(arts)
             log(conts)
             var actor = xpath(html,`//video/actor/text()`).match(/\[.*\[(.*?)\]\.*]/)[1] || "内详";
             var director = xpath(html,`//video/director/text()`).match(/\[.*\[(.*?)\]\.*]/)[1] || "内详";
@@ -1012,7 +1015,20 @@ function xunmierji(type,ua) {
             };
         }else if (/cms|xpath|biubiu/.test(type)) {
             let single = conts[i]||"";
-            if(single){lists.push(single.split('#'))};
+            if(single){
+                let lines = single.split('#');
+                if(isxml==1){
+                    for(let i in lines){
+                        if(lines[i].indexOf('$')==-1){
+                            lines[i] = i+'$'+lines[i];
+                        }else{
+                            break;
+                        }
+                    }
+                }else{
+                    lists.push(lines)
+                }
+            };
         }else{
             //网页
         }
