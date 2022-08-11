@@ -280,7 +280,6 @@ function xunmi(name,data) {
                             let note = String(xpath(videos[i],`//video/note/text()`)).trim();
                             xmllist.push({"vod_id":id,"vod_name":name,"vod_remarks":note,"vod_pic":pic})
                         }
-                        log(xmllist)
                         var html = {"list":xmllist};
                     }else if(!/{|}/.test(gethtml)&&gethtml!=""){
                         var decfile = "hiker://files/rules/Src/Juying/appdec.js";
