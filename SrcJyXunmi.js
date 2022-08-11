@@ -270,13 +270,14 @@ function xunmi(name,data) {
                 try {
                     var gethtml = request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 });
                     if(/cms/.test(obj.type)&&/<\?xml/.test(gethtml)){
+                        gethtml = gethtml.replace(/&lt;!\[CDATA\[|\]\]&gt;/g,'');
                         let xmllist = [];
                         let videos = pdfa(gethtml,'list&&video');
                         for(let i in videos){
                             let id = String(xpath(videos[i],`//video/id/text()`)).trim();
-                            let name = String(xpath(videos[i],`//video/name/text()`)).trim().replace(/&lt;!\[CDATA\[|\]\]&gt;/g,'');
+                            let name = String(xpath(videos[i],`//video/name/text()`)).trim();
                             let pic = String(xpath(videos[i],`//video/pic/text()`)).trim();
-                            let note = String(xpath(videos[i],`//video/note/text()`)).trim().replace(/&lt;!\[CDATA\[|\]\]&gt;/g,'');
+                            let note = String(xpath(videos[i],`//video/note/text()`)).trim();
                             xmllist.push({"vod_id":id,"vod_name":name,"vod_remarks":note,"vod_pic":pic})
                         }
                         var html = {"list":xmllist};
@@ -727,22 +728,23 @@ function xunmierji(type,ua) {
     if (zt == 1) {
         var dqnf = "";
         if(/cms/.test(type)&&isxml==1){
+            html = html.replace(/&lt;!\[CDATA\[|\]\]&gt;/g,'');
             var arts = xpathArray(html,`//video/dl/dt/@name`);
             if(arts.length==0){
                 arts = xpathArray(html,`//video/dl/dd/@flag`);
             }
             var conts = xpathArray(html,`//video/dl/dd/text()`);
             for(let i in conts){
-                conts[i] = conts[i].replace(/&lt;!\[CDATA\[|\]\]&gt;/g,'');
+                conts[i] = conts[i];
             }
-            var actor = String(xpath(html,`//video/actor/text()`)).trim().replace(/&lt;!\[CDATA\[|\]\]&gt;/g,'').replace(/&middot;/g,'·') || "内详";
-            var director = String(xpath(html,`//video/director/text()`)).trim().replace(/&lt;!\[CDATA\[|\]\]&gt;/g,'').replace(/&middot;/g,'·') || "内详";
+            var actor = String(xpath(html,`//video/actor/text()`)).trim().replace(/&middot;/g,'·') || "内详";
+            var director = String(xpath(html,`//video/director/text()`)).trim().replace(/&middot;/g,'·') || "内详";
             var area = String(xpath(html,`//video/area/text()`)).trim();
             var year = String(xpath(html,`//video/year/text()`)).trim();
-            var remarks = String(xpath(html,`//video/note/text()`)).trim().replace(/&lt;!\[CDATA\[|\]\]&gt;/g,'') || "";
+            var remarks = String(xpath(html,`//video/note/text()`)).trim() || "";
             var pubdate = String(xpath(html,`//video/type/text()`)).trim() || "";
             var pic = MY_PARAMS.pic || xpath(html,`//video/pic/text()`);
-            var desc = String(xpath(html.replace('<p>','').replace('</p>',''),`//video/des/text()`)).replace(/&lt;!\[CDATA\[|\]\]&gt;/g,'') || '...';
+            var desc = String(xpath(html.replace('<p>','').replace('</p>',''),`//video/des/text()`)) || '...';
             if(area){ dqnf = '\n地区：' + area}
             if(year){ dqnf = dqnf + '   年代：' + year}
         }else if (/v1|app|v2|cms/.test(type)) {
