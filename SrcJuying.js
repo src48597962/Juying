@@ -118,8 +118,18 @@ function jiekouyiji() {
         
         const Color = "#3399cc";
         try{
-            var typehtml = JSON.parse(request(typeurl, { headers: { 'User-Agent': api_ua }, timeout:xunmitimeout*1000 }));
-            if (api_type=="v1") {
+            let gethtml = request(typeurl, { headers: { 'User-Agent': api_ua }, timeout:xunmitimeout*1000 });
+            if(api_type=="cms"&&/^<\?xml/.test(gethtml)){
+                let typelist = pdfa(gethtml,'class&&ty');
+                var typeclass = typelist.map((list)=>{
+                    return {
+                        "type_id": String(xpath(list,`//ty/@id`)).trim(),
+                        "type_pid": 0,
+                        "type_name": String(xpath(list,`//ty/text()`)).trim()
+                    }
+                })
+            }else if (api_type=="v1") {
+                let typehtml = JSON.parse(gethtml);
                 let typelist = typehtml.data.list||typehtml.data.typelist;
                 var typeclass = typelist.map((list)=>{
                     return {
@@ -128,16 +138,9 @@ function jiekouyiji() {
                         "type_name": list.type_name
                     }
                 })
-            } else if (api_type=="app") {
+            } else if (/app|v2/.test(api_type)) {
+                let typehtml = JSON.parse(gethtml);
                 var typeclass = typehtml.list.map((list)=>{
-                    return {
-                        "type_id": list.type_id,
-                        "type_pid": 0,
-                        "type_name": list.type_name
-                    }
-                })
-            } else if (api_type=="v2") {
-                var typeclass = typehtml.data.map((list)=>{
                     return {
                         "type_id": list.type_id,
                         "type_pid": 0,
@@ -155,6 +158,7 @@ function jiekouyiji() {
                     oumeiju: '欧美剧',
                     tiyu: '体育'
                 };
+                let typehtml = JSON.parse(gethtml);
                 var typeclass = typehtml.map((list)=>{
                     if(type_dict[list]){
                         return {
@@ -166,6 +170,7 @@ function jiekouyiji() {
                 })
                 typeclass = typeclass.filter(n => n);
             } else if (api_type=="cms") {
+                let typehtml = JSON.parse(gethtml);
                 var typeclass = typehtml.class;
             } else {
                 log('api类型错误')
@@ -174,7 +179,7 @@ function jiekouyiji() {
             log(api_name+' 接口访问异常，请更换接口！获取分类失败>'+e.message);
             var typeclass = [];
         }
-        
+        log(typeclass)
         if(typeclass&&typeclass.length>0){
             let type_pids = [];
             let type_ids = [];
