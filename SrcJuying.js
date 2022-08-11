@@ -298,8 +298,8 @@ function jiekouyiji() {
                 return {
                     title: vodname,
                     desc: voddesc,
-                    pic_url: vodpic,
-                    url: list.play?list.play:$("hiker://empty##" + vodurl + "#immersiveTheme#").rule((type,ua) => {
+                    pic_url: vodpic,//list.play?list.play:
+                    url: $("hiker://empty##" + vodurl + "#immersiveTheme#").rule((type,ua) => {
                             require(config.依赖.match(/https.*\//)[0] + 'SrcJyXunmi.js');
                             xunmierji(type,ua)
                         },api_type, api_ua),
