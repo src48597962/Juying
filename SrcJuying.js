@@ -927,17 +927,16 @@ function sousuo() {
     }
     setResult(d);
 }
-log(parseFloat('3.7'))
-log(parseFloat('4.0')>parseFloat('3.7'))
+
 //版本检测
 function Version() {
-    var nowVersion = 3.7;//现在版本
+    var nowVersion = '3.7';//现在版本
     var nowtime = Date.now();
     var oldtime = parseInt(getItem('VersionChecktime','0').replace('time',''));
     if (getVar('SrcJuying-VersionCheck', '0') == '0' && nowtime > (oldtime+6*60*60*1000)) {
         try {
             eval(fetch(config.依赖.match(/https.*\//)[0] + 'SrcTmplVersion.js'))
-            if (newVersion.SrcJuying > nowVersion) {
+            if (parseFloat(newVersion.SrcJuying) > parseFloat(nowVersion)) {
                 confirm({
                     title:'发现新版本，是否更新？', 
                     content:nowVersion+'=>'+newVersion.SrcJuying+'\n'+newVersion.SrcJuyingdesc[eval(newVersion.SrcJuying)], 
