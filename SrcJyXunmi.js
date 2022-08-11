@@ -271,7 +271,6 @@ function xunmi(name,data) {
                     var gethtml = request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 });
                     if(/cms/.test(obj.type)&&/<\?xml/.test(gethtml)){
                         gethtml = gethtml.replace(/&lt;!\[CDATA\[|\]\]&gt;|<!\[CDATA\[|\]\]>/g,'');
-                        log(gethtml)
                         let xmllist = [];
                         let videos = pdfa(gethtml,'list&&video');
                         for(let i in videos){
@@ -729,7 +728,7 @@ function xunmierji(type,ua) {
     if (zt == 1) {
         var dqnf = "";
         if(/cms/.test(type)&&isxml==1){
-            html = html.replace(/&lt;!\[CDATA\[|\]\]&gt;/g,'');
+            html = html.replace(/&lt;!\[CDATA\[|\]\]&gt;|<!\[CDATA\[|\]\]>/g,'');
             var arts = xpathArray(html,`//video/dl/dt/@name`);
             if(arts.length==0){
                 arts = xpathArray(html,`//video/dl/dd/@flag`);
