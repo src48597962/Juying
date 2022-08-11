@@ -270,9 +270,11 @@ function xunmi(name,data) {
                 try {
                     var gethtml = request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 });
                     if(/cms/.test(obj.type)&&/<\?xml/.test(gethtml)){
+                        log('aa')
                         gethtml = gethtml.replace(/&lt;!\[CDATA\[|\]\]&gt;|<!\[CDATA\[|\]\]>/g,'');
                         let xmllist = [];
                         let videos = pdfa(gethtml,'list&&video');
+                        log(videos)
                         for(let i in videos){
                             let id = String(xpath(videos[i],`//video/id/text()`)).trim();
                             let name = String(xpath(videos[i],`//video/name/text()`)).trim();
