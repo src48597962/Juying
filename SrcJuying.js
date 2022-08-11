@@ -53,7 +53,7 @@ function jiekouyiji() {
             var listurl = api_url + '?ac=list&class=@type_id&page=';
             var lists = "html.data";
         } else if (api_type=="cms") {
-            var url = api_url + '?ac=detail&ids=';
+            var url = api_url + '?ac=videolist&ids=';
             var typeurl = api_url + "?ac=list";
             var listurl = api_url + '?ac=videolist&t=@type_id&pg=';
             var lists = "html.list";
@@ -74,7 +74,7 @@ function jiekouyiji() {
             return item.type!="xpath" && item.type!="biubiu";
         })
         if(datalist.length>0){
-            if(!api_url){
+            if(!api_url||!datalist.some(item => item.url == api_url)){
                 var cfgfile = "hiker://files/rules/Src/Juying/config.json";
                 var Juyingcfg=fetch(cfgfile);
                 if(Juyingcfg != ""){
