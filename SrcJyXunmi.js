@@ -735,14 +735,14 @@ function xunmierji(type,ua) {
             for(let i in conts){
                 conts[i] = conts[i].match(/\[.*\[(.*?)\]\.*]/)[1];
             }
-            var actor = xpath(html,`//video/actor/text()`).trim().match(/\[.*\[(.*?)\]\.*]/)[1] || "内详";
-            var director = xpath(html,`//video/director/text()`).trim().match(/\[.*\[(.*?)\]\.*]/)[1] || "内详";
-            var area = xpath(html,`//video/area/text()`).trim();
-            var year = xpath(html,`//video/year/text()`).trim();
-            var remarks = xpath(html,`//video/note/text()`).trim().match(/\[.*\[(.*?)\]\.*]/)[1] || "";
-            var pubdate = xpath(html,`//video/type/text()`).trim() || "";
+            var actor = String(xpath(html,`//video/actor/text()`)).trim().match(/\[.*\[(.*?)\]\.*]/)[1] || "内详";
+            var director = String(xpath(html,`//video/director/text()`)).trim().match(/\[.*\[(.*?)\]\.*]/)[1] || "内详";
+            var area = String(xpath(html,`//video/area/text()`)).trim();
+            var year = String(xpath(html,`//video/year/text()`)).trim();
+            var remarks = String(xpath(html,`//video/note/text()`)).trim().match(/\[.*\[(.*?)\]\.*]/)[1] || "";
+            var pubdate = String(xpath(html,`//video/type/text()`)).trim() || "";
             var pic = MY_PARAMS.pic || xpath(html,`//video/pic/text()`);
-            var desc = xpath(html,`//video/des/text()`).trim().match(/\[.*\[(.*?)\]\.*]/)[1] || '...';
+            var desc = String(xpath(html,`//video/des/text()`)).trim().match(/\[.*\[(.*?)\]\.*]/)[1] || '...';
             log('1'+area+'2')
             if(area){ dqnf = '\n地区：' + area}
             if(year){ dqnf = dqnf + '   年代：' + year}
