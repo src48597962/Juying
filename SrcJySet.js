@@ -5,7 +5,7 @@ function SRCSet() {
         clearMyVar('duoselect');
         //refreshPage(false);
     }));
-    setPageTitle("♥管理"+getVar('SrcJuying-Version', ''));
+    setPageTitle("♥管理"+getMyVar('SrcJuying-Version', ''));
     clearMyVar('duoselect');
     function getTitle(title, Color) {
         return '<font color="' + Color + '">' + title + '</font>';
