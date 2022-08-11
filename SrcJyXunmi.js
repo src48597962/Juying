@@ -269,18 +269,25 @@ function xunmi(name,data) {
             if(/v1|app|iptv|v2|cms/.test(obj.type)){
                 try {
                     var gethtml = request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 });
-                    if(/cms/.test(obj.type)&&/<\?xml/.test(gethtml)){
-                        gethtml = gethtml.replace(/&lt;!\[CDATA\[|\]\]&gt;|<!\[CDATA\[|\]\]>/g,'');
-                        let xmllist = [];
-                        let videos = pdfa(gethtml,'list&&video');
-                        for(let i in videos){
-                            let id = String(xpath(videos[i],`//video/id/text()`)).trim();
-                            let name = String(xpath(videos[i],`//video/name/text()`)).trim();
-                            let pic = String(xpath(videos[i],`//video/pic/text()`)).trim();
-                            let note = String(xpath(videos[i],`//video/note/text()`)).trim();
-                            xmllist.push({"vod_id":id,"vod_name":name,"vod_remarks":note,"vod_pic":pic})
+                    if(/cms/.test(obj.type)){
+                        if(gethtml&&gethtml.indexOf(name)==-1){
+                            gethtml = request(ssurl.replace('videolist','list'), { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 });
                         }
-                        var html = {"list":xmllist};
+                        if(/<\?xml/.test(gethtml)){
+                            gethtml = gethtml.replace(/&lt;!\[CDATA\[|\]\]&gt;|<!\[CDATA\[|\]\]>/g,'');
+                            let xmllist = [];
+                            let videos = pdfa(gethtml,'list&&video');
+                            for(let i in videos){
+                                let id = String(xpath(videos[i],`//video/id/text()`)).trim();
+                                let name = String(xpath(videos[i],`//video/name/text()`)).trim();
+                                let pic = String(xpath(videos[i],`//video/pic/text()`)).trim();
+                                let note = String(xpath(videos[i],`//video/note/text()`)).trim();
+                                xmllist.push({"vod_id":id,"vod_name":name,"vod_remarks":note,"vod_pic":pic})
+                            }
+                            var html = {"list":xmllist};
+                        }else{
+                            var html = JSON.parse(gethtml);
+                        }
                     }else if(!/{|}/.test(gethtml)&&gethtml!=""){
                         var decfile = "hiker://files/rules/Src/Juying/appdec.js";
                         var Juyingdec=fetch(decfile);
