@@ -245,7 +245,8 @@ function jiekouyiji() {
             var gethtml = request(MY_URL, { headers: { 'User-Agent': api_ua }, timeout:xunmitimeout*1000 });
             if(/cms/.test(api_type)&&/<\?xml/.test(gethtml)){
                 let xmllist = [];
-                let videos = pdfa(gethtml,'list&&video');
+                let videos = pdfa(gethtml.replace(/undefined/g,''),'list&&video');
+                log(videos)
                 for(let i in videos){
                     let id = String(xpath(videos[i],`//video/id/text()`)).trim();
                     let name = String(xpath(videos[i],`//video/name/text()`)).match(/\[.*\[(.*?)\]\.*]/)[1];
@@ -282,7 +283,7 @@ function jiekouyiji() {
         } catch (e) {
             var list = html.list||html.data.list||html.data||[];
         }
-
+        log(list)
         let videolist = list.map((list)=>{
             let vodname = list.vod_name||list.title;
             if(vodname){
