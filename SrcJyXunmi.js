@@ -247,7 +247,7 @@ function xunmi(name,data) {
                 var ssurl = url_api + '?ac=list&zm='+name+'&wd='+name; 
                 var lists = "html.data";
             } else if (obj.type=="cms") {
-                var url = url_api + '?ac=detail&ids=';
+                var url = url_api + '?ac=videolist&ids=';
                 var ssurl = url_api + '?ac=videolist&wd='+name;
                 var lists = "html.list";
             } else if (obj.type=="xpath"||obj.type=="biubiu") {
@@ -690,6 +690,22 @@ function xunmierji(type,ua) {
     if (getMyVar('myurl', '0') != MY_URL || !configvar.详情1 || configvar.标识 != MY_URL) {
         if (/v1|app|v2|iptv|cms/.test(type)) {
             try{
+
+
+
+                if(/cms/.test(obj.type)&&/^<\?xml/.test(gethtml)){
+                        let xmllist = [];
+                        require(config.依赖.match(/https.*\//)[0] + 'SrcXPath.js');
+                        let videos = pdfa(gethtml,'list&&video');
+                        for(let i in videos){
+                            let id = SrcXPath(videos[i],`//video/id/text()`);
+                            let name = SrcXPath(videos[i],`//video/name/text()`).match(/\[.*\[(.*?)\]\.*]/)[1];
+                            let pic = SrcXPath(videos[i],`//video/pic/text()`);
+                            let note = SrcXPath(videos[i],`//video/note/text()`).match(/\[.*\[(.*?)\]\.*]/)[1];
+                            xmllist.push({"vod_id":id,"vod_name":name,"vod_remarks":note,"vod_pic":pic})
+                        }
+                        var html = {"list":xmllist};
+                    }
                 var html = JSON.parse(request(MY_URL.split('##')[1], { headers: { 'User-Agent': ua } }));
             } catch (e) {
                 var html = "";
