@@ -270,7 +270,7 @@ function xunmi(name,data) {
                 try {
                     var gethtml = request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 });
                     if(/cms/.test(obj.type)&&/<\?xml/.test(gethtml)){
-                        gethtml = gethtml.replace(/&lt;!\[CDATA\[|\]\]&gt;/g,'');
+                        gethtml = gethtml.replace(/&lt;!\[CDATA\[|\]\]&gt;|<!\[CDATA\[|\]\]>/g,'');
                         log(gethtml)
                         let xmllist = [];
                         let videos = pdfa(gethtml,'list&&video');
