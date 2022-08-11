@@ -692,6 +692,7 @@ function xunmierji(type,ua) {
                 if(/cms/.test(type)&&/^<\?xml/.test(gethtml)){
                     var html = request(MY_URL.split('##')[1], { headers: { 'User-Agent': ua } });
                     var isxml = 1;
+                    log(html)
                 }else{
                     var html = JSON.parse(request(MY_URL.split('##')[1], { headers: { 'User-Agent': ua } }));
                     var isxml = 0;
