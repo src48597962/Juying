@@ -253,13 +253,17 @@ function jiekouyiji() {
                     let note = String(xpath(videos[i],`//video/note/text()`)).replace(/&lt;!\[CDATA\[|\]\]&gt;/g,'');
                     let arr = {"vod_id":id,"vod_name":name,"vod_remarks":note,"vod_pic":pic};
                     let plays = xpartArray(videos[i],`//video/dl/dd/text()`);
+                    log(plays)
                     if(plays.length==1){
                         try{
                             var play = plays[0].replace(/&lt;!\[CDATA\[|\]\]&gt;/g,'');
                         }catch(e){ }
                     }
-                    if(play&&play.indexOf('$')==-1&&play.indexOf('m3u8')>-1){
-                        arr['play'] = play;
+                    if(play){
+                        log(play)
+                        if(play.indexOf('$')==-1&&play.indexOf('m3u8')>-1){
+                            arr['play'] = play;
+                        }
                     }
                     xmllist.push(arr)
                 }
