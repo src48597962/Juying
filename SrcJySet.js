@@ -3,13 +3,14 @@ function SRCSet() {
 
     
     let xmlhtml = request('http://f2dcj6.com/sapi?ac=videolist&pg=1&t=3');
-    log(xmlhtml)
     function xml_2_json(xmlhtml) {
         eval(fetch('https://www.w3cschool.cn/statics/tools/xmljson/ObjTree.js'))
         var space = "  ";
         var xotree = new XML.ObjTree();
         var inputdata = xmlhtml;
+        log('1');
         var tree = xotree.parseXML(inputdata);
+        log('2');
         if (!tree.html) {
             try{
                 var josnhtml= JSON.stringify(tree, null, space);
