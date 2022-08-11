@@ -275,7 +275,7 @@ function xunmi(name,data) {
                         for(let i in videos){
                             let id = xpath(videos[i],`//video/id/text()`).trim();
                             let name = xpath(videos[i],`//video/name/text()`).match(/\[.*\[(.*?)\]\.*]/)[1];
-                            let pic = xpath(videos[i],`//video/pic/text()`);
+                            let pic = xpath(videos[i],`//video/pic/text()`).trim();
                             let note = xpath(videos[i],`//video/note/text()`).match(/\[.*\[(.*?)\]\.*]/)[1];
                             xmllist.push({"vod_id":id,"vod_name":name,"vod_remarks":note,"vod_pic":pic})
                         }
@@ -735,14 +735,14 @@ function xunmierji(type,ua) {
             for(let i in conts){
                 conts[i] = conts[i].match(/\[.*\[(.*?)\]\.*]/)[1];
             }
-            var actor = xpath(html,`//video/actor/text()`).match(/\[.*\[(.*?)\]\.*]/)[1] || "内详";
-            var director = xpath(html,`//video/director/text()`).match(/\[.*\[(.*?)\]\.*]/)[1] || "内详";
-            var area = xpath(html,`//video/area/text()`);
-            var year = xpath(html,`//video/year/text()`);
-            var remarks = xpath(html,`//video/note/text()`).match(/\[.*\[(.*?)\]\.*]/)[1] || "";
-            var pubdate = xpath(html,`//video/type/text()`) || "";
+            var actor = xpath(html,`//video/actor/text()`).trim().match(/\[.*\[(.*?)\]\.*]/)[1] || "内详";
+            var director = xpath(html,`//video/director/text()`).trim().match(/\[.*\[(.*?)\]\.*]/)[1] || "内详";
+            var area = xpath(html,`//video/area/text()`).trim();
+            var year = xpath(html,`//video/year/text()`).trim();
+            var remarks = xpath(html,`//video/note/text()`).trim().match(/\[.*\[(.*?)\]\.*]/)[1] || "";
+            var pubdate = xpath(html,`//video/type/text()`).trim() || "";
             var pic = MY_PARAMS.pic || xpath(html,`//video/pic/text()`);
-            var desc = xpath(html,`//video/des/text()`).match(/\[.*\[(.*?)\]\.*]/)[1] || '...';
+            var desc = xpath(html,`//video/des/text()`).trim().match(/\[.*\[(.*?)\]\.*]/)[1] || '...';
             if(area){ dqnf = '\n地区：' + area}
             if(year){ dqnf = dqnf + '   年代：' + year}
         }else if (/v1|app|v2|cms/.test(type)) {
