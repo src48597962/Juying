@@ -278,7 +278,23 @@ function xunmi(name,data) {
                         }
                     }else{
                         if(/cms/.test(obj.type)&&/^<\?xml/.test(gethtml)){
-
+                            require(config.依赖.match(/https.*\//)[0] + 'SrcXPath.js');
+                            let videos = pdfa(gethtml,'list&&video');
+                            for(let i in videos){
+                                let id = SrcXPath(videos[i],`//video/id/text()`);
+                                log(id);
+                            }
+                            return "";
+                            /*
+                            let title = xpathArray(gethtml, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodName);
+                            let href = xpathArray(gethtml, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodId);
+                            let img = xpathArray(gethtml, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodImg);
+                            let mark = xpathArray(gethtml, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodMark)||"";
+                            var list = [];
+                            for(var j in title){
+                                list.push({"id":href[j],"name":title[j],"pic":img[j],"desc":mark[j]})
+                            }
+                            */
                         }else{
                             var html = JSON.parse(gethtml);
                         }
