@@ -728,7 +728,7 @@ function xunmierji(type,ua) {
         var dqnf = "";
         if(/cms/.test(type)&&isxml==1){
             var arts = xpathArray(html,`//video/dl/dt/@name`);
-            if(arts.length>0){
+            if(arts.length==0){
                 arts = xpathArray(html,`//video/dl/dd/@flag`);
             }
             var conts = xpathArray(html,`//video/dl/dd/text()`);
