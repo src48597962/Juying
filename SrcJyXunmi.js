@@ -318,7 +318,7 @@ function xunmi(name,data) {
                             list = [];
                         }
                     }
-                    
+                    /*
                     if(obj.type=="cms"){
                         if((list.length>0&&list[0].vod_name.indexOf(name)==-1)||html.code=="0"){
                             try {
@@ -330,7 +330,7 @@ function xunmi(name,data) {
                             }
                         }
                     }
-                    
+                    */
                     if(list.length>0){
                         try {
                             let search = list.map((list)=>{
