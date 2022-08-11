@@ -277,7 +277,11 @@ function xunmi(name,data) {
                             var html = JSON.parse(xgdec(gethtml));
                         }
                     }else{
-                        var html = JSON.parse(gethtml);
+                        if(/cms/.test(obj.type)&&/^<\?xml/.test(gethtml)){
+
+                        }else{
+                            var html = JSON.parse(gethtml);
+                        }
                     }
                 } catch (e) {
                     var html = { data: [] };
