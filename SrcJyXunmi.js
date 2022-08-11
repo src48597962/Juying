@@ -734,9 +734,6 @@ function xunmierji(type,ua) {
                 arts = xpathArray(html,`//video/dl/dd/@flag`);
             }
             var conts = xpathArray(html,`//video/dl/dd/text()`);
-            for(let i in conts){
-                conts[i] = conts[i];
-            }
             var actor = String(xpath(html,`//video/actor/text()`)).trim().replace(/&middot;/g,'·') || "内详";
             var director = String(xpath(html,`//video/director/text()`)).trim().replace(/&middot;/g,'·') || "内详";
             var area = String(xpath(html,`//video/area/text()`)).trim();
