@@ -960,6 +960,9 @@ function sousuo() {
     if(fileExist('hiker://files/rules/Src/Juying/jiekou.json')){
         try{
             let name = MY_URL.match(/query=(.*?)&/)[1];
+            require(config.依赖.match(/https.*\//)[0] + 'SrcJyXunmi.js');
+            xunmi(name);
+            /*
             d.push({
                 title: "调用聚影接口聚合搜索>"+name,
                 url: $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
@@ -967,7 +970,7 @@ function sousuo() {
                     xunmi(name);
                 }, name),
                 col_type: 'text_center_1'
-            })
+            })*/
         }catch(e){}
     }
     setResult(d);
