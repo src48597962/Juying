@@ -114,14 +114,6 @@ function xunmi(name,data,hkss) {
     }
     
     var d = [];
-    d.push({
-        title: '没有接口，无法搜索',
-        url: "hiker://empty",
-        col_type: "text_center_1",
-        extra: {
-            id: "loading"
-        }
-    });
     if(hkss!=1){
         let grouplist = datalist.map((list)=>{
             return list.group||list.type;
@@ -200,11 +192,6 @@ function xunmi(name,data,hkss) {
                 }
             });
         }
-        d.push({
-            title: '<br>',
-            col_type: 'rich_text'
-        });
-        
         if(datalist2.length>0){
             datalist = datalist2;
         }
@@ -216,6 +203,18 @@ function xunmi(name,data,hkss) {
             }
         }
     }
+    d.push({
+        title: '没有接口，无法搜索',
+        url: "hiker://empty",
+        col_type: "text_center_1",
+        extra: {
+            id: "loading"
+        }
+    });
+    d.push({
+        title: hkss!=1?'<br>':'',
+        col_type: 'rich_text'
+    });
     setHomeResult(d);
     
     var count = datalist.length;
