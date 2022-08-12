@@ -350,6 +350,7 @@ function xunmi(name,data) {
                                     return {
                                         title: vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):vodname,
                                         desc: voddesc + '\n\n' + appname + ' ('+obj.type+')'+(obj.group&&obj.group!=obj.type?' ['+obj.group+']':''),
+                                        content: appname + ' ('+obj.type+')'+(obj.group&&obj.group!=obj.type?' ['+obj.group+']':''),
                                         pic_url: vodpic,
                                         url: $("hiker://empty##" + vodurl + "#immersiveTheme#").rule((type,ua) => {
                                                 require(config.依赖.match(/https.*\//)[0] + 'SrcJyXunmi.js');
