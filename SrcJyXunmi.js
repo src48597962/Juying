@@ -114,7 +114,15 @@ function xunmi(name,data,hkss) {
     }
     
     var d = [];
-    if(hkss!=1){
+    d.push({
+        title: '没有接口，无法搜索',
+        url: "hiker://empty",
+        col_type: "text_center_1",
+        extra: {
+            id: "loading"
+        }
+    });
+    if(!hkss){
         let grouplist = datalist.map((list)=>{
             return list.group||list.type;
         })
@@ -192,14 +200,6 @@ function xunmi(name,data,hkss) {
                 }
             });
         }
-        d.push({
-            title: count>0?'加载中...':'没有接口，无法搜索',
-            url: "hiker://empty",
-            col_type: "text_center_1",
-            extra: {
-                id: "loading"
-            }
-        });
         d.push({
             title: '<br>',
             col_type: 'rich_text'
