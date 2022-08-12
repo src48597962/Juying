@@ -122,7 +122,7 @@ function xunmi(name,data,hkss) {
             id: "loading"
         }
     });
-    if(!hkss){
+    if(hkss!=1){
         let grouplist = datalist.map((list)=>{
             return list.group||list.type;
         })
