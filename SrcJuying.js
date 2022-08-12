@@ -131,7 +131,8 @@ function jiekouyiji() {
                 })
             } else if (/app|v2/.test(api_type)) {
                 let typehtml = JSON.parse(gethtml);
-                var typeclass = typehtml.list.map((list)=>{
+                let typelist = typehtml.list||typehtml.data;
+                var typeclass = typelist.map((list)=>{
                     return {
                         "type_id": list.type_id,
                         "type_pid": 0,
