@@ -30,27 +30,27 @@ function jiekouyiji() {
             let key = (mm<10?"0"+mm:mm)+""+(dd<10?"0"+dd:dd);
             var url = api_url + '/detail?&key='+key+'&vod_id=';
             var typeurl = api_url + "/types";
-            var listurl = api_url + '?key='+key+'&limit=12&type=@type_id&page=';
+            var listurl = api_url + '?key='+key+'&page=';
             var lists = "html.data.list";
         } else if (api_type=="app") {
             var url = api_url + 'video_detail?id=';
-            var typeurl = api_url + "/nav";
-            var listurl = api_url + '/video?tid=@type_id&limit=12&pg=';
+            var typeurl = api_url + "nav";
+            var listurl = api_url + 'video?tid=@type_id&pg=';
             var lists = "html.list";
         } else if (api_type=="v2") {
             var url = api_url + 'video_detail?id=';
             var typeurl = api_url + "nav";
-            var listurl = api_url + 'video?tid=@type_id&limit=12&pg=';
+            var listurl = api_url + 'video?tid=@type_id&pg=';
             var lists = "html.data";
         } else if (api_type=="iptv") {
             var url = api_url + '?ac=detail&ids=';
             var typeurl = api_url + "?ac=flitter";
-            var listurl = api_url + '?ac=list&class=@type_id&limit=12&page=';
+            var listurl = api_url + '?ac=list&page=';
             var lists = "html.data";
         } else if (api_type=="cms") {
             var url = api_url + '?ac=videolist&ids=';
             var typeurl = api_url + "?ac=list";
-            var listurl = api_url + '?ac=videolist&t=@type_id&limit=12&pg=';
+            var listurl = api_url + '?ac=videolist&pg=';
             var lists = "html.list";
         } else {
             log('api类型错误')
@@ -96,6 +96,7 @@ function jiekouyiji() {
                     title: api_url==datalist[i].url?'““””<b><span style="color:#3CB371">' + datalist[i].name + '</span></b>':datalist[i].name,
                     col_type: 'scroll_button',
                     url: $('#noLoading#').lazyRule((Jydouli) => {
+                        clearMyVar('SrcJydouli$type_id');
                         var cfgfile = "hiker://files/rules/Src/Juying/config.json";
                         var Juyingcfg=fetch(cfgfile);
                         if(Juyingcfg != ""){
@@ -184,18 +185,16 @@ function jiekouyiji() {
         if(typeclass&&typeclass.length>0){
             let type_pids = [];
             let type_ids = [];
-            let type_names = [];
             for(let i in typeclass){
                 if(type_pids.indexOf(typeclass[i].type_pid)==-1){type_pids.push(typeclass[i].type_pid)}
                 if(type_ids.indexOf(typeclass[i].type_id)==-1){type_ids.push(typeclass[i].type_id)}
-                if(type_names.indexOf(typeclass[i].type_name)==-1){type_names.push(typeclass[i].type_name)}
             }
             if(type_pids.length > 0){
                 type_pids.sort((a, b) => {
                     return a - b
                 })
             };
-            if(!getMyVar('SrcJydouli$type_id')||type_names.indexOf(getMyVar('SrcJydouli$type_name'))==-1){
+            if(/v2|app/.test(api_type)&&!getMyVar('SrcJydouli$type_id')){
                 putMyVar('SrcJydouli$type_name',type_names[0]);
                 putMyVar('SrcJydouli$type_id',type_ids[0]);
             }
@@ -241,10 +240,21 @@ function jiekouyiji() {
             }
         });
     }
-    
+        
     try{
         MY_URL = listurl + MY_PAGE;
-        MY_URL = MY_URL.replace('@type_id',getMyVar('SrcJydouli$type_id','1'));
+        if(api_type=="v2"||api_type=="app"){
+            MY_URL = MY_URL.replace('@type_id',getMyVar('SrcJydouli$type_id','1'));
+        }else if(getMyVar('SrcJydouli$type_id')){
+            if (api_type=="v1") {
+                MY_URL = MY_URL + '&type=' + getMyVar('SrcJydouli$type_id');
+            } else if (api_type=="iptv") {
+                MY_URL = MY_URL + '&class=' + getMyVar('SrcJydouli$type_id');
+            } else{
+                MY_URL = MY_URL + '&t=' + getMyVar('SrcJydouli$type_id');
+            }
+        }
+        
         try {
             var gethtml = request(MY_URL, { headers: { 'User-Agent': api_ua }, timeout:xunmitimeout*1000 });
             if(/cms/.test(api_type)&&/<\?xml/.test(gethtml)){
