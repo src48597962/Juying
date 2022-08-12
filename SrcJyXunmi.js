@@ -1,5 +1,5 @@
 //寻觅片源
-function xunmi(name,data) {
+function xunmi(name,data,hkss) {
     setPageTitle('聚搜>'+name);
     addListener("onClose", $.toString(() => {
         clearMyVar('moviemore');
@@ -114,108 +114,110 @@ function xunmi(name,data) {
     }
     
     var d = [];
-    let grouplist = datalist.map((list)=>{
-        return list.group||list.type;
-    })
-    //去重复
-    function uniq(array){
-        var temp = []; //一个新的临时数组
-        for(var i = 0; i < array.length; i++){
-            if(temp.indexOf(array[i]) == -1){
-                temp.push(array[i]);
-            }
-        }
-        return temp;
-    }
-    grouplist = uniq(grouplist);
-    if(xunmigroup&&grouplist.indexOf(xunmigroup)>-1&&grouplist.indexOf(xunmigroup)!=0){
-        for (var i = 0; i < grouplist.length; i++) {
-            if (grouplist[i] == xunmigroup) {
-                grouplist.splice(i, 1);
-                break;
-            }
-        }
-        grouplist.unshift(xunmigroup);
-    }
-    if(grouplist.indexOf('失败待处理')!=-1&&grouplist.indexOf('失败待处理')!=grouplist.length-1){
-        for (var i = 0; i < grouplist.length; i++) {
-            if (grouplist[i] == '失败待处理') {
-                grouplist.splice(i, 1);
-                break;
-            }
-        }
-        grouplist.push('失败待处理');
-    }
-    var datalist2 = [];
-    for(var i in grouplist){
-        var lists = datalist.filter(item => {
-            return item.group==grouplist[i] || !item.group&&item.type==grouplist[i];
+    if(hkss!=1){
+        let grouplist = datalist.map((list)=>{
+            return list.group||list.type;
         })
-        if(grouplist[i]==xunmigroup){datalist2 = lists;}
-        let groupname = grouplist[i]+'('+lists.length+')';
-        let groupmenu = getMyVar('groupmenu')?getMyVar('groupmenu').split(','):[];
-        groupmenu.push(groupname);
-        putMyVar('groupmenu',groupmenu.join(','));
+        //去重复
+        function uniq(array){
+            var temp = []; //一个新的临时数组
+            for(var i = 0; i < array.length; i++){
+                if(temp.indexOf(array[i]) == -1){
+                    temp.push(array[i]);
+                }
+            }
+            return temp;
+        }
+        grouplist = uniq(grouplist);
+        if(xunmigroup&&grouplist.indexOf(xunmigroup)>-1&&grouplist.indexOf(xunmigroup)!=0){
+            for (var i = 0; i < grouplist.length; i++) {
+                if (grouplist[i] == xunmigroup) {
+                    grouplist.splice(i, 1);
+                    break;
+                }
+            }
+            grouplist.unshift(xunmigroup);
+        }
+        if(grouplist.indexOf('失败待处理')!=-1&&grouplist.indexOf('失败待处理')!=grouplist.length-1){
+            for (var i = 0; i < grouplist.length; i++) {
+                if (grouplist[i] == '失败待处理') {
+                    grouplist.splice(i, 1);
+                    break;
+                }
+            }
+            grouplist.push('失败待处理');
+        }
+        var datalist2 = [];
+        for(var i in grouplist){
+            var lists = datalist.filter(item => {
+                return item.group==grouplist[i] || !item.group&&item.type==grouplist[i];
+            })
+            if(grouplist[i]==xunmigroup){datalist2 = lists;}
+            let groupname = grouplist[i]+'('+lists.length+')';
+            let groupmenu = getMyVar('groupmenu')?getMyVar('groupmenu').split(','):[];
+            groupmenu.push(groupname);
+            putMyVar('groupmenu',groupmenu.join(','));
+            d.push({
+                title: grouplist[i]==xunmigroup?'‘‘’’<b><span style="color:#3399cc">'+groupname:groupname,
+                url: $('#noLoading#').lazyRule((bess,datalist,name,count,groupname)=>{
+                        let groupmenu = getMyVar('groupmenu')?getMyVar('groupmenu').split(','):[];
+                        for(let i in groupmenu){
+                            if(groupmenu[i]==groupname){
+                                putMyVar("selectgroup",groupname);
+                                updateItem(groupname,{title:'‘‘’’<b><span style="color:#3399cc">'+groupmenu[i]})
+                            }else{
+                                updateItem(groupmenu[i],{title:groupmenu[i]})
+                            }
+                        }
+                        if(getMyVar("starttask","0")=="1"){putMyVar("stoptask","1");}
+                        let waittime = parseInt(getMyVar("xunmitimeout","5"))+1;
+                        for (let i = 0; i < waittime; i++) {
+                            if(getMyVar("starttask","0")=="0"){
+                                break;
+                            }
+                            showLoading('等待上次线程结束，'+(waittime-i-1)+'s');
+                            java.lang.Thread.sleep(1000);
+                        }
+                        hideLoading();
+                        let beresults = [];
+                        let beerrors = [];
+                        deleteItemByCls('xunmilist');
+                        putMyVar("starttask","1");
+                        bess(datalist,beresults,beerrors,name,count);
+                        return'hiker://empty';
+                    },bess,lists,name,lists.length,groupname),
+                col_type: "scroll_button",
+                extra: {
+                    id: groupname
+                }
+            });
+        }
         d.push({
-            title: grouplist[i]==xunmigroup?'‘‘’’<b><span style="color:#3399cc">'+groupname:groupname,
-            url: $('#noLoading#').lazyRule((bess,datalist,name,count,groupname)=>{
-                    let groupmenu = getMyVar('groupmenu')?getMyVar('groupmenu').split(','):[];
-                    for(let i in groupmenu){
-                        if(groupmenu[i]==groupname){
-                            putMyVar("selectgroup",groupname);
-                            updateItem(groupname,{title:'‘‘’’<b><span style="color:#3399cc">'+groupmenu[i]})
-                        }else{
-                            updateItem(groupmenu[i],{title:groupmenu[i]})
-                        }
-                    }
-                    if(getMyVar("starttask","0")=="1"){putMyVar("stoptask","1");}
-                    let waittime = parseInt(getMyVar("xunmitimeout","5"))+1;
-                    for (let i = 0; i < waittime; i++) {
-                        if(getMyVar("starttask","0")=="0"){
-                            break;
-                        }
-                        showLoading('等待上次线程结束，'+(waittime-i-1)+'s');
-                        java.lang.Thread.sleep(1000);
-                    }
-                    hideLoading();
-                    let beresults = [];
-                    let beerrors = [];
-                    deleteItemByCls('xunmilist');
-                    putMyVar("starttask","1");
-                    bess(datalist,beresults,beerrors,name,count);
-                    return'hiker://empty';
-                },bess,lists,name,lists.length,groupname),
-            col_type: "scroll_button",
+            title: count>0?'加载中...':'没有接口，无法搜索',
+            url: "hiker://empty",
+            col_type: "text_center_1",
             extra: {
-                id: groupname
+                id: "loading"
             }
         });
-    }
-    d.push({
-        title: count>0?'加载中...':'没有接口，无法搜索',
-        url: "hiker://empty",
-        col_type: "text_center_1",
-        extra: {
-            id: "loading"
+        d.push({
+            title: '<br>',
+            col_type: 'rich_text'
+        });
+        
+        if(datalist2.length>0){
+            datalist = datalist2;
         }
-    });
-    d.push({
-        title: '<br>',
-        col_type: 'rich_text'
-    });
-    setHomeResult(d);
-
-    if(datalist2.length>0){
-        datalist = datalist2;
-    }
-    if(getMyVar('selectgroup','a').indexOf('失败待处理')==-1&&xunmigroup!="失败待处理"&&grouplist.length>1){
-        for(var i=0;i<datalist.length;i++){
-            if(datalist[i].group=="失败待处理"){
-                datalist.splice(i,1);
+        if(getMyVar('selectgroup','a').indexOf('失败待处理')==-1&&xunmigroup!="失败待处理"&&grouplist.length>1){
+            for(var i=0;i<datalist.length;i++){
+                if(datalist[i].group=="失败待处理"){
+                    datalist.splice(i,1);
+                }
             }
         }
     }
-
+    setHomeResult(d);
+    
     var count = datalist.length;
     var beresults = [];
     var beerrors = [];
@@ -338,7 +340,7 @@ function xunmi(name,data) {
                                 if(vodname.indexOf(name)>-1){
                                     let vodpic = list.vod_pic||list.pic;
                                     let voddesc = list.vod_remarks||list.state||"";
-                                    let appname = '‘‘’’<font color=#f13b66a>'+obj.name+'</font>';
+                                    let appname = '‘‘’’<font color=#f13b66a>'+obj.name+'</font>'+' ('+obj.type+')'+(obj.group&&obj.group!=obj.type?' ['+obj.group+']':'');
                                     let vodurl = list.vod_id?url + list.vod_id:list.nextlink;
                                     vodpic = vodpic?vodpic.replace('/img.php?url=','').replace('/tu.php?tu=','') + "@Referer=":"https://www.xawqxh.net/mxtheme/images/loading.gif";
                                     if(/^\/upload|^upload/.test(vodpic)){
@@ -349,8 +351,8 @@ function xunmi(name,data) {
                                     }
                                     return {
                                         title: vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):vodname,
-                                        desc: voddesc + '\n\n' + appname + ' ('+obj.type+')'+(obj.group&&obj.group!=obj.type?' ['+obj.group+']':''),
-                                        content: appname + ' ('+obj.type+')'+(obj.group&&obj.group!=obj.type?' ['+obj.group+']':''),
+                                        desc: voddesc + '\n\n' + appname,
+                                        content: appname,
                                         pic_url: vodpic,
                                         url: $("hiker://empty##" + vodurl + "#immersiveTheme#").rule((type,ua) => {
                                                 require(config.依赖.match(/https.*\//)[0] + 'SrcJyXunmi.js');
@@ -458,7 +460,7 @@ function xunmi(name,data) {
                             if(vodname.indexOf(name)>-1){
                                 let vodpic = list.pic.replace('/tu.php?tu=','').replace('/img.php?url=','');
                                 let voddesc = list.desc?list.desc:"";
-                                let appname = '‘‘’’<font color=#f13b66a>'+obj.name+'</font>';
+                                let appname = '‘‘’’<font color=#f13b66a>'+obj.name+'</font>'+' ('+obj.type+')'+(obj.group&&obj.group!=obj.type?' ['+obj.group+']':'');
                                 let vodurl = eval(ssvodurl);
                                 if(/^\/upload|^upload/.test(vodpic)){
                                     vodpic = vodurl.match(/http(s)?:\/\/(.*?)\//)[0] + vodpic;
@@ -468,7 +470,8 @@ function xunmi(name,data) {
                                 }
                                 return {
                                     title: vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):vodname,
-                                    desc: voddesc + '\n\n' + appname + ' ('+obj.type+')'+(obj.group?' ['+obj.group+']':''),
+                                    desc: voddesc + '\n\n' + appname,
+                                    content: appname,
                                     pic_url: vodpic?vodpic + "@Referer=":"https://www.xawqxh.net/mxtheme/images/loading.gif",
                                     url: $("hiker://empty##" + vodurl + "#immersiveTheme#").rule((type,ua) => {
                                             require(config.依赖.match(/https.*\//)[0] + 'SrcJyXunmi.js');
