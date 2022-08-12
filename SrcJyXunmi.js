@@ -211,10 +211,12 @@ function xunmi(name,data,hkss) {
             id: "loading"
         }
     });
-    d.push({
-        title: !hkss?'<br>':'',
-        col_type: 'rich_text'
-    });
+    if(!hkss){
+        d.push({
+            title: '<br>',
+            col_type: 'rich_text'
+        });
+    }
     setHomeResult(d);
     
     var count = datalist.length;
@@ -350,8 +352,8 @@ function xunmi(name,data,hkss) {
                                     }
                                     return {
                                         title: vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):vodname,
-                                        desc: voddesc + (!hkss?'\n\n' + appname:''),
-                                        content: appname,
+                                        desc: !hkss?(voddesc + '\n\n' + appname):obj.name,
+                                        content: voddesc,
                                         pic_url: vodpic,
                                         url: $("hiker://empty##" + vodurl + "#immersiveTheme#").rule((type,ua) => {
                                                 require(config.依赖.match(/https.*\//)[0] + 'SrcJyXunmi.js');
@@ -469,8 +471,8 @@ function xunmi(name,data,hkss) {
                                 }
                                 return {
                                     title: vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):vodname,
-                                    desc: voddesc + (!hkss?'\n\n' + appname:''),
-                                    content: appname,
+                                    desc: !hkss?(voddesc + '\n\n' + appname):obj.name,
+                                    content: voddesc,
                                     pic_url: vodpic?vodpic + "@Referer=":"https://www.xawqxh.net/mxtheme/images/loading.gif",
                                     url: $("hiker://empty##" + vodurl + "#immersiveTheme#").rule((type,ua) => {
                                             require(config.依赖.match(/https.*\//)[0] + 'SrcJyXunmi.js');
