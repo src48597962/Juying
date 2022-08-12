@@ -114,7 +114,7 @@ function xunmi(name,data,hkss) {
     }
     
     var d = [];
-    if(hkss!=1){
+    if(!hkss){
         let grouplist = datalist.map((list)=>{
             return list.group||list.type;
         })
@@ -212,7 +212,7 @@ function xunmi(name,data,hkss) {
         }
     });
     d.push({
-        title: hkss!=1?'<br>':'',
+        title: !hkss?'<br>':'',
         col_type: 'rich_text'
     });
     setHomeResult(d);
@@ -350,7 +350,7 @@ function xunmi(name,data,hkss) {
                                     }
                                     return {
                                         title: vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):vodname,
-                                        desc: voddesc + '\n\n' + appname,
+                                        desc: voddesc + (!hkss?'\n\n' + appname:''),
                                         content: appname,
                                         pic_url: vodpic,
                                         url: $("hiker://empty##" + vodurl + "#immersiveTheme#").rule((type,ua) => {
@@ -469,7 +469,7 @@ function xunmi(name,data,hkss) {
                                 }
                                 return {
                                     title: vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):vodname,
-                                    desc: voddesc + '\n\n' + appname,
+                                    desc: voddesc + (!hkss?'\n\n' + appname:''),
                                     content: appname,
                                     pic_url: vodpic?vodpic + "@Referer=":"https://www.xawqxh.net/mxtheme/images/loading.gif",
                                     url: $("hiker://empty##" + vodurl + "#immersiveTheme#").rule((type,ua) => {
