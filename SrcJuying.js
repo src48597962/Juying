@@ -96,7 +96,6 @@ function jiekouyiji() {
                     title: api_url==datalist[i].url?'““””<b><span style="color:#3CB371">' + datalist[i].name + '</span></b>':datalist[i].name,
                     col_type: 'scroll_button',
                     url: $('#noLoading#').lazyRule((Jydouli) => {
-                        clearMyVar('SrcJydouli$type_id');
                         var cfgfile = "hiker://files/rules/Src/Juying/config.json";
                         var Juyingcfg=fetch(cfgfile);
                         if(Juyingcfg != ""){
@@ -185,16 +184,21 @@ function jiekouyiji() {
         if(typeclass&&typeclass.length>0){
             let type_pids = [];
             let type_ids = [];
+            let type_names = [];
             for(let i in typeclass){
                 if(type_pids.indexOf(typeclass[i].type_pid)==-1){type_pids.push(typeclass[i].type_pid)}
-                if(type_ids.indexOf(typeclass[i].type_id)==-1){type_ids.push(''+typeclass[i].type_id)}
+                if(type_ids.indexOf(typeclass[i].type_id)==-1){type_ids.push(typeclass[i].type_id)}
+                if(type_names.indexOf(typeclass[i].type_name)==-1){type_names.push(typeclass[i].type_name)}
             }
             if(type_pids.length > 0){
                 type_pids.sort((a, b) => {
                     return a - b
                 })
             };
-            if(!getMyVar('SrcJydouli$type_id')||type_ids.indexOf(getMyVar('SrcJydouli$type_id'))==-1){putMyVar('SrcJydouli$type_id',''+type_ids[0])}
+            if(!getMyVar('SrcJydouli$type_id')||type_names.indexOf(getMyVar('SrcJydouli$type_name'))==-1){
+                putMyVar('SrcJydouli$type_name',type_names[0]);
+                putMyVar('SrcJydouli$type_id',type_ids[0]);
+            }
             for (var j in type_pids) {
                 for (var i in typeclass) {
                     if(typeclass[i].type_pid==type_pids[j]){
