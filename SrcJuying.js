@@ -96,6 +96,7 @@ function jiekouyiji() {
                     title: api_url==datalist[i].url?'““””<b><span style="color:#3CB371">' + datalist[i].name + '</span></b>':datalist[i].name,
                     col_type: 'scroll_button',
                     url: $('#noLoading#').lazyRule((Jydouli) => {
+                        clearMyVar('SrcJydouli$type_id');
                         var cfgfile = "hiker://files/rules/Src/Juying/config.json";
                         var Juyingcfg=fetch(cfgfile);
                         if(Juyingcfg != ""){
@@ -193,7 +194,6 @@ function jiekouyiji() {
                     return a - b
                 })
             };
-            log(type_ids)
             if(!getMyVar('SrcJydouli$type_id')||type_ids.indexOf(getMyVar('SrcJydouli$type_id'))==-1){putMyVar('SrcJydouli$type_id',''+type_ids[0])}
             for (var j in type_pids) {
                 for (var i in typeclass) {
