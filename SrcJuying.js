@@ -195,7 +195,6 @@ function jiekouyiji() {
                 })
             };
             if(/v2|app/.test(api_type)&&!getMyVar('SrcJydouli$type_id')){
-                putMyVar('SrcJydouli$type_name',type_names[0]);
                 putMyVar('SrcJydouli$type_id',type_ids[0]);
             }
             for (var j in type_pids) {
