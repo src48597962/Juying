@@ -2,7 +2,7 @@
 function xunmi(name,data,hkss) {
     setPageTitle('聚搜>'+name);
     addListener("onClose", $.toString(() => {
-        clearMyVar('moviemore');
+        //clearMyVar('moviemore');
         clearMyVar('xunminum');
         clearMyVar('xunmitimeout');
         clearMyVar('starttask');
@@ -11,7 +11,7 @@ function xunmi(name,data,hkss) {
         clearMyVar('selectgroup');
         clearMyVar('baoliujk');
     }));
-    putMyVar('moviemore','1');
+    //putMyVar('moviemore','1');
     try{
         var cfgfile = "hiker://files/rules/Src/Juying/config.json";
         var Juyingcfg=fetch(cfgfile);
@@ -351,7 +351,7 @@ function xunmi(name,data,hkss) {
                                         vodpic = "https" + vodpic;
                                     }
                                     return {
-                                        title: vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):vodname,
+                                        title: !hkss&&vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):vodname,
                                         desc: !hkss?(voddesc + '\n\n' + appname):obj.name,
                                         content: voddesc,
                                         pic_url: vodpic,
@@ -364,6 +364,7 @@ function xunmi(name,data,hkss) {
                                             pic: vodpic,
                                             name: vodname,
                                             title: vodname+'-'+obj.name,
+                                            back: 1,
                                             cls: 'xunmilist'
                                         }
                                     }
@@ -470,7 +471,7 @@ function xunmi(name,data,hkss) {
                                     vodpic = "https" + vodpic;
                                 }
                                 return {
-                                    title: vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):vodname,
+                                    title: !hkss&&vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):vodname,
                                     desc: !hkss?(voddesc + '\n\n' + appname):obj.name,
                                     content: voddesc,
                                     pic_url: vodpic?vodpic + "@Referer=":"https://www.xawqxh.net/mxtheme/images/loading.gif",
@@ -484,6 +485,7 @@ function xunmi(name,data,hkss) {
                                         name: vodname,
                                         title: vodname+'-'+obj.name,
                                         data: jsondata,
+                                        back: 1,
                                         cls: 'xunmilist'
                                     }
                                 }
