@@ -271,10 +271,10 @@ var erjimenu = [
     },
     {
         title: "更多片源",
-        url: !fileExist('hiker://files/rules/Src/Juying/jiekou.json')?"toast://分享页面或没有接口，无法扩展更多片源":getMyVar('moviemore','0')=="0"?$('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
+        url: !fileExist('hiker://files/rules/Src/Juying/jiekou.json')?"toast://分享页面或没有接口，无法扩展更多片源":MY_PARAMS.back==1?`#noLoading#@lazyRule=.js:back(false);'hiker://empty'`:$('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
             require(config.依赖.match(/https.*\//)[0] + 'SrcJyXunmi.js');
             xunmi(name);
-        }, MY_PARAMS.name):`#noLoading#@lazyRule=.js:back(false);'hiker://empty'`,
+        }, MY_PARAMS.name),
         pic_url: 'https://lanmeiguojiang.com/tubiao/messy/25.svg',
         col_type: 'icon_small_3'
     }
