@@ -886,21 +886,7 @@ function sousuo2() {
         pic_url: 'https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=3779990328,1416553241&fm=179&app=35&f=PNG?w=60&h=70&s=E7951B62A4639D153293A4E90300401B',
         col_type: 'icon_small_3'
     });
-    var cfgfile = "hiker://files/rules/Src/Juying/config.json";
-    var Juyingcfg=fetch(cfgfile);
-    if(Juyingcfg != ""){
-        eval("var JYconfig=" + Juyingcfg+ ";");
-    }else{
-        var JYconfig= {};
-    }
-    try{
-        if(JYconfig.resoulist){
-            delete JYconfig['resoulist'];
-            writeFile(cfgfile, JSON.stringify(JYconfig));
-        }
-    }catch(e){
-        //过几个版本后删除
-    }
+    
     var resoufile = "hiker://files/rules/Src/Juying/resou.json";
     var Juyingresou=fetch(resoufile);
     if(Juyingresou != ""){
@@ -933,13 +919,13 @@ function sousuo2() {
 
 //搜索
 function sousuo() {
-    var d = [];
     var cfgfile = "hiker://files/rules/Src/Juying/config.json";
     var Juyingcfg=fetch(cfgfile);
     if(Juyingcfg != ""){
         eval("var JYconfig=" + Juyingcfg+ ";");
     }
-    if(JYconfig.sousuoms!=2){
+    if(!fileExist('hiker://files/rules/Src/Juying/jiekou.json')||JYconfig.sousuoms!=2){
+        var d = [];
         var html = getResCode();
         try {
             var list = JSON.parse(html.match(/INITIAL_STATE.*?({.*});/)[1]).result.longVideo.results;
@@ -959,24 +945,15 @@ function sousuo() {
                 }
             }
         } catch (e) { }
-    }
-    if(fileExist('hiker://files/rules/Src/Juying/jiekou.json')){
+        setResult(d);
+    }else{
         try{
             let name = MY_URL.match(/query=(.*?)&/)[1];
             require(config.依赖.match(/https.*\//)[0] + 'SrcJyXunmi.js');
             xunmi(name,false,true);
-            /*
-            d.push({
-                title: "调用聚影接口聚合搜索>"+name,
-                url: $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
-                    require(config.依赖.match(/https.*\//)[0] + 'SrcJyXunmi.js');
-                    xunmi(name);
-                }, name),
-                col_type: 'text_center_1'
-            })*/
         }catch(e){}
     }
-    setResult(d);
+    
 }
 
 //版本检测
