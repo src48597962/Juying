@@ -10,7 +10,9 @@ function xunmi(name,data,ishkss) {
         clearMyVar('groupmenu');
         clearMyVar('selectgroup');
         clearMyVar('baoliujk');
+        putMyVar('closexunmi','1')
     }));
+    clearMyVar('closexunmi');
     try{
         var cfgfile = "hiker://files/rules/Src/Juying/config.json";
         var Juyingcfg=fetch(cfgfile);
@@ -22,7 +24,9 @@ function xunmi(name,data,ishkss) {
         }
         var xunmigroup = JYconfig.xunmigroup&&JYconfig.xunmigroup!="全部"?JYconfig.xunmigroup:"";
     }catch(e){}
-    
+    if(ishkss&&parseInt(getMyVar('xunminum'))>30){
+        putMyVar('xunminum',"20");
+    }
     if(data){
         var datalist = data;
     }else{
@@ -540,7 +544,7 @@ function xunmi(name,data,ishkss) {
                     }
                 });
                 if(error){log(id+"-错误信息："+error);}
-                if (success>=xunminum||obj.results.length==count||getMyVar("stoptask","0")=="1") {
+                if (success>=xunminum||obj.results.length==count||getMyVar("stoptask","0")=="1"||getMyVar('closexunmi')=="1") {
                     //toast("我主动中断了");
                     //log("√线程中止");
                     putMyVar("starttask","0");
