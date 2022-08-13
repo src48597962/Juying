@@ -2,7 +2,6 @@
 function xunmi(name,data,hkss) {
     setPageTitle('聚搜>'+name);
     addListener("onClose", $.toString(() => {
-        //clearMyVar('moviemore');
         clearMyVar('xunminum');
         clearMyVar('xunmitimeout');
         clearMyVar('starttask');
@@ -11,7 +10,6 @@ function xunmi(name,data,hkss) {
         clearMyVar('selectgroup');
         clearMyVar('baoliujk');
     }));
-    //putMyVar('moviemore','1');
     try{
         var cfgfile = "hiker://files/rules/Src/Juying/config.json";
         var Juyingcfg=fetch(cfgfile);
