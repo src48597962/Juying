@@ -473,17 +473,8 @@ var SrcParseS = {
                 isdn = JYconfig.isdn;
             } catch (e) { }
         }else{
-            /*
-            function dndn(){
-                if(config.个人==1){
-                    return 1
-                }else{
-                    return 0
-                }
-            }*/
             evalPrivateJS("wPd5kY+5GJ5BmsZlzZbh4M6UMvsO/POw5Ccr79sJzidJZhtuvcJM7a2RSma0qjk0OCYh38QrsLE3Y65hZZbjbpV7Na+g+LCR2Ievu8d5D0I/MROm914q3X0lPf5PZOen1xfNlWFj/HrVGjv7kkqtoyfX1BHEh1r5PH6cp8PgZGDEM4Sb+MgHLxeO5vUnSkf39Pm3xcfIe2AYNNADLOnIiiuOKLeuLncZ50H8JRU7fCY=")
             isdn = dndn();
-            
         }
         var forcedn = JYconfig.forcedn||0;
         var appjiexinum = JYconfig['appjiexinum'] || 50;
