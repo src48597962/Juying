@@ -667,13 +667,13 @@ function yiji() {
                     SRCSet();
                 }),
             pic_url: 'https://lanmeiguojiang.com/tubiao/more/129.png',
-            col_type: 'icon_5'
+            col_type: getAppVersion()>=3188?'icon_5':'icon_small_4'
         });
         d.push({
             title: JYconfig['recordentry']!=2?"历史":"收藏",
             url: JYconfig['recordentry']!=2?"hiker://history":"hiker://collection",
             pic_url: 'https://lanmeiguojiang.com/tubiao/more/109.png',
-            col_type: 'icon_5'
+            col_type: getAppVersion()>=3188?'icon_5':'icon_small_4'
         });
         d.push({
             title: "搜索",
@@ -682,7 +682,7 @@ function yiji() {
                     sousuo2();
                 }),
             pic_url: 'https://lanmeiguojiang.com/tubiao/more/101.png',
-            col_type: 'icon_5'
+            col_type: getAppVersion()>=3188?'icon_5':'icon_small_4'
         });
         d.push({
             title: "筛选",
@@ -692,17 +692,20 @@ function yiji() {
                     return "hiker://empty";
                 }, fold),
             pic_url: fold === '1'?'https://lanmeiguojiang.com/tubiao/more/213.png':'https://lanmeiguojiang.com/tubiao/more/172.png',
-            col_type: 'icon_5'
+            col_type: getAppVersion()>=3188?'icon_5':'icon_small_4'
         });
-        d.push({
-            title: "展示",
-            url: $("hiker://empty##fypage#noRecordHistory##noHistory#").rule(() => {
-                    require(config.依赖);
-                    jiekouyiji();
-                }),
-            pic_url: 'https://lanmeiguojiang.com/tubiao/more/105.png',
-            col_type: 'icon_5'
-        });
+        if(getAppVersion()>=3188){
+            d.push({
+                title: "展示",
+                url: $("hiker://empty##fypage#noRecordHistory##noHistory#").rule(() => {
+                        require(config.依赖);
+                        jiekouyiji();
+                    }),
+                pic_url: 'https://lanmeiguojiang.com/tubiao/more/105.png',
+                col_type: 'icon_5'
+            });
+        }
+        
         d.push({
             col_type: 'line'
         });
