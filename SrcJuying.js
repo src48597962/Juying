@@ -961,13 +961,6 @@ function Version() {
     var nowVersion = "3.9";//现在版本
     var nowtime = Date.now();
     var oldtime = parseInt(getItem('VersionChecktime','0').replace('time',''));
-    eval(fetch(config.依赖.match(/https.*\//)[0] + 'SrcTmplVersion.js'))
-    confirm({
-                    title:'发现新版本，是否更新？', 
-                    content:nowVersion+'=>'+newVersion.SrcJuying+'\n'+newVersion.SrcJuyingdesc[eval(newVersion.SrcJuying)], 
-                    confirm:`deleteCache();refreshPage();`, 
-                    cancel:''
-                })
     if (getMyVar('SrcJuying-VersionCheck', '0') == '0' && nowtime > (oldtime+6*60*60*1000)) {
         try {
             eval(fetch(config.依赖.match(/https.*\//)[0] + 'SrcTmplVersion.js'))
