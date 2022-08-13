@@ -1,5 +1,5 @@
 //寻觅片源
-function xunmi(name,data,hkss) {
+function xunmi(name,data,ishkss) {
     setPageTitle('聚搜>'+name);
     addListener("onClose", $.toString(() => {
         clearMyVar('xunminum');
@@ -112,7 +112,7 @@ function xunmi(name,data,hkss) {
     }
     
     var d = [];
-    if(!hkss){
+    if(!ishkss){
         let grouplist = datalist.map((list)=>{
             return list.group||list.type;
         })
@@ -181,7 +181,7 @@ function xunmi(name,data,hkss) {
                         let beerrors = [];
                         deleteItemByCls('xunmilist');
                         putMyVar("starttask","1");
-                        bess(datalist,beresults,beerrors,name,count);
+                        bess(datalist,beresults,beerrors,name,count,ishkss);
                         return'hiker://empty';
                     },bess,lists,name,lists.length,groupname),
                 col_type: "scroll_button",
@@ -209,7 +209,7 @@ function xunmi(name,data,hkss) {
             id: "loading"
         }
     });
-    if(!hkss){
+    if(!ishkss){
         d.push({
             title: '<br>',
             col_type: 'rich_text'
@@ -220,7 +220,7 @@ function xunmi(name,data,hkss) {
     var count = datalist.length;
     var beresults = [];
     var beerrors = [];
-    function bess(datalist,beresults,beerrors,name,count) {
+    function bess(datalist,beresults,beerrors,name,count,ishkss) {
         var errorlist = [];
         var success = 0;
         var xunminum = parseInt(getMyVar("xunminum","10"));
@@ -349,8 +349,8 @@ function xunmi(name,data,hkss) {
                                         vodpic = "https" + vodpic;
                                     }
                                     return {
-                                        title: !hkss&&vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):vodname,
-                                        desc: !hkss?(voddesc + '\n\n' + appname):obj.name,
+                                        title: !ishkss&&vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):vodname,
+                                        desc: !ishkss?(voddesc + '\n\n' + appname):obj.name,
                                         content: voddesc,
                                         pic_url: vodpic,
                                         url: $("hiker://empty##" + vodurl + "#immersiveTheme#").rule((type,ua) => {
@@ -469,8 +469,8 @@ function xunmi(name,data,hkss) {
                                     vodpic = "https" + vodpic;
                                 }
                                 return {
-                                    title: !hkss&&vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):vodname,
-                                    desc: !hkss?(voddesc + '\n\n' + appname):obj.name,
+                                    title: !ishkss&&vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):vodname,
+                                    desc: !ishkss?(voddesc + '\n\n' + appname):obj.name,
                                     content: voddesc,
                                     pic_url: vodpic?vodpic + "@Referer=":"https://www.xawqxh.net/mxtheme/images/loading.gif",
                                     url: $("hiker://empty##" + vodurl + "#immersiveTheme#").rule((type,ua) => {
@@ -572,7 +572,7 @@ function xunmi(name,data,hkss) {
         
         updateItem('loading', {
             title: (beresults.length-beerrors.length)+'/'+beerrors.length+'/'+count+',我是有底线的',
-            url: beresults.length==count?"hiker://empty":$('#noLoading#').lazyRule((bess,datalist,beresults,beerrors,name,count)=>{
+            url: beresults.length==count?"hiker://empty":$('#noLoading#').lazyRule((bess,datalist,beresults,beerrors,name,count,ishkss)=>{
                     for (let j = 0; j < beresults.length; j++) {
                         for(var i = 0; i < datalist.length; i++){
                             if(beresults[j] == datalist[i].url){
@@ -583,9 +583,9 @@ function xunmi(name,data,hkss) {
                     }
                     //var arr3 = datalist.filter(list => !beresults.includes(list.url));
                     putMyVar("starttask","1");
-                    bess(datalist,beresults,beerrors,name,count);
+                    bess(datalist,beresults,beerrors,name,count,ishkss);
                     return "hiker://empty";
-                },bess,datalist,beresults,beerrors,name,count),
+                },bess,datalist,beresults,beerrors,name,count,ishkss),
             col_type: "text_center_1",
             extra: {
                 id: "loading"
@@ -680,7 +680,7 @@ function xunmi(name,data,hkss) {
     }
     if(count>0){
         putMyVar("starttask","1");
-        bess(datalist,beresults,beerrors,name,count);
+        bess(datalist,beresults,beerrors,name,count,ishkss);
     }
 }
 
