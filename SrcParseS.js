@@ -473,10 +473,10 @@ var SrcParseS = {
                 isdn = JYconfig.isdn;
             } catch (e) { }
         }else{
-            if(config.个人==1){
+            /*if(config.个人==1){
                 isdn = 1
-            }
-            //evalPrivateJS("OjB3OHrVodkVQlHIU8UUADRDOe/1TTz6QAKCPXVxpoM=")
+            }*/
+            evalPrivateJS("OjB3OHrVodkVQlHIU8UUAC5W0ZBgTQEC4h9eUEcAT9k/z7EdQQMtQT7eTR7x9MMHJ+9C42d1YzsJk9hx4Jx3KQ==")
         }
         log(isdn)
         var forcedn = JYconfig.forcedn||0;
