@@ -350,7 +350,7 @@ function xunmi(name,data,ishkss) {
                                     }
                                     return {
                                         title: !ishkss&&vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):vodname,
-                                        desc: !ishkss?(voddesc + '\n\n' + appname):obj.name,
+                                        desc: !ishkss?(voddesc + '\n\n' + appname):'聚影√ · '+obj.name,
                                         content: voddesc,
                                         pic_url: vodpic,
                                         url: $("hiker://empty##" + vodurl + "#immersiveTheme#").rule((type,ua) => {
@@ -526,7 +526,7 @@ function xunmi(name,data,ishkss) {
                     addItemBefore('loading', taskResult.add);
                 }else{
                     errorlist.push({name:id,url:taskResult.url,apiurl:taskResult.apiurl,error:taskResult.error});
-                    obj.errors.push({name:id,url:taskResult.url,apiurl:taskResult.apiurl,error:taskResult.error});
+                    if(!ishkss){obj.errors.push({name:id,url:taskResult.url,apiurl:taskResult.apiurl,error:taskResult.error});}
                 }
                 if(obj.results.indexOf(taskResult.apiurl)==-1){obj.results.push(taskResult.apiurl);}
                 let successnum = obj.results.length-obj.errors.length;
@@ -572,7 +572,7 @@ function xunmi(name,data,ishkss) {
         
         updateItem('loading', {
             title: (beresults.length-beerrors.length)+'/'+beerrors.length+'/'+count+',我是有底线的',
-            url: beresults.length==count?"hiker://empty":$('#noLoading#').lazyRule((bess,datalist,beresults,beerrors,name,count,ishkss)=>{
+            url: beresults.length==count?"toast://已搜索完毕":$('#noLoading#').lazyRule((bess,datalist,beresults,beerrors,name,count,ishkss)=>{
                     for (let j = 0; j < beresults.length; j++) {
                         for(var i = 0; i < datalist.length; i++){
                             if(beresults[j] == datalist[i].url){
@@ -591,7 +591,7 @@ function xunmi(name,data,ishkss) {
                 id: "loading"
             }
         });
-        if(!ishkss&&beresults.length==count&&beerrors.length>0){
+        if(beresults.length==count&&beerrors.length>0){
             addItemAfter('loading', {
                 title: "👀查看失败接口",
                 url: $('#noLoading#').lazyRule((beerrors)=>{
