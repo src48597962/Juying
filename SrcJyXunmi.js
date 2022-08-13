@@ -4,6 +4,7 @@ function xunmi(name,data,ishkss) {
     addListener("onClose", $.toString(() => {
         clearMyVar('xunminum');
         clearMyVar('xunmitimeout');
+        clearMyVar('failnum');
         clearMyVar('starttask');
         clearMyVar('stoptask');
         clearMyVar('groupmenu');
@@ -157,7 +158,7 @@ function xunmi(name,data,ishkss) {
             putMyVar('groupmenu',groupmenu.join(','));
             d.push({
                 title: grouplist[i]==xunmigroup?'‘‘’’<b><span style="color:#3399cc">'+groupname:groupname,
-                url: $('#noLoading#').lazyRule((bess,datalist,name,count,groupname)=>{
+                url: $('#noLoading#').lazyRule((bess,datalist,name,count,groupname,ishkss)=>{
                         let groupmenu = getMyVar('groupmenu')?getMyVar('groupmenu').split(','):[];
                         for(let i in groupmenu){
                             if(groupmenu[i]==groupname){
@@ -183,7 +184,7 @@ function xunmi(name,data,ishkss) {
                         putMyVar("starttask","1");
                         bess(datalist,beresults,beerrors,name,count,ishkss);
                         return'hiker://empty';
-                    },bess,lists,name,lists.length,groupname),
+                    },bess,lists,name,lists.length,groupname,ishkss),
                 col_type: "scroll_button",
                 extra: {
                     id: groupname
@@ -752,7 +753,7 @@ function xunmierji(type,ua) {
             var year = String(xpath(html,`//video/year/text()`)).trim();
             var remarks = String(xpath(html,`//video/note/text()`)).trim() || "";
             var pubdate = String(xpath(html,`//video/type/text()`)).trim() || "";
-            var pic = MY_PARAMS.pic || xpath(html,`//video/pic/text()`);
+            var pic = MY_PARAMS.pic!="https://www.xawqxh.net/mxtheme/images/loading.gif"?MY_PARAMS.pic:xpath(html,`//video/pic/text()`);
             var desc = String(xpath(html.replace('<p>','').replace('</p>',''),`//video/des/text()`)) || '...';
         }else if (/v1|app|v2|cms/.test(type)) {
             if (/cms/.test(type)) {
@@ -797,7 +798,7 @@ function xunmierji(type,ua) {
             var year = json.vod_year;
             var remarks = json.vod_remarks || "";
             var pubdate = json.vod_pubdate || json.vod_class || "";
-            var pic = MY_PARAMS.pic || json.vod_pic;
+            var pic = MY_PARAMS.pic!="https://www.xawqxh.net/mxtheme/images/loading.gif"?MY_PARAMS.pic:json.vod_pic;
             var desc = json.vod_blurb || '...';
         }else if (/iptv/.test(type)) {
             var actor = html.actor.join(",") || "内详";
