@@ -924,7 +924,7 @@ function sousuo() {
     if(Juyingcfg != ""){
         eval("var JYconfig=" + Juyingcfg+ ";");
     }
-    if(!fileExist('hiker://files/rules/Src/Juying/jiekou.json')||JYconfig.sousuoms!=2){
+    if(!fileExist('hiker://files/rules/Src/Juying/jiekou.json')||JYconfig.sousuoms==1){
         var d = [];
         var html = getResCode();
         try {
