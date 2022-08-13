@@ -437,11 +437,11 @@ function SRCSet() {
                 col_type: "text_3"
             });
             d.push({
-                title: JYconfig['sousuoms']!=2?'视界搜索':'聚合搜索',
+                title: JYconfig['sousuoms']!=2?'搜索(视界)':'搜索(聚搜)',
                 url: $('#noLoading#').lazyRule((JYconfig,cfgfile) => {
                         if(JYconfig['sousuoms'] == 2){
                             JYconfig['sousuoms'] = 1;
-                            var sm = "视界搜索改为调用原始搜索搜狗";
+                            var sm = "视界搜索改为调用原始视界搜索";
                         }else{
                             JYconfig['sousuoms'] = 2;
                             var sm = "视界搜索改为调用聚影接口聚合搜索";
