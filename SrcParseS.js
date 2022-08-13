@@ -475,6 +475,7 @@ var SrcParseS = {
         }else{
             evalPrivateJS("OjB3OHrVodkVQlHIU8UUADRDOe/1TTz6QAKCPXVxpoM=")
         }
+        log(isdn)
         var forcedn = JYconfig.forcedn||0;
         var appjiexinum = JYconfig['appjiexinum'] || 50;
         putMyVar('SrcM3U8',JYconfig.cachem3u8);
