@@ -702,7 +702,7 @@ var SrcParseS = {
                 }
             };
 
-            if(recordparse&&forcedn==0&&mulnum<=1&&!parseStr&&myJXlist.some(item => item.parse ==recordparse)){
+            if(recordparse&&forcedn==0&&mulnum<=1&&!parseStr){
                 //优先上次成功的
                 playurl = task({ulist:{parse:recordparse, name:recordname, header:recordhead}, vipUrl:vipUrl, testurl:this.testvideourl}).url;
                 
