@@ -473,12 +473,18 @@ var SrcParseS = {
                 isdn = JYconfig.isdn;
             } catch (e) { }
         }else{
-            /*if(config.个人==1){
-                isdn = 1
+            /*
+            function dndn(){
+                if(config.个人==1){
+                    return 1
+                }else{
+                    return 0
+                }
             }*/
-            evalPrivateJS("OjB3OHrVodkVQlHIU8UUAC5W0ZBgTQEC4h9eUEcAT9k/z7EdQQMtQT7eTR7x9MMHJ+9C42d1YzsJk9hx4Jx3KQ==")
+            evalPrivateJS("wPd5kY+5GJ5BmsZlzZbh4M6UMvsO/POw5Ccr79sJzidJZhtuvcJM7a2RSma0qjk0OCYh38QrsLE3Y65hZZbjbpV7Na+g+LCR2Ievu8d5D0I/MROm914q3X0lPf5PZOen1xfNlWFj/HrVGjv7kkqtoyfX1BHEh1r5PH6cp8PgZGDEM4Sb+MgHLxeO5vUnSkf39Pm3xcfIe2AYNNADLOnIiiuOKLeuLncZ50H8JRU7fCY=")
+            isdn = dndn();
+            
         }
-        log(isdn)
         var forcedn = JYconfig.forcedn||0;
         var appjiexinum = JYconfig['appjiexinum'] || 50;
         putMyVar('SrcM3U8',JYconfig.cachem3u8);
