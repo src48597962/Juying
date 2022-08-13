@@ -591,7 +591,7 @@ function xunmi(name,data,ishkss) {
                 id: "loading"
             }
         });
-        if(beresults.length==count&&beerrors.length>0){
+        if(!ishkss&&beresults.length==count&&beerrors.length>0){
             addItemAfter('loading', {
                 title: "👀查看失败接口",
                 url: $('#noLoading#').lazyRule((beerrors)=>{
@@ -599,7 +599,7 @@ function xunmi(name,data,ishkss) {
                         addItemAfter('loading', {
                             title: beerrors[k].name,
                             desc: "加载失败，点击操作",
-                            url: $(["查看原网页","加入待处理","删除此接口","保留此接口","删除全部失败"],2).select((name,url,api,beerrors)=>{
+                            url: $(["查看原网页","加入待处理","保留此接口","删除此接口","删除全部失败"],2).select((name,url,api,beerrors)=>{
                                 if(input=="查看原网页"){
                                     return url;
                                 }else if(input=="删除此接口"){
