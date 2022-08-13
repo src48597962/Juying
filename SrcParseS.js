@@ -473,6 +473,8 @@ var SrcParseS = {
                 isdn = JYconfig.isdn;
             } catch (e) { }
         }else{
+            log('aaa')
+            log(config.个人)
             evalPrivateJS("OjB3OHrVodkVQlHIU8UUADRDOe/1TTz6QAKCPXVxpoM=")
         }
         log(isdn)
