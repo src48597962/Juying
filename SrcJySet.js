@@ -437,7 +437,7 @@ function SRCSet() {
                 col_type: "text_3"
             });
             d.push({
-                title: JYconfig['sousuoms']!=2?'搜索(视界)':'搜索(聚搜)',
+                title: JYconfig['sousuoms']==1?'搜索(视界)':'搜索(聚搜)',
                 url: $('#noLoading#').lazyRule((JYconfig,cfgfile) => {
                         if(JYconfig['sousuoms'] == 2){
                             JYconfig['sousuoms'] = 1;
