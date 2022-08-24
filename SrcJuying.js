@@ -308,6 +308,11 @@ function jiekouyiji() {
                 if(/^\/\//.test(vodpic)){
                     vodpic = "https" + vodpic;
                 }
+                if(api_type=='cms'&&list.vod_play_url){
+                    if(list.vod_play_url.indexOf('$')==-1&&list.vod_play_url.indexOf('m3u8')>-1){
+                        list['play'] = list.vod_play_url;
+                    }
+                }
                 return {
                     title: vodname,
                     desc: voddesc,
