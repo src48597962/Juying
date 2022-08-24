@@ -19,7 +19,8 @@ function jiekouyiji() {
     var api_name = JYconfig.Jydouli?JYconfig.Jydouli.api_name||"":"";
     var api_type = JYconfig.Jydouli?JYconfig.Jydouli.api_type||"":"";
     var api_url = JYconfig.Jydouli?JYconfig.Jydouli.api_url||"":"";
-    var api_ua = JYconfig.Jydouli?JYconfig.Jydouli.api_ua||MOBILE_UA:MOBILE_UA;
+    var api_ua = JYconfig.Jydouli?JYconfig.Jydouli.api_ua||"MOBILE_UA":MOBILE_UA;
+    api_ua = api_ua=="MOBILE_UA"?MOBILE_UA:api_ua=="PC_UA"?PC_UA:api_ua;
     var xunmitimeout = JYconfig.xunmitimeout||5;
     if(api_name){setPageTitle(api_name);}
     if(api_name&&api_type&&api_url){
