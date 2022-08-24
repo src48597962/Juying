@@ -1029,7 +1029,7 @@ function xunmierji(type,ua) {
             let single = conts[i]||"";
             if(single){
                 let lines = single.split('#');
-                if(isxml==1){
+                if(type=='cms'){
                     for(let i in lines){
                         if(lines[i].indexOf('$')==-1){
                             let ii = parseInt(i)+1;
