@@ -31,7 +31,7 @@ var SrcParseS = {
                 if(url.indexOf('#isVideo=true#')==-1){
                     url = url + '#isVideo=true#';
                 }
-                return url+'#ignoreImage';
+                return url+'#ignoreImg=true#';
             }
         } catch (e) {
             return url;
@@ -77,7 +77,7 @@ var SrcParseS = {
             for (var i in urls) {
                 if (!exclude.test(urls[i]) && contain.test(urls[i]) && urls[i].indexOf('=http')==-1) {
                     //fba.log("嗅探成功>"+urls[i]);
-                    return urls[i]+'#ignoreImage#isVideo=true#';
+                    //return urls[i]+'#isVideo=true#';
                     if(fy_bridge_app.getHeaderUrl&&vipUrl.indexOf("=http")==-1)
                         return $$$("#noLoading#").lazyRule((url) => {
                             url = base64Decode(url);
