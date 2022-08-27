@@ -82,9 +82,9 @@ var SrcParseS = {
                         return $$$("#noLoading#").lazyRule((url) => {
                             url = base64Decode(url);
                             if (getMyVar('SrcM3U8', '1') == "1"&&url.indexOf('.m3u8')>-1) {
-                                return cacheM3u8(url.split(";{")[0], {timeout: 2000})+"#isVideo=true#;{"+url.split(";{")[1];
+                                return cacheM3u8(url.split(";{")[0], {timeout: 2000})+"#ignoreImg=true##isVideo=true#;{"+url.split(";{")[1];
                             }else{
-                                return url.replace(";{", "#isVideo=true#;{");
+                                return url.replace(";{", "#ignoreImg=true##isVideo=true#;{");
                             }
                         }, fy_bridge_app.base64Encode(fy_bridge_app.getHeaderUrl(urls[i])));
                     else {
