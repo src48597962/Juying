@@ -76,7 +76,7 @@ var SrcParseS = {
             var contain = /\.mp4|\.m3u8|\.flv|\.avi|\.mpeg|\.wmv|\.mov|\.rmvb|\.dat|qqBFdownload|mime=video%2F|video_mp4/;//设置符合条件的正确地址
             for (var i in urls) {
                 if (!exclude.test(urls[i]) && contain.test(urls[i]) && urls[i].indexOf('=http')==-1) {
-                    //fba.log("嗅探成功>"+urls[i]);
+                    fba.log("嗅探成功>"+urls[i]);
                     if(fy_bridge_app.getHeaderUrl&&vipUrl.indexOf("=http")==-1)
                         return $$$("#noLoading#").lazyRule((url) => {
                             url = base64Decode(url);
