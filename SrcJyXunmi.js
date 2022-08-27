@@ -1151,7 +1151,7 @@ function xunmierji(type,ua) {
                 d.push({
                     title: playtitle.replace(/第|集|话|期|-/g, ''),
                     url: playurl + DTJX,
-                    extra: { id: playurl, referer: playurl, jsLoadingInject: true, blockRules: ['.m4a','.mp3','.mp4','.flv','.avi','.mpeg','.wmv','.mov','.rmvb','.gif','.jpeg','.jpg','.png','hm.baidu.com','/ads/*.js','cnzz.com','.css'] },
+                    extra: { id: playurl, referer: playurl, jsLoadingInject: true, blockRules: ['.m4a','.mp3','.mp4','.flv','.avi','.mpeg','.wmv','.mov','.rmvb','.gif','.jpeg','.png','hm.baidu.com','/ads/*.js','cnzz.com','.css'] },
                     col_type: list.length > 4 && len < 7 ? 'text_4' : 'text_3'
                 });
             } else {
