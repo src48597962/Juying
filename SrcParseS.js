@@ -31,7 +31,7 @@ var SrcParseS = {
                 if(url.indexOf('#isVideo=true#')==-1){
                     url = url + '#isVideo=true#';
                 }
-                return url;
+                return url+'#ignoreImage';
             }
         } catch (e) {
             return url;
