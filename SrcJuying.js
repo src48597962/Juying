@@ -973,11 +973,11 @@ function Version() {
             if (parseFloat(newVersion.SrcJuying) > parseFloat(nowVersion)) {
                 confirm({
                     title:'发现新版本，是否更新？', 
-                    content:nowVersion+'=>'+newVersion.SrcJuying+'\n'+newVersion.SrcJuyingdesc[eval(newVersion.SrcJuying)], 
+                    content:nowVersion+'=>'+newVersion.SrcJuying+'\n'+newVersion.SrcJuyingdesc[newVersion.SrcJuying], 
                     confirm:`deleteCache();refreshPage();`, 
                     cancel:''
                 })
-                log('检测到新版本！\nV'+newVersion.SrcJuying+'版本》'+newVersion.SrcJuyingdesc[eval(newVersion.SrcJuying)]);
+                log('检测到新版本！\nV'+newVersion.SrcJuying+'版本》'+newVersion.SrcJuyingdesc[newVersion.SrcJuying]);
             }
             putMyVar('SrcJuying-Version', '-V'+newVersion.SrcJuying);
         } catch (e) { }
