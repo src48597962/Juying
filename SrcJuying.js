@@ -348,6 +348,7 @@ function erji() {
     addListener("onClose", $.toString(() => {
         clearMyVar('SrcM3U8');
     }));
+    clearMyVar('SrcJy$back');
     var d = [];
     var html = fetch(MY_URL.split('##')[1]);
     var json = JSON.parse(html.match(/INITIAL_STATE.*?({.*});/)[1]).detail.itemData;
