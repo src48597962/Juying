@@ -15,7 +15,7 @@ function jiekouyiji() {
     }else{
         var JYconfig= {};
     }
-    
+    clearMyVar('SrcJy$back');
     var api_name = JYconfig.Jydouli?JYconfig.Jydouli.api_name||"":"";
     var api_type = JYconfig.Jydouli?JYconfig.Jydouli.api_type||"":"";
     var api_url = JYconfig.Jydouli?JYconfig.Jydouli.api_url||"":"";
@@ -626,7 +626,7 @@ function yiji() {
         clearMyVar('isverifyA');
     }));
 */
-
+    clearMyVar('SrcJy$back');
     var d = [];
     const Color = "#3399cc";
     const categorys = ['电视剧','电影','动漫','综艺','纪录片'];
