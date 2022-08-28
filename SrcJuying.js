@@ -1,11 +1,9 @@
 //本代码仅用于个人学习，请勿用于其他作用，下载后请24小时内删除
 //接口一级
 function jiekouyiji() {
-    /*
     addListener("onClose", $.toString(() => {
-        clearMyVar('isverifyA');
+        clearMyVar('SrcJy$back');
     }));
-*/
     setPageTitle('接口独立展示');
     var d = [];
     var cfgfile = "hiker://files/rules/Src/Juying/config.json";
@@ -15,7 +13,7 @@ function jiekouyiji() {
     }else{
         var JYconfig= {};
     }
-    clearMyVar('SrcJy$back');
+    
     var api_name = JYconfig.Jydouli?JYconfig.Jydouli.api_name||"":"";
     var api_type = JYconfig.Jydouli?JYconfig.Jydouli.api_type||"":"";
     var api_url = JYconfig.Jydouli?JYconfig.Jydouli.api_url||"":"";
