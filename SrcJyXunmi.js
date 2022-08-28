@@ -10,9 +10,11 @@ function xunmi(name,data,ishkss) {
         clearMyVar('groupmenu');
         clearMyVar('selectgroup');
         clearMyVar('baoliujk');
-        putMyVar('closexunmi','1')
+        clearMyVar('SrcJy$back');
+        putMyVar('closexunmi','1');
     }));
     clearMyVar('closexunmi');
+    putMyVar('SrcJy$back','1');
     try{
         var cfgfile = "hiker://files/rules/Src/Juying/config.json";
         var Juyingcfg=fetch(cfgfile);
@@ -367,7 +369,6 @@ function xunmi(name,data,ishkss) {
                                             pic: vodpic,
                                             name: vodname,
                                             title: vodname+'-'+obj.name,
-                                            back: 1,
                                             cls: 'xunmilist'
                                         }
                                     }
@@ -488,7 +489,6 @@ function xunmi(name,data,ishkss) {
                                         name: vodname,
                                         title: vodname+'-'+obj.name,
                                         data: jsondata,
-                                        back: 1,
                                         cls: 'xunmilist'
                                     }
                                 }
