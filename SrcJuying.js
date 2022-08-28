@@ -1,9 +1,7 @@
 //本代码仅用于个人学习，请勿用于其他作用，下载后请24小时内删除
 //接口一级
 function jiekouyiji() {
-    addListener("onClose", $.toString(() => {
-        clearMyVar('SrcJy$back');
-    }));
+    clearMyVar('SrcJy$back');
     setPageTitle('接口独立展示');
     var d = [];
     var cfgfile = "hiker://files/rules/Src/Juying/config.json";
