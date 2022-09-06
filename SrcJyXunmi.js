@@ -613,11 +613,16 @@ function xunmi(name,data,ishkss) {
             addItemAfter('loading', {
                 title: "👀查看失败接口",
                 url: $('#noLoading#').lazyRule((beerrors)=>{
+                    if(getMyVar('selectgroup','a').indexOf('失败待处理')>-1){
+                        var selectmenu = ["查看原网页","删除此接口","删除全部失败"];    
+                    }else{
+                        var selectmenu = ["查看原网页","加入待处理","保留此接口","删除此接口","删除全部失败","失败全部待处理"];
+                    }
                     for (let k in beerrors) {
                         addItemAfter('loading', {
                             title: beerrors[k].name,
                             desc: "加载失败，点击操作",
-                            url: $(["查看原网页","加入待处理","保留此接口","删除此接口","删除全部失败","失败全部待处理"],2).select((name,url,api,beerrors)=>{
+                            url: $(selectmenu,2).select((name,url,api,beerrors)=>{
                                 if(input=="查看原网页"){
                                     return url;
                                 }else if(input=="删除此接口"){
