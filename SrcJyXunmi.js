@@ -578,7 +578,7 @@ function xunmi(name,data,ishkss) {
             for (let j=0;j<sccesslist.length;j++) {
                 if(jiekoulist[i].url==sccesslist[j]){
                     delete jiekoulist[i].group;
-                    log(sccesslist[j]+' 移出失败组');
+                    //log(sccesslist[j]+' 移出失败组');
                     tzgroup = 1;
                     break;
                 }
@@ -615,7 +615,7 @@ function xunmi(name,data,ishkss) {
                         addItemAfter('loading', {
                             title: beerrors[k].name,
                             desc: "加载失败，点击操作",
-                            url: $(["查看原网页","加入待处理","保留此接口","删除此接口","删除全部失败"],2).select((name,url,api,beerrors)=>{
+                            url: $(["查看原网页","加入待处理","保留此接口","删除此接口","删除全部失败","失败全部待处理"],2).select((name,url,api,beerrors)=>{
                                 if(input=="查看原网页"){
                                     return url;
                                 }else if(input=="删除此接口"){
@@ -656,7 +656,7 @@ function xunmi(name,data,ishkss) {
                                         baoliujk.push(api);
                                         putMyVar('baoliujk',baoliujk.join(','));
                                     }
-                                    return "toast://全部删除失败时保留“"+name+"”";
+                                    return "toast://失败全部删除时保留“"+name+"”";
                                 }else if(input=="删除全部失败"){
                                     return $("确定要删除失败的"+beerrors.length+"个接口吗？").confirm((beerrors)=>{
                                         var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
@@ -672,8 +672,23 @@ function xunmi(name,data,ishkss) {
                                             }
                                         }
                                         writeFile(filepath, JSON.stringify(datalist));
-                                        return "toast://已删除全部失败的接口";
+                                        return "toast://已删除全部失败的接口(保留除外)";
                                     }, beerrors)
+                                }else if(input=="失败全部待处理"){
+                                    var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
+                                    var datafile = fetch(filepath);
+                                    eval("var datalist=" + datafile+ ";");
+                                    for (let k in beerrors) {
+                                        for(let i=0;i<datalist.length;i++){
+                                            if(datalist[i].url==beerrors[k].apiurl){
+                                                deleteItem('xumi-'+datalist[i].url);
+                                                datalist[i].group = "失败待处理";
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    writeFile(filepath, JSON.stringify(datalist));
+                                    return "toast://已将失败的接口，均调整到失败待处理分组";
                                 }
                             }, beerrors[k].name, beerrors[k].url, beerrors[k].apiurl, beerrors),
                             col_type: "text_1",
