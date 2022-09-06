@@ -578,6 +578,7 @@ function xunmi(name,data,ishkss) {
             for (let j=0;j<sccesslist.length;j++) {
                 if(jiekoulist[i].url==sccesslist[j]){
                     delete jiekoulist[i].group;
+                    log(sccesslist[j]+' 移出失败组');
                     tzgroup = 1;
                     break;
                 }
