@@ -518,7 +518,7 @@ function xunmi(name,data,ishkss) {
                 if(i==1){
                     success = success + i;
                     addItemBefore('loading', taskResult.add);
-                    sccesslist.push(taskResult.apiurl);
+                    if(getMyVar('selectgroup','a').indexOf('失败待处理')>-1){sccesslist.push(taskResult.apiurl);}
                 }else{
                     errorlist.push({name:id,url:taskResult.url,apiurl:taskResult.apiurl,error:taskResult.error});
                     if(!ishkss){obj.errors.push({name:id,url:taskResult.url,apiurl:taskResult.apiurl,error:taskResult.error});}
@@ -564,14 +564,14 @@ function xunmi(name,data,ishkss) {
             }
         }*/
         
-        for(var i=0;i<jiekoulist.length;i++){
-            for (let k in errorlist) {
+        for(let i=0;i<jiekoulist.length;i++){
+            for (let k=0;k<errorlist.length;k++) {
                 if(jiekoulist[i].url==errorlist[k].apiurl){
                     jiekoulist[i].failnum = jiekoulist[i].failnum + 1 || 1;
                     if(errorlist[k].error==1&&jiekoulist[i].failnum>=parseInt(getMyVar("failnum","10"))){
-                        jiekoulist[i].group = "失败待处理";
-                        tzgroup = 1;
+                        jiekoulist[i].group = "失败待处理";                        
                     }
+                    tzgroup = 1;
                     break;
                 }
             }
