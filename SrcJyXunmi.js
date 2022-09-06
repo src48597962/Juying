@@ -228,6 +228,7 @@ function xunmi(name,data,ishkss) {
     var beresults = [];
     var beerrors = [];
     function bess(datalist,beresults,beerrors,name,count,ishkss) {
+        var sccesslist = [];
         var errorlist = [];
         var success = 0;
         var xunminum = parseInt(getMyVar("xunminum","10"));
@@ -326,19 +327,7 @@ function xunmi(name,data,ishkss) {
                             list = [];
                         }
                     }
-                    /*
-                    if(obj.type=="cms"){
-                        if((list.length>0&&list[0].vod_name.indexOf(name)==-1)||html.code=="0"){
-                            try {
-                                ssurl = ssurl.replace('videolist','list');
-                                html = JSON.parse(request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 }));
-                                list = html.list||[];
-                            } catch (e) {
-                                list = [];
-                            }
-                        }
-                    }
-                    */
+
                     if(list.length>0){
                         try {
                             let search = list.map((list)=>{
@@ -529,6 +518,7 @@ function xunmi(name,data,ishkss) {
                 if(i==1){
                     success = success + i;
                     addItemBefore('loading', taskResult.add);
+                    sccesslist.push(taskResult.apiurl);
                 }else{
                     errorlist.push({name:id,url:taskResult.url,apiurl:taskResult.apiurl,error:taskResult.error});
                     if(!ishkss){obj.errors.push({name:id,url:taskResult.url,apiurl:taskResult.apiurl,error:taskResult.error});}
@@ -536,7 +526,7 @@ function xunmi(name,data,ishkss) {
                 if(obj.results.indexOf(taskResult.apiurl)==-1){obj.results.push(taskResult.apiurl);}
                 let successnum = obj.results.length-obj.errors.length;
                 updateItem('loading', {
-                    title: (successnum<0?0:successnum)+'/'+obj.errors.length+'/'+count+'，加载中...',
+                    title: ishkss?(successnum<0?0:successnum)+'/'+count+'，加载中...':(successnum<0?0:successnum)+'/'+obj.errors.length+'/'+count+'，加载中...',
                     url: "hiker://empty",
                     col_type: "text_center_1",
                     extra: {
@@ -561,8 +551,21 @@ function xunmi(name,data,ishkss) {
         var datafile = fetch(filepath);
         eval("var jiekoulist=" + datafile+ ";");
         let tzgroup = 0;
-        for (let k in errorlist) {
+        /*for (let k in errorlist) {
             for(var i=0;i<jiekoulist.length;i++){
+                if(jiekoulist[i].url==errorlist[k].apiurl){
+                    jiekoulist[i].failnum = jiekoulist[i].failnum + 1 || 1;
+                    if(errorlist[k].error==1&&jiekoulist[i].failnum>=parseInt(getMyVar("failnum","10"))){
+                        jiekoulist[i].group = "失败待处理";
+                        tzgroup = 1;
+                    }
+                    break;
+                }
+            }
+        }*/
+        
+        for(var i=0;i<jiekoulist.length;i++){
+            for (let k in errorlist) {
                 if(jiekoulist[i].url==errorlist[k].apiurl){
                     jiekoulist[i].failnum = jiekoulist[i].failnum + 1 || 1;
                     if(errorlist[k].error==1&&jiekoulist[i].failnum>=parseInt(getMyVar("failnum","10"))){
@@ -576,7 +579,7 @@ function xunmi(name,data,ishkss) {
         if(tzgroup == 1){writeFile(filepath, JSON.stringify(jiekoulist));}
         
         updateItem('loading', {
-            title: (beresults.length-beerrors.length)+'/'+beerrors.length+'/'+count+',我是有底线的',
+            title: ishkss?(beresults.length-beerrors.length)+'/'+count+',我是有底线的':(beresults.length-beerrors.length)+'/'+beerrors.length+'/'+count+',我是有底线的',
             url: beresults.length==count?"toast://已搜索完毕":$('#noLoading#').lazyRule((bess,datalist,beresults,beerrors,name,count,ishkss)=>{
                     for (let j = 0; j < beresults.length; j++) {
                         for(var i = 0; i < datalist.length; i++){
