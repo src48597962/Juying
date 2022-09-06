@@ -202,10 +202,11 @@ function xunmi(name,data,ishkss) {
         }
         
         if(getMyVar('selectgroup','a').indexOf('失败待处理')==-1&&xunmigroup!="失败待处理"&&grouplist.length>1){
-            log(datalist.length);
-            log(datalist);
-            for(let i in datalist){
-                log(datalist[i].name+' '+datalist[i].group);
+            //log(datalist);
+            for(let i=0;i<datalist.length;i++){
+                log(datalist[i].name);
+                log(datalist[i].group);
+                //log(datalist[i].name+' '+datalist[i].group);
                 if(datalist[i].group=="失败待处理"){
                     datalist.splice(i,1);
                 }
