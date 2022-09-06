@@ -575,6 +575,13 @@ function xunmi(name,data,ishkss) {
                     break;
                 }
             }
+            for (let j=0;j<sccesslist.length;j++) {
+                if(jiekoulist[i].url==sccesslist[j]){
+                    delete jiekoulist[i].group;
+                    tzgroup = 1;
+                    break;
+                }
+            }
         }
         if(tzgroup == 1){writeFile(filepath, JSON.stringify(jiekoulist));}
         
