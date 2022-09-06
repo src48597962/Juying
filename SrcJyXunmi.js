@@ -610,9 +610,110 @@ function xunmi(name,data,ishkss) {
             }
         });
         if(beresults.length==count&&beerrors.length>0){
+            function fialjklist(beerrors) {
+                if(getMyVar('selectgroup','a').indexOf('失败待处理')>-1){
+                    var selectmenu = ["查看原网页","删除此接口","删除全部失败"];    
+                }else{
+                    var selectmenu = ["查看原网页","加入待处理","保留此接口","删除此接口","删除全部失败","失败全部待处理"];
+                }
+                for (let k in beerrors) {
+                    addItemAfter('loading', {
+                        title: beerrors[k].name,
+                        desc: "加载失败，点击操作",
+                        url: $(selectmenu,2).select((name,url,api,beerrors)=>{
+                            if(input=="查看原网页"){
+                                return url;
+                            }else if(input=="删除此接口"){
+                                let filepath = "hiker://files/rules/Src/Juying/jiekou.json";
+                                let datafile = fetch(filepath);
+                                eval("let datalist=" + datafile+ ";");
+                                for(let i=0;i<datalist.length;i++){
+                                    if(datalist[i].url==api){
+                                        datalist.splice(i,1);
+                                        break;
+                                    }
+                                }
+                                writeFile(filepath, JSON.stringify(datalist));
+                                deleteItem('xumi-'+api);
+                                return "toast://已删除";
+                            }else if(input=="加入待处理"){
+                                let filepath = "hiker://files/rules/Src/Juying/jiekou.json";
+                                let datafile = fetch(filepath);
+                                eval("let datalist=" + datafile+ ";");
+                                for(let i=0;i<datalist.length;i++){
+                                    if(datalist[i].url==api){
+                                        datalist[i].group = "失败待处理";
+                                        break;
+                                    }
+                                }
+                                writeFile(filepath, JSON.stringify(datalist));
+                                deleteItem('xumi-'+api);
+                                let baoliujk = getMyVar('baoliujk','')?getMyVar('baoliujk','').split(','):[];
+                                if(baoliujk.indexOf(api)==-1){
+                                    baoliujk.push(api);
+                                    putMyVar('baoliujk',baoliujk.join(','));
+                                }
+                                return "toast://已将“"+name+"”，调整到失败待处理分组";
+                            }else if(input=="保留此接口"){
+                                deleteItem('xumi-'+api);
+                                let baoliujk = getMyVar('baoliujk','')?getMyVar('baoliujk','').split(','):[];
+                                if(baoliujk.indexOf(api)==-1){
+                                    baoliujk.push(api);
+                                    putMyVar('baoliujk',baoliujk.join(','));
+                                }
+                                return "toast://失败全部删除时保留“"+name+"”";
+                            }else if(input=="删除全部失败"){
+                                return $("确定要删除失败的"+beerrors.length+"个接口吗？").confirm((beerrors)=>{
+                                    let filepath = "hiker://files/rules/Src/Juying/jiekou.json";
+                                    let datafile = fetch(filepath);
+                                    eval("let datalist=" + datafile+ ";");
+                                    for (let k in beerrors) {
+                                        for(let i=0;i<datalist.length;i++){
+                                            if(datalist[i].url==beerrors[k].apiurl&&getMyVar('baoliujk','').indexOf(datalist[i].url)==-1){
+                                                deleteItem('xumi-'+datalist[i].url);
+                                                datalist.splice(i,1);
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    writeFile(filepath, JSON.stringify(datalist));
+                                    return "toast://已删除全部失败的接口(保留除外)";
+                                }, beerrors)
+                            }else if(input=="失败全部待处理"){
+                                let filepath = "hiker://files/rules/Src/Juying/jiekou.json";
+                                let datafile = fetch(filepath);
+                                eval("let datalist=" + datafile+ ";");
+                                for (let k in beerrors) {
+                                    for(let i=0;i<datalist.length;i++){
+                                        if(datalist[i].url==beerrors[k].apiurl){
+                                            deleteItem('xumi-'+datalist[i].url);
+                                            datalist[i].group = "失败待处理";
+                                            break;
+                                        }
+                                    }
+                                }
+                                writeFile(filepath, JSON.stringify(datalist));
+                                return "toast://已将失败的接口，均调整到失败待处理分组";
+                            }
+                        }, beerrors[k].name, beerrors[k].url, beerrors[k].apiurl, beerrors),
+                        col_type: "text_1",
+                        extra: {
+                            id: 'xumi-'+beerrors[k].apiurl,
+                            cls: 'xunmilist'
+                        }
+                    });
+                }
+            }
+            if(datalist.length==1){
+                fialjklist(beerrors);
+            }else{
+
+            
             addItemAfter('loading', {
                 title: "👀查看失败接口",
-                url: $('#noLoading#').lazyRule((beerrors)=>{
+                url: $('#noLoading#').lazyRule((fialjklist,beerrors)=>{
+                    fialjklist(beerrors);
+                    /*
                     if(getMyVar('selectgroup','a').indexOf('失败待处理')>-1){
                         var selectmenu = ["查看原网页","删除此接口","删除全部失败"];    
                     }else{
@@ -626,10 +727,10 @@ function xunmi(name,data,ishkss) {
                                 if(input=="查看原网页"){
                                     return url;
                                 }else if(input=="删除此接口"){
-                                    var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
-                                    var datafile = fetch(filepath);
-                                    eval("var datalist=" + datafile+ ";");
-                                    for(var i=0;i<datalist.length;i++){
+                                    let filepath = "hiker://files/rules/Src/Juying/jiekou.json";
+                                    let datafile = fetch(filepath);
+                                    eval("let datalist=" + datafile+ ";");
+                                    for(let i=0;i<datalist.length;i++){
                                         if(datalist[i].url==api){
                                             datalist.splice(i,1);
                                             break;
@@ -639,10 +740,10 @@ function xunmi(name,data,ishkss) {
                                     deleteItem('xumi-'+api);
                                     return "toast://已删除";
                                 }else if(input=="加入待处理"){
-                                    var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
-                                    var datafile = fetch(filepath);
-                                    eval("var datalist=" + datafile+ ";");
-                                    for(var i=0;i<datalist.length;i++){
+                                    let filepath = "hiker://files/rules/Src/Juying/jiekou.json";
+                                    let datafile = fetch(filepath);
+                                    eval("let datalist=" + datafile+ ";");
+                                    for(let i=0;i<datalist.length;i++){
                                         if(datalist[i].url==api){
                                             datalist[i].group = "失败待处理";
                                             break;
@@ -666,11 +767,11 @@ function xunmi(name,data,ishkss) {
                                     return "toast://失败全部删除时保留“"+name+"”";
                                 }else if(input=="删除全部失败"){
                                     return $("确定要删除失败的"+beerrors.length+"个接口吗？").confirm((beerrors)=>{
-                                        var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
-                                        var datafile = fetch(filepath);
-                                        eval("var datalist=" + datafile+ ";");
+                                        let filepath = "hiker://files/rules/Src/Juying/jiekou.json";
+                                        let datafile = fetch(filepath);
+                                        eval("let datalist=" + datafile+ ";");
                                         for (let k in beerrors) {
-                                            for(var i=0;i<datalist.length;i++){
+                                            for(let i=0;i<datalist.length;i++){
                                                 if(datalist[i].url==beerrors[k].apiurl&&getMyVar('baoliujk','').indexOf(datalist[i].url)==-1){
                                                     deleteItem('xumi-'+datalist[i].url);
                                                     datalist.splice(i,1);
@@ -682,9 +783,9 @@ function xunmi(name,data,ishkss) {
                                         return "toast://已删除全部失败的接口(保留除外)";
                                     }, beerrors)
                                 }else if(input=="失败全部待处理"){
-                                    var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
-                                    var datafile = fetch(filepath);
-                                    eval("var datalist=" + datafile+ ";");
+                                    let filepath = "hiker://files/rules/Src/Juying/jiekou.json";
+                                    let datafile = fetch(filepath);
+                                    eval("let datalist=" + datafile+ ";");
                                     for (let k in beerrors) {
                                         for(let i=0;i<datalist.length;i++){
                                             if(datalist[i].url==beerrors[k].apiurl){
@@ -704,16 +805,17 @@ function xunmi(name,data,ishkss) {
                                 cls: 'xunmilist'
                             }
                         });
-                    }
+                    }*/
                     deleteItem('lookerror');
                     return "hiker://empty";
-                },beerrors),
+                },fialjklist,beerrors),
                 col_type: "text_center_1",
                 extra: {
                     id: 'lookerror',
                     cls: 'xunmilist'
                 }
             });
+            }
         }
     }
     if(count>0){
