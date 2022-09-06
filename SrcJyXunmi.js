@@ -200,6 +200,8 @@ function xunmi(name,data,ishkss) {
         if(datalist2.length>0){
             datalist = datalist2;
         }
+        log(datalist.length);
+        log(datalist);
         if(getMyVar('selectgroup','a').indexOf('失败待处理')==-1&&xunmigroup!="失败待处理"&&grouplist.length>1){
             for(var i=0;i<datalist.length;i++){
                 log(datalist[i].name+' '+datalist[i].group);
