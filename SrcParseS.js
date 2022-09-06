@@ -535,7 +535,6 @@ var SrcParseS = {
                 }
             }
             var Uparselist = [];
-            var Nparselist = [];
             var appJXlist= [];
             var myJXlist= [];
             var recordfile = "hiker://files/rules/Src/Juying/parse.json";
@@ -618,6 +617,7 @@ var SrcParseS = {
                                 arr["sort"] = sort;
                                 Uparselist.push(arr);
                                 myjxnum = myjxnum + 1;
+                                //非强制优先、非排除片源、非屏蔽优先调用
                             }
                         }
                     }
@@ -720,7 +720,6 @@ var SrcParseS = {
                     for(var i=0;i<Uparselist.length;i++){
                         if(Uparselist[i].parse==recordparse){
                             Uparselist.splice(i,1);
-                            //removeByValue(Nparselist,recordname);
                             break;
                         }
                     }
