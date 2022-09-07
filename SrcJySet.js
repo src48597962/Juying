@@ -584,8 +584,9 @@ function SRCSet() {
                             html = html.replace(reg, function(word) { 
                                 return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
                             }).replace(/^.*#.*$/gm,"").replace(/🐝|🐌|💡|🥇|⚽|🏀|📺|🐨|🐧|🍋|🐯|👒|🅱|🚁|🍎|🎈|💘|🐞|🔥|🌎|🈲|🍀|🥒|⭐️|❄️|\(XPF\)|\(萝卜\)|\(神马\)|\(切\)|\(聚\)|\(优\)|\(神马\)|\(XB\)|\(SP\)|\\t|\\r|\\n/g,'').replace(/\,\,/g,',');
-                            log(html);
-                            var data = JSON.parse(html);
+                            //log(html);
+                            //var data = JSON.parse(html);
+                            var data = eval('(' + html + ')'); 
                             var jiekou = data.sites;
                             var jiexi = data.parses;
                         }else{
