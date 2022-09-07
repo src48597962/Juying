@@ -576,6 +576,7 @@ function SRCSet() {
                         html = html.replace(reg, function(word) { 
                             return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
                         }).replace(/^.*#.*$/gm,"").replace(/🐝|🚀|🐌|💡|🥇|⚽|🏀|📺|🐨|🐧|🍋|🐯|👒|🅱|🚁|🍎|🎈|💘|🐞|🔥|🌎|🈲|🍀|🥒|⭐️|❄️|\(XPF\)|\(萝卜\)|\(神马\)|\(切\)|\(聚\)|\(优\)|\(神马\)|\(XB\)|\(SP\)|[\t\r\n]/g,'').replace(/\,\,/g,',');
+                        log(html);
                         var data = JSON.parse(html);
                         var jiekou = data.sites;
                         var jiexi = data.parses;
@@ -679,7 +680,7 @@ function SRCSet() {
                                     }
                                     if(jxnum>0){
                                         writeFile(jxfilepath, JSON.stringify(jxdatalist));
-                                        return "toast://保存解析"+jxnum.length;
+                                        return "toast://导入完成，解析保存："+jxnum;
                                     }else{
                                         return "toast://无解析";
                                     }
