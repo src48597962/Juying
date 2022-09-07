@@ -906,8 +906,8 @@ function xunmierji(type,ua) {
                 var year = String(xpath(html, jsondata.dtNode+jsondata.dtYear)).replace('年份：','').replace(jsondata.filter?eval(jsondata.filter):"","");
                 getsm = "获取类型dtCate";
                 var remarks = String(xpath(html, jsondata.dtNode+jsondata.dtCate)).split(' / ')[0].replace(jsondata.filter?eval(jsondata.filter):"","") || "";
-                getsm = "获取备份dtMark";
-                var pubdate = String(xpath(html, jsondata.dtNode+jsondata.dtMark)) || "";
+                getsm = "获取备注dtMark";
+                var pubdate = String(xpath(html, jsondata.dtNode+jsondata.dtMark)).replace(jsondata.filter?eval(jsondata.filter):"","") || "";
                 var pic = MY_PARAMS.pic || xpath(html, jsondata.dtNode+jsondata.dtImg);
                 getsm = "获取简介dtDesc";
                 var desc = String(xpath(html, jsondata.dtNode+jsondata.dtDesc)).replace(jsondata.filter?eval(jsondata.filter):"","") || '...';
