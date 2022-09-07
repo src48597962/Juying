@@ -572,13 +572,13 @@ function SRCSet() {
                         if(/\/storage\/emulated\//.test(input)){input = "file://" + input}
                         var html = fetch(input,{timeout:2000});
                         if(!/https:\/\/i.*memory.coding.net/.test(input)||/^file:/.test(input)){
+                            /*
                             function strToJson(str){ 
                                 var json = eval('(' + str + ')'); 
                                 return json; 
                             } 
-                            var testjson = strToJson(html);
-                            log(testjson);
-                            
+                            log(strToJson(html));
+                            */
                             var lx ="TVb";
                             var reg = /("([^\\\"]*(\\.)?)*")|('([^\\\']*(\\.)?)*')|(\/{2,}.*?(\r|\n|$))|(\/\*(\n|.)*?\*\/)/g;
                             html = html.replace(reg, function(word) { 
