@@ -579,6 +579,7 @@ function SRCSet() {
                             }).replace(/^.*#.*$/mg,"");
                             log(html);
                             var data = JSON.parse(html);
+                            log('ok')
                             var jiekou = data.sites;
                             var jiexi = data.parses;
                         }else{
