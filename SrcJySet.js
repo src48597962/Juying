@@ -576,7 +576,7 @@ function SRCSet() {
                             var reg = /("([^\\\"]*(\\.)?)*")|('([^\\\']*(\\.)?)*')|(\/{2,}.*?(\r|\n|$))|(\/\*(\n|.)*?\*\/)/g;
                             html = html.replace(reg, function(word) { 
                                 return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
-                            }).replace(/^.*#.*$/gm,"").replace(/🐞|🈲|🥒|⭐️|❄️|\(XPF\)|\(萝卜\)|\(神马\)|\(切\)|\(聚\)|\(XB\)|\(SP\)|\\t|\\n/g,'').repalce(/\,\,/g,',');
+                            }).replace(/^.*#.*$/gm,"").replace(/🐞|🈲|🥒|⭐️|❄️|\(XPF\)|\(萝卜\)|\(神马\)|\(切\)|\(聚\)|\(XB\)|\(SP\)|\\t|\\n/g,'').repalce(/,,/g,',');
                             log(html);
                             var data = JSON.parse(html);
                             log('ok')
