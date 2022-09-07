@@ -481,10 +481,10 @@ function SRCSet() {
 
                         var urls= [];
                         for(var i in bbjiekou){
-                            urls.push({ "name": bbjiekou[i].name, "url": bbjiekou[i].url, "group": "新导入"})
+                            urls.push({ "name": bbjiekou[i].name.replace(/🐞|🈲|🥒|⭐️|❄️|\(XPF\)|\(萝卜\)|\(神马\)|\(切\)|\(聚\)|\(XB\)|\(SP\)/,''), "url": bbjiekou[i].url, "group": "新导入"})
                         }
                         for(var i in bbcaiji){
-                            urls.push({ "name": bbcaiji[i].name, "url": /\/api.php^/.test(bbcaiji[i].url)?bbcaiji[i].url+"/provide/vod":bbcaiji[i].url, "group": "新导入"})
+                            urls.push({ "name": bbcaiji[i].name.replace(/🐞|🈲|🥒|⭐️|❄️|\(XPF\)|\(萝卜\)|\(神马\)|\(切\)|\(聚\)|\(XB\)|\(SP\)/,''), "url": /\/api.php^/.test(bbcaiji[i].url)?bbcaiji[i].url+"/provide/vod":bbcaiji[i].url, "group": "新导入"})
                         }
                         for(var i in bbzidingyi){
                             try{
@@ -512,7 +512,7 @@ function SRCSet() {
                                 biudata.zhuyanhou = bbzidingyi[i].zhuyanhou;
                                 biudata.juqingqian = bbzidingyi[i].juqingqian;
                                 biudata.juqinghou = bbzidingyi[i].juqinghou;
-                                urls.push({ "name": bbzidingyi[i].name, "url": bbzidingyi[i].url, "type": "biubiu", "ua": "PC_UA", "data": biudata, "group": "新导入"})
+                                urls.push({ "name": bbzidingyi[i].name.replace(/🐞|🈲|🥒|⭐️|❄️|\(XPF\)|\(萝卜\)|\(神马\)|\(切\)|\(聚\)|\(XB\)|\(SP\)/,''), "url": bbzidingyi[i].url, "type": "biubiu", "ua": "PC_UA", "data": biudata, "group": "新导入"})
                             }catch(e){
                                 //log(bbzidingyi[i].name + '>抓取失败>' + e.message)
                             }
@@ -593,13 +593,13 @@ function SRCSet() {
                     var urls= [];
                     for(var i in jiekou){
                         if(lx=="."){
-                            urls.push({ "name": jiekou[i].split('@')[1].split('=')[0], "url": jiekou[i].split('@')[1].split('=')[1].split('#')[0], "group":jiekou[i].split('@')[0], "group": "新导入"})
+                            urls.push({ "name": jiekou[i].split('@')[1].split('=')[0].replace(/🐞|🈲|🥒|⭐️|❄️|\(XPF\)|\(萝卜\)|\(神马\)|\(切\)|\(聚\)|\(XB\)|\(SP\)/,''), "url": jiekou[i].split('@')[1].split('=')[1].split('#')[0], "group":jiekou[i].split('@')[0], "group": "新导入"})
                         }else{
                             if(/^csp_AppYs/.test(jiekou[i].api)){
-                                urls.push({ "name": jiekou[i].name, "url": jiekou[i].ext, "group": "新导入"})
+                                urls.push({ "name": jiekou[i].name.replace(/🐞|🈲|🥒|⭐️|❄️|\(XPF\)|\(萝卜\)|\(神马\)|\(切\)|\(聚\)|\(XB\)|\(SP\)/,''), "url": jiekou[i].ext, "group": "新导入"})
                             }
                             if(jiekou[i].type==1){
-                                urls.push({ "name": jiekou[i].name, "url": jiekou[i].api, "group": "新导入"})
+                                urls.push({ "name": jiekou[i].name.replace(/🐞|🈲|🥒|⭐️|❄️|\(XPF\)|\(萝卜\)|\(神马\)|\(切\)|\(聚\)|\(XB\)|\(SP\)/,''), "url": jiekou[i].api, "group": "新导入"})
                             }
                             if(/^csp_XBiubiu/.test(jiekou[i].api)){
                                 try{
