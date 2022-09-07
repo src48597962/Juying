@@ -481,10 +481,10 @@ function SRCSet() {
 
                         var urls= [];
                         for(var i in bbjiekou){
-                            urls.push({ "name": bbjiekou[i].name.replace(/🐞|🈲|🥒|⭐️|❄️|\(XPF\)|\(萝卜\)|\(神马\)|\(切\)|\(聚\)|\(XB\)|\(SP\)/,''), "url": bbjiekou[i].url, "group": "新导入"})
+                            urls.push({ "name": bbjiekou[i].name, "url": bbjiekou[i].url, "group": "新导入"})
                         }
                         for(var i in bbcaiji){
-                            urls.push({ "name": bbcaiji[i].name.replace(/🐞|🈲|🥒|⭐️|❄️|\(XPF\)|\(萝卜\)|\(神马\)|\(切\)|\(聚\)|\(XB\)|\(SP\)/,''), "url": /\/api.php^/.test(bbcaiji[i].url)?bbcaiji[i].url+"/provide/vod":bbcaiji[i].url, "group": "新导入"})
+                            urls.push({ "name": bbcaiji[i].name, "url": /\/api.php^/.test(bbcaiji[i].url)?bbcaiji[i].url+"/provide/vod":bbcaiji[i].url, "group": "新导入"})
                         }
                         for(var i in bbzidingyi){
                             try{
@@ -512,7 +512,7 @@ function SRCSet() {
                                 biudata.zhuyanhou = bbzidingyi[i].zhuyanhou;
                                 biudata.juqingqian = bbzidingyi[i].juqingqian;
                                 biudata.juqinghou = bbzidingyi[i].juqinghou;
-                                urls.push({ "name": bbzidingyi[i].name.replace(/🐞|🈲|🥒|⭐️|❄️|\(XPF\)|\(萝卜\)|\(神马\)|\(切\)|\(聚\)|\(XB\)|\(SP\)/,''), "url": bbzidingyi[i].url, "type": "biubiu", "ua": "PC_UA", "data": biudata, "group": "新导入"})
+                                urls.push({ "name": bbzidingyi[i].name, "url": bbzidingyi[i].url, "type": "biubiu", "ua": "PC_UA", "data": biudata, "group": "新导入"})
                             }catch(e){
                                 //log(bbzidingyi[i].name + '>抓取失败>' + e.message)
                             }
@@ -576,10 +576,8 @@ function SRCSet() {
                             var reg = /("([^\\\"]*(\\.)?)*")|('([^\\\']*(\\.)?)*')|(\/{2,}.*?(\r|\n|$))|(\/\*(\n|.)*?\*\/)/g;
                             html = html.replace(reg, function(word) { 
                                 return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
-                            }).replace(/^.*#.*$/gm,"").replace(/🐞|🈲|🥒|⭐️|❄️|\(XPF\)|\(萝卜\)|\(神马\)|\(切\)|\(聚\)|\(XB\)|\(SP\)|\\t|\\n/g,'').replace(/\,\,/g,',');
-                            log(html);
+                            }).replace(/^.*#.*$/gm,"").replace(/🐝|🐌|💡|🥇|⚽|🏀|📺|🐨|🐧|🍋|🐯|👒|🅱|🚁|🍎|🎈|💘|🐞|🔥|🌎|🈲|🍀|🥒|⭐️|❄️|\(XPF\)|\(萝卜\)|\(神马\)|\(切\)|\(聚\)|\(优\)|\(神马\)|\(XB\)|\(SP\)|\\t|\\r|\\n/g,'').replace(/\,\,/g,',');
                             var data = JSON.parse(html);
-                            log('ok')
                             var jiekou = data.sites;
                             var jiexi = data.parses;
                         }else{
