@@ -219,7 +219,6 @@ function xunmi(name,data,ishkss) {
         
         if(getMyVar('selectgroup','a').indexOf('失败待处理')==-1&&xunmigroup!="失败待处理"&&grouplist.length>1){
             for(let i=0;i<datalist.length;i++){
-                log(datalist[i]);
                 if(datalist[i].group=="失败待处理"){
                     datalist.splice(i,1);
                     i = i - 1;
