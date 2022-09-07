@@ -670,17 +670,16 @@ function SRCSet() {
                                     for (var i=0;i<jiexi.length;i++) {
                                         if(/^http/.test(jiexi[i].url)&&!jxdatalist.some(item => item.parse ==jiexi[i].url)){
                                             let arr  = { "name": jiexi[i].name, "parse": jiexi[i].url, "stopfrom": [], "priorfrom": [], "sort": 1 };
-                                            if(jiexi[i].header){
-                                                log(jiexi[i].header);
-                                                arr['header'] = jiexi[i].header;
+                                            if(jiexi[i].ext&&jiexi[i].ext.header){
+                                                arr['header'] = jiexi[i].ext.header;
                                             }
                                             jxdatalist.push(arr);
                                             jxnum = jxnum + 1;
                                         }
                                     }
-                                    log(jxdatalist);
                                     if(jxnum>0){
                                         writeFile(jxfilepath, JSON.stringify(jxdatalist));
+                                        return "toast://保存解析"+jxnum.length;
                                     }else{
                                         return "toast://无解析";
                                     }
