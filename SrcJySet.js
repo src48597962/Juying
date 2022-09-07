@@ -567,6 +567,9 @@ function SRCSet() {
             d.push({
                 title: 'TVBox导入',
                 url:$("","输入TVBox/beibei资源地址").input(() => {
+                    evar('var ttttt = ' + fetch('https://gitea.com/ygfxz/mao/raw/branch/main/1.json'))
+                    log('1')
+                    log(ttttt)
                     try{
                         showLoading('检测文件有效性')
                         require(config.依赖.match(/https.*\//)[0] + 'SrcJySet.js');
