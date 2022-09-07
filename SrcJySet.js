@@ -571,78 +571,89 @@ function SRCSet() {
                         require(config.依赖.match(/https.*\//)[0] + 'SrcJySet.js');
                         if(/\/storage\/emulated\//.test(input)){input = "file://" + input}
                         var html = fetch(input,{timeout:2000});
-                        if(!/https:\/\/i.*memory.coding.net/.test(input)||/^file:/.test(input)){
-                            var lx ="TVb";
-                            var reg = /("([^\\\"]*(\\.)?)*")|('([^\\\']*(\\.)?)*')|(\/{2,}.*?(\r|\n|$))|(\/\*(\n|.)*?\*\/)/g;
-                            html = html.replace(reg, function(word) { 
-                                return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
-                            }).replace(/^.*#.*$/gm,"").replace(/🐝|🐌|💡|🥇|⚽|🏀|📺|🐨|🐧|🍋|🐯|👒|🅱|🚁|🍎|🎈|💘|🐞|🔥|🌎|🈲|🍀|🥒|⭐️|❄️|\(XPF\)|\(萝卜\)|\(神马\)|\(切\)|\(聚\)|\(优\)|\(神马\)|\(XB\)|\(SP\)|[\t\r\n]/g,'').replace(/\,\,/g,',');
-                            var data = JSON.parse(html);
-                            var jiekou = data.sites;
-                            var jiexi = data.parses;
-                        }else{
-                            var lx =".";
-                                var jiekou = html.split('\n');
-                            var jiexi = [];
-                        }
+                        var reg = /("([^\\\"]*(\\.)?)*")|('([^\\\']*(\\.)?)*')|(\/{2,}.*?(\r|\n|$))|(\/\*(\n|.)*?\*\/)/g;
+                        html = html.replace(reg, function(word) { 
+                            return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
+                        }).replace(/^.*#.*$/gm,"").replace(/🐝|🚀|🐌|💡|🥇|⚽|🏀|📺|🐨|🐧|🍋|🐯|👒|🅱|🚁|🍎|🎈|💘|🐞|🔥|🌎|🈲|🍀|🥒|⭐️|❄️|\(XPF\)|\(萝卜\)|\(神马\)|\(切\)|\(聚\)|\(优\)|\(神马\)|\(XB\)|\(SP\)|[\t\r\n]/g,'').replace(/\,\,/g,',');
+                        var data = JSON.parse(html);
+                        var jiekou = data.sites;
+                        var jiexi = data.parses;
                     } catch (e) {
                         log('接口导入失败：'+e.message); 
                         return "toast://导入失败：连接无效或内容有错";
                     }
                     showLoading('正在抓取数据中')
                     var urls= [];
-                    for(var i in jiekou){
-                        if(lx=="."){
-                            urls.push({ "name": jiekou[i].split('@')[1].split('=')[0], "url": jiekou[i].split('@')[1].split('=')[1].split('#')[0], "group":jiekou[i].split('@')[0], "group": "新导入"})
-                        }else{
-                            if(/^csp_AppYs/.test(jiekou[i].api)){
-                                urls.push({ "name": jiekou[i].name, "url": jiekou[i].ext, "group": "新导入"})
-                            }
-                            if(jiekou[i].type==1){
-                                urls.push({ "name": jiekou[i].name, "url": jiekou[i].api, "group": "新导入"})
-                            }
-                            if(/^csp_XBiubiu/.test(jiekou[i].api)){
-                                try{
-                                    let urlfile = jiekou[i].ext;
-                                    if(/^clan:/.test(urlfile)){
-                                        urlfile = urlfile.replace("clan://TVBox/",input.match(/file.*\//)[0]);
-                                    }
-                                    let biuhtml = fetch(urlfile,{timeout:2000});
-                                    biuhtml = biuhtml.replace(reg, function(word) { 
-                                        return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
-                                    }).replace(/^.*#.*$/mg,"");
-                                    let biujson = JSON.parse(biuhtml);
-                                    let biudata = {};
-                                    biudata.url = biujson.url;
-                                    biudata.jiequshuzuqian = biujson.jiequshuzuqian;
-                                    biudata.jiequshuzuhou = biujson.jiequshuzuhou;
-                                    biudata.tupianqian = biujson.tupianqian;
-                                    biudata.tupianhou = biujson.tupianhou;
-                                    biudata.biaotiqian = biujson.biaotiqian;
-                                    biudata.biaotihou = biujson.biaotihou;
-                                    biudata.lianjieqian = biujson.lianjieqian;
-                                    biudata.lianjiehou = biujson.lianjiehou;
-                                    biudata.sousuoqian = biujson.sousuoqian;
-                                    biudata.sousuohou = biujson.sousuohou;
-                                    biudata.sousuohouzhui = biujson.sousuohouzhui;
-                                    biudata.ssmoshi = biujson.ssmoshi;
-                                    biudata.bfjiequshuzuqian = biujson.bfjiequshuzuqian;
-                                    biudata.bfjiequshuzuhou = biujson.bfjiequshuzuhou;
-                                    biudata.zhuangtaiqian = biujson.zhuangtaiqian;
-                                    biudata.zhuangtaihou = biujson.zhuangtaihou;
-                                    biudata.daoyanqian = biujson.daoyanqian;
-                                    biudata.daoyanhou = biujson.daoyanhou;
-                                    biudata.zhuyanqian = biujson.zhuyanqian;
-                                    biudata.zhuyanhou = biujson.zhuyanhou;
-                                    biudata.juqingqian = biujson.juqingqian;
-                                    biudata.juqinghou = biujson.juqinghou;
-                                    urls.push({ "name": jiekou[i].name, "url": jiekou[i].key, "type": "biubiu", "ua": "PC_UA", "data": biudata, "group": "新导入"})
-                                }catch(e){
-                                    //log(bbzidingyi[i].name + '>抓取失败>' + e.message)
+                    //多线程处理
+                    var task = function(obj) {
+                        if(/^csp_AppYs/.test(obj.api)){
+                            urls.push({ "name": obj.name, "url": obj.ext, "group": "新导入"})
+                        }
+                        if(obj.type==1){
+                            urls.push({ "name": obj.name, "url": obj.api, "group": "新导入"})
+                        }
+                        if(/^csp_XBiubiu/.test(obj.api)){
+                            try{
+                                let urlfile = obj.ext;
+                                if(/^clan:/.test(urlfile)){
+                                    urlfile = urlfile.replace("clan://TVBox/",input.match(/file.*\//)[0]);
                                 }
+                                let biuhtml = fetch(urlfile,{timeout:2000});
+                                biuhtml = biuhtml.replace(reg, function(word) { 
+                                    return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
+                                }).replace(/^.*#.*$/mg,"");
+                                let biujson = JSON.parse(biuhtml);
+                                let biudata = {};
+                                biudata.url = biujson.url;
+                                biudata.jiequshuzuqian = biujson.jiequshuzuqian;
+                                biudata.jiequshuzuhou = biujson.jiequshuzuhou;
+                                biudata.tupianqian = biujson.tupianqian;
+                                biudata.tupianhou = biujson.tupianhou;
+                                biudata.biaotiqian = biujson.biaotiqian;
+                                biudata.biaotihou = biujson.biaotihou;
+                                biudata.lianjieqian = biujson.lianjieqian;
+                                biudata.lianjiehou = biujson.lianjiehou;
+                                biudata.sousuoqian = biujson.sousuoqian;
+                                biudata.sousuohou = biujson.sousuohou;
+                                biudata.sousuohouzhui = biujson.sousuohouzhui;
+                                biudata.ssmoshi = biujson.ssmoshi;
+                                biudata.bfjiequshuzuqian = biujson.bfjiequshuzuqian;
+                                biudata.bfjiequshuzuhou = biujson.bfjiequshuzuhou;
+                                biudata.zhuangtaiqian = biujson.zhuangtaiqian;
+                                biudata.zhuangtaihou = biujson.zhuangtaihou;
+                                biudata.daoyanqian = biujson.daoyanqian;
+                                biudata.daoyanhou = biujson.daoyanhou;
+                                biudata.zhuyanqian = biujson.zhuyanqian;
+                                biudata.zhuyanhou = biujson.zhuyanhou;
+                                biudata.juqingqian = biujson.juqingqian;
+                                biudata.juqinghou = biujson.juqinghou;
+                                urls.push({ "name": obj.name, "url": obj.key, "type": "biubiu", "ua": "PC_UA", "data": biudata, "group": "新导入"})
+                            }catch(e){
+                                //log(obj.name + '>抓取失败>' + e.message)
                             }
                         }
+                        return 1;
                     }
+                    let jiekous = jiekou.map((list)=>{
+                        return {
+                            func: task,
+                            param: list,
+                            id: list.name
+                        }
+                    });
+
+                    be(jiekous, {
+                        func: function(obj, id, error, taskResult) {
+                            
+                        },
+                        param: {
+                            //results: beurls,
+                            //parses: beparses,
+                            //errors: beerrors
+                        }
+                    });
+                    log(urls.length);
+                    
                     var jknum = jiekousave(urls);
                     hideLoading();
                     if(jknum<0){
