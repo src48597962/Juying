@@ -44,21 +44,22 @@ function xunmi(name,data,ishkss) {
                 let TVBoxDY = JYconfig.TVBoxDY;
                 if(/\/storage\/emulated\//.test(TVBoxDY)){TVBoxDY = "file://" + TVBoxDY}
                 if(/^http/.test(TVBoxDY)){
-                    var dyhtml = fetchCache(TVBoxDY,48, { timeout:2000 });
+                    var dyhtml = fetchCache(TVBoxDY,96, { timeout:2000 });
                 }else{
                     var dyhtml = fetch(TVBoxDY);
                 }
                 var reg = /("([^\\\"]*(\\.)?)*")|('([^\\\']*(\\.)?)*')|(\/{2,}.*?(\r|\n|$))|(\/\*(\n|.)*?\*\/)/g;
                 dyhtml = dyhtml.replace(reg, function(word) { 
                     return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
-                }).replace(/^.*#.*$/mg,"");
+                }).replace(/^.*#.*$/gm,"").replace(/🐝|🐌|💡|🥇|⚽|🏀|📺|🐨|🐧|🍋|🐯|👒|🅱|🚁|🍎|🎈|💘|🐞|🔥|🌎|🈲|🍀|🥒|⭐️|❄️|\(XPF\)|\(萝卜\)|\(神马\)|\(切\)|\(聚\)|\(优\)|\(神马\)|\(XB\)|\(SP\)|[\t\r\n]/g,'').replace(/\,\,/g,',');
                 var dydata = JSON.parse(dyhtml);
                 var dyjiekou = dydata.sites;
-                require(config.依赖.match(/https.*\//)[0] + 'SrcJySet.js');
+                
                 showLoading('正在多线程加载TVBox订阅接口');
                 //多线程处理
                 var dytask = function(obj) {
                     if(/^csp_AppYs/.test(obj.api)){
+                        require(config.依赖.match(/https.*\//)[0] + 'SrcJySet.js');
                         let dytype = getapitype(obj.ext);
                         if(dytype&&obj.name&&obj.ext){
                             datalist.push({ "name": obj.name, "url": obj.ext, "ua":"MOBILE_UA", "type":dytype, "group": "TVBox订阅"})
