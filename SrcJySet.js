@@ -576,7 +576,7 @@ function SRCSet() {
                             var reg = /("([^\\\"]*(\\.)?)*")|('([^\\\']*(\\.)?)*')|(\/{2,}.*?(\r|\n|$))|(\/\*(\n|.)*?\*\/)/g;
                             html = html.replace(reg, function(word) { 
                                 return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
-                            }).replace(/^.*#.*$/mg,"");
+                            }).replace(/^.*#.*$/gm,"");
                             log(html);
                             var data = JSON.parse(html);
                             log('ok')
