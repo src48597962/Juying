@@ -961,7 +961,7 @@ function sousuo() {
 
 //版本检测
 function Version() {
-    var nowVersion = "4.0";//现在版本
+    var nowVersion = "4.1";//现在版本
     var nowtime = Date.now();
     var oldtime = parseInt(getItem('VersionChecktime','0').replace('time',''));
     if (getMyVar('SrcJuying-VersionCheck', '0') == '0' && nowtime > (oldtime+6*60*60*1000)) {
