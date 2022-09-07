@@ -567,20 +567,20 @@ function SRCSet() {
             d.push({
                 title: 'TVBox导入',
                 url:$("","输入TVBox/beibei资源地址").input(() => {
-                    eval('var ttttt = ' + fetch('https://gitea.com/ygfxz/mao/raw/branch/main/1.json'))
-                    log('1')
-                    log(ttttt)
                     try{
                         showLoading('检测文件有效性')
                         require(config.依赖.match(/https.*\//)[0] + 'SrcJySet.js');
                         if(/\/storage\/emulated\//.test(input)){input = "file://" + input}
                         var html = fetch(input,{timeout:2000});
-                        var reg = /("([^\\\"]*(\\.)?)*")|('([^\\\']*(\\.)?)*')|(\/{2,}.*?(\r|\n|$))|(\/\*(\n|.)*?\*\/)/g;
-                        html = html.replace(reg, function(word) { 
-                            return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
-                        }).replace(/^.*#.*$/gm,"").replace(/🐝|🚀|🐌|💡|🥇|⚽|🏀|📺|🐨|🐧|🍋|🐯|👒|🅱|🚁|🍎|🎈|💘|🐞|🔥|🌎|🈲|🍀|🥒|⭐️|❄️|\(XPF\)|\(萝卜\)|\(神马\)|\(切\)|\(聚\)|\(优\)|\(神马\)|\(XB\)|\(SP\)|[\t\r\n]/g,'').replace(/\,\,/g,',');
-                        var data = JSON.parse(html);
-                        log('ok');
+                        
+                        //var reg = /("([^\\\"]*(\\.)?)*")|('([^\\\']*(\\.)?)*')|(\/{2,}.*?(\r|\n|$))|(\/\*(\n|.)*?\*\/)/g;
+                        //html = html.replace(reg, function(word) { 
+                           // return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
+                        //}).replace(/^.*#.*$/gm,"").replace(/🐝|🚀|🐌|💡|🥇|⚽|🏀|📺|🐨|🐧|🍋|🐯|👒|🅱|🚁|🍎|🎈|💘|🐞|🔥|🌎|🈲|🍀|🥒|⭐️|❄️|\(XPF\)|\(萝卜\)|\(神马\)|\(切\)|\(聚\)|\(优\)|\(神马\)|\(XB\)|\(SP\)|[\t\r\n]/g,'').replace(/\,\,/g,',');
+                        //var data = JSON.parse(html);
+                        if(html){
+                            eval('var data = '+html)
+                        }
                         var jiekou = data.sites;
                         var jiexi = data.parses;
                     } catch (e) {
