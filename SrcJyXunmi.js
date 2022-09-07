@@ -54,12 +54,11 @@ function xunmi(name,data,ishkss) {
                 }).replace(/^.*#.*$/gm,"").replace(/🐝|🐌|💡|🥇|⚽|🏀|📺|🐨|🐧|🍋|🐯|👒|🅱|🚁|🍎|🎈|💘|🐞|🔥|🌎|🈲|🍀|🥒|⭐️|❄️|\(XPF\)|\(萝卜\)|\(神马\)|\(切\)|\(聚\)|\(优\)|\(神马\)|\(XB\)|\(SP\)|[\t\r\n]/g,'').replace(/\,\,/g,',');
                 var dydata = JSON.parse(dyhtml);
                 var dyjiekou = dydata.sites;
-                
+                require(config.依赖.match(/https.*\//)[0] + 'SrcJySet.js');
                 showLoading('正在多线程加载TVBox订阅接口');
                 //多线程处理
                 var dytask = function(obj) {
-                    if(/^csp_AppYs/.test(obj.api)){
-                        require(config.依赖.match(/https.*\//)[0] + 'SrcJySet.js');
+                    if(/^csp_AppYs/.test(obj.api)){                        
                         let dytype = getapitype(obj.ext);
                         if(dytype&&obj.name&&obj.ext){
                             datalist.push({ "name": obj.name, "url": obj.ext, "ua":"MOBILE_UA", "type":dytype, "group": "TVBox订阅"})
@@ -135,7 +134,7 @@ function xunmi(name,data,ishkss) {
         }
         hideLoading();
     }
-    
+    log(datalist);
     var d = [];
     if(!ishkss){
         let grouplist = datalist.map((list)=>{
