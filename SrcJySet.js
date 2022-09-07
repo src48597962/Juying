@@ -577,6 +577,7 @@ function SRCSet() {
                             html = html.replace(reg, function(word) { 
                                 return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
                             }).replace(/^.*#.*$/mg,"");
+                            log(html);
                             var data = JSON.parse(html);
                             var jiekou = data.sites;
                             var jiexi = data.parses;
