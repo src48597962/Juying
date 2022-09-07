@@ -670,6 +670,9 @@ function SRCSet() {
                                     for (var i=0;i<jiexi.length;i++) {
                                         if(/^http/.test(jiexi[i].url)&&!jxdatalist.some(item => item.parse ==jiexi[i].url)){
                                             let arr  = { "name": jiexi[i].name, "parse": jiexi[i].url, "stopfrom": [], "priorfrom": [], "sort": 1 };
+                                            if(jiexi[i].header){
+                                                arr['header'] = jiexi[i].header;
+                                            }
                                             jxdatalist.push(arr);
                                             jxnum = jxnum + 1;
                                         }
