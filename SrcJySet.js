@@ -576,7 +576,7 @@ function SRCSet() {
                             var reg = /("([^\\\"]*(\\.)?)*")|('([^\\\']*(\\.)?)*')|(\/{2,}.*?(\r|\n|$))|(\/\*(\n|.)*?\*\/)/g;
                             html = html.replace(reg, function(word) { 
                                 return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
-                            }).replace(/^.*#.*$/gm,"");
+                            }).replace(/^.*#.*$/gm,"").replace(/🐞|🈲|🥒|⭐️|❄️|\(XPF\)|\(萝卜\)|\(神马\)|\(切\)|\(聚\)|\(XB\)|\(SP\)|\\t/g,'');
                             log(html);
                             var data = JSON.parse(html);
                             log('ok')
@@ -595,13 +595,13 @@ function SRCSet() {
                     var urls= [];
                     for(var i in jiekou){
                         if(lx=="."){
-                            urls.push({ "name": jiekou[i].split('@')[1].split('=')[0].replace(/🐞|🈲|🥒|⭐️|❄️|\(XPF\)|\(萝卜\)|\(神马\)|\(切\)|\(聚\)|\(XB\)|\(SP\)/,''), "url": jiekou[i].split('@')[1].split('=')[1].split('#')[0], "group":jiekou[i].split('@')[0], "group": "新导入"})
+                            urls.push({ "name": jiekou[i].split('@')[1].split('=')[0], "url": jiekou[i].split('@')[1].split('=')[1].split('#')[0], "group":jiekou[i].split('@')[0], "group": "新导入"})
                         }else{
                             if(/^csp_AppYs/.test(jiekou[i].api)){
-                                urls.push({ "name": jiekou[i].name.replace(/🐞|🈲|🥒|⭐️|❄️|\(XPF\)|\(萝卜\)|\(神马\)|\(切\)|\(聚\)|\(XB\)|\(SP\)/,''), "url": jiekou[i].ext, "group": "新导入"})
+                                urls.push({ "name": jiekou[i].name, "url": jiekou[i].ext, "group": "新导入"})
                             }
                             if(jiekou[i].type==1){
-                                urls.push({ "name": jiekou[i].name.replace(/🐞|🈲|🥒|⭐️|❄️|\(XPF\)|\(萝卜\)|\(神马\)|\(切\)|\(聚\)|\(XB\)|\(SP\)/,''), "url": jiekou[i].api, "group": "新导入"})
+                                urls.push({ "name": jiekou[i].name, "url": jiekou[i].api, "group": "新导入"})
                             }
                             if(/^csp_XBiubiu/.test(jiekou[i].api)){
                                 try{
