@@ -567,7 +567,7 @@ function SRCSet() {
             d.push({
                 title: 'TVBox导入',
                 url:$("","输入TVBox/beibei资源地址").input(() => {
-                    evar('var ttttt = ' + fetch('https://gitea.com/ygfxz/mao/raw/branch/main/1.json'))
+                    eval('var ttttt = ' + fetch('https://gitea.com/ygfxz/mao/raw/branch/main/1.json'))
                     log('1')
                     log(ttttt)
                     try{
