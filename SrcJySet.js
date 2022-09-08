@@ -1948,12 +1948,12 @@ function jiexi(lx,data) {
                     try{
                         if(/http/.test(parseurls)){
                             parseurls = parsePaste(parseurls);
-                            if(parseurls){
-                                parseurls = base64Decode(parseurls);
-                            }
+                            var urlname = parseurls.split('★')[1];
+                            var urlurl = base64Decode(parseurls.split('★')[2]);
+                        }else{
+                            var urlname = parseurls.split('★')[1];
+                            var urlurl = parseurls.split('★')[2];
                         }
-                        let urlname = parseurls.split('★')[1];
-                        let urlurl = parseurls.split('★')[2];
                         let arr  = { "name": urlname.trim(), "parse": urlurl.trim(), "stopfrom": [], "priorfrom": [], "sort": 0 };
                         datalist.push(arr);
                         urlnum = 1;
