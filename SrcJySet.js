@@ -464,6 +464,7 @@ function SRCSet() {
                 title: 'biu导入',
                 url:$("","输入biubiu资源地址").input(() => {
                         try{
+                            showLoading('检测文件有效性');
                             require(config.依赖.match(/https.*\//)[0] + 'SrcJySet.js');
                             var html = fetch(input,{timeout:2000});
                             var reg = /("([^\\\"]*(\\.)?)*")|('([^\\\']*(\\.)?)*')|(\/{2,}.*?(\r|\n|$))|(\/\*(\n|.)*?\*\/)/g;
@@ -476,10 +477,11 @@ function SRCSet() {
                             var bbcaiji = bbdata.caijizhan||[];
                             var bbzidingyi = bbdata.zidingyi||[];
                         } catch (e) {
+                            hideLoading();
                             log('接口导入失败：'+e.message); 
                             return "toast://导入失败：连接无效或内容有错";
                         }
-
+                        showLoading('正在抓取数据中')
                         var urls= [];
                         for(var i in bbjiekou){
                             urls.push({ "name": bbjiekou[i].name, "url": bbjiekou[i].url, "group": "新导入"})
@@ -519,6 +521,7 @@ function SRCSet() {
                             }
                         }
                         var jknum = jiekousave(urls);
+                        hideLoading();
                         if(jknum<0){
                             return'toast://导入失败，内容异常';
                         }else{
@@ -569,7 +572,7 @@ function SRCSet() {
                 title: 'TVBox导入',
                 url:$("","输入TVBox/beibei资源地址").input(() => {
                     try{
-                        showLoading('检测文件有效性')
+                        showLoading('检测文件有效性');
                         require(config.依赖.match(/https.*\//)[0] + 'SrcJySet.js');
                         if(/\/storage\/emulated\//.test(input)){input = "file://" + input}
                         var html = fetch(input,{timeout:2000});
@@ -587,7 +590,7 @@ function SRCSet() {
                         log('接口导入失败：'+e.message); 
                         return "toast://导入失败：连接无效或内容有错";
                     }
-                    showLoading('正在多线程抓取数据中')
+                    showLoading('正在多线程抓取数据中');
                     var urls= [];
                     //多线程处理
                     var task = function(obj) {
