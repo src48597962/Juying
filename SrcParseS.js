@@ -648,7 +648,7 @@ var SrcParseS = {
 
             //明码解析线程代码
             var task = function(obj) {
-                if(typeof obj.ulist.parse == 'function'){
+                if($.type(obj.ulist.parse) == 'function'){
                     log('function')
                 }
                 var taskheader = {withStatusCode:true,timeout:5000};
