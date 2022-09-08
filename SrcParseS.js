@@ -648,69 +648,69 @@ var SrcParseS = {
 
             //明码解析线程代码
             var task = function(obj) {
-                /*
-                if(obj.ulist.parse.indexOf('function')>-1){
-                    eval('var parse = '+obj.ulist.parse)
-                }
-                */
                 if(/^function/.test(obj.ulist.parse.trim())){
-                    eval('var parse = '+obj.ulist.parse)
-                    log($.type(parse));
-                }
-                
-                
-                var taskheader = {withStatusCode:true,timeout:5000};
-                let head = obj.ulist.header||{};
-                if(JSON.stringify(head) != "{}"){
-                    taskheader['header'] = head;
-                }
-                var getjson = JSON.parse(request(obj.ulist.parse+obj.vipUrl,taskheader));
-                if (getjson.body&&getjson.statusCode==200){
-                    var gethtml = getjson.body;
-                    var rurl = "";
-                    try {
-                        rurl = JSON.parse(gethtml).url||JSON.parse(gethtml).data.url||JSON.parse(gethtml).data;
-                    } catch (e) {
-                        if(/\.m3u8|\.mp4/.test(getjson.url)&&getjson.url.indexOf('=http')==-1){
-                            rurl = getjson.url;
-                        }else if(/\.m3u8|\.mp4|\.flv/.test(gethtml)){
-                            try {
-                                if(gethtml.indexOf('urls = "') != -1){
-                                    rurl = gethtml.match(/urls = "(.*?)"/)[1];
-                                }else if(gethtml.indexOf('"url":"') != -1){
-                                    rurl = gethtml.match(/"url":"(.*?)"/)[1];
-                                }else if(gethtml.indexOf('id="video" src="') != -1){
-                                    rurl = gethtml.match(/id="video" src="(.*?)"/)[1];
-                                }else if(gethtml.indexOf('url: "') != -1){
-                                    rurl = gethtml.match(/url: "(.*?)"/)[1];
-                                }else{
-                                    //if(printlog==1){log('将日志提交给作者，帮助完善解析逻辑>>>'+gethtml)};
-                                }
-                            } catch (e) {
-                                if(printlog==1){log('明码获取错误：'+e.message)};
-                            }
-                        }
-                    }
-                    var x5 = 0;
-                    if(rurl == ""){
-                        if(!/404 /.test(gethtml)&&obj.ulist.parse.indexOf('key=')==-1){
-                            if(x5jxlist.length<=5){
-                                x5jxlist.push(obj.ulist.parse);
-                                if(printlog==1){log(obj.ulist.name + '>加入x5嗅探列表');}
-                                x5namelist.push(obj.ulist.name);
-                            }
-                            x5 = 1;
-                        }
-                    }else{
-                        if(obj.testurl(rurl,obj.ulist.name)==0){
-                            rurl = "";
-                        }
-                    }
-                    obj.ulist['x5'] = x5;
-                    return {url: rurl,ulist: obj.ulist}; 
-                }else{
+                    eval('var JSparse = '+obj.ulist.parse)
+                    log($.type(JSparse));
+                    var rurl = JSparse(obj.vipUrl);
+                    if(obj.testurl(rurl,obj.ulist.name)==0){
+                        rurl = "";
+                    }                    
                     obj.ulist['x5'] = 0;
-                    return {url: "",ulist: obj.ulist}; 
+                    return {url: rurl,ulist: obj.ulist}; 
+                }else{            
+                    var taskheader = {withStatusCode:true,timeout:5000};
+                    let head = obj.ulist.header||{};
+                    if(JSON.stringify(head) != "{}"){
+                        taskheader['header'] = head;
+                    }
+                    var getjson = JSON.parse(request(obj.ulist.parse+obj.vipUrl,taskheader));
+                    if (getjson.body&&getjson.statusCode==200){
+                        var gethtml = getjson.body;
+                        var rurl = "";
+                        try {
+                            rurl = JSON.parse(gethtml).url||JSON.parse(gethtml).data.url||JSON.parse(gethtml).data;
+                        } catch (e) {
+                            if(/\.m3u8|\.mp4/.test(getjson.url)&&getjson.url.indexOf('=http')==-1){
+                                rurl = getjson.url;
+                            }else if(/\.m3u8|\.mp4|\.flv/.test(gethtml)){
+                                try {
+                                    if(gethtml.indexOf('urls = "') != -1){
+                                        rurl = gethtml.match(/urls = "(.*?)"/)[1];
+                                    }else if(gethtml.indexOf('"url":"') != -1){
+                                        rurl = gethtml.match(/"url":"(.*?)"/)[1];
+                                    }else if(gethtml.indexOf('id="video" src="') != -1){
+                                        rurl = gethtml.match(/id="video" src="(.*?)"/)[1];
+                                    }else if(gethtml.indexOf('url: "') != -1){
+                                        rurl = gethtml.match(/url: "(.*?)"/)[1];
+                                    }else{
+                                        //if(printlog==1){log('将日志提交给作者，帮助完善解析逻辑>>>'+gethtml)};
+                                    }
+                                } catch (e) {
+                                    if(printlog==1){log('明码获取错误：'+e.message)};
+                                }
+                            }
+                        }
+                        var x5 = 0;
+                        if(rurl == ""){
+                            if(!/404 /.test(gethtml)&&obj.ulist.parse.indexOf('key=')==-1){
+                                if(x5jxlist.length<=5){
+                                    x5jxlist.push(obj.ulist.parse);
+                                    if(printlog==1){log(obj.ulist.name + '>加入x5嗅探列表');}
+                                    x5namelist.push(obj.ulist.name);
+                                }
+                                x5 = 1;
+                            }
+                        }else{
+                            if(obj.testurl(rurl,obj.ulist.name)==0){
+                                rurl = "";
+                            }
+                        }
+                        obj.ulist['x5'] = x5;
+                        return {url: rurl,ulist: obj.ulist}; 
+                    }else{
+                        obj.ulist['x5'] = 0;
+                        return {url: "",ulist: obj.ulist}; 
+                    }
                 }
             };
 
