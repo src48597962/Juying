@@ -90,7 +90,7 @@ var SrcParseS = {
                     else {
                         return $$$("#noLoading#").lazyRule((url, formatUrl) => {
                             //url = url.replace(/http.*?\?url=/, '');
-                            return formatUrl(url);
+                            return formatUrl(url)+"#ignoreImg=true#";
                         }, urls[i], formatUrl);
                     }
                 }
@@ -648,6 +648,9 @@ var SrcParseS = {
 
             //明码解析线程代码
             var task = function(obj) {
+                if(typeof obj.ulist.parse == 'function'){
+                    log('function')
+                }
                 var taskheader = {withStatusCode:true,timeout:5000};
                 let head = obj.ulist.header||{};
                 if(JSON.stringify(head) != "{}"){
