@@ -1749,7 +1749,7 @@ function jiexi(lx,data) {
         d.push({
             title:'批量添加',
             col_type: 'input',
-            desc: "一行一个解析\n格式：解析名称#链接地址\n分隔符#可以用,号代替",
+            desc: "一行一个解析\n格式：解析名称#链接地址\n分隔符#可以用,号代替\n\n\n断插解析★xxx★xxx",
             extra: {
                 titleVisible: false,
                 type: "textarea",
@@ -1943,21 +1943,31 @@ function jiexi(lx,data) {
                     return "toast://已存在";
                 }
             }else if(getMyVar('addtype', '1')=="2"&&parseurls){
-                let urls = parseurls.replace(/,|，/g,"#").split('\n');
                 let urlnum = 0;
+                if(parseurls.indexOf('★')>-1){
+                    if(/http/.test(parseurls)){
 
-                for (var i in urls) {
-                    let urlname = urls[i].split('#')[0];
-                    let urlurl = urls[i].split('#')[1];
-                    if(!datalist.some(item => item.url ==urlurl)&&urlname&&/^http/.test(urlurl)){
-                        let arr  = { "name": urlname.trim(), "parse": urlurl.trim(), "stopfrom": [], "priorfrom": [], "sort": 0 };
-                        datalist.push(arr);
-                        urlnum = urlnum + 1;
                     }
-                }
+                    let urlname = parseurls.split('★')[1];
+                    let urlurl = parseurls.split('★')[2];
+                    let arr  = { "name": urlname.trim(), "parse": urlurl.trim(), "stopfrom": [], "priorfrom": [], "sort": 0 };
+                    datalist.push(arr);
+                    urlnum = 1;
+                }else{
+                    let urls = parseurls.replace(/,|，/g,"#").split('\n');                    
+                    for (var i in urls) {
+                        let urlname = urls[i].split('#')[0];
+                        let urlurl = urls[i].split('#')[1];
+                        if(!datalist.some(item => item.url ==urlurl)&&urlname&&/^http/.test(urlurl)){
+                            let arr  = { "name": urlname.trim(), "parse": urlurl.trim(), "stopfrom": [], "priorfrom": [], "sort": 0 };
+                            datalist.push(arr);
+                            urlnum = urlnum + 1;
+                        }
+                    }
+                }               
                 if(urlnum>0){writeFile(filepath, JSON.stringify(datalist));}
                 back(true);
-                return "toast://合计："+urls.length+"，保存："+urlnum;
+                return "toast://成功保存解析："+urlnum;
             }else{
                 return "toast://无法保存，检查项目填写完整性";
             }
