@@ -1948,6 +1948,9 @@ function jiexi(lx,data) {
                     try{
                         if(/http/.test(parseurls)){
                             parseurls = parsePaste(parseurls);
+                            if(parseurls){
+                                parseurls = base64Decode(parseurls);
+                            }
                         }
                         let urlname = parseurls.split('★')[1];
                         let urlurl = parseurls.split('★')[2];
