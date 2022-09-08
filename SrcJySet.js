@@ -1945,14 +1945,18 @@ function jiexi(lx,data) {
             }else if(getMyVar('addtype', '1')=="2"&&parseurls){
                 let urlnum = 0;
                 if(parseurls.indexOf('★')>-1){
-                    if(/http/.test(parseurls)){
-
+                    try{
+                        if(/http/.test(parseurls)){
+                            parseurls = parsePaste(parseurls);
+                        }
+                        let urlname = parseurls.split('★')[1];
+                        let urlurl = parseurls.split('★')[2];
+                        let arr  = { "name": urlname.trim(), "parse": urlurl.trim(), "stopfrom": [], "priorfrom": [], "sort": 0 };
+                        datalist.push(arr);
+                        urlnum = 1;
+                    }catch(e){
+                        return "toast://断插解析识别出错";
                     }
-                    let urlname = parseurls.split('★')[1];
-                    let urlurl = parseurls.split('★')[2];
-                    let arr  = { "name": urlname.trim(), "parse": urlurl.trim(), "stopfrom": [], "priorfrom": [], "sort": 0 };
-                    datalist.push(arr);
-                    urlnum = 1;
                 }else{
                     let urls = parseurls.replace(/,|，/g,"#").split('\n');                    
                     for (var i in urls) {
