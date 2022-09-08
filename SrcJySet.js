@@ -605,7 +605,7 @@ function SRCSet() {
                                 let biuhtml = fetch(urlfile,{timeout:2000});
                                 biuhtml = biuhtml.replace(reg, function(word) { 
                                     return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
-                                }).replace(/^.*#.*$/mg,"").replace(/[\t\r\n]/g,'');
+                                }).replace(/^.*#.*$/mg,"").replace(/[\x00-\x1F\x7F]|[\t\r\n]/g,'');
                                 let biujson = JSON.parse(biuhtml);
                                 let biudata = {};
                                 biudata.url = biujson.url;
