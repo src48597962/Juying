@@ -1620,6 +1620,8 @@ function jiexi(lx,data) {
             col_type: 'input',
             desc: "链接地址",
             extra: {
+                highlight: true,
+                type: "textarea",
                 titleVisible: false,
                 defaultValue: getMyVar('parseurl', lx=="update"?data.url:""),
                 onChange: 'putMyVar("parseurl",input)'
