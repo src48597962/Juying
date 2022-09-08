@@ -1749,7 +1749,7 @@ function jiexi(lx,data) {
         d.push({
             title:'批量添加',
             col_type: 'input',
-            desc: "一行一个解析\n格式：解析名称#链接地址\n分隔符#可以用,号代替\n\n\n断插解析★xxx★xxx",
+            desc: "一行一个解析\n格式：解析名称#链接地址\n分隔符#可以用,号代替\n\n\n断插导入\n明码格式：★xxx★xxx\n云分享链接也支持",
             extra: {
                 titleVisible: false,
                 type: "textarea",
@@ -1946,7 +1946,7 @@ function jiexi(lx,data) {
                 let urlnum = 0;
                 if(parseurls.indexOf('★')>-1){
                     try{
-                        if(/http/.test(parseurls)){
+                        if(/^https:\/\/netcut\.cn/.test(parseurls)){
                             parseurls = parsePaste(parseurls);
                             var urlname = parseurls.split('★')[1];
                             var urlurl = base64Decode(parseurls.split('★')[2]);
