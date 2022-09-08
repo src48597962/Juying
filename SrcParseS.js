@@ -653,7 +653,7 @@ var SrcParseS = {
                     eval('var parse = '+obj.ulist.parse)
                 }
                 */
-                if(/^function/.test(trim(obj.ulist.parse))){
+                if(/^function/.test(obj.ulist.parse.trim())){
                     eval('var parse = '+obj.ulist.parse)
                     log($.type(parse));
                 }
