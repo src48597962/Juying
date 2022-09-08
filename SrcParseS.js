@@ -649,13 +649,15 @@ var SrcParseS = {
             //明码解析线程代码
             var task = function(obj) {
                 log('1111')
+                if(obj.ulist.parse.indexOf('function')>-1){
+                    eval('var parse = '+obj.ulist.parse)
+                }
                 
                 
-                
-                if(typeof JSON.parse(obj.ulist.parse) == 'function'){
+                if(typeof parse == 'function'){
                     log('aaa')
                 }
-                log($.type(JSON.parse(obj.ulist.parse)));
+                log($.type(parse));
                 
                 var taskheader = {withStatusCode:true,timeout:5000};
                 let head = obj.ulist.header||{};
