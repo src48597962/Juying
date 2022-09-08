@@ -649,10 +649,8 @@ var SrcParseS = {
             //明码解析线程代码
             var task = function(obj) {
                 
-                if(obj.ulist.parse.indexOf('function')>-1){
-                    let parse = JSON.parse(obj.ulist.parse);
-                    log($.type(parse));
-                }
+                log($.type(JSON.parse(obj.ulist.parse)));
+                
                 
                 //if($.type(obj.ulist.parse) == 'function'){
                 //    log('function')
