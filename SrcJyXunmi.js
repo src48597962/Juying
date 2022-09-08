@@ -51,8 +51,9 @@ function xunmi(name,data,ishkss) {
                 var reg = /("([^\\\"]*(\\.)?)*")|('([^\\\']*(\\.)?)*')|(\/{2,}.*?(\r|\n|$))|(\/\*(\n|.)*?\*\/)/g;
                 dyhtml = dyhtml.replace(reg, function(word) { 
                     return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
-                }).replace(/^.*#.*$/gm,"").replace(/🐝|🐌|💡|🥇|⚽|🏀|📺|🐨|🐧|🍋|🐯|👒|🅱|🚁|🍎|🎈|💘|🐞|🔥|🌎|🈲|🍀|🥒|⭐️|❄️|\(XPF\)|\(萝卜\)|\(神马\)|\(切\)|\(聚\)|\(优\)|\(神马\)|\(XB\)|\(SP\)|[\t\r\n]/g,'').replace(/\,\,/g,',');
-                var dydata = JSON.parse(dyhtml);
+                }).replace(/^.*#.*$/gm,"").replace(/🎾|👀|🐈|🌸|🎬|📌|📀|🐼|🍹|👑|🌈|🐝|🐌|💡|🥇|⚽|🏀|📺|🐨|🐧|🍋|🐯|👒|🅱|🚁|🍎|🎈|💘|🐞|🔥|🌎|🈲|🍀|🥒|⭐️|❄️|\(XPF\)|\(萝卜\)|\(切\)|\(聚\)|\(优\)|\(神马\)|\(XB\)|\(SP\)|[\x00-\x1F\x7F]/g,'').replace(/\,\,/g,',');
+                //var dydata = JSON.parse(dyhtml);
+                eval('var dydata = ' + dyhtml)
                 var dyjiekou = dydata.sites;
                 require(config.依赖.match(/https.*\//)[0] + 'SrcJySet.js');
                 showLoading('正在多线程加载TVBox订阅接口');
