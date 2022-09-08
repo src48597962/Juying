@@ -648,9 +648,10 @@ var SrcParseS = {
 
             //明码解析线程代码
             var task = function(obj) {
-                if($.type(obj.ulist.parse) == 'function'){
-                    log('function')
-                }
+                log($.type(obj.ulist.parse));
+                //if($.type(obj.ulist.parse) == 'function'){
+                //    log('function')
+                //}
                 var taskheader = {withStatusCode:true,timeout:5000};
                 let head = obj.ulist.header||{};
                 if(JSON.stringify(head) != "{}"){
