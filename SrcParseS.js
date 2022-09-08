@@ -650,7 +650,6 @@ var SrcParseS = {
             var task = function(obj) {
                 if(/^function/.test(obj.ulist.parse.trim())){
                     eval('var JSparse = '+obj.ulist.parse)
-                    log($.type(JSparse));
                     var rurl = JSparse(obj.vipUrl);
                     if(obj.testurl(rurl,obj.ulist.name)==0){
                         rurl = "";
