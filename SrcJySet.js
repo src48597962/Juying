@@ -1528,7 +1528,7 @@ function jiekou(lx,data) {
                         return "toast://未修改";
                     }
                 }
-                let arr = {"name": apiname, "url": apiurl, "ua": apiua, "type": urltype };
+                let arr = {"name": apiname.trim(), "url": apiurl.trim(), "ua": apiua, "type": urltype };
                 if(apigroup){arr['group'] = apigroup}
                 if(apidata){
                     try{
@@ -1545,7 +1545,7 @@ function jiekou(lx,data) {
                     let urlurl = list[i].split('#')[1];
                     let urltype = list[i].split('#')[2]||getapitype(urlurl);
                     let urlgroup = list[i].split('#')[3]||"";
-                    let arr  = { "name": urlname, "url": urlurl, "ua": apiua, "type": urltype };
+                    let arr  = { "name": urlname.trim(), "url": urlurl.trim(), "ua": apiua, "type": urltype };
                     if(urlgroup){arr['group'] = urlgroup}
                     urls.push(arr);
                 }
@@ -1931,7 +1931,7 @@ function jiexi(lx,data) {
                     stopfrom = stopfrom.filter(n => n);
                     let priorfrom = pasrepriorfrom.replace('，',',').split(',');
                     priorfrom = priorfrom.filter(n => n);
-                    let arr  = { "name": parsename, "parse": parseurl, "stopfrom": stopfrom, "priorfrom": priorfrom, "sort": 0};
+                    let arr  = { "name": parsename.trim(), "parse": parseurl.trim(), "stopfrom": stopfrom, "priorfrom": priorfrom, "sort": 0};
                     try{
                         if(parseheader){arr['header']= JSON.parse(parseheader)}
                     }catch(e){     }
@@ -1950,7 +1950,7 @@ function jiexi(lx,data) {
                     let urlname = urls[i].split('#')[0];
                     let urlurl = urls[i].split('#')[1];
                     if(!datalist.some(item => item.url ==urlurl)&&urlname&&/^http/.test(urlurl)){
-                        let arr  = { "name": urlname, "parse": urlurl, "stopfrom": [], "priorfrom": [], "sort": 0 };
+                        let arr  = { "name": urlname.trim(), "parse": urlurl.trim(), "stopfrom": [], "priorfrom": [], "sort": 0 };
                         datalist.push(arr);
                         urlnum = urlnum + 1;
                     }
