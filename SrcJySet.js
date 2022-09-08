@@ -469,8 +469,9 @@ function SRCSet() {
                             var reg = /("([^\\\"]*(\\.)?)*")|('([^\\\']*(\\.)?)*')|(\/{2,}.*?(\r|\n|$))|(\/\*(\n|.)*?\*\/)/g;
                             html = html.replace(reg, function(word) { 
                                 return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
-                            }).replace(/\\ '/g,"\'").replace(/\\ "/g,`\"`).replace(/\\>/g,">").replace(/\\'"/g,`'"`);
-                            var bbdata = JSON.parse(html);
+                            }).replace(/\\ '/g,"\'").replace(/\\ "/g,`\"`).replace(/\\>/g,">").replace(/\\'"/g,`'"`).replace(/[\x00-\x1F\x7F]/g,'');
+                            //var bbdata = JSON.parse(html);
+                            eval('var bbdata = ' + html)
                             var bbjiekou = bbdata.zhuyejiekou||[];
                             var bbcaiji = bbdata.caijizhan||[];
                             var bbzidingyi = bbdata.zidingyi||[];
