@@ -1954,12 +1954,8 @@ function jiexi(lx,data) {
                             let parses = parsePaste(parseurls);
                             eval(base64Decode(parses.replace('MyParseS合集★@base64://','')));
                             for (let i=0;i<parseTitle.length;i++) {
-                                let urlname = parseTitle[i].trim();
-                                log(urlname)
-                                //log(ParseS[urlname])
-                                log(JSON.stringify(ParseS[urlname]))
-                                
-                                let urlurl = JSON.stringify(ParseS[parseTitle[i]]);
+                                let urlname = parseTitle[i];                            
+                                let urlurl = ParseS[urlname];
                                 
                                 if(!datalist.some(item => item.url ==urlurl)&&urlname){
                                     let arr  = { "name": urlname, "parse": urlurl, "stopfrom": [], "priorfrom": [], "sort": 0 };
