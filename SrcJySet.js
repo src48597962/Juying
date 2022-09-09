@@ -1956,7 +1956,8 @@ function jiexi(lx,data) {
                             for (let i=0;i<parseTitle.length;i++) {
                                 let urlname = parseTitle[i].trim();
                                 log(urlname)
-                                log(JSON.stringify(ParseS[parseTitle[i]]))
+                                log(ParseS[urlname])
+                                log(JSON.stringify(ParseS[urlname]))
                                 /*
                                 let urlurl = JSON.stringify(ParseS[parseTitle[i]]).trim();
                                 
