@@ -1957,13 +1957,14 @@ function jiexi(lx,data) {
                                 let urlname = parseTitle[i].trim();
                                 log(urlname)
                                 log(JSON.stringify(ParseS[parseTitle[i]]))
+                                /*
                                 let urlurl = JSON.stringify(ParseS[parseTitle[i]]).trim();
                                 
                                 if(!datalist.some(item => item.url ==urlurl)&&urlname){
                                     let arr  = { "name": urlname, "parse": urlurl, "stopfrom": [], "priorfrom": [], "sort": 0 };
                                     datalist.push(arr);
                                     urlnum = urlnum + 1;
-                                }
+                                }*/
                             }
                         }else{                        
                             if(/^https:\/\/netcut\.cn/.test(parseurls)){
