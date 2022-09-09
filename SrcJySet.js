@@ -1950,27 +1950,43 @@ function jiexi(lx,data) {
                 let urlnum = 0;
                 if(parseurls.indexOf('★')>-1){
                     try{
-                        if(/^https:\/\/netcut\.cn/.test(parseurls)){
-                            parseurls = parsePaste(parseurls);
-                            var urlname = parseurls.split('★')[1];
-                            var urlurl = base64Decode(parseurls.split('★')[2]);
-                        }else{
-                            var urlname = parseurls.split('★')[1];
-                            var urlurl = parseurls.split('★')[2];
+                        if(/^https:\/\/netcut\.cn/.test(parseurls)&&parseurls.indexOf('★MyParseS合集★')>-1){
+                            let parses = parsePaste(parseurls);
+                            eval(base64Decode(parses.replace('MyParseS合集★@base64://','')));
+                            for (let i=0;i<parseTitle.length;i++) {
+                                let urlname = parseTitle[i].trim();
+                                let urlurl = ParseS[parseTitle[i]].trim();
+                                if(!datalist.some(item => item.url ==urlurl)&&urlname){
+                                    let arr  = { "name": urlname, "parse": urlurl, "stopfrom": [], "priorfrom": [], "sort": 0 };
+                                    datalist.push(arr);
+                                    urlnum = urlnum + 1;
+                                }
+                            }
+                        }else{                        
+                            if(/^https:\/\/netcut\.cn/.test(parseurls)){
+                                parseurls = parsePaste(parseurls);
+                                var urlname = parseurls.split('★')[1].trim();
+                                var urlurl = base64Decode(parseurls.split('★')[2]).trim();
+                            }else{
+                                var urlname = parseurls.split('★')[1].trim();
+                                var urlurl = parseurls.split('★')[2].trim();
+                            }
+                            if(!datalist.some(item => item.url ==urlurl)&&urlname){
+                                let arr  = { "name": urlname, "parse": urlurl, "stopfrom": [], "priorfrom": [], "sort": 0 };
+                                datalist.unshift(arr);
+                                urlnum = 1;
+                            }
                         }
-                        let arr  = { "name": urlname.trim(), "parse": urlurl.trim(), "stopfrom": [], "priorfrom": [], "sort": 0 };
-                        datalist.push(arr);
-                        urlnum = 1;
                     }catch(e){
                         return "toast://断插解析识别出错";
                     }
                 }else{
                     let urls = parseurls.replace(/,|，/g,"#").split('\n');                    
                     for (var i in urls) {
-                        let urlname = urls[i].split('#')[0];
-                        let urlurl = urls[i].split('#')[1];
+                        let urlname = urls[i].split('#')[0].trim();
+                        let urlurl = urls[i].split('#')[1].trim();
                         if(!datalist.some(item => item.url ==urlurl)&&urlname&&/^http/.test(urlurl)){
-                            let arr  = { "name": urlname.trim(), "parse": urlurl.trim(), "stopfrom": [], "priorfrom": [], "sort": 0 };
+                            let arr  = { "name": urlname, "parse": urlurl, "stopfrom": [], "priorfrom": [], "sort": 0 };
                             datalist.push(arr);
                             urlnum = urlnum + 1;
                         }
