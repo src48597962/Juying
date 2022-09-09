@@ -1956,8 +1956,9 @@ function jiexi(lx,data) {
                             for (let i=0;i<parseTitle.length;i++) {
                                 let urlname = parseTitle[i].trim();
                                 log(urlname)
+                                log(JSON.stringify(ParseS[parseTitle[i]]))
                                 let urlurl = JSON.stringify(ParseS[parseTitle[i]]).trim();
-                                log(urlurl)
+                                
                                 if(!datalist.some(item => item.url ==urlurl)&&urlname){
                                     let arr  = { "name": urlname, "parse": urlurl, "stopfrom": [], "priorfrom": [], "sort": 0 };
                                     datalist.push(arr);
