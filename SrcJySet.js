@@ -1956,25 +1956,25 @@ function jiexi(lx,data) {
                             for (let i=0;i<parseTitle.length;i++) {
                                 let urlname = parseTitle[i].trim();
                                 log(urlname)
-                                log(ParseS[urlname])
+                                //log(ParseS[urlname])
                                 log(JSON.stringify(ParseS[urlname]))
-                                /*
-                                let urlurl = JSON.stringify(ParseS[parseTitle[i]]).trim();
+                                
+                                let urlurl = JSON.stringify(ParseS[parseTitle[i]]);
                                 
                                 if(!datalist.some(item => item.url ==urlurl)&&urlname){
                                     let arr  = { "name": urlname, "parse": urlurl, "stopfrom": [], "priorfrom": [], "sort": 0 };
                                     datalist.push(arr);
                                     urlnum = urlnum + 1;
-                                }*/
+                                }
                             }
                         }else{                        
                             if(/^https:\/\/netcut\.cn/.test(parseurls)){
                                 parseurls = parsePaste(parseurls);
                                 var urlname = parseurls.split('★')[1].trim();
-                                var urlurl = base64Decode(parseurls.split('★')[2]).trim();
+                                var urlurl = base64Decode(parseurls.split('★')[2]);
                             }else{
                                 var urlname = parseurls.split('★')[1].trim();
-                                var urlurl = parseurls.split('★')[2].trim();
+                                var urlurl = parseurls.split('★')[2];
                             }
                             if(!datalist.some(item => item.url ==urlurl)&&urlname){
                                 let arr  = { "name": urlname, "parse": urlurl, "stopfrom": [], "priorfrom": [], "sort": 0 };
