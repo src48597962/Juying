@@ -1951,8 +1951,10 @@ function jiexi(lx,data) {
                 if(parseurls.indexOf('★')>-1){
                     try{
                         if(/^https:\/\/netcut\.cn/.test(parseurls)&&parseurls.indexOf('★MyParseS合集★')>-1){
-                            let parses = parsePaste(parseurls);
+                            let parses = parsePaste(parseurls.split('★MyParseS合集★')[0]);
+                            log(parses)
                             eval(base64Decode(parses.replace('MyParseS合集★@base64://','')));
+                            log(parseTitle)
                             for (let i=0;i<parseTitle.length;i++) {
                                 let urlname = parseTitle[i].trim();
                                 let urlurl = ParseS[parseTitle[i]].trim();
