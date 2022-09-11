@@ -1951,12 +1951,11 @@ function jiexi(lx,data) {
                 if(parseurls.indexOf('★')>-1){
                     try{
                         if(/^https:\/\/netcut\.cn/.test(parseurls)&&parseurls.indexOf('★MyParseS合集★')>-1){
-                            let parses = parsePaste(parseurls);
-                            eval(base64Decode(parses.replace('MyParseS合集★@base64://','')));
+                            let parsesurl = parsePaste(parseurls);
+                            eval(base64Decode(parsesurl.replace('MyParseS合集★@base64://','')));
                             for (let i=0;i<parseTitle.length;i++) {
                                 let urlname = parseTitle[i];                            
-                                let urlurl = ParseS[urlname+''];
-                                log(JSON.stringify(urlurl))
+                                let urlurl = ParseS[urlname];
                                 if(!datalist.some(item => item.url ==urlurl)&&urlname){
                                     let arr  = { "name": urlname, "parse": urlurl, "stopfrom": [], "priorfrom": [], "sort": 0 };
                                     datalist.push(arr);
