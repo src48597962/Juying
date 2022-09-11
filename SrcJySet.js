@@ -1436,7 +1436,7 @@ function jiekou(lx,data) {
         col_type:'text_3',
         url: $(getMyVar("testkey","我的"),"输入测试搜索关键字").input(()=>{
                 putMyVar("testkey",input);
-                if(getMyVar('addtype', '1')=="1"&&!/^http|^csp/.test(getMyVar('apiurl',''))){return "toast://接口地址不正确"}
+                if(getMyVar('addtype', '1')=="1"&&!/^http|^functio|^csp/.test(getMyVar('apiurl','')).trim()){return "toast://接口地址不正确"}
                 return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
                     let apiurl = getMyVar('apiurl');
                     let apiname = getMyVar('apiname');
@@ -1954,10 +1954,9 @@ function jiexi(lx,data) {
                             let parsesurl = parsePaste(parseurls);
                             eval(base64Decode(parsesurl.replace('MyParseS合集★@base64://','')));
                             for (let i=0;i<parseTitle.length;i++) {
-                                let urlname = parseTitle[i];                            
-                                let urlurl = $.stringify(ParseS[urlname]);
-                                log(urlurl);
-                                if(!datalist.some(item => item.url ==urlurl)&&urlname){
+                                let urlname = parseTitle[i].trim();                            
+                                let urlurl = $.stringify(ParseS[urlname]).trim();
+                                if(!datalist.some(item => item.url.trim() ==urlurl)&&urlname){
                                     let arr  = { "name": urlname, "parse": urlurl, "stopfrom": [], "priorfrom": [], "sort": 0 };
                                     datalist.push(arr);
                                     urlnum = urlnum + 1;
@@ -1967,12 +1966,12 @@ function jiexi(lx,data) {
                             if(/^https:\/\/netcut\.cn/.test(parseurls)){
                                 parseurls = parsePaste(parseurls);
                                 var urlname = parseurls.split('★')[1].trim();
-                                var urlurl = base64Decode(parseurls.split('★')[2]);
+                                var urlurl = base64Decode(parseurls.split('★')[2]).trim();
                             }else{
                                 var urlname = parseurls.split('★')[1].trim();
-                                var urlurl = parseurls.split('★')[2];
+                                var urlurl = parseurls.split('★')[2].trim();
                             }
-                            if(!datalist.some(item => item.url ==urlurl)&&urlname){
+                            if(!datalist.some(item => item.url.trim() ==urlurl)&&urlname){
                                 let arr  = { "name": urlname, "parse": urlurl, "stopfrom": [], "priorfrom": [], "sort": 0 };
                                 datalist.unshift(arr);
                                 urlnum = 1;
