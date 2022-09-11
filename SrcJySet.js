@@ -1955,7 +1955,8 @@ function jiexi(lx,data) {
                             eval(base64Decode(parsesurl.replace('MyParseS合集★@base64://','')));
                             for (let i=0;i<parseTitle.length;i++) {
                                 let urlname = parseTitle[i];                            
-                                let urlurl = ParseS[urlname];
+                                let urlurl = $.stringify(ParseS[urlname]);
+                                log(urlurl);
                                 if(!datalist.some(item => item.url ==urlurl)&&urlname){
                                     let arr  = { "name": urlname, "parse": urlurl, "stopfrom": [], "priorfrom": [], "sort": 0 };
                                     datalist.push(arr);
