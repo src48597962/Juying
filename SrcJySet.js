@@ -1436,7 +1436,7 @@ function jiekou(lx,data) {
         col_type:'text_3',
         url: $(getMyVar("testkey","我的"),"输入测试搜索关键字").input(()=>{
                 putMyVar("testkey",input);
-                if(getMyVar('addtype', '1')=="1"&&!/^http|^functio|^csp/.test(getMyVar('apiurl','')).trim()){return "toast://接口地址不正确"}
+                if(getMyVar('addtype', '1')=="1"&&!/^http|^csp/.test(getMyVar('apiurl',''))){return "toast://接口地址不正确"}
                 return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
                     let apiurl = getMyVar('apiurl');
                     let apiname = getMyVar('apiname');
@@ -1770,7 +1770,7 @@ function jiexi(lx,data) {
             var dataurl = getMyVar('parseurl');
             var dataname = getMyVar('parsename')||'测试';
             var datahead = getMyVar('parseheader',data&&data.header?JSON.stringify(data.header):"");
-            if(!dataurl||!/^http/.test(dataurl)){
+            if(!dataurl||!/^http|^functio/.test(dataurl.trim())){
                 return "toast://获取解析地址失败，无法测试";
             }
 
