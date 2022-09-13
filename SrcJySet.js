@@ -520,7 +520,13 @@ function SRCSet() {
                                 //log(bbzidingyi[i].name + '>抓取失败>' + e.message)
                             }
                         }
-                        var jknum = jiekousave(urls);
+
+                        try{
+                            var jknum = jiekousave(urls);
+                        }catch(e){
+                            var jknum =-1;
+                            log('导入保存有异常>'+e.message);
+                        }  
                         hideLoading();
                         if(jknum<0){
                             return'toast://导入失败，内容异常';
@@ -562,7 +568,7 @@ function SRCSet() {
                                     }
                                 }, jiexi)
                             }else{
-                                return "接口导入已完成，成功保存："+jknum;
+                                return "toast://接口导入已完成，成功保存："+jknum;
                             }
                         }
                 }),
@@ -699,7 +705,7 @@ function SRCSet() {
                                 }
                             },jiexi)
                         }else{
-                            return "接口导入已完成，成功保存："+jknum;
+                            return "toast://接口导入已完成，成功保存："+jknum;
                         }
                     }
                 }),
