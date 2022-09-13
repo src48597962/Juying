@@ -1930,7 +1930,7 @@ function jiexi(lx,data) {
                         }
                     }
                 }
-                if(!datalist.some(item => item.parse ==parseurl)){
+                if(!datalist.some(item => item.parse ==parseurl.trim())){
                     let stopfrom = parsestopfrom.replace('，',',').split(',');
                     stopfrom = stopfrom.filter(n => n);
                     let priorfrom = pasrepriorfrom.replace('，',',').split(',');
