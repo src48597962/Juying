@@ -1956,7 +1956,7 @@ function jiexi(lx,data) {
                             for (let i=0;i<parseTitle.length;i++) {
                                 let urlname = parseTitle[i].trim();                            
                                 let urlurl = $.stringify(ParseS[urlname]).trim();
-                                if(!datalist.some(item => $.stringify(item.url).trim()==urlurl)&&urlname){
+                                if(!datalist.some(item => item.parse==urlurl)&&urlname){
                                     let arr  = { "name": urlname, "parse": urlurl, "stopfrom": [], "priorfrom": [], "sort": 0 };
                                     datalist.push(arr);
                                     urlnum = urlnum + 1;
@@ -1971,7 +1971,7 @@ function jiexi(lx,data) {
                                 var urlname = parseurls.split('★')[1].trim();
                                 var urlurl = parseurls.split('★')[2].trim();
                             }
-                            if(!datalist.some(item => $.stringify(item.url).trim()==urlurl)&&urlname){
+                            if(!datalist.some(item => $.stringify(item.parse).trim()==urlurl)&&urlname){
                                 let arr  = { "name": urlname, "parse": urlurl, "stopfrom": [], "priorfrom": [], "sort": 0 };
                                 datalist.unshift(arr);
                                 urlnum = 1;
