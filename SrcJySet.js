@@ -1956,9 +1956,7 @@ function jiexi(lx,data) {
                             for (let i=0;i<parseTitle.length;i++) {
                                 let urlname = parseTitle[i].trim();                            
                                 let urlurl = $.stringify(ParseS[urlname]).trim();
-                                //urlurl = urlurl.trim();
-                                log(urlurl);
-                                if(!datalist.some(item => item.url==urlurl)&&urlname){
+                                if(!datalist.some(item => $.stringify(item.url).trim()==urlurl)&&urlname){
                                     let arr  = { "name": urlname, "parse": urlurl, "stopfrom": [], "priorfrom": [], "sort": 0 };
                                     datalist.push(arr);
                                     urlnum = urlnum + 1;
@@ -1968,12 +1966,12 @@ function jiexi(lx,data) {
                             if(/^https:\/\/netcut\.cn/.test(parseurls)){
                                 parseurls = parsePaste(parseurls);
                                 var urlname = parseurls.split('★')[1].trim();
-                                var urlurl = base64Decode(parseurls.split('★')[2]);
+                                var urlurl = base64Decode(parseurls.split('★')[2]).trim();
                             }else{
                                 var urlname = parseurls.split('★')[1].trim();
-                                var urlurl = parseurls.split('★')[2];
+                                var urlurl = parseurls.split('★')[2].trim();
                             }
-                            if(!datalist.some(item => item.url ==urlurl)&&urlname){
+                            if(!datalist.some(item => $.stringify(item.url).trim()==urlurl)&&urlname){
                                 let arr  = { "name": urlname, "parse": urlurl, "stopfrom": [], "priorfrom": [], "sort": 0 };
                                 datalist.unshift(arr);
                                 urlnum = 1;
