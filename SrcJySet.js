@@ -1301,15 +1301,11 @@ function jiekousave(urls,update) {
             let urlua = urls[i].ua||"Dalvik/2.1.0";
             let urltype = urls[i].type||getapitype(urlurl);
             let urlgroup = urls[i].group||"";
-            if(!datalist.some(item => parseInt(getSimilarity(item.name,urlname))>30)){
+            if(!datalist.some(item => getSimilarity(item.name,urlname)>50)){
                 log(urlname);
                 log(urlurl);
             }
-            if(datalist.some(item => getSimilarity(item.name,urlname)<30)){
-                log(urlname);
-                log(urlurl);
-                log('11');
-            }
+            
             /*if(!datalist.some(item => item.url==urlurl||(getSimilarity(item.name,urlname)>30&&urltype=="biubiu"))&&urlname&&/^http|^csp/.test(urlurl)&&urltype){
                 let arr  = { "name": urlname, "url": urlurl, "ua": urlua, "type": urltype };
                 if(urls[i].data){arr['data'] = urls[i].data}
