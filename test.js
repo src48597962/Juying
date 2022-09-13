@@ -9,13 +9,10 @@
 {"key": "csp_biubiu_VF影院","name": "☃️AB影院(XB)","type": 3,"api": "csp_XBiubiu","searchable": 1,"quickSearch": 1,"filterable": 0,"ext": "https://gitea.com/83225451/Tvbox/raw/branch/main/MaooXB2/AB影院.json"},
 {"key": "csp_biubiu_dmxq","name": "🍿大米星球〔XB〕","type": 3,"api": "csp_XBiubiu","searchable": 1,"quickSearch": 1,"filterable": 0,"ext": "https://gitea.com/83225451/Tvbox/raw/branch/main/MaooXB2/dmxq.json"},
 {"key": "csp_biubiu_555电影","name": "😭555电影〔XB〕","type": 3,"api": "csp_XBiubiu","searchable": 1,"quickSearch": 1,"filterable": 0,"ext": "https://gitea.com/83225451/Tvbox/raw/branch/main/MaooXB2/555电影.json"},
-//{"key": "csp_biubiu_橘子tv","name": "🍊橘子tv〔XB〕","type": 3,"api": "csp_XBiubiu","searchable": 1,"quickSearch": 1,"filterable": 0,"ext": "https://gitea.com/83225451/Tvbox/raw/branch/main/MaooXB2/juzi.json"},
 {"key": "csp_biubiu_宝仙HD","name": "👼宝仙〔XB〕","type": 3,"api": "csp_XBiubiu","searchable": 1,"quickSearch": 1,"filterable": 0,"ext": "https://gitea.com/83225451/Tvbox/raw/branch/main/MaooXB2/宝仙HD.json"},
 {"key":"csp_biubiu_sjkj","name":"手机看剧(XB)","type":3,"api":"csp_XBiubiu","searchable":1,"quickSearch":1,"filterable":0,"ext": "https://gitea.com/83225451/Tvbox/raw/branch/main/MaooXB2/sjkj.json"},
 {"key":"csp_xbb_影视之光","name":"🍀影视之光","type":3,"api":"csp_XBiubiu","searchable":1,"quickSearch":1,"filterable":0,"ext":"https://gitea.com/83225451/box/raw/branch/main/sub/MeowXB/影视之光.json"},
 {"key":"csp_xbb_酷云影院","name":"🍀酷云影院","type":3,"api":"csp_XBiubiu","searchable":1,"quickSearch":1,"filterable":0,"ext":"https://gitea.com/83225451/box/raw/branch/main/sub/MeowXB/酷云影院.json"},
-
-
 {"key":"csp_biubiu_七年影视","name":"🥒七年影视(XB)","type":3,"api":"csp_XBiubiu","searchable":1,"quickSearch":1,"filterable":0,"ext":"https://gitea.com/83225451/Tvbox/raw/branch/main/MaooXB2/七年影视.json"},
 {"key":"csp_biubiu_大象TV","name":"🥒大象TV(XB)","type":3,"api":"csp_XBiubiu","searchable":1,"quickSearch":1,"filterable":0,"ext":"https://gitea.com/83225451/Tvbox/raw/branch/main/MaooXB2/大象TV.json"},
 {"key":"csp_biubiu_小猫咪","name":"🥒小猫咪(XB)","type":3,"api":"csp_XBiubiu","searchable":1,"quickSearch":1,"filterable":0,"ext":"https://gitea.com/83225451/Tvbox/raw/branch/main/MaooXB2/小猫咪.json"},
