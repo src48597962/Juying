@@ -1304,7 +1304,7 @@ function jiekousave(urls,update) {
             let urltype = urls[i].type||getapitype(urlurl);
             let urlgroup = urls[i].group||"";
             log(urlname);
-            if(!datalist.some(item => item.url==urlurl||(getSimilarity(item.name,urlname)>30&&urltype=="biubiu"))&&urlname&&/^http|^csp/.test(urlurl)&&urltype){
+            if(!datalist.some(item => (getSimilarity(item.name,urlname)>30&&urltype=="biubiu"))&&urlname&&/^http|^csp/.test(urlurl)&&urltype){
                 let arr  = { "name": urlname, "url": urlurl, "ua": urlua, "type": urltype };
                 if(urls[i].data){arr['data'] = urls[i].data}
                 if(urlgroup){arr['group'] = urlgroup}
