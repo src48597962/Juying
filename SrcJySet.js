@@ -656,8 +656,12 @@ function SRCSet() {
                         param: {
                         }
                     });
-                    
-                    var jknum = jiekousave(urls);
+                    try{
+                        var jknum = jiekousave(urls);
+                    }catch(e){
+                        var jknum =-1;
+                        log('导入保存有异常>'+e.message);
+                    }                   
                     hideLoading();
                     if(jknum<0){
                         return'toast://导入失败，内容异常';
