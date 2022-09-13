@@ -1301,7 +1301,7 @@ function jiekousave(urls,update) {
             let urlua = urls[i].ua||"Dalvik/2.1.0";
             let urltype = urls[i].type||getapitype(urlurl);
             let urlgroup = urls[i].group||"";
-            if(!datalist.some(item => item.url==urlurl||(getSimilarity(item.name,urlname)>30&&urltype=="biubiu"))){
+            if(!datalist.some(item => item.url==urlurl||(getSimilarity(item.name,urlname)<30&&urltype=="biubiu"))){
                 log(urlname);
                 log(urlurl);
             }
