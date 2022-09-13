@@ -583,8 +583,8 @@ function SRCSet() {
                         //log(html);
                         eval('var data = ' + html)
                         //var data = JSON.parse(html);                        
-                        var jiekou = data.sites;
-                        var jiexi = data.parses;
+                        var jiekou = data.sites||[];
+                        var jiexi = data.parses||[];
                     } catch (e) {
                         hideLoading();
                         log('接口导入失败：'+e.message); 
