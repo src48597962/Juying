@@ -1,5 +1,6 @@
 //个人学习代码
 function SRCSet() {
+    log(getSimilarity('酷云七七','🐞酷云七七(SP)'));
     addListener("onClose", $.toString(() => {
         clearMyVar('guanlicz');
         clearMyVar('duoselect');
@@ -1248,6 +1249,24 @@ function getapitype(apiurl) {
         return "";
     }
 }
+function getSimilarity(str1,str2) {
+    let sameNum = 0
+    //寻找相同字符
+    for (let i = 0; i < str1.length; i++) {
+        for(let j =0;j<str2.length;j++){
+            if(str1[i]===str2[j]){
+                sameNum ++ 
+                break
+            }
+        }
+    }
+    // console.log(str1,str2);
+    // console.log("相似度",(sameNum/str1.length) * 100);
+    //判断2个字符串哪个长度比较长
+    let length = str1.length > str2.length ? str1.length : str2.length
+    return (sameNum/length) * 100 || 0
+}
+
 function jiekousave(urls,update) {
     try{
         var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
@@ -1274,7 +1293,7 @@ function jiekousave(urls,update) {
             let urltype = urls[i].type||getapitype(urlurl);
             let urlgroup = urls[i].group||"";
             
-            if(!datalist.some(item => item.url ==urlurl)&&urlname&&/^http|^csp/.test(urlurl)&&urltype){
+            if(!datalist.some(item => item.url==urlurl)&&urlname&&/^http|^csp/.test(urlurl)&&urltype){
                 let arr  = { "name": urlname, "url": urlurl, "ua": urlua, "type": urltype };
                 if(urls[i].data){arr['data'] = urls[i].data}
                 if(urlgroup){arr['group'] = urlgroup}
