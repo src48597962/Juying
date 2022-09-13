@@ -1288,10 +1288,12 @@ function jiekousave(urls,update) {
         
         var num = 0;
         for (var i in urls) {
+            log(urls[i].url);
             if(update==1){
                 for(var j=0;j<datalist.length;j++){
                     if(datalist[j].url==urls[i].url){
                         datalist.splice(j,1);
+                        log('ddd');
                         break;
                     }
                 }
@@ -1301,7 +1303,7 @@ function jiekousave(urls,update) {
             let urlua = urls[i].ua||"Dalvik/2.1.0";
             let urltype = urls[i].type||getapitype(urlurl);
             let urlgroup = urls[i].group||"";
-            
+            log(urlname);
             if(!datalist.some(item => item.url==urlurl||(getSimilarity(item.name,urlname)>30&&urltype=="biubiu"))&&urlname&&/^http|^csp/.test(urlurl)&&urltype){
                 let arr  = { "name": urlname, "url": urlurl, "ua": urlua, "type": urltype };
                 if(urls[i].data){arr['data'] = urls[i].data}
