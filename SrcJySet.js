@@ -1,47 +1,5 @@
 //个人学习代码
-function similar(s, t, f) {//判断两个字符串之间的相似度
-    if (!s || !t) {
-        return 0
-    }
-    if(s === t){
-        return 100;
-    }
-    var l = s.length > t.length ? s.length : t.length
-    var n = s.length
-    var m = t.length
-    var d = []
-    f = f || 2
-    var min = function (a, b, c) {
-        return a < b ? (a < c ? a : c) : (b < c ? b : c)
-    }
-    var i, j, si, tj, cost
-    if (n === 0) return m
-    if (m === 0) return n
-    for (i = 0; i <= n; i++) {
-        d[i] = []
-        d[i][0] = i
-    }
-    for (j = 0; j <= m; j++) {
-        d[0][j] = j
-    }
-    for (i = 1; i <= n; i++) {
-        si = s.charAt(i - 1)
-        for (j = 1; j <= m; j++) {
-            tj = t.charAt(j - 1)
-            if (si === tj) {
-                cost = 0
-            } else {
-                cost = 1
-            }
-            d[i][j] = min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + cost)
-        }
-    }
-    let res = (1 - d[n][m] / l) *100
-    return res.toFixed(f)
-}
 function SRCSet() {
-    log(similar('🐞酷云七七(SP)','酷云七七'));
-    //log(getSimilarity('🐞酷云七七(SP)','酷云七七'));
     addListener("onClose", $.toString(() => {
         clearMyVar('guanlicz');
         clearMyVar('duoselect');
@@ -1334,7 +1292,7 @@ function jiekousave(urls,update) {
             let urltype = urls[i].type||getapitype(urlurl);
             let urlgroup = urls[i].group||"";
             
-            if(!datalist.some(item => item.url==urlurl)&&urlname&&/^http|^csp/.test(urlurl)&&urltype){
+            if(!datalist.some(item => item.url==urlurl||(getSimilarity(item.name,urlname)>30&&urltype=="biubiu"))&&urlname&&/^http|^csp/.test(urlurl)&&urltype){
                 let arr  = { "name": urlname, "url": urlurl, "ua": urlua, "type": urltype };
                 if(urls[i].data){arr['data'] = urls[i].data}
                 if(urlgroup){arr['group'] = urlgroup}
