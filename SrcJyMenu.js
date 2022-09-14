@@ -296,7 +296,7 @@ var erjimenu = [
                     col_type: "text_2"
                 });
                 d.push({
-                    title: '内核(x5)',
+                    title: '👀内核(x5)',
                     url: 'hiker://empty',
                     col_type: "text_2"
                 });
