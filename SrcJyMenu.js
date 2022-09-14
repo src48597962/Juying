@@ -57,7 +57,7 @@ var erjimenu = [
         url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
                 function getide(is) {
                     if(is==1){
-                        return '‘‘’’<font color="#f13b66a">◉ </front>';
+                        return '‘‘’’<strong><font color="#f13b66a">◉ </front></strong>';
                     }else{
                         return '‘‘’’<strong><font color="#F54343">◉ </front></strong>';
                     }
@@ -251,7 +251,12 @@ var erjimenu = [
                 });
                 d.push({
                     title: (parsemode==1?getide(1):getide(0))+'聚影智能',
-                    url: 'hiker://empty',
+                    url: $('#noLoading#').lazyRule((JYconfig,cfgfile) => {
+                            JYconfig['parsemode'] = 1;
+                            writeFile(cfgfile, JSON.stringify(JYconfig));
+                            refreshPage(false);
+                            return 'toast://解析模式：聚影智能';
+                        }, JYconfig, cfgfile),
                     col_type: "text_2"
                 });
                 d.push({
@@ -264,7 +269,12 @@ var erjimenu = [
                 });
                 d.push({
                     title: (parsemode==2?getide(1):getide(0))+'强制断插',
-                    url: 'hiker://empty',
+                    url: $('#noLoading#').lazyRule((JYconfig,cfgfile) => {
+                            JYconfig['parsemode'] = 2;
+                            writeFile(cfgfile, JSON.stringify(JYconfig));
+                            refreshPage(false);
+                            return 'toast://解析模式：聚影智能';
+                        }, JYconfig, cfgfile),
                     col_type: "text_2"
                 });
                 d.push({
@@ -277,7 +287,12 @@ var erjimenu = [
                 });
                 d.push({
                     title: (parsemode==3?getide(1):getide(0))+'强制嗅探',
-                    url: 'hiker://empty',
+                    url: $('#noLoading#').lazyRule((JYconfig,cfgfile) => {
+                            JYconfig['parsemode'] = 3;
+                            writeFile(cfgfile, JSON.stringify(JYconfig));
+                            refreshPage(false);
+                            return 'toast://解析模式：聚影智能';
+                        }, JYconfig, cfgfile),
                     col_type: "text_2"
                 });
                 d.push({
