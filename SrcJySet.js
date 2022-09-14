@@ -1,7 +1,5 @@
 //个人学习代码
 function SRCSet() {
-    log(getSimilarity('帅才影视','乐猎影视'))
-    log(getSimilarity('帅才影视','555影视'))
     addListener("onClose", $.toString(() => {
         clearMyVar('guanlicz');
         clearMyVar('duoselect');
@@ -1303,7 +1301,7 @@ function jiekousave(urls,update) {
             let urlua = urls[i].ua||"Dalvik/2.1.0";
             let urltype = urls[i].type||getapitype(urlurl);
             let urlgroup = urls[i].group||"";
-            if(!datalist.some(item => item.url==urlurl||(getSimilarity(item.name,urlname)>70&&urltype=="biubiu"))&&urlname&&/^http|^csp/.test(urlurl)&&urltype){
+            if(!datalist.some(item => item.url==urlurl||(getSimilarity(item.name,urlname)>60&&urltype=="biubiu"))&&urlname&&/^http|^csp/.test(urlurl)&&urltype){
                 let arr  = { "name": urlname, "url": urlurl, "ua": urlua, "type": urltype };
                 if(urls[i].data){arr['data'] = urls[i].data}
                 if(urlgroup){arr['group'] = urlgroup}
