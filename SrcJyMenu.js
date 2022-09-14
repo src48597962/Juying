@@ -102,42 +102,7 @@ var erjimenu = [
                         }, JYconfig, cfgfile),
                     col_type: "text_2"
                 });
-                d.push({
-                    col_type: "line"
-                });
-                if(fileExist('hiker://files/cache/MyParseSet.json')&&fileExist('hiker://files/rules/DuanNian/MyParse.json')){var isDn = 1}else{var isDn = 0};
-                d.push({
-                    title: isDn==1&&JYconfig['isdn']!=0?'断插辅助(开)':'断插辅助(关)',
-                    url: isDn==0?'toast://没有断插？无法开启！':$('#noLoading#').lazyRule((JYconfig,cfgfile) => {
-                            if(JYconfig['isdn'] == 0){
-                                JYconfig['isdn'] = 1;
-                                var sm = "开启断插同步并发解析";
-                            }else{
-                                JYconfig['isdn'] = 0;
-                                var sm = "只走程序自身的解析";
-                            }
-                            writeFile(cfgfile, JSON.stringify(JYconfig));
-                            refreshPage(false);
-                            return 'toast://切换成功：' + sm;
-                        }, JYconfig, cfgfile),
-                    col_type: "text_2"
-                });
-                d.push({
-                    title: isDn==1&&JYconfig['forcedn']==1?'强制断插(开)':'强制断插(关)',
-                    url: isDn==0?'toast://没有断插？无法开启！':$('#noLoading#').lazyRule((JYconfig,cfgfile) => {
-                            if(JYconfig['forcedn'] != 1){
-                                JYconfig['forcedn'] = 1;
-                                var sm = "开启强制断插，仅走断插解析";
-                            }else{
-                                JYconfig['forcedn'] = 0;
-                                var sm = "关闭强制断插，程序智能解析";
-                            }
-                            writeFile(cfgfile, JSON.stringify(JYconfig));
-                            refreshPage(false);
-                            return 'toast://切换成功：' + sm;
-                        }, JYconfig, cfgfile),
-                    col_type: "text_2"
-                });
+                
                 d.push({
                     title: '屏蔽操作',
                     col_type: "rich_text"
@@ -241,7 +206,7 @@ var erjimenu = [
                 });
                 d.push({
                     title: '清除优先拦截记录',
-                    url: $("清除app自带解析拦截黑名单记录？").confirm(()=>{
+                    url: $("清除接口自带解析拦截黑名单记录？").confirm(()=>{
                             var recordfile = "hiker://files/rules/Src/Juying/parse.json";
                             var recordparse=fetch(recordfile);
                             if(recordparse != ""){
@@ -257,46 +222,95 @@ var erjimenu = [
                     col_type: "text_2"
                 });
                 d.push({
-                    title: '反悔回退',
+                    title: '解析设置',
                     col_type: "rich_text"
                 });
                 d.push({
                     col_type: "line_blank"
                 });
+                let parsemode = JYconfig.parsemode || 1;
+                if(fileExist('hiker://files/rules/DuanNian/MyParse.json')){
+                    var haveDN = 1
+                    var isdn = JYconfig.isdn || 1;
+                }else{
+                    var haveDN = 0
+                };
                 d.push({
-                    title: '清除拦截记录',
-                    url: $(["播放地址","优先解析"],2,"选择需清除记录的项").select(()=>{
-                            if(input=="播放地址"){
-                                return $("清除拦截跳舞小姐姐视频记录？").confirm(()=>{
-                                    var recordfile = "hiker://files/rules/Src/Juying/parse.json";
-                                    var recordparse=fetch(recordfile);
-                                    if(recordparse != ""){
-                                        eval("var recordlist=" + recordparse+ ";");
-                                        recordlist['exclude'] = [];
-                                        writeFile(recordfile, JSON.stringify(recordlist));
-                                        return 'toast://已清除跳舞小姐姐视频拦截记录';
-                                    }else{
-                                        return 'toast://无记录';
-                                    }
-                                })
-                            }else if(input=="优先解析"){
-                                return $("清除app自带解析拦截黑名单记录？").confirm(()=>{
-                                    var recordfile = "hiker://files/rules/Src/Juying/parse.json";
-                                    var recordparse=fetch(recordfile);
-                                    if(recordparse != ""){
-                                        eval("var recordlist=" + recordparse+ ";");
-                                        recordlist['excludeparse'] = [];
-                                        writeFile(recordfile, JSON.stringify(recordlist));
-                                        refreshPage(false);
-                                        return 'toast://已清除app自带解析拦截黑名单记录';
-                                    }else{
-                                        return 'toast://无记录';
-                                    }
-                                })
+                    title: '当前解析模式：' + (parsemode==1?'聚影智能':parsemode==2?'强制断插':'强制嗅探'),
+                    desc: parsemode==1?'上次优先>app解析+私有解析'+(haveDN&&isdn?'+断插解析':'')+'+嗅探保底':parsemode==2?'走断插(含魔断)或帅助手小程序设置的解析逻辑':'接口自带和私有解析中的直链+保底自带解析进行聚合嗅探',
+                    url: 'hiker://empty',
+                    col_type: "text_center_1"
+                });
+                d.push({
+                    title: '聚影智能',
+                    url: 'hiker://empty',
+                    col_type: "text_2"
+                });
+                d.push({
+                    title: '断插辅助',
+                    url: 'hiker://empty',
+                    col_type: "text_2"
+                });
+                d.push({
+                    col_type: "line"
+                });
+                d.push({
+                    title: '强制断插',
+                    url: 'hiker://empty',
+                    col_type: "text_2"
+                });
+                d.push({
+                    title: '断插配置',
+                    url: 'hiker://empty',
+                    col_type: "text_2"
+                });
+                d.push({
+                    col_type: "line"
+                });
+                d.push({
+                    title: '强制嗅探',
+                    url: 'hiker://empty',
+                    col_type: "text_2"
+                });
+                d.push({
+                    title: '内核',
+                    url: 'hiker://empty',
+                    col_type: "text_2"
+                });
+                d.push({
+                    col_type: "line"
+                });
+                
+                d.push({
+                    title: isDn==1&&JYconfig['isdn']!=0?'断插辅助(开)':'断插辅助(关)',
+                    url: isDn==0?'toast://没有断插？无法开启！':$('#noLoading#').lazyRule((JYconfig,cfgfile) => {
+                            if(JYconfig['isdn'] == 0){
+                                JYconfig['isdn'] = 1;
+                                var sm = "开启断插同步并发解析";
+                            }else{
+                                JYconfig['isdn'] = 0;
+                                var sm = "只走程序自身的解析";
                             }
-                            
-                            
-                        }),
+                            writeFile(cfgfile, JSON.stringify(JYconfig));
+                            refreshPage(false);
+                            return 'toast://切换成功：' + sm;
+                        }, JYconfig, cfgfile),
+                    col_type: "text_2"
+                });
+                d.push({
+                    title: isDn==1&&JYconfig['forcedn']==1?'强制断插(开)':'强制断插(关)',
+                    url: isDn==0?'toast://没有断插？无法开启！':$('#noLoading#').lazyRule((JYconfig,cfgfile) => {
+                            if(JYconfig['forcedn'] != 1){
+                                JYconfig['forcedn'] = 1;
+                                var sm = "开启强制断插，仅走断插解析";
+                            }else{
+                                JYconfig['forcedn'] = 0;
+                                var sm = "关闭强制断插，程序智能解析";
+                            }
+                            writeFile(cfgfile, JSON.stringify(JYconfig));
+                            refreshPage(false);
+                            return 'toast://切换成功：' + sm;
+                        }, JYconfig, cfgfile),
                     col_type: "text_2"
                 });
                 setHomeResult(d);
