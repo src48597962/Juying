@@ -1,11 +1,3 @@
-function getide(title,is) {
-    if(is==1){
-        return '‘‘’’<strong><font color="#19B89D">' + title + '</front></strong>';
-    }else{
-        return '‘‘’’<strong><font color="#F54343">' + title + '</front></strong>';
-    }
-}
-
 //二级统一菜单
 var erjimenu = [
         {
