@@ -1288,19 +1288,29 @@ function jiekousave(urls,update) {
         
         var num = 0;
         for (var i in urls) {
-            if(update==1){
-                for(var j=0;j<datalist.length;j++){
-                    if(datalist[j].url==urls[i].url){
-                        datalist.splice(j,1);
-                        break;
-                    }
-                }
-            }
             let urlname = urls[i].name;
             let urlurl = urls[i].url;
             let urlua = urls[i].ua||"Dalvik/2.1.0";
             let urltype = urls[i].type||getapitype(urlurl);
             let urlgroup = urls[i].group||"";
+
+            if(update==1){
+                for(var j=0;j<datalist.length;j++){
+                    if(datalist[j].url==urlurl){
+                        datalist.splice(j,1);
+                        break;
+                    }
+                }
+            }
+
+            function checkitem(item) {
+                log(item.name+' '+urlname+' '+urltype+getSimilarity(item.name,urlname));
+                return item.url==urlurl||(getSimilarity(item.name,urlname)>60&&urltype=="biubiu");
+            }
+            if(!datalist.some(checkitem)&&urlname&&/^http|^csp/.test(urlurl)&&urltype){
+                log('ok')
+            }
+            /*
             if(!datalist.some(item => item.url==urlurl||(getSimilarity(item.name,urlname)>60&&urltype=="biubiu"))&&urlname&&/^http|^csp/.test(urlurl)&&urltype){
                 let arr  = { "name": urlname, "url": urlurl, "ua": urlua, "type": urltype };
                 if(urls[i].data){arr['data'] = urls[i].data}
@@ -1311,7 +1321,7 @@ function jiekousave(urls,update) {
                     datalist.push(arr);
                 }
                 num = num + 1;
-            }
+            }*/
         }
         if(num>0){writeFile(filepath, JSON.stringify(datalist));}
     } catch (e) {
