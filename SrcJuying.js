@@ -377,6 +377,13 @@ function erji() {
 
     });
     //二级统一菜单
+    function getide(title,is) {
+        if(is==1){
+            return '‘‘’’<strong><font color="#19B89D">' + title + '</front></strong>';
+        }else{
+            return '‘‘’’<strong><font color="#F54343">' + title + '</front></strong>';
+        }
+    }
     require(config.依赖.match(/https.*\//)[0] + 'SrcJyMenu.js');
     for(var i in erjimenu){
         d.push(
