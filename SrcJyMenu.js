@@ -245,7 +245,7 @@ var erjimenu = [
                 };
                 d.push({
                     title: '当前解析模式：' + (parsemode==1?'聚影智能':parsemode==2?'强制断插':'强制嗅探'),
-                    desc: parsemode==1?'上次优先>app解析+私有解析'+(haveDN&&isdn?'+断插解析':'')+'+嗅探保底':parsemode==2?'断插(含魔断)或帅助手设置的解析逻辑':'app和私有解析中的直链+保底解析进行聚合嗅探',
+                    desc: parsemode==1?'上次优先>app解析+私有解析'+(haveDN&&isdn?'+断插解析':'')+'+嗅探保底':parsemode==2?'走断插(含魔断)或帅助手设置的解析逻辑':'app和私有解析中的直链+保底解析进行聚合嗅探',
                     url: 'hiker://empty',
                     col_type: "text_center_1"
                 });
@@ -273,12 +273,12 @@ var erjimenu = [
                             JYconfig['parsemode'] = 2;
                             writeFile(cfgfile, JSON.stringify(JYconfig));
                             refreshPage(false);
-                            return 'toast://解析模式：聚影智能';
+                            return 'toast://解析模式：强制断插';
                         }, JYconfig, cfgfile),
                     col_type: "text_2"
                 });
                 d.push({
-                    title: '断插配置',
+                    title: '🍧断插配置',
                     url: 'hiker://empty',
                     col_type: "text_2"
                 });
@@ -291,12 +291,12 @@ var erjimenu = [
                             JYconfig['parsemode'] = 3;
                             writeFile(cfgfile, JSON.stringify(JYconfig));
                             refreshPage(false);
-                            return 'toast://解析模式：聚影智能';
+                            return 'toast://解析模式：强制嗅探';
                         }, JYconfig, cfgfile),
                     col_type: "text_2"
                 });
                 d.push({
-                    title: '内核',
+                    title: '内核(x5)',
                     url: 'hiker://empty',
                     col_type: "text_2"
                 });
