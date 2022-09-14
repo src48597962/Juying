@@ -1,5 +1,7 @@
 //个人学习代码
 function SRCSet() {
+    similar('🐞酷云七七(SP)','酷云七七')
+    similar('🐞酷云七七','酷云七七')
     addListener("onClose", $.toString(() => {
         clearMyVar('guanlicz');
         clearMyVar('duoselect');
@@ -1313,7 +1315,7 @@ function similar(s, t, f) {//判断两个字符串之间的相似度
         }
     }
     let res = (1 - d[n][m] / l) *100 || 0;
-    return res.toFixed(f);
+    return parseInt(res.toFixed(f));
 }
 function jiekousave(urls,update) {
     try{
