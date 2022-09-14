@@ -234,6 +234,7 @@ var erjimenu = [
                     var isdn = JYconfig.isdn || 1;
                 }else{
                     var haveDN = 0
+                    var isdn = 0;
                 };
                 d.push({
                     title: '当前解析模式：' + (parsemode==1?'聚影智能':parsemode==2?'强制断插':'强制嗅探'),
@@ -280,7 +281,7 @@ var erjimenu = [
                 d.push({
                     col_type: "line"
                 });
-                
+                /*
                 d.push({
                     title: isDn==1&&JYconfig['isdn']!=0?'断插辅助(开)':'断插辅助(关)',
                     url: isDn==0?'toast://没有断插？无法开启！':$('#noLoading#').lazyRule((JYconfig,cfgfile) => {
@@ -312,7 +313,7 @@ var erjimenu = [
                             return 'toast://切换成功：' + sm;
                         }, JYconfig, cfgfile),
                     col_type: "text_2"
-                });
+                });*/
                 setHomeResult(d);
             }),
         pic_url: 'https://lanmeiguojiang.com/tubiao/messy/37.svg',
