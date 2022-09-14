@@ -1,5 +1,7 @@
 //个人学习代码
 function SRCSet() {
+    log(getSimilarity('帅才影视','乐猎影视'))
+    log(getSimilarity('帅才影视','555影视'))
     addListener("onClose", $.toString(() => {
         clearMyVar('guanlicz');
         clearMyVar('duoselect');
