@@ -55,11 +55,11 @@ var erjimenu = [
     {
         title: "观影设置",
         url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
-                function getide(title,is) {
+                function getide(is) {
                     if(is==1){
-                        return '‘‘’’<strong><font color="#19B89D">' + title + '</front></strong>';
+                        return '‘‘’’<font color="#f13b66a">◉ </front>';
                     }else{
-                        return '‘‘’’<strong><font color="#F54343">' + title + '</front></strong>';
+                        return '‘‘’’<strong><font color="#F54343">◉ </front></strong>';
                     }
                 }
                 setPageTitle("♥观影设置");
@@ -80,7 +80,7 @@ var erjimenu = [
                     col_type: "line_blank"
                 });
                 d.push({
-                    title: JYconfig['printlog']==1?'打印日志(开)':'打印日志(关)',
+                    title: (JYconfig['printlog']==1?getide(1):getide(0))+'打印日志',
                     url: $('#noLoading#').lazyRule((JYconfig,cfgfile) => {
                             if(JYconfig['printlog'] != 1){
                                 JYconfig['printlog'] = 1;
@@ -94,7 +94,7 @@ var erjimenu = [
                     col_type: "text_2"
                 });
                 d.push({
-                    title: JYconfig['cachem3u8']!=0?'m3u8缓存(开)':'m3u8缓存(关)',
+                    title: (JYconfig['cachem3u8']!=0?getide(1):getide(0))+'m3u8缓存',
                     url: $('#noLoading#').lazyRule((JYconfig,cfgfile) => {
                             if(JYconfig['cachem3u8'] == 0){
                                 JYconfig['cachem3u8'] = 1;
@@ -250,12 +250,12 @@ var erjimenu = [
                     col_type: "text_center_1"
                 });
                 d.push({
-                    title: (parsemode==1?getide('◉',1):getide('◉',0))+'聚影智能',
+                    title: (parsemode==1?getide(1):getide(0))+'聚影智能',
                     url: 'hiker://empty',
                     col_type: "text_2"
                 });
                 d.push({
-                    title: (isdn==1?getide('◉',1):getide('◉',0))+'断插辅助',
+                    title: (isdn==1?getide(1):getide(0))+'断插辅助',
                     url: 'hiker://empty',
                     col_type: "text_2"
                 });
@@ -263,7 +263,7 @@ var erjimenu = [
                     col_type: "line"
                 });
                 d.push({
-                    title: (parsemode==2?getide('◉',1):getide('◉',0))+'强制断插',
+                    title: (parsemode==2?getide(1):getide(0))+'强制断插',
                     url: 'hiker://empty',
                     col_type: "text_2"
                 });
@@ -276,7 +276,7 @@ var erjimenu = [
                     col_type: "line"
                 });
                 d.push({
-                    title: (parsemode==3?getide('◉',1):getide('◉',0))+'强制嗅探',
+                    title: (parsemode==3?getide(1):getide(0))+'强制嗅探',
                     url: 'hiker://empty',
                     col_type: "text_2"
                 });
