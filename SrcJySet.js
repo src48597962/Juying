@@ -1,7 +1,6 @@
 //个人学习代码
 function SRCSet() {
-    log(similar('🐞酷云七七(SP)','酷云七七'))
-    log(similar('🐞酷云七七','酷云七七'))
+    log(similar('酷云七七2','酷云七七'))
     addListener("onClose", $.toString(() => {
         clearMyVar('guanlicz');
         clearMyVar('duoselect');
