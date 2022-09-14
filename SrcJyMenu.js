@@ -55,6 +55,13 @@ var erjimenu = [
     {
         title: "观影设置",
         url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
+                function getide(title,is) {
+                    if(is==1){
+                        return '‘‘’’<strong><font color="#19B89D">' + title + '</front></strong>';
+                    }else{
+                        return '‘‘’’<strong><font color="#F54343">' + title + '</front></strong>';
+                    }
+                }
                 setPageTitle("♥观影设置");
                 var d = [];
                 var cfgfile = "hiker://files/rules/Src/Juying/config.json";
