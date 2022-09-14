@@ -1,6 +1,5 @@
 //个人学习代码
 function SRCSet() {
-    log(similar('酷云七七2','酷云七七'))
     addListener("onClose", $.toString(() => {
         clearMyVar('guanlicz');
         clearMyVar('duoselect');
@@ -1259,23 +1258,7 @@ function getapitype(apiurl) {
         return "";
     }
 }
-function getSimilarity(str1,str2) {
-    let sameNum = 0
-    //寻找相同字符
-    for (let i = 0; i < str1.length; i++) {
-        for(let j =0;j<str2.length;j++){
-            if(str1[i]===str2[j]){
-                sameNum ++ 
-                break
-            }
-        }
-    }
-    // console.log(str1,str2);
-    // console.log("相似度",(sameNum/str1.length) * 100);
-    //判断2个字符串哪个长度比较长
-    let length = str1.length > str2.length ? str1.length : str2.length
-    return (sameNum/length) * 100 || 0
-}
+
 function similar(s, t, f) {//判断两个字符串之间的相似度
     if (!s || !t) {
         return 0
@@ -1344,9 +1327,8 @@ function jiekousave(urls,update) {
             }
 
             function checkitem(item) {
-                log(item.name+' '+urlname+' '+getSimilarity(item.name,urlname)+' '+similar(item.name,urlname));
-                
-                return item.url==urlurl||(getSimilarity(item.name,urlname)>75&&urltype=="biubiu");
+                //log(item.name+' '+urlname+' '+similar(item.name,urlname));
+                return item.url==urlurl||(similar(item.name,urlname)>70&&urltype=="biubiu");
             }
             if(!datalist.some(checkitem)&&urlname&&/^http|^csp/.test(urlurl)&&urltype){
                 let arr  = { "name": urlname, "url": urlurl, "ua": urlua, "type": urltype };
@@ -1357,20 +1339,8 @@ function jiekousave(urls,update) {
                 }else{
                     datalist.push(arr);
                 }
-                num ++;
-            }
-            /*
-            if(!datalist.some(item => item.url==urlurl||(getSimilarity(item.name,urlname)>60&&urltype=="biubiu"))&&urlname&&/^http|^csp/.test(urlurl)&&urltype){
-                let arr  = { "name": urlname, "url": urlurl, "ua": urlua, "type": urltype };
-                if(urls[i].data){arr['data'] = urls[i].data}
-                if(urlgroup){arr['group'] = urlgroup}
-                if(urls.length == 1){
-                    datalist.unshift(arr);
-                }else{
-                    datalist.push(arr);
-                }
                 num = num + 1;
-            }*/
+            }
         }
         if(num>0){writeFile(filepath, JSON.stringify(datalist));}
     } catch (e) {
