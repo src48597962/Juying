@@ -1,3 +1,11 @@
+function getide(title,is) {
+    if(is==1){
+        return '‘‘’’<strong><font color="#19B89D">' + title + '</front></strong>';
+    }else{
+        return '‘‘’’<strong><font color="#F54343">' + title + '</front></strong>';
+    }
+}
+
 //二级统一菜单
 var erjimenu = [
         {
@@ -243,12 +251,12 @@ var erjimenu = [
                     col_type: "text_center_1"
                 });
                 d.push({
-                    title: '◉聚影智能',
+                    title: (parsemode==1?getide('◉',1):getide('◉',0))+'聚影智能',
                     url: 'hiker://empty',
                     col_type: "text_2"
                 });
                 d.push({
-                    title: '◉断插辅助',
+                    title: (isdn==1?getide('◉',1):getide('◉',0))+'断插辅助',
                     url: 'hiker://empty',
                     col_type: "text_2"
                 });
@@ -256,7 +264,7 @@ var erjimenu = [
                     col_type: "line"
                 });
                 d.push({
-                    title: '◉强制断插',
+                    title: (parsemode==2?getide('◉',1):getide('◉',0))+'强制断插',
                     url: 'hiker://empty',
                     col_type: "text_2"
                 });
@@ -269,7 +277,7 @@ var erjimenu = [
                     col_type: "line"
                 });
                 d.push({
-                    title: '◉强制嗅探',
+                    title: (parsemode==3?getide('◉',1):getide('◉',0))+'强制嗅探',
                     url: 'hiker://empty',
                     col_type: "text_2"
                 });
