@@ -182,7 +182,7 @@ var erjimenu = [
                     col_type: "text_2"
                 });
                 d.push({
-                    col_type: "line_blank"
+                    col_type: "line"
                 });
                 var parsefrom = [];
                 var recordfile = "hiker://files/rules/Src/Juying/parse.json";
@@ -195,6 +195,50 @@ var erjimenu = [
                         }
                     }catch(e){ }
                 }
+                d.push({
+                    title: '屏蔽优先解析',
+                    url: parsefrom.length==0?'toast://没有优先解析，无需操作':$(parsefrom,3,"选择片源屏蔽优先解析").select(()=>{
+                        var recordfile = "hiker://files/rules/Src/Juying/parse.json";
+                        var recordparse=fetch(recordfile);
+                        eval("var recordlist=" + recordparse+ ";");
+                        var parseurl = recordlist.parse[input];
+                        var parsename = recordlist.name[input];
+                        delete recordlist.parse[input];
+                        
+
+                        var filepath = "hiker://files/rules/Src/Juying/myjiexi.json";
+                        var datafile = fetch(filepath);
+                        if(datafile != ""){
+                            eval("var datalist=" + datafile+ ";");
+                        }else{
+                            var datalist = [];
+                        }
+                        if(datalist.some(item => item.parse == parseurl)){
+                            //私有解析在屏蔽优先时，仅排除片源
+                            for(var j=0;j<datalist.length;j++){
+                                if(datalist[j].parse==parseurl&&datalist[j].stopfrom.indexOf(input)==-1){
+                                    datalist[j].stopfrom[datalist[j].stopfrom.length] = input;
+                                }
+                                break;
+                            }
+                            writeFile(filepath, JSON.stringify(datalist));
+                            var sm = '私有解析('+parsename+')>排除片源>'+input;
+                        }else{
+                            //app自带的解析在屏蔽优先时，直接加入黑名单
+                            recordlist['excludeparse'] = recordlist['excludeparse']||[];
+                            if(parseurl&&recordlist['excludeparse'].indexOf(parseurl)==-1){
+                                recordlist['excludeparse'].push(parseurl);
+                            }
+                            var sm = parsename+'>加入全局黑名单';
+                        }
+
+                        writeFile(recordfile, JSON.stringify(recordlist));   
+                        refreshPage(false);
+                        log('已屏蔽'+input+' 优先解析：'+sm);
+                        return 'toast://已屏蔽'+input+'优先解析';
+                    }),
+                    col_type: "text_2"
+                });
                 d.push({
                     title: '清除优先拦截记录',
                     url: $("清除app自带解析拦截黑名单记录？").confirm(()=>{
