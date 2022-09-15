@@ -378,7 +378,7 @@ var erjimenu = [
                     col_type: "text_3"
                 });
                 d.push({
-                    title: (parsemode==3&&JYconfig.xiutannh!='x5'?getide(1):getide(0))+'web内核',
+                    title: (JYconfig.xiutannh!='x5'?getide(1):getide(0))+'web内核',
                     url: $('#noLoading#').lazyRule((JYconfig,cfgfile) => {
                             JYconfig['xiutannh'] = 'web';
                             writeFile(cfgfile, JSON.stringify(JYconfig));
@@ -388,7 +388,7 @@ var erjimenu = [
                     col_type: "text_3"
                 });
                 d.push({
-                    title: (parsemode==3&&JYconfig.xiutannh=='x5'?getide(1):getide(0))+'x5内核',
+                    title: (JYconfig.xiutannh=='x5'?getide(1):getide(0))+'x5内核',
                     url: $('#noLoading#').lazyRule((JYconfig,cfgfile) => {
                             JYconfig['xiutannh'] = 'x5';
                             writeFile(cfgfile, JSON.stringify(JYconfig));
