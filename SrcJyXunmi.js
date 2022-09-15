@@ -751,6 +751,7 @@ function xunmierji(type,ua) {
         clearMyVar('parse_api');
         clearMyVar('moviedesc');
         clearMyVar('SrcM3U8');
+        clearMyVar('SrcXTNH');
         clearMyVar('linecode');
     }));
 
