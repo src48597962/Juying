@@ -62,6 +62,60 @@ var erjimenu = [
                         return '‘‘’’<strong><font color="#F54343">◉ </front></strong>';
                     }
                 }
+                function setupPages(type) {
+                    switch (type) {
+                        case "设置":
+                            return $("hiker://empty#noRecordHistory#").rule(() => {
+                                this.d = [];
+                                eval(fetch('hiker://files/cache/fileLinksᴰⁿ.txt'));
+                                if (!getVar('jxItemV')) {
+                                    require(fLinks.jxItUrl);
+                                }
+                                d.push({
+                                    desc: 'auto',
+                                    url: fLinks.x5Route + 'Parse_Dn.html',
+                                    col_type: 'x5_webview_single'
+                                });
+                                var jxItNewV = getVar('jxItNewV', ''),
+                                    jxItemV = getVar('jxItemV', '');
+                                var versionTips = jxItNewV == '' ? '‘‘' : '‘‘' + jxItNewV + '\n';
+                                var pics = [
+                                    'https://tva1.sinaimg.cn/large/9bd9b167gy1fwri56wjhqj21hc0u0arr.jpg',
+                                    'https://cdn.seovx.com/img/seovx-20-10%20(92).jpg',
+                                    'https://cdn.seovx.com/img/mom2018%20(207).jpg',
+                                    'https://tva4.sinaimg.cn/large/9bd9b167gy1fwrh5xoltdj21hc0u0tax.jpg',
+                                    'https://tva1.sinaimg.cn/large/005BYqpggy1fwreyu4nl6j31hc0u0ahr.jpg',
+                                    'https://s3.bmp.ovh/imgs/2021/10/d7e60b990742093d.jpeg',
+                                    'https://s3.bmp.ovh/imgs/2021/10/91ad6d6538bf8689.jpg',
+                                    'https://tva1.sinaimg.cn/large/005BYqpggy1fwresl5pmlj31hc0xcwka.jpg',
+                                    'https://tva3.sinaimg.cn/large/005BYqpggy1fwrgjdk74oj31hc0u0dqn.jpg',
+                                    'https://cdn.seovx.com/img/mom2018%20(803).jpg'
+                                ];
+                                d.push({
+                                    img: pics[Math.floor(Math.random() * 10)],
+                                    title: versionTips + '’’<small><span style="color:#6EB897">　　点击此处查看操作指引<br>点击上方头像进入编辑',
+                                    desc: '当前版本: ' + jxItemV,
+                                    url: fLinks.czzy,
+                                    col_type: 'movie_1'
+                                });
+                                setResult(d);
+                            })
+                            break;
+                        case "编辑":
+                            return $("hiker://empty#noRecordHistory#").rule(() => {
+                                this.d = [];
+                                eval(fetch('hiker://files/cache/fileLinksᴰⁿ.txt'));
+                                require(fLinks.jxItUrl);
+                                jxItem.jxList();
+                                setResult(d);
+                            })
+                            break;
+                        default:
+                            return 'toast://需要传入正确参数'
+                            break;
+                    }
+                }
+
                 setPageTitle("♥观影设置");
                 var d = [];
                 var cfgfile = "hiker://files/rules/Src/Juying/config.json";
@@ -260,8 +314,20 @@ var erjimenu = [
                     col_type: "text_2"
                 });
                 d.push({
-                    title: (isdn==1?getide(1):getide(0))+'断插辅助',
-                    url: 'hiker://empty',
+                    title: (haveDN&&isdn?getide(1):getide(0))+'断插辅助',
+                    url: haveDN==0?'toast://没有断插？无法开启！':$(JYconfig.dnfile?JYconfig.dnfile:"","指定断插解析文件路径\n默认可以留空").input((JYconfig,cfgfile) => {
+                            if(JYconfig['isdn'] == 0){
+                                JYconfig['isdn'] = 1;
+                                var sm = "开启断插同步并发解析";
+                            }else{
+                                JYconfig['isdn'] = 0;
+                                var sm = "只走程序自身的解析";
+                            }
+                            if(input){JYconfig['dnfile'] = input;}
+                            writeFile(cfgfile, JSON.stringify(JYconfig));
+                            refreshPage(false);
+                            return 'toast://切换成功：' + sm;
+                        }, JYconfig, cfgfile),
                     col_type: "text_2"
                 });
                 d.push({
@@ -275,12 +341,17 @@ var erjimenu = [
                             refreshPage(false);
                             return 'toast://解析模式：强制断插';
                         }, JYconfig, cfgfile),
-                    col_type: "text_2"
+                    col_type: "text_3"
                 });
                 d.push({
                     title: '🍧断插配置',
-                    url: 'hiker://empty',
-                    col_type: "text_2"
+                    url: fileExist('hiker://files/cache/fileLinksᴰⁿ.txt') ? setupPages("设置") : "hiker://page/Route?rule=MyFieldᴰⁿ&type=设置#noHistory#",
+                    col_type: "text_3"
+                });
+                d.push({
+                    title: '🍨解析管理',
+                    url: fileExist('hiker://files/cache/fileLinksᴰⁿ.txt') ? setupPages("编辑") : "hiker://page/Route?rule=MyFieldᴰⁿ&type=编辑#noRecordHistory#",
+                    col_type: "text_3"
                 });
                 d.push({
                     col_type: "line"
