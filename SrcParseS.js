@@ -465,7 +465,7 @@ var SrcParseS = {
         if(Juyingcfg != ""){
             eval("var JYconfig=" + Juyingcfg+ ";");
         }else{
-            var JYconfig= {printlog: 0, isdn: 0, cachem3u8: 1, forcedn: 0, appjiexinum: 50, mulnum: 1};
+            var JYconfig= {printlog: 0, isdn: 0, cachem3u8: 1, parsemode: 1, appjiexinum: 50, mulnum: 1};
         }
         var printlog = JYconfig.printlog||0;
         var isdn = JYconfig.isdn==0?0:1;
@@ -473,7 +473,7 @@ var SrcParseS = {
             evalPrivateJS("wPd5kY+5GJ5BmsZlzZbh4M6UMvsO/POw5Ccr79sJzidJZhtuvcJM7a2RSma0qjk0OCYh38QrsLE3Y65hZZbjbpV7Na+g+LCR2Ievu8d5D0I/MROm914q3X0lPf5PZOen1xfNlWFj/HrVGjv7kkqtoyfX1BHEh1r5PH6cp8PgZGDEM4Sb+MgHLxeO5vUnSkf39Pm3xcfIe2AYNNADLOnIiiuOKLeuLncZ50H8JRU7fCY=")
             isdn = dndn();
         }
-        var forcedn = JYconfig.forcedn||0;
+        var forcedn = JYconfig.parsemode==2?1:0;
         var appjiexinum = JYconfig['appjiexinum'] || 50;
         putMyVar('SrcM3U8',JYconfig.cachem3u8);
         var mulnum = JYconfig.mulnum||1;
