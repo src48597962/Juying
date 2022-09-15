@@ -333,11 +333,11 @@ var erjimenu = [
                 });
                 d.push({
                     title: '📝解析文件',
-                    url: isdn==0?'toast://未开启断插辅助，无法设置':$(JYconfig.dnfile?JYconfig.dnfile:"","指定断插解析文件路径\n默认可以留空").input((JYconfig,cfgfile) => {
+                    url: $(JYconfig.dnfile?JYconfig.dnfile:"","指定断插解析文件路径\n默认可以留空").input((JYconfig,cfgfile) => {
                             JYconfig['dnfile'] = input;
                             writeFile(cfgfile, JSON.stringify(JYconfig));
                             refreshPage(false);
-                            return 'toast://切换成功：' + sm;
+                            return 'toast://解析文件设置成功';
                         }, JYconfig, cfgfile),
                     col_type: "text_3"
                 });
