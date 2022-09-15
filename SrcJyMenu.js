@@ -66,6 +66,7 @@ var erjimenu = [
                     switch (type) {
                         case "设置":
                             return $("hiker://empty#noRecordHistory#").rule(() => {
+                                setPageTitle("断插配置");
                                 this.d = [];
                                 eval(fetch('hiker://files/cache/fileLinksᴰⁿ.txt'));
                                 if (!getVar('jxItemV')) {
@@ -103,6 +104,7 @@ var erjimenu = [
                             break;
                         case "编辑":
                             return $("hiker://empty#noRecordHistory#").rule(() => {
+                                setPageTitle("解析管理");
                                 this.d = [];
                                 eval(fetch('hiker://files/cache/fileLinksᴰⁿ.txt'));
                                 require(fLinks.jxItUrl);
@@ -311,11 +313,11 @@ var erjimenu = [
                             refreshPage(false);
                             return 'toast://解析模式：聚影智能';
                         }, JYconfig, cfgfile),
-                    col_type: "text_2"
+                    col_type: "text_3"
                 });
                 d.push({
                     title: (haveDN&&isdn?getide(1):getide(0))+'断插辅助',
-                    url: haveDN==0?'toast://没有断插？无法开启！':$(JYconfig.dnfile?JYconfig.dnfile:"","指定断插解析文件路径\n默认可以留空").input((JYconfig,cfgfile) => {
+                    url: haveDN==0?'toast://没有断插？无法开启！':$('#noLoading#').lazyRule((JYconfig,cfgfile) => {
                             if(JYconfig['isdn'] == 0){
                                 JYconfig['isdn'] = 1;
                                 var sm = "开启断插同步并发解析";
@@ -323,12 +325,21 @@ var erjimenu = [
                                 JYconfig['isdn'] = 0;
                                 var sm = "只走程序自身的解析";
                             }
-                            if(input){JYconfig['dnfile'] = input;}
                             writeFile(cfgfile, JSON.stringify(JYconfig));
                             refreshPage(false);
                             return 'toast://切换成功：' + sm;
                         }, JYconfig, cfgfile),
-                    col_type: "text_2"
+                    col_type: "text_3"
+                });
+                d.push({
+                    title: '📝解析文件',
+                    url: isdn==0?'toast://未开启断插辅助，无法设置':$(JYconfig.dnfile?JYconfig.dnfile:"","指定断插解析文件路径\n默认可以留空").input((JYconfig,cfgfile) => {
+                            JYconfig['dnfile'] = input;
+                            writeFile(cfgfile, JSON.stringify(JYconfig));
+                            refreshPage(false);
+                            return 'toast://切换成功：' + sm;
+                        }, JYconfig, cfgfile),
+                    col_type: "text_3"
                 });
                 d.push({
                     col_type: "line"
@@ -349,7 +360,7 @@ var erjimenu = [
                     col_type: "text_3"
                 });
                 d.push({
-                    title: '🍨解析管理',
+                    title: '🍦解析管理',
                     url: fileExist('hiker://files/cache/fileLinksᴰⁿ.txt') ? setupPages("编辑") : "hiker://page/Route?rule=MyFieldᴰⁿ&type=编辑#noRecordHistory#",
                     col_type: "text_3"
                 });
@@ -369,7 +380,12 @@ var erjimenu = [
                 d.push({
                     title: '👀内核(x5)',
                     url: 'hiker://empty',
-                    col_type: "text_2"
+                    col_type: "text_3"
+                });
+                d.push({
+                    title: '👀内核(web)',
+                    url: 'hiker://empty',
+                    col_type: "text_3"
                 });
 
                 /*
