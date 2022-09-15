@@ -465,7 +465,7 @@ var SrcParseS = {
         if(Juyingcfg != ""){
             eval("var JYconfig=" + Juyingcfg+ ";");
         }else{
-            var JYconfig= {printlog: 0, isdn: 0, cachem3u8: 1, parsemode: 1, appjiexinum: 50, mulnum: 1};
+            var JYconfig= {printlog: 0, isdn: 0, cachem3u8: 1, parsemode: 1, appjiexinum: 50, xiutannh: 'web'};
         }
         var printlog = JYconfig.printlog||0;
         var isdn = JYconfig.isdn==0?0:1;
@@ -476,6 +476,7 @@ var SrcParseS = {
         var forcedn = JYconfig.parsemode==2?1:0;
         var appjiexinum = JYconfig['appjiexinum'] || 50;
         putMyVar('SrcM3U8',JYconfig.cachem3u8);
+        if(JYconfig.xiutannh){putMyVar('SrcXTNH',JYconfig.xiutannh);}
         var mulnum = JYconfig.mulnum||1;
         if(printlog==1){log("影片地址："+vipUrl)}; 
         var exclude = /404\.m3u8|xiajia\.mp4|余额不足\.m3u8|\.m3u8\.tv/;//设置排除地址
