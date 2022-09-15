@@ -2041,7 +2041,7 @@ function jiexi(lx,data) {
                     for (var i in urls) {
                         let urlname = urls[i].split('#')[0].trim();
                         let urlurl = urls[i].split('#')[1].trim();
-                        if(!datalist.some(item => item.url ==urlurl)&&urlname&&/^http/.test(urlurl)){
+                        if(!datalist.some(item => item.parse==urlurl)&&urlname&&/^http/.test(urlurl)){
                             let arr  = { "name": urlname, "parse": urlurl, "stopfrom": [], "priorfrom": [], "sort": 0 };
                             datalist.push(arr);
                             urlnum = urlnum + 1;
