@@ -294,7 +294,7 @@ var erjimenu = [
                 let parsemode = JYconfig.parsemode || 1;
                 if(fileExist('hiker://files/rules/DuanNian/MyParse.json')){
                     var haveDN = 1
-                    var isdn = JYconfig.isdn || 1;
+                    var isdn = JYconfig.isdn==0?0:1;
                 }else{
                     var haveDN = 0
                     var isdn = 0;
@@ -375,16 +375,26 @@ var erjimenu = [
                             refreshPage(false);
                             return 'toast://解析模式：强制嗅探';
                         }, JYconfig, cfgfile),
-                    col_type: "text_2"
-                });
-                d.push({
-                    title: '👀内核(x5)',
-                    url: 'hiker://empty',
                     col_type: "text_3"
                 });
                 d.push({
-                    title: '👀内核(web)',
-                    url: 'hiker://empty',
+                    title: (parsemode==3&&JYconfig.xiutannh!='web'?getide(1):getide(0))+'内核(x5)',
+                    url: $('#noLoading#').lazyRule((JYconfig,cfgfile) => {
+                            JYconfig['xiutannh'] = 'x5';
+                            writeFile(cfgfile, JSON.stringify(JYconfig));
+                            refreshPage(false);
+                            return 'toast://嗅探内核：x5';
+                        }, JYconfig, cfgfile),
+                    col_type: "text_3"
+                });
+                d.push({
+                    title: (parsemode==3&&JYconfig.xiutannh=='web'?getide(1):getide(0))+'内核(web)',
+                    url: $('#noLoading#').lazyRule((JYconfig,cfgfile) => {
+                            JYconfig['xiutannh'] = 'web';
+                            writeFile(cfgfile, JSON.stringify(JYconfig));
+                            refreshPage(false);
+                            return 'toast://嗅探内核：web';
+                        }, JYconfig, cfgfile),
                     col_type: "text_3"
                 });
 
