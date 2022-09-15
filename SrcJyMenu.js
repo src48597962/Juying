@@ -323,7 +323,7 @@ var erjimenu = [
                                 var sm = "开启断插同步并发解析";
                             }else{
                                 JYconfig['isdn'] = 0;
-                                var sm = "只走程序自身的解析";
+                                var sm = "断插辅助解析已关闭";
                             }
                             writeFile(cfgfile, JSON.stringify(JYconfig));
                             refreshPage(false);
@@ -378,7 +378,7 @@ var erjimenu = [
                     col_type: "text_3"
                 });
                 d.push({
-                    title: (parsemode==3&&JYconfig.xiutannh!='web'?getide(1):getide(0))+'内核(x5)',
+                    title: (parsemode==3&&JYconfig.xiutannh!='web'?getide(1):getide(0))+'x5内核',
                     url: $('#noLoading#').lazyRule((JYconfig,cfgfile) => {
                             JYconfig['xiutannh'] = 'x5';
                             writeFile(cfgfile, JSON.stringify(JYconfig));
@@ -388,7 +388,7 @@ var erjimenu = [
                     col_type: "text_3"
                 });
                 d.push({
-                    title: (parsemode==3&&JYconfig.xiutannh=='web'?getide(1):getide(0))+'内核(web)',
+                    title: (parsemode==3&&JYconfig.xiutannh=='web'?getide(1):getide(0))+'web内核',
                     url: $('#noLoading#').lazyRule((JYconfig,cfgfile) => {
                             JYconfig['xiutannh'] = 'web';
                             writeFile(cfgfile, JSON.stringify(JYconfig));
