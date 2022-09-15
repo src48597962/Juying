@@ -633,7 +633,7 @@ var SrcParseS = {
             var appJXchange = 0;//app解析是否有发现新的或增加可解片源
             var myJXchange = 0;//私有解析是否排除片源
             var appzdchange = 0;//app自带解析是否加入黑名单
-            
+
             //断插线程代码
             var dnaytmParse = function(vipUrl) {
                 evalPrivateJS("OjB3OHrVodkVQlHIU8UUAC5W0ZBgTQEC4h9eUEcAT9kEM0hY/45YOxs7PDeQEnxjVhaWW2tIqO5GQimD4ssHKSka505+O0avEtQQZ9zRy6GxaBZdTHrbCPcoNIajmr3+JG22tRswOJFYDX5aYk0PfUDEFsZa2OjZbz+xTthnoUPLNm0R2g1kBFnWwGKBWUxEhEsFwFruhFSaxJi1E1WZ7WlbP0v4OpoQgn6M7UXGahP9h2fHi8UBVDGfjzIuVuJSCgICLlVGaAbT0ghic+Kfbp3TmjRhAo1DKretYp1U53apDMvO2Q+6oAyO1js5TJwx51ygFSUqVGAu0C2DLxkG0Z3+L8UPZyJa4KVDlqq/goE=")
@@ -642,7 +642,14 @@ var SrcParseS = {
                 var url = aytmParse(vipUrl);
                 return {url: url, ulist: {type:"dn",name:'dn',parse:'dn',x5:0}}; 
             }
-
+            //嗅探线程代码
+            var xiutanParse = function(obj) {
+                evalPrivateJS("OjB3OHrVodkVQlHIU8UUAC5W0ZBgTQEC4h9eUEcAT9kEM0hY/45YOxs7PDeQEnxjVhaWW2tIqO5GQimD4ssHKSka505+O0avEtQQZ9zRy6GxaBZdTHrbCPcoNIajmr3+JG22tRswOJFYDX5aYk0PfUDEFsZa2OjZbz+xTthnoUPLNm0R2g1kBFnWwGKBWUxEhEsFwFruhFSaxJi1E1WZ7WlbP0v4OpoQgn6M7UXGahP9h2fHi8UBVDGfjzIuVuJSCgICLlVGaAbT0ghic+Kfbp3TmjRhAo1DKretYp1U53apDMvO2Q+6oAyO1js5TJwx51ygFSUqVGAu0C2DLxkG0Z3+L8UPZyJa4KVDlqq/goE=")
+                //eval("var config =" + fetch("hiker://files/cache/MyParseSet.json"));
+                //eval(fetch(config.cj));
+                var url = aytmParse(vipUrl);
+                return {url: url, ulist: {type:"dn",name:'dn',parse:'dn',x5:0}}; 
+            }
             //明码解析线程代码
             var task = function(obj) {
                 if(/^function/.test(obj.ulist.parse.trim())){
@@ -690,6 +697,10 @@ var SrcParseS = {
                         if(rurl == ""){
                             if(!/404 /.test(gethtml)&&obj.ulist.parse.indexOf('key=')==-1){
                                 if(x5jxlist.length<=5){
+                                    let test=$(obj.ulist.parse+obj.vipUrl).x5Lazy(()=>{
+                                        return url; //url是嗅探得到的视频链接
+                                    });
+                                    log(test);
                                     x5jxlist.push(obj.ulist.parse);
                                     if(printlog==1){log(obj.ulist.name + '>加入x5嗅探列表');}
                                     x5namelist.push(obj.ulist.name);
