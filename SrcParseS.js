@@ -697,8 +697,8 @@ var SrcParseS = {
                         if(rurl == ""){
                             if(!/404 /.test(gethtml)&&obj.ulist.parse.indexOf('key=')==-1){
                                 if(x5jxlist.length<=5){
-                                    let test=$(obj.ulist.parse+obj.vipUrl).x5Lazy(()=>{
-                                        return url; //url是嗅探得到的视频链接
+                                    let test=$(obj.ulist.parse+obj.vipUrl).x5LazyRule(()=>{
+                                        return 'testx5'; //url是嗅探得到的视频链接
                                     });
                                     log(test);
                                     x5jxlist.push(obj.ulist.parse);
