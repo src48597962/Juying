@@ -345,6 +345,7 @@ function jiekouyiji() {
 function erji() {
     addListener("onClose", $.toString(() => {
         clearMyVar('SrcM3U8');
+        clearMyVar('SrcXTNH');
     }));
     clearMyVar('SrcJy$back');
     var d = [];
