@@ -527,7 +527,7 @@ var aytmParse = function (vipUrl,parseStr) {
                 id: parse.id
             }
         });
-        /*
+        
         be(parses, {
             func: function(obj, id, error, taskResult) {
                 log('be>'+taskResult.rurl);
@@ -544,7 +544,7 @@ var aytmParse = function (vipUrl,parseStr) {
                 errors: beerrors
             }
         });
-        */
+        log(x5jxlist)
         for(let k in beresults){
             log(beresults[k])
             parsename = beresults[k].name;
