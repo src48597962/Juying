@@ -549,11 +549,12 @@ var aytmParse = function (vipUrl,parseStr) {
         });
 
         for(let k in beresults){
+            log(beresults[k])
             log(beresults[k].name)
             parsename = beresults[k].name;
             parseurl = beresults[k].rurl;
             parselx = beresults[k].lx;
-            if(config.printlog==1){log("√" + parselx + "-" + parsename + ">解析结果检查")};
+            if(config.printlog==1){log("√"+ parsename + ">" + parselx + "解析结果检查")};
             if(beerrors[k]==null){
                 if(config.jstoweb==1&&parselx=="J"&&parseurl.search(/x5Rule|webRule/)>-1){
                         //js中跳转x5或web嗅探
