@@ -509,10 +509,10 @@ var aytmParse = function (vipUrl,parseStr) {
     if(config.testcheck==1){showLoading('√解析列表，检测中')};
 
     for (var i=0;i<parselist.length;i++) {
-        if(contain.test(url)){break;}
+        if(url){break;}
         var beresults = [];//用于存储多线程返回对象
         var beerrors = [];//用于存储多线程是否有错误
-        
+        log(i)
         let p = i+multiline;
         if(p>parselist.length){p=parselist.length}
         let JxList = [];
@@ -527,7 +527,7 @@ var aytmParse = function (vipUrl,parseStr) {
                 id: parse.id
             }
         });
-
+        /*
         be(parses, {
             func: function(obj, id, error, taskResult) {
                 log('be>'+taskResult.rurl);
@@ -544,7 +544,7 @@ var aytmParse = function (vipUrl,parseStr) {
                 errors: beerrors
             }
         });
-
+        */
         for(let k in beresults){
             log(beresults[k])
             parsename = beresults[k].name;
