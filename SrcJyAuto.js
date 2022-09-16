@@ -435,7 +435,7 @@ var aytmParse = function (vipUrl,parseStr) {
 
     var exclude = /404\.m3u8|xiajia\.mp4|余额不足\.m3u8/;//设置排除地址
     var contain = /\.mp4|\.m3u8|\.flv|\.avi|\.mpeg|\.wmv|\.mov|\.rmvb|\.dat|qqBFdownload|mime=video%2F|video_mp4/;//设置符合条件的正确地址
-    var url = "";
+    var playurl = "";
     var urls = [];//用于多线路地址存储
     var names = [];//用于多线路名称存储
     var headers = [];//用于多线路头信息存储
@@ -546,25 +546,25 @@ var aytmParse = function (vipUrl,parseStr) {
         });
 
         for(let k in beresults){
-            log(beresults[k])
+            //log(beresults[k])
             parsename = beresults[k].name;
             parseurl = beresults[k].rurl;
             parselx = beresults[k].lx;
-            if(config.printlog==1){log("√" + parselx + "-" + parsename + "解析结果检查")};
+            if(config.printlog==1){log("√" + parselx + "-" + parsename + ">解析结果检查")};
             if(beerrors[k]==null){
                 if(config.jstoweb==1&&parselx=="J"&&parseurl.search(/x5Rule|webRule/)>-1){
                         //js中跳转x5或web嗅探
                         if(config.printlog==1){log("√JS中跳转x5|web嗅探,解析逻辑被打断,结果自负")};  
                         return parseurl;
                 }else{
-                    if (contain.test(url) && !exclude.test(url)) {
-                        url = parseurl;
-                        if(config.printlog==1){log("√"+parselx+"解析成功>" + url)};  
+                    if (contain.test(parseurl) && !exclude.test(parseurl)) {
+                        playurl = parseurl;
+                        if(config.printlog==1){log("√"+parselx+"解析成功>" + parseurl)};  
                         if(config.testcheck==1){
-                            url = "";
+                            playurl = "";
                         }else{
                             if(ismulti==1&&multiline>1){
-                                let rurl = url.replace(/;{.*}/,'');
+                                let rurl = playurl.replace(/;{.*}/,'');
                                 let head = format.urlJoinUa(rurl,1);
                                 urls.push(format.urlCacheM3u8(rurl,head,urls.length)+'#pre#');
                                 names.push(parsename);
@@ -617,7 +617,7 @@ var aytmParse = function (vipUrl,parseStr) {
 
     //上面js免嗅、json、明码解析、剔除打不开网站做完了
     try {
-        if (url==''||url==null) {
+        if (playurl=="") {
             function uniq(array){
                 var temp = []; //一个新的临时数组
                 for(var i = 0; i < array.length; i++){
@@ -685,7 +685,7 @@ var aytmParse = function (vipUrl,parseStr) {
                             headers: headers
                         });   
             }else{
-                return format.urlJoinUa(format.urlCacheM3u8(url,format.urlJoinUa(url,1))) + '#isVideo=true#'; 
+                return format.urlJoinUa(format.urlCacheM3u8(playurl,format.urlJoinUa(playurl,1))) + '#isVideo=true#'; 
             }
         }
     } catch (e) {
