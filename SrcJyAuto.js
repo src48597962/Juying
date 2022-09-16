@@ -447,7 +447,6 @@ var aytmParse = function (vipUrl,parseStr) {
     if(config.testcheck==1){multiline=10}
     //明码解析线程代码
     var parsetask = function(obj) {
-        log('qqqqqqqqq')
         let rurl = "";
         let x5 = 0;
         if(obj.lx=="J"){
@@ -505,6 +504,7 @@ var aytmParse = function (vipUrl,parseStr) {
             }
         }
         obj['rurl'] = rurl;
+        log('qqqqqqqqq'+rurl)
         return obj;
     };
     if(config.testcheck==1){showLoading('√解析列表，检测中')};
