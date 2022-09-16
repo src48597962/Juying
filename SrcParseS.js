@@ -1029,16 +1029,7 @@ var SrcParseS = {
     //处理多线路播放地址
     formatMulUrl: function (url,i) {
         try {
-            if (/mgtv/.test(url)) {
-                var header = {'User-Agent': 'Mozilla/5.0','Referer': 'www.mgtv.com'};
-            }else if(/bilibili|bilivideo/.test(url)) {
-                var header = {'User-Agent': 'Mozilla/5.0','Referer': 'www.bilibili.com'};
-            }else if (/wkfile/.test(url)) {
-                var header = {'User-Agent': 'Mozilla/5.0','Referer': 'fantuan.tv'};
-            }else{
-                var header = {'User-Agent': 'Mozilla/5.0'};
-            }
-
+            let header = this.mulheader(url);
             if ((getMyVar('SrcM3U8', '1') == "1"||url.indexOf('vkey=')>-1)&&url.indexOf('.m3u8')>-1) {
                 var name = 'video'+parseInt(i)+'.m3u8';
                 url = cacheM3u8(url, {headers: header, timeout: 2000}, name)+'#pre#';
