@@ -613,283 +613,6 @@ var aytmParse = function (vipUrl,parseStr) {
         }//多线程结果处理
     }//循环结束
 
-    /*
-    if(Jparselist.length>0){ 
-        if(config.testcheck==1){showLoading('JS免嗅解析列表，检测中')};
-        if(config.printlog==1){log("√进入JS列表，接口数:"+Jparselist.length)};
-        for (var i=0;i<Jparselist.length;i++) {
-            if(contain.test(url)){break;}
-            var beurls = [];//用于存储多线程返回地址
-            var benames = [];//用于存储多线程名称
-            var beerrors = [];//用于存储多线程是否有错误
-            var task = function(obj) {
-                return ParseS[obj.parsename](obj.vipUrl);
-            };
-            
-            let p = i+multiline;
-            if(p>Jparselist.length){p=Jparselist.length}
-            let JsList = [];
-            for(let s=i;s<p;s++){
-                parsename = Jparselist[s].name;
-                JsList.push(parsename);
-                i=s;
-            }
-            let Jsparses = JsList.map((parse)=>{
-                return {
-                    func: task,
-                    param: {
-                        parsename: parse,
-                        vipUrl: vipUrl
-                    },
-                    id: parse
-                }
-            });
-
-            be(Jsparses, {
-                func: function(obj, id, error, taskResult) {
-                    obj.results.push(taskResult);
-                    obj.names.push(id);
-                    obj.errors.push(error);
-
-                    if (ismulti!=1&&config.testcheck!=1&&contain.test(taskResult)&&!exclude.test(taskResult)) {
-                        //toast("我主动中断了");
-                        log("√线程中止");
-                        return "break";
-                    }
-                },
-                param: {
-                    results: beurls,
-                    names: benames,
-                    errors: beerrors
-                }
-            });
-
-            for(let k in benames){
-                parsename = benames[k];
-                if(config.printlog==1){log("√正在调用js解析：" + parsename)};
-                if(beerrors[k]==null){
-                    if(config.jstoweb==1&&beurls[k].search(/x5Rule|webRule/)>-1){
-                            //js中跳转x5或web嗅探
-                            if(config.printlog==1){log("√JS中跳转x5|web嗅探,帅助手逻辑被打断,结果自负")};  
-                            return beurls[k];
-                    }else{
-                        if (contain.test(beurls[k]) && !exclude.test(beurls[k])) {
-                            url = beurls[k];
-                            if(config.printlog==1){log("√JS解析成功>" + url)};  
-                            if(config.testcheck==1){url=""}else{
-                                if(ismulti==1&&multiline>1){
-                                    let rurl = url.replace(/;{.*}/,'');
-                                    let head = format.urlJoinUa(rurl,1);
-                                    urls.push(format.urlCacheM3u8(rurl,head,urls.length)+'#pre#');
-                                    names.push(parsename);
-                                    headers.push(head);
-                                }else{
-                                    break;
-                                }
-                            }
-                        } else {
-                            //JS解析失败了，排序+1
-                            let failsum =0 ;
-                            for(var j=0;j<sortlist.length;j++){
-                                if(sortlist[j].name == parsename){ 
-                                    sortlist[j].sort = sortlist[j].sort+1;
-                                    issort = 1;
-                                    failsum = sortlist[j].sort;
-                                    if(sortlist[j].stopfrom.indexOf(from)==-1){
-                                        if((config.autoselect==1&&failsum>2)||(failsum>=config.failcount)){
-                                            //自动选择接口时此接口失败大于2时、失败次数大于限定，此片源排除此解析接口
-                                            sortlist[j].stopfrom[sortlist[j].stopfrom.length] = from
-                                        };
-                                    }
-                                    break;
-                                }
-                            }
-                            if(config.testcheck==1){faillist.push(parsename)};
-                            if(config.printlog==1){log("√解析失败,已失败"+failsum+"次，更换下一个解析")};
-                        }
-                    }
-                }else{
-                    if(config.testcheck==1){faillist.push(parsename)};
-                    if(config.printlog==1){log(beerrors[k]+" √此接口有语法错误，更换下一个解析")};
-                    for(var j=0;j<sortlist.length;j++){
-                        if(sortlist[j].name == parsename){ 
-                            sortlist[j].sort = sortlist[j].sort+1;
-                            issort = 1;
-                            if(sortlist[j].stopfrom.indexOf(from)==-1){
-                                sortlist[j].stopfrom[sortlist[j].stopfrom.length] = from;
-                            }
-                            break;
-                        }
-                    }
-                }
-            }//多线程结果处理
-        }//循环结束
-    }
-
-    if(Uparselist.length>0 && url==""){  
-        if(config.testcheck==1){showLoading('URL直链解析列表，检测中')};
-        if(config.printlog==1){log("√进入URL列表，接口数:"+Uparselist.length)}   
-        for (var i=0;i<Uparselist.length;i++) {
-            if(x5jxlist.length>=5){break;}
-            if(contain.test(url)){break;}
-
-            let UrlList = [];
-            var behtmls = [];//用于存储多线程返回html
-            var beparses = [];//用于存储多线程名称|url地址
-            var beerrors = [];//用于存储多线程是否有错误
-            var task = function(obj) {
-                return request(obj.playUrl,{timeout:2000});
-            };
-
-            let p = i+multiline;
-            if(p>Uparselist.length){p=Uparselist.length}
-            for(let s=i;s<p;s++){
-                UrlList.push(Uparselist[s].name+'|'+Uparselist[s].url);
-                i=s;
-            }
-
-            let Urlparses = UrlList.map((parse)=>{
-                return {
-                    func: task,
-                    param: {
-                        playUrl: parse.split('|')[1]+vipUrl
-                    },
-                    id: parse
-                }
-            });
-
-            be(Urlparses, {
-                func: function(obj, id, error, taskResult) {
-                    obj.results.push(taskResult);
-                    obj.parses.push(id);
-                    obj.errors.push(error);
-                    
-                    if (ismulti!=1&&config.testcheck!=1&&contain.test(taskResult)&&!exclude.test(taskResult)) {
-                        log("√线程中止");
-                        return "break";
-                    }
-                },
-                param: {
-                    results: behtmls,
-                    parses: beparses,
-                    errors: beerrors
-                }
-            });
-            
-            for(let k in beparses){
-                let gethtml = behtmls[k];
-                parsename = beparses[k].split('|')[0];
-                parseurl = beparses[k].split('|')[1];
-                if(beerrors[k]==null){
-                    if (gethtml == undefined || gethtml == "" || gethtml == null){
-                        //url直链网页打不开，排序+1
-                        let failsum =0 ;
-                        for(let j=0;j<sortlist.length;j++){
-                            if(sortlist[j].name == parsename){ 
-                                sortlist[j].sort = sortlist[j].sort+1;
-                                issort = 1;
-                                failsum = sortlist[j].sort;
-                                if(failsum>2&&sortlist[j].stopfrom.indexOf(from)==-1){
-                                    //网站打不开的情况，失败次数>2，此片源排除此解析接口
-                                    sortlist[j].stopfrom[sortlist[j].stopfrom.length] = from
-                                };
-                                break;
-                            }
-                        }
-                        if(config.testcheck==1){faillist.push(parsename)};
-                        if(config.printlog==1){log(parsename+"-√网站疑似打不开,已失败"+failsum+"次，跳过")}; 
-                    }else{
-                        var rurl = "";
-                        var rjxlx = "";
-                        try {
-                            rurl = JSON.parse(gethtml).url||JSON.parse(gethtml).data.url||JSON.parse(gethtml).data;
-                            rjxlx = "O";
-                        } catch (e) {
-                            //if(config.printlog==1){log(parsename+"-√URL直链-JSON解析失败，转网页明码偿试")}; 
-                            if(/\.m3u8|\.mp4|\.flv/.test(gethtml)){
-                                try {
-                                    if(gethtml.indexOf('urls = "') != -1){
-                                        rurl = gethtml.match(/urls = "(.*?)"/)[1];
-                                    }else if(gethtml.indexOf('"url":"') != -1){
-                                        rurl = gethtml.match(/"url":"(.*?)"/)[1];
-                                    }else if(gethtml.indexOf('id="video" src="') != -1){
-                                        rurl = gethtml.match(/id="video" src="(.*?)"/)[1];
-                                    }else if(gethtml.indexOf('url: "') != -1){
-                                        rurl = gethtml.match(/url: "(.*?)"/)[1];
-                                    }else{
-                                        //log('√将日志提交给帅，帮助完善解析逻辑 '+gethtml);
-                                    }
-                                } catch (e) {
-                                    log('√明码获取错误：'+e.message);
-                                }
-                            }
-                            if(rurl !=""){
-                                rjxlx = "U"
-                            }else{
-                                if(config.printlog==1){log(parsename+"-√URL直链-明码解析失败，加入嗅探解析组偿试")};  
-                                x5jxlist.push(parseurl);
-                                x5nmlist.push(parsename);
-                            }
-                        }
-                        if (typeof(rurl)!="undefined" && contain.test(rurl) && !exclude.test(rurl)){
-                            url = rurl;
-                            if(rjxlx=="O"){
-                                for(var j=0;j<sortlist.length;j++){
-                                    if(sortlist[j].name == parsename){ 
-                                        if(sortlist[j].sort>=0){
-                                            sortlist[j].sort = -1;
-                                            issort = 1;
-                                        }
-                                        break;
-                                    }
-                                }
-                                if(config.printlog==1){log(parsename+"-√URL直链-JSON解析成功>" + url)};
-                            }else if(rjxlx == "U"){
-                                if(config.printlog==1){log(parsename+"-√URL直链-明码解析成功>" + url)};
-                            }
-
-                            if(config.testcheck==1){url=""}else{
-                                if(ismulti==1&&multiline>1){
-                                    let head = format.urlJoinUa(url,1);
-                                    urls.push(format.urlCacheM3u8(url,head,urls.length));
-                                    names.push(parsename);
-                                    headers.push(head);
-                                }else{
-                                    break;
-                                }
-                            }
-                        } else {
-                            let failsum = 0;
-                            for(var j=0;j<sortlist.length;j++){
-                                if(sortlist[j].name == parsename){ 
-                                    sortlist[j].sort = sortlist[j].sort+1;
-                                    issort = 1;
-                                    failsum = sortlist[j].sort;
-                                    if(failsum==0){failsum=1}
-                                    break;
-                                }
-                            }
-                            if(config.testcheck==1){faillist.push(parsename)};
-                            if(config.printlog==1){log(parsename+"-√URL直链-解析失败"+failsum+"次，跳过")};
-                        }
-                    }
-                }else{
-                    if(config.testcheck==1){faillist.push(parsename)};
-                    if(config.printlog==1){log(beerrors[k]+" √此接口有语法错误，更换下一个解析")};
-                    for(var j=0;j<sortlist.length;j++){
-                        if(sortlist[j].name == parsename){ 
-                            sortlist[j].sort = sortlist[j].sort+1;
-                            issort = 1;
-                            if(sortlist[j].stopfrom.indexOf(from)==-1){
-                                sortlist[j].stopfrom[sortlist[j].stopfrom.length] = from;
-                            }
-                            break;
-                        }
-                    }
-                }
-            }//批量结果循环
-        }
-    }*/
     if(issort==1&&isparse==0){writeFile("hiker://files/cache/SrcSort.json", JSON.stringify(sortlist))};
 
     //上面js免嗅、json、明码解析、剔除打不开网站做完了
@@ -906,6 +629,7 @@ var aytmParse = function (vipUrl,parseStr) {
             }
             uniq(faillist);//去除重复
             if (x5jxlist.length == 0) { 
+                log('aaaa')
                 hideLoading();
                 if(config.printlog==1){if(config.testcheck==1){log('√检测结束');log('√解析失败的>'+faillist);refreshPage(false);}else{log('√JS免嗅和URL明码接口失败、网页嗅探未取到解析口，需重新配置插件')}};
                 if(config.testcheck==1){
@@ -929,6 +653,7 @@ var aytmParse = function (vipUrl,parseStr) {
                     return "toast://未找到可用的解析口"
                 }
             } else {
+                log('bbbb')
                 if(config.printlog==1){if(config.testcheck==1){log("√JS免嗅和URL明码检测结束，转网页嗅探检测接口数："+x5jxlist.length)}else{log("√JS免嗅和URL明码失败，转网页嗅探解析接口数："+x5jxlist.length)}};
                 if(config.printlog==1){log("√嗅探调用解析口："+x5nmlist[0])};
                 if(config.testcheck==1){showLoading('嗅探解析列表，检测中')}else{showLoading('√嗅探解析中，请稍候')};
@@ -941,6 +666,7 @@ var aytmParse = function (vipUrl,parseStr) {
                 return x5Player(x5jxlist,x5nmlist,vipUrl,sortlist,parmset,faillist,format);
             }
         } else {
+            log('cccc')
             if(urls.length>1){
                 return JSON.stringify({
                             urls: urls,
