@@ -446,7 +446,7 @@ var aytmParse = function (vipUrl,parseStr) {
     if(ismulti==0&&adminuser==0){multiline=2}else{if(multiline>5){multiline=5}}
     if(config.testcheck==1){multiline=10}
 
-    config.testcheck=1;
+    //config.testcheck=1;
     //明码解析线程代码
     var parsetask = function(obj) {
         let rurl = "";
@@ -529,7 +529,6 @@ var aytmParse = function (vipUrl,parseStr) {
         var beresults = [];//用于存储多线程返回对象
         var beids = [];//用于存储多线程返回id lx+name
         var beerrors = [];//用于存储多线程是否有错误
-        log(i)
         let p = i+multiline;
         if(p>parselist.length){p=parselist.length}
         let JxList = [];
