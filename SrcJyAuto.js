@@ -549,8 +549,7 @@ var aytmParse = function (vipUrl,parseStr) {
         });
 
         for(let k in beresults){
-            log(beresults[k])
-            log(beresults[k].name)
+            log(beresults[k]==null?beerrors[k]:beresults[k])
             parsename = beresults[k].name;
             parseurl = beresults[k].rurl;
             parselx = beresults[k].lx;
