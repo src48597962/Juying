@@ -510,11 +510,17 @@ var aytmParse = function (vipUrl,parseStr) {
         obj['rurl'] = rurl;
         return obj;
     };
+    //清理sort排序文件线程代码
+    var sorttask = function(obj) {
+        
+        return obj;
+    };
     if(config.testcheck==1){showLoading('√解析列表，检测中')};
-
+    var cleansort = 0;
     for (var i=0;i<parselist.length;i++) {
         if(playurl){break;}
         var beresults = [];//用于存储多线程返回对象
+        var beids = [];//用于存储多线程返回id lx+name
         var beerrors = [];//用于存储多线程是否有错误
         log(i)
         let p = i+multiline;
@@ -524,16 +530,30 @@ var aytmParse = function (vipUrl,parseStr) {
             JxList.push(parselist[s]);
             i=s;
         }
+        if(cleansort==0&&!parseStr){
+            cleansort = 1;//清理sort文件只调用一轮
+            JxList.push({lx:'cleansort'});
+        }
+
         let parses = JxList.map((parse)=>{
-            return {
-                func: parsetask,
-                param: parse,
-                id: parse.id
-            }
+            if(parse.lx=="cleansort"){
+                return {
+                    func: sorttask,
+                    param: parse,
+                    id: 'cleansort'
+                }
+            }else{
+                return {
+                    func: parsetask,
+                    param: parse,
+                    id: parse.lx+'|'+parse.name
+                }
+            } 
         });
         
         be(parses, {
             func: function(obj, id, error, taskResult) {
+                obj.ids.push(id);
                 obj.results.push(taskResult);
                 obj.errors.push(error);
                 if (ismulti!=1&&config.testcheck!=1&&contain.test(taskResult.rurl) && !exclude.test(taskResult.rurl)) {
@@ -543,18 +563,18 @@ var aytmParse = function (vipUrl,parseStr) {
                 }
             },
             param: {
+                ids: beids,
                 results: beresults,
                 errors: beerrors
             }
         });
 
-        for(let k in beresults){
-            log(beresults[k]==null?beerrors[k]:beresults[k])
-            parsename = beresults[k].name;
-            parseurl = beresults[k].rurl;
-            parselx = beresults[k].lx;
+        for(let k in beids){
+            parsename = beids[k].split('|')[1];
+            parselx = beids[k].split('|')[0];
             if(config.printlog==1){log("√"+ parsename + ">" + parselx + "解析结果检查")};
             if(beerrors[k]==null){
+                parseurl = beresults[k].rurl;
                 if(config.jstoweb==1&&parselx=="J"&&parseurl.search(/x5Rule|webRule/)>-1){
                         //js中跳转x5或web嗅探
                         if(config.printlog==1){log("√JS中跳转x5|web嗅探,解析逻辑被打断,结果自负")};  
@@ -573,6 +593,15 @@ var aytmParse = function (vipUrl,parseStr) {
                                 names.push(parsename);
                                 headers.push(head);
                             }else{
+                                break;
+                            }
+                        }
+                        for(var j=0;j<sortlist.length;j++){
+                            if(sortlist[j].name == parsename){ 
+                                if(sortlist[j].sort>0){
+                                    sortlist[j].sort = sortlist[j].sort-1;
+                                    issort = 1;
+                                }
                                 break;
                             }
                         }
