@@ -447,6 +447,7 @@ var aytmParse = function (vipUrl,parseStr) {
     if(config.testcheck==1){multiline=10}
     //明码解析线程代码
     var parsetask = function(obj) {
+        log('qqqqqqqqq')
         let rurl = "";
         let x5 = 0;
         if(obj.lx=="J"){
