@@ -445,6 +445,8 @@ var aytmParse = function (vipUrl,parseStr) {
 
     if(ismulti==0&&adminuser==0){multiline=2}else{if(multiline>5){multiline=5}}
     if(config.testcheck==1){multiline=10}
+
+    config.testcheck=1;
     //明码解析线程代码
     var parsetask = function(obj) {
         let rurl = "";
@@ -497,9 +499,11 @@ var aytmParse = function (vipUrl,parseStr) {
             }
             obj['x5'] = x5;
         }
-        if(rurl&&/^http/.test(rurl)){   
-            //检测地址有效性
-            if(format.testvideourl(rurl,obj.name)==0){
+        if(rurl){   
+            if(/^toast/.test(rurl)){
+                rurl = "";
+            }else if(/^http/.test(rurl)&&format.testvideourl(rurl,obj.name)==0){
+                //检测地址有效性
                 rurl = "";
             }
         }
@@ -530,7 +534,6 @@ var aytmParse = function (vipUrl,parseStr) {
         
         be(parses, {
             func: function(obj, id, error, taskResult) {
-                log('be>'+taskResult.rurl);
                 obj.results.push(taskResult);
                 obj.errors.push(error);
                 if (ismulti!=1&&config.testcheck!=1&&contain.test(taskResult.rurl) && !exclude.test(taskResult.rurl)) {
@@ -546,7 +549,7 @@ var aytmParse = function (vipUrl,parseStr) {
         });
 
         for(let k in beresults){
-            //log(beresults[k])
+            log(beresults[k].name)
             parsename = beresults[k].name;
             parseurl = beresults[k].rurl;
             parselx = beresults[k].lx;
