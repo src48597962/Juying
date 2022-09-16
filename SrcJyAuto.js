@@ -589,12 +589,48 @@ var aytmParse = function (vipUrl,parseStr) {
                         return parseurl;
                 }else{
                     if (contain.test(parseurl) && !exclude.test(parseurl)) {
-                        playurl = parseurl;
+                        if(playurl==""){playurl = parseurl;}
                         if(config.printlog==1){log("√"+parselx+"解析成功>" + parseurl)};  
                         if(config.testcheck==1){
                             playurl = "";
                         }else{
                             if(ismulti==1&&multiline>1){
+
+                            
+                                try{
+                                    var isjson = $.type(JSON.parse(parseurl));
+                                }catch(e){
+                                    var isjson = "string";
+                                }
+                                if(isjson != "string"){
+                                    try {
+                                        let murls = JSON.parse(parseurl).urls;
+                                        let mnames = JSON.parse(parseurl).names||[];
+                                        let mheaders = JSON.parse(parseurl).headers;
+                                        for(var j=0;j<murls.length;j++){
+                                            let MulUrl = this.formatMulUrl(murls[j].replace(/;{.*}/g,""), urls.length);
+                                            urls.push(MulUrl.url);
+                                            if(mnames.length>0){
+                                                names.push(mnames[j]);
+                                            }else{
+                                                names.push('线路'+urls.length);
+                                            }
+                                            headers.push(mheaders[j]);
+                                        }
+                                    } catch (e) {
+                                        log('判断多线路地址对象有错：'+e.message);
+                                    }
+                                }else{
+                                    let MulUrl = this.formatMulUrl(beurls[k].replace(/;{.*}/g,""), urls.length);
+                                    urls.push(MulUrl.url);
+                                    names.push('线路'+urls.length);
+                                    headers.push(MulUrl.header);
+                                }
+
+
+
+
+                                
                                 let rurl = playurl.replace(/;{.*}/,'');
                                 let head = format.urlJoinUa(rurl,1);
                                 urls.push(format.urlCacheM3u8(rurl,head,urls.length)+'#pre#');
@@ -669,7 +705,6 @@ var aytmParse = function (vipUrl,parseStr) {
             }
             uniq(faillist);//去除重复
             if (x5jxlist.length == 0) {
-                log('aaaa') 
                 hideLoading();
                 if(config.printlog==1){
                     if(config.testcheck==1){
@@ -680,7 +715,6 @@ var aytmParse = function (vipUrl,parseStr) {
                         log('√JS免嗅和URL明码接口失败、网页嗅探未取到解析口，需重新配置插件')
                     }
                 };
-                log('aaaaa') 
                 if(config.testcheck==1){
                     if (parseStr == undefined) {
                         if(faillist.length>0){
@@ -699,11 +733,9 @@ var aytmParse = function (vipUrl,parseStr) {
                         return "toast://〖"+parseStr+"〗解析失败";
                     }
                 }else{
-                    log('aaaaaa') 
                     return "toast://未找到可用的解析口"
                 }
             } else {
-                log('bbbb')
                 if(config.printlog==1){if(config.testcheck==1){log("√JS免嗅和URL明码检测结束，转网页嗅探检测接口数："+x5jxlist.length)}else{log("√JS免嗅和URL明码失败，转网页嗅探解析接口数："+x5jxlist.length)}};
                 if(config.printlog==1){log("√嗅探调用解析口："+x5nmlist[0])};
                 if(config.testcheck==1){showLoading('嗅探解析列表，检测中')}else{showLoading('√嗅探解析中，请稍候')};
@@ -716,14 +748,13 @@ var aytmParse = function (vipUrl,parseStr) {
                 return x5Player(x5jxlist,x5nmlist,vipUrl,sortlist,parmset,faillist,format);
             }
         } else {
-            log('cccc')
             if(urls.length>1){
                 return JSON.stringify({
-                            urls: urls,
-                            names: names,
-                            //danmu: "hiker://files/cache/danmu.json",
-                            headers: headers
-                        });   
+                    urls: urls,
+                    names: names,
+                    //danmu: "hiker://files/cache/danmu.json",
+                    headers: headers
+                });   
             }else{
                 return format.urlJoinUa(format.urlCacheM3u8(playurl,format.urlJoinUa(playurl,1))) + '#isVideo=true#'; 
             }
