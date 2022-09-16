@@ -509,7 +509,7 @@ var aytmParse = function (vipUrl,parseStr) {
     if(config.testcheck==1){showLoading('√解析列表，检测中')};
 
     for (var i=0;i<parselist.length;i++) {
-        if(url){break;}
+        if(playurl){break;}
         var beresults = [];//用于存储多线程返回对象
         var beerrors = [];//用于存储多线程是否有错误
         log(i)
