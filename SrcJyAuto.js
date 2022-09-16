@@ -628,10 +628,19 @@ var aytmParse = function (vipUrl,parseStr) {
                 return temp;
             }
             uniq(faillist);//去除重复
-            if (x5jxlist.length == 0) { 
-                log('aaaa')
+            if (x5jxlist.length == 0) {
+                log('aaaa') 
                 hideLoading();
-                if(config.printlog==1){if(config.testcheck==1){log('√检测结束');log('√解析失败的>'+faillist);refreshPage(false);}else{log('√JS免嗅和URL明码接口失败、网页嗅探未取到解析口，需重新配置插件')}};
+                if(config.printlog==1){
+                    if(config.testcheck==1){
+                        log('√检测结束');
+                        log('√解析失败的>'+faillist);
+                        refreshPage(false);
+                    }else{
+                        log('√JS免嗅和URL明码接口失败、网页嗅探未取到解析口，需重新配置插件')
+                    }
+                };
+                log('aaaaa') 
                 if(config.testcheck==1){
                     if (parseStr == undefined) {
                         if(faillist.length>0){
@@ -650,6 +659,7 @@ var aytmParse = function (vipUrl,parseStr) {
                         return "toast://〖"+parseStr+"〗解析失败";
                     }
                 }else{
+                    log('aaaaaa') 
                     return "toast://未找到可用的解析口"
                 }
             } else {
