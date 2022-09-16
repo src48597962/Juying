@@ -512,9 +512,16 @@ var aytmParse = function (vipUrl,parseStr) {
     };
     //清理sort排序文件线程代码
     var sorttask = function(obj) {
-        
+        for(var j=0;j<sortlist.length;j++){
+            if(!parselist.some(item => item.name==sortlist[j].name)){ 
+                log(sortlist[j].name+'不存在，从sort文件中删除')
+                sortlist.splice(j,1);
+                j = j - 1;
+            }
+        }
         return obj;
     };
+
     if(config.testcheck==1){showLoading('√解析列表，检测中')};
     var cleansort = 0;
     for (var i=0;i<parselist.length;i++) {
@@ -530,7 +537,7 @@ var aytmParse = function (vipUrl,parseStr) {
             JxList.push(parselist[s]);
             i=s;
         }
-        if(cleansort==0&&!parseStr){
+        if(cleansort==0&&!parseStr&&config.autoselect==1){
             cleansort = 1;//清理sort文件只调用一轮
             JxList.push({lx:'cleansort'});
         }
@@ -553,13 +560,15 @@ var aytmParse = function (vipUrl,parseStr) {
         
         be(parses, {
             func: function(obj, id, error, taskResult) {
-                obj.ids.push(id);
-                obj.results.push(taskResult);
-                obj.errors.push(error);
-                if (ismulti!=1&&config.testcheck!=1&&contain.test(taskResult.rurl) && !exclude.test(taskResult.rurl)) {
-                    //toast("我主动中断了");
-                    log("√线程结束");
-                    return "break";
+                if(id!='cleansort'){
+                    obj.ids.push(id);
+                    obj.results.push(taskResult);
+                    obj.errors.push(error);
+                    if (ismulti!=1&&config.testcheck!=1&&contain.test(taskResult.rurl) && !exclude.test(taskResult.rurl)) {
+                        //toast("我主动中断了");
+                        log("√线程结束");
+                        return "break";
+                    }
                 }
             },
             param: {
