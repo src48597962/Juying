@@ -140,7 +140,7 @@ if (isresetsort==0){
 //自动解析入口
 var aytmParse = function (vipUrl,parseStr) {
     if(config.printlog==1){
-        log("√影片地址："+vipUrl);
+        //log("√影片地址："+vipUrl);
         if(config.iscustom==1){log("√已开启远程关怀模式")};  
         if(parseStr != undefined && parseStr != ""){
             log("√指定解析：");
@@ -288,7 +288,7 @@ var aytmParse = function (vipUrl,parseStr) {
     if (strlist.length==0) {hideLoading();return 'toast://好像没有配置解析接口，解个寂寞吗';}
     if(config.printlog==1){
         log("√选择的解析接口组："+strlist);
-        log("√影片来源标识："+from)
+        //log("√影片来源标识："+from)
     };
     
     //定义排序函数
