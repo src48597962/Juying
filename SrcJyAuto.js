@@ -504,7 +504,6 @@ var aytmParse = function (vipUrl,parseStr) {
             }
         }
         obj['rurl'] = rurl;
-        log('qqqqqqqqq'+rurl)
         return obj;
     };
     if(config.testcheck==1){showLoading('√解析列表，检测中')};
@@ -531,6 +530,7 @@ var aytmParse = function (vipUrl,parseStr) {
 
         be(parses, {
             func: function(obj, id, error, taskResult) {
+                log('be>'+taskResult.rurl);
                 obj.results.push(taskResult);
                 obj.errors.push(error);
                 if (ismulti!=1&&config.testcheck!=1&&contain.test(taskResult.rurl) && !exclude.test(taskResult.rurl)) {
