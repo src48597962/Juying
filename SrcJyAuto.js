@@ -502,7 +502,7 @@ var aytmParse = function (vipUrl,parseStr) {
         if(rurl){   
             if(/^toast/.test(rurl)){
                 rurl = "";
-            }else if(/^http/.test(rurl)&&format.testvideourl(rurl,obj.name)==0){
+            }else if(/^http/.test(rurl)&&SrcParseS.testvideourl(rurl,obj.name)==0){
                 //检测地址有效性
                 rurl = "";
             }
@@ -608,7 +608,7 @@ var aytmParse = function (vipUrl,parseStr) {
                                         let mnames = JSON.parse(parseurl).names||[];
                                         let mheaders = JSON.parse(parseurl).headers;
                                         for(var j=0;j<murls.length;j++){
-                                            let MulUrl = this.formatMulUrl(murls[j].replace(/;{.*}/g,""), urls.length);
+                                            let MulUrl = SrcParseS.formatMulUrl(murls[j].replace(/;{.*}/g,""), urls.length);
                                             urls.push(MulUrl.url);
                                             if(mnames.length>0){
                                                 names.push(mnames[j]);
@@ -621,7 +621,7 @@ var aytmParse = function (vipUrl,parseStr) {
                                         log('判断多线路地址对象有错：'+e.message);
                                     }
                                 }else{
-                                    let MulUrl = this.formatMulUrl(beurls[k].replace(/;{.*}/g,""), urls.length);
+                                    let MulUrl = SrcParseS.formatMulUrl(parseurl.replace(/;{.*}/g,""), urls.length);
                                     urls.push(MulUrl.url);
                                     names.push('线路'+urls.length);
                                     headers.push(MulUrl.header);
@@ -629,13 +629,14 @@ var aytmParse = function (vipUrl,parseStr) {
 
 
 
-
+                                /*
                                 
                                 let rurl = playurl.replace(/;{.*}/,'');
                                 let head = format.urlJoinUa(rurl,1);
                                 urls.push(format.urlCacheM3u8(rurl,head,urls.length)+'#pre#');
                                 names.push(parsename);
                                 headers.push(head);
+                                */
                             }else{
                                 break;
                             }
@@ -931,6 +932,71 @@ var format = {
             if(config.printlog==1){log("√错误："+e.message)};
             return url;
         }    
+    }
+};
+var SrcParseS = {
+    formatUrl: function (url, i) {
+        try {
+            if (url.trim() == "") {
+                return "toast://解析失败，建议切换线路或更换解析方式";
+            } else {
+                if (url[0] == '/') { url = 'https:' + url }
+                if (i == undefined) {
+                    if (getMyVar('SrcM3U8', '1') == "1"&&url.indexOf('.m3u8')>-1) {
+                        url = cacheM3u8(url, {timeout: 2000});
+                    }
+                    if(url.indexOf('User-Agent')==-1){
+                        if (/wkfile/.test(url)) {
+                            url = url + ';{User-Agent@Mozilla/5.0&&Referer@https://fantuan.tv/}';
+                        } else if (/bilibili|bilivideo/.test(url)) {
+                            url = url + ";{User-Agent@Mozilla/5.0&&Referer@https://www.bilibili.com/}";
+                        } /*else if (/shenglinyiyang\.cn/.test(url)) {
+                            url = url + ";{User-Agent@Mozilla/5.0&&Referer@https://zyz.sdljwomen.com}";
+                        }*/ else if (/mgtv/.test(url)) {
+                            url = url + ";{User-Agent@Mozilla/5.0}";
+                        }/* else {
+                            url = url + ";{User-Agent@Mozilla/5.0}";
+                        }*/
+                    }
+                } else {
+                    if ((getMyVar('SrcM3U8', '1') == "1"||url.indexOf('vkey=')>-1)&&url.indexOf('.m3u8')>-1) {
+                        url = cacheM3u8(url, {timeout: 2000}, 'video' + parseInt(i) + '.m3u8') + '#pre#';
+                    }
+                }
+                if(url.indexOf('#isVideo=true#')==-1){
+                    url = url + '#isVideo=true#';
+                }
+                return url;
+            }
+        } catch (e) {
+            return url;
+        }
+    },
+    mulheader: function (url) {
+        if (/mgtv/.test(url)) {
+            var header = { 'User-Agent': 'Mozilla/5.0', 'Referer': 'www.mgtv.com' };
+        } else if (/bilibili|bilivideo/.test(url)) {
+            var header = { 'User-Agent': 'Mozilla/5.0', 'Referer': 'www.bilibili.com' };
+        } else if (/wkfile/.test(url)) {
+            var header = { 'User-Agent': 'Mozilla/5.0', 'Referer': 'fantuan.tv' };
+        } else {
+            var header = { 'User-Agent': 'Mozilla/5.0' };
+        }
+        return header;
+    },
+    //处理多线路播放地址
+    formatMulUrl: function (url,i) {
+        try {
+            let header = this.mulheader(url);
+            if ((getMyVar('SrcM3U8', '1') == "1"||url.indexOf('vkey=')>-1)&&url.indexOf('.m3u8')>-1) {
+                var name = 'video'+parseInt(i)+'.m3u8';
+                url = cacheM3u8(url, {headers: header, timeout: 2000}, name)+'#pre#';
+            }
+            return {url:url, header:header};
+        } catch (e) {
+            if(config.printlog==1){log("√错误："+e.message)};
+            return url;
+        }   
     },
     //测试视频地址有效性
     testvideourl: function (url,name,times) {
@@ -981,4 +1047,6 @@ var format = {
             return 1;
         }
     }
-};
+    
+}
+
