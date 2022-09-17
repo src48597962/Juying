@@ -895,14 +895,12 @@ var SrcParseS = {
                         
                         //组一个多线路播放地址备用，log($.type(beurls[k]));
                         try{
-                            var isjson = $.type(JSON.parse(beurls[k]));
+                            eval('let urlstr = '+beurls[k]);
+                            var urltype = $.type(urlstr);
                         }catch(e){
-                            //log(e.message)
-                            var isjson = "string";
+                            var urltype = "string";
                         }
-                        eval('var urljson = '+beurls[k]);
-                        log($.type(urljson))
-                        if(isjson != "string"){
+                        if(urltype == "object"){
                             try {
                                 let murls = JSON.parse(beurls[k]).urls;
                                 let mnames = JSON.parse(beurls[k]).names||[];
