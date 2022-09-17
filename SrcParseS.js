@@ -900,8 +900,8 @@ var SrcParseS = {
                             log(e.message)
                             var isjson = "string";
                         }
-                        log(beurls[k])
-                        log(beparses[k].name+isjson)
+                        log(JSON.parse(beurls[k]))
+                        
                         if(isjson != "string"){
                             try {
                                 let murls = JSON.parse(beurls[k]).urls;
