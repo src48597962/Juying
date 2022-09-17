@@ -120,8 +120,8 @@ var defaultconfig = {
     "remotepath": ""//远程在线文件地址
 }
 //聚影使用时默认值
-var config = defaultconfig;
-config.printlog = JYconfig.printlog;
+var SAconfig = defaultconfig;
+SAconfig.printlog = JYconfig.printlog;
 
 var sortlist = []; //排序降权临时存放数组
 var sortfile=fetch("hiker://files/cache/SrcSort.json");
@@ -132,7 +132,7 @@ if(sortfile != ""){
 //自动解析入口
 var aytmParse = function (vipUrl,parseStr) {
     if(stauts==0){return "";}
-    if(config.printlog==1){
+    if(SAconfig.printlog==1){
         log("√断插解析开始");
     };
     var str = "";
@@ -204,8 +204,8 @@ var aytmParse = function (vipUrl,parseStr) {
     }else{
         //自动列出所有接口
         var excludeParse = ['defaultParse', 'maoss', 'CityIP', 'cacheM3u8', 'pcUA', 'parseLc', 'gparse', 'nparse', '道长仓库通免', 'defaultParseWeb', '智能优选', '默认'];
-        if(mySet.qju=="智能优选"){config.autoselect=1}
-        if(config.autoselect==1){
+        if(mySet.qju=="智能优选"){SAconfig.autoselect=1}
+        if(SAconfig.autoselect==1){
              //全局排除的追加到排除列表
             for(var j=0;j<sortlist.length;j++){
                 try{
@@ -226,7 +226,7 @@ var aytmParse = function (vipUrl,parseStr) {
                 }
             }
             var parsetmplist = [];//用于取配置文件的解析口临时数组
-            if(config.iscustom==1){
+            if(SAconfig.iscustom==1){
                 //远程关怀模式只取在线解析接口
                 for( var key in ParseZ ){
                     if(excludeParse.indexOf(key)==-1 && prior.indexOf(key)==-1){
@@ -241,7 +241,7 @@ var aytmParse = function (vipUrl,parseStr) {
                     }
                 }
             }
-            if(config.disorder==1){
+            if(SAconfig.disorder==1){
                 //乱序模式
                 function randArr (arr) {
                     return arr.sort(() => {
@@ -268,7 +268,7 @@ var aytmParse = function (vipUrl,parseStr) {
 
     if (strlist.length==0) {
         hideLoading();
-        if(config.printlog==1){
+        if(SAconfig.printlog==1){
             log("√断插没有配置解析接口，解个寂寞吗");
         };
         return '';
@@ -321,7 +321,7 @@ var aytmParse = function (vipUrl,parseStr) {
                 }else{
                     if(sortlist[j].stopfrom.length > 0){ Object.assign(stopfrom, sortlist[j].stopfrom); };
                 }
-                if(config.autoselect==1&&prior.includes(parsename)==true&&config.parsereserve==1){
+                if(SAconfig.autoselect==1&&prior.includes(parsename)==true&&SAconfig.parsereserve==1){
                     //开启了强制优先并保留用户配置的解析
                     sort = 0;
                     stopfrom = [];
@@ -344,7 +344,7 @@ var aytmParse = function (vipUrl,parseStr) {
             if(dellist.indexOf(strlist[i])==-1){dellist.push(strlist[i])};
         }else{
             //解析接口存在
-            if(config.autoselect==1){
+            if(SAconfig.autoselect==1){
                 if(stopfrom.indexOf(from)==-1){
                     //自动筛选模式时，sort只做排序使用，不包含停用片源的解析，则加入解析接口组
                     if(parselx=="J"){
@@ -358,13 +358,13 @@ var aytmParse = function (vipUrl,parseStr) {
                         Uparsenum ++;
                     }
                 }else{
-                    if(stopfrom.length>=config.fromcount&&stopfrom.indexOf(from)>-1){
+                    if(stopfrom.length>=SAconfig.fromcount&&stopfrom.indexOf(from)>-1){
                         //此解析接口大于多少片源失败，且已排除片源，加入提示删除数组
                         dellist.push(strlist[i]);
                     }
                 }
             }else{
-                if(sort>=config.failcount&&stopfrom.indexOf(from)>-1){
+                if(sort>=SAconfig.failcount&&stopfrom.indexOf(from)>-1){
                     //此接口已失败大于设置的次数，且已排除片源，加入提示删除数组
                     dellist.push(strlist[i]);
                 }else{
@@ -384,19 +384,19 @@ var aytmParse = function (vipUrl,parseStr) {
         }
     }
     if(dellist.length > 0){
-        config['dellist'] = dellist;
-        writeFile("hiker://files/cache/SrcSet.js", 'var userconfig = ' + JSON.stringify(config))
-        //if(config.printlog == 1){log("√建议删除解析口:"+dellist);}
+        SAconfig['dellist'] = dellist;
+        writeFile("hiker://files/cache/SrcSet.js", 'var userconfig = ' + JSON.stringify(SAconfig))
+        //if(SAconfig.printlog == 1){log("√建议删除解析口:"+dellist);}
     }
     if(parselist.length == 0){
-        if(config.printlog==1){log("√断插没有可用的解析接口，需重新配置")};
+        if(SAconfig.printlog==1){log("√断插没有可用的解析接口，需重新配置")};
         hideLoading();
         return '';
     }else{
         //解析接口排序，将之前失败的排在后面 
         parselist.sort(sortData)
     }
-    if(config.printlog==1){
+    if(SAconfig.printlog==1){
         log("√断插有效解析数："+parselist.length+"  (J解析:"+Jparsenum+",U解析:"+Uparsenum+")");
     };
 
@@ -407,12 +407,12 @@ var aytmParse = function (vipUrl,parseStr) {
     var names = [];//用于多线路名称
     var headers = [];//用于多线路头信息
     var danmu = "";//多线路弹幕
-    var ismulti = config.ismulti||0;//是否开启多线程
-    var multiline = config.multiline||1;//多线程数量
-    var adminuser = config.adminuser||0;
+    var ismulti = SAconfig.ismulti||0;//是否开启多线程
+    var multiline = SAconfig.multiline||1;//多线程数量
+    var adminuser = SAconfig.adminuser||0;
 
     if(ismulti==0&&adminuser==0){multiline=2}else{if(multiline>5){multiline=5}}
-    if(config.testcheck==1){multiline=10}
+    if(SAconfig.testcheck==1){multiline=10}
 
     //明码解析线程代码
     var parsetask = function(obj) {
@@ -469,7 +469,7 @@ var aytmParse = function (vipUrl,parseStr) {
         }
         if(rurl){   
             if(/^toast/.test(rurl)){
-                if(config.printlog==1){log(obj.name+'>提示：'+rurl.replace('toast://',''))};
+                if(SAconfig.printlog==1){log(obj.name+'>提示：'+rurl.replace('toast://',''))};
                 rurl = "";
             }else if(/^http/.test(rurl)&&SrcParseS.testvideourl(rurl,obj.name)==0){
                 //检测地址有效性
@@ -504,7 +504,7 @@ var aytmParse = function (vipUrl,parseStr) {
             JxList.push(parselist[s]);
             i=s;
         }
-        if(cleansort==0&&!parseStr&&config.autoselect==1){
+        if(cleansort==0&&!parseStr&&SAconfig.autoselect==1){
             cleansort = 1;//清理sort文件只调用一轮
             JxList.push({lx:'cleansort'});
         }
@@ -531,7 +531,7 @@ var aytmParse = function (vipUrl,parseStr) {
                     obj.ids.push(id);
                     obj.results.push(taskResult);
                     obj.errors.push(error);
-                    if (ismulti!=1&&config.testcheck!=1&&contain.test(taskResult.rurl) && !exclude.test(taskResult.rurl)) {
+                    if (ismulti!=1&&SAconfig.testcheck!=1&&contain.test(taskResult.rurl) && !exclude.test(taskResult.rurl)) {
                         //toast("我主动中断了");
                         //log("√线程结束");
                         return "break";
@@ -548,18 +548,18 @@ var aytmParse = function (vipUrl,parseStr) {
         for(let k in beids){
             parsename = beids[k].split('|')[1];
             parselx = beids[k].split('|')[0];
-            //if(config.printlog==1){log("√"+ parsename + ">" + parselx + "解析结果检查")};
+            //if(SAconfig.printlog==1){log("√"+ parsename + ">" + parselx + "解析结果检查")};
             if(beerrors[k]==null){
                 parseurl = beresults[k].rurl;
-                if(config.jstoweb==1&&parselx=="J"&&parseurl.search(/x5Rule|webRule/)>-1){
+                if(SAconfig.jstoweb==1&&parselx=="J"&&parseurl.search(/x5Rule|webRule/)>-1){
                         //js中跳转x5或web嗅探
-                        //if(config.printlog==1){log("√JS中跳转x5|web嗅探,解析逻辑被打断,结果自负")};  
+                        //if(SAconfig.printlog==1){log("√JS中跳转x5|web嗅探,解析逻辑被打断,结果自负")};  
                         return parseurl;
                 }else{
                     if (contain.test(parseurl) && !exclude.test(parseurl)) {
                         if(playurl==""){playurl = parseurl;}
-                        if(config.printlog==1){log("√"+parsename+">"+parselx+"解析成功>"+parseurl)};  
-                        if(config.testcheck==1){
+                        if(SAconfig.printlog==1){log("√"+parsename+">"+parselx+"解析成功>"+parseurl)};  
+                        if(SAconfig.testcheck==1){
                             playurl = "";
                         }else{
                             if(ismulti==1&&multiline>1){
@@ -617,7 +617,7 @@ var aytmParse = function (vipUrl,parseStr) {
                                     issort = 1;
                                     failsum = sortlist[j].sort;
                                     if(sortlist[j].stopfrom.indexOf(from)==-1){
-                                        if((config.autoselect==1&&failsum>=3)||(failsum>=config.failcount)){
+                                        if((SAconfig.autoselect==1&&failsum>=3)||(failsum>=SAconfig.failcount)){
                                             //自动选择接口时此接口失败大于等于3时、失败次数大于限定，此片源排除此解析接口
                                             sortlist[j].stopfrom[sortlist[j].stopfrom.length] = from
                                         };
@@ -625,14 +625,14 @@ var aytmParse = function (vipUrl,parseStr) {
                                     break;
                                 }
                             }
-                            if(config.testcheck==1){faillist.push(parsename)};
-                            //if(config.printlog==1){log("√解析失败,已失败"+failsum+"次，跳过")};   
+                            if(SAconfig.testcheck==1){faillist.push(parsename)};
+                            //if(SAconfig.printlog==1){log("√解析失败,已失败"+failsum+"次，跳过")};   
                         }
                     }
                 }
             }else{
-                if(config.testcheck==1){faillist.push(parsename)};
-                //if(config.printlog==1){log(beerrors[k]+" √此解析有语法错误，跳过")};
+                if(SAconfig.testcheck==1){faillist.push(parsename)};
+                //if(SAconfig.printlog==1){log(beerrors[k]+" √此解析有语法错误，跳过")};
                 for(var j=0;j<sortlist.length;j++){
                     if(sortlist[j].name == parsename){ 
                         sortlist[j].sort = sortlist[j].sort+1;
@@ -684,7 +684,7 @@ var SrcParseS = {
             }
             return {url:url, header:header};
         } catch (e) {
-            //if(config.printlog==1){log("√错误："+e.message)};
+            //if(SAconfig.printlog==1){log("√错误："+e.message)};
             return url;
         }   
     },
