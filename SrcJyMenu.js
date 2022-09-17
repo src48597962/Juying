@@ -292,7 +292,7 @@ var erjimenu = [
                     col_type: "line_blank"
                 });
                 let parsemode = JYconfig.parsemode || 1;
-                if(fileExist('hiker://files/rules/DuanNian/MyParse.json')){
+                if(fileExist('hiker://files/rules/DuanNian/MyParse.json')||JYconfig.dnfile){
                     var haveDN = 1
                     var isdn = JYconfig.isdn==0?0:1;
                 }else{
