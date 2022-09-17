@@ -1063,7 +1063,7 @@ var SrcParseS = {
         try {
             if (/\.m3u8/.test(url)) {
                 var urlcode = JSON.parse(fetch(url,{withStatusCode:true,timeout:2000}));
-                log(name+'url访问状态码：'+urlcode.statusCode)
+                //log(name+'url访问状态码：'+urlcode.statusCode)
                 if(urlcode.statusCode==-1){
                     log(name+'>m3u8探测超时未拦载，结果未知')
                     return 1;
@@ -1088,7 +1088,7 @@ var SrcParseS = {
                             urlts = http + urlts;
                         }    
                         var tscode = JSON.parse(fetch(urlts,{headers:{'Referer':url},onlyHeaders:true,timeout:2000}));
-                        log(name+'ts访问状态码：'+tscode.statusCode)
+                        //log(name+'ts访问状态码：'+tscode.statusCode)
                         if(tscode.statusCode==-1){
                             log(name+'>ts段探测超时未拦载，结果未知')
                             return 1;
