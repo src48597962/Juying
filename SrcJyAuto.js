@@ -713,16 +713,16 @@ var SrcParseS = {
             if (/\.m3u8/.test(url)) {
                 var urlcode = JSON.parse(fetch(url,{withStatusCode:true,timeout:2000}));
                 if(urlcode.statusCode==-1){
-                    log(name+'>错误：探测超时未拦载，结果未知')
+                    log(name+'>m3u8探测超时未拦载，结果未知')
                     return 1;
                 }else if(urlcode.statusCode!=200){
-                    log(name+'>播放地址疑似失效或网络无法访问，不信去验证一下>'+url);
+                    log(name+'>m3u8播放地址疑似失效或网络无法访问，不信去验证一下>'+url);
                     return 0;
                 }else{
                     var tstime = urlcode.body.match(/#EXT-X-TARGETDURATION:(.*?)\n/)[1];
                     var urltss = urlcode.body.replace(/#.*?\n/g,'').replace('#EXT-X-ENDLIST','').split('\n');
                     if(parseInt(tstime)*parseInt(urltss.length)<times){
-                        log(name+'>播放地址疑似跳舞小姐姐或防盗小视频，不信去验证一下>'+url);
+                        log(name+'>m3u8播放地址疑似跳舞小姐姐或防盗小视频，不信去验证一下>'+url);
                         return 0;
                     }else{
                         log(urlcode.url)
