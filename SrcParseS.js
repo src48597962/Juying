@@ -1078,7 +1078,7 @@ var SrcParseS = {
                         var tstime = 0;
                         var urltss = [];
                     }
-                    if((parseInt(tstime)*parseInt(urltss.length))<times){
+                    if(parseInt(tstime)*parseInt(urltss.length) < times){
                         log(name+'>m3u8播放地址疑似跳舞小姐姐或防盗小视频，不信去验证一下>'+url);
                         return 0;
                     }else{
@@ -1115,7 +1115,7 @@ var SrcParseS = {
                 }
             }
             return 1;
-        } catch (e) {
+        } catch(e) {
             log(name+'>错误：探测异常未拦截，可能是失败的>'+e.message)
             return 1;
         }
