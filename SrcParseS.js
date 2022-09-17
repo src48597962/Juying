@@ -637,11 +637,16 @@ var SrcParseS = {
 
             //断插线程代码
             var dnaytmParse = function(vipUrl) {
-                /*evalPrivateJS("OjB3OHrVodkVQlHIU8UUAC5W0ZBgTQEC4h9eUEcAT9kEM0hY/45YOxs7PDeQEnxjVhaWW2tIqO5GQimD4ssHKSka505+O0avEtQQZ9zRy6GxaBZdTHrbCPcoNIajmr3+JG22tRswOJFYDX5aYk0PfUDEFsZa2OjZbz+xTthnoUPLNm0R2g1kBFnWwGKBWUxEhEsFwFruhFSaxJi1E1WZ7WlbP0v4OpoQgn6M7UXGahP9h2fHi8UBVDGfjzIuVuJSCgICLlVGaAbT0ghic+Kfbp3TmjRhAo1DKretYp1U53apDMvO2Q+6oAyO1js5TJwx51ygFSUqVGAu0C2DLxkG0Z3+L8UPZyJa4KVDlqq/goE=")*/
-                //eval("var config =" + fetch("hiker://files/cache/MyParseSet.json"));
-                //eval(fetch(config.cj));
-                require(config.依赖.match(/https.*\//)[0] + 'SrcJyAuto.js');
-                let rurl = aytmParse(vipUrl);
+                try{
+                    /*evalPrivateJS("OjB3OHrVodkVQlHIU8UUAC5W0ZBgTQEC4h9eUEcAT9kEM0hY/45YOxs7PDeQEnxjVhaWW2tIqO5GQimD4ssHKSka505+O0avEtQQZ9zRy6GxaBZdTHrbCPcoNIajmr3+JG22tRswOJFYDX5aYk0PfUDEFsZa2OjZbz+xTthnoUPLNm0R2g1kBFnWwGKBWUxEhEsFwFruhFSaxJi1E1WZ7WlbP0v4OpoQgn6M7UXGahP9h2fHi8UBVDGfjzIuVuJSCgICLlVGaAbT0ghic+Kfbp3TmjRhAo1DKretYp1U53apDMvO2Q+6oAyO1js5TJwx51ygFSUqVGAu0C2DLxkG0Z3+L8UPZyJa4KVDlqq/goE=")*/
+                    //eval("var config =" + fetch("hiker://files/cache/MyParseSet.json"));
+                    //eval(fetch(config.cj));
+                    require(config.依赖.match(/https.*\//)[0] + 'SrcJyAuto.js');
+                    var rurl = aytmParse(vipUrl);
+                }catch(e){
+                    log("断插执行异常>"+e.message);
+                    var rurl = "";
+                }
                 return {url: rurl, ulist: {type:"dn",name:'dn',parse:'dn',x5:0}}; 
             }
             //明码解析线程代码
