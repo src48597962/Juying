@@ -1047,7 +1047,6 @@ var SrcParseS = {
         try {
             if (/\.m3u8/.test(url)) {
                 var urlcode = JSON.parse(fetch(url,{withStatusCode:true,timeout:2000}));
-                log('访问状态码：'+urlcode.statusCode)
                 if(urlcode.statusCode!=200){
                     log(name+'>播放地址疑似失效或网络无法访问，不信去验证一下>'+url);
                     return 0;
@@ -1064,6 +1063,7 @@ var SrcParseS = {
                             urlts = http + urlts;
                         }    
                         var tscode = JSON.parse(fetch(urlts,{headers:{'Referer':url},onlyHeaders:true,timeout:2000}));
+                        log('ts访问状态码：'+tscode.statusCode)
                         if(tscode.statusCode!=200){
                             log(name+'>ts段地址疑似失效或网络无法访问，不信去验证一下>'+url);
                             return 0;
