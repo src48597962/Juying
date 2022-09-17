@@ -900,7 +900,7 @@ var SrcParseS = {
                             log(e.message)
                             var isjson = "string";
                         }
-                        log(JSON.parse(beurls[k]))
+                        log(JSON.parse(beurls[k].replace(/[\x00-\x1F\x7F]|[\t\r\n]/g)))
                         
                         if(isjson != "string"){
                             try {
