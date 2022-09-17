@@ -640,51 +640,17 @@ var aytmParse = function (vipUrl,parseStr) {
             headers: headers
         });   
     }else{
-        return playurl?SrcParseS.formatUrl(playurl):"";
+        return playurl;
     }
 };
 
 var SrcParseS = {
-    formatUrl: function (url, i) {
-        try {
-            if (url.trim() == "") {
-                return "toast://解析失败，建议切换线路或更换解析方式";
-            } else if(/^{/.test(url)){
-                return url;
-            }else {
-                if (url[0] == '/') { url = 'https:' + url }
-                if (i == undefined) {
-                    if (getMyVar('SrcM3U8', '1') == "1"&&url.indexOf('.m3u8')>-1) {
-                        url = cacheM3u8(url, {timeout: 2000});
-                    }
-                    if(url.indexOf('User-Agent')==-1){
-                        if (/wkfile/.test(url)) {
-                            url = url + ';{User-Agent@Mozilla/5.0&&Referer@https://fantuan.tv/}';
-                        } else if (/bilibili|bilivideo/.test(url)) {
-                            url = url + ";{User-Agent@Mozilla/5.0&&Referer@https://www.bilibili.com/}";
-                        } else if (/mgtv/.test(url)) {
-                            url = url + ";{User-Agent@Mozilla/5.0}";
-                        }
-                    }
-                } else {
-                    if ((getMyVar('SrcM3U8', '1') == "1"||url.indexOf('vkey=')>-1)&&url.indexOf('.m3u8')>-1) {
-                        url = cacheM3u8(url, {timeout: 2000}, 'video' + parseInt(i) + '.m3u8') + '#pre#';
-                    }
-                }
-                if(url.indexOf('#isVideo=true#')==-1){
-                    url = url + '#isVideo=true#';
-                }
-                return url;
-            }
-        } catch (e) {
-            return url;
-        }
-    },
     mulheader: function (url) {
         if (/mgtv/.test(url)) {
             var header = { 'User-Agent': 'Mozilla/5.0', 'Referer': 'www.mgtv.com' };
         } else if (/bilibili|bilivideo/.test(url)) {
             var header = { 'User-Agent': 'Mozilla/5.0', 'Referer': 'www.bilibili.com' };
+            //headers: [{'Referer': 'https://www.bilibili.com','User-Agent': 'bili2021'}]
         } else if (/wkfile/.test(url)) {
             var header = { 'User-Agent': 'Mozilla/5.0', 'Referer': 'fantuan.tv' };
         } else {
