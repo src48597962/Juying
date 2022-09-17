@@ -1,22 +1,29 @@
 //============自动挡处理逻辑、仅用于个人学习使用============
 //========感谢@断念大佬========
 
+var stauts = 1;//开关
 //载入断插主控js
-var cfgfile = "hiker://files/rules/Src/Juying/config.json";
-var Juyingcfg=fetch(cfgfile);
-if(Juyingcfg != ""){
-    eval("var JYconfig=" + Juyingcfg+ ";");
-}
 try{
+    var cfgfile = "hiker://files/rules/Src/Juying/config.json";
+    var Juyingcfg=fetch(cfgfile);
+    if(Juyingcfg != ""){
+        eval("var JYconfig=" + Juyingcfg+ ";");
+    }
     var parseRoute = JYconfig.dnfile?JYconfig.dnfile:'hiker://files/rules/DuanNian/MyParse.json';
+}catch(e){
+    stauts = 0;
+    log('√聚影配置文件加载失败');
+}
+try{    
     var MyParseS = {};
     var mySet = {};
     if (fileExist(parseRoute)) {
         eval('var parseFile =' + (/^http/.test(parseRoute)?fetchCache(parseRoute, 24):fetch(parseRoute)));
-        MyParseS = parseFile.codes;
-        mySet = parseFile.settings;
     }
+    MyParseS = parseFile.codes;
+    mySet = parseFile.settings;
 }catch(e){
+    stauts = 0;
     log('√断插解析文件加载失败');
 }
 
@@ -122,7 +129,7 @@ if(sortfile != ""){
 }
 //自动解析入口
 var aytmParse = function (vipUrl,parseStr) {
-    if(!parseFile){return "";}
+    if(stauts==0){return "";}
     if(config.printlog==1){
         log("√断插解析开始");
     };
