@@ -900,8 +900,8 @@ var SrcParseS = {
                             //log(e.message)
                             var isjson = "string";
                         }
-                        let urljson = JSON.parse(beurls[k]);
-                        
+                        eval('var urljson = '+beurls[k]);
+                        log($.type(urljson))
                         if(isjson != "string"){
                             try {
                                 let murls = JSON.parse(beurls[k]).urls;
