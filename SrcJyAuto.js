@@ -97,9 +97,9 @@ var defaultconfig = {
     "autoselect": 1,//是否开启智能优选解析接口：0关闭/1开启
     "failcount": 3,//设置失败几次的片源剔除解析
     "fromcount": 12,//当开启自动选择解析时，失败片源达多少个，提示删除
-    "multiline": 1,//设置解析多线程数
+    "multiline": 2,//设置解析多线程数
     "testcheck": 0,//进入测试检测模式：0关闭/1开启
-    "disorder": 1,//是否开启乱序模式
+    "disorder": 0,//是否开启乱序模式
     "parsereserve": 1,//是否强制保留用户配置的解析口
     "jstoweb": 0,//是否允许js解析中跳转x5或web
     "cachem3u8": 1,//m3u8是否使用缓存方式播放
