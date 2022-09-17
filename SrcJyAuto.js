@@ -116,7 +116,6 @@ if(sortfile != ""){
     eval("var newsort=" + sortfile+ ";");
     Object.assign(sortlist, newsort);
 }
-log(sortlist);
 //自动解析入口
 var aytmParse = function (vipUrl,parseStr) {
     if(config.printlog==1){
