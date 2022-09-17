@@ -900,7 +900,7 @@ var SrcParseS = {
                             log(e.message)
                             var isjson = "string";
                         }
-                        log($.type(beurls[k]))
+                        log(JSON.parse(beurls[k]))
                         
                         if(isjson != "string"){
                             try {
