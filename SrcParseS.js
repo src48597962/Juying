@@ -787,7 +787,7 @@ var SrcParseS = {
                     iscalldn = 1;//断插辅助只调用一轮
                     UrlList.push({type:'dn'});
                 }
-                log(UrlList)
+
                 let Urlparses = UrlList.map((list)=>{
                     if(list.type=="dn"){
                         return {func: dnaytmParse, param: vipUrl, id: 'dn'}
@@ -804,7 +804,7 @@ var SrcParseS = {
                         }
                     }
                 });
-                log($.stringify(Urlparses))
+
                 be(Urlparses, {
                     func: function(obj, id, error, taskResult) {
                         let beurl = taskResult.url;
