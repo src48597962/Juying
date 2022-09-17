@@ -1062,7 +1062,7 @@ var SrcParseS = {
                             let http = urlcode.url.match(/http.*\//)[0];
                             urlts = http + urlts;
                         }    
-                        var tscode = JSON.parse(fetch(urlts,{onlyHeaders:true,timeout:2000}));
+                        var tscode = JSON.parse(fetch(urlts,{headers:{'Referer':url},onlyHeaders:true,timeout:2000}));
                         if(tscode.statusCode!=200){
                             log(name+'>ts段地址疑似失效或网络无法访问，不信去验证一下>'+url);
                             return 0;
