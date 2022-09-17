@@ -894,6 +894,7 @@ var SrcParseS = {
                         }
                         
                         //组一个多线路播放地址备用，log($.type(beurls[k]));
+                        log(beurls[k])
                         try{
                             var isjson = $.type(JSON.parse(beurls[k]));
                         }catch(e){
