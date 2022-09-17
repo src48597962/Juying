@@ -474,6 +474,7 @@ var SrcParseS = {
             isdn = dndn();
         }
         var forcedn = JYconfig.parsemode==2?1:0;
+        var parsemode = JYconfig.parsemode || 1;
         var appjiexinum = JYconfig['appjiexinum'] || 50;
         putMyVar('SrcM3U8',JYconfig.cachem3u8);
         if(JYconfig.xiutannh){putMyVar('SrcXTNH',JYconfig.xiutannh);}
