@@ -748,7 +748,8 @@ var SrcParseS = {
                     }
                 }
             }
-            
+            var iscalldn = 0;
+            var isrecord = 0;
             if(playurl==""&&!parseStr){
                 if(forcedn==1){
                     if(printlog==1){log("开启强制断插解析模式")};
@@ -762,12 +763,10 @@ var SrcParseS = {
 
                     if(isdn==1&&Uparselist.length==0){
                         Uparselist.push({type:'dn',name:'断插'});
+                        iscalldn = 1;
                     }
                 }
             }
-
-            var isrecord = 0;
-            var iscalldn = 0;
             for (var i=0;i<Uparselist.length;i++) {
                 if(contain.test(playurl)){break;}
                 let UrlList = [];
