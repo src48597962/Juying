@@ -316,7 +316,7 @@ var erjimenu = [
                     col_type: "text_3"
                 });
                 d.push({
-                    title: (haveDN&&isdn?getide(1):getide(0))+'断插辅助',
+                    title: (haveDN&&isdn&&JYconfig.parsemode==1?getide(1):getide(0))+'断插辅助',
                     url: haveDN==0?'toast://没有断插？无法开启！':$('#noLoading#').lazyRule((JYconfig,cfgfile) => {
                             if(JYconfig['isdn'] == 0){
                                 JYconfig['isdn'] = 1;
