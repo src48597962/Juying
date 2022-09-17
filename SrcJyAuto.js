@@ -383,7 +383,7 @@ var aytmParse = function (vipUrl,parseStr) {
         parselist.sort(sortData)
     }
     if(config.printlog==1){
-        log("√断插有效解析数："+parselist.length+" (J解析:"+Jparsenum+"，U解析:"+Uparsenum+")");
+        log("√断插有效解析数："+parselist.length+"  (J解析:"+Jparsenum+",U解析:"+Uparsenum+")");
     };
 
     var exclude = /404\.m3u8|xiajia\.mp4|余额不足\.m3u8/;//设置排除地址
@@ -404,7 +404,11 @@ var aytmParse = function (vipUrl,parseStr) {
         let rurl = "";
         let x5 = 0;
         if(obj.lx=="J"){
-            rurl = ParseS[obj.name](vipUrl);
+            try {
+                rurl = ParseS[obj.name](vipUrl);
+            } catch (e) {
+                //if(printlog==1){log('√明码获取错误：'+e.message)};
+            }
         }else if(obj.lx=="U"){
             let taskheader = {withStatusCode:true,timeout:3000};
             let getjson = JSON.parse(request(obj.url+vipUrl,taskheader));
