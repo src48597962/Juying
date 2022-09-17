@@ -1026,7 +1026,7 @@ var SrcParseS = {
                     return this.formatUrl(playurl);
                 }
             }else{
-                if(printlog==1){
+                if(parsemode==1&&printlog==1){
                     log('明码解析失败，转嗅探备用解析');
                     log('进入嗅探解析列表：' + x5namelist)
                 }
