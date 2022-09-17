@@ -100,59 +100,27 @@ var defaultconfig = {
     "multiline": 2,//设置解析多线程数
     "testcheck": 0,//进入测试检测模式：0关闭/1开启
     "disorder": 1,//是否开启乱序模式
-    "parsereserve": 0,//是否强制保留用户配置的解析口
+    "parsereserve": 1,//是否强制保留用户配置的解析口
     "jstoweb": 0,//是否允许js解析中跳转x5或web
     "cachem3u8": 1,//m3u8是否使用缓存方式播放
     "iscustom": 0,//是否开启远程关怀模式，自定义解析设置开关：0关闭/1开启
     "remotepath": ""//远程在线文件地址
 }
-eval(fetch('hiker://files/cache/SrcSet.js'));//加载用户参数
-if(!userconfig){var config = defaultconfig}else{var config = userconfig}//没有取到用户参数时调用默认参数
-if(getMyVar('Stitle','0').indexOf("帅助手") == -1){config.testcheck=0}
-
-//加载远程自定义设置
-if(config.iscustom==1){
-    try{
-        let remotefile = fetchCache(config.remotepath, 24);
-        if(remotefile.indexOf("ParseZ") != -1){
-            eval(remotefile);
-            Object.assign(ParseS, ParseZ);
-        }else{
-            if(config.printlog==1){log("√远程关怀自定义解析为空，走本地配置文件")};
-            config.iscustom = 0;        
-        }
-    }catch(e){
-        if(config.printlog==1){log("√远程关怀自定义加载失败，走本地配置文件")};
-        config.iscustom = 0;
-    }
-}else{var resetsort = 0};
 //聚影使用时默认值
-putMyVar('SrcM3U8', config.cachem3u8);
-config.autoselect=1
+var config = userconfig;
+config.printlog = JYconfig.printlog;
 
 var sortlist = []; //排序降权临时存放数组
-var isresetsort = resetsort || 0;
-if (isresetsort==0){
-    var sortfile=fetch("hiker://files/cache/SrcSort.json");
-    if(sortfile != ""){
-        eval("var newsort=" + sortfile+ ";");
-        Object.assign(sortlist, newsort);
-    }
+var sortfile=fetch("hiker://files/cache/SrcSort.json");
+if(sortfile != ""){
+    eval("var newsort=" + sortfile+ ";");
+    Object.assign(sortlist, newsort);
 }
 
 //自动解析入口
 var aytmParse = function (vipUrl,parseStr) {
     if(config.printlog==1){
-        //log("√影片地址："+vipUrl);
-        if(config.iscustom==1){log("√已开启远程关怀模式")};  
-        if(parseStr != undefined && parseStr != ""){
-            log("√指定解析：");
-        }else{
-            if(config.autoselect==1){log("√开启智能优选")}else{log("√关闭智能优选")};  
-            if(config.disorder==1){log("√开启乱序模式")}else{log("√关闭乱序模式")}; 
-            if(config.parsereserve==1){log("√开启强制优先断插配置")}; 
-        }
-        if(config.testcheck==1){log("√检测模式")};  
+        log("√断插解析开始");
     };
     var str = "";
     var from = "";
@@ -218,11 +186,8 @@ var aytmParse = function (vipUrl,parseStr) {
     if (str == undefined || str == "") {if(mySet.qju==""||mySet.qju=="默认"){str = mySet.oth;}else{if(mySet.qju!="智能优选"){str = mySet.qju;}}}
     var strlist = [];//解析口载入临时数组
     var prior = [];//处理用户手工配置项的临时数组
-    var isparse = 0;
     if (parseStr != undefined && parseStr != "") {
         strlist = parseStr.split(/,|，/); //字符分割
-        isparse = 1;
-        //config.autoselect = 0;
     }else{
         //自动列出所有接口
         var excludeParse = ['defaultParse', 'maoss', 'CityIP', 'cacheM3u8', 'pcUA', 'parseLc', 'gparse', 'nparse', '道长仓库通免', 'defaultParseWeb', '智能优选', '默认'];
@@ -288,11 +253,14 @@ var aytmParse = function (vipUrl,parseStr) {
         }
     }
 
-    if (strlist.length==0) {hideLoading();return 'toast://好像没有配置解析接口，解个寂寞吗';}
-    if(config.printlog==1){
-        log("√选择的解析接口组："+strlist);
-        //log("√影片来源标识："+from)
-    };
+    if (strlist.length==0) {
+        hideLoading();
+        if(config.printlog==1){
+            log("√断插没有配置解析接口，解个寂寞吗");
+        };
+        return '';
+    }
+    
     
     //定义排序函数
     function sortData(a, b) {
@@ -307,12 +275,8 @@ var aytmParse = function (vipUrl,parseStr) {
     var parseurl = "";
     var parselx = "";
     var parselist = [];
-    //var Jparselist = [];
-    //var Uparselist = [];
     var Jparsenum = 0;
     var Uparsenum = 0;
-    var x5jxlist = []; //x5嗅探接口存放数组
-    var x5nmlist = []; //x5嗅探接口存放数组
     var dellist = [];
     var faillist = [];
     var issort = 0;
@@ -371,15 +335,11 @@ var aytmParse = function (vipUrl,parseStr) {
                 if(stopfrom.indexOf(from)==-1){
                     //自动筛选模式时，sort只做排序使用，不包含停用片源的解析，则加入解析接口组
                     if(parselx=="J"){
-                        //let parsearr  = { "id" : i,"sort" : sort, "name" : parsename };
-                        //Jparselist.push(parsearr); 
                         let arr  = { "id": i,"sort": sort, "name": parsename, "lx": parselx };
                         parselist.push(arr); 
                         Jparsenum ++;
                     }
                     if(parselx=="U"){
-                        //let urlarr  = { "id" : i,"sort" : sort, "name" : parsename, "url" : parseurl };
-                        //Uparselist.push(urlarr); 
                         let arr  = { "id": i,"sort": sort, "name": parsename, "url": parseurl, "lx": parselx };
                         parselist.push(arr); 
                         Uparsenum ++;
@@ -397,15 +357,11 @@ var aytmParse = function (vipUrl,parseStr) {
                 }else{
                     //非自动筛选解析时按失败次数，小于设置的次数、且解析接口名有效，加入解析接口组
                     if(parselx=="J"){
-                        //let parsearr  = { "id" : i,"sort" : sort, "name" : parsename };
-                        //Jparselist.push(parsearr); 
                         let arr  = { "id": i,"sort": sort, "name": parsename, "lx": parselx };
                         parselist.push(arr); 
                         Jparsenum ++;
                     }
                     if(parselx=="U"){
-                        //let urlarr  = { "id" : i,"sort" : sort, "name" : parsename, "url" : parseurl };
-                        //Uparselist.push(urlarr); 
                         let arr  = { "id": i,"sort": sort, "name": parsename, "url": parseurl, "lx": parselx };
                         parselist.push(arr); 
                         Uparsenum ++;
@@ -417,23 +373,18 @@ var aytmParse = function (vipUrl,parseStr) {
     if(dellist.length > 0){
         config['dellist'] = dellist;
         writeFile("hiker://files/cache/SrcSet.js", 'var userconfig = ' + JSON.stringify(config))
-        if(config.printlog == 1){log("√建议删除解析口:"+dellist);}
+        //if(config.printlog == 1){log("√建议删除解析口:"+dellist);}
     }
-    //if(Jparselist.length == 0 && Uparselist.length == 0){
     if(parselist.length == 0){
-        if(config.printlog==1){log("√没有可用的解析接口，需重新配置")};
+        if(config.printlog==1){log("√断插没有可用的解析接口，需重新配置")};
         hideLoading();
-        return 'toast://√解析口全部无效了，重新配置吧';
+        return '';
     }else{
         //解析接口排序，将之前失败的排在后面 
         parselist.sort(sortData)
     }
-    //解析接口排序，将之前失败的排在后面 
-    //if(Jparselist.length > 0){Jparselist.sort(sortData)};
-    //if(Uparselist.length > 0){Uparselist.sort(sortData)};
-    //if(config.printlog==1){log("√有效解析接口数："+(Jparselist.length+Uparselist.length))};
     if(config.printlog==1){
-        log("√有效解析数："+parselist.length+"，JS解析："+Jparsenum+"，URL解析："+Uparsenum);
+        log("√断插有效解析数："+parselist.length+"，JS解析："+Jparsenum+"，URL解析："+Uparsenum);
     };
 
     var exclude = /404\.m3u8|xiajia\.mp4|余额不足\.m3u8/;//设置排除地址
@@ -449,7 +400,6 @@ var aytmParse = function (vipUrl,parseStr) {
     if(ismulti==0&&adminuser==0){multiline=2}else{if(multiline>5){multiline=5}}
     if(config.testcheck==1){multiline=10}
 
-    //config.testcheck=1;
     //明码解析线程代码
     var parsetask = function(obj) {
         let rurl = "";
@@ -480,17 +430,14 @@ var aytmParse = function (vipUrl,parseStr) {
                                 //if(printlog==1){log('将日志提交给作者，帮助完善解析逻辑>>>'+gethtml)};
                             }
                         } catch (e) {
-                            if(printlog==1){log('√明码获取错误：'+e.message)};
+                            //if(printlog==1){log('√明码获取错误：'+e.message)};
                         }
                     }
                 }
                 
                 if(rurl == ""){
                     if(!/404 /.test(gethtml)){
-                        if(x5jxlist.length<=5&&obj.url.indexOf('key=')==-1){
-                            x5jxlist.push(obj.url);
-                            x5nmlist.push(obj.name);
-                            if(printlog==1){log(obj.name + '>√加入x5嗅探列表');}
+                        if(obj.url.indexOf('key=')==-1){
                             x5 = 1;//网页可以正常访问，偿试嗅探
                         }else{
                             x5 = 2; //网页404，标记剔除
@@ -517,7 +464,7 @@ var aytmParse = function (vipUrl,parseStr) {
     var sorttask = function(obj) {
         for(var j=0;j<sortlist.length;j++){
             if(!parselist.some(item => item.name==sortlist[j].name)){ 
-                log(sortlist[j].name+'不存在，从sort文件中删除')
+                //log(sortlist[j].name+'不存在，从sort文件中删除')
                 sortlist.splice(j,1);
                 j = j - 1;
             }
@@ -525,7 +472,6 @@ var aytmParse = function (vipUrl,parseStr) {
         return obj;
     };
 
-    if(config.testcheck==1){showLoading('√解析列表，检测中')};
     var cleansort = 0;
     for (var i=0;i<parselist.length;i++) {
         if(playurl){break;}
@@ -568,7 +514,7 @@ var aytmParse = function (vipUrl,parseStr) {
                     obj.errors.push(error);
                     if (ismulti!=1&&config.testcheck!=1&&contain.test(taskResult.rurl) && !exclude.test(taskResult.rurl)) {
                         //toast("我主动中断了");
-                        log("√线程结束");
+                        //log("√线程结束");
                         return "break";
                     }
                 }
@@ -583,17 +529,17 @@ var aytmParse = function (vipUrl,parseStr) {
         for(let k in beids){
             parsename = beids[k].split('|')[1];
             parselx = beids[k].split('|')[0];
-            if(config.printlog==1){log("√"+ parsename + ">" + parselx + "解析结果检查")};
+            //if(config.printlog==1){log("√"+ parsename + ">" + parselx + "解析结果检查")};
             if(beerrors[k]==null){
                 parseurl = beresults[k].rurl;
                 if(config.jstoweb==1&&parselx=="J"&&parseurl.search(/x5Rule|webRule/)>-1){
                         //js中跳转x5或web嗅探
-                        if(config.printlog==1){log("√JS中跳转x5|web嗅探,解析逻辑被打断,结果自负")};  
+                        //if(config.printlog==1){log("√JS中跳转x5|web嗅探,解析逻辑被打断,结果自负")};  
                         return parseurl;
                 }else{
                     if (contain.test(parseurl) && !exclude.test(parseurl)) {
                         if(playurl==""){playurl = parseurl;}
-                        if(config.printlog==1){log("√"+parselx+"解析成功>" + parseurl)};  
+                        if(config.printlog==1){log("√"+parsename+">"+parselx+"解析成功")};  
                         if(config.testcheck==1){
                             playurl = "";
                         }else{
@@ -621,7 +567,7 @@ var aytmParse = function (vipUrl,parseStr) {
                                             headers.push(mheaders[j]);
                                         }
                                     } catch (e) {
-                                        log('判断多线路地址对象有错：'+e.message);
+                                        //log('判断多线路地址对象有错：'+e.message);
                                     }
                                 }else{
                                     let MulUrl = SrcParseS.formatMulUrl(parseurl.replace(/;{.*}/g,""), urls.length);
@@ -629,17 +575,6 @@ var aytmParse = function (vipUrl,parseStr) {
                                     names.push('线路'+urls.length);
                                     headers.push(MulUrl.header);
                                 }
-
-
-
-                                /*
-                                
-                                let rurl = playurl.replace(/;{.*}/,'');
-                                let head = format.urlJoinUa(rurl,1);
-                                urls.push(format.urlCacheM3u8(rurl,head,urls.length)+'#pre#');
-                                names.push(parsename);
-                                headers.push(head);
-                                */
                             }else{
                                 break;
                             }
@@ -672,13 +607,13 @@ var aytmParse = function (vipUrl,parseStr) {
                                 }
                             }
                             if(config.testcheck==1){faillist.push(parsename)};
-                            if(config.printlog==1){log("√解析失败,已失败"+failsum+"次，跳过")};   
+                            //if(config.printlog==1){log("√解析失败,已失败"+failsum+"次，跳过")};   
                         }
                     }
                 }
             }else{
                 if(config.testcheck==1){faillist.push(parsename)};
-                if(config.printlog==1){log(beerrors[k]+" √此解析有语法错误，跳过")};
+                //if(config.printlog==1){log(beerrors[k]+" √此解析有语法错误，跳过")};
                 for(var j=0;j<sortlist.length;j++){
                     if(sortlist[j].name == parsename){ 
                         sortlist[j].sort = sortlist[j].sort+1;
@@ -693,203 +628,21 @@ var aytmParse = function (vipUrl,parseStr) {
         }//多线程结果处理
     }//循环结束
 
-    if(issort==1&&isparse==0){writeFile("hiker://files/cache/SrcSort.json", JSON.stringify(sortlist))};
+    if(issort==1&&!parseStr){writeFile("hiker://files/cache/SrcSort.json", JSON.stringify(sortlist))};
 
     //上面js免嗅、json、明码解析、剔除打不开网站做完了
-    try {
-        if (playurl=="") {
-            function uniq(array){
-                var temp = []; //一个新的临时数组
-                for(var i = 0; i < array.length; i++){
-                    if(temp.indexOf(array[i]) == -1){
-                        temp.push(array[i]);
-                    }
-                }
-                return temp;
-            }
-            uniq(faillist);//去除重复
-            if (x5jxlist.length == 0) {
-                hideLoading();
-                if(config.printlog==1){
-                    if(config.testcheck==1){
-                        log('√检测结束');
-                        log('√解析失败的>'+faillist);
-                        refreshPage(false);
-                    }else{
-                        log('√JS免嗅和URL明码接口失败、网页嗅探未取到解析口，需重新配置插件')
-                    }
-                };
-                if(config.testcheck==1){
-                    if (parseStr == undefined) {
-                        if(faillist.length>0){
-                            return $("检测结束,是否处理失败的解析？").confirm((faillist,helper)=>{
-                                return $("#noHistory##noRecordHistory#hiker://empty").rule((faillist,helper)=>{
-                                    requireCache(helper, 48);
-                                    faildeal(faillist)
-                                },faillist,helper);     
-                            },faillist,getMyVar('helper','0'));
-                        }else{
-                            return "toast://检测结束";
-                        }
-                    }else{
-                        initConfig({faillist:faillist});
-                        refreshPage(false);
-                        return "toast://〖"+parseStr+"〗解析失败";
-                    }
-                }else{
-                    return "toast://未找到可用的解析口"
-                }
-            } else {
-                if(config.printlog==1){if(config.testcheck==1){log("√JS免嗅和URL明码检测结束，转网页嗅探检测接口数："+x5jxlist.length)}else{log("√JS免嗅和URL明码失败，转网页嗅探解析接口数："+x5jxlist.length)}};
-                if(config.printlog==1){log("√嗅探调用解析口："+x5nmlist[0])};
-                if(config.testcheck==1){showLoading('嗅探解析列表，检测中')}else{showLoading('√嗅探解析中，请稍候')};
-                let parmset = {"issort":0,"printlog":config.printlog,"timeout":config.x5timeout,"autoselect":config.autoselect,"failcount":config.failcount,"from":from,"testcheck":config.testcheck,"parseStr":parseStr,"helper":getMyVar('helper','0'),"Sversion":parseInt(getMyVar('Sversion','0'))};
-                for(var i = 0; i < x5nmlist.length; i++) {
-                    faillist.push(x5nmlist[i]);
-                }
-                config['x5scslist'] = [];
-                writeFile("hiker://files/cache/SrcSet.js", 'var userconfig = ' + JSON.stringify(config));
-                return x5Player(x5jxlist,x5nmlist,vipUrl,sortlist,parmset,faillist,format);
-            }
-        } else {
-            if(urls.length>1){
-                return JSON.stringify({
-                    urls: urls,
-                    names: names,
-                    //danmu: "hiker://files/cache/danmu.json",
-                    headers: headers
-                });   
-            }else{
-                return SrcParseS.formatUrl(playurl);
-            }
-        }
-    } catch (e) {
-        if(config.printlog==1){log("√语法错误")};
-        return 'toast://解析失败，语法错误';
+    if(urls.length>1){
+        return JSON.stringify({
+            urls: urls,
+            names: names,
+            //danmu: "hiker://files/cache/danmu.json",
+            headers: headers
+        });   
+    }else{
+        return playurl?SrcParseS.formatUrl(playurl):"";
     }
-    
 };
 
-//x5嗅探通用免嗅函数、自动多层嵌套
-function x5Player(x5jxlist, x5nmlist, vipUrl, sortlist, parmset, faillist, format) {
-    return 'x5Rule://' + x5jxlist[0] + vipUrl + '@' + (typeof $$$ == 'undefined' ? $ : $$$).toString((x5jxlist, x5nmlist, vipUrl, sortlist, parmset, faillist, format, x5Player) => {
-        if(typeof(request)=='undefined'||!request){
-            eval(fba.getInternalJs());
-        };
-        if (window.c == null) {
-            window.c = 0;
-            if(parmset.testcheck==1){fba.showLoading('嗅探解析列表，检测中')}else{fba.showLoading('√嗅探解析中，请稍候')};
-        };
-        window.c++;
-        if (window.c * 250 >= parmset.timeout*1000) {
-            if (x5jxlist.length == 1) { 
-                //最后一个X5解析失败了，排序+1
-                let failsum = 0;
-                for(var j=0;j<sortlist.length;j++){
-                    if(sortlist[j].name == x5nmlist[0]){ 
-                        sortlist[j].sort = sortlist[j].sort+1;
-                        failsum = sortlist[j].sort;
-                        if(sortlist[j].stopfrom.indexOf(parmset.from)==-1){
-                            if((parmset.autoselect==1&&failsum>2)||(failsum>=parmset.failcount)){
-                                //自动选择接口时此接口失败大于2时、失败次数大于限定，此片源排除此解析接口
-                                sortlist[j].stopfrom[sortlist[j].stopfrom.length] = parmset.from;
-                            };
-                        }
-                        break;
-                    }
-                }
-                fba.writeFile("hiker://files/cache/srcsort.json", JSON.stringify(sortlist));
-                fba.hideLoading();
-
-                eval(request("hiker://files/cache/SrcSet.js"));
-                for(var i = 0; i < userconfig.x5scslist.length; i++) {
-                    faillist.splice(faillist.indexOf(userconfig.x5scslist[i]),1);
-                }
-                if(parmset.printlog==1){
-                    if(parmset.testcheck==1){
-                        fba.log("√检测结束");
-                        fba.log('√解析失败的>'+faillist);
-                    }else{
-                        fba.log("√超过"+window.c * 250+"毫秒还未成功,此接口已失败"+failsum+"次，全部嗅探解析口都失败了");
-                    }
-                };
-                if(parmset.testcheck==1){
-                    if (parmset.parseStr == undefined) {
-                        if(faillist.length>0){
-                            return $$$("检测结束,是否处理失败的解析？").confirm((faillist,helper) => $("hiker://empty#noHistory##noRecordHistory#").rule((faillist,helper) => {
-                                    requireCache(helper, 48);
-                                    faildeal(faillist);
-                                }, faillist, helper), faillist, parmset.helper)
-                        }else{
-                            return "toast://检测结束";
-                        }
-                    }else{
-                        initConfig({faillist:faillist});
-                        refreshPage(false);
-                        return "toast://〖"+parmset.parseStr+"〗解析失败";
-                    }
-                }else{
-                    return "toast://所有解析接口失败了，请重新配置断插解析接口";
-                };
-            } else {
-                //X5解析失败了，排序+1
-                let failsum = 0;
-                for(var j=0;j<sortlist.length;j++){
-                    if(sortlist[j].name == x5nmlist[0]){ 
-                        sortlist[j].sort = sortlist[j].sort+1;
-                        parmset.issort = 1;
-                        failsum = sortlist[j].sort;
-                        if(sortlist[j].stopfrom.indexOf(parmset.from)==-1){
-                            if((parmset.autoselect==1&&failsum>2)||(failsum>=parmset.failcount)){
-                                //自动选择接口时此接口失败大于2时、失败次数大于限定，此片源排除此解析接口
-                                sortlist[j].stopfrom[sortlist[j].stopfrom.length] = parmset.from;
-                            };
-                        }
-                        break;
-                    }
-                }
-                if(parmset.printlog==1){ if(parmset.testcheck==1){fba.log("√检测下一个嗅探接口："+x5nmlist.slice(1)[0]);}else{fba.log("√超过"+window.c * 250+"毫秒还未成功,此接口已失败"+failsum+"次，跳转下一个嗅探接口："+x5nmlist.slice(1)[0])}};
-                return x5Player(x5jxlist.slice(1), x5nmlist.slice(1), vipUrl, sortlist, parmset, faillist, format);
-            }
-        }
-        //fba.log(fy_bridge_app.getUrls());
-        var urls = _getUrls();
-        var exclude = /playm3u8|m3u8\.tv|404\.m3u8|xiajia\.mp4|余额不足\.m3u8/;
-        var contain = /\.mp4|\.m3u8|\.flv|\.avi|\.mpeg|\.wmv|\.mov|\.rmvb|\.dat|qqBFdownload|mime=video%2F|video_mp4/;
-        for (var i in urls) {
-            if (!exclude.test(urls[i]) && contain.test(urls[i])) {
-                if(parmset.printlog==1){fy_bridge_app.log("√嗅探解析成功>"+urls[i])};
-                if(parmset.issort==1){fy_bridge_app.writeFile("hiker://files/cache/SrcSort.json", JSON.stringify(sortlist))};
-                if(parmset.testcheck==1){
-                    eval(request("hiker://files/cache/SrcSet.js"));
-                    userconfig.x5scslist.push(x5nmlist[0]);
-                    fy_bridge_app.writeFile("hiker://files/cache/SrcSet.js", "var userconfig = " + JSON.stringify(userconfig));
-                    window.c = 100;
-                }else{
-                    return $$$("#noLoading#").lazyRule((url,format)=>{
-                        return format.urlJoinUa(format.urlCacheM3u8(url,format.urlJoinUa(url,1))) + '#isVideo=true#'; 
-                    }, urls[i], format);
-                    /*
-                    let url = "";
-                    if (/bilibili|bilivideo/.test(urls[i])) {
-                        url = urls[i] + ';{User-Agent@Mozilla/5.0&&Referer@https://www.bilibili.com/}';
-                    } else if (/mgtv|sohu/.test(urls[i])) {
-                        url = urls[i] + ';{User-Agent@Mozilla/5.0 (Windows NT 10.0)}';
-                    } else {
-                        url = urls[i];
-                    }
-                    return url + '#isVideo=true#';
-                    */
-                }
-            }
-        } 
-    }, x5jxlist, x5nmlist, vipUrl, sortlist, parmset, faillist, format, x5Player)
-};
-
-//加载视频url地址处理函数
-var format = {
-    
-};
 var SrcParseS = {
     formatUrl: function (url, i) {
         try {
@@ -906,13 +659,9 @@ var SrcParseS = {
                             url = url + ';{User-Agent@Mozilla/5.0&&Referer@https://fantuan.tv/}';
                         } else if (/bilibili|bilivideo/.test(url)) {
                             url = url + ";{User-Agent@Mozilla/5.0&&Referer@https://www.bilibili.com/}";
-                        } /*else if (/shenglinyiyang\.cn/.test(url)) {
-                            url = url + ";{User-Agent@Mozilla/5.0&&Referer@https://zyz.sdljwomen.com}";
-                        }*/ else if (/mgtv/.test(url)) {
+                        } else if (/mgtv/.test(url)) {
                             url = url + ";{User-Agent@Mozilla/5.0}";
-                        }/* else {
-                            url = url + ";{User-Agent@Mozilla/5.0}";
-                        }*/
+                        }
                     }
                 } else {
                     if ((getMyVar('SrcM3U8', '1') == "1"||url.indexOf('vkey=')>-1)&&url.indexOf('.m3u8')>-1) {
@@ -950,7 +699,7 @@ var SrcParseS = {
             }
             return {url:url, header:header};
         } catch (e) {
-            if(config.printlog==1){log("√错误："+e.message)};
+            //if(config.printlog==1){log("√错误："+e.message)};
             return url;
         }   
     },
