@@ -1112,7 +1112,7 @@ var SrcParseS = {
             }
             return 1;
         } catch (e) {
-            log(name+'>错误：探测超时未拦截，有可能是失败的')
+            log(name+'>错误：探测异常未拦截，可能是失败的>'+e.message)
             return 1;
         }
     }
