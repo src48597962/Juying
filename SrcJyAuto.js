@@ -547,8 +547,6 @@ var aytmParse = function (vipUrl,parseStr) {
                             playurl = "";
                         }else{
                             if(ismulti==1&&multiline>1){
-
-                            
                                 try{
                                     var isjson = $.type(JSON.parse(parseurl));
                                 }catch(e){
@@ -632,7 +630,6 @@ var aytmParse = function (vipUrl,parseStr) {
     }//循环结束
 
     if(issort==1&&!parseStr){writeFile("hiker://files/cache/SrcSort.json", JSON.stringify(sortlist))};
-    log(urls.length)
     //上面js免嗅、json、明码解析、剔除打不开网站做完了
     if(urls.length>1){
         return JSON.stringify({
@@ -651,7 +648,9 @@ var SrcParseS = {
         try {
             if (url.trim() == "") {
                 return "toast://解析失败，建议切换线路或更换解析方式";
-            } else {
+            } else if(/^{/.test(url)){
+                return url;
+            }else {
                 if (url[0] == '/') { url = 'https:' + url }
                 if (i == undefined) {
                     if (getMyVar('SrcM3U8', '1') == "1"&&url.indexOf('.m3u8')>-1) {
