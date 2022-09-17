@@ -632,7 +632,7 @@ var aytmParse = function (vipUrl,parseStr) {
     }//循环结束
 
     if(issort==1&&!parseStr){writeFile("hiker://files/cache/SrcSort.json", JSON.stringify(sortlist))};
-
+    log(urls.length)
     //上面js免嗅、json、明码解析、剔除打不开网站做完了
     if(urls.length>1){
         return JSON.stringify({
