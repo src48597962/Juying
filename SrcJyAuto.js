@@ -723,6 +723,7 @@ var SrcParseS = {
                         if(!/^http/.test(urlts)){
                             let http = urlcode.url.match(/http.*\//)[0];
                             urlts = http + urlts;
+                            log(urlts)
                         }    
                         var tscode = JSON.parse(fetch(urlts,{headers:{'Referer':url},onlyHeaders:true,timeout:2000}));
                         if(tscode.statusCode!=200){
