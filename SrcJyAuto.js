@@ -116,7 +116,7 @@ if(sortfile != ""){
     eval("var newsort=" + sortfile+ ";");
     Object.assign(sortlist, newsort);
 }
-
+log(sortlist);
 //自动解析入口
 var aytmParse = function (vipUrl,parseStr) {
     if(config.printlog==1){
@@ -539,7 +539,7 @@ var aytmParse = function (vipUrl,parseStr) {
                 }else{
                     if (contain.test(parseurl) && !exclude.test(parseurl)) {
                         if(playurl==""){playurl = parseurl;}
-                        if(config.printlog==1){log("√"+parsename+">"+parselx+"解析成功")};  
+                        if(config.printlog==1){log("√"+parsename+">"+parselx+"解析成功>"+parseurl)};  
                         if(config.testcheck==1){
                             playurl = "";
                         }else{
