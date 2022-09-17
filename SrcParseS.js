@@ -641,6 +641,7 @@ var SrcParseS = {
                 //eval(fetch(config.cj));
                 require(config.依赖.match(/https.*\//)[0] + 'SrcJyAuto.js');
                 var url = aytmParse(vipUrl);
+                log('断插返回>'+url)
                 return {url: url, ulist: {type:"dn",name:'dn',parse:'dn',x5:0}}; 
             }
             //明码解析线程代码
@@ -894,7 +895,6 @@ var SrcParseS = {
                         }
                         
                         //组一个多线路播放地址备用，log($.type(beurls[k]));
-                        log(beurls[k])
                         try{
                             var isjson = $.type(JSON.parse(beurls[k]));
                         }catch(e){
@@ -1049,7 +1049,7 @@ var SrcParseS = {
         try {
             if (/\.m3u8/.test(url)) {
                 var urlcode = JSON.parse(fetch(url,{withStatusCode:true,timeout:2000}));
-                log('url访问状态码：'+urlcode.statusCode)
+                log(name+'url访问状态码：'+urlcode.statusCode)
                 if(urlcode.statusCode!=200){
                     log(name+'>播放地址疑似失效或网络无法访问，不信去验证一下>'+url);
                     return 0;
@@ -1066,7 +1066,7 @@ var SrcParseS = {
                             urlts = http + urlts;
                         }    
                         var tscode = JSON.parse(fetch(urlts,{headers:{'Referer':url},onlyHeaders:true,timeout:2000}));
-                        log('ts访问状态码：'+tscode.statusCode)
+                        log(name+'ts访问状态码：'+tscode.statusCode)
                         if(tscode.statusCode!=200){
                             log(name+'>ts段地址疑似失效或网络无法访问，不信去验证一下>'+url);
                             return 0;
