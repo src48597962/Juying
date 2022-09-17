@@ -107,7 +107,7 @@ var defaultconfig = {
     "remotepath": ""//远程在线文件地址
 }
 //聚影使用时默认值
-var config = userconfig;
+var config = defaultconfig;
 config.printlog = JYconfig.printlog;
 
 var sortlist = []; //排序降权临时存放数组
