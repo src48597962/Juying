@@ -316,7 +316,7 @@ var erjimenu = [
                     col_type: "text_3"
                 });
                 d.push({
-                    title: (haveDN&&isdn&&JYconfig.parsemode==1?getide(1):getide(0))+'断插辅助',
+                    title: (haveDN&&isdn&&parsemode==1?getide(1):getide(0))+'断插辅助',
                     url: haveDN==0?'toast://没有断插？无法开启！':$('#noLoading#').lazyRule((JYconfig,cfgfile) => {
                             if(JYconfig['isdn'] == 0){
                                 JYconfig['isdn'] = 1;
@@ -378,7 +378,7 @@ var erjimenu = [
                     col_type: "text_3"
                 });
                 d.push({
-                    title: (JYconfig.xiutannh!='x5'?getide(1):getide(0))+'web内核',
+                    title: (parsemode!=2&&JYconfig.xiutannh!='x5'?getide(1):getide(0))+'web内核',
                     url: $('#noLoading#').lazyRule((JYconfig,cfgfile) => {
                             JYconfig['xiutannh'] = 'web';
                             writeFile(cfgfile, JSON.stringify(JYconfig));
@@ -388,7 +388,7 @@ var erjimenu = [
                     col_type: "text_3"
                 });
                 d.push({
-                    title: (JYconfig.xiutannh=='x5'?getide(1):getide(0))+'x5内核',
+                    title: (parsemode!=2&&JYconfig.xiutannh=='x5'?getide(1):getide(0))+'x5内核',
                     url: $('#noLoading#').lazyRule((JYconfig,cfgfile) => {
                             JYconfig['xiutannh'] = 'x5';
                             writeFile(cfgfile, JSON.stringify(JYconfig));
