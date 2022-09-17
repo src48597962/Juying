@@ -1047,6 +1047,7 @@ var SrcParseS = {
         try {
             if (/\.m3u8/.test(url)) {
                 var urlcode = JSON.parse(fetch(url,{withStatusCode:true,timeout:2000}));
+                log(urlcode)
                 if(urlcode.statusCode!=200){
                     log(name+'>播放地址疑似失效或网络无法访问，不信去验证一下>'+url);
                     return 0;
