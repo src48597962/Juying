@@ -888,54 +888,7 @@ function x5Player(x5jxlist, x5nmlist, vipUrl, sortlist, parmset, faillist, forma
 
 //加载视频url地址处理函数
 var format = {
-    //定义url-UA处理函数
-    urlJoinUa: function (url,ismul) {
-        try {
-            if(ismul==1){//多线路ua头
-                if (/mgtv/.test(url)) {
-                    var header = {'User-Agent': 'Mozilla/5.0','Referer': 'www.mgtv.com'};
-                }else if(/bilibili|bilivideo/.test(url)) {
-                    var header = {'User-Agent': 'Mozilla/5.0','Referer': 'www.bilibili.com'};
-                }else if (/wkfile/.test(url)) {
-                    var header = {'User-Agent': 'Mozilla/5.0','Referer': 'fantuan.tv'};
-                }else{
-                    var header = {'User-Agent': 'Mozilla/5.0'};
-                }
-                return header;
-            }else{
-                if (url[0] == '/') { url = 'https:' + url }
-                if (/wkfile/.test(url)) {
-                        url = url + ';{User-Agent@Mozilla/5.0&&Referer@https://fantuan.tv/}';
-                }else if(/bilibili|bilivideo/.test(url)){
-                    url = url + ";{User-Agent@Mozilla/5.0&&Referer@https://www.bilibili.com/}";
-                }else if(/mgtv/.test(url)){
-                    url = url + ';{User-Agent@Mozilla/5.0}';
-                }
-                return url;    
-            }
-        } catch (e) {
-            if(config.printlog==1){log("√错误："+e.message)};
-            return url;
-        }   
-    },
-    //定义url是否需要存本地处理函数
-    urlCacheM3u8: function (url,header,i) {
-        try {
-            if(i==undefined||i==""){
-                var name = 'video.m3u8';
-            }else{
-                var name = 'video'+parseInt(i)+'.m3u8';
-            }
-            if(header==undefined||header==""){header = {}}
-            if (config.cachem3u8==1) {
-                url = cacheM3u8(url, header, name);
-            }
-            return url;
-        } catch (e) {
-            if(config.printlog==1){log("√错误："+e.message)};
-            return url;
-        }    
-    }
+    
 };
 var SrcParseS = {
     formatUrl: function (url, i) {
