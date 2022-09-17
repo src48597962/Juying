@@ -17,8 +17,10 @@ try{
 try{    
     var MyParseS = {};
     var mySet = {};
-    if (fileExist(parseRoute)) {
-        eval('var parseFile =' + (/^http/.test(parseRoute)?fetchCache(parseRoute, 24):fetch(parseRoute)));
+    if (/^http/.test(parseRoute)) {
+        eval('var parseFile =' + fetchCache(parseRoute, 24));
+    }else if (fileExist(parseRoute)) {
+        eval('var parseFile =' + fetch(parseRoute));
     }
     MyParseS = parseFile.codes;
     mySet = parseFile.settings;
