@@ -4,7 +4,9 @@ var SrcParseS = {
         try {
             if (url.trim() == "") {
                 return "toast://解析失败，建议切换线路或更换解析方式";
-            } else {
+            } else if(/^{/.test(url)){
+                return url;
+            }else {
                 if (url[0] == '/') { url = 'https:' + url }
                 if (i == undefined) {
                     if (getMyVar('SrcM3U8', '1') == "1"&&url.indexOf('.m3u8')>-1) {
@@ -1050,14 +1052,17 @@ var SrcParseS = {
             if (/\.m3u8/.test(url)) {
                 var urlcode = JSON.parse(fetch(url,{withStatusCode:true,timeout:2000}));
                 log(name+'url访问状态码：'+urlcode.statusCode)
-                if(urlcode.statusCode!=200){
-                    log(name+'>播放地址疑似失效或网络无法访问，不信去验证一下>'+url);
+                if(urlcode.statusCode==-1){
+                    log(name+'>m3u8探测超时未拦载，结果未知')
+                    return 1;
+                }else if(urlcode.statusCode!=200){
+                    log(name+'>m3u8播放地址疑似失效或网络无法访问，不信去验证一下>'+url);
                     return 0;
                 }else{
                     var tstime = urlcode.body.match(/#EXT-X-TARGETDURATION:(.*?)\n/)[1];
                     var urltss = urlcode.body.replace(/#.*?\n/g,'').replace('#EXT-X-ENDLIST','').split('\n');
                     if(parseInt(tstime)*parseInt(urltss.length)<times){
-                        log(name+'>播放地址疑似跳舞小姐姐或防盗小视频，不信去验证一下>'+url);
+                        log(name+'>m3u8播放地址疑似跳舞小姐姐或防盗小视频，不信去验证一下>'+url);
                         return 0;
                     }else{
                         var urlts = urltss[0];
@@ -1067,7 +1072,10 @@ var SrcParseS = {
                         }    
                         var tscode = JSON.parse(fetch(urlts,{headers:{'Referer':url},onlyHeaders:true,timeout:2000}));
                         log(name+'ts访问状态码：'+tscode.statusCode)
-                        if(tscode.statusCode!=200){
+                        if(tscode.statusCode==-1){
+                            log(name+'>ts段探测超时未拦载，结果未知')
+                            return 1;
+                        }else if(tscode.statusCode!=200){
                             log(name+'>ts段地址疑似失效或网络无法访问，不信去验证一下>'+url);
                             return 0;
                         }
@@ -1076,13 +1084,16 @@ var SrcParseS = {
                 //log('test>播放地址连接正常');
             }else if (/\.mp4/.test(url)) {
                 var urlheader = JSON.parse(fetch(url,{onlyHeaders:true,timeout:2000}));
-                if(urlheader.statusCode!=200){
-                    log(name+'>播放地址疑似失效或网络无法访问，不信去验证一下>'+url);
+                if(urlheader.statusCode==-1){
+                    log(name+'>mp4探测超时未拦载，结果未知')
+                    return 1;
+                }else if(urlheader.statusCode!=200){
+                    log(name+'>mp4播放地址疑似失效或网络无法访问，不信去验证一下>'+url);
                     return 0;
                 }else{
                     var filelength = urlheader.headers['content-length'];
                     if(parseInt(filelength[0])/1024/1024 < 80){
-                        log(name+'>播放地址疑似跳舞小姐姐或防盗小视频，不信去验证一下>'+url);
+                        log(name+'>mp4播放地址疑似跳舞小姐姐或防盗小视频，不信去验证一下>'+url);
                         return 0;
                     }
                 }
