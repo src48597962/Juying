@@ -389,9 +389,10 @@ var aytmParse = function (vipUrl,parseStr) {
     var exclude = /404\.m3u8|xiajia\.mp4|余额不足\.m3u8/;//设置排除地址
     var contain = /\.mp4|\.m3u8|\.flv|\.avi|\.mpeg|\.wmv|\.mov|\.rmvb|\.dat|qqBFdownload|mime=video%2F|video_mp4/;//设置符合条件的正确地址
     var playurl = "";
-    var urls = [];//用于多线路地址存储
-    var names = [];//用于多线路名称存储
-    var headers = [];//用于多线路头信息存储
+    var urls = [];//用于多线路地址
+    var names = [];//用于多线路名称
+    var headers = [];//用于多线路头信息
+    var danmu = "";//多线路弹幕
     var ismulti = config.ismulti||0;//是否开启多线程
     var multiline = config.multiline||1;//多线程数量
     var adminuser = config.adminuser||0;
@@ -549,15 +550,16 @@ var aytmParse = function (vipUrl,parseStr) {
                         }else{
                             if(ismulti==1&&multiline>1){
                                 try{
-                                    var isjson = $.type(JSON.parse(parseurl));
+                                    eval('var urljson = '+ parseurl);
+                                    var urltype = $.type(urljson);
                                 }catch(e){
-                                    var isjson = "string";
+                                    var urltype = "string";
                                 }
-                                if(isjson != "string"){
+                                if(urltype == "object"){
                                     try {
-                                        let murls = JSON.parse(parseurl).urls;
-                                        let mnames = JSON.parse(parseurl).names||[];
-                                        let mheaders = JSON.parse(parseurl).headers;
+                                        let murls = urljson.urls;
+                                        let mnames = urljson.names||[];
+                                        let mheaders = urljson.headers;
                                         for(var j=0;j<murls.length;j++){
                                             let MulUrl = SrcParseS.formatMulUrl(murls[j].replace(/;{.*}/g,""), urls.length);
                                             urls.push(MulUrl.url);
@@ -568,6 +570,7 @@ var aytmParse = function (vipUrl,parseStr) {
                                             }
                                             headers.push(mheaders[j]);
                                         }
+                                        if(urljson.danmu){danmu = urljson.danmu;}
                                     } catch (e) {
                                         //log('判断多线路地址对象有错：'+e.message);
                                     }
@@ -636,8 +639,8 @@ var aytmParse = function (vipUrl,parseStr) {
         return JSON.stringify({
             urls: urls,
             names: names,
-            //danmu: "hiker://files/cache/danmu.json",
-            headers: headers
+            headers: headers,
+            danmu: danmu
         });   
     }else{
         return playurl;
