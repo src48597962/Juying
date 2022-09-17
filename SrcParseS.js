@@ -1078,7 +1078,8 @@ var SrcParseS = {
                         var tstime = 1;
                         var urltss = 1;
                     }
-                    if(parseInt(tstime)*parseInt(urltss.length)<times){
+                    log(parseInt(tstime)*parseInt(urltss.length))
+                    if((parseInt(tstime)*parseInt(urltss.length))<times){
                         log(name+'>m3u8播放地址疑似跳舞小姐姐或防盗小视频，不信去验证一下>'+url);
                         return 0;
                     }else{
