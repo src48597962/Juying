@@ -656,7 +656,7 @@ var SrcParseS = {
         } else if (/wkfile/.test(url)) {
             var header = { 'User-Agent': 'Mozilla/5.0', 'Referer': 'fantuan.tv' };
         } else {
-            var header = { 'User-Agent': 'Mozilla/5.0' };
+            var header = {};
         }
         return header;
     },
