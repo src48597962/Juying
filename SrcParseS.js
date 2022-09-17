@@ -723,7 +723,7 @@ var SrcParseS = {
                 }
             };
 
-            if(recordparse&&forcedn==0&&mulnum<=1&&!parseStr){
+            if(recordparse&&forcedn==0&&mulnum<=1&&!parseStr&&parsemode==1){
                 //优先上次成功的
                 playurl = task({ulist:{parse:recordparse, name:recordname, header:recordhead}, vipUrl:vipUrl, testurl:this.testvideourl}).url;
                 
@@ -763,7 +763,7 @@ var SrcParseS = {
             }
             var iscalldn = 0;
             var isrecord = 0;
-            if(playurl==""&&!parseStr){
+            if(playurl==""&&!parseStr&&parsemode!=3){
                 if(forcedn==1){
                     if(printlog==1){log("开启强制断插解析模式")};
                     Uparselist = [{type:'dn',name:'断插'}];
