@@ -897,10 +897,10 @@ var SrcParseS = {
                         try{
                             var isjson = $.type(JSON.parse(beurls[k]));
                         }catch(e){
-                            log(e.message)
+                            //log(e.message)
                             var isjson = "string";
                         }
-                        log(JSON.parse(beurls[k]))
+                        let urljson = JSON.parse(beurls[k]);
                         
                         if(isjson != "string"){
                             try {
