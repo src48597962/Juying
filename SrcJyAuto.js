@@ -126,6 +126,9 @@ if(config.iscustom==1){
         config.iscustom = 0;
     }
 }else{var resetsort = 0};
+//聚影使用时默认值
+putMyVar('SrcM3U8', config.cachem3u8);
+config.autoselect=1
 
 var sortlist = []; //排序降权临时存放数组
 var isresetsort = resetsort || 0;
@@ -757,7 +760,7 @@ var aytmParse = function (vipUrl,parseStr) {
                     headers: headers
                 });   
             }else{
-                return format.urlJoinUa(format.urlCacheM3u8(playurl,format.urlJoinUa(playurl,1))) + '#isVideo=true#'; 
+                return SrcParseS.formatUrl(playurl);
             }
         }
     } catch (e) {
