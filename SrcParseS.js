@@ -897,6 +897,7 @@ var SrcParseS = {
                         try{
                             var isjson = $.type(JSON.parse(beurls[k]));
                         }catch(e){
+                            log(e.message)
                             var isjson = "string";
                         }
                         log(beurls[k])
