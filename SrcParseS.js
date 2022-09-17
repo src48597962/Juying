@@ -895,16 +895,16 @@ var SrcParseS = {
                         
                         //组一个多线路播放地址备用，log($.type(beurls[k]));
                         try{
-                            eval('let urlstr = '+beurls[k]);
-                            var urltype = $.type(urlstr);
+                            eval('var urljson = '+ beurls[k]);
+                            var urltype = $.type(urljson);
                         }catch(e){
                             var urltype = "string";
                         }
                         if(urltype == "object"){
                             try {
-                                let murls = JSON.parse(beurls[k]).urls;
-                                let mnames = JSON.parse(beurls[k]).names||[];
-                                let mheaders = JSON.parse(beurls[k]).headers;
+                                let murls = urljson.urls;
+                                let mnames = urljson.names||[];
+                                let mheaders = urljson.headers;
                                 for(var j=0;j<murls.length;j++){
                                     let MulUrl = this.formatMulUrl(murls[j].replace(/;{.*}/g,""), urls.length);
                                     urls.push(MulUrl.url);
