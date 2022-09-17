@@ -629,6 +629,7 @@ var SrcParseS = {
             var urls = [];//多线路地址
             var names = [];//多线路名称
             var headers = [];//多线路头信息
+            var danmu = "";//多线路弹幕
             var dellist = [];//需从本地解析中删除列表
             var appJXchange = 0;//app解析是否有发现新的或增加可解片源
             var myJXchange = 0;//私有解析是否排除片源
@@ -915,6 +916,7 @@ var SrcParseS = {
                                     }
                                     headers.push(mheaders[j]);
                                 }
+                                if(urljson.danmu){danmu = urljson.danmu;}
                             } catch (e) {
                                 log('判断多线路地址对象有错：'+e.message);
                             }
@@ -1004,7 +1006,8 @@ var SrcParseS = {
                     return JSON.stringify({
                         urls: urls,
                         names: names,
-                        headers: headers
+                        headers: headers,
+                        danmu: danmu
                     }); 
                 }else{
                     if(printlog==1){log('解析完成，进入播放1')};
