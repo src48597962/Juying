@@ -16,10 +16,8 @@ var SrcParseS = {
                         if (/wkfile/.test(url)) {
                             url = url + ';{User-Agent@Mozilla/5.0&&Referer@https://fantuan.tv/}';
                         } else if (/bilibili|bilivideo/.test(url)) {
-                            url = url + ";{User-Agent@Mozilla/5.0&&Referer@https://www.bilibili.com/}";
-                        } /*else if (/shenglinyiyang\.cn/.test(url)) {
-                            url = url + ";{User-Agent@Mozilla/5.0&&Referer@https://zyz.sdljwomen.com}";
-                        }*/ else if (/mgtv/.test(url)) {
+                            url = url + ";{User-Agent@bili2021&&Referer@https://www.bilibili.com/}";
+                        } else if (/mgtv/.test(url)) {
                             url = url + ";{User-Agent@Mozilla/5.0}";
                         }/* else {
                             url = url + ";{User-Agent@Mozilla/5.0}";
@@ -43,7 +41,7 @@ var SrcParseS = {
         if (/mgtv/.test(url)) {
             var header = { 'User-Agent': 'Mozilla/5.0', 'Referer': 'www.mgtv.com' };
         } else if (/bilibili|bilivideo/.test(url)) {
-            var header = { 'User-Agent': 'Mozilla/5.0', 'Referer': 'www.bilibili.com' };
+            var header = { 'User-Agent': 'bili2021', 'Referer': 'www.bilibili.com' };
         } else if (/wkfile/.test(url)) {
             var header = { 'User-Agent': 'Mozilla/5.0', 'Referer': 'fantuan.tv' };
         } else {
@@ -901,6 +899,7 @@ var SrcParseS = {
                         }catch(e){
                             var isjson = "string";
                         }
+                        log(beurls[k])
                         log(beparses[k].name+isjson)
                         if(isjson != "string"){
                             try {
