@@ -642,9 +642,8 @@ var SrcParseS = {
                 //eval("var config =" + fetch("hiker://files/cache/MyParseSet.json"));
                 //eval(fetch(config.cj));
                 require(config.依赖.match(/https.*\//)[0] + 'SrcJyAuto.js');
-                var url = aytmParse(vipUrl);
-                log('断插返回>'+url)
-                return {url: url, ulist: {type:"dn",name:'dn',parse:'dn',x5:0}}; 
+                let rurl = aytmParse(vipUrl);
+                return {url: rurl, ulist: {type:"dn",name:'dn',parse:'dn',x5:0}}; 
             }
             //明码解析线程代码
             var task = function(obj) {
