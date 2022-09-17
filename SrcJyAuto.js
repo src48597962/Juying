@@ -723,6 +723,7 @@ var SrcParseS = {
                         log(name+'>播放地址疑似跳舞小姐姐或防盗小视频，不信去验证一下>'+url);
                         return 0;
                     }else{
+                        log(urlcode.url)
                         var urlts = urltss[0];
                         if(!/^http/.test(urlts)){
                             let http = urlcode.url.match(/http.*\//)[0];
