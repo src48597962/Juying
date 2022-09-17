@@ -899,6 +899,7 @@ var SrcParseS = {
                         }catch(e){
                             var isjson = "string";
                         }
+                        log(beparses[k].name+isjson)
                         if(isjson != "string"){
                             try {
                                 let murls = JSON.parse(beurls[k]).urls;
