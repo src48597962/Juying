@@ -558,7 +558,7 @@ var SrcParseS = {
                 let arr = {type:'test',name:parseStr.name,parse:parseStr.parse,sort:0};
                 if(parseStr.header){arr['header'] = parseStr.header}
                 Uparselist.push(arr);
-            }else{
+            }else if(parsemode==1){
                 //读取app自带的解析，将未屏蔽的入备选
                 var appParses = getMyVar('parse_api', '');
                 if(appParses){
