@@ -201,7 +201,7 @@ var aytmParse = function (vipUrl,parseStr) {
                 }catch(e){}
             } 
 
-            if(str!=""&&str!="默认"){
+            if(str&&str!="默认"){
                 //如开启了智能优先时，优先取单项指定解析
                 prior = str.split(/,|，/); //字符分割
                 for (var i in prior) {
