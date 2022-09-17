@@ -649,8 +649,7 @@ var SrcParseS = {
         if (/mgtv/.test(url)) {
             var header = { 'User-Agent': 'Mozilla/5.0', 'Referer': 'www.mgtv.com' };
         } else if (/bilibili|bilivideo/.test(url)) {
-            var header = { 'User-Agent': 'Mozilla/5.0', 'Referer': 'www.bilibili.com' };
-            //headers: [{'Referer': 'https://www.bilibili.com','User-Agent': 'bili2021'}]
+            var header = { 'User-Agent': 'bili2021', 'Referer': 'https://www.bilibili.com' };
         } else if (/wkfile/.test(url)) {
             var header = { 'User-Agent': 'Mozilla/5.0', 'Referer': 'fantuan.tv' };
         } else {
