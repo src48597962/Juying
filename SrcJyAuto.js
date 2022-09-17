@@ -454,6 +454,7 @@ var aytmParse = function (vipUrl,parseStr) {
         }
         if(rurl){   
             if(/^toast/.test(rurl)){
+                if(config.printlog==1){log(obj.name+'>提示：'+rurl.replace('toast://',''))};
                 rurl = "";
             }else if(/^http/.test(rurl)&&SrcParseS.testvideourl(rurl,obj.name)==0){
                 //检测地址有效性
