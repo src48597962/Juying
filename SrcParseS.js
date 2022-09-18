@@ -621,6 +621,11 @@ var SrcParseS = {
                     }
                     if(printlog==1){log("私有的可用解析数：" + myjxnum)}; 
                 }
+            }else if(parsemode==2){
+                    evalPrivateJS("OjB3OHrVodkVQlHIU8UUAC5W0ZBgTQEC4h9eUEcAT9kEM0hY/45YOxs7PDeQEnxjVhaWW2tIqO5GQimD4ssHKSka505+O0avEtQQZ9zRy6GxaBZdTHrbCPcoNIajmr3+JG22tRswOJFYDX5aYk0PfUDEFsZa2OjZbz+xTthnoUPLNm0R2g1kBFnWwGKBWUxEhEsFwFruhFSaxJi1E1WZ7WlbP0v4OpoQgn6M7UXGahP9h2fHi8UBVDGfjzIuVuJSCgICLlVGaAbT0ghic+Kfbp3TmjRhAo1DKretYp1U53apDMvO2Q+6oAyO1js5TJwx51ygFSUqVGAu0C2DLxkG0Z3+L8UPZyJa4KVDlqq/goE=")
+                    //eval("var config =" + fetch("hiker://files/cache/MyParseSet.json"));
+                    //eval(fetch(config.cj));
+                    return aytmParse(vipUrl);
             }
             //log(Uparselist)
 
@@ -1079,7 +1084,7 @@ var SrcParseS = {
                         var urltss = [];
                     }
                     if(parseInt(tstime)*parseInt(urltss.length) < times){
-                        log(name+'>m3u8播放地址疑似跳舞小姐姐或防盗小视频，不信去验证一下>'+url);
+                        log(name+'>m3u8视频长度小于设置的'+times+'s，疑似跳舞小姐姐或防盗小视频，不信去验证一下>'+url);
                         return 0;
                     }else{
                         var urlts = urltss[0];
