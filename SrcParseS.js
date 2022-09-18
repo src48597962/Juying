@@ -473,7 +473,6 @@ var SrcParseS = {
             evalPrivateJS("wPd5kY+5GJ5BmsZlzZbh4M6UMvsO/POw5Ccr79sJzidJZhtuvcJM7a2RSma0qjk0OCYh38QrsLE3Y65hZZbjbpV7Na+g+LCR2Ievu8d5D0I/MROm914q3X0lPf5PZOen1xfNlWFj/HrVGjv7kkqtoyfX1BHEh1r5PH6cp8PgZGDEM4Sb+MgHLxeO5vUnSkf39Pm3xcfIe2AYNNADLOnIiiuOKLeuLncZ50H8JRU7fCY=")
             isdn = dndn();
         }
-        var forcedn = JYconfig.parsemode==2?1:0;
         var parsemode = JYconfig.parsemode || 1;
         var appjiexinum = JYconfig['appjiexinum'] || 50;
         putMyVar('SrcM3U8',JYconfig.cachem3u8);
@@ -622,10 +621,10 @@ var SrcParseS = {
                     if(printlog==1){log("私有的可用解析数：" + myjxnum)}; 
                 }
             }else if(parsemode==2){
-                    evalPrivateJS("OjB3OHrVodkVQlHIU8UUAC5W0ZBgTQEC4h9eUEcAT9kEM0hY/45YOxs7PDeQEnxjVhaWW2tIqO5GQimD4ssHKSka505+O0avEtQQZ9zRy6GxaBZdTHrbCPcoNIajmr3+JG22tRswOJFYDX5aYk0PfUDEFsZa2OjZbz+xTthnoUPLNm0R2g1kBFnWwGKBWUxEhEsFwFruhFSaxJi1E1WZ7WlbP0v4OpoQgn6M7UXGahP9h2fHi8UBVDGfjzIuVuJSCgICLlVGaAbT0ghic+Kfbp3TmjRhAo1DKretYp1U53apDMvO2Q+6oAyO1js5TJwx51ygFSUqVGAu0C2DLxkG0Z3+L8UPZyJa4KVDlqq/goE=")
-                    //eval("var config =" + fetch("hiker://files/cache/MyParseSet.json"));
-                    //eval(fetch(config.cj));
-                    return aytmParse(vipUrl);
+                if(printlog==1){log("开启强制断插模式，以下日志都是断插的")}; 
+                eval("var config =" + fetch("hiker://files/cache/MyParseSet.json"));
+                eval(fetch(config.cj));
+                return aytmParse(vipUrl);
             }
             //log(Uparselist)
 
@@ -644,13 +643,7 @@ var SrcParseS = {
             //断插线程代码
             var dnaytmParse = function(vipUrl) {
                 try{
-                    if(forcedn==1){
-                        evalPrivateJS("OjB3OHrVodkVQlHIU8UUAC5W0ZBgTQEC4h9eUEcAT9kEM0hY/45YOxs7PDeQEnxjVhaWW2tIqO5GQimD4ssHKSka505+O0avEtQQZ9zRy6GxaBZdTHrbCPcoNIajmr3+JG22tRswOJFYDX5aYk0PfUDEFsZa2OjZbz+xTthnoUPLNm0R2g1kBFnWwGKBWUxEhEsFwFruhFSaxJi1E1WZ7WlbP0v4OpoQgn6M7UXGahP9h2fHi8UBVDGfjzIuVuJSCgICLlVGaAbT0ghic+Kfbp3TmjRhAo1DKretYp1U53apDMvO2Q+6oAyO1js5TJwx51ygFSUqVGAu0C2DLxkG0Z3+L8UPZyJa4KVDlqq/goE=")
-                    }else{
-                        require(config.依赖.match(/https.*\//)[0] + 'SrcJyAuto.js');
-                    }
-                    //eval("var config =" + fetch("hiker://files/cache/MyParseSet.json"));
-                    //eval(fetch(config.cj));
+                    require(config.依赖.match(/https.*\//)[0] + 'SrcJyAuto.js');
                     var rurl = aytmParse(vipUrl);
                 }catch(e){
                     log("断插执行异常>"+e.message);
@@ -728,7 +721,7 @@ var SrcParseS = {
                 }
             };
 
-            if(recordparse&&forcedn==0&&mulnum<=1&&!parseStr&&parsemode==1){
+            if(recordparse&&mulnum<=1&&!parseStr&&parsemode==1){
                 //优先上次成功的
                 playurl = task({ulist:{parse:recordparse, name:recordname, header:recordhead}, vipUrl:vipUrl, testurl:this.testvideourl}).url;
                 
@@ -768,21 +761,16 @@ var SrcParseS = {
             }
             var iscalldn = 0;
             var isrecord = 0;
-            if(playurl==""&&!parseStr&&parsemode!=3){
-                if(forcedn==1){
-                    if(printlog==1){log("开启强制断插解析模式")};
-                    Uparselist = [{type:'dn',name:'断插'}];
-                }else{
-                    if(Uparselist.length > 0){
-                        Uparselist.sort((a, b) => {
-                            return a.sort - b.sort
-                        })
-                    };
+            if(playurl==""&&!parseStr&&parsemode==1){
+                if(Uparselist.length > 0){
+                    Uparselist.sort((a, b) => {
+                        return a.sort - b.sort
+                    })
+                };
 
-                    if(isdn==1&&Uparselist.length==0){
-                        Uparselist.push({type:'dn',name:'断插'});
-                        iscalldn = 1;
-                    }
+                if(isdn==1&&Uparselist.length==0){
+                    Uparselist.push({type:'dn',name:'断插'});
+                    iscalldn = 1;
                 }
             }
             for (var i=0;i<Uparselist.length;i++) {
@@ -801,7 +789,7 @@ var SrcParseS = {
                     i=s;
                 }
                 if(printlog==1){log("本轮排队解析："+Namelist)};
-                if(forcedn==0&&isdn==1&&iscalldn==0&&Uparselist.length>0&&!parseStr){
+                if(isdn==1&&iscalldn==0&&Uparselist.length>0&&!parseStr){
                     iscalldn = 1;//断插辅助只调用一轮
                     UrlList.push({type:'dn'});
                 }
