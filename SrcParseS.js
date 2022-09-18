@@ -498,16 +498,20 @@ var SrcParseS = {
             return this.嗅探(vipUrl);
         }else{
             var from = "";
-            if(vipUrl.indexOf('-yanaifei.html') != -1){
-                from = 'yanaifei';
-            }else if(vipUrl.indexOf('suoyo.cc') != -1){
-                from = 'duoduozy';
-            }else if(vipUrl.indexOf('.') != -1){
-                var host = vipUrl.match(/\.(.*?)\//)[1];
-                from = host.split('.')[0];
-            }else if(vipUrl.indexOf('-') != -1){
-                from = vipUrl.split('-')[0];
-            }else{
+            try{
+                if(vipUrl.indexOf('-yanaifei.html') != -1){
+                    from = 'yanaifei';
+                }else if(vipUrl.indexOf('suoyo.cc') != -1){
+                    from = 'duoduozy';
+                }else if(vipUrl.indexOf('.') != -1){
+                    var host = vipUrl.match(/\.(.*?)\//)[1];
+                    from = host.split('.')[0];
+                }else if(vipUrl.indexOf('-') != -1){
+                    from = vipUrl.split('-')[0];
+                }else{
+                    from = getMyVar('linecode', 'oth');
+                }
+            }catch(e){
                 from = getMyVar('linecode', 'oth');
             }
             if(from=="qiyi"){from = "iqiyi"}
