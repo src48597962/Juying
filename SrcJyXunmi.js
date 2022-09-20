@@ -545,7 +545,7 @@ function xunmi(name,data,ishkss) {
                 if(obj.results.indexOf(taskResult.apiurl)==-1){obj.results.push(taskResult.apiurl);}
                 let successnum = obj.results.length-obj.errors.length;
                 updateItem('loading', {
-                    title: ishkss?'‘‘’’<font color=#19B89D>' + (successnum<0?0:successnum)+'</font>/'+count+'，加载中...':'‘‘’’<font color=#19B89D>' + (successnum<0?0:successnum)+'</font>/'+'‘‘’’<font color=#F54343>'+obj.errors.length+'</font>/'+count+'，加载中...',
+                    title: ishkss?(successnum<0?0:successnum)+'/'+count+'，加载中...':(successnum<0?0:successnum)+'/'+obj.errors.length+'/'+count+'，加载中...',
                     url: "hiker://empty",
                     col_type: "text_center_1",
                     extra: {
@@ -606,7 +606,7 @@ function xunmi(name,data,ishkss) {
         if(tzgroup == 1){writeFile(filepath, JSON.stringify(jiekoulist));}
         
         updateItem('loading', {
-            title: ishkss?'‘‘’’<font color=#19B89D>'+(beresults.length-beerrors.length)+'</font>/'+count+',我是有底线的':'‘‘’’<font color=#19B89D>'+ (beresults.length-beerrors.length)+'</font>/'+'‘‘’’<font color=#F54343>'+beerrors.length+'</font>/'+count+',我是有底线的',
+            title: ishkss?'‘‘’’<font color=#f13b66a>'+(beresults.length-beerrors.length)+'</font>/'+count+',我是有底线的':'‘‘’’<font color=#f13b66a>'+ (beresults.length-beerrors.length)+'</font>/'+'‘‘’’<font color=#F54343>'+beerrors.length+'</font>/'+count+',我是有底线的',
             url: beresults.length==count?"toast://已搜索完毕":$('#noLoading#').lazyRule((bess,datalist,beresults,beerrors,name,count,ishkss)=>{
                     for (let j = 0; j < beresults.length; j++) {
                         for(var i = 0; i < datalist.length; i++){
