@@ -899,17 +899,17 @@ function xunmierji(type,ua) {
                     conts.push(cont.join("#"))
                 }
                 getsm = "获取主演dtActor";
-                var actor = String(xpathArray(html, jsondata.dtNode+jsondata.dtActor).join(',')).replace('主演：','').replace(jsondata.filter?eval(jsondata.filter):"","") || "内详";
+                var actor = String(xpathArray(html, jsondata.dtNode+jsondata.dtActor).join(',')).replace('主演：','').replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "") || "内详";
                 getsm = "获取导演dtDirector";
-                var director = String(xpathArray(html, jsondata.dtNode+jsondata.dtDirector).join(',')).replace('导演：','').replace(jsondata.filter?eval(jsondata.filter):"","") || "内详";
+                var director = String(xpathArray(html, jsondata.dtNode+jsondata.dtDirector).join(',')).replace('导演：','').replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "") || "内详";
                 getsm = "获取地区dtArea";
-                var area = String(xpath(html, jsondata.dtNode+jsondata.dtArea)).replace('地区：','').replace(jsondata.filter?eval(jsondata.filter):"","");
+                var area = String(xpath(html, jsondata.dtNode+jsondata.dtArea)).replace('地区：','').replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "");
                 getsm = "获取年份dtYear";
-                var year = String(xpath(html, jsondata.dtNode+jsondata.dtYear)).replace('年份：','').replace(jsondata.filter?eval(jsondata.filter):"","");
+                var year = String(xpath(html, jsondata.dtNode+jsondata.dtYear)).replace('年份：','').replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "");
                 getsm = "获取类型dtCate";
-                var remarks = String(xpathArray(html, jsondata.dtNode+jsondata.dtCate).join(',')).replace(jsondata.filter?eval(jsondata.filter):"","") || "";
+                var remarks = String(xpathArray(html, jsondata.dtNode+jsondata.dtCate).join(',')).replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "") || "";
                 getsm = "获取备注dtMark";
-                var pubdate = String(xpathArray(html, jsondata.dtNode+jsondata.dtMark).join(',')).replace(jsondata.filter?eval(jsondata.filter):"","") || "";
+                var pubdate = String(xpathArray(html, jsondata.dtNode+jsondata.dtMark).join(',')).replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "") || "";
                 var pic = MY_PARAMS.pic || xpath(html, jsondata.dtNode+jsondata.dtImg);
                 getsm = "获取简介dtDesc";
                 var desc = String(xpath(html, jsondata.dtNode+jsondata.dtDesc)).replace(jsondata.filter?eval(jsondata.filter):"","") || '...';
@@ -1051,7 +1051,7 @@ function xunmierji(type,ua) {
             tabs.push(line);
             var linecode = i;
         }else if (/cms|xpath|biubiu/.test(type)) {
-            tabs.push(arts[i]);
+            tabs.push(arts[i].replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, ""));
             var linecode = arts[i];
         }else{
             var linecode = "";
