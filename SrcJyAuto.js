@@ -124,11 +124,18 @@ var SAconfig = defaultconfig;
 SAconfig.printlog = JYconfig.printlog;
 
 var sortlist = []; //排序降权临时存放数组
-var sortfile=fetch("hiker://files/cache/SrcSort.json");
-if(sortfile != ""){
-    eval("var newsort=" + sortfile+ ";");
+var sortfile = "hiker://files/rules/Src/Auto/SrcSort.json";
+if (!fileExist(sortfile)&&fileExist('hiker://files/cache/SrcSort.json')) {
+    try{
+        eval("var oldsort=" + fetch('hiker://files/cache/SrcSort.json'));
+        writeFile(sortfile, JSON.stringify(oldsort));
+    }catch(e){}
+}
+if (fileExist(sortfile)){
+    eval("var newsort=" + fetch(sortfile));
     Object.assign(sortlist, newsort);
 }
+
 //自动解析入口
 var aytmParse = function (vipUrl,parseStr) {
     if(stauts==0){return "";}
@@ -385,8 +392,8 @@ var aytmParse = function (vipUrl,parseStr) {
     }
     if(dellist.length > 0){
         SAconfig['dellist'] = dellist;
-        writeFile("hiker://files/cache/SrcSet.js", 'var userconfig = ' + JSON.stringify(SAconfig))
-        //if(SAconfig.printlog == 1){log("√建议删除解析口:"+dellist);}
+        writeFile("hiker://files/rules/Src/Auto/config.json", JSON.stringify(SAconfig))
+        if(SAconfig.printlog == 1){log("√建议删除断插解析:"+dellist);}
     }
     if(parselist.length == 0){
         if(SAconfig.printlog==1){log("√断插没有可用的解析接口，需重新配置")};
@@ -647,7 +654,7 @@ var aytmParse = function (vipUrl,parseStr) {
         }//多线程结果处理
     }//循环结束
 
-    if(issort==1&&!parseStr){writeFile("hiker://files/cache/SrcSort.json", JSON.stringify(sortlist))};
+    if(issort==1&&!parseStr){writeFile(sortfile, JSON.stringify(sortlist))};
     //上面js免嗅、json、明码解析、剔除打不开网站做完了
     if(urls.length>1){
         return JSON.stringify({
