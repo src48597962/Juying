@@ -1051,7 +1051,7 @@ function xunmierji(type,ua) {
             tabs.push(line);
             var linecode = i;
         }else if (/cms|xpath|biubiu/.test(type)) {
-            tabs.push(arts[i].replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, ""));
+            tabs.push(arts[i].replace(/[\r\ \n]/g, ""));
             var linecode = arts[i];
         }else{
             var linecode = "";
