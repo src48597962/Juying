@@ -489,7 +489,7 @@ var aytmParse = function (vipUrl,parseStr) {
     //清理sort排序文件线程代码
     var sorttask = function(obj) {
         for(var j=0;j<sortlist.length;j++){
-            if(!parselist.some(item => item.name==sortlist[j].name)){ 
+            if(!strlist.some(item => item.name==sortlist[j].name)){ 
                 //log(sortlist[j].name+'不存在，从sort文件中删除')
                 sortlist.splice(j,1);
                 j = j - 1;
