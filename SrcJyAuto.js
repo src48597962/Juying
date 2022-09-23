@@ -411,7 +411,7 @@ var aytmParse = function (vipUrl,parseStr) {
     };
 
     var exclude = /404\.m3u8|xiajia\.mp4|余额不足\.m3u8/;//设置排除地址
-    var contain = /\.mp4|\.m3u8|\.flv|\.avi|\.mpeg|\.wmv|\.mov|\.rmvb|\.dat|qqBFdownload|mime=video%2F|video_mp4/;//设置符合条件的正确地址
+    var contain = /\.mp4|\.m3u8|\.flv|\.avi|\.mpeg|\.wmv|\.mov|\.rmvb|\.dat|qqBFdownload|mime=video%2F|video_mp4|\.ts/;//设置符合条件的正确地址
     var playurl = "";
     var urls = [];//用于多线路地址
     var names = [];//用于多线路名称
@@ -700,6 +700,7 @@ var SrcParseS = {
     },
     //测试视频地址有效性
     testvideourl: function (url,name,times) {
+        if(!url){return 0}
         if(!name){name = "解析"}
         if(!times){times = 120}
         try {
