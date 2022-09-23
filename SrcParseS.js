@@ -675,7 +675,6 @@ var SrcParseS = {
                         taskheader['header'] = head;
                     }
                     var getjson = JSON.parse(request(obj.ulist.parse+obj.vipUrl,taskheader));
-                    log(getjson)
                     if (getjson.body&&getjson.statusCode==200){
                         var gethtml = getjson.body;
                         var rurl = "";
