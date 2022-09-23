@@ -704,7 +704,9 @@ var SrcParseS = {
         if(!name){name = "解析"}
         if(!times){times = 120}
         try {
-            if (/\.m3u8/.test(url)) {
+            if(/vkey=/.test(url)){
+                return 1;
+            }else if (/\.m3u8/.test(url)) {
                 var urlcode = JSON.parse(fetch(url,{withStatusCode:true,timeout:2000}));
                 if(urlcode.statusCode==-1){
                     //log(name+'>m3u8探测超时未拦载，结果未知')
