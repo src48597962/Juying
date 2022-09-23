@@ -1072,8 +1072,8 @@ var SrcParseS = {
                         var tstime = urlcode.body.match(/#EXT-X-TARGETDURATION:(.*?)\n/)[1];
                         var urltss = urlcode.body.replace(/#.*?\n/g,'').replace('#EXT-X-ENDLIST','').split('\n');
                     }catch(e){
-                        var tstime = 0;
-                        var urltss = [];
+                        log(name+'>√错误：探测异常未拦截>'+e.message)
+                        return 1;
                     }
                     if(parseInt(tstime)*parseInt(urltss.length) < times){
                         log(name+'>m3u8视频长度小于设置的'+times+'s，疑似跳舞小姐姐或防盗小视频，不信去验证一下>'+url);
