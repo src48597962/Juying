@@ -1059,7 +1059,9 @@ var SrcParseS = {
         if(!name){name = "解析"}
         if(!times){times = 120}
         try {
-            if (/\.m3u8/.test(url)) {
+            if(/vkey=/.test(url)){
+                return 1;
+            }else if (/\.m3u8/.test(url)) {
                 var urlcode = JSON.parse(fetch(url,{withStatusCode:true,timeout:2000}));
                 //log(name+'url访问状态码：'+urlcode.statusCode)
                 if(urlcode.statusCode==-1){
