@@ -438,7 +438,7 @@ var erjimenu = [
     {
         title: "更多片源",
         url: !fileExist('hiker://files/rules/Src/Juying/jiekou.json')?"toast://分享页面或没有接口，无法扩展更多片源":getMyVar('SrcJy$back')=='1'?`#noLoading#@lazyRule=.js:back(false);'hiker://empty'`:$('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
-            require(config.依赖.match(/https.*\//)[0] + 'SrcJyXunmi.js');
+            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
             xunmi(name);
         }, MY_PARAMS.name),
         pic_url: 'https://lanmeiguojiang.com/tubiao/messy/25.svg',
