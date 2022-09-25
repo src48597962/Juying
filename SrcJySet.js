@@ -465,7 +465,7 @@ function SRCSet() {
                 url:$("","输入biubiu资源地址").input(() => {
                         try{
                             showLoading('检测文件有效性');
-                            require(config.依赖.match(/https.*\//)[0] + 'SrcJySet.js');
+                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                             var html = fetch(input,{timeout:2000});
                             var reg = /("([^\\\"]*(\\.)?)*")|('([^\\\']*(\\.)?)*')|(\/{2,}.*?(\r|\n|$))|(\/\*(\n|.)*?\*\/)/g;
                             html = html.replace(reg, function(word) { 
@@ -579,7 +579,7 @@ function SRCSet() {
                 url:$("","输入TVBox/beibei资源地址").input(() => {
                     try{
                         showLoading('检测文件有效性');
-                        require(config.依赖.match(/https.*\//)[0] + 'SrcJySet.js');
+                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                         if(/\/storage\/emulated\//.test(input)){input = "file://" + input}
                         var html = fetch(input,{timeout:2000});
                         var reg = /("([^\\\"]*(\\.)?)*")|('([^\\\']*(\\.)?)*')|(\/{2,}.*?(\r|\n|$))|(\/\*(\n|.)*?\*\/)/g;
@@ -715,7 +715,7 @@ function SRCSet() {
                 title: '其他导入',
                 url:$("","仅支持输入JY自定义的资源地址").input(() => {
                         try{
-                            require(config.依赖.match(/https.*\//)[0] + 'SrcJySet.js');
+                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                             eval(fetch(input,{timeout:2000}))
                             var urls= [];
                             for(let k in jyjiekou){
@@ -821,7 +821,7 @@ function SRCSet() {
                             copy(name+'#'+url);
                             return "hiker://empty";
                         },dataname, dataurl):getMyVar('guanlicz')=="2"?$('hiker://empty#noRecordHistory##noHistory#').rule((data) => {
-                            require(config.依赖.match(/https.*\//)[0] + 'SrcJySet.js');
+                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                             if(getMyVar('guanli', 'jk')=="jk"){
                                 jiekou('update', data);
                             }else{
@@ -887,10 +887,10 @@ function SRCSet() {
     d.push({
         title: '增加',
         url: getMyVar('guanli', 'jk')=="jk"?$('hiker://empty#noRecordHistory##noHistory#').rule(() => {
-            require(config.依赖.match(/https.*\//)[0] + 'SrcJySet.js');
+            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
             jiekou('add')
         }):$('hiker://empty#noRecordHistory##noHistory#').rule(() => {
-            require(config.依赖.match(/https.*\//)[0] + 'SrcJySet.js');
+            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
             jiexi('add');
         }),
         img: "https://lanmeiguojiang.com/tubiao/more/25.png",
@@ -1499,7 +1499,7 @@ function jiekou(lx,data) {
                     let apiurls = getMyVar('apiurls');
                     let apiua = getMyVar('apiua','Dalvik/2.1.0');
                     let datalist = [];
-                    require(config.依赖.match(/https.*\//)[0] + 'SrcJySet.js');
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                     if(getMyVar('addtype', '1')=="1"&&apiname&&apiurl){
                         let urltype = getMyVar('apitype')||getapitype(apiurl);
                         let urlgroup = getMyVar('apigroup');
@@ -1529,7 +1529,7 @@ function jiekou(lx,data) {
                     }else{
                         return "toast://无法测试，检查项目填写完整性";
                     }
-                    require(config.依赖.match(/https.*\//)[0] + 'SrcJyXunmi.js');
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
                     xunmi(name, datalist);
                 },input);
             })
@@ -1571,7 +1571,7 @@ function jiekou(lx,data) {
         col_type:'text_3',
         url: $().lazyRule((lx,data)=>{
             if(getMyVar('addtype', '1')=="1"&&!/^http|^csp/.test(getMyVar('apiurl',''))){return "toast://接口地址不正确"}
-            require(config.依赖.match(/https.*\//)[0] + 'SrcJySet.js');
+            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
             var urls= [];
             let apiurl = getMyVar('apiurl');
             let apiname = getMyVar('apiname');
@@ -1885,14 +1885,14 @@ function jiexi(lx,data) {
                 addItemBefore('jxline2', {
                     title: key,
                     url: key!="自定义"?$('#noRecordHistory##noHistory#').lazyRule((vipUrl,parseStr)=>{
-                        require(config.依赖.match(/https.*\//)[0] + 'SrcParseS.js');
+                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
                         return SrcParseS.聚影(vipUrl, parseStr);
                     },urls[key],parsearr):$("","输入自定义播放地址").input((parseStr) => {
                         if(input==""){
                             return "toast://未输入自定义地址，无法测试";
                         }else{
                             return $().lazyRule((vipUrl,parseStr)=>{
-                                require(config.依赖.match(/https.*\//)[0] + 'SrcParseS.js');
+                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
                                 return SrcParseS.聚影(vipUrl, parseStr);
                             }, input, parseStr)
                         }
