@@ -117,7 +117,6 @@ var erjimenu = [
                             break;
                     }
                 }
-                log(MY_NAME);
                 setPageTitle("♥观影设置");
                 var d = [];
                 var cfgfile = "hiker://files/rules/Src/Juying/config.json";
@@ -397,39 +396,18 @@ var erjimenu = [
                         }, JYconfig, cfgfile),
                     col_type: "text_3"
                 });
-                /*
-                d.push({
-                    title: isDn==1&&JYconfig['isdn']!=0?'断插辅助(开)':'断插辅助(关)',
-                    url: isDn==0?'toast://没有断插？无法开启！':$('#noLoading#').lazyRule((JYconfig,cfgfile) => {
-                            if(JYconfig['isdn'] == 0){
-                                JYconfig['isdn'] = 1;
-                                var sm = "开启断插同步并发解析";
-                            }else{
-                                JYconfig['isdn'] = 0;
-                                var sm = "只走程序自身的解析";
-                            }
-                            writeFile(cfgfile, JSON.stringify(JYconfig));
-                            refreshPage(false);
-                            return 'toast://切换成功：' + sm;
-                        }, JYconfig, cfgfile),
-                    col_type: "text_2"
-                });
-                d.push({
-                    title: isDn==1&&JYconfig['forcedn']==1?'强制断插(开)':'强制断插(关)',
-                    url: isDn==0?'toast://没有断插？无法开启！':$('#noLoading#').lazyRule((JYconfig,cfgfile) => {
-                            if(JYconfig['forcedn'] != 1){
-                                JYconfig['forcedn'] = 1;
-                                var sm = "开启强制断插，仅走断插解析";
-                            }else{
-                                JYconfig['forcedn'] = 0;
-                                var sm = "关闭强制断插，程序智能解析";
-                            }
-                            writeFile(cfgfile, JSON.stringify(JYconfig));
-                            refreshPage(false);
-                            return 'toast://切换成功：' + sm;
-                        }, JYconfig, cfgfile),
-                    col_type: "text_2"
-                });*/
+                if(MY_NAME=="海阔视界"&&getAppVersion()>=3369){
+                    d.push({
+                        col_type: "line"
+                    });
+                    d.push({
+                        title: '播放器超级嗅探：' + (JYconfig.superweb==1?'开启':'关闭'),
+                        desc: JYconfig.superweb==1?'此模式目前无法在选集页下载，无法预加载，但是可以多线路':'普通模式先嗅探到播放地址再进播放器',
+                        url: 'hiker://empty',
+                        col_type: "text_center_1"
+                    });
+                }
+                    
                 setHomeResult(d);
             }),
         pic_url: 'https://lanmeiguojiang.com/tubiao/messy/37.svg',
