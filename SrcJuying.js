@@ -1,5 +1,5 @@
 //本代码仅用于个人学习，请勿用于其他作用，下载后请24小时内删除
-//接口一级1
+//接口一级
 function jiekouyiji() {
     clearMyVar('SrcJy$back');
     setPageTitle('接口独立展示');
