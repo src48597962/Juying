@@ -55,7 +55,7 @@ function xunmi(name,data,ishkss) {
                 //var dydata = JSON.parse(dyhtml);
                 eval('var dydata = ' + dyhtml)
                 var dyjiekou = dydata.sites;
-                require(config.依赖.match(/https.*\//)[0] + 'SrcJySet.js');
+                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                 showLoading('正在多线程加载TVBox订阅接口');
                 //多线程处理
                 var dytask = function(obj) {
@@ -369,7 +369,7 @@ function xunmi(name,data,ishkss) {
                                         content: voddesc,
                                         pic_url: vodpic,
                                         url: $("hiker://empty##" + vodurl + "#immersiveTheme#").rule((type,ua) => {
-                                                require(config.依赖.match(/https.*\//)[0] + 'SrcJyXunmi.js');
+                                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
                                                 xunmierji(type,ua)
                                             },obj.type, urlua),
                                         col_type: "movie_1_vertical_pic",
@@ -488,7 +488,7 @@ function xunmi(name,data,ishkss) {
                                     content: voddesc,
                                     pic_url: vodpic?vodpic + "@Referer=":"https://www.xawqxh.net/mxtheme/images/loading.gif",
                                     url: $("hiker://empty##" + vodurl + "#immersiveTheme#").rule((type,ua) => {
-                                            require(config.依赖.match(/https.*\//)[0] + 'SrcJyXunmi.js');
+                                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
                                             xunmierji(type,ua)
                                         },obj.type, urlua),
                                     col_type: "movie_1_vertical_pic",
@@ -758,7 +758,7 @@ function xunmierji(type,ua) {
     var d = [];
     if(MY_PARAMS.title){setPageTitle(MY_PARAMS.title);}
     //加载本地自定义变量缓存文件
-    var configfile = config.依赖.match(/https.*\//)[0] + 'srcconfig.js';
+    var configfile = config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'srcconfig.js';
     require(configfile);
 
     //自动判断是否需要更新请求
@@ -1007,7 +1007,7 @@ function xunmierji(type,ua) {
     });
 
     //二级统一菜单
-    require(config.依赖.match(/https.*\//)[0] + 'SrcJyMenu.js');
+    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyMenu.js');
     putMyVar('moviedesc',desc)
     for(var i in erjimenu){
         d.push(
@@ -1194,14 +1194,14 @@ function xunmierji(type,ua) {
                     }
                     putMyVar('parse_api', parse_api);
                     var DTJX = $("").lazyRule(() => {
-                        require(config.依赖.match(/https.*\//)[0] + 'SrcParseS.js');
+                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
                         return SrcParseS.聚影(input);
                     });
                 }else if (/xpath|biubiu/.test(type)) {
                     var playtitle = list[j].split('$')[0];
                     var playurl = list[j].split('$')[1];
                     var DTJX = $("").lazyRule(() => {
-                        require(config.依赖.match(/https.*\//)[0] + 'SrcParseS.js');
+                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
                         return SrcParseS.嗅探(input);
                     });
                 }else{
