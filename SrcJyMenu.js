@@ -117,7 +117,7 @@ var erjimenu = [
                             break;
                     }
                 }
-
+                log(MY_NAME);
                 setPageTitle("♥观影设置");
                 var d = [];
                 var cfgfile = "hiker://files/rules/Src/Juying/config.json";
