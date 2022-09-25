@@ -218,7 +218,7 @@ function jiekouyiji() {
         var seachurl = $('').lazyRule((data) => {
             if(data){
                 return $('hiker://empty#noRecordHistory##noHistory#').rule((name,data) => {
-                    require(config.依赖.match(/https.*\//)[0] + 'SrcJyXunmi.js');
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
                     xunmi(name,data);
                 }, input,data);
             }else{
@@ -315,7 +315,7 @@ function jiekouyiji() {
                     desc: voddesc,
                     pic_url: vodpic,
                     url: list.play?list.play:$("hiker://empty##" + vodurl + "#immersiveTheme#").rule((type,ua) => {
-                            require(config.依赖.match(/https.*\//)[0] + 'SrcJyXunmi.js');
+                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
                             xunmierji(type,ua)
                         },api_type, api_ua),
                     col_type: 'movie_3',
@@ -378,7 +378,7 @@ function erji() {
 
     });
     //二级统一菜单
-    require(config.依赖.match(/https.*\//)[0] + 'SrcJyMenu.js');
+    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyMenu.js');
     for(var i in erjimenu){
         d.push(
             erjimenu[i]
@@ -496,7 +496,7 @@ function erji() {
                 return "toast://本集无播放地址，可从更多片源中寻找";
             }
             //log(input)
-            require(config.依赖.match(/https.*\//)[0] + 'SrcParseS.js');
+            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
             return SrcParseS.聚影(input);
         }catch(e){
             return input;
@@ -667,7 +667,7 @@ function yiji() {
         d.push({
             title: "管理",
             url: $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
-                    require(config.依赖.match(/https.*\//)[0] + 'SrcJySet.js');
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                     SRCSet();
                 }),
             pic_url: 'https://lanmeiguojiang.com/tubiao/more/129.png',
@@ -769,7 +769,7 @@ function yiji() {
     }
     var seachurl = $('').lazyRule(() => {
         return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
-            require(config.依赖.match(/https.*\//)[0] + 'SrcJyXunmi.js');
+            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
             xunmi(name);
         }, input);
     });
@@ -828,7 +828,7 @@ function sousuo2() {
     }));
     var seachurl = $('').lazyRule(() => {
             return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
-                require(config.依赖.match(/https.*\//)[0] + 'SrcJyXunmi.js');
+                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
                 xunmi(name);
             }, input);
         });
@@ -952,7 +952,7 @@ function sousuo() {
     }else{
         try{
             let name = MY_URL.match(/query=(.*?)&/)[1];
-            require(config.依赖.match(/https.*\//)[0] + 'SrcJyXunmi.js');
+            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
             xunmi(name,false,true);
         }catch(e){}
     }
@@ -966,7 +966,7 @@ function Version() {
     var oldtime = parseInt(getItem('VersionChecktime','0').replace('time',''));
     if (getMyVar('SrcJuying-VersionCheck', '0') == '0' && nowtime > (oldtime+6*60*60*1000)) {
         try {
-            eval(fetch(config.依赖.match(/https.*\//)[0] + 'SrcTmplVersion.js'))
+            eval(fetch(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcTmplVersion.js'))
             if (parseFloat(newVersion.SrcJuying) > parseFloat(nowVersion)) {
                 confirm({
                     title:'发现新版本，是否更新？', 
