@@ -328,7 +328,7 @@ var SrcParseS = {
         return aytmParse(vipUrl);
     },
     聚嗅: function (vipUrl, x5jxlist) {
-        var jxhtml = config.依赖.match(/https.*\//)[0] + 'SrcJiexi.html';
+        var jxhtml = config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJiexi.html';
         fc(jxhtml, 96);
         let libsjxjs = fetch("hiker://files/libs/" + md5(jxhtml) + ".js");
         if (x5jxlist != undefined) {
@@ -647,7 +647,7 @@ var SrcParseS = {
             //断插线程代码
             var dnaytmParse = function(vipUrl) {
                 try{
-                    require(config.依赖.match(/https.*\//)[0] + 'SrcJyAuto.js');
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAuto.js');
                     var rurl = aytmParse(vipUrl);
                 }catch(e){
                     log("断插执行异常>"+e.message);
