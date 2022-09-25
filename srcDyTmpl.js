@@ -109,7 +109,7 @@ function yiji() {
 function erji() {
     var d = [];
     //加载本地自定义变量缓存文件
-    var configfile = config.依赖.match(/https.*\//)[0] + 'srcconfig.js';
+    var configfile = config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'srcconfig.js';
     require(configfile);
     addListener("onClose", $.toString(() => {
         clearMyVar('是否APP');
@@ -432,7 +432,7 @@ function erji() {
         if (getMyVar('islazy') == "0" || getMyVar('SrcQJJX', '1') == "2") {//调用模板自带嗅探
             if (isAPP == 0) {
                 var DTJX = $("").lazyRule(() => {
-                    require(config.依赖.match(/https.*\//)[0] + 'SrcParseS.js');
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
                     return SrcParseS.嗅探(input);
                 });
             } else {
@@ -837,7 +837,7 @@ function yijidtfl(isverify,verifylx,waittime) {
     var 分类颜色 = '#3399cc';
     var page = MY_PAGE;
     var true_url = getMyVar('header.url', MY_URL);
-    let 链接处理工具 = require(config.依赖.match(/https.*\//)[0] + 'plugins/UrlProcessor.js')
+    let 链接处理工具 = require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'plugins/UrlProcessor.js')
     true_url = 链接处理工具
         .链接(true_url)
         .页码(page)
@@ -927,7 +927,7 @@ function yijidtfl(isverify,verifylx,waittime) {
 
     // 引入动态分类依赖
     // 框架已经稳定，使用 require 更佳
-    let htmlCategories = require(config.依赖.match(/https.*\//)[0] + 'plugins/categories-header.js')
+    let htmlCategories = require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'plugins/categories-header.js')
     htmlCategories.界面(d)
         .分类链接(true_url)
         .源码(html)
@@ -1333,7 +1333,7 @@ var SrcParseS = {
         return aytmParse(vipUrl);
     },
     聚嗅: function (vipUrl, x5jxlist) {
-        var jxhtml = config.依赖.match(/https.*\//)[0] + 'SrcJiexi.html';
+        var jxhtml = config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJiexi.html';
         fc(jxhtml, 48);
         let libsjxjs = fetch("hiker://files/libs/" + md5(jxhtml) + ".js");
         if (x5jxlist != undefined) {
@@ -1720,7 +1720,7 @@ function Version() {
     var nowVersion = 5.5;//现在版本
     if (getVar('srcDyTmpl-VersionCheck', '0') == '0') {
         try {
-            eval(fetch(config.依赖.match(/https.*\//)[0] + 'SrcTmplVersion.js'))
+            eval(fetch(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcTmplVersion.js'))
             if (newVersion.srcDyTmpl > nowVersion) {
                 deleteCache();
                 require(config.依赖);
