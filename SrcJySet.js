@@ -1821,15 +1821,15 @@ function jiexi(lx,data) {
                 })
             }, parseheader)
         });
-        if(lx=="update"&&data.web==1){
+        if(lx=="update"&&data.web==1&&getMyVar('parseisweb','0')=="0"){
             putMyVar('parseisweb','1');
         }
         d.push({
-            title:'是否web普通解析：' + (getMyVar('parseisweb')=="1"?"是":getMyVar('parseisweb')=="0"?"否":"未知"),
+            title:'是否明确为web普通解析：' + (getMyVar('parseisweb')=="1"?"是":"否"),
             col_type: 'text_1',
             url:$().lazyRule(()=>{
-                if(getMyVar('parseisweb','0')=="1"){
-                    putMyVar('parseisweb','0');
+                if(getMyVar('parseisweb')=="1"){
+                    clearMyVar('parseisweb');
                 }else{
                     putMyVar('parseisweb','1');
                 }
