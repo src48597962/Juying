@@ -939,7 +939,7 @@ function SRCSet() {
     });
     d.push({
         title: '导入',
-        url: $("","聚影口令").input(()=>{
+        url: $("","聚影口令").input((jiekousave)=>{
                 try{
                     if((input.split('￥')[0]=="聚影接口"||input.split('￥')[0]=="聚影资源码")&&getMyVar('guanli', 'jk')=="jk"){
                         var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
@@ -973,13 +973,15 @@ function SRCSet() {
                             }else if(codelx=="dingyue"){
                                 var pastedatalist = pastedata.jiekou;
                             }
+                            urlnum = jiekousave(pastedatalist);
+                            /*
                             for (var i in pastedatalist) {
                                 if(!datalist.some(item => item.url ==pastedatalist[i].url)){
                                     //let arr  = { "name" : pastedatalist[i].name, "url" : pastedatalist[i].url, "ua" : pastedatalist[i].ua, "type" : pastedatalist[i].type, "group" : pastedatalist[i].group?pastedatalist[i].group:pastedatalist[i].type };
                                     datalist.push(pastedatalist[i]);
                                     urlnum = urlnum + 1;
                                 }
-                            }
+                            }*/
                         }else{
                             if(codelx=="share"){
                                 var pastedatalist = pastedata;
@@ -1008,7 +1010,7 @@ function SRCSet() {
             }),
         img: "https://lanmeiguojiang.com/tubiao/more/43.png",
         col_type: "icon_small_4"
-    });
+    },jiekousave);
     d.push({
         title: '分享',
         url: datalist.length==0?'toast://数据为空，无法分享':$().lazyRule(()=>{
