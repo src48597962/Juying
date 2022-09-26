@@ -960,7 +960,7 @@ function SRCSet() {
                     if(pasteurl&&!/^error/.test(text)){
                         let pastedata = JSON.parse(base64Decode(text));
                         
-                        var urlnum = 0;
+                        let urlnum = 0;
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                         if(getMyVar('guanli', 'jk')=="jk"){
                             if(codelx=="share"){
@@ -969,14 +969,6 @@ function SRCSet() {
                                 var pastedatalist = pastedata.jiekou;
                             }
                             urlnum = jiekousave(pastedatalist);
-                            /*
-                            for (var i in pastedatalist) {
-                                if(!datalist.some(item => item.url ==pastedatalist[i].url)){
-                                    //let arr  = { "name" : pastedatalist[i].name, "url" : pastedatalist[i].url, "ua" : pastedatalist[i].ua, "type" : pastedatalist[i].type, "group" : pastedatalist[i].group?pastedatalist[i].group:pastedatalist[i].type };
-                                    datalist.push(pastedatalist[i]);
-                                    urlnum = urlnum + 1;
-                                }
-                            }*/
                         }else{
                             var datafile = fetch(filepath);
                             if(datafile != ""){
@@ -1001,7 +993,6 @@ function SRCSet() {
                             }
                         }
                         if(urlnum>0){
-                            //writeFile(filepath, JSON.stringify(datalist));
                             refreshPage(false);
                         }
                         return "toast://"+sm+"合计："+pastedatalist.length+"，保存："+urlnum;
@@ -1342,6 +1333,55 @@ function jiekousave(urls,update) {
                 let arr  = { "name": urlname, "url": urlurl, "ua": urlua, "type": urltype };
                 if(urls[i].data){arr['data'] = urls[i].data}
                 if(urlgroup){arr['group'] = urlgroup}
+                if(urls.length == 1){
+                    datalist.unshift(arr);
+                }else{
+                    datalist.push(arr);
+                }
+                num = num + 1;
+            }
+        }
+        if(num>0){writeFile(filepath, JSON.stringify(datalist));}
+    } catch (e) {
+        log('导入失败：'+e.message); 
+        return -1;
+    }
+    return num;
+}
+function jiexisave(urls,update) {
+    try{
+        var filepath = "hiker://files/rules/Src/Juying/myjiexi.json";
+        var datafile = fetch(filepath);
+        if(datafile != ""){
+            eval("var datalist=" + datafile+ ";");
+        }else{
+            var datalist = [];
+        }
+        
+        var num = 0;
+        for (var i in urls) {
+            let urlname = urls[i].name;
+            let urlurl = urls[i].parse;
+            let urlstopfrom = urls[i].stopfrom||[];
+            let urlpriorfrom = urls[i].priorfrom||[];
+            let urlsort = urls[i].sort||0;
+
+            if(update==1){
+                for(var j=0;j<datalist.length;j++){
+                    if(datalist[j].parse==urlurl){
+                        datalist.splice(j,1);
+                        break;
+                    }
+                }
+            }
+            
+            function checkitem(item) {
+                return item.parse==urlurl;
+            }
+
+            if(!datalist.some(checkitem)&&urlname&&/^http|^functio/.test(urlurl)){
+                let arr  = { "name": urlname, "parse": urlurl, "stopfrom": urlstopfrom, "priorfrom": urlpriorfrom, "sort": urlsort };
+                if(urls[i].x5){arr['x5'] = urls[i].x5}
                 if(urls.length == 1){
                     datalist.unshift(arr);
                 }else{
