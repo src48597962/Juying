@@ -1328,7 +1328,8 @@ function jiekousave(urls,update) {
 
             function checkitem(item) {
                 //log(item.name+' '+urlname+' '+similar(item.name,urlname));
-                return item.url==urlurl||(similar(item.name,urlname)>60&&urltype=="biubiu");
+                //return item.url==urlurl||(similar(item.name,urlname)>60&&urltype=="biubiu");
+                return item.url==urlurl||(urltype=="biubiu"&&item.data&&urls[i].data.url==item.data.url);
             }
             if(!datalist.some(checkitem)&&urlname&&/^http|^csp/.test(urlurl)&&urltype){
                 let arr  = { "name": urlname, "url": urlurl, "ua": urlua, "type": urltype };
