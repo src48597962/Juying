@@ -790,6 +790,7 @@ function SRCSet() {
                     var datadesc = "优先强制：" + datapriorfrom + "" + "\n排除片源：" + datastopfrom + "";
                     var dataarr = {name:dataname, url:dataurl, stopfrom:datastopfrom+"", priorfrom:datapriorfrom+""};
                     if(datalist.header){dataarr['header'] = datalist.header}
+                    if(datalist.web){dataarr['web'] = datalist.web}
                     var filepath = "hiker://files/rules/Src/Juying/myjiexi.json";
                 }
                 
@@ -1657,7 +1658,7 @@ function jiexi(lx,data) {
         clearMyVar('stopfrom');
         clearMyVar('priorfrom');
         clearMyVar('parseheader');
-        clearMyVar('parseweb');
+        clearMyVar('parseisweb');
         //refreshPage(false);
     }));
     var d = [];
@@ -1821,16 +1822,16 @@ function jiexi(lx,data) {
             }, parseheader)
         });
         if(lx=="update"&&data.web==1){
-            putMyVar('parseweb','1');
+            putMyVar('parseisweb','1');
         }
         d.push({
-            title:'是否web普通解析：' + (getMyVar('parseweb','0')=="1"?"是":"未知"),
+            title:'是否web普通解析：' + (getMyVar('parseisweb')=="1"?"是":getMyVar('parseisweb')=="0"?"否":"未知"),
             col_type: 'text_1',
             url:$().lazyRule(()=>{
-                if(getMyVar('parseweb','0')=="1"){
-                    putMyVar('parseweb','0');
+                if(getMyVar('parseisweb','0')=="1"){
+                    putMyVar('parseisweb','0');
                 }else{
-                    putMyVar('parseweb','1');
+                    putMyVar('parseisweb','1');
                 }
                 refreshPage(false);
                 return "hiker://empty";
@@ -1910,7 +1911,8 @@ function jiexi(lx,data) {
             let parsearr = {name:dataname,parse:dataurl};
             try{
                 if(datahead){parsearr['header']= JSON.parse(datahead)}
-            }catch(e){     }
+            }catch(e){}
+            if(getMyVar('parseisweb')=="1"){parsearr['web']= 1}
             urls['自定义'] = "";
             for(var key in urls){
                 addItemBefore('jxline2', {
@@ -2015,7 +2017,9 @@ function jiexi(lx,data) {
                 try{
                     if(parseheader){arr['header']= JSON.parse(parseheader)}
                 }catch(e){     }
-                
+                try{
+                    if(getMyVar('parseisweb')=="1"){arr['web']= 1}
+                }catch(e){}
                 if(lx=="update"){
                     isupdate = 1;
                     arr['oldurl'] = data.url;
