@@ -970,17 +970,20 @@ function SRCSet() {
                             }
                             urlnum = jiekousave(pastedatalist);
                         }else{
+                            /*
                             var datafile = fetch(filepath);
                             if(datafile != ""){
                                 eval("var datalist=" + datafile+ ";");
                             }else{
                                 var datalist = [];
-                            }
+                            }*/
                             if(codelx=="share"){
                                 var pastedatalist = pastedata;
                             }else if(codelx=="dingyue"){
                                 var pastedatalist = pastedata.jiexi;
                             }
+                            urlnum = jiexisave(pastedatalist);
+                            /*
                             for (var i in pastedatalist) {
                                 if(!datalist.some(item => item.parse ==pastedatalist[i].parse)){
                                     //let arr  = { "name" : pastedatalist[i].name, "parse" : pastedatalist[i].parse, "stopfrom" : pastedatalist[i].stopfrom };
@@ -990,7 +993,7 @@ function SRCSet() {
                             } 
                             if(urlnum>0){
                                 writeFile(filepath, JSON.stringify(datalist));
-                            }
+                            }*/
                         }
                         if(urlnum>0){
                             refreshPage(false);
@@ -1381,7 +1384,7 @@ function jiexisave(urls,update) {
 
             if(!datalist.some(checkitem)&&urlname&&/^http|^functio/.test(urlurl)){
                 let arr  = { "name": urlname, "parse": urlurl, "stopfrom": urlstopfrom, "priorfrom": urlpriorfrom, "sort": urlsort };
-                if(urls[i].x5){arr['x5'] = urls[i].x5}
+                if(urls[i].web){arr['web'] = urls[i].web}
                 if(urls.length == 1){
                     datalist.unshift(arr);
                 }else{
