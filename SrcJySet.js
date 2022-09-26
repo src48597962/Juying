@@ -1657,6 +1657,7 @@ function jiexi(lx,data) {
         clearMyVar('stopfrom');
         clearMyVar('priorfrom');
         clearMyVar('parseheader');
+        clearMyVar('parseweb');
         //refreshPage(false);
     }));
     var d = [];
@@ -1819,11 +1820,24 @@ function jiexi(lx,data) {
                 })
             }, parseheader)
         });
+        d.push({
+            title:'是否web普通解析：' + getMyVar('parseweb','0')=="1"?是:否,
+            col_type: 'text_1',
+            url:$().lazyRule(()=>{
+                if(getMyVar('parseweb','0')=="1"){
+                    putMyVar('parseweb','0');
+                }else{
+                    putMyVar('parseweb','1');
+                }
+                refreshPage(false);
+                return "hiker://empty";
+            })
+        });
     }else{
         d.push({
             title:'批量添加',
             col_type: 'input',
-            desc: "一行一个解析\n格式：解析名称#链接地址\n分隔符#可以用,号代替\n\n\n断插单个导入\n明码格式：★xxx★xxx\n云分享链接也支持的",
+            desc: "一行一个解析\n格式：解析名称#链接地址\n分隔符#可以用,号代替\n\n\n断插解析导入\n明码格式：★xxx★xxx\n云分享链接也支持的",
             extra: {
                 titleVisible: false,
                 type: "textarea",
