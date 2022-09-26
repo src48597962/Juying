@@ -1821,7 +1821,7 @@ function jiexi(lx,data) {
             }, parseheader)
         });
         d.push({
-            title:'是否web普通解析：' + getMyVar('parseweb','0')=="1"?"是":"否",
+            title:'是否web普通解析：' + (getMyVar('parseweb','0')=="1"?"是":"否"),
             col_type: 'text_1',
             url:$().lazyRule(()=>{
                 if(getMyVar('parseweb','0')=="1"){
