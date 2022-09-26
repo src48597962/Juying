@@ -539,26 +539,8 @@ function SRCSet() {
                             if(jiexi.length>0){
                                 return $("接口导入已完成，成功保存："+jknum+ "，确定要继续导入解析吗？\n不建议导入，因为99%是失效的").confirm((jiexi,jiexisave)=>{
                                     try{
-                                        //require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
-                                        /*
-                                        var jxfilepath = "hiker://files/rules/Src/Juying/myjiexi.json";
-                                        var jxdatafile = fetch(jxfilepath);
-                                        if(jxdatafile != ""){
-                                            eval("var jxdatalist=" + jxdatafile+ ";");
-                                        }else{
-                                            var jxdatalist = [];
-                                        }
-                                        var jxnum = 0;
-                                        */
                                         let urls = [];
                                         for (let i=0;i<jiexi.length;i++) {
-                                            /*
-                                            if(/^http/.test(jiexi[i])&&!jxdatalist.some(item => item.parse ==jiexi[i])){
-                                                let namebh = parseInt(jxdatalist.length)+parseInt(jiexi.length);
-                                                let arr  = { "name": "bb"+namebh, "parse": jiexi[i], "stopfrom": [], "priorfrom": [], "sort": 1 };
-                                                jxdatalist.push(arr);
-                                                jxnum = jxnum + 1;
-                                            }*/
                                             if(/^http/.test(jiexi[i])){
                                                 let arr  = { "name": "bb"+namebh, "parse": jiexi[i], "stopfrom": [], "priorfrom": [], "sort": 1 };
                                                 urls.push(arr);
@@ -566,7 +548,6 @@ function SRCSet() {
                                         }
                                         let jxnum = jiexisave(urls);
                                         if(jxnum>0){
-                                            //writeFile(jxfilepath, JSON.stringify(jxdatalist));
                                             return "toast://导入完成，解析保存："+jxnum;
                                         }else{
                                             return "toast://无解析";
@@ -594,7 +575,7 @@ function SRCSet() {
                         var reg = /("([^\\\"]*(\\.)?)*")|('([^\\\']*(\\.)?)*')|(\/{2,}.*?(\r|\n|$))|(\/\*(\n|.)*?\*\/)/g;
                         html = html.replace(/api\"\:csp/g,'api":"csp').replace(reg, function(word) { 
                             return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
-                        }).replace(/^.*#.*$/gm,"").replace(/(?:[\u2700-\u27bf]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff]|[\u0023-\u0039]\ufe0f?\u20e3|\u3299|\u3297|\u303d|\u3030|\u24c2|\ud83c[\udd70-\udd71]|\ud83c[\udd7e-\udd7f]|\ud83c\udd8e|\ud83c[\udd91-\udd9a]|\ud83c[\udde6-\uddff]|\ud83c[\ude01-\ude02]|\ud83c\ude1a|\ud83c\ude2f|\ud83c[\ude32-\ude3a]|\ud83c[\ude50-\ude51]|\u203c|\u2049|[\u25aa-\u25ab]|\u25b6|\u25c0|[\u25fb-\u25fe]|\u00a9|\u00ae|\u2122|\u2139|\ud83c\udc04|[\u2600-\u26FF]|\u2b05|\u2b06|\u2b07|\u2b1b|\u2b1c|\u2b50|\u2b55|\u231a|\u231b|\u2328|\u23cf|[\u23e9-\u23f3]|[\u23f8-\u23fa]|\ud83c\udccf|\u2934|\u2935|[\u2190-\u21ff])|\(XPF\)|\(萝卜\)|\(神马\)|\(切\)|\(聚\)|\(优\)|\(神马\)|\(XB\)|\(SP\)|[\x00-\x1F\x7F]/g,'').replace(/\,\,/g,',');//.replace(/=\\n\"/g,'="')|[\t\r\n]
+                        }).replace(/^.*#.*$/gm,"").replace(/\,\,/g,',');//.replace(/=\\n\"/g,'="')|[\t\r\n]
                         //log(html);
                         eval('var data = ' + html)
                         //var data = JSON.parse(html);                        
@@ -684,28 +665,8 @@ function SRCSet() {
                         if(jiexi.length>0){
                             return $("接口导入已完成，成功保存："+jknum+ "，确定要继续导入解析吗？\n不建议导入，因为99%是失效的").confirm((jiexi,jiexisave)=>{
                                 try{
-                                    /*
-                                    var jxfilepath = "hiker://files/rules/Src/Juying/myjiexi.json";
-                                    var jxdatafile = fetch(jxfilepath);
-                                    if(jxdatafile != ""){
-                                        eval("var jxdatalist=" + jxdatafile+ ";");
-                                    }else{
-                                        var jxdatalist = [];
-                                    }
-                                    var jxnum = 0;
-                                    */
                                     let urls = [];
                                     for (let i=0;i<jiexi.length;i++) {
-                                        /*
-                                        if(/^http/.test(jiexi[i].url)&&!jxdatalist.some(item => item.parse ==jiexi[i].url)){
-                                            let arr  = { "name": jiexi[i].name, "parse": jiexi[i].url, "stopfrom": [], "priorfrom": [], "sort": 1 };
-                                            if(jiexi[i].ext&&jiexi[i].ext.header){
-                                                arr['header'] = jiexi[i].ext.header;
-                                            }
-                                            jxdatalist.push(arr);
-                                            jxnum = jxnum + 1;
-                                        }
-                                        */
                                         if(/^http/.test(jiexi[i].url)){
                                             let arr  = { "name": jiexi[i].name, "parse": jiexi[i].url, "stopfrom": [], "priorfrom": [], "sort": 1 };
                                             urls.push(arr);
@@ -713,7 +674,6 @@ function SRCSet() {
                                     }
                                     let jxnum = jiexisave(urls);
                                     if(jxnum>0){
-                                        //writeFile(jxfilepath, JSON.stringify(jxdatalist));
                                         return "toast://导入完成，解析保存："+jxnum;
                                     }else{
                                         return "toast://无解析";
@@ -1312,7 +1272,7 @@ function jiekousave(urls,update) {
         
         var num = 0;
         for (var i in urls) {
-            let urlname = urls[i].name;
+            let urlname = urls[i].name.replace(/(?:[\u2700-\u27bf]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff]|[\u0023-\u0039]\ufe0f?\u20e3|\u3299|\u3297|\u303d|\u3030|\u24c2|\ud83c[\udd70-\udd71]|\ud83c[\udd7e-\udd7f]|\ud83c\udd8e|\ud83c[\udd91-\udd9a]|\ud83c[\udde6-\uddff]|\ud83c[\ude01-\ude02]|\ud83c\ude1a|\ud83c\ude2f|\ud83c[\ude32-\ude3a]|\ud83c[\ude50-\ude51]|\u203c|\u2049|[\u25aa-\u25ab]|\u25b6|\u25c0|[\u25fb-\u25fe]|\u00a9|\u00ae|\u2122|\u2139|\ud83c\udc04|[\u2600-\u26FF]|\u2b05|\u2b06|\u2b07|\u2b1b|\u2b1c|\u2b50|\u2b55|\u231a|\u231b|\u2328|\u23cf|[\u23e9-\u23f3]|[\u23f8-\u23fa]|\ud83c\udccf|\u2934|\u2935|[\u2190-\u21ff])|\(XPF\)|\(萝卜\)|\(神马\)|\(切\)|\(聚\)|\(优\)|\(神马\)|\(XB\)|\(SP\)|[\x00-\x1F\x7F]/g,'');
             let urlurl = urls[i].url;
             let urlua = urls[i].ua||"Dalvik/2.1.0";
             let urltype = urls[i].type||getapitype(urlurl);
