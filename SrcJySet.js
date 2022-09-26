@@ -1352,6 +1352,7 @@ function jiexisave(urls,update) {
             let urlsort = urls[i].sort||0;
 
             if(update==1){
+                log(urls[i].oldurl)
                 for(var j=0;j<datalist.length;j++){
                     if(datalist[j].parse==urlurl||datalist[j].parse==urls[i].oldurl){
                         datalist.splice(j,1);
