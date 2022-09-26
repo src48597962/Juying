@@ -1820,7 +1820,7 @@ function jiexi(lx,data) {
                 })
             }, parseheader)
         });
-        if(lx=="update"&&date.web==1){
+        if(lx=="update"&&data.web==1){
             putMyVar('parseweb','1');
         }
         d.push({
