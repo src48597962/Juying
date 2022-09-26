@@ -1352,7 +1352,6 @@ function jiexisave(urls,update) {
             let urlsort = urls[i].sort||0;
 
             if(update==1){
-                log(urls[i].oldurl)
                 for(var j=0;j<datalist.length;j++){
                     if(datalist[j].parse==urlurl||datalist[j].parse==urls[i].oldurl){
                         datalist.splice(j,1);
@@ -2020,7 +2019,7 @@ function jiexi(lx,data) {
                 try{
                     if(parseheader){arr['header']= JSON.parse(parseheader)}
                 }catch(e){     }
-                
+                log(data)
                 if(lx=="update"){
                     isupdate = 1;
                     arr['oldurl'] = data.parse;
