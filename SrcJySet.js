@@ -942,7 +942,7 @@ function SRCSet() {
         url: $("","聚影口令").input(()=>{
                 try{
                     if((input.split('￥')[0]=="聚影接口"||input.split('￥')[0]=="聚影资源码")&&getMyVar('guanli', 'jk')=="jk"){
-                        var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
+                        //var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
                         var sm = "聚影接口";
                     }else if((input.split('￥')[0]=="聚影解析"||input.split('￥')[0]=="聚影资源码")&&getMyVar('guanli', 'jk')=="jx"){
                         var filepath = "hiker://files/rules/Src/Juying/myjiexi.json";
@@ -959,12 +959,7 @@ function SRCSet() {
                     let text = parsePaste('https://netcut.cn/p/'+aesDecode('Juying', pasteurl));
                     if(pasteurl&&!/^error/.test(text)){
                         let pastedata = JSON.parse(base64Decode(text));
-                        var datafile = fetch(filepath);
-                        if(datafile != ""){
-                            eval("var datalist=" + datafile+ ";");
-                        }else{
-                            var datalist = [];
-                        }
+                        
                         var urlnum = 0;
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                         if(getMyVar('guanli', 'jk')=="jk"){
@@ -983,6 +978,12 @@ function SRCSet() {
                                 }
                             }*/
                         }else{
+                            var datafile = fetch(filepath);
+                            if(datafile != ""){
+                                eval("var datalist=" + datafile+ ";");
+                            }else{
+                                var datalist = [];
+                            }
                             if(codelx=="share"){
                                 var pastedatalist = pastedata;
                             }else if(codelx=="dingyue"){
@@ -995,9 +996,12 @@ function SRCSet() {
                                     urlnum = urlnum + 1;
                                 }
                             } 
+                            if(urlnum>0){
+                                writeFile(filepath, JSON.stringify(datalist));
+                            }
                         }
                         if(urlnum>0){
-                            writeFile(filepath, JSON.stringify(datalist));
+                            //writeFile(filepath, JSON.stringify(datalist));
                             refreshPage(false);
                         }
                         return "toast://"+sm+"合计："+pastedatalist.length+"，保存："+urlnum;
@@ -1333,7 +1337,7 @@ function jiekousave(urls,update) {
                 //return item.url==urlurl||(similar(item.name,urlname)>60&&urltype=="biubiu");
                 return item.url==urlurl||(urltype=="biubiu"&&item.data&&urls[i].data.url==item.data.url);
             }
-            log(datalist.some(checkitem));
+
             if(!datalist.some(checkitem)&&urlname&&/^http|^csp/.test(urlurl)&&urltype){
                 let arr  = { "name": urlname, "url": urlurl, "ua": urlua, "type": urltype };
                 if(urls[i].data){arr['data'] = urls[i].data}
