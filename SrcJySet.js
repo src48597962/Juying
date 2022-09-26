@@ -551,7 +551,7 @@ function SRCSet() {
                                         var jxnum = 0;
                                         */
                                         let urls = [];
-                                        for (var i=0;i<jiexi.length;i++) {
+                                        for (let i=0;i<jiexi.length;i++) {
                                             /*
                                             if(/^http/.test(jiexi[i])&&!jxdatalist.some(item => item.parse ==jiexi[i])){
                                                 let namebh = parseInt(jxdatalist.length)+parseInt(jiexi.length);
@@ -559,8 +559,10 @@ function SRCSet() {
                                                 jxdatalist.push(arr);
                                                 jxnum = jxnum + 1;
                                             }*/
-                                            let arr  = { "name": "bb"+namebh, "parse": jiexi[i], "stopfrom": [], "priorfrom": [], "sort": 1 };
-                                            urls.push(arr);
+                                            if(/^http/.test(jiexi[i]){
+                                                let arr  = { "name": "bb"+namebh, "parse": jiexi[i], "stopfrom": [], "priorfrom": [], "sort": 1 };
+                                                urls.push(arr);
+                                            }
                                         }
                                         let jxnum = jiexisave(urls);
                                         if(jxnum>0){
@@ -680,8 +682,9 @@ function SRCSet() {
                         return'toast://导入失败，内容异常';
                     }else{
                         if(jiexi.length>0){
-                            return $("接口导入已完成，成功保存："+jknum+ "，确定要继续导入解析吗？\n不建议导入，因为99%是失效的").confirm((jiexi)=>{
+                            return $("接口导入已完成，成功保存："+jknum+ "，确定要继续导入解析吗？\n不建议导入，因为99%是失效的").confirm((jiexi,jiexisave)=>{
                                 try{
+                                    /*
                                     var jxfilepath = "hiker://files/rules/Src/Juying/myjiexi.json";
                                     var jxdatafile = fetch(jxfilepath);
                                     if(jxdatafile != ""){
@@ -690,7 +693,10 @@ function SRCSet() {
                                         var jxdatalist = [];
                                     }
                                     var jxnum = 0;
-                                    for (var i=0;i<jiexi.length;i++) {
+                                    */
+                                    let urls = [];
+                                    for (let i=0;i<jiexi.length;i++) {
+                                        /*
                                         if(/^http/.test(jiexi[i].url)&&!jxdatalist.some(item => item.parse ==jiexi[i].url)){
                                             let arr  = { "name": jiexi[i].name, "parse": jiexi[i].url, "stopfrom": [], "priorfrom": [], "sort": 1 };
                                             if(jiexi[i].ext&&jiexi[i].ext.header){
@@ -699,9 +705,15 @@ function SRCSet() {
                                             jxdatalist.push(arr);
                                             jxnum = jxnum + 1;
                                         }
+                                        */
+                                        if(/^http/.test(jiexi[i].url){
+                                            let arr  = { "name": jiexi[i].name, "parse": jiexi[i].url, "stopfrom": [], "priorfrom": [], "sort": 1 };
+                                            urls.push(arr);
+                                        }
                                     }
+                                    let jxnum = jiexisave(urls);
                                     if(jxnum>0){
-                                        writeFile(jxfilepath, JSON.stringify(jxdatalist));
+                                        //writeFile(jxfilepath, JSON.stringify(jxdatalist));
                                         return "toast://导入完成，解析保存："+jxnum;
                                     }else{
                                         return "toast://无解析";
@@ -710,7 +722,7 @@ function SRCSet() {
                                     log('解析导入失败：'+e.message);
                                     return "toast://解析导入失败";
                                 }
-                            },jiexi)
+                            },jiexi,jiexisave)
                         }else{
                             return "toast://接口导入已完成，成功保存："+jknum;
                         }
