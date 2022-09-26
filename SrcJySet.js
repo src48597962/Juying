@@ -970,30 +970,12 @@ function SRCSet() {
                             }
                             urlnum = jiekousave(pastedatalist);
                         }else{
-                            /*
-                            var datafile = fetch(filepath);
-                            if(datafile != ""){
-                                eval("var datalist=" + datafile+ ";");
-                            }else{
-                                var datalist = [];
-                            }*/
                             if(codelx=="share"){
                                 var pastedatalist = pastedata;
                             }else if(codelx=="dingyue"){
                                 var pastedatalist = pastedata.jiexi;
                             }
                             urlnum = jiexisave(pastedatalist);
-                            /*
-                            for (var i in pastedatalist) {
-                                if(!datalist.some(item => item.parse ==pastedatalist[i].parse)){
-                                    //let arr  = { "name" : pastedatalist[i].name, "parse" : pastedatalist[i].parse, "stopfrom" : pastedatalist[i].stopfrom };
-                                    datalist.push(pastedatalist[i]);
-                                    urlnum = urlnum + 1;
-                                }
-                            } 
-                            if(urlnum>0){
-                                writeFile(filepath, JSON.stringify(datalist));
-                            }*/
                         }
                         if(urlnum>0){
                             refreshPage(false);
@@ -1319,7 +1301,7 @@ function jiekousave(urls,update) {
 
             if(update==1){
                 for(var j=0;j<datalist.length;j++){
-                    if(datalist[j].url==urlurl){
+                    if(datalist[j].url==urlurl||datalist[j].url==urls[i].oldurl){
                         datalist.splice(j,1);
                         break;
                     }
@@ -1371,7 +1353,7 @@ function jiexisave(urls,update) {
 
             if(update==1){
                 for(var j=0;j<datalist.length;j++){
-                    if(datalist[j].parse==urlurl){
+                    if(datalist[j].parse==urlurl||datalist[j].parse==urls[i].oldurl){
                         datalist.splice(j,1);
                         break;
                     }
@@ -1633,12 +1615,6 @@ function jiekou(lx,data) {
                 let urltype = getMyVar('apitype');
                 let apigroup = getMyVar('apigroup');
                 let apidata = getMyVar('apidata');
-                if(lx=="update"){
-                    isupdate = 1;
-                    if((apiurl==data.url&&apiname==data.name&&apiua==data.ua&&urltype==data.type&&apigroup==(data.group?data.group:'')&&apidata==(data.data?JSON.stringify(data.data):''))){
-                        return "toast://未修改";
-                    }
-                }
                 let arr = {"name": apiname.trim(), "url": apiurl.trim(), "ua": apiua, "type": urltype };
                 if(apigroup){arr['group'] = apigroup}
                 if(apidata){
@@ -1646,6 +1622,14 @@ function jiekou(lx,data) {
                         arr['data'] = JSON.parse(apidata);
                     }catch(e){
                         return "toast://data对象数据异常";
+                    }
+                }
+                if(lx=="update"){
+                    isupdate = 1;
+                    if((apiurl==data.url&&apiname==data.name&&apiua==data.ua&&urltype==data.type&&apigroup==(data.group?data.group:'')&&apidata==(data.data?JSON.stringify(data.data):''))){
+                        return "toast://未修改";
+                    }else{
+                        arr['oldurl'] = data.url;
                     }
                 }
                 urls.push(arr);
@@ -2015,13 +1999,16 @@ function jiexi(lx,data) {
         title:'保存',
         col_type:'text_3',
         url: $().lazyRule((lx,data)=>{
+            if(getMyVar('addtype', '1')=="1"&&!/^http|^functio/.test(getMyVar('parseurl',''))){return "toast://解析地址不正确"}
+            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+            /*
             var filepath = "hiker://files/rules/Src/Juying/myjiexi.json";
             var datafile = fetch(filepath);
             if(datafile != ""){
                 eval("var datalist=" + datafile+ ";");
             }else{
                 var datalist = [];
-            }
+            }*/
             let parseurl = getMyVar('parseurl');
             let parsename = getMyVar('parsename');
             let parseurls = getMyVar('parseurls');
