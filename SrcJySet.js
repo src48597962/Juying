@@ -1829,7 +1829,7 @@ function jiexi(lx,data) {
             col_type: 'text_1',
             url:$().lazyRule(()=>{
                 if(getMyVar('parseisweb')=="1"){
-                    putMyVar('parseisweb','0');
+                    clearMyVar('parseisweb');
                 }else{
                     putMyVar('parseisweb','1');
                 }
