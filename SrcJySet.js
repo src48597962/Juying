@@ -1331,6 +1331,7 @@ function jiekousave(urls,update) {
                 //return item.url==urlurl||(similar(item.name,urlname)>60&&urltype=="biubiu");
                 return item.url==urlurl||(urltype=="biubiu"&&item.data&&urls[i].data.url==item.data.url);
             }
+            log(datalist.some(checkitem));
             if(!datalist.some(checkitem)&&urlname&&/^http|^csp/.test(urlurl)&&urltype){
                 let arr  = { "name": urlname, "url": urlurl, "ua": urlua, "type": urltype };
                 if(urls[i].data){arr['data'] = urls[i].data}
