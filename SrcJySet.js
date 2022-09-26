@@ -2001,14 +2001,7 @@ function jiexi(lx,data) {
         url: $().lazyRule((lx,data)=>{
             if(getMyVar('addtype', '1')=="1"&&!/^http|^functio/.test(getMyVar('parseurl',''))){return "toast://解析地址不正确"}
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
-            /*
-            var filepath = "hiker://files/rules/Src/Juying/myjiexi.json";
-            var datafile = fetch(filepath);
-            if(datafile != ""){
-                eval("var datalist=" + datafile+ ";");
-            }else{
-                var datalist = [];
-            }*/
+
             let urls= [];
             let parseurl = getMyVar('parseurl');
             let parsename = getMyVar('parsename');
@@ -2041,30 +2034,6 @@ function jiexi(lx,data) {
                 }else{
                     return "toast://保存出错";
                 }
-                /*if(lx=="update"){
-                    for(var i=0;i<datalist.length;i++){
-                        if(datalist[i].parse==data.url){
-                            datalist.splice(i,1);
-                            break;
-                        }
-                    }
-                }
-                if(!datalist.some(item => item.parse ==parseurl.trim())){
-                    let stopfrom = parsestopfrom.replace('，',',').split(',');
-                    stopfrom = stopfrom.filter(n => n);
-                    let priorfrom = pasrepriorfrom.replace('，',',').split(',');
-                    priorfrom = priorfrom.filter(n => n);
-                    let arr  = { "name": parsename.trim(), "parse": parseurl.trim(), "stopfrom": stopfrom, "priorfrom": priorfrom, "sort": 0};
-                    try{
-                        if(parseheader){arr['header']= JSON.parse(parseheader)}
-                    }catch(e){     }
-                    datalist.unshift(arr);
-                    writeFile(filepath, JSON.stringify(datalist));
-                    back(true);
-                    return "toast://已保存";
-                }else{
-                    return "toast://已存在";
-                }*/
             }else if(getMyVar('addtype', '1')=="2"&&parseurls){
                 let urlnum = 0;
                 if(parseurls.indexOf('★')>-1){
@@ -2100,20 +2069,23 @@ function jiexi(lx,data) {
                         return "toast://断插解析识别出错";
                     }
                 }else{
-                    let urls = parseurls.replace(/,|，/g,"#").split('\n');                    
-                    for (var i in urls) {
-                        let urlname = urls[i].split('#')[0].trim();
-                        let urlurl = urls[i].split('#')[1].trim();
-                        if(!datalist.some(item => item.parse==urlurl)&&urlname&&/^http/.test(urlurl)){
-                            let arr  = { "name": urlname, "parse": urlurl, "stopfrom": [], "priorfrom": [], "sort": 0 };
-                            datalist.push(arr);
-                            urlnum = urlnum + 1;
-                        }
+                    let list = parseurls.replace(/,|，/g,"#").split('\n');
+                    for (let i in list) {
+                        let urlname = list[i].split('#')[0];
+                        let urlurl = list[i].split('#')[1];
+                        let arr  = { "name": urlname, "parse": urlurl, "stopfrom": [], "priorfrom": [], "sort": 0 };
+                        urls.push(arr);
                     }
                 }               
-                if(urlnum>0){writeFile(filepath, JSON.stringify(datalist));}
-                back(true);
-                return "toast://成功保存解析："+urlnum;
+                if(urls.length>0){
+                    let num = jiexisave(urls);
+                    if(num>=0){
+                        back(true);
+                        return "toast://成功保存解析："+num;
+                    }else{
+                        return "toast://保存出错";
+                    } 
+                }
             }else{
                 return "toast://无法保存，检查项目填写完整性";
             }
