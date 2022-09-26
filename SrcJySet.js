@@ -559,7 +559,7 @@ function SRCSet() {
                                                 jxdatalist.push(arr);
                                                 jxnum = jxnum + 1;
                                             }*/
-                                            if(/^http/.test(jiexi[i]){
+                                            if(/^http/.test(jiexi[i])){
                                                 let arr  = { "name": "bb"+namebh, "parse": jiexi[i], "stopfrom": [], "priorfrom": [], "sort": 1 };
                                                 urls.push(arr);
                                             }
@@ -706,7 +706,7 @@ function SRCSet() {
                                             jxnum = jxnum + 1;
                                         }
                                         */
-                                        if(/^http/.test(jiexi[i].url){
+                                        if(/^http/.test(jiexi[i].url)){
                                             let arr  = { "name": jiexi[i].name, "parse": jiexi[i].url, "stopfrom": [], "priorfrom": [], "sort": 1 };
                                             urls.push(arr);
                                         }
