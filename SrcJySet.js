@@ -1821,7 +1821,7 @@ function jiexi(lx,data) {
                 })
             }, parseheader)
         });
-        if(lx=="update"&&data.web==1&&getMyVar('parseisweb')=="0"){
+        if(lx=="update"&&getMyVar('parseisweb',data&&data.web==1?"1":"0")=="1"){
             putMyVar('parseisweb','1');
         }
         d.push({
