@@ -2009,6 +2009,7 @@ function jiexi(lx,data) {
             }else{
                 var datalist = [];
             }*/
+            let urls= [];
             let parseurl = getMyVar('parseurl');
             let parsename = getMyVar('parsename');
             let parseurls = getMyVar('parseurls');
@@ -2016,7 +2017,31 @@ function jiexi(lx,data) {
             let pasrepriorfrom = getMyVar('priorfrom',"");
             let parseheader = getMyVar('parseheader',data&&data.header?JSON.stringify(data.header):"");
             if(getMyVar('addtype', '1')=="1"&&parseurl&&parsename){
+                let isupdate = 0;
+                let stopfrom = parsestopfrom.replace('，',',').split(',');
+                stopfrom = stopfrom.filter(n => n);
+                let priorfrom = pasrepriorfrom.replace('，',',').split(',');
+                priorfrom = priorfrom.filter(n => n);
+                let arr  = { "name": parsename.trim(), "parse": parseurl.trim(), "stopfrom": stopfrom, "priorfrom": priorfrom, "sort": 0};
+                try{
+                    if(parseheader){arr['header']= JSON.parse(parseheader)}
+                }catch(e){     }
+                
                 if(lx=="update"){
+                    isupdate = 1;
+                    arr['oldurl'] = data.parse;
+                }
+                urls.push(arr);
+                let num = jiexisave(urls,isupdate);
+                if(num==1){
+                    back(true);
+                    return "toast://已保存";
+                }else if(num==0){
+                    return "toast://已存在";
+                }else{
+                    return "toast://保存出错";
+                }
+                /*if(lx=="update"){
                     for(var i=0;i<datalist.length;i++){
                         if(datalist[i].parse==data.url){
                             datalist.splice(i,1);
@@ -2039,7 +2064,7 @@ function jiexi(lx,data) {
                     return "toast://已保存";
                 }else{
                     return "toast://已存在";
-                }
+                }*/
             }else if(getMyVar('addtype', '1')=="2"&&parseurls){
                 let urlnum = 0;
                 if(parseurls.indexOf('★')>-1){
