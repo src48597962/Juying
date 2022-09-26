@@ -1821,7 +1821,7 @@ function jiexi(lx,data) {
                 })
             }, parseheader)
         });
-        if(lx=="update"&&data.web==1&&getMyVar('parseisweb','0')=="0"){
+        if(lx=="update"&&data.web==1&&getMyVar('parseisweb')=="0"){
             putMyVar('parseisweb','1');
         }
         d.push({
@@ -1829,7 +1829,7 @@ function jiexi(lx,data) {
             col_type: 'text_1',
             url:$().lazyRule(()=>{
                 if(getMyVar('parseisweb')=="1"){
-                    clearMyVar('parseisweb');
+                    putMyVar('parseisweb','0');
                 }else{
                     putMyVar('parseisweb','1');
                 }
