@@ -1820,8 +1820,11 @@ function jiexi(lx,data) {
                 })
             }, parseheader)
         });
+        if(lx=="update"&&date.web==1){
+            putMyVar('parseweb','1');
+        }
         d.push({
-            title:'是否web普通解析：' + (getMyVar('parseweb','0')=="1"?"是":"否"),
+            title:'是否web普通解析：' + (getMyVar('parseweb','0')=="1"?"是":"未知"),
             col_type: 'text_1',
             url:$().lazyRule(()=>{
                 if(getMyVar('parseweb','0')=="1"){
