@@ -2019,10 +2019,10 @@ function jiexi(lx,data) {
                 try{
                     if(parseheader){arr['header']= JSON.parse(parseheader)}
                 }catch(e){     }
-                log(data)
+                
                 if(lx=="update"){
                     isupdate = 1;
-                    arr['oldurl'] = data.parse;
+                    arr['oldurl'] = data.url;
                 }
                 urls.push(arr);
                 let num = jiexisave(urls,isupdate);
