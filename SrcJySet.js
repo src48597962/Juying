@@ -2035,7 +2035,6 @@ function jiexi(lx,data) {
                     return "toast://保存出错";
                 }
             }else if(getMyVar('addtype', '1')=="2"&&parseurls){
-                let urlnum = 0;
                 if(parseurls.indexOf('★')>-1){
                     try{
                         if(/^https:\/\/netcut\.cn/.test(parseurls)&&parseurls.indexOf('★MyParseS合集★')>-1){
@@ -2044,11 +2043,8 @@ function jiexi(lx,data) {
                             for (let i=0;i<parseTitle.length;i++) {
                                 let urlname = parseTitle[i].trim();                            
                                 let urlurl = $.stringify(ParseS[urlname]).trim();
-                                if(!datalist.some(item => item.parse==urlurl)&&urlname){
-                                    let arr  = { "name": urlname, "parse": urlurl, "stopfrom": [], "priorfrom": [], "sort": 0 };
-                                    datalist.push(arr);
-                                    urlnum = urlnum + 1;
-                                }
+                                let arr  = { "name": urlname, "parse": urlurl, "stopfrom": [], "priorfrom": [], "sort": 0 };
+                                urls.push(arr);
                             }
                         }else{                        
                             if(/^https:\/\/netcut\.cn/.test(parseurls)){
@@ -2059,11 +2055,8 @@ function jiexi(lx,data) {
                                 var urlname = parseurls.split('★')[1].trim();
                                 var urlurl = parseurls.split('★')[2].trim();
                             }
-                            if(!datalist.some(item => item.parse==urlurl)&&urlname){
-                                let arr  = { "name": urlname, "parse": urlurl, "stopfrom": [], "priorfrom": [], "sort": 0 };
-                                datalist.unshift(arr);
-                                urlnum = 1;
-                            }
+                            let arr  = { "name": urlname, "parse": urlurl, "stopfrom": [], "priorfrom": [], "sort": 0 };
+                            urls.push(arr);
                         }
                     }catch(e){
                         return "toast://断插解析识别出错";
