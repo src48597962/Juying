@@ -2039,6 +2039,7 @@ function jiexi(lx,data) {
             let parseurls = getMyVar('parseurls');
             let parsestopfrom = getMyVar('stopfrom',"");
             let pasrepriorfrom = getMyVar('priorfrom',"");
+            log(parsestopfrom);log(pasrepriorfrom);
             let parseheader = getMyVar('parseheader',data&&data.header?JSON.stringify(data.header):"");
             if(getMyVar('addtype', '1')=="1"&&parseurl&&parsename){
                 let isupdate = 0;
@@ -2053,7 +2054,7 @@ function jiexi(lx,data) {
                 try{
                     if(getMyVar('parseisweb')=="1"){arr['web']= 1}
                 }catch(e){}
-                log(arr)
+                
                 if(lx=="update"){
                     isupdate = 1;
                     arr['oldurl'] = data.url;
