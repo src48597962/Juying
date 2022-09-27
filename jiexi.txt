@@ -1,7 +1,6 @@
 ok1,https://okjx.cc/?url=
 ok2https://api.okjx.cc:3389/jx.php?url=
 全民解析,http://api.wpsseo.cn/?v=
-飞飞解析,https://y.9dan.cc/?v=
 BL解析,https://svip.bljiex.cc/?v=
 爱跟解析,https://vip.2ktvb.com/player/?url=
 parwix,https://jx.bozrc.com:4433/player/?url=
@@ -16,7 +15,6 @@ m2090,https://m2090.com/?url=
 百域,https://jx.618g.com/?url=
 LE,https://lecurl.cn/?url=
 ccyjjd,https://ckmov.ccyjjd.com/ckmov/?url=
-爱豆,https://jx.aidouer.net/?url=
 诺诺,https://www.ckmov.com/?url=
 BL,https://vip.bljiex.com/?v=
 MAO,https://www.mtosz.com/m3u8.php?url=
