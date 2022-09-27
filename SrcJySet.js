@@ -1857,7 +1857,7 @@ function jiexi(lx,data) {
             title:'是否明确为web普通解析：' + (getMyVar('parseisweb')=="1"?"是":"否"),
             col_type: 'text_1',
             url:$().lazyRule(()=>{
-                if(/^http/.test(getMyVar('parseurl',''))){
+                if(/^http/.test(getMyVar('parseurl',''))&&!/json|id=|key=/.test(getMyVar('parseurl',''))){
                     if(getMyVar('parseisweb')=="1"){
                         putMyVar('parseisweb','0');
                     }else{
