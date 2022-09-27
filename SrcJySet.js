@@ -708,6 +708,7 @@ function SRCSet() {
                             let jxnum = 0;
                             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                             let jiexis = fetch(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'jiexi.txt',{timeout:2000});
+                            log(jiexis)
                             if(jiexis){
                                 let jiexi = jiexis.split('\n');
                                 let urls = [];
