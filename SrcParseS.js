@@ -778,12 +778,14 @@ var SrcParseS = {
             }
             var iscalldn = 0;
             var isrecord = 0;
+            log('>>>'+x5namelist)
             if(playurl==""&&!parseStr){
                 if(Wparselist.length > 0){
                     Wparselist.sort((a, b) => {
                         return a.sort - b.sort
                     })
                 };
+                log('>>>'+x5namelist)
                 for (let i=0;i<Wparselist.length;i++) {
                     if(x5jxlist.length<5||(JYconfig.superweb==1&&parsemode==3)){
                         x5jxlist.push(Wparselist[i].parse);
@@ -792,6 +794,7 @@ var SrcParseS = {
                         break;
                     }
                 }
+                log('>>>'+x5namelist)
                 if(parsemode==1){
                     if(Uparselist.length > 0){
                         Uparselist.sort((a, b) => {
@@ -805,7 +808,7 @@ var SrcParseS = {
                     }
                 }
             }
-            log('>>>'+x5namelist)
+            
             for (var i=0;i<Uparselist.length;i++) {
                 if(contain.test(playurl)){break;}
                 let UrlList = [];
