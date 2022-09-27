@@ -979,6 +979,7 @@ var SrcParseS = {
                     for(var j=0;j<myJXlist.length;j++){
                         if(dellist[p].parse==myJXlist[j].parse){
                             if(dellist[p].x5==1){
+                                myJXlist[j]['web'] = 1;
                                 myJXlist[j]['sort'] = myJXlist[j]['sort']||0;
                                 myJXlist[j].sort = myJXlist[j].sort + 1;
                             }else{
@@ -1062,7 +1063,15 @@ var SrcParseS = {
                         return "toast://解析失败";
                     }
                 }else{
-                    return this.聚嗅(vipUrl, x5jxlist);
+                    if(JYconfig.superweb==1){
+                        let weburls = x5jxlist.map(item => "video://" + item +vipUrl);
+                        return JSON.stringify({
+                            urls: weburls,
+                            names: x5namelist
+                        }); 
+                    }else{
+                        return this.聚嗅(vipUrl, x5jxlist);
+                    }
                 }
             }
         }
