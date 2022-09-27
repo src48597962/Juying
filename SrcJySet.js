@@ -691,8 +691,45 @@ function SRCSet() {
                 col_type: "text_3"
             });
             d.push({
+                title: 'TVBox订阅',
+                url: $(JYconfig['TVBoxDY']?JYconfig['TVBoxDY']:"","输入TVBox在线接口，在搜索时自动加载").input((JYconfig,cfgfile) => {
+                        JYconfig['TVBoxDY'] = input;
+                        writeFile(cfgfile, JSON.stringify(JYconfig));
+                        refreshPage(false);
+                        return 'toast://'+(input?'已保存':'已取消');
+                    }, JYconfig, cfgfile),
+                col_type: "text_3"
+            });
+            d.push({
                 title: '其他导入',
                 url:$("","仅支持输入JY自定义的资源地址").input(() => {
+                    if(input=="帅"){
+                        try{
+                            let jxnum = 0;
+                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                            let jiexis = fetch(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'jiexi.txt',{timeout:2000});
+                            if(jiexis){
+                                let jiexi = jiexis.split('\n');
+                                let urls = [];
+                                for (let i=0;i<jiexi.length;i++) {
+                                    if(/^http/.test(jiexi[i].split(',')[0])){
+                                        let arr  = { "name":jiexi[i].split(',')[0], "parse":jiexi[i].split(',')[1], "stopfrom":[], "priorfrom":[], "sort":1, "web":1 };
+                                        urls.push(arr);
+                                    }
+                                }
+                                jxnum = jiexisave(urls);
+                            }
+                            if(jxnum>0){
+                                return "toast://导入完成，解析保存："+jxnum;
+                            }else{
+                                return "toast://无解析";
+                            }
+                        } catch (e) {
+                            log('解析导入失败：'+e.message);
+                            return "toast://解析导入失败";
+                        }
+
+                    }else if(input){
                         try{
                             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                             eval(fetch(input,{timeout:2000}))
@@ -713,17 +750,8 @@ function SRCSet() {
                         }else{
                             return "toast://导入完成，接口保存："+jknum;
                         }
+                    } 
                 }),
-                col_type: "text_3"
-            });
-            d.push({
-                title: 'TVBox订阅',
-                url: $(JYconfig['TVBoxDY']?JYconfig['TVBoxDY']:"","输入TVBox在线接口，在搜索时自动加载").input((JYconfig,cfgfile) => {
-                        JYconfig['TVBoxDY'] = input;
-                        writeFile(cfgfile, JSON.stringify(JYconfig));
-                        refreshPage(false);
-                        return 'toast://'+(input?'已保存':'已取消');
-                    }, JYconfig, cfgfile),
                 col_type: "text_3"
             });
             d.push({
