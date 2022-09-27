@@ -2053,6 +2053,7 @@ function jiexi(lx,data) {
                 try{
                     if(getMyVar('parseisweb')=="1"){arr['web']= 1}
                 }catch(e){}
+                log(arr)
                 if(lx=="update"){
                     isupdate = 1;
                     arr['oldurl'] = data.url;
