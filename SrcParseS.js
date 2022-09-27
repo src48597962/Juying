@@ -535,9 +535,11 @@ var SrcParseS = {
                     }
                 }
             }
-            var Uparselist = [];
-            var appJXlist= [];
-            var myJXlist= [];
+            
+            var Uparselist = [];//待进线程执行的解析列表
+            var Webparselist = [];//web解析临时存放列表
+            var appJXlist= [];//读取本地保存的app自带历史解析列表
+            var myJXlist= [];//读取私有解析列表
             var recordfile = "hiker://files/rules/Src/Juying/parse.json";
             var parserecord=fetch(recordfile);
             if(parserecord!=""){
@@ -562,33 +564,36 @@ var SrcParseS = {
                 let arr = {type:'test',name:parseStr.name,parse:parseStr.parse,sort:0};
                 if(parseStr.header){arr['header'] = parseStr.header}
                 Uparselist.push(arr);
-            }else if(parsemode==1){
-                //读取app自带的解析，将未屏蔽的入备选
-                var appParses = getMyVar('parse_api', '');
-                if(appParses){
-                    let appParselist = appParses.split(',');
-                    appParselist = uniq(appParselist);//去重
-                    for (var i in appParselist) {
-                        if(excludeparse.indexOf(appParselist[i])==-1){
-                            Uparselist.push({type:'appz',name:'appz'+i,parse:appParselist[i],sort:0});
+            }else if(parsemode==1||parsemode==3){
+                if(parsemode==1){
+                    //读取app自带的解析，将未屏蔽的入备选
+                    var appParses = getMyVar('parse_api', '');
+                    if(appParses){
+                        let appParselist = appParses.split(',');
+                        appParselist = uniq(appParselist);//去重
+                        for (var i in appParselist) {
+                            if(excludeparse.indexOf(appParselist[i])==-1){
+                                Uparselist.push({type:'appz',name:'appz'+i,parse:appParselist[i],sort:0});
+                            }
                         }
+                        if(printlog==1){log("接口自带的解析数："+Uparselist.length)}; 
                     }
-                    if(printlog==1){log("接口自带的解析数："+Uparselist.length)}; 
-                }
-                //读取本地app保存的解析，将可用加入备选
-                var appJXfile = "hiker://files/rules/Src/Juying/appjiexi.json";
-                var appJX=fetch(appJXfile);
-                if(appJX != ""){
-                    eval("var appJXlist=" + appJX+ ";");
-                    var apjxnum = 0;
-                    for(var j=0;j<appJXlist.length;j++){
-                        if(appJXlist[j].from.indexOf(from)>-1&&excludeparse.indexOf(appJXlist[j].parse)==-1&&!Uparselist.some(item => item.parse ==appJXlist[j].parse)){
-                            Uparselist.push({type:'apps',name:'apps'+j,parse:appJXlist[j].parse,sort:0});
-                            var apjxnum = apjxnum + 1;
+                    //读取本地app保存的解析，将可用加入备选
+                    var appJXfile = "hiker://files/rules/Src/Juying/appjiexi.json";
+                    var appJX=fetch(appJXfile);
+                    if(appJX != ""){
+                        eval("var appJXlist=" + appJX+ ";");
+                        var apjxnum = 0;
+                        for(var j=0;j<appJXlist.length;j++){
+                            if(appJXlist[j].from.indexOf(from)>-1&&excludeparse.indexOf(appJXlist[j].parse)==-1&&!Uparselist.some(item => item.parse ==appJXlist[j].parse)){
+                                Uparselist.push({type:'apps',name:'apps'+j,parse:appJXlist[j].parse,sort:0});
+                                var apjxnum = apjxnum + 1;
+                            }
                         }
+                        if(printlog==1){log("保存的可用解析数：" + apjxnum)}; 
                     }
-                    if(printlog==1){log("保存的可用解析数：" + apjxnum)}; 
                 }
+                
                 //读取私有增加的解析，将可用加入备选
                 var myJXfile = "hiker://files/rules/Src/Juying/myjiexi.json";
                 var myJX=fetch(myJXfile);
@@ -610,13 +615,21 @@ var SrcParseS = {
                                 }
                             }
                             arr["sort"] = -1;
-                            Uparselist.unshift(arr);
+                            if(myJXlist[j].web==1){
+                                Webparselist.unshift(arr);
+                            }else{
+                                Uparselist.unshift(arr);
+                            }
                             myjxnum = myjxnum + 1;
                         }else{
                             if(myJXlist[j].stopfrom.indexOf(from)==-1&&excludeparse.indexOf(myJXlist[j].parse)==-1&&!Uparselist.some(item => item.parse ==myJXlist[j].parse)){
                                 let sort = myJXlist[j]['sort']||0;
                                 arr["sort"] = sort;
-                                Uparselist.push(arr);
+                                if(myJXlist[j].web==1){
+                                    Webparselist.push(arr);
+                                }else{
+                                    Uparselist.push(arr);
+                                }
                                 myjxnum = myjxnum + 1;
                                 //非强制优先、非排除片源、非屏蔽优先调用
                             }
@@ -704,7 +717,7 @@ var SrcParseS = {
                         var x5 = 0;
                         if(rurl == ""){
                             if(!/404 /.test(gethtml)&&obj.ulist.parse.indexOf('key=')==-1){
-                                if(x5jxlist.length<=5){
+                                if(x5jxlist.length<5){
                                     x5jxlist.push(obj.ulist.parse);
                                     if(printlog==1){log(obj.ulist.name + '>加入x5嗅探列表');}
                                     x5namelist.push(obj.ulist.name);
@@ -765,16 +778,31 @@ var SrcParseS = {
             }
             var iscalldn = 0;
             var isrecord = 0;
-            if(playurl==""&&!parseStr&&parsemode==1){
-                if(Uparselist.length > 0){
-                    Uparselist.sort((a, b) => {
+            if(playurl==""&&!parseStr){
+                if(Wparselist.length > 0){
+                    Wparselist.sort((a, b) => {
                         return a.sort - b.sort
                     })
                 };
+                for (let i=0;i<Wparselist.length;i++) {
+                    if(x5jxlist.length<5){
+                        x5jxlist.push(Wparselist[i].parse);
+                        x5namelist.push(Wparselist[i].name);
+                    }else{
+                        break;
+                    }
+                }
+                if(parsemode==1){
+                    if(Uparselist.length > 0){
+                        Uparselist.sort((a, b) => {
+                            return a.sort - b.sort
+                        })
+                    };
 
-                if(isdn==1&&Uparselist.length==0){
-                    Uparselist.push({type:'dn',name:'断插'});
-                    iscalldn = 1;
+                    if(isdn==1&&Uparselist.length==0){
+                        Uparselist.push({type:'dn',name:'断插'});
+                        iscalldn = 1;
+                    }
                 }
             }
             for (var i=0;i<Uparselist.length;i++) {
