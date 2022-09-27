@@ -616,7 +616,7 @@ var SrcParseS = {
                             }
                             arr["sort"] = -1;
                             if(myJXlist[j].web==1){
-                                Webparselist.unshift(arr);
+                                Wparselist.unshift(arr);
                             }else{
                                 Uparselist.unshift(arr);
                             }
