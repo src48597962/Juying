@@ -537,7 +537,7 @@ var SrcParseS = {
             }
             
             var Uparselist = [];//待进线程执行的解析列表
-            var Webparselist = [];//web解析临时存放列表
+            var Wparselist = [];//web解析临时存放列表
             var appJXlist= [];//读取本地保存的app自带历史解析列表
             var myJXlist= [];//读取私有解析列表
             var recordfile = "hiker://files/rules/Src/Juying/parse.json";
@@ -626,7 +626,7 @@ var SrcParseS = {
                                 let sort = myJXlist[j]['sort']||0;
                                 arr["sort"] = sort;
                                 if(myJXlist[j].web==1){
-                                    Webparselist.push(arr);
+                                    Wparselist.push(arr);
                                 }else{
                                     Uparselist.push(arr);
                                 }
@@ -778,14 +778,14 @@ var SrcParseS = {
             }
             var iscalldn = 0;
             var isrecord = 0;
-            log('>>>'+x5namelist)
+
             if(playurl==""&&!parseStr){
                 if(Wparselist.length > 0){
                     Wparselist.sort((a, b) => {
                         return a.sort - b.sort
                     })
                 };
-                log('>>>'+x5namelist)
+
                 for (let i=0;i<Wparselist.length;i++) {
                     if(x5jxlist.length<5||(JYconfig.superweb==1&&parsemode==3)){
                         x5jxlist.push(Wparselist[i].parse);
@@ -794,7 +794,7 @@ var SrcParseS = {
                         break;
                     }
                 }
-                log('>>>'+x5namelist)
+
                 if(parsemode==1){
                     if(Uparselist.length > 0){
                         Uparselist.sort((a, b) => {
