@@ -1,12 +1,10 @@
 ok1,https://okjx.cc/?url=
 ok2https://api.okjx.cc:3389/jx.php?url=
 全民解析,http://api.wpsseo.cn/?v=
-BL解析,https://svip.bljiex.cc/?v=
-爱跟解析,https://vip.2ktvb.com/player/?url=
 parwix,https://jx.bozrc.com:4433/player/?url=
 parwix2,https://jx.parwix.com:4433/player/analysis.php?v=
 七彩解析,https://jx.xymav.com/?url=
-高速接口,https://jsap.attakids.com/?url=
+高速,https://jsap.attakids.com/?url=
 夜幕,https://www.yemu.xyz/?url=
 虾米,https://jx.xmflv.com/?url=
 全民,https://jx.quanmingjiexi.com/?url=
