@@ -1828,13 +1828,17 @@ function jiexi(lx,data) {
             title:'是否明确为web普通解析：' + (getMyVar('parseisweb')=="1"?"是":"否"),
             col_type: 'text_1',
             url:$().lazyRule(()=>{
-                if(getMyVar('parseisweb')=="1"){
-                    putMyVar('parseisweb','0');
+                if(/^http/.test(getMyVar('parseurl',''))){
+                    if(getMyVar('parseisweb')=="1"){
+                        putMyVar('parseisweb','0');
+                    }else{
+                        putMyVar('parseisweb','1');
+                    }
+                    refreshPage(false);
+                    return "hiker://empty";
                 }else{
-                    putMyVar('parseisweb','1');
+                    return "toast:/以http开头的普通解析才能标记"
                 }
-                refreshPage(false);
-                return "hiker://empty";
             })
         });
     }else{
