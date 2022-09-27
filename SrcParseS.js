@@ -617,7 +617,7 @@ var SrcParseS = {
                             arr["sort"] = -1;
                             if(myJXlist[j].web==1){
                                 Wparselist.unshift(arr);
-                            }else{
+                            }else if(parsemode==1){
                                 Uparselist.unshift(arr);
                             }
                             myjxnum = myjxnum + 1;
@@ -627,7 +627,7 @@ var SrcParseS = {
                                 arr["sort"] = sort;
                                 if(myJXlist[j].web==1){
                                     Wparselist.push(arr);
-                                }else{
+                                }else if(parsemode==1){
                                     Uparselist.push(arr);
                                 }
                                 myjxnum = myjxnum + 1;
@@ -806,8 +806,6 @@ var SrcParseS = {
                         Uparselist.push({type:'dn',name:'断插'});
                         iscalldn = 1;
                     }
-                }else{
-                    Uparselist = [];
                 }
             }
             
@@ -1058,10 +1056,6 @@ var SrcParseS = {
                     return this.formatUrl(playurl);
                 }
             }else{
-                if(parsemode==1&&printlog==1){
-                    log('明码解析失败，转嗅探备用解析');
-                    log('进入嗅探解析列表：' + x5namelist)
-                }
                 if(parseStr){
                     if(x5jxlist.length>0){
                         return this.嗅探(parseStr.parse+vipUrl);
@@ -1069,6 +1063,9 @@ var SrcParseS = {
                         return "toast://解析失败";
                     }
                 }else{
+                    if(printlog==1&&x5namelist.length>0){
+                        log('进入嗅探解析列表：' + x5namelist)
+                    }
                     if(JYconfig.superweb==1){
                         let weburls = x5jxlist.map(item => "video://" + item +vipUrl);
                         return JSON.stringify({
