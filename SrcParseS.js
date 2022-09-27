@@ -806,6 +806,8 @@ var SrcParseS = {
                         Uparselist.push({type:'dn',name:'断插'});
                         iscalldn = 1;
                     }
+                }else{
+                    Uparselist = [];
                 }
             }
             
