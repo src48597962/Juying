@@ -789,13 +789,13 @@ function yiji() {
     }
 
     setResult(d);
-    if(getMyVar('jydingyue','0')=="0"&&JYconfig['codeid2']&&JYconfig['codeid']!=JYconfig['codeid2']){
+    if(getMyVar('jydingyue','0')=="0"&&JYconfig['codedyid']&&JYconfig['codeid']!=JYconfig['codedyid']){
         putMyVar('jydingyue','1');
         try{
             var nowtime = Date.now();
             var oldtime = parseInt(getItem('dingyuetime','0').replace('time',''));
             if(nowtime > (oldtime+6*60*60*1000)){
-                let pasteurl = JYconfig['codeid2'];
+                let pasteurl = JYconfig['codedyid'];
                 let text = parsePaste('https://netcut.cn/p/'+aesDecode('Juying', pasteurl));
                 if(pasteurl&&!/^error/.test(text)){
                     let pastedata = JSON.parse(base64Decode(text));
