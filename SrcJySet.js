@@ -1771,7 +1771,7 @@ function jiexi(lx,data) {
             var froms = recordlist.from || ['youku','mgtv','iqiyi','qq'];
             for(var i in froms){
                 d.push({
-                    title:froms[i],
+                    title:getMyVar('selectfrom','').indexOf(froms[i])>-1?'‘‘’’<span style="color:red">'+froms[i]:froms[i],
                     col_type:'text_4',
                     url: $('#noLoading#').lazyRule((from)=>{
                             let selectfrom = getMyVar('selectfrom')?getMyVar('selectfrom','').replace(/,|，/g,",").split(','):[];
@@ -1829,11 +1829,6 @@ function jiexi(lx,data) {
             url: $('hiker://empty#noRecordHistory##noHistory#').rule((selectfrom,lx,oldfrom) => {
                 selectfrom(lx,oldfrom);
             },selectfrom,'stop',stopfrom)
-            /*$(stopfrom,"输入排除的片源标识，以逗号隔开，为空则自动管理").input(()=>{
-                putMyVar('stopfrom', input);
-                refreshPage(false);
-                return "toast://"+input;
-            })*/
         });
         let parseheader = getMyVar('parseheader', lx=="update"&&data.header?JSON.stringify(data.header):"");
         d.push({
