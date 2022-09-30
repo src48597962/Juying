@@ -1176,8 +1176,7 @@ function SRCSet() {
                         }),
                     col_type: "scroll_button"
                 });
-            }
-            d.push({
+                d.push({
                     title: "重置排序",
                     url: $('#noLoading#').lazyRule(()=>{
                             let duoselect = storage0.getMyVar('duoselect')?storage0.getMyVar('duoselect'):[];
