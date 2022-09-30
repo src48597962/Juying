@@ -1092,7 +1092,7 @@ function SRCSet() {
         });
         if(getMyVar('guanlicz')=="4"){
             d.push({
-                title: "全部选择",
+                title: "全选",
                 url: $('#noLoading#').lazyRule(()=>{
                         let datalist = storage0.getMyVar('datalist')?storage0.getMyVar('datalist'):[];
                         let duoselect = [];
@@ -1109,6 +1109,8 @@ function SRCSet() {
                                 var datatitle = datasort+'-'+dataname+'-'+dataurl;
                                 var dataurl = datalist.parse;
                             }
+                            log(dataurl)
+                            log(datatitle)
                             updateItem(dataurl,{title:'‘‘’’<span style="color:red">'+datatitle})
                             duoselect.push(dataurl);
                         }
