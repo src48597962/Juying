@@ -48,7 +48,14 @@ function SRCSet() {
                 writeFile(cfgfile, JSON.stringify(JYconfig));
                 let png = "hiker://files/rules/Src/Juying/dingyue.json";
                 let path = getPath(png).replace("file://", "");
-                new File(path).delete();
+                const File = java.io.File;
+                let javaImport = new JavaImporter();
+                javaImport.importPackage(
+                    Packages.com.example.hikerview.utils
+                );
+                with(javaImport) {
+                    new File(path).delete();
+                }
             }
             //上面的代码是将订阅历史迁移合并到config中
             d.push({
