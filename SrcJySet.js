@@ -13,13 +13,13 @@ function SRCSet() {
     var d = [];
     d.push({
         title: getMyVar('guanli', 'jk')=="jk"?getTitle('接口管理', '#f13b66a'):'接口管理',
-        url: `#noLoading#@lazyRule=.js:putMyVar('guanli','jk');clearMyVar('duoselect');refreshPage(false);'toast://已切换到接口管理';`,
+        url: `#noLoading#@lazyRule=.js:putMyVar('guanli','jk');refreshPage(false);'toast://已切换到接口管理';`,
         img: "https://lanmeiguojiang.com/tubiao/movie/98.svg",
         col_type: "icon_small_3"
     });
     d.push({
         title: getMyVar('guanli', 'jk')=="jk"?'解析管理':getTitle('解析管理', '#f13b66a'),
-        url: `#noLoading#@lazyRule=.js:putMyVar('guanli','jx');clearMyVar('duoselect');refreshPage(false);'toast://已切换到解析管理';`,
+        url: `#noLoading#@lazyRule=.js:putMyVar('guanli','jx');refreshPage(false);'toast://已切换到解析管理';`,
         img: "https://lanmeiguojiang.com/tubiao/movie/105.svg",
         col_type: "icon_small_3"
     });
@@ -860,7 +860,7 @@ function SRCSet() {
                             refreshPage(false);
                             return "toast://已删除";
                         }, dataurl,filepath):getMyVar('guanlicz')=="4"?$('#noLoading#').lazyRule((datatitle,dataurl)=>{
-                            let duoselect = getMyVar('duoselect','')?getMyVar('duoselect','').split(','):[];
+                            let duoselect = getMyVar('duoselect')?storage0.getMyVar('duoselect'):[];
                             if(duoselect.indexOf(dataurl)==-1){
                                 duoselect.push(dataurl);
                                 updateItem(dataurl,{title:'‘‘’’<span style="color:red">'+datatitle})
@@ -876,7 +876,8 @@ function SRCSet() {
                                 removeByValue(duoselect,dataurl);
                                 updateItem(dataurl,{title:datatitle})
                             }
-                            putMyVar('duoselect',duoselect.join(','));
+                            storage0.putMyVar('duoselect',duoselect);
+                            log(storage0.putMyVar('duoselect'))
                             return "hiker://empty";
                         }, datatitle,dataurl):"toast://功能异常",
                     col_type: 'text_1',
@@ -1089,6 +1090,7 @@ function SRCSet() {
             }
         });
         if(getMyVar('guanlicz')=="4"){
+            
             d.push({
                 title: "批量删除",
                 url: $('#noLoading#').lazyRule(()=>{
