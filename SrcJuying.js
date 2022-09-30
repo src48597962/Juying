@@ -12,10 +12,10 @@ function jiekouyiji() {
         var JYconfig= {};
     }
     
-    var api_name = JYconfig.Jydouli?JYconfig.Jydouli.api_name||"":"";
-    var api_type = JYconfig.Jydouli?JYconfig.Jydouli.api_type||"":"";
-    var api_url = JYconfig.Jydouli?JYconfig.Jydouli.api_url||"":"";
-    var api_ua = JYconfig.Jydouli?JYconfig.Jydouli.api_ua||"MOBILE_UA":MOBILE_UA;
+    var api_name = JYconfig.zsjiekou?JYconfig.zsjiekou.api_name||"":"";
+    var api_type = JYconfig.zsjiekou?JYconfig.zsjiekou.api_type||"":"";
+    var api_url = JYconfig.zsjiekou?JYconfig.zsjiekou.api_url||"":"";
+    var api_ua = JYconfig.zsjiekou?JYconfig.zsjiekou.api_ua||"MOBILE_UA":MOBILE_UA;
     api_ua = api_ua=="MOBILE_UA"?MOBILE_UA:api_ua=="PC_UA"?PC_UA:api_ua;
     var xunmitimeout = JYconfig.xunmitimeout||5;
     if(api_name){setPageTitle(api_name);}
@@ -74,7 +74,7 @@ function jiekouyiji() {
                 }else{
                     var JYconfig= {};
                 }
-                JYconfig['Jydouli'] = {api_name:datalist[0].name, api_type:datalist[0].type, api_url:datalist[0].url, api_ua:datalist[0].ua};
+                JYconfig['zsjiekou'] = {api_name:datalist[0].name, api_type:datalist[0].type, api_url:datalist[0].url, api_ua:datalist[0].ua};
                 writeFile(cfgfile, JSON.stringify(JYconfig));
                 log('未指定接口，默认第一个>'+datalist[0].name+datalist[0].url);
                 refreshPage(true);
@@ -86,14 +86,14 @@ function jiekouyiji() {
             }
             for(let i in datalist){
                 if(api_url==datalist[i].url){
-                    var SrcJydoulisousuodata = [];
-                    SrcJydoulisousuodata.push(datalist[i]);
+                    var Srczsjiekousousuodata = [];
+                    Srczsjiekousousuodata.push(datalist[i]);
                 }
                 d.push({
                     title: api_url==datalist[i].url?'““””<b><span style="color:#3CB371">' + datalist[i].name + '</span></b>':datalist[i].name,
                     col_type: 'scroll_button',
-                    url: $('#noLoading#').lazyRule((Jydouli) => {
-                        clearMyVar('SrcJydouli$type_id');
+                    url: $('#noLoading#').lazyRule((zsjiekou) => {
+                        clearMyVar('Srczsjiekou$type_id');
                         var cfgfile = "hiker://files/rules/Src/Juying/config.json";
                         var Juyingcfg=fetch(cfgfile);
                         if(Juyingcfg != ""){
@@ -101,7 +101,7 @@ function jiekouyiji() {
                         }else{
                             var JYconfig= {};
                         }
-                        JYconfig['Jydouli'] = Jydouli;
+                        JYconfig['zsjiekou'] = zsjiekou;
                         writeFile(cfgfile, JSON.stringify(JYconfig));
                         refreshPage(true);
                         return "hiker://empty";
@@ -192,16 +192,16 @@ function jiekouyiji() {
                     return a - b
                 })
             };
-            if(/v2|app/.test(api_type)&&!getMyVar('SrcJydouli$type_id')){
-                putMyVar('SrcJydouli$type_id',type_ids[0]);
+            if(/v2|app/.test(api_type)&&!getMyVar('Srczsjiekou$type_id')){
+                putMyVar('Srczsjiekou$type_id',type_ids[0]);
             }
             for (var j in type_pids) {
                 for (var i in typeclass) {
                     if(typeclass[i].type_pid==type_pids[j]){
                         d.push({
-                            title: getMyVar('SrcJydouli$type_id')==typeclass[i].type_id?'““””<b><span style="color:' + Color + '">' + typeclass[i].type_name + '</span></b>':typeclass[i].type_name,
+                            title: getMyVar('Srczsjiekou$type_id')==typeclass[i].type_id?'““””<b><span style="color:' + Color + '">' + typeclass[i].type_name + '</span></b>':typeclass[i].type_name,
                             url: $('#noLoading#').lazyRule((type_id) => {
-                                putMyVar('SrcJydouli$type_id', type_id);
+                                putMyVar('Srczsjiekou$type_id', type_id);
                                 refreshPage(true);
                                 return "hiker://empty";
                             }, typeclass[i].type_id),
@@ -224,7 +224,7 @@ function jiekouyiji() {
             }else{
                 return 'toast://未找到接口数据'
             }
-        },SrcJydoulisousuodata);
+        },Srczsjiekousousuodata);
         d.push({
             title: "🔍",
             url: $.toString((seachurl) => {
@@ -241,14 +241,14 @@ function jiekouyiji() {
     try{
         MY_URL = listurl + MY_PAGE;
         if(api_type=="v2"||api_type=="app"){
-            MY_URL = MY_URL.replace('@type_id',getMyVar('SrcJydouli$type_id','1'));
-        }else if(getMyVar('SrcJydouli$type_id')){
+            MY_URL = MY_URL.replace('@type_id',getMyVar('Srczsjiekou$type_id','1'));
+        }else if(getMyVar('Srczsjiekou$type_id')){
             if (api_type=="v1") {
-                MY_URL = MY_URL + '&type=' + getMyVar('SrcJydouli$type_id');
+                MY_URL = MY_URL + '&type=' + getMyVar('Srczsjiekou$type_id');
             } else if (api_type=="iptv") {
-                MY_URL = MY_URL + '&class=' + getMyVar('SrcJydouli$type_id');
+                MY_URL = MY_URL + '&class=' + getMyVar('Srczsjiekou$type_id');
             } else{
-                MY_URL = MY_URL + '&t=' + getMyVar('SrcJydouli$type_id');
+                MY_URL = MY_URL + '&t=' + getMyVar('Srczsjiekou$type_id');
             }
         }
         
