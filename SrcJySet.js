@@ -877,7 +877,7 @@ function SRCSet() {
                                 updateItem(dataurl,{title:datatitle})
                             }
                             storage0.putMyVar('duoselect',duoselect);
-                            log(storage0.putMyVar('duoselect'))
+                            log(storage0.getMyVar('duoselect'))
                             return "hiker://empty";
                         }, datatitle,dataurl):"toast://功能异常",
                     col_type: 'text_1',
