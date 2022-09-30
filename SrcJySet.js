@@ -58,6 +58,12 @@ function SRCSet() {
                 }
             }
             //上面的代码是将订阅历史迁移合并到config中
+            if(JYconfig['codeid2']){
+                JYconfig['codedyid'] = JYconfig['codeid2'];
+                delete JYconfig['codeid2'];
+                writeFile(cfgfile, JSON.stringify(JYconfig));
+            }
+            //上面临时存放几个版本，将订阅id名称改一下
             d.push({
                 title: '聚影分享',
                 col_type: "rich_text"
@@ -197,8 +203,8 @@ function SRCSet() {
                 col_type: "line_blank"
             });
             d.push({
-                title: JYconfig['codeid2']?'已订阅聚影资源码':'订阅聚影资源码',
-                desc: JYconfig['codeid2']?'点击订阅、复制、切换资源码'+(JYconfig['codedyname']?'\n当前订阅的资源码为：'+JYconfig['codedyname']:""):'订阅后将与分享者云端数据保持同步',
+                title: JYconfig['codedyid']?'已订阅聚影资源码':'订阅聚影资源码',
+                desc: JYconfig['codedyid']?'点击订阅、复制、切换资源码'+(JYconfig['codedyname']?'\n当前订阅的资源码为：'+JYconfig['codedyname']:""):'订阅后将与分享者云端数据保持同步',
                 url: $(["订阅","复制","切换"],3).select((JYconfig,cfgfile)=>{
                         if(input=="订阅"){
                             return $("","聚影资源码口令").input((JYconfig,cfgfile) => {
@@ -216,7 +222,7 @@ function SRCSet() {
                                             return 'toast://名称重复，无法保存';
                                         }else if(input!=""){
                                             if(!dydatalist.some(item => item.url ==codeid)){
-                                                JYconfig['codeid2'] = codeid;
+                                                JYconfig['codedyid'] = codeid;
                                                 JYconfig['codedyname'] = input;
                                                 dydatalist.push({name:input, url:codeid})
                                                 JYconfig['dingyue'] = dydatalist;
@@ -235,14 +241,14 @@ function SRCSet() {
                                 }
                             }, JYconfig, cfgfile)
                         }else if(input=="复制"){
-                            let codeid = JYconfig['codeid2'];
+                            let codeid = JYconfig['codedyid'];
                             return codeid?$().lazyRule((codeid)=>{
                                 let code = '聚影资源码￥'+codeid;
                                 copy(code);
                                 return "hiker://empty";
                             },codeid):'toast://请先订阅'
                         }else if(input=="切换"){
-                            let codeid = JYconfig['codeid2'];
+                            let codeid = JYconfig['codedyid'];
                             let dydatalist = JYconfig.dingyue||[];
                             let list = dydatalist.map((list)=>{
                                 if(list.url !=codeid){
@@ -260,7 +266,7 @@ function SRCSet() {
                                         }
                                     }
                                     if(url){
-                                        JYconfig['codeid2'] = url;
+                                        JYconfig['codedyid'] = url;
                                         JYconfig['codedyname'] = input;
                                         writeFile(cfgfile, JSON.stringify(JYconfig));
                                         refreshPage(false);
@@ -279,9 +285,9 @@ function SRCSet() {
 
             d.push({
                 title: '更新资源',
-                url: JYconfig['codeid2']?$().lazyRule((JYconfig) => {
+                url: JYconfig['codedyid']?$().lazyRule((codedyid) => {
                         try{
-                            let codeid = JYconfig['codeid2'];
+                            let codeid = codedyid;
                             let text = parsePaste('https://netcut.cn/p/'+aesDecode('Juying', codeid));
                             if(codeid&&!/^error/.test(text)){
                                 let pastedata = JSON.parse(base64Decode(text));
@@ -303,15 +309,15 @@ function SRCSet() {
                             log('更新失败：'+e.message); 
                             return "toast://无法识别的口令";
                         }
-                    }, JYconfig):'toast://请先订阅聚影资源码',
+                    }, JYconfig['codedyid']):'toast://请先订阅聚影资源码',
                 col_type: "text_2"
             });
             d.push({
                 title: '删除订阅',
-                url: JYconfig['codeid2']?$(["仅删订阅源，保留历史","册除订阅及历史，不再切换"],1).select((JYconfig,cfgfile)=>{
+                url: JYconfig['codedyid']?$(["仅删订阅源，保留历史","册除订阅及历史，不再切换"],1).select((JYconfig,cfgfile)=>{
                     if(input=="仅删订阅源，保留历史"){
                         return $().lazyRule((JYconfig,cfgfile) => {
-                            delete JYconfig['codeid2'];
+                            delete JYconfig['codedyid'];
                             delete JYconfig['codedyname'];
                             writeFile(cfgfile, JSON.stringify(JYconfig));
                             refreshPage(false);
@@ -319,12 +325,12 @@ function SRCSet() {
                         }, JYconfig, cfgfile)
                     }else if(input=="册除订阅及历史，不再切换"){
                         return $().lazyRule((JYconfig,cfgfile) => {
-                            let codeid2 = JYconfig['codeid2'];
-                            delete JYconfig['codeid2'];
+                            let codeid = JYconfig['codedyid'];
+                            delete JYconfig['codedyid'];
                             delete JYconfig['codedyname'];
                             let dydatalist = JYconfig.dingyue||[];
                             for (var i in dydatalist) {
-                                if(dydatalist[i].url==codeid2){
+                                if(dydatalist[i].url==codeid){
                                     dydatalist.splice(i,1);
                                     break;
                                 }
