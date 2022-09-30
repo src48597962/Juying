@@ -40,18 +40,16 @@ function SRCSet() {
                 var JYconfig= {};
             }
             //临时保存几个版本，以后要删除
-            var filepath = "hiker://files/rules/Src/Juying/dingyue.json";
-            var dingyuefile = fetch(filepath);
+            var dingyuefilepath = "hiker://files/rules/Src/Juying/dingyue.json";
+            var dingyuefile = fetch(dingyuefilepath);
             if(dingyuefile != ""){
                 eval("var dingyuelist=" + dingyuefile+ ";");
-            }else{
-                var dingyuelist = [];
+                JYconfig['dingyue'] = dingyuelist;
+                writeFile(cfgfile, JSON.stringify(JYconfig));
+                let png = "hiker://files/rules/Src/Juying/dingyue.json";
+                let path = getPath(png).replace("file://", "");
+                new File(path).delete();
             }
-            JYconfig['dingyue'] = dingyuelist;
-            writeFile(cfgfile, JSON.stringify(JYconfig));
-            let png = "hiker://files/rules/Src/Juying/dingyue.json";
-            let path = getPath(png).replace("file://", "");
-            new File(path).delete();
             //上面的代码是将订阅历史迁移合并到config中
             d.push({
                 title: '聚影分享',
