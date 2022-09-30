@@ -39,7 +39,20 @@ function SRCSet() {
             }else{
                 var JYconfig= {};
             }
-
+            //临时保存几个版本，以后要删除
+            var filepath = "hiker://files/rules/Src/Juying/dingyue.json";
+            var dingyuefile = fetch(filepath);
+            if(dingyuefile != ""){
+                eval("var dingyuelist=" + dingyuefile+ ";");
+            }else{
+                var dingyuelist = [];
+            }
+            JYconfig['dingyue'] = dingyuelist;
+            writeFile(cfgfile, JSON.stringify(JYconfig));
+            let png = "hiker://files/rules/Src/Juying/dingyue.json";
+            let path = getPath(png).replace("file://", "");
+            new File(path).delete();
+            //上面的代码是将订阅历史迁移合并到config中
             d.push({
                 title: '聚影分享',
                 col_type: "rich_text"
@@ -193,23 +206,17 @@ function SRCSet() {
                                 hideLoading();
                                 if(codeid&&!/^error/.test(text)){
                                     return $("","当前资源码有效，起个名保存吧").input((JYconfig,cfgfile,codeid) => {
-                                        var filepath = "hiker://files/rules/Src/Juying/dingyue.json";
-                                        var datafile = fetch(filepath);
-                                        if(datafile != ""){
-                                            eval("var datalist=" + datafile+ ";");
-                                        }else{
-                                            var datalist = [];
-                                        }
-                                        if(datalist.some(item => item.name ==input)){
+                                        let dydatalist = JYconfig.dingyue||[];
+                                        if(dydatalist.some(item => item.name ==input)){
                                             return 'toast://名称重复，无法保存';
                                         }else if(input!=""){
-                                            if(!datalist.some(item => item.url ==codeid)){
+                                            if(!dydatalist.some(item => item.url ==codeid)){
                                                 JYconfig['codeid2'] = codeid;
                                                 JYconfig['codedyname'] = input;
+                                                dydatalist.push({name:input, url:codeid})
+                                                JYconfig['dingyue'] = dydatalist;
                                                 writeFile(cfgfile, JSON.stringify(JYconfig));
                                                 refreshPage(false);
-                                                datalist.push({name:input, url:codeid})
-                                                writeFile(filepath, JSON.stringify(datalist));
                                                 return 'toast://已保存，订阅成功';
                                             }else{
                                                 return 'toast://已存在，订阅未成功';
@@ -231,25 +238,19 @@ function SRCSet() {
                             },codeid):'toast://请先订阅'
                         }else if(input=="切换"){
                             let codeid = JYconfig['codeid2'];
-                            var filepath = "hiker://files/rules/Src/Juying/dingyue.json";
-                            var datafile = fetch(filepath);
-                            if(datafile != ""){
-                                eval("var datalist=" + datafile+ ";");
-                            }else{
-                                var datalist = [];
-                            }
-                            let list = datalist.map((list)=>{
+                            let dydatalist = JYconfig.dingyue||[];
+                            let list = dydatalist.map((list)=>{
                                 if(list.url !=codeid){
                                     return list.name;
                                 }
                             })
                             list = list.filter(n => n);
                             if(list.length>0){
-                                return $(list,3,"选择需切换的订阅源").select((datalist,JYconfig,cfgfile)=>{
+                                return $(list,3,"选择需切换的订阅源").select((dydatalist,JYconfig,cfgfile)=>{
                                     var url = "";
-                                    for (var i in datalist) {
-                                        if(datalist[i].name==input){
-                                            url = datalist[i].url;
+                                    for (var i in dydatalist) {
+                                        if(dydatalist[i].name==input){
+                                            url = dydatalist[i].url;
                                             break;
                                         }
                                     }
@@ -262,7 +263,7 @@ function SRCSet() {
                                     }else{
                                         return 'toast://本地订阅记录文件异常，是不是干了坏事？';
                                     }
-                                },datalist,JYconfig,cfgfile)
+                                },dydatalist,JYconfig,cfgfile)
                             }else{
                                 return 'toast://未找到可切换的历史订阅';
                             }
@@ -316,22 +317,15 @@ function SRCSet() {
                             let codeid2 = JYconfig['codeid2'];
                             delete JYconfig['codeid2'];
                             delete JYconfig['codedyname'];
-                            writeFile(cfgfile, JSON.stringify(JYconfig));
-
-                            var filepath = "hiker://files/rules/Src/Juying/dingyue.json";
-                            var datafile = fetch(filepath);
-                            if(datafile != ""){
-                                eval("var datalist=" + datafile+ ";");
-                            }else{
-                                var datalist = [];
-                            }
-                            for (var i in datalist) {
-                                if(datalist[i].url==codeid2){
-                                    datalist.splice(i,1);
+                            let dydatalist = JYconfig.dingyue||[];
+                            for (var i in dydatalist) {
+                                if(dydatalist[i].url==codeid2){
+                                    dydatalist.splice(i,1);
                                     break;
                                 }
                             }
-                            writeFile(filepath, JSON.stringify(datalist));
+                            JYconfig['dingyue'] = dydatalist;
+                            writeFile(cfgfile, JSON.stringify(JYconfig));
                             refreshPage(false);
                             return 'toast://已删除订阅源和历史记录';
                         }, JYconfig, cfgfile)
