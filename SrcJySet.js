@@ -39,7 +39,7 @@ function SRCSet() {
             }else{
                 var JYconfig= {};
             }
-            //临时保存几个版本，以后要删除
+            //临时保存几个版本，以后删除
             var dingyuefilepath = "hiker://files/rules/Src/Juying/dingyue.json";
             var dingyuefile = fetch(dingyuefilepath);
             if(dingyuefile != ""){
