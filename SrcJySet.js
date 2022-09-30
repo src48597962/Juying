@@ -3,10 +3,12 @@ function SRCSet() {
     addListener("onClose", $.toString(() => {
         clearMyVar('guanlicz');
         clearMyVar('duoselect');
+        clearMyVar('datalist');
         //refreshPage(false);
     }));
     setPageTitle("♥管理"+getMyVar('SrcJuying-Version', ''));
     clearMyVar('duoselect');
+    clearMyVar('datalist');
     function getTitle(title, Color) {
         return '<font color="' + Color + '">' + title + '</font>';
     }
@@ -776,7 +778,7 @@ function SRCSet() {
     }else{
         var datalist = [];
     }
-
+    storage0.putMyVar('datalist',datalist);
     d.push({
         col_type: "line_blank"
     });
@@ -1089,7 +1091,32 @@ function SRCSet() {
             }
         });
         if(getMyVar('guanlicz')=="4"){
-            
+            d.push({
+                title: "全部选择",
+                url: $('#noLoading#').lazyRule(()=>{
+                        let datalist = storage0.getMyVar('datalist')?storage0.getMyVar('datalist'):[];
+                        let duoselect = [];
+                        for(let i=0;i<datalist.length;i++){
+                            if(getMyVar('guanli', 'jk')=="jk"){
+                                let dataname = datalist.name;
+                                let datatype = datalist.type;
+                                let datagroup = datalist.group;
+                                var datatitle = dataname + ' ('+datatype+')' + (datagroup&&datagroup!=datatype?' [' + datagroup + ']':"");
+                                var dataurl = datalist.url;
+                            }else{
+                                let dataname = datalist.name;
+                                let datasort = datalist.sort||0;
+                                var datatitle = datasort+'-'+dataname+'-'+dataurl;
+                                var dataurl = datalist.parse;
+                            }
+                            updateItem(dataurl,{title:'‘‘’’<span style="color:red">'+datatitle})
+                            duoselect.push(dataurl);
+                        }
+                        storage0.putMyVar('duoselect',duoselect);
+                        return "toast://合计选择："+duoselect.length;
+                    }),
+                col_type: "scroll_button"
+            });
             d.push({
                 title: "批量删除",
                 url: $('#noLoading#').lazyRule(()=>{
@@ -1231,6 +1258,7 @@ function SRCSet() {
                                 deleteItemByCls('guanlidatalist');
                                 let gldatalist = guanlidata(lists);
                                 addItemBefore('guanliloading', gldatalist);
+                                storage0.putMyVar('datalist',lists);
                             }
                             return "hiker://empty";
                         },guanlidata,lists),
