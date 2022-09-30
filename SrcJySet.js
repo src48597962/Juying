@@ -1098,19 +1098,17 @@ function SRCSet() {
                         let duoselect = [];
                         for(let i=0;i<datalist.length;i++){
                             if(getMyVar('guanli', 'jk')=="jk"){
-                                let dataname = datalist.name;
-                                let datatype = datalist.type;
-                                let datagroup = datalist.group;
+                                let dataname = datalist[i].name;
+                                let datatype = datalist[i].type;
+                                let datagroup = datalist[i].group;
                                 var datatitle = dataname + ' ('+datatype+')' + (datagroup&&datagroup!=datatype?' [' + datagroup + ']':"");
-                                var dataurl = datalist.url;
+                                var dataurl = datalist[i].url;
                             }else{
-                                let dataname = datalist.name;
-                                let datasort = datalist.sort||0;
+                                let dataname = datalist[i].name;
+                                let datasort = datalist[i].sort||0;
                                 var datatitle = datasort+'-'+dataname+'-'+dataurl;
-                                var dataurl = datalist.parse;
+                                var dataurl = datalist[i].parse;
                             }
-                            log(dataurl)
-                            log(datatitle)
                             updateItem(dataurl,{title:'‘‘’’<span style="color:red">'+datatitle})
                             duoselect.push(dataurl);
                         }
