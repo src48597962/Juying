@@ -49,7 +49,12 @@ function SRCSet() {
                 writeFile(cfgfile, JSON.stringify(JYconfig));
             }
             //上面临时存放几个版本，将订阅id名称改一下
-            
+            if(JYconfig['Jydouli']){
+                JYconfig['zsjiekou'] = JYconfig['Jydouli'];
+                delete JYconfig['Jydouli'];
+                writeFile(cfgfile, JSON.stringify(JYconfig));
+            }
+            //上面临时存放几个版本，独立展示接口改个名
             var dingyuefilepath = "hiker://files/rules/Src/Juying/dingyue.json";
             var dingyuefile = fetch(dingyuefilepath);
             if(dingyuefile != ""){
