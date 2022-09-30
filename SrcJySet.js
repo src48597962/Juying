@@ -1732,85 +1732,95 @@ function jiexi(lx,data) {
                 onChange: 'putMyVar("parseurl",input)'
             }
         });
-        
+        function selectfrom(lx,oldfrom){
+            addListener("onClose", $.toString(() => {
+                clearMyVar('selectfrom');
+            }));
+            var d = [];
+            d.push({
+                title: lx=="prior"?'优先片源标识不为空时，优先级在上次优先之后':'排除对应片源后，解析将不再调用',
+                col_type: "rich_text"
+            });
+            d.push({
+                col_type: "line"
+            });
+            d.push({
+                title:lx=="prior"?'优先片源':'排除片源',
+                col_type: 'input',
+                desc: getMyVar('selectfrom',oldfrom),
+                extra: {
+                    titleVisible: false,
+                    defaultValue: getMyVar('selectfrom', oldfrom),
+                    onChange: 'putMyVar("selectfrom",input)'
+                }
+            });
+            d.push({
+                title: '选择对应的片源标识>',
+                col_type: "rich_text"
+            });
+            d.push({
+                col_type: "line_blank"
+            });
+            var recordfile = "hiker://files/rules/Src/Juying/parse.json";
+            var recordparse=fetch(recordfile);
+            if(recordparse!=""){
+                eval("var recordlist=" + recordparse+ ";");
+            }else{
+                var recordlist={};
+            }
+            var froms = recordlist.from || ['youku','mgtv','iqiyi','qq'];
+            for(var i in froms){
+                d.push({
+                    title:froms[i],
+                    col_type:'text_4',
+                    url: $('#noLoading#').lazyRule((from)=>{
+                            let selectfrom = getMyVar('selectfrom')?getMyVar('selectfrom','').replace(/,|，/g,",").split(','):[];
+                            if(selectfrom.indexOf(from)==-1){
+                                selectfrom.push(from);
+                                var sm = '选择片源>'+from;
+                            }else{
+                                function removeByValue(arr, val) {
+                                    for(var i = 0; i < arr.length; i++) {
+                                        if(arr[i] == val) {
+                                        arr.splice(i, 1);
+                                        break;
+                                        }
+                                    }
+                                }
+                                removeByValue(selectfrom,from);
+                                var sm = '删除片源>'+from;
+                            }
+                            putMyVar('selectfrom',selectfrom.join(','));
+                            refreshPage(false);
+                            return 'toast://'+sm;
+                    }, froms[i])
+                })
+            }
+            d.push({
+                col_type: "line_blank"
+            });
+            d.push({
+                title:'选择好了，点此返回',
+                col_type:'text_center_1',
+                url: $('#noLoading#').lazyRule((lx)=>{
+                    if(lx=="prior"){
+                        putMyVar('priorfrom',getMyVar('selectfrom',''));
+                    }else{
+                        putMyVar('stopfrom',getMyVar('selectfrom',''));
+                    }
+                    back(true);
+                    return "hiker://empty";
+                },lx)
+            });
+            setHomeResult(d);
+        }
         let priorfrom = getMyVar('priorfrom', data&&data.priorfrom?data.priorfrom:"");
         d.push({
             title:'优先片源：' + priorfrom,
             col_type: 'text_1',
-            url:$('hiker://empty#noRecordHistory##noHistory#').rule((priorfrom) => {
-                var d = [];
-                d.push({
-                    title: '优先片源标识不为空时，优先级在上次优先之后',
-                    col_type: "rich_text"
-                });
-                d.push({
-                    col_type: "line"
-                });
-                d.push({
-                    title:'优先片源',
-                    col_type: 'input',
-                    desc: getMyVar('priorfrom',''),
-                    extra: {
-                        titleVisible: false,
-                        defaultValue: getMyVar('priorfrom', priorfrom),
-                        onChange: 'putMyVar("priorfrom",input)'
-                    }
-                });
-                d.push({
-                    title: '选择需要优先的片源标识>',
-                    col_type: "rich_text"
-                });
-                d.push({
-                    col_type: "line_blank"
-                });
-                var recordfile = "hiker://files/rules/Src/Juying/parse.json";
-                var recordparse=fetch(recordfile);
-                if(recordparse!=""){
-                    eval("var recordlist=" + recordparse+ ";");
-                }else{
-                    var recordlist={};
-                }
-                var froms = recordlist.from || ['youku','mgtv','iqiyi','qq'];
-                for(var i in froms){
-                    d.push({
-                        title:froms[i],
-                        col_type:'text_4',
-                        url: $('#noLoading#').lazyRule((from)=>{
-                                let priorfrom = getMyVar('priorfrom','')?getMyVar('priorfrom','').replace(/,|，/g,",").split(','):[];
-                                if(priorfrom.indexOf(from)==-1){
-                                    priorfrom.push(from);
-                                    var sm = '选择优先>'+from;
-                                }else{
-                                    function removeByValue(arr, val) {
-                                        for(var i = 0; i < arr.length; i++) {
-                                            if(arr[i] == val) {
-                                            arr.splice(i, 1);
-                                            break;
-                                            }
-                                        }
-                                    }
-                                    removeByValue(priorfrom,from);
-                                    var sm = '删除优先>'+from;
-                                }
-                                putMyVar('priorfrom',priorfrom.join(','));
-                                refreshPage(false);
-                                return 'toast://'+sm;
-                        }, froms[i])
-                    })
-                }
-                d.push({
-                    col_type: "line_blank"
-                });
-                d.push({
-                    title:'选择好了，点此返回',
-                    col_type:'text_center_1',
-                    url: $('#noLoading#').lazyRule(()=>{
-                        back(true);
-                        return "hiker://empty";
-                    })
-                });
-                setHomeResult(d);
-            },priorfrom)
+            url:$('hiker://empty#noRecordHistory##noHistory#').rule((selectfrom,lx,oldfrom) => {
+                selectfrom(lx,oldfrom);
+            },selectfrom,'prior',priorfrom)
         });
         let stopfrom = getMyVar('stopfrom', lx=="update"?data.stopfrom:"");
         d.push({
