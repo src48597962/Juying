@@ -1771,7 +1771,7 @@ function jiexi(lx,data) {
             var froms = recordlist.from || ['youku','mgtv','iqiyi','qq'];
             for(var i in froms){
                 d.push({
-                    title:getMyVar('selectfrom','').indexOf(froms[i])>-1?'‘‘’’<span style="color:red">'+froms[i]:froms[i],
+                    title:getMyVar('selectfrom',oldfrom).indexOf(froms[i])>-1?'‘‘’’<span style="color:red">'+froms[i]:froms[i],
                     col_type:'text_4',
                     url: $('#noLoading#').lazyRule((from)=>{
                             let selectfrom = getMyVar('selectfrom')?getMyVar('selectfrom','').replace(/,|，/g,",").split(','):[];
