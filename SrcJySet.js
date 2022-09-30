@@ -40,6 +40,16 @@ function SRCSet() {
                 var JYconfig= {};
             }
             //临时保存几个版本，以后删除
+            if(JYconfig['codeid2']){
+                JYconfig['codedyid'] = JYconfig['codeid2'];
+                delete JYconfig['codeid2'];
+                let dyname = JYconfig['codedyname'];
+                JYconfig['codedyname'] = dyname;
+                delete JYconfig['codedyname'];
+                writeFile(cfgfile, JSON.stringify(JYconfig));
+            }
+            //上面临时存放几个版本，将订阅id名称改一下
+            
             var dingyuefilepath = "hiker://files/rules/Src/Juying/dingyue.json";
             var dingyuefile = fetch(dingyuefilepath);
             if(dingyuefile != ""){
@@ -58,12 +68,7 @@ function SRCSet() {
                 }
             }
             //上面的代码是将订阅历史迁移合并到config中
-            if(JYconfig['codeid2']){
-                JYconfig['codedyid'] = JYconfig['codeid2'];
-                delete JYconfig['codeid2'];
-                writeFile(cfgfile, JSON.stringify(JYconfig));
-            }
-            //上面临时存放几个版本，将订阅id名称改一下
+            
             d.push({
                 title: '聚影分享',
                 col_type: "rich_text"
