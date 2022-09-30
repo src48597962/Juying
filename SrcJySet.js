@@ -860,7 +860,7 @@ function SRCSet() {
                             refreshPage(false);
                             return "toast://已删除";
                         }, dataurl,filepath):getMyVar('guanlicz')=="4"?$('#noLoading#').lazyRule((datatitle,dataurl)=>{
-                            let duoselect = getMyVar('duoselect')?storage0.getMyVar('duoselect'):[];
+                            let duoselect = storage0.getMyVar('duoselect')?storage0.getMyVar('duoselect'):[];
                             if(duoselect.indexOf(dataurl)==-1){
                                 duoselect.push(dataurl);
                                 updateItem(dataurl,{title:'‘‘’’<span style="color:red">'+datatitle})
@@ -877,7 +877,6 @@ function SRCSet() {
                                 updateItem(dataurl,{title:datatitle})
                             }
                             storage0.putMyVar('duoselect',duoselect);
-                            log(storage0.getMyVar('duoselect'))
                             return "hiker://empty";
                         }, datatitle,dataurl):"toast://功能异常",
                     col_type: 'text_1',
@@ -1014,7 +1013,7 @@ function SRCSet() {
                 var datafile = fetch(filepath);
                 eval("var datalist=" + datafile+ ";");
                 var sm2 = "聚影分享口令已生成";
-                let duoselect = getMyVar('duoselect','')?getMyVar('duoselect','').split(','):[];
+                let duoselect = storage0.getMyVar('duoselect')?storage0.getMyVar('duoselect'):[];
                 if(duoselect.length>0){
                     var lists = datalist.filter(item => {
                         if(item.url){
@@ -1026,7 +1025,7 @@ function SRCSet() {
                     if(lists.length>0){
                         var datalist = lists;
                         sm2 = "(选定)聚影分享口令已生成";
-                        clearMyVar('duoselect');
+                        //clearMyVar('duoselect');
                     }
                 }
                 
@@ -1094,7 +1093,7 @@ function SRCSet() {
             d.push({
                 title: "批量删除",
                 url: $('#noLoading#').lazyRule(()=>{
-                        let duoselect = getMyVar('duoselect','')?getMyVar('duoselect','').split(','):[];
+                        let duoselect = storage0.getMyVar('duoselect')?storage0.getMyVar('duoselect'):[];
                         if(duoselect.length>0){
                             if(getMyVar('guanli', 'jk')=="jk"){
                                 var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
@@ -1126,7 +1125,7 @@ function SRCSet() {
                 d.push({
                     title: "调整分组",
                     url: $('#noLoading#').lazyRule(()=>{
-                            let duoselect = getMyVar('duoselect','')?getMyVar('duoselect','').split(','):[];
+                            let duoselect = storage0.getMyVar('duoselect')?storage0.getMyVar('duoselect'):[];
                             if(duoselect.length>0){
                                 return $("","选定的"+duoselect.length+"个接口新分组名").input((duoselect)=>{
                                     var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
@@ -1156,7 +1155,7 @@ function SRCSet() {
                 d.push({
                     title: "重置排除",
                     url: $('#noLoading#').lazyRule(()=>{
-                            let duoselect = getMyVar('duoselect','')?getMyVar('duoselect','').split(','):[];
+                            let duoselect = storage0.getMyVar('duoselect')?storage0.getMyVar('duoselect'):[];
                             if(duoselect.length>0){
                                 return $("确定重置选定的"+duoselect.length+"个解析排除片源记录吗？").confirm((duoselect)=>{
                                     var filepath = "hiker://files/rules/Src/Juying/myjiexi.json";
@@ -1372,7 +1371,7 @@ function jiexisave(urls,update) {
             }
             
             function checkitem(item) {
-                return item.parse==urlurl;
+                return item.parse==urlurl||item.name==urlname;
             }
 
             if(!datalist.some(checkitem)&&urlname&&/^http|^functio/.test(urlurl)){
