@@ -1826,11 +1826,14 @@ function jiexi(lx,data) {
         d.push({
             title:'排除片源：' + stopfrom,
             col_type: 'text_1',
-            url:$(stopfrom,"输入排除的片源标识，以逗号隔开，为空则自动管理").input(()=>{
+            url: $('hiker://empty#noRecordHistory##noHistory#').rule((selectfrom,lx,oldfrom) => {
+                selectfrom(lx,oldfrom);
+            },selectfrom,'stop',stopfrom)
+            /*$(stopfrom,"输入排除的片源标识，以逗号隔开，为空则自动管理").input(()=>{
                 putMyVar('stopfrom', input);
                 refreshPage(false);
                 return "toast://"+input;
-            })
+            })*/
         });
         let parseheader = getMyVar('parseheader', lx=="update"&&data.header?JSON.stringify(data.header):"");
         d.push({
