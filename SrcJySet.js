@@ -1177,6 +1177,31 @@ function SRCSet() {
                     col_type: "scroll_button"
                 });
             }
+            d.push({
+                    title: "重置排序",
+                    url: $('#noLoading#').lazyRule(()=>{
+                            let duoselect = storage0.getMyVar('duoselect')?storage0.getMyVar('duoselect'):[];
+                            if(duoselect.length>0){
+                                return $("确定重置选定的"+duoselect.length+"个解析失败排序记录吗？").confirm((duoselect)=>{
+                                    var filepath = "hiker://files/rules/Src/Juying/myjiexi.json";
+                                    var datafile = fetch(filepath);
+                                    eval("var datalist=" + datafile+ ";");
+                                    for(var i=0;i<datalist.length;i++){
+                                        if(duoselect.indexOf(datalist[i].parse)>-1){
+                                            datalist[i].sort = 0;
+                                        }
+                                    }
+                                    writeFile(filepath, JSON.stringify(datalist));
+                                    refreshPage(false);
+                                    return "toast://已批量重置选定解析的排除片源记录";
+                                }, duoselect)
+                            }else{
+                                return "toast://请选择";
+                            }
+                        }),
+                    col_type: "scroll_button"
+                });
+            }
         }
         if(getMyVar('guanli', 'jk')=="jk"){
             d.push({
