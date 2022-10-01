@@ -1091,7 +1091,7 @@ var SrcParseS = {
                         log('进入嗅探解析列表：' + x5namelist)
                     }
                     
-                    if(JYconfig.superweb==0&x5jxlist.length>0){
+                    if(JYconfig.superweb==1&x5jxlist.length>0){
                         if(printlog==1){log('开启播放器超级嗅探模式')}
                         let weburls = x5jxlist.map(item => "video://" + item +vipUrl);
                         return JSON.stringify({
