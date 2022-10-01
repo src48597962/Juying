@@ -368,7 +368,7 @@ function xunmi(name,data,ishkss) {
                                         desc: !ishkss?(voddesc + '\n\n' + appname):'聚影√ · '+obj.name,
                                         content: voddesc,
                                         pic_url: vodpic,
-                                        url: $("hiker://empty##" + vodurl + "#immersiveTheme#").rule((type,ua) => {
+                                        url: $("hiker://empty##" + vodurl + "#immersiveTheme##autoCache#").rule((type,ua) => {
                                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
                                                 xunmierji(type,ua)
                                             },obj.type, urlua),
@@ -487,7 +487,7 @@ function xunmi(name,data,ishkss) {
                                     desc: !ishkss?(voddesc + '\n\n' + appname):'聚影√ · '+obj.name,
                                     content: voddesc,
                                     pic_url: vodpic?vodpic + "@Referer=":"https://www.xawqxh.net/mxtheme/images/loading.gif",
-                                    url: $("hiker://empty##" + vodurl + "#immersiveTheme#").rule((type,ua) => {
+                                    url: $("hiker://empty##" + vodurl + "#immersiveTheme##autoCache#").rule((type,ua) => {
                                             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
                                             xunmierji(type,ua)
                                         },obj.type, urlua),
