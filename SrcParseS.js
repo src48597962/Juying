@@ -599,6 +599,29 @@ var SrcParseS = {
                 var myJX=fetch(myJXfile);
                 if(myJX != ""){
                     eval("var myJXlist=" + myJX+ ";");
+                    if(myJXlist.length==0){
+                        try{
+                            let jxnum = 0;
+                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                            let jiexis = fetch(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'jiexi.txt',{timeout:2000});
+                            if(jiexis){
+                                let jiexi = jiexis.split('\n');
+                                let urls = [];
+                                for (let i=0;i<jiexi.length;i++) {
+                                    if(/^http/.test(jiexi[i].split(',')[1])){
+                                        let arr  = { "name":jiexi[i].split(',')[0], "parse":jiexi[i].split(',')[1], "stopfrom":[], "priorfrom":[], "sort":1, "web":1 };
+                                        urls.push(arr);
+                                    }
+                                }
+                                jxnum = jiexisave(urls);
+                            }
+                            if(jxnum>0){
+                                myJXlist = urls;
+                                if(printlog==1){log("自动导入解析："+jxnum)}
+                            }
+                        } catch (e) { }
+                        if(MY_NAME=="海阔视界"&&getAppVersion()>=3369&&JYconfig.superweb!=0){JYconfig.superweb=1};
+                    }
                     var myjxnum = 0;
                     for(var j=0;j<myJXlist.length;j++){
                         let priorfrom = myJXlist[j].priorfrom || [];
