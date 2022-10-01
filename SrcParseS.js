@@ -620,7 +620,7 @@ var SrcParseS = {
                                 if(printlog==1){log("自动导入解析："+jxnum)}
                             }
                         } catch (e) { }
-                        if(MY_NAME=="海阔视界"&&getAppVersion()>=3369&&JYconfig.superweb!=0){JYconfig.superweb=1};
+                        //if(MY_NAME=="海阔视界"&&getAppVersion()>=3369&&JYconfig.superweb!=0){JYconfig.superweb=1};
                     }
                     var myjxnum = 0;
                     for(var j=0;j<myJXlist.length;j++){
