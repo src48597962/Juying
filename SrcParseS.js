@@ -620,7 +620,6 @@ var SrcParseS = {
                                 if(printlog==1){log("自动导入解析："+jxnum)}
                             }
                         } catch (e) { }
-                        //if(MY_NAME=="海阔视界"&&getAppVersion()>=3369&&JYconfig.superweb!=0){JYconfig.superweb=1};
                     }
                     var myjxnum = 0;
                     for(var j=0;j<myJXlist.length;j++){
@@ -1089,7 +1088,8 @@ var SrcParseS = {
                     if(printlog==1&&x5namelist.length>0){
                         log('进入嗅探解析列表：' + x5namelist)
                     }
-                    if(JYconfig.superweb==1&x5jxlist.length>0){
+                    
+                    if(MY_NAME=="海阔视界"&&getAppVersion()>=3369&&JYconfig.superweb!=0&x5jxlist.length>0){
                         if(printlog==1){log('开启播放器超级嗅探模式')}
                         let weburls = x5jxlist.map(item => "video://" + item +vipUrl);
                         return JSON.stringify({
