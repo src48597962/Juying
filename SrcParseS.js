@@ -800,7 +800,7 @@ var SrcParseS = {
             }
             var iscalldn = 0;
             var isrecord = 0;
-
+            if(MY_NAME=="海阔视界"&&getAppVersion()>=3369&&JYconfig.superweb!=0){JYconfig.superweb=1;}
             if(playurl==""&&!parseStr){
                 if(Wparselist.length > 0){
                     Wparselist.sort((a, b) => {
@@ -828,6 +828,8 @@ var SrcParseS = {
                         Uparselist.push({type:'dn',name:'断插'});
                         iscalldn = 1;
                     }
+                }else{
+                    Uparselist = [];
                 }
             }
             
@@ -1089,7 +1091,7 @@ var SrcParseS = {
                         log('进入嗅探解析列表：' + x5namelist)
                     }
                     
-                    if(MY_NAME=="海阔视界"&&getAppVersion()>=3369&&JYconfig.superweb!=0&x5jxlist.length>0){
+                    if(JYconfig.superweb==0&x5jxlist.length>0){
                         if(printlog==1){log('开启播放器超级嗅探模式')}
                         let weburls = x5jxlist.map(item => "video://" + item +vipUrl);
                         return JSON.stringify({
