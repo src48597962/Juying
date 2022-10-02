@@ -528,7 +528,7 @@ function erji() {
                                 d.push({
                                     title: list[j].index + '',
                                     url: url + easy,
-                                    extra: { id: MY_URL+j, jsLoadingInject: true, blockRules: block },
+                                    extra: { id: MY_URL.replace('#autoCache#','')+j, jsLoadingInject: true, blockRules: block },
                                     col_type: 'text_4'
                                 });
                             }
@@ -544,7 +544,7 @@ function erji() {
                                 d.push({
                                     title: list[j].index + '',
                                     url: url + easy,
-                                    extra: { id: MY_URL+j, jsLoadingInject: true, blockRules: block },
+                                    extra: { id: MY_URL.replace('#autoCache#','')+j, jsLoadingInject: true, blockRules: block },
                                     col_type: 'text_4'
                                 });
                             }
@@ -583,7 +583,7 @@ function erji() {
                     col_type: "text_2",
                     url: url + easy,
                     extra: {
-                        id: MY_URL+k, jsLoadingInject: true, blockRules: block
+                        id: MY_URL.replace('#autoCache#','')+k, jsLoadingInject: true, blockRules: block
                     }
                 });
             }
@@ -598,7 +598,7 @@ function erji() {
                     img: 'http://dlweb.sogoucdn.com/video/wap/static/img/logo/' + plays[m].sitename[1],
                     url: url + easy,
                     col_type: "icon_2",
-                    extra: { id: MY_URL, jsLoadingInject: true, blockRules: block },
+                    extra: { id: MY_URL.replace('#autoCache#',''), jsLoadingInject: true, blockRules: block },
                 })
             }
         }
