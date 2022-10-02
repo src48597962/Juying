@@ -800,7 +800,6 @@ var SrcParseS = {
             }
             var iscalldn = 0;
             var isrecord = 0;
-            if(MY_NAME=="海阔视界"&&getAppVersion()>=3369&&JYconfig.superweb!=0){JYconfig.superweb=1;}
             if(playurl==""&&!parseStr){
                 if(Wparselist.length > 0){
                     Wparselist.sort((a, b) => {
