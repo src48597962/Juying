@@ -397,7 +397,6 @@ var erjimenu = [
                     col_type: "text_3"
                 });
                 if(MY_NAME=="海阔视界"&&getAppVersion()>=3369){
-                    if(JYconfig.superweb!=0){JYconfig.superweb=1;}
                     d.push({
                         col_type: "line"
                     });
