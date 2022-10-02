@@ -1116,13 +1116,13 @@ function SRCSet() {
                                 let dataname = datalist[i].name;
                                 let datatype = datalist[i].type;
                                 let datagroup = datalist[i].group;
-                                var datatitle = dataname + ' ('+datatype+')' + (datagroup&&datagroup!=datatype?' [' + datagroup + ']':"");
                                 var dataurl = datalist[i].url;
+                                var datatitle = dataname + ' ('+datatype+')' + (datagroup&&datagroup!=datatype?' [' + datagroup + ']':"");
                             }else{
                                 let dataname = datalist[i].name;
                                 let datasort = datalist[i].sort||0;
-                                var datatitle = datasort+'-'+dataname+'-'+dataurl;
                                 var dataurl = datalist[i].parse;
+                                var datatitle = datasort+'-'+dataname+'-'+dataurl;
                             }
                             updateItem(dataurl,{title:'‘‘’’<span style="color:red">'+datatitle})
                             duoselect.push(dataurl);
