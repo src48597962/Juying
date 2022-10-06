@@ -23,6 +23,7 @@ function xunmi(name,data,ishkss) {
             putMyVar('xunminum',JYconfig['xunminum']?JYconfig['xunminum']:"10");
             putMyVar('xunmitimeout',JYconfig['xunmitimeout']?JYconfig['xunmitimeout']:"5");
             putMyVar('failnum',JYconfig['failnum']?JYconfig['failnum']:"10");
+            if(JYconfig.cachem3u8==1&&JYconfig.superweb==1){putMyVar('superwebcachem3u8','1')}else{clearMyVar('superwebcachem3u8')}
         }
         var xunmigroup = JYconfig.xunmigroup&&JYconfig.xunmigroup!="全部"?JYconfig.xunmigroup:"";
     }catch(e){}
