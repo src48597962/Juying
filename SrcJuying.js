@@ -938,6 +938,7 @@ function sousuo() {
     if(!fileExist('hiker://files/rules/Src/Juying/jiekou.json')||JYconfig.sousuoms==1){
         var d = [];
         var html = getResCode();
+        log(html)
         try {
             var list = JSON.parse(html.match(/INITIAL_STATE.*?({.*});/)[1]).result.longVideo.results;
             for (var i = 0; i < list.length; i++) {
