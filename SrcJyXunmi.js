@@ -782,15 +782,6 @@ function xunmierji(type,ua) {
             } catch (e) {
                 var html = "";
             }
-            try{
-                var cfgfile = "hiker://files/rules/Src/Juying/config.json";
-                var Juyingcfg=fetch(cfgfile);
-                if(Juyingcfg != ""){
-                    eval("var JYconfig=" + Juyingcfg+ ";");
-                }
-                let iscachem3u8 = JYconfig.cachem3u8==0?0:1;
-                putMyVar('SrcM3U8',iscachem3u8);
-            }catch(e){}
         } else {
             //后续网页类
         }
@@ -799,6 +790,18 @@ function xunmierji(type,ua) {
     } else {
         var zt = 0;
     }
+    if(!getMyVar('SrcM3U8')||!getMyVar('superwebM3U8')){
+        try{
+            var cfgfile = "hiker://files/rules/Src/Juying/config.json";
+            var Juyingcfg=fetch(cfgfile);
+            if(Juyingcfg != ""){
+                eval("var JYconfig=" + Juyingcfg+ ";");
+            }
+            putMyVar('SrcM3U8',JYconfig.cachem3u8==0?'0':'1');
+            putMyVar('superwebM3U8',JYconfig.cachem3u8==1&&JYconfig.superweb==1?'1':'0');
+        }catch(e){}
+    }
+        
     //影片详情
     if (zt == 1) {
         var dqnf = "";
@@ -1211,7 +1214,7 @@ function xunmierji(type,ua) {
                 d.push({
                     title: playtitle.replace(/第|集|话|期|-/g, ''),
                     url: playurl + DTJX,
-                    extra: { id: playurl, referer: playurl, jsLoadingInject: true, blockRules: ['.m4a','.mp3','.flv','.avi','.mpeg','.wmv','.mov','.rmvb','.gif','.jpeg','.png','hm.baidu.com','/ads/*.js','cnzz.com','.css'] },
+                    extra: { id: playurl, referer: playurl, jsLoadingInject: true, cacheM3u8: getMyVar('superwebM3U8')==1?true:false, blockRules: ['.m4a','.mp3','.flv','.avi','.mpeg','.wmv','.mov','.rmvb','.gif','.jpeg','.png','hm.baidu.com','/ads/*.js','cnzz.com','.css'] },
                     col_type: list.length > 4 && len < 7 ? 'text_4' : 'text_3'
                 });
             } else {
