@@ -126,7 +126,7 @@ var erjimenu = [
                 }else{
                     var JYconfig= {};
                 }
-                putMyVar('superwebM3U8',JYconfig.cachem3u8==1&&JYconfig.superweb==1?'1':'0');
+                putMyVar('superwebM3U8',JYconfig.cachem3u8!=0&&JYconfig.superweb==1?'1':'0');
                 d.push({
                     title: '功能开关',
                     col_type: "rich_text"
