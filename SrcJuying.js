@@ -349,7 +349,7 @@ function erji() {
     }));
     clearMyVar('SrcJy$back');
     var d = [];
-    var html = fetch(MY_URL.split('##')[1]);
+    var html = request(MY_URL.split('##')[1]);
     var json = JSON.parse(html.match(/INITIAL_STATE.*?({.*});/)[1]).detail.itemData;
     var plays = json.play.item_list;
     //log(plays);
