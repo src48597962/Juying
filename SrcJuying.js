@@ -582,9 +582,7 @@ function erji() {
                     title: "第" + arr[k] + "期",
                     col_type: "text_2",
                     url: url + easy,
-                    extra: {
-                        id: MY_URL.replace('#autoCache#','')+k, jsLoadingInject: true, blockRules: block
-                    }
+                    extra: { id: MY_URL.replace('#autoCache#','')+k, jsLoadingInject: true, blockRules: block  }
                 });
             }
         } else if (plays.length==0) {
