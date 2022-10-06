@@ -509,7 +509,7 @@ function erji() {
             if(Juyingcfg != ""){
                 eval("var JYconfig=" + Juyingcfg+ ";");
             }
-            putMyVar('superwebM3U8',JYconfig.cachem3u8==1&&JYconfig.superweb==1?'1':'0');
+            putMyVar('superwebM3U8',JYconfig.cachem3u8!=0&&JYconfig.superweb==1?'1':'0');
         }catch(e){}
     }
     var block = ['.m4a','.mp3','.flv','.avi','.3gp','.mpeg','.wmv','.mov','.rmvb','.gif','.jpg','.jpeg','.png','hm.baidu.com','/ads/*.js','.css'];
