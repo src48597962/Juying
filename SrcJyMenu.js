@@ -396,7 +396,7 @@ var erjimenu = [
                         }, JYconfig, cfgfile),
                     col_type: "text_3"
                 });
-                if(MY_NAME=="海阔视界"&&getAppVersion()>=3369){
+                if((MY_NAME=="海阔视界"&&getAppVersion()>=3369)||(MY_NAME=="嗅觉浏览器"&&getAppVersion()>=798)){
                     d.push({
                         col_type: "line"
                     });
