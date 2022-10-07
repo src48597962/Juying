@@ -69,9 +69,7 @@ var erjimenu = [
                                 setPageTitle("断插配置");
                                 this.d = [];
                                 eval(fetch('hiker://files/cache/fileLinksᴰⁿ.txt'));
-                                if (!getVar('jxItemV')) {
-                                    require(fLinks.jxItUrl);
-                                }
+                                
                                 d.push({
                                     desc: 'auto',
                                     url: fLinks.x5Route + 'Parse_Dn.html',
