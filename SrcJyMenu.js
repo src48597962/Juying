@@ -329,12 +329,12 @@ var erjimenu = [
                 });
                 d.push({
                     title: '🍧断插配置',
-                    url: fileExist('hiker://files/cache/fileLinksᴰⁿ.txt') ? setupPages("设置") : "hiker://page/Route?rule=MyFieldᴰⁿ&type=设置#noHistory#",
+                    url: fetch('hiker://files/cache/Parse_Dn.js').indexOf('updateDate')==-1 ? setupPages("设置") : "hiker://page/Route?rule=MyFieldᴰⁿ&type=设置#noHistory#",
                     col_type: "text_3"
                 });
                 d.push({
                     title: '🍦解析管理',
-                    url: fileExist('hiker://files/cache/fileLinksᴰⁿ.txt') ? setupPages("编辑") : "hiker://page/Route?rule=MyFieldᴰⁿ&type=编辑#noRecordHistory#",
+                    url: fetch('hiker://files/cache/Parse_Dn.js').indexOf('updateDate')==-1 ? setupPages("编辑") : "hiker://page/Route?rule=MyFieldᴰⁿ&type=编辑#noRecordHistory#",
                     col_type: "text_3"
                 });
                 d.push({
