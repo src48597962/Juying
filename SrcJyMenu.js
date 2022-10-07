@@ -80,9 +80,8 @@ var erjimenu = [
                             return $("hiker://empty#noRecordHistory#").rule(() => {
                                 setPageTitle("解析管理");
                                 this.d = [];
-                                //eval(fetch('hiker://files/cache/fileLinksᴰⁿ.txt'));
                                 require('https://hikerfans.com/js/jxItem.js');
-                                jxItem.jxList();
+                                jxList();
                                 setResult(d);
                             })
                             break;
