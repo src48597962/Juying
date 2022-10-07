@@ -77,9 +77,6 @@ var erjimenu = [
                                     url: fLinks.x5Route + 'Parse_Dn.html',
                                     col_type: 'x5_webview_single'
                                 });
-                                var jxItNewV = getVar('jxItNewV', ''),
-                                    jxItemV = getVar('jxItemV', '');
-                                var versionTips = jxItNewV == '' ? '‘‘' : '‘‘' + jxItNewV + '\n';
                                 
                                 setResult(d);
                             })
