@@ -68,14 +68,11 @@ var erjimenu = [
                             return $("hiker://empty#noRecordHistory#").rule(() => {
                                 setPageTitle("断插配置");
                                 this.d = [];
-                                eval(fetch('hiker://files/cache/fileLinksᴰⁿ.txt'));
-                                
                                 d.push({
                                     desc: 'auto',
-                                    url: fLinks.x5Route + 'Parse_Dn.html',
+                                    url: 'file:///storage/emulated/0/Android/data/com.example.hikerview/files/Documents/cache/Parse_Dn.html',
                                     col_type: 'x5_webview_single'
                                 });
-                                
                                 setResult(d);
                             })
                             break;
