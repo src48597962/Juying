@@ -67,6 +67,7 @@ var erjimenu = [
                         case "设置":
                             return $("hiker://empty#noRecordHistory#").rule(() => {
                                 setPageTitle("断插配置");
+                                eval(fetch('hiker://files/cache/fileLinksᴰⁿ.txt'));
                                 this.d = [];
                                 d.push({
                                     desc: 'auto',
