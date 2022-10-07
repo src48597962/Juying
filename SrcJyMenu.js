@@ -67,12 +67,37 @@ var erjimenu = [
                         case "设置":
                             return $("hiker://empty#noRecordHistory#").rule(() => {
                                 setPageTitle("断插配置");
-                                eval(fetch('hiker://files/cache/fileLinksᴰⁿ.txt'));
                                 this.d = [];
+                                eval(fetch('hiker://files/cache/fileLinksᴰⁿ.txt'));
+                                if (!getVar('jxItemV')) {
+                                    require(fLinks.jxItUrl);
+                                }
                                 d.push({
                                     desc: 'auto',
-                                    url: 'hiker://files/cache/Parse_Dn.html',
+                                    url: fLinks.x5Route + 'Parse_Dn.html',
                                     col_type: 'x5_webview_single'
+                                });
+                                var jxItNewV = getVar('jxItNewV', ''),
+                                    jxItemV = getVar('jxItemV', '');
+                                var versionTips = jxItNewV == '' ? '‘‘' : '‘‘' + jxItNewV + '\n';
+                                var pics = [
+                                    'https://tva1.sinaimg.cn/large/9bd9b167gy1fwri56wjhqj21hc0u0arr.jpg',
+                                    'https://cdn.seovx.com/img/seovx-20-10%20(92).jpg',
+                                    'https://cdn.seovx.com/img/mom2018%20(207).jpg',
+                                    'https://tva4.sinaimg.cn/large/9bd9b167gy1fwrh5xoltdj21hc0u0tax.jpg',
+                                    'https://tva1.sinaimg.cn/large/005BYqpggy1fwreyu4nl6j31hc0u0ahr.jpg',
+                                    'https://s3.bmp.ovh/imgs/2021/10/d7e60b990742093d.jpeg',
+                                    'https://s3.bmp.ovh/imgs/2021/10/91ad6d6538bf8689.jpg',
+                                    'https://tva1.sinaimg.cn/large/005BYqpggy1fwresl5pmlj31hc0xcwka.jpg',
+                                    'https://tva3.sinaimg.cn/large/005BYqpggy1fwrgjdk74oj31hc0u0dqn.jpg',
+                                    'https://cdn.seovx.com/img/mom2018%20(803).jpg'
+                                ];
+                                d.push({
+                                    img: pics[Math.floor(Math.random() * 10)],
+                                    title: versionTips + '’’<small><span style="color:#6EB897">　　点击此处查看操作指引<br>点击上方头像进入编辑',
+                                    desc: '当前版本: ' + jxItemV,
+                                    url: fLinks.czzy,
+                                    col_type: 'movie_1'
                                 });
                                 setResult(d);
                             })
