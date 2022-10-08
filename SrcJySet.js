@@ -1533,7 +1533,7 @@ function jiekou(lx,data) {
                     highlight: true,
                     defaultValue: data&&data.data?JSON.stringify(data.data, null, "\t"):getMyVar('apidata', ''),
                     type: "textarea",
-                    height: 8,
+                    height: 6,
                     onChange: 'putMyVar("apidata",JSON.stringify(JSON.parse(input)))'
                 }
             });
