@@ -1531,9 +1531,9 @@ function jiekou(lx,data) {
                 extra: {
                     titleVisible: false,
                     highlight: true,
-                    defaultValue: getMyVar('apidata', data&&data.data?data.data:"")?JSON.stringify(getMyVar('apidata', data&&data.data?data.data:""), null, "\t"):"",
+                    defaultValue: getMyVar('apidata', data&&data.data?data.data:""),
                     type: "textarea",
-                    height: 6,
+                    height: 5,
                     onChange: 'putMyVar("apidata",JSON.stringify(JSON.parse(input)))'
                 }
             });
@@ -1565,7 +1565,6 @@ function jiekou(lx,data) {
             }
         });
     }
-    
     d.push({
         title: 'User-Agent：'+getMyVar('apiua','Dalvik/2.1.0'),
         col_type:'text_1',
