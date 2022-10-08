@@ -1552,21 +1552,6 @@ function jiekou(lx,data) {
                 return'toast://已选择类型：' + input;
             })
         });
-        if(lx=="update"){
-            d.push({
-                title: getMyVar('isSaveAs', '')!="1"?'保存方式：覆盖':'保存方式：另存',
-                col_type:'text_1',
-                url:$('#noLoading#').lazyRule(()=>{
-                    if(getMyVar('isSaveAs', '')!="1"){
-                        putMyVar('isSaveAs', '1');
-                    }else{
-                        clearMyVar('isSaveAs');
-                    }
-                    refreshPage(false);
-                    return 'toast://已切换';
-                })
-            });
-        }
     }else{
         d.push({
             title:'批量添加',
@@ -1607,6 +1592,21 @@ function jiekou(lx,data) {
             return "toast://"+input;
         })
     });
+    if(lx=="update"){
+        d.push({
+            title: getMyVar('isSaveAs', '')!="1"?'保存方式：覆盖':'保存方式：另存',
+            col_type:'text_1',
+            url:$('#noLoading#').lazyRule(()=>{
+                if(getMyVar('isSaveAs', '')!="1"){
+                    putMyVar('isSaveAs', '1');
+                }else{
+                    clearMyVar('isSaveAs');
+                }
+                refreshPage(false);
+                return 'toast://已切换';
+            })
+        });
+    }
     for (let i = 0; i < 10; i++) {
         d.push({
             col_type: "blank_block"
@@ -1762,6 +1762,11 @@ function jiekou(lx,data) {
             } 
         }, lx, data)
     });
+    for (let i = 0; i < 10; i++) {
+        d.push({
+            col_type: "blank_block"
+        })
+    }
     setHomeResult(d);
 }
 
