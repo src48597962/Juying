@@ -1471,6 +1471,7 @@ function jiekou(lx,data) {
         clearMyVar('isload');
         clearMyVar('apigroup');
         clearMyVar('apidata');
+        clearMyVar('isSaveAs');
     }));
 
     var d = [];
@@ -1551,6 +1552,21 @@ function jiekou(lx,data) {
                 return'toast://已选择类型：' + input;
             })
         });
+        if(lx=="update"){
+            d.push({
+                title: getMyVar('isSaveAs', '')!="1"?'保存方式：覆盖':'保存方式：另存',
+                col_type:'text_1',
+                url:$('#noLoading#').lazyRule(()=>{
+                    if(getMyVar('isSaveAs', '')!="1"){
+                        putMyVar('isSaveAs', '1');
+                    }else{
+                        clearMyVar('isSaveAs');
+                    }
+                    refreshPage(false);
+                    return 'toast://已切换';
+                })
+            });
+        }
     }else{
         d.push({
             title:'批量添加',
@@ -1727,6 +1743,9 @@ function jiekou(lx,data) {
             if(urls.length==0){
                     return'toast://失败>无数据';
             }else{
+                if(getMyVar('isSaveAs','')=="1"){
+                    isupdate = 0;
+                }
                 var jknum = jiekousave(urls, isupdate);
                 if(jknum<0){
                     return'toast://失败>内容异常';
