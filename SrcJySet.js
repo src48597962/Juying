@@ -1531,7 +1531,7 @@ function jiekou(lx,data) {
                 extra: {
                     titleVisible: false,
                     highlight: true,
-                    defaultValue: data&&data.data?JSON.stringify(data.data, null, "\t"):getMyVar('apidata', ''),
+                    defaultValue: getMyVar('apidata', data&&data.data?JSON.stringify(data.data, null, "\t"):""),
                     type: "textarea",
                     height: 6,
                     onChange: 'putMyVar("apidata",JSON.stringify(JSON.parse(input)))'
