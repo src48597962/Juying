@@ -1530,8 +1530,8 @@ function jiekou(lx,data) {
                 desc: "对象数据格式要求非常高\n大佬来偿试写接口呀",
                 extra: {
                     titleVisible: false,
-                    highlight: true,
-                    defaultValue: getMyVar('apidata', data&&data.data?JSON.stringify(data.data):""),
+                    highlight: true,//getMyVar('apidata', data&&data.data?JSON.stringify(data.data):"")
+                    defaultValue: getMyVar('apidata')?JSON.stringify(JSON.parse(getMyVar('apidata')), null, "\t"):data&&data.data?JSON.stringify(data.data, null, "\t"):"",
                     type: "textarea",
                     height: 5,
                     onChange: 'putMyVar("apidata",JSON.stringify(JSON.parse(input)))'
