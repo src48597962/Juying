@@ -609,11 +609,9 @@ function SRCSet() {
                     var task = function(obj) {
                         if(/^csp_AppYs/.test(obj.api)){
                             urls.push({ "name": obj.name, "url": obj.ext, "group": "新导入"})
-                        }
-                        if(obj.type==1){
+                        }else if(obj.type==1){
                             urls.push({ "name": obj.name, "url": obj.api, "group": "新导入"})
-                        }
-                        if(/^csp_XBiubiu/.test(obj.api)){
+                        }else if(/^csp_XBiubiu/.test(obj.api)){
                             try{
                                 let urlfile = obj.ext;
                                 if(/^clan:/.test(urlfile)){
