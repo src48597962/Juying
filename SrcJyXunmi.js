@@ -64,7 +64,7 @@ function xunmi(name,data,ishkss) {
                         if(dytype&&obj.name&&obj.ext){
                             datalist.push({ "name": obj.name, "url": obj.ext, "ua":"MOBILE_UA", "type":dytype, "group": "TVBox订阅"})
                         }
-                    }else if(obj.type==1&&obj.name&&obj.api&&obj.api.indexOf('cms.nokia.press')==-1){
+                    }else if((obj.type==1||obj.type==0)&&obj.api.indexOf('cms.nokia.press')==-1){
                         datalist.push({ "name": obj.name, "url": obj.api, "ua":"MOBILE_UA", "type":"cms", "group": "TVBox订阅"})
                     }else if(/^csp_XBiubiu/.test(obj.api)){
                         try{
