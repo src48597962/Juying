@@ -609,7 +609,7 @@ function SRCSet() {
                     var task = function(obj) {
                         if(/^csp_AppYs/.test(obj.api)){
                             urls.push({ "name": obj.name, "url": obj.ext, "group": "新导入"})
-                        }else if(obj.type==1){
+                        }else if((obj.type==1||obj.type==0)&&obj.api.indexOf('cms.nokia.press')==-1){
                             urls.push({ "name": obj.name, "url": obj.api, "group": "新导入"})
                         }else if(/^csp_XBiubiu/.test(obj.api)){
                             try{
