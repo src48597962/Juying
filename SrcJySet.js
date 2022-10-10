@@ -1563,6 +1563,7 @@ function jiekou(lx,data) {
             }
         });
     }
+    /*
     d.push({
         title: 'User-Agent：'+getMyVar('apiua','Dalvik/2.1.0'),
         col_type:'text_1',
@@ -1609,7 +1610,7 @@ function jiekou(lx,data) {
             col_type: "blank_block"
         })
     }
-    /*
+    
     d.push({
         title:'测试',
         col_type:'text_3',
