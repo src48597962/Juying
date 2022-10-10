@@ -1609,7 +1609,7 @@ function jiekou(lx,data) {
             col_type: "blank_block"
         })
     }
-    
+    /*
     d.push({
         title:'测试',
         col_type:'text_3',
@@ -1688,7 +1688,7 @@ function jiekou(lx,data) {
                     return "toast://已清空";
                 })
         });
-    }/*
+    }
     d.push({
         title:'保存',
         col_type:'text_3',
