@@ -599,6 +599,7 @@ var SrcParseS = {
                 var myJX=fetch(myJXfile);
                 if(myJX != ""){
                     eval("var myJXlist=" + myJX+ ";");
+                    /*
                     if(myJXlist.length==0){
                         try{
                             let jxnum = 0;
@@ -620,7 +621,7 @@ var SrcParseS = {
                                 if(printlog==1){log("自动导入解析："+jxnum)}
                             }
                         } catch (e) { }
-                    }
+                    }*/
                     var myjxnum = 0;
                     for(var j=0;j<myJXlist.length;j++){
                         let priorfrom = myJXlist[j].priorfrom || [];
