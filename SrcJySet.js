@@ -851,7 +851,7 @@ function SRCSet() {
                             }else{
                                 jiexi('update', data);
                             }
-                        }, dataarr):getMyVar('guanlicz')=="3"?$("确定删除接口："+dataname).confirm((dataurl,filepath)=>{
+                        }, dataarr):getMyVar('guanlicz')=="3"?$("确定删除："+dataname).confirm((dataurl,filepath)=>{
                             var datafile = fetch(filepath);
                             eval("var datalist=" + datafile+ ";");
                             if(getMyVar('guanli', 'jk')=="jk"){
@@ -862,6 +862,18 @@ function SRCSet() {
                                     }
                                 }
                                 writeFile(filepath, JSON.stringify(datalist));
+
+                                let cfgfile = "hiker://files/rules/Src/Juying/config.json";
+                                let Juyingcfg=fetch(cfgfile);
+                                if(Juyingcfg != ""){
+                                    eval("var JYconfig=" + Juyingcfg+ ";");
+                                }else{
+                                    var JYconfig= {};
+                                }
+                                if(JYconfig.zsjiekou.api_url==dataurl){
+                                    delete JYconfig['zsjiekou'];
+                                    writeFile(cfgfile, JSON.stringify(JYconfig));
+                                }
                             }else{
                                 for(var i=0;i<datalist.length;i++){
                                     if(datalist[i].parse==dataurl){
