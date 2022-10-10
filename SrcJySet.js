@@ -1529,7 +1529,7 @@ function jiekou(lx,data) {
                 extra: {
                     titleVisible: false,
                     highlight: true,//getMyVar('apidata', data&&data.data?JSON.stringify(data.data):"")
-                    defaultValue: "",//getMyVar('apidata')?JSON.stringify(JSON.parse(getMyVar('apidata')), null, "\t"):data&&data.data?JSON.stringify(data.data, null, "\t"):
+                    defaultValue: getMyVar('apidata')?JSON.stringify(JSON.parse(getMyVar('apidata')), null, "\t"):data&&data.data?JSON.stringify(data.data, null, "\t"):"",
                     type: "textarea",
                     height: 5,
                     onChange: 'putMyVar("apidata",JSON.stringify(JSON.parse(input)))'
@@ -1550,6 +1550,7 @@ function jiekou(lx,data) {
                 return'toast://已选择类型：' + input;
             })
         });
+        log(1)
     }else{
         d.push({
             title:'批量添加',
@@ -1589,6 +1590,7 @@ function jiekou(lx,data) {
             return "toast://"+input;
         })
     });
+    log(2)
     if(lx=="update"){
         d.push({
             title: getMyVar('isSaveAs', '')!="1"?'保存方式：覆盖':'保存方式：另存',
