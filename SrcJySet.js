@@ -1501,7 +1501,7 @@ function jiekou(lx,data) {
     }
     
     if(getMyVar('addtype', '1')=="1"){
-        d.push({
+        /*d.push({
             title:'apiname',
             col_type: 'input',
             desc: "接口名称",
@@ -1535,7 +1535,7 @@ function jiekou(lx,data) {
                     onChange: 'putMyVar("apidata",JSON.stringify(JSON.parse(input)))'
                 }
             });
-        }
+        }*/
         d.push({
             title: getMyVar('apitype', '')==""?'类型：自动识别':'类型：'+getMyVar('apitype'),
             col_type:'text_1',
@@ -1563,7 +1563,7 @@ function jiekou(lx,data) {
             }
         });
     }
-    /*
+    
     d.push({
         title: 'User-Agent：'+getMyVar('apiua','Dalvik/2.1.0'),
         col_type:'text_1',
@@ -1764,7 +1764,7 @@ function jiekou(lx,data) {
         d.push({
             col_type: "blank_block"
         })
-    }*/
+    }
     setHomeResult(d);
 }
 
