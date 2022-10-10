@@ -354,7 +354,7 @@ function xunmi(name,data,ishkss) {
                                     let voddesc = list.vod_remarks||list.state||"";
                                     let appname = '‘‘’’<font color=#f13b66a>'+obj.name+'</font>'+' ('+obj.type+')'+(obj.group&&obj.group!=obj.type?' ['+obj.group+']':'');
                                     let vodurl = list.vod_id?url + list.vod_id:list.nextlink;
-                                    vodpic = vodpic?vodpic.replace('/img.php?url=','').replace('/tu.php?tu=','') + "@Referer=":"https://www.xawqxh.net/mxtheme/images/loading.gif";
+                                    vodpic = vodpic?vodpic.replace('/img.php?url=','').replace('/tu.php?tu=','') + "@Referer=":"https://www.xawqxh.net/mxtheme/images/loading.gif@Referer=";
                                     if(/^\/upload|^upload/.test(vodpic)){
                                         vodpic = vodurl.match(/http(s)?:\/\/(.*?)\//)[0] + vodpic;
                                     }
@@ -372,7 +372,7 @@ function xunmi(name,data,ishkss) {
                                             },obj.type, urlua),
                                         col_type: "movie_1_vertical_pic",
                                         extra: {
-                                            pic: vodpic,
+                                            pic: vodpic.replace('loading.gif@Referer=','loading.gif'),
                                             name: vodname,
                                             title: vodname+'-'+obj.name,
                                             cls: 'xunmilist'
@@ -484,14 +484,14 @@ function xunmi(name,data,ishkss) {
                                     title: !ishkss&&vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):vodname,
                                     desc: !ishkss?(voddesc + '\n\n' + appname):'聚影√ · '+obj.name,
                                     content: voddesc,
-                                    pic_url: vodpic?vodpic + "@Referer=":"https://www.xawqxh.net/mxtheme/images/loading.gif",
+                                    pic_url: vodpic?vodpic + "@Referer=":"https://www.xawqxh.net/mxtheme/images/loading.gif@Referer=",
                                     url: $("hiker://empty##" + vodurl + "#immersiveTheme##autoCache#").rule((type,ua) => {
                                             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
                                             xunmierji(type,ua)
                                         },obj.type, urlua),
                                     col_type: "movie_1_vertical_pic",
                                     extra: {
-                                        pic: vodpic,
+                                        pic: vodpic.replace('loading.gif@Referer=','loading.gif'),
                                         name: vodname,
                                         title: vodname+'-'+obj.name,
                                         data: jsondata,
