@@ -1522,7 +1522,6 @@ function jiekou(lx,data) {
             }
         });
         if(getMyVar('apitype')=="xpath"||getMyVar('apitype')=="biubiu"){
-            log('>>>'+getMyVar('apidata'))
             d.push({
                 title:'data代码',
                 col_type: 'input',
@@ -1530,7 +1529,7 @@ function jiekou(lx,data) {
                 extra: {
                     titleVisible: false,
                     highlight: true,//getMyVar('apidata', data&&data.data?JSON.stringify(data.data):"")
-                    defaultValue: getMyVar('apidata')?JSON.stringify(JSON.parse(getMyVar('apidata')), null, "\t"):data&&data.data?JSON.stringify(data.data, null, "\t"):"",
+                    defaultValue: "",//getMyVar('apidata')?JSON.stringify(JSON.parse(getMyVar('apidata')), null, "\t"):data&&data.data?JSON.stringify(data.data, null, "\t"):
                     type: "textarea",
                     height: 5,
                     onChange: 'putMyVar("apidata",JSON.stringify(JSON.parse(input)))'
