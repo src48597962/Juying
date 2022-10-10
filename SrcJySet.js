@@ -1501,7 +1501,7 @@ function jiekou(lx,data) {
     }
     
     if(getMyVar('addtype', '1')=="1"){
-        /*d.push({
+        d.push({
             title:'apiname',
             col_type: 'input',
             desc: "接口名称",
@@ -1520,7 +1520,7 @@ function jiekou(lx,data) {
                 defaultValue: getMyVar('apitype')=="xpath"&&getMyVar('apiurl', '')==""?'csp_xpath_':getMyVar('apitype')=="biubiu"&&getMyVar('apiurl', '')==""?'csp_biubiu_':getMyVar('apiurl', ''),
                 onChange: 'putMyVar("apiurl",input)'
             }
-        });
+        });/*
         if(getMyVar('apitype')=="xpath"||getMyVar('apitype')=="biubiu"){
             d.push({
                 title:'data代码',
