@@ -1685,6 +1685,18 @@ function jiekou(lx,data) {
                     }
                 }
                 writeFile(filepath, JSON.stringify(datalist));
+
+                let cfgfile = "hiker://files/rules/Src/Juying/config.json";
+                let Juyingcfg=fetch(cfgfile);
+                if(Juyingcfg != ""){
+                    eval("var JYconfig=" + Juyingcfg+ ";");
+                }else{
+                    var JYconfig= {};
+                }
+                if(JYconfig.zsjiekou.api_url==dataurl){
+                    delete JYconfig['zsjiekou'];
+                    writeFile(cfgfile, JSON.stringify(JYconfig));
+                }
                 back(true);
                 return "toast://已删除";
             }, data.url)
