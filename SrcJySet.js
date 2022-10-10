@@ -1532,7 +1532,7 @@ function jiekou(lx,data) {
                     defaultValue: getMyVar('apidata')?JSON.stringify(JSON.parse(getMyVar('apidata')), null, "\t"):data&&data.data?JSON.stringify(data.data, null, "\t"):"",
                     type: "textarea",
                     height: 5,
-                    //onChange: 'putMyVar("apidata",JSON.stringify(JSON.parse(input)))'
+                    onChange: '/{|}/.test(input)?putMyVar("apidata",JSON.stringify(JSON.parse(input))):""'
                 }
             });
         }
