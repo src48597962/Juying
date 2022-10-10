@@ -1520,7 +1520,7 @@ function jiekou(lx,data) {
                 defaultValue: getMyVar('apitype')=="xpath"&&getMyVar('apiurl', '')==""?'csp_xpath_':getMyVar('apitype')=="biubiu"&&getMyVar('apiurl', '')==""?'csp_biubiu_':getMyVar('apiurl', ''),
                 onChange: 'putMyVar("apiurl",input)'
             }
-        });/*
+        });
         if(getMyVar('apitype')=="xpath"||getMyVar('apitype')=="biubiu"){
             d.push({
                 title:'data代码',
@@ -1529,13 +1529,13 @@ function jiekou(lx,data) {
                 extra: {
                     titleVisible: false,
                     highlight: true,//getMyVar('apidata', data&&data.data?JSON.stringify(data.data):"")
-                    defaultValue: getMyVar('apidata')?JSON.stringify(JSON.parse(getMyVar('apidata')), null, "\t"):data&&data.data?JSON.stringify(data.data, null, "\t"):"",
+                    //defaultValue: getMyVar('apidata')?JSON.stringify(JSON.parse(getMyVar('apidata')), null, "\t"):data&&data.data?JSON.stringify(data.data, null, "\t"):"",
                     type: "textarea",
                     height: 5,
                     onChange: 'putMyVar("apidata",JSON.stringify(JSON.parse(input)))'
                 }
             });
-        }*/
+        }
         d.push({
             title: getMyVar('apitype', '')==""?'类型：自动识别':'类型：'+getMyVar('apitype'),
             col_type:'text_1',
