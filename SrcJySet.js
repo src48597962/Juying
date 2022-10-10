@@ -1522,6 +1522,7 @@ function jiekou(lx,data) {
             }
         });
         if(getMyVar('apitype')=="xpath"||getMyVar('apitype')=="biubiu"){
+            log('>>>'+getMyVar('apidata'))
             d.push({
                 title:'data代码',
                 col_type: 'input',
