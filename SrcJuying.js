@@ -975,7 +975,7 @@ function Version() {
     var oldtime = parseInt(getItem('VersionChecktime','0').replace('time',''));
     if (getMyVar('SrcJuying-VersionCheck', '0') == '0' && nowtime > (oldtime+6*60*60*1000)) {
         try {
-            eval(fetch(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcTmplVersion.js'))
+            eval(request(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcTmplVersion.js'))
             if (parseFloat(newVersion.SrcJuying) > parseFloat(nowVersion)) {
                 confirm({
                     title:'发现新版本，是否更新？', 
