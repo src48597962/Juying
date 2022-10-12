@@ -172,7 +172,7 @@ var erjimenu = [
                             var recordparse=fetch(recordfile);
                             if(recordparse != ""){
                                 eval("var recordlist=" + recordparse+ ";");
-                                recordlist['exclude'] = [];
+                                recordlist['excludeurl'] = [];
                                 writeFile(recordfile, JSON.stringify(recordlist));
                                 return 'toast://已清除跳舞小姐姐视频拦截记录';
                             }else{
@@ -201,11 +201,9 @@ var erjimenu = [
                         var recordfile = "hiker://files/rules/Src/Juying/parse.json";
                         var recordparse=fetch(recordfile);
                         eval("var recordlist=" + recordparse+ ";");
-                        var parseurl = recordlist.parse[input];
-                        var parsename = recordlist.name[input];
-                        delete recordlist.parse[input];
+                        var priorparse = recordlist.priorparse[input];
+                        delete recordlist.priorparse[input];
                         
-
                         var filepath = "hiker://files/rules/Src/Juying/myjiexi.json";
                         var datafile = fetch(filepath);
                         if(datafile != ""){
@@ -213,28 +211,31 @@ var erjimenu = [
                         }else{
                             var datalist = [];
                         }
-                        if(datalist.some(item => item.parse == parseurl)){
-                            //私有解析在屏蔽优先时，仅排除片源
-                            for(var j=0;j<datalist.length;j++){
-                                if(datalist[j].parse==parseurl&&datalist[j].stopfrom.indexOf(input)==-1){
-                                    datalist[j].stopfrom[datalist[j].stopfrom.length] = input;
+                        let list = priorparse.split(';;');
+                        for(let i=0;i<list.length;i++){     
+                            if(datalist.some(item => item.name == list[i])){
+                                //私有解析在屏蔽优先时，仅排除片源
+                                for(var j=0;j<datalist.length;j++){
+                                    if(datalist[j].name==list[i]&&datalist[j].stopfrom.indexOf(input)==-1){
+                                        datalist[j].stopfrom[datalist[j].stopfrom.length] = input;
+                                    }
+                                    break;
                                 }
-                                break;
+                                writeFile(filepath, JSON.stringify(datalist));
+                                var sm = '私有解析('+list[i]+')>排除片源>'+input;
+                                log('已屏蔽'+input+' 优先解析：'+sm);
+                            }else{
+                                //app自带的解析在屏蔽优先时，直接加入黑名单
+                                recordlist['excludeparse'] = recordlist['excludeparse']||[];
+                                if(recordlist['excludeparse'].indexOf(list[i])==-1){
+                                    recordlist['excludeparse'].push(list[i]);
+                                }
+                                var sm = list[i]+'>app接口解析加入全局黑名单';
+                                log('已屏蔽'+input+' 优先解析：'+sm);
                             }
-                            writeFile(filepath, JSON.stringify(datalist));
-                            var sm = '私有解析('+parsename+')>排除片源>'+input;
-                        }else{
-                            //app自带的解析在屏蔽优先时，直接加入黑名单
-                            recordlist['excludeparse'] = recordlist['excludeparse']||[];
-                            if(parseurl&&recordlist['excludeparse'].indexOf(parseurl)==-1){
-                                recordlist['excludeparse'].push(parseurl);
-                            }
-                            var sm = parsename+'>加入全局黑名单';
                         }
-
                         writeFile(recordfile, JSON.stringify(recordlist));   
                         refreshPage(false);
-                        log('已屏蔽'+input+' 优先解析：'+sm);
                         return 'toast://已屏蔽'+input+'优先解析';
                     }),
                     col_type: "text_2"
