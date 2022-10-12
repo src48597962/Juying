@@ -849,7 +849,7 @@ var SrcParseS = {
                     Uparselist = [];
                 }
             }
-            log('a')
+            log('a'+Uparselist.length)
             for (var i=0;i<Uparselist.length;i++) {
                 if(playurl){break;}
                 let UrlList = [];
