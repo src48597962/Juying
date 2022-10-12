@@ -851,7 +851,7 @@ var SrcParseS = {
             }
 
             for (var i=0;i<Uparselist.length;i++) {
-                if(playurl){break;}
+                if(playurl!=""){break;}
                 let UrlList = [];
                 let Namelist = [];
                 var beurls = [];//用于存储多线程返回url
@@ -1026,7 +1026,7 @@ var SrcParseS = {
                     }
                 }//排队解析结果循环
             }//解析全列表循环
-            log('a')
+            
             var failparse = [];
             //失败的解析，处理
             for(var p=0;p<dellist.length;p++){
@@ -1080,7 +1080,7 @@ var SrcParseS = {
                 }
 
             }
-            log('c')
+
             if(!parseStr){
                 //私有解析有排除片源
                 if(myJXchange == 1){writeFile(myJXfile, JSON.stringify(myJXlist));}
@@ -1091,6 +1091,7 @@ var SrcParseS = {
                 //私有解析失败的统一提示
                 if(failparse.length>0&&printlog==1){log(failparse+'<以上私有解析失败，排序-1')}
                 //记录上次优先解析和自动解析有加入黑名单的保存
+                /*
                 recordlist['priorparse'] = recordlist['priorparse']||{};
                 recordlist['priorparse'][from] = recordname.join(',');
                 delete recordlist['parse'];
@@ -1098,6 +1099,7 @@ var SrcParseS = {
                 delete recordlist['name'];
                 delete recordlist['head'];
                 writeFile(recordfile, JSON.stringify(recordlist));
+                */
             } 
 
             //播放
