@@ -851,7 +851,8 @@ var SrcParseS = {
             }
 
             for (var i=0;i<Uparselist.length;i++) {
-                if(playurl !=''){break;}
+                log('a')
+                if(playurl){break;}
                 let UrlList = [];
                 let Namelist = [];
                 var beurls = [];//用于存储多线程返回url
@@ -865,6 +866,7 @@ var SrcParseS = {
                     Namelist.push(Uparselist[s].name);
                     i=s;
                 }
+                log('b')
                 if(printlog==1){log("本轮排队解析："+Namelist)};
                 if(isdn==1&&iscalldn==0&&Uparselist.length>0&&!parseStr){
                     iscalldn = 1;//断插辅助只调用一轮
