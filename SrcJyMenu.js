@@ -224,7 +224,7 @@ var erjimenu = [
                                 writeFile(filepath, JSON.stringify(datalist));
                                 var sm = '私有解析('+list[i]+')>排除片源>'+input;
                                 log('已屏蔽'+input+' 优先解析：'+sm);
-                            }else{
+                            }else if(/^http/.test(list[i])){
                                 //app自带的解析在屏蔽优先时，直接加入黑名单
                                 recordlist['excludeparse'] = recordlist['excludeparse']||[];
                                 if(recordlist['excludeparse'].indexOf(list[i])==-1){
