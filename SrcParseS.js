@@ -554,20 +554,10 @@ var SrcParseS = {
             var excludeurl = recordlist.excludeurl||[];//屏蔽的播放地址
             var excludeparse = recordlist.excludeparse||[];//屏蔽的解析
             try{
-                var priorparse = recordlist.priorparse[from].split(',');//优先上次解析
+                var priorparse = recordlist.priorparse[from].split(';;');//优先上次解析
             }catch(e){
                 var priorparse = [];
             }
-            /*
-            try{
-                var recordparse = recordlist.parse[from];
-                var recordname = recordlist.name[from]||"***";
-                var recordhead = recordlist.head[from]||{};
-            }catch(e){
-                var recordparse = "";
-                var recordname = "***";
-                var recordhead = {};
-            }*/
             
             if(parseStr){
                 //指定解析用于测试
@@ -771,47 +761,8 @@ var SrcParseS = {
                 }
             };
 
-            /*if(recordparse&&mulnum<=1&&!parseStr&&parsemode==1){
-                playurl = task({ulist:{parse:recordparse, name:recordname, header:recordhead}, vipUrl:vipUrl, testurl:this.testvideourl}).url;
-                
-                if(contain.test(playurl)&&!exclude.test(playurl)&&excludeurl.indexOf(playurl)==-1){
-                    if(printlog==1){log("优先上次解析("+recordname+")成功>"+playurl)}; 
-                }else{
-                    if(printlog==1){log("优先上次解析("+recordname+")失败，无效视频地址")}; 
-                    playurl = "";
-                    delete recordlist.parse[from];
-                    delete recordlist.name[from];
-                    delete recordlist.head[from];
-                    writeFile(recordfile, JSON.stringify(recordlist));
-                    //失败的从待解列表中去除
-                    for(var i=0;i<Uparselist.length;i++){
-                        if(Uparselist[i].parse==recordparse){
-                            Uparselist.splice(i,1);
-                            break;
-                        }
-                    }
-                        
-                    for(var j=0;j<appJXlist.length;j++){
-                        if(appJXlist[j].parse == recordparse){
-                            //判断本地记录的解析是否已存在
-                            if(appJXlist[j].from.length>1){
-                                if(printlog==1){log('发现失效解析，自动删除解析片源')};
-                                removeByValue(appJXlist[j].from,from);
-                                appJXchange = 1;
-                            }else{
-                                if(printlog==1){log('发现失效解析，自动删除解析')};
-                                appJXlist.splice(j,1);
-                                j = j-1;
-                                appJXchange = 1;
-                            }
-                        }
-                    }
-                }
-            }*/
-
             var iscalldn = 0;//是否调用断插标识
             var recordname = []; //解析成功的作为优先解析临时组
-            //var isrecord = 0;
             if(playurl==""&&!parseStr){
                 if(Wparselist.length > 0){
                     Wparselist.sort((a, b) => {
@@ -838,7 +789,7 @@ var SrcParseS = {
                     if(priorparse.length>0){
                         //优先上次成功的
                         for(let i=0; i<Uparselist.length; i++) {
-                            if(priorparse.indexOf(Uparselist[i].name)>-1) {
+                            if(priorparse.indexOf(Uparselist[i].name)>-1 || (/app/.test(Uparselist[i].type)&&priorparse.indexOf(Uparselist[i].parse)>-1)) {
                                 let Uparseobj = Uparselist[i];
                                 Uparselist.splice(i,1);
                                 Uparselist.unshift(Uparseobj);
@@ -936,21 +887,11 @@ var SrcParseS = {
                                 }
                             }
                             if(recordlist['from'].indexOf(from)==-1){recordlist['from'].push(from)}
-                            if(recordname.indexOf(beparses[k].name)==-1){recordname.push(beparses[k].name)}
-                            /*
-                            if(isrecord==0){
-                                if(printlog==1){log(beparses[k].name+'，记录为片源'+from+'的优先')};
-                                recordlist['parse'] = recordlist['parse']||{};
-                                recordlist['parse'][from] = parseurl;
-                                recordlist['name'] = recordlist['name']||{};
-                                recordlist['name'][from] = beparses[k].name;
-                                recordlist['head'] = recordlist['head']||{};
-                                recordlist['head'][from] = beparses[k].header;
-                                recordlist['from']= recordlist['from']||[];
-                                if(recordlist['from'].indexOf(from)==-1){recordlist['from'].push(from)}
-                                writeFile(recordfile, JSON.stringify(recordlist));
-                                isrecord = 1;
-                            }*/
+                            if(beparses[k].type=="myjx"){//私有解析保存解析名
+                                if(recordname.indexOf(beparses[k].name)==-1){recordname.push(beparses[k].name)}
+                            }else if(/app/.test(beparses[k].type)){//app接口解析保存链接
+                                if(recordname.indexOf(parseurl)==-1){recordname.push(parseurl)}
+                            }
 
                             if(!myJXlist.some(item => item.parse ==parseurl)){
                                 //解析成功的且不在私有解析中的添加到本地
@@ -1097,7 +1038,7 @@ var SrcParseS = {
                 if(failparse.length>0&&printlog==1){log(failparse+'<以上私有解析失败，排序-1')}
                 //记录上次优先解析和自动解析有加入黑名单的保存                
                 recordlist['priorparse'] = recordlist['priorparse']||{};
-                recordlist['priorparse'][from] = recordname.join(',');
+                recordlist['priorparse'][from] = recordname.join(';;');
                 delete recordlist['parse'];
                 delete recordlist['exclude'];
                 delete recordlist['name'];
