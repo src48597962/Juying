@@ -829,6 +829,7 @@ var SrcParseS = {
                             return a.sort - b.sort
                         })
                     };
+                    log('a')
                     if(priorparse.length>0){
                         //优先上次成功的
                         for(let i=0; Uparselist.length; i++) {
@@ -849,7 +850,7 @@ var SrcParseS = {
                     Uparselist = [];
                 }
             }
-            
+            log('b')
             for (var i=0;i<Uparselist.length;i++) {
                 if(playurl){break;}
                 let UrlList = [];
