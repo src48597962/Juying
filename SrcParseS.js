@@ -543,7 +543,11 @@ var SrcParseS = {
             var recordfile = "hiker://files/rules/Src/Juying/parse.json";
             var parserecord=fetch(recordfile);
             if(parserecord!=""){
-                eval("var recordlist=" + parserecord+ ";");
+                try{
+                    eval("var recordlist=" + parserecord+ ";");
+                }catch(e){
+                    var recordlist={};
+                }
             }else{
                 var recordlist={};
             }
@@ -631,7 +635,7 @@ var SrcParseS = {
                     var myjxnum = 0;
                     for(var j=0;j<myJXlist.length;j++){
                         let priorfrom = myJXlist[j].priorfrom || [];
-                        let arr = {type:'myjx',name:myJXlist[j].name,parse:myJXlist[j].parse};
+                        let arr = {type:'myjx',name:myJXlist[j].name.replace(/,/g,''),parse:myJXlist[j].parse};
                         if(myJXlist[j].header){arr["header"] = myJXlist[j].header}
 
                         if(priorfrom.indexOf(from)>-1){
@@ -830,9 +834,50 @@ var SrcParseS = {
                             return a.sort - b.sort
                         })
                     };
+
+
+let arr=[
+        {name:'a',age:'1'},
+        {name:'b',age:'1'},
+        {name:'c',age:'1'},
+        {name:'d',age:'26'},
+        {name:'e',age:'12'},
+        {name:'f',age:'14'},
+        {name:'g',age:'18'},
+        {name:'h',age:'24'},
+    ];
+
+function compare(key, desc) {
+     //key:  用于排序的数组的key值
+     //desc： 布尔值，为true是升序排序，false是降序排序
+      return function(a, b) {
+        let  value1 = a[key];
+        let  value2 = b[key];
+        if (desc == true) {
+          // 升序排列
+          return value1 - value2;
+        } else {
+          // 降序排列
+          return value2 - value1;
+        }
+      };
+    }
+ 
+    log(arr.sort(compare('age',false)));    //打印调用方法
+
+
+
+
+
+
+
+
+
+
                     if(priorparse.length>0){
                         //优先上次成功的
-                        for(let i=0; i<Uparselist.length; i++) {
+                        for (let i=Uparselist.length-1; i>=0; i--) {
+                        //for(let i=0; i<Uparselist.length; i++) {
                             if(priorparse.indexOf(Uparselist[i].name)>-1) {
                                 log(Uparselist[i].name+'<发现优先解析');
                                 let Uparseobj = Uparselist[i];
