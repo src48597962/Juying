@@ -849,9 +849,8 @@ var SrcParseS = {
                     Uparselist = [];
                 }
             }
-
+            log('a')
             for (var i=0;i<Uparselist.length;i++) {
-                log('a')
                 if(playurl){break;}
                 let UrlList = [];
                 let Namelist = [];
@@ -866,7 +865,6 @@ var SrcParseS = {
                     Namelist.push(Uparselist[s].name);
                     i=s;
                 }
-                log('b')
                 if(printlog==1){log("本轮排队解析："+Namelist)};
                 if(isdn==1&&iscalldn==0&&Uparselist.length>0&&!parseStr){
                     iscalldn = 1;//断插辅助只调用一轮
