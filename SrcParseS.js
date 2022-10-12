@@ -885,7 +885,7 @@ function compare(key, desc) {
                                 let Uparseobj = Uparselist[i];
                                 Uparselist.splice(i, 1);
                                 Uparselist.unshift(Uparseobj);
-                                i--;
+                                i++;
                             }
                             usum++;
                         }
