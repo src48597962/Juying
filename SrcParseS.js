@@ -832,9 +832,9 @@ var SrcParseS = {
                     };
                     if(priorparse.length>0){
                         //优先上次成功的
-                        for(let i=0; Uparselist.length; i++) {
+                        for(let i=0; i<Uparselist.length; i++) {
                             if(priorparse.indexOf(Uparselist[i].name)>-1) {
-                                log(Uparselist[i].name+'>优先');
+                                log(Uparselist[i].name+'<发现优先解析');
                                 let Uparseobj = Uparselist[i];
                                 Uparselist.splice(i, 1)
                                 Uparselist.unshift(Uparseobj);
