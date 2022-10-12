@@ -849,7 +849,7 @@ var SrcParseS = {
                     Uparselist = [];
                 }
             }
-            log('a'+Uparselist.length)
+
             for (var i=0;i<Uparselist.length;i++) {
                 if(playurl){break;}
                 let UrlList = [];
@@ -1026,9 +1026,9 @@ var SrcParseS = {
                     }
                 }//排队解析结果循环
             }//解析全列表循环
+            log('a')
             var failparse = [];
             //失败的解析，处理
-            
             for(var p=0;p<dellist.length;p++){
                 if(dellist[p].type=="myjx"){
                     for(var j=0;j<myJXlist.length;j++){
@@ -1080,7 +1080,7 @@ var SrcParseS = {
                 }
 
             }
-            
+            log('c')
             if(!parseStr){
                 //私有解析有排除片源
                 if(myJXchange == 1){writeFile(myJXfile, JSON.stringify(myJXlist));}
