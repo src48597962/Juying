@@ -878,7 +878,6 @@ function compare(key, desc) {
                         //优先上次成功的
                         let utmp = [];
                         for(let i=0; i<Uparselist.length; i++) {
-                            log(i)
                             if(priorparse.indexOf(Uparselist[i].name)>-1) {
                                 //let Uparseobj = Uparselist[i];
                                 log('发现优先解析'+Uparselist[i].name)
@@ -887,7 +886,10 @@ function compare(key, desc) {
                                 i = i - 1;
                             }
                         }
-                        Uparselist.unshift(utmp);
+                        if(utmp.length>0){
+                            Uparselist = utmp.concat(Uparselist);
+                        }
+                        //Uparselist.unshift(utmp);
                         log(Uparselist)
                     }
 
