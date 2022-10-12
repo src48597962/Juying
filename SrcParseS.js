@@ -878,11 +878,13 @@ function compare(key, desc) {
                         //优先上次成功的
                         let utmp = [];
                         for(let i=0; i<Uparselist.length; i++) {
+                            log(i)
                             if(priorparse.indexOf(Uparselist[i].name)>-1) {
-                                let Uparseobj = Uparselist[i];
+                                //let Uparseobj = Uparselist[i];
+                                log('发现优先解析'+Uparselist[i].name)
+                                utmp.push(Uparselist[i]);
                                 Uparselist.splice(i,1);
                                 i = i - 1;
-                                utmp.push(Uparseobj);
                             }
                         }
                         Uparselist.unshift(utmp);
