@@ -876,21 +876,13 @@ function compare(key, desc) {
 
                     if(priorparse.length>0){
                         //优先上次成功的
-                        let utmp = [];
                         for(let i=0; i<Uparselist.length; i++) {
                             if(priorparse.indexOf(Uparselist[i].name)>-1) {
-                                //let Uparseobj = Uparselist[i];
-                                log('发现优先解析'+Uparselist[i].name)
-                                utmp.push(Uparselist[i]);
+                                let Uparseobj = Uparselist[i];
                                 Uparselist.splice(i,1);
-                                i = i - 1;
+                                Uparselist.unshift(Uparseobj);
                             }
                         }
-                        if(utmp.length>0){
-                            Uparselist = utmp.concat(Uparselist);
-                        }
-                        //Uparselist.unshift(utmp);
-                        log(Uparselist)
                     }
 
                     if(isdn==1&&Uparselist.length==0){
