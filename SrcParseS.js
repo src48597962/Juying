@@ -883,9 +883,10 @@ function compare(key, desc) {
                             if(priorparse.indexOf(Uparselist[i].name)>-1) {
                                 log(Uparselist[i].name+'<发现优先解析');
                                 let Uparseobj = Uparselist[i];
+                                log(i)
                                 Uparselist.splice(i, 1);
                                 Uparselist.unshift(Uparseobj);
-                                i++;
+                                log(i)
                             }
                             usum++;
                         }
