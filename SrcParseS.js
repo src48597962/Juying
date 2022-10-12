@@ -863,7 +863,7 @@ function compare(key, desc) {
       };
     }
  
-    log(arr.sort(compare('age',false)));    //打印调用方法
+    log(arr.sort(compare('age',true)));    //打印调用方法
 
 
 
@@ -881,7 +881,7 @@ function compare(key, desc) {
                             if(priorparse.indexOf(Uparselist[i].name)>-1) {
                                 log(Uparselist[i].name+'<发现优先解析');
                                 let Uparseobj = Uparselist[i];
-                                Uparselist.splice(i, 1)
+                                Uparselist.splice(i, -1)
                                 Uparselist.unshift(Uparseobj);
                             }
                         }
