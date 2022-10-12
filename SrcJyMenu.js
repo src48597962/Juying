@@ -190,7 +190,7 @@ var erjimenu = [
                 if(recordparse != ""){
                     eval("var recordlist=" + recordparse+ ";");
                     try{
-                        for(var key in recordlist.parse){
+                        for(var key in recordlist.priorparse){
                             parsefrom.push(key);
                         }
                     }catch(e){ }
