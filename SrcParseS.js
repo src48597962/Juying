@@ -876,15 +876,20 @@ function compare(key, desc) {
 
                     if(priorparse.length>0){
                         //优先上次成功的
+                        log(Uparselist.length)
+                        let usum =0;
                         for (let i=Uparselist.length-1; i>=0; i--) {
                         //for(let i=0; i<Uparselist.length; i++) {
                             if(priorparse.indexOf(Uparselist[i].name)>-1) {
                                 log(Uparselist[i].name+'<发现优先解析');
                                 let Uparseobj = Uparselist[i];
-                                Uparselist.splice(i, -1)
+                                Uparselist.splice(i, 1);
                                 Uparselist.unshift(Uparseobj);
+                                i--;
                             }
+                            usum++;
                         }
+                        log(usum)
                     }
 
                     if(isdn==1&&Uparselist.length==0){
