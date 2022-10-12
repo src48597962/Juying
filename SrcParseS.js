@@ -805,7 +805,8 @@ var SrcParseS = {
                 }
             }*/
 
-            var iscalldn = 0;
+            var iscalldn = 0;//是否调用断插标识
+            var recordname = []; //解析成功的作为优先解析临时组
             //var isrecord = 0;
             if(playurl==""&&!parseStr){
                 if(Wparselist.length > 0){
@@ -913,7 +914,7 @@ var SrcParseS = {
                         errors: beerrors
                     }
                 });
-                let recordname = []; 
+                
                 for(let k in beparses){
                     var parseurl = beparses[k].parse;
                     if(beerrors[k]==null&&contain.test(beurls[k])&&!exclude.test(beurls[k])&&excludeurl.indexOf(beurls[k])==-1){
@@ -1090,8 +1091,7 @@ var SrcParseS = {
                 //if(appzdchange==1){writeFile(recordfile, JSON.stringify(recordlist));}
                 //私有解析失败的统一提示
                 if(failparse.length>0&&printlog==1){log(failparse+'<以上私有解析失败，排序-1')}
-                //记录上次优先解析和自动解析有加入黑名单的保存
-                /*
+                //记录上次优先解析和自动解析有加入黑名单的保存                
                 recordlist['priorparse'] = recordlist['priorparse']||{};
                 recordlist['priorparse'][from] = recordname.join(',');
                 delete recordlist['parse'];
@@ -1099,7 +1099,6 @@ var SrcParseS = {
                 delete recordlist['name'];
                 delete recordlist['head'];
                 writeFile(recordfile, JSON.stringify(recordlist));
-                */
             } 
 
             //播放
