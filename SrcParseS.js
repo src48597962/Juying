@@ -888,6 +888,7 @@ function compare(key, desc) {
                             }
                         }
                         Uparselist.unshift(utmp);
+                        log(Uparselist)
                     }
 
                     if(isdn==1&&Uparselist.length==0){
