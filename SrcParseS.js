@@ -829,42 +829,11 @@ var SrcParseS = {
                 }
 
                 if(parsemode==1){
-                    log(Uparselist)
                     if(Uparselist.length > 0){
                         Uparselist.sort((a, b) => {
                             return a.sort - b.sort
                         })
                     };
-                    log(Uparselist)
-
-
-/*
-function compare(key, desc) {
-     //key:  用于排序的数组的key值
-     //desc： 布尔值，为true是升序排序，false是降序排序
-      return function(a, b) {
-        let  value1 = a[key];
-        let  value2 = b[key];
-        if (desc == true) {
-          // 升序排列
-          return value1 - value2;
-        } else {
-          // 降序排列
-          return value2 - value1;
-        }
-      };
-    }
- 
-    log(Uparselist.sort(compare('sort',true)));    //打印调用方法
-*/
-
-
-
-
-
-
-
-
 
                     if(priorparse.length>0){
                         //优先上次成功的
