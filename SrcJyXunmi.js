@@ -568,18 +568,6 @@ function xunmi(name,data,ishkss) {
         var datafile = fetch(filepath);
         eval("var jiekoulist=" + datafile+ ";");
         let tzgroup = 0;
-        /*for (let k in errorlist) {
-            for(var i=0;i<jiekoulist.length;i++){
-                if(jiekoulist[i].url==errorlist[k].apiurl){
-                    jiekoulist[i].failnum = jiekoulist[i].failnum + 1 || 1;
-                    if(errorlist[k].error==1&&jiekoulist[i].failnum>=parseInt(getMyVar("failnum","10"))){
-                        jiekoulist[i].group = "失败待处理";
-                        tzgroup = 1;
-                    }
-                    break;
-                }
-            }
-        }*/
         
         for(let i=0;i<jiekoulist.length;i++){
             for (let k=0;k<errorlist.length;k++) {
@@ -885,6 +873,8 @@ function xunmierji(type,ua) {
                     if(arts[i-1].indexOf("在线视频")>-1){arts[i-1] = '播放源'+i;}
                     let contname = xpathArray(html, '('+jsondata.dtNode+jsondata.dtUrlNode+')['+i+']'+jsondata.dtUrlSubNode+jsondata.dtUrlName);
                     let conturl = xpathArray(html, '('+jsondata.dtNode+jsondata.dtUrlNode+')['+i+']'+jsondata.dtUrlSubNode+jsondata.dtUrlId);
+                    log(contname)
+                    log(conturl)
                     let cont = [];
                     for (let j = 0; j < contname.length; j++) {
                         let urlid = jsondata.dtUrlIdR;
