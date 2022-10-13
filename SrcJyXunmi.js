@@ -354,7 +354,7 @@ function xunmi(name,data,ishkss) {
                                     let voddesc = list.vod_remarks||list.state||"";
                                     let appname = '‘‘’’<font color=#f13b66a>'+obj.name+'</font>'+' ('+obj.type+')'+(obj.group&&obj.group!=obj.type?' ['+obj.group+']':'');
                                     let vodurl = list.vod_id?url + list.vod_id:list.nextlink;
-                                    vodpic = vodpic?vodpic.replace(/\/img\.php\?url=| |\/tu\.php\?tu=/g,'') + "@Referer=":"https://www.xawqxh.net/mxtheme/images/loading.gif@Referer=";
+                                    vodpic = vodpic?vodpic.replace(/http.*\/tu\.php\?tu=|\/img\.php\?url=| |\/tu\.php\?tu=/g,'') + "@Referer=":"https://www.xawqxh.net/mxtheme/images/loading.gif@Referer=";
                                     if(/^\/upload|^upload/.test(vodpic)){
                                         vodpic = vodurl.match(/http(s)?:\/\/(.*?)\//)[0] + vodpic;
                                     }
@@ -470,7 +470,7 @@ function xunmi(name,data,ishkss) {
                         let search = list.map((list)=>{
                             let vodname = list.name;
                             if(vodname.indexOf(name)>-1){
-                                let vodpic = list.pic.replace(/\/tu\.php\?tu=| |\/img\.php\?url=/g,'');
+                                let vodpic = list.pic.replace(/http.*\/tu\.php\?tu=|\/tu\.php\?tu=| |\/img\.php\?url=/g,'');
                                 let voddesc = list.desc?list.desc:"";
                                 let appname = '‘‘’’<font color=#f13b66a>'+obj.name+'</font>'+' ('+obj.type+')'+(obj.group&&obj.group!=obj.type?' ['+obj.group+']':'');
                                 let vodurl = eval(ssvodurl);
@@ -1120,7 +1120,7 @@ function xunmierji(type,ua) {
             tabs.push(line);
             var linecode = i;
         }else if (/cms|xpath|biubiu/.test(type)) {
-            tabs.push(arts[i].replace(/[\r\ \n]/g, ""));
+            tabs.push(arts[i].replace(/[\r\ \n\t]/g, ""));
             var linecode = arts[i];
         }else{
             var linecode = "";
