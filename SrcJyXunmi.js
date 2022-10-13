@@ -898,7 +898,7 @@ function xunmierji(type,ua) {
                 getsm = "获取年份dtYear";
                 var year = String(xpath(html, jsondata.dtYear)).replace('年份：','').replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "");
                 getsm = "获取类型dtCate";
-                var remarks = String(xpathArray(html, jsondata.dtCate.indexOf('concat(')>-1?jsondata.dtCate.substring(6,jsondata.dtCate.length-1):jsondata.dtCate).join(',')).replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "") || "";
+                var remarks = String(xpathArray(html, (jsondata.dtCate.indexOf('concat(')>-1?jsondata.dtCate.substring(6,jsondata.dtCate.length-1):jsondata.dtCate)).join(',')).replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "") || "";
                 getsm = "获取备注dtMark";
                 var pubdate = String(xpathArray(html, jsondata.dtMark).join(',')).replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "") || "";
                 var pic = MY_PARAMS.pic || xpath(html, jsondata.dtImg);
