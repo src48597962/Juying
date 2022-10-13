@@ -871,9 +871,7 @@ function xunmierji(type,ua) {
                 var conts = [];
                 for (let i = 1; i < arts.length+1; i++) {
                     if(arts[i-1].indexOf("在线视频")>-1){arts[i-1] = '播放源'+i;}
-                    //let contname = xpathArray(html, '('+jsondata.dtNode+jsondata.dtUrlNode+')['+i+']'+jsondata.dtUrlSubNode+jsondata.dtUrlName);
                     let contname = xpathArray(html, jsondata.dtUrlNode+'['+i+']'+jsondata.dtUrlSubNode+jsondata.dtUrlName);
-                    //let conturl = xpathArray(html, '('+jsondata.dtNode+jsondata.dtUrlNode+')['+i+']'+jsondata.dtUrlSubNode+jsondata.dtUrlId);
                     let conturl = xpathArray(html, jsondata.dtUrlNode+'['+i+']'+jsondata.dtUrlSubNode+(jsondata.dtUrlId=="@href"?'/'+jsondata.dtUrlId:jsondata.dtUrlId));
                     let cont = [];
                     for (let j = 0; j < contname.length; j++) {
@@ -898,7 +896,7 @@ function xunmierji(type,ua) {
                 getsm = "获取年份dtYear";
                 var year = String(xpath(html, jsondata.dtYear)).replace('年份：','').replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "");
                 getsm = "获取类型dtCate";
-                var remarks = String(xpathArray(html, (jsondata.dtCate.indexOf('concat(')>-1?jsondata.dtCate.replace('concat(','').replace('))',')'):jsondata.dtCate)).join(',')).replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "") || "";
+                var remarks = String(xpathArray(html, jsondata.dtCate).join(',')).replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "") || "";
                 getsm = "获取备注dtMark";
                 var pubdate = String(xpathArray(html, jsondata.dtMark).join(',')).replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "") || "";
                 var pic = MY_PARAMS.pic || xpath(html, jsondata.dtImg);
