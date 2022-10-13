@@ -424,7 +424,7 @@ function xunmi(name,data,ishkss) {
                             for(var j in title){
                                 list.push({"id":href[j],"name":title[j],"pic":img[j],"desc":mark[j]})
                             }
-                            var ssvodurl = `jsondata.dtUrl.replace('{vid}',list.id.replace('.html',''))`;
+                            var ssvodurl = `jsondata.dtUrl.replace('{vid}',list.id.replace(/.*\//,'').replace('.html',''))`;
                         }
                     }else{
                         var ssurl = jsondata.url+jsondata.sousuoqian+name+jsondata.sousuohou;
