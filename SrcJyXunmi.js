@@ -865,7 +865,7 @@ function xunmierji(type,ua) {
         }else if (/xpath/.test(type)) {
             var jsondata = MY_PARAMS.data;
             try{
-                var arts = xpathArray(html, jsondata.dtFromNode+jsondata.dtFromName);
+                var arts = xpathArray(html, jsondata.dtFromNode+(jsondata.dtFromName.indexOf('concat(')>-1?'/text()':jsondata.dtFromName));
             }catch(e){
                 log('xpath获取线路失改>'+e.message);
                 var arts = [];
