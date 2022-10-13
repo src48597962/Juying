@@ -875,7 +875,8 @@ function xunmierji(type,ua) {
                     //let contname = xpathArray(html, '('+jsondata.dtNode+jsondata.dtUrlNode+')['+i+']'+jsondata.dtUrlSubNode+jsondata.dtUrlName);
                     let contname = xpathArray(html, jsondata.dtUrlNode+'['+i+']'+jsondata.dtUrlSubNode+jsondata.dtUrlName);
                     log(contname)
-                    let conturl = xpathArray(html, '('+jsondata.dtNode+jsondata.dtUrlNode+')['+i+']'+jsondata.dtUrlSubNode+jsondata.dtUrlId);
+                    //let conturl = xpathArray(html, '('+jsondata.dtNode+jsondata.dtUrlNode+')['+i+']'+jsondata.dtUrlSubNode+jsondata.dtUrlId);
+                    let conturl = xpathArray(html, jsondata.dtUrlNode+'['+i+']'+jsondata.dtUrlSubNode+jsondata.dtUrlId);
                     log(conturl)
                     let cont = [];
                     for (let j = 0; j < contname.length; j++) {
