@@ -354,7 +354,7 @@ function xunmi(name,data,ishkss) {
                                     let voddesc = list.vod_remarks||list.state||"";
                                     let appname = '‘‘’’<font color=#f13b66a>'+obj.name+'</font>'+' ('+obj.type+')'+(obj.group&&obj.group!=obj.type?' ['+obj.group+']':'');
                                     let vodurl = list.vod_id?url + list.vod_id:list.nextlink;
-                                    vodpic = vodpic?vodpic.replace('/img.php?url=','').replace('/tu.php?tu=','') + "@Referer=":"https://www.xawqxh.net/mxtheme/images/loading.gif@Referer=";
+                                    vodpic = vodpic?vodpic.replace(/\/img\.php\?url=| |\/tu\.php\?tu=/g,'') + "@Referer=":"https://www.xawqxh.net/mxtheme/images/loading.gif@Referer=";
                                     if(/^\/upload|^upload/.test(vodpic)){
                                         vodpic = vodurl.match(/http(s)?:\/\/(.*?)\//)[0] + vodpic;
                                     }
@@ -415,10 +415,10 @@ function xunmi(name,data,ishkss) {
                                 var gethtml = request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 });
                             }
 
-                            let title = xpathArray(gethtml, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodName);
-                            let href = xpathArray(gethtml, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodId);
-                            let img = xpathArray(gethtml, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodImg);
-                            let mark = xpathArray(gethtml, jsondata.dtNode+jsondata.scVodNode+jsondata.scVodMark)||"";
+                            let title = xpathArray(gethtml, jsondata.scVodNode+jsondata.scVodName);
+                            let href = xpathArray(gethtml, jsondata.scVodNode+jsondata.scVodId);
+                            let img = xpathArray(gethtml, jsondata.scVodNode+jsondata.scVodImg);
+                            let mark = xpathArray(gethtml, jsondata.scVodNode+jsondata.scVodMark)||"";
                             var list = [];
                             for(var j in title){
                                 list.push({"id":href[j],"name":title[j],"pic":img[j],"desc":mark[j]})
@@ -470,7 +470,7 @@ function xunmi(name,data,ishkss) {
                         let search = list.map((list)=>{
                             let vodname = list.name;
                             if(vodname.indexOf(name)>-1){
-                                let vodpic = list.pic.replace('/tu.php?tu=','').replace('/img.php?url=','');
+                                let vodpic = list.pic.replace(/\/tu\.php\?tu=| |\/img\.php\?url=/g,'');
                                 let voddesc = list.desc?list.desc:"";
                                 let appname = '‘‘’’<font color=#f13b66a>'+obj.name+'</font>'+' ('+obj.type+')'+(obj.group&&obj.group!=obj.type?' ['+obj.group+']':'');
                                 let vodurl = eval(ssvodurl);
@@ -867,17 +867,14 @@ function xunmierji(type,ua) {
                 getsm = "获取传递数据";
                 var jsondata = MY_PARAMS.data;
                 getsm = "获取播放选集列表";
-                var arts = xpathArray(html, jsondata.dtNode+jsondata.dtFromNode+jsondata.dtFromName);
+                var arts = xpathArray(html, jsondata.dtFromNode+jsondata.dtFromName);
                 var conts = [];
                 for (let i = 1; i < arts.length+1; i++) {
                     if(arts[i-1].indexOf("在线视频")>-1){arts[i-1] = '播放源'+i;}
-                    log(i)
                     //let contname = xpathArray(html, '('+jsondata.dtNode+jsondata.dtUrlNode+')['+i+']'+jsondata.dtUrlSubNode+jsondata.dtUrlName);
                     let contname = xpathArray(html, jsondata.dtUrlNode+'['+i+']'+jsondata.dtUrlSubNode+jsondata.dtUrlName);
-                    log(contname)
                     //let conturl = xpathArray(html, '('+jsondata.dtNode+jsondata.dtUrlNode+')['+i+']'+jsondata.dtUrlSubNode+jsondata.dtUrlId);
                     let conturl = xpathArray(html, jsondata.dtUrlNode+'['+i+']'+jsondata.dtUrlSubNode+(jsondata.dtUrlId=="@href"?'/'+jsondata.dtUrlId:jsondata.dtUrlId));
-                    log(conturl)
                     let cont = [];
                     for (let j = 0; j < contname.length; j++) {
                         let urlid = jsondata.dtUrlIdR;
@@ -893,20 +890,20 @@ function xunmierji(type,ua) {
                     conts.push(cont.join("#"))
                 }
                 getsm = "获取主演dtActor";
-                var actor = String(xpathArray(html, jsondata.dtNode+jsondata.dtActor).join(',')).replace('主演：','').replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "") || "内详";
+                var actor = String(xpathArray(html, jsondata.dtActor).join(',')).replace('主演：','').replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "") || "内详";
                 getsm = "获取导演dtDirector";
-                var director = String(xpathArray(html, jsondata.dtNode+jsondata.dtDirector).join(',')).replace('导演：','').replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "") || "内详";
+                var director = String(xpathArray(html, jsondata.dtDirector).join(',')).replace('导演：','').replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "") || "内详";
                 getsm = "获取地区dtArea";
-                var area = String(xpath(html, jsondata.dtNode+jsondata.dtArea)).replace('地区：','').replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "");
+                var area = String(xpath(html, jsondata.dtArea)).replace('地区：','').replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "");
                 getsm = "获取年份dtYear";
-                var year = String(xpath(html, jsondata.dtNode+jsondata.dtYear)).replace('年份：','').replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "");
+                var year = String(xpath(html, jsondata.dtYear)).replace('年份：','').replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "");
                 getsm = "获取类型dtCate";
-                var remarks = String(xpathArray(html, jsondata.dtNode+jsondata.dtCate).join(',')).replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "") || "";
+                var remarks = String(xpathArray(html, jsondata.dtCate).join(',')).replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "") || "";
                 getsm = "获取备注dtMark";
-                var pubdate = String(xpathArray(html, jsondata.dtNode+jsondata.dtMark).join(',')).replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "") || "";
-                var pic = MY_PARAMS.pic || xpath(html, jsondata.dtNode+jsondata.dtImg);
+                var pubdate = String(xpathArray(html, jsondata.dtMark).join(',')).replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "") || "";
+                var pic = MY_PARAMS.pic || xpath(html, jsondata.dtImg);
                 getsm = "获取简介dtDesc";
-                var desc = String(xpath(html, jsondata.dtNode+jsondata.dtDesc)).replace(jsondata.filter?eval(jsondata.filter):"","") || '...';
+                var desc = String(xpath(html, jsondata.dtDesc)).replace(jsondata.filter?eval(jsondata.filter):"","") || '...';
             }catch(e){
                 var actor = actor||"抓取失败";
                 var director = director||"";
