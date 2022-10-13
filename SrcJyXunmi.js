@@ -372,7 +372,7 @@ function xunmi(name,data,ishkss) {
                                             },obj.type, urlua),
                                         col_type: "movie_1_vertical_pic",
                                         extra: {
-                                            pic: vodpic.replace('loading.gif@Referer=','loading.gif'),
+                                            pic: vodpic,
                                             name: vodname,
                                             title: vodname+'-'+obj.name,
                                             cls: 'xunmilist'
@@ -491,7 +491,7 @@ function xunmi(name,data,ishkss) {
                                         },obj.type, urlua),
                                     col_type: "movie_1_vertical_pic",
                                     extra: {
-                                        pic: vodpic.replace('loading.gif@Referer=','loading.gif'),
+                                        pic: vodpic,
                                         name: vodname,
                                         title: vodname+'-'+obj.name,
                                         data: jsondata,
@@ -804,7 +804,7 @@ function xunmierji(type,ua) {
             var year = String(xpath(html,`//video/year/text()`)).trim();
             var remarks = String(xpath(html,`//video/note/text()`)).trim() || "";
             var pubdate = String(xpath(html,`//video/type/text()`)).trim() || "";
-            var pic = MY_PARAMS.pic!="https://www.xawqxh.net/mxtheme/images/loading.gif"?MY_PARAMS.pic:xpath(html,`//video/pic/text()`);
+            var pic = MY_PARAMS.pic.indexOf('loading.gif')==-1?MY_PARAMS.pic:xpath(html,`//video/pic/text()`);
             var desc = String(xpath(html.replace('<p>','').replace('</p>',''),`//video/des/text()`)) || '...';
         }else if (/v1|app|v2|cms/.test(type)) {
             if (/cms/.test(type)) {
@@ -849,7 +849,7 @@ function xunmierji(type,ua) {
             var year = json.vod_year;
             var remarks = json.vod_remarks || "";
             var pubdate = json.vod_pubdate || json.vod_class || "";
-            var pic = MY_PARAMS.pic!="https://www.xawqxh.net/mxtheme/images/loading.gif"?MY_PARAMS.pic:json.vod_pic;
+            var pic = MY_PARAMS.pic.indexOf('loading.gif')==-1?MY_PARAMS.pic:json.vod_pic?json.vod_pic:MY_PARAMS.pic;
             var desc = json.vod_blurb || '...';
         }else if (/iptv/.test(type)) {
             var actor = html.actor.join(",") || "内详";
