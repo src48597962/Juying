@@ -1243,7 +1243,7 @@ function jiexi(lx,data) {
                     refreshPage(false);
                     return "hiker://empty";
                 }else{
-                    return "toast:/以http开头的普通解析才能标记"
+                    return "toast://以http开头的普通解析才能标记"
                 }
             })
         });
@@ -1590,7 +1590,6 @@ function extension(){
             }, JYconfig, cfgfile),
         col_type: "text_center_1"
     });
-    
     d.push({
         title: '分享同步',
         url: JYconfig['codeid']?$(["只传接口","只传解析","接口+解析"],2,"选择上传同步云端的项").select((JYconfig,cfgfile)=>{
@@ -1952,6 +1951,111 @@ function extension(){
     d.push({
         col_type: "line_blank"
     });
+    /*
+    d.push({
+        title: '分享同步',
+        url: JYconfig['codeid']?$('hiker://empty#noRecordHistory##noHistory#').rule((JYconfig,cfgfile) => {
+            var d = [];
+            addListener("onClose", $.toString(() => {
+                //refreshPage(false);
+            }));
+            d.push({
+                title: '选择需分享同步的项目',
+                col_type: "rich_text"
+            });
+            d.push({
+                col_type: "line_blank"
+            });
+            d.push({
+                title:'影视接口',
+                col_type:'text_3',
+                url:$("确定要清空上面填写的内容？").confirm(()=>{
+                    clearMyVar('parsename');
+                    clearMyVar('parseurl');
+                    clearMyVar('parseurls');
+                    refreshPage(false);
+                    return "toast://已清空";
+                })
+            });
+            d.push({
+                title:'解析接口',
+                col_type:'text_3',
+                url:$("确定要清空上面填写的内容？").confirm(()=>{
+                    clearMyVar('parsename');
+                    clearMyVar('parseurl');
+                    clearMyVar('parseurls');
+                    refreshPage(false);
+                    return "toast://已清空";
+                })
+            });
+            d.push({
+                title:'直播接口',
+                col_type:'text_3',
+                url:$("确定要清空上面填写的内容？").confirm(()=>{
+                    clearMyVar('parsename');
+                    clearMyVar('parseurl');
+                    clearMyVar('parseurls');
+                    refreshPage(false);
+                    return "toast://已清空";
+                })
+            });
+
+            var text = {};
+            if(input=="只传接口"||input=="接口+解析"){
+                var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
+                var datafile = fetch(filepath);
+                if(datafile==""){
+                    return 'toast://接口数据为空，无法同步云端';
+                }
+                eval("var datalist=" + datafile+ ";");
+                text['jiekou'] = datalist;
+            }else{
+                text['jiekou'] = [];
+            }
+            if(input=="只传解析"||input=="接口+解析"){
+                var filepath = "hiker://files/rules/Src/Juying/myjiexi.json";
+                var datafile = fetch(filepath);
+                if(datafile==""){
+                    var datalist=[];
+                }else{
+                    eval("var datalist=" + datafile+ ";");
+                }
+                text['jiexi'] = datalist;
+            }else{
+                text['jiexi'] = [];
+            }
+            let textcontent = base64Encode(JSON.stringify(text));
+            if(textcontent.length>=200000){
+                log('分享失败：接口字符数超过最大限制，请精简接口，重点减少xpath和biubiu类型'); 
+                return 'toast://分享同步失败，接口字符数超过最大限制';
+            }
+            try{
+                var pasteupdate = JSON.parse(request('https://netcut.cn/api/note/update/', {
+                    headers: { 'Referer': 'https://netcut.cn/' },
+                    body: 'note_id='+aesDecode('Juying', JYconfig['codeid'])+'&note_content='+textcontent,
+                    method: 'POST'
+                }));
+                var status = pasteupdate.status
+                var sharetime = pasteupdate.data.updated_time;
+                if(status==1){
+                    JYconfig['sharetime'] = sharetime;
+                    writeFile(cfgfile, JSON.stringify(JYconfig));
+                    refreshPage(false);
+                    //let code = '聚影资源码￥'+JYconfig['codeid'];
+                    //copy(code);
+                    return "toast://分享同步云端数据成功";
+                }else{
+                    return 'toast://分享同步失败，资源码应该不存在';
+                }
+            } catch (e) {
+                log('分享失败：'+e.message); 
+                return 'toast://分享同步失败，请重新再试';
+            }
+            setHomeResult(d);
+        }, JYconfig, cfgfile):'toast://请先申请聚影资源码',
+        col_type: "text_2"
+    });
+    */
     
     d.push({
         title: 'biu导入',
@@ -2123,6 +2227,46 @@ function extension(){
                         biudata.juqingqian = biujson.juqingqian;
                         biudata.juqinghou = biujson.juqinghou;
                         urls.push({ "name": obj.name, "url": obj.key, "type": "biubiu", "ua": "PC_UA", "data": biudata, "group": "新导入"})
+                    }catch(e){
+                        //log(obj.name + '>抓取失败>' + e.message)
+                    }
+                }else if(/^csp_XPath/.test(obj.api)){
+                    try{
+                        let urlfile = obj.ext;
+                        if(/^clan:/.test(urlfile)){
+                            urlfile = urlfile.replace("clan://TVBox/",input.match(/file.*\//)[0]);
+                        }
+                        let xphtml = fetch(urlfile,{timeout:2000});
+                        xphtml = xphtml.replace(reg, function(word) { 
+                            return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
+                        }).replace(/^.*#.*$/mg,"").replace(/[\x00-\x1F\x7F]|[\t\r\n]/g,'');
+                        let xpjson = JSON.parse(xphtml);
+                        let xpdata = {};
+                        xpdata.filter = "";
+                        xpdata.dtUrl = xpjson.dtUrl;
+                        xpdata.dtImg = xpjson.dtImg;
+                        xpdata.dtCate = xpjson.dtCate;
+                        xpdata.dtYear = xpjson.dtYear;
+                        xpdata.dtArea = xpjson.dtArea;
+                        xpdata.dtMark = xpjson.dtMark;
+                        xpdata.dtDirector = xpjson.dtDirector;
+                        xpdata.dtActor = xpjson.dtActor;
+                        xpdata.dtDesc = xpjson.dtDesc;
+                        xpdata.dtFromNode = xpjson.dtFromNode;
+                        xpdata.dtFromName = xpjson.dtFromName;
+                        xpdata.dtUrlNode = xpjson.dtUrlNode;
+                        xpdata.dtUrlSubNode = xpjson.dtUrlSubNode;
+                        xpdata.dtUrlId = xpjson.dtUrlId;
+                        xpdata.dtUrlName = xpjson.dtUrlName;
+                        xpdata.dtUrlIdR = xpjson.dtUrlIdR;
+                        xpdata.playUrl = xpjson.playUrl;
+                        xpdata.searchUrl = xpjson.searchUrl;
+                        xpdata.scVodNode = xpjson.scVodNode;
+                        xpdata.scVodName = xpjson.scVodName;
+                        xpdata.scVodId = xpjson.scVodId;
+                        xpdata.scVodImg = xpjson.scVodImg;
+                        xpdata.scVodMark = xpjson.scVodMark;
+                        urls.push({ "name": obj.name, "url": obj.ext, "type": "biubiu", "ua": xpjson.ua?xpjson.ua:"PC_UA", "data": xpdata, "group": "新导入"})
                     }catch(e){
                         //log(obj.name + '>抓取失败>' + e.message)
                     }
