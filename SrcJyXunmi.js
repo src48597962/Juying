@@ -401,6 +401,7 @@ function xunmi(name,data,ishkss) {
                             var gethtml = request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 });
                             var html = JSON.parse(gethtml);
                             var list = html.list||[];
+                            var ssvodurl = `jsondata.dtUrl.replace('{vid}',list.id)`;
                         }else{
                             var sstype = ssurl.indexOf(';post')>-1?"post":"get";
                             if(sstype == "post"){
@@ -423,8 +424,8 @@ function xunmi(name,data,ishkss) {
                             for(var j in title){
                                 list.push({"id":href[j],"name":title[j],"pic":img[j],"desc":mark[j]})
                             }
+                            var ssvodurl = `jsondata.dtUrl.replace(/.*\/|\.html/g,list.id)`;
                         }
-                        var ssvodurl = `jsondata.dtUrl.replace('{vid}',list.id)`;
                     }else{
                         var ssurl = jsondata.url+jsondata.sousuoqian+name+jsondata.sousuohou;
                         if(jsondata.ssmoshi=="0"){
