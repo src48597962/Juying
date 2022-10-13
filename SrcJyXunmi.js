@@ -863,7 +863,87 @@ function xunmierji(type,ua) {
             var arts = html.videolist;
             var conts = arts;
         }else if (/xpath/.test(type)) {
+            var jsondata = MY_PARAMS.data;
             try{
+                var arts = xpathArray(html, jsondata.dtFromNode+jsondata.dtFromName);
+            }catch(e){
+                log('xpath获取线路失改>'+e.message);
+                var arts = [];
+            }
+            try{
+                var conts = [];
+                for (let i = 1; i < arts.length+1; i++) {
+                    if(arts[i-1].indexOf("在线视频")>-1){arts[i-1] = '播放源'+i;}
+                    let contname = xpathArray(html, jsondata.dtUrlNode+'['+i+']'+jsondata.dtUrlSubNode+jsondata.dtUrlName);
+                    let conturl = xpathArray(html, jsondata.dtUrlNode+'['+i+']'+jsondata.dtUrlSubNode+(jsondata.dtUrlId=="@href"?'/'+jsondata.dtUrlId:jsondata.dtUrlId));
+                    let cont = [];
+                    for (let j = 0; j < contname.length; j++) {
+                        let urlid = jsondata.dtUrlIdR;
+                        if(urlid){
+                            let urlidl = urlid.split('(\\S+)')[0];
+                            let urlidr = urlid.split('(\\S+)')[1];
+                            var playUrl = conturl[j].replace(urlidl,'').replace(urlidr,'');
+                        }else{
+                            var playUrl = conturl[j];
+                        }
+                        cont.push(contname[j]+"$"+jsondata.playUrl.replace('{playUrl}',playUrl))
+                    }
+                    conts.push(cont.join("#"))
+                }
+            }catch(e){
+                log('xpath获取选集列表失败>'+e.message);
+                var conts = [];
+            }
+            try{
+                var actor = String(xpathArray(html, jsondata.dtActor).join(',')).replace('主演：','').replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "") || "内详";
+            }catch(e){
+                log('xpath获取主演dtActor失败>'+e.message);
+                var actor = "取dtActor失败";
+            }
+            try{
+                var director = String(xpathArray(html, jsondata.dtDirector).join(',')).replace('导演：','').replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "") || "内详";
+            }catch(e){
+                log('xpath获取导演dtDirector失败>'+e.message);
+                var director = "取dtDirector失败";
+            }
+            try{
+                var area = String(xpath(html, jsondata.dtArea)).replace('地区：','').replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "");
+            }catch(e){
+                log('xpath获取地区dtArea失败>'+e.message);
+                var area = "取dtArea失败";
+            }
+            try{
+                var year = String(xpath(html, jsondata.dtYear)).replace('年份：','').replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "");
+            }catch(e){
+                log('xpath获取年份dtYear失败>'+e.message);
+                var year = "取dtYear失败";
+            }
+            try{
+                var remarks = String(xpathArray(html, jsondata.dtCate).join(',')).replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "") || "";
+            }catch(e){
+                log('xpath获取类型dtCate失败>'+e.message);
+                var remarks = "取dtCate失败";
+            }
+            try{
+                var pubdate = String(xpathArray(html, jsondata.dtMark).join(',')).replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "") || "";
+            }catch(e){
+                log('xpath获取备注dtMark失败>'+e.message);
+                var pubdate = "取dtMark失败";
+            }
+            try{
+                var pic = MY_PARAMS.pic || xpath(html, jsondata.dtImg);
+            }catch(e){
+                log('xpath获取图片dtImg失败>'+e.message);
+                var pic = "";
+            }
+            try{
+                var desc = String(xpath(html, jsondata.dtDesc)).replace(jsondata.filter?eval(jsondata.filter):"","") || '...';
+            }catch(e){
+                log('xpath获取简价dtDesc失败>'+e.message);
+                var desc = "...";
+            }
+
+            /*try{
                 getsm = "获取传递数据";
                 var jsondata = MY_PARAMS.data;
                 getsm = "获取播放选集列表";
@@ -914,7 +994,7 @@ function xunmierji(type,ua) {
                 var arts = arts||[];
                 var conts = conts||[];
                 log(getsm+'失败>'+e.message)
-            }    
+            }   */ 
         }else if (/biubiu/.test(type)) {
             var getsm = "";
             try{
