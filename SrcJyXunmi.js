@@ -863,11 +863,13 @@ function xunmierji(type,ua) {
             var arts = html.videolist;
             var conts = arts;
         }else if (/xpath/.test(type)) {
+            log('进来了')
             try{
                 getsm = "获取传递数据";
                 var jsondata = MY_PARAMS.data;
                 getsm = "获取播放选集列表";
                 var arts = xpathArray(html, jsondata.dtNode+jsondata.dtFromNode+jsondata.dtFromName);
+                log(arts)
                 var conts = [];
                 for (let i = 1; i < arts.length+1; i++) {
                     if(arts[i-1].indexOf("在线视频")>-1){arts[i-1] = '播放源'+i;}
