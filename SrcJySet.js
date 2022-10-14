@@ -2005,51 +2005,53 @@ function extension(){
         })
     });
     if(getMyVar('importtype','0')!="0"){
-        d.push({
-            title: '选择需要的导入项目',
-            col_type: "rich_text",
-            extra:{textSize:12}
-        });
-        d.push({
-            title:(getMyVar('importjiekou','0')=="1"?getide(1):getide(0))+'影视接口',
-            col_type:'text_3',
-            url:$('#noLoading#').lazyRule(() => {
-                if(getMyVar('importjiekou')=="1"){
-                    putMyVar('importjiekou','0');
-                }else{
-                    putMyVar('importjiekou','1');
-                }
-                refreshPage(false);
-                return "hiker://empty";
-            })
-        });
-        d.push({
-            title:(getMyVar('importjiexi','0')=="1"?getide(1):getide(0))+'解析接口',
-            col_type:'text_3',
-            url:$('#noLoading#').lazyRule(() => {
-                if(getMyVar('importjiexi')=="1"){
-                    putMyVar('importjiexi','0');
-                }else{
-                    putMyVar('importjiexi','1');
-                }
-                refreshPage(false);
-                return "hiker://empty";
-            })
-        });
-        d.push({
-            title:(getMyVar('importlive','0')=="1"?getide(1):getide(0))+'直播接口',
-            col_type:'text_3',
-            url:$('#noLoading#').lazyRule(() => {
-                return 'toast://暂不支持';
-                if(getMyVar('importlive')=="1"){
-                    putMyVar('importlive','0');
-                }else{
-                    putMyVar('importlive','1');
-                }
-                refreshPage(false);
-                return "hiker://empty";
-            })
-        });
+        if(getMyVar('importtype','0')!="2"){
+            d.push({
+                title: '选择需要的导入项目',
+                col_type: "rich_text",
+                extra:{textSize:12}
+            });
+            d.push({
+                title:(getMyVar('importjiekou','0')=="1"?getide(1):getide(0))+'影视接口',
+                col_type:'text_3',
+                url:$('#noLoading#').lazyRule(() => {
+                    if(getMyVar('importjiekou')=="1"){
+                        putMyVar('importjiekou','0');
+                    }else{
+                        putMyVar('importjiekou','1');
+                    }
+                    refreshPage(false);
+                    return "hiker://empty";
+                })
+            });
+            d.push({
+                title:(getMyVar('importjiexi','0')=="1"?getide(1):getide(0))+'解析接口',
+                col_type:'text_3',
+                url:$('#noLoading#').lazyRule(() => {
+                    if(getMyVar('importjiexi')=="1"){
+                        putMyVar('importjiexi','0');
+                    }else{
+                        putMyVar('importjiexi','1');
+                    }
+                    refreshPage(false);
+                    return "hiker://empty";
+                })
+            });
+            d.push({
+                title:(getMyVar('importlive','0')=="1"?getide(1):getide(0))+'直播接口',
+                col_type:'text_3',
+                url:$('#noLoading#').lazyRule(() => {
+                    return 'toast://暂不支持';
+                    if(getMyVar('importlive')=="1"){
+                        putMyVar('importlive','0');
+                    }else{
+                        putMyVar('importlive','1');
+                    }
+                    refreshPage(false);
+                    return "hiker://empty";
+                })
+            });
+        }
         d.push({
             title:'',
             col_type: 'input',
@@ -2072,7 +2074,7 @@ function extension(){
         });
         d.push({
             title: '🆗 确定导入',
-            url: getMyVar('importjiekou')!="1"&&getMyVar('importjiexi')!="1"&&getMyVar('importlive')!="1"?'toast://请选择导入项目':$('#noLoading#').lazyRule(() => {
+            url: getMyVar('importtype')!="2"&&getMyVar('importjiekou')!="1"&&getMyVar('importjiexi')!="1"&&getMyVar('importlive')!="1"?'toast://请选择导入项目':$('#noLoading#').lazyRule(() => {
                     if(getMyVar('importinput', '')==""&&getMyVar('importtype','0')!="2"){
                         return 'toast://请先输入链接地址'
                     }
