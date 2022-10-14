@@ -1566,7 +1566,8 @@ function extension(){
     });
     d.push({
         title: '聚影分享',
-        col_type: "rich_text"
+        img:'https://lanmeiguojiang.com/tubiao/more/255.png',
+        col_type: "avatar"
     });
     d.push({
         col_type: "line"
