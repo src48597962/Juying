@@ -2031,11 +2031,13 @@ function extension(){
                 url:$('#noLoading#').lazyRule(() => {
                     if(getMyVar('importjiexi')=="1"){
                         putMyVar('importjiexi','0');
+                        var sm = "toast://不建议导入太多解析，因为网上公开的解析大多是失效了";
                     }else{
                         putMyVar('importjiexi','1');
+                        var sm = "hiker://empty";
                     }
                     refreshPage(false);
-                    return 'toast://不建议导入太多解析，因为网上公开的解析大多是失效了';
+                    return sm;
                 })
             });
             d.push({
@@ -2057,9 +2059,8 @@ function extension(){
             title:'本地',
             col_type: 'input',
             desc: '请输入链接地址',
-            url: `fileSelect://putMyVar("importinput",input);refreshPage(false);`,
             extra: {
-                titleVisible: getMyVar('importtype','0')=="1"?true:false,
+                titleVisible: false,
                 defaultValue: getMyVar('importinput', ''),
                 onChange: 'putMyVar("importinput",input)'
             }
