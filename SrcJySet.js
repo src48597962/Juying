@@ -2064,11 +2064,26 @@ function extension(){
         });
         d.push({
             title: '🆖 历史记录',
-            url: $('hiker://empty#noRecordHistory##noHistory#').rule((JYconfig, cfgfile) => {
+            url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
                 addListener("onClose", $.toString(() => {
                     refreshPage(false);
                 }));
+                setPageTitle("🆖历史记录");
+                let cfgfile = "hiker://files/rules/Src/Juying/config.json";
+                let Juyingcfg=fetch(cfgfile);
+                if(Juyingcfg != ""){
+                    eval("var JYconfig=" + Juyingcfg+ ";");
+                }else{
+                    var JYconfig= {};
+                }
                 var d = [];
+                d.push({
+                    title: '⇩点击下方的历史条目，进行操作',
+                    col_type: "rich_text"
+                });
+                d.push({
+                    col_type: "line"
+                });
                 let importrecord = JYconfig['importrecord']||[];
                 if(importrecord.length>0){
                     for(let i=0;i<importrecord.length;i++){
@@ -2099,7 +2114,7 @@ function extension(){
                     }
                 }
                 setHomeResult(d);
-            }, JYconfig, cfgfile),
+            }),
             col_type: "text_2"
         });
         d.push({
