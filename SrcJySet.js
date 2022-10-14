@@ -2031,10 +2031,10 @@ function extension(){
                 url:$('#noLoading#').lazyRule(() => {
                     if(getMyVar('importjiexi')=="1"){
                         putMyVar('importjiexi','0');
-                        var sm = "toast://不建议导入太多解析，因为网上公开的解析大多是失效了";
+                        var sm = "hiker://empty";
                     }else{
                         putMyVar('importjiexi','1');
-                        var sm = "hiker://empty";
+                        var sm = "toast://不建议导入太多解析，因为网上公开的解析大多是失效了";
                     }
                     refreshPage(false);
                     return sm;
@@ -2071,7 +2071,7 @@ function extension(){
                 addListener("onClose", $.toString(() => {
                     refreshPage(false);
                 }));
-                setPageTitle("🆖历史记录");
+                setPageTitle("🆖资源导入-历史记录");
                 let cfgfile = "hiker://files/rules/Src/Juying/config.json";
                 let Juyingcfg=fetch(cfgfile);
                 if(Juyingcfg != ""){
