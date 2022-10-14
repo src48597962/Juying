@@ -2035,7 +2035,7 @@ function extension(){
                         putMyVar('importjiexi','1');
                     }
                     refreshPage(false);
-                    return "hiker://empty";
+                    return 'toast://不建议导入太多解析，因为网上公开的解析大多是失效了';
                 })
             });
             d.push({
@@ -2054,11 +2054,12 @@ function extension(){
             });
         }
         d.push({
-            title:'',
+            title:'本地',
             col_type: 'input',
             desc: '请输入链接地址',
+            url: `fileSelect://putMyVar("importinput",input);refreshPage(false);`,
             extra: {
-                titleVisible: false,
+                titleVisible: getMyVar('importtype','0')=="1"?true:false,
                 defaultValue: getMyVar('importinput', ''),
                 onChange: 'putMyVar("importinput",input)'
             }
