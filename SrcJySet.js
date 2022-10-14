@@ -2064,12 +2064,42 @@ function extension(){
         });
         d.push({
             title: '🆖 历史记录',
-            url: $(JYconfig['xunmigroup']?JYconfig['xunmigroup']:"全部","设置搜索时默认分组").input((JYconfig,cfgfile) => {
-                    JYconfig['xunmigroup'] = input;
-                    writeFile(cfgfile, JSON.stringify(JYconfig));
+            url: $('hiker://empty#noRecordHistory##noHistory#').rule((JYconfig, cfgfile) => {
+                addListener("onClose", $.toString(() => {
                     refreshPage(false);
-                    return 'toast://默认搜索分组'+(input?'已设置为：'+input:'已清空');
-                }, JYconfig, cfgfile),
+                }));
+                var d = [];
+                let importrecord = JYconfig['importrecord']||[];
+                if(importrecord.length>0){
+                    for(let i=0;i<importrecord.length;i++){
+                        if(importrecord[i].type==getMyVar('importtype','0')){
+                            d.push({
+                                title: importrecord[i].url,
+                                url: $(["选择","删除"],1,"").select((JYconfig, cfgfile, url)=>{
+                                        if(input=="选择"){
+                                            putMyVar('importinput', url);
+                                            back(true);
+                                        }else if(input=="删除"){
+                                            let importrecord = JYconfig['importrecord']||[];
+                                            for(let i=0;i<importrecord.length;i++){
+                                                if(importrecord[i].url==url){
+                                                    importrecord.splice(i,1);
+                                                    break;
+                                                }
+                                            }
+                                            JYconfig['importrecord'] = importrecord; 
+                                            writeFile(cfgfile, JSON.stringify(JYconfig));
+                                            refreshPage(false);
+                                        }
+                                        return "hiker://empty";
+                                    }, JYconfig, cfgfile, importrecord[i].url),
+                                col_type: "text_1"
+                            });
+                        }
+                    }
+                }
+                setHomeResult(d);
+            }, JYconfig, cfgfile),
             col_type: "text_2"
         });
         d.push({
