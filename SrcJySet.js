@@ -1565,9 +1565,8 @@ function extension(){
         col_type: "line_blank"
     });
     d.push({
-        title: '聚影分享',
-        img:'https://lanmeiguojiang.com/tubiao/more/255.png',
-        col_type: "avatar"
+        title: '🌐聚影分享',
+        col_type: "rich_text"
     });
     d.push({
         col_type: "line"
@@ -1696,7 +1695,7 @@ function extension(){
         col_type: "line_blank"
     });
     d.push({
-        title: '订阅管理',
+        title: '⚡订阅管理',
         col_type: "rich_text"
     });
     d.push({
@@ -1848,7 +1847,7 @@ function extension(){
         col_type: "line_blank"
     });
     d.push({
-        title: '个性设置',
+        title: '⚙个性设置',
         col_type: "rich_text"
     });
     d.push({
@@ -1965,7 +1964,7 @@ function extension(){
         col_type: "line_blank"
     });
     d.push({
-        title: '其他资源',
+        title: '🎁其他资源',
         col_type: "rich_text"
     });
     d.push({
@@ -2055,7 +2054,7 @@ function extension(){
         }
     });
     d.push({
-        title: '历史记录',
+        title: '🆖历史记录',
         url: $(JYconfig['xunmigroup']?JYconfig['xunmigroup']:"全部","设置搜索时默认分组").input((JYconfig,cfgfile) => {
                 JYconfig['xunmigroup'] = input;
                 writeFile(cfgfile, JSON.stringify(JYconfig));
@@ -2065,7 +2064,7 @@ function extension(){
         col_type: "text_2"
     });
     d.push({
-        title: '确定导入',
+        title: '🆗确定导入',
         url: $(JYconfig['xunmigroup']?JYconfig['xunmigroup']:"全部","设置搜索时默认分组").input((JYconfig,cfgfile) => {
                 JYconfig['xunmigroup'] = input;
                 writeFile(cfgfile, JSON.stringify(JYconfig));
