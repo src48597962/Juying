@@ -2102,7 +2102,7 @@ function extension(){
                                     }else if(input=="删除"){
                                         let importrecord = JYconfig['importrecord']||[];
                                         for(let i=0;i<importrecord.length;i++){
-                                            if(importrecord[i].url==url){
+                                            if(importrecord[i].url==url&&importrecord[i].type==getMyVar('importtype','0')){
                                                 importrecord.splice(i,1);
                                                 break;
                                             }
