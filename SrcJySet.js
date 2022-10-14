@@ -2077,15 +2077,15 @@ function extension(){
                     var JYconfig= {};
                 }
                 var d = [];
-                d.push({
-                    title: '⇩点击下方的历史条目，进行操作',
-                    col_type: "rich_text"
-                });
-                d.push({
-                    col_type: "line"
-                });
                 let importrecord = JYconfig['importrecord']||[];
                 if(importrecord.length>0){
+                    d.push({
+                        title: '⇩点击下方的历史条目，进行操作',
+                        col_type: "rich_text"
+                    });
+                    d.push({
+                        col_type: "line"
+                    });
                     for(let i=0;i<importrecord.length;i++){
                         if(importrecord[i].type==getMyVar('importtype','0')){
                             d.push({
@@ -2112,6 +2112,11 @@ function extension(){
                             });
                         }
                     }
+                }else{
+                    d.push({
+                        title: '↻无记录',
+                        col_type: "rich_text"
+                    });
                 }
                 setHomeResult(d);
             }),
