@@ -1951,111 +1951,43 @@ function extension(){
     d.push({
         col_type: "line_blank"
     });
-    /*
     d.push({
-        title: '分享同步',
-        url: JYconfig['codeid']?$('hiker://empty#noRecordHistory##noHistory#').rule((JYconfig,cfgfile) => {
-            var d = [];
-            addListener("onClose", $.toString(() => {
-                //refreshPage(false);
-            }));
-            d.push({
-                title: '选择需分享同步的项目',
-                col_type: "rich_text"
-            });
-            d.push({
-                col_type: "line_blank"
-            });
-            d.push({
-                title:'影视接口',
-                col_type:'text_3',
-                url:$("确定要清空上面填写的内容？").confirm(()=>{
-                    clearMyVar('parsename');
-                    clearMyVar('parseurl');
-                    clearMyVar('parseurls');
-                    refreshPage(false);
-                    return "toast://已清空";
-                })
-            });
-            d.push({
-                title:'解析接口',
-                col_type:'text_3',
-                url:$("确定要清空上面填写的内容？").confirm(()=>{
-                    clearMyVar('parsename');
-                    clearMyVar('parseurl');
-                    clearMyVar('parseurls');
-                    refreshPage(false);
-                    return "toast://已清空";
-                })
-            });
-            d.push({
-                title:'直播接口',
-                col_type:'text_3',
-                url:$("确定要清空上面填写的内容？").confirm(()=>{
-                    clearMyVar('parsename');
-                    clearMyVar('parseurl');
-                    clearMyVar('parseurls');
-                    refreshPage(false);
-                    return "toast://已清空";
-                })
-            });
-
-            var text = {};
-            if(input=="只传接口"||input=="接口+解析"){
-                var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
-                var datafile = fetch(filepath);
-                if(datafile==""){
-                    return 'toast://接口数据为空，无法同步云端';
-                }
-                eval("var datalist=" + datafile+ ";");
-                text['jiekou'] = datalist;
-            }else{
-                text['jiekou'] = [];
-            }
-            if(input=="只传解析"||input=="接口+解析"){
-                var filepath = "hiker://files/rules/Src/Juying/myjiexi.json";
-                var datafile = fetch(filepath);
-                if(datafile==""){
-                    var datalist=[];
-                }else{
-                    eval("var datalist=" + datafile+ ";");
-                }
-                text['jiexi'] = datalist;
-            }else{
-                text['jiexi'] = [];
-            }
-            let textcontent = base64Encode(JSON.stringify(text));
-            if(textcontent.length>=200000){
-                log('分享失败：接口字符数超过最大限制，请精简接口，重点减少xpath和biubiu类型'); 
-                return 'toast://分享同步失败，接口字符数超过最大限制';
-            }
-            try{
-                var pasteupdate = JSON.parse(request('https://netcut.cn/api/note/update/', {
-                    headers: { 'Referer': 'https://netcut.cn/' },
-                    body: 'note_id='+aesDecode('Juying', JYconfig['codeid'])+'&note_content='+textcontent,
-                    method: 'POST'
-                }));
-                var status = pasteupdate.status
-                var sharetime = pasteupdate.data.updated_time;
-                if(status==1){
-                    JYconfig['sharetime'] = sharetime;
-                    writeFile(cfgfile, JSON.stringify(JYconfig));
-                    refreshPage(false);
-                    //let code = '聚影资源码￥'+JYconfig['codeid'];
-                    //copy(code);
-                    return "toast://分享同步云端数据成功";
-                }else{
-                    return 'toast://分享同步失败，资源码应该不存在';
-                }
-            } catch (e) {
-                log('分享失败：'+e.message); 
-                return 'toast://分享同步失败，请重新再试';
-            }
-            setHomeResult(d);
-        }, JYconfig, cfgfile):'toast://请先申请聚影资源码',
-        col_type: "text_2"
+        title: '选择需要导入的项目',
+        col_type: "rich_text"
     });
-    */
+    d.push({
+        title:'影视接口',
+        col_type:'text_3',
+        url:$("确定要清空上面填写的内容？").confirm(()=>{
+            clearMyVar('parsename');
+            clearMyVar('parseurl');
+            clearMyVar('parseurls');
+            refreshPage(false);
+            return "toast://已清空";
+        })
+    });
+    d.push({
+        title:'解析接口',
+        col_type:'text_3',
+        url:$("确定要清空上面填写的内容？").confirm(()=>{
+            clearMyVar('parsename');
+            clearMyVar('parseurl');
+            clearMyVar('parseurls');
+            refreshPage(false);
+            return "toast://已清空";
+        })
+    });
+    d.push({
+        title:'直播接口',
+        col_type:'text_3',
+        url:$("确定要清空上面填写的内容？").confirm(()=>{
+            clearMyVar('parsename');
+            clearMyVar('parseurl');
+            clearMyVar('parseurls');
+            refreshPage(false);
+            return "toast://已清空";
+        })
+    });
     
     d.push({
         title: 'biu导入',
