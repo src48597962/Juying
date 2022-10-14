@@ -1508,7 +1508,8 @@ function extension(){
         clearMyVar('importjiekou');
         clearMyVar('importjiexi');
         clearMyVar('importlive');
-        clearMyVar('importlx')
+        clearMyVar('importtype');
+        clearMyVar('importinput');
         refreshPage(false);
     }));
     var d = [];
@@ -1967,38 +1968,38 @@ function extension(){
         extra:{textSize:12}
     });
     d.push({
-        title: (getMyVar('importlx','0')=="1"?"👉":"")+"TVBox导入",
+        title: (getMyVar('importtype','0')=="1"?"👉":"")+"TVBox导入",
         col_type: 'scroll_button',
         url: $('#noLoading#').lazyRule(() => {
-            putMyVar('importlx','1');
-            refreshPage(true);
+            putMyVar('importtype','1');
+            refreshPage(false);
             return "hiker://empty";
         })
     });
     d.push({
-        title: (getMyVar('importlx','0')=="2"?"👉":"")+"biu导入",
+        title: (getMyVar('importtype','0')=="2"?"👉":"")+"biu导入",
         col_type: 'scroll_button',
         url: $('#noLoading#').lazyRule(() => {
-            putMyVar('importlx','2');
-            refreshPage(true);
+            putMyVar('importtype','2');
+            refreshPage(false);
             return "hiker://empty";
         })
     });
     d.push({
-        title: (getMyVar('importlx','0')=="3"?"👉":"")+"其他导入",
+        title: (getMyVar('importtype','0')=="3"?"👉":"")+"其他导入",
         col_type: 'scroll_button',
         url: $('#noLoading#').lazyRule(() => {
-            putMyVar('importlx','3');
-            refreshPage(true);
+            putMyVar('importtype','3');
+            refreshPage(false);
             return "hiker://empty";
         })
     });
     d.push({
-        title: (getMyVar('importlx','0')=="4"?"👉":"")+"TVBox订阅",
+        title: (getMyVar('importtype','0')=="4"?"👉":"")+"TVBox订阅",
         col_type: 'scroll_button',
         url: $('#noLoading#').lazyRule(() => {
-            putMyVar('importlx','4');
-            refreshPage(true);
+            putMyVar('importtype','4');
+            refreshPage(false);
             return "hiker://empty";
         })
     });
@@ -2010,34 +2011,28 @@ function extension(){
     d.push({
         title:(getMyVar('importjiekou','0')=="1"?getide(1):getide(0))+'影视接口',
         col_type:'text_3',
-        url:$("确定要清空上面填写的内容？").confirm(()=>{
-            clearMyVar('parsename');
-            clearMyVar('parseurl');
-            clearMyVar('parseurls');
+        url:$('#noLoading#').lazyRule(() => {
+            putMyVar('importjiekou','1');
             refreshPage(false);
-            return "toast://已清空";
+            return "hiker://empty";
         })
     });
     d.push({
         title:(getMyVar('importjiexi','0')=="1"?getide(1):getide(0))+'解析接口',
         col_type:'text_3',
-        url:$("确定要清空上面填写的内容？").confirm(()=>{
-            clearMyVar('parsename');
-            clearMyVar('parseurl');
-            clearMyVar('parseurls');
+        url:$('#noLoading#').lazyRule(() => {
+            putMyVar('importjiexi','1');
             refreshPage(false);
-            return "toast://已清空";
+            return "hiker://empty";
         })
     });
     d.push({
         title:(getMyVar('importlive','0')=="1"?getide(1):getide(0))+'直播接口',
         col_type:'text_3',
-        url:$("确定要清空上面填写的内容？").confirm(()=>{
-            clearMyVar('parsename');
-            clearMyVar('parseurl');
-            clearMyVar('parseurls');
+        url:$('#noLoading#').lazyRule(() => {
+            putMyVar('importlive','1');
             refreshPage(false);
-            return "toast://已清空";
+            return "hiker://empty";
         })
     });
     d.push({
@@ -2045,7 +2040,36 @@ function extension(){
         col_type: "rich_text",
         extra:{textSize:12}
     });
-
+    d.push({
+        title:'',
+        col_type: 'input',
+        desc: '请输入链接地址',
+        extra: {
+            titleVisible: false,
+            defaultValue: getMyVar('importinput', ''),
+            onChange: 'putMyVar("importinput",input)'
+        }
+    });
+    d.push({
+        title: '历史记录',
+        url: $(JYconfig['xunmigroup']?JYconfig['xunmigroup']:"全部","设置搜索时默认分组").input((JYconfig,cfgfile) => {
+                JYconfig['xunmigroup'] = input;
+                writeFile(cfgfile, JSON.stringify(JYconfig));
+                refreshPage(false);
+                return 'toast://默认搜索分组'+(input?'已设置为：'+input:'已清空');
+            }, JYconfig, cfgfile),
+        col_type: "text_3"
+    });
+    d.push({
+        title: '确定导入',
+        url: $(JYconfig['xunmigroup']?JYconfig['xunmigroup']:"全部","设置搜索时默认分组").input((JYconfig,cfgfile) => {
+                JYconfig['xunmigroup'] = input;
+                writeFile(cfgfile, JSON.stringify(JYconfig));
+                refreshPage(false);
+                return 'toast://默认搜索分组'+(input?'已设置为：'+input:'已清空');
+            }, JYconfig, cfgfile),
+        col_type: "text_3"
+    });
     d.push({
         title: 'biu导入',
         url:$("","输入biubiu资源地址").input(() => {
