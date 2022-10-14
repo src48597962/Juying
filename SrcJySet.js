@@ -2242,7 +2242,7 @@ function Resourceimport(input){
                 log('TVBox导入解析保存失败>'+e.message);
             }
         }              
-        let sm = (jknum>-1?' 接口保存>'+jknum:'')+(jxnum>-1?' 解析保存>'+jxnum:'');
+        let sm = (jknum>-1?' 接口保存'+jknum:'')+(jxnum>-1?' 解析保存'+jxnum:'');
         return 'TVBox导入：'+(sm?sm:'导入异常，详情查看日志');
     }else if(getMyVar('importtype','')=="2"){//tvbox订阅
         try{
@@ -2358,7 +2358,7 @@ function Resourceimport(input){
                 }
             }
         }
-        let sm = (jknum>-1?' 接口保存>'+jknum:'')+(jxnum>-1?' 解析保存>'+jxnum:'');
+        let sm = (jknum>-1?' 接口保存'+jknum:'')+(jxnum>-1?' 解析保存'+jxnum:'');
         return 'biu导入：'+(sm?sm:'导入异常，详情查看日志');
     }   
 }
