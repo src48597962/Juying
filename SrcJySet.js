@@ -2155,6 +2155,30 @@ function extension(){
         });
     }
     d.push({
+        col_type: "line_blank"
+    });
+    d.push({
+        title: '💝 关于聚影',
+        col_type: "rich_text"
+    });
+    d.push({
+        col_type: "line"
+    });
+    d.push({
+        title: '这是一个有想法的小程序',
+        desc: '演示资源码、查看更新日志',
+        col_type: 'text_1',
+        url:$('#noLoading#').lazyRule(() => {
+            if(getMyVar('importjiekou')=="1"){
+                putMyVar('importjiekou','0');
+            }else{
+                putMyVar('importjiekou','1');
+            }
+            refreshPage(false);
+            return "hiker://empty";
+        })
+    });
+    d.push({
         title: '<br>',
         col_type: 'rich_text'
     });
