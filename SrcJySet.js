@@ -2080,7 +2080,7 @@ function extension(){
                     }
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                     let sm = Resourceimport(getMyVar('importinput', ''));
-                    return sm?sm:'异常';
+                    return sm?'toast://'+sm:'toast://异常出错';
                 }),
             col_type: "text_2"
         });
