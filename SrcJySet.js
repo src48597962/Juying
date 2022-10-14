@@ -2091,7 +2091,7 @@ function extension(){
 }
 //资源导入
 function Resourceimport(){
-    return getMyVar('importjiekou');
+    return "toast://"+getMyVar('importjiekou');
     d.push({
         title: 'biu导入',
         url:$("","输入biubiu资源地址").input(() => {
