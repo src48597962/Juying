@@ -2004,82 +2004,85 @@ function extension(){
             return "hiker://empty";
         })
     });
-    d.push({
-        title: '选择需要的导入项目',
-        col_type: "rich_text",
-        extra:{textSize:12}
-    });
-    d.push({
-        title:(getMyVar('importjiekou','0')=="1"?getide(1):getide(0))+'影视接口',
-        col_type:'text_3',
-        url:$('#noLoading#').lazyRule(() => {
-            if(getMyVar('importjiekou')=="1"){
-                putMyVar('importjiekou','0');
-            }else{
-                putMyVar('importjiekou','1');
-            }
-            refreshPage(false);
-            return "hiker://empty";
-        })
-    });
-    d.push({
-        title:(getMyVar('importjiexi','0')=="1"?getide(1):getide(0))+'解析接口',
-        col_type:'text_3',
-        url:$('#noLoading#').lazyRule(() => {
-            if(getMyVar('importjiexi')=="1"){
-                putMyVar('importjiexi','0');
-            }else{
-                putMyVar('importjiexi','1');
-            }
-            refreshPage(false);
-            return "hiker://empty";
-        })
-    });
-    d.push({
-        title:(getMyVar('importlive','0')=="1"?getide(1):getide(0))+'直播接口',
-        col_type:'text_3',
-        url:$('#noLoading#').lazyRule(() => {
-            if(getMyVar('importlive')=="1"){
-                putMyVar('importlive','0');
-            }else{
-                putMyVar('importlive','1');
-            }
-            refreshPage(false);
-            return "hiker://empty";
-        })
-    });
-    d.push({
-        title:'',
-        col_type: 'input',
-        desc: '请输入链接地址',
-        extra: {
-            titleVisible: false,
-            defaultValue: getMyVar('importinput', ''),
-            onChange: 'putMyVar("importinput",input)'
-        }
-    });
-    d.push({
-        title: '🆖 历史记录',
-        url: $(JYconfig['xunmigroup']?JYconfig['xunmigroup']:"全部","设置搜索时默认分组").input((JYconfig,cfgfile) => {
-                JYconfig['xunmigroup'] = input;
-                writeFile(cfgfile, JSON.stringify(JYconfig));
-                refreshPage(false);
-                return 'toast://默认搜索分组'+(input?'已设置为：'+input:'已清空');
-            }, JYconfig, cfgfile),
-        col_type: "text_2"
-    });
-    d.push({
-        title: '🆗 确定导入',
-        url: getMyVar('importjiekou')!="1"&&getMyVar('importjiexi')!="1"&&getMyVar('importlive')!="1"?'toast://请选择导入项目':$('#noLoading#').lazyRule(() => {
-                if(getMyVar('importinput', '')==""&&getMyVar('importtype','0')!="2"){
-                    return 'toast://请先输入链接地址'
+    if(getMyVar('importtype','0')!="0"){
+        d.push({
+            title: '选择需要的导入项目',
+            col_type: "rich_text",
+            extra:{textSize:12}
+        });
+        d.push({
+            title:(getMyVar('importjiekou','0')=="1"?getide(1):getide(0))+'影视接口',
+            col_type:'text_3',
+            url:$('#noLoading#').lazyRule(() => {
+                if(getMyVar('importjiekou')=="1"){
+                    putMyVar('importjiekou','0');
+                }else{
+                    putMyVar('importjiekou','1');
                 }
-                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
-                let sm = Resourceimport(getMyVar('importinput', ''));
-                return sm?sm:'异常';
-            }),
-        col_type: "text_2"
-    });
+                refreshPage(false);
+                return "hiker://empty";
+            })
+        });
+        d.push({
+            title:(getMyVar('importjiexi','0')=="1"?getide(1):getide(0))+'解析接口',
+            col_type:'text_3',
+            url:$('#noLoading#').lazyRule(() => {
+                if(getMyVar('importjiexi')=="1"){
+                    putMyVar('importjiexi','0');
+                }else{
+                    putMyVar('importjiexi','1');
+                }
+                refreshPage(false);
+                return "hiker://empty";
+            })
+        });
+        d.push({
+            title:(getMyVar('importlive','0')=="1"?getide(1):getide(0))+'直播接口',
+            col_type:'text_3',
+            url:$('#noLoading#').lazyRule(() => {
+                return 'toast://暂不支持';
+                if(getMyVar('importlive')=="1"){
+                    putMyVar('importlive','0');
+                }else{
+                    putMyVar('importlive','1');
+                }
+                refreshPage(false);
+                return "hiker://empty";
+            })
+        });
+        d.push({
+            title:'',
+            col_type: 'input',
+            desc: '请输入链接地址',
+            extra: {
+                titleVisible: false,
+                defaultValue: getMyVar('importinput', ''),
+                onChange: 'putMyVar("importinput",input)'
+            }
+        });
+        d.push({
+            title: '🆖 历史记录',
+            url: $(JYconfig['xunmigroup']?JYconfig['xunmigroup']:"全部","设置搜索时默认分组").input((JYconfig,cfgfile) => {
+                    JYconfig['xunmigroup'] = input;
+                    writeFile(cfgfile, JSON.stringify(JYconfig));
+                    refreshPage(false);
+                    return 'toast://默认搜索分组'+(input?'已设置为：'+input:'已清空');
+                }, JYconfig, cfgfile),
+            col_type: "text_2"
+        });
+        d.push({
+            title: '🆗 确定导入',
+            url: getMyVar('importjiekou')!="1"&&getMyVar('importjiexi')!="1"&&getMyVar('importlive')!="1"?'toast://请选择导入项目':$('#noLoading#').lazyRule(() => {
+                    if(getMyVar('importinput', '')==""&&getMyVar('importtype','0')!="2"){
+                        return 'toast://请先输入链接地址'
+                    }
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                    let sm = Resourceimport(getMyVar('importinput', ''));
+                    return sm?sm:'异常';
+                }),
+            col_type: "text_2"
+        });
+    }
     d.push({
         title: '<br>',
         col_type: 'rich_text'
