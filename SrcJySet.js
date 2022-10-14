@@ -2208,12 +2208,14 @@ function extension(){
                 d.push({
                     col_type: "line"
                 });
+                var updatedesc = [];
                 for(let key in SrcJuyingdesc){
-                    d.push({
-                        title: '版本V'+key+(parseFloat(key) > parseFloat(getMyVar('SrcJuying-Version','').replace('-V',''))?"(未上线)":"")+'：'+SrcJuyingdesc[key],
-                        col_type: "rich_text"
-                    });
+                    updatedesc.push('版本V'+key+(parseFloat(key) > parseFloat(getMyVar('SrcJuying-Version','').replace('-V',''))?"(未发布)":"")+'：'+SrcJuyingdesc[key]);
                 }
+                d.push({
+                    title: updatedesc.join('<br>'),
+                    col_type: "rich_text"
+                });
             }
             setHomeResult(d);
         })
