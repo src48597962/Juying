@@ -2078,7 +2078,7 @@ function extension(){
                     if(getMyVar('importinput', '')==""&&getMyVar('importtype','0')!="2"){
                         return 'toast://请先输入链接地址'
                     }
-                    if(input){
+                    if(input!=""){
                         let importrecord = JYconfig['importrecord']||[];
                         if(!importrecord.some(item => item.url == input)){
                             importrecord.push({type:getMyVar('importtype','0'),url:input});
