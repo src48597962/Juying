@@ -2020,7 +2020,11 @@ function extension(){
         title:(getMyVar('importjiekou','0')=="1"?getide(1):getide(0))+'影视接口',
         col_type:'text_3',
         url:$('#noLoading#').lazyRule(() => {
-            putMyVar('importjiekou','1');
+            if(getMyVar('importjiekou')=="1"){
+                putMyVar('importjiekou','0');
+            }else{
+                putMyVar('importjiekou','1');
+            }
             refreshPage(false);
             return "hiker://empty";
         })
@@ -2029,7 +2033,11 @@ function extension(){
         title:(getMyVar('importjiexi','0')=="1"?getide(1):getide(0))+'解析接口',
         col_type:'text_3',
         url:$('#noLoading#').lazyRule(() => {
-            putMyVar('importjiexi','1');
+            if(getMyVar('importjiexi')=="1"){
+                putMyVar('importjiexi','0');
+            }else{
+                putMyVar('importjiexi','1');
+            }
             refreshPage(false);
             return "hiker://empty";
         })
@@ -2038,7 +2046,11 @@ function extension(){
         title:(getMyVar('importlive','0')=="1"?getide(1):getide(0))+'直播接口',
         col_type:'text_3',
         url:$('#noLoading#').lazyRule(() => {
-            putMyVar('importlive','1');
+            if(getMyVar('importlive')=="1"){
+                putMyVar('importlive','0');
+            }else{
+                putMyVar('importlive','1');
+            }
             refreshPage(false);
             return "hiker://empty";
         })
@@ -2065,12 +2077,11 @@ function extension(){
     });
     d.push({
         title: '🆗 确定导入',
-        url: $(JYconfig['xunmigroup']?JYconfig['xunmigroup']:"全部","设置搜索时默认分组").input((JYconfig,cfgfile) => {
-                JYconfig['xunmigroup'] = input;
-                writeFile(cfgfile, JSON.stringify(JYconfig));
+        url: !getMyVar('importjiekou')&&!getMyVar('importjiexi')&&!getMyVar('importlive')?'toast://请选择导入项目':$.lazyRule(() => {
+                
                 refreshPage(false);
-                return 'toast://默认搜索分组'+(input?'已设置为：'+input:'已清空');
-            }, JYconfig, cfgfile),
+                return 'toast://默认搜索分组';
+            }),
         col_type: "text_2"
     });
     d.push({
