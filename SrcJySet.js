@@ -2166,7 +2166,7 @@ function extension(){
     });
     d.push({
         title: '这是一个有想法的小程序',
-        desc: '演示资源码、查看更新日志',
+        desc: '小白和大佬均可简单使用、开局演示资源码、查看规则更新日志',
         col_type: 'text_1',
         url:$('#noLoading#').lazyRule(() => {
             if(getMyVar('importjiekou')=="1"){
