@@ -2347,7 +2347,7 @@ function Resourceimport(input){
                     let urls = [];
                     for (let i=0;i<jiexi.length;i++) {
                         if(/^http/.test(jiexi[i])){
-                            let arr  = { "name": "bb"+randomid, "parse": jiexi[i], "stopfrom": [], "priorfrom": [], "sort": 1 };
+                            let arr  = { "name": "bb"+randomid(), "parse": jiexi[i], "stopfrom": [], "priorfrom": [], "sort": 1 };
                             urls.push(arr);
                         }
                     }
