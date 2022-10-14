@@ -2078,12 +2078,20 @@ function extension(){
     d.push({
         title: '🆗 确定导入',
         url: getMyVar('importjiekou')!="1"&&getMyVar('importjiexi')!="1"&&getMyVar('importlive')!="1"?'toast://请选择导入项目':$().lazyRule(() => {
-                
-                refreshPage(false);
-                return 'toast://默认搜索分组';
+                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                Resourceimport();
             }),
         col_type: "text_2"
     });
+    d.push({
+        title: '<br>',
+        col_type: 'rich_text'
+    });
+    setHomeResult(d);
+}
+//资源导入
+function Resourceimport(){
+    return getMyVar('importjiekou');
     d.push({
         title: 'biu导入',
         url:$("","输入biubiu资源地址").input(() => {
@@ -2417,9 +2425,4 @@ function extension(){
         }),
         col_type: "text_3"
     });
-    d.push({
-        title: '<br>',
-        col_type: 'rich_text'
-    });
-    setHomeResult(d);
 }
