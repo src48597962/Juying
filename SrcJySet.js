@@ -1565,7 +1565,7 @@ function extension(){
         col_type: "line_blank"
     });
     d.push({
-        title: '🌐聚影分享',
+        title: '🌐 聚影分享',
         col_type: "rich_text"
     });
     d.push({
@@ -1605,7 +1605,7 @@ function extension(){
         col_type: "text_center_1"
     });
     d.push({
-        title: '分享同步',
+        title: '✅ 分享同步',
         url: JYconfig['codeid']?$(["只传接口","只传解析","接口+解析"],2,"选择上传同步云端的项").select((JYconfig,cfgfile)=>{
             var text = {};
             if(input=="只传接口"||input=="接口+解析"){
@@ -1662,7 +1662,7 @@ function extension(){
         col_type: "text_2"
     });
     d.push({
-        title: '删除云端',
+        title: '❎ 删除云端',
         url: JYconfig['codeid']?$().lazyRule((JYconfig,cfgfile) => {
                 try{
                     var pastedelete = JSON.parse(request('https://netcut.cn/api/note/del_note/', {
@@ -1695,7 +1695,7 @@ function extension(){
         col_type: "line_blank"
     });
     d.push({
-        title: '⚡订阅管理',
+        title: '⚡ 订阅管理',
         col_type: "rich_text"
     });
     d.push({
@@ -1783,7 +1783,7 @@ function extension(){
     });
 
     d.push({
-        title: '更新资源',
+        title: '✅ 更新资源',
         url: JYconfig['codedyid']?$().lazyRule((codedyid) => {
                 try{
                     let codeid = codedyid;
@@ -1812,7 +1812,7 @@ function extension(){
         col_type: "text_2"
     });
     d.push({
-        title: '删除订阅',
+        title: '❎ 删除订阅',
         url: JYconfig['codedyid']?$(["仅删订阅源，保留历史","册除订阅及历史，不再切换"],1).select((JYconfig,cfgfile)=>{
             if(input=="仅删订阅源，保留历史"){
                 return $().lazyRule((JYconfig,cfgfile) => {
@@ -1847,7 +1847,7 @@ function extension(){
         col_type: "line_blank"
     });
     d.push({
-        title: '⚙个性设置',
+        title: '⚙ 个性设置',
         col_type: "rich_text"
     });
     d.push({
@@ -1964,7 +1964,7 @@ function extension(){
         col_type: "line_blank"
     });
     d.push({
-        title: '🎁其他资源',
+        title: '🎁 其他资源',
         col_type: "rich_text"
     });
     d.push({
@@ -2054,7 +2054,7 @@ function extension(){
         }
     });
     d.push({
-        title: '🆖历史记录',
+        title: '🆖 历史记录',
         url: $(JYconfig['xunmigroup']?JYconfig['xunmigroup']:"全部","设置搜索时默认分组").input((JYconfig,cfgfile) => {
                 JYconfig['xunmigroup'] = input;
                 writeFile(cfgfile, JSON.stringify(JYconfig));
@@ -2064,7 +2064,7 @@ function extension(){
         col_type: "text_2"
     });
     d.push({
-        title: '🆗确定导入',
+        title: '🆗 确定导入',
         url: $(JYconfig['xunmigroup']?JYconfig['xunmigroup']:"全部","设置搜索时默认分组").input((JYconfig,cfgfile) => {
                 JYconfig['xunmigroup'] = input;
                 writeFile(cfgfile, JSON.stringify(JYconfig));
