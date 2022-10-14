@@ -2191,6 +2191,7 @@ function extension(){
             }
             d.push({
                 title: isupdate?'💡发现新版本V'+newVersion.SrcJuying:'🎉已是最新版本',
+                desc: '当前版本'+getMyVar('SrcJuying-Version',''),
                 url: isupdate?$('#noLoading#').lazyRule(()=>{
                         deleteCache();
                         refreshPage();
@@ -2200,12 +2201,17 @@ function extension(){
             });
 
             if(SrcJuyingdesc){
+                d.push({
+                    title: '📑 更新日志',
+                    col_type: "rich_text"
+                });
+                d.push({
+                    col_type: "line"
+                });
                 for(let key in SrcJuyingdesc){
                     d.push({
-                        title: '版本V'+key,
-                        desc: SrcJuyingdesc[key],
-                        url: "hiker://empty",
-                        col_type: "text_1"
+                        title: '版本V'+key+(parseFloat(key) > parseFloat(getMyVar('SrcJuying-Version','').replace('-V',''))?"(未上线)":"")+'：'+SrcJuyingdesc[key],
+                        col_type: "rich_text"
                     });
                 }
             }
