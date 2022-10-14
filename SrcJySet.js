@@ -1512,6 +1512,7 @@ function extension(){
         clearMyVar('importlive');
         clearMyVar('importtype');
         clearMyVar('importinput');
+        clearMyVar('guanlicz');
         refreshPage(false);
     }));
     var d = [];
@@ -2139,6 +2140,7 @@ function extension(){
                     }
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                     let sm = Resourceimport(input);
+                    back();
                     return sm?'toast://'+sm:'toast://异常出错';
                 }, JYconfig, cfgfile),
             col_type: "text_2"
