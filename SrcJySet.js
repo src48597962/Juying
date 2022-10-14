@@ -1549,7 +1549,13 @@ function extension(){
         }
     }
     //上面的代码是将订阅历史迁移合并到config中
-    
+    function getide(is) {
+        if(is==1){
+            return '‘‘’’<strong><font color="#f13b66a";size=18px;>◉ </front></strong>';
+        }else{
+            return '‘‘’’<strong><font color="#F54343";size=18px;>◉ </front></strong>';
+        }
+    }
     d.push({
         title: '聚影分享',
         col_type: "rich_text"
@@ -1953,7 +1959,8 @@ function extension(){
     });
     d.push({
         title: '选择需要导入的项目',
-        col_type: "rich_text"
+        col_type: "rich_text",
+        extra:{textSize:16}
     });
     d.push({
         title:'影视接口',
