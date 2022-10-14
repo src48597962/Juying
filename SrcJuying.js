@@ -973,7 +973,7 @@ function Version() {
     var nowVersion = "4.8";//现在版本 
     var nowtime = Date.now();
     var oldtime = parseInt(getItem('VersionChecktime','0').replace('time',''));
-    if (getMyVar('SrcJuying-VersionCheck', '0') == '0' && nowtime > (oldtime+6*60*60*1000)) {
+    if (getMyVar('SrcJuying-VersionCheck', '0') == '0' && nowtime > (oldtime+24*60*60*1000)) {
         try {
             eval(request(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcTmplVersion.js'))
             if (parseFloat(newVersion.SrcJuying) > parseFloat(nowVersion)) {
