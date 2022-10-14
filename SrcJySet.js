@@ -1966,7 +1966,7 @@ function extension(){
         extra:{textSize:12}
     });
     d.push({
-        title: TVBOX源导入,
+        title: "TVBOX源导入",
         col_type: 'scroll_button',
         url: $('#noLoading#').lazyRule(() => {
             
@@ -1975,7 +1975,7 @@ function extension(){
         })
     });
     d.push({
-        title: biu源导入,
+        title: "biu源导入",
         col_type: 'scroll_button',
         url: $('#noLoading#').lazyRule(() => {
             
@@ -1984,7 +1984,7 @@ function extension(){
         })
     });
     d.push({
-        title: 其他源导入,
+        title: "其他源导入",
         col_type: 'scroll_button',
         url: $('#noLoading#').lazyRule(() => {
             
