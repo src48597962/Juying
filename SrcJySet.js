@@ -624,6 +624,7 @@ function similar(s, t, f) {//判断两个字符串之间的相似度
     return parseInt(res.toFixed(f));
 }
 function jiekousave(urls,update) {
+    if(urls.length==0){return 0;}
     try{
         var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
         var datafile = fetch(filepath);
@@ -676,6 +677,7 @@ function jiekousave(urls,update) {
     return num;
 }
 function jiexisave(urls,update) {
+    if(urls.length==0){return 0;}
     try{
         var filepath = "hiker://files/rules/Src/Juying/myjiexi.json";
         var datafile = fetch(filepath);
@@ -2069,7 +2071,7 @@ function extension(){
     d.push({
         title: '🆗 确定导入',
         url: getMyVar('importjiekou')!="1"&&getMyVar('importjiexi')!="1"&&getMyVar('importlive')!="1"?'toast://请选择导入项目':$('#noLoading#').lazyRule(() => {
-                if(getMyVar('importinput', '')==""){
+                if(getMyVar('importinput', '')==""&&getMyVar('importtype','0')!="2"){
                     return 'toast://请先输入链接地址'
                 }
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
@@ -2089,9 +2091,9 @@ function Resourceimport(input){
     if(getMyVar('importtype','')=="1"){//tvbox导入
         try{
             showLoading('检测文件有效性');
-            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+            //require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
             if(/\/storage\/emulated\//.test(input)){input = "file://" + input}
-            var html = fetch(input,{timeout:2000});
+            var html = request(input,{timeout:2000});
             var reg = /("([^\\\"]*(\\.)?)*")|('([^\\\']*(\\.)?)*')|(\/{2,}.*?(\r|\n|$))|(\/\*(\n|.)*?\*\/)/g;
             html = html.replace(/api\"\:csp/g,'api":"csp').replace(reg, function(word) { 
                 return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
@@ -2103,148 +2105,145 @@ function Resourceimport(input){
             var jiexi = data.parses||[];
         } catch (e) {
             hideLoading();
-            log('接口导入失败：'+e.message); 
-            return "toast://导入失败：连接无效或内容有错";
+            log('TVBox文件检测失败>'+e.message); 
+            return "TVBox导入失败：链接文件无效或内容有错";
         }
-        showLoading('正在多线程抓取数据中');
-        var urls= [];
-        //多线程处理
-        var task = function(obj) {
-            if(/^csp_AppYs/.test(obj.api)){
-                urls.push({ "name": obj.name, "url": obj.ext, "group": "新导入"})
-            }else if((obj.type==1||obj.type==0)&&obj.api.indexOf('cms.nokia.press')==-1){
-                urls.push({ "name": obj.name, "url": obj.api, "group": "新导入"})
-            }else if(/^csp_XBiubiu/.test(obj.api)){
-                try{
-                    let urlfile = obj.ext;
-                    if(/^clan:/.test(urlfile)){
-                        urlfile = urlfile.replace("clan://TVBox/",input.match(/file.*\//)[0]);
-                    }
-                    let biuhtml = fetch(urlfile,{timeout:2000});
-                    biuhtml = biuhtml.replace(reg, function(word) { 
-                        return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
-                    }).replace(/^.*#.*$/mg,"").replace(/[\x00-\x1F\x7F]|[\t\r\n]/g,'');
-                    let biujson = JSON.parse(biuhtml);
-                    let biudata = {};
-                    biudata.url = biujson.url;
-                    biudata.jiequshuzuqian = biujson.jiequshuzuqian;
-                    biudata.jiequshuzuhou = biujson.jiequshuzuhou;
-                    biudata.tupianqian = biujson.tupianqian;
-                    biudata.tupianhou = biujson.tupianhou;
-                    biudata.biaotiqian = biujson.biaotiqian;
-                    biudata.biaotihou = biujson.biaotihou;
-                    biudata.lianjieqian = biujson.lianjieqian;
-                    biudata.lianjiehou = biujson.lianjiehou;
-                    biudata.sousuoqian = biujson.sousuoqian;
-                    biudata.sousuohou = biujson.sousuohou;
-                    biudata.sousuohouzhui = biujson.sousuohouzhui;
-                    biudata.ssmoshi = biujson.ssmoshi;
-                    biudata.bfjiequshuzuqian = biujson.bfjiequshuzuqian;
-                    biudata.bfjiequshuzuhou = biujson.bfjiequshuzuhou;
-                    biudata.zhuangtaiqian = biujson.zhuangtaiqian;
-                    biudata.zhuangtaihou = biujson.zhuangtaihou;
-                    biudata.daoyanqian = biujson.daoyanqian;
-                    biudata.daoyanhou = biujson.daoyanhou;
-                    biudata.zhuyanqian = biujson.zhuyanqian;
-                    biudata.zhuyanhou = biujson.zhuyanhou;
-                    biudata.juqingqian = biujson.juqingqian;
-                    biudata.juqinghou = biujson.juqinghou;
-                    urls.push({ "name": obj.name, "url": obj.key, "type": "biubiu", "ua": "PC_UA", "data": biudata, "group": "新导入"})
-                }catch(e){
-                    //log(obj.name + '>抓取失败>' + e.message)
-                }
-            }else if(/^csp_XPath/.test(obj.api)){
-                try{
-                    let urlfile = obj.ext;
-                    if(/^clan:/.test(urlfile)){
-                        urlfile = urlfile.replace("clan://TVBox/",input.match(/file.*\//)[0]);
-                    }
-                    let xphtml = fetch(urlfile,{timeout:2000});
-                    xphtml = xphtml.replace(reg, function(word) { 
-                        return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
-                    }).replace(/^.*#.*$/mg,"").replace(/[\x00-\x1F\x7F]|[\t\r\n]/g,'');
-                    let xpjson = JSON.parse(xphtml);
-                    let xpdata = {};
-                    xpdata.filter = "";
-                    xpdata.dtUrl = xpjson.dtUrl;
-                    xpdata.dtImg = xpjson.dtImg;
-                    xpdata.dtCate = xpjson.dtCate;
-                    xpdata.dtYear = xpjson.dtYear;
-                    xpdata.dtArea = xpjson.dtArea;
-                    xpdata.dtMark = xpjson.dtMark;
-                    xpdata.dtDirector = xpjson.dtDirector;
-                    xpdata.dtActor = xpjson.dtActor;
-                    xpdata.dtDesc = xpjson.dtDesc;
-                    xpdata.dtFromNode = xpjson.dtFromNode;
-                    xpdata.dtFromName = xpjson.dtFromName;
-                    xpdata.dtUrlNode = xpjson.dtUrlNode;
-                    xpdata.dtUrlSubNode = xpjson.dtUrlSubNode;
-                    xpdata.dtUrlId = xpjson.dtUrlId;
-                    xpdata.dtUrlName = xpjson.dtUrlName;
-                    xpdata.dtUrlIdR = xpjson.dtUrlIdR;
-                    xpdata.playUrl = xpjson.playUrl;
-                    xpdata.searchUrl = xpjson.searchUrl;
-                    xpdata.scVodNode = xpjson.scVodNode;
-                    xpdata.scVodName = xpjson.scVodName;
-                    xpdata.scVodId = xpjson.scVodId;
-                    xpdata.scVodImg = xpjson.scVodImg;
-                    xpdata.scVodMark = xpjson.scVodMark;
-                    urls.push({ "name": obj.name, "url": obj.ext, "type": "xpath", "ua": xpjson.ua?xpjson.ua:"PC_UA", "data": xpdata, "group": "新导入"})
-                }catch(e){
-                    //log(obj.name + '>抓取失败>' + e.message)
-                }
-            }
-            return 1;
-        }
-        let jiekous = jiekou.map((list)=>{
-            return {
-                func: task,
-                param: list,
-                id: list.name
-            }
-        });
-
-        be(jiekous, {
-            func: function(obj, id, error, taskResult) {                            
-            },
-            param: {
-            }
-        });
-        try{
-            var jknum = jiekousave(urls);
-        }catch(e){
-            var jknum =-1;
-            log('导入保存有异常>'+e.message);
-        }                   
-        hideLoading();
-        if(jknum<0){
-            return'toast://导入失败，内容异常';
-        }else{
-            if(jiexi.length>0){
-                return $("接口导入已完成，成功保存："+jknum+ "，确定要继续导入解析吗？\n不建议导入，因为99%是失效的").confirm((jiexi,jiexisave)=>{
+        var jknum = -1;
+        var jxnum = -1;
+        if(getMyVar('importjiekou','')=="1"&&jiekou.length>0){
+            showLoading('正在多线程抓取数据中');
+            var urls= [];
+            //多线程处理
+            var task = function(obj) {
+                if(/^csp_AppYs/.test(obj.api)){
+                    urls.push({ "name": obj.name, "url": obj.ext, "group": "新导入"})
+                }else if((obj.type==1||obj.type==0)&&obj.api.indexOf('cms.nokia.press')==-1){
+                    urls.push({ "name": obj.name, "url": obj.api, "group": "新导入"})
+                }else if(/^csp_XBiubiu/.test(obj.api)){
                     try{
-                        let urls = [];
-                        for (let i=0;i<jiexi.length;i++) {
-                            if(/^http/.test(jiexi[i].url)){
-                                let arr  = { "name": jiexi[i].name, "parse": jiexi[i].url, "stopfrom": [], "priorfrom": [], "sort": 1 };
-                                urls.push(arr);
-                            }
+                        let urlfile = obj.ext;
+                        if(/^clan:/.test(urlfile)){
+                            urlfile = urlfile.replace("clan://TVBox/",input.match(/file.*\//)[0]);
                         }
-                        let jxnum = jiexisave(urls);
-                        if(jxnum>0){
-                            return "toast://导入完成，解析保存："+jxnum;
-                        }else{
-                            return "toast://无解析";
-                        }
-                    } catch (e) {
-                        log('解析导入失败：'+e.message);
-                        return "toast://解析导入失败";
+                        let biuhtml = request(urlfile,{timeout:2000});
+                        biuhtml = biuhtml.replace(reg, function(word) { 
+                            return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
+                        }).replace(/^.*#.*$/mg,"").replace(/[\x00-\x1F\x7F]|[\t\r\n]/g,'');
+                        let biujson = JSON.parse(biuhtml);
+                        let biudata = {};
+                        biudata.url = biujson.url;
+                        biudata.jiequshuzuqian = biujson.jiequshuzuqian;
+                        biudata.jiequshuzuhou = biujson.jiequshuzuhou;
+                        biudata.tupianqian = biujson.tupianqian;
+                        biudata.tupianhou = biujson.tupianhou;
+                        biudata.biaotiqian = biujson.biaotiqian;
+                        biudata.biaotihou = biujson.biaotihou;
+                        biudata.lianjieqian = biujson.lianjieqian;
+                        biudata.lianjiehou = biujson.lianjiehou;
+                        biudata.sousuoqian = biujson.sousuoqian;
+                        biudata.sousuohou = biujson.sousuohou;
+                        biudata.sousuohouzhui = biujson.sousuohouzhui;
+                        biudata.ssmoshi = biujson.ssmoshi;
+                        biudata.bfjiequshuzuqian = biujson.bfjiequshuzuqian;
+                        biudata.bfjiequshuzuhou = biujson.bfjiequshuzuhou;
+                        biudata.zhuangtaiqian = biujson.zhuangtaiqian;
+                        biudata.zhuangtaihou = biujson.zhuangtaihou;
+                        biudata.daoyanqian = biujson.daoyanqian;
+                        biudata.daoyanhou = biujson.daoyanhou;
+                        biudata.zhuyanqian = biujson.zhuyanqian;
+                        biudata.zhuyanhou = biujson.zhuyanhou;
+                        biudata.juqingqian = biujson.juqingqian;
+                        biudata.juqinghou = biujson.juqinghou;
+                        urls.push({ "name": obj.name, "url": obj.key, "type": "biubiu", "ua": "PC_UA", "data": biudata, "group": "新导入"})
+                    }catch(e){
+                        //log(obj.name + '>抓取失败>' + e.message)
                     }
-                },jiexi,jiexisave)
-            }else{
-                return "toast://接口导入已完成，成功保存："+jknum;
+                }else if(/^csp_XPath/.test(obj.api)){
+                    try{
+                        let urlfile = obj.ext;
+                        if(/^clan:/.test(urlfile)){
+                            urlfile = urlfile.replace("clan://TVBox/",input.match(/file.*\//)[0]);
+                        }
+                        let xphtml = request(urlfile,{timeout:2000});
+                        xphtml = xphtml.replace(reg, function(word) { 
+                            return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
+                        }).replace(/^.*#.*$/mg,"").replace(/[\x00-\x1F\x7F]|[\t\r\n]/g,'');
+                        let xpjson = JSON.parse(xphtml);
+                        let xpdata = {};
+                        xpdata.filter = "";
+                        xpdata.dtUrl = xpjson.dtUrl;
+                        xpdata.dtImg = xpjson.dtImg;
+                        xpdata.dtCate = xpjson.dtCate;
+                        xpdata.dtYear = xpjson.dtYear;
+                        xpdata.dtArea = xpjson.dtArea;
+                        xpdata.dtMark = xpjson.dtMark;
+                        xpdata.dtDirector = xpjson.dtDirector;
+                        xpdata.dtActor = xpjson.dtActor;
+                        xpdata.dtDesc = xpjson.dtDesc;
+                        xpdata.dtFromNode = xpjson.dtFromNode;
+                        xpdata.dtFromName = xpjson.dtFromName;
+                        xpdata.dtUrlNode = xpjson.dtUrlNode;
+                        xpdata.dtUrlSubNode = xpjson.dtUrlSubNode;
+                        xpdata.dtUrlId = xpjson.dtUrlId;
+                        xpdata.dtUrlName = xpjson.dtUrlName;
+                        xpdata.dtUrlIdR = xpjson.dtUrlIdR;
+                        xpdata.playUrl = xpjson.playUrl;
+                        xpdata.searchUrl = xpjson.searchUrl;
+                        xpdata.scVodNode = xpjson.scVodNode;
+                        xpdata.scVodName = xpjson.scVodName;
+                        xpdata.scVodId = xpjson.scVodId;
+                        xpdata.scVodImg = xpjson.scVodImg;
+                        xpdata.scVodMark = xpjson.scVodMark;
+                        urls.push({ "name": obj.name, "url": obj.ext, "type": "xpath", "ua": xpjson.ua?xpjson.ua:"PC_UA", "data": xpdata, "group": "新导入"})
+                    }catch(e){
+                        //log(obj.name + '>抓取失败>' + e.message)
+                    }
+                }
+                return 1;
             }
+            let jiekous = jiekou.map((list)=>{
+                return {
+                    func: task,
+                    param: list,
+                    id: list.name
+                }
+            });
+
+            be(jiekous, {
+                func: function(obj, id, error, taskResult) {                            
+                },
+                param: {
+                }
+            });
+            try{
+                jknum = jiekousave(urls);
+            }catch(e){
+                jknum =-1;
+                log('TVBox导入接口保存有异常>'+e.message);
+            } 
+            hideLoading();    
         }
+        if(getMyVar('importjiexi','')=="1"&&jiexi.length>0){
+            try{
+                let urls = [];
+                for (let i=0;i<jiexi.length;i++) {
+                    if(/^http/.test(jiexi[i].url)){
+                        let arr  = { "name": jiexi[i].name, "parse": jiexi[i].url, "stopfrom": [], "priorfrom": [], "sort": 1 };
+                        urls.push(arr);
+                    }
+                }
+                let jxnum = jiexisave(urls);
+                if(jxnum>0){
+                    return "toast://导入完成，解析保存："+jxnum;
+                }else{
+                    return "toast://无解析";
+                }
+            } catch (e) {
+                log('TVBox导入解析保存失败>'+e.message);
+            }
+        }              
+        let sm = (jknum>-1?' 接口保存>'+jknum:'')+(jxnum>-1?' 解析保存>'+jxnum:'');
+        return 'TVBox导入：'+(sm?sm:'导入异常，详情查看日志');
     }else if(getMyVar('importtype','')=="2"){//tvbox订阅
         try{
             let cfgfile = "hiker://files/rules/Src/Juying/config.json";
@@ -2258,13 +2257,14 @@ function Resourceimport(input){
             writeFile(cfgfile, JSON.stringify(JYconfig));
             return 'TVBox订阅：'+(input?'已保存订阅':'已取消订阅');
         }catch(e){
-            return 'TVBox订阅：失败>'+e.message;
+            log('TVBox订阅：失败>'+e.message);
+            return 'TVBox订阅：失败，详情查看日志';
         }
     }else if(getMyVar('importtype','')=="3"){//biubiu导入
         try{
             showLoading('检测文件有效性');
-            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
-            var html = fetch(input,{timeout:2000});
+            //require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+            var html = request(input,{timeout:2000});
             var reg = /("([^\\\"]*(\\.)?)*")|('([^\\\']*(\\.)?)*')|(\/{2,}.*?(\r|\n|$))|(\/\*(\n|.)*?\*\/)/g;
             html = html.replace(reg, function(word) { 
                 return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
@@ -2322,14 +2322,12 @@ function Resourceimport(input){
                 }
             }
             hideLoading();
-            if(urls.length>0){
-                try{
-                    jknum = jiekousave(urls);
-                }catch(e){
-                    jknum =-1;
-                    log('biu导入接口保存有异常>'+e.message);
-                } 
-            }
+            try{
+                jknum = jiekousave(urls);
+            }catch(e){
+                jknum =-1;
+                log('biu导入接口保存有异常>'+e.message);
+            }             
         }
         if(getMyVar('importjiexi','')=="1"){
             let zhujiexi = bbdata.zhujiexi||"";
@@ -2342,7 +2340,11 @@ function Resourceimport(input){
                     let urls = [];
                     for (let i=0;i<jiexi.length;i++) {
                         if(/^http/.test(jiexi[i])){
-                            let arr  = { "name": "bb"+namebh, "parse": jiexi[i], "stopfrom": [], "priorfrom": [], "sort": 1 };
+                            let nameid = ''; 
+                            for (var i = 0; i < 6; i++) {
+                                nameid += Math.floor(Math.random() * 10);
+                            }
+                            let arr  = { "name": "bb"+nameid, "parse": jiexi[i], "stopfrom": [], "priorfrom": [], "sort": 1 };
                             urls.push(arr);
                         }
                     }
@@ -2353,6 +2355,7 @@ function Resourceimport(input){
                 }
             }
         }
-        return 'biu导入：'+(jknum>-1?' 接口保存-'+jknum:'')+(jxnum>-1?' 解析保存-'+jxnum:'')
+        let sm = (jknum>-1?' 接口保存>'+jknum:'')+(jxnum>-1?' 解析保存>'+jxnum:'');
+        return 'biu导入：'+(sm?sm:'导入异常，详情查看日志');
     }   
 }
