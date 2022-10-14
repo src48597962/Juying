@@ -2336,15 +2336,18 @@ function Resourceimport(input){
             let bjiexi = beiyongjiexi.split('#');
             let jiexi = zjiexi.concat(bjiexi);
             if(jiexi.length>0){
+                function randomid(){
+                    let id = ''; 
+                    for (var i = 0; i < 6; i++) {
+                        id += Math.floor(Math.random() * 10);
+                    }
+                    return id;
+                }
                 try{
                     let urls = [];
                     for (let i=0;i<jiexi.length;i++) {
                         if(/^http/.test(jiexi[i])){
-                            let nameid = ''; 
-                            for (var i = 0; i < 6; i++) {
-                                nameid += Math.floor(Math.random() * 10);
-                            }
-                            let arr  = { "name": "bb"+nameid, "parse": jiexi[i], "stopfrom": [], "priorfrom": [], "sort": 1 };
+                            let arr  = { "name": "bb"+randomid, "parse": jiexi[i], "stopfrom": [], "priorfrom": [], "sort": 1 };
                             urls.push(arr);
                         }
                     }
