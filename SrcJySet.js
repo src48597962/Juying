@@ -1562,11 +1562,14 @@ function extension(){
         }
     }
     d.push({
+        col_type: "line_blank"
+    });
+    d.push({
         title: '聚影分享',
         col_type: "rich_text"
     });
     d.push({
-        col_type: "line_blank"
+        col_type: "line"
     });
     d.push({
         title: JYconfig['codeid']?'复制聚影资源码口令':'申请聚影资源码',//sharetime
@@ -1687,16 +1690,16 @@ function extension(){
             }, JYconfig, cfgfile):'toast://请先申请聚影资源码',
         col_type: "text_2"
     });
+    
     d.push({
-        col_type: "line"
+        col_type: "line_blank"
     });
-
     d.push({
         title: '订阅管理',
         col_type: "rich_text"
     });
     d.push({
-        col_type: "line_blank"
+        col_type: "line"
     });
     d.push({
         title: JYconfig['codedyid']?'已订阅聚影资源码':'订阅聚影资源码',
@@ -1840,13 +1843,15 @@ function extension(){
         }, JYconfig, cfgfile):'toast://请先订阅聚影资源码',
         col_type: "text_2"
     });
-
+    d.push({
+        col_type: "line_blank"
+    });
     d.push({
         title: '个性设置',
         col_type: "rich_text"
     });
     d.push({
-        col_type: "line_blank"
+        col_type: "line"
     });
     d.push({
         title: JYconfig['erjimode']!=2?'当前二级模式：常规':'当前二级模式：搜索',
@@ -1956,11 +1961,14 @@ function extension(){
         col_type: "text_3"
     });
     d.push({
+        col_type: "line_blank"
+    });
+    d.push({
         title: '其他资源',
         col_type: "rich_text"
     });
     d.push({
-        col_type: "line_blank"
+        col_type: "line"
     });
     d.push({
         title: '选择需要的功能类型',
@@ -2036,11 +2044,6 @@ function extension(){
         })
     });
     d.push({
-        title: '请输入链接地址',
-        col_type: "rich_text",
-        extra:{textSize:12}
-    });
-    d.push({
         title:'',
         col_type: 'input',
         desc: '请输入链接地址',
@@ -2058,7 +2061,7 @@ function extension(){
                 refreshPage(false);
                 return 'toast://默认搜索分组'+(input?'已设置为：'+input:'已清空');
             }, JYconfig, cfgfile),
-        col_type: "text_3"
+        col_type: "text_2"
     });
     d.push({
         title: '确定导入',
@@ -2068,7 +2071,7 @@ function extension(){
                 refreshPage(false);
                 return 'toast://默认搜索分组'+(input?'已设置为：'+input:'已清空');
             }, JYconfig, cfgfile),
-        col_type: "text_3"
+        col_type: "text_2"
     });
     d.push({
         title: 'biu导入',
