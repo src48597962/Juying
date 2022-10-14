@@ -2074,14 +2074,22 @@ function extension(){
         });
         d.push({
             title: '🆗 确定导入',
-            url: getMyVar('importtype')!="2"&&getMyVar('importjiekou')!="1"&&getMyVar('importjiexi')!="1"&&getMyVar('importlive')!="1"?'toast://请选择导入项目':$('#noLoading#').lazyRule(() => {
+            url: getMyVar('importtype')!="2"&&getMyVar('importjiekou')!="1"&&getMyVar('importjiexi')!="1"&&getMyVar('importlive')!="1"?'toast://请选择导入项目':$('#noLoading#').lazyRule((JYconfig,cfgfile) => {
                     if(getMyVar('importinput', '')==""&&getMyVar('importtype','0')!="2"){
                         return 'toast://请先输入链接地址'
+                    }
+                    if(input){
+                        let importrecord = JYconfig['importrecord']||[];
+                        if(!importrecord.some(item => item.url == input)){
+                            importrecord.push({type:getMyVar('importtype','0'),url:input});
+                            JYconfig['importrecord'] = importrecord;
+                            writeFile(cfgfile, JSON.stringify(JYconfig));
+                        }
                     }
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                     let sm = Resourceimport(getMyVar('importinput', ''));
                     return sm?'toast://'+sm:'toast://异常出错';
-                }),
+                }, JYconfig, cfgfile),
             col_type: "text_2"
         });
     }
@@ -2096,7 +2104,6 @@ function Resourceimport(input){
     if(getMyVar('importtype','')=="1"){//tvbox导入
         try{
             showLoading('检测文件有效性');
-            //require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
             if(/\/storage\/emulated\//.test(input)){input = "file://" + input}
             var html = request(input,{timeout:2000});
             var reg = /("([^\\\"]*(\\.)?)*")|('([^\\\']*(\\.)?)*')|(\/{2,}.*?(\r|\n|$))|(\/\*(\n|.)*?\*\/)/g;
@@ -2264,7 +2271,6 @@ function Resourceimport(input){
     }else if(getMyVar('importtype','')=="3"){//biubiu导入
         try{
             showLoading('检测文件有效性');
-            //require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
             var html = request(input,{timeout:2000});
             var reg = /("([^\\\"]*(\\.)?)*")|('([^\\\']*(\\.)?)*')|(\/{2,}.*?(\r|\n|$))|(\/\*(\n|.)*?\*\/)/g;
             html = html.replace(reg, function(word) { 
