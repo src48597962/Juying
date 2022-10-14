@@ -2232,13 +2232,9 @@ function Resourceimport(input){
                         urls.push(arr);
                     }
                 }
-                let jxnum = jiexisave(urls);
-                if(jxnum>0){
-                    return "toast://导入完成，解析保存："+jxnum;
-                }else{
-                    return "toast://无解析";
-                }
+                jxnum = jiexisave(urls);
             } catch (e) {
+                jxnum = -1;
                 log('TVBox导入解析保存失败>'+e.message);
             }
         }              
