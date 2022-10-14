@@ -1961,9 +1961,41 @@ function extension(){
         col_type: "line_blank"
     });
     d.push({
-        title: '选择需要导入的项目',
+        title: '选择需要的功能类型',
         col_type: "rich_text",
-        extra:{textSize:16}
+        extra:{textSize:12}
+    });
+    d.push({
+        title: TVBOX源导入,
+        col_type: 'scroll_button',
+        url: $('#noLoading#').lazyRule(() => {
+            
+            refreshPage(true);
+            return "hiker://empty";
+        })
+    });
+    d.push({
+        title: biu源导入,
+        col_type: 'scroll_button',
+        url: $('#noLoading#').lazyRule(() => {
+            
+            refreshPage(true);
+            return "hiker://empty";
+        })
+    });
+    d.push({
+        title: 其他源导入,
+        col_type: 'scroll_button',
+        url: $('#noLoading#').lazyRule(() => {
+            
+            refreshPage(true);
+            return "hiker://empty";
+        })
+    });
+    d.push({
+        title: '选择需要的导入项目',
+        col_type: "rich_text",
+        extra:{textSize:12}
     });
     d.push({
         title:(getMyVar('importjiekou','0')=="1"?getide(1):getide(0))+'影视接口',
