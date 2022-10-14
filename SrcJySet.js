@@ -2256,7 +2256,7 @@ function Resourceimport(input){
             }
             JYconfig['TVBoxDY'] = input;
             writeFile(cfgfile, JSON.stringify(JYconfig));
-            return 'TVBox订阅：'+(input?'已保存订阅':'已取消订阅');
+            return 'TVBox订阅：'+(input?'保存成功':'已取消');
         }catch(e){
             log('TVBox订阅：失败>'+e.message);
             return 'TVBox订阅：失败，详情查看日志';
