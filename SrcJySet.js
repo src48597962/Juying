@@ -2084,11 +2084,9 @@ function extension(){
                 let lists = importrecord.filter(item => {
                     return item.type==getMyVar('importtype','0');
                 })
-                log(getMyVar('importtype','0'))
-                log(lists)
                 if(lists.length>0){
                     d.push({
-                        title: '👇点击下方的历史条目，进行操作',
+                        title: '点击下方的历史条目，进行操作👇',
                         col_type: "rich_text"
                     });
                     d.push({
@@ -2137,7 +2135,7 @@ function extension(){
                     let input = getMyVar('importinput', '');
                     if(input){
                         let importrecord = JYconfig['importrecord']||[];
-                        if(!importrecord.some(item => item.url == input)){
+                        if(!importrecord.some(item => item.url==input && item.type==getMyVar('importtype','0'))){
                             importrecord.push({type:getMyVar('importtype','0'),url:input});
                             JYconfig['importrecord'] = importrecord;
                             writeFile(cfgfile, JSON.stringify(JYconfig));
