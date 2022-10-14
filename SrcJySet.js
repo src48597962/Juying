@@ -2165,7 +2165,7 @@ function extension(){
         col_type: "line"
     });
     d.push({
-        title: '这是一个有想法的小程序',
+        title: '这是一个堪比app的小程序',
         desc: '佬少皆可用、演示资源码、更新日志',
         col_type: 'text_1',
         url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
@@ -2177,7 +2177,7 @@ function extension(){
                 desc: code,
                 url: $('#noLoading#').lazyRule((code)=>{
                         copy(code);
-                        return 'toast://已复制';
+                        return "hiker://empty";
                     },code),
                 col_type: "text_1"
             });
