@@ -2078,7 +2078,8 @@ function extension(){
                     if(getMyVar('importinput', '')==""&&getMyVar('importtype','0')!="2"){
                         return 'toast://请先输入链接地址'
                     }
-                    if(input!=""){
+                    let input = getMyVar('importinput', '');
+                    if(input){
                         let importrecord = JYconfig['importrecord']||[];
                         if(!importrecord.some(item => item.url == input)){
                             importrecord.push({type:getMyVar('importtype','0'),url:input});
@@ -2087,7 +2088,7 @@ function extension(){
                         }
                     }
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
-                    let sm = Resourceimport(getMyVar('importinput', ''));
+                    let sm = Resourceimport(input);
                     return sm?'toast://'+sm:'toast://异常出错';
                 }, JYconfig, cfgfile),
             col_type: "text_2"
