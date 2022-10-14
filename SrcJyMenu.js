@@ -57,7 +57,7 @@ var erjimenu = [
         url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
                 function getide(is) {
                     if(is==1){
-                        return '‘‘’’<strong><font color="#f13b66a">◉ </front></strong>';
+                        return '‘‘’’<strong><font color="#f13b66a";size=22px;>◉ </front></strong>';
                     }else{
                         return '‘‘’’<strong><font color="#F54343">◉ </front></strong>';
                     }
