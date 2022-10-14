@@ -2073,8 +2073,8 @@ function extension(){
                     return 'toast://请先输入链接地址'
                 }
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
-                Resourceimport(getMyVar('importinput', ''));
-                return 'toast://默认搜索分组';
+                let sm = Resourceimport(getMyVar('importinput', ''));
+                return sm?sm:'异常';
             }),
         col_type: "text_2"
     });
