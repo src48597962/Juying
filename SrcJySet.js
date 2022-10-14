@@ -1508,6 +1508,7 @@ function extension(){
         clearMyVar('importjiekou');
         clearMyVar('importjiexi');
         clearMyVar('importlive');
+        clearMyVar('importlx')
         refreshPage(false);
     }));
     var d = [];
@@ -1966,28 +1967,37 @@ function extension(){
         extra:{textSize:12}
     });
     d.push({
-        title: "TVBOX源导入",
+        title: (getMyVar('importlx','0')=="1"?"👉":"")+"TVBox导入",
         col_type: 'scroll_button',
         url: $('#noLoading#').lazyRule(() => {
-            
+            putMyVar('importlx','1');
             refreshPage(true);
             return "hiker://empty";
         })
     });
     d.push({
-        title: "biu源导入",
+        title: (getMyVar('importlx','0')=="2"?"👉":"")+"biu导入",
         col_type: 'scroll_button',
         url: $('#noLoading#').lazyRule(() => {
-            
+            putMyVar('importlx','2');
             refreshPage(true);
             return "hiker://empty";
         })
     });
     d.push({
-        title: "其他源导入",
+        title: (getMyVar('importlx','0')=="3"?"👉":"")+"其他导入",
         col_type: 'scroll_button',
         url: $('#noLoading#').lazyRule(() => {
-            
+            putMyVar('importlx','3');
+            refreshPage(true);
+            return "hiker://empty";
+        })
+    });
+    d.push({
+        title: (getMyVar('importlx','0')=="4"?"👉":"")+"TVBox订阅",
+        col_type: 'scroll_button',
+        url: $('#noLoading#').lazyRule(() => {
+            putMyVar('importlx','4');
             refreshPage(true);
             return "hiker://empty";
         })
@@ -2030,7 +2040,12 @@ function extension(){
             return "toast://已清空";
         })
     });
-    
+    d.push({
+        title: '请输入链接地址',
+        col_type: "rich_text",
+        extra:{textSize:12}
+    });
+
     d.push({
         title: 'biu导入',
         url:$("","输入biubiu资源地址").input(() => {
