@@ -1505,6 +1505,9 @@ function jiexi(lx,data) {
 //扩展中心
 function extension(){
     addListener("onClose", $.toString(() => {
+        clearMyVar('importjiekou');
+        clearMyVar('importjiexi');
+        clearMyVar('importlive');
         refreshPage(false);
     }));
     var d = [];
@@ -1551,9 +1554,9 @@ function extension(){
     //上面的代码是将订阅历史迁移合并到config中
     function getide(is) {
         if(is==1){
-            return '‘‘’’<strong><font color="#f13b66a";size=18px;>◉ </front></strong>';
+            return '‘‘’’<strong><font color="#f13b66a">◉ </front></strong>';
         }else{
-            return '‘‘’’<strong><font color="#F54343";size=18px;>◉ </front></strong>';
+            return '‘‘’’<strong><font color="#F54343">◉ </front></strong>';
         }
     }
     d.push({
@@ -1963,7 +1966,7 @@ function extension(){
         extra:{textSize:16}
     });
     d.push({
-        title:'影视接口',
+        title:(getMyVar('importjiekou','0')=="1"?getide(1):getide(0))+'影视接口',
         col_type:'text_3',
         url:$("确定要清空上面填写的内容？").confirm(()=>{
             clearMyVar('parsename');
@@ -1974,7 +1977,7 @@ function extension(){
         })
     });
     d.push({
-        title:'解析接口',
+        title:(getMyVar('importjiexi','0')=="1"?getide(1):getide(0))+'解析接口',
         col_type:'text_3',
         url:$("确定要清空上面填写的内容？").confirm(()=>{
             clearMyVar('parsename');
@@ -1985,7 +1988,7 @@ function extension(){
         })
     });
     d.push({
-        title:'直播接口',
+        title:(getMyVar('importlive','0')=="1"?getide(1):getide(0))+'直播接口',
         col_type:'text_3',
         url:$("确定要清空上面填写的内容？").confirm(()=>{
             clearMyVar('parsename');
