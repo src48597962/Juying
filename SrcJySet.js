@@ -1990,11 +1990,14 @@ function extension(){
     d.push({
         title: (getMyVar('importtype','0')=="2"?"👉":"")+"TVBox订阅",
         col_type: 'scroll_button',
-        url: $('#noLoading#').lazyRule(() => {
+        url: $('#noLoading#').lazyRule((TVBoxDY) => {
             putMyVar('importtype','2');
+            if(TVBoxDY){
+                putMyVar("importinput",TVBoxDY);
+            }
             refreshPage(false);
             return "hiker://empty";
-        })
+        }, JYconfig['TVBoxDY'])
     });
     d.push({
         title: (getMyVar('importtype','0')=="3"?"👉":"")+"biu导入",
