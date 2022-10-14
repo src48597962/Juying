@@ -2081,39 +2081,40 @@ function extension(){
                 }
                 var d = [];
                 let importrecord = JYconfig['importrecord']||[];
-                if(importrecord.length>0){
+                let lists = importrecord.filter(item => {
+                    return item.type==getMyVar('importtype','0');
+                })
+                if(lists.length>0){
                     d.push({
-                        title: '⇩点击下方的历史条目，进行操作',
+                        title: '👇点击下方的历史条目，进行操作',
                         col_type: "rich_text"
                     });
                     d.push({
                         col_type: "line"
                     });
                     for(let i=0;i<importrecord.length;i++){
-                        if(importrecord[i].type==getMyVar('importtype','0')){
-                            d.push({
-                                title: importrecord[i].url,
-                                url: $(["选择","删除"],1,"").select((JYconfig, cfgfile, url)=>{
-                                        if(input=="选择"){
-                                            putMyVar('importinput', url);
-                                            back(true);
-                                        }else if(input=="删除"){
-                                            let importrecord = JYconfig['importrecord']||[];
-                                            for(let i=0;i<importrecord.length;i++){
-                                                if(importrecord[i].url==url){
-                                                    importrecord.splice(i,1);
-                                                    break;
-                                                }
+                        d.push({
+                            title: importrecord[i].url,
+                            url: $(["选择","删除"],1,"").select((JYconfig, cfgfile, url)=>{
+                                    if(input=="选择"){
+                                        putMyVar('importinput', url);
+                                        back(true);
+                                    }else if(input=="删除"){
+                                        let importrecord = JYconfig['importrecord']||[];
+                                        for(let i=0;i<importrecord.length;i++){
+                                            if(importrecord[i].url==url){
+                                                importrecord.splice(i,1);
+                                                break;
                                             }
-                                            JYconfig['importrecord'] = importrecord; 
-                                            writeFile(cfgfile, JSON.stringify(JYconfig));
-                                            refreshPage(false);
                                         }
-                                        return "hiker://empty";
-                                    }, JYconfig, cfgfile, importrecord[i].url),
-                                col_type: "text_1"
-                            });
-                        }
+                                        JYconfig['importrecord'] = importrecord; 
+                                        writeFile(cfgfile, JSON.stringify(JYconfig));
+                                        refreshPage(false);
+                                    }
+                                    return "hiker://empty";
+                                }, JYconfig, cfgfile, importrecord[i].url),
+                            col_type: "text_1"
+                        });
                     }
                 }else{
                     d.push({
