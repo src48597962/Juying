@@ -2077,7 +2077,7 @@ function extension(){
     });
     d.push({
         title: '🆗 确定导入',
-        url: !getMyVar('importjiekou')&&!getMyVar('importjiexi')&&!getMyVar('importlive')?'toast://请选择导入项目':$.lazyRule(() => {
+        url: !getMyVar('importjiekou')&&!getMyVar('importjiexi')&&!getMyVar('importlive')?'toast://请选择导入项目':$().lazyRule(() => {
                 
                 refreshPage(false);
                 return 'toast://默认搜索分组';
