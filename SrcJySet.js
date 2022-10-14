@@ -2166,16 +2166,50 @@ function extension(){
     });
     d.push({
         title: '这是一个有想法的小程序',
-        desc: '小白和大佬均可简单使用、开局演示资源码、查看规则更新日志',
+        desc: '佬少皆可用、演示资源码、更新日志',
         col_type: 'text_1',
-        url:$('#noLoading#').lazyRule(() => {
-            if(getMyVar('importjiekou')=="1"){
-                putMyVar('importjiekou','0');
-            }else{
-                putMyVar('importjiekou','1');
+        url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
+            setPageTitle("💝 关于聚影");
+            var d = [];
+            let code = '聚影资源码￥K1zM/hocuUV5d8Q9T5IujP9pkulPKB77TVq7GjjEkXM=';
+            d.push({
+                title: '📋演示资源码',
+                desc: code,
+                url: $('#noLoading#').lazyRule((code)=>{
+                        copy(code);
+                        return 'toast://已复制';
+                    },code),
+                col_type: "text_1"
+            });
+
+            try{
+                eval(fetchCache(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcTmplVersion.js', 1, { timeout:2000 }))
+                var isupdate = parseFloat(newVersion.SrcJuying) > parseFloat(getMyVar('SrcJuying-Version','').replace('-V',''))?1:0;
+                var SrcJuyingdesc = newVersion.SrcJuyingdesc;
+            }catch(e){
+                var isupdate = 0;
             }
-            refreshPage(false);
-            return "hiker://empty";
+            d.push({
+                title: isupdate?'💡发现新版本V'+newVersion.SrcJuying:'🎉已是最新版本',
+                url: isupdate?$('#noLoading#').lazyRule(()=>{
+                        deleteCache();
+                        refreshPage();
+                        return 'toast://已复制';
+                    }):"hiker://empty",
+                col_type: "text_1"
+            });
+
+            if(SrcJuyingdesc){
+                for(let key in SrcJuyingdesc){
+                    d.push({
+                        title: '版本V'+key,
+                        desc: SrcJuyingdesc[key],
+                        url: "hiker://empty",
+                        col_type: "text_1"
+                    });
+                }
+            }
+            setHomeResult(d);
         })
     });
     d.push({
