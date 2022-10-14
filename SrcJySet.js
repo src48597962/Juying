@@ -2084,6 +2084,8 @@ function extension(){
                 let lists = importrecord.filter(item => {
                     return item.type==getMyVar('importtype','0');
                 })
+                log(getMyVar('importtype','0'))
+                log(lists)
                 if(lists.length>0){
                     d.push({
                         title: '👇点击下方的历史条目，进行操作',
@@ -2092,9 +2094,9 @@ function extension(){
                     d.push({
                         col_type: "line"
                     });
-                    for(let i=0;i<importrecord.length;i++){
+                    for(let i=0;i<lists.length;i++){
                         d.push({
-                            title: importrecord[i].url,
+                            title: lists[i].url,
                             url: $(["选择","删除"],1,"").select((JYconfig, cfgfile, url)=>{
                                     if(input=="选择"){
                                         putMyVar('importinput', url);
@@ -2112,7 +2114,7 @@ function extension(){
                                         refreshPage(false);
                                     }
                                     return "hiker://empty";
-                                }, JYconfig, cfgfile, importrecord[i].url),
+                                }, JYconfig, cfgfile, lists[i].url),
                             col_type: "text_1"
                         });
                     }
