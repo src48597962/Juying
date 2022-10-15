@@ -75,7 +75,7 @@ function Live() {
             }
             d.push({
                 title: grouplist[i],
-                url: $.toString((guanlidata,datalist) => {
+                url: $('#noLoading#').lazyRule((guanlidata,datalist) => {
                     if(datalist.length>0){
                         deleteItemByCls('livelist');
                         var lists = datalist.filter(item => {
