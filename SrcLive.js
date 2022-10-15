@@ -19,9 +19,14 @@ function Live() {
             if(JYlives[i].indexOf('#genre#')>-1){
                 group = JYlives[i].split(',')[0];
             }else if(JYlives[i].indexOf(',')>-1){
-                datalist.push({group: group, name: JYlives[i].split(',')[0], url: JYlives[i].split(',')[1]});
+                datalist.push({group: group, name: JYlives[i].split(',')[0]});
             }
         }
+        let obj = {};
+        datalist = datalist.reduce((newArr, next) => {
+            obj[next.name] ? "" : (obj[next.name] = true && newArr.push(next));
+            return newArr;
+        }, []);
         let grouplist = datalist.map((list)=>{
             return list.group;
         })
@@ -40,11 +45,7 @@ function Live() {
             let lists = datalist.filter(item => {
                 return item.group==grouplist[i];
             })
-            let obj = {};
-            lists = lists.reduce((newArr, next) => {
-                obj[next.name] ? "" : (obj[next.name] = true && newArr.push(next));
-                return newArr;
-            }, []);
+            
             d.push({
                 title: grouplist[i],
                 url: $('#noLoading#').lazyRule(()=>{
