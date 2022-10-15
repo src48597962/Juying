@@ -738,6 +738,14 @@ function yiji() {
             });
         }
         d.push({
+            title: "直播",
+            url: $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLive.js');
+                    Live();
+                }),
+            col_type: 'scroll_button'
+        });
+        d.push({
             col_type: "blank_block"
         });
         
