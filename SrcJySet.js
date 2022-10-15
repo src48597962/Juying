@@ -2438,7 +2438,7 @@ function Resourceimport(input,importtype,boxdy){
                                     id = JYlives.indexOf(YClives[i]);
                                 }else if(YClives[i].indexOf('#genre#')>-1&&JYlives.indexOf(YClives[i])==-1){
                                     id = JYlives.length+1;
-                                }else if(JYlives.indexOf(YClives[i])==-1){
+                                }else if(JYlives.indexOf(YClives[i])==-1&&YClives[i].trim()!=""){
                                     JYlives.splice(id, 0, YClives[i]);
                                 }
                             }
