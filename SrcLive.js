@@ -12,6 +12,12 @@ function Live() {
         var JYlives = [];
     }
     if(JYlives.length>0){
+        d.push({
+            title: '<b>聚直播</b> &nbsp &nbsp <small> 聚直播设置 </small>',
+            img: "",
+            url: "",
+            col_type: 'avatar'
+        });
         let datalist = [];
         let datalist2 = [];
         let group = "";
@@ -30,9 +36,9 @@ function Live() {
         let grouplist = datalist.map((list)=>{
             return list.group;
         })
-        //&#21435;&#37325;&#22797;
+
         function uniq(array){
-            var temp = []; //&#19968;&#20010;&#26032;&#30340;&#20020;&#26102;&#25968;&#32452;
+            var temp = []; 
             for(var i = 0; i < array.length; i++){
                 if(temp.indexOf(array[i]) == -1){
                     temp.push(array[i]);
@@ -78,7 +84,7 @@ function Live() {
         });
     }else{
         d.push({
-            title: '&#27809;&#26377;&#30452;&#25773;&#28304;&#25968;&#25454;',
+            title: '没有直播数据源',
             col_type: 'rich_text'
         });
     }
