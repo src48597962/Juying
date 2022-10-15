@@ -33,6 +33,9 @@ function Live() {
             obj[next.name] ? "" : (obj[next.name] = true && newArr.push(next));
             return newArr;
         }, []);
+        datalist.sort((a, b) => {
+            return a.name - b.name
+        })
         d.push({
             title: "🔍",
             url: $.toString((guanlidata,datalist) => {
