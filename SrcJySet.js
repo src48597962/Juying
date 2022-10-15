@@ -1564,9 +1564,11 @@ function extension(){
             return '‘‘’’<strong><font color="#F54343">◉ </front></strong>';
         }
     }
+    /*
     d.push({
         col_type: "line_blank"
     });
+    */
     d.push({
         title: '🌐 聚影分享',
         col_type: "rich_text"
@@ -1693,10 +1695,11 @@ function extension(){
             }, JYconfig, cfgfile):'toast://请先申请聚影资源码',
         col_type: "text_2"
     });
-    
+    /*
     d.push({
         col_type: "line_blank"
     });
+    */
     d.push({
         title: '⚡ 订阅管理',
         col_type: "rich_text"
@@ -1846,9 +1849,11 @@ function extension(){
         }, JYconfig, cfgfile):'toast://请先订阅聚影资源码',
         col_type: "text_2"
     });
+    /*
     d.push({
         col_type: "line_blank"
     });
+    */
     d.push({
         title: '⚙ 个性设置',
         col_type: "rich_text"
@@ -1963,9 +1968,11 @@ function extension(){
             }, JYconfig, cfgfile),
         col_type: "text_3"
     });
+    /*
     d.push({
         col_type: "line_blank"
     });
+    */
     d.push({
         title: '🎁 其他资源',
         col_type: "rich_text"
@@ -2158,9 +2165,11 @@ function extension(){
             col_type: "text_2"
         });
     }
+    /*
     d.push({
         col_type: "line_blank"
     });
+    */
     d.push({
         title: '💝 关于聚影',
         col_type: "rich_text"
