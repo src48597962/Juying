@@ -5,8 +5,8 @@ var erjimenu = [
         url: /\.sogou\./.test(MY_URL)?$('hiker://empty#noRecordHistory##noHistory#').rule((url) => {
                 var d=[];
                 var html = request(url.split('##')[1]);
-                log(html)
                 var story=parseDomForHtml(html, 'body&&.srch-result-info&&Html').replace(/<\/a><a/g,',</a><a');
+                log(story)
                 for(let i = 0;;i++){
                     try{
                         d.push({
