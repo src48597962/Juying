@@ -22,11 +22,9 @@ function Live() {
                 datalist.push({group: group, name: JYlives[i].split(',')[0], url: JYlives[i].split(',')[1]});
             }
         }
-        log(1)
         let grouplist = datalist.map((list)=>{
             return list.group;
         })
-        log(2)
         //去重复
         function uniq(array){
             var temp = []; //一个新的临时数组
@@ -38,11 +36,15 @@ function Live() {
             return temp;
         }
         grouplist = uniq(grouplist);
-        log(3)
         for(var i in grouplist){
-            var lists = datalist.filter(item => {
+            let lists = datalist.filter(item => {
                 return item.group==grouplist[i];
             })
+            let obj = {};
+            lists = lists.reduce((newArr, next) => {
+                obj[next.name] ? "" : (obj[next.name] = true && newArr.push(next));
+                return newArr;
+            }, []);
             d.push({
                 title: grouplist[i],
                 url: $('#noLoading#').lazyRule(()=>{
@@ -58,7 +60,7 @@ function Live() {
                 datalist2 = lists;
             }
         }
-        log(4)
+
         datalist = datalist2;
         //writeFile(livefile, "");
         for (let i=0;i<datalist.length;i++) {
