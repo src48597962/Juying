@@ -1570,12 +1570,13 @@ function extension(){
     });
     */
     d.push({
+        col_type: "line"
+    });
+    d.push({
         title: '🌐 聚影分享',
         col_type: "rich_text"
     });
-    d.push({
-        col_type: "line"
-    });
+    
     d.push({
         title: JYconfig['codeid']?'复制聚影资源码口令':'申请聚影资源码',//sharetime
         desc: JYconfig['codetime']?JYconfig['codetime']+' 有效期三年\n'+(JYconfig['sharetime']?JYconfig['sharetime']+" 上次同步时间":"暂未分享同步"):'点击申请三年长期资源码',
@@ -1701,12 +1702,13 @@ function extension(){
     });
     */
     d.push({
+        col_type: "line"
+    });
+    d.push({
         title: '⚡ 订阅管理',
         col_type: "rich_text"
     });
-    d.push({
-        col_type: "line"
-    });
+    
     d.push({
         title: JYconfig['codedyid']?'已订阅聚影资源码':'订阅聚影资源码',
         desc: JYconfig['codedyid']?'点击订阅、复制、切换资源码'+(JYconfig['codedyname']?'\n当前订阅的资源码为：'+JYconfig['codedyname']:""):'订阅后将与分享者云端数据保持同步',
@@ -1855,12 +1857,13 @@ function extension(){
     });
     */
     d.push({
+        col_type: "line"
+    });
+    d.push({
         title: '⚙ 个性设置',
         col_type: "rich_text"
     });
-    d.push({
-        col_type: "line"
-    });
+    
     d.push({
         title: JYconfig['erjimode']!=2?'当前二级模式：常规':'当前二级模式：搜索',
         desc: JYconfig['erjimode']!=2?'一级选片点击先用进二级，再扩展更多片源':'一级选片点击调用接口搜索扩展更多片源',
@@ -1974,12 +1977,13 @@ function extension(){
     });
     */
     d.push({
+        col_type: "line"
+    });
+    d.push({
         title: '🎁 其他资源',
         col_type: "rich_text"
     });
-    d.push({
-        col_type: "line"
-    });
+
     d.push({
         title: '选择需要的功能类型',
         col_type: "rich_text",
@@ -2171,12 +2175,13 @@ function extension(){
     });
     */
     d.push({
+        col_type: "line"
+    });
+    d.push({
         title: '💝 关于聚影',
         col_type: "rich_text"
     });
-    d.push({
-        col_type: "line"
-    });
+
     d.push({
         title: '这是一个堪比app的小程序',
         desc: '佬少皆可用、演示资源码、更新日志',
