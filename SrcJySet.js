@@ -2455,7 +2455,7 @@ function Resourceimport(input,importtype,boxdy){
         if(isboxdy){
             return dydatas;
         }else{
-            let sm = (jknum>-1?' 接口保存'+jknum:'')+(jxnum>-1?' 解析保存'+jxnum:'');
+            let sm = (jknum>-1?' 接口保存'+jknum:'')+(jxnum>-1?' 解析保存'+jxnum:'')+(JYlives?' 直播数据已保存':'');
             return 'TVBox导入：'+(sm?sm:'导入异常，详情查看日志');
         }              
     }else if(importtype=="2"){//tvbox订阅
