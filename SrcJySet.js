@@ -2145,7 +2145,7 @@ function extension(){
                         }
                     }
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
-                    let sm = Resourceimport(input);
+                    let sm = Resourceimport(input,getMyVar('importtype','0'));
                     if(getMyVar('importtype','0')!="2"){
                         back();
                     }else{
@@ -2230,10 +2230,15 @@ function extension(){
     setHomeResult(d);
 }
 //资源导入
-function Resourceimport(input){
-    if(getMyVar('importtype','')=="1"){//tvbox导入
+function Resourceimport(input,importtype,boxdy){
+    if(importtype=="1"){//tvbox导入
+        if(boxdy){
+            var isboxdy = boxdy.is;
+            var datasl = boxdy.sl;
+            var dydatas = {};
+        }
         try{
-            showLoading('检测文件有效性');
+            showLoading('检测'+(isboxdy?'TVBox订阅':'')+'文件有效性');
             if(/\/storage\/emulated\//.test(input)){input = "file://" + input}
             var html = request(input,{timeout:2000});
             var reg = /("([^\\\"]*(\\.)?)*")|('([^\\\']*(\\.)?)*')|(\/{2,}.*?(\r|\n|$))|(\/\*(\n|.)*?\*\/)/g;
@@ -2248,19 +2253,19 @@ function Resourceimport(input){
         } catch (e) {
             hideLoading();
             log('TVBox文件检测失败>'+e.message); 
-            return "TVBox导入失败：链接文件无效或内容有错";
+            return isboxdy?{jiekou:[],jiexi:[]}:"TVBox导入失败：链接文件无效或内容有错";
         }
         var jknum = -1;
         var jxnum = -1;
-        if(getMyVar('importjiekou','')=="1"&&jiekou.length>0){
+        if((isboxdy||getMyVar('importjiekou','')=="1")&&jiekou.length>0){
             showLoading('正在多线程抓取数据中');
             var urls= [];
             //多线程处理
             var task = function(obj) {
                 if(/^csp_AppYs/.test(obj.api)){
-                    urls.push({ "name": obj.name, "url": obj.ext, "group": "新导入"})
+                    urls.push({ "name": obj.name, "url": obj.ext, "group": isboxdy?datasl>0?"TVBox订阅":"":"新导入"})
                 }else if((obj.type==1||obj.type==0)&&obj.api.indexOf('cms.nokia.press')==-1){
-                    urls.push({ "name": obj.name, "url": obj.api, "group": "新导入"})
+                    urls.push({ "name": obj.name, "url": obj.api, "group": isboxdy?datasl>0?"TVBox订阅":"":"新导入"})
                 }else if(/^csp_XBiubiu/.test(obj.api)){
                     try{
                         let urlfile = obj.ext;
@@ -2296,11 +2301,11 @@ function Resourceimport(input){
                         biudata.zhuyanhou = biujson.zhuyanhou;
                         biudata.juqingqian = biujson.juqingqian;
                         biudata.juqinghou = biujson.juqinghou;
-                        urls.push({ "name": obj.name, "url": obj.key, "type": "biubiu", "ua": "PC_UA", "data": biudata, "group": "新导入"})
+                        urls.push({ "name": obj.name, "url": obj.key, "type": "biubiu", "ua": "PC_UA", "data": biudata, "group": isboxdy?datasl>0?"TVBox订阅":"":"新导入"})
                     }catch(e){
                         //log(obj.name + '>抓取失败>' + e.message)
                     }
-                }else if(/^csp_XPath/.test(obj.api)){
+                }else if(/^csp_XPath/.test(obj.api)&&!boxdy){
                     try{
                         let urlfile = obj.ext;
                         if(/^clan:/.test(urlfile)){
@@ -2336,7 +2341,7 @@ function Resourceimport(input){
                         xpdata.scVodId = xpjson.scVodId;
                         xpdata.scVodImg = xpjson.scVodImg;
                         xpdata.scVodMark = xpjson.scVodMark;
-                        urls.push({ "name": obj.name, "url": obj.ext, "type": "xpath", "ua": xpjson.ua?xpjson.ua:"PC_UA", "data": xpdata, "group": "新导入"})
+                        urls.push({ "name": obj.name, "url": obj.ext, "type": "xpath", "ua": xpjson.ua?xpjson.ua:"PC_UA", "data": xpdata, "group": isboxdy?datasl>0?"TVBox订阅":"":"新导入"})
                     }catch(e){
                         //log(obj.name + '>抓取失败>' + e.message)
                     }
@@ -2357,15 +2362,19 @@ function Resourceimport(input){
                 param: {
                 }
             });
-            try{
-                jknum = jiekousave(urls);
-            }catch(e){
-                jknum =-1;
-                log('TVBox导入接口保存有异常>'+e.message);
-            } 
+            if(isboxdy){
+                dydatas['jiekou'] = urls;
+            }else{
+                try{
+                    jknum = jiekousave(urls);
+                }catch(e){
+                    jknum =-1;
+                    log('TVBox导入接口保存有异常>'+e.message);
+                } 
+            }
             hideLoading();    
         }
-        if(getMyVar('importjiexi','')=="1"&&jiexi.length>0){
+        if((isboxdy||getMyVar('importjiexi','')=="1")&&jiexi.length>0){
             try{
                 let urls = [];
                 for (let i=0;i<jiexi.length;i++) {
@@ -2374,15 +2383,23 @@ function Resourceimport(input){
                         urls.push(arr);
                     }
                 }
-                jxnum = jiexisave(urls);
+                if(isboxdy){
+                    dydatas['jiexi'] = urls;
+                }else{
+                    jxnum = jiexisave(urls);
+                }
             } catch (e) {
                 jxnum = -1;
                 log('TVBox导入解析保存失败>'+e.message);
             }
+        }
+        if(isboxdy){
+            return dydatas;
+        }else{
+            let sm = (jknum>-1?' 接口保存'+jknum:'')+(jxnum>-1?' 解析保存'+jxnum:'');
+            return 'TVBox导入：'+(sm?sm:'导入异常，详情查看日志');
         }              
-        let sm = (jknum>-1?' 接口保存'+jknum:'')+(jxnum>-1?' 解析保存'+jxnum:'');
-        return 'TVBox导入：'+(sm?sm:'导入异常，详情查看日志');
-    }else if(getMyVar('importtype','')=="2"){//tvbox订阅
+    }else if(importtype=="2"){//tvbox订阅
         try{
             let cfgfile = "hiker://files/rules/Src/Juying/config.json";
             let Juyingcfg=fetch(cfgfile);
@@ -2398,7 +2415,7 @@ function Resourceimport(input){
             log('TVBox订阅：失败>'+e.message);
             return 'TVBox订阅：失败，详情查看日志';
         }
-    }else if(getMyVar('importtype','')=="3"){//biubiu导入
+    }else if(importtype=="3"){//biubiu导入
         try{
             showLoading('检测文件有效性');
             var html = request(input,{timeout:2000});
