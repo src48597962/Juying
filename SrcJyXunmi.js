@@ -50,6 +50,7 @@ function xunmi(name,data,ishkss) {
                     let dydatas = Resourceimport(TVBoxDY,'1',{is:1,sl:datalist.length});
                     DYdatalist = dydatas.jiekou;
                     storage0.putMyVar('JYTVBoxDYdatalist',DYdatalist);   
+                    log(DYdatalist)
                 }    
                 for(let i=0;i<DYdatalist.length;i++){
                     if(!datalist.some(item => item.url==DYdatalist[i].url)){
