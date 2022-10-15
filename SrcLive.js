@@ -30,9 +30,9 @@ function Live() {
         let grouplist = datalist.map((list)=>{
             return list.group;
         })
-        //去重复
+        //&#21435;&#37325;&#22797;
         function uniq(array){
-            var temp = []; //一个新的临时数组
+            var temp = []; //&#19968;&#20010;&#26032;&#30340;&#20020;&#26102;&#25968;&#32452;
             for(var i = 0; i < array.length; i++){
                 if(temp.indexOf(array[i]) == -1){
                     temp.push(array[i]);
@@ -67,7 +67,8 @@ function Live() {
         for (let i=0;i<datalist.length;i++) {
             d.push({
                 title: datalist[i].name,
-                col_type:'text_4',
+                img: 'https://lanmeiguojiang.com/tubiao/more/228.png',
+                col_type: 'icon_2_round',
                 url: ""
             });
         }
@@ -77,7 +78,7 @@ function Live() {
         });
     }else{
         d.push({
-            title: '没有直播源数据',
+            title: '&#27809;&#26377;&#30452;&#25773;&#28304;&#25968;&#25454;',
             col_type: 'rich_text'
         });
     }
