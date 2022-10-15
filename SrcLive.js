@@ -18,8 +18,8 @@ function Live() {
         for(let i=0;i<JYlives.length;i++){
             if(JYlives[i].indexOf('#genre#')>-1){
                 group = JYlives[i];
-            }else if(JYlives[i].trim()!=""&&JYlives[i].indexOf(',')>-1&&!datalist.some(item => item.name==datalist[i].split(',')[0])){
-                datalist.push({group: group, name: datalist[i].split(',')[0]});
+            }else if(JYlives[i].trim()!=""&&JYlives[i].indexOf(',')>-1&&!datalist.some(item => item.name==JYlives[i].split(',')[0])){
+                datalist.push({group: group, name: JYlives[i].split(',')[0]});
             }
         }
         let grouplist = datalist.map((list)=>{
