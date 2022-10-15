@@ -1570,9 +1570,6 @@ function extension(){
     });
     */
     d.push({
-        col_type: "line"
-    });
-    d.push({
         title: '🌐 聚影分享',
         col_type: "rich_text"
     });
