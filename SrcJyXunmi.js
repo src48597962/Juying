@@ -41,6 +41,7 @@ function xunmi(name,data,ishkss) {
         }
         try{
             if(JYconfig.TVBoxDY){
+                let DYdatalist = [];
                 let TVBoxDY = JYconfig.TVBoxDY;
                 if(/\/storage\/emulated\//.test(TVBoxDY)){TVBoxDY = "file://" + TVBoxDY}
                 if(/^http/.test(TVBoxDY)){
@@ -62,10 +63,10 @@ function xunmi(name,data,ishkss) {
                     if(/^csp_AppYs/.test(obj.api)){                        
                         let dytype = getapitype(obj.ext);
                         if(dytype&&obj.name&&obj.ext){
-                            datalist.push({ "name": obj.name, "url": obj.ext, "ua":"MOBILE_UA", "type":dytype, "group": "TVBox订阅"})
+                            DYdatalist.push({ "name": obj.name, "url": obj.ext, "ua":"MOBILE_UA", "type":dytype, "group": datalist.length>0?"TVBox订阅":""})
                         }
                     }else if((obj.type==1||obj.type==0)&&obj.api.indexOf('cms.nokia.press')==-1){
-                        datalist.push({ "name": obj.name, "url": obj.api, "ua":"MOBILE_UA", "type":"cms", "group": "TVBox订阅"})
+                        DYdatalist.push({ "name": obj.name, "url": obj.api, "ua":"MOBILE_UA", "type":"cms", "group": datalist.length>0?"TVBox订阅":""})
                     }else if(/^csp_XBiubiu/.test(obj.api)){
                         try{
                             let urlfile = obj.ext;
@@ -105,7 +106,7 @@ function xunmi(name,data,ishkss) {
                             biudata.zhuyanhou = biujson.zhuyanhou;
                             biudata.juqingqian = biujson.juqingqian;
                             biudata.juqinghou = biujson.juqinghou;
-                            datalist.push({ "name": obj.name, "url": obj.key, "type": "biubiu", "ua": "PC_UA", "data": biudata, "group": "TVBox订阅"})
+                            DYdatalist.push({ "name": obj.name, "url": obj.key, "type": "biubiu", "ua": "PC_UA", "data": biudata, "group": datalist.length>0?"TVBox订阅":""})
                         }catch(e){
                             //log(e.message)
                         }
@@ -127,6 +128,7 @@ function xunmi(name,data,ishkss) {
                     param: {
                     }
                 });
+                datalist = datalist.concat(DYdatalist);
             }
         }catch(e){
             log(e.message)
