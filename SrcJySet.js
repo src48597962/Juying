@@ -2228,7 +2228,7 @@ function extension(){
                     updatedesc.push('版本V'+key+(parseFloat(key) > parseFloat(getMyVar('SrcJuying-Version','').replace('-V',''))?"(未发布)":"")+'：'+SrcJuyingdesc[key]);
                 }
                 d.push({
-                    title: updatedesc.join('<br>'),
+                    title: updatedesc.reverse().join('<br>'),
                     col_type: "rich_text"
                 });
             }
