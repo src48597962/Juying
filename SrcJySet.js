@@ -2264,9 +2264,9 @@ function Resourceimport(input,importtype,boxdy){
             //多线程处理
             var task = function(obj) {
                 if(/^csp_AppYs/.test(obj.api)){
-                    urls.push({ "name": obj.name, "url": obj.ext, "group": isboxdy?datasl>0?"TVBox订阅":"":"新导入"})
+                    urls.push({ "name": obj.name, "url": obj.ext, "type": getapitype(obj.ext), "group": isboxdy?datasl>0?"TVBox订阅":"":"新导入"})
                 }else if((obj.type==1||obj.type==0)&&obj.api.indexOf('cms.nokia.press')==-1){
-                    urls.push({ "name": obj.name, "url": obj.api, "group": isboxdy?datasl>0?"TVBox订阅":"":"新导入"})
+                    urls.push({ "name": obj.name, "url": obj.api, "type": "cms", "group": isboxdy?datasl>0?"TVBox订阅":"":"新导入"})
                 }else if(/^csp_XBiubiu/.test(obj.api)){
                     try{
                         let urlfile = obj.ext;
