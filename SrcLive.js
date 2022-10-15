@@ -17,14 +17,16 @@ function Live() {
         let group = "";
         for(let i=0;i<JYlives.length;i++){
             if(JYlives[i].indexOf('#genre#')>-1){
-                group = JYlives[i];
+                group = JYlives[i].split(',')[0];
             }else if(JYlives[i].trim()!=""&&JYlives[i].indexOf(',')>-1&&!datalist.some(item => item.name==JYlives[i].split(',')[0])){
                 datalist.push({group: group, name: JYlives[i].split(',')[0]});
             }
         }
+        log(1)
         let grouplist = datalist.map((list)=>{
             return list.group;
         })
+        log(2)
         //去重复
         function uniq(array){
             var temp = []; //一个新的临时数组
@@ -36,6 +38,7 @@ function Live() {
             return temp;
         }
         grouplist = uniq(grouplist);
+        log(3)
         for(var i in grouplist){
             var lists = datalist.filter(item => {
                 return item.group==grouplist[i];
@@ -55,6 +58,7 @@ function Live() {
                 datalist2 = lists;
             }
         }
+        log(4)
         datalist = datalist2;
         //writeFile(livefile, "");
         for (let i=0;i<datalist.length;i++) {
