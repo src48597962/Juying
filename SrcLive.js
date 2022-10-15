@@ -120,7 +120,7 @@ function Live() {
 function guanlidata(datalist) {
     let list = [];
     datalist.sort((a, b) => {
-        return a.name - b.name
+        return b.name - a.name
     })
     for (let i=0;i<datalist.length;i++) {
         list.push({
