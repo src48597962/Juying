@@ -49,8 +49,10 @@ function xunmi(name,data,ishkss) {
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                     let dydatas = Resourceimport(TVBoxDY,'1',{is:1,sl:datalist.length});
                     DYdatalist = dydatas.jiekou;
-                    storage0.putMyVar('JYTVBoxDYdatalist',DYdatalist);   
-                    log(DYdatalist)
+                    storage0.putMyVar('JYTVBoxDYdatalist',DYdatalist);
+                    try{
+                        storage0.putMyVar('JYTVBoxDYjxlist',dydatas.jiexi);
+                    }catch(e){}
                 }    
                 for(let i=0;i<DYdatalist.length;i++){
                     if(!datalist.some(item => item.url==DYdatalist[i].url)){
