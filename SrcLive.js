@@ -42,7 +42,7 @@ function Live() {
                             return item.name.includes(input);
                         })
                         let gldatalist = guanlidata(lists);
-                        addItemBefore('liveloading', gldatalist);
+                        addItemAfter('liveloading', gldatalist);
                     }
                     return "hiker://empty";
                 },guanlidata,datalist),
@@ -75,10 +75,20 @@ function Live() {
             }
             d.push({
                 title: grouplist[i],
-                url: $('#noLoading#').lazyRule(()=>{
+                url: $.toString((guanlidata,datalist) => {
+                    if(datalist.length>0){
+                        deleteItemByCls('livelist');
+                        var lists = datalist.filter(item => {
+                            return item.name.includes(input);
+                        })
+                        let gldatalist = guanlidata(lists);
+                        addItemAfter('liveloading', gldatalist);
+                    }
+                    return "hiker://empty";
+                },guanlidata,lists),/*$('#noLoading#').lazyRule(()=>{
                         
                         return'hiker://empty';
-                    }),
+                    }),*/
                 col_type: "scroll_button",
                 extra: {
                     id: grouplist[i]
