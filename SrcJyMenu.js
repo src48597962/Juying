@@ -4,7 +4,7 @@ var erjimenu = [
         title: "剧情简介",
         url: /\.sogou\./.test(MY_URL)?$('hiker://empty#noRecordHistory##noHistory#').rule((url) => {
                 var d=[];
-                var html = fetch(url.split('##')[1]);
+                var html = request(url.split('##')[1]);
                 var story=parseDomForHtml(html, 'body&&.srch-result-info&&Html').replace(/<\/a><a/g,',</a><a');
                 for(let i = 0;;i++){
                     try{
