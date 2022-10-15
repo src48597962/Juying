@@ -2144,9 +2144,9 @@ function extension(){
                             writeFile(cfgfile, JSON.stringify(JYconfig));
                         }
                     }
+                    writeFile("hiker://files/rules/Src/Juying/DYTVBoxTmp.json", "");
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                     let sm = Resourceimport(input,getMyVar('importtype','0'));
-                    clearMyVar('JYTVBoxDYdatalist');
                     if(getMyVar('importtype','0')!="2"){
                         back();
                     }else{
