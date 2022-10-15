@@ -41,18 +41,25 @@ function xunmi(name,data,ishkss) {
         }
         try{
             if(JYconfig.TVBoxDY){
-                if(storage0.getMyVar('JYTVBoxDYdatalist')){
-                    var DYdatalist = storage0.getMyVar('JYTVBoxDYdatalist')||[];
+                let TVBoxTmpfile = "hiker://files/rules/Src/Juying/DYTVBoxTmp.json";
+                let DYTVBoxTmp = fetch(TVBoxTmpfile);
+                if(DYTVBoxTmp != ""){
+                    eval("var dydatas=" + DYTVBoxTmp+ ";");
+                }else{
+                    var dydatas = {};
+                }
+                let nowtime = Date.now();
+                let oldtime = parseInt(getItem('DYTVBoxChecktime','0').replace('time',''));
+                if(nowtime < (oldtime+12*60*60*1000)&&dydatas.jiekou){
+                    var DYdatalist = dydatas.jiekou||[];
                 }else{
                     var DYdatalist = [];
                     let TVBoxDY = JYconfig.TVBoxDY;
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
-                    let dydatas = Resourceimport(TVBoxDY,'1',{is:1,sl:datalist.length});
+                    dydatas = Resourceimport(TVBoxDY,'1',{is:1,sl:datalist.length});
                     DYdatalist = dydatas.jiekou;
-                    storage0.putMyVar('JYTVBoxDYdatalist',DYdatalist);
-                    try{
-                        storage0.putMyVar('JYTVBoxDYjxlist',dydatas.jiexi);
-                    }catch(e){}
+                    writeFile(TVBoxTmpfile, JSON.stringify(dydatas));
+                    setItem('DYTVBoxChecktime',nowtime+"time");
                 }    
                 for(let i=0;i<DYdatalist.length;i++){
                     if(!datalist.some(item => item.url==DYdatalist[i].url)){
