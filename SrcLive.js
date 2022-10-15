@@ -13,7 +13,7 @@ function Live() {
     }
     if(JYlives.length>0){
         d.push({
-            title: '<b>聚直播</b> &nbsp &nbsp <small> 聚直播设置 </small>',
+            title: '<b>⚙直播设置⚙</b>',
             img: "",
             url: "",
             col_type: 'avatar'
@@ -33,10 +33,29 @@ function Live() {
             obj[next.name] ? "" : (obj[next.name] = true && newArr.push(next));
             return newArr;
         }, []);
+        d.push({
+            title: "🔍",
+            url: $.toString((guanlidata,datalist) => {
+                    if(datalist.length>0){
+                        deleteItemByCls('livelist');
+                        var lists = datalist.filter(item => {
+                            return item.name.includes(input);
+                        })
+                        let gldatalist = guanlidata(lists);
+                        addItemBefore('liveloading', gldatalist);
+                    }
+                    return "hiker://empty";
+                },guanlidata,datalist),
+            desc: "搜你想要的...",
+            col_type: "input",
+            extra: {
+                titleVisible: true
+            }
+        });
+
         let grouplist = datalist.map((list)=>{
             return list.group;
         })
-
         function uniq(array){
             var temp = []; 
             for(var i = 0; i < array.length; i++){
@@ -51,7 +70,9 @@ function Live() {
             let lists = datalist.filter(item => {
                 return item.group==grouplist[i];
             })
-            
+            if(i==0){
+                datalist2 = lists;
+            }
             d.push({
                 title: grouplist[i],
                 url: $('#noLoading#').lazyRule(()=>{
@@ -63,21 +84,16 @@ function Live() {
                     id: grouplist[i]
                 }
             });
-            if(i==0){
-                datalist2 = lists;
-            }
         }
-
+        d.push({
+            col_type: 'line',
+            extra: {
+                id: 'liveloading'
+            }
+        });
         datalist = datalist2;
         //writeFile(livefile, "");
-        for (let i=0;i<datalist.length;i++) {
-            d.push({
-                title: datalist[i].name,
-                img: 'https://lanmeiguojiang.com/tubiao/more/228.png',
-                col_type: 'icon_2_round',
-                url: ""
-            });
-        }
+        d = d.concat(guanlidata(datalist));
         d.push({
             title: '<br>',
             col_type: 'rich_text'
@@ -89,4 +105,19 @@ function Live() {
         });
     }
     setHomeResult(d);
+}
+function guanlidata(datalist) {
+    let list = [];
+    for (let i=0;i<datalist.length;i++) {
+        list.push({
+            title: datalist[i].name,
+            img: 'https://lanmeiguojiang.com/tubiao/more/228.png',
+            col_type: 'icon_2_round',
+            url: "",
+            extra: {
+                cls: 'livelist'
+            }
+        });
+    }
+    return list;
 }
