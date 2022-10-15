@@ -2055,7 +2055,6 @@ function extension(){
                 title:(getMyVar('importlive','0')=="1"?getide(1):getide(0))+'直播接口',
                 col_type:'text_3',
                 url:$('#noLoading#').lazyRule(() => {
-                    return 'toast://暂不支持';
                     if(getMyVar('importlive')=="1"){
                         putMyVar('importlive','0');
                     }else{
@@ -2403,6 +2402,54 @@ function Resourceimport(input,importtype,boxdy){
             } catch (e) {
                 jxnum = -1;
                 log('TVBox导入解析保存失败>'+e.message);
+            }
+        }
+        if(getMyVar('importlive','')=="1"){
+            try{
+                let urls = [];
+                let lives = data.lives;
+                for (let i=0;i<lives.length;i++) {
+                    let channels = lives[i].channels;
+                    for (let j=0;j<channels.length;j++) {
+                        let live = channels[i].urls;
+                        for (let k=0;k<live.length;k++) {
+                            let url = live[i].replace('proxy://do=live&type=txt&ext=','');
+                            urls.push(base64Decode(url));
+                        }
+                    }
+                }
+                if(urls.length>0){
+                    let YClives = [];
+                    for(let i=0;i<urls.length;i++){
+                        let YChtml = request(urls[i],{timeout:2000});
+                        if(YChtml.indexOf('#genre#')>-1){
+                            let YClive = YChtml.split('\n');
+                            YClives = YClives.concat(YClive);
+                        }
+                    }
+                    if(YClives.length>0){
+                        let livefile = "hiker://files/rules/Src/Juying/live.txt";
+                        let JYlive=fetch(livefile);
+                        if(JYlive){
+                            var JYlives = JYlive.split('\n');
+                            let id = 0;
+                            for(let i=0;i<YClives.length;i++){
+                                if(YClives[i].indexOf('#genre#')>-1&&JYlives.indexOf(YClives[i])>-1){
+                                    id = JYlives.indexOf(YClives[i]);
+                                }else if(YClives[i].indexOf('#genre#')>-1&&JYlives.indexOf(YClives[i])==-1){
+                                    id = JYlives.length+1;
+                                }else if(JYlives.indexOf(YClives[i])==-1){
+                                    JYlives.splice(id, 0, YClives[i]);
+                                }
+                            }
+                        }else{
+                            var JYlives = YClives;
+                        }
+                        writeFile(livefile, JYlives.join('\n'));
+                    }
+                }
+            } catch (e) {
+                log('TVBox导入live保存失败>'+e.message);
             }
         }
         if(isboxdy){
