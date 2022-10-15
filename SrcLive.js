@@ -1,4 +1,4 @@
-function SRCSet() {
+function Live() {
     addListener("onClose", $.toString(() => {
         //clearMyVar('guanlicz');
     }));
