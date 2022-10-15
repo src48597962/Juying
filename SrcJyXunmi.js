@@ -41,105 +41,110 @@ function xunmi(name,data,ishkss) {
         }
         try{
             if(JYconfig.TVBoxDY){
-                let DYdatalist = [];
-                let TVBoxDY = JYconfig.TVBoxDY;
-                if(/\/storage\/emulated\//.test(TVBoxDY)){TVBoxDY = "file://" + TVBoxDY}
-                if(/^http/.test(TVBoxDY)){
-                    var dyhtml = fetchCache(TVBoxDY,96, { timeout:2000 });
+                if(storage0.getMyVar('JYTVBoxDYdatalist')){
+                    var DYdatalist = storage0.getMyVar('JYTVBoxDYdatalist')||[];
                 }else{
-                    var dyhtml = fetch(TVBoxDY);
-                }
-                var reg = /("([^\\\"]*(\\.)?)*")|('([^\\\']*(\\.)?)*')|(\/{2,}.*?(\r|\n|$))|(\/\*(\n|.)*?\*\/)/g;
-                dyhtml = dyhtml.replace(reg, function(word) { 
-                    return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
-                }).replace(/^.*#.*$/gm,"").replace(/(?:[\u2700-\u27bf]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff]|[\u0023-\u0039]\ufe0f?\u20e3|\u3299|\u3297|\u303d|\u3030|\u24c2|\ud83c[\udd70-\udd71]|\ud83c[\udd7e-\udd7f]|\ud83c\udd8e|\ud83c[\udd91-\udd9a]|\ud83c[\udde6-\uddff]|\ud83c[\ude01-\ude02]|\ud83c\ude1a|\ud83c\ude2f|\ud83c[\ude32-\ude3a]|\ud83c[\ude50-\ude51]|\u203c|\u2049|[\u25aa-\u25ab]|\u25b6|\u25c0|[\u25fb-\u25fe]|\u00a9|\u00ae|\u2122|\u2139|\ud83c\udc04|[\u2600-\u26FF]|\u2b05|\u2b06|\u2b07|\u2b1b|\u2b1c|\u2b50|\u2b55|\u231a|\u231b|\u2328|\u23cf|[\u23e9-\u23f3]|[\u23f8-\u23fa]|\ud83c\udccf|\u2934|\u2935|[\u2190-\u21ff])|\(XPF\)|\(萝卜\)|\(切\)|\(聚\)|\(优\)|\(神马\)|\(XB\)|\(SP\)|[\x00-\x1F\x7F]/g,'').replace(/\,\,/g,',');
-                //var dydata = JSON.parse(dyhtml);
-                eval('var dydata = ' + dyhtml)
-                var dyjiekou = dydata.sites;
-                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
-                showLoading('正在多线程加载TVBox订阅接口');
-                //多线程处理
-                var dytask = function(obj) {
-                    if(/^csp_AppYs/.test(obj.api)){                        
-                        let dytype = getapitype(obj.ext);
-                        if(dytype&&obj.name&&obj.ext){
-                            if(!datalist.some(item => item.url==obj.ext)){
-                                DYdatalist.push({ "name": obj.name, "url": obj.ext, "ua":"MOBILE_UA", "type":dytype, "group": datalist.length>0?"TVBox订阅":""})
-                            }
-                        }
-                    }else if((obj.type==1||obj.type==0)&&obj.api.indexOf('cms.nokia.press')==-1){
-                        if(!datalist.some(item => item.url==obj.api)){
-                            DYdatalist.push({ "name": obj.name, "url": obj.api, "ua":"MOBILE_UA", "type":"cms", "group": datalist.length>0?"TVBox订阅":""})
-                        }
-                    }else if(/^csp_XBiubiu/.test(obj.api)){
-                        try{
-                            let urlfile = obj.ext;
-                            if(/^clan:/.test(urlfile)){
-                                urlfile = urlfile.replace("clan://TVBox/",TVBoxDY.match(/file.*\//)[0]);
-                            }
-                            if(/^http/.test(urlfile)){
-                                var biuhtml = fetchCache(urlfile,168,{timeout:2000});
-                            }else{
-                                var biuhtml = fetch(urlfile);
-                            }
-                            biuhtml = biuhtml.replace(reg, function(word) { 
-                                return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
-                            }).replace(/^.*#.*$/mg,"").replace(/[\t\r\n]/g,'');
-                            let biujson = JSON.parse(biuhtml);
-                            let biudata = {};
-                            biudata.url = biujson.url;
-                            biudata.jiequshuzuqian = biujson.jiequshuzuqian;
-                            biudata.jiequshuzuhou = biujson.jiequshuzuhou;
-                            biudata.tupianqian = biujson.tupianqian;
-                            biudata.tupianhou = biujson.tupianhou;
-                            biudata.biaotiqian = biujson.biaotiqian;
-                            biudata.biaotihou = biujson.biaotihou;
-                            biudata.lianjieqian = biujson.lianjieqian;
-                            biudata.lianjiehou = biujson.lianjiehou;
-                            biudata.sousuoqian = biujson.sousuoqian;
-                            biudata.sousuohou = biujson.sousuohou;
-                            biudata.sousuohouzhui = biujson.sousuohouzhui;
-                            biudata.ssmoshi = biujson.ssmoshi;
-                            biudata.bfjiequshuzuqian = biujson.bfjiequshuzuqian;
-                            biudata.bfjiequshuzuhou = biujson.bfjiequshuzuhou;
-                            biudata.zhuangtaiqian = biujson.zhuangtaiqian;
-                            biudata.zhuangtaihou = biujson.zhuangtaihou;
-                            biudata.daoyanqian = biujson.daoyanqian;
-                            biudata.daoyanhou = biujson.daoyanhou;
-                            biudata.zhuyanqian = biujson.zhuyanqian;
-                            biudata.zhuyanhou = biujson.zhuyanhou;
-                            biudata.juqingqian = biujson.juqingqian;
-                            biudata.juqinghou = biujson.juqinghou;
-                            if(!datalist.some(item => item.url==obj.key)){
-                                DYdatalist.push({ "name": obj.name, "url": obj.key, "type": "biubiu", "ua": "PC_UA", "data": biudata, "group": datalist.length>0?"TVBox订阅":""})
-                            }
-                        }catch(e){
-                            //log(e.message)
-                        }
+                    var DYdatalist = [];
+                    let TVBoxDY = JYconfig.TVBoxDY;
+                    if(/\/storage\/emulated\//.test(TVBoxDY)){TVBoxDY = "file://" + TVBoxDY}
+                    if(/^http/.test(TVBoxDY)){
+                        //var dyhtml = fetchCache(TVBoxDY,96, { timeout:2000 });
+                        var dyhtml = request(TVBoxDY,{ timeout:2000 });
+                    }else{
+                        var dyhtml = fetch(TVBoxDY);
                     }
-                    return 1;
-                }
-                
-                let dyjiekous = dyjiekou.map((list)=>{
-                    return {
-                        func: dytask,
-                        param: list,
-                        id: list.name
+                    var reg = /("([^\\\"]*(\\.)?)*")|('([^\\\']*(\\.)?)*')|(\/{2,}.*?(\r|\n|$))|(\/\*(\n|.)*?\*\/)/g;
+                    dyhtml = dyhtml.replace(reg, function(word) { 
+                        return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
+                    }).replace(/^.*#.*$/gm,"").replace(/(?:[\u2700-\u27bf]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff]|[\u0023-\u0039]\ufe0f?\u20e3|\u3299|\u3297|\u303d|\u3030|\u24c2|\ud83c[\udd70-\udd71]|\ud83c[\udd7e-\udd7f]|\ud83c\udd8e|\ud83c[\udd91-\udd9a]|\ud83c[\udde6-\uddff]|\ud83c[\ude01-\ude02]|\ud83c\ude1a|\ud83c\ude2f|\ud83c[\ude32-\ude3a]|\ud83c[\ude50-\ude51]|\u203c|\u2049|[\u25aa-\u25ab]|\u25b6|\u25c0|[\u25fb-\u25fe]|\u00a9|\u00ae|\u2122|\u2139|\ud83c\udc04|[\u2600-\u26FF]|\u2b05|\u2b06|\u2b07|\u2b1b|\u2b1c|\u2b50|\u2b55|\u231a|\u231b|\u2328|\u23cf|[\u23e9-\u23f3]|[\u23f8-\u23fa]|\ud83c\udccf|\u2934|\u2935|[\u2190-\u21ff])|\(XPF\)|\(萝卜\)|\(切\)|\(聚\)|\(优\)|\(神马\)|\(XB\)|\(SP\)|[\x00-\x1F\x7F]/g,'').replace(/\,\,/g,',');
+                    //var dydata = JSON.parse(dyhtml);
+                    eval('var dydata = ' + dyhtml)
+                    var dyjiekou = dydata.sites;
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                    showLoading('正在多线程加载TVBox订阅接口');
+                    //多线程处理
+                    var dytask = function(obj) {
+                        if(/^csp_AppYs/.test(obj.api)){                        
+                            let dytype = getapitype(obj.ext);
+                            if(dytype&&obj.name&&obj.ext){
+                                if(!datalist.some(item => item.url==obj.ext)){
+                                    DYdatalist.push({ "name": obj.name, "url": obj.ext, "ua":"MOBILE_UA", "type":dytype, "group": datalist.length>0?"TVBox订阅":""})
+                                }
+                            }
+                        }else if((obj.type==1||obj.type==0)&&obj.api.indexOf('cms.nokia.press')==-1){
+                            if(!datalist.some(item => item.url==obj.api)){
+                                DYdatalist.push({ "name": obj.name, "url": obj.api, "ua":"MOBILE_UA", "type":"cms", "group": datalist.length>0?"TVBox订阅":""})
+                            }
+                        }else if(/^csp_XBiubiu/.test(obj.api)){
+                            try{
+                                let urlfile = obj.ext;
+                                if(/^clan:/.test(urlfile)){
+                                    urlfile = urlfile.replace("clan://TVBox/",TVBoxDY.match(/file.*\//)[0]);
+                                }
+                                if(/^http/.test(urlfile)){
+                                    //var biuhtml = fetchCache(urlfile,168,{timeout:2000});
+                                    var biuhtml = request(urlfile, {timeout:2000});
+                                }else{
+                                    var biuhtml = fetch(urlfile);
+                                }
+                                biuhtml = biuhtml.replace(reg, function(word) { 
+                                    return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
+                                }).replace(/^.*#.*$/mg,"").replace(/[\t\r\n]/g,'');
+                                let biujson = JSON.parse(biuhtml);
+                                let biudata = {};
+                                biudata.url = biujson.url;
+                                biudata.jiequshuzuqian = biujson.jiequshuzuqian;
+                                biudata.jiequshuzuhou = biujson.jiequshuzuhou;
+                                biudata.tupianqian = biujson.tupianqian;
+                                biudata.tupianhou = biujson.tupianhou;
+                                biudata.biaotiqian = biujson.biaotiqian;
+                                biudata.biaotihou = biujson.biaotihou;
+                                biudata.lianjieqian = biujson.lianjieqian;
+                                biudata.lianjiehou = biujson.lianjiehou;
+                                biudata.sousuoqian = biujson.sousuoqian;
+                                biudata.sousuohou = biujson.sousuohou;
+                                biudata.sousuohouzhui = biujson.sousuohouzhui;
+                                biudata.ssmoshi = biujson.ssmoshi;
+                                biudata.bfjiequshuzuqian = biujson.bfjiequshuzuqian;
+                                biudata.bfjiequshuzuhou = biujson.bfjiequshuzuhou;
+                                biudata.zhuangtaiqian = biujson.zhuangtaiqian;
+                                biudata.zhuangtaihou = biujson.zhuangtaihou;
+                                biudata.daoyanqian = biujson.daoyanqian;
+                                biudata.daoyanhou = biujson.daoyanhou;
+                                biudata.zhuyanqian = biujson.zhuyanqian;
+                                biudata.zhuyanhou = biujson.zhuyanhou;
+                                biudata.juqingqian = biujson.juqingqian;
+                                biudata.juqinghou = biujson.juqinghou;
+                                if(!datalist.some(item => item.url==obj.key)){
+                                    DYdatalist.push({ "name": obj.name, "url": obj.key, "type": "biubiu", "ua": "PC_UA", "data": biudata, "group": datalist.length>0?"TVBox订阅":""})
+                                }
+                            }catch(e){
+                                //log(e.message)
+                            }
+                        }
+                        return 1;
                     }
-                });
+                    
+                    let dyjiekous = dyjiekou.map((list)=>{
+                        return {
+                            func: dytask,
+                            param: list,
+                            id: list.name
+                        }
+                    });
 
-                be(dyjiekous, {
-                    func: function(obj, id, error, taskResult) {                            
-                    },
-                    param: {
-                    }
-                });
-                storage0.putMyVar('JYTVBoxDYdatalist',DYdatalist);
+                    be(dyjiekous, {
+                        func: function(obj, id, error, taskResult) {                            
+                        },
+                        param: {
+                        }
+                    });
+                    storage0.putMyVar('JYTVBoxDYdatalist',DYdatalist);                 
+                }
                 datalist = datalist.concat(DYdatalist);
-                log(storage0.getMyVar('JYTVBoxDYdatalist'));
             }
         }catch(e){
-            log(e.message)
+            log('TVBox订阅失败>'+e.message)
         }
         hideLoading();
     }
