@@ -7,21 +7,62 @@ function Live() {
     let livefile = "hiker://files/rules/Src/Juying/live.txt";
     let JYlive=fetch(livefile);
     if(JYlive){
-        var datalist = JYlive.split('\n');
+        var JYlives = JYlive.split('\n');
     }else{
-        var datalist = [];
+        var JYlives = [];
     }
-    if(datalist.length>0){
-
+    if(JYlives.length>0){
+        let datalist = [];
+        let datalist2 = [];
+        let group = "";
+        for(let i=0;i<JYlives.length;i++){
+            if(JYlives[i].indexOf('#genre#')>-1){
+                group = JYlives[i];
+            }else if(JYlives[i].trim()!=""&&JYlives[i].indexOf(',')>-1&&!datalist.some(item => item.name==datalist[i].split(',')[0])){
+                datalist.push({group: group, name: datalist[i].split(',')[0]});
+            }
+        }
+        let grouplist = datalist.map((list)=>{
+            return list.group;
+        })
+        //去重复
+        function uniq(array){
+            var temp = []; //一个新的临时数组
+            for(var i = 0; i < array.length; i++){
+                if(temp.indexOf(array[i]) == -1){
+                    temp.push(array[i]);
+                }
+            }
+            return temp;
+        }
+        grouplist = uniq(grouplist);
+        for(var i in grouplist){
+            var lists = datalist.filter(item => {
+                return item.group==grouplist[i];
+            })
+            d.push({
+                title: grouplist[i],
+                url: $('#noLoading#').lazyRule(()=>{
+                        
+                        return'hiker://empty';
+                    }),
+                col_type: "scroll_button",
+                extra: {
+                    id: grouplist[i]
+                }
+            });
+            if(i==0){
+                datalist2 = lists;
+            }
+        }
+        datalist = datalist2;
         //writeFile(livefile, "");
         for (let i=0;i<datalist.length;i++) {
-            if(datalist[i].indexOf('#genre#')==-1){
-                d.push({
-                    title: datalist[i].split(',')[0],
-                    col_type:'text_4',
-                    url: datalist[i].split(',')[1]
-                });
-            }
+            d.push({
+                title: datalist[i].name,
+                col_type:'text_4',
+                url: ""
+            });
         }
         d.push({
             title: '<br>',
