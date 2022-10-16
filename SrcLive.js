@@ -198,7 +198,7 @@ function LiveSet() {
         col_type: 'icon_2_round',
         url: $('#noLoading#').lazyRule(() => {
             let Julivefile = "hiker://files/rules/live/config.json";
-            let Julive = fetch(Julive);
+            let Julive = fetch(Julivefile);
             if(Julive != ""){
                 try{
                     eval("var Judata=" + Julive+ ";");
