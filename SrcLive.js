@@ -24,7 +24,7 @@ function Live() {
             if(JYlives[i].indexOf('#genre#')>-1){
                 group = JYlives[i].split(',')[0];
             }else if(JYlives[i].indexOf(',')>-1){
-                datalist.push({group: group, name: JYlives[i].split(',')[0]});
+                datalist.push({group: group, name: JYlives[i].split(',')[0].replace(/CCTV-/g,'CCTV')});
             }
         }
         let obj = {};
@@ -127,7 +127,8 @@ function guanlidata(datalist) {
         return (a,b) => {
             a = a[attr];
             b = b[attr];
-            if(a.replace(/[^\d]/g, "")){
+            if(a.replace(/[^\d]/g, "")&&b.replace(/[^\d]/g, "")){
+                log('111')
                 if(a.replace(/[^\d]/g, "") < b.replace(/[^\d]/g, "")){
                     return rev * -1;
                 }
