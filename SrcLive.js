@@ -24,7 +24,7 @@ function Live() {
             if(JYlives[i].indexOf('#genre#')>-1){
                 group = JYlives[i].split(',')[0];
             }else if(JYlives[i].indexOf(',')>-1){
-                datalist.push({group: group, name: JYlives[i].split(',')[0].replace(/CCTV-/g,'CCTV')});
+                datalist.push({group: group, name: JYlives[i].split(',')[0].replace(/TV-/g,'TV')});
             }
         }
         let obj = {};
@@ -128,11 +128,10 @@ function guanlidata(datalist) {
             a = a[attr];
             b = b[attr];
             if(a.replace(/[^\d]/g, "")&&b.replace(/[^\d]/g, "")){
-                log('111')
-                if(a.replace(/[^\d]/g, "") < b.replace(/[^\d]/g, "")){
+                if(parseInt(a.replace(/[^\d]/g, "")) < parseInt(b.replace(/[^\d]/g, ""))){
                     return rev * -1;
                 }
-                if(a.replace(/[^\d]/g, "") > b.replace(/[^\d]/g, "")){
+                if(parseInt(a.replace(/[^\d]/g, "")) > parseInt(b.replace(/[^\d]/g, ""))){
                     return rev * 1;
                 }
                 return 0;
