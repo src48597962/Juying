@@ -24,7 +24,7 @@ function Live() {
             if(JYlives[i].indexOf('#genre#')>-1){
                 group = JYlives[i].split(',')[0];
             }else if(JYlives[i].indexOf(',')>-1){
-                datalist.push({group: group, name: JYlives[i].split(',')[0].replace(/TV-/g,'TV')});
+                datalist.push({group: group, name: JYlives[i].split(',')[0]});
             }
         }
         let obj = {};
@@ -153,9 +153,9 @@ function guanlidata(datalist) {
             title: datalist[i].name,
             img: 'https://lanmeiguojiang.com/tubiao/ke/156.png',//https://lanmeiguojiang.com/tubiao/more/228.png
             col_type: 'icon_2_round',
-            url: $('#noLoading#').lazyRule((name,livefile) => {
+            url: $('#noLoading#').lazyRule((name) => {
                 let urls = [];
-                let JYlive=fetch(livefile);
+                let JYlive=fetch("hiker://files/rules/Src/Juying/live.txt");
                 let JYlives = JYlive.split('\n');
                 for(var i = 0; i < JYlives.length; i++){
                     if(JYlives[i].indexOf(',')>-1&&JYlives[i].split(',')[0]==name){
@@ -165,7 +165,7 @@ function guanlidata(datalist) {
                  return JSON.stringify({
                             urls: urls
                         }); 
-            },datalist[i].name,livefile),
+            },datalist[i].name),
             extra: {
                 cls: 'livelist'
             }
