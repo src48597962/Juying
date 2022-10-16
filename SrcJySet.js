@@ -2434,12 +2434,17 @@ function Resourceimport(input,importtype,boxdy){
                             var JYlives = JYlive.split('\n');
                             let id = 0;
                             for(let i=0;i<YClives.length;i++){
-                                if(YClives[i].indexOf('#genre#')>-1&&JYlives.indexOf(YClives[i])>-1){
-                                    id = JYlives.indexOf(YClives[i]);
-                                }else if(YClives[i].indexOf('#genre#')>-1&&JYlives.indexOf(YClives[i])==-1){
-                                    id = JYlives.length+1;
-                                }else if(JYlives.indexOf(YClives[i])==-1&&YClives[i].trim()!=""){
-                                    JYlives.splice(id, 0, YClives[i]);
+                                if(JYlives.length>6000){
+                                    log('直播数据源文件已大于6000行，为保证效率，停止导入');
+                                    break;
+                                }else{
+                                    if(YClives[i].indexOf('#genre#')>-1&&JYlives.indexOf(YClives[i])>-1){
+                                        id = JYlives.indexOf(YClives[i]);
+                                    }else if(YClives[i].indexOf('#genre#')>-1&&JYlives.indexOf(YClives[i])==-1){
+                                        id = JYlives.length+1;
+                                    }else if(JYlives.indexOf(YClives[i])==-1&&YClives[i].trim()!=""){
+                                        JYlives.splice(id, 0, YClives[i]);
+                                    }
                                 }
                             }
                         }else{
