@@ -203,7 +203,7 @@ function LiveSet() {
                     let judatalist = judata.data;
                     let livefile = "hiker://files/rules/Src/Juying/live.txt";
                     if(!judatalist.some(item => item.url==livefile)){
-                        judatalist.push({name:"聚影√",url:livefile})
+                        judatalist.push({"name":"聚影√", "url":livefile})
                         judata.data = judatalist;
                         writeFile(julivefile, JSON.stringify(judata));
                         return "toast://导入聚直播订阅成功";
@@ -211,6 +211,7 @@ function LiveSet() {
                         return "toast://已存在聚直播订阅";
                     }
                 }catch(e){
+                    log("导入聚直播订阅失败>"+e.message)
                     return "toast://导入聚直播订阅失败";
                 }
             }else{
