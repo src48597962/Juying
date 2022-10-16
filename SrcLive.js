@@ -254,7 +254,7 @@ function LiveSet() {
                 var task = function(obj) {
                     try{
                         let url = obj.split(',')[1];
-                        let code = JSON.parse(request(url,{onlyHeaders:true,timeout:2000}));
+                        let code = JSON.parse(request(url,{onlyHeaders:true,timeout:1000}));
                         if(code.statusCode!=200){
                             fails.push(obj);
                         }
@@ -263,7 +263,7 @@ function LiveSet() {
                     }
                     return 1;
                 }
-                showLoading('多线程检测中，请保持屏幕亮屏');
+                showLoading('正在检测'+urls.length+'条，请保持屏幕亮屏');
                 for (var i=0;i<urls.length;i++) {
                     let UrlList = [];
                     let p = i + 799;
