@@ -12,8 +12,8 @@ function Live() {
     }
     if(JYlives.length>0){
         d.push({
-            title: '<b>⚙直播设置⚙</b>',
-            img: "",
+            title: '<b>聚影√</b> &nbsp &nbsp <small>⚙直播设置⚙</small>',
+            img: "https://img.vinua.cn/images/QqyC.png",
             url: "",
             col_type: 'avatar'
         });
