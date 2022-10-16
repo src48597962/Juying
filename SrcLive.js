@@ -24,11 +24,13 @@ function Live() {
         let datalist2 = [];
         let group = "";
         for(let i=0;i<JYlives.length;i++){
-            if(JYlives[i].indexOf('#genre#')>-1){
-                group = JYlives[i].split(',')[0];
-            }else if(JYlives[i].indexOf(',http')>-1){
-                datalist.push({group: group, name: JYlives[i].split(',')[0]});
-            }
+            try{
+                if(JYlives[i].indexOf('#genre#')>-1){
+                    group = JYlives[i].split(',')[0];
+                }else if(JYlives[i].indexOf(',http')>-1){
+                    datalist.push({group: group, name: JYlives[i].split(',')[0].trim()});
+                }
+            }catch(e){}
         }
         let obj = {};
         datalist = datalist.reduce((newArr, next) => {
@@ -123,6 +125,7 @@ function Live() {
 }
 
 function guanlidata(datalist) {
+    /*
     function compare (attr,rev) {
         if(rev ==  undefined){
             rev = 1;
@@ -151,8 +154,9 @@ function guanlidata(datalist) {
             }
         }
     }
-    let list = [];
-    datalist = datalist.sort(compare('name',true));   
+    datalist = datalist.sort(compare('name',true));  
+    */
+    let list = []; 
     for (let i=0;i<datalist.length;i++) {
         list.push({
             title: datalist[i].name,
@@ -163,9 +167,11 @@ function guanlidata(datalist) {
                 let JYlive=fetch("hiker://files/rules/Src/Juying/live.txt");
                 let JYlives = JYlive.split('\n');
                 for(var i = 0; i < JYlives.length; i++){
-                    if(JYlives[i].indexOf(',')>-1&&JYlives[i].split(',')[0]==name){
-                        urls.push(JYlives[i].split(',')[1]);
-                    }
+                    try{
+                        if(JYlives[i].indexOf(',')>-1&&JYlives[i].split(',')[0].trim()==name){
+                            urls.push(JYlives[i].split(',')[1] + '#isVideo=true#');
+                        }
+                    }catch(e){}
                 }
                 return JSON.stringify({
                     urls: urls
