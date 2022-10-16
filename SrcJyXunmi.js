@@ -531,7 +531,7 @@ function xunmi(name,data,ishkss) {
         if(tzgroup == 1){writeFile(filepath, JSON.stringify(jiekoulist));}
         
         updateItem('loading', {
-            title: ishkss?'':'‘‘’’<font color=#f13b66a>'+ (beresults.length-beerrors.length)+'</font>/'+'‘‘’’<font color=#F54343>'+beerrors.length+'</font>/'+count+',我是有底线的',
+            title: ishkss?(beresults.length-beerrors.length)+'/'+count+',我是有底线的':'‘‘’’<font color=#f13b66a>'+ (beresults.length-beerrors.length)+'</font>/'+'‘‘’’<font color=#F54343>'+beerrors.length+'</font>/'+count+',我是有底线的',
             url: beresults.length==count?"toast://已搜索完毕":$('#noLoading#').lazyRule((bess,datalist,beresults,beerrors,name,count,ishkss)=>{
                     for (let j = 0; j < beresults.length; j++) {
                         for(var i = 0; i < datalist.length; i++){
