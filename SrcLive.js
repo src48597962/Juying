@@ -236,52 +236,58 @@ function LiveSet() {
         col_type: 'text_center_1',
         url: $('#noLoading#').lazyRule(() => {
             let urls = [];
-            let JYlivefile=fetch("hiker://files/rules/Src/Juying/live.txt");
-            let JYlives = JYlivefile.split('\n');
-            for(let i = 0; i < JYlives.length; i++){
-                try{
-                    if(JYlives[i].indexOf(',')>-1&&JYlives[i].indexOf('#genre#')==-1){
-                        urls.push(JYlives[i]);
-                    }
-                }catch(e){}
-            }
-            let fails = [];
-            var task = function(obj) {
-                try{
-                    let url = obj.split(',')[1];
-                    let code = JSON.parse(request(url,{onlyHeaders:true,timeout:2000}));
-                    if(code!=200){
-                        fails.push(obj);
-                    }
-                }catch(e){
+            let JYlivefile="hiker://files/rules/Src/Juying/live.txt";
+            let JYlive = fetch(JYlivefile);
+            if(JYlive!=""){
+                let JYlives = JYlive.split('\n');
+                for(let i = 0; i < JYlives.length; i++){
+                    try{
+                        if(JYlives[i].indexOf(',')>-1&&JYlives[i].indexOf('#genre#')==-1){
+                            urls.push(JYlives[i]);
+                        }
+                    }catch(e){}
+                }
+                let fails = [];
+                var task = function(obj) {
+                    try{
+                        let url = obj.split(',')[1];
+                        let code = JSON.parse(request(url,{onlyHeaders:true,timeout:2000}));
+                        if(code!=200){
+                            fails.push(obj);
+                        }
+                    }catch(e){
 
+                    }
+                    return 1;
                 }
-                return 1;
+                log(urls.length)
+                let urlscheck = urls.map((list)=>{
+                    return {
+                        func: task,
+                        param: list,
+                        id: list
+                    }
+                    
+                });
+                log(urlscheck.length)
+                be(urlscheck, {
+                    func: function(obj, id, error, taskResult) {                            
+                    },
+                    param: {
+                    }
+                });
+                log(fails.length)
+                for(let i = 0; i < JYlives.length; i++){
+                    if(fails.indexOf(lJYlives[i])>-1){
+                        JYlives.splice(i,1);
+                        i = i - 1;
+                    }
+                }
+                writeFile(JYlivefile, JYlives.join('\n'));
+                return "toast://删除疑似失效源"+fails.length+"条";
+            }else{
+                return "toast://无直播数据源";
             }
-            let urlscheck = urls.map((list)=>{
-                return {
-                    func: task,
-                    param: list,
-                    id: list
-                }
-                
-            });
-            log(urlscheck.length)
-            be(urlscheck, {
-                func: function(obj, id, error, taskResult) {                            
-                },
-                param: {
-                }
-            });
-            log(fails.length)
-            for(let i = 0; i < JYlives.length; i++){
-                if(fails.indexOf(lJYlives[i])>-1){
-                    JYlives.splice(i,1);
-                    i = i - 1;
-                }
-            }
-            writeFile(JYlivefile, JYlives.join('\n'));
-            return "toast://删除疑似失效源"+fails.length+"条";
         })
     });
     setHomeResult(d);
