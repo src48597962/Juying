@@ -162,7 +162,9 @@ function guanlidata(datalist) {
                         urls.push(JYlives[i].split(',')[1]);
                     }
                 }
-                return "hiker://empty";
+                 return JSON.stringify({
+                            urls: urls
+                        }); 
             },datalist[i].name,livefile),
             extra: {
                 cls: 'livelist'
