@@ -2,7 +2,7 @@ function Live() {
     addListener("onClose", $.toString(() => {
         //clearMyVar('guanlicz');
     }));
-    let str = "CCTV-10";
+    let str = "CCTV";
     log(str.replace(/[^\d]/g, ""))
     var d = [];
     let livefile = "hiker://files/rules/Src/Juying/live.txt";
