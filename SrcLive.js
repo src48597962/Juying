@@ -192,16 +192,40 @@ function LiveSet() {
     }));
     var d = [];
     d.push({
+        title: '导入聚直播',
+        img: 'https://lanmeiguojiang.com/tubiao/ke/156.png',
+        col_type: 'icon_2_round',
+        url: $('#noLoading#').lazyRule(() => {
+            let julivefile = "hiker://files/rules/live/config.json";
+            if(julivefile != ""){
+                try{
+                    eval("var judata=" + julivefile+ ";");
+                    let judatalist = judata.data;
+                    let livefile = "hiker://files/rules/Src/Juying/live.txt";
+                    if(!judatalist.some(item => item.url==livefile)){
+                        judatalist.push({name:"聚影√",url:livefile})
+                        judata.data = judatalist;
+                        writeFile(julivefile, JSON.stringify(judata));
+                        return "toast://导入聚直播订阅成功";
+                    }else{
+                        return "toast://已存在聚直播订阅";
+                    }
+                }catch(e){
+                    return "toast://导入聚直播订阅失败";
+                }
+            }else{
+                return "toast://仓库先导入聚直播小程序";
+            }
+        })
+    });
+    d.push({
         title: '清空直播源',
         img: 'https://lanmeiguojiang.com/tubiao/ke/156.png',
         col_type: 'icon_2_round',
         url: $('#noLoading#').lazyRule(() => {
             writeFile("hiker://files/rules/Src/Juying/live.txt", "");
             return "hiker://empty";
-        }),
-        extra: {
-            cls: 'livelist'
-        }
+        })
     });
     setHomeResult(d);
 }
