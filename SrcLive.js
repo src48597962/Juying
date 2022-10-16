@@ -263,24 +263,30 @@ function LiveSet() {
                     }
                     return 1;
                 }
-
-                let urlscheck = urls.map((list)=>{
-                    return {
-                        func: task,
-                        param: list,
-                        id: list
-                    }
-                    
-                });
-                log(urlscheck.length)
                 showLoading('多线程检测中');
-                be(urlscheck, {
-                    func: function(obj, id, error, taskResult) {                            
-                    },
-                    param: {
+                for (var i=0;i<urls.length;i++) {
+                    let UrlList = [];
+                    let p = i + 799;
+                    for(let s=i;s<p;s++){
+                        UrlList.push(urls[s]);
+                        i=s;
                     }
-                });
-                log(fails.length)
+                    let urlscheck = UrlList.map((list)=>{
+                        return {
+                            func: task,
+                            param: list,
+                            id: list
+                        }
+                        
+                    });
+                    be(urlscheck, {
+                        func: function(obj, id, error, taskResult) {                            
+                        },
+                        param: {
+                        }
+                    });
+                }
+                
                 for(let i = 0; i < JYlives.length; i++){
                     if(fails.indexOf(lJYlives[i])>-1){
                         JYlives.splice(i,1);
