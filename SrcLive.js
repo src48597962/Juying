@@ -231,6 +231,9 @@ function LiveSet() {
         })
     });
     d.push({
+        col_type: 'line'
+    });
+    d.push({
         title: '删除失效的直播源地址',
         desc: '此功能为实验性的，可能存在误删，谨慎操作！\n通过判断地址是否可以访问来甄别有效性',
         col_type: 'text_center_1',
@@ -260,7 +263,7 @@ function LiveSet() {
                     }
                     return 1;
                 }
-                log(urls.length)
+
                 let urlscheck = urls.map((list)=>{
                     return {
                         func: task,
@@ -270,6 +273,7 @@ function LiveSet() {
                     
                 });
                 log(urlscheck.length)
+                showLoading('多线程检测中');
                 be(urlscheck, {
                     func: function(obj, id, error, taskResult) {                            
                     },
@@ -284,6 +288,7 @@ function LiveSet() {
                     }
                 }
                 writeFile(JYlivefile, JYlives.join('\n'));
+                hideLoading();
                 return "toast://删除疑似失效源"+fails.length+"条";
             }else{
                 return "toast://无直播数据源";
