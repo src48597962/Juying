@@ -14,7 +14,10 @@ function Live() {
         d.push({
             title: '<b>聚影√</b> &nbsp &nbsp <small>⚙直播设置⚙</small>',
             img: "https://img.vinua.cn/images/QqyC.png",
-            url: "",
+            url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLive.js');
+                    LiveSet();
+                }),
             col_type: 'avatar'
         });
         let datalist = [];
@@ -52,7 +55,9 @@ function Live() {
                 titleVisible: true
             }
         });
-
+        d.push({
+            col_type: 'line'
+        });
         let grouplist = datalist.map((list)=>{
             return list.group;
         })
@@ -66,34 +71,35 @@ function Live() {
             return temp;
         }
         grouplist = uniq(grouplist);
+        let index = 0;
         for(var i in grouplist){
             let lists = datalist.filter(item => {
                 return item.group==grouplist[i];
             })
-            if(i==0){
-                datalist2 = lists;
-            }
-            d.push({
-                title: grouplist[i],
-                url: $('#noLoading#').lazyRule((guanlidata,datalist) => {
-                    if(datalist.length>0){
-                        deleteItemByCls('livelist');
-                        var lists = datalist.filter(item => {
-                            return item.name.includes(input);
-                        })
-                        let gldatalist = guanlidata(lists);
-                        addItemAfter('liveloading', gldatalist);
-                    }
-                    return "hiker://empty";
-                },guanlidata,lists),/*$('#noLoading#').lazyRule(()=>{
-                        
-                        return'hiker://empty';
-                    }),*/
-                col_type: "scroll_button",
-                extra: {
-                    id: grouplist[i]
+            if(lists.length>0){
+                if(index==0){
+                    datalist2 = lists;
+                    index = 1;
                 }
-            });
+                d.push({
+                    title: grouplist[i],
+                    url: $('#noLoading#').lazyRule((guanlidata,datalist) => {
+                        if(datalist.length>0){
+                            deleteItemByCls('livelist');
+                            var lists = datalist.filter(item => {
+                                return item.name.includes(input);
+                            })
+                            let gldatalist = guanlidata(lists);
+                            addItemAfter('liveloading', gldatalist);
+                        }
+                        return "hiker://empty";
+                    },guanlidata,lists),
+                    col_type: "scroll_button",
+                    extra: {
+                        id: grouplist[i]
+                    }
+                });
+            }
         }
         d.push({
             col_type: 'line',
@@ -102,7 +108,6 @@ function Live() {
             }
         });
         datalist = datalist2;
-        //writeFile(livefile, "");
         d = d.concat(guanlidata(datalist));
         d.push({
             title: '<br>',
@@ -162,9 +167,9 @@ function guanlidata(datalist) {
                         urls.push(JYlives[i].split(',')[1]);
                     }
                 }
-                 return JSON.stringify({
-                            urls: urls
-                        }); 
+                return JSON.stringify({
+                    urls: urls
+                }); 
             },datalist[i].name),
             extra: {
                 cls: 'livelist'
@@ -172,4 +177,23 @@ function guanlidata(datalist) {
         });
     }
     return list;
+}
+
+function LiveSet() {
+    addListener("onClose", $.toString(() => {
+        //clearMyVar('guanlicz');
+    }));
+    var d = [];
+    d.push({
+        title: '清空直播源',
+        img: 'https://lanmeiguojiang.com/tubiao/ke/156.png',
+        col_type: 'icon_2_round',
+        url: $('#noLoading#').lazyRule(() => {
+            writeFile("hiker://files/rules/Src/Juying/live.txt", "");
+        }),
+        extra: {
+            cls: 'livelist'
+        }
+    });
+    setHomeResult(d);
 }
