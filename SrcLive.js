@@ -2,6 +2,7 @@ function Live() {
     addListener("onClose", $.toString(() => {
         //clearMyVar('guanlicz');
     }));
+    setPageTitle("⚙直播设置⚙");
     var d = [];
     let livefile = "hiker://files/rules/Src/Juying/live.txt";
     let JYlive=fetch(livefile);
@@ -27,7 +28,7 @@ function Live() {
             try{
                 if(JYlives[i].indexOf('#genre#')>-1){
                     group = JYlives[i].split(',')[0];
-                }else if(JYlives[i].indexOf(',http')>-1){
+                }else if(JYlives[i].indexOf(',')>-1){
                     datalist.push({group: group, name: JYlives[i].split(',')[0].trim()});
                 }
             }catch(e){}
@@ -164,8 +165,8 @@ function guanlidata(datalist) {
             col_type: 'icon_2_round',
             url: $('#noLoading#').lazyRule((name) => {
                 let urls = [];
-                let JYlive=fetch("hiker://files/rules/Src/Juying/live.txt");
-                let JYlives = JYlive.split('\n');
+                let JYlivefile=fetch("hiker://files/rules/Src/Juying/live.txt");
+                let JYlives = JYlivefile.split('\n');
                 for(var i = 0; i < JYlives.length; i++){
                     try{
                         if(JYlives[i].indexOf(',')>-1&&JYlives[i].split(',')[0].trim()==name){
@@ -190,36 +191,8 @@ function LiveSet() {
         //clearMyVar('guanlicz');
         refreshPage(false);
     }));
+
     var d = [];
-    d.push({
-        title: '直播源检测',
-        img: 'https://lanmeiguojiang.com/tubiao/messy/22.svg',
-        col_type: 'icon_2_round',
-        url: $('#noLoading#').lazyRule(() => {
-            let Julivefile = "hiker://files/rules/live/config.json";
-            let Julive = fetch(Julive);
-            if(Julive != ""){
-                try{
-                    eval("var Judata=" + Julive+ ";");
-                    let Judatalist = Judata['data']||[];
-                    let JYlivefile = "hiker://files/rules/Src/Juying/live.txt";
-                    if(!Judatalist.some(item => item.url==JYlivefile)){
-                        Judatalist.push({"name":"聚影√", "url":JYlivefile})
-                        Judata['data'] = Judatalist;
-                        writeFile(Julivefile, JSON.stringify(Judata));
-                        return "toast://导入聚直播订阅成功";
-                    }else{
-                        return "toast://已存在聚直播订阅";
-                    }
-                }catch(e){
-                    log("导入聚直播订阅失败>"+e.message);
-                    return "toast://导入聚直播订阅失败";
-                }
-            }else{
-                return "toast://仓库先导入聚直播小程序";
-            }
-        })
-    });
     d.push({
         title: '导入聚直播',
         img: 'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fis4.mzstatic.com%2Fimage%2Fthumb%2FPurple3%2Fv4%2Fdf%2Ff6%2Fda%2Fdff6da83-47d7-9cb6-2398-1919c13837b4%2Fmzl.kgmnwodo.png%2F0x0ss-85.jpg&refer=http%3A%2F%2Fis4.mzstatic.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1638629349&t=2f6d967185fe2b9c54e8b230eb83e66c',
@@ -251,11 +224,61 @@ function LiveSet() {
     });
     d.push({
         title: '清空直播源',
-        img: 'https://lanmeiguojiang.com/tubiao/more/216.png',
+        img: 'https://lanmeiguojiang.com/tubiao/messy/8.svg',
         col_type: 'icon_2_round',
         url: $('#noLoading#').lazyRule(() => {
             writeFile("hiker://files/rules/Src/Juying/live.txt", "");
             return "hiker://empty";
+        })
+    });
+    d.push({
+        title: '删除失效的直播源地址',
+        desc: '此功能为实验性的，可能存在误删，谨慎操作！\n通过判断地址是否可以访问来甄别有效性',
+        col_type: 'text_center_1',
+        url: $('#noLoading#').lazyRule(() => {
+            let urls = [];
+            let JYlivefile=fetch("hiker://files/rules/Src/Juying/live.txt");
+            let JYlives = JYlivefile.split('\n');
+            for(let i = 0; i < JYlives.length; i++){
+                try{
+                    if(JYlives[i].indexOf(',')>-1&&JYlives[i].indexOf('#genre#')==-1){
+                        urls.push(JYlives[i]);
+                    }
+                }catch(e){}
+            }
+            let fails = [];
+            var task = function(obj) {
+                let code = JSON.parse(request(obj.url,{onlyHeaders:true,timeout:2000}));
+                if(code!=200){
+                    fails.push(obj.name+','+obj.url);
+                }
+                return 1;
+            }
+            let urlscheck = urls.map((list)=>{
+                return {
+                    func: task,
+                    param: {
+                        name: list.split(',')[0],
+                        url: list.split(',')[1]
+                    },
+                    id: list.split(',')[1]
+                }
+                
+            });
+            be(urlscheck, {
+                func: function(obj, id, error, taskResult) {
+                },
+                param: {
+                }
+            });
+            for(let i = 0; i < JYlives.length; i++){
+                if(fails.indexOf(lJYlives[i])>-1){
+                    JYlives.splice(i,1);
+                    i = i - 1;
+                }
+            }
+            writeFile(JYlivefile, JYlives.join('\n'));
+            return "toast://删除疑似失效源"+fails.length+"条";
         })
     });
     setHomeResult(d);
