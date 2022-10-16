@@ -2,7 +2,6 @@ function Live() {
     addListener("onClose", $.toString(() => {
         //clearMyVar('guanlicz');
     }));
-    setPageTitle("⚙直播设置⚙");
     var d = [];
     let livefile = "hiker://files/rules/Src/Juying/live.txt";
     let JYlive=fetch(livefile);
@@ -191,7 +190,7 @@ function LiveSet() {
         //clearMyVar('guanlicz');
         refreshPage(false);
     }));
-
+    setPageTitle("⚙直播设置⚙");
     var d = [];
     d.push({
         title: '导入聚直播',
@@ -248,29 +247,33 @@ function LiveSet() {
             }
             let fails = [];
             var task = function(obj) {
-                let code = JSON.parse(request(obj.url,{onlyHeaders:true,timeout:2000}));
-                if(code!=200){
-                    fails.push(obj.name+','+obj.url);
+                try{
+                    let url = obj.split(',')[1];
+                    let code = JSON.parse(request(url,{onlyHeaders:true,timeout:2000}));
+                    if(code!=200){
+                        fails.push(obj);
+                    }
+                }catch(e){
+
                 }
                 return 1;
             }
             let urlscheck = urls.map((list)=>{
                 return {
                     func: task,
-                    param: {
-                        name: list.split(',')[0],
-                        url: list.split(',')[1]
-                    },
-                    id: list.split(',')[1]
+                    param: list,
+                    id: list
                 }
                 
             });
+            log(urlscheck.length)
             be(urlscheck, {
-                func: function(obj, id, error, taskResult) {
+                func: function(obj, id, error, taskResult) {                            
                 },
                 param: {
                 }
             });
+            log(fails.length)
             for(let i = 0; i < JYlives.length; i++){
                 if(fails.indexOf(lJYlives[i])>-1){
                     JYlives.splice(i,1);
