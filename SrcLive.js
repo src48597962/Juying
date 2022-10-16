@@ -148,10 +148,13 @@ function guanlidata(datalist) {
         }
     }
     let list = [];
-    datalist = datalist.sort(compare('name',true));
+    //datalist = datalist.sort(compare('name',true));
     /*datalist.sort((a, b) => {
         return a.name - b.name
     })*/
+    datalist.sort((a, b) => {
+        return a.name.localeCompare(b.name)
+    })
     for (let i=0;i<datalist.length;i++) {
         list.push({
             title: datalist[i].name,
