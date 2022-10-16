@@ -263,7 +263,7 @@ function LiveSet() {
                     }
                     return 1;
                 }
-                showLoading('耗时会比较长，请保持屏幕亮屏');
+                showLoading('多线程检测中，请保持屏幕亮屏');
                 for (var i=0;i<urls.length;i++) {
                     let UrlList = [];
                     let p = i + 799;
