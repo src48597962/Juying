@@ -139,7 +139,9 @@ function compare (attr,rev) {
 
 function guanlidata(datalist) {
     let list = [];
+    log(datalist)
     datalist = compare(datalist,true);
+    log(datalist)
     /*datalist.sort((a, b) => {
         return a.name - b.name
     })*/
