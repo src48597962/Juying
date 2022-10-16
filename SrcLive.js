@@ -2,8 +2,6 @@ function Live() {
     addListener("onClose", $.toString(() => {
         //clearMyVar('guanlicz');
     }));
-    let str = "CCTV";
-    log(str.replace(/[^\d]/g, ""))
     var d = [];
     let livefile = "hiker://files/rules/Src/Juying/live.txt";
     let JYlive=fetch(livefile);
@@ -129,11 +127,11 @@ function guanlidata(datalist) {
         return (a,b) => {
             a = a[attr];
             b = b[attr];
-            if(parseInt(a)){
-                if(parseInt(a) < parseInt(b)){
+            if(a.replace(/[^\d]/g, "")){
+                if(a.replace(/[^\d]/g, "") < b.replace(/[^\d]/g, "")){
                     return rev * -1;
                 }
-                if(parseInt(a) > parseInt(b)){
+                if(a.replace(/[^\d]/g, "") > b.replace(/[^\d]/g, "")){
                     return rev * 1;
                 }
                 return 0;
