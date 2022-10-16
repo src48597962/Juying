@@ -1,6 +1,6 @@
 function Live() {
     addListener("onClose", $.toString(() => {
-        //clearMyVar('guanlicz');
+        clearMyVar('editmode');
     }));
     var d = [];
     let livefile = "hiker://files/rules/Src/Juying/live.txt";
@@ -31,10 +31,10 @@ function Live() {
         d.push({
             title: '<b>聚影√</b> &nbsp &nbsp <small>⚙直播设置⚙</small>',
             img: "https://img.vinua.cn/images/QqyC.png",
-            url: $('hiker://empty#noRecordHistory##noHistory#').rule((datalist) => {
+            url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLive.js');
                     LiveSet();
-                },datalist),
+                }),
             col_type: 'avatar'
         });
         d.push({
@@ -186,8 +186,10 @@ function guanlidata(datalist) {
 
 function LiveSet() {
     addListener("onClose", $.toString(() => {
-        //clearMyVar('guanlicz');
-        refreshPage(false);
+        if(getMyVar('isEdit')=="1"){
+            refreshPage(false);
+        }
+        clearMyVar('isEdit');
     }));
     setPageTitle("⚙直播设置⚙");
     var d = [];
@@ -226,18 +228,40 @@ function LiveSet() {
         col_type: 'icon_2_round',
         url: $('#noLoading#').lazyRule(() => {
             writeFile("hiker://files/rules/Src/Juying/live.txt", "");
+            putMyVar('isEdit','1');
             return "toast://已清空";
         })
     });
     d.push({
         col_type: 'line'
     });
-
+    d.push({
+        title: '删除分组',
+        col_type: 'scroll_button',
+        url: $('#noLoading#').lazyRule(() => {
+            putMyVar('editmode','delete');
+            back(false);
+            return "toast://进入删除分组模式";
+        })
+    });
+    d.push({
+        title: '分组改名',
+        col_type: 'scroll_button',
+        url: $('#noLoading#').lazyRule(() => {
+            putMyVar('editmode','rename');
+            back(false);
+            return "toast://进入删除分组模式";
+        })
+    });
+    d.push({
+        col_type: 'line'
+    });
     d.push({
         title: '删除失效的直播源地址',
         desc: '此功能为实验性的，可能存在误删，谨慎操作！\n通过判断地址是否可以访问来甄别有效性',
         col_type: 'text_center_1',
         url: $('#noLoading#').lazyRule(() => {
+            putMyVar('isEdit','1');
             let urls = [];
             let JYlivefile="hiker://files/rules/Src/Juying/live.txt";
             let JYlive = fetch(JYlivefile);
