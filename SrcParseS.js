@@ -60,7 +60,7 @@ var SrcParseS = {
             };
             window.c++;
             if (window.c * 250 >= 15 * 1000) {
-                fba.log("嗅探失改>超过15秒未获取到");
+                fba.log("嗅探失败>超过15秒未获取到");
                 fba.hideLoading();
                 try{
                     let videourl = vipUrl.split('url=')[1];
