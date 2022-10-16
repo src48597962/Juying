@@ -117,31 +117,28 @@ function Live() {
     }
     setHomeResult(d);
 }
-function compare (attr,rev) {
-    // console.log(attr, rev)
-    if(rev ==  undefined){
-        rev = 1;
-    }else{
-        rev = (rev) ? 1 : -1;
-    }
-    return (a,b) => {
-        a = a[attr];
-        b = b[attr];
-        if(a < b){
-            return rev * -1;
-        }
-        if(a > b){
-            return rev * 1;
-        }
-        return 0;
-    }
-}
 
 function guanlidata(datalist) {
+    function compare (attr,rev) {
+        if(rev ==  undefined){
+            rev = 1;
+        }else{
+            rev = (rev) ? 1 : -1;
+        }
+        return (a,b) => {
+            a = a[attr];
+            b = b[attr];
+            if(a < b){
+                return rev * -1;
+            }
+            if(a > b){
+                return rev * 1;
+            }
+            return 0;
+        }
+    }
     let list = [];
-
     datalist = datalist.sort(compare('name',true));
-
     /*datalist.sort((a, b) => {
         return a.name - b.name
     })*/
