@@ -153,7 +153,17 @@ function guanlidata(datalist) {
             title: datalist[i].name,
             img: 'https://lanmeiguojiang.com/tubiao/ke/156.png',//https://lanmeiguojiang.com/tubiao/more/228.png
             col_type: 'icon_2_round',
-            url: "",
+            url: $('#noLoading#').lazyRule((name,livefile) => {
+                let urls = [];
+                let JYlive=fetch(livefile);
+                let JYlives = JYlive.split('\n');
+                for(var i = 0; i < JYlives.length; i++){
+                    if(JYlives[i].indexOf(',')>-1&&JYlives[i].split(',')[0]==name){
+                        urls.push(JYlives[i].split(',')[1]);
+                    }
+                }
+                return "hiker://empty";
+            },datalist[i].name,livefile),
             extra: {
                 cls: 'livelist'
             }
