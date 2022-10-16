@@ -360,7 +360,7 @@ function xunmi(name,data,ishkss) {
                             let mark = xpathArray(gethtml, jsondata.scVodNode+jsondata.scVodMark)||"";
                             var list = [];
                             for(var j in title){
-                                list.push({"id":href[j].replace(/\/.*\/|\.html/g,''),"name":title[j],"pic":img[j],"desc":mark[j]})
+                                list.push({"id":/^http/.test(href[j])?href[j]:href[j].replace(/\/.*\/|\.html/g,''),"name":title[j],"pic":img[j],"desc":mark[j]})
                             }
                         }
                         var ssvodurl = `jsondata.dtUrl.replace('{vid}',list.id)`;
@@ -531,7 +531,7 @@ function xunmi(name,data,ishkss) {
         if(tzgroup == 1){writeFile(filepath, JSON.stringify(jiekoulist));}
         
         updateItem('loading', {
-            title: ishkss?'‘‘’’<font color=#f13b66a>'+(beresults.length-beerrors.length)+'</font>/'+count+',我是有底线的':'‘‘’’<font color=#f13b66a>'+ (beresults.length-beerrors.length)+'</font>/'+'‘‘’’<font color=#F54343>'+beerrors.length+'</font>/'+count+',我是有底线的',
+            title: ishkss?'':'‘‘’’<font color=#f13b66a>'+ (beresults.length-beerrors.length)+'</font>/'+'‘‘’’<font color=#F54343>'+beerrors.length+'</font>/'+count+',我是有底线的',
             url: beresults.length==count?"toast://已搜索完毕":$('#noLoading#').lazyRule((bess,datalist,beresults,beerrors,name,count,ishkss)=>{
                     for (let j = 0; j < beresults.length; j++) {
                         for(var i = 0; i < datalist.length; i++){
