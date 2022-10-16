@@ -117,7 +117,7 @@ function Live() {
     }
     setHomeResult(d);
 }
-log(parseInt('CCTV-12'))
+
 function guanlidata(datalist) {
     function compare (attr,rev) {
         if(rev ==  undefined){
@@ -128,23 +128,23 @@ function guanlidata(datalist) {
         return (a,b) => {
             a = a[attr];
             b = b[attr];
-            try{
+            if(parseInt(a)){
                 if(parseInt(a) < parseInt(b)){
                     return rev * -1;
                 }
                 if(parseInt(a) > parseInt(b)){
                     return rev * 1;
                 }
-            }catch(e){
+                return 0;
+            }else{
                 if(a < b){
                     return rev * -1;
                 }
                 if(a > b){
                     return rev * 1;
                 }
+                return 0;
             }
-            
-            return 0;
         }
     }
     let list = [];
