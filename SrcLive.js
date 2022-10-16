@@ -182,6 +182,7 @@ function guanlidata(datalist) {
 function LiveSet() {
     addListener("onClose", $.toString(() => {
         //clearMyVar('guanlicz');
+        refreshPage(false);
     }));
     var d = [];
     d.push({
@@ -190,6 +191,7 @@ function LiveSet() {
         col_type: 'icon_2_round',
         url: $('#noLoading#').lazyRule(() => {
             writeFile("hiker://files/rules/Src/Juying/live.txt", "");
+            return "hiker://empty";
         }),
         extra: {
             cls: 'livelist'
