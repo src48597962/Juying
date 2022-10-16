@@ -2421,7 +2421,7 @@ function Resourceimport(input,importtype,boxdy){
                 if(urls.length>0){
                     let YClives = [];
                     for(let i=0;i<urls.length;i++){
-                        let YChtml = request(urls[i],{timeout:2000}).replace(/CCTV-/g,'CCTV');
+                        let YChtml = request(urls[i],{timeout:2000}).replace(/TV-/g,'TV');
                         if(YChtml.indexOf('#genre#')>-1){
                             let YClive = YChtml.split('\n');
                             YClives = YClives.concat(YClive);
