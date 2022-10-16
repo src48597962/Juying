@@ -288,7 +288,7 @@ function LiveSet() {
                 }
                 
                 for(let i = 0; i < JYlives.length; i++){
-                    if(fails.indexOf(lJYlives[i])>-1){
+                    if(fails.indexOf(JYlives[i])>-1){
                         JYlives.splice(i,1);
                         i = i - 1;
                     }
