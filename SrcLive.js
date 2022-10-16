@@ -128,12 +128,22 @@ function guanlidata(datalist) {
         return (a,b) => {
             a = a[attr];
             b = b[attr];
-            if(a < b){
-                return rev * -1;
+            try{
+                if(parseInt(a) < parseInt(b)){
+                    return rev * -1;
+                }
+                if(parseInt(a) > parseInt(b)){
+                    return rev * 1;
+                }
+            }catch(e){
+                if(a < b){
+                    return rev * -1;
+                }
+                if(a > b){
+                    return rev * 1;
+                }
             }
-            if(a > b){
-                return rev * 1;
-            }
+            
             return 0;
         }
     }
