@@ -117,7 +117,7 @@ function Live() {
         });
     }else{
         d.push({
-            title: '没有直播数据源',
+            title: '没有直播数据源，可从TVBox导入',
             col_type: 'rich_text'
         });
     }
@@ -227,7 +227,7 @@ function LiveSet() {
         col_type: 'icon_2_round',
         url: $('#noLoading#').lazyRule(() => {
             writeFile("hiker://files/rules/Src/Juying/live.txt", "");
-            return "hiker://empty";
+            return "toast://已清空";
         })
     });
     d.push({
@@ -297,7 +297,7 @@ function LiveSet() {
                 hideLoading();
                 return "toast://删除疑似失效源"+fails.length+"条";
             }else{
-                return "toast://无直播数据源";
+                return "toast://没有直播数据源";
             }
         })
     });
