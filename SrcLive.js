@@ -147,15 +147,11 @@ function guanlidata(datalist) {
         }
     }
     let list = [];
-    datalist = datalist.sort(compare('name',true));
-    /*datalist.sort((a, b) => {
-        return a.name - b.name
-    })*/
-    
+    datalist = datalist.sort(compare('name',true));   
     for (let i=0;i<datalist.length;i++) {
         list.push({
             title: datalist[i].name,
-            img: 'https://lanmeiguojiang.com/tubiao/more/228.png',
+            img: 'https://lanmeiguojiang.com/tubiao/ke/156.png',//https://lanmeiguojiang.com/tubiao/more/228.png
             col_type: 'icon_2_round',
             url: "",
             extra: {
