@@ -11,15 +11,6 @@ function Live() {
         var JYlives = [];
     }
     if(JYlives.length>0){
-        d.push({
-            title: '<b>聚影√</b> &nbsp &nbsp <small>⚙直播设置⚙</small>',
-            img: "https://img.vinua.cn/images/QqyC.png",
-            url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
-                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLive.js');
-                    LiveSet();
-                }),
-            col_type: 'avatar'
-        });
         let datalist = [];
         let datalist2 = [];
         let group = "";
@@ -37,7 +28,15 @@ function Live() {
             obj[next.name] ? "" : (obj[next.name] = true && newArr.push(next));
             return newArr;
         }, []);
-        
+        d.push({
+            title: '<b>聚影√</b> &nbsp &nbsp <small>⚙直播设置⚙</small>',
+            img: "https://img.vinua.cn/images/QqyC.png",
+            url: $('hiker://empty#noRecordHistory##noHistory#').rule((datalist) => {
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLive.js');
+                    LiveSet();
+                },datalist),
+            col_type: 'avatar'
+        });
         d.push({
             title: "🔍",
             url: $.toString((guanlidata,datalist) => {
@@ -233,6 +232,7 @@ function LiveSet() {
     d.push({
         col_type: 'line'
     });
+
     d.push({
         title: '删除失效的直播源地址',
         desc: '此功能为实验性的，可能存在误删，谨慎操作！\n通过判断地址是否可以访问来甄别有效性',
