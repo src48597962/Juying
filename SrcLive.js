@@ -192,6 +192,35 @@ function LiveSet() {
     }));
     var d = [];
     d.push({
+        title: '直播源检测',
+        img: 'https://lanmeiguojiang.com/tubiao/messy/22.svg',
+        col_type: 'icon_2_round',
+        url: $('#noLoading#').lazyRule(() => {
+            let Julivefile = "hiker://files/rules/live/config.json";
+            let Julive = fetch(Julive);
+            if(Julive != ""){
+                try{
+                    eval("var Judata=" + Julive+ ";");
+                    let Judatalist = Judata['data']||[];
+                    let JYlivefile = "hiker://files/rules/Src/Juying/live.txt";
+                    if(!Judatalist.some(item => item.url==JYlivefile)){
+                        Judatalist.push({"name":"聚影√", "url":JYlivefile})
+                        Judata['data'] = Judatalist;
+                        writeFile(Julivefile, JSON.stringify(Judata));
+                        return "toast://导入聚直播订阅成功";
+                    }else{
+                        return "toast://已存在聚直播订阅";
+                    }
+                }catch(e){
+                    log("导入聚直播订阅失败>"+e.message);
+                    return "toast://导入聚直播订阅失败";
+                }
+            }else{
+                return "toast://仓库先导入聚直播小程序";
+            }
+        })
+    });
+    d.push({
         title: '导入聚直播',
         img: 'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fis4.mzstatic.com%2Fimage%2Fthumb%2FPurple3%2Fv4%2Fdf%2Ff6%2Fda%2Fdff6da83-47d7-9cb6-2398-1919c13837b4%2Fmzl.kgmnwodo.png%2F0x0ss-85.jpg&refer=http%3A%2F%2Fis4.mzstatic.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1638629349&t=2f6d967185fe2b9c54e8b230eb83e66c',
         col_type: 'icon_2_round',
@@ -222,7 +251,7 @@ function LiveSet() {
     });
     d.push({
         title: '清空直播源',
-        img: 'https://lanmeiguojiang.com/tubiao/more/334.png',
+        img: 'https://lanmeiguojiang.com/tubiao/more/216.png',
         col_type: 'icon_2_round',
         url: $('#noLoading#').lazyRule(() => {
             writeFile("hiker://files/rules/Src/Juying/live.txt", "");
