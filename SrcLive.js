@@ -20,6 +20,7 @@ function Live() {
         if(YChtml.indexOf('#genre#')>-1){
             writeFile(livefile, YChtml);
             JYlive = YChtml;
+            saveFile(livedata[0],YChtml);
         }
         hideLoading();
     }
