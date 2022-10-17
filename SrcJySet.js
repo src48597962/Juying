@@ -2151,7 +2151,7 @@ function extension(){
                             writeFile(cfgfile, JSON.stringify(JYconfig));
                         }
                     }
-                    writeFile("hiker://files/rules/Src/Juying/DYTVBoxTmp.json", "");
+
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                     let sm = Resourceimport(input,getMyVar('importtype','0'));
                     if(getMyVar('importtype','0')!="2"){
@@ -2253,7 +2253,7 @@ function Resourceimport(input,importtype,boxdy){
             if(/\/storage\/emulated\//.test(input)){input = "file://" + input}
             var html = request(input,{timeout:2000});
             var reg = /("([^\\\"]*(\\.)?)*")|('([^\\\']*(\\.)?)*')|(\/{2,}.*?(\r|\n|$))|(\/\*(\n|.)*?\*\/)/g;
-            html = html.replace(/api\"\:csp/g,'api":"csp').replace(reg, function(word) { 
+            html = html.replace(/api\"\:csp/g,'api":"csp').replace(/,\"/g,',').replace(/\"\:/g,':').replace(/\{\"/g,'{').replace(reg, function(word) { 
                 return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
             }).replace(/^.*#.*$/gm,"").replace(/\,\,/g,',');//.replace(/=\\n\"/g,'="')|[\t\r\n]
             //log(html);
@@ -2474,6 +2474,7 @@ function Resourceimport(input,importtype,boxdy){
             }
             JYconfig['TVBoxDY'] = input;
             writeFile(cfgfile, JSON.stringify(JYconfig));
+            writeFile("hiker://files/rules/Src/Juying/DYTVBoxTmp.json", "");
             return 'TVBox订阅：'+(input?'保存成功':'已取消');
         }catch(e){
             log('TVBox订阅：失败>'+e.message);
