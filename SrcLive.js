@@ -5,6 +5,24 @@ function Live() {
     var d = [];
     let livefile = "hiker://files/rules/Src/Juying/live.txt";
     let JYlive=fetch(livefile);
+
+    let livecfgfile = "hiker://files/rules/Src/Juying/liveconfig.json";
+    let livecfg = fetch(livecfgfile);
+    if(livecfg != ""){
+        eval("var liveconfig = " + livecfg);
+    }else{
+        var liveconfig = {};
+    }
+    let livedata = liveconfig['data']||[];
+    if(JYlive==""&&livedata.length>0){
+        showLoading('发现订阅源，正在初始化');
+        let YChtml = request(livedata[0],{timeout:2000}).replace(/TV-/g,'TV');
+        if(YChtml.indexOf('#genre#')>-1){
+            writeFile(livefile, YChtml);
+            JYlive = YChtml;
+        }
+        hideLoading();
+    }
     if(JYlive){
         var JYlives = JYlive.split('\n');
     }else{
