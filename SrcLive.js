@@ -246,8 +246,10 @@ function LiveSet() {
                                 if(input=="更新缓存"){
                                     let YChtml = request(url,{timeout:2000}).replace(/TV-/g,'TV').replace(/\[.*\]/g,'');
                                     if(YChtml){
+                                        showLoading('正在缓存，请稍后.');
                                         deleteFile('live'+md5(url)+'.txt');
                                         saveFile('live'+md5(url)+'.txt',YChtml);
+                                        hideLoading();
                                         return "toast://更新文件缓存成功";
                                     }else{
                                         return "toast://更新失败";
@@ -299,7 +301,7 @@ function LiveSet() {
                                         return "toast://仓库先导入聚直播小程序";
                                     }
                                 }else if(input=="导入聚影√"){
-                                    showLoading('发现订阅源，正在初始化');
+                                    showLoading('叠加导入聚影直播，最大万行限制');
                                     let YChtml = readFile('live'+md5(url)+'.txt');
                                     if(!YChtml){
                                         YChtml = request(url,{timeout:2000}).replace(/TV-/g,'TV').replace(/\[.*\]/g,'');
