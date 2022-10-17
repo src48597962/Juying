@@ -77,9 +77,7 @@ function Live() {
                 titleVisible: true
             }
         });
-        d.push({
-            col_type: 'line'
-        });
+        
         let grouplist = datalist.map((list)=>{
             return list.group;
         })
@@ -220,7 +218,7 @@ function LiveSet() {
             addListener("onClose", $.toString(() => {
                 //refreshPage(false);
             }));
-            setPageTitle("直播-订阅源管理");
+            setPageTitle("⚙直播设置⚙");
             let livecfgfile = "hiker://files/rules/Src/Juying/liveconfig.json";
             let livecfg = fetch(livecfgfile);
             if(livecfg != ""){
@@ -229,6 +227,20 @@ function LiveSet() {
                 var liveconfig = {};
             }
             var d = [];
+            d.push({
+                title: '<b>订阅源管理</b> &nbsp &nbsp <small>添加自定义链接</small>',
+                img: "https://img.vinua.cn/images/QqyC.png",
+                url: $("","输入tv通用格式的链接地址").input(()=>{
+                    if(input){
+                        
+                        //writeFile(Julivefile, JSON.stringify(Judata));
+                        return "toast://导入聚直播订阅成功";
+                    }else{
+                        return "toast://地址不能为空";
+                    }
+                }),
+                col_type: 'avatar'
+            });
             let livedata = liveconfig['data']||[];
             if(livedata.length>0){
                 d.push({
@@ -387,7 +399,7 @@ function LiveSet() {
     d.push({
         title: '♻ 清空直播源',
         col_type: 'text_2',
-        url: $('#noLoading#').lazyRule(() => {
+        url: $("确定清空聚影直播本地文件？").confirm(()=>{
             writeFile("hiker://files/rules/Src/Juying/live.txt", "");
             putMyVar('isEdit','1');
             return "toast://已清空";
@@ -418,7 +430,7 @@ function LiveSet() {
         col_type: 'line'
     });
     d.push({
-        title: '删除失效的直播源地址',
+        title: '🔎删除失效的直播源地址',
         desc: '此功能为实验性的，可能存在误删，谨慎操作！\n通过判断地址是否可以访问来甄别有效性',
         col_type: 'text_center_1',
         url: $('#noLoading#').lazyRule(() => {
