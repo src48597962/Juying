@@ -244,14 +244,15 @@ function LiveSet() {
                         title: livedata[i],
                         url: $(["更新缓存","删除订阅","导入聚直播","导入聚影√"],2,"").select((livecfgfile, url)=>{
                                 if(input=="更新缓存"){
+                                    showLoading('正在缓存，请稍后.');
                                     let YChtml = request(url,{timeout:2000}).replace(/TV-/g,'TV').replace(/\[.*\]/g,'');
                                     if(YChtml){
-                                        showLoading('正在缓存，请稍后.');
                                         deleteFile('live'+md5(url)+'.txt');
                                         saveFile('live'+md5(url)+'.txt',YChtml);
                                         hideLoading();
                                         return "toast://更新文件缓存成功";
                                     }else{
+                                        hideLoading();
                                         return "toast://更新失败";
                                     }
                                 }else if(input=="删除订阅"){
