@@ -2259,6 +2259,9 @@ function Resourceimport(input,importtype,boxdy){
 
             html = html.replace(/<\/?.+?>/g,"");
             html = html.replace(/[\r\n]/g, "");
+            html = html.replace(/(?<=\"ext\"\: \{).+(?=\})/g, "").replace(/(?<=\"ads\"\: \[).+(?=\])/g, "");
+            
+
             html = html.replace(/api\"\:csp/g,'api":"csp').replace(/,\"/g,',').replace(/\"\:/g,':').replace(/\{\"/g,'{');//.replace(/=\\n\"/g,'="')|[\t\r\n]
             log(html);
             eval('var data = ' + html)
