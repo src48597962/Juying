@@ -1,6 +1,4 @@
 function Live() {
-    log('live'+md5('https://agit.ai/Yoursmile7/TVBox/raw/branch/master/live.txt')+'.txt')
-    log(readFile('live'+md5('https://agit.ai/Yoursmile7/TVBox/raw/branch/master/live.txt')+'.txt'))
     addListener("onClose", $.toString(() => {
         clearMyVar('editmode');
     }));
@@ -18,11 +16,14 @@ function Live() {
     let livedata = liveconfig['data']||[];
     if(JYlive==""&&livedata.length>0){
         showLoading('发现订阅源，正在初始化');
-        let YChtml = request(livedata[0],{timeout:2000}).replace(/TV-/g,'TV');
+        let YChtml = readFile('live'+md5(livedata[0])+'.txt');
+        if(!YChtml){
+            YChtml = request(livedata[0],{timeout:2000}).replace(/TV-/g,'TV').replace(/\[.*\]/g,'');
+            saveFile('live'+md5(livedata[0])+'.txt',YChtml);
+        }
         if(YChtml.indexOf('#genre#')>-1){
             writeFile(livefile, YChtml);
             JYlive = YChtml;
-            //saveFile('live'+md5(livedata[0])+'.txt',YChtml);
         }
         hideLoading();
     }
