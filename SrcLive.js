@@ -243,23 +243,100 @@ function LiveSet() {
                     d.push({
                         title: livedata[i],
                         url: $(["更新缓存","删除订阅","导入聚直播","导入聚影√"],2,"").select((livecfgfile, url)=>{
-                            /*
-                                if(input=="选择"){
-                                    putMyVar('importinput', url);
-                                    back(true);
-                                }else if(input=="删除"){
-                                    let importrecord = JYconfig['importrecord']||[];
-                                    for(let i=0;i<importrecord.length;i++){
-                                        if(importrecord[i].url==url&&importrecord[i].type==getMyVar('importtype','0')){
-                                            importrecord.splice(i,1);
-                                            break;
-                                        }
+                                if(input=="更新缓存"){
+                                    let YChtml = request(url,{timeout:2000}).replace(/TV-/g,'TV').replace(/\[.*\]/g,'');
+                                    if(YChtml){
+                                        deleteFile('live'+md5(url)+'.txt');
+                                        saveFile('live'+md5(url)+'.txt',YChtml);
+                                        return "toast://更新文件缓存成功";
+                                    }else{
+                                        return "toast://更新失败";
                                     }
-                                    JYconfig['importrecord'] = importrecord; 
-                                    writeFile(cfgfile, JSON.stringify(JYconfig));
-                                    refreshPage(false);
+                                }else if(input=="删除订阅"){
+                                    deleteFile('live'+md5(url)+'.txt');
+                                    let livecfg = fetch(livecfgfile);
+                                    if(livecfg != ""){
+                                        eval("var liveconfig = " + livecfg);
+                                        let livedata = liveconfig['data']||[];
+                                        function removeByValue(arr, val) {
+                                            for(var i = 0; i < arr.length; i++) {
+                                                if(arr[i] == val) {
+                                                arr.splice(i, 1);
+                                                break;
+                                                }
+                                            }
+                                        }
+                                        removeByValue(livedata,url);
+                                        liveconfig['data'] = livedata;
+                                        writeFile(livecfgfile, JSON.stringify(liveconfig));
+                                        refreshPage(false);
+                                    }
+                                }else if(input=="导入聚直播"){
+                                    let Julivefile = "hiker://files/rules/live/config.json";
+                                    let Julive = fetch(Julivefile);
+                                    if(Julive != ""){
+                                        try{
+                                            eval("var Judata=" + Julive+ ";");
+                                            let Judatalist = Judata['data']||[];
+                                            if(!Judatalist.some(item => item.url==url)){
+                                                return $("","取个名字保存吧").input((Julivefile,Judata,url)=>{
+                                                    if(input){
+                                                        Judata['data'].push({name:input,url:url});
+                                                        writeFile(Julivefile, JSON.stringify(Judata));
+                                                        return "toast://导入聚直播订阅成功";
+                                                    }else{
+                                                        return "toast://名称不能为空";
+                                                    }
+                                                },Julivefile,Judata,url)
+                                            }else{
+                                                return "toast://已存在聚直播订阅";
+                                            }
+                                        }catch(e){
+                                            log("导入聚直播订阅失败>"+e.message);
+                                            return "toast://导入聚直播订阅失败";
+                                        }
+                                    }else{
+                                        return "toast://仓库先导入聚直播小程序";
+                                    }
+                                }else if(input=="导入聚影√"){
+                                    showLoading('发现订阅源，正在初始化');
+                                    let YChtml = readFile('live'+md5(livedata[0])+'.txt');
+                                    if(!YChtml){
+                                        YChtml = request(livedata[0],{timeout:2000}).replace(/TV-/g,'TV').replace(/\[.*\]/g,'');
+                                        saveFile('live'+md5(livedata[0])+'.txt',YChtml);
+                                    }
+                                    if(YChtml.indexOf('#genre#')>-1){
+                                        var YClives = JYlive.split('\n');
+                                    }else{
+                                        var YClives = [];
+                                    }
+                                    if(YClives.length>0){
+                                        let livefile = "hiker://files/rules/Src/Juying/live.txt";
+                                        let JYlive=fetch(livefile);
+                                        if(JYlive){
+                                            var JYlives = JYlive.split('\n');
+                                            let id = 0;
+                                            for(let i=0;i<YClives.length;i++){
+                                                if(JYlives.length>10000){
+                                                    log('直播数据源文件已大于10000行，为保证效率停止导入');
+                                                    break;
+                                                }else{
+                                                    if(YClives[i].indexOf('#genre#')>-1&&JYlives.indexOf(YClives[i])>-1){
+                                                        id = JYlives.indexOf(YClives[i]);
+                                                    }else if(YClives[i].indexOf('#genre#')>-1&&JYlives.indexOf(YClives[i])==-1){
+                                                        id = JYlives.length+1;
+                                                    }else if(JYlives.indexOf(YClives[i])==-1&&YClives[i].trim()!=""){
+                                                        JYlives.splice(id, 0, YClives[i]);
+                                                    }
+                                                }
+                                            }
+                                        }else{
+                                            var JYlives = YClives;
+                                        }
+                                        writeFile(livefile, JYlives.join('\n'));
+                                        return "toast://成功导入";
+                                    }
                                 }
-                                */
                                 return "hiker://empty";
                             }, livecfgfile, livedata[i]),
                         col_type: "text_1"
