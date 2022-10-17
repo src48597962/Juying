@@ -336,7 +336,10 @@ function LiveSet() {
                                             var JYlives = YClives;
                                         }
                                         writeFile(livefile, JYlives.join('\n'));
+                                        hideLoading();
                                         return "toast://成功导入";
+                                    }else{
+                                        return "toast://文件异常，导入失败";
                                     }
                                 }
                                 return "hiker://empty";
