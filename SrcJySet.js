@@ -2252,6 +2252,7 @@ function Resourceimport(input,importtype,boxdy){
             showLoading('检测'+(isboxdy?'TVBox订阅':'')+'文件有效性');
             if(/\/storage\/emulated\//.test(input)){input = "file://" + input}
             var html = request(input,{timeout:2000});
+            log(html);
             var reg = /("([^\\\"]*(\\.)?)*")|('([^\\\']*(\\.)?)*')|(\/{2,}.*?(\r|\n|$))|(\/\*(\n|.)*?\*\/)/g;
             html = html.replace(/api\"\:csp/g,'api":"csp').replace(reg, function(word) { 
                 return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
