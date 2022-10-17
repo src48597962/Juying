@@ -228,7 +228,7 @@ function LiveSet() {
             }
             var d = [];
             d.push({
-                title: '<b>订阅源管理</b> &nbsp &nbsp <small>添加自定义链接</small>',
+                title: '<b>📺 订阅源管理</b> &nbsp &nbsp <small>添加自定义链接</small>',
                 img: "https://img.vinua.cn/images/QqyC.png",
                 url: $("","输入tv通用格式的链接地址").input(()=>{
                     if(input){
@@ -239,8 +239,9 @@ function LiveSet() {
                         return "toast://地址不能为空";
                     }
                 }),
-                col_type: 'avatar'
+                col_type: 'text_1'
             });
+            
             let livedata = liveconfig['data']||[];
             if(livedata.length>0){
                 d.push({
