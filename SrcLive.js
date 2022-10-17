@@ -301,14 +301,14 @@ function LiveSet() {
                                         return "toast://仓库先导入聚直播小程序";
                                     }
                                 }else if(input=="导入聚影√"){
-                                    showLoading('叠加导入聚影直播，最大万行限制');
+                                    showLoading('叠加导入直播，最大万行限制');
                                     let YChtml = readFile('live'+md5(url)+'.txt');
                                     if(!YChtml){
                                         YChtml = request(url,{timeout:2000}).replace(/TV-/g,'TV').replace(/\[.*\]/g,'');
                                         saveFile('live'+md5(url)+'.txt',YChtml);
                                     }
                                     if(YChtml.indexOf('#genre#')>-1){
-                                        var YClives = JYlive.split('\n');
+                                        var YClives = YChtml.split('\n');
                                     }else{
                                         var YClives = [];
                                     }
