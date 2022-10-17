@@ -1,5 +1,6 @@
 function Live() {
-    log(readFile('live'+md5(livedata[0])+'.txt'))
+    log('live'+md5('https://agit.ai/Yoursmile7/TVBox/raw/branch/master/live.txt')+'.txt')
+    log(readFile('live'+md5('https://agit.ai/Yoursmile7/TVBox/raw/branch/master/live.txt')+'.txt'))
     addListener("onClose", $.toString(() => {
         clearMyVar('editmode');
     }));
