@@ -2253,7 +2253,6 @@ function Resourceimport(input,importtype,boxdy){
             if(/\/storage\/emulated\//.test(input)){input = "file://" + input}
             var html = request(input,{timeout:2000});
             var reg = /("([^\\\"]*(\\.)?)*")|('([^\\\']*(\\.)?)*')|(\/{2,}.*?(\r|\n|$))|(\/\*(\n|.)*?\*\/)/g;
-            
             html = html.replace(/api\"\:csp/g,'api":"csp').replace(reg, function(word) { 
                 return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
             }).replace(/^.*#.*$/gm,"").replace(/\,\,/g,',');//.replace(/=\\n\"/g,'="')|[\t\r\n]
