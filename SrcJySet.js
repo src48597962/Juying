@@ -2253,17 +2253,11 @@ function Resourceimport(input,importtype,boxdy){
             if(/\/storage\/emulated\//.test(input)){input = "file://" + input}
             var html = request(input,{timeout:2000});
             var reg = /("([^\\\"]*(\\.)?)*")|('([^\\\']*(\\.)?)*')|(\/{2,}.*?(\r|\n|$))|(\/\*(\n|.)*?\*\/)/g;
-            html = html.replace(reg, function(word) { 
-                return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
-            }).replace(/^.*#.*$/gm,"").replace(/\,\,/g,',').replace(/\s+/g,'');
-
-            html = html.replace(/<\/?.+?>/g,"");
-            html = html.replace(/[\r\n]/g, "");
-            html = html.replace(/(?<=\"ext\"\: \{).+(?=\})/g, "").replace(/(?<=\"ads\"\: \[).+(?=\])/g, "");
             
-
-            html = html.replace(/api\"\:csp/g,'api":"csp').replace(/,\"/g,',').replace(/\"\:/g,':').replace(/\{\"/g,'{');//.replace(/=\\n\"/g,'="')|[\t\r\n]
-            log(html);
+            html = html.replace(/api\"\:csp/g,'api":"csp').replace(reg, function(word) { 
+                return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
+            }).replace(/^.*#.*$/gm,"").replace(/\,\,/g,',');//.replace(/=\\n\"/g,'="')|[\t\r\n]
+            //log(html);
             eval('var data = ' + html)
             //var data = JSON.parse(html);                        
             var jiekou = data.sites||[];
@@ -2425,7 +2419,29 @@ function Resourceimport(input,importtype,boxdy){
                         }
                     }
                 }
+                let livenum = -1;
                 if(urls.length>0){
+                    livenum = 0;
+                    let livecfgfile = "hiker://files/rules/Src/Juying/liveconfig.json";
+                    let livecfg = fetch(livecfgfile);
+                    if(livecfg != ""){
+                        eval("var liveconfig = " + livecfg);
+                    }else{
+                        var liveconfig = {};
+                    }
+                    let livedata = liveconfig['data']||[];
+                    for(let i=0;i<urls.length;i++){
+                        let YChtml = request(urls[i],{timeout:2000}).replace(/TV-/g,'TV');
+                        if(YChtml.indexOf('#genre#')>-1&&livedata.indexOf(urls[i])==-1){
+                            livedata.push(urls[i]);
+                            livenum++;
+                        }
+                    }
+                    if(livenum>0){
+                        liveconfig['data'] = livedata;
+                        writeFile(livecfgfile, JSON.stringify(liveconfig));
+                    }
+                /*
                     let YClives = [];
                     for(let i=0;i<urls.length;i++){
                         let YChtml = request(urls[i],{timeout:2000}).replace(/TV-/g,'TV');
@@ -2458,7 +2474,7 @@ function Resourceimport(input,importtype,boxdy){
                             var JYlives = YClives;
                         }
                         writeFile(livefile, JYlives.join('\n'));
-                    }
+                    }*/
                 }
             } catch (e) {
                 log('TVBox导入live保存失败>'+e.message);
@@ -2467,7 +2483,7 @@ function Resourceimport(input,importtype,boxdy){
         if(isboxdy){
             return dydatas;
         }else{
-            let sm = (jknum>-1?' 接口保存'+jknum:'')+(jxnum>-1?' 解析保存'+jxnum:'')+(JYlives?' 直播数据已保存':'');
+            let sm = (jknum>-1?' 接口保存'+jknum:'')+(jxnum>-1?' 解析保存'+jxnum:'')+(livenum>-1?' 直播保存'+livenum:'');
             return 'TVBox导入：'+(sm?sm:'导入异常，详情查看日志');
         }              
     }else if(importtype=="2"){//tvbox订阅
