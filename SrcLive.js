@@ -230,15 +230,22 @@ function LiveSet() {
             d.push({
                 title: '‘‘’’<b>📺 订阅源管理</b> &nbsp &nbsp <small>添加自定义链接</small>',
                 img: "https://img.vinua.cn/images/QqyC.png",
-                url: $("","输入tv通用格式的链接地址").input(()=>{
+                url: $("","输入tv通用格式的链接地址").input((livecfgfile,liveconfig)=>{
                     if(input){
-                        
-                        //writeFile(Julivefile, JSON.stringify(Judata));
-                        return "toast://导入聚直播订阅成功";
+                        let livedata = liveconfig['data']|[];
+                        let YChtml = request(input,{timeout:2000});
+                        if(YChtml.indexOf('#genre#')>-1){
+                            livedata.push(input);
+                            liveconfig['data'] = livedata;
+                            writeFile(livecfgfile, JSON.stringify(liveconfig));
+                            return "toast://增加自定义tv链接地址成功";
+                        }else{
+                            return "toast://无法识别，需含#genre#的通用格式";
+                        }
                     }else{
                         return "toast://地址不能为空";
                     }
-                }),
+                },livecfgfile,liveconfig),
                 col_type: 'text_1'
             });
             
