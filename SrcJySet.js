@@ -2256,7 +2256,7 @@ function Resourceimport(input,importtype,boxdy){
             html = html.replace(reg, function(word) { 
                 return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
             }).replace(/^.*#.*$/gm,"").replace(/[\t\r\n]/g,"").replace(/\,\,/g,',').replace(/api\"\:csp/g,'api":"csp').replace(/,\"/g,',').replace(/\"\:/g,':').replace(/\{\"/g,'{');//.replace(/=\\n\"/g,'="')|[\t\r\n]
-            //log(html);
+            log(html);
             eval('var data = ' + html)
             //var data = JSON.parse(html);                        
             var jiekou = data.sites||[];
