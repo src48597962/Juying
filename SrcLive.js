@@ -1,4 +1,5 @@
 function Live() {
+    log(readFile('live'+md5(livedata[0])+'.txt'))
     addListener("onClose", $.toString(() => {
         clearMyVar('editmode');
     }));
@@ -20,7 +21,7 @@ function Live() {
         if(YChtml.indexOf('#genre#')>-1){
             writeFile(livefile, YChtml);
             JYlive = YChtml;
-            saveFile('live'+md5(livedata[0])+'.txt',YChtml);
+            //saveFile('live'+md5(livedata[0])+'.txt',YChtml);
         }
         hideLoading();
     }
