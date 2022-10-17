@@ -16,12 +16,11 @@ function Live() {
     let livedata = liveconfig['data']||[];
     if(JYlive==""&&livedata.length>0){
         showLoading('发现订阅源，正在初始化');
-        let YChtml = readFile('live'+md5(livedata[0])+'.txt');
-        if(!YChtml){
-            YChtml = request(livedata[0],{timeout:2000}).replace(/TV-/g,'TV').replace(/\[.*\]/g,'');
-            saveFile('live'+md5(livedata[0])+'.txt',YChtml);
-        }
+        let YChtml = readFile('live'+md5(livedata[0])+'.txt')||request(livedata[0],{timeout:2000}).replace(/TV-/g,'TV').replace(/\[.*\]/g,'');
         if(YChtml.indexOf('#genre#')>-1){
+            if(!fileExist('live'+md5(livedata[0])+'.txt')){
+                saveFile('live'+md5(livedata[0])+'.txt',YChtml);
+            }
             writeFile(livefile, YChtml);
             JYlive = YChtml;
         }
@@ -216,12 +215,12 @@ function LiveSet() {
     setPageTitle("⚙直播设置⚙");
     var d = [];
     d.push({
-        title: '🆖 订阅源管理',
+        title: '📺 订阅源管理',
         url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
             addListener("onClose", $.toString(() => {
                 //refreshPage(false);
             }));
-            //setPageTitle("🆖资源导入-历史记录");
+            setPageTitle("直播-订阅源管理");
             let livecfgfile = "hiker://files/rules/Src/Juying/liveconfig.json";
             let livecfg = fetch(livecfgfile);
             if(livecfg != ""){
@@ -303,12 +302,11 @@ function LiveSet() {
                                     }
                                 }else if(input=="导入聚影√"){
                                     showLoading('叠加导入直播，最大万行限制');
-                                    let YChtml = readFile('live'+md5(url)+'.txt');
-                                    if(!YChtml){
-                                        YChtml = request(url,{timeout:2000}).replace(/TV-/g,'TV').replace(/\[.*\]/g,'');
-                                        saveFile('live'+md5(url)+'.txt',YChtml);
-                                    }
+                                    let YChtml = readFile('live'+md5(url)+'.txt')||request(url,{timeout:2000}).replace(/TV-/g,'TV').replace(/\[.*\]/g,'');
                                     if(YChtml.indexOf('#genre#')>-1){
+                                        if(!fileExist('live'+md5(url)+'.txt')){
+                                            saveFile('live'+md5(url)+'.txt',YChtml);
+                                        }
                                         var YClives = YChtml.split('\n');
                                     }else{
                                         var YClives = [];
@@ -359,9 +357,8 @@ function LiveSet() {
         col_type: "text_2"
     });
     d.push({
-        title: '导入聚直播',
-        img: 'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fis4.mzstatic.com%2Fimage%2Fthumb%2FPurple3%2Fv4%2Fdf%2Ff6%2Fda%2Fdff6da83-47d7-9cb6-2398-1919c13837b4%2Fmzl.kgmnwodo.png%2F0x0ss-85.jpg&refer=http%3A%2F%2Fis4.mzstatic.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1638629349&t=2f6d967185fe2b9c54e8b230eb83e66c',
-        col_type: 'icon_2_round',
+        title: '🎦 导入聚直播',
+        col_type: 'text_2',
         url: $('#noLoading#').lazyRule(() => {
             let Julivefile = "hiker://files/rules/live/config.json";
             let Julive = fetch(Julivefile);
@@ -388,9 +385,8 @@ function LiveSet() {
         })
     });
     d.push({
-        title: '清空直播源',
-        img: 'https://lanmeiguojiang.com/tubiao/messy/8.svg',
-        col_type: 'icon_2_round',
+        title: '♻ 清空直播源',
+        col_type: 'text_2',
         url: $('#noLoading#').lazyRule(() => {
             writeFile("hiker://files/rules/Src/Juying/live.txt", "");
             putMyVar('isEdit','1');
