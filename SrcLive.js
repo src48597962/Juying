@@ -300,10 +300,10 @@ function LiveSet() {
                                     }
                                 }else if(input=="导入聚影√"){
                                     showLoading('发现订阅源，正在初始化');
-                                    let YChtml = readFile('live'+md5(livedata[0])+'.txt');
+                                    let YChtml = readFile('live'+md5(url)+'.txt');
                                     if(!YChtml){
-                                        YChtml = request(livedata[0],{timeout:2000}).replace(/TV-/g,'TV').replace(/\[.*\]/g,'');
-                                        saveFile('live'+md5(livedata[0])+'.txt',YChtml);
+                                        YChtml = request(url,{timeout:2000}).replace(/TV-/g,'TV').replace(/\[.*\]/g,'');
+                                        saveFile('live'+md5(url)+'.txt',YChtml);
                                     }
                                     if(YChtml.indexOf('#genre#')>-1){
                                         var YClives = JYlive.split('\n');
