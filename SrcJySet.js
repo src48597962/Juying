@@ -2252,12 +2252,11 @@ function Resourceimport(input,importtype,boxdy){
             showLoading('检测'+(isboxdy?'TVBox订阅':'')+'文件有效性');
             if(/\/storage\/emulated\//.test(input)){input = "file://" + input}
             var html = request(input,{timeout:2000});
-            log(html);
             var reg = /("([^\\\"]*(\\.)?)*")|('([^\\\']*(\\.)?)*')|(\/{2,}.*?(\r|\n|$))|(\/\*(\n|.)*?\*\/)/g;
             html = html.replace(/api\"\:csp/g,'api":"csp').replace(reg, function(word) { 
                 return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
             }).replace(/^.*#.*$/gm,"").replace(/\,\,/g,',');//.replace(/=\\n\"/g,'="')|[\t\r\n]
-            log(html);
+            //log(html);
             eval('var data = ' + html)
             //var data = JSON.parse(html);                        
             var jiekou = data.sites||[];
@@ -2269,6 +2268,7 @@ function Resourceimport(input,importtype,boxdy){
         }
         var jknum = -1;
         var jxnum = -1;
+        var livenum = -1;
         if((isboxdy||getMyVar('importjiekou','')=="1")&&jiekou.length>0){
             showLoading('正在多线程抓取数据中');
             var urls= [];
@@ -2419,7 +2419,6 @@ function Resourceimport(input,importtype,boxdy){
                         }
                     }
                 }
-                let livenum = -1;
                 if(urls.length>0){
                     livenum = 0;
                     let livecfgfile = "hiker://files/rules/Src/Juying/liveconfig.json";
