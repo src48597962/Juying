@@ -2154,7 +2154,7 @@ function extension(){
 
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                     let sm = Resourceimport(input,getMyVar('importtype','0'));
-                    if(getMyVar('importtype','0')!="2"){
+                    if(getMyVar('importtype','0')!="2"&&sm.indexOf('链接文件无效或内容有错')==-1){
                         back();
                     }else{
                         clearMyVar('importinput');
