@@ -212,6 +212,66 @@ function LiveSet() {
     setPageTitle("⚙直播设置⚙");
     var d = [];
     d.push({
+        title: '🆖 订阅源管理',
+        url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
+            addListener("onClose", $.toString(() => {
+                //refreshPage(false);
+            }));
+            //setPageTitle("🆖资源导入-历史记录");
+            let livecfgfile = "hiker://files/rules/Src/Juying/liveconfig.json";
+            let livecfg = fetch(livecfgfile);
+            if(livecfg != ""){
+                eval("var liveconfig = " + livecfg);
+            }else{
+                var liveconfig = {};
+            }
+            var d = [];
+            let livedata = liveconfig['data']||[];
+            if(livedata.length>0){
+                d.push({
+                    title: '点击下方的订阅源条目，进行操作👇',
+                    col_type: "rich_text"
+                });
+                d.push({
+                    col_type: "line"
+                });
+                for(let i=0;i<livedata.length;i++){
+                    d.push({
+                        title: livedata[i],
+                        url: $(["更新缓存","删除订阅","导入聚直播","导入聚影√"],2,"").select((livecfgfile, url)=>{
+                            /*
+                                if(input=="选择"){
+                                    putMyVar('importinput', url);
+                                    back(true);
+                                }else if(input=="删除"){
+                                    let importrecord = JYconfig['importrecord']||[];
+                                    for(let i=0;i<importrecord.length;i++){
+                                        if(importrecord[i].url==url&&importrecord[i].type==getMyVar('importtype','0')){
+                                            importrecord.splice(i,1);
+                                            break;
+                                        }
+                                    }
+                                    JYconfig['importrecord'] = importrecord; 
+                                    writeFile(cfgfile, JSON.stringify(JYconfig));
+                                    refreshPage(false);
+                                }
+                                */
+                                return "hiker://empty";
+                            }, livecfgfile, livedata[i]),
+                        col_type: "text_1"
+                    });
+                }
+            }else{
+                d.push({
+                    title: '↻无记录',
+                    col_type: "rich_text"
+                });
+            }
+            setHomeResult(d);
+        }),
+        col_type: "text_2"
+    });
+    d.push({
         title: '导入聚直播',
         img: 'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fis4.mzstatic.com%2Fimage%2Fthumb%2FPurple3%2Fv4%2Fdf%2Ff6%2Fda%2Fdff6da83-47d7-9cb6-2398-1919c13837b4%2Fmzl.kgmnwodo.png%2F0x0ss-85.jpg&refer=http%3A%2F%2Fis4.mzstatic.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1638629349&t=2f6d967185fe2b9c54e8b230eb83e66c',
         col_type: 'icon_2_round',
