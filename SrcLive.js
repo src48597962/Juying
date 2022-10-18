@@ -1,6 +1,7 @@
 function Live() {
     addListener("onClose", $.toString(() => {
         clearMyVar('editmode');
+        clearMyVar('clearlive');
     }));
     var d = [];
     let livefile = "hiker://files/rules/Src/Juying/live.txt";
@@ -14,7 +15,7 @@ function Live() {
         var liveconfig = {};
     }
     let livedata = liveconfig['data']||[];
-    if(JYlive==""&&livedata.length>0){
+    if(JYlive==""&&livedata.length>0&&getMyVar('clearlive','0')!="1"){
         showLoading('发现订阅源，正在初始化');
         let YChtml = readFile('live'+md5(livedata[0])+'.txt')||request(livedata[0],{timeout:2000}).replace(/TV-/g,'TV').replace(/\[.*\]/g,'');
         if(YChtml.indexOf('#genre#')>-1){
@@ -435,6 +436,7 @@ function LiveSet() {
         url: $("确定清空聚影直播本地文件？").confirm(()=>{
             writeFile("hiker://files/rules/Src/Juying/live.txt", "");
             putMyVar('isEdit','1');
+            putMyVar('clearlive','1');
             return "toast://已清空";
         })
     });
