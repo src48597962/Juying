@@ -25,35 +25,28 @@ function Live() {
     let livedata = liveconfig['data']||[];
 
     let JYlivefile = "hiker://files/rules/Src/Juying/live.txt";
+    if(!getMyVar('JYlivedyurl')){
+        var JYlive=fetch(JYlivefile);
+    }
     if(livedata.length>0){
+        d.push({
+            title: '选择订阅👉',
+            url: 'hiker://empty',
+            col_type: 'scroll_button'
+        })
         for(let i=0;i<livedata.length;i++){
+            let dyname = livedata[i].name;
             let dyurl = livedata[i].url;
             d.push({
-                title: getMyVar('JYlivedyurl')==dyurl?'‘‘’’<b><span style="color:#3399cc">'+dyurl:dyurl,
+                title: getMyVar('JYlivedyurl')==dyurl?'‘‘’’<b><span style="color:#3399cc">'+dyname:dyname,
                 url: $("#noLoading#").lazyRule(() => {
-                    if(code=="exitedit"){
-                        clearMyVar('editmode');
-                        deleteItemByCls('editmenu');
-                        return "toast://退出编辑，正常观看";
-                    }else{
-                        putMyVar('editmode',code);
-                    }
-                    for(let i in editnames){
-                        if(editnames[i].split('|')[1]==code){
-                            updateItem(code,{title:'‘‘’’<b><span style="color:#3399cc">'+name})
-                        }else{
-                            updateItem(editnames[i].split('|')[1],{title:editnames[i].split('|')[0]})
-                        }
-                    }
+                    
                     return "toast://进入"+name+"模式";
                 }),
                 col_type: 'scroll_button'
             })
         }
     }
-
-
-    let JYlive=fetch(JYlivefile);
 
     if(JYlive==""&&livedata.length>0&&getMyVar('clearlive','0')!="1"){
         showLoading('发现订阅源，正在初始化');
