@@ -41,6 +41,9 @@ function Live() {
             }),
             col_type: 'scroll_button'
         })
+        d.push({
+            col_type: 'line'
+        })
         for(let i=0;i<livedata.length;i++){
             let dyname = livedata[i].name;
             let dyurl = livedata[i].url;
