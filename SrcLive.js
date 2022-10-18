@@ -140,7 +140,7 @@ function Live() {
                                 hideLoading();
                                 //refreshPage(false);
                                 deleteItem(groupname);
-                                deleteItemByCls('livelist');
+                                //deleteItemByCls('livelist');
                                 return "toast://已删除分组 <"+groupname+"> 所有地址";
                             }catch(e){
                                 hideLoading();
