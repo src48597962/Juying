@@ -252,8 +252,8 @@ function guanlidata(datalist) {
                         }catch(e){}
                     }
                     writeFile(JYlivefile, JYlives.join('\n'));
-                    deleteItemByCls(name);
-                    return "toast://已删除地址 <"+name+">";
+                    deleteItem(name);
+                    return "toast://已删除 <"+name+">";
                 }else if(getMyVar('editmode','0')=="urlrename"){
                     return $("","输入新的地址名").input((name,JYlivefile)=>{
                         if(input){
