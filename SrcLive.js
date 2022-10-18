@@ -263,6 +263,7 @@ function guanlidata(datalist) {
                                 try{
                                     if(JYlives[i].indexOf(',')>-1&&JYlives[i].indexOf(name)>-1){
                                         JYlives[i] = JYlives[i].replace(name,input);
+                                        log(name+'>'+input);
                                     }
                                 }catch(e){}
                             }
