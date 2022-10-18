@@ -217,6 +217,13 @@ function LiveSet() {
     setPageTitle("⚙直播设置⚙");
     var d = [];
     d.push({
+        title: '👦哥就是帅，不接受反驳...',
+        col_type: "rich_text"
+    });
+    d.push({
+        col_type: "line"
+    });
+    d.push({
         title: '📺 订阅源管理',
         url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
             addListener("onClose", $.toString(() => {
@@ -428,6 +435,9 @@ function LiveSet() {
                 return "toast://仓库先导入聚直播小程序";
             }
         })
+    });
+    d.push({
+        col_type: "line"
     });
     d.push({
         title: '🛠 编辑本地源',
