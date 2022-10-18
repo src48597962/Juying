@@ -233,14 +233,19 @@ function LiveSet() {
                 url: $("","输入通用格式的tv链接地址").input((livecfgfile,liveconfig)=>{
                     if(input){
                         let livedata = liveconfig['data']||[];
-                        let YChtml = request(input,{timeout:2000});
-                        if(YChtml.indexOf('#genre#')>-1){
-                            livedata.push(input);
-                            liveconfig['data'] = livedata;
-                            writeFile(livecfgfile, JSON.stringify(liveconfig));
-                            return "toast://增加自定义tv链接地址成功";
+                        if(livedata.indexOf(input)==-1){
+                            let YChtml = request(input,{timeout:2000});
+                            if(YChtml.indexOf('#genre#')>-1){
+                                livedata.push(input);
+                                liveconfig['data'] = livedata;
+                                writeFile(livecfgfile, JSON.stringify(liveconfig));
+                                refreshPage(false);
+                                return "toast://增加自定义tv链接地址成功";
+                            }else{
+                                return "toast://无法识别，需含#genre#的通用格式";
+                            }
                         }else{
-                            return "toast://无法识别，需含#genre#的通用格式";
+                            return "toast://已存在";
                         }
                     }else{
                         return "toast://地址不能为空";
@@ -332,6 +337,7 @@ function LiveSet() {
                                         var YClives = [];
                                     }
                                     if(YClives.length>0){
+                                        let ycnum = 0;
                                         let livefile = "hiker://files/rules/Src/Juying/live.txt";
                                         let JYlive=fetch(livefile);
                                         if(JYlive){
@@ -346,8 +352,9 @@ function LiveSet() {
                                                         id = JYlives.indexOf(YClives[i]);
                                                     }else if(YClives[i].indexOf('#genre#')>-1&&JYlives.indexOf(YClives[i])==-1){
                                                         id = JYlives.length+1;
-                                                    }else if(JYlives.indexOf(YClives[i])==-1&&YClives[i].trim()!=""){
+                                                    }else if(YClives[i].indexOf(',')>-1&&!JYlives.some(item => item.split(',')[1] === YClives[i])&&YClives[i].trim()!=""){
                                                         JYlives.splice(id, 0, YClives[i]);
+                                                        ycnum++;
                                                     }
                                                 }
                                             }
@@ -356,7 +363,10 @@ function LiveSet() {
                                         }
                                         writeFile(livefile, JYlives.join('\n'));
                                         hideLoading();
-                                        return "toast://成功导入";
+                                        if(ycnum>0){
+                                            putMyVar('isEdit','1');
+                                        }
+                                        return "toast://成功导入"+ycnum;
                                     }else{
                                         return "toast://文件异常，导入失败";
                                     }
@@ -402,6 +412,15 @@ function LiveSet() {
             }else{
                 return "toast://仓库先导入聚直播小程序";
             }
+        })
+    });
+    d.push({
+        title: '🛠 编辑本地源',
+        col_type: 'text_2',
+        url: $(["分组删除","分组改名","直播删除","直播改名"],2,"").select(()=>{
+            writeFile("hiker://files/rules/Src/Juying/live.txt", "");
+            putMyVar('isEdit','1');
+            return "toast://已清空";
         })
     });
     d.push({
