@@ -133,6 +133,8 @@ function Live() {
                                     }
                                 }catch(e){}
                             }
+                            writeFile(livefile, JYlives.join('\n'));
+                            refreshPage(false);
                             return "toast://已删除分组："+groupname;
                         }
                     },grouplist,grouplist[i],guanlidata,lists,livefile),
