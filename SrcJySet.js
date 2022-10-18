@@ -2431,7 +2431,7 @@ function Resourceimport(input,importtype,boxdy){
                     let livedata = liveconfig['data']||[];
                     for(let i=0;i<urls.length;i++){
                         let YChtml = request(urls[i],{timeout:2000}).replace(/TV-/g,'TV');
-                        if(YChtml.indexOf('#genre#')>-1&&livedata.indexOf(urls[i])==-1){
+                        if(YChtml.indexOf('#genre#')>-1 && !livedata.some(item => item.url==urls[i])){
                             livedata.push({name:'聚影'+livedata.length,url:urls[i]});
                             livenum++;
                         }
