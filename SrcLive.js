@@ -354,7 +354,7 @@ function LiveSet() {
                                                         id = JYlives.indexOf(YClives[i]);
                                                     }else if(YClives[i].indexOf('#genre#')>-1&&JYlives.indexOf(YClives[i])==-1){
                                                         id = JYlives.length+1;
-                                                    }else if(YClives[i].indexOf(',')>-1&&!JYlives.some(item => item.split(',')[1] === YClives[i])&&YClives[i].trim()!=""){
+                                                    }else if(YClives[i].indexOf(',')>-1&&!JYlives.some(item => item.split(',')[1]==YClives[i].split(',')[1])&&YClives[i].trim()!=""){
                                                         JYlives.splice(id, 0, YClives[i]);
                                                         ycnum++;
                                                     }
