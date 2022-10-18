@@ -340,6 +340,7 @@ function LiveSet() {
                                         var YClives = [];
                                     }
                                     if(YClives.length>0){
+                                        let importnum = 0;
                                         let livefile = "hiker://files/rules/Src/Juying/live.txt";
                                         let JYlive=fetch(livefile);
                                         if(JYlive){
@@ -360,18 +361,20 @@ function LiveSet() {
                                                     }else if(YClives[i].indexOf(',')>-1&&JYlives.indexOf(YClives[i])==-1&&YClives[i].trim()!=""){
                                                         JYlives.splice(id, py, YClives[i]);
                                                         py++;
+                                                        importnum++;
                                                     }
                                                 }
                                             }
                                         }else{
                                             var JYlives = YClives;
+                                            importnum = JYlives.length;
                                         }
                                         writeFile(livefile, JYlives.join('\n'));
                                         hideLoading();
-                                        if(JYlives.length>0){
+                                        if(importnum>0){
                                             putMyVar('isEdit','1');
                                         }
-                                        return "toast://成功导入"+JYlives.length;
+                                        return "toast://成功导入"+importnum;
                                     }else{
                                         return "toast://文件异常，导入失败";
                                     }
