@@ -331,6 +331,7 @@ function LiveSet() {
                                 }else if(input=="导入聚影√"){
                                     showLoading('叠加导入直播，最大万行限制');
                                     let YChtml = readFile('live'+md5(url)+'.txt')||request(url,{timeout:2000}).replace(/TV-/g,'TV').replace(/\[.*\]/g,'');
+                                    log(YChtml.slice(0,100))
                                     if(YChtml.indexOf('#genre#')>-1){
                                         if(!fileExist('live'+md5(url)+'.txt')){
                                             saveFile('live'+md5(url)+'.txt',YChtml);
@@ -339,6 +340,7 @@ function LiveSet() {
                                     }else{
                                         var YClives = [];
                                     }
+                                    log(YClives.length)
                                     if(YClives.length>0){
                                         let importnum = 0;
                                         let livefile = "hiker://files/rules/Src/Juying/live.txt";
