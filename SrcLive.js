@@ -230,9 +230,9 @@ function LiveSet() {
             d.push({
                 title: '‘‘’’<b>📺 订阅源管理</b> &nbsp &nbsp <small>添加自定义链接</small>',
                 img: "https://img.vinua.cn/images/QqyC.png",
-                url: $("","输入tv通用格式的链接地址").input((livecfgfile,liveconfig)=>{
+                url: $("","输入通用格式的tv链接地址").input((livecfgfile,liveconfig)=>{
                     if(input){
-                        let livedata = liveconfig['data']|[];
+                        let livedata = liveconfig['data']||[];
                         let YChtml = request(input,{timeout:2000});
                         if(YChtml.indexOf('#genre#')>-1){
                             livedata.push(input);
