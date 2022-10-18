@@ -41,7 +41,7 @@ function Live() {
             })
         }
         d.push({
-            title: '本地✋',
+            title: JYlivedyurl=="juying"?'本地✋':'本地',
             url: $("#noLoading#").lazyRule(() => {
                 putMyVar('JYlivedyurl','juying');
                 refreshPage(false);
@@ -53,7 +53,7 @@ function Live() {
             let dyname = livedata[i].name;
             let dyurl = livedata[i].url;
             d.push({
-                title: getMyVar('JYlivedyurl')==dyurl?dyname+'✋':dyname,
+                title: JYlivedyurl==dyurl?dyname+'✋':dyname,
                 url: $("#noLoading#").lazyRule((dyname,dyurl) => {
                     putMyVar('JYlivedyurl',dyurl);
                     refreshPage(false);
