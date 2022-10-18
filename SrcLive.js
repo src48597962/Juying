@@ -341,6 +341,7 @@ function LivePlay(name) {
     let JYlives = JYlive.split('\n');
     log(JYlives.length);
     if(!/^url/.test(getMyVar('editmode','0'))||getMyVar('JYlivedyurl','juying')!="juying"){
+        log('1')
         let urls = [];
         for(let i = 0;i<JYlives.length;i++){
             try{
@@ -353,6 +354,7 @@ function LivePlay(name) {
                 }
             }catch(e){}
         }
+        log(url)
         return JSON.stringify({
             urls: urls
         });
