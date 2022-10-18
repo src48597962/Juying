@@ -36,7 +36,7 @@ function Live() {
             col_type: 'line'
         })
         for (let i = 0; i < 9; i++) {
-            editmenu.push({
+            d.push({
                 col_type: "blank_block"
             })
         }
