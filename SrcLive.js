@@ -121,10 +121,11 @@ function Live() {
                             addItemAfter('liveloading', gldatalist);
                             return "hiker://empty";
                         }else if(getMyVar('editmode','0')=="groupdelete"){
-                            let JYlive=fetch(JYlivefile);
-                            let JYlives = JYlive.split('\n');
-                            for(let i=0;i<JYlives.length;i++){
-                                try{
+                            try{
+                                showLoading('加载中，请稍候...');
+                                let JYlive=fetch(JYlivefile);
+                                let JYlives = JYlive.split('\n');
+                                for(let i=0;i<JYlives.length;i++){
                                     if(JYlives[i].indexOf('#genre#')>-1&&JYlives[i].indexOf(groupname)>-1){
                                         JYlives.splice(i,1);
                                         i = i - 1;
@@ -132,7 +133,10 @@ function Live() {
                                         JYlives.splice(i,1);
                                         i = i - 1;
                                     }
-                                }catch(e){}
+                                }
+                                hideLoading();
+                            }catch(e){
+                                hideLoading();
                             }
                             writeFile(JYlivefile, JYlives.join('\n'));
                             refreshPage(false);
