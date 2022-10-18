@@ -101,7 +101,7 @@ function Live() {
                 return item.group==grouplist[i];
             })
             if(lists.length>0){
-                let groupname = grouplist[i].trim()?grouplist[i]:"无分组";
+                let groupname = grouplist[i].trim()?grouplist[i]:"未分组";
                 d.push({
                     title: index==0?'‘‘’’<b><span style="color:#3399cc">'+groupname:groupname,
                     url: $('#noLoading#').lazyRule((grouplist,groupname,guanlidata,datalist,JYlivefile) => {
