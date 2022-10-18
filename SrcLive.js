@@ -136,13 +136,15 @@ function Live() {
                                         i = i - 1;
                                     }
                                 }
+                                writeFile(JYlivefile, JYlives.join('\n'));
                                 hideLoading();
+                                refreshPage(false);
+                                return "toast://已删除分组 <"+groupname+"> 所有地址";
                             }catch(e){
                                 hideLoading();
+                                log(e.message);
+                                return "toast://删除分组失败，详情查看日志";
                             }
-                            writeFile(JYlivefile, JYlives.join('\n'));
-                            refreshPage(false);
-                            return "toast://已删除分组 <"+groupname+"> 所有地址";
                         }else if(getMyVar('editmode','0')=="grouprename"){
                             return $("","输入新的分组名").input((groupname,JYlivefile)=>{
                                 if(input){
