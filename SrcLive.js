@@ -131,7 +131,7 @@ function Live() {
                                     if(JYlives[i].indexOf('#genre#')>-1&&JYlives[i].indexOf(groupname)>-1){
                                         JYlives.splice(i,1);
                                         i = i - 1;
-                                    }else if(JYlives[i].indexOf(',')>-1&&datalist.some(item => item.name==JYlives[i].split(',')[0])){
+                                    }else if(JYlives[i].indexOf('#genre#')==-1&&JYlives[i].indexOf(',')>-1&&datalist.some(item => item.name==JYlives[i].split(',')[0])){
                                         JYlives.splice(i,1);
                                         i = i - 1;
                                     }
@@ -307,7 +307,7 @@ function guanlidata(datalist) {
                 }else if(getMyVar('editmode','0')=="urldelete"){
                     for(let i=0;i<JYlives.length;i++){
                         try{
-                            if(JYlives[i].indexOf(',')>-1&&JYlives[i].indexOf(name)>-1){
+                            if(JYlives[i].indexOf('#genre#')==-1&&JYlives[i].indexOf(',')>-1&&JYlives[i].indexOf(name)>-1){
                                 JYlives.splice(i,1);
                                 i = i - 1;
                             }
@@ -514,6 +514,8 @@ function LiveSet() {
                                                         importnum++;
                                                     }
                                                 }
+                                                log(id+'#genre#');
+                                                log(py);
                                             }
                                         }else{
                                             var JYlives = YClives;
