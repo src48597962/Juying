@@ -3,11 +3,18 @@ function Live() {
         clearMyVar('editmode');
         clearMyVar('clearlive');
         clearMyVar('JYlivenum');
+        clearMyVar('JYlivedyurl');
     }));
     var d = [];
-    let JYlivefile = "hiker://files/rules/Src/Juying/live.txt";
-    let JYlive=fetch(JYlivefile);
-
+    d.push({
+        title: '<b>聚影√</b> &nbsp &nbsp <small>⚙直播设置⚙</small>',
+        img: "https://img.vinua.cn/images/QqyC.png",
+        url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
+                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLive.js');
+                LiveSet();
+            }),
+        col_type: 'avatar'
+    });
     let livecfgfile = "hiker://files/rules/Src/Juying/liveconfig.json";
     let livecfg = fetch(livecfgfile);
     if(livecfg != ""){
@@ -16,6 +23,37 @@ function Live() {
         var liveconfig = {};
     }
     let livedata = liveconfig['data']||[];
+
+    let JYlivefile = "hiker://files/rules/Src/Juying/live.txt";
+    if(livedata.length>0){
+        for(let i=0;i<livedata.length;i++){
+            d.push({
+                title: getMyVar('JYlivedyurl')==livedata[i]?'‘‘’’<b><span style="color:#3399cc">'+livedata[i]:livedata[i],
+                url: $("#noLoading#").lazyRule(() => {
+                    if(code=="exitedit"){
+                        clearMyVar('editmode');
+                        deleteItemByCls('editmenu');
+                        return "toast://退出编辑，正常观看";
+                    }else{
+                        putMyVar('editmode',code);
+                    }
+                    for(let i in editnames){
+                        if(editnames[i].split('|')[1]==code){
+                            updateItem(code,{title:'‘‘’’<b><span style="color:#3399cc">'+name})
+                        }else{
+                            updateItem(editnames[i].split('|')[1],{title:editnames[i].split('|')[0]})
+                        }
+                    }
+                    return "toast://进入"+name+"模式";
+                }),
+                col_type: 'scroll_button'
+            })
+        }
+    }
+
+
+    let JYlive=fetch(JYlivefile);
+
     if(JYlive==""&&livedata.length>0&&getMyVar('clearlive','0')!="1"){
         showLoading('发现订阅源，正在初始化');
         log('本地源文件为空且有订阅，默认导入第一个订阅');
@@ -34,15 +72,7 @@ function Live() {
     }else{
         var JYlives = [];
     }
-    d.push({
-        title: '<b>聚影√</b> &nbsp &nbsp <small>⚙直播设置⚙</small>',
-        img: "https://img.vinua.cn/images/QqyC.png",
-        url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
-                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLive.js');
-                LiveSet();
-            }),
-        col_type: 'avatar'
-    });
+    
     if(JYlives.length>0){
         let datalist = [];
         let datalist2 = [];
@@ -418,7 +448,7 @@ function LiveSet() {
                 for(let i=0;i<livedata.length;i++){
                     d.push({
                         title: livedata[i],
-                        url: $(["更新缓存","删除订阅","导入聚直播","导入聚影√"],2,"").select((livecfgfile, url)=>{
+                        url: $(["更新缓存","删除订阅","导入聚直播","导入聚影√","复制链接"],2,"").select((livecfgfile, url)=>{
                             try{
                                 if(input=="更新缓存"){
                                     showLoading('正在缓存，请稍后.');
@@ -529,6 +559,8 @@ function LiveSet() {
                                     }else{
                                         return "toast://文件异常，导入失败";
                                     }
+                                }else if(input=="复制链接"){
+                                    copy(url);
                                 }
                                 return "hiker://empty";
                             }catch(e){
