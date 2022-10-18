@@ -697,15 +697,6 @@ function yiji() {
             col_type: 'icon_5'
         });
         d.push({
-            title: "直播",
-            url: $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
-                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLive.js');
-                    Live();
-                }),
-            pic_url: 'https://lanmeiguojiang.com/tubiao/more/87.png',
-            col_type: 'icon_5'
-        });
-        d.push({
             title: "展示",
             url: $("hiker://empty##fypage#noRecordHistory##noHistory#").rule(() => {
                     require(config.依赖);
@@ -714,7 +705,15 @@ function yiji() {
             pic_url: 'https://lanmeiguojiang.com/tubiao/more/105.png',
             col_type: 'icon_5'
         });
-        
+        d.push({
+            title: "直播",
+            url: $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLive.js');
+                    Live();
+                }),
+            pic_url: 'https://lanmeiguojiang.com/tubiao/more/87.png',
+            col_type: 'icon_5'
+        });
         
         d.push({
             col_type: 'line'
