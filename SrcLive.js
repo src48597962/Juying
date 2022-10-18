@@ -139,6 +139,8 @@ function Live() {
                                 writeFile(JYlivefile, JYlives.join('\n'));
                                 hideLoading();
                                 refreshPage(false);
+                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLive.js');
+                                editmode();
                                 return "toast://已删除分组 <"+groupname+"> 所有地址";
                             }catch(e){
                                 hideLoading();
