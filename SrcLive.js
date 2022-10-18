@@ -35,8 +35,13 @@ function Live() {
         d.push({
             col_type: 'line'
         })
+        for (let i = 0; i < 9; i++) {
+            editmenu.push({
+                col_type: "blank_block"
+            })
+        }
         d.push({
-            title: '本地👉',
+            title: '本地✋',
             url: $("#noLoading#").lazyRule(() => {
                 putMyVar('JYlivedyurl','juying');
                 refreshPage(false);
@@ -48,7 +53,7 @@ function Live() {
             let dyname = livedata[i].name;
             let dyurl = livedata[i].url;
             d.push({
-                title: getMyVar('JYlivedyurl')==dyurl?'‘‘’’<b><span style="color:#3399cc">'+dyname:dyname,
+                title: getMyVar('JYlivedyurl')==dyurl?dyname+'✋':dyname,
                 url: $("#noLoading#").lazyRule((dyname,dyurl) => {
                     putMyVar('JYlivedyurl',dyurl);
                     refreshPage(false);
