@@ -508,12 +508,11 @@ function LiveSet() {
                                                     }else if(YClives[i].indexOf('#genre#')>-1&&JYlives.indexOf(YClives[i])==-1){
                                                         id = JYlives.length+1;
                                                         py = 0;
-                                                        JYlives.splice(id, 0, YClives[i]);
+                                                        JYlives.splice(id+1, 0, YClives[i]);
                                                     }else if(YClives[i].indexOf(',')>-1&&JYlives.indexOf(YClives[i])==-1&&YClives[i].trim()!=""){
-                                                        JYlives.splice(id+py, 0, YClives[i]);
+                                                        JYlives.splice(id+1+py, 0, YClives[i]);
                                                         py++;
                                                         importnum++;
-                                                        log(id+py)
                                                     }
                                                 }
                                             }
