@@ -725,7 +725,15 @@ function yiji() {
                 col_type: "blank_block"
             })
         }
-
+        d.push({
+            title: fold === '1' ? '““””<b><span style="color: #F54343">∨</span></b>' : '““””<b><span style="color:' + Color + '">∧</span></b>',
+            url: $('#noLoading#').lazyRule((fold) => {
+                putMyVar('SrcJuying$fold', fold === '1' ? '0' : '1');
+                refreshPage(false);
+                return "hiker://empty";
+            }, fold),
+            col_type: 'scroll_button',
+        })
         for (var i in categorys) {
             d.push({
                 title: getMyVar('SrcJuying$listTab', 'teleplay') === listTabs[i] ? '““””<b><span style="color:' + Color + '">' + categorys[i] + '</span></b>' : categorys[i],
@@ -737,6 +745,7 @@ function yiji() {
                 col_type: 'scroll_button'
             });
         }
+        /*
         d.push({
             title: "直播",
             url: $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
@@ -745,6 +754,7 @@ function yiji() {
                 }),
             col_type: 'scroll_button'
         });
+        */
         d.push({
             col_type: "blank_block"
         });
