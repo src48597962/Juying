@@ -2,6 +2,7 @@ function Live() {
     addListener("onClose", $.toString(() => {
         clearMyVar('editmode');
         clearMyVar('clearlive');
+        clearMyVar('JYlivenum');
     }));
     var d = [];
     let livefile = "hiker://files/rules/Src/Juying/live.txt";
@@ -56,6 +57,7 @@ function Live() {
             }catch(e){}
         }
         let obj = {};
+        putMyVar('JYlivenum',datalist.length);
         datalist = datalist.reduce((newArr, next) => {
             obj[next.name] ? "" : (obj[next.name] = true && newArr.push(next));
             return newArr;
@@ -501,7 +503,7 @@ function LiveSet() {
                         }
                     }catch(e){}
                 }
-                showLoading('正在检测'+urls.length+'条，请保持屏幕亮屏');
+                showLoading('检测'+urls.length+'条，保持屏幕亮屏');
                 let fails = [];
                 for (var i=0;i<urls.length;i++) {
                     let UrlList = [];
@@ -539,6 +541,10 @@ function LiveSet() {
                 return "toast://没有直播数据源";
             }
         })
+    });
+    d.push({
+        title: '聚影本地直播源地址共有：'+getMyVar('JYlivenum','0'),
+        col_type: 'rich_text'
     });
     setHomeResult(d);
 }
