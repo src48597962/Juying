@@ -228,8 +228,8 @@ function guanlidata(datalist) {
             img: 'https://lanmeiguojiang.com/tubiao/ke/156.png',//https://lanmeiguojiang.com/tubiao/more/228.png
             col_type: 'icon_2_round',
             url: $('#noLoading#').lazyRule((name) => {
-                let JYlivefile=fetch("hiker://files/rules/Src/Juying/live.txt");
-                let JYlives = JYlivefile.split('\n');
+                let livefile=fetch("hiker://files/rules/Src/Juying/live.txt");
+                let JYlives = livefile.split('\n');
                 if(getMyVar('editmode','0')=="0"){
                     let urls = [];
                     for(let i = 0;i<JYlives.length;i++){
