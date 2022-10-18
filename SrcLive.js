@@ -235,7 +235,7 @@ function Live() {
         });
     }
     setHomeResult(d);
-    if(getMyVar('editmode')){
+    if(getMyVar('editmode')&&getMyVar('JYlivedyurl','juying')=="juying"){
         let editnames = ["分组删除|groupdelete","分组改名|grouprename","地址删除|urldelete","地址改名|urlrename","退出编辑|exitedit"];
         let editmenu = [];
         for(let i=0;i<editnames.length;i++){
@@ -243,7 +243,7 @@ function Live() {
             let code = editnames[i].split('|')[1];
             editmenu.push({
                 title: getMyVar('editmode')==code?'‘‘’’<b><span style="color:#3399cc">'+name:name,
-                url: $("#noLoading#").lazyRule((name,code,editnames) => {
+                url: getMyVar('JYlivedyurl','juying')=="juying"?$("#noLoading#").lazyRule((name,code,editnames) => {
                     if(code=="exitedit"){
                         clearMyVar('editmode');
                         deleteItemByCls('editmenu');
@@ -259,7 +259,7 @@ function Live() {
                         }
                     }
                     return "toast://进入"+name+"模式";
-                },name,code,editnames),
+                },name,code,editnames):"toast://当前为远程订阅源，无法进入编辑模式",
                 col_type: 'scroll_button',
                 extra: {
                     id: code,
@@ -632,11 +632,11 @@ function LiveSet() {
     d.push({
         title: '🛠 编辑本地源',
         col_type: 'text_2',
-        url: $('#noLoading#').lazyRule(() => {
+        url: getMyVar('JYlivedyurl','juying')=="juying"?$('#noLoading#').lazyRule(() => {
             putMyVar('editmode','1');
             back(true);
             return "toast://进入编辑模式，选择操作菜单";
-        })
+        }):"toast://当前为远程订阅源，无法进入编辑模式"
     });
     d.push({
         title: '♻ 清空直播源',
