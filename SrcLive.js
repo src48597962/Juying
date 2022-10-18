@@ -135,7 +135,26 @@ function Live() {
                             }
                             writeFile(livefile, JYlives.join('\n'));
                             refreshPage(false);
-                            return "toast://已删除分组："+groupname;
+                            return "toast://已删除分组 <"+groupname+"> 所有地址";
+                        }else if(getMyVar('editmode','0')=="grouprename"){
+                            return $("","输入新的分组名").input((groupname,livefile)=>{
+                                if(input){
+                                    let JYlive=fetch(livefile);
+                                    let JYlives = JYlive.split('\n');
+                                    for(let i=0;i<JYlives.length;i++){
+                                        try{
+                                            if(JYlives[i].indexOf('#genre#')>-1&&JYlives[i].indexOf(groupname)>-1){
+                                                JYlives[i] = JYlives[i].replace(groupname,input);
+                                            }
+                                        }catch(e){}
+                                    }
+                                    writeFile(livefile, JYlives.join('\n'));
+                                    refreshPage(false);
+                                    return "toast://分组 <"+groupname+"> 改名为《"+input+"》";
+                                }else{
+                                    return "toast://输入不能为空"
+                                }
+                            },groupname,livefile)
                         }
                     },grouplist,grouplist[i],guanlidata,lists,livefile),
                     col_type: "scroll_button",
