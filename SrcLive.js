@@ -354,7 +354,7 @@ function LivePlay(name) {
                 }
             }catch(e){}
         }
-        log(url)
+        log(urls)
         return JSON.stringify({
             urls: urls
         });
