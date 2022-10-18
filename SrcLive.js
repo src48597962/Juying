@@ -17,6 +17,7 @@ function Live() {
     let livedata = liveconfig['data']||[];
     if(JYlive==""&&livedata.length>0&&getMyVar('clearlive','0')!="1"){
         showLoading('发现订阅源，正在初始化');
+        java.lang.Thread.sleep(100);
         let YChtml = readFile('live'+md5(livedata[0])+'.txt')||request(livedata[0],{timeout:2000}).replace(/TV-/g,'TV').replace(/\[.*\]/g,'');
         if(YChtml.indexOf('#genre#')>-1){
             if(!fileExist('live'+md5(livedata[0])+'.txt')){
