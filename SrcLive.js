@@ -17,7 +17,7 @@ function Live() {
     let livedata = liveconfig['data']||[];
     if(JYlive==""&&livedata.length>0&&getMyVar('clearlive','0')!="1"){
         showLoading('发现订阅源，正在初始化');
-        java.lang.Thread.sleep(100);
+        log('本地源文件为空且有订阅，默认导入第一个订阅');
         let YChtml = readFile('live'+md5(livedata[0])+'.txt')||request(livedata[0],{timeout:2000}).replace(/TV-/g,'TV').replace(/\[.*\]/g,'');
         if(YChtml.indexOf('#genre#')>-1){
             if(!fileExist('live'+md5(livedata[0])+'.txt')){
@@ -475,15 +475,6 @@ function LiveSet() {
             let JYlivefile="hiker://files/rules/Src/Juying/live.txt";
             let JYlive = fetch(JYlivefile);
             if(JYlive!=""){
-                let JYlives = JYlive.split('\n');
-                for(let i = 0; i < JYlives.length; i++){
-                    try{
-                        if(JYlives[i].indexOf(',')>-1&&JYlives[i].indexOf('#genre#')==-1){
-                            urls.push(JYlives[i]);
-                        }
-                    }catch(e){}
-                }
-                let fails = [];
                 var task = function(obj) {
                     try{
                         let url = obj.split(',')[1];
@@ -497,6 +488,15 @@ function LiveSet() {
                     return 1;
                 }
                 showLoading('正在检测'+urls.length+'条，请保持屏幕亮屏');
+                let JYlives = JYlive.split('\n');
+                for(let i = 0; i < JYlives.length; i++){
+                    try{
+                        if(JYlives[i].indexOf(',')>-1&&JYlives[i].indexOf('#genre#')==-1){
+                            urls.push(JYlives[i]);
+                        }
+                    }catch(e){}
+                }
+                let fails = [];
                 for (var i=0;i<urls.length;i++) {
                     let UrlList = [];
                     let p = i + 799;
