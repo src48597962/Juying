@@ -150,7 +150,7 @@ function Live() {
                                     }
                                     writeFile(livefile, JYlives.join('\n'));
                                     refreshPage(false);
-                                    return "toast://分组 <"+groupname+"> 改名为《"+input+"》";
+                                    return "toast:// <"+groupname+"> 分组改名为 <"+input+">";
                                 }else{
                                     return "toast://输入不能为空"
                                 }
@@ -228,19 +228,52 @@ function guanlidata(datalist) {
             img: 'https://lanmeiguojiang.com/tubiao/ke/156.png',//https://lanmeiguojiang.com/tubiao/more/228.png
             col_type: 'icon_2_round',
             url: $('#noLoading#').lazyRule((name) => {
-                let urls = [];
                 let JYlivefile=fetch("hiker://files/rules/Src/Juying/live.txt");
                 let JYlives = JYlivefile.split('\n');
-                for(var i = 0; i < JYlives.length; i++){
-                    try{
-                        if(JYlives[i].indexOf(',')>-1&&JYlives[i].split(',')[0].trim()==name){
-                            urls.push(JYlives[i].split(',')[1] + '#isVideo=true#');
+                if(getMyVar('editmode','0')=="0"){
+                    let urls = [];
+                    for(let i = 0;i<JYlives.length;i++){
+                        try{
+                            if(JYlives[i].indexOf(',')>-1&&JYlives[i].split(',')[0].trim()==name){
+                                urls.push(JYlives[i].split(',')[1] + '#isVideo=true#');
+                            }
+                        }catch(e){}
+                    }
+                    return JSON.stringify({
+                        urls: urls
+                    });
+                }else if(getMyVar('editmode','0')=="urldelete"){
+                    for(let i=0;i<JYlives.length;i++){
+                        try{
+                            if(JYlives[i].indexOf(',')>-1&&JYlives[i].indexOf(name)>-1){
+                                JYlives.splice(i,1);
+                                i = i - 1;
+                            }
+                        }catch(e){}
+                    }
+                    writeFile(livefile, JYlives.join('\n'));
+                    refreshPage(false);
+                    return "toast://已删除地址 <"+name+">";
+                }else if(getMyVar('editmode','0')=="urlrename"){
+                    return $("","输入新的地址名").input((name,livefile)=>{
+                        if(input){
+                            let JYlive=fetch(livefile);
+                            let JYlives = JYlive.split('\n');
+                            for(let i=0;i<JYlives.length;i++){
+                                try{
+                                    if(JYlives[i].indexOf(',')>-1&&JYlives[i].indexOf(name)>-1){
+                                        JYlives[i] = JYlives[i].replace(name,input);
+                                    }
+                                }catch(e){}
+                            }
+                            writeFile(livefile, JYlives.join('\n'));
+                            refreshPage(false);
+                            return "toast:// <"+name+"> 改名为 <"+input+">";
+                        }else{
+                            return "toast://输入不能为空"
                         }
-                    }catch(e){}
+                    },name,livefile)
                 }
-                return JSON.stringify({
-                    urls: urls
-                }); 
             },datalist[i].name),
             extra: {
                 cls: 'livelist'
