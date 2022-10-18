@@ -325,7 +325,7 @@ function guanlidata(datalist) {
             col_type: 'icon_2_round',
             url: $('#noLoading#').lazyRule((name) => {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLive.js');
-                LivePlay(name);
+                return LivePlay(name);
             },datalist[i].name),
             extra: {
                 id: datalist[i].name,
@@ -339,9 +339,7 @@ function LivePlay(name) {
     let JYlivefile= "hiker://files/rules/Src/Juying/live.txt";
     let JYlive= getMyVar('JYlivedyurl','juying')=="juying"?fetch(JYlivefile):readFile('live'+md5(getMyVar('JYlivedyurl'))+'.txt');
     let JYlives = JYlive.split('\n');
-    log(JYlives.length);
     if(!/^url/.test(getMyVar('editmode','0'))||getMyVar('JYlivedyurl','juying')!="juying"){
-        log('1')
         let urls = [];
         for(let i = 0;i<JYlives.length;i++){
             try{
@@ -354,7 +352,6 @@ function LivePlay(name) {
                 }
             }catch(e){}
         }
-        log(urls)
         return JSON.stringify({
             urls: urls
         });
