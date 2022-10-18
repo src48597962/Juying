@@ -267,6 +267,7 @@ function LiveSet() {
                     d.push({
                         title: livedata[i],
                         url: $(["更新缓存","删除订阅","导入聚直播","导入聚影√"],2,"").select((livecfgfile, url)=>{
+                            try{
                                 if(input=="更新缓存"){
                                     showLoading('正在缓存，请稍后.');
                                     let YChtml = request(url,{timeout:2000}).replace(/TV-/g,'TV').replace(/\[.*\]/g,'');
@@ -371,8 +372,13 @@ function LiveSet() {
                                         return "toast://文件异常，导入失败";
                                     }
                                 }
-                                return "hiker://empty";
-                            }, livecfgfile, livedata[i]),
+                            return "hiker://empty";
+                            }catch(e){
+                                hideLoading();
+                                log(e.message);
+                                return "toast://操作异常，详情查看日志";
+                            }
+                        }, livecfgfile, livedata[i]),
                         col_type: "text_1"
                     });
                 }
