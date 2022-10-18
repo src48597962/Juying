@@ -111,7 +111,7 @@ function Live() {
                                 updateItem(grouplist[i],{title:grouplist[i]})
                             }
                         }
-                        if(getMyVar('editmode','0')=="0"){
+                        if(!/^group/.test(getMyVar('editmode','0'))){
                             deleteItemByCls('livelist');
                             var lists = datalist.filter(item => {
                                 return item.name.includes(input);
@@ -231,12 +231,16 @@ function guanlidata(datalist) {
                 let JYlivefile="hiker://files/rules/Src/Juying/live.txt";
                 let JYlive=fetch(JYlivefile);
                 let JYlives = JYlive.split('\n');
-                if(getMyVar('editmode','0')=="0"){
+                if(!/^url/.test(getMyVar('editmode','0'))){
                     let urls = [];
                     for(let i = 0;i<JYlives.length;i++){
                         try{
                             if(JYlives[i].indexOf(',')>-1&&JYlives[i].split(',')[0].trim()==name){
-                                urls.push(JYlives[i].split(',')[1] + '#isVideo=true#');
+                                let url = JYlives[i].split(',')[1].trim();
+                                if(/\\r^/.test(url)){
+                                    url = url.slice(0, url.length - 2);
+                                }
+                                urls.push(url + '#isVideo=true#');
                             }
                         }catch(e){}
                     }
