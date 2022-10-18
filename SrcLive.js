@@ -78,6 +78,7 @@ function Live() {
             desc: "搜你想要的...",
             col_type: "input",
             extra: {
+                id: "livesearch",
                 titleVisible: true
             }
         });
@@ -94,6 +95,7 @@ function Live() {
             }
             return temp;
         }
+        
         grouplist = uniq(grouplist);
         let index = 0;
         for(var i in grouplist){
@@ -101,7 +103,7 @@ function Live() {
                 return item.group==grouplist[i];
             })
             if(lists.length>0){
-                let groupname = grouplist[i].trim()?grouplist[i]:"未分组";
+                let groupname = grouplist[i]?grouplist[i]:"未分组";
                 d.push({
                     title: index==0?'‘‘’’<b><span style="color:#3399cc">'+groupname:groupname,
                     url: $('#noLoading#').lazyRule((grouplist,groupname,guanlidata,datalist,JYlivefile) => {
@@ -531,7 +533,41 @@ function LiveSet() {
     d.push({
         title: '🛠 编辑本地源',
         col_type: 'text_2',
-        url: $(["分组删除","分组改名","地址删除","地址改名","退出编辑"],2,"").select(()=>{
+        url: $('#noLoading#').lazyRule(() => {
+            let editnames = ["分组删除|groupdelete","分组改名|grouprename","地址删除|urldelete","地址改名|urlrename","退出编辑|exitedit"];
+            let editmenu = [];
+            editmenu.push({
+                col_type: 'line',
+                extra: {
+                    cls: 'editmenu'
+                }
+            })
+            for(let i=0;i<editnames.length;i++){
+                editmenu.push({
+                    title: editnames[i],
+                    url: $("#noLoading#").lazyRule((editname) => {
+                        let name = editname.split('|')[0];
+                        let code = editname.split('|')[1];
+                        if(code=="exitedit"){
+                            clearMyVar('editmode');
+                            deleteItemByCls('editmenu');
+                            return "toast://退出编辑，正常观看";
+                        }else{
+                            putMyVar('editmode',code);
+                        }
+                        return "toast://进入"+name+"模式";
+                    },editnames[i]),
+                    col_type: 'scroll_button',
+                    extra: {
+                        cls: 'editmenu'
+                    }
+                })
+            }
+            addItemBefore('livesearch',editmenu);
+            back(false);
+            return "toast://进入编辑模式，选择操作菜单";
+        })
+        /*$(["分组删除","分组改名","地址删除","地址改名","退出编辑"],2,"").select(()=>{
             if(input=="分组删除"){
                 putMyVar('editmode','groupdelete');
             }else if(input=="分组改名"){
@@ -547,7 +583,7 @@ function LiveSet() {
             }
             back(false);
             return "toast://进入"+input+"模式";
-        })
+        })*/
     });
     d.push({
         title: '♻ 清空直播源',
