@@ -536,15 +536,9 @@ function LiveSet() {
         url: $('#noLoading#').lazyRule(() => {
             let editnames = ["分组删除|groupdelete","分组改名|grouprename","地址删除|urldelete","地址改名|urlrename","退出编辑|exitedit"];
             let editmenu = [];
-            editmenu.push({
-                col_type: 'line',
-                extra: {
-                    cls: 'editmenu'
-                }
-            })
             for(let i=0;i<editnames.length;i++){
                 editmenu.push({
-                    title: editnames[i],
+                    title: editnames[i].split('|')[0],
                     url: $("#noLoading#").lazyRule((editname) => {
                         let name = editname.split('|')[0];
                         let code = editname.split('|')[1];
@@ -563,27 +557,24 @@ function LiveSet() {
                     }
                 })
             }
-            addItemBefore('livesearch',editmenu);
+            editmenu.push({
+                col_type: 'line',
+                extra: {
+                    cls: 'editmenu'
+                }
+            })
+            for (let i = 0; i < 9; i++) {
+                editmenu.push({
+                    col_type: "blank_block",
+                    extra: {
+                        cls: 'editmenu'
+                    }
+                })
+            }
+            addItemAfter('livesearch',editmenu);
             back(false);
             return "toast://进入编辑模式，选择操作菜单";
         })
-        /*$(["分组删除","分组改名","地址删除","地址改名","退出编辑"],2,"").select(()=>{
-            if(input=="分组删除"){
-                putMyVar('editmode','groupdelete');
-            }else if(input=="分组改名"){
-                putMyVar('editmode','grouprename');
-            }else if(input=="地址删除"){
-                putMyVar('editmode','urldelete');
-            }else if(input=="地址改名"){
-                putMyVar('editmode','urlrename');
-            }else if(input=="退出编辑"){
-                clearMyVar('editmode');
-                back(false);
-                return "toast://退出编辑，正常观看";
-            }
-            back(false);
-            return "toast://进入"+input+"模式";
-        })*/
     });
     d.push({
         title: '♻ 清空直播源',
