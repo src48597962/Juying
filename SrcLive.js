@@ -259,13 +259,16 @@ function guanlidata(datalist) {
                         if(input){
                             let JYlive=fetch(JYlivefile);
                             let JYlives = JYlive.split('\n');
+                            log(JYlives.length)
                             for(let i=0;i<JYlives.length;i++){
                                 try{
                                     if(JYlives[i].indexOf(',')>-1&&JYlives[i].indexOf(name)>-1){
                                         JYlives[i] = JYlives[i].replace(name,input);
                                         log(name+'>'+input);
                                     }
-                                }catch(e){}
+                                }catch(e){
+                                    log(e.message)
+                                }
                             }
                             writeFile(JYlivefile, JYlives.join('\n'));
                             updateItem(name, {
