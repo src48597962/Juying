@@ -5,8 +5,8 @@ function Live() {
         clearMyVar('JYlivenum');
     }));
     var d = [];
-    let livefile = "hiker://files/rules/Src/Juying/live.txt";
-    let JYlive=fetch(livefile);
+    let JYlivefile = "hiker://files/rules/Src/Juying/live.txt";
+    let JYlive=fetch(JYlivefile);
 
     let livecfgfile = "hiker://files/rules/Src/Juying/liveconfig.json";
     let livecfg = fetch(livecfgfile);
@@ -24,7 +24,7 @@ function Live() {
             if(!fileExist('live'+md5(livedata[0])+'.txt')){
                 saveFile('live'+md5(livedata[0])+'.txt',YChtml);
             }
-            writeFile(livefile, YChtml);
+            writeFile(JYlivefile, YChtml);
             JYlive = YChtml;
         }
         hideLoading();
@@ -103,7 +103,7 @@ function Live() {
             if(lists.length>0){
                 d.push({
                     title: index==0?'‘‘’’<b><span style="color:#3399cc">'+grouplist[i]:grouplist[i],
-                    url: $('#noLoading#').lazyRule((grouplist,groupname,guanlidata,datalist,livefile) => {
+                    url: $('#noLoading#').lazyRule((grouplist,groupname,guanlidata,datalist,JYlivefile) => {
                         for(let i in grouplist){
                             if(grouplist[i]==groupname){
                                 updateItem(groupname,{title:'‘‘’’<b><span style="color:#3399cc">'+groupname})
@@ -120,7 +120,7 @@ function Live() {
                             addItemAfter('liveloading', gldatalist);
                             return "hiker://empty";
                         }else if(getMyVar('editmode','0')=="groupdelete"){
-                            let JYlive=fetch(livefile);
+                            let JYlive=fetch(JYlivefile);
                             let JYlives = JYlive.split('\n');
                             for(let i=0;i<JYlives.length;i++){
                                 try{
@@ -133,13 +133,13 @@ function Live() {
                                     }
                                 }catch(e){}
                             }
-                            writeFile(livefile, JYlives.join('\n'));
+                            writeFile(JYlivefile, JYlives.join('\n'));
                             refreshPage(false);
                             return "toast://已删除分组 <"+groupname+"> 所有地址";
                         }else if(getMyVar('editmode','0')=="grouprename"){
-                            return $("","输入新的分组名").input((groupname,livefile)=>{
+                            return $("","输入新的分组名").input((groupname,JYlivefile)=>{
                                 if(input){
-                                    let JYlive=fetch(livefile);
+                                    let JYlive=fetch(JYlivefile);
                                     let JYlives = JYlive.split('\n');
                                     for(let i=0;i<JYlives.length;i++){
                                         try{
@@ -148,15 +148,15 @@ function Live() {
                                             }
                                         }catch(e){}
                                     }
-                                    writeFile(livefile, JYlives.join('\n'));
+                                    writeFile(JYlivefile, JYlives.join('\n'));
                                     refreshPage(false);
                                     return "toast:// <"+groupname+"> 分组改名为 <"+input+">";
                                 }else{
                                     return "toast://输入不能为空"
                                 }
-                            },groupname,livefile)
+                            },groupname,JYlivefile)
                         }
-                    },grouplist,grouplist[i],guanlidata,lists,livefile),
+                    },grouplist,grouplist[i],guanlidata,lists,JYlivefile),
                     col_type: "scroll_button",
                     extra: {
                         id: grouplist[i]
@@ -228,8 +228,8 @@ function guanlidata(datalist) {
             img: 'https://lanmeiguojiang.com/tubiao/ke/156.png',//https://lanmeiguojiang.com/tubiao/more/228.png
             col_type: 'icon_2_round',
             url: $('#noLoading#').lazyRule((name) => {
-                let livefile=fetch("hiker://files/rules/Src/Juying/live.txt");
-                let JYlives = livefile.split('\n');
+                let JYlivefile=fetch("hiker://files/rules/Src/Juying/live.txt");
+                let JYlives = JYlivefile.split('\n');
                 if(getMyVar('editmode','0')=="0"){
                     let urls = [];
                     for(let i = 0;i<JYlives.length;i++){
@@ -251,13 +251,13 @@ function guanlidata(datalist) {
                             }
                         }catch(e){}
                     }
-                    writeFile(livefile, JYlives.join('\n'));
-                    refreshPage(false);
+                    writeFile(JYlivefile, JYlives.join('\n'));
+                    deleteItemByCls(name);
                     return "toast://已删除地址 <"+name+">";
                 }else if(getMyVar('editmode','0')=="urlrename"){
-                    return $("","输入新的地址名").input((name,livefile)=>{
+                    return $("","输入新的地址名").input((name,JYlivefile)=>{
                         if(input){
-                            let JYlive=fetch(livefile);
+                            let JYlive=fetch(JYlivefile);
                             let JYlives = JYlive.split('\n');
                             for(let i=0;i<JYlives.length;i++){
                                 try{
@@ -266,16 +266,19 @@ function guanlidata(datalist) {
                                     }
                                 }catch(e){}
                             }
-                            writeFile(livefile, JYlives.join('\n'));
-                            refreshPage(false);
+                            writeFile(JYlivefile, JYlives.join('\n'));
+                            updateItem(name, {
+                                title: input
+                            });
                             return "toast:// <"+name+"> 改名为 <"+input+">";
                         }else{
                             return "toast://输入不能为空"
                         }
-                    },name,livefile)
+                    },name,JYlivefile)
                 }
             },datalist[i].name),
             extra: {
+                id: datalist[i].name,
                 cls: 'livelist'
             }
         });
@@ -426,8 +429,8 @@ function LiveSet() {
                                     }
                                     if(YClives.length>0){
                                         let importnum = 0;
-                                        let livefile = "hiker://files/rules/Src/Juying/live.txt";
-                                        let JYlive=fetch(livefile);
+                                        let JYlivefile = "hiker://files/rules/Src/Juying/live.txt";
+                                        let JYlive=fetch(JYlivefile);
                                         if(JYlive){
                                             var JYlives = JYlive.split('\n');
                                             let id = 0;
@@ -454,7 +457,7 @@ function LiveSet() {
                                             var JYlives = YClives;
                                             importnum = JYlives.length;
                                         }
-                                        writeFile(livefile, JYlives.join('\n'));
+                                        writeFile(JYlivefile, JYlives.join('\n'));
                                         hideLoading();
                                         if(importnum>0){
                                             putMyVar('isEdit','1');
