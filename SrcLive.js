@@ -228,8 +228,9 @@ function guanlidata(datalist) {
             img: 'https://lanmeiguojiang.com/tubiao/ke/156.png',//https://lanmeiguojiang.com/tubiao/more/228.png
             col_type: 'icon_2_round',
             url: $('#noLoading#').lazyRule((name) => {
-                let JYlivefile=fetch("hiker://files/rules/Src/Juying/live.txt");
-                let JYlives = JYlivefile.split('\n');
+                let JYlivefile="hiker://files/rules/Src/Juying/live.txt";
+                let JYlive=fetch(JYlivefile);
+                let JYlives = JYlive.split('\n');
                 if(getMyVar('editmode','0')=="0"){
                     let urls = [];
                     for(let i = 0;i<JYlives.length;i++){
@@ -259,16 +260,12 @@ function guanlidata(datalist) {
                         if(input){
                             let JYlive=fetch(JYlivefile);
                             let JYlives = JYlive.split('\n');
-                            log(JYlives.length)
                             for(let i=0;i<JYlives.length;i++){
                                 try{
                                     if(JYlives[i].indexOf(',')>-1&&JYlives[i].indexOf(name)>-1){
                                         JYlives[i] = JYlives[i].replace(name,input);
-                                        log(name+'>'+input);
                                     }
-                                }catch(e){
-                                    log(e.message)
-                                }
+                                }catch(e){}
                             }
                             writeFile(JYlivefile, JYlives.join('\n'));
                             updateItem(name, {
