@@ -2432,7 +2432,7 @@ function Resourceimport(input,importtype,boxdy){
                     for(let i=0;i<urls.length;i++){
                         let YChtml = request(urls[i],{timeout:2000}).replace(/TV-/g,'TV');
                         if(YChtml.indexOf('#genre#')>-1&&livedata.indexOf(urls[i])==-1){
-                            livedata.push(urls[i]);
+                            livedata.push({name:'聚影'+livedata.length,url:urls[i]});
                             livenum++;
                         }
                     }
