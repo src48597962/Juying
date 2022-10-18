@@ -697,13 +697,12 @@ function yiji() {
             col_type: 'icon_5'
         });
         d.push({
-            title: "筛选",
-            url: $('#noLoading#').lazyRule((fold) => {
-                    putMyVar('SrcJuying$fold', fold === '1' ? '0' : '1');
-                    refreshPage(false);
-                    return "hiker://empty";
-                }, fold),
-            pic_url: fold === '1'?'https://lanmeiguojiang.com/tubiao/more/213.png':'https://lanmeiguojiang.com/tubiao/more/172.png',
+            title: "直播",
+            url: $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLive.js');
+                    Live();
+                }),
+            pic_url: 'https://lanmeiguojiang.com/tubiao/more/87.png',
             col_type: 'icon_5'
         });
         d.push({
@@ -745,16 +744,7 @@ function yiji() {
                 col_type: 'scroll_button'
             });
         }
-        /*
-        d.push({
-            title: "直播",
-            url: $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
-                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLive.js');
-                    Live();
-                }),
-            col_type: 'scroll_button'
-        });
-        */
+
         d.push({
             col_type: "blank_block"
         });
