@@ -196,6 +196,9 @@ function Live() {
         });
     }
     setHomeResult(d);
+    editmode();
+}
+function editmode(){
     if(getMyVar('editmode','0')==1){
         let editnames = ["分组删除|groupdelete","分组改名|grouprename","地址删除|urldelete","地址改名|urlrename","退出编辑|exitedit"];
         let editmenu = [];
@@ -245,7 +248,6 @@ function Live() {
         addItemAfter('livesearch',editmenu);
     }
 }
-
 function guanlidata(datalist) {
     /*
     function compare (attr,rev) {
