@@ -2432,7 +2432,8 @@ function Resourceimport(input,importtype,boxdy){
                     for(let i=0;i<urls.length;i++){
                         let YChtml = request(urls[i],{timeout:2000}).replace(/TV-/g,'TV');
                         if(YChtml.indexOf('#genre#')>-1 && !livedata.some(item => item.url==urls[i])){
-                            livedata.push({name:'聚影'+livedata.length,url:urls[i]});
+                            let id = livedata.length + 1;
+                            livedata.push({name:'JY订阅'+id,url:urls[i]});
                             livenum++;
                         }
                     }
@@ -2440,40 +2441,6 @@ function Resourceimport(input,importtype,boxdy){
                         liveconfig['data'] = livedata;
                         writeFile(livecfgfile, JSON.stringify(liveconfig));
                     }
-                /*
-                    let YClives = [];
-                    for(let i=0;i<urls.length;i++){
-                        let YChtml = request(urls[i],{timeout:2000}).replace(/TV-/g,'TV');
-                        if(YChtml.indexOf('#genre#')>-1){
-                            let YClive = YChtml.split('\n');
-                            YClives = YClives.concat(YClive);
-                        }
-                    }
-                    if(YClives.length>0){
-                        let livefile = "hiker://files/rules/Src/Juying/live.txt";
-                        let JYlive=fetch(livefile);
-                        if(JYlive){
-                            var JYlives = JYlive.split('\n');
-                            let id = 0;
-                            for(let i=0;i<YClives.length;i++){
-                                if(JYlives.length>6000){
-                                    log('直播数据源文件已大于6000行，为保证效率，停止导入');
-                                    break;
-                                }else{
-                                    if(YClives[i].indexOf('#genre#')>-1&&JYlives.indexOf(YClives[i])>-1){
-                                        id = JYlives.indexOf(YClives[i]);
-                                    }else if(YClives[i].indexOf('#genre#')>-1&&JYlives.indexOf(YClives[i])==-1){
-                                        id = JYlives.length+1;
-                                    }else if(JYlives.indexOf(YClives[i])==-1&&YClives[i].trim()!=""){
-                                        JYlives.splice(id, 0, YClives[i]);
-                                    }
-                                }
-                            }
-                        }else{
-                            var JYlives = YClives;
-                        }
-                        writeFile(livefile, JYlives.join('\n'));
-                    }*/
                 }
             } catch (e) {
                 log('TVBox导入live保存失败>'+e.message);
