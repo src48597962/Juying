@@ -25,13 +25,20 @@ function Live() {
     let livedata = liveconfig['data']||[];
 
     let JYlivefile = "hiker://files/rules/Src/Juying/live.txt";
-    if(!getMyVar('JYlivedyurl')){
-        var JYlive=fetch(JYlivefile);
+    let JYlive= "";
+    let JYlivedyurl = getMyVar('JYlivedyurl','juying');
+    if(JYlivedyurl=="juying"){
+        JYlive=fetch(JYlivefile);
     }
+
     if(livedata.length>0){
         d.push({
-            title: '选择订阅👉',
-            url: 'hiker://empty',
+            title: '选择👉',
+            url: $("#noLoading#").lazyRule(() => {
+                putMyVar('JYlivedyurl','juying');
+                refreshPage(false);
+                return "toast://已刷新";
+            }),
             col_type: 'scroll_button'
         })
         for(let i=0;i<livedata.length;i++){
@@ -39,24 +46,32 @@ function Live() {
             let dyurl = livedata[i].url;
             d.push({
                 title: getMyVar('JYlivedyurl')==dyurl?'‘‘’’<b><span style="color:#3399cc">'+dyname:dyname,
-                url: $("#noLoading#").lazyRule(() => {
-                    
-                    return "toast://进入"+name+"模式";
-                }),
+                url: $("#noLoading#").lazyRule((dyname,dyurl) => {
+                    putMyVar('JYlivedyurl',dyurl);
+                    refreshPage(false);
+                    return "toast://已选择远程订阅："+dyname;
+                },dyname,dyurl),
                 col_type: 'scroll_button'
             })
         }
     }
 
-    if(JYlive==""&&livedata.length>0&&getMyVar('clearlive','0')!="1"){
+    if(JYlive==""&&livedata.length>0&&(getMyVar('clearlive','0')!="1"||JYlivedyurl!="juying")){
         showLoading('发现订阅源，正在初始化');
-        log('本地源文件为空且有订阅，默认导入第一个订阅');
-        let YChtml = readFile('live'+md5(livedata[0].url)+'.txt')||request(livedata[0].url,{timeout:2000}).replace(/TV-/g,'TV').replace(/\[.*\]/g,'');
+        if(JYlivedyurl=="juying"){
+            log('本地源文件为空且有订阅，默认导入第一个订阅');
+            var tourl = livedata[0].url;
+        }else{
+            var tourl = JYlivedyurl;
+        }
+        let YChtml = readFile('live'+md5(tourl)+'.txt')||request(tourl,{timeout:2000}).replace(/TV-/g,'TV').replace(/\[.*\]/g,'');
         if(YChtml.indexOf('#genre#')>-1){
             if(!fileExist('live'+md5(livedata[0].url)+'.txt')){
                 saveFile('live'+md5(livedata[0].url)+'.txt',YChtml);
             }
-            writeFile(JYlivefile, YChtml);
+            if(JYlivedyurl=="juying"){
+                writeFile(JYlivefile, YChtml);
+            }
             JYlive = YChtml;
         }
         hideLoading();
@@ -306,7 +321,7 @@ function guanlidata(datalist) {
     for (let i=0;i<datalist.length;i++) {
         list.push({
             title: datalist[i].name,
-            img: 'https://lanmeiguojiang.com/tubiao/ke/156.png',//https://lanmeiguojiang.com/tubiao/more/228.png
+            img: 'https://lanmeiguojiang.com/tubiao/ke/156.png',
             col_type: 'icon_2_round',
             url: $('#noLoading#').lazyRule((name) => {
                 let JYlivefile="hiker://files/rules/Src/Juying/live.txt";
