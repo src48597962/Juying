@@ -138,7 +138,9 @@ function Live() {
                                 }
                                 writeFile(JYlivefile, JYlives.join('\n'));
                                 hideLoading();
-                                refreshPage(false);
+                                //refreshPage(false);
+                                deleteItem(groupname);
+                                deleteItemByCls('livelist');
                                 return "toast://已删除分组 <"+groupname+"> 所有地址";
                             }catch(e){
                                 hideLoading();
@@ -158,7 +160,7 @@ function Live() {
                                         }catch(e){}
                                     }
                                     writeFile(JYlivefile, JYlives.join('\n'));
-                                    refreshPage(false);
+                                    updateItem(groupname,{title:input});
                                     return "toast:// <"+groupname+"> 分组改名为 <"+input+">";
                                 }else{
                                     return "toast://输入不能为空"
