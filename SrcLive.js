@@ -337,8 +337,9 @@ function guanlidata(datalist) {
 }
 function LivePlay(name) {
     let JYlivefile= "hiker://files/rules/Src/Juying/live.txt";
-    let JYlive= getMyVar('JYlivedyurl','juying')=="juying"?fetch(JYlivefile):readFile('live'+md5(getMyVar('JYlivedyurl','juying'))+'.txt');
+    let JYlive= getMyVar('JYlivedyurl','juying')=="juying"?fetch(JYlivefile):readFile('live'+md5(getMyVar('JYlivedyurl'))+'.txt');
     let JYlives = JYlive.split('\n');
+    log(JYlives.length);
     if(!/^url/.test(getMyVar('editmode','0'))||getMyVar('JYlivedyurl','juying')!="juying"){
         let urls = [];
         for(let i = 0;i<JYlives.length;i++){
