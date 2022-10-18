@@ -357,7 +357,7 @@ function LiveSet() {
                                                     }else if(YClives[i].indexOf('#genre#')>-1&&JYlives.indexOf(YClives[i])==-1){
                                                         id = JYlives.length+1;
                                                         py = 0;
-                                                    }else if(YClives[i].indexOf(',')>-1&&!JYlives.some(item => item.split(',')[1]==YClives[i].split(',')[1])&&YClives[i].trim()!=""){
+                                                    }else if(YClives[i].indexOf(',')>-1&&JYlives.indexOf(YClives[i])==-1&&YClives[i].trim()!=""){
                                                         JYlives.splice(id, py, YClives[i]);
                                                         py++;
                                                     }
