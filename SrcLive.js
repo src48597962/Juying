@@ -138,9 +138,7 @@ function Live() {
                                 }
                                 writeFile(JYlivefile, JYlives.join('\n'));
                                 hideLoading();
-                                //refreshPage(false);
-                                deleteItem(groupname);
-                                //deleteItemByCls('livelist');
+                                refreshPage(false);
                                 return "toast://已删除分组 <"+groupname+"> 所有地址";
                             }catch(e){
                                 hideLoading();
@@ -198,6 +196,54 @@ function Live() {
         });
     }
     setHomeResult(d);
+    if(getMyVar('editmode','0')==1){
+        let editnames = ["分组删除|groupdelete","分组改名|grouprename","地址删除|urldelete","地址改名|urlrename","退出编辑|exitedit"];
+        let editmenu = [];
+        for(let i=0;i<editnames.length;i++){
+            let name = editnames[i].split('|')[0];
+            let code = editnames[i].split('|')[1];
+            editmenu.push({
+                title: name,
+                url: $("#noLoading#").lazyRule((name,code,editnames) => {
+                    if(code=="exitedit"){
+                        clearMyVar('editmode');
+                        deleteItemByCls('editmenu');
+                        return "toast://退出编辑，正常观看";
+                    }else{
+                        putMyVar('editmode',code);
+                    }
+                    for(let i in editnames){
+                        if(editnames[i].split('|')[1]==code){
+                            updateItem(code,{title:'‘‘’’<b><span style="color:#3399cc">'+name})
+                        }else{
+                            updateItem(editnames[i].split('|')[1],{title:editnames[i].split('|')[0]})
+                        }
+                    }
+                    return "toast://进入"+name+"模式";
+                },name,code,editnames),
+                col_type: 'scroll_button',
+                extra: {
+                    id: code,
+                    cls: 'editmenu'
+                }
+            })
+        }
+        editmenu.push({
+            col_type: 'line',
+            extra: {
+                cls: 'editmenu'
+            }
+        })
+        for (let i = 0; i < 9; i++) {
+            editmenu.push({
+                col_type: "blank_block",
+                extra: {
+                    cls: 'editmenu'
+                }
+            })
+        }
+        addItemAfter('livesearch',editmenu);
+    }
 }
 
 function guanlidata(datalist) {
@@ -538,53 +584,8 @@ function LiveSet() {
         title: '🛠 编辑本地源',
         col_type: 'text_2',
         url: $('#noLoading#').lazyRule(() => {
-            let editnames = ["分组删除|groupdelete","分组改名|grouprename","地址删除|urldelete","地址改名|urlrename","退出编辑|exitedit"];
-            let editmenu = [];
-            for(let i=0;i<editnames.length;i++){
-                let name = editnames[i].split('|')[0];
-                let code = editnames[i].split('|')[1];
-                editmenu.push({
-                    title: name,
-                    url: $("#noLoading#").lazyRule((name,code,editnames) => {
-                        if(code=="exitedit"){
-                            clearMyVar('editmode');
-                            deleteItemByCls('editmenu');
-                            return "toast://退出编辑，正常观看";
-                        }else{
-                            putMyVar('editmode',code);
-                        }
-                        for(let i in editnames){
-                            if(editnames[i].split('|')[1]==code){
-                                updateItem(code,{title:'‘‘’’<b><span style="color:#3399cc">'+name})
-                            }else{
-                                updateItem(editnames[i].split('|')[1],{title:editnames[i].split('|')[0]})
-                            }
-                        }
-                        return "toast://进入"+name+"模式";
-                    },name,code,editnames),
-                    col_type: 'scroll_button',
-                    extra: {
-                        id: code,
-                        cls: 'editmenu'
-                    }
-                })
-            }
-            editmenu.push({
-                col_type: 'line',
-                extra: {
-                    cls: 'editmenu'
-                }
-            })
-            for (let i = 0; i < 9; i++) {
-                editmenu.push({
-                    col_type: "blank_block",
-                    extra: {
-                        cls: 'editmenu'
-                    }
-                })
-            }
-            addItemAfter('livesearch',editmenu);
-            back(false);
+            putMyVar('editmode','1');
+            back(true);
             return "toast://进入编辑模式，选择操作菜单";
         })
     });
