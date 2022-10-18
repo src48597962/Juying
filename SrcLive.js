@@ -102,8 +102,8 @@ function Live() {
             })
             if(lists.length>0){
                 d.push({
-                    title: grouplist[i],
-                    url: $('#noLoading#').lazyRule((grouplist,groupname,guanlidata,datalist) => {
+                    title: index==0?'‘‘’’<b><span style="color:#3399cc">'+grouplist[i]:grouplist[i],
+                    url: $('#noLoading#').lazyRule((grouplist,groupname,guanlidata,datalist,livefile) => {
                         for(let i in grouplist){
                             if(grouplist[i]==groupname){
                                 updateItem(groupname,{title:'‘‘’’<b><span style="color:#3399cc">'+groupname})
@@ -111,15 +111,31 @@ function Live() {
                                 updateItem(grouplist[i],{title:grouplist[i]})
                             }
                         }
-                        deleteItemByCls('livelist');
-                        var lists = datalist.filter(item => {
-                            return item.name.includes(input);
-                        })
-                        let gldatalist = guanlidata(lists);
-                        addItemAfter('liveloading', gldatalist);
-                        
-                        return "hiker://empty";
-                    },grouplist,grouplist[i],guanlidata,lists),
+                        if(getMyVar('editmode','0')=="0"){
+                            deleteItemByCls('livelist');
+                            var lists = datalist.filter(item => {
+                                return item.name.includes(input);
+                            })
+                            let gldatalist = guanlidata(lists);
+                            addItemAfter('liveloading', gldatalist);
+                            return "hiker://empty";
+                        }else if(getMyVar('editmode','0')=="groupdelete"){
+                            let JYlive=fetch(livefile);
+                            let JYlives = JYlive.split('\n');
+                            for(let i=0;i<JYlives.length;i++){
+                                try{
+                                    if(JYlives[i].indexOf('#genre#')>-1&&JYlives[i].indexOf(groupname)>-1){
+                                        JYlives.splice(i,1);
+                                        i = i - 1;
+                                    }else if(JYlives[i].indexOf(',')>-1&&datalist.some(item => item.name==JYlives[i].split(',')[0])){
+                                        JYlives.splice(i,1);
+                                        i = i - 1;
+                                    }
+                                }catch(e){}
+                            }
+                            return "toast://已删除分组："+groupname;
+                        }
+                    },grouplist,grouplist[i],guanlidata,lists,livefile),
                     col_type: "scroll_button",
                     extra: {
                         id: grouplist[i]
@@ -128,7 +144,6 @@ function Live() {
                 if(index==0){
                     datalist2 = lists;
                     index = 1;
-                    updateItem(grouplist[i],{title:'‘‘’’<b><span style="color:#3399cc">'+grouplist[i]});
                 }
             }
         }
@@ -449,7 +464,7 @@ function LiveSet() {
     d.push({
         title: '🛠 编辑本地源',
         col_type: 'text_2',
-        url: $(["分组删除","分组改名","地址删除","地址改名"],2,"").select(()=>{
+        url: $(["分组删除","分组改名","地址删除","地址改名","退出编辑"],2,"").select(()=>{
             if(input=="分组删除"){
                 putMyVar('editmode','groupdelete');
             }else if(input=="分组改名"){
@@ -458,6 +473,10 @@ function LiveSet() {
                 putMyVar('editmode','urldelete');
             }else if(input=="地址改名"){
                 putMyVar('editmode','urlrename');
+            }else if(input=="退出编辑"){
+                clearMyVar('editmode');
+                back(false);
+                return "toast://退出编辑，正常观看";
             }
             back(false);
             return "toast://进入"+input+"模式";
