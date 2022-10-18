@@ -372,7 +372,7 @@ function LiveSet() {
                                         return "toast://文件异常，导入失败";
                                     }
                                 }
-                            return "hiker://empty";
+                                return "hiker://empty";
                             }catch(e){
                                 hideLoading();
                                 log(e.message);
