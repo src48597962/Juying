@@ -489,7 +489,7 @@ var SrcParseS = {
             return vipUrl + '#isVideo=true#';
         }else if (vipUrl.indexOf('sa.sogou') != -1) {
             if(printlog==1){log("优看视频，直接明码解析")}; 
-            return unescape(fetch(vipUrl).match(/"url":"([^"]*)"/)[1].replace(/\\u/g, "%u"));
+            return unescape(request(vipUrl).match(/"url":"([^"]*)"/)[1].replace(/\\u/g, "%u"));
         }else if (/magnet|torrent/.test(vipUrl)) {
             if(printlog==1){log("磁力/BT视频地址，由视界解析")}; 
             return vipUrl;
@@ -1109,7 +1109,7 @@ var SrcParseS = {
             if(/vkey=/.test(url)){
                 return 1;
             }else if (/\.m3u8/.test(url)) {
-                var urlcode = JSON.parse(fetch(url,{withStatusCode:true,timeout:2000}));
+                var urlcode = JSON.parse(request(url,{withStatusCode:true,timeout:2000}));
                 //log(name+'url访问状态码：'+urlcode.statusCode)
                 if(urlcode.statusCode==-1){
                     log(name+'>m3u8探测超时未拦载，结果未知')
@@ -1134,7 +1134,7 @@ var SrcParseS = {
                             let http = urlcode.url.match(/http.*\//)[0];
                             urlts = http + urlts;
                         }    
-                        var tscode = JSON.parse(fetch(urlts,{headers:{'Referer':url},onlyHeaders:true,timeout:2000}));
+                        var tscode = JSON.parse(request(urlts,{headers:{'Referer':url},onlyHeaders:true,timeout:2000}));
                         //log(name+'ts访问状态码：'+tscode.statusCode)
                         if(tscode.statusCode==-1){
                             log(name+'>ts段探测超时未拦载，结果未知')
@@ -1146,7 +1146,7 @@ var SrcParseS = {
                     }
                 }
             }else if (/\.mp4/.test(url)) {
-                var urlheader = JSON.parse(fetch(url,{onlyHeaders:true,timeout:2000}));
+                var urlheader = JSON.parse(request(url,{onlyHeaders:true,timeout:2000}));
                 if(urlheader.statusCode==-1){
                     log(name+'>mp4探测超时未拦载，结果未知')
                     return 1;
