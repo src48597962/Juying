@@ -432,10 +432,18 @@ function LiveSet() {
     d.push({
         title: '🛠 编辑本地源',
         col_type: 'text_2',
-        url: $(["分组删除","分组改名","直播删除","直播改名"],2,"").select(()=>{
-            writeFile("hiker://files/rules/Src/Juying/live.txt", "");
-            putMyVar('isEdit','1');
-            return "toast://已清空";
+        url: $(["分组删除","分组改名","地址删除","地址改名"],2,"").select(()=>{
+            if(input=="分组删除"){
+                putMyVar('editmode','groupdelete');
+            }else if(input=="分组改名"){
+                putMyVar('editmode','grouprename');
+            }else if(input=="地址删除"){
+                putMyVar('editmode','urldelete');
+            }else if(input=="地址改名"){
+                putMyVar('editmode','urlrename');
+            }
+            back(false);
+            return "toast://进入"+input+"模式";
         })
     });
     d.push({
@@ -446,27 +454,6 @@ function LiveSet() {
             putMyVar('isEdit','1');
             putMyVar('clearlive','1');
             return "toast://已清空";
-        })
-    });
-    d.push({
-        col_type: 'line'
-    });
-    d.push({
-        title: '删除分组',
-        col_type: 'scroll_button',
-        url: $('#noLoading#').lazyRule(() => {
-            putMyVar('editmode','delete');
-            back(false);
-            return "toast://进入删除分组模式";
-        })
-    });
-    d.push({
-        title: '分组改名',
-        col_type: 'scroll_button',
-        url: $('#noLoading#').lazyRule(() => {
-            putMyVar('editmode','rename');
-            back(false);
-            return "toast://进入删除分组模式";
         })
     });
     d.push({
