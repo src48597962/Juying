@@ -101,28 +101,35 @@ function Live() {
                 return item.group==grouplist[i];
             })
             if(lists.length>0){
-                if(index==0){
-                    datalist2 = lists;
-                    index = 1;
-                }
                 d.push({
                     title: grouplist[i],
-                    url: $('#noLoading#').lazyRule((guanlidata,datalist) => {
-                        if(datalist.length>0){
-                            deleteItemByCls('livelist');
-                            var lists = datalist.filter(item => {
-                                return item.name.includes(input);
-                            })
-                            let gldatalist = guanlidata(lists);
-                            addItemAfter('liveloading', gldatalist);
+                    url: $('#noLoading#').lazyRule((grouplist,groupname,guanlidata,datalist) => {
+                        for(let i in grouplist){
+                            if(grouplist[i]==groupname){
+                                updateItem(groupname,{title:'‘‘’’<b><span style="color:#3399cc">'+groupname})
+                            }else{
+                                updateItem(grouplist[i],{title:grouplist[i]})
+                            }
                         }
+                        deleteItemByCls('livelist');
+                        var lists = datalist.filter(item => {
+                            return item.name.includes(input);
+                        })
+                        let gldatalist = guanlidata(lists);
+                        addItemAfter('liveloading', gldatalist);
+                        
                         return "hiker://empty";
-                    },guanlidata,lists),
+                    },grouplist,grouplist[i],guanlidata,lists),
                     col_type: "scroll_button",
                     extra: {
                         id: grouplist[i]
                     }
                 });
+                if(index==0){
+                    datalist2 = lists;
+                    index = 1;
+                    updateItem(grouplist[i],{title:'‘‘’’<b><span style="color:#3399cc">'+grouplist[i]});
+                }
             }
         }
         d.push({
