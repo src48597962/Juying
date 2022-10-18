@@ -340,12 +340,13 @@ function LiveSet() {
                                         var YClives = [];
                                     }
                                     if(YClives.length>0){
-                                        let ycnum = 0;
+                                        let importnum = 0;
                                         let livefile = "hiker://files/rules/Src/Juying/live.txt";
                                         let JYlive=fetch(livefile);
                                         if(JYlive){
                                             var JYlives = JYlive.split('\n');
                                             let id = 0;
+                                            let py = 0;
                                             for(let i=0;i<YClives.length;i++){
                                                 if(JYlives.length>10000){
                                                     log('直播数据源文件已大于10000行，为保证效率停止导入');
@@ -353,11 +354,15 @@ function LiveSet() {
                                                 }else{
                                                     if(YClives[i].indexOf('#genre#')>-1&&JYlives.indexOf(YClives[i])>-1){
                                                         id = JYlives.indexOf(YClives[i]);
+                                                        py = 0;
                                                     }else if(YClives[i].indexOf('#genre#')>-1&&JYlives.indexOf(YClives[i])==-1){
                                                         id = JYlives.length+1;
+                                                        py = 0;
                                                     }else if(YClives[i].indexOf(',')>-1&&!JYlives.some(item => item.split(',')[1]==YClives[i].split(',')[1])&&YClives[i].trim()!=""){
-                                                        JYlives.splice(id, 0, YClives[i]);
-                                                        ycnum++;
+                                                        JYlives.splice(id, py, YClives[i]);
+                                                        log(JYlives.some(item => item.split(',')[1]==YClives[i].split(',')[1]));
+                                                        py++;
+                                                        importnum++;
                                                     }
                                                 }
                                             }
@@ -366,10 +371,10 @@ function LiveSet() {
                                         }
                                         writeFile(livefile, JYlives.join('\n'));
                                         hideLoading();
-                                        if(ycnum>0){
+                                        if(importnum>0){
                                             putMyVar('isEdit','1');
                                         }
-                                        return "toast://成功导入"+ycnum;
+                                        return "toast://成功导入"+importnum;
                                     }else{
                                         return "toast://文件异常，导入失败";
                                     }
