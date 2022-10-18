@@ -33,6 +33,9 @@ function Live() {
 
     if(livedata.length>0){
         d.push({
+            col_type: 'line'
+        })
+        d.push({
             title: '本地👉',
             url: $("#noLoading#").lazyRule(() => {
                 putMyVar('JYlivedyurl','juying');
