@@ -32,6 +32,15 @@ function Live() {
     }else{
         var JYlives = [];
     }
+    d.push({
+        title: '<b>聚影√</b> &nbsp &nbsp <small>⚙直播设置⚙</small>',
+        img: "https://img.vinua.cn/images/QqyC.png",
+        url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
+                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLive.js');
+                LiveSet();
+            }),
+        col_type: 'avatar'
+    });
     if(JYlives.length>0){
         let datalist = [];
         let datalist2 = [];
@@ -50,15 +59,6 @@ function Live() {
             obj[next.name] ? "" : (obj[next.name] = true && newArr.push(next));
             return newArr;
         }, []);
-        d.push({
-            title: '<b>聚影√</b> &nbsp &nbsp <small>⚙直播设置⚙</small>',
-            img: "https://img.vinua.cn/images/QqyC.png",
-            url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
-                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLive.js');
-                    LiveSet();
-                }),
-            col_type: 'avatar'
-        });
         d.push({
             title: "🔍",
             url: $.toString((guanlidata,datalist) => {
