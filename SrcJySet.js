@@ -1953,6 +1953,9 @@ function extension(){
         col_type: "text_3"
     });
     d.push({
+        col_type: "line"
+    });
+    d.push({
         title: JYconfig['sousuoms']==1?'搜索数据来源：搜狗':'搜索数据来源：接口',
         desc: JYconfig['sousuoms']==1?'视界原生搜索按钮改为调用搜狗搜索影片':'视界原生搜索按钮改为调用接口聚搜影片',
         url: $('#noLoading#').lazyRule((JYconfig,cfgfile) => {
@@ -1967,7 +1970,7 @@ function extension(){
                 refreshPage(false);
                 return 'toast://' + sm + '，返回主页后刷新生效';
             }, JYconfig, cfgfile),
-        col_type: "text_1"
+        col_type: "text_center_1"
     });
     /*
     d.push({
@@ -2260,7 +2263,7 @@ function Resourceimport(input,importtype,boxdy){
             log('TVBox文件检测失败>'+e.message); 
             return isboxdy?{jiekou:[],jiexi:[]}:"toast://TVBox导入失败：链接文件无效或内容有错";
         }
-        
+        hideLoading();
         var jknum = -1;
         var jxnum = -1;
         var livenum = -1;
