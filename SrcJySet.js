@@ -1711,7 +1711,7 @@ function extension(){
         desc: JYconfig['codedyid']?'点击订阅、复制、切换资源码'+(JYconfig['codedyname']?'\n当前订阅的资源码为：'+JYconfig['codedyname']:""):'订阅后将与分享者云端数据保持同步',
         url: $(["订阅","复制","切换"],3).select((JYconfig,cfgfile)=>{
                 if(input=="订阅"){
-                    return $("","聚影资源码口令").input((JYconfig,cfgfile) => {
+                    return $("","输入聚影资源码口令\n订阅会自动和云端同步，完全覆盖本地").input((JYconfig,cfgfile) => {
                         if(input.split('￥')[0]!="聚影资源码"){
                             return 'toast://口令有误';
                         }
