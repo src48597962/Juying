@@ -76,7 +76,7 @@ function Live() {
         }else{
             var tourl = JYlivedyurl;
         }
-        let YChtml = fetchCache(tourl,24,{timeout:5000}).replace(/TV-/g,'TV').replace(/\[.*\]/g,'');
+        let YChtml = fetchCache(tourl,24,{timeout:3000}).replace(/TV-/g,'TV').replace(/\[.*\]/g,'');
         if(YChtml.indexOf('#genre#')>-1){
             if(JYlivedyurl=="juying"){
                 writeFile(JYlivefile, YChtml);
@@ -346,7 +346,7 @@ function guanlidata(datalist) {
 }
 function LivePlay(name) {
     let JYlivefile= "hiker://files/rules/Src/Juying/live.txt";
-    let JYlive= getMyVar('JYlivedyurl','juying')=="juying"?fetch(JYlivefile):fetchCache(getMyVar('JYlivedyurl'),24,{timeout:5000});
+    let JYlive= getMyVar('JYlivedyurl','juying')=="juying"?fetch(JYlivefile):fetchCache(getMyVar('JYlivedyurl'),24,{timeout:3000});
     let JYlives = JYlive.split('\n');
     if(!/^url/.test(getMyVar('editmode','0'))||getMyVar('JYlivedyurl','juying')!="juying"){
         let urls = [];
@@ -542,7 +542,7 @@ function LiveSet() {
                                     }
                                 }else if(input=="导入聚影√"){
                                     showLoading('叠加导入直播，最大万行限制');
-                                    let YChtml = fetchCache(url,24,{timeout:5000}).replace(/TV-/g,'TV').replace(/\[.*\]/g,'');
+                                    let YChtml = fetchCache(url,24,{timeout:3000}).replace(/TV-/g,'TV').replace(/\[.*\]/g,'');
                                     if(YChtml.indexOf('#genre#')>-1){
                                         var YClives = YChtml.split('\n');
                                     }else{
