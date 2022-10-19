@@ -2252,7 +2252,7 @@ function Resourceimport(input,importtype,boxdy){
             var reg = /("([^\\\"]*(\\.)?)*")|('([^\\\']*(\\.)?)*')|(\/{2,}.*?(\r|\n|$))|(\/\*(\n|.)*?\*\/)/g;
             html = html.replace(/api\"\:csp/g,'api":"csp').replace(reg, function(word) { 
                 return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
-            }).replace(/^.*#.*$/gm,"").replace(/\,\,/g,',');//.replace(/=\\n\"/g,'="')|[\t\r\n]
+            }).replace(/^.*#.*$/gm,"").replace(/\,\,/g,',').replace(/\"\}.*?\{\"key\"/g,'"},{"key"');//.replace(/=\\n\"/g,'="')|[\t\r\n]
             //log(html);
             eval('var data = ' + html)
             //var data = JSON.parse(html);                        
