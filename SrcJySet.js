@@ -2202,11 +2202,11 @@ function extension(){
             }
             d.push({
                 title: isupdate?'💡发现新版本V'+newVersion.SrcJuying:'🎉已是最新版本',
-                desc: '当前版本'+getMyVar('SrcJuying-Version',''),
+                desc: '当前版本'+getMyVar('SrcJuying-Version','').replace('-',''),
                 url: isupdate?$('#noLoading#').lazyRule(()=>{
                         deleteCache();
                         refreshPage();
-                        return 'toast://已复制';
+                        return 'toast://已更新，返回主页下拉界面生效';
                     }):"hiker://empty",
                 col_type: "text_1"
             });
