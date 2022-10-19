@@ -595,7 +595,7 @@ function LiveSet() {
                                         let livedata = liveconfig['data']||[];
                                         for(let i=0;i<livedata.length;i++){
                                             if(livedata[i].url==url){
-                                                livedata.show = input=="停用订阅"?0:1;
+                                                livedata[i].show = input=="停用订阅"?0:1;
                                                 break;
                                             }
                                         }
