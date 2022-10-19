@@ -437,7 +437,7 @@ function LiveSet() {
                     if(input){
                         let livedata = liveconfig['data']||[];
                         if(!livedata.some(item => item.url==input)){
-                            let YChtml = request(input,{timeout:2000});
+                            let YChtml = request(input,{timeout:3000});
                             if(YChtml.indexOf('#genre#')>-1){
                                 return $("","起个名字").input((livedata,url,livecfgfile,liveconfig)=>{
                                     if(input){
@@ -487,8 +487,10 @@ function LiveSet() {
                             try{
                                 if(input=="更新缓存"){
                                     showLoading('正在缓存，请稍后.');
-                                    let YChtml = fetchCache(url,24,{timeout:5000}).replace(/TV-/g,'TV').replace(/\[.*\]/g,'');
-                                    if(YChtml){
+                                    let YChtml = request(url,{timeout:3000});
+                                    if(YChtml.indexOf('#genre#')>-1){
+                                        deleteCache(url);
+                                        let YChtml = fetchCache(url,24,{timeout:3000}).replace(/TV-/g,'TV').replace(/\[.*\]/g,'');
                                         hideLoading();
                                         return "toast://更新文件缓存成功";
                                     }else{
