@@ -52,6 +52,7 @@ function Live() {
         for(let i=0;i<livedata.length;i++){
             let dyname = livedata[i].name;
             let dyurl = livedata[i].url;
+            deleteFile('live'+md5(dyurl)+'.txt');//自动删除之前私有文件
             d.push({
                 title: JYlivedyurl==dyurl?dyname+'✌':dyname,
                 url: $("#noLoading#").lazyRule((dyname,dyurl) => {
@@ -75,11 +76,8 @@ function Live() {
         }else{
             var tourl = JYlivedyurl;
         }
-        let YChtml = readFile('live'+md5(tourl)+'.txt')||request(tourl,{timeout:2000}).replace(/TV-/g,'TV').replace(/\[.*\]/g,'');
+        let YChtml = fetchCache(tourl,24,{timeout:5000}).replace(/TV-/g,'TV').replace(/\[.*\]/g,'');
         if(YChtml.indexOf('#genre#')>-1){
-            if(!fileExist('live'+md5(tourl)+'.txt')){
-                saveFile('live'+md5(tourl)+'.txt',YChtml);
-            }
             if(JYlivedyurl=="juying"){
                 writeFile(JYlivefile, YChtml);
             }
@@ -348,7 +346,7 @@ function guanlidata(datalist) {
 }
 function LivePlay(name) {
     let JYlivefile= "hiker://files/rules/Src/Juying/live.txt";
-    let JYlive= getMyVar('JYlivedyurl','juying')=="juying"?fetch(JYlivefile):readFile('live'+md5(getMyVar('JYlivedyurl'))+'.txt');
+    let JYlive= getMyVar('JYlivedyurl','juying')=="juying"?fetch(JYlivefile):fetchCache(getMyVar('JYlivedyurl'),24,{timeout:5000});
     let JYlives = JYlive.split('\n');
     if(!/^url/.test(getMyVar('editmode','0'))||getMyVar('JYlivedyurl','juying')!="juying"){
         let urls = [];
@@ -474,18 +472,23 @@ function LiveSet() {
                 d.push({
                     col_type: "line"
                 });
+                function getide(is) {
+                    if(is==1){
+                        return '‘‘’’<strong><font color="#f13b66a">◉ </front></strong>';
+                    }else{
+                        return '‘‘’’<strong><font color="#F54343">◉ </front></strong>';
+                    }
+                }
                 for(let i=0;i<livedata.length;i++){
                     d.push({
-                        title: livedata[i].name,
+                        title: (livedata[i].show!=0?getide(1):getide(0))+livedata[i].name,
                         desc: livedata[i].url,
-                        url: $(["更新缓存","删除订阅","导入聚直播","导入聚影√","复制链接"],2,"").select((livecfgfile, url)=>{
+                        url: $(["更新缓存","删除订阅","导入聚直播","导入聚影√","复制链接",livedata[i].show!=0?"停用订阅":"启用订阅"],2,"").select((livecfgfile, url)=>{
                             try{
                                 if(input=="更新缓存"){
                                     showLoading('正在缓存，请稍后.');
-                                    let YChtml = request(url,{timeout:2000}).replace(/TV-/g,'TV').replace(/\[.*\]/g,'');
+                                    let YChtml = fetchCache(url,24,{timeout:5000}).replace(/TV-/g,'TV').replace(/\[.*\]/g,'');
                                     if(YChtml){
-                                        deleteFile('live'+md5(url)+'.txt');
-                                        saveFile('live'+md5(url)+'.txt',YChtml);
                                         hideLoading();
                                         return "toast://更新文件缓存成功";
                                     }else{
@@ -493,7 +496,7 @@ function LiveSet() {
                                         return "toast://更新失败";
                                     }
                                 }else if(input=="删除订阅"){
-                                    deleteFile('live'+md5(url)+'.txt');
+                                    deleteCache(url);
                                     let livecfg = fetch(livecfgfile);
                                     if(livecfg != ""){
                                         eval("var liveconfig = " + livecfg);
@@ -537,11 +540,8 @@ function LiveSet() {
                                     }
                                 }else if(input=="导入聚影√"){
                                     showLoading('叠加导入直播，最大万行限制');
-                                    let YChtml = readFile('live'+md5(url)+'.txt')||request(url,{timeout:2000}).replace(/TV-/g,'TV').replace(/\[.*\]/g,'');
+                                    let YChtml = fetchCache(url,24,{timeout:5000}).replace(/TV-/g,'TV').replace(/\[.*\]/g,'');
                                     if(YChtml.indexOf('#genre#')>-1){
-                                        if(!fileExist('live'+md5(url)+'.txt')){
-                                            saveFile('live'+md5(url)+'.txt',YChtml);
-                                        }
                                         var YClives = YChtml.split('\n');
                                     }else{
                                         var YClives = [];
@@ -588,6 +588,21 @@ function LiveSet() {
                                     }
                                 }else if(input=="复制链接"){
                                     copy(url);
+                                }else if(input=="停用订阅"||input=="启用订阅"){
+                                    let livecfg = fetch(livecfgfile);
+                                    if(livecfg != ""){
+                                        eval("var liveconfig = " + livecfg);
+                                        let livedata = liveconfig['data']||[];
+                                        for(let i=0;i<livedata.length;i++){
+                                            if(livedata[i].url==url){
+                                                livedata.show = input=="停用订阅"?0:1;
+                                                break;
+                                            }
+                                        }
+                                        liveconfig['data'] = livedata;
+                                        writeFile(livecfgfile, JSON.stringify(liveconfig));
+                                        refreshPage(false);
+                                    }
                                 }
                                 return "hiker://empty";
                             }catch(e){
