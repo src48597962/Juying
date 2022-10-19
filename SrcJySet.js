@@ -125,7 +125,7 @@ function SRCSet() {
                                 }else{
                                     var JYconfig= {};
                                 }
-                                if(JYconfig.zsjiekou.api_url==dataurl){
+                                if(JYconfig.zsjiekou&&JYconfig.zsjiekou.api_url==dataurl){
                                     delete JYconfig['zsjiekou'];
                                     writeFile(cfgfile, JSON.stringify(JYconfig));
                                 }
@@ -950,7 +950,7 @@ function jiekou(lx,data) {
                 }else{
                     var JYconfig= {};
                 }
-                if(JYconfig.zsjiekou.api_url==dataurl){
+                if(JYconfig.zsjiekou&&JYconfig.zsjiekou.api_url==dataurl){
                     delete JYconfig['zsjiekou'];
                     writeFile(cfgfile, JSON.stringify(JYconfig));
                 }
