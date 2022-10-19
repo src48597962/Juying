@@ -1914,24 +1914,24 @@ function extension(){
     });
     d.push({
         title: '失败次数',
-        url: $(JYconfig['failnum']?JYconfig['failnum']:"10","设置接口搜索失败多少次，转移到失败待处理分组").input((JYconfig,cfgfile) => {
+        url: $(JYconfig['failnum']?JYconfig['failnum']:"10","搜索无法访问的接口达到多少失败次数，转移到失败待处理分组").input((JYconfig,cfgfile) => {
                 if(!parseInt(input)||parseInt(input)<1||parseInt(input)>100){return 'toast://输入有误，请输入1-100数字'}else{
                     JYconfig['failnum'] = parseInt(input);
                     writeFile(cfgfile, JSON.stringify(JYconfig));
                     refreshPage(false);
-                    return 'toast://接口搜索失败'+input+'次，转移到失败待处理分组';
+                    return 'toast://搜索接口无法访问'+input+'次，自动转移到失败待处理分组';
                 }
             }, JYconfig, cfgfile),
         col_type: "text_3"
     });
     d.push({
         title: '解析保留',
-        url: $(JYconfig['appjiexinum']?JYconfig['appjiexinum']:"50","app自带解析保留数量").input((JYconfig,cfgfile) => {
+        url: $(JYconfig['appjiexinum']?JYconfig['appjiexinum']:"50","控制app自带有效解析保留数量").input((JYconfig,cfgfile) => {
                 if(!parseInt(input)||parseInt(input)<1||parseInt(input)>100){return 'toast://输入有误，请输入1-100数字'}else{
                     JYconfig['appjiexinum'] = parseInt(input);
                     writeFile(cfgfile, JSON.stringify(JYconfig));
                     refreshPage(false);
-                    return 'toast://app自带解析保留数量已设置为：'+input;
+                    return 'toast://app自带有效解析保留数量已设置为：'+input;
                 }
             }, JYconfig, cfgfile),
         col_type: "text_3"
@@ -1953,20 +1953,21 @@ function extension(){
         col_type: "text_3"
     });
     d.push({
-        title: JYconfig['sousuoms']==1?'搜索(视界)':'搜索(聚搜)',
+        title: JYconfig['sousuoms']==1?'搜索数据来源：搜狗':'搜索数据来源：接口',
+        desc: JYconfig['sousuoms']==1?'视界原生搜索按钮改为调用搜狗搜索影片':'视界原生搜索按钮改为调用接口聚搜影片',
         url: $('#noLoading#').lazyRule((JYconfig,cfgfile) => {
                 if(JYconfig['sousuoms'] == 2){
                     JYconfig['sousuoms'] = 1;
-                    var sm = "视界搜索改为调用原始视界搜索";
+                    var sm = "视界原生搜索按钮搜索数据来源：搜狗数据";
                 }else{
                     JYconfig['sousuoms'] = 2;
-                    var sm = "视界搜索改为调用聚影接口聚合搜索";
+                    var sm = "视界原生搜索按钮搜索数据来源：聚搜接口";
                 }
                 writeFile(cfgfile, JSON.stringify(JYconfig));
                 refreshPage(false);
                 return 'toast://' + sm + '，返回主页后刷新生效';
             }, JYconfig, cfgfile),
-        col_type: "text_3"
+        col_type: "text_1"
     });
     /*
     d.push({
@@ -2153,14 +2154,7 @@ function extension(){
                     }
 
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
-                    let sm = Resourceimport(input,getMyVar('importtype','0'));
-                    if(getMyVar('importtype','0')!="2"&&sm.indexOf('链接文件无效或内容有错')==-1){
-                        back();
-                    }else{
-                        clearMyVar('importinput');
-                        refreshPage(false);
-                    }
-                    return sm?'toast://'+sm:'toast://异常出错';
+                    return Resourceimport(input,getMyVar('importtype','0'));
                 }, JYconfig, cfgfile),
             col_type: "text_2"
         });
@@ -2264,11 +2258,13 @@ function Resourceimport(input,importtype,boxdy){
         } catch (e) {
             hideLoading();
             log('TVBox文件检测失败>'+e.message); 
-            return isboxdy?{jiekou:[],jiexi:[]}:"TVBox导入失败：链接文件无效或内容有错";
+            return isboxdy?{jiekou:[],jiexi:[]}:"toast://TVBox导入失败：链接文件无效或内容有错";
         }
+        
         var jknum = -1;
         var jxnum = -1;
         var livenum = -1;
+        var livesm = "";
         if((isboxdy||getMyVar('importjiekou','')=="1")&&jiekou.length>0){
             showLoading('正在多线程抓取数据中');
             var urls= [];
@@ -2430,11 +2426,17 @@ function Resourceimport(input,importtype,boxdy){
                     }
                     let livedata = liveconfig['data']||[];
                     for(let i=0;i<urls.length;i++){
-                        let YChtml = request(urls[i],{timeout:2000}).replace(/TV-/g,'TV');
-                        if(YChtml.indexOf('#genre#')>-1 && !livedata.some(item => item.url==urls[i])){
-                            let id = livedata.length + 1;
-                            livedata.push({name:'JY订阅'+id,url:urls[i]});
-                            livenum++;
+                        if(!livedata.some(item => item.url==urls[i])){
+                            let YChtml = request(urls[i],{timeout:5000}).replace(/TV-/g,'TV');
+                            if(YChtml.indexOf('#genre#')>-1){
+                                let id = livedata.length + 1;
+                                livedata.push({name:'JY订阅'+id,url:urls[i]});
+                                livenum++;
+                            }else{
+                                livesm = "链接无效或非通用tv格式文件";
+                            }
+                        }else{
+                            livesm = "已存在";
                         }
                     }
                     if(livenum>0){
@@ -2449,9 +2451,14 @@ function Resourceimport(input,importtype,boxdy){
         if(isboxdy){
             return dydatas;
         }else{
-            let sm = (jknum>-1?' 接口保存'+jknum:'')+(jxnum>-1?' 解析保存'+jxnum:'')+(livenum>-1?' 直播保存'+livenum:'');
-            return 'TVBox导入：'+(sm?sm:'导入异常，详情查看日志');
-        }              
+            let sm = (jknum>-1?' 接口保存'+jknum:'')+(jxnum>-1?' 解析保存'+jxnum:'')+(livenum>-1?livenum==0?' 直播订阅'+livesm:' 直播保存'+livenum:'');
+            if(jknum>0||jxnum>0){back();}
+            if(jknum==-1&&jxnum==-1&&livenum>-1){
+                clearMyVar('importinput');
+                refreshPage(false);
+            }
+            return 'toast://TVBox导入：'+(sm?sm:'导入异常，详情查看日志');
+        }       
     }else if(importtype=="2"){//tvbox订阅
         try{
             let cfgfile = "hiker://files/rules/Src/Juying/config.json";
@@ -2464,10 +2471,12 @@ function Resourceimport(input,importtype,boxdy){
             JYconfig['TVBoxDY'] = input;
             writeFile(cfgfile, JSON.stringify(JYconfig));
             writeFile("hiker://files/rules/Src/Juying/DYTVBoxTmp.json", "");
-            return 'TVBox订阅：'+(input?'保存成功':'已取消');
+            clearMyVar('importinput');
+            refreshPage(false);
+            return 'toast://TVBox订阅：'+(input?'保存成功':'已取消');
         }catch(e){
             log('TVBox订阅：失败>'+e.message);
-            return 'TVBox订阅：失败，详情查看日志';
+            return 'toast://TVBox订阅：失败，详情查看日志';
         }
     }else if(importtype=="3"){//biubiu导入
         try{
@@ -2485,7 +2494,7 @@ function Resourceimport(input,importtype,boxdy){
         } catch (e) {
             hideLoading();
             log('biu导入接口失败：'+e.message); 
-            return "biu导入：远程链接文件无效或内容有错"
+            return "toast://biu导入：远程链接文件无效或内容有错"
         }
         var jknum = -1;
         var jxnum = -1;
@@ -2567,6 +2576,6 @@ function Resourceimport(input,importtype,boxdy){
             }
         }
         let sm = (jknum>-1?' 接口保存'+jknum:'')+(jxnum>-1?' 解析保存'+jxnum:'');
-        return 'biu导入：'+(sm?sm:'导入异常，详情查看日志');
+        return 'toast://biu导入：'+(sm?sm:'导入异常，详情查看日志');
     }   
 }
