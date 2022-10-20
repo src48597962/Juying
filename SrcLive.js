@@ -28,20 +28,24 @@ function Live() {
     let JYlivefile = "hiker://files/rules/Src/Juying/live.txt";
     let JYlive = "";
     let JYlivedyurl = getMyVar('JYlivedyurl','juying');
-    if(JYlivedyurl=="juying"&&!getMyVar('JYlivelocal')){
+    if(getMyVar('JYlivelocal','0')=="1"){
         JYlive=fetch(JYlivefile);
-        if(JYlive==""&&livedata.length>0){
-            JYlivedyurl = livedata[0].url?livedata[0].url:JYlivedyurl;
-            putMyVar('JYlivedyurl',JYlivedyurl);
+    }else{
+        if(JYlivedyurl=="juying"){
+            JYlive=fetch(JYlivefile);
+            if(JYlive==""&&livedata.length>0){
+                JYlivedyurl = livedata[0].url?livedata[0].url:JYlivedyurl;
+                putMyVar('JYlivedyurl',JYlivedyurl);
+            }
         }
-    }
-    if(JYlivedyurl!="juying"){
-        showLoading('发现订阅源，正在初始化');
-        let YChtml = fetchCache(JYlivedyurl,24,{timeout:3000}).replace(/TV-/g,'TV').replace(/\[.*\]/g,'');
-        if(YChtml.indexOf('#genre#')>-1){
-            JYlive = YChtml;
+        if(JYlivedyurl!="juying"){
+            showLoading('发现订阅源，正在初始化');
+            let YChtml = fetchCache(JYlivedyurl,24,{timeout:3000}).replace(/TV-/g,'TV').replace(/\[.*\]/g,'');
+            if(YChtml.indexOf('#genre#')>-1){
+                JYlive = YChtml;
+            }
+            hideLoading();
         }
-        hideLoading();
     }
 
     if(livedata.length>0){
@@ -535,7 +539,7 @@ function LiveSet() {
                                         }
                                         writeFile(JYlivefile, JYlives.join('\n'));
                                         hideLoading();
-                                        if(importnum>0){
+                                        if(importnum>0&&getMyVar('JYlivedyurl','juying')=="juying"){
                                             putMyVar('isEdit','1');
                                         }
                                         return "toast://成功导入"+importnum;
