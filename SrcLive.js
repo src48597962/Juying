@@ -4,6 +4,7 @@ function Live() {
         clearMyVar('clearlive');
         clearMyVar('JYlivenum');
         clearMyVar('JYlivedyurl');
+        clearMyVar('selectgroup');
     }));
     var d = [];
     d.push({
@@ -32,6 +33,9 @@ function Live() {
     }
 
     if(livedata.length>0){
+        if(JYlive==""){
+            putMyVar('JYlivedyurl',livedata[0].url?livedata[0].url:JYlivedyurl);
+        }
         d.push({
             col_type: 'line'
         })
@@ -80,9 +84,10 @@ function Live() {
         }
         let YChtml = fetchCache(tourl,24,{timeout:3000}).replace(/TV-/g,'TV').replace(/\[.*\]/g,'');
         if(YChtml.indexOf('#genre#')>-1){
+            /*
             if(JYlivedyurl=="juying"){
                 writeFile(JYlivefile, YChtml);
-            }
+            }*/
             JYlive = YChtml;
         }
         hideLoading();
@@ -156,7 +161,7 @@ function Live() {
                 let groupname = grouplist[i]?grouplist[i]:"未分组";
                 d.push({
                     title: index==0?'‘‘’’<b><span style="color:#3399cc">'+groupname:groupname,
-                    url: $('#noLoading#').lazyRule((grouplist,groupname,guanlidata,datalist,JYlivefile) => {
+                    url: $('#noLoading#').lazyRule((grouplist,groupname,guanlidata,lists,JYlivefile) => {
                         for(let i in grouplist){
                             if(grouplist[i]==groupname){
                                 updateItem(groupname,{title:'‘‘’’<b><span style="color:#3399cc">'+groupname})
@@ -164,38 +169,40 @@ function Live() {
                                 updateItem(grouplist[i],{title:grouplist[i]})
                             }
                         }
-                        if(!/^group/.test(getMyVar('editmode','0'))){
+                        if(getMyVar('selectgroup')!=groupname){
                             deleteItemByCls('livelist');
-                            var lists = datalist.filter(item => {
-                                return item.name.includes(input);
-                            })
                             let gldatalist = guanlidata(lists);
                             addItemAfter('liveloading', gldatalist);
                             return "hiker://empty";
-                        }else if(getMyVar('editmode','0')=="groupdelete"){
+                        }else if(getMyVar('editmode')=="onedelete"){
                             try{
-                                showLoading('加载中，请稍候...');
+                                showLoading('删除中，请稍候...');
                                 let JYlive=fetch(JYlivefile);
                                 let JYlives = JYlive.split('\n');
                                 for(let i=0;i<JYlives.length;i++){
                                     if(JYlives[i].indexOf('#genre#')>-1&&JYlives[i].indexOf(groupname)>-1){
                                         JYlives.splice(i,1);
                                         i = i - 1;
-                                    }else if(JYlives[i].indexOf('#genre#')==-1&&JYlives[i].indexOf(',')>-1&&datalist.some(item => item.name==JYlives[i].split(',')[0])){
+                                    }else if(JYlives[i].indexOf('#genre#')==-1&&JYlives[i].indexOf(',')>-1&&lists.some(item => item.name==JYlives[i].split(',')[0])){
                                         JYlives.splice(i,1);
                                         i = i - 1;
                                     }
                                 }
                                 writeFile(JYlivefile, JYlives.join('\n'));
+                                let names = lists.map((list)=>{
+                                    return list.name;
+                                })
+                                deleteItem(names);
+                                deleteItem(groupname);
                                 hideLoading();
-                                refreshPage(false);
+                                //refreshPage(false);
                                 return "toast://已删除分组 <"+groupname+"> 所有地址";
                             }catch(e){
                                 hideLoading();
                                 log(e.message);
                                 return "toast://删除分组失败，详情查看日志";
                             }
-                        }else if(getMyVar('editmode','0')=="grouprename"){
+                        }else if(getMyVar('editmode')=="grouprename"){
                             return $("","输入新的分组名").input((groupname,JYlivefile)=>{
                                 if(input){
                                     let JYlive=fetch(JYlivefile);
@@ -246,54 +253,6 @@ function Live() {
         });
     }
     setHomeResult(d);
-    if(getMyVar('editmode')&&getMyVar('JYlivedyurl','juying')=="juying"){
-        let editnames = ["分组删除|groupdelete","分组改名|grouprename","地址删除|urldelete","地址改名|urlrename","退出编辑|exitedit"];
-        let editmenu = [];
-        for(let i=0;i<editnames.length;i++){
-            let name = editnames[i].split('|')[0];
-            let code = editnames[i].split('|')[1];
-            editmenu.push({
-                title: getMyVar('editmode')==code?'‘‘’’<b><span style="color:#3399cc">'+name:name,
-                url: getMyVar('JYlivedyurl','juying')=="juying"?$("#noLoading#").lazyRule((name,code,editnames) => {
-                    if(code=="exitedit"){
-                        clearMyVar('editmode');
-                        deleteItemByCls('editmenu');
-                        return "toast://退出编辑，正常观看";
-                    }else{
-                        putMyVar('editmode',code);
-                    }
-                    for(let i in editnames){
-                        if(editnames[i].split('|')[1]==code){
-                            updateItem(code,{title:'‘‘’’<b><span style="color:#3399cc">'+name})
-                        }else{
-                            updateItem(editnames[i].split('|')[1],{title:editnames[i].split('|')[0]})
-                        }
-                    }
-                    return "toast://进入"+name+"模式";
-                },name,code,editnames):"toast://当前为远程订阅源，无法进入编辑模式",
-                col_type: 'scroll_button',
-                extra: {
-                    id: code,
-                    cls: 'editmenu'
-                }
-            })
-        }
-        editmenu.push({
-            col_type: 'line',
-            extra: {
-                cls: 'editmenu'
-            }
-        })
-        for (let i = 0; i < 9; i++) {
-            editmenu.push({
-                col_type: "blank_block",
-                extra: {
-                    cls: 'editmenu'
-                }
-            })
-        }
-        addItemAfter('livesearch',editmenu);
-    }
 }
 
 function guanlidata(datalist) {
@@ -350,7 +309,7 @@ function LivePlay(name) {
     let JYlivefile= "hiker://files/rules/Src/Juying/live.txt";
     let JYlive= getMyVar('JYlivedyurl','juying')=="juying"?fetch(JYlivefile):fetchCache(getMyVar('JYlivedyurl'),24,{timeout:3000});
     let JYlives = JYlive.split('\n');
-    if(!/^url/.test(getMyVar('editmode','0'))||getMyVar('JYlivedyurl','juying')!="juying"){
+    if(!getMyVar('editmode')||getMyVar('JYlivedyurl','juying')!="juying"){
         let urls = [];
         for(let i = 0;i<JYlives.length;i++){
             try{
@@ -366,7 +325,7 @@ function LivePlay(name) {
         return JSON.stringify({
             urls: urls
         });
-    }else if(getMyVar('editmode','0')=="urldelete"){
+    }else if(getMyVar('editmode')=="onedelete"){
         for(let i=0;i<JYlives.length;i++){
             try{
                 if(JYlives[i].indexOf('#genre#')==-1&&JYlives[i].indexOf(',')>-1&&JYlives[i].indexOf(name)>-1){
@@ -378,7 +337,7 @@ function LivePlay(name) {
         writeFile(JYlivefile, JYlives.join('\n'));
         deleteItem(name);
         return "toast://已删除 <"+name+">";
-    }else if(getMyVar('editmode','0')=="urlrename"){
+    }else if(getMyVar('editmode')=="urlrename"){
         return $("","输入新的地址名").input((name,JYlivefile)=>{
             if(input){
                 let JYlive=fetch(JYlivefile);
@@ -663,8 +622,55 @@ function LiveSet() {
         title: '🛠 编辑本地源',
         col_type: 'text_2',
         url: getMyVar('JYlivedyurl','juying')=="juying"?$('#noLoading#').lazyRule(() => {
-            putMyVar('editmode','1');
-            back(true);
+            //putMyVar('editmode','1');
+            //back(true);
+            let editnames = ["单选删除|onedelete","多选删除|moredelete","分组改名|grouprename","地址改名|urlrename","退出编辑|exitedit"];
+            let editmenu = [];
+            for(let i=0;i<editnames.length;i++){
+                let name = editnames[i].split('|')[0];
+                let code = editnames[i].split('|')[1];
+                editmenu.push({
+                    title: name,
+                    url: getMyVar('JYlivedyurl','juying')=="juying"?$("#noLoading#").lazyRule((name,code,editnames) => {
+                        if(code=="exitedit"){
+                            clearMyVar('editmode');
+                            deleteItemByCls('editmenu');
+                            return "toast://退出编辑，正常观看";
+                        }else{
+                            putMyVar('editmode',code);
+                        }
+                        for(let i in editnames){
+                            if(editnames[i].split('|')[1]==code){
+                                updateItem(code,{title:'‘‘’’<b><span style="color:#3399cc">'+name})
+                            }else{
+                                updateItem(editnames[i].split('|')[1],{title:editnames[i].split('|')[0]})
+                            }
+                        }
+                        return "toast://进入"+name+"模式";
+                    },name,code,editnames):"toast://当前为远程订阅源，无法进入编辑模式",
+                    col_type: 'scroll_button',
+                    extra: {
+                        id: code,
+                        cls: 'editmenu'
+                    }
+                })
+            }
+            editmenu.push({
+                col_type: 'line',
+                extra: {
+                    cls: 'editmenu'
+                }
+            })
+            for (let i = 0; i < 9; i++) {
+                editmenu.push({
+                    col_type: "blank_block",
+                    extra: {
+                        cls: 'editmenu'
+                    }
+                })
+            }
+            addItemAfter('livesearch',editmenu);
+            back(false);
             return "toast://进入编辑模式，选择操作菜单";
         }):"toast://当前为远程订阅源，无法进入编辑模式"
     });
