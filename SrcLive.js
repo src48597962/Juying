@@ -189,6 +189,7 @@ function Live() {
                                 }
                                 writeFile(JYlivefile, JYlives.join('\n'));
                                 deleteItem(groupname);
+                                deleteItem('null');
                                 hideLoading();
                                 return "toast://已删除分组 <"+groupname+"> 所有地址";
                             }catch(e){
@@ -664,7 +665,7 @@ function LiveSet() {
                     }
                 })
             }
-            addItemBefore('livesearch',editmenu);
+            addItemAfter('livesearch',editmenu);
             back(false);
             return "toast://进入编辑模式，选择操作菜单";
         }):"toast://当前为远程订阅源，无法进入编辑模式"
