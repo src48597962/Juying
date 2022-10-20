@@ -189,7 +189,7 @@ function Live() {
                                 }
                                 writeFile(JYlivefile, JYlives.join('\n'));
                                 deleteItem(groupname);
-                                deleteItem('null');
+                                updateItem(groupname,{title:groupname});
                                 hideLoading();
                                 return "toast://已删除分组 <"+groupname+"> 所有地址";
                             }catch(e){
