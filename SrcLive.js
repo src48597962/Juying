@@ -35,6 +35,7 @@ function Live() {
     if(livedata.length>0){
         if(JYlive==""){
             putMyVar('JYlivedyurl',livedata[0].url?livedata[0].url:JYlivedyurl);
+            JYlivedyurl = livedata[0].url?livedata[0].url:JYlivedyurl;
         }
         d.push({
             col_type: 'line'
@@ -112,7 +113,7 @@ function Live() {
             }catch(e){}
         }
         let obj = {};
-        putMyVar('JYlivenum',datalist.length);
+        if(JYlivedyurl=="juying"){putMyVar('JYlivenum',datalist.length);}
         datalist = datalist.reduce((newArr, next) => {
             obj[next.name] ? "" : (obj[next.name] = true && newArr.push(next));
             return newArr;
@@ -681,6 +682,8 @@ function LiveSet() {
             writeFile("hiker://files/rules/Src/Juying/live.txt", "");
             putMyVar('isEdit','1');
             putMyVar('clearlive','1');
+            clearMyVar('JYlivenum');
+            refreshPage(false);
             return "toast://已清空";
         })
     });
