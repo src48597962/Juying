@@ -32,6 +32,7 @@ function Live() {
         JYlive=fetch(JYlivefile);
         if(JYlive==""&&livedata.length>0){
             JYlivedyurl = livedata[0].url?livedata[0].url:JYlivedyurl;
+            putMyVar('JYlivedyurl',JYlivedyurl);
         }
     }
     if(JYlivedyurl!="juying"){
