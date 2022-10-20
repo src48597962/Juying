@@ -6,6 +6,7 @@ function Live() {
         clearMyVar('selectgroup');
         clearMyVar('JYlivelocal');
     }));
+    clearMyVar('editmode');
     var d = [];
     d.push({
         title: '<b>聚影√</b> &nbsp &nbsp <small>⚙直播设置⚙</small>',
@@ -191,8 +192,8 @@ function Live() {
                                 let playlist = lists.map((list)=>{
                                     return list.name;
                                 })
-                                deleteItem(playlist);
                                 deleteItem(groupname);
+                                deleteItem(playlist);
                                 return "toast://已删除分组 <"+groupname+"> 所有地址";
                             }catch(e){
                                 hideLoading();
