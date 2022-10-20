@@ -1,10 +1,10 @@
 function Live() {
     addListener("onClose", $.toString(() => {
         clearMyVar('editmode');
-        clearMyVar('clearlive');
         clearMyVar('JYlivenum');
         clearMyVar('JYlivedyurl');
         clearMyVar('selectgroup');
+        clearMyVar('JYlivelocal');
     }));
     var d = [];
     d.push({
@@ -28,7 +28,7 @@ function Live() {
     let JYlivefile = "hiker://files/rules/Src/Juying/live.txt";
     let JYlive = "";
     let JYlivedyurl = getMyVar('JYlivedyurl','juying');
-    if(JYlivedyurl=="juying"){
+    if(JYlivedyurl=="juying"&&!getMyVar('JYlivelocal')){
         JYlive=fetch(JYlivefile);
         if(JYlive==""&&livedata.length>0){
             JYlivedyurl = livedata[0].url?livedata[0].url:JYlivedyurl;
@@ -56,6 +56,7 @@ function Live() {
             title: JYlivedyurl=="juying"?'本地✌':'本地',
             url: $("#noLoading#").lazyRule(() => {
                 putMyVar('JYlivedyurl','juying');
+                putMyVar('JYlivelocal','1');
                 refreshPage(false);
                 return "toast://聚影直播本地源数据";
             }),
@@ -70,6 +71,7 @@ function Live() {
                     title: JYlivedyurl==dyurl?dyname+'✌':dyname,
                     url: $("#noLoading#").lazyRule((dyname,dyurl) => {
                         putMyVar('JYlivedyurl',dyurl);
+                        clearMyVar('JYlivelocal');
                         refreshPage(false);
                         return "toast://已切换远程订阅："+dyname;
                     },dyname,dyurl),
@@ -670,7 +672,6 @@ function LiveSet() {
         url: $("确定清空聚影直播本地文件？").confirm(()=>{
             writeFile("hiker://files/rules/Src/Juying/live.txt", "");
             putMyVar('isEdit','1');
-            putMyVar('clearlive','1');
             clearMyVar('JYlivenum');
             refreshPage(false);
             return "toast://已清空";
