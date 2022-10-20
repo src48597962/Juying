@@ -175,7 +175,7 @@ function Live() {
                             return "hiker://empty";
                         }else if(getMyVar('editmode','0')=="groupdelete"){
                             try{
-                                showLoading('加载中，请稍候...');
+                                showLoading('删除中，请稍候...');
                                 let JYlive=fetch(JYlivefile);
                                 let JYlives = JYlive.split('\n');
                                 for(let i=0;i<JYlives.length;i++){
@@ -640,7 +640,7 @@ function LiveSet() {
                         }
                         for(let i in editnames){
                             if(editnames[i].split('|')[1]==code){
-                                updateItem(code,{title:'‘‘’’<b><span style="color:#3399cc">'+name})
+                                updateItem(code,{title:'‘‘’’<b><span style="color:#CD6600">'+name})
                             }else{
                                 updateItem(editnames[i].split('|')[1],{title:editnames[i].split('|')[0]})
                             }
