@@ -615,8 +615,9 @@ function LiveSet() {
         title: '🛠 编辑本地源',
         col_type: 'text_2',
         url: getMyVar('JYlivedyurl','juying')=="juying"?$('#noLoading#').lazyRule(() => {
-            //putMyVar('editmode','1');
-            //back(true);
+            if(getMyVar('JYlivenum','0')=="0"){
+                return "toast://本地数据源为空，无法进入编辑模式";
+            }
             let editnames = ["单选删除|onedelete","多选删除|moredelete","分组改名|grouprename","地址改名|urlrename","退出编辑|exitedit"];
             let editmenu = [];
             for(let i=0;i<editnames.length;i++){
@@ -640,7 +641,7 @@ function LiveSet() {
                             }
                         }
                         return "toast://进入"+name+"模式";
-                    },name,code,editnames):getMyVar('JYlivenum','0')=="0"?"toast://本地数据源为空，无法进入编辑模式":"toast://当前为远程订阅源，无法进入编辑模式",
+                    },name,code,editnames):"toast://当前为远程订阅源，无法进入编辑模式",
                     col_type: 'scroll_button',
                     extra: {
                         id: code,
