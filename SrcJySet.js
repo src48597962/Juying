@@ -1513,6 +1513,10 @@ function extension(){
         clearMyVar('importtype');
         clearMyVar('importinput');
         clearMyVar('guanlicz');
+        clearMyVar('uploads');
+        clearMyVar('uploadjiekou');
+        clearMyVar('uploadjiexi');
+        clearMyVar('uploadlive');
         refreshPage(false);
     }));
     var d = [];
@@ -1539,24 +1543,7 @@ function extension(){
         writeFile(cfgfile, JSON.stringify(JYconfig));
     }
     //上面临时存放几个版本，独立展示接口改个名
-    var dingyuefilepath = "hiker://files/rules/Src/Juying/dingyue.json";
-    var dingyuefile = fetch(dingyuefilepath);
-    if(dingyuefile != ""){
-        eval("var dingyuelist=" + dingyuefile+ ";");
-        JYconfig['dingyue'] = dingyuelist;
-        writeFile(cfgfile, JSON.stringify(JYconfig));
-        let png = "hiker://files/rules/Src/Juying/dingyue.json";
-        let path = getPath(png).replace("file://", "");
-        const File = java.io.File;
-        let javaImport = new JavaImporter();
-        javaImport.importPackage(
-            Packages.com.example.hikerview.utils
-        );
-        with(javaImport) {
-            new File(path).delete();
-        }
-    }
-    //上面的代码是将订阅历史迁移合并到config中
+    
     function getide(is) {
         if(is==1){
             return '‘‘’’<strong><font color="#f13b66a">◉ </front></strong>';
@@ -1609,64 +1596,19 @@ function extension(){
     });
     d.push({
         title: '✅ 分享同步',
-        url: JYconfig['codeid']?$(["只传接口","只传解析","接口+解析"],2,"选择上传同步云端的项").select((JYconfig,cfgfile)=>{
-            var text = {};
-            if(input=="只传接口"||input=="接口+解析"){
-                var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
-                var datafile = fetch(filepath);
-                if(datafile==""){
-                    return 'toast://接口数据为空，无法同步云端';
-                }
-                eval("var datalist=" + datafile+ ";");
-                text['jiekou'] = datalist;
-            }else{
-                text['jiekou'] = [];
-            }
-            if(input=="只传解析"||input=="接口+解析"){
-                var filepath = "hiker://files/rules/Src/Juying/myjiexi.json";
-                var datafile = fetch(filepath);
-                if(datafile==""){
-                    var datalist=[];
-                }else{
-                    eval("var datalist=" + datafile+ ";");
-                }
-                text['jiexi'] = datalist;
-            }else{
-                text['jiexi'] = [];
-            }
-            let textcontent = base64Encode(JSON.stringify(text));
-            if(textcontent.length>=200000){
-                log('分享失败：接口字符数超过最大限制，请精简接口，重点减少xpath和biubiu类型'); 
-                return 'toast://分享同步失败，接口字符数超过最大限制';
-            }
-            try{
-                var pasteupdate = JSON.parse(request('https://netcut.cn/api/note/update/', {
-                    headers: { 'Referer': 'https://netcut.cn/' },
-                    body: 'note_id='+aesDecode('Juying', JYconfig['codeid'])+'&note_content='+textcontent,
-                    method: 'POST'
-                }));
-                var status = pasteupdate.status
-                var sharetime = pasteupdate.data.updated_time;
-                if(status==1){
-                    JYconfig['sharetime'] = sharetime;
-                    writeFile(cfgfile, JSON.stringify(JYconfig));
-                    refreshPage(false);
-                    //let code = '聚影资源码￥'+JYconfig['codeid'];
-                    //copy(code);
-                    return "toast://分享同步云端数据成功";
-                }else{
-                    return 'toast://分享同步失败，资源码应该不存在';
-                }
-            } catch (e) {
-                log('分享失败：'+e.message); 
-                return 'toast://分享同步失败，请重新再试';
-            }
-        }, JYconfig, cfgfile):'toast://请先申请聚影资源码',
+        url: JYconfig['codeid']?$('#noLoading#').lazyRule(()=>{
+            putMyVar('uploads','1');
+            putMyVar('uploadjiekou','1');
+            putMyVar('uploadjiexi','0');
+            putMyVar('uploadlive','1');
+            refreshPage(false);
+            return 'toast://选择上传同步云端的项';
+        }):'toast://请先申请聚影资源码',
         col_type: "text_2"
     });
     d.push({
         title: '❎ 删除云端',
-        url: JYconfig['codeid']?$().lazyRule((JYconfig,cfgfile) => {
+        url: JYconfig['codeid']?$("确定要删除吗，删除后无法找回？").confirm((JYconfig,cfgfile)=>{
                 try{
                     var pastedelete = JSON.parse(request('https://netcut.cn/api/note/del_note/', {
                         headers: { 'Referer': 'https://netcut.cn/' },
@@ -1693,6 +1635,141 @@ function extension(){
             }, JYconfig, cfgfile):'toast://请先申请聚影资源码',
         col_type: "text_2"
     });
+    if(getMyVar('uploads','0')=="1"){
+        d.push({
+            title: '选择分享同步云端的项目',
+            col_type: "rich_text",
+            extra:{textSize:12}
+        });
+        d.push({
+            title:(getMyVar('uploadjiekou','0')=="1"?getide(1):getide(0))+'影视接口',
+            col_type:'text_3',
+            url:$('#noLoading#').lazyRule(() => {
+                if(getMyVar('uploadjiekou')=="1"){
+                    putMyVar('uploadjiekou','0');
+                }else{
+                    putMyVar('uploadjiekou','1');
+                }
+                refreshPage(false);
+                return "hiker://empty";
+            })
+        });
+        d.push({
+            title:(getMyVar('uploadjiexi','0')=="1"?getide(1):getide(0))+'解析接口',
+            col_type:'text_3',
+            url:$('#noLoading#').lazyRule(() => {
+                if(getMyVar('uploadjiexi')=="1"){
+                    putMyVar('uploadjiexi','0');
+                    var sm = "hiker://empty";
+                }else{
+                    putMyVar('uploadjiexi','1');
+                    var sm = "toast://友情提醒：公开分享的解析容易失效";
+                }
+                refreshPage(false);
+                return sm;
+            })
+        });
+        d.push({
+            title:(getMyVar('uploadlive','0')=="1"?getide(1):getide(0))+'直播接口',
+            col_type:'text_3',
+            url:$('#noLoading#').lazyRule(() => {
+                if(getMyVar('uploadlive')=="1"){
+                    putMyVar('uploadlive','0');
+                }else{
+                    putMyVar('uploadlive','1');
+                }
+                refreshPage(false);
+                return "hiker://empty";
+            })
+        });
+        d.push({
+            title: '🔙 取消上传',
+            url: $('#noLoading#').lazyRule(() => {
+                clearMyVar('uploads');
+                clearMyVar('uploadjiekou');
+                clearMyVar('uploadjiexi');
+                clearMyVar('uploadlive');
+                refreshPage(false);
+                return "hiker://empty";
+            }),
+            col_type: "text_2"
+        });
+        d.push({
+            title: '🔝 确定上传',
+            url: $().lazyRule((JYconfig,cfgfile) => {
+                var text = {};
+                if(getMyVar('uploadjiekou','0')=="1"){
+                    var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
+                    var datafile = fetch(filepath);
+                    if(datafile==""){
+                        var datalist = [];
+                    }else{
+                        eval("var datalist=" + datafile+ ";");
+                    }
+                    text['jiekou'] = datalist;
+                }else{
+                    text['jiekou'] = [];
+                }
+                if(getMyVar('uploadjiexi','0')=="1"){
+                    var filepath = "hiker://files/rules/Src/Juying/myjiexi.json";
+                    var datafile = fetch(filepath);
+                    if(datafile==""){
+                        var datalist = [];
+                    }else{
+                        eval("var datalist=" + datafile+ ";");
+                    }
+                    text['jiexi'] = datalist;
+                }else{
+                    text['jiexi'] = [];
+                }
+                if(getMyVar('uploadlive','0')=="1"){
+                    var filepath = "hiker://files/rules/Src/Juying/liveconfig.json";
+                    var datafile = fetch(filepath);
+                    if(datafile==""){
+                        var liveconfig={};
+                    }else{
+                        eval("var liveconfig=" + datafile+ ";");
+                    }
+                    text['live'] = liveconfig;
+                }else{
+                    text['live'] = {};
+                }
+                let textcontent = base64Encode(JSON.stringify(text));
+                if(textcontent.length>=200000){
+                    log('分享失败：字符数超过最大限制，请精简接口，重点减少xpath和biubiu类型'); 
+                    return 'toast://分享同步失败，超过最大限制，请精简接口';
+                }
+                try{
+                    var pasteupdate = JSON.parse(request('https://netcut.cn/api/note/update/', {
+                        headers: { 'Referer': 'https://netcut.cn/' },
+                        body: 'note_id='+aesDecode('Juying', JYconfig['codeid'])+'&note_content='+textcontent,
+                        method: 'POST'
+                    }));
+                    var status = pasteupdate.status
+                    var sharetime = pasteupdate.data.updated_time;
+                    clearMyVar('uploads');
+                    clearMyVar('uploadjiekou');
+                    clearMyVar('uploadjiexi');
+                    clearMyVar('uploadlive');
+                    refreshPage(false);
+                    if(status==1){
+                        JYconfig['sharetime'] = sharetime;
+                        writeFile(cfgfile, JSON.stringify(JYconfig));
+                        refreshPage(false);
+                        //let code = '聚影资源码￥'+JYconfig['codeid'];
+                        //copy(code);
+                        return "toast://分享同步云端数据成功";
+                    }else{
+                        return 'toast://分享同步失败，资源码应该不存在';
+                    }
+                } catch (e) {
+                    log('分享失败：'+e.message); 
+                    return 'toast://分享同步失败，请重新再试';
+                }
+            }, JYconfig, cfgfile),
+            col_type: "text_2"
+        });
+    }
     /*
     d.push({
         col_type: "line_blank"
@@ -1789,7 +1866,7 @@ function extension(){
 
     d.push({
         title: '✅ 更新资源',
-        url: JYconfig['codedyid']?$().lazyRule((codedyid) => {
+        url: JYconfig['codedyid']?$("确定要从云端更新数据覆盖本地？").confirm((codedyid)=>{
                 try{
                     let codeid = codedyid;
                     let text = parsePaste('https://netcut.cn/p/'+aesDecode('Juying', codeid));
@@ -1805,7 +1882,13 @@ function extension(){
                         if(jxdatalist.length>0){
                             writeFile(jxfilepath, JSON.stringify(jxdatalist));
                         }
-                        return "toast://同步完成，接口："+jkdatalist.length+"，解析："+jxdatalist.length;
+                        if(pastedata.live){
+                            var livefilepath = "hiker://files/rules/Src/Juying/liveconfig.json";
+                            var liveconfig = pastedata.live;
+                            writeFile(livefilepath, JSON.stringify(liveconfig));
+                            var sm = "，直播订阅已同步"
+                        }
+                        return "toast://同步完成，接口："+jkdatalist.length+"，解析："+jxdatalist.length+(sm?sm:"");
                     }else{
                         return "toast://口令错误或资源码已失效";
                     }
