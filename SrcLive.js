@@ -33,10 +33,6 @@ function Live() {
     }
 
     if(livedata.length>0){
-        if(JYlive==""){
-            putMyVar('JYlivedyurl',livedata[0].url?livedata[0].url:JYlivedyurl);
-            JYlivedyurl = livedata[0].url?livedata[0].url:JYlivedyurl;
-        }
         d.push({
             col_type: 'line'
         })
