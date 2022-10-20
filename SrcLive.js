@@ -159,40 +159,40 @@ function Live() {
                 d.push({
                     title: index==0?'‘‘’’<b><span style="color:#3399cc">'+groupname:groupname,
                     url: $('#noLoading#').lazyRule((grouplist,groupname,guanlidata,lists,JYlivefile) => {
-                        for(let i in grouplist){
-                            if(grouplist[i]==groupname){
-                                updateItem(groupname,{title:'‘‘’’<b><span style="color:#3399cc">'+groupname})
-                            }else{
-                                updateItem(grouplist[i],{title:grouplist[i]})
+                        if(!/^group/.test(getMyVar('editmode','0'))&&getMyVar('selectgroup')!=groupname){
+                            putMyVar('selectgroup',groupname);
+                            for(let i in grouplist){
+                                if(grouplist[i]==groupname){
+                                    updateItem(groupname,{title:'‘‘’’<b><span style="color:#3399cc">'+groupname})
+                                }else{
+                                    updateItem(grouplist[i],{title:grouplist[i]})
+                                }
                             }
-                        }
-                        if(getMyVar('selectgroup')!=groupname){
                             deleteItemByCls('livelist');
                             let gldatalist = guanlidata(lists);
                             addItemAfter('liveloading', gldatalist);
                             return "hiker://empty";
-                        }else if(getMyVar('editmode')=="onedelete"){
+                        }else if(getMyVar('editmode','0')=="groupdelete"){
                             try{
-                                showLoading('删除中，请稍候...');
+                                showLoading('加载中，请稍候...');
                                 let JYlive=fetch(JYlivefile);
                                 let JYlives = JYlive.split('\n');
                                 for(let i=0;i<JYlives.length;i++){
                                     if(JYlives[i].indexOf('#genre#')>-1&&JYlives[i].indexOf(groupname)>-1){
                                         JYlives.splice(i,1);
                                         i = i - 1;
-                                    }else if(JYlives[i].indexOf('#genre#')==-1&&JYlives[i].indexOf(',')>-1&&lists.some(item => item.name==JYlives[i].split(',')[0])){
+                                    }else if(JYlives[i].indexOf('#genre#')==-1&&JYlives[i].indexOf(',')>-1&&lists.some(item => item.name==JYlives[i].split(',')[0].trim())){
                                         JYlives.splice(i,1);
                                         i = i - 1;
                                     }
                                 }
                                 writeFile(JYlivefile, JYlives.join('\n'));
-                                let names = lists.map((list)=>{
+                                hideLoading();
+                                let playlist = lists.map((list)=>{
                                     return list.name;
                                 })
-                                deleteItem(names);
+                                deleteItem(playlist);
                                 deleteItem(groupname);
-                                hideLoading();
-                                //refreshPage(false);
                                 return "toast://已删除分组 <"+groupname+"> 所有地址";
                             }catch(e){
                                 hideLoading();
@@ -306,7 +306,7 @@ function LivePlay(name) {
     let JYlivefile= "hiker://files/rules/Src/Juying/live.txt";
     let JYlive= getMyVar('JYlivedyurl','juying')=="juying"?fetch(JYlivefile):fetchCache(getMyVar('JYlivedyurl'),24,{timeout:3000});
     let JYlives = JYlive.split('\n');
-    if(!getMyVar('editmode')||getMyVar('JYlivedyurl','juying')!="juying"){
+    if(!/^url/.test(getMyVar('editmode','0'))||getMyVar('JYlivedyurl','juying')!="juying"){
         let urls = [];
         for(let i = 0;i<JYlives.length;i++){
             try{
@@ -322,10 +322,10 @@ function LivePlay(name) {
         return JSON.stringify({
             urls: urls
         });
-    }else if(getMyVar('editmode')=="onedelete"){
+    }else if(getMyVar('editmode','0')=="urldelete"){
         for(let i=0;i<JYlives.length;i++){
             try{
-                if(JYlives[i].indexOf('#genre#')==-1&&JYlives[i].indexOf(',')>-1&&JYlives[i].indexOf(name)>-1){
+                if(JYlives[i].indexOf('#genre#')==-1&&JYlives[i].indexOf(',')>-1&&JYlives[i].split(',')[0].trim()==name){
                     JYlives.splice(i,1);
                     i = i - 1;
                 }
@@ -441,7 +441,7 @@ function LiveSet() {
                     d.push({
                         title: (livedata[i].show!=0?getide(1):getide(0))+livedata[i].name,
                         desc: livedata[i].url,
-                        url: $(["更新缓存","删除订阅","导入聚直播","导入聚影√","复制链接",livedata[i].show!=0?"停用订阅":"启用订阅"],2,"").select((livecfgfile, url)=>{
+                        url: $(["复制链接","导入聚影√","更新缓存","导入聚直播","删除订阅",livedata[i].show!=0?"停用订阅":"启用订阅"],2,"").select((livecfgfile, url)=>{
                             try{
                                 if(input=="更新缓存"){
                                     showLoading('正在缓存，请稍后.');
@@ -622,7 +622,7 @@ function LiveSet() {
             if(getMyVar('JYlivenum','0')=="0"){
                 return "toast://本地数据源为空，无法进入编辑模式";
             }
-            let editnames = ["单选删除|onedelete","多选删除|moredelete","分组改名|grouprename","地址改名|urlrename","退出编辑|exitedit"];
+            let editnames = ["分组删除|groupdelete","分组改名|grouprename","地址删除|urldelete","地址改名|urlrename","退出编辑|exitedit"];
             let editmenu = [];
             for(let i=0;i<editnames.length;i++){
                 let name = editnames[i].split('|')[0];
@@ -677,7 +677,9 @@ function LiveSet() {
         col_type: 'text_2',
         url: $("确定清空聚影直播本地文件？").confirm(()=>{
             writeFile("hiker://files/rules/Src/Juying/live.txt", "");
-            putMyVar('isEdit','1');
+            if(getMyVar('JYlivedyurl','juying')=="juying"){
+                putMyVar('isEdit','1');
+            }
             clearMyVar('JYlivenum');
             refreshPage(false);
             return "toast://已清空";
@@ -750,6 +752,9 @@ function LiveSet() {
                 }
                 writeFile(JYlivefile, JYlives.join('\n'));
                 hideLoading();
+                if(fails.length>0&&getMyVar('JYlivedyurl','juying')=="juying"){
+                    putMyVar('isEdit','1');
+                }
                 return "toast://删除疑似失效源"+fails.length+"条";
             }else{
                 return "toast://没有直播数据源";
