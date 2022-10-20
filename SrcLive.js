@@ -639,7 +639,7 @@ function LiveSet() {
                             }
                         }
                         return "toast://进入"+name+"模式";
-                    },name,code,editnames):"toast://当前为远程订阅源，无法进入编辑模式",
+                    },name,code,editnames):getMyVar('JYlivenum','0')=="0"?"toast://本地数据源为空，无法进入编辑模式":"toast://当前为远程订阅源，无法进入编辑模式",
                     col_type: 'scroll_button',
                     extra: {
                         id: code,
