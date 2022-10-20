@@ -189,7 +189,10 @@ function Live() {
                                 }
                                 writeFile(JYlivefile, JYlives.join('\n'));
                                 deleteItem(groupname);
-                                updateItem(groupname,{title:groupname});
+                                let playlist = lists.map((list)=>{
+                                    return list.name;
+                                });
+                                deleteItem(playlist);
                                 hideLoading();
                                 return "toast://已删除分组 <"+groupname+"> 所有地址";
                             }catch(e){
