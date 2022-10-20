@@ -636,7 +636,7 @@ function LiveSet() {
                         }
                         for(let i in editnames){
                             if(editnames[i].split('|')[1]==code){
-                                updateItem(code,{title:'‘‘’’<b><span style="color:#CD6600">'+name})
+                                updateItem(code,{title:'‘‘’’<b><span style="color:#CDBE70">'+name})
                             }else{
                                 updateItem(editnames[i].split('|')[1],{title:editnames[i].split('|')[0]})
                             }
@@ -664,7 +664,7 @@ function LiveSet() {
                     }
                 })
             }
-            addItemAfter('livesearch',editmenu);
+            addItemBefore('livesearch',editmenu);
             back(false);
             return "toast://进入编辑模式，选择操作菜单";
         }):"toast://当前为远程订阅源，无法进入编辑模式"
