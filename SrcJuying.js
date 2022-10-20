@@ -824,9 +824,14 @@ function yiji() {
                     if(jxdatalist.length>0){
                         writeFile(jxfilepath, JSON.stringify(jxdatalist));
                     }
-                    log("自动订阅同步完成");
+                    if(pastedata.live){
+                        let livefilepath = "hiker://files/rules/Src/Juying/liveconfig.json";
+                        let liveconfig = pastedata.live;
+                        writeFile(livefilepath, JSON.stringify(liveconfig));
+                    }
+                    log("订阅资源码自动同步完成");
                 }else{
-                    log("自动订阅同步口令错误或已失效");
+                    log("订阅资源码自动同步口令错误或已失效");
                 }
                 setItem('dingyuetime',nowtime+"time");
             }
