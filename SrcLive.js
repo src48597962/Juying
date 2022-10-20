@@ -26,10 +26,21 @@ function Live() {
     let livedata = liveconfig['data']||[];
 
     let JYlivefile = "hiker://files/rules/Src/Juying/live.txt";
-    let JYlive= "";
+    let JYlive = "";
     let JYlivedyurl = getMyVar('JYlivedyurl','juying');
     if(JYlivedyurl=="juying"){
         JYlive=fetch(JYlivefile);
+        if(JYlive==""&&livedata.length>0){
+            JYlivedyurl = livedata[0].url?livedata[0].url:JYlivedyurl;
+        }
+    }
+    if(JYlivedyurl!="juying"){
+        showLoading('发现订阅源，正在初始化');
+        let YChtml = fetchCache(JYlivedyurl,24,{timeout:3000}).replace(/TV-/g,'TV').replace(/\[.*\]/g,'');
+        if(YChtml.indexOf('#genre#')>-1){
+            JYlive = YChtml;
+        }
+        hideLoading();
     }
 
     if(livedata.length>0){
@@ -71,24 +82,6 @@ function Live() {
         })
     }
 
-    if(JYlive==""&&livedata.length>0&&(getMyVar('clearlive','0')!="1"||JYlivedyurl!="juying")){
-        showLoading('发现订阅源，正在初始化');
-        if(JYlivedyurl=="juying"){
-            log('本地源文件为空且有订阅，默认导入第一个订阅');
-            var tourl = livedata[0].url;
-        }else{
-            var tourl = JYlivedyurl;
-        }
-        let YChtml = fetchCache(tourl,24,{timeout:3000}).replace(/TV-/g,'TV').replace(/\[.*\]/g,'');
-        if(YChtml.indexOf('#genre#')>-1){
-            /*
-            if(JYlivedyurl=="juying"){
-                writeFile(JYlivefile, YChtml);
-            }*/
-            JYlive = YChtml;
-        }
-        hideLoading();
-    }
     if(JYlive){
         var JYlives = JYlive.split('\n');
     }else{
