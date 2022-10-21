@@ -2581,7 +2581,7 @@ function Resourceimport(input,importtype,boxdy){
 function JYimport(input) {
     if(input.indexOf('@import=js:')>-1){
         try{
-            input = input.split('\n')[1].split('@import=js:')[0];
+            input = input.split('@import=js:')[0].replace('聚影√云口令：\n','');
             var cloudimport = 1;
         }catch(e){
             return "toast://聚影√：云口令有误，无法导入";
@@ -2624,7 +2624,6 @@ function JYimport(input) {
             if(urlnum>0&&cloudimport!=1){
                 refreshPage(false);
             }
-            log(sm+"合计："+pastedatalist.length+"，保存："+urlnum);
             return "toast://"+sm+"合计："+pastedatalist.length+"，保存："+urlnum;
         }else{
             return "toast://聚影√：口令错误或已失效";
@@ -2686,7 +2685,7 @@ function JYshare(lx) {
         if(lx!=2){
             copy(code);
         }else{
-            copy(`云口令：复制后打开软件自动识别\n`+code+`@import=js:$.require("hiker://page/cloudimport?rule=聚影√");`);
+            copy(`聚影√云口令：\n`+code+`@import=js:$.require("hiker://page/cloudimport?rule=聚影√");`);
         }
         return "toast://"+sm2;
     }else{
