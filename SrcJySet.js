@@ -1,6 +1,6 @@
 //个人学习代码
-function JYimport() {
-    log('云口令导入')
+function JYimport(input) {
+    log(input+'云口令导入')
 }
 function JYshare(lx) {
     if(getMyVar('guanli', 'jk')=="jk"){
