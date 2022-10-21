@@ -2624,6 +2624,7 @@ function JYimport(input) {
             if(urlnum>0&&cloudimport!=1){
                 refreshPage(false);
             }
+            log(sm+"合计："+pastedatalist.length+"，保存："+urlnum);
             return "toast://"+sm+"合计："+pastedatalist.length+"，保存："+urlnum;
         }else{
             return "toast://聚影√：口令错误或已失效";
