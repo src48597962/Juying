@@ -632,6 +632,15 @@ function yiji() {
         clearMyVar('isverifyA');
     }));
 */
+    if(MY_RULE.version<5){
+        confirm({
+            title:'更新提示', 
+            content:'发现新版本，建议立即更新？', 
+            confirm:()=>{return parsePaste("https://pasteme.tyrantg.com/xxxxxx/brtvj1ow7dvlvnv5@EYUzic");}, 
+            cancel:()=>{return 'toast://不更新可能会有异常哦';}
+        })
+        setResult([]);
+    }
     clearMyVar('SrcJy$back');
     var d = [];
     const Color = "#3399cc";
