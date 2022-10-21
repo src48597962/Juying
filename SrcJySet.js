@@ -249,7 +249,7 @@ function SRCSet() {
             }
         }):$().lazyRule(()=>{
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
-            JYshare(1);
+            return JYshare(1);
         }),
         img: "https://lanmeiguojiang.com/tubiao/more/3.png",
         col_type: "icon_small_4"
