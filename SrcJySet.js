@@ -2606,7 +2606,6 @@ function JYimport(input) {
             let pastedata = JSON.parse(base64Decode(text));
             
             let urlnum = 0;
-            //require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
             if(getMyVar('guanli', 'jk')=="jk"){
                 if(codelx=="share"){
                     var pastedatalist = pastedata;
@@ -2622,8 +2621,12 @@ function JYimport(input) {
                 }
                 urlnum = jiexisave(pastedatalist);
             }
-            if(urlnum>0&&cloudimport!=1){
-                refreshPage(false);
+            if(cloudimport){
+                log(sm+"合计："+pastedatalist.length+"，保存："+urlnum);
+            }else{
+                if(urlnum>0){
+                    refreshPage(false);
+                }
             }
             return "toast://"+sm+"合计："+pastedatalist.length+"，保存："+urlnum;
         }else{
