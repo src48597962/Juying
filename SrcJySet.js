@@ -233,10 +233,8 @@ function SRCSet() {
         url: $("","聚影口令").input(()=>{
                 try{
                     if((input.split('￥')[0]=="聚影接口"||input.split('￥')[0]=="聚影资源码")&&getMyVar('guanli', 'jk')=="jk"){
-                        //var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
                         var sm = "聚影接口";
                     }else if((input.split('￥')[0]=="聚影解析"||input.split('￥')[0]=="聚影资源码")&&getMyVar('guanli', 'jk')=="jx"){
-                        var filepath = "hiker://files/rules/Src/Juying/myjiexi.json";
                         var sm = "聚影解析";
                     }else{
                         return "toast://无法识别的口令";
