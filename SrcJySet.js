@@ -232,7 +232,7 @@ function SRCSet() {
         title: '导入',
         url: $("","聚影口令").input(()=>{
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
-            JYimport(input);
+            return JYimport(input);
         }),
         img: "https://lanmeiguojiang.com/tubiao/more/43.png",
         col_type: "icon_small_4"
@@ -243,9 +243,9 @@ function SRCSet() {
         url: datalist.length==0?'toast://数据为空，无法分享':iscloudshare?$(['普通口令','云口令'],2).select(()=>{
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
             if(input=="云口令"){
-                JYshare(2);
+                return JYshare(2);
             }else{
-                JYshare(1);
+                return JYshare(1);
             }
         }):$().lazyRule(()=>{
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
