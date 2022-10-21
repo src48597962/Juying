@@ -55,7 +55,7 @@ function JYshare(lx) {
             copy(code);
         }else{
             let importsql = `require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');JYimport(input)`
-            copy(`聚影分享云口令，复制后打开软件自动识别\n`+code+`@import=js:eval(base64Decode(`+base64Encode(importsql)+`))`);
+            copy(`聚影分享云口令，复制后打开软件自动识别\n`+code+`@import=js:eval(base64Decode('`+base64Encode(importsql)+`'))`);
         }
         return "toast://"+sm2;
     }else{
