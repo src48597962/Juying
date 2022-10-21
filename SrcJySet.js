@@ -1,5 +1,5 @@
 //个人学习代码
-function JYimport(lx) {
+function JYimport() {
     log('云口令导入')
 }
 function JYshare(lx) {
