@@ -2689,7 +2689,7 @@ function JYshare(lx) {
         if(lx!=2){
             copy(code);
         }else{
-            copy(`云口令：复制后打开软件自动识别\n`+code+`@import=js:eval(JSON.parse(fetch("hiker://page/cloudimport?rule=聚影√")).rule);`);
+            copy(`云口令：复制后打开软件自动识别\n`+code+`@import=js:$.require("hiker://page/cloudimport?rule=聚影√");`);
         }
         return "toast://"+sm2;
     }else{
