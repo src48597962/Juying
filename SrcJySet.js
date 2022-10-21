@@ -2581,7 +2581,7 @@ function Resourceimport(input,importtype,boxdy){
 function JYimport(input) {
     if(input.indexOf('@import=js:')>-1){
         try{
-            input = input.split('@import=js:')[0].replace('聚影√云口令：\n','');
+            input = input.split('@import=js:')[0].replace('云口令：\n','');
             var cloudimport = 1;
         }catch(e){
             return "toast://聚影√：云口令有误，无法导入";
@@ -2685,7 +2685,7 @@ function JYshare(lx) {
         if(lx!=2){
             copy(code);
         }else{
-            copy(`聚影√云口令：\n`+code+`@import=js:$.require("hiker://page/cloudimport?rule=聚影√");`);
+            copy(`云口令：\n`+code+`@import=js:$.require("hiker://page/cloudimport?rule=聚影√");`);
         }
         return "toast://"+sm2;
     }else{
