@@ -2584,16 +2584,16 @@ function JYimport(input) {
             input = input.split('\n')[1].split('@import=js:')[0];
             var cloudimport = 1;
         }catch(e){
-            return "云口令有误，无法导入";
+            return "toast://聚影√：云口令有误，无法导入";
         }
     }
     try{
         if((input.split('￥')[0]=="聚影接口"||input.split('￥')[0]=="聚影资源码")&&getMyVar('guanli', 'jk')=="jk"){
-            var sm = "聚影接口";
+            var sm = "聚影√：接口";
         }else if((input.split('￥')[0]=="聚影解析"||input.split('￥')[0]=="聚影资源码")&&getMyVar('guanli', 'jk')=="jx"){
-            var sm = "聚影解析";
+            var sm = "聚影√：解析";
         }else{
-            return "toast://无法识别的口令";
+            return "toast://聚影√：无法识别的口令";
         }
         if(input.split('￥')[0]=="聚影资源码"){
             var codelx = "dingyue";
@@ -2621,19 +2621,15 @@ function JYimport(input) {
                 }
                 urlnum = jiexisave(pastedatalist);
             }
-            if(cloudimport){
-                log("云口令导入>"+sm+"合计："+pastedatalist.length+"，保存："+urlnum);
-            }else{
-                if(urlnum>0){
-                    refreshPage(false);
-                }
+            if(urlnum>0&&cloudimport!=1){
+                refreshPage(false);
             }
             return "toast://"+sm+"合计："+pastedatalist.length+"，保存："+urlnum;
         }else{
-            return "toast://口令错误或已失效";
+            return "toast://聚影√：口令错误或已失效";
         }
     } catch (e) {
-        return "toast://无法识别的口令";
+        return "toast://聚影√：无法识别的口令";
     }
 }
 //资源分享
