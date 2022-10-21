@@ -634,10 +634,10 @@ function yiji() {
 */
     if(MY_RULE.version<5){
         confirm({
-            title:'更新提示', 
-            content:'发现新版本，建议立即更新？', 
+            title:'小程序更新提示', 
+            content:'发现新版本，需立即更新？', 
             confirm:()=>{return parsePaste("https://pasteme.tyrantg.com/xxxxxx/brtvj1ow7dvlvnv5@EYUzic");}, 
-            cancel:()=>{return 'toast://不更新可能会有异常哦';}
+            cancel:()=>{return 'toast://不更新无法使用';}
         })
         setResult([]);
     }
