@@ -1,4 +1,67 @@
 //个人学习代码
+function JYimport(lx) {
+    log('云口令导入')
+}
+function JYshare(lx) {
+    if(getMyVar('guanli', 'jk')=="jk"){
+    var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
+        var sm = "聚影接口";
+    }else{
+        var filepath = "hiker://files/rules/Src/Juying/myjiexi.json";
+        var sm = "聚影解析";
+    }
+    var datafile = fetch(filepath);
+    eval("var datalist=" + datafile+ ";");
+    var sm2 = "聚影分享口令已生成";
+    let duoselect = storage0.getMyVar('duoselect')?storage0.getMyVar('duoselect'):[];
+    if(duoselect.length>0){
+        var lists = datalist.filter(item => {
+            if(item.url){
+                return duoselect.indexOf(item.url)>-1;
+            }else{
+                return duoselect.indexOf(item.parse)>-1;
+            }
+        })
+        if(lists.length>0){
+            var datalist = lists;
+            sm2 = "(选定)聚影分享口令已生成";
+            //clearMyVar('duoselect');
+        }
+    }
+    
+    let text = JSON.stringify(datalist);
+    var num = ''; 
+    for (var i = 0; i < 6; i++) {
+        num += Math.floor(Math.random() * 10);
+    }
+    let textcontent = base64Encode(text);
+    if(textcontent.length>=200000){
+        log('分享失败：接口字符数超过最大限制，请精简接口，重点减少xpath和biubiu类型'); 
+        return 'toast://分享同步失败，接口字符数超过最大限制';
+    }
+    try{
+        var pasteurl = JSON.parse(request('https://netcut.cn/api/note/create/', {
+            headers: { 'Referer': 'https://netcut.cn/' },
+            body: 'note_name=Juying'+num+'&note_content='+textcontent+'&note_pwd=0&expire_time=3600',
+            method: 'POST'
+        })).data.note_id || "";
+    }catch(e){
+        var pasteurl = "";
+    }
+
+    if(pasteurl){
+        let code = sm+'￥'+aesEncode('Juying', pasteurl)+'￥1小时内有效';
+        if(lx!=2){
+            copy(code);
+        }else{
+            let importsql = `require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');JYimport()`
+            copy(`聚影分享云口令，复制后打开软件自动识别\n`+code+`@import=js:eval(base64Decode(`+base64Encode(importsql)+`')`);
+        }
+        return "toast://"+sm2;
+    }else{
+        return "toast://分享失败，剪粘板或网络异常";
+    }
+}
 function SRCSet() {
     addListener("onClose", $.toString(() => {
         clearMyVar('guanlicz');
@@ -283,6 +346,9 @@ function SRCSet() {
     d.push({
         title: '分享',
         url: datalist.length==0?'toast://数据为空，无法分享':$().lazyRule(()=>{
+            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+            JYshare(2);
+            /*
                 if(getMyVar('guanli', 'jk')=="jk"){
                     var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
                     var sm = "聚影接口";
@@ -335,7 +401,7 @@ function SRCSet() {
                     return "toast://"+sm2;
                 }else{
                     return "toast://分享失败，剪粘板或网络异常";
-                }
+                }*/
             }),
         img: "https://lanmeiguojiang.com/tubiao/more/3.png",
         col_type: "icon_small_4"
