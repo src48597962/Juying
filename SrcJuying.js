@@ -632,6 +632,7 @@ function yiji() {
         clearMyVar('isverifyA');
     }));
 */
+/*
     if(MY_RULE.version<6){
         confirm({
             title:'小程序更新提示', 
@@ -641,6 +642,7 @@ function yiji() {
         })
         setResult([]);
     }
+    */
     clearMyVar('SrcJy$back');
     var d = [];
     const Color = "#3399cc";
