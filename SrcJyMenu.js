@@ -147,7 +147,7 @@ var erjimenu = [
                 });
                 d.push({
                     title: '无效播放地址',
-                    url: $("","屏蔽无效播放地址\n多数为跳舞小姐姐播放链接").input(()=>{
+                    url: $("","屏蔽无法播放的地址").input(()=>{
                             var recordfile = "hiker://files/rules/Src/Juying/parse.json";
                             var recordparse=fetch(recordfile);
                             if(recordparse != ""){
@@ -167,7 +167,7 @@ var erjimenu = [
                 });                
                 d.push({
                     title: '清除播放拦载记录',
-                    url: $("清除拦截跳舞小姐姐视频记录？").confirm(()=>{
+                    url: $("清除拦截无法播放地址记录？").confirm(()=>{
                             var recordfile = "hiker://files/rules/Src/Juying/parse.json";
                             var recordparse=fetch(recordfile);
                             if(recordparse != ""){
