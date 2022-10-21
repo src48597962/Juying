@@ -49,9 +49,10 @@ var SrcParseS = {
         }
         return header;
     },
-    嗅探: function (vipUrl) {
+    嗅探: function (vipUrl, excludeurl) {
         showLoading('√视频解析中，请稍候...');
-        return (getMyVar('SrcXTNH', 'web') == 'x5' ? 'x5Rule://' : 'webRule://') + vipUrl + '@' + $.toString((formatUrl,vipUrl) => {
+        excludeurl = excludeurl||[];
+        return (getMyVar('SrcXTNH', 'web') == 'x5' ? 'x5Rule://' : 'webRule://') + vipUrl + '@' + $.toString((formatUrl,vipUrl,excludeurl) => {
             if (window.c == null) {
                 if (typeof (request) == 'undefined' || !request) {
                     eval(fba.getInternalJs());
@@ -75,7 +76,7 @@ var SrcParseS = {
             var exclude = /\/404\.m3u8|\/xiajia\.mp4|\/余额不足\.m3u8|\.css|\.js|\.gif|\.png|\.jpeg|api\.m3u88\.com|html,http|\.php\?v=h|\?url=h|\&url=h|%253Furl%253Dh/;//设置排除地址
             var contain = /\.mp4|\.m3u8|\.flv|\.avi|\.mpeg|\.wmv|\.mov|\.rmvb|\.dat|qqBFdownload|mime=video%2F|video_mp4|\.ts\?|TG@UosVod/;//设置符合条件的正确地址
             for (var i in urls) {
-                if (!exclude.test(urls[i]) && contain.test(urls[i])) {
+                if (!exclude.test(urls[i]) && contain.test(urls[i]) && excludeurl.indexOf(urls[i])==-1) {
                     //fba.log("嗅探成功>"+urls[i]);
                     //return urls[i]+'#isVideo=true#';
                     if(fy_bridge_app.getHeaderUrl&&vipUrl.indexOf("=http")==-1)
@@ -95,7 +96,7 @@ var SrcParseS = {
                     }
                 }
             }
-        }, this.formatUrl, vipUrl)
+        }, this.formatUrl, vipUrl, excludeurl)
     },
     智能: function (vipUrl, input) {
         showLoading('√智能解析中，请稍候');
@@ -327,7 +328,7 @@ var SrcParseS = {
         evalPrivateJS("OjB3OHrVodkVQlHIU8UUAC5W0ZBgTQEC4h9eUEcAT9kEM0hY/45YOxs7PDeQEnxjVhaWW2tIqO5GQimD4ssHKSka505+O0avEtQQZ9zRy6GxaBZdTHrbCPcoNIajmr3+JG22tRswOJFYDX5aYk0PfUDEFsZa2OjZbz+xTthnoUPLNm0R2g1kBFnWwGKBWUxEhEsFwFruhFSaxJi1E1WZ7WlbP0v4OpoQgn6M7UXGahP9h2fHi8UBVDGfjzIuVuJSCgICLlVGaAbT0ghic+Kfbp3TmjRhAo1DKretYp1U53apDMvO2Q+6oAyO1js5TJwx51ygFSUqVGAu0C2DLxkG0Z3+L8UPZyJa4KVDlqq/goE=")
         return aytmParse(vipUrl);
     },
-    聚嗅: function (vipUrl, x5jxlist) {
+    聚嗅: function (vipUrl, x5jxlist, excludeurl) {
         var jxhtml = config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJiexi.html';
         fc(jxhtml, 96);
         let libsjxjs = fetch("hiker://files/libs/" + md5(jxhtml) + ".js");
@@ -352,7 +353,7 @@ var SrcParseS = {
         }
         let libsjxhtml = "hiker://files/libs/" + md5(jxhtml) + ".html";
         writeFile(libsjxhtml, libsjxjs);
-        return this.嗅探(getPath(libsjxhtml) + '?url=' + vipUrl);
+        return this.嗅探(getPath(libsjxhtml) + '?url=' + vipUrl, excludeurl);
     },
     
     APP: function (vipUrl) {
@@ -1063,7 +1064,7 @@ var SrcParseS = {
             }else{
                 if(parseStr){
                     if(x5jxlist.length>0){
-                        return this.嗅探(parseStr.parse+vipUrl);
+                        return this.嗅探(parseStr.parse+vipUrl,excludeurl);
                     }else{
                         return "toast://解析失败";
                     }
@@ -1080,7 +1081,7 @@ var SrcParseS = {
                             names: x5namelist
                         }); 
                     }else{
-                        return this.聚嗅(vipUrl, x5jxlist);
+                        return this.聚嗅(vipUrl, x5jxlist,excludeurl);
                     }
                 }
             }
