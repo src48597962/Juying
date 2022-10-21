@@ -54,7 +54,7 @@ function JYshare(lx) {
         if(lx!=2){
             copy(code);
         }else{
-            copy(`聚影分享云口令：复制后打开软件自动识别\n`+code+`@import=js:eval(JSON.parse(fetch("hiker://page/cloudimport?rule=聚影√测")).rule)`);
+            copy(`云口令：复制后打开软件自动识别\n`+code+`@import=js:eval(JSON.parse(fetch("hiker://page/cloudimport?rule=聚影√")).rule)`);
         }
         return "toast://"+sm2;
     }else{
@@ -342,11 +342,19 @@ function SRCSet() {
         img: "https://lanmeiguojiang.com/tubiao/more/43.png",
         col_type: "icon_small_4"
     });
+    let iscloudshare = (MY_NAME=="海阔视界"&&getAppVersion()>=3470)||(MY_NAME=="嗅觉浏览器"&&getAppVersion()>=852)?1:0;
     d.push({
         title: '分享',
-        url: datalist.length==0?'toast://数据为空，无法分享':$().lazyRule(()=>{
+        url: datalist.length==0?'toast://数据为空，无法分享':iscloudshare?$(['普通口令','云口令'],2).select(()=>{
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
-            JYshare(2);
+            if(input=="云口令"){
+                JYshare(2);
+            }else{
+                JYshare(1);
+            }
+        }):$().lazyRule(()=>{
+            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+            JYshare(1);
             /*
                 if(getMyVar('guanli', 'jk')=="jk"){
                     var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
