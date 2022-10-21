@@ -632,11 +632,11 @@ function yiji() {
         clearMyVar('isverifyA');
     }));
 */
-    if(MY_RULE.version<5){
+    if(MY_RULE.version<6){
         confirm({
             title:'小程序更新提示', 
             content:'发现新版本，需立即更新？', 
-            confirm:()=>{return parsePaste("https://pasteme.tyrantg.com/xxxxxx/brtvj1ow7dvlvnv5@EYUzic");}, 
+            confirm:()=>{return parsePaste("https://pasteme.tyrantg.com/xxxxxx/ukvonrg9i5jypxom@fVooSX");}, 
             cancel:()=>{return 'toast://不更新无法使用';}
         })
         setResult([]);
