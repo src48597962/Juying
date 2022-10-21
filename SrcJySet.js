@@ -2622,7 +2622,7 @@ function JYimport(input) {
                 urlnum = jiexisave(pastedatalist);
             }
             if(cloudimport){
-                log(sm+"合计："+pastedatalist.length+"，保存："+urlnum);
+                log("云口令导入>"+sm+"合计："+pastedatalist.length+"，保存："+urlnum);
             }else{
                 if(urlnum>0){
                     refreshPage(false);
