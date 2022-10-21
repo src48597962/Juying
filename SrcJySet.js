@@ -2216,7 +2216,7 @@ function extension(){
                 });
                 var updatedesc = [];
                 for(let key in SrcJuyingdesc){
-                    updatedesc.push('版本V'+key+(parseFloat(key) > parseFloat(getMyVar('SrcJuying-Version','').replace('-V',''))?"(未发布)":"")+'：'+SrcJuyingdesc[key]);
+                    updatedesc.push('版本V'+key+(parseFloat(key) > parseFloat(getMyVar('SrcJuying-Version','').replace('-V',''))?"(内测)":"")+'：'+SrcJuyingdesc[key]);
                 }
                 d.push({
                     title: updatedesc.reverse().join('<br>'),
