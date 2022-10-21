@@ -1,68 +1,4 @@
 //个人学习代码
-function JYimport(input,lx) {
-    if(lx==2){
-        log(input+'云口令导入')
-    }
-}
-function JYshare(lx) {
-    if(getMyVar('guanli', 'jk')=="jk"){
-    var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
-        var sm = "聚影接口";
-    }else{
-        var filepath = "hiker://files/rules/Src/Juying/myjiexi.json";
-        var sm = "聚影解析";
-    }
-    var datafile = fetch(filepath);
-    eval("var datalist=" + datafile+ ";");
-    var sm2 = "聚影分享口令已生成";
-    let duoselect = storage0.getMyVar('duoselect')?storage0.getMyVar('duoselect'):[];
-    if(duoselect.length>0){
-        var lists = datalist.filter(item => {
-            if(item.url){
-                return duoselect.indexOf(item.url)>-1;
-            }else{
-                return duoselect.indexOf(item.parse)>-1;
-            }
-        })
-        if(lists.length>0){
-            var datalist = lists;
-            sm2 = "(选定)聚影分享口令已生成";
-            //clearMyVar('duoselect');
-        }
-    }
-    
-    let text = JSON.stringify(datalist);
-    var num = ''; 
-    for (var i = 0; i < 6; i++) {
-        num += Math.floor(Math.random() * 10);
-    }
-    let textcontent = base64Encode(text);
-    if(textcontent.length>=200000){
-        log('分享失败：接口字符数超过最大限制，请精简接口，重点减少xpath和biubiu类型'); 
-        return 'toast://分享同步失败，接口字符数超过最大限制';
-    }
-    try{
-        var pasteurl = JSON.parse(request('https://netcut.cn/api/note/create/', {
-            headers: { 'Referer': 'https://netcut.cn/' },
-            body: 'note_name=Juying'+num+'&note_content='+textcontent+'&note_pwd=0&expire_time=3600',
-            method: 'POST'
-        })).data.note_id || "";
-    }catch(e){
-        var pasteurl = "";
-    }
-
-    if(pasteurl){
-        let code = sm+'￥'+aesEncode('Juying', pasteurl)+'￥1小时内有效';
-        if(lx!=2){
-            copy(code);
-        }else{
-            copy(`云口令：复制后打开软件自动识别\n`+code+`@import=js:eval(JSON.parse(fetch("hiker://page/cloudimport?rule=聚影√")).rule)`);
-        }
-        return "toast://"+sm2;
-    }else{
-        return "toast://分享失败，剪粘板或网络异常";
-    }
-}
 function SRCSet() {
     addListener("onClose", $.toString(() => {
         clearMyVar('guanlicz');
@@ -295,52 +231,9 @@ function SRCSet() {
     d.push({
         title: '导入',
         url: $("","聚影口令").input(()=>{
-                try{
-                    if((input.split('￥')[0]=="聚影接口"||input.split('￥')[0]=="聚影资源码")&&getMyVar('guanli', 'jk')=="jk"){
-                        var sm = "聚影接口";
-                    }else if((input.split('￥')[0]=="聚影解析"||input.split('￥')[0]=="聚影资源码")&&getMyVar('guanli', 'jk')=="jx"){
-                        var sm = "聚影解析";
-                    }else{
-                        return "toast://无法识别的口令";
-                    }
-                    if(input.split('￥')[0]=="聚影资源码"){
-                        var codelx = "dingyue";
-                    }else{
-                        var codelx = "share";
-                    }
-                    let pasteurl = input.split('￥')[1];
-                    let text = parsePaste('https://netcut.cn/p/'+aesDecode('Juying', pasteurl));
-                    if(pasteurl&&!/^error/.test(text)){
-                        let pastedata = JSON.parse(base64Decode(text));
-                        
-                        let urlnum = 0;
-                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
-                        if(getMyVar('guanli', 'jk')=="jk"){
-                            if(codelx=="share"){
-                                var pastedatalist = pastedata;
-                            }else if(codelx=="dingyue"){
-                                var pastedatalist = pastedata.jiekou;
-                            }
-                            urlnum = jiekousave(pastedatalist);
-                        }else{
-                            if(codelx=="share"){
-                                var pastedatalist = pastedata;
-                            }else if(codelx=="dingyue"){
-                                var pastedatalist = pastedata.jiexi;
-                            }
-                            urlnum = jiexisave(pastedatalist);
-                        }
-                        if(urlnum>0){
-                            refreshPage(false);
-                        }
-                        return "toast://"+sm+"合计："+pastedatalist.length+"，保存："+urlnum;
-                    }else{
-                        return "toast://口令错误或已失效";
-                    }
-                } catch (e) {
-                    return "toast://无法识别的口令";
-                }
-            }),
+            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+            JYimport(input);
+        }),
         img: "https://lanmeiguojiang.com/tubiao/more/43.png",
         col_type: "icon_small_4"
     });
@@ -357,61 +250,7 @@ function SRCSet() {
         }):$().lazyRule(()=>{
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
             JYshare(1);
-            /*
-                if(getMyVar('guanli', 'jk')=="jk"){
-                    var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
-                    var sm = "聚影接口";
-                }else{
-                    var filepath = "hiker://files/rules/Src/Juying/myjiexi.json";
-                    var sm = "聚影解析";
-                }
-                var datafile = fetch(filepath);
-                eval("var datalist=" + datafile+ ";");
-                var sm2 = "聚影分享口令已生成";
-                let duoselect = storage0.getMyVar('duoselect')?storage0.getMyVar('duoselect'):[];
-                if(duoselect.length>0){
-                    var lists = datalist.filter(item => {
-                        if(item.url){
-                            return duoselect.indexOf(item.url)>-1;
-                        }else{
-                            return duoselect.indexOf(item.parse)>-1;
-                        }
-                    })
-                    if(lists.length>0){
-                        var datalist = lists;
-                        sm2 = "(选定)聚影分享口令已生成";
-                        //clearMyVar('duoselect');
-                    }
-                }
-                
-                let text = JSON.stringify(datalist);
-                var num = ''; 
-                for (var i = 0; i < 6; i++) {
-                    num += Math.floor(Math.random() * 10);
-                }
-                let textcontent = base64Encode(text);
-                if(textcontent.length>=200000){
-                    log('分享失败：接口字符数超过最大限制，请精简接口，重点减少xpath和biubiu类型'); 
-                    return 'toast://分享同步失败，接口字符数超过最大限制';
-                }
-                try{
-                    var pasteurl = JSON.parse(request('https://netcut.cn/api/note/create/', {
-                        headers: { 'Referer': 'https://netcut.cn/' },
-                        body: 'note_name=Juying'+num+'&note_content='+textcontent+'&note_pwd=0&expire_time=3600',
-                        method: 'POST'
-                    })).data.note_id || "";
-                }catch(e){
-                    var pasteurl = "";
-                }
-
-                if(pasteurl){
-                    let code = sm+'￥'+aesEncode('Juying', pasteurl)+'￥1小时内有效';
-                    copy(code);
-                    return "toast://"+sm2;
-                }else{
-                    return "toast://分享失败，剪粘板或网络异常";
-                }*/
-            }),
+        }),
         img: "https://lanmeiguojiang.com/tubiao/more/3.png",
         col_type: "icon_small_4"
     });
@@ -2737,4 +2576,119 @@ function Resourceimport(input,importtype,boxdy){
         let sm = (jknum>-1?' 接口保存'+jknum:'')+(jxnum>-1?' 解析保存'+jxnum:'');
         return 'toast://biu导入：'+(sm?sm:'导入异常，详情查看日志');
     }   
+}
+//资源导入
+function JYimport(input) {
+    if(input.indexOf('@import=js:')>-1){
+        try{
+            input = input.split('\n')[1].split('@import=js:')[0];
+        }catch(e){
+            return "云口令有误，无法导入";
+        }
+    }
+    try{
+        if((input.split('￥')[0]=="聚影接口"||input.split('￥')[0]=="聚影资源码")&&getMyVar('guanli', 'jk')=="jk"){
+            var sm = "聚影接口";
+        }else if((input.split('￥')[0]=="聚影解析"||input.split('￥')[0]=="聚影资源码")&&getMyVar('guanli', 'jk')=="jx"){
+            var sm = "聚影解析";
+        }else{
+            return "toast://无法识别的口令";
+        }
+        if(input.split('￥')[0]=="聚影资源码"){
+            var codelx = "dingyue";
+        }else{
+            var codelx = "share";
+        }
+        let pasteurl = input.split('￥')[1];
+        let text = parsePaste('https://netcut.cn/p/'+aesDecode('Juying', pasteurl));
+        if(pasteurl&&!/^error/.test(text)){
+            let pastedata = JSON.parse(base64Decode(text));
+            
+            let urlnum = 0;
+            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+            if(getMyVar('guanli', 'jk')=="jk"){
+                if(codelx=="share"){
+                    var pastedatalist = pastedata;
+                }else if(codelx=="dingyue"){
+                    var pastedatalist = pastedata.jiekou;
+                }
+                urlnum = jiekousave(pastedatalist);
+            }else{
+                if(codelx=="share"){
+                    var pastedatalist = pastedata;
+                }else if(codelx=="dingyue"){
+                    var pastedatalist = pastedata.jiexi;
+                }
+                urlnum = jiexisave(pastedatalist);
+            }
+            if(urlnum>0){
+                refreshPage(false);
+            }
+            return "toast://"+sm+"合计："+pastedatalist.length+"，保存："+urlnum;
+        }else{
+            return "toast://口令错误或已失效";
+        }
+    } catch (e) {
+        return "toast://无法识别的口令";
+    }
+}
+//资源分享
+function JYshare(lx) {
+    if(getMyVar('guanli', 'jk')=="jk"){
+    var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
+        var sm = "聚影接口";
+    }else{
+        var filepath = "hiker://files/rules/Src/Juying/myjiexi.json";
+        var sm = "聚影解析";
+    }
+    var datafile = fetch(filepath);
+    eval("var datalist=" + datafile+ ";");
+    var sm2 = "聚影分享口令已生成";
+    let duoselect = storage0.getMyVar('duoselect')?storage0.getMyVar('duoselect'):[];
+    if(duoselect.length>0){
+        var lists = datalist.filter(item => {
+            if(item.url){
+                return duoselect.indexOf(item.url)>-1;
+            }else{
+                return duoselect.indexOf(item.parse)>-1;
+            }
+        })
+        if(lists.length>0){
+            var datalist = lists;
+            sm2 = "(选定)聚影分享口令已生成";
+            //clearMyVar('duoselect');
+        }
+    }
+    
+    let text = JSON.stringify(datalist);
+    var num = ''; 
+    for (var i = 0; i < 6; i++) {
+        num += Math.floor(Math.random() * 10);
+    }
+    let textcontent = base64Encode(text);
+    if(textcontent.length>=200000){
+        log('分享失败：接口字符数超过最大限制，请精简接口，重点减少xpath和biubiu类型'); 
+        return 'toast://分享同步失败，接口字符数超过最大限制';
+    }
+    try{
+        var pasteurl = JSON.parse(request('https://netcut.cn/api/note/create/', {
+            headers: { 'Referer': 'https://netcut.cn/' },
+            body: 'note_name=Juying'+num+'&note_content='+textcontent+'&note_pwd=0&expire_time=3600',
+            method: 'POST'
+        })).data.note_id || "";
+    }catch(e){
+        var pasteurl = "";
+    }
+
+    if(pasteurl){
+        let code = sm+'￥'+aesEncode('Juying', pasteurl)+'￥1小时内有效';
+        if(lx!=2){
+            copy(code);
+        }else{
+            copy(`云口令：复制后打开软件自动识别\n`+code+`@import=js:eval(JSON.parse(fetch("hiker://page/cloudimport?rule=聚影√")).rule)`);
+        }
+        return "toast://"+sm2;
+    }else{
+        return "toast://分享失败，剪粘板或网络异常";
+    }
 }
