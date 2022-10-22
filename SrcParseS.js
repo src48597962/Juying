@@ -77,7 +77,7 @@ var SrcParseS = {
             var exclude = /\/404\.m3u8|\/xiajia\.mp4|\/余额不足\.m3u8|\.css|\.js|\.gif|\.png|\.jpeg|api\.m3u88\.com|html,http|\.php\?v=h|\?url=h|\&url=h|%253Furl%253Dh/;//设置排除地址
             var contain = /\.mp4|\.m3u8|\.flv|\.avi|\.mpeg|\.wmv|\.mov|\.rmvb|\.dat|qqBFdownload|mime=video%2F|video_mp4|\.ts\?|TG@UosVod/;//设置符合条件的正确地址
             for (var i in urls) {
-                if (!exclude.test(urls[i]) && contain.test(urls[i]) && excludeurl.indexOf(urls[i])==-1 && testurl(urls[i])==1) {
+                if (!exclude.test(urls[i]) && contain.test(urls[i]) && excludeurl.indexOf(urls[i])==-1 && testurl(urls[i],false,false,true)==1) {
                     //fba.log("嗅探成功>"+urls[i]);
                     //return urls[i]+'#isVideo=true#';
                     if(fy_bridge_app.getHeaderUrl&&vipUrl.indexOf("=http")==-1)
@@ -1103,7 +1103,7 @@ var SrcParseS = {
         }   
     },
     //测试视频地址有效性
-    testvideourl: function (url,name,times) {
+    testvideourl: function (url,name,times,nolog) {
         if(!url){return 0}
         if(!name){name = "解析"}
         if(!times){times = 120}
@@ -1114,7 +1114,7 @@ var SrcParseS = {
                 var urlcode = JSON.parse(request(url,{withStatusCode:true,timeout:1500}));
                 //log(name+'url访问状态码：'+urlcode.statusCode)
                 if(urlcode.statusCode==-1){
-                    //log(name+'>m3u8探测超时未拦载，结果未知')
+                    if(!nolog){log(name+'>m3u8探测超时未拦载，结果未知');}
                     return 1;
                 }else if(urlcode.statusCode!=200){
                     //log(name+'>m3u8播放地址疑似失效或网络无法访问，不信去验证一下>'+url);
@@ -1124,11 +1124,11 @@ var SrcParseS = {
                         var tstime = urlcode.body.match(/#EXT-X-TARGETDURATION:(.*?)\n/)[1];
                         var urltss = urlcode.body.replace(/#.*?\n/g,'').replace('#EXT-X-ENDLIST','').split('\n');
                     }catch(e){
-                        //log(name+'>√错误：探测异常未拦截>'+e.message)
+                        if(!nolog){log(name+'>√错误：探测异常未拦截>'+e.message);}
                         return 1;
                     }
                     if(parseInt(tstime)*parseInt(urltss.length) < times){
-                        //log(name+'>m3u8视频长度小于设置的'+times+'s，疑似跳舞小姐姐或防盗小视频，不信去验证一下>'+url);
+                        if(!nolog){log(name+'>m3u8视频长度小于设置的'+times+'s，疑似跳舞小姐姐或防盗小视频，不信去验证一下>'+url);}
                         return 0;
                     }else{
                         var urlts = urltss[0];
@@ -1139,10 +1139,10 @@ var SrcParseS = {
                         var tscode = JSON.parse(request(urlts,{headers:{'Referer':url},onlyHeaders:true,timeout:1500}));
                         //log(name+'ts访问状态码：'+tscode.statusCode)
                         if(tscode.statusCode==-1){
-                            //log(name+'>ts段探测超时未拦载，结果未知')
+                            if(!nolog){log(name+'>ts段探测超时未拦载，结果未知');}
                             return 1;
                         }else if(tscode.statusCode!=200){
-                            //log(name+'>ts段地址疑似失效或网络无法访问，不信去验证一下>'+url);
+                            if(!nolog){log(name+'>ts段地址疑似失效或网络无法访问，不信去验证一下>'+url);}
                             return 0;
                         }
                     }
@@ -1150,22 +1150,22 @@ var SrcParseS = {
             }else if (/\.mp4/.test(url)) {
                 var urlheader = JSON.parse(request(url,{onlyHeaders:true,timeout:1500}));
                 if(urlheader.statusCode==-1){
-                    //log(name+'>mp4探测超时未拦载，结果未知')
+                    if(!nolog){log(name+'>mp4探测超时未拦载，结果未知');}
                     return 1;
                 }else if(urlheader.statusCode!=200){
-                    //log(name+'>mp4播放地址疑似失效或网络无法访问，不信去验证一下>'+url);
+                    if(!nolog){log(name+'>mp4播放地址疑似失效或网络无法访问，不信去验证一下>'+url);}
                     return 0;
                 }else{
                     var filelength = urlheader.headers['content-length'];
                     if(parseInt(filelength[0])/1024/1024 < 30){
-                        //log(name+'>mp4播放地址疑似跳舞小姐姐或防盗小视频，不信去验证一下>'+url);
+                        if(!nolog){log(name+'>mp4播放地址疑似跳舞小姐姐或防盗小视频，不信去验证一下>'+url);}
                         return 0;
                     }
                 }
             }
             return 1;
         } catch(e) {
-            //log(name+'>错误：探测异常未拦截，可能是失败的>'+e.message)
+            if(!nolog){log(name+'>错误：探测异常未拦截，可能是失败的>'+e.message);}
             return 1;
         }
     }
