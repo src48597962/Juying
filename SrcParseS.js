@@ -49,11 +49,10 @@ var SrcParseS = {
         }
         return header;
     },
-    嗅探: function (vipUrl, excludeurl ,testurl) {
+    嗅探: function (vipUrl, excludeurl) {
         showLoading('√视频解析中，请稍候...');
         excludeurl = excludeurl||[];
-        var testurl = testurl||this.testvideourl;
-        return (getMyVar('SrcXTNH', 'web') == 'x5' ? 'x5Rule://' : 'webRule://') + vipUrl + '@' + $.toString((formatUrl,vipUrl,excludeurl,testurl) => {
+        return (getMyVar('SrcXTNH', 'web') == 'x5' ? 'x5Rule://' : 'webRule://') + vipUrl + '@' + $.toString((formatUrl,vipUrl,excludeurl) => {
             if (window.c == null) {
                 if (typeof (request) == 'undefined' || !request) {
                     eval(fba.getInternalJs());
@@ -77,7 +76,12 @@ var SrcParseS = {
             var exclude = /\/404\.m3u8|\/xiajia\.mp4|\/余额不足\.m3u8|\.css|\.js|\.gif|\.png|\.jpeg|api\.m3u88\.com|html,http|\.php\?v=h|\?url=h|\&url=h|%253Furl%253Dh/;//设置排除地址
             var contain = /\.mp4|\.m3u8|\.flv|\.avi|\.mpeg|\.wmv|\.mov|\.rmvb|\.dat|qqBFdownload|mime=video%2F|video_mp4|\.ts\?|TG@UosVod/;//设置符合条件的正确地址
             for (var i in urls) {
-                if (!exclude.test(urls[i]) && contain.test(urls[i]) && excludeurl.indexOf(urls[i])==-1 && testurl(urls[i],false,false,true)==1) {
+                var tc = 1;
+                if(/cdn\.oss-cn-m3u8\.tv-nanjing-chengdu\.myqcloud\.com\.zh188.net/.test(urls[i])){
+                    var html = request(urls[i],{timeout:1500})||"";
+                    if(html.indexOf("token过期了")>-1){tc = 0;}
+                }
+                if (!exclude.test(urls[i]) && contain.test(urls[i]) && excludeurl.indexOf(urls[i])==-1 && tc==1) {
                     //fba.log("嗅探成功>"+urls[i]);
                     //return urls[i]+'#isVideo=true#';
                     if(fy_bridge_app.getHeaderUrl&&vipUrl.indexOf("=http")==-1)
@@ -97,7 +101,7 @@ var SrcParseS = {
                     }
                 }
             }
-        }, this.formatUrl, vipUrl, excludeurl, testurl)
+        }, this.formatUrl, vipUrl, excludeurl)
     },
     智能: function (vipUrl, input) {
         showLoading('√智能解析中，请稍候');
@@ -354,111 +358,7 @@ var SrcParseS = {
         }
         let libsjxhtml = "hiker://files/libs/" + md5(jxhtml) + ".html";
         writeFile(libsjxhtml, libsjxjs);
-        return this.嗅探(getPath(libsjxhtml) + '?url=' + vipUrl, excludeurl, this.testvideourl);
-    },
-    
-    APP: function (vipUrl) {
-        var appParses = getMyVar('parse_api', '');
-        var Uparselist = [];
-        Uparselist = appParses.split(',');
-        function uniq(array) {
-            var temp = []; //一个新的临时数组
-            for (var i = 0; i < array.length; i++) {
-                if (temp.indexOf(array[i]) == -1) {
-                    temp.push(array[i]);
-                }
-            }
-            return temp;
-        }
-        Uparselist = uniq(Uparselist);//去重
-        var x5jxlist = []; //x5嗅探接口存放数组
-        var url = "";
-        var parseurl = "";
-        var urls = [];//多线路地址
-        var headers = [];//多线路头信息
-        var exclude = /404\.m3u8|xiajia\.mp4|余额不足\.m3u8|\.suoyo|\.ruifenglb|m3u8\.tv/;//设置排除地址
-        var contain = /\.mp4|\.m3u8|\.flv|\.avi|\.mpeg|\.wmv|\.mov|\.rmvb|\.dat|qqBFdownload|mime=video%2F|video_mp4/;//设置符合条件的正确地址
-        if (!exclude.test(vipUrl) && contain.test(vipUrl)) {
-            url = vipUrl;
-        }
-        for (var i = 0; i < Uparselist.length; i++) {
-            if (contain.test(url)) { break; }
-            if (x5jxlist.length >= 3) { break; }
-            let UrlList = [];
-            let p = i + 3;
-            if (p > Uparselist.length) { p = Uparselist.length }
-            for (let s = i; s < p; s++) {
-                parseurl = Uparselist[s];
-                if (parseurl[0] == '/') { parseurl = 'https:' + parseurl }
-                if (parseurl.substring(0, 4) == 'http') {
-                    UrlList.push(parseurl);
-                }
-                i = s;
-            }
-            if (UrlList.length > 0) {
-                let playUrls = UrlList.map((playUrl) => {
-                    return {
-                        url: playUrl + vipUrl,
-                        options: { headers: { 'User-Agent': PC_UA }, timeout: 2000 }
-                    }
-                });
-
-                let bfhtml = batchFetch(playUrls);
-                for (let k in bfhtml) {
-                    let gethtml = bfhtml[k];
-                    parseurl = UrlList[k];
-                    if (gethtml == undefined || gethtml == "" || !/<|{/.test(gethtml)) {
-                        //url直链网页打不开
-                    } else {
-                        try {
-                            try {
-                                var rurl = JSON.parse(gethtml).url || JSON.parse(gethtml).data;
-                            } catch (e) {
-                                try {
-                                    var rurl = gethtml.match(/urls = "(.*?)"/)[1];
-                                } catch (e) {
-                                    x5jxlist.push(parseurl);
-                                }
-                            }
-                            if (typeof (rurl) != "undefined" && contain.test(rurl) && !exclude.test(rurl)) {
-                                url = rurl;
-                                urls.push(this.formatUrl(url, urls.length));
-                                headers.push(this.mulheader(url));
-                            }
-                        } catch (e) { }
-                    }
-                }//批量结果循环
-            }
-        }
-
-        if (url == "") {
-            if (/youku|mgtv|ixigua|qq\.com|iqiyi|migu|bilibili|sohu|pptv|\.le\.|\.1905|cctv/.test(vipUrl)) {
-                if (getMyVar('SrcGJFS', '1') == "2") {
-                    return this.DN(vipUrl);
-                } else {
-                    if (getMyVar('author') == "帅√`人才") {
-                        return this.聚嗅(vipUrl);
-                    } else {
-                        return this.聚嗅(vipUrl, x5jxlist);
-                    }
-                }
-            } else {
-                if (getMyVar('author') == "帅√`人才") {
-                    return this.智能(vipUrl);
-                } else {
-                    return this.聚嗅(vipUrl, x5jxlist);
-                }
-            }
-        } else {
-            if (urls.length > 1) {
-                return JSON.stringify({
-                    urls: urls,
-                    headers: headers
-                });
-            } else {
-                return this.formatUrl(url);
-            }
-        }
+        return this.嗅探(getPath(libsjxhtml) + '?url=' + vipUrl, excludeurl);
     },
     聚影: function (vipUrl,parseStr) {
         //聚影采用新的、独立的解析逻辑
@@ -1103,7 +1003,7 @@ var SrcParseS = {
         }   
     },
     //测试视频地址有效性
-    testvideourl: function (url,name,times,nolog) {
+    testvideourl: function (url,name,times) {
         if(!url){return 0}
         if(!name){name = "解析"}
         if(!times){times = 120}
@@ -1112,10 +1012,9 @@ var SrcParseS = {
                 return 1;
             }else if (/\.m3u8/.test(url)) {
                 var urlcode = JSON.parse(request(url,{withStatusCode:true,timeout:1500}));
-                fba.log(urlcode);
                 //log(name+'url访问状态码：'+urlcode.statusCode)
                 if(urlcode.statusCode==-1){
-                    if(!nolog){log(name+'>m3u8探测超时未拦载，结果未知');}
+                    log(name+'>m3u8探测超时未拦载，结果未知');
                     return 1;
                 }else if(urlcode.statusCode!=200){
                     //log(name+'>m3u8播放地址疑似失效或网络无法访问，不信去验证一下>'+url);
@@ -1125,11 +1024,11 @@ var SrcParseS = {
                         var tstime = urlcode.body.match(/#EXT-X-TARGETDURATION:(.*?)\n/)[1];
                         var urltss = urlcode.body.replace(/#.*?\n/g,'').replace('#EXT-X-ENDLIST','').split('\n');
                     }catch(e){
-                        if(!nolog){log(name+'>√错误：探测异常未拦截>'+e.message);}
+                        log(name+'>√错误：探测异常未拦截>'+e.message);
                         return 1;
                     }
                     if(parseInt(tstime)*parseInt(urltss.length) < times){
-                        if(!nolog){log(name+'>m3u8视频长度小于设置的'+times+'s，疑似跳舞小姐姐或防盗小视频，不信去验证一下>'+url);}
+                        log(name+'>m3u8视频长度小于设置的'+times+'s，疑似跳舞小姐姐或防盗小视频，不信去验证一下>'+url);
                         return 0;
                     }else{
                         var urlts = urltss[0];
@@ -1140,10 +1039,10 @@ var SrcParseS = {
                         var tscode = JSON.parse(request(urlts,{headers:{'Referer':url},onlyHeaders:true,timeout:1500}));
                         //log(name+'ts访问状态码：'+tscode.statusCode)
                         if(tscode.statusCode==-1){
-                            if(!nolog){log(name+'>ts段探测超时未拦载，结果未知');}
+                            log(name+'>ts段探测超时未拦载，结果未知');
                             return 1;
                         }else if(tscode.statusCode!=200){
-                            if(!nolog){log(name+'>ts段地址疑似失效或网络无法访问，不信去验证一下>'+url);}
+                            log(name+'>ts段地址疑似失效或网络无法访问，不信去验证一下>'+url);
                             return 0;
                         }
                     }
@@ -1151,22 +1050,22 @@ var SrcParseS = {
             }else if (/\.mp4/.test(url)) {
                 var urlheader = JSON.parse(request(url,{onlyHeaders:true,timeout:1500}));
                 if(urlheader.statusCode==-1){
-                    if(!nolog){log(name+'>mp4探测超时未拦载，结果未知');}
+                    log(name+'>mp4探测超时未拦载，结果未知');
                     return 1;
                 }else if(urlheader.statusCode!=200){
-                    if(!nolog){log(name+'>mp4播放地址疑似失效或网络无法访问，不信去验证一下>'+url);}
+                    log(name+'>mp4播放地址疑似失效或网络无法访问，不信去验证一下>'+url);
                     return 0;
                 }else{
                     var filelength = urlheader.headers['content-length'];
                     if(parseInt(filelength[0])/1024/1024 < 30){
-                        if(!nolog){log(name+'>mp4播放地址疑似跳舞小姐姐或防盗小视频，不信去验证一下>'+url);}
+                        log(name+'>mp4播放地址疑似跳舞小姐姐或防盗小视频，不信去验证一下>'+url);
                         return 0;
                     }
                 }
             }
             return 1;
         } catch(e) {
-            if(!nolog){log(name+'>错误：探测异常未拦截，可能是失败的>'+e.message);}
+            log(name+'>错误：探测异常未拦截，可能是失败的>'+e.message);
             return 1;
         }
     }
