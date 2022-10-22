@@ -82,7 +82,7 @@ var SrcParseS = {
                     if(html.indexOf("token过期了")>-1){tc = 0;}
                 }
                 if (!exclude.test(urls[i]) && contain.test(urls[i]) && excludeurl.indexOf(urls[i])==-1 && tc==1) {
-                    //fba.log("嗅探成功>"+urls[i]);
+                    fba.log("嗅探成功>"+urls[i]);
                     //return urls[i]+'#isVideo=true#';
                     if(fy_bridge_app.getHeaderUrl&&vipUrl.indexOf("=http")==-1)
                         return $$$("#noLoading#").lazyRule((url) => {
@@ -340,6 +340,7 @@ var SrcParseS = {
         if (x5jxlist != undefined) {
             if (x5jxlist.length > 0) {
                 var a = JSON.parse(libsjxjs.match(/apiArray=(.*?);/)[1]);
+                /*
                 for (var i = 0; i < x5jxlist.length; i++) {
                     a.push(x5jxlist[i]);
                 }
@@ -353,6 +354,8 @@ var SrcParseS = {
                     return temp;
                 }
                 a = uniq(a);//去重
+                */
+                a = x5jxlist;
                 libsjxjs = libsjxjs.replace(libsjxjs.match(/apiArray=(.*?);/)[1], JSON.stringify(a))
             }
         }
