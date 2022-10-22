@@ -1112,6 +1112,7 @@ var SrcParseS = {
                 return 1;
             }else if (/\.m3u8/.test(url)) {
                 var urlcode = JSON.parse(request(url,{withStatusCode:true,timeout:1500}));
+                fba.log(urlcode);
                 //log(name+'url访问状态码：'+urlcode.statusCode)
                 if(urlcode.statusCode==-1){
                     if(!nolog){log(name+'>m3u8探测超时未拦载，结果未知');}
