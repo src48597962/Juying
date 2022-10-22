@@ -752,7 +752,7 @@ var SrcParseS = {
                     return 0;
                 }else{
                     var filelength = urlheader.headers['content-length'];
-                    if(parseInt(filelength[0])/1024/1024 < 80){
+                    if(parseInt(filelength[0])/1024/1024 < 30){
                         //log(name+'>mp4播放地址疑似跳舞小姐姐或防盗小视频，不信去验证一下>'+url);
                         return 0;
                     }
