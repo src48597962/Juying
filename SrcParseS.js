@@ -49,10 +49,11 @@ var SrcParseS = {
         }
         return header;
     },
-    嗅探: function (vipUrl, excludeurl) {
+    嗅探: function (vipUrl, excludeurl ,testurl) {
         showLoading('√视频解析中，请稍候...');
         excludeurl = excludeurl||[];
-        return (getMyVar('SrcXTNH', 'web') == 'x5' ? 'x5Rule://' : 'webRule://') + vipUrl + '@' + $.toString((formatUrl,vipUrl,excludeurl,testvideourl) => {
+        var testurl = testurl||this.testvideourl;
+        return (getMyVar('SrcXTNH', 'web') == 'x5' ? 'x5Rule://' : 'webRule://') + vipUrl + '@' + $.toString((formatUrl,vipUrl,excludeurl,testurl) => {
             if (window.c == null) {
                 if (typeof (request) == 'undefined' || !request) {
                     eval(fba.getInternalJs());
@@ -76,7 +77,7 @@ var SrcParseS = {
             var exclude = /\/404\.m3u8|\/xiajia\.mp4|\/余额不足\.m3u8|\.css|\.js|\.gif|\.png|\.jpeg|api\.m3u88\.com|html,http|\.php\?v=h|\?url=h|\&url=h|%253Furl%253Dh/;//设置排除地址
             var contain = /\.mp4|\.m3u8|\.flv|\.avi|\.mpeg|\.wmv|\.mov|\.rmvb|\.dat|qqBFdownload|mime=video%2F|video_mp4|\.ts\?|TG@UosVod/;//设置符合条件的正确地址
             for (var i in urls) {
-                if (!exclude.test(urls[i]) && contain.test(urls[i]) && excludeurl.indexOf(urls[i])==-1 && testvideourl(urls[i])==1) {
+                if (!exclude.test(urls[i]) && contain.test(urls[i]) && excludeurl.indexOf(urls[i])==-1 && testurl(urls[i])==1) {
                     //fba.log("嗅探成功>"+urls[i]);
                     //return urls[i]+'#isVideo=true#';
                     if(fy_bridge_app.getHeaderUrl&&vipUrl.indexOf("=http")==-1)
@@ -96,7 +97,7 @@ var SrcParseS = {
                     }
                 }
             }
-        }, this.formatUrl, vipUrl, excludeurl, testvideourl)
+        }, this.formatUrl, vipUrl, excludeurl, testurl)
     },
     智能: function (vipUrl, input) {
         showLoading('√智能解析中，请稍候');
@@ -353,8 +354,7 @@ var SrcParseS = {
         }
         let libsjxhtml = "hiker://files/libs/" + md5(jxhtml) + ".html";
         writeFile(libsjxhtml, libsjxjs);
-        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
-        return this.嗅探(getPath(libsjxhtml) + '?url=' + vipUrl, excludeurl);
+        return this.嗅探(getPath(libsjxhtml) + '?url=' + vipUrl, excludeurl, this.testvideourl);
     },
     
     APP: function (vipUrl) {
