@@ -52,7 +52,7 @@ var SrcParseS = {
     嗅探: function (vipUrl, excludeurl) {
         showLoading('√视频解析中，请稍候...');
         excludeurl = excludeurl||[];
-        return (getMyVar('SrcXTNH', 'web') == 'x5' ? 'x5Rule://' : 'webRule://') + vipUrl + '@' + $.toString((formatUrl,vipUrl,excludeurl,testurl) => {
+        return (getMyVar('SrcXTNH', 'web') == 'x5' ? 'x5Rule://' : 'webRule://') + vipUrl + '@' + $.toString((formatUrl,vipUrl,excludeurl) => {
             if (window.c == null) {
                 if (typeof (request) == 'undefined' || !request) {
                     eval(fba.getInternalJs());
@@ -96,7 +96,7 @@ var SrcParseS = {
                     }
                 }
             }
-        }, this.formatUrl, vipUrl, excludeurl, testvideourl)
+        }, this.formatUrl, vipUrl, excludeurl)
     },
     智能: function (vipUrl, input) {
         showLoading('√智能解析中，请稍候');
