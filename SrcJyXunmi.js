@@ -11,6 +11,7 @@ function xunmi(name,data,ishkss) {
         clearMyVar('selectgroup');
         clearMyVar('baoliujk');
         clearMyVar('SrcJy$back');
+        clearMyVar('deleteswitch');
         putMyVar('closexunmi','1');
     }));
     clearMyVar('closexunmi');
@@ -151,6 +152,24 @@ function xunmi(name,data,ishkss) {
                 }
             });
         }
+        d.push({
+            title: '删除开关',
+            url: $('#noLoading#').lazyRule(()=>{
+                    if(getMyVar('deleteswitch')){
+                        clearMyVar('deleteswitch');
+                        updateItem('deleteswitch',{title:'删除开关'});
+                        return 'toast://退出处理模式，撤销二级删除开关';
+                    }else{
+                        putMyVar('deleteswitch','1');
+                        updateItem('deleteswitch',{title:'‘‘’’<b><span style="color:#3CB371">删除开关'});
+                        return 'toast://进入处理模式，点击影片详情确认是否删除';
+                    }
+                }),
+            col_type: "scroll_button",
+            extra: {
+                id: 'deleteswitch'
+            }
+        });
         if(datalist2.length>0){
             datalist = datalist2;
         }
@@ -311,6 +330,7 @@ function xunmi(name,data,ishkss) {
                                             },obj.type, urlua),
                                         col_type: "movie_1_vertical_pic",
                                         extra: {
+                                            apiurl:url_api,
                                             pic: vodpic,
                                             name: vodname,
                                             title: vodname+'-'+obj.name,
@@ -430,6 +450,7 @@ function xunmi(name,data,ishkss) {
                                         },obj.type, urlua),
                                     col_type: "movie_1_vertical_pic",
                                     extra: {
+                                        apiurl:url_api,
                                         pic: vodpic,
                                         name: vodname,
                                         title: vodname+'-'+obj.name,
