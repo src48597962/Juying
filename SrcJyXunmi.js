@@ -330,7 +330,7 @@ function xunmi(name,data,ishkss) {
                                             },obj.type, urlua),
                                         col_type: "movie_1_vertical_pic",
                                         extra: {
-                                            api: url_api,
+                                            api: 'xumi-'+url_api,
                                             pic: vodpic,
                                             name: vodname,
                                             title: vodname+'-'+obj.name,
@@ -450,7 +450,7 @@ function xunmi(name,data,ishkss) {
                                         },obj.type, urlua),
                                     col_type: "movie_1_vertical_pic",
                                     extra: {
-                                        api:url_api,
+                                        api: 'xumi-'+url_api,
                                         pic: vodpic,
                                         name: vodname,
                                         title: vodname+'-'+obj.name,
@@ -975,20 +975,20 @@ function xunmierji(type,ua) {
         title: details1,//详情1
         desc: details2,//详情2
         pic_url: pic + '@Referer=',//图片
-        url: getMyVar('deleteswitch')?$("确定要删除此接口吗").confirm(()=>{
+        url: getMyVar('deleteswitch')?$("确定要删除此接口吗").confirm((api)=>{
             let filepath = "hiker://files/rules/Src/Juying/jiekou.json";
             let datafile = fetch(filepath);
             eval("let datalist=" + datafile+ ";");
             for(let i=0;i<datalist.length;i++){
-                if(datalist[i].url==MY_PARAMS.api.replace('xumi-','')){
+                if(datalist[i].url==api.replace('xumi-','')){
                     datalist.splice(i,1);
                     break;
                 }
             }
             writeFile(filepath, JSON.stringify(datalist));
-            deleteItem('xumi-'+MY_PARAMS.api);
+            deleteItem('xumi-'+api);
             return "toast://已删除";
-        }):pic + '#noHistory#',//链接
+        },MY_PARAMS.api):pic + '#noHistory#',//链接
         col_type: 'movie_1_vertical_pic_blur',
         extra: {
             gradient: true
