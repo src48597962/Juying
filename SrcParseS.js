@@ -79,7 +79,7 @@ var SrcParseS = {
                 if (!exclude.test(urls[i]) && contain.test(urls[i]) && excludeurl.indexOf(urls[i])==-1) {
                     //fba.log("嗅探成功>"+urls[i]);
                     //return urls[i]+'#isVideo=true#';
-                    if(fy_bridge_app.getHeaderUrl&&vipUrl.indexOf("=http")==-1)
+                    //if(fy_bridge_app.getHeaderUrl&&vipUrl.indexOf("=http")==-1)
                         return $$$("#noLoading#").lazyRule((url) => {
                             url = base64Decode(url);
                             if (getMyVar('SrcM3U8', '1') == "1"&&url.indexOf('.m3u8')>-1) {
@@ -88,12 +88,12 @@ var SrcParseS = {
                                 return url.replace(";{", "#ignoreImg=true##isVideo=true#;{");
                             }
                         }, fy_bridge_app.base64Encode(fy_bridge_app.getHeaderUrl(urls[i])));
-                    else {
+                    /*else {
                         return $$$("#noLoading#").lazyRule((url, formatUrl) => {
                             //url = url.replace(/http.*?\?url=/, '');
                             return formatUrl(url)+"#ignoreImg=true#";
                         }, urls[i], formatUrl);
-                    }
+                    }*/
                 }
             }
         }, this.formatUrl, vipUrl, excludeurl)
