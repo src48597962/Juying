@@ -74,7 +74,7 @@ var SrcParseS = {
             //fba.log(fy_bridge_app.getUrls());
             var urls = _getUrls();
             var exclude = /\/404\.m3u8|\/xiajia\.mp4|\/余额不足\.m3u8|\.css|\.js|\.gif|\.png|\.jpg|\.jpeg|html,http|\.php\?v=h|\?url=h|\&url=h|%253Furl%253Dh/;//设置排除地址
-            var contain = /\.mp4|\.m3u8|\.flv|\.avi|\.mpeg|\.wmv|\.mov|\.rmvb|\.dat|qqBFdownload|mime=video%2F|video_mp4|\.ts\?|TG@UosVod/;//设置符合条件的正确地址
+            var contain = /\.mp4|\.m3u8|\.flv|\.avi|\.mpeg|\.wmv|\.mov|\.rmvb|\.dat|qqBFdownload|mime=video%2F|video_mp4|\.ts\?|TG@UosVod|video\/tos\/cn\/tos/;//设置符合条件的正确地址
             for (var i in urls) {
                 var tc = 1;
                 if(/cdn\.oss-cn-m3u8\.tv-nanjing-chengdu\.myqcloud\.com\.zh188.net/.test(urls[i])&&vipUrl.indexOf("=http")>-1){
