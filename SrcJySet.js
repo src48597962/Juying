@@ -536,7 +536,7 @@ function similar(s, t, f) {//判断两个字符串之间的相似度
     let res = (1 - d[n][m] / l) *100 || 0;
     return parseInt(res.toFixed(f));
 }
-function jiekousave(urls,update) {
+function jiekousave(urls,update,subscribe) {
     if(urls.length==0){return 0;}
     try{
         var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
@@ -546,7 +546,15 @@ function jiekousave(urls,update) {
         }else{
             var datalist = [];
         }
-        
+        if(subscribe==1){
+            for(let i=0;i<datalist.length;i++){
+                if(datalist[i].retain!=1){
+                    datalist.splice(i,1);
+                    i = i - 1;
+                }
+            }
+        }
+
         var num = 0;
         for (var i in urls) {
             let urlname = urls[i].name.replace(/(?:[\u2700-\u27bf]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff]|[\u0023-\u0039]\ufe0f?\u20e3|\u3299|\u3297|\u303d|\u3030|\u24c2|\ud83c[\udd70-\udd71]|\ud83c[\udd7e-\udd7f]|\ud83c\udd8e|\ud83c[\udd91-\udd9a]|\ud83c[\udde6-\uddff]|\ud83c[\ude01-\ude02]|\ud83c\ude1a|\ud83c\ude2f|\ud83c[\ude32-\ude3a]|\ud83c[\ude50-\ude51]|\u203c|\u2049|[\u25aa-\u25ab]|\u25b6|\u25c0|[\u25fb-\u25fe]|\u00a9|\u00ae|\u2122|\u2139|\ud83c\udc04|[\u2600-\u26FF]|\u2b05|\u2b06|\u2b07|\u2b1b|\u2b1c|\u2b50|\u2b55|\u231a|\u231b|\u2328|\u23cf|[\u23e9-\u23f3]|[\u23f8-\u23fa]|\ud83c\udccf|\u2934|\u2935|[\u2190-\u21ff])|\(XPF\)|\(萝卜\)|\(神马\)|\(切\)|\(聚\)|\(优\)|\(神马\)|\(XB\)|\(SP\)|\(XP\)|[\x00-\x1F\x7F]/g,'');
@@ -590,7 +598,7 @@ function jiekousave(urls,update) {
     }
     return num;
 }
-function jiexisave(urls,update) {
+function jiexisave(urls,update,subscribe) {
     if(urls.length==0){return 0;}
     try{
         var filepath = "hiker://files/rules/Src/Juying/myjiexi.json";
@@ -599,6 +607,14 @@ function jiexisave(urls,update) {
             eval("var datalist=" + datafile+ ";");
         }else{
             var datalist = [];
+        }
+        if(subscribe==1){
+            for(let i=0;i<datalist.length;i++){
+                if(datalist[i].retain!=1){
+                    datalist.splice(i,1);
+                    i = i - 1;
+                }
+            }
         }
         
         var num = 0;
@@ -993,7 +1009,7 @@ function jiexi(lx,data) {
         clearMyVar('parseheader');
         clearMyVar('parseisweb');
         clearMyVar('isretain');
-        //refreshPage(false);
+        clearMyVar('isload');
     }));
     var d = [];
     if(lx!="update"){
@@ -1012,8 +1028,11 @@ function jiexi(lx,data) {
             })
         });
     }else{
-        setPageTitle("♥解析管理-变更");
-        putMyVar('isretain', data.retain?data.retain:"");
+        if(getMyVar('isload', '0')=="0"){
+            setPageTitle("♥解析管理-变更");
+            putMyVar('isretain', data.retain?data.retain:"");
+            putMyVar('isload', '1');
+        }
     }
     if(getMyVar('addtype', '1')=="1"){
         d.push({
@@ -1550,7 +1569,7 @@ function extension(){
             putMyVar('uploads','1');
             putMyVar('uploadjiekou','1');
             putMyVar('uploadjiexi','0');
-            putMyVar('uploadlive','1');
+            putMyVar('uploadlive','0');
             refreshPage(false);
             return 'toast://选择上传同步云端的项';
         }):'toast://请先申请聚影资源码',
@@ -1821,16 +1840,21 @@ function extension(){
                     let codeid = codedyid;
                     let text = parsePaste('https://netcut.cn/p/'+aesDecode('Juying', codeid));
                     if(codeid&&!/^error/.test(text)){
+                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                        var jknum = 0;
+                        var jxnum = 0;
                         let pastedata = JSON.parse(base64Decode(text));
-                        var jkfilepath = "hiker://files/rules/Src/Juying/jiekou.json";
+                        //var jkfilepath = "hiker://files/rules/Src/Juying/jiekou.json";
                         var jkdatalist = pastedata.jiekou;
                         if(jkdatalist.length>0){
-                            writeFile(jkfilepath, JSON.stringify(jkdatalist));
+                            jknum = jiekousave(jkdatalist, 0, 1);
+                            //writeFile(jkfilepath, JSON.stringify(jkdatalist));
                         }
-                        var jxfilepath = "hiker://files/rules/Src/Juying/myjiexi.json";
+                        //var jxfilepath = "hiker://files/rules/Src/Juying/myjiexi.json";
                         var jxdatalist = pastedata.jiexi;
                         if(jxdatalist.length>0){
-                            writeFile(jxfilepath, JSON.stringify(jxdatalist));
+                            jxnum = jiexisave(jxdatalist, 0, 1);
+                            //writeFile(jxfilepath, JSON.stringify(jxdatalist));
                         }
                         if(pastedata.live){
                             var livefilepath = "hiker://files/rules/Src/Juying/liveconfig.json";
@@ -1838,7 +1862,7 @@ function extension(){
                             writeFile(livefilepath, JSON.stringify(liveconfig));
                             var sm = "，直播订阅已同步"
                         }
-                        return "toast://同步完成，接口："+jkdatalist.length+"，解析："+jxdatalist.length+(sm?sm:"");
+                        return "toast://同步完成，接口："+jknum+"，解析："+jxnum+(sm?sm:"");
                     }else{
                         return "toast://口令错误或资源码已失效";
                     }
