@@ -421,6 +421,37 @@ function SRCSet() {
                     col_type: "scroll_button"
                 });
             }
+            d.push({
+                title: "批量保留",
+                url: $('#noLoading#').lazyRule(()=>{
+                        let duoselect = storage0.getMyVar('duoselect')?storage0.getMyVar('duoselect'):[];
+                        if(duoselect.length>0){
+                            if(getMyVar('guanli', 'jk')=="jk"){
+                                var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
+                                var sm = "确定在订阅更新时保留选定的"+duoselect.length+"个接口吗？";
+                            }else if(getMyVar('guanli', 'jk')=="jx"){
+                                var filepath = "hiker://files/rules/Src/Juying/myjiexi.json";
+                                var sm = "确定在订阅更新时保留选定的"+duoselect.length+"个解析吗？";
+                            }
+                            return $(sm).confirm((duoselect, filepath)=>{
+                                var datafile = fetch(filepath);
+                                eval("var datalist=" + datafile+ ";");
+                                for(var i=0;i<datalist.length;i++){
+                                    let dataurl = datalist[i].url?datalist[i].url:datalist[i].parse;
+                                    if(duoselect.indexOf(dataurl)>-1){
+                                        datalist[i].retain = 1;
+                                    }
+                                }
+                                writeFile(filepath, JSON.stringify(datalist));
+                                refreshPage(false);
+                                return "toast://已保留"+duoselect.length;
+                            }, duoselect, filepath)
+                        }else{
+                            return "toast://请选择";
+                        }
+                    }),
+                col_type: "scroll_button"
+            });
         }
         if(getMyVar('guanli', 'jk')=="jk"){
             d.push({
@@ -444,17 +475,21 @@ function SRCSet() {
                 var lists = datalist.filter(item => {
                     return item.group==grouplist[i] || !item.group&&item.type==grouplist[i];
                 })
+                if(grouplist[i]==getMyVar('groupmenu')){
+                    datalist = lists;
+                }
                 d.push({
-                    title: grouplist[i]+'('+lists.length+')',
-                    url: $('#noLoading#').lazyRule((guanlidata,lists)=>{
+                    title: grouplist[i]==getMyVar('groupmenu')?'‘‘’’<b><span style="color:#3399cc">'+grouplist[i]+'('+lists.length+')':grouplist[i]+'('+lists.length+')',
+                    url: $('#noLoading#').lazyRule((guanlidata,lists,groupmenu)=>{
                             if(lists.length>0){
                                 deleteItemByCls('guanlidatalist');
                                 let gldatalist = guanlidata(lists);
                                 addItemBefore('guanliloading', gldatalist);
                                 storage0.putMyVar('datalist',lists);
+                                putMyVar('groupmenu',groupmenu);
                             }
                             return "hiker://empty";
-                        },guanlidata,lists),
+                        },guanlidata,lists,grouplist[i]),
                     col_type: "scroll_button",
                     extra: {
                         id: "grouplist"
@@ -1837,6 +1872,7 @@ function extension(){
         title: '✅ 更新资源',
         url: JYconfig['codedyid']?$("确定要从云端更新数据覆盖本地？").confirm((codedyid)=>{
                 try{
+                    showLoading('请稍候...')
                     let codeid = codedyid;
                     let text = parsePaste('https://netcut.cn/p/'+aesDecode('Juying', codeid));
                     if(codeid&&!/^error/.test(text)){
@@ -1858,11 +1894,14 @@ function extension(){
                             writeFile(livefilepath, JSON.stringify(liveconfig));
                             var sm = "，直播订阅已同步"
                         }
+                        hideLoading();
                         return "toast://同步完成，接口："+jknum+"，解析："+jxnum+(sm?sm:"");
                     }else{
+                        hideLoading();
                         return "toast://口令错误或资源码已失效";
                     }
                 } catch (e) {
+                    hideLoading();
                     log('更新失败：'+e.message); 
                     return "toast://无法识别的口令";
                 }
