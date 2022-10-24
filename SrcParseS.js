@@ -987,8 +987,10 @@ var SrcParseS = {
                             urls: weburls,
                             names: x5namelist
                         }); 
-                    }else{
+                    }else if(x5jxlist.length>0){
                         return this.聚嗅(vipUrl, x5jxlist,excludeurl);
+                    }else{
+                        return vipUrl;
                     }
                 }
             }
