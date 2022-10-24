@@ -1384,7 +1384,7 @@ function jiexi(lx,data) {
         d.push({
             title:'删除',
             col_type:'text_3',
-            url: $("确定删除解析："+data.url).confirm((dataurl)=>{
+            url: $("确定删除解析："+getMyVar('parsename',data.name)).confirm((dataurl)=>{
                 var filepath = "hiker://files/rules/Src/Juying/myjiexi.json";
                 var datafile = fetch(filepath);
                 eval("var datalist=" + datafile+ ";");
