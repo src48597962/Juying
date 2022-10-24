@@ -2269,7 +2269,7 @@ function extension(){
 
     d.push({
         title: '💝 关于聚影',
-        desc: '这是一个空壳小程序，自行研究概不负责！',
+        desc: '这是一个空壳小程序，仅用于个人兴趣研究！',
         col_type: 'text_1',
         url: 'toast://哥就是帅',
         extra:{
