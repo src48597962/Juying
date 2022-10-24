@@ -472,13 +472,14 @@ function SRCSet() {
                 }
                 return temp;
             }
+            let datalist2 = [];
             grouplist = uniq(grouplist);
             for(var i in grouplist){
                 var lists = datalist.filter(item => {
                     return item.group==grouplist[i] || !item.group&&item.type==grouplist[i];
                 })
                 if(grouplist[i]==getMyVar('groupmenu')){
-                    datalist = lists;
+                    datalist2 = lists;
                 }
                 d.push({
                     title: grouplist[i]+'('+lists.length+')',
@@ -499,6 +500,7 @@ function SRCSet() {
                 });
             }
         }
+        if(datalist2.length>0){datalist = datalist2;}
         let gldatalist = guanlidata(datalist);
         d = d.concat(gldatalist);
     }
