@@ -4,6 +4,7 @@ function SRCSet() {
         clearMyVar('guanlicz');
         clearMyVar('duoselect');
         clearMyVar('datalist');
+        clearMyVar('groupmenu');
         //refreshPage(false);
     }));
     setPageTitle("♥管理"+getMyVar('SrcJuying-Version', ''));
@@ -190,41 +191,42 @@ function SRCSet() {
     d.push({
         title: getMyVar('guanlicz')=="1"?'复制':getMyVar('guanlicz')=="2"?'变更':getMyVar('guanlicz')=="3"?'删除':getMyVar('guanlicz')=="4"?'多选':'操作',
         url: $(["复制","变更","删除","清空","多选"],2,"选择操作功能项").select(()=>{
-                if(input=="复制"){
-                    putMyVar('guanlicz','1');
-                    refreshPage(false);
-                    return 'toast://已切换到复制模式';
-                }else if(input=="变更"){
-                    putMyVar('guanlicz','2');
-                    refreshPage(false);
-                    return 'toast://已切换到变更模式';
-                }else if(input=="删除"){
-                    putMyVar('guanlicz','3');
-                    refreshPage(false);
-                    return 'toast://已切换到删除模式';
-                }else if(input=="多选"){
-                    putMyVar('guanlicz','4');
-                    refreshPage(false);
-                    return 'toast://已切换到多选模式';
-                }else if(input=="清空"){
-                    if(getMyVar('guanli', 'jk')=="jk"){
-                        var sm = "接口";
-                    }else{
-                        var sm = "私有解析";
-                    }
-                    return $("确定要删除本地所有的"+sm+"吗？").confirm(()=>{
-                        if(getMyVar('guanli', 'jk')=="jk"){
-                            var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
-                        }else if(getMyVar('guanli', 'jk')=="jx"){
-                            var filepath = "hiker://files/rules/Src/Juying/myjiexi.json";
-                        }
-                        var datalist = [];
-                        writeFile(filepath, JSON.stringify(datalist));
-                        refreshPage(false);
-                        return 'toast://已全部清空';
-                    })
+            clearMyVar('groupmenu');
+            if(input=="复制"){
+                putMyVar('guanlicz','1');
+                refreshPage(false);
+                return 'toast://已切换到复制模式';
+            }else if(input=="变更"){
+                putMyVar('guanlicz','2');
+                refreshPage(false);
+                return 'toast://已切换到变更模式';
+            }else if(input=="删除"){
+                putMyVar('guanlicz','3');
+                refreshPage(false);
+                return 'toast://已切换到删除模式';
+            }else if(input=="多选"){
+                putMyVar('guanlicz','4');
+                refreshPage(false);
+                return 'toast://已切换到多选模式';
+            }else if(input=="清空"){
+                if(getMyVar('guanli', 'jk')=="jk"){
+                    var sm = "接口";
+                }else{
+                    var sm = "私有解析";
                 }
-            }),
+                return $("确定要删除本地所有的"+sm+"吗？").confirm(()=>{
+                    if(getMyVar('guanli', 'jk')=="jk"){
+                        var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
+                    }else if(getMyVar('guanli', 'jk')=="jx"){
+                        var filepath = "hiker://files/rules/Src/Juying/myjiexi.json";
+                    }
+                    var datalist = [];
+                    writeFile(filepath, JSON.stringify(datalist));
+                    refreshPage(false);
+                    return 'toast://已全部清空';
+                })
+            }
+        }),
         img: getMyVar('guanlicz')=="1"?"https://lanmeiguojiang.com/tubiao/more/292.png":getMyVar('guanlicz')=="2"?"https://lanmeiguojiang.com/tubiao/more/275.png":getMyVar('guanlicz')=="3"?"https://lanmeiguojiang.com/tubiao/more/216.png":getMyVar('guanlicz')=="4"?"https://lanmeiguojiang.com/tubiao/more/213.png":"https://lanmeiguojiang.com/tubiao/more/290.png",
         col_type: "icon_small_4"
     });
@@ -479,7 +481,7 @@ function SRCSet() {
                     datalist = lists;
                 }
                 d.push({
-                    title: grouplist[i]==getMyVar('groupmenu')?'‘‘’’<b><span style="color:#3399cc">'+grouplist[i]+'('+lists.length+')':grouplist[i]+'('+lists.length+')',
+                    title: grouplist[i]+'('+lists.length+')',
                     url: $('#noLoading#').lazyRule((guanlidata,lists,groupmenu)=>{
                             if(lists.length>0){
                                 deleteItemByCls('guanlidatalist');
