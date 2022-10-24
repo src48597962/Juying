@@ -2266,14 +2266,15 @@ function extension(){
     d.push({
         col_type: "line"
     });
+    /*
     d.push({
         title: '💝 关于聚影',
         col_type: "rich_text"
     });
-
+    */
     d.push({
-        title: '这只是一个空壳小程序',
-        desc: '哥帅不',
+        title: '💝 关于聚影',
+        desc: '这是一个空壳小程序',
         col_type: 'text_1',
         url: 'toast://哥就是帅'
     });
