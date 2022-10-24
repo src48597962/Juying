@@ -997,14 +997,14 @@ function Version() {
     var nowVersion = "5.5";//现在版本 
     var nowtime = Date.now();
     var oldtime = parseInt(getItem('VersionChecktime','0').replace('time',''));
-    if (getMyVar('SrcJuying-VersionCheck', '0') == '0' && nowtime > (oldtime+24*60*60*1000)) {
+    if (getMyVar('SrcJuying-VersionCheck', '0') == '0' && nowtime > (oldtime+12*60*60*1000)) {
         try {
             eval(request(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcTmplVersion.js'))
             if (parseFloat(newVersion.SrcJuying) > parseFloat(nowVersion)) {
                 confirm({
                     title:'发现新版本，是否更新？', 
                     content:nowVersion+'=>'+newVersion.SrcJuying+'\n'+newVersion.SrcJuyingdesc[newVersion.SrcJuying], 
-                    confirm:`setItem('VersionChecktime',`+nowtime+`'+time');deleteCache();refreshPage();`, 
+                    confirm:`deleteCache();refreshPage();`, 
                     cancel:''
                 })
                 log('检测到新版本！\nV'+newVersion.SrcJuying+'版本》'+newVersion.SrcJuyingdesc[newVersion.SrcJuying]);
@@ -1012,6 +1012,7 @@ function Version() {
             putMyVar('SrcJuying-Version', '-V'+newVersion.SrcJuying);
         } catch (e) { }
         putMyVar('SrcJuying-VersionCheck', '1');
+        setItem('VersionChecktime', nowtime+'time');
     }else{
         putMyVar('SrcJuying-Version', '-V'+nowVersion);
     }
