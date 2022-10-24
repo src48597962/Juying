@@ -92,6 +92,7 @@ function SRCSet() {
                     if(datalist.web){dataarr['web'] = datalist.web}
                     var filepath = "hiker://files/rules/Src/Juying/myjiexi.json";
                 }
+                if(datalist.retain){dataarr['retain'] = 1}
                 
                 return {
                     title: datatitle,
@@ -573,6 +574,7 @@ function jiekousave(urls,update) {
                 let arr  = { "name": urlname, "url": urlurl, "ua": urlua, "type": urltype };
                 if(urls[i].data){arr['data'] = urls[i].data}
                 if(urlgroup){arr['group'] = urlgroup}
+                if(urls[i].retain){arr['retain'] = 1}
                 if(urls.length == 1){
                     datalist.unshift(arr);
                 }else{
@@ -623,6 +625,7 @@ function jiexisave(urls,update) {
             if(!datalist.some(checkitem)&&urlname&&/^http|^functio/.test(urlurl)){
                 let arr  = { "name": urlname, "parse": urlurl, "stopfrom": urlstopfrom, "priorfrom": urlpriorfrom, "sort": urlsort };
                 if(urls[i].web){arr['web'] = urls[i].web}
+                if(urls[i].retain){arr['retain'] = 1;}
                 if(urls.length == 1){
                     datalist.unshift(arr);
                 }else{
@@ -650,6 +653,7 @@ function jiekou(lx,data) {
         clearMyVar('isload');
         clearMyVar('apigroup');
         clearMyVar('apidata');
+        clearMyVar('isretain');
         clearMyVar('isSaveAs');
     }));
 
@@ -677,6 +681,7 @@ function jiekou(lx,data) {
             putMyVar('apitype', data.type);
             putMyVar('apiua', data.ua);
             putMyVar('apigroup', data.group?data.group:"");
+            putMyVar('isretain', data.retain?data.retain:"");
             putMyVar('isload', '1');
         }
     }
@@ -786,6 +791,20 @@ function jiekou(lx,data) {
             })
         });
     }
+    d.push({
+        title: getMyVar('isretain', '')!="1"?'强制保留：否':'强制保留：是',
+        desc: getMyVar('isretain', '')!="1"?'资源码订阅更新时会被覆盖':'资源码订阅更新时保留此接口',
+        col_type:'text_1',
+        url:$('#noLoading#').lazyRule(()=>{
+            if(getMyVar('isretain', '')!="1"){
+                putMyVar('isretain', '1');
+            }else{
+                clearMyVar('isretain');
+            }
+            refreshPage(false);
+            return 'toast://已切换';
+        })
+    });
     for (let i = 0; i < 10; i++) {
         d.push({
             col_type: "blank_block"
@@ -908,9 +927,11 @@ function jiekou(lx,data) {
                         return "toast://data对象数据异常";
                     }
                 }
+                let isretain = getMyVar('isretain')=="1"?1:0;
+                if(isretain){arr['retain'] = 1;}
                 if(lx=="update"){
                     isupdate = 1;
-                    if((apiurl==data.url&&apiname==data.name&&apiua==data.ua&&urltype==data.type&&apigroup==(data.group?data.group:'')&&apidata==(data.data?JSON.stringify(data.data):''))){
+                    if((apiurl==data.url&&apiname==data.name&&apiua==data.ua&&urltype==data.type&&isretain==data.retain&&apigroup==(data.group?data.group:'')&&apidata==(data.data?JSON.stringify(data.data):''))){
                         return "toast://未修改";
                     }else{
                         arr['oldurl'] = data.url;
@@ -971,6 +992,7 @@ function jiexi(lx,data) {
         clearMyVar('priorfrom');
         clearMyVar('parseheader');
         clearMyVar('parseisweb');
+        clearMyVar('isretain');
         //refreshPage(false);
     }));
     var d = [];
@@ -991,6 +1013,7 @@ function jiexi(lx,data) {
         });
     }else{
         setPageTitle("♥解析管理-变更");
+        putMyVar('isretain', data.retain?data.retain:"");
     }
     if(getMyVar('addtype', '1')=="1"){
         d.push({
@@ -1159,6 +1182,20 @@ function jiexi(lx,data) {
                 }else{
                     return "toast://以http开头的普通解析才能标记"
                 }
+            })
+        });
+        d.push({
+            title: getMyVar('isretain', '')!="1"?'强制保留：否':'强制保留：是',
+            desc: getMyVar('isretain', '')!="1"?'资源码订阅更新时会被覆盖':'资源码订阅更新时保留此接口',
+            col_type:'text_1',
+            url:$('#noLoading#').lazyRule(()=>{
+                if(getMyVar('isretain', '')!="1"){
+                    putMyVar('isretain', '1');
+                }else{
+                    clearMyVar('isretain');
+                }
+                refreshPage(false);
+                return 'toast://已切换';
             })
         });
     }else{
@@ -1344,7 +1381,8 @@ function jiexi(lx,data) {
                 try{
                     if(getMyVar('parseisweb')=="1"){arr['web']= 1}
                 }catch(e){}
-                
+                let isretain = getMyVar('isretain')=="1"?1:0;
+                if(isretain){arr['retain'] = 1;}
                 if(lx=="update"){
                     isupdate = 1;
                     arr['oldurl'] = data.url;
