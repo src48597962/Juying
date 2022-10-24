@@ -825,22 +825,23 @@ function yiji() {
                 let text = parsePaste('https://netcut.cn/p/'+aesDecode('Juying', pasteurl));
                 if(pasteurl&&!/^error/.test(text)){
                     let pastedata = JSON.parse(base64Decode(text));
-                    var jkfilepath = "hiker://files/rules/Src/Juying/jiekou.json";
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                    let jknum = 0;
+                    let jxnum = 0;
                     var jkdatalist = pastedata.jiekou;
                     if(jkdatalist.length>0){
-                        writeFile(jkfilepath, JSON.stringify(jkdatalist));
+                        jknum = jiekousave(jkdatalist, 0, 1);
                     }
-                    var jxfilepath = "hiker://files/rules/Src/Juying/myjiexi.json";
                     var jxdatalist = pastedata.jiexi;
                     if(jxdatalist.length>0){
-                        writeFile(jxfilepath, JSON.stringify(jxdatalist));
+                        jxnum = jiexisave(jxdatalist, 0, 1);
                     }
                     if(pastedata.live){
                         let livefilepath = "hiker://files/rules/Src/Juying/liveconfig.json";
                         let liveconfig = pastedata.live;
                         writeFile(livefilepath, JSON.stringify(liveconfig));
                     }
-                    log("订阅资源码自动同步完成");
+                    log("订阅资源码自动同步完成，接口："+jknum+"，解析："+jxnum);
                 }else{
                     log("订阅资源码自动同步口令错误或已失效");
                 }
