@@ -139,9 +139,7 @@ function SRCSet() {
                                 }
                                 writeFile(filepath, JSON.stringify(datalist));
                             }
-                            deleteItem(dataurl);
-                            updateItem('guanliloading',{title:'当前共有'+datalist.length+'个'+(getMyVar('guanli', 'jk')=="jk"?"接口":"私有解析")});
-                            //refreshPage(false);
+                            refreshPage(false);
                             return "toast://已删除";
                         }, dataurl,filepath):getMyVar('guanlicz')=="4"?$('#noLoading#').lazyRule((datatitle,dataurl)=>{
                             let duoselect = storage0.getMyVar('duoselect')?storage0.getMyVar('duoselect'):[];
@@ -329,15 +327,13 @@ function SRCSet() {
                                 for(var i=0;i<datalist.length;i++){
                                     let dataurl = datalist[i].url?datalist[i].url:datalist[i].parse;
                                     if(duoselect.indexOf(dataurl)>-1){
-                                        deleteItem(dataurl);
                                         datalist.splice(i,1);
                                         i = i - 1;
                                     }
                                 }
                                 writeFile(filepath, JSON.stringify(datalist));
-                                updateItem('guanliloading',{title:'当前共有'+datalist.length+'个'+(getMyVar('guanli', 'jk')=="jk"?"接口":"私有解析")});
-                                //refreshPage(false);
-                                return "toast://已批量删除解析"+duoselect.length;
+                                refreshPage(false);
+                                return "toast://已删除"+duoselect.length;
                             }, duoselect, filepath)
                         }else{
                             return "toast://请选择";
