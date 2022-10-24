@@ -499,8 +499,8 @@ function SRCSet() {
                     }
                 });
             }
+            if(datalist2.length>0){datalist = datalist2;}
         }
-        if(datalist2.length>0){datalist = datalist2;}
         let gldatalist = guanlidata(datalist);
         d = d.concat(gldatalist);
     }
