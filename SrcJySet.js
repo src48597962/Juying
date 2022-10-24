@@ -2171,60 +2171,10 @@ function extension(){
     });
 
     d.push({
-        title: '这是一个堪比app的小程序',
-        desc: '佬少皆可用、演示资源码、更新日志',
+        title: '这只是一个空壳小程序',
+        desc: '哥帅不',
         col_type: 'text_1',
-        url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
-            setPageTitle("💝 关于聚影");
-            var d = [];
-            let code = '聚影资源码￥K1zM/hocuUV5d8Q9T5IujP9pkulPKB77TVq7GjjEkXM=';
-            d.push({
-                title: '📋演示资源码',
-                desc: code,
-                url: $('#noLoading#').lazyRule((code)=>{
-                        copy(code);
-                        return "toast://返回上页，订阅后更新资源";
-                    },code),
-                col_type: "text_1"
-            });
-
-            try{
-                eval(fetchCache(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcTmplVersion.js', 1, { timeout:2000 }))
-                var isupdate = parseFloat(newVersion.SrcJuying) > parseFloat(getMyVar('SrcJuying-Version','').replace('-V',''))?1:0;
-                var SrcJuyingdesc = newVersion.SrcJuyingdesc;
-            }catch(e){
-                var isupdate = 0;
-            }
-            d.push({
-                title: isupdate?'💡发现新版本V'+newVersion.SrcJuying:'🎉已是最新版本',
-                desc: '当前版本'+getMyVar('SrcJuying-Version','').replace('-',''),
-                url: isupdate?$('#noLoading#').lazyRule(()=>{
-                        deleteCache();
-                        refreshPage();
-                        return 'toast://已更新，返回主页下拉界面生效';
-                    }):"hiker://empty",
-                col_type: "text_1"
-            });
-
-            if(SrcJuyingdesc){
-                d.push({
-                    title: '📑 更新日志',
-                    col_type: "rich_text"
-                });
-                d.push({
-                    col_type: "line"
-                });
-                var updatedesc = [];
-                for(let key in SrcJuyingdesc){
-                    updatedesc.push('版本V'+key+(parseFloat(key) > parseFloat(getMyVar('SrcJuying-Version','').replace('-V',''))?"(内测)":"")+'：'+SrcJuyingdesc[key]);
-                }
-                d.push({
-                    title: updatedesc.reverse().join('<br>'),
-                    col_type: "rich_text"
-                });
-            }
-            setHomeResult(d);
-        })
+        url: 'toast://哥就是帅'
     });
     d.push({
         title: '<br>',
