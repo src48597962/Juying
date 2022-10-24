@@ -990,6 +990,7 @@ var SrcParseS = {
                     }else if(x5jxlist.length>0){
                         return this.聚嗅(vipUrl, x5jxlist,excludeurl);
                     }else{
+                        if(printlog==1){log('没有解析，跳转原网页')}
                         return vipUrl;
                     }
                 }
