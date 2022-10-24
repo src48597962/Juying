@@ -1840,25 +1840,21 @@ function extension(){
                     let codeid = codedyid;
                     let text = parsePaste('https://netcut.cn/p/'+aesDecode('Juying', codeid));
                     if(codeid&&!/^error/.test(text)){
-                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
-                        var jknum = 0;
-                        var jxnum = 0;
                         let pastedata = JSON.parse(base64Decode(text));
-                        //var jkfilepath = "hiker://files/rules/Src/Juying/jiekou.json";
-                        var jkdatalist = pastedata.jiekou;
+                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                        let jknum = 0;
+                        let jxnum = 0;
+                        let jkdatalist = pastedata.jiekou;
                         if(jkdatalist.length>0){
                             jknum = jiekousave(jkdatalist, 0, 1);
-                            //writeFile(jkfilepath, JSON.stringify(jkdatalist));
                         }
-                        //var jxfilepath = "hiker://files/rules/Src/Juying/myjiexi.json";
-                        var jxdatalist = pastedata.jiexi;
+                        let jxdatalist = pastedata.jiexi;
                         if(jxdatalist.length>0){
                             jxnum = jiexisave(jxdatalist, 0, 1);
-                            //writeFile(jxfilepath, JSON.stringify(jxdatalist));
                         }
                         if(pastedata.live){
-                            var livefilepath = "hiker://files/rules/Src/Juying/liveconfig.json";
-                            var liveconfig = pastedata.live;
+                            let livefilepath = "hiker://files/rules/Src/Juying/liveconfig.json";
+                            let liveconfig = pastedata.live;
                             writeFile(livefilepath, JSON.stringify(liveconfig));
                             var sm = "，直播订阅已同步"
                         }
