@@ -246,7 +246,7 @@ function Live() {
         });
     }else{
         d.push({
-            title: '没有直播数据源，可从TVBox导入',
+            title: '没有直播数据源',
             col_type: 'rich_text'
         });
     }
