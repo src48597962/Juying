@@ -1796,7 +1796,7 @@ function extension(){
         desc: JYconfig['codedyid']?'点击订阅、复制、切换资源码'+(JYconfig['codedyname']?'\n当前订阅的资源码为：'+JYconfig['codedyname']:""):'订阅后将与分享者云端数据保持同步',
         url: $(["订阅","复制","切换"],3).select((JYconfig,cfgfile)=>{
                 if(input=="订阅"){
-                    return $("","输入聚影资源码口令\n订阅会自动和云端同步，完全覆盖本地").input((JYconfig,cfgfile) => {
+                    return $("","输入聚影资源码口令\n订阅会自动和云端同步，覆盖本地非保留接口").input((JYconfig,cfgfile) => {
                         if(input.split('￥')[0]!="聚影资源码"){
                             return 'toast://口令有误';
                         }
@@ -1874,7 +1874,7 @@ function extension(){
 
     d.push({
         title: '✅ 更新资源',
-        url: JYconfig['codedyid']?$("确定要从云端更新数据覆盖本地？").confirm((codedyid)=>{
+        url: JYconfig['codedyid']?$("确定要从云端更新数据覆盖本地非保留？").confirm((codedyid)=>{
                 try{
                     showLoading('请稍候...')
                     let codeid = codedyid;
