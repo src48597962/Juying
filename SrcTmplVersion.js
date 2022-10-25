@@ -1,6 +1,6 @@
 var newVersion = {
     "srcDyTmpl":5.5,
-    "SrcJuying":"5.6",
+    "SrcJuying":"5.5",
     "SrcJuyingdesc":{
         "0.1":"原始搜狗改造",
         "0.2":"主页界面完成",
