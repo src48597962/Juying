@@ -382,8 +382,8 @@ function xunmi(name,data,ishkss) {
                             let img = xpathArray(gethtml, jsondata.scVodNode+jsondata.scVodImg);
                             let mark = xpathArray(gethtml, jsondata.scVodNode+jsondata.scVodMark)||"";
                             var list = [];
-                            for(var j in title){
-                                list.push({"id":/^http/.test(href[j])?href[j]:/\{vid\}$/.test(jsondata.dtUrl)?href[j]:href[j].replace(/\/.*?\/|\.html/g,''),"name":title[j],"pic":img[j],"desc":mark[j]})
+                            for(var j in title){dturl
+                                list.push({"id":/^http|\{vid}$/.test(href[j])?href[j]:href[j].replace(/\/.*?\/|\.html/g,''),"name":title[j],"pic":img[j],"desc":mark[j]})
                             }
                         }
                         var ssvodurl = `jsondata.dtUrl.replace('{vid}',list.id)`;
