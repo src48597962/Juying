@@ -383,7 +383,7 @@ function xunmi(name,data,ishkss) {
                             let mark = xpathArray(gethtml, jsondata.scVodNode+jsondata.scVodMark)||"";
                             var list = [];
                             for(var j in title){
-                                list.push({"id":/^http/.test(href[j])?href[j]:/html^/.test(href[j])?href[j].replace(/\/.*\/|\.html/g,''):href[j],"name":title[j],"pic":img[j],"desc":mark[j]})
+                                list.push({"id":/^http/.test(href[j])?href[j]:href[j].replace(/\/.*?\/|\.html/g,''),"name":title[j],"pic":img[j],"desc":mark[j]})
                             }
                         }
                         var ssvodurl = `jsondata.dtUrl.replace('{vid}',list.id)`;
