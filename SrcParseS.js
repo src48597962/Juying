@@ -84,7 +84,8 @@ var SrcParseS = {
                     var html = request(urls[i],{timeout:1500})||"";
                     if(html.indexOf("token过期了")>-1){tc = 0;}
                 }
-                if (!exclude.test(urls[i]) && contain.test(urls[i]) && excludeurl.indexOf(urls[i])==-1 && tc==1) {
+                //if (!exclude.test(urls[i]) && contain.test(urls[i]) && excludeurl.indexOf(urls[i])==-1 && tc==1) {
+                if (contain.test(urls[i])) {
                     fba.log("嗅探成功>"+urls[i]);
                     //return urls[i]+'#isVideo=true#';
                     if(fy_bridge_app.getHeaderUrl&&vipUrl.indexOf("=http")==-1)
