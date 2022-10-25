@@ -52,6 +52,7 @@ var SrcParseS = {
     嗅探: function (vipUrl, excludeurl, getparse) {
         showLoading('√视频解析中，请稍候...');
         excludeurl = excludeurl||[];
+        clearVar('Srcgetparse');
         return (getMyVar('SrcXTNH', 'web') == 'x5' ? 'x5Rule://' : 'webRule://') + vipUrl + '@' + $.toString((formatUrl,vipUrl,excludeurl,getparse) => {
             if (window.c == null) {
                 if (typeof (request) == 'undefined' || !request) {
