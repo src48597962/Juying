@@ -1195,7 +1195,7 @@ function xunmierji(type,ua) {
                     var playurl = list[j].split('$')[1];
                     var DTJX = $("").lazyRule(() => {
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
-                        return SrcParseS.嗅探(input);
+                        return SrcParseS.嗅探(input,[],1);
                     });
                 }else{
                     //网页
