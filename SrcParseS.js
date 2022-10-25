@@ -61,6 +61,7 @@ var SrcParseS = {
             };
             window.c++;
             if (window.c * 250 >= 15 * 1000) {
+                fba.clearVar('Srcgetparse');
                 fba.log("嗅探失败>超过15秒未获取到");
                 fba.hideLoading();
                 try{
@@ -76,16 +77,19 @@ var SrcParseS = {
             var exclude = /\/404\.m3u8|\/xiajia\.mp4|\/余额不足\.m3u8|\.css|\.js|\.gif|\.png|\.jpg|\.jpeg|html,http|m3u88.com\/admin|\.php\?v=h|\?url=h|\&url=h|%253Furl%253Dh/;//设置排除地址
             var contain = /\.mp4|\.m3u8|\.flv|\.avi|\.mpeg|\.wmv|\.mov|\.rmvb|\.dat|qqBFdownload|mime=video%2F|video_mp4|\.ts\?|TG@UosVod|video\/tos\/cn\/tos/;//设置符合条件的正确地址
             for (var i in urls) {
-                if(getparse&&/url=h|v=h|youku|mgtv|ixigua|qq\.com|iqiyi|migu|bilibili|sohu|pptv|\.le\.|\.1905|cctv/.test(urls[i])){
-                    fba.log(urls[i].match(/http.*?=/)[0]);
+                if(getparse&&!getVar('Srcgetparse')&&/url=h|v=h|youku|mgtv|ixigua|qq\.com|iqiyi|migu|bilibili|sohu|pptv|\.le\.|\.1905|cctv/.test(urls[i])&&!/\/bid\?/.test(urls[i])){
+                    try{
+                        fba.log(urls[i].match(/http.*?=/)[0]);
+                        fba.putVar('Srcgetparse','1');
+                    }catch(e){}
                 }
                 var tc = 1;
                 if(/cdn\.oss-cn-m3u8\.tv-nanjing-chengdu\.myqcloud\.com\.zh188.net/.test(urls[i])&&vipUrl.indexOf("=http")>-1){
                     var html = request(urls[i],{timeout:1500})||"";
                     if(html.indexOf("token过期了")>-1){tc = 0;}
                 }
-                //if (!exclude.test(urls[i]) && contain.test(urls[i]) && excludeurl.indexOf(urls[i])==-1 && tc==1) {
-                if (contain.test(urls[i])) {
+                if (!exclude.test(urls[i]) && contain.test(urls[i]) && excludeurl.indexOf(urls[i])==-1 && tc==1) {
+                    fba.clearVar('Srcgetparse');
                     fba.log("嗅探成功>"+urls[i]);
                     //return urls[i]+'#isVideo=true#';
                     if(fy_bridge_app.getHeaderUrl&&vipUrl.indexOf("=http")==-1)
