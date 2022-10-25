@@ -828,11 +828,11 @@ function yiji() {
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                     let jknum = 0;
                     let jxnum = 0;
-                    var jkdatalist = pastedata.jiekou;
+                    var jkdatalist = pastedata.jiekou||[];
                     if(jkdatalist.length>0){
                         jknum = jiekousave(jkdatalist, 0, 1);
                     }
-                    var jxdatalist = pastedata.jiexi;
+                    var jxdatalist = pastedata.jiexi||[];
                     if(jxdatalist.length>0){
                         jxnum = jiexisave(jxdatalist, 0, 1);
                     }
