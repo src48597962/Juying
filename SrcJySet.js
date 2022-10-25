@@ -1715,8 +1715,6 @@ function extension(){
                         eval("var datalist=" + datafile+ ";");
                     }
                     text['jiekou'] = datalist;
-                }else{
-                    text['jiekou'] = [];
                 }
                 if(getMyVar('uploadjiexi','0')=="1"){
                     var filepath = "hiker://files/rules/Src/Juying/myjiexi.json";
@@ -1727,8 +1725,6 @@ function extension(){
                         eval("var datalist=" + datafile+ ";");
                     }
                     text['jiexi'] = datalist;
-                }else{
-                    text['jiexi'] = [];
                 }
                 if(getMyVar('uploadlive','0')=="1"){
                     var filepath = "hiker://files/rules/Src/Juying/liveconfig.json";
@@ -1739,8 +1735,6 @@ function extension(){
                         eval("var liveconfig=" + datafile+ ";");
                     }
                     text['live'] = liveconfig;
-                }else{
-                    text['live'] = {};
                 }
                 let textcontent = base64Encode(JSON.stringify(text));
                 if(textcontent.length>=200000){
@@ -1884,11 +1878,11 @@ function extension(){
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                         let jknum = 0;
                         let jxnum = 0;
-                        let jkdatalist = pastedata.jiekou;
+                        let jkdatalist = pastedata.jiekou||[];
                         if(jkdatalist.length>0){
                             jknum = jiekousave(jkdatalist, 0, 1);
                         }
-                        let jxdatalist = pastedata.jiexi;
+                        let jxdatalist = pastedata.jiexi||[];
                         if(jxdatalist.length>0){
                             jxnum = jiexisave(jxdatalist, 0, 1);
                         }
