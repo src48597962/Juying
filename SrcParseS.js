@@ -1014,7 +1014,7 @@ var SrcParseS = {
                 var name = 'video'+parseInt(i)+'.m3u8';
                 url = cacheM3u8(url, {headers: header, timeout: 2000}, name)+'#pre#';
             }
-            if(url.indexOf('#isVideo=true#')==-1){
+            if(url.indexOf('#isVideo=true#')==-1&&i==0){
                 url = url + '#isVideo=true#';
             }
             return {url:url, header:header};
