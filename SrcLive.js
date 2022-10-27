@@ -25,6 +25,9 @@ function Live() {
         var liveconfig = {};
     }
     let livedata = liveconfig['data']||[];
+    livedata = livedata.filter(item => {
+        return item.show!=0;
+    })
 
     let JYlivefile = "hiker://files/rules/Src/Juying/live.txt";
     let JYlive = "";
@@ -72,7 +75,7 @@ function Live() {
             let dyname = livedata[i].name;
             let dyurl = livedata[i].url;
             deleteFile('live'+md5(dyurl)+'.txt');//自动删除之前私有文件
-            if(livedata[i].show!=0){
+            //if(livedata[i].show!=0){
                 d.push({
                     title: JYlivedyurl==dyurl?dyname+'✌':dyname,
                     url: $("#noLoading#").lazyRule((dyname,dyurl) => {
@@ -83,7 +86,7 @@ function Live() {
                     },dyname,dyurl),
                     col_type: 'scroll_button'
                 })
-            }
+            //}
         }
         d.push({
             col_type: 'line'
