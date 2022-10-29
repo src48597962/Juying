@@ -681,6 +681,7 @@ function jiexisave(urls,update,subscribe) {
                 let arr  = { "name": urlname, "parse": urlurl, "stopfrom": urlstopfrom, "priorfrom": urlpriorfrom, "sort": urlsort };
                 if(urls[i].web){arr['web'] = urls[i].web}
                 if(urls[i].retain){arr['retain'] = 1;}
+                if(urls[i].header){arr['header'] = urls[i].header;}
                 if(urls.length == 1){
                     datalist.unshift(arr);
                 }else{
@@ -1203,7 +1204,7 @@ function jiexi(lx,data) {
                     if(!/^http/.test(parse)){
                         return "";
                     }else{
-                        let head = {"User-Agent": "Dalvik/2.1.0"};
+                        let head = {"User-Agent": "okhttp/4.1.0"};
                         let referer = parse.match(/http(s)?:\/\/(.*?)\//)[0]||"";
                         if(referer){
                             head["referer"] = referer;
@@ -2430,6 +2431,9 @@ function Resourceimport(input,importtype,boxdy){
                 for (let i=0;i<jiexi.length;i++) {
                     if(/^http/.test(jiexi[i].url)){
                         let arr  = { "name": jiexi[i].name, "parse": jiexi[i].url, "stopfrom": [], "priorfrom": [], "sort": 1 };
+                        if(jiexi[i].header){
+                            arr['header'] = jiexi[i].header;
+                        }
                         urls.push(arr);
                     }
                 }
