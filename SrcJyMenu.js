@@ -43,7 +43,7 @@ var erjimenu = [
                     }
                 }catch(e){};
                 setHomeResult(d);
-            }, MY_URL): $('hiker://empty#noHistory#').rule(() => {
+            }, MY_URL): $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
                 setHomeResult([{
                     title: '影片简介：\n' + getMyVar('moviedesc',''),
                     col_type: 'long_text'
