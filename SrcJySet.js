@@ -2722,6 +2722,8 @@ function JYimport(input) {
         if(pasteurl&&!/^error/.test(text)){
             let pastedata = JSON.parse(base64Decode(text));
             let urlnum = 0;
+            log(getMyVar('guanli'))
+            log(cloudtype)
             if(getMyVar('guanli')=="jk"||cloudtype=="jk"){
                 if(codelx=="share"){
                     var pastedatalist = pastedata;
