@@ -1200,7 +1200,6 @@ function xunmierji(type,ua) {
                 }else{
                     //网页
                 }
-                setLastChapterRule('js:' + $.toString(param=>{ setResult('更新至：'+param) }, list[list.length-1].split('$')[0]))
                 d.push({
                     title: playtitle.replace(/第|集|话|期|-/g, ''),
                     url: playurl + DTJX,
@@ -1265,4 +1264,8 @@ function xunmierji(type,ua) {
         col_type: 'text_center_1'
     });
     setResult(d);
+    setLastChapterRule('js:' + $.toString((type,ua,data)=>{
+        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
+        xunmierji(type,ua,data);
+    }, type,ua,MY_PARAMS.data))
 }
