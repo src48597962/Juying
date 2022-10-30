@@ -2680,7 +2680,7 @@ function JYshare(lx) {
         if(lx!=2){
             copy(code);
         }else{
-            copy(code+`@import=js:$.require("hiker://page/cloudimport?rule=聚影√");`);
+            copy('云口令：'+code+`@import=js:$.require("hiker://page/cloudimport?rule=聚影√");`);
         }
         return "toast://"+sm2;
     }else{
@@ -2689,14 +2689,9 @@ function JYshare(lx) {
 }
 //资源导入
 function JYimport(input) {
-    log(input)
-    if(input.indexOf('@import=js:')>-1){
-        try{
-            input = input.split('@import=js:')[0];
-            var cloudimport = 1;
-        }catch(e){
-            return "toast://聚影√：云口令有误，无法导入";
-        }
+    if(/^云口令：/.test(input)){
+        input = input.replace('云口令：','');
+        var cloudimport = 1;
     }
     try{
         var inputname = input.split('￥')[0];
