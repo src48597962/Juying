@@ -2632,14 +2632,19 @@ function JYimport(input) {
         try{
             input = input.split('@import=js:')[0];
             var cloudimport = 1;
+            if(input.split('￥')[0]=="聚影接口"){
+                var cloudtype = "jk";
+            }else if(input.split('￥')[0]=="聚影解析"){
+                var cloudtype = "jx";
+            }
         }catch(e){
             return "toast://聚影√：云口令有误，无法导入";
         }
     }
     try{
-        if((input.split('￥')[0]=="聚影接口"||input.split('￥')[0]=="聚影资源码")&&getMyVar('guanli', 'jk')=="jk"){
+        if((input.split('￥')[0]=="聚影接口"||input.split('￥')[0]=="聚影资源码")&&(getMyVar('guanli', 'jk')=="jk"||cloudtype=="jk")){
             var sm = "聚影√：接口";
-        }else if((input.split('￥')[0]=="聚影解析"||input.split('￥')[0]=="聚影资源码")&&getMyVar('guanli', 'jk')=="jx"){
+        }else if((input.split('￥')[0]=="聚影解析"||input.split('￥')[0]=="聚影资源码")&&(getMyVar('guanli', 'jk')=="jx"||cloudtype=="jx")){
             var sm = "聚影√：解析";
         }else{
             return "toast://聚影√：无法识别的口令";
@@ -2655,14 +2660,14 @@ function JYimport(input) {
             let pastedata = JSON.parse(base64Decode(text));
             
             let urlnum = 0;
-            if(getMyVar('guanli', 'jk')=="jk"){
+            if(getMyVar('guanli', 'jk')=="jk"||cloudtype=="jk"){
                 if(codelx=="share"){
                     var pastedatalist = pastedata;
                 }else if(codelx=="dingyue"){
                     var pastedatalist = pastedata.jiekou;
                 }
                 urlnum = jiekousave(pastedatalist);
-            }else{
+            }else if(getMyVar('guanli', 'jk')=="jx"||cloudtype=="jx"){
                 if(codelx=="share"){
                     var pastedatalist = pastedata;
                 }else if(codelx=="dingyue"){
