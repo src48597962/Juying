@@ -6,6 +6,7 @@ function sougou() {
         var shows = json.play_from_open_index;
         var list = plays[0].info;
     }catch(e){
+        log('获取最新失败>'+e.message);
         var list = [];
     }
     
