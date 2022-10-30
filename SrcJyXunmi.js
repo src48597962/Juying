@@ -1265,7 +1265,7 @@ function xunmierji(type,ua) {
     });
     setResult(d);
     setLastChapterRule('js:' + $.toString((type,ua,data)=>{
-        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
-        xunmierji(type,ua,data);
-    }, type,ua,MY_PARAMS.data))
+        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLastChapter.js');
+        xunmi(type,ua,data);
+    }, type, ua, MY_PARAMS.data))
 }
