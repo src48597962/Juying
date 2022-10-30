@@ -2626,66 +2626,7 @@ function Resourceimport(input,importtype,boxdy){
         return 'toast://biu导入：'+(sm?sm:'导入异常，详情查看日志');
     }   
 }
-//资源导入
-function JYimport(input) {
-    if(input.indexOf('@import=js:')>-1){
-        try{
-            input = input.split('@import=js:')[0];
-            var cloudimport = 1;
-            if(input.split('￥')[0]=="聚影接口"){
-                var cloudtype = "jk";
-            }else if(input.split('￥')[0]=="聚影解析"){
-                var cloudtype = "jx";
-            }
-        }catch(e){
-            return "toast://聚影√：云口令有误，无法导入";
-        }
-    }
-    try{
-        if((input.split('￥')[0]=="聚影接口"||input.split('￥')[0]=="聚影资源码")&&(getMyVar('guanli', 'jk')=="jk"||cloudtype=="jk")){
-            var sm = "聚影√：接口";
-        }else if((input.split('￥')[0]=="聚影解析"||input.split('￥')[0]=="聚影资源码")&&(getMyVar('guanli', 'jk')=="jx"||cloudtype=="jx")){
-            var sm = "聚影√：解析";
-        }else{
-            return "toast://聚影√：无法识别的口令";
-        }
-        if(input.split('￥')[0]=="聚影资源码"){
-            var codelx = "dingyue";
-        }else{
-            var codelx = "share";
-        }
-        let pasteurl = input.split('￥')[1];
-        let text = parsePaste('https://netcut.cn/p/'+aesDecode('Juying', pasteurl));
-        if(pasteurl&&!/^error/.test(text)){
-            let pastedata = JSON.parse(base64Decode(text));
-            
-            let urlnum = 0;
-            if(getMyVar('guanli', 'jk')=="jk"||cloudtype=="jk"){
-                if(codelx=="share"){
-                    var pastedatalist = pastedata;
-                }else if(codelx=="dingyue"){
-                    var pastedatalist = pastedata.jiekou;
-                }
-                urlnum = jiekousave(pastedatalist);
-            }else if(getMyVar('guanli', 'jk')=="jx"||cloudtype=="jx"){
-                if(codelx=="share"){
-                    var pastedatalist = pastedata;
-                }else if(codelx=="dingyue"){
-                    var pastedatalist = pastedata.jiexi;
-                }
-                urlnum = jiexisave(pastedatalist);
-            }
-            if(urlnum>0&&cloudimport!=1){
-                refreshPage(false);
-            }
-            return "toast://"+sm+"合计："+pastedatalist.length+"，保存："+urlnum;
-        }else{
-            return "toast://聚影√：口令错误或已失效";
-        }
-    } catch (e) {
-        return "toast://聚影√：无法识别的口令";
-    }
-}
+
 //资源分享
 function JYshare(lx) {
     if(getMyVar('guanli', 'jk')=="jk"){
@@ -2744,5 +2685,67 @@ function JYshare(lx) {
         return "toast://"+sm2;
     }else{
         return "toast://分享失败，剪粘板或网络异常";
+    }
+}
+//资源导入
+function JYimport(input) {
+    if(input.indexOf('@import=js:')>-1){
+        try{
+            input = input.split('@import=js:')[0];
+            var cloudimport = 1;
+            if(input.split('￥')[0]=="聚影接口"){
+                var cloudtype = "jk";
+            }else if(input.split('￥')[0]=="聚影解析"){
+                var cloudtype = "jx";
+            }
+        }catch(e){
+            return "toast://聚影√：云口令有误，无法导入";
+        }
+    }
+    try{
+        log(input)
+        if((input.split('￥')[0]=="聚影接口"||input.split('￥')[0]=="聚影资源码")&&(getMyVar('guanli', 'jk')=="jk"||cloudtype=="jk")){
+            var sm = "聚影√：接口";
+        }else if((input.split('￥')[0]=="聚影解析"||input.split('￥')[0]=="聚影资源码")&&(getMyVar('guanli', 'jk')=="jx"||cloudtype=="jx")){
+            var sm = "聚影√：解析";
+        }else{
+            return "toast://聚影√：无法识别的口令";
+        }
+        log(sm)
+        if(input.split('￥')[0]=="聚影资源码"){
+            var codelx = "dingyue";
+        }else{
+            var codelx = "share";
+        }
+        let pasteurl = input.split('￥')[1];
+        let text = parsePaste('https://netcut.cn/p/'+aesDecode('Juying', pasteurl));
+        if(pasteurl&&!/^error/.test(text)){
+            let pastedata = JSON.parse(base64Decode(text));
+            
+            let urlnum = 0;
+            if(getMyVar('guanli', 'jk')=="jk"||cloudtype=="jk"){
+                if(codelx=="share"){
+                    var pastedatalist = pastedata;
+                }else if(codelx=="dingyue"){
+                    var pastedatalist = pastedata.jiekou;
+                }
+                urlnum = jiekousave(pastedatalist);
+            }else if(getMyVar('guanli', 'jk')=="jx"||cloudtype=="jx"){
+                if(codelx=="share"){
+                    var pastedatalist = pastedata;
+                }else if(codelx=="dingyue"){
+                    var pastedatalist = pastedata.jiexi;
+                }
+                urlnum = jiexisave(pastedatalist);
+            }
+            if(urlnum>0&&cloudimport!=1){
+                refreshPage(false);
+            }
+            return "toast://"+sm+"合计："+pastedatalist.length+"，保存："+urlnum;
+        }else{
+            return "toast://聚影√：口令错误或已失效";
+        }
+    } catch (e) {
+        return "toast://聚影√：无法识别的口令";
     }
 }
