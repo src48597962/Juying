@@ -11,7 +11,7 @@ function sougou() {
     }
     
     if(list&&list.length > 0){
-        var param = list[list.length-1].index;
+        setResult('更新至：' + list[list.length-1].index);
     }else if (shows&&plays.length>0) {
         var arr = [];
         var zy = shows.item_list[0];
@@ -33,10 +33,6 @@ function sougou() {
                 }
             }
         }
-        var param = "第" + arr[arr.length-1] + "期";
-    } else {
-        var param = "";
+        setResult('更新至：' + "第" + arr[arr.length-1] + "期");
     }
-     
-    setResult('更新至：'+param);
 }
