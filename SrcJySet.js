@@ -2705,9 +2705,9 @@ function JYimport(input) {
     }
 
     try{
-        if(((inputname=="聚影接口"||input.split('￥')[0]=="聚影资源码")&&getMyVar('guanli', 'jk')=="jk")||cloudtype=="jk"){
+        if(((inputname=="聚影接口"||input.split('￥')[0]=="聚影资源码")&&getMyVar('guanli')=="jk")||cloudtype=="jk"){
             var sm = "聚影√：接口";
-        }else if(((inputname=="聚影解析"||input.split('￥')[0]=="聚影资源码")&&getMyVar('guanli', 'jk')=="jx")||cloudtype=="jx"){
+        }else if(((inputname=="聚影解析"||input.split('￥')[0]=="聚影资源码")&&getMyVar('guanli')=="jx")||cloudtype=="jx"){
             var sm = "聚影√：解析";
         }else{
             return "toast://聚影√：无法识别的口令";
