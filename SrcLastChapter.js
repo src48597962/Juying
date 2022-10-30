@@ -36,7 +36,7 @@ function sougou() {
         setResult('更新至：' + "第" + arr[arr.length-1] + "期");
     }
 }
-function xunmi(type,ua) {
+function xunmi(type,ua,data) {
     if (/v1|app|v2|iptv|cms/.test(type)) {
         try{
             var gethtml = request(MY_URL.split('##')[1], { headers: { 'User-Agent': ua } });
@@ -57,146 +57,97 @@ function xunmi(type,ua) {
             var html = "";
         }
     }
-        
-        var dqnf = "";
-        if(/cms/.test(type)&&isxml==1){
-            html = html.replace(/&lt;!\[CDATA\[|\]\]&gt;|<!\[CDATA\[|\]\]>/g,'');
-            var conts = xpathArray(html,`//video/dl/dd/text()`);
-        }else if (/v1|app|v2|cms/.test(type)) {
-            if (/cms/.test(type)) {
-                try{
-                    var json = html.list[0];
-                }catch(e){
-                    var json = html.data.list[0];
-                }
-                if(json.vod_play_from&&json.vod_play_url){
-                    var conts = json.vod_play_url.split('$$$');
-                }else if(html.from&&html.play){
-                    var conts = [];
-                    for (let i = 0; i < html.play.length; i++) {
-                        let cont = [];
-                        let plays = html.play[i];
-                        for (let j = 0; j < plays.length; j++) {
-                            cont.push(plays[j][0]+"$"+plays[j][1])
-                        }
-                        conts.push(cont.join("#"))
+    
+    if(/cms/.test(type)&&isxml==1){
+        html = html.replace(/&lt;!\[CDATA\[|\]\]&gt;|<!\[CDATA\[|\]\]>/g,'');
+        var conts = xpathArray(html,`//video/dl/dd/text()`);
+    }else if (/v1|app|v2|cms/.test(type)) {
+        if (/cms/.test(type)) {
+            try{
+                var json = html.list[0];
+            }catch(e){
+                var json = html.data.list[0];
+            }
+            if(json.vod_play_from&&json.vod_play_url){
+                var conts = json.vod_play_url.split('$$$');
+            }else if(html.from&&html.play){
+                var conts = [];
+                for (let i = 0; i < html.play.length; i++) {
+                    let cont = [];
+                    let plays = html.play[i];
+                    for (let j = 0; j < plays.length; j++) {
+                        cont.push(plays[j][0]+"$"+plays[j][1])
                     }
-                }else{
-                    var conts = [];
+                    conts.push(cont.join("#"))
                 }
             }else{
-                if($.type(html.data)=="array"){
-                    var json = html.data[0];
-                }else{
-                    var json = html.data;
-                }
-                if(json&&json.vod_info){
-                    json = json.vod_info;
-                }
-                var conts = json.vod_play_list || json.vod_url_with_player;
-            }
-        }else if (/iptv/.test(type)) {
-            var conts = html.videolist;
-        }else if (/xpath/.test(type)) {
-            var jsondata = MY_PARAMS.data;
-            try{
-                var arts = xpathArray(html, jsondata.dtFromNode+(jsondata.dtFromName.indexOf('concat(')>-1?'/text()':jsondata.dtFromName));
-            }catch(e){
-                log('xpath获取线路失改>'+e.message);
-                var arts = [];
-            }
-            try{
-                var conts = [];
-                for (let i = 1; i < arts.length+1; i++) {
-                    if(arts[i-1].indexOf("在线视频")>-1){arts[i-1] = '播放源'+i;}
-                    let contname = xpathArray(html, jsondata.dtUrlNode+'['+i+']'+jsondata.dtUrlSubNode+jsondata.dtUrlName);
-                    let conturl = xpathArray(html, jsondata.dtUrlNode+'['+i+']'+jsondata.dtUrlSubNode+(jsondata.dtUrlId=="@href"?'/'+jsondata.dtUrlId:jsondata.dtUrlId));
-                    let cont = [];
-                    for (let j = 0; j < contname.length; j++) {
-                        let urlid = jsondata.dtUrlIdR;
-                        if(urlid){
-                            let urlidl = urlid.split('(\\S+)')[0];
-                            let urlidr = urlid.split('(\\S+)')[1];
-                            var playUrl = conturl[j].replace(urlidl,'').replace(urlidr,'');
-                        }else{
-                            var playUrl = conturl[j];
-                        }
-                        cont.push(contname[j]+"$"+jsondata.playUrl.replace('{playUrl}',playUrl))
-                    }
-                    conts.push(cont.join("#"))
-                }
-            }catch(e){
-                log('xpath获取选集列表失败>'+e.message);
                 var conts = [];
             }
-        }else if (/biubiu/.test(type)) {
-            try{
-                var jsondata = MY_PARAMS.data;
-                let bflist = html.split(jsondata.bfjiequshuzuqian.replace(/\\/g,""));
-                bflist.splice(0,1);
-                var arts = [];
-                var conts = [];
-                for (let i = 0; i < bflist.length; i++) {
-                    arts[i] = '播放源'+(i+1);
-                    bflist[i] = bflist[i].split(jsondata.bfjiequshuzuhou.replace(/\\/g,""))[0];
-                    let bfline = pdfa(bflist[i],"body&&a");
-                    let cont = [];
-                    for (let j = 0; j < bfline.length; j++) {
-                        let contname = pdfh(bfline[j],"a&&Text");
-                        let conturl = pd(bfline[j],"a&&href");
-                        cont.push(contname+"$"+conturl)
-                    }
-                    conts.push(cont.join("#"))
-                }
-            }catch(e){
-                var conts = conts||[];
-            }    
-        }
-
-    var parse_api = "";
-    var tabs = [];
-    var linecodes = [];
-    for (var i in arts) {
-        if (/v1|app|v2/.test(type)) {
-            let line = arts[i].name || arts[i].player_info.show;
-            tabs.push(line);
-            var linecode = arts[i].code || arts[i].player_info.from;
-
-            if (getMyVar(MY_URL, '0') == i) {
-                try {
-                    if(type=="v2"){
-                        var parse1 = arts[i].parse_api;
-                        var parse2 = arts[i].extra_parse_api;
-                    }else{
-                        var parse1 = arts[i].player_info.parse;
-                        var parse2 = arts[i].player_info.parse2;
-                    }
-                    if (parse2.indexOf('//') == -1) {
-                        parse_api = parse1;
-                    } else if (parse1.indexOf('//') == -1) {
-                        parse_api = parse2;
-                    } else {
-                        parse_api = parse2 + ',' + parse1;
-                    }
-                } catch (e) {
-                    parse_api = arts[i].parse_api;
-                }
-                if (parse_api != "" && parse_api != undefined) {
-                    parse_api = parse_api.replace(/\.\./g, '.').replace(/。\./g, '.');
-                }
-            }
-        }else if (/iptv/.test(type)) {
-            let line = i;
-            tabs.push(line);
-            var linecode = i;
-        }else if (/cms|xpath|biubiu/.test(type)) {
-            tabs.push(arts[i].replace(/[\r\ \n\t]/g, ""));
-            var linecode = arts[i];
         }else{
-            var linecode = "";
-            //网页
+            if($.type(html.data)=="array"){
+                var json = html.data[0];
+            }else{
+                var json = html.data;
+            }
+            if(json&&json.vod_info){
+                json = json.vod_info;
+            }
+            var conts = json.vod_play_list || json.vod_url_with_player;
         }
-        linecodes.push(linecode);
+    }else if (/iptv/.test(type)) {
+        var conts = html.videolist;
+    }else if (/xpath/.test(type)) {
+        var jsondata = data;
+        try{
+            var arts = xpathArray(html, jsondata.dtFromNode+(jsondata.dtFromName.indexOf('concat(')>-1?'/text()':jsondata.dtFromName));
+        }catch(e){
+            var arts = [];
+        }
+        try{
+            var conts = [];
+            for (let i = 1; i < arts.length+1; i++) {
+                if(arts[i-1].indexOf("在线视频")>-1){arts[i-1] = '播放源'+i;}
+                let contname = xpathArray(html, jsondata.dtUrlNode+'['+i+']'+jsondata.dtUrlSubNode+jsondata.dtUrlName);
+                let conturl = xpathArray(html, jsondata.dtUrlNode+'['+i+']'+jsondata.dtUrlSubNode+(jsondata.dtUrlId=="@href"?'/'+jsondata.dtUrlId:jsondata.dtUrlId));
+                let cont = [];
+                for (let j = 0; j < contname.length; j++) {
+                    let urlid = jsondata.dtUrlIdR;
+                    if(urlid){
+                        let urlidl = urlid.split('(\\S+)')[0];
+                        let urlidr = urlid.split('(\\S+)')[1];
+                        var playUrl = conturl[j].replace(urlidl,'').replace(urlidr,'');
+                    }else{
+                        var playUrl = conturl[j];
+                    }
+                    cont.push(contname[j]+"$"+jsondata.playUrl.replace('{playUrl}',playUrl))
+                }
+                conts.push(cont.join("#"))
+            }
+        }catch(e){
+            var conts = [];
+        }
+    }else if (/biubiu/.test(type)) {
+        try{
+            var jsondata = data;
+            let bflist = html.split(jsondata.bfjiequshuzuqian.replace(/\\/g,""));
+            bflist.splice(0,1);
+            var arts = [];
+            var conts = [];
+            for (let i = 0; i < bflist.length; i++) {
+                arts[i] = '播放源'+(i+1);
+                bflist[i] = bflist[i].split(jsondata.bfjiequshuzuhou.replace(/\\/g,""))[0];
+                let bfline = pdfa(bflist[i],"body&&a");
+                let cont = [];
+                for (let j = 0; j < bfline.length; j++) {
+                    let contname = pdfh(bfline[j],"a&&Text");
+                    let conturl = pd(bfline[j],"a&&href");
+                    cont.push(contname+"$"+conturl)
+                }
+                conts.push(cont.join("#"))
+            }
+        }catch(e){
+            var conts = conts||[];
+        }    
     }
 
     var lists = [];
@@ -240,50 +191,19 @@ function xunmi(type,ua) {
                 }
                 lists.push(lines)
             };
-        }else{
-            //网页
         }
     }
  
-
-        var list = lists[0]||[];
-
-            if (/v1|app|v2|iptv|cms|xpath|biubiu/.test(type)) {
-                var listone = list[0].split('$')[0];
-                try{
-                    let list1 = list[0].split('$')[0];
-                    let list2 = list[list.length-1].split('$')[0];
-                    if(parseInt(list1.match(/(\d+)/)[0])>parseInt(list2.match(/(\d+)/)[0])){
-                        list.reverse();
-                    }
-                }catch(e){
-                    //log('修正选集顺序失败>'+e.message)
-                }
-            }else{
-                
+    var list = lists[0]||[];
+    if (/v1|app|v2|iptv|cms|xpath|biubiu/.test(type)) {
+        try{
+            let list1 = list[0].split('$')[0];
+            let list2 = list[list.length-1].split('$')[0];
+            if(parseInt(list1.match(/(\d+)/)[0])>parseInt(list2.match(/(\d+)/)[0])){
+                list.reverse();
             }
-            
-            if (listone) {
-                var len = listone.length;
-            }
-            if (getMyVar('shsort') == '1') {
-                try {
-                    for (var j = list.length - 1; j >= 0; j--) {
-                        playlist('1', len);
-                    }
-                } catch (e) {
-                    playlist('0');
-                }
-            } else {
-                try {
-                    for (var j = 0; j < list.length; j++) {
-                        playlist('1', len);
-                    }
-                } catch (e) {
-                    playlist('0');
-                }
-
-            }
-        
-    
+        }catch(e){
+        }
+    }
+    setResult('更新至：' + list[list.length-1].split('$')[0]);
 }
