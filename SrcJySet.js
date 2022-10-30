@@ -2730,6 +2730,7 @@ function JYimport(input) {
                 }
                 urlnum = jiekousave(pastedatalist);
             }else if(getMyVar('guanli', 'jk')=="jx"||cloudtype=="jx"){
+                log('qq')
                 if(codelx=="share"){
                     var pastedatalist = pastedata;
                 }else if(codelx=="dingyue"){
