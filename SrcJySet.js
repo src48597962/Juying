@@ -2725,6 +2725,7 @@ function JYimport(input) {
             log(getMyVar('guanli'))
             log(cloudtype)
             if(getMyVar('guanli')=="jk"||cloudtype=="jk"){
+                log(1)
                 if(codelx=="share"){
                     var pastedatalist = pastedata;
                 }else if(codelx=="dingyue"){
@@ -2732,6 +2733,7 @@ function JYimport(input) {
                 }
                 urlnum = jiekousave(pastedatalist);
             }else if(getMyVar('guanli')=="jx"||cloudtype=="jx"){
+                log(2)
                 if(codelx=="share"){
                     var pastedatalist = pastedata;
                 }else if(codelx=="dingyue"){
@@ -2739,6 +2741,7 @@ function JYimport(input) {
                 }
                 urlnum = jiexisave(pastedatalist);
             }
+            log(pastedatalist);
             if(urlnum>0&&cloudimport!=1){
                 refreshPage(false);
             }
