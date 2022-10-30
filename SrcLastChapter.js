@@ -36,7 +36,12 @@ function sougou() {
         setResult('更新至：' + "第" + arr[arr.length-1] + "期");
     }
 }
+
 function xunmi(type,ua,data) {
+    log(MY_URL)
+    log(type)
+    log(ua)
+    log(data)
     if (/v1|app|v2|iptv|cms/.test(type)) {
         try{
             var gethtml = request(MY_URL.split('##')[1], { headers: { 'User-Agent': ua } });
