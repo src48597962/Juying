@@ -2432,7 +2432,7 @@ function Resourceimport(input,importtype,boxdy){
                     if(/^http/.test(jiexi[i].url)){
                         let arr  = { "name": jiexi[i].name, "parse": jiexi[i].url, "stopfrom": [], "priorfrom": [], "sort": 1 };
                         if(jiexi[i].header){
-                            arr['header'] = jiexi[i].header;
+                            arr['header'] = JSON.parse(jiexi[i].header);
                         }
                         urls.push(arr);
                     }
