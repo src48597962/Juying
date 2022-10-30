@@ -2689,6 +2689,7 @@ function JYshare(lx) {
 }
 //资源导入
 function JYimport(input) {
+    log(input)
     if(input.indexOf('@import=js:')>-1){
         try{
             input = input.split('@import=js:')[0];
