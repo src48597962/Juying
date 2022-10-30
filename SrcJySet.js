@@ -2197,6 +2197,7 @@ function extension(){
                     d.push({
                         col_type: "line"
                     });
+                    lists.reverse();
                     for(let i=0;i<lists.length;i++){
                         d.push({
                             title: lists[i].url,
@@ -2431,11 +2432,10 @@ function Resourceimport(input,importtype,boxdy){
                 for (let i=0;i<jiexi.length;i++) {
                     if(/^http/.test(jiexi[i].url)){
                         let arr  = { "name": jiexi[i].name, "parse": jiexi[i].url, "stopfrom": [], "priorfrom": [], "sort": 1 };
-                        if(jiexi[i].header){
-                            arr['header'] = jiexi[i].header;
+                        if(jiexi[i].ext&&jiexi[i].ext.header){
+                            arr['header'] = jiexi[i].ext.header;
                         }
                         urls.push(arr);
-                        log(arr)
                     }
                 }
                 if(isboxdy){
