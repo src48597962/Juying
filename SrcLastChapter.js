@@ -131,10 +131,8 @@ function xunmi(type,ua,data) {
             var jsondata = data;
             let bflist = html.split(jsondata.bfjiequshuzuqian.replace(/\\/g,""));
             bflist.splice(0,1);
-            var arts = [];
             var conts = [];
             for (let i = 0; i < bflist.length; i++) {
-                arts[i] = '播放源'+(i+1);
                 bflist[i] = bflist[i].split(jsondata.bfjiequshuzuhou.replace(/\\/g,""))[0];
                 let bfline = pdfa(bflist[i],"body&&a");
                 let cont = [];
@@ -193,17 +191,18 @@ function xunmi(type,ua,data) {
             };
         }
     }
- 
-    var list = lists[0]||[];
-    if (/v1|app|v2|iptv|cms|xpath|biubiu/.test(type)) {
-        try{
-            let list1 = list[0].split('$')[0];
-            let list2 = list[list.length-1].split('$')[0];
-            if(parseInt(list1.match(/(\d+)/)[0])>parseInt(list2.match(/(\d+)/)[0])){
-                list.reverse();
+    if(lists.length>0){
+        var list = lists[0];
+        if (/v1|app|v2|iptv|cms|xpath|biubiu/.test(type)) {
+            try{
+                let list1 = list[0].split('$')[0];
+                let list2 = list[list.length-1].split('$')[0];
+                if(parseInt(list1.match(/(\d+)/)[0])>parseInt(list2.match(/(\d+)/)[0])){
+                    list.reverse();
+                }
+            }catch(e){
             }
-        }catch(e){
         }
+        setResult('更新至：' + list[list.length-1].split('$')[0]);
     }
-    setResult('更新至：' + list[list.length-1].split('$')[0]);
 }
