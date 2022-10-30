@@ -2703,7 +2703,7 @@ function JYimport(input) {
     }catch(e){
         return "toast://聚影√：口令有误";
     }
-    log(cloudtype)
+
     try{
         if(((inputname=="聚影接口"||input.split('￥')[0]=="聚影资源码")&&getMyVar('guanli', 'jk')=="jk")||cloudtype=="jk"){
             var sm = "聚影√：接口";
@@ -2722,15 +2722,14 @@ function JYimport(input) {
         if(pasteurl&&!/^error/.test(text)){
             let pastedata = JSON.parse(base64Decode(text));
             let urlnum = 0;
-            if(getMyVar('guanli', 'jk')=="jk"||cloudtype=="jk"){
+            if(getMyVar('guanli')=="jk"||cloudtype=="jk"){
                 if(codelx=="share"){
                     var pastedatalist = pastedata;
                 }else if(codelx=="dingyue"){
                     var pastedatalist = pastedata.jiekou;
                 }
                 urlnum = jiekousave(pastedatalist);
-            }else if(getMyVar('guanli', 'jk')=="jx"||cloudtype=="jx"){
-                log('qq')
+            }else if(getMyVar('guanli')=="jx"||cloudtype=="jx"){
                 if(codelx=="share"){
                     var pastedatalist = pastedata;
                 }else if(codelx=="dingyue"){
