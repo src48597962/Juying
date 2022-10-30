@@ -38,10 +38,6 @@ function sougou() {
 }
 
 function xunmi(type,ua,data) {
-    log(MY_URL)
-    log(type)
-    log(ua)
-    log(data)
     if (/v1|app|v2|iptv|cms/.test(type)) {
         try{
             var gethtml = request(MY_URL.split('##')[1], { headers: { 'User-Agent': ua } });
