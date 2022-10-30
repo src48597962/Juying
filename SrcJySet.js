@@ -233,6 +233,12 @@ function SRCSet() {
     d.push({
         title: '导入',
         url: $("","聚影口令").input(()=>{
+            if(input==""){
+                return 'toast://不能为空';
+            }
+            if(input.indexOf('@import=js:')>-1){
+                input = input.split('@import=js:')[0].replace('云口令：','');
+            }
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
             return JYimport(input);
         }),
@@ -2722,10 +2728,7 @@ function JYimport(input) {
         if(pasteurl&&!/^error/.test(text)){
             let pastedata = JSON.parse(base64Decode(text));
             let urlnum = 0;
-            log(getMyVar('guanli'))
-            log(cloudtype)
             if(getMyVar('guanli')=="jk"||cloudtype=="jk"){
-                log(1)
                 if(codelx=="share"){
                     var pastedatalist = pastedata;
                 }else if(codelx=="dingyue"){
@@ -2733,7 +2736,6 @@ function JYimport(input) {
                 }
                 urlnum = jiekousave(pastedatalist);
             }else if(getMyVar('guanli')=="jx"||cloudtype=="jx"){
-                log(2)
                 if(codelx=="share"){
                     var pastedatalist = pastedata;
                 }else if(codelx=="dingyue"){
@@ -2741,7 +2743,6 @@ function JYimport(input) {
                 }
                 urlnum = jiexisave(pastedatalist);
             }
-            log(pastedatalist);
             if(urlnum>0&&cloudimport!=1){
                 refreshPage(false);
             }
