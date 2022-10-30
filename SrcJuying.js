@@ -529,7 +529,6 @@ function erji() {
             if (list.length == 0) {
                 nolist();
             } else {
-                setLastChapterRule('js:' + $.toString(param=>{ setResult('更新至：'+param) }, list[list.length-1].index))
                 if (getMyVar('shsort') == '1') {
                     try {
                         for (var j = list.length - 1; j >= 0; j--) {
@@ -585,7 +584,6 @@ function erji() {
                     }
                 }
             }
-            setLastChapterRule('js:' + $.toString(param=>{ setResult('更新至：'+param) }, "第" + arr[arr.length-1] + "期"))
             for (var k = 0; k < arr.length; k++) {
                 let url = "https://v.sogou.com/vc/eplay?query=" + arr[k] + "&date=" + arr[k] + "&key=" + json.dockey + "&st=5&tvsite=" + plays[index].site;
                 d.push({
@@ -598,7 +596,6 @@ function erji() {
         } else if (plays.length==0) {
             nolist();
         } else {
-            setLastChapterRule('js:' + $.toString(param=>{ setResult(param) }, ""))
             for (var m in plays) {
                 let url = "https://v.sogou.com" + plays[m].url;
                 d.push({
@@ -619,8 +616,11 @@ function erji() {
         url: 'toast://温馨提示：且用且珍惜！',
         col_type: 'text_center_1'
     });
-     
     setResult(d);
+    setLastChapterRule('js:' + $.toString(param=>{
+        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLastChapter.js');
+        sougou();
+    }))
 }
 
 
