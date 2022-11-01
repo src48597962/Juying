@@ -33,7 +33,7 @@ function sougou() {
                 }
             }
         }
-        setResult('更新至：' + "第" + arr[arr.length-1] + "期");
+        setResult('更新至：' + arr[arr.length-1]);
     }
 }
 
