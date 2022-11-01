@@ -2688,7 +2688,7 @@ function JYshare(lx,time) {
     }
 
     if(pasteurl){
-        let code = sm+'￥'+aesEncode('Juying', pasteurl)+'￥'+(time==3600?'一小时':time==604800?'一周':time==2592000?'一个月':time==31536000?'一年':'限期')+'内有效';
+        let code = sm+'￥'+aesEncode('Juying', pasteurl)+'￥'+(time==3600?'1小时':time==604800?'1周':time==2592000?'1个月':time==31536000?'1年':'限期')+'内有效';
         if(lx!=2){
             copy(code);
         }else{
