@@ -248,16 +248,21 @@ function SRCSet() {
     let iscloudshare = (MY_NAME=="海阔视界"&&getAppVersion()>=3470)||(MY_NAME=="嗅觉浏览器"&&getAppVersion()>=852)?1:0;
     d.push({
         title: '分享',
-        url: datalist.length==0?'toast://数据为空，无法分享':iscloudshare?$(['普通口令','云口令'],2).select(()=>{
+        url: datalist.length==0?'toast://数据为空，无法分享':iscloudshare?$(['云口令(时)','云口令(周)','云口令(月)','云口令(年)'],2).select(()=>{
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
-            if(input=="云口令"){
-                return JYshare(2);
-            }else{
-                return JYshare(1);
+            if(input=="云口令(时)"){
+                var time = 3600;
+            }else if(input=="云口令(周)"){
+                var time = 604800;
+            }else if(input=="云口令(月)"){
+                var time = 2592000;
+            }else if(input=="云口令(年)"){
+                var time = 31536000;
             }
+            return JYshare(2,time);
         }):$().lazyRule(()=>{
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
-            return JYshare(1);
+            return JYshare(1,3600);
         }),
         img: "https://lanmeiguojiang.com/tubiao/more/3.png",
         col_type: "icon_small_4"
@@ -2634,7 +2639,8 @@ function Resourceimport(input,importtype,boxdy){
 }
 
 //资源分享
-function JYshare(lx) {
+function JYshare(lx,time) {
+    time = time||3600;
     if(getMyVar('guanli', 'jk')=="jk"){
     var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
         var sm = "聚影接口";
@@ -2674,7 +2680,7 @@ function JYshare(lx) {
     try{
         var pasteurl = JSON.parse(request('https://netcut.cn/api/note/create/', {
             headers: { 'Referer': 'https://netcut.cn/' },
-            body: 'note_name=Juying'+num+'&note_content='+textcontent+'&note_pwd=0&expire_time=3600',
+            body: 'note_name=Juying'+num+'&note_content='+textcontent+'&note_pwd=0&expire_time='+time,//3600时，604800周，2592000月，31536000年
             method: 'POST'
         })).data.note_id || "";
     }catch(e){
@@ -2682,7 +2688,7 @@ function JYshare(lx) {
     }
 
     if(pasteurl){
-        let code = sm+'￥'+aesEncode('Juying', pasteurl)+'￥1小时内有效';
+        let code = sm+'￥'+aesEncode('Juying', pasteurl)+'￥'+(time==3600?'一小时':time==604800?'一周':time==2592000?'一个月':time==31536000?'一年':'限期')+'内有效';
         if(lx!=2){
             copy(code);
         }else{
