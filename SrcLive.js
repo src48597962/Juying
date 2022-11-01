@@ -323,9 +323,15 @@ function LivePlay(name) {
                 }
             }catch(e){}
         }
-        return JSON.stringify({
-            urls: urls
-        });
+        if(urls.length==0){
+            return "toast://无播放地址";
+        }else if(urls.length==1){
+            return urls[0];
+        }else{
+            return JSON.stringify({
+                urls: urls
+            });
+        }
     }else if(getMyVar('editmode','0')=="urldelete"){
         for(let i=0;i<JYlives.length;i++){
             try{
