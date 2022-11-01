@@ -512,7 +512,7 @@ function erji() {
             putMyVar('superwebM3U8',JYconfig.cachem3u8!=0&&JYconfig.superweb==1?'1':'0');
         }catch(e){}
     }
-    var block = ['.m4a','.mp3','.flv','.avi','.3gp','.mpeg','.wmv','.mov','.rmvb','.gif','.jpg','.jpeg','.png','.ico','hm.baidu.com','/ads/*.js'];
+    var block = ['.m4a','.mp3','.gif','.jpg','.jpeg','.png','.ico','hm.baidu.com','/ads/*.js'];
     //选集部份
     function setLists(lists, index) {
         var list = lists[index];
