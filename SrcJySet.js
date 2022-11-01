@@ -1360,7 +1360,7 @@ function jiexi(lx,data) {
                     extra:{
                         cls: 'jxtest',
                         jsLoadingInject: true,
-                        blockRules: ['.m4a','.mp3','.flv','.avi','.3gp','.mpeg','.wmv','.mov','.rmvb','.gif','.jpeg','.png','.ico','hm.baidu.com','/ads/*.js'] 
+                        blockRules: ['.m4a','.mp3','.gif','.jpeg','.png','.ico','hm.baidu.com','/ads/*.js'] 
                     }
                 })
             }
