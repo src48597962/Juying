@@ -537,7 +537,7 @@ function erji() {
                                 d.push({
                                     title: list[j].index + '',
                                     url: url + easy,
-                                    extra: { id: MY_URL.replace('#autoCache#','')+j, jsLoadingInject: true, cacheM3u8: getMyVar('superwebM3U8')==1?true:false, blockRules: block },
+                                    extra: { id: MY_URL.replace('#autoCache#','')+j, jsLoadingInject: true, cacheM3u8: getMyVar('superwebM3U8')=="1"?true:false, blockRules: block },
                                     col_type: 'text_4'
                                 });
                             }
@@ -553,7 +553,7 @@ function erji() {
                                 d.push({
                                     title: list[j].index + '',
                                     url: url + easy,
-                                    extra: { id: MY_URL.replace('#autoCache#','')+j, jsLoadingInject: true, cacheM3u8: getMyVar('superwebM3U8')==1?true:false, blockRules: block },
+                                    extra: { id: MY_URL.replace('#autoCache#','')+j, jsLoadingInject: true, cacheM3u8: getMyVar('superwebM3U8')=="1"?true:false, blockRules: block },
                                     col_type: 'text_4'
                                 });
                             }
@@ -590,7 +590,7 @@ function erji() {
                     title: "第" + arr[k] + "期",
                     col_type: "text_2",
                     url: url + easy,
-                    extra: { id: MY_URL.replace('#autoCache#','')+k, jsLoadingInject: true, cacheM3u8: getMyVar('superwebM3U8')==1?true:false, blockRules: block  }
+                    extra: { id: MY_URL.replace('#autoCache#','')+k, jsLoadingInject: true, cacheM3u8: getMyVar('superwebM3U8')=="1"?true:false, blockRules: block  }
                 });
             }
         } else if (plays.length==0) {
@@ -603,7 +603,7 @@ function erji() {
                     img: 'http://dlweb.sogoucdn.com/video/wap/static/img/logo/' + plays[m].sitename[1],
                     url: url + easy,
                     col_type: "icon_2",
-                    extra: { id: MY_URL.replace('#autoCache#',''), jsLoadingInject: true, cacheM3u8: getMyVar('superwebM3U8')==1?true:false, blockRules: block },
+                    extra: { id: MY_URL.replace('#autoCache#',''), jsLoadingInject: true, cacheM3u8: getMyVar('superwebM3U8')=="1"?true:false, blockRules: block },
                 })
             }
         }
