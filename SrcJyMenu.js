@@ -391,7 +391,22 @@ var erjimenu = [
                         col_type: "text_center_1"
                     });
                 }
-                    
+                if(getItem('enabledpush', '')=='1'){
+                    d.push({
+                        title: '其他功能',
+                        col_type: "rich_text"
+                    });
+                    d.push({
+                        col_type: "line_blank"
+                    });
+                    d.push({
+                        title: 'TVBOX推送选集列表，设置接收端ip地址',
+                        desc: getItem('hikertvboxset')?'TVBOX接收端ip地址：'+getItem('hikertvboxset'):'还未设置TVBOX接收端ip地址',
+                        url: "input://" + getItem('hikertvboxset', 'http://' + getIP() + ':9978') + "////请输入.js:setItem('hikertvboxset',input);refreshPage()",
+                        col_type: "text_center_1"
+                    }); 
+                }
+                   
                 setHomeResult(d);
             }),
         pic_url: 'https://lanmeiguojiang.com/tubiao/messy/37.svg',
