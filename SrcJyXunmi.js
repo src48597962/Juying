@@ -1193,6 +1193,7 @@ function xunmierji(type,ua) {
                     body: 'do=push&url=' + JSON.stringify(push),
                     method: 'POST'
                 });
+                log(push);
                 //log(state);
                 if (state == 'ok') {
                     return 'toast://推送成功，如果tvbox显示“没找到数据”可能是该链接需要密码或者当前的jar不支持。';
