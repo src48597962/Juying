@@ -1176,7 +1176,7 @@ function xunmierji(type,ua) {
     if(getItem('enabledpush', '') == '1'){
         let push = {
             "name":MY_PARAMS.title||'聚影',
-            "pic":pic.replace(/@Referer=/g,''),
+            "pic":pic.split('@')[0],
             "content":desc
         };
         let tvip = getItem('hikertvboxset', '');
