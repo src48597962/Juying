@@ -1201,7 +1201,7 @@ function xunmierji(type,ua) {
                 }
             }
             return 'toast://当前线路不支持推送选集列表';
-        }, push, lists[parseInt(getMyVar(vari, '0'))]),
+        }, push, lists[parseInt(getMyVar(MY_URL, '0'))]),
         col_type: 'scroll_button'
     })
 
