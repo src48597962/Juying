@@ -1176,7 +1176,7 @@ function xunmierji(type,ua) {
     if(getItem('enabledpush', '') == '1'){
         let push = {
             "name":MY_PARAMS.title||'聚影',
-            "pic":pic.replace('@referer=',''),
+            "pic":pic.replace(/@referer=/g,''),
             "content":desc
         };
         let tvip = getItem('hikertvboxset', '');
@@ -1184,7 +1184,7 @@ function xunmierji(type,ua) {
             title: '推送当前列表至TVBOX',
             url: $("#noLoading#").lazyRule((push,list,tvip) => {
                 if(tvip==""){
-                     return 'toast://TVBOX接收端ip地址未设置';
+                     return 'toast://观影设置中设置TVBOX接收端ip地址，完成后回来刷新一下';
                 }
                 let oneurl = list[0].split('$')[1];
                 if(/^http/.test(oneurl)){
