@@ -1174,26 +1174,27 @@ function xunmierji(type,ua) {
     //推送tvbox
     let push = {
         "name":MY_PARAMS.title||'聚影',
-        "pic":pic,
+        "pic":pic.replace('@referer=',''),
         "content":desc
     };
+    let tvip = getItem('hikertvboxset', 'http://192.168.3.2:9978');
     d.push({
         title: '推送当前列表至TVBOX',
-        url: $("#noLoading#").lazyRule((push,list) => {
+        url: $("#noLoading#").lazyRule((push,list,tvip) => {
             let oneurl = list[0].split('$')[1];
             if(/^http/.test(oneurl)){
                 push['url'] = list.join('#').replace(/\&/g, '＆＆');
-                var state = request('http://192.168.3.2:9978' + '/action', {
+                var state = request(tvip + '/action', {
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
                         //'X-Requested-With': 'XMLHttpRequest',
-                        'Referer': 'http://192.168.3.2:9978'
+                        'Referer': tvip
                     },
                     timeout: 2000,
                     body: 'do=push&url=' + JSON.stringify(push),
                     method: 'POST'
                 });
-                log(push);
+                //log(push);
                 //log(state);
                 if (state == 'ok') {
                     return 'toast://推送成功，如果tvbox显示“没找到数据”可能是该链接需要密码或者当前的jar不支持。';
@@ -1202,7 +1203,7 @@ function xunmierji(type,ua) {
                 }
             }
             return 'toast://当前线路不支持推送选集列表';
-        }, push, lists[parseInt(getMyVar(MY_URL, '0'))]),
+        }, push, lists[parseInt(getMyVar(MY_URL, '0'))], tvip),
         col_type: 'scroll_button'
     })
 
