@@ -401,8 +401,8 @@ var erjimenu = [
                     });
                     d.push({
                         title: 'TVBOX推送选集列表，设置接收端ip地址',
-                        desc: getItem('hikertvboxset')?'TVBOX接收端ip地址：'+getItem('hikertvboxset'):'还未设置TVBOX接收端ip地址',
-                        url: "input://" + getItem('hikertvboxset', 'http://' + getIP() + ':9978') + "////请输入.js:setItem('hikertvboxset',input);refreshPage()",
+                        desc: getItem('hikertvboxset')?'TVBOX接收端ip地址：'+getItem('hikertvboxset',''):'还未设置TVBOX接收端ip地址',
+                        url: "input://" + getItem('hikertvboxset', 'http://' + getIP() + ':9978') + "////TVBOX接收端ip地址.js:setItem('hikertvboxset',input);refreshPage()",
                         col_type: "text_center_1"
                     }); 
                 }
