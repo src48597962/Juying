@@ -739,16 +739,19 @@ function xunmierji(type,ua) {
     } else {
         var zt = 0;
     }
-    if(!getMyVar('SrcM3U8')||!getMyVar('superwebM3U8')){
-        try{
-            var cfgfile = "hiker://files/rules/Src/Juying/config.json";
-            var Juyingcfg=fetch(cfgfile);
-            if(Juyingcfg != ""){
-                eval("var JYconfig=" + Juyingcfg+ ";");
-            }
-            putMyVar('SrcM3U8',JYconfig.cachem3u8==0?'0':'1');
-            putMyVar('superwebM3U8',JYconfig.cachem3u8!=0&&JYconfig.superweb==1?'1':'0');
-        }catch(e){}
+    
+    try{
+        var cfgfile = "hiker://files/rules/Src/Juying/config.json";
+        var Juyingcfg=fetch(cfgfile);
+        if(Juyingcfg != ""){
+            eval("var JYconfig=" + Juyingcfg+ ";");
+        }
+        if (/xpath|biubiu/.test(type)) {
+            putMyVar('SrcM3U8',JYconfig.cachem3u8==0?'0':'1');//为了给xb和xp接口直接嗅探传递
+        }
+        //putMyVar('superwebM3U8',JYconfig.cachem3u8!=0&&JYconfig.superweb==1?'1':'0');
+    }catch(e){
+
     }
         
     //影片详情
@@ -1203,7 +1206,7 @@ function xunmierji(type,ua) {
                 d.push({
                     title: playtitle.replace(/第|集|话|期|-/g, ''),
                     url: playurl + DTJX,
-                    extra: { id: playurl, referer: playurl, jsLoadingInject: true, cacheM3u8: getMyVar('superwebM3U8')==1?true:false, blockRules: ['.m4a','.mp3','.gif','.jpeg','.jpg','.ico','.png','hm.baidu.com','/ads/*.js','cnzz.com'] },
+                    extra: { id: playurl, referer: playurl, jsLoadingInject: true, cacheM3u8: JYconfig&&JYconfig.cachem3u8!=0&&JYconfig.superweb==1?true:false, blockRules: ['.m4a','.mp3','.gif','.jpeg','.jpg','.ico','.png','hm.baidu.com','/ads/*.js','cnzz.com'] },
                     col_type: list.length > 4 && len < 7 ? 'text_4' : 'text_3'
                 });
             } else {
