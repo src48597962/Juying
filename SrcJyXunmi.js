@@ -1171,41 +1171,47 @@ function xunmierji(type,ua) {
         }
     }
     setTabs(tabs, MY_URL);
+    
     //推送tvbox
-    let push = {
-        "name":MY_PARAMS.title||'聚影',
-        "pic":pic.replace('@referer=',''),
-        "content":desc
-    };
-    let tvip = getItem('hikertvboxset', 'http://192.168.3.2:9978');
-    d.push({
-        title: '推送当前列表至TVBOX',
-        url: $("#noLoading#").lazyRule((push,list,tvip) => {
-            let oneurl = list[0].split('$')[1];
-            if(/^http/.test(oneurl)){
-                push['url'] = list.join('#').replace(/\&/g, '＆＆');
-                var state = request(tvip + '/action', {
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                        //'X-Requested-With': 'XMLHttpRequest',
-                        'Referer': tvip
-                    },
-                    timeout: 2000,
-                    body: 'do=push&url=' + JSON.stringify(push),
-                    method: 'POST'
-                });
-                //log(push);
-                //log(state);
-                if (state == 'ok') {
-                    return 'toast://推送成功，如果tvbox显示“没找到数据”可能是该链接需要密码或者当前的jar不支持。';
-                } else {
-                    return 'toast://推送失败'
+    if(getItem('enabledpush', '') == '1'){
+        let push = {
+            "name":MY_PARAMS.title||'聚影',
+            "pic":pic.replace('@referer=',''),
+            "content":desc
+        };
+        let tvip = getItem('hikertvboxset', '');
+        d.push({
+            title: '推送当前列表至TVBOX',
+            url: $("#noLoading#").lazyRule((push,list,tvip) => {
+                if(tvip==""){
+                     return 'toast://TVBOX接收端ip地址未设置';
                 }
-            }
-            return 'toast://当前线路不支持推送选集列表';
-        }, push, lists[parseInt(getMyVar(MY_URL, '0'))], tvip),
-        col_type: 'scroll_button'
-    })
+                let oneurl = list[0].split('$')[1];
+                if(/^http/.test(oneurl)){
+                    push['url'] = list.join('#').replace(/\&/g, '＆＆');
+                    var state = request(tvip + '/action', {
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                            //'X-Requested-With': 'XMLHttpRequest',
+                            'Referer': tvip
+                        },
+                        timeout: 2000,
+                        body: 'do=push&url=' + JSON.stringify(push),
+                        method: 'POST'
+                    });
+                    //log(push);
+                    //log(state);
+                    if (state == 'ok') {
+                        return 'toast://推送成功，如果tvbox显示“没找到数据”可能是该链接需要密码或者当前的jar不支持。';
+                    } else {
+                        return 'toast://推送失败'
+                    }
+                }
+                return 'toast://当前线路不支持推送选集列表';
+            }, push, lists[parseInt(getMyVar(MY_URL, '0'))], tvip),
+            col_type: 'scroll_button'
+        })
+    }
 
     //选集部份
     function setLists(lists, index) {
