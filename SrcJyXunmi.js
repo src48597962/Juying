@@ -1175,13 +1175,14 @@ function xunmierji(type,ua) {
     //推送tvbox
     if(getItem('enabledpush', '') == '1'){
         let push = {
-            "name":MY_PARAMS.title||'聚影',
-            "pic":pic.split('@')[0],
-            "content":desc
+            "name": MY_PARAMS.title||'聚影',
+            "pic": pic.split('@')[0],
+            "content": desc,
+            "from": tabs[parseInt(getMyVar(MY_URL, '0'))]
         };
         let tvip = getItem('hikertvboxset', '');
         d.push({
-            title: '推送当前列表至TVBOX',
+            title: '推送列表至TVBOX',
             url: $("#noLoading#").lazyRule((push,list,tvip) => {
                 if(tvip==""){
                      return 'toast://观影设置中设置TVBOX接收端ip地址，完成后回来刷新一下';
