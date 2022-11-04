@@ -1178,9 +1178,10 @@ function xunmierji(type,ua) {
             "name": MY_PARAMS.title||'聚影',
             "pic": pic.split('@')[0],
             "content": desc,
-            "director":"导演",
-            "format":".mp4#.m3u8#.flv",
-            "filters":".html#.jpg#.js#=http",
+            "director": details1.split('\n')[0].replace('导演：',''),
+            "actor": details1.split('主演：')[1].split('\n')[0],
+            "format": ".mp4#.m3u8#.flv",
+            "filters": ".html#.jpg#.js#=http",
             "from": tabs[parseInt(getMyVar(MY_URL, '0'))]
         };
         let tvip = getItem('hikertvboxset', '');
