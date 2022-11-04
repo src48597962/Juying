@@ -256,7 +256,7 @@ function SRCSet() {
     }else if(cloudsharetime==2592000){
         var sharelist = ['时限(1时)','时限(1周)','‘‘’’<span style="color:red" title="时限(1月)">时限(1月)','时限(1年)'];
     }else if(cloudsharetime==604800){
-        var sharelist = ['时限(1时)','">时限(1周)','时限(1月)','‘‘’’<span style="color:red" title="时限(1年)">时限(1年)'];
+        var sharelist = ['时限(1时)','时限(1周)','时限(1月)','‘‘’’<span style="color:red" title="时限(1年)">时限(1年)'];
     }
     //['云口令(时)','云口令(周)','云口令(月)','云口令(年)']
     d.push({
