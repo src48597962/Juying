@@ -1180,8 +1180,7 @@ function xunmierji(type,ua) {
             "content": desc,
             "director": details1.split('\n')[0].replace('导演：',''),
             "actor": details1.split('主演：')[1].split('\n')[0],
-            "format": ".mp4#.m3u8#.flv",
-            "filters": ".html#.jpg#.js#=http",
+            "area" : details2.replace('\n',' ')
         };
         let tvip = getItem('hikertvboxset', '');
         d.push({
