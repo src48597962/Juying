@@ -1182,18 +1182,28 @@ function xunmierji(type,ua) {
             "actor": details1.split('主演：')[1].split('\n')[0],
             "format": ".mp4#.m3u8#.flv",
             "filters": ".html#.jpg#.js#=http",
-            "from": tabs[parseInt(getMyVar(MY_URL, '0'))]
         };
         let tvip = getItem('hikertvboxset', '');
         d.push({
             title: '推送列表至TVBOX',
-            url: $("#noLoading#").lazyRule((push,list,tvip) => {
+            url: $("#noLoading#").lazyRule((push,tabs,lists,tvip) => {
                 if(tvip==""){
                      return 'toast://观影设置中设置TVBOX接收端ip地址，完成后回来刷新一下';
                 }
-                let oneurl = list[0].split('$')[1];
-                if(/^http/.test(oneurl)){
-                    push['url'] = list.join('#').replace(/\&/g, '＆＆');
+                let urls = [];
+                let froms = [];
+                for(let i in lists){
+                    let list = lists[i];
+                    let oneurl = list[0].split('$')[1];
+                    if(/^http/.test(oneurl)){
+                        urls.push(list.join('#').replace(/\&/g, '＆＆'));
+                        froms.push(tabs[i]);
+                    }
+                }
+
+                if(urls.length>0){
+                    push['from'] = froms.join('$$$');
+                    push['url'] = urls.join('$$$');
                     var state = request(tvip + '/action', {
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded',
@@ -1212,8 +1222,8 @@ function xunmierji(type,ua) {
                         return 'toast://推送失败'
                     }
                 }
-                return 'toast://当前线路不支持推送选集列表';
-            }, push, lists[parseInt(getMyVar(MY_URL, '0'))], tvip),
+                return 'toast://所有线路均不支持推送列表';
+            }, push, tabs, lists, tvip),
             col_type: 'scroll_button'
         })
     }
