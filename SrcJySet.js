@@ -2715,7 +2715,9 @@ function JYimport(input) {
     }catch(e){
         return "toast://聚影√：口令有误";
     }
-
+    log(input);
+    log(inputname);
+    log(getMyVar('guanli'));
     try{
         if(((inputname=="聚影接口"||input.split('￥')[0]=="聚影资源码")&&getMyVar('guanli')=="jk")||cloudtype=="jk"){
             var sm = "聚影√：接口";
@@ -2724,6 +2726,7 @@ function JYimport(input) {
         }else{
             return "toast://聚影√：无法识别的口令";
         }
+        log(sm);
         if(inputname=="聚影资源码"){
             var codelx = "dingyue";
         }else{
