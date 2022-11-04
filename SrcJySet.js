@@ -248,14 +248,14 @@ function SRCSet() {
         col_type: "icon_small_4"
     });
     let iscloudshare = (MY_NAME=="海阔视界"&&getAppVersion()>=3470)||(MY_NAME=="嗅觉浏览器"&&getAppVersion()>=852)?1:0;
-    let cloudsharetime = getItem('cloudsharetime',3600);
-    if(cloudsharetime==3600){
+    let cloudsharetime = getItem('cloudsharetime','3600');
+    if(cloudsharetime=='3600'){
         var sharelist = ['‘‘’’<span style="color:red" title="时限(1时)">时限(1时)','时限(1周)','时限(1月)','时限(1年)'];
-    }else if(cloudsharetime==604800){
+    }else if(cloudsharetime=='604800'){
         var sharelist = ['时限(1时)','‘‘’’<span style="color:red" title="时限(1周)">时限(1周)','时限(1月)','时限(1年)'];
-    }else if(cloudsharetime==2592000){
+    }else if(cloudsharetime=='2592000'){
         var sharelist = ['时限(1时)','时限(1周)','‘‘’’<span style="color:red" title="时限(1月)">时限(1月)','时限(1年)'];
-    }else if(cloudsharetime==604800){
+    }else if(cloudsharetime=='604800'){
         var sharelist = ['时限(1时)','时限(1周)','时限(1月)','‘‘’’<span style="color:red" title="时限(1年)">时限(1年)'];
     }
     //['云口令(时)','云口令(周)','云口令(月)','云口令(年)']
