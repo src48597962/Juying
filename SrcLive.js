@@ -314,7 +314,7 @@ function LivePlay(name) {
         let urls = [];
         for(let i = 0;i<JYlives.length;i++){
             try{
-                if(JYlives[i].indexOf(',')>-1&&JYlives[i].split(',')[0].trim()==name){
+                if(JYlives[i].indexOf(',')>-1&&JYlives[i].split(',')[0].replace(/TV-/g,'TV').replace(/\[.*\]/g,'').trim()==name){
                     let url = JYlives[i].split(',')[1].trim();
                     if(/\\r^/.test(url)){
                         url = url.slice(0, url.length - 2);
@@ -335,7 +335,7 @@ function LivePlay(name) {
     }else if(getMyVar('editmode','0')=="urldelete"){
         for(let i=0;i<JYlives.length;i++){
             try{
-                if(JYlives[i].indexOf('#genre#')==-1&&JYlives[i].indexOf(',')>-1&&JYlives[i].split(',')[0].trim()==name){
+                if(JYlives[i].indexOf('#genre#')==-1&&JYlives[i].indexOf(',')>-1&&JYlives[i].split(',')[0].replace(/TV-/g,'TV').replace(/\[.*\]/g,'').trim()==name){
                     JYlives.splice(i,1);
                     i = i - 1;
                 }
