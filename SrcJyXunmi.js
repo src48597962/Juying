@@ -1198,7 +1198,6 @@ function xunmierji(type,ua) {
                         list = list.map(item => {
                             return item.split('$')[0]+'$'+item.split('$')[1].split('=')[1];
                         });
-                        log(list);
                     }
                     if(/^http/.test(oneurl)){
                         urls.push(list.join('#').replace(/\&/g, '＆＆'));
