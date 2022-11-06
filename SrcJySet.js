@@ -2471,7 +2471,11 @@ function Resourceimport(input,importtype,boxdy){
                         let live = channels[i].urls;
                         for (let k=0;k<live.length;k++) {
                             let url = live[i].replace('proxy://do=live&type=txt&ext=','');
-                            urls.push(base64Decode(url));
+                            if(/^http/.test(url)){
+                                urls.push(url);
+                            }else{
+                                urls.push(base64Decode(url));
+                            }
                         }
                     }
                 }
