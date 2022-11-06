@@ -1193,6 +1193,13 @@ function xunmierji(type,ua) {
                 for(let i in lists){
                     let list = lists[i];
                     let oneurl = list[0].split('$')[1];
+                    if(oneurl.indexOf('=')>-1){
+                        oneurl = oneurl.split('=')[1];
+                        list = list.forEach(item => {
+                            item = item.split('$')[0]+'$'+item.split('$')[1].split('=')[1];
+                        });
+                        log(list);
+                    }
                     if(/^http/.test(oneurl)){
                         urls.push(list.join('#').replace(/\&/g, '＆＆'));
                         froms.push(tabs[i]);
@@ -1234,8 +1241,8 @@ function xunmierji(type,ua) {
                 if (/v1|app|v2|iptv|cms/.test(type)) {
                     var playtitle = list[j].split('$')[0];
                     if (/iptv/.test(type)) {
-                        var playurl = list[j].split('$')[1].split('url=')[1];
-                        parse_api = list[j].split('$')[1].split('url=')[0]+"url=";
+                        var playurl = list[j].split('$')[1].split('=')[1];
+                        parse_api = list[j].split('$')[1].split('=')[0]+"=";
                     }else{
                         var playurl = list[j].split('$')[1];
                     }
