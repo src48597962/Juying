@@ -1195,7 +1195,7 @@ function xunmierji(type,ua) {
                     let oneurl = list[0].split('$')[1];
                     if(oneurl.indexOf('=')>-1){
                         oneurl = oneurl.split('=')[1];
-                        list = list.forEach(item => {
+                        list.forEach(item => {
                             item = item.split('$')[0]+'$'+item.split('$')[1].split('=')[1];
                         });
                         log(list);
