@@ -74,7 +74,7 @@ function xunmi(name,data,ishkss) {
         hideLoading();
     }
     var d = [];
-    if(!ishkss){
+    //if(!ishkss){
         let grouplist = datalist.map((list)=>{
             return list.group||list.type;
         })
@@ -117,6 +117,7 @@ function xunmi(name,data,ishkss) {
             let groupmenu = getMyVar('groupmenu')?getMyVar('groupmenu').split(','):[];
             groupmenu.push(groupname);
             putMyVar('groupmenu',groupmenu.join(','));
+            if(!ishkss){
             d.push({
                 title: grouplist[i]==xunmigroup?'‘‘’’<b><span style="color:#3399cc">'+groupname:groupname,
                 url: $('#noLoading#').lazyRule((bess,datalist,name,count,groupname,ishkss)=>{
@@ -151,8 +152,9 @@ function xunmi(name,data,ishkss) {
                     id: groupname
                 }
             });
+            }
         }
-        if(getMyVar('isload', '0')=="0"){
+        if(!ishkss&&getMyVar('isload', '0')=="0"){
             d.push({
                 title: '删除开关',
                 url: $('#noLoading#').lazyRule(()=>{
@@ -185,7 +187,7 @@ function xunmi(name,data,ishkss) {
                 }
             }
         }
-    }
+    //}
     d.push({
         title: '没有接口，无法搜索',
         url: "hiker://empty",
