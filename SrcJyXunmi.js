@@ -74,50 +74,50 @@ function xunmi(name,data,ishkss) {
         hideLoading();
     }
     var d = [];
-    //if(!ishkss){
-        let grouplist = datalist.map((list)=>{
-            return list.group||list.type;
+
+    let grouplist = datalist.map((list)=>{
+        return list.group||list.type;
+    })
+    //去重复
+    function uniq(array){
+        var temp = []; //一个新的临时数组
+        for(var i = 0; i < array.length; i++){
+            if(temp.indexOf(array[i]) == -1){
+                temp.push(array[i]);
+            }
+        }
+        return temp;
+    }
+    grouplist = uniq(grouplist);
+    if(xunmigroup&&grouplist.indexOf(xunmigroup)>-1&&grouplist.indexOf(xunmigroup)!=0){
+        for (var i = 0; i < grouplist.length; i++) {
+            if (grouplist[i] == xunmigroup) {
+                grouplist.splice(i, 1);
+                break;
+            }
+        }
+        grouplist.unshift(xunmigroup);
+    }
+    if(grouplist.indexOf('失败待处理')!=-1&&grouplist.indexOf('失败待处理')!=grouplist.length-1){
+        for (var i = 0; i < grouplist.length; i++) {
+            if (grouplist[i] == '失败待处理') {
+                grouplist.splice(i, 1);
+                break;
+            }
+        }
+        grouplist.push('失败待处理');
+    }
+    var datalist2 = [];
+    for(var i in grouplist){
+        var lists = datalist.filter(item => {
+            return item.group==grouplist[i] || !item.group&&item.type==grouplist[i];
         })
-        //去重复
-        function uniq(array){
-            var temp = []; //一个新的临时数组
-            for(var i = 0; i < array.length; i++){
-                if(temp.indexOf(array[i]) == -1){
-                    temp.push(array[i]);
-                }
-            }
-            return temp;
-        }
-        grouplist = uniq(grouplist);
-        if(xunmigroup&&grouplist.indexOf(xunmigroup)>-1&&grouplist.indexOf(xunmigroup)!=0){
-            for (var i = 0; i < grouplist.length; i++) {
-                if (grouplist[i] == xunmigroup) {
-                    grouplist.splice(i, 1);
-                    break;
-                }
-            }
-            grouplist.unshift(xunmigroup);
-        }
-        if(grouplist.indexOf('失败待处理')!=-1&&grouplist.indexOf('失败待处理')!=grouplist.length-1){
-            for (var i = 0; i < grouplist.length; i++) {
-                if (grouplist[i] == '失败待处理') {
-                    grouplist.splice(i, 1);
-                    break;
-                }
-            }
-            grouplist.push('失败待处理');
-        }
-        var datalist2 = [];
-        for(var i in grouplist){
-            var lists = datalist.filter(item => {
-                return item.group==grouplist[i] || !item.group&&item.type==grouplist[i];
-            })
-            if(grouplist[i]==xunmigroup){datalist2 = lists;}
+        if(grouplist[i]==xunmigroup){datalist2 = lists;}
+        if(!ishkss){//海阔软件搜索时隐藏分组
             let groupname = grouplist[i]+'('+lists.length+')';
             let groupmenu = getMyVar('groupmenu')?getMyVar('groupmenu').split(','):[];
             groupmenu.push(groupname);
             putMyVar('groupmenu',groupmenu.join(','));
-            if(!ishkss){
             d.push({
                 title: grouplist[i]==xunmigroup?'‘‘’’<b><span style="color:#3399cc">'+groupname:groupname,
                 url: $('#noLoading#').lazyRule((bess,datalist,name,count,groupname,ishkss)=>{
@@ -152,42 +152,42 @@ function xunmi(name,data,ishkss) {
                     id: groupname
                 }
             });
+        }
+    }
+    if(!ishkss&&getMyVar('isload', '0')=="0"){
+        d.push({
+            title: '删除开关',
+            url: $('#noLoading#').lazyRule(()=>{
+                    if(getMyVar('deleteswitch')){
+                        clearMyVar('deleteswitch');
+                        updateItem('deleteswitch',{title:'删除开关'});
+                        return 'toast://退出处理模式，撤销二级删除开关';
+                    }else{
+                        putMyVar('deleteswitch','1');
+                        updateItem('deleteswitch',{title:'‘‘’’<b><span style="color:#3CB371">删除开关'});
+                        return 'toast://进入处理模式，点击影片详情确认是否删除';
+                    }
+                }),
+            col_type: "scroll_button",
+            extra: {
+                id: 'deleteswitch'
+            }
+        });
+    }
+    
+    if(datalist2.length>0){
+        datalist = datalist2;
+    }
+    
+    if(getMyVar('selectgroup','a').indexOf('失败待处理')==-1&&xunmigroup!="失败待处理"&&grouplist.length>1){
+        for(let i=0;i<datalist.length;i++){
+            if(datalist[i].group=="失败待处理"){
+                datalist.splice(i,1);
+                i = i - 1;
             }
         }
-        if(!ishkss&&getMyVar('isload', '0')=="0"){
-            d.push({
-                title: '删除开关',
-                url: $('#noLoading#').lazyRule(()=>{
-                        if(getMyVar('deleteswitch')){
-                            clearMyVar('deleteswitch');
-                            updateItem('deleteswitch',{title:'删除开关'});
-                            return 'toast://退出处理模式，撤销二级删除开关';
-                        }else{
-                            putMyVar('deleteswitch','1');
-                            updateItem('deleteswitch',{title:'‘‘’’<b><span style="color:#3CB371">删除开关'});
-                            return 'toast://进入处理模式，点击影片详情确认是否删除';
-                        }
-                    }),
-                col_type: "scroll_button",
-                extra: {
-                    id: 'deleteswitch'
-                }
-            });
-        }
-        
-        if(datalist2.length>0){
-            datalist = datalist2;
-        }
-        
-        if(getMyVar('selectgroup','a').indexOf('失败待处理')==-1&&xunmigroup!="失败待处理"&&grouplist.length>1){
-            for(let i=0;i<datalist.length;i++){
-                if(datalist[i].group=="失败待处理"){
-                    datalist.splice(i,1);
-                    i = i - 1;
-                }
-            }
-        }
-    //}
+    }
+
     d.push({
         title: '没有接口，无法搜索',
         url: "hiker://empty",
