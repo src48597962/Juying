@@ -403,7 +403,10 @@ var erjimenu = [
                             return 'toast://已开启，仅对接口二级有效，非需要请关闭';
                         }
                     }),
-                    col_type: "text_1"
+                    col_type: "text_1",
+                    extra:{
+                        lineVisible:false
+                    }
                 });
 
                 if(getItem('enabledpush', '')=='1'){    
@@ -414,7 +417,10 @@ var erjimenu = [
                         col_type: "text_center_1"
                     }); 
                 }
-                d.push('<br>')   
+                d.push({
+                    title: '<br>',
+                    col_type: 'rich_text'
+                }); 
                 setHomeResult(d);
             }),
         pic_url: 'https://lanmeiguojiang.com/tubiao/messy/37.svg',
