@@ -105,9 +105,6 @@ var erjimenu = [
                     col_type: "rich_text"
                 });
                 d.push({
-                    col_type: "line_blank"
-                });
-                d.push({
                     title: (JYconfig['printlog']==1?getide(1):getide(0))+'打印日志',
                     url: $('#noLoading#').lazyRule((JYconfig,cfgfile) => {
                             if(JYconfig['printlog'] != 1){
@@ -137,13 +134,12 @@ var erjimenu = [
                         }, JYconfig, cfgfile),
                     col_type: "text_2"
                 });
-                
+                d.push({
+                    col_type: "line_blank"
+                });
                 d.push({
                     title: '屏蔽操作',
                     col_type: "rich_text"
-                });
-                d.push({
-                    col_type: "line_blank"
                 });
                 d.push({
                     title: '无效播放地址',
@@ -258,11 +254,11 @@ var erjimenu = [
                     col_type: "text_2"
                 });
                 d.push({
-                    title: '解析设置',
-                    col_type: "rich_text"
+                    col_type: "line_blank"
                 });
                 d.push({
-                    col_type: "line_blank"
+                    title: '解析设置',
+                    col_type: "rich_text"
                 });
                 let parsemode = JYconfig.parsemode || 1;
                 if(fileExist('hiker://files/rules/DuanNian/MyParse.json')||JYconfig.dnfile){
@@ -392,6 +388,9 @@ var erjimenu = [
                     });
                 }
                 //if(getItem('enabledpush', '')=='1'){
+                d.push({
+                    col_type: "line_blank"
+                });
                     d.push({
                         title: (getItem('enabledpush', '')=='1'?getide(1):getide(0))+'TVBOX推送',
                         url: $('#noLoading#').lazyRule(() => {
@@ -405,17 +404,15 @@ var erjimenu = [
                         }),
                         col_type: "text_1"
                     });
-                    d.push({
-                        col_type: "line_blank"
-                    });
-                    
+
+                if(getItem('enabledpush', '')=='1'){    
                     d.push({
                         title: 'TVBOX推送选集列表，设置接收端ip地址',
                         desc: getItem('hikertvboxset')?'TVBOX接收端ip地址：'+getItem('hikertvboxset',''):'还未设置TVBOX接收端ip地址',
                         url: "input://" + getItem('hikertvboxset', 'http://' + getIP() + ':9978') + "////TVBOX接收端ip地址.js:setItem('hikertvboxset',input);refreshPage()",
                         col_type: "text_center_1"
                     }); 
-                //}
+                }
                    
                 setHomeResult(d);
             }),
