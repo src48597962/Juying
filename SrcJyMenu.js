@@ -387,33 +387,34 @@ var erjimenu = [
                         col_type: "text_center_1"
                     });
                 }
-                //if(getItem('enabledpush', '')=='1'){
+
                 d.push({
                     col_type: "line_blank"
                 });
-                    d.push({
-                        title: (getItem('enabledpush', '')=='1'?getide(1):getide(0))+'TVBOX推送',
-                        url: $('#noLoading#').lazyRule(() => {
-                            if(getItem('enabledpush', '')=='1'){
-                                clearItem('enabledpush');
-                            }else{
-                                setItem('enabledpush', '1');
-                            }
-                            refreshPage(false);
-                            return 'toast://嗅探内核：web';
-                        }),
-                        col_type: "text_1"
-                    });
+                d.push({
+                    title: (getItem('enabledpush', '')=='1'?getide(1):getide(0))+'TVBOX推送',
+                    url: $('#noLoading#').lazyRule(() => {
+                        refreshPage(false);
+                        if(getItem('enabledpush', '')=='1'){
+                            clearItem('enabledpush');
+                            return 'toast://已关闭按钮';
+                        }else{
+                            setItem('enabledpush', '1');
+                            return 'toast://已开启，仅对接口二级有效，非需要请关闭';
+                        }
+                    }),
+                    col_type: "text_1"
+                });
 
                 if(getItem('enabledpush', '')=='1'){    
                     d.push({
-                        title: 'TVBOX推送选集列表，设置接收端ip地址',
-                        desc: getItem('hikertvboxset')?'TVBOX接收端ip地址：'+getItem('hikertvboxset',''):'还未设置TVBOX接收端ip地址',
+                        title: getItem('hikertvboxset')?'参照频道香佬教程，需自行研究':'推送选集列表，设置接收端ip地址',
+                        desc: getItem('hikertvboxset')?'接收端ip地址：'+getItem('hikertvboxset',''):'还未设置接收端ip地址',
                         url: "input://" + getItem('hikertvboxset', 'http://' + getIP() + ':9978') + "////TVBOX接收端ip地址.js:setItem('hikertvboxset',input);refreshPage()",
                         col_type: "text_center_1"
                     }); 
                 }
-                   
+                d.push('<br>')   
                 setHomeResult(d);
             }),
         pic_url: 'https://lanmeiguojiang.com/tubiao/messy/37.svg',
