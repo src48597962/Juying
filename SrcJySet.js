@@ -467,8 +467,7 @@ function SRCSet() {
                     }),
                 col_type: "scroll_button"
             });
-        }
-        d.push({
+            d.push({
                 title: "取消保留",
                 url: $('#noLoading#').lazyRule(()=>{
                         let duoselect = storage0.getMyVar('duoselect')?storage0.getMyVar('duoselect'):[];
