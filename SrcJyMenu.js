@@ -413,7 +413,7 @@ var erjimenu = [
                     d.push({
                         title: getItem('hikertvboxset')?'参照频道香佬教程，需自行研究':'推送选集列表，设置接收端ip地址',
                         desc: getItem('hikertvboxset')?'接收端ip地址：'+getItem('hikertvboxset',''):'还未设置接收端ip地址',
-                        url: "input://" + getItem('hikertvboxset', 'http://' + getIP() + ':9978') + "////TVBOX接收端ip地址.js:setItem('hikertvboxset',input);refreshPage()",
+                        url: "input://" + getItem('hikertvboxset', 'http://' + (getIP()?getIP():'0.0.0.0') + ':9978') + "////TVBOX接收端ip地址.js:setItem('hikertvboxset',input);refreshPage()",
                         col_type: "text_center_1"
                     }); 
                 }
