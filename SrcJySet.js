@@ -468,6 +468,38 @@ function SRCSet() {
                 col_type: "scroll_button"
             });
         }
+        d.push({
+                title: "取消保留",
+                url: $('#noLoading#').lazyRule(()=>{
+                        let duoselect = storage0.getMyVar('duoselect')?storage0.getMyVar('duoselect'):[];
+                        if(duoselect.length>0){
+                            if(getMyVar('guanli', 'jk')=="jk"){
+                                var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
+                                var sm = "确定在订阅更新时取消保留选定的"+duoselect.length+"个接口吗？";
+                            }else if(getMyVar('guanli', 'jk')=="jx"){
+                                var filepath = "hiker://files/rules/Src/Juying/myjiexi.json";
+                                var sm = "确定在订阅更新时取消保留选定的"+duoselect.length+"个解析吗？";
+                            }
+                            return $(sm).confirm((duoselect, filepath)=>{
+                                var datafile = fetch(filepath);
+                                eval("var datalist=" + datafile+ ";");
+                                for(var i=0;i<datalist.length;i++){
+                                    let dataurl = datalist[i].url?datalist[i].url:datalist[i].parse;
+                                    if(duoselect.indexOf(dataurl)>-1){
+                                        delete datalist[i].retain;
+                                    }
+                                }
+                                writeFile(filepath, JSON.stringify(datalist));
+                                refreshPage(false);
+                                return "toast://已取消保留"+duoselect.length;
+                            }, duoselect, filepath)
+                        }else{
+                            return "toast://请选择";
+                        }
+                    }),
+                col_type: "scroll_button"
+            });
+        }
         if(getMyVar('guanli', 'jk')=="jk"){
             d.push({
                 col_type: "blank_block"
