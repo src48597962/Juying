@@ -1,3 +1,7 @@
+//一级统一菜单
+var yijimenu = [
+
+]
 //二级统一菜单
 var erjimenu = [
         {
