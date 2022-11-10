@@ -683,6 +683,7 @@ function yiji() {
         var JYconfig= {};
     }
     if(MY_PAGE==1){
+        /*
         d.push({
             title: "管理",
             url: $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
@@ -729,6 +730,15 @@ function yiji() {
         d.push({
             col_type: 'line'
         });
+        */
+        //二级统一菜单
+        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyMenu.js');
+        putMyVar('moviedesc',desc)
+        for(var i in yijimenu){
+            d.push(
+                yijimenu[i]
+            )
+        }
         for (let i = 0; i < 10; i++) {
             d.push({
                 col_type: "blank_block"
