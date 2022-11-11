@@ -57,9 +57,8 @@ function JYerji(){
     let datasource = getItem('JYdatasource', '360');
     MY_URL = MY_URL.split('##')[1].replace('#immersiveTheme','');
     var d = [];
-    let myurl = datasource=="sougou"?MY_URL:MY_URL+(getMyVar(MY_URL, '0')=='0'?"":"&site="+getMyVar(MY_URL.split('&site=')[0]+'linename', ''));
+    let myurl = datasource=="sougou"?MY_URL:MY_URL+(getMyVar(MY_URL, '0')=='0'?"":"&site="+getMyVar(MY_URL+'#line', ''));
     var html = request(myurl, { headers: { 'User-Agent': PC_UA } });
-    log(MY_URL+(getMyVar(MY_URL, '0')=='0'?"":"&site="+getMyVar(MY_URL.split('&site=')[0]+'linename', '')));
     
     let json = datasource=="sougou"?JSON.parse(html.match(/INITIAL_STATE.*?({.*});/)[1]).detail.itemData:JSON.parse(html).data;
     let plays = datasource=="sougou"?json.play.item_list:[];
@@ -102,17 +101,16 @@ function JYerji(){
             tabs.push(plays[i].sitename[0]);
         }
     }else{
+        var playnum = json.allupinfo;
         tabs = json.playlink_sites;
-        log(tabs);
-        log(parseInt(getMyVar(MY_URL, '0')));
-
         for(let i in tabs){
             if(parseInt(getMyVar(MY_URL, '0'))==i){
                 let sitename = tabs[i];
-                log(sitename);
+                let onenum = playnum[sitename]||'0';
+                if(getMyVar(MY_URL, '0')=='0'&&parseInt(onenum)>20){
+                    json = JSON.parse(request(myurl+'&start=1&end='+onenum, { headers: { 'User-Agent': PC_UA } }));
+                }
                 let onelist = json.allepidetail[sitename];
-                log(onelist);
-                log(json.allepidetail);
                 onelist = onelist.map(item=>{
                     return item.playlink_num+'$'+item.url;
                 })
@@ -159,9 +157,10 @@ function JYerji(){
         })
         for (var i in tabs) {
             if (tabs[i] != "") {
+                let lineparam = datasource=='sougou'?'':tabs[i]+'&start=1&end='+playnum[i];
                 d.push({
                     title: getMyVar(vari, '0') == i ? getHead(tabs[i] + '↓') : tabs[i],
-                    url: $("#noLoading#").lazyRule((vari, i, Marksum, linename) => {
+                    url: $("#noLoading#").lazyRule((vari, i, Marksum, lineparam) => {
                         if (parseInt(getMyVar(vari, '0')) != i) {
                             try {
                                 eval('var SrcMark = ' + fetch("hiker://files/cache/SrcMark.json"));
@@ -183,13 +182,13 @@ function JYerji(){
                             if (key > Marksum) { delete SrcMark.route[one]; }
                             writeFile("hiker://files/cache/SrcMark.json", JSON.stringify(SrcMark));
                             putMyVar(vari, i);
-                            putMyVar(vari+'linename', linename);
+                            if(lineparam){putMyVar(vari+'#line', lineparam);}
                             refreshPage(false);
                             return 'toast://切换成功'
                         } else {
                             return '#noHistory#hiker://empty'
                         }
-                    }, vari, i, Marksum,tabs[i]),
+                    }, vari, i, Marksum,lineparam),
                     col_type: 'scroll_button'
                 })
             }
