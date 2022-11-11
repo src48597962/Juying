@@ -56,23 +56,19 @@ let yijimenu = [
 function JYerji(){
     let datasource = getItem('JYdatasource', '360');
     var d = [];
-    var html = request(MY_URL.split('##')[1], { headers: { 'User-Agent': PC_UA } });
+    let myurl = datasource=="sougou"?MY_URL.split('##')[1]:MY_URL.split('##')[1]+(getMyVar(vari, '0')=='0'?"":"&site="+getMyVar(vari+'linename', ''));
+    var html = request(myurl, { headers: { 'User-Agent': PC_UA } });
     log(html);
-    if(datasource=="sougou"){
-        var json = JSON.parse(html.match(/INITIAL_STATE.*?({.*});/)[1]).detail.itemData;
-        var plays = json.play.item_list;
-        //log(plays);
-        var shows = json.play_from_open_index;
-        //log(shows);
-    }
     
-    
-    let actor = json.starring?'演员：'+json.starring : json.emcee?'主持：'+json.emcee:'内详';
-    let director = json.director?'导演：'+json.director : json.tv_station?json.tv_station:'内详';
-    let area = json.zone?'地区：'+json.zone:'';
-    let year = json.year?'   年代：' + json.year:'';
-    let remarks = json.style ? json.style : '';
-    let pubdate = json.update_wordstr ? json.update_wordstr : '';
+    let json = datasource=="sougou"?JSON.parse(html.match(/INITIAL_STATE.*?({.*});/)[1]).detail.itemData:JSON.parse(html).data;
+    let plays = datasource=="sougou"?json.play.item_list:[];
+    let shows = datasource=="sougou"?json.play_from_open_index:'';
+    let actor = datasource=="sougou"?(json.starring?'演员：'+json.starring : json.emcee?'主持：'+json.emcee:'内详'):(json.actor?'演员：'+json.actor:'内详');
+    let director = json.director?'导演：'+json.director : datasource=="sougou"&&json.tv_station?json.tv_station:'内详';
+    let area = datasource=="sougou"?(json.zone?'地区：'+json.zone:''):(json.area?'地区：'+json.area:'');
+    let year = datasource=="sougou"&&json.year?'   年代：' + json.year:'';
+    let remarks = datasource=="sougou"?(json.style ? json.style : ''):json.moviecategory;
+    let pubdate = datasource=="sougou"?(json.update_wordstr ? json.update_wordstr : ''):json.pubdate;   
 
     var details1 = director.substring(0, 15) + '\n' + actor.substring(0, 15) + '\n' + area + year;
     var details2 = remarks + '\n' + pubdate;
@@ -88,6 +84,7 @@ function JYerji(){
         }
 
     });
+    if(datasource=="360"){putMyVar('moviedesc',json.description);}
     //二级统一菜单
     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyMenu.js');
     for(var i in erjimenu){
@@ -98,11 +95,28 @@ function JYerji(){
 
     var tabs = [];
     var lists = [];
-
-    for (var i in plays) {
-        lists.push(plays[i].info);
-        tabs.push(plays[i].sitename[0]);
+    if(datasource=='sougou'){
+        for (var i in plays) {
+            lists.push(plays[i].info);
+            tabs.push(plays[i].sitename[0]);
+        }
+    }else{
+        tabs = json.playlink_sites;
+        for(let i in tabs){
+            if(parseInt(getMyVar(vari, '0'))==i){
+                let sitename = tabs[i];
+                let onelist = json.allepidetail[sitename];
+                onelist = onelist.map(item=>{
+                    return item.playlink_num+'$'+item.url;
+                })
+                lists.push(onelist);
+            }else{
+                lists.push([]);
+            }
+        }
+        lists = json.allepidetail[tabs[parseInt(getMyVar(vari, '0'))]];
     }
+    
 
     //取之前足迹记录，用于自动定位之前的线路
     try {
@@ -163,6 +177,7 @@ function JYerji(){
                             if (key > Marksum) { delete SrcMark.route[one]; }
                             writeFile("hiker://files/cache/SrcMark.json", JSON.stringify(SrcMark));
                             putMyVar(vari, i);
+                            putMyVar(vari+'linename', input);
                             refreshPage(false);
                             return 'toast://切换成功'
                         } else {
@@ -174,11 +189,13 @@ function JYerji(){
             }
         }
     }
+
     try{
-        var playsinfo = plays[0].info;
+        var playsinfo = datasource=='sougou'?plays[0].info:'360';
     }catch(e){
         var playsinfo = "";
     }
+
     if(playsinfo||shows){
         setTabs(tabs, MY_URL);
     }else{
@@ -191,7 +208,7 @@ function JYerji(){
             })
         }
     }
-    var easy = $("").lazyRule(() => {
+    var easy = datasource=="sougou"?$("").lazyRule(() => {
         try{
             input=fetch(input,{}).split("('")[1].split("'")[0];
 
@@ -212,6 +229,9 @@ function JYerji(){
         }catch(e){
             return input;
         }
+    }):$("").lazyRule(() => {
+        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
+        return SrcParseS.聚影(input);
     });
     if(!getMyVar('superwebM3U8')){
         try{
@@ -243,10 +263,11 @@ function JYerji(){
                 if (getMyVar('shsort') == '1') {
                     try {
                         for (var j = list.length - 1; j >= 0; j--) {
-                            let url = 'https://v.sogou.com' + list[j].url;
-                            if (!list[j].index == '0') {
+                            let name = datasource=="sougou"?list[j].index:list[j].split('$')[0];
+                            let url = datasource=="sougou"?'https://v.sogou.com' + list[j].url:list[j].split('$')[1];
+                            if (name != '0') {
                                 d.push({
-                                    title: list[j].index + '',
+                                    title: name + '',
                                     url: url + easy,
                                     extra: { id: MY_URL.replace('#autoCache#','')+j, jsLoadingInject: true, cacheM3u8: getMyVar('superwebM3U8')=="1"?true:false, blockRules: block },
                                     col_type: 'text_4'
@@ -259,10 +280,11 @@ function JYerji(){
                 } else {
                     try {
                         for (var j = 0; j < list.length; j++) {
-                            let url = 'https://v.sogou.com' + list[j].url;
-                            if (!list[j].index == '0') {
+                            let name = datasource=="sougou"?list[j].index:list[j].split('$')[0];
+                            let url = datasource=="sougou"?'https://v.sogou.com' + list[j].url:list[j].split('$')[1];
+                            if (name != '0') {
                                 d.push({
-                                    title: list[j].index + '',
+                                    title: name + '',
                                     url: url + easy,
                                     extra: { id: MY_URL.replace('#autoCache#','')+j, jsLoadingInject: true, cacheM3u8: getMyVar('superwebM3U8')=="1"?true:false, blockRules: block },
                                     col_type: 'text_4'
