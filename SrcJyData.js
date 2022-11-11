@@ -279,7 +279,7 @@ function homepage(datasource){
     }else{
         var list = html.data.movies;
         for (var i in list) {
-            let img = 'https:'+list[i].cdncover;
+            let img = /^http/.test(list[i].cdncover)?list[i].cdncover:'https:'+list[i].cdncover;
             d.push({
                 title: list[i].title,
                 img: img + '@Referer=',
