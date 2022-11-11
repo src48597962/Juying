@@ -55,11 +55,23 @@ let yijimenu = [
 
 function JYerji(){
     let datasource = getItem('JYdatasource', '360');
+    log(MY_URL);
     MY_URL = MY_URL.split('##')[1].replace('#immersiveTheme','');
+
+    //取之前足迹记录，用于自动定位之前的线路
+    try {
+        eval('var SrcMark = ' + fetch("hiker://files/cache/SrcMark.json"));
+        if (SrcMark != "") {
+            if (SrcMark.route[MY_URL] != undefined) {
+                var SrcMarkline = SrcMark.route[MY_URL];
+                putMyVar(MY_URL, SrcMarkline);
+            }
+        }
+    } catch (e) { }
+    var Marksum = 30;//设置记录线路足迹数量
+    var urlline = getMyVar(MY_URL, typeof(SrcMarkline) != "undefined"?SrcMarkline:'0');
     var d = [];
-    let myurl = datasource=="sougou"?MY_URL:MY_URL+(getMyVar(MY_URL, '0')=='0'?"":"&site="+getMyVar(MY_URL+'#line', ''));
-    var html = request(myurl, { headers: { 'User-Agent': PC_UA } });
-    
+    var html = request(MY_URL, { headers: { 'User-Agent': PC_UA } });
     let json = datasource=="sougou"?JSON.parse(html.match(/INITIAL_STATE.*?({.*});/)[1]).detail.itemData:JSON.parse(html).data;
     let plays = datasource=="sougou"?json.play.item_list:[];
     let shows = datasource=="sougou"?json.play_from_open_index:'';
@@ -104,12 +116,10 @@ function JYerji(){
         var playnum = json.allupinfo||[];
         tabs = json.playlink_sites;
         for(let i in tabs){
-            if(parseInt(getMyVar(MY_URL, '0'))==i){
+            if(parseInt(urlline)==i){
                 let sitename = tabs[i];
                 let onenum = playnum.length>0?playnum[sitename]||'0':'0';
-                if(getMyVar(MY_URL, '0')=='0'&&parseInt(onenum)>20){
-                    json = JSON.parse(request(myurl+'&start=1&end='+onenum+'&site='+sitename, { headers: { 'User-Agent': PC_UA } })).data;
-                }
+                json = JSON.parse(request(MY_URL+'&start=1&end='+onenum+'&site='+sitename, { headers: { 'User-Agent': PC_UA } })).data;
                 let onelist = json.allepidetail[sitename];
                 onelist = onelist.map(item=>{
                     return item.playlink_num+'$'+item.url;
@@ -121,18 +131,6 @@ function JYerji(){
         }
     }
     
-
-    //取之前足迹记录，用于自动定位之前的线路
-    try {
-        eval('var SrcMark = ' + fetch("hiker://files/cache/SrcMark.json"));
-        if (SrcMark != "") {
-            if (SrcMark.route[MY_URL] != undefined) {
-                putMyVar(MY_URL, SrcMark.route[MY_URL]);
-            }
-        }
-    } catch (e) { }
-    var Marksum = 30;//设置记录线路足迹数量
-
     //线路部份
     var Color = "#f13b66a";
     var Color1 = "#098AC1";
@@ -157,10 +155,9 @@ function JYerji(){
         })
         for (var i in tabs) {
             if (tabs[i] != "") {
-                let lineparam = datasource=='sougou'?'':tabs[i]+'&start=1&end='+playnum[tabs[i]];
                 d.push({
                     title: getMyVar(vari, '0') == i ? getHead(tabs[i] + '↓') : tabs[i],
-                    url: $("#noLoading#").lazyRule((vari, i, Marksum, lineparam) => {
+                    url: $("#noLoading#").lazyRule((vari, i, Marksum) => {
                         if (parseInt(getMyVar(vari, '0')) != i) {
                             try {
                                 eval('var SrcMark = ' + fetch("hiker://files/cache/SrcMark.json"));
@@ -182,13 +179,12 @@ function JYerji(){
                             if (key > Marksum) { delete SrcMark.route[one]; }
                             writeFile("hiker://files/cache/SrcMark.json", JSON.stringify(SrcMark));
                             putMyVar(vari, i);
-                            if(lineparam){putMyVar(vari+'#line', lineparam);}
                             refreshPage(false);
                             return 'toast://切换成功'
                         } else {
                             return '#noHistory#hiker://empty'
                         }
-                    }, vari, i, Marksum,lineparam),
+                    }, vari, i, Marksum),
                     col_type: 'scroll_button'
                 })
             }
@@ -331,7 +327,7 @@ function JYerji(){
             }
         }
     }
-    setLists(lists, getMyVar(MY_URL, '0'));
+    setLists(lists, urlline);
 
     //底部说明
     d.push({
