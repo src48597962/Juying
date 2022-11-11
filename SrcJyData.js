@@ -198,13 +198,14 @@ function homepage(datasource){
     }else{
         var list = html.data.movies;
         for (var i in list) {
+            let img = 'https:'+list[i].cdncover;
             d.push({
                 title: list[i].title,
-                img: list[i].cdncover + '@Referer=',
+                img: img + '@Referer=',
                 url: JYconfig['erjimode']!=2?"hiker://empty##https://www.360kan.com/tv/" + list[i].id + ".html#immersiveTheme##autoCache#":list[i].name + seachurl,
                 desc: list[i].total==list[i].upinfo?"全集"+list[i].total:"连载"+list[i].upinfo+"/"+list[i].total,
                 extra: {
-                    pic: list[i].cdncover,
+                    pic: img,
                     name: list[i].title
                 }
             });
