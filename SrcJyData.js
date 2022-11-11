@@ -186,8 +186,10 @@ function homepage(datasource){
                     var acts = filter.split(',d=')[1];
                     filter = filter.split(',d=')[0];
                 }
+                log(filter);
                 for(let i in filter){
                     let option_list = filter[i].data;
+                    log(option_list)
                     for (let j in option_list) {
                         d.push({
                             title: getMyVar('SrcJuying$'+filter[i].label, '')==option_list[j].id?'““””<span style="color:red">'+option_list[j].id+'</span>':option_list[j].id,
