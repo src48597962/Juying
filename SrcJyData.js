@@ -56,7 +56,7 @@ let yijimenu = [
 function JYerji(){
     let datasource = getItem('JYdatasource', '360');
     var d = [];
-    let myurl = datasource=="sougou"?MY_URL.split('##')[1]:MY_URL.split('##')[1]+(getMyVar(vari, '0')=='0'?"":"&site="+getMyVar(vari+'linename', ''));
+    let myurl = datasource=="sougou"?MY_URL.split('##')[1]:MY_URL.split('##')[1]+(getMyVar(MY_URL, '0')=='0'?"":"&site="+getMyVar(MY_URL+'linename', ''));
     var html = request(myurl, { headers: { 'User-Agent': PC_UA } });
     log(html);
     
@@ -103,7 +103,7 @@ function JYerji(){
     }else{
         tabs = json.playlink_sites;
         for(let i in tabs){
-            if(parseInt(getMyVar(vari, '0'))==i){
+            if(parseInt(getMyVar(MY_URL, '0'))==i){
                 let sitename = tabs[i];
                 let onelist = json.allepidetail[sitename];
                 onelist = onelist.map(item=>{
