@@ -101,12 +101,12 @@ function JYerji(){
             tabs.push(plays[i].sitename[0]);
         }
     }else{
-        var playnum = json.allupinfo;
+        var playnum = json.allupinfo||[];
         tabs = json.playlink_sites;
         for(let i in tabs){
             if(parseInt(getMyVar(MY_URL, '0'))==i){
                 let sitename = tabs[i];
-                let onenum = playnum[sitename]||'0';
+                let onenum = playnum.length>0?playnum[sitename]||'0':'0';
                 if(getMyVar(MY_URL, '0')=='0'&&parseInt(onenum)>20){
                     json = JSON.parse(request(myurl+'&start=1&end='+onenum+'&site='+sitename, { headers: { 'User-Agent': PC_UA } })).data;
                 }
@@ -266,40 +266,25 @@ function JYerji(){
                 nolist();
             } else {
                 if (getMyVar('shsort') == '1') {
-                    try {
-                        for (var j = list.length - 1; j >= 0; j--) {
-                            let name = datasource=="sougou"?list[j].index:list[j].split('$')[0];
-                            let url = datasource=="sougou"?'https://v.sogou.com' + list[j].url:list[j].split('$')[1];
-                            if (name != '0') {
-                                d.push({
-                                    title: name + '',
-                                    url: url + easy,
-                                    extra: { id: MY_URL.replace('#autoCache#','')+j, jsLoadingInject: true, cacheM3u8: getMyVar('superwebM3U8')=="1"?true:false, blockRules: block },
-                                    col_type: 'text_4'
-                                });
-                            }
-                        }
-                    } catch (e) {
-                        nolist();
-                    }
-                } else {
-                    try {
-                        for (var j = 0; j < list.length; j++) {
-                            let name = datasource=="sougou"?list[j].index:list[j].split('$')[0];
-                            let url = datasource=="sougou"?'https://v.sogou.com' + list[j].url:list[j].split('$')[1];
-                            if (name != '0') {
-                                d.push({
-                                    title: name + '',
-                                    url: url + easy,
-                                    extra: { id: MY_URL.replace('#autoCache#','')+j, jsLoadingInject: true, cacheM3u8: getMyVar('superwebM3U8')=="1"?true:false, blockRules: block },
-                                    col_type: 'text_4'
-                                });
-                            }
-                        }
-                    } catch (e) {
-                        nolist();
-                    }
+                    list = list.reverse();
                 }
+                try {
+                    for (var j = 0; j < list.length; j++) {
+                        let name = datasource=="sougou"?list[j].index:list[j].split('$')[0];
+                        let url = datasource=="sougou"?'https://v.sogou.com' + list[j].url:list[j].split('$')[1];
+                        if (name != '0') {
+                            d.push({
+                                title: name + '',
+                                url: url + easy,
+                                extra: { id: MY_URL.replace('#autoCache#','')+j, jsLoadingInject: true, cacheM3u8: getMyVar('superwebM3U8')=="1"?true:false, blockRules: block },
+                                col_type: 'text_4'
+                            });
+                        }
+                    }
+                } catch (e) {
+                    nolist();
+                }
+                
             }
         }else if (shows&&plays.length>0) {
             var arr = [];
