@@ -122,7 +122,7 @@ function JYerji(){
                 if(parseInt(urlline)==i){
                     let getlist = [];
                     let listlength = sitelist[sitename];
-                    let fornum = Math.round(listlength/200);
+                    let fornum = Math.ceil(listlength/200);
                     log(fornum)
                     for(let i=0;i<fornum;i++){
                         let start = 1 + (200 * i);
