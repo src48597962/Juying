@@ -71,7 +71,7 @@ function JYerji(){
 
     var urlline = getMyVar(MY_URL, typeof(SrcMarkline) != "undefined"?SrcMarkline:'0');
     var d = [];
-    var html = request(datasource=='sougou'?MY_URL:MY_URL+'&site='+MY_PARAMS.sites[urlline], { headers: { 'User-Agent': PC_UA } });
+    var html = request(MY_URL, { headers: { 'User-Agent': PC_UA } });
     let json = datasource=="sougou"?JSON.parse(html.match(/INITIAL_STATE.*?({.*});/)[1]).detail.itemData:JSON.parse(html).data;
     let plays = datasource=="sougou"?json.play.item_list:[];
     let shows = datasource=="sougou"?json.play_from_open_index:'';
@@ -122,7 +122,7 @@ function JYerji(){
                 if(parseInt(urlline)==i){
                     let onenum = playnum.length>0?playnum[sitename]||'0':'0';
                     if(parseInt(onenum)>20){
-                        json = JSON.parse(request(MY_URL+'&start=1&end='+onenum, { headers: { 'User-Agent': PC_UA } })).data;
+                        json = JSON.parse(request(MY_URL+'&start=1&end='+onenum+'&site='+sitename, { headers: { 'User-Agent': PC_UA } })).data;
                     }
                     var onelist = json.allepidetail[sitename];
                     onelist = onelist.map(item=>{
@@ -589,8 +589,7 @@ function JYyiji(){
                 desc: list[i].total?list[i].total==list[i].upinfo?"全集"+list[i].total:"连载"+list[i].upinfo+"/"+list[i].total:list[i].tag?list[i].tag:list[i].doubanscore?list[i].doubanscore:"",
                 extra: {
                     pic: img,
-                    name: list[i].title,
-                    sites: list[i].playlink_sites
+                    name: list[i].title
                 }
             });
         }
