@@ -194,7 +194,8 @@ function homepage(datasource){
                         d.push({
                             title: getMyVar('SrcJuying$'+filter[i].label, '全部')==optionname?'““””<span style="color:red">'+optionname+'</span>':optionname,
                             url: $('#noLoading#').lazyRule((name,option) => {
-                                    putMyVar('SrcJuying$'+name, option);
+                                    
+                                    putMyVar('SrcJuying$'+name, option?option:'全部');
                                     refreshPage(false);
                                     return "hiker://empty";
                                 }, filter[i].label, option_list[j].id),
