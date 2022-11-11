@@ -53,7 +53,8 @@ let yijimenu = [
     }
 ]
 
-function erji(datasource){
+function erji(){
+    let datasource = getItem('JYdatasource', 'sougou');
     var d = [];
     var html = request(MY_URL.split('##')[1], { headers: { 'User-Agent': PC_UA } });
     log(html);
@@ -328,7 +329,8 @@ function erji(datasource){
     });
     setResult(d);
 }
-function yiji(datasource){    
+function yiji(){    
+    let datasource = getItem('JYdatasource', 'sougou');
     var d = [];
     const Color = "#3399cc";
     const categorys = datasource=="sougou"?['电视剧','电影','动漫','综艺','纪录片']:['电视剧','电影','动漫','综艺'];
@@ -453,18 +455,23 @@ function yiji(datasource){
                     });
                 }
             }else{
-                let filterjs = fetchCache('https://s.ssl.qhres2.com/static/3deb65e2c118233e.js',168);
-                let filters = filterjs.split(`defaultId:"rankhot"},`);//filterjs.match(/defaultId:\"rankhot\"\},(.*?),o=i/)[1];
-                filters.splice(0,1);
-                filters = filters.map(item=>{
-                    return '['+(item.split(',o=i')[0].split(',r=i')[0])
-                })
-                let filterstr = filters[listTabs.indexOf(getMyVar('SrcJuying$listTab', '2'))];
-                if(getMyVar('SrcJuying$listTab', '2')=='1' || getMyVar('SrcJuying$listTab', '2')=='2'){
-                    eval('var acts = ' + filterstr.split(',d=')[1]);
-                    filterstr = filterstr.split(',d=')[0];
+                try{
+                    let filterjs = fetchCache('https://s.ssl.qhres2.com/static/3deb65e2c118233e.js',168,{timeout:2000});
+                    let filters = filterjs.split(`defaultId:"rankhot"},`);//filterjs.match(/defaultId:\"rankhot\"\},(.*?),o=i/)[1];
+                    filters.splice(0,1);
+                    filters = filters.map(item=>{
+                        return '['+(item.split(',o=i')[0].split(',r=i')[0])
+                    })
+                    let filterstr = filters[listTabs.indexOf(getMyVar('SrcJuying$listTab', '2'))];
+                    if(getMyVar('SrcJuying$listTab', '2')=='1' || getMyVar('SrcJuying$listTab', '2')=='2'){
+                        eval('var acts = ' + filterstr.split(',d=')[1]);
+                        filterstr = filterstr.split(',d=')[0];
+                    }
+                    eval('var filter = ' + filtevarrstr);
+                }catch(e){
+                    var filter = [];
                 }
-                eval('let filter = ' + filterstr);
+
                 for(let i in filter){
                     let option_list = filter[i].data;
                     for (let j in option_list) {
