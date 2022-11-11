@@ -649,7 +649,7 @@ function yiji() {
     */
     clearMyVar('SrcJy$back');
     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
-    yiji('sougou');
+    yiji('360');
     if(getMyVar('jydingyue','0')=="0"&&JYconfig['codedyid']&&JYconfig['codeid']!=JYconfig['codedyid']){
         putMyVar('jydingyue','1');
         try{
