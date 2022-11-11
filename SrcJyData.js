@@ -124,7 +124,7 @@ function JYerji(){
                     let listlength = sitelist[sitename];
                     let fornum = Math.round(listlength/200);
                     log(fornum)
-                    for(let i=0;i<fornum-1;i++){
+                    for(let i=0;i<fornum;i++){
                         let start = 1 + (200 * i);
                         let end = 200 + (200 * i);
                         if(end>listlength){end = listlength;}
