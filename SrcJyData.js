@@ -161,7 +161,7 @@ function JYerji(){
             if (tabs[i] != "") {
                 d.push({
                     title: getMyVar(vari, '0') == i ? getHead(tabs[i] + '↓') : tabs[i],
-                    url: $("#noLoading#").lazyRule((vari, i, Marksum) => {
+                    url: $("#noLoading#").lazyRule((vari, i, Marksum, linename) => {
                         if (parseInt(getMyVar(vari, '0')) != i) {
                             try {
                                 eval('var SrcMark = ' + fetch("hiker://files/cache/SrcMark.json"));
@@ -183,14 +183,13 @@ function JYerji(){
                             if (key > Marksum) { delete SrcMark.route[one]; }
                             writeFile("hiker://files/cache/SrcMark.json", JSON.stringify(SrcMark));
                             putMyVar(vari, i);
-                            log(input);
-                            putMyVar(vari+'linename', input);
+                            putMyVar(vari+'linename', linename);
                             refreshPage(false);
                             return 'toast://切换成功'
                         } else {
                             return '#noHistory#hiker://empty'
                         }
-                    }, vari, i, Marksum),
+                    }, vari, i, Marksum,tabs[i]),
                     col_type: 'scroll_button'
                 })
             }
