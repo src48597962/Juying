@@ -53,8 +53,8 @@ let yijimenu = [
     }
 ]
 
-function erji(){
-    let datasource = getItem('JYdatasource', 'sougou');
+function JYerji(){
+    let datasource = getItem('JYdatasource', '360');
     var d = [];
     var html = request(MY_URL.split('##')[1], { headers: { 'User-Agent': PC_UA } });
     log(html);
@@ -329,8 +329,8 @@ function erji(){
     });
     setResult(d);
 }
-function yiji(){    
-    let datasource = getItem('JYdatasource', 'sougou');
+function JYyiji(){    
+    let datasource = getItem('JYdatasource', '360');
     var d = [];
     const Color = "#3399cc";
     const categorys = datasource=="sougou"?['电视剧','电影','动漫','综艺','纪录片']:['电视剧','电影','动漫','综艺'];
