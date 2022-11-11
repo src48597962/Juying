@@ -113,30 +113,36 @@ function JYerji(){
             tabs.push(plays[i].sitename[0]);
         }
     }else{
-        let playnum = json.allupinfo;
+        let sitelist = json.allupinfo;
         let playlist = [];
         tabs = json.playlink_sites;
         for(let i in tabs){
             let sitename = tabs[i];
             if(json.allepidetail){
                 if(parseInt(urlline)==i){
-                    let onenum = playnum[sitename];
-                    log(MY_URL+'&start=1&end='+onenum+'&site='+sitename)
-                    json = JSON.parse(request(MY_URL+'&start=1&end='+onenum+'&site='+sitename, { headers: { 'User-Agent': PC_UA } })).data;
-                    log(json)
-                    var onelist = json.allepidetail[sitename];
-                    onelist = onelist.map(item=>{
-                        return item.playlink_num+'$'+item.url;
-                    })
-                    lists.push(onelist);
+                    let getlist = [];
+                    let listlength = sitelist[sitename];
+                    let fornum = parseInt(listlength/200);
+                    for(let i=0;i<fornum-1;i++){
+                        let start = 1 + (200 * i);
+                        let end = 200 + (200 * i);
+                        if(end>listlength){end = listlength;}
+                        json = JSON.parse(request(MY_URL+'&start='+start+'&end='+end+'&site='+sitename, { headers: { 'User-Agent': PC_UA } })).data;
+                        let forlist = json.allepidetail[sitename];
+                        forlist = forlist.map(item=>{
+                            return item.playlink_num+'$'+item.url;
+                        })
+                        getlist = getlist.concat(forlist);
+                    }
+                    lists.push(getlist);
                 }else{
                     lists.push([]);
                 }
                 var isline = 1;
             }else{
-                var onelist = json.playlinksdetail[sitename];
-                onelist = sitename+'$'+onelist.default_url
-                playlist.push(onelist);
+                let getlist = json.playlinksdetail[sitename];
+                getlist = sitename+'$'+onelist.default_url
+                playlist.push(getlist);
                 var isline = 0;
             }
         }
