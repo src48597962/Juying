@@ -144,34 +144,52 @@ function homepage(datasource){
         var html = JSON.parse(request(MY_URL));
         
         if(fold==='1'){
-            let filterjs = request('https://s.ssl.qhres2.com/static/3deb65e2c118233e.js');
-            let filter1 = filterjs.match(//);
-            var filter = html.listData.list.filter_list;
-            for (var i in filter) {
-                d.push({
-                    title: filter[i].name=="排序"?排序==""?'““””<span style="color:red">最热</span>':"最热":(类型==""&&filter[i].name=="类型")||(地区==""&&filter[i].name=="地区")||(年代==""&&filter[i].name=="年代")||(资源==""&&filter[i].name=="资源")||(明星==""&&filter[i].name=="明星")?'““””<span style="color:red">全部</span>':"全部",
-                    url: $('#noLoading#').lazyRule((name) => {
-                            putMyVar('SrcJuying$'+name, '');
-                            refreshPage(false);
-                            return "hiker://empty";
-                        }, filter[i].name),
-                    col_type: 'scroll_button',
-                })
-                let option_list = filter[i].option_list;
-                for (var j in option_list) {
+            if(datasource=="sougou"){
+                let filter = html.listData.list.filter_list;
+                for (let i in filter) {
                     d.push({
-                        title: getMyVar('SrcJuying$'+filter[i].name, '')==option_list[j]?'““””<span style="color:red">'+option_list[j]+'</span>':option_list[j],
-                        url: $('#noLoading#').lazyRule((name,option) => {
-                                putMyVar('SrcJuying$'+name, option);
+                        title: filter[i].name=="排序"?排序==""?'““””<span style="color:red">最热</span>':"最热":(类型==""&&filter[i].name=="类型")||(地区==""&&filter[i].name=="地区")||(年代==""&&filter[i].name=="年代")||(资源==""&&filter[i].name=="资源")||(明星==""&&filter[i].name=="明星")?'““””<span style="color:red">全部</span>':"全部",
+                        url: $('#noLoading#').lazyRule((name) => {
+                                putMyVar('SrcJuying$'+name, '');
                                 refreshPage(false);
                                 return "hiker://empty";
-                            }, filter[i].name, option_list[j]),
-                        col_type: 'scroll_button'
+                            }, filter[i].name),
+                        col_type: 'scroll_button',
+                    })
+                    let option_list = filter[i].option_list;
+                    for (let j in option_list) {
+                        d.push({
+                            title: getMyVar('SrcJuying$'+filter[i].name, '')==option_list[j]?'““””<span style="color:red">'+option_list[j]+'</span>':option_list[j],
+                            url: $('#noLoading#').lazyRule((name,option) => {
+                                    putMyVar('SrcJuying$'+name, option);
+                                    refreshPage(false);
+                                    return "hiker://empty";
+                                }, filter[i].name, option_list[j]),
+                            col_type: 'scroll_button'
+                        });
+                    }
+                    d.push({
+                        col_type: "blank_block"
                     });
                 }
-                d.push({
-                    col_type: "blank_block"
-                });
+            }else{
+                //let filterjs = request('https://s.ssl.qhres2.com/static/3deb65e2c118233e.js');
+                //let filter1 = filterjs.match(//);
+                let rank = [{title:"最近热映",id:"rankhot"},{title:"最近上映",id:"ranklatest"},{title:"最受好评",id:"rankpoint"}];
+                for (let i in rank) {
+                    if(i<2||(getMyVar('SrcJuying$listTab', '')=='1' || getMyVar('SrcJuying$listTab', '')=='2')){
+                        d.push({
+                            title: getMyVar('SrcJuying$排序', '')==rank[i].id?'““””<span style="color:red">'+rank[i].title+'</span>':rank[i].title,
+                            url: $('#noLoading#').lazyRule((id) => {
+                                    putMyVar('SrcJuying$排序', id);
+                                    refreshPage(false);
+                                    return "hiker://empty";
+                                }, rank[i].id),
+                            col_type: 'scroll_button'
+                        });
+                    }
+                    
+                }
             }
         }
     }else{
