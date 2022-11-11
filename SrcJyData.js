@@ -102,9 +102,6 @@ function homepage(datasource){
         if(明星 != ""){
             MY_URL = MY_URL + "&act=" + 明星;
         }
-        if(getMyVar('SrcJuying$排序', '')=="rankpoint"&&(getMyVar('SrcJuying$listTab')=="3"||getMyVar('SrcJuying$listTab')=="4")){
-            clearMyVar('SrcJuying$排序');
-        }
     }
     
 
@@ -133,6 +130,9 @@ function homepage(datasource){
                 title: getMyVar('SrcJuying$listTab', '2') === listTabs[i] ? '““””<b><span style="color:' + Color + '">' + categorys[i] + '</span></b>' : categorys[i],
                 url: $('#noLoading#').lazyRule((listTab) => {
                         putMyVar('SrcJuying$listTab', listTab);
+                        if(getMyVar('SrcJuying$排序', '')=="rankpoint"&&(getMyVar('SrcJuying$listTab')=="3"||getMyVar('SrcJuying$listTab')=="4")){
+                            clearMyVar('SrcJuying$排序');
+                        }
                         refreshPage(false);
                         return "hiker://empty";
                     }, listTabs[i]),
