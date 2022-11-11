@@ -102,6 +102,9 @@ function homepage(datasource){
         if(明星 != ""){
             MY_URL = MY_URL + "&act=" + 明星;
         }
+        if(getMyVar('SrcJuying$排序', '')=="rankpoint"&&(getMyVar('SrcJuying$listTab')=="3"||getMyVar('SrcJuying$listTab')=="4")){
+            clearMyVar('SrcJuying$排序');
+        }
     }
     
 
