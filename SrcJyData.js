@@ -110,6 +110,7 @@ function JYerji(){
                 if(getMyVar(MY_URL, '0')=='0'&&parseInt(onenum)>20){
                     log(myurl+'&start=1&end='+onenum+'&site='+sitename);
                     json = JSON.parse(request(myurl+'&start=1&end='+onenum+'&site='+sitename, { headers: { 'User-Agent': PC_UA } }));
+                    log(json);
                 }
                 let onelist = json.allepidetail[sitename];
                 onelist = onelist.map(item=>{
