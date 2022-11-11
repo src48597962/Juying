@@ -120,6 +120,7 @@ function JYerji(){
             let sitename = tabs[i];
             let onenum = playnum.length>0?playnum[sitename]||'0':'0';
             json = JSON.parse(request(MY_URL+'&start=1&end='+onenum+'&site='+sitename, { headers: { 'User-Agent': PC_UA } })).data;
+            log(json)
             if(json.allepidetail){
                 if(parseInt(urlline)==i){
                     var onelist = json.allepidetail[sitename];
