@@ -181,13 +181,12 @@ function homepage(datasource){
                 filters = filters.map(item=>{
                     return '['+(item.split(',o=i')[0].split(',r=i')[0])
                 })
-                let filter = filters[listTabs.indexOf(getMyVar('SrcJuying$listTab', '2'))];
+                let filterstr = filters[listTabs.indexOf(getMyVar('SrcJuying$listTab', '2'))];
                 if(getMyVar('SrcJuying$listTab', '2')=='1' || getMyVar('SrcJuying$listTab', '2')=='2'){
-                    var acts = filter.split(',d=')[1];
-                    filter = filter.split(',d=')[0]||[];
+                    var acts = filterstr.split(',d=')[1];
+                    filterstr = filterstr.split(',d=')[0];
                 }
-                log(filter);
-                log(filter[0]);
+                eval('let filter = ' + filterstr);
                 for(let i in filter){
                     let option_list = filter[i].data;
                     for (let j in option_list) {
