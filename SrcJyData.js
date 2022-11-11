@@ -184,8 +184,25 @@ function homepage(datasource){
                 let filter = filters[listTabs.indexOf(getMyVar('SrcJuying$listTab', '2'))];
                 if(getMyVar('SrcJuying$listTab', '2')=='1' || getMyVar('SrcJuying$listTab', '2')=='2'){
                     var acts = filter.split(',d=')[1];
+                    filter = filter.split(',d=')[0];
                 }
-                log(acts);
+                for(let i in filter){
+                    let option_list = filter[i].data;
+                    for (let j in option_list) {
+                        d.push({
+                            title: getMyVar('SrcJuying$'+filter[i].label, '')==option_list[j].id?'““””<span style="color:red">'+option_list[j].id+'</span>':option_list[j].id,
+                            url: $('#noLoading#').lazyRule((name,option) => {
+                                    putMyVar('SrcJuying$'+name, option);
+                                    refreshPage(false);
+                                    return "hiker://empty";
+                                }, filter[i].label, option_list[j].id),
+                            col_type: 'scroll_button'
+                        });
+                    }
+                    d.push({
+                        col_type: "blank_block"
+                    });
+                }
 
                 let ranks = [{title:"最近热映",id:"rankhot"},{title:"最近上映",id:"ranklatest"},{title:"最受好评",id:"rankpoint"}];
                 for (let i in ranks) {
