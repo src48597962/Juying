@@ -140,7 +140,9 @@ function JYerji(){
                 var isline = 0;
             }
         }
+        log(playlist)
         if(isline){lists.push(playlist);}
+        log(lists)
     }
     
     //线路部份
