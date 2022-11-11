@@ -110,6 +110,8 @@ function JYerji(){
                 let sitename = tabs[i];
                 log(sitename);
                 let onelist = json.allepidetail[sitename];
+                log(onelist);
+                log(json.allepidetail);
                 onelist = onelist.map(item=>{
                     return item.playlink_num+'$'+item.url;
                 })
