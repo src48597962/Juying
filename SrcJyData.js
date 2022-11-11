@@ -1,3 +1,10 @@
+var cfgfile = "hiker://files/rules/Src/Juying/config.json";
+var Juyingcfg=fetch(cfgfile);
+if(Juyingcfg != ""){
+    eval("var JYconfig=" + Juyingcfg+ ";");
+}else{
+    var JYconfig= {};
+}
 
 function sougou(){    
     var d = [];
@@ -31,13 +38,7 @@ function sougou(){
     if(排序 != ""){
         MY_URL = MY_URL + "&order=" + (排序=="最新"?"time":"score");
     }
-    var cfgfile = "hiker://files/rules/Src/Juying/config.json";
-    var Juyingcfg=fetch(cfgfile);
-    if(Juyingcfg != ""){
-        eval("var JYconfig=" + Juyingcfg+ ";");
-    }else{
-        var JYconfig= {};
-    }
+
     if(MY_PAGE==1){
         d.push({
             title: "管理",
