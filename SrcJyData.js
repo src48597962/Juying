@@ -208,7 +208,7 @@ function homepage(datasource){
                             col_type: 'scroll_button'
                         });
                     }
-                    if(acts&&filter[i].label=='明星'){
+                    if(acts!=undefined&&filter[i].label=='明星'){
                         let act = acts[getMyVar('SrcJuying$地区', '全部')];
                         act.forEach(item => {
                             if($.type(item)!='string'){
