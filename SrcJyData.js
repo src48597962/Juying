@@ -104,9 +104,11 @@ function JYerji(){
         tabs = json.playlink_sites;
         log(tabs);
         log(parseInt(getMyVar(MY_URL, '0')));
+
         for(let i in tabs){
             if(parseInt(getMyVar(MY_URL, '0'))==i){
                 let sitename = tabs[i];
+                log(sitename);
                 let onelist = json.allepidetail[sitename];
                 onelist = onelist.map(item=>{
                     return item.playlink_num+'$'+item.url;
