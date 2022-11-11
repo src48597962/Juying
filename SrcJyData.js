@@ -142,7 +142,7 @@ function homepage(datasource){
         });
         
         var html = JSON.parse(request(MY_URL));
-        log(html);
+        /*
         if(fold==='1'){
             var filter = html.listData.list.filter_list;
             for (var i in filter) {
@@ -171,7 +171,7 @@ function homepage(datasource){
                     col_type: "blank_block"
                 });
             }
-        }
+        }*/
     }else{
         var html = JSON.parse(request(MY_URL));
     }
@@ -181,20 +181,34 @@ function homepage(datasource){
             xunmi(name);
         }, input);
     });
-    
-    var list = html.listData.results;
-    for (var i in list) {
-        d.push({
-            title: list[i].name,
-            img: list[i].v_picurl + '@Referer=',
-            url: JYconfig['erjimode']!=2?"hiker://empty##https://v.sogou.com" + list[i].url.replace('teleplay', 'series').replace('cartoon', 'series') + "#immersiveTheme##autoCache#":list[i].name + seachurl,
-            desc: list[i].ipad_play_for_list.finish_episode?list[i].ipad_play_for_list.episode==list[i].ipad_play_for_list.finish_episode?"全集"+list[i].ipad_play_for_list.finish_episode:"连载"+list[i].ipad_play_for_list.episode+"/"+list[i].ipad_play_for_list.finish_episode:"",
-            extra: {
-                pic: list[i].v_picurl,
-                name: list[i].name
-            }
-        });
+    if(datasource=="sougou"){
+        var list = html.listData.results;
+        for (var i in list) {
+            d.push({
+                title: list[i].name,
+                img: list[i].v_picurl + '@Referer=',
+                url: JYconfig['erjimode']!=2?"hiker://empty##https://v.sogou.com" + list[i].url.replace('teleplay', 'series').replace('cartoon', 'series') + "#immersiveTheme##autoCache#":list[i].name + seachurl,
+                desc: list[i].ipad_play_for_list.finish_episode?list[i].ipad_play_for_list.episode==list[i].ipad_play_for_list.finish_episode?"全集"+list[i].ipad_play_for_list.finish_episode:"连载"+list[i].ipad_play_for_list.episode+"/"+list[i].ipad_play_for_list.finish_episode:"",
+                extra: {
+                    pic: list[i].v_picurl,
+                    name: list[i].name
+                }
+            });
+        }
+    }else{
+        var list = html.data.movies;
+        for (var i in list) {
+            d.push({
+                title: list[i].title,
+                img: list[i].cdncover + '@Referer=',
+                url: JYconfig['erjimode']!=2?"hiker://empty##https://www.360kan.com/tv/" + list[i].id + ".html#immersiveTheme##autoCache#":list[i].name + seachurl,
+                desc: list[i].total==list[i].upinfo?"全集"+list[i].total:"连载"+list[i].upinfo+"/"+list[i].total,
+                extra: {
+                    pic: list[i].cdncover,
+                    name: list[i].title
+                }
+            });
+        }
     }
-
     setResult(d);
 }
