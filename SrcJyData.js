@@ -186,7 +186,7 @@ function homepage(datasource){
                 })
                 let filterstr = filters[listTabs.indexOf(getMyVar('SrcJuying$listTab', '2'))];
                 if(getMyVar('SrcJuying$listTab', '2')=='1' || getMyVar('SrcJuying$listTab', '2')=='2'){
-                    var acts = filterstr.split(',d=')[1];
+                    eval('var acts = ' + filterstr.split(',d=')[1]);
                     filterstr = filterstr.split(',d=')[0];
                 }
                 eval('let filter = ' + filterstr);
@@ -195,7 +195,7 @@ function homepage(datasource){
                     for (let j in option_list) {
                         let optionname = option_list[j].id?option_list[j].id:option_list[j].title;
                         d.push({
-                            title: getMyVar('SrcJuying$'+filter[i].label, '全部')==optionname?'““””<span style="color:red">'+optionname+'</span>':optionname,
+                            title: getMyVar('SrcJuying$'+filter[i].label, '全部')==optionname?'““””<span style="color:red">'+(optionname=="lt_year"?"更早":optionname)+'</span>':(optionname=="lt_year"?"更早":optionname),
                             url: $('#noLoading#').lazyRule((name,option) => {
                                     if(option==''){
                                         clearMyVar('SrcJuying$'+name); 
@@ -207,6 +207,27 @@ function homepage(datasource){
                                 }, filter[i].label, option_list[j].id),
                             col_type: 'scroll_button'
                         });
+                    }
+                    if(option_list.label=='明星'){
+                        let act = acts[getMyVar('SrcJuying$明星', '全部')];
+                        act.forEach(item => {
+                            if($.type(item)!='string'){
+                                item = item.id;
+                            }
+                            d.push({
+                                title: getMyVar('SrcJuying$明星', '全部')==item?'““””<span style="color:red">'+item+'</span>':item,
+                                url: $('#noLoading#').lazyRule((option) => {
+                                        if(option==''){
+                                            clearMyVar('SrcJuying$明星'); 
+                                        }else{
+                                            putMyVar('SrcJuying$明星', option);
+                                        }
+                                        refreshPage(false);
+                                        return "hiker://empty";
+                                    }, item),
+                                col_type: 'scroll_button'
+                            });
+                        })
                     }
                     d.push({
                         col_type: "blank_block"
