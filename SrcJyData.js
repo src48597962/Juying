@@ -209,7 +209,8 @@ function homepage(datasource){
                         });
                     }
                     if(option_list.label=='明星'){
-                        let act = acts[getMyVar('SrcJuying$明星', '全部')];
+                        let act = acts[getMyVar('SrcJuying$地区', '全部')];
+                        log(act);
                         act.forEach(item => {
                             if($.type(item)!='string'){
                                 item = item.id;
