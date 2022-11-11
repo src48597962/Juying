@@ -53,7 +53,7 @@ let yijimenu = [
     }
 ]
 
-function sougou(){    
+function homepage(){    
     var d = [];
     const Color = "#3399cc";
     const categorys = ['电视剧','电影','动漫','综艺','纪录片'];
