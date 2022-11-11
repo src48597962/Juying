@@ -204,7 +204,7 @@ function homepage(datasource){
                 title: list[i].title,
                 img: img + '@Referer=',
                 url: JYconfig['erjimode']!=2?"hiker://empty##https://www.360kan.com/tv/" + list[i].id + ".html#immersiveTheme##autoCache#":list[i].name + seachurl,
-                desc: list[i].total==list[i].upinfo?"全集"+list[i].total:"连载"+list[i].upinfo+"/"+list[i].total,
+                desc: list[i].total?list[i].total==list[i].upinfo?"全集"+list[i].total:"连载"+list[i].upinfo+"/"+list[i].total:list[i].pubdate,
                 extra: {
                     pic: img,
                     name: list[i].title
