@@ -53,11 +53,11 @@ let yijimenu = [
     }
 ]
 
-function homepage(){    
+function homepage(datasource){    
     var d = [];
     const Color = "#3399cc";
-    const categorys = ['电视剧','电影','动漫','综艺','纪录片'];
-    const listTabs = ['teleplay','film','cartoon','tvshow','documentary'];
+    const categorys = datasource=="sougou"?['电视剧','电影','动漫','综艺','纪录片']:['电视剧','电影','动漫','综艺'];
+    const listTabs = datasource=="sougou"?['teleplay','film','cartoon','tvshow','documentary']:['2','1','4','3'];//['/dianshi/list','/dianying/list','/dongman/list','/zongyi/list'];
     const fold = getMyVar('SrcJuying$fold', "0");
     const 类型 = getMyVar('SrcJuying$类型', '');
     const 地区 = getMyVar('SrcJuying$地区', '');
@@ -65,26 +65,45 @@ function homepage(){
     const 资源 = getMyVar('SrcJuying$资源', '');
     const 明星 = getMyVar('SrcJuying$明星', '');
     const 排序 = getMyVar('SrcJuying$排序', '');
-    MY_URL = "https://waptv.sogou.com/napi/video/classlist?abtest=0&iploc=CN1304&spver=&listTab=" + getMyVar('SrcJuying$listTab', 'teleplay') + "&filter=&start="+ (MY_PAGE-1)*15 +"&len=15&fr=filter";
-
-    if(类型 != ""){
-        MY_URL = MY_URL + "&style=" + 类型;
+    if(datasource=="sougou"){
+        MY_URL = "https://waptv.sogou.com/napi/video/classlist?abtest=0&iploc=CN1304&spver=&listTab=" + getMyVar('SrcJuying$listTab', 'teleplay') + "&filter=&start="+ (MY_PAGE-1)*15 +"&len=15&fr=filter";
+        if(类型 != ""){
+            MY_URL = MY_URL + "&style=" + 类型;
+        }
+        if(地区 != ""){
+            MY_URL = MY_URL + "&zone=" + 地区;
+        }
+        if(年代 != ""){
+            MY_URL = MY_URL + "&year=" + 年代;
+        }
+        if(资源 != ""){
+            MY_URL = MY_URL + "&fee=" + 资源;
+        }
+        if(明星 != ""){
+            MY_URL = MY_URL + "&emcee=" + 明星;
+        }
+        if(排序 != ""){
+            MY_URL = MY_URL + "&order=" + (排序=="最新"?"time":"score");
+        }
+    }else{
+        MY_URL = "https://api.web.360kan.com/v1/filter/list?catid=" + getMyVar('SrcJuying$listTab', '2') + "&size=35&pageno=" + MY_PAGE;
+        if(排序 != ""){
+            MY_URL = MY_URL + "&rank=" + 排序;
+        }
+        if(类型 != ""){
+            MY_URL = MY_URL + "&cat=" + 类型;
+        }
+        if(地区 != ""){
+            MY_URL = MY_URL + "&area=" + 地区;
+        }
+        if(年代 != ""){
+            MY_URL = MY_URL + "&year=" + 年代;
+        }
+        if(明星 != ""){
+            MY_URL = MY_URL + "&act=" + 明星;
+        }
     }
-    if(地区 != ""){
-        MY_URL = MY_URL + "&zone=" + 地区;
-    }
-    if(年代 != ""){
-        MY_URL = MY_URL + "&year=" + 年代;
-    }
-    if(资源 != ""){
-        MY_URL = MY_URL + "&fee=" + 资源;
-    }
-    if(明星 != ""){
-        MY_URL = MY_URL + "&emcee=" + 明星;
-    }
-    if(排序 != ""){
-        MY_URL = MY_URL + "&order=" + (排序=="最新"?"time":"score");
-    }
+    
 
     if(MY_PAGE==1){
         for(var i in yijimenu){
@@ -108,7 +127,7 @@ function homepage(){
         })
         for (var i in categorys) {
             d.push({
-                title: getMyVar('SrcJuying$listTab', 'teleplay') === listTabs[i] ? '““””<b><span style="color:' + Color + '">' + categorys[i] + '</span></b>' : categorys[i],
+                title: getMyVar('SrcJuying$listTab', '2') === listTabs[i] ? '““””<b><span style="color:' + Color + '">' + categorys[i] + '</span></b>' : categorys[i],
                 url: $('#noLoading#').lazyRule((listTab) => {
                         putMyVar('SrcJuying$listTab', listTab);
                         refreshPage(false);
@@ -123,7 +142,7 @@ function homepage(){
         });
         
         var html = JSON.parse(request(MY_URL));
-
+        log(html);
         if(fold==='1'){
             var filter = html.listData.list.filter_list;
             for (var i in filter) {
