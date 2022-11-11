@@ -348,6 +348,7 @@ function erji() {
         clearMyVar('SrcXTNH');
     }));
     clearMyVar('SrcJy$back');
+    /*
     var d = [];
     var html = request(MY_URL.split('##')[1], { headers: { 'User-Agent': PC_UA } });
     var json = JSON.parse(html.match(/INITIAL_STATE.*?({.*});/)[1]).detail.itemData;
@@ -617,6 +618,7 @@ function erji() {
         col_type: 'text_center_1'
     });
     setResult(d);
+    */
     setLastChapterRule('js:' + $.toString(param=>{
         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLastChapter.js');
         sougou();
