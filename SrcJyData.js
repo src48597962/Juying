@@ -55,8 +55,7 @@ let yijimenu = [
 
 function JYerji(){
     let datasource = getItem('JYdatasource', '360');
-    log(MY_URL);
-    MY_URL = MY_URL.split('##')[1].replace('#immersiveTheme','');
+    MY_URL = MY_URL.replace('#immersiveTheme##autoCache#','').split('##')[1];
 
     //取之前足迹记录，用于自动定位之前的线路
     try {
@@ -69,6 +68,7 @@ function JYerji(){
         }
     } catch (e) { }
     var Marksum = 30;//设置记录线路足迹数量
+
     var urlline = getMyVar(MY_URL, typeof(SrcMarkline) != "undefined"?SrcMarkline:'0');
     var d = [];
     var html = request(datasource=='sougou'?MY_URL:MY_URL+'&site='+MY_PARAMS.sites[urlline], { headers: { 'User-Agent': PC_UA } });
@@ -122,10 +122,17 @@ function JYerji(){
                 if(parseInt(onenum)>20){
                     json = JSON.parse(request(MY_URL+'&start=1&end='+onenum, { headers: { 'User-Agent': PC_UA } })).data;
                 }
-                let onelist = json.allepidetail[sitename];
-                onelist = onelist.map(item=>{
-                    return item.playlink_num+'$'+item.url;
-                })
+                if(json.allepidetail&&json.playlinksdetail){
+                    var onelist = json.allepidetail[sitename];
+                    onelist = onelist.map(item=>{
+                        return item.playlink_num+'$'+item.url;
+                    })
+                }else{
+                    var onelist = json.playlinksdetail[sitename];
+                    onelist = onelist.map(item=>{
+                        return sitename+'$'+item.default_url;
+                    })
+                }
                 lists.push(onelist);
             }else{
                 lists.push([]);
