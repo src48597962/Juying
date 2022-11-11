@@ -142,8 +142,10 @@ function homepage(datasource){
         });
         
         var html = JSON.parse(request(MY_URL));
-        /*
+        
         if(fold==='1'){
+            let filterjs = request('https://s.ssl.qhres2.com/static/3deb65e2c118233e.js');
+            let filter1 = filterjs.match(//);
             var filter = html.listData.list.filter_list;
             for (var i in filter) {
                 d.push({
@@ -171,7 +173,7 @@ function homepage(datasource){
                     col_type: "blank_block"
                 });
             }
-        }*/
+        }
     }else{
         var html = JSON.parse(request(MY_URL));
     }
@@ -181,7 +183,7 @@ function homepage(datasource){
             xunmi(name);
         }, input);
     });
-    log(html);
+
     if(datasource=="sougou"){
         var list = html.listData.results;
         for (var i in list) {
@@ -204,7 +206,7 @@ function homepage(datasource){
                 title: list[i].title,
                 img: img + '@Referer=',
                 url: JYconfig['erjimode']!=2?"hiker://empty##https://www.360kan.com/tv/" + list[i].id + ".html#immersiveTheme##autoCache#":list[i].name + seachurl,
-                desc: list[i].total?list[i].total==list[i].upinfo?"全集"+list[i].total:"连载"+list[i].upinfo+"/"+list[i].total:list[i].tag?list[i].tag:list[i].pubdate,
+                desc: list[i].total?list[i].total==list[i].upinfo?"全集"+list[i].total:"连载"+list[i].upinfo+"/"+list[i].total:list[i].tag?list[i].tag:list[i].doubanscore?list[i].doubanscore:"",
                 extra: {
                     pic: img,
                     name: list[i].title
