@@ -129,13 +129,12 @@ function homepage(datasource){
                 title: getMyVar('SrcJuying$listTab', '2') === listTabs[i] ? '““””<b><span style="color:' + Color + '">' + categorys[i] + '</span></b>' : categorys[i],
                 url: $('#noLoading#').lazyRule((listTab) => {
                         putMyVar('SrcJuying$listTab', listTab);
-                        if(getMyVar('SrcJuying$排序', '')=="rankpoint"&&(getMyVar('SrcJuying$listTab')=="3"||getMyVar('SrcJuying$listTab')=="4")){
-                            clearMyVar('SrcJuying$类型');
-                            clearMyVar('SrcJuying$地区');
-                            clearMyVar('SrcJuying$年代');
-                            clearMyVar('SrcJuying$明星');
-                            clearMyVar('SrcJuying$排序');//360需要的
-                        }
+                        clearMyVar('SrcJuying$类型');
+                        clearMyVar('SrcJuying$地区');
+                        clearMyVar('SrcJuying$年代');
+                        clearMyVar('SrcJuying$资源');
+                        clearMyVar('SrcJuying$明星');
+                        clearMyVar('SrcJuying$排序');
                         refreshPage(false);
                         return "hiker://empty";
                     }, listTabs[i]),
