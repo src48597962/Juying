@@ -103,7 +103,6 @@ function homepage(datasource){
             MY_URL = MY_URL + "&act=" + 明星;
         }
     }
-    
 
     if(MY_PAGE==1){
         for(var i in yijimenu){
@@ -131,7 +130,7 @@ function homepage(datasource){
                 url: $('#noLoading#').lazyRule((listTab) => {
                         putMyVar('SrcJuying$listTab', listTab);
                         if(getMyVar('SrcJuying$排序', '')=="rankpoint"&&(getMyVar('SrcJuying$listTab')=="3"||getMyVar('SrcJuying$listTab')=="4")){
-                            clearMyVar('SrcJuying$排序');
+                            clearMyVar('SrcJuying$排序');//360需要的
                         }
                         refreshPage(false);
                         return "hiker://empty";
@@ -176,18 +175,25 @@ function homepage(datasource){
                     });
                 }
             }else{
-                //let filterjs = request('https://s.ssl.qhres2.com/static/3deb65e2c118233e.js');
-                //let filter1 = filterjs.match(//);
-                let rank = [{title:"最近热映",id:"rankhot"},{title:"最近上映",id:"ranklatest"},{title:"最受好评",id:"rankpoint"}];
-                for (let i in rank) {
+                let filterjs = fetchCache('https://s.ssl.qhres2.com/static/3deb65e2c118233e.js',168);
+                let filters = filterjs.split(`defaultId:"rankhot"},`);//filterjs.match(/defaultId:\"rankhot\"\},(.*?),o=i/)[1];
+                filters.splice(0,1);
+                filters = filters.map(item=>{
+                    return '['+(item.split(',o=i')[0].split(',r=i')[0])+'}]'
+                })
+                listTabs.indexOf(getMyVar('SrcJuying$listTab', '2'))
+                log(filters[listTabs.indexOf(getMyVar('SrcJuying$listTab', '2'))]);
+
+                let ranks = [{title:"最近热映",id:"rankhot"},{title:"最近上映",id:"ranklatest"},{title:"最受好评",id:"rankpoint"}];
+                for (let i in ranks) {
                     if(i<2||(getMyVar('SrcJuying$listTab', '2')=='1' || getMyVar('SrcJuying$listTab', '2')=='2')){
                         d.push({
-                            title: getMyVar('SrcJuying$排序', 'rankhot')==rank[i].id?'““””<span style="color:red">'+rank[i].title+'</span>':rank[i].title,
+                            title: getMyVar('SrcJuying$排序', 'rankhot')==ranks[i].id?'““””<span style="color:red">'+ranks[i].title+'</span>':ranks[i].title,
                             url: $('#noLoading#').lazyRule((id) => {
                                     putMyVar('SrcJuying$排序', id);
                                     refreshPage(false);
                                     return "hiker://empty";
-                                }, rank[i].id),
+                                }, ranks[i].id),
                             col_type: 'scroll_button'
                         });
                     }
