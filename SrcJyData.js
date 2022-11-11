@@ -184,7 +184,7 @@ function homepage(datasource){
                 let filter = filters[listTabs.indexOf(getMyVar('SrcJuying$listTab', '2'))];
                 if(getMyVar('SrcJuying$listTab', '2')=='1' || getMyVar('SrcJuying$listTab', '2')=='2'){
                     var acts = filter.split(',d=')[1];
-                    filter = filter.split(',d=')[0];
+                    filter = filter.split(',d=')[0]||[];
                 }
                 log(filter);
                 log(filter[0]);
