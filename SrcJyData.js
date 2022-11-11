@@ -57,9 +57,9 @@ function JYerji(){
     let datasource = getItem('JYdatasource', '360');
     MY_URL = MY_URL.split('##')[1].replace('#immersiveTheme','');
     var d = [];
-    let myurl = datasource=="sougou"?MY_URL:MY_URL+(getMyVar(MY_URL, '0')=='0'?"":"&site="+getMyVar(MY_URL+'linename', ''));
+    let myurl = datasource=="sougou"?MY_URL:MY_URL+(getMyVar(MY_URL, '0')=='0'?"":"&site="+getMyVar(MY_URL.split('&site=')[0]+'linename', ''));
     var html = request(myurl, { headers: { 'User-Agent': PC_UA } });
-    log(MY_URL+(getMyVar(MY_URL, '0')=='0'?"":"&site="+getMyVar(MY_URL+'linename', '')));
+    log(MY_URL+(getMyVar(MY_URL, '0')=='0'?"":"&site="+getMyVar(MY_URL.split('&site=')[0]+'linename', '')));
     
     let json = datasource=="sougou"?JSON.parse(html.match(/INITIAL_STATE.*?({.*});/)[1]).detail.itemData:JSON.parse(html).data;
     let plays = datasource=="sougou"?json.play.item_list:[];
@@ -183,6 +183,7 @@ function JYerji(){
                             if (key > Marksum) { delete SrcMark.route[one]; }
                             writeFile("hiker://files/cache/SrcMark.json", JSON.stringify(SrcMark));
                             putMyVar(vari, i);
+                            log(input);
                             putMyVar(vari+'linename', input);
                             refreshPage(false);
                             return 'toast://切换成功'
