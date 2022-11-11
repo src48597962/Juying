@@ -114,7 +114,6 @@ function JYerji(){
                 lists.push([]);
             }
         }
-        lists = json.allepidetail[tabs[parseInt(getMyVar(vari, '0'))]];
     }
     
 
