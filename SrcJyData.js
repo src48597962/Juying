@@ -108,9 +108,7 @@ function JYerji(){
                 let sitename = tabs[i];
                 let onenum = playnum[sitename]||'0';
                 if(getMyVar(MY_URL, '0')=='0'&&parseInt(onenum)>20){
-                    log(myurl+'&start=1&end='+onenum);
-                    json = JSON.parse(request(myurl+'&start=1&end='+onenum, { headers: { 'User-Agent': PC_UA } }));
-                    log(json);
+                    json = JSON.parse(request(myurl+'&start=1&end='+onenum+'&site='+sitename, { headers: { 'User-Agent': PC_UA } }));
                 }
                 let onelist = json.allepidetail[sitename];
                 onelist = onelist.map(item=>{
