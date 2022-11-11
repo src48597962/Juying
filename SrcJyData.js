@@ -127,6 +127,7 @@ function JYerji(){
                         let start = 1 + (200 * i);
                         let end = 200 + (200 * i);
                         if(end>listlength){end = listlength;}
+                        log(MY_URL+'&start='+start+'&end='+end+'&site='+sitename)
                         json = JSON.parse(request(MY_URL+'&start='+start+'&end='+end+'&site='+sitename, { headers: { 'User-Agent': PC_UA } })).data;
                         let forlist = json.allepidetail[sitename];
                         forlist = forlist.map(item=>{
