@@ -190,8 +190,9 @@ function homepage(datasource){
                 for(let i in filter){
                     let option_list = filter[i].data;
                     for (let j in option_list) {
+                        let optionname = option_list[j].id?option_list[j].id:option_list[j].title;
                         d.push({
-                            title: getMyVar('SrcJuying$'+filter[i].label, '')==option_list[j].id?'““””<span style="color:red">'+option_list[j].id+'</span>':option_list[j].id,
+                            title: getMyVar('SrcJuying$'+filter[i].label, '全部')==optionname?'““””<span style="color:red">'+optionname+'</span>':optionname,
                             url: $('#noLoading#').lazyRule((name,option) => {
                                     putMyVar('SrcJuying$'+name, option);
                                     refreshPage(false);
