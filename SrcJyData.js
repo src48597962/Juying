@@ -58,7 +58,7 @@ function JYerji(){
     var d = [];
     let myurl = datasource=="sougou"?MY_URL.split('##')[1]:MY_URL.split('##')[1]+(getMyVar(MY_URL, '0')=='0'?"":"&site="+getMyVar(MY_URL+'linename', ''));
     var html = request(myurl, { headers: { 'User-Agent': PC_UA } });
-    //log(html);
+    log(MY_URL.split('##')[1]+(getMyVar(MY_URL, '0')=='0'?"":"&site="+getMyVar(MY_URL+'linename', '')));
     
     let json = datasource=="sougou"?JSON.parse(html.match(/INITIAL_STATE.*?({.*});/)[1]).detail.itemData:JSON.parse(html).data;
     let plays = datasource=="sougou"?json.play.item_list:[];
