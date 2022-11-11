@@ -348,6 +348,8 @@ function erji() {
         clearMyVar('SrcXTNH');
     }));
     clearMyVar('SrcJy$back');
+    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
+    erji('360');
     /*
     var d = [];
     var html = request(MY_URL.split('##')[1], { headers: { 'User-Agent': PC_UA } });
@@ -647,7 +649,7 @@ function yiji() {
     */
     clearMyVar('SrcJy$back');
     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
-    homepage('360');
+    yiji('360');
     if(getMyVar('jydingyue','0')=="0"&&JYconfig['codedyid']&&JYconfig['codeid']!=JYconfig['codedyid']){
         putMyVar('jydingyue','1');
         try{
