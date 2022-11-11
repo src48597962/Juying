@@ -644,6 +644,7 @@ function yiji() {
     }
     */
     clearMyVar('SrcJy$back');
+    /*
     var d = [];
     const Color = "#3399cc";
     const categorys = ['电视剧','电影','动漫','综艺','纪录片'];
@@ -816,6 +817,9 @@ function yiji() {
     }
 
     setResult(d);
+    */
+    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
+    sougou();
     if(getMyVar('jydingyue','0')=="0"&&JYconfig['codedyid']&&JYconfig['codeid']!=JYconfig['codedyid']){
         putMyVar('jydingyue','1');
         try{
