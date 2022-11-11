@@ -123,6 +123,7 @@ function JYerji(){
                     let getlist = [];
                     let listlength = sitelist[sitename];
                     let fornum = parseInt(listlength/200);
+                    log(fornum)
                     for(let i=0;i<fornum-1;i++){
                         let start = 1 + (200 * i);
                         let end = 200 + (200 * i);
