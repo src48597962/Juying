@@ -113,14 +113,14 @@ function JYerji(){
             tabs.push(plays[i].sitename[0]);
         }
     }else{
-        let playnum = json.allupinfo||[];
+        let playnum = json.allupinfo;
         let playlist = [];
         tabs = json.playlink_sites;
         for(let i in tabs){
             let sitename = tabs[i];
             if(json.allepidetail){
                 if(parseInt(urlline)==i){
-                    let onenum = playnum.length>0?playnum[sitename]||'0':'0';
+                    let onenum = playnum[sitename];
                     log(MY_URL+'&start=1&end='+onenum+'&site='+sitename)
                     json = JSON.parse(request(MY_URL+'&start=1&end='+onenum+'&site='+sitename, { headers: { 'User-Agent': PC_UA } })).data;
                     log(json)
