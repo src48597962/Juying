@@ -158,7 +158,7 @@ function JYerji(){
         })
         for (var i in tabs) {
             if (tabs[i] != "") {
-                let lineparam = datasource=='sougou'?'':tabs[i]+'&start=1&end='+playnum[i];
+                let lineparam = datasource=='sougou'?'':tabs[i]+'&start=1&end='+playnum[tabs[i]];
                 d.push({
                     title: getMyVar(vari, '0') == i ? getHead(tabs[i] + '↓') : tabs[i],
                     url: $("#noLoading#").lazyRule((vari, i, Marksum, lineparam) => {
