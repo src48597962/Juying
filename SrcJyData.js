@@ -57,11 +57,14 @@ function erji(datasource){
     var d = [];
     var html = request(MY_URL.split('##')[1], { headers: { 'User-Agent': PC_UA } });
     log(html);
-    var json = JSON.parse(html.match(/INITIAL_STATE.*?({.*});/)[1]).detail.itemData;
-    var plays = json.play.item_list;
-    //log(plays);
-    var shows = json.play_from_open_index;
-    //log(shows);
+    if(datasource=="sougou"){
+        var json = JSON.parse(html.match(/INITIAL_STATE.*?({.*});/)[1]).detail.itemData;
+        var plays = json.play.item_list;
+        //log(plays);
+        var shows = json.play_from_open_index;
+        //log(shows);
+    }
+    
     
     let actor = json.starring?'演员：'+json.starring : json.emcee?'主持：'+json.emcee:'内详';
     let director = json.director?'导演：'+json.director : json.tv_station?json.tv_station:'内详';
@@ -555,7 +558,7 @@ function yiji(datasource){
             d.push({
                 title: list[i].title,
                 img: img + '@Referer=',
-                url: JYconfig['erjimode']!=2?"hiker://empty##https://api.web.360kan.com/v1/detail?cat="+getMyVar('SrcJuying$listTab', '2')+"&id" + list[i].id + "#immersiveTheme##autoCache#":list[i].name + seachurl,
+                url: JYconfig['erjimode']!=2?"hiker://empty##https://api.web.360kan.com/v1/detail?cat="+getMyVar('SrcJuying$listTab', '2')+"&id=" + list[i].id + "#immersiveTheme##autoCache#":list[i].name + seachurl,
                 desc: list[i].total?list[i].total==list[i].upinfo?"全集"+list[i].total:"连载"+list[i].upinfo+"/"+list[i].total:list[i].tag?list[i].tag:list[i].doubanscore?list[i].doubanscore:"",
                 extra: {
                     pic: img,
