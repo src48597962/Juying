@@ -186,9 +186,9 @@ function homepage(datasource){
                     var acts = filter.split(',d=')[1];
                     filter = filter.split(',d=')[0];
                 }
-                log(filter);
+                //log(filter);
                 for(let i in filter){
-                    let option_list = filter[i].data;
+                    let option_list = JSON.parse(filter[i]).data;
                     log(option_list)
                     for (let j in option_list) {
                         d.push({
