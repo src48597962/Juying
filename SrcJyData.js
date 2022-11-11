@@ -181,6 +181,7 @@ function homepage(datasource){
             xunmi(name);
         }, input);
     });
+    log(html);
     if(datasource=="sougou"){
         var list = html.listData.results;
         for (var i in list) {
