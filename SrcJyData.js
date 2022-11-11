@@ -179,10 +179,13 @@ function homepage(datasource){
                 let filters = filterjs.split(`defaultId:"rankhot"},`);//filterjs.match(/defaultId:\"rankhot\"\},(.*?),o=i/)[1];
                 filters.splice(0,1);
                 filters = filters.map(item=>{
-                    return '['+(item.split(',o=i')[0].split(',r=i')[0])+'}]'
+                    return '['+(item.split(',o=i')[0].split(',r=i')[0])
                 })
-                listTabs.indexOf(getMyVar('SrcJuying$listTab', '2'))
-                log(filters[listTabs.indexOf(getMyVar('SrcJuying$listTab', '2'))]);
+                let filter = filters[listTabs.indexOf(getMyVar('SrcJuying$listTab', '2'))];
+                if(getMyVar('SrcJuying$listTab', '2')=='1' || getMyVar('SrcJuying$listTab', '2')=='2'){
+                    var acts = filter.split(',d=')[1];
+                }
+                log(acts);
 
                 let ranks = [{title:"最近热映",id:"rankhot"},{title:"最近上映",id:"ranklatest"},{title:"最受好评",id:"rankpoint"}];
                 for (let i in ranks) {
