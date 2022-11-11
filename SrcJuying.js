@@ -820,7 +820,6 @@ function sousuo() {
             xunmi(name,false,true);
         }catch(e){}
     }
-    
 }
 
 //版本检测
