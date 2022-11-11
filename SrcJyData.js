@@ -177,9 +177,9 @@ function homepage(datasource){
                 //let filter1 = filterjs.match(//);
                 let rank = [{title:"最近热映",id:"rankhot"},{title:"最近上映",id:"ranklatest"},{title:"最受好评",id:"rankpoint"}];
                 for (let i in rank) {
-                    if(i<2||(getMyVar('SrcJuying$listTab', '')=='1' || getMyVar('SrcJuying$listTab', '')=='2')){
+                    if(i<2||(getMyVar('SrcJuying$listTab', '2')=='1' || getMyVar('SrcJuying$listTab', '2')=='2')){
                         d.push({
-                            title: getMyVar('SrcJuying$排序', '')==rank[i].id?'““””<span style="color:red">'+rank[i].title+'</span>':rank[i].title,
+                            title: getMyVar('SrcJuying$排序', 'rankhot')==rank[i].id?'““””<span style="color:red">'+rank[i].title+'</span>':rank[i].title,
                             url: $('#noLoading#').lazyRule((id) => {
                                     putMyVar('SrcJuying$排序', id);
                                     refreshPage(false);
