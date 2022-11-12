@@ -795,34 +795,11 @@ function sousuo() {
         eval("var JYconfig=" + Juyingcfg+ ";");
     }
     if(!fileExist('hiker://files/rules/Src/Juying/jiekou.json')||JYconfig.sousuoms==1){
-        /*
-        var d = [];
-        var html = getResCode();
-        try {
-            var list = JSON.parse(html.match(/INITIAL_STATE.*?({.*});/)[1]).result.longVideo.results;
-            for (var i = 0; i < list.length; i++) {
-                if (list[i].play.item_list){
-                    d.push({
-                        title: list[i].name.replace(/|/g,''),
-                        url: 'hiker://empty##https://v.sogou.com' + list[i].tiny_url + "#immersiveTheme#",
-                        desc: list[i].list_category.join(','),
-                        content: list[i].introduction,
-                        pic_url: list[i].v_picurl,
-                        extra: {
-                            pic: list[i].v_picurl,
-                            name: list[i].name.replace(/|/g,'')
-                        }
-                    })
-                }
-            }
-        } catch (e) { }
-        setResult(d);
-        */
         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
         JYsousuo();
     }else{
         try{
-            let name = MY_URL.match(/query=(.*?)&/)[1];
+            let name = MY_URL.split('##')[1];
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
             xunmi(name,false,true);
         }catch(e){}
