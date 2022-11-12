@@ -2005,6 +2005,7 @@ function extension(){
                     setItem('JYdatasource', 'sougou');
                     var sm = "聚影主页数据源切换为sougou";
                 }
+                clearMyVar('SrcJuying$listTab');
                 clearMyVar('SrcJuying$类型');
                 clearMyVar('SrcJuying$地区');
                 clearMyVar('SrcJuying$年代');
