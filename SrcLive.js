@@ -43,12 +43,16 @@ function Live() {
             }
         }
         if(JYlivedyurl!="juying"){
-            showLoading('发现订阅源，正在初始化');
-            let YChtml = fetchCache(JYlivedyurl,24,{timeout:3000}).replace(/TV-/g,'TV').replace(/\[.*\]/g,'');
-            if(YChtml.indexOf('#genre#')>-1){
-                JYlive = YChtml;
+            try{
+                showLoading('发现订阅源，正在初始化');
+                let YChtml = fetchCache(JYlivedyurl,48,{timeout:3000}).replace(/TV-/g,'TV').replace(/\[.*\]/g,'');
+                if(YChtml.indexOf('#genre#')>-1){
+                    JYlive = YChtml;
+                }
+                hideLoading();
+            }catch(e){
+                log(e.message);
             }
-            hideLoading();
         }
     }
 
