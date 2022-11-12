@@ -406,11 +406,12 @@ function JYerji(){
                     for (var j = 0; j < list.length; j++) {
                         let name = datasource=="sougou"?list[j].index:list[j].split('$')[0];
                         let url = datasource=="sougou"?'https://v.sogou.com' + list[j].url:list[j].split('$')[1];
+                        let urlid = datasource=="sougou"?MY_URL+j:url;
                         if (name != '0') {
                             d.push({
                                 title: name + '',
                                 url: url + easy,
-                                extra: { id: MY_URL+j, jsLoadingInject: true, cacheM3u8: getMyVar('superwebM3U8')=="1"?true:false, blockRules: block },
+                                extra: { id: urlid, jsLoadingInject: true, cacheM3u8: getMyVar('superwebM3U8')=="1"?true:false, blockRules: block },
                                 col_type: listonename.length>6?'text_2':'text_4'
                             });
                         }
