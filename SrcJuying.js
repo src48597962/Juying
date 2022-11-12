@@ -366,7 +366,7 @@ function yiji() {
         clearMyVar('isverifyA');
     }));
     */
-
+    /*
     if(MY_RULE.version<9){
         confirm({
             title: "温馨提示",
@@ -379,7 +379,7 @@ function yiji() {
             })
         });
     }
-        
+    */  
     clearMyVar('SrcJy$back');
     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
     JYyiji();
