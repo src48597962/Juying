@@ -72,6 +72,7 @@ function JYerji(){
     var urlline = getMyVar(MY_URL, typeof(SrcMarkline) != "undefined"?SrcMarkline:'0');
     var d = [];
     var html = request(MY_URL, { headers: { 'User-Agent': PC_UA } });
+    log(html)
     let json = datasource=="sougou"?JSON.parse(html.match(/INITIAL_STATE.*?({.*});/)[1]).detail.itemData:JSON.parse(html).data;
     let plays = datasource=="sougou"?json.play.item_list:[];
     let shows = datasource=="sougou"?json.play_from_open_index:'';
@@ -146,7 +147,7 @@ function JYerji(){
                 var isline = 1;
             }else{
                 let getlist = json.playlinksdetail[sitename];
-                getlist = sitename+'$'+onelist.default_url
+                getlist = sitename+'$'+getlist.default_url
                 playlist.push(getlist);
                 var isline = 0;
             }
