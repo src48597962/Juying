@@ -156,6 +156,7 @@ function JYerji(){
                     urllist = urllist.map(item=>{
                         return item.period+'$'+item.url;
                     })
+                    lists.push(urllist);
                 }else{
                     lists.push([]);
                 }
