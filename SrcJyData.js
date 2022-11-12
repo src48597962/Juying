@@ -516,7 +516,7 @@ function JYyiji(){
                         eval('var acts = ' + filterstr.split(',d=')[1]);
                         filterstr = filterstr.split(',d=')[0];
                     }
-                    eval('var filter = ' + filtevarrstr);
+                    eval('var filter = ' + filterstr);
                 }catch(e){
                     log(e.message);
                     var filter = [];
