@@ -53,7 +53,7 @@ let yijimenu = [
     }
 ]
 function JYsousuo(){
-    let datasource = getItem('JYdatasource', 'sougou');
+    let datasource = MY_PARAMS.datasource||getItem('JYdatasource', 'sougou');
     var d = [];
     if(!/^hiker/.test(MY_URL)){
         var html = getResCode();
@@ -89,7 +89,7 @@ function JYsousuo(){
     setResult(d);
 }
 function JYerji(){
-    let datasource = getItem('JYdatasource', 'sougou');
+    let datasource = MY_PARAMS.datasource||getItem('JYdatasource', 'sougou');
     MY_URL = MY_URL.replace('#immersiveTheme##autoCache#','').split('##')[1];
 
     //取之前足迹记录，用于自动定位之前的线路
@@ -477,7 +477,7 @@ function JYerji(){
     setResult(d);
 }
 function JYyiji(){    
-    let datasource = getItem('JYdatasource', 'sougou');
+    let datasource = MY_PARAMS.datasource||getItem('JYdatasource', 'sougou');
     var d = [];
     const Color = "#3399cc";
     const categorys = datasource=="sougou"?['电视剧','电影','动漫','综艺','纪录片']:['电视剧','电影','动漫','综艺'];
