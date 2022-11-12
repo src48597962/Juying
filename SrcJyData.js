@@ -52,7 +52,36 @@ let yijimenu = [
         col_type: 'line'
     }
 ]
-
+function JYsousuo(){
+    let datasource = getItem('JYdatasource', 'sougou');
+    var d = [];
+    if(!/^hiker/.test(MY_URL)){
+        var html = getResCode();
+        datasource = 'sougou';
+    }else{
+        MY_URL = datasource=='sougou'?'https://v.sogou.com/v?query=**&typemask=6&p=&dp=&dr=&_asf=v.sogou.com&enter=1&ie=utf8':'https://api.so.360kan.com/index?force_v=1&kw=**&pageno=fypage&v_ap=1&tab=all';
+        var html = request(MY_URL, { headers: { 'User-Agent': PC_UA } });
+    }
+    try {
+        var list = datasource=='sougou'?JSON.parse(html.match(/INITIAL_STATE.*?({.*});/)[1]).result.longVideo.results:JSON.parse(html).data.longData.rows;
+        list.forEach(item => {
+            try{
+                d.push({
+                    title: datasource=='sougou'?item.name.replace(/|/g,''):item.titleTxt,
+                    url: 'hiker://empty##'+(datasource=='sougou'?('https://v.sogou.com' + item.tiny_url):('https://api.web.360kan.com/v1/detail?cat=' + item.cat_id + '&id=' + item.en_id)) + '#immersiveTheme##autoCache#',
+                    desc: datasource=='sougou'?item.list_category.join(','):item.coverInfo.txt,
+                    content: datasource=='sougou'?item.introduction:(item.tag+'\n'+item.area+'  '+item.year),
+                    img: datasource=='sougou'?(item.v_picurl + '@Referer='):(item.cover + '@Referer='),
+                    extra: {
+                        pic: datasource=='sougou'?item.v_picurl:item.cover,
+                        name: datasource=='sougou'?item.name.replace(/|/g,''):item.titleTxt
+                    }
+                })
+            }catch(e){}
+        })
+    } catch (e) { }
+    setResult(d);
+}
 function JYerji(){
     let datasource = getItem('JYdatasource', 'sougou');
     MY_URL = MY_URL.replace('#immersiveTheme##autoCache#','').split('##')[1];
@@ -72,7 +101,7 @@ function JYerji(){
     var lineindex = getMyVar(MY_URL, typeof(SrcMarkline) != "undefined"?SrcMarkline:'0');
     var d = [];
     var html = request(MY_URL, { headers: { 'User-Agent': PC_UA } });
-    log(html)
+
     let json = datasource=="sougou"?JSON.parse(html.match(/INITIAL_STATE.*?({.*});/)[1]).detail.itemData:JSON.parse(html).data;
     let plays = datasource=="sougou"?json.play.item_list:[];
     let shows = datasource=="sougou"?json.play_from_open_index:'';
@@ -505,7 +534,7 @@ function JYyiji(){
                 }
             }else{
                 try{
-                    let filterjs = fetchCache('https://s.ssl.qhres2.com/static/3deb65e2c118233e.js',168,{timeout:2000});
+                    let filterjs = fetchCache('https://s.ssl.qhres2.com/static/3deb65e2c118233e.js',360,{timeout:2000});
                     let filters = filterjs.split(`defaultId:"rankhot"},`);//filterjs.match(/defaultId:\"rankhot\"\},(.*?),o=i/)[1];
                     filters.splice(0,1);
                     filters = filters.map(item=>{
