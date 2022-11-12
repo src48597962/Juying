@@ -204,8 +204,10 @@ function JYerji(){
         }
         if(isline==0){
             lists.push(playlist);
-            tabs = [];
-            isline = 1;
+            if(getItem('enabledpush', '') == '1'){
+                tabs = [];
+                isline = 1;
+            }
         }
     }
     
