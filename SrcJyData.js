@@ -116,6 +116,7 @@ function JYerji(){
         let sitelist = json.allupinfo;
         let playlist = [];
         tabs = json.playlink_sites;
+        log(json);
         for(let i in tabs){
             let sitename = tabs[i];
             if(json.allepidetail){
