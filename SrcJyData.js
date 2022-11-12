@@ -573,7 +573,7 @@ function JYyiji(){
                     }
 
                     if(typeof(acts) != "undefined" && filter[i].label=='明星'){
-                        let act = acts[getMyVar('SrcJuying$地区', '全部')]||acts['全部'];
+                        let act = acts[getMyVar('SrcJuying$地区', '全部')]||acts['中国'+getMyVar('SrcJuying$地区', '全部')]||acts['全部'];
                         act.forEach(item => {
                             if($.type(item)!='string'){
                                 item = item.id;
