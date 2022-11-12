@@ -62,7 +62,11 @@ function JYsousuo(){
         let wd = MY_URL.split('##')[1];
         let page = MY_URL.split('##')[2];
         MY_URL = datasource=='sougou'?('https://v.sogou.com/v?query='+wd+'&typemask=6&p=&dp=&dr=&_asf=v.sogou.com&enter=1&ie=utf8'):('https://api.so.360kan.com/index?force_v=1&kw='+wd+'&pageno='+page+'&v_ap=1&tab=all');
-        var html = request(MY_URL, { headers: { 'User-Agent': PC_UA } });
+        if((datasource=='sougou'&&page==1)||datasource=='360'){
+            var html = request(MY_URL, { headers: { 'User-Agent': PC_UA } });
+        }else{
+            var html = "";
+        }
     }
     try {
         var list = datasource=='sougou'?JSON.parse(html.match(/INITIAL_STATE.*?({.*});/)[1]).result.longVideo.results:JSON.parse(html).data.longData.rows;
