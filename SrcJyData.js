@@ -272,7 +272,7 @@ function JYerji(){
         //推送tvbox
         if(getItem('enabledpush', '') == '1' && datasource == "360"){
             let push = {
-                "name": MY_PARAMS.title||'聚影',
+                "name": MY_PARAMS.name||'聚影',
                 "pic": pic.split('@')[0],
                 "content": desc,
                 "director": details1.split('\n')[0].replace('导演：',''),
