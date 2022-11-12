@@ -51,6 +51,7 @@ function Live() {
                 }
                 hideLoading();
             }catch(e){
+                hideLoading();
                 log(e.message);
             }
         }
