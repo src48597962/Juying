@@ -53,7 +53,6 @@ function Live() {
             }catch(e){
                 hideLoading();
                 log(e.message);
-                return "toast://当前订阅访问异常";
             }
         }
     }
