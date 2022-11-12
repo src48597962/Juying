@@ -59,7 +59,9 @@ function JYsousuo(){
         var html = getResCode();
         datasource = 'sougou';
     }else{
-        MY_URL = datasource=='sougou'?'https://v.sogou.com/v?query=**&typemask=6&p=&dp=&dr=&_asf=v.sogou.com&enter=1&ie=utf8':'https://api.so.360kan.com/index?force_v=1&kw=**&pageno=fypage&v_ap=1&tab=all';
+        let wd = MY_URL.split('##')[1];
+        let page = MY_URL.split('##')[2];
+        MY_URL = datasource=='sougou'?('https://v.sogou.com/v?query='+wd+'&typemask=6&p=&dp=&dr=&_asf=v.sogou.com&enter=1&ie=utf8'):('https://api.so.360kan.com/index?force_v=1&kw='+wd+'&pageno='+page+'&v_ap=1&tab=all');
         var html = request(MY_URL, { headers: { 'User-Agent': PC_UA } });
     }
     try {
