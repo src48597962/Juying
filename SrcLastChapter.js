@@ -30,6 +30,7 @@ function sougou() {
     }catch(e){
         log('获取最新失败>'+e.message);
         var list = [];
+        setResult('');
     }
     
     if(list&&list.length > 0){
@@ -56,6 +57,8 @@ function sougou() {
             }
         }
         setResult('更新至：' + arr[arr.length-1]);
+    }else{
+        setResult('');
     }
 }
 
