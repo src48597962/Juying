@@ -532,9 +532,11 @@ function sousuo() {
         JYsousuo();
     }else{
         try{
-            let name = MY_URL.split('##')[1];
-            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
-            xunmi(name,false,true);
+            if(MY_PAGE==1){
+                let name = MY_URL.split('##')[1];
+                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
+                xunmi(name,false,true);
+            }
         }catch(e){}
     }
 }
