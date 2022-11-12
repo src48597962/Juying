@@ -1996,7 +1996,7 @@ function extension(){
         col_type: "rich_text"
     });
     d.push({
-        title: getItem('JYdatasource', 'sougou')=="sougou"?'聚影主页数据调用：搜狗':'聚影主页数据调用：360',
+        title: getItem('JYdatasource', 'sougou')=="sougou"?'主页数据调用：搜狗':'主页数据调用：360',
         url: $('#noLoading#').lazyRule(() => {
                 if(getItem('JYdatasource', 'sougou')=="sougou"){
                     setItem('JYdatasource', '360');
@@ -2111,7 +2111,7 @@ function extension(){
         col_type: "line"
     });
     d.push({
-        title: JYconfig['sousuoms']==1?'搜索数据来源：搜狗':'搜索数据来源：接口',
+        title: JYconfig['sousuoms']==1?'搜索数据来源：'+(getItem('JYdatasource', 'sougou')=="sougou"?'搜狗':'360'):'搜索数据来源：接口',
         desc: JYconfig['sousuoms']==1?'视界原生搜索按钮改为调用搜狗搜索影片':'视界原生搜索按钮改为调用接口聚搜影片',
         url: $('#noLoading#').lazyRule((JYconfig,cfgfile) => {
                 if(JYconfig['sousuoms'] == 2){
