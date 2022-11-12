@@ -71,7 +71,7 @@ function JYsousuo(){
                 d.push({
                     title: datasource=='sougou'?item.name.replace(/|/g,''):item.titleTxt,
                     url: 'hiker://empty##'+(datasource=='sougou'?('https://v.sogou.com' + item.tiny_url):('https://api.web.360kan.com/v1/detail?cat=' + item.cat_id + '&id=' + item.en_id)) + '#immersiveTheme##autoCache#',
-                    desc: datasource=='sougou'?item.list_category.join(','):(item.year+','+item.area+','+item.tag+item.coverInfo.txt),
+                    desc: datasource=='sougou'?item.list_category.join(','):(item.year+','+item.area+','+item.coverInfo.txt),
                     content: datasource=='sougou'?item.introduction:item.description,
                     img: datasource=='sougou'?(item.v_picurl + '@Referer='):(item.cover + '@Referer='),
                     extra: {
@@ -647,7 +647,7 @@ function JYyiji(){
                 title: list[i].title,
                 img: img + '@Referer=',
                 url: JYconfig['erjimode']!=2?"hiker://empty##https://api.web.360kan.com/v1/detail?cat="+getMyVar('SrcJuying$listTab', '2')+"&id=" + list[i].id + "#immersiveTheme##autoCache#":list[i].name + seachurl,
-                desc: list[i].total?list[i].total==list[i].upinfo?"全集"+list[i].total:"连载"+list[i].upinfo+"/"+list[i].total:list[i].tag?list[i].tag:list[i].doubanscore?list[i].doubanscore:"",
+                desc: list[i].total?list[i].total==list[i].upinfo?list[i].total+'集全':'连载'+list[i].upinfo+"/"+list[i].total:list[i].tag?list[i].tag:list[i].doubanscore?list[i].doubanscore:"",
                 extra: {
                     pic: img,
                     name: list[i].title
