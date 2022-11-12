@@ -6,7 +6,7 @@ function JY360(){
         let list = [];
         let sitename = json.playlink_sites[0];
         if(json.allepidetail){
-            list = getjson.allepidetail[sitename];
+            list = json.allepidetail[sitename];
             setResult('更新至：' + list[list.length-1].playlink_num);
         }else if(json.defaultepisode){
             list = json.defaultepisode;
