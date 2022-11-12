@@ -644,9 +644,29 @@ function yiji() {
             confirm:()=>{return parsePaste("https://pasteme.tyrantg.com/xxxxxx/ukvonrg9i5jypxom@fVooSX");}, 
             cancel:()=>{return 'toast://不更新无法使用';}
         })
+        confirm({
+            title: "温馨提示",
+            content: "当前未导入扩展插件，点击下方确定按钮导入",
+            confirm: $.toString(() => {
+                return "海阔视界首页频道规则【聚影√】￥home_rule_url￥http://hiker.nokia.press/hikerule/rulelist.json?id=5102"
+            }),
+            cancel: $.toString(() => {
+                return "toast://当前代码新版本需要配合新小程序版本9以上"
+            })
+        });
         setResult([]);
     }
     */
+    confirm({
+            title: "温馨提示",
+            content: "当前未导入扩展插件，点击下方确定按钮导入",
+            confirm: $.toString(() => {
+                return "海阔视界首页频道规则【聚影√】￥home_rule_url￥http://hiker.nokia.press/hikerule/rulelist.json?id=5102"
+            }),
+            cancel: $.toString(() => {
+                return "toast://当前代码新版本需要配合新小程序版本9以上"
+            })
+        });
     clearMyVar('SrcJy$back');
     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
     JYyiji();
