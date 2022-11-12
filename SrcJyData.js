@@ -71,8 +71,8 @@ function JYsousuo(){
                 d.push({
                     title: datasource=='sougou'?item.name.replace(/|/g,''):item.titleTxt,
                     url: 'hiker://empty##'+(datasource=='sougou'?('https://v.sogou.com' + item.tiny_url):('https://api.web.360kan.com/v1/detail?cat=' + item.cat_id + '&id=' + item.en_id)) + '#immersiveTheme##autoCache#',
-                    desc: datasource=='sougou'?item.list_category.join(','):item.coverInfo.txt,
-                    content: datasource=='sougou'?item.introduction:(item.tag+'\n'+item.area+'  '+item.year),
+                    desc: datasource=='sougou'?item.list_category.join(','):(item.year+','+item.area+','+item.tag+item.coverInfo.txt),
+                    content: datasource=='sougou'?item.introduction:item.description,
                     img: datasource=='sougou'?(item.v_picurl + '@Referer='):(item.cover + '@Referer='),
                     extra: {
                         pic: datasource=='sougou'?item.v_picurl:item.cover,
