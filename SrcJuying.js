@@ -536,6 +536,8 @@ function sousuo() {
                 let name = MY_URL.split('##')[1];
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
                 xunmi(name,false,true);
+            }else{
+                setResult();
             }
         }catch(e){}
     }
