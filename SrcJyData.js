@@ -122,10 +122,11 @@ function JYerji(){
                 if(parseInt(urlline)==i){
                     let getlist = [];
                     let listlength = sitelist[sitename];
-                    let fornum = Math.ceil(listlength/200);
+                    let onenum = 50;
+                    let fornum = Math.ceil(listlength/onenum);
                     for(let i=0;i<fornum;i++){
-                        let start = 1 + (200 * i);
-                        let end = 200 + (200 * i);
+                        let start = 1 + (onenum * i);
+                        let end = onenum + (onenum * i);
                         if(end>listlength){end = listlength;}
                         try{
                             let getjson = JSON.parse(request(MY_URL+'&start='+start+'&end='+end+'&site='+sitename, { headers: { 'User-Agent': PC_UA } })).data;
