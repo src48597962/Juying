@@ -128,7 +128,10 @@ function JYerji(){
         }
 
     });
-    if(datasource=="360"){putMyVar('moviedesc',json.description);}
+    if(datasource=="360"){
+        var desc = json.description;
+        putMyVar('moviedesc',desc);
+    }
     //二级统一菜单
     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyMenu.js');
     for(var i in erjimenu){
