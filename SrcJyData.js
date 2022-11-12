@@ -205,6 +205,7 @@ function JYerji(){
         if(isline==0){
             lists.push(playlist);
             tabs = [];
+            isline = 1;
         }
     }
     
