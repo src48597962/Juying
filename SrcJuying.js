@@ -353,8 +353,8 @@ function erji() {
 
     setLastChapterRule('js:' + $.toString(param=>{
         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLastChapter.js');
-        getItem('JYdatasource', 'sougou')=='sougou'?sougou():JY360();
-    }))
+        param=='sougou'?sougou():JY360();
+    }, MY_PARAMS.datasource))
 }
 
 
