@@ -1995,7 +1995,27 @@ function extension(){
         title: '⚙ 个性设置',
         col_type: "rich_text"
     });
-    
+    d.push({
+        title: getItem('JYdatasource', 'sougou')=="sougou"?'聚影主页数据调用：搜狗':'聚影主页数据调用：360',
+        url: $('#noLoading#').lazyRule(() => {
+                if(getItem('JYdatasource', 'sougou')=="sougou"){
+                    setItem('JYdatasource', '360');
+                    var sm = "聚影主页数据源切换为360";
+                }else{
+                    setItem('JYdatasource', 'sougou');
+                    var sm = "聚影主页数据源切换为sougou";
+                }
+                clearMyVar('SrcJuying$类型');
+                clearMyVar('SrcJuying$地区');
+                clearMyVar('SrcJuying$年代');
+                clearMyVar('SrcJuying$资源');
+                clearMyVar('SrcJuying$明星');
+                clearMyVar('SrcJuying$排序');
+                refreshPage(false);
+                return 'toast://' + sm + '，返回主页后刷新生效';
+            }),
+        col_type: "text_center_1"
+    });
     d.push({
         title: JYconfig['erjimode']!=2?'当前二级模式：常规':'当前二级模式：搜索',
         desc: JYconfig['erjimode']!=2?'一级选片点击先用进二级，再扩展更多片源':'一级选片点击调用接口搜索扩展更多片源',
@@ -2089,27 +2109,6 @@ function extension(){
     });
     d.push({
         col_type: "line"
-    });
-    d.push({
-        title: getItem('JYdatasource', 'sougou')=="sougou"?'聚影主页数据调用：搜狗':'首页数据调用：360',
-        url: $('#noLoading#').lazyRule(() => {
-                if(getItem('JYdatasource', 'sougou')=="sougou"){
-                    setItem('JYdatasource', '360');
-                    var sm = "聚影主页数据源切换为360";
-                }else{
-                    setItem('JYdatasource', 'sougou');
-                    var sm = "聚影主页数据源切换为sougou";
-                }
-                clearMyVar('SrcJuying$类型');
-                clearMyVar('SrcJuying$地区');
-                clearMyVar('SrcJuying$年代');
-                clearMyVar('SrcJuying$资源');
-                clearMyVar('SrcJuying$明星');
-                clearMyVar('SrcJuying$排序');
-                refreshPage(false);
-                return 'toast://' + sm + '，返回主页后刷新生效';
-            }),
-        col_type: "text_center_1"
     });
     d.push({
         title: JYconfig['sousuoms']==1?'搜索数据来源：搜狗':'搜索数据来源：接口',
