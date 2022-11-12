@@ -664,7 +664,7 @@ function yiji() {
                 return "海阔视界首页频道规则【聚影√】￥home_rule_url￥http://hiker.nokia.press/hikerule/rulelist.json?id=5102"
             }),
             cancel: $.toString(() => {
-                return "toast://当前代码新版本需要配合新小程序版本9以上"
+                return "toast://当前代码需要配合新小程序版本9以上"
             })
         });
     clearMyVar('SrcJy$back');
