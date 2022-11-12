@@ -366,37 +366,20 @@ function yiji() {
         clearMyVar('isverifyA');
     }));
     */
-    /*
-    if(MY_RULE.version<6){
-        confirm({
-            title:'小程序更新提示', 
-            content:'发现新版本，需立即更新？', 
-            confirm:()=>{return parsePaste("https://pasteme.tyrantg.com/xxxxxx/ukvonrg9i5jypxom@fVooSX");}, 
-            cancel:()=>{return 'toast://不更新无法使用';}
-        })
+
+    if(MY_RULE.version<9){
         confirm({
             title: "温馨提示",
-            content: "当前未导入扩展插件，点击下方确定按钮导入",
+            content: "发现小程序新版本",
             confirm: $.toString(() => {
                 return "海阔视界首页频道规则【聚影√】￥home_rule_url￥http://hiker.nokia.press/hikerule/rulelist.json?id=5102"
             }),
             cancel: $.toString(() => {
-                return "toast://当前代码新版本需要配合新小程序版本9以上"
+                return "toast://当前代码需要配合新小程序版本9以上"
             })
         });
-        setResult([]);
     }
-    */
-    confirm({
-            title: "小程序更新提示",
-            content: "当前代码需要配合新小程序版本9以上",
-            confirm: $.toString(() => {
-                return "海阔视界首页频道规则【聚影√】￥home_rule_url￥http://hiker.nokia.press/hikerule/rulelist.json?id=5102"
-            }),
-            cancel: $.toString(() => {
-                return "toast://取消更新，功能受限"
-            })
-        });
+        
     clearMyVar('SrcJy$back');
     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
     JYyiji();
@@ -558,7 +541,7 @@ function sousuo() {
 
 //版本检测
 function Version() {
-    var nowVersion = "5.7";//现在版本 
+    var nowVersion = "5.8";//现在版本 
     var nowtime = Date.now();
     var oldtime = parseInt(getItem('VersionChecktime','0').replace('time',''));
     if (getMyVar('SrcJuying-VersionCheck', '0') == '0' && nowtime > (oldtime+12*60*60*1000)) {
