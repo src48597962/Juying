@@ -2091,6 +2091,27 @@ function extension(){
         col_type: "line"
     });
     d.push({
+        title: getItem('JYdatasource', 'sougou')=="sougou"?'聚影主页数据调用：搜狗':'首页数据调用：360',
+        url: $('#noLoading#').lazyRule(() => {
+                if(getItem('JYdatasource', 'sougou')=="sougou"){
+                    setItem('JYdatasource', '360');
+                    var sm = "聚影主页数据源切换为360";
+                }else{
+                    setItem('JYdatasource', 'sougou');
+                    var sm = "聚影主页数据源切换为sougou";
+                }
+                clearMyVar('SrcJuying$类型');
+                clearMyVar('SrcJuying$地区');
+                clearMyVar('SrcJuying$年代');
+                clearMyVar('SrcJuying$资源');
+                clearMyVar('SrcJuying$明星');
+                clearMyVar('SrcJuying$排序');
+                refreshPage(false);
+                return 'toast://' + sm + '，返回主页后刷新生效';
+            }),
+        col_type: "text_center_1"
+    });
+    d.push({
         title: JYconfig['sousuoms']==1?'搜索数据来源：搜狗':'搜索数据来源：接口',
         desc: JYconfig['sousuoms']==1?'视界原生搜索按钮改为调用搜狗搜索影片':'视界原生搜索按钮改为调用接口聚搜影片',
         url: $('#noLoading#').lazyRule((JYconfig,cfgfile) => {
