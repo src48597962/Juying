@@ -69,7 +69,7 @@ function JYerji(){
     } catch (e) { }
     var Marksum = 30;//设置记录线路足迹数量
 
-    var urlline = getMyVar(MY_URL, typeof(SrcMarkline) != "undefined"?SrcMarkline:'0');
+    var lineindex = getMyVar(MY_URL, typeof(SrcMarkline) != "undefined"?SrcMarkline:'0');
     var d = [];
     var html = request(MY_URL, { headers: { 'User-Agent': PC_UA } });
     log(html)
@@ -120,14 +120,14 @@ function JYerji(){
         for(let i in tabs){
             let sitename = tabs[i];
             if(json.allepidetail){
-                if(parseInt(urlline)==i){
-                    let getlist = [];
+                if(parseInt(lineindex)==i){
+                    let urllist = [];
                     let listlength = sitelist[sitename];
                     let onenum = 50;
                     let fornum = Math.ceil(listlength/onenum);
-                    for(let i=0;i<fornum;i++){
-                        let start = 1 + (onenum * i);
-                        let end = onenum + (onenum * i);
+                    for(let j=0;j<fornum;j++){
+                        let start = 1 + (onenum * j);
+                        let end = onenum + (onenum * j);
                         if(end>listlength){end = listlength;}
                         try{
                             let getjson = JSON.parse(request(MY_URL+'&start='+start+'&end='+end+'&site='+sitename, { headers: { 'User-Agent': PC_UA } })).data;
@@ -135,20 +135,35 @@ function JYerji(){
                             forlist = forlist.map(item=>{
                                 return item.playlink_num+'$'+item.url;
                             })
-                            getlist = getlist.concat(forlist);
+                            urllist = urllist.concat(forlist);
                         }catch(e){
 
                         }
                     }
-                    lists.push(getlist);
+                    lists.push(urllist);
+                }else{
+                    lists.push([]);
+                }
+                var isline = 1;
+            }else if(json.defaultepisode){
+                if(parseInt(lineindex)==i){
+                    if(i==0){
+                        var urllist = json.defaultepisode;
+                    }else{
+                        let getjson = JSON.parse(request(MY_URL+'&site='+sitename, { headers: { 'User-Agent': PC_UA } })).data;
+                        var urllist = getjson.defaultepisode;
+                    }
+                    urllist = urllist.map(item=>{
+                        return item.period+'$'+item.url;
+                    })
                 }else{
                     lists.push([]);
                 }
                 var isline = 1;
             }else{
-                let getlist = json.playlinksdetail[sitename];
-                getlist = sitename+'$'+getlist.default_url
-                playlist.push(getlist);
+                let urllist = json.playlinksdetail[sitename];
+                urllist = sitename+'$'+urllist.default_url
+                playlist.push(urllist);
                 var isline = 0;
             }
         }
@@ -297,7 +312,7 @@ function JYerji(){
                                 title: name + '',
                                 url: url + easy,
                                 extra: { id: MY_URL+j, jsLoadingInject: true, cacheM3u8: getMyVar('superwebM3U8')=="1"?true:false, blockRules: block },
-                                col_type: 'text_4'
+                                col_type: datasource=="sougou"?'text_4':getMyVar('SrcJuying$类型', '')=='3'?'text_2':'text_4'
                             });
                         }
                     }
@@ -351,7 +366,7 @@ function JYerji(){
             }
         }
     }
-    setLists(lists, urlline);
+    setLists(lists, lineindex);
 
     //底部说明
     d.push({
