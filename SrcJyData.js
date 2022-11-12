@@ -640,7 +640,7 @@ function JYyiji(){
             });
         }
     }else{
-        var list = html.data.movies;
+        var list = html.data?html.data.movies:[];
         for (var i in list) {
             let img = /^http/.test(list[i].cdncover)?list[i].cdncover:'https:'+list[i].cdncover;
             d.push({
