@@ -635,8 +635,8 @@ function yiji() {
     addListener("onClose", $.toString(() => {
         clearMyVar('isverifyA');
     }));
-*/
-/*
+    */
+    /*
     if(MY_RULE.version<6){
         confirm({
             title:'小程序更新提示', 
