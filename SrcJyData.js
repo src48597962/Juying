@@ -123,18 +123,20 @@ function JYerji(){
                     let getlist = [];
                     let listlength = sitelist[sitename];
                     let fornum = Math.ceil(listlength/200);
-                    log(fornum)
                     for(let i=0;i<fornum;i++){
                         let start = 1 + (200 * i);
                         let end = 200 + (200 * i);
                         if(end>listlength){end = listlength;}
-                        log(MY_URL+'&start='+start+'&end='+end+'&site='+sitename)
-                        json = JSON.parse(request(MY_URL+'&start='+start+'&end='+end+'&site='+sitename, { headers: { 'User-Agent': PC_UA } })).data;
-                        let forlist = json.allepidetail[sitename];
-                        forlist = forlist.map(item=>{
-                            return item.playlink_num+'$'+item.url;
-                        })
-                        getlist = getlist.concat(forlist);
+                        try{
+                            json = JSON.parse(request(MY_URL+'&start='+start+'&end='+end+'&site='+sitename, { headers: { 'User-Agent': PC_UA } })).data;
+                            let forlist = json.allepidetail[sitename];
+                            forlist = forlist.map(item=>{
+                                return item.playlink_num+'$'+item.url;
+                            })
+                            getlist = getlist.concat(forlist);
+                        }catch(e){
+
+                        }
                     }
                     lists.push(getlist);
                 }else{
