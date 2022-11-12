@@ -202,7 +202,10 @@ function JYerji(){
                 var isline = 0;
             }
         }
-        if(isline==0){lists.push(playlist);}
+        if(isline==0){
+            lists.push(playlist);
+            tabs = [];
+        }
     }
     
     //线路部份
@@ -263,56 +266,56 @@ function JYerji(){
                 })
             }
         }
+    }
+    //推送tvbox
+    if(getItem('enabledpush', '') == '1' && datasource == "360"){
+        let push = {
+            "name": MY_PARAMS.title||'聚影',
+            "pic": pic.split('@')[0],
+            "content": desc,
+            "director": details1.split('\n')[0].replace('导演：',''),
+            "actor": details1.split('主演：')[1].split('\n')[0],
+            "from": tabs.length>0?tabs[lineindex]:'360'
+        };
+        let tvip = getItem('hikertvboxset', '');
+        d.push({
+            title: '推送至TVBOX',
+            url: $("#noLoading#").lazyRule((push,lists,tvip) => {
+                if(tvip==""){
+                    return 'toast://观影设置中设置TVBOX接收端ip地址，完成后回来刷新一下';
+                }
+                let urls = [];
+                for(let i in lists){
+                    let list = lists[i];
+                    if(list.length>0){
+                        urls.push(list.join('#').replace(/\&/g, '＆＆'));
+                    }
+                }
 
-        //推送tvbox
-        if(getItem('enabledpush', '') == '1' && datasource == "360"){
-            let push = {
-                "name": MY_PARAMS.title||'聚影',
-                "pic": pic.split('@')[0],
-                "content": desc,
-                "director": details1.split('\n')[0].replace('导演：',''),
-                "actor": details1.split('主演：')[1].split('\n')[0]
-            };
-            let tvip = getItem('hikertvboxset', '');
-            d.push({
-                title: '推送至TVBOX',
-                url: $("#noLoading#").lazyRule((push,lists,tvip) => {
-                    if(tvip==""){
-                        return 'toast://观影设置中设置TVBOX接收端ip地址，完成后回来刷新一下';
+                if(urls.length>0){
+                    push['url'] = urls.join('$$$');
+                    var state = request(tvip + '/action', {
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                            //'X-Requested-With': 'XMLHttpRequest',
+                            'Referer': tvip
+                        },
+                        timeout: 2000,
+                        body: 'do=push&url=' + JSON.stringify(push),
+                        method: 'POST'
+                    });
+                    //log(push);
+                    //log(state);
+                    if (state == 'ok') {
+                        return 'toast://推送成功，如果tvbox显示“没找到数据”可能是该链接需要密码或者当前的jar不支持。';
+                    } else {
+                        return 'toast://推送失败'
                     }
-                    let urls = [];
-                    for(let i in lists){
-                        let list = lists[i];
-                        if(list.length>0){
-                            urls.push(list.join('#').replace(/\&/g, '＆＆'));
-                        }
-                    }
-
-                    if(urls.length>0){
-                        push['url'] = urls.join('$$$');
-                        var state = request(tvip + '/action', {
-                            headers: {
-                                'Content-Type': 'application/x-www-form-urlencoded',
-                                //'X-Requested-With': 'XMLHttpRequest',
-                                'Referer': tvip
-                            },
-                            timeout: 2000,
-                            body: 'do=push&url=' + JSON.stringify(push),
-                            method: 'POST'
-                        });
-                        //log(push);
-                        //log(state);
-                        if (state == 'ok') {
-                            return 'toast://推送成功，如果tvbox显示“没找到数据”可能是该链接需要密码或者当前的jar不支持。';
-                        } else {
-                            return 'toast://推送失败'
-                        }
-                    }
-                    return 'toast://所有线路均不支持推送列表';
-                }, push, lists, tvip),
-                col_type: 'scroll_button'
-            })
-        }
+                }
+                return 'toast://所有线路均不支持推送列表';
+            }, push, lists, tvip),
+            col_type: 'scroll_button'
+        })
     }
 
     try{
