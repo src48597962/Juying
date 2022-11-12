@@ -116,7 +116,6 @@ function JYerji(){
         let sitelist = json.allupinfo;
         let playlist = [];
         tabs = json.playlink_sites;
-        log(json);
         for(let i in tabs){
             let sitename = tabs[i];
             if(json.allepidetail){
@@ -129,8 +128,8 @@ function JYerji(){
                         let end = 200 + (200 * i);
                         if(end>listlength){end = listlength;}
                         try{
-                            json = JSON.parse(request(MY_URL+'&start='+start+'&end='+end+'&site='+sitename, { headers: { 'User-Agent': PC_UA } })).data;
-                            let forlist = json.allepidetail[sitename];
+                            let getjson = JSON.parse(request(MY_URL+'&start='+start+'&end='+end+'&site='+sitename, { headers: { 'User-Agent': PC_UA } })).data;
+                            let forlist = getjson.allepidetail[sitename];
                             forlist = forlist.map(item=>{
                                 return item.playlink_num+'$'+item.url;
                             })
