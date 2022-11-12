@@ -11,9 +11,12 @@ function JY360(){
         }else if(json.defaultepisode){
             list = json.defaultepisode;
             setResult('更新至：' + list[0].period);
+        }else{
+            setResult();
         }
     }catch(e){
         log('获取最新失败>'+e.message);
+        setResult();
     }
 }
 
