@@ -518,6 +518,7 @@ function JYyiji(){
                     }
                     eval('var filter = ' + filtevarrstr);
                 }catch(e){
+                    log(e.message);
                     var filter = [];
                 }
 
