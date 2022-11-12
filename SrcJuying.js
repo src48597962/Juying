@@ -795,9 +795,9 @@ function sousuo() {
         eval("var JYconfig=" + Juyingcfg+ ";");
     }
     if(!fileExist('hiker://files/rules/Src/Juying/jiekou.json')||JYconfig.sousuoms==1){
+        /*
         var d = [];
         var html = getResCode();
-        log(html)
         try {
             var list = JSON.parse(html.match(/INITIAL_STATE.*?({.*});/)[1]).result.longVideo.results;
             for (var i = 0; i < list.length; i++) {
@@ -817,6 +817,9 @@ function sousuo() {
             }
         } catch (e) { }
         setResult(d);
+        */
+        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
+        JYsousuo();
     }else{
         try{
             let name = MY_URL.match(/query=(.*?)&/)[1];
