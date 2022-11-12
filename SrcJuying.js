@@ -537,7 +537,7 @@ function sousuo() {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
                 xunmi(name,false,true);
             }else{
-                setResult();
+                setResult([]);
             }
         }catch(e){}
     }
