@@ -1,3 +1,25 @@
+function JY360(){
+    try{
+        MY_URL = MY_URL.replace('#immersiveTheme##autoCache#','').split('##')[1];
+        let html = request(MY_URL, { headers: { 'User-Agent': PC_UA } });
+        let json = JSON.parse(html).data;
+        let list = [];
+        let sitename = json.playlink_sites[0];
+        if(json.allepidetail){
+            list = getjson.allepidetail[sitename];
+            setResult('更新至：' + list[list.length-1].playlink_num);
+        }else if(json.defaultepisode){
+            list = json.defaultepisode;
+            setResult('更新至：' + list[0].period);
+        }else{
+            setResult('');
+        }
+    }catch(e){
+        log('获取最新失败>'+e.message);
+        setResult('');
+    }
+}
+
 function sougou() {
     try{
         var html = request(MY_URL.split('##')[1], { headers: { 'User-Agent': PC_UA }, timeout:3000 });
