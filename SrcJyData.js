@@ -107,7 +107,7 @@ function JYerji(){
     let json = datasource=="sougou"?JSON.parse(html.match(/INITIAL_STATE.*?({.*});/)[1]).detail.itemData:JSON.parse(html).data;
     let plays = datasource=="sougou"?json.play.item_list:[];
     let shows = datasource=="sougou"?json.play_from_open_index:'';
-    let actor = datasource=="sougou"?(json.starring?'演员：'+json.starring : json.emcee?'主持：'+json.emcee:'内详'):(json.actor?'演员：'+json.actor:'内详');
+    let actor = datasource=="sougou"?(json.starring?'主演：'+json.starring : json.emcee?'主持：'+json.emcee:'内详'):(json.actor?'主演：'+json.actor:'内详');
     let director = json.director?'导演：'+json.director : datasource=="sougou"&&json.tv_station?json.tv_station:'内详';
     let area = datasource=="sougou"?(json.zone?'地区：'+json.zone:''):(json.area?'地区：'+json.area:'');
     let year = datasource=="sougou"&&json.year?'   年代：' + json.year:'';
@@ -259,6 +259,56 @@ function JYerji(){
                     col_type: 'scroll_button'
                 })
             }
+        }
+
+        //推送tvbox
+        if(getItem('enabledpush', '') == '1' && datasource == "360"){
+            let push = {
+                "name": MY_PARAMS.title||'聚影',
+                "pic": pic.split('@')[0],
+                "content": desc,
+                "director": details1.split('\n')[0].replace('导演：',''),
+                "actor": details1.split('主演：')[1].split('\n')[0]
+            };
+            let tvip = getItem('hikertvboxset', '');
+            d.push({
+                title: '推送至TVBOX',
+                url: $("#noLoading#").lazyRule((push,lists,tvip) => {
+                    if(tvip==""){
+                        return 'toast://观影设置中设置TVBOX接收端ip地址，完成后回来刷新一下';
+                    }
+                    let urls = [];
+                    for(let i in lists){
+                        let list = lists[i];
+                        if(list.length>0){
+                            urls.push(list.join('#').replace(/\&/g, '＆＆'));
+                        }
+                    }
+
+                    if(urls.length>0){
+                        push['url'] = urls.join('$$$');
+                        var state = request(tvip + '/action', {
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                                //'X-Requested-With': 'XMLHttpRequest',
+                                'Referer': tvip
+                            },
+                            timeout: 2000,
+                            body: 'do=push&url=' + JSON.stringify(push),
+                            method: 'POST'
+                        });
+                        //log(push);
+                        //log(state);
+                        if (state == 'ok') {
+                            return 'toast://推送成功，如果tvbox显示“没找到数据”可能是该链接需要密码或者当前的jar不支持。';
+                        } else {
+                            return 'toast://推送失败'
+                        }
+                    }
+                    return 'toast://所有线路均不支持推送列表';
+                }, push, lists, tvip),
+                col_type: 'scroll_button'
+            })
         }
     }
 
