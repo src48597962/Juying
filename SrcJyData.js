@@ -53,7 +53,7 @@ let yijimenu = [
     }
 ]
 function JYsousuo(){
-    let datasource = MY_PARAMS.datasource||getItem('JYdatasource', 'sougou');
+    let datasource = getItem('JYdatasource', 'sougou');
     var d = [];
     if(!/^hiker/.test(MY_URL)){
         var html = getResCode();
@@ -477,7 +477,7 @@ function JYerji(){
     setResult(d);
 }
 function JYyiji(){    
-    let datasource = MY_PARAMS.datasource||getItem('JYdatasource', 'sougou');
+    let datasource = getItem('JYdatasource', 'sougou');
     var d = [];
     const Color = "#3399cc";
     const categorys = datasource=="sougou"?['电视剧','电影','动漫','综艺','纪录片']:['电视剧','电影','动漫','综艺'];
@@ -702,7 +702,8 @@ function JYyiji(){
                 desc: list[i].ipad_play_for_list.finish_episode?list[i].ipad_play_for_list.episode==list[i].ipad_play_for_list.finish_episode?"全集"+list[i].ipad_play_for_list.finish_episode:"连载"+list[i].ipad_play_for_list.episode+"/"+list[i].ipad_play_for_list.finish_episode:"",
                 extra: {
                     pic: list[i].v_picurl,
-                    name: list[i].name
+                    name: list[i].name,
+                    datasource: getItem('JYdatasource', 'sougou')
                 }
             });
         }
@@ -717,7 +718,8 @@ function JYyiji(){
                 desc: list[i].total?list[i].total==list[i].upinfo?list[i].total+'集全':'连载'+list[i].upinfo+"/"+list[i].total:list[i].tag?list[i].tag:list[i].doubanscore?list[i].doubanscore:"",
                 extra: {
                     pic: img,
-                    name: list[i].title
+                    name: list[i].title,
+                    datasource: getItem('JYdatasource', 'sougou')
                 }
             });
         }
