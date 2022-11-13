@@ -161,7 +161,7 @@ function JYerji(){
                 if(parseInt(lineindex)==i){
                     let urllist = [];
                     let listlength = sitelist[sitename];
-                    let onenum = 100;
+                    let onenum = 50;
                     let fornum = Math.ceil(listlength/onenum);
                     for(let j=0;j<fornum;j++){
                         let start = 1 + (onenum * j);
