@@ -167,19 +167,22 @@ function JYerji(){
                         let start = 1 + (onenum * j);
                         let end = onenum + (onenum * j);
                         if(end>listlength){end = listlength;}
-                        for(let k=1;k<3;k++){
-                            try{
-                                var getjson = JSON.parse(request(MY_URL+'&start='+start+'&end='+end+'&site='+sitename, { headers: { 'User-Agent': PC_UA } })).data;
-                                brek;
-                            }catch(e){
-                                end--;
+                        try{
+                            for(let k=0;k<3;k++){
+                                try{
+                                    var getjson = JSON.parse(request(MY_URL+'&start='+start+'&end='+end+'&site='+sitename, { headers: { 'User-Agent': PC_UA } })).data;
+                                    brek;
+                                }catch(e){
+                                    end--;
+                                }
                             }
+                            let forlist = getjson.allepidetail[sitename];
+                            forlist = forlist.map(item=>{
+                                return item.playlink_num+'$'+item.url;
+                            })
+                            urllist = urllist.concat(forlist);
+                        }catch(e){
                         }
-                        let forlist = getjson.allepidetail[sitename];
-                        forlist = forlist.map(item=>{
-                            return item.playlink_num+'$'+item.url;
-                        })
-                        urllist = urllist.concat(forlist);
                     }
                     lists.push(urllist);
                 }else{
