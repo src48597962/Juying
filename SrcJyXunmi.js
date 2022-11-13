@@ -393,6 +393,7 @@ function xunmi(name,data,ishkss) {
                         var ssurl = jsondata.url+jsondata.sousuoqian+name+jsondata.sousuohou;
                         if(jsondata.ssmoshi=="0"){
                             var gethtml = request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 });
+                            log(gethtml);
                             var html = JSON.parse(gethtml);
                             var list = html.list||[];
                         }else{
