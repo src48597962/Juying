@@ -161,7 +161,7 @@ function JYerji(){
                 if(parseInt(lineindex)==i){
                     let urllist = [];
                     let listlength = sitelist[sitename];
-                    let onenum = 50;
+                    let onenum = 100;
                     let fornum = Math.ceil(listlength/onenum);
                     for(let j=0;j<fornum;j++){
                         let start = 1 + (onenum * j);
@@ -171,7 +171,7 @@ function JYerji(){
                             for(let k=0;k<3;k++){
                                 try{
                                     var getjson = JSON.parse(request(MY_URL+'&start='+start+'&end='+end+'&site='+sitename, { headers: { 'User-Agent': PC_UA } })).data;
-                                    brek;
+                                    break;
                                 }catch(e){
                                     end--;
                                 }
