@@ -169,12 +169,11 @@ function JYerji(){
                         if(end>listlength){end = listlength;}
                         try{
                             for(let k=0;k<3;k++){
-                                try{
-                                    var getjson = JSON.parse(request(MY_URL+'&start='+start+'&end='+end+'&site='+sitename, { headers: { 'User-Agent': PC_UA } })).data;
-                                    log(getjson)
-                                    break;
-                                }catch(e){
+                                var getjson = JSON.parse(request(MY_URL+'&start='+start+'&end='+end+'&site='+sitename, { headers: { 'User-Agent': PC_UA } })).data;
+                                if(getjson==null){
                                     end--;
+                                }else{
+                                    break;
                                 }
                             }
                             let forlist = getjson.allepidetail[sitename];
