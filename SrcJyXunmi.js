@@ -396,6 +396,7 @@ function xunmi(name,data,ishkss) {
                             if(/页面已拦截/.test(gethtml)){
                                 let ck = JSON.parse(request('http://www.ysgc.cc',{withStatusCode:true,timeout:1500}));
                                 //log(getCookie('http://www.ysgc.cc'));
+                                log(ck);
                                 gethtml = request(ssurl, { headers: ck.headers, timeout:xunmitimeout*1000 });
                                 log(gethtml);
                             }
