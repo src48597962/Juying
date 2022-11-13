@@ -394,8 +394,8 @@ function xunmi(name,data,ishkss) {
                         if(jsondata.ssmoshi=="0"){
                             var gethtml = request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 });
                             if(/页面已拦截/.test(gethtml)){
-                                let ck = fetchCookie('http://www.ysgc.cc', { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 })
-                                log(getCookie('http://www.ysgc.cc'));
+                                let ck = JSON.parse(request(ssurl,{withStatusCode:true,timeout:1500}));
+                                //log(getCookie('http://www.ysgc.cc'));
                                 log(ck);
                             }
                             var html = JSON.parse(gethtml);
