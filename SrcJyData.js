@@ -171,6 +171,7 @@ function JYerji(){
                             for(let k=0;k<3;k++){
                                 try{
                                     var getjson = JSON.parse(request(MY_URL+'&start='+start+'&end='+end+'&site='+sitename, { headers: { 'User-Agent': PC_UA } })).data;
+                                    log(getjson)
                                     break;
                                 }catch(e){
                                     end--;
@@ -516,7 +517,7 @@ function JYyiji(){
             MY_URL = MY_URL + "&order=" + (排序=="最新"?"time":"score");
         }
     }else{
-        MY_URL = "https://api.web.360kan.com/v1/filter/list?catid=" + getMyVar('SrcJuying$listTab', '2') + "&size=35&pageno=" + MY_PAGE;
+        MY_URL = "https://api.web.360kan.com/v1/filter/list?catid=" + getMyVar('SrcJuying$listTab', '2') + "&size=36&pageno=" + MY_PAGE;
         if(排序 != ""){
             MY_URL = MY_URL + "&rank=" + 排序;
         }
