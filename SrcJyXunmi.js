@@ -397,7 +397,7 @@ function xunmi(name,data,ishkss) {
                                 let ck = JSON.parse(request('http://www.ysgc.cc',{headers:{'User-Agent':urlua},withStatusCode:true,timeout:1500}));
                                 //log(getCookie('http://www.ysgc.cc'));
                                 log(ck);
-                                gethtml = request('http://www.ysgc.cc');
+                                gethtml = request(ssurl,{headers:{'Referer':'http://www.ysgc.cc'},onlyHeaders:true,timeout:1500});
                                 log(gethtml);
                             }
                             var html = JSON.parse(gethtml);
