@@ -269,7 +269,10 @@ function xunmi(name,data,ishkss) {
                         };
                         eval(JSON.parse(request('hiker://page/jxhs?rule=模板·Q')).rule);
                         evalPrivateJS(ssyz);//ssurl.match(/http(s)?:\/\/.*?\//)[0] + 'index.php/verify/index.html?'
+                        let cook = fetchCookie('http://www.600dvd.com/inc/common/code.php?a=search', {headers: headers});
+                        headers.Cookie = JSON.parse(cook||'[]').join(';');
                         let vcode = getVCode2('http://www.600dvd.com/inc/common/code.php?a=search', JSON.stringify(headers), 'num');
+                        
                         /*
                         fetch('http://www.600dvd.com/inc/ajax.php?ac=code_check&type=search&code=' + JSON.parse(vcode).ret, {
                             //MY_HOME + html.match(/\/index.php.*?verify=/)[0]
@@ -277,10 +280,9 @@ function xunmi(name,data,ishkss) {
                             method: 'POST'
                         })*/
 
+                        fetch('http://www.600dvd.com/inc/ajax.php?ac=code_check&type=search&code=' + JSON.parse(vcode).ret, {headers: headers})
+
                         
-                        let cook = fetchCookie('http://www.600dvd.com/inc/ajax.php?ac=code_check&type=search&code=' + JSON.parse(vcode).ret, {headers: headers})
-                        log(cook);
-                        headers.Cookie = JSON.parse(cook||'[]').join(';');
                         html = fetch(ssurl, { headers: headers, timeout:timeout});
                         log(html);
                         //http://www.600dvd.com/inc/ajax.php?ac=code_check&type=search&code=3573
