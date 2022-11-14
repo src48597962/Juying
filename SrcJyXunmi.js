@@ -282,12 +282,7 @@ function xunmi(name,data,ishkss) {
                             method: ssurl.indexOf('search-pg-1-wd-')>-1?'GET':'POST'
                         })
 
-                        //fetch('http://www.600dvd.com/inc/ajax.php?ac=code_check&type=search&code=' + JSON.parse(vcode).ret, {headers: headers});
-                        
                         html = fetch(ssurl, { headers: headers, timeout:timeout});
-                        log(html);
-                        //http://www.600dvd.com/inc/ajax.php?ac=code_check&type=search&code=3573
-                        //http://www.600dvd.com/inc/common/code.php?a=search
                     }
                 }catch(e){}
                 return html;
