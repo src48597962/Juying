@@ -276,12 +276,9 @@ function xunmi(name,data,ishkss) {
                             headers: headers,
                             method: 'POST'
                         })*/
-                        fetch('http://www.600dvd.com/inc/ajax.php?ac=code_check&type=search&code=' + JSON.parse(vcode).ret, {
-                            //MY_HOME + html.match(/\/index.php.*?verify=/)[0]
-                            headers: headers,
-                            method: 'GET'
-                        })
-                        html = fetch(ssurl, { headers: headers, timeout:timeout });
+                        let ck = fetchCookie('http://www.600dvd.com/inc/ajax.php?ac=code_check&type=search&code=' + JSON.parse(vcode).ret, {headers: headers})
+                        log(ck);
+                        html = fetch(ssurl, { headers: headers, timeout:timeout,cookie:ck });
                         log(html);
                         //http://www.600dvd.com/inc/ajax.php?ac=code_check&type=search&code=3573
                         //http://www.600dvd.com/inc/common/code.php?a=search
