@@ -259,7 +259,7 @@ function xunmi(name,data,ishkss) {
                 let html = request(ssurl, { headers: { 'User-Agent': ua }, timeout:timeout });
                 try{
                     if (/页面已拦截/.test(html)) {
-                        html = fetchCodeByWebView(ssurl, { headers: { 'User-Agent': ua }});
+                        html = fetchCodeByWebView(ssurl, { headers: { 'User-Agent': ua },timeout:5000});
                         html = pdfh(html,'body&&pre&&Text');
                     }
                     if (/验证码|系统安全验证/.test(html)) {
