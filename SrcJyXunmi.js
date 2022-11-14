@@ -255,23 +255,22 @@ function xunmi(name,data,ishkss) {
             });
             var geterror = 0;
             var urlua = obj.ua=="MOBILE_UA"?MOBILE_UA:obj.ua=="PC_UA"?PC_UA:obj.ua;
-            function gethtml(ssurl,ua,timeout){
+            function getHtmlCode(ssurl,ua,timeout){
                 let html = request(ssurl, { headers: { 'User-Agent': ua }, timeout:timeout });
-                log(html);
                 if(/页面已拦截/.test(html)){
-                    html = fetchCodeByWebView(ssurl, { headers: { 'User-Agent': ua }, timeout:timeout });
-                    log(html);
-                    html = pdfh(html,'body&&pre&&Text');
-                    log(html);
+                    try{
+                        html = fetchCodeByWebView(ssurl, { headers: { 'User-Agent': ua }});
+                        html = pdfh(html,'body&&pre&&Text');
+                    }catch(e){}
                 }
                 return html;
             }
             if(/v1|app|iptv|v2|cms/.test(obj.type)){
                 try {
-                    var gethtml = request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 });
+                    var gethtml = getHtmlCode(ssurl,urlua,xunmitimeout*1000);
                     if(/cms/.test(obj.type)){
                         if(gethtml&&gethtml.indexOf(name)==-1){
-                            gethtml = request(ssurl.replace('videolist','list'), { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 });
+                            gethtml = getHtmlCode(ssurl.replace('videolist','list'),urlua,xunmitimeout*1000);
                         }
                         if(/<\?xml/.test(gethtml)){
                             gethtml = gethtml.replace(/&lt;!\[CDATA\[|\]\]&gt;|<!\[CDATA\[|\]\]>/g,'');
@@ -312,7 +311,7 @@ function xunmi(name,data,ishkss) {
                     if(list.length==0&&obj.type=="iptv"){
                         try {
                             ssurl = ssurl.replace('&zm='+name,'');
-                            html = JSON.parse(request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 }));
+                            html = JSON.parse(getHtmlCode(ssurl,urlua,xunmitimeout*1000));
                             list = html.data||[];
                         } catch (e) {
                             list = [];
@@ -373,7 +372,7 @@ function xunmi(name,data,ishkss) {
                     if(obj.type=="xpath"){
                         var ssurl = jsondata.searchUrl.replace('{wd}',name);
                         if(jsondata.scVodNode=="json:list"){
-                            var gethtml = request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 });
+                            var gethtml = getHtmlCode(ssurl,urlua,xunmitimeout*1000);
                             var html = JSON.parse(gethtml);
                             var list = html.list||[];
                         }else{
@@ -387,7 +386,7 @@ function xunmi(name,data,ishkss) {
                                 ssurl = ssstr.join('?');
                                 var gethtml = request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000, method: 'POST', body: postcs  });
                             }else{
-                                var gethtml = request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 });
+                                var gethtml = getHtmlCode(ssurl,urlua,xunmitimeout*1000);
                             }
 
                             let title = xpathArray(gethtml, jsondata.scVodNode+jsondata.scVodName);
@@ -403,14 +402,8 @@ function xunmi(name,data,ishkss) {
                     }else{
                         var ssurl = jsondata.url+jsondata.sousuoqian+name+jsondata.sousuohou;
                         if(jsondata.ssmoshi=="0"){
-                            /*
-                            var gethtml = request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 });
-                            if(/页面已拦截/.test(gethtml)){
-                                let ck = JSON.parse(request('http://www.ysgc.cc',{headers:{'User-Agent':urlua},withStatusCode:true,timeout:1500}));
-                                
-                            }
-                            */
-                            var html = JSON.parse(gethtml(ssurl,urlua,xunmitimeout*1000));
+                            var gethtml = getHtmlCode(ssurl,urlua,xunmitimeout*1000);
+                            var html = JSON.parse(gethtml);
                             var list = html.list||[];
                         }else{
                             var sstype = ssurl.indexOf(';post')>-1?"post":"get";
@@ -424,7 +417,7 @@ function xunmi(name,data,ishkss) {
                                var gethtml = request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000, method: 'POST', body: postcs  });
                             */
                             }else{
-                                var gethtml = request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 });
+                                var gethtml = getHtmlCode(ssurl,urlua,xunmitimeout*1000);
                             }
                             let sslist = gethtml.split(jsondata.jiequshuzuqian.replace(/\\/g,""));
                             sslist.splice(0,1);
