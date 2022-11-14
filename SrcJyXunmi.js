@@ -255,6 +255,14 @@ function xunmi(name,data,ishkss) {
             });
             var geterror = 0;
             var urlua = obj.ua=="MOBILE_UA"?MOBILE_UA:obj.ua=="PC_UA"?PC_UA:obj.ua;
+            function gethtml(ssurl,ua,timeout){
+                let html = request(ssurl, { headers: { 'User-Agent': ua }, timeout:timeout });
+                if(/页面已拦截/.test(html)){
+                    html = fetchCodeByWebView(ssurl, { headers: { 'User-Agent': ua }, timeout:timeout });
+                    html = pdfh(html,'body&&pre&&Text');
+                }
+                return html;
+            }
             if(/v1|app|iptv|v2|cms/.test(obj.type)){
                 try {
                     var gethtml = request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 });
@@ -392,16 +400,14 @@ function xunmi(name,data,ishkss) {
                     }else{
                         var ssurl = jsondata.url+jsondata.sousuoqian+name+jsondata.sousuohou;
                         if(jsondata.ssmoshi=="0"){
+                            /*
                             var gethtml = request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000 });
                             if(/页面已拦截/.test(gethtml)){
                                 let ck = JSON.parse(request('http://www.ysgc.cc',{headers:{'User-Agent':urlua},withStatusCode:true,timeout:1500}));
-                                //log(getCookie('http://www.ysgc.cc'));
-                                log(ck);
-                                log(request('http://www.ysgc.cc'));
-                                gethtml = request('http://www.ysgc.cc',{headers:{'Referer':'http://www.ysgc.cc'},onlyHeaders:true,timeout:1500});
-                                log(gethtml);
+                                
                             }
-                            var html = JSON.parse(gethtml);
+                            */
+                            var html = JSON.parse(gethtml(ssurl,urlua,xunmitimeout*1000));
                             var list = html.list||[];
                         }else{
                             var sstype = ssurl.indexOf(';post')>-1?"post":"get";
