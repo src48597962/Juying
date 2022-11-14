@@ -257,12 +257,36 @@ function xunmi(name,data,ishkss) {
             var urlua = obj.ua=="MOBILE_UA"?MOBILE_UA:obj.ua=="PC_UA"?PC_UA:obj.ua;
             function getHtmlCode(ssurl,ua,timeout){
                 let html = request(ssurl, { headers: { 'User-Agent': ua }, timeout:timeout });
-                if(/页面已拦截/.test(html)){
-                    try{
+                try{
+                    if (/页面已拦截/.test(html)) {
                         html = fetchCodeByWebView(ssurl, { headers: { 'User-Agent': ua }});
                         html = pdfh(html,'body&&pre&&Text');
-                    }catch(e){}
-                }
+                    }
+                    if (/验证码|系统安全验证/.test(html)) {
+                        let headers = {
+                            "User-Agent": ua,
+                            "Referer": ssurl
+                        };
+                        eval(JSON.parse(request('hiker://page/jxhs?rule=模板·Q')).rule);
+                        evalPrivateJS(ssyz);//ssurl.match(/http(s)?:\/\/.*?\//)[0] + 'index.php/verify/index.html?'
+                        let vcode = getVCode2('http://www.600dvd.com/inc/common/code.php?a=search', JSON.stringify(headers), 'num');
+                        /*
+                        fetch('http://www.600dvd.com/inc/ajax.php?ac=code_check&type=search&code=' + JSON.parse(vcode).ret, {
+                            //MY_HOME + html.match(/\/index.php.*?verify=/)[0]
+                            headers: headers,
+                            method: 'POST'
+                        })*/
+                        fetch('http://www.600dvd.com/inc/ajax.php?ac=code_check&type=search&code=' + JSON.parse(vcode).ret, {
+                            //MY_HOME + html.match(/\/index.php.*?verify=/)[0]
+                            headers: headers,
+                            method: 'GET'
+                        })
+                        html = fetch(ssurl, { headers: headers, timeout:timeout });
+                        log(html);
+                        //http://www.600dvd.com/inc/ajax.php?ac=code_check&type=search&code=3573
+                        //http://www.600dvd.com/inc/common/code.php?a=search
+                    }
+                }catch(e){}
                 return html;
             }
             if(/v1|app|iptv|v2|cms/.test(obj.type)){
