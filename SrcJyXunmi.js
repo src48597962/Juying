@@ -407,7 +407,9 @@ function xunmi(name,data,ishkss) {
                                 
                             }
                             */
+                            log(gethtml(ssurl,urlua,xunmitimeout*1000));
                             var html = JSON.parse(gethtml(ssurl,urlua,xunmitimeout*1000));
+                            log(html);
                             var list = html.list||[];
                         }else{
                             var sstype = ssurl.indexOf(';post')>-1?"post":"get";
