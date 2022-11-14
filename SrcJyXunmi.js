@@ -261,8 +261,7 @@ function xunmi(name,data,ishkss) {
                     if (/页面已拦截/.test(html)) {
                         html = fetchCodeByWebView(ssurl, { headers: { 'User-Agent': ua },timeout:5000});
                         html = pdfh(html,'body&&pre&&Text');
-                    }
-                    if (/验证码|系统安全验证/.test(html)) {
+                    }else if (/验证码|系统安全验证/.test(html)) {
                         let headers = {
                             "User-Agent": ua,
                             "Referer": ssurl
