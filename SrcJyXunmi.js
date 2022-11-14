@@ -257,9 +257,12 @@ function xunmi(name,data,ishkss) {
             var urlua = obj.ua=="MOBILE_UA"?MOBILE_UA:obj.ua=="PC_UA"?PC_UA:obj.ua;
             function gethtml(ssurl,ua,timeout){
                 let html = request(ssurl, { headers: { 'User-Agent': ua }, timeout:timeout });
+                log(html);
                 if(/页面已拦截/.test(html)){
                     html = fetchCodeByWebView(ssurl, { headers: { 'User-Agent': ua }, timeout:timeout });
+                    log(html);
                     html = pdfh(html,'body&&pre&&Text');
+                    log(html);
                 }
                 return html;
             }
@@ -407,9 +410,7 @@ function xunmi(name,data,ishkss) {
                                 
                             }
                             */
-                            log(gethtml(ssurl,urlua,xunmitimeout*1000));
                             var html = JSON.parse(gethtml(ssurl,urlua,xunmitimeout*1000));
-                            log(html);
                             var list = html.list||[];
                         }else{
                             var sstype = ssurl.indexOf(';post')>-1?"post":"get";
