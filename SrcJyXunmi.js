@@ -166,7 +166,7 @@ function xunmi(name,data,ishkss) {
                 }catch(e){
                     return 'toast://茶杯搜索失败';
                 }
-                if(list.length>0){
+                if(lists.length>0){
                     let datalist =[];
                     try{
                         let info = JSON.parse(request('https://api.cupfox.app/api/v2/tmdb/?query='+name+'&token='+token));
@@ -204,6 +204,7 @@ function xunmi(name,data,ishkss) {
                             })
                         } 
                     });
+                    addItemBefore('loading', datalist);
                 }else{
                     return 'toast://未获取到内容';
                 }
