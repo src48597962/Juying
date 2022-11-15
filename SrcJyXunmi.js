@@ -157,7 +157,7 @@ function xunmi(name,data,ishkss) {
     if(!ishkss&&getMyVar('isload', '0')=="0"){
         d.push({
             title: '茶杯搜索',
-            url: $('#noLoading#').lazyRule(()=>{
+            url: $('#noLoading#').lazyRule((name)=>{
                 eval(getCryptoJS());
                 let token = CryptoJS.SHA1(name + "URBBRGROUN").toString();
                 try{
@@ -207,7 +207,7 @@ function xunmi(name,data,ishkss) {
                 }else{
                     return 'toast://未获取到内容';
                 }
-            }),
+            },name),
             col_type: "scroll_button",
             extra: {
                 id: 'sschabeihu'
