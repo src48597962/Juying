@@ -162,7 +162,6 @@ function xunmi(name,data,ishkss) {
                 let token = CryptoJS.SHA1(name + "URBBRGROUN").toString();
                 try{
                     let html = request('https://api.cupfox.app/api/v2/search/?text='+name+'&type=0&from=0&size=200&token='+token);
-                    log(html);
                     var lists = JSON.parse(html).resources;
                     deleteItemByCls('xunmilist');
                 }catch(e){
@@ -172,6 +171,7 @@ function xunmi(name,data,ishkss) {
                     let datalist =[];
                     try{
                         let info = JSON.parse(request('https://api.cupfox.app/api/v2/tmdb/?query='+name+'&token='+token));
+                        log(info);
                         datalist.push({
                             title: info.title,
                             url: 'hiker://empty',
@@ -188,8 +188,8 @@ function xunmi(name,data,ishkss) {
 
                     }
                     lists.forEach(item => {
-                        if(!/qq|mgtv|iptv|iqiyi|youku/.test(item.url)){
-                            let vodname = item.text.replace(/<em>|<\/em>/g,'');
+                        let vodname = item.text.replace(/<em>|<\/em>/g,'');
+                        if(!/qq|mgtv|iptv|iqiyi|youku/.test(item.url)&&vodname.index(name)>-1){
                             datalist.push({
                                 title: vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):vodname,
                                 desc: item.website+'  '+item.tags,
@@ -207,6 +207,7 @@ function xunmi(name,data,ishkss) {
                         } 
                     });
                     addItemBefore('loading', datalist);
+                    return 'toast://加载完成';
                 }else{
                     return 'toast://未获取到内容';
                 }
