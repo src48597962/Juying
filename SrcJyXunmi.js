@@ -122,7 +122,6 @@ function xunmi(name,data,ishkss) {
             d.push({
                 title: grouplist[i]==xunmigroup?'‘‘’’<b><span style="color:#3399cc">'+groupname:groupname,
                 url: $('#noLoading#').lazyRule((bess,datalist,name,count,groupname,ishkss)=>{
-                    clearMyVar('sschabeihu');
                     updateItem('sschabeihu',{title:'茶杯搜索'});
                     let groupmenu = getMyVar('groupmenu')?getMyVar('groupmenu').split(','):[];
                     for(let i in groupmenu){
@@ -162,21 +161,16 @@ function xunmi(name,data,ishkss) {
         d.push({
             title: '茶杯搜索',
             url: $('#noLoading#').lazyRule((name)=>{
-                showLoading('找cls');
-                let arr = findItemsByCls('groupname');
-                log(arr);
-                hideLoading();
+                let groupmenu = getMyVar('groupmenu')?getMyVar('groupmenu').split(','):[];
+                for(let i in groupmenu){
+                    updateItem(groupmenu[i],{title:groupmenu[i]})
+                }
+                putMyVar("selectgroup",'茶杯搜索');
                 if(getMyVar('deleteswitch')){
                     clearMyVar('deleteswitch');
                     updateItem('deleteswitch',{title:'删除开关'});
                 }
-                if(getMyVar('sschabeihu')){
-                    clearMyVar('sschabeihu');
-                    updateItem('sschabeihu',{title:'茶杯搜索'});
-                }else{
-                    putMyVar('sschabeihu','1');
-                    updateItem('sschabeihu',{title:'‘‘’’<b><span style="color:#3399cc">茶杯搜索'});
-                }
+                updateItem('sschabeihu',{title:'‘‘’’<b><span style="color:#3399cc">茶杯搜索'});
                 if(getMyVar("starttask","0")=="1"){putMyVar("stoptask","1");}
                 let waittime = parseInt(getMyVar("xunmitimeout","5"))+1;
                 for (let i = 0; i < waittime; i++) {
@@ -239,7 +233,7 @@ function xunmi(name,data,ishkss) {
         d.push({
             title: '删除开关',
             url: $('#noLoading#').lazyRule(()=>{
-                if(getMyVar('sschabeihu')){
+                if(getMyVar("selectgroup")=='茶杯搜索'){
                     return 'toast://茶杯搜索模式下无法开启二级界面删除接口开关';
                 }
                 if(getMyVar('deleteswitch')){
