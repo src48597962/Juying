@@ -161,7 +161,9 @@ function xunmi(name,data,ishkss) {
                 eval(getCryptoJS());
                 let token = CryptoJS.SHA1(name + "URBBRGROUN").toString();
                 try{
-                    var lists = JSON.parse(request('https://api.cupfox.app/api/v2/search/?text='+name+'&type=0&from=0&size=20&token='+token)).resources;
+                    let html = request('https://api.cupfox.app/api/v2/search/?text='+name+'&type=0&from=0&size=200&token='+token);
+                    log(html);
+                    var lists = JSON.parse(html).resources;
                     deleteItemByCls('xunmilist');
                 }catch(e){
                     return 'toast://茶杯搜索失败';
