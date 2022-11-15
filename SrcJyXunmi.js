@@ -122,32 +122,34 @@ function xunmi(name,data,ishkss) {
             d.push({
                 title: grouplist[i]==xunmigroup?'‘‘’’<b><span style="color:#3399cc">'+groupname:groupname,
                 url: $('#noLoading#').lazyRule((bess,datalist,name,count,groupname,ishkss)=>{
-                        let groupmenu = getMyVar('groupmenu')?getMyVar('groupmenu').split(','):[];
-                        for(let i in groupmenu){
-                            if(groupmenu[i]==groupname){
-                                putMyVar("selectgroup",groupname);
-                                updateItem(groupname,{title:'‘‘’’<b><span style="color:#3399cc">'+groupmenu[i]})
-                            }else{
-                                updateItem(groupmenu[i],{title:groupmenu[i]})
-                            }
+                    clearMyVar('sschabeihu');
+                    updateItem('sschabeihu',{title:'茶杯搜索'});
+                    let groupmenu = getMyVar('groupmenu')?getMyVar('groupmenu').split(','):[];
+                    for(let i in groupmenu){
+                        if(groupmenu[i]==groupname){
+                            putMyVar("selectgroup",groupname);
+                            updateItem(groupname,{title:'‘‘’’<b><span style="color:#3399cc">'+groupmenu[i]})
+                        }else{
+                            updateItem(groupmenu[i],{title:groupmenu[i]})
                         }
-                        if(getMyVar("starttask","0")=="1"){putMyVar("stoptask","1");}
-                        let waittime = parseInt(getMyVar("xunmitimeout","5"))+1;
-                        for (let i = 0; i < waittime; i++) {
-                            if(getMyVar("starttask","0")=="0"){
-                                break;
-                            }
-                            showLoading('等待上次线程结束，'+(waittime-i-1)+'s');
-                            java.lang.Thread.sleep(1000);
+                    }
+                    if(getMyVar("starttask","0")=="1"){putMyVar("stoptask","1");}
+                    let waittime = parseInt(getMyVar("xunmitimeout","5"))+1;
+                    for (let i = 0; i < waittime; i++) {
+                        if(getMyVar("starttask","0")=="0"){
+                            break;
                         }
-                        hideLoading();
-                        let beresults = [];
-                        let beerrors = [];
-                        deleteItemByCls('xunmilist');
-                        putMyVar("starttask","1");
-                        bess(datalist,beresults,beerrors,name,count,ishkss);
-                        return'hiker://empty';
-                    },bess,lists,name,lists.length,groupname,ishkss),
+                        showLoading('等待上次线程结束，'+(waittime-i-1)+'s');
+                        java.lang.Thread.sleep(1000);
+                    }
+                    hideLoading();
+                    let beresults = [];
+                    let beerrors = [];
+                    deleteItemByCls('xunmilist');
+                    putMyVar("starttask","1");
+                    bess(datalist,beresults,beerrors,name,count,ishkss);
+                    return'hiker://empty';
+                },bess,lists,name,lists.length,groupname,ishkss),
                 col_type: "scroll_button",
                 extra: {
                     id: groupname
@@ -159,6 +161,13 @@ function xunmi(name,data,ishkss) {
         d.push({
             title: '茶杯搜索',
             url: $('#noLoading#').lazyRule((name)=>{
+                if(getMyVar('sschabeihu')){
+                    clearMyVar('sschabeihu');
+                    updateItem('sschabeihu',{title:'茶杯搜索'});
+                }else{
+                    putMyVar('sschabeihu','1');
+                    updateItem('sschabeihu',{title:'‘‘’’<b><span style="color:#3CB371">茶杯搜索'});
+                }
                 if(getMyVar("starttask","0")=="1"){putMyVar("stoptask","1");}
                 let waittime = parseInt(getMyVar("xunmitimeout","5"))+1;
                 for (let i = 0; i < waittime; i++) {
@@ -187,7 +196,7 @@ function xunmi(name,data,ishkss) {
                         if(!/qq|mgtv|iptv|iqiyi|youku/.test(item.url)&&vodname.indexOf(name)>-1){
                             datalist.push({
                                 title: vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):vodname,
-                                desc: item.website+'  '+item.tags,
+                                desc: '‘‘’’<font color=#f13b66a>'+ item.website+'</font> ['+item.tags.join(' ')+']',
                                 url: $("hiker://empty##" + item.url + "#immersiveTheme##autoCache#").rule((type,ua) => {
                                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
                                         xunmierji(type,ua)
