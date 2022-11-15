@@ -159,6 +159,16 @@ function xunmi(name,data,ishkss) {
         d.push({
             title: '茶杯搜索',
             url: $('#noLoading#').lazyRule((name)=>{
+                if(getMyVar("starttask","0")=="1"){putMyVar("stoptask","1");}
+                let waittime = parseInt(getMyVar("xunmitimeout","5"))+1;
+                for (let i = 0; i < waittime; i++) {
+                    if(getMyVar("starttask","0")=="0"){
+                        break;
+                    }
+                    showLoading('等待上次线程结束，'+(waittime-i-1)+'s');
+                    java.lang.Thread.sleep(1000);
+                }
+                hideLoading();
                 showLoading('正在加载中...');
                 eval(getCryptoJS());
                 let token = CryptoJS.SHA1(name + "URBBRGROUN").toString();
@@ -191,7 +201,12 @@ function xunmi(name,data,ishkss) {
                             })
                         } 
                     });
+                    
                     addItemBefore('loading', datalist);
+                    updateItem('loading', {
+                        title: '茶杯搜索加载完成',
+                        url: "hiker://empty"
+                    });
                     return 'toast://加载完成';
                 }else{
                     return 'toast://未获取到内容';
