@@ -156,6 +156,65 @@ function xunmi(name,data,ishkss) {
     }
     if(!ishkss&&getMyVar('isload', '0')=="0"){
         d.push({
+            title: '茶杯搜索',
+            url: $('#noLoading#').lazyRule(()=>{
+                eval(getCryptoJS());
+                let token = CryptoJS.SHA1(name + "URBBRGROUN").toString();
+                try{
+                    var lists = JSON.parse(request('https://api.cupfox.app/api/v2/search/?text='+name+'&type=0&from=0&size=20&token='+token)).resources;
+                    deleteItemByCls('xunmilist');
+                }catch(e){
+                    return 'toast://茶杯搜索失败';
+                }
+                if(list.length>0){
+                    let datalist =[];
+                    try{
+                        let info = JSON.parse(request('https://api.cupfox.app/api/v2/tmdb/?query='+name+'&token='+token));
+                        datalist.push({
+                            title: info.title,
+                            url: 'hiker://empty',
+                            desc: info.overview,
+                            content: info.tags,
+                            pic_url: info.cover+'@Referer=',
+                            col_type: "movie_1_vertical_pic",
+                            extra: {
+                                id: 'chabeihuinfo',
+                                cls: 'xunmilist'
+                            }
+                        })
+                    }catch(e){
+
+                    }
+                    lists.forEach(item => {
+                        if(!/qq|mgtv|iptv|iqiyi|youku/.test(item.url)){
+                            let vodname = item.text.replace(/<em>|<\/em>/g,'');
+                            datalist.push({
+                                title: vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):vodname,
+                                desc: item.website+'  '+item.tags,
+                                url: $("hiker://empty##" + item.url + "#immersiveTheme##autoCache#").rule((type,ua) => {
+                                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
+                                        xunmierji(type,ua)
+                                    },'webtml', MOBILE_UA),
+                                col_type: "text_1",
+                                extra: {
+                                    name: name,
+                                    title: vodname+'-茶杯搜索',
+                                    cls: 'xunmilist'
+                                }
+                            })
+                        } 
+                    });
+                }else{
+                    return 'toast://未获取到内容';
+                }
+            }),
+            col_type: "scroll_button",
+            extra: {
+                id: 'sschabeihu'
+            }
+        });
+        
+        d.push({
             title: '删除开关',
             url: $('#noLoading#').lazyRule(()=>{
                     if(getMyVar('deleteswitch')){
