@@ -189,7 +189,7 @@ function xunmi(name,data,ishkss) {
                     }
                     lists.forEach(item => {
                         let vodname = item.text.replace(/<em>|<\/em>/g,'');
-                        if(!/qq|mgtv|iptv|iqiyi|youku/.test(item.url)&&vodname.index(name)>-1){
+                        if(!/qq|mgtv|iptv|iqiyi|youku/.test(item.url)&&vodname.indexOf(name)>-1){
                             datalist.push({
                                 title: vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):vodname,
                                 desc: item.website+'  '+item.tags,
