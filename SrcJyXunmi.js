@@ -171,23 +171,6 @@ function xunmi(name,data,ishkss) {
                 hideLoading();
                 if(lists.length>0){
                     let datalist =[];
-                    try{
-                        let info = JSON.parse(request('https://api.cupfox.app/api/v2/tmdb/?query='+name+'&token='+token)).info;
-                        datalist.push({
-                            title: info.title,
-                            url: 'hiker://empty',
-                            desc: info.overview,
-                            content: info.tags,
-                            pic_url: info.cover+'@Referer=',
-                            col_type: "movie_1_vertical_pic",
-                            extra: {
-                                id: 'chabeihuinfo',
-                                cls: 'xunmilist'
-                            }
-                        })
-                    }catch(e){
-
-                    }
                     lists.forEach(item => {
                         let vodname = item.text.replace(/<em>|<\/em>/g,'');
                         if(!/qq|mgtv|iptv|iqiyi|youku/.test(item.url)&&vodname.indexOf(name)>-1){
