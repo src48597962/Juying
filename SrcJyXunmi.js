@@ -52,7 +52,7 @@ function xunmi(name,data,ishkss) {
                 }
                 let nowtime = Date.now();
                 let oldtime = parseInt(getItem('DYTVBoxChecktime','0').replace('time',''));
-                if(nowtime < (oldtime+12*60*60*1000)&&dydatas.jiekou){
+                if((nowtime < (oldtime+12*60*60*1000)) && dydatas.jiekou){
                     var DYdatalist = dydatas.jiekou||[];
                 }else{
                     var DYdatalist = [];
@@ -152,7 +152,8 @@ function xunmi(name,data,ishkss) {
                 },bess,lists,name,lists.length,groupname,ishkss),
                 col_type: "scroll_button",
                 extra: {
-                    id: groupname
+                    id: groupname,
+                    cls: 'groupname'
                 }
             });
         }
@@ -161,12 +162,20 @@ function xunmi(name,data,ishkss) {
         d.push({
             title: '茶杯搜索',
             url: $('#noLoading#').lazyRule((name)=>{
+                showLoading('找cls');
+                let arr = findItemsByCls('groupname');
+                log(arr);
+                hideLoading();
+                if(getMyVar('deleteswitch')){
+                    clearMyVar('deleteswitch');
+                    updateItem('deleteswitch',{title:'删除开关'});
+                }
                 if(getMyVar('sschabeihu')){
                     clearMyVar('sschabeihu');
                     updateItem('sschabeihu',{title:'茶杯搜索'});
                 }else{
                     putMyVar('sschabeihu','1');
-                    updateItem('sschabeihu',{title:'‘‘’’<b><span style="color:#3CB371">茶杯搜索'});
+                    updateItem('sschabeihu',{title:'‘‘’’<b><span style="color:#3399cc">茶杯搜索'});
                 }
                 if(getMyVar("starttask","0")=="1"){putMyVar("stoptask","1");}
                 let waittime = parseInt(getMyVar("xunmitimeout","5"))+1;
@@ -196,7 +205,7 @@ function xunmi(name,data,ishkss) {
                         if(!/qq|mgtv|iptv|iqiyi|youku/.test(item.url)&&vodname.indexOf(name)>-1){
                             datalist.push({
                                 title: vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):vodname,
-                                desc: '‘‘’’<font color=#f13b66a>'+ item.website+'</font> ['+item.tags.join(' ')+']',
+                                desc: '‘‘’’<font color=#f13b66a>'+ item.website+'</font>'+(item.tags.length>0?'['+item.tags.join(' ')+']':'') ,
                                 url: $("hiker://empty##" + item.url + "#immersiveTheme##autoCache#").rule((type,ua) => {
                                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
                                         xunmierji(type,ua)
@@ -230,16 +239,19 @@ function xunmi(name,data,ishkss) {
         d.push({
             title: '删除开关',
             url: $('#noLoading#').lazyRule(()=>{
-                    if(getMyVar('deleteswitch')){
-                        clearMyVar('deleteswitch');
-                        updateItem('deleteswitch',{title:'删除开关'});
-                        return 'toast://退出处理模式，撤销二级删除开关';
-                    }else{
-                        putMyVar('deleteswitch','1');
-                        updateItem('deleteswitch',{title:'‘‘’’<b><span style="color:#3CB371">删除开关'});
-                        return 'toast://进入处理模式，点击影片详情确认是否删除';
-                    }
-                }),
+                if(getMyVar('sschabeihu')){
+                    return 'toast://茶杯搜索模式下无法开启二级界面删除接口开关';
+                }
+                if(getMyVar('deleteswitch')){
+                    clearMyVar('deleteswitch');
+                    updateItem('deleteswitch',{title:'删除开关'});
+                    return 'toast://退出处理模式，撤销二级删除开关';
+                }else{
+                    putMyVar('deleteswitch','1');
+                    updateItem('deleteswitch',{title:'‘‘’’<b><span style="color:#3CB371">删除开关'});
+                    return 'toast://进入处理模式，点击影片详情确认是否删除';
+                }
+            }),
             col_type: "scroll_button",
             extra: {
                 id: 'deleteswitch'
