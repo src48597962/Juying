@@ -158,6 +158,7 @@ function xunmi(name,data,ishkss) {
         d.push({
             title: '茶杯搜索',
             url: $('#noLoading#').lazyRule((name)=>{
+                showLoading('正在加载中...');
                 eval(getCryptoJS());
                 let token = CryptoJS.SHA1(name + "URBBRGROUN").toString();
                 try{
@@ -167,11 +168,11 @@ function xunmi(name,data,ishkss) {
                 }catch(e){
                     return 'toast://茶杯搜索失败';
                 }
+                hideLoading();
                 if(lists.length>0){
                     let datalist =[];
                     try{
-                        let info = JSON.parse(request('https://api.cupfox.app/api/v2/tmdb/?query='+name+'&token='+token));
-                        log(info);
+                        let info = JSON.parse(request('https://api.cupfox.app/api/v2/tmdb/?query='+name+'&token='+token)).info;
                         datalist.push({
                             title: info.title,
                             url: 'hiker://empty',
