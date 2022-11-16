@@ -38,7 +38,7 @@ function autoerji(url){
                     arts.push(pdfh(item, t.tab_text));
                 }
             });
-
+            log(arts)
             let lists = pdfa(html,t.lists.split(',')[0]);//全线路影片列表
             log(lists)
             var conts = [];
