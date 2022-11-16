@@ -30,20 +30,17 @@ function autoerji(url){
     for(let i in tmpllist){
         let t = tmpllist[i].解析;
         try {
-            //var details1 = pdfh(html,t.desc);
-            //var details2 = '';
-            //var pic = pdfh(html,t.img);
-            //var desc = pdfh(html,t.content);
             let tabs = pdfa(html,t.tabs);
-            log(tabs)
-            //let lists = pdfa(html,t.lists.split(',')[0]);//全线路影片列表
-            
-            /*
             var arts = [];
             tabs.forEach(item => {
                 arts.push(pdfh(item, t.tabs_text).replace(//g,'').replace(/ /g,'').replace(/ /g,'').replace(eval(filter), ''));
             });
-            log(arts);*/
+            log(arts);
+
+            //let lists = pdfa(html,t.lists.split(',')[0]);//全线路影片列表
+            
+            
+            
             /*
             var conts = [];
             for (let i = 0; i < lists.length; i++) {
@@ -58,6 +55,10 @@ function autoerji(url){
                 conts.push(cont.join("#"))
             }
             if(arts.length>0&&conts.length>0&&conts[0]){
+                //var details1 = pdfh(html,t.desc);
+                //var details2 = '';
+                //var pic = pdfh(html,t.img);
+                //var desc = pdfh(html,t.content);
                 data = {details1:details1,details2:details2,pic:pic,desc:desc,arts:arts,conts:conts};
                 putMyVar('Tmpl-'+urldomian,JSON.stringify(tmpllist[i])); 
                 break;
