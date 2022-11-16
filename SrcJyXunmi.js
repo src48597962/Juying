@@ -1088,7 +1088,7 @@ function xunmierji(type,ua) {
                 var conts = data.conts;
             }else{
                 var details1 = '自动匹配失败';
-                var details2 = '道长dr模板需要扩展了';
+                var details2 = '';
                 var pic = '';
                 var desc = '';
                 var arts = [];
