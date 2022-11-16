@@ -1086,6 +1086,8 @@ function xunmierji(type,ua) {
                 var arts = [];
                 var conts = [];
             }
+            log(arts)
+            log(conts)
         }
         if(area){
             dqnf = '\n地区：' + area + (year?'   年代：' + year:'')
