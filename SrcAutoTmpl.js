@@ -34,9 +34,9 @@ function autoerji(url){
             log(tabs)
             var arts = [];
             tabs.forEach(item => {
-                let name = pdfh(item, t.tab_text);
+                let name = pdfh(item, t.tab_text?t.tab_text:'a||h3&&Text');
                 if(name&&!/更多精品/.test(name)){
-                    arts.push(pdfh(item, t.tab_text?t.tab_text:'a||h3&&Text'));
+                    arts.push(name);
                 }
             });
             log(arts)
