@@ -27,7 +27,7 @@ function autoerji(url){
         tmpllist.unshift(tmpl[0]);
     }
     for(let i in tmpllist){
-        //log('【'+tmpllist[i].名称+'】');
+        log('【'+tmpllist[i].名称+'】');
         let t = tmpllist[i].解析;
         try {
             let tabs = pdfa(html,t.tabs);
@@ -58,7 +58,7 @@ function autoerji(url){
                 let details1 = pdfh(html, t.desc.split(';')[0]);
                 let details2 = t.desc.indexOf(';')>-1?pdfh(html, t.desc.split(';')[1]):"";
                 let pic = pdfh(html,t.img);
-                pic = pic?pic.replace(/http.*\/tu\.php\?tu=|\/img\.php\?url=| |\/tu\.php\?tu=/g,''):"";
+                //pic = pic?pic.replace(/http.*\/tu\.php\?tu=|\/img\.php\?url=| |\/tu\.php\?tu=/g,''):"";
                 let desc = pdfh(html,t.content);
                 data = {details1:details1,details2:details2,pic:pic,desc:desc,arts:arts,conts:conts};
                 putMyVar('Tmpl-'+urldomian,JSON.stringify(tmpllist[i])); 
