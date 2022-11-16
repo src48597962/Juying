@@ -157,10 +157,56 @@ function xunmi(name,data,ishkss) {
             });
         }
     }
+    function chabeisousuo(name){
+        updateItem('sschabeihu',{title:'‘‘’’<b><span style="color:#3399cc">茶杯搜索'});
+        hideLoading();
+        showLoading('正在加载中...');
+        eval(getCryptoJS());
+        let token = CryptoJS.SHA1(name + "URBBRGROUN").toString();
+        try{
+            let html = request('https://api.cupfox.app/api/v2/search/?text='+name+'&type=0&from=0&size=200&token='+token);
+            var lists = JSON.parse(html).resources;
+            deleteItemByCls('xunmilist');
+        }catch(e){
+            return 'toast://茶杯搜索失败';
+        }
+        hideLoading();
+        if(lists.length>0){
+            let Cdatalist =[];
+            lists.forEach(item => {
+                let vodname = item.text.replace(/<em>|<\/em>/g,'');
+                if(!/qq|mgtv|iptv|iqiyi|youku/.test(item.url)&&vodname.indexOf(name)>-1){
+                    Cdatalist.push({
+                        title: vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):vodname,
+                        desc: '‘‘’’<font color=#f13b66a>'+ item.website+'</font>'+(item.tags.length>0?'  ['+item.tags.join(' ')+']':'') ,
+                        url: $("hiker://empty##" + item.url + "#immersiveTheme##autoCache#").rule((type,ua) => {
+                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
+                                xunmierji(type,ua)
+                            },'webtml', MOBILE_UA),
+                        col_type: "text_1",
+                        extra: {
+                            name: name,
+                            title: vodname+'-茶杯搜索',
+                            cls: 'xunmilist'
+                        }
+                    })
+                } 
+            });
+            
+            addItemBefore('loading', Cdatalist);
+            updateItem('loading', {
+                title: '茶杯搜索加载完成',
+                url: "hiker://empty"
+            });
+            return 'toast://加载完成';
+        }else{
+            return 'toast://未获取到内容';
+        }
+    }
     if(!ishkss&&getMyVar('isload', '0')=="0"){
         d.push({
             title: '茶杯搜索',
-            url: $('#noLoading#').lazyRule((name)=>{
+            url: $('#noLoading#').lazyRule((name,chabeisousuo)=>{
                 let groupmenu = getMyVar('groupmenu')?getMyVar('groupmenu').split(','):[];
                 for(let i in groupmenu){
                     updateItem(groupmenu[i],{title:groupmenu[i]})
@@ -170,7 +216,6 @@ function xunmi(name,data,ishkss) {
                     clearMyVar('deleteswitch');
                     updateItem('deleteswitch',{title:'删除开关'});
                 }
-                updateItem('sschabeihu',{title:'‘‘’’<b><span style="color:#3399cc">茶杯搜索'});
                 if(getMyVar("starttask","0")=="1"){putMyVar("stoptask","1");}
                 let waittime = parseInt(getMyVar("xunmitimeout","5"))+1;
                 for (let i = 0; i < waittime; i++) {
@@ -180,77 +225,36 @@ function xunmi(name,data,ishkss) {
                     showLoading('等待上次线程结束，'+(waittime-i-1)+'s');
                     java.lang.Thread.sleep(1000);
                 }
-                hideLoading();
-                showLoading('正在加载中...');
-                eval(getCryptoJS());
-                let token = CryptoJS.SHA1(name + "URBBRGROUN").toString();
-                try{
-                    let html = request('https://api.cupfox.app/api/v2/search/?text='+name+'&type=0&from=0&size=200&token='+token);
-                    var lists = JSON.parse(html).resources;
-                    deleteItemByCls('xunmilist');
-                }catch(e){
-                    return 'toast://茶杯搜索失败';
-                }
-                hideLoading();
-                if(lists.length>0){
-                    let datalist =[];
-                    lists.forEach(item => {
-                        let vodname = item.text.replace(/<em>|<\/em>/g,'');
-                        if(!/qq|mgtv|iptv|iqiyi|youku/.test(item.url)&&vodname.indexOf(name)>-1){
-                            datalist.push({
-                                title: vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):vodname,
-                                desc: '‘‘’’<font color=#f13b66a>'+ item.website+'</font>'+(item.tags.length>0?'  ['+item.tags.join(' ')+']':'') ,
-                                url: $("hiker://empty##" + item.url + "#immersiveTheme##autoCache#").rule((type,ua) => {
-                                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
-                                        xunmierji(type,ua)
-                                    },'webtml', MOBILE_UA),
-                                col_type: "text_1",
-                                extra: {
-                                    name: name,
-                                    title: vodname+'-茶杯搜索',
-                                    cls: 'xunmilist'
-                                }
-                            })
-                        } 
-                    });
-                    
-                    addItemBefore('loading', datalist);
-                    updateItem('loading', {
-                        title: '茶杯搜索加载完成',
-                        url: "hiker://empty"
-                    });
-                    return 'toast://加载完成';
-                }else{
-                    return 'toast://未获取到内容';
-                }
-            },name),
+                chabeisousuo(name);
+            },name,chabeisousuo),
             col_type: "scroll_button",
             extra: {
                 id: 'sschabeihu'
             }
         });
-        
-        d.push({
-            title: '删除开关',
-            url: $('#noLoading#').lazyRule(()=>{
-                if(getMyVar("selectgroup")=='茶杯搜索'){
-                    return 'toast://茶杯搜索模式下无法开启二级界面删除接口开关';
+        if(datalist.length>0){
+            d.push({
+                title: '删除开关',
+                url: $('#noLoading#').lazyRule(()=>{
+                    if(getMyVar("selectgroup")=='茶杯搜索'){
+                        return 'toast://茶杯搜索模式下无法开启二级界面删除接口开关';
+                    }
+                    if(getMyVar('deleteswitch')){
+                        clearMyVar('deleteswitch');
+                        updateItem('deleteswitch',{title:'删除开关'});
+                        return 'toast://退出处理模式，撤销二级删除开关';
+                    }else{
+                        putMyVar('deleteswitch','1');
+                        updateItem('deleteswitch',{title:'‘‘’’<b><span style="color:#3CB371">删除开关'});
+                        return 'toast://进入处理模式，点击影片详情确认是否删除';
+                    }
+                }),
+                col_type: "scroll_button",
+                extra: {
+                    id: 'deleteswitch'
                 }
-                if(getMyVar('deleteswitch')){
-                    clearMyVar('deleteswitch');
-                    updateItem('deleteswitch',{title:'删除开关'});
-                    return 'toast://退出处理模式，撤销二级删除开关';
-                }else{
-                    putMyVar('deleteswitch','1');
-                    updateItem('deleteswitch',{title:'‘‘’’<b><span style="color:#3CB371">删除开关'});
-                    return 'toast://进入处理模式，点击影片详情确认是否删除';
-                }
-            }),
-            col_type: "scroll_button",
-            extra: {
-                id: 'deleteswitch'
-            }
-        });
+            });
+        }
     }
     
     if(datalist2.length>0){
@@ -281,6 +285,7 @@ function xunmi(name,data,ishkss) {
         });
     }
     setHomeResult(d);
+
     
     var count = datalist.length;
     var beresults = [];
