@@ -42,7 +42,7 @@ function autoerji(url){
             var conts = [];
             for (let i = 0; i < lists.length; i++) {
                 log(lists[i]);
-                let list = pdfa(lists[i],"#id&&li");//单线路影片列表
+                let list = pdfa(lists[i],"body&&li");//单线路影片列表
                 log(list);
                 let cont = [];
                 for (let j = 0; j < list.length; j++) {
