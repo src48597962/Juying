@@ -225,7 +225,7 @@ function xunmi(name,data,ishkss) {
                     showLoading('等待上次线程结束，'+(waittime-i-1)+'s');
                     java.lang.Thread.sleep(1000);
                 }
-                chabeisousuo(name);
+                return chabeisousuo(name);
             },name,chabeisousuo),
             col_type: "scroll_button",
             extra: {
@@ -256,20 +256,6 @@ function xunmi(name,data,ishkss) {
             });
         }
     }
-    
-    if(datalist2.length>0){
-        datalist = datalist2;
-    }
-    
-    if(getMyVar('selectgroup','a').indexOf('失败待处理')==-1&&xunmigroup!="失败待处理"&&grouplist.length>1){
-        for(let i=0;i<datalist.length;i++){
-            if(datalist[i].group=="失败待处理"){
-                datalist.splice(i,1);
-                i = i - 1;
-            }
-        }
-    }
-
     d.push({
         title: '没有接口，无法搜索',
         url: "hiker://empty",
@@ -285,8 +271,20 @@ function xunmi(name,data,ishkss) {
         });
     }
     setHomeResult(d);
-
     
+    if(datalist2.length>0){
+        datalist = datalist2;
+    }
+
+    if(getMyVar('selectgroup','a').indexOf('失败待处理')==-1&&xunmigroup!="失败待处理"&&grouplist.length>1){
+        for(let i=0;i<datalist.length;i++){
+            if(datalist[i].group=="失败待处理"){
+                datalist.splice(i,1);
+                i = i - 1;
+            }
+        }
+    }
+
     var count = datalist.length;
     var beresults = [];
     var beerrors = [];
@@ -808,6 +806,8 @@ function xunmi(name,data,ishkss) {
     if(count>0){
         putMyVar("starttask","1");
         bess(datalist,beresults,beerrors,name,count,ishkss);
+    }else{
+        chabeisousuo(name);
     }
 }
 
