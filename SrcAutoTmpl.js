@@ -34,7 +34,7 @@ function autoerji(url){
             //var details2 = '';
             //var pic = pdfh(html,t.img);
             //var desc = pdfh(html,t.content);
-            let tabs = pdfa(html,'body&&.stui-vodlist__head:has(span)');
+            let tabs = pdfa(html,t.tabs);
             log(tabs)
             //let lists = pdfa(html,t.lists.split(',')[0]);//全线路影片列表
             
