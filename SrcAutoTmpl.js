@@ -19,7 +19,6 @@ function autoerji(url){
         var tmpllist = [];
     }
     let html = 获取源码(url);
-    let filter = '';
     let urldomian = url.match(/http(s)?:\/\/(.*?)\//)[0];
     let urltmpl = JSON.parse(getMyVar('Tmpl-'+urldomian,'{}'));
     let tmplidex = tmpllist.findIndex(it=>it.名称===urltmpl.名称);
@@ -35,7 +34,7 @@ function autoerji(url){
             var arts = [];
             tabs.forEach(item => {
                 let name = pdfh(item, t.tab_text);
-                if(!/更多精品/.test(name)){
+                if(name&&!/更多精品/.test(name)){
                     arts.push(pdfh(item, t.tab_text));
                 }
             });
