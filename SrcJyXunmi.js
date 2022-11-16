@@ -1070,6 +1070,7 @@ function xunmierji(type,ua) {
             //网页
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcAutoTmpl.js');
             let data = autoerji(MY_URL.split('##')[1].split('#')[0]);
+
             if(data.conts){
                 var details1 = data.details1;
                 var details2 = data.details2;
@@ -1107,6 +1108,13 @@ function xunmierji(type,ua) {
         var arts = configvar.线路;
         var conts = configvar.影片;
     }
+
+    log(details1);
+    log(details2);
+    log(pic);
+    log(arts);
+    log(conts);
+
     d.push({
         title: details1,//详情1
         desc: details2,//详情2
