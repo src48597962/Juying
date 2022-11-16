@@ -33,25 +33,27 @@ function autoerji(url){
             var details2 = '';
             var pic = pdfh(html,t.img);
             var desc = pdfh(html,t.content);
-            let tabs = pdfa(html,t.tabs);
-            var arts = tabs.map(item=>{
-                return pdfh(item, t.tabs_text).replace(//g,'').replace(/ /g,'').replace(/ /g,'').replace(eval(filter), '');
-            });
-            let lists = pdfa(html,t.lists.split(',')[0]);//全线路影片列表
-            var conts = [];
-            for (let i = 0; i < lists.length; i++) {
-                let list = pdfa(lists[i],t.lists.split(',')[1]);//单线路影片列表
-                let cont = [];
-                for (let j = 0; j < list.length; j++) {
-                    let contname = pdfh(list[j],"a&&Text");
-                    let conturl = pd(list[j],t.tab_id?t.tab_id:'a&&href');
-                    cont.push(contname+"$"+conturl)
+            let tabs = pdfa(html,t.tabs)||[];
+            let lists = pdfa(html,t.lists.split(',')[0])||[];//全线路影片列表
+            if(tabs.length>0&&lists.length>0){
+                var arts = tabs.map(item=>{
+                    return pdfh(item, t.tabs_text).replace(//g,'').replace(/ /g,'').replace(/ /g,'').replace(eval(filter), '');
+                });
+                var conts = [];
+                for (let i = 0; i < lists.length; i++) {
+                    let list = pdfa(lists[i],t.lists.split(',')[1]);//单线路影片列表
+                    let cont = [];
+                    for (let j = 0; j < list.length; j++) {
+                        let contname = pdfh(list[j],"a&&Text");
+                        let conturl = pd(list[j],t.tab_id?t.tab_id:'a&&href');
+                        cont.push(contname+"$"+conturl)
+                    }
+                    conts.push(cont.join("#"))
                 }
-                conts.push(cont.join("#"))
+                data = {details1:details1,details2:details2,pic:pic,desc:desc,arts:arts,conts:conts};
+                putMyVar('Tmpl-'+urldomian,JSON.stringify(tmpllist[i])); 
+                break;
             }
-            data = {details1:details1,details2:details2,pic:pic,desc:desc,arts:arts,conts:conts};
-            putMyVar('Tmpl-'+urldomian,JSON.stringify(tmpllist[i])); 
-            break;
         }catch (e) {
             log('二级模板自动匹配失败：'+e.message);
         }
