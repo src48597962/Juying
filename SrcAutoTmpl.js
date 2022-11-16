@@ -39,7 +39,7 @@ function autoerji(url){
                 }
             });
             log(arts)
-            let lists = pdfa(html,t.lists.split(',')[0]);//全线路影片列表
+            let lists = pdfa(html,'body&&'+t.lists.split(',')[0]);//全线路影片列表
             log(lists)
             var conts = [];
             for (let i = 0; i < lists.length; i++) {
