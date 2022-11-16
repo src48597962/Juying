@@ -51,20 +51,16 @@ function autoerji(url){
                 }
                 conts.push(cont.join("#"))
             }
-            log(conts);
-            
-            
-            /*
             
             if(arts.length>0&&conts.length>0&&conts[0]){
-                //var details1 = pdfh(html,t.desc);
-                //var details2 = '';
-                //var pic = pdfh(html,t.img);
-                //var desc = pdfh(html,t.content);
+                let details1 = pdfh(html,t.desc);
+                let details2 = '';
+                let pic = pdfh(html,t.img);
+                let desc = pdfh(html,t.content);
                 data = {details1:details1,details2:details2,pic:pic,desc:desc,arts:arts,conts:conts};
                 putMyVar('Tmpl-'+urldomian,JSON.stringify(tmpllist[i])); 
                 break;
-            }*/
+            }
         }catch (e) {
             log('二级模板【'+tmpllist[i].名称+'】匹配失败：'+e.message);
         }
