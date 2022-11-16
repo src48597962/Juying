@@ -32,15 +32,13 @@ function autoerji(url){
         let t = tmpllist[i].解析;
         try {
             let tabs = pdfa(html,t.tabs);
-            log(tabs);
             var arts = [];
             tabs.forEach(item => {
                 arts.push(pdfh(item, t.tab_text));
             });
-            log(arts);
 
-            //let lists = pdfa(html,t.lists.split(',')[0]);//全线路影片列表
-            
+            let lists = pdfa(html,t.lists.split(',')[0]);//全线路影片列表
+            log(lists);
             
             
             /*
