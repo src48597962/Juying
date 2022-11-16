@@ -182,7 +182,7 @@ function xunmi(name,data,ishkss) {
                         url: $("hiker://empty##" + item.url + "#immersiveTheme##autoCache#").rule((type,ua) => {
                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
                                 xunmierji(type,ua)
-                            },'webtml', MOBILE_UA),
+                            },'web', MOBILE_UA),
                         col_type: "text_1",
                         extra: {
                             name: name,
@@ -1066,16 +1066,33 @@ function xunmierji(type,ua) {
                 var conts = conts||[];
                 log(getsm+'失败>'+e.message)
             }    
-        }else{
+        }else if (type=='web') {
             //网页
+            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcAutoTmpl.js');
+            let data = autoerji(MY_URL.split('##')[1].split('#')[0]);
+            if(data.conts){
+                var details1 = data.details1;
+                var details2 = data.details2;
+                var pic = data.pic;
+                var desc = data.desc;
+                var arts = data.arts;
+                var conts = data.conts;
+            }else{
+                var details1 = '自动匹配失败';
+                var details2 = '道长dr模板需要扩展了';
+                var pic = '';
+                var desc = '';
+                var arts = [];
+                var conts = [];
+            }
         }
         if(area){
             dqnf = '\n地区：' + area + (year?'   年代：' + year:'')
         }else{
             dqnf = year?'\n年代：' + year:''
         }
-        var details1 = '导演：' + director.substring(0, director.length<12?director.length:12) + '\n主演：' + actor.substring(0, actor.length<12||dqnf==""?actor.length:12) + dqnf;
-        var details2 = remarks.trim() + '\n' + pubdate.trim();
+        var details1 = type=='web'?details1:'导演：' + director.substring(0, director.length<12?director.length:12) + '\n主演：' + actor.substring(0, actor.length<12||dqnf==""?actor.length:12) + dqnf;
+        var details2 = type=='web'?details2:remarks.trim() + '\n' + pubdate.trim();
         details1 = details1.replace(/&ldquo;/g,'“').replace(/&rdquo;/g,'”').replace(/&middot;/g,'·').replace(/&hellip;/g,'…');
         details2 = details2.replace(/&ldquo;/g,'“').replace(/&rdquo;/g,'”').replace(/&middot;/g,'·').replace(/&hellip;/g,'…');
         desc = desc.replace(/&ldquo;/g,'“').replace(/&rdquo;/g,'”').replace(/&middot;/g,'·').replace(/&hellip;/g,'…');
@@ -1159,7 +1176,7 @@ function xunmierji(type,ua) {
             let line = i;
             tabs.push(line);
             var linecode = i;
-        }else if (/cms|xpath|biubiu/.test(type)) {
+        }else if (/cms|xpath|biubiu|web/.test(type)) {
             tabs.push(arts[i].replace(/[\r\ \n\t]/g, ""));
             var linecode = arts[i];
         }else{
@@ -1210,8 +1227,12 @@ function xunmierji(type,ua) {
                 }
                 lists.push(lines)
             };
-        }else{
-            //网页
+        }else if (type=='web') {
+            let single = conts[i]||"";
+            if(single){
+                let lines = single.split('#');
+                lists.push(lines)
+            };
         }
     }
 
@@ -1369,7 +1390,7 @@ function xunmierji(type,ua) {
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
                         return SrcParseS.聚影(input);
                     });
-                }else if (/xpath|biubiu/.test(type)) {
+                }else if (/xpath|biubiu|web/.test(type)) {
                     var playtitle = list[j].split('$')[0];
                     var playurl = list[j].split('$')[1];
                     var DTJX = $("").lazyRule(() => {
@@ -1397,7 +1418,7 @@ function xunmierji(type,ua) {
         if (list == undefined || list.length == 0) {
             playlist('0');
         } else {
-            if (/v1|app|v2|iptv|cms|xpath|biubiu/.test(type)) {
+            if (/v1|app|v2|iptv|cms|xpath|biubiu|web/.test(type)) {
                 var listone = list[0].split('$')[0];
                 try{
                     let list1 = list[0].split('$')[0];
