@@ -40,7 +40,7 @@ function autoerji(url){
             });
 
             let lists = pdfa(html,t.lists.split(',')[0]);//全线路影片列表
-            
+            log(lists)
             var conts = [];
             for (let i = 0; i < lists.length; i++) {
                 let key = lists[i].indexOf('#id')==-1?t.lists.split(',')[1].replace('#id','body'):t.lists.split(',')[1];
@@ -53,7 +53,7 @@ function autoerji(url){
                 }
                 conts.push(cont.join("#"))
             }
-            
+            log(conts)
             if(arts.length>0&&conts.length>0&&conts[0]){
                 let details1 = pdfh(html, t.desc.split(';')[0]);
                 let details2 = t.desc.indexOf(';')>-1?pdfh(html, t.desc.split(';')[1]):"";
