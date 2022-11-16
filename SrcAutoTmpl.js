@@ -291,12 +291,12 @@ function autoerji(url){
         let tmpl = erjiTmpl.splice(tmplidex, 1);
         erjiTmpl.unshift(tmpl[0]);
     }
+	let playlist = [];
     for(let i in erjiTmpl){
-        log('【'+erjiTmpl[i].id+'】');
+        //log('【'+erjiTmpl[i].id+'】');
         let t = erjiTmpl[i];
         try {
             let tabs = pdfa(html,t.tabs);
-            log(tabs)
             var arts = [];
             tabs.forEach(item => {
                 let name = pdfh(item, t.tab_text?t.tab_text:'h3||a||span||body&&Text');
@@ -304,9 +304,7 @@ function autoerji(url){
                     arts.push(name);
                 }
             });
-            log(arts)
             let lists = pdfa(html,'body&&'+t.lists.split(';')[0]);//全线路影片列表
-            log(lists)
             var conts = [];
             for (let i = 0; i < lists.length; i++) {
                 let key = t.lists.split(';')[1];
@@ -319,7 +317,7 @@ function autoerji(url){
                 }
                 conts.push(cont.join("#"))
             }
-            log(conts)
+			if(conts.length>0){playlist = conts[0];}
             if(arts.length>0&&conts.length>0&&conts[0]){
 				let details = t.desc.split(';');
                 let details1 = pdfh(html, details[0]);
@@ -334,9 +332,12 @@ function autoerji(url){
                 break;
             }
         }catch (e) {
-            log('二级模板【'+t.id+'】匹配失败：'+e.message);
+            //log('二级模板【'+t.id+'】匹配失败：'+e.message);
         }
     }
     //log(data);
+	if(!data.arts){
+		data = {details1:"暂无信息",details2:"暂无信息",pic:"",desc:"暂无信息",arts:["播放列表"],conts:playlist};
+	}
     return data;
 }
