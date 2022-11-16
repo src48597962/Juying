@@ -36,8 +36,9 @@ function autoerji(url){
             let tabs = pdfa(html,t.tabs);
             let lists = pdfa(html,t.lists.split(',')[0]);//全线路影片列表
             log(tabs)
-            var arts = tabs.map(item=>{
-                return pdfh(item, t.tabs_text).replace(//g,'').replace(/ /g,'').replace(/ /g,'').replace(eval(filter), '');
+            var arts = [];
+            tabs.forEach(item => {
+                arts.push(pdfh(item, t.tabs_text).replace(//g,'').replace(/ /g,'').replace(/ /g,'').replace(eval(filter), ''));
             });
             log(arts);
             var conts = [];
