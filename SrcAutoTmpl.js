@@ -53,7 +53,7 @@ function autoerji(url){
             putMyVar('Tmpl-'+urldomian,JSON.stringify(tmpllist[i])); 
             break;
         }catch (e) {
-
+            log('二级模板自动匹配失败：'+e.message);
         }
     }
     return data;
