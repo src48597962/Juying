@@ -54,12 +54,10 @@ function autoerji(url){
             
             if(arts.length>0&&conts.length>0&&conts[0]){
                 let details1 = pdfh(html,t.desc);
-                log(details1);
+                log('详情>'+details1);
                 let details2 = '';
                 let pic = pdfh(html,t.img);
-                log(pic);
                 let desc = pdfh(html,t.content);
-                log(desc);
                 data = {details1:details1,details2:details2,pic:pic,desc:desc,arts:arts,conts:conts};
                 putMyVar('Tmpl-'+urldomian,JSON.stringify(tmpllist[i])); 
                 break;
