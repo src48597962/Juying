@@ -1109,12 +1109,6 @@ function xunmierji(type,ua) {
         var conts = configvar.影片;
     }
 
-    log(details1);
-    log(details2);
-    log(pic);
-    log(arts);
-    log(conts);
-
     d.push({
         title: details1,//详情1
         desc: details2,//详情2
@@ -1193,7 +1187,7 @@ function xunmierji(type,ua) {
         }
         linecodes.push(linecode);
     }
-
+    log(111)
     var lists = [];
     for (var i in conts) {
         if (/v1|app|v2/.test(type)) {
@@ -1237,7 +1231,7 @@ function xunmierji(type,ua) {
             };
         }
     }
-
+    log(222)
     //取之前足迹记录，用于自动定位之前的线路
     try {
         eval('var SrcMark = ' + fetch("hiker://files/cache/SrcMark.json"));
