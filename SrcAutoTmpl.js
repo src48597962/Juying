@@ -57,7 +57,8 @@ function autoerji(url){
             if(arts.length>0&&conts.length>0&&conts[0]){
                 let details1 = pdfh(html, t.desc.split(';')[0]);
                 let details2 = t.desc.indexOf(';')>-1?pdfh(html, t.desc.split(';')[1]):"";
-                let pic = pdfh(html,t.img).replace(/http.*\/tu\.php\?tu=|\/img\.php\?url=| |\/tu\.php\?tu=/g,'');
+                let pic = pdfh(html,t.img);
+                pic = pic?pic.replace(/http.*\/tu\.php\?tu=|\/img\.php\?url=| |\/tu\.php\?tu=/g,''):"";
                 let desc = pdfh(html,t.content);
                 data = {details1:details1,details2:details2,pic:pic,desc:desc,arts:arts,conts:conts};
                 putMyVar('Tmpl-'+urldomian,JSON.stringify(tmpllist[i])); 
