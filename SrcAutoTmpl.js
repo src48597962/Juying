@@ -49,7 +49,7 @@ function autoerji(url){
                 }
                 conts.push(cont.join("#"))
             }
-            log(lists);
+            log(conts);
             
             
             /*
