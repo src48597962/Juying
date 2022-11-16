@@ -31,6 +31,7 @@ function autoerji(url){
         let t = tmpllist[i].解析;
         try {
             let tabs = pdfa(html,t.tabs);
+            log(tabs)
             var arts = [];
             tabs.forEach(item => {
                 let name = pdfh(item, t.tab_text);
