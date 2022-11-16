@@ -31,9 +31,10 @@ function autoerji(url){
         let t = tmpllist[i].解析;
         try {
             let tabs = pdfa(html,t.tabs);
+            log(tabs);
             var arts = [];
             tabs.forEach(item => {
-                arts.push(pdfh(item, t.tabs_text).replace(//g,'').replace(/ /g,'').replace(/ /g,'').replace(eval(filter), ''));
+                arts.push(pdfh(item, "h3&&Text"));
             });
             log(arts);
 
