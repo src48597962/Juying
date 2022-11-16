@@ -39,10 +39,11 @@ function autoerji(url){
             var arts = tabs.map(item=>{
                 return pdfh(item, t.tabs_text).replace(//g,'').replace(/ /g,'').replace(/ /g,'').replace(eval(filter), '');
             });
-            
+            log(arts);
             var conts = [];
             for (let i = 0; i < lists.length; i++) {
                 let list = pdfa(lists[i],t.lists.split(',')[1]);//单线路影片列表
+                log(list);
                 let cont = [];
                 for (let j = 0; j < list.length; j++) {
                     let contname = pdfh(list[j],"a&&Text");
