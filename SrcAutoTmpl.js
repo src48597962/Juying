@@ -28,7 +28,7 @@ function autoerji(url){
         tmpllist.unshift(tmpl[0]);
     }
     for(let i in tmpllist){
-        log('【'+tmpllist[i].名称+'】');
+        //log('【'+tmpllist[i].名称+'】');
         let t = tmpllist[i].解析;
         try {
             let tabs = pdfa(html,t.tabs);
@@ -65,6 +65,6 @@ function autoerji(url){
             log('二级模板【'+tmpllist[i].名称+'】匹配失败：'+e.message);
         }
     }
-    log(data);
+    //log(data);
     return data;
 }
