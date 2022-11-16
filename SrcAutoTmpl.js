@@ -34,17 +34,17 @@ function autoerji(url){
             log(tabs)
             var arts = [];
             tabs.forEach(item => {
-                let name = pdfh(item, t.tab_text?t.tab_text:'h3||a||span&&Text');
+                let name = pdfh(item, t.tab_text?t.tab_text:'h3||a||span||body&&Text');
                 if(name&&!/更多精品/.test(name)){
                     arts.push(name);
                 }
             });
             log(arts)
-            let lists = pdfa(html,'body&&'+t.lists.split(',')[0]);//全线路影片列表
+            let lists = pdfa(html,'body&&'+t.lists.replace(',#id',';body').split(';')[0]);//全线路影片列表
             log(lists)
             var conts = [];
             for (let i = 0; i < lists.length; i++) {
-                let key = lists[i].indexOf('#id')==-1?t.lists.split(',')[1].replace('#id','body'):t.lists.split(',')[1];
+                let key = t.lists.replace(',#id',';body').split(';')[1];
                 let list = pdfa(lists[i],key);//单线路影片列表
                 let cont = [];
                 for (let j = 0; j < list.length; j++) {
