@@ -10,7 +10,7 @@ function 获取源码(url){
 }
 
 function autoerji(url){
-    log(url);
+    //log(url);
     let data = {};
     if(!/http/.test(url)){return data;}
     try{
