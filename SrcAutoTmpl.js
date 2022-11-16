@@ -28,13 +28,14 @@ function autoerji(url){
         tmpllist.unshift(tmpl[0]);
     }
     for(let i in tmpllist){
+        log('【'+tmpllist[i].名称+'】');
         let t = tmpllist[i].解析;
         try {
             let tabs = pdfa(html,t.tabs);
             log(tabs);
             var arts = [];
             tabs.forEach(item => {
-                arts.push(pdfh(item, "h3&&Text"));
+                arts.push(pdfh(item, t.tab_text));
             });
             log(arts);
 
