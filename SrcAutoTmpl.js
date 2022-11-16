@@ -38,9 +38,11 @@ function autoerji(url){
             });
 
             let lists = pdfa(html,t.lists.split(',')[0]);//全线路影片列表
+            
             var conts = [];
             for (let i = 0; i < lists.length; i++) {
-                let list = pdfa(lists[i],t.lists.split(',')[1]);//单线路影片列表
+                log(lists[i]);
+                let list = pdfa(lists[i],"#id&&li");//单线路影片列表
                 log(list);
                 let cont = [];
                 for (let j = 0; j < list.length; j++) {
