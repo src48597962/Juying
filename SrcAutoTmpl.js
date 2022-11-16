@@ -320,11 +320,11 @@ function autoerji(url){
                 let pic = pdfh(html,t.img).replace(/http.*\/tu\.php\?tu=|\/img\.php\?url=| |\/tu\.php\?tu=/g,'');
                 let desc = pdfh(html,t.content);
                 data = {details1:details1,details2:details2,pic:pic,desc:desc,arts:arts,conts:conts};
-                putMyVar('Tmpl-'+urldomian,JSON.stringify(tmpllist[i])); 
+                putMyVar('Tmpl-'+urldomian,JSON.stringify(t)); 
                 break;
             }
         }catch (e) {
-            log('二级模板【'+tmpllist[i].id+'】匹配失败：'+e.message);
+            log('二级模板【'+t.id+'】匹配失败：'+e.message);
         }
     }
     //log(data);
