@@ -183,7 +183,7 @@ function xunmi(name,data,ishkss) {
                     Cdatalist.push({
                         title: vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):vodname,
                         desc: '‘‘’’<font color=#f13b66a>'+ item.website+'</font>'+(item.tags.length>0?'  ['+item.tags.join(' ')+']':'') ,
-                        url: $("hiker://empty##" + item.url + "#immersiveTheme##autoCache#").rule((type,ua) => {
+                        url: $("hiker://empty##" + item.url + "#immersiveTheme#").rule((type,ua) => {
                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
                                 xunmierji(type,ua)
                             },'web', MOBILE_UA),
