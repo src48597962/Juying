@@ -56,5 +56,6 @@ function autoerji(url){
             log('二级模板自动匹配失败：'+e.message);
         }
     }
+    log(data);
     return data;
 }
