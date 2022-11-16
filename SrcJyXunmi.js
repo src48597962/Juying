@@ -190,7 +190,7 @@ function xunmi(name,data,ishkss) {
                         col_type: "text_1",
                         extra: {
                             name: name,
-                            title: vodname+'-茶杯搜索',
+                            title: vodname+'-'+item.website,
                             cls: 'xunmilist'
                         }
                     })
