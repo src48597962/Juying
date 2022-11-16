@@ -1187,7 +1187,7 @@ function xunmierji(type,ua) {
         }
         linecodes.push(linecode);
     }
-    log(111)
+
     var lists = [];
     for (var i in conts) {
         if (/v1|app|v2/.test(type)) {
@@ -1231,7 +1231,7 @@ function xunmierji(type,ua) {
             };
         }
     }
-    log(222)
+ 
     //取之前足迹记录，用于自动定位之前的线路
     try {
         eval('var SrcMark = ' + fetch("hiker://files/cache/SrcMark.json"));
@@ -1311,8 +1311,8 @@ function xunmierji(type,ua) {
             "name": MY_PARAMS.title||'聚影',
             "pic": pic.split('@')[0],
             "content": desc,
-            "director": details1.split('\n')[0].replace('导演：',''),
-            "actor": details1.split('主演：')[1].split('\n')[0]
+            "director": type=='web'?details1:details1.split('\n')[0].replace('导演：',''),
+            "actor": type=='web'?details2:details1.split('主演：')[1].split('\n')[0]
         };
         let tvip = getItem('hikertvboxset', '');
         d.push({
