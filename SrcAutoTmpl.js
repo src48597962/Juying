@@ -53,10 +53,8 @@ function autoerji(url){
             }
             
             if(arts.length>0&&conts.length>0&&conts[0]){
-                log('111')
-                let details1 = pdfh(html, "p.data&&Text;.stui-content__detail&&p,-2&&Text");
-                log('222>'+details1);
-                let details2 = '';
+                let details1 = pdfh(html, t.desc.split(';')[0]);
+                let details2 = t.desc.indexOf(';')>-1?pdfh(html, t.desc.split(';')[1]):"";
                 let pic = pdfh(html,t.img);
                 let desc = pdfh(html,t.content);
                 data = {details1:details1,details2:details2,pic:pic,desc:desc,arts:arts,conts:conts};
