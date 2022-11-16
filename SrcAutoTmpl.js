@@ -53,8 +53,9 @@ function autoerji(url){
             }
             
             if(arts.length>0&&conts.length>0&&conts[0]){
+                log('111')
                 let details1 = pdfh(html,t.desc);
-                log('详情>'+details1);
+                log('222>'+details1);
                 let details2 = '';
                 let pic = pdfh(html,t.img);
                 let desc = pdfh(html,t.content);
