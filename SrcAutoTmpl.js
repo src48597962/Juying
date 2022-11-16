@@ -60,7 +60,7 @@ function autoerji(url){
                 break;
             }
         }catch (e) {
-            log('二级模板'+t.名称+'匹配失败：'+e.message);
+            log('二级模板'+tmpllist[i].名称+'匹配失败：'+e.message);
         }
     }
     log(data);
