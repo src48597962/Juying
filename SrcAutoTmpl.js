@@ -37,10 +37,18 @@ function autoerji(url){
             var arts = tabs.map(item=>{
                 return pdfh(item, t.tabs_text).replace(//g,'').replace(/ /g,'').replace(/ /g,'').replace(eval(filter), '');
             });
-            let lists = pdfa(html,t.lists);
-            var conts = lists.map(item=>{
-                return pdfh(item, 'a&&Text')+'$'+pdfh(item, t.tab_id?t.tab_id:'a&&href');
-            });
+            let lists = pdfa(html,t.lists.split(',')[0]);//全线路影片列表
+            var conts = [];
+            for (let i = 0; i < lists.length; i++) {
+                let list = pdfa(lists[i],t.lists.split(',')[1]);//单线路影片列表
+                let cont = [];
+                for (let j = 0; j < list.length; j++) {
+                    let contname = pdfh(list[j],"a&&Text");
+                    let conturl = pd(list[j],t.tab_id?t.tab_id:'a&&href');
+                    cont.push(contname+"$"+conturl)
+                }
+                conts.push(cont.join("#"))
+            }
             data = {details1:details1,details2:details2,pic:pic,desc:desc,arts:arts,conts:conts};
             putMyVar('Tmpl-'+urldomian,JSON.stringify(tmpllist[i])); 
             break;
