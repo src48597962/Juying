@@ -41,9 +41,8 @@ function autoerji(url){
             
             var conts = [];
             for (let i = 0; i < lists.length; i++) {
-                log(lists[i]);
-                let list = pdfa(lists[i],"body&&li");//单线路影片列表
-                log(list);
+                let key = lists[i].indexOf('#id')==-1?t.lists.split(',')[1].replace('#id','body'):t.lists.split(',')[1];
+                let list = pdfa(lists[i],key);//单线路影片列表
                 let cont = [];
                 for (let j = 0; j < list.length; j++) {
                     let contname = pdfh(list[j],"a&&Text");
