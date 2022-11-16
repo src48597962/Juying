@@ -42,6 +42,7 @@ function autoerji(url){
                 arts.push(pdfh(item, t.tabs_text).replace(//g,'').replace(/ /g,'').replace(/ /g,'').replace(eval(filter), ''));
             });
             log(arts);
+            /*
             var conts = [];
             for (let i = 0; i < lists.length; i++) {
                 let list = pdfa(lists[i],t.lists.split(',')[1]);//单线路影片列表
@@ -58,7 +59,7 @@ function autoerji(url){
                 data = {details1:details1,details2:details2,pic:pic,desc:desc,arts:arts,conts:conts};
                 putMyVar('Tmpl-'+urldomian,JSON.stringify(tmpllist[i])); 
                 break;
-            }
+            }*/
         }catch (e) {
             log('二级模板'+tmpllist[i].名称+'匹配失败：'+e.message);
         }
