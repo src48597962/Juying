@@ -181,7 +181,7 @@ function xunmi(name,data,ishkss) {
                 let vodname = item.text.replace(/<em>|<\/em>/g,'');
                 if(!/qq|mgtv|iptv|iqiyi|youku|bilibili|souhu|cctv|kkw361|ksksl|zjtu\.cc/.test(item.url)&&vodname.indexOf(name)>-1){
                     Cdatalist.push({
-                        title: (vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):vodname) + '‘‘’’<font color=#f13b66a>'+ item.website+'</font>',
+                        title: (vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):vodname) + ' - <font color=#f13b66a>'+ item.website+'</font>' + (item.tags.length>0?'  ['+item.tags.join(' ')+']':''),
                         //desc: '‘‘’’<font color=#f13b66a>'+ item.website+'</font>'+(item.tags.length>0?'  ['+item.tags.join(' ')+']':'') ,
                         url: $("hiker://empty##" + item.url + "#immersiveTheme#").rule((type,ua) => {
                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
@@ -194,6 +194,9 @@ function xunmi(name,data,ishkss) {
                             title: vodname+'-'+item.website,
                             cls: 'xunmilist'
                         }
+                    })
+                    Cdatalist.push({
+                        col_type: "line"
                     })
                 } 
             });
