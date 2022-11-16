@@ -179,7 +179,7 @@ function xunmi(name,data,ishkss) {
                     Cdatalist.push({
                         title: vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):vodname,
                         desc: '‘‘’’<font color=#f13b66a>'+ item.website+'</font>'+(item.tags.length>0?'  ['+item.tags.join(' ')+']':'') ,
-                        url: $("hiker://empty##" + item.url).rule((type,ua) => {// + "#immersiveTheme##autoCache#"
+                        url: $("hiker://empty##" + item.url + "#immersiveTheme##autoCache#").rule((type,ua) => {
                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
                                 xunmierji(type,ua)
                             },'web', MOBILE_UA),
@@ -257,7 +257,7 @@ function xunmi(name,data,ishkss) {
         }
     }
     d.push({
-        title: '没有接口，无法搜索',
+        title: '没有接口？',
         url: "hiker://empty",
         col_type: "text_center_1",
         extra: {
@@ -1244,9 +1244,10 @@ function xunmierji(type,ua) {
     var Marksum = 30;//设置记录线路足迹数量
 
     //线路部份
-    var Color = "#f13b66a";
-    var Color1 = "#098AC1";
-    function getHead(title) {
+    var Color1 = "#09c11b";//#f13b66a
+    var Color2 = "#098AC1";
+    var Color3 = "#098AC1";
+    function getHead(title,Color) {
         return '‘‘’’<strong><font color="' + Color + '">' + title + '</front></strong>';
     }
     for (let i = 0; i < 9; i++) {
@@ -1269,7 +1270,7 @@ function xunmierji(type,ua) {
             if (tabs[i] != "") {
                 if(getMyVar(vari, '0') == i){putMyVar('linecode', linecodes[i])};
                 d.push({
-                    title: getMyVar(vari, '0') == i ? getHead(tabs[i] + '↓') : tabs[i],
+                    title: getMyVar(vari, '0') == i ? getHead(tabs[i],Color1) : getHead(tabs[i],Color2),
                     url: $("#noLoading#").lazyRule((vari, i, Marksum) => {
                         if (parseInt(getMyVar(vari, '0')) != i) {
                             try {
@@ -1397,7 +1398,7 @@ function xunmierji(type,ua) {
                     //网页
                 }
                 d.push({
-                    title: playtitle.replace(/第|集|话|期|-/g, ''),
+                    title: getHead(playtitle.replace(/第|集|话|期|-/g, ''), Color3),
                     url: playurl + DTJX,
                     extra: { id: playurl, referer: playurl, jsLoadingInject: true, cacheM3u8: getMyVar('superwebM3U8')=="1"?true:false, blockRules: ['.m4a','.mp3','.gif','.jpeg','.jpg','.ico','.png','hm.baidu.com','/ads/*.js','cnzz.com'] },
                     col_type: list.length > 4 && len < 7 ? 'text_4' : 'text_3'
