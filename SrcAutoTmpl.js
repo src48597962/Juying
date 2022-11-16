@@ -1,11 +1,11 @@
 //白嫖道长dr二级模板数据
 let erjiTmpl = [
 	{
-        "id": 1,
+    	"id": 1,
 		"img": ".lazyload&&data-original",
 		"desc": ".data&&Text;.data,6&&Text",
 		"content": "p.detail&&Text.js:input.replace(\"简介：\",\"\").replace(\"详情\",\"\")",
-		"tabs": ".nav-tabs&&li",
+		"tabs": ".nav-tabs&&li||a",
 		"lists": ".stui-content__playlist;body&&li"
 	},
 	{
@@ -53,7 +53,6 @@ let erjiTmpl = [
 		"desc": "p.data&&Text;.stui-content__detail&&p,-2&&Text",
 		"content": ".detail&&Text",
 		"tabs": "body&&.stui-vodlist__head:has(span)",
-		"tab_text": "h3&&Text",
 		"lists": ".stui-content__playlist;body&&li"
 	},
 	{
@@ -87,7 +86,6 @@ let erjiTmpl = [
 		"desc": ".vodTag&&Text",
 		"content": ".ecshow&&Text",
 		"tabs": ".play_source_tab&&a",
-		"tab_text": "body&&Text",
 		"lists": "body&&.content_playlist;body&&a"
 	},
 	{
@@ -265,6 +263,14 @@ let erjiTmpl = [
 		"content": ".animeplot&&Text",
 		"tabs": "#two1",
 		"lists": ".playlist;body&&.list-title"
+	},
+	{
+        "id": 34,
+		"img": ".lazyload&&data-original||src",
+		"desc": ".module-info-item,3&&Text;.module-info-item,1&&Text;.module-info-item,4&&Text",
+		"content": ".module-info-item,5||.module-info-item&&Text",
+		"tabs": "#two1",
+		"lists": ".playlist;body&&.list-title"
 	}
 ]
 
@@ -315,10 +321,14 @@ function autoerji(url){
             }
             log(conts)
             if(arts.length>0&&conts.length>0&&conts[0]){
-                let details1 = pdfh(html, t.desc.split(';')[0]);
-                let details2 = t.desc.indexOf(';')>-1?pdfh(html, t.desc.split(';')[1]):"";
+				let details = t.desc.split(';');
+                let details1 = pdfh(html, details[0]);
+				let details2 = "";
+				for(let j=1;j<details.length;j++){
+					details2 = details2.concat(pdfh(html, details[j]));
+				}
                 let pic = pdfh(html,t.img).replace(/http.*\/tu\.php\?tu=|\/img\.php\?url=| |\/tu\.php\?tu=/g,'');
-                let desc = pdfh(html,t.content);
+                let desc = t.content?pdfh(html,t.content):"";
                 data = {details1:details1,details2:details2,pic:pic,desc:desc,arts:arts,conts:conts};
                 putMyVar('Tmpl-'+urldomian,JSON.stringify(t)); 
                 break;
