@@ -35,8 +35,9 @@ function autoerji(url){
             var pic = pdfh(html,t.img);
             var desc = pdfh(html,t.content);
             let tabs = pdfa(html,t.tabs);
-            let lists = pdfa(html,t.lists.split(',')[0]);//全线路影片列表
             log(tabs)
+            let lists = pdfa(html,t.lists.split(',')[0]);//全线路影片列表
+            
             /*
             var arts = [];
             tabs.forEach(item => {
@@ -62,9 +63,9 @@ function autoerji(url){
                 break;
             }*/
         }catch (e) {
-            log('二级模板'+tmpllist[i].名称+'匹配失败：'+e.message);
+            log('二级模板【'+tmpllist[i].名称+'】匹配失败：'+e.message);
         }
     }
-    log(data);
+    //log(data);
     return data;
 }
