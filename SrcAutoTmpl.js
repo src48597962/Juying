@@ -317,7 +317,7 @@ function autoerji(url){
                 }
                 conts.push(cont.join("#"))
             }
-			if(conts.length>0){playlist = conts[0];}
+			if(conts.length>0&&playlist.length==0){playlist = conts[0];}
             if(arts.length>0&&conts.length>0&&conts[0]){
 				let details = t.desc.split(';');
                 let details1 = pdfh(html, details[0]);
@@ -336,7 +336,7 @@ function autoerji(url){
         }
     }
     //log(data);
-	if(!data.arts){
+	if(!data.arts&&playlist.length>0){
 		data = {details1:"暂无信息",details2:"暂无信息",pic:"",desc:"暂无信息",arts:["播放列表"],conts:playlist};
 	}
     return data;
