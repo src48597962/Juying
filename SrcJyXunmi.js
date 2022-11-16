@@ -1211,7 +1211,7 @@ function xunmierji(type,ua) {
                 }
                 lists.push(si);
             };
-        }else if (/cms|xpath|biubiu/.test(type)) {
+        }else if (/cms|xpath|biubiu|web/.test(type)) {
             let single = conts[i]||"";
             if(single){
                 let lines = single.split('#');
@@ -1225,12 +1225,6 @@ function xunmierji(type,ua) {
                         }
                     }
                 }
-                lists.push(lines)
-            };
-        }else if (type=='web') {
-            let single = conts[i]||"";
-            if(single){
-                let lines = single.split('#');
                 lists.push(lines)
             };
         }
