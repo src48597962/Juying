@@ -34,7 +34,10 @@ function autoerji(url){
             let tabs = pdfa(html,t.tabs);
             var arts = [];
             tabs.forEach(item => {
-                arts.push(pdfh(item, t.tab_text));
+                let name = pdfh(item, t.tab_text);
+                if(!/更多精品/.test(name)){
+                    arts.push(pdfh(item, t.tab_text));
+                }
             });
 
             let lists = pdfa(html,t.lists.split(',')[0]);//全线路影片列表
