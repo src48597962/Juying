@@ -18,7 +18,7 @@ function autoerji(url){
     }catch(e){
         var tmpllist = [];
     }
-    let html = 获取源码(url);
+    let html = 获取源码(url, {headers: {'User-Agent': PC_UA }});
     let urldomian = url.match(/http(s)?:\/\/(.*?)\//)[0];
     let urltmpl = JSON.parse(getMyVar('Tmpl-'+urldomian,'{}'));
     let tmplidex = tmpllist.findIndex(it=>it.名称===urltmpl.名称);
