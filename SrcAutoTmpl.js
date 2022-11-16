@@ -36,7 +36,7 @@ function autoerji(url){
             tabs.forEach(item => {
                 let name = pdfh(item, t.tab_text);
                 if(name&&!/更多精品/.test(name)){
-                    arts.push(pdfh(item, t.tab_text));
+                    arts.push(pdfh(item, t.tab_text?t.tab_text:'a||h3&&Text'));
                 }
             });
             log(arts)
