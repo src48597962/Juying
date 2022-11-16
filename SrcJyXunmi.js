@@ -1257,13 +1257,17 @@ function xunmierji(type,ua) {
 
     //线路部份
     var Color1 = "#09c11b";//#f13b66a
-    var Color2 = "#098AC1";
-    var Color3 = "#098AC1";
+    var Color2 = "";//#098AC1
+    var Color3 = "";
     function getHead(title,Color,strong) {
-        if(strong){
-            return '‘‘’’<strong><font color="' + Color + '">' + title + '</front></strong>';
+        if(Color){
+            if(strong){
+                return '‘‘’’<strong><font color="' + Color + '">' + title + '</front></strong>';
+            }else{
+                return '‘‘’’<font color="' + Color + '">' + title + '</front>';
+            }
         }else{
-            return '‘‘’’<font color="' + Color + '">' + title + '</front>';
+            return title;
         }
     }
     for (let i = 0; i < 9; i++) {
