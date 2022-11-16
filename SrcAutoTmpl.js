@@ -34,7 +34,7 @@ function autoerji(url){
             log(tabs)
             var arts = [];
             tabs.forEach(item => {
-                let name = pdfh(item, t.tab_text?t.tab_text:'a||h3&&Text');
+                let name = pdfh(item, t.tab_text?t.tab_text:'h3||a||span&&Text');
                 if(name&&!/更多精品/.test(name)){
                     arts.push(name);
                 }
