@@ -29,12 +29,15 @@ function autoerji(url){
     for(let i in tmpllist){
         let t = tmpllist[i].解析;
         try {
-            var details1 = pdfh(html,t.content);
+            var details1 = pdfh(html,t.desc);
             var details2 = '';
             var pic = pdfh(html,t.img);
-            var desc = pdfh(html,t.desc);
-            let tabs = pdfa(html,t.tabs)||[""];
-            let lists = pdfa(html,t.lists.split(',')[0])||[""];//全线路影片列表
+            var desc = pdfh(html,t.content);
+            let tabs = pdfa(html,t.tabs)||[];
+            let lists = pdfa(html,t.lists.split(',')[0])||[];//全线路影片列表
+            log(tabs);
+            log(lists);
+            log('11111')
             if(tabs[0]!=""&&lists[0]!=""){
                 var arts = tabs.map(item=>{
                     return pdfh(item, t.tabs_text).replace(//g,'').replace(/ /g,'').replace(/ /g,'').replace(eval(filter), '');
