@@ -168,6 +168,10 @@ function xunmi(name,data,ishkss) {
             var lists = JSON.parse(html).resources;
             deleteItemByCls('xunmilist');
         }catch(e){
+            updateItem('loading', {
+                title: '没有接口，且茶杯搜索失败',
+                url: "hiker://empty"
+            });
             return 'toast://茶杯搜索失败';
         }
         hideLoading();
@@ -200,6 +204,10 @@ function xunmi(name,data,ishkss) {
             });
             return 'toast://加载完成';
         }else{
+            updateItem('loading', {
+                title: '没有接口，且茶杯搜索为0',
+                url: "hiker://empty"
+            });
             return 'toast://未获取到内容';
         }
     }
@@ -257,7 +265,7 @@ function xunmi(name,data,ishkss) {
         }
     }
     d.push({
-        title: '没有接口？',
+        title: '',
         url: "hiker://empty",
         col_type: "text_center_1",
         extra: {
@@ -1249,8 +1257,12 @@ function xunmierji(type,ua) {
     var Color1 = "#09c11b";//#f13b66a
     var Color2 = "#098AC1";
     var Color3 = "#098AC1";
-    function getHead(title,Color) {
-        return '‘‘’’<strong><font color="' + Color + '">' + title + '</front></strong>';
+    function getHead(title,Color,strong) {
+        if(strong){
+            return '‘‘’’<strong><font color="' + Color + '">' + title + '</front></strong>';
+        }else{
+            return '‘‘’’<font color="' + Color + '">' + title + '</front>';
+        }
     }
     for (let i = 0; i < 9; i++) {
         d.push({
@@ -1272,7 +1284,7 @@ function xunmierji(type,ua) {
             if (tabs[i] != "") {
                 if(getMyVar(vari, '0') == i){putMyVar('linecode', linecodes[i])};
                 d.push({
-                    title: getMyVar(vari, '0') == i ? getHead(tabs[i],Color1) : getHead(tabs[i],Color2),
+                    title: getMyVar(vari, '0') == i ? getHead(tabs[i],Color1,1) : getHead(tabs[i],Color2),
                     url: $("#noLoading#").lazyRule((vari, i, Marksum) => {
                         if (parseInt(getMyVar(vari, '0')) != i) {
                             try {
