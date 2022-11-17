@@ -346,7 +346,7 @@ function autoerji(url){
             //log('二级模板【'+t.id+'】匹配失败：'+e.message);
         }
     }
-
+	log(detail);
 	if(data.conts){
 		return data;
 	}else{
