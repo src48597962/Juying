@@ -358,40 +358,20 @@ function aierji(html,url,detail){
 	let alist = pdfa(html, "body&&a");
 	let arr = alist.map(it => {
 		return {
-			//html: it,
 			text: pdfh(it, "a&&Text"),
-			title: pdfh(it, "a&&title"),
 			href: pd(it, "a&&href", url)
 		}
 	});
-	log(arr)
+
 	function clearText(it) {
 		return it.replace(/第|集|章|期|-/g, "");
 	}
 
-	function isMovie(it) {
-		if (it == null || it.text == null) {
-			return false;
-		}
-		let tit = it.title || "";
-		it = it.text || "";
-		if (it == "" || it.length > 8) {
-			return false;
-		}
-		//排除
-		let reg = /\./;
-		if (tit != "" && !tit.includes(it) || reg.test(it)) {
-			return false;
-		}
-		return it.match(/原画|备用|蓝光|国语|粤语|超清|高清|正片|韩版|4K|4k|1080P|720P|TC|HD|BD/)
-	}
-
 	function notChapter(it) {
-		//if (it == null || it.text == null) {
-		if (!it.text || !it.title|| !it.href) {
+		if (!/^http/.test(it.href) || !/原画|备用|蓝光|国语|粤语|超清|高清|正片|韩版|4K|4k|1080P|720P|TC|HD|BD|第|集|章|期|-/.test(it.text)) {
 			return true;
 		}
-		return it.text.match(/[0-9]\.[0-9]分/);
+		return false;
 	}
 
 	function isChapter(it, pre, next) {
@@ -399,21 +379,11 @@ function aierji(html,url,detail){
 			//优先排除
 			return false;
 		}
-		//判断是不是电影
-		if (isMovie(it)) {
-			return true;
-		}
 		return isChapter0(it, pre) || isChapter0(it, next);
 	}
 
 	function getChapterNum(it) {
-		if (it == null || it.text == null) {
-			return -1;
-		}
-		it = it.text || "";
-		if (it == "") {
-			return -1;
-		}
+		it = it.text;
 		it = clearText(it);
 		let reg = /^[0-9]*$/;
 		if(!reg.test(it)){
@@ -427,19 +397,11 @@ function aierji(html,url,detail){
 	}
 
 	function isChapter0(it, brother) {
-		/*if (debug) {
-			log({
-				it: it,
-				brother: brother
-			});
-		}*/
 		it = getChapterNum(it);
-		//if (debug) log(it);
 		if (it < 0) {
 			return false;
 		}
 		brother = getChapterNum(brother);
-		//if (debug) log(brother);
 		if (brother < 0) {
 			return false;
 		}
