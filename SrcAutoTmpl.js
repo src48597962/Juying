@@ -390,6 +390,8 @@ function aierji(html,url,detail){
 		if (it == null || it.text == null) {
 			return true;
 		}
+		log(it);
+		log(it.text.match(/[0-9]\.[0-9]分/));
 		return it.text.match(/[0-9]\.[0-9]分/);
 	}
 
