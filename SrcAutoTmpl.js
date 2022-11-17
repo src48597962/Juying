@@ -352,8 +352,6 @@ function aierji(html,url){
 			href: pd(it, "a&&href", url)
 		}
 	});
-	//log(arr);
-	let debug = false;
 
 	function clearText(it) {
 		return it.replace(/第|集|章/g, "");
@@ -469,6 +467,7 @@ function aierji(html,url){
 		toast("AI匹配失败，已使用X5加载");
 		setResult(d);
 	} else {
+		log(d);
 		//为线路加分割线
 		let d2 = [];
 		for (let i = 0; i < d.length; i++) {
