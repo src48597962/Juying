@@ -286,7 +286,7 @@ function autoerji(url){
         let tmpl = erjiTmpl.splice(tmplidex, 1);
         erjiTmpl.unshift(tmpl[0]);
     }
-	
+	let detail = {};
     for(let i in erjiTmpl){
         //log('【'+erjiTmpl[i].id+'】');
         let t = erjiTmpl[i];
@@ -312,15 +312,32 @@ function autoerji(url){
                 }
                 conts.push(cont.join("#"))
             }
-            if(arts.length>0&&conts.length>0&&conts[0]){
-				let details = t.desc.split(';');
-                let details1 = pdfh(html, details[0]);
-				let details2 = "";
+            try{
+				var details = t.desc.split(';');
+				var details1 = pdfh(html, details[0]);
+				var details2 = "";
 				for(let j=1;j<details.length;j++){
 					details2 = details2.concat(pdfh(html, details[j]));
 				}
-                let pic = pdfh(html,t.img).replace(/http.*\/tu\.php\?tu=|\/img\.php\?url=| |\/tu\.php\?tu=/g,'');
-                let desc = t.content?pdfh(html,t.content):"";
+				if(details1&&!detail.details1){detail.details1 = details1;}
+				if(details2&&!detail.details2){detail.details2 = details2;}
+			}catch(e){
+				var details1 = "";
+				var details2 = "";
+			}
+			try{
+				var pic = pdfh(html,t.img).replace(/http.*\/tu\.php\?tu=|\/img\.php\?url=| |\/tu\.php\?tu=/g,'');
+				if(pic&&!detail.pic){detail.pic = pic;}
+			}catch(e){
+				var pic = "";
+			}
+			try{
+				var desc = t.content?pdfh(html,t.content):"";
+				if(desc&&!detail.desc){detail.desc = desc;}
+			}catch(e){
+				var desc = "";
+			}
+			if(arts.length>0&&conts.length>0&&conts[0]){
                 data = {details1:details1,details2:details2,pic:pic,desc:desc,arts:arts,conts:conts};
                 putMyVar('Tmpl-'+urldomian,JSON.stringify(t)); 
                 break;
@@ -333,11 +350,11 @@ function autoerji(url){
 	if(data.conts){
 		return data;
 	}else{
-		return aierji(html,url);
+		return aierji(html,url,detail);
 	}
 }
 //AI二级
-function aierji(html,url){
+function aierji(html,url,detail){
 	var d = [];
 	let alist = pdfa(html, "body&&a");
 	let arr = alist.map(it => {
@@ -471,14 +488,16 @@ function aierji(html,url){
 				let next = d[i + 1];
 				let t2 = parseInt(clearText(next.title));
 				if (t2 - t1 > 1 || t1 - t2 > 1) {
-					let s = arts.length+1;
-					arts.push("播放源"+s);
 					conts.push(d2.join('#'));
-					d2 = [];
+					if (i < d.length - 2) {
+						let s = arts.length+1;
+						arts.push("播放源"+s);
+						d2 = [];
+					}
 				}
 			}
 		}
-		data = {details1:"影片信息",details2:"选集列表来源于AI识片技术",pic:"",desc:"暂无信息",arts:arts,conts:conts};
+		data = {details1:detail.details1||"",details2:detail.details2||"选集列表来源于AI识片技术",pic:detail.img||"",desc:detail.desc||"暂无信息",arts:arts,conts:conts};
 		return data;
 	}
 	return {};
