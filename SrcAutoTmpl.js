@@ -337,11 +337,11 @@ function autoerji(url){
 	if(data.conts){
 		return data;
 	}else{
-		aierji(html);
+		aierji(html,url);
 	}
 }
 //AI二级
-function aierji(html){
+function aierji(html,url){
 	var d = [];
 	let alist = pdfa(html, "body&&a");
 	let arr = alist.map(it => {
