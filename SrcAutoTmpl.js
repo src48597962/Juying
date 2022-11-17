@@ -346,7 +346,6 @@ function autoerji(url){
             //log('二级模板【'+t.id+'】匹配失败：'+e.message);
         }
     }
-	log(detail);
 	if(data.conts){
 		return data;
 	}else{
@@ -497,7 +496,7 @@ function aierji(html,url,detail){
 				}
 			}
 		}
-		data = {details1:detail.details1||"",details2:detail.details2||"选集列表来源于AI识片技术",pic:detail.img||"",desc:detail.desc||"暂无信息",arts:arts,conts:conts};
+		data = {details1:detail.details1||"",details2:detail.details2||"选集列表来源于AI识片技术",pic:detail.pic||"",desc:detail.desc||"暂无信息",arts:arts,conts:conts};
 		return data;
 	}
 	return {};
