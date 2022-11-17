@@ -387,11 +387,10 @@ function aierji(html,url,detail){
 	}
 
 	function notChapter(it) {
-		if (it == null || it.text == null) {
+		//if (it == null || it.text == null) {
+		if (!it||!it.text||!/原画|备用|蓝光|超清|高清|正片|韩版|4K|4k|1080P|720P|TC|HD|BD|[0-9]|第|期|集|-|章/.test(it.text)) {
 			return true;
 		}
-		log(it);
-		log(it.text.match(/[0-9]\.[0-9]分/));
 		return it.text.match(/[0-9]\.[0-9]分/);
 	}
 
