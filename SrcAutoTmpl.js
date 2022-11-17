@@ -286,7 +286,7 @@ function autoerji(url){
         let tmpl = erjiTmpl.splice(tmplidex, 1);
         erjiTmpl.unshift(tmpl[0]);
     }
-	let playlist = [];
+	
     for(let i in erjiTmpl){
         //log('【'+erjiTmpl[i].id+'】');
         let t = erjiTmpl[i];
@@ -312,7 +312,6 @@ function autoerji(url){
                 }
                 conts.push(cont.join("#"))
             }
-			if(conts.length>0&&playlist.length==0){playlist = conts[0];}
             if(arts.length>0&&conts.length>0&&conts[0]){
 				let details = t.desc.split(';');
                 let details1 = pdfh(html, details[0]);
@@ -330,10 +329,7 @@ function autoerji(url){
             //log('二级模板【'+t.id+'】匹配失败：'+e.message);
         }
     }
-    //log(data);
-	if(!data.arts&&playlist.length>0){
-		data = {details1:"暂无信息",details2:"暂无信息",pic:"",desc:"暂无信息",arts:["播放列表"],conts:playlist};
-	}
+
 	if(data.conts){
 		return data;
 	}else{
@@ -475,13 +471,14 @@ function aierji(html,url){
 				let next = d[i + 1];
 				let t2 = parseInt(clearText(next.title));
 				if (t2 - t1 > 1 || t1 - t2 > 1) {
-					arts.push("播放源"+arts.length+1);
+					let s = arts.length+1;
+					arts.push("播放源"+s);
 					conts.push(d2.join('#'));
 					d2 = [];
 				}
 			}
 		}
-		data = {details1:"暂无信息",details2:"暂无信息",pic:"",desc:"暂无信息",arts:arts,conts:conts};
+		data = {details1:"影片信息",details2:"选集列表来源于AI识片技术",pic:"",desc:"暂无信息",arts:arts,conts:conts};
 		return data;
 	}
 	return {};
