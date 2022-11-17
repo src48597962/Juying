@@ -1133,7 +1133,7 @@ function xunmierji(type,ua) {
     d.push({
         title: details1,//详情1
         desc: details2,//详情2
-        pic_url: pic + '@Referer=',//图片
+        pic_url: pic?pic + '@Referer=':'',//图片
         url: getMyVar('deleteswitch')?$("确定要删除此接口吗").confirm((id)=>{
             let filepath = "hiker://files/rules/Src/Juying/jiekou.json";
             let datafile = fetch(filepath);
