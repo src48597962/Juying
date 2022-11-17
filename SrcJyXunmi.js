@@ -285,6 +285,7 @@ function xunmi(name,data,ishkss) {
             col_type: 'rich_text'
         });
     }
+    log(1)
     setHomeResult(d);
     
     if(datalist2.length>0){
