@@ -274,16 +274,11 @@ let erjiTmpl = [
 	}
 ]
 
-function 获取源码(url){
-    let html =request(url);
-    return html;
-}
-
 function autoerji(url){
     //log(url);
     let data = {};
     if(!/http/.test(url)){return data;}
-    let html = 获取源码(url, {headers: {'User-Agent': PC_UA }});
+    let html = request(url, {headers: {'User-Agent': PC_UA }});
     let urldomian = url.match(/http(s)?:\/\/(.*?)\//)[0];
     let urltmpl = JSON.parse(getMyVar('Tmpl-'+urldomian,'{}'));
     let tmplidex = erjiTmpl.findIndex(it=>it.id===urltmpl.id);
@@ -339,5 +334,164 @@ function autoerji(url){
 	if(!data.arts&&playlist.length>0){
 		data = {details1:"暂无信息",details2:"暂无信息",pic:"",desc:"暂无信息",arts:["播放列表"],conts:playlist};
 	}
-    return data;
+	if(data.conts){
+		return data;
+	}else{
+		aierji(html);
+	}
+}
+//AI二级
+function aierji(html){
+	var d = [];
+	let alist = pdfa(html, "body&&a");
+	let arr = alist.map(it => {
+		return {
+			//html: it,
+			text: pdfh(it, "a&&Text"),
+			title: pdfh(it, "a&&title"),
+			href: pd(it, "a&&href", url)
+		}
+	});
+	//log(arr);
+	let debug = false;
+
+	function clearText(it) {
+		return it.replace(/第|集|章/g, "");
+	}
+
+	function isMovie(it) {
+		if (it == null || it.text == null) {
+			return false;
+		}
+		let tit = it.title || "";
+		it = it.text || "";
+		if (it == "" || it.length > 8) {
+			return false;
+		}
+		//排除
+		let reg = /\./;
+		if (tit != "" && !tit.includes(it) || reg.test(it)) {
+			return false;
+		}
+		return it.match(/原画|备用|蓝光|超清|高清|正片|韩版|4K|4k|1080P|720P|TC|HD|BD/)
+	}
+
+	function notChapter(it) {
+		if (it == null || it.text == null) {
+			return true;
+		}
+		return it.text.match(/[0-9]\.[0-9]分/);
+	}
+
+	function isChapter(it, pre, next) {
+		if (notChapter(it)) {
+			//优先排除
+			return false;
+		}
+		//判断是不是电影
+		if (isMovie(it)) {
+			return true;
+		}
+		return isChapter0(it, pre) || isChapter0(it, next);
+	}
+
+	function getChapterNum(it) {
+		if (it == null || it.text == null) {
+			return -1;
+		}
+		it = it.text || "";
+		if (it == "") {
+			return -1;
+		}
+		it = clearText(it);
+		let reg = /^[0-9]*$/;
+		if(!reg.test(it)){
+			return -1;
+		}
+		it = parseInt(it);
+		if (isNaN(it)) {
+			return -1;
+		}
+		return it;
+	}
+
+	function isChapter0(it, brother) {
+		/*if (debug) {
+			log({
+				it: it,
+				brother: brother
+			});
+		}*/
+		it = getChapterNum(it);
+		//if (debug) log(it);
+		if (it < 0) {
+			return false;
+		}
+		brother = getChapterNum(brother);
+		//if (debug) log(brother);
+		if (brother < 0) {
+			return false;
+		}
+		return it - brother < 2 && it - brother > -2;
+	}
+
+	for (let i = 0; i < arr.length; i++) {
+		let it = arr[i];
+		let t = it.text;
+		if (!it.href || it.href == "") {
+			continue;
+		}
+		let pre = i == 0 ? null : arr[i - 1];
+		let next = i == (arr.length - 1) ? null : arr[i + 1];
+		if (isChapter(it, pre, next)) {
+			d.push({
+				title: t,
+				url: it.href ,
+				col_type: "text_3",
+				extra: {
+					id: it.href
+				}
+			});
+		}
+	}
+	if (d.length == 0) {
+		//匹配失败
+		d.push({
+			title: "",
+			url: url,
+			col_type: "x5_webview_single",
+			desc: "float&&100%",
+			pic_url: "",
+			extra: {
+				canBack: true
+			}
+		});
+		toast("AI匹配失败，已使用X5加载");
+		setResult(d);
+	} else {
+		//为线路加分割线
+		let d2 = [];
+		for (let i = 0; i < d.length; i++) {
+			d2.push(d[i]);
+			if (i < d.length - 1) {
+				let it = d[i];
+				let t1 = parseInt(clearText(it.title));
+				let next = d[i + 1];
+				let t2 = parseInt(clearText(next.title));
+				if (t2 - t1 > 1 || t1 - t2 > 1) {
+					d2.push({
+						col_type: "big_blank_block"
+					});
+					d2.push({
+						col_type: "line_blank"
+					});
+					d2.push({
+						col_type: "big_blank_block"
+					});
+				}
+			}
+		}
+
+		setResult(d2);
+	}
 }
