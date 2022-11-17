@@ -181,8 +181,8 @@ function xunmi(name,data,ishkss) {
         if(lists.length>0){
             let Cdatalist =[];
             lists.forEach(item => {
-                let vodname = item.text.replace(/<em>|<\/em>/g,'');
-                if(!/qq|mgtv|iptv|iqiyi|youku|bilibili|souhu|cctv|kkw361|ksksl|zjtu\.cc|bdys01/.test(item.url)){//&&vodname.indexOf(name)>-1
+                let vodname = item.text.replace(/<em>|<\/em>/g,'');//|kkw361|ksksl|zjtu\.cc|bdys01
+                if(!/qq|mgtv|iptv|iqiyi|youku|bilibili|souhu|cctv/.test(item.url)){//&&vodname.indexOf(name)>-1
                     let push = {
                         title: ishkss?vodname:(vodname!=name?vodname.replace(name,'<font color=red>'+name+'</font>'):vodname) + ' - <font color=#f13b66a>'+ item.website+'</font>' + (item.tags.length>0?'  ['+item.tags.join(' ')+']':''),
                         desc: item.website + (item.tags.length>0?'  ['+item.tags.join(' ')+']':'') ,
