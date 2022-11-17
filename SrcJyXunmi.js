@@ -184,14 +184,14 @@ function xunmi(name,data,ishkss) {
                 let vodname = item.text.replace(/<em>|<\/em>/g,'');
                 if(!/qq|mgtv|iptv|iqiyi|youku|bilibili|souhu|cctv|kkw361|ksksl|zjtu\.cc|bdys01/.test(item.url)){//&&vodname.indexOf(name)>-1
                     Cdatalist.push({
-                        title: (vodname!=name?vodname.replace(name,'<font color=red>'+name+'</font>'):vodname) + ' - <font color=#f13b66a>'+ item.website+'</font>' + (item.tags.length>0?'  ['+item.tags.join(' ')+']':''),
-                        //desc: '‘‘’’<font color=#f13b66a>'+ item.website+'</font>'+(item.tags.length>0?'  ['+item.tags.join(' ')+']':'') ,
+                        title: (vodname!=name?vodname.replace(name,'<font color=red>'+name+'</font>'):vodname) + ishkss?"":' - <font color=#f13b66a>'+ item.website+'</font>' + (item.tags.length>0?'  ['+item.tags.join(' ')+']':''),
+                        desc: '‘‘’’<font color=#f13b66a>'+ item.website+'</font>'+(item.tags.length>0?'  ['+item.tags.join(' ')+']':'') ,
                         url: $("hiker://empty##" + item.url + "#immersiveTheme##autoCache#").rule((type,ua) => {
                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
                                 xunmierji(type,ua)
                             },'web', MOBILE_UA),
                         img: item.icon,
-                        col_type: "avatar",//"text_1",
+                        col_type: ishkss?"text_1":"avatar",
                         extra: {
                             name: name,
                             title: vodname+'-'+item.website,
