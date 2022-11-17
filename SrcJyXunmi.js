@@ -158,6 +158,7 @@ function xunmi(name,data,ishkss) {
         }
     }
     function chabeisousuo(name){
+        updateItem('loading', {title: ''});
         updateItem('sschabeihu',{title:'‘‘’’<b><span style="color:#3399cc">茶杯搜索'});
         hideLoading();
         showLoading('正在加载中...');
@@ -167,14 +168,16 @@ function xunmi(name,data,ishkss) {
             let html = request('https://api.cupfox.app/api/v2/search/?text='+name+'&type=0&from=0&size=200&token='+token);
             var lists = JSON.parse(html).resources;
             deleteItemByCls('xunmilist');
+            hideLoading();
         }catch(e){
+            hideLoading();
             updateItem('loading', {
                 title: '没有接口，且茶杯搜索失败',
                 url: "hiker://empty"
             });
             return 'toast://茶杯搜索失败';
         }
-        hideLoading();
+        
         if(lists.length>0){
             let Cdatalist =[];
             lists.forEach(item => {
@@ -269,7 +272,7 @@ function xunmi(name,data,ishkss) {
         }
     }
     d.push({
-        title: '',
+        title: '没有接口？无法搜索',
         url: "hiker://empty",
         col_type: "text_center_1",
         extra: {
@@ -818,7 +821,7 @@ function xunmi(name,data,ishkss) {
     if(count>0){
         putMyVar("starttask","1");
         bess(datalist,beresults,beerrors,name,count,ishkss);
-    }else{
+    }else if(!ishkss){
         chabeisousuo(name);
     }
 }
