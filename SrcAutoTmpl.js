@@ -337,7 +337,7 @@ function autoerji(url){
 	if(data.conts){
 		return data;
 	}else{
-		aierji(html,url);
+		return aierji(html,url);
 	}
 }
 //AI二级
@@ -494,4 +494,5 @@ function aierji(html,url){
 
 		setResult(d2);
 	}
+	return {};
 }
