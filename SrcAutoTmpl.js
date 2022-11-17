@@ -354,7 +354,7 @@ function aierji(html,url){
 	});
 
 	function clearText(it) {
-		return it.replace(/第|集|章/g, "");
+		return it.replace(/第|集|章|期|-/g, "");
 	}
 
 	function isMovie(it) {
@@ -444,11 +444,7 @@ function aierji(html,url){
 		if (isChapter(it, pre, next)) {
 			d.push({
 				title: t,
-				url: it.href ,
-				col_type: "text_3",
-				extra: {
-					id: it.href
-				}
+				url: it.href
 			});
 		}
 	}
@@ -467,31 +463,26 @@ function aierji(html,url){
 		toast("AI匹配失败，已使用X5加载");
 		setResult(d);
 	} else {
-		log(d);
-		//为线路加分割线
+		//线路分割
+		let arts = ["播放源1"];
+		let conts = [];
 		let d2 = [];
 		for (let i = 0; i < d.length; i++) {
-			d2.push(d[i]);
+			d2.push(d[i].title+'$'+d[i].url);
 			if (i < d.length - 1) {
 				let it = d[i];
 				let t1 = parseInt(clearText(it.title));
 				let next = d[i + 1];
 				let t2 = parseInt(clearText(next.title));
 				if (t2 - t1 > 1 || t1 - t2 > 1) {
-					d2.push({
-						col_type: "big_blank_block"
-					});
-					d2.push({
-						col_type: "line_blank"
-					});
-					d2.push({
-						col_type: "big_blank_block"
-					});
+					arts.push("播放源"+arts.length+1);
+					conts.push(d2.join('#'));
+					d2 = [];
 				}
 			}
 		}
-
-		setResult(d2);
+		data = {details1:"暂无信息",details2:"暂无信息",pic:"",desc:"暂无信息",arts:arts,conts:conts};
+		return data;
 	}
 	return {};
 }
