@@ -486,7 +486,10 @@ function aierji(html,url,detail){
 				let t1 = parseInt(clearText(it.title));
 				let next = d[i + 1];
 				let t2 = parseInt(clearText(next.title));
+				log(t1)
+				log(t2)
 				if (t2 - t1 > 1 || t1 - t2 > 1) {
+					log('>1')
 					conts.push(d2.join('#'));
 					if (i < d.length - 2) {
 						let s = arts.length+1;
@@ -496,6 +499,7 @@ function aierji(html,url,detail){
 				}
 			}
 		}
+		if(conts.length==0){arts = [];}
 		data = {details1:detail.details1||"",details2:detail.details2||"选集列表来源于AI识片技术",pic:detail.pic||"",desc:detail.desc||"暂无信息",arts:arts,conts:conts};
 		return data;
 	}
