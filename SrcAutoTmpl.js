@@ -479,6 +479,7 @@ function aierji(html,url,detail){
 		let arts = ["播放源1"];
 		let conts = [];
 		let d2 = [];
+		log(d);
 		for (let i = 0; i < d.length; i++) {
 			d2.push(d[i].title+'$'+d[i].url);
 			if (i < d.length - 1) {
@@ -486,16 +487,12 @@ function aierji(html,url,detail){
 				let t1 = parseInt(clearText(it.title));
 				let next = d[i + 1];
 				let t2 = parseInt(clearText(next.title));
-				log(t1)
-				log(t2)
 				if (t2 - t1 > 1 || t1 - t2 > 1) {
-					log('>1')
+					log('add');
 					conts.push(d2.join('#'));
-					if (i < d.length - 2) {
-						let s = arts.length+1;
-						arts.push("播放源"+s);
-						d2 = [];
-					}
+					let s = arts.length+1;
+					arts.push("播放源"+s);
+					d2 = [];
 				}
 			}
 		}
