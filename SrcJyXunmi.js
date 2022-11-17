@@ -1,6 +1,7 @@
 //寻觅片源
 function xunmi(name,data,ishkss) {
     name = name.replace(/全集|国语|粤语|\s/g,'');
+    log(name);
     setPageTitle('聚搜>'+name);
     addListener("onClose", $.toString(() => {
         clearMyVar('xunminum');
