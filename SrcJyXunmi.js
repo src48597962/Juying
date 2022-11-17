@@ -1,7 +1,6 @@
 //寻觅片源
 function xunmi(name,data,ishkss) {
     name = name.replace(/全集|国语|粤语|\s/g,'');
-    log(name);
     setPageTitle('聚搜>'+name);
     addListener("onClose", $.toString(() => {
         clearMyVar('xunminum');
@@ -286,7 +285,6 @@ function xunmi(name,data,ishkss) {
             col_type: 'rich_text'
         });
     }
-    log(1)
     setHomeResult(d);
     
     if(datalist2.length>0){
@@ -823,7 +821,7 @@ function xunmi(name,data,ishkss) {
     if(count>0){
         putMyVar("starttask","1");
         bess(datalist,beresults,beerrors,name,count,ishkss);
-    }else if(!ishkss){
+    }else{
         chabeisousuo(name);
     }
 }
