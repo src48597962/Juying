@@ -364,7 +364,7 @@ function aierji(html,url,detail){
 			href: pd(it, "a&&href", url)
 		}
 	});
-
+	log(arr)
 	function clearText(it) {
 		return it.replace(/第|集|章|期|-/g, "");
 	}
