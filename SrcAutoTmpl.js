@@ -108,7 +108,7 @@ function aierji(html,url,detail){
 		if (tit != "" && !tit.includes(it) || reg.test(it)) {
 			return false;
 		}
-		return it.match(/原画|备用|蓝光|超清|高清|正片|韩版|4K|4k|1080P|720P|TC|HD|BD/)
+		return it.match(/原画|备用|蓝光|超清|国语|粤语|英语|高清|正片|韩版|4K|4k|1080P|720P|TC|HD|BD/)
 	}
 
 	function notChapter(it) {
@@ -222,10 +222,8 @@ function aierji(html,url,detail){
 				conts.push(d2.join('#'));
 			}
 		}
-
 		if(conts.length==0){arts = [];}
-		data = {details1:detail.details1||"",details2:detail.details2||"选集列表来源于AI识片技术",pic:detail.pic||"",desc:detail.desc||"暂无信息",arts:arts,conts:conts};
-		return data;
+		return {details1:detail.details1||"",details2:detail.details2||"选集列表来源于AI识片技术",pic:detail.pic||"",desc:detail.desc||"暂无信息",arts:arts,conts:conts};
 	}
 	return {};
 }
