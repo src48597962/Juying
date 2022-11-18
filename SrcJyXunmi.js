@@ -846,9 +846,9 @@ function xunmierji(type,ua) {
     //加载本地自定义变量缓存文件
     var configfile = config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'srcconfig.js';
     require(configfile);
-    log(MY_URL)
+
     //自动判断是否需要更新请求
-    if (getMyVar('myurl', '0') != MY_URL || !configvar.影片 || configvar.标识 != MY_URL) {
+    if (getMyVar('myurl', '0') != MY_URL || !configvar || configvar.标识 != MY_URL) {
         if (/v1|app|v2|iptv|cms/.test(type)) {
             try{
                 var gethtml = request(MY_URL.split('##')[1], { headers: { 'User-Agent': ua } });
@@ -1119,7 +1119,6 @@ function xunmierji(type,ua) {
         details2 = details2.replace(/&ldquo;/g,'“').replace(/&rdquo;/g,'”').replace(/&middot;/g,'·').replace(/&hellip;/g,'…');
         desc = desc.replace(/&ldquo;/g,'“').replace(/&rdquo;/g,'”').replace(/&middot;/g,'·').replace(/&hellip;/g,'…');
         var newconfig = { 详情1: details1, 详情2: details2, 图片: pic, 简介: desc, 线路: arts, 影片: conts, 标识: MY_URL };
-        log(newconfig);
         var libsfile = 'hiker://files/libs/' + md5(configfile) + '.js';
         writeFile(libsfile, 'var configvar = ' + JSON.stringify(newconfig));
     } else {
