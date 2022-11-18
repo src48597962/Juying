@@ -580,7 +580,7 @@ function xunmi(name,data,ishkss) {
                                     vodpic = "https" + vodpic;
                                 }
                                 return {
-                                    title: !ishkss&&vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):'<font color=red>'+vodname+'</font>',
+                                    title: !ishkss&&vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):'‘‘’’'+vodname,
                                     desc: !ishkss?(voddesc + '\n\n' + appname):'聚影√ · '+obj.name,
                                     content: voddesc,
                                     pic_url: vodpic?vodpic + "@Referer=":"https://www.xawqxh.net/mxtheme/images/loading.gif@Referer=",
