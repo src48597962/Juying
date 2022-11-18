@@ -3,6 +3,23 @@ function autoerji(url){
     if(!/http/.test(url)){return data;}
     let html = request(url, {headers: {'User-Agent': PC_UA }});
     let urldomian = url.match(/http(s)?:\/\/(.*?)\//)[0];
+	let erjiTmplfile = "hiker://files/rules/Src/Juying/erjiTmpl.json";
+	let erjiTmplfiles = fetch(erjiTmplfile);
+    if(erjiTmplfiles!=""){
+		eval("var erjiTmpl = " + erjiTmplfiles+ ";");
+	}else{
+		var erjiTmpl = [];
+	}
+	
+	//定义排序函数
+    function sortData(a, b) {
+        if(a.sort!=b.sort){
+            return b.sort - a.sort
+        }else{
+            return b.id - a.id;
+        }
+    };
+	erjiTmpl.sort(sortData)
     let urltmpl = JSON.parse(getMyVar('Tmpl-'+urldomian,'{}'));
     let tmplidex = erjiTmpl.findIndex(it=>it.id===urltmpl.id);
     if(tmplidex>-1) {
@@ -51,7 +68,7 @@ function autoerji(url){
 			try{
 				var pic = pdfh(html,t.img).replace(/http.*\/tu\.php\?tu=|\/img\.php\?url=| |\/tu\.php\?tu=/g,'');
 				if(!/^http/.test(pic)){
-					pic = url.match(/http(s)?:\/\/.*?\//)[0] + pic;
+					pic = urldomian + pic;
 				}
 				if(pic&&!detail.pic){detail.pic = pic;}
 			}catch(e){
@@ -65,7 +82,14 @@ function autoerji(url){
 			}
 			if(arts.length>0&&conts.length>0&&conts[0]){
                 data = {details1:details1,details2:details2,pic:pic,desc:desc,arts:arts,conts:conts};
-                putMyVar('Tmpl-'+urldomian,JSON.stringify(t)); 
+                putMyVar('Tmpl-'+urldomian,JSON.stringify(t));
+
+				for(var p=0;p<erjiTmpl.length;p++){
+					if(erjiTmpl[p].id==t.id){
+						erjiTmpl[p].sort++;
+					}
+				}
+				writeFile(erjiTmplfile, JSON.stringify(erjiTmpl));
                 break;
             }
         }catch (e) {
@@ -230,21 +254,23 @@ function aierji(html,url,detail){
 	}
 	return {};
 }
-let erjiTmpl = [
+let erjiTmpldemo = [
 	{
     	"id": 1,
 		"img": ".lazyload&&data-original",
 		"desc": ".data&&Text;.data,6&&Text",
 		"content": "p.detail&&Text.js:input.replace(\"简介：\",\"\").replace(\"详情\",\"\")",
 		"tabs": ".nav-tabs&&li||a",
-		"lists": ".stui-content__playlist;body&&li"
+		"lists": ".stui-content__playlist;body&&li",
+		"sort": 0
 	},
 	{
         "id": 2,
 		"img": ".lazyload&&data-original",
 		"desc": "span.sketch.content&&Text",
 		"tabs": ".nav-tabs&&li",
-		"lists": ".myui-content__list;body&&li"
+		"lists": ".myui-content__list;body&&li",
+		"sort": 0
 	},
 	{
         "id": 3,
@@ -252,7 +278,8 @@ let erjiTmpl = [
 		"desc": ".module-info-item,1&&Text;.module-info-item,2&&Text;.module-info-item,3&&Text",
 		"content": ".module-info-introduction-content&&Text",
 		"tabs": "body&&.module-tab-item",
-		"lists": "body&&.module-play-list;body&&a"
+		"lists": "body&&.module-play-list;body&&a",
+		"sort": 0
 	},
 	{
         "id": 4,
@@ -260,7 +287,8 @@ let erjiTmpl = [
 		"desc": ".data,2&&Text;.data,3&&Text",
 		"content": "#desc&&span.data&&Text",
 		"tabs": "ul.nav-tabs&&li",
-		"lists": ".tab-content&&#id&&li"
+		"lists": ".tab-content&&#id&&li",
+		"sort": 0
 	},
 	{
         "id": 5,
@@ -268,7 +296,8 @@ let erjiTmpl = [
 		"desc": ".tag-link&&Text",
 		"content": ".video-info-content&&Text",
 		"tabs": "body&&.module-tab-item",
-		"lists": "body&&.scroll-box-y;body&&a"
+		"lists": "body&&.scroll-box-y;body&&a",
+		"sort": 0
 	},
 	{
         "id": 6,
@@ -276,7 +305,8 @@ let erjiTmpl = [
 		"desc": "p.data,-1&&Text;p.data,-2&&Text",
 		"content": "body&&.stui-pannel_bd:not(:has(a)):has(.col-pd)&&Text",
 		"tabs": "body&&.bottom-line:has(span)",
-		"lists": "body&&.stui-content__playlist;body&&li"
+		"lists": "body&&.stui-content__playlist;body&&li",
+		"sort": 0
 	},
 	{
         "id": 7,
@@ -284,7 +314,8 @@ let erjiTmpl = [
 		"desc": "p.data&&Text;.stui-content__detail&&p,-2&&Text",
 		"content": ".detail&&Text",
 		"tabs": "body&&.stui-vodlist__head:has(span)",
-		"lists": ".stui-content__playlist;body&&li"
+		"lists": ".stui-content__playlist;body&&li",
+		"sort": 0
 	},
 	{
         "id": 8,
@@ -293,7 +324,8 @@ let erjiTmpl = [
 		"content": ".desc&&Text",
 		"tabs": "body&&.stui-pannel:has(span.more)",
 		"tab_text": ".title&&Text",
-		"lists": ".stui-content__playlist;body&&li"
+		"lists": ".stui-content__playlist;body&&li",
+		"sort": 0
 	},
 	{
         "id": 9,
@@ -301,7 +333,8 @@ let erjiTmpl = [
 		"desc": ".fed-list-remarks&&Text;.fed-deta-info&&li,-2&&Text;.fed-deta-info&&li,-3&&Text",
 		"content": ".fed-tabs-info&&p&&Text",
 		"tabs": "body&&.fed-play-btns",
-		"lists": ".fed-play-item;body&&ul,1&&li"
+		"lists": ".fed-play-item;body&&ul,1&&li",
+		"sort": 0
 	},
 	{
         "id": 10,
@@ -309,7 +342,8 @@ let erjiTmpl = [
 		"desc": ".hl-full-box&&li,1&&Text",
 		"content": ".hl-full-box&&li,-1&&Text",
 		"tabs": ".hl-from-list&&li",
-		"lists": "body&&.hl-plays-list;body&&li"
+		"lists": "body&&.hl-plays-list;body&&li",
+		"sort": 0
 	},
 	{
         "id": 11,
@@ -317,7 +351,8 @@ let erjiTmpl = [
 		"desc": ".vodTag&&Text",
 		"content": ".ecshow&&Text",
 		"tabs": ".play_source_tab&&a",
-		"lists": "body&&.content_playlist;body&&a"
+		"lists": "body&&.content_playlist;body&&a",
+		"sort": 0
 	},
 	{
         "id": 12,
@@ -325,7 +360,8 @@ let erjiTmpl = [
 		"desc": ".content_min&&li,1&&Text",
 		"content": ".content_min&&li,-1&&Text",
 		"tabs": ".play_source_tab&&a",
-		"lists": "body&&.content_playlist;body&&li"
+		"lists": "body&&.content_playlist;body&&li",
+		"sort": 0
 	},
 	{
         "id": 13,
@@ -333,14 +369,16 @@ let erjiTmpl = [
 		"desc": ".mv-showr&&p,2&&Text;.mv-showr&&p,3&&Text",
 		"content": ".des&&Text",
 		"tabs": ".layui-tab-brief,1&&.layui-tab-title&&li",
-		"lists": ".layui-tab-content,1&&.layui-tab-item:has(a);body&&a"
+		"lists": ".layui-tab-content,1&&.layui-tab-item:has(a);body&&a",
+		"sort": 0
 	},
 	{
         "id": 14,
 		"img": ".y-part-2by3&&data-original",
 		"desc": ".y-part-rows&&li&&Text&&Text;.y-part-rows&&li,1&&Text",
 		"tabs": ".nav-tabs&&li",
-		"lists": ".episodes-list;body&&li"
+		"lists": ".episodes-list;body&&li",
+		"sort": 0
 	},
 	{
         "id": 15,
@@ -348,7 +386,8 @@ let erjiTmpl = [
 		"desc": ".fed-deta-content&&.fed-part-rows&&li&&Text",
 		"content": ".fed-conv-text&&Text",
 		"tabs": ".fed-tabs-foot&&li",
-		"lists": ".fed-tabs-btm;body&&li"
+		"lists": ".fed-tabs-btm;body&&li",
+		"sort": 0
 	},
 	{
         "id": 16,
@@ -356,7 +395,8 @@ let erjiTmpl = [
 		"desc": ".addtime&&Text",
 		"content": ".info&&Text",
 		"tabs": ".tab_box&&h2",
-		"lists": "body&&.video_list;body&&a"
+		"lists": "body&&.video_list;body&&a",
+		"sort": 0
 	},
 	{
         "id": 17,
@@ -364,7 +404,8 @@ let erjiTmpl = [
 		"desc": ".v_desc&&Text;#intro&&p,0&&Text;#intro&&p,2&&Text;#intro&&p,1&&Text;#intro&&p,3&&Text",
 		"content": "#intro&&p,-1&&Text;",
 		"tabs": ".tab_control&&li",
-		"lists": "#play_list&&.play_list;body&&li"
+		"lists": "#play_list&&.play_list;body&&li",
+		"sort": 0
 	},
 	{
         "id": 18,
@@ -372,7 +413,8 @@ let erjiTmpl = [
 		"desc": ".detail_imform_kv,0&&Text;.detail_imform_kv,2&&Text;.detail_imform_kv,5&&Text",
 		"content": ".detail_imform_desc_pre&&p&&Text",
 		"tabs": "#menu0&&li",
-		"lists": "#main0&&.movurl;body&&li"
+		"lists": "#main0&&.movurl;body&&li",
+		"sort": 0
 	},
 	{
         "id": 19,
@@ -380,7 +422,8 @@ let erjiTmpl = [
 		"desc": ".info-txt&&p,2&&Text;.info-txt&&p,3&&Text;",
 		"content": ".brief&&Text",
 		"tabs": "body&&.playname",
-		"lists": ".playerlist;body&&ul&&a"
+		"lists": ".playerlist;body&&ul&&a",
+		"sort": 0
 	},
 	{
         "id": 20,
@@ -388,7 +431,8 @@ let erjiTmpl = [
 		"desc": ".play-tag&&Text",
 		"content": ".info-wrap,-1&&Text",
 		"tabs": ".swiper-slide",
-		"lists": "#playsx;body&&li"
+		"lists": "#playsx;body&&li",
+		"sort": 0
 	},
 	{
         "id": 21,
@@ -396,7 +440,8 @@ let erjiTmpl = [
 		"desc": "body&&.data&&Text",
 		"content": ".stui-player__detail&&p,-1&&Text",
 		"tabs": ".tab-top",
-		"lists": ".stui-play__list;body&&li"
+		"lists": ".stui-play__list;body&&li",
+		"sort": 0
 	},
 	{
         "id": 22,
@@ -404,7 +449,8 @@ let erjiTmpl = [
 		"desc": "body&&dd,0&&Text;info&&dd,1&&Text;.info&&dd,2&&Text",
 		"content": ".desdd&&Text",
 		"tabs": ".tab0&&li:not(:matches(^$))",
-		"lists": "body&&.plist;body&&a"
+		"lists": "body&&.plist;body&&a",
+		"sort": 0
 	},
 	{
         "id": 23,
@@ -412,7 +458,8 @@ let erjiTmpl = [
 		"desc": "body&&dd,0&&Text;info&&dd,1&&Text;.info&&dd,2&&Text",
 		"content": ".desdd&&Text",
 		"tabs": "#tab11",
-		"lists": "body&&.plist;body&&a"
+		"lists": "body&&.plist;body&&a",
+		"sort": 0
 	},
 	{
         "id": 24,
@@ -420,7 +467,8 @@ let erjiTmpl = [
 		"desc": ".data,0&&Text",
 		"content": "#desc&&.stui-content__desc&&Text",
 		"tabs": "#bofy&&.t-ul&&li",
-		"lists": ".stui-content__playlist;body&&li"
+		"lists": ".stui-content__playlist;body&&li",
+		"sort": 0
 	},
 	{
         "id": 25,
@@ -428,7 +476,8 @@ let erjiTmpl = [
 		"desc": ".fed-deta-content&&.fed-part-rows&&Text",
 		"content": ".fed-tabs-info&&p&&Text",
 		"tabs": ".fed-tabs-boxs&&.fed-part-rows&&li",
-		"lists": ".fed-play-item;body&&ul,1&&li"
+		"lists": ".fed-play-item;body&&ul,1&&li",
+		"sort": 0
 	},
 	{
         "id": 26,
@@ -436,7 +485,8 @@ let erjiTmpl = [
 		"desc": ".play-ail&&p,-2&&Text",
 		"content": ".detail-intro-txt&&Text",
 		"tabs": "#playTab&&li",
-		"lists": ".playlist&&ul;body&&li"
+		"lists": ".playlist&&ul;body&&li",
+		"sort": 0
 	},
 	{
         "id": 27,
@@ -445,6 +495,7 @@ let erjiTmpl = [
 		"content": ".infor_intro&&Text",
 		"tabs": ".play_source_tab&&a",
 		"lists": "body&&.play_num_list;body&&li",
+		"sort": 0
 	},
 	{
         "id": 28,
@@ -452,7 +503,8 @@ let erjiTmpl = [
 		"desc": ".moviedteail_list&&Text",
 		"content": "body&&.yp_context&&Text",
 		"tabs": ".mi_paly_box&&.ypxingq_t",
-		"lists": ".paly_list_btn;body&&a"
+		"lists": ".paly_list_btn;body&&a",
+		"sort": 0
 	},
 	{
         "id": 29,
@@ -461,7 +513,8 @@ let erjiTmpl = [
 		"content": "#rating&&Text",
 		"tabs": "body&&.myui-panel__head&&h3",
 		"tab_text": ".title&&Text",
-		"lists": "#playlist1&&li;body&&a"
+		"lists": "#playlist1&&li;body&&a",
+		"sort": 0
 	},
 	{
         "id": 30,
@@ -469,7 +522,8 @@ let erjiTmpl = [
 		"desc": ".v_info_box&&p&&Text",
 		"content": ".p_txt&&Text",
 		"tabs": ".from_list&&li",
-		"lists": "#play_link&&li;body&&a"
+		"lists": "#play_link&&li;body&&a",
+		"sort": 0
 	},
 	{
         "id": 31,
@@ -477,7 +531,8 @@ let erjiTmpl = [
 		"desc": ".detail_top&&li,2&&Text;.detail_top&&li,,3&&Text;.detail_top&&li,4&&Text",
 		"content": ".li_intro&&Text",
 		"tabs": ".play_source_tab&&a",
-		"lists": "body&&.player_list;body&&li"
+		"lists": "body&&.player_list;body&&li",
+		"sort": 0
 	},
 	{
         "id": 32,
@@ -485,7 +540,8 @@ let erjiTmpl = [
 		"desc": "#book-cont&&.r&&Text",
 		"content": "#wrap&&Text",
 		"tabs": "#zhankai&&.arconix-toggle-title",
-		"lists": "#zhankai&&.arconix-toggle-content;body&&li"
+		"lists": "#zhankai&&.arconix-toggle-content;body&&li",
+		"sort": 0
 	},
 	{
         "id": 33,
@@ -493,7 +549,8 @@ let erjiTmpl = [
 		"desc": ".info,0&&Text;.info,1&&Text;.info,2&&Text;.starring&&Text",
 		"content": ".animeplot&&Text",
 		"tabs": "#two1",
-		"lists": ".playlist;body&&.list-title"
+		"lists": ".playlist;body&&.list-title",
+		"sort": 0
 	},
 	{
         "id": 34,
@@ -501,6 +558,12 @@ let erjiTmpl = [
 		"desc": ".module-info-item,3&&Text;.module-info-item,1&&Text;.module-info-item,4&&Text",
 		"content": ".module-info-item,5||.module-info-item&&Text",
 		"tabs": "#two1",
-		"lists": ".playlist;body&&.list-title"
+		"lists": ".playlist;body&&.list-title",
+		"sort": 0
 	}
 ]
+let erjiTmplfile = "hiker://files/rules/Src/Juying/erjiTmpl.json";
+let erjiTmpl = fetch(erjiTmplfile);
+if(erjiTmpl==""){
+	writeFile(erjiTmplfile, JSON.stringify(erjiTmpldemo));
+}
