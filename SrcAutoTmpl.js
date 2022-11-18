@@ -128,7 +128,7 @@ function autoerji(url){
 				o: t,
             }
         });
-        if(setid>0&&data.conts.length>0){
+        if(setid>0&&data.arts.length>0&&data.conts.length>0){
 			putMyVar('Tmpl-'+urldomian,JSON.stringify(t));
 			let sortidex = sortlist.findIndex(it=>it.id===setid);
 			if(sortidex>-1) {
@@ -139,7 +139,12 @@ function autoerji(url){
 			if(data.arts.length>data.conts.length){
 				data.arts.splice(data.conts.length-1,data.arts.length-data.conts.length);
 			}
-			data = {details1:data.details1||detail.details1,details2:data.details2||detail.details2,pic:data.pic||detail.pic,desc:data.desc||detail.desc,arts:data.arts,conts:data.conts};
+			data.details1 = data.details1||detail.details1||"";
+			data.details2 = data.details2||detail.details2||"模板未匹配到信息";
+			data.pic = data.pic||detail.pic||"";
+			data.desc = data.desc||detail.desc||"";
+		}else{
+			data = {};
 		}
     }
 	if(data.conts){
