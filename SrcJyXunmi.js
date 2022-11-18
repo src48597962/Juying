@@ -122,7 +122,6 @@ function xunmi(name,data,ishkss) {
             d.push({
                 title: grouplist[i]==xunmigroup?'‘‘’’<b><span style="color:#3399cc">'+groupname:groupname,
                 url: $('#noLoading#').lazyRule((bess,datalist,name,count,groupname,ishkss)=>{
-                    updateItem('sschabeihu',{title:'茶杯搜索'});
                     let groupmenu = getMyVar('groupmenu')?getMyVar('groupmenu').split(','):[];
                     for(let i in groupmenu){
                         if(groupmenu[i]==groupname){
@@ -157,104 +156,8 @@ function xunmi(name,data,ishkss) {
             });
         }
     }
-    function chabeisousuo(name,ishkss){
-        updateItem('loading', {title: ''});
-        updateItem('sschabeihu',{title:'‘‘’’<b><span style="color:#3399cc">茶杯搜索'});
-        hideLoading();
-        showLoading('正在加载中...');
-        eval(getCryptoJS());
-        let token = CryptoJS.SHA1(name + "URBBRGROUN").toString();
-        try{
-            let html = request('https://api.cupfox.app/api/v2/search/?text='+name+'&type=0&from=0&size=200&token='+token);
-            var lists = JSON.parse(html).resources;
-            deleteItemByCls('xunmilist');
-            hideLoading();
-        }catch(e){
-            hideLoading();
-            updateItem('loading', {
-                title: '没有接口，且茶杯搜索失败',
-                url: "hiker://empty"
-            });
-            return 'toast://茶杯搜索失败';
-        }
-        
-        if(lists.length>0){
-            let Cdatalist =[];
-            lists.forEach(item => {
-                let vodname = item.text.replace(/<em>|<\/em>/g,'');//|kkw361|ksksl|zjtu\.cc|bdys01
-                if(!/qq|mgtv|iptv|iqiyi|youku|bilibili|souhu|cctv/.test(item.url)){//&&vodname.indexOf(name)>-1
-                    let push = {
-                        title: ishkss?vodname:(vodname!=name?vodname.replace(name,'<font color=red>'+name+'</font>'):'<font color=red>'+vodname+'</font>') + ' - <font color=#f13b66a>'+ item.website+'</font>' + (item.tags.length>0?'  ['+item.tags.join(' ')+']':''),
-                        desc: item.website + (item.tags.length>0?'  ['+item.tags.join(' ')+']':'') ,
-                        url: $("hiker://empty##" + item.url + "#immersiveTheme##autoCache#").rule((type,ua) => {
-                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
-                                xunmierji(type,ua)
-                            },'web', MOBILE_UA),
-                        col_type: ishkss?"text_1":"avatar",
-                        extra: {
-                            name: name,
-                            title: vodname+'-'+item.website,
-                            cls: 'xunmilist'
-                        }
-                    };
-                    
-                    if(!ishkss){
-                        push.img = item.icon;
-                        Cdatalist.push(push);
-                        Cdatalist.push({
-                            col_type: "line"
-                        })
-                    }else{
-                        Cdatalist.push(push);
-                    } 
-                } 
-            });
-            
-            addItemBefore('loading', Cdatalist);
-            updateItem('loading', {
-                title: '茶杯搜索加载完成',
-                url: "hiker://empty"
-            });
-            return 'toast://加载完成';
-        }else{
-            updateItem('loading', {
-                title: '没有接口，且茶杯搜索为0',
-                url: "hiker://empty"
-            });
-            return 'toast://未获取到内容';
-        }
-    }
+    
     if(!ishkss&&getMyVar('isload', '0')=="0"){
-        if(JYconfig.aichabei==1){
-            d.push({
-                title: '茶杯搜索',
-                url: $('#noLoading#').lazyRule((name,chabeisousuo,ishkss)=>{
-                    let groupmenu = getMyVar('groupmenu')?getMyVar('groupmenu').split(','):[];
-                    for(let i in groupmenu){
-                        updateItem(groupmenu[i],{title:groupmenu[i]})
-                    }
-                    putMyVar("selectgroup",'茶杯搜索');
-                    if(getMyVar('deleteswitch')){
-                        clearMyVar('deleteswitch');
-                        updateItem('deleteswitch',{title:'删除开关'});
-                    }
-                    if(getMyVar("starttask","0")=="1"){putMyVar("stoptask","1");}
-                    let waittime = parseInt(getMyVar("xunmitimeout","5"))+1;
-                    for (let i = 0; i < waittime; i++) {
-                        if(getMyVar("starttask","0")=="0"){
-                            break;
-                        }
-                        showLoading('等待上次线程结束，'+(waittime-i-1)+'s');
-                        java.lang.Thread.sleep(1000);
-                    }
-                    return chabeisousuo(name,ishkss);
-                },name,chabeisousuo,ishkss),
-                col_type: "scroll_button",
-                extra: {
-                    id: 'sschabeihu'
-                }
-            });
-        }
         if(datalist.length>0){
             d.push({
                 title: '删除开关',
@@ -280,7 +183,7 @@ function xunmi(name,data,ishkss) {
         }
     }
     d.push({
-        title: JYconfig.aichabei==1?'加载AI茶杯搜索':'没有接口？无法搜索',
+        title: '没有接口？无法搜索',
         url: "hiker://empty",
         col_type: "text_center_1",
         extra: {
@@ -829,8 +732,6 @@ function xunmi(name,data,ishkss) {
     if(count>0){
         putMyVar("starttask","1");
         bess(datalist,beresults,beerrors,name,count,ishkss);
-    }else if(JYconfig.aichabei==1){
-        chabeisousuo(name,ishkss);
     }
 }
 
