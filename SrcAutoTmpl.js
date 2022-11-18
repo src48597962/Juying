@@ -49,7 +49,10 @@ function autoerji(url){
 				var details2 = "";
 			}
 			try{
-				var pic = pd(html,t.img,url).replace(/http.*\/tu\.php\?tu=|\/img\.php\?url=| |\/tu\.php\?tu=/g,'');
+				var pic = pdfh(html,t.img).replace(/http.*\/tu\.php\?tu=|\/img\.php\?url=| |\/tu\.php\?tu=/g,'');
+				if(!/^http/.test(pic)){
+					pic = url.match(/http(s)?:\/\/.*?\//)[0] + pic;
+				}
 				if(pic&&!detail.pic){detail.pic = pic;}
 			}catch(e){
 				var pic = "";
