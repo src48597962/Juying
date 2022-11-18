@@ -463,7 +463,7 @@ function aierji(html,url,detail){
 	for (let i = 0; i < arr.length; i++) {
 		let it = arr[i];
 		let t = it.text;
-		if (!it.href || it.href == "") {
+		if (!it.href || it.href == "" || (it.href==url&&it.href.indexOf('-')==-1)) {
 			continue;
 		}
 		let pre = i == 0 ? null : arr[i - 1];
