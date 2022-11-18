@@ -499,6 +499,7 @@ function aierji(html,url,detail){
 			}
 		}
 		log(d2);
+		log(conts);
 		if(conts.length==0){arts = [];}
 		data = {details1:detail.details1||"",details2:detail.details2||"选集列表来源于AI识片技术",pic:detail.pic||"",desc:detail.desc||"暂无信息",arts:arts,conts:conts};
 		return data;
