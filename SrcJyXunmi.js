@@ -184,7 +184,7 @@ function xunmi(name,data,ishkss) {
                 let vodname = item.text.replace(/<em>|<\/em>/g,'');//|kkw361|ksksl|zjtu\.cc|bdys01
                 if(!/qq|mgtv|iptv|iqiyi|youku|bilibili|souhu|cctv/.test(item.url)){//&&vodname.indexOf(name)>-1
                     let push = {
-                        title: ishkss?vodname:(vodname!=name?vodname.replace(name,'<font color=red>'+name+'</font>'):vodname) + ' - <font color=#f13b66a>'+ item.website+'</font>' + (item.tags.length>0?'  ['+item.tags.join(' ')+']':''),
+                        title: ishkss?vodname:(vodname!=name?vodname.replace(name,'<font color=red>'+name+'</font>'):'<font color=red>'+vodname+'</font>') + ' - <font color=#f13b66a>'+ item.website+'</font>' + (item.tags.length>0?'  ['+item.tags.join(' ')+']':''),
                         desc: item.website + (item.tags.length>0?'  ['+item.tags.join(' ')+']':'') ,
                         url: $("hiker://empty##" + item.url + "#immersiveTheme##autoCache#").rule((type,ua) => {
                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
@@ -460,7 +460,7 @@ function xunmi(name,data,ishkss) {
                                         vodpic = "https" + vodpic;
                                     }
                                     return {
-                                        title: !ishkss&&vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):vodname,
+                                        title: !ishkss&&vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):'<font color=red>'+vodname+'</font>',
                                         desc: !ishkss?(voddesc + '\n\n' + appname):'聚影√ · '+obj.name,
                                         content: voddesc,
                                         pic_url: vodpic,
@@ -580,7 +580,7 @@ function xunmi(name,data,ishkss) {
                                     vodpic = "https" + vodpic;
                                 }
                                 return {
-                                    title: !ishkss&&vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):vodname,
+                                    title: !ishkss&&vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):'<font color=red>'+vodname+'</font>',
                                     desc: !ishkss?(voddesc + '\n\n' + appname):'聚影√ · '+obj.name,
                                     content: voddesc,
                                     pic_url: vodpic?vodpic + "@Referer=":"https://www.xawqxh.net/mxtheme/images/loading.gif@Referer=",
