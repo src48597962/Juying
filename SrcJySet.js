@@ -2115,12 +2115,12 @@ function extension(){
         title: JYconfig['sousuoms']==1?'搜索数据来源：'+(getItem('JYdatasource', 'sougou')=="sougou"?'搜狗':'360'):'搜索数据来源：接口',
         desc: JYconfig['sousuoms']==1?'视界原生搜索按钮改为调用搜狗搜索影片':'视界原生搜索按钮改为调用接口聚搜影片',
         url: $('#noLoading#').lazyRule((JYconfig,cfgfile) => {
-                if(JYconfig['sousuoms'] == 2){
-                    JYconfig['sousuoms'] = 1;
-                    var sm = "视界原生搜索按钮搜索数据来源：搜狗数据";
-                }else{
+                if(JYconfig['sousuoms'] == 1){
                     JYconfig['sousuoms'] = 2;
                     var sm = "视界原生搜索按钮搜索数据来源：聚搜接口";
+                }else{
+                    JYconfig['sousuoms'] = 1;
+                    var sm = "视界原生搜索按钮搜索数据来源：搜狗数据";
                 }
                 writeFile(cfgfile, JSON.stringify(JYconfig));
                 refreshPage(false);
@@ -2140,7 +2140,6 @@ function extension(){
         title: '🎁 其他资源',
         col_type: "rich_text"
     });
-
     d.push({
         title: '选择需要的功能类型',
         col_type: "rich_text",
@@ -2175,6 +2174,22 @@ function extension(){
             refreshPage(false);
             return "hiker://empty";
         })
+    });
+    d.push({
+        title: "AI茶杯"+(JYconfig['chabeihu']?"开":"关"),
+        col_type: 'scroll_button',
+        url: $('#noLoading#').lazyRule((JYconfig,cfgfile) => {
+            if(JYconfig['chabeihu'] == 1){
+                JYconfig['chabeihu'] = 0;
+                var sm = "聚搜关闭AI茶杯搜索分组";
+            }else{
+                JYconfig['chabeihu'] = 1;
+                var sm = "聚搜开启AI茶杯搜索分组";
+            }
+            writeFile(cfgfile, JSON.stringify(JYconfig));
+            refreshPage(false);
+            return 'toast://' + sm;
+        }, JYconfig, cfgfile),
     });
     if(getMyVar('importtype','0')!="0"){
         if(getMyVar('importtype','0')!="2"){
