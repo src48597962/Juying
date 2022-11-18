@@ -157,7 +157,7 @@ function xunmi(name,data,ishkss) {
             });
         }
     }
-    function chabeisousuo(name){
+    function chabeisousuo(name,ishkss){
         updateItem('loading', {title: ''});
         updateItem('sschabeihu',{title:'‘‘’’<b><span style="color:#3399cc">茶杯搜索'});
         hideLoading();
@@ -246,7 +246,7 @@ function xunmi(name,data,ishkss) {
                     showLoading('等待上次线程结束，'+(waittime-i-1)+'s');
                     java.lang.Thread.sleep(1000);
                 }
-                return chabeisousuo(name);
+                return chabeisousuo(name,ishkss);
             },name,chabeisousuo,ishkss),
             col_type: "scroll_button",
             extra: {
@@ -828,7 +828,7 @@ function xunmi(name,data,ishkss) {
         putMyVar("starttask","1");
         bess(datalist,beresults,beerrors,name,count,ishkss);
     }else{
-        chabeisousuo(name);
+        chabeisousuo(name,ishkss);
     }
 }
 
@@ -1336,7 +1336,7 @@ function xunmierji(type,ua) {
     setTabs(tabs, MY_URL);
     
     //推送tvbox
-    if(getItem('enabledpush', '') == '1'){
+    if(getItem('enabledpush','')=='1' && lists.length>0){
         let push = {
             "name": MY_PARAMS.title||'聚影',
             "pic": pic.split('@')[0],
