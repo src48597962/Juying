@@ -17,8 +17,8 @@ function autoerji(url){
 	erjiTmpl = erjiTmpl.map(item => {
 		item.sort = 0;
 		for(let j=0;j<sortlist.length;j++){
-			if(sortlist.id==item.id){
-				item.sort = sortlist.sort;
+			if(sortlist[j].id==item.id){
+				item.sort = sortlist[j].sort;
 				break;
 			}
 		}
@@ -29,7 +29,7 @@ function autoerji(url){
         if(a.sort!=b.sort){
             return b.sort - a.sort
         }else{
-            return b.id - a.id;
+            return a.id - b.id;
         }
     };
 	erjiTmpl.sort(sortData)
