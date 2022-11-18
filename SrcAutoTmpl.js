@@ -83,7 +83,7 @@ function aierji(html,url,detail){
 	let arr = alist.map(it => {
 		return {
 			//html: it,
-			text: pdfh(it, "a&&Text"),
+			text: pdfh(it, "a&&Text").replace('new',''),
 			title: pdfh(it, "a&&title"),
 			href: pd(it, "a&&href", url)
 		}
