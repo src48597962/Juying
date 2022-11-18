@@ -1,6 +1,6 @@
 //寻觅片源
 function xunmi(name,data,ishkss) {
-    name = name.replace(/全集|国语|粤语|\s/g,'');
+    name = name.replace(/全集.*|国语.*|粤语.*|\s/g,'');
     setPageTitle('聚搜>'+name);
     addListener("onClose", $.toString(() => {
         clearMyVar('xunminum');
@@ -227,7 +227,7 @@ function xunmi(name,data,ishkss) {
     if(!ishkss&&getMyVar('isload', '0')=="0"){
         d.push({
             title: '茶杯搜索',
-            url: $('#noLoading#').lazyRule((name,chabeisousuo)=>{
+            url: $('#noLoading#').lazyRule((name,chabeisousuo,ishkss)=>{
                 let groupmenu = getMyVar('groupmenu')?getMyVar('groupmenu').split(','):[];
                 for(let i in groupmenu){
                     updateItem(groupmenu[i],{title:groupmenu[i]})
@@ -247,7 +247,7 @@ function xunmi(name,data,ishkss) {
                     java.lang.Thread.sleep(1000);
                 }
                 return chabeisousuo(name);
-            },name,chabeisousuo),
+            },name,chabeisousuo,ishkss),
             col_type: "scroll_button",
             extra: {
                 id: 'sschabeihu'
