@@ -2175,22 +2175,6 @@ function extension(){
             return "hiker://empty";
         })
     });
-    d.push({
-        title: "AI茶杯"+(JYconfig['aichabei']?"(开)":"(关)"),
-        col_type: 'scroll_button',
-        url: $('#noLoading#').lazyRule((JYconfig,cfgfile) => {
-            if(JYconfig['aichabei'] == 1){
-                JYconfig['aichabei'] = 0;
-                var sm = "聚搜关闭AI茶杯搜索分组";
-            }else{
-                JYconfig['aichabei'] = 1;
-                var sm = "聚搜开启AI茶杯搜索分组";
-            }
-            writeFile(cfgfile, JSON.stringify(JYconfig));
-            refreshPage(false);
-            return 'toast://' + sm;
-        }, JYconfig, cfgfile),
-    });
     if(getMyVar('importtype','0')!="0"){
         if(getMyVar('importtype','0')!="2"){
             d.push({
