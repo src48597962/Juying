@@ -358,20 +358,41 @@ function aierji(html,url,detail){
 	let alist = pdfa(html, "body&&a");
 	let arr = alist.map(it => {
 		return {
+			//html: it,
 			text: pdfh(it, "a&&Text"),
+			title: pdfh(it, "a&&title"),
 			href: pd(it, "a&&href", url)
 		}
 	});
+	//log(arr);
+	let debug = false;
 
 	function clearText(it) {
-		return it.replace(/第|集|章|期|-/g, "");
+		return it.replace(/第|集|章/g, "");
+	}
+
+	function isMovie(it) {
+		if (it == null || it.text == null) {
+			return false;
+		}
+		let tit = it.title || "";
+		it = it.text || "";
+		if (it == "" || it.length > 8) {
+			return false;
+		}
+		//排除
+		let reg = /\.|高清直播|写真推荐/;
+		if (tit != "" && !tit.includes(it) || reg.test(it)) {
+			return false;
+		}
+		return it.match(/原画|备用|蓝光|超清|高清|正片|韩版|4K|4k|1080P|720P|TC|HD|BD/)
 	}
 
 	function notChapter(it) {
-		if (!/^http/.test(it.href) || !/原画|备用|蓝光|国语|粤语|超清|高清|正片|韩版|4K|4k|1080P|720P|TC|HD|BD|第|集|章|期|-/.test(it.text)) {
+		if (it == null || it.text == null) {
 			return true;
 		}
-		return false;
+		return it.text.match(/[0-9]\.[0-9]分/);
 	}
 
 	function isChapter(it, pre, next) {
@@ -379,14 +400,24 @@ function aierji(html,url,detail){
 			//优先排除
 			return false;
 		}
+		//判断是不是电影
+		if (isMovie(it)) {
+			return true;
+		}
 		return isChapter0(it, pre) || isChapter0(it, next);
 	}
 
 	function getChapterNum(it) {
-		it = it.text;
+		if (it == null || it.text == null) {
+			return -1;
+		}
+		it = it.text || "";
+		if (it == "") {
+			return -1;
+		}
 		it = clearText(it);
 		let reg = /^[0-9]*$/;
-		if(!reg.test(it)){
+		if (!reg.test(it)) {
 			return -1;
 		}
 		it = parseInt(it);
@@ -397,16 +428,37 @@ function aierji(html,url,detail){
 	}
 
 	function isChapter0(it, brother) {
+		/*if (debug) {
+			log({
+				it: it,
+				brother: brother
+			});
+		}*/
 		it = getChapterNum(it);
+		//if (debug) log(it);
 		if (it < 0) {
 			return false;
 		}
 		brother = getChapterNum(brother);
+		//if (debug) log(brother);
 		if (brother < 0) {
 			return false;
 		}
 		return it - brother < 2 && it - brother > -2;
 	}
+
+	let _web = $.toString(() => {
+		let urls = _getUrls();
+		let reg = /\.html|\.css|\.js/;
+		for (let k in urls) {
+			if (!reg.test(urls[k]) && urls[k].match(/\.mp4|\.m3u8/)) {
+				fy_bridge_app.log(urls[k]);
+				return fy_bridge_app.getHeaderUrl(urls[k].replace(/.*?url=/, "")) + "#ignoreImg=true#";
+			}
+		}
+	});
+
+	let web = getItem('web', '0') == "1";
 
 	for (let i = 0; i < arr.length; i++) {
 		let it = arr[i];
@@ -417,9 +469,24 @@ function aierji(html,url,detail){
 		let pre = i == 0 ? null : arr[i - 1];
 		let next = i == (arr.length - 1) ? null : arr[i + 1];
 		if (isChapter(it, pre, next)) {
+			if (web) {
+				var urlx = "webRule://" + it.href + "@" + _web;
+				var extrax = {
+					jsLoadingInject: true,
+					id: it.href,
+					blockRules: ['.m4a', '.mp3', '.flv', '.avi', '.3gp', '.mpeg', '.wmv', '.mov', '.rmvb', '.gif', '.jpeg', '.png', '.ico', '.svg']
+				};
+			} else {
+				var urlx = "video://" + it.href;
+				var extrax = {
+					id: it.href
+				};
+			}
 			d.push({
 				title: t,
-				url: it.href
+				url: urlx,
+				col_type: "text_3",
+				extra: extrax
 			});
 		}
 	}
