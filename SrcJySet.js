@@ -2176,14 +2176,14 @@ function extension(){
         })
     });
     d.push({
-        title: "AI茶杯"+(JYconfig['chabeihu']?"开":"关"),
+        title: "AI茶杯"+(JYconfig['aichabei']?"开":"关"),
         col_type: 'scroll_button',
         url: $('#noLoading#').lazyRule((JYconfig,cfgfile) => {
-            if(JYconfig['chabeihu'] == 1){
-                JYconfig['chabeihu'] = 0;
+            if(JYconfig['aichabei'] == 1){
+                JYconfig['aichabei'] = 0;
                 var sm = "聚搜关闭AI茶杯搜索分组";
             }else{
-                JYconfig['chabeihu'] = 1;
+                JYconfig['aichabei'] = 1;
                 var sm = "聚搜开启AI茶杯搜索分组";
             }
             writeFile(cfgfile, JSON.stringify(JYconfig));
