@@ -447,19 +447,6 @@ function aierji(html,url,detail){
 		return it - brother < 2 && it - brother > -2;
 	}
 
-	let _web = $.toString(() => {
-		let urls = _getUrls();
-		let reg = /\.html|\.css|\.js/;
-		for (let k in urls) {
-			if (!reg.test(urls[k]) && urls[k].match(/\.mp4|\.m3u8/)) {
-				fy_bridge_app.log(urls[k]);
-				return fy_bridge_app.getHeaderUrl(urls[k].replace(/.*?url=/, "")) + "#ignoreImg=true#";
-			}
-		}
-	});
-
-	let web = getItem('web', '0') == "1";
-
 	for (let i = 0; i < arr.length; i++) {
 		let it = arr[i];
 		let t = it.text;
@@ -469,24 +456,9 @@ function aierji(html,url,detail){
 		let pre = i == 0 ? null : arr[i - 1];
 		let next = i == (arr.length - 1) ? null : arr[i + 1];
 		if (isChapter(it, pre, next)) {
-			if (web) {
-				var urlx = "webRule://" + it.href + "@" + _web;
-				var extrax = {
-					jsLoadingInject: true,
-					id: it.href,
-					blockRules: ['.m4a', '.mp3', '.flv', '.avi', '.3gp', '.mpeg', '.wmv', '.mov', '.rmvb', '.gif', '.jpeg', '.png', '.ico', '.svg']
-				};
-			} else {
-				var urlx = "video://" + it.href;
-				var extrax = {
-					id: it.href
-				};
-			}
 			d.push({
 				title: t,
-				url: urlx,
-				col_type: "text_3",
-				extra: extrax
+				url: it.href,
 			});
 		}
 	}
@@ -526,6 +498,7 @@ function aierji(html,url,detail){
 				}
 			}
 		}
+		log(d2);
 		if(conts.length==0){arts = [];}
 		data = {details1:detail.details1||"",details2:detail.details2||"选集列表来源于AI识片技术",pic:detail.pic||"",desc:detail.desc||"暂无信息",arts:arts,conts:conts};
 		return data;
