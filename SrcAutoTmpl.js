@@ -1,4 +1,236 @@
-//白嫖道长dr二级模板数据
+function autoerji(url){
+    //log(url);
+    let data = {};
+    if(!/http/.test(url)){return data;}
+    let html = request(url, {headers: {'User-Agent': PC_UA }});
+    let urldomian = url.match(/http(s)?:\/\/(.*?)\//)[0];
+    let urltmpl = JSON.parse(getMyVar('Tmpl-'+urldomian,'{}'));
+    let tmplidex = erjiTmpl.findIndex(it=>it.id===urltmpl.id);
+    if(tmplidex>-1) {
+        let tmpl = erjiTmpl.splice(tmplidex, 1);
+        erjiTmpl.unshift(tmpl[0]);
+    }
+	let detail = {};
+    for(let i in erjiTmpl){
+        //log('【'+erjiTmpl[i].id+'】');
+        let t = erjiTmpl[i];
+        try {
+            let tabs = pdfa(html,t.tabs);
+            var arts = [];
+            tabs.forEach(item => {
+                let name = pdfh(item, t.tab_text?t.tab_text:'h3||a||span||body&&Text');
+                if(name&&!/更多精品/.test(name)){
+                    arts.push(name);
+                }
+            });
+            let lists = pdfa(html,'body&&'+t.lists.split(';')[0]);//全线路影片列表
+            var conts = [];
+            for (let i = 0; i < lists.length; i++) {
+                let key = t.lists.split(';')[1];
+                let list = pdfa(lists[i],key);//单线路影片列表
+                let cont = [];
+                for (let j = 0; j < list.length; j++) {
+                    let contname = pdfh(list[j],"a&&Text");
+                    let conturl = pd(list[j],t.tab_id?t.tab_id:'a&&href');
+                    cont.push(contname+"$"+conturl)
+                }
+                conts.push(cont.join("#"))
+            }
+            try{
+				var details = t.desc.split(';');
+				var details1 = pdfh(html, details[0]);
+				var details2 = "";
+				for(let j=1;j<details.length;j++){
+					details2 = details2.concat(pdfh(html, details[j]));
+				}
+				if(details1&&!detail.details1){detail.details1 = details1;}
+				if(details2&&!detail.details2){detail.details2 = details2;}
+			}catch(e){
+				var details1 = "";
+				var details2 = "";
+			}
+			try{
+				var pic = pdfh(html,t.img).replace(/http.*\/tu\.php\?tu=|\/img\.php\?url=| |\/tu\.php\?tu=/g,'');
+				if(pic&&!detail.pic){detail.pic = pic;}
+			}catch(e){
+				var pic = "";
+			}
+			try{
+				var desc = t.content?pdfh(html,t.content):"";
+				if(desc&&!detail.desc){detail.desc = desc;}
+			}catch(e){
+				var desc = "";
+			}
+			if(arts.length>0&&conts.length>0&&conts[0]){
+                data = {details1:details1,details2:details2,pic:pic,desc:desc,arts:arts,conts:conts};
+                putMyVar('Tmpl-'+urldomian,JSON.stringify(t)); 
+                break;
+            }
+        }catch (e) {
+            //log('二级模板【'+t.id+'】匹配失败：'+e.message);
+        }
+    }
+	if(data.conts){
+		return data;
+	}else{
+		return aierji(html,url,detail);
+	}
+}
+//AI二级
+function aierji(html,url,detail){
+	var d = [];
+	let alist = pdfa(html, "body&&a");
+	let arr = alist.map(it => {
+		return {
+			//html: it,
+			text: pdfh(it, "a&&Text"),
+			title: pdfh(it, "a&&title"),
+			href: pd(it, "a&&href", url)
+		}
+	});
+	//log(arr);
+	let debug = false;
+
+	function clearText(it) {
+		return it.replace(/第|集|章/g, "");
+	}
+
+	function isMovie(it) {
+		if (it == null || it.text == null) {
+			return false;
+		}
+		let tit = it.title || "";
+		it = it.text || "";
+		if (it == "" || it.length > 8) {
+			return false;
+		}
+		//排除
+		let reg = /\.|高清直播|写真推荐/;
+		if (tit != "" && !tit.includes(it) || reg.test(it)) {
+			return false;
+		}
+		return it.match(/原画|备用|蓝光|超清|高清|正片|韩版|4K|4k|1080P|720P|TC|HD|BD/)
+	}
+
+	function notChapter(it) {
+		if (it == null || it.text == null) {
+			return true;
+		}
+		return it.text.match(/[0-9]\.[0-9]分/);
+	}
+
+	function isChapter(it, pre, next) {
+		if (notChapter(it)) {
+			//优先排除
+			return false;
+		}
+		//判断是不是电影
+		if (isMovie(it)) {
+			return true;
+		}
+		return isChapter0(it, pre) || isChapter0(it, next);
+	}
+
+	function getChapterNum(it) {
+		if (it == null || it.text == null) {
+			return -1;
+		}
+		it = it.text || "";
+		if (it == "") {
+			return -1;
+		}
+		it = clearText(it);
+		let reg = /^[0-9]*$/;
+		if (!reg.test(it)) {
+			return -1;
+		}
+		it = parseInt(it);
+		if (isNaN(it)) {
+			return -1;
+		}
+		return it;
+	}
+
+	function isChapter0(it, brother) {
+		/*if (debug) {
+			log({
+				it: it,
+				brother: brother
+			});
+		}*/
+		it = getChapterNum(it);
+		//if (debug) log(it);
+		if (it < 0) {
+			return false;
+		}
+		brother = getChapterNum(brother);
+		//if (debug) log(brother);
+		if (brother < 0) {
+			return false;
+		}
+		return it - brother < 2 && it - brother > -2;
+	}
+
+	for (let i = 0; i < arr.length; i++) {
+		let it = arr[i];
+		log(it);
+		let t = it.text;
+		if (!it.href || it.href == "" || (it.href==url&&it.href.indexOf('-')==-1)) {
+			continue;
+		}
+		let pre = i == 0 ? null : arr[i - 1];
+		let next = i == (arr.length - 1) ? null : arr[i + 1];
+		if (isChapter(it, pre, next)) {
+			d.push({
+				title: t,
+				url: it.href,
+			});
+		}
+	}
+	//log(d);
+	if (d.length == 0) {
+		//匹配失败
+		d.push({
+			title: "",
+			url: url,
+			col_type: "x5_webview_single",
+			desc: "float&&100%",
+			pic_url: "",
+			extra: {
+				canBack: true
+			}
+		});
+		toast("AI匹配失败，已使用X5加载");
+		setResult(d);
+	} else {
+		//线路分割
+		let arts = ["播放源1"];
+		let conts = [];
+		let d2 = [];
+		for (let i = 0; i < d.length; i++) {
+			d2.push(d[i].title+'$'+d[i].url);
+			if (i < d.length - 1) {
+				let it = d[i];
+				let t1 = parseInt(clearText(it.title));
+				let next = d[i + 1];
+				let t2 = parseInt(clearText(next.title));
+				if (t2 - t1 > 1 || t1 - t2 > 1) {
+					conts.push(d2.join('#'));
+					let s = arts.length+1;
+					arts.push("播放源"+s);
+					d2 = [];
+				}
+			}else{
+				conts.push(d2.join('#'));
+			}
+		}
+
+		if(conts.length==0){arts = [];}
+		data = {details1:detail.details1||"",details2:detail.details2||"选集列表来源于AI识片技术",pic:detail.pic||"",desc:detail.desc||"暂无信息",arts:arts,conts:conts};
+		return data;
+	}
+	return {};
+}
 let erjiTmpl = [
 	{
     	"id": 1,
@@ -273,238 +505,3 @@ let erjiTmpl = [
 		"lists": ".playlist;body&&.list-title"
 	}
 ]
-
-function autoerji(url){
-    //log(url);
-    let data = {};
-    if(!/http/.test(url)){return data;}
-    let html = request(url, {headers: {'User-Agent': PC_UA }});
-    let urldomian = url.match(/http(s)?:\/\/(.*?)\//)[0];
-    let urltmpl = JSON.parse(getMyVar('Tmpl-'+urldomian,'{}'));
-    let tmplidex = erjiTmpl.findIndex(it=>it.id===urltmpl.id);
-    if(tmplidex>-1) {
-        let tmpl = erjiTmpl.splice(tmplidex, 1);
-        erjiTmpl.unshift(tmpl[0]);
-    }
-	let detail = {};
-    for(let i in erjiTmpl){
-        //log('【'+erjiTmpl[i].id+'】');
-        let t = erjiTmpl[i];
-        try {
-            let tabs = pdfa(html,t.tabs);
-            var arts = [];
-            tabs.forEach(item => {
-                let name = pdfh(item, t.tab_text?t.tab_text:'h3||a||span||body&&Text');
-                if(name&&!/更多精品/.test(name)){
-                    arts.push(name);
-                }
-            });
-            let lists = pdfa(html,'body&&'+t.lists.split(';')[0]);//全线路影片列表
-            var conts = [];
-            for (let i = 0; i < lists.length; i++) {
-                let key = t.lists.split(';')[1];
-                let list = pdfa(lists[i],key);//单线路影片列表
-                let cont = [];
-                for (let j = 0; j < list.length; j++) {
-                    let contname = pdfh(list[j],"a&&Text");
-                    let conturl = pd(list[j],t.tab_id?t.tab_id:'a&&href');
-                    cont.push(contname+"$"+conturl)
-                }
-                conts.push(cont.join("#"))
-            }
-            try{
-				var details = t.desc.split(';');
-				var details1 = pdfh(html, details[0]);
-				var details2 = "";
-				for(let j=1;j<details.length;j++){
-					details2 = details2.concat(pdfh(html, details[j]));
-				}
-				if(details1&&!detail.details1){detail.details1 = details1;}
-				if(details2&&!detail.details2){detail.details2 = details2;}
-			}catch(e){
-				var details1 = "";
-				var details2 = "";
-			}
-			try{
-				var pic = pdfh(html,t.img).replace(/http.*\/tu\.php\?tu=|\/img\.php\?url=| |\/tu\.php\?tu=/g,'');
-				if(pic&&!detail.pic){detail.pic = pic;}
-			}catch(e){
-				var pic = "";
-			}
-			try{
-				var desc = t.content?pdfh(html,t.content):"";
-				if(desc&&!detail.desc){detail.desc = desc;}
-			}catch(e){
-				var desc = "";
-			}
-			if(arts.length>0&&conts.length>0&&conts[0]){
-                data = {details1:details1,details2:details2,pic:pic,desc:desc,arts:arts,conts:conts};
-                putMyVar('Tmpl-'+urldomian,JSON.stringify(t)); 
-                break;
-            }
-        }catch (e) {
-            //log('二级模板【'+t.id+'】匹配失败：'+e.message);
-        }
-    }
-	if(data.conts){
-		return data;
-	}else{
-		return aierji(html,url,detail);
-	}
-}
-//AI二级
-function aierji(html,url,detail){
-	var d = [];
-	let alist = pdfa(html, "body&&a");
-	let arr = alist.map(it => {
-		return {
-			//html: it,
-			text: pdfh(it, "a&&Text"),
-			title: pdfh(it, "a&&title"),
-			href: pd(it, "a&&href", url)
-		}
-	});
-	//log(arr);
-	let debug = false;
-
-	function clearText(it) {
-		return it.replace(/第|集|章/g, "");
-	}
-
-	function isMovie(it) {
-		if (it == null || it.text == null) {
-			return false;
-		}
-		let tit = it.title || "";
-		it = it.text || "";
-		if (it == "" || it.length > 8) {
-			return false;
-		}
-		//排除
-		let reg = /\.|高清直播|写真推荐/;
-		if (tit != "" && !tit.includes(it) || reg.test(it)) {
-			return false;
-		}
-		return it.match(/原画|备用|蓝光|超清|高清|正片|韩版|4K|4k|1080P|720P|TC|HD|BD/)
-	}
-
-	function notChapter(it) {
-		if (it == null || it.text == null) {
-			return true;
-		}
-		return it.text.match(/[0-9]\.[0-9]分/);
-	}
-
-	function isChapter(it, pre, next) {
-		if (notChapter(it)) {
-			//优先排除
-			return false;
-		}
-		//判断是不是电影
-		if (isMovie(it)) {
-			return true;
-		}
-		return isChapter0(it, pre) || isChapter0(it, next);
-	}
-
-	function getChapterNum(it) {
-		if (it == null || it.text == null) {
-			return -1;
-		}
-		it = it.text || "";
-		if (it == "") {
-			return -1;
-		}
-		it = clearText(it);
-		let reg = /^[0-9]*$/;
-		if (!reg.test(it)) {
-			return -1;
-		}
-		it = parseInt(it);
-		if (isNaN(it)) {
-			return -1;
-		}
-		return it;
-	}
-
-	function isChapter0(it, brother) {
-		/*if (debug) {
-			log({
-				it: it,
-				brother: brother
-			});
-		}*/
-		it = getChapterNum(it);
-		//if (debug) log(it);
-		if (it < 0) {
-			return false;
-		}
-		brother = getChapterNum(brother);
-		//if (debug) log(brother);
-		if (brother < 0) {
-			return false;
-		}
-		return it - brother < 2 && it - brother > -2;
-	}
-
-	for (let i = 0; i < arr.length; i++) {
-		let it = arr[i];
-		let t = it.text;
-		if (!it.href || it.href == "" || (it.href==url&&it.href.indexOf('-')==-1)) {
-			continue;
-		}
-		let pre = i == 0 ? null : arr[i - 1];
-		let next = i == (arr.length - 1) ? null : arr[i + 1];
-		if (isChapter(it, pre, next)) {
-			d.push({
-				title: t,
-				url: it.href,
-			});
-		}
-	}
-	if (d.length == 0) {
-		//匹配失败
-		d.push({
-			title: "",
-			url: url,
-			col_type: "x5_webview_single",
-			desc: "float&&100%",
-			pic_url: "",
-			extra: {
-				canBack: true
-			}
-		});
-		toast("AI匹配失败，已使用X5加载");
-		setResult(d);
-	} else {
-		//线路分割
-		let arts = ["播放源1"];
-		let conts = [];
-		let d2 = [];
-		log(d);
-		for (let i = 0; i < d.length; i++) {
-			d2.push(d[i].title+'$'+d[i].url);
-			if (i < d.length - 1) {
-				let it = d[i];
-				let t1 = parseInt(clearText(it.title));
-				let next = d[i + 1];
-				let t2 = parseInt(clearText(next.title));
-				if (t2 - t1 > 1 || t1 - t2 > 1) {
-					log('add');
-					conts.push(d2.join('#'));
-					let s = arts.length+1;
-					arts.push("播放源"+s);
-					d2 = [];
-				}
-			}else{
-				conts.push(d2.join('#'));
-			}
-		}
-		log(d2);
-		log(conts);
-		if(conts.length==0){arts = [];}
-		data = {details1:detail.details1||"",details2:detail.details2||"选集列表来源于AI识片技术",pic:detail.pic||"",desc:detail.desc||"暂无信息",arts:arts,conts:conts};
-		return data;
-	}
-	return {};
-}
