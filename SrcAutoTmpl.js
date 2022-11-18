@@ -496,6 +496,8 @@ function aierji(html,url,detail){
 					arts.push("播放源"+s);
 					d2 = [];
 				}
+			}else{
+				conts.push(d2.join('#'));
 			}
 		}
 		log(d2);
