@@ -40,84 +40,103 @@ function autoerji(url){
         erjiTmpl.unshift(tmpl[0]);
     }
 	let detail = {};
+	//线程
+	let task = function(obj) {
+        //log('【'+obj.id+'】');
+		let tabs = pdfa(html, obj.tabs);
+		var arts = [];
+		tabs.forEach(item => {
+			let name = pdfh(item, obj.tab_text?obj.tab_text:'h3||a||span||body&&Text');
+			if(name&&!/更多精品/.test(name)){
+				arts.push(name);
+			}
+		});
+		let lists = pdfa(html,'body&&'+obj.lists.split(';')[0]);//全线路影片列表
+		var conts = [];
+		let key = obj.lists.split(';')[1];
+		lists.forEach(item=>{
+			let list = pdfa(item, key);//单线路影片列表
+			let cont = [];
+			for (let j = 0; j < list.length; j++) {
+				let contname = pdfh(list[j],"a&&Text");
+				let conturl = pd(list[j],obj.tab_id?obj.tab_id:'a&&href');
+				cont.push(contname+"$"+conturl)
+			}
+			conts.push(cont.join("#"))
+		})
+		try{
+			var details = obj.desc.split(';');
+			var details1 = pdfh(html, details[0]);
+			var details2 = "";
+			for(let j=1;j<details.length;j++){
+				details2 = details2.concat(pdfh(html, details[j]));
+			}
+			if(details1&&!detail.details1){detail.details1 = details1;}
+			if(details2&&!detail.details2){detail.details2 = details2;}
+		}catch(e){
+			var details1 = "";
+			var details2 = "";
+		}
+		try{
+			var pic = pdfh(html, obj.img).replace(/http.*\/tu\.php\?tu=|\/img\.php\?url=| |\/tu\.php\?tu=/g,'');
+			if(!/^http/.test(pic)){
+				pic = urldomian + pic;
+			}
+			if(pic&&!detail.pic){detail.pic = pic;}
+		}catch(e){
+			var pic = "";
+		}
+		try{
+			var desc = obj.content?pdfh(html,obj.content):"";
+			if(desc&&!detail.desc){detail.desc = desc;}
+		}catch(e){
+			var desc = "";
+		}
+        return {details1:details1,details2:details2,pic:pic,desc:desc,arts:arts,conts:conts};
+    };
+	let setid = 0;
     for(let i in erjiTmpl){
-		/*var beresults = [];//用于存储多线程返回对象
-        var beids = [];//用于存储多线程返回id
-        var beerrors = [];//用于存储多线程是否有错误
-        let p = i+multiline;
-        if(p>parselist.length){p=parselist.length}
-        let JxList = [];
+		if(setid > 0){
+			break;
+		}
+        let p = i+5;
+        if(p>erjiTmpl.length){p=erjiTmpl.length}
+        let TmplList = [];
         for(let s=i;s<p;s++){
-            JxList.push(parselist[s]);
+            TmplList.push(erjiTmpl[s]);
             i=s;
-        }*/
-        //log('【'+erjiTmpl[ej].id+'】');
-        let t = erjiTmpl[i];
-        try {
-            let tabs = pdfa(html,t.tabs);
-            var arts = [];
-            tabs.forEach(item => {
-                let name = pdfh(item, t.tab_text?t.tab_text:'h3||a||span||body&&Text');
-                if(name&&!/更多精品/.test(name)){
-                    arts.push(name);
-                }
-            });
-            let lists = pdfa(html,'body&&'+t.lists.split(';')[0]);//全线路影片列表
-            var conts = [];
-			let key = t.lists.split(';')[1];
-            lists.forEach(item=>{
-                let list = pdfa(item, key);//单线路影片列表
-                let cont = [];
-                for (let j = 0; j < list.length; j++) {
-                    let contname = pdfh(list[j],"a&&Text");
-                    let conturl = pd(list[j],t.tab_id?t.tab_id:'a&&href');
-                    cont.push(contname+"$"+conturl)
-                }
-                conts.push(cont.join("#"))
-            })
-            try{
-				var details = t.desc.split(';');
-				var details1 = pdfh(html, details[0]);
-				var details2 = "";
-				for(let j=1;j<details.length;j++){
-					details2 = details2.concat(pdfh(html, details[j]));
-				}
-				if(details1&&!detail.details1){detail.details1 = details1;}
-				if(details2&&!detail.details2){detail.details2 = details2;}
-			}catch(e){
-				var details1 = "";
-				var details2 = "";
-			}
-			try{
-				var pic = pdfh(html,t.img).replace(/http.*\/tu\.php\?tu=|\/img\.php\?url=| |\/tu\.php\?tu=/g,'');
-				if(!/^http/.test(pic)){
-					pic = urldomian + pic;
-				}
-				if(pic&&!detail.pic){detail.pic = pic;}
-			}catch(e){
-				var pic = "";
-			}
-			try{
-				var desc = t.content?pdfh(html,t.content):"";
-				if(desc&&!detail.desc){detail.desc = desc;}
-			}catch(e){
-				var desc = "";
-			}
-			if(arts.length>0&&conts.length>0&&conts[0]){
-                data = {details1:details1,details2:details2,pic:pic,desc:desc,arts:arts,conts:conts};
-                putMyVar('Tmpl-'+urldomian,JSON.stringify(t));
-				let sortidex = sortlist.findIndex(it=>it.id===t.id);
-				if(sortidex>-1) {
-					sortlist[sortidex].sort++;
-				}else{
-					sortlist.push({id:t.id,sort:1});
-				}
-				writeFile(tmplSortfile, JSON.stringify({erji:sortlist}));
-                break;
-            }
-        }catch (e) {
-            //log('二级模板【'+t.id+'】匹配失败：'+e.message);
         }
+		let Tmpls = TmplList.map((item)=>{
+			return {
+				func: task,
+				param: item,
+				id: item.id
+			}
+        });
+		let t = {};
+		be(Tmpls, {
+            func: function(obj, id, error, taskResult) {
+				if (taskResult.arts.length>0&&taskResult.conts.length>0&&taskResult.conts[0]) {
+					setid = id;
+					data = taskResult;
+					o = obj;
+					return "break";
+				}
+            },
+            param: {
+				o: t,
+            }
+        });
+        if(setid>0&&data.conts.length>0){
+			putMyVar('Tmpl-'+urldomian,JSON.stringify(t));
+			let sortidex = sortlist.findIndex(it=>it.id===setid);
+			if(sortidex>-1) {
+				sortlist[sortidex].sort++;
+			}else{
+				sortlist.push({id:setid,sort:1});
+			}
+			data = {details1:data.details1||detail.details1,details2:data.details2||detail.details2,pic:data.pic||detail.pic,desc:data.desc||detail.desc,arts:arts,conts:conts};
+		}
     }
 	if(data.conts){
 		return data;
