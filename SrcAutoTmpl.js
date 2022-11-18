@@ -91,7 +91,7 @@ function aierji(html,url,detail){
 	let debug = false;
 
 	function clearText(it) {
-		return it.replace(/第|集|章/g, "");
+		return it.replace(/第|集|章|-|期/g, "");
 	}
 
 	function isMovie(it) {
