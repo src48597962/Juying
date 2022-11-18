@@ -135,7 +135,7 @@ function autoerji(url){
 			}else{
 				sortlist.push({id:setid,sort:1});
 			}
-			data = {details1:data.details1||detail.details1,details2:data.details2||detail.details2,pic:data.pic||detail.pic,desc:data.desc||detail.desc,arts:arts,conts:conts};
+			data = {details1:data.details1||detail.details1,details2:data.details2||detail.details2,pic:data.pic||detail.pic,desc:data.desc||detail.desc,arts:data.arts,conts:data.conts};
 		}
     }
 	if(data.conts){
