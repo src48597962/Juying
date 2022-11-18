@@ -1093,7 +1093,7 @@ function xunmierji(type,ua) {
             //网页
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcAutoTmpl.js');
             let data = autoerji(MY_URL.split('##')[1].split('#')[0]);
-
+            log(data);
             if(data.conts){
                 var details1 = data.details1;
                 var details2 = data.details2;
