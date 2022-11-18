@@ -33,7 +33,6 @@ function autoerji(url){
         }
     };
 	erjiTmpl.sort(sortData)
-	log(erjiTmpl)
     let urltmpl = JSON.parse(getMyVar('Tmpl-'+urldomian,'{}'));
     let tmplidex = erjiTmpl.findIndex(it=>it.id===urltmpl.id);
     if(tmplidex>-1) {
@@ -42,7 +41,17 @@ function autoerji(url){
     }
 	let detail = {};
     for(let i in erjiTmpl){
-        //log('【'+erjiTmpl[i].id+'】');
+		/*var beresults = [];//用于存储多线程返回对象
+        var beids = [];//用于存储多线程返回id
+        var beerrors = [];//用于存储多线程是否有错误
+        let p = i+multiline;
+        if(p>parselist.length){p=parselist.length}
+        let JxList = [];
+        for(let s=i;s<p;s++){
+            JxList.push(parselist[s]);
+            i=s;
+        }*/
+        //log('【'+erjiTmpl[ej].id+'】');
         let t = erjiTmpl[i];
         try {
             let tabs = pdfa(html,t.tabs);
@@ -55,9 +64,9 @@ function autoerji(url){
             });
             let lists = pdfa(html,'body&&'+t.lists.split(';')[0]);//全线路影片列表
             var conts = [];
-            for (let i = 0; i < lists.length; i++) {
-                let key = t.lists.split(';')[1];
-                let list = pdfa(lists[i],key);//单线路影片列表
+			let key = t.lists.split(';')[1];
+            lists.forEach(item=>{
+                let list = pdfa(item, key);//单线路影片列表
                 let cont = [];
                 for (let j = 0; j < list.length; j++) {
                     let contname = pdfh(list[j],"a&&Text");
@@ -65,7 +74,7 @@ function autoerji(url){
                     cont.push(contname+"$"+conturl)
                 }
                 conts.push(cont.join("#"))
-            }
+            })
             try{
 				var details = t.desc.split(';');
 				var details1 = pdfh(html, details[0]);
@@ -97,25 +106,12 @@ function autoerji(url){
 			if(arts.length>0&&conts.length>0&&conts[0]){
                 data = {details1:details1,details2:details2,pic:pic,desc:desc,arts:arts,conts:conts};
                 putMyVar('Tmpl-'+urldomian,JSON.stringify(t));
-
 				let sortidex = sortlist.findIndex(it=>it.id===t.id);
 				if(sortidex>-1) {
 					sortlist[sortidex].sort++;
 				}else{
 					sortlist.push({id:t.id,sort:1});
 				}
-				/*
-				if(sortlist.some(item => item.id==t.id)){
-					for(var p=0;p<sortlist.length;p++){
-						if(sortlist[p].id==t.id){
-							sortlist[p].sort++;
-						}
-					}
-				}else{
-					sortlist.push({id:t.id,sort:1});
-				}
-				*/
-				
 				writeFile(tmplSortfile, JSON.stringify({erji:sortlist}));
                 break;
             }
