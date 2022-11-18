@@ -1,5 +1,4 @@
 function autoerji(url){
-    //log(url);
     let data = {};
     if(!/http/.test(url)){return data;}
     let html = request(url, {headers: {'User-Agent': PC_UA }});
@@ -83,7 +82,7 @@ function aierji(html,url,detail){
 	let arr = alist.map(it => {
 		return {
 			//html: it,
-			text: pdfh(it, "a&&Text").replace('new',''),
+			text: pdfh(it, "a&&Text").replace(/new/g,''),
 			title: pdfh(it, "a&&title"),
 			href: pd(it, "a&&href", url)
 		}
