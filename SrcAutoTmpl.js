@@ -49,7 +49,7 @@ function autoerji(url){
 				var details2 = "";
 			}
 			try{
-				var pic = pdfh(html,t.img).replace(/http.*\/tu\.php\?tu=|\/img\.php\?url=| |\/tu\.php\?tu=/g,'');
+				var pic = pd(html,t.img,url).replace(/http.*\/tu\.php\?tu=|\/img\.php\?url=| |\/tu\.php\?tu=/g,'');
 				if(pic&&!detail.pic){detail.pic = pic;}
 			}catch(e){
 				var pic = "";
@@ -172,7 +172,6 @@ function aierji(html,url,detail){
 
 	for (let i = 0; i < arr.length; i++) {
 		let it = arr[i];
-		log(it);
 		let t = it.text;
 		if (!it.href || it.href == "" || (it.href==url&&it.href.indexOf('-')==-1)) {
 			continue;
