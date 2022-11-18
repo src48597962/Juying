@@ -3,14 +3,27 @@ function autoerji(url){
     if(!/http/.test(url)){return data;}
     let html = request(url, {headers: {'User-Agent': PC_UA }});
     let urldomian = url.match(/http(s)?:\/\/(.*?)\//)[0];
-	let erjiTmplfile = "hiker://files/rules/Src/Juying/erjiTmpl.json";
-	let erjiTmplfiles = fetch(erjiTmplfile);
-    if(erjiTmplfiles!=""){
-		eval("var erjiTmpl = " + erjiTmplfiles+ ";");
+	let tmplSortfile = "hiker://files/rules/Src/Juying/TmplSort.json";
+	let tmplSortfiles = fetch(tmplSortfile);
+    if(tmplSortfiles!=""){
+		eval("var tmplSort = " + tmplSortfiles+ ";");
 	}else{
-		var erjiTmpl = [];
+		var tmplSort = {};
 	}
-	
+	let sortlist = [];
+	if(tmplSort.erji){
+		Object.assign(sortlist, tmplSort.erji);
+	}
+	erjiTmpl = erjiTmpl.map(item => {
+		item.sort = 0;
+		for(let j=0;j<sortlist.length;j++){
+			if(sortlist.id==item.id){
+				item.sort = sortlist.sort;
+				break;
+			}
+		}
+		return item;
+	})
 	//定义排序函数
     function sortData(a, b) {
         if(a.sort!=b.sort){
@@ -84,12 +97,25 @@ function autoerji(url){
                 data = {details1:details1,details2:details2,pic:pic,desc:desc,arts:arts,conts:conts};
                 putMyVar('Tmpl-'+urldomian,JSON.stringify(t));
 
-				for(var p=0;p<erjiTmpl.length;p++){
-					if(erjiTmpl[p].id==t.id){
-						erjiTmpl[p].sort++;
-					}
+				let sortidex = sortlist.findIndex(it=>it.id===t.id);
+				if(sortidex>-1) {
+					sortlist[sortidex].sort++;
+				}else{
+					sortlist.push({id:t.id,sort:1});
 				}
-				writeFile(erjiTmplfile, JSON.stringify(erjiTmpl));
+				/*
+				if(sortlist.some(item => item.id==t.id)){
+					for(var p=0;p<sortlist.length;p++){
+						if(sortlist[p].id==t.id){
+							sortlist[p].sort++;
+						}
+					}
+				}else{
+					sortlist.push({id:t.id,sort:1});
+				}
+				*/
+				
+				writeFile(tmplSortfile, JSON.stringify({erji:sortlist}));
                 break;
             }
         }catch (e) {
@@ -254,23 +280,22 @@ function aierji(html,url,detail){
 	}
 	return {};
 }
-let erjiTmpldemo = [
+
+let erjiTmpl = [
 	{
     	"id": 1,
 		"img": ".lazyload&&data-original",
 		"desc": ".data&&Text;.data,6&&Text",
 		"content": "p.detail&&Text.js:input.replace(\"简介：\",\"\").replace(\"详情\",\"\")",
 		"tabs": ".nav-tabs&&li||a",
-		"lists": ".stui-content__playlist;body&&li",
-		"sort": 0
+		"lists": ".stui-content__playlist;body&&li"
 	},
 	{
         "id": 2,
 		"img": ".lazyload&&data-original",
 		"desc": "span.sketch.content&&Text",
 		"tabs": ".nav-tabs&&li",
-		"lists": ".myui-content__list;body&&li",
-		"sort": 0
+		"lists": ".myui-content__list;body&&li"
 	},
 	{
         "id": 3,
@@ -278,8 +303,7 @@ let erjiTmpldemo = [
 		"desc": ".module-info-item,1&&Text;.module-info-item,2&&Text;.module-info-item,3&&Text",
 		"content": ".module-info-introduction-content&&Text",
 		"tabs": "body&&.module-tab-item",
-		"lists": "body&&.module-play-list;body&&a",
-		"sort": 0
+		"lists": "body&&.module-play-list;body&&a"
 	},
 	{
         "id": 4,
@@ -287,8 +311,7 @@ let erjiTmpldemo = [
 		"desc": ".data,2&&Text;.data,3&&Text",
 		"content": "#desc&&span.data&&Text",
 		"tabs": "ul.nav-tabs&&li",
-		"lists": ".tab-content&&#id&&li",
-		"sort": 0
+		"lists": ".tab-content&&#id&&li"
 	},
 	{
         "id": 5,
@@ -296,8 +319,7 @@ let erjiTmpldemo = [
 		"desc": ".tag-link&&Text",
 		"content": ".video-info-content&&Text",
 		"tabs": "body&&.module-tab-item",
-		"lists": "body&&.scroll-box-y;body&&a",
-		"sort": 0
+		"lists": "body&&.scroll-box-y;body&&a"
 	},
 	{
         "id": 6,
@@ -305,8 +327,7 @@ let erjiTmpldemo = [
 		"desc": "p.data,-1&&Text;p.data,-2&&Text",
 		"content": "body&&.stui-pannel_bd:not(:has(a)):has(.col-pd)&&Text",
 		"tabs": "body&&.bottom-line:has(span)",
-		"lists": "body&&.stui-content__playlist;body&&li",
-		"sort": 0
+		"lists": "body&&.stui-content__playlist;body&&li"
 	},
 	{
         "id": 7,
@@ -314,8 +335,7 @@ let erjiTmpldemo = [
 		"desc": "p.data&&Text;.stui-content__detail&&p,-2&&Text",
 		"content": ".detail&&Text",
 		"tabs": "body&&.stui-vodlist__head:has(span)",
-		"lists": ".stui-content__playlist;body&&li",
-		"sort": 0
+		"lists": ".stui-content__playlist;body&&li"
 	},
 	{
         "id": 8,
@@ -324,8 +344,7 @@ let erjiTmpldemo = [
 		"content": ".desc&&Text",
 		"tabs": "body&&.stui-pannel:has(span.more)",
 		"tab_text": ".title&&Text",
-		"lists": ".stui-content__playlist;body&&li",
-		"sort": 0
+		"lists": ".stui-content__playlist;body&&li"
 	},
 	{
         "id": 9,
@@ -333,8 +352,7 @@ let erjiTmpldemo = [
 		"desc": ".fed-list-remarks&&Text;.fed-deta-info&&li,-2&&Text;.fed-deta-info&&li,-3&&Text",
 		"content": ".fed-tabs-info&&p&&Text",
 		"tabs": "body&&.fed-play-btns",
-		"lists": ".fed-play-item;body&&ul,1&&li",
-		"sort": 0
+		"lists": ".fed-play-item;body&&ul,1&&li"
 	},
 	{
         "id": 10,
@@ -342,8 +360,7 @@ let erjiTmpldemo = [
 		"desc": ".hl-full-box&&li,1&&Text",
 		"content": ".hl-full-box&&li,-1&&Text",
 		"tabs": ".hl-from-list&&li",
-		"lists": "body&&.hl-plays-list;body&&li",
-		"sort": 0
+		"lists": "body&&.hl-plays-list;body&&li"
 	},
 	{
         "id": 11,
@@ -351,8 +368,7 @@ let erjiTmpldemo = [
 		"desc": ".vodTag&&Text",
 		"content": ".ecshow&&Text",
 		"tabs": ".play_source_tab&&a",
-		"lists": "body&&.content_playlist;body&&a",
-		"sort": 0
+		"lists": "body&&.content_playlist;body&&a"
 	},
 	{
         "id": 12,
@@ -360,8 +376,7 @@ let erjiTmpldemo = [
 		"desc": ".content_min&&li,1&&Text",
 		"content": ".content_min&&li,-1&&Text",
 		"tabs": ".play_source_tab&&a",
-		"lists": "body&&.content_playlist;body&&li",
-		"sort": 0
+		"lists": "body&&.content_playlist;body&&li"
 	},
 	{
         "id": 13,
@@ -369,16 +384,14 @@ let erjiTmpldemo = [
 		"desc": ".mv-showr&&p,2&&Text;.mv-showr&&p,3&&Text",
 		"content": ".des&&Text",
 		"tabs": ".layui-tab-brief,1&&.layui-tab-title&&li",
-		"lists": ".layui-tab-content,1&&.layui-tab-item:has(a);body&&a",
-		"sort": 0
+		"lists": ".layui-tab-content,1&&.layui-tab-item:has(a);body&&a"
 	},
 	{
         "id": 14,
 		"img": ".y-part-2by3&&data-original",
 		"desc": ".y-part-rows&&li&&Text&&Text;.y-part-rows&&li,1&&Text",
 		"tabs": ".nav-tabs&&li",
-		"lists": ".episodes-list;body&&li",
-		"sort": 0
+		"lists": ".episodes-list;body&&li"
 	},
 	{
         "id": 15,
@@ -386,8 +399,7 @@ let erjiTmpldemo = [
 		"desc": ".fed-deta-content&&.fed-part-rows&&li&&Text",
 		"content": ".fed-conv-text&&Text",
 		"tabs": ".fed-tabs-foot&&li",
-		"lists": ".fed-tabs-btm;body&&li",
-		"sort": 0
+		"lists": ".fed-tabs-btm;body&&li"
 	},
 	{
         "id": 16,
@@ -395,8 +407,7 @@ let erjiTmpldemo = [
 		"desc": ".addtime&&Text",
 		"content": ".info&&Text",
 		"tabs": ".tab_box&&h2",
-		"lists": "body&&.video_list;body&&a",
-		"sort": 0
+		"lists": "body&&.video_list;body&&a"
 	},
 	{
         "id": 17,
@@ -404,8 +415,7 @@ let erjiTmpldemo = [
 		"desc": ".v_desc&&Text;#intro&&p,0&&Text;#intro&&p,2&&Text;#intro&&p,1&&Text;#intro&&p,3&&Text",
 		"content": "#intro&&p,-1&&Text;",
 		"tabs": ".tab_control&&li",
-		"lists": "#play_list&&.play_list;body&&li",
-		"sort": 0
+		"lists": "#play_list&&.play_list;body&&li"
 	},
 	{
         "id": 18,
@@ -413,8 +423,7 @@ let erjiTmpldemo = [
 		"desc": ".detail_imform_kv,0&&Text;.detail_imform_kv,2&&Text;.detail_imform_kv,5&&Text",
 		"content": ".detail_imform_desc_pre&&p&&Text",
 		"tabs": "#menu0&&li",
-		"lists": "#main0&&.movurl;body&&li",
-		"sort": 0
+		"lists": "#main0&&.movurl;body&&li"
 	},
 	{
         "id": 19,
@@ -422,8 +431,7 @@ let erjiTmpldemo = [
 		"desc": ".info-txt&&p,2&&Text;.info-txt&&p,3&&Text;",
 		"content": ".brief&&Text",
 		"tabs": "body&&.playname",
-		"lists": ".playerlist;body&&ul&&a",
-		"sort": 0
+		"lists": ".playerlist;body&&ul&&a"
 	},
 	{
         "id": 20,
@@ -431,8 +439,7 @@ let erjiTmpldemo = [
 		"desc": ".play-tag&&Text",
 		"content": ".info-wrap,-1&&Text",
 		"tabs": ".swiper-slide",
-		"lists": "#playsx;body&&li",
-		"sort": 0
+		"lists": "#playsx;body&&li"
 	},
 	{
         "id": 21,
@@ -440,8 +447,7 @@ let erjiTmpldemo = [
 		"desc": "body&&.data&&Text",
 		"content": ".stui-player__detail&&p,-1&&Text",
 		"tabs": ".tab-top",
-		"lists": ".stui-play__list;body&&li",
-		"sort": 0
+		"lists": ".stui-play__list;body&&li"
 	},
 	{
         "id": 22,
@@ -449,8 +455,7 @@ let erjiTmpldemo = [
 		"desc": "body&&dd,0&&Text;info&&dd,1&&Text;.info&&dd,2&&Text",
 		"content": ".desdd&&Text",
 		"tabs": ".tab0&&li:not(:matches(^$))",
-		"lists": "body&&.plist;body&&a",
-		"sort": 0
+		"lists": "body&&.plist;body&&a"
 	},
 	{
         "id": 23,
@@ -458,8 +463,7 @@ let erjiTmpldemo = [
 		"desc": "body&&dd,0&&Text;info&&dd,1&&Text;.info&&dd,2&&Text",
 		"content": ".desdd&&Text",
 		"tabs": "#tab11",
-		"lists": "body&&.plist;body&&a",
-		"sort": 0
+		"lists": "body&&.plist;body&&a"
 	},
 	{
         "id": 24,
@@ -467,8 +471,7 @@ let erjiTmpldemo = [
 		"desc": ".data,0&&Text",
 		"content": "#desc&&.stui-content__desc&&Text",
 		"tabs": "#bofy&&.t-ul&&li",
-		"lists": ".stui-content__playlist;body&&li",
-		"sort": 0
+		"lists": ".stui-content__playlist;body&&li"
 	},
 	{
         "id": 25,
@@ -476,8 +479,7 @@ let erjiTmpldemo = [
 		"desc": ".fed-deta-content&&.fed-part-rows&&Text",
 		"content": ".fed-tabs-info&&p&&Text",
 		"tabs": ".fed-tabs-boxs&&.fed-part-rows&&li",
-		"lists": ".fed-play-item;body&&ul,1&&li",
-		"sort": 0
+		"lists": ".fed-play-item;body&&ul,1&&li"
 	},
 	{
         "id": 26,
@@ -485,8 +487,7 @@ let erjiTmpldemo = [
 		"desc": ".play-ail&&p,-2&&Text",
 		"content": ".detail-intro-txt&&Text",
 		"tabs": "#playTab&&li",
-		"lists": ".playlist&&ul;body&&li",
-		"sort": 0
+		"lists": ".playlist&&ul;body&&li"
 	},
 	{
         "id": 27,
@@ -494,8 +495,7 @@ let erjiTmpldemo = [
 		"desc": ".txt_list&&li,2&&Text;.txt_list&&li,3&&Text;.txt_list&&li,4&&Text",
 		"content": ".infor_intro&&Text",
 		"tabs": ".play_source_tab&&a",
-		"lists": "body&&.play_num_list;body&&li",
-		"sort": 0
+		"lists": "body&&.play_num_list;body&&li"
 	},
 	{
         "id": 28,
@@ -503,8 +503,7 @@ let erjiTmpldemo = [
 		"desc": ".moviedteail_list&&Text",
 		"content": "body&&.yp_context&&Text",
 		"tabs": ".mi_paly_box&&.ypxingq_t",
-		"lists": ".paly_list_btn;body&&a",
-		"sort": 0
+		"lists": ".paly_list_btn;body&&a"
 	},
 	{
         "id": 29,
@@ -513,8 +512,7 @@ let erjiTmpldemo = [
 		"content": "#rating&&Text",
 		"tabs": "body&&.myui-panel__head&&h3",
 		"tab_text": ".title&&Text",
-		"lists": "#playlist1&&li;body&&a",
-		"sort": 0
+		"lists": "#playlist1&&li;body&&a"
 	},
 	{
         "id": 30,
@@ -522,8 +520,7 @@ let erjiTmpldemo = [
 		"desc": ".v_info_box&&p&&Text",
 		"content": ".p_txt&&Text",
 		"tabs": ".from_list&&li",
-		"lists": "#play_link&&li;body&&a",
-		"sort": 0
+		"lists": "#play_link&&li;body&&a"
 	},
 	{
         "id": 31,
@@ -531,8 +528,7 @@ let erjiTmpldemo = [
 		"desc": ".detail_top&&li,2&&Text;.detail_top&&li,,3&&Text;.detail_top&&li,4&&Text",
 		"content": ".li_intro&&Text",
 		"tabs": ".play_source_tab&&a",
-		"lists": "body&&.player_list;body&&li",
-		"sort": 0
+		"lists": "body&&.player_list;body&&li"
 	},
 	{
         "id": 32,
@@ -540,8 +536,7 @@ let erjiTmpldemo = [
 		"desc": "#book-cont&&.r&&Text",
 		"content": "#wrap&&Text",
 		"tabs": "#zhankai&&.arconix-toggle-title",
-		"lists": "#zhankai&&.arconix-toggle-content;body&&li",
-		"sort": 0
+		"lists": "#zhankai&&.arconix-toggle-content;body&&li"
 	},
 	{
         "id": 33,
@@ -549,8 +544,7 @@ let erjiTmpldemo = [
 		"desc": ".info,0&&Text;.info,1&&Text;.info,2&&Text;.starring&&Text",
 		"content": ".animeplot&&Text",
 		"tabs": "#two1",
-		"lists": ".playlist;body&&.list-title",
-		"sort": 0
+		"lists": ".playlist;body&&.list-title"
 	},
 	{
         "id": 34,
@@ -558,12 +552,6 @@ let erjiTmpldemo = [
 		"desc": ".module-info-item,3&&Text;.module-info-item,1&&Text;.module-info-item,4&&Text",
 		"content": ".module-info-item,5||.module-info-item&&Text",
 		"tabs": "#two1",
-		"lists": ".playlist;body&&.list-title",
-		"sort": 0
+		"lists": ".playlist;body&&.list-title"
 	}
 ]
-let erjiTmplfile = "hiker://files/rules/Src/Juying/erjiTmpl.json";
-let erjiTmpl = fetch(erjiTmplfile);
-if(erjiTmpl==""){
-	writeFile(erjiTmplfile, JSON.stringify(erjiTmpldemo));
-}
