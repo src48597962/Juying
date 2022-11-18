@@ -460,7 +460,7 @@ function xunmi(name,data,ishkss) {
                                         vodpic = "https" + vodpic;
                                     }
                                     return {
-                                        title: !ishkss&&vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):'<font color=red>'+vodname+'</font>',
+                                        title: !ishkss&&vodname!=name?vodname.replace(name,'<font color=red>'+name+'</font>'):'<font color=red>'+vodname+'</font>',
                                         desc: !ishkss?(voddesc + '\n\n' + appname):'聚影√ · '+obj.name,
                                         content: voddesc,
                                         pic_url: vodpic,
@@ -580,7 +580,7 @@ function xunmi(name,data,ishkss) {
                                     vodpic = "https" + vodpic;
                                 }
                                 return {
-                                    title: !ishkss&&vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):'‘‘’’'+vodname,
+                                    title: !ishkss&&vodname!=name?vodname.replace(name,'<font color=red>'+name+'</font>'):'<font color=red>'+vodname+'</font>',
                                     desc: !ishkss?(voddesc + '\n\n' + appname):'聚影√ · '+obj.name,
                                     content: voddesc,
                                     pic_url: vodpic?vodpic + "@Referer=":"https://www.xawqxh.net/mxtheme/images/loading.gif@Referer=",
@@ -692,7 +692,7 @@ function xunmi(name,data,ishkss) {
         if(tzgroup == 1){writeFile(filepath, JSON.stringify(jiekoulist));}
         
         updateItem('loading', {
-            title: ishkss?(beresults.length-beerrors.length)+'/'+count+(beresults.length==count?',我是有底线的':',点击继续加载'):'‘‘’’<font color=#f13b66a>'+ (beresults.length-beerrors.length)+'</font>/'+'‘‘’’<font color=#F54343>'+beerrors.length+'</font>/'+count+(beresults.length==count?',我是有底线的':',点击继续加载'),
+            title: ishkss?(beresults.length-beerrors.length)+'/'+count+(beresults.length==count?',我是有底线的':',点击继续加载'):'<font color=#f13b66a>'+ (beresults.length-beerrors.length)+'</font>/'+'<font color=#F54343>'+beerrors.length+'</font>/'+count+(beresults.length==count?',我是有底线的':',点击继续加载'),
             url: beresults.length==count?"toast://已搜索完毕":$('#noLoading#').lazyRule((bess,datalist,beresults,beerrors,name,count,ishkss)=>{
                     for (let j = 0; j < beresults.length; j++) {
                         for(var i = 0; i < datalist.length; i++){
