@@ -225,34 +225,36 @@ function xunmi(name,data,ishkss) {
         }
     }
     if(!ishkss&&getMyVar('isload', '0')=="0"){
-        d.push({
-            title: '茶杯搜索',
-            url: $('#noLoading#').lazyRule((name,chabeisousuo,ishkss)=>{
-                let groupmenu = getMyVar('groupmenu')?getMyVar('groupmenu').split(','):[];
-                for(let i in groupmenu){
-                    updateItem(groupmenu[i],{title:groupmenu[i]})
-                }
-                putMyVar("selectgroup",'茶杯搜索');
-                if(getMyVar('deleteswitch')){
-                    clearMyVar('deleteswitch');
-                    updateItem('deleteswitch',{title:'删除开关'});
-                }
-                if(getMyVar("starttask","0")=="1"){putMyVar("stoptask","1");}
-                let waittime = parseInt(getMyVar("xunmitimeout","5"))+1;
-                for (let i = 0; i < waittime; i++) {
-                    if(getMyVar("starttask","0")=="0"){
-                        break;
+        if(JYconfig.aichabei==1){
+            d.push({
+                title: '茶杯搜索',
+                url: $('#noLoading#').lazyRule((name,chabeisousuo,ishkss)=>{
+                    let groupmenu = getMyVar('groupmenu')?getMyVar('groupmenu').split(','):[];
+                    for(let i in groupmenu){
+                        updateItem(groupmenu[i],{title:groupmenu[i]})
                     }
-                    showLoading('等待上次线程结束，'+(waittime-i-1)+'s');
-                    java.lang.Thread.sleep(1000);
+                    putMyVar("selectgroup",'茶杯搜索');
+                    if(getMyVar('deleteswitch')){
+                        clearMyVar('deleteswitch');
+                        updateItem('deleteswitch',{title:'删除开关'});
+                    }
+                    if(getMyVar("starttask","0")=="1"){putMyVar("stoptask","1");}
+                    let waittime = parseInt(getMyVar("xunmitimeout","5"))+1;
+                    for (let i = 0; i < waittime; i++) {
+                        if(getMyVar("starttask","0")=="0"){
+                            break;
+                        }
+                        showLoading('等待上次线程结束，'+(waittime-i-1)+'s');
+                        java.lang.Thread.sleep(1000);
+                    }
+                    return chabeisousuo(name,ishkss);
+                },name,chabeisousuo,ishkss),
+                col_type: "scroll_button",
+                extra: {
+                    id: 'sschabeihu'
                 }
-                return chabeisousuo(name,ishkss);
-            },name,chabeisousuo,ishkss),
-            col_type: "scroll_button",
-            extra: {
-                id: 'sschabeihu'
-            }
-        });
+            });
+        }
         if(datalist.length>0){
             d.push({
                 title: '删除开关',
@@ -278,7 +280,7 @@ function xunmi(name,data,ishkss) {
         }
     }
     d.push({
-        title: '没有接口？无法搜索',
+        title: JYconfig.aichabei==1?'加载AI茶杯搜索':'没有接口？无法搜索',
         url: "hiker://empty",
         col_type: "text_center_1",
         extra: {
