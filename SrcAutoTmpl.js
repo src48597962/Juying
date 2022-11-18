@@ -33,6 +33,7 @@ function autoerji(url){
         }
     };
 	erjiTmpl.sort(sortData)
+	log(erjiTmpl)
     let urltmpl = JSON.parse(getMyVar('Tmpl-'+urldomian,'{}'));
     let tmplidex = erjiTmpl.findIndex(it=>it.id===urltmpl.id);
     if(tmplidex>-1) {
