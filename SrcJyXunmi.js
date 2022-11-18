@@ -114,7 +114,7 @@ function xunmi(name,data,ishkss) {
             return item.group==grouplist[i] || !item.group&&item.type==grouplist[i];
         })
         if(grouplist[i]==xunmigroup){datalist2 = lists;}
-        if(!ishkss&&JYconfig.aichabei==1){//海阔软件搜索时隐藏分组
+        if(!ishkss){//海阔软件搜索时隐藏分组
             let groupname = grouplist[i]+'('+lists.length+')';
             let groupmenu = getMyVar('groupmenu')?getMyVar('groupmenu').split(','):[];
             groupmenu.push(groupname);
