@@ -2176,7 +2176,7 @@ function extension(){
         })
     });
     d.push({
-        title: "AI茶杯"+(JYconfig['aichabei']?"开":"关"),
+        title: "AI茶杯"+(JYconfig['aichabei']?"(开)":"(关)"),
         col_type: 'scroll_button',
         url: $('#noLoading#').lazyRule((JYconfig,cfgfile) => {
             if(JYconfig['aichabei'] == 1){
