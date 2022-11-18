@@ -119,6 +119,7 @@ function autoerji(url){
 				if (taskResult.arts.length>0&&taskResult.conts.length>0&&taskResult.conts[0]) {
 					setid = id;
 					data = taskResult;
+					log(taskResult);
 					o = obj;
 					return "break";
 				}
@@ -135,7 +136,9 @@ function autoerji(url){
 			}else{
 				sortlist.push({id:setid,sort:1});
 			}
-			log(data.details2);
+			if(data.arts.length>data.conts.length){
+				data.arts.splice(data.conts.length-1,data.arts.length-data.conts.length);
+			}
 			data = {details1:data.details1||detail.details1,details2:data.details2||detail.details2,pic:data.pic||detail.pic,desc:data.desc||detail.desc,arts:data.arts,conts:data.conts};
 		}
     }
