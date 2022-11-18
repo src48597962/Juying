@@ -848,7 +848,7 @@ function xunmierji(type,ua) {
     require(configfile);
     log(MY_URL)
     //自动判断是否需要更新请求
-    if (getMyVar('myurl', '0') != MY_URL || !configvar.详情1 || configvar.标识 != MY_URL) {
+    if (getMyVar('myurl', '0') != MY_URL || !configvar.影片 || configvar.标识 != MY_URL) {
         if (/v1|app|v2|iptv|cms/.test(type)) {
             try{
                 var gethtml = request(MY_URL.split('##')[1], { headers: { 'User-Agent': ua } });
