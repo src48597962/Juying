@@ -1,7 +1,7 @@
-function autoerji(url){
+function autoerji(url,html){
     let data = {};
     if(!/http/.test(url)){return data;}
-    let html = request(url, {headers: {'User-Agent': PC_UA }});
+    let html = html||request(url, {headers: {'User-Agent': PC_UA }});
     let urldomian = url.match(/http(s)?:\/\/(.*?)\//)[0];
 	let tmplSortfile = "hiker://files/rules/Src/Juying/TmplSort.json";
 	let tmplSortfiles = fetch(tmplSortfile);
