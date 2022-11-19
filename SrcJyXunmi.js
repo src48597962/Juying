@@ -448,36 +448,37 @@ function xunmi(name,data,ishkss) {
             if(lists.length>0){
                 try {
                     let search = lists.map((list)=>{
-                        log(list)
-                        let vodname = list.vodname
-                        let vodpic = list.vodpic?list.vodpic.replace(/http.*\/tu\.php\?tu=|\/img\.php\?url=| |\/tu\.php\?tu=/g,'') + "@Referer=":"https://www.xawqxh.net/mxtheme/images/loading.gif@Referer=";
-                        let voddesc = list.voddesc;
-                        let appname = '‘‘’’<font color=#f13b66a>'+obj.name+'</font>'+' ('+obj.type+')'+(obj.group&&obj.group!=obj.type?' ['+obj.group+']':'');
-                        let vodurl = list.vodurl;
-                        if(/^\/\//.test(vodpic)){
-                            vodpic = "https" + vodpic;
-                        }   
-                        if(/^\/upload|^upload/.test(vodpic)){
-                            vodpic = vodurl.match(/http(s)?:\/\/(.*?)\//)[0] + vodpic;
-                        }
-                            
-                        return {
-                            title: !ishkss?vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):'‘‘’’<font color=red>'+vodname+'</font>':vodname,
-                            desc: !ishkss?(voddesc + '\n\n' + appname):'聚影√ · '+obj.name,
-                            content: voddesc,
-                            pic_url: vodpic,
-                            url: $("hiker://empty##" + vodurl + "#immersiveTheme##autoCache#").rule((type,ua) => {
-                                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
-                                    xunmierji(type,ua)
-                                },obj.type, urlua),
-                            col_type: "movie_1_vertical_pic",
-                            extra: {
-                                id: 'xumi-'+url_api,
-                                pic: vodpic,
-                                name: vodname,
-                                title: vodname+'-'+obj.name,
-                                data: typeof(jsondata) =="undefined"|| jsondata ==null?{}:jsondata,
-                                cls: 'xunmilist'
+                        if(list){
+                            let vodname = list.vodname
+                            let vodpic = list.vodpic?list.vodpic.replace(/http.*\/tu\.php\?tu=|\/img\.php\?url=| |\/tu\.php\?tu=/g,'') + "@Referer=":"https://www.xawqxh.net/mxtheme/images/loading.gif@Referer=";
+                            let voddesc = list.voddesc;
+                            let appname = '‘‘’’<font color=#f13b66a>'+obj.name+'</font>'+' ('+obj.type+')'+(obj.group&&obj.group!=obj.type?' ['+obj.group+']':'');
+                            let vodurl = list.vodurl;
+                            if(/^\/\//.test(vodpic)){
+                                vodpic = "https" + vodpic;
+                            }   
+                            if(/^\/upload|^upload/.test(vodpic)){
+                                vodpic = vodurl.match(/http(s)?:\/\/(.*?)\//)[0] + vodpic;
+                            }
+                                
+                            return {
+                                title: !ishkss?vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):'‘‘’’<font color=red>'+vodname+'</font>':vodname,
+                                desc: !ishkss?(voddesc + '\n\n' + appname):'聚影√ · '+obj.name,
+                                content: voddesc,
+                                pic_url: vodpic,
+                                url: $("hiker://empty##" + vodurl + "#immersiveTheme##autoCache#").rule((type,ua) => {
+                                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
+                                        xunmierji(type,ua)
+                                    },obj.type, urlua),
+                                col_type: "movie_1_vertical_pic",
+                                extra: {
+                                    id: 'xumi-'+url_api,
+                                    pic: vodpic,
+                                    name: vodname,
+                                    title: vodname+'-'+obj.name,
+                                    data: typeof(jsondata) =="undefined"|| jsondata ==null?{}:jsondata,
+                                    cls: 'xunmilist'
+                                }
                             }
                         }
                     });
