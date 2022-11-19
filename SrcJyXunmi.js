@@ -162,9 +162,6 @@ function xunmi(name,data,ishkss) {
             d.push({
                 title: '删除开关',
                 url: $('#noLoading#').lazyRule(()=>{
-                    if(getMyVar("selectgroup")=='茶杯搜索'){
-                        return 'toast://茶杯搜索模式下无法开启二级界面删除接口开关';
-                    }
                     if(getMyVar('deleteswitch')){
                         clearMyVar('deleteswitch');
                         updateItem('deleteswitch',{title:'删除开关'});
@@ -980,14 +977,16 @@ function xunmierji(type,ua) {
                 var desc = pdfh(html.split(jsondata.juqingqian.replace(/\\/g,""))[1].split(jsondata.juqinghou.replace(/\\/g,""))[0],"Text") || '...';
                 getsm = "获取播放地址数组bfjiequshuzuqian";
             }catch(e){
+                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcAutoTmpl.js');
+                let data = autoerji(MY_URL.split('##')[1].split('#')[0]);
                 var actor = actor||"抓取失败";
                 var director = director||"";
                 var remarks = remarks||"biubiu数据异常";
                 var pubdate = pubdate||"此接口需要修改，或删除";
                 var pic = MY_PARAMS.pic;
-                var desc = desc||'...';
-                var arts = arts||[];
-                var conts = conts||[];
+                var desc = desc||data.desc||'...';
+                var arts = arts||data.arts||[];
+                var conts = conts||data.conts||[];
                 log(getsm+'失败>'+e.message)
             }    
         }else{
