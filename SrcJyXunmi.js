@@ -961,9 +961,9 @@ function xunmierji(type,ua) {
                 getsm = "获取导演daoyanqian";
                 director = pdfh(html.split(jsondata.daoyanqian.replace(/\\/g,""))[1].split(jsondata.daoyanhou.replace(/\\/g,""))[0],"Text");
                 getsm = "获取备注zhuangtaiqian";
-                remarks = pdfh(html.split(jsondata.zhuangtaiqian.replace(/\\/g,""))[1].split(jsondata.zhuangtaihou.replace(/\\/g,""))[0],"Text").split('/')[0];
+                remarks = pdfh(html.split(jsondata.zhuangtaiqian.replace(/\\/g,""))[1].split(jsondata.zhuangtaihou.replace(/\\/g,""))[0],"Text").split('/')[0]||"";
                 getsm = "获取更新zhuangtaiqian";
-                pubdate = pdfh(html.split(jsondata.zhuangtaiqian.replace(/\\/g,""))[1].split(jsondata.zhuangtaihou.replace(/\\/g,""))[0],"Text").split('/')[1];
+                pubdate = pdfh(html.split(jsondata.zhuangtaiqian.replace(/\\/g,""))[1].split(jsondata.zhuangtaihou.replace(/\\/g,""))[0],"Text").split('/')[1]||"";
                 getsm = "获取剧情简介juqingqian";
                 desc = pdfh(html.split(jsondata.juqingqian.replace(/\\/g,""))[1].split(jsondata.juqinghou.replace(/\\/g,""))[0],"Text") || '...';
             }catch(e){
@@ -971,6 +971,7 @@ function xunmierji(type,ua) {
             }    
         }else{
             //网页
+            /*
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcAutoTmpl.js');
             let data = autoerji(MY_URL.split('##')[1].split('#')[0]);
             var details1 = data.details1||'自动匹配失败';
@@ -979,13 +980,14 @@ function xunmierji(type,ua) {
             var desc = data.desc||'';
             var arts = data.arts||[];
             var conts = data.conts||[];
+            */
         }
         if(/xpath|biubiu/.test(type)&&(arts.length==0||conts.length==0)){
             log('开启模板自动匹配、AI识片，获取播放选集');
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcAutoTmpl.js');
-            let data = autoerji(MY_URL.split('##')[1].split('#')[0]);
+            let data = autoerji(MY_URL.split('##')[1].split('#')[0],html);
             remarks = "获取数据存在错误";
-            pubdate = data.details2;
+            pubdate = data.details2||"";
             arts = data.arts;
             conts = data.conts;
             pic = pic||data.pic;
