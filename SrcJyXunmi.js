@@ -800,7 +800,6 @@ function xunmierji(type,ua) {
         var desc = '...';
         var arts = [];
         var conts = [];
-        var dqnf = "";
         if(/cms/.test(type)&&isxml==1){
             html = html.replace(/&lt;!\[CDATA\[|\]\]&gt;|<!\[CDATA\[|\]\]>/g,'');
             arts = xpathArray(html,`//video/dl/dt/@name`);
@@ -871,6 +870,46 @@ function xunmierji(type,ua) {
         }else if (/xpath/.test(type)) {
             var jsondata = MY_PARAMS.data;
             try{
+                actor = String(xpathArray(html, jsondata.dtActor).join(',')).replace('主演：','').replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "");
+            }catch(e){
+                log('xpath获取主演dtActor失败>'+e.message);
+            }
+            try{
+                director = String(xpathArray(html, jsondata.dtDirector).join(',')).replace('导演：','').replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "");
+            }catch(e){
+                log('xpath获取导演dtDirector失败>'+e.message);
+            }
+            try{
+                area = String(xpath(html, jsondata.dtArea)).replace('地区：','').replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "");
+            }catch(e){
+                log('xpath获取地区dtArea失败>'+e.message);
+            }
+            try{
+                year = String(xpath(html, jsondata.dtYear)).replace('年份：','').replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "");
+            }catch(e){
+                log('xpath获取年份dtYear失败>'+e.message);
+            }
+            try{
+                remarks = String(xpathArray(html, jsondata.dtCate).join(',')).replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "");
+            }catch(e){
+                log('xpath获取类型dtCate失败>'+e.message);
+            }
+            try{
+                pubdate = String(xpathArray(html, jsondata.dtMark).join(',')).replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "");
+            }catch(e){
+                log('xpath获取备注dtMark失败>'+e.message);
+            }
+            try{
+                pic = pic?pic:xpath(html, jsondata.dtImg);
+            }catch(e){
+                log('xpath获取图片dtImg失败>'+e.message);
+            }
+            try{
+                desc = String(xpath(html, jsondata.dtDesc)).replace(jsondata.filter?eval(jsondata.filter):"","");
+            }catch(e){
+                log('xpath获取简价dtDesc失败>'+e.message);
+            }
+            try{
                 arts = xpathArray(html, jsondata.dtFromNode+(jsondata.dtFromName.indexOf('concat(')>-1?'/text()':jsondata.dtFromName));
             }catch(e){
                 log('xpath获取线路失改>'+e.message);
@@ -897,54 +936,8 @@ function xunmierji(type,ua) {
             }catch(e){
                 log('xpath获取选集列表失败>'+e.message);
             }
-            try{
-                actor = String(xpathArray(html, jsondata.dtActor).join(',')).replace('主演：','').replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "") || "内详";
-            }catch(e){
-                log('xpath获取主演dtActor失败>'+e.message);
-                actor = "取dtActor失败";
-            }
-            try{
-                director = String(xpathArray(html, jsondata.dtDirector).join(',')).replace('导演：','').replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "") || "内详";
-            }catch(e){
-                log('xpath获取导演dtDirector失败>'+e.message);
-                director = "取dtDirector失败";
-            }
-            try{
-                area = String(xpath(html, jsondata.dtArea)).replace('地区：','').replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "");
-            }catch(e){
-                log('xpath获取地区dtArea失败>'+e.message);
-                area = "取dtArea失败";
-            }
-            try{
-                year = String(xpath(html, jsondata.dtYear)).replace('年份：','').replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "");
-            }catch(e){
-                log('xpath获取年份dtYear失败>'+e.message);
-                year = "取dtYear失败";
-            }
-            try{
-                remarks = String(xpathArray(html, jsondata.dtCate).join(',')).replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "") || "";
-            }catch(e){
-                log('xpath获取类型dtCate失败>'+e.message);
-                remarks = "取dtCate失败";
-            }
-            try{
-                pubdate = String(xpathArray(html, jsondata.dtMark).join(',')).replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "") || "";
-            }catch(e){
-                log('xpath获取备注dtMark失败>'+e.message);
-                pubdate = "取dtMark失败";
-            }
-            try{
-                pic = pic?pic:xpath(html, jsondata.dtImg);
-            }catch(e){
-                log('xpath获取图片dtImg失败>'+e.message);
-            }
-            try{
-                desc = String(xpath(html, jsondata.dtDesc)).replace(jsondata.filter?eval(jsondata.filter):"","") || '...';
-            }catch(e){
-                log('xpath获取简价dtDesc失败>'+e.message);
-            }
         }else if (/biubiu/.test(type)) {
-            var getsm = "";
+            let getsm = "";
             try{
                 getsm = "获取传递数据";
                 var jsondata = MY_PARAMS.data;
@@ -974,19 +967,6 @@ function xunmierji(type,ua) {
                 getsm = "获取剧情简介juqingqian";
                 desc = pdfh(html.split(jsondata.juqingqian.replace(/\\/g,""))[1].split(jsondata.juqinghou.replace(/\\/g,""))[0],"Text") || '...';
             }catch(e){
-                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcAutoTmpl.js');
-                let data = autoerji(MY_URL.split('##')[1].split('#')[0]);
-                log(data);
-                actor = actor||"抓取失败";
-                director = director||"";
-                remarks = remarks||"biubiu数据异常";
-                pubdate = pubdate||"此接口需要修改，或删除";
-                desc = desc||data.desc||'...';
-                arts = arts.length==0?data.arts:[];
-                conts = conts.length==0?data.conts:[];
-                log(arts.length)
-                log(data.arts)
-                log(arts)
                 log(getsm+'失败>'+e.message)
             }    
         }else{
@@ -1000,12 +980,25 @@ function xunmierji(type,ua) {
             var arts = data.arts||[];
             var conts = data.conts||[];
         }
+        if(/xpath|biubiu/.test(type)&&(atrs.length==0||conts.length==0)){
+            log('开启模板自动匹配、AI识片，获取播放选集');
+            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcAutoTmpl.js');
+            let data = autoerji(MY_URL.split('##')[1].split('#')[0]);
+            remarks = "获取数据存在错误";
+            pubdate = data.details2;
+            arts = data.arts;
+            conts = data.conts;
+            pic = pic||data.pic;
+            actor = actor || "内详";
+            director = director || "内详";
+        }
+        let dqnf = "";
         if(area){
             dqnf = '\n地区：' + area + (year?'   年代：' + year:'')
         }else{
             dqnf = year?'\n年代：' + year:''
         }
-        var details1 = '导演：' + director.substring(0, director.length<12?director.length:12) + '\n主演：' + actor.substring(0, actor.length<12||dqnf==""?actor.length:12) + dqnf;
+        var details1 = detail:'导演：' + director.substring(0, director.length<12?director.length:12) + '\n主演：' + actor.substring(0, actor.length<12||dqnf==""?actor.length:12) + dqnf;
         var details2 = remarks.trim() + '\n' + pubdate.trim();
         details1 = details1.replace(/&ldquo;/g,'“').replace(/&rdquo;/g,'”').replace(/&middot;/g,'·').replace(/&hellip;/g,'…');
         details2 = details2.replace(/&ldquo;/g,'“').replace(/&rdquo;/g,'”').replace(/&middot;/g,'·').replace(/&hellip;/g,'…');
