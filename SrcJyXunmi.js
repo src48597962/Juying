@@ -327,7 +327,7 @@ function xunmi(name,data,ishkss) {
                     }
                 } catch (e) {
                     var html = { data: [] };
-                    if(gethtml){geterror = 1;}
+                    if(gethtml){geterror = 1;log(1)}
                 }
                 try{
                     try{
@@ -357,7 +357,7 @@ function xunmi(name,data,ishkss) {
                     })
                 } catch (e) {
                     //log(obj.name+'>'+e.message);
-                    geterror = 1;
+                    geterror = 1;log(2)
                 }
             }else if(obj.type=="xpath"||obj.type=="biubiu"){
                 try {
@@ -439,7 +439,7 @@ function xunmi(name,data,ishkss) {
                     })
                 } catch (e) {
                     //log(obj.name+'>'+e.message);
-                    geterror = 1;
+                    geterror = 1;log(3)
                 }
             }else{
 
@@ -486,7 +486,7 @@ function xunmi(name,data,ishkss) {
                     }
                 } catch (e) {
                     //log(obj.name+'>'+e.message);
-                    geterror = 1;
+                    geterror = 1;log(4)
                 }
             }
             return {result:0, url:ssurl, apiurl:url_api, error:geterror};
