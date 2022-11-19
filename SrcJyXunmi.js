@@ -790,22 +790,32 @@ function xunmierji(type,ua) {
         
     //影片详情
     if (zt == 1) {
+        var actor = "";
+        var director = "";
+        var area = "";
+        var year = "";
+        var remarks = "";
+        var pubdate = "";
+        var pic = MY_PARAMS.pic;
+        var desc = '...';
+        var arts = [];
+        var conts = [];
         var dqnf = "";
         if(/cms/.test(type)&&isxml==1){
             html = html.replace(/&lt;!\[CDATA\[|\]\]&gt;|<!\[CDATA\[|\]\]>/g,'');
-            var arts = xpathArray(html,`//video/dl/dt/@name`);
+            arts = xpathArray(html,`//video/dl/dt/@name`);
             if(arts.length==0){
                 arts = xpathArray(html,`//video/dl/dd/@flag`);
             }
-            var conts = xpathArray(html,`//video/dl/dd/text()`);
-            var actor = String(xpath(html,`//video/actor/text()`)).trim().replace(/&middot;/g,'·') || "内详";
-            var director = String(xpath(html,`//video/director/text()`)).trim().replace(/&middot;/g,'·') || "内详";
-            var area = String(xpath(html,`//video/area/text()`)).trim();
-            var year = String(xpath(html,`//video/year/text()`)).trim();
-            var remarks = String(xpath(html,`//video/note/text()`)).trim() || "";
-            var pubdate = String(xpath(html,`//video/type/text()`)).trim() || "";
-            var pic = MY_PARAMS.pic.indexOf('loading.gif')==-1?MY_PARAMS.pic:xpath(html,`//video/pic/text()`);
-            var desc = String(xpath(html.replace('<p>','').replace('</p>',''),`//video/des/text()`)) || '...';
+            conts = xpathArray(html,`//video/dl/dd/text()`);
+            actor = String(xpath(html,`//video/actor/text()`)).trim().replace(/&middot;/g,'·') || "内详";
+            director = String(xpath(html,`//video/director/text()`)).trim().replace(/&middot;/g,'·') || "内详";
+            area = String(xpath(html,`//video/area/text()`)).trim();
+            year = String(xpath(html,`//video/year/text()`)).trim();
+            remarks = String(xpath(html,`//video/note/text()`)).trim() || "";
+            pubdate = String(xpath(html,`//video/type/text()`)).trim() || "";
+            pic = pic.indexOf('loading.gif')==-1?pic:xpath(html,`//video/pic/text()`);
+            desc = String(xpath(html.replace('<p>','').replace('</p>',''),`//video/des/text()`)) || '...';
         }else if (/v1|app|v2|cms/.test(type)) {
             if (/cms/.test(type)) {
                 try{
@@ -814,11 +824,10 @@ function xunmierji(type,ua) {
                     var json = html.data.list[0];
                 }
                 if(json.vod_play_from&&json.vod_play_url){
-                    var arts = json.vod_play_from.split('$$$');
-                    var conts = json.vod_play_url.split('$$$');
+                    arts = json.vod_play_from.split('$$$');
+                    conts = json.vod_play_url.split('$$$');
                 }else if(html.from&&html.play){
-                    var arts = html.from;
-                    var conts = [];
+                    arts = html.from;
                     for (let i = 0; i < html.play.length; i++) {
                         let cont = [];
                         let plays = html.play[i];
@@ -827,9 +836,6 @@ function xunmierji(type,ua) {
                         }
                         conts.push(cont.join("#"))
                     }
-                }else{
-                    var arts = [];
-                    var conts = [];
                 }
             }else{
                 if($.type(html.data)=="array"){
@@ -840,38 +846,36 @@ function xunmierji(type,ua) {
                 if(json&&json.vod_info){
                     json = json.vod_info;
                 }
-                var arts = json.vod_play_list || json.vod_url_with_player;
-                var conts = arts;
+                arts = json.vod_play_list || json.vod_url_with_player;
+                conts = arts;
             }
-            var actor = json.vod_actor || "内详";
-            var director = json.vod_director || "内详";
-            var area = json.vod_area;
-            var year = json.vod_year;
-            var remarks = json.vod_remarks || "";
-            var pubdate = json.vod_pubdate || json.vod_class || "";
-            var pic = MY_PARAMS.pic.indexOf('loading.gif')==-1?MY_PARAMS.pic:json.vod_pic?json.vod_pic:MY_PARAMS.pic;
-            var desc = json.vod_blurb || '...';
+            actor = json.vod_actor || "内详";
+            director = json.vod_director || "内详";
+            area = json.vod_area;
+            year = json.vod_year;
+            remarks = json.vod_remarks || "";
+            pubdate = json.vod_pubdate || json.vod_class || "";
+            pic = pic.indexOf('loading.gif')==-1?pic:json.vod_pic?json.vod_pic:pic;
+            desc = json.vod_blurb || '...';
         }else if (/iptv/.test(type)) {
-            var actor = html.actor.join(",") || "内详";
-            var director = html.director.join(",") || "内详";
-            var area = html.area.join(",");
-            var year = html.pubtime;
-            var remarks = html.trunk || "";
-            var pubdate = html.type.join(",") || "";
-            var pic = MY_PARAMS.pic || html.img_url;
-            var desc = html.intro || '...';
-            var arts = html.videolist;
-            var conts = arts;
+            actor = html.actor.join(",") || "内详";
+            director = html.director.join(",") || "内详";
+            area = html.area.join(",");
+            year = html.pubtime;
+            remarks = html.trunk || "";
+            pubdate = html.type.join(",") || "";
+            pic = pic || html.img_url;
+            desc = html.intro || '...';
+            arts = html.videolist;
+            conts = arts;
         }else if (/xpath/.test(type)) {
             var jsondata = MY_PARAMS.data;
             try{
-                var arts = xpathArray(html, jsondata.dtFromNode+(jsondata.dtFromName.indexOf('concat(')>-1?'/text()':jsondata.dtFromName));
+                arts = xpathArray(html, jsondata.dtFromNode+(jsondata.dtFromName.indexOf('concat(')>-1?'/text()':jsondata.dtFromName));
             }catch(e){
                 log('xpath获取线路失改>'+e.message);
-                var arts = [];
             }
             try{
-                var conts = [];
                 for (let i = 1; i < arts.length+1; i++) {
                     if(arts[i-1].indexOf("在线视频")>-1){arts[i-1] = '播放源'+i;}
                     let contname = xpathArray(html, jsondata.dtUrlNode+'['+i+']'+jsondata.dtUrlSubNode+jsondata.dtUrlName);
@@ -892,64 +896,59 @@ function xunmierji(type,ua) {
                 }
             }catch(e){
                 log('xpath获取选集列表失败>'+e.message);
-                var conts = [];
             }
             try{
-                var actor = String(xpathArray(html, jsondata.dtActor).join(',')).replace('主演：','').replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "") || "内详";
+                actor = String(xpathArray(html, jsondata.dtActor).join(',')).replace('主演：','').replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "") || "内详";
             }catch(e){
                 log('xpath获取主演dtActor失败>'+e.message);
-                var actor = "取dtActor失败";
+                actor = "取dtActor失败";
             }
             try{
-                var director = String(xpathArray(html, jsondata.dtDirector).join(',')).replace('导演：','').replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "") || "内详";
+                director = String(xpathArray(html, jsondata.dtDirector).join(',')).replace('导演：','').replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "") || "内详";
             }catch(e){
                 log('xpath获取导演dtDirector失败>'+e.message);
-                var director = "取dtDirector失败";
+                director = "取dtDirector失败";
             }
             try{
-                var area = String(xpath(html, jsondata.dtArea)).replace('地区：','').replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "");
+                area = String(xpath(html, jsondata.dtArea)).replace('地区：','').replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "");
             }catch(e){
                 log('xpath获取地区dtArea失败>'+e.message);
-                var area = "取dtArea失败";
+                area = "取dtArea失败";
             }
             try{
-                var year = String(xpath(html, jsondata.dtYear)).replace('年份：','').replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "");
+                year = String(xpath(html, jsondata.dtYear)).replace('年份：','').replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "");
             }catch(e){
                 log('xpath获取年份dtYear失败>'+e.message);
-                var year = "取dtYear失败";
+                year = "取dtYear失败";
             }
             try{
-                var remarks = String(xpathArray(html, jsondata.dtCate).join(',')).replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "") || "";
+                remarks = String(xpathArray(html, jsondata.dtCate).join(',')).replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "") || "";
             }catch(e){
                 log('xpath获取类型dtCate失败>'+e.message);
-                var remarks = "取dtCate失败";
+                remarks = "取dtCate失败";
             }
             try{
-                var pubdate = String(xpathArray(html, jsondata.dtMark).join(',')).replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "") || "";
+                pubdate = String(xpathArray(html, jsondata.dtMark).join(',')).replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "") || "";
             }catch(e){
                 log('xpath获取备注dtMark失败>'+e.message);
-                var pubdate = "取dtMark失败";
+                pubdate = "取dtMark失败";
             }
             try{
-                var pic = MY_PARAMS.pic || xpath(html, jsondata.dtImg);
+                pic = pic?pic:xpath(html, jsondata.dtImg);
             }catch(e){
                 log('xpath获取图片dtImg失败>'+e.message);
-                var pic = "";
             }
             try{
-                var desc = String(xpath(html, jsondata.dtDesc)).replace(jsondata.filter?eval(jsondata.filter):"","") || '...';
+                desc = String(xpath(html, jsondata.dtDesc)).replace(jsondata.filter?eval(jsondata.filter):"","") || '...';
             }catch(e){
                 log('xpath获取简价dtDesc失败>'+e.message);
-                var desc = "...";
             }
         }else if (/biubiu/.test(type)) {
             var getsm = "";
             try{
-                var arts = [];
-                var conts = [];
                 getsm = "获取传递数据";
                 var jsondata = MY_PARAMS.data;
-                getsm = "获取播放选集列表";
+                getsm = "获取播放地址数组bfjiequshuzuqian";
                 let bflist = html.split(jsondata.bfjiequshuzuqian.replace(/\\/g,""));
                 bflist.splice(0,1);
                 for (let i = 0; i < bflist.length; i++) {
@@ -965,29 +964,26 @@ function xunmierji(type,ua) {
                     conts.push(cont.join("#"))
                 }
                 getsm = "获取主演zhuyanqian";
-                var actor = pdfh(html.split(jsondata.zhuyanqian.replace(/\\/g,""))[1].split(jsondata.zhuyanhou.replace(/\\/g,""))[0],"Text") || "内详";
+                actor = pdfh(html.split(jsondata.zhuyanqian.replace(/\\/g,""))[1].split(jsondata.zhuyanhou.replace(/\\/g,""))[0],"Text") || "内详";
                 getsm = "获取导演daoyanqian";
-                var director = pdfh(html.split(jsondata.daoyanqian.replace(/\\/g,""))[1].split(jsondata.daoyanhou.replace(/\\/g,""))[0],"Text") || "内详";
+                director = pdfh(html.split(jsondata.daoyanqian.replace(/\\/g,""))[1].split(jsondata.daoyanhou.replace(/\\/g,""))[0],"Text") || "内详";
                 getsm = "获取备注zhuangtaiqian";
-                var remarks = pdfh(html.split(jsondata.zhuangtaiqian.replace(/\\/g,""))[1].split(jsondata.zhuangtaihou.replace(/\\/g,""))[0],"Text").split('/')[0] || "内详";
+                remarks = pdfh(html.split(jsondata.zhuangtaiqian.replace(/\\/g,""))[1].split(jsondata.zhuangtaihou.replace(/\\/g,""))[0],"Text").split('/')[0] || "内详";
                 getsm = "获取更新zhuangtaiqian";
-                var pubdate = pdfh(html.split(jsondata.zhuangtaiqian.replace(/\\/g,""))[1].split(jsondata.zhuangtaihou.replace(/\\/g,""))[0],"Text").split('/')[1] || "内详";
-                var pic = MY_PARAMS.pic || "";
+                pubdate = pdfh(html.split(jsondata.zhuangtaiqian.replace(/\\/g,""))[1].split(jsondata.zhuangtaihou.replace(/\\/g,""))[0],"Text").split('/')[1] || "内详";
                 getsm = "获取剧情简介juqingqian";
-                var desc = pdfh(html.split(jsondata.juqingqian.replace(/\\/g,""))[1].split(jsondata.juqinghou.replace(/\\/g,""))[0],"Text") || '...';
-                getsm = "获取播放地址数组bfjiequshuzuqian";
+                desc = pdfh(html.split(jsondata.juqingqian.replace(/\\/g,""))[1].split(jsondata.juqinghou.replace(/\\/g,""))[0],"Text") || '...';
             }catch(e){
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcAutoTmpl.js');
                 let data = autoerji(MY_URL.split('##')[1].split('#')[0]);
                 log(data);
-                var actor = actor||"抓取失败";
-                var director = director||"";
-                var remarks = remarks||"biubiu数据异常";
-                var pubdate = pubdate||"此接口需要修改，或删除";
-                var pic = MY_PARAMS.pic;
-                var desc = desc||data.desc||'...';
-                var arts = arts.length==0||data.arts||[];
-                var conts = conts.length==0||data.conts||[];
+                actor = actor||"抓取失败";
+                director = director||"";
+                remarks = remarks||"biubiu数据异常";
+                pubdate = pubdate||"此接口需要修改，或删除";
+                desc = desc||data.desc||'...';
+                arts = arts.length==0?data.arts:[];
+                conts = conts.length==0?data.conts:[];
                 log(arts.length)
                 log(data.arts)
                 log(arts)
