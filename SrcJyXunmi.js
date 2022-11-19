@@ -751,7 +751,7 @@ function xunmierji(type,ua) {
             } catch (e) {
                 var html = "";
             }
-        } else if (/xpath|biubiu/.test(type)) {
+        } else if (/xpath|biubiu|cutsom/.test(type)) {
             try{
                 var html = request(MY_URL.split('##')[1], { headers: { 'User-Agent': ua } });
             } catch (e) {
