@@ -452,7 +452,7 @@ function xunmi(name,data,ishkss) {
                         let vodpic = list.vodpic?list.vodpic.replace(/http.*\/tu\.php\?tu=|\/img\.php\?url=| |\/tu\.php\?tu=/g,'') + "@Referer=":"https://www.xawqxh.net/mxtheme/images/loading.gif@Referer=";
                         let voddesc = list.voddesc;
                         let appname = '‘‘’’<font color=#f13b66a>'+obj.name+'</font>'+' ('+obj.type+')'+(obj.group&&obj.group!=obj.type?' ['+obj.group+']':'');
-                        let vodurl = vodurl;
+                        let vodurl = list.vodurl;
                         if(/^\/\//.test(vodpic)){
                             vodpic = "https" + vodpic;
                         }   
