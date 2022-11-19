@@ -979,6 +979,7 @@ function xunmierji(type,ua) {
             }catch(e){
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcAutoTmpl.js');
                 let data = autoerji(MY_URL.split('##')[1].split('#')[0]);
+                log(data);
                 var actor = actor||"抓取失败";
                 var director = director||"";
                 var remarks = remarks||"biubiu数据异常";
