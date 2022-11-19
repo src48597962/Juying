@@ -243,7 +243,7 @@ function xunmi(name,data,ishkss) {
                 var url = url_api + '?ac=videolist&ids=';
                 var ssurl = url_api + '?ac=videolist&wd='+name;
                 var listcode = "html.list";
-            } else if (obj.type=="xpath"||obj.type=="biubiu"||obj.type=="cunstom") {
+            } else if (obj.type=="xpath"||obj.type=="biubiu"||obj.type=="custom") {
                 var jsondata = obj.data;
             } else {
                 log('api类型错误')
@@ -447,7 +447,7 @@ function xunmi(name,data,ishkss) {
                     let jkfile = fetchCache(jsondata.ext,48);
                     if(jkfile){
                         eval(jkfile);
-                        lists = obj.url(name);
+                        lists = url_api(name);
                     }
                 }catch(e){
                     log(e.message);
