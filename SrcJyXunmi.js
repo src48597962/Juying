@@ -935,7 +935,6 @@ function xunmierji(type,ua) {
                 }
             }catch(e){
                 log('xpath获取选集列表失败>'+e.message);
-                remarks = "xpath接口存在错误";
             }
         }else if (/biubiu/.test(type)) {
             let getsm = "";
@@ -969,7 +968,6 @@ function xunmierji(type,ua) {
                 desc = pdfh(html.split(jsondata.juqingqian.replace(/\\/g,""))[1].split(jsondata.juqinghou.replace(/\\/g,""))[0],"Text") || '...';
             }catch(e){
                 log(getsm+'失败>'+e.message)
-                remarks = "biubiu接口存在错误";
             }    
         }else{
             //网页
