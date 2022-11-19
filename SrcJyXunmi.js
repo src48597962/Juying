@@ -959,18 +959,15 @@ function xunmierji(type,ua) {
                 log(getsm+'失败>'+e.message)
             }    
         }else{
-            //网页
-            
+            //自定义接口/web自动匹配
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcAutoTmpl.js');
             let data = autoerji(MY_URL.split('##')[1].split('#')[0],html);
-            log(data)
             var details1 = data.details1||'自动匹配失败';
             var details2 = data.details2||'';
             var pic = data.pic||'';
             var desc = data.desc||'';
             var arts = data.arts||[];
             var conts = data.conts||[];
-            
         }
         if(/xpath|biubiu/.test(type)&&(arts.length==0||conts.length==0)){
             log('开启模板自动匹配、AI识片，获取播放选集');
@@ -1076,12 +1073,9 @@ function xunmierji(type,ua) {
             let line = i;
             tabs.push(line);
             var linecode = i;
-        }else if (/cms|xpath|biubiu/.test(type)) {
+        }else if (/cms|xpath|biubiu|cutsom/.test(type)) {
             tabs.push(arts[i].replace(/[\r\ \n\t]/g, ""));
             var linecode = arts[i];
-        }else{
-            var linecode = "";
-            //网页
         }
         linecodes.push(linecode);
     }
@@ -1111,7 +1105,7 @@ function xunmierji(type,ua) {
                 }
                 lists.push(si);
             };
-        }else if (/cms|xpath|biubiu/.test(type)) {
+        }else if (/cms|xpath|biubiu|cutsom/.test(type)) {
             let single = conts[i]||"";
             if(single){
                 let lines = single.split('#');
@@ -1293,7 +1287,7 @@ function xunmierji(type,ua) {
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
                         return SrcParseS.聚影(input);
                     });
-                }else if (/xpath|biubiu/.test(type)) {
+                }else if (/xpath|biubiu|cutsom/.test(type)) {
                     var playtitle = list[j].split('$')[0];
                     var playurl = list[j].split('$')[1];
                     var DTJX = $("").lazyRule(() => {
@@ -1321,7 +1315,7 @@ function xunmierji(type,ua) {
         if (list == undefined || list.length == 0) {
             playlist('0');
         } else {
-            if (/v1|app|v2|iptv|cms|xpath|biubiu/.test(type)) {
+            if (/v1|app|v2|iptv|cms|xpath|biubiu|cutsom/.test(type)) {
                 var listone = list[0].split('$')[0];
                 try{
                     let list1 = list[0].split('$')[0];
