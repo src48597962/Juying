@@ -964,8 +964,6 @@ function xunmierji(type,ua) {
                     }
                     conts.push(cont.join("#"))
                 }
-                log(arts)
-                log(conts)
                 getsm = "获取主演zhuyanqian";
                 var actor = pdfh(html.split(jsondata.zhuyanqian.replace(/\\/g,""))[1].split(jsondata.zhuyanhou.replace(/\\/g,""))[0],"Text") || "内详";
                 getsm = "获取导演daoyanqian";
@@ -981,6 +979,7 @@ function xunmierji(type,ua) {
             }catch(e){
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcAutoTmpl.js');
                 let data = autoerji(MY_URL.split('##')[1].split('#')[0]);
+                log(data);
                 var actor = actor||"抓取失败";
                 var director = director||"";
                 var remarks = remarks||"biubiu数据异常";
@@ -989,6 +988,8 @@ function xunmierji(type,ua) {
                 var desc = desc||data.desc||'...';
                 var arts = arts.length==0||data.arts||[];
                 var conts = conts.length==0||data.conts||[];
+                log(arts)
+                log(conts)
                 log(getsm+'失败>'+e.message)
             }    
         }else{
