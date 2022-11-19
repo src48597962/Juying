@@ -890,7 +890,7 @@ function xunmierji(type,ua) {
                 log('xpath获取年份dtYear失败>'+e.message);
             }
             try{
-                remarks = String(xpathArray(html, jsondata.dtCate).join(',')).replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "");
+                remarks = String(xpathArray(html, jsondata.dtCate).join(',')).replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "")||"xpath数据存在错误";
             }catch(e){
                 log('xpath获取类型dtCate失败>'+e.message);
             }
@@ -956,12 +956,12 @@ function xunmierji(type,ua) {
                     }
                     conts.push(cont.join("#"))
                 }
+                getsm = "获取备注zhuangtaiqian";
+                remarks = pdfh(html.split(jsondata.zhuangtaiqian.replace(/\\/g,""))[1].split(jsondata.zhuangtaihou.replace(/\\/g,""))[0],"Text").split('/')[0]||"biubiu数据存在错误";
                 getsm = "获取主演zhuyanqian";
                 actor = pdfh(html.split(jsondata.zhuyanqian.replace(/\\/g,""))[1].split(jsondata.zhuyanhou.replace(/\\/g,""))[0],"Text");
                 getsm = "获取导演daoyanqian";
                 director = pdfh(html.split(jsondata.daoyanqian.replace(/\\/g,""))[1].split(jsondata.daoyanhou.replace(/\\/g,""))[0],"Text");
-                getsm = "获取备注zhuangtaiqian";
-                remarks = pdfh(html.split(jsondata.zhuangtaiqian.replace(/\\/g,""))[1].split(jsondata.zhuangtaihou.replace(/\\/g,""))[0],"Text").split('/')[0]||"";
                 getsm = "获取更新zhuangtaiqian";
                 pubdate = pdfh(html.split(jsondata.zhuangtaiqian.replace(/\\/g,""))[1].split(jsondata.zhuangtaihou.replace(/\\/g,""))[0],"Text").split('/')[1]||"";
                 getsm = "获取剧情简介juqingqian";
@@ -986,7 +986,7 @@ function xunmierji(type,ua) {
             log('开启模板自动匹配、AI识片，获取播放选集');
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcAutoTmpl.js');
             let data = autoerji(MY_URL.split('##')[1].split('#')[0],html);
-            remarks = "获取数据存在错误";
+            remarks = remarks||"获取数据存在错误";
             pubdate = data.details2||"";
             arts = data.arts;
             conts = data.conts;
@@ -1000,7 +1000,7 @@ function xunmierji(type,ua) {
         }else{
             dqnf = year?'\n年代：' + year:''
         }
-        var details1 = '导演：' + director.substring(0, director.length<12?director.length:12) + '\n主演：' + actor.substring(0, actor.length<12||dqnf==""?actor.length:12) + dqnf;
+        var details1 = '导演：' + director.substring(0, director.length<10?director.length:10) + '\n主演：' + actor.substring(0, actor.length<12||dqnf==""?actor.length:12) + dqnf;
         var details2 = remarks.trim() + '\n' + pubdate.trim();
         details1 = details1.replace(/&ldquo;/g,'“').replace(/&rdquo;/g,'”').replace(/&middot;/g,'·').replace(/&hellip;/g,'…');
         details2 = details2.replace(/&ldquo;/g,'“').replace(/&rdquo;/g,'”').replace(/&middot;/g,'·').replace(/&hellip;/g,'…');
