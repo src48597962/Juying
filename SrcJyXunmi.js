@@ -290,6 +290,7 @@ function xunmi(name,data,ishkss) {
                 }catch(e){}
                 return html;
             }
+            
             if(/v1|app|iptv|v2|cms/.test(obj.type)){
                 try {
                     var gethtml = getHtmlCode(ssurl,urlua,xunmitimeout*1000);
@@ -360,7 +361,7 @@ function xunmi(name,data,ishkss) {
                                         vodpic = "https" + vodpic;
                                     }
                                     return {
-                                        title: !ishkss&&vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):'‘‘’’<font color=red>'+vodname+'</font>',
+                                        title: !ishkss?vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):'‘‘’’<font color=red>'+vodname+'</font>':vodname,
                                         desc: !ishkss?(voddesc + '\n\n' + appname):'聚影√ · '+obj.name,
                                         content: voddesc,
                                         pic_url: vodpic,
@@ -480,7 +481,7 @@ function xunmi(name,data,ishkss) {
                                     vodpic = "https" + vodpic;
                                 }
                                 return {
-                                    title: !ishkss&&vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):'‘‘’’<font color=red>'+vodname+'</font>',
+                                    title: !ishkss?vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):'‘‘’’<font color=red>'+vodname+'</font>':vodname,
                                     desc: !ishkss?(voddesc + '\n\n' + appname):'聚影√ · '+obj.name,
                                     content: voddesc,
                                     pic_url: vodpic?vodpic + "@Referer=":"https://www.xawqxh.net/mxtheme/images/loading.gif@Referer=",
@@ -512,6 +513,7 @@ function xunmi(name,data,ishkss) {
             }else{
 
             }
+
         };
 
         let Jklist = datalist.map((parse)=>{
