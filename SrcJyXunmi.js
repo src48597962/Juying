@@ -868,7 +868,7 @@ function xunmierji(type,ua) {
             arts = html.videolist;
             conts = arts;
         }else if (/xpath/.test(type)) {
-            var jsondata = MY_PARAMS.data;
+            let jsondata = MY_PARAMS.data;
             try{
                 actor = String(xpathArray(html, jsondata.dtActor).join(',')).replace('主演：','').replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "");
             }catch(e){
@@ -893,7 +893,6 @@ function xunmierji(type,ua) {
                 remarks = String(xpathArray(html, jsondata.dtCate).join(',')).replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "");
             }catch(e){
                 log('xpath获取类型dtCate失败>'+e.message);
-                remarks = "xpath接口存在错误";
             }
             try{
                 pubdate = String(xpathArray(html, jsondata.dtMark).join(',')).replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "");
@@ -936,6 +935,7 @@ function xunmierji(type,ua) {
                 }
             }catch(e){
                 log('xpath获取选集列表失败>'+e.message);
+                remarks = "xpath接口存在错误";
             }
         }else if (/biubiu/.test(type)) {
             let getsm = "";
@@ -958,13 +958,13 @@ function xunmierji(type,ua) {
                     conts.push(cont.join("#"))
                 }
                 getsm = "获取主演zhuyanqian";
-                actor = pdfh(html.split(jsondata.zhuyanqian.replace(/\\/g,""))[1].split(jsondata.zhuyanhou.replace(/\\/g,""))[0],"Text") || "内详";
+                actor = pdfh(html.split(jsondata.zhuyanqian.replace(/\\/g,""))[1].split(jsondata.zhuyanhou.replace(/\\/g,""))[0],"Text");
                 getsm = "获取导演daoyanqian";
-                director = pdfh(html.split(jsondata.daoyanqian.replace(/\\/g,""))[1].split(jsondata.daoyanhou.replace(/\\/g,""))[0],"Text") || "内详";
+                director = pdfh(html.split(jsondata.daoyanqian.replace(/\\/g,""))[1].split(jsondata.daoyanhou.replace(/\\/g,""))[0],"Text");
                 getsm = "获取备注zhuangtaiqian";
-                remarks = pdfh(html.split(jsondata.zhuangtaiqian.replace(/\\/g,""))[1].split(jsondata.zhuangtaihou.replace(/\\/g,""))[0],"Text").split('/')[0] || "内详";
+                remarks = pdfh(html.split(jsondata.zhuangtaiqian.replace(/\\/g,""))[1].split(jsondata.zhuangtaihou.replace(/\\/g,""))[0],"Text").split('/')[0];
                 getsm = "获取更新zhuangtaiqian";
-                pubdate = pdfh(html.split(jsondata.zhuangtaiqian.replace(/\\/g,""))[1].split(jsondata.zhuangtaihou.replace(/\\/g,""))[0],"Text").split('/')[1] || "内详";
+                pubdate = pdfh(html.split(jsondata.zhuangtaiqian.replace(/\\/g,""))[1].split(jsondata.zhuangtaihou.replace(/\\/g,""))[0],"Text").split('/')[1];
                 getsm = "获取剧情简介juqingqian";
                 desc = pdfh(html.split(jsondata.juqingqian.replace(/\\/g,""))[1].split(jsondata.juqinghou.replace(/\\/g,""))[0],"Text") || '...';
             }catch(e){
