@@ -243,7 +243,7 @@ function xunmi(name,data,ishkss) {
                 var url = url_api + '?ac=videolist&ids=';
                 var ssurl = url_api + '?ac=videolist&wd='+name;
                 var listcode = "html.list";
-            } else if (obj.type=="xpath"||obj.type=="biubiu") {
+            } else if (obj.type=="xpath"||obj.type=="biubiu"||obj.type=="cunstom") {
                 var jsondata = obj.data;
             } else {
                 log('api类型错误')
@@ -442,8 +442,16 @@ function xunmi(name,data,ishkss) {
                     //log(3);//log(obj.name+'>'+e.message);
                     geterror = 1;
                 }
-            }else{
-
+            }else if(obj.type=="custom"){
+                try{
+                    let jkfile = fetchCache(jsondata.ext,48);
+                    if(jkfile){
+                        eval(jkfile);
+                        lists = obj.url(name);
+                    }
+                }catch(e){
+                    log(e.message);
+                }
             }
 
             if(lists.length>0){
