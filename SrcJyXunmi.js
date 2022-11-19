@@ -945,13 +945,13 @@ function xunmierji(type,ua) {
         }else if (/biubiu/.test(type)) {
             var getsm = "";
             try{
+                var arts = [];
+                var conts = [];
                 getsm = "获取传递数据";
                 var jsondata = MY_PARAMS.data;
                 getsm = "获取播放选集列表";
                 let bflist = html.split(jsondata.bfjiequshuzuqian.replace(/\\/g,""));
                 bflist.splice(0,1);
-                var arts = [];
-                var conts = [];
                 for (let i = 0; i < bflist.length; i++) {
                     arts[i] = '播放源'+(i+1);
                     bflist[i] = bflist[i].split(jsondata.bfjiequshuzuhou.replace(/\\/g,""))[0];
@@ -981,15 +981,14 @@ function xunmierji(type,ua) {
             }catch(e){
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcAutoTmpl.js');
                 let data = autoerji(MY_URL.split('##')[1].split('#')[0]);
-                log(data);
                 var actor = actor||"抓取失败";
                 var director = director||"";
                 var remarks = remarks||"biubiu数据异常";
                 var pubdate = pubdate||"此接口需要修改，或删除";
                 var pic = MY_PARAMS.pic;
                 var desc = desc||data.desc||'...';
-                var arts = arts||data.arts||[];
-                var conts = conts||data.conts||[];
+                var arts = arts.length==0||data.arts||[];
+                var conts = conts.length==0||data.conts||[];
                 log(getsm+'失败>'+e.message)
             }    
         }else{
