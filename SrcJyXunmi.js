@@ -963,6 +963,7 @@ function xunmierji(type,ua) {
             
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcAutoTmpl.js');
             let data = autoerji(MY_URL.split('##')[1].split('#')[0],html);
+            log(data)
             var details1 = data.details1||'自动匹配失败';
             var details2 = data.details2||'';
             var pic = data.pic||'';
