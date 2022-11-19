@@ -1,4 +1,4 @@
-function chabeisousuo(name) {
+function csp_custom_aicb(name) {
     let list = [];
 	eval(getCryptoJS());
 	let token = CryptoJS.SHA1(name + "URBBRGROUN").toString();
