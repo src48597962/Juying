@@ -438,8 +438,8 @@ function xunmi(name,data,ishkss) {
                         }
                     })
                 } catch (e) {
-                    //log(obj.name+'>'+e.message);
-                    geterror = 1;log(3)
+                    log(3);log(obj.name+'>'+e.message);
+                    geterror = 1;
                 }
             }else{
 
@@ -487,8 +487,8 @@ function xunmi(name,data,ishkss) {
                         return {result:1, apiurl:url_api, add:search};
                     }
                 } catch (e) {
-                    log(obj.name+'>'+e.message);
-                    geterror = 1;log(4)
+                    //log(4);//log(obj.name+'>'+e.message);
+                    geterror = 1;
                 }
             }
             return {result:0, url:ssurl, apiurl:url_api, error:geterror};
