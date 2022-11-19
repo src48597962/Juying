@@ -964,6 +964,8 @@ function xunmierji(type,ua) {
                     }
                     conts.push(cont.join("#"))
                 }
+                log(arts)
+                log(conts)
                 getsm = "获取主演zhuyanqian";
                 var actor = pdfh(html.split(jsondata.zhuyanqian.replace(/\\/g,""))[1].split(jsondata.zhuyanhou.replace(/\\/g,""))[0],"Text") || "内详";
                 getsm = "获取导演daoyanqian";
