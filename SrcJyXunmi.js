@@ -988,8 +988,9 @@ function xunmierji(type,ua) {
                 var desc = desc||data.desc||'...';
                 var arts = arts.length==0||data.arts||[];
                 var conts = conts.length==0||data.conts||[];
+                log(arts.length)
+                log(data.arts)
                 log(arts)
-                log(conts)
                 log(getsm+'失败>'+e.message)
             }    
         }else{
