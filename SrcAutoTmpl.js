@@ -119,7 +119,6 @@ function autoerji(url){
 				if (taskResult.arts.length>0&&taskResult.conts.length>0&&taskResult.conts[0]) {
 					setid = id;
 					data = taskResult;
-					log(taskResult);
 					o = obj;
 					return "break";
 				}
