@@ -362,7 +362,7 @@ function xunmi(name,data,ishkss) {
             }else if(obj.type=="xpath"||obj.type=="biubiu"){
                 try {
                     if(obj.type=="xpath"){
-                        let ssurl = jsondata.searchUrl.replace('{wd}',name);
+                        var ssurl = jsondata.searchUrl.replace('{wd}',name);
                         if(jsondata.scVodNode=="json:list"){
                             gethtml = getHtmlCode(ssurl,urlua,xunmitimeout*1000);
                             let html = JSON.parse(gethtml);
@@ -390,7 +390,7 @@ function xunmi(name,data,ishkss) {
                         }
                         var ssvodurl = `jsondata.dtUrl.replace('{vid}',list.id)`;
                     }else{
-                        let ssurl = jsondata.url+jsondata.sousuoqian+name+jsondata.sousuohou;
+                        var ssurl = jsondata.url+jsondata.sousuoqian+name+jsondata.sousuohou;
                         if(jsondata.ssmoshi=="0"){
                             gethtml = getHtmlCode(ssurl,urlua,xunmitimeout*1000);
                             let html = JSON.parse(gethtml);
