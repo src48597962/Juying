@@ -893,6 +893,7 @@ function xunmierji(type,ua) {
                 remarks = String(xpathArray(html, jsondata.dtCate).join(',')).replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "");
             }catch(e){
                 log('xpath获取类型dtCate失败>'+e.message);
+                remarks = "xpath接口存在错误";
             }
             try{
                 pubdate = String(xpathArray(html, jsondata.dtMark).join(',')).replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "");
@@ -968,6 +969,7 @@ function xunmierji(type,ua) {
                 desc = pdfh(html.split(jsondata.juqingqian.replace(/\\/g,""))[1].split(jsondata.juqinghou.replace(/\\/g,""))[0],"Text") || '...';
             }catch(e){
                 log(getsm+'失败>'+e.message)
+                remarks = "biubiu接口存在错误";
             }    
         }else{
             //网页
@@ -989,9 +991,9 @@ function xunmierji(type,ua) {
             arts = data.arts;
             conts = data.conts;
             pic = pic||data.pic;
-            actor = actor || "内详";
-            director = director || "内详";
         }
+        actor = actor || "内详";
+        director = director || "内详";
         let dqnf = "";
         if(area){
             dqnf = '\n地区：' + area + (year?'   年代：' + year:'')
