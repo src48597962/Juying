@@ -485,7 +485,7 @@ function xunmi(name,data,ishkss) {
                         return {result:1, apiurl:url_api, add:search};
                     }
                 } catch (e) {
-                    //log(obj.name+'>'+e.message);
+                    log(obj.name+'>'+e.message);
                     geterror = 1;log(4)
                 }
             }
