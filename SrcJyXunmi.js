@@ -979,6 +979,7 @@ function xunmierji(type,ua) {
             conts = data.conts;
             pic = pic||data.pic;
         }
+        setPagePicUrl(pic);
         actor = actor || "内详";
         director = director || "内详";
         let dqnf = "";
