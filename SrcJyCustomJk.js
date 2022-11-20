@@ -45,8 +45,8 @@ let customparse = {
                         try{
                             let sitename = pdfh(it, "a&&li,1&&Text");
                             let vodname = pdfh(it, "a&&li,0&&Text");
-                            if(vodname==dogname){
-                                let vodurl = pdfh(it, "a&&href");
+                            let vodurl = pdfh(it, "a&&href");
+                            if(vodname==dogname&&!lists.some(ii => ii.url==vodurl)){
                                 lists.push({name:vodname,pic:dogpic,url:vodurl,site:sitename})
                             }
                         }catch(e){}
@@ -63,12 +63,14 @@ let customparse = {
             try{
                 let trueurl = request(obj.url, {redirect: false, withHeaders: true});
                 let vodurl = JSON.parse(trueurl).headers.location[0];
-                list.push({
-                    vodname: obj.name,
-                    vodpic: obj.pic,
-                    voddesc: obj.site,
-                    vodurl: vodurl
-                })
+                if(!/qq|mgtv|iptv|iqiyi|youku|bilibili|souhu|cctv|icaqd|cokemv|mhyyy|fun4k|jpys\.me|31kan|37dyw|kpkuang/.test(vodurl)&&!list.some(ii => ii.vodurl==vodurl)){
+                    list.push({
+                        vodname: obj.name,
+                        vodpic: obj.pic,
+                        voddesc: obj.site,
+                        vodurl: vodurl
+                    })
+                }
             }catch(e){}
             return 1;
         }
