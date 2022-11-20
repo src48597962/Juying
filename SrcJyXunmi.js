@@ -1292,8 +1292,12 @@ function xunmierji(type,ua) {
                     var playtitle = list[j].split('$')[0];
                     var playurl = list[j].split('$')[1];
                     var DTJX = $("").lazyRule(() => {
-                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
-                        return SrcParseS.嗅探(input,[],1);
+                        if(getMyVar('superwebM3U8')=="1"){
+                            return 'video://'+input;
+                        }else{
+                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
+                            return SrcParseS.嗅探(input,[],1);
+                        }
                     });
                 }else{
                     //网页
