@@ -46,29 +46,29 @@ let customparse = {
                         let sitename = pdfh(it, "a&&li,1&&Text");
                         let vodname = pdfh(it, "a&&li,0&&Text");
                         let vodurl = pdfh(it, "a&&href");
-                        log(vodurl);
-                        /*
                         lists.push({name:vodname,pic:dogpic,url:vodurl,site:sitename})
-                        */
+                        log(lists.length);
                         //log(it)
                     })
                 }
             })
-            log(lists);
         } catch (e) {
             log(e.message);
             var lists = [];
         }
+        log(lists.length);
         let list = [];
         let task = function(obj) {
-            let trueurl = request(obj.url, {redirect: false, withHeaders: true});
-            let vodurl = JSON.parse(trueurl).headers.location[0];
-            list.push({
-                vodname: obj.name,
-                vodpic: obj.pic,
-                voddesc: obj.site,
-                vodurl: vodurl
-            })
+            try{
+                let trueurl = request(obj.url, {redirect: false, withHeaders: true});
+                let vodurl = JSON.parse(trueurl).headers.location[0];
+                list.push({
+                    vodname: obj.name,
+                    vodpic: obj.pic,
+                    voddesc: obj.site,
+                    vodurl: vodurl
+                })
+            }catch(e){}
             return 1;
         }
         let doglist = lists.map((item)=>{
