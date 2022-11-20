@@ -41,7 +41,12 @@ let customparse = {
                     };
                     let doghtml = request('https://www.dianyinggou.com/SpiderMovie/zy/' + dogname, {headers: headers});
                     let htmls = pdfa(doghtml, "body&&a");
-                    lists.push({htmls:htmls,pic:dogpic,url:dogurl})
+                    htmls.forEach(item=>{
+                        let sitename = pdfh(item, "a&&li,1&&Text");
+                        let vodname = pdfh(item, "a&&li,0&&Text");
+                        let dogurl = pdfh(item, "a&&href");
+                        lists.push({name:vodname,pic:dogpic,url:dogurl,site:sitename})
+                    })
                 }
             })
         } catch (e) {
@@ -50,19 +55,13 @@ let customparse = {
         }
         let list = [];
         let task = function(obj) {
-            let lists = obj.htmls||[];
-            lists.forEach(item=>{
-                let sitename = pdfh(item, "a&&li,1&&Text");
-                let vodname = pdfh(item, "a&&li,0&&Text");
-                let dogurl = pdfh(item, "a&&href");
-                let trueurl = request(dogurl, {redirect: false, withHeaders: true});
-                let vodurl = JSON.parse(trueurl).headers.location[0];
-                list.push({
-                    vodname: vodname,
-                    vodpic: obj.pic,
-                    voddesc: sitename,
-                    vodurl: vodurl
-                })
+            let trueurl = request(obj.url, {redirect: false, withHeaders: true});
+            let vodurl = JSON.parse(trueurl).headers.location[0];
+            list.push({
+                vodname: obj.name,
+                vodpic: obj.pic,
+                voddesc: obj.site,
+                vodurl: vodurl
             })
             return 1;
         }
