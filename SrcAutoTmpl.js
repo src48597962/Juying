@@ -159,7 +159,7 @@ function aierji(html,url,detail){
 	let arr = alist.map(it => {
 		return {
 			//html: it,
-			text: pdfh(it, "a&&Text").replace(/new|新/g,''),
+			text: pdfh(it, "a&&Text").replace(/new|最新|新/g,''),
 			title: pdfh(it, "a&&title"),
 			href: pd(it, "a&&href", url)
 		}
@@ -250,7 +250,7 @@ function aierji(html,url,detail){
 	for (let i = 0; i < arr.length; i++) {
 		let it = arr[i];
 		let t = it.text;
-		if (!it.href || it.href == "" || (it.href==url&&it.href.indexOf('-')==-1) || /voddetail/.test(it.href)) {
+		if (!it.href || it.href == "" || (it.href==url&&it.href.indexOf('-')==-1) || /voddetail|s\/guoyu/.test(it.href)) {
 			continue;
 		}
 		let pre = i == 0 ? null : arr[i - 1];
