@@ -965,7 +965,7 @@ function xunmierji(type,ua) {
             let data = autoerji(MY_URL.split('##')[1].split('#')[0],html);
             var details1 = data.details1||'自动匹配失败';
             var details2 = data.details2||'';
-            var pic = data.pic||'';
+            var pic = pic.indexOf('loading.gif')==-1?pic:data.pic;
             var desc = data.desc||'';
             var arts = data.arts||[];
             var conts = data.conts||[];
