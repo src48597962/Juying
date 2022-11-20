@@ -27,7 +27,7 @@ let customparse = {
             var lists = [];
             let html = request("https://www.dianyinggou.com/so/" + name);
             let data = pdfa(html, "body&&.movies&&.each");
-            let doghtml = request('https://www.dianyinggou.com/SpiderMovie/zy/' + dogname);
+            let doghtml = request('https://www.dianyinggou.com/SpiderMovie/zy/' + name);
                     log(doghtml);
                     /*
             data.forEach(item=>{
