@@ -399,6 +399,7 @@ function lookset(){
                     JYconfig['superweb'] = 0;
                 }
                 putMyVar('superwebM3U8',JYconfig['superweb']);
+                log(getMyVar('superwebM3U8'));
                 writeFile(cfgfile, JSON.stringify(JYconfig));
                 refreshPage(false);
                 return 'toast://切换成功';
