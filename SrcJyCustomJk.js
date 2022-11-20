@@ -43,12 +43,12 @@ let customparse = {
                     let htmls = pdfa(doghtml, "body&&a");
                     log(htmls.length)
                     htmls.forEach(it=>{
+                        log(it)
                         let sitename = pdfh(it, "a&&li,1&&Text");
                         let vodname = pdfh(it, "a&&li,0&&Text");
                         let vodurl = pdfh(it, "a&&href");
                         lists.push({name:vodname,pic:dogpic,url:vodurl,site:sitename})
                         log(lists.length);
-                        //log(it)
                     })
                 }
             })
