@@ -751,7 +751,7 @@ function xunmierji(type,ua) {
             } catch (e) {
                 var html = "";
             }
-        } else if (/xpath|biubiu|cutsom/.test(type)) {
+        } else if (/xpath|biubiu|custom/.test(type)) {
             try{
                 var html = request(MY_URL.split('##')[1], { headers: { 'User-Agent': ua } });
             } catch (e) {
@@ -1041,7 +1041,6 @@ function xunmierji(type,ua) {
     var parse_api = "";
     var tabs = [];
     var linecodes = [];
-    log(arts)
     for (var i in arts) {
         if (/v1|app|v2/.test(type)) {
             let line = arts[i].name || arts[i].player_info.show;
@@ -1075,7 +1074,7 @@ function xunmierji(type,ua) {
             let line = i;
             tabs.push(line);
             var linecode = i;
-        }else if (/cms|xpath|biubiu|cutsom/.test(type)) {
+        }else if (/cms|xpath|biubiu|custom/.test(type)) {
             tabs.push(arts[i].replace(/[\r\ \n\t]/g, ""));
             var linecode = arts[i];
         }
@@ -1107,7 +1106,7 @@ function xunmierji(type,ua) {
                 }
                 lists.push(si);
             };
-        }else if (/cms|xpath|biubiu|cutsom/.test(type)) {
+        }else if (/cms|xpath|biubiu|custom/.test(type)) {
             let single = conts[i]||"";
             if(single){
                 let lines = single.split('#');
@@ -1289,7 +1288,7 @@ function xunmierji(type,ua) {
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
                         return SrcParseS.聚影(input);
                     });
-                }else if (/xpath|biubiu|cutsom/.test(type)) {
+                }else if (/xpath|biubiu|custom/.test(type)) {
                     var playtitle = list[j].split('$')[0];
                     var playurl = list[j].split('$')[1];
                     var DTJX = $("").lazyRule(() => {
@@ -1317,7 +1316,7 @@ function xunmierji(type,ua) {
         if (list == undefined || list.length == 0) {
             playlist('0');
         } else {
-            if (/v1|app|v2|iptv|cms|xpath|biubiu|cutsom/.test(type)) {
+            if (/v1|app|v2|iptv|cms|xpath|biubiu|custom/.test(type)) {
                 var listone = list[0].split('$')[0];
                 try{
                     let list1 = list[0].split('$')[0];
