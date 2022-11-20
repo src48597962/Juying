@@ -263,7 +263,7 @@ function aierji(html,url,detail){
 		}
 	}
 	//log(d);
-	if (d.length == 0) {
+	if (d.length == 0&&!/502|403|Unavailable/.test(html)) {
 		//匹配失败
 		d.push({
 			title: "",
