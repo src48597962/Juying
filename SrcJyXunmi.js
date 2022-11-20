@@ -722,7 +722,6 @@ function xunmi(name,data,ishkss) {
 }
 
 function xunmierji(type,ua) {
-    log(getMyVar('superwebM3U8'));
     addListener("onClose", $.toString(() => {
         clearMyVar('parse_api');
         clearMyVar('moviedesc');
