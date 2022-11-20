@@ -800,14 +800,14 @@ function jiekou(lx,data) {
         d.push({
             title:'apiurl',
             col_type: 'input',
-            desc: getMyVar('apitype')=="xpath"?"接口地址以csp_xpath_为前缀":getMyVar('apitype')=="biubiu"?"接口地址以csp_biubiu_为前缀":"接口地址",
+            desc: getMyVar('apitype')=="xpath"?"接口地址以csp_xpath_为前缀":getMyVar('apitype')=="biubiu"?"接口地址以csp_biubiu_为前缀":getMyVar('apitype')=="custom"?"接口地址以csp_custom_为前缀":"接口地址",
             extra: {
                 titleVisible: false,
-                defaultValue: getMyVar('apitype')=="xpath"&&getMyVar('apiurl', '')==""?'csp_xpath_':getMyVar('apitype')=="biubiu"&&getMyVar('apiurl', '')==""?'csp_biubiu_':getMyVar('apiurl', ''),
+                defaultValue: getMyVar('apitype')=="xpath"&&getMyVar('apiurl', '')==""?'csp_xpath_':getMyVar('apitype')=="biubiu"&&getMyVar('apiurl', '')==""?'csp_biubiu_':getMyVar('apitype')=="custom"&&getMyVar('apiurl', '')==""?'csp_custom_':getMyVar('apiurl', ''),
                 onChange: 'putMyVar("apiurl",input)'
             }
         });
-        if(getMyVar('apitype')=="xpath"||getMyVar('apitype')=="biubiu"){
+        if(getMyVar('apitype')=="xpath"||getMyVar('apitype')=="biubiu"||getMyVar('apitype')=="custom"){
             d.push({
                 title:'data代码',
                 col_type: 'input',
@@ -825,7 +825,7 @@ function jiekou(lx,data) {
         d.push({
             title: getMyVar('apitype', '')==""?'类型：自动识别':'类型：'+getMyVar('apitype'),
             col_type:'text_1',
-            url:$(["v1","app","v2","iptv","cms","xpath","biubiu","自动"],3).select(()=>{
+            url:$(["v1","app","v2","iptv","cms","xpath","biubiu","custom","自动"],3).select(()=>{
                 if(input=="自动"){
                     clearMyVar('apitype');
                     clearMyVar('apidata');
@@ -2457,7 +2457,7 @@ function Resourceimport(input,importtype,boxdy){
                         xpdata.scVodId = xpjson.scVodId;
                         xpdata.scVodImg = xpjson.scVodImg;
                         xpdata.scVodMark = xpjson.scVodMark;
-                        urls.push({ "name": obj.name, "url": obj.ext, "type": "xpath", "ua": xpjson.ua?xpjson.ua:"PC_UA", "data": xpdata, "group": isboxdy?datasl>0?"TVBox订阅":"":"新导入"})
+                        urls.push({ "name": obj.name, "url": obj.key, "type": "xpath", "ua": xpjson.ua?xpjson.ua:"PC_UA", "data": xpdata, "group": isboxdy?datasl>0?"TVBox订阅":"":"新导入"})
                     }catch(e){
                         //log(obj.name + '>抓取失败>' + e.message)
                     }
