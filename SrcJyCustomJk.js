@@ -41,14 +41,13 @@ let customparse = {
                     };
                     let doghtml = request('https://www.dianyinggou.com/SpiderMovie/zy/' + dogname, {headers: headers});
                     let htmls = pdfa(doghtml, "body&&a");
-                    log(htmls.length)
                     htmls.forEach(it=>{
-                        log(it)
-                        let sitename = pdfh(it, "a&&li,1&&Text");
-                        let vodname = pdfh(it, "a&&li,0&&Text");
-                        let vodurl = pdfh(it, "a&&href");
-                        lists.push({name:vodname,pic:dogpic,url:vodurl,site:sitename})
-                        log(lists.length);
+                        try{
+                            let sitename = pdfh(it, "a&&li,1&&Text");
+                            let vodname = pdfh(it, "a&&li,0&&Text");
+                            let vodurl = pdfh(it, "a&&href");
+                            lists.push({name:vodname,pic:dogpic,url:vodurl,site:sitename})
+                        }catch(e){}
                     })
                 }
             })
@@ -56,7 +55,6 @@ let customparse = {
             log(e.message);
             var lists = [];
         }
-        log(lists.length);
         let list = [];
         let task = function(obj) {
             try{
