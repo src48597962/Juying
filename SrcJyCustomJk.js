@@ -54,7 +54,6 @@ let customparse = {
             log(e.message);
             var lists = [];
         }
-        log(lists);
         let list = [];
         let task = function(obj) {
             let trueurl = request(obj.url, {redirect: false, withHeaders: true});
