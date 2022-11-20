@@ -27,7 +27,13 @@ let customparse = {
             var lists = [];
             let html = request("https://www.dianyinggou.com/so/" + name);
             let data = pdfa(html, "body&&.movies&&.each");
-            let doghtml = request('https://www.dianyinggou.com/SpiderMovie/zy/' + name);
+            let headers = {
+                "User-Agent": MOBILE_UA,
+                "Referer": "https://www.dianyinggou.com"
+            };
+            let cook = fetchCookie('https://www.dianyinggou.com');
+            headers.Cookie = JSON.parse(cook||'[]').join(';');
+            let doghtml = request('https://www.dianyinggou.com/SpiderMovie/zy/' + name, { headers: headers, timeout:timeout});
                     log(doghtml);
                     /*
             data.forEach(item=>{
