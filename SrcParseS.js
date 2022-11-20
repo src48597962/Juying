@@ -862,7 +862,7 @@ var SrcParseS = {
                                 let mnames = urljson.names||[];
                                 let mheaders = urljson.headers;
                                 for(var j=0;j<murls.length;j++){
-                                    if(mnames[j].indexOf('yueyu')==-1){
+                                    if(mnames[j].indexOf('-yue')==-1){
                                         let MulUrl = this.formatMulUrl(murls[j].replace(/;{.*}/g,""), urls.length);
                                         urls.push(MulUrl.url);
                                         if(mnames.length>0){
