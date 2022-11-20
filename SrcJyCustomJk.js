@@ -21,6 +21,45 @@ let customparse = {
             }
         });
         return list;
+    },
+    csp_custom_aidog: function (name) {
+        try {
+            var lists = [];
+            let html = request("https://www.dianyinggou.com/so/" + name);
+            let data = pdfa(html, "body&&.movies&&.each");
+            data.forEach(item=>{
+                let dogname = pdfh(item, "a&&title");
+                if(dogname.indexOf(name)>-1){
+                    let dogpic = pdfh(item, "img&&data-url");
+                    let doghtml = request('https://www.dianyinggou.com/SpiderMovie/zy/' + dogname);
+                    log(doghtml);
+                    lists.push({name:dogname,html:doghtml,pic:dogpic})
+                }
+            })
+        } catch (e) {
+            var lists = [];
+        }
+        let task = function(obj) {
+            //let html = request('https://www.dianyinggou.com/SpiderMovie/zy/' + name);
+            //log(html);
+            return 1;
+
+        }
+        let doglist = lists.map((item)=>{
+			return {
+				func: task,
+				param: item,
+				id: item.url
+			}
+        });
+        be(doglist, {
+            func: function(obj, id, error, taskResult) {
+            },
+            param: {
+            }
+        });
+
+        return list;
     }
 }
 
