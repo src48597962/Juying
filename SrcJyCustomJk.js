@@ -66,7 +66,7 @@ let customparse = {
                 if(!/qq|mgtv|iptv|iqiyi|youku|bilibili|souhu|cctv|icaqd|cokemv|mhyyy|fun4k|jpys\.me|31kan|37dyw|kpkuang/.test(vodurl)&&!list.some(ii => ii.vodurl==vodurl)){
                     list.push({
                         vodname: obj.name,
-                        vodpic: obj.pic,
+                        vodpic: obj.pic.replace(/http.*?\?url=/,''),
                         voddesc: obj.site,
                         vodurl: vodurl
                     })
