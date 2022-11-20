@@ -55,8 +55,10 @@ let customparse = {
             log(e.message);
             var lists = [];
         }
+        log(lists);
         let list = [];
         let task = function(obj) {
+            log(obj);
             try{
                 let trueurl = request(obj.url, {redirect: false, withHeaders: true});
                 let vodurl = JSON.parse(trueurl).headers.location[0];
