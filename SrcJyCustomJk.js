@@ -54,7 +54,9 @@ let customparse = {
             lists.forEach(item=>{
                 let sitename = pdfh(item, "a&&li,1&&Text");
                 let vodname = pdfh(item, "a&&li,0&&Text");
-                let vodurl = pdfh(item, "a&&href");
+                let dogurl = pdfh(item, "a&&href");
+                let trueurl = request(dogurl, {redirect: false, withHeaders: true});
+                let vodurl = JSON.parse(trueurl).headers.location[0];
                 list.push({
                     vodname: vodname,
                     vodpic: obj.pic,
@@ -77,7 +79,6 @@ let customparse = {
             param: {
             }
         });
-        log(list);
         return list;
     }
 }
