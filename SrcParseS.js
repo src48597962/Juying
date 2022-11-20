@@ -1014,7 +1014,8 @@ var SrcParseS = {
             let header = this.mulheader(url);
             if ((getMyVar('SrcM3U8', '1') == "1"||url.indexOf('vkey=')>-1)&&url.indexOf('.m3u8')>-1) {
                 var name = 'video'+parseInt(i)+'.m3u8';
-                url = cacheM3u8(url, {headers: header, timeout: 2000}, name)+'#pre#';
+                url = cacheM3u8(url, {headers: header, timeout: 8000}, name)+'#pre#';
+                log(i+'>>>'+url);
             }
             if(url.indexOf('#isVideo=true#')==-1&&i==0){
                 url = url + '#isVideo=true#';
