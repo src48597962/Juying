@@ -1041,6 +1041,7 @@ function xunmierji(type,ua) {
     var parse_api = "";
     var tabs = [];
     var linecodes = [];
+    log(arts)
     for (var i in arts) {
         if (/v1|app|v2/.test(type)) {
             let line = arts[i].name || arts[i].player_info.show;
@@ -1080,7 +1081,7 @@ function xunmierji(type,ua) {
         }
         linecodes.push(linecode);
     }
-
+    log(tabs)
     var lists = [];
     for (var i in conts) {
         if (/v1|app|v2/.test(type)) {
