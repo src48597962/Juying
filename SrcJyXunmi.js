@@ -765,7 +765,7 @@ function xunmierji(type,ua) {
     } else {
         var zt = 0;
     }
-    if(!getMyVar('SrcM3U8')||!getMyVar('superwebM3U8')){
+    if(!getMyVar('SrcM3U8')||!getMyVar('superwebM3U8')||!getMyVar('superweb')){
         try{
             var cfgfile = "hiker://files/rules/Src/Juying/config.json";
             var Juyingcfg=fetch(cfgfile);
@@ -773,7 +773,8 @@ function xunmierji(type,ua) {
                 eval("var JYconfig=" + Juyingcfg+ ";");
             }
             putMyVar('SrcM3U8',JYconfig.cachem3u8==0?'0':'1');
-            putMyVar('superwebM3U8',JYconfig.cachem3u8!=0&&JYconfig.superweb==1?'1':'0');
+            putMyVar('superwebM3U8',JYconfig.cachem3u8!=0&&JYconfig.superweb!=0?'1':'0');
+            putMyVar('superweb',JYconfig.superweb!=0?'1':'0');
         }catch(e){}
     }
         
@@ -1292,7 +1293,7 @@ function xunmierji(type,ua) {
                     var playtitle = list[j].split('$')[0];
                     var playurl = list[j].split('$')[1];
                     var DTJX = $("").lazyRule(() => {
-                        if(getMyVar('superwebM3U8')=="1"){
+                        if(getMyVar('superweb')=="1"){
                             return 'video://'+input;
                         }else{
                             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
