@@ -79,7 +79,7 @@ function autoerji(url,html){
 		}
 		try{
 			var pic = pdfh(html, obj.img).replace(/http.*\/tu\.php\?tu=|\/img\.php\?url=| |\/tu\.php\?tu=/g,'');
-			if(!/^http/.test(pic)){
+			if(!/^http/.test(pic)&&pic){
 				pic = urldomian + pic;
 			}
 			if(pic&&!detail.pic){detail.pic = pic;}
@@ -159,7 +159,7 @@ function aierji(html,url,detail){
 	let arr = alist.map(it => {
 		return {
 			//html: it,
-			text: pdfh(it, "a&&Text").replace(/new/g,''),
+			text: pdfh(it, "a&&Text").replace(/new|新/g,''),
 			title: pdfh(it, "a&&title"),
 			href: pd(it, "a&&href", url)
 		}
