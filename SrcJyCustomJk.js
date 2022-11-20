@@ -33,7 +33,7 @@ let customparse = {
             };
             let cook = fetchCookie('https://www.dianyinggou.com');
             headers.Cookie = JSON.parse(cook||'[]').join(';');
-            let doghtml = request('https://www.dianyinggou.com/SpiderMovie/zy/' + name, { headers: headers, timeout:timeout});
+            let doghtml = request('https://www.dianyinggou.com/SpiderMovie/zy/' + name, { headers: headers, timeout:5000});
                     log(doghtml);
                     /*
             data.forEach(item=>{
