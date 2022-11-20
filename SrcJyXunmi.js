@@ -722,6 +722,7 @@ function xunmi(name,data,ishkss) {
 }
 
 function xunmierji(type,ua) {
+    log(getMyVar('superwebM3U8'));
     addListener("onClose", $.toString(() => {
         clearMyVar('parse_api');
         clearMyVar('moviedesc');
@@ -1292,7 +1293,6 @@ function xunmierji(type,ua) {
                     var playtitle = list[j].split('$')[0];
                     var playurl = list[j].split('$')[1];
                     var DTJX = $("").lazyRule(() => {
-                        log(getMyVar('superwebM3U8'));
                         if(getMyVar('superwebM3U8')=="1"){
                             return 'video://'+input;
                         }else{
