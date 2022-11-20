@@ -46,10 +46,11 @@ let customparse = {
                         
                         let sitename = pdfh(it, "a&&li,1&&Text");
                         log(sitename);
+                        /*
                         let vodname = pdfh(it, "a&&li,0&&Text");
                         let vodurl = pdfh(it, "a&&href");
                         lists.push({name:vodname,pic:dogpic,url:vodurl,site:sitename})
-                        
+                        */
                         //log(it)
                     })
                 }
