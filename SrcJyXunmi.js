@@ -796,8 +796,8 @@ function xunmierji(type,ua) {
                 arts = xpathArray(html,`//video/dl/dd/@flag`);
             }
             conts = xpathArray(html,`//video/dl/dd/text()`);
-            actor = String(xpath(html,`//video/actor/text()`)).trim().replace(/&middot;/g,'·') || "内详";
-            director = String(xpath(html,`//video/director/text()`)).trim().replace(/&middot;/g,'·') || "内详";
+            actor = String(xpath(html,`//video/actor/text()`)).trim().replace(/&middot;/g,'·') || "未知";
+            director = String(xpath(html,`//video/director/text()`)).trim().replace(/&middot;/g,'·') || "未知";
             area = String(xpath(html,`//video/area/text()`)).trim();
             year = String(xpath(html,`//video/year/text()`)).trim();
             remarks = String(xpath(html,`//video/note/text()`)).trim() || "";
@@ -837,8 +837,8 @@ function xunmierji(type,ua) {
                 arts = json.vod_play_list || json.vod_url_with_player;
                 conts = arts;
             }
-            actor = json.vod_actor || "内详";
-            director = json.vod_director || "内详";
+            actor = json.vod_actor || "未知";
+            director = json.vod_director || "未知";
             area = json.vod_area;
             year = json.vod_year;
             remarks = json.vod_remarks || "";
@@ -846,8 +846,8 @@ function xunmierji(type,ua) {
             pic = pic.indexOf('loading.gif')==-1?pic:json.vod_pic?json.vod_pic:pic;
             desc = json.vod_blurb || '...';
         }else if (/iptv/.test(type)) {
-            actor = html.actor.join(",") || "内详";
-            director = html.director.join(",") || "内详";
+            actor = html.actor.join(",") || "未知";
+            director = html.director.join(",") || "未知";
             area = html.area.join(",");
             year = html.pubtime;
             remarks = html.trunk || "";
@@ -980,8 +980,8 @@ function xunmierji(type,ua) {
             pic = pic||data.pic;
         }
         setPagePicUrl(pic);
-        actor = actor || "内详";
-        director = director || "内详";
+        actor = actor || "未知";
+        director = director || "未知";
         let dqnf = "";
         if(area){
             dqnf = '\n地区：' + area + (year?'   年代：' + year:'')
@@ -1213,8 +1213,8 @@ function xunmierji(type,ua) {
             "name": MY_PARAMS.title||'聚影',
             "pic": pic.split('@')[0],
             "content": desc,
-            "director": details1.split('\n')[0].replace('导演：',''),
-            "actor": details1.split('主演：')[1].split('\n')[0]
+            "director": details1.split('\n')[0].replace('导演：','')||"未知",
+            "actor": details1.indexOf('主演：')>-1?details1.split('主演：')[1].split('\n')[0]:"未知"
         };
         let tvip = getItem('hikertvboxset', '');
         d.push({
@@ -1299,7 +1299,7 @@ function xunmierji(type,ua) {
                     //网页
                 }
                 d.push({
-                    title: getHead(playtitle.replace(/第|集|话|期|-/g, ''), Color3),
+                    title: getHead(playtitle.replace(/第|集|话|期|-|new|最新|新/g, ''), Color3),
                     url: playurl + DTJX,
                     extra: { id: playurl, referer: playurl, jsLoadingInject: true, cacheM3u8: getMyVar('superwebM3U8')=="1"?true:false, blockRules: ['.m4a','.mp3','.gif','.jpeg','.jpg','.ico','.png','hm.baidu.com','/ads/*.js','cnzz.com'] },
                     col_type: list.length > 4 && len < 7 ? 'text_4' : 'text_3'
