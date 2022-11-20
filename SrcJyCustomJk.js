@@ -45,9 +45,9 @@ let customparse = {
                     htmls.forEach(it=>{
                         let sitename = pdfh(it, "a&&li,1&&Text");
                         let vodname = pdfh(it, "a&&li,0&&Text");
-                        log(vodname);
-                        /*
                         let vodurl = pdfh(it, "a&&href");
+                        log(vodurl);
+                        /*
                         lists.push({name:vodname,pic:dogpic,url:vodurl,site:sitename})
                         */
                         //log(it)
