@@ -27,33 +27,42 @@ let customparse = {
             var lists = [];
             let html = request("https://www.dianyinggou.com/so/" + name);
             let data = pdfa(html, "body&&.movies&&.each");
-            let headers = {
-                "User-Agent": MOBILE_UA,
-                "Referer": "https://www.dianyinggou.com"
-            };
-            let cook = fetchCookie('https://www.dianyinggou.com');
-            headers.Cookie = JSON.parse(cook||'[]').join(';');
-            let doghtml = request('https://www.dianyinggou.com/SpiderMovie/zy/' + name, { headers: headers, timeout:5000});
-                    log(doghtml);
-                    /*
+            let cook = getCookie('https://www.dianyinggou.com');
             data.forEach(item=>{
                 let dogname = pdfh(item, "a&&title");
                 if(dogname.indexOf(name)>-1){
+                    let dogurl = pdfh(item, "a&&href");
                     let dogpic = pdfh(item, "img&&data-url");
-                    let doghtml = request('https://www.dianyinggou.com/SpiderMovie/zy/' + dogname);
-                    log(doghtml);
-                    lists.push({name:dogname,html:doghtml,pic:dogpic})
+                    let headers = {
+                        "User-Agent": MOBILE_UA,
+                        "Referer": dogurl,
+                        "x-requested-with": "XMLHttpRequest",
+                        "Cookie": cook
+                    };
+                    let doghtml = request('https://www.dianyinggou.com/SpiderMovie/zy/' + dogname, {headers: headers});
+                    let htmls = pdfa(doghtml, "body&&a");
+                    lists.push({htmls:htmls,pic:dogpic,url:dogurl})
                 }
-            })*/
+            })
         } catch (e) {
             log(e.message);
             var lists = [];
         }
+        let list = [];
         let task = function(obj) {
-            //let html = request('https://www.dianyinggou.com/SpiderMovie/zy/' + name);
-            //log(html);
+            let lists = obj.htmls||[];
+            lists.forEach(item=>{
+                let sitename = pdfh(item, "a&&li,1&&Text");
+                let vodname = pdfh(item, "a&&li,0&&Text");
+                let vodurl = pdfh(item, "a&&href");
+                list.push({
+                    vodname: vodname,
+                    vodpic: obj.pic,
+                    voddesc: sitename,
+                    vodurl: vodurl
+                })
+            })
             return 1;
-
         }
         let doglist = lists.map((item)=>{
 			return {
@@ -68,7 +77,7 @@ let customparse = {
             param: {
             }
         });
-
+        log(list);
         return list;
     }
 }
