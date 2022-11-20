@@ -390,15 +390,15 @@ function lookset(){
             col_type: "line"
         });
         d.push({
-            title:  (JYconfig.superweb!=1?getide(1):getide(0)) + '播放器超级嗅探：' + (JYconfig.superweb!=1?'开启':'关闭'),
-            desc: JYconfig.superweb!=1?'无法在选集页下载，无法预加载，但是可以多线路':'普通模式先嗅探到播放地址再进播放器',
+            title:  (JYconfig.superweb!=0?getide(1):getide(0)) + '播放器超级嗅探：' + (JYconfig.superweb!=0?'开启':'关闭'),
+            desc: JYconfig.superweb!=0?'无法在选集页下载，无法预加载，但是可以多线路':'普通模式先嗅探到播放地址再进播放器',
             url: $('#noLoading#').lazyRule((JYconfig,cfgfile) => {
-                if(JYconfig['superweb'] != 1){
-                    JYconfig['superweb'] = 1;
-                }else{
+                if(JYconfig['superweb'] != 0){
                     JYconfig['superweb'] = 0;
+                }else{
+                    JYconfig['superweb'] = 1;
                 }
-                putMyVar('superwebM3U8',JYconfig['superweb']);
+                putMyVar('superweb',JYconfig['superweb']);
                 writeFile(cfgfile, JSON.stringify(JYconfig));
                 refreshPage(false);
                 return 'toast://切换成功';
