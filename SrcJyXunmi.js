@@ -988,8 +988,8 @@ function xunmierji(type,ua) {
         }else{
             dqnf = year?'\n年代：' + year:''
         }
-        var details1 = '导演：' + director.substring(0, director.length<10?director.length:10) + '\n主演：' + actor.substring(0, actor.length<10||dqnf==""?actor.length:10) + dqnf;
-        var details2 = remarks.trim() + '\n' + pubdate.trim();
+        var details1 = details1?details1:'导演：' + director.substring(0, director.length<10?director.length:10) + '\n主演：' + actor.substring(0, actor.length<10||dqnf==""?actor.length:10) + dqnf;
+        var details2 = details2?details2:remarks.trim() + '\n' + pubdate.trim();
         details1 = details1.replace(/&ldquo;/g,'“').replace(/&rdquo;/g,'”').replace(/&middot;/g,'·').replace(/&hellip;/g,'…');
         details2 = details2.replace(/&ldquo;/g,'“').replace(/&rdquo;/g,'”').replace(/&middot;/g,'·').replace(/&hellip;/g,'…');
         desc = desc.replace(/&ldquo;/g,'“').replace(/&rdquo;/g,'”').replace(/&middot;/g,'·').replace(/&hellip;/g,'…');
@@ -1080,7 +1080,7 @@ function xunmierji(type,ua) {
         }
         linecodes.push(linecode);
     }
-    log(tabs)
+    
     var lists = [];
     for (var i in conts) {
         if (/v1|app|v2/.test(type)) {
