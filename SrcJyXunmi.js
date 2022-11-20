@@ -444,7 +444,7 @@ function xunmi(name,data,ishkss) {
                 }
             }else if(obj.type=="custom"){
                 try{
-                    let jkfile = fetchCache(jsondata.ext,48);
+                    let jkfile = fetchCache(jsondata.ext,72);
                     if(jkfile){
                         eval(jkfile);
                         lists = customparse[url_api](name);
