@@ -863,6 +863,7 @@ var SrcParseS = {
                                 let mheaders = urljson.headers;
                                 for(var j=0;j<murls.length;j++){
                                     let MulUrl = this.formatMulUrl(murls[j].replace(/;{.*}/g,""), urls.length);
+                                    log(MulUrl);
                                     urls.push(MulUrl.url);
                                     if(mnames.length>0){
                                         names.push(mnames[j]);
