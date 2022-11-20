@@ -42,6 +42,7 @@ let customparse = {
                     let doghtml = request('https://www.dianyinggou.com/SpiderMovie/zy/' + dogname, {headers: headers});
                     let htmls = pdfa(doghtml, "body&&a");
                     for(let i in htmls){
+                        log(htmls[i]);
                         let sitename = pdfh(htmls[i], "body&&li,1&&Text");
                         let vodname = pdfh(htmls[i], "body&&li,0&&Text");
                         let vodurl = pdfh(htmls[i], "body&&href");
