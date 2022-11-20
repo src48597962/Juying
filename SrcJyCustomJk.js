@@ -11,7 +11,7 @@ let customparse = {
         }
         lists.forEach(item => {
             let vodname = item.text.replace(/<em>|<\/em>/g, ''); 
-            if (!/qq|mgtv|iptv|iqiyi|youku|bilibili|souhu|cctv|wybg666|bdys01/.test(item.url)&&vodname.indexOf(name)>-1) {
+            if (!/qq|mgtv|iptv|iqiyi|youku|bilibili|souhu|cctv|wybg666|bdys01|ylwt33/.test(item.url)&&vodname.indexOf(name)>-1) {
                 list.push({
                     vodname: vodname,
                     vodpic: "",
