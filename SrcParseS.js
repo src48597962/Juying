@@ -110,6 +110,9 @@ var SrcParseS = {
                     }
                 }
             }
+            try {
+                document.querySelector("#count-down").click()
+            } catch (e) {}
         }, this.formatUrl, vipUrl, excludeurl, getparse)
     },
     智能: function (vipUrl, input) {
