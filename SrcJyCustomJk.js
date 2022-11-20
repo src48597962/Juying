@@ -27,6 +27,9 @@ let customparse = {
             var lists = [];
             let html = request("https://www.dianyinggou.com/so/" + name);
             let data = pdfa(html, "body&&.movies&&.each");
+            let doghtml = request('https://www.dianyinggou.com/SpiderMovie/zy/' + dogname);
+                    log(doghtml);
+                    /*
             data.forEach(item=>{
                 let dogname = pdfh(item, "a&&title");
                 if(dogname.indexOf(name)>-1){
@@ -35,8 +38,9 @@ let customparse = {
                     log(doghtml);
                     lists.push({name:dogname,html:doghtml,pic:dogpic})
                 }
-            })
+            })*/
         } catch (e) {
+            log(e.message);
             var lists = [];
         }
         let task = function(obj) {
