@@ -773,8 +773,8 @@ function xunmierji(type,ua) {
                 eval("var JYconfig=" + Juyingcfg+ ";");
             }
             putMyVar('SrcM3U8',JYconfig.cachem3u8==0?'0':'1');
-            putMyVar('superwebM3U8',JYconfig.cachem3u8!=0&&JYconfig.superweb!=0?'1':'0');
-            putMyVar('superweb',JYconfig.superweb!=0?'1':'0');
+            putMyVar('superwebM3U8',JYconfig.cachem3u8!=0&&JYconfig.superweb==1?'1':'0');
+            putMyVar('superweb',JYconfig.superweb==1?'1':'0');
         }catch(e){}
     }
         
