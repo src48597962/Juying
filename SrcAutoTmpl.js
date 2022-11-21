@@ -99,7 +99,7 @@ function autoerji(url,html){
 		if(setid > 0){
 			break;
 		}
-        let p = i+5;
+        let p = i+10;
         if(p>erjiTmpl.length){p=erjiTmpl.length}
         let TmplList = [];
         for(let s=i;s<p;s++){
