@@ -30,7 +30,7 @@ let customparse = {
             let cook = getCookie('https://www.dianyinggou.com');
             data.forEach(item=>{
                 let dogname = pdfh(item, "a&&title");
-                if(dogname.indexOf(name)>-1){
+                if(dogname == name){
                     let dogurl = pdfh(item, "a&&href");
                     let dogpic = pdfh(item, "img&&data-url");
                     let headers = {
@@ -133,7 +133,7 @@ let customparse = {
             log(e.message);
             var lists = [];
         }
-        log(lists);
+        
         let list = [];
         let task = function(obj) {
             try {
