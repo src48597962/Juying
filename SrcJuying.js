@@ -18,6 +18,8 @@ function jiekouyiji() {
     var api_ua = JYconfig.zsjiekou?JYconfig.zsjiekou.api_ua||"MOBILE_UA":MOBILE_UA;
     api_ua = api_ua=="MOBILE_UA"?MOBILE_UA:api_ua=="PC_UA"?PC_UA:api_ua;
     var xunmitimeout = JYconfig.xunmitimeout||5;
+    var api_group = JYconfig.zsjiekou?JYconfig.zsjiekou.api_group||"":"";
+
     if(api_name){setPageTitle(api_name);}
     if(api_name&&api_type&&api_url){
         if (api_type=="v1") {
@@ -63,18 +65,15 @@ function jiekouyiji() {
             var datalist = [];
         }
         datalist = datalist.filter(item => {
-            return item.type!="xpath" && item.type!="biubiu";
+            if(JYconfig['zsjiekou'].group){
+                return /app|v1|v2|iptv|cms/.test(item.type) && (item.group==JYconfig['zsjiekou'].group || !item.group&&item.type==JYconfig['zsjiekou'].group)
+            }else{
+                return /app|v1|v2|iptv|cms/.test(item.type);
+            }
         })
         if(datalist.length>0){
             if(!api_url||!datalist.some(item => item.url == api_url)){
-                var cfgfile = "hiker://files/rules/Src/Juying/config.json";
-                var Juyingcfg=fetch(cfgfile);
-                if(Juyingcfg != ""){
-                    eval("var JYconfig=" + Juyingcfg+ ";");
-                }else{
-                    var JYconfig= {};
-                }
-                JYconfig['zsjiekou'] = {api_name:datalist[0].name, api_type:datalist[0].type, api_url:datalist[0].url, api_ua:datalist[0].ua};
+                JYconfig['zsjiekou'] = {api_name:datalist[0].name, api_type:datalist[0].type, api_url:datalist[0].url, api_ua:datalist[0].ua, api_group:datalist[0].group||datalist[0].type};
                 writeFile(cfgfile, JSON.stringify(JYconfig));
                 log('未指定接口，默认第一个>'+datalist[0].name+datalist[0].url);
                 refreshPage(true);
@@ -84,6 +83,31 @@ function jiekouyiji() {
                     col_type: "blank_block"
                 })
             }
+            let grouplist = datalist.map((list)=>{
+                return list.group||list.type;
+            })
+            //去重复
+            function uniq(array){
+                var temp = []; //一个新的临时数组
+                for(var i = 0; i < array.length; i++){
+                    if(temp.indexOf(array[i]) == -1){
+                        temp.push(array[i]);
+                    }
+                }
+                return temp;
+            }
+            grouplist = uniq(grouplist);
+            d.push({
+                title: JYconfig['zsjiekou'].group?'👉'+JYconfig['zsjiekou'].group:'🆙选择分组',
+                url: $(grouplist,2).select((cfgfile,JYconfig)=>{
+                    JYconfig['zsjiekou'].group = input;
+                    writeFile(cfgfile, JSON.stringify(JYconfig));
+                    refreshPage(true);
+                    return "hiker://empty";
+                },cfgfile,JYconfig),
+                col_type: "scroll_button"
+            });
+
             for(let i in datalist){
                 if(api_url==datalist[i].url){
                     var Srczsjiekousousuodata = [];
@@ -92,20 +116,13 @@ function jiekouyiji() {
                 d.push({
                     title: api_url==datalist[i].url?'““””<b><span style="color:#3CB371">' + datalist[i].name + '</span></b>':datalist[i].name,
                     col_type: 'scroll_button',
-                    url: $('#noLoading#').lazyRule((zsjiekou) => {
+                    url: $('#noLoading#').lazyRule((zsjiekou,cfgfile,JYconfig) => {
                         clearMyVar('Srczsjiekou$type_id');
-                        var cfgfile = "hiker://files/rules/Src/Juying/config.json";
-                        var Juyingcfg=fetch(cfgfile);
-                        if(Juyingcfg != ""){
-                            eval("var JYconfig=" + Juyingcfg+ ";");
-                        }else{
-                            var JYconfig= {};
-                        }
                         JYconfig['zsjiekou'] = zsjiekou;
                         writeFile(cfgfile, JSON.stringify(JYconfig));
                         refreshPage(true);
                         return "hiker://empty";
-                    }, {api_name:datalist[i].name, api_type:datalist[i].type, api_url:datalist[i].url, api_ua:datalist[i].ua})
+                    }, {api_name:datalist[i].name, api_type:datalist[i].type, api_url:datalist[i].url, api_ua:datalist[i].ua, api_group:datalist[i].group||datalist[i].type},cfgfile,JYconfig)
                 });
             }
             d.push({
