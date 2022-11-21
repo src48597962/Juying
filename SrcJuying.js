@@ -67,16 +67,16 @@ function jiekouyiji() {
         let grouplist = [];
         datalist.forEach(item=>{
             let groupname = item.group||item.type;
-            if(/app|v1|v2|iptv|cms/.test(item.type)&&grouplist.indexOf(groupname)==-1&&api_group!="失败待处理"){
+            if(/app|v1|v2|iptv|cms/.test(item.type)&&grouplist.indexOf(groupname)==-1&&item.group!="失败待处理"){
                 grouplist.push(groupname);
             }
         })
 
         datalist = datalist.filter(item => {
             if(api_group){
-                return /app|v1|v2|iptv|cms/.test(item.type) && (item.group==api_group || !item.group&&item.type==api_group) && api_group!="失败待处理"
+                return /app|v1|v2|iptv|cms/.test(item.type) && (item.group==api_group || !item.group&&item.type==api_group) && item.group!="失败待处理"
             }else{
-                return /app|v1|v2|iptv|cms/.test(item.type) && api_group!="失败待处理";
+                return /app|v1|v2|iptv|cms/.test(item.type) && item.group!="失败待处理";
             }
         })
         if(!datalist.some(item => item.url == api_url)){
