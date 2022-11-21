@@ -92,12 +92,14 @@ function jiekouyiji() {
         
         d.push({
             title: api_group?'👉'+api_group:'🆙选择分组',
-            url: $(grouplist,2).select((cfgfile,JYconfig)=>{
-                JYconfig['zsjiekou'].api_group = input;
-                writeFile(cfgfile, JSON.stringify(JYconfig));
-                refreshPage(true);
+            url: $(grouplist,2).select((cfgfile,JYconfig,api_group)=>{
+                if(api_group!=input){
+                    JYconfig['zsjiekou'].api_group = input;
+                    writeFile(cfgfile, JSON.stringify(JYconfig));
+                    refreshPage(true);
+                }
                 return "hiker://empty";
-            },cfgfile,JYconfig),
+            },cfgfile,JYconfig,api_group),
             col_type: "scroll_button"
         });
         if(datalist.length>0){
