@@ -76,7 +76,7 @@ function xunmi(type,ua,data) {
         } catch (e) {
             var html = "";
         }
-    } else if (/xpath|biubiu/.test(type)) {
+    } else if (/xpath|biubiu||custom/.test(type)) {
         try{
             var html = request(MY_URL.split('##')[1], { headers: { 'User-Agent': ua }, timeout:3000 });
         } catch (e) {
@@ -172,6 +172,16 @@ function xunmi(type,ua,data) {
             }catch(e){
                 var conts = conts||[];
             }    
+        }else{
+            //自定义接口/web自动匹配
+            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcAutoTmpl.js');
+            let data = autoerji(MY_URL.split('##')[1].split('#')[0],html);
+            var conts = data.conts||[];
+        }
+        if(/xpath|biubiu/.test(type)&&conts.length==0){
+            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcAutoTmpl.js');
+            let data = autoerji(MY_URL.split('##')[1].split('#')[0],html);
+            conts = data.conts;
         }
 
         var lists = [];
@@ -199,7 +209,7 @@ function xunmi(type,ua,data) {
                     }
                     lists.push(si);
                 };
-            }else if (/cms|xpath|biubiu/.test(type)) {
+            }else if (/cms|xpath|biubiu|custom/.test(type)) {
                 let single = conts[i]||"";
                 if(single){
                     let lines = single.split('#');
