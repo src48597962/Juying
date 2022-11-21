@@ -67,7 +67,7 @@ function jiekouyiji() {
         let grouplist = [];
         datalist.forEach(item=>{
             let groupname = item.group||item.type;
-            if(grouplist.indexOf(groupname)==-1){
+            if(/app|v1|v2|iptv|cms/.test(item.type)&&grouplist.indexOf(groupname)==-1){
                 grouplist.push(groupname);
             }
         })
