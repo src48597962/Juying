@@ -90,6 +90,79 @@ let customparse = {
             });
         }
         return list;
+    },
+    csp_custom_zhuiyingmao: function(name) {
+        try {
+            var lists = [];
+            let html = request("https://zhuiyingmao.com/index.php/ajax/suggest?mid=1&wd="+name+"&limit=10" );
+            let data = JSON.parse(html).list;
+            let cook = getCookie('https://zhuiyingmao.com');
+            data.forEach(item => {
+                let maoname = item.name;
+                if (maoname.indexOf(name) > -1) {
+                    let maourl = 'https://zhuiyingmao.com/voddetail/' + item.id+".html";
+                    let maopic = item.pic;
+                    let headers = {
+                        "User-Agent": MOBILE_UA,
+                        "Referer": maourl,
+                        "x-requested-with": "XMLHttpRequest",
+                        "Cookie": cook
+                    };
+                    let maohtml = request(maourl, {
+                        headers: headers
+                    });
+                    let htmls = pdfa(maohtml, ".search-result-container&&a");
+                    htmls.forEach(it => {
+                        try {
+                            let sitename = pdfh(it, ".website-name&&Text");
+                            let vodname = pdfh(it, ".title&&Text");
+                            let vodurl = pdfh(it, "a&&href");
+                            if (vodname == maoname && !lists.some(ii => ii.url == vodurl)) {
+                                lists.push({
+                                    name: vodname,
+                                    pic: maopic,
+                                    url: vodurl,
+                                    site: sitename
+                                });
+                            }
+                        } catch (e) {}
+                    });
+                }
+            })
+        } catch (e) {
+            log(e.message);
+            var lists = [];
+        }
+        log(lists);
+        let list = [];
+        let task = function(obj) {
+            try {
+                let vodurl = obj.url;
+                if (!/qq|mgtv|iptv|iqiyi|youku|bilibili|souhu|cctv|icaqd|cokemv|mhyyy|fun4k|jpys\.me|31kan|37dyw|kpkuang/.test(vodurl) && !list.some(ii => ii.vodurl == vodurl)) {
+                    list.push({
+                        vodname: obj.name,
+                        vodpic: obj.pic.replace(/http.*?\?url=/, ''),
+                        voddesc: obj.site,
+                        vodurl: vodurl
+                    });
+                }
+            } catch (e) {}
+            return 1;
+        }
+        let maolist = lists.map((item) => {
+            return {
+                func: task,
+                param: item,
+                id: item.url
+            }
+        });
+        if (maolist.length > 0) {
+            be(maolist, {
+                func: function(obj, id, error, taskResult) {},
+                param: {}
+            });
+        }
+        return list;
     }
 }
 
