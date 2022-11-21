@@ -99,7 +99,7 @@ let customparse = {
             let cook = getCookie('https://zhuiyingmao.com');
             data.forEach(item => {
                 let maoname = item.name;
-                if (maoname.indexOf(name) > -1) {
+                if (maoname == name) {
                     let maourl = 'https://zhuiyingmao.com/voddetail/' + item.id+".html";
                     let maopic = item.pic;
                     let headers = {
