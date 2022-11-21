@@ -195,7 +195,11 @@ function JYerji(){
                     if(i==0){
                         var urllist = json.defaultepisode;
                     }else{
-                        let getjson = JSON.parse(request(MY_URL+'&site='+sitename, { headers: { 'User-Agent': PC_UA } })).data;
+                         try {
+                            var getjson = JSON.parse(request(MY_URL + '&start=1&end=' + (json.upinfo > 200 ? 200 : json.upinfo) + '&year=' + tag + '&site=' + sitename, { headers: { 'User-Agent': PC_UA } })).data;
+                         }catch(e){
+                             var getjson = JSON.parse(request(MY_URL+'&site='+sitename, { headers: { 'User-Agent': PC_UA } })).data;
+                         }
                         var urllist = getjson.defaultepisode;
                     }
                     urllist = urllist.map(item=>{
