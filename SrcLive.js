@@ -321,10 +321,13 @@ function LivePlay(name) {
             try{
                 if(JYlives[i].indexOf(',')>-1&&JYlives[i].split(',')[0].replace(/TV-/g,'TV').replace(/\[.*\]/g,'').trim()==name){
                     let url = JYlives[i].split(',')[1].trim();
-                    if(/\\r^/.test(url)){
-                        url = url.slice(0, url.length - 2);
-                    }
-                    urls.push(url + '#isVideo=true#');
+                    let urll = url.split('#');
+                    urll.forEach(item => {
+                        if(/\\r^/.test(item)){
+                            item = item.slice(0, item.length - 2);
+                        }
+                        urls.push(item + '#isVideo=true#');
+                    })
                 }
             }catch(e){}
         }
