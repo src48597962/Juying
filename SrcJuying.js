@@ -79,29 +79,28 @@ function jiekouyiji() {
                 return /app|v1|v2|iptv|cms/.test(item.type) && api_group!="失败待处理";
             }
         })
-        if(datalist.length>0){
-            if(!datalist.some(item => item.url == api_url)){
-                JYconfig['zsjiekou'] = api_group?{api_group:api_group}:{};
+        if(!datalist.some(item => item.url == api_url)){
+            JYconfig['zsjiekou'] = api_group?{api_group:api_group}:{};
+            writeFile(cfgfile, JSON.stringify(JYconfig));
+            refreshPage(true);
+        }
+        for (let i = 0; i < 9; i++) {
+            d.push({
+                col_type: "blank_block"
+            })
+        }
+        
+        d.push({
+            title: api_group?'👉'+api_group:'🆙选择分组',
+            url: $(grouplist,2).select((cfgfile,JYconfig)=>{
+                JYconfig['zsjiekou'].api_group = input;
                 writeFile(cfgfile, JSON.stringify(JYconfig));
                 refreshPage(true);
-            }
-            for (let i = 0; i < 9; i++) {
-                d.push({
-                    col_type: "blank_block"
-                })
-            }
-            
-            d.push({
-                title: api_group?'👉'+api_group:'🆙选择分组',
-                url: $(grouplist,2).select((cfgfile,JYconfig)=>{
-                    JYconfig['zsjiekou'].api_group = input;
-                    writeFile(cfgfile, JSON.stringify(JYconfig));
-                    refreshPage(true);
-                    return "hiker://empty";
-                },cfgfile,JYconfig),
-                col_type: "scroll_button"
-            });
-
+                return "hiker://empty";
+            },cfgfile,JYconfig),
+            col_type: "scroll_button"
+        });
+        if(datalist.length>0){
             for(let i in datalist){
                 if(api_url==datalist[i].url){
                     var Srczsjiekousousuodata = [];
