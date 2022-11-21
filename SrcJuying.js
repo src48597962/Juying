@@ -73,7 +73,7 @@ function jiekouyiji() {
         })
 
         datalist = datalist.filter(item => {
-            if(JYconfig['zsjiekou'].group){
+            if(api_group){
                 return /app|v1|v2|iptv|cms/.test(item.type) && (item.group==api_group || !item.group&&item.type==api_group)
             }else{
                 return /app|v1|v2|iptv|cms/.test(item.type);
