@@ -222,8 +222,17 @@ function xunmi(type,ua,data) {
     }
     
     if(lists.length>0){
-        var list = lists[0];
-        if (/v1|app|v2|iptv|cms|xpath|biubiu/.test(type)) {
+        //取线路选集最多的索引
+        var indexOfMax = 0;
+        var tempMax = lists[0].length;
+        for(let i = 0; i < lists.length; i ++){
+            if(lists[i].length > tempMax){
+                tempMax = lists[i].length;
+                indexOfMax = i;
+            }
+        }
+        var list = lists[indexOfMax];
+        if (/v1|app|v2|iptv|cms|xpath|biubiu|custom/.test(type)) {
             try{
                 let list1 = list[0].split('$')[0];
                 let list2 = list[list.length-1].split('$')[0];
