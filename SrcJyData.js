@@ -19,7 +19,29 @@ let yijimenu = [
         title: JYconfig['recordentry']!=2?"历史":"收藏",
         url: JYconfig['recordentry']!=2?"hiker://history":"hiker://collection",
         pic_url: 'https://lanmeiguojiang.com/tubiao/more/109.png',
-        col_type: 'icon_5'
+        col_type: 'icon_5',
+        extra: {
+            id: "lishishoucang",
+            longClick: [{
+                title: "历史按钮",
+                js: $.toString(() => {
+                    updateItem("lishishoucang", {
+                        title: "历史",
+                        url: "hiker://history"
+                    });
+                    return "toast://切换按钮为历史"
+                })
+            }, {
+                title: "收藏按钮",
+                js: $.toString(() => {
+                    updateItem("lishishoucang", {
+                        title: "收藏",
+                        url: "hiker://collection"
+                    });
+                    return "toast://切换按钮为收藏"
+                })
+            }]
+        }
     },
     {
         title: "搜索",
