@@ -23,22 +23,22 @@ let yijimenu = [
         extra: {
             id: "lishishoucang",
             longClick: [{
-                title: "历史按钮",
+                title: "切换为历史按钮",
                 js: $.toString(() => {
                     updateItem("lishishoucang", {
                         title: "历史",
                         url: "hiker://history"
                     });
-                    return "toast://切换按钮为历史"
+                    return "toast://已切换按钮为历史"
                 })
             }, {
-                title: "收藏按钮",
+                title: "切换为收藏按钮",
                 js: $.toString(() => {
                     updateItem("lishishoucang", {
                         title: "收藏",
                         url: "hiker://collection"
                     });
-                    return "toast://切换按钮为收藏"
+                    return "toast://已切换按钮为收藏"
                 })
             }]
         }
