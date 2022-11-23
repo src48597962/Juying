@@ -411,9 +411,6 @@ function LiveSet() {
                 img: "https://img.vinua.cn/images/QqyC.png",
                 url: $("","输入通用格式的tv链接地址").input((livecfgfile,liveconfig)=>{
                     if(input){
-                        if(/^\/storage/){
-                            input = 'file://' + input;
-                        }
                         let livedata = liveconfig['data']||[];
                         if(!livedata.some(item => item.url==input)){
                             showLoading('正在验证链接有效性...');
