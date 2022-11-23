@@ -244,7 +244,7 @@ function lookset(){
                     if(recordlist['excludeparse'].indexOf(list[i])==-1){
                         recordlist['excludeparse'].push(list[i]);
                     }
-                    var sm = list[i]+'>app接口解析加入全局黑名单';
+                    var sm = list[i]+'>接口自带解析加入全局黑名单';
                     log('已屏蔽'+input+' 优先解析：'+sm);
                 }
             }
@@ -264,7 +264,7 @@ function lookset(){
                     recordlist['excludeparse'] = [];
                     writeFile(recordfile, JSON.stringify(recordlist));
                     refreshPage(false);
-                    return 'toast://已清除app自带解析拦截黑名单记录';
+                    return 'toast://已清除接口自带解析拦截黑名单记录';
                 }else{
                     return 'toast://无记录';
                 }
@@ -288,7 +288,7 @@ function lookset(){
     };
     d.push({
         title: '当前解析模式：' + (parsemode==1?'聚影智能':parsemode==2?'强制断插':'强制嗅探'),
-        desc: parsemode==1?'上次优先>app解析+私有解析'+(haveDN&&isdn?'+断插解析':''):parsemode==2?'走断插(含魔断)或帅助手设置的解析逻辑':'app和私有解析中的直链进行聚合嗅探',
+        desc: parsemode==1?'上次优先>接口自带+私有解析'+(haveDN&&isdn?'+断插解析':''):parsemode==2?'走断插(含魔断)或帅助手设置的解析逻辑':'接口自带和私有解析中的直链进行聚合嗅探',
         url: 'hiker://empty',
         col_type: "text_center_1"
     });
