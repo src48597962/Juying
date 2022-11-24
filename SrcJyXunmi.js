@@ -323,7 +323,7 @@ function xunmi(name,data,ishkss) {
                             var html = JSON.parse(xgdec(gethtml));
                         }
                     }else{
-                        var html = JSON.parse(gethtml.replace('<script src=https://mpsyy.com/upload/ver.txt></script>',''));
+                        var html = JSON.parse(gethtml.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,''));
                     }
                 } catch (e) {
                     var html = { data: [] };
