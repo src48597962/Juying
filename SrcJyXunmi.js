@@ -844,7 +844,7 @@ function xunmierji(type,ua) {
             year = json.vod_year;
             remarks = json.vod_remarks || "";
             pubdate = json.vod_pubdate || json.vod_class || "";
-            pic = pic.indexOf('loading.gif')==-1?pic:json.vod_pic?json.vod_pic:pic;
+            pic = pic.indexOf('loading.gif')==-1?pic:json.vod_pic&&json.vod_pic.indexOf('ver.txt')==-1?json.vod_pic:pic;
             desc = json.vod_blurb || '...';
         }else if (/iptv/.test(type)) {
             actor = html.actor.join(",") || "未知";
