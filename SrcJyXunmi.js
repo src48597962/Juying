@@ -350,7 +350,7 @@ function xunmi(name,data,ishkss) {
                             let vodurl = list.vod_id?url + list.vod_id:list.nextlink;
                             return {
                                 vodname: vodname,
-                                vodpic: vodpic,
+                                vodpic: vodpic.indexOf('ver.txt')>-1?"":vodpic,
                                 voddesc: voddesc,
                                 vodurl: vodurl
                             }
@@ -745,7 +745,7 @@ function xunmierji(type,ua) {
                     var html = gethtml;
                     var isxml = 1;
                 }else{
-                    var html = JSON.parse(gethtml);
+                    var html = JSON.parse(gethtml.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,''));
                     var isxml = 0;
                 }
             } catch (e) {
