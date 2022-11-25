@@ -2333,7 +2333,33 @@ function extension(){
         col_type: 'text_1',
         url: 'toast://哥就是帅',
         extra:{
-            lineVisible:false
+            lineVisible:false,
+            id: "guanyujuying",
+            longClick: [{
+                title: "一些设置",
+                js: $.toString(() => {
+                    addItemBefore('loading', taskResult.add);
+                    addItemBefore("guanyujuying", [{
+                        col_type: "line"
+                    },{
+                        title: '☸ 一些设置',
+                        col_type: "rich_text"
+                    },{
+                        title: getItem('SrcJy$playcolor','')==''?'选集颜色':'‘‘’’<font color='+getItem('SrcJy$playcolor','')+'>'+'选集颜色'+'</font>',
+                        url: $("","选集列表名称的颜色设置").input(() => {
+                            setItem('SrcJy$playcolor',input);
+                            return 'toast://已设置';
+                        }),
+                        col_type: "text_3"
+                    }]);
+                    updateItem("guanyujuying", {
+                        extra:{
+                            lineVisible:false
+                        }
+                    });
+                    return "toast://已切换按钮为历史"
+                })
+            }]
         }
     });
     d.push({
