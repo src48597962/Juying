@@ -1140,7 +1140,7 @@ function xunmierji(type,ua) {
     //线路部份
     var Color1 = "#09c11b";//#f13b66a
     var Color2 = "";//#098AC1
-    var Color3 = "";
+    var Color3 = getItem('SrcJy$playcolor','');
     function getHead(title,Color,strong) {
         if(Color){
             if(strong){
