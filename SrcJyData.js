@@ -442,7 +442,7 @@ function JYerji(){
                         let urlid = datasource=="sougou"?MY_URL+j:url;
                         if (name != '0') {
                             d.push({
-                                title: name + '',
+                                title: getItem('SrcJy$playcolor','')==''?name + '':'‘‘’’<font color='+getItem('SrcJy$playcolor','')+'>'+name+''+'</font>',
                                 url: url + easy,
                                 extra: { id: urlid, jsLoadingInject: true, cacheM3u8: getMyVar('superwebM3U8')=="1"?true:false, blockRules: block },
                                 col_type: listonename.length>6?'text_2':'text_4'
@@ -478,7 +478,7 @@ function JYerji(){
             for (var k = 0; k < arr.length; k++) {
                 let url = "https://v.sogou.com/vc/eplay?query=" + arr[k] + "&date=" + arr[k] + "&key=" + json.dockey + "&st=5&tvsite=" + plays[index].site;
                 d.push({
-                    title: "第" + arr[k] + "期",
+                    title: getItem('SrcJy$playcolor','')==''?"第" + arr[k] + "期":'‘‘’’<font color='+getItem('SrcJy$playcolor','')+'>'+"第" + arr[k] + "期"+'</font>',
                     col_type: "text_2",
                     url: url + easy,
                     extra: { id: MY_URL+k, jsLoadingInject: true, cacheM3u8: getMyVar('superwebM3U8')=="1"?true:false, blockRules: block  }
@@ -490,7 +490,7 @@ function JYerji(){
             for (var m in plays) {
                 let url = "https://v.sogou.com" + plays[m].url;
                 d.push({
-                    title: plays[m].flag_list.indexOf('trailer') == -1?plays[m].sitename[0]:plays[m].sitename[0] + '—预告',
+                    title: plays[m].flag_list.indexOf('trailer') == -1?getItem('SrcJy$playcolor','')==''?plays[m].sitename[0]:'‘‘’’<font color='+getItem('SrcJy$playcolor','')+'>'+plays[m].sitename[0]+'</font>':plays[m].sitename[0] + '—预告',
                     img: 'http://dlweb.sogoucdn.com/video/wap/static/img/logo/' + plays[m].sitename[1],
                     url: url + easy,
                     col_type: "icon_2",
