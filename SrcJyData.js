@@ -249,15 +249,19 @@ function JYerji(){
     }
     
     //线路部份
-    var Color = "#f13b66a";
-    var Color1 = "#098AC1";
-    function getHead(title) {
-        return '‘‘’’<strong><font color="' + Color + '">' + title + '</front></strong>';
-    }
-    for (let i = 0; i < 9; i++) {
-        d.push({
-            col_type: "blank_block"
-        })
+    var Color1 = "#09c11b";
+    var Color2 = "";//#098AC1
+    var Color3 = getItem('SrcJy$playcolor','');
+    function getHead(title,Color,strong) {
+        if(Color){
+            if(strong){
+                return '‘‘’’<strong><font color="' + Color + '">' + title + '</front></strong>';
+            }else{
+                return '‘‘’’<font color="' + Color + '">' + title + '</front>';
+            }
+        }else{
+            return title;
+        }
     }
 
     function setTabs(tabs, vari) {
@@ -273,7 +277,7 @@ function JYerji(){
         for (var i in tabs) {
             if (tabs[i] != "") {
                 d.push({
-                    title: getMyVar(vari, '0') == i ? getHead(tabs[i] + '↓') : tabs[i],
+                    title: getMyVar(vari, '0') == i ? getHead(tabs[i],Color1,1) : getHead(tabs[i],Color2),
                     url: $("#noLoading#").lazyRule((vari, i, Marksum) => {
                         if (parseInt(getMyVar(vari, '0')) != i) {
                             try {
@@ -442,7 +446,7 @@ function JYerji(){
                         let urlid = datasource=="sougou"?MY_URL+j:url;
                         if (name != '0') {
                             d.push({
-                                title: getItem('SrcJy$playcolor','')==''?name + '':'‘‘’’<font color='+getItem('SrcJy$playcolor','')+'>'+name+''+'</font>',
+                                title: getHead(name + '', Color3),
                                 url: url + easy,
                                 extra: { id: urlid, jsLoadingInject: true, cacheM3u8: getMyVar('superwebM3U8')=="1"?true:false, blockRules: block },
                                 col_type: listonename.length>6?'text_2':'text_4'
@@ -478,7 +482,7 @@ function JYerji(){
             for (var k = 0; k < arr.length; k++) {
                 let url = "https://v.sogou.com/vc/eplay?query=" + arr[k] + "&date=" + arr[k] + "&key=" + json.dockey + "&st=5&tvsite=" + plays[index].site;
                 d.push({
-                    title: getItem('SrcJy$playcolor','')==''?"第" + arr[k] + "期":'‘‘’’<font color='+getItem('SrcJy$playcolor','')+'>'+"第" + arr[k] + "期"+'</font>',
+                    title: getHead("第" + arr[k] + "期", Color3),
                     col_type: "text_2",
                     url: url + easy,
                     extra: { id: MY_URL+k, jsLoadingInject: true, cacheM3u8: getMyVar('superwebM3U8')=="1"?true:false, blockRules: block  }
@@ -490,7 +494,7 @@ function JYerji(){
             for (var m in plays) {
                 let url = "https://v.sogou.com" + plays[m].url;
                 d.push({
-                    title: plays[m].flag_list.indexOf('trailer') == -1?getItem('SrcJy$playcolor','')==''?plays[m].sitename[0]:'‘‘’’<font color='+getItem('SrcJy$playcolor','')+'>'+plays[m].sitename[0]+'</font>':plays[m].sitename[0] + '—预告',
+                    title: plays[m].flag_list.indexOf('trailer') == -1?getHead(plays[m].sitename[0], Color3):plays[m].sitename[0] + '—预告',
                     img: 'http://dlweb.sogoucdn.com/video/wap/static/img/logo/' + plays[m].sitename[1],
                     url: url + easy,
                     col_type: "icon_2",
