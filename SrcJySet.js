@@ -2338,7 +2338,6 @@ function extension(){
             longClick: [{
                 title: "一些设置",
                 js: $.toString(() => {
-                    addItemBefore('loading', taskResult.add);
                     addItemBefore("guanyujuying", [{
                         col_type: "line"
                     },{
