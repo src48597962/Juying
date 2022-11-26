@@ -85,6 +85,7 @@ function Live() {
                     url: $("#noLoading#").lazyRule((dyname,dyurl) => {
                         putMyVar('JYlivedyurl',dyurl);
                         clearMyVar('JYlivelocal');
+                        clearMyVar('editmode');
                         refreshPage(false);
                         return "toast://已切换远程订阅："+dyname;
                     },dyname,dyurl),
