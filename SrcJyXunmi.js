@@ -487,6 +487,7 @@ function xunmi(name,data,ishkss) {
                                     title: vodname+'-'+obj.name,
                                     data: typeof(jsondata) =="undefined"|| jsondata ==null?{}:jsondata,
                                     cls: 'xunmilist'
+                                }
                             }
                         }
                     });
