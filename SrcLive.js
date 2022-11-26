@@ -6,7 +6,6 @@ function Live() {
         clearMyVar('selectgroup');
         clearMyVar('JYlivelocal');
     }));
-    clearMyVar('editmode');
     var d = [];
     d.push({
         title: '<b>聚影√</b> &nbsp &nbsp <small>⚙直播设置⚙</small>',
@@ -237,7 +236,7 @@ function Live() {
                     col_type: "scroll_button",
                     extra: {
                         id: groupname,
-                        longClick: getMyVar('editmode')?longClick:[]
+                        longClick: getMyVar('editmode','0')=="1"?longClick:[]
                     }
                 });
                 if(index==0){
