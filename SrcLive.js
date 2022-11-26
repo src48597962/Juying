@@ -128,7 +128,7 @@ function Live() {
             url: $.toString((guanlidata,datalist) => {
                     if(datalist.length>0){
                         deleteItemByCls('livelist');
-                        var lists = datalist.filter(item => {
+                        let lists = datalist.filter(item => {
                             return item.name.includes(input);
                         })
                         let gldatalist = guanlidata(lists);
@@ -318,6 +318,13 @@ function guanlidata(datalist) {
                 return LiveEdit(name,'rename');
             },name)
         }]:[];
+        longClick.push({
+            title: "推送至TVBOX",
+            js: $.toString((name) => {
+                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLive.js');
+                return LiveEdit(name,'pushBox');
+            },name)
+        })
         list.push({
             title: name,
             img: 'https://lanmeiguojiang.com/tubiao/ke/156.png',
@@ -403,6 +410,46 @@ function LiveEdit(name,mode) {
                 return "toast://输入不能为空"
             }
         },name,JYlivefile)
+    }else if(mode=='pushBox'){
+        let push = {
+            "name": name,
+            "pic": 'https://lanmeiguojiang.com/tubiao/ke/156.png',
+            "content": '聚影直播推送',
+            "director": "未知",
+            "actor": "未知"
+        };
+        let urls = [];
+        let JYlive= fetch(JYlivefile);
+        let JYlives = JYlive.split('\n');
+        for(let i=0;i<JYlives.length;i++){
+            try{
+                if(JYlives[i].indexOf('#genre#')==-1&&JYlives[i].indexOf(',')>-1&&JYlives[i].split(',')[0].replace(/TV-/g,'TV').replace(/\[.*\]/g,'').trim()==name){
+                    urls.push(JYlives[i].split(',')[1]);
+                }
+            }catch(e){}
+        }
+        if(urls.length>0){
+            push['from'] = name;
+            push['url'] = urls;
+            var state = request(tvip + '/action', {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    //'X-Requested-With': 'XMLHttpRequest',
+                    'Referer': tvip
+                },
+                timeout: 2000,
+                body: 'do=push&url=' + JSON.stringify(push),
+                method: 'POST'
+            });
+
+            if (state == 'ok') {
+                return 'toast://推送成功，如果tvbox显示“没找到数据”可能是该链接需要密码或者当前的jar不支持。';
+            } else {
+                return 'toast://推送失败';
+            }
+        }else{
+            return 'toast://播放地址为空';
+        }
     }
 } 
 function LiveSet() {
