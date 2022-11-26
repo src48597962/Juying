@@ -196,24 +196,26 @@ function Live() {
                     },JYlivefile,groupname,lists)
                 },{
                     title: "重命名分组",
-                    js: $("","输入新的分组名").input((groupname,JYlivefile)=>{
-                        if(input){
-                            let JYlive=fetch(JYlivefile);
-                            let JYlives = JYlive.split('\n');
-                            for(let i=0;i<JYlives.length;i++){
-                                try{
-                                    if(JYlives[i].indexOf('#genre#')>-1&&JYlives[i].indexOf(groupname)>-1){
-                                        JYlives[i] = JYlives[i].replace(groupname,input);
-                                    }
-                                }catch(e){}
+                    js: $.toString((JYlivefile,groupname) => {
+                        return $("","输入新的分组名").input((JYlivefile,groupname)=>{
+                            if(input){
+                                let JYlive=fetch(JYlivefile);
+                                let JYlives = JYlive.split('\n');
+                                for(let i=0;i<JYlives.length;i++){
+                                    try{
+                                        if(JYlives[i].indexOf('#genre#')>-1&&JYlives[i].indexOf(groupname)>-1){
+                                            JYlives[i] = JYlives[i].replace(groupname,input);
+                                        }
+                                    }catch(e){}
+                                }
+                                writeFile(JYlivefile, JYlives.join('\n'));
+                                updateItem(groupname,{title:input});
+                                return "toast:// <"+groupname+"> 分组改名为 <"+input+">";
+                            }else{
+                                return "toast://输入不能为空"
                             }
-                            writeFile(JYlivefile, JYlives.join('\n'));
-                            updateItem(groupname,{title:input});
-                            return "toast:// <"+groupname+"> 分组改名为 <"+input+">";
-                        }else{
-                            return "toast://输入不能为空"
-                        }
-                    },groupname,JYlivefile)
+                        },JYlivefile,groupname)
+                    },JYlivefile,groupname)
                 }];
                 d.push({
                     title: index==0?'‘‘’’<b><span style="color:#3399cc">'+groupname:groupname,
