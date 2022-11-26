@@ -450,7 +450,7 @@ function lookset(){
     });
     d.push({
         title: getItem('SrcJy$linecolor1','')==''?'线路选中':'‘‘’’<font color='+getItem('SrcJy$linecolor1','')+'>'+'线路选中'+'</font>',
-        url: $("","线路选中的颜色设置").input(() => {
+        url: $("","选中的线路名颜色设置").input(() => {
             setItem('SrcJy$linecolor1',input);
             return 'toast://已设置';
         }),
@@ -458,7 +458,7 @@ function lookset(){
     })
     d.push({
         title: getItem('SrcJy$linecolor2','')==''?'线路未选':'‘‘’’<font color='+getItem('SrcJy$linecolor2','')+'>'+'线路未选'+'</font>',
-        url: $("","选集列表名称的颜色设置").input(() => {
+        url: $("","未选中的线路名颜色设置").input(() => {
             setItem('SrcJy$linecolor2',input);
             return 'toast://已设置';
         }),
