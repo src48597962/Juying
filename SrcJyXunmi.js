@@ -1306,7 +1306,7 @@ function xunmierji(type,ua) {
                     title: getHead(playtitle.replace(/第|集|话|期|-|new|最新|新/g, ''), Color3),
                     url: playurl + DTJX,
                     extra: { id: playurl, referer: playurl, jsLoadingInject: true, cacheM3u8: getMyVar('superwebM3U8')=="1"?true:false, blockRules: ['.m4a','.mp3','.gif','.jpeg','.jpg','.ico','.png','hm.baidu.com','/ads/*.js','cnzz.com'] },
-                    col_type: list.length > 4 && len < 7 ? 'text_4' : 'text_3'
+                    col_type: list.length > 4 && len < 7 ? 'text_4' : len > 20 ? 'text_1' :'text_3'
                 });
             } else {
                 d.push({
