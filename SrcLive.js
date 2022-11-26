@@ -428,6 +428,7 @@ function LiveEdit(name,mode) {
                 }
             }catch(e){}
         }
+        let tvip = getItem('hikertvboxset', '');
         if(urls.length>0){
             push['from'] = name;
             push['url'] = urls;
