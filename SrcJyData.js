@@ -24,7 +24,7 @@ let yijimenu = [
             id: "lishishoucang",
             longClick: [{
                 title: "切换为历史按钮",
-                js: $.toString(() => {
+                js: $.toString((JYconfig,cfgfile) => {
                     updateItem("lishishoucang", {
                         title: "历史",
                         url: "hiker://history"
@@ -35,7 +35,7 @@ let yijimenu = [
                 },JYconfig,cfgfile)
             }, {
                 title: "切换为收藏按钮",
-                js: $.toString(() => {
+                js: $.toString((JYconfig,cfgfile) => {
                     updateItem("lishishoucang", {
                         title: "收藏",
                         url: "hiker://collection"
