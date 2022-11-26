@@ -452,8 +452,11 @@ function sousuo2() {
     }));
     var searchurl = $('').lazyRule(() => {
         let recordlist = storage0.getItem('searchrecord') || [];
+        if(recordlist.indexOf(input)>-1){
+            recordlist = recordlist.filter((item) => item !== input);
+        }
         recordlist.unshift(input);
-        if(recordlist.length>10){
+        if(recordlist.length>11){
             recordlist.splice(recordlist.length-1,1);
         }
         storage0.setItem('searchrecord', recordlist);
