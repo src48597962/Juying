@@ -164,7 +164,7 @@ function Live() {
             })
             if(lists.length>0){
                 let groupname = grouplist[i]?grouplist[i]:"未分组";
-                let longClick = [{
+                let longClick = getMyVar('editmode','0')=="1"?[{
                     title: "删除此分组",
                     js: $.toString((JYlivefile,groupname,lists) => {
                         try{
@@ -216,7 +216,7 @@ function Live() {
                             }
                         },JYlivefile,groupname)
                     },JYlivefile,groupname)
-                }];
+                }]:[];
                 d.push({
                     title: index==0?'‘‘’’<b><span style="color:#3399cc">'+groupname:groupname,
                     url: $('#noLoading#').lazyRule((grouplist,groupname,guanlidata,lists) => {
@@ -238,7 +238,7 @@ function Live() {
                     col_type: "scroll_button",
                     extra: {
                         id: groupname,
-                        longClick: getMyVar('editmode','0')=="1"?longClick:[]
+                        longClick: longClick
                     }
                 });
                 if(index==0){
@@ -300,19 +300,35 @@ function guanlidata(datalist) {
     }
     datalist = datalist.sort(compare('name',true));  
     */
+
     let list = []; 
     for (let i=0;i<datalist.length;i++) {
+        let name = datalist[i].name;
+        let longClick = getMyVar('editmode','0')=="1"?[{
+            title: "删除此频道",
+            js: $.toString((name) => {
+                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLive.js');
+                return LiveEdit(name,'del');
+            },name)
+        },{
+            title: "重命名频道",
+            js: $.toString((name) => {
+                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLive.js');
+                return LiveEdit(name,'rename');
+            },name)
+        }]:[];
         list.push({
-            title: datalist[i].name,
+            title: name,
             img: 'https://lanmeiguojiang.com/tubiao/ke/156.png',
             col_type: 'icon_2_round',
             url: $('#noLoading#').lazyRule((name) => {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLive.js');
                 return LivePlay(name);
-            },datalist[i].name),
+            },name),
             extra: {
-                id: datalist[i].name,
-                cls: 'livelist'
+                id: name,
+                cls: 'livelist',
+                longClick: longClick
             }
         });
     }
@@ -322,34 +338,38 @@ function LivePlay(name) {
     let JYlivefile= "hiker://files/rules/Src/Juying/live.txt";
     let JYlive= getMyVar('JYlivedyurl','juying')=="juying"?fetch(JYlivefile):fetchCache(getMyVar('JYlivedyurl'),24,{timeout:3000});
     let JYlives = JYlive.split('\n');
-    if(!/^url/.test(getMyVar('editmode','0'))||getMyVar('JYlivedyurl','juying')!="juying"){
-        let urls = [];
-        for(let i = 0;i<JYlives.length;i++){
-            try{
-                if(JYlives[i].indexOf(',')>-1&&JYlives[i].indexOf('#genre#')==-1&&JYlives[i].split(',')[0].replace(/TV-/g,'TV').replace(/\[.*\]/g,'').trim()==name){
-                    let url = JYlives[i].split(',')[1].trim();
-                    let urll = url.split('#');
-                    urll.forEach(item => {
-                        if(/\\r^/.test(item)){
-                            item = item.slice(0, item.length - 2);
-                        }
-                        if(item){
-                            urls.push(item + '#isVideo=true#');
-                        }
-                    })
-                }
-            }catch(e){}
-        }
-        if(urls.length==0){
-            return "toast://无播放地址";
-        }else if(urls.length==1){
-            return urls[0];
-        }else{
-            return JSON.stringify({
-                urls: urls
-            });
-        }
-    }else if(getMyVar('editmode','0')=="urldelete"){
+    let urls = [];
+    for(let i = 0;i<JYlives.length;i++){
+        try{
+            if(JYlives[i].indexOf(',')>-1&&JYlives[i].indexOf('#genre#')==-1&&JYlives[i].split(',')[0].replace(/TV-/g,'TV').replace(/\[.*\]/g,'').trim()==name){
+                let url = JYlives[i].split(',')[1].trim();
+                let urll = url.split('#');
+                urll.forEach(item => {
+                    if(/\\r^/.test(item)){
+                        item = item.slice(0, item.length - 2);
+                    }
+                    if(item){
+                        urls.push(item + '#isVideo=true#');
+                    }
+                })
+            }
+        }catch(e){}
+    }
+    if(urls.length==0){
+        return "toast://无播放地址";
+    }else if(urls.length==1){
+        return urls[0];
+    }else{
+        return JSON.stringify({
+            urls: urls
+        });
+    }
+} 
+function LiveEdit(name,mode) {
+    let JYlivefile= "hiker://files/rules/Src/Juying/live.txt";
+    if(mode=='del'){
+        let JYlive= fetch(JYlivefile);
+        let JYlives = JYlive.split('\n');
         for(let i=0;i<JYlives.length;i++){
             try{
                 if(JYlives[i].indexOf('#genre#')==-1&&JYlives[i].indexOf(',')>-1&&JYlives[i].split(',')[0].replace(/TV-/g,'TV').replace(/\[.*\]/g,'').trim()==name){
@@ -361,7 +381,7 @@ function LivePlay(name) {
         writeFile(JYlivefile, JYlives.join('\n'));
         deleteItem(name);
         return "toast://已删除 <"+name+">";
-    }else if(getMyVar('editmode')=="urlrename"){
+    }else if(mode=='rename'){
         return $("","输入新的地址名").input((name,JYlivefile)=>{
             if(input){
                 let JYlive=fetch(JYlivefile);
@@ -706,7 +726,7 @@ function LiveSet() {
             return "toast://进入编辑模式，选择操作菜单";*/
             putMyVar('editmode','1');
             putMyVar('isEdit','1');
-            return "toast://进入编辑模式，长按分组或选集选择操作";
+            return "toast://进入编辑模式，长按分组或频道选择操作";
         }):"toast://当前为远程订阅源，无法进入编辑模式"
     });
     d.push({
