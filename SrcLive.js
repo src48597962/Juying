@@ -318,13 +318,15 @@ function guanlidata(datalist) {
                 return LiveEdit(name,'rename');
             },name)
         }]:[];
-        longClick.push({
-            title: "推送至TVBOX",
-            js: $.toString((name) => {
-                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLive.js');
-                return LiveEdit(name,'pushBox');
-            },name)
-        })
+        if(getItem('enabledpush','')=='1'){
+            longClick.push({
+                title: "推送至TVBOX",
+                js: $.toString((name) => {
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLive.js');
+                    return LiveEdit(name,'pushBox');
+                },name)
+            })
+        }
         list.push({
             title: name,
             img: 'https://lanmeiguojiang.com/tubiao/ke/156.png',
