@@ -486,27 +486,7 @@ function xunmi(name,data,ishkss) {
                                     name: vodname,
                                     title: vodname+'-'+obj.name,
                                     data: typeof(jsondata) =="undefined"|| jsondata ==null?{}:jsondata,
-                                    cls: 'xunmilist',
-                                    longClick: [{
-                                        title: "切换为历史按钮",
-                                        js: $.toString(() => {
-                                            updateItem("lishishoucang", {
-                                                title: "历史",
-                                                url: "hiker://history"
-                                            });
-                                            return "toast://已切换按钮为历史"
-                                        })
-                                    }, {
-                                        title: "切换为收藏按钮",
-                                        js: $.toString(() => {
-                                            updateItem("lishishoucang", {
-                                                title: "收藏",
-                                                url: "hiker://collection"
-                                            });
-                                            return "toast://已切换按钮为收藏"
-                                        })
-                                    }]
-                                }
+                                    cls: 'xunmilist'
                             }
                         }
                     });
