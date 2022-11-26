@@ -29,8 +29,10 @@ let yijimenu = [
                         title: "历史",
                         url: "hiker://history"
                     });
+                    JYconfig['recordentry'] = 1;
+                    writeFile(cfgfile, JSON.stringify(JYconfig));
                     return "toast://已切换按钮为历史"
-                })
+                },JYconfig,cfgfile)
             }, {
                 title: "切换为收藏按钮",
                 js: $.toString(() => {
@@ -38,8 +40,10 @@ let yijimenu = [
                         title: "收藏",
                         url: "hiker://collection"
                     });
+                    JYconfig['recordentry'] = 2;
+                    writeFile(cfgfile, JSON.stringify(JYconfig));
                     return "toast://已切换按钮为收藏"
-                })
+                },JYconfig,cfgfile)
             }]
         }
     },
