@@ -835,14 +835,12 @@ function xunmierji(type,ua) {
                 if(json&&json.vod_info){
                     json = json.vod_info;
                 }
-                arts = json.vod_play_list || json.vod_url_with_player;
+                arts = json.vod_play_list || json.vod_url_with_player || [];
                 conts = arts;
-                log(arts)
-                if(!arts&&json.vod_play_from&&json.vod_play_url){
+                if(arts.length==0&&json.vod_play_from&&json.vod_play_url){
                     arts = json.vod_play_from.split('$$$');
                     conts = json.vod_play_url.split('$$$');
                     type = "cms";
-                    log(type)
                 }
             }
             actor = json.vod_actor || "未知";
