@@ -524,6 +524,12 @@ function sousuo2() {
                 }),
                 col_type: 'scroll_button'
             });
+        }else{
+            d.push({
+                title: '↻无记录',
+                url: "hiker://empty",
+                col_type: 'scroll_button'
+            });
         }
         recordlist.forEach(item=>{
             d.push({
@@ -531,7 +537,7 @@ function sousuo2() {
                 url: item + searchurl,
                 col_type: 'scroll_button',
                 extra: {
-                    cls: 'searchrecord',
+                    cls: 'searchrecord'
                 }
             });
         })
