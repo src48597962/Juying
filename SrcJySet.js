@@ -2638,6 +2638,8 @@ function Resourceimport(input,importtype,boxdy){
         }
         var jknum = -1;
         var jxnum = -1;
+        var livenum = -1;
+        var livesm = "";
         if(getMyVar('importjiekou','')=="1"){
             showLoading('正在抓取数据中')
             let urls= [];
@@ -2688,9 +2690,23 @@ function Resourceimport(input,importtype,boxdy){
         }
         if(getMyVar('importjiexi','')=="1"){
             let zhujiexi = bbdata.zhujiexi||"";
-            let zjiexi = zhujiexi.split('#');
+            try{
+                var zjiexi = zhujiexi.split('#');
+                zjiexi = zjiexi.map(item=>{
+                    return {url:item};
+                })
+            }catch(e){
+                var zjiexi = zhujiexi;
+            }
             let beiyongjiexi = bbdata.beiyongjiexi||"";
-            let bjiexi = beiyongjiexi.split('#');
+            try{
+                var bjiexi = beiyongjiexi.split('#');
+                bjiexi = bjiexi.map(item=>{
+                    return {url:item};
+                })
+            }catch(e){
+                var bjiexi = beiyongjiexi;
+            }
             let jiexi = zjiexi.concat(bjiexi);
             if(jiexi.length>0){
                 function randomid(){
@@ -2703,8 +2719,8 @@ function Resourceimport(input,importtype,boxdy){
                 try{
                     let urls = [];
                     for (let i=0;i<jiexi.length;i++) {
-                        if(/^http/.test(jiexi[i])){
-                            let arr  = { "name": "bb"+randomid(), "parse": jiexi[i], "stopfrom": [], "priorfrom": [], "sort": 1 };
+                        if(/^http/.test(jiexi[i].url)){
+                            let arr  = { "name": jiexi[i].name||"bb"+randomid(), "parse": jiexi[i].url, "stopfrom": [], "priorfrom": [], "sort": 1 };
                             urls.push(arr);
                         }
                     }
@@ -2715,7 +2731,52 @@ function Resourceimport(input,importtype,boxdy){
                 }
             }
         }
-        let sm = (jknum>-1?' 接口保存'+jknum:'')+(jxnum>-1?' 解析保存'+jxnum:'');
+        if(getMyVar('importlive','')=="1"){
+            try{
+                let urls = [];
+                let lives = bbdata.dianshizhibo;
+                if(lives&&/^http/.test(lives)){
+                    urls.push(lives);
+                }
+                if(urls.length>0){
+                    livenum = 0;
+                    let livecfgfile = "hiker://files/rules/Src/Juying/liveconfig.json";
+                    let livecfg = fetch(livecfgfile);
+                    if(livecfg != ""){
+                        eval("var liveconfig = " + livecfg);
+                    }else{
+                        var liveconfig = {};
+                    }
+                    let livedata = liveconfig['data']||[];
+                    for(let i=0;i<urls.length;i++){
+                        if(!livedata.some(item => item.url==urls[i])){
+                            let YChtml = request(urls[i],{timeout:5000}).replace(/TV-/g,'TV');
+                            if(YChtml.indexOf('#genre#')>-1){
+                                let id = livedata.length + 1;
+                                livedata.push({name:'JY订阅'+id,url:urls[i]});
+                                livenum++;
+                            }else{
+                                livesm = "链接无效或非通用tv格式文件";
+                            }
+                        }else{
+                            livesm = "已存在";
+                        }
+                    }
+                    if(livenum>0){
+                        liveconfig['data'] = livedata;
+                        writeFile(livecfgfile, JSON.stringify(liveconfig));
+                    }
+                }
+            } catch (e) {
+                log('biubiu导入live保存失败>'+e.message);
+            }
+        }
+        let sm = (jknum>-1?' 接口保存'+jknum:'')+(jxnum>-1?' 解析保存'+jxnum:'')+(livenum>-1?livenum==0?' 直播订阅'+livesm:' 直播保存'+livenum:'');
+        if(jknum>0||jxnum>0){back();}
+        if(jknum==-1&&jxnum==-1&&livenum>-1){
+            clearMyVar('importinput');
+            refreshPage(false);
+        }
         return 'toast://biu导入：'+(sm?sm:'导入异常，详情查看日志');
     }   
 }
