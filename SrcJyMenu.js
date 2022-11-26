@@ -442,6 +442,37 @@ function lookset(){
         }); 
     }
     d.push({
+        col_type: "line_blank"
+    });
+    d.push({
+        title: '颜色设置',
+        col_type: "rich_text"
+    });
+    d.push({
+        title: getItem('SrcJy$linecolor1','')==''?'线路选中':'‘‘’’<font color='+getItem('SrcJy$linecolor1','')+'>'+'线路选中'+'</font>',
+        url: $("","线路选中的颜色设置").input(() => {
+            setItem('SrcJy$linecolor1',input);
+            return 'toast://已设置';
+        }),
+        col_type: "text_3"
+    })
+    d.push({
+        title: getItem('SrcJy$linecolor2','')==''?'线路未选':'‘‘’’<font color='+getItem('SrcJy$linecolor2','')+'>'+'线路未选'+'</font>',
+        url: $("","选集列表名称的颜色设置").input(() => {
+            setItem('SrcJy$linecolor2',input);
+            return 'toast://已设置';
+        }),
+        col_type: "text_3"
+    })
+    d.push({
+        title: getItem('SrcJy$playcolor','')==''?'选集颜色':'‘‘’’<font color='+getItem('SrcJy$playcolor','')+'>'+'选集颜色'+'</font>',
+        url: $("","选集列表名称的颜色设置").input(() => {
+            setItem('SrcJy$playcolor',input);
+            return 'toast://已设置';
+        }),
+        col_type: "text_3"
+    })
+    d.push({
         title: '<br>',
         col_type: 'rich_text'
     }); 
