@@ -1157,8 +1157,8 @@ function xunmierji(type,ua) {
     var Marksum = 30;//设置记录线路足迹数量
 
     //线路部份
-    var Color1 = "#09c11b";//#f13b66a
-    var Color2 = "";//#098AC1
+    var Color1 = getItem('SrcJy$linecolor','#09c11b');//#f13b66a
+    var Color2 = getItem('SrcJy$linecolor2','');;//#098AC1
     var Color3 = getItem('SrcJy$playcolor','');
     function getHead(title,Color,strong) {
         if(Color){
