@@ -456,7 +456,7 @@ function sousuo2() {
             recordlist = recordlist.filter((item) => item !== input);
         }
         recordlist.unshift(input);
-        if(recordlist.length>11){
+        if(recordlist.length>20){
             recordlist.splice(recordlist.length-1,1);
         }
         storage0.setItem('searchrecord', recordlist);
@@ -523,7 +523,7 @@ function sousuo2() {
                 url: $('#noLoading#').lazyRule(() => {
                     clearItem('searchrecord');
                     deleteItemByCls('searchrecord');
-                    return "hiker://empty";
+                    return "toast://已清空";
                 }),
                 col_type: 'scroll_button'
             });
