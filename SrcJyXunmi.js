@@ -837,10 +837,12 @@ function xunmierji(type,ua) {
                 }
                 arts = json.vod_play_list || json.vod_url_with_player;
                 conts = arts;
+                log(arts)
                 if(!arts&&json.vod_play_from&&json.vod_play_url){
                     arts = json.vod_play_from.split('$$$');
                     conts = json.vod_play_url.split('$$$');
                     type = "cms";
+                    log(type)
                 }
             }
             actor = json.vod_actor || "未知";
