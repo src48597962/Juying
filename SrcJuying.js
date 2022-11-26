@@ -231,7 +231,7 @@ function jiekouyiji() {
                 }
                 
             }
-            var seachurl = $('').lazyRule((data) => {
+            var searchurl = $('').lazyRule((data) => {
                 if(data){
                     return $('hiker://empty#noRecordHistory##noHistory#').rule((name,data) => {
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
@@ -243,9 +243,9 @@ function jiekouyiji() {
             },Srczsjiekousousuodata);
             d.push({
                 title: "🔍",
-                url: $.toString((seachurl) => {
-                        return input + seachurl;
-                    },seachurl),
+                url: $.toString((searchurl) => {
+                        return input + searchurl;
+                    },searchurl),
                 desc: "搜你想看的...",
                 col_type: "input",
                 extra: {
@@ -450,7 +450,7 @@ function sousuo2() {
     addListener("onClose", $.toString(() => {
         clearMyVar('sousuo$input');
     }));
-    var seachurl = $('').lazyRule(() => {
+    var searchurl = $('').lazyRule(() => {
             return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
                 xunmi(name);
@@ -459,15 +459,15 @@ function sousuo2() {
     var d = [];
     d.push({
         title: "🔍",
-        url: $.toString((seachurl) => {
-                return input + seachurl;
-            },seachurl),
+        url: $.toString((searchurl) => {
+                return input + searchurl;
+            },searchurl),
         desc: "搜你想看的...",
         col_type: "input",
         extra: {
             titleVisible: true,
-            id: "input",
-            onChange: $.toString((seachurl) => {
+            id: "searchinput",
+            onChange: $.toString((searchurl) => {
                 if(input.length==1){deleteItemByCls('suggest');}
                 if(input.length>1&&input!=getMyVar('sousuo$input', '')){
                     putMyVar('sousuo$input', input);
@@ -480,7 +480,7 @@ function sousuo2() {
                                 return {
                                     title: sug.title,
                                     img: sug.img + '@Referer=',
-                                    url: sug.title + seachurl,
+                                    url: sug.title + searchurl,
                                     desc: "年份：" + sug.year,
                                     col_type: "movie_1_vertical_pic",
                                     extra: {
@@ -490,7 +490,7 @@ function sousuo2() {
                             }else{
                                 return {
                                     title: "⚡" + sug.title,
-                                    url: sug.title + seachurl,
+                                    url: sug.title + searchurl,
                                     col_type: "text_1",
                                     extra: {
                                         cls: 'suggest'
@@ -500,13 +500,13 @@ function sousuo2() {
                         } catch (e) {  }
                     });
                     if(suggest.length>0){
-                        addItemAfter('input', suggest);
+                        addItemAfter('searchinput', suggest);
                     }
                 }
-            }, seachurl)
+            }, searchurl)
         }
     });
-
+    
     d.push({
         title: '<span style="color:#ff6600"><b>\t热搜榜\t\t\t</b></span>',
         url: "hiker://empty",
@@ -536,7 +536,7 @@ function sousuo2() {
     for (var i in list) {
         d.push({
             title: i=="0"?'““””<span style="color:#ff3300">' + (parseInt(i)+1).toString() + '</span>' + "\t\t\t" + pdfh(list[i], "a&&Text"):i=="1"?'““””<span style="color:#ff6600">' + (parseInt(i)+1).toString() + '</span>' + "\t\t\t" + pdfh(list[i], "a&&Text"):i=="2"?'““””<span style="color:#ff9900">' + (parseInt(i)+1).toString() + '</span>' + "\t\t\t" + pdfh(list[i], "a&&Text"):'““””<span>' + (parseInt(i)+1).toString() + '</span>' + "\t\t\t" + pdfh(list[i], "a&&Text"),
-            url: pdfh(list[i], "a&&Text") + seachurl,
+            url: pdfh(list[i], "a&&Text") + searchurl,
             col_type: "text_1"
         }, );
     }
