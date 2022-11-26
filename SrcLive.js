@@ -165,10 +165,61 @@ function Live() {
             })
             if(lists.length>0){
                 let groupname = grouplist[i]?grouplist[i]:"未分组";
+                let longClick = [{
+                    title: "删除此分组",
+                    js: $.toString((JYlivefile,groupname,lists) => {
+                        try{
+                            showLoading('删除中，请稍候...');
+                            let JYlive=fetch(JYlivefile);
+                            let JYlives = JYlive.split('\n');
+                            for(let i=0;i<JYlives.length;i++){
+                                if(JYlives[i].indexOf('#genre#')>-1&&JYlives[i].indexOf(groupname)>-1){
+                                    JYlives.splice(i,1);
+                                    i = i - 1;
+                                }else if(JYlives[i].indexOf('#genre#')==-1&&JYlives[i].indexOf(',')>-1&&lists.some(item => item.name==JYlives[i].split(',')[0].trim())){
+                                    JYlives.splice(i,1);
+                                    i = i - 1;
+                                }
+                            }
+                            writeFile(JYlivefile, JYlives.join('\n'));
+                            deleteItem(groupname);
+                            let playlist = lists.map((list)=>{
+                                return list.name;
+                            });
+                            deleteItem(playlist);
+                            hideLoading();
+                            return "toast://已删除分组 <"+groupname+"> 所有地址";
+                        }catch(e){
+                            hideLoading();
+                            log(e.message);
+                            return "toast://删除分组失败，详情查看日志";
+                        }
+                    },JYlivefile,groupname,lists)
+                },{
+                    title: "重命名分组",
+                    js: $("","输入新的分组名").input((groupname,JYlivefile)=>{
+                        if(input){
+                            let JYlive=fetch(JYlivefile);
+                            let JYlives = JYlive.split('\n');
+                            for(let i=0;i<JYlives.length;i++){
+                                try{
+                                    if(JYlives[i].indexOf('#genre#')>-1&&JYlives[i].indexOf(groupname)>-1){
+                                        JYlives[i] = JYlives[i].replace(groupname,input);
+                                    }
+                                }catch(e){}
+                            }
+                            writeFile(JYlivefile, JYlives.join('\n'));
+                            updateItem(groupname,{title:input});
+                            return "toast:// <"+groupname+"> 分组改名为 <"+input+">";
+                        }else{
+                            return "toast://输入不能为空"
+                        }
+                    },groupname,JYlivefile)
+                }];
                 d.push({
                     title: index==0?'‘‘’’<b><span style="color:#3399cc">'+groupname:groupname,
-                    url: $('#noLoading#').lazyRule((grouplist,groupname,guanlidata,lists,JYlivefile) => {
-                        if(!/^group/.test(getMyVar('editmode','0'))&&getMyVar('selectgroup')!=groupname){
+                    url: $('#noLoading#').lazyRule((grouplist,groupname,guanlidata,lists) => {
+                        if(getMyVar('selectgroup')!=groupname){
                             putMyVar('selectgroup',groupname);
                             for(let i in grouplist){
                                 if(grouplist[i]==groupname){
@@ -180,58 +231,13 @@ function Live() {
                             deleteItemByCls('livelist');
                             let gldatalist = guanlidata(lists);
                             addItemAfter('liveloading', gldatalist);
-                            return "hiker://empty";
-                        }else if(getMyVar('editmode','0')=="groupdelete"){
-                            try{
-                                showLoading('删除中，请稍候...');
-                                let JYlive=fetch(JYlivefile);
-                                let JYlives = JYlive.split('\n');
-                                for(let i=0;i<JYlives.length;i++){
-                                    if(JYlives[i].indexOf('#genre#')>-1&&JYlives[i].indexOf(groupname)>-1){
-                                        JYlives.splice(i,1);
-                                        i = i - 1;
-                                    }else if(JYlives[i].indexOf('#genre#')==-1&&JYlives[i].indexOf(',')>-1&&lists.some(item => item.name==JYlives[i].split(',')[0].trim())){
-                                        JYlives.splice(i,1);
-                                        i = i - 1;
-                                    }
-                                }
-                                writeFile(JYlivefile, JYlives.join('\n'));
-                                deleteItem(groupname);
-                                let playlist = lists.map((list)=>{
-                                    return list.name;
-                                });
-                                deleteItem(playlist);
-                                hideLoading();
-                                return "toast://已删除分组 <"+groupname+"> 所有地址";
-                            }catch(e){
-                                hideLoading();
-                                log(e.message);
-                                return "toast://删除分组失败，详情查看日志";
-                            }
-                        }else if(getMyVar('editmode')=="grouprename"){
-                            return $("","输入新的分组名").input((groupname,JYlivefile)=>{
-                                if(input){
-                                    let JYlive=fetch(JYlivefile);
-                                    let JYlives = JYlive.split('\n');
-                                    for(let i=0;i<JYlives.length;i++){
-                                        try{
-                                            if(JYlives[i].indexOf('#genre#')>-1&&JYlives[i].indexOf(groupname)>-1){
-                                                JYlives[i] = JYlives[i].replace(groupname,input);
-                                            }
-                                        }catch(e){}
-                                    }
-                                    writeFile(JYlivefile, JYlives.join('\n'));
-                                    updateItem(groupname,{title:input});
-                                    return "toast:// <"+groupname+"> 分组改名为 <"+input+">";
-                                }else{
-                                    return "toast://输入不能为空"
-                                }
-                            },groupname,JYlivefile)
                         }
-                    },grouplist,groupname,guanlidata,lists,JYlivefile),
+                        return "hiker://empty";
+                    },grouplist,groupname,guanlidata,lists),
                     col_type: "scroll_button",
                     extra: {
-                        id: groupname
+                        id: groupname,
+                        longClick: getMyVar('editmode')?longClick:[]
                     }
                 });
                 if(index==0){
@@ -648,6 +654,7 @@ function LiveSet() {
             if(getMyVar('JYlivenum','0')=="0"){
                 return "toast://本地数据源为空，无法进入编辑模式";
             }
+            /*
             let editnames = ["分组删除|groupdelete","分组改名|grouprename","地址删除|urldelete","地址改名|urlrename","退出编辑|exitedit"];
             let editmenu = [];
             for(let i=0;i<editnames.length;i++){
@@ -695,7 +702,10 @@ function LiveSet() {
             }
             addItemAfter('livesearch',editmenu);
             back(false);
-            return "toast://进入编辑模式，选择操作菜单";
+            return "toast://进入编辑模式，选择操作菜单";*/
+            putMyVar('editmode','1');
+            putMyVar('isEdit','1');
+            return "toast://进入编辑模式，长按分组或选集选择操作";
         }):"toast://当前为远程订阅源，无法进入编辑模式"
     });
     d.push({
