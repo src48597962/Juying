@@ -292,7 +292,7 @@ function GroupEdit(groupname,mode,lists) {
             "pic": 'https://lanmeiguojiang.com/tubiao/ke/156.png',
             "content": '聚影直播推送',
             "director": "分组推送",
-            "actor": "只支持单线路"
+            "actor": "列表可能有点凌乱"
         };
         let urls = [];
         let JYlive= fetch(JYlivefile);
@@ -322,7 +322,7 @@ function GroupEdit(groupname,mode,lists) {
             });
 
             if (state == 'ok') {
-                return 'toast://推送成功，如果不能播放则TVBOX版本不支持，分组推送只支持单线路。';
+                return 'toast://推送成功，如果不能播放则TVBOX版本不支持，分组推送完成。';
             } else {
                 return 'toast://推送失败';
             }
@@ -481,7 +481,7 @@ function LiveEdit(name,mode) {
             "pic": 'https://lanmeiguojiang.com/tubiao/ke/156.png',
             "content": '聚影直播推送',
             "director": "频道推送",
-            "actor": "支持多线路"
+            "actor": "单个频道所有线路"
         };
         let urls = [];
         let JYlive= fetch(JYlivefile);
@@ -509,7 +509,7 @@ function LiveEdit(name,mode) {
             });
 
             if (state == 'ok') {
-                return 'toast://推送成功，如果不能播放则TVBOX版本不支持，单频道推送支持多线路。';
+                return 'toast://推送成功，如果不能播放则TVBOX版本不支持，单频道推送完成。';
             } else {
                 return 'toast://推送失败';
             }
