@@ -167,57 +167,26 @@ function Live() {
                 let groupname = grouplist[i]?grouplist[i]:"未分组";
                 let longClick = getMyVar('editmode','0')=="1"?[{
                     title: "删除此分组",
-                    js: $.toString((JYlivefile,groupname,lists) => {
-                        try{
-                            showLoading('删除中，请稍候...');
-                            let JYlive=fetch(JYlivefile);
-                            let JYlives = JYlive.split('\n');
-                            for(let i=0;i<JYlives.length;i++){
-                                if(JYlives[i].indexOf('#genre#')>-1&&JYlives[i].indexOf(groupname)>-1){
-                                    JYlives.splice(i,1);
-                                    i = i - 1;
-                                }else if(JYlives[i].indexOf('#genre#')==-1&&JYlives[i].indexOf(',')>-1&&lists.some(item => item.name==JYlives[i].split(',')[0].trim())){
-                                    JYlives.splice(i,1);
-                                    i = i - 1;
-                                }
-                            }
-                            writeFile(JYlivefile, JYlives.join('\n'));
-                            deleteItem(groupname);
-                            let playlist = lists.map((list)=>{
-                                return list.name;
-                            });
-                            deleteItem(playlist);
-                            hideLoading();
-                            return "toast://已删除分组 <"+groupname+"> 所有地址";
-                        }catch(e){
-                            hideLoading();
-                            log(e.message);
-                            return "toast://删除分组失败，详情查看日志";
-                        }
-                    },JYlivefile,groupname,lists)
+                    js: $.toString((groupname,lists) => {
+                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLive.js');
+                        return GroupEdit(groupname,'del',lists);
+                    },groupname,lists)
                 },{
                     title: "重命名分组",
-                    js: $.toString((JYlivefile,groupname) => {
-                        return $("","输入新的分组名").input((JYlivefile,groupname)=>{
-                            if(input){
-                                let JYlive=fetch(JYlivefile);
-                                let JYlives = JYlive.split('\n');
-                                for(let i=0;i<JYlives.length;i++){
-                                    try{
-                                        if(JYlives[i].indexOf('#genre#')>-1&&JYlives[i].indexOf(groupname)>-1){
-                                            JYlives[i] = JYlives[i].replace(groupname,input);
-                                        }
-                                    }catch(e){}
-                                }
-                                writeFile(JYlivefile, JYlives.join('\n'));
-                                updateItem(groupname,{title:input});
-                                return "toast:// <"+groupname+"> 分组改名为 <"+input+">";
-                            }else{
-                                return "toast://输入不能为空"
-                            }
-                        },JYlivefile,groupname)
-                    },JYlivefile,groupname)
+                    js: $.toString((groupname) => {
+                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLive.js');
+                        return GroupEdit(groupname,'rename');
+                    },groupname)
                 }]:[];
+                if(getItem('enabledpush','')=='1'){
+                    longClick.push({
+                        title: "推送至TVBOX",
+                        js: $.toString((groupname,lists) => {
+                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLive.js');
+                            return GroupEdit(groupname,'pushBox',lists);
+                        },groupname,lists)
+                    })
+                }
                 d.push({
                     title: index==0?'‘‘’’<b><span style="color:#3399cc">'+groupname:groupname,
                     url: $('#noLoading#').lazyRule((grouplist,groupname,guanlidata,lists) => {
@@ -268,6 +237,98 @@ function Live() {
     }
     setHomeResult(d);
 }
+
+function GroupEdit(groupname,mode,lists) {
+    let JYlivefile= "hiker://files/rules/Src/Juying/live.txt";
+    if(mode=='del'){
+        try{
+            showLoading('删除中，请稍候...');
+            let JYlive=fetch(JYlivefile);
+            let JYlives = JYlive.split('\n');
+            for(let i=0;i<JYlives.length;i++){
+                if(JYlives[i].indexOf('#genre#')>-1&&JYlives[i].indexOf(groupname)>-1){
+                    JYlives.splice(i,1);
+                    i = i - 1;
+                }else if(JYlives[i].indexOf('#genre#')==-1&&JYlives[i].indexOf(',')>-1&&lists.some(item => item.name==JYlives[i].split(',')[0].trim())){
+                    JYlives.splice(i,1);
+                    i = i - 1;
+                }
+            }
+            writeFile(JYlivefile, JYlives.join('\n'));
+            deleteItem(groupname);
+            let playlist = lists.map((list)=>{
+                return list.name;
+            });
+            deleteItem(playlist);
+            hideLoading();
+            return "toast://已删除分组 <"+groupname+"> 所有地址";
+        }catch(e){
+            hideLoading();
+            log(e.message);
+            return "toast://删除分组失败，详情查看日志";
+        }
+    }else if(mode=='rename'){
+        return $("","输入新的分组名").input((JYlivefile,groupname)=>{
+            if(input){
+                let JYlive=fetch(JYlivefile);
+                let JYlives = JYlive.split('\n');
+                for(let i=0;i<JYlives.length;i++){
+                    try{
+                        if(JYlives[i].indexOf('#genre#')>-1&&JYlives[i].indexOf(groupname)>-1){
+                            JYlives[i] = JYlives[i].replace(groupname,input);
+                        }
+                    }catch(e){}
+                }
+                writeFile(JYlivefile, JYlives.join('\n'));
+                updateItem(groupname,{title:input});
+                return "toast:// <"+groupname+"> 分组改名为 <"+input+">";
+            }else{
+                return "toast://输入不能为空"
+            }
+        },JYlivefile,groupname)
+    }else if(mode=='pushBox'){
+        let push = {
+            "name": groupname,
+            "pic": 'https://lanmeiguojiang.com/tubiao/ke/156.png',
+            "content": '聚影直播推送',
+            "director": "分组推送",
+            "actor": "只支持单线路"
+        };
+        let urls = [];
+        let JYlive= fetch(JYlivefile);
+        let JYlives = JYlive.split('\n');
+        for(let i=0;i<JYlives.length;i++){
+            try{
+                if(JYlives[i].indexOf('#genre#')==-1&&JYlives[i].indexOf(',')>-1&&JYlives[i].split(',')[0].replace(/TV-/g,'TV').replace(/\[.*\]/g,'').trim()==name){
+                    urls.push(JYlives[i].split(',')[1]);
+                }
+            }catch(e){}
+        }
+        let tvip = getItem('hikertvboxset', '');
+        if(urls.length>0){
+            push['from'] = groupname;
+            push['url'] = {urls:urls};//urls.join('#').replace(/\&/g, '＆＆');
+            var state = request(tvip + '/action', {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    //'X-Requested-With': 'XMLHttpRequest',
+                    'Referer': tvip
+                },
+                timeout: 2000,
+                body: 'do=push&url=' + JSON.stringify(push),
+                method: 'POST'
+            });
+
+            if (state == 'ok') {
+                return 'toast://推送成功，如果tvbox显示“没找到数据”可能是该链接需要密码或者当前的jar不支持。';
+            } else {
+                return 'toast://推送失败';
+            }
+        }else{
+            return 'toast://播放地址为空';
+        }
+    }
+} 
 
 function guanlidata(datalist) {
     /*
@@ -417,8 +478,8 @@ function LiveEdit(name,mode) {
             "name": name,
             "pic": 'https://lanmeiguojiang.com/tubiao/ke/156.png',
             "content": '聚影直播推送',
-            "director": "未知",
-            "actor": "未知"
+            "director": "频道推送",
+            "actor": "支持多线路"
         };
         let urls = [];
         let JYlive= fetch(JYlivefile);
@@ -433,7 +494,7 @@ function LiveEdit(name,mode) {
         let tvip = getItem('hikertvboxset', '');
         if(urls.length>0){
             push['from'] = name;
-            push['url'] = {urls:urls}//urls.join('#').replace(/\&/g, '＆＆');
+            push['url'] = {urls:urls};//urls.join('#').replace(/\&/g, '＆＆');
             var state = request(tvip + '/action', {
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
