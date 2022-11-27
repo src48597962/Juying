@@ -253,7 +253,7 @@ function JYerji(){
     }
     
     //线路部份
-    var Color1 = getItem('SrcJy$linecolor','#09c11b');
+    var Color1 = getItem('SrcJy$linecolor1','#09c11b');
     var Color2 = getItem('SrcJy$linecolor2','');
     var Color3 = getItem('SrcJy$playcolor','');
     function getHead(title,Color,strong) {
