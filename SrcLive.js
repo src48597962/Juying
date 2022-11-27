@@ -299,15 +299,17 @@ function GroupEdit(groupname,mode,lists) {
         let JYlives = JYlive.split('\n');
         for(let i=0;i<JYlives.length;i++){
             try{
-                if(JYlives[i].indexOf('#genre#')==-1&&JYlives[i].indexOf(',')>-1&&JYlives[i].split(',')[0].replace(/TV-/g,'TV').replace(/\[.*\]/g,'').trim()==name){
-                    urls.push(JYlives[i].split(',')[1]);
+                if(JYlives[i].indexOf('#genre#')==-1&&JYlives[i].indexOf(',')>-1&&lists.some(item => item.name==JYlives[i].split(',')[0].trim())){
+                    urls.push(JYlives[i].split(',')[0].trim()+'$'+JYlives[i].split(',')[1].split('#')[0]);
                 }
-            }catch(e){}
+            }catch(e){
+
+            }
         }
         let tvip = getItem('hikertvboxset', '');
         if(urls.length>0){
             push['from'] = groupname;
-            push['url'] = {urls:urls};//urls.join('#').replace(/\&/g, '＆＆');
+            push['url'] = urls.join('#').replace(/\&/g, '＆＆');
             var state = request(tvip + '/action', {
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
@@ -320,7 +322,7 @@ function GroupEdit(groupname,mode,lists) {
             });
 
             if (state == 'ok') {
-                return 'toast://推送成功，如果tvbox显示“没找到数据”可能是该链接需要密码或者当前的jar不支持。';
+                return 'toast://推送成功，如果不能播放则TVBOX版本不支持，分组推送只支持单线路。';
             } else {
                 return 'toast://推送失败';
             }
@@ -507,7 +509,7 @@ function LiveEdit(name,mode) {
             });
 
             if (state == 'ok') {
-                return 'toast://推送成功，如果tvbox显示“没找到数据”可能是该链接需要密码或者当前的jar不支持。';
+                return 'toast://推送成功，如果不能播放则TVBOX版本不支持，单频道推送支持多线路。';
             } else {
                 return 'toast://推送失败';
             }
