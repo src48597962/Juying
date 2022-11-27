@@ -433,7 +433,7 @@ function LiveEdit(name,mode) {
         let tvip = getItem('hikertvboxset', '');
         if(urls.length>0){
             push['from'] = name;
-            push['url'] = urls.join('#').replace(/\&/g, '＆＆');
+            push['url'] = {urls:urls}//urls.join('#').replace(/\&/g, '＆＆');
             var state = request(tvip + '/action', {
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
