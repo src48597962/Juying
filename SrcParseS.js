@@ -98,7 +98,11 @@ var SrcParseS = {
                             url = base64Decode(url);
                             if(getItem('enabledpush','')=='1'){
                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
-                                return pushBoxPlay({urls:url.split(";{")[0],headers:"{"+url.split(";{")[1]});
+                                let pushurl = [];
+                                pushurl.push(url.split(";{")[0].join('#').replace(/\&/g, '＆＆'));
+                                let pushhead = [];
+                                pushhead.push("{"+url.split(";{")[1]);
+                                return pushBoxPlay({urls:pushurl,headers:pushhead});
                             }else{
                                 if (getMyVar('SrcM3U8', '1') == "1"&&url.indexOf('.m3u8')>-1) {
                                     return cacheM3u8(url.split(";{")[0], {timeout: 2000})+"#ignoreImg=true##isVideo=true#;{"+url.split(";{")[1];
@@ -1108,6 +1112,7 @@ function pushBoxPlay(urls) {
     let push = storage0.getMyVar('movieinfo')||{};
     clearMyVar('movieinfo');
     push['url'] = urls;//urls.join('#').replace(/\&/g, '＆＆');
+    log(push);
     let tvip = getItem('hikertvboxset', '');
     let state = request(tvip + '/action', {
         headers: {
