@@ -68,7 +68,16 @@ var erjimenu = [
             xunmi(name);
         }, MY_PARAMS.name),
         pic_url: 'https://lanmeiguojiang.com/tubiao/messy/25.svg',
-        col_type: 'icon_small_3'
+        col_type: 'icon_small_3',
+        extra: {
+            key: MY_PARAMS.name,
+            longClick: {
+                title: "云盘君搜索",
+                js: $.toString(() => {
+                    return "hiker://page/detail?rule=云盘君";
+                })
+            }
+        }
     }
 ]
 
