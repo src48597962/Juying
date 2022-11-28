@@ -71,12 +71,17 @@ var erjimenu = [
         col_type: 'icon_small_3',
         extra: {
             key: MY_PARAMS.name,
-            longClick: {
-                title: "云盘君搜索",
+            longClick: [{
+                title: "云盘君",
                 js: $.toString(() => {
                     return "hiker://page/soup?rule=云盘君";
                 })
-            }
+            },{
+                title: "AI影搜",
+                js: $.toString(() => {
+                    return "hiker://page/soup?p=fypage?rule=AI影搜";
+                })
+            }]
         }
     }
 ]
