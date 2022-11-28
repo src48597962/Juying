@@ -92,29 +92,36 @@ var SrcParseS = {
                 if (!exclude.test(urls[i]) && contain.test(urls[i]) && excludeurl.indexOf(urls[i])==-1 && tc==1) {
                     fba.clearVar('Srcgetparse');
                     fba.log("嗅探成功>"+urls[i]);
+                    fba.hideLoading();
                     //return urls[i]+'#isVideo=true#';
                     if(fy_bridge_app.getHeaderUrl&&vipUrl.indexOf("=http")==-1)
                         return $$$("#noLoading#").lazyRule((url) => {
                             url = base64Decode(url);
-                            if(getItem('enabledpush','')=='1'){
+                            /*if(getItem('enabledpush','')=='1'){
                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
                                 let pushurl = [];
                                 pushurl.push(url.split(";{")[0].replace(/\&/g, '＆＆'));
-                                let pushhead = [];
-                                //pushhead.push(JSON.parse("{"+url.split(";{")[1]));,headers:pushhead
                                 return pushBoxPlay({urls:pushurl});
-                            }else{
+                            }else{*/
                                 if (getMyVar('SrcM3U8', '1') == "1"&&url.indexOf('.m3u8')>-1) {
                                     return cacheM3u8(url.split(";{")[0], {timeout: 2000})+"#ignoreImg=true##isVideo=true#;{"+url.split(";{")[1];
                                 }else{
                                     return url.replace(";{", "#ignoreImg=true##isVideo=true#;{");
                                 }
-                            }
+                            //}
                         }, fy_bridge_app.base64Encode(fy_bridge_app.getHeaderUrl(urls[i])));
                     else {
                         return $$$("#noLoading#").lazyRule((url, formatUrl) => {
                             //url = url.replace(/http.*?\?url=/, '');
-                            return formatUrl(url)+"#ignoreImg=true#";
+                            /*if(getItem('enabledpush','')=='1'){
+                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
+                                let pushurl = [];
+                                pushurl.push(url);
+                                return pushBoxPlay({urls:pushurl});
+                            }else{
+                                */
+                                return formatUrl(url)+"#ignoreImg=true#";
+                            //}
                         }, urls[i], formatUrl);
                     }
                 }
@@ -1106,13 +1113,13 @@ var SrcParseS = {
         }
     }
 }
+/*
 //推送tvbox
 function pushBoxPlay(urls) {
     clearMyVar('enabledpush');
     let push = storage0.getMyVar('movieinfo')||{};
     clearMyVar('movieinfo');
     push['url'] = urls;//urls.join('#').replace(/\&/g, '＆＆');
-    log(push);
     let tvip = getItem('hikertvboxset', '');
     let state = request(tvip + '/action', {
         headers: {
@@ -1130,3 +1137,4 @@ function pushBoxPlay(urls) {
         return 'toast://推送失败';
     }
 }
+*/
