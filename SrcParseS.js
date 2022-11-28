@@ -92,7 +92,6 @@ var SrcParseS = {
                 if (!exclude.test(urls[i]) && contain.test(urls[i]) && excludeurl.indexOf(urls[i])==-1 && tc==1) {
                     fba.clearVar('Srcgetparse');
                     fba.log("嗅探成功>"+urls[i]);
-                    fba.hideLoading();
                     //return urls[i]+'#isVideo=true#';
                     if(fy_bridge_app.getHeaderUrl&&vipUrl.indexOf("=http")==-1)
                         return $$$("#noLoading#").lazyRule((url) => {
@@ -1131,6 +1130,7 @@ function pushBoxPlay(urls) {
         body: 'do=push&url=' + JSON.stringify(push),
         method: 'POST'
     });
+    hideLoading();
     if (state == 'ok') {
         return 'toast://推送成功，如果不能播放则TVBOX版本不支持，单集点播推送完成。';
     } else {
