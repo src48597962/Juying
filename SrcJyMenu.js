@@ -79,7 +79,7 @@ var erjimenu = [
             },{
                 title: "AI影搜",
                 js: $.toString(() => {
-                    return "hiker://page/soup?p=fypage?rule=AI影搜";
+                    return "hiker://page/soup?rule=AI影搜";
                 })
             }]
         }
