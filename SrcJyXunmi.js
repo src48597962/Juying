@@ -1308,10 +1308,28 @@ function xunmierji(type,ua) {
                 }else{
                     //网页
                 }
+                let extra = {
+                    id: playurl,
+                    referer: playurl,
+                    jsLoadingInject: true,
+                    blockRules: ['.m4a', '.mp3', '.gif', '.jpeg', '.jpg', '.ico', '.png', 'hm.baidu.com', '/ads/*.js', 'cnzz.com']
+                }
+                if(getMyVar('superwebM3U8') == "1"){
+                    extra.cacheM3u8 = true;
+                }
+                if(getItem('enabledpush','')=='1'){
+                    extra.longClick = [{
+                        title: "推送至TVBOX",
+                        js: $.toString((play) => {
+                            putMyVar('pushboxplay','1');
+                            return play;
+                        },playurl + DTJX)
+                    }]
+                }
                 d.push({
                     title: getHead(playtitle.replace(/第|集|话|期|-|new|最新|新/g, ''), Color3),
                     url: playurl + DTJX,
-                    extra: { id: playurl, referer: playurl, jsLoadingInject: true, cacheM3u8: getMyVar('superwebM3U8')=="1"?true:false, blockRules: ['.m4a','.mp3','.gif','.jpeg','.jpg','.ico','.png','hm.baidu.com','/ads/*.js','cnzz.com'] },
+                    extra: extra,
                     col_type: list.length > 4 && len < 7 ? 'text_4' : len > 20 ? 'text_1' :'text_3'
                 });
             } else {
