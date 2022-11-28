@@ -99,9 +99,10 @@ var SrcParseS = {
                             if(getItem('enabledpush','')=='1'){
                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
                                 let pushurl = [];
-                                pushurl.push(url.split(";{")[0].join('#').replace(/\&/g, '＆＆'));
+                                pushurl.push(url.split(";{")[0].replace(/\&/g, '＆＆'));
                                 let pushhead = [];
                                 pushhead.push("{"+url.split(";{")[1]);
+                                log({urls:pushurl,headers:pushhead});
                                 return pushBoxPlay({urls:pushurl,headers:pushhead});
                             }else{
                                 if (getMyVar('SrcM3U8', '1') == "1"&&url.indexOf('.m3u8')>-1) {
