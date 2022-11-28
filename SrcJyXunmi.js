@@ -1215,7 +1215,7 @@ function xunmierji(type,ua) {
     
     //推送tvbox
     if(getItem('enabledpush','')=='1' && lists.length>0){
-        let push = {
+        var movieinfo = {
             "name": MY_PARAMS.title||'聚影',
             "pic": pic.split('@')[0],
             "content": desc,
@@ -1271,7 +1271,7 @@ function xunmierji(type,ua) {
                     }
                 }
                 return 'toast://所有线路均不支持推送列表';
-            }, push, tabs, lists, tvip),
+            }, movieinfo, tabs, lists, tvip),
             col_type: 'scroll_button'
         })
     }
@@ -1320,13 +1320,18 @@ function xunmierji(type,ua) {
                     extra.cacheM3u8 = true;
                 }
                 if(getItem('enabledpush','')=='1'){
-                    extra.longClick = [{
-                        title: "推送至TVBOX",
-                        js: $.toString((play) => {
-                            putMyVar('pushboxplay','1');
-                            return play;
-                        },playurl + DTJX)
-                    }]
+                    try{
+                        movieinfo['from'] = playtitle;
+                        extra.longClick = [{
+                            title: "推送至TVBOX",
+                            js: $.toString((play,movieinfo) => {
+                                putMyVar('pushboxplay','1');
+                                storage0.putMyVar('movieinfo',movieinfo);
+                                return play;
+                            },playurl + DTJX,movieinfo)
+                        }]
+                    }catch(e){
+                    }
                 }
                 d.push({
                     title: getHead(playtitle.replace(/第|集|话|期|-|new|最新|新/g, ''), Color3),
