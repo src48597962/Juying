@@ -1298,7 +1298,7 @@ function xunmierji(type,ua) {
                     var playtitle = list[j].split('$')[0];
                     var playurl = list[j].split('$')[1];
                     var DTJX = $("").lazyRule(() => {
-                        if(getMyVar('superweb')=="1" && getMyVar('pushboxplay')!="1"){
+                        if(getMyVar('superweb')=="1"){// && getMyVar('pushboxplay')!="1"){
                             return 'video://'+input;
                         }else{
                             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
@@ -1319,6 +1319,7 @@ function xunmierji(type,ua) {
                 if(getMyVar('superwebM3U8') == "1"){
                     extra.cacheM3u8 = true;
                 }
+                /*
                 if(getItem('enabledpush','')=='1'){
                     try{
                         movieinfo['from'] = playtitle;
@@ -1333,6 +1334,7 @@ function xunmierji(type,ua) {
                     }catch(e){
                     }
                 }
+                */
                 d.push({
                     title: getHead(playtitle.replace(/第|集|话|期|-|new|最新|新/g, ''), Color3),
                     url: playurl + DTJX,
