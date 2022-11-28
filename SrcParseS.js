@@ -95,8 +95,10 @@ var SrcParseS = {
                     //return urls[i]+'#isVideo=true#';
                     if(fy_bridge_app.getHeaderUrl&&vipUrl.indexOf("=http")==-1)
                         return $$$("#noLoading#").lazyRule((url) => {
-                            if(getItem('enabledpush','')=='1'){
                             url = base64Decode(url);
+                            if(getItem('enabledpush','')=='1'){
+                                pushBoxPlay({urls:url.split(";{")[0],headers:"{"+url.split(";{")[1]});
+                            }
                             if (getMyVar('SrcM3U8', '1') == "1"&&url.indexOf('.m3u8')>-1) {
                                 return cacheM3u8(url.split(";{")[0], {timeout: 2000})+"#ignoreImg=true##isVideo=true#;{"+url.split(";{")[1];
                             }else{
@@ -1100,14 +1102,9 @@ var SrcParseS = {
 }
 //推送tvbox
 function pushBoxPlay(urls) {
-    let push = {
-        "name": name,
-        "pic": 'https://lanmeiguojiang.com/tubiao/ke/156.png',
-        "content": '聚影直播推送',
-        "director": "频道推送",
-        "actor": "单个频道所有线路",
-        "from": "线路"
-    };
+    clearMyVar('enabledpush');
+    let push = storage0.getMyVar('movieinfo')||{};
+    clearMyVar('movieinfo');
     push['url'] = urls;//urls.join('#').replace(/\&/g, '＆＆');
     let tvip = getItem('hikertvboxset', '');
     let state = request(tvip + '/action', {
