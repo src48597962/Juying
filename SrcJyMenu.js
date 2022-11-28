@@ -74,7 +74,7 @@ var erjimenu = [
             longClick: {
                 title: "云盘君搜索",
                 js: $.toString(() => {
-                    return "hiker://page/detail?rule=云盘君";
+                    return "hiker://page/soup?rule=云盘君";
                 })
             }
         }
