@@ -101,8 +101,8 @@ var SrcParseS = {
                                 let pushurl = [];
                                 pushurl.push(url.split(";{")[0].replace(/\&/g, '＆＆'));
                                 let pushhead = [];
-                                pushhead.push(JSON.parse("{"+url.split(";{")[1]));
-                                return pushBoxPlay({urls:pushurl,headers:pushhead});
+                                //pushhead.push(JSON.parse("{"+url.split(";{")[1]));,headers:pushhead
+                                return pushBoxPlay({urls:pushurl});
                             }else{
                                 if (getMyVar('SrcM3U8', '1') == "1"&&url.indexOf('.m3u8')>-1) {
                                     return cacheM3u8(url.split(";{")[0], {timeout: 2000})+"#ignoreImg=true##isVideo=true#;{"+url.split(";{")[1];
