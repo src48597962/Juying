@@ -101,8 +101,7 @@ var SrcParseS = {
                                 let pushurl = [];
                                 pushurl.push(url.split(";{")[0].replace(/\&/g, '＆＆'));
                                 let pushhead = [];
-                                pushhead.push("{"+url.split(";{")[1]);
-                                log({urls:pushurl,headers:pushhead});
+                                pushhead.push(JSON.parse("{"+url.split(";{")[1]));
                                 return pushBoxPlay({urls:pushurl,headers:pushhead});
                             }else{
                                 if (getMyVar('SrcM3U8', '1') == "1"&&url.indexOf('.m3u8')>-1) {
