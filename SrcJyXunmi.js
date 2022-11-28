@@ -1298,7 +1298,7 @@ function xunmierji(type,ua) {
                     var playtitle = list[j].split('$')[0];
                     var playurl = list[j].split('$')[1];
                     var DTJX = $("").lazyRule(() => {
-                        if(getMyVar('superweb')=="1"){
+                        if(getMyVar('superweb')=="1" && getMyVar('pushboxplay')!="1"){
                             return 'video://'+input;
                         }else{
                             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
@@ -1310,9 +1310,11 @@ function xunmierji(type,ua) {
                 }
                 let extra = {
                     id: playurl,
-                    referer: playurl,
                     jsLoadingInject: true,
                     blockRules: ['.m4a', '.mp3', '.gif', '.jpeg', '.jpg', '.ico', '.png', 'hm.baidu.com', '/ads/*.js', 'cnzz.com']
+                }
+                if(!/qq|youku|mgtv|bili|qiyi|sohu|pptv/.test(playurl) && /html/.test(playurl)){
+                    extra.referer = playurl;
                 }
                 if(getMyVar('superwebM3U8') == "1"){
                     extra.cacheM3u8 = true;
