@@ -97,12 +97,14 @@ var SrcParseS = {
                         return $$$("#noLoading#").lazyRule((url) => {
                             url = base64Decode(url);
                             if(getItem('enabledpush','')=='1'){
-                                pushBoxPlay({urls:url.split(";{")[0],headers:"{"+url.split(";{")[1]});
-                            }
-                            if (getMyVar('SrcM3U8', '1') == "1"&&url.indexOf('.m3u8')>-1) {
-                                return cacheM3u8(url.split(";{")[0], {timeout: 2000})+"#ignoreImg=true##isVideo=true#;{"+url.split(";{")[1];
+                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
+                                return pushBoxPlay({urls:url.split(";{")[0],headers:"{"+url.split(";{")[1]});
                             }else{
-                                return url.replace(";{", "#ignoreImg=true##isVideo=true#;{");
+                                if (getMyVar('SrcM3U8', '1') == "1"&&url.indexOf('.m3u8')>-1) {
+                                    return cacheM3u8(url.split(";{")[0], {timeout: 2000})+"#ignoreImg=true##isVideo=true#;{"+url.split(";{")[1];
+                                }else{
+                                    return url.replace(";{", "#ignoreImg=true##isVideo=true#;{");
+                                }
                             }
                         }, fy_bridge_app.base64Encode(fy_bridge_app.getHeaderUrl(urls[i])));
                     else {
