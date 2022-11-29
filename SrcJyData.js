@@ -769,7 +769,16 @@ function JYyiji(){
                 extra: {
                     pic: list[i].v_picurl,
                     name: list[i].name,
-                    datasource: getItem('JYdatasource', 'sougou')
+                    datasource: getItem('JYdatasource', 'sougou'),
+                    longClick: [{
+                        title: "快速聚搜",
+                        js: $.toString((name) => {
+                            return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
+                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
+                                xunmi(name);
+                            }, name)
+                        },list[i].name)
+                    }]
                 }
             });
         }
@@ -785,7 +794,16 @@ function JYyiji(){
                 extra: {
                     pic: img,
                     name: list[i].title,
-                    datasource: getItem('JYdatasource', 'sougou')
+                    datasource: getItem('JYdatasource', 'sougou'),
+                    longClick: [{
+                        title: "快速聚搜",
+                        js: $.toString((name) => {
+                            return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
+                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
+                                xunmi(name);
+                            }, name)
+                        },list[i].title)
+                    }]
                 }
             });
         }
