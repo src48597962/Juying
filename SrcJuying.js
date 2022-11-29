@@ -629,10 +629,10 @@ function sousuo() {
 
 //版本检测
 function Version() {
-    var nowVersion = "6.0";//现在版本 
+    var nowVersion = "6.1";//现在版本 
     var nowtime = Date.now();
     var oldtime = parseInt(getItem('VersionChecktime','0').replace('time',''));
-    if (getMyVar('SrcJuying-VersionCheck', '0') == '0'){// && nowtime > (oldtime+12*60*60*1000)) {
+    if (getMyVar('SrcJuying-VersionCheck', '0') == '0' && nowtime > (oldtime+12*60*60*1000)) {
         try {
             eval(request(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcTmplVersion.js'))
             if (parseFloat(newVersion.SrcJuying) > parseFloat(nowVersion)) {
@@ -643,7 +643,7 @@ function Version() {
                         setItem('VersionChecktime', nowtime+'time');
                         deleteCache();
                         refreshPage();
-                    },nowtime),//`deleteCache();refreshPage();`, 
+                    },nowtime),
                     cancel:''
                 })
                 log('检测到新版本！\nV'+newVersion.SrcJuying+'版本》'+newVersion.SrcJuyingdesc[newVersion.SrcJuying]);
@@ -651,7 +651,6 @@ function Version() {
             putMyVar('SrcJuying-Version', '-V'+newVersion.SrcJuying);
         } catch (e) { }
         putMyVar('SrcJuying-VersionCheck', '1');
-        //setItem('VersionChecktime', nowtime+'time');
     }else{
         putMyVar('SrcJuying-Version', '-V'+nowVersion);
     }
