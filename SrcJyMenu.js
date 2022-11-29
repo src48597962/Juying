@@ -74,12 +74,12 @@ var erjimenu = [
             longClick: [{
                 title: "云盘君",
                 js: $.toString(() => {
-                    return "hiker://page/soup?rule=云盘君";
+                    return "hiker://page/soup?rule=云盘君#noHistory#";
                 })
             },{
                 title: "AI影搜",
                 js: $.toString(() => {
-                    return "hiker://page/soup?p=fypage&rule=AI影搜";
+                    return "hiker://page/soup?p=fypage&rule=AI影搜#noHistory#";
                 })
             }]
         }
