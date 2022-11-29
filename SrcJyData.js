@@ -57,13 +57,38 @@ let yijimenu = [
         col_type: 'icon_5'
     },
     {
-        title: "展示",
-        url: $("hiker://empty##fypage#noRecordHistory##noHistory#").rule(() => {
+        title: getItem('zhanshibutton')=="history"?"历史":"展示",
+        url: getItem('zhanshibutton')=="history"?"hiker://history":$("hiker://empty##fypage#noRecordHistory##noHistory#").rule(() => {
                 require(config.依赖);
                 jiekouyiji();
             }),
         pic_url: 'https://lanmeiguojiang.com/tubiao/more/105.png',
-        col_type: 'icon_5'
+        col_type: 'icon_5',
+        extra: {
+            id: "zhanshibutton",
+            longClick: [{
+                title: "切换按钮功能",
+                js: $.toString(() => {
+                    if(getItem('zhanshibutton')=="history"){
+                        clearItem('zhanshibutton');
+                        updateItem("zhanshibutton", {
+                            title: "展示",
+                            url: $("hiker://empty##fypage#noRecordHistory##noHistory#").rule(() => {
+                                require(config.依赖);
+                                jiekouyiji();
+                            })
+                        });
+                    }else{
+                        setItem('zhanshibutton','history');
+                        updateItem("zhanshibutton", {
+                            title: "历史",
+                            url: "hiker://history"
+                        });
+                    }
+                    return "toast://已切换"
+                },JYconfig,cfgfile)
+            }]
+        }
     },
     {
         title: "直播",
