@@ -2333,7 +2333,40 @@ function extension(){
         col_type: 'text_1',
         url: 'toast://哥就是帅',
         extra:{
-            lineVisible:false
+            lineVisible:false,
+            longClick: [{
+                title: "删除此分组",
+                js: $.toString(() => {
+                    return $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
+                        setPageTitle("💝 关于聚影");
+                        var d = [];
+                        try{
+                            eval(fetchCache(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcTmplVersion.js', 1, { timeout:2000 }))
+                            var SrcJuyingdesc = newVersion.SrcJuyingdesc;
+                        }catch(e){
+
+                        }
+                        if(SrcJuyingdesc){
+                            d.push({
+                                title: '📑 更新日志',
+                                col_type: "rich_text"
+                            });
+                            d.push({
+                                col_type: "line"
+                            });
+                            var updatedesc = [];
+                            for(let key in SrcJuyingdesc){
+                                updatedesc.push('版本V'+key+(parseFloat(key) > parseFloat(getMyVar('SrcJuying-Version','').replace('-V',''))?"(内测)":"")+'：'+SrcJuyingdesc[key]);
+                            }
+                            d.push({
+                                title: updatedesc.reverse().join('<br>'),
+                                col_type: "rich_text"
+                            });
+                        }
+                        setHomeResult(d);
+                    })
+                })
+            }]
         }
     });
     d.push({
