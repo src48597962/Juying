@@ -1282,7 +1282,7 @@ function xunmierji(type,ua) {
         function playlist(lx, len) {//定义选集列表生成
             if (lx == '1') {
                 if (/v1|app|v2|iptv|cms/.test(type)) {
-                    var playtitle = list[j].split('$')[0];
+                    var playtitle = list[j].split('$')[0].trim();
                     if (/iptv/.test(type)) {
                         var playurl = list[j].split('$')[1].split('=')[1];
                         parse_api = list[j].split('$')[1].split('=')[0]+"=";
@@ -1295,7 +1295,7 @@ function xunmierji(type,ua) {
                         return SrcParseS.聚影(input);
                     });
                 }else if (/xpath|biubiu|custom/.test(type)) {
-                    var playtitle = list[j].split('$')[0];
+                    var playtitle = list[j].split('$')[0].trim();
                     var playurl = list[j].split('$')[1];
                     var DTJX = $("").lazyRule(() => {
                         if(getMyVar('superweb')=="1"){// && getMyVar('pushboxplay')!="1"){
@@ -1354,7 +1354,7 @@ function xunmierji(type,ua) {
             playlist('0');
         } else {
             if (/v1|app|v2|iptv|cms|xpath|biubiu|custom/.test(type)) {
-                var listone = list[0].split('$')[0];
+                var listone = list[0].split('$')[0].trim();
                 try{
                     let list1 = list[0].split('$')[0];
                     let list2 = list[list.length-1].split('$')[0];
