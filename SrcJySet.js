@@ -2335,7 +2335,7 @@ function extension(){
         extra:{
             lineVisible:false,
             longClick: [{
-                title: "删除此分组",
+                title: "更新日志",
                 js: $.toString(() => {
                     return $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
                         setPageTitle("💝 关于聚影");
@@ -2356,7 +2356,9 @@ function extension(){
                             });
                             var updatedesc = [];
                             for(let key in SrcJuyingdesc){
-                                updatedesc.push('版本V'+key+(parseFloat(key) > parseFloat(getMyVar('SrcJuying-Version','').replace('-V',''))?"(内测)":"")+'：'+SrcJuyingdesc[key]);
+                                if(updatedesc.length<4){
+                                    updatedesc.push('版本V'+key+(parseFloat(key) > parseFloat(getMyVar('SrcJuying-Version','').replace('-V',''))?"(内测)":"")+'：'+SrcJuyingdesc[key]);
+                                }
                             }
                             d.push({
                                 title: updatedesc.reverse().join('<br>'),
