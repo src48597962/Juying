@@ -2356,12 +2356,10 @@ function extension(){
                             });
                             var updatedesc = [];
                             for(let key in SrcJuyingdesc){
-                                if(updatedesc.length<4){
-                                    updatedesc.push('版本V'+key+(parseFloat(key) > parseFloat(getMyVar('SrcJuying-Version','').replace('-V',''))?"(内测)":"")+'：'+SrcJuyingdesc[key]);
-                                }
+                                updatedesc.push('版本V'+key+(parseFloat(key) > parseFloat(getMyVar('SrcJuying-Version','').replace('-V',''))?"(内测)":"")+'：'+SrcJuyingdesc[key]);
                             }
                             d.push({
-                                title: updatedesc.reverse().join('<br>'),
+                                title: updatedesc.reverse().slice(0,3).join('<br>'),
                                 col_type: "rich_text"
                             });
                         }
