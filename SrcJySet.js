@@ -2335,7 +2335,7 @@ function extension(){
         extra:{
             lineVisible:false,
             longClick: [{
-                title: "更新日志",
+                title: "📑更新日志",
                 js: $.toString(() => {
                     return $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
                         setPageTitle("💝 关于聚影");
