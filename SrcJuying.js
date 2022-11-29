@@ -639,7 +639,11 @@ function Version() {
                 confirm({
                     title:'发现新版本，是否更新？', 
                     content:nowVersion+'=>'+newVersion.SrcJuying+'\n'+newVersion.SrcJuyingdesc[newVersion.SrcJuying], 
-                    confirm:`deleteCache();refreshPage();`, 
+                    confirm: $.toString((nowtime) => {
+                        setItem('VersionChecktime', nowtime+'time');
+                        deleteCache();
+                        refreshPage();
+                    },nowtime),//`deleteCache();refreshPage();`, 
                     cancel:''
                 })
                 log('检测到新版本！\nV'+newVersion.SrcJuying+'版本》'+newVersion.SrcJuyingdesc[newVersion.SrcJuying]);
@@ -647,7 +651,7 @@ function Version() {
             putMyVar('SrcJuying-Version', '-V'+newVersion.SrcJuying);
         } catch (e) { }
         putMyVar('SrcJuying-VersionCheck', '1');
-        setItem('VersionChecktime', nowtime+'time');
+        //setItem('VersionChecktime', nowtime+'time');
     }else{
         putMyVar('SrcJuying-Version', '-V'+nowVersion);
     }
