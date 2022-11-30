@@ -518,14 +518,11 @@ function SRCSet() {
             }
             let datalist2 = [];
             grouplist = uniq(grouplist);
-            try{
-                let grouparr = storage0.getItem('grouparr')||[];
-                log(grouparr);
-                grouparr = grouparr.filter((item1) => grouplist.some((item2) => item1 === item2)).concat(grouplist);
-                grouplist = uniq(grouparr);
-                log(grouplist);
-                storage0.setItem('grouparr',grouplist);
-            }catch(e){}
+
+            let grouparr = storage0.getItem('grouparr')||[];
+            grouparr = grouparr.filter((item1) => grouplist.some((item2) => item1 === item2)).concat(grouplist);
+            grouplist = uniq(grouparr);
+            storage0.setItem('grouparr',grouplist);
                 
             for(var i in grouplist){
                 let groupname = grouplist[i];
@@ -563,7 +560,16 @@ function SRCSet() {
                     }
                 });
             }
-            if(datalist2.length>0){datalist = datalist2;}
+            if(datalist2.length>0){
+                datalist = datalist2;
+            }else{
+                datalist = datalist.sort((a,b)=>{
+                    let agroup = a.group||a.type;
+                    let bgroup = b.group||b.type;
+
+                    return grouparr.indexOf(agroup)-grouparr.indexOf(bgroup)
+                });
+            }
         }
         let gldatalist = guanlidata(datalist);
         d = d.concat(gldatalist);
