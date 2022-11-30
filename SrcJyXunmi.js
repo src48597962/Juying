@@ -219,7 +219,7 @@ function xunmi(name,data,ishkss) {
             }
         }
     }
-    log(datalist);
+
     var count = datalist.length;
     var beresults = [];
     var beerrors = [];
@@ -564,7 +564,7 @@ function xunmi(name,data,ishkss) {
                 results: beresults,
                 errors: beerrors
             }
-        });
+        },xunminum);
         var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
         var datafile = fetch(filepath);
         eval("var jiekoulist=" + datafile+ ";");
