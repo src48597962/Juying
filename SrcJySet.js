@@ -518,15 +518,23 @@ function SRCSet() {
             }
             let datalist2 = [];
             grouplist = uniq(grouplist);
+            try{
+                let grouparr = storage0.getItem('grouparr');
+                grouparr = grouparr.filter((item1) => grouplist.some((item2) => item1 === item2)).concat(grouplist);
+                grouplist = uniq(grouparr);
+                storage0.setItem('grouparr',grouplist);
+            }catch(e){}
+                
             for(var i in grouplist){
+                let groupname = grouplist[i];
                 var lists = datalist.filter(item => {
-                    return item.group==grouplist[i] || !item.group&&item.type==grouplist[i];
+                    return item.group==groupname || !item.group&&item.type==groupname;
                 })
-                if(grouplist[i]==getMyVar('groupmenu')){
+                if(groupname==getMyVar('groupmenu')){
                     datalist2 = lists;
                 }
                 d.push({
-                    title: grouplist[i]+'('+lists.length+')',
+                    title: groupname+'('+lists.length+')',
                     url: $('#noLoading#').lazyRule((guanlidata,lists,groupmenu)=>{
                             if(lists.length>0){
                                 deleteItemByCls('guanlidatalist');
@@ -536,10 +544,20 @@ function SRCSet() {
                                 putMyVar('groupmenu',groupmenu);
                             }
                             return "hiker://empty";
-                        },guanlidata,lists,grouplist[i]),
+                        },guanlidata,lists,groupname),
                     col_type: "scroll_button",
                     extra: {
-                        id: "grouplist"
+                        id: groupname,
+                        longClick: [{
+                            title: "⏫分组置顶",
+                            js: $.toString((groupname) => {
+                                let grouparr = storage0.getItem('grouparr');
+                                grouparr.unshift(grouparr.splice(grouparr.indexOf(groupname), 1)[0]);
+                                storage0.setItem('grouparr',grouparr);
+                                refreshPage(false);
+                                return "hiker://empty";
+                            },groupname)
+                        }]
                     }
                 });
             }
