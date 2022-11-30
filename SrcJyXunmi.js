@@ -516,7 +516,6 @@ function xunmi(name,data,ishkss) {
         };
 
         let bedatalist = datalist.slice(0,xunminum);
-        log(bedatalist);
         let Jklist = bedatalist.map((parse)=>{
             return {
                 func: task,
