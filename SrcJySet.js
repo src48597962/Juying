@@ -520,8 +520,10 @@ function SRCSet() {
             grouplist = uniq(grouplist);
             try{
                 let grouparr = storage0.getItem('grouparr');
+                log(grouparr);
                 grouparr = grouparr.filter((item1) => grouplist.some((item2) => item1 === item2)).concat(grouplist);
                 grouplist = uniq(grouparr);
+                log(grouplist);
                 storage0.setItem('grouparr',grouplist);
             }catch(e){}
                 
