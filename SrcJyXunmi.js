@@ -514,7 +514,7 @@ function xunmi(name,data,ishkss) {
             }
             return {result:0, url:ssurl, apiurl:url_api, error:geterror};
         };
-
+        log(datalist.slice(0,5));
         let Jklist = datalist.map((parse)=>{
             return {
                 func: task,
@@ -564,7 +564,7 @@ function xunmi(name,data,ishkss) {
                 results: beresults,
                 errors: beerrors
             }
-        },xunminum);
+        });
         var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
         var datafile = fetch(filepath);
         eval("var jiekoulist=" + datafile+ ";");
