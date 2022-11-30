@@ -90,6 +90,12 @@ function xunmi(name,data,ishkss) {
         return temp;
     }
     grouplist = uniq(grouplist);
+
+    let grouparr = storage0.getItem('grouparr')||[];
+    grouparr = grouparr.filter((item1) => grouplist.some((item2) => item1 === item2)).concat(grouplist);
+    grouplist = uniq(grouparr);
+    storage0.setItem('grouparr',grouplist);
+
     if(xunmigroup&&grouplist.indexOf(xunmigroup)>-1&&grouplist.indexOf(xunmigroup)!=0){
         for (var i = 0; i < grouplist.length; i++) {
             if (grouplist[i] == xunmigroup) {
@@ -197,6 +203,12 @@ function xunmi(name,data,ishkss) {
     
     if(datalist2.length>0){
         datalist = datalist2;
+    }else{
+        datalist = datalist.sort((a,b)=>{
+            let agroup = a.group||a.type;
+            let bgroup = b.group||b.type;
+            return grouparr.indexOf(agroup)-grouparr.indexOf(bgroup)
+        });
     }
 
     if(getMyVar('selectgroup','a').indexOf('失败待处理')==-1&&xunmigroup!="失败待处理"&&grouplist.length>1){
