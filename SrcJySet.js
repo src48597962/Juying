@@ -562,14 +562,15 @@ function SRCSet() {
             }
             if(datalist2.length>0){
                 datalist = datalist2;
-            }else{
+            }
+            /*按分组排序进行展示接口，在管理中不需要
+            else{
                 datalist = datalist.sort((a,b)=>{
                     let agroup = a.group||a.type;
                     let bgroup = b.group||b.type;
-
                     return grouparr.indexOf(agroup)-grouparr.indexOf(bgroup)
                 });
-            }
+            }*/
         }
         let gldatalist = guanlidata(datalist);
         d = d.concat(gldatalist);
