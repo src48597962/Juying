@@ -514,7 +514,8 @@ function xunmi(name,data,ishkss) {
             }
             return {result:0, url:ssurl, apiurl:url_api, error:geterror};
         };
-        log(datalist.length);
+        //log(datalist.length);
+        datalist = datalist.slice(0,xunminum);
         let Jklist = datalist.map((parse)=>{
             return {
                 func: task,
