@@ -519,7 +519,7 @@ function SRCSet() {
             let datalist2 = [];
             grouplist = uniq(grouplist);
             try{
-                let grouparr = storage0.getItem('grouparr');
+                let grouparr = storage0.getItem('grouparr')||[];
                 log(grouparr);
                 grouparr = grouparr.filter((item1) => grouplist.some((item2) => item1 === item2)).concat(grouplist);
                 grouplist = uniq(grouparr);
