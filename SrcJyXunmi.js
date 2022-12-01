@@ -473,7 +473,7 @@ function xunmi(name,data,ishkss) {
                             let vodname = list.vodname
                             let vodpic = list.vodpic?list.vodpic.replace(/http.*\/tu\.php\?tu=|\/img\.php\?url=| |\/tu\.php\?tu=/g,'') + "@Referer=":"https://www.xawqxh.net/mxtheme/images/loading.gif@Referer=";
                             let voddesc = list.voddesc;
-                            let appname = '‘‘’’<font color=#f13b66a>'+obj.name+'</font>'+' ('+obj.type+')'+(obj.group&&obj.group!=obj.type?' ['+obj.group+']':'');
+                            let appname = '‘‘’’<font color=#f13b66a>聚影√ · '+obj.name+'</font>'+' ('+obj.type+')'+(obj.group&&obj.group!=obj.type?' ['+obj.group+']':'');
                             let vodurl = list.vodurl;
                             if(/^\/\//.test(vodpic)){
                                 vodpic = "https" + vodpic;
@@ -484,7 +484,7 @@ function xunmi(name,data,ishkss) {
                                 
                             return {
                                 title: !ishkss?vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):'‘‘’’<font color=red>'+vodname+'</font>':vodname,
-                                desc: !ishkss?(voddesc + '\n\n' + appname):appname+'\n聚影√ · '+obj.name,
+                                desc: !ishkss?(voddesc + '\n\n' + appname):'聚影√ · '+obj.name+' ('+obj.type+')'+(obj.group&&obj.group!=obj.type?' ['+obj.group+']':''),
                                 content: voddesc,
                                 pic_url: vodpic,
                                 url: $("hiker://empty##" + vodurl + "#immersiveTheme##autoCache#").rule((type,ua) => {
