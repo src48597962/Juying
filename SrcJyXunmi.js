@@ -484,7 +484,7 @@ function xunmi(name,data,ishkss) {
                                 
                             return {
                                 title: !ishkss?vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):'‘‘’’<font color=red>'+vodname+'</font>':vodname,
-                                desc: !ishkss?(voddesc + '\n\n' + appname):'聚影√ · '+obj.name,
+                                desc: !ishkss?(voddesc + '\n\n' + appname):appname+'\n聚影√ · '+obj.name,
                                 content: voddesc,
                                 pic_url: vodpic,
                                 url: $("hiker://empty##" + vodurl + "#immersiveTheme##autoCache#").rule((type,ua) => {
