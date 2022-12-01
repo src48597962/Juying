@@ -780,19 +780,16 @@ function jiexisave(urls,update,subscribe) {
 
 function jiekou(lx,data) {
     addListener("onClose", $.toString(() => {
-        
         clearMyVar('apiname');
         clearMyVar('apiurl');
+        clearMyVar('apitype');
         clearMyVar('apiua');
         clearMyVar('apiurls');
         clearMyVar('addtype');
+        clearMyVar('isload');
         clearMyVar('apigroup');
         clearMyVar('apidata');
         clearMyVar('isretain');
-        
-        clearMyVar('jiekoudata');
-        clearMyVar('apitype');
-        clearMyVar('isload');
         clearMyVar('isSaveAs');
     }));
 
@@ -815,18 +812,16 @@ function jiekou(lx,data) {
     }else{
         if(getMyVar('isload', '0')=="0"){
             setPageTitle("♥接口管理-变更");
-            
             putMyVar('apiname', data.name);
             putMyVar('apiurl', data.url);
             putMyVar('apitype', data.type);
             putMyVar('apiua', data.ua);
             putMyVar('apigroup', data.group?data.group:"");
             putMyVar('isretain', data.retain?data.retain:"");
-            storage0.putMyVar('jiekoudata',data);
             putMyVar('isload', '1');
         }
     }
-    let jkdata = storage0.getMyVar('jiekoudata')||{};
+    
     if(getMyVar('addtype', '1')=="1"){
         d.push({
             title:'apiname',
@@ -834,11 +829,8 @@ function jiekou(lx,data) {
             desc: "接口名称",
             extra: {
                 titleVisible: false,
-                defaultValue: jkdata.name||"",
-                onChange: $.toString((jkdata) => {
-                    jkdata.name = input;
-                    storage0.putMyVar('jiekoudata',jkdata);
-                },jkdata)
+                defaultValue: getMyVar('apiname', ''),
+                onChange: 'putMyVar("apiname",input)'
             }
         });
         d.push({
@@ -947,15 +939,6 @@ function jiekou(lx,data) {
             }
             refreshPage(false);
             return 'toast://已切换';
-        })
-    });
-    d.push({
-        title: '专用解析：' + getMyVar('apiparse',''),
-        col_type:'text_1',
-        url: $(getMyVar('apiparse',''),"输入该接口专用解析\n不再调用其他解析").input(()=>{
-            putMyVar('apiparse', input);
-            refreshPage(true);
-            return "toast://已指定专用解析："+input;
         })
     });
     for (let i = 0; i < 10; i++) {
