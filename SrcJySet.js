@@ -835,9 +835,9 @@ function jiekou(lx,data) {
             extra: {
                 titleVisible: false,
                 defaultValue: data.name||"",
-                onChange: $.toString((data,input) => {
+                onChange: $.toString((data) => {
                     data.name = input;
-                },data,input)
+                },data)
             }
         });
         d.push({
