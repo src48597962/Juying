@@ -548,10 +548,19 @@ function SRCSet() {
                     extra: {
                         id: groupname,
                         longClick: [{
-                            title: "⏫分组置顶",
+                            title: "⏪分组置顶",
                             js: $.toString((groupname) => {
                                 let grouparr = storage0.getItem('grouparr');
                                 grouparr.unshift(grouparr.splice(grouparr.indexOf(groupname), 1)[0]);
+                                storage0.setItem('grouparr',grouparr);
+                                refreshPage(false);
+                                return "hiker://empty";
+                            },groupname)
+                        },{
+                            title: "⏩分组置底",
+                            js: $.toString((groupname) => {
+                                let grouparr = storage0.getItem('grouparr');
+                                grouparr.push(grouparr.splice(grouparr.indexOf(groupname), 1)[0]);
                                 storage0.setItem('grouparr',grouparr);
                                 refreshPage(false);
                                 return "hiker://empty";
