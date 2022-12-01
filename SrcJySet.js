@@ -826,7 +826,7 @@ function jiekou(lx,data) {
             putMyVar('isload', '1');
         }
     }
-    
+    let jkdata = storage0.getMyVar('jiekoudata')||{};
     if(getMyVar('addtype', '1')=="1"){
         d.push({
             title:'apiname',
@@ -834,10 +834,11 @@ function jiekou(lx,data) {
             desc: "接口名称",
             extra: {
                 titleVisible: false,
-                defaultValue: data.name||"",
-                onChange: $.toString((data) => {
-                    data.name = input;
-                },data)
+                defaultValue: jkdata.name||"",
+                onChange: $.toString((jkdata) => {
+                    jkdata.name = input;
+                    storage0.putMyVar('jiekoudata',jkdata);
+                },jkdata)
             }
         });
         d.push({
