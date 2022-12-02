@@ -655,7 +655,7 @@ function similar(s, t, f) {//判断两个字符串之间的相似度
     let res = (1 - d[n][m] / l) *100 || 0;
     return parseInt(res.toFixed(f));
 }
-function jiekousave(urls,update,subscribe) {
+function jiekousave(urls,update,codedytype) {
     if(urls.length==0){return 0;}
     try{
         var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
@@ -665,7 +665,7 @@ function jiekousave(urls,update,subscribe) {
         }else{
             var datalist = [];
         }
-        if(subscribe==1){
+        if(codedytype==1){
             for(let i=0;i<datalist.length;i++){
                 if(datalist[i].retain!=1){
                     datalist.splice(i,1);
@@ -717,7 +717,7 @@ function jiekousave(urls,update,subscribe) {
     }
     return num;
 }
-function jiexisave(urls,update,subscribe) {
+function jiexisave(urls,update,codedytype) {
     if(urls.length==0){return 0;}
     try{
         var filepath = "hiker://files/rules/Src/Juying/myjiexi.json";
@@ -727,7 +727,7 @@ function jiexisave(urls,update,subscribe) {
         }else{
             var datalist = [];
         }
-        if(subscribe==1){
+        if(codedytype==1){
             for(let i=0;i<datalist.length;i++){
                 if(datalist[i].retain!=1){
                     datalist.splice(i,1);
@@ -1949,7 +1949,7 @@ function extension(){
 
     d.push({
         title: '✅ 更新资源',
-        url: JYconfig['codedyid']?$("确定要从云端更新数据覆盖本地非保留？").confirm((codedyid)=>{
+        url: JYconfig['codedyid']?$("确定要从云端更新数据覆盖本地非保留？").confirm((codedyid,codedytype)=>{
                 try{
                     showLoading('请稍候...')
                     let codeid = codedyid;
@@ -1961,11 +1961,11 @@ function extension(){
                         let jxnum = 0;
                         let jkdatalist = pastedata.jiekou||[];
                         if(jkdatalist.length>0){
-                            jknum = jiekousave(jkdatalist, 0, 1);
+                            jknum = jiekousave(jkdatalist, 0, codedytype||1);
                         }
                         let jxdatalist = pastedata.jiexi||[];
                         if(jxdatalist.length>0){
-                            jxnum = jiexisave(jxdatalist, 0, 1);
+                            jxnum = jiexisave(jxdatalist, 0, codedytype||1);
                         }
                         if(pastedata.live){
                             let livefilepath = "hiker://files/rules/Src/Juying/liveconfig.json";
@@ -1984,8 +1984,25 @@ function extension(){
                     log('更新失败：'+e.message); 
                     return "toast://无法识别的口令";
                 }
-            }, JYconfig['codedyid']):'toast://请先订阅聚影资源码',
-        col_type: "text_2"
+            }, JYconfig['codedyid'], JYconfig['codedytype']):'toast://请先订阅聚影资源码',
+        col_type: "text_2",
+        extra: {
+            longClick: [{
+                title: "订阅类型改为："+(JYconfig['codedytype']=="2"?"全量":"增量"),
+                js: $.toString((JYconfig,cfgfile) => {
+                    if(JYconfig['codedytype']=="2"){
+                        JYconfig['codedytype'] = "1";
+                        var sm = "切换为全量订阅，除强制保留的接口/接口，均会被清空";
+                    }else{
+                        JYconfig['codedytype'] = "2";
+                        var sm = "切换为增量订阅，接口/接口只会累加，不会删除";
+                    }
+                    writeFile(cfgfile, JSON.stringify(JYconfig));
+                    refreshPage(false);
+                    return "toast://"+sm;
+                },JYconfig,cfgfile)
+            }]
+        }
     });
     d.push({
         title: '❎ 删除订阅',
