@@ -1949,7 +1949,7 @@ function extension(){
 
     d.push({
         title: '✅ 更新资源',
-        url: JYconfig['codedyid']?$("确定要从云端更新数据覆盖本地非保留？").confirm((codedyid,codedytype)=>{
+        url: JYconfig['codedyid']?$("确定要从云端更新数据？\n"+(JYconfig['codedytype']=="2"?"当前为增量订阅模式，只增不删":"当前为全量订阅模式，覆盖本地")).confirm((codedyid,codedytype)=>{
                 try{
                     showLoading('请稍候...')
                     let codeid = codedyid;
