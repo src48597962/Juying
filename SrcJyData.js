@@ -54,7 +54,20 @@ let yijimenu = [
                 sousuo2();
             }),
         pic_url: 'https://lanmeiguojiang.com/tubiao/more/101.png',
-        col_type: 'icon_5'
+        col_type: 'icon_5',
+        extra: {
+            longClick: [{
+                title: "切换为"+(getItem('searchmode')=="hiker"?"接口聚合搜索":"调用视界搜索"),
+                js: $.toString(() => {
+                    if(getItem('searchmode')=="hiker"){
+                        clearItem('searchmode');
+                    }else{
+                        setItem('searchmode','hiker');
+                    }
+                    return "toast://已切换";
+                })
+            }]
+        }
     },
     {
         title: getItem('zhanshibutton')=="history"?"历史":"展示",
