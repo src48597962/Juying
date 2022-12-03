@@ -57,13 +57,14 @@ let yijimenu = [
         col_type: 'icon_5',
         extra: {
             longClick: [{
-                title: "切换为"+(getItem('searchmode')=="hiker"?"接口聚合搜索":"调用视界搜索"),
+                title: "🔍切换为"+(getItem('searchmode')=="hiker"?"接口聚合搜索":"调用视界搜索"),
                 js: $.toString(() => {
                     if(getItem('searchmode')=="hiker"){
                         clearItem('searchmode');
                     }else{
                         setItem('searchmode','hiker');
                     }
+                    refreshPage(false);
                     return "toast://已切换";
                 })
             }]
