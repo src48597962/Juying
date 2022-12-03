@@ -460,10 +460,14 @@ function sousuo2() {
             recordlist.splice(recordlist.length-1,1);
         }
         storage0.setItem('searchrecord', recordlist);
-        return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
-            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
-            xunmi(name);
-        }, input);
+        if(getItem('searchmode')=="hiker"){
+            return "hiker://search?rule=" + MY_RULE.title + "&s=" + input;
+        }else{
+            return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
+                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
+                xunmi(name);
+            }, input);
+        }
     });
     var d = [];
     d.push({
