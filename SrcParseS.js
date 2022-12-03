@@ -535,29 +535,6 @@ var SrcParseS = {
                 var myJX=fetch(myJXfile);
                 if(myJX != ""){
                     eval("var myJXlist=" + myJX+ ";");
-                    /*
-                    if(myJXlist.length==0){
-                        try{
-                            let jxnum = 0;
-                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
-                            let jiexis = fetch(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'jiexi.txt',{timeout:2000});
-                            if(jiexis){
-                                let jiexi = jiexis.split('\n');
-                                let urls = [];
-                                for (let i=0;i<jiexi.length;i++) {
-                                    if(/^http/.test(jiexi[i].split(',')[1])){
-                                        let arr  = { "name":jiexi[i].split(',')[0], "parse":jiexi[i].split(',')[1], "stopfrom":[], "priorfrom":[], "sort":1, "web":1 };
-                                        urls.push(arr);
-                                    }
-                                }
-                                jxnum = jiexisave(urls);
-                            }
-                            if(jxnum>0){
-                                myJXlist = urls;
-                                if(printlog==1){log("自动导入解析："+jxnum)}
-                            }
-                        } catch (e) { }
-                    }*/
                     var myjxnum = 0;
                     for(var j=0;j<myJXlist.length;j++){
                         let priorfrom = myJXlist[j].priorfrom || [];
@@ -822,8 +799,9 @@ var SrcParseS = {
                                     log(beparses[k].name+'>解析成功>'+beurls[k]+'，记录为片源'+from+'的优先');
                                 }
                             }
+                            recordlist['from'] = recordlist['from']||[];
                             if(recordlist['from'].indexOf(from)==-1){recordlist['from'].push(from)}
-                            log(1);
+                            
                             if(beparses[k].type=="myjx"){//私有解析保存解析名
                                 if(recordname.indexOf(beparses[k].name)==-1){recordname.push(beparses[k].name)}
                             }else if(/app/.test(beparses[k].type)){//app接口解析保存链接
