@@ -553,21 +553,7 @@ function sousuo2() {
         title: '<span style="color:#ff6600"><b>\t热搜榜\t\t\t</b></span>',
         url: "hiker://empty",
         pic_url: 'https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=3779990328,1416553241&fm=179&app=35&f=PNG?w=60&h=70&s=E7951B62A4639D153293A4E90300401B',
-        col_type: 'icon_small_3',
-        extra: {
-            longClick: [{
-                title: "开启/关闭搜索历史记录显示",
-                js: $.toString(() => {
-                    if(getItem('searchrecordide','0')=='1'){
-                        clearItem('searchrecordide');
-                    }else{
-                        setItem('searchrecordide','1');
-                    }
-                    refreshPage(false);
-                    return "toast://已切换"
-                })
-            }]
-        }
+        col_type: 'icon_small_3'
     });
     
     var resoufile = "hiker://files/rules/Src/Juying/resou.json";
