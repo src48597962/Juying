@@ -57,7 +57,7 @@ let yijimenu = [
         col_type: 'icon_5',
         extra: {
             longClick: [{
-                title: "🔍切换为"+(getItem('searchmode')=="hiker"?"接口聚合搜索":"调用视界搜索"),
+                title: "🔍切换为"+(getItem('searchmode')=="hiker"?"聚合搜索":"视界搜索"),
                 js: $.toString(() => {
                     if(getItem('searchmode')=="hiker"){
                         clearItem('searchmode');
@@ -68,7 +68,7 @@ let yijimenu = [
                     return "toast://已切换";
                 })
             },{
-                title: "📑"+(getItem('searchrecordide')=='1'?"关闭":"开启")+"搜索历史记录显示",
+                title: "📑"+(getItem('searchrecordide')=='1'?"关闭":"开启")+"搜索记录",
                 js: $.toString(() => {
                     if(getItem('searchrecordide')=='1'){
                         clearItem('searchrecordide');
