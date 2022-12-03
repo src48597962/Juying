@@ -67,6 +67,17 @@ let yijimenu = [
                     refreshPage(false);
                     return "toast://已切换";
                 })
+            },{
+                title: "📑"+(getItem('searchrecordide')=='1'?"关闭":"开启")+"搜索历史记录显示",
+                js: $.toString(() => {
+                    if(getItem('searchrecordide')=='1'){
+                        clearItem('searchrecordide');
+                    }else{
+                        setItem('searchrecordide','1');
+                    }
+                    refreshPage(false);
+                    return "toast://已切换"
+                })
             }]
         }
     },
