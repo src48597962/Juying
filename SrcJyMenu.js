@@ -246,8 +246,8 @@ function lookset(){
                     for(var j=0;j<datalist.length;j++){
                         if(datalist[j].name==list[i]&&datalist[j].stopfrom.indexOf(input)==-1){
                             datalist[j].stopfrom[datalist[j].stopfrom.length] = input;
+                            break;
                         }
-                        break;
                     }
                     writeFile(filepath, JSON.stringify(datalist));
                     var sm = '私有解析('+list[i]+')>排除片源>'+input;
