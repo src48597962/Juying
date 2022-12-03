@@ -823,6 +823,7 @@ var SrcParseS = {
                                 }
                             }
                             if(recordlist['from'].indexOf(from)==-1){recordlist['from'].push(from)}
+                            log(1);
                             if(beparses[k].type=="myjx"){//私有解析保存解析名
                                 if(recordname.indexOf(beparses[k].name)==-1){recordname.push(beparses[k].name)}
                             }else if(/app/.test(beparses[k].type)){//app接口解析保存链接
