@@ -175,6 +175,7 @@ let customparse = {
                     let aiurl = "https://www.wandou.pro"+item.movie_url;
                     let aipic = item.movie_img_url;
                     let aihtml = request(aiurl);
+                    log(aihtml);
                     let htmls = JSON.parse(aihtml).pageProps.data.playData;
                     let vodname = ainame;//JSON.parse(aihtml).pageProps.data.movie.movie_name;
                     log(htmls)
