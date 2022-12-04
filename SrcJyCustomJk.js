@@ -172,13 +172,11 @@ let customparse = {
             data.forEach(item=>{
                 let ainame = item.movie_name;
                 if(ainame == name){
-                    let aiurl = "https://www.wandou.pro"+item.movie_url;
+                    let aiurl = "https://www.wandou.pro/_next/data/7cd38774e4afd0127c31c9ea7e3835dd76514e15/detail/"+item.movie_id+".json?id="+item.movie_id;
                     let aipic = item.movie_img_url;
                     let aihtml = request(aiurl);
-                    log(aihtml);
                     let htmls = JSON.parse(aihtml).pageProps.data.playData;
-                    let vodname = ainame;//JSON.parse(aihtml).pageProps.data.movie.movie_name;
-                    log(htmls)
+                    let vodname = JSON.parse(aihtml).pageProps.data.movie.movie_name;
                     htmls.forEach(it=>{
                         try{
                             let sitename = it.site_name;
@@ -206,7 +204,6 @@ let customparse = {
                 })
             }
         })
-        log(list)
         return list;
     }
 }
