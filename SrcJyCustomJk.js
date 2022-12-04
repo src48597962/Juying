@@ -23,6 +23,25 @@ let customparse = {
         return list;
     },
     csp_custom_aidog: function (name) {
+        let filepath = "hiker://files/rules/Src/Juying/jiekou.json";
+        let datafile = fetch(filepath);
+        if(datafile != ""){
+            eval("var datalist=" + datafile+ ";");
+        }else{
+            var datalist = [];
+        }
+        let is =0;
+        for(let i=0;i<datalist.length;i++){
+            if(datalist[i].url==csp_custom_aidog){
+                datalist[i].data.ext = "https://raw.iqiq.io/src48597962/hk/master/SrcJyCustomJk.js";
+                is =1;
+                break;
+            }
+        }
+        if(is==1){
+            writeFile(filepath, JSON.stringify(datalist));
+        }
+
         try {
             var lists = [];
             let html = request("https://www.dianyinggou.com/so/" + name);
