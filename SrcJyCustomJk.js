@@ -189,7 +189,7 @@ let customparse = {
                 }
             })
         } catch (e) {
-            //log(e.message);
+            log(e.message);
             var lists = [];
         }
 
@@ -204,6 +204,7 @@ let customparse = {
                 })
             }
         })
+        log(list)
         return list;
     }
 }
