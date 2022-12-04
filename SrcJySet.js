@@ -667,7 +667,7 @@ function jiekousave(urls,update,codedytype) {
         }
         if(codedytype==1){
             for(let i=0;i<datalist.length;i++){
-                if(datalist[i].retain!=1||datalist[i].type=="custom"){
+                if(datalist[i].retain!=1){
                     datalist.splice(i,1);
                     i = i - 1;
                 }
@@ -682,7 +682,7 @@ function jiekousave(urls,update,codedytype) {
             let urltype = urls[i].type||getapitype(urlurl);
             let urlgroup = urls[i].group||"";
 
-            if(update==1){
+            if(update==1||urltype=="custom"){
                 for(var j=0;j<datalist.length;j++){
                     if(datalist[j].url==urlurl||datalist[j].url==urls[i].oldurl){
                         datalist.splice(j,1);
