@@ -32,7 +32,7 @@ let customparse = {
         }
         let is =0;
         for(let i=0;i<datalist.length;i++){
-            if(datalist[i].url==csp_custom_aidog){
+            if(datalist[i].url=="csp_custom_aidog"){
                 datalist[i].data.ext = "https://raw.iqiq.io/src48597962/hk/master/SrcJyCustomJk.js";
                 is =1;
                 break;
