@@ -632,6 +632,7 @@ function Version() {
                     confirm: $.toString((nowtime) => {
                         setItem('VersionChecktime', nowtime+'time');
                         deleteCache();
+                        delete config.依赖;
                         refreshPage();
                     },nowtime),
                     cancel:''
