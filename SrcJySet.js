@@ -667,7 +667,7 @@ function jiekousave(urls,update,codedytype) {
         }
         if(codedytype==1){
             for(let i=0;i<datalist.length;i++){
-                if(datalist[i].retain!=1){
+                if(datalist[i].retain!=1||datalist[i].type=="custom"){
                     datalist.splice(i,1);
                     i = i - 1;
                 }
