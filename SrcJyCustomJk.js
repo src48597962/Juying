@@ -169,7 +169,6 @@ let customparse = {
             var lists = [];
             let html = request("https://wuli.api.bailian168.cc/movie/getsearchlist/keywords/"+name+"/page/1/rows/20.json");
             let data = JSON.parse(html).data;
-            log(data);
             data.forEach(item=>{
                 let ainame = item.movie_name;
                 if(ainame == name){
@@ -177,7 +176,8 @@ let customparse = {
                     let aipic = item.movie_img_url;
                     let aihtml = request(aiurl);
                     let htmls = JSON.parse(aihtml).pageProps.data.playData;
-                    let vodname = JSON.parse(aihtml).pageProps.data.movie.movie_name;
+                    let vodname = ainame;//JSON.parse(aihtml).pageProps.data.movie.movie_name;
+                    log(htmls)
                     htmls.forEach(it=>{
                         try{
                             let sitename = it.site_name;
