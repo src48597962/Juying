@@ -275,7 +275,7 @@ function aierji(html,url,detail){
 				canBack: true
 			}
 		});
-		toast("AI匹配失败，已使用X5加载");
+		//toast("AI匹配失败，已使用X5加载");
 		setResult(d);
 	} else {
 		//线路分割
