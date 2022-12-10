@@ -37,7 +37,11 @@ function xunmi(name,data,ishkss) {
         var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
         var datafile = fetch(filepath);
         if(datafile != ""){
-            eval("var datalist=" + datafile+ ";");
+            try{
+                eval("var datalist=" + datafile+ ";");
+            }catch(e){
+                var datalist = [];
+            }
         }else{
             var datalist = [];
         }
