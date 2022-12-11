@@ -118,7 +118,7 @@ let customparse = {
             let cook = getCookie('https://zhuiyingmao.com');
             data.forEach(item => {
                 let maoname = item.name;
-                if (maoname == name) {
+                //if (maoname == name) {
                     let maourl = 'https://zhuiyingmao.com/voddetail/' + item.id+".html";
                     let maopic = item.pic;
                     let headers = {
@@ -146,7 +146,7 @@ let customparse = {
                             }
                         } catch (e) {}
                     });
-                }
+                //}
             })
         } catch (e) {
             log(e.message);
