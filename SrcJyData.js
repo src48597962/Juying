@@ -5,6 +5,7 @@ if(Juyingcfg != ""){
 }else{
     var JYconfig= {};
 }
+
 let yijimenu = [
     {
         title: "管理",
@@ -79,7 +80,7 @@ let yijimenu = [
                     return "toast://已切换"
                 })
             },{
-                title: "🍭搜索模式："+(getSearchMode()==1?"精准":"默认"),
+                title: "🍭搜索模式："+(typeof(getSearchMode)!="undefined"&&getSearchMode()==1?"精准":"默认"),
                 js: $.toString(() => {
                     try{
                         if(getSearchMode()==1){
@@ -90,7 +91,7 @@ let yijimenu = [
                         refreshPage(false);
                         return "toast://已切换";
                     }catch(e){
-                        return "toast://视界需要7.26以上版本";
+                        return "toast://软件版本过低，不支持此方法";
                     }
                 })
             }]
