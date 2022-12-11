@@ -187,6 +187,24 @@ function xunmi(name,data,ishkss) {
                     id: 'deleteswitch'
                 }
             });
+            d.push({
+                title: "精准搜索",
+                url: $('#noLoading#').lazyRule(()=>{
+                    if(getSearchMode()==1){
+                        setSearchMode(0);
+                        updateItem('SearchMode',{title:'精准搜索'});
+                        return "toast://关闭精准搜索，再次搜索或加载时生效"
+                    }else{
+                        setSearchMode(1);
+                        updateItem('SearchMode',{title:'‘‘’’<b><span style="color:#3CB371">精准搜索'});
+                        return "toast://开启精准搜索，再次搜索或加载时生效"
+                    }
+                }),
+                col_type: "scroll_button",
+                extra: {
+                    id: 'SearchMode'
+                }
+            });
         }
     }
     d.push({
