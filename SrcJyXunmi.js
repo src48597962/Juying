@@ -484,7 +484,9 @@ function xunmi(name,data,ishkss) {
                                 vodpic = vodurl.match(/http(s)?:\/\/(.*?)\//)[0] + vodpic;
                             }
                             let searchMode = getSearchMode()||0;
+                            log(searchMode);
                             let searchIncludes = searchContains(vodname,name,true)?1:vodname.indexOf(name)>-1?1:0;
+                            log(searchIncludes);
                             if((searchMode==1&&vodname==name)||(searchMode==0&&searchIncludes==1)) {
                                 return {
                                     title: !ishkss?vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):'‘‘’’<font color=red>'+vodname+'</font>':vodname,
