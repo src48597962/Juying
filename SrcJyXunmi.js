@@ -188,7 +188,7 @@ function xunmi(name,data,ishkss) {
                 }
             });
             d.push({
-                title: "精准搜索",
+                title: getSearchMode()==1?'‘‘’’<b><span style="color:#3CB371">精准搜索':"精准搜索",
                 url: $('#noLoading#').lazyRule(()=>{
                     if(getSearchMode()==1){
                         setSearchMode(0);
