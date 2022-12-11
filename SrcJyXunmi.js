@@ -483,10 +483,8 @@ function xunmi(name,data,ishkss) {
                             if(/^\/upload|^upload/.test(vodpic)){
                                 vodpic = vodurl.match(/http(s)?:\/\/(.*?)\//)[0] + vodpic;
                             }
-                            let searchMode = getSearchMode()||0;
-                            log('mode:'+searchMode);
+                            let searchMode = typeof(getSearchMode)!="undefined"?getSearchMode()||0:0;
                             let searchIncludes = typeof(searchContains) =="undefined" ? vodname.indexOf(name)>-1?1:0 :searchContains(vodname,name,true);
-                            log(searchIncludes);
                             if((searchMode==1&&vodname==name)||(searchMode==0&&searchIncludes)) {
                                 return {
                                     title: !ishkss?vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):'‘‘’’<font color=red>'+vodname+'</font>':vodname,
