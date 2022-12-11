@@ -472,7 +472,6 @@ function xunmi(name,data,ishkss) {
                 try {
                     let search = lists.map((list)=>{
                         if(list){
-                            log(1);
                             let vodname = list.vodname
                             let vodpic = list.vodpic?list.vodpic.replace(/http.*\/tu\.php\?tu=|\/img\.php\?url=| |\/tu\.php\?tu=/g,'') + "@Referer=":"https://www.xawqxh.net/mxtheme/images/loading.gif@Referer=";
                             let voddesc = list.voddesc;
