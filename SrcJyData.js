@@ -86,6 +86,7 @@ let yijimenu = [
                     }else{
                         setSearchMode(1);
                     }
+                    log(getSearchMode());
                     refreshPage(false);
                     return "toast://已切换"
                 })
