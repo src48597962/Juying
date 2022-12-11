@@ -485,7 +485,7 @@ function xunmi(name,data,ishkss) {
                             }
                             let searchMode = getSearchMode()||0;
                             log('mode:'+searchMode);
-                            let searchIncludes = searchContains(vodname,name,true) || vodname.indexOf(name)>-1?1:0;
+                            let searchIncludes = typeof(searchContains) =="undefined" ? vodname.indexOf(name)>-1?1:0 :searchContains(vodname,name,true);
                             log(searchIncludes);
                             if((searchMode==1&&vodname==name)||(searchMode==0&&searchIncludes)) {
                                 return {
