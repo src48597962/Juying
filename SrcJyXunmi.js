@@ -472,6 +472,7 @@ function xunmi(name,data,ishkss) {
                 try {
                     let search = lists.map((list)=>{
                         if(list){
+                            log(1);
                             let vodname = list.vodname
                             let vodpic = list.vodpic?list.vodpic.replace(/http.*\/tu\.php\?tu=|\/img\.php\?url=| |\/tu\.php\?tu=/g,'') + "@Referer=":"https://www.xawqxh.net/mxtheme/images/loading.gif@Referer=";
                             let voddesc = list.voddesc;
@@ -485,7 +486,6 @@ function xunmi(name,data,ishkss) {
                             }
                             let searchMode = typeof(getSearchMode)!="undefined"?getSearchMode()||0:0;
                             let searchIncludes = typeof(searchContains) =="undefined" ? vodname.indexOf(name)>-1?1:0 :searchContains(vodname,name,true);
-                            log(searchIncludes);
                             if((searchMode==1&&vodname==name)||(searchMode==0&&searchIncludes)) {
                                 return {
                                     title: !ishkss?vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):'‘‘’’<font color=red>'+vodname+'</font>':vodname,
