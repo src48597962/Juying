@@ -1,6 +1,5 @@
 //寻觅片源
 function xunmi(name,data,ishkss) {
-    log(searchContains('斗罗大陆4','斗罗陆',true));
     name = name.replace(/全集.*|国语.*|粤语.*/g,'');//|\s
     setPageTitle('聚搜>'+name);
     addListener("onClose", $.toString(() => {
@@ -486,6 +485,7 @@ function xunmi(name,data,ishkss) {
                             }
                             let searchMode = typeof(getSearchMode)!="undefined"?getSearchMode()||0:0;
                             let searchIncludes = typeof(searchContains) =="undefined" ? vodname.indexOf(name)>-1?1:0 :searchContains(vodname,name,true);
+                            log(searchIncludes);
                             if((searchMode==1&&vodname==name)||(searchMode==0&&searchIncludes)) {
                                 return {
                                     title: !ishkss?vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):'‘‘’’<font color=red>'+vodname+'</font>':vodname,
