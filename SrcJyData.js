@@ -78,18 +78,6 @@ let yijimenu = [
                     refreshPage(false);
                     return "toast://已切换"
                 })
-            },{
-                title: "🍭搜索模式："+(getSearchMode()==1?"精准":"默认"),
-                js: $.toString(() => {
-                    if(getSearchMode()==1){
-                        setSearchMode(0);
-                    }else{
-                        setSearchMode(1);
-                    }
-                    log(getSearchMode());
-                    refreshPage(false);
-                    return "toast://已切换"
-                })
             }]
         }
     },
