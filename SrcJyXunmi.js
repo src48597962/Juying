@@ -1,6 +1,7 @@
 //寻觅片源
 function xunmi(name,data,ishkss) {
-    name = name.replace(/全集.*|国语.*|粤语.*/g,'');
+    log(searchContains('斗罗大陆4','斗罗陆',true));
+    name = name.replace(/全集.*|国语.*|粤语.*/g,'');//|\s
     setPageTitle('聚搜>'+name);
     addListener("onClose", $.toString(() => {
         clearMyVar('xunminum');
