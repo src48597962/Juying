@@ -442,16 +442,14 @@ function xunmi(name,data,ishkss) {
                     }
                     lists = lists.map(list=>{
                         let vodname = list.name;
-                        if(vodname.indexOf(name)>-1){
-                            let vodpic = list.pic||"";
-                            let voddesc = list.desc||"";
-                            let vodurl = eval(ssvodurl);
-                            return {
-                                vodname: vodname,
-                                vodpic: vodpic,
-                                voddesc: voddesc,
-                                vodurl: vodurl
-                            }
+                        let vodpic = list.pic||"";
+                        let voddesc = list.desc||"";
+                        let vodurl = eval(ssvodurl);
+                        return {
+                            vodname: vodname,
+                            vodpic: vodpic,
+                            voddesc: voddesc,
+                            vodurl: vodurl
                         }
                     })
                 } catch (e) {
@@ -485,8 +483,9 @@ function xunmi(name,data,ishkss) {
                             if(/^\/upload|^upload/.test(vodpic)){
                                 vodpic = vodurl.match(/http(s)?:\/\/(.*?)\//)[0] + vodpic;
                             }
-                            let SearchMode = getSearchMode()||0;
-                            if((SearchMode==1&&vodname==name)||SearchMode==0) {
+                            let searchMode = getSearchMode()||0;
+                            let searchIncludes = searchContains(vodname,name,true)?1:vodname.indexOf(name)>-1?1:0;
+                            if((searchMode==1&&vodname==name)||(searchMode==0&&searchIncludes==1)) {
                                 return {
                                     title: !ishkss?vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):'‘‘’’<font color=red>'+vodname+'</font>':vodname,
                                     desc: !ishkss?(voddesc + '\n\n' + appname):'聚影√ · '+obj.name+' ('+obj.type+')'+(obj.group&&obj.group!=obj.type?' ['+obj.group+']':''),
