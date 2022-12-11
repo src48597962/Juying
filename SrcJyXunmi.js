@@ -485,26 +485,28 @@ function xunmi(name,data,ishkss) {
                             if(/^\/upload|^upload/.test(vodpic)){
                                 vodpic = vodurl.match(/http(s)?:\/\/(.*?)\//)[0] + vodpic;
                             }
-                                
-                            return {
-                                title: !ishkss?vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):'‘‘’’<font color=red>'+vodname+'</font>':vodname,
-                                desc: !ishkss?(voddesc + '\n\n' + appname):'聚影√ · '+obj.name+' ('+obj.type+')'+(obj.group&&obj.group!=obj.type?' ['+obj.group+']':''),
-                                content: voddesc,
-                                pic_url: vodpic,
-                                url: $("hiker://empty##" + vodurl + "#immersiveTheme##autoCache#").rule((type,ua) => {
-                                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
-                                        xunmierji(type,ua)
-                                    },obj.type, urlua),
-                                col_type: "movie_1_vertical_pic",
-                                extra: {
-                                    id: 'xumi-'+url_api,
-                                    pic: vodpic,
-                                    name: vodname,
-                                    title: vodname+'-'+obj.name,
-                                    data: typeof(jsondata) =="undefined"|| jsondata ==null?{}:jsondata,
-                                    cls: 'xunmilist'
+                            let SearchMode = getSearchMode()||0;
+                            if((SearchMode==1&&vodname==name)||SearchMode==0) {
+                                return {
+                                    title: !ishkss?vodname!=name?vodname.replace(name,'‘‘’’<font color=red>'+name+'</font>'):'‘‘’’<font color=red>'+vodname+'</font>':vodname,
+                                    desc: !ishkss?(voddesc + '\n\n' + appname):'聚影√ · '+obj.name+' ('+obj.type+')'+(obj.group&&obj.group!=obj.type?' ['+obj.group+']':''),
+                                    content: voddesc,
+                                    pic_url: vodpic,
+                                    url: $("hiker://empty##" + vodurl + "#immersiveTheme##autoCache#").rule((type,ua) => {
+                                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
+                                            xunmierji(type,ua)
+                                        },obj.type, urlua),
+                                    col_type: "movie_1_vertical_pic",
+                                    extra: {
+                                        id: 'xumi-'+url_api,
+                                        pic: vodpic,
+                                        name: vodname,
+                                        title: vodname+'-'+obj.name,
+                                        data: typeof(jsondata) =="undefined"|| jsondata ==null?{}:jsondata,
+                                        cls: 'xunmilist'
+                                    }
                                 }
-                            }
+                            }   
                         }
                     });
                     search = search.filter(n => n);
