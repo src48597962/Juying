@@ -59,20 +59,38 @@ let 获取解析 = {
         return "";
     }
 }
-function SrcJyJX(vipUrl) {
-    let parse = getItem('SrcJy$baipiaojiexi','');
-    if(parse == ""){
-        for(let key in 获取解析){
-            parse = 获取解析[key]();
-            if(parse){
-                setItem('SrcJy$baipiaojiexi',parse);
-                break;
-            }
+function bpParse(vipUrl) {
+    try{
+        if(!/聚影/.test(MY_RULE.title)){
+            log('非法调用');
+            return "";
         }
+        let parse = getItem('SrcJy$baipiaojiexi','');
+        function getparse(parse){
+            for(let key in 获取解析){
+                parse = 获取解析[key]();
+                if(parse){
+                    setItem('SrcJy$baipiaojiexi',parse);
+                    break;
+                }
+            }
+            return parse;
+        }
+        parse = parse?parse:getparse(parse);
+        if(parse){
+            let json = JSON.parse(request(parse + vipUrl, {timeout: 5000 }));
+            if(json.code==300){
+                parse = getparse(parse);
+                json = JSON.parse(request(parse + vipUrl, {timeout: 5000 }));
+            }
+            return json.url || "";
+        }else{
+            return "";
+        }
+    }catch(e){
+        log(e.message);
+        return "";
     }
-    let json = request(parse + vipUrl, {timeout: 5000 });
-    log(json);
-    return JSON.parse(json).url || "";
 }
 
 
