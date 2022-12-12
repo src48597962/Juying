@@ -73,32 +73,48 @@ let 获取解析 = {
         let regdata = "username="+username+"&qq="+qq+"&password="+username;
         let result = 注册账号(regurl,regdata);
         log(regdata+'>>>'+result);
-        if(result.indexOf('注册成功')>-1){
-            log('ok');
-            //fetch(loginurl, {timeout: 5000});
-            let loginurl = "https://vip.nxflv.com/user/login";
-            //request(loginurl, {timeout: 5000});
-            let login = request('https://vip.nxflv.com/user/login/checkUser',
-                {headers: {'Referer': loginurl, 'Cookie': getCookie(loginurl)},
-                body: "username="+username+"&password="+username,
-                method: 'POST',
-                timeout: 3000
-            });
-            log(login);
-            if(JSON.parse(login).status == 200){
-                log('okok');
-                let html = request("https://vip.nxflv.com/user/information", {headers: {'Referer': loginurl, 'Cookie': getCookie(loginurl)}})
-                let uid = html.split('<input type="number" class="form-control" value="')[1].split('"')[0];
-                let key = html.split('<input type="text" class="form-control" value="')[3].split('"')[0];
-                return "https://json.nxflv.com/?uid="+uid+"&key="+key+"&url=";
-            }
+
+        //fetch(loginurl, {timeout: 5000});
+        let loginurl = "https://vip.nxflv.com/user/login";
+        //request(loginurl, {timeout: 5000});
+        let login = request('https://vip.nxflv.com/user/login/checkUser',
+            {headers: {'Referer': loginurl, 'Cookie': getCookie(loginurl)},
+            body: "username="+username+"&password="+username,
+            method: 'POST',
+            timeout: 3000
+        });
+        log(login);
+        if(JSON.parse(login).status == 200){
+            log('okok');
+            let html = request("https://vip.nxflv.com/user/information", {headers: {'Referer': loginurl, 'Cookie': getCookie(loginurl)}})
+            let uid = html.split('<input type="number" class="form-control" value="')[1].split('"')[0];
+            let key = html.split('<input type="text" class="form-control" value="')[3].split('"')[0];
+            return "https://json.nxflv.com/?uid="+uid+"&key="+key+"&url=";
         }
+        
         return "";
     }
 }
 function SrcJyJX(vipUrl) {   
-    let jx = 获取解析.nxflv();
-    log(jx);
+    //let jx = 获取解析.nxflv();
+    //log(jx);
+    
+    let loginurl = "https://vip.nxflv.com/user/login";
+        //request(loginurl, {timeout: 5000});
+        let login = request('https://vip.nxflv.com/user/login/checkUser',
+            {headers: {'Referer': loginurl, 'Cookie': getCookie(loginurl)},
+            body: "username=JQhCXFH18p&password=JQhCXFH18p",
+            method: 'POST',
+            timeout: 3000
+        });
+        log(login);
+        if(JSON.parse(login).status == 200){
+            log('okok');
+            let html = request("https://vip.nxflv.com/user/information", {headers: {'Referer': loginurl, 'Cookie': getCookie(loginurl)}})
+            let uid = html.split('<input type="number" class="form-control" value="')[1].split('"')[0];
+            let key = html.split('<input type="text" class="form-control" value="')[3].split('"')[0];
+            log("https://json.nxflv.com/?uid="+uid+"&key="+key+"&url=");
+        }
     /*
     function getFreeApi() {
         let registUrl = getRegistUrl();
