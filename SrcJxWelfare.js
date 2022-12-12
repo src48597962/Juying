@@ -86,7 +86,7 @@ let 获取解析 = {
         log(login);
         if(JSON.parse(login).status == 200){
             log('okok');
-            let html = request("https://vip.nxflv.com/user/information", {headers: {'Referer': loginurl, 'Cookie': getCookie(loginurl)}})
+            let html = request("https://vip.nxflv.com/user/information", {headers: {'Referer': loginurl, 'Cookie': getCookie(loginurl)}});
             let uid = html.split('<input type="number" class="form-control" value="')[1].split('"')[0];
             let key = html.split('<input type="text" class="form-control" value="')[3].split('"')[0];
             return "https://json.nxflv.com/?uid="+uid+"&key="+key+"&url=";
@@ -110,7 +110,8 @@ function SrcJyJX(vipUrl) {
         log(login);
         if(JSON.parse(login).status == 200){
             log('okok');
-            let html = request("https://vip.nxflv.com/user/information", {headers: {'Referer': loginurl, 'Cookie': getCookie(loginurl)}})
+            let html = request("https://vip.nxflv.com/user/information", {headers: {'Referer': loginurl, 'Cookie': getCookie(loginurl)}});
+            log(html);
             let uid = html.split('<input type="number" class="form-control" value="')[1].split('"')[0];
             let key = html.split('<input type="text" class="form-control" value="')[3].split('"')[0];
             log("https://json.nxflv.com/?uid="+uid+"&key="+key+"&url=");
