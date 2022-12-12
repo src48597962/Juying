@@ -72,6 +72,7 @@ let 获取解析 = {
         let regurl = "https://vip.nxflv.com/user/login/reg";
         let regdata = "username="+username+"&qq="+qq+"&password="+username;
         let result = 注册账号(regurl,regdata);
+        log(regdata+'>>>'+result);
         if(result.indexOf('注册成功')>-1){
             //fetch(loginurl, {timeout: 5000});
             let loginurl = "https://vip.nxflv.com/user/login";
@@ -93,8 +94,8 @@ let 获取解析 = {
     }
 }
 function SrcJyJX(vipUrl) {   
-    
-    log(获取解析['nxflv']());
+    let jx = 获取解析.nxflv();
+    log(jx);
     /*
     function getFreeApi() {
         let registUrl = getRegistUrl();
