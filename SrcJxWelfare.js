@@ -58,20 +58,43 @@ function 注册账号(regurl,regdata) {
                 body: regdata,
                 method: 'POST',
                 redirect:false,
-                withHeaders:true
+                withHeaders:true,
+                timeout: 3000
             });
 
     let regjg = JSON.parse(reg).headers.location || "";
     return regjg;
 }
-function SrcJyJX(vipUrl) {
-    let username = 取随机用户名(10);
-    let qq = 取随机QQ号(10);
-    let regurl = "https://vip.nxflv.com/user/login/reg";
-    let regdata = "username="+username+"&qq="+qq+"&password="+username;
-    log(regdata);
-    log(注册账号(regurl,regdata));
-    return "";
+let username = 取随机用户名(10);
+let qq = 取随机QQ号(10);
+let 获取解析 = {
+    nxflv: function() {
+        let regurl = "https://vip.nxflv.com/user/login/reg";
+        let regdata = "username="+username+"&qq="+qq+"&password="+username;
+        let result = 注册账号(regurl,regdata);
+        if(result.indexOf('注册成功')>-1){
+            //fetch(loginurl, {timeout: 5000});
+            let loginurl = "https://vip.nxflv.com/user/login";
+            //request(loginurl);
+            let login = request('https://vip.nxflv.com/user/login/checkUser',
+                {headers: {'Referer': loginurl, 'Cookie': getCookie(loginurl)},
+                body: "username="+username+"&password="+username,
+                method: 'POST',
+                timeout: 3000
+            });
+            if(JSON.parse(login).status == 200){
+                let html = request("https://vip.nxflv.com/user/information", {headers: {'Referer': loginurl, 'Cookie': getCookie(loginurl)}})
+                let uid = html.split('<input type="number" class="form-control" value="')[1].split('"')[0];
+                let key = html.split('<input type="text" class="form-control" value="')[3].split('"')[0];
+                return "https://json.nxflv.com/?uid="+uid+"&key="+key+"&url=";
+            }
+            return "";
+        }
+    }
+}
+function SrcJyJX(vipUrl) {   
+    
+    log(获取解析['nxflv']);
     /*
     function getFreeApi() {
         let registUrl = getRegistUrl();
