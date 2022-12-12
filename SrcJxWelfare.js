@@ -59,10 +59,20 @@ let 获取解析 = {
         return "";
     }
 }
-function SrcJyJX(vipUrl) {   
-    let jx = 获取解析.nxflv();
-    log(jx);
-
+function SrcJyJX(vipUrl) {
+    let parse = getItem('SrcJy$baipiaojiexi','');
+    if(parse == ""){
+        for(let key in 获取解析){
+            parse = 获取解析[key]();
+            if(parse){
+                setItem('SrcJy$baipiaojiexi',parse);
+                break;
+            }
+        }
+    }
+    let json = request(parse + vipUrl, {timeout: 5000 });
+    log(json);
+    return JSON.parse(json).url || "";
 }
 
 
