@@ -68,12 +68,13 @@ function bpParse(vipUrl) {
             log('非法调用');
             return "";
         }
-        let parse = readFile('hiker://files/rules/Src/bpParse.txt', 1);
+        let parse = readFile('hiker://files/rules/Src/bpParse.txt');
+        parse = parse?aesDecode('Juying', parse):"";
         function getparse(parse){
             for(let key in 获取解析){
                 parse = 获取解析[key]();
                 if(parse){
-                    saveFile('hiker://files/rules/Src/bpParse.txt', parse, 1);
+                    saveFile('hiker://files/rules/Src/bpParse.txt', aesEncode('Juying', parse));
                     break;
                 }
             }
