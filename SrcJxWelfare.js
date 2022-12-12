@@ -94,7 +94,7 @@ let 获取解析 = {
 }
 function SrcJyJX(vipUrl) {   
     
-    log(获取解析['nxflv']);
+    log(获取解析['nxflv']());
     /*
     function getFreeApi() {
         let registUrl = getRegistUrl();
