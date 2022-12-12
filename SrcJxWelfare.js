@@ -113,7 +113,7 @@ function SrcJyJX(vipUrl) {
             let html = request("https://vip.nxflv.com/user/information", {headers: {'Referer': loginurl, 'Cookie': getCookie(loginurl)}});
             log(html);
             let uid = html.split('<input type="number" class="form-control" value="')[1].split('"')[0];
-            let key = html.split('<input type="text" class="form-control" value="')[3].split('"')[0];
+            let key = html.split('<input type="text" class="form-control" value="')[2].split('"')[0];
             log("https://json.nxflv.com/?uid="+uid+"&key="+key+"&url=");
         }
     /*
