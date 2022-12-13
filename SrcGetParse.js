@@ -78,6 +78,7 @@ function bpParse(vipUrl,parsename) {
         function getparse(parse){
             parse = 获取解析[parsename]();
             if(parse){
+                log('找到新的白嫖解析！');
                 parsejson[parsename] = parse;
                 saveFile('hiker://files/rules/Src/bpParse.json', aesEncode('Juying', JSON.stringify(parsejson)));
             }
