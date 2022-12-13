@@ -43,9 +43,7 @@ let 获取解析 = {
         let regdata = "username="+username+"&qq="+qq+"&password="+username;
         let result = 注册账号(regurl,regdata);
         if(/success/.test(result)){
-            //fetch(loginurl, {timeout: 5000});
             let loginurl = "https://vip.nxflv.com/user/login";
-            //request(loginurl, {timeout: 5000});
             let login = request('https://vip.nxflv.com/user/login/checkUser',
                 {headers: {'Referer': loginurl, 'Cookie': getCookie(loginurl)},
                 body: "username="+username+"&password="+username,
