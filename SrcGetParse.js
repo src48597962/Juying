@@ -79,7 +79,7 @@ function bpParse(vipUrl,parsename) {
             parse = 获取解析[parsename]();
             if(parse){
                 parsejson[parsename] = parse;
-                saveFile('hiker://files/rules/Src/bpParse.json', JSON.stringify(aesEncode('Juying', parsejson)));
+                saveFile('hiker://files/rules/Src/bpParse.json', aesEncode('Juying', JSON.stringify(parsejson)));
             }
             return parse;
         }
