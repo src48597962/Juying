@@ -71,7 +71,7 @@ function bpParse(vipUrl,parsename) {
         
         let parsefile = readFile('hiker://files/rules/Src/bpParse.json');
         if(parsefile){
-            var parsejson = JSON.parse(aesDecode('Juying', parsejson));
+            var parsejson = JSON.parse(aesDecode('Juying', parsefile));
         }else{
             var parsejson = {};
         }
