@@ -599,7 +599,7 @@ function sousuo() {
     }else{
         if(MY_PAGE==1){
             let name = MY_URL.split('##')[1];
-            if(name == "undefined"){
+            if(name == undefined){
                 setResult([{
                     title: "当前小程序版本过低，需升级新版本",
                     url: "海阔视界首页频道规则【聚影√】￥home_rule_url￥http://hiker.nokia.press/hikerule/rulelist.json?id=5102&auth=9f188bbe-4415-5fd4-ae82-726319ca44d5",
