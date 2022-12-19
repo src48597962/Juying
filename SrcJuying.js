@@ -598,19 +598,14 @@ function sousuo() {
         JYsousuo();
     }else{
         if(MY_PAGE==1){
-            let name = '';
-            try{
-                name = MY_URL.split('##')[1];
-                log(name);
-            }catch(e){
-                log(e.message)
+            let name = MY_URL.split('##')[1];
+            if(name == "undefined"){
                 setResult([{
                     title: "当前小程序版本过低，需升级新版本",
                     url: "海阔视界首页频道规则【聚影√】￥home_rule_url￥http://hiker.nokia.press/hikerule/rulelist.json?id=5102&auth=9f188bbe-4415-5fd4-ae82-726319ca44d5",
                     col_type: "text_1"
                 }]);
-            }
-            if(name&&name.trim()){
+            }else if(name.trim()){
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
                 xunmi(name,false,true);
             }else{
