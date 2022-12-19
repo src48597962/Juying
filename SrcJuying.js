@@ -608,7 +608,7 @@ function sousuo() {
                     col_type: "text_1"
                 }]);
             }
-            if(name.trim()){
+            if(name){
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
                 xunmi(name,false,true);
             }else{
