@@ -285,6 +285,7 @@ function xunmi(name,data,ishkss) {
                     log(html);
                     if (html.indexOf('检测中') != -1) {
                         log('过宝塔>'+ssurl + '&btwaf' + html.match(/btwaf(.*?)\"/)[1]);
+                        headers.Cookie = getCookie(ssurl);
                         html = request(ssurl + '&btwaf' + html.match(/btwaf(.*?)\"/)[1], {headers: headers, timeout: timeout});
                         log(html);
                     }else if (/页面已拦截/.test(html)) {
