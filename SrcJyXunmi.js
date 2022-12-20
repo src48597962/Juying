@@ -286,6 +286,7 @@ function xunmi(name,data,ishkss) {
                     if (html.indexOf('检测中') != -1) {
                         log('过宝塔>'+ssurl + '&btwaf' + html.match(/btwaf(.*?)\"/)[1]);
                         html = request(ssurl + '&btwaf' + html.match(/btwaf(.*?)\"/)[1], {headers: headers, timeout: timeout});
+                        log(html);
                     }else if (/页面已拦截/.test(html)) {
                         html = fetchCodeByWebView(ssurl, { headers: headers, 'blockRules': ['.png', '.jpg'], timeout:timeout});
                         html = pdfh(html,'body&&pre&&Text');
