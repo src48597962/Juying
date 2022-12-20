@@ -186,7 +186,7 @@ let customparse = {
     csp_custom_aiwandou: function (name) {
         try {
             var lists = [];
-            let html = request("https://wuli.api.bailian168.cc/movie/getsearchlist/keywords/"+name+"/page/1/rows/20.json");
+            let html = request("https://wuli.api.bailian168.cc/movie/getsearchlist/keywords/"+name+"/page/1/rows/15.json");
             let data = JSON.parse(html).data;
             data.forEach(item=>{
                 let ainame = item.movie_name;
