@@ -287,16 +287,17 @@ function xunmi(name,data,ishkss) {
                             "Referer": ssurl
                         };
                         //过数字验证先白嫖代码吧，感谢墙佬&道长
-                        let ssyz = 'TloGnnikThrfs/5fDNlk5CSsbaGtAH7W/uMZjuYoIupB6bCoo9CotLQHfPIdGgbkbynKqL2aUE2Xy558X2QxHYtTU09vD+4oaCDIuSZO7nxDbLfRGfWj7zql+yMbvF+aJoD/m6Psfw/PyYOAp/ZVGdrPzaCByfd0HL5DFVSw+YF2OC40V8SP9RxdFKKdrBuPxCWdxUCFrJ+1lRy/TU3LC84C4xxEBhgud7RtBp0zZArqBE06+Z3JtDP0eFCz/D5X0409qPHK3e1y/LuUgccuxpHnjYLE1GjlP8wYA2hQWe7yPngggQBHw33/gvb3tuCcxEKTWgmah/R32AH9ZF8jF7WemT26lUizVXe/spCdhDgHR/zUhODD4PO6glI8JPhdu+VwfPyRLG2D7CUo1L6SIF+0fYf0oTOWN13UPITo5+uZd/WnQQLU8NYx/WFCThEnkbzln9YGt60fRxsH+8uMDFgaBiC+z2SpcxB9gZ6GXypLSXWaj+qEUbGJKEx+jK/v5fnrkIhCdwNbkp9dRks6dmlYlBifzoWF8RkuC3rqPtoScBkMOMZu7GiVtoHEdHUozmnUIdrU1LGIqq9WnG7X2a3yH8s65mjLuLnd3q0U8v+LMPnHL2/GjQuTQKVh+RKEPqK/JdrChGLNrjcHvLHDbHEshrGZuQOdEphbx/PkhkvaYy4K1MO84R17guRsKs/V6niUPaL+XbQ7c3fqJS4VHJwludJTDe02euffGCm0PJIPlAOgLHnX0izJhA6q738R2UwQcWBQjJt79aF+kyqSdyt1QPVQVjaC3IpRf7PgsDhEJ7bi9nSclyIzgJ9DCJ4T+8dG1xHhKyZasT7L/x9Lfr1Mgs8nBZER2W9ax7iTkNK+X5ACU//p/YoP/uAanDtb3D0iKUUuXFH+Jbb0x1P322S2w6BJ46nuNHBMHTpVuWwhZeZzriGh7qoOywLWiExBMKyxTGLnmKh7r03/yXKYWIJnpBN2MMycVHRZJ7RumHV4CIsVrq7iRP48823RJVt9OtyP7uuc3wBBV3kcZUzbbaYdWBx1+Au+Od2u7lR6joOL810mcJm/f7J5TvGQP6HGph1YHHX4C7453a7uVHqOgyjjh5EBd720MEBY23c+TKq/z9UpWDDOg48ZFnwSIhFqitWdiZiqsaYuN0/SXwiK8EG9eQ29u2XDJoDW4mlwtcRO7vaX5XcFsgf4/mLU07mi';
-                        evalPrivateJS(ssyz);
+                        //let ssyz = 'TloGnnikThrfs/5fDNlk5CSsbaGtAH7W/uMZjuYoIupB6bCoo9CotLQHfPIdGgbkbynKqL2aUE2Xy558X2QxHYtTU09vD+4oaCDIuSZO7nxDbLfRGfWj7zql+yMbvF+aJoD/m6Psfw/PyYOAp/ZVGdrPzaCByfd0HL5DFVSw+YF2OC40V8SP9RxdFKKdrBuPxCWdxUCFrJ+1lRy/TU3LC84C4xxEBhgud7RtBp0zZArqBE06+Z3JtDP0eFCz/D5X0409qPHK3e1y/LuUgccuxpHnjYLE1GjlP8wYA2hQWe7yPngggQBHw33/gvb3tuCcxEKTWgmah/R32AH9ZF8jF7WemT26lUizVXe/spCdhDgHR/zUhODD4PO6glI8JPhdu+VwfPyRLG2D7CUo1L6SIF+0fYf0oTOWN13UPITo5+uZd/WnQQLU8NYx/WFCThEnkbzln9YGt60fRxsH+8uMDFgaBiC+z2SpcxB9gZ6GXypLSXWaj+qEUbGJKEx+jK/v5fnrkIhCdwNbkp9dRks6dmlYlBifzoWF8RkuC3rqPtoScBkMOMZu7GiVtoHEdHUozmnUIdrU1LGIqq9WnG7X2a3yH8s65mjLuLnd3q0U8v+LMPnHL2/GjQuTQKVh+RKEPqK/JdrChGLNrjcHvLHDbHEshrGZuQOdEphbx/PkhkvaYy4K1MO84R17guRsKs/V6niUPaL+XbQ7c3fqJS4VHJwludJTDe02euffGCm0PJIPlAOgLHnX0izJhA6q738R2UwQcWBQjJt79aF+kyqSdyt1QPVQVjaC3IpRf7PgsDhEJ7bi9nSclyIzgJ9DCJ4T+8dG1xHhKyZasT7L/x9Lfr1Mgs8nBZER2W9ax7iTkNK+X5ACU//p/YoP/uAanDtb3D0iKUUuXFH+Jbb0x1P322S2w6BJ46nuNHBMHTpVuWwhZeZzriGh7qoOywLWiExBMKyxTGLnmKh7r03/yXKYWIJnpBN2MMycVHRZJ7RumHV4CIsVrq7iRP48823RJVt9OtyP7uuc3wBBV3kcZUzbbaYdWBx1+Au+Od2u7lR6joOL810mcJm/f7J5TvGQP6HGph1YHHX4C7453a7uVHqOgyjjh5EBd720MEBY23c+TKq/z9UpWDDOg48ZFnwSIhFqitWdiZiqsaYuN0/SXwiK8EG9eQ29u2XDJoDW4mlwtcRO7vaX5XcFsgf4/mLU07mi';
+                        let yzcode = 'dMAn/3+9sBWBVMBCED49UnozR961HpaReX33gCVLfBXnJf+FGKd434r4HqKfMxZN0Z6HREaLfn67g9VxwE3qc403Uso103K1/yY1WzkViXvMxO4ZgCKpPmOsK/ciuYJx7tLIZt3XVyxy7W/0gkVNvgxMUJIEkNla1KYdgdUV2Ym+E5mD7GTIDBIJD6uGlUJSJZA8mSqXotk4WX2qHpPo08SXC+xnAbmb1UvhkoFpbEH44hAK8LWLS556cyImIGc69Z3Gt/5fyYMHNi18A5zTEDTECtRodhBmTyM+TIrshx9VTYwkV8xTJ34XS7uxRQnIuezB7D57W/Ie8Pap73VcJBwJcmpDKMjr/MoDFKO4CkEPTk5CnVYsaRegrdQdFWSNrIT1VeGZLOqSoiaixAO9hKsLyYibkp9jkplMKLmr9Ik=';
+                        evalPrivateJS(yzcode);
                         let www = ssurl.split('/');
-                        let myhome = www[0]+'//'+www[2];
-                        let codeurl = myhome+(ssurl.indexOf('search-pg-1-wd-')>-1?'/inc/common/code.php?a=search':'/index.php/verify/index.html?');
+                        let home = www[0]+'//'+www[2];
+                        let codeurl = home+(ssurl.indexOf('search-pg-1-wd-')>-1?'/inc/common/code.php?a=search':'/index.php/verify/index.html?');
                         let cook = fetchCookie(codeurl, {headers: headers});
                         headers.Cookie = JSON.parse(cook||'[]').join(';');
-                        let vcode = getVCode2(codeurl, JSON.stringify(headers), 'num');
-
-                        fetch(myhome+(ssurl.indexOf('search-pg-1-wd-')>-1?'/inc/ajax.php?ac=code_check&type=search&code=':html.match(/\/index.php.*?verify=/)[0]) + JSON.parse(vcode).ret, {
+                        //let vcode = JSON.parse(getVCode2(codeurl, JSON.stringify(headers), 'num')).ret;
+                        let vcode = SrcVerify.ocr(codeurl);
+                        fetch(home+(ssurl.indexOf('search-pg-1-wd-')>-1?'/inc/ajax.php?ac=code_check&type=search&code=':html.match(/\/index.php.*?verify=/)[0]) + vcode, {
                             headers: headers,
                             method: ssurl.indexOf('search-pg-1-wd-')>-1?'GET':'POST'
                         })
