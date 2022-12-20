@@ -282,6 +282,7 @@ function xunmi(name,data,ishkss) {
                         html = fetchCodeByWebView(ssurl, { headers: { 'User-Agent': ua }, 'blockRules': ['.png', '.jpg'], timeout:5000});
                         html = pdfh(html,'body&&pre&&Text');
                     }else if (/验证码|系统安全验证/.test(html)) {
+                        log(obj.name+'>'+ssurl+'>页面有验证码拦截');
                         let headers = {
                             "User-Agent": ua,
                             "Referer": ssurl
