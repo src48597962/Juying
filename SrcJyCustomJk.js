@@ -190,7 +190,7 @@ let customparse = {
             let data = JSON.parse(html).data;
             data.forEach(item=>{
                 let ainame = item.movie_name;
-                if(ainame == name){
+                if(ainame == name || (getSearchMode()==0&&ainame.indexOf(name)>-1)){
                     let aiurl = "https://www.wandou.pro/detail/"+item.movie_id;
                     let aipic = item.movie_img_url;
                     let aihtml = request(aiurl);
