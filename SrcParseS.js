@@ -1031,7 +1031,7 @@ var SrcParseS = {
             if(/vkey=/.test(url)){
                 return 1;
             }else if (/\.m3u8/.test(url)) {
-                var urlcode = JSON.parse(request(url,{withStatusCode:true,timeout:1500}));
+                var urlcode = JSON.parse(request(url,{withStatusCode:true,timeout:2000}));
                 //log(name+'url访问状态码：'+urlcode.statusCode)
                 if(urlcode.statusCode==-1){
                     log(name+'>m3u8探测超时未拦载，结果未知');
@@ -1053,7 +1053,7 @@ var SrcParseS = {
                     }else{
                         var urlts = urltss[0];
                         if(/^http/.test(urlts)){
-                            var tscode = JSON.parse(request(urlts,{headers:{'Referer':url},onlyHeaders:true,timeout:1500}));
+                            var tscode = JSON.parse(request(urlts,{headers:{'Referer':url},onlyHeaders:true,redirect:false,timeout:2000}));
                             //log(name+'ts访问状态码：'+tscode.statusCode)
                             if(tscode.statusCode==-1){
                                 log(name+'>ts段探测超时未拦载，结果未知');
@@ -1066,7 +1066,7 @@ var SrcParseS = {
                     }
                 }
             }else if (/\.mp4/.test(url)) {
-                var urlheader = JSON.parse(request(url,{onlyHeaders:true,timeout:1500}));
+                var urlheader = JSON.parse(request(url,{onlyHeaders:true,timeout:2000}));
                 if(urlheader.statusCode==-1){
                     log(name+'>mp4探测超时未拦载，结果未知');
                     return 1;
