@@ -1058,7 +1058,7 @@ var SrcParseS = {
                             if(tscode.statusCode==-1){
                                 log(name+'>ts段探测超时未拦载，结果未知');
                                 return 1;
-                            }else if(tscode.statusCode!=200){
+                            }else if(tscode.statusCode!=200 || tscode.statusCode!=403){
                                 log(name+'>ts段地址疑似失效或网络无法访问，不信去验证一下>'+url);
                                 return 0;
                             }
