@@ -1054,7 +1054,7 @@ var SrcParseS = {
                         var urlts = urltss[0];
                         if(/^http/.test(urlts)){
                             var tscode = JSON.parse(request(urlts,{headers:{'Referer':url},onlyHeaders:true,redirect:false,timeout:2000}));
-                            //log(name+'ts访问状态码：'+tscode.statusCode)
+                            log(name+'ts访问状态码：'+tscode.statusCode)
                             if(tscode.statusCode==-1){
                                 log(name+'>ts段探测超时未拦载，结果未知');
                                 return 1;
