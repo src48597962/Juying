@@ -1070,7 +1070,7 @@ var SrcParseS = {
                 if(urlheader.statusCode==-1){
                     log(name+'>mp4探测超时未拦载，结果未知');
                     return 1;
-                }else if(urlheader.statusCode!=200 && tscode.statusCode!=403){
+                }else if(urlheader.statusCode!=200){
                     log(name+'>mp4播放地址疑似失效或网络无法访问，不信去验证一下>'+url);
                     return 0;
                 }else{
