@@ -392,7 +392,6 @@ function xunmi(name,data,ishkss) {
                             lists.forEach(item => {
                                 if(jsondata.scVodId){
                                     item.id = item[jsondata.scVodId];
-                                    log(jsondata.scVodId+' '+item.id);
                                 }
                             })
                         }else{
