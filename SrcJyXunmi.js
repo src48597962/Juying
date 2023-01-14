@@ -390,9 +390,9 @@ function xunmi(name,data,ishkss) {
                             let html = JSON.parse(gethtml);
                             lists = html.list||[];
                             lists.forEach(item => {
-                                if(item.scVodId){
-                                    item.id = item[item.scVodId];
-                                    log(item.scVodId+' '+item.id);
+                                if(jsondata.scVodId){
+                                    item.id = item[jsondata.scVodId];
+                                    log(jsondata.scVodId+' '+item.id);
                                 }
                             })
                         }else{
