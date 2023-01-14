@@ -410,7 +410,7 @@ function xunmi(name,data,ishkss) {
                                 lists.push({"id":/^http/.test(href[j])||/\{vid}$/.test(jsondata.dtUrl)?href[j]:href[j].replace(/\/.*?\/|\.html/g,''),"name":title[j],"pic":img[j],"desc":mark[j]})
                             }
                         }
-                        var ssvodurl = `jsondata.dtUrl.replace('{vid}',list.id)`;
+                        var ssvodurl = `jsondata.dtUrl.replace('{vid}',list.scVodId?list.scVodId:list.id)`;
                     }else{
                         var ssurl = jsondata.url+jsondata.sousuoqian+name+jsondata.sousuohou;
                         if(jsondata.ssmoshi=="0"){
