@@ -389,6 +389,11 @@ function xunmi(name,data,ishkss) {
                             gethtml = getHtmlCode(ssurl,urlua,xunmitimeout*1000);
                             let html = JSON.parse(gethtml);
                             lists = html.list||[];
+                            lists.forEach(item => {
+                                if(item.scVodId){
+                                    item.id = item['scVodId'];
+                                }
+                            })
                         }else{
                             let sstype = ssurl.indexOf(';post')>-1?"post":"get";
                             if(sstype == "post"){
@@ -410,7 +415,7 @@ function xunmi(name,data,ishkss) {
                                 lists.push({"id":/^http/.test(href[j])||/\{vid}$/.test(jsondata.dtUrl)?href[j]:href[j].replace(/\/.*?\/|\.html/g,''),"name":title[j],"pic":img[j],"desc":mark[j]})
                             }
                         }
-                        var ssvodurl = `jsondata.dtUrl.replace('{vid}', list.scVodId || list.id)`;
+                        var ssvodurl = `jsondata.dtUrl.replace('{vid}', list.id)`;
                     }else{
                         var ssurl = jsondata.url+jsondata.sousuoqian+name+jsondata.sousuohou;
                         if(jsondata.ssmoshi=="0"){
