@@ -391,7 +391,7 @@ function xunmi(name,data,ishkss) {
                             lists = html.list||[];
                             lists.forEach(item => {
                                 if(item.scVodId){
-                                    item.id = item['scVodId'];
+                                    item.id = item[item.scVodId];
                                 }
                             })
                         }else{
