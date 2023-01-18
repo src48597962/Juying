@@ -501,7 +501,7 @@ function xunmi(name,data,ishkss) {
                                     desc: !ishkss?(voddesc + '\n\n' + appname):'聚影√ · '+obj.name+' ('+obj.type+')'+(obj.group&&obj.group!=obj.type?' ['+obj.group+']':''),
                                     content: voddesc,
                                     pic_url: vodpic,
-                                    url: $("hiker://empty##" + vodurl + "#immersiveTheme##autoCache#").rule((type,ua) => {
+                                    url: $("hiker://empty##" + vodurl + "#immersiveTheme#"+(getMyVar('debug','0')=="0"?"#autoCache#":"")).rule((type,ua) => {
                                             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
                                             xunmierji(type,ua)
                                         },obj.type, urlua),
