@@ -79,7 +79,6 @@ function Live() {
         for(let i=0;i<livedata.length;i++){
             let dyname = livedata[i].name;
             let dyurl = livedata[i].url;
-            deleteFile('live'+md5(dyurl)+'.txt');//自动删除之前私有文件
             //if(livedata[i].show!=0){
                 d.push({
                     title: JYlivedyurl==dyurl?dyname+'✌':dyname,
