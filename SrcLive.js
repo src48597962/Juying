@@ -745,6 +745,7 @@ function LiveSet() {
                                         }
                                         return "toast://成功导入"+importnum;
                                     }else{
+                                        hideLoading();
                                         return "toast://文件异常或不支持的格式，导入失败";
                                     }
                                 }else if(input=="复制链接"){
