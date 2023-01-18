@@ -126,7 +126,9 @@ function Live() {
                     log(JYlives[i].match(/",(.*?)\\n/)[1]);
                     datalist.push({group: JYlives[i].match(/group-title="(.*?)"/)[1], name: JYlives[i].match(/",(.*?)\\n/)[1]});
                 }
-            }catch(e){}
+            }catch(e){
+                log(e.message);
+            }
         }
         /*
 group-title="玩偶",一日女友的漂亮姐姐 上
