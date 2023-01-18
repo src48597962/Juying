@@ -123,7 +123,7 @@ function Live() {
                         datalist.push({group: group, name: JYlives[i].split(',')[0].trim()});
                     }
                 }else if(JYlives[i].indexOf('group-title')>-1){
-                    log(JYlives[i].match(/group-title="(.*?)"/)[1]);
+                    log(JYlives[i].match(/",(.*?)\\n/)[1]);
                     datalist.push({group: JYlives[i].match(/group-title="(.*?)"/)[1], name: JYlives[i].match(/",(.*?)\\n/)[1]});
                 }
             }catch(e){}
