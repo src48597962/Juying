@@ -116,6 +116,7 @@ function Live() {
         let group = "";
         for(let i=0;i<JYlives.length;i++){
             try{
+                log(JYlives[i]);
                 if(JYlive.indexOf('#genre#')>-1){
                     if(JYlives[i].indexOf('#genre#')>-1){
                         group = JYlives[i].split(',')[0];
