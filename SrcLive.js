@@ -116,18 +116,23 @@ function Live() {
         let group = "";
         for(let i=0;i<JYlives.length;i++){
             try{
-                log(JYlives[i]);
                 if(JYlive.indexOf('#genre#')>-1){
                     if(JYlives[i].indexOf('#genre#')>-1){
                         group = JYlives[i].split(',')[0];
                     }else if(JYlives[i].indexOf(',')>-1){
                         datalist.push({group: group, name: JYlives[i].split(',')[0].trim()});
                     }
-                }else{
+                }else if(JYlives[i].indexOf('group-title')>-1){
+                    log(JYlives[i].match(/group-title="(.*?)"/)[1]);
                     datalist.push({group: JYlives[i].match(/group-title="(.*?)"/)[1], name: JYlives[i].match(/",(.*?)\\n/)[1]});
                 }
             }catch(e){}
         }
+        /*
+group-title="玩偶",一日女友的漂亮姐姐 上
+https://ypmnkbb.saejeuj.com/api/app/media/m3u8/av/ph/gr/7v/78/af7b145ecae246b2ac79cecb6f47f6ad.m3u8?
+
+        */
         let obj = {};
         if(JYlivedyurl=="juying"){putMyVar('JYlivenum',datalist.length);}
         datalist = datalist.reduce((newArr, next) => {
