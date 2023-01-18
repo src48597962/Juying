@@ -126,14 +126,10 @@ function Live() {
                     datalist.push({group: JYlives[i].match(/group-title="(.*?)"/)[1], name: JYlives[i].match(/",(.*?)\n/)[1]});
                 }
             }catch(e){
-                log(e.message);
+                //log(e.message);
             }
         }
-        /*
-group-title="玩偶",一日女友的漂亮姐姐 上
-https://ypmnkbb.saejeuj.com/api/app/media/m3u8/av/ph/gr/7v/78/af7b145ecae246b2ac79cecb6f47f6ad.m3u8?
 
-        */
         let obj = {};
         if(JYlivedyurl=="juying"){putMyVar('JYlivenum',datalist.length);}
         datalist = datalist.reduce((newArr, next) => {
@@ -425,25 +421,46 @@ function guanlidata(datalist) {
     return list;
 }
 function LivePlay(name) {
-    let JYlivefile= "hiker://files/rules/Src/Juying/live.txt";
-    let JYlive= getMyVar('JYlivedyurl','juying')=="juying"?fetch(JYlivefile):fetchCache(getMyVar('JYlivedyurl'),24,{timeout:3000});
-    let JYlives = JYlive.split('\n');
+    let JYlive= getMyVar('JYlivedyurl','juying')=="juying"?fetch("hiker://files/rules/Src/Juying/live.txt"):fetchCache(getMyVar('JYlivedyurl'),24,{timeout:3000});
+    if(JYlive.indexOf('#genre#')>-1){
+        var JYlives = JYlive.split('\n');
+    }else if(JYlive.indexOf('#EXTINF:-1')>-1){
+        var JYlives = JYlive.split('#EXTINF:-1 ');
+    }else{
+        var JYlives = [];
+    }
     let urls = [];
+            /*
+group-title="玩偶",一日女友的漂亮姐姐 上
+https://ypmnkbb.saejeuj.com/api/app/media/m3u8/av/ph/gr/7v/78/af7b145ecae246b2ac79cecb6f47f6ad.m3u8?
+
+        */
     for(let i = 0;i<JYlives.length;i++){
         try{
-            if(JYlives[i].indexOf(',')>-1&&JYlives[i].indexOf('#genre#')==-1&&JYlives[i].split(',')[0].replace(/TV-/g,'TV').replace(/\[.*\]/g,'').trim()==name){
-                let url = JYlives[i].split(',')[1].trim();
-                let urll = url.split('#');
+            if(JYlive.indexOf('#genre#')>-1){
+                if(JYlives[i].indexOf(',')>-1&&JYlives[i].indexOf('#genre#')==-1&&JYlives[i].split(',')[0].replace(/TV-/g,'TV').replace(/\[.*\]/g,'').trim()==name){
+                    let url = JYlives[i].split(',')[1].trim();
+                    let urll = url.split('#');
+                    urll.forEach(item => {
+                        if(/\\r^/.test(item)){
+                            item = item.slice(0, item.length - 2);
+                        }
+                        if(item){
+                            urls.push(item + '#isVideo=true#');
+                        }
+                    })
+                }
+            }else if(JYlives[i].indexOf('group-title')>-1){
+                let urll = JYlives[i].split('\n');
                 urll.forEach(item => {
-                    if(/\\r^/.test(item)){
-                        item = item.slice(0, item.length - 2);
-                    }
-                    if(item){
+                    if(item.indexOf('://')>-1){
                         urls.push(item + '#isVideo=true#');
                     }
                 })
             }
-        }catch(e){}
+        }catch(e){
+            //log(e.message);
+        }
     }
     if(urls.length==0){
         return "toast://无播放地址";
