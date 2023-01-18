@@ -450,7 +450,7 @@ https://ypmnkbb.saejeuj.com/api/app/media/m3u8/av/ph/gr/7v/78/af7b145ecae246b2ac
                         }
                     })
                 }
-            }else if(JYlives[i].indexOf('group-title')>-1){
+            }else if(JYlives[i].indexOf('group-title')>-1 && JYlives[i].match(/",(.*?)\n/)[1]==name){
                 let urll = JYlives[i].split('\n');
                 urll.forEach(item => {
                     if(item.indexOf('://')>-1){
