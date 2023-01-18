@@ -46,7 +46,7 @@ function Live() {
             try{
                 showLoading('发现订阅源，正在初始化');
                 let YChtml = fetchCache(JYlivedyurl,48,{timeout:3000}).replace(/TV-/g,'TV').replace(/\[.*\]/g,'');
-                if(YChtml.indexOf('#genre#')>-1){
+                if(YChtml.indexOf('#genre#')>-1 || YChtml.indexOf('#EXTINF:-1')>-1){
                     JYlive = YChtml;
                 }
                 hideLoading();
@@ -99,7 +99,14 @@ function Live() {
     }
 
     if(JYlive){
-        var JYlives = JYlive.split('\n');
+        if(JYlive.indexOf('#genre#')>-1){
+            var JYlives = JYlive.split('\n');
+        }else if(JYlive.indexOf('#EXTINF:-1')>-1){
+            log(JYlive);
+            var JYlives = JYlive.split('#EXTINF:-1');
+        }else{
+            var JYlives = [];
+        }
     }else{
         var JYlives = [];
     }
@@ -559,7 +566,7 @@ function LiveSet() {
                         if(!livedata.some(item => item.url==input)){
                             showLoading('正在验证链接有效性...');
                             let YChtml = request(input,{timeout:3000});
-                            if(YChtml.indexOf('#genre#')>-1){
+                            if(YChtml.indexOf('#genre#')>-1 || YChtml.indexOf('#EXTINF:-1')>-1){
                                 hideLoading();
                                 return $("","链接有效，起个名字保存").input((livedata,url,livecfgfile,liveconfig)=>{
                                     if(input){
@@ -711,7 +718,7 @@ function LiveSet() {
                                         }
                                         return "toast://成功导入"+importnum;
                                     }else{
-                                        return "toast://文件异常，导入失败";
+                                        return "toast://文件异常或不支持的格式，导入失败";
                                     }
                                 }else if(input=="复制链接"){
                                     copy(url);
