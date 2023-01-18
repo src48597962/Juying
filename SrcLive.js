@@ -102,8 +102,7 @@ function Live() {
         if(JYlive.indexOf('#genre#')>-1){
             var JYlives = JYlive.split('\n');
         }else if(JYlive.indexOf('#EXTINF:-1')>-1){
-            log(JYlive);
-            var JYlives = JYlive.split('#EXTINF:-1');
+            var JYlives = JYlive.split('#EXTINF:-1 ');
         }else{
             var JYlives = [];
         }
@@ -117,10 +116,14 @@ function Live() {
         let group = "";
         for(let i=0;i<JYlives.length;i++){
             try{
-                if(JYlives[i].indexOf('#genre#')>-1){
-                    group = JYlives[i].split(',')[0];
-                }else if(JYlives[i].indexOf(',')>-1){
-                    datalist.push({group: group, name: JYlives[i].split(',')[0].trim()});
+                if(JYlive.indexOf('#genre#')>-1){
+                    if(JYlives[i].indexOf('#genre#')>-1){
+                        group = JYlives[i].split(',')[0];
+                    }else if(JYlives[i].indexOf(',')>-1){
+                        datalist.push({group: group, name: JYlives[i].split(',')[0].trim()});
+                    }
+                }else{
+                    datalist.push({group: JYlives[i].match(/group-title="(.*?)"/)[1], name: JYlives[i].match(/",(.*?)\\n/)[1]});
                 }
             }catch(e){}
         }
