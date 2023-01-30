@@ -565,7 +565,7 @@ function JYerji(){
             for (var m in plays) {
                 let url = "https://v.sogou.com" + plays[m].url;
                 d.push({
-                    title: plays[m].flag_list.indexOf('trailer') == -1?getHead(plays[m].sitename[0], Color3):plays[m].sitename[0] + '—预告',
+                    title: plays[m].flag_list.indexOf('trailer') == -1?plays[m].sitename[0]:plays[m].sitename[0] + '—预告',
                     img: 'http://dlweb.sogoucdn.com/video/wap/static/img/logo/' + plays[m].sitename[1],
                     url: url + easy,
                     col_type: "icon_2",
