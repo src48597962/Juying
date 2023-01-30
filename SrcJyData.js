@@ -656,6 +656,8 @@ function JYyiji(){
             }, fold),
             col_type: 'scroll_button',
         })
+        log(getMyVar('SrcJuying$listTab', datasource=="sougou"?'2':'teleplay'))
+        log(listTabs[i])
         for (var i in categorys) {
             d.push({
                 title: getMyVar('SrcJuying$listTab', datasource=="sougou"?'2':'teleplay') === listTabs[i] ? '““””<b><span style="color:' + Color + '">' + categorys[i] + '</span></b>' : categorys[i],
