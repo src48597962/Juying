@@ -658,7 +658,7 @@ function JYyiji(){
         })
         for (var i in categorys) {
             d.push({
-                title: getMyVar('SrcJuying$listTab', '2'||'teleplay') === listTabs[i] ? '““””<b><span style="color:' + Color + '">' + categorys[i] + '</span></b>' : categorys[i],
+                title: getMyVar('SrcJuying$listTab', datasource=="sougou"?'2':'teleplay') === listTabs[i] ? '““””<b><span style="color:' + Color + '">' + categorys[i] + '</span></b>' : categorys[i],
                 url: $('#noLoading#').lazyRule((listTab) => {
                         putMyVar('SrcJuying$listTab', listTab);
                         clearMyVar('SrcJuying$类型');
