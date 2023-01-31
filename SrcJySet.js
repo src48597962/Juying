@@ -933,7 +933,7 @@ function jiekou(lx,data) {
     }
     d.push({
         title: getMyVar('isretain', '')!="1"?'强制保留：否':'强制保留：是',
-        desc: getMyVar('isretain', '')!="1"?'资源码订阅更新时会被覆盖':'资源码订阅更新时保留此接口',
+        desc: getMyVar('isretain', '')!="1"?'资源码订阅全量同步时会被覆盖':'资源码订阅全量同步时保留此接口',
         col_type:'text_1',
         url:$('#noLoading#').lazyRule(()=>{
             if(getMyVar('isretain', '')!="1"){
@@ -954,8 +954,8 @@ function jiekou(lx,data) {
     d.push({
         title:'测试',
         col_type:'text_3',
-        url: $(getMyVar("testkey","我的"),"输入测试搜索关键字").input(()=>{
-                putMyVar("testkey",input);
+        url: $(getItem('searchtestkey', '斗罗大陆'),"输入测试搜索关键字").input(()=>{
+                setItem("searchtestkey",input);
                 if(getMyVar('addtype', '1')=="1"&&!/^http|^csp/.test(getMyVar('apiurl',''))){return "toast://接口地址不正确"}
                 return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
                     let apiurl = getMyVar('apiurl');
