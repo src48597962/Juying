@@ -840,14 +840,14 @@ function jiekou(lx,data) {
         d.push({
             title:'apiurl',
             col_type: 'input',
-            desc: getMyVar('apitype')=="xpath"?"接口地址以csp_xpath_为前缀":getMyVar('apitype')=="biubiu"?"接口地址以csp_biubiu_为前缀":getMyVar('apitype')=="custom"?"接口地址以csp_custom_为前缀":"接口地址",
+            desc: getMyVar('apitype')=="xpath"?"接口地址以csp_xpath_为前缀":getMyVar('apitype')=="biubiu"?"接口地址以csp_biubiu_为前缀":getMyVar('apitype')=="XBPQ"?"接口地址以csp_XBPQ_为前缀":getMyVar('apitype')=="custom"?"接口地址以csp_custom_为前缀":"接口地址",
             extra: {
                 titleVisible: false,
-                defaultValue: getMyVar('apitype')=="xpath"&&getMyVar('apiurl', '')==""?'csp_xpath_':getMyVar('apitype')=="biubiu"&&getMyVar('apiurl', '')==""?'csp_biubiu_':getMyVar('apitype')=="custom"&&getMyVar('apiurl', '')==""?'csp_custom_':getMyVar('apiurl', ''),
+                defaultValue: getMyVar('apiurl','')?getMyVar('apiurl',''):getMyVar('apitype')=="xpath"?'csp_xpath_':getMyVar('apitype')=="biubiu"?'csp_biubiu_':getMyVar('apitype')=="XBPQ"?'csp_XBPQ_':getMyVar('apitype')=="custom"?'csp_custom_':"",
                 onChange: 'putMyVar("apiurl",input)'
             }
         });
-        if(getMyVar('apitype')=="xpath"||getMyVar('apitype')=="biubiu"||getMyVar('apitype')=="custom"){
+        if(getMyVar('apitype')=="xpath"||getMyVar('apitype')=="biubiu"||getMyVar('apitype')=="XBPQ"||getMyVar('apitype')=="custom"){
             d.push({
                 title:'data代码',
                 col_type: 'input',
@@ -865,7 +865,7 @@ function jiekou(lx,data) {
         d.push({
             title: getMyVar('apitype', '')==""?'类型：自动识别':'类型：'+getMyVar('apitype'),
             col_type:'text_1',
-            url:$(["v1","app","v2","iptv","cms","xpath","biubiu","custom","自动"],3).select(()=>{
+            url:$(["v1","app","v2","iptv","cms","xpath","biubiu","XBPQ","custom","自动"],3).select(()=>{
                 if(input=="自动"){
                     clearMyVar('apitype');
                     clearMyVar('apidata');
@@ -891,11 +891,11 @@ function jiekou(lx,data) {
     }
     
     d.push({
-        title: 'User-Agent：'+getMyVar('apiua','Dalvik/2.1.0'),
+        title: 'User-Agent：'+getMyVar('apiua','MOBILE_UA'),
         col_type:'text_1',
         url:$(["Dalvik/2.1.0","Dart/2.13 (dart:io)","MOBILE_UA","PC_UA","自定义"],2).select(()=>{
             if(input=="自定义"){
-                return $(getMyVar('apiua','Dalvik/2.1.0'),"输入指定ua").input(()=>{
+                return $(getMyVar('apiua','MOBILE_UA'),"输入指定ua").input(()=>{
                     putMyVar('apiua', input);
                     refreshPage(true);
                     return "toast://已指定ua："+input;
@@ -961,7 +961,7 @@ function jiekou(lx,data) {
                     let apiurl = getMyVar('apiurl');
                     let apiname = getMyVar('apiname');
                     let apiurls = getMyVar('apiurls');
-                    let apiua = getMyVar('apiua','Dalvik/2.1.0');
+                    let apiua = getMyVar('apiua','MOBILE_UA');
                     let datalist = [];
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                     if(getMyVar('addtype', '1')=="1"&&apiname&&apiurl){
@@ -1052,7 +1052,7 @@ function jiekou(lx,data) {
             let apiurl = getMyVar('apiurl');
             let apiname = getMyVar('apiname');
             let apiurls = getMyVar('apiurls');
-            let apiua = getMyVar('apiua','Dalvik/2.1.0');
+            let apiua = getMyVar('apiua','MOBILE_UA');
             let isupdate = 0;
             if(getMyVar('addtype', '1')=="1"&&apiname&&apiurl){
                 let urltype = getMyVar('apitype');
@@ -2511,7 +2511,7 @@ function Resourceimport(input,importtype,boxdy){
                     }catch(e){
                         //log(obj.name + '>抓取失败>' + e.message)
                     }
-                }else if(/^csp_XPath/.test(obj.api)&&!boxdy){
+                }else if(/^csp_XPath/.test(obj.api)&&!boxdy){//xpath很多语法兼容不好，所以订阅跳过
                     try{
                         let urlfile = obj.ext;
                         if(/^clan:/.test(urlfile)){
@@ -2548,6 +2548,21 @@ function Resourceimport(input,importtype,boxdy){
                         xpdata.scVodImg = xpjson.scVodImg;
                         xpdata.scVodMark = xpjson.scVodMark;
                         urls.push({ "name": obj.name, "url": obj.key, "type": "xpath", "ua": xpjson.ua?xpjson.ua:"PC_UA", "data": xpdata, "group": isboxdy?datasl>0?"TVBox订阅":"":"新导入"})
+                    }catch(e){
+                        //log(obj.name + '>抓取失败>' + e.message)
+                    }
+                }else if(obj.api=="csp_XBPQ"){
+                    try{
+                        let urlfile = obj.ext;
+                        if(/^clan:/.test(urlfile)){
+                            urlfile = urlfile.replace("clan://TVBox/",input.match(/file.*\//)[0]);
+                        }else if(/^./.test(urlfile)){
+                            urlfile = input.match(/http(s)?:\/\/.*\//)[0]+urlfile.replace("./","");
+                        }
+                        let data ={
+                            "ext": urlfile
+                        }
+                        urls.push({ "name": obj.name, "url": obj.key, "type": "XBPQ", "ua": "PC_UA", "data": data, "group": isboxdy?datasl>0?"TVBox订阅":"":"新导入"})
                     }catch(e){
                         //log(obj.name + '>抓取失败>' + e.message)
                     }
