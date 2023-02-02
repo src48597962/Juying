@@ -1003,7 +1003,7 @@ var SrcParseS = {
 
 
                         */
-                        let dm = $.require('hiker://page/dmFun?rule=dm盒子').zuoandm(vipUrl);
+                        let dm = $.require('hiker://page/dmFun?rule=dm盒子').fcdm(vipUrl);
                         return JSON.stringify({
                             urls: weburls,
                             names: x5namelist,
