@@ -991,8 +991,11 @@ var SrcParseS = {
                     if(JYconfig.superweb==1&x5jxlist.length>0){
                         if(printlog==1){log('开启播放器超级嗅探模式')}
                         let weburls = x5jxlist.map(item => "video://" + item +vipUrl);
-
-                        let dm = $.require('hiker://page/dmFun?rule=dm盒子1').dmRoute(vipUrl);
+                        try{
+                            var dm = $.require('hiker://page/dmFun?rule=dm盒子1').dmRoute(vipUrl);
+                        }catch(e){
+                            var dm = "";
+                        }
                         return JSON.stringify({
                             urls: weburls,
                             names: x5namelist,
