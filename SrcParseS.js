@@ -104,7 +104,7 @@ var SrcParseS = {
                         }, fy_bridge_app.base64Encode(fy_bridge_app.getHeaderUrl(urls[i])));
                     else {
                         let dm = "";
-                        if(getItem('dmRoute', '0')=="1" && vipUrl.match(/youku|iqiyi|ixigua|migu|sohu|pptv|le|cctv|1905|mgtv|qq.com/)){
+                        if(fba.getItem('dmRoute', '0')=="1" && vipUrl.match(/youku|iqiyi|ixigua|migu|sohu|pptv|le|cctv|1905|mgtv|qq.com/)){
                             try{
                                 dm = $.require('hiker://page/dmFun?rule=dm盒子').dmRoute(vipUrl);
                             }catch(e){}
@@ -121,7 +121,7 @@ var SrcParseS = {
                                     urls.push(playUrl);
                                     headers.push({});
                                 }
-                                return JSON.stringify({
+                                return $.stringify({
                                     urls: urls,
                                     headers: headers,
                                     danmu: dm 
