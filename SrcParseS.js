@@ -963,7 +963,7 @@ var SrcParseS = {
             } 
             //dm盒子弹幕
             let dm = "";
-            if(getItem('isdanmu', '0')=="1"){
+            if(getItem('dmRoute', '0')=="1" && vipUrl.match(/youku|qiyi|ixigua|migu|sohu|pptv|le|cctv|1905.com|mgtv|qq.com/)){
                 try{
                     dm = $.require('hiker://page/dmFun?rule=dm盒子').dmRoute(vipUrl);
                 }catch(e){}
@@ -981,7 +981,16 @@ var SrcParseS = {
                     }); 
                 }else{
                     if(printlog==1){log('解析完成，进入播放1')};
-                    return this.formatUrl(playurl);
+                    if(dm && getItem('dmRoute', '0')=="1"){
+                        let MulUrl = this.formatMulUrl(playurl, 0);
+                        return JSON.stringify({
+                            urls: MulUrl.url,
+                            headers: MulUrl.header,
+                            danmu: dm 
+                        }); 
+                    }else{
+                        return this.formatUrl(playurl);
+                    }
                 }
             }else{
                 if(parseStr){
@@ -1021,7 +1030,7 @@ var SrcParseS = {
                 var name = 'video'+parseInt(i)+'.m3u8';
                 url = cacheM3u8(url, {headers: header, timeout: 3000}, name)+'#pre#';
             }
-            if(url.indexOf('#isVideo=true#')==-1&&i==0){
+            if(url.indexOf('#isVideo=true#')==-1 && i==0){
                 url = url + '#isVideo=true#';
             }
             return {url:url, header:header};
