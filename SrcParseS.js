@@ -104,6 +104,11 @@ var SrcParseS = {
                         }, fy_bridge_app.base64Encode(fy_bridge_app.getHeaderUrl(urls[i])));
                     else {
                         return $$$("#noLoading#").lazyRule((url, formatUrl, vipUrl) => {
+                            try{
+                                vipUrl = vipUrl.split("=")[1];
+                            }catch(e){
+                                vipUrl = "";
+                            }
                             let dm = "";
                             if(getItem('dmRoute', '0')=="1" && vipUrl.match(/youku|iqiyi|ixigua|migu|sohu|pptv|le|cctv|1905|mgtv|qq.com/)){
                                 try{
