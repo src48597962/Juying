@@ -992,18 +992,7 @@ var SrcParseS = {
                         if(printlog==1){log('开启播放器超级嗅探模式')}
                         let weburls = x5jxlist.map(item => "video://" + item +vipUrl);
 
-                        /*
-
-                        dm = $.require('hiker://page/dmFun?rule=dm盒子').fcdm(官链);
-                        dm = $.require('hiker://page/dmFun?rule=dm盒子').zuoandm(官链);
-                        dm = $.require('hiker://page/dmFun?rule=dm盒子').fufeng_Third(官链);
-                        dm = $.require('hiker://page/dmFun?rule=dm盒子').MGdm(官链);
-                        dm = $.require('hiker://page/dmFun?rule=dm盒子').TXdm(官链);
-                        dm = $.require('hiker://page/dmFun?rule=dm盒子').bilidm(官链);
-
-
-                        */
-                        let dm = $.require('hiker://page/dmFun?rule=dm盒子').fcdm(vipUrl);
+                        let dm = $.require('hiker://page/dmFun?rule=dm盒子1').dmRoute(vipUrl);
                         return JSON.stringify({
                             urls: weburls,
                             names: x5namelist,
