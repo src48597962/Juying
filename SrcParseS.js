@@ -103,13 +103,13 @@ var SrcParseS = {
                             }
                         }, fy_bridge_app.base64Encode(fy_bridge_app.getHeaderUrl(urls[i])));
                     else {
-                        let dm = "";
-                        if(fba.getItem('dmRoute', '0')=="1" && vipUrl.match(/youku|iqiyi|ixigua|migu|sohu|pptv|le|cctv|1905|mgtv|qq.com/)){
-                            try{
-                                dm = $.require('hiker://page/dmFun?rule=dm盒子').dmRoute(vipUrl);
-                            }catch(e){}
-                        }
-                        return $$$("#noLoading#").lazyRule((url, formatUrl ,dm) => {
+                        return $$$("#noLoading#").lazyRule((url, formatUrl) => {
+                            let dm = "";
+                            if(getItem('dmRoute', '0')=="1" && vipUrl.match(/youku|iqiyi|ixigua|migu|sohu|pptv|le|cctv|1905|mgtv|qq.com/)){
+                                try{
+                                    dm = $.require('hiker://page/dmFun?rule=dm盒子').dmRoute(vipUrl);
+                                }catch(e){}
+                            }
                             if(dm){
                                 let playUrl = formatUrl(url);
                                 let urls = [];
@@ -121,7 +121,7 @@ var SrcParseS = {
                                     urls.push(playUrl);
                                     headers.push({});
                                 }
-                                return $.stringify({
+                                return JSON.stringify({
                                     urls: urls,
                                     headers: headers,
                                     danmu: dm 
@@ -129,7 +129,7 @@ var SrcParseS = {
                             }else{
                                 return formatUrl(url)+"#ignoreImg=true#";
                             }
-                        }, urls[i], formatUrl, dm);
+                        }, urls[i], formatUrl);
                     }
                 }
             }
