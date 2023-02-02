@@ -991,9 +991,23 @@ var SrcParseS = {
                     if(JYconfig.superweb==1&x5jxlist.length>0){
                         if(printlog==1){log('开启播放器超级嗅探模式')}
                         let weburls = x5jxlist.map(item => "video://" + item +vipUrl);
+
+                        /*
+
+                        dm = $.require('hiker://page/dmFun?rule=dm盒子').fcdm(官链);
+                        dm = $.require('hiker://page/dmFun?rule=dm盒子').zuoandm(官链);
+                        dm = $.require('hiker://page/dmFun?rule=dm盒子').fufeng_Third(官链);
+                        dm = $.require('hiker://page/dmFun?rule=dm盒子').MGdm(官链);
+                        dm = $.require('hiker://page/dmFun?rule=dm盒子').TXdm(官链);
+                        dm = $.require('hiker://page/dmFun?rule=dm盒子').bilidm(官链);
+
+
+                        */
+                        let dm = $.require('hiker://page/dmFun?rule=dm盒子').zuoandm(vipUrl);
                         return JSON.stringify({
                             urls: weburls,
-                            names: x5namelist
+                            names: x5namelist,
+                            danmu: dm
                         }); 
                     }else if(x5jxlist.length>0){
                         return this.聚嗅(vipUrl, x5jxlist,excludeurl);
