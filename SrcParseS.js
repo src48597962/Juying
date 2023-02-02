@@ -961,7 +961,14 @@ var SrcParseS = {
                 delete recordlist['head'];
                 writeFile(recordfile, JSON.stringify(recordlist));
             } 
-
+            //dm盒子弹幕
+            let dm = "";
+            if(getItem('isdanmu', '0')=="1"){
+                try{
+                    dm = $.require('hiker://page/dmFun?rule=dm盒子').dmRoute(vipUrl);
+                }catch(e){}
+            }
+            
             //播放
             if(playurl!=""){
                 if(urls.length>1){
@@ -970,7 +977,7 @@ var SrcParseS = {
                         urls: urls,
                         names: names,
                         headers: headers,
-                        danmu: danmu
+                        danmu: danmu || dm 
                     }); 
                 }else{
                     if(printlog==1){log('解析完成，进入播放1')};
@@ -991,11 +998,6 @@ var SrcParseS = {
                     if(JYconfig.superweb==1&x5jxlist.length>0){
                         if(printlog==1){log('开启播放器超级嗅探模式')}
                         let weburls = x5jxlist.map(item => "video://" + item +vipUrl);
-                        try{
-                            var dm = $.require('hiker://page/dmFun?rule=dm盒子1').dmRoute(vipUrl);
-                        }catch(e){
-                            var dm = "";
-                        }
                         return JSON.stringify({
                             urls: weburls,
                             names: x5namelist,
