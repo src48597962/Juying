@@ -103,7 +103,7 @@ var SrcParseS = {
                             }
                         }, fy_bridge_app.base64Encode(fy_bridge_app.getHeaderUrl(urls[i])));
                     else {
-                        return $$$("#noLoading#").lazyRule((url, formatUrl) => {
+                        return $$$("#noLoading#").lazyRule((url, formatUrl, vipUrl) => {
                             let dm = "";
                             if(getItem('dmRoute', '0')=="1" && vipUrl.match(/youku|iqiyi|ixigua|migu|sohu|pptv|le|cctv|1905|mgtv|qq.com/)){
                                 try{
@@ -129,7 +129,7 @@ var SrcParseS = {
                             }else{
                                 return formatUrl(url)+"#ignoreImg=true#";
                             }
-                        }, urls[i], formatUrl);
+                        }, urls[i], formatUrl, vipUrl);
                     }
                 }
             }
