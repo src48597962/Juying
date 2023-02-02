@@ -113,13 +113,11 @@ var SrcParseS = {
                             if(dm){
                                 let playUrl = formatUrl(url);
                                 let urls = [];
-                                let headers= [];
+                                let headers= [{'User-Agent': 'Mozilla/5.0'}];
                                 if(playUrl.indexOf(";{")>-1){
                                     urls.push(playUrl.split(";{")[0]);
-                                    headers.push("{"+playUrl.split(";{")[1]);
                                 }else{
                                     urls.push(playUrl);
-                                    headers.push({});
                                 }
                                 return JSON.stringify({
                                     urls: urls,
