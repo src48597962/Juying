@@ -686,7 +686,7 @@ var SrcParseS = {
                 };
 
                 for (let i=0;i<Wparselist.length;i++) {
-                    if(x5jxlist.length<5||(JYconfig.superweb==1&&parsemode==3)){
+                    if(x5jxlist.length<5||JYconfig.superweb==1){
                         x5jxlist.push(Wparselist[i].parse);
                         x5namelist.push(Wparselist[i].name);
                     }else{
