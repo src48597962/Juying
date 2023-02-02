@@ -421,6 +421,23 @@ function lookset(){
             col_type: "text_center_1"
         });
     }
+    d.push({
+        col_type: "line"
+    });
+    d.push({
+        title: (getItem('dmRoute', '0')=="1"?getide(1):getide(0)) + 'dm盒子弹幕：' + (getItem('dmRoute', '0')=="1"?'开启':'关闭'),
+        desc: '1.弹幕仅对官链有效，2.拥有dm盒子小程序，且版本29+',
+        url: $('#noLoading#').lazyRule(() => {
+            if(getItem('dmRoute', '0')=="1"){
+                setItem('dmRoute', '0');
+            }else{
+                setItem('dmRoute', '1');
+            }
+            refreshPage(false);
+            return 'toast://切换成功';
+        }),
+        col_type: "text_center_1"
+    });
 
     d.push({
         col_type: "line_blank"
