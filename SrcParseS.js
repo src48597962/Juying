@@ -964,12 +964,11 @@ var SrcParseS = {
             //dm盒子弹幕
             let dm = "";
             if(getItem('dmRoute', '0')=="1" && vipUrl.match(/youku|iqiyi|ixigua|migu|sohu|pptv|le|cctv|1905|mgtv|qq.com/)){
-                log('11');
                 try{
                     dm = $.require('hiker://page/dmFun?rule=dm盒子').dmRoute(vipUrl);
                 }catch(e){}
             }
-            log(dm);
+
             //播放
             if(playurl!=""){
                 if(urls.length>1){
@@ -982,7 +981,6 @@ var SrcParseS = {
                     }); 
                 }else{
                     if(printlog==1){log('解析完成，进入播放1')};
-                    log(getItem('dmRoute', '0'));
                     if(dm && getItem('dmRoute', '0')=="1"){
                         let MulUrl = this.formatMulUrl(playurl, 0);
                         return JSON.stringify({
