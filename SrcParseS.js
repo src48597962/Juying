@@ -96,32 +96,40 @@ var SrcParseS = {
                     if(fy_bridge_app.getHeaderUrl&&vipUrl.indexOf("=http")==-1)
                         return $$$("#noLoading#").lazyRule((url) => {
                             url = base64Decode(url);
-                            /*if(getItem('enabledpush','')=='1'){
-                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
-                                let pushurl = [];
-                                pushurl.push(url.split(";{")[0].replace(/\&/g, '＆＆'));
-                                return pushBoxPlay({urls:pushurl});
-                            }else{*/
-                                if (getMyVar('SrcM3U8', '1') == "1"&&url.indexOf('.m3u8')>-1) {
-                                    return cacheM3u8(url.split(";{")[0], {timeout: 2000})+"#ignoreImg=true##isVideo=true#;{"+url.split(";{")[1];
-                                }else{
-                                    return url.replace(";{", "#ignoreImg=true##isVideo=true#;{");
-                                }
-                            //}
+                            if (getMyVar('SrcM3U8', '1') == "1"&&url.indexOf('.m3u8')>-1) {
+                                return cacheM3u8(url.split(";{")[0], {timeout: 2000})+"#ignoreImg=true##isVideo=true#;{"+url.split(";{")[1];
+                            }else{
+                                return url.replace(";{", "#ignoreImg=true##isVideo=true#;{");
+                            }
                         }, fy_bridge_app.base64Encode(fy_bridge_app.getHeaderUrl(urls[i])));
                     else {
-                        return $$$("#noLoading#").lazyRule((url, formatUrl) => {
-                            //url = url.replace(/http.*?\?url=/, '');
-                            /*if(getItem('enabledpush','')=='1'){
-                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
-                                let pushurl = [];
-                                pushurl.push(url);
-                                return pushBoxPlay({urls:pushurl});
+                        let dm = "";
+                        if(getItem('dmRoute', '0')=="1" && vipUrl.match(/youku|iqiyi|ixigua|migu|sohu|pptv|le|cctv|1905|mgtv|qq.com/)){
+                            try{
+                                dm = $.require('hiker://page/dmFun?rule=dm盒子').dmRoute(vipUrl);
+                            }catch(e){}
+                        }
+                        return $$$("#noLoading#").lazyRule((url, formatUrl ,dm) => {
+                            if(dm){
+                                let playUrl = formatUrl(url);
+                                let urls = [];
+                                let headers= [];
+                                if(playUrl.indexOf(";{")>-1){
+                                    urls.push(playUrl.split(";{")[0]);
+                                    headers.push("{"+playUrl.split(";{")[1]);
+                                }else{
+                                    urls.push(playUrl);
+                                    headers.push({});
+                                }
+                                return JSON.stringify({
+                                    urls: urls,
+                                    headers: headers,
+                                    danmu: dm 
+                                }); 
                             }else{
-                                */
                                 return formatUrl(url)+"#ignoreImg=true#";
-                            //}
-                        }, urls[i], formatUrl);
+                            }
+                        }, urls[i], formatUrl, dm);
                     }
                 }
             }
@@ -983,6 +991,8 @@ var SrcParseS = {
                     if(printlog==1){log('解析完成，进入播放1')};
                     if(dm && getItem('dmRoute', '0')=="1"){
                         let MulUrl = this.formatMulUrl(playurl, 0);
+                        urls = [];
+                        headers= [];
                         urls.push(MulUrl.url);
                         headers.push(MulUrl.header);
                         return JSON.stringify({
@@ -1107,29 +1117,4 @@ var SrcParseS = {
         }
     }
 }
-/*
-//推送tvbox
-function pushBoxPlay(urls) {
-    clearMyVar('enabledpush');
-    let push = storage0.getMyVar('movieinfo')||{};
-    clearMyVar('movieinfo');
-    push['url'] = urls;//urls.join('#').replace(/\&/g, '＆＆');
-    let tvip = getItem('hikertvboxset', '');
-    let state = request(tvip + '/action', {
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            //'X-Requested-With': 'XMLHttpRequest',
-            'Referer': tvip
-        },
-        timeout: 2000,
-        body: 'do=push&url=' + JSON.stringify(push),
-        method: 'POST'
-    });
-    hideLoading();
-    if (state == 'ok') {
-        return 'toast://推送成功，如果不能播放则TVBOX版本不支持，单集点播推送完成。';
-    } else {
-        return 'toast://推送失败';
-    }
-}
-*/
+
