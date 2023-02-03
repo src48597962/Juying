@@ -487,6 +487,7 @@ function xunmi(name,data,ishkss) {
                         if(jkdata["搜索模式"]=="0"&&jkdata["搜索后缀"]){
                             gethtml = getHtmlCode(ssurl,urlua,xunmitimeout*1000);
                             let html = JSON.parse(gethtml);
+                            log(html);
                             lists = html.list||[];
                             var ssvodurl = `jkdata["主页url"] + jkdata["搜索后缀"] + list.id + '.html'`;
                         }else{
