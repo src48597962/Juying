@@ -683,7 +683,7 @@ function JYyiji(){
         }catch(e){
             setItem('JYdatasource', getItem('JYdatasource', 'sougou')=='sougou'?'360':'sougou');
             toast("当前主页数据源连接异常，已自动切换");
-            setResult([]);
+            setResult();
             refreshPage(true);
         }
         
