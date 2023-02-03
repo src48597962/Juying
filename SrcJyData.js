@@ -598,7 +598,7 @@ function JYyiji(){
     const 明星 = getMyVar('SrcJuying$明星', '');
     const 排序 = getMyVar('SrcJuying$排序', '');
     if(datasource=="sougou"){
-        MY_URL = "https://waptv.sogou.com1/napi/video/classlist?abtest=0&iploc=CN1304&spver=&listTab=" + getMyVar('SrcJuying$listTab', 'teleplay') + "&filter=&start="+ (MY_PAGE-1)*15 +"&len=15&fr=filter";
+        MY_URL = "https://waptv.sogou.com/napi/video/classlist?abtest=0&iploc=CN1304&spver=&listTab=" + getMyVar('SrcJuying$listTab', 'teleplay') + "&filter=&start="+ (MY_PAGE-1)*15 +"&len=15&fr=filter";
         if(类型 != ""){
             MY_URL = MY_URL + "&style=" + 类型;
         }
@@ -681,7 +681,6 @@ function JYyiji(){
         try{
             var html = JSON.parse(request(MY_URL));
         }catch(e){
-            setResult(d);
             setItem('JYdatasource', getItem('JYdatasource', 'sougou')=='sougou'?'360':'sougou');
             refreshPage(true);
             toast("当前主页数据源连接异常，已自动切换！");
