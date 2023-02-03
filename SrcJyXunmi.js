@@ -499,7 +499,7 @@ function xunmi(name,data,ishkss) {
                                 gethtml = getHtmlCode(ssurl,urlua,xunmitimeout*1000);
                             }
                             log(gethtml);
-                            let ssarray = gethtml.match('/'+jkdata["搜索数组"].replace('&&','(.*?)')+'/');
+                            let ssarray = gethtml.match(new RegExp(jkdata["搜索数组"].replace('&&','(.*?)'), 'g'))||[];
                             log(ssarray);
                             /*
                             let title = xpathArray(gethtml, jsondata.scVodNode+jsondata.scVodName);
