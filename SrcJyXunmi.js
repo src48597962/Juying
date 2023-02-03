@@ -484,6 +484,7 @@ function xunmi(name,data,ishkss) {
 
                         var ssurl = jkdata["搜索url"].replace('{wd}',name).replace('{pg}','1');
                         ssurl = /^http/.test(ssurl)?ssurl:jkdata["主页url"]+ssurl;
+                        log(ssurl);
                         if(jkdata["搜索模式"]=="0"){
                             gethtml = getHtmlCode(ssurl,urlua,xunmitimeout*1000);
                             let html = JSON.parse(gethtml);
