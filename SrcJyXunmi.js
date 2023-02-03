@@ -509,7 +509,19 @@ function xunmi(name,data,ishkss) {
                             log(lists);
                             
                         }
-                        var ssvodurl = `jsondata.dtUrl.replace('{vid}', list.id)`;
+                        var ssvodurl = `list.id`;
+                        lists = lists.map(list=>{
+                            let vodname = list.name;
+                            let vodpic = list.pic||"";
+                            let voddesc = list.desc||"";
+                            let vodurl = eval(ssvodurl);
+                            return {
+                                vodname: vodname,
+                                vodpic: vodpic,
+                                voddesc: voddesc,
+                                vodurl: vodurl
+                            }
+                        })
                     }else{
                         lists = [];
                     }
