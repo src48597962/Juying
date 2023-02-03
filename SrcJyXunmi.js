@@ -481,11 +481,10 @@ function xunmi(name,data,ishkss) {
                     let jkfile = fetchCache(jsondata.ext,72);
                     if(jkfile){
                         eval("var jkdata = " + jkfile);
-
+                        jkdata["搜索url"] = jkdata["搜索url"] || "/index.php/ajax/suggest?mid=1&wd={wd}&limit=500";
                         var ssurl = jkdata["搜索url"].replace('{wd}',name).replace('{pg}','1');
                         ssurl = /^http/.test(ssurl)?ssurl:jkdata["主页url"]+ssurl;
-                        log(ssurl);
-                        if(jkdata["搜索模式"]=="0"){
+                        if(jkdata["搜索模式"]=="0"&&jkdata["搜索后缀"]){
                             gethtml = getHtmlCode(ssurl,urlua,xunmitimeout*1000);
                             let html = JSON.parse(gethtml);
                             lists = html.list||[];
@@ -506,20 +505,14 @@ function xunmi(name,data,ishkss) {
                                 let mark = sslist[i].split(jkdata["搜索副标题"].split('&&')[0])[1].split(jkdata["搜索副标题"].split('&&')[1])[0];
                                 lists.push({"id":/^http/.test(href)?href:jkdata["主页url"]+href,"name":title,"pic":img,"desc":mark})
                             }
-                            log(lists);
-                            
                         }
-                        var ssvodurl = `list.id`;
                         lists = lists.map(list=>{
-                            let vodname = list.name;
-                            let vodpic = list.pic||"";
-                            let voddesc = list.desc||"";
-                            let vodurl = eval(ssvodurl);
+                            let vodurl = list.id;
                             return {
-                                vodname: vodname,
-                                vodpic: vodpic,
-                                voddesc: voddesc,
-                                vodurl: vodurl
+                                vodname: list.name,
+                                vodpic: list.pic||"",
+                                voddesc: list.desc||"",
+                                vodurl: list.id
                             }
                         })
                     }else{
