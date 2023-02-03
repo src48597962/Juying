@@ -260,7 +260,7 @@ function xunmi(name,data,ishkss) {
                 var url = url_api + '?ac=videolist&ids=';
                 var ssurl = url_api + '?ac=videolist&wd='+name;
                 var listcode = "html.list";
-            } else if (obj.type=="xpath"||obj.type=="biubiu"||obj.type=="custom") {
+            } else if (obj.type=="xpath"||obj.type=="biubiu"||obj.type=="XBPQ"||obj.type=="custom") {
                 var jsondata = obj.data;
             } else {
                 log('api类型错误')
@@ -472,6 +472,38 @@ function xunmi(name,data,ishkss) {
                     if(jkfile){
                         eval(jkfile);
                         lists = customparse[url_api](name);
+                    }
+                }catch(e){
+                    log(e.message);
+                }
+            }else if(obj.type=="XBPQ"){
+                try{
+                    let jkfile = fetchCache(jsondata.ext,72);
+                    if(jkfile){
+                        eval("var jkdata = " + jkfile);
+
+                        var ssurl = jkdata["搜索url"].replace('{wd}',name).replace('{pg}','1');
+                        ssurl = /^http/.test(ssurl)?ssurl:jkdata["主页url"]+ssurl;
+                        if(jkdata["搜索模式"]=="0"){
+                            gethtml = getHtmlCode(ssurl,urlua,xunmitimeout*1000);
+                            let html = JSON.parse(gethtml);
+                            lists = html.list||[];
+                        }else{
+                            gethtml = getHtmlCode(ssurl,urlua,xunmitimeout*1000);
+                            let ssarray = gethtml.match(eval('/'+jkdata["搜索数组"].replace('&&','(.*?)')+'/'));
+                            log(ssarray);
+                            /*
+                            let title = xpathArray(gethtml, jsondata.scVodNode+jsondata.scVodName);
+                            let href = xpathArray(gethtml, jsondata.scVodNode+jsondata.scVodId);
+                            let img = xpathArray(gethtml, jsondata.scVodNode+jsondata.scVodImg);
+                            let mark = xpathArray(gethtml, jsondata.scVodNode+jsondata.scVodMark)||"";
+                            for(let j in title){
+                                lists.push({"id":/^http/.test(href[j])||/\{vid}$/.test(jsondata.dtUrl)?href[j]:href[j].replace(/\/.*?\/|\.html/g,''),"name":title[j],"pic":img[j],"desc":mark[j]})
+                            }*/
+                        }
+                        var ssvodurl = `jsondata.dtUrl.replace('{vid}', list.id)`;
+                    }else{
+                        lists = [];
                     }
                 }catch(e){
                     log(e.message);
