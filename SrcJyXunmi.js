@@ -490,7 +490,8 @@ function xunmi(name,data,ishkss) {
                             lists = html.list||[];
                         }else{
                             gethtml = getHtmlCode(ssurl,urlua,xunmitimeout*1000);
-                            let ssarray = gethtml.match('/'+jkdata["搜索数组"].replace('&&','(.*?)')+'/');
+                            log(gethtml);
+                            let ssarray = gethtml.match(eval('/'+jkdata["搜索数组"].replace('&&','(.*?)')+'/'));
                             log(ssarray);
                             /*
                             let title = xpathArray(gethtml, jsondata.scVodNode+jsondata.scVodName);
