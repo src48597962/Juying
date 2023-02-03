@@ -488,6 +488,7 @@ function xunmi(name,data,ishkss) {
                             gethtml = getHtmlCode(ssurl,urlua,xunmitimeout*1000);
                             let html = JSON.parse(gethtml);
                             lists = html.list||[];
+                            var ssvodurl = `jkdata["主页url"] + jkdata["搜索后缀"] + list.id + '.html'`;
                         }else{
                             let sstype = ssurl.indexOf(';post')>-1?"post":"get";
                             if(sstype == "post"){
@@ -505,14 +506,15 @@ function xunmi(name,data,ishkss) {
                                 let mark = sslist[i].split(jkdata["搜索副标题"].split('&&')[0])[1].split(jkdata["搜索副标题"].split('&&')[1])[0];
                                 lists.push({"id":/^http/.test(href)?href:jkdata["主页url"]+href,"name":title,"pic":img,"desc":mark})
                             }
+                            var ssvodurl = "";
                         }
                         lists = lists.map(list=>{
-                            let vodurl = list.id;
+                            let vodurl = ssvodurl?eval(ssvodurl):list.id;
                             return {
                                 vodname: list.name,
                                 vodpic: list.pic||"",
                                 voddesc: list.desc||"",
-                                vodurl: list.id
+                                vodurl: vodurl
                             }
                         })
                     }else{
