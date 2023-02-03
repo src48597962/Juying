@@ -681,6 +681,7 @@ function JYyiji(){
         try{
             var html = JSON.parse(request(MY_URL));
         }catch(e){
+            setResult(d);
             setItem('JYdatasource', getItem('JYdatasource', 'sougou')=='sougou'?'360':'sougou');
             refreshPage(true);
             toast("当前主页数据源连接异常，已自动切换！");
