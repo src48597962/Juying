@@ -498,17 +498,16 @@ function xunmi(name,data,ishkss) {
                             }else{
                                 gethtml = getHtmlCode(ssurl,urlua,xunmitimeout*1000);
                             }
-                            log(gethtml);
-                            let ssarray = gethtml.match(new RegExp(jkdata["搜索数组"].replace('&&','(.*?)'), 'g'))||[];
-                            log(ssarray);
-                            /*
-                            let title = xpathArray(gethtml, jsondata.scVodNode+jsondata.scVodName);
-                            let href = xpathArray(gethtml, jsondata.scVodNode+jsondata.scVodId);
-                            let img = xpathArray(gethtml, jsondata.scVodNode+jsondata.scVodImg);
-                            let mark = xpathArray(gethtml, jsondata.scVodNode+jsondata.scVodMark)||"";
-                            for(let j in title){
-                                lists.push({"id":/^http/.test(href[j])||/\{vid}$/.test(jsondata.dtUrl)?href[j]:href[j].replace(/\/.*?\/|\.html/g,''),"name":title[j],"pic":img[j],"desc":mark[j]})
-                            }*/
+                            let sslist = gethtml.match(new RegExp(jkdata["搜索数组"].replace('&&','((?:.|[\r\n])*?)'), 'g'));
+                            for (let i = 0; i < sslist.length; i++) {
+                                let title = sslist[i].split(jkdata["搜索标题"].split('&&')[0])[1].split(jkdata["搜索标题"].split('&&')[1])[0];
+                                let href = sslist[i].split(jkdata["搜索链接"].split('&&')[0])[1].split(jkdata["搜索链接"].split('&&')[1])[0];
+                                let img = sslist[i].split(jkdata["搜索图片"].split('&&')[0])[1].split(jkdata["搜索图片"].split('&&')[1])[0];
+                                let mark = sslist[i].split(jkdata["搜索副标题"].split('&&')[0])[1].split(jkdata["搜索副标题"].split('&&')[1])[0];
+                                lists.push({"id":/^http/.test(href)?href:jkdata["主页url"]+href,"name":title,"pic":img,"desc":mark})
+                            }
+                            log(lists);
+                            
                         }
                         var ssvodurl = `jsondata.dtUrl.replace('{vid}', list.id)`;
                     }else{
