@@ -490,7 +490,14 @@ function xunmi(name,data,ishkss) {
                             let html = JSON.parse(gethtml);
                             lists = html.list||[];
                         }else{
-                            gethtml = getHtmlCode(ssurl,urlua,xunmitimeout*1000);
+                            let sstype = ssurl.indexOf(';post')>-1?"post":"get";
+                            if(sstype == "post"){
+                                let postcs = ssurl.split(';')[2];
+                                ssurl = ssurl.split(';')[0];
+                                gethtml = request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000, method: 'POST', body: postcs  });
+                            }else{
+                                gethtml = getHtmlCode(ssurl,urlua,xunmitimeout*1000);
+                            }
                             log(gethtml);
                             let ssarray = gethtml.match(eval('/'+jkdata["搜索数组"].replace('&&','(.*?)')+'/'));
                             log(ssarray);
