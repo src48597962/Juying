@@ -486,7 +486,6 @@ function xunmi(name,data,ishkss) {
                         ssurl = /^http/.test(ssurl)?ssurl:jkdata["主页url"]+ssurl;
                         if(jkdata["搜索模式"]=="0"&&jkdata["搜索后缀"]){
                             gethtml = getHtmlCode(ssurl,urlua,xunmitimeout*1000);
-                            log(gethtml)
                             let html = JSON.parse(gethtml);
                             lists = html.list||[];
                             var ssvodurl = `jkdata["主页url"] + jkdata["搜索后缀"] + list.id + '.html'`;
@@ -827,7 +826,7 @@ function xunmierji(type,ua) {
             } catch (e) {
                 var html = "";
             }
-        } else if (/xpath|biubiu|custom/.test(type)) {
+        } else if (/xpath|biubiu|custom|XBPQ/.test(type)) {
             try{
                 var html = request(MY_URL.split('##')[1], { headers: { 'User-Agent': ua } });
             } catch (e) {
@@ -1040,6 +1039,66 @@ function xunmierji(type,ua) {
             }catch(e){
                 log(getsm+'失败>'+e.message)
             }    
+        }else if (/XBPQ/.test(type)) {
+            let getsm = "";
+            try{
+                getsm = "获取传递数据";
+                var jsondata = MY_PARAMS.data;
+
+                let jkfile = fetchCache(jsondata.ext,72);
+                    if(jkfile){
+                        eval("var jkdata = " + jkfile);
+                        /*
+                        jkdata["搜索url"] = jkdata["搜索url"] || "/index.php/ajax/suggest?mid=1&wd={wd}&limit=500";
+                        var ssurl = jkdata["搜索url"].replace('{wd}',name).replace('{pg}','1');
+                        ssurl = /^http/.test(ssurl)?ssurl:jkdata["主页url"]+ssurl;
+                        if(jkdata["搜索模式"]=="0"&&jkdata["搜索后缀"]){
+                            gethtml = getHtmlCode(ssurl,urlua,xunmitimeout*1000);
+                            let html = JSON.parse(gethtml);
+                            lists = html.list||[];
+                            var ssvodurl = `jkdata["主页url"] + jkdata["搜索后缀"] + list.id + '.html'`;
+                        }else{
+                            let sstype = ssurl.indexOf(';post')>-1?"post":"get";
+                            if(sstype == "post"){
+                                let postcs = ssurl.split(';')[2];
+                                ssurl = ssurl.split(';')[0];
+                                gethtml = request(ssurl, { headers: { 'User-Agent': urlua }, timeout:xunmitimeout*1000, method: 'POST', body: postcs  });
+                            }else{
+                                gethtml = getHtmlCode(ssurl,urlua,xunmitimeout*1000);
+                            }
+                            let sslist = gethtml.match(new RegExp(jkdata["搜索数组"].replace('&&','((?:.|[\r\n])*?)'), 'g'));
+                            for (let i = 0; i < sslist.length; i++) {
+                                let title = sslist[i].split(jkdata["搜索标题"].split('&&')[0])[1].split(jkdata["搜索标题"].split('&&')[1])[0];
+                                let href = sslist[i].split(jkdata["搜索链接"].split('&&')[0])[1].split(jkdata["搜索链接"].split('&&')[1])[0];
+                                let img = sslist[i].split(jkdata["搜索图片"].split('&&')[0])[1].split(jkdata["搜索图片"].split('&&')[1])[0];
+                                let mark = sslist[i].split(jkdata["搜索副标题"].split('&&')[0])[1].split(jkdata["搜索副标题"].split('&&')[1])[0];
+                                lists.push({"id":/^http/.test(href)?href:jkdata["主页url"]+href,"name":title,"pic":img,"desc":mark})
+                            }
+                            var ssvodurl = "";
+                        }
+                        lists = lists.map(list=>{
+                            let vodurl = ssvodurl?eval(ssvodurl):list.id;
+                            return {
+                                vodname: list.name,
+                                vodpic: list.pic||"",
+                                voddesc: list.desc||"",
+                                vodurl: vodurl
+                            }
+                        })
+                        */
+                    }
+
+                remarks = "";
+                getsm = "获取主演";
+                actor = html.split(jkdata["主演"].split('&&')[0])[1].split(jkdata["主演"].split('&&')[1])[0];
+                getsm = "获取导演";
+                director = html.split(jkdata["导演"].split('&&')[0])[1].split(jkdata["导演"].split('&&')[1])[0];
+                pubdate = "";
+                getsm = "获取剧情简介";
+                desc = html.split(jkdata["简介"].split('&&')[0])[1].split(jkdata["简介"].split('&&')[1])[0] || '...';
+            }catch(e){
+                log(getsm+'失败>'+e.message)
+            }    
         }else{
             //自定义接口/web自动匹配
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcAutoTmpl.js');
@@ -1051,7 +1110,7 @@ function xunmierji(type,ua) {
             var arts = data.arts||[];
             var conts = data.conts||[];
         }
-        if(/xpath|biubiu/.test(type)&&html&&(arts.length==0||conts.length==0)&&getMyVar('debug','0')=="0"&&html.indexOf(MY_PARAMS.title)>-1){
+        if(/xpath|biubiu|XBPQ/.test(type)&&html&&(arts.length==0||conts.length==0)&&getMyVar('debug','0')=="0"&&html.indexOf(MY_PARAMS.title)>-1){
             log('开启模板自动匹配、AI识片，获取播放选集');
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcAutoTmpl.js');
             let data = autoerji(MY_URL.split('##')[1].split('#')[0],html);
