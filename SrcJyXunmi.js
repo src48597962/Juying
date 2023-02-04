@@ -1417,7 +1417,7 @@ function xunmierji(type,ua) {
                 }else if (/xpath|biubiu|custom|XBPQ/.test(type)) {
                     var playtitle = list[j].split('$')[0].trim();
                     var playurl = list[j].split('$')[1];
-                    if(/qq\.com|youku|mgtv|bili|qiyi|sohu|pptv|migu|1905|le\.com/.test(playurl) && /html/.test(playurl)){
+                    if(/qq\.com|douyin|youku|mgtv|ixigua|bili|iqiyi|sohu|pptv|migu|1905|le\.com/.test(playurl) && /html/.test(playurl)){
                         var DTJX = $("").lazyRule(() => {
                             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
                             return SrcParseS.聚影(input);
