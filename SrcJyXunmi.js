@@ -1048,12 +1048,12 @@ function xunmierji(type,ua) {
                 if(jkfile){
                     eval("var jkdata = " + jkfile);
                 }
-                remarks = "";
+                remarks = jkdata["影片类型"]?html.split(jkdata["影片类型"].split('&&')[0])[1].split(jkdata["影片类型"].split('&&')[1])[0].replace(/<\/?.+?\/?>/g,''):"";
                 getsm = "获取主演";
                 actor = html.split(jkdata["主演"].split('&&')[0])[1].split(jkdata["主演"].split('&&')[1])[0].replace(/<\/?.+?\/?>/g,'');
                 getsm = "获取导演";
                 director = html.split(jkdata["导演"].split('&&')[0])[1].split(jkdata["导演"].split('&&')[1])[0].replace(/<\/?.+?\/?>/g,'');
-                pubdate = "";
+                pubdate = (jkdata["影片年代"]?html.split(jkdata["影片年代"].split('&&')[0])[1].split(jkdata["影片年代"].split('&&')[1])[0].replace(/<\/?.+?\/?>/g,''):"")+(jkdata["影片地区"]?" "+html.split(jkdata["影片地区"].split('&&')[0])[1].split(jkdata["影片地区"].split('&&')[1])[0].replace(/<\/?.+?\/?>/g,''):"");
                 getsm = "获取剧情简介";
                 desc = html.split(jkdata["简介"].split('&&')[0])[1].split(jkdata["简介"].split('&&')[1])[0].replace(/<\/?.+?\/?>/g,'') || '...';
                 getsm = "获取线路";
@@ -1072,11 +1072,11 @@ function xunmierji(type,ua) {
                 }
                 let contlist = conthtml.match(new RegExp(jkdata["播放数组"].replace('&&','((?:.|[\r\n])*?)'), 'g'));
                 for (let i = 0; i < contlist.length; i++) {
-                    let bfline = pdfa(contlist[i],"body&&a");
+                    let bfline = jkdata["播放列表"]?contlist[i].match(new RegExp(jkdata["播放列表"].replace('&&','((?:.|[\r\n])*?)'), 'g')):pdfa(contlist[i],"body&&a");
                     let cont = [];
                     for (let j = 0; j < bfline.length; j++) {
-                        let contname = pdfh(bfline[j],"a&&Text");
-                        let conturl = pd(bfline[j],"a&&href");
+                        let contname = jkdata["播放标题"]?bfline[j].split(jkdata["播放标题"].split('&&')[0])[1].split(jkdata["简播放标题介"].split('&&')[1])[0]:pdfh(bfline[j],"a&&Text");
+                        let conturl = jkdata["播放链接"]?bfline[j].split(jkdata["播放链接"].split('&&')[0])[1].split(jkdata["播放链接"].split('&&')[1])[0]:pd(bfline[j],"a&&href");
                         cont.push(contname+"$"+conturl)
                     }
                     conts.push(cont.join("#"))
