@@ -1066,8 +1066,21 @@ function xunmierji(type,ua) {
                     let arttitle = artlist[i].split(jkdata["线路数组"].split('&&')[0])[1].split(jkdata["线路数组"].split('&&')[1])[0].split(jkdata["线路标题"].split('&&')[0])[1].split(jkdata["线路标题"].split('&&')[1])[0];
                     arts[i] = arttitle;
                 }
-
-
+                let conthtml = html;
+                if(jkdata["播放二次截取"]){
+                    conthtml = conthtml.split(jkdata["播放二次截取"].split('&&')[0])[1].split(jkdata["播放二次截取"].split('&&')[1])[0];
+                }
+                let contlist = conthtml.match(new RegExp(jkdata["播放数组"].replace('&&','((?:.|[\r\n])*?)'), 'g'));
+                for (let i = 0; i < contlist.length; i++) {
+                    let bfline = pdfa(contlist[i],"body&&a");
+                    let cont = [];
+                    for (let j = 0; j < bfline.length; j++) {
+                        let contname = pdfh(bfline[j],"a&&Text");
+                        let conturl = pd(bfline[j],"a&&href");
+                        cont.push(contname+"$"+conturl)
+                    }
+                    conts.push(cont.join("#"))
+                }
             }catch(e){
                 log(getsm+'失败>'+e.message)
             }    
@@ -1219,7 +1232,7 @@ function xunmierji(type,ua) {
                 }
                 lists.push(si);
             };
-        }else if (/cms|xpath|biubiu|custom/.test(type)) {
+        }else if (/cms|xpath|biubiu|custom|XBPQ/.test(type)) {
             let single = conts[i]||"";
             if(single){
                 let lines = single.split('#');
@@ -1401,7 +1414,7 @@ function xunmierji(type,ua) {
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
                         return SrcParseS.聚影(input);
                     });
-                }else if (/xpath|biubiu|custom/.test(type)) {
+                }else if (/xpath|biubiu|custom|XBPQ/.test(type)) {
                     var playtitle = list[j].split('$')[0].trim();
                     var playurl = list[j].split('$')[1];
                     var DTJX = $("").lazyRule(() => {
@@ -1460,7 +1473,7 @@ function xunmierji(type,ua) {
         if (list == undefined || list.length == 0) {
             playlist('0');
         } else {
-            if (/v1|app|v2|iptv|cms|xpath|biubiu|custom/.test(type)) {
+            if (/v1|app|v2|iptv|cms|xpath|biubiu|custom|XBPQ/.test(type)) {
                 var listone = list[0].split('$')[0].trim();
                 try{
                     let list1 = list[0].split('$')[0];
