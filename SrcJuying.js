@@ -360,6 +360,7 @@ function jiekouyiji() {
                         let pic = jklist[i].split(jkdata["图片"].split('&&')[0])[1].split(jkdata["图片"].split('&&')[1])[0];
                         let note = jklist[i].split(jkdata["副标题"].split('&&')[0])[1].split(jkdata["副标题"].split('&&')[1])[0];
                         let arr = {"vod_id":id,"vod_name":name,"vod_remarks":note,"vod_pic":pic};
+                        log(arr);
                         list.push(arr);
                     }
                     log(list)
