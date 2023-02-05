@@ -349,7 +349,7 @@ function jiekouyiji() {
                     }
                     jkdata["数组"] = jkdata["数组"] || `<a &&</a>`;
                     let jklist = gethtml.match(new RegExp(jkdata["数组"].replace('&&','((?:.|[\r\n])*?)'), 'g'));
-                    log(jklist);
+                    //log(jklist);
                     let list = [];
                     jkdata["链接"] = jkdata["链接"] || `href="&&"`;
                     jkdata["标题"] = jkdata["标题"] || `title="&&"`;
