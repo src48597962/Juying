@@ -349,17 +349,13 @@ function jiekouyiji() {
                     }
                     jkdata["数组"] = jkdata["数组"] || `<a &&</a>`;
                     let jklist = gethtml.match(new RegExp(jkdata["数组"].replace('&&','((?:.|[\r\n])*?)'), 'g'));
-                    log(jklist.length);
-                    
-                    let list = [];
+                    var list = [];
                     jkdata["链接"] = jkdata["链接"] || `href="&&"`;
                     jkdata["标题"] = jkdata["标题"] || `title="&&"`;
                     jkdata["图片"] = jkdata["图片"] || `data-original="&&"`;
                     jkdata["副标题"] = jkdata["副标题"] || `class="module-item-note">&&</div>`;
-                    log('111')
                     for (let i = 0; i < jklist.length; i++) {
                         let id = jklist[i].split(jkdata["链接"].split('&&')[0])[1].split(jkdata["链接"].split('&&')[1])[0];
-                        log(id)
                         let name = jklist[i].split(jkdata["标题"].split('&&')[0])[1].split(jkdata["标题"].split('&&')[1])[0];
                         let pic = jklist[i].split(jkdata["图片"].split('&&')[0])[1].split(jkdata["图片"].split('&&')[1])[0];
                         let note = jklist[i].split(jkdata["副标题"].split('&&')[0])[1].split(jkdata["副标题"].split('&&')[1])[0];
