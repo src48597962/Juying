@@ -340,7 +340,7 @@ function jiekouyiji() {
                     }
                 }
             }
-            
+            log(MY_URL);
             try {
                 var gethtml = request(MY_URL, { headers: { 'User-Agent': api_ua }, timeout:xunmitimeout*1000 });
                 log(gethtml);
