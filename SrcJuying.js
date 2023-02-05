@@ -362,6 +362,8 @@ function jiekouyiji() {
                                 jkdata["图片"] = `original="&&"`;
                             }
                         };
+                        log(jkdata["图片"])
+                        
                         let id = jklist[i].split(jkdata["链接"].split('&&')[0])[1].split(jkdata["链接"].split('&&')[1])[0];
                         log(id)
                         let name = jklist[i].split(jkdata["标题"].split('&&')[0])[1].split(jkdata["标题"].split('&&')[1])[0];
