@@ -83,10 +83,10 @@ function jiekouyiji() {
                 }catch(e){
                     var jkdata = {};
                 }
-                //var url = api_url + '?ac=videolist&ids=';
+                var url = jkdata["主页url"];
                 var typeurl = jkdata["分类"];
+                jkdata["分类url"] = /^http/.test(jkdata["分类url"])?jkdata["分类url"]:url + jkdata["分类url"];
                 var listurl = jkdata["分类url"].replace(/class\/\{class\}|\{class\}|year\/\{year\}|\{year\}|area\/\{area\}|\{area\}|by\/\{by\}|\{by\}|\{act\}/g,'');
-                //var lists = "html.list";
             }
         } else {
             log('api类型错误')
@@ -343,45 +343,66 @@ function jiekouyiji() {
             log(MY_URL);
             try {
                 var gethtml = request(MY_URL, { headers: { 'User-Agent': api_ua }, timeout:xunmitimeout*1000 });
-                log(gethtml);
-                if(/cms/.test(api_type)&&/<\?xml/.test(gethtml)){
-                    gethtml = gethtml.replace(/&lt;!\[CDATA\[|\]\]&gt;|<!\[CDATA\[|\]\]>/g,'');
-                    let xmllist = [];
-                    let videos = pdfa(gethtml,'list&&video');
-                    for(let i in videos){
-                        let id = String(xpath(videos[i],`//video/id/text()`)).trim();
-                        let name = String(xpath(videos[i],`//video/name/text()`)).trim();
-                        let pic = String(xpath(videos[i],`//video/pic/text()`)).trim();
-                        let note = String(xpath(videos[i],`//video/note/text()`)).trim();
-                        let arr = {"vod_id":id,"vod_name":name,"vod_remarks":note,"vod_pic":pic};
-                        let plays = xpathArray(videos[i],`//video/dl/dd/text()`);
-                        if(plays.length==1){
-                            let play = plays[0];
-                            if(play.indexOf('$')==-1&&play.indexOf('m3u8')>-1){
-                                arr['play'] = play;
-                            }
-                        }
-                        xmllist.push(arr)
+                if(api_type=="XBPQ"){
+                    if(jkdata["二次截取"]){
+                        gethtml = gethtml.split(jkdata["二次截取"].split('&&')[0])[1].split(jkdata["二次截取"].split('&&')[1])[0];
                     }
-                    var html = {"list":xmllist};
-                }else if(!/{|}/.test(gethtml)&&gethtml!=""){
-                    var decfile = "hiker://files/rules/Src/Juying/appdec.js";
-                    var Juyingdec=fetch(decfile);
-                    if(Juyingdec != ""){
-                        eval(Juyingdec);
-                        var html = JSON.parse(xgdec(gethtml));
+                    jkdata["数组"] = jkdata["数组"] || `<a &&</a>`;
+                    let jklist = gethtml.match(new RegExp(jkdata["数组"].replace('&&','((?:.|[\r\n])*?)'), 'g'));
+                    let list = [];
+                    jkdata["链接"] = jkdata["链接"] || `href="&&"`;
+                    jkdata["标题"] = jkdata["标题"] || `title="&&"`;
+                    jkdata["图片"] = jkdata["图片"] || `data-original="&&"`;
+                    jkdata["副标题"] = jkdata["副标题"] || `class="module-item-note">&&</div>`;
+                    for (let i = 0; i < jklist.length; i++) {
+                        let id = jklist[i].split(jkdata["链接"].split('&&')[0])[1].split(jkdata["链接"].split('&&')[1])[0];
+                        let name = jklist[i].split(jkdata["标题"].split('&&')[0])[1].split(jkdata["标题"].split('&&')[1])[0];
+                        let pic = jklist[i].split(jkdata["图片"].split('&&')[0])[1].split(jkdata["图片"].split('&&')[1])[0];
+                        let note = jklist[i].split(jkdata["副标题"].split('&&')[0])[1].split(jkdata["副标题"].split('&&')[1])[0];
+                        let arr = {"vod_id":id,"vod_name":name,"vod_remarks":note,"vod_pic":pic};
+                        list.push(arr);
                     }
                 }else{
-                    var html = JSON.parse(gethtml);
+                    if(/cms/.test(api_type)&&/<\?xml/.test(gethtml)){
+                        gethtml = gethtml.replace(/&lt;!\[CDATA\[|\]\]&gt;|<!\[CDATA\[|\]\]>/g,'');
+                        let xmllist = [];
+                        let videos = pdfa(gethtml,'list&&video');
+                        for(let i in videos){
+                            let id = String(xpath(videos[i],`//video/id/text()`)).trim();
+                            let name = String(xpath(videos[i],`//video/name/text()`)).trim();
+                            let pic = String(xpath(videos[i],`//video/pic/text()`)).trim();
+                            let note = String(xpath(videos[i],`//video/note/text()`)).trim();
+                            let arr = {"vod_id":id,"vod_name":name,"vod_remarks":note,"vod_pic":pic};
+                            let plays = xpathArray(videos[i],`//video/dl/dd/text()`);
+                            if(plays.length==1){
+                                let play = plays[0];
+                                if(play.indexOf('$')==-1&&play.indexOf('m3u8')>-1){
+                                    arr['play'] = play;
+                                }
+                            }
+                            xmllist.push(arr)
+                        }
+                        var html = {"list":xmllist};
+                    }else if(!/{|}/.test(gethtml)&&gethtml!=""){
+                        var decfile = "hiker://files/rules/Src/Juying/appdec.js";
+                        var Juyingdec=fetch(decfile);
+                        if(Juyingdec != ""){
+                            eval(Juyingdec);
+                            var html = JSON.parse(xgdec(gethtml));
+                        }
+                    }else{
+                        var html = JSON.parse(gethtml);
+                    }
+                    try{
+                        var list = eval(lists)||html.list||html.data.list||html.data||[];
+                    } catch (e) {
+                        var list = html.list||html.data.list||html.data||[];
+                    }
                 }
             } catch (e) {
-                var html = { data: [] };
+                var list = [];
             }
-            try{
-                var list = eval(lists)||html.list||html.data.list||html.data||[];
-            } catch (e) {
-                var list = html.list||html.data.list||html.data||[];
-            }
+            
             let videolist = list.map((list)=>{
                 let vodname = list.vod_name||list.title;
                 if(vodname){
