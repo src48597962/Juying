@@ -1,6 +1,10 @@
 //本代码仅用于个人学习，请勿用于其他作用，下载后请24小时内删除，代码虽然是公开学习的，但请尊重作者，应留下说明
 //接口一级
 function jiekouyiji() {
+    addListener("onClose", $.toString(() => {
+        clearMyVar('zsjiekou');
+        clearMyVar('zsdatalist');
+    }));
     clearMyVar('SrcJy$back');
     setPageTitle('接口独立展示');
     var d = [];
@@ -11,14 +15,33 @@ function jiekouyiji() {
     }else{
         var JYconfig= {};
     }
-    
-    var api_name = JYconfig.zsjiekou?JYconfig.zsjiekou.api_name||"":"";
-    var api_type = JYconfig.zsjiekou?JYconfig.zsjiekou.api_type||"":"";
-    var api_url = JYconfig.zsjiekou?JYconfig.zsjiekou.api_url||"":"";
-    var api_ua = JYconfig.zsjiekou?JYconfig.zsjiekou.api_ua||"MOBILE_UA":MOBILE_UA;
+    if(!storage0.getMyVar('zsjiekou')){
+        var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
+        var datafile = fetch(filepath);
+        if(datafile != ""){
+            eval("var datalist=" + datafile+ ";");
+        }else{
+            var datalist = [];
+        }
+        storage0.putMyVar('zsdatalist',datalist);
+        if(JYconfig.zsjiekou){
+            var zslist = datalist.filter(item => {
+                return item.name==JYconfig.zsjiekou.api_name;
+            })
+        }else{
+            var zslist = [];
+        }
+        zslist = zslist.length>0?zslist:[{}];
+        storage0.putMyVar('zsjiekou',zslist[0]);
+    }
+    let zsjiekou = storage0.getMyVar('zsjiekou',{});
+    let api_name = zsjiekou.name||"";
+    let api_type = zsjiekou.type||"";
+    let api_url = zsjiekou.url||"";
+    let api_ua = zsjiekou.ua||"MOBILE_UA";
     api_ua = api_ua=="MOBILE_UA"?MOBILE_UA:api_ua=="PC_UA"?PC_UA:api_ua;
-    var xunmitimeout = JYconfig.xunmitimeout||5;
-    var api_group = JYconfig.zsjiekou?JYconfig.zsjiekou.api_group||"":"";
+    let xunmitimeout = JYconfig.xunmitimeout||5;
+    let selectgroup = JYconfig.zsjiekou?JYconfig.zsjiekou.selectgroup||"":"";
 
     if(api_name){setPageTitle(api_name);}
     if(api_name&&api_type&&api_url){
@@ -51,12 +74,15 @@ function jiekouyiji() {
             var typeurl = api_url + "?ac=list";
             var listurl = api_url + '?ac=videolist&pg=';
             var lists = "html.list";
+        }  else if (obj.type=="XBPQ") {
+            var jsondata = obj.data;
         } else {
             log('api类型错误')
         }
     }
     
     if(MY_PAGE==1){
+        /*
         var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
         var datafile = fetch(filepath);
         if(datafile != ""){
@@ -64,6 +90,8 @@ function jiekouyiji() {
         }else{
             var datalist = [];
         }
+        */
+        let datalist = storage0.getMyVar('zsdatalist',[]);
         let grouplist = [];
         datalist.forEach(item=>{
             let groupname = item.group||item.type;
@@ -73,17 +101,19 @@ function jiekouyiji() {
         })
 
         datalist = datalist.filter(item => {
-            if(api_group){
-                return /app|v1|v2|iptv|cms/.test(item.type) && (item.group==api_group || !item.group&&item.type==api_group) && item.group!="失败待处理"
+            if(selectgroup){
+                return /app|v1|v2|iptv|cms/.test(item.type) && (item.group==selectgroup || !item.group&&item.type==selectgroup) && item.group!="失败待处理"
             }else{
                 return /app|v1|v2|iptv|cms/.test(item.type) && item.group!="失败待处理";
             }
         })
+        /*
         if(!datalist.some(item => item.url == api_url)){
             JYconfig['zsjiekou'] = api_group?{api_group:api_group}:{};
             writeFile(cfgfile, JSON.stringify(JYconfig));
             refreshPage(true);
         }
+        */
         for (let i = 0; i < 9; i++) {
             d.push({
                 col_type: "blank_block"
@@ -91,15 +121,15 @@ function jiekouyiji() {
         }
         
         d.push({
-            title: api_group?'👉'+api_group:'🆙选择分组',
-            url: $(grouplist,2).select((cfgfile,JYconfig,api_group)=>{
-                if(api_group!=input){
-                    JYconfig['zsjiekou'].api_group = input;
+            title: selectgroup?'👉'+selectgroup:'🆙选择分组',
+            url: $(grouplist,2).select((cfgfile,JYconfig,selectgroup)=>{
+                if(selectgroup!=input){
+                    JYconfig['zsjiekou'].selectgroup = input;
                     writeFile(cfgfile, JSON.stringify(JYconfig));
                     refreshPage(true);
                 }
                 return "hiker://empty";
-            },cfgfile,JYconfig,api_group),
+            },cfgfile,JYconfig,selectgroup),
             col_type: "scroll_button"
         });
         if(datalist.length>0){
@@ -108,9 +138,10 @@ function jiekouyiji() {
                     var Srczsjiekousousuodata = [];
                     Srczsjiekousousuodata.push(datalist[i]);
                 }
-                let zsdata = {api_name:datalist[i].name, api_type:datalist[i].type, api_url:datalist[i].url, api_ua:datalist[i].ua};
-                if(api_group){
-                    zsdata.api_group = api_group;
+                //let zsdata = {api_name:datalist[i].name, api_type:datalist[i].type, api_url:datalist[i].url, api_ua:datalist[i].ua};
+                let zsdata = {api_name:datalist[i].name};
+                if(selectgroup){
+                    zsdata.selectgroup = selectgroup;
                 }
                 d.push({
                     title: api_url==datalist[i].url?'““””<b><span style="color:#3CB371">' + datalist[i].name + '</span></b>':datalist[i].name,
