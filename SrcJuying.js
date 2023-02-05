@@ -84,8 +84,8 @@ function jiekouyiji() {
                     var jkdata = {};
                 }
                 //var url = api_url + '?ac=videolist&ids=';
-                var typeurl = jkdata["分类url"];
-                //var listurl = api_url + '?ac=videolist&pg=';
+                var typeurl = jkdata["分类"];
+                var listurl = jkdata["分类url"].replace(/class\/{class}|{class}|year\/{year}|{year}|area\/{area}|{area}|by\/{by}|{by}|{act}/,'');
                 //var lists = "html.list";
             }
         } else {
@@ -324,21 +324,26 @@ function jiekouyiji() {
     }
     if(typeof(listurl) != "undefined"){
         try{
-            MY_URL = listurl + MY_PAGE;
-            if(api_type=="v2"||api_type=="app"){
-                MY_URL = MY_URL.replace('@type_id',getMyVar('Srczsjiekou$type_id','1'));
-            }else if(getMyVar('Srczsjiekou$type_id')){
-                if (api_type=="v1") {
-                    MY_URL = MY_URL + '&type=' + getMyVar('Srczsjiekou$type_id');
-                } else if (api_type=="iptv") {
-                    MY_URL = MY_URL + '&class=' + getMyVar('Srczsjiekou$type_id');
-                } else{
-                    MY_URL = MY_URL + '&t=' + getMyVar('Srczsjiekou$type_id');
+            if(api_type=="XBPQ"){
+                MY_URL = listurl.replace('{catePg}',MY_PAGE).replace('{cateId}',getMyVar('Srczsjiekou$type_id','1'));
+            }else{
+                MY_URL = listurl + MY_PAGE;
+                if(api_type=="v2"||api_type=="app"){
+                    MY_URL = MY_URL.replace('@type_id',getMyVar('Srczsjiekou$type_id','1'));
+                }else if(getMyVar('Srczsjiekou$type_id')){
+                    if (api_type=="v1") {
+                        MY_URL = MY_URL + '&type=' + getMyVar('Srczsjiekou$type_id');
+                    } else if (api_type=="iptv") {
+                        MY_URL = MY_URL + '&class=' + getMyVar('Srczsjiekou$type_id');
+                    } else {
+                        MY_URL = MY_URL + '&t=' + getMyVar('Srczsjiekou$type_id');
+                    }
                 }
             }
             
             try {
                 var gethtml = request(MY_URL, { headers: { 'User-Agent': api_ua }, timeout:xunmitimeout*1000 });
+                log(gethtml);
                 if(/cms/.test(api_type)&&/<\?xml/.test(gethtml)){
                     gethtml = gethtml.replace(/&lt;!\[CDATA\[|\]\]&gt;|<!\[CDATA\[|\]\]>/g,'');
                     let xmllist = [];
