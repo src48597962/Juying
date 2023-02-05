@@ -355,6 +355,7 @@ function jiekouyiji() {
                     jkdata["副标题"] = jkdata["副标题"] || `class="module-item-note">&&</div>`;
                     for (let i = 0; i < jklist.length; i++) {
                         log(i)
+                        log(jklist[i])
                         if(!jkdata["图片"]){
                             if(jklist[i].indexOf('<img')>-1){
                                 jkdata["图片"] = `<img src="&&"`;
