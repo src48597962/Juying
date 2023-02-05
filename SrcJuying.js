@@ -146,13 +146,14 @@ function jiekouyiji() {
                 d.push({
                     title: api_url==datalist[i].url?'““””<b><span style="color:#3CB371">' + datalist[i].name + '</span></b>':datalist[i].name,
                     col_type: 'scroll_button',
-                    url: $('#noLoading#').lazyRule((zsjiekou,cfgfile,JYconfig) => {
+                    url: $('#noLoading#').lazyRule((zsjiekou,cfgfile,JYconfig,jkdata) => {
                         clearMyVar('Srczsjiekou$type_id');
                         JYconfig['zsjiekou'] = zsjiekou;
                         writeFile(cfgfile, JSON.stringify(JYconfig));
+                        storage0.putMyVar('zsjiekou',jkdata);
                         refreshPage(true);
                         return "hiker://empty";
-                    }, zsdata,cfgfile,JYconfig)
+                    }, zsdata,cfgfile,JYconfig,datalist[i])
                 });
             }
             d.push({
