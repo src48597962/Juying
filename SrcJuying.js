@@ -352,18 +352,13 @@ function jiekouyiji() {
                     var list = [];
                     jkdata["链接"] = jkdata["链接"] || `href="&&"`;
                     jkdata["标题"] = jkdata["标题"] || `title="&&"`;
-                    jkdata["图片"] = jkdata["图片"] || `data-original="&&"`;
+                    jkdata["图片"] = jkdata["图片"] || `<img src="&&"`;
                     jkdata["副标题"] = jkdata["副标题"] || `class="module-item-note">&&</div>`;
                     for (let i = 0; i < jklist.length; i++) {
-                        log(i);
                         let id = jklist[i].split(jkdata["链接"].split('&&')[0])[1].split(jkdata["链接"].split('&&')[1])[0];
-                        log(id);
                         let name = jklist[i].split(jkdata["标题"].split('&&')[0])[1].split(jkdata["标题"].split('&&')[1])[0];
-                        log(name);
                         let pic = jklist[i].split(jkdata["图片"].split('&&')[0])[1].split(jkdata["图片"].split('&&')[1])[0];
-                        log(pic);
                         let note = jklist[i].split(jkdata["副标题"].split('&&')[0])[1].split(jkdata["副标题"].split('&&')[1])[0];
-                        log(note);
                         let arr = {"vod_id":id,"vod_name":name,"vod_remarks":note,"vod_pic":pic};
                         list.push(arr);
                     }
