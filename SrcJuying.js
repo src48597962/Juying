@@ -352,13 +352,25 @@ function jiekouyiji() {
                     var list = [];
                     jkdata["链接"] = jkdata["链接"] || `href="&&"`;
                     jkdata["标题"] = jkdata["标题"] || `title="&&"`;
-                    jkdata["图片"] = jkdata["图片"] || `<img src="&&"`;
                     jkdata["副标题"] = jkdata["副标题"] || `class="module-item-note">&&</div>`;
                     for (let i = 0; i < jklist.length; i++) {
+                        if(!jkdata["图片"]){
+                            if(jklist[i].indexOf('<img')>-1){
+                                jkdata["图片"] = `<img src="&&"`;
+                            }else if(jklist[i].indexOf('original=')>-1){
+                                jkdata["图片"] = `original="&&"`;
+                            }
+                        };
                         let id = jklist[i].split(jkdata["链接"].split('&&')[0])[1].split(jkdata["链接"].split('&&')[1])[0];
                         let name = jklist[i].split(jkdata["标题"].split('&&')[0])[1].split(jkdata["标题"].split('&&')[1])[0];
-                        let pic = jklist[i].split(jkdata["图片"].split('&&')[0])[1].split(jkdata["图片"].split('&&')[1])[0];
-                        let note = jklist[i].split(jkdata["副标题"].split('&&')[0])[1].split(jkdata["副标题"].split('&&')[1])[0];
+                        let pic = "";
+                        try{
+                            pic = jklist[i].split(jkdata["图片"].split('&&')[0])[1].split(jkdata["图片"].split('&&')[1])[0];
+                        }catch(e){}
+                        let note = "";
+                        try{
+                            note = jklist[i].split(jkdata["副标题"].split('&&')[0])[1].split(jkdata["副标题"].split('&&')[1])[0];
+                        }catch(e){}
                         let arr = {"vod_id":id,"vod_name":name,"vod_remarks":note,"vod_pic":pic};
                         list.push(arr);
                     }
