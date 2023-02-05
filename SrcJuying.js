@@ -276,7 +276,7 @@ function jiekouyiji() {
                         return a - b
                     })
                 };
-                if(/v2|app/.test(api_type)&&!getMyVar('Srczsjiekou$type_id')){
+                if(/v2|app|XBPQ/.test(api_type)&&!getMyVar('Srczsjiekou$type_id')){
                     putMyVar('Srczsjiekou$type_id',type_ids[0]);
                 }
                 for (var j in type_pids) {
@@ -349,6 +349,7 @@ function jiekouyiji() {
                     }
                     jkdata["数组"] = jkdata["数组"] || `<a &&</a>`;
                     let jklist = gethtml.match(new RegExp(jkdata["数组"].replace('&&','((?:.|[\r\n])*?)'), 'g'));
+                    log(jklist);
                     let list = [];
                     jkdata["链接"] = jkdata["链接"] || `href="&&"`;
                     jkdata["标题"] = jkdata["标题"] || `title="&&"`;
@@ -362,6 +363,7 @@ function jiekouyiji() {
                         let arr = {"vod_id":id,"vod_name":name,"vod_remarks":note,"vod_pic":pic};
                         list.push(arr);
                     }
+                    log(list)
                 }else{
                     if(/cms/.test(api_type)&&/<\?xml/.test(gethtml)){
                         gethtml = gethtml.replace(/&lt;!\[CDATA\[|\]\]&gt;|<!\[CDATA\[|\]\]>/g,'');
