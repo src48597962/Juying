@@ -121,7 +121,7 @@ function jiekouyiji() {
         }
         
         d.push({
-            title: selectgroup?'👉'+selectgroup:'🆙选择分组',
+            title: selectgroup&&grouplist.indexOf(selectgroup)>-1?'👉'+selectgroup:'🆙选择分组',
             url: $(grouplist,2).select((cfgfile,JYconfig,selectgroup)=>{
                 if(selectgroup!=input){
                     JYconfig['zsjiekou'].selectgroup = input;
