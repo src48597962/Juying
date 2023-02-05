@@ -101,7 +101,7 @@ function jiekouyiji() {
         })
 
         datalist = datalist.filter(item => {
-            if(selectgroup){
+            if(selectgroup&&grouplist.indexOf(selectgroup)>-1){
                 return /app|v1|v2|iptv|cms/.test(item.type) && (item.group==selectgroup || !item.group&&item.type==selectgroup) && item.group!="失败待处理"
             }else{
                 return /app|v1|v2|iptv|cms/.test(item.type) && item.group!="失败待处理";
