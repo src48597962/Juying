@@ -348,7 +348,7 @@ function jiekouyiji() {
                     if(jkdata["二次截取"]){
                         gethtml = gethtml.split(jkdata["二次截取"].split('&&')[0])[1].split(jkdata["二次截取"].split('&&')[1])[0];
                     }
-                    jkdata["数组"] = jkdata["数组"] || `<a &&</a>`;
+                    jkdata["数组"] = jkdata["数组"] || (gethtml.indexOf(`<li `)>-1?`<li &&</li>`:`<a &&</a>`);
                     let jklist = gethtml.match(new RegExp(jkdata["数组"].replace('&&','((?:.|[\r\n])*?)'), 'g'));
                     var list = [];
                     jkdata["链接"] = jkdata["链接"] || `href="&&"`;
