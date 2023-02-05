@@ -85,7 +85,7 @@ function jiekouyiji() {
                 }
                 //var url = api_url + '?ac=videolist&ids=';
                 var typeurl = jkdata["分类"];
-                var listurl = jkdata["分类url"].replace(/class\/{class}|{class}|year\/{year}|{year}|area\/{area}|{area}|by\/{by}|{by}|{act}/,'');
+                var listurl = jkdata["分类url"].replace(/class\/\{class\}|\{class\}|year\/\{year\}|\{year\}|area\/\{area\}|\{area\}|by\/\{by\}|\{by\}|\{act\}/g,'');
                 //var lists = "html.list";
             }
         } else {
