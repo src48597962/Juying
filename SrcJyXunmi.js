@@ -535,7 +535,7 @@ function xunmi(name,data,ishkss) {
                             let appname = '‘‘’’<font color=#f13b66a>聚影√ · '+obj.name+'</font>'+' ('+obj.type+')'+(obj.group&&obj.group!=obj.type?' ['+obj.group+']':'');
                             let vodurl = list.vodurl;
                             if(/^\/\//.test(vodpic)){
-                                vodpic = "https" + vodpic;
+                                vodpic = "https:" + vodpic;
                             }   
                             if(/^\/upload|^upload/.test(vodpic)){
                                 vodpic = vodurl.match(/http(s)?:\/\/(.*?)\//)[0] + vodpic;
