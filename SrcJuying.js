@@ -343,14 +343,11 @@ function jiekouyiji() {
             log(MY_URL);
             try {
                 var gethtml = request(MY_URL, { headers: { 'User-Agent': api_ua }, timeout:xunmitimeout*1000 });
-                log(gethtml)
-                log(111)
                 if(api_type=="XBPQ"){
                     jkdata["二次截取"] = jkdata["二次截取"] || (gethtml.indexOf(`<ul class="stui-vodlist`)>-1?`<ul class="stui-vodlist&&</ul>`:gethtml.indexOf(`<ul class="myui-vodlist`)>-1?`<ul class="myui-vodlist&&</ul>`:"");
                     if(jkdata["二次截取"]){
                         gethtml = gethtml.split(jkdata["二次截取"].split('&&')[0])[1].split(jkdata["二次截取"].split('&&')[1])[0];
                     }
-                    
                     var list = [];
                     jkdata["链接"] = jkdata["链接"] || `href="&&"`;
                     jkdata["标题"] = jkdata["标题"] || `title="&&"`;
@@ -365,6 +362,7 @@ function jiekouyiji() {
                                 jkdata["图片"] = `original="&&"`;
                             }
                         };
+                        log(jklist[i])
                         if(jklist[i].indexOf(jkdata["图片"].split("&&")[0])>-1){
                             let id = jklist[i].split(jkdata["链接"].split('&&')[0])[1].split(jkdata["链接"].split('&&')[1])[0];
                             log(id)
