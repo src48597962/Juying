@@ -342,7 +342,7 @@ function jiekouyiji() {
                         if(!jkdata["图片"]){
                             if(jklist[i].indexOf('original=')>-1){
                                 jkdata["图片"] = `original="&&"`;
-                            }else if(jklist[i].indexOf('<img src="')>-1){
+                            }else if(jklist[i].indexOf('<img src=')>-1){
                                 jkdata["图片"] = `<img src="&&"`;
                             }
                         };
