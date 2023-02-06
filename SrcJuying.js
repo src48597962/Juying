@@ -325,7 +325,7 @@ function jiekouyiji() {
     if(typeof(listurl) != "undefined"){
         try{
             if(api_type=="XBPQ"){
-                MY_URL = listurl.replace('{catePg}',MY_PAGE).replace('{cateId}',getMyVar('Srczsjiekou$type_id','1'));
+                MY_URL = listurl.replace('{catePg}',jkdata["起始页"]?MY_PAGE>jkdata["起始页"]?MY_PAGE:"":MY_PAGE).replace('{cateId}',getMyVar('Srczsjiekou$type_id','1'));
             }else{
                 MY_URL = listurl + MY_PAGE;
                 if(api_type=="v2"||api_type=="app"){
