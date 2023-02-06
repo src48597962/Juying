@@ -75,7 +75,7 @@ function jiekouyiji() {
             var listurl = api_url + '?ac=videolist&pg=';
             var lists = "html.list";
         }  else if (api_type=="XBPQ") {
-            let jsondata = zsjiekou.data;
+            var jsondata = zsjiekou.data;
             if(jsondata&&jsondata.ext){
                 let apihtml = request(jsondata.ext, { headers: { 'User-Agent': api_ua }, timeout:xunmitimeout*1000 });
                 try{
