@@ -639,6 +639,7 @@ var SrcParseS = {
                     var getjson = JSON.parse(request(obj.ulist.parse+obj.vipUrl,taskheader));
                     if (getjson.body&&getjson.statusCode==200){
                         var gethtml = getjson.body;
+                        log(gethtml);
                         var rurl = "";
                         try {
                             rurl = JSON.parse(gethtml).url||JSON.parse(gethtml).data.url||JSON.parse(gethtml).data;
