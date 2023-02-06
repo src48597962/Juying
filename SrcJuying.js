@@ -343,11 +343,13 @@ function jiekouyiji() {
             log(MY_URL);
             try {
                 var gethtml = request(MY_URL, { headers: { 'User-Agent': api_ua }, timeout:xunmitimeout*1000 });
+                
                 if(api_type=="XBPQ"){
                     jkdata["二次截取"] = jkdata["二次截取"] || (gethtml.indexOf(`<ul class="stui-vodlist`)>-1?`<ul class="stui-vodlist&&</ul>`:gethtml.indexOf(`<ul class="myui-vodlist`)>-1?`<ul class="myui-vodlist&&</ul>`:"");
                     if(jkdata["二次截取"]){
                         gethtml = gethtml.split(jkdata["二次截取"].split('&&')[0])[1].split(jkdata["二次截取"].split('&&')[1])[0];
                     }
+                    log(gethtml)
                     var list = [];
                     jkdata["链接"] = jkdata["链接"] || `href="&&"`;
                     jkdata["标题"] = jkdata["标题"] || `title="&&"`;
@@ -355,7 +357,6 @@ function jiekouyiji() {
                     let jklist = gethtml.match(new RegExp(jkdata["数组"].replace('&&','((?:.|[\r\n])*?)'), 'g'));
                     for (let i = 0; i < jklist.length; i++) {
                         log(i)
-                        log(jklist[i])
                         if(!jkdata["图片"]){
                             if(jklist[i].indexOf('<img')>-1){
                                 jkdata["图片"] = `<img src="&&"`;
@@ -372,17 +373,14 @@ function jiekouyiji() {
                             try{
                                 pic = jklist[i].split(jkdata["图片"].split('&&')[0])[1].split(jkdata["图片"].split('&&')[1])[0];
                             }catch(e){}
-                            log(pic)
                             let note = "";
                             try{
                                 note = jklist[i].split(jkdata["副标题"].split('&&')[0])[1].split(jkdata["副标题"].split('&&')[1])[0];
                             }catch(e){}
-                            log(note)
                             let arr = {"vod_id":id,"vod_name":name,"vod_remarks":note,"vod_pic":pic};
                             list.push(arr);
                         }
                     }
-                    log(list)
                 }else{
                     if(/cms/.test(api_type)&&/<\?xml/.test(gethtml)){
                         gethtml = gethtml.replace(/&lt;!\[CDATA\[|\]\]&gt;|<!\[CDATA\[|\]\]>/g,'');
