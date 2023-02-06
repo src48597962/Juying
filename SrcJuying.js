@@ -337,6 +337,30 @@ function jiekouyiji() {
                     jkdata["标题"] = jkdata["标题"] || `title="&&"`;
                     jkdata["数组"] = jkdata["数组"] || `<a &&</a>`;
                     let jklist = gethtml.match(new RegExp(jkdata["数组"].replace('&&','((?:.|[\r\n])*?)'), 'g'));
+                    jklist.forEach(item=>{
+                        if(!jkdata["图片"]){
+                            if(item.indexOf('original=')>-1){
+                                jkdata["图片"] = `original="&&"`;
+                            }else if(item.indexOf('<img src=')>-1){
+                                jkdata["图片"] = `<img src="&&"`;
+                            }
+                        };
+                        if(jkdata["图片"]&&item.indexOf(jkdata["图片"].split("&&")[0])>-1){
+                            let id = item.split(jkdata["链接"].split('&&')[0])[1].split(jkdata["链接"].split('&&')[1])[0];
+                            let name = item.split(jkdata["标题"].split('&&')[0])[1].split(jkdata["标题"].split('&&')[1])[0];
+                            let pic = "";
+                            try{
+                                pic = item.split(jkdata["图片"].split('&&')[0])[1].split(jkdata["图片"].split('&&')[1])[0];
+                            }catch(e){}
+                            let note = "";
+                            try{
+                                note = item.split(jkdata["副标题"].split('&&')[0])[1].split(jkdata["副标题"].split('&&')[1])[0];
+                            }catch(e){}
+                            let arr = {"vod_id":id,"vod_name":name,"vod_remarks":note,"vod_pic":pic};
+                            list.push(arr);
+                        }
+                    })
+                    /*
                     for (let i = 0; i < jklist.length; i++) {
                         if(!jkdata["图片"]){
                             if(jklist[i].indexOf('original=')>-1){
@@ -359,7 +383,7 @@ function jiekouyiji() {
                             let arr = {"vod_id":id,"vod_name":name,"vod_remarks":note,"vod_pic":pic};
                             list.push(arr);
                         }
-                    }
+                    }*/
                 }else{
                     if(/cms/.test(api_type)&&/<\?xml/.test(gethtml)){
                         gethtml = gethtml.replace(/&lt;!\[CDATA\[|\]\]&gt;|<!\[CDATA\[|\]\]>/g,'');
