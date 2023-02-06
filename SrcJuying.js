@@ -412,7 +412,7 @@ function jiekouyiji() {
                         vodpic = vodurl.match(/http(s)?:\/\/(.*?)\//)[0] + vodpic;
                     }
                     if(/^\/\//.test(vodpic)){
-                        vodpic = "https" + vodpic;
+                        vodpic = "https:" + vodpic;
                     }
                     if(api_type=='cms'&&list.vod_play_url){
                         if(list.vod_play_url.indexOf('$')==-1&&list.vod_play_url.indexOf('m3u8')>-1){
