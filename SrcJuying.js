@@ -324,7 +324,7 @@ function jiekouyiji() {
                     }
                 }
             }
-            log(MY_URL);
+
             try {
                 var gethtml = request(MY_URL, { headers: { 'User-Agent': api_ua }, timeout:xunmitimeout*1000 });
                 if(api_type=="XBPQ"){
@@ -338,7 +338,6 @@ function jiekouyiji() {
                     jkdata["数组"] = jkdata["数组"] || `<a &&</a>`;
                     let jklist = gethtml.match(new RegExp(jkdata["数组"].replace('&&','((?:.|[\r\n])*?)'), 'g'));
                     for (let i = 0; i < jklist.length; i++) {
-                        log(i)
                         if(!jkdata["图片"]){
                             if(jklist[i].indexOf('original=')>-1){
                                 jkdata["图片"] = `original="&&"`;
@@ -348,9 +347,7 @@ function jiekouyiji() {
                         };
                         if(jkdata["图片"]&&jklist[i].indexOf(jkdata["图片"].split("&&")[0])>-1){
                             let id = jklist[i].split(jkdata["链接"].split('&&')[0])[1].split(jkdata["链接"].split('&&')[1])[0];
-                            log(id)
                             let name = jklist[i].split(jkdata["标题"].split('&&')[0])[1].split(jkdata["标题"].split('&&')[1])[0];
-                            log(name)
                             let pic = "";
                             try{
                                 pic = jklist[i].split(jkdata["图片"].split('&&')[0])[1].split(jkdata["图片"].split('&&')[1])[0];
@@ -434,7 +431,8 @@ function jiekouyiji() {
                         extra: {
                             pic: vodpic,
                             name: vodname,
-                            title: vodname+'-'+api_name
+                            title: vodname+'-'+api_name,
+                            data: typeof(jsondata) =="undefined"|| jsondata ==null?{}:jsondata
                         }
                     }
                 }
