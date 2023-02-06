@@ -94,15 +94,6 @@ function jiekouyiji() {
     }
     
     if(MY_PAGE==1){
-        /*
-        var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
-        var datafile = fetch(filepath);
-        if(datafile != ""){
-            eval("var datalist=" + datafile+ ";");
-        }else{
-            var datalist = [];
-        }
-        */
         let datalist = storage0.getMyVar('zsdatalist',[]);
         let grouplist = [];
         datalist.forEach(item=>{
@@ -119,13 +110,7 @@ function jiekouyiji() {
                 return /app|v1|v2|iptv|cms|XBPQ/.test(item.type) && item.group!="失败待处理";
             }
         })
-        /*
-        if(!datalist.some(item => item.url == api_url)){
-            JYconfig['zsjiekou'] = api_group?{api_group:api_group}:{};
-            writeFile(cfgfile, JSON.stringify(JYconfig));
-            refreshPage(true);
-        }
-        */
+
         for (let i = 0; i < 9; i++) {
             d.push({
                 col_type: "blank_block"
@@ -150,7 +135,6 @@ function jiekouyiji() {
                     var Srczsjiekousousuodata = [];
                     Srczsjiekousousuodata.push(datalist[i]);
                 }
-                //let zsdata = {api_name:datalist[i].name, api_type:datalist[i].type, api_url:datalist[i].url, api_ua:datalist[i].ua};
                 let zsdata = {api_name:datalist[i].name};
                 if(selectgroup){
                     zsdata.selectgroup = selectgroup;
@@ -356,10 +340,10 @@ function jiekouyiji() {
                     for (let i = 0; i < jklist.length; i++) {
                         log(i)
                         if(!jkdata["图片"]){
-                            if(jklist[i].indexOf('<img')>-1){
-                                jkdata["图片"] = `<img src="&&"`;
-                            }else if(jklist[i].indexOf('original=')>-1){
+                            if(jklist[i].indexOf('original=')>-1){
                                 jkdata["图片"] = `original="&&"`;
+                            }else if(jklist[i].indexOf('<img src="')>-1){
+                                jkdata["图片"] = `<img src="&&"`;
                             }
                         };
                         log(jklist[i])
