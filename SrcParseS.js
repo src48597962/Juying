@@ -631,7 +631,7 @@ var SrcParseS = {
                     obj.ulist['x5'] = 0;
                     return {url: rurl,ulist: obj.ulist}; 
                 }else{            
-                    var taskheader = {withStatusCode:true,timeout:5000};
+                    var taskheader = {withStatusCode:true,timeout:8000};
                     let head = obj.ulist.header||{};
                     if(JSON.stringify(head) != "{}"){
                         taskheader['header'] = head;
@@ -639,10 +639,10 @@ var SrcParseS = {
                     var getjson = JSON.parse(request(obj.ulist.parse+obj.vipUrl,taskheader));
                     if (getjson.body&&getjson.statusCode==200){
                         var gethtml = getjson.body;
-                        log(gethtml);
                         var rurl = "";
                         try {
                             rurl = JSON.parse(gethtml).url||JSON.parse(gethtml).data.url||JSON.parse(gethtml).data;
+                            var isjson = 1;
                         } catch (e) {
                             if(/\.m3u8|\.mp4/.test(getjson.url)&&getjson.url.indexOf('=http')==-1){
                                 rurl = getjson.url;
@@ -663,10 +663,11 @@ var SrcParseS = {
                                     if(printlog==1){log('明码获取错误：'+e.message)};
                                 }
                             }
+                            var isjson = 0;
                         }
                         var x5 = 0;
                         if(rurl == ""){
-                            if(!/404 /.test(gethtml)&&obj.ulist.parse.indexOf('key=')==-1){
+                            if(!/404 /.test(gethtml)&&obj.ulist.parse.indexOf('key=')==-1&&isjson==0){
                                 if(x5jxlist.length<5){
                                     x5jxlist.push(obj.ulist.parse);
                                     if(printlog==1){log(obj.ulist.name + '>加入x5嗅探列表');}
