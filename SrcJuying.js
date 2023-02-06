@@ -360,30 +360,6 @@ function jiekouyiji() {
                             list.push(arr);
                         }
                     })
-                    /*
-                    for (let i = 0; i < jklist.length; i++) {
-                        if(!jkdata["图片"]){
-                            if(jklist[i].indexOf('original=')>-1){
-                                jkdata["图片"] = `original="&&"`;
-                            }else if(jklist[i].indexOf('<img src=')>-1){
-                                jkdata["图片"] = `<img src="&&"`;
-                            }
-                        };
-                        if(jkdata["图片"]&&jklist[i].indexOf(jkdata["图片"].split("&&")[0])>-1){
-                            let id = jklist[i].split(jkdata["链接"].split('&&')[0])[1].split(jkdata["链接"].split('&&')[1])[0];
-                            let name = jklist[i].split(jkdata["标题"].split('&&')[0])[1].split(jkdata["标题"].split('&&')[1])[0];
-                            let pic = "";
-                            try{
-                                pic = jklist[i].split(jkdata["图片"].split('&&')[0])[1].split(jkdata["图片"].split('&&')[1])[0];
-                            }catch(e){}
-                            let note = "";
-                            try{
-                                note = jklist[i].split(jkdata["副标题"].split('&&')[0])[1].split(jkdata["副标题"].split('&&')[1])[0];
-                            }catch(e){}
-                            let arr = {"vod_id":id,"vod_name":name,"vod_remarks":note,"vod_pic":pic};
-                            list.push(arr);
-                        }
-                    }*/
                 }else{
                     if(/cms/.test(api_type)&&/<\?xml/.test(gethtml)){
                         gethtml = gethtml.replace(/&lt;!\[CDATA\[|\]\]&gt;|<!\[CDATA\[|\]\]>/g,'');
@@ -430,7 +406,7 @@ function jiekouyiji() {
                 if(vodname){
                     let vodpic = list.vod_pic||list.pic;
                     let voddesc = list.vod_remarks||list.state||"";
-                    let vodurl = list.vod_id?url + list.vod_id:list.nextlink;
+                    let vodurl = list.vod_id?url&&!/^http/.test(list.vod_id)?url+list.vod_id:list.vod_id:list.nextlink;
                     vodpic = vodpic?vodpic.replace('/img.php?url=','').replace('/tu.php?tu=','') + "@Referer=":"https://www.xawqxh.net/mxtheme/images/loading.gif";
                     if(/^\/upload|^upload/.test(vodpic)){
                         vodpic = vodurl.match(/http(s)?:\/\/(.*?)\//)[0] + vodpic;
