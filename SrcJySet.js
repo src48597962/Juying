@@ -2559,10 +2559,15 @@ function Resourceimport(input,importtype,boxdy){
                         }else if(/^./.test(urlfile)){
                             urlfile = input.match(/http(s)?:\/\/.*\//)[0]+urlfile.replace("./","");
                         }
+                        let jkhtml = request(urlfile,{timeout:2000});
+                        jkhtml = jkhtml.replace(reg, function(word) { 
+                            return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
+                        }).replace(/^.*#.*$/mg,"").replace(/[\x00-\x1F\x7F]|[\t\r\n]/g,'');
+                        let jkdata = JSON.parse(jkhtml);
                         let data ={
                             "ext": urlfile
                         }
-                        urls.push({ "name": obj.name, "url": obj.key, "type": "XBPQ", "ua": "PC_UA", "data": data, "group": isboxdy?datasl>0?"TVBox订阅":"":"新导入"})
+                        urls.push({ "name": obj.name, "url": obj.key, "type": "XBPQ", "ua": jkdata["请求头"]=="手机"?"MOBILE_UA":"PC_UA", "data": data, "group": isboxdy?datasl>0?"TVBox订阅":"":"新导入"})
                     }catch(e){
                         //log(obj.name + '>抓取失败>' + e.message)
                     }
