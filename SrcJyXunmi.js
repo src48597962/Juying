@@ -1062,6 +1062,7 @@ function xunmierji(type,ua) {
                     arthtml = arthtml.split(jkdata["线路二次截取"].split('&&')[0])[1].split(jkdata["线路二次截取"].split('&&')[1])[0];
                 }
                 let artlist = arthtml.match(new RegExp(jkdata["线路数组"].replace('&&','((?:.|[\r\n])*?)'), 'g'));
+                log(artlist)
                 for (let i = 0; i < artlist.length; i++) {
                     let arttitle = artlist[i].split(jkdata["线路数组"].split('&&')[0])[1].split(jkdata["线路数组"].split('&&')[1])[0].split(jkdata["线路标题"].split('&&')[0])[1].split(jkdata["线路标题"].split('&&')[1])[0];
                     arts[i] = arttitle.replace(/<\/?.+?\/?>/g,'');
