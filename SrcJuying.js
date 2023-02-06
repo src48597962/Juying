@@ -346,9 +346,7 @@ function jiekouyiji() {
                                 jkdata["图片"] = `<img src="&&"`;
                             }
                         };
-                        log(jklist[i])
-                        log(jkdata["图片"].split("&&")[0])
-                        if(jklist[i].indexOf(jkdata["图片"].split("&&")[0])>-1){
+                        if(jkdata["图片"]&&jklist[i].indexOf(jkdata["图片"].split("&&")[0])>-1){
                             let id = jklist[i].split(jkdata["链接"].split('&&')[0])[1].split(jkdata["链接"].split('&&')[1])[0];
                             log(id)
                             let name = jklist[i].split(jkdata["标题"].split('&&')[0])[1].split(jkdata["标题"].split('&&')[1])[0];
