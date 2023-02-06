@@ -728,7 +728,7 @@ var SrcParseS = {
                         return 0;
                     }else{
                         var urlts = urltss[0];
-                        if(/^http/.test(urlts)){
+                        if(/^http/.test(urlts)&&!urlts.match(/youku|iqiyi|ixigua|migu|sohu|pptv|le|cctv|1905|mgtv|qq.com/)){
                             var tscode = JSON.parse(fetch(urlts,{headers:{'Referer':url},onlyHeaders:true,timeout:2000}));
                             if(tscode.statusCode==-1){
                                 //log(name+'>ts段探测超时未拦载，结果未知')
