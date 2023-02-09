@@ -1084,7 +1084,7 @@ var SrcParseS = {
                     if(parseInt(tstime)*parseInt(urltss.length) < times){
                         log(name+'>m3u8视频长度小于设置的'+times+'s，疑似跳舞小姐姐或防盗小视频，不信去验证一下>'+url);
                         return 0;
-                    }else{
+                    }else if(!/banyung/.test(url)){
                         var urlts = urltss[0];
                         if(/^http/.test(urlts)&&!urlts.match(/youku|iqiyi|ixigua|migu|sohu|pptv|le|cctv|1905|mgtv|qq.com/)){
                             var tscode = JSON.parse(request(urlts,{headers:{'Referer':url},onlyHeaders:true,redirect:false,timeout:2000}));
