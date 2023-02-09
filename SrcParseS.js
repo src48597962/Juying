@@ -1086,7 +1086,7 @@ var SrcParseS = {
                         return 0;
                     }else if(!/banyung/.test(url)){
                         var urlts = urltss[0];
-                        if(/^http/.test(urlts)&&!urlts.match(/youku|iqiyi|ixigua|migu|sohu|pptv|le|cctv|1905|mgtv|qq.com/)){
+                        if(/^http/.test(urlts)&&!urlts.match(/youku|iqiyi|ixigua|migu|sohu|pptv|le|cctv|1905|mgtv|qq\.com|M3U8\.TV/)){
                             var tscode = JSON.parse(request(urlts,{headers:{'Referer':url},onlyHeaders:true,redirect:false,timeout:2000}));
                             //log(name+'ts访问状态码：'+tscode.statusCode)
                             if(tscode.statusCode==-1){
