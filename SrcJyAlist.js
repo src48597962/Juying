@@ -34,6 +34,7 @@ function getlist(data,isdir) {
     let list = data.filter(item => {
         return isdir ? item.is_dir : /\.mp4|\.avi|\.mkv|\.rmvb|\.flv|\.mov|\.wmv|\.3gp|\.mp3|\.wma|\.wav/.test(item.name);
     })
+    log(list);
     return list;
   }catch(e){
     return [];
@@ -98,6 +99,7 @@ function Alistlist(alistapi){
     let json = JSON.parse(gethtml(apiurl,MY_PARAMS.path,alistapi.password));
     if(json.code==200){
       let dirlist = getlist(json.data.content,1);
+      log("目录数："+dirlist.length);
       dirlist.forEach(item => {
         d.push({
           title: item.name,
@@ -113,6 +115,7 @@ function Alistlist(alistapi){
         })
       })
       let filelist = getlist(json.data.content,0);
+      log("文件数："+dirlist.length);
       filelist.forEach(item => {
         d.push({
           title: item.name,
