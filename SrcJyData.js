@@ -109,7 +109,7 @@ let yijimenu = [
         extra: {
             id: "zhanshibutton",
             longClick: [{
-                title: "切换按钮功能",
+                title: "切换为"+(getItem('zhanshibutton')=="history"?"历史":"展示")+"按钮",
                 js: $.toString(() => {
                     if(getItem('zhanshibutton')=="history"){
                         clearItem('zhanshibutton');
