@@ -20,6 +20,7 @@ function gethtml(api,path,password) {
     path = path || "";
     password = password || "";
     let html = fetch(api, {body: `{"path":`+path+`,"password":`+password+`}`,method:'POST'});
+    log(html);
     return html;
   }catch(e){
     return "";
@@ -51,13 +52,10 @@ function yiji() {
   })
   if (datalist.length > 0) {
     let listapi = getMyVar('Alistapi', datalist[0].server) + "/api/fs/list";
-    log(listapi);
     try{
       let json = JSON.parse(gethtml(listapi,"",""));
-      log(json);
       if(json.code==200){
         let list = getlist(json.data.content);
-        log(list);
       }
     }catch(e){
 
