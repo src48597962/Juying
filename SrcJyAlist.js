@@ -116,16 +116,16 @@ function Alistlist(alistapi){
         d.push({
           title: item.name,
           img: item.thumb || "https://cdn.jsdelivr.net/gh/alist-org/logo@main/logo.svg",
-          url: $('#noLoading#').lazyRule((apiurl,path,password) => {
+          url: alistapi.server+MY_PARAMS.path+"/"+item.name + '#isVideo=true#',
+          /*$('#noLoading#').lazyRule((apiurl,path,password) => {
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
-            log(apiurl);
             let json = JSON.parse(gethtml(apiurl, path, password));
-            log(json);
             if(json.code==200){
               return json.data.raw_url;
             }
             return "hiker://empty";
           }, alistapi.server+"/api/fs/get", MY_PARAMS.path+"/"+item.name, alistapi.password),
+          */
           col_type: 'avatar',
         })
       })
