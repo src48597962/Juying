@@ -43,7 +43,7 @@ function yiji() {
     d.push({
       title: item.name,
       url: $('#noLoading#').lazyRule((item) => {
-        putMyVar('Alistapi', item.server);
+        storage0.putMyVar('Alistapi', item);
         refreshPage(false);
         return "hiker://empty";
       }, item),
@@ -51,23 +51,28 @@ function yiji() {
     })
   })
   if (datalist.length > 0) {
-    let listapi = getMyVar('Alistapi', datalist[0].server) + "/api/fs/list";
+    let alistapi = storage0.getMyVar('Alistapi', datalist[0]);
+    let apiurl = alistapi.server + "/api/fs/list";
     try{
-      let json = JSON.parse(gethtml(listapi,"",""));
+      let json = JSON.parse(gethtml(apiurl,"",alistapi.password));
       if(json.code==200){
         let dirlist = getlist(json.data.content,1);
         dirlist.forEach(item => {
           d.push({
             title: item.name,
             img: "https://gitcode.net/qq_32394351/dr/-/raw/master/img/文件类型/文件夹.svg",
-            url: $('#noLoading#').lazyRule(() => {
-              return "hiker://empty";
-            }),
+            url: $("hiker://empty#noRecordHistory##noHistory#").rule((api) => {
+                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
+                Alistlist(api);
+            },alistapi),
             col_type: 'avatar',
+            extra: {
+              path: "/"+item.name
+            }
           })
         })
-        let vodlist = getlist(json.data.content,0);
-        vodlist.forEach(item => {
+        let filelist = getlist(json.data.content,0);
+        filelist.forEach(item => {
           d.push({
             title: item.name,
             img: "",
@@ -80,5 +85,42 @@ function yiji() {
       }
     }catch(e){ }
   }
+  setResult(d);
+}
+
+function Alistlist(alistapi){
+  let d = [];
+  let apiurl = alistapi.server + "/api/fs/list";
+  try{
+    let json = JSON.parse(gethtml(apiurl,MY_PARAMS.path,alistapi.password));
+    if(json.code==200){
+      let dirlist = getlist(json.data.content,1);
+      dirlist.forEach(item => {
+        d.push({
+          title: item.name,
+          img: "https://gitcode.net/qq_32394351/dr/-/raw/master/img/文件类型/文件夹.svg",
+          url: $("hiker://empty#noRecordHistory##noHistory#").rule((item) => {
+              require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
+              Alistlist(api,item);
+          },item,api),
+          col_type: 'avatar',
+          extra: {
+            path: MY_PARAMS.path+"/"+item.name
+          }
+        })
+      })
+      let filelist = getlist(json.data.content,0);
+      filelist.forEach(item => {
+        d.push({
+          title: item.name,
+          img: "",
+          url: $('#noLoading#').lazyRule(() => {
+            return "hiker://empty";
+          }),
+          col_type: 'avatar',
+        })
+      })
+    }
+  }catch(e){ }
   setResult(d);
 }
