@@ -17,9 +17,10 @@ if (AlistData != "") {
 }
 function gethtml(api,path,password) {
   try{
+    log(api);
     path = path || "";
     password = password || "";
-    let html = fetch(api, {body: `{"path":`+path+`,"password":`+password+`}`,method:'POST'});
+    let html = fetch(api, {body: `{"path":"","password":""}`,method:'POST'});
     log(html);
     return html;
   }catch(e){
