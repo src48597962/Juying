@@ -101,8 +101,11 @@ let yijimenu = [
     {
         title: getItem('zhanshibutton')=="history"?"历史":"展示",
         url: getItem('zhanshibutton')=="history"?"hiker://history":$("hiker://empty##fypage#noRecordHistory##noHistory#").rule(() => {
+                /*
                 require(config.依赖);
-                jiekouyiji();
+                jiekouyiji();*/
+                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
+                yiji();
             }),
         pic_url: 'https://lanmeiguojiang.com/tubiao/more/105.png',
         col_type: 'icon_5',
