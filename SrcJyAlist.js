@@ -118,6 +118,7 @@ function Alistlist(alistapi){
           img: item.thumb || "https://cdn.jsdelivr.net/gh/alist-org/logo@main/logo.svg",
           url: $('#noLoading#').lazyRule((apiurl,path,password) => {
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
+            log(apiurl);
             let json = JSON.parse(gethtml(apiurl, path, password));
             log(json);
             if(json.code==200){
