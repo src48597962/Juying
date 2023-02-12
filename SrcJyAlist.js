@@ -10,8 +10,8 @@ if (AlistData != "") {
       "server": "http://alist.xiaoya.pro"
     },
     {
-      "name": "杜比",
-      "server": "https://dubi.tk"
+      "name": "帅鹏",
+      "server": "https://hi.shuaipeng.wang"
     }
   ];
 }
