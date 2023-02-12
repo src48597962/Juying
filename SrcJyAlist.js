@@ -66,6 +66,17 @@ function yiji() {
             col_type: 'avatar',
           })
         })
+        let vodlist = getlist(json.data.content,0);
+        vodlist.forEach(item => {
+          d.push({
+            title: item.name,
+            img: "",
+            url: $('#noLoading#').lazyRule(() => {
+              return "hiker://empty";
+            }),
+            col_type: 'avatar',
+          })
+        })
       }
     }catch(e){ }
   }
