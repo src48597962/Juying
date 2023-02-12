@@ -31,7 +31,7 @@ function yiji() {
   })
   if (datalist.length > 0) {
     let listapi = getMyVar('Alistapi', datalist[0]) + "/api/fs/list";
-
+    
   }
   setResult(d);
 }
