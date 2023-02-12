@@ -129,6 +129,12 @@ let yijimenu = [
                     }
                     return "toast://已切换"
                 },JYconfig,cfgfile)
+            },{
+                title: "Alist网盘",
+                js: $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
+                    yiji();
+                })
             }]
         }
     },
