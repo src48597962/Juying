@@ -17,13 +17,9 @@ if (AlistData != "") {
 }
 function gethtml(api,path,password) {
   try{
-    log(api);
     path = path || "";
-    log(path);
     password = password || "";
-    log(password);
     let html = fetch(api, {body: {"path":path,"password":password},method:'POST'});
-    log(html);
     return html;
   }catch(e){
     return "";
@@ -34,7 +30,6 @@ function getlist(data,isdir) {
     let list = data.filter(item => {
         return isdir ? item.is_dir : /\.mp4|\.avi|\.mkv|\.rmvb|\.flv|\.mov|\.wmv|\.3gp|\.mp3|\.wma|\.wav/.test(item.name);
     })
-    log(list);
     return list;
   }catch(e){
     return [];
@@ -56,15 +51,14 @@ function yiji() {
   })
   if (datalist.length > 0) {
     let alistapi = storage0.getMyVar('Alistapi', datalist[0]);
-    let apiurl = alistapi.server + "/api/fs/list";
     try{
-      let json = JSON.parse(gethtml(apiurl,"",alistapi.password));
+      let json = JSON.parse(gethtml(alistapi.server + "/api/fs/list", "", alistapi.password));
       if(json.code==200){
         let dirlist = getlist(json.data.content,1);
         dirlist.forEach(item => {
           d.push({
             title: item.name,
-            img: "https://gitcode.net/qq_32394351/dr/-/raw/master/img/文件类型/文件夹.svg",
+            img: item.thumb || "https://gitcode.net/qq_32394351/dr/-/raw/master/img/文件类型/文件夹.svg",
             url: $("hiker://empty#noRecordHistory##noHistory#").rule((api) => {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
                 Alistlist(api);
@@ -79,10 +73,15 @@ function yiji() {
         filelist.forEach(item => {
           d.push({
             title: item.name,
-            img: "",
-            url: $('#noLoading#').lazyRule(() => {
+            img: item.thumb || "https://cdn.jsdelivr.net/gh/alist-org/logo@main/logo.svg",
+            url: $('#noLoading#').lazyRule((apiurl,path,password) => {
+              require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
+              let json = JSON.parse(gethtml(apiurl, path, password));
+              if(json.code==200){
+                return json.data.raw_url;
+              }
               return "hiker://empty";
-            }),
+            }, alistapi.server+"/api/fs/get", "/"+item.name, alistapi.password),
             col_type: 'avatar',
           })
         })
@@ -94,16 +93,14 @@ function yiji() {
 
 function Alistlist(alistapi){
   let d = [];
-  let apiurl = alistapi.server + "/api/fs/list";
   try{
-    let json = JSON.parse(gethtml(apiurl,MY_PARAMS.path,alistapi.password));
+    let json = JSON.parse(gethtml(alistapi.server + "/api/fs/list", MY_PARAMS.path, alistapi.password));
     if(json.code==200){
       let dirlist = getlist(json.data.content,1);
-      log("目录数："+dirlist.length);
       dirlist.forEach(item => {
         d.push({
           title: item.name,
-          img: "https://gitcode.net/qq_32394351/dr/-/raw/master/img/文件类型/文件夹.svg",
+          img: item.thumb || "https://gitcode.net/qq_32394351/dr/-/raw/master/img/文件类型/文件夹.svg",
           url: $("hiker://empty#noRecordHistory##noHistory#").rule((api) => {
               require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
               Alistlist(api);
@@ -114,16 +111,19 @@ function Alistlist(alistapi){
           }
         })
       })
-      log("d:"+d.length);
       let filelist = getlist(json.data.content,0);
-      log("文件数："+dirlist.length);
       filelist.forEach(item => {
         d.push({
           title: item.name,
-          img: "",
-          url: $('#noLoading#').lazyRule(() => {
+          img: item.thumb || "https://cdn.jsdelivr.net/gh/alist-org/logo@main/logo.svg",
+          url: $('#noLoading#').lazyRule((apiurl,path,password) => {
+            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
+            let json = JSON.parse(gethtml(apiurl, path, password));
+            if(json.code==200){
+              return json.data.raw_url;
+            }
             return "hiker://empty";
-          }),
+          }, alistapi.server+"/api/fs/get", MY_PARAMS.path+"/"+item.name, alistapi.password),
           col_type: 'avatar',
         })
       })
