@@ -68,6 +68,7 @@ function yiji() {
 }
 
 function Alistlist(alistapi){
+  setPageTitle("Alist网盘-" + alistapi.name);
   let d = [];
   d.push({
     title: alistapi.name + (MY_PARAMS.path||""),
