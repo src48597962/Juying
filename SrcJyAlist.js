@@ -21,16 +21,15 @@ function gethtml(api,path,password) {
     path = path || "";
     password = password || "";
     let html = fetch(api, {body: {"path":path,"password":password},method:'POST'});
-    log(html);
     return html;
   }catch(e){
     return "";
   }
 }
-function getlist(data) {
+function getlist(data,isdir) {
   try{
     let list = data.filter(item => {
-        return item.is_dir || /\.mp4|\.avi|\.mkv|\.rmvb|\.flv|\.mov|\.wmv|\.3gp|\.mp3|\.wma|\.wav/.test(item.name);
+        return isdir ? item.is_dir : /\.mp4|\.avi|\.mkv|\.rmvb|\.flv|\.mov|\.wmv|\.3gp|\.mp3|\.wma|\.wav/.test(item.name);
     })
     return list;
   }catch(e){
@@ -56,14 +55,19 @@ function yiji() {
     try{
       let json = JSON.parse(gethtml(listapi,"",""));
       if(json.code==200){
-        let list = getlist(json.data.content);
-        log(list);
+        let dirlist = getlist(json.data.content,1);
+        dirlist.forEach(item => {
+          d.push({
+            title: item.name,
+            img: "https://gitcode.net/qq_32394351/dr/-/raw/master/img/文件类型/文件夹.svg",
+            url: $('#noLoading#').lazyRule(() => {
+              return "hiker://empty";
+            }),
+            col_type: 'avatar',
+          })
+        })
       }
-    }catch(e){
-
-    }
-    
-
+    }catch(e){ }
   }
   setResult(d);
 }
