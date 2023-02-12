@@ -15,6 +15,26 @@ if (AlistData != "") {
     }
   ];
 }
+function gethtml(api,path,password) {
+  try{
+    path = path || "";
+    password = password || "";
+    let html = fetch(api, {body: `{"path":`+path+`,"password":`+password+`}`,method:'POST'});
+    return html;
+  }catch(e){
+    return "";
+  }
+}
+function getlist(data) {
+  try{
+    let list = data.filter(item => {
+        return item.is_dir || /\.mp4|\.avi|\.mkv|\.rmvb|\.flv|\.mov|\.wmv|\.3gp|\.mp3|\.wma|\.wav/.test(item.name);
+    })
+    return list;
+  }catch(e){
+    return [];
+  }
+}
 
 function yiji() {
   let d = [];
@@ -30,11 +50,17 @@ function yiji() {
   })
   if (datalist.length > 0) {
     let listapi = getMyVar('Alistapi', datalist[0].server) + "/api/fs/list";
-    log(listapi);
-    let html = fetch(listapi, {body: `{"path":"","password":""}`,method:'POST'});
-    log(html);
-    let json = JSON.parse(html);
-    log(json);
+    try{
+      let json = JSON.parse(gethtml(listapi,"",""));
+      if(json.code==200){
+        let list = getlist(json.data.content);
+        log(list);
+      }
+    }catch(e){
+
+    }
+    
+
   }
   setResult(d);
 }
