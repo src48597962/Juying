@@ -20,7 +20,7 @@ function gethtml(api,path,password) {
     log(api);
     path = path || "";
     password = password || "";
-    let html = fetch(api, {body: `{"path":"","password":""}`,method:'POST'});
+    let html = fetch(api, {body: {"path":"","password":""},method:'POST'});
     log(html);
     return html;
   }catch(e){
