@@ -51,6 +51,7 @@ function yiji() {
   })
   if (datalist.length > 0) {
     let listapi = getMyVar('Alistapi', datalist[0].server) + "/api/fs/list";
+    log(listapi);
     try{
       let json = JSON.parse(gethtml(listapi,"",""));
       log(json);
