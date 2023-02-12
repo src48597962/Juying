@@ -1,6 +1,6 @@
 //本代码仅用于个人学习，请勿用于其他作用，下载后请24小时内删除，代码虽然是公开学习的，但请尊重作者，应留下说明
 var Alistfile = "hiker://files/rules/Src/Juying/Alist.json";
-var AlistData = fetch(cfgfile);
+var AlistData = fetch(Alistfile);
 if(AlistData != ""){
     eval("var datalist=" + AlistData+ ";");
 }else{
