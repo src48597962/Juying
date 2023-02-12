@@ -64,13 +64,29 @@ function yiji() {
   }
   setResult(d);
 }
+
+function Alistlist(alistapi){
+  let d = [];
+  try{
+    let json = JSON.parse(gethtml(alistapi.server + "/api/fs/list", MY_PARAMS.path, alistapi.password));
+    if(json.code==200){
+      let dirlist = getlist(json.data.content,1);
+      d = d.concat(arrayAdd(dirlist,1,alistapi));
+      
+      let filelist = getlist(json.data.content,0);
+      d = d.concat(arrayAdd(filelist,0,alistapi));
+    }
+  }catch(e){ }
+  setResult(d);
+}
+
 function arrayAdd(list,isdir,alistapi){
   let d = [];
   if(isdir){
     list.forEach(item => {
       d.push({
         title: item.name,
-        img: item.thumb || "https://gitcode.net/qq_32394351/dr/-/raw/master/img/文件类型/文件夹.svg",
+        img: item.thumb || config.依赖.match(/http(s)?:\/\/.*\//)[0] + "img/文件夹.svg",
         url: $("hiker://empty#noRecordHistory##noHistory#").rule((api) => {
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
             Alistlist(api);
@@ -92,59 +108,11 @@ function arrayAdd(list,isdir,alistapi){
           if(json.code==200&&json.data.raw_url){
             return json.data.raw_url + (/\.mp3|\.m4a|\.wav/.test(json.data.raw_url)?"#isMusic=true#":"#isVideo=true#");
           }
-          return "hiker://empty";
+          return "toast://播放失败了，应为网盘token失效";
         }, alistapi.server + "/api/fs/get", (MY_PARAMS.path||"") + "/" + item.name, alistapi.password),
         col_type: 'avatar',
       })
     })
   }
   return d;
-}
-function Alistlist(alistapi){
-  let d = [];
-  try{
-    let json = JSON.parse(gethtml(alistapi.server + "/api/fs/list", MY_PARAMS.path, alistapi.password));
-    if(json.code==200){
-      let dirlist = getlist(json.data.content,1);
-      d = d.concat(arrayAdd(dirlist,1,alistapi));
-      
-      let filelist = getlist(json.data.content,0);
-      d = d.concat(arrayAdd(filelist,0,alistapi));
-      /*
-      let dirlist = getlist(json.data.content,1);
-      dirlist.forEach(item => {
-        d.push({
-          title: item.name,
-          img: item.thumb || "https://gitcode.net/qq_32394351/dr/-/raw/master/img/文件类型/文件夹.svg",
-          url: $("hiker://empty#noRecordHistory##noHistory#").rule((api) => {
-              require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
-              Alistlist(api);
-          },alistapi),
-          col_type: 'avatar',
-          extra: {
-            path: MY_PARAMS.path+"/"+item.name
-          }
-        })
-      })
-      let filelist = getlist(json.data.content,0);
-      filelist.forEach(item => {
-        d.push({
-          title: item.name,
-          img: item.thumb || "https://cdn.jsdelivr.net/gh/alist-org/logo@main/logo.svg@Referer=",
-          url: $().lazyRule((apiurl,path,password) => {
-            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
-            let json = JSON.parse(gethtml(apiurl, path, password));
-            log(json.data.raw_url);
-            if(json.code==200){
-              return json.data.raw_url;
-            }
-            return "hiker://empty";
-          }, alistapi.server+"/api/fs/get", MY_PARAMS.path+"/"+item.name, alistapi.password),
-          col_type: 'avatar',
-        })
-      })
-      */
-    }
-  }catch(e){ }
-  setResult(d);
 }
