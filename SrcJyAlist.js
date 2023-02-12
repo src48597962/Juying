@@ -110,14 +110,18 @@ function arrayAdd(list,isdir,alistapi){
       d.push({
         title: item.name,
         img: item.thumb || "https://cdn.jsdelivr.net/gh/alist-org/logo@main/logo.svg@Referer=",
-        url: $().lazyRule((apiurl,path,password) => {
+        url: $().lazyRule((api,path,password) => {
           require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
-          let json = JSON.parse(gethtml(apiurl, path, password));
-          if(json.code==200&&json.data.raw_url){
-            return json.data.raw_url + (/\.mp3|\.m4a|\.wav/.test(json.data.raw_url)?"#isMusic=true#":"#isVideo=true#");
+          try{
+            let json = JSON.parse(gethtml(api + "/api/fs/get", path, password));
+            if(json.code==200&&json.data.raw_url){
+              return json.data.raw_url + (/\.mp3|\.m4a|\.wav/.test(json.data.raw_url)?"#isMusic=true#":"#isVideo=true#");
+            }
+          }catch(e){
+            return api + path + (/\.mp3|\.m4a|\.wav/.test(path)?"#isMusic=true#":"#isVideo=true#");
           }
           return "toast://播放失败了，应为网盘token失效";
-        }, alistapi.server + "/api/fs/get", (MY_PARAMS.path||"") + "/" + item.name, alistapi.password),
+        }, alistapi.server, (MY_PARAMS.path||"") + "/" + item.name, alistapi.password),
         col_type: 'avatar',
       })
     })
