@@ -28,7 +28,7 @@ function gethtml(api,path,password) {
 function getlist(data,isdir) {
   try{
     let list = data.filter(item => {
-        return isdir ? item.is_dir : /\.mp4|\.avi|\.mkv|\.rmvb|\.flv|\.mov|\.wmv|\.3gp|\.mp3|\.wma|\.wav/.test(item.name);
+        return isdir ? item.is_dir : /\.mp4|\.avi|\.mkv|\.rmvb|\.flv|\.mov|\.wmv|\.3gp|\.mp3|\.m4a|\.wma|\.wav/.test(item.name);
     })
     return list;
   }catch(e){
@@ -59,22 +59,6 @@ function yiji() {
         
         let filelist = getlist(json.data.content,0);
         d = d.concat(arrayAdd(filelist,0,alistapi));
-        /*
-        filelist.forEach(item => {
-          d.push({
-            title: item.name,
-            img: item.thumb || "https://cdn.jsdelivr.net/gh/alist-org/logo@main/logo.svg",
-            url: $().lazyRule((apiurl,path,password) => {
-              require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
-              let json = JSON.parse(gethtml(apiurl, path, password));
-              if(json.code==200){
-                return json.data.raw_url;
-              }
-              return "hiker://empty";
-            }, alistapi.server+"/api/fs/get", "/"+item.name, alistapi.password),
-            col_type: 'avatar',
-          })
-        })*/
       }
     }catch(e){ }
   }
@@ -105,9 +89,8 @@ function arrayAdd(list,isdir,alistapi){
         url: $().lazyRule((apiurl,path,password) => {
           require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
           let json = JSON.parse(gethtml(apiurl, path, password));
-          log(json.data.raw_url);
-          if(json.code==200){
-            return json.data.raw_url;
+          if(json.code==200&&json.data.raw_url){
+            return json.data.raw_url + (/\.mp3|\.m4a|\.wav/.test(json.data.raw_url)?"#isMusic=true#":"#isVideo=true#");
           }
           return "hiker://empty";
         }, alistapi.server + "/api/fs/get", (MY_PARAMS.path||"") + "/" + item.name, alistapi.password),
