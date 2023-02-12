@@ -42,6 +42,7 @@ function yiji() {
     d.push({
       title: item.name,
       url: $('#noLoading#').lazyRule((item) => {
+        putMyVar('Alistapi', item.server);
         refreshPage(false);
         return "hiker://empty";
       }, item),
@@ -52,6 +53,7 @@ function yiji() {
     let listapi = getMyVar('Alistapi', datalist[0].server) + "/api/fs/list";
     try{
       let json = JSON.parse(gethtml(listapi,"",""));
+      log(json);
       if(json.code==200){
         let list = getlist(json.data.content);
         log(list);
