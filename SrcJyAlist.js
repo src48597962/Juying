@@ -4,7 +4,16 @@ var AlistData = fetch(Alistfile);
 if(AlistData != ""){
     eval("var datalist=" + AlistData+ ";");
 }else{
-    var datalist = [];
+    var datalist = [
+    {
+      "name": "小雅",
+      "server": "http://alist.xiaoya.pro"
+    },
+    {
+      "name": "杜比",
+      "server": "https://dubi.tk"
+    }
+  ];
 }
 
 function yiji() {
