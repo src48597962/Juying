@@ -131,9 +131,11 @@ let yijimenu = [
                 },JYconfig,cfgfile)
             },{
                 title: "Alist网盘",
-                js: $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
-                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
-                    yiji();
+                js: $.toString(() => {
+                    return $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
+                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
+                        yiji();
+                    })
                 })
             }]
         }
