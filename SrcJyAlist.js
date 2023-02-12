@@ -8,7 +8,7 @@ if(AlistData != ""){
 }
 
 function yiji() {
-    let d = d || [];
+    let d = [];
     datalist.forEach(item => {
         d.push({
             title: item.name,
