@@ -119,6 +119,7 @@ function Alistlist(alistapi){
           url: $('#noLoading#').lazyRule((apiurl,path,password) => {
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
             let json = JSON.parse(gethtml(apiurl, path, password));
+            log(json);
             if(json.code==200){
               return json.data.raw_url;
             }
