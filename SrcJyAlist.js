@@ -22,20 +22,12 @@ function yiji() {
     d.push({
       title: item.name,
       url: $('#noLoading#').lazyRule((item) => {
-
         refreshPage(false);
         return "hiker://empty";
       }, item),
       col_type: 'scroll_button',
     })
   })
-  if (datalist.length > 0) {
-    let listapi = getMyVar('Alistapi', datalist[0]) + "/api/fs/list";
-    log(listapi);
-    let html = fetch(listapi, {body: `{"path":"","password":""}`,method:'POST'});
-    log(html);
-    let json = JSON.parse(html);
-    log(json);
-  }
+  
   setResult(d);
 }
