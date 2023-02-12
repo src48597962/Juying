@@ -19,8 +19,11 @@ function gethtml(api,path,password) {
   try{
     log(api);
     path = path || "";
+    log(path);
     password = password || "";
+    log(password);
     let html = fetch(api, {body: {"path":path,"password":password},method:'POST'});
+    log(html);
     return html;
   }catch(e){
     return "";
