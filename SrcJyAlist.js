@@ -104,16 +104,17 @@ function Alistlist(alistapi){
         d.push({
           title: item.name,
           img: "https://gitcode.net/qq_32394351/dr/-/raw/master/img/文件类型/文件夹.svg",
-          url: $("hiker://empty#noRecordHistory##noHistory#").rule((item) => {
+          url: $("hiker://empty#noRecordHistory##noHistory#").rule((api) => {
               require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
-              Alistlist(api,item);
-          },item,api),
+              Alistlist(api);
+          },alistapi),
           col_type: 'avatar',
           extra: {
             path: MY_PARAMS.path+"/"+item.name
           }
         })
       })
+      log("d:"+d.length);
       let filelist = getlist(json.data.content,0);
       log("文件数："+dirlist.length);
       filelist.forEach(item => {
