@@ -74,7 +74,7 @@ function yiji() {
           d.push({
             title: item.name,
             img: item.thumb || "https://cdn.jsdelivr.net/gh/alist-org/logo@main/logo.svg",
-            url: $('#noLoading#').lazyRule((apiurl,path,password) => {
+            url: $().lazyRule((apiurl,path,password) => {
               require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
               let json = JSON.parse(gethtml(apiurl, path, password));
               if(json.code==200){
@@ -115,16 +115,16 @@ function Alistlist(alistapi){
       filelist.forEach(item => {
         d.push({
           title: item.name,
-          img: item.thumb || "https://cdn.jsdelivr.net/gh/alist-org/logo@main/logo.svg",
-          url: $('#noLoading#').lazyRule((apiurl,path,password) => {
+          img: item.thumb || "https://cdn.jsdelivr.net/gh/alist-org/logo@main/logo.svg@Referer=",
+          url: $().lazyRule((apiurl,path,password) => {
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
             let json = JSON.parse(gethtml(apiurl, path, password));
+            log(json.data.raw_url);
             if(json.code==200){
               return json.data.raw_url;
             }
             return "hiker://empty";
           }, alistapi.server+"/api/fs/get", MY_PARAMS.path+"/"+item.name, alistapi.password),
-          
           col_type: 'avatar',
         })
       })
