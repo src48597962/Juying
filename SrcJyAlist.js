@@ -37,6 +37,7 @@ function getlist(data,isdir) {
 }
 
 function yiji() {
+  setPageTitle("Alist网盘");
   let d = [];
   datalist.forEach(item => {
     d.push({
@@ -46,11 +47,12 @@ function yiji() {
         refreshPage(false);
         return "hiker://empty";
       }, item),
-      col_type: 'scroll_button',
+      col_type: 'scroll_button'
     })
   })
   if (datalist.length > 0) {
     let alistapi = storage0.getMyVar('Alistapi', datalist[0]);
+    setPageTitle("Alist网盘-" + alistapi.name);
     try{
       let json = JSON.parse(gethtml(alistapi.server + "/api/fs/list", "", alistapi.password));
       if(json.code==200){
@@ -67,6 +69,11 @@ function yiji() {
 
 function Alistlist(alistapi){
   let d = [];
+  d.push({
+    title: alistapi.name + (MY_PARAMS.path||""),
+    col_type: 'rich_text'
+  })
+  
   try{
     let json = JSON.parse(gethtml(alistapi.server + "/api/fs/list", MY_PARAMS.path, alistapi.password));
     if(json.code==200){
