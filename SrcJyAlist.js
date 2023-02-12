@@ -20,7 +20,7 @@ function gethtml(api,path,password) {
     log(api);
     path = path || "";
     password = password || "";
-    let html = fetch(api, {body: {"path":"","password":""},method:'POST'});
+    let html = fetch(api, {body: {"path":path,"password":password},method:'POST'});
     log(html);
     return html;
   }catch(e){
@@ -57,6 +57,7 @@ function yiji() {
       let json = JSON.parse(gethtml(listapi,"",""));
       if(json.code==200){
         let list = getlist(json.data.content);
+        log(list);
       }
     }catch(e){
 
