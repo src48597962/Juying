@@ -31,7 +31,9 @@ function yiji() {
   })
   if (datalist.length > 0) {
     let listapi = getMyVar('Alistapi', datalist[0]) + "/api/fs/list";
+    log(listapi);
     let html = fetch(listapi, {body: `{"path":"","password":""}`,method:'POST'});
+    log(html);
     let json = JSON.parse(html);
     log(json);
   }
