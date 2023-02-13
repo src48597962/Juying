@@ -446,6 +446,9 @@ var SrcParseS = {
         }else if (/\/share\//.test(vipUrl)) {
             if(printlog==1){log("资源网云播地址")}; 
             return this.嗅探(vipUrl);
+        }else if (/douyin\.com/.test(vipUrl)) {
+            if(printlog==1){log("抖音视频，偿试嗅探")}; 
+            return this.嗅探(vipUrl);
         }else{
             var from = "";
             try{
