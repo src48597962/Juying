@@ -1062,7 +1062,7 @@ var SrcParseS = {
         if(!name){name = "解析"}
         if(!times){times = 120}
         try {
-            if(/vkey=|banyung|mgtv/.test(url)){
+            if(/vkey=|banyung\.|mgtv\.com|1905\.com|qq\.com/.test(url)){
                 return 1;
             }else if (/\.m3u8/.test(url)) {
                 var urlcode = JSON.parse(request(url,{withStatusCode:true,timeout:2000}));
