@@ -425,6 +425,9 @@ var SrcParseS = {
         if((MY_NAME=="海阔视界"&&getAppVersion()>=3369)||(MY_NAME=="嗅觉浏览器"&&getAppVersion()>=798)){
             JYconfig['superweb'] = JYconfig.superweb==0?0:1;
         }
+        if(vipUrl.match(/youku|iqiyi|ixigua|migu|sohu|pptv|le|cctv|1905|mgtv|qq\.com/)&&vipUrl.indexOf('?')>-1){
+            vipUrl = vipUrl.split('?')[0];
+        }
         if(printlog==1){log("影片地址："+vipUrl)}; 
         var exclude = /404\.m3u8|xiajia\.mp4|余额不足\.m3u8|\.m3u8\.tv/;//设置排除地址
         var contain = /\.mp4|\.m3u8|\.flv|\.avi|\.mpeg|\.wmv|\.mov|\.rmvb|\.dat|qqBFdownload|mime=video%2F|video_mp4|\.ts\?/;//设置符合条件的正确地址
@@ -444,9 +447,6 @@ var SrcParseS = {
             if(printlog==1){log("资源网云播地址")}; 
             return this.嗅探(vipUrl);
         }else{
-            if(vipUrl.match(/youku|iqiyi|ixigua|migu|sohu|pptv|le|cctv|1905|mgtv|qq\.com/)&&vipUrl.indexOf('?')>-1){
-                vipUrl = vipUrl.split('?')[0];
-            }
             var from = "";
             try{
                 if(vipUrl.indexOf('-yanaifei.html') != -1){
