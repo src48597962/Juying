@@ -118,7 +118,7 @@ function arrayAdd(list,isdir,alistapi){
               return json.data.raw_url + (/\.mp3|\.m4a|\.wav/.test(json.data.raw_url)?"#isMusic=true#":"#isVideo=true#");
             }
           }catch(e){
-            return api + path + (/\.mp3|\.m4a|\.wav/.test(path)?"#isMusic=true#":"#isVideo=true#");
+            return api + "/d"+ path;
           }
           return "toast://播放失败了，应为网盘token失效";
         }, alistapi.server, (MY_PARAMS.path||"") + "/" + item.name, alistapi.password),
