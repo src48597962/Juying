@@ -631,12 +631,13 @@ var SrcParseS = {
                     obj.ulist['x5'] = 0;
                     return {url: rurl,ulist: obj.ulist}; 
                 }else{            
-                    var taskheader = {withStatusCode:true,timeout:8000};
+                    let taskheader = {withStatusCode:true,timeout:8000};
                     let head = obj.ulist.header||{};
                     if(JSON.stringify(head) != "{}"){
                         taskheader['header'] = head;
                     }
-                    var getjson = JSON.parse(request(obj.ulist.parse+obj.vipUrl,taskheader));
+                    let getjson = JSON.parse(request(obj.ulist.parse+obj.vipUrl,taskheader));
+                    log(getjson);
                     if (getjson.body&&getjson.statusCode==200){
                         var gethtml = getjson.body;
                         var rurl = "";
