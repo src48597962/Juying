@@ -619,11 +619,9 @@ var SrcParseS = {
             }
             //明码解析线程代码
             var task = function(obj) {
-                log("进入线程来了");
                 if(/^function/.test(obj.ulist.parse.trim())){
                     eval('var JSparse = '+obj.ulist.parse)
                     var rurl = JSparse(obj.vipUrl);
-                    log("结果:"+rurl);
                     if(/^toast/.test(rurl)){
                         if(printlog==1){log(obj.ulist.name+'>提示：'+rurl.replace('toast://',''))};
                         rurl = "";
@@ -1064,7 +1062,7 @@ var SrcParseS = {
         if(!name){name = "解析"}
         if(!times){times = 120}
         try {
-            if(/vkey=|banyung/.test(url)){
+            if(/vkey=|banyung|mgtv/.test(url)){
                 return 1;
             }else if (/\.m3u8/.test(url)) {
                 var urlcode = JSON.parse(request(url,{withStatusCode:true,timeout:2000}));
