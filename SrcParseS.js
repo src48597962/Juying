@@ -444,6 +444,9 @@ var SrcParseS = {
             if(printlog==1){log("资源网云播地址")}; 
             return this.嗅探(vipUrl);
         }else{
+            if(vipUrl.match(/youku|iqiyi|ixigua|migu|sohu|pptv|le|cctv|1905|mgtv|qq\.com/)&&vipUrl.indexOf('?')>-1){
+                vipUrl = vipUrl.split('?')[0];
+            }
             var from = "";
             try{
                 if(vipUrl.indexOf('-yanaifei.html') != -1){
