@@ -619,9 +619,12 @@ var SrcParseS = {
             }
             //明码解析线程代码
             var task = function(obj) {
+                log("进入线程来了");
+                log(obj);
                 if(/^function/.test(obj.ulist.parse.trim())){
                     eval('var JSparse = '+obj.ulist.parse)
                     var rurl = JSparse(obj.vipUrl);
+                    log("结果:"+rurl);
                     if(/^toast/.test(rurl)){
                         if(printlog==1){log(obj.ulist.name+'>提示：'+rurl.replace('toast://',''))};
                         rurl = "";
@@ -637,7 +640,6 @@ var SrcParseS = {
                         taskheader['header'] = head;
                     }
                     let getjson = JSON.parse(request(obj.ulist.parse+obj.vipUrl,taskheader));
-                    log(getjson);
                     if (getjson.body&&getjson.statusCode==200){
                         var gethtml = getjson.body;
                         var rurl = "";
