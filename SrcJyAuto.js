@@ -27,7 +27,7 @@ try{
     mySet = parseFile.settings;
 }catch(e){
     stauts = 0;
-    log('√断插解析文件加载失败');
+    //log('√断插解析文件加载失败');
 }
 
 var tools = {
