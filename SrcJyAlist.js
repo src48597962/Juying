@@ -86,7 +86,7 @@ function alisthome() {
       });
     }catch(e){
       updateItem('homeloading', {
-        title: "链接异常，出错了"
+        title: "出错了,下拉刷新重试."
       });
     }
   } else {
@@ -129,7 +129,7 @@ function alistlist(alistapi){
     });
   }catch(e){
     updateItem(listid, {
-      title: "链接异常，出错了"
+      title: "出错了,下拉刷新重试."
     });
   }
 }
@@ -141,7 +141,7 @@ function arrayAdd(list,isdir,alistapi){
       d.push({
         title: item.name,
         img: item.thumb || config.依赖.match(/http(s)?:\/\/.*\//)[0] + "img/文件夹.svg",
-        url: $("hiker://empty#noRecordHistory##noHistory#").rule((alistapi) => {
+        url: $("hiker://empty#noRecordHistory##noHistory#"+alistapi.server+(MY_PARAMS.path||"") + "/" + item.name).rule((alistapi) => {
           require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
           alistlist(alistapi);
         },alistapi),
@@ -166,7 +166,7 @@ function arrayAdd(list,isdir,alistapi){
           }catch(e){
             return api + "/d"+ path;
           }
-          return "toast://播放失败了，应为网盘token失效";
+          return "toast://播放失败，网盘失效";
         }, alistapi.server, (MY_PARAMS.path||"") + "/" + item.name, alistapi.password),
         col_type: 'avatar',
       })
