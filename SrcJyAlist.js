@@ -68,6 +68,11 @@ function alisthome() {
         lineVisible: false
     }
   })
+  d.push({
+      desc: '‘‘’’<small><font color=#f20c00>此规则仅限学习交流使用，请于导入后24小时内删除，任何团体或个人不得以任何方式方法传播此规则的整体或部分！</font></small>',
+      url: 'toast://温馨提示：且用且珍惜！',
+      col_type: 'text_center_1'
+  });
   setResult(d);
   if (datalist.length > 0) {
     alistapi = storage0.getMyVar('Alistapi', datalist[0]);
