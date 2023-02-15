@@ -112,28 +112,32 @@ let yijimenu = [
         extra: {
             id: "zhanshibutton",
             longClick: [{
-                title: "切换为"+(getItem('zhanshibutton')=="history"?"历史":"展示")+"按钮",
+                title: "切为展示",
                 js: $.toString(() => {
-                    if(getItem('zhanshibutton')=="history"){
-                        clearItem('zhanshibutton');
-                        updateItem("zhanshibutton", {
-                            title: "展示",
-                            url: $("hiker://empty##fypage#noRecordHistory##noHistory#").rule(() => {
-                                require(config.依赖);
-                                jiekouyiji();
-                            })
-                        });
-                    }else{
-                        setItem('zhanshibutton','history');
-                        updateItem("zhanshibutton", {
-                            title: "历史",
-                            url: "hiker://history"
-                        });
-                    }
-                    return "toast://已切换"
-                },JYconfig,cfgfile)
+                    clearItem('zhanshibutton');
+                    updateItem("zhanshibutton", {
+                        title: "展示",
+                        pic_url: 'https://lanmeiguojiang.com/tubiao/more/105.png',
+                        url: $("hiker://empty##fypage#noRecordHistory##noHistory#").rule(() => {
+                            require(config.依赖);
+                            jiekouyiji();
+                        })
+                    });
+                    return "toast://已切换为展示按钮";
+                })
             },{
-                title: "切换为Alist网盘按钮",
+                title: "切为历史",
+                js: $.toString(() => {
+                    setItem('zhanshibutton','history');
+                    updateItem("zhanshibutton", {
+                        title: "历史",
+                        pic_url: 'https://lanmeiguojiang.com/tubiao/more/105.png',
+                        url: "hiker://history"
+                    });
+                    return "toast://已切换为历史按钮";
+                })
+            },{
+                title: "切为Alist网盘",
                 js: $.toString(() => {
                     setItem('zhanshibutton','alist');
                     updateItem("zhanshibutton", {
@@ -144,6 +148,7 @@ let yijimenu = [
                             alisthome();
                         })
                     });
+                    return "toast://已切换为Alist网盘按钮";
                 })
             }]
         }
