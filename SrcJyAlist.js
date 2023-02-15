@@ -138,16 +138,17 @@ function arrayAdd(list,isdir,alistapi){
   let d = [];
   if(isdir){
     list.forEach(item => {
+      let folderpath = (MY_PARAMS.path||"") + "/" + item.name;
       d.push({
         title: item.name,
         img: item.thumb || config.依赖.match(/http(s)?:\/\/.*\//)[0] + "img/文件夹.svg",
-        url: $("hiker://empty#noRecordHistory##noHistory#"+alistapi.server+(MY_PARAMS.path||"") + "/" + item.name).rule((alistapi) => {
+        url: $("hiker://empty##" + alistapi.server + folderpath + "#noRecordHistory##noHistory#").rule((alistapi) => {
           require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
           alistlist(alistapi);
         },alistapi),
         col_type: 'avatar',
         extra: {
-          path: (MY_PARAMS.path||"") + "/" + item.name
+          path: folderpath
         }
       })
     })
