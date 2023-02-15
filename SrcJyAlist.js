@@ -70,6 +70,11 @@ function alisthome() {
       col_type: 'scroll_button'
   });
   d.push({
+      title: '🔍搜索',
+      url: "",
+      col_type: 'scroll_button'
+  });
+  d.push({
       col_type: 'line'
   });
   d.push({
@@ -96,7 +101,7 @@ function alisthome() {
         addItemBefore('homeloading', arrayAdd(filelist,0,alistapi));
       }
       updateItem('homeloading', {
-        title: "‘‘’’<small><font color=#f20c00>此规则仅限学习交流使用，请于导入后24小时内删除，任何团体或个人不得以任何方式方法传播此规则的整体或部分！</font></small>"
+        title: "““””<small><font color=#f20c00>此规则仅限学习交流使用，请于导入后24小时内删除，任何团体或个人不得以任何方式方法传播此规则的整体或部分！</font></small>"
       });
     }catch(e){
       updateItem('homeloading', {
