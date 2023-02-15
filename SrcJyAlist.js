@@ -46,10 +46,11 @@ function getlist(data,isdir) {
 }
 
 function alisthome() {
+  let alistapi = storage0.getMyVar('Alistapi',{});
   let d = [];
   datalist.forEach(item => {
     d.push({
-      title: item.name,
+      title: alistapi.server==item.server?`““””<b><span style="color: #3399cc">`+item.name+`</span></b>`:item.name,
       url: $('#noLoading#').lazyRule((item) => {
         storage0.putMyVar('Alistapi', item);
         refreshPage(false);
@@ -69,7 +70,7 @@ function alisthome() {
   })
   setResult(d);
   if (datalist.length > 0) {
-    let alistapi = storage0.getMyVar('Alistapi', datalist[0]);
+    alistapi = storage0.getMyVar('Alistapi', datalist[0]);
     setPageTitle("Alist网盘-" + alistapi.name);
     try{
       let json = JSON.parse(gethtml(alistapi.server + "/api/fs/list", "", alistapi.password));
@@ -101,7 +102,7 @@ function alistlist(alistapi){
   let d = [];
   let listid = base64Encode(MY_PARAMS.path);
   d.push({
-    title: "<span style='color: #3399cc'>📑🔗🏠🏡📔"+ (MY_PARAMS.path||"") + "</span>",
+    title: "<span style='color: #3399cc'>🏠"+ (MY_PARAMS.path||"") + "</span>",
     col_type: 'rich_text'
   })
   d.push({
