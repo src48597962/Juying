@@ -63,7 +63,8 @@ function alisthome() {
     url: "hiker://empty",
     col_type: "text_center_1",
     extra: {
-        id: "homeloading"
+        id: "homeloading",
+        lineVisible: false
     }
   })
   setResult(d);
@@ -97,9 +98,10 @@ function alisthome() {
 
 function alistlist(alistapi){
   let d = [];
-  let pathid = alistapi.name + (MY_PARAMS.path||"");
+  let folderpath = alistapi.name + (MY_PARAMS.path||"");
+  let listid = base64Encode(folderpath);
   d.push({
-    title: pathid,
+    title: folderpath,
     col_type: 'rich_text'
   })
   d.push({
@@ -107,7 +109,8 @@ function alistlist(alistapi){
     url: "hiker://empty",
     col_type: "text_center_1",
     extra: {
-        id: pathid
+        id: listid,
+        lineVisible: false
     }
   })
   setResult(d);
@@ -115,16 +118,16 @@ function alistlist(alistapi){
     let json = JSON.parse(gethtml(alistapi.server + "/api/fs/list", MY_PARAMS.path, alistapi.password));
     if(json.code==200){
       let dirlist = getlist(json.data.content,1);
-      addItemBefore(pathid, arrayAdd(dirlist,1,alistapi));
+      addItemBefore(listid, arrayAdd(dirlist,1,alistapi));
       
       let filelist = getlist(json.data.content,0);
-      addItemBefore(pathid, arrayAdd(filelist,0,alistapi));
+      addItemBefore(listid, arrayAdd(filelist,0,alistapi));
     }
-    updateItem(pathid, {
+    updateItem(listid, {
       title: ""
     });
   }catch(e){
-    updateItem(pathid, {
+    updateItem(listid, {
       title: "链接异常，出错了"
     });
   }
