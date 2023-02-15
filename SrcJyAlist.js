@@ -101,7 +101,7 @@ function alistlist(alistapi){
   let d = [];
   let listid = base64Encode(MY_PARAMS.path);
   d.push({
-    title: "<span style='color: #99ff66'><b>🏠</b>"+ (MY_PARAMS.path||"") + "</span>",
+    title: "<span style='color: #99ff66'>📑📁"+ (MY_PARAMS.path||"") + "</span>",
     col_type: 'rich_text'
   })
   d.push({
