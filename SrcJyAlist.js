@@ -97,10 +97,11 @@ function alisthome() {
 }
 
 function alistlist(alistapi){
+  setPageTitle("Alist网盘-" + alistapi.name);
   let d = [];
   let listid = base64Encode(MY_PARAMS.path);
   d.push({
-    title: "<b><span style='color: #1aad19'>"+ (MY_PARAMS.path||"") + "</span></b>",
+    title: "<b><span style='color: #FFEBCD'>🏠"+ (MY_PARAMS.path||"") + "</span></b>",
     col_type: 'rich_text'
   })
   d.push({
