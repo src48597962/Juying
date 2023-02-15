@@ -77,13 +77,16 @@ function alisthome() {
         addItemBefore('homeloading', arrayAdd(dirlist,1,alistapi));
         
         let filelist = getlist(json.data.content,0);
-        //d = d.concat(arrayAdd(filelist,0,alistapi));
         addItemBefore('homeloading', arrayAdd(filelist,0,alistapi));
       }
-    }catch(e){ }
-    updateItem('homeloading', {
+      updateItem('homeloading', {
         title: ""
-    });
+      });
+    }catch(e){
+      updateItem('homeloading', {
+        title: "链接异常，出错了"
+      });
+    }
   } else {
     setPageTitle("Alist网盘");
     updateItem('homeloading', {
@@ -119,13 +122,14 @@ function arrayAdd(list,isdir,alistapi){
       d.push({
         title: item.name,
         img: item.thumb || config.依赖.match(/http(s)?:\/\/.*\//)[0] + "img/文件夹.svg",
-        url: $("hiker://empty#noRecordHistory##noHistory#").rule((api) => {
-            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
-            alistlist(api);
-        },alistapi),
+        url: $("hiker://empty#noRecordHistory##noHistory#").rule((alistapi,pathname) => {
+          setPageTitle(pathname);
+          require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
+          alistlist(alistapi);
+        },alistapi,item.name),
         col_type: 'avatar',
         extra: {
-          path: (MY_PARAMS.path||"") + "/" + item.name
+          path: (MY_PARAMS.path||"") + " / " + item.name
         }
       })
     })
