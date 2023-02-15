@@ -45,8 +45,7 @@ function getlist(data,isdir) {
   }
 }
 
-function yiji() {
-  setPageTitle("Alist网盘");
+function Alisthome() {
   let d = [];
   datalist.forEach(item => {
     d.push({
@@ -59,6 +58,15 @@ function yiji() {
       col_type: 'scroll_button'
     })
   })
+  d.push({
+    title: "加载中...",
+    url: "hiker://empty",
+    col_type: "text_center_1",
+    extra: {
+        id: "homeloading"
+    }
+  })
+  setResult(d);
   if (datalist.length > 0) {
     let alistapi = storage0.getMyVar('Alistapi', datalist[0]);
     setPageTitle("Alist网盘-" + alistapi.name);
@@ -66,18 +74,25 @@ function yiji() {
       let json = JSON.parse(gethtml(alistapi.server + "/api/fs/list", "", alistapi.password));
       if(json.code==200){
         let dirlist = getlist(json.data.content,1);
-        d = d.concat(arrayAdd(dirlist,1,alistapi));
+        addItemBefore('homeloading', arrayAdd(dirlist,1,alistapi));
         
         let filelist = getlist(json.data.content,0);
-        d = d.concat(arrayAdd(filelist,0,alistapi));
+        //d = d.concat(arrayAdd(filelist,0,alistapi));
+        addItemBefore('homeloading', arrayAdd(filelist,0,alistapi));
       }
     }catch(e){ }
+    updateItem('homeloading', {
+        title: ""
+    });
+  } else {
+    setPageTitle("Alist网盘");
+    updateItem('homeloading', {
+        title: "Alist列表为空"
+    });
   }
-  setResult(d);
 }
 
 function Alistlist(alistapi){
-  setPageTitle("Alist网盘-" + alistapi.name);
   let d = [];
   d.push({
     title: alistapi.name + (MY_PARAMS.path||""),
