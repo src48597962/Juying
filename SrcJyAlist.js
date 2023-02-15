@@ -45,7 +45,7 @@ function getlist(data,isdir) {
   }
 }
 
-function Alisthome() {
+function alisthome() {
   let d = [];
   datalist.forEach(item => {
     d.push({
@@ -92,7 +92,7 @@ function Alisthome() {
   }
 }
 
-function Alistlist(alistapi){
+function alistlist(alistapi){
   let d = [];
   d.push({
     title: alistapi.name + (MY_PARAMS.path||""),
@@ -121,7 +121,7 @@ function arrayAdd(list,isdir,alistapi){
         img: item.thumb || config.依赖.match(/http(s)?:\/\/.*\//)[0] + "img/文件夹.svg",
         url: $("hiker://empty#noRecordHistory##noHistory#").rule((api) => {
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
-            Alistlist(api);
+            alistlist(api);
         },alistapi),
         col_type: 'avatar',
         extra: {
