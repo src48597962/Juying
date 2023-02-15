@@ -99,15 +99,15 @@ let yijimenu = [
         }
     },
     {
-        title: getItem('zhanshibutton')=="history"?"历史":"展示",
-        url: getItem('zhanshibutton')=="history"?"hiker://history":$("hiker://empty##fypage#noRecordHistory##noHistory#").rule(() => {
-                /*
-                require(config.依赖);
-                jiekouyiji();*/
+        title: getItem('zhanshibutton')=="alist"?"Alist":getItem('zhanshibutton')=="history"?"历史":"展示",
+        url: getItem('zhanshibutton')=="alist"?$("hiker://empty###noRecordHistory##noHistory#").rule(() => {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
-                Alisthome();
+                alisthome();
+            }):getItem('zhanshibutton')=="history"?"hiker://history":$("hiker://empty##fypage#noRecordHistory##noHistory#").rule(() => {
+                require(config.依赖);
+                jiekouyiji();
             }),
-        pic_url: 'https://lanmeiguojiang.com/tubiao/more/105.png',
+        pic_url: getItem('zhanshibutton')=="alist"?'https://cdn.jsdelivr.net/gh/alist-org/logo@main/logo.svg':'https://lanmeiguojiang.com/tubiao/more/105.png',
         col_type: 'icon_5',
         extra: {
             id: "zhanshibutton",
@@ -133,12 +133,17 @@ let yijimenu = [
                     return "toast://已切换"
                 },JYconfig,cfgfile)
             },{
-                title: "Alist网盘",
+                title: "切换为Alist网盘按钮",
                 js: $.toString(() => {
-                    return $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
-                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
-                        yiji();
-                    })
+                    setItem('zhanshibutton','alist');
+                    updateItem("zhanshibutton", {
+                        title: "Alist",
+                        pic_url: 'https://cdn.jsdelivr.net/gh/alist-org/logo@main/logo.svg',
+                        url: $("hiker://empty###noRecordHistory##noHistory#").rule(() => {
+                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
+                            alisthome();
+                        })
+                    });
                 })
             }]
         }
