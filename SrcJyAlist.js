@@ -172,5 +172,6 @@ function arrayAdd(list,isdir,alistapi){
       })
     })
   }
+  log(d);
   return d;
 }
