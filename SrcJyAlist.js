@@ -97,10 +97,6 @@ function alisthome() {
 
 function alistlist(alistapi){
   let d = [];
-  d.push({
-    title: alistapi.name + (MY_PARAMS.path||""),
-    col_type: 'rich_text'
-  })
   
   try{
     let json = JSON.parse(gethtml(alistapi.server + "/api/fs/list", MY_PARAMS.path, alistapi.password));
@@ -124,6 +120,12 @@ function arrayAdd(list,isdir,alistapi){
         img: item.thumb || config.依赖.match(/http(s)?:\/\/.*\//)[0] + "img/文件夹.svg",
         url: $("hiker://empty#noRecordHistory##noHistory#").rule((alistapi,pathname) => {
           setPageTitle(pathname);
+          let d = [];
+          d.push({
+            title: alistapi.name + (MY_PARAMS.path||""),
+            col_type: 'rich_text'
+          })
+          setResult(d);
           require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
           alistlist(alistapi);
         },alistapi,item.name),
