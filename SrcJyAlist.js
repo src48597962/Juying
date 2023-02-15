@@ -62,7 +62,7 @@ function alisthome() {
     })
   })
   d.push({
-      col_type: 'line_blank'
+      col_type: 'blank_block'
   });
   d.push({
       title: '⚙设置',
