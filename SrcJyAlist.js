@@ -118,6 +118,7 @@ function alistlist(alistapi){
     let json = JSON.parse(gethtml(alistapi.server + "/api/fs/list", MY_PARAMS.path, alistapi.password));
     if(json.code==200){
       let dirlist = getlist(json.data.content,1);
+      log(dirlist);
       addItemBefore(listid, arrayAdd(dirlist,1,alistapi));
       
       let filelist = getlist(json.data.content,0);
@@ -172,6 +173,5 @@ function arrayAdd(list,isdir,alistapi){
       })
     })
   }
-  log(d);
   return d;
 }
