@@ -4,7 +4,7 @@ try{
   eval("var alistData=" + fetch(alistfile));
   var datalist = alistData.drives;
 }catch(e){
-  var datalist = [];
+  //var datalist = [];
 }
 datalist = datalist || [
   {
