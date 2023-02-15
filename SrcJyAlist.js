@@ -116,6 +116,7 @@ function alistlist(alistapi){
   setResult(d);
   try{
     let json = JSON.parse(gethtml(alistapi.server + "/api/fs/list", MY_PARAMS.path, alistapi.password));
+    log(json);
     if(json.code==200){
       let dirlist = getlist(json.data.content,1);
       log(dirlist);
