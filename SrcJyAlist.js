@@ -98,10 +98,9 @@ function alisthome() {
 
 function alistlist(alistapi){
   let d = [];
-  let folderpath = alistapi.name + (MY_PARAMS.path||"");
-  let listid = base64Encode(folderpath);
+  let listid = base64Encode(MY_PARAMS.path);
   d.push({
-    title: folderpath,
+    title: "<b>"+alistapi.name+"</b>" + (MY_PARAMS.path||""),
     col_type: 'rich_text'
   })
   d.push({
