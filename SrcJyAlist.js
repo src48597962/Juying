@@ -97,18 +97,37 @@ function alisthome() {
 
 function alistlist(alistapi){
   let d = [];
-  
+  let pathid = alistapi.name + (MY_PARAMS.path||"");
+  d.push({
+    title: pathid,
+    col_type: 'rich_text'
+  })
+  d.push({
+    title: "加载中...",
+    url: "hiker://empty",
+    col_type: "text_center_1",
+    extra: {
+        id: pathid
+    }
+  })
+  setResult(d);
   try{
     let json = JSON.parse(gethtml(alistapi.server + "/api/fs/list", MY_PARAMS.path, alistapi.password));
     if(json.code==200){
       let dirlist = getlist(json.data.content,1);
-      d = d.concat(arrayAdd(dirlist,1,alistapi));
+      addItemBefore(pathid, arrayAdd(dirlist,1,alistapi));
       
       let filelist = getlist(json.data.content,0);
-      d = d.concat(arrayAdd(filelist,0,alistapi));
+      addItemBefore(pathid, arrayAdd(filelist,0,alistapi));
     }
-  }catch(e){ }
-  setResult(d);
+    updateItem(pathid, {
+      title: ""
+    });
+  }catch(e){
+    updateItem(pathid, {
+      title: "链接异常，出错了"
+    });
+  }
 }
 
 function arrayAdd(list,isdir,alistapi){
@@ -118,14 +137,8 @@ function arrayAdd(list,isdir,alistapi){
       d.push({
         title: item.name,
         img: item.thumb || config.依赖.match(/http(s)?:\/\/.*\//)[0] + "img/文件夹.svg",
-        url: $("hiker://empty#noRecordHistory##noHistory#").rule((alistapi,pathname) => {
-          setPageTitle(pathname);
-          let d = [];
-          d.push({
-            title: alistapi.name + (MY_PARAMS.path||""),
-            col_type: 'rich_text'
-          })
-          setResult(d);
+        url: $("hiker://empty#noRecordHistory##noHistory#").rule((alistapi,filename) => {
+          setPageTitle(filename);
           require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
           alistlist(alistapi);
         },alistapi,item.name),
