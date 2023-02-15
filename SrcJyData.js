@@ -105,7 +105,7 @@ let yijimenu = [
                 require(config.依赖);
                 jiekouyiji();*/
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
-                yiji();
+                Alisthome();
             }),
         pic_url: 'https://lanmeiguojiang.com/tubiao/more/105.png',
         col_type: 'icon_5',
