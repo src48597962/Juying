@@ -12,6 +12,15 @@ if (AlistData != "") {
     {
       "name": "帅鹏",
       "server": "https://hi.shuaipeng.wang"
+    },{
+      "name": "触光",
+      "server": "https://pan.ichuguang.com"
+    },{
+      "name": "七米蓝",
+      "server": "https://al.chirmyram.com"
+    },{
+      "name": "神族九帝",
+      "server": "https://alist.shenzjd.com"
     }
   ];
 }
