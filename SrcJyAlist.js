@@ -4,9 +4,9 @@ try{
   eval("var alistData=" + fetch(alistfile));
   var datalist = alistData.drives;
 }catch(e){
-  //var datalist = [];
+  var datalist = [];
 }
-datalist = datalist || [
+datalist = [
   {
     "name": "小雅",
     "server": "http://alist.xiaoya.pro"
@@ -50,11 +50,6 @@ function getlist(data,isdir) {
 function alisthome() {
   let alistapi = storage0.getMyVar('Alistapi',{});
   let d = [];
-  d.push({
-        title: '<b>⚙管理设置</b>',
-        url: "",
-        col_type: 'scroll_button'
-    });
   datalist.forEach(item => {
     d.push({
       title: alistapi.server==item.server?`““””<b><span style="color: #3399cc">`+item.name+`</span></b>`:item.name,
@@ -67,6 +62,17 @@ function alisthome() {
     })
   })
   d.push({
+      col_type: 'line_blank'
+  });
+  d.push({
+      title: '⚙设置',
+      url: "",
+      col_type: 'scroll_button'
+  });
+  d.push({
+      col_type: 'line'
+  });
+  d.push({
     title: "加载中...",
     url: "hiker://empty",
     col_type: "text_center_1",
@@ -75,11 +81,7 @@ function alisthome() {
         lineVisible: false
     }
   })
-  d.push({
-      desc: '‘‘’’<small><font color=#f20c00>此规则仅限学习交流使用，请于导入后24小时内删除，任何团体或个人不得以任何方式方法传播此规则的整体或部分！</font></small>',
-      url: 'toast://温馨提示：且用且珍惜！',
-      col_type: 'text_center_1'
-  });
+
   setResult(d);
   if (datalist.length > 0) {
     alistapi = storage0.getMyVar('Alistapi', datalist[0]);
@@ -94,7 +96,7 @@ function alisthome() {
         addItemBefore('homeloading', arrayAdd(filelist,0,alistapi));
       }
       updateItem('homeloading', {
-        title: ""
+        title: "‘‘’’<small><font color=#f20c00>此规则仅限学习交流使用，请于导入后24小时内删除，任何团体或个人不得以任何方式方法传播此规则的整体或部分！</font></small>"
       });
     }catch(e){
       updateItem('homeloading', {
