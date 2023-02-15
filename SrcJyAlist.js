@@ -1,29 +1,31 @@
 //本代码仅用于个人学习，请勿用于其他作用，下载后请24小时内删除，代码虽然是公开学习的，但请尊重作者，应留下说明
-var Alistfile = "hiker://files/rules/Src/Juying/Alist.json";
-var AlistData = fetch(Alistfile);
-if (AlistData != "") {
-  eval("var datalist=" + AlistData + ";");
-} else {
-  var datalist = [
-    {
-      "name": "小雅",
-      "server": "http://alist.xiaoya.pro"
-    },
-    {
-      "name": "帅鹏",
-      "server": "https://hi.shuaipeng.wang"
-    },{
-      "name": "触光",
-      "server": "https://pan.ichuguang.com"
-    },{
-      "name": "七米蓝",
-      "server": "https://al.chirmyram.com"
-    },{
-      "name": "神族九帝",
-      "server": "https://alist.shenzjd.com"
-    }
-  ];
+let alistfile = "hiker://files/rules/Src/Juying/Alist.json";
+try{
+  eval("var alistData=" + fetch(alistfile));
+  var datalist = alistData.drives;
+}catch(e){
+  var datalist = [];
 }
+datalist = datalist || [
+  {
+    "name": "小雅",
+    "server": "http://alist.xiaoya.pro"
+  },
+  {
+    "name": "帅鹏",
+    "server": "https://hi.shuaipeng.wang"
+  },{
+    "name": "触光",
+    "server": "https://pan.ichuguang.com"
+  },{
+    "name": "七米蓝",
+    "server": "https://al.chirmyram.com"
+  },{
+    "name": "神族九帝",
+    "server": "https://alist.shenzjd.com"
+  }
+];
+
 function gethtml(api,path,password) {
   try{
     path = path || "";
@@ -48,6 +50,11 @@ function getlist(data,isdir) {
 function alisthome() {
   let alistapi = storage0.getMyVar('Alistapi',{});
   let d = [];
+  d.push({
+        title: '<b>⚙管理设置</b>',
+        url: "",
+        col_type: 'scroll_button'
+    });
   datalist.forEach(item => {
     d.push({
       title: alistapi.server==item.server?`““””<b><span style="color: #3399cc">`+item.name+`</span></b>`:item.name,
