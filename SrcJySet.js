@@ -2627,16 +2627,23 @@ function Resourceimport(input,importtype,boxdy){
                 let urls = [];
                 let lives = data.lives;
                 for (let i=0;i<lives.length;i++) {
-                    let channels = lives[i].channels;
-                    for (let j=0;j<channels.length;j++) {
-                        let live = channels[i].urls;
-                        for (let k=0;k<live.length;k++) {
-                            let url = live[i].replace('proxy://do=live&type=txt&ext=','');
-                            if(/^http/.test(url)){
-                                urls.push(url);
-                            }else{
-                                urls.push(base64Decode(url));
+                    let channels = lives[i].channels||[];
+                    if(channels.length>0){
+                        for (let j=0;j<channels.length;j++) {
+                            let live = channels[i].urls;
+                            for (let k=0;k<live.length;k++) {
+                                let url = live[i].replace('proxy://do=live&type=txt&ext=','');
+                                if(/^http/.test(url)){
+                                    urls.push(url);
+                                }else{
+                                    urls.push(base64Decode(url));
+                                }
                             }
+                        }
+                    }else{
+                        let url = lives[i].url || "";
+                        if(/^http/.test(url)){
+                            urls.push(url);
                         }
                     }
                 }
