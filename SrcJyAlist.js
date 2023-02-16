@@ -25,6 +25,8 @@ datalist = [
     "server": "https://alist.shenzjd.com"
   }
 ];
+let isFilter = 0;
+let contain = /\.mp4|\.avi|\.mkv|\.rmvb|\.flv|\.mov|\.mp3|\.m4a|\.wma/;//设置可显示的后缀文件
 
 function gethtml(api,path,password) {
   try{
@@ -39,7 +41,7 @@ function gethtml(api,path,password) {
 function getlist(data,isdir) {
   try{
     let list = data.filter(item => {
-        return isdir ? item.is_dir : /\.mp4|\.avi|\.mkv|\.rmvb|\.flv|\.mov|\.wmv|\.3gp|\.mp3|\.m4a|\.wma|\.wav/.test(item.name);
+        return isdir ? item.is_dir : isFilter?contain.test(item.name):item.is_dir==0;
     })
     return list;
   }catch(e){
