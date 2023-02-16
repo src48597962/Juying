@@ -25,8 +25,8 @@ datalist = [
     "server": "https://alist.shenzjd.com"
   }
 ];
-let isFilter = 1;
-let contain = /\.mp4|\.avi|\.mkv|\.rmvb|\.flv|\.mov|\.mp3|\.m4a|\.wma/;//设置可显示的后缀文件
+let fileFilter = 1;
+let contain = /\.mp4|\.avi|\.mkv|\.rmvb|\.flv|\.mov|\.mp3|\.m4a|\.wma/;//设置可显示的文件后缀
 
 function gethtml(api,path,password) {
   try{
@@ -41,7 +41,7 @@ function gethtml(api,path,password) {
 function getlist(data,isdir) {
   try{
     let list = data.filter(item => {
-        return isdir ? item.is_dir : isFilter?contain.test(item.name):item.is_dir==0;
+        return isdir ? item.is_dir : fileFilter?contain.test(item.name):item.is_dir==0;
     })
     return list;
   }catch(e){
@@ -146,7 +146,7 @@ function alistlist(alistapi){
       addItemBefore(listid, arrayAdd(filelist,0,alistapi));
     }
     updateItem(listid, {
-      title: ""
+      title: fileFilter?"““””<font color=#f20c00>已开启文件过滤</font>":""
     });
   }catch(e){
     updateItem(listid, {
@@ -183,7 +183,7 @@ function arrayAdd(list,isdir,alistapi){
           try{
             let json = JSON.parse(gethtml(api + "/api/fs/get", path, password));
             if(json.code==200&&json.data.raw_url){
-              return json.data.raw_url + (/\.mp3|\.m4a|\.wav/.test(json.data.raw_url)?"#isMusic=true#":"#isVideo=true#");
+              return json.data.raw_url;// + (/\.mp3|\.m4a|\.wav/.test(json.data.raw_url)?"#isMusic=true#":"#isVideo=true#");
             }
           }catch(e){
             return api + "/d"+ path;
