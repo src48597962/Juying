@@ -169,10 +169,10 @@ function alistList(alistapi){
 }
 
 function arrayAdd(list,isdir,alistapi){
-  let folderpath = (list.parent||MY_PARAMS.path||"") + "/" + item.name; 
   let d = [];
   if(isdir){
     list.forEach(item => {
+      let folderpath = (item.parent||MY_PARAMS.path||"") + "/" + item.name; 
       d.push({
         title: item.name,
         img: item.thumb || config.依赖.match(/http(s)?:\/\/.*\//)[0] + "img/文件夹.svg",
@@ -189,13 +189,14 @@ function arrayAdd(list,isdir,alistapi){
     })
   }else{
     list.forEach(item => {
+      let filepath = (item.parent||MY_PARAMS.path||"") + "/" + item.name; 
       d.push({
         title: item.name,
         img: item.thumb || "https://cdn.jsdelivr.net/gh/alist-org/logo@main/logo.svg@Referer=",
-        url: $(alistapi.server+path).lazyRule((api,path,pwd,sign) => {
+        url: $(alistapi.server+filepath).lazyRule((api,path,pwd,sign) => {
           require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
           return alistUrl(api,path,pwd,sign);
-        }, alistapi.server, path, alistapi.password, item.sign),
+        }, alistapi.server, filepath, alistapi.password, item.sign),
         col_type: 'avatar',
         extra: {
           cls: "alist"
