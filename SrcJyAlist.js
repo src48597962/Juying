@@ -43,6 +43,11 @@ function getlist(data,isdir) {
     let list = data.filter(item => {
         return isdir ? item.is_dir : fileFilter?contain.test(item.name):item.is_dir==0;
     })
+    list = list.sort((a,b)=>{
+        let asort = a.name||a.modified;
+        let bsort = b.name||b.modified;
+        return asort-bsort
+    });
     return list;
   }catch(e){
     return [];
