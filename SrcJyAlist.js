@@ -178,10 +178,10 @@ function arrayAdd(list,isdir,alistapi){
       d.push({
         title: item.name,
         img: item.thumb || "https://cdn.jsdelivr.net/gh/alist-org/logo@main/logo.svg@Referer=",
-        url: $().lazyRule((alistapi,path,sign) => {
+        url: $().lazyRule((api,path,pwd,sign) => {
           require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
-          return alistUrl(alistapi,path,sign);
-        }, alistapi, (MY_PARAMS.path||"") + "/" + item.name, item.sign),
+          return alistUrl(api,path,pwd,sign);
+        }, alistapi.server, (MY_PARAMS.path||"") + "/" + item.name, alistapi.password, item.sign),
         col_type: 'avatar',
       })
     })
@@ -189,14 +189,13 @@ function arrayAdd(list,isdir,alistapi){
   return d;
 }
 
-function alistUrl(alistapi,path,sign) {
-  log(MY_PARAMS.path);
+function alistUrl(api,path,pwd,sign) {
   try{
-    let json = JSON.parse(gethtml(alistapi.server + "/api/fs/get", path, alistapi.password));
+    let json = JSON.parse(gethtml(api + "/api/fs/get", path, pwd));
     if(json.code==200&&contain.test(json.data.raw_url)){
       return json.data.raw_url;// + (/\.mp3|\.m4a|\.wav/.test(json.data.raw_url)?"#isMusic=true#":"#isVideo=true#");
-    }else{
-
+    }else if(!fileFilter){
+      return api + "/d"+ path + "?sign=" + sign;
     }
   }catch(e){
     return api + "/d"+ path + "?sign=" + sign;
