@@ -26,7 +26,7 @@ datalist = [
   }
 ];
 let fileFilter = 0;
-let contain = /\.mp4|\.avi|\.mkv|\.rmvb|\.flv|\.mov|\.mp3|\.m4a|\.wma/;//设置可显示的文件后缀
+let contain = /\.mp4|\.avi|\.mkv|\.rmvb|\.flv|\.mov|\.mp3|\.m4a|\.wma|\.flac/;//设置可显示的文件后缀
 
 function gethtml(api,path,password) {
   try{
@@ -194,7 +194,7 @@ function alistUrl(api,path,pwd,sign) {
     try{
       let json = JSON.parse(gethtml(api + "/api/fs/get", path, pwd));
       if(json.code==200){
-        return json.data.raw_url + (/\.mp3|\.m4a|\.wav/.test(path)?"#isMusic=true#":"#isVideo=true#");
+        return json.data.raw_url + (/\.mp3|\.m4a|\.wav|\.flac/.test(path)?"#isMusic=true#":"#isVideo=true#");
       }
     }catch(e){
       return api + "/d"+ path + "?sign=" + sign;
