@@ -50,13 +50,13 @@ function getlist(data,isdir) {
 }
 
 function alistHome() {
-  let alistapi = storage0.getMyVar('Alistapi',{});
+  let alistapi = storage0.getItem('Alistapi',datalist.length>0?datalist[0]:{});
   let d = [];
   datalist.forEach(item => {
     d.push({
       title: alistapi.server==item.server?`““””<b><span style="color: #3399cc">`+item.name+`</span></b>`:item.name,
-      url: $('#noLoading#').lazyRule((item) => {
-        storage0.putMyVar('Alistapi', item);
+      url: $(item.server+'#noLoading#').lazyRule((item) => {
+        storage0.setItem('Alistapi', item);
         refreshPage(false);
         return "hiker://empty";
       }, item),
@@ -88,10 +88,9 @@ function alistHome() {
         lineVisible: false
     }
   })
-
   setResult(d);
+
   if (datalist.length > 0) {
-    alistapi = storage0.getMyVar('Alistapi', datalist[0]);
     setPageTitle("Alist网盘-" + alistapi.name);
     try{
       let json = JSON.parse(gethtml(alistapi.server + "/api/fs/list", "", alistapi.password));
@@ -175,13 +174,14 @@ function arrayAdd(list,isdir,alistapi){
     })
   }else{
     list.forEach(item => {
+      let path = (MY_PARAMS.path||"") + "/" + item.name;
       d.push({
         title: item.name,
         img: item.thumb || "https://cdn.jsdelivr.net/gh/alist-org/logo@main/logo.svg@Referer=",
-        url: $().lazyRule((api,path,pwd,sign) => {
+        url: $(alistapi.server+path).lazyRule((api,path,pwd,sign) => {
           require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
           return alistUrl(api,path,pwd,sign);
-        }, alistapi.server, (MY_PARAMS.path||"") + "/" + item.name, alistapi.password, item.sign),
+        }, alistapi.server, path, alistapi.password, item.sign),
         col_type: 'avatar',
       })
     })
