@@ -49,7 +49,7 @@ function getlist(data,isdir) {
   }
 }
 
-function alisthome() {
+function alistHome() {
   let alistapi = storage0.getMyVar('Alistapi',{});
   let d = [];
   datalist.forEach(item => {
@@ -118,7 +118,7 @@ function alisthome() {
   }
 }
 
-function alistlist(alistapi){
+function alistList(alistapi){
   setPageTitle("Alist网盘-" + alistapi.name);
   let d = [];
   let listid = base64Encode(MY_PARAMS.path);
@@ -146,7 +146,7 @@ function alistlist(alistapi){
       addItemBefore(listid, arrayAdd(filelist,0,alistapi));
     }
     updateItem(listid, {
-      title: fileFilter?"““””<font color=#f20c00>已开启文件过滤</font>":""
+      title: fileFilter?"““””<small><font color=#f20c00>已开启文件过滤，仅显示白名单文件</font></small>":""
     });
   }catch(e){
     updateItem(listid, {
@@ -165,7 +165,7 @@ function arrayAdd(list,isdir,alistapi){
         img: item.thumb || config.依赖.match(/http(s)?:\/\/.*\//)[0] + "img/文件夹.svg",
         url: $("hiker://empty##" + alistapi.server + folderpath + "#noRecordHistory##noHistory#").rule((alistapi) => {
           require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
-          alistlist(alistapi);
+          alistList(alistapi);
         },alistapi),
         col_type: 'avatar',
         extra: {
@@ -178,26 +178,33 @@ function arrayAdd(list,isdir,alistapi){
       d.push({
         title: item.name,
         img: item.thumb || "https://cdn.jsdelivr.net/gh/alist-org/logo@main/logo.svg@Referer=",
-        url: $().lazyRule((api,path,password,sign) => {
+        url: $().lazyRule((alistapi,path,sign) => {
           require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
-          try{
-            let json = JSON.parse(gethtml(api + "/api/fs/get", path, password));
-            if(json.code==200&&contain.test(json.data.raw_url)){
-              return json.data.raw_url;// + (/\.mp3|\.m4a|\.wav/.test(json.data.raw_url)?"#isMusic=true#":"#isVideo=true#");
-            }else{
-
-            }
-          }catch(e){
-            return api + "/d"+ path + "?sign=" + sign;
-          }
-          return "toast://播放失败，网盘失效";
-        }, alistapi.server, (MY_PARAMS.path||"") + "/" + item.name, alistapi.password, item.sign),
+          return alistUrl(alistapi,path,sign);
+        }, alistapi, (MY_PARAMS.path||"") + "/" + item.name, item.sign),
         col_type: 'avatar',
       })
     })
   }
   return d;
 }
+
+function alistUrl(alistapi,path,sign) {
+  log(MY_PARAMS.path);
+  try{
+    let json = JSON.parse(gethtml(alistapi.server + "/api/fs/get", path, alistapi.password));
+    if(json.code==200&&contain.test(json.data.raw_url)){
+      return json.data.raw_url;// + (/\.mp3|\.m4a|\.wav/.test(json.data.raw_url)?"#isMusic=true#":"#isVideo=true#");
+    }else{
+
+    }
+  }catch(e){
+    return api + "/d"+ path + "?sign=" + sign;
+  }
+  return "toast://播放失败，网盘失效";
+}
+
+
 
 /*
 
