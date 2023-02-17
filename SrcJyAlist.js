@@ -25,7 +25,7 @@ datalist = [
     "server": "https://alist.shenzjd.com"
   }
 ];
-let fileFilter = 1;
+let fileFilter = 0;
 let contain = /\.mp4|\.avi|\.mkv|\.rmvb|\.flv|\.mov|\.mp3|\.m4a|\.wma|\.flac/;//设置可显示的文件后缀
 
 function gethtml(api,path,password) {
@@ -84,10 +84,10 @@ function alistHome() {
   });
   d.push({
       title: '🔍搜索',
-      url: $().lazyRule(() => {
+      url: $("","输入关键字").input((alistapi)=>{
         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
-        
-      }),
+        alistSearch(alistapi,input);
+      },alistapi),
       col_type: 'scroll_button'
   });
   d.push({
