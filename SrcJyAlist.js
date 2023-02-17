@@ -44,10 +44,11 @@ function getlist(data,isdir) {
         return isdir ? item.is_dir : fileFilter?contain.test(item.name):item.is_dir==0;
     })
     list = list.sort((a,b)=>{
+      return b.name - a.name;
         let oDate1 = new Date(a.modified);
         let oDate2 = new Date(b.modified);
         if(a.modified!=b.modified){
-            return oDate2.getTime() > oDate1.getTime()
+            return oDate2.getTime() < oDate1.getTime()
         }else{
             return b.name - a.name;
         }
