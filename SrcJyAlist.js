@@ -146,7 +146,7 @@ function alistList(alistapi){
       addItemBefore(listid, arrayAdd(filelist,0,alistapi));
     }
     updateItem(listid, {
-      title: fileFilter?"““””<small><font color=#f20c00>已开启文件过滤，仅显示白名单文件</font></small>":""
+      title: fileFilter?"““””<small><font color=#f20c00>已开启文件过滤，仅显示音视频文件</font></small>":""
     });
   }catch(e){
     updateItem(listid, {
@@ -193,9 +193,8 @@ function alistUrl(api,path,pwd,sign) {
   if(contain.test(path)){
     try{
       let json = JSON.parse(gethtml(api + "/api/fs/get", path, pwd));
-      log(json);
       if(json.code==200){
-        return json.data.raw_url;// + (/\.mp3|\.m4a|\.wav/.test(json.data.raw_url)?"#isMusic=true#":"#isVideo=true#");
+        return json.data.raw_url + (/\.mp3|\.m4a|\.wav/.test(path)?"#isMusic=true#":"#isVideo=true#");
       }
     }catch(e){
       return api + "/d"+ path + "?sign=" + sign;
