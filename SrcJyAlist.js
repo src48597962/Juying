@@ -25,7 +25,7 @@ datalist = [
     "server": "https://alist.shenzjd.com"
   }
 ];
-let fileFilter = 1;
+let fileFilter = 0;
 let contain = /\.mp4|\.avi|\.mkv|\.rmvb|\.flv|\.mov|\.mp3|\.m4a|\.wma/;//设置可显示的文件后缀
 
 function gethtml(api,path,password) {
