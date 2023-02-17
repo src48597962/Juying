@@ -44,9 +44,11 @@ function getlist(data,isdir) {
         return isdir ? item.is_dir : fileFilter?contain.test(item.name):item.is_dir==0;
     })
     list = list.sort((a,b)=>{
-        let asort = a.name||a.modified;
-        let bsort = b.name||b.modified;
-        return asort-bsort
+        if(a.modified!=b.modified){
+            return a.modified - b.modified
+        }else{
+            return a.name - b.name;
+        }
     });
     return list;
   }catch(e){
