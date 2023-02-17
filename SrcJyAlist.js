@@ -190,17 +190,19 @@ function arrayAdd(list,isdir,alistapi){
 }
 
 function alistUrl(api,path,pwd,sign) {
-  try{
-    let json = JSON.parse(gethtml(api + "/api/fs/get", path, pwd));
-    if(json.code==200&&contain.test(json.data.raw_url)){
-      return json.data.raw_url;// + (/\.mp3|\.m4a|\.wav/.test(json.data.raw_url)?"#isMusic=true#":"#isVideo=true#");
-    }else if(!fileFilter){
+  if(contain.test(path)){
+    try{
+      let json = JSON.parse(gethtml(api + "/api/fs/get", path, pwd));
+      if(json.code==200){
+        return json.data.raw_url;// + (/\.mp3|\.m4a|\.wav/.test(json.data.raw_url)?"#isMusic=true#":"#isVideo=true#");
+      }
+    }catch(e){
       return api + "/d"+ path + "?sign=" + sign;
     }
-  }catch(e){
-    return api + "/d"+ path + "?sign=" + sign;
+    return "toast://播放失败，网盘失效";
+  }else{
+    return "download://" + api + "/d"+ path + "?sign=" + sign;
   }
-  return "toast://播放失败，网盘失效";
 }
 
 
