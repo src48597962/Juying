@@ -84,7 +84,7 @@ function alistHome() {
   });
   d.push({
       title: '🔍搜索',
-      url: $("","输入关键字").input((alistapi)=>{
+      url: $("","搜索关键字").input((alistapi)=>{
         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
         alistSearch(alistapi,input);
       },alistapi),
@@ -227,6 +227,7 @@ function alistSearch(api,key) {
   deleteItemByCls('alist');
   try{
     let json = JSON.parse(fetch(api + "/api/fs/search", {body:{"per_page":100,"page":1,"parent":"/","keywords":key},method:'POST',timeout:10000}));
+    log(json);
     if(json.code==200){
       let dirlist = getlist(json.data.content,1);
       addItemBefore('homeloading', arrayAdd(dirlist,1,alistapi));
