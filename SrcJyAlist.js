@@ -47,7 +47,7 @@ function getlist(data,isdir) {
         let oDate1 = new Date(a.modified);
         let oDate2 = new Date(b.modified);
         if(a.modified!=b.modified){
-            return oDate2.getTime() < oDate1.getTime()
+            return oDate2.getTime() > oDate1.getTime()
         }else{
             return a.name.replace(/[^\d]/g, " ") - b.name.replace(/[^\d]/g, " ");
         }
