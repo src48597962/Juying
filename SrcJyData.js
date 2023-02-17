@@ -102,7 +102,7 @@ let yijimenu = [
         title: getItem('zhanshibutton')=="alist"?"Alist":getItem('zhanshibutton')=="history"?"历史":"展示",
         url: getItem('zhanshibutton')=="alist"?$("hiker://empty###noRecordHistory##noHistory#").rule(() => {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
-                alisthome();
+                alistHome();
             }):getItem('zhanshibutton')=="history"?"hiker://history":$("hiker://empty##fypage#noRecordHistory##noHistory#").rule(() => {
                 require(config.依赖);
                 jiekouyiji();
@@ -145,7 +145,7 @@ let yijimenu = [
                         pic_url: 'https://cdn.jsdelivr.net/gh/alist-org/logo@main/logo.svg',
                         url: $("hiker://empty###noRecordHistory##noHistory#").rule(() => {
                             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
-                            alisthome();
+                            alistHome();
                         })
                     });
                     return "toast://已切换为Alist网盘按钮";
