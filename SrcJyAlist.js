@@ -193,6 +193,7 @@ function alistUrl(api,path,pwd,sign) {
   if(contain.test(path)){
     try{
       let json = JSON.parse(gethtml(api + "/api/fs/get", path, pwd));
+      log(json);
       if(json.code==200){
         return json.data.raw_url;// + (/\.mp3|\.m4a|\.wav/.test(json.data.raw_url)?"#isMusic=true#":"#isVideo=true#");
       }
