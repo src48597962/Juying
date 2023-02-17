@@ -50,6 +50,7 @@ function getlist(data,isdir) {
             return a.name - b.name;
         }
     });
+    log(list);
     return list;
   }catch(e){
     return [];
