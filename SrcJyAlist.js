@@ -239,7 +239,7 @@ function alistSearch(alistapi,key) {
       }
     }
   }catch(e){
-    toast('搜索出错了，此网盘不支持搜索');
+    //toast('搜索出错了，此网盘不支持搜索');
     log('搜索出错了>'+e.message);
   }
   hideLoading();
