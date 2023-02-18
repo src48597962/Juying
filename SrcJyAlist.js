@@ -89,12 +89,11 @@ function getlist(data,isdir) {
               }
           })
           //按照要求的方式进行数据排序重组
-          let newList = [
-              ...cn_list.sort((a, b) => a.name?.localeCompare(b.name)),
-              ...en_list.sort((a, b) => a.name.localeCompare(b.name)),//localeCompare可以不区分大小写的进行排序
-              ...num_list.sort((a, b) => a.name - b.name),
-              ...symbol_list.sort((a, b) => a.name - b.name)
-          ]
+          let newList = [];
+          newList = newList.concat(cn_list.sort((a, b) => a.name?.localeCompare(b.name)));
+          newList = newList.concat(en_list.sort((a, b) => a.name.localeCompare(b.name)));
+          newList = newList.concat(num_list.sort((a, b) => a.name - b.name));
+          newList = newList.concat(symbol_list.sort((a, b) => a.name - b.name));
           return newList;
         }
         return list;
