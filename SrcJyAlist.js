@@ -122,12 +122,12 @@ function alistHome() {
   }
 }
 
-function alistList(alistapi){
-  setPageTitle(alistapi.name+' | Alist网盘');
+function alistList(alistapi,dirname){
+  setPageTitle(dirname);
   let d = [];
   let listid = base64Encode(MY_PARAMS.path);
   d.push({
-    title: "<span style='color: #3399cc'>🏠"+ (MY_PARAMS.path||"") + "</span>",
+    title: "<span style='color: #3399cc'>🏠"+ alistapi.name + "/" +MY_PARAMS.path + "</span>",
     col_type: 'rich_text'
   })
   d.push({
@@ -145,9 +145,15 @@ function alistList(alistapi){
     if(json.code==200){
       let dirlist = getlist(json.data.content,1);
       addItemBefore(listid, arrayAdd(dirlist,1,alistapi));
-      
       let filelist = getlist(json.data.content,0);
       addItemBefore(listid, arrayAdd(filelist,0,alistapi));
+      if(dirlist.length==0&&filelist.length==0){
+        addItemBefore('listid', {
+          title: "列表为空",
+          url: "hiker://empty",
+          col_type: "text_center_1"
+        });
+      }
     }
     updateItem(listid, {
       title: fileFilter?"““””<small><font color=#f20c00>已开启文件过滤，仅显示音视频文件</font></small>":""
@@ -167,10 +173,10 @@ function arrayAdd(list,isdir,alistapi){
       d.push({
         title: item.name,
         img: item.thumb || config.依赖.match(/http(s)?:\/\/.*\//)[0] + "img/文件夹.svg",
-        url: $("hiker://empty##" + alistapi.server + path + "#noRecordHistory##noHistory#").rule((alistapi) => {
+        url: $("hiker://empty##" + alistapi.server + path + "#noRecordHistory##noHistory#").rule((alistapi,dirname) => {
           require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
-          alistList(alistapi);
-        },alistapi),
+          alistList(alistapi,dirname);
+        },alistapi,item.name),
         col_type: 'avatar',
         extra: {
           path: path,
