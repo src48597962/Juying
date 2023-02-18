@@ -52,8 +52,7 @@ function getlist(data,isdir) {
             } else {
               return 0;
             }
-          } else {
-            /*
+          } else if (/第[^\d]集/.test(a.name) || /第[^\d]集/.test(b.name)) {
             let temp1 = parseInt(a.name);
             let temp2 = parseInt(b.name);
             if (temp1 < temp2) {
@@ -63,8 +62,8 @@ function getlist(data,isdir) {
             } else {
                 return 1;
             }
-            */
-            return a.name.localeCompare(b.name);//, "zh"
+          } else {
+            return a.name.localeCompare(b.name, "zh");
           }
         })
     }catch(e){
