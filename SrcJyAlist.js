@@ -92,7 +92,16 @@ function getlist(data,isdir) {
           let newList = [];
           newList = newList.concat(cn_list.sort((a, b) => a.name.localeCompare(b.name)));
           newList = newList.concat(en_list.sort((a, b) => a.name.localeCompare(b.name)));
-          newList = newList.concat(num_list.sort((a, b) => a.name - b.name));
+          newList = newList.concat(num_list.sort((a, b) => {
+              if (parseInt(a.name) < parseInt(b.name)) {
+                  return -1;
+              } else if (parseInt(a.name) == parseInt(b.name)) {
+                  return 0;
+              } else {
+                  return 1;
+              }
+            }
+          ));
           newList = newList.concat(symbol_list.sort((a, b) => a.name - b.name));
           return newList;
         }
