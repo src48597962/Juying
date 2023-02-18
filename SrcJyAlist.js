@@ -38,12 +38,25 @@ function gethtml(api,path,password) {
   }
 }
 function getlist(data,isdir) {
-  try{
     let list = data.filter(item => {
         return isdir ? item.is_dir : fileFilter?contain.test(item.name):item.is_dir==0;
     })
     try{
-        list = list.sort((a,b)=>{
+        list = list.sort((a, b) => {
+        let reg = /^[A-z]/;
+        if (reg.test(a.name) || reg.test(b.name)) {
+          if (a.name > b.name) {
+            return 1;
+          } else if (a.name < b.name) {
+            return -1;
+          } else {
+            return 0;
+          }
+        } else {
+          return a.name.localeCompare(b.name, "zh");
+        }
+
+        /*.sort((a,b)=>{
             let oDate1 = new Date(a.modified);
             let oDate2 = new Date(b.modified);
             if(a.modified!=b.modified){
@@ -52,11 +65,11 @@ function getlist(data,isdir) {
                 return a.name.replace(/[^\d]/g, " ") - b.name.replace(/[^\d]/g, " ");
             }
         });
-    }catch(e){}
-    return list;
-  }catch(e){
-    return [];
-  }
+        */
+    }catch(e){
+      log(e.message);
+    }
+    return list || [];
 }
 
 function alistHome() {
