@@ -8,21 +8,20 @@ try{
 }
 datalist = [
   {
-    "name": "小雅",
-    "server": "http://alist.xiaoya.pro"
-  },
-  {
-    "name": "帅鹏",
-    "server": "https://hi.shuaipeng.wang"
+    "name": "云哲小站",
+    "server": "http://202.81.231.111:50526"
   },{
-    "name": "触光",
-    "server": "https://pan.ichuguang.com"
+    "name": "AR盘",
+    "server": "https://xn--ar-4g8e.tk"
   },{
-    "name": "七米蓝",
-    "server": "https://al.chirmyram.com"
+    "name": "影视库",
+    "server": "https://a.aa01.ml"
   },{
-    "name": "神族九帝",
-    "server": "https://alist.shenzjd.com"
+    "name": "听闻网盘",
+    "server": "https://wangpan.sangxuesheng.com"
+  },{
+    "name": "Drive",
+    "server": "https://drive.9t.ee"
   }
 ];
 let fileFilter = 0;
@@ -225,8 +224,8 @@ function alistUrl(api,path,pwd,sign) {
 
 function alistSearch(api,key) {
   deleteItemByCls('alist');
-  try{//content-type: application/json;charset=UTF-8
-    let json = JSON.parse(fetch(api + "/api/fs/search", {body:{"per_page":100,"page":1,"parent":"/","keywords":key},method:'POST',timeout:10000}));
+  try{
+    let json = JSON.parse(fetch(api + "/api/fs/search", {headers:{'content-type':'content-type: application/json;charset=UTF-8' },body:{"per_page":100,"page":1,"parent":"/","keywords":key},method:'POST',timeout:10000}));
     log(json);
     if(json.code==200){
       let dirlist = getlist(json.data.content,1);
