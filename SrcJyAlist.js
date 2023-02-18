@@ -42,9 +42,9 @@ function getlist(data,isdir) {
         return isdir ? item.is_dir : fileFilter?contain.test(item.name):item.is_dir==0;
     })
     try{    
-        if(!isdir){
+        //if(!isdir){
             list.sort(SortList);
-        }
+        //}
     }catch(e){
       log(e.message);
     }
