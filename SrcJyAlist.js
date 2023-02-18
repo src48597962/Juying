@@ -225,7 +225,7 @@ function alistUrl(api,path,pwd,sign) {
 function alistSearch(api,key) {
   deleteItemByCls('alist');
   try{
-    let json = JSON.parse(fetch(api + "/api/fs/search", {headers:{'content-type':'content-type: application/json;charset=UTF-8' },body:{"per_page":100,"page":1,"parent":"/","keywords":key},method:'POST',timeout:10000}));
+    let json = JSON.parse(fetch(api + "/api/fs/search", {headers:{'content-type':'application/json;charset=UTF-8' },body:{"per_page":100,"page":1,"parent":"/","keywords":key},method:'POST',timeout:10000}));
     log(json);
     if(json.code==200){
       let dirlist = getlist(json.data.content,1);
