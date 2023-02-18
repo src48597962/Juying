@@ -208,6 +208,7 @@ function arrayAdd(list,isdir,alistapi){
 
 function alistUrl(api,path,pwd,sign) {
   if(contain.test(path)){
+    return api + "/d"+ path + "?sign=" + sign;
     try{
       let json = JSON.parse(gethtml(api + "/api/fs/get", path, pwd));
       if(json.code==200){
