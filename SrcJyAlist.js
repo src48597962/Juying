@@ -117,7 +117,7 @@ function alistHome() {
   setResult(d);
 
   if (datalist.length > 0) {
-    setPageTitle("Alist网盘-" + alistapi.name);
+    setPageTitle(alistapi.name+'-Alist');
     try{
       let json = JSON.parse(gethtml(alistapi.server + "/api/fs/list", "", alistapi.password));
       if(json.code==200){
@@ -143,8 +143,8 @@ function alistHome() {
   }
 }
 
-function alistList(alistapi){
-  setPageTitle("Alist网盘-" + alistapi.name);
+function alistList(alistapi,itemname){
+  setPageTitle(itemname+'|'+alistapi.name+'-Alist');
   let d = [];
   let listid = base64Encode(MY_PARAMS.path);
   d.push({
@@ -190,7 +190,7 @@ function arrayAdd(list,isdir,alistapi){
         img: item.thumb || config.依赖.match(/http(s)?:\/\/.*\//)[0] + "img/文件夹.svg",
         url: $("hiker://empty##" + alistapi.server + path + "#noRecordHistory##noHistory#").rule((alistapi) => {
           require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
-          alistList(alistapi);
+          alistList(alistapi,item.name);
         },alistapi),
         col_type: 'avatar',
         extra: {
