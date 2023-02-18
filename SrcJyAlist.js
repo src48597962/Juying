@@ -53,19 +53,18 @@ function getlist(data,isdir) {
               return 0;
             }
           } else {
-            return a.name.localeCompare(b.name, "zh");
+            let temp1 = parseInt(a.name);
+            let temp2 = parseInt(b.name);
+            if (temp1 < temp2) {
+                return -1;
+            } else if (temp1 == temp2) {
+                return 0;
+            } else {
+                return 1;
+            }
+            //return a.name.localeCompare(b.name, "zh");
           }
         })
-
-        /*.sort((a,b)=>{
-            let oDate1 = new Date(a.modified);
-            let oDate2 = new Date(b.modified);
-            if(a.modified!=b.modified){
-                return oDate2.getTime() < oDate1.getTime()
-            }else{
-                return a.name.replace(/[^\d]/g, " ") - b.name.replace(/[^\d]/g, " ");
-            }
-        */
     }catch(e){
       log(e.message);
     }
@@ -117,7 +116,7 @@ function alistHome() {
   setResult(d);
 
   if (datalist.length > 0) {
-    setPageTitle(alistapi.name+'-Alist');
+    setPageTitle(alistapi.name+'-Alist | 聚影√');
     try{
       let json = JSON.parse(gethtml(alistapi.server + "/api/fs/list", "", alistapi.password));
       if(json.code==200){
@@ -136,15 +135,15 @@ function alistHome() {
       });
     }
   } else {
-    setPageTitle("Alist网盘");
+    setPageTitle("Alist | 聚影√");
     updateItem('homeloading', {
         title: "Alist列表为空"
     });
   }
 }
 
-function alistList(alistapi,itemname){
-  setPageTitle(itemname+'|'+alistapi.name+'-Alist');
+function alistList(alistapi){
+  setPageTitle(alistapi.name+'-Alist | 聚影√');
   let d = [];
   let listid = base64Encode(MY_PARAMS.path);
   d.push({
@@ -188,10 +187,10 @@ function arrayAdd(list,isdir,alistapi){
       d.push({
         title: item.name,
         img: item.thumb || config.依赖.match(/http(s)?:\/\/.*\//)[0] + "img/文件夹.svg",
-        url: $("hiker://empty##" + alistapi.server + path + "#noRecordHistory##noHistory#").rule((alistapi,itemname) => {
+        url: $("hiker://empty##" + alistapi.server + path + "#noRecordHistory##noHistory#").rule((alistapi) => {
           require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
-          alistList(alistapi,itemname);
-        },alistapi,item.name),
+          alistList(alistapi);
+        },alistapi),
         col_type: 'avatar',
         extra: {
           path: path,
