@@ -70,77 +70,59 @@ function getlist(data,isdir) {
       */
         
         if(!isdir){
-          //比较没有后缀的文件名
-function fileNoExtCompare(a, b)
-{
-// 特殊字符判定
-var specialChars = "!#$%^~()-+=-";
-var firstCharA = a.charAt(0);
-var firstCharB = b.charAt(0);
-var spA = specialChars.indexOf(firstCharA);
-var spB = specialChars.indexOf(firstCharB);
-if(spA != spB)
-{
-return (spA >= 0) ? -1 : 1
+          function SortLikeWin(v1, v2) {
+var a = v1.name;
+var b = v2.name;
+var reg = /[0-9]+/g;
+var lista = a.match(reg);
+var listb = b.match(reg);
+if (!lista || !listb) {
+return a.localeCompare(b);
 }
-if(spA >= 0 && spB >= 0)
-{
-if(firstCharA != firstCharB)
-{
-return firstCharB - firstCharA;
+for (var i = 0, minLen = Math.min(lista.length, listb.length) ; i < minLen; i++) {
+//数字所在位置序号
+var indexa = a.indexOf(lista[i]);
+var indexb = b.indexOf(listb[i]);
+//数字前面的前缀
+var prefixa = a.substring(0, indexa);
+var prefixb = a.substring(0, indexb);
+//数字的string
+var stra = lista[i];
+var strb = listb[i];
+//数字的值
+var numa = parseInt(stra);
+var numb = parseInt(strb);
+//如果数字的序号不等或前缀不等，属于前缀不同的情况，直接比较
+if (indexa != indexb || prefixa != prefixb) {
+return a.localeCompare(b);
 }
-else
-{
-return fileNoExtCompare(a.substring(1), b.substring(1)) ;
+else {
+//数字的string全等
+if (stra === strb) {
+//如果是最后一个数字，比较数字的后缀
+if (i == minLen - 1) {
+return a.substring(indexa).localeCompare(b.substring(indexb));
+}
+//如果不是最后一个数字，则循环跳转到下一个数字，并去掉前面相同的部分
+else {
+a = a.substring(indexa + stra.length);
+b = b.substring(indexa + stra.length);
 }
 }
-
-//判定比较内容是不是数值
-var nA = parseInt(a);
-var nB = parseInt(b);
-if(!isNaN(nA) && !isNaN(nB))
-{
-    return nA - nB;
+//如果数字的string不全等，但值相等
+else if (numa == numb) {
+//直接比较数字前缀0的个数，多的更小
+return strb.lastIndexOf(numb + '') - stra.lastIndexOf(numa + '');
 }
-
-if(firstCharA == firstCharB)
-{
-    return fileNoExtCompare(a.substring(1), b.substring(1)) ;
+else {
+//如果数字不等，直接比较数字大小
+return numa - numb;
 }
-
-var isChFirstA = isChCode(firstCharA);
-var isChFirstB = isChCode(firstCharB);
-if(isChFirstA != isChFirstB)
-{
-    return isChFirstA ? 1 : -1;
 }
-
-var aa = "1" + firstCharA;
-var bb = "1" + firstCharB;
-
-//return a.localeCompare(b);
-return aa.localeCompare(bb,'zh-CN');
 }
-
-//比较带后缀的文件名
-function fileWithExtCompare(a, b){
-//debugger
-var onlyNameA = a.substring(0, a.lastIndexOf("."));
-var onlyNameB = b.substring(0, b.lastIndexOf("."));
-var result = fileNoExtCompare(onlyNameA, onlyNameB);
-if(result != 0){
-return result;
 }
 
-//比较后缀
-var extA = a.substring(a.lastIndexOf("."));
-var extB = b.substring(b.lastIndexOf("."));  
-return extA.localeCompare(extB);  
-}
-
-list.sort(function(a,b){
-  return fileWithExtCompare(a.name, b.name)
-});
+list.sort(SortLikeWin);
         }
         
     }catch(e){
