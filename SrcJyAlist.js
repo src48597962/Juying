@@ -42,6 +42,7 @@ function getlist(data,isdir) {
         return isdir ? item.is_dir : fileFilter?contain.test(item.name):item.is_dir==0;
     })
     try{
+      /*
         list = list.sort((a, b) => {
           let reg = /^[A-z]/;
           if (reg.test(a.name) || reg.test(b.name)) {
@@ -53,11 +54,9 @@ function getlist(data,isdir) {
               return 0;
             }
           } else if (/第.*集/.test(a.name) || /第.*集/.test(b.name)) {
-            let temp1 = parseInt(a.name)||0;
-            let temp2 = parseInt(b.name)||0;
-            if (temp1 < temp2) {
+            if (parseInt(a.name) < parseInt(b.name)) {
                 return -1;
-            } else if (temp1 == temp2) {
+            } else if (parseInt(a.name) == parseInt(b.name)) {
                 return 0;
             } else {
                 return 1;
@@ -66,6 +65,39 @@ function getlist(data,isdir) {
             return a.name.localeCompare(b.name, "zh");
           }
         })
+        */
+        if(!isdir){
+          // 名字以特殊符号开头的应用列表
+          let symbol_list = []
+          // 名字以中文开头的应用列表
+          let cn_list = []
+          // 名字以英文开头的应用列表
+          let en_list = []
+          // 名字以数字开头的应用列表
+          let num_list = []
+
+          list.forEach((item) => {
+              //通过正则进行数据分类
+              if (/[\u4e00-\u9fa5]/.test(item.name)) {
+                  cn_list.push(item)
+              } else if (/[a-zA-Z]/.test(item.name)) {
+                  en_list.push(item)
+              } else if (/[\d]/.test(item.name)) {
+                  num_list.push(item)
+              } else {
+                  symbol_list.push(item)
+              }
+          })
+          //按照要求的方式进行数据排序重组
+          let newList = [
+              ...cn_list.sort((a, b) => a.name?.localeCompare(b.name)),
+              ...en_list.sort((a, b) => a.name.localeCompare(b.name)),//localeCompare可以不区分大小写的进行排序
+              ...num_list.sort((a, b) => a.name - b.name),
+              ...symbol_list.sort((a, b) => a.name - b.name)
+          ]
+          return newList;
+        }
+        return list;
     }catch(e){
       log(e.message);
     }
@@ -117,7 +149,7 @@ function alistHome() {
   setResult(d);
 
   if (datalist.length > 0) {
-    setPageTitle(alistapi.name+' | 聚影√-Alist');
+    setPageTitle(alistapi.name+' | Alist网盘');
     try{
       let json = JSON.parse(gethtml(alistapi.server + "/api/fs/list", "", alistapi.password));
       if(json.code==200){
@@ -136,7 +168,7 @@ function alistHome() {
       });
     }
   } else {
-    setPageTitle('聚影√-Alist');
+    setPageTitle('Alist网盘 | 聚影√');
     updateItem('homeloading', {
         title: "Alist列表为空"
     });
@@ -144,7 +176,7 @@ function alistHome() {
 }
 
 function alistList(alistapi){
-  setPageTitle(alistapi.name+' | 聚影√-Alist');
+  setPageTitle(alistapi.name+' | Alist网盘');
   let d = [];
   let listid = base64Encode(MY_PARAMS.path);
   d.push({
@@ -236,7 +268,6 @@ function alistSearch(alistapi,key) {
   deleteItemByCls('alist');
   try{
     let json = JSON.parse(fetch(alistapi.server + "/api/fs/search", {headers:{'content-type':'application/json;charset=UTF-8' },body:{"per_page":100,"page":1,"parent":"/","keywords":key},method:'POST',timeout:10000}));
-    log(json);
     if(json.code==200){
       let dirlist = getlist(json.data.content,1);
       addItemBefore('homeloading', arrayAdd(dirlist,1,alistapi));
