@@ -43,18 +43,19 @@ function getlist(data,isdir) {
     })
     try{
         list = list.sort((a, b) => {
-        let reg = /^[A-z]/;
-        if (reg.test(a.name) || reg.test(b.name)) {
-          if (a.name > b.name) {
-            return 1;
-          } else if (a.name < b.name) {
-            return -1;
+          let reg = /^[A-z]/;
+          if (reg.test(a.name) || reg.test(b.name)) {
+            if (a.name > b.name) {
+              return 1;
+            } else if (a.name < b.name) {
+              return -1;
+            } else {
+              return 0;
+            }
           } else {
-            return 0;
+            return a.name.localeCompare(b.name, "zh");
           }
-        } else {
-          return a.name.localeCompare(b.name, "zh");
-        }
+        })
 
         /*.sort((a,b)=>{
             let oDate1 = new Date(a.modified);
@@ -64,7 +65,6 @@ function getlist(data,isdir) {
             }else{
                 return a.name.replace(/[^\d]/g, " ") - b.name.replace(/[^\d]/g, " ");
             }
-        });
         */
     }catch(e){
       log(e.message);
