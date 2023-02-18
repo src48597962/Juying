@@ -127,7 +127,7 @@ function alistList(alistapi,dirname){
   let d = [];
   let listid = base64Encode(MY_PARAMS.path);
   d.push({
-    title: "<span style='color: #3399cc'>🏠"+ alistapi.name + "/" +MY_PARAMS.path + "</span>",
+    title: "<span style='color: #3399cc'>🏠"+ alistapi.name + MY_PARAMS.path + "</span>",
     col_type: 'rich_text'
   })
   d.push({
@@ -239,6 +239,7 @@ function alistSearch(alistapi,key) {
       }
     }
   }catch(e){
+    toast("搜索出错了，此网盘不支持搜索");
     log(e.message);
   }
   hideLoading();
