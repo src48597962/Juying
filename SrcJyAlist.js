@@ -42,7 +42,6 @@ function getlist(data,isdir) {
         return isdir ? item.is_dir : fileFilter?contain.test(item.name):item.is_dir==0;
     })
     try{
-      /*
         list = list.sort((a, b) => {
           let reg = /^[A-z]/;
           if (reg.test(a.name) || reg.test(b.name)) {
@@ -53,10 +52,10 @@ function getlist(data,isdir) {
             } else {
               return 0;
             }
-          } else if (/第.*集/.test(a.name) || /第.*集/.test(b.name)) {
-            if (parseInt(a.name) < parseInt(b.name)) {
+          } else if (/第.*?集/.test(a.name) && /第.*?集/.test(b.name)) {
+            if (parseInt(a.name.replace(/第(.*?)集/,'$1')) < parseInt(b.name.replace(/第(.*?)集/,'$1'))) {
                 return -1;
-            } else if (parseInt(a.name) == parseInt(b.name)) {
+            } else if (parseInt(a.name.replace(/第(.*?)集/,'$1')) == parseInt(b.name.replace(/第(.*?)集/,'$1'))) {
                 return 0;
             } else {
                 return 1;
@@ -65,7 +64,7 @@ function getlist(data,isdir) {
             return a.name.localeCompare(b.name, "zh");
           }
         })
-        */
+        /*
         if(!isdir){
           // 名字以特殊符号开头的应用列表
           let symbol_list = []
@@ -105,7 +104,7 @@ function getlist(data,isdir) {
           newList = newList.concat(symbol_list.sort((a, b) => a.name - b.name));
           return newList;
         }
-        return list;
+        */
     }catch(e){
       log(e.message);
     }
