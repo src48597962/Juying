@@ -225,7 +225,7 @@ function alistUrl(api,path,pwd,sign) {
 
 function alistSearch(api,key) {
   deleteItemByCls('alist');
-  try{
+  try{//content-type: application/json;charset=UTF-8
     let json = JSON.parse(fetch(api + "/api/fs/search", {body:{"per_page":100,"page":1,"parent":"/","keywords":key},method:'POST',timeout:10000}));
     log(json);
     if(json.code==200){
@@ -236,6 +236,6 @@ function alistSearch(api,key) {
       addItemBefore('homeloading', arrayAdd(filelist,0,alistapi));
     }
   }catch(e){
-    
+    log(e.message);
   }
 }
