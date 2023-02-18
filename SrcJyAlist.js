@@ -169,40 +169,37 @@ function alistList(alistapi){
 
 function arrayAdd(list,isdir,alistapi){
   let d = [];
-  if(isdir){
-    list.forEach(item => {
-      let folderpath = (item.parent||MY_PARAMS.path||"") + "/" + item.name; 
+  list.forEach(item => {
+    let path = ((item.parent=="/"?"":item.parent)||MY_PARAMS.path||"") + "/" + item.name; 
+    if(isdir){
       d.push({
         title: item.name,
         img: item.thumb || config.依赖.match(/http(s)?:\/\/.*\//)[0] + "img/文件夹.svg",
-        url: $("hiker://empty##" + alistapi.server + folderpath + "#noRecordHistory##noHistory#").rule((alistapi) => {
+        url: $("hiker://empty##" + alistapi.server + path + "#noRecordHistory##noHistory#").rule((alistapi) => {
           require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
           alistList(alistapi);
         },alistapi),
         col_type: 'avatar',
         extra: {
-          path: folderpath,
+          path: path,
           cls: "alist"
         }
       })
-    })
-  }else{
-    list.forEach(item => {
-      let filepath = (item.parent||MY_PARAMS.path||"") + "/" + item.name; 
+    }else{
       d.push({
         title: item.name,
         img: item.thumb || "https://cdn.jsdelivr.net/gh/alist-org/logo@main/logo.svg@Referer=",
-        url: $(alistapi.server+filepath).lazyRule((api,path,pwd,sign) => {
+        url: $(alistapi.server+path).lazyRule((api,path,pwd,sign) => {
           require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
           return alistUrl(api,path,pwd,sign);
-        }, alistapi.server, filepath, alistapi.password, item.sign),
+        }, alistapi.server, path, alistapi.password, item.sign),
         col_type: 'avatar',
         extra: {
           cls: "alist"
         }
       })
-    })
-  }
+    }
+  })
   return d;
 }
 
