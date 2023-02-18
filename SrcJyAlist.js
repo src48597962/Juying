@@ -90,7 +90,7 @@ function getlist(data,isdir) {
           })
           //按照要求的方式进行数据排序重组
           let newList = [];
-          newList = newList.concat(cn_list.sort((a, b) => a.name?.localeCompare(b.name)));
+          newList = newList.concat(cn_list.sort((a, b) => a.name.localeCompare(b.name)));
           newList = newList.concat(en_list.sort((a, b) => a.name.localeCompare(b.name)));
           newList = newList.concat(num_list.sort((a, b) => a.name - b.name));
           newList = newList.concat(symbol_list.sort((a, b) => a.name - b.name));
