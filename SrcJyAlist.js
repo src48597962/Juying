@@ -219,9 +219,18 @@ function alistSearch(alistapi,key) {
       deleteItemByCls('alist');
       let dirlist = getlist(json.data.content,1);
       addItemBefore('homeloading', arrayAdd(dirlist,1,alistapi));
-      
       let filelist = getlist(json.data.content,0);
       addItemBefore('homeloading', arrayAdd(filelist,0,alistapi));
+      if(dirlist.length==0&&filelist.length==0){
+        addItemBefore('homeloading', {
+          title: "未搜索到“"+key+"”",
+          url: "hiker://empty",
+          col_type: "text_center_1",
+          extra: {
+              cls: "alist"
+          }
+        });
+      }
     }
   }catch(e){
     log(e.message);
