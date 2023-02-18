@@ -221,6 +221,7 @@ function alistSearch(alistapi,key) {
   showLoading('搜索中，请稍后...');
   try{
     let json = JSON.parse(fetch(alistapi.server + "/api/fs/search", {headers:{'content-type':'application/json;charset=UTF-8' },body:{"per_page":100,"page":1,"parent":"/","keywords":key},method:'POST',timeout:10000}));
+    log(json);
     if(json.code==200){
       deleteItemByCls('alist');
       let dirlist = getlist(json.data.content,1);
