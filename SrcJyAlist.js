@@ -42,6 +42,8 @@ function getlist(data,isdir) {
         return isdir ? item.is_dir : fileFilter?contain.test(item.name):item.is_dir==0;
     })
     try{
+      /*
+      if(!isdir){
         list = list.sort((a, b) => {
           let reg = /^[A-z]/;
           if (reg.test(a.name) || reg.test(b.name)) {
@@ -64,47 +66,83 @@ function getlist(data,isdir) {
             return a.name.localeCompare(b.name, "zh");
           }
         })
-        /*
+      }
+      */
+        
         if(!isdir){
-          // 名字以特殊符号开头的应用列表
-          let symbol_list = []
-          // 名字以中文开头的应用列表
-          let cn_list = []
-          // 名字以英文开头的应用列表
-          let en_list = []
-          // 名字以数字开头的应用列表
-          let num_list = []
+          //比较没有后缀的文件名
+function fileNoExtCompare(a, b)
+{
+// 特殊字符判定
+var specialChars = "!#$%^~()-+=-";
+var firstCharA = a.charAt(0);
+var firstCharB = b.charAt(0);
+var spA = specialChars.indexOf(firstCharA);
+var spB = specialChars.indexOf(firstCharB);
+if(spA != spB)
+{
+return (spA >= 0) ? -1 : 1
+}
+if(spA >= 0 && spB >= 0)
+{
+if(firstCharA != firstCharB)
+{
+return firstCharB - firstCharA;
+}
+else
+{
+return fileNoExtCompare(a.substring(1), b.substring(1)) ;
+}
+}
 
-          list.forEach((item) => {
-              //通过正则进行数据分类
-              if (/[\u4e00-\u9fa5]/.test(item.name)) {
-                  cn_list.push(item)
-              } else if (/[a-zA-Z]/.test(item.name)) {
-                  en_list.push(item)
-              } else if (/[\d]/.test(item.name)) {
-                  num_list.push(item)
-              } else {
-                  symbol_list.push(item)
-              }
-          })
-          //按照要求的方式进行数据排序重组
-          let newList = [];
-          newList = newList.concat(cn_list.sort((a, b) => a.name.localeCompare(b.name)));
-          newList = newList.concat(en_list.sort((a, b) => a.name.localeCompare(b.name)));
-          newList = newList.concat(num_list.sort((a, b) => {
-              if (parseInt(a.name) < parseInt(b.name)) {
-                  return -1;
-              } else if (parseInt(a.name) == parseInt(b.name)) {
-                  return 0;
-              } else {
-                  return 1;
-              }
-            }
-          ));
-          newList = newList.concat(symbol_list.sort((a, b) => a.name - b.name));
-          return newList;
+//判定比较内容是不是数值
+var nA = parseInt(a);
+var nB = parseInt(b);
+if(!isNaN(nA) && !isNaN(nB))
+{
+    return nA - nB;
+}
+
+if(firstCharA == firstCharB)
+{
+    return fileNoExtCompare(a.substring(1), b.substring(1)) ;
+}
+
+var isChFirstA = isChCode(firstCharA);
+var isChFirstB = isChCode(firstCharB);
+if(isChFirstA != isChFirstB)
+{
+    return isChFirstA ? 1 : -1;
+}
+
+var aa = "1" + firstCharA;
+var bb = "1" + firstCharB;
+
+//return a.localeCompare(b);
+return aa.localeCompare(bb,'zh-CN');
+}
+
+//比较带后缀的文件名
+function fileWithExtCompare(a, b){
+//debugger
+var onlyNameA = a.substring(0, a.lastIndexOf("."));
+var onlyNameB = b.substring(0, b.lastIndexOf("."));
+var result = fileNoExtCompare(onlyNameA, onlyNameB);
+if(result != 0){
+return result;
+}
+
+//比较后缀
+var extA = a.substring(a.lastIndexOf("."));
+var extB = b.substring(b.lastIndexOf("."));  
+return extA.localeCompare(extB);  
+}
+
+list.sort(function(a,b){
+  return fileWithExtCompare(a.name, b.name)
+});
         }
-        */
+        
     }catch(e){
       log(e.message);
     }
