@@ -52,9 +52,9 @@ function getlist(data,isdir) {
             } else {
               return 0;
             }
-          } else if (/第[^\d]集/.test(a.name) || /第[^\d]集/.test(b.name)) {
-            let temp1 = parseInt(a.name);
-            let temp2 = parseInt(b.name);
+          } else if (/第.*集/.test(a.name) || /第.*集/.test(b.name)) {
+            let temp1 = parseInt(a.name)||0;
+            let temp2 = parseInt(b.name)||0;
             if (temp1 < temp2) {
                 return -1;
             } else if (temp1 == temp2) {
@@ -117,7 +117,7 @@ function alistHome() {
   setResult(d);
 
   if (datalist.length > 0) {
-    setPageTitle(alistapi.name+'-Alist | 聚影√');
+    setPageTitle(alistapi.name+' | 聚影√-Alist');
     try{
       let json = JSON.parse(gethtml(alistapi.server + "/api/fs/list", "", alistapi.password));
       if(json.code==200){
@@ -136,7 +136,7 @@ function alistHome() {
       });
     }
   } else {
-    setPageTitle("Alist | 聚影√");
+    setPageTitle('聚影√-Alist');
     updateItem('homeloading', {
         title: "Alist列表为空"
     });
@@ -144,7 +144,7 @@ function alistHome() {
 }
 
 function alistList(alistapi){
-  setPageTitle(alistapi.name+'-Alist | 聚影√');
+  setPageTitle(alistapi.name+' | 聚影√-Alist');
   let d = [];
   let listid = base64Encode(MY_PARAMS.path);
   d.push({
