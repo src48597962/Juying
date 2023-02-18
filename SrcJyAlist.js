@@ -170,7 +170,7 @@ function alistList(alistapi){
 function arrayAdd(list,isdir,alistapi){
   let d = [];
   list.forEach(item => {
-    let path = ((item.parent=="/"?"":item.parent)||(MY_PARAMS&&MY_PARAMS.path)||"") + "/" + item.name; 
+    let path = ((item.parent=="/"?"":item.parent)||(typeof(MY_PARAMS)!="undefined"&&MY_PARAMS.path)||"") + "/" + item.name; 
     if(isdir){
       d.push({
         title: item.name,
