@@ -192,7 +192,7 @@ function arrayAdd(list,isdir,alistapi){
         }
       })
     }else{
-      let name = item.name.substring(0,item.name.indexOf("."));
+      let name = item.name.substring(0,item.name.lastIndexOf("."));
       let sub = [];
       sublist.forEach(item => {
         if(item.name.indexOf(name)>-1){
@@ -243,7 +243,7 @@ function alistUrl(api,path,pwd,sign,sub) {
               urls.push(playurl);
               return JSON.stringify({
                     urls: urls,
-                    subtitle: url.match(/http(s)?:\/\/.*\//)[0] + input
+                    subtitle: url.match(/http(s)?:\/\/.*\//)[0] + input + "?" + url.split('?')[1]
                 }); 
             }
           },playurl,url,sub)
