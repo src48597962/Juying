@@ -196,7 +196,7 @@ function arrayAdd(list,isdir,alistapi){
       let sub = [];
       sublist.forEach(item => {
         if(item.name.indexOf(name)>-1){
-          sub.push(item.name);
+          sub.push(item.name+"?sign="+item.sign);
         }
       })
       d.push({
@@ -235,7 +235,7 @@ function alistUrl(api,path,pwd,sign,sub) {
           return playurl;
         }else{
           sub.unshift('不挂载字幕');
-          return $(sub,1).select((playurl,url,sub)=>{
+          return $(sub,1).select((playurl,urlpath,sub)=>{
             if(input==sub[0]){
               return playurl;
             }else{
@@ -243,10 +243,10 @@ function alistUrl(api,path,pwd,sign,sub) {
               urls.push(playurl);
               return JSON.stringify({
                     urls: urls,
-                    subtitle: url.match(/http(s)?:\/\/.*\//)[0] + input + "?" + url.split('?')[1]
+                    subtitle: urlpath + input
                 }); 
             }
-          },playurl,url,sub)
+          },playurl,url.match(/http(s)?:\/\/.*\//)[0],sub)
         }
       }
     }catch(e){ }
