@@ -181,7 +181,7 @@ function arrayAdd(list,isdir,alistapi){
       d.push({
         title: item.name,
         img: item.thumb || config.依赖.match(/http(s)?:\/\/.*\//)[0] + "img/文件夹.svg",//#noRecordHistory##noHistory#
-        url: $("hiker://empty##" + encodeURI(alistapi.server + path) + "#autoCache#").rule((alistapi,dirname) => {
+        url: $("hiker://empty##" + encodeURI(alistapi.server + path) + "#noRecordHistory##noHistory#").rule((alistapi,dirname) => {
           require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
           alistList(alistapi,dirname);
         },alistapi,item.name),
@@ -208,7 +208,7 @@ function arrayAdd(list,isdir,alistapi){
         }, alistapi.server, path, alistapi.password, item.sign, sub),
         col_type: 'avatar',
         extra: {
-          id: base64Encode(path),
+          id: encodeURI(alistapi.server+path),
           cls: typeof(MY_PARAMS)!="undefined"&&contain.test(item.name)?"playlist":typeof(MY_PARAMS)=="undefined"&&contain.test(item.name)?"alist playlist":"alist",
           longClick: [{
               title: "📋复制链接",
