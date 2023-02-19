@@ -208,7 +208,7 @@ function arrayAdd(list,isdir,alistapi){
         }, alistapi.server, path, alistapi.password, item.sign, sub),
         col_type: 'avatar',
         extra: {
-          id: encodeURI(alistapi.server+path),
+          id: encodeURI(path),
           cls: typeof(MY_PARAMS)!="undefined"&&contain.test(item.name)?"playlist":typeof(MY_PARAMS)=="undefined"&&contain.test(item.name)?"alist playlist":"alist",
           longClick: [{
               title: "📋复制链接",
@@ -234,6 +234,13 @@ function alistUrl(api,path,pwd,sign,sub) {
         if(sub.length==0){
           return playurl;
         }else{
+          let urls = [];
+          urls.push(playurl);
+          return JSON.stringify({
+              urls: urls,
+              subtitle: url.match(/http(s)?:\/\/.*\//)[0] + sub[0]
+          });
+          /*
           sub.unshift('不挂载字幕');
           return $(sub,1).select((playurl,urlpath,sub)=>{
             if(input==sub[0]){
@@ -247,6 +254,7 @@ function alistUrl(api,path,pwd,sign,sub) {
                 }); 
             }
           },playurl,url.match(/http(s)?:\/\/.*\//)[0],sub)
+          */
         }
       }
     }catch(e){ }
