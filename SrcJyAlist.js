@@ -243,7 +243,7 @@ function alistUrl(api,path,pwd,sign,sub) {
               urls.push(url);
               return JSON.stringify({
                     urls: urls,
-                    subtitle: url.match(/http(s)?:\/\/.*\//)[0] + sub[input]
+                    subtitle: url.match(/http(s)?:\/\/.*\//)[0] + input
                 }); 
             }
           },url,sub)
