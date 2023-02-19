@@ -39,7 +39,7 @@ function gethtml(api,path,password) {
 }
 function getlist(data,isdir) {
     let list = data.filter(item => {
-        return isdir ? item.is_dir : fileFilter?contain.test(item.name):item.is_dir==0;
+        return isdir ? item.is_dir : fileFilter? contain.test(item.name) || /\.srt|\.vtt|\.ass/.test(item.name) : item.is_dir==0;
     })
     try{    
         //if(!isdir){
@@ -167,13 +167,21 @@ function alistList(alistapi,dirname){
 
 function arrayAdd(list,isdir,alistapi){
   let d = [];
+  let sublist = list.filter(item => {
+      return /\.srt|\.vtt|\.ass/.test(item.name);
+  })
+  if(fileFilter){
+    list = list.filter(item => {
+        return contain.test(item.name);
+    })
+  }
   list.forEach(item => {
     let path = ((item.parent=="/"?"":item.parent)||(typeof(MY_PARAMS)!="undefined"&&MY_PARAMS.path)||"") + "/" + item.name; 
     if(isdir){
       d.push({
         title: item.name,
-        img: item.thumb || config.依赖.match(/http(s)?:\/\/.*\//)[0] + "img/文件夹.svg",
-        url: $("hiker://empty##" + alistapi.server + path + "#noRecordHistory##noHistory#").rule((alistapi,dirname) => {
+        img: item.thumb || config.依赖.match(/http(s)?:\/\/.*\//)[0] + "img/文件夹.svg",//#noRecordHistory##noHistory#
+        url: $("hiker://empty##" + encodeURI(alistapi.server + path) + "#autoCache#").rule((alistapi,dirname) => {
           require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
           alistList(alistapi,dirname);
         },alistapi,item.name),
@@ -184,13 +192,20 @@ function arrayAdd(list,isdir,alistapi){
         }
       })
     }else{
+      let name = item.name.substring(0,item.name.indexOf("."));
+      let sub = [];
+      sublist.forEach(item => {
+        if(item.name.indexOf(name)>-1){
+          sub.push(item.name);
+        }
+      })
       d.push({
         title: item.name,
         img: item.thumb || "https://cdn.jsdelivr.net/gh/alist-org/logo@main/logo.svg@Referer=",
-        url: $(alistapi.server+path).lazyRule((api,path,pwd,sign) => {
+        url: $(encodeURI(alistapi.server+path)).lazyRule((api,path,pwd,sign,sub) => {
           require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
-          return alistUrl(api,path,pwd,sign);
-        }, alistapi.server, path, alistapi.password, item.sign),
+          return alistUrl(api,path,pwd,sign,sub);
+        }, alistapi.server, path, alistapi.password, item.sign, sub),
         col_type: 'avatar',
         extra: {
           id: base64Encode(path),
@@ -200,7 +215,7 @@ function arrayAdd(list,isdir,alistapi){
               js: $.toString((url) => {
                   copy(url);
                   return "hiker://empty";
-              },alistapi.server+'/d'+path+'?sign='+item.sign)
+              },encodeURI(alistapi.server+'/d'+path+'?sign='+item.sign))
           }]
         }
       })
@@ -209,19 +224,37 @@ function arrayAdd(list,isdir,alistapi){
   return d;
 }
 
-function alistUrl(api,path,pwd,sign) {
+function alistUrl(api,path,pwd,sign,sub) {
+  let url = encodeURI(api + "/d"+ path) + "?sign=" + sign;
   if(contain.test(path)){
     try{
       let json = JSON.parse(gethtml(api + "/api/fs/get", path, pwd));
       if(json.code==200){
-        return json.data.raw_url + (/\.mp3|\.m4a|\.wav|\.flac/.test(path)?"#isMusic=true#":"#isVideo=true#");
+        url = json.data.raw_url + (/\.mp3|\.m4a|\.wav|\.flac/.test(path)?"#isMusic=true#":"#isVideo=true#");
+        if(sub.length==0){
+          return url;
+        }else{
+          sub.unshift('不挂载字幕');
+          return $(sub,1).select((url,sub)=>{
+            if(input==sub[0]){
+              return url;
+            }else{
+              let urls = [];
+              urls.push(url);
+              return JSON.stringify({
+                    urls: urls,
+                    subtitle: url.match(/http(s)?:\/\/.*\//)[0] + sub[input]
+                }); 
+            }
+          },url,sub)
+        }
       }
-    }catch(e){
-      return api + "/d"+ path + "?sign=" + sign;
-    }
-    return "toast://播放失败，网盘失效";
+    }catch(e){ }
+    return url;
+  }else if(/\.jpg|\.png|\.gif|\.bmp|\.ico|\.svg/.test(path)){
+    return url;
   }else{
-    return "download://" + api + "/d"+ path + "?sign=" + sign;
+    return "download://" + url;
   }
 }
 
