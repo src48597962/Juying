@@ -194,7 +194,7 @@ function arrayAdd(list,isdir,alistapi){
         col_type: 'avatar',
         extra: {
           id: base64Encode(path),
-          cls: "alist",
+          cls: typeof(MY_PARAMS)!="undefined"&&contain.test(item.name)?"playlist":typeof(MY_PARAMS)=="undefined"&&contain.test(item.name)?"alist playlist":"alist",
           longClick: [{
               title: "📋复制链接",
               js: $.toString((url) => {
