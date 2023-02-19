@@ -230,23 +230,23 @@ function alistUrl(api,path,pwd,sign,sub) {
     try{
       let json = JSON.parse(gethtml(api + "/api/fs/get", path, pwd));
       if(json.code==200){
-        url = json.data.raw_url + (/\.mp3|\.m4a|\.wav|\.flac/.test(path)?"#isMusic=true#":"#isVideo=true#");
+        let playurl = json.data.raw_url + (/\.mp3|\.m4a|\.wav|\.flac/.test(path)?"#isMusic=true#":"#isVideo=true#");
         if(sub.length==0){
-          return url;
+          return playurl;
         }else{
           sub.unshift('不挂载字幕');
-          return $(sub,1).select((url,sub)=>{
+          return $(sub,1).select((playurl,url,sub)=>{
             if(input==sub[0]){
-              return url;
+              return playurl;
             }else{
               let urls = [];
-              urls.push(url);
+              urls.push(playurl);
               return JSON.stringify({
                     urls: urls,
                     subtitle: url.match(/http(s)?:\/\/.*\//)[0] + input
                 }); 
             }
-          },url,sub)
+          },playurl,url,sub)
         }
       }
     }catch(e){ }
