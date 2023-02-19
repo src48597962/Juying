@@ -22,6 +22,9 @@ datalist = [
   },{
     "name": "Drive",
     "server": "https://drive.9t.ee"
+  },{
+    "name": "OUO聚合",
+    "server": "https://alist.ouo3.repl.co"
   }
 ];
 let fileFilter = 0;
@@ -228,19 +231,21 @@ function alistUrl(api,path,pwd,sign,subtitles) {
   let url = encodeURI(api + "/d"+ path) + "?sign=" + sign;
   if(contain.test(path)){
     try{
-      let json = JSON.parse(gethtml(api + "/api/fs/get", path, pwd));
-      if(json.code==200){
-        let playurl = json.data.raw_url + (/\.mp3|\.m4a|\.wav|\.flac/.test(path)?"#isMusic=true#":"#isVideo=true#");
+      //let json = JSON.parse(gethtml(api + "/api/fs/get", path, pwd));
+      //if(json.code==200){
+        //let playurl = json.data.raw_url + (/\.mp3|\.m4a|\.wav|\.flac/.test(path)?"#isMusic=true#":"#isVideo=true#");
+        let playurl = url + (/\.mp3|\.m4a|\.wav|\.flac/.test(path)?"#isMusic=true#":"#isVideo=true#");
         if(subtitles.length==0){
           return playurl;
         }else{
+          /*
           let urls = [];
           urls.push(playurl);
           return JSON.stringify({
               urls: urls,
               subtitle: url.match(/http(s)?:\/\/.*\//)[0] + subtitles[0]
           });
-          /*
+          */
           subtitles.unshift('不挂载字幕');
           return $(subtitles,1).select((playurl,urlpath)=>{
             if(input=='不挂载字幕'){
@@ -254,9 +259,9 @@ function alistUrl(api,path,pwd,sign,subtitles) {
                 }); 
             }
           },playurl,url.match(/http(s)?:\/\/.*\//)[0])
-          */
+          
         }
-      }
+      //}
     }catch(e){ }
     return url;
   }else if(/\.jpg|\.png|\.gif|\.bmp|\.ico|\.svg/.test(path)){
