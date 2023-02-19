@@ -193,14 +193,14 @@ function arrayAdd(list,isdir,alistapi){
         }, alistapi.server, path, alistapi.password, item.sign),
         col_type: 'avatar',
         extra: {
-          id: path,
+          id: base64Encode(path),
           cls: "alist",
           longClick: [{
-              title: "复制链接",
+              title: "📋复制链接",
               js: $.toString((url) => {
                   copy(url);
                   return "hiker://empty";
-              },alistapi.server+'/d'+path+'?sign'+item.sign)
+              },alistapi.server+'/d'+path+'?sign='+item.sign)
           }]
         }
       })
