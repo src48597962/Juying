@@ -167,8 +167,11 @@ function alistList(alistapi,dirname){
 
 function arrayAdd(list,isdir,alistapi){
   let d = [];
-  let sublist = list.filter(item => {
-      return /\.srt|\.vtt|\.ass/.test(item.name);
+  let sublist = [];
+  list.forEach(item => {
+      if(/\.srt|\.vtt|\.ass|\.ssa/.test(item.name)){
+          sublist.push(item.name+"?sign="+item.sign);
+      }
   })
   if(fileFilter){
     list = list.filter(item => {
@@ -193,19 +196,16 @@ function arrayAdd(list,isdir,alistapi){
       })
     }else{
       let name = item.name.substring(0,item.name.lastIndexOf("."));
-      let sub = [];
-      sublist.forEach(item => {
-        if(item.name.indexOf(name)>-1){
-          sub.push(item.name+"?sign="+item.sign);
-        }
+      let subtitles = sublist.filter(item => {
+          return item.indexOf(name)>-1;
       })
       d.push({
         title: item.name,
         img: item.thumb || "https://cdn.jsdelivr.net/gh/alist-org/logo@main/logo.svg@Referer=",
-        url: $(encodeURI(alistapi.server+path)).lazyRule((api,path,pwd,sign,sub) => {
+        url: $(encodeURI(alistapi.server+path)).lazyRule((api,path,pwd,sign,subtitles) => {
           require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
-          return alistUrl(api,path,pwd,sign,sub);
-        }, alistapi.server, path, alistapi.password, item.sign, sub),
+          return alistUrl(api,path,pwd,sign,subtitles);
+        }, alistapi.server, path, alistapi.password, item.sign, subtitles.length>0?subtitles:sublist),
         col_type: 'avatar',
         extra: {
           id: encodeURI(path),
@@ -224,26 +224,26 @@ function arrayAdd(list,isdir,alistapi){
   return d;
 }
 
-function alistUrl(api,path,pwd,sign,sub) {
+function alistUrl(api,path,pwd,sign,subtitles) {
   let url = encodeURI(api + "/d"+ path) + "?sign=" + sign;
   if(contain.test(path)){
     try{
       let json = JSON.parse(gethtml(api + "/api/fs/get", path, pwd));
       if(json.code==200){
         let playurl = json.data.raw_url + (/\.mp3|\.m4a|\.wav|\.flac/.test(path)?"#isMusic=true#":"#isVideo=true#");
-        if(sub.length==0){
+        if(subtitles.length==0){
           return playurl;
         }else{
           let urls = [];
           urls.push(playurl);
           return JSON.stringify({
               urls: urls,
-              subtitle: url.match(/http(s)?:\/\/.*\//)[0] + sub[0]
+              subtitle: url.match(/http(s)?:\/\/.*\//)[0] + subtitles[0]
           });
           /*
-          sub.unshift('不挂载字幕');
-          return $(sub,1).select((playurl,urlpath,sub)=>{
-            if(input==sub[0]){
+          subtitles.unshift('不挂载字幕');
+          return $(subtitles,1).select((playurl,urlpath)=>{
+            if(input=='不挂载字幕'){
               return playurl;
             }else{
               let urls = [];
@@ -253,7 +253,7 @@ function alistUrl(api,path,pwd,sign,sub) {
                     subtitle: urlpath + input
                 }); 
             }
-          },playurl,url.match(/http(s)?:\/\/.*\//)[0],sub)
+          },playurl,url.match(/http(s)?:\/\/.*\//)[0])
           */
         }
       }
