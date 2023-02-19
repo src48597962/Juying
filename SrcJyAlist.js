@@ -205,10 +205,10 @@ function arrayAdd(list,isdir,alistapi){
       d.push({
         title: item.name,
         img: item.thumb || "https://cdn.jsdelivr.net/gh/alist-org/logo@main/logo.svg@Referer=",
-        url: $(encodeURI(alistapi.server+path)).lazyRule((api,path,pwd,sign,subtitles) => {
+        url: $(encodeURI(alistapi.server+path)).lazyRule((api,path,sign,subtitle) => {
           require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
-          return alistUrl(api,path,pwd,sign,subtitles);
-        }, alistapi.server, path, alistapi.password, item.sign, subtitles.length>0?subtitles:sublist),
+          return alistUrl(api,path,sign,subtitle);
+        }, alistapi.server, path, item.sign, subtitles.length==1?subtitles[0]:""),
         col_type: 'avatar',
         extra: {
           id: encodeURI(path),
@@ -227,41 +227,21 @@ function arrayAdd(list,isdir,alistapi){
   return d;
 }
 
-function alistUrl(api,path,pwd,sign,subtitles) {
+function alistUrl(api,path,sign,subtitle) {
   let url = encodeURI(api + "/d"+ path) + "?sign=" + sign;
   if(contain.test(path)){
     try{
-      //let json = JSON.parse(gethtml(api + "/api/fs/get", path, pwd));
-      //if(json.code==200){
-        //let playurl = json.data.raw_url + (/\.mp3|\.m4a|\.wav|\.flac/.test(path)?"#isMusic=true#":"#isVideo=true#");
-        let playurl = url + (/\.mp3|\.m4a|\.wav|\.flac/.test(path)?"#isMusic=true#":"#isVideo=true#");
-        if(subtitles.length==0){
-          return playurl;
+        url = url + (/\.mp3|\.m4a|\.wav|\.flac/.test(path)?"#isMusic=true#":"#isVideo=true#");
+        if(!subtitle){
+          return url;
         }else{
-          /*
           let urls = [];
-          urls.push(playurl);
+          urls.push(url);
           return JSON.stringify({
               urls: urls,
-              subtitle: url.match(/http(s)?:\/\/.*\//)[0] + subtitles[0]
+              subtitle: url.match(/http(s)?:\/\/.*\//)[0] + subtitle
           });
-          */
-          subtitles.unshift('不挂载字幕');
-          return $(subtitles,1).select((playurl,urlpath)=>{
-            if(input=='不挂载字幕'){
-              return playurl;
-            }else{
-              let urls = [];
-              urls.push(playurl);
-              return JSON.stringify({
-                    urls: urls,
-                    subtitle: urlpath + input
-                }); 
-            }
-          },playurl,url.match(/http(s)?:\/\/.*\//)[0])
-          
         }
-      //}
     }catch(e){ }
     return url;
   }else if(/\.jpg|\.png|\.gif|\.bmp|\.ico|\.svg/.test(path)){
