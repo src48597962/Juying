@@ -172,7 +172,7 @@ function arrayAdd(list,isdir,alistapi){
   let d = [];
   let sublist = [];
   list.forEach(item => {
-      if(/\.srt|\.vtt|\.ass|\.ssa/.test(item.name)){
+      if(/\.srt|\.vtt|\.ass/.test(item.name)){
           sublist.push(item.name+"?sign="+item.sign);
       }
   })
@@ -205,10 +205,10 @@ function arrayAdd(list,isdir,alistapi){
       d.push({
         title: item.name,
         img: item.thumb || "https://cdn.jsdelivr.net/gh/alist-org/logo@main/logo.svg@Referer=",
-        url: $(encodeURI(alistapi.server+path)).lazyRule((api,path,sign,subtitles) => {
+        url: $(encodeURI(alistapi.server+path)).lazyRule((api,path,sign,subtitle) => {
           require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
-          return alistUrl(api,path,sign,subtitles);
-        }, alistapi.server, path, item.sign, subtitles.length>0?subtitles:sublist),
+          return alistUrl(api,path,sign,subtitle);
+        }, alistapi.server, path, item.sign, subtitles.length==1?subtitles[0]:""),
         col_type: 'avatar',
         extra: {
           id: encodeURI(path),
@@ -227,34 +227,20 @@ function arrayAdd(list,isdir,alistapi){
   return d;
 }
 
-function alistUrl(api,path,sign,subtitles) {
+function alistUrl(api,path,sign,subtitle) {
   let url = encodeURI(api + "/d"+ path) + "?sign=" + sign;
   if(contain.test(path)){
     try{
         url = url + (/\.mp3|\.m4a|\.wav|\.flac/.test(path)?"#isMusic=true#":"#isVideo=true#");
-        if(subtitles.length==0){
+        if(!subtitle){
           return url;
         }else{
           let urls = [];
           urls.push(url);
-          if(subtitles.length==1){
-            return JSON.stringify({
-                urls: urls,
-                subtitle: url.match(/http(s)?:\/\/.*\//)[0] + subtitles[0]
-            });
-          }else{
-            subtitles.unshift('不挂载字幕');
-            return $(subtitles,1).select((urls)=>{
-              if(input=='不挂载字幕'){
-                return urls[0];
-              }else{
-                return JSON.stringify({
-                    urls: urls,
-                    subtitle: urls[0].match(/http(s)?:\/\/.*\//)[0] + input
-                }); 
-              }
-            },urls)
-          }
+          return JSON.stringify({
+              urls: urls,
+              subtitle: url.match(/http(s)?:\/\/.*\//)[0] + subtitle
+          });
         }
     }catch(e){ }
     return url;
