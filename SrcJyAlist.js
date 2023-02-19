@@ -250,7 +250,7 @@ function alistUrl(api,path,sign,subtitles) {
               }else{
                 return JSON.stringify({
                     urls: urls,
-                    subtitle: url[0].match(/http(s)?:\/\/.*\//)[0] + input
+                    subtitle: urls[0].match(/http(s)?:\/\/.*\//)[0] + input
                 }); 
               }
             },urls)
