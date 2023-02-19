@@ -28,7 +28,7 @@ datalist = [
   }
 ];
 let fileFilter = 0;
-let contain = /\.mp4|\.avi|\.mkv|\.rmvb|\.flv|\.mov|\.mp3|\.m4a|\.wma|\.flac/;//设置可显示的文件后缀
+let contain = /\.mp4|\.avi|\.mkv|\.rmvb|\.flv|\.mov|\.ts|\.mp3|\.m4a|\.wma|\.flac/;//设置可显示的文件后缀
 
 function gethtml(api,path,password) {
   try{
@@ -259,7 +259,7 @@ function alistUrl(api,path,sign,subtitles) {
     }catch(e){ }
     return url;
   }else if(/\.jpg|\.png|\.gif|\.bmp|\.ico|\.svg/.test(path)){
-    return url;
+    return url+"#.jpg";
   }else{
     return "download://" + url;
   }
