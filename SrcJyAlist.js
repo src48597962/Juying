@@ -136,7 +136,13 @@ function alistHome() {
           });
           d.push({
               title: '导入',
-              url: "",
+              url: $("","alist分享口令的云剪贴板").input((item) => {
+                let content = parsePaste(input);
+                let datalist = JSON.parse(aesDecode('Juying', content));
+                
+                refreshPage(false);
+                return "hiker://empty";
+              }, item),
               img: "https://lanmeiguojiang.com/tubiao/more/43.png",
               col_type: "icon_small_3"
           });
@@ -158,7 +164,9 @@ function alistHome() {
                     copy(item.name+item.server);
                     return "hiker://empty";
                   }else if(input=="分享"){
-                    let url = sharePaste(base64Encode(JSON.stringify(item)));
+                    let oneshare = []
+                    oneshare.push(item);
+                    let url = sharePaste(aesEncode('Juying', JSON.stringify(oneshare)));
                     copy(url);
                     return "hiker://empty";
                   }else{
