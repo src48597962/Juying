@@ -346,7 +346,7 @@ function arrayAdd(list,isdir,alistapi){
         return contain.test(item.name);
     })
   }
-  log(list)
+
   list.forEach(item => {
     let path = ((item.parent=="/"?"":item.parent)||(typeof(MY_PARAMS)!="undefined"&&MY_PARAMS.path)||"") + "/" + item.name; 
     if(isdir){
@@ -390,6 +390,7 @@ function arrayAdd(list,isdir,alistapi){
       })
     }
   })
+  log(d)
   return d;
 }
 
