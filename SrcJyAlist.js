@@ -334,6 +334,9 @@ function alistList(alistapi,dirname){
 }
 
 function arrayAdd(list,isdir,alistapi){
+  log(list)
+  log(isdir)
+  log(alistapi)
   let d = [];
   let sublist = [];
   list.forEach(item => {
