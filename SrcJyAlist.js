@@ -27,7 +27,8 @@ let datalist = alistData.drives || [
     "server": "https://alist.ouo3.repl.co"
   }
 ];
-let fileFilter = 0;
+let config = alistData.config || {};
+let fileFilter = config['fileFilter']==0?0:1;
 let contain = /\.mp4|\.avi|\.mkv|\.rmvb|\.flv|\.mov|\.ts|\.mp3|\.m4a|\.wma|\.flac/;//设置可显示的文件后缀
 
 function gethtml(api,path,password) {
@@ -104,7 +105,9 @@ function alistHome() {
               img: fileFilter?"https://lanmeiguojiang.com/tubiao/messy/55.svg":"https://lanmeiguojiang.com/tubiao/messy/56.svg",
               col_type: "icon_2"
           });
-          
+          d.push({
+              col_type: "line"
+          });
           d.push({
               title: '增加',
               url: $("","alist链接地址\n如：https://alist.abc.com").input((alistfile) => {
