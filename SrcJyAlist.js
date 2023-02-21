@@ -38,7 +38,6 @@ function alistSet() {
   }catch(e){
     var alistData= {drives:[]};
   }
-  log(alistData);
   var d = [];
   d.push({
       title: '接口管理',
@@ -53,7 +52,6 @@ function alistSet() {
       col_type: "icon_2"
   });
   if(getMyVar('alistguanli','jk')=="jk"){
-    let datalist = alistData.drives;
     d.push({
         title: '增加',
         url: $("","alist链接\n如：https://alist.abc.com").input((alistData, alistfile) => {
@@ -89,7 +87,7 @@ function alistSet() {
               hideLoading();
               return 'toast://链接无效';
             }
-        }, datalist, alistfile),
+        }, alistData, alistfile),
         img: "https://lanmeiguojiang.com/tubiao/more/25.png",
         col_type: "icon_small_3"
     });
@@ -108,7 +106,7 @@ function alistSet() {
     d.push({
         col_type: "line"
     });
-
+    let datalist = alistData.drives;
   }
   setResult(d);
 }
