@@ -23,11 +23,9 @@ function gethtml(api,path,password) {
   }
 }
 function getlist(data,isdir) {
-  log(fileFilter);
     let list = data.filter(item => {
         return isdir ? item.is_dir : fileFilter? (contain.test(item.name) || /\.srt|\.vtt|\.ass/.test(item.name)) : item.is_dir==0;
     })
-    log(list);
     try{    
         //if(!isdir){
             list.sort(SortList);
@@ -391,6 +389,7 @@ function arrayAdd(list,isdir,alistapi){
       })
     }
   })
+  log(d);
   return d;
 }
 
