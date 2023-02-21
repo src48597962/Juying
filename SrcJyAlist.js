@@ -7,8 +7,8 @@ try{
   var alistData = {};
 }
 let datalist = alistData.drives || [];
-let config = alistData.config || {};
-let fileFilter = config['fileFilter']==0?0:1;
+let alistconfig = alistData.config || {};
+let fileFilter = alistconfig['fileFilter']==0?0:1;
 let contain = /\.mp4|\.avi|\.mkv|\.rmvb|\.flv|\.mov|\.ts|\.mp3|\.m4a|\.wma|\.flac/;//设置可显示的文件后缀
 
 function gethtml(api,path,password) {
@@ -63,22 +63,22 @@ function alistHome() {
           }catch(e){
             var alistData= {drives:[]};
           }
-          let config = alistData.config || {};
-          let fileFilter = config['fileFilter']==0?0:1;
+          let alistconfig = alistData.config || {};
+          let fileFilter = alistconfig['fileFilter']==0?0:1;
           var d = [];
           d.push({
               title: '音视频过滤',
               url: $('#noLoading#').lazyRule((fileFilter,alistData,alistfile) => {
-                let config = alistData.config || {};
+                let alistconfig = alistData.config || {};
                 let sm = "";
                 if(fileFilter){
-                  config['fileFilter'] =0;
+                  alistconfig['fileFilter'] =0;
                   sm = "已关闭音视频文件过滤，将显示全部文件";
                 }else{
-                  config['fileFilter'] =1;
+                  alistconfig['fileFilter'] =1;
                   sm = "已开启文件过滤，仅显示音视频文件";
                 }
-                alistData.config = config;
+                alistData.config = alistconfig;
                 writeFile(alistfile, JSON.stringify(alistData));
                 refreshPage(false);
                 return 'toast://'+sm;
