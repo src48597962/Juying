@@ -82,7 +82,7 @@ function alistHome() {
             var alistData= {drives:[]};
           }
           let config = alistData.config || {};
-          let fileFilter = config['fileFilter'] || 1;
+          let fileFilter = config['fileFilter']==0?0:1;
           var d = [];
           d.push({
               title: '音视频过滤',
