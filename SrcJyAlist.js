@@ -56,7 +56,7 @@ function alistSet() {
     d.push({
         title: '增加',
         url: $("","alist链接\n如：https://alist.abc.com").input((alistData, alistfile) => {
-            if(!input.startsWith('http') || input.endwith('/')){
+            if(!input.startsWith('http') || input.endswith('/')){
                 return 'toast://链接有误';
             }
             if(alistData.drives.some(item => item.server==input)){
