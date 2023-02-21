@@ -111,7 +111,7 @@ function alistSet() {
       d.push({
           title: item.name,
           url: "",
-          dec: item.server,
+          desc: item.server,
           col_type: "text_1"
       });
     })
