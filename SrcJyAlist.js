@@ -153,9 +153,14 @@ function alistHome() {
           datalist.forEach(item => {
             d.push({
                 title: item.name,
-                url: $(["复制","删除","密码"],1).select((item,alistfile)=>{
+                url: $(["复制","分享","删除","密码"],1).select((item,alistfile)=>{
                   if(input=="复制"){
                     copy(item.name+item.server);
+                    return "hiker://empty";
+                  }else if(input=="分享"){
+                    let pastes = getPastes();
+                    log(pastes)
+                    //var url = sharePaste(base64Encode(JSON.stringify(item)), paste);
                     return "hiker://empty";
                   }else{
                     eval("var alistData=" + fetch(alistfile));
