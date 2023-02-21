@@ -187,7 +187,7 @@ function arrayAdd(list,isdir,alistapi){
       d.push({
         title: item.name,
         img: item.thumb || config.依赖.match(/http(s)?:\/\/.*\//)[0] + "img/文件夹.svg",//#noRecordHistory##noHistory#
-        url: $("hiker://empty##" + encodeURI(alistapi.server + path) + "#noRecordHistory##noHistory#").rule((alistapi,dirname) => {
+        url: $("hiker://empty##" + encodeURI(alistapi.server + path) + "#noRecordHistory#").rule((alistapi,dirname) => {
           require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
           alistList(alistapi,dirname);
         },alistapi,item.name),
@@ -231,7 +231,7 @@ function alistUrl(api,path,sign,subtitle) {
   let url = encodeURI(api + "/d"+ path) + "?sign=" + sign;
   if(contain.test(path)){
     try{
-        url = url + (/\.mp3|\.m4a|\.wav|\.flac/.test(path)?"#isMusic=true#":"#isVideo=true#");
+        url = url + (/\.mp3|\.m4a|\.wma|\.flac/.test(path)?"#isMusic=true#":"#isVideo=true#");
         if(!subtitle){
           return url;
         }else{
@@ -244,7 +244,8 @@ function alistUrl(api,path,sign,subtitle) {
         }
     }catch(e){ }
     return url;
-  }else if(/\.jpg|\.png|\.gif|\.bmp|\.ico|\.svg/.test(path)){
+  }else if(/\.jpg|\.png|\.gif|\.JPG|\.PNG|\.bmp|\.ico|\.svg/.test(path)){
+    log(url);
     return url+"#.jpg";
   }else{
     return "download://" + url;
