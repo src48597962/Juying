@@ -38,6 +38,7 @@ function alistSet() {
   }catch(e){
     var alistData= {drives:[]};
   }
+  log(alistData);
   var d = [];
   d.push({
       title: '接口管理',
