@@ -107,6 +107,14 @@ function alistSet() {
         col_type: "line"
     });
     let datalist = alistData.drives;
+    datalist.forEach(item => {
+      d.push({
+          title: item.name,
+          url: "",
+          dec: item.server,
+          col_type: "text_1"
+      });
+    })
   }
   setResult(d);
 }
