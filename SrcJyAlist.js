@@ -245,8 +245,7 @@ function alistUrl(api,path,sign,subtitle) {
     }catch(e){ }
     return url;
   }else if(/\.jpg|\.png|\.gif|\.JPG|\.PNG|\.bmp|\.ico|\.svg/.test(path)){
-    log(url);
-    return url+"#.jpg";
+    return url+"@Referer=";
   }else{
     return "download://" + url;
   }
