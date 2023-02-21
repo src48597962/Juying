@@ -117,8 +117,9 @@ function alistSet() {
       d.push({
           title: item.name,
           url: $(["复制","删除","密码"],1).select((item,alistfile)=>{
-            if(input=="密码"){
-
+            if(input=="复制"){
+              copy(item.name+item.server);
+              return "hiker://empty";
             }else{
               eval("var alistData=" + fetch(alistfile));
               if (input == "删除") {
@@ -134,8 +135,52 @@ function alistSet() {
                 refreshPage(false);
                 return 'toast://已删除';
               } else {
-                copy(item.name+item.server);
-                return "hiker://empty";
+                return $('hiker://empty#noRecordHistory##noHistory#').rule((item,alistfile) => {
+                  setPageTitle('密码管理 | '+item.name);
+                  eval("var alistData=" + fetch(alistfile));
+                  let datalist = alistData.drives;
+                  let d = [];
+                  d.push({
+                      title: '添加密码',
+                      url: $("","有密码的路径").input((api,alistData,alistfile) => {
+                        return $("","此路径的密码").input((path,api,alistData,alistfile) => {
+                          let datalist = alistData.drives;
+                          for (let i = 0; i < datalist.length; i++) {
+                            if (datalist[i].server == api) {
+                              let password = datalist[i].password || {};
+                              password[path] = input;
+                              datalist[i].password = password;
+                              break;
+                            }
+                          }
+                          alistData.drives = datalist;
+                          writeFile(alistfile, JSON.stringify(alistData));
+                          refreshPage(false);
+                          return "hiker://empty";
+                        },input,api,alistData,alistfile)
+                      },item.server,alistData,alistfile),
+                      img: "https://lanmeiguojiang.com/tubiao/movie/98.svg",
+                      col_type: "icon_2"
+                  });
+                  
+                  for (let i = 0; i < datalist.length; i++) {
+                    if (datalist[i].server == item.server) {
+                      var pwdlist = datalist[i].password || {}
+                      break;
+                    }
+                  }
+                  for(let key in pwdlist){
+                    d.push({
+                        title: key,
+                        desc: pwdlist[key],
+                        url: $(["复制","删除","密码"],1).select(()=>{
+
+                        }),
+                        col_type: "text_1"
+                    });
+                  }
+                  setResult(d);
+                }, item, alistfile)
               }
             }
           }, item ,alistfile),
