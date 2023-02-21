@@ -158,9 +158,8 @@ function alistHome() {
                     copy(item.name+item.server);
                     return "hiker://empty";
                   }else if(input=="分享"){
-                    let pastes = getPastes();
-                    log(pastes)
-                    //var url = sharePaste(base64Encode(JSON.stringify(item)), paste);
+                    let url = sharePaste(base64Encode(JSON.stringify(item)));
+                    copy(url);
                     return "hiker://empty";
                   }else{
                     eval("var alistData=" + fetch(alistfile));
