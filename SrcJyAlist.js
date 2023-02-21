@@ -30,12 +30,13 @@ let datalist = alistData.drives || [
 let fileFilter = 0;
 let contain = /\.mp4|\.avi|\.mkv|\.rmvb|\.flv|\.mov|\.ts|\.mp3|\.m4a|\.wma|\.flac/;//设置可显示的文件后缀
 function alistSet() {
+  setPageTitle('⚙设置 | Alist网盘');
   let alistfile = "hiker://files/rules/Src/Juying/Alist.json";
   try{
     eval("var alistData=" + fetch(alistfile));
     let jknum = alistData.drives.length;
   }catch(e){
-    var alistData= {};
+    var alistData= {drives:[]};
   }
   var d = [];
   d.push({
@@ -51,9 +52,43 @@ function alistSet() {
       col_type: "icon_2"
   });
   if(getMyVar('alistguanli','jk')=="jk"){
+    let datalist = alistData.drives;
     d.push({
         title: '增加',
-        url: "",
+        url: $("","alist链接\n如：https://alist.abc.com").input((alistData, alistfile) => {
+            if(!input.startsWith('http') || input.endwith('/')){
+                return 'toast://链接有误';
+            }
+            if(alistData.drives.some(item => item.server==input)){
+                return 'toast://已存在';
+            }
+            showLoading('正在较验有效性');
+            let apiurl = input + "/api/public/settings";
+            try{
+              let getapi = JSON.parse(fetch(apiurl,{timeout:10000}));
+              hideLoading();
+              if(getapi.code==200 && /^v3/.test(getapi.version)){
+                return $("","当前链接有效，起个名保存吧").input((alistData,alistfile,api) => {
+                    if(input!=""){
+                      alistData.drives.push({
+                        "name": input,
+                        "server": api
+                      })
+                      writeFile(alistfile, JSON.stringify(alistData));
+                      refreshPage(false);
+                      return 'toast://已保存';
+                    }else{
+                        return 'toast://名称为空，无法保存';
+                    }
+                }, alistData, alistfile, input);
+              }else{
+                return 'toast://仅支持alist v3版本';
+              }
+            }catch(e){
+              hideLoading();
+              return 'toast://链接无效';
+            }
+        }, datalist, alistfile),
         img: "https://lanmeiguojiang.com/tubiao/more/25.png",
         col_type: "icon_small_3"
     });
@@ -72,6 +107,7 @@ function alistSet() {
     d.push({
         col_type: "line"
     });
+
   }
   setResult(d);
 }
