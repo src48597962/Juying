@@ -2,11 +2,11 @@
 let alistfile = "hiker://files/rules/Src/Juying/Alist.json";
 try{
   eval("var alistData=" + fetch(alistfile));
-  var datalist = alistData.drives;
+  let jknum = alistData.drives.length;
 }catch(e){
   var alistData = {};
 }
-datalist = alistData.drives || [
+let datalist = alistData.drives || [
   {
     "name": "云哲小站",
     "server": "http://202.81.231.111:50526"
@@ -33,26 +33,46 @@ function alistSet() {
   let alistfile = "hiker://files/rules/Src/Juying/Alist.json";
   try{
     eval("var alistData=" + fetch(alistfile));
-    var datalist = alistData.drives;
+    let jknum = alistData.drives.length;
   }catch(e){
     var alistData= {};
   }
   var d = [];
   d.push({
       title: '接口管理',
-      url: `#noLoading#@lazyRule=.js:putMyVar('guanli','jk');refreshPage(false);'toast://已切换到接口管理';`,
+      url: `#noLoading#@lazyRule=.js:putMyVar('alistguanli','jk');refreshPage(false);'toast://已切换到接口管理';`,
       img: "https://lanmeiguojiang.com/tubiao/movie/98.svg",
       col_type: "icon_2"
   });
   d.push({
-      title: '个性设置',
-      url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
-          require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
-          extension();
-      }),
+      title: '扩展设置',
+      url: `#noLoading#@lazyRule=.js:putMyVar('alistguanli','set');refreshPage(false);'toast://已切换到扩展设置';`,
       img: "https://lanmeiguojiang.com/tubiao/ke/156.png",
       col_type: "icon_2"
   });
+  if(getMyVar('alistguanli','jk')=="jk"){
+    d.push({
+        title: '增加',
+        url: "",
+        img: "https://lanmeiguojiang.com/tubiao/more/25.png",
+        col_type: "icon_small_3"
+    });
+    d.push({
+        title: '导入',
+        url: "",
+        img: "https://lanmeiguojiang.com/tubiao/more/43.png",
+        col_type: "icon_small_3"
+    });
+    d.push({
+        title: '分享',
+        url: "",
+        img: "https://lanmeiguojiang.com/tubiao/more/3.png",
+        col_type: "icon_small_3"
+    });
+    d.push({
+        col_type: "line"
+    });
+  }
   setResult(d);
 }
 function gethtml(api,path,password) {
