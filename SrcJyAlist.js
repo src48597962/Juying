@@ -54,12 +54,9 @@ function alistSet() {
   if(getMyVar('alistguanli','jk')=="jk"){
     d.push({
         title: '增加',
-        url: $("","alist链接地址\n如：https://alist.abc.com").input((alistData, alistfile) => {
+        url: $("","alist链接地址\n如：https://alist.abc.com").input((alistfile) => {
             if(!input.startsWith('http') || input.endsWith('/')){
                 return 'toast://链接有误';
-            }
-            if(alistData.drives.some(item => item.server==input)){
-                return 'toast://已存在';
             }
             showLoading('正在较验有效性');
             let apiurl = input + "/api/public/settings";
@@ -67,7 +64,16 @@ function alistSet() {
               let getapi = JSON.parse(fetch(apiurl,{timeout:10000}));
               hideLoading();
               if(getapi.code==200 && /^v3/.test(getapi.data.version)){
-                return $("","当前链接有效，起个名保存吧").input((alistData,alistfile,api) => {
+                return $("","当前链接有效，起个名保存吧").input((alistfile,api) => {
+                    try{
+                      eval("var alistData=" + fetch(alistfile));
+                      let jknum = alistData.drives.length;
+                    }catch(e){
+                      var alistData= {drives:[]};
+                    }
+                    if(alistData.drives.some(item => item.server==input)){
+                        return 'toast://已存在';
+                    }
                     if(input!=""){
                       alistData.drives.push({
                         "name": input,
@@ -79,7 +85,7 @@ function alistSet() {
                     }else{
                         return 'toast://名称为空，无法保存';
                     }
-                }, alistData, alistfile, input);
+                }, alistfile, input);
               }else{
                 return 'toast://仅支持alist v3版本';
               }
@@ -87,7 +93,7 @@ function alistSet() {
               hideLoading();
               return 'toast://链接无效';
             }
-        }, alistData, alistfile),
+        }, alistfile),
         img: "https://lanmeiguojiang.com/tubiao/more/25.png",
         col_type: "icon_small_3"
     });
@@ -110,7 +116,42 @@ function alistSet() {
     datalist.forEach(item => {
       d.push({
           title: item.name,
-          url: "",
+          url: $(["修改名称","修改链接","删除接口","密码管理"],1).select((item)=>{
+            if(input=="密码管理"){
+
+            }else{
+              eval("var alistData=" + fetch(alistfile));
+              if (input == "删除接口") {
+                let datalist = alistData.drives;
+                for (var i = 0; i < datalist.length; i++) {
+                  if (datalist[i].server == item.server) {
+                    datalist.splice(i, 1);
+                    break;
+                  }
+                }
+                refreshPage(false);
+                return 'toast://已删除';
+              } else {
+                return $("", input == "修改名称" ? "新的接口名称" : "新的接口链接地址").input((type, alistData, alistfile) => {
+                  let datalist = alistData.drives;
+                  for (var i = 0; i < datalist.length; i++) {
+                    if (datalist[i].server == item.server) {
+                      if (type == "修改名称") {
+                        datalist[i].name = input;
+                      } else {
+                        datalist[i].server = input;
+                      }
+                      break;
+                    }
+                  }
+                  alistData.drives = datalist;
+                  writeFile(alistfile, JSON.stringify(alistData));
+                  refreshPage(false);
+                  return 'toast://已修改';
+                }, input, alistData, alistfile)
+              }
+            }
+          }, item),
           desc: item.server,
           col_type: "text_1"
       });
