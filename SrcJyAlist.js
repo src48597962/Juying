@@ -132,7 +132,7 @@ function alistSet() {
                 refreshPage(false);
                 return 'toast://已删除';
               } else {
-                return $("", input == "修改名称" ? "新的接口名称" : "新的接口链接地址").input((type, alistData, alistfile) => {
+                return $("", input == "修改名称" ? "新的接口名称" : "新的接口链接地址").input((item,type,alistData,alistfile) => {
                   let datalist = alistData.drives;
                   for (var i = 0; i < datalist.length; i++) {
                     if (datalist[i].server == item.server) {
@@ -148,7 +148,7 @@ function alistSet() {
                   writeFile(alistfile, JSON.stringify(alistData));
                   refreshPage(false);
                   return 'toast://已修改';
-                }, input, alistData, alistfile)
+                }, item, input, alistData, alistfile)
               }
             }
           }, item ,alistfile),
