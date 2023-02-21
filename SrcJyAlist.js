@@ -27,8 +27,8 @@ let datalist = [
     "server": "https://alist.ouo3.repl.co"
   }
 ];
-let config = alistData.config || {};
-let fileFilter = config['fileFilter']==0?0:1;
+//let config = alistData.config || {};
+let fileFilter = 1;//config['fileFilter']==0?0:1;
 let contain = /\.mp4|\.avi|\.mkv|\.rmvb|\.flv|\.mov|\.ts|\.mp3|\.m4a|\.wma|\.flac/;//设置可显示的文件后缀
 
 function gethtml(api,path,password) {
