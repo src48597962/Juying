@@ -4,9 +4,9 @@ try{
   eval("var alistData=" + fetch(alistfile));
   let jknum = alistData.drives.length;
 }catch(e){
-  var alistData = {};
+  var alistData = {drives:[]};
 }
-let datalist = alistData.drives || [
+let datalist = [
   {
     "name": "云哲小站",
     "server": "http://202.81.231.111:50526"
