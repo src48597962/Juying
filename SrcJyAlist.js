@@ -4,29 +4,9 @@ try{
   eval("var alistData=" + fetch(alistfile));
   let jknum = alistData.drives.length;
 }catch(e){
-  var alistData = {drives:[]};
+  var alistData = {};
 }
-let datalist = [
-  {
-    "name": "云哲小站",
-    "server": "http://202.81.231.111:50526"
-  },{
-    "name": "AR盘",
-    "server": "https://xn--ar-4g8e.tk"
-  },{
-    "name": "影视库",
-    "server": "https://a.aa01.ml"
-  },{
-    "name": "听闻网盘",
-    "server": "https://wangpan.sangxuesheng.com"
-  },{
-    "name": "Drive",
-    "server": "https://drive.9t.ee"
-  },{
-    "name": "OUO聚合",
-    "server": "https://alist.ouo3.repl.co"
-  }
-];
+let datalist = alistData.drives || [];
 //let config = alistData.config || {};
 let fileFilter = 1;//config['fileFilter']==0?0:1;
 let contain = /\.mp4|\.avi|\.mkv|\.rmvb|\.flv|\.mov|\.ts|\.mp3|\.m4a|\.wma|\.flac/;//设置可显示的文件后缀
