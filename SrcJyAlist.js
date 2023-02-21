@@ -29,168 +29,7 @@ let datalist = alistData.drives || [
 ];
 let fileFilter = 0;
 let contain = /\.mp4|\.avi|\.mkv|\.rmvb|\.flv|\.mov|\.ts|\.mp3|\.m4a|\.wma|\.flac/;//设置可显示的文件后缀
-function alistSet() {
-  setPageTitle('⚙设置 | Alist网盘');
-  let alistfile = "hiker://files/rules/Src/Juying/Alist.json";
-  try{
-    eval("var alistData=" + fetch(alistfile));
-    let jknum = alistData.drives.length;
-  }catch(e){
-    var alistData= {drives:[]};
-  }
-  var d = [];
-  d.push({
-      title: '接口管理',
-      url: `#noLoading#@lazyRule=.js:putMyVar('alistguanli','jk');refreshPage(false);'toast://已切换到接口管理';`,
-      img: "https://lanmeiguojiang.com/tubiao/movie/98.svg",
-      col_type: "icon_2"
-  });
-  d.push({
-      title: '扩展设置',
-      url: `#noLoading#@lazyRule=.js:putMyVar('alistguanli','set');refreshPage(false);'toast://已切换到扩展设置';`,
-      img: "https://lanmeiguojiang.com/tubiao/ke/156.png",
-      col_type: "icon_2"
-  });
-  if(getMyVar('alistguanli','jk')=="jk"){
-    d.push({
-        title: '增加',
-        url: $("","alist链接地址\n如：https://alist.abc.com").input((alistfile) => {
-            if(!input.startsWith('http') || input.endsWith('/')){
-                return 'toast://链接有误';
-            }
-            showLoading('正在较验有效性');
-            let apiurl = input + "/api/public/settings";
-            try{
-              let getapi = JSON.parse(fetch(apiurl,{timeout:10000}));
-              hideLoading();
-              if(getapi.code==200 && /^v3/.test(getapi.data.version)){
-                return $("","当前链接有效，起个名保存吧").input((alistfile,api) => {
-                    try{
-                      eval("var alistData=" + fetch(alistfile));
-                      let jknum = alistData.drives.length;
-                    }catch(e){
-                      var alistData= {drives:[]};
-                    }
-                    if(alistData.drives.some(item => item.server==input)){
-                        return 'toast://已存在';
-                    }
-                    if(input!=""){
-                      alistData.drives.push({
-                        "name": input,
-                        "server": api
-                      })
-                      writeFile(alistfile, JSON.stringify(alistData));
-                      refreshPage(false);
-                      return 'toast://已保存';
-                    }else{
-                        return 'toast://名称为空，无法保存';
-                    }
-                }, alistfile, input);
-              }else{
-                return 'toast://仅支持alist v3版本';
-              }
-            }catch(e){
-              hideLoading();
-              return 'toast://链接无效';
-            }
-        }, alistfile),
-        img: "https://lanmeiguojiang.com/tubiao/more/25.png",
-        col_type: "icon_small_3"
-    });
-    d.push({
-        title: '导入',
-        url: "",
-        img: "https://lanmeiguojiang.com/tubiao/more/43.png",
-        col_type: "icon_small_3"
-    });
-    d.push({
-        title: '分享',
-        url: "",
-        img: "https://lanmeiguojiang.com/tubiao/more/3.png",
-        col_type: "icon_small_3"
-    });
-    d.push({
-        col_type: "line"
-    });
-    let datalist = alistData.drives;
-    datalist.forEach(item => {
-      d.push({
-          title: item.name,
-          url: $(["复制","删除","密码"],1).select((item,alistfile)=>{
-            if(input=="复制"){
-              copy(item.name+item.server);
-              return "hiker://empty";
-            }else{
-              eval("var alistData=" + fetch(alistfile));
-              if (input == "删除") {
-                let datalist = alistData.drives;
-                for (var i = 0; i < datalist.length; i++) {
-                  if (datalist[i].server == item.server) {
-                    datalist.splice(i, 1);
-                    break;
-                  }
-                }
-                alistData.drives = datalist;
-                writeFile(alistfile, JSON.stringify(alistData));
-                refreshPage(false);
-                return 'toast://已删除';
-              } else {
-                return $('hiker://empty#noRecordHistory##noHistory#').rule((item,alistfile) => {
-                  setPageTitle('密码管理 | '+item.name);
-                  eval("var alistData=" + fetch(alistfile));
-                  let datalist = alistData.drives;
-                  let d = [];
-                  d.push({
-                      title: '添加密码',
-                      url: $("","有密码的路径").input((api,alistData,alistfile) => {
-                        return $("","此路径的密码").input((path,api,alistData,alistfile) => {
-                          let datalist = alistData.drives;
-                          for (let i = 0; i < datalist.length; i++) {
-                            if (datalist[i].server == api) {
-                              let password = datalist[i].password || {};
-                              password[path] = input;
-                              datalist[i].password = password;
-                              break;
-                            }
-                          }
-                          alistData.drives = datalist;
-                          writeFile(alistfile, JSON.stringify(alistData));
-                          refreshPage(false);
-                          return "hiker://empty";
-                        },input,api,alistData,alistfile)
-                      },item.server,alistData,alistfile),
-                      img: "https://lanmeiguojiang.com/tubiao/movie/98.svg",
-                      col_type: "icon_2"
-                  });
-                  
-                  for (let i = 0; i < datalist.length; i++) {
-                    if (datalist[i].server == item.server) {
-                      var pwdlist = datalist[i].password || {}
-                      break;
-                    }
-                  }
-                  for(let key in pwdlist){
-                    d.push({
-                        title: key,
-                        desc: pwdlist[key],
-                        url: $(["复制","删除","密码"],1).select(()=>{
 
-                        }),
-                        col_type: "text_1"
-                    });
-                  }
-                  setResult(d);
-                }, item, alistfile)
-              }
-            }
-          }, item ,alistfile),
-          desc: item.server,
-          col_type: "text_1"
-      });
-    })
-  }
-  setResult(d);
-}
 function gethtml(api,path,password) {
   try{
     path = path || "";
@@ -234,10 +73,172 @@ function alistHome() {
   });
   d.push({
       title: '⚙设置',
-      url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
-          require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
-          alistSet();
-      }),
+      url: $('hiker://empty#noRecordHistory##noHistory#').rule((alistfile) => {
+          setPageTitle('⚙设置 | Alist网盘');
+          try{
+            eval("var alistData=" + fetch(alistfile));
+            let jknum = alistData.drives.length;
+          }catch(e){
+            var alistData= {drives:[]};
+          }
+          var d = [];
+          d.push({
+              title: '音视频过滤',
+              url: `#noLoading#@lazyRule=.js:putMyVar('alistguanli','jk');refreshPage(false);'toast://已切换到接口管理';`,
+              img: "https://lanmeiguojiang.com/tubiao/movie/98.svg",
+              col_type: "scroll_button"
+          });
+          
+          d.push({
+              title: '增加',
+              url: $("","alist链接地址\n如：https://alist.abc.com").input((alistfile) => {
+                  if(!input.startsWith('http') || input.endsWith('/')){
+                      return 'toast://链接有误';
+                  }
+                  showLoading('正在较验有效性');
+                  let apiurl = input + "/api/public/settings";
+                  try{
+                    let getapi = JSON.parse(fetch(apiurl,{timeout:10000}));
+                    hideLoading();
+                    if(getapi.code==200 && /^v3/.test(getapi.data.version)){
+                      return $("","当前链接有效，起个名保存吧").input((alistfile,api) => {
+                          try{
+                            eval("var alistData=" + fetch(alistfile));
+                            let jknum = alistData.drives.length;
+                          }catch(e){
+                            var alistData= {drives:[]};
+                          }
+                          if(alistData.drives.some(item => item.server==input)){
+                              return 'toast://已存在';
+                          }
+                          if(input!=""){
+                            alistData.drives.push({
+                              "name": input,
+                              "server": api
+                            })
+                            writeFile(alistfile, JSON.stringify(alistData));
+                            refreshPage(false);
+                            return 'toast://已保存';
+                          }else{
+                              return 'toast://名称为空，无法保存';
+                          }
+                      }, alistfile, input);
+                    }else{
+                      return 'toast://仅支持alist v3版本';
+                    }
+                  }catch(e){
+                    hideLoading();
+                    return 'toast://链接无效';
+                  }
+              }, alistfile),
+              img: "https://lanmeiguojiang.com/tubiao/more/25.png",
+              col_type: "icon_small_3"
+          });
+          d.push({
+              title: '导入',
+              url: "",
+              img: "https://lanmeiguojiang.com/tubiao/more/43.png",
+              col_type: "icon_small_3"
+          });
+          d.push({
+              title: '分享',
+              url: "",
+              img: "https://lanmeiguojiang.com/tubiao/more/3.png",
+              col_type: "icon_small_3"
+          });
+          d.push({
+              col_type: "line"
+          });
+          let datalist = alistData.drives;
+          datalist.forEach(item => {
+            d.push({
+                title: item.name,
+                url: $(["复制","删除","密码"],1).select((item,alistfile)=>{
+                  if(input=="复制"){
+                    copy(item.name+item.server);
+                    return "hiker://empty";
+                  }else{
+                    eval("var alistData=" + fetch(alistfile));
+                    if (input == "删除") {
+                      let datalist = alistData.drives;
+                      for (var i = 0; i < datalist.length; i++) {
+                        if (datalist[i].server == item.server) {
+                          datalist.splice(i, 1);
+                          break;
+                        }
+                      }
+                      alistData.drives = datalist;
+                      writeFile(alistfile, JSON.stringify(alistData));
+                      refreshPage(false);
+                      return 'toast://已删除';
+                    } else {
+                      return $('hiker://empty#noRecordHistory##noHistory#').rule((item,alistfile) => {
+                        setPageTitle('密码管理 | '+item.name);
+                        eval("var alistData=" + fetch(alistfile));
+                        let datalist = alistData.drives;
+                        let d = [];
+                        d.push({
+                            title: '🔢添加密码',
+                            url: $("","有密码的路径").input((api,alistData,alistfile) => {
+                              return $("","此路径的密码").input((path,api,alistData,alistfile) => {
+                                let datalist = alistData.drives;
+                                for (let i = 0; i < datalist.length; i++) {
+                                  if (datalist[i].server == api) {
+                                    let password = datalist[i].password || {};
+                                    password[path] = input;
+                                    datalist[i].password = password;
+                                    break;
+                                  }
+                                }
+                                alistData.drives = datalist;
+                                writeFile(alistfile, JSON.stringify(alistData));
+                                refreshPage(false);
+                                return "hiker://empty";
+                              },input,api,alistData,alistfile)
+                            },item.server,alistData,alistfile),
+                            img: "https://lanmeiguojiang.com/tubiao/movie/98.svg",
+                            col_type: "text_center_1"
+                        });
+                        for (let i = 0; i < datalist.length; i++) {
+                          if (datalist[i].server == item.server) {
+                            var pwdlist = datalist[i].password || {}
+                            break;
+                          }
+                        }
+                        for(let key in pwdlist){
+                          d.push({
+                              title: key,
+                              desc: pwdlist[key],
+                              url: $("确定删除："+key).confirm((api,key,alistData,alistfile)=>{
+                                let datalist = alistData.drives;
+                                for (let i = 0; i < datalist.length; i++) {
+                                  if (datalist[i].server == api) {
+                                    let password = datalist[i].password;
+                                    delete password[key];
+                                    datalist[i].password = password;
+                                    break;
+                                  }
+                                }
+                                alistData.drives = datalist;
+                                writeFile(alistfile, JSON.stringify(alistData));
+                                refreshPage(false);
+                                return "hiker://empty";
+                              },item.server,key,alistData,alistfile),
+                              col_type: "text_1"
+                          });
+                        }
+                        setResult(d);
+                      }, item, alistfile)
+                    }
+                  }
+                }, item ,alistfile),
+                desc: item.server,
+                col_type: "text_1"
+            });
+          })
+          
+          setResult(d);
+      }, alistfile),
       col_type: 'scroll_button'
   });
   d.push({
