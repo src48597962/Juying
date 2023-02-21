@@ -341,16 +341,17 @@ function arrayAdd(list,isdir,alistapi){
           sublist.push(item.name+"?sign="+item.sign);
       }
   })
-  /*
-  if(fileFilter){
+  
+  if(fileFilter&&isdir==0){
     list = list.filter(item => {
         return contain.test(item.name);
     })
   }
-*/
+
   list.forEach(item => {
     let path = ((item.parent=="/"?"":item.parent)||(typeof(MY_PARAMS)!="undefined"&&MY_PARAMS.path)||"") + "/" + item.name; 
     if(isdir){
+      log(1)
       d.push({
         title: item.name,
         img: item.thumb || config.依赖.match(/http(s)?:\/\/.*\//)[0] + "img/文件夹.svg",//#noRecordHistory##noHistory#
@@ -391,7 +392,6 @@ function arrayAdd(list,isdir,alistapi){
       })
     }
   })
-  log(d)
   return d;
 }
 
