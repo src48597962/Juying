@@ -10,7 +10,7 @@ let datalist = alistData.drives || [];
 let config = alistData.config || {};
 let fileFilter = config['fileFilter']==0?0:1;
 let contain = /\.mp4|\.avi|\.mkv|\.rmvb|\.flv|\.mov|\.ts|\.mp3|\.m4a|\.wma|\.flac/;//设置可显示的文件后缀
-log(datalist);
+
 function gethtml(api,path,password) {
   try{
     path = path || "";
@@ -18,6 +18,7 @@ function gethtml(api,path,password) {
     let html = fetch(api, {body: {"path":path,"password":password},method:'POST',timeout:10000});
     return html;
   }catch(e){
+    log(e.message);
     return "";
   }
 }
@@ -37,7 +38,6 @@ function getlist(data,isdir) {
 
 function alistHome() {
   let alistapi = storage0.getItem('Alistapi',datalist.length>0?datalist[0]:{});
-  log(alistapi);
   let d = [];
   datalist.forEach(item => {
     d.push({
