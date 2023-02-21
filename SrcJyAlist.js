@@ -16,6 +16,7 @@ function gethtml(api,path,password) {
     path = path || "";
     password = password || "";
     let html = fetch(api, {body: {"path":path,"password":password},method:'POST',timeout:10000});
+    log(html);
     return html;
   }catch(e){
     log(e.message);
@@ -33,6 +34,7 @@ function getlist(data,isdir) {
     }catch(e){
       log(e.message);
     }
+    log(list);
     return list || [];
 }
 
