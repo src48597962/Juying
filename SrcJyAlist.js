@@ -266,7 +266,8 @@ function alistHome() {
   if (datalist.length > 0) {
     setPageTitle(alistapi.name+' | Alist网盘');
     try{
-      let json = JSON.parse(gethtml(alistapi.server + "/api/fs/list", "", alistapi.password));
+      let pwd = alistapi.password?alistapi.password['/']||"":"";
+      let json = JSON.parse(gethtml(alistapi.server + "/api/fs/list", "", pwd));
       if(json.code==200){
         let dirlist = getlist(json.data.content,1);
         addItemBefore('homeloading', arrayAdd(dirlist,1,alistapi));
@@ -309,7 +310,8 @@ function alistList(alistapi,dirname){
   })
   setResult(d);
   try{
-    let json = JSON.parse(gethtml(alistapi.server + "/api/fs/list", MY_PARAMS.path, alistapi.password));
+    let pwd = alistapi.password?alistapi.password[MY_PARAMS.path]||"":"";
+    let json = JSON.parse(gethtml(alistapi.server + "/api/fs/list", MY_PARAMS.path, pwd));
     if(json.code==200){
       let dirlist = getlist(json.data.content,1);
       addItemBefore(listid, arrayAdd(dirlist,1,alistapi));
