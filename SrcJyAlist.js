@@ -13,10 +13,11 @@ let contain = /\.mp4|\.avi|\.mkv|\.rmvb|\.flv|\.mov|\.ts|\.mp3|\.m4a|\.wma|\.fla
 
 function gethtml(api,path,password) {
   try{
+    log(api+"@"+path+"@"+password)
     path = path || "";
     password = password || "";
     let html = fetch(api, {body: {"path":path,"password":password},method:'POST',timeout:10000});
-    log(html);
+    log('html'+html);
     return html;
   }catch(e){
     log(e.message);
