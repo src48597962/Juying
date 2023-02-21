@@ -116,12 +116,12 @@ function alistSet() {
     datalist.forEach(item => {
       d.push({
           title: item.name,
-          url: $(["修改名称","修改链接","删除接口","密码管理"],1).select((item,alistfile)=>{
-            if(input=="密码管理"){
+          url: $(["复制","删除","密码"],1).select((item,alistfile)=>{
+            if(input=="密码"){
 
             }else{
               eval("var alistData=" + fetch(alistfile));
-              if (input == "删除接口") {
+              if (input == "删除") {
                 let datalist = alistData.drives;
                 for (var i = 0; i < datalist.length; i++) {
                   if (datalist[i].server == item.server) {
@@ -129,26 +129,13 @@ function alistSet() {
                     break;
                   }
                 }
+                alistData.drives = datalist;
+                writeFile(alistfile, JSON.stringify(alistData));
                 refreshPage(false);
                 return 'toast://已删除';
               } else {
-                return $("", input == "修改名称" ? "新的接口名称" : "新的接口链接地址").input((item,type,alistData,alistfile) => {
-                  let datalist = alistData.drives;
-                  for (var i = 0; i < datalist.length; i++) {
-                    if (datalist[i].server == item.server) {
-                      if (type == "修改名称") {
-                        datalist[i].name = input;
-                      } else {
-                        datalist[i].server = input;
-                      }
-                      break;
-                    }
-                  }
-                  alistData.drives = datalist;
-                  writeFile(alistfile, JSON.stringify(alistData));
-                  refreshPage(false);
-                  return 'toast://已修改';
-                }, item, input, alistData, alistfile)
+                copy(item.name+item.server);
+                return "hiker://empty";
               }
             }
           }, item ,alistfile),
