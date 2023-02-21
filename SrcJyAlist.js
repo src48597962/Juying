@@ -334,9 +334,6 @@ function alistList(alistapi,dirname){
 }
 
 function arrayAdd(list,isdir,alistapi){
-  log(list)
-  log(isdir)
-  log(alistapi)
   let d = [];
   let sublist = [];
   list.forEach(item => {
@@ -344,12 +341,13 @@ function arrayAdd(list,isdir,alistapi){
           sublist.push(item.name+"?sign="+item.sign);
       }
   })
+  /*
   if(fileFilter){
     list = list.filter(item => {
         return contain.test(item.name);
     })
   }
-
+*/
   list.forEach(item => {
     let path = ((item.parent=="/"?"":item.parent)||(typeof(MY_PARAMS)!="undefined"&&MY_PARAMS.path)||"") + "/" + item.name; 
     if(isdir){
