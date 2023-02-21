@@ -335,23 +335,21 @@ function alistList(alistapi,dirname){
 
 function arrayAdd(list,isdir,alistapi){
   let d = [];
-  let sublist = [];
-  list.forEach(item => {
-      if(/\.srt|\.vtt|\.ass/.test(item.name)){
-          sublist.push(item.name+"?sign="+item.sign);
-      }
-  })
-  
-  if(fileFilter&&isdir==0){
-    list = list.filter(item => {
-        return contain.test(item.name);
+
+  if(isdir==0){
+    var sublist = list.filter(item => {
+        return /\.srt|\.vtt|\.ass/.test(item.name);
     })
+    if(fileFilter){
+      list = list.filter(item => {
+          return contain.test(item.name);
+      })
+    }
   }
 
   list.forEach(item => {
     let path = ((item.parent=="/"?"":item.parent)||(typeof(MY_PARAMS)!="undefined"&&MY_PARAMS.path)||"") + "/" + item.name; 
     if(isdir){
-      log(1)
       d.push({
         title: item.name,
         img: item.thumb || config.依赖.match(/http(s)?:\/\/.*\//)[0] + "img/文件夹.svg",//#noRecordHistory##noHistory#
@@ -367,8 +365,11 @@ function arrayAdd(list,isdir,alistapi){
       })
     }else{
       let name = item.name.substring(0,item.name.lastIndexOf("."));
-      let subtitles = sublist.filter(item => {
-          return item.indexOf(name)>-1;
+      let subtitles = [];
+      sublist.forEach(item => {
+        if(item.indexOf(name)>-1){
+          subtitles.push(item.name+"?sign="+item.sign);
+        }
       })
       d.push({
         title: item.name,
@@ -376,7 +377,7 @@ function arrayAdd(list,isdir,alistapi){
         url: $(encodeURI(alistapi.server+path)).lazyRule((api,path,sign,subtitle) => {
           require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
           return alistUrl(api,path,sign,subtitle);
-        }, alistapi.server, path, item.sign, subtitles.length==1?subtitles[0]:""),
+        }, alistapi.server, path, item.sign, subtitles.length>0?subtitles[0]:""),
         col_type: 'avatar',
         extra: {
           id: encodeURI(path),
@@ -386,7 +387,7 @@ function arrayAdd(list,isdir,alistapi){
               js: $.toString((url) => {
                   copy(url);
                   return "hiker://empty";
-              },encodeURI(alistapi.server+'/d'+path+'?sign='+item.sign))
+              },encodeURI(alistapi.server+'/d'+path)+'?sign='+item.sign)
           }]
         }
       })
