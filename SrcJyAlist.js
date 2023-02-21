@@ -87,15 +87,16 @@ function alistHome() {
           d.push({
               title: '音视频过滤',
               url: $('#noLoading#').lazyRule((fileFilter,alistData,alistfile) => {
-                alistData[config] = alistData[config] || {};
+                let config = alistData.config || {};
                 let sm = "";
                 if(fileFilter){
-                  alistData.config['fileFilter'] =0;
+                  config['fileFilter'] =0;
                   sm = "已关闭音视频文件过滤，将显示全部文件";
                 }else{
-                  alistData.config['fileFilter'] =1;
+                  config['fileFilter'] =1;
                   sm = "已开启文件过滤，仅显示音视频文件";
                 }
+                alistData.config = config;
                 writeFile(alistfile, JSON.stringify(alistData));
                 refreshPage(false);
                 return 'toast://'+sm;
