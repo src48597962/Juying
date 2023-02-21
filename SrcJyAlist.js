@@ -87,6 +87,7 @@ function alistHome() {
           d.push({
               title: '音视频过滤',
               url: $('#noLoading#').lazyRule((fileFilter,alistData,alistfile) => {
+                alistData[config] = alistData[config] || {};
                 let sm = "";
                 if(fileFilter){
                   alistData.config['fileFilter'] =0;
