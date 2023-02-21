@@ -4,9 +4,9 @@ try{
   eval("var alistData=" + fetch(alistfile));
   var datalist = alistData.drives;
 }catch(e){
-  var datalist = [];
+  var alistData = {};
 }
-datalist = [
+datalist = alistData.drives || [
   {
     "name": "云哲小站",
     "server": "http://202.81.231.111:50526"
@@ -29,7 +29,32 @@ datalist = [
 ];
 let fileFilter = 0;
 let contain = /\.mp4|\.avi|\.mkv|\.rmvb|\.flv|\.mov|\.ts|\.mp3|\.m4a|\.wma|\.flac/;//设置可显示的文件后缀
-
+function alistSet() {
+  let alistfile = "hiker://files/rules/Src/Juying/Alist.json";
+  try{
+    eval("var alistData=" + fetch(alistfile));
+    var datalist = alistData.drives;
+  }catch(e){
+    var alistData= {};
+  }
+  var d = [];
+  d.push({
+      title: '接口管理',
+      url: `#noLoading#@lazyRule=.js:putMyVar('guanli','jk');refreshPage(false);'toast://已切换到接口管理';`,
+      img: "https://lanmeiguojiang.com/tubiao/movie/98.svg",
+      col_type: "icon_2"
+  });
+  d.push({
+      title: '个性设置',
+      url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
+          require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+          extension();
+      }),
+      img: "https://lanmeiguojiang.com/tubiao/ke/156.png",
+      col_type: "icon_2"
+  });
+  setResult(d);
+}
 function gethtml(api,path,password) {
   try{
     path = path || "";
@@ -73,7 +98,10 @@ function alistHome() {
   });
   d.push({
       title: '⚙设置',
-      url: "",
+      url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
+          require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
+          alistSet();
+      }),
       col_type: 'scroll_button'
   });
   d.push({
@@ -187,7 +215,7 @@ function arrayAdd(list,isdir,alistapi){
       d.push({
         title: item.name,
         img: item.thumb || config.依赖.match(/http(s)?:\/\/.*\//)[0] + "img/文件夹.svg",//#noRecordHistory##noHistory#
-        url: $("hiker://empty##" + encodeURI(alistapi.server + path) + "").rule((alistapi,dirname) => {
+        url: $("hiker://empty##" + encodeURI(alistapi.server + path)).rule((alistapi,dirname) => {
           require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
           alistList(alistapi,dirname);
         },alistapi,item.name),
