@@ -187,7 +187,7 @@ function arrayAdd(list,isdir,alistapi){
       d.push({
         title: item.name,
         img: item.thumb || config.依赖.match(/http(s)?:\/\/.*\//)[0] + "img/文件夹.svg",//#noRecordHistory##noHistory#
-        url: $("hiker://empty##" + encodeURI(alistapi.server + path) + "#noRecordHistory#").rule((alistapi,dirname) => {
+        url: $("hiker://empty##" + encodeURI(alistapi.server + path) + "").rule((alistapi,dirname) => {
           require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
           alistList(alistapi,dirname);
         },alistapi,item.name),
