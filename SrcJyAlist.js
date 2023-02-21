@@ -116,7 +116,7 @@ function alistSet() {
     datalist.forEach(item => {
       d.push({
           title: item.name,
-          url: $(["修改名称","修改链接","删除接口","密码管理"],1).select((item)=>{
+          url: $(["修改名称","修改链接","删除接口","密码管理"],1).select((item,alistfile)=>{
             if(input=="密码管理"){
 
             }else{
@@ -151,7 +151,7 @@ function alistSet() {
                 }, input, alistData, alistfile)
               }
             }
-          }, item),
+          }, item ,alistfile),
           desc: item.server,
           col_type: "text_1"
       });
