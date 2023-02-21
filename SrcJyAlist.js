@@ -79,14 +79,15 @@ function alistHome() {
             eval("var alistData=" + fetch(alistfile));
             let jknum = alistData.drives.length;
           }catch(e){
-            var alistData= {drives:[],config:{}};
+            var alistData= {drives:[]};
           }
+          let config = alistData.config || {};
+          let fileFilter = config['fileFilter'] || 1;
           var d = [];
           d.push({
               title: '音视频过滤',
-              url: $('#noLoading#').lazyRule((alistData, alistfile) => {
+              url: $('#noLoading#').lazyRule((fileFilter,alistData,alistfile) => {
                 let sm = "";
-                let fileFilter = alistData.config['fileFilter'] || 1;
                 if(fileFilter){
                   alistData.config['fileFilter'] =0;
                   sm = "已关闭音视频文件过滤，将显示全部文件";
@@ -97,8 +98,8 @@ function alistHome() {
                 writeFile(alistfile, JSON.stringify(alistData));
                 refreshPage(false);
                 return 'toast://'+sm;
-              }, alistData, alistfile),
-              img: alistData.config['fileFilter']?"https://lanmeiguojiang.com/tubiao/messy/55.svg":"https://lanmeiguojiang.com/tubiao/messy/56.svg",
+              }, fileFilter, alistData, alistfile),
+              img: fileFilter?"https://lanmeiguojiang.com/tubiao/messy/55.svg":"https://lanmeiguojiang.com/tubiao/messy/56.svg",
               col_type: "icon_2"
           });
           
