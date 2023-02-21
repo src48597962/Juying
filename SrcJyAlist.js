@@ -54,7 +54,7 @@ function alistSet() {
   if(getMyVar('alistguanli','jk')=="jk"){
     d.push({
         title: '增加',
-        url: $("","alist链接\n如：https://alist.abc.com").input((alistData, alistfile) => {
+        url: $("","alist链接地址\n如：https://alist.abc.com").input((alistData, alistfile) => {
             if(!input.startsWith('http') || input.endsWith('/')){
                 return 'toast://链接有误';
             }
@@ -66,7 +66,7 @@ function alistSet() {
             try{
               let getapi = JSON.parse(fetch(apiurl,{timeout:10000}));
               hideLoading();
-              if(getapi.code==200 && /^v3/.test(getapi.version)){
+              if(getapi.code==200 && /^v3/.test(getapi.data.version)){
                 return $("","当前链接有效，起个名保存吧").input((alistData,alistfile,api) => {
                     if(input!=""){
                       alistData.drives.push({
