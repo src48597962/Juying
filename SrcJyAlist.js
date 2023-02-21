@@ -79,14 +79,27 @@ function alistHome() {
             eval("var alistData=" + fetch(alistfile));
             let jknum = alistData.drives.length;
           }catch(e){
-            var alistData= {drives:[]};
+            var alistData= {drives:[],config:{}};
           }
           var d = [];
           d.push({
               title: '音视频过滤',
-              url: `#noLoading#@lazyRule=.js:putMyVar('alistguanli','jk');refreshPage(false);'toast://已切换到接口管理';`,
-              img: "https://lanmeiguojiang.com/tubiao/movie/98.svg",
-              col_type: "scroll_button"
+              url: $('#noLoading#').lazyRule((alistData, alistfile) => {
+                let sm = "";
+                let fileFilter = alistData.config['fileFilter'] || 1;
+                if(fileFilter){
+                  alistData.config['fileFilter'] =0;
+                  sm = "已关闭音视频文件过滤，将显示全部文件";
+                }else{
+                  alistData.config['fileFilter'] =1;
+                  sm = "已开启文件过滤，仅显示音视频文件";
+                }
+                writeFile(alistfile, JSON.stringify(alistData));
+                refreshPage(false);
+                return 'toast://'+sm;
+              }, alistData, alistfile),
+              img: alistData.config['fileFilter']?"https://lanmeiguojiang.com/tubiao/messy/55.svg":"https://lanmeiguojiang.com/tubiao/messy/56.svg",
+              col_type: "icon_2"
           });
           
           d.push({
@@ -173,12 +186,12 @@ function alistHome() {
                       return 'toast://已删除';
                     } else {
                       return $('hiker://empty#noRecordHistory##noHistory#').rule((item,alistfile) => {
-                        setPageTitle('密码管理 | '+item.name);
+                        setPageTitle(item.name+' | 密码管理');
                         eval("var alistData=" + fetch(alistfile));
                         let datalist = alistData.drives;
                         let d = [];
                         d.push({
-                            title: '🔢添加密码',
+                            title: '🔢 添加密码',
                             url: $("","有密码的路径").input((api,alistData,alistfile) => {
                               return $("","此路径的密码").input((path,api,alistData,alistfile) => {
                                 let datalist = alistData.drives;
