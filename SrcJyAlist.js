@@ -197,7 +197,7 @@ function alistHome() {
           datalist.forEach(item => {
             d.push({
                 title: item.name,
-                url: $(["复制地址","分享接口","删除接口","密码管理","向上进位","向下落位"],2).select((item,alistfile)=>{
+                url: $(["复制地址","分享接口","删除接口","密码管理","向上进位","向下落位","列表置顶","列表置底"],2).select((item,alistfile)=>{
                   if(input=="复制地址"){
                     copy(item.name+item.server);
                     return "hiker://empty";
@@ -230,34 +230,29 @@ function alistHome() {
                       writeFile(alistfile, JSON.stringify(alistData));
                       refreshPage(false);
                       return 'toast://已删除';
-                    } else if (input == "向上进位"){
+                    } else if (input=="向上进位" || input=="向下落位" || input=="列表置顶" || input=="列表置底"){
                       let datalist = alistData.drives;
                       let index = datalist.indexOf(datalist.filter(d=>d.server == item.server)[0]);
-                      if(index==0){
-                        return 'toast://已经在顶端了';
+                      if(index==0 || index==datalist.length-1){
+                        return 'toast://位置无法移动';
                       }else{
-                        /*
-                        let data = datalist[index];
-                        datalist.splice(index, 1);
-                        datalist[index-1] = data;*/
-                        datalist = Move(datalist,index,index-1);
+                        if (input=="向上进位" || input=="向下落位"){
+                          let newindex = input=="向上进位"?index-1:index+1;
+                          datalist.splice(newindex, 0, datalist.splice(index, 1)[0]);
+                        }else{
+                          let data = datalist[index];
+                          datalist.splice(index, 1);
+                          if(input=="列表置顶"){
+                            datalist.unshift(data);
+                          }else{
+                            datalist.push(data);
+                          }
+                        }
                       }
                       alistData.drives = datalist;
                       writeFile(alistfile, JSON.stringify(alistData));
                       refreshPage(false);
-                      return 'toast://已进位';
-                    } else if (input == "向下落位"){
-                      let datalist = alistData.drives;
-                      let index = datalist.indexOf(datalist.filter(d=>d.server == item.server)[0]);
-                      if(index==datalist.length-1){
-                        return 'toast://已经在地板了';
-                      }else{
-                        datalist = Move(datalist,index,index+1);
-                      }
-                      alistData.drives = datalist;
-                      writeFile(alistfile, JSON.stringify(alistData));
-                      refreshPage(false);
-                      return 'toast://已落位';
+                      return 'toast://已移动';
                     } else if (input == "密码管理") {
                       return $('hiker://empty#noRecordHistory##noHistory#').rule((item,alistfile) => {
                         setPageTitle(item.name+' | 密码管理');
