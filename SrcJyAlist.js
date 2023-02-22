@@ -37,9 +37,10 @@ function getlist(data,isdir) {
 }
 
 function alistHome() {
-  let alistapi = datalist.filter(item => {
+  let getapi = datalist.filter(item => {
       return item.server == getItem('Alistapi',datalist.length>0?datalist[0].server:"");
-  })
+  });
+  let alistapi = getapi.length>0?getapi[0]:{};
   let d = [];
   datalist.forEach(item => {
     d.push({
