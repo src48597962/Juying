@@ -65,6 +65,7 @@ function alistHome() {
           }
           let alistconfig = alistData.config || {};
           let fileFilter = alistconfig['fileFilter']==0?0:1;
+          let datalist = alistData.drives;
           var d = [];
           d.push({
               title: '音视频过滤',
@@ -189,7 +190,7 @@ function alistHome() {
           d.push({
               col_type: "line"
           });
-          let datalist = alistData.drives;
+          
           datalist.forEach(item => {
             d.push({
                 title: item.name,
