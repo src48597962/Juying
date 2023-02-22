@@ -410,7 +410,9 @@ function alistList(alistapi,dirname){
   setResult(d);
   try{
     let pwd = alistapi.password?alistapi.password[MY_PARAMS.path]||"":"";
+    log(gethtml(alistapi.server + "/api/fs/list", MY_PARAMS.path, pwd))
     let json = JSON.parse(gethtml(alistapi.server + "/api/fs/list", MY_PARAMS.path, pwd));
+    log('json')
     if(json.code==200){
       let dirlist = getlist(json.data.content,1);
       log('dir')
