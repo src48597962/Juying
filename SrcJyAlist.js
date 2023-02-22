@@ -141,6 +141,7 @@ function alistHome() {
                 try{
                     let inputname = input.split('￥')[0];
                     if(inputname=="聚影Alist"){
+                      showLoading("正在导入，请稍后...");
                       let parseurl = aesDecode('Juying', input.split('￥')[1]);
                       let content = parsePaste(parseurl);
                       let datalist = JSON.parse(aesDecode('Juying', content));
@@ -148,6 +149,7 @@ function alistHome() {
                         eval("var alistData=" + fetch(alistfile));
                         let jknum = alistData.drives.length;
                       }catch(e){
+                        hideLoading();
                         var alistData= {drives:[]};
                       }
                       let newdatalist = alistData.drives;
@@ -160,6 +162,7 @@ function alistHome() {
                       }
                       alistData.drives = newdatalist;
                       writeFile(alistfile, JSON.stringify(alistData));
+                      hideLoading();
                       refreshPage(false);
                       return "toast://合计"+datalist.length+"个，导入"+num+"个";
                     }else{
@@ -199,9 +202,11 @@ function alistHome() {
                     copy(item.name+item.server);
                     return "hiker://empty";
                   }else if(input=="分享"){
+                    showLoading('分享上传中，请稍后...');
                     let oneshare = []
                     oneshare.push(item);
                     let pasteurl = sharePaste(aesEncode('Juying', JSON.stringify(oneshare)));
+                    hideLoading();
                     if(pasteurl){
                       let code = '聚影Alist￥'+aesEncode('Juying', pasteurl)+'￥共1条';
                       copy(code);
