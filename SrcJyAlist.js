@@ -412,9 +412,9 @@ function alistList(alistapi,dirname){
     let pwd = alistapi.password?alistapi.password[MY_PARAMS.path]||"":"";
     let json = JSON.parse(gethtml(alistapi.server + "/api/fs/list", MY_PARAMS.path, pwd));
     if(json.code==200){
-      let dirlist = getlist(json.data.content,1);
+      let dirlist = getlist(json.data.content||[],1);
       addItemBefore(listid, arrayAdd(dirlist,1,alistapi));
-      let filelist = getlist(json.data.content,0);
+      let filelist = getlist(json.data.content||[],0);
       addItemBefore(listid, arrayAdd(filelist,0,alistapi));
       if(dirlist.length==0&&filelist.length==0){
         addItemBefore('listid', {
