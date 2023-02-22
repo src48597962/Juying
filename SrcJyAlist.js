@@ -9,7 +9,7 @@ try{
 let datalist = alistData.drives || [];
 let alistconfig = alistData.config || {};
 let fileFilter = alistconfig['fileFilter']==0?0:1;
-let contain = /\.mp4|\.avi|\.mkv|\.rmvb|\.flv|\.mov|\.ts|\.mp3|\.m4a|\.wma|\.flac/;//设置可显示的文件后缀
+let contain = new RegExp(alistconfig.contain||'.mp4|.avi|.mkv|.rmvb|.flv|.mov|.ts|.mp3|.m4a|.wma|.flac');//设置可显示的文件后缀
 
 function gethtml(api,path,password) {
   try{
@@ -67,11 +67,12 @@ function alistHome() {
             var alistData= {drives:[]};
           }
           let alistconfig = alistData.config || {};
+          let contain = alistconfig.contain || '.mp4|.avi|.mkv|.rmvb|.flv|.mov|.ts|.mp3|.m4a|.wma|.flac';
           let fileFilter = alistconfig['fileFilter']==0?0:1;
           let datalist = alistData.drives;
           var d = [];
           d.push({
-              title: '音视频过滤',
+              title: fileFilter?'音视频过滤开':'音视频过滤关',
               url: $('#noLoading#').lazyRule((fileFilter,alistData,alistfile) => {
                 let alistconfig = alistData.config || {};
                 let sm = "";
@@ -87,6 +88,19 @@ function alistHome() {
                 refreshPage(false);
                 return 'toast://'+sm;
               }, fileFilter, alistData, alistfile),
+              img: fileFilter?"https://lanmeiguojiang.com/tubiao/messy/55.svg":"https://lanmeiguojiang.com/tubiao/messy/56.svg",
+              col_type: "icon_2"
+          });
+          d.push({
+              title: '音视频后缀名',
+              url: $(contain,"开启过滤后，仅允许显示的音频或视频文件格式，用|隔开").input((alistData,alistfile) => {
+                let alistconfig = alistData.config || {};
+                alistconfig['contain'] =input;
+                alistData.config = alistconfig;
+                writeFile(alistfile, JSON.stringify(alistData));
+                refreshPage(false);
+                return 'toast://已设置音视频文件格式后缀';
+              }, alistData, alistfile),
               img: fileFilter?"https://lanmeiguojiang.com/tubiao/messy/55.svg":"https://lanmeiguojiang.com/tubiao/messy/56.svg",
               col_type: "icon_2"
           });
