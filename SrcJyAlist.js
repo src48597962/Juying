@@ -37,13 +37,15 @@ function getlist(data,isdir) {
 }
 
 function alistHome() {
-  let alistapi = storage0.getItem('Alistapi',datalist.length>0?datalist[0]:{});
+  let alistapi = datalist.filter(item => {
+      return item.server == getItem('Alistapi',datalist.length>0?datalist[0].server:"");
+  })
   let d = [];
   datalist.forEach(item => {
     d.push({
       title: alistapi.server==item.server?`““””<b><span style="color: #3399cc">`+item.name+`</span></b>`:item.name,
       url: $(item.server+'#noLoading#').lazyRule((item) => {
-        storage0.setItem('Alistapi', item);
+        setItem('Alistapi', item.server);
         refreshPage(false);
         return "hiker://empty";
       }, item),
@@ -234,7 +236,7 @@ function alistHome() {
                       let datalist = alistData.drives;
                       let index = datalist.indexOf(datalist.filter(d=>d.server == item.server)[0]);
                       if((index==0&&(input=="向上进位"||input=="列表置顶")) || (index==datalist.length-1&&(input=="向下落位"||input=="列表置底"))){
-                        return 'toast://位置无法移动';
+                        return 'toast://位置移动无效';
                       }else{
                         if (input=="向上进位" || input=="向下落位"){
                           let newindex = input=="向上进位"?index-1:index+1;
