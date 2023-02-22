@@ -145,7 +145,7 @@ function alistHome() {
                           }
                       }, alistfile, input);
                     }else{
-                      return 'toast://不支持版本'+getapi.data.version+'，仅支持v3以上版本';
+                      return 'toast://不支持v2版本，仅支持v3以上版本';
                     }
                   }catch(e){
                     hideLoading();
