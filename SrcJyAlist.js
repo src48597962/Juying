@@ -110,8 +110,11 @@ function alistHome() {
           d.push({
               title: '增加',
               url: $("","alist链接地址\n如：https://alist.abc.com").input((alistfile) => {
-                  if(!input.startsWith('http') || input.endsWith('/')){
+                  if(!input.startsWith('http')){
                       return 'toast://链接有误';
+                  }
+                  if(input.endsWith('/')){
+                    input = input.slice(0,input.length-1);
                   }
                   showLoading('正在较验有效性');
                   let apiurl = input + "/api/public/settings";
@@ -142,7 +145,7 @@ function alistHome() {
                           }
                       }, alistfile, input);
                     }else{
-                      return 'toast://仅支持alist v3版本';
+                      return 'toast://不支持版本'+getapi.data.version+'，仅支持v3以上版本';
                     }
                   }catch(e){
                     hideLoading();
@@ -417,7 +420,7 @@ function alistList(alistapi,dirname){
       let filelist = getlist(json.data.content||[],0);
       addItemBefore(listid, arrayAdd(filelist,0,alistapi));
       if(dirlist.length==0&&filelist.length==0){
-        addItemBefore('listid', {
+        addItemBefore(listid, {
           title: "列表为空",
           url: "hiker://empty",
           col_type: "text_center_1"
