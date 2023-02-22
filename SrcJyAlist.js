@@ -215,6 +215,12 @@ function alistHome() {
                       return "toast://分享失败，剪粘板或网络异常";
                     }
                   }else{
+                    function Move(arr, a, b) {
+                        let arr_temp = [].concat(arr);
+                        arr_temp.splice(b, 0, arr_temp.splice(a, 1)[0]);
+                        return arr_temp;
+                    }
+
                     eval("var alistData=" + fetch(alistfile));
                     if (input == "删除接口") {
                       let datalist = alistData.drives;
@@ -230,9 +236,11 @@ function alistHome() {
                       if(index==0){
                         return 'toast://已经在顶端了';
                       }else{
+                        /*
                         let data = datalist[index];
                         datalist.splice(index, 1);
-                        datalist[index-1] = data;
+                        datalist[index-1] = data;*/
+                        datalist = Move(datalist,index,index-1);
                       }
                       alistData.drives = datalist;
                       writeFile(alistfile, JSON.stringify(alistData));
@@ -244,9 +252,7 @@ function alistHome() {
                       if(index==datalist.length-1){
                         return 'toast://已经在地板了';
                       }else{
-                        let data = datalist[index];
-                        datalist.splice(index, 1);
-                        datalist[index+1] = data;
+                        datalist = Move(datalist,index,index+1);
                       }
                       alistData.drives = datalist;
                       writeFile(alistfile, JSON.stringify(alistData));
