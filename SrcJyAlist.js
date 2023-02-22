@@ -233,7 +233,7 @@ function alistHome() {
                     } else if (input=="向上进位" || input=="向下落位" || input=="列表置顶" || input=="列表置底"){
                       let datalist = alistData.drives;
                       let index = datalist.indexOf(datalist.filter(d=>d.server == item.server)[0]);
-                      if((index==0&&datalist[index].server==item.server) || (index==datalist.length-1&&datalist[index].server==item.server)){
+                      if((index==0&&(input=="向上进位"||input=="列表置顶")) || (index==datalist.length-1&&(input=="向下落位"||input=="列表置底"))){
                         return 'toast://位置无法移动';
                       }else{
                         if (input=="向上进位" || input=="向下落位"){
