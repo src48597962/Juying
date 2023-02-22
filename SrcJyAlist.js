@@ -411,12 +411,14 @@ function alistList(alistapi,dirname){
   try{
     let pwd = alistapi.password?alistapi.password[MY_PARAMS.path]||"":"";
     let json = JSON.parse(gethtml(alistapi.server + "/api/fs/list", MY_PARAMS.path, pwd));
+    log(json)
     if(json.code==200){
       let dirlist = getlist(json.data.content,1);
       addItemBefore(listid, arrayAdd(dirlist,1,alistapi));
+      log('dir'+dirlist.length)
       let filelist = getlist(json.data.content,0);
       addItemBefore(listid, arrayAdd(filelist,0,alistapi));
-      log(dirlist.length+'AAAA'+filelist.length)
+      log('file'+filelist.length)
       if(dirlist.length==0&&filelist.length==0){
         addItemBefore('listid', {
           title: "列表为空",
