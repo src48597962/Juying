@@ -368,10 +368,10 @@ function alistHome() {
       let pwd = alistapi.password?alistapi.password['/']||"":"";
       let json = JSON.parse(gethtml(alistapi.server + "/api/fs/list", "", pwd));
       if(json.code==200){
-        let dirlist = getlist(json.data.content,1);
+        let dirlist = getlist(json.data.content||[],1);
         addItemBefore('homeloading', arrayAdd(dirlist,1,alistapi));
         
-        let filelist = getlist(json.data.content,0);
+        let filelist = getlist(json.data.content||[],0);
         addItemBefore('homeloading', arrayAdd(filelist,0,alistapi));
       }
       updateItem('homeloading', {
@@ -437,7 +437,6 @@ function alistList(alistapi,dirname){
 
 function arrayAdd(list,isdir,alistapi){
   let d = [];
-
   if(isdir==0){
     var sublist = list.filter(item => {
         return /\.srt|\.vtt|\.ass/.test(item.name);
