@@ -428,6 +428,7 @@ function alistList(alistapi,dirname){
       title: fileFilter?"““””<small><font color=#f20c00>已开启文件过滤，仅显示音视频文件</font></small>":""
     });
   }catch(e){
+    log(e.message);
     updateItem(listid, {
       title: "超时或出错了,下拉刷新重试."
     });
