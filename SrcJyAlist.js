@@ -101,7 +101,7 @@ function alistHome() {
                 refreshPage(false);
                 return 'toast://已设置音视频文件格式后缀';
               }, alistData, alistfile),
-              img: fileFilter?"https://lanmeiguojiang.com/tubiao/messy/55.svg":"https://lanmeiguojiang.com/tubiao/messy/56.svg",
+              img: "https://lanmeiguojiang.com/tubiao/messy/145.svg",
               col_type: "icon_2"
           });
           d.push({
