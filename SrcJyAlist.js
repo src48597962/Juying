@@ -24,7 +24,7 @@ function gethtml(api,path,password) {
 }
 function getlist(data,isdir) {
     let list = data.filter(item => {
-        return isdir ? item.is_dir : fileFilter? (contain.test(item.name) || /\.srt|\.vtt|\.ass/.test(item.name)) : item.is_dir==0;
+        return isdir ? item.is_dir : fileFilter? (contain.test(item.name) || /\.srt|\.vtt|\.ass/.test(item.name)) : !item.is_dir;
     })
     try{    
         //if(!isdir){
@@ -411,14 +411,11 @@ function alistList(alistapi,dirname){
   try{
     let pwd = alistapi.password?alistapi.password[MY_PARAMS.path]||"":"";
     let json = JSON.parse(gethtml(alistapi.server + "/api/fs/list", MY_PARAMS.path, pwd));
-    log(json)
     if(json.code==200){
       let dirlist = getlist(json.data.content,1);
       addItemBefore(listid, arrayAdd(dirlist,1,alistapi));
-      log('dir'+dirlist.length)
       let filelist = getlist(json.data.content,0);
       addItemBefore(listid, arrayAdd(filelist,0,alistapi));
-      log('file'+filelist.length)
       if(dirlist.length==0&&filelist.length==0){
         addItemBefore('listid', {
           title: "列表为空",
@@ -472,7 +469,7 @@ function arrayAdd(list,isdir,alistapi){
       let name = item.name.substring(0,item.name.lastIndexOf("."));
       let subtitles = [];
       sublist.forEach(item => {
-        if(item.indexOf(name)>-1){
+        if(item.name.indexOf(name)>-1){
           subtitles.push(item.name+"?sign="+item.sign);
         }
       })
