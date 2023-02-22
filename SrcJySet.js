@@ -1055,7 +1055,10 @@ function jiekou(lx,data) {
             let apiua = getMyVar('apiua','MOBILE_UA');
             let isupdate = 0;
             if(getMyVar('addtype', '1')=="1"&&apiname&&apiurl){
-                let urltype = getMyVar('apitype');
+                let urltype = getMyVar('apitype')||getapitype(apiurl);
+                if(!urltype){
+                    return "toast://无法自动识别接口类型，请检查链接";
+                }
                 let apigroup = getMyVar('apigroup');
                 let apidata = getMyVar('apidata');
                 let arr = {"name": apiname.trim(), "url": apiurl.trim(), "ua": apiua, "type": urltype };
