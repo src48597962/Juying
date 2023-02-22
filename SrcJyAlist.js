@@ -136,19 +136,53 @@ function alistHome() {
           });
           d.push({
               title: '导入',
-              url: $("","alist分享口令的云剪贴板").input((item) => {
-                let content = parsePaste(input);
-                let datalist = JSON.parse(aesDecode('Juying', content));
-                
-                refreshPage(false);
-                return "hiker://empty";
-              }, item),
+              url: $("","alist分享口令的云剪贴板").input((alistfile) => {
+                try{
+                    let inputname = input.split('￥')[0];
+                    if(inputname=="聚影Alist"){
+                      let parseurl = aesDecode('Juying', input.split('￥')[1]);
+                      let content = parsePaste(parseurl);
+                      let datalist = JSON.parse(aesDecode('Juying', content));
+                      try{
+                        eval("var alistData=" + fetch(alistfile));
+                        let jknum = alistData.drives.length;
+                      }catch(e){
+                        var alistData= {drives:[]};
+                      }
+                      let newdatalist = alistData.drives;
+                      let num =0;
+                      for (let i = 0; i < datalist.length; i++) {
+                        if(!newdatalist.some(item => item.server==datalist[i].server)){
+                            newdatalist.push(datalist[i]);
+                            num = num+1;
+                        }
+                      }
+                      alistData.drives = newdatalist;
+                      writeFile(alistfile, JSON.stringify(alistData));
+                      refreshPage(false);
+                      return "toast://合计"+datalist.length+"个，导入"+num+"个";
+                    }else{
+                      return "toast://聚影√：非Alist口令";
+                    }
+                }catch(e){
+                    return "toast://聚影√：口令有误";
+                }
+              }, alistfile),
               img: "https://lanmeiguojiang.com/tubiao/more/43.png",
               col_type: "icon_small_3"
           });
           d.push({
               title: '分享',
-              url: "",
+              url: datalist.length==0?"toast://alist接口为0，无法分享":$().lazyRule((datalist)=>{
+                  let pasteurl = sharePaste(aesEncode('Juying', JSON.stringify(datalist)));
+                  if(pasteurl){
+                    let code = '聚影Alist￥'+aesEncode('Juying', pasteurl)+'￥共'+datalist.length+'条';
+                    copy(code);
+                    return "toast://(全部)Alist分享口令已生成";
+                  }else{
+                    return "toast://分享失败，剪粘板或网络异常";
+                  }
+              },datalist),
               img: "https://lanmeiguojiang.com/tubiao/more/3.png",
               col_type: "icon_small_3"
           });
@@ -166,9 +200,14 @@ function alistHome() {
                   }else if(input=="分享"){
                     let oneshare = []
                     oneshare.push(item);
-                    let url = sharePaste(aesEncode('Juying', JSON.stringify(oneshare)));
-                    copy(url);
-                    return "hiker://empty";
+                    let pasteurl = sharePaste(aesEncode('Juying', JSON.stringify(oneshare)));
+                    if(pasteurl){
+                      let code = '聚影Alist￥'+aesEncode('Juying', pasteurl)+'￥共1条';
+                      copy(code);
+                      return "toast://(单个)Alist分享口令已生成";
+                    }else{
+                      return "toast://分享失败，剪粘板或网络异常";
+                    }
                   }else{
                     eval("var alistData=" + fetch(alistfile));
                     if (input == "删除") {
