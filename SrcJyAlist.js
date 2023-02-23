@@ -347,7 +347,10 @@ function alistHome() {
       title: '🔍搜索',
       url: $("","搜索关键字").input((alistapi)=>{
         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
+        showLoading('搜索中，请稍后...');
+        deleteItemByCls('alist');
         alistSearch(alistapi,input);
+        hideLoading();
       },alistapi),
       col_type: 'scroll_button'
   });
@@ -525,18 +528,16 @@ function alistUrl(api,path,sign,subtitle) {
 }
 
 function alistSearch(alistapi,key) {
-  showLoading('搜索中，请稍后...');
   try{
     let json = JSON.parse(fetch(alistapi.server + "/api/fs/search", {headers:{'content-type':'application/json;charset=UTF-8' },body:{"per_page":100,"page":1,"parent":"/","keywords":key},method:'POST',timeout:10000}));
     if(json.code==200){
-      deleteItemByCls('alist');
       let dirlist = getlist(json.data.content,1);
       addItemBefore('homeloading', arrayAdd(dirlist,1,alistapi));
       let filelist = getlist(json.data.content,0);
       addItemBefore('homeloading', arrayAdd(filelist,0,alistapi));
       if(dirlist.length==0&&filelist.length==0){
         addItemBefore('homeloading', {
-          title: "未搜索到“"+key+"”",
+          title: alistapi.name+" 未搜索到 “"+key+"”",
           url: "hiker://empty",
           col_type: "text_center_1",
           extra: {
@@ -545,12 +546,13 @@ function alistSearch(alistapi,key) {
         });
       }
     }else if(json.code==500){
-      toast('搜索出错了，此网盘不支持搜索');
+      toast(alistapi.name+' 搜索出错了，此网盘不支持搜索');
     }
   }catch(e){
-    log('搜索出错了>'+e.message);
+    toast(alistapi.name+' 搜索出错了，详情查看日志');
+    log(alistapi.name+' 搜索出错了>'+e.message);
   }
-  hideLoading();
+  return 1;
 }
 
 function SortList(v1, v2) {
