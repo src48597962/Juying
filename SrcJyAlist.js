@@ -535,7 +535,7 @@ function alistSearch(alistapi,key) {
       addItemBefore('homeloading', arrayAdd(dirlist,1,alistapi));
       let filelist = getlist(json.data.content,0);
       filelist = filelist.filter(f => {
-        return !dirlist.some(d => d.parent+d.name==f.parent);
+        return !dirlist.some(d => d.parent+"/"+d.name==f.parent);
       })
       addItemBefore('homeloading', arrayAdd(filelist,0,alistapi));
       if(dirlist.length==0&&filelist.length==0){
