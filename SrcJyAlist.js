@@ -532,10 +532,11 @@ function alistSearch(alistapi,key) {
     let json = JSON.parse(fetch(alistapi.server + "/api/fs/search", {headers:{'content-type':'application/json;charset=UTF-8' },body:{"per_page":100,"page":1,"parent":"/","keywords":key},method:'POST',timeout:10000}));
     if(json.code==200){
       let dirlist = getlist(json.data.content,1);
-      log(dirlist)
       addItemBefore('homeloading', arrayAdd(dirlist,1,alistapi));
       let filelist = getlist(json.data.content,0);
-      log(filelist)
+      filelist = filelist.filter(f => {
+        return !dirlist.some(d => d.parent+d.name==f.parent);
+      })
       addItemBefore('homeloading', arrayAdd(filelist,0,alistapi));
       if(dirlist.length==0&&filelist.length==0){
         addItemBefore('homeloading', {
