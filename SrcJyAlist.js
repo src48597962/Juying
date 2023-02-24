@@ -432,6 +432,7 @@ function alistList(alistapi,dirname){
         }
       }
     }
+    log('pwd:'+pwd)
     let json = JSON.parse(gethtml(alistapi.server + "/api/fs/list", MY_PARAMS.path, pwd));
     if(json.code==200){
       let dirlist = getlist(json.data.content||[],1);
