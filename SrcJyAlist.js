@@ -422,7 +422,7 @@ function alistList(alistapi,dirname){
       }else{
         let paths = MY_PARAMS.path.split('/');
         let patht = MY_PARAMS.path.split('/');
-        for (let i = 0; i < paths.length-1; i++) {
+        for (let i = 1; i < paths.length-1; i++) {
           patht.length = patht.length-i;
           log(patht.join('/'));
         }
