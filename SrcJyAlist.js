@@ -424,9 +424,7 @@ function alistList(alistapi,dirname){
         let patht = MY_PARAMS.path.split('/');
         for (let i = 0; i < paths.length-1; i++) {
           patht.length = patht.length-1;
-          log(patht);
           let onpath = patht.join('/') || "/";
-          log(onpath);
           if(alistapi.password[onpath]){
             pwd = alistapi.password[onpath];
             break;
@@ -434,7 +432,7 @@ function alistList(alistapi,dirname){
         }
       }
     }
-    //log('pwd:'+pwd);
+
     let json = JSON.parse(gethtml(alistapi.server + "/api/fs/list", MY_PARAMS.path, pwd));
     if(json.code==200){
       let dirlist = getlist(json.data.content||[],1);
