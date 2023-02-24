@@ -475,7 +475,7 @@ function arrayAdd(list,isdir,alistapi){
       let subtitles = [];
       sublist.forEach(item => {
         if(item.name.indexOf(name)>-1){
-          subtitles.push(item.name+"?sign="+item.sign);
+          subtitles.push(item.name+"?sign="+(item.sign||""));
         }
       })
       d.push({
@@ -494,7 +494,7 @@ function arrayAdd(list,isdir,alistapi){
               js: $.toString((url) => {
                   copy(url);
                   return "hiker://empty";
-              },encodeURI(alistapi.server+'/d'+path)+'?sign='+item.sign)
+              },encodeURI(alistapi.server+'/d'+path)+'?sign='+(item.sign||""))
           }]
         }
       })
