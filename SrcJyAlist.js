@@ -425,14 +425,16 @@ function alistList(alistapi,dirname){
         for (let i = 1; i < paths.length-1; i++) {
           patht.length = patht.length-1;
           let onpath = patht.join('/');
+          log(onpath);
           if(alistapi.password[onpath]){
+            log('找到');
             pwd = alistapi.password[onpath];
             break;
           }
         }
       }
     }
-    log('pwd:'+pwd)
+    log('pwd:'+pwd);
     let json = JSON.parse(gethtml(alistapi.server + "/api/fs/list", MY_PARAMS.path, pwd));
     if(json.code==200){
       let dirlist = getlist(json.data.content||[],1);
