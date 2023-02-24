@@ -417,10 +417,13 @@ function alistList(alistapi,dirname){
   try{
     let pwd = "";
     if(alistapi.password){
+      log('1');
       if(alistapi.password[MY_PARAMS.path]){
+        log('0');
         pwd = alistapi.password[MY_PARAMS.path]
       }else{
         let paths = MY_PARAMS.path.split('/');
+        log(paths);
         let patht = MY_PARAMS.path.split('/');
         for (let i = 1; i < paths.length-1; i++) {
           patht.length = patht.length-1;
