@@ -425,7 +425,7 @@ function alistList(alistapi,dirname){
         for (let i = 0; i < paths.length-1; i++) {
           patht.length = patht.length-1;
           log(patht);
-          let onpath = patht.join('/');
+          let onpath = patht.join('/') || "/";
           log(onpath);
           if(alistapi.password[onpath]){
             pwd = alistapi.password[onpath];
