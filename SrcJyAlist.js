@@ -525,7 +525,6 @@ function alistUrl(alistapi,path,sign,subtitle) {
   if(contain.test(path)){
     try{
         try{
-          log(MY_PARAMS.path);
           let pwd = "";
           if(alistapi.password){
             if(alistapi.password[path]){
