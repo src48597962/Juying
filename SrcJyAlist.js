@@ -23,7 +23,6 @@ function gethtml(api,path,password) {
   }
 }
 function getlist(data,isdir,filter) {
-  log(isdir+' '+filter)
     let list = data.filter(item => {
         return isdir ? item.is_dir : filter? (contain.test(item.name) || /\.srt|\.vtt|\.ass/.test(item.name)) : !item.is_dir;
     })
@@ -505,7 +504,7 @@ function arrayAdd(list,isdir,alistapi,provider){
     var sublist = list.filter(item => {
         return /\.srt|\.vtt|\.ass/.test(item.name);
     })
-    if(fileFilter){
+    if(!alistapi.nofilter&&fileFilter){
       list = list.filter(item => {
           return contain.test(item.name);
       })
