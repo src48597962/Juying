@@ -11,17 +11,6 @@ let alistconfig = alistData.config || {};
 let fileFilter = alistconfig['fileFilter']==0?0:1;
 let contain = new RegExp(alistconfig.contain||'.mp4|.avi|.mkv|.rmvb|.flv|.mov|.ts|.mp3|.m4a|.wma|.flac',"i");//设置可显示的文件后缀
 
-function gethtml(api,path,password) {
-  try{
-    path = path || "";
-    password = password || "";
-    let html = fetch(api, {headers:{'content-type':'application/json;charset=UTF-8' },body: {"path":path,"password":password},method:'POST',timeout:10000});
-    return html;
-  }catch(e){
-    log(e.message);
-    return "";
-  }
-}
 function getlist(data,isdir,filter) {
     let list = data.filter(item => {
         return isdir ? item.is_dir : filter? (contain.test(item.name) || /\.srt|\.vtt|\.ass/.test(item.name)) : !item.is_dir;
@@ -412,7 +401,11 @@ function alistHome() {
     setPageTitle(alistapi.name+' | Alist网盘');
     try{
       let pwd = alistapi.password?alistapi.password['/']||"":"";
-      let json = JSON.parse(gethtml(alistapi.server + "/api/fs/list", "", pwd));
+      let headers = {'content-type':'application/json;charset=UTF-8'};
+      if(alistapi.token){
+        headers.Authorization = alistapi.token;
+      }
+      let json = JSON.parse(fetch(alistapi.server + "/api/fs/list", {headers:headers,body: {"path":"/","password":pwd},method:'POST',timeout:10000}));
       if(json.code==200){
         let dirlist = getlist(json.data.content||[],1);
         addItemBefore('homeloading', arrayAdd(dirlist,1,alistapi));
@@ -472,8 +465,11 @@ function alistList(alistapi,dirname){
         }
       }
     }
-
-    let json = JSON.parse(gethtml(alistapi.server + "/api/fs/list", MY_PARAMS.path, pwd));
+    let headers = {'content-type':'application/json;charset=UTF-8'};
+    if(alistapi.token){
+      headers.Authorization = alistapi.token;
+    }
+    let json = JSON.parse(fetch(alistapi.server + "/api/fs/list", {headers:headers,body: {"path":MY_PARAMS.path,"password":pwd},method:'POST',timeout:10000}));
     if(json.code==200){
       let dirlist = getlist(json.data.content||[],1);
       addItemBefore(listid, arrayAdd(dirlist,1,alistapi));
@@ -583,7 +579,11 @@ function alistUrl(alistapi,path,sign,subtitle,provider) {
               }
             }
           }
-          let json = JSON.parse(fetch(alistapi.server+'/api/fs/other', {headers:{'content-type':'application/json;charset=UTF-8' },body: {"path":path,"password":pwd,"method":"video_preview"},method:'POST',timeout:10000}));
+          let headers = {'content-type':'application/json;charset=UTF-8'};
+          if(alistapi.token){
+            headers.Authorization = alistapi.token;
+          }
+          let json = JSON.parse(fetch(alistapi.server+'/api/fs/other', {headers:headers,body: {"path":path,"password":pwd,"method":"video_preview"},method:'POST',timeout:10000}));
           if(json.code==200){
             let playurl = json.data.video_preview_play_info.live_transcoding_task_list;
             playurl.reverse();
@@ -625,7 +625,11 @@ function alistUrl(alistapi,path,sign,subtitle,provider) {
 
 function alistSearch(alistapi,key) {
   try{
-    let json = JSON.parse(fetch(alistapi.server + "/api/fs/search", {headers:{'content-type':'application/json;charset=UTF-8' },body:{"per_page":100,"page":1,"parent":"/","keywords":key},method:'POST',timeout:10000}));
+    let headers = {'content-type':'application/json;charset=UTF-8'};
+    if(alistapi.token){
+      headers.Authorization = alistapi.token;
+    }
+    let json = JSON.parse(fetch(alistapi.server + "/api/fs/search", {headers:headers,body:{"per_page":100,"page":1,"parent":"/","keywords":key},method:'POST',timeout:10000}));
     if(json.code==200){
       let dirlist = getlist(json.data.content,1);
       addItemBefore('homeloading', arrayAdd(dirlist,1,alistapi));
