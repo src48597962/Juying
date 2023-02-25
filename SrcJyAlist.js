@@ -234,6 +234,30 @@ function alistHome() {
                     }else{
                       return "toast://分享失败，剪粘板或网络异常";
                     }
+                  }else if(input=="获取令牌"){
+                    return $("","此接口的登录用户名").input((api,alistData,alistfile) => {
+                      if(input==""){
+                        return "hiker://empty";
+                      }
+                      return $("","此接口的登录密码").input((user,api,alistData,alistfile) => {
+                        try{
+                          let html = fetch(api+"/api/auth/login", {headers:{'content-type':'application/json;charset=UTF-8' },body: {"Username":user,"Password":input},method:'POST',timeout:10000});
+                          let json = JSON.parse(html);
+                          if(json.code==200){
+                            let datalist = alistData.drives;
+                            let index = datalist.indexOf(datalist.filter(d=>d.server == api)[0]);
+                            datalist[index].token = json.data.token;
+                            alistData.drives = datalist;
+                            writeFile(alistfile, JSON.stringify(alistData));
+                            return "toast://登录用户令牌已获取成功";
+                          }else{
+                            return "toast://" + json.message;
+                          }
+                        }catch(e){
+                          return "toast://" + e.message;
+                        }
+                      },input,api,alistData,alistfile)
+                    },api,alistData,alistfile)
                   }else{
                     function Move(arr, a, b) {
                         let arr_temp = [].concat(arr);
@@ -253,15 +277,18 @@ function alistHome() {
                     } else if (input == "全局过滤" || input == "禁止过滤") {
                       let datalist = alistData.drives;
                       let index = datalist.indexOf(datalist.filter(d=>d.server == item.server)[0]);
+                      let sm = "";
                       if(input == "禁止过滤"){
                         datalist[index].nofilter = true;
+                        sm = "已设置此接口不过滤文件";
                       }else{
                         delete datalist[index].nofilter;
+                        sm = "此接口是否过滤文件交由全局设置";
                       }
                       alistData.drives = datalist;
                       writeFile(alistfile, JSON.stringify(alistData));
                       refreshPage(false);
-                      return 'toast://已删除';
+                      return 'toast://'+sm;
                     } else if (input=="向上进位" || input=="向下落位" || input=="列表置顶" || input=="列表置底"){
                       let datalist = alistData.drives;
                       let index = datalist.indexOf(datalist.filter(d=>d.server == item.server)[0]);
