@@ -15,7 +15,7 @@ function gethtml(api,path,password) {
   try{
     path = path || "";
     password = password || "";
-    let html = fetch(api, {body: {"path":path,"password":password},method:'POST',timeout:10000});
+    let html = fetch(api, {headers:{'content-type':'application/json;charset=UTF-8' },body: {"path":path,"password":password},method:'POST',timeout:10000});
     return html;
   }catch(e){
     log(e.message);
@@ -378,7 +378,7 @@ function alistHome() {
         addItemBefore('homeloading', arrayAdd(dirlist,1,alistapi));
         
         let filelist = getlist(json.data.content||[],0);
-        addItemBefore('homeloading', arrayAdd(filelist,0,alistapi));
+        addItemBefore('homeloading', arrayAdd(filelist,0,alistapi,json.data.provider));
       }
       updateItem('homeloading', {
         title: "““””<small><font color=#f20c00>此规则仅限学习交流使用，请于导入后24小时内删除，任何团体或个人不得以任何方式方法传播此规则的整体或部分！</font></small>"
@@ -438,7 +438,7 @@ function alistList(alistapi,dirname){
       let dirlist = getlist(json.data.content||[],1);
       addItemBefore(listid, arrayAdd(dirlist,1,alistapi));
       let filelist = getlist(json.data.content||[],0);
-      addItemBefore(listid, arrayAdd(filelist,0,alistapi));
+      addItemBefore(listid, arrayAdd(filelist,0,alistapi,json.data.provider));
       if(dirlist.length==0&&filelist.length==0){
         addItemBefore(listid, {
           title: "列表为空",
@@ -458,7 +458,7 @@ function alistList(alistapi,dirname){
   }
 }
 
-function arrayAdd(list,isdir,alistapi){
+function arrayAdd(list,isdir,alistapi,provider){
   let d = [];
   if(isdir==0){
     var sublist = list.filter(item => {
@@ -498,10 +498,10 @@ function arrayAdd(list,isdir,alistapi){
       d.push({
         title: item.name,
         img: item.thumb || "https://cdn.jsdelivr.net/gh/alist-org/logo@main/logo.svg@Referer=",
-        url: $(encodeURI(alistapi.server+path)).lazyRule((alistapi,path,sign,subtitle) => {
+        url: $(encodeURI(alistapi.server+path)).lazyRule((alistapi,path,sign,subtitle,provider) => {
           require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
-          return alistUrl(alistapi,path,sign,subtitle);
-        }, alistapi, path, item.sign||"", subtitles.length>0?subtitles[0]:""),
+          return alistUrl(alistapi,path,sign,subtitle,provider);
+        }, alistapi, path, item.sign||"", subtitles.length>0?subtitles[0]:"", provider),
         col_type: 'avatar',
         extra: {
           id: encodeURI(path),
@@ -520,10 +520,11 @@ function arrayAdd(list,isdir,alistapi){
   return d;
 }
 
-function alistUrl(alistapi,path,sign,subtitle) {
+function alistUrl(alistapi,path,sign,subtitle,provider) {
   let url = encodeURI(alistapi.server + "/d"+ path) + "?sign=" + sign;
   if(contain.test(path)){
     try{
+      if(provider=="AliyundriveOpen"){
         try{
           let pwd = "";
           if(alistapi.password){
@@ -542,7 +543,7 @@ function alistUrl(alistapi,path,sign,subtitle) {
               }
             }
           }
-          let json = JSON.parse(fetch(alistapi.server+'/api/fs/other', {body: {"path":path,"password":pwd,"method":"video_preview"},method:'POST',timeout:10000}));
+          let json = JSON.parse(fetch(alistapi.server+'/api/fs/other', {headers:{'content-type':'application/json;charset=UTF-8' },body: {"path":path,"password":pwd,"method":"video_preview"},method:'POST',timeout:10000}));
           if(json.code==200){
             let playurl = json.data.video_preview_play_info.live_transcoding_task_list;
             playurl.reverse();
@@ -559,8 +560,9 @@ function alistUrl(alistapi,path,sign,subtitle) {
             });
           }
         }catch(e){
-          log('阿里多线程失败>'+e.message);
+          log('阿里开放获取多线程失败>'+e.message);
         }
+      }
         url = url + (/\.mp3|\.m4a|\.wma|\.flac/.test(path)?"#isMusic=true#":"#isVideo=true#");
         if(!subtitle){
           return url;
@@ -591,7 +593,7 @@ function alistSearch(alistapi,key) {
       filelist = filelist.filter(f => {
         return !dirlist.some(d => d.parent+"/"+d.name==f.parent);
       })
-      addItemBefore('homeloading', arrayAdd(filelist,0,alistapi));
+      addItemBefore('homeloading', arrayAdd(filelist,0,alistapi,json.data.provider));
       if(dirlist.length==0&&filelist.length==0){
         addItemBefore('homeloading', {
           title: alistapi.name+" 未搜索到 “"+key+"”",
