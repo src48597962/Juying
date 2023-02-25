@@ -498,10 +498,10 @@ function arrayAdd(list,isdir,alistapi){
       d.push({
         title: item.name,
         img: item.thumb || "https://cdn.jsdelivr.net/gh/alist-org/logo@main/logo.svg@Referer=",
-        url: $(encodeURI(alistapi.server+path)).lazyRule((api,path,sign,subtitle) => {
+        url: $(encodeURI(alistapi.server+path)).lazyRule((alistapi,path,sign,subtitle) => {
           require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
-          return alistUrl(api,path,sign,subtitle);
-        }, alistapi.server, path, item.sign, subtitles.length>0?subtitles[0]:""),
+          return alistUrl(alistapi,path,sign,subtitle);
+        }, alistapi, path, item.sign||"", subtitles.length>0?subtitles[0]:""),
         col_type: 'avatar',
         extra: {
           id: encodeURI(path),
@@ -520,10 +520,45 @@ function arrayAdd(list,isdir,alistapi){
   return d;
 }
 
-function alistUrl(api,path,sign,subtitle) {
-  let url = encodeURI(api + "/d"+ path) + "?sign=" + sign;
+function alistUrl(alistapi,path,sign,subtitle) {
+  let url = encodeURI(alistapi.server + "/d"+ path) + "?sign=" + sign;
   if(contain.test(path)){
     try{
+        try{
+          let pwd = "";
+          if(alistapi.password){
+            if(alistapi.password[path]){
+              pwd = alistapi.password[path]
+            }else{
+              let paths = path.split('/');
+              let patht = path.split('/');
+              for (let i = 0; i < paths.length-1; i++) {
+                patht.length = patht.length-1;
+                let onpath = patht.join('/') || "/";
+                if(alistapi.password[onpath]){
+                  pwd = alistapi.password[onpath];
+                  break;
+                }
+              }
+            }
+          }
+          let json = JSON.parse(fetch(alistapi.server, {body: {"path":path,"password":pwd,"method":"video_preview"},method:'POST',timeout:10000}));
+          if(json.code==200){
+            let playurl = json.data.video_preview_play_info.live_transcoding_task_list;
+            playurl.reverse();
+            let urls = [];
+            let names = [];
+            playurl.forEach(item => {
+              urls.push(item.url+"#isVideo=true##pre#");
+              names.push(item.template_id=="LD"?"流畅":item.template_id=="SD"?"标清":item.template_id=="HD"?"高清":item.template_id=="FHD"?"超清":item.template_height);
+            })
+            return JSON.stringify({
+                urls: urls,
+                names: names,
+                subtitle: url.match(/http(s)?:\/\/.*\//)[0] + subtitle
+            });
+          }
+        }catch(e){}
         url = url + (/\.mp3|\.m4a|\.wma|\.flac/.test(path)?"#isMusic=true#":"#isVideo=true#");
         if(!subtitle){
           return url;
