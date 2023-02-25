@@ -22,9 +22,9 @@ function gethtml(api,path,password) {
     return "";
   }
 }
-function getlist(data,isdir) {
+function getlist(data,isdir,filter) {
     let list = data.filter(item => {
-        return isdir ? item.is_dir : fileFilter? (contain.test(item.name) || /\.srt|\.vtt|\.ass/.test(item.name)) : !item.is_dir;
+        return isdir ? item.is_dir : filter? (contain.test(item.name) || /\.srt|\.vtt|\.ass/.test(item.name)) : !item.is_dir;
     })
     try{    
         //if(!isdir){
@@ -257,7 +257,7 @@ function alistHome() {
                           return "toast://" + e.message;
                         }
                       },input,api,alistData,alistfile)
-                    },api,alistData,alistfile)
+                    },item.server,alistData,alistfile)
                   }else{
                     function Move(arr, a, b) {
                         let arr_temp = [].concat(arr);
@@ -416,7 +416,7 @@ function alistHome() {
         let dirlist = getlist(json.data.content||[],1);
         addItemBefore('homeloading', arrayAdd(dirlist,1,alistapi));
         
-        let filelist = getlist(json.data.content||[],0);
+        let filelist = getlist(json.data.content||[],0,alistapi.nofilter?0:fileFilter);
         addItemBefore('homeloading', arrayAdd(filelist,0,alistapi,json.data.provider));
       }
       updateItem('homeloading', {
@@ -476,7 +476,7 @@ function alistList(alistapi,dirname){
     if(json.code==200){
       let dirlist = getlist(json.data.content||[],1);
       addItemBefore(listid, arrayAdd(dirlist,1,alistapi));
-      let filelist = getlist(json.data.content||[],0);
+      let filelist = getlist(json.data.content||[],0,alistapi.nofilter?0:fileFilter);
       addItemBefore(listid, arrayAdd(filelist,0,alistapi,json.data.provider));
       if(dirlist.length==0&&filelist.length==0){
         addItemBefore(listid, {
@@ -628,7 +628,7 @@ function alistSearch(alistapi,key) {
     if(json.code==200){
       let dirlist = getlist(json.data.content,1);
       addItemBefore('homeloading', arrayAdd(dirlist,1,alistapi));
-      let filelist = getlist(json.data.content,0);
+      let filelist = getlist(json.data.content,0,alistapi.nofilter?0:fileFilter);
       filelist = filelist.filter(f => {
         return !dirlist.some(d => d.parent+"/"+d.name==f.parent);
       })
