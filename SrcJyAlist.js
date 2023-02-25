@@ -542,7 +542,7 @@ function alistUrl(alistapi,path,sign,subtitle) {
               }
             }
           }
-          let json = JSON.parse(fetch(alistapi.server, {body: {"path":path,"password":pwd,"method":"video_preview"},method:'POST',timeout:10000}));
+          let json = JSON.parse(fetch(alistapi.server+'/api/fs/other', {body: {"path":path,"password":pwd,"method":"video_preview"},method:'POST',timeout:10000}));
           if(json.code==200){
             let playurl = json.data.video_preview_play_info.live_transcoding_task_list;
             playurl.reverse();
