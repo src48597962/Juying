@@ -556,7 +556,7 @@ function alistUrl(alistapi,path,sign,subtitle,provider) {
             return JSON.stringify({
                 urls: urls,
                 names: names,
-                subtitle: url.match(/http(s)?:\/\/.*\//)[0] + subtitle
+                subtitle: subtitle?url.match(/http(s)?:\/\/.*\//)[0] + subtitle:""
             });
           }
         }catch(e){
@@ -571,7 +571,7 @@ function alistUrl(alistapi,path,sign,subtitle,provider) {
           urls.push(url);
           return JSON.stringify({
               urls: urls,
-              subtitle: url.match(/http(s)?:\/\/.*\//)[0] + subtitle
+              subtitle: subtitle?url.match(/http(s)?:\/\/.*\//)[0] + subtitle:""
           });
         }
     }catch(e){ }
