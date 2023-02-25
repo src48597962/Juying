@@ -217,7 +217,7 @@ function alistHome() {
           datalist.forEach(item => {
             d.push({
                 title: item.name,
-                url: $(["复制地址","分享接口","删除接口","密码管理","向上进位","向下落位","列表置顶","列表置底"],2).select((item,alistfile)=>{
+                url: $(["复制地址","分享接口","删除接口","密码管理",item.nofilter?"全局过滤":"禁止过滤","获取令牌","向上进位","向下落位","列表置顶","列表置底"],2).select((item,alistfile)=>{
                   if(input=="复制地址"){
                     copy(item.name+item.server);
                     return "hiker://empty";
@@ -246,6 +246,18 @@ function alistHome() {
                       let datalist = alistData.drives;
                       let index = datalist.indexOf(datalist.filter(d=>d.server == item.server)[0]);
                       datalist.splice(index, 1);
+                      alistData.drives = datalist;
+                      writeFile(alistfile, JSON.stringify(alistData));
+                      refreshPage(false);
+                      return 'toast://已删除';
+                    } else if (input == "全局过滤" || input == "禁止过滤") {
+                      let datalist = alistData.drives;
+                      let index = datalist.indexOf(datalist.filter(d=>d.server == item.server)[0]);
+                      if(input == "禁止过滤"){
+                        datalist[index].nofilter = true;
+                      }else{
+                        delete datalist[index].nofilter;
+                      }
                       alistData.drives = datalist;
                       writeFile(alistfile, JSON.stringify(alistData));
                       refreshPage(false);
