@@ -23,6 +23,7 @@ function gethtml(api,path,password) {
   }
 }
 function getlist(data,isdir,filter) {
+  log(isdir+' '+filter)
     let list = data.filter(item => {
         return isdir ? item.is_dir : filter? (contain.test(item.name) || /\.srt|\.vtt|\.ass/.test(item.name)) : !item.is_dir;
     })
@@ -235,15 +236,16 @@ function alistHome() {
                       return "toast://分享失败，剪粘板或网络异常";
                     }
                   }else if(input=="获取令牌"){
-                    return $("","此接口的登录用户名").input((api,alistData,alistfile) => {
+                    return $("","此接口的登录用户名").input((api,alistfile) => {
                       if(input==""){
                         return "hiker://empty";
                       }
-                      return $("","此接口的登录密码").input((user,api,alistData,alistfile) => {
+                      return $("","此接口的登录密码").input((user,api,alistfile) => {
                         try{
                           let html = fetch(api+"/api/auth/login", {headers:{'content-type':'application/json;charset=UTF-8' },body: {"Username":user,"Password":input},method:'POST',timeout:10000});
                           let json = JSON.parse(html);
                           if(json.code==200){
+                            eval("var alistData=" + fetch(alistfile));
                             let datalist = alistData.drives;
                             let index = datalist.indexOf(datalist.filter(d=>d.server == api)[0]);
                             datalist[index].token = json.data.token;
@@ -256,16 +258,16 @@ function alistHome() {
                         }catch(e){
                           return "toast://" + e.message;
                         }
-                      },input,api,alistData,alistfile)
-                    },item.server,alistData,alistfile)
+                      },input,api,alistfile)
+                    },item.server,alistfile)
                   }else{
                     function Move(arr, a, b) {
                         let arr_temp = [].concat(arr);
                         arr_temp.splice(b, 0, arr_temp.splice(a, 1)[0]);
                         return arr_temp;
                     }
-
                     eval("var alistData=" + fetch(alistfile));
+
                     if (input == "删除接口") {
                       let datalist = alistData.drives;
                       let index = datalist.indexOf(datalist.filter(d=>d.server == item.server)[0]);
@@ -487,7 +489,7 @@ function alistList(alistapi,dirname){
       }
     }
     updateItem(listid, {
-      title: fileFilter?"““””<small><font color=#f20c00>已开启文件过滤，仅显示音视频文件</font></small>":""
+      title: !alistapi.nofilter&&fileFilter?"““””<small><font color=#f20c00>已开启文件过滤，仅显示音视频文件</font></small>":""
     });
   }catch(e){
     log(e.message);
