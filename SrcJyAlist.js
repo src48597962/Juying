@@ -9,7 +9,7 @@ try{
 let datalist = alistData.drives || [];
 let alistconfig = alistData.config || {};
 let fileFilter = alistconfig['fileFilter']==0?0:1;
-let contain = new RegExp(alistconfig.contain||'.mp4|.avi|.mkv|.rmvb|.flv|.mov|.ts|.mp3|.m4a|.wma|.flac');//设置可显示的文件后缀
+let contain = new RegExp(alistconfig.contain||'.mp4|.avi|.mkv|.rmvb|.flv|.mov|.ts|.mp3|.m4a|.wma|.flac',"i");//设置可显示的文件后缀
 
 function gethtml(api,path,password) {
   try{
@@ -525,6 +525,7 @@ function alistUrl(alistapi,path,sign,subtitle) {
   if(contain.test(path)){
     try{
         try{
+          log(MY_PARAMS.path);
           let pwd = "";
           if(alistapi.password){
             if(alistapi.password[path]){
@@ -558,7 +559,9 @@ function alistUrl(alistapi,path,sign,subtitle) {
                 subtitle: url.match(/http(s)?:\/\/.*\//)[0] + subtitle
             });
           }
-        }catch(e){}
+        }catch(e){
+          log('阿里多线程失败>'+e.message);
+        }
         url = url + (/\.mp3|\.m4a|\.wma|\.flac/.test(path)?"#isMusic=true#":"#isVideo=true#");
         if(!subtitle){
           return url;
