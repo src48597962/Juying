@@ -667,10 +667,11 @@ function alistSearch(alistapi,key) {
       let list = pdfa(html,'body&&div&&a');
       let dirlist = [];
       list.forEach(item => {
+        let txt = pdfh(item,"a&&href");
         dirlist.push(
           {
-                "parent": pdfh(item,"a&&href"),
-                "name": pdfh(item,"a&&Text"),
+                "parent": txt.substring(0,txt.lastIndexOf("/")),
+                "name": txt.substring(txt.lastIndexOf('/')+1),
                 "is_dir": true,
                 "size": 0,
                 "type": 1
