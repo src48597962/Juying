@@ -10,7 +10,7 @@ let datalist = alistData.drives || [];
 let alistconfig = alistData.config || {};
 let fileFilter = alistconfig['fileFilter']==0?0:1;
 let audiovisual = 'mp4|avi|mkv|rmvb|flv|mov|ts|mp3|m4a|wma|flac';//影音文件
-let contain = new RegExp(alistconfig.contain.replace(/\./g,"")||audiovisual,"i");//设置可显示的文件后缀
+let contain = new RegExp(alistconfig.contain||audiovisual,"i");//设置可显示的文件后缀
 
 function getlist(data,isdir,filter) {
     let list = data.filter(item => {
@@ -85,7 +85,11 @@ function alistHome() {
               title: '音视频后缀名',
               url: $(contain,"开启过滤后，仅允许显示的音频或视频文件格式，用|隔开").input((alistData,alistfile) => {
                 let alistconfig = alistData.config || {};
-                alistconfig['contain'] =input.replace(/\./g,"");
+                if(input){
+                  alistconfig['contain'] =input.replace(/\./g,"");
+                }else{
+                  delete alistconfig['contain'];
+                }
                 alistData.config = alistconfig;
                 writeFile(alistfile, JSON.stringify(alistData));
                 refreshPage(false);
