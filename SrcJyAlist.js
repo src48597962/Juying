@@ -13,6 +13,9 @@ let contain = new RegExp(alistconfig.contain||'.mp4|.avi|.mkv|.rmvb|.flv|.mov|.t
 
 function getlist(data,isdir,filter) {
     let list = data.filter(item => {
+        if(!isdir){
+          log(item.name.substring(item.name.lastIndexOf('.')+1))
+        }
         return isdir ? item.is_dir : filter? (contain.test(item.name) || /\.srt|\.vtt|\.ass/.test(item.name)) : !item.is_dir;
     })
     try{    
