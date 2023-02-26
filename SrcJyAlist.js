@@ -9,14 +9,12 @@ try{
 let datalist = alistData.drives || [];
 let alistconfig = alistData.config || {};
 let fileFilter = alistconfig['fileFilter']==0?0:1;
-let contain = new RegExp(alistconfig.contain||'.mp4|.avi|.mkv|.rmvb|.flv|.mov|.ts|.mp3|.m4a|.wma|.flac',"i");//设置可显示的文件后缀
+let audiovisual = 'mp4|avi|mkv|rmvb|flv|mov|ts|mp3|m4a|wma|flac';//影音文件
+let contain = new RegExp(alistconfig.contain.replace(/\./g,"")||audiovisual,"i");//设置可显示的文件后缀
 
 function getlist(data,isdir,filter) {
     let list = data.filter(item => {
-        if(!isdir){
-          log(item.name.substring(item.name.lastIndexOf('.')+1))
-        }
-        return isdir ? item.is_dir : filter? (contain.test(item.name) || /\.srt|\.vtt|\.ass/.test(item.name)) : !item.is_dir;
+        return isdir ? item.is_dir : filter? (contain.test(item.name.substring(item.name.lastIndexOf('.')+1)) || /srt|vtt|ass/.test(item.name.substring(item.name.lastIndexOf('.')+1))) : !item.is_dir;
     })
     try{    
         //if(!isdir){
@@ -50,7 +48,7 @@ function alistHome() {
   });
   d.push({
       title: '⚙设置',
-      url: $('hiker://empty#noRecordHistory##noHistory#').rule((alistfile) => {
+      url: $('hiker://empty#noRecordHistory##noHistory#').rule((alistfile,audiovisual) => {
           setPageTitle('⚙设置 | Alist网盘');
           try{
             eval("var alistData=" + fetch(alistfile));
@@ -59,7 +57,7 @@ function alistHome() {
             var alistData= {drives:[]};
           }
           let alistconfig = alistData.config || {};
-          let contain = alistconfig.contain || '.mp4|.avi|.mkv|.rmvb|.flv|.mov|.ts|.mp3|.m4a|.wma|.flac';
+          let contain = alistconfig.contain || audiovisual;
           let fileFilter = alistconfig['fileFilter']==0?0:1;
           let datalist = alistData.drives;
           var d = [];
@@ -87,7 +85,7 @@ function alistHome() {
               title: '音视频后缀名',
               url: $(contain,"开启过滤后，仅允许显示的音频或视频文件格式，用|隔开").input((alistData,alistfile) => {
                 let alistconfig = alistData.config || {};
-                alistconfig['contain'] =input;
+                alistconfig['contain'] =input.replace(/\./g,"");
                 alistData.config = alistconfig;
                 writeFile(alistfile, JSON.stringify(alistData));
                 refreshPage(false);
@@ -372,7 +370,7 @@ function alistHome() {
           })
           
           setResult(d);
-      }, alistfile),
+      }, alistfile,audiovisual),
       col_type: 'scroll_button'
   });
   d.push({
@@ -501,11 +499,11 @@ function arrayAdd(list,isdir,alistapi,provider){
   let d = [];
   if(isdir==0){
     var sublist = list.filter(item => {
-        return /\.srt|\.vtt|\.ass/.test(item.name);
+        return /srt|vtt|ass/.test(item.name.substring(item.name.lastIndexOf('.')+1));
     })
-    if(!alistapi.nofilter&&fileFilter){
+    if(!alistapi.nofilter&&fileFilter&&!isdir){
       list = list.filter(item => {
-          return contain.test(item.name);
+          return contain.test(item.name.substring(item.name.lastIndexOf('.')+1));
       })
     }
   }
@@ -527,7 +525,8 @@ function arrayAdd(list,isdir,alistapi,provider){
         }
       })
     }else{
-      let name = item.name.substring(0,item.name.lastIndexOf("."));
+      let name = item.name.substring(0,item.name.lastIndexOf("."));//文件名
+      let suffix=item.name.substring(item.name.lastIndexOf('.')+1);//后缀名
       let subtitles = [];
       sublist.forEach(item => {
         if(item.name.indexOf(name)>-1){
@@ -544,7 +543,7 @@ function arrayAdd(list,isdir,alistapi,provider){
         col_type: 'avatar',
         extra: {
           id: encodeURI(path),
-          cls: typeof(MY_PARAMS)!="undefined"&&contain.test(item.name)?"playlist":typeof(MY_PARAMS)=="undefined"&&contain.test(item.name)?"alist playlist":"alist",
+          cls: typeof(MY_PARAMS)!="undefined"&&contain.test(suffix)?"playlist":typeof(MY_PARAMS)=="undefined"&&contain.test(suffix)?"alist playlist":"alist",
           longClick: [{
               title: "📋复制链接",
               js: $.toString((url) => {
@@ -560,8 +559,11 @@ function arrayAdd(list,isdir,alistapi,provider){
 }
 
 function alistUrl(alistapi,path,sign,subtitle,provider) {
+  let suffix = path.substring(path.lastIndexOf('.')+1);//后缀名
+  let music = new RegExp("mp3|m4a|wma|flac","i");//进入音乐播放器
+  let image = new RegExp("jpg|png|gif|bmp|ico|svg","i");//进入图片查看
   let url = encodeURI(alistapi.server + "/d"+ path) + "?sign=" + sign;
-  if(contain.test(path)){
+  if(contain.test(suffix)){
     try{
       if(provider=="AliyundriveOpen"){
         try{
@@ -606,7 +608,7 @@ function alistUrl(alistapi,path,sign,subtitle,provider) {
           log('阿里开放获取多线程失败>'+e.message);
         }
       }
-        url = url + (/\.mp3|\.m4a|\.wma|\.flac/.test(path)?"#isMusic=true#":"#isVideo=true#");
+        url = url + (music.test(suffix)?"#isMusic=true#":"#isVideo=true#");
         if(!subtitle){
           return url;
         }else{
@@ -619,7 +621,7 @@ function alistUrl(alistapi,path,sign,subtitle,provider) {
         }
     }catch(e){ }
     return url;
-  }else if(/\.jpg|\.png|\.gif|\.JPG|\.PNG|\.bmp|\.ico|\.svg/.test(path)){
+  }else if(image.test(suffix)){
     return url+"@Referer=";
   }else{
     return "download://" + url;
