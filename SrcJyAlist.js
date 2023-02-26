@@ -661,8 +661,26 @@ function alistSearch(alistapi,key) {
       toast(alistapi.name+' 搜索出错了，此网盘不支持搜索');
     }
   }catch(e){
-    toast(alistapi.name+' 搜索出错了，详情查看日志');
-    log(alistapi.name+' 搜索出错了>'+e.message);
+    log(alistapi.name+' 内置搜索出错了>'+e.message);
+    try{
+      let html = fetch(alistapi.server+'/search?box='+key+'&url=&type=video');
+      let list = pdfa(html,'body&&div&&a');
+      let dirlist = [];
+      list.forEach(item => {
+        dirlist.push(
+          {
+                "parent": pdfh(item,"a&&href"),
+                "name": pdfh(item,"a&&Text"),
+                "is_dir": true,
+                "size": 0,
+                "type": 1
+            }
+        )
+      })
+      addItemBefore('homeloading', arrayAdd(dirlist,1,alistapi));
+    }catch(e){
+      log(alistapi.name+' 偿试小雅搜索失败');
+    }
   }
   return 1;
 }
