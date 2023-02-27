@@ -569,29 +569,29 @@ function alistUrl(alistapi,path,sign,subtitle,provider) {
   let url = encodeURI(alistapi.server + "/d"+ path) + "?sign=" + sign;
   if(contain.test(suffix)){
     try{
-      if(provider=="AliyundriveOpen"){
-        try{
-          let pwd = "";
-          if(alistapi.password){
-            if(alistapi.password[path]){
-              pwd = alistapi.password[path]
-            }else{
-              let paths = path.split('/');
-              let patht = path.split('/');
-              for (let i = 0; i < paths.length-1; i++) {
-                patht.length = patht.length-1;
-                let onpath = patht.join('/') || "/";
-                if(alistapi.password[onpath]){
-                  pwd = alistapi.password[onpath];
-                  break;
-                }
-              }
+      let pwd = "";
+      if(alistapi.password){
+        if(alistapi.password[path]){
+          pwd = alistapi.password[path]
+        }else{
+          let paths = path.split('/');
+          let patht = path.split('/');
+          for (let i = 0; i < paths.length-1; i++) {
+            patht.length = patht.length-1;
+            let onpath = patht.join('/') || "/";
+            if(alistapi.password[onpath]){
+              pwd = alistapi.password[onpath];
+              break;
             }
           }
-          let headers = {'content-type':'application/json;charset=UTF-8'};
-          if(alistapi.token){
-            headers.Authorization = alistapi.token;
-          }
+        }
+      }
+      let headers = {'content-type':'application/json;charset=UTF-8'};
+      if(alistapi.token){
+        headers.Authorization = alistapi.token;
+      }
+      if(provider=="AliyundriveOpen"){
+        try{
           let json = JSON.parse(fetch(alistapi.server+'/api/fs/other', {headers:headers,body: {"path":path,"password":pwd,"method":"video_preview"},method:'POST',timeout:10000}));
           if(json.code==200){
             let playurl = json.data.video_preview_play_info.live_transcoding_task_list;
@@ -611,6 +611,13 @@ function alistUrl(alistapi,path,sign,subtitle,provider) {
         }catch(e){
           log('阿里开放获取多线程失败>'+e.message);
         }
+      }else{
+        try{
+          let json = JSON.parse(fetch(alistapi.server+'/api/fs/get', {headers:headers,body: {"path":path,"password":pwd,"method":"video_preview"},method:'POST',timeout:10000}));
+          if(json.code==200){
+            url = json.data.raw_url || url;
+          }
+        }catch(e){}
       }
         url = url + (music.test(suffix)?"#isMusic=true#":"#isVideo=true#");
         if(!subtitle){
