@@ -26,6 +26,36 @@ function getlist(data,isdir,filter) {
     return list || [];
 }
 
+function gethtml(alistapi,int,path){
+    let pwd = "";
+    if(alistapi.password){
+      if(alistapi.password[path]){
+        pwd = alistapi.password[path]
+      }else{
+        let paths = path.split('/');
+        let patht = path.path.split('/');
+        for (let i = 0; i < paths.length-1; i++) {
+          patht.length = patht.length-1;
+          let onpath = patht.join('/') || "/";
+          if(alistapi.password[onpath]){
+            pwd = alistapi.password[onpath];
+            break;
+          }
+        }
+      }
+    }
+    let headers = {'content-type':'application/json;charset=UTF-8'}
+    if(alistapi.token){
+      headers.Authorization = alistapi.token;
+    }
+    let body = {"path":path,"password":pwd}
+    if(int=="/api/fs/other"){
+      body.method = "video_preview";
+    }
+    let html = request(alistapi.server + int, {headers:headers,body:body,method:'POST',timeout:10000});
+    return html;
+}
+
 function alistHome() {
   let getapi = datalist.filter(item => {
       return item.server == getItem('Alistapi',datalist.length>0?datalist[0].server:"");
@@ -405,12 +435,7 @@ function alistHome() {
   if (datalist.length > 0) {
     setPageTitle(alistapi.name+' | Alist网盘');
     try{
-      let pwd = alistapi.password?alistapi.password['/']||"":"";
-      let headers = {'content-type':'application/json;charset=UTF-8'};
-      if(alistapi.token){
-        headers.Authorization = alistapi.token;
-      }
-      let json = JSON.parse(fetch(alistapi.server + "/api/fs/list", {headers:headers,body: {"path":"/","password":pwd},method:'POST',timeout:10000}));
+      let json = JSON.parse(gethtml(alistapi,"/api/fs/list",'/'));
       if(json.code==200){
         let dirlist = getlist(json.data.content||[],1);
         addItemBefore('homeloading', arrayAdd(dirlist,1,alistapi));
@@ -453,28 +478,7 @@ function alistList(alistapi,dirname){
   })
   setResult(d);
   try{
-    let pwd = "";
-    if(alistapi.password){
-      if(alistapi.password[MY_PARAMS.path]){
-        pwd = alistapi.password[MY_PARAMS.path]
-      }else{
-        let paths = MY_PARAMS.path.split('/');
-        let patht = MY_PARAMS.path.split('/');
-        for (let i = 0; i < paths.length-1; i++) {
-          patht.length = patht.length-1;
-          let onpath = patht.join('/') || "/";
-          if(alistapi.password[onpath]){
-            pwd = alistapi.password[onpath];
-            break;
-          }
-        }
-      }
-    }
-    let headers = {'content-type':'application/json;charset=UTF-8'};
-    if(alistapi.token){
-      headers.Authorization = alistapi.token;
-    }
-    let json = JSON.parse(fetch(alistapi.server + "/api/fs/list", {headers:headers,body: {"path":MY_PARAMS.path,"password":pwd},method:'POST',timeout:10000}));
+    let json = JSON.parse(gethtml(alistapi,"/api/fs/list",MY_PARAMS.path));
     if(json.code==200){
       let dirlist = getlist(json.data.content||[],1);
       addItemBefore(listid, arrayAdd(dirlist,1,alistapi));
@@ -569,30 +573,9 @@ function alistUrl(alistapi,path,sign,subtitle,provider) {
   let url = encodeURI(alistapi.server + "/d"+ path) + "?sign=" + sign;
   if(contain.test(suffix)){
     try{
-      let pwd = "";
-      if(alistapi.password){
-        if(alistapi.password[path]){
-          pwd = alistapi.password[path]
-        }else{
-          let paths = path.split('/');
-          let patht = path.split('/');
-          for (let i = 0; i < paths.length-1; i++) {
-            patht.length = patht.length-1;
-            let onpath = patht.join('/') || "/";
-            if(alistapi.password[onpath]){
-              pwd = alistapi.password[onpath];
-              break;
-            }
-          }
-        }
-      }
-      let headers = {'content-type':'application/json;charset=UTF-8'};
-      if(alistapi.token){
-        headers.Authorization = alistapi.token;
-      }
       if(provider=="AliyundriveOpen"){
         try{
-          let json = JSON.parse(fetch(alistapi.server+'/api/fs/other', {headers:headers,body: {"path":path,"password":pwd,"method":"video_preview"},method:'POST',timeout:10000}));
+          let json = JSON.parse(gethtml(alistapi,"/api/fs/other",path));
           if(json.code==200){
             let playurl = json.data.video_preview_play_info.live_transcoding_task_list;
             playurl.reverse();
@@ -613,7 +596,7 @@ function alistUrl(alistapi,path,sign,subtitle,provider) {
         }
       }else{
         try{
-          let json = JSON.parse(fetch(alistapi.server+'/api/fs/get', {headers:headers,body: {"path":path,"password":pwd,"method":"video_preview"},method:'POST',timeout:10000}));
+          let json = JSON.parse(gethtml(alistapi,"/api/fs/get",path));
           if(json.code==200){
             url = json.data.raw_url || url;
           }
