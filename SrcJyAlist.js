@@ -259,9 +259,15 @@ function alistHome() {
                       return "toast://分享失败，剪粘板或网络异常";
                     }
                   }else if(input=="获取令牌"){
-                    return $("","此接口的登录用户名").input((api,alistfile) => {
+                    return $("","此接口的登录用户名\n留空则清除令牌token").input((api,alistfile) => {
                       if(input==""){
-                        return "hiker://empty";
+                          eval("var alistData=" + fetch(alistfile));
+                          let datalist = alistData.drives;
+                          let index = datalist.indexOf(datalist.filter(d=>d.server == api)[0]);
+                          delete datalist[index].token;
+                          alistData.drives = datalist;
+                          writeFile(alistfile, JSON.stringify(alistData));
+                          return "toast://已清除令牌token，取消登录状态";
                       }
                       return $("","此接口的登录密码").input((user,api,alistfile) => {
                         try{
@@ -442,6 +448,8 @@ function alistHome() {
         
         let filelist = getlist(json.data.content||[],0,alistapi.nofilter?0:fileFilter);
         addItemBefore('homeloading', arrayAdd(filelist,0,alistapi,json.data.provider));
+      }else if(json.code==401){
+        toast('登录令牌token失效，需要重新获取');
       }
       updateItem('homeloading', {
         title: "““””<small><font color=#f20c00>此规则仅限学习交流使用，请于导入后24小时内删除，任何团体或个人不得以任何方式方法传播此规则的整体或部分！</font></small>"
@@ -491,6 +499,8 @@ function alistList(alistapi,dirname){
           col_type: "text_center_1"
         });
       }
+    }else if(json.code==401){
+      toast('登录令牌token失效，需要重新获取');
     }
     updateItem(listid, {
       title: !alistapi.nofilter&&fileFilter?"““””<small><font color=#f20c00>已开启文件过滤，仅显示音视频文件</font></small>":""
@@ -649,6 +659,8 @@ function alistSearch(alistapi,key) {
       }
     }else if(json.code==500){
       toast(alistapi.name+' 搜索出错了，此网盘不支持搜索');
+    }else if(json.code==401){
+      toast('登录令牌token失效，需要重新获取');
     }
   }catch(e){
     log(alistapi.name+' 内置搜索出错了>'+e.message);
