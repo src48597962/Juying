@@ -32,9 +32,8 @@ function gethtml(alistapi,int,path){
       if(alistapi.password[path]){
         pwd = alistapi.password[path]
       }else{
-        log(path);
         let paths = path.split('/');
-        let patht = path.path.split('/');
+        let patht = path.split('/');
         for (let i = 0; i < paths.length-1; i++) {
           patht.length = patht.length-1;
           let onpath = patht.join('/') || "/";
