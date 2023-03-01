@@ -154,13 +154,48 @@ let yijimenu = [
         }
     },
     {
-        title: "直播",
-        url: $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
+        title: getItem('zhibobutton')=="alist"?"Alist":"直播",
+        url: getItem('zhibobutton')=="alist"?$("hiker://empty###noRecordHistory##noHistory#").rule(() => {
+                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
+                alistHome();
+            }):$("hiker://empty#noRecordHistory##noHistory#").rule(() => {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLive.js');
                 Live();
             }),
-        pic_url: 'https://lanmeiguojiang.com/tubiao/more/87.png',
-        col_type: 'icon_5'
+        pic_url: getItem('zhibobutton')=="alist"?'https://cdn.jsdelivr.net/gh/alist-org/logo@main/logo.svg':'https://lanmeiguojiang.com/tubiao/more/87.png',
+        col_type: 'icon_5',
+        extra: {
+            id: "zhibobutton",
+            longClick: [{
+                title: "切为直播",
+                js: $.toString(() => {
+                    clearItem('zhibobutton');
+                    updateItem("zhibobutton", {
+                        title: "直播",
+                        pic_url: 'https://lanmeiguojiang.com/tubiao/more/87.png',
+                        url: $("hiker://empty##fypage#noRecordHistory##noHistory#").rule(() => {
+                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLive.js');
+                            Live();
+                        })
+                    });
+                    return "toast://已切换为直播按钮";
+                })
+            },{
+                title: "切为Alist网盘",
+                js: $.toString(() => {
+                    setItem('zhibobutton','alist');
+                    updateItem("zhibobutton", {
+                        title: "Alist",
+                        pic_url: 'https://cdn.jsdelivr.net/gh/alist-org/logo@main/logo.svg',
+                        url: $("hiker://empty###noRecordHistory##noHistory#").rule(() => {
+                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
+                            alistHome();
+                        })
+                    });
+                    return "toast://已切换为Alist网盘按钮";
+                })
+            }]
+        }
     },
     {
         col_type: 'line'
