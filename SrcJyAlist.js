@@ -10,7 +10,9 @@ let datalist = alistData.drives || [];
 let alistconfig = alistData.config || {};
 let fileFilter = alistconfig['fileFilter']==0?0:1;
 let audiovisual = 'mp4|avi|mkv|rmvb|flv|mov|ts|mp3|m4a|wma|flac';//影音文件
-let contain = new RegExp(alistconfig.contain||audiovisual,"i");//设置可显示的文件后缀
+let contain = new RegExp(alistconfig.contain||audiovisual,"i");//设置可显示的影音文件后缀
+let music = new RegExp("mp3|m4a|wma|flac","i");//进入音乐播放器
+let image = new RegExp("jpg|png|gif|bmp|ico|svg","i");//进入图片查看
 
 function getlist(data,isdir,filter) {
     let list = data.filter(item => {
@@ -553,7 +555,7 @@ function arrayAdd(list,isdir,alistapi,provider){
       })
       d.push({
         title: item.name,
-        img: item.thumb || "https://cdn.jsdelivr.net/gh/alist-org/logo@main/logo.svg@Referer=",
+        img: item.thumb || music.test(item.name)?"https://lanmeiguojiang.com/tubiao/music/46.svg":!music.test(item.name)&&contain.test(item.name)?"https://lanmeiguojiang.com/tubiao/movie/13.svg":"https://cdn.jsdelivr.net/gh/alist-org/logo@main/logo.svg@Referer=",
         url: $(encodeURI(alistapi.server+path)).lazyRule((alistapi,path,sign,subtitle,provider) => {
           require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
           return alistUrl(alistapi,path,sign,subtitle,provider);
@@ -578,8 +580,6 @@ function arrayAdd(list,isdir,alistapi,provider){
 
 function alistUrl(alistapi,path,sign,subtitle,provider) {
   let suffix = path.substring(path.lastIndexOf('.')+1);//后缀名
-  let music = new RegExp("mp3|m4a|wma|flac","i");//进入音乐播放器
-  let image = new RegExp("jpg|png|gif|bmp|ico|svg","i");//进入图片查看
   let url = encodeURI(alistapi.server + "/d"+ path) + "?sign=" + sign;
   if(contain.test(suffix)){
     try{
