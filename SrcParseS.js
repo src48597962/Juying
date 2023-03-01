@@ -425,8 +425,8 @@ var SrcParseS = {
         if((MY_NAME=="海阔视界"&&getAppVersion()>=3369)||(MY_NAME=="嗅觉浏览器"&&getAppVersion()>=798)){
             JYconfig['superweb'] = JYconfig.superweb==0?0:1;
         }
-        if(vipUrl.match(/youku|iqiyi|ixigua|migu|sohu|pptv|le|cctv|1905|mgtv|qq\.com/)&&vipUrl.indexOf('?')>-1){
-            vipUrl = vipUrl.split('?')[0];
+        if(vipUrl.match(/youku|iqiyi|ixigua|migu|sohu|pptv|le|cctv|1905|mgtv|qq\.com/)&&vipUrl.indexOf('html?')>-1){
+            vipUrl = vipUrl.split('html?')[0]+'html';
         }
         if(printlog==1){log("影片地址："+vipUrl)}; 
         var exclude = /404\.m3u8|xiajia\.mp4|余额不足\.m3u8|\.m3u8\.tv/;//设置排除地址
