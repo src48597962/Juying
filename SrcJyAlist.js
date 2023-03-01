@@ -555,7 +555,7 @@ function arrayAdd(list,isdir,alistapi,provider){
       })
       d.push({
         title: item.name,
-        img: item.thumb || music.test(item.name)?"https://lanmeiguojiang.com/tubiao/music/46.svg":!music.test(item.name)&&contain.test(item.name)?"https://lanmeiguojiang.com/tubiao/movie/13.svg":"https://cdn.jsdelivr.net/gh/alist-org/logo@main/logo.svg@Referer=",
+        img: item.thumb || (music.test(suffix)?"https://lanmeiguojiang.com/tubiao/music/46.svg":contain.test(suffix)?"https://lanmeiguojiang.com/tubiao/movie/13.svg":image.test(suffix)?"https://lanmeiguojiang.com/tubiao/more/38.png"?"https://cdn.jsdelivr.net/gh/alist-org/logo@main/logo.svg@Referer="),
         url: $(encodeURI(alistapi.server+path)).lazyRule((alistapi,path,sign,subtitle,provider) => {
           require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
           return alistUrl(alistapi,path,sign,subtitle,provider);
