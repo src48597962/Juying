@@ -244,7 +244,7 @@ function alistHome() {
           datalist.forEach(item => {
             d.push({
                 title: item.name,
-                url: $(["复制地址","分享接口","删除接口","密码管理",item.nofilter?"全局过滤":"禁止过滤","获取令牌","向上进位","向下落位","列表置顶","列表置底"],2).select((item,alistfile)=>{
+                url: $(["复制地址","分享接口","删除接口","密码管理",item.nofilter?"全局过滤":"禁止过滤","登录令牌","向上进位","向下落位","列表置顶","列表置底"],2).select((item,alistfile)=>{
                   if(input=="复制地址"){
                     copy(item.name+item.server);
                     return "hiker://empty";
@@ -261,7 +261,7 @@ function alistHome() {
                     }else{
                       return "toast://分享失败，剪粘板或网络异常";
                     }
-                  }else if(input=="获取令牌"){
+                  }else if(input=="登录令牌"){
                     return $("","此接口的登录用户名\n留空则清除令牌token").input((api,alistfile) => {
                       if(input==""){
                           eval("var alistData=" + fetch(alistfile));
@@ -427,6 +427,35 @@ function alistHome() {
       },alistapi),
       col_type: 'scroll_button'
   });
+  if(alistapi.token){
+    d.push({
+        title: '挂载阿里',
+        url: $(['阿里刷新令牌',"挂载阿里分享"],1).select((alistapi,alistfile)=>{
+          try{
+            var alistData = JSON.parse(fetch(alistfile));
+          }catch(e){
+            var alistData = {};
+          }
+          let alistconfig = alistData.config || {};
+          if(input=='阿里刷新令牌'){
+            return $(alistconfig.alitoken||"","刷新令牌").input((alistfile,alistData,alistconfig)=>{
+              alistconfig.alitoken = input;
+              alistData.config = alistconfig;
+              writeFile(alistfile, JSON.stringify(alistData));
+            },alistfile,alistData,alistconfig)
+          }else{
+              return $("","阿里分享链接").input((alistapi)=>{
+              require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
+              showLoading('搜索中，请稍后...');
+              deleteItemByCls('alist');
+              alistSearch(alistapi,input);
+              hideLoading();
+            },alistapi)
+          }
+        },alistapi,alistfile),
+        col_type: 'scroll_button'
+    });
+  }
   d.push({
       col_type: 'line'
   });
