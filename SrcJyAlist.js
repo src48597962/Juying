@@ -15,7 +15,6 @@ let music = new RegExp("mp3|m4a|wma|flac","i");//进入音乐播放器
 let image = new RegExp("jpg|png|gif|bmp|ico|svg","i");//进入图片查看
 
 function getlist(data,isdir,filter) {
-  log(contain)
     let list = data.filter(item => {
         let suffix = item.name.substring(item.name.lastIndexOf('.')+1);//后缀名
         
