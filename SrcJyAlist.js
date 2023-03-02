@@ -472,7 +472,8 @@ function alistHome() {
 }
 
 function alistList(alistapi,dirname){
-  log(audiovisual);
+  let audiovisual = audiovisual || "123";
+  let contain = new RegExp(audiovisual,"i");//设置可显示的影音文件后缀
   setPageTitle(dirname);
   let d = [];
   let listid = base64Encode(MY_PARAMS.path);
@@ -525,6 +526,7 @@ function arrayAdd(list,isdir,alistapi,provider){
     var sublist = list.filter(item => {
         return /srt|vtt|ass/.test(item.name.substring(item.name.lastIndexOf('.')+1));
     })
+    log(audiovisual);
     log(list);
 
     if(!alistapi.nofilter&&fileFilter&&!isdir){
