@@ -20,7 +20,6 @@ function getlist(data,isdir,filter,audiovisual) {
         let suffix = item.name.substring(item.name.lastIndexOf('.')+1);//后缀名
         return isdir ? item.is_dir : filter? (contain.test(suffix) || /srt|vtt|ass/.test(suffix)) : !item.is_dir;
     })
-    log(list);
     try{    
         if(!isdir){
             list.sort(SortList);
