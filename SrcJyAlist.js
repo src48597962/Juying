@@ -18,6 +18,9 @@ function getlist(data,isdir,filter) {
     let list = data.filter(item => {
         return isdir ? item.is_dir : filter? (contain.test(item.name.substring(item.name.lastIndexOf('.')+1)) || /srt|vtt|ass/.test(item.name.substring(item.name.lastIndexOf('.')+1))) : !item.is_dir;
     })
+    if(!isdir){
+      log(list);
+    }
     try{    
         //if(!isdir){
             list.sort(SortList);
@@ -521,13 +524,11 @@ function arrayAdd(list,isdir,alistapi,provider){
     var sublist = list.filter(item => {
         return /srt|vtt|ass/.test(item.name.substring(item.name.lastIndexOf('.')+1));
     })
-    log(list);
     if(!alistapi.nofilter&&fileFilter&&!isdir){
       list = list.filter(item => {
           return contain.test(item.name.substring(item.name.lastIndexOf('.')+1));
       })
     }
-    //log(list);
   }
 
   list.forEach(item => {
