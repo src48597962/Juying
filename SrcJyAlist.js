@@ -18,13 +18,17 @@ function getlist(data,isdir,filter) {
   log(contain)
     let list = data.filter(item => {
         let suffix = item.name.substring(item.name.lastIndexOf('.')+1);//后缀名
+        
+        if(!isdir){
+            log(suffix);
+        }
         return isdir ? item.is_dir : filter? (contain.test(suffix) || /srt|vtt|ass/.test(suffix)) : !item.is_dir;
     })
     
     try{    
-        //if(!isdir){
+        if(!isdir){
             list.sort(SortList);
-        //}
+        }
     }catch(e){
       log(e.message);
     }
