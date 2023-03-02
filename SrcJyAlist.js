@@ -21,7 +21,7 @@ function getlist(data,isdir,filter) {
         if(!isdir){
             log(suffix);
         }
-        return isdir ? item.is_dir : filter? (contain.test(item.name) || /srt|vtt|ass/.test(item.name)) : !item.is_dir;
+        return isdir ? item.is_dir : filter? (/'mp4|avi|mkv|rmvb|flv|mov|ts|mp3|m4a|wma|flac'/.test(suffix) || /srt|vtt|ass/.test(suffix)) : !item.is_dir;
     })
     
     try{    
