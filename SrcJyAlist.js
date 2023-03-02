@@ -524,9 +524,10 @@ function arrayAdd(list,isdir,alistapi,provider){
     var sublist = list.filter(item => {
         return /srt|vtt|ass/.test(item.name.substring(item.name.lastIndexOf('.')+1));
     })
-    log(audiovisual);
-    log(music);
-    log(image);
+    log(contain.test('mp4'));
+    log(image.test('jpg'));
+    log(music.test('jpg'));
+    
     log(list);
 
     if(!alistapi.nofilter&&fileFilter&&!isdir){
