@@ -472,7 +472,7 @@ function alistHome() {
   }
 }
 
-function alistList(alistapi,dirname,audiovisual){
+function alistList(alistapi,dirname){
   setPageTitle(dirname);
   let d = [];
   let listid = base64Encode(MY_PARAMS.path);
@@ -495,6 +495,7 @@ function alistList(alistapi,dirname,audiovisual){
     if(json.code==200){
       let dirlist = getlist(json.data.content||[],1);
       addItemBefore(listid, arrayAdd(dirlist,1,alistapi));
+
       let filelist = getlist(json.data.content||[],0,alistapi.nofilter?0:fileFilter,audiovisual);
       addItemBefore(listid, arrayAdd(filelist,0,alistapi,json.data.provider));
       if(dirlist.length==0&&filelist.length==0){
@@ -539,7 +540,7 @@ function arrayAdd(list,isdir,alistapi,provider){
         img: item.thumb || config.依赖.match(/http(s)?:\/\/.*\//)[0] + "img/文件夹.svg",//#noRecordHistory##noHistory#
         url: $("hiker://empty##" + encodeURI(alistapi.server + path)).rule((alistapi,dirname) => {
           require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
-          alistList(alistapi,dirname,audiovisual);
+          alistList(alistapi,dirname);
         },alistapi,item.name),
         col_type: 'avatar',
         extra: {
