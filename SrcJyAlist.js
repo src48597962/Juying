@@ -490,6 +490,7 @@ function alistList(alistapi,dirname){
   setResult(d);
   try{
     let json = JSON.parse(gethtml(alistapi,"/api/fs/list",MY_PARAMS.path));
+    log(json)
     if(json.code==200){
       let dirlist = getlist(json.data.content||[],1);
       addItemBefore(listid, arrayAdd(dirlist,1,alistapi));
