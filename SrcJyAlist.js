@@ -13,15 +13,9 @@ let audiovisual = alistconfig.contain?alistconfig.contain.replace(/\./,""):'mp4|
 let contain = new RegExp(audiovisual,"i");//设置可显示的影音文件后缀
 let music = new RegExp("mp3|m4a|wma|flac","i");//进入音乐播放器
 let image = new RegExp("jpg|png|gif|bmp|ico|svg","i");//进入图片查看
-let suffixcontain = new RegExp(audiovisual,"i");//设置可显示的影音文件后缀
 
-function getlist(data,isdir,filter,audiovisual) {
-  log('图片'+image.test('jp1g'));
-    let contain = new RegExp(audiovisual,"i");//设置可显示的影音文件后缀
+function getlist(data,isdir,filter) {
     let list = data.filter(item => {
-      if(!isdir){
-        log(item.name+'>'+suffixcontain.test('mp4'))
-      }
         let suffix = item.name.substring(item.name.lastIndexOf('.')+1);//后缀名
         return isdir ? item.is_dir : filter? (contain.test(suffix) || /srt|vtt|ass/.test(suffix)) : !item.is_dir;
     })
@@ -500,7 +494,7 @@ function alistList(alistapi,dirname){
       let dirlist = getlist(json.data.content||[],1);
       addItemBefore(listid, arrayAdd(dirlist,1,alistapi));
 
-      let filelist = getlist(json.data.content||[],0,alistapi.nofilter?0:fileFilter,audiovisual);
+      let filelist = getlist(json.data.content||[],0,alistapi.nofilter?0:fileFilter);
       addItemBefore(listid, arrayAdd(filelist,0,alistapi,json.data.provider));
       if(dirlist.length==0&&filelist.length==0){
         addItemBefore(listid, {
@@ -529,12 +523,6 @@ function arrayAdd(list,isdir,alistapi,provider){
     var sublist = list.filter(item => {
         return /srt|vtt|ass/.test(item.name.substring(item.name.lastIndexOf('.')+1));
     })
-    log(contain.test('mp4'));
-    log(image.test('jpg'));
-    log(music.test('jpg'));
-    
-    log(list);
-
     if(!alistapi.nofilter&&fileFilter&&!isdir){
       list = list.filter(item => {
           return contain.test(item.name.substring(item.name.lastIndexOf('.')+1));
