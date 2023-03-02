@@ -19,7 +19,6 @@ function getlist(data,isdir,filter) {
         let suffix = item.name.substring(item.name.lastIndexOf('.')+1);//后缀名
         return isdir ? item.is_dir : filter? (contain.test(suffix) || /srt|vtt|ass/.test(suffix)) : !item.is_dir;
     })
-    log(list);
     try{    
         if(!isdir){
             list.sort(SortList);
@@ -471,7 +470,7 @@ function alistHome() {
   }
 }
 
-function alistList(alistapi,dirname){
+function alistList(alistapi,dirname,contain){
   setPageTitle(dirname);
   let d = [];
   let listid = base64Encode(MY_PARAMS.path);
@@ -538,7 +537,7 @@ function arrayAdd(list,isdir,alistapi,provider){
         img: item.thumb || config.依赖.match(/http(s)?:\/\/.*\//)[0] + "img/文件夹.svg",//#noRecordHistory##noHistory#
         url: $("hiker://empty##" + encodeURI(alistapi.server + path)).rule((alistapi,dirname) => {
           require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
-          alistList(alistapi,dirname);
+          alistList(alistapi,dirname,contain);
         },alistapi,item.name),
         col_type: 'avatar',
         extra: {
