@@ -521,11 +521,13 @@ function arrayAdd(list,isdir,alistapi,provider){
     var sublist = list.filter(item => {
         return /srt|vtt|ass/.test(item.name.substring(item.name.lastIndexOf('.')+1));
     })
+    log(list);
     if(!alistapi.nofilter&&fileFilter&&!isdir){
       list = list.filter(item => {
           return contain.test(item.name.substring(item.name.lastIndexOf('.')+1));
       })
     }
+    //log(list);
   }
 
   list.forEach(item => {
