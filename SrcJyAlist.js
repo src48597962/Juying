@@ -15,11 +15,10 @@ let music = new RegExp("mp3|m4a|wma|flac","i");//进入音乐播放器
 let image = new RegExp("jpg|png|gif|bmp|ico|svg","i");//进入图片查看
 
 function getlist(data,isdir,filter) {
-  if(!isdir){
-      log(data);
-    }
+  log(contain)
     let list = data.filter(item => {
-        return isdir ? item.is_dir : filter? (contain.test(item.name.substring(item.name.lastIndexOf('.')+1)) || /srt|vtt|ass/.test(item.name.substring(item.name.lastIndexOf('.')+1))) : !item.is_dir;
+        let suffix = item.name.substring(item.name.lastIndexOf('.')+1);//后缀名
+        return isdir ? item.is_dir : filter? (contain.test(suffix) || /srt|vtt|ass/.test(suffix)) : !item.is_dir;
     })
     
     try{    
@@ -550,7 +549,7 @@ function arrayAdd(list,isdir,alistapi,provider){
       })
     }else{
       let name = item.name.substring(0,item.name.lastIndexOf("."));//文件名
-      let suffix=item.name.substring(item.name.lastIndexOf('.')+1);//后缀名
+      let suffix = item.name.substring(item.name.lastIndexOf('.')+1);//后缀名
       let subtitles = [];
       sublist.forEach(item => {
         if(item.name.indexOf(name)>-1){
