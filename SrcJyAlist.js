@@ -599,7 +599,7 @@ function alistUrl(alistapi,path,sign,subtitle,provider) {
             let names = [];
             playurl.forEach(item => {
               urls.push(item.url+"#isVideo=true##pre#");
-              names.push(item.template_id=="LD"?"流畅":item.template_id=="SD"?"标清":item.template_id=="HD"?"高清":item.template_id=="FHD"?"超清":item.template_height);
+              names.push(item.template_id=="LD"?"360p 流畅":item.template_id=="SD"?"540p 标清":item.template_id=="HD"?"720p 高清":item.template_id=="FHD"?"1080p 全高清":item.template_height);
             })
             return JSON.stringify({
                 urls: urls,
