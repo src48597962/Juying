@@ -16,6 +16,7 @@ let image = new RegExp("jpg|png|gif|bmp|ico|svg","i");//进入图片查看
 let suffixcontain = new RegExp(audiovisual,"i");//设置可显示的影音文件后缀
 
 function getlist(data,isdir,filter,audiovisual) {
+  log('图片'+image.test('jpg'));
     let contain = new RegExp(audiovisual,"i");//设置可显示的影音文件后缀
     let list = data.filter(item => {
       if(!isdir){
