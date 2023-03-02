@@ -9,14 +9,14 @@ try{
 let datalist = alistData.drives || [];
 let alistconfig = alistData.config || {};
 let fileFilter = alistconfig['fileFilter']==0?0:1;
-let audiovisual = alistconfig.contain||'mp4|avi|mkv|rmvb|flv|mov|ts|mp3|m4a|wma|flac';//影音文件
+let audiovisual = alistconfig.contain?alistconfig.contain.replace(/\./,""):'mp4|avi|mkv|rmvb|flv|mov|ts|mp3|m4a|wma|flac';//影音文件
 let contain = new RegExp(audiovisual,"i");//设置可显示的影音文件后缀
 let music = new RegExp("mp3|m4a|wma|flac","i");//进入音乐播放器
 let image = new RegExp("jpg|png|gif|bmp|ico|svg","i");//进入图片查看
 let suffixcontain = new RegExp(audiovisual,"i");//设置可显示的影音文件后缀
 
 function getlist(data,isdir,filter,audiovisual) {
-  log('图片'+image.test('jpg'));
+  log('图片'+image.test('jp1g'));
     let contain = new RegExp(audiovisual,"i");//设置可显示的影音文件后缀
     let list = data.filter(item => {
       if(!isdir){
