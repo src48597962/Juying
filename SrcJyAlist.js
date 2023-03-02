@@ -17,7 +17,7 @@ let image = new RegExp("jpg|png|gif|bmp|ico|svg","i");//进入图片查看
 function getlist(data,isdir,filter) {
     let list = data.filter(item => {
         let suffix = item.name.substring(item.name.lastIndexOf('.')+1);//后缀名
-        return isdir ? item.is_dir : filter? (/'mp4|avi|mkv|rmvb|flv|mov|ts|mp3|m4a|wma|flac'/.test(suffix) || /srt|vtt|ass/.test(suffix)) : !item.is_dir;
+        return isdir ? item.is_dir : filter? (contain.test(suffix) || /srt|vtt|ass/.test(suffix)) : !item.is_dir;
     })
     log(list);
     try{    
