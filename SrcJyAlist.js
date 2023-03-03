@@ -115,13 +115,38 @@ function alistHome() {
               writeFile(alistfile, JSON.stringify(alistData));
             },alistfile,alistData,alistconfig)
           }else{
+            if(alistconfig.alitoken){
               return $("","阿里分享链接").input((alistapi)=>{
-              require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
-              showLoading('搜索中，请稍后...');
-              deleteItemByCls('alist');
-              alistSearch(alistapi,input);
-              hideLoading();
-            },alistapi)
+                input = input.replace('https://www.aliyundrive.com/s/','');
+                let share_id = input.indexOf('/folder/')>-1?input.split('/folder/')[0]:input;
+                let folder_id = input.indexOf('/folder/')>-1?input.split('/folder/')[1]:"root";
+                let html = request("https://api.aliyundrive.com/adrive/v3/share_link/get_share_by_anonymous", {body:{"share_id":share_id},method:'POST',timeout:10000});
+                let folderlist = JSON.parse(html).file_infos;
+                if(folderlist.length==1){
+                  let body = {
+                    "mount_path": "/阿里分享/自动挂载/"+folderlist[0].file_name,
+                    "order": 0,
+                    "remark": "",
+                    "cache_expiration": 30,
+                    "web_proxy": false,
+                    "webdav_policy": "302_redirect",
+                    "down_proxy_url": "",
+                    "extract_folder": "",
+                    "driver": "AliyundriveShare",
+                    "addition": "{\"refresh_token\":\""+alistconfig.alitoken+"\",\"share_id\":\""+share_id+"\",\"share_pwd\":\"\",\"root_folder_id\":\""+folder_id+"\",\"order_by\":\"\",\"order_direction\":\"\"}"
+                  }
+                  let result = JSON.parse(request(alistapi.server+"/api/admin/storage/create", {headers:{"Authorization":alistapi.token},body:body,method:'POST',timeout:10000}));
+                  if(result.code==200){
+
+                    return "toast://成功";
+                  }else if(result.code==500){
+                    return "toast://已存在";
+                  }
+                }
+              },alistapi)
+            }else{
+              return "toast://阿里token还未填写，无法挂载";
+            }
           }
         },alistapi,alistfile),
         col_type: 'scroll_button'
