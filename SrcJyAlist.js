@@ -343,7 +343,7 @@ function alistUrl(alistapi,path,sign,subtitle,provider) {
           }
         }catch(e){}
       }
-        url = url + (music.test(suffix)?"#isMusic=true#":"#isVideo=true#") + (url.indexOf('baidu.com')>-1? ';{User-Agent@Lavf/57.83.100}':'');
+        url = cacheM3u8(url) + (music.test(suffix)?"#isMusic=true#":"#isVideo=true#") + (url.indexOf('baidu.com')>-1? ';{User-Agent@Lavf/57.83.100}':'');
         if(!subtitle){
           return url;
         }else{
