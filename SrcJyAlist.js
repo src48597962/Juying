@@ -81,339 +81,10 @@ function alistHome() {
   });
   d.push({
       title: '⚙设置',
-      url: $('hiker://empty#noRecordHistory##noHistory#').rule((alistfile,audiovisual) => {
-          setPageTitle('⚙设置 | Alist网盘');
-          try{
-            eval("var alistData=" + fetch(alistfile));
-            let jknum = alistData.drives.length;
-          }catch(e){
-            var alistData= {drives:[]};
-          }
-          let alistconfig = alistData.config || {};
-          let contain = alistconfig.contain || audiovisual;
-          let fileFilter = alistconfig['fileFilter']==0?0:1;
-          let datalist = alistData.drives;
-          var d = [];
-          d.push({
-              title: fileFilter?'音视频过滤开':'音视频过滤关',
-              url: $('#noLoading#').lazyRule((fileFilter,alistData,alistfile) => {
-                let alistconfig = alistData.config || {};
-                let sm = "";
-                if(fileFilter){
-                  alistconfig['fileFilter'] =0;
-                  sm = "已关闭音视频文件过滤，将显示全部文件";
-                }else{
-                  alistconfig['fileFilter'] =1;
-                  sm = "已开启文件过滤，仅显示音视频文件";
-                }
-                alistData.config = alistconfig;
-                writeFile(alistfile, JSON.stringify(alistData));
-                refreshPage(false);
-                return 'toast://'+sm;
-              }, fileFilter, alistData, alistfile),
-              img: fileFilter?"https://lanmeiguojiang.com/tubiao/messy/55.svg":"https://lanmeiguojiang.com/tubiao/messy/56.svg",
-              col_type: "icon_2"
-          });
-          d.push({
-              title: '音视频后缀名',
-              url: $(contain,"开启过滤后，仅允许显示的音频或视频文件格式，用|隔开").input((alistData,alistfile) => {
-                let alistconfig = alistData.config || {};
-                if(input){
-                  alistconfig['contain'] =input.replace(/\./g,"");
-                }else{
-                  delete alistconfig['contain'];
-                }
-                alistData.config = alistconfig;
-                writeFile(alistfile, JSON.stringify(alistData));
-                refreshPage(false);
-                return 'toast://已设置音视频文件格式后缀';
-              }, alistData, alistfile),
-              img: "https://lanmeiguojiang.com/tubiao/messy/145.svg",
-              col_type: "icon_2"
-          });
-          d.push({
-              col_type: "line"
-          });
-          d.push({
-              title: '增加',
-              url: $("","alist链接地址\n如：https://alist.abc.com").input((alistfile) => {
-                  if(!input.startsWith('http')){
-                      return 'toast://链接有误';
-                  }
-                  if(input.endsWith('/')){
-                    input = input.slice(0,input.length-1);
-                  }
-                  showLoading('正在较验有效性');
-                  let apiurl = input + "/api/public/settings";
-                  try{
-                    let getapi = JSON.parse(fetch(apiurl,{timeout:10000}));
-                    hideLoading();
-                    if(getapi.code==200 && /^v3/.test(getapi.data.version)){
-                      return $("","当前链接有效，起个名保存吧").input((alistfile,api) => {
-                          try{
-                            eval("var alistData=" + fetch(alistfile));
-                            let jknum = alistData.drives.length;
-                          }catch(e){
-                            var alistData= {drives:[]};
-                          }
-                          if(alistData.drives.some(item => item.server==input)){
-                              return 'toast://已存在';
-                          }
-                          if(input!=""){
-                            alistData.drives.push({
-                              "name": input,
-                              "server": api
-                            })
-                            writeFile(alistfile, JSON.stringify(alistData));
-                            refreshPage(false);
-                            return 'toast://已保存';
-                          }else{
-                              return 'toast://名称为空，无法保存';
-                          }
-                      }, alistfile, input);
-                    }else{
-                      return 'toast://不支持v2版本，仅支持v3以上版本';
-                    }
-                  }catch(e){
-                    hideLoading();
-                    return 'toast://链接无效';
-                  }
-              }, alistfile),
-              img: "https://lanmeiguojiang.com/tubiao/more/25.png",
-              col_type: "icon_small_3"
-          });
-          d.push({
-              title: '导入',
-              url: $("","alist分享口令的云剪贴板").input((alistfile) => {
-                try{
-                    let inputname = input.split('￥')[0];
-                    if(inputname=="聚影Alist"){
-                      showLoading("正在导入，请稍后...");
-                      let parseurl = aesDecode('Juying', input.split('￥')[1]);
-                      let content = parsePaste(parseurl);
-                      let datalist = JSON.parse(aesDecode('Juying', content));
-                      try{
-                        eval("var alistData=" + fetch(alistfile));
-                        let jknum = alistData.drives.length;
-                      }catch(e){
-                        hideLoading();
-                        var alistData= {drives:[]};
-                      }
-                      let newdatalist = alistData.drives;
-                      let num =0;
-                      for (let i = 0; i < datalist.length; i++) {
-                        if(!newdatalist.some(item => item.server==datalist[i].server)){
-                            newdatalist.push(datalist[i]);
-                            num = num+1;
-                        }
-                      }
-                      alistData.drives = newdatalist;
-                      writeFile(alistfile, JSON.stringify(alistData));
-                      hideLoading();
-                      refreshPage(false);
-                      return "toast://合计"+datalist.length+"个，导入"+num+"个";
-                    }else{
-                      return "toast://聚影√：非Alist口令";
-                    }
-                }catch(e){
-                    return "toast://聚影√：口令有误";
-                }
-              }, alistfile),
-              img: "https://lanmeiguojiang.com/tubiao/more/43.png",
-              col_type: "icon_small_3"
-          });
-          d.push({
-              title: '分享',
-              url: datalist.length==0?"toast://alist接口为0，无法分享":$().lazyRule((datalist)=>{
-                  let pasteurl = sharePaste(aesEncode('Juying', JSON.stringify(datalist)));
-                  if(pasteurl){
-                    let code = '聚影Alist￥'+aesEncode('Juying', pasteurl)+'￥共'+datalist.length+'条';
-                    copy(code);
-                    return "toast://(全部)Alist分享口令已生成";
-                  }else{
-                    return "toast://分享失败，剪粘板或网络异常";
-                  }
-              },datalist),
-              img: "https://lanmeiguojiang.com/tubiao/more/3.png",
-              col_type: "icon_small_3"
-          });
-          d.push({
-              col_type: "line"
-          });
-          
-          datalist.forEach(item => {
-            d.push({
-                title: item.name,
-                url: $(["复制地址","分享接口","删除接口","密码管理",item.nofilter?"全局过滤":"禁止过滤","登录令牌","向上进位","向下落位","列表置顶","列表置底"],2).select((item,alistfile)=>{
-                  if(input=="复制地址"){
-                    copy(item.name+item.server);
-                    return "hiker://empty";
-                  }else if(input=="分享接口"){
-                    showLoading('分享上传中，请稍后...');
-                    let oneshare = []
-                    oneshare.push(item);
-                    let pasteurl = sharePaste(aesEncode('Juying', JSON.stringify(oneshare)));
-                    hideLoading();
-                    if(pasteurl){
-                      let code = '聚影Alist￥'+aesEncode('Juying', pasteurl)+'￥共1条';
-                      copy(code);
-                      return "toast://(单个)Alist分享口令已生成";
-                    }else{
-                      return "toast://分享失败，剪粘板或网络异常";
-                    }
-                  }else if(input=="登录令牌"){
-                    return $("","此接口的登录用户名\n留空则清除令牌token").input((api,alistfile) => {
-                      if(input==""){
-                          eval("var alistData=" + fetch(alistfile));
-                          let datalist = alistData.drives;
-                          let index = datalist.indexOf(datalist.filter(d=>d.server == api)[0]);
-                          delete datalist[index].token;
-                          alistData.drives = datalist;
-                          writeFile(alistfile, JSON.stringify(alistData));
-                          return "toast://已清除令牌token，取消登录状态";
-                      }
-                      return $("","此接口的登录密码").input((user,api,alistfile) => {
-                        try{
-                          let html = fetch(api+"/api/auth/login", {headers:{'content-type':'application/json;charset=UTF-8' },body: {"Username":user,"Password":input},method:'POST',timeout:10000});
-                          let json = JSON.parse(html);
-                          if(json.code==200){
-                            eval("var alistData=" + fetch(alistfile));
-                            let datalist = alistData.drives;
-                            let index = datalist.indexOf(datalist.filter(d=>d.server == api)[0]);
-                            datalist[index].token = json.data.token;
-                            alistData.drives = datalist;
-                            writeFile(alistfile, JSON.stringify(alistData));
-                            return "toast://登录用户令牌已获取成功";
-                          }else{
-                            return "toast://" + json.message;
-                          }
-                        }catch(e){
-                          return "toast://" + e.message;
-                        }
-                      },input,api,alistfile)
-                    },item.server,alistfile)
-                  }else{
-                    function Move(arr, a, b) {
-                        let arr_temp = [].concat(arr);
-                        arr_temp.splice(b, 0, arr_temp.splice(a, 1)[0]);
-                        return arr_temp;
-                    }
-                    eval("var alistData=" + fetch(alistfile));
-
-                    if (input == "删除接口") {
-                      let datalist = alistData.drives;
-                      let index = datalist.indexOf(datalist.filter(d=>d.server == item.server)[0]);
-                      datalist.splice(index, 1);
-                      alistData.drives = datalist;
-                      writeFile(alistfile, JSON.stringify(alistData));
-                      refreshPage(false);
-                      return 'toast://已删除';
-                    } else if (input == "全局过滤" || input == "禁止过滤") {
-                      let datalist = alistData.drives;
-                      let index = datalist.indexOf(datalist.filter(d=>d.server == item.server)[0]);
-                      let sm = "";
-                      if(input == "禁止过滤"){
-                        datalist[index].nofilter = true;
-                        sm = "已设置此接口不过滤文件";
-                      }else{
-                        delete datalist[index].nofilter;
-                        sm = "此接口是否过滤文件交由全局设置";
-                      }
-                      alistData.drives = datalist;
-                      writeFile(alistfile, JSON.stringify(alistData));
-                      refreshPage(false);
-                      return 'toast://'+sm;
-                    } else if (input=="向上进位" || input=="向下落位" || input=="列表置顶" || input=="列表置底"){
-                      let datalist = alistData.drives;
-                      let index = datalist.indexOf(datalist.filter(d=>d.server == item.server)[0]);
-                      if((index==0&&(input=="向上进位"||input=="列表置顶")) || (index==datalist.length-1&&(input=="向下落位"||input=="列表置底"))){
-                        return 'toast://位置移动无效';
-                      }else{
-                        if (input=="向上进位" || input=="向下落位"){
-                          let newindex = input=="向上进位"?index-1:index+1;
-                          datalist.splice(newindex, 0, datalist.splice(index, 1)[0]);
-                        }else{
-                          let data = datalist[index];
-                          datalist.splice(index, 1);
-                          if(input=="列表置顶"){
-                            datalist.unshift(data);
-                          }else{
-                            datalist.push(data);
-                          }
-                        }
-                      }
-                      alistData.drives = datalist;
-                      writeFile(alistfile, JSON.stringify(alistData));
-                      refreshPage(false);
-                      return 'toast://已移动';
-                    } else if (input == "密码管理") {
-                      return $('hiker://empty#noRecordHistory##noHistory#').rule((item,alistfile) => {
-                        setPageTitle(item.name+' | 密码管理');
-                        eval("var alistData=" + fetch(alistfile));
-                        let datalist = alistData.drives;
-                        let d = [];
-                        d.push({
-                            title: '🔢 添加密码',
-                            url: $("","有密码的路径").input((api,alistData,alistfile) => {
-                              return $("","此路径的密码").input((path,api,alistData,alistfile) => {
-                                let datalist = alistData.drives;
-                                for (let i = 0; i < datalist.length; i++) {
-                                  if (datalist[i].server == api) {
-                                    let password = datalist[i].password || {};
-                                    password[path] = input;
-                                    datalist[i].password = password;
-                                    break;
-                                  }
-                                }
-                                alistData.drives = datalist;
-                                writeFile(alistfile, JSON.stringify(alistData));
-                                refreshPage(false);
-                                return "hiker://empty";
-                              },input,api,alistData,alistfile)
-                            },item.server,alistData,alistfile),
-                            img: "https://lanmeiguojiang.com/tubiao/movie/98.svg",
-                            col_type: "text_center_1"
-                        });
-                        for (let i = 0; i < datalist.length; i++) {
-                          if (datalist[i].server == item.server) {
-                            var pwdlist = datalist[i].password || {}
-                            break;
-                          }
-                        }
-                        for(let key in pwdlist){
-                          d.push({
-                              title: key,
-                              desc: pwdlist[key],
-                              url: $("确定删除："+key).confirm((api,key,alistData,alistfile)=>{
-                                let datalist = alistData.drives;
-                                for (let i = 0; i < datalist.length; i++) {
-                                  if (datalist[i].server == api) {
-                                    let password = datalist[i].password;
-                                    delete password[key];
-                                    datalist[i].password = password;
-                                    break;
-                                  }
-                                }
-                                alistData.drives = datalist;
-                                writeFile(alistfile, JSON.stringify(alistData));
-                                refreshPage(false);
-                                return "hiker://empty";
-                              },item.server,key,alistData,alistfile),
-                              col_type: "text_1"
-                          });
-                        }
-                        setResult(d);
-                      }, item, alistfile)
-                    }
-                  }
-                }, item ,alistfile),
-                desc: item.server,
-                col_type: "text_1"
-            });
-          })
-          
-          setResult(d);
-      }, alistfile,audiovisual),
+      url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
+          require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
+          alistSet();
+      }),
       col_type: 'scroll_button'
   });
   d.push({
@@ -773,4 +444,338 @@ function SortList(v1, v2) {
       }
     }
   }
+}
+
+function alistSet() {
+  setPageTitle('⚙设置 | Alist网盘');
+  try{
+    eval("var alistData=" + fetch(alistfile));
+    let jknum = alistData.drives.length;
+  }catch(e){
+    var alistData= {drives:[]};
+  }
+  let alistconfig = alistData.config || {};
+  let contain = alistconfig.contain || audiovisual;
+  let fileFilter = alistconfig['fileFilter']==0?0:1;
+  let datalist = alistData.drives;
+  var d = [];
+  d.push({
+      title: fileFilter?'音视频过滤开':'音视频过滤关',
+      url: $('#noLoading#').lazyRule((fileFilter,alistData,alistfile) => {
+        let alistconfig = alistData.config || {};
+        let sm = "";
+        if(fileFilter){
+          alistconfig['fileFilter'] =0;
+          sm = "已关闭音视频文件过滤，将显示全部文件";
+        }else{
+          alistconfig['fileFilter'] =1;
+          sm = "已开启文件过滤，仅显示音视频文件";
+        }
+        alistData.config = alistconfig;
+        writeFile(alistfile, JSON.stringify(alistData));
+        refreshPage(false);
+        return 'toast://'+sm;
+      }, fileFilter, alistData, alistfile),
+      img: fileFilter?"https://lanmeiguojiang.com/tubiao/messy/55.svg":"https://lanmeiguojiang.com/tubiao/messy/56.svg",
+      col_type: "icon_2"
+  });
+  d.push({
+      title: '音视频后缀名',
+      url: $(contain,"开启过滤后，仅允许显示的音频或视频文件格式，用|隔开").input((alistData,alistfile) => {
+        let alistconfig = alistData.config || {};
+        if(input){
+          alistconfig['contain'] =input.replace(/\./g,"");
+        }else{
+          delete alistconfig['contain'];
+        }
+        alistData.config = alistconfig;
+        writeFile(alistfile, JSON.stringify(alistData));
+        refreshPage(false);
+        return 'toast://已设置音视频文件格式后缀';
+      }, alistData, alistfile),
+      img: "https://lanmeiguojiang.com/tubiao/messy/145.svg",
+      col_type: "icon_2"
+  });
+  d.push({
+      col_type: "line"
+  });
+  d.push({
+      title: '增加',
+      url: $("","alist链接地址\n如：https://alist.abc.com").input((alistfile) => {
+          if(!input.startsWith('http')){
+              return 'toast://链接有误';
+          }
+          if(input.endsWith('/')){
+            input = input.slice(0,input.length-1);
+          }
+          showLoading('正在较验有效性');
+          let apiurl = input + "/api/public/settings";
+          try{
+            let getapi = JSON.parse(fetch(apiurl,{timeout:10000}));
+            hideLoading();
+            if(getapi.code==200 && /^v3/.test(getapi.data.version)){
+              return $("","当前链接有效，起个名保存吧").input((alistfile,api) => {
+                  try{
+                    eval("var alistData=" + fetch(alistfile));
+                    let jknum = alistData.drives.length;
+                  }catch(e){
+                    var alistData= {drives:[]};
+                  }
+                  if(alistData.drives.some(item => item.server==input)){
+                      return 'toast://已存在';
+                  }
+                  if(input!=""){
+                    alistData.drives.push({
+                      "name": input,
+                      "server": api
+                    })
+                    writeFile(alistfile, JSON.stringify(alistData));
+                    refreshPage(false);
+                    return 'toast://已保存';
+                  }else{
+                      return 'toast://名称为空，无法保存';
+                  }
+              }, alistfile, input);
+            }else{
+              return 'toast://不支持v2版本，仅支持v3以上版本';
+            }
+          }catch(e){
+            hideLoading();
+            return 'toast://链接无效';
+          }
+      }, alistfile),
+      img: "https://lanmeiguojiang.com/tubiao/more/25.png",
+      col_type: "icon_small_3"
+  });
+  d.push({
+      title: '导入',
+      url: $("","alist分享口令的云剪贴板").input((alistfile) => {
+        try{
+            let inputname = input.split('￥')[0];
+            if(inputname=="聚影Alist"){
+              showLoading("正在导入，请稍后...");
+              let parseurl = aesDecode('Juying', input.split('￥')[1]);
+              let content = parsePaste(parseurl);
+              let datalist = JSON.parse(aesDecode('Juying', content));
+              try{
+                eval("var alistData=" + fetch(alistfile));
+                let jknum = alistData.drives.length;
+              }catch(e){
+                hideLoading();
+                var alistData= {drives:[]};
+              }
+              let newdatalist = alistData.drives;
+              let num =0;
+              for (let i = 0; i < datalist.length; i++) {
+                if(!newdatalist.some(item => item.server==datalist[i].server)){
+                    newdatalist.push(datalist[i]);
+                    num = num+1;
+                }
+              }
+              alistData.drives = newdatalist;
+              writeFile(alistfile, JSON.stringify(alistData));
+              hideLoading();
+              refreshPage(false);
+              return "toast://合计"+datalist.length+"个，导入"+num+"个";
+            }else{
+              return "toast://聚影√：非Alist口令";
+            }
+        }catch(e){
+            return "toast://聚影√：口令有误";
+        }
+      }, alistfile),
+      img: "https://lanmeiguojiang.com/tubiao/more/43.png",
+      col_type: "icon_small_3"
+  });
+  d.push({
+      title: '分享',
+      url: datalist.length==0?"toast://alist接口为0，无法分享":$().lazyRule((datalist)=>{
+          let pasteurl = sharePaste(aesEncode('Juying', JSON.stringify(datalist)));
+          if(pasteurl){
+            let code = '聚影Alist￥'+aesEncode('Juying', pasteurl)+'￥共'+datalist.length+'条';
+            copy(code);
+            return "toast://(全部)Alist分享口令已生成";
+          }else{
+            return "toast://分享失败，剪粘板或网络异常";
+          }
+      },datalist),
+      img: "https://lanmeiguojiang.com/tubiao/more/3.png",
+      col_type: "icon_small_3"
+  });
+  d.push({
+      col_type: "line"
+  });
+  
+  datalist.forEach(item => {
+    d.push({
+        title: item.name,
+        url: $(["复制地址","分享接口","删除接口","密码管理",item.nofilter?"全局过滤":"禁止过滤","登录令牌","向上进位","向下落位","列表置顶","列表置底"],2).select((item,alistfile)=>{
+          if(input=="复制地址"){
+            copy(item.name+item.server);
+            return "hiker://empty";
+          }else if(input=="分享接口"){
+            showLoading('分享上传中，请稍后...');
+            let oneshare = []
+            oneshare.push(item);
+            let pasteurl = sharePaste(aesEncode('Juying', JSON.stringify(oneshare)));
+            hideLoading();
+            if(pasteurl){
+              let code = '聚影Alist￥'+aesEncode('Juying', pasteurl)+'￥共1条';
+              copy(code);
+              return "toast://(单个)Alist分享口令已生成";
+            }else{
+              return "toast://分享失败，剪粘板或网络异常";
+            }
+          }else if(input=="登录令牌"){
+            return $("","此接口的登录用户名\n留空则清除令牌token").input((api,alistfile) => {
+              if(input==""){
+                  eval("var alistData=" + fetch(alistfile));
+                  let datalist = alistData.drives;
+                  let index = datalist.indexOf(datalist.filter(d=>d.server == api)[0]);
+                  delete datalist[index].token;
+                  alistData.drives = datalist;
+                  writeFile(alistfile, JSON.stringify(alistData));
+                  return "toast://已清除令牌token，取消登录状态";
+              }
+              return $("","此接口的登录密码").input((user,api,alistfile) => {
+                try{
+                  let html = fetch(api+"/api/auth/login", {headers:{'content-type':'application/json;charset=UTF-8' },body: {"Username":user,"Password":input},method:'POST',timeout:10000});
+                  let json = JSON.parse(html);
+                  if(json.code==200){
+                    eval("var alistData=" + fetch(alistfile));
+                    let datalist = alistData.drives;
+                    let index = datalist.indexOf(datalist.filter(d=>d.server == api)[0]);
+                    datalist[index].token = json.data.token;
+                    alistData.drives = datalist;
+                    writeFile(alistfile, JSON.stringify(alistData));
+                    return "toast://登录用户令牌已获取成功";
+                  }else{
+                    return "toast://" + json.message;
+                  }
+                }catch(e){
+                  return "toast://" + e.message;
+                }
+              },input,api,alistfile)
+            },item.server,alistfile)
+          }else{
+            function Move(arr, a, b) {
+                let arr_temp = [].concat(arr);
+                arr_temp.splice(b, 0, arr_temp.splice(a, 1)[0]);
+                return arr_temp;
+            }
+            eval("var alistData=" + fetch(alistfile));
+
+            if (input == "删除接口") {
+              let datalist = alistData.drives;
+              let index = datalist.indexOf(datalist.filter(d=>d.server == item.server)[0]);
+              datalist.splice(index, 1);
+              alistData.drives = datalist;
+              writeFile(alistfile, JSON.stringify(alistData));
+              refreshPage(false);
+              return 'toast://已删除';
+            } else if (input == "全局过滤" || input == "禁止过滤") {
+              let datalist = alistData.drives;
+              let index = datalist.indexOf(datalist.filter(d=>d.server == item.server)[0]);
+              let sm = "";
+              if(input == "禁止过滤"){
+                datalist[index].nofilter = true;
+                sm = "已设置此接口不过滤文件";
+              }else{
+                delete datalist[index].nofilter;
+                sm = "此接口是否过滤文件交由全局设置";
+              }
+              alistData.drives = datalist;
+              writeFile(alistfile, JSON.stringify(alistData));
+              refreshPage(false);
+              return 'toast://'+sm;
+            } else if (input=="向上进位" || input=="向下落位" || input=="列表置顶" || input=="列表置底"){
+              let datalist = alistData.drives;
+              let index = datalist.indexOf(datalist.filter(d=>d.server == item.server)[0]);
+              if((index==0&&(input=="向上进位"||input=="列表置顶")) || (index==datalist.length-1&&(input=="向下落位"||input=="列表置底"))){
+                return 'toast://位置移动无效';
+              }else{
+                if (input=="向上进位" || input=="向下落位"){
+                  let newindex = input=="向上进位"?index-1:index+1;
+                  datalist.splice(newindex, 0, datalist.splice(index, 1)[0]);
+                }else{
+                  let data = datalist[index];
+                  datalist.splice(index, 1);
+                  if(input=="列表置顶"){
+                    datalist.unshift(data);
+                  }else{
+                    datalist.push(data);
+                  }
+                }
+              }
+              alistData.drives = datalist;
+              writeFile(alistfile, JSON.stringify(alistData));
+              refreshPage(false);
+              return 'toast://已移动';
+            } else if (input == "密码管理") {
+              return $('hiker://empty#noRecordHistory##noHistory#').rule((item,alistfile) => {
+                setPageTitle(item.name+' | 密码管理');
+                eval("var alistData=" + fetch(alistfile));
+                let datalist = alistData.drives;
+                let d = [];
+                d.push({
+                    title: '🔢 添加密码',
+                    url: $("","有密码的路径").input((api,alistData,alistfile) => {
+                      return $("","此路径的密码").input((path,api,alistData,alistfile) => {
+                        let datalist = alistData.drives;
+                        for (let i = 0; i < datalist.length; i++) {
+                          if (datalist[i].server == api) {
+                            let password = datalist[i].password || {};
+                            password[path] = input;
+                            datalist[i].password = password;
+                            break;
+                          }
+                        }
+                        alistData.drives = datalist;
+                        writeFile(alistfile, JSON.stringify(alistData));
+                        refreshPage(false);
+                        return "hiker://empty";
+                      },input,api,alistData,alistfile)
+                    },item.server,alistData,alistfile),
+                    img: "https://lanmeiguojiang.com/tubiao/movie/98.svg",
+                    col_type: "text_center_1"
+                });
+                for (let i = 0; i < datalist.length; i++) {
+                  if (datalist[i].server == item.server) {
+                    var pwdlist = datalist[i].password || {}
+                    break;
+                  }
+                }
+                for(let key in pwdlist){
+                  d.push({
+                      title: key,
+                      desc: pwdlist[key],
+                      url: $("确定删除："+key).confirm((api,key,alistData,alistfile)=>{
+                        let datalist = alistData.drives;
+                        for (let i = 0; i < datalist.length; i++) {
+                          if (datalist[i].server == api) {
+                            let password = datalist[i].password;
+                            delete password[key];
+                            datalist[i].password = password;
+                            break;
+                          }
+                        }
+                        alistData.drives = datalist;
+                        writeFile(alistfile, JSON.stringify(alistData));
+                        refreshPage(false);
+                        return "hiker://empty";
+                      },item.server,key,alistData,alistfile),
+                      col_type: "text_1"
+                  });
+                }
+                setResult(d);
+              }, item, alistfile)
+            }
+          }
+        }, item ,alistfile),
+        desc: item.server,
+        col_type: "text_1"
+    });
+  })
+  
+  setResult(d);
 }
