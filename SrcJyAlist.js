@@ -116,7 +116,7 @@ function alistHome() {
             },alistfile,alistData,alistconfig)
           }else{
             if(alistconfig.alitoken){
-              return $("","阿里分享链接").input((alistapi)=>{
+              return $("","阿里分享链接").input((alistapi,alitoken)=>{
                 input = input.replace('https://www.aliyundrive.com/s/','');
                 let share_id = input.indexOf('/folder/')>-1?input.split('/folder/')[0]:input;
                 let folder_id = input.indexOf('/folder/')>-1?input.split('/folder/')[1]:"root";
@@ -133,7 +133,7 @@ function alistHome() {
                     "down_proxy_url": "",
                     "extract_folder": "",
                     "driver": "AliyundriveShare",
-                    "addition": "{\"refresh_token\":\""+alistconfig.alitoken+"\",\"share_id\":\""+share_id+"\",\"share_pwd\":\"\",\"root_folder_id\":\""+folder_id+"\",\"order_by\":\"\",\"order_direction\":\"\"}"
+                    "addition": "{\"refresh_token\":\""+alitoken+"\",\"share_id\":\""+share_id+"\",\"share_pwd\":\"\",\"root_folder_id\":\""+folder_id+"\",\"order_by\":\"\",\"order_direction\":\"\"}"
                   }
                   let result = JSON.parse(request(alistapi.server+"/api/admin/storage/create", {headers:{"Authorization":alistapi.token},body:body,method:'POST',timeout:10000}));
                   if(result.code==200){
@@ -143,7 +143,7 @@ function alistHome() {
                     return "toast://已存在";
                   }
                 }
-              },alistapi)
+              },alistapi,alistconfig.alitoken)
             }else{
               return "toast://阿里token还未填写，无法挂载";
             }
