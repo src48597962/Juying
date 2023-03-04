@@ -346,6 +346,11 @@ function alistUrl(alistapi,path,sign,subtitle,provider) {
 
       let result = JSON.parse(request(url,{onlyHeaders:true,redirect:false,timeout:10000}));
       log(result);
+      //let redirect = result.location;
+      let html = request('https://api.aliyundrive.com/v2/file/get_video_preview_play_info', {headers:{'x-share-token':'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b21Kc29uIjoie1wiZG9tYWluX2lkXCI6XCJiajI5XCIsXCJzaGFyZV9pZFwiOlwiNFlWc0tQSzhUdFNcIixcImNyZWF0b3JcIjpcIjY2OTg3MThjMDljYzRhNGFiMzViZDBhYWE2NWZlYThhXCIsXCJ1c2VyX2lkXCI6XCJhbm9ueW1vdXNcIn0iLCJjdXN0b21UeXBlIjoic2hhcmVfbGluayIsImV4cCI6MTY3NzkxMjgxMSwiaWF0IjoxNjc3OTA1NTUxfQ.sufsLmtm_OkreW0mqW1Rp_caeUkCwNFzN5oHXODs6jXfI4AKovKt8c8ho9nAFc4yOUvPY_8bcR62FUYcyW0x-2Rriri2KYWjeNykBWxx97VUkKYSPd7CuBsfcUMTV-P2x84pVRh1PycfloygYXF-FNKayZ2pHDUMGyycr8EvmIM'},body:{"share_id":"4YVsKPK8TtS","drive_id":"899144851","file_id":"63f723ea2a560c25a2f24a9eade3dd012863b1fa","category":"live_transcoding","template_id":"","get_preview_url":true,"get_subtitle_info":true},method:'POST',timeout:10000});
+      let play = JSON.parse(html).video_preview_play_info.live_transcoding_task_list;
+      return play[play.length-1].preview_url;
+      
         url = url + (music.test(suffix)?"#isMusic=true#":"#isVideo=true#") + (url.indexOf('baidu.com')>-1? ';{User-Agent@Lavf/57.83.100}':'');
         if(!subtitle){
           return url;
