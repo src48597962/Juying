@@ -344,7 +344,7 @@ function alistUrl(alistapi,path,sign,subtitle,provider) {
         }catch(e){}
       }
 
-      let result = JSON.parse(request(url,{withStatusCode:true,timeout:5000}));
+      let result = request(url);
       log(result);
         url = url + (music.test(suffix)?"#isMusic=true#":"#isVideo=true#") + (url.indexOf('baidu.com')>-1? ';{User-Agent@Lavf/57.83.100}':'');
         if(!subtitle){
