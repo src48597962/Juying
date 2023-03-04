@@ -350,7 +350,7 @@ function alistUrl(alistapi,path,sign,subtitle,provider) {
       let play = JSON.parse(html).video_preview_play_info.live_transcoding_task_list;
       let result = JSON.parse(request(play[play.length-1].preview_url,{onlyHeaders:true,redirect:false,timeout:10000}));
       log(result);
-      return result.headers.location[0].replace('anonymous','3426ad8ebaa04e1ea9ee01bd998d06d4')+"#isVideo=true#";
+      return result.headers.location[0].replace('ref_task','media').replace('hls%2Fsign%2Cparams_ZGksZHIsZix1LHNs','hls%2Fsign%2Cparams_ZGksZHIsZix1LHNs%2Cheaders_cmVmZXJlcg%3D%3D').replace('&x-oss-expires','&x-oss-additional-headers=referer&x-oss-expires').replace('anonymous','3426ad8ebaa04e1ea9ee01bd998d06d4')+"#isVideo=true#";
       
         url = url + (music.test(suffix)?"#isMusic=true#":"#isVideo=true#") + (url.indexOf('baidu.com')>-1? ';{User-Agent@Lavf/57.83.100}':'');
         if(!subtitle){
