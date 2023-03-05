@@ -310,6 +310,14 @@ function arrayAdd(list,isdir,alistapi,provider){
 }
 
 function alistUrl(alistapi,path,sign,subtitle,provider) {
+  const transcoding = {
+    UHD: "4K 超清",
+    QHD: "2K 超清",
+    FHD: "1080 全高清",
+    HD: "720 高清",
+    SD: "540 标清",
+    LD: "360 流畅"
+  };
   let suffix = path.substring(path.lastIndexOf('.')+1);//后缀名
   let url = encodeURI(alistapi.server + "/d"+ path) + "?sign=" + sign;
   if(contain.test(suffix)){
@@ -324,7 +332,7 @@ function alistUrl(alistapi,path,sign,subtitle,provider) {
             let names = [];
             playurl.forEach(item => {
               urls.push(item.url+"#isVideo=true##pre#");
-              names.push(item.template_id=="LD"?"360p 流畅":item.template_id=="SD"?"540p 标清":item.template_id=="HD"?"720p 高清":item.template_id=="FHD"?"1080p 全高清":item.template_height);
+              names.push(transcoding[item.template_id]?transcoding[item.template_id]:item.template_height);
             })
             return JSON.stringify({
                 urls: urls,
