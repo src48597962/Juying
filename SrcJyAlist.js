@@ -331,13 +331,16 @@ function alistUrl(alistapi,path,sign,subtitle,provider) {
             playurl.reverse();
             let urls = [];
             let names = [];
+            let heads = [];
             playurl.forEach(item => {
               urls.push(item.url+"#isVideo=true##pre#");
               names.push(transcoding[item.template_id]?transcoding[item.template_id]:item.template_height);
+              heads.push({'Referer':'https://www.aliyundrive.com/'});
             })
             return JSON.stringify({
                 urls: urls,
                 names: names,
+                headers: heads,
                 subtitle: subtitle
             });
           }
@@ -369,12 +372,10 @@ function alistUrl(alistapi,path,sign,subtitle,provider) {
           };
           let refresh_token = alistconfig.alitoken;
           let userinfo = JSON.parse(request('https://auth.aliyundrive.com/v2/account/token',{headers:headers,body:{"refresh_token":refresh_token,"grant_type":"refresh_token"},method:'POST',timeout:3000}));
-          log(userinfo);
           let authorization = 'Bearer '+userinfo.access_token;
           let userId = userinfo.user_id;
           let deviceId = userinfo.device_id;
           let getaliecc = JSON.parse(request('http://124.221.241.174:87/api',{body:'did='+deviceId+'&uid='+userId,method:'POST',timeout:3000}));
-          log(getaliecc);
           let signature;
           let public_key;
           if(getaliecc.code==200){
@@ -403,24 +404,26 @@ function alistUrl(alistapi,path,sign,subtitle,provider) {
               "get_subtitle_info":true
             }
             let json = JSON.parse(request('https://api.aliyundrive.com/v2/file/get_share_link_video_preview_play_info',{headers:headers,body:data,method:'POST',timeout:3000}));
-            log(json);
             let playurl = json.video_preview_play_info.live_transcoding_task_list;
             playurl.reverse();
             let urls = [];
             let names = [];
+            let heads = [];
             playurl.forEach(item => {
-              let rurl = JSON.parse(request(item.url,{onlyHeaders:true,redirect:false,timeout:3000})).headers.location[0];
+              let rurl = JSON.parse(request(item.url,{headers:{'Referer':'https://www.aliyundrive.com/'},onlyHeaders:true,redirect:false,timeout:3000})).headers.location[0];
               urls.push(rurl+"#isVideo=true##pre#");
               names.push(transcoding[item.template_id]?transcoding[item.template_id]:item.template_height);
+              heads.push({'Referer':'https://www.aliyundrive.com/'});
             })
             return JSON.stringify({
                 urls: urls,
                 names: names,
+                headers: heads,
                 subtitle: subtitle
             });
           }
         }catch(e){
-          log('获取共享链接播放地址>'+e.message);
+          log('获取共享链接播放地址失败>'+e.message);
         }
       }
         url = url + (music.test(suffix)?"#isMusic=true#":"#isVideo=true#") + (url.indexOf('baidu.com')>-1? ';{User-Agent@Lavf/57.83.100}':'');
