@@ -1,6 +1,7 @@
+eval(getCryptoJS());
 function sha256(str) {
   const data = new Uint8Array(Array.from(str, c => c.charCodeAt(0)));
-  return crypto.subtle.digest('SHA-256', data).then(hashBuffer => {
+  return CryptoJS.subtle.digest('SHA-256', data).then(hashBuffer => {
     const hashArray = Array.from(new Uint8Array(hashBuffer));
     const hashHex = hashArray.map(b => ('00' + b.toString(16)).slice(-2)).join('');
     return hashHex;
@@ -8,7 +9,7 @@ function sha256(str) {
 }
 function getRandomBytes(len) {
   const arr = new Uint8Array(len);
-  window.crypto.getRandomValues(arr);
+  CryptoJS.getRandomValues(arr);
   return Array.from(arr, (dec) => ('0' + dec.toString(16)).substr(-2)).join('');
 }
 function toHex(buf) {
