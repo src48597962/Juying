@@ -424,19 +424,23 @@ function alistUrl(alistapi,path,sign,subtitle,provider) {
                   names.push(transcoding[item.template_id]?transcoding[item.template_id]:item.template_height);
                   heads.push({'Referer':'https://www.aliyundrive.com/'});
                 })
-                return JSON.stringify({
+                return {
                     urls: urls,
                     names: names,
                     headers: heads,
                     subtitle: subtitle
-                });
+                };
               }
             }
           }catch(e){
             log('获取共享链接播放地址失败>'+e.message);
+            return {};
           }
         }
-        getAliUrl(url,alistconfig.alitoken,subtitle);
+        let play = getAliUrl(url,alistconfig.alitoken,subtitle);
+        if(play.urls){
+          return JSON.stringify(play);
+        }
       }
         url = url + (music.test(suffix)?"#isMusic=true#":"#isVideo=true#") + (url.indexOf('baidu.com')>-1? ';{User-Agent@Lavf/57.83.100}':'');
         if(!subtitle){
