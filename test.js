@@ -1,8 +1,8 @@
-require("https://cdn.jsdelivr.net/npm/crypto-es/crypto-es.js")
-require("https://cdn.jsdelivr.net/npm/elliptic/dist/elliptic.min.js")
+require("https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js")
+require("https://cdnjs.cloudflare.com/ajax/libs/elliptic/6.5.4/elliptic.min.js")
 
 // 生成随机私钥
-const privateKey = CryptoES.lib.WordArray.random(32).toString();
+const privateKey = CryptoJS.lib.WordArray.random(32).toString();
 // 根据私钥生成公钥
 const ec = new elliptic.ec('secp256k1');
 const publicKey = ec.keyFromPrivate(privateKey).getPublic().encode('hex');
@@ -13,7 +13,7 @@ const userId = "3426axxxxx04e1ea9ee01bd998d06d4";
 let nonce = 0;
 const message = `${appId}:${deviceId}:${userId}:${nonce}`;
 // 计算消息哈希
-const messageHash = CryptoES.SHA256(CryptoES.enc.Utf8.parse(message)).toString();
+const messageHash = CryptoJS.SHA256(CryptoJS.enc.Utf8.parse(message)).toString();
 // 对哈希值进行签名
 const signKey = ec.keyFromPrivate(privateKey);
 const signature = signKey.sign(messageHash).toDER('hex');
