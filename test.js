@@ -13,7 +13,7 @@ let signature = sign(privateKey, messageHash);
 sendToServer(signature, publicKey);
 function generateRandomPrivateKey() {
   // 生成32字节随机数作为私钥
-  return crypto.randomBytes(32);
+  return CryptoJS.randomBytes(32);
 }
 function generatePublicKey(privateKey) {
   // 根据私钥生成公钥
@@ -26,7 +26,7 @@ function generateMessage(appId, deviceId, userId, nonce) {
 }
 function sha256(data) {
   // 计算SHA256哈希值
-  return crypto.createHash('sha256').update(data).digest();
+  return CryptoJS.createHash('sha256').update(data).digest();
 }
 function sign(privateKey, messageHash) {
   // 使用私钥对消息哈希值进行签名
