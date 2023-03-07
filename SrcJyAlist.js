@@ -320,6 +320,7 @@ function alistUrl(alistapi,path,sign,subtitle,provider) {
   };
   let suffix = path.substring(path.lastIndexOf('.')+1);//后缀名
   let url = encodeURI(alistapi.server + "/d"+ path) + "?sign=" + sign;
+  subtitle = subtitle?url.match(/http(s)?:\/\/.*\//)[0] + subtitle:"";
   if(contain.test(suffix)){
     try{
       if(provider=="AliyundriveOpen"){
@@ -337,7 +338,7 @@ function alistUrl(alistapi,path,sign,subtitle,provider) {
             return JSON.stringify({
                 urls: urls,
                 names: names,
-                subtitle: subtitle?url.match(/http(s)?:\/\/.*\//)[0] + subtitle:""
+                subtitle: subtitle
             });
           }
         }catch(e){
@@ -354,7 +355,7 @@ function alistUrl(alistapi,path,sign,subtitle,provider) {
       
       if(provider=="AliyundriveShare"){
         try{
-          let redirect = JSON.parse(request(url,{onlyHeaders:true,redirect:false,timeout:10000}));
+          let redirect = JSON.parse(request(url,{onlyHeaders:true,redirect:false,timeout:3000}));
           let rurl = redirect.headers.location[0];
           let share_id = rurl.split('&sl=')[1].split('&')[0];
           let file_id = rurl.split('&f=')[1].split('&')[0];
@@ -408,12 +409,14 @@ function alistUrl(alistapi,path,sign,subtitle,provider) {
             let urls = [];
             let names = [];
             playurl.forEach(item => {
-              urls.push(item.url+"#isVideo=true##pre#");
+              let rurl = JSON.parse(request(item.url,{onlyHeaders:true,redirect:false,timeout:3000})).headers.location[0];
+              urls.push(rurl+"#isVideo=true##pre#");
               names.push(transcoding[item.template_id]?transcoding[item.template_id]:item.template_height);
             })
             return JSON.stringify({
                 urls: urls,
-                names: names
+                names: names,
+                subtitle: subtitle
             });
           }
         }catch(e){
