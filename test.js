@@ -31,3 +31,5 @@ const keyPairPromise = crypto.subtle.generateKey(
   ['sign', 'verify']
 );
 toast('加载完')
+
+setResult(d);
