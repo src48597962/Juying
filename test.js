@@ -19,4 +19,49 @@ function generateKeyPair() {
     publicKey: '04' + publicKey.x.toString(16, 64) + publicKey.y.toString(16, 64)
   };
 }
-log('aaa');
+function hexToBigInt(hex) {
+  return BigInt('0x' + hex.slice(2));
+}
+function pointMultiply(G, d) {
+  let Q = null;
+  let k = 1;
+  let k2 = 0;
+  while (d > 0) {
+    if (d & 1) {
+      if (Q === null) {
+        Q = G;
+      } else {
+        Q = pointAdd(Q, G, curve);
+      }
+      k2 = k;
+      k = 0;
+    }
+    G = pointAdd(G, G, curve);
+    d >>= 1;
+    k += k;
+  }
+  if (Q === null) {
+    Q = pointMultiply(G, 0n);
+  } else {
+    Q = pointMultiply(Q, k2);
+  }
+  return Q;
+}
+function pointAdd(P, Q, curve) {
+  const m = ((P.y - Q.y) * modInverse(P.x - Q.x, curve.p)) %!c(MISSING)urve.p;
+  const x = (m * m - P.x - Q.x) %!c(MISSING)urve.p;
+  const y = (m * (P.x - x) - P.y) %!c(MISSING)urve.p;
+  return { x, y };
+}
+function modInverse(a, m) {
+  a = a %!m(MISSING);
+  for (let x = 1n; x < m; x++) {
+    if ((a * x) %!m(MISSING) === 1n) {
+      return x;
+    }
+  }
+  return 1n;
+}
+const keyPair = generateKeyPair();
+console.log('Private key:', keyPair.privateKey);
+console.log('Public key:', keyPair.publicKey);
