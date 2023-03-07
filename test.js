@@ -1,5 +1,5 @@
 function sha256(str) {
-  const data = new Uint8Array([...str].map(c => c.charCodeAt(0)));
+  const data = new Uint8Array(Array.from(str, c => c.charCodeAt(0)));
   return crypto.subtle.digest('SHA-256', data).then(hashBuffer => {
     const hashArray = Array.from(new Uint8Array(hashBuffer));
     const hashHex = hashArray.map(b => ('00' + b.toString(16)).slice(-2)).join('');
