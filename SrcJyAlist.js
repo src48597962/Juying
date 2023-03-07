@@ -373,6 +373,7 @@ function alistUrl(alistapi,path,sign,subtitle,provider) {
           let userId = userinfo.user_id;
           let deviceId = userinfo.device_id;
           let getaliecc = JSON.parse(request('http://124.221.241.174:87/api',{body:'did='+deviceId+'&uid='+userId,method:'POST',timeout:3000}));
+          log(getaliecc);
           let signature;
           let public_key;
           if(getaliecc.code==200){
@@ -401,6 +402,7 @@ function alistUrl(alistapi,path,sign,subtitle,provider) {
               "get_subtitle_info":true
             }
             let json = JSON.parse(request('https://api.aliyundrive.com/v2/file/get_share_link_video_preview_play_info',{headers:headers,body:data,method:'POST',timeout:3000}));
+            log(json);
             let playurl = json.video_preview_play_info.live_transcoding_task_list;
             playurl.reverse();
             let urls = [];
