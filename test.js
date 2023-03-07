@@ -23,7 +23,7 @@ const appId = '5ddexxxbdf9e4966b387ba58f4b3fdc3';
 const deviceId = '2eexxx84b9fc4860b9427feb97a4c142';
 const userId = '3426axxxbaa04e1ea9ee01bd998d06d4';
 let nonce = 0;
-const keyPairPromise = crypto.subtle.generateKey(
+const keyPairPromise = CryptoJS.subtle.generateKey(
   {
     name: 'ECDSA',
     namedCurve: curve
