@@ -15,7 +15,7 @@ function generateKeyPair() {
   };
   const publicKey = pointMultiply(G, privateKey);
   return {
-    privateKey,
+    privateKey: privateKey,
     publicKey: '04' + publicKey.x.toString(16, 64) + publicKey.y.toString(16, 64)
   };
 }
