@@ -363,7 +363,7 @@ function alistUrl(alistapi,path,sign,subtitle,provider) {
           const dd = new Date().getDate() < 10 ? '0' + new Date().getDate() : new Date().getDate()
           const HH = new Date().getHours() < 10 ? '0' + new Date().getHours() : new Date().getHours()
           const mm = new Date().getMinutes() < 10 ? '0' + new Date().getMinutes() : new Date().getMinutes()
-          return yy + '' + MM + '' + dd + '' + HH + '' + mm + '' + ss
+          return yy + '' + dd + '' + HH + '' + MM + '' + mm
         }
         try{
           let redirect = JSON.parse(request(url,{onlyHeaders:true,redirect:false,timeout:3000}));
