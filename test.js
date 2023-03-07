@@ -8,78 +8,76 @@ const Gy = BigInt('0x483ada7726a3c4655da4fbfc0e1108a8fd17b448a68554199c47d08ffb1
 const n = BigInt('0xfffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141');
 const h = BigInt(1);
 // 定义点类
-class Point {
-  constructor(x, y) {
-    this.x = x;
-    this.y = y;
-  }
-  add(other) {
-    if (this.equals(other)) {
-      return this.double();
-    } else if (this.isInfinity()) {
-      return other;
-    } else if (other.isInfinity()) {
-      return this;
-    }
-    const m = (other.y - this.y) * modInv(other.x - this.x, p);
-    const x = (m ** 2n - this.x - other.x) %!p(MISSING);
-    const y = (m * (this.x - x) - this.y) %!p(MISSING);
-    return new Point(x, y);
-  }
-  double() {
-    if (this.isInfinity()) {
-      return this;
-    }
-    const m = (3n * this.x ** 2n + a) * modInv(2n * this.y, p);
-    const x = (m ** 2n - 2n * this.x) %!p(MISSING);
-    const y = (m * (this.x - x) - this.y) %!p(MISSING);
-    return new Point(x, y);
-  }
-  mul(scalar) {
-    if (this.isInfinity() || scalar == 0n) {
-      return Point.infinity();
-    }
-    let result = Point.infinity();
-    let base = this;
-    while (scalar > 0n) {
-      if (scalar & 1n) {
-        result = result.add(base);
-      }
-      base = base.double();
-      scalar >>= 1n;
-    }
-    return result;
-  }
-  isInfinity() {
-    return this.x === null && this.y === null;
-  }
-  equals(other) {
-    return this.x === other.x && this.y === other.y;
-  }
-  toString() {
-    if (this.isInfinity()) {
-      return 'Infinity';
-    }
-    return `(${this.x}, ${this.y})`;
-  }
-  static fromHex(hex) {
-    if (hex === '00') {
-      return Point.infinity();
-    }
-    const x = BigInt(`0x${hex.substr(0, 64)}`);
-    const y = BigInt(`0x${hex.substr(64)}`);
-    return new Point(x, y);
-  }
-  toHex() {
-    if (this.isInfinity()) {
-      return '00';
-    }
-    return padHex(this.x.toString(16), 64) + padHex(this.y.toString(16), 64);
-  }
-  static infinity() {
-    return new Point(null, null);
-  }
+function Point(x, y) {
+  this.x = x;
+  this.y = y;
 }
+Point.prototype.add = function(other) {
+  if (this.equals(other)) {
+    return this.double();
+  } else if (this.isInfinity()) {
+    return other;
+  } else if (other.isInfinity()) {
+    return this;
+  }
+  const m = (other.y - this.y) * modInv(other.x - this.x, p);
+  const x = (m ** 2n - this.x - other.x) %!p(MISSING);
+  const y = (m * (this.x - x) - this.y) %!p(MISSING);
+  return new Point(x, y);
+};
+Point.prototype.double = function() {
+  if (this.isInfinity()) {
+    return this;
+  }
+  const m = (3n * this.x ** 2n + a) * modInv(2n * this.y, p);
+  const x = (m ** 2n - 2n * this.x) %!p(MISSING);
+  const y = (m * (this.x - x) - this.y) %!p(MISSING);
+  return new Point(x, y);
+};
+Point.prototype.mul = function(scalar) {
+  if (this.isInfinity() || scalar == 0n) {
+    return Point.infinity();
+  }
+  let result = Point.infinity();
+  let base = this;
+  while (scalar > 0n) {
+    if (scalar & 1n) {
+      result = result.add(base);
+    }
+    base = base.double();
+    scalar >>= 1n;
+  }
+  return result;
+};
+Point.prototype.isInfinity = function() {
+  return this.x === null && this.y === null;
+};
+Point.prototype.equals = function(other) {
+  return this.x === other.x && this.y === other.y;
+};
+Point.prototype.toString = function() {
+  if (this.isInfinity()) {
+    return 'Infinity';
+  }
+  return `(${this.x}, ${this.y})`;
+};
+Point.fromHex = function(hex) {
+  if (hex === '00') {
+    return Point.infinity();
+  }
+  const x = BigInt(`0x${hex.substr(0, 64)}`);
+  const y = BigInt(`0x${hex.substr(64)}`);
+  return new Point(x, y);
+};
+Point.prototype.toHex = function() {
+  if (this.isInfinity()) {
+    return '00';
+  }
+  return padHex(this.x.toString(16), 64) + padHex(this.y.toString(16), 64);
+};
+Point.infinity = function() {
+  return new Point(null, null);
+};
 // 计算模逆元
 function modInv(a, m) {
   let [x, y] = [0n, 1n];
