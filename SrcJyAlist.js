@@ -357,83 +357,86 @@ function alistUrl(alistapi,path,sign,subtitle,provider) {
       }
       
       if(provider=="AliyundriveShare"){
-        function getNowTime() {
-          const yy = new Date().getFullYear()
-          const MM = (new Date().getMonth() + 1) < 10 ? '0' + (new Date().getMonth() + 1) : (new Date().getMonth() + 1)
-          const dd = new Date().getDate() < 10 ? '0' + new Date().getDate() : new Date().getDate()
-          const HH = new Date().getHours() < 10 ? '0' + new Date().getHours() : new Date().getHours()
-          const mm = new Date().getMinutes() < 10 ? '0' + new Date().getMinutes() : new Date().getMinutes()
-          return yy + '' + dd + '' + HH + '' + MM + '' + mm
-        }
-        try{
-          let redirect = JSON.parse(request(url,{onlyHeaders:true,redirect:false,timeout:3000}));
-          let rurl = redirect.headers.location[0];
-          let share_id = rurl.split('&sl=')[1].split('&')[0];
-          let file_id = rurl.split('&f=')[1].split('&')[0];
-          let sharetoken = JSON.parse(request('https://api.aliyundrive.com/v2/share_link/get_share_token',{body:{"share_pwd":"","share_id":share_id},method:'POST',timeout:3000})).share_token;
-          let headers = {
-            'content-type':'application/json;charset=UTF-8',
-            "origin": "https://www.aliyundrive.com",
-            "referer": "https://www.aliyundrive.com/",
-            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36 Edg/110.0.1587.41",
-            "x-canary": "client=web,app=adrive,version=v3.1.0"
-          };
-          let alitoken = alistconfig.alitoken;
-          let userinfo = JSON.parse(request('https://auth.aliyundrive.com/v2/account/token',{headers:headers,body:{"refresh_token":alitoken,"grant_type":"refresh_token"},method:'POST',timeout:3000}));
-          let authorization = 'Bearer '+userinfo.access_token;
-          let userId = userinfo.user_id;
-          let deviceId = userinfo.device_id;
-          let getaliecc = JSON.parse(request('http://124.221.241.174:87/api',{body:'did='+deviceId+'&uid='+userId+'&token='+md5(getNowTime()),method:'POST',timeout:3000}));
-          let signature;
-          let public_key;
-          if(getaliecc.code==200){
-            signature = getaliecc.sign;
-            public_key = getaliecc.key;
-          }
-          headers['authorization'] = authorization;
-          headers['x-device-id'] = deviceId;
-          headers['x-signature'] = signature;
-          let data = {
-              "deviceName": "Edge浏览器",
-              "modelName": "Windows网页版",
-              "pubKey": public_key,
-          }
-          if(signature&&public_key){
-            let req = JSON.parse(request("https://api.aliyundrive.com/users/v1/users/device/create_session",{headers:headers,body:data,timeout:3000}));
-            if(req.success){
-              headers['x-share-token'] = sharetoken;
-              headers['fileid'] = userinfo.user_id;
-              data = {
-                "category":"live_transcoding",
-                "file_id":file_id,
-                "get_preview_url":true,
-                "share_id":share_id,
-                "template_id":"",
-                "get_subtitle_info":true
-              }
-              let json = JSON.parse(request('https://api.aliyundrive.com/v2/file/get_share_link_video_preview_play_info',{headers:headers,body:data,method:'POST',timeout:3000}));
-              let playurl = json.video_preview_play_info.live_transcoding_task_list;
-              playurl.reverse();
-              let urls = [];
-              let names = [];
-              let heads = [];
-              playurl.forEach(item => {
-                let rurl = JSON.parse(request(item.url,{headers:{'Referer':'https://www.aliyundrive.com/'},onlyHeaders:true,redirect:false,timeout:3000})).headers.location[0];
-                urls.push(rurl+"#isVideo=true##pre#");
-                names.push(transcoding[item.template_id]?transcoding[item.template_id]:item.template_height);
-                heads.push({'Referer':'https://www.aliyundrive.com/'});
-              })
-              return JSON.stringify({
-                  urls: urls,
-                  names: names,
-                  headers: heads,
-                  subtitle: subtitle
-              });
+        function getAliUrl(url,alitoken,subtitle){
+          try{
+            function getNowTime() {
+              const yy = new Date().getFullYear()
+              const MM = (new Date().getMonth() + 1) < 10 ? '0' + (new Date().getMonth() + 1) : (new Date().getMonth() + 1)
+              const dd = new Date().getDate() < 10 ? '0' + new Date().getDate() : new Date().getDate()
+              const HH = new Date().getHours() < 10 ? '0' + new Date().getHours() : new Date().getHours()
+              const mm = new Date().getMinutes() < 10 ? '0' + new Date().getMinutes() : new Date().getMinutes()
+              return yy + '' + dd + '' + HH + '' + MM + '' + mm
             }
+            let redirect = JSON.parse(request(url,{onlyHeaders:true,redirect:false,timeout:3000}));
+            let rurl = redirect.headers.location[0];
+            let share_id = rurl.split('&sl=')[1].split('&')[0];
+            let file_id = rurl.split('&f=')[1].split('&')[0];
+            let sharetoken = JSON.parse(request('https://api.aliyundrive.com/v2/share_link/get_share_token',{body:{"share_pwd":"","share_id":share_id},method:'POST',timeout:3000})).share_token;
+            let headers = {
+              'content-type':'application/json;charset=UTF-8',
+              "origin": "https://www.aliyundrive.com",
+              "referer": "https://www.aliyundrive.com/",
+              "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36 Edg/110.0.1587.41",
+              "x-canary": "client=web,app=adrive,version=v3.1.0"
+            };
+            //let alitoken = alistconfig.alitoken;
+            let userinfo = JSON.parse(request('https://auth.aliyundrive.com/v2/account/token',{headers:headers,body:{"refresh_token":alitoken,"grant_type":"refresh_token"},method:'POST',timeout:3000}));
+            let authorization = 'Bearer '+userinfo.access_token;
+            let userId = userinfo.user_id;
+            let deviceId = userinfo.device_id;
+            let getaliecc = JSON.parse(request('http://124.221.241.174:87/api',{body:'did='+deviceId+'&uid='+userId+'&token='+md5(getNowTime()),method:'POST',timeout:3000}));
+            let signature;
+            let public_key;
+            if(getaliecc.code==200){
+              signature = getaliecc.sign;
+              public_key = getaliecc.key;
+            }
+            headers['authorization'] = authorization;
+            headers['x-device-id'] = deviceId;
+            headers['x-signature'] = signature;
+            let data = {
+                "deviceName": "Edge浏览器",
+                "modelName": "Windows网页版",
+                "pubKey": public_key,
+            }
+            if(signature&&public_key){
+              let req = JSON.parse(request("https://api.aliyundrive.com/users/v1/users/device/create_session",{headers:headers,body:data,timeout:3000}));
+              if(req.success){
+                headers['x-share-token'] = sharetoken;
+                headers['fileid'] = userinfo.user_id;
+                data = {
+                  "category":"live_transcoding",
+                  "file_id":file_id,
+                  "get_preview_url":true,
+                  "share_id":share_id,
+                  "template_id":"",
+                  "get_subtitle_info":true
+                }
+                let json = JSON.parse(request('https://api.aliyundrive.com/v2/file/get_share_link_video_preview_play_info',{headers:headers,body:data,method:'POST',timeout:3000}));
+                let playurl = json.video_preview_play_info.live_transcoding_task_list;
+                playurl.reverse();
+                let urls = [];
+                let names = [];
+                let heads = [];
+                playurl.forEach(item => {
+                  let rurl = JSON.parse(request(item.url,{headers:{'Referer':'https://www.aliyundrive.com/'},onlyHeaders:true,redirect:false,timeout:3000})).headers.location[0];
+                  urls.push(rurl+"#isVideo=true##pre#");
+                  names.push(transcoding[item.template_id]?transcoding[item.template_id]:item.template_height);
+                  heads.push({'Referer':'https://www.aliyundrive.com/'});
+                })
+                return JSON.stringify({
+                    urls: urls,
+                    names: names,
+                    headers: heads,
+                    subtitle: subtitle
+                });
+              }
+            }
+          }catch(e){
+            log('获取共享链接播放地址失败>'+e.message);
           }
-        }catch(e){
-          log('获取共享链接播放地址失败>'+e.message);
         }
+        getAliUrl(url,alistconfig.alitoken,subtitle);
       }
         url = url + (music.test(suffix)?"#isMusic=true#":"#isVideo=true#") + (url.indexOf('baidu.com')>-1? ';{User-Agent@Lavf/57.83.100}':'');
         if(!subtitle){
