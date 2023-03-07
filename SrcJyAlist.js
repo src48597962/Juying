@@ -399,8 +399,7 @@ function alistUrl(alistapi,path,sign,subtitle,provider) {
               "get_subtitle_info":true
             }
             let json = JSON.parse(request('https://api.aliyundrive.com/v2/file/get_share_link_video_preview_play_info',{headers:headers,body:data,method:'POST',timeout:3000}));
-            log(json)
-            let playurl = json.data.video_preview_play_info.live_transcoding_task_list;
+            let playurl = json.video_preview_play_info.live_transcoding_task_list;
             playurl.reverse();
             let urls = [];
             let names = [];
