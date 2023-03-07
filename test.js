@@ -6,7 +6,7 @@ const b = BigInt(7);
 const Gx = BigInt('0x79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798');
 const Gy = BigInt('0x483ada7726a3c4655da4fbfc0e1108a8fd17b448a68554199c47d08ffb10d4b8');
 const n = BigInt('0xfffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141');
-const h = BigInt(1);
+const h = 1n;
 // 定义点类
 function Point(x, y) {
   this.x = x;
@@ -21,8 +21,8 @@ Point.prototype.add = function(other) {
     return this;
   }
   const m = (other.y - this.y) * modInv(other.x - this.x, p);
-  const x = (m ** 2n - this.x - other.x) %!p(MISSING);
-  const y = (m * (this.x - x) - this.y) %!p(MISSING);
+  const x = (m ** 2n - this.x - other.x).mod(p);
+  const y = (m * (this.x - x) - this.y).mod(p);
   return new Point(x, y);
 };
 Point.prototype.double = function() {
@@ -30,8 +30,8 @@ Point.prototype.double = function() {
     return this;
   }
   const m = (3n * this.x ** 2n + a) * modInv(2n * this.y, p);
-  const x = (m ** 2n - 2n * this.x) %!p(MISSING);
-  const y = (m * (this.x - x) - this.y) %!p(MISSING);
+  const x = (m ** 2n - 2n * this.x).mod(p);
+  const y = (m * (this.x - x) - this.y).mod(p);
   return new Point(x, y);
 };
 Point.prototype.mul = function(scalar) {
@@ -84,7 +84,7 @@ function modInv(a, m) {
   let [lastX, lastY] = [1n, 0n];
   let [mod, quotient] = [m, null];
   while (mod > 0n) {
-    [quotient, a, mod] = [a / mod, mod, a %!m(MISSING)od];
+    [quotient, a, mod] = [a / mod, mod, a %!m(MISSING)];
     [x, lastX] = [lastX - quotient * x, x];
     [y, lastY] = [lastY - quotient * y, y];
   }
