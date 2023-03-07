@@ -362,7 +362,7 @@ function alistUrl(alistapi,path,sign,subtitle,provider) {
           'content-type':'application/json;charset=UTF-8',
           "origin": "https://www.aliyundrive.com",
           "referer": "https://www.aliyundrive.com/",
-          "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36 Edg/110.0.1587.41",
+          "user-agent": MOBILE_UA,//"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36 Edg/110.0.1587.41",
           "x-canary": "client=web,app=adrive,version=v3.1.0"
         };
         let refresh_token = alistconfig.alitoken;
@@ -382,8 +382,8 @@ function alistUrl(alistapi,path,sign,subtitle,provider) {
         headers['x-signature'] = signature;
 
         let data = {
-            "deviceName": "Edge浏览器",
-            "modelName": "Windows网页版",
+            "deviceName": "浏览器",
+            "modelName": "WebBrowser",
             "pubKey": public_key,
         }
         let req = JSON.parse(request("https://api.aliyundrive.com/users/v1/users/device/create_session",{headers:headers,body:data,timeout:3000}));
@@ -397,21 +397,22 @@ function alistUrl(alistapi,path,sign,subtitle,provider) {
             "template_id":"",
             "get_subtitle_info":true
           }
-          let video = JSON.parse(request('https://api.aliyundrive.com/v2/file/get_share_link_video_preview_play_info',{headers:headers,body:data,method:'POST',timeout:3000}));
-          log(video);
+          let json = JSON.parse(request('https://api.aliyundrive.com/v2/file/get_share_link_video_preview_play_info',{headers:headers,body:data,method:'POST',timeout:3000}));
+          let playurl = json.data.video_preview_play_info.live_transcoding_task_list;
+          playurl.reverse();
+          let urls = [];
+          let names = [];
+          playurl.forEach(item => {
+            urls.push(item.url+"#isVideo=true##pre#");
+            names.push(transcoding[item.template_id]?transcoding[item.template_id]:item.template_height);
+          })
+          return JSON.stringify({
+              urls: urls,
+              names: names,
+              subtitle: subtitle?url.match(/http(s)?:\/\/.*\//)[0] + subtitle:""
+          });
         }
-
-
       }
-      
-      /*
-      //let redirect = result.location;
-      let html = request('https://api.aliyundrive.com/v2/file/get_video_preview_play_info', {headers:{'x-share-token':'eyJhyQ8EwRiLx0'},body:{"share_id":"4YVsKPK8TtS","drive_id":"899144851","file_id":"63f723ea2a560c25a2f24a9eade3dd012863b1fa","category":"live_transcoding","template_id":"","get_preview_url":true,"get_subtitle_info":true},method:'POST',timeout:10000});
-      let play = JSON.parse(html).video_preview_play_info.live_transcoding_task_list;
-      let result = JSON.parse(request(play[play.length-1].preview_url,{onlyHeaders:true,redirect:false,timeout:10000}));
-      log(result);
-      return result.headers.location[0].replace('ref_task','media').replace('hls%2Fsign%2Cparams_ZGksZHIsZix1LHNs','hls%2Fsign%2Cparams_ZGksZHIsZix1LHNs%2Cheaders_cmVmZXJlcg%3D%3D').replace('&x-oss-expires','&x-oss-additional-headers=referer&x-oss-expires').replace('anonymous','3426ad8ebaa04e1ea9ee01bd998d06d4')+"#isVideo=true#";
-      */
         url = url + (music.test(suffix)?"#isMusic=true#":"#isVideo=true#") + (url.indexOf('baidu.com')>-1? ';{User-Agent@Lavf/57.83.100}':'');
         if(!subtitle){
           return url;
