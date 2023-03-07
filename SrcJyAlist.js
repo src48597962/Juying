@@ -363,12 +363,13 @@ function alistUrl(alistapi,path,sign,subtitle,provider) {
             'content-type':'application/json;charset=UTF-8',
             "origin": "https://www.aliyundrive.com",
             "referer": "https://www.aliyundrive.com/",
-            "user-agent": MOBILE_UA,//"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36 Edg/110.0.1587.41",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36 Edg/110.0.1587.41",
             "x-canary": "client=web,app=adrive,version=v3.1.0"
           };
           let refresh_token = alistconfig.alitoken;
           let userinfo = JSON.parse(request('https://auth.aliyundrive.com/v2/account/token',{headers:headers,body:{"refresh_token":refresh_token,"grant_type":"refresh_token"},method:'POST',timeout:3000}));
-          let authorization = userinfo.token_type+' '+userinfo.access_token;
+          log(userinfo);
+          let authorization = 'Bearer '+userinfo.access_token;
           let userId = userinfo.user_id;
           let deviceId = userinfo.device_id;
           let getaliecc = JSON.parse(request('http://124.221.241.174:87/api',{body:'did='+deviceId+'&uid='+userId,method:'POST',timeout:3000}));
@@ -383,13 +384,14 @@ function alistUrl(alistapi,path,sign,subtitle,provider) {
           headers['x-signature'] = signature;
 
           let data = {
-              "deviceName": "浏览器",
-              "modelName": "WebBrowser",
+              "deviceName": "Edge浏览器",
+              "modelName": "Windows网页版",
               "pubKey": public_key,
           }
           let req = JSON.parse(request("https://api.aliyundrive.com/users/v1/users/device/create_session",{headers:headers,body:data,timeout:3000}));
           if(req.success){
             headers['x-share-token'] = sharetoken;
+            headers['fileid'] = userinfo.user_id;
             data = {
               "category":"live_transcoding",
               "file_id":file_id,
