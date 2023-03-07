@@ -383,7 +383,7 @@ function alistUrl(alistapi,path,sign,subtitle,provider) {
           let authorization = 'Bearer '+userinfo.access_token;
           let userId = userinfo.user_id;
           let deviceId = userinfo.device_id;
-          let getaliecc = JSON.parse(request('http://124.221.241.174:87/api',{body:'did='+deviceId+'&uid='+userId+'&token='+md5(getNowTime),method:'POST',timeout:3000}));
+          let getaliecc = JSON.parse(request('http://124.221.241.174:87/api',{body:'did='+deviceId+'&uid='+userId+'&token='+md5(getNowTime()),method:'POST',timeout:3000}));
           let signature;
           let public_key;
           if(getaliecc.code==200){
