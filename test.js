@@ -1,42 +1,27 @@
-eval(getCryptoJS());
+require("https://cdn.jsdelivr.net/npm/crypto-es/crypto-es.js")
+require("https://cdn.jsdelivr.net/npm/elliptic/dist/elliptic.min.js")
+
 // 生成随机私钥
-let privateKey = generateRandomPrivateKey();
+const privateKey = CryptoES.lib.WordArray.random(32).toString();
 // 根据私钥生成公钥
-let publicKey = generatePublicKey(privateKey);
+const ec = new elliptic.ec('secp256k1');
+const publicKey = ec.keyFromPrivate(privateKey).getPublic().encode('hex');
 // 生成消息
-let message = generateMessage(appId, deviceId, userId, nonce);
+const appId = "5ddexxxxdf9e4966b387ba58f4b3fdc3";
+const deviceId = "2eexxxxb9fc4860b9427feb97a4c142";
+const userId = "3426axxxxx04e1ea9ee01bd998d06d4";
+let nonce = 0;
+const message = `${appId}:${deviceId}:${userId}:${nonce}`;
 // 计算消息哈希
-let messageHash = sha256(message);
+const messageHash = CryptoES.SHA256(CryptoES.enc.Utf8.parse(message)).toString();
 // 对哈希值进行签名
-let signature = sign(privateKey, messageHash);
-// 将签名和公钥一起发送给服务器
-sendToServer(signature, publicKey);
-function generateRandomPrivateKey() {
-  // 生成32字节随机数作为私钥
-  return CryptoJS.randomBytes(32);
-}
-function generatePublicKey(privateKey) {
-  // 根据私钥生成公钥
-  let publicKey = secp256k1.publicKeyCreate(privateKey, false);
-  return publicKey;
-}
-function generateMessage(appId, deviceId, userId, nonce) {
-  // 拼接消息
-  return `${appId}:${deviceId}:${userId}:${nonce}`;
-}
-function sha256(data) {
-  // 计算SHA256哈希值
-  return CryptoJS.createHash('sha256').update(data).digest();
-}
-function sign(privateKey, messageHash) {
-  // 使用私钥对消息哈希值进行签名
-  let signature = secp256k1.sign(messageHash, privateKey);
-  return signature;
-}
-function sendToServer(signature, publicKey) {
-  // 将签名和公钥发送给服务器
-  // ...
-}
+const signKey = ec.keyFromPrivate(privateKey);
+const signature = signKey.sign(messageHash).toDER('hex');
+// 验证签名
+const verifyKey = ec.keyFromPublic(publicKey, 'hex');
+const verify = verifyKey.verify(messageHash, signature);
+console.log('Signature: ', signature);
+console.log('Signature verification: ', verify);
 
 toast('加载完')
 
