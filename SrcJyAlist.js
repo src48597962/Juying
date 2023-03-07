@@ -351,15 +351,24 @@ function alistUrl(alistapi,path,sign,subtitle,provider) {
           }
         }catch(e){}
       }
+      /*
+      if(provider=="AliyundriveShare"){
+        let redirect = JSON.parse(request(url,{onlyHeaders:true,redirect:false,timeout:10000}));
+        let rurl = redirect.headers.location[0];
+        let share_id = rurl.split('&sl=')[1].split('&')[0];
+        let getsharetoken = JSON.parse(request('https://api.aliyundrive.com/v2/share_link/get_share_token',{headers:{'content-type':'application/json'},body:{"share_pwd":"","share_id":share_id},method:'POST',timeout:3000}));
 
       
+      }
+      
+      
       //let redirect = result.location;
-      let html = request('https://api.aliyundrive.com/v2/file/get_video_preview_play_info', {headers:{'x-share-token':'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b21Kc29uIjoie1wiZG9tYWluX2lkXCI6XCJiajI5XCIsXCJzaGFyZV9pZFwiOlwiNFlWc0tQSzhUdFNcIixcImNyZWF0b3JcIjpcIjY2OTg3MThjMDljYzRhNGFiMzViZDBhYWE2NWZlYThhXCIsXCJ1c2VyX2lkXCI6XCJhbm9ueW1vdXNcIn0iLCJjdXN0b21UeXBlIjoic2hhcmVfbGluayIsImV4cCI6MTY3NzkyMjU5NiwiaWF0IjoxNjc3OTE1MzM2fQ.ecZ10cbMeirL59-P_xaYg3gb5BLRMXiTJEGVT2EZo6LvebHRN2YaSvYyS_q6CTD16_t__ztV-hvEOd-tlyQzzVxfBXqhosRb1pg0j7mAj2wRZwinfn4--4qzRuy5KXSdtaN_7Ub8CRVkpGNI-RGYQCoVcZYH0DyQ8Ew17xRiLx0'},body:{"share_id":"4YVsKPK8TtS","drive_id":"899144851","file_id":"63f723ea2a560c25a2f24a9eade3dd012863b1fa","category":"live_transcoding","template_id":"","get_preview_url":true,"get_subtitle_info":true},method:'POST',timeout:10000});
+      let html = request('https://api.aliyundrive.com/v2/file/get_video_preview_play_info', {headers:{'x-share-token':'eyJhyQ8EwRiLx0'},body:{"share_id":"4YVsKPK8TtS","drive_id":"899144851","file_id":"63f723ea2a560c25a2f24a9eade3dd012863b1fa","category":"live_transcoding","template_id":"","get_preview_url":true,"get_subtitle_info":true},method:'POST',timeout:10000});
       let play = JSON.parse(html).video_preview_play_info.live_transcoding_task_list;
       let result = JSON.parse(request(play[play.length-1].preview_url,{onlyHeaders:true,redirect:false,timeout:10000}));
       log(result);
       return result.headers.location[0].replace('ref_task','media').replace('hls%2Fsign%2Cparams_ZGksZHIsZix1LHNs','hls%2Fsign%2Cparams_ZGksZHIsZix1LHNs%2Cheaders_cmVmZXJlcg%3D%3D').replace('&x-oss-expires','&x-oss-additional-headers=referer&x-oss-expires').replace('anonymous','3426ad8ebaa04e1ea9ee01bd998d06d4')+"#isVideo=true#";
-      
+      */
         url = url + (music.test(suffix)?"#isMusic=true#":"#isVideo=true#") + (url.indexOf('baidu.com')>-1? ';{User-Agent@Lavf/57.83.100}':'');
         if(!subtitle){
           return url;
