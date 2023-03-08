@@ -100,8 +100,8 @@ function alistHome() {
   });
   if(alistapi.token){
     d.push({
-        title: '挂载阿里',
-        url: $(['阿里刷新令牌',"挂载阿里分享"],1).select((alistapi,alistfile)=>{
+        title: '挂载存储',
+        url: $(['阿里刷新令牌',"挂载阿里分享"],2).select((alistapi,alistfile)=>{
           try{
             var alistData = JSON.parse(fetch(alistfile));
           }catch(e){
@@ -116,8 +116,7 @@ function alistHome() {
                 let filepath = "hiker://files/rules/icy/icy-ali-token.json";
                 let icyalifile = fetch(filepath);
                 if(icyalifile){
-                  let icyalitoken = JSON.parse(eval(icyalifile));
-                  log(icyalitoken)
+                  let icyalitoken = eval(icyalifile);
                   if(icyalitoken.length>0){
                     alitoken = icyalitoken[0].refresh_token;
                   }
@@ -402,7 +401,7 @@ function alistUrl(alistapi,path,sign,subtitle,provider) {
                 let filepath = "hiker://files/rules/icy/icy-ali-token.json";
                 let icyalifile = fetch(filepath);
                 if(icyalifile){
-                  let icyalitoken = JSON.parse(eval(icyalifile));
+                  let icyalitoken = eval(icyalifile);
                   if(icyalitoken.length>0){
                     userinfo = icyalitoken[0];
                   }
