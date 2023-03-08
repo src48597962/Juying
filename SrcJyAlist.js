@@ -109,7 +109,20 @@ function alistHome() {
           }
           let alistconfig = alistData.config || {};
           if(input=='阿里刷新令牌'){
-            return $(alistconfig.alitoken||"","刷新令牌").input((alistfile,alistData,alistconfig)=>{
+            let alitoken = alistconfig.alitoken;
+            if(!alitoken){
+              try{
+                let filepath = "hiker://files/rules/icy/icy-ali-token.json";
+                let icyalifile = fetch(filepath);
+                if(icyalifile){
+                  let icyalitoken = JSON.parse(eval(icyalifile));
+                  if(icyalitoken.length>0){
+                    alitoken = icyalitoken[0].refresh_token;
+                  }
+                }
+              }catch(e){}
+            }
+            return $(alitoken||"","刷新令牌").input((alistfile,alistData,alistconfig)=>{
               alistconfig.alitoken = input;
               alistData.config = alistconfig;
               writeFile(alistfile, JSON.stringify(alistData));
