@@ -112,17 +112,21 @@ function alistHome() {
             let alitoken = alistconfig.alitoken;
             if(!alitoken){
               try{
+                //节约资源，如果云盘汇影有获取过用户信息，就重复利用一下
                 let filepath = "hiker://files/rules/icy/icy-ali-token.json";
                 let icyalifile = fetch(filepath);
                 if(icyalifile){
                   let icyalitoken = JSON.parse(eval(icyalifile));
+                  log(icyalitoken)
                   if(icyalitoken.length>0){
                     alitoken = icyalitoken[0].refresh_token;
                   }
                 }
-              }catch(e){}
+              }catch(e){
+                log('从云盘汇影取ali-token失败'+e.message)
+              }
             }
-            return $(alitoken||"","刷新令牌").input((alistfile,alistData,alistconfig)=>{
+            return $(alitoken||"","refresh_token").input((alistfile,alistData,alistconfig)=>{
               alistconfig.alitoken = input;
               alistData.config = alistconfig;
               writeFile(alistfile, JSON.stringify(alistData));
