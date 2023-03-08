@@ -179,13 +179,42 @@ function alistHome() {
   }
   d.push({
       title: '🔍批量测试',
-      url: $("","搜索关键字").input((alistapi)=>{
+      url: $("","搜索关键字").input((alistfile)=>{
         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
+        try{
+          var alistData = JSON.parse(fetch(alistfile));
+        }catch(e){
+          var alistData = {};
+        }
+        let datalist = alistData.drives || [];
         showLoading('搜索中，请稍后...');
         deleteItemByCls('loadlist');
-        alistSearch(alistapi,input);
+        let task = function(obj) {
+            try{
+                alistSearch(obj,input);
+            }catch(e){
+              log(obj.name+' 搜索失败>'+e.message);
+            }
+            return 1;
+        }
+        let list = datalist.map((item)=>{
+            return {
+              func: task,
+              param: item,
+              id: item.server
+            }
+        });
+        if(list.length>0){
+            be(list, {
+                func: function(obj, id, error, taskResult) {
+                },
+                param: {
+                }
+            });
+        }
+        
         hideLoading();
-      },alistapi),
+      },alistfile),
       col_type: 'scroll_button'
   });
   d.push({
