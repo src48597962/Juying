@@ -89,7 +89,7 @@ function alistHome() {
       col_type: 'scroll_button',
       extra: {
           longClick: [{
-              title: "阿里token",
+              title: "🔑阿里token",
               js: $.toString((alistfile) => {
                   try{
                     var alistData = JSON.parse(fetch(alistfile));
@@ -177,6 +177,17 @@ function alistHome() {
         col_type: 'scroll_button'
     });
   }
+  d.push({
+      title: '🔍批量测试',
+      url: $("","搜索关键字").input((alistapi)=>{
+        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
+        showLoading('搜索中，请稍后...');
+        deleteItemByCls('loadlist');
+        alistSearch(alistapi,input);
+        hideLoading();
+      },alistapi),
+      col_type: 'scroll_button'
+  });
   d.push({
       col_type: 'line'
   });
