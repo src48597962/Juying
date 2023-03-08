@@ -381,7 +381,7 @@ function alistUrl(alistapi,path,sign,subtitle,provider) {
           }
         }catch(e){}
       }
-        url = url + (music.test(suffix)?"#isMusic=true#":"#isVideo=true#") + (url.indexOf('baidu.com')>-1?';{User-Agent@Lavf/57.83.100}':url.indexOf('mypikpak.com')>-1?';{dns@https://dns.alidns.com/dns-query}':'');
+        url = url + (music.test(suffix)?"#isMusic=true#":"#isVideo=true#") + (url.indexOf('baidu.com')>-1?';{User-Agent@Lavf/57.83.100}':url.indexOf('mypikpak.com')>-1?'':'');//;{dns@https://dns.alidns.com/dns-query}
         if(!subtitle){
           return url;
         }else{
