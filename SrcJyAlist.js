@@ -86,7 +86,43 @@ function alistHome() {
           require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
           alistSet();
       }),
-      col_type: 'scroll_button'
+      col_type: 'scroll_button',
+      extra: {
+          longClick: [{
+              title: "阿里token",
+              js: $.toString((alistfile) => {
+                  try{
+                    var alistData = JSON.parse(fetch(alistfile));
+                  }catch(e){
+                    var alistData = {};
+                  }
+                  let alistconfig = alistData.config || {};
+
+                  let alitoken = alistconfig.alitoken;
+                  if(!alitoken){
+                    try{
+                      //节约资源，如果云盘汇影有获取过用户信息，就重复利用一下
+                      let filepath = "hiker://files/rules/icy/icy-ali-token.json";
+                      let icyalifile = fetch(filepath);
+                      if(icyalifile){
+                        let icyalitoken = eval(icyalifile);
+                        if(icyalitoken.length>0){
+                          alitoken = icyalitoken[0].refresh_token;
+                        }
+                      }
+                    }catch(e){
+                      log('从云盘汇影取ali-token失败'+e.message)
+                    }
+                  }
+                  return $(alitoken||"","refresh_token").input((alistfile,alistData,alistconfig)=>{
+                    alistconfig.alitoken = input;
+                    alistData.config = alistconfig;
+                    writeFile(alistfile, JSON.stringify(alistData));
+                    return "toast://已设置";
+                  },alistfile,alistData,alistconfig)
+              },alistfile)
+          }]
+      }
   });
   d.push({
       title: '🔍搜索',
@@ -101,37 +137,9 @@ function alistHome() {
   });
   if(alistapi.token){
     d.push({
-        title: '挂载存储',
-        url: $(['阿里刷新令牌',"挂载阿里分享"],2).select((alistapi,alistfile)=>{
-          try{
-            var alistData = JSON.parse(fetch(alistfile));
-          }catch(e){
-            var alistData = {};
-          }
-          let alistconfig = alistData.config || {};
-          if(input=='阿里刷新令牌'){
-            let alitoken = alistconfig.alitoken;
-            if(!alitoken){
-              try{
-                //节约资源，如果云盘汇影有获取过用户信息，就重复利用一下
-                let filepath = "hiker://files/rules/icy/icy-ali-token.json";
-                let icyalifile = fetch(filepath);
-                if(icyalifile){
-                  let icyalitoken = eval(icyalifile);
-                  if(icyalitoken.length>0){
-                    alitoken = icyalitoken[0].refresh_token;
-                  }
-                }
-              }catch(e){
-                log('从云盘汇影取ali-token失败'+e.message)
-              }
-            }
-            return $(alitoken||"","refresh_token").input((alistfile,alistData,alistconfig)=>{
-              alistconfig.alitoken = input;
-              alistData.config = alistconfig;
-              writeFile(alistfile, JSON.stringify(alistData));
-            },alistfile,alistData,alistconfig)
-          }else{
+        title: '🔗挂载',
+        url: $(["挂载阿里分享"],2).select((alistapi,alistconfig)=>{
+          if(input=='挂载阿里分享'){
             if(alistconfig.alitoken){
               return $("","阿里分享链接").input((alistapi,alitoken)=>{
                 input = input.replace('https://www.aliyundrive.com/s/','');
@@ -165,7 +173,7 @@ function alistHome() {
               return "toast://阿里token还未填写，无法挂载";
             }
           }
-        },alistapi,alistfile),
+        },alistapi,alistconfig),
         col_type: 'scroll_button'
     });
   }
@@ -381,7 +389,7 @@ function alistUrl(alistapi,path,sign,subtitle,provider) {
           }
         }catch(e){}
       }
-        url = url + (music.test(suffix)?"#isMusic=true#":"#isVideo=true#") + (url.indexOf('baidu.com')>-1?';{User-Agent@Lavf/57.83.100}':url.indexOf('mypikpak.com')>-1?'':'');//;{dns@https://dns.alidns.com/dns-query}
+        url = url + (music.test(suffix)?"#isMusic=true#":"#isVideo=true#") + (url.indexOf('baidu.com')>-1?';{User-Agent@Lavf/57.83.100}':'');
         if(!subtitle){
           return url;
         }else{
