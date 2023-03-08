@@ -369,7 +369,9 @@ function alistUrl(alistapi,path,sign,subtitle,provider) {
         try{
           let redirect = JSON.parse(request(url,{onlyHeaders:true,redirect:false,timeout:3000}));
           let rurl = redirect.headers.location[0];
+          log(rurl);
           let share_id = rurl.split('&sl=')[1].split('&')[0];
+          log(share_id);
           let file_id = rurl.split('&f=')[1].split('&')[0];
           let alitoken = alistconfig.alitoken;
           let play = getAliUrl(share_id,file_id,alitoken);
