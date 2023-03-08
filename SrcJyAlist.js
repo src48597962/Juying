@@ -472,7 +472,7 @@ function alistSearch(alistapi,input) {
       let list = pdfa(html,'body&&div&&a');
       list.forEach(item => {
         let txt = pdfh(item,"a&&href");
-        let suffix = txt.substring(0,txt.length-5);
+        let suffix = txt.substring(txt.length-5,txt.length);
         log(suffix)
         dirlist.push({
             "parent": txt.substring(0,txt.lastIndexOf("/")),
