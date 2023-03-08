@@ -240,7 +240,7 @@ function alistHome() {
         addItemBefore('listloading', arrayAdd(dirlist,1,alistapi));
         
         let filelist = getlist(json.data.content||[],0,alistapi.nofilter?0:fileFilter);
-        addItemBefore('listloading', arrayAdd(filelist,0,alistapi,json.data.provider));
+        addItemBefore('listloading', arrayAdd(filelist,0,alistapi));
       }else if(json.code==401){
         toast('登录令牌token失效，需要重新获取');
       }else if(json.code==500){
@@ -287,7 +287,7 @@ function alistList(alistapi,dirname){
       addItemBefore(listid, arrayAdd(dirlist,1,alistapi));
 
       let filelist = getlist(json.data.content||[],0,alistapi.nofilter?0:fileFilter);
-      addItemBefore(listid, arrayAdd(filelist,0,alistapi,json.data.provider));
+      addItemBefore(listid, arrayAdd(filelist,0,alistapi));
       if(dirlist.length==0&&filelist.length==0){
         addItemBefore(listid, {
           title: "列表为空",
@@ -311,7 +311,7 @@ function alistList(alistapi,dirname){
   }
 }
 
-function arrayAdd(list,isdir,alistapi,provider){
+function arrayAdd(list,isdir,alistapi){
   let d = [];
   if(!isdir){
     var sublist = list.filter(item => {
@@ -352,10 +352,10 @@ function arrayAdd(list,isdir,alistapi,provider){
       d.push({
         title: item.name,
         img: item.thumb || (music.test(suffix)?"https://lanmeiguojiang.com/tubiao/music/46.svg":contain.test(suffix)?"https://lanmeiguojiang.com/tubiao/movie/13.svg":image.test(suffix)?"https://lanmeiguojiang.com/tubiao/more/38.png":"https://cdn.jsdelivr.net/gh/alist-org/logo@main/logo.svg@Referer="),
-        url: $(encodeURI(alistapi.server+path)).lazyRule((alistapi,path,sign,subtitle,provider) => {
+        url: $(encodeURI(alistapi.server+path)).lazyRule((alistapi,path,sign,subtitle) => {
           require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
-          return alistUrl(alistapi,path,sign,subtitle,provider);
-        }, alistapi, path, item.sign||"", subtitles.length>0?subtitles[0]:"", provider),
+          return alistUrl(alistapi,path,sign,subtitle);
+        }, alistapi, path, item.sign||"", subtitles.length>0?subtitles[0]:""),
         col_type: 'avatar',
         extra: {
           id: encodeURI(path),
@@ -374,11 +374,19 @@ function arrayAdd(list,isdir,alistapi,provider){
   return d;
 }
 
-function alistUrl(alistapi,path,sign,subtitle,provider) {
+function alistUrl(alistapi,path,sign,subtitle) {
   let suffix = path.substring(path.lastIndexOf('.')+1);//后缀名
   let url = encodeURI(alistapi.server + "/d"+ path) + "?sign=" + sign;
   subtitle = subtitle?url.match(/http(s)?:\/\/.*\//)[0] + subtitle:"";
+  let provider;
   if(contain.test(suffix)){
+    try{
+      let json = JSON.parse(gethtml(alistapi,"/api/fs/get",path));
+      if(json.code==200){
+        url = json.data.raw_url || url;
+        provider = json.data.provider;
+      }
+    }catch(e){}
     try{
       if(provider=="AliyundriveOpen"){
         try{
@@ -404,16 +412,7 @@ function alistUrl(alistapi,path,sign,subtitle,provider) {
         }catch(e){
           log('阿里开放获取多线程失败>'+e.message);
         }
-      }else{
-        try{
-          let json = JSON.parse(gethtml(alistapi,"/api/fs/get",path));
-          if(json.code==200){
-            url = json.data.raw_url || url;
-          }
-        }catch(e){}
-      }
-      
-      if(provider=="AliyundriveShare"){
+      }else if(provider=="AliyundriveShare"){
         try{
           let redirect = JSON.parse(request(url,{onlyHeaders:true,redirect:false,timeout:3000}));
           let rurl = redirect.headers.location[0];
@@ -473,8 +472,8 @@ function alistSearch(alistapi,input) {
       let list = pdfa(html,'body&&div&&a');
       list.forEach(item => {
         let txt = pdfh(item,"a&&href");
-        let isfile = txt.substring(txt.lastIndexOf('.')+1);
-        log(txt+'>'+isfile);
+        let suffix = txt.substring(0,txt.length-5);
+        log(suffix)
         dirlist.push({
             "parent": txt.substring(0,txt.lastIndexOf("/")),
             "name": txt.substring(txt.lastIndexOf('/')+1),
@@ -490,7 +489,7 @@ function alistSearch(alistapi,input) {
       filelist = filelist.filter(f => {
         return !dirlist.some(d => d.parent+"/"+d.name==f.parent);
       })
-      addItemBefore('listloading', arrayAdd(filelist,0,alistapi,json.data.provider));
+      addItemBefore('listloading', arrayAdd(filelist,0,alistapi));
       if(dirlist.length==0&&filelist.length==0){
         addItemBefore('listloading', {
           title: alistapi.name+" 未搜索到 “"+input+"”",
