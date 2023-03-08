@@ -357,7 +357,7 @@ function alistUrl(alistapi,path,sign,subtitle,provider) {
       }
       
       if(provider=="AliyundriveShare"){
-        function getAliUrl(url,alitoken,subtitle){
+        function getAliUrl(share_id,file_id,alitoken){
           try{
             function getNowTime() {
               const yy = new Date().getFullYear()
@@ -367,10 +367,7 @@ function alistUrl(alistapi,path,sign,subtitle,provider) {
               const mm = new Date().getMinutes() < 10 ? '0' + new Date().getMinutes() : new Date().getMinutes()
               return yy + '' + dd + '' + HH + '' + MM + '' + mm
             }
-            let redirect = JSON.parse(request(url,{onlyHeaders:true,redirect:false,timeout:3000}));
-            let rurl = redirect.headers.location[0];
-            let share_id = rurl.split('&sl=')[1].split('&')[0];
-            let file_id = rurl.split('&f=')[1].split('&')[0];
+            
             let sharetoken = JSON.parse(request('https://api.aliyundrive.com/v2/share_link/get_share_token',{body:{"share_pwd":"","share_id":share_id},method:'POST',timeout:3000})).share_token;
             let headers = {
               'content-type':'application/json;charset=UTF-8',
@@ -379,8 +376,26 @@ function alistUrl(alistapi,path,sign,subtitle,provider) {
               "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36 Edg/110.0.1587.41",
               "x-canary": "client=web,app=adrive,version=v3.1.0"
             };
-            //let alitoken = alistconfig.alitoken;
-            let userinfo = JSON.parse(request('https://auth.aliyundrive.com/v2/account/token',{headers:headers,body:{"refresh_token":alitoken,"grant_type":"refresh_token"},method:'POST',timeout:3000}));
+            let userinfo;
+            let aliuserinfo = storage0.getMyVar('aliuserinfo');
+            if(aliuserinfo&&aliuserinfo.user_id){
+              userinfo = aliuserinfo;
+            }else{
+              try{
+                let filepath = "hiker://files/rules/icy/icy-ali-token.json";
+                let icyalifile = fetch(filepath);
+                if(icyalifile){
+                  let icyalitoken = JSON.parse(eval(icyalifile));
+                  if(icyalitoken.length>0){
+                    userinfo = icyalitoken[0];
+                  }
+                }
+              }catch(e){}
+              if(!userinfo){
+                userinfo = JSON.parse(request('https://auth.aliyundrive.com/v2/account/token',{headers:headers,body:{"refresh_token":alitoken,"grant_type":"refresh_token"},method:'POST',timeout:3000}));
+              }
+              storage0.putMyVar('aliuserinfo',userinfo);
+            }
             let authorization = 'Bearer '+userinfo.access_token;
             let userId = userinfo.user_id;
             let deviceId = userinfo.device_id;
@@ -427,8 +442,7 @@ function alistUrl(alistapi,path,sign,subtitle,provider) {
                 return {
                     urls: urls,
                     names: names,
-                    headers: heads,
-                    subtitle: subtitle
+                    headers: heads
                 };
               }
             }
@@ -437,8 +451,16 @@ function alistUrl(alistapi,path,sign,subtitle,provider) {
             return {};
           }
         }
-        let play = getAliUrl(url,alistconfig.alitoken,subtitle);
+        let redirect = JSON.parse(request(url,{onlyHeaders:true,redirect:false,timeout:3000}));
+        let rurl = redirect.headers.location[0];
+        let share_id = rurl.split('&sl=')[1].split('&')[0];
+        let file_id = rurl.split('&f=')[1].split('&')[0];
+        let alitoken = alistconfig.alitoken;
+        let play = getAliUrl(share_id,file_id,alitoken);
         if(play.urls){
+          if(subtitle){
+            play['subtitle'] = subtitle;
+          }
           return JSON.stringify(play);
         }
       }
