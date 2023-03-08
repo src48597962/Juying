@@ -397,19 +397,7 @@ function alistUrl(alistapi,path,sign,subtitle,provider) {
             if(aliuserinfo&&aliuserinfo.user_id){
               userinfo = aliuserinfo;
             }else{
-              try{
-                let filepath = "hiker://files/rules/icy/icy-ali-token.json";
-                let icyalifile = fetch(filepath);
-                if(icyalifile){
-                  let icyalitoken = eval(icyalifile);
-                  if(icyalitoken.length>0){
-                    userinfo = icyalitoken[0];
-                  }
-                }
-              }catch(e){}
-              if(!userinfo){
-                userinfo = JSON.parse(request('https://auth.aliyundrive.com/v2/account/token',{headers:headers,body:{"refresh_token":alitoken,"grant_type":"refresh_token"},method:'POST',timeout:3000}));
-              }
+              userinfo = JSON.parse(request('https://auth.aliyundrive.com/v2/account/token',{headers:headers,body:{"refresh_token":alitoken,"grant_type":"refresh_token"},method:'POST',timeout:3000}));
               storage0.putMyVar('aliuserinfo',userinfo);
             }
             let authorization = 'Bearer '+userinfo.access_token;
