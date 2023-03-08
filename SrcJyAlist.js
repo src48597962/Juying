@@ -449,7 +449,9 @@ function alistUrl(alistapi,path,sign,subtitle,provider) {
   }
 }
 
-function alistSearch(alistapi,key) {
+function alistSearch(alistapi,input) {
+  let dirlist = [];
+  let filelist = [];
   try{
     let headers = {'content-type':'application/json;charset=UTF-8'};
     if(alistapi.token){
@@ -457,16 +459,41 @@ function alistSearch(alistapi,key) {
     }
     let json = JSON.parse(fetch(alistapi.server + "/api/fs/search", {headers:headers,body:{"per_page":100,"page":1,"parent":"/","keywords":key},method:'POST',timeout:10000}));
     if(json.code==200){
-      let dirlist = getlist(json.data.content,1);
+      dirlist = getlist(json.data.content,1);
+      filelist = getlist(json.data.content,0,alistapi.nofilter?0:fileFilter);
+    }else if(json.code==500){
+      toast(alistapi.name+' 搜索出错了，此网盘不支持搜索');
+    }else if(json.code==401){
+      toast(alistapi.name+' 登录令牌token失效，需要重新获取');
+    }
+  }catch(e){
+    log(alistapi.name+' 内置搜索出错,偿试小雅搜索>'+e.message);
+    try{
+      let html = fetch(alistapi.server+'/search?box='+key+'&url=&type=video');
+      let list = pdfa(html,'body&&div&&a');
+      list.forEach(item => {
+        let txt = pdfh(item,"a&&href");
+        let isfile = txt.substring(txt.lastIndexOf('.')+1);
+        log(txt+'>'+isfile);
+        dirlist.push({
+            "parent": txt.substring(0,txt.lastIndexOf("/")),
+            "name": txt.substring(txt.lastIndexOf('/')+1),
+            "is_dir": true
+        })
+      })
+    }catch(e){
+      log(alistapi.name+' 偿试小雅搜索失败');
+    }
+  }
+
       addItemBefore('listloading', arrayAdd(dirlist,1,alistapi));
-      let filelist = getlist(json.data.content,0,alistapi.nofilter?0:fileFilter);
       filelist = filelist.filter(f => {
         return !dirlist.some(d => d.parent+"/"+d.name==f.parent);
       })
       addItemBefore('listloading', arrayAdd(filelist,0,alistapi,json.data.provider));
       if(dirlist.length==0&&filelist.length==0){
         addItemBefore('listloading', {
-          title: alistapi.name+" 未搜索到 “"+key+"”",
+          title: alistapi.name+" 未搜索到 “"+input+"”",
           url: "hiker://empty",
           col_type: "text_center_1",
           extra: {
@@ -474,34 +501,7 @@ function alistSearch(alistapi,key) {
           }
         });
       }
-    }else if(json.code==500){
-      toast(alistapi.name+' 搜索出错了，此网盘不支持搜索');
-    }else if(json.code==401){
-      toast('登录令牌token失效，需要重新获取');
-    }
-  }catch(e){
-    log(alistapi.name+' 内置搜索出错了>'+e.message);
-    try{
-      let html = fetch(alistapi.server+'/search?box='+key+'&url=&type=video');
-      let list = pdfa(html,'body&&div&&a');
-      let dirlist = [];
-      list.forEach(item => {
-        let txt = pdfh(item,"a&&href");
-        dirlist.push(
-          {
-                "parent": txt.substring(0,txt.lastIndexOf("/")),
-                "name": txt.substring(txt.lastIndexOf('/')+1),
-                "is_dir": true,
-                "size": 0,
-                "type": 1
-            }
-        )
-      })
-      addItemBefore('listloading', arrayAdd(dirlist,1,alistapi));
-    }catch(e){
-      log(alistapi.name+' 偿试小雅搜索失败');
-    }
-  }
+  
   return 1;
 }
 
