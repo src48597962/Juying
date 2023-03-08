@@ -177,7 +177,7 @@ function alistHome() {
     url: "hiker://empty",
     col_type: "text_center_1",
     extra: {
-        id: "homeloading",
+        id: "listloading",
         lineVisible: false
     }
   })
@@ -189,26 +189,26 @@ function alistHome() {
       let json = JSON.parse(gethtml(alistapi,"/api/fs/list",'/'));
       if(json.code==200){
         let dirlist = getlist(json.data.content||[],1);
-        addItemBefore('homeloading', arrayAdd(dirlist,1,alistapi));
+        addItemBefore('listloading', arrayAdd(dirlist,1,alistapi));
         
         let filelist = getlist(json.data.content||[],0,alistapi.nofilter?0:fileFilter);
-        addItemBefore('homeloading', arrayAdd(filelist,0,alistapi,json.data.provider));
+        addItemBefore('listloading', arrayAdd(filelist,0,alistapi,json.data.provider));
       }else if(json.code==401){
         toast('登录令牌token失效，需要重新获取');
       }else if(json.code==500){
         toast('获取列表失败，下拉刷新重试.');
       }
-      updateItem('homeloading', {
+      updateItem('listloading', {
         title: "““””<small><font color=#f20c00>此规则仅限学习交流使用，请于导入后24小时内删除，任何团体或个人不得以任何方式方法传播此规则的整体或部分！</font></small>"
       });
     }catch(e){
-      updateItem('homeloading', {
+      updateItem('listloading', {
         title: "超时或出错了,下拉刷新重试."
       });
     }
   } else {
     setPageTitle('Alist网盘 | 聚影√');
-    updateItem('homeloading', {
+    updateItem('listloading', {
         title: "Alist列表为空"
     });
   }
@@ -410,14 +410,14 @@ function alistSearch(alistapi,key) {
     let json = JSON.parse(fetch(alistapi.server + "/api/fs/search", {headers:headers,body:{"per_page":100,"page":1,"parent":"/","keywords":key},method:'POST',timeout:10000}));
     if(json.code==200){
       let dirlist = getlist(json.data.content,1);
-      addItemBefore('homeloading', arrayAdd(dirlist,1,alistapi));
+      addItemBefore('listloading', arrayAdd(dirlist,1,alistapi));
       let filelist = getlist(json.data.content,0,alistapi.nofilter?0:fileFilter);
       filelist = filelist.filter(f => {
         return !dirlist.some(d => d.parent+"/"+d.name==f.parent);
       })
-      addItemBefore('homeloading', arrayAdd(filelist,0,alistapi,json.data.provider));
+      addItemBefore('listloading', arrayAdd(filelist,0,alistapi,json.data.provider));
       if(dirlist.length==0&&filelist.length==0){
-        addItemBefore('homeloading', {
+        addItemBefore('listloading', {
           title: alistapi.name+" 未搜索到 “"+key+"”",
           url: "hiker://empty",
           col_type: "text_center_1",
@@ -449,7 +449,7 @@ function alistSearch(alistapi,key) {
             }
         )
       })
-      addItemBefore('homeloading', arrayAdd(dirlist,1,alistapi));
+      addItemBefore('listloading', arrayAdd(dirlist,1,alistapi));
     }catch(e){
       log(alistapi.name+' 偿试小雅搜索失败');
     }
