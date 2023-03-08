@@ -93,7 +93,7 @@ function alistHome() {
       url: $("","搜索关键字").input((alistapi)=>{
         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
         showLoading('搜索中，请稍后...');
-        deleteItemByCls('alist');
+        deleteItemByCls('loadlist');
         alistSearch(alistapi,input);
         hideLoading();
       },alistapi),
@@ -289,7 +289,7 @@ function arrayAdd(list,isdir,alistapi,provider){
         col_type: 'avatar',
         extra: {
           path: path,
-          cls: "alist"
+          cls: "loadlist"
         }
       })
     }else{
@@ -311,7 +311,7 @@ function arrayAdd(list,isdir,alistapi,provider){
         col_type: 'avatar',
         extra: {
           id: encodeURI(path),
-          cls: typeof(MY_PARAMS)!="undefined"&&contain.test(suffix)?"playlist":typeof(MY_PARAMS)=="undefined"&&contain.test(suffix)?"alist playlist":"alist",
+          cls: typeof(MY_PARAMS)!="undefined"&&contain.test(suffix)?"playlist":typeof(MY_PARAMS)=="undefined"&&contain.test(suffix)?"loadlist playlist":"loadlist",
           longClick: [{
               title: "📋复制链接",
               js: $.toString((url) => {
@@ -422,7 +422,7 @@ function alistSearch(alistapi,key) {
           url: "hiker://empty",
           col_type: "text_center_1",
           extra: {
-              cls: "alist"
+              cls: "loadlist"
           }
         });
       }
