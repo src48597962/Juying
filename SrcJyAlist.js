@@ -472,18 +472,20 @@ function alistSearch(alistapi,input) {
       let list = pdfa(html,'body&&div&&a');
       list.forEach(item => {
         let txt = pdfh(item,"a&&href");
-        let suffix = txt.substring(txt.length-5,txt.length);
-        if(suffix.indexOf('.')==-1 || !contain.test(suffix)){
+        let parent = txt.substring(0,txt.lastIndexOf("/"));
+        let name = txt.substring(txt.lastIndexOf('/')+1);
+        let suffix = name.substring(txt.length-5,txt.length);
+        if((suffix.indexOf('.')==-1 || !contain.test(suffix))){
           dirlist.push({
-              "parent": txt.substring(0,txt.lastIndexOf("/")),
-              "name": txt.substring(txt.lastIndexOf('/')+1),
+              "parent": parent,
+              "name": name,
               "is_dir": true
           })
         }else if(contain.test(suffix)){
           filelist.push({
-              "parent": txt.substring(0,txt.lastIndexOf("/")),
-              "name": txt.substring(txt.lastIndexOf('/')+1),
-              "is_dir": true
+              "parent": parent,
+              "name": name,
+              "is_dir": false
           })
         }
       })
@@ -491,6 +493,27 @@ function alistSearch(alistapi,input) {
       log(alistapi.name+' 偿试小雅搜索失败');
     }
   }
+  function objHeavy(arr) {
+	var newArr= []; //存新数组
+    var obj= {}; //存处理后转成字符串的对象
+    for (var i = 0; i < arr.length; i++) {
+        var keys = Object.keys(arr[i]);
+        keys.sort(function(a, b) {
+            return (Number(a) - Number(b));
+        });
+        var str = '';
+        for (var j = 0; j < keys.length; j++) {
+            str += JSON.stringify(keys[j]);
+            str += JSON.stringify(arr[i][keys[j]]);
+        }
+        if (!obj.hasOwnProperty(str)) {
+            newArr.push(arr[i]);
+            obj[str] = true;
+        }
+    }
+    return newArr;
+}
+
 
       addItemBefore('listloading', arrayAdd(dirlist,1,alistapi));
       filelist = filelist.filter(f => {
