@@ -457,7 +457,7 @@ function alistSearch(alistapi,input) {
     if(alistapi.token){
       headers.Authorization = alistapi.token;
     }
-    let json = JSON.parse(fetch(alistapi.server + "/api/fs/search", {headers:headers,body:{"per_page":100,"page":1,"parent":"/","keywords":key},method:'POST',timeout:10000}));
+    let json = JSON.parse(fetch(alistapi.server + "/api/fs/search", {headers:headers,body:{"per_page":100,"page":1,"parent":"/","keywords":input},method:'POST',timeout:10000}));
     if(json.code==200){
       dirlist = getlist(json.data.content,1);
       filelist = getlist(json.data.content,0,alistapi.nofilter?0:fileFilter);
@@ -469,7 +469,7 @@ function alistSearch(alistapi,input) {
   }catch(e){
     log(alistapi.name+' 内置搜索出错,偿试小雅搜索>'+e.message);
     try{
-      let html = fetch(alistapi.server+'/search?box='+key+'&url=&type=video');
+      let html = fetch(alistapi.server+'/search?box='+input+'&url=&type=video');
       let list = pdfa(html,'body&&div&&a');
       list.forEach(item => {
         let txt = pdfh(item,"a&&href");
