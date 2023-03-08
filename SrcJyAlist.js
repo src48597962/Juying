@@ -473,12 +473,19 @@ function alistSearch(alistapi,input) {
       list.forEach(item => {
         let txt = pdfh(item,"a&&href");
         let suffix = txt.substring(txt.length-5,txt.length);
-        log(suffix)
-        dirlist.push({
-            "parent": txt.substring(0,txt.lastIndexOf("/")),
-            "name": txt.substring(txt.lastIndexOf('/')+1),
-            "is_dir": true
-        })
+        if(suffix.indexOf('.')==-1 || !contain.test(suffix)){
+          dirlist.push({
+              "parent": txt.substring(0,txt.lastIndexOf("/")),
+              "name": txt.substring(txt.lastIndexOf('/')+1),
+              "is_dir": true
+          })
+        }else if(contain.test(suffix)){
+          filelist.push({
+              "parent": txt.substring(0,txt.lastIndexOf("/")),
+              "name": txt.substring(txt.lastIndexOf('/')+1),
+              "is_dir": true
+          })
+        }
       })
     }catch(e){
       log(alistapi.name+' 偿试小雅搜索失败');
@@ -623,7 +630,7 @@ function alistSet() {
           try{
             let getapi = JSON.parse(fetch(apiurl,{timeout:10000}));
             hideLoading();
-            if(getapi.code==200 && /^v3/.test(getapi.data.version)){
+            if(getapi.code==200 && /^v3|^3/.test(getapi.data.version)){
               return $("","当前链接有效，起个名保存吧").input((alistfile,api) => {
                   try{
                     eval("var alistData=" + fetch(alistfile));
