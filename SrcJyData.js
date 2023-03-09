@@ -877,94 +877,70 @@ function JYyiji(){
             xunmi(name);
         }, input);
     });
-
+    let list = [];
     if(datasource=="sougou"){
-        var list = html.listData.results;
-        for (var i in list) {
-            d.push({
-                title: list[i].name,
-                img: list[i].v_picurl + '@Referer=',
-                url: JYconfig['erjimode']!=2?"hiker://empty##https://v.sogou.com" + list[i].url.replace('teleplay', 'series').replace('cartoon', 'series') + "#immersiveTheme##autoCache#":list[i].name + seachurl,
-                desc: list[i].ipad_play_for_list.finish_episode?list[i].ipad_play_for_list.episode==list[i].ipad_play_for_list.finish_episode?"全集"+list[i].ipad_play_for_list.finish_episode:"连载"+list[i].ipad_play_for_list.episode+"/"+list[i].ipad_play_for_list.finish_episode:"",
-                extra: {
-                    pic: list[i].v_picurl,
-                    name: list[i].name,
-                    datasource: getItem('JYdatasource', 'sougou'),
-                    longClick: [{
-                        title: "🔍快速聚搜",
-                        js: $.toString((name) => {
-                            return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
-                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
-                                xunmi(name);
-                            }, name)
-                        },list[i].name)
-                    },{
-                        title: "🔎Alist搜索",
-                        js: $.toString((name) => {
-                            return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
-                                let d = [];
-                                d.push({
-                                    title: name+"-Alist聚合搜索",
-                                    url: "hiker://empty",
-                                    col_type: "text_center_1",
-                                    extra: {
-                                        id: "listloading",
-                                        lineVisible: false
-                                    }
-                                })
-                                setResult(d);
-                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
-                                alistSearch2(name,1);
-                            }, name)
-                        },list[i].name)
-                    }]
-                }
-            });
-        }
-    }else{
-        var list = html.data?html.data.movies:[];
-        for (var i in list) {
-            let img = /^http/.test(list[i].cdncover)?list[i].cdncover:'https:'+list[i].cdncover;
-            d.push({
-                title: list[i].title,
-                img: img + '@Referer=',
-                url: JYconfig['erjimode']!=2?"hiker://empty##https://api.web.360kan.com/v1/detail?cat="+getMyVar('SrcJuying$listTab', '2')+"&id=" + list[i].id + "#immersiveTheme##autoCache#":list[i].title + seachurl,
-                desc: list[i].total?list[i].total==list[i].upinfo?list[i].total+'集全':'连载'+list[i].upinfo+"/"+list[i].total:list[i].tag?list[i].tag:list[i].doubanscore?list[i].doubanscore:"",
-                extra: {
-                    pic: img,
-                    name: list[i].title,
-                    datasource: getItem('JYdatasource', 'sougou'),
-                    longClick: [{
-                        title: "🔍快速聚搜",
-                        js: $.toString((name) => {
-                            return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
-                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
-                                xunmi(name);
-                            }, name)
-                        },list[i].name)
-                    },{
-                        title: "🔎Alist搜索",
-                        js: $.toString((name) => {
-                            return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
-                                let d = [];
-                                d.push({
-                                    title: name+"-Alist聚合搜索",
-                                    url: "hiker://empty",
-                                    col_type: "text_center_1",
-                                    extra: {
-                                        id: "listloading",
-                                        lineVisible: false
-                                    }
-                                })
-                                setResult(d);
-                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
-                                alistSearch2(name,1);
-                            }, name)
-                        },list[i].title)
-                    }]
-                }
-            });
-        }
+        list = html.listData.results;
+        list = list.map(item=>{
+            return {
+                name: item.name,
+                img: item.v_picurl,
+                url: "https://v.sogou.com" + item.url.replace('teleplay', 'series').replace('cartoon', 'series'),
+                desc: item.ipad_play_for_list.finish_episode?item.ipad_play_for_list.episode==item.ipad_play_for_list.finish_episode?"全集"+item.ipad_play_for_list.finish_episode:"连载"+item.ipad_play_for_list.episode+"/"+item.ipad_play_for_list.finish_episode:""
+            };
+        })
+    }else if(datasource=="360"){
+        list = html.data?html.data.movies:[];
+        list = list.map(item=>{
+            return {
+                name: item.title,
+                img: /^http/.test(item.cdncover)?item.cdncover:'https:'+item.cdncover,
+                url: "https://api.web.360kan.com/v1/detail?cat="+getMyVar('SrcJuying$listTab', '2')+"&id=" + item.id,
+                desc: item.total?item.total==item.upinfo?item.total+'集全':'连载'+item.upinfo+"/"+item.total:item.tag?item.tag:item.doubanscore?item.doubanscore:""
+            };
+        })
     }
+
+    for (var i in list) {
+        d.push({
+            title: list[i].name,
+            img: list[i].img + '@Referer=',
+            url: JYconfig['erjimode']!=2?"hiker://empty##" + list[i].url + "#immersiveTheme##autoCache#":list[i].name + seachurl,
+            desc: list[i].desc,
+            extra: {
+                pic: list[i].img,
+                name: list[i].name,
+                datasource: getItem('JYdatasource', 'sougou'),
+                longClick: [{
+                    title: "🔍快速聚搜",
+                    js: $.toString((name) => {
+                        return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
+                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
+                            xunmi(name);
+                        }, name)
+                    },list[i].name)
+                },{
+                    title: "🔎Alist搜索",
+                    js: $.toString((name) => {
+                        return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
+                            let d = [];
+                            d.push({
+                                title: name+"-Alist聚合搜索",
+                                url: "hiker://empty",
+                                col_type: "text_center_1",
+                                extra: {
+                                    id: "listloading",
+                                    lineVisible: false
+                                }
+                            })
+                            setResult(d);
+                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
+                            alistSearch2(name,1);
+                        }, name)
+                    },list[i].name)
+                }]
+            }
+        });
+    }
+    
     setResult(d);
 }
