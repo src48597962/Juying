@@ -151,62 +151,14 @@ function alistHome() {
   });
   d.push({
       title: '🔎聚合',
-      url: $(getItem('searchtestkey', ''),"搜索关键字").input((alistfile)=>{
+      url: $(getItem('searchtestkey', ''),"搜索关键字").input(()=>{
         setItem("searchtestkey",input);
         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
-        try{
-          var alistData = JSON.parse(fetch(alistfile));
-        }catch(e){
-          var alistData = {};
-        }
-        let datalist = alistData.drives || [];
         showLoading('搜索中，请稍后...');
-        deleteItemByCls('loadlist');
-        let task = function(obj) {
-            try{
-                let searchlist = alistSearch(obj,input);
-                if(searchlist.length>0){
-                  searchlist.unshift({
-                    title: obj.name + " 找到" + searchlist.length + "条 “"+input+"” 相关",
-                    url: "hiker://empty",
-                    col_type: "text_center_1",
-                    extra: {
-                        cls: "loadlist"
-                    }
-                  });
-                  searchlist.unshift({
-                      col_type: "line_blank",
-                      extra: {
-                          cls: "loadlist"
-                      }
-                  });
-                  addItemBefore('listloading', searchlist);
-                }else{
-                  log(obj.name+">未搜索到 “"+input+"”");
-                }
-            }catch(e){
-              log(obj.name+'>搜索失败>'+e.message);
-            }
-            return 1;
-        }
-        let list = datalist.map((item)=>{
-            return {
-              func: task,
-              param: item,
-              id: item.server
-            }
-        });
-        if(list.length>0){
-            be(list, {
-                func: function(obj, id, error, taskResult) {
-                },
-                param: {
-                }
-            });
-        }
+        alistSearch2();
         hideLoading();
         return "toast://搜索结束";
-      },alistfile),
+      }),
       col_type: 'scroll_button'
   });
   if(alistapi.token){
@@ -549,6 +501,58 @@ function alistSearch(alistapi,input,notoast) {
     log(alistapi.name+'>生成搜索数据失败>'+e.message);
   }
   return searchlist;
+}
+
+function alistSearch2(){
+    try{
+      var alistData = JSON.parse(fetch(alistfile));
+    }catch(e){
+      var alistData = {};
+    }
+    let datalist = alistData.drives || [];
+    deleteItemByCls('loadlist');
+    let task = function(obj) {
+        try{
+            let searchlist = alistSearch(obj,input);
+            if(searchlist.length>0){
+              searchlist.unshift({
+                title: obj.name + " 找到" + searchlist.length + "条 “"+input+"” 相关",
+                url: "hiker://empty",
+                col_type: "text_center_1",
+                extra: {
+                    cls: "loadlist"
+                }
+              });
+              searchlist.unshift({
+                  col_type: "line_blank",
+                  extra: {
+                      cls: "loadlist"
+                  }
+              });
+              addItemBefore('listloading', searchlist);
+            }else{
+              log(obj.name+">未搜索到 “"+input+"”");
+            }
+        }catch(e){
+          log(obj.name+'>搜索失败>'+e.message);
+        }
+        return 1;
+    }
+    let list = datalist.map((item)=>{
+        return {
+          func: task,
+          param: item,
+          id: item.server
+        }
+    });
+    if(list.length>0){
+        be(list, {
+            func: function(obj, id, error, taskResult) {
+            },
+            param: {
+            }
+        });
+    }
 }
 
 function SortList(v1, v2) {
