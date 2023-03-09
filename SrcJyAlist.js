@@ -205,24 +205,23 @@ function alistHome() {
             try{
                 let searchlist = alistSearch(obj,input);
                 if(searchlist.length>0){
-                  addItemBefore('listloading', {
-                    title: obj.name + " 搜索到"+searchlist.length+"条结果",
+                  searchlist.unshift({
+                    title: obj.name + " 搜索到"+searchlist.length+"条 “"+input+"” 相关",
                     url: "hiker://empty",
                     col_type: "text_center_1",
                     extra: {
                         cls: "loadlist"
                     }
+                  });
+                  searchlist.unshift({
+                      col_type: "line_blank",
+                      extra: {
+                          cls: "loadlist"
+                      }
                   });
                   addItemBefore('listloading', searchlist);
                 }else{
-                  addItemBefore('listloading', {
-                    title: obj.name+" 未搜索到 “"+input+"”",
-                    url: "hiker://empty",
-                    col_type: "text_center_1",
-                    extra: {
-                        cls: "loadlist"
-                    }
-                  });
+                  log(obj.name+" 未搜索到 “"+input+"”");
                 }
             }catch(e){
               log(obj.name+' 搜索失败>'+e.message);
