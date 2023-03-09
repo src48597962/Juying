@@ -440,10 +440,10 @@ function JYerji(){
         if(JYconfig['alistLine']==1){
             d.push({
                 title: 'Alist搜索',
-                url: $("#noLoading#").lazyRule(() => {
+                url: $("#noLoading#").lazyRule((name) => {
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
-                    alistSearch2(MY_PARAMS.name);
-                }),
+                    alistSearch2(name);
+                },MY_PARAMS.name),
                 col_type: 'scroll_button'
             })
         }
