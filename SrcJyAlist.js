@@ -503,7 +503,7 @@ function alistSearch(alistapi,input,notoast) {
   return searchlist;
 }
 
-function alistSearch2(input){
+function alistSearch2(input,notoast){
     try{
       var alistData = JSON.parse(fetch(alistfile));
     }catch(e){
@@ -513,7 +513,7 @@ function alistSearch2(input){
     deleteItemByCls('loadlist');
     let task = function(obj) {
         try{
-            let searchlist = alistSearch(obj,input);
+            let searchlist = alistSearch(obj,input,notoast);
             if(searchlist.length>0){
               searchlist.unshift({
                 title: obj.name + " 找到" + searchlist.length + "条 “"+input+"” 相关",
