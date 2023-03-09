@@ -504,7 +504,9 @@ function alistSearch(alistapi,input,notoast) {
 }
 
 function alistSearch2(input,notoast){
-    
+    if(datalist.length==0){
+      toast('无接口，无法搜索');
+    }
     deleteItemByCls('loadlist');
     let task = function(obj) {
         try{
