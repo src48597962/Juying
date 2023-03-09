@@ -84,7 +84,7 @@ var erjimenu = [
                 })
             },{
                title: "Alist搜索",
-               js: $.toString(() => {
+               js: $.toString((name) => {
                    return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
                         let d = [];
                         d.push({
@@ -99,8 +99,8 @@ var erjimenu = [
                         setResult(d);
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
                         alistSearch2(name,1);
-                    }, MY_PARAMS.name)
-               })
+                    }, name)
+               },MY_PARAMS.name)
             }]
         }
     }
