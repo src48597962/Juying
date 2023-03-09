@@ -18,7 +18,7 @@ const transcoding = {UHD: "4K 超清",QHD: "2K 超清",FHD: "1080 全高清",HD:
 function getlist(data,isdir,filter) {
     let list = data.filter(item => {
         let suffix = item.name.substring(item.name.lastIndexOf('.')+1);//后缀名
-        return isdir ? item.is_dir : filter? (contain.test(suffix) || /srt|vtt|ass/.test(suffix)) : !item.is_dir;
+        return isdir ? item.is_dir : filter? ((contain.test(suffix) || /srt|vtt|ass/.test(suffix))) && !item.is_dir : !item.is_dir;
     })
     try{    
         if(!isdir){
@@ -226,7 +226,6 @@ function alistHome() {
         addItemBefore('listloading', arrayAdd(dirlist,1,alistapi));
         
         let filelist = getlist(json.data.content||[],0,alistapi.nofilter?0:fileFilter);
-        log(filelist)
         addItemBefore('listloading', arrayAdd(filelist,0,alistapi));
       }else if(json.code==401){
         toast('登录令牌token失效，需要重新获取');
