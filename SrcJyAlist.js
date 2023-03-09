@@ -474,19 +474,19 @@ function alistSearch(alistapi,input) {
         let txt = pdfh(item,"a&&href");
         let parent = txt.substring(0,txt.lastIndexOf("/"));
         let name = txt.substring(txt.lastIndexOf('/')+1);
-        let suffix = name.substring(txt.length-5,txt.length);
-        if((suffix.indexOf('.')==-1 || !contain.test(suffix))){
+        let suffix = name.substring(txt.lastIndexOf('.')+1);
+        if(suffix.length>3 && !contain.test(suffix) && !dirlist.some(d => d.parent+'/'+d.name==parent)){
           dirlist.push({
               "parent": parent,
               "name": name,
               "is_dir": true
           })
-        }else if(contain.test(suffix)){
-          filelist.push({
+        }else if(contain.test(suffix) && !dirlist.some(d => d.parent+'/'+d.name==parent)){
+           filelist.push({
               "parent": parent,
               "name": name,
               "is_dir": false
-          })
+          }) 
         }
       })
     }catch(e){
