@@ -499,16 +499,16 @@ function alistSearch(alistapi,input) {
       templist.push(dirlist);
     }
   })
-  log(templist);
+
   let searchlist = [];
   searchlist = searchlist.concat(arrayAdd(templist,1,alistapi));
   templist =[];
   filelist.forEach(item => {
-    if(!templist.some(s => item.parent.indexOf(s.parent)>-1 && s.parent !='/')){
+    if(!dirlist.some(d => item.parent.indexOf(d.parent)>-1 && d.parent !='/') || item.parent =='/'){
       templist.push(filelist);
     }
   })
-  log(templist);
+
   searchlist = searchlist.concat(arrayAdd(templist,0,alistapi));
   addItemBefore('listloading', searchlist);
   /*
