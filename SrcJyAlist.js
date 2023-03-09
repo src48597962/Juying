@@ -487,6 +487,8 @@ function alistSearch(alistapi,input) {
               "name": name,
               "is_dir": false
           }) 
+        }else{
+          log(name);
         }
       })
     }catch(e){
