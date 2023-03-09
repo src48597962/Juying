@@ -474,7 +474,7 @@ function alistSearch(alistapi,input) {
         let txt = pdfh(item,"a&&href");
         let parent = txt.substring(0,txt.lastIndexOf("/"));
         let name = txt.substring(txt.lastIndexOf('/')+1);
-        let suffix = name.substring(txt.lastIndexOf('.')+1);
+        let suffix = name.substring(name.lastIndexOf('.')+1);
         if(suffix.length>3 && !contain.test(suffix) && !dirlist.some(d => d.parent+'/'+d.name==parent)){
           dirlist.push({
               "parent": parent,
@@ -482,13 +482,14 @@ function alistSearch(alistapi,input) {
               "is_dir": true
           })
         }else if(contain.test(suffix) && !dirlist.some(d => d.parent+'/'+d.name==parent)){
-           filelist.push({
+          filelist.push({
               "parent": parent,
               "name": name,
               "is_dir": false
           }) 
         }else{
           log(name);
+          log(suffix);
         }
       })
     }catch(e){
