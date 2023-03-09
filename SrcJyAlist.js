@@ -499,10 +499,10 @@ function alistSearch(alistapi,input) {
       templist.push(dirlist);
     }
   })
-
+  log(templist);
   let searchlist = [];
   searchlist = searchlist.concat(arrayAdd(templist,1,alistapi));
-  log(searchlist);
+
   templist =[];
   filelist.forEach(item => {
     if(!dirlist.some(d => item.parent.indexOf(d.parent)>-1 && d.parent !='/') || item.parent =='/'){
