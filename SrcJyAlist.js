@@ -447,7 +447,7 @@ function alistSearch(alistapi,input,notoast) {
       dirlist = getlist(json.data.content,1);
       filelist = getlist(json.data.content,0,alistapi.nofilter?0:fileFilter);
     }else if(json.code==500){
-      if(!notoast){toast(alistapi.name+' 搜索出错了，不支持搜索.'+json.message);}
+      if(!notoast){toast(alistapi.name+' 搜索失败.'+json.message);}
     }else if(json.code==401){
       if(!notoast){toast(alistapi.name+' 登录令牌token失效，需要重新获取');}
     }
