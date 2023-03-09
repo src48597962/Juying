@@ -493,26 +493,12 @@ function alistSearch(alistapi,input) {
       log(alistapi.name+' 偿试小雅搜索失败');
     }
   }
-  function objHeavy(arr) {
-	var newArr= []; //存新数组
-    var obj= {}; //存处理后转成字符串的对象
-    for (var i = 0; i < arr.length; i++) {
-        var keys = Object.keys(arr[i]);
-        keys.sort(function(a, b) {
-            return (Number(a) - Number(b));
-        });
-        var str = '';
-        for (var j = 0; j < keys.length; j++) {
-            str += JSON.stringify(keys[j]);
-            str += JSON.stringify(arr[i][keys[j]]);
-        }
-        if (!obj.hasOwnProperty(str)) {
-            newArr.push(arr[i]);
-            obj[str] = true;
-        }
+  let searchlist = [];
+  dirlist.forEach(item => {
+    if(!searchlist.some(s => s.parent+"/"+s.name==item.parent)){
+
     }
-    return newArr;
-}
+  })
 
 
       addItemBefore('listloading', arrayAdd(dirlist,1,alistapi));
