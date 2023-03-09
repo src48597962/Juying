@@ -487,24 +487,29 @@ function alistSearch(alistapi,input) {
               "name": name,
               "is_dir": false
           }) 
-        }else{
-          log(name);
-          log(suffix);
         }
       })
     }catch(e){
       log(alistapi.name+' 偿试小雅搜索失败');
     }
   }
-  let searchlist = [];
+  let templist = [];
   dirlist.forEach(item => {
-    if(!searchlist.some(s => s.parent+"/"+s.name==item.parent)){
-
+    if(!templist.some(s => item.parent.indexOf(s.parent)>-1 && s.parent !='/')){
+      templist.push(dirlist);
     }
   })
-
-
-      addItemBefore('listloading', arrayAdd(dirlist,1,alistapi));
+  let searchlist = [];
+  searchlist = searchlist.concat(arrayAdd(templist,1,alistapi));
+  templist =[];
+  filelist.forEach(item => {
+    if(!templist.some(s => item.parent.indexOf(s.parent)>-1 && s.parent !='/')){
+      templist.push(dirlist);
+    }
+  })
+  searchlist = searchlist.concat(arrayAdd(templist,0,alistapi));
+  addItemBefore('listloading', searchlist);
+  /*
       filelist = filelist.filter(f => {
         return !dirlist.some(d => d.parent+"/"+d.name==f.parent);
       })
@@ -519,7 +524,7 @@ function alistSearch(alistapi,input) {
           }
         });
       }
-  
+  */
   return 1;
 }
 
