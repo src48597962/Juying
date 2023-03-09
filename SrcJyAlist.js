@@ -499,6 +499,7 @@ function alistSearch(alistapi,input) {
       templist.push(dirlist);
     }
   })
+  log(templist);
   let searchlist = [];
   searchlist = searchlist.concat(arrayAdd(templist,1,alistapi));
   templist =[];
