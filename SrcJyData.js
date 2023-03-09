@@ -960,7 +960,7 @@ function JYyiji(){
                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
                                 alistSearch2(name,1);
                             }, name)
-                        },list[i].name)
+                        },list[i].title)
                     }]
                 }
             });
