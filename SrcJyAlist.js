@@ -145,7 +145,7 @@ function alistHome() {
           });
         }
         hideLoading();
-        return "toast://搜索结束";
+        return "toast://搜索完成";
       },alistapi),
       col_type: 'scroll_button'
   });
@@ -157,7 +157,7 @@ function alistHome() {
         showLoading('搜索中，请稍后...');
         alistSearch2(input);
         hideLoading();
-        return "toast://搜索结束";
+        return "toast://搜索完成";
       }),
       col_type: 'scroll_button'
   });
