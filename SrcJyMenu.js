@@ -82,6 +82,25 @@ var erjimenu = [
                 js: $.toString(() => {
                     return "#noHistory#hiker://page/soup?p=fypage&rule=AI影搜";
                 })
+            },{
+               title: "Alist搜索",
+               js: $.toString(() => {
+                   return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
+                        let d = [];
+                        d.push({
+                            title: name+"-Alist聚合搜索",
+                            url: "hiker://empty",
+                            col_type: "text_center_1",
+                            extra: {
+                                id: "listloading",
+                                lineVisible: false
+                            }
+                        })
+                        setResult(d);
+                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
+                        alistSearch2(name,1);
+                    }, MY_PARAMS.name)
+               })
             }]
         }
     }
