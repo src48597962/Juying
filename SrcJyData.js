@@ -877,7 +877,34 @@ function JYyiji(){
             xunmi(name);
         }, input);
     });
-
+    let longClicklist = [{
+        title: "🔍快速聚搜",
+        js: $.toString((name) => {
+            return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
+                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
+                xunmi(name);
+            }, name)
+        },list[i].name)
+    },{
+        title: "🔎Alist搜索",
+        js: $.toString((name) => {
+            return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
+                let d = [];
+                d.push({
+                    title: name+"-Alist聚合搜索",
+                    url: "hiker://empty",
+                    col_type: "text_center_1",
+                    extra: {
+                        id: "listloading",
+                        lineVisible: false
+                    }
+                })
+                setResult(d);
+                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
+                alistSearch2(name,1);
+            }, name)
+        },list[i].name)
+    }];
     if(datasource=="sougou"){
         var list = html.listData.results;
         for (var i in list) {
@@ -890,34 +917,7 @@ function JYyiji(){
                     pic: list[i].v_picurl,
                     name: list[i].name,
                     datasource: getItem('JYdatasource', 'sougou'),
-                    longClick: [{
-                        title: "🔍快速聚搜",
-                        js: $.toString((name) => {
-                            return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
-                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
-                                xunmi(name);
-                            }, name)
-                        },list[i].name)
-                    },{
-                        title: "🔎Alist搜索",
-                        js: $.toString((name) => {
-                            return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
-                                let d = [];
-                                d.push({
-                                    title: name+"-Alist聚合搜索",
-                                    url: "hiker://empty",
-                                    col_type: "text_center_1",
-                                    extra: {
-                                        id: "listloading",
-                                        lineVisible: false
-                                    }
-                                })
-                                setResult(d);
-                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
-                                alistSearch2(name,1);
-                            }, name)
-                        },list[i].name)
-                    }]
+                    longClick: longClicklist
                 }
             });
         }
@@ -934,15 +934,7 @@ function JYyiji(){
                     pic: img,
                     name: list[i].title,
                     datasource: getItem('JYdatasource', 'sougou'),
-                    longClick: [{
-                        title: "🔍快速聚搜",
-                        js: $.toString((name) => {
-                            return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
-                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
-                                xunmi(name);
-                            }, name)
-                        },list[i].title)
-                    }]
+                    longClick: longClicklist
                 }
             });
         }
