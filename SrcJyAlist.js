@@ -150,7 +150,7 @@ function alistHome() {
       col_type: 'scroll_button'
   });
   d.push({
-      title: '🔍批量',
+      title: '🔎聚合',
       url: $(getItem('searchtestkey', ''),"搜索关键字").input((alistfile)=>{
         setItem("searchtestkey",input);
         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
@@ -482,7 +482,7 @@ function alistUrl(alistapi,path,sign,subtitle) {
   }
 }
 
-function alistSearch(alistapi,input) {
+function alistSearch(alistapi,input,notoast) {
   let dirlist = [];
   let filelist = [];
   try{
@@ -495,9 +495,9 @@ function alistSearch(alistapi,input) {
       dirlist = getlist(json.data.content,1);
       filelist = getlist(json.data.content,0,alistapi.nofilter?0:fileFilter);
     }else if(json.code==500){
-      toast(alistapi.name+' 搜索出错了，不支持搜索.'+json.message);
+      if(!notoast){toast(alistapi.name+' 搜索出错了，不支持搜索.'+json.message);}
     }else if(json.code==401){
-      toast(alistapi.name+' 登录令牌token失效，需要重新获取');
+      if(!notoast){toast(alistapi.name+' 登录令牌token失效，需要重新获取');}
     }
   }catch(e){
     //log(alistapi.name+' 内置搜索出错,偿试小雅搜索>'+e.message);
