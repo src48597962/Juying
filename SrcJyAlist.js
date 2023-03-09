@@ -155,7 +155,7 @@ function alistHome() {
         setItem("searchtestkey",input);
         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
         showLoading('搜索中，请稍后...');
-        alistSearch2();
+        alistSearch2(input);
         hideLoading();
         return "toast://搜索结束";
       }),
@@ -503,7 +503,7 @@ function alistSearch(alistapi,input,notoast) {
   return searchlist;
 }
 
-function alistSearch2(){
+function alistSearch2(input){
     try{
       var alistData = JSON.parse(fetch(alistfile));
     }catch(e){
