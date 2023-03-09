@@ -25,7 +25,7 @@ function getlist(data,isdir,filter) {
             list.sort(SortList);
         }
     }catch(e){
-      log(e.message);
+      log('排序修正失败>'+e.message);
     }
     return list || [];
 }
@@ -126,7 +126,8 @@ function alistHome() {
   });
   d.push({
       title: '🔍搜索',
-      url: $("","搜索关键字").input((alistapi)=>{
+      url: $(getItem('searchtestkey', ''),"搜索关键字").input((alistapi)=>{
+        setItem("searchtestkey",input);
         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
         showLoading('搜索中，请稍后...');
         deleteItemByCls('loadlist');
@@ -144,7 +145,68 @@ function alistHome() {
           });
         }
         hideLoading();
+        return "toast://搜索结束";
       },alistapi),
+      col_type: 'scroll_button'
+  });
+  d.push({
+      title: '🔍批量',
+      url: $(getItem('searchtestkey', ''),"搜索关键字").input((alistfile)=>{
+        setItem("searchtestkey",input);
+        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
+        try{
+          var alistData = JSON.parse(fetch(alistfile));
+        }catch(e){
+          var alistData = {};
+        }
+        let datalist = alistData.drives || [];
+        showLoading('搜索中，请稍后...');
+        deleteItemByCls('loadlist');
+        let task = function(obj) {
+            try{
+                let searchlist = alistSearch(obj,input);
+                if(searchlist.length>0){
+                  searchlist.unshift({
+                    title: obj.name + " 找到" + searchlist.length + "条 “"+input+"” 相关",
+                    url: "hiker://empty",
+                    col_type: "text_center_1",
+                    extra: {
+                        cls: "loadlist"
+                    }
+                  });
+                  searchlist.unshift({
+                      col_type: "line_blank",
+                      extra: {
+                          cls: "loadlist"
+                      }
+                  });
+                  addItemBefore('listloading', searchlist);
+                }else{
+                  log(obj.name+">未搜索到 “"+input+"”");
+                }
+            }catch(e){
+              log(obj.name+'>搜索失败>'+e.message);
+            }
+            return 1;
+        }
+        let list = datalist.map((item)=>{
+            return {
+              func: task,
+              param: item,
+              id: item.server
+            }
+        });
+        if(list.length>0){
+            be(list, {
+                func: function(obj, id, error, taskResult) {
+                },
+                param: {
+                }
+            });
+        }
+        hideLoading();
+        return "toast://搜索结束";
+      },alistfile),
       col_type: 'scroll_button'
   });
   if(alistapi.token){
@@ -189,65 +251,6 @@ function alistHome() {
         col_type: 'scroll_button'
     });
   }
-  d.push({
-      title: '🔍批量测试',
-      url: $("","搜索关键字").input((alistfile)=>{
-        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
-        try{
-          var alistData = JSON.parse(fetch(alistfile));
-        }catch(e){
-          var alistData = {};
-        }
-        let datalist = alistData.drives || [];
-        showLoading('搜索中，请稍后...');
-        deleteItemByCls('loadlist');
-        let task = function(obj) {
-            try{
-                let searchlist = alistSearch(obj,input);
-                if(searchlist.length>0){
-                  searchlist.unshift({
-                    title: obj.name + " 搜索到"+searchlist.length+"条 “"+input+"” 相关",
-                    url: "hiker://empty",
-                    col_type: "text_center_1",
-                    extra: {
-                        cls: "loadlist"
-                    }
-                  });
-                  searchlist.unshift({
-                      col_type: "line_blank",
-                      extra: {
-                          cls: "loadlist"
-                      }
-                  });
-                  addItemBefore('listloading', searchlist);
-                }else{
-                  log(obj.name+" 未搜索到 “"+input+"”");
-                }
-            }catch(e){
-              log(obj.name+' 搜索失败>'+e.message);
-            }
-            return 1;
-        }
-        let list = datalist.map((item)=>{
-            return {
-              func: task,
-              param: item,
-              id: item.server
-            }
-        });
-        if(list.length>0){
-            be(list, {
-                func: function(obj, id, error, taskResult) {
-                },
-                param: {
-                }
-            });
-        }
-        
-        hideLoading();
-      },alistfile),
-      col_type: 'scroll_button'
-  });
   d.push({
       col_type: 'line'
   });
@@ -335,7 +338,7 @@ function alistList(alistapi,dirname){
       title: !alistapi.nofilter&&fileFilter?"““””<small><font color=#f20c00>已开启文件过滤，仅显示音视频文件</font></small>":""
     });
   }catch(e){
-    log(e.message);
+    log(alistapi.name+'>获取列表失败>'+e.message);
     updateItem(listid, {
       title: "超时或出错了,下拉刷新重试."
     });
@@ -492,12 +495,12 @@ function alistSearch(alistapi,input) {
       dirlist = getlist(json.data.content,1);
       filelist = getlist(json.data.content,0,alistapi.nofilter?0:fileFilter);
     }else if(json.code==500){
-      toast(alistapi.name+' 搜索出错了，应不支持搜索.'+json.message);
+      toast(alistapi.name+' 搜索出错了，不支持搜索.'+json.message);
     }else if(json.code==401){
       toast(alistapi.name+' 登录令牌token失效，需要重新获取');
     }
   }catch(e){
-    log(alistapi.name+' 内置搜索出错,偿试小雅搜索>'+e.message);
+    //log(alistapi.name+' 内置搜索出错,偿试小雅搜索>'+e.message);
     try{
       let html = fetch(alistapi.server+'/search?box='+input+'&url=&type=video');
       let list = pdfa(html,'body&&div&&a');
@@ -521,7 +524,7 @@ function alistSearch(alistapi,input) {
         }
       })
     }catch(e){
-      log(alistapi.name+' 偿试小雅搜索失败');
+      log(alistapi.name+'>偿试小雅搜索失败');
     }
   }
   let searchlist = [];
@@ -543,7 +546,7 @@ function alistSearch(alistapi,input) {
     })
     searchlist = searchlist.concat(arrayAdd(templist,0,alistapi));
   }catch(e){
-    log(alistapi.name+' 生成搜索数据失败>'+e.message);
+    log(alistapi.name+'>生成搜索数据失败>'+e.message);
   }
   return searchlist;
 }
