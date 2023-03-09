@@ -461,7 +461,7 @@ function JYerji(){
             };
             let tvip = getItem('hikertvboxset', '');
             d.push({
-                title: '推送至TVBOX',
+                title: '推送TVBOX',
                 url: $("#noLoading#").lazyRule((push,lists,tvip) => {
                     if(tvip==""){
                         return 'toast://观影设置中设置TVBOX接收端ip地址，完成后回来刷新一下';
