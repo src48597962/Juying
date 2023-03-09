@@ -441,7 +441,8 @@ function JYerji(){
             d.push({
                 title: 'Alist搜索',
                 url: $("#noLoading#").lazyRule(() => {
-                    
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
+                    alistSearch2();
                 }),
                 col_type: 'scroll_button'
             })
