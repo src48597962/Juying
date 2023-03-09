@@ -206,7 +206,7 @@ function alistHome() {
                 let searchlist = alistSearch(obj,input);
                 if(searchlist.length>0){
                   addItemBefore('listloading', {
-                    title: alistapi.name + " 搜索到"+searchlist.length+"条结果",
+                    title: obj.name + " 搜索到"+searchlist.length+"条结果",
                     url: "hiker://empty",
                     col_type: "text_center_1",
                     extra: {
@@ -216,7 +216,7 @@ function alistHome() {
                   addItemBefore('listloading', searchlist);
                 }else{
                   addItemBefore('listloading', {
-                    title: alistapi.name+" 未搜索到 “"+input+"”",
+                    title: obj.name+" 未搜索到 “"+input+"”",
                     url: "hiker://empty",
                     col_type: "text_center_1",
                     extra: {
