@@ -509,8 +509,10 @@ function JYerji(){
     }catch(e){
         var playsinfo = "";
     }
-
-    if(playsinfo||shows){
+    if(JYconfig['alistLine']==1){
+        isline =1;
+    }
+    if(isline||shows){
         setTabs(tabs, MY_URL);
     }else{
         d.push({
