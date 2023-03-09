@@ -503,7 +503,7 @@ function JYerji(){
             })
         }
     }
-
+    log(plays[0].info)
     try{
         var playsinfo = datasource=='sougou'?plays[0].info:isline;
     }catch(e){
