@@ -1357,7 +1357,7 @@ function xunmierji(type,ua) {
         };
         let tvip = getItem('hikertvboxset', '');
         d.push({
-            title: '推送至TVBOX',
+            title: '推送TVBOX',
             url: $("#noLoading#").lazyRule((push,tabs,lists,tvip) => {
                 if(tvip==""){
                      return 'toast://观影设置中设置TVBOX接收端ip地址，完成后回来刷新一下';
@@ -1467,7 +1467,7 @@ function xunmierji(type,ua) {
                     try{
                         movieinfo['from'] = playtitle;
                         extra.longClick = [{
-                            title: "推送至TVBOX",
+                            title: "推送TVBOX",
                             js: $.toString((play,movieinfo) => {
                                 putMyVar('pushboxplay','1');
                                 storage0.putMyVar('movieinfo',movieinfo);
