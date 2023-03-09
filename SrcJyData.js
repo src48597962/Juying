@@ -437,6 +437,15 @@ function JYerji(){
                 })
             }
         }
+        if(JYconfig['alistLine']==1){
+            d.push({
+                title: 'Alist搜索',
+                url: $("#noLoading#").lazyRule(() => {
+                    
+                }),
+                col_type: 'scroll_button'
+            })
+        }
         //推送tvbox
         if(getItem('enabledpush', '') == '1' && datasource == "360"){
             let push = {
