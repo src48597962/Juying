@@ -505,9 +505,10 @@ function alistSearch(alistapi,input) {
   templist =[];
   filelist.forEach(item => {
     if(!templist.some(s => item.parent.indexOf(s.parent)>-1 && s.parent !='/')){
-      templist.push(dirlist);
+      templist.push(filelist);
     }
   })
+  log(templist);
   searchlist = searchlist.concat(arrayAdd(templist,0,alistapi));
   addItemBefore('listloading', searchlist);
   /*
