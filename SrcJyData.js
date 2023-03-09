@@ -441,10 +441,14 @@ function JYerji(){
             d.push({
                 title: 'Alist搜索',
                 url: $("#noLoading#").lazyRule((vari,name) => {
-                    putMyVar(vari, '99');
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
-                    alistSearch2(name,1);
-                    return "toast://搜索完成";
+                    if(datalist.length>0){
+                        alistSearch2(name,1);
+                        putMyVar(vari, '99');
+                        return "toast://搜索完成";
+                    }else{
+                        return "toast://无Alist接口";
+                    }
                 },vari,MY_PARAMS.name),
                 col_type: 'scroll_button'
             })
