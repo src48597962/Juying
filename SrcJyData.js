@@ -107,7 +107,7 @@ let yijimenu = [
                 require(config.依赖);
                 jiekouyiji();
             }),
-        pic_url: getItem('zhanshibutton')=="alist"?'https://cdn.jsdelivr.net/gh/alist-org/logo@main/logo.svg':'https://lanmeiguojiang.com/tubiao/more/105.png',
+        pic_url: getItem('zhanshibutton')=="alist"?'hiker://files/cache/src/Alist.svg':'https://lanmeiguojiang.com/tubiao/more/105.png',
         col_type: 'icon_5',
         extra: {
             id: "zhanshibutton",
@@ -142,7 +142,7 @@ let yijimenu = [
                     setItem('zhanshibutton','alist');
                     updateItem("zhanshibutton", {
                         title: "Alist",
-                        pic_url: 'https://cdn.jsdelivr.net/gh/alist-org/logo@main/logo.svg',
+                        pic_url: 'hiker://files/cache/src/Alist.svg',
                         url: $("hiker://empty###noRecordHistory##noHistory#").rule(() => {
                             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
                             alistHome();
@@ -162,7 +162,7 @@ let yijimenu = [
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLive.js');
                 Live();
             }),
-        pic_url: getItem('zhibobutton')=="alist"?'https://cdn.jsdelivr.net/gh/alist-org/logo@main/logo.svg':'https://lanmeiguojiang.com/tubiao/more/87.png',
+        pic_url: getItem('zhibobutton')=="alist"?'hiker://files/cache/src/Alist.svg':'https://lanmeiguojiang.com/tubiao/more/87.png',
         col_type: 'icon_5',
         extra: {
             id: "zhibobutton",
@@ -186,7 +186,7 @@ let yijimenu = [
                     setItem('zhibobutton','alist');
                     updateItem("zhibobutton", {
                         title: "Alist",
-                        pic_url: 'https://cdn.jsdelivr.net/gh/alist-org/logo@main/logo.svg',
+                        pic_url: 'hiker://files/cache/src/Alist.svg',
                         url: $("hiker://empty###noRecordHistory##noHistory#").rule(() => {
                             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
                             alistHome();
@@ -661,6 +661,7 @@ function JYerji(){
     setResult(d);
 }
 function JYyiji(){    
+    downloadicon();//下载图标
     let datasource = getItem('JYdatasource', 'sougou');
     var d = [];
     const Color = "#3399cc";
@@ -947,4 +948,22 @@ function JYyiji(){
     }
     
     setResult(d);
+}
+
+function downloadicon() {
+    if(!fileExist('hiker://files/cache/src/Alist.svg')){
+        downloadFile('https://cdn.jsdelivr.net/gh/alist-org/logo@main/logo.svg', 'hiker://files/cache/src/Alist.svg');
+    }
+    if(!fileExist('hiker://files/cache/src/文件夹.svg')){
+        downloadFile(config.依赖.match(/http(s)?:\/\/.*\//)[0] + "img/文件夹.svg", 'hiker://files/cache/src/文件夹.svg');
+    }
+    if(!fileExist('hiker://files/cache/src/影片.svg')){
+        downloadFile("https://lanmeiguojiang.com/tubiao/movie/13.svg", 'hiker://files/cache/src/影片.svg');
+    }
+    if(!fileExist('hiker://files/cache/src/音乐.svg')){
+        downloadFile("https://lanmeiguojiang.com/tubiao/music/46.svg", 'hiker://files/cache/src/音乐.svg');
+    }
+    if(!fileExist('hiker://files/cache/src/图片.png')){
+        downloadFile("https://lanmeiguojiang.com/tubiao/more/38.png", 'hiker://files/cache/src/图片.png');
+    }
 }
