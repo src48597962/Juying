@@ -275,7 +275,7 @@ function alistHome() {
       }else if(json.code==401){
         toast('登录令牌token失效，需要重新获取');
       }else if(json.code==500){
-        toast('获取列表失败，下拉刷新重试.');
+        toast('获取列表失败，下拉刷新重试.'+json.message);
       }
       updateItem('listloading', {
         title: "““””<small><font color=#f20c00>此规则仅限学习交流使用，请于导入后24小时内删除，任何团体或个人不得以任何方式方法传播此规则的整体或部分！</font></small>"
@@ -329,7 +329,7 @@ function alistList(alistapi,dirname){
     }else if(json.code==401){
       toast('登录令牌token失效，需要重新获取');
     }else if(json.code==500){
-      toast('获取列表失败，下拉刷新重试.');
+      toast('获取列表失败，下拉刷新重试.'+json.message);
     }
     updateItem(listid, {
       title: !alistapi.nofilter&&fileFilter?"““””<small><font color=#f20c00>已开启文件过滤，仅显示音视频文件</font></small>":""
@@ -492,7 +492,7 @@ function alistSearch(alistapi,input) {
       dirlist = getlist(json.data.content,1);
       filelist = getlist(json.data.content,0,alistapi.nofilter?0:fileFilter);
     }else if(json.code==500){
-      toast(alistapi.name+' 搜索出错了，此网盘不支持搜索');
+      toast(alistapi.name+' 搜索出错了，应不支持搜索.'+json.message);
     }else if(json.code==401){
       toast(alistapi.name+' 登录令牌token失效，需要重新获取');
     }
