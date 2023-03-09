@@ -503,19 +503,17 @@ function JYerji(){
             })
         }
     }
-    log(plays[0].info)
+
     try{
         var playsinfo = datasource=='sougou'?plays[0].info:isline;
     }catch(e){
         var playsinfo = "";
     }
-    if(datasource=='sougou' && !plays[0].info){
+    if(datasource=='sougou' && !plays[0].info && JYconfig['alistLine']==1){
         tabs = [];
+        playsinfo = 1;
     }
-    if(JYconfig['alistLine']==1){
-        isline =1;
-    }
-    if(isline||shows){
+    if(playsinfo||shows){
         setTabs(tabs, MY_URL);
     }else{
         d.push({
