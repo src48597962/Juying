@@ -1331,20 +1331,21 @@ function xunmierji(type,ua) {
                 })
             }
         }
+        if(JYconfig['alistLine']==1){
+            d.push({
+                title: 'Alist搜索',
+                url: $("#noLoading#").lazyRule((vari,name) => {
+                    putMyVar(vari, '99');
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
+                    alistSearch2(name,1);
+                    return "toast://搜索完成";
+                },vari,MY_PARAMS.name),
+                col_type: 'scroll_button'
+            })
+        }
     }
     setTabs(tabs, MY_URL);
-    if(JYconfig['alistLine']==1){
-        d.push({
-            title: 'Alist搜索',
-            url: $("#noLoading#").lazyRule((vari,name) => {
-                putMyVar(vari, '99');
-                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
-                alistSearch2(name,1);
-                return "toast://搜索完成";
-            },vari,MY_PARAMS.name),
-            col_type: 'scroll_button'
-        })
-    }
+    
     //推送tvbox
     if(getItem('enabledpush','')=='1' && lists.length>0){
         var movieinfo = {
