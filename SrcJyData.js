@@ -585,7 +585,7 @@ function JYerji(){
                             d.push({
                                 title: getHead(name + '', Color3),
                                 url: url + easy,
-                                extra: { id: urlid, jsLoadingInject: true, cacheM3u8: getMyVar('superwebM3U8')=="1"?true:false, blockRules: block },
+                                extra: { id: urlid, jsLoadingInject: true, cacheM3u8: getMyVar('superwebM3U8')=="1"?true:false, blockRules: block, cls: "loadlist" },
                                 col_type: listonename.length>6?'text_2':'text_4'
                             });
                         }
@@ -622,7 +622,7 @@ function JYerji(){
                     title: getHead("第" + arr[k] + "期", Color3),
                     col_type: "text_2",
                     url: url + easy,
-                    extra: { id: MY_URL+k, jsLoadingInject: true, cacheM3u8: getMyVar('superwebM3U8')=="1"?true:false, blockRules: block  }
+                    extra: { id: MY_URL+k, jsLoadingInject: true, cacheM3u8: getMyVar('superwebM3U8')=="1"?true:false, blockRules: block, cls: "loadlist"  }
                 });
             }
         } else if (plays.length==0) {
@@ -635,7 +635,7 @@ function JYerji(){
                     img: 'http://dlweb.sogoucdn.com/video/wap/static/img/logo/' + plays[m].sitename[1],
                     url: url + easy,
                     col_type: "icon_2",
-                    extra: { id: MY_URL, jsLoadingInject: true, cacheM3u8: getMyVar('superwebM3U8')=="1"?true:false, blockRules: block },
+                    extra: { id: MY_URL, jsLoadingInject: true, cacheM3u8: getMyVar('superwebM3U8')=="1"?true:false, blockRules: block, cls: "loadlist" },
                 })
             }
         }
@@ -646,7 +646,11 @@ function JYerji(){
     d.push({
         desc: '‘‘’’<small><font color=#f20c00>此规则仅限学习交流使用，请于导入后24小时内删除，任何团体或个人不得以任何方式方法传播此规则的整体或部分！</font></small>',
         url: 'toast://温馨提示：且用且珍惜！',
-        col_type: 'text_center_1'
+        col_type: 'text_center_1',
+        extra: {
+            id: "listloading",
+            lineVisible: false
+        }
     });
     setResult(d);
 }
