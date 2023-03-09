@@ -130,7 +130,19 @@ function alistHome() {
         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
         showLoading('搜索中，请稍后...');
         deleteItemByCls('loadlist');
-        alistSearch(alistapi,input);
+        let searchlist = alistSearch(alistapi,input);
+        if(searchlist.length>0){
+          addItemBefore('listloading', searchlist);
+        }else{
+          addItemBefore('listloading', {
+            title: alistapi.name+" 未搜索到 “"+input+"”",
+            url: "hiker://empty",
+            col_type: "text_center_1",
+            extra: {
+                cls: "loadlist"
+            }
+          });
+        }
         hideLoading();
       },alistapi),
       col_type: 'scroll_button'
@@ -191,7 +203,27 @@ function alistHome() {
         deleteItemByCls('loadlist');
         let task = function(obj) {
             try{
-                alistSearch(obj,input);
+                let searchlist = alistSearch(obj,input);
+                if(searchlist.length>0){
+                  addItemBefore('listloading', {
+                    title: alistapi.name + " 搜索到"+searchlist.length+"条结果",
+                    url: "hiker://empty",
+                    col_type: "text_center_1",
+                    extra: {
+                        cls: "loadlist"
+                    }
+                  });
+                  addItemBefore('listloading', searchlist);
+                }else{
+                  addItemBefore('listloading', {
+                    title: alistapi.name+" 未搜索到 “"+input+"”",
+                    url: "hiker://empty",
+                    col_type: "text_center_1",
+                    extra: {
+                        cls: "loadlist"
+                    }
+                  });
+                }
             }catch(e){
               log(obj.name+' 搜索失败>'+e.message);
             }
@@ -493,40 +525,28 @@ function alistSearch(alistapi,input) {
       log(alistapi.name+' 偿试小雅搜索失败');
     }
   }
-  let templist = [];
-  dirlist.forEach(item => {
-    if(!templist.some(s => item.parent.indexOf(s.parent)>-1 && s.parent !='/')){
-      templist.push(item);
-    }
-  })
   let searchlist = [];
-  searchlist = searchlist.concat(arrayAdd(templist,1,alistapi));
-
-  templist =[];
-  filelist.forEach(item => {
-    if(!dirlist.some(d => item.parent.indexOf(d.parent)>-1 && d.parent !='/') || item.parent =='/'){
-      templist.push(item);
-    }
-  })
-  searchlist = searchlist.concat(arrayAdd(templist,0,alistapi));
-  addItemBefore('listloading', searchlist);
-  /*
-      filelist = filelist.filter(f => {
-        return !dirlist.some(d => d.parent+"/"+d.name==f.parent);
-      })
-      addItemBefore('listloading', arrayAdd(filelist,0,alistapi));
-      if(dirlist.length==0&&filelist.length==0){
-        addItemBefore('listloading', {
-          title: alistapi.name+" 未搜索到 “"+input+"”",
-          url: "hiker://empty",
-          col_type: "text_center_1",
-          extra: {
-              cls: "loadlist"
-          }
-        });
+  try{
+    let templist = [];
+    dirlist.forEach(item => {
+      if(!templist.some(s => item.parent.indexOf(s.parent)>-1 && s.parent !='/')){
+        templist.push(item);
       }
-  */
-  return 1;
+    })
+    
+    searchlist = searchlist.concat(arrayAdd(templist,1,alistapi));
+
+    templist =[];
+    filelist.forEach(item => {
+      if(!dirlist.some(d => item.parent.indexOf(d.parent)>-1 && d.parent !='/') || item.parent =='/'){
+        templist.push(item);
+      }
+    })
+    searchlist = searchlist.concat(arrayAdd(templist,0,alistapi));
+  }catch(e){
+    log(alistapi.name+' 生成搜索数据失败>'+e.message);
+  }
+  return searchlist;
 }
 
 function SortList(v1, v2) {
