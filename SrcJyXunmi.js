@@ -840,7 +840,7 @@ function xunmierji(type,ua) {
     } else {
         var zt = 0;
     }
-    if(!getMyVar('SrcM3U8')||!getMyVar('superwebM3U8')||!getMyVar('superweb')){
+    if(!getMyVar('SrcM3U8')||!getMyVar('superwebM3U8')||!getMyVar('superweb')||!getMyVar('alistLine')){
         try{
             var cfgfile = "hiker://files/rules/Src/Juying/config.json";
             var Juyingcfg=fetch(cfgfile);
@@ -850,6 +850,7 @@ function xunmierji(type,ua) {
             putMyVar('SrcM3U8',JYconfig.cachem3u8==0?'0':'1');
             putMyVar('superwebM3U8',JYconfig.cachem3u8!=0&&JYconfig.superweb==1?'1':'0');
             putMyVar('superweb',JYconfig.superweb==1?'1':'0');
+            putMyVar('alistLine',JYconfig.alistLine==1?'1':'0');
         }catch(e){}
     }
         
@@ -1329,7 +1330,7 @@ function xunmierji(type,ua) {
         }
     }
     setTabs(tabs, MY_URL);
-    log(JYconfig['alistLine'])
+
     if(JYconfig['alistLine']==1){
         d.push({
             title: 'Alist搜索',
