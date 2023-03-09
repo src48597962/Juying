@@ -84,7 +84,8 @@ var erjimenu = [
                 })
             },{
                title: "Alist搜索",
-               js: $.toString((name) => {
+               js: $.toString((name,alineLine) => {
+                   log('是否开启：'+alineLine);
                    return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
                         let d = [];
                         d.push({
@@ -100,7 +101,7 @@ var erjimenu = [
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
                         alistSearch2(name,1);
                     }, name)
-               },MY_PARAMS.name)
+               },MY_PARAMS.name,JYconfig['alineLine'])
             }]
         }
     }
@@ -196,7 +197,7 @@ function lookset(){
                 }
                 writeFile(cfgfile, JSON.stringify(JYconfig));
                 refreshPage(false);
-                return 'toast://切换成功';
+                return 'toast://'+JYconfig['alistLine']?'已开启Alist搜索线路':'已关闭Alist搜索线路';
             }, JYconfig, cfgfile),
         col_type: "text_2"
     });
