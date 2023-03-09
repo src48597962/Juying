@@ -1333,7 +1333,18 @@ function xunmierji(type,ua) {
         }
     }
     setTabs(tabs, MY_URL);
-    
+    if(JYconfig['alistLine']==1){
+        d.push({
+            title: 'Alist搜索',
+            url: $("#noLoading#").lazyRule((vari,name) => {
+                putMyVar(vari, '99');
+                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
+                alistSearch2(name,1);
+                return "toast://搜索完成";
+            },vari,MY_PARAMS.name),
+            col_type: 'scroll_button'
+        })
+    }
     //推送tvbox
     if(getItem('enabledpush','')=='1' && lists.length>0){
         var movieinfo = {
@@ -1440,7 +1451,8 @@ function xunmierji(type,ua) {
                 let extra = {
                     id: playurl,
                     jsLoadingInject: true,
-                    blockRules: ['.m4a', '.mp3', '.gif', '.jpeg', '.jpg', '.ico', '.png', 'hm.baidu.com', '/ads/*.js', 'cnzz.com']
+                    blockRules: ['.m4a', '.mp3', '.gif', '.jpeg', '.jpg', '.ico', '.png', 'hm.baidu.com', '/ads/*.js', 'cnzz.com'],
+                    cls: "loadlist"
                 }
                 
                 if(!/qq|youku|mgtv|bili|qiyi|sohu|pptv/.test(playurl) && /html/.test(playurl)){
@@ -1526,7 +1538,11 @@ function xunmierji(type,ua) {
     d.push({
         desc: '‘‘’’<small><font color=#f20c00>此规则仅限学习交流使用，请于导入后24小时内删除，任何团体或个人不得以任何方式方法传播此规则的整体或部分！</font></small>',
         url: 'toast://温馨提示：且用且珍惜！',
-        col_type: 'text_center_1'
+        col_type: 'text_center_1',
+        extra: {
+            id: "listloading",
+            lineVisible: false
+        }
     });
     setResult(d);
     setLastChapterRule('js:' + $.toString((type,ua,data)=>{
