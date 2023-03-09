@@ -1331,7 +1331,7 @@ function xunmierji(type,ua) {
     }
     setTabs(tabs, MY_URL);
 
-    if(JYconfig['alistLine']==1){
+    if(getMyVar('alistLine','0')==1){
         d.push({
             title: 'Alist搜索',
             url: $("#noLoading#").lazyRule((name) => {
