@@ -442,7 +442,7 @@ function JYerji(){
                 title: 'Alist搜索',
                 url: $("#noLoading#").lazyRule(() => {
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
-                    alistSearch2();
+                    alistSearch2(MY_PARAMS.name);
                 }),
                 col_type: 'scroll_button'
             })
