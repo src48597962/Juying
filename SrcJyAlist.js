@@ -504,12 +504,7 @@ function alistSearch(alistapi,input,notoast) {
 }
 
 function alistSearch2(input,notoast){
-    try{
-      var alistData = JSON.parse(fetch(alistfile));
-    }catch(e){
-      var alistData = {};
-    }
-    let datalist = alistData.drives || [];
+    
     deleteItemByCls('loadlist');
     let task = function(obj) {
         try{
