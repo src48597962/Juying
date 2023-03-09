@@ -406,37 +406,34 @@ function JYerji(){
                 d.push({
                     title: getMyVar(vari, '0') == i ? getHead(tabs[i],Color1,1) : getHead(tabs[i],Color2),
                     url: $("#noLoading#").lazyRule((vari, i, Marksum) => {
-                        if (parseInt(getMyVar(vari, '0')) != i) {
-                            try {
-                                eval('var SrcMark = ' + fetch("hiker://files/cache/SrcMark.json"));
-                            } catch (e) {
-                                var SrcMark = "";
-                            }
-                            if (SrcMark == "") {
-                                SrcMark = { route: {} };
-                            } else if (SrcMark.route == undefined) {
-                                SrcMark.route = {};
-                            }
-                            SrcMark.route[vari] = i;
-                            var key = 0;
-                            var one = "";
-                            for (var k in SrcMark.route) {
-                                key++;
-                                if (key == 1) { one = k }
-                            }
-                            if (key > Marksum) { delete SrcMark.route[one]; }
-                            writeFile("hiker://files/cache/SrcMark.json", JSON.stringify(SrcMark));
-                            putMyVar(vari, i);
-                            refreshPage(false);
-                            return 'toast://切换成功'
-                        } else {
-                            return '#noHistory#hiker://empty'
+                        try {
+                            eval('var SrcMark = ' + fetch("hiker://files/cache/SrcMark.json"));
+                        } catch (e) {
+                            var SrcMark = "";
                         }
+                        if (SrcMark == "") {
+                            SrcMark = { route: {} };
+                        } else if (SrcMark.route == undefined) {
+                            SrcMark.route = {};
+                        }
+                        SrcMark.route[vari] = i;
+                        var key = 0;
+                        var one = "";
+                        for (var k in SrcMark.route) {
+                            key++;
+                            if (key == 1) { one = k }
+                        }
+                        if (key > Marksum) { delete SrcMark.route[one]; }
+                        writeFile("hiker://files/cache/SrcMark.json", JSON.stringify(SrcMark));
+                        putMyVar(vari, i);
+                        refreshPage(false);
+                        return 'toast://切换成功'
                     }, vari, i, Marksum),
                     col_type: 'scroll_button'
                 })
             }
         }
+        log(JYconfig);
         if(JYconfig['alistLine']==1){
             d.push({
                 title: 'Alist搜索',
@@ -444,7 +441,6 @@ function JYerji(){
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
                     if(datalist.length>0){
                         alistSearch2(name,1);
-                        putMyVar(vari, '99');
                         return "toast://搜索完成";
                     }else{
                         return "toast://无Alist接口";
