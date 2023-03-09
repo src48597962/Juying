@@ -226,6 +226,7 @@ function alistHome() {
         addItemBefore('listloading', arrayAdd(dirlist,1,alistapi));
         
         let filelist = getlist(json.data.content||[],0,alistapi.nofilter?0:fileFilter);
+        log(filelist)
         addItemBefore('listloading', arrayAdd(filelist,0,alistapi));
       }else if(json.code==401){
         toast('登录令牌token失效，需要重新获取');
