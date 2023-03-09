@@ -531,10 +531,10 @@ function alistSearch2(input,notoast){
               });
               addItemBefore('listloading', searchlist);
             }else{
-              log(obj.name+">未搜索到 “"+input+"”");
+              if(!notoast){log(obj.name+">未搜索到 “"+input+"”");}
             }
         }catch(e){
-          log(obj.name+'>搜索失败>'+e.message);
+          if(!notoast){log(obj.name+'>搜索失败>'+e.message);}
         }
         return 1;
     }
