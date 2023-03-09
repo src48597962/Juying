@@ -509,6 +509,9 @@ function JYerji(){
     }catch(e){
         var playsinfo = "";
     }
+    if(datasource=='sougou' && !plays[0].info){
+        tabs = [];
+    }
     if(JYconfig['alistLine']==1){
         isline =1;
     }
