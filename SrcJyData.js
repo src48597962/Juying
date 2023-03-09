@@ -433,11 +433,11 @@ function JYerji(){
                 })
             }
         }
-        log(JYconfig);
+
         if(JYconfig['alistLine']==1){
             d.push({
                 title: 'Alist搜索',
-                url: $("#noLoading#").lazyRule((vari,name) => {
+                url: $("#noLoading#").lazyRule((name) => {
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
                     if(datalist.length>0){
                         alistSearch2(name,1);
@@ -445,7 +445,7 @@ function JYerji(){
                     }else{
                         return "toast://无Alist接口";
                     }
-                },vari,MY_PARAMS.name),
+                },MY_PARAMS.name),
                 col_type: 'scroll_button'
             })
         }
