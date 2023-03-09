@@ -172,8 +172,10 @@ function lookset(){
         url: $('#noLoading#').lazyRule((JYconfig,cfgfile) => {
                 if(JYconfig['alistLine'] != 1){
                     JYconfig['alistLine'] = 1;
+                    putMyVar('alistLine','1');
                 }else{
                     JYconfig['alistLine'] = 0;
+                    putMyVar('alistLine','0');
                 }
                 writeFile(cfgfile, JSON.stringify(JYconfig));
                 refreshPage(false);
