@@ -884,7 +884,7 @@ var SrcParseS = {
                                         if(mnames.length>0){
                                             names.push(mnames[j]);
                                         }else{
-                                            names.push('线路'+urls.length);
+                                            names.push(beparses[k].name || '线路'+urls.length);
                                         }
                                         headers.push(mheaders[j]);
                                     }
@@ -896,7 +896,7 @@ var SrcParseS = {
                         }else{
                             let MulUrl = this.formatMulUrl(beurls[k].replace(/;{.*}/g,""), urls.length);
                             urls.push(MulUrl.url);
-                            names.push('线路'+urls.length);
+                            names.push(beparses[k].name || '线路'+urls.length);
                             headers.push(MulUrl.header);
                         }
                         //if(ismul==0){break;}
