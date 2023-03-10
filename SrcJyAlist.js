@@ -383,7 +383,7 @@ function alistUrl(alistapi,path,sign,subtitle) {
             let urls = [];
             let names = [];
             let heads = [];
-            playurl.forEach(item => {
+            playurl.forEach((item,i) => {
               let url = cacheM3u8(item.url,{headers:{'Referer':'https://www.aliyundrive.com/'}, timeout: 2000},'video'+i+'.m3u8');
               urls.push(url+"#isVideo=true##pre#");
               names.push(transcoding[item.template_id]?transcoding[item.template_id]:item.template_height);
