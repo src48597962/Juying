@@ -970,7 +970,7 @@ function getAliUrl(share_id, file_id, alitoken) {
     let signature;
     let public_key;
     if(typeof(justTestSign)!="undefined"){
-      let getaliecc = justTestSign('5dde4e1bdf9e4966b387ba58f4b3fdc3',userId,deviceId);
+      let getaliecc = justTestSign('5dde4e1bdf9e4966b387ba58f4b3fdc3',deviceId,userId);
       signature = getaliecc.split('##')[0];
       public_key = getaliecc.split('##')[1];
     }else{
