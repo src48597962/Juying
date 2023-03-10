@@ -914,7 +914,7 @@ var SrcParseS = {
                     }
                 }//排队解析结果循环
             }//解析全列表循环
-            
+            /*
             var failparse = [];
             //失败的解析，处理
             for(var p=0;p<dellist.length;p++){
@@ -968,7 +968,7 @@ var SrcParseS = {
                 }
 
             }
-            /*
+            
             if(!parseStr){
                 //私有解析有排除片源
                 if(myJXchange == 1){writeFile(myJXfile, JSON.stringify(myJXlist));}
