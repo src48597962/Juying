@@ -989,6 +989,8 @@ function getAliUrl(share_id, file_id, alitoken) {
       "modelName": "Windows网页版",
       "pubKey": public_key,
     }
+    log(signature)
+    log(public_key)
     if (signature && public_key) {
       let req = JSON.parse(request("https://api.aliyundrive.com/users/v1/users/device/create_session", { headers: headers, body: data, timeout: 3000 }));
       if (req.success) {
