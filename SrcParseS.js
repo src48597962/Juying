@@ -755,7 +755,7 @@ var SrcParseS = {
                 var beparses = [];//用于存储多线程解析地址
                 var beerrors = [];//用于存储多线程是否有错误
                 var sccess = 0;//计算成功的结果数
-                let p = i + mulnum + 1;
+                let p = i + mulnum + 2;
                 if(p>Uparselist.length){p=Uparselist.length}
                 for(let s=i;s<p;s++){
                     UrlList.push(Uparselist[s]);
@@ -815,7 +815,6 @@ var SrcParseS = {
                     var parseurl = beparses[k].parse;
                     if(beerrors[k]==null&&contain.test(beurls[k])&&!exclude.test(beurls[k])&&excludeurl.indexOf(beurls[k])==-1){
                         if(playurl==""){playurl = beurls[k];}
-                        /*
                         if(beparses[k].type=="test"){
                             //当前为测试
                             if(printlog==1){log(beparses[k].name+'>测试成功>'+beurls[k])};
@@ -908,7 +907,6 @@ var SrcParseS = {
                             headers.push(MulUrl.header);
                         }
                         //if(ismul==0){break;}
-                        */
                     }else{
                         if(beparses[k].type!="test"){
                             dellist.push(beparses[k])
@@ -916,7 +914,7 @@ var SrcParseS = {
                     }
                 }//排队解析结果循环
             }//解析全列表循环
-            /*
+
             var failparse = [];
             //失败的解析，处理
             for(var p=0;p<dellist.length;p++){
@@ -987,7 +985,7 @@ var SrcParseS = {
                 delete recordlist['head'];
                 writeFile(recordfile, JSON.stringify(recordlist));
             } 
-            */
+
             //dm盒子弹幕
             let dm = "";
             if(getItem('dmRoute', '0')=="1" && vipUrl.match(/youku|iqiyi|ixigua|migu|sohu|pptv|le|cctv|1905|mgtv|qq.com/)){
