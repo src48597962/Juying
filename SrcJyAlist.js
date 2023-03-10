@@ -1009,9 +1009,11 @@ function getAliUrl(share_id, file_id, alitoken) {
         let urls = [];
         let names = [];
         let heads = [];
-        playurl.forEach(item => {
+        playurl.forEach((item,i) => {
           let rurl = JSON.parse(request(item.url, { headers: { 'Referer': 'https://www.aliyundrive.com/' }, onlyHeaders: true, redirect: false, timeout: 3000 })).headers.location[0];
-          urls.push(cacheM3u8(rurl,{headers:{'Referer':'https://www.aliyundrive.com/'}, timeout: 2000}) + "#isVideo=true##pre#");
+          let url = cacheM3u8(rurl,{headers:{'Referer':'https://www.aliyundrive.com/'}, timeout: 2000},'video'+i+'.m3u8');
+          log(url);
+          urls.push(url + "#isVideo=true##pre#");
           names.push(transcoding[item.template_id] ? transcoding[item.template_id] : item.template_height);
           heads.push({ 'Referer': 'https://www.aliyundrive.com/' });
         })
