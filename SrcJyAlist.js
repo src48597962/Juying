@@ -993,6 +993,7 @@ function getAliUrl(share_id, file_id, alitoken) {
     log(public_key)
     if (signature && public_key) {
       let req = JSON.parse(request("https://api.aliyundrive.com/users/v1/users/device/create_session", { headers: headers, body: data, timeout: 3000 }));
+      log(req)
       if (req.success) {
         headers['x-share-token'] = sharetoken;
         headers['fileid'] = userinfo.user_id;
