@@ -871,7 +871,7 @@ var SrcParseS = {
                         }else{
                             if(printlog==1){log('当前播放地址通过断插解析获得')};
                         }
-                        
+                        /*
                         //组一个多线路播放地址备用，log($.type(beurls[k]));
                         try{
                             eval('var urljson = '+ beurls[k]);
@@ -907,6 +907,7 @@ var SrcParseS = {
                             headers.push(MulUrl.header);
                         }
                         //if(ismul==0){break;}
+                        */
                     }else{
                         if(beparses[k].type!="test"){
                             dellist.push(beparses[k])
