@@ -642,7 +642,14 @@ var SrcParseS = {
                     if(JSON.stringify(head) != "{}"){
                         taskheader['header'] = head;
                     }
-                    let getjson = JSON.parse(request(obj.ulist.parse+obj.vipUrl,taskheader));
+                    let getjson;
+                    try{
+                        getjson = JSON.parse(request(obj.ulist.parse+obj.vipUrl,taskheader));
+                    }catch(e){
+                        getjson = {};
+                        if(printlog==1){log(obj.ulist.name+'>解析地址访问失败')};
+                    }
+                        
                     if (getjson.body&&getjson.statusCode==200){
                         var gethtml = getjson.body;
                         var rurl = "";
