@@ -968,17 +968,15 @@ var SrcParseS = {
                 }
 
             }
-
+            /*
             if(!parseStr){
                 //私有解析有排除片源
                 if(myJXchange == 1){writeFile(myJXfile, JSON.stringify(myJXlist));}
                 //app有发现或修改解析时保存本地
                 if(appJXchange == 1){writeFile(appJXfile, JSON.stringify(appJXlist));}
-                //app自带解析是否加入黑名单
-                //if(appzdchange==1){writeFile(recordfile, JSON.stringify(recordlist));}
                 //私有解析失败的统一提示
                 if(failparse.length>0&&printlog==1){log(failparse+'<以上私有解析失败，排序-1')}
-                //记录上次优先解析和自动解析有加入黑名单的保存                
+                //记录上次优先解析和自带解析有加入黑名单的保存                
                 recordlist['priorparse'] = recordlist['priorparse']||{};
                 recordlist['priorparse'][from] = recordname.join(';;');
                 delete recordlist['parse'];
@@ -987,6 +985,7 @@ var SrcParseS = {
                 delete recordlist['head'];
                 writeFile(recordfile, JSON.stringify(recordlist));
             } 
+            */
             //dm盒子弹幕
             let dm = "";
             if(getItem('dmRoute', '0')=="1" && vipUrl.match(/youku|iqiyi|ixigua|migu|sohu|pptv|le|cctv|1905|mgtv|qq.com/)){
