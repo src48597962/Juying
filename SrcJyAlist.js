@@ -969,17 +969,17 @@ function getAliUrl(share_id, file_id, alitoken) {
     let userId = userinfo.user_id;
     let signature;
     let public_key;
-    //if(typeof(justTestSign)!="undefined"){
-    //  let getaliecc = justTestSign('5dde4e1bdf9e4966b387ba58f4b3fdc3',deviceId,userId);
-    //  signature = getaliecc.split('##')[0];
-    //  public_key = getaliecc.split('##')[1];
-    //}else{
+    if(typeof(justTestSign)!="undefined"){
+      let getaliecc = justTestSign('5dde4e1bdf9e4966b387ba58f4b3fdc3',deviceId,userId);
+      signature = getaliecc.split('##')[0];
+      public_key = getaliecc.split('##')[1];
+    }else{
       let getaliecc = JSON.parse(request('http://124.221.241.174:87/api', { body: 'did=' + deviceId + '&uid=' + userId + '&token=' + md5(getNowTime()), method: 'POST', timeout: 3000 }));
       if (getaliecc.code == 200) {
         signature = getaliecc.sign;
         public_key = getaliecc.key;
       }
-    //}
+    }
     
     headers['authorization'] = authorization;
     headers['x-device-id'] = deviceId;
