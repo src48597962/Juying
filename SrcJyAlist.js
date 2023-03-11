@@ -975,9 +975,7 @@ function getAliUrl(share_id, file_id, alitoken) {
             let playUrl;
             if(url.includes(".ts")){
               let expires = url.split('x-oss-expires=')[1].split('&')[0];
-              log(expires);
-              log(expires-30);
-              if(Date.now()>new Date(expires)){
+              if(Math.round(new Date() / 1000) > Math.round(expires)-30){
                 log('过期更新')
                 return geturl();
               }else{
