@@ -964,13 +964,15 @@ function getAliUrl(share_id, file_id, alitoken) {
             }
             let playUrl;
             if(url.includes(".ts")){
-              if(url.includes(".ts")){
+
                 let expires = url.split('&x-oss-expires=')[1].split('&')[0];
+                log(expires);
+                /*
                 if(Date.now()>new Date(expires)){
                   log('过期更新')
                   playUrl = geturl();
-                }
-              }
+                }*/
+
               
             }else{
               log('首次更新')
