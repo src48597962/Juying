@@ -957,7 +957,7 @@ function getAliUrl(share_id, file_id, alitoken) {
         log("我在代理" + rurl);
         let f = cacheM3u8(rurl, {headers:{'Referer':'https://www.aliyundrive.com/'}, timeout: 2000});
         let id = file_id; 
-        let time = 10000; 
+        let time = 30000; 
 
         registerTask(id, time, $.toString((line,share_id,file_id,alitoken)=> {
           log('执行了定时');
@@ -1046,9 +1046,7 @@ function aliSharePlayUrl(share_id, file_id, alitoken){
     }
     let aliyunUrl = [];
     if (signature && public_key) {
-      log('111')
       let req = JSON.parse(request("https://api.aliyundrive.com/users/v1/users/device/create_session", { headers: headers, body: data, timeout: 3000 }));
-      log(req);
       if (req.success) {
         headers['x-share-token'] = sharetoken;
         headers['fileid'] = userId;
@@ -1061,12 +1059,10 @@ function aliSharePlayUrl(share_id, file_id, alitoken){
           "get_subtitle_info": true
         }
         let json = JSON.parse(request('https://api.aliyundrive.com/v2/file/get_share_link_video_preview_play_info', { headers: headers, body: data, method: 'POST', timeout: 3000 }));
-        log(json);
         aliyunUrl = json.video_preview_play_info.live_transcoding_task_list;
         aliyunUrl.reverse();
       }
     }
-    log(aliyunUrl);
     return aliyunUrl;
   }catch(e){
     log('根据共享链接获取播放地址失败>'+e.message);
