@@ -972,7 +972,7 @@ function getAliUrl(share_id, file_id, alitoken) {
                   });
               }
               log("我在代理" + aliurl);
-              let f = fetch(aliurl).split("\n");
+              let f = fetch(aliurl, { headers: { 'Referer': 'https://www.aliyundrive.com/' }, timeout: 3000}).split("\n");
               return f.map(it => {
                   if (it.startsWith("media-")) {
                       return "/proxy?url=" + base64Encode(it);
