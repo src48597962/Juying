@@ -977,8 +977,11 @@ function getAliUrl(share_id, file_id, alitoken) {
             if(url.includes(".ts")){
               let f = fetch('hiker://files/cache/_fileSelect_'+file_id+'.m3u8').split("\n");
               f.forEach(it => {
-                if(it && (url.substr(url.indexOf('/media-'),url.indexOf('.ts')) == it.substr(it.indexOf('/media-'),it.indexOf('.ts')))){
-                  url = it;
+                if(it&&it.startsWith('/proxy?url=')){
+                  let furl = base64Decode(it.replace('/proxy?url=',''));
+                  if(url.substr(url.indexOf('/media-'),url.indexOf('.ts')) == furl.substr(furl.indexOf('/media-'),furl.indexOf('.ts'))){
+                    url = furl;
+                  }
                 }
               })
               //let expires = url.split('x-oss-expires=')[1].split('&')[0];
@@ -990,8 +993,11 @@ function getAliUrl(share_id, file_id, alitoken) {
                 log('过期更新')
                 let f = geturl().split("\n");
                 f.forEach(it => {
-                  if(it && (url.substr(url.indexOf('/media-'),url.indexOf('.ts')) == it.substr(it.indexOf('/media-'),it.indexOf('.ts')))){
-                    url = it;
+                  if(it&&it.startsWith('/proxy?url=')){
+                    let furl = base64Decode(it.replace('/proxy?url=',''));
+                    if(url.substr(url.indexOf('/media-'),url.indexOf('.ts')) == furl.substr(furl.indexOf('/media-'),furl.indexOf('.ts'))){
+                      url = furl;
+                    }
                   }
                 })
 
