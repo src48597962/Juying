@@ -1013,8 +1013,8 @@ function getAliUrl(share_id, file_id, alitoken) {
         let heads = [];
         playurl.forEach((item,i) => {
           log(item.url)
-          let rurl = JSON.parse(request(item.url, { headers: { 'Referer': 'https://www.aliyundrive.com/' }, onlyHeaders: true, redirect: false, timeout: 3000 })).headers.location[0];
-          let url = cacheM3u8(rurl,{headers:{'Referer':'https://www.aliyundrive.com/'}, timeout: 2000},'video'+i+'.m3u8');
+          //let rurl = JSON.parse(request(item.url, { headers: { 'Referer': 'https://www.aliyundrive.com/' }, onlyHeaders: true, redirect: false, timeout: 3000 })).headers.location[0];
+          let url = cacheM3u8(item.url,{headers:{'Referer':'https://www.aliyundrive.com/'}, timeout: 2000},'video'+i+'.m3u8');
           urls.push(url + "#isVideo=true##pre#");
           names.push(transcoding[item.template_id] ? transcoding[item.template_id] : item.template_height);
           heads.push({ 'Referer': 'https://www.aliyundrive.com/' });
