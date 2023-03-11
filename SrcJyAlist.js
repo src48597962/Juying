@@ -957,6 +957,8 @@ function getAliUrl(share_id, file_id, alitoken) {
 
           registerTask(id, time, $.toString((aliSharePlayUrl,line,share_id,file_id,alitoken)=> {
             log('执行了定时');
+            log(share_id+'$'+share_id+'$'+alitoken);
+
             let f;
             //require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
             let playUrlList = aliSharePlayUrl(share_id, file_id, alitoken) || [];
@@ -1015,13 +1017,13 @@ function aliSharePlayUrl(share_id, file_id, alitoken){
       "x-canary": "client=web,app=adrive,version=v3.1.0"
     };
     let userinfo;
-    let aliuserinfo = storage0.getMyVar('aliuserinfo');
-    if (aliuserinfo && aliuserinfo.user_id) {
-      userinfo = aliuserinfo;
-    } else {
+    //let aliuserinfo = storage0.getMyVar('aliuserinfo');
+    //if (aliuserinfo && aliuserinfo.user_id) {
+    //  userinfo = aliuserinfo;
+    //} else {
       userinfo = JSON.parse(request('https://auth.aliyundrive.com/v2/account/token', { headers: headers, body: { "refresh_token": alitoken, "grant_type": "refresh_token" }, method: 'POST', timeout: 3000 }));
-      storage0.putMyVar('aliuserinfo', userinfo);
-    }
+    //  storage0.putMyVar('aliuserinfo', userinfo);
+    //}
     let authorization = 'Bearer ' + userinfo.access_token;
     let deviceId = userinfo.device_id;
     let userId = userinfo.user_id;
