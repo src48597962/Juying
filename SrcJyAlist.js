@@ -1015,10 +1015,10 @@ function getAliUrl(share_id, file_id, alitoken) {
             let f = cacheM3u8(url, {headers:{'Referer':'https://www.aliyundrive.com/'}, timeout: 2000});
             let id = 'abc'; 
             let time = 10000; 
-            let obj = {}; 
-            registerTask(id, time, $.toString((obj)=> {
+
+            registerTask(id, time, $.toString((url)=> {
               log('执行了') 
-            }, obj));
+            }, url));
             //log(f)
             return readFile(f.split("##")[0]);
         }));
@@ -1027,8 +1027,8 @@ function getAliUrl(share_id, file_id, alitoken) {
         playurl.forEach((item,i) => {
           if(i==0){
           //log(item.url)
-          let rurl = JSON.parse(request(item.url, { headers: { 'Referer': 'https://www.aliyundrive.com/' }, onlyHeaders: true, redirect: false, timeout: 3000 })).headers.location[0];
-          urls.push(u + "?url=" + base64Encode(rurl) + "#.m3u8");
+          //let rurl = JSON.parse(request(item.url, { headers: { 'Referer': 'https://www.aliyundrive.com/' }, onlyHeaders: true, redirect: false, timeout: 3000 })).headers.location[0];
+          urls.push(u + "?url=" + base64Encode(item.url) + "#.m3u8");
           
           //let url = cacheM3u8(item.url,{headers:{'Referer':'https://www.aliyundrive.com/'}, timeout: 2000},'video'+i+'.m3u8');
           //urls.push(url + "#isVideo=true##pre#");
