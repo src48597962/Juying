@@ -958,7 +958,6 @@ function getAliUrl(share_id, file_id, alitoken) {
                   aliurl = JSON.parse(request(item.url, { headers: { 'Referer': 'https://www.aliyundrive.com/' }, onlyHeaders: true, redirect: false, timeout: 3000 })).headers.location[0];
                 }
               })
-              log(aliurl);
               let home = aliurl.split('media.m3u8')[0];
               let url = base64Decode(MY_PARAMS.url);
               if (url.includes(".ts")) {
@@ -967,11 +966,12 @@ function getAliUrl(share_id, file_id, alitoken) {
                   return JSON.stringify({
                       statusCode: 302,
                       headers: {
-                          "Location": home + url
+                          "Location": home + url,
+                          'Referer': 'https://www.aliyundrive.com/'
                       }
                   });
               }
-              log("我在代理" + url);
+              log("我在代理" + aliurl);
               let f = fetch(aliurl).split("\n");
               return f.map(it => {
                   if (it.startsWith("media-")) {
