@@ -950,7 +950,7 @@ function getAliUrl(share_id, file_id, alitoken) {
     let u = startProxyServer($.toString(() => {
         let url = base64Decode(MY_PARAMS.url);
         log(url);
-        let line = base64Decode(MY_PARAMS.line);
+        let line = MY_PARAMS.line;
         log(line);
         let share_id = MY_PARAMS.share_id;
         log(share_id);
@@ -985,7 +985,7 @@ function getAliUrl(share_id, file_id, alitoken) {
       if(i==0){
       //log(item.url)
       //let rurl = JSON.parse(request(item.url, { headers: { 'Referer': 'https://www.aliyundrive.com/' }, onlyHeaders: true, redirect: false, timeout: 3000 })).headers.location[0];
-      urls.push(u + "?url=" + base64Encode(item.url) + "#.m3u8"+"&line="+base64Encode(item.template_id)+"&share_id="+share_id+"&file_id="+file_id+"&alitoken="+base64Encode(alitoken));
+      urls.push(u + "?url=" + base64Encode(item.url) + "#.m3u8"+"&line="+item.template_id+"&share_id="+share_id+"&file_id="+file_id+"&alitoken="+base64Encode(alitoken));
       
       //let url = cacheM3u8(item.url,{headers:{'Referer':'https://www.aliyundrive.com/'}, timeout: 2000});
       //urls.push(url + "#isVideo=true##pre#");
