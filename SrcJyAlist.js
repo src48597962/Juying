@@ -1007,18 +1007,39 @@ function getAliUrl(share_id, file_id, alitoken) {
         let urls = [];
         let names = [];
         let heads = [];
+
+
+        let u = startProxyServer($.toString(() => {
+            let url = base64Decode(MY_PARAMS.url);
+            log("我在代理" + url);
+            let f = cacheM3u8(url);
+            return readFile(f.split("##")[0]);
+            /*
+            let url = base64Decode(MY_PARAMS.url);
+            log("我在代理" + url);
+            return JSON.stringify({
+                statusCode: 302,
+                headers: {
+                    "Location": url
+                }
+            });*/
+        }));
+        
+
         playurl.forEach((item,i) => {
-          log(item.url)
-          //let rurl = JSON.parse(request(item.url, { headers: { 'Referer': 'https://www.aliyundrive.com/' }, onlyHeaders: true, redirect: false, timeout: 3000 })).headers.location[0];
-          let url = cacheM3u8(item.url,{headers:{'Referer':'https://www.aliyundrive.com/'}, timeout: 2000},'video'+i+'.m3u8');
-          urls.push(url + "#isVideo=true##pre#");
+          //log(item.url)
+          let rurl = JSON.parse(request(item.url, { headers: { 'Referer': 'https://www.aliyundrive.com/' }, onlyHeaders: true, redirect: false, timeout: 3000 })).headers.location[0];
+          urls.push(u + "?url=" + base64Encode(rurl) + "#.m3u8");
+          
+          //let url = cacheM3u8(item.url,{headers:{'Referer':'https://www.aliyundrive.com/'}, timeout: 2000},'video'+i+'.m3u8');
+          //urls.push(url + "#isVideo=true##pre#");
           names.push(transcoding[item.template_id] ? transcoding[item.template_id] : item.template_height);
           heads.push({ 'Referer': 'https://www.aliyundrive.com/' });
         })
         return {
-          urls: urls,
-          names: names,
-          headers: heads
+            urls: urls,
+            names: names,
+            headers: heads
         };
       }
     }
