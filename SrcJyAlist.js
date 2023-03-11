@@ -1003,7 +1003,7 @@ function getAliUrl(share_id, file_id, alitoken) {
         let json = JSON.parse(request('https://api.aliyundrive.com/v2/file/get_share_link_video_preview_play_info', { headers: headers, body: data, method: 'POST', timeout: 3000 }));
         let playurl = json.video_preview_play_info.live_transcoding_task_list;
         playurl.reverse();
-        log(playurl[0].url);
+
         let urls = [];
         let names = [];
         let heads = [];
@@ -1017,7 +1017,7 @@ function getAliUrl(share_id, file_id, alitoken) {
             let time = 10000; 
 
             registerTask(id, time, $.toString((url)=> {
-              log('执行了') 
+              log('定时执行'+url) 
             }, url));
             //log(f)
             return readFile(f.split("##")[0]);
