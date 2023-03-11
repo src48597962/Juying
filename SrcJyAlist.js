@@ -966,9 +966,8 @@ function getAliUrl(share_id, file_id, alitoken) {
             let url = base64Decode(MY_PARAMS.url);
             let playUrl;
             if(url.includes(".ts")){
-              log(url)
-                //let expires = url.split('&x-oss-expires=')[1].split('&')[0];
-                //log(expires);
+              let expires = url.split('x-oss-expires=')[1].split('&')[0];
+              log(expires);
                 /*
                 if(Date.now()>new Date(expires)){
                   log('过期更新')
