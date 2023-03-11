@@ -948,6 +948,7 @@ function getAliUrl(share_id, file_id, alitoken) {
     let playUrlList = aliSharePlayUrl(share_id, file_id, alitoken) || [];
 
     let u = startProxyServer($.toString(() => {
+      log(MY_PARAMS)
         let url = base64Decode(MY_PARAMS.url);
         log(url);
         let line = MY_PARAMS.line;
