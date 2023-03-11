@@ -963,42 +963,53 @@ function getAliUrl(share_id, file_id, alitoken) {
               log("我在代理" + aliurl);
               let home = aliurl.split('media.m3u8')[0];
               let f = fetch(aliurl, { headers: { 'Referer': 'https://www.aliyundrive.com/' }, timeout: 3000}).split("\n");
-              return f.map(it => {
+              let ff = f.map(it => {
                   if (it.startsWith("media-")) {
                       return "/proxy?url=" + base64Encode(home+it);
                   }
                   return it;
               }).join("\n");
+              writeFile('hiker://files/cache/_fileSelect_'+file_id,ff);
+              return ff;
             }
 
             let url = base64Decode(MY_PARAMS.url);
-            let playUrl;
             if(url.includes(".ts")){
-              let expires = url.split('x-oss-expires=')[1].split('&')[0];
-              if(Math.round(new Date() / 1000) > Math.round(expires)-30){
+              let f = fetch('hiker://files/cache/_fileSelect_'+file_id).split("\n");
+              f.forEach(it => {
+                if(it && (url.substr(url.indexOf('/media-'),url.indexOf('.ts')) == it.substr(it.indexOf('/media-'),it.indexOf('.ts')))){
+                  url = it;
+                }
+              })
+              //let expires = url.split('x-oss-expires=')[1].split('&')[0];
+              let expires = url.substr(url.indexOf('x-oss-expires=') + 'x-oss-expires='.length);
+              expires = expires.substr(0, expires.indexOf('&'));
+              const lasttime = parseInt(expires) - Date.now() / 1000;
+              //if(Math.round(new Date() / 1000) > Math.round(expires)-30){
+              if(lasttime < 60){
                 log('过期更新')
-                return geturl();
+                let f = geturl().split("\n");
+                f.forEach(it => {
+                  if(it && (url.substr(url.indexOf('/media-'),url.indexOf('.ts')) == it.substr(it.indexOf('/media-'),it.indexOf('.ts')))){
+                    url = it;
+                  }
+                })
+
               }else{
                 log('未过期')
-                return JSON.stringify({
-                      statusCode: 302,
-                      headers: {
-                          "Location": url,
-                          'Referer': 'https://www.aliyundrive.com/'
-                      }
-                  });
+                //log("代理ts：" + url);
               }
-              
-
-              //log("代理ts：" + url);
-                  //此时可以根据实际逻辑得到真实有效的ts地址
-
-                  
-                  
-
+              return JSON.stringify({
+                    statusCode: 302,
+                    headers: {
+                        "Location": url,
+                        'Referer': 'https://www.aliyundrive.com/'
+                    }
+                });
             }else{
               log('首次更新')
-              return geturl();
+              let ff = geturl();
+              return ff;
             }
 
               
