@@ -950,6 +950,7 @@ function getAliUrl(share_id, file_id, alitoken) {
       playUrlList.forEach((item,i) => {
         if(i==0){
           let u = startProxyServer($.toString((aliSharePlayUrl,line,share_id,file_id,alitoken) => {
+            log(line+'$'+share_id+'$'+file_id+'$'+alitoken)
               let playUrlList = aliSharePlayUrl(share_id, file_id, alitoken) || [];
               let aliurl;
               playUrlList.forEach((item) => {
