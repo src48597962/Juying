@@ -949,9 +949,9 @@ function getAliUrl(share_id, file_id, alitoken) {
     playUrlList.forEach((item,i) => {
       let u = startProxyServer($.toString((aliSharePlayUrl,line,share_id,file_id,alitoken) => {
           let url = base64Decode(MY_PARAMS.url);
-          let rurl = JSON.parse(request(url, { headers: { 'Referer': 'https://www.aliyundrive.com/' }, onlyHeaders: true, redirect: false, timeout: 3000 })).headers.location[0];
+          //let rurl = JSON.parse(request(url, { headers: { 'Referer': 'https://www.aliyundrive.com/' }, onlyHeaders: true, redirect: false, timeout: 3000 })).headers.location[0];
           //log("我在代理" + rurl);
-          let f = cacheM3u8(rurl, {headers:{'Referer':'https://www.aliyundrive.com/'}, timeout: 2000});
+          //let f = cacheM3u8(rurl, {headers:{'Referer':'https://www.aliyundrive.com/'}, timeout: 2000});
           let id = file_id; 
           let time = 60000; 
 
@@ -969,7 +969,8 @@ function getAliUrl(share_id, file_id, alitoken) {
           }, aliSharePlayUrl,line,share_id,file_id,alitoken));
           
           //log(f)
-          return readFile(f.split("##")[0]);
+          //return readFile(f.split("##")[0]);
+          return "hiker://files/Documents/cache/video.m3u8";
       },aliSharePlayUrl,item.template_id,share_id,file_id,alitoken));
       if(i==0){
       //log(item.url)
