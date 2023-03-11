@@ -972,23 +972,24 @@ function getAliUrl(share_id, file_id, alitoken) {
             }
 
             let url = base64Decode(MY_PARAMS.url);
+            log(url);
             let playUrl;
             if(url.includes(".ts")){
               let expires = url.split('x-oss-expires=')[1].split('&')[0];
-              if(Date.now()>new Date(expires)){
-                log('过期更新')
-                //geturl();
-              }
+              //if(Date.now()>new Date(expires)){
+              //  log('过期更新')
+              //  //geturl();
+              //}
                 /*
                 if(Date.now()>new Date(expires)){
                   log('过期更新')
                   playUrl = geturl();
                 }*/
               
-              if (url.includes(".ts")) {
-                  log("代理ts：" + url);
+
+              log("代理ts：" + url);
                   //此时可以根据实际逻辑得到真实有效的ts地址
-                  return url;
+              return url;
                   /*
                   return JSON.stringify({
                       statusCode: 302,
@@ -998,7 +999,7 @@ function getAliUrl(share_id, file_id, alitoken) {
                       }
                   });
                   */
-              }
+
             }else{
               log('首次更新')
               geturl();
