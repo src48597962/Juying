@@ -953,18 +953,15 @@ function getAliUrl(share_id, file_id, alitoken) {
           //log("我在代理" + rurl);
           let f = cacheM3u8(rurl, {headers:{'Referer':'https://www.aliyundrive.com/'}, timeout: 2000});
           let id = file_id; 
-          let time = 30000; 
+          let time = 60000; 
 
           registerTask(id, time, $.toString((aliSharePlayUrl,line,share_id,file_id,alitoken)=> {
             log('执行了定时');
-            log(share_id+'$'+share_id+'$'+alitoken);
-
             let f;
-            //require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
             let playUrlList = aliSharePlayUrl(share_id, file_id, alitoken) || [];
-            log(playUrlList);
             playUrlList.forEach((item) => {
               if(item.template_id == line){
+                let rurl = JSON.parse(request(item.url, { headers: { 'Referer': 'https://www.aliyundrive.com/' }, onlyHeaders: true, redirect: false, timeout: 3000 })).headers.location[0];
                 f = cacheM3u8(rurl, {headers:{'Referer':'https://www.aliyundrive.com/'}, timeout: 2000});
               }
             })
