@@ -972,10 +972,11 @@ function getAliUrl(share_id, file_id, alitoken) {
               playUrlList.forEach((item) => {
                 if(item.template_id == line){
                   let rurl = JSON.parse(request(item.url, { headers: { 'Referer': 'https://www.aliyundrive.com/' }, onlyHeaders: true, redirect: false, timeout: 3000 })).headers.location[0];
-                  f = cacheM3u8(rurl, {headers:{'Referer':'https://www.aliyundrive.com/'}, timeout: 2000});
+                  let ts = fetch(rurl, {headers:{'Referer':'https://www.aliyundrive.com/'}, timeout: 2000});
+                  saveFile("file:///storage/emulated/0/Android/data/com.example.hikerview/files/Documents/cache/video.m3u8",ts);
                 }
               })
-              log('定时执行,获取新的播放地址>'+f) ;
+              log('定时执行,获取新的播放地址') ;
             }, aliSharePlayUrl,item.template_id,share_id,file_id,alitoken));
         //log(item.url)
         //let rurl = JSON.parse(request(item.url, { headers: { 'Referer': 'https://www.aliyundrive.com/' }, onlyHeaders: true, redirect: false, timeout: 3000 })).headers.location[0];
