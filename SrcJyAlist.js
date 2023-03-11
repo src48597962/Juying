@@ -970,7 +970,7 @@ function getAliUrl(share_id, file_id, alitoken) {
             
             //log(f)
             //return readFile(f.split("##")[0]);
-            return readFile("hiker://files/Documents/cache/video.m3u8");
+            return readFile("file:///storage/emulated/0/Android/data/com.example.hikerview/files/Documents/cache/video.m3u8");
         },aliSharePlayUrl,item.template_id,share_id,file_id,alitoken));
         if(i==0){
         //log(item.url)
