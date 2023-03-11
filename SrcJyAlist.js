@@ -949,16 +949,21 @@ function getAliUrl(share_id, file_id, alitoken) {
 
     let u = startProxyServer($.toString(() => {
         let url = base64Decode(MY_PARAMS.url);
+        log(url);
         let line = base64Decode(MY_PARAMS.line);
+        log(line);
         let share_id = MY_PARAMS.share_id;
+        log(share_id);
         let file_id = MY_PARAMS.file_id;
+        log(file_id);
         let alitoken = base64Decode(MY_PARAMS.alitoken);
+        log(alitoken);
         let rurl = JSON.parse(request(url, { headers: { 'Referer': 'https://www.aliyundrive.com/' }, onlyHeaders: true, redirect: false, timeout: 3000 })).headers.location[0];
         log("我在代理" + rurl);
         let f = cacheM3u8(rurl, {headers:{'Referer':'https://www.aliyundrive.com/'}, timeout: 2000});
         let id = file_id; 
         let time = 30000; 
-
+        /*
         registerTask(id, time, $.toString((line,share_id,file_id,alitoken)=> {
           log('执行了定时');
           let f;
@@ -971,11 +976,13 @@ function getAliUrl(share_id, file_id, alitoken) {
           })
           log('定时执行,获取新的播放地址>'+f) ;
         }, line,share_id,file_id,alitoken));
+        */
         //log(f)
         return readFile(f.split("##")[0]);
     }));
 
-    playUrlList.forEach((item) => {
+    playUrlList.forEach((item,i) => {
+      if(i==0){
       //log(item.url)
       //let rurl = JSON.parse(request(item.url, { headers: { 'Referer': 'https://www.aliyundrive.com/' }, onlyHeaders: true, redirect: false, timeout: 3000 })).headers.location[0];
       urls.push(u + "?url=" + base64Encode(item.url) + "#.m3u8"+"&line="+base64Encode(item.template_id)+"&share_id="+share_id+"&file_id="+file_id+"&alitoken="+base64Encode(alitoken));
@@ -984,6 +991,7 @@ function getAliUrl(share_id, file_id, alitoken) {
       //urls.push(url + "#isVideo=true##pre#");
       names.push(transcoding[item.template_id] ? transcoding[item.template_id] : item.template_height);
       heads.push({ 'Referer': 'https://www.aliyundrive.com/' });
+      }
     })
 
     return {
