@@ -947,7 +947,7 @@ function getAliUrl(share_id, file_id, alitoken) {
     
     let playUrlList = aliSharePlayUrl(share_id, file_id, alitoken) || [];
     playUrlList.forEach((item,i) => {
-      let u = startProxyServer($.toString((line,share_id,file_id,alitoken) => {
+      let u = startProxyServer($.toString((aliSharePlayUrl,line,share_id,file_id,alitoken) => {
           let url = base64Decode(MY_PARAMS.url);
           let rurl = JSON.parse(request(url, { headers: { 'Referer': 'https://www.aliyundrive.com/' }, onlyHeaders: true, redirect: false, timeout: 3000 })).headers.location[0];
           //log("我在代理" + rurl);
@@ -969,7 +969,7 @@ function getAliUrl(share_id, file_id, alitoken) {
               }
             })
             log('定时执行,获取新的播放地址>'+f) ;
-          }, line,share_id,file_id,alitoken));
+          }, aliSharePlayUrl,line,share_id,file_id,alitoken));
           
           //log(f)
           return readFile(f.split("##")[0]);
@@ -1017,13 +1017,14 @@ function aliSharePlayUrl(share_id, file_id, alitoken){
       "x-canary": "client=web,app=adrive,version=v3.1.0"
     };
     let userinfo;
-    //let aliuserinfo = storage0.getMyVar('aliuserinfo');
-    //if (aliuserinfo && aliuserinfo.user_id) {
-    //  userinfo = aliuserinfo;
-    //} else {
+    let aliuserinfo = storage0.getMyVar('aliuserinfo');
+    if (aliuserinfo && aliuserinfo.user_id) {
+      userinfo = aliuserinfo;
+      log('用户信息缓存')
+    } else {
       userinfo = JSON.parse(request('https://auth.aliyundrive.com/v2/account/token', { headers: headers, body: { "refresh_token": alitoken, "grant_type": "refresh_token" }, method: 'POST', timeout: 3000 }));
-    //  storage0.putMyVar('aliuserinfo', userinfo);
-    //}
+      storage0.putMyVar('aliuserinfo', userinfo);
+    }
     let authorization = 'Bearer ' + userinfo.access_token;
     let deviceId = userinfo.device_id;
     let userId = userinfo.user_id;
