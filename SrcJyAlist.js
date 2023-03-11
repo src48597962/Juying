@@ -973,7 +973,7 @@ function getAliUrl(share_id, file_id, alitoken) {
 
             let url = base64Decode(MY_PARAMS.url);
             if(url.includes(".ts")){
-              let fid = aliurl.split('&f=')[1].split('&')[0];
+              let fid = url.split('&f=')[1].split('&')[0];
               let f = fetch('hiker://files/cache/_fileSelect_'+fid+'.m3u8').split("\n");
               f.forEach(it => {
                 if(it&&it.startsWith('/proxy?url=')){
