@@ -950,7 +950,9 @@ function getAliUrl(share_id, file_id, alitoken) {
       playUrlList.forEach((item,i) => {
         if(i==0){
           let u = startProxyServer($.toString((aliSharePlayUrl,line,share_id,file_id,alitoken) => {
-            log(line+'$'+share_id+'$'+file_id+'$'+alitoken)
+            //log(line+'$'+share_id+'$'+file_id+'$'+alitoken)
+            let url = base64Decode(MY_PARAMS.url);
+            function geturl(){
               let playUrlList = aliSharePlayUrl(share_id, file_id, alitoken) || [];
               let aliurl;
               playUrlList.forEach((item) => {
@@ -958,11 +960,30 @@ function getAliUrl(share_id, file_id, alitoken) {
                   aliurl = JSON.parse(request(item.url, { headers: { 'Referer': 'https://www.aliyundrive.com/' }, onlyHeaders: true, redirect: false, timeout: 3000 })).headers.location[0];
                 }
               })
-              let home = aliurl.split('media.m3u8')[0];
-              let url = base64Decode(MY_PARAMS.url);
+              return aliurl;
+            }
+            let playUrl;
+            if(url.includes(".ts")){
+              if(url.includes(".ts")){
+                let expires = url.split('&x-oss-expires=')[1].split('&')[0];
+                if(Date.now()>expires){
+                  log('过期更新')
+                  playUrl = geturl();
+                }
+              }
+              
+            }else{
+              log('首次更新')
+              playUrl = geturl();
+            }
+              
+              
+
+              
               if (url.includes(".ts")) {
                   log("代理ts：" + url);
                   //此时可以根据实际逻辑得到真实有效的ts地址
+                  let home = playUrl.split('media.m3u8')[0];
                   return JSON.stringify({
                       statusCode: 302,
                       headers: {
@@ -971,8 +992,8 @@ function getAliUrl(share_id, file_id, alitoken) {
                       }
                   });
               }
-              log("我在代理" + aliurl);
-              let f = fetch(aliurl, { headers: { 'Referer': 'https://www.aliyundrive.com/' }, timeout: 3000}).split("\n");
+              log("我在代理" + playUrl);
+              let f = fetch(playUrl, { headers: { 'Referer': 'https://www.aliyundrive.com/' }, timeout: 3000}).split("\n");
               return f.map(it => {
                   if (it.startsWith("media-")) {
                       return "/proxy?url=" + base64Encode(it);
