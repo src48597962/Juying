@@ -998,70 +998,74 @@ function getAliUrl(share_id, file_id, alitoken) {
 }
 
 function aliSharePlayUrl(share_id, file_id, alitoken){
-  function getNowTime() {
-    const yy = new Date().getFullYear()
-    const MM = (new Date().getMonth() + 1) < 10 ? '0' + (new Date().getMonth() + 1) : (new Date().getMonth() + 1)
-    const dd = new Date().getDate() < 10 ? '0' + new Date().getDate() : new Date().getDate()
-    const HH = new Date().getHours() < 10 ? '0' + new Date().getHours() : new Date().getHours()
-    const mm = new Date().getMinutes() < 10 ? '0' + new Date().getMinutes() : new Date().getMinutes()
-    return yy + '' + dd + '' + HH + '' + MM + '' + mm
-  }
-
-  let sharetoken = JSON.parse(request('https://api.aliyundrive.com/v2/share_link/get_share_token', { body: { "share_pwd": "", "share_id": share_id }, method: 'POST', timeout: 3000 })).share_token;
-  let headers = {
-    'content-type': 'application/json;charset=UTF-8',
-    "origin": "https://www.aliyundrive.com",
-    "referer": "https://www.aliyundrive.com/",
-    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36 Edg/110.0.1587.41",
-    "x-canary": "client=web,app=adrive,version=v3.1.0"
-  };
-  let userinfo;
-  let aliuserinfo = storage0.getMyVar('aliuserinfo');
-  if (aliuserinfo && aliuserinfo.user_id) {
-    userinfo = aliuserinfo;
-  } else {
-    userinfo = JSON.parse(request('https://auth.aliyundrive.com/v2/account/token', { headers: headers, body: { "refresh_token": alitoken, "grant_type": "refresh_token" }, method: 'POST', timeout: 3000 }));
-    storage0.putMyVar('aliuserinfo', userinfo);
-  }
-  let authorization = 'Bearer ' + userinfo.access_token;
-  let deviceId = userinfo.device_id;
-  let userId = userinfo.user_id;
-  let signature;
-  let public_key;
-
-  let getaliecc = JSON.parse(request('http://124.221.241.174:87/api', { body: 'did=' + deviceId + '&uid=' + userId + '&token=' + md5(getNowTime()), method: 'POST', timeout: 3000 }));
-  if (getaliecc.code == 200) {
-    signature = getaliecc.sign;
-    public_key = getaliecc.key;
-  }
-  
-  headers['authorization'] = authorization;
-  headers['x-device-id'] = deviceId;
-  headers['x-signature'] = signature;
-  let data = {
-    "deviceName": "Edge浏览器",
-    "modelName": "Windows网页版",
-    "pubKey": public_key,
-  }
-  let aliyunUrl = [];
-  if (signature && public_key) {
-    let req = JSON.parse(request("https://api.aliyundrive.com/users/v1/users/device/create_session", { headers: headers, body: data, timeout: 3000 }));
-    if (req.success) {
-      headers['x-share-token'] = sharetoken;
-      headers['fileid'] = userinfo.user_id;
-      data = {
-        "category": "live_transcoding",
-        "file_id": file_id,
-        "get_preview_url": true,
-        "share_id": share_id,
-        "template_id": "",
-        "get_subtitle_info": true
-      }
-      let json = JSON.parse(request('https://api.aliyundrive.com/v2/file/get_share_link_video_preview_play_info', { headers: headers, body: data, method: 'POST', timeout: 3000 }));
-      aliyunUrl = json.video_preview_play_info.live_transcoding_task_list;
-      aliyunUrl.reverse();
+  try{
+    function getNowTime() {
+      const yy = new Date().getFullYear()
+      const MM = (new Date().getMonth() + 1) < 10 ? '0' + (new Date().getMonth() + 1) : (new Date().getMonth() + 1)
+      const dd = new Date().getDate() < 10 ? '0' + new Date().getDate() : new Date().getDate()
+      const HH = new Date().getHours() < 10 ? '0' + new Date().getHours() : new Date().getHours()
+      const mm = new Date().getMinutes() < 10 ? '0' + new Date().getMinutes() : new Date().getMinutes()
+      return yy + '' + dd + '' + HH + '' + MM + '' + mm
     }
+
+    let sharetoken = JSON.parse(request('https://api.aliyundrive.com/v2/share_link/get_share_token', { body: { "share_pwd": "", "share_id": share_id }, method: 'POST', timeout: 3000 })).share_token;
+    let headers = {
+      'content-type': 'application/json;charset=UTF-8',
+      "origin": "https://www.aliyundrive.com",
+      "referer": "https://www.aliyundrive.com/",
+      "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36 Edg/110.0.1587.41",
+      "x-canary": "client=web,app=adrive,version=v3.1.0"
+    };
+    let userinfo;
+    let aliuserinfo = storage0.getMyVar('aliuserinfo');
+    if (aliuserinfo && aliuserinfo.user_id) {
+      userinfo = aliuserinfo;
+    } else {
+      userinfo = JSON.parse(request('https://auth.aliyundrive.com/v2/account/token', { headers: headers, body: { "refresh_token": alitoken, "grant_type": "refresh_token" }, method: 'POST', timeout: 3000 }));
+      storage0.putMyVar('aliuserinfo', userinfo);
+    }
+    let authorization = 'Bearer ' + userinfo.access_token;
+    let deviceId = userinfo.device_id;
+    let userId = userinfo.user_id;
+    let signature;
+    let public_key;
+
+    let getaliecc = JSON.parse(request('http://124.221.241.174:87/api', { body: 'did=' + deviceId + '&uid=' + userId + '&token=' + md5(getNowTime()), method: 'POST', timeout: 3000 }));
+    if (getaliecc.code == 200) {
+      signature = getaliecc.sign;
+      public_key = getaliecc.key;
+    }
+    
+    headers['authorization'] = authorization;
+    headers['x-device-id'] = deviceId;
+    headers['x-signature'] = signature;
+    let data = {
+      "deviceName": "Edge浏览器",
+      "modelName": "Windows网页版",
+      "pubKey": public_key,
+    }
+    let aliyunUrl = [];
+    if (signature && public_key) {
+      let req = JSON.parse(request("https://api.aliyundrive.com/users/v1/users/device/create_session", { headers: headers, body: data, timeout: 3000 }));
+      if (req.success) {
+        headers['x-share-token'] = sharetoken;
+        headers['fileid'] = userinfo.user_id;
+        data = {
+          "category": "live_transcoding",
+          "file_id": file_id,
+          "get_preview_url": true,
+          "share_id": share_id,
+          "template_id": "",
+          "get_subtitle_info": true
+        }
+        let json = JSON.parse(request('https://api.aliyundrive.com/v2/file/get_share_link_video_preview_play_info', { headers: headers, body: data, method: 'POST', timeout: 3000 }));
+        aliyunUrl = json.video_preview_play_info.live_transcoding_task_list;
+        aliyunUrl.reverse();
+      }
+    }
+    return aliyunUrl;
+  }catch(e){
+    log('根据共享链接获取播放地址失败>'+e.message);
   }
-  return aliyunUrl;
 }
 //evalPrivateJS('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')
