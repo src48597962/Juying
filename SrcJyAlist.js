@@ -975,24 +975,25 @@ function getAliUrl(share_id, file_id, alitoken) {
             let playUrl;
             if(url.includes(".ts")){
               let expires = url.split('x-oss-expires=')[1].split('&')[0];
-              if(Date.now()>new Date(expires)){
+              if(Date.now()>expires){
                 log('过期更新')
-                //geturl();
+                return geturl();
               }else{
                 log('未过期')
-              }
-              
-
-              log("代理ts：" + url);
-                  //此时可以根据实际逻辑得到真实有效的ts地址
-
-                  return JSON.stringify({
+                return JSON.stringify({
                       statusCode: 302,
                       headers: {
                           "Location": url,
                           'Referer': 'https://www.aliyundrive.com/'
                       }
                   });
+              }
+              
+
+              //log("代理ts：" + url);
+                  //此时可以根据实际逻辑得到真实有效的ts地址
+
+                  
                   
 
             }else{
