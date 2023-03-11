@@ -965,7 +965,7 @@ function getAliUrl(share_id, file_id, alitoken) {
               let f = fetch(aliurl, { headers: { 'Referer': 'https://www.aliyundrive.com/' }, timeout: 3000}).split("\n");
               return f.map(it => {
                   if (it.startsWith("media-")) {
-                      return "/proxy?url=" + home + base64Encode(it);
+                      return "/proxy?url=" + base64Encode(home+it);
                   }
                   return it;
               }).join("\n");
