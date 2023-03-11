@@ -964,6 +964,7 @@ function getAliUrl(share_id, file_id, alitoken) {
                 if(item.template_id == line){
                   let rurl = JSON.parse(request(item.url, { headers: { 'Referer': 'https://www.aliyundrive.com/' }, onlyHeaders: true, redirect: false, timeout: 3000 })).headers.location[0];
                   f = cacheM3u8(rurl, {headers:{'Referer':'https://www.aliyundrive.com/'}, timeout: 2000});
+                  log(f)
                   return readFile(f.split("##")[0]);
                 }
               })
