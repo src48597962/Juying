@@ -1046,6 +1046,7 @@ function aliSharePlayUrl(share_id, file_id, alitoken){
     }
     let aliyunUrl = [];
     if (signature && public_key) {
+      log('111')
       let req = JSON.parse(request("https://api.aliyundrive.com/users/v1/users/device/create_session", { headers: headers, body: data, timeout: 3000 }));
       if (req.success) {
         headers['x-share-token'] = sharetoken;
@@ -1063,6 +1064,7 @@ function aliSharePlayUrl(share_id, file_id, alitoken){
         aliyunUrl.reverse();
       }
     }
+    log(aliyunUrl);
     return aliyunUrl;
   }catch(e){
     log('根据共享链接获取播放地址失败>'+e.message);
