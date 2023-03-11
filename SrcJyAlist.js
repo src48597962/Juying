@@ -1048,9 +1048,10 @@ function aliSharePlayUrl(share_id, file_id, alitoken){
     if (signature && public_key) {
       log('111')
       let req = JSON.parse(request("https://api.aliyundrive.com/users/v1/users/device/create_session", { headers: headers, body: data, timeout: 3000 }));
+      log(req);
       if (req.success) {
         headers['x-share-token'] = sharetoken;
-        headers['fileid'] = userinfo.user_id;
+        headers['fileid'] = userId;
         data = {
           "category": "live_transcoding",
           "file_id": file_id,
@@ -1060,6 +1061,7 @@ function aliSharePlayUrl(share_id, file_id, alitoken){
           "get_subtitle_info": true
         }
         let json = JSON.parse(request('https://api.aliyundrive.com/v2/file/get_share_link_video_preview_play_info', { headers: headers, body: data, method: 'POST', timeout: 3000 }));
+        log(json);
         aliyunUrl = json.video_preview_play_info.live_transcoding_task_list;
         aliyunUrl.reverse();
       }
