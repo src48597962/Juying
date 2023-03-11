@@ -975,11 +975,11 @@ function getAliUrl(share_id, file_id, alitoken) {
             //log(url);
             let playUrl;
             if(url.includes(".ts")){
-              //let expires = url.split('x-oss-expires=')[1].split('&')[0];
-              //if(Date.now()>new Date(expires)){
-              //  log('过期更新')
-              //  //geturl();
-              //}
+              let expires = url.split('x-oss-expires=')[1].split('&')[0];
+              if(Date.now()>new Date(expires)){
+                log('过期更新')
+                //geturl();
+              }
                 /*
                 if(Date.now()>new Date(expires)){
                   log('过期更新')
