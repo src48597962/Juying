@@ -950,10 +950,11 @@ function getAliUrl(share_id, file_id, alitoken) {
       playUrlList.forEach((item,i) => {
         if(i==0){
           let u = startProxyServer($.toString((aliSharePlayUrl,line,share_id,file_id,alitoken) => {
-              //let url = base64Decode(MY_PARAMS.url);
-              //let rurl = JSON.parse(request(url, { headers: { 'Referer': 'https://www.aliyundrive.com/' }, onlyHeaders: true, redirect: false, timeout: 3000 })).headers.location[0];
-              //log("我在代理" + rurl);
-              //let f = cacheM3u8(rurl, {headers:{'Referer':'https://www.aliyundrive.com/'}, timeout: 2000});
+            log(input);
+            let url = base64Decode(MY_PARAMS.url);
+            let rurl = JSON.parse(request(url, { headers: { 'Referer': 'https://www.aliyundrive.com/' }, onlyHeaders: true, redirect: false, timeout: 3000 })).headers.location[0];
+            log("我在代理" + rurl);
+            let f = cacheM3u8(rurl, {headers:{'Referer':'https://www.aliyundrive.com/'}, timeout: 2000});
             let id = file_id; 
             let time = 300000; 
             registerTask(id, time, $.toString((aliSharePlayUrl,line,share_id,file_id,alitoken)=> {
@@ -964,14 +965,12 @@ function getAliUrl(share_id, file_id, alitoken) {
                 if(item.template_id == line){
                   let rurl = JSON.parse(request(item.url, { headers: { 'Referer': 'https://www.aliyundrive.com/' }, onlyHeaders: true, redirect: false, timeout: 3000 })).headers.location[0];
                   f = cacheM3u8(rurl, {headers:{'Referer':'https://www.aliyundrive.com/'}, timeout: 2000});
-                  log(f)
-                  return readFile(f.split("##")[0]);
                 }
               })
-              log('定时执行,获取新的播放地址') ;
+              log('定时执行,获取新的播放地址'+f) ;
             }, aliSharePlayUrl,line,share_id,file_id,alitoken));
               //log(f)
-              //return readFile(f.split("##")[0]);
+              return readFile(f.split("##")[0]);
           },aliSharePlayUrl,item.template_id,share_id,file_id,alitoken));
           
         //log(item.url)
