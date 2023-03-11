@@ -949,12 +949,12 @@ function getAliUrl(share_id, file_id, alitoken) {
     if(playUrlList.length>0){
       playUrlList.forEach((item,i) => {
         let u = startProxyServer($.toString((aliSharePlayUrl,line,share_id,file_id,alitoken) => {
-            let url = base64Decode(MY_PARAMS.url);
+            //let url = base64Decode(MY_PARAMS.url);
             //let rurl = JSON.parse(request(url, { headers: { 'Referer': 'https://www.aliyundrive.com/' }, onlyHeaders: true, redirect: false, timeout: 3000 })).headers.location[0];
             //log("我在代理" + rurl);
             //let f = cacheM3u8(rurl, {headers:{'Referer':'https://www.aliyundrive.com/'}, timeout: 2000});
             let id = file_id; 
-            let time = 60000; 
+            let time = 300000; 
             registerTask(id, time, $.toString((aliSharePlayUrl,line,share_id,file_id,alitoken)=> {
               log('执行了定时');
               let f;
@@ -1021,7 +1021,6 @@ function aliSharePlayUrl(share_id, file_id, alitoken){
     let aliuserinfo = storage0.getMyVar('aliuserinfo');
     if (aliuserinfo && aliuserinfo.user_id) {
       userinfo = aliuserinfo;
-      log('用户信息缓存')
     } else {
       userinfo = JSON.parse(request('https://auth.aliyundrive.com/v2/account/token', { headers: headers, body: { "refresh_token": alitoken, "grant_type": "refresh_token" }, method: 'POST', timeout: 3000 }));
       storage0.putMyVar('aliuserinfo', userinfo);
