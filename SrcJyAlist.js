@@ -1060,7 +1060,7 @@ function getAliUrl(share_id, file_id, alitoken) {
           names: names,
           headers: heads
         };*/
-        return getAliPlayUrl(palyurl);
+        return getAliPlayUrl(playurl);
       }
     }
   } catch (e) {
