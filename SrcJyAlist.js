@@ -1011,19 +1011,15 @@ function getAliUrl(share_id, file_id, alitoken) {
 
         let u = startProxyServer($.toString(() => {
             let url = base64Decode(MY_PARAMS.url);
-            url = JSON.stringify({
-                statusCode: 302,
-                headers: {
-                    "Location": url
-                }
-            });
-            log("我在代理" + url);
-            let f = cacheM3u8(url, {headers:{'Referer':'https://www.aliyundrive.com/'}, timeout: 2000});
+            let rurl = JSON.parse(request(url, { headers: { 'Referer': 'https://www.aliyundrive.com/' }, onlyHeaders: true, redirect: false, timeout: 3000 })).headers.location[0];
+            log("我在代理" + rurl);
+            let f = cacheM3u8(rurl, {headers:{'Referer':'https://www.aliyundrive.com/'}, timeout: 2000});
             let id = 'abc'; 
             let time = 10000; 
 
             registerTask(id, time, $.toString((url)=> {
-              log('定时执行'+url) 
+              let rurl = JSON.parse(request(url, { headers: { 'Referer': 'https://www.aliyundrive.com/' }, onlyHeaders: true, redirect: false, timeout: 3000 })).headers.location[0];
+              log('定时执行,获取新的播放地址>'+rurl) 
             }, url));
             //log(f)
             return readFile(f.split("##")[0]);
