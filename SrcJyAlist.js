@@ -1011,6 +1011,12 @@ function getAliUrl(share_id, file_id, alitoken) {
 
         let u = startProxyServer($.toString(() => {
             let url = base64Decode(MY_PARAMS.url);
+            url = JSON.stringify({
+                statusCode: 302,
+                headers: {
+                    "Location": url
+                }
+            });
             log("我在代理" + url);
             let f = cacheM3u8(url, {headers:{'Referer':'https://www.aliyundrive.com/'}, timeout: 2000});
             let id = 'abc'; 
