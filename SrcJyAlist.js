@@ -989,16 +989,15 @@ function getAliUrl(share_id, file_id, alitoken) {
 
               log("代理ts：" + url);
                   //此时可以根据实际逻辑得到真实有效的ts地址
-              return url;
-                  /*
+
                   return JSON.stringify({
                       statusCode: 302,
                       headers: {
-                          "Location": home + url,
+                          "Location": url,
                           'Referer': 'https://www.aliyundrive.com/'
                       }
                   });
-                  */
+                  
 
             }else{
               log('首次更新')
