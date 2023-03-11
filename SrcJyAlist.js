@@ -969,13 +969,13 @@ function getAliUrl(share_id, file_id, alitoken) {
                   }
                   return it;
               }).join("\n");
-              writeFile('hiker://files/cache/_fileSelect_'+file_id,ff);
+              writeFile('hiker://files/cache/_fileSelect_'+file_id+'.m3u8',ff);
               return ff;
             }
 
             let url = base64Decode(MY_PARAMS.url);
             if(url.includes(".ts")){
-              let f = fetch('hiker://files/cache/_fileSelect_'+file_id).split("\n");
+              let f = fetch('hiker://files/cache/_fileSelect_'+file_id+'.m3u8').split("\n");
               f.forEach(it => {
                 if(it && (url.substr(url.indexOf('/media-'),url.indexOf('.ts')) == it.substr(it.indexOf('/media-'),it.indexOf('.ts')))){
                   url = it;
