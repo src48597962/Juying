@@ -951,7 +951,7 @@ function getAliUrl(share_id, file_id, alitoken) {
         if(i==0){
           let u = startProxyServer($.toString((aliSharePlayUrl,line,share_id,file_id,alitoken) => {
             //log(line+'$'+share_id+'$'+file_id+'$'+alitoken)
-            let url = base64Decode(MY_PARAMS.url);
+            
             function geturl(){
               let playUrlList = aliSharePlayUrl(share_id, file_id, alitoken) || [];
               let aliurl;
@@ -962,6 +962,8 @@ function getAliUrl(share_id, file_id, alitoken) {
               })
               return aliurl;
             }
+
+            let url = base64Decode(MY_PARAMS.url);
             let playUrl;
             if(url.includes(".ts")){
 
@@ -978,8 +980,7 @@ function getAliUrl(share_id, file_id, alitoken) {
               log('首次更新')
               playUrl = geturl();
             }
-              
-              
+
 
               
               if (url.includes(".ts")) {
