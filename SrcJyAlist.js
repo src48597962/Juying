@@ -952,7 +952,10 @@ function getAliPlayUrl(list) {
           urls.push(url + "#isVideo=true##pre#");
           names.push(transcoding[item.template_id] ? transcoding[item.template_id] : item.template_height);
           heads.push({ 'Referer': 'https://www.aliyundrive.com/' });
-      }catch(e){}
+          log(url);
+      }catch(e){
+        log(url+'>缓存m3u8失败>'+e.message);
+      }
       return 1;
   }
   let list = datalist.map((item,id)=>{
