@@ -939,50 +939,6 @@ function alistSet() {
   setResult(d);
 }
 
-function getAliPlayUrl(datalist) {
-  let urls = [];
-  let names =[];
-  let heads = [];
-  let temp = [];
-  let task = function(obj) {
-      let item = obj.item;
-      let i = obj.id;
-      try{
-          let rurl = JSON.parse(request(item.url, { headers: { 'Referer': 'https://www.aliyundrive.com/' }, onlyHeaders: true, redirect: false, timeout: 3000 })).headers.location[0];
-          let url = cacheM3u8(rurl,{headers:{'Referer':'https://www.aliyundrive.com/'}, timeout: 3000},'video'+i+'.m3u8');
-          let name = transcoding[item.template_id] ? transcoding[item.template_id] : item.template_height;
-          temp.push(name+'$'+url+ "#isVideo=true##pre#");
-          heads.push({ 'Referer': 'https://www.aliyundrive.com/' });
-      }catch(e){
-        //log(url+'>缓存m3u8失败>'+e.message);
-      }
-      return 1;
-  }
-  let list = datalist.map((item,id)=>{
-      return {
-        func: task,
-        param: {'item':item,'id':id},
-        id: id
-      }
-  });
-  if(list.length>0){
-      be(list, {
-          func: function(obj, id, error, taskResult) {
-          },
-          param: {
-          }
-      });
-  }
-  let paly = [];
-  temp.forEach(item => {
-
-  })
-  return {
-    urls: urls,
-    names: names,
-    headers: heads
-  };
-}
 function getAliUrl(share_id, file_id, alitoken) {
   try {
     function getNowTime() {
@@ -1051,12 +1007,12 @@ function getAliUrl(share_id, file_id, alitoken) {
         let json = JSON.parse(request('https://api.aliyundrive.com/v2/file/get_share_link_video_preview_play_info', { headers: headers, body: data, method: 'POST', timeout: 3000 }));
         let playurl = json.video_preview_play_info.live_transcoding_task_list;
         playurl.reverse();
-        log(playurl)
-        /*
+        
         let urls = [];
         let names = [];
         let heads = [];
         playurl.forEach((item,i) => {
+          log(item.url)
           let rurl = JSON.parse(request(item.url, { headers: { 'Referer': 'https://www.aliyundrive.com/' }, onlyHeaders: true, redirect: false, timeout: 3000 })).headers.location[0];
           let url = cacheM3u8(rurl,{headers:{'Referer':'https://www.aliyundrive.com/'}, timeout: 2000},'video'+i+'.m3u8');
           urls.push(url + "#isVideo=true##pre#");
@@ -1067,8 +1023,7 @@ function getAliUrl(share_id, file_id, alitoken) {
           urls: urls,
           names: names,
           headers: heads
-        };*/
-        return getAliPlayUrl(playurl);
+        };
       }
     }
   } catch (e) {
