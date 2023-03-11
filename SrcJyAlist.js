@@ -947,7 +947,7 @@ function getAliUrl(share_id, file_id, alitoken) {
     
     let playUrlList = aliSharePlayUrl(share_id, file_id, alitoken) || [];
     if(playUrlList.length>0){
-      playUrlList.forEach((item,i) => {
+      playUrlList.forEach((item) => {
           let u = startProxyServer($.toString((aliSharePlayUrl,line,share_id,file_id,alitoken) => {
             function geturl(){
               let playUrlList = aliSharePlayUrl(share_id, file_id, alitoken) || [];
@@ -966,13 +966,15 @@ function getAliUrl(share_id, file_id, alitoken) {
                   }
                   return it;
               }).join("\n");
-              writeFile('hiker://files/cache/_fileSelect_'+file_id+'.m3u8',ff);
+              let fid = aliurl.split('&f=')[1].split('&')[0];
+              writeFile('hiker://files/cache/_fileSelect_'+fid+'.m3u8',ff);
               return ff;
             }
 
             let url = base64Decode(MY_PARAMS.url);
             if(url.includes(".ts")){
-              let f = fetch('hiker://files/cache/_fileSelect_'+file_id+'.m3u8').split("\n");
+              let fid = aliurl.split('&f=')[1].split('&')[0];
+              let f = fetch('hiker://files/cache/_fileSelect_'+fid+'.m3u8').split("\n");
               f.forEach(it => {
                 if(it&&it.startsWith('/proxy?url=')){
                   let furl = base64Decode(it.replace('/proxy?url=',''));
@@ -983,7 +985,6 @@ function getAliUrl(share_id, file_id, alitoken) {
               })
               let expires = url.split('x-oss-expires=')[1].split('&')[0];
               const lasttime = parseInt(expires) - Date.now() / 1000;
-              //if(Math.round(new Date() / 1000) > Math.round(expires)-30){
               if(lasttime < 60){
                 log('过期更新')
                 let f = geturl().split("\n");
@@ -1014,7 +1015,7 @@ function getAliUrl(share_id, file_id, alitoken) {
             }
           },aliSharePlayUrl,item.template_id,share_id,file_id,alitoken));
           
-        urls.push(u + "?url=" + base64Encode(item.url) + "#.m3u8");
+        urls.push(u + "?url=" + base64Encode(item.url) + "#.m3u8#pre#");
         names.push(transcoding[item.template_id] ? transcoding[item.template_id] : item.template_height);
         heads.push({ 'Referer': 'https://www.aliyundrive.com/' });
       })
