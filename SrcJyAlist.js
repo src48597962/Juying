@@ -939,7 +939,7 @@ function alistSet() {
   setResult(d);
 }
 
-function getAliPlayUrl(list) {
+function getAliPlayUrl(datalist) {
   let urls = [];
   let names =[];
   let heads = [];
