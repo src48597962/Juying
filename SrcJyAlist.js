@@ -972,19 +972,15 @@ function getAliUrl(share_id, file_id, alitoken) {
             }
 
             let url = base64Decode(MY_PARAMS.url);
-            //log(url);
             let playUrl;
             if(url.includes(".ts")){
               let expires = url.split('x-oss-expires=')[1].split('&')[0];
               if(Date.now()>new Date(expires)){
                 log('过期更新')
                 //geturl();
+              }else{
+                log('未过期')
               }
-                /*
-                if(Date.now()>new Date(expires)){
-                  log('过期更新')
-                  playUrl = geturl();
-                }*/
               
 
               log("代理ts：" + url);
