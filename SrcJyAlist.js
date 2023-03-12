@@ -954,7 +954,7 @@ function getAliUrl(share_id, file_id, alitoken) {
             aliurl = JSON.parse(request(item.url, { headers: { 'Referer': 'https://www.aliyundrive.com/' }, onlyHeaders: true, redirect: false, timeout: 3000 })).headers.location[0];
           }
         })
-        //log("我在代理" + aliurl);
+        log("我在代理" + aliurl);
         let home = aliurl.split('media.m3u8')[0];
         let f = fetch(aliurl, { headers: { 'Referer': 'https://www.aliyundrive.com/' }, timeout: 3000}).split("\n");
         let ff = f.map(it => {
@@ -984,8 +984,9 @@ function getAliUrl(share_id, file_id, alitoken) {
         let expires = url.split('x-oss-expires=')[1].split('&')[0];
         const lasttime = parseInt(expires) - Date.now() / 1000;
         if(lasttime < 60){
-          //log('过期更新')
+          log('过期更新')
           let line  = url.split('/media')[0].substring(item.name.lastIndexOf('/')+1);//取之前播放的ts段线路
+          log(line);
           let f = geturl(fid,line).split("\n");
           f.forEach(it => {
             if(it&&it.startsWith('/proxy?url=')){
@@ -997,7 +998,7 @@ function getAliUrl(share_id, file_id, alitoken) {
           })
 
         }else{
-          //log('未过期')
+          log('未过期')
           //log("代理ts：" + url);
         }
         return JSON.stringify({
@@ -1008,7 +1009,7 @@ function getAliUrl(share_id, file_id, alitoken) {
               }
           });
       }else{
-        //log('首次更新')
+        log('首次更新')
         let line  = url.split('|')[1];
         let ff = geturl(file_id,line);
         return ff;
