@@ -59,6 +59,19 @@ let yijimenu = [
         col_type: 'icon_5',
         extra: {
             longClick: [{
+                title: "阿里链接",
+                js: $.toString(() => {
+                    return $("","阿里共享链接").input(() => {
+                        return $("hiker://empty##fypage#noRecordHistory##noHistory#").rule((input) => {
+                            input = input.replace('https://www.aliyundrive.com/s/','');
+                            let share_id = input.indexOf('/folder/')>-1?input.split('/folder/')[0]:input;
+                            let folder_id = input.indexOf('/folder/')>-1?input.split('/folder/')[1]:"root";
+                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliShare.js');
+                            aliShare(share_id,share_pwd,folder_id);
+                        },input);
+                    }) 
+                })
+            },{
                 title: "🔍切换为"+(getItem('searchmode')=="hiker"?"聚合搜索":"视界搜索"),
                 js: $.toString(() => {
                     if(getItem('searchmode')=="hiker"){
