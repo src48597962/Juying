@@ -944,83 +944,81 @@ function getAliUrl(share_id, file_id, alitoken) {
     let urls = [];
     let names = [];
     let heads = [];
+    let u = startProxyServer($.toString((aliSharePlayUrl,file_id,share_id,alitoken) => {
+      function geturl(fileid,line){
+        //预加载时会变file_id,所以ts过期更新时还取原来的id
+        let playUrlList = aliSharePlayUrl(share_id, fileid, alitoken) || [];
+        let aliurl;
+        playUrlList.forEach((item) => {
+          if(item.template_id == line){
+            aliurl = JSON.parse(request(item.url, { headers: { 'Referer': 'https://www.aliyundrive.com/' }, onlyHeaders: true, redirect: false, timeout: 3000 })).headers.location[0];
+          }
+        })
+        log("我在代理" + aliurl);
+        let home = aliurl.split('media.m3u8')[0];
+        let f = fetch(aliurl, { headers: { 'Referer': 'https://www.aliyundrive.com/' }, timeout: 3000}).split("\n");
+        let ff = f.map(it => {
+            if (it.startsWith("media-")) {
+                return "/proxy?url=" + base64Encode(home+it);
+            }
+            return it;
+        }).join("\n");
+        log('ufid-'+fileid);
+        writeFile('hiker://files/cache/_fileSelect_'+fileid+'.m3u8',ff);
+        return ff;
+      }
+      let url = base64Decode(MY_PARAMS.url);
+      if(url.includes(".ts")){
+        let fid = url.split('&f=')[1].split('&')[0];
+        log('sfid-'+fid);
+        let f = fetch('hiker://files/cache/_fileSelect_'+fid+'.m3u8').split("\n");
+        f.forEach(it => {
+          if(it&&it.startsWith('/proxy?url=')){
+            let furl = base64Decode(it.replace('/proxy?url=',''));
+            if(url.substr(url.indexOf('/media-'),url.indexOf('.ts')) == furl.substr(furl.indexOf('/media-'),furl.indexOf('.ts'))){
+              url = furl;
+            }
+          }
+        })
+        let expires = url.split('x-oss-expires=')[1].split('&')[0];
+        const lasttime = parseInt(expires) - Date.now() / 1000;
+        if(lasttime < 60){
+          log('过期更新')
+          let line  = url.split('/media')[0];//取之前播放的ts段线路
+          line = line.substring(line.lastIndexOf('/')+1);
+          let f = geturl(fid,line).split("\n");
+          f.forEach(it => {
+            if(it&&it.startsWith('/proxy?url=')){
+              let furl = base64Decode(it.replace('/proxy?url=',''));
+              if(url.substr(url.indexOf('/media-'),url.indexOf('.ts')) == furl.substr(furl.indexOf('/media-'),furl.indexOf('.ts'))){
+                url = furl;
+              }
+            }
+          })
+
+        }else{
+          log('未过期')
+          //log("代理ts：" + url);
+        }
+        return JSON.stringify({
+              statusCode: 302,
+              headers: {
+                  "Location": url,
+                  'Referer': 'https://www.aliyundrive.com/'
+              }
+          });
+      }else{
+        log('首次更新')
+        let line  = url.split('|')[1];
+        let ff = geturl(file_id,line);
+        return ff;
+      }
+    },aliSharePlayUrl,file_id,share_id,alitoken));
 
     let playUrlList = aliSharePlayUrl(share_id, file_id, alitoken) || [];
     if(playUrlList.length>0){
       playUrlList.forEach((item) => {
-        let u = startProxyServer($.toString((aliSharePlayUrl,share_id,alitoken) => {
-          function geturl(fileid,line){
-            //预加载时会变file_id,所以ts过期更新时还取原来的id
-            let playUrlList = aliSharePlayUrl(share_id, fileid, alitoken) || [];
-            let aliurl;
-            playUrlList.forEach((item) => {
-              if(item.template_id == line){
-                aliurl = JSON.parse(request(item.url, { headers: { 'Referer': 'https://www.aliyundrive.com/' }, onlyHeaders: true, redirect: false, timeout: 3000 })).headers.location[0];
-              }
-            })
-            log("我在代理" + aliurl);
-            let home = aliurl.split('media.m3u8')[0];
-            let f = fetch(aliurl, { headers: { 'Referer': 'https://www.aliyundrive.com/' }, timeout: 3000}).split("\n");
-            let ff = f.map(it => {
-                if (it.startsWith("media-")) {
-                    return "/proxy?url=" + base64Encode(home+it);
-                }
-                return it;
-            }).join("\n");
-            //let fid = aliurl.split('&f=')[1].split('&')[0];
-            log('ufid-'+fileid);
-            writeFile('hiker://files/cache/_fileSelect_'+fileid+'.m3u8',ff);
-            return ff;
-          }
-          let url = base64Decode(MY_PARAMS.url);
-          if(url.includes(".ts")){
-            let fid = url.split('&f=')[1].split('&')[0];
-            log('sfid-'+fid);
-            let f = fetch('hiker://files/cache/_fileSelect_'+fid+'.m3u8').split("\n");
-            f.forEach(it => {
-              if(it&&it.startsWith('/proxy?url=')){
-                let furl = base64Decode(it.replace('/proxy?url=',''));
-                if(url.substr(url.indexOf('/media-'),url.indexOf('.ts')) == furl.substr(furl.indexOf('/media-'),furl.indexOf('.ts'))){
-                  url = furl;
-                }
-              }
-            })
-            let expires = url.split('x-oss-expires=')[1].split('&')[0];
-            const lasttime = parseInt(expires) - Date.now() / 1000;
-            if(lasttime < 60){
-              log('过期更新')
-              let line  = url.split('/media')[0];//取之前播放的ts段线路
-              line = line.substring(line.lastIndexOf('/')+1);
-              let f = geturl(fid,line).split("\n");
-              f.forEach(it => {
-                if(it&&it.startsWith('/proxy?url=')){
-                  let furl = base64Decode(it.replace('/proxy?url=',''));
-                  if(url.substr(url.indexOf('/media-'),url.indexOf('.ts')) == furl.substr(furl.indexOf('/media-'),furl.indexOf('.ts'))){
-                    url = furl;
-                  }
-                }
-              })
-
-            }else{
-              log('未过期')
-              //log("代理ts：" + url);
-            }
-            return JSON.stringify({
-                  statusCode: 302,
-                  headers: {
-                      "Location": url,
-                      'Referer': 'https://www.aliyundrive.com/'
-                  }
-              });
-          }else{
-            log('首次更新')
-            let fileid  = url.split('|')[1];
-            let line  = url.split('|')[2];
-            let ff = geturl(fileid,line);
-            return ff;
-          }
-        },aliSharePlayUrl,share_id,alitoken));
-        urls.push(u + "?url=" + base64Encode(item.url+"|"+file_id+"|"+item.template_id) + "#.m3u8#pre#");
+        urls.push(u + "?url=" + base64Encode(item.url+"|"+item.template_id) + "#.m3u8");//#pre#
         names.push(transcoding[item.template_id] ? transcoding[item.template_id] : item.template_height);
         heads.push({ 'Referer': 'https://www.aliyundrive.com/' });
       })
