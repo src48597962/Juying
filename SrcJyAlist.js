@@ -374,48 +374,50 @@ function alistUrl(alistapi,path,sign,subtitle) {
       }
     }catch(e){}
     try{
-      if(provider=="AliyundriveOpen"){
-        try{
-          let json = JSON.parse(gethtml(alistapi,"/api/fs/other",path));
-          if(json.code==200){
-            let playurl = json.data.video_preview_play_info.live_transcoding_task_list;
-            playurl.reverse();
-            let urls = [];
-            let names = [];
-            let heads = [];
-            playurl.forEach((item,i) => {
-              let url = cacheM3u8(item.url,{headers:{'Referer':'https://www.aliyundrive.com/'}, timeout: 2000},'video'+i+'.m3u8');
-              urls.push(url+"#isVideo=true##pre#");
-              names.push(transcoding[item.template_id]?transcoding[item.template_id]:item.template_height);
-              heads.push({'Referer':'https://www.aliyundrive.com/'});
-            })
-            return JSON.stringify({
-                urls: urls,
-                names: names,
-                headers: heads,
-                subtitle: subtitle
-            });
-          }
-        }catch(e){
-          log('阿里开放获取多线程失败>'+e.message);
-        }
-      }else if(provider=="AliyundriveShare"){
-        try{
-          let redirect = JSON.parse(request(url,{onlyHeaders:true,redirect:false,timeout:3000}));
-          let rurl = redirect.headers.location[0];
-          let share_id = rurl.split('&sl=')[1].split('&')[0];
-          let file_id = rurl.split('&f=')[1].split('&')[0];
-          let alitoken = alistconfig.alitoken;
-          let play = getAliUrl(share_id,file_id,alitoken);
-          if(play.urls){
-            if(subtitle){
-              play['subtitle'] = subtitle;
+      if(!music.test(suffix)){
+        if(provider=="AliyundriveOpen"){
+          try{
+            let json = JSON.parse(gethtml(alistapi,"/api/fs/other",path));
+            if(json.code==200){
+              let playurl = json.data.video_preview_play_info.live_transcoding_task_list;
+              playurl.reverse();
+              let urls = [];
+              let names = [];
+              let heads = [];
+              playurl.forEach((item,i) => {
+                let url = cacheM3u8(item.url,{headers:{'Referer':'https://www.aliyundrive.com/'}, timeout: 2000},'video'+i+'.m3u8');
+                urls.push(url+"#isVideo=true##pre#");
+                names.push(transcoding[item.template_id]?transcoding[item.template_id]:item.template_height);
+                heads.push({'Referer':'https://www.aliyundrive.com/'});
+              })
+              return JSON.stringify({
+                  urls: urls,
+                  names: names,
+                  headers: heads,
+                  subtitle: subtitle
+              });
             }
-            return JSON.stringify(play);
+          }catch(e){
+            log('阿里开放获取多线程失败>'+e.message);
           }
-        }catch(e){}
-      }
-        url = url + (music.test(suffix)?"#isMusic=true#":"#isVideo=true#") + (url.indexOf('baidu.com')>-1?';{User-Agent@Lavf/57.83.100}':'');
+        }else if(provider=="AliyundriveShare"){
+          try{
+            let redirect = JSON.parse(request(url,{onlyHeaders:true,redirect:false,timeout:3000}));
+            let rurl = redirect.headers.location[0];
+            let share_id = rurl.split('&sl=')[1].split('&')[0];
+            let file_id = rurl.split('&f=')[1].split('&')[0];
+            let alitoken = alistconfig.alitoken;
+            let play = getAliUrl(share_id,file_id,alitoken);
+            if(play.urls){
+              if(subtitle){
+                play['subtitle'] = subtitle;
+              }
+              return JSON.stringify(play);
+            }
+          }catch(e){}
+        }
+      } 
+        url = url + (music.test(suffix)?"#isMusic=true#":"#isVideo=true#") + (url.indexOf('baidu.com')>-1?';{User-Agent@Lavf/57.83.100}':url.indexOf('aliyundrive.com')>-1?';{Referer@https://www.aliyundrive.com/}':'');
         if(!subtitle){
           return url;
         }else{
