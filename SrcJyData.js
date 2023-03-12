@@ -67,7 +67,7 @@ let yijimenu = [
                             let share_id = input.indexOf('/folder/')>-1?input.split('/folder/')[0]:input;
                             let folder_id = input.indexOf('/folder/')>-1?input.split('/folder/')[1]:"root";
                             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliShare.js');
-                            aliShare(share_id,share_pwd,folder_id);
+                            aliShare(share_id,'',folder_id);
                         },input);
                     }) 
                 })
