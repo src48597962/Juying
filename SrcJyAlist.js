@@ -954,7 +954,7 @@ function getAliUrl(share_id, file_id, alitoken) {
             aliurl = JSON.parse(request(item.url, { headers: { 'Referer': 'https://www.aliyundrive.com/' }, onlyHeaders: true, redirect: false, timeout: 3000 })).headers.location[0];
           }
         })
-        log("我在代理" + aliurl);
+        //log("我在代理" + aliurl);
         let home = aliurl.split('media.m3u8')[0];
         let f = fetch(aliurl, { headers: { 'Referer': 'https://www.aliyundrive.com/' }, timeout: 3000}).split("\n");
         let ff = f.map(it => {
@@ -964,14 +964,14 @@ function getAliUrl(share_id, file_id, alitoken) {
             return it;
         }).join("\n");
         let fid = aliurl.split('&f=')[1].split('&')[0];
-        log('ufid-'+fid);
+        //log('ufid-'+fid);
         writeFile('hiker://files/cache/_fileSelect_'+fid+'.m3u8',ff);
         return ff;
       }
       let url = base64Decode(MY_PARAMS.url);
       if(url.includes(".ts")){
         let fid = url.split('&f=')[1].split('&')[0];
-        log('sfid-'+fid);
+        //log('sfid-'+fid);
         let f = fetch('hiker://files/cache/_fileSelect_'+fid+'.m3u8').split("\n");
         f.forEach(it => {
           if(it&&it.startsWith('/proxy?url=')){
@@ -984,8 +984,8 @@ function getAliUrl(share_id, file_id, alitoken) {
         let expires = url.split('x-oss-expires=')[1].split('&')[0];
         const lasttime = parseInt(expires) - Date.now() / 1000;
         if(lasttime < 60){
-          log('过期更新')
-          let line  = url.split('/media')[0].split('/')[1];
+          //log('过期更新')
+          let line  = url.split('/media')[0].substring(item.name.lastIndexOf('/')+1);//取之前播放的ts段线路
           let f = geturl(fid,line).split("\n");
           f.forEach(it => {
             if(it&&it.startsWith('/proxy?url=')){
@@ -997,7 +997,7 @@ function getAliUrl(share_id, file_id, alitoken) {
           })
 
         }else{
-          log('未过期')
+          //log('未过期')
           //log("代理ts：" + url);
         }
         return JSON.stringify({
@@ -1008,7 +1008,7 @@ function getAliUrl(share_id, file_id, alitoken) {
               }
           });
       }else{
-        log('首次更新')
+        //log('首次更新')
         let line  = url.split('|')[1];
         let ff = geturl(file_id,line);
         return ff;
@@ -1056,13 +1056,16 @@ function aliSharePlayUrl(share_id, file_id, alitoken){
       "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36 Edg/110.0.1587.41",
       "x-canary": "client=web,app=adrive,version=v3.1.0"
     };
+    let nowtime = Date.now();
+    let oldtime = parseInt(getMyVar('userinfoChecktime','0').replace('time',''));
     let userinfo;
     let aliuserinfo = storage0.getMyVar('aliuserinfo');
-    if (aliuserinfo && aliuserinfo.user_id) {
+    if (aliuserinfo && aliuserinfo.user_id && nowtime < (oldtime+1*60*60*1000)) {
       userinfo = aliuserinfo;
     } else {
       userinfo = JSON.parse(request('https://auth.aliyundrive.com/v2/account/token', { headers: headers, body: { "refresh_token": alitoken, "grant_type": "refresh_token" }, method: 'POST', timeout: 3000 }));
       storage0.putMyVar('aliuserinfo', userinfo);
+      putMyVar('userinfoChecktime', nowtime+'time');
     }
     let authorization = 'Bearer ' + userinfo.access_token;
     let deviceId = userinfo.device_id;
