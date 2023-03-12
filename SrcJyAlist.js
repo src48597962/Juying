@@ -967,7 +967,7 @@ function getAliUrl(share_id, file_id, alitoken) {
                   return it;
               }).join("\n");
               let fid = aliurl.split('&f=')[1].split('&')[0];
-              log('ufid'+fid);
+              log('ufid-'+fid);
               writeFile('hiker://files/cache/_fileSelect_'+fid+'.m3u8',ff);
               return ff;
             }
@@ -975,7 +975,7 @@ function getAliUrl(share_id, file_id, alitoken) {
             let url = base64Decode(MY_PARAMS.url);
             if(url.includes(".ts")){
               let fid = url.split('&f=')[1].split('&')[0];
-              log('tsfid'+fid);
+              log('sfid-'+fid);
               let f = fetch('hiker://files/cache/_fileSelect_'+fid+'.m3u8').split("\n");
               f.forEach(it => {
                 if(it&&it.startsWith('/proxy?url=')){
@@ -986,17 +986,16 @@ function getAliUrl(share_id, file_id, alitoken) {
                 }
               })
               let expires = url.split('x-oss-expires=')[1].split('&')[0];
-              // 比如需要这样的格式 yyyy-MM-dd hh:mm:ss
-              var date = new Date(expires);
-              Y = date.getFullYear() + '-';
-              M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
-              D = date.getDate() + ' ';
-              h = date.getHours() + ':';
-              m = date.getMinutes() + ':';
-              s = date.getSeconds(); 
-              log(Y+M+D+h+m+s);
               const lasttime = parseInt(expires) - Date.now() / 1000;
               if(lasttime < 60){
+                let date = new Date(expires);
+                let Y = date.getFullYear() + '-';
+                let M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+                let D = date.getDate() + ' ';
+                let h = date.getHours() + ':';
+                let m = date.getMinutes() + ':';
+                let s = date.getSeconds(); 
+                log(Y+M+D+h+m+s);
                 log('过期更新')
                 let f = geturl().split("\n");
                 f.forEach(it => {
