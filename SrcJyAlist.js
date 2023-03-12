@@ -949,8 +949,9 @@ function getAliUrl(share_id, file_id, alitoken) {
     if(playUrlList.length>0){
       playUrlList.forEach((item) => {
           let u = startProxyServer($.toString((aliSharePlayUrl,line,share_id,file_id,alitoken) => {
-            function geturl(){
-              let playUrlList = aliSharePlayUrl(share_id, file_id, alitoken) || [];
+            function geturl(fileid){
+              fileid = fileid || file_id;//预加载时会变file_id,所以ts过期更新时还取原来的id
+              let playUrlList = aliSharePlayUrl(share_id, fileid, alitoken) || [];
               let aliurl;
               playUrlList.forEach((item) => {
                 if(item.template_id == line){
@@ -988,16 +989,8 @@ function getAliUrl(share_id, file_id, alitoken) {
               let expires = url.split('x-oss-expires=')[1].split('&')[0];
               const lasttime = parseInt(expires) - Date.now() / 1000;
               if(lasttime < 60){
-                let date = new Date(expires);
-                let Y = date.getFullYear() + '-';
-                let M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
-                let D = date.getDate() + ' ';
-                let h = date.getHours() + ':';
-                let m = date.getMinutes() + ':';
-                let s = date.getSeconds(); 
-                log(Y+M+D+h+m+s);
                 log('过期更新')
-                let f = geturl().split("\n");
+                let f = geturl(fid).split("\n");
                 f.forEach(it => {
                   if(it&&it.startsWith('/proxy?url=')){
                     let furl = base64Decode(it.replace('/proxy?url=',''));
@@ -1020,7 +1013,7 @@ function getAliUrl(share_id, file_id, alitoken) {
                 });
             }else{
               log('首次更新')
-              let ff = geturl();
+              let ff = geturl(file_id);
               return ff;
             }
           },aliSharePlayUrl,item.template_id,share_id,file_id,alitoken));
