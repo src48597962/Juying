@@ -403,7 +403,7 @@ function alistUrl(alistapi,path,sign,subtitle) {
             log('阿里开放获取多线程失败>'+e.message);
           }
         }else if(provider=="AliyundriveShare"){
-          if(typeof(startProxyServer)!="undefined"){
+          if(typeof(startProxyServer)=="undefined"){
             return "toast://软件需升级新版本才能支持代理播放";
           }
           try{
