@@ -385,10 +385,9 @@ function alistUrl(alistapi,path,sign,subtitle) {
               let names = [];
               let heads = [];
               urls.push(url);
-              names.push('原始');
+              names.push('原始 文件');
               heads.push({'Referer':'https://www.aliyundrive.com/'});
-              playurl.forEach((item,i) => {
-                //let url = cacheM3u8(item.url,{headers:{'Referer':'https://www.aliyundrive.com/'}, timeout: 2000},'video'+i+'.m3u8');
+              playurl.forEach((item) => {
                 urls.push(item.url+"#isVideo=true##pre#");
                 names.push(transcoding[item.template_id]?transcoding[item.template_id]:item.template_height);
                 heads.push({'Referer':'https://www.aliyundrive.com/'});
