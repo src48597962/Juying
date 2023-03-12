@@ -958,6 +958,7 @@ function getAliUrl(share_id, file_id, alitoken) {
             aliurl = JSON.parse(request(item.url, { headers: { 'Referer': 'https://www.aliyundrive.com/' }, onlyHeaders: true, redirect: false, timeout: 3000 })).headers.location[0];
           }
         })
+        //上面是获取阿里的播放地址
         //log("我在代理" + aliurl);
         let home = aliurl.split('media.m3u8')[0];
         let f = fetch(aliurl, { headers: { 'Referer': 'https://www.aliyundrive.com/' }, timeout: 3000}).split("\n");
@@ -986,7 +987,7 @@ function getAliUrl(share_id, file_id, alitoken) {
         })
         let expires = url.split('x-oss-expires=')[1].split('&')[0];
         const lasttime = parseInt(expires) - Date.now() / 1000;
-        if(lasttime < 60){
+        if(lasttime < 40){
           //log('过期更新')
           let line  = url.split('/media')[0];//取之前播放的ts段线路
           line = line.substring(line.lastIndexOf('/')+1);
@@ -1076,17 +1077,16 @@ function aliSharePlayUrl(share_id, file_id, alitoken){
     let userId = userinfo.user_id;
     let signature;
     let public_key;
-    /*
     let getaliecc = JSON.parse(request('http://124.221.241.174:87/api', { body: 'did=' + deviceId + '&uid=' + userId + '&token=' + md5(getNowTime()), method: 'POST', timeout: 3000 }));
     if (getaliecc.code == 200) {
       signature = getaliecc.sign;
       public_key = getaliecc.key;
     }
-    */
+    /*
     let a = justTestSign('5dde4e1bdf9e4966b387ba58f4b3fdc3',deviceId,userId);
     signature = a.split('##')[0];
     public_key = a.split('##')[1];
-
+    */
     headers['authorization'] = authorization;
     headers['x-device-id'] = deviceId;
     headers['x-signature'] = signature;
