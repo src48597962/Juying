@@ -417,7 +417,7 @@ function alistUrl(alistapi,path,sign,subtitle) {
           }catch(e){}
         }
       } 
-        url = url + (music.test(suffix)?"#isMusic=true#":"#isVideo=true#") + (url.indexOf('baidu.com')>-1?';{User-Agent@Lavf/57.83.100}':url.indexOf('aliyundrive.com')>-1?';{Referer@https://www.aliyundrive.com/}':'');
+        url = url + (music.test(suffix)?"#isMusic=true#":"#isVideo=true#") + (url.indexOf('baidu.com')>-1?';{User-Agent@Lavf/57.83.100}':url.indexOf('aliyundrive')>-1?';{Referer@https://www.aliyundrive.com/}':'');
         if(!subtitle){
           return url;
         }else{
