@@ -51,7 +51,7 @@ function aliShare(share_id,share_pwd,folder_id) {
                 title: item.name,
                 img: "hiker://files/cache/src/文件夹.svg",//#noRecordHistory##noHistory#
                 url: $("hiker://empty##").rule((share_id,share_pwd,folder_id) => {
-                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliShare.js');
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
                     aliShare(share_id,share_pwd,folder_id);
                 }, item.share_id, share_pwd, item.file_id),
                 col_type: 'avatar',
