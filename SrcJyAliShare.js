@@ -15,7 +15,7 @@ function aliShareUrl(input) {
     let folder_id;
     let share_pwd
     li.forEach(it => {
-        it = it.tirm();
+        it = it.trim();
         if (it.indexOf("提取码")>-1){
             share_pwd = it.replace('提取码: ','');
         }
