@@ -63,14 +63,12 @@ let yijimenu = [
                 js: $.toString(() => {
                     return $("","阿里共享链接").input(() => {
                         return $("hiker://empty##fypage#noRecordHistory##noHistory#").rule((input) => {
-                            
-                            let li = input.split('\n');
-                            log(li);
-                            input = input.replace('https://www.aliyundrive.com/s/','');
-                            let share_id = input.indexOf('/folder/')>-1?input.split('/folder/')[0]:input;
-                            let folder_id = input.indexOf('/folder/')>-1?input.split('/folder/')[1]:"root";
+                            //input = input.replace('https://www.aliyundrive.com/s/','');
+                            //let share_id = input.indexOf('/folder/')>-1?input.split('/folder/')[0]:input;
+                            //let folder_id = input.indexOf('/folder/')>-1?input.split('/folder/')[1]:"root";
                             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliShare.js');
-                            aliShare(share_id,'',folder_id);
+                            //aliShare(share_id,'',folder_id);
+                            aliShareUrl(input);
                         },input);
                     }) 
                 })
