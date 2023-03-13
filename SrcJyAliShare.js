@@ -1,4 +1,3 @@
-/*
 let alistfile = "hiker://files/rules/Src/Juying/Alist.json";
 try{
   var alistData = JSON.parse(fetch(alistfile));
@@ -6,9 +5,11 @@ try{
 }catch(e){
   var alistData = {};
 }
-let datalist = alistData.yunpans || [];
+//let datalist = alistData.yunpans || [];
 let alistconfig = alistData.config || {};
-*/
+let audiovisual = alistconfig.contain?alistconfig.contain.replace(/\./,""):'mp4|avi|mkv|rmvb|flv|mov|ts|mp3|m4a|wma|flac';//影音文件
+let contain = new RegExp(audiovisual,"i");//设置可显示的影音文件后缀
+
 function aliShareUrl(input) {
     let li = input.split('\n');
     let share_id;
@@ -40,6 +41,9 @@ function aliShare(share_id,share_pwd,folder_id) {
     let postdata = {"share_id":share_id,"parent_file_id":folder_id||"root","limit":20,"image_thumbnail_process":"image/resize,w_256/format,jpeg","image_url_process":"image/resize,w_1920/format,jpeg/interlace,1","video_thumbnail_process":"video/snapshot,t_1000,f_jpg,ar_auto,w_256","order_by":"name","order_direction":"DESC"};
     headers['x-share-token'] = sharetoken;
     let sharelist = JSON.parse(request('https://api.aliyundrive.com/adrive/v2/file/list_by_share', { headers:headers, body: postdata, method: 'POST', timeout: 3000 })).items;
+    let sublist = sharelist.filter(item => {
+        return item.type=="file" && /srt|vtt|ass/.test(item.file_extension);
+    })
     let d = [];
     sharelist.forEach((item) => {
         if (item.type=="folder") {
@@ -55,21 +59,37 @@ function aliShare(share_id,share_pwd,folder_id) {
                     cls: "loadlist"
                 }
             })
-        } else {
-            d.push({
-                title: item.name,
-                img: item.thumbnail || item.category=="video"?"hiker://files/cache/src/影片.svg":item.category=="audio"?"hiker://files/cache/src/音乐.svg":"",
-                url: $("hiker://empty##").lazyRule((share_id,file_id) => {
-                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
-                    let alitoken = alistconfig.alitoken;
-                    let play = getAliUrl(share_id, file_id, alitoken);
-                    if (play.urls) {
-                        return JSON.stringify(play);
+        } else if (item.type=="file") {
+            if(item.category=="video"){
+                let sub = {};
+                if(sublist.length==1){
+                    sub = {share_id: sublist[0].share_id, file_id: sublist[0].file_id};
+                }
+                sublist.forEach(it => {
+                    if(it.name.substring(0,it.name.lastIndexOf("."))==item.name.substring(0,item.name.lastIndexOf("."))){
+                        sub = {share_id: it.share_id, file_id: it.file_id};
                     }
-                }, item.share_id, item.file_id),
-                col_type: 'avatar'
-            })
+                })
+                d.push({
+                    title: item.name,
+                    img: item.thumbnail || item.category=="video"?"hiker://files/cache/src/影片.svg":item.category=="audio"?"hiker://files/cache/src/音乐.svg":item.category=="image"?"hiker://files/cache/src/图片.png":"https://img.alicdn.com/imgextra/i1/O1CN01mhaPJ21R0UC8s9oik_!!6000000002049-2-tps-80-80.png",
+                    url: $("hiker://empty##").lazyRule((share_id,file_id,sub) => {
+                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
+                        let alitoken = alistconfig.alitoken;
+                        let play = getAliUrl(share_id, file_id, alitoken);
+                        if (play.urls) {
+
+                            return JSON.stringify(play);
+                        }
+                    }, item.share_id, item.file_id ,sub),
+                    col_type: 'avatar'
+                })
+            }
         }
     })
     setResult(d);
+}
+
+function getSubTitles() {
+    
 }
