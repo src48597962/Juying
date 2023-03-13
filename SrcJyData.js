@@ -66,7 +66,7 @@ let yijimenu = [
                             //input = input.replace('https://www.aliyundrive.com/s/','');
                             //let share_id = input.indexOf('/folder/')>-1?input.split('/folder/')[0]:input;
                             //let folder_id = input.indexOf('/folder/')>-1?input.split('/folder/')[1]:"root";
-                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliShare.js');
+                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
                             //aliShare(share_id,'',folder_id);
                             aliShareUrl(input);
                         },input);
