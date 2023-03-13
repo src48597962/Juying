@@ -61,19 +61,20 @@ function aliShare(share_id,share_pwd,folder_id) {
             })
         } else if (item.type=="file") {
             if(item.category=="video"){
-                let sub = {};
-                if(sublist.length==1){
-                    sub = {share_id: sublist[0].share_id, file_id: sublist[0].file_id};
+                let sub_file_id;
+                if (sublist.length == 1) {
+                    sub_file_id = sublist[0].file_id;
+                } else if (sublist.length > 1) {
+                    sublist.forEach(it => {
+                        if (it.name.substring(0, it.name.lastIndexOf(".")) == item.name.substring(0, item.name.lastIndexOf("."))) {
+                            sub_file_id = it.file_id;
+                        }
+                    })
                 }
-                sublist.forEach(it => {
-                    if(it.name.substring(0,it.name.lastIndexOf("."))==item.name.substring(0,item.name.lastIndexOf("."))){
-                        sub = {share_id: it.share_id, file_id: it.file_id};
-                    }
-                })
                 d.push({
                     title: item.name,
                     img: item.thumbnail || item.category=="video"?"hiker://files/cache/src/影片.svg":item.category=="audio"?"hiker://files/cache/src/音乐.svg":item.category=="image"?"hiker://files/cache/src/图片.png":"https://img.alicdn.com/imgextra/i1/O1CN01mhaPJ21R0UC8s9oik_!!6000000002049-2-tps-80-80.png",
-                    url: $("hiker://empty##").lazyRule((share_id,file_id,sub) => {
+                    url: $("hiker://empty##").lazyRule((share_id,file_id,sub_file_id) => {
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
                         let alitoken = alistconfig.alitoken;
                         let play = getAliUrl(share_id, file_id, alitoken);
@@ -81,15 +82,11 @@ function aliShare(share_id,share_pwd,folder_id) {
 
                             return JSON.stringify(play);
                         }
-                    }, item.share_id, item.file_id ,sub),
+                    }, item.share_id, item.file_id ,sub_file_id),
                     col_type: 'avatar'
                 })
             }
         }
     })
     setResult(d);
-}
-
-function getSubTitles() {
-    
 }
