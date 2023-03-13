@@ -63,7 +63,9 @@ let yijimenu = [
                 js: $.toString(() => {
                     return $("","阿里共享链接").input(() => {
                         return $("hiker://empty##fypage#noRecordHistory##noHistory#").rule((input) => {
-                            log(input);
+                            
+                            let li = input.split('\n');
+                            log(li);
                             input = input.replace('https://www.aliyundrive.com/s/','');
                             let share_id = input.indexOf('/folder/')>-1?input.split('/folder/')[0]:input;
                             let folder_id = input.indexOf('/folder/')>-1?input.split('/folder/')[1]:"root";
