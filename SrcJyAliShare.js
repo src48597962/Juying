@@ -28,15 +28,15 @@ function aliShare(share_id,share_pwd,folder_id) {
         } else {
             d.push({
                 title: item.name,
-                img: "hiker://files/cache/src/音乐.svg",// : contain.test(suffix) ? "hiker://files/cache/src/影片.svg" : image.test(suffix) ? "hiker://files/cache/src/图片.png" : "hiker://files/cache/src/Alist.svg"),
-                url: $("hiker://empty##").lazyRule((share_id,share_pwd,file_id) => {
+                img: item.thumbnail || item.category=="video"?"hiker://files/cache/src/影片.svg":item.category=="audio"?"hiker://files/cache/src/音乐.svg":"",
+                url: $("hiker://empty##").lazyRule((share_id,file_id) => {
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
                     let alitoken = alistconfig.alitoken;
                     let play = getAliUrl(share_id, file_id, alitoken);
                     if (play.urls) {
                         return JSON.stringify(play);
                     }
-                }, item.share_id, share_pwd, item.file_id),
+                }, item.share_id, item.file_id),
                 col_type: 'avatar'
             })
         }
