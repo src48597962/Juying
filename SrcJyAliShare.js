@@ -10,33 +10,22 @@ let datalist = alistData.yunpans || [];
 let alistconfig = alistData.config || {};
 */
 function aliShareUrl(input) {
-    log(input);
-    /*
     let li = input.split('\n');
     let share_id;
     let folder_id;
     let share_pwd
     li.forEach(it => {
-        if (it.startsWith("提取码")){
+        it = it.tirm();
+        if (it.indexOf("提取码")>-1){
             share_pwd = it.replace('提取码: ','');
         }
-        it = it.trim();
         if(it.indexOf("https://www.aliyundrive.com")>-1){
-            it = it.trim().replace('https://www.aliyundrive.com/s/','');
+            it = it.replace('https://www.aliyundrive.com/s/','');
             share_id = it.indexOf('/folder/')>-1?it.split('/folder/')[0]:it;
+            folder_id = it.indexOf('/folder/')>-1?it.split('/folder/')[1]:"root";
         }
     })
-    shareurl = shareurl.replace('https://www.aliyundrive.com/s/','');
-    let share_id = shareurl.indexOf('/folder/')>-1?input.split('/folder/')[0]:input;
-    let folder_id = shareurl.indexOf('/folder/')>-1?input.split('/folder/')[1]:"root";
-    let share_pwd = sharepwd.length==4?sharepwd:"";
-    */
-/*
-    破冰行动
-https://www.aliyundrive.com/s/SX17uSxDVpL
-提取码: em43
-点击链接保存，或者复制本段内容，打开「阿里云盘」APP ，无需下载极速在线查看，视频原画倍速播放。
-*/
+    aliShare(share_id,share_pwd,folder_id);
 }
 
 function aliShare(share_id,share_pwd,folder_id) {
