@@ -146,7 +146,9 @@ function aliShareSearch(input) {
         }
     })
     return data;}}];
-    
+    if(datalist.length==0){
+        toast('无接口，无法搜索');
+    }
     let task = function(obj) {
         try{
             let datalist = obj.parse(input) || [];
