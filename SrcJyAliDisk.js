@@ -22,6 +22,7 @@ function aliShareUrl(input) {
 }
 
 function aliShare(share_id,share_pwd,folder_id) {
+    setPageTitle(MY_PARAMS&&MY_PARAMS.dirname?MY_PARAMS.dirname:'云盘共享文件 | 聚影√');
     let headers = {
       'content-type': 'application/json;charset=UTF-8',
       "origin": "https://www.aliyundrive.com",
@@ -48,7 +49,7 @@ function aliShare(share_id,share_pwd,folder_id) {
                 }, item.share_id, share_pwd, item.file_id),
                 col_type: 'avatar',
                 extra: {
-                    cls: "loadlist"
+                    dirname: item.name
                 }
             })
         } else if (item.type=="file") {
