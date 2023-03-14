@@ -613,7 +613,7 @@ function sousuo2() {
         }
     });
     d.push({
-        title: getItem('searchsource')=="360"?"源：360":getItem('searchsource')=="sougou"?"源：搜狗":"源：接口",
+        title: "♻"+(getItem('searchsource')=="360"?"源：360":getItem('searchsource')=="sougou"?"源：搜狗":"源：接口"),
         url: $(["接口","sougou","360"],1,"选择搜索数据源").select(()=>{
             setItem('searchsource',input);
             refreshPage(false);
@@ -622,7 +622,7 @@ function sousuo2() {
         col_type: 'scroll_button'
     });
     d.push({
-        title: getItem('searchmode')=="hiker"?"新窗口搜索":"软件层搜索",
+        title: "💡"+(getItem('searchmode')=="hiker"?"新窗口搜索":"软件层搜索"),
         url: $('#noLoading#').lazyRule(() => {
             if(getItem('searchmode')=='hiker'){
                 clearItem('searchmode');
