@@ -523,7 +523,7 @@ function JYerji(){
     }catch(e){
         var playsinfo = "";
     }
-    if(datasource=='sougou' &&plays.length>0 && !plays[0].info && JYconfig['alistLine']==1){
+    if(((datasource=='sougou' &&plays.length>0 && !plays[0].info) || lists.length==0) && JYconfig['alistLine']==1){
         tabs = [];
         playsinfo = 1;
     }
