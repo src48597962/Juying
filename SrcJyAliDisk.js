@@ -18,10 +18,10 @@ function aliShareUrl(input) {
             folder_id = it.indexOf('/folder/')>-1?it.split('/folder/')[1]:"root";
         }
     })
-    aliShare(share_id,share_pwd,folder_id);
+    aliShare(share_id,folder_id,share_pwd);
 }
 
-function aliShare(share_id,share_pwd,folder_id) {
+function aliShare(share_id,folder_id,share_pwd) {
     setPageTitle(MY_PARAMS&&MY_PARAMS.dirname?MY_PARAMS.dirname:'云盘共享文件 | 聚影√');
     let headers = {
       'content-type': 'application/json;charset=UTF-8',
@@ -43,10 +43,10 @@ function aliShare(share_id,share_pwd,folder_id) {
             d.push({
                 title: item.name,
                 img: "hiker://files/cache/src/文件夹.svg",//#noRecordHistory##noHistory#
-                url: $("hiker://empty##").rule((share_id,share_pwd,folder_id) => {
+                url: $("hiker://empty##").rule((share_id,folder_id,share_pwd) => {
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
-                    aliShare(share_id,share_pwd,folder_id);
-                }, item.share_id, share_pwd, item.file_id),
+                    aliShare(share_id,folder_id,share_pwd);
+                }, item.share_id,item.file_id,share_pwd),
                 col_type: 'avatar',
                 extra: {
                     dirname: item.name
@@ -67,21 +67,21 @@ function aliShare(share_id,share_pwd,folder_id) {
                 d.push({
                     title: item.name,
                     img: item.thumbnail || item.category=="video"?"hiker://files/cache/src/影片.svg":item.category=="audio"?"hiker://files/cache/src/音乐.svg":item.category=="image"?"hiker://files/cache/src/图片.png":"https://img.alicdn.com/imgextra/i1/O1CN01mhaPJ21R0UC8s9oik_!!6000000002049-2-tps-80-80.png",
-                    url: $("hiker://empty##").lazyRule((share_id,share_pwd,file_id,sub_file_id) => {
+                    url: $("hiker://empty##").lazyRule((share_id,file_id,sub_file_id,share_pwd) => {
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliPublic.js');
                         let alitoken = alistconfig.alitoken;
-                        let play = getAliUrl(share_id,share_pwd,file_id,alitoken);
+                        let play = getAliUrl(share_id,file_id,alitoken,share_pwd);
                         if (play.urls) {
                             let subtitle;
                             if(sub_file_id){
-                                subtitle = getSubtitle(share_id,share_pwd,sub_file_id);
+                                subtitle = getSubtitle(share_id,sub_file_id,share_pwd);
                             }
                             if(subtitle){
                                 play['subtitle'] = subtitle;
                             }
                             return JSON.stringify(play);
                         }
-                    }, item.share_id, share_pwd, item.file_id, sub_file_id),
+                    }, item.share_id,item.file_id,sub_file_id,share_pwd),
                     col_type: 'avatar',
                     extra: {
                         id: item.file_id
