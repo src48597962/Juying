@@ -56,20 +56,7 @@ let yijimenu = [
                 sousuo2();
             }),
         pic_url: 'https://lanmeiguojiang.com/tubiao/more/101.png',
-        col_type: 'icon_5',
-        extra: {
-            longClick: [{
-                title: "Ali云盘链接",
-                js: $.toString(() => {
-                    return $("","阿里共享链接").input(() => {
-                        return $("hiker://empty##fypage#noRecordHistory##noHistory#").rule((input) => {
-                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
-                            aliShareUrl(input);
-                        },input);
-                    }) 
-                })
-            }]
-        }
+        col_type: 'icon_5'
     },
     {
         title: getItem('zhanshibutton')=="alist"?"Alist":getItem('zhanshibutton')=="history"?"历史":"展示",
