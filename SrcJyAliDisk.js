@@ -77,6 +77,7 @@ function aliShare(share_id,share_pwd,folder_id) {
                     url: $("hiker://empty##").lazyRule((share_id,share_pwd,file_id,sub_file_id) => {
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
                         let alitoken = alistconfig.alitoken;
+                        log(alitoken);
                         let play = getAliUrl(share_id,share_pwd,file_id,alitoken);
                         if (play.urls) {
                             let subtitles;
@@ -88,7 +89,7 @@ function aliShare(share_id,share_pwd,folder_id) {
                             }
                             return JSON.stringify(play);
                         }
-                    }, item.share_id, share_pwd, item.file_id, sub_file_id, share_pwd),
+                    }, item.share_id, share_pwd, item.file_id, sub_file_id),
                     col_type: 'avatar'
                 })
             }
