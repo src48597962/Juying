@@ -507,6 +507,7 @@ function alistSearch2(input,notoast){
         try{
             let searchlist = alistSearch(obj,input,notoast);
             if(searchlist.length>0){
+              hideLoading();
               searchlist.unshift({
                 title: obj.name + " 找到" + searchlist.length + "条 “"+input+"” 相关",
                 url: "hiker://empty",
