@@ -164,6 +164,7 @@ function getAliUrl(share_id, share_pwd, file_id, alitoken) {
           });
       }else{
         //log('首次更新')
+        log(url.split('|')[0]);
         let line  = url.split('|')[1];
         let ff = geturl(file_id,line);
         return ff;
