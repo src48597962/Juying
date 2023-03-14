@@ -164,10 +164,12 @@ function getAliUrl(share_id, share_pwd, file_id, alitoken) {
           });
       }else{
         //log('首次更新')
-        //let line  = url.split('|')[1];
+        let line  = url.split('|')[1];
+        let ff = geturl(file_id,line);
+        return ff;
+
+        /*
         let aliurl = JSON.parse(request(url.split('|')[0], { headers: { 'Referer': 'https://www.aliyundrive.com/' }, onlyHeaders: true, redirect: false, timeout: 3000 })).headers.location[0];
-        //let ff = geturl(file_id,line);
-        //return ff;
         let home = aliurl.split('media.m3u8')[0];
         let f = fetch(aliurl, { headers: { 'Referer': 'https://www.aliyundrive.com/' }, timeout: 3000}).split("\n");
         let ff = f.map(it => {
@@ -179,6 +181,7 @@ function getAliUrl(share_id, share_pwd, file_id, alitoken) {
         //log('ufid-'+fileid);
         writeFile('hiker://files/cache/_fileSelect_'+fileid+'.m3u8',ff);
         return ff;
+        */
       }
     },aliSharePlayUrl,share_id,share_pwd,file_id,alitoken));
 
