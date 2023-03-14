@@ -244,7 +244,7 @@ function JYsousuo(){
                     extra: {
                         pic: datasource=='sougou'?item.v_picurl:item.cover,
                         name: datasource=='sougou'?item.name.replace(/|/g,''):item.titleTxt,
-                        datasource: getItem('JYdatasource', 'sougou')
+                        datasource: datasource
                     }
                 })
             }catch(e){}
