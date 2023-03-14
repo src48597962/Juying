@@ -503,6 +503,7 @@ function alistSearch2(input,notoast){
       toast('无接口，无法搜索');
     }
     deleteItemByCls('loadlist');
+    showLoading('搜索中，请稍后...');
     let task = function(obj) {
         try{
             let searchlist = alistSearch(obj,input,notoast);
