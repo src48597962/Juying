@@ -131,7 +131,7 @@ function aliShareSearch(input) {
     list.forEach(item => {
         if(item.page_url.indexOf('https://www.aliyundrive.com')>-1){
             data.push({
-                title: item.title,
+                title: [].filter.call(item.title,function(s,i,o){return o.indexOf(s)==i;}).join(''),
                 url: item.page_url
             })
         }
