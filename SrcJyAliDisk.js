@@ -81,7 +81,10 @@ function aliShare(share_id,share_pwd,folder_id) {
                             return JSON.stringify(play);
                         }
                     }, item.share_id, share_pwd, item.file_id, sub_file_id),
-                    col_type: 'avatar'
+                    col_type: 'avatar',
+                    extra: {
+                        id: item.file_id
+                    }
                 })
             }
         }
