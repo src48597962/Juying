@@ -3,6 +3,7 @@ try{
   eval("var alistData = " + fetch(alistfile));
   let jknum = alistData.yunpans.length;
 }catch(e){
+  log(e.message);
   var alistData = {};
 }
 log(alistData);
