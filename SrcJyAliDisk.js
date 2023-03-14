@@ -5,6 +5,7 @@ try{
 }catch(e){
   var alistData = {};
 }
+log(alistData);
 //let datalist = alistData.yunpans || [];
 let alistconfig = alistData.config || {};
 let audiovisual = alistconfig.contain?alistconfig.contain.replace(/\./,""):'mp4|avi|mkv|rmvb|flv|mov|ts|mp3|m4a|wma|flac';//影音文件
