@@ -840,7 +840,7 @@ function xunmierji(type,ua) {
     } else {
         var zt = 0;
     }
-    if(!getMyVar('SrcM3U8')||!getMyVar('superwebM3U8')||!getMyVar('superweb')||!getMyVar('alistLine')){
+    if(!getMyVar('SrcM3U8')||!getMyVar('superwebM3U8')||!getMyVar('superweb')||!getMyVar('alistLine')||!getMyVar('yundiskLine')){
         try{
             var cfgfile = "hiker://files/rules/Src/Juying/config.json";
             var Juyingcfg=fetch(cfgfile);
@@ -851,6 +851,7 @@ function xunmierji(type,ua) {
             putMyVar('superwebM3U8',JYconfig.cachem3u8!=0&&JYconfig.superweb==1?'1':'0');
             putMyVar('superweb',JYconfig.superweb==1?'1':'0');
             putMyVar('alistLine',JYconfig.alistLine==1?'1':'0');
+            putMyVar('yundiskLine',JYconfig.yundiskLine==1?'1':'0');
         }catch(e){}
     }
         
@@ -1330,11 +1331,21 @@ function xunmierji(type,ua) {
         }
     }
     setTabs(tabs, MY_URL);
-
+    if(getMyVar('yundiskLine','0')==1){
+        d.push({
+            title: '云盘搜索',
+            url: $().lazyRule((name) => {
+                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+                aliShareSearch(name);
+                return "toast://搜索完成";
+            },MY_PARAMS.name),
+            col_type: 'scroll_button'
+        })
+    }
     if(getMyVar('alistLine','0')==1){
         d.push({
             title: 'Alist搜索',
-            url: $("#noLoading#").lazyRule((name) => {
+            url: $().lazyRule((name) => {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
                 if(datalist.length>0){
                     alistSearch2(name,1);
