@@ -519,7 +519,7 @@ function JYerji(){
     }
 
     try{
-        var playsinfo = datasource=='sougou'?plays[0].info:isline;
+        var playsinfo = datasource=='sougou'&&plays.length>0?plays[0].info:isline;
     }catch(e){
         var playsinfo = "";
     }
