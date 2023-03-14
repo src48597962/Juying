@@ -553,7 +553,7 @@ function sousuo2() {
             recordlist.splice(recordlist.length-1,1);
         }
         storage0.setItem('searchrecord', recordlist);
-        if(getItem('searchmode')=="hiker"){
+        if(getItem('searchmode')=="hiker" || (getItem('searchsource')=="360"||getItem('searchsource')=="搜狗")){
             return "hiker://search?rule=" + MY_RULE.title + "&s=" + input;
         }else{
             return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
@@ -613,7 +613,29 @@ function sousuo2() {
         }
     });
     d.push({
-        title: "📑"+(getItem('searchrecordide')=='1'?"关闭":"开启")+"搜索记录",
+        title: getItem('searchsource')=="360"?"源：360":getItem('searchsource')=="sougou"?"源：搜狗":"源：接口",
+        url: $(["接口","搜狗","360"],1,"选择搜索数据源").select(()=>{
+            setItem('searchsource',input);
+            refreshPage(false);
+            return "toast://已切换"
+        }),
+        col_type: 'scroll_button'
+    });
+    d.push({
+        title: getItem('searchmode')=="hiker"?"新窗口搜索":"软件层搜索",
+        url: $('#noLoading#').lazyRule(() => {
+            if(getItem('searchmode')=='hiker'){
+                clearItem('searchmode');
+            }else{
+                setItem('searchmode','hiker');
+            }
+            refreshPage(false);
+            return "toast://已切换"
+        }),
+        col_type: 'scroll_button'
+    });
+    d.push({
+        title: "📑"+(getItem('searchrecordide')=='1'?"关闭":"开启")+"记录",
         url: $('#noLoading#').lazyRule(() => {
             if(getItem('searchrecordide')=='1'){
                 clearItem('searchrecordide');
@@ -626,24 +648,28 @@ function sousuo2() {
         col_type: 'scroll_button'
     });
     d.push({
-        title: "🍭搜索模式："+(typeof(getSearchMode)!="undefined"&&getSearchMode()==1?"精准":"默认"),
+        title: "🍭模式："+(typeof(getSearchMode)!="undefined"&&getSearchMode()==1?"精准":"默认"),
         url: $('#noLoading#').lazyRule(() => {
             try{
+                let sm;
                 if(getSearchMode()==1){
                     setSearchMode(0);
+                    sm = "为默认模式，结果包含关键字";
                 }else{
                     setSearchMode(1);
+                    sm = "为精准模式，结果等于关键字";
                 }
                 refreshPage(false);
-                return "toast://已切换";
+                return "toast://已切换"+sm;
             }catch(e){
                 return "toast://软件版本过低，不支持此方法";
             }
         }),
         col_type: 'scroll_button'
     });
+    
     d.push({
-        col_type: "line"
+        col_type: "blank_block"
     });
     if(getItem('searchrecordide','0')=='1'){
         let recordlist = storage0.getItem('searchrecord') || [];
@@ -714,12 +740,19 @@ function sousuo2() {
 
 //搜索
 function sousuo() {
-    var cfgfile = "hiker://files/rules/Src/Juying/config.json";
-    var Juyingcfg=fetch(cfgfile);
+    let sousuoms;
+    let cfgfile = "hiker://files/rules/Src/Juying/config.json";
+    let Juyingcfg=fetch(cfgfile);
     if(Juyingcfg != ""){
-        eval("var JYconfig=" + Juyingcfg+ ";");
+        try{
+            eval("var JYconfig=" + Juyingcfg+ ";");
+            sousuoms = JYconfig.sousuoms;
+        }catch(e){
+            var JYconfig= {};
+            sousuoms==1
+        }
     }
-    if(!fileExist('hiker://files/rules/Src/Juying/jiekou.json')||JYconfig.sousuoms==1){
+    if(!fileExist('hiker://files/rules/Src/Juying/jiekou.json')||sousuoms==1){
         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
         JYsousuo();
     }else{
