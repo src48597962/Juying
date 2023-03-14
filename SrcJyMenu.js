@@ -184,6 +184,22 @@ function lookset(){
         col_type: "text_2"
     });
     d.push({
+        title: (JYconfig['yundiskLine']==1?getide(1):getide(0))+'云盘搜索',
+        url: $('#noLoading#').lazyRule((JYconfig,cfgfile) => {
+                if(JYconfig['yundiskLine'] != 1){
+                    JYconfig['yundiskLine'] = 1;
+                    putMyVar('yundiskLine','1');
+                }else{
+                    JYconfig['yundiskLine'] = 0;
+                    putMyVar('yundiskLine','0');
+                }
+                writeFile(cfgfile, JSON.stringify(JYconfig));
+                refreshPage(false);
+                return 'toast://'+JYconfig['alistLine']?'已开启云盘搜索线路':'已关闭云盘搜索线路';
+            }, JYconfig, cfgfile),
+        col_type: "text_2"
+    });
+    d.push({
         col_type: "line_blank"
     });
     d.push({
