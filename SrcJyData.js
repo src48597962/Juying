@@ -409,6 +409,17 @@ function JYerji(){
                 col_type: 'scroll_button'
             })
         }
+        if(JYconfig['alistLine']==1){
+            d.push({
+                title: '云盘搜索',
+                url: $("#noLoading#").lazyRule((name) => {
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+                    aliShareSearch(name);
+                    return "toast://搜索完成";
+                },MY_PARAMS.name),
+                col_type: 'scroll_button'
+            })
+        }
         //推送tvbox
         if(getItem('enabledpush', '') == '1' && datasource == "360"){
             let push = {
