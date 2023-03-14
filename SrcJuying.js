@@ -566,7 +566,14 @@ function sousuo2() {
     d.push({
         title: "🔍",
         url: $.toString((searchurl) => {
-                return input + searchurl;
+                if(input.indexOf('https://www.aliyundrive.com/s/')>-1){
+                    return $("hiker://empty##fypage#noRecordHistory##noHistory#").rule((input) => {
+                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+                        aliShareUrl(input);
+                    },input);
+                }else{
+                    return input + searchurl;
+                }
             },searchurl),
         desc: "搜你想看的...",
         col_type: "input",
@@ -574,39 +581,41 @@ function sousuo2() {
             titleVisible: true,
             id: "searchinput",
             onChange: $.toString((searchurl) => {
-                if(input.length==1){deleteItemByCls('suggest');}
-                if(input.length>1&&input!=getMyVar('sousuo$input', '')){
-                    putMyVar('sousuo$input', input);
-                    deleteItemByCls('suggest');
-                    var html = request("https://movie.douban.com/j/subject_suggest?q=" + input, {timeout: 3000});
-                    var list = JSON.parse(html)||[];
-                    let suggest = list.map((sug)=>{
-                        try {
-                            if(sug.img!=""){
-                                return {
-                                    title: sug.title,
-                                    img: sug.img + '@Referer=',
-                                    url: sug.title + searchurl,
-                                    desc: "年份：" + sug.year,
-                                    col_type: "movie_1_vertical_pic",
-                                    extra: {
-                                        cls: 'suggest'
+                if(input.indexOf('https://www.aliyundrive.com/s/')==-1){
+                    if(input.length==1){deleteItemByCls('suggest');}
+                    if(input.length>1&&input!=getMyVar('sousuo$input', '')){
+                        putMyVar('sousuo$input', input);
+                        deleteItemByCls('suggest');
+                        var html = request("https://movie.douban.com/j/subject_suggest?q=" + input, {timeout: 3000});
+                        var list = JSON.parse(html)||[];
+                        let suggest = list.map((sug)=>{
+                            try {
+                                if(sug.img!=""){
+                                    return {
+                                        title: sug.title,
+                                        img: sug.img + '@Referer=',
+                                        url: sug.title + searchurl,
+                                        desc: "年份：" + sug.year,
+                                        col_type: "movie_1_vertical_pic",
+                                        extra: {
+                                            cls: 'suggest'
+                                        }
+                                    }
+                                }else{
+                                    return {
+                                        title: "⚡" + sug.title,
+                                        url: sug.title + searchurl,
+                                        col_type: "text_1",
+                                        extra: {
+                                            cls: 'suggest'
+                                        }
                                     }
                                 }
-                            }else{
-                                return {
-                                    title: "⚡" + sug.title,
-                                    url: sug.title + searchurl,
-                                    col_type: "text_1",
-                                    extra: {
-                                        cls: 'suggest'
-                                    }
-                                }
-                            }
-                        } catch (e) {  }
-                    });
-                    if(suggest.length>0){
-                        addItemAfter('searchinput', suggest);
+                            } catch (e) {  }
+                        });
+                        if(suggest.length>0){
+                            addItemAfter('searchinput', suggest);
+                        }
                     }
                 }
             }, searchurl)
