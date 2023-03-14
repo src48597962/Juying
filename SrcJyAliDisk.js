@@ -71,12 +71,12 @@ function aliShare(share_id,share_pwd,folder_id) {
                         let alitoken = alistconfig.alitoken;
                         let play = getAliUrl(share_id,share_pwd,file_id,alitoken);
                         if (play.urls) {
-                            let subtitles;
+                            let subtitle;
                             if(sub_file_id){
-                                subtitles = getSubtitle(share_id,share_pwd,sub_file_id);
+                                subtitle = getSubtitle(share_id,share_pwd,sub_file_id);
                             }
-                            if(subtitles){
-                                play['subtitles'] = subtitles;
+                            if(subtitle){
+                                play['subtitle'] = subtitle;
                             }
                             return JSON.stringify(play);
                         }
