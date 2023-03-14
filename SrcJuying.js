@@ -631,7 +631,7 @@ function sousuo2() {
         col_type: 'scroll_button'
     });
     d.push({
-        title: "💡"+(getItem('searchmode')=="hiker"?"新窗口搜索":"软件层搜索"),
+        title: "💡"+(getItem('searchmode')=="hiker"?"软件层搜索":"新窗口搜索"),
         url: $('#noLoading#').lazyRule(() => {
             if(getItem('searchmode')=='hiker'){
                 clearItem('searchmode');
