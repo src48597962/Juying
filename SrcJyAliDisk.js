@@ -116,7 +116,7 @@ function aliShare(share_id, folder_id, share_pwd) {
 
 function aliShareSearch(input) {
     deleteItemByCls('loadlist');
-
+    showLoading('搜索中，请稍后...');
     let datalist = [{ name: '小纸条', parse: function (input) {let list = JSON.parse(request('https://gitcafe.net/tool/alipaper/', { body: "action=search&keyword=" + input, method: 'POST', timeout: 5000 }));
     let data = list.map(item => {
         return {
@@ -162,7 +162,8 @@ function aliShareSearch(input) {
                     },item.url),
                     col_type: "avatar",
                     extra: {
-                        cls: "loadlist"
+                        cls: "loadlist",
+                        dirname: input
                     }
                 };
             })
