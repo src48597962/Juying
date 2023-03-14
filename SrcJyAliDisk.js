@@ -99,7 +99,7 @@ function aliShareSearch(input) {
     let datalist = list.map(item => {
         return {
             id: '小纸条',
-            name: item.name,
+            title: item.title,
             key: item.key
         }
     })
@@ -107,7 +107,7 @@ function aliShareSearch(input) {
     let searchlist = [];
     datalist.forEach(item => {
         searchlist.push({
-            title: item.name + ' - ' + item.id,
+            title: item.title + ' - ' + item.id,
             url: $("hiker://empty##fypage#noRecordHistory##noHistory#").rule((input) => {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
                 aliShareUrl('https://www.aliyundrive.com/s/'+input);
