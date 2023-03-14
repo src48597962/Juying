@@ -111,21 +111,31 @@ function aliShare(share_id, folder_id, share_pwd) {
 
 function aliShareSearch(input) {
     deleteItemByCls('loadlist');
-
-    let datalist = [{ id: '小纸条', parse: function (input) {let list = JSON.parse(request('https://gitcafe.net/tool/alipaper/', { body: "action=search&keyword=" + input, method: 'POST', timeout: 5000 }));
+share_id, folder_id, share_pwd
+    let datalist = [{ name: '小纸条', parse: function (input) {let list = JSON.parse(request('https://gitcafe.net/tool/alipaper/', { body: "action=search&keyword=" + input, method: 'POST', timeout: 5000 }));
     let data = list.map(item => {
         return {
             id: '小纸条',
             title: item.title,
-            key: item.key
+            shareid: item.key
         }
     })
-    return data;}},{ id: '大纸条', parse: function (input) {let list = JSON.parse(request('https://gitcafe.net/tool/alipaper/', { body: "action=search&keyword=" + input, method: 'POST', timeout: 5000 }));
-    let data = list.map(item => {
-        return {
-            id: '大纸条',
-            title: item.title,
-            key: item.key
+    return data;}},{ name: 'UP云搜', parse: function (input) {
+        let list = JSON.parse(base64Decode(request('https://upapi.juapp9.com/search?keyword='+input+'&page=1&s_type=2', { timeout: 5000 }))).result.items;
+    
+    let data = [];
+    list.forEach(item => {
+        if(item.page_url.indexOf('https://www.aliyundrive.com')>-1){
+            let share_id = item.page_url.indexOf('/folder/') > -1 ? item.page_url.split('/folder/')[0] : item.page_url;
+            let folder_id = item.page_url.indexOf('/folder/') > -1 ? item.page_url.split('/folder/')[1] : "root";
+            if(!data.some(it => it.shareid==share_id && it.folderid==folder_id)){
+                data.push({
+                    id: 'UP云搜',
+                    title: item.title,
+                    shareid: share_id,
+                    folderid: folder_id
+                })
+            }
         }
     })
     return data;}}];
@@ -136,10 +146,10 @@ function aliShareSearch(input) {
             let searchlist = datalist.map(item => {
                 return {
                     title: item.title + ' - ' + item.id,
-                    url: $("hiker://empty##fypage#noRecordHistory##noHistory#").rule((input) => {
+                    url: $("hiker://empty##fypage#noRecordHistory##noHistory#").rule((shareid,folderid) => {
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
-                        aliShare(input, 'root', '');
-                    },item.key),
+                        aliShare(shareid,folderid||'root','');
+                    },item.shareid,item.folderid),
                     col_type: "text_1",
                     extra: {
                         cls: "loadlist"
