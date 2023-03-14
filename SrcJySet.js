@@ -20,7 +20,18 @@ function SRCSet() {
         title: getMyVar('guanli', 'jk')=="jk"?getTitle('接口管理', '#f13b66a'):'接口管理',
         url: `#noLoading#@lazyRule=.js:putMyVar('guanli','jk');refreshPage(false);'toast://已切换到接口管理';`,
         img: "https://lanmeiguojiang.com/tubiao/movie/98.svg",
-        col_type: "icon_small_3"
+        col_type: "icon_small_3",
+        extra: {
+            longClick: [{
+                title: "云盘接口",
+                js: $.toString(() => {
+                    return $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
+                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                        yundiskjiekou();
+                    })
+                })
+            }]
+        }
     });
     d.push({
         title: getMyVar('guanli', 'jk')=="jk"?'解析管理':getTitle('解析管理', '#f13b66a'),
@@ -2996,4 +3007,8 @@ function JYimport(input) {
     } catch (e) {
         return "toast://聚影√：无法识别的口令";
     }
+}
+
+function yundiskjiekou() {
+    
 }
