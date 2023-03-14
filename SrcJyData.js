@@ -396,7 +396,7 @@ function JYerji(){
         if(JYconfig['yundiskLine']==1){
             d.push({
                 title: '云盘搜索',
-                url: $("#noLoading#").lazyRule((name) => {
+                url: $().lazyRule((name) => {
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
                     aliShareSearch(name);
                     return "toast://搜索完成";
@@ -407,7 +407,7 @@ function JYerji(){
         if(JYconfig['alistLine']==1){
             d.push({
                 title: 'Alist搜索',
-                url: $("#noLoading#").lazyRule((name) => {
+                url: $().lazyRule((name) => {
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
                     if(datalist.length>0){
                         alistSearch2(name,1);
