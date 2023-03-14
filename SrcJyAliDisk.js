@@ -1,14 +1,14 @@
+let alistconfig = {};
 let alistfile = "hiker://files/rules/Src/Juying/Alist.json";
 try{
   eval("var alistData = " + fetch(alistfile));
-  let jknum = alistData.yunpans.length;
+  alistconfig = alistData.config;
 }catch(e){
   log(e.message);
   var alistData = {};
 }
-log(alistData);
+
 //let datalist = alistData.yunpans || [];
-let alistconfig = alistData.config || {};
 let audiovisual = alistconfig.contain?alistconfig.contain.replace(/\./,""):'mp4|avi|mkv|rmvb|flv|mov|ts|mp3|m4a|wma|flac';//影音文件
 let contain = new RegExp(audiovisual,"i");//设置可显示的影音文件后缀
 
