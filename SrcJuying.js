@@ -761,8 +761,8 @@ function sousuo() {
             sousuoms==1
         }
     }
-    log(sousuoms);
-    if(!fileExist('hiker://files/rules/Src/Juying/jiekou.json')||sousuoms==1){
+
+    if((!fileExist('hiker://files/rules/Src/Juying/jiekou.json')||sousuoms==1) && getItem('searchsource')!="接口"){
         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
         JYsousuo();
     }else{
