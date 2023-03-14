@@ -138,7 +138,7 @@ function aliShareSearch(input) {
     })
     return data;}},{ name: '易搜', parse: function (input) {
         let list = JSON.parse(request('https://yiso.fun/api/search?name='+input+'&pageNo=1&from=ali', { timeout: 5000 })).data.list;
-    
+    log(list);
     let data = list.map(item => {
         return {
             title: item.name.replace(/<[^>]+>/g,""),
@@ -182,7 +182,7 @@ function aliShareSearch(input) {
                 addItemBefore('listloading', searchlist);
             }
         }catch(e){
-          
+            log(obj.name + '>' + e.message);
         }
         return 1;
     }
