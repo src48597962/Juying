@@ -612,6 +612,39 @@ function sousuo2() {
             }, searchurl)
         }
     });
+    d.push({
+        title: "📑"+(getItem('searchrecordide')=='1'?"关闭":"开启")+"搜索记录",
+        url: $('#noLoading#').lazyRule(() => {
+            if(getItem('searchrecordide')=='1'){
+                clearItem('searchrecordide');
+            }else{
+                setItem('searchrecordide','1');
+            }
+            refreshPage(false);
+            return "toast://已切换"
+        }),
+        col_type: 'scroll_button'
+    });
+    d.push({
+        title: "🍭搜索模式："+(typeof(getSearchMode)!="undefined"&&getSearchMode()==1?"精准":"默认"),
+        url: $('#noLoading#').lazyRule(() => {
+            try{
+                if(getSearchMode()==1){
+                    setSearchMode(0);
+                }else{
+                    setSearchMode(1);
+                }
+                refreshPage(false);
+                return "toast://已切换";
+            }catch(e){
+                return "toast://软件版本过低，不支持此方法";
+            }
+        }),
+        col_type: 'scroll_button'
+    });
+    d.push({
+        col_type: "line"
+    });
     if(getItem('searchrecordide','0')=='1'){
         let recordlist = storage0.getItem('searchrecord') || [];
         if(recordlist.length>0){
