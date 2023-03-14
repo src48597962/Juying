@@ -38,56 +38,62 @@ function aliShare(share_id, folder_id, share_pwd) {
         return item.type == "file" && /srt|vtt|ass/.test(item.file_extension);
     })
     let d = [];
-    sharelist.forEach((item) => {
-        if (item.type == "folder") {
-            d.push({
-                title: item.name,
-                img: "hiker://files/cache/src/文件夹.svg",//#noRecordHistory##noHistory#
-                url: $("hiker://empty##").rule((share_id, folder_id, share_pwd) => {
-                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
-                    aliShare(share_id, folder_id, share_pwd);
-                }, item.share_id, item.file_id, share_pwd),
-                col_type: 'avatar',
-                extra: {
-                    dirname: item.name
-                }
-            })
-        } else if (item.type == "file") {
-            if (item.category == "video") {
-                let sub_file_id;
-                if (sublist.length == 1) {
-                    sub_file_id = sublist[0].file_id;
-                } else if (sublist.length > 1) {
-                    sublist.forEach(it => {
-                        if (it.name.substring(0, it.name.lastIndexOf(".")) == item.name.substring(0, item.name.lastIndexOf("."))) {
-                            sub_file_id = it.file_id;
-                        }
-                    })
-                }
-                d.push({
-                    title: item.name,
-                    img: item.thumbnail || item.category == "video" ? "hiker://files/cache/src/影片.svg" : item.category == "audio" ? "hiker://files/cache/src/音乐.svg" : item.category == "image" ? "hiker://files/cache/src/图片.png" : "https://img.alicdn.com/imgextra/i1/O1CN01mhaPJ21R0UC8s9oik_!!6000000002049-2-tps-80-80.png",
-                    url: $("hiker://empty##").lazyRule((share_id, file_id, sub_file_id, share_pwd) => {
-                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliPublic.js');
-                        let alitoken = alistconfig.alitoken;
-                        let play = getAliUrl(share_id, file_id, alitoken, share_pwd);
-                        if (play.urls) {
-                            let subtitle;
-                            if (sub_file_id) {
-                                subtitle = getSubtitle(share_id, sub_file_id, share_pwd);
-                            }
-                            if (subtitle) {
-                                play['subtitle'] = subtitle;
-                            }
-                            return JSON.stringify(play);
-                        }
-                    }, item.share_id, item.file_id, sub_file_id, share_pwd),
-                    col_type: 'avatar',
-                    extra: {
-                        id: item.file_id
+    let dirlist = sharelist.filter((item) => {
+        return item.type == "folder";
+    })
+    dirlist.forEach((item) => {
+        d.push({
+            title: item.name,
+            img: "hiker://files/cache/src/文件夹.svg",//#noRecordHistory##noHistory#
+            url: $("hiker://empty##").rule((share_id, folder_id, share_pwd) => {
+                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+                aliShare(share_id, folder_id, share_pwd);
+            }, item.share_id, item.file_id, share_pwd),
+            col_type: 'avatar',
+            extra: {
+                dirname: item.name
+            }
+        })
+    })
+    let filelist = sharelist.filter((item) => {
+        return item.type == "file";
+    })
+    filelist.sort(SortList);
+    filelist.forEach((item) => {
+        if (item.category == "video") {
+            let sub_file_id;
+            if (sublist.length == 1) {
+                sub_file_id = sublist[0].file_id;
+            } else if (sublist.length > 1) {
+                sublist.forEach(it => {
+                    if (it.name.substring(0, it.name.lastIndexOf(".")) == item.name.substring(0, item.name.lastIndexOf("."))) {
+                        sub_file_id = it.file_id;
                     }
                 })
             }
+            d.push({
+                title: item.name,
+                img: item.thumbnail || item.category == "video" ? "hiker://files/cache/src/影片.svg" : item.category == "audio" ? "hiker://files/cache/src/音乐.svg" : item.category == "image" ? "hiker://files/cache/src/图片.png" : "https://img.alicdn.com/imgextra/i1/O1CN01mhaPJ21R0UC8s9oik_!!6000000002049-2-tps-80-80.png",
+                url: $("hiker://empty##").lazyRule((share_id, file_id, sub_file_id, share_pwd) => {
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliPublic.js');
+                    let alitoken = alistconfig.alitoken;
+                    let play = getAliUrl(share_id, file_id, alitoken, share_pwd);
+                    if (play.urls) {
+                        let subtitle;
+                        if (sub_file_id) {
+                            subtitle = getSubtitle(share_id, sub_file_id, share_pwd);
+                        }
+                        if (subtitle) {
+                            play['subtitle'] = subtitle;
+                        }
+                        return JSON.stringify(play);
+                    }
+                }, item.share_id, item.file_id, sub_file_id, share_pwd),
+                col_type: 'avatar',
+                extra: {
+                    id: item.file_id
+                }
+            })
         }
     })
     setResult(d);
