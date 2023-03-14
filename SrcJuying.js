@@ -765,8 +765,10 @@ function sousuo() {
         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
         JYsousuo();
     }else{
+        log('进来了');
         if(MY_PAGE==1){
             let name = MY_URL.split('##')[1];
+            log(name);
             if(name == undefined){
                 setResult([{
                     title: "当前小程序版本过低，需升级新版本",
