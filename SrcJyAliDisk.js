@@ -47,7 +47,7 @@ function aliShare(share_id, folder_id, share_pwd) {
             d.push({
                 title: item.name,
                 img: "hiker://files/cache/src/文件夹.svg",//#noRecordHistory##noHistory#
-                url: $("hiker://empty##").rule((share_id, folder_id, share_pwd) => {
+                url: $("hiker://empty##https://www.aliyundrive.com/s/"+item.share_id+(item.file_id?"/folder/"+item.file_id:"")).rule((share_id, folder_id, share_pwd) => {
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
                     aliShare(share_id, folder_id, share_pwd);
                 }, item.share_id, item.file_id, share_pwd),
@@ -120,28 +120,29 @@ function aliShareSearch(input) {
     let datalist = [{ name: '小纸条', parse: function (input) {let list = JSON.parse(request('https://gitcafe.net/tool/alipaper/', { body: "action=search&keyword=" + input, method: 'POST', timeout: 5000 }));
     let data = list.map(item => {
         return {
-            id: '小纸条',
             title: item.title,
-            shareid: item.key
+            url: 'https://www.aliyundrive.com/s/' + item.key
         }
     })
     return data;}},{ name: 'UP云搜', parse: function (input) {
         let list = JSON.parse(base64Decode(request('https://upapi.juapp9.com/search?keyword='+input+'&page=1&s_type=2', { timeout: 5000 }))).result.items;
-    
+
     let data = [];
     list.forEach(item => {
         if(item.page_url.indexOf('https://www.aliyundrive.com')>-1){
-            let itit = item.page_url.replace('https://www.aliyundrive.com/s/', '');
-            let share_id = itit.indexOf('/folder/') > -1 ? itit.split('/folder/')[0] : itit;
-            let folder_id = itit.indexOf('/folder/') > -1 ? itit.split('/folder/')[1] : "root";
-            if(!data.some(it => it.shareid==share_id && it.folderid==folder_id)){
-                data.push({
-                    id: 'UP云搜',
-                    title: item.title,
-                    shareid: share_id,
-                    folderid: folder_id
-                })
-            }
+            data.push({
+                title: item.title,
+                url: item.page_url
+            })
+        }
+    })
+    return data;}},{ name: '易搜', parse: function (input) {
+        let list = JSON.parse(request('https://yiso.fun/api/search?name='+input+'&pageNo=1&from=ali', { timeout: 5000 })).data.list;
+    
+    let data = list.map(item => {
+        return {
+            title: item.name.replace(/<[^>]+>/g,""),
+            url: item.url
         }
     })
     return data;}}];
@@ -151,12 +152,12 @@ function aliShareSearch(input) {
             let datalist = obj.parse(input) || [];
             let searchlist = datalist.map(item => {
                 return {
-                    title: item.title + ' - ' + item.id,
-                    img: "hiker://files/cache/src/影片.svg",
-                    url: $("hiker://empty##fypage#noRecordHistory##noHistory#").rule((shareid,folderid) => {
+                    title: item.title,
+                    img: "hiker://files/cache/src/文件夹.svg",
+                    url: $("hiker://empty##"+item.url).rule((input) => {
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
-                        aliShare(shareid,folderid||'root','');
-                    },item.shareid,item.folderid),
+                        aliShareUrl(input);
+                    },item.url),
                     col_type: "avatar",
                     extra: {
                         cls: "loadlist"
@@ -178,8 +179,8 @@ function aliShareSearch(input) {
                         cls: "loadlist"
                     }
                 });
+                addItemBefore('listloading', searchlist);
             }
-            addItemBefore('listloading', searchlist);
         }catch(e){
           
         }
@@ -189,7 +190,7 @@ function aliShareSearch(input) {
         return {
           func: task,
           param: item,
-          id: item.id
+          id: item.name
         }
     });
     if(list.length>0){
