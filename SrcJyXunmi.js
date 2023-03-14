@@ -1334,7 +1334,7 @@ function xunmierji(type,ua) {
     if(getMyVar('yundiskLine','0')==1){
         d.push({
             title: '云盘搜索',
-            url: $().lazyRule((name) => {
+            url: $("#noLoading#").lazyRule((name) => {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
                 aliShareSearch(name);
                 return "toast://搜索完成";
@@ -1345,7 +1345,7 @@ function xunmierji(type,ua) {
     if(getMyVar('alistLine','0')==1){
         d.push({
             title: 'Alist搜索',
-            url: $().lazyRule((name) => {
+            url: $("#noLoading#").lazyRule((name) => {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
                 if(datalist.length>0){
                     alistSearch2(name,1);
