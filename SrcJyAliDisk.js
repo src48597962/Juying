@@ -204,15 +204,15 @@ function aliSharePlayUrl(share_id,share_pwd,file_id,alitoken){
 }
 
 
-function getAliUrl(share_id, file_id, alitoken) {
+function getAliUrl(share_id, share_pwd, file_id, alitoken) {
   try {
     let urls = [];
     let names = [];
     let heads = [];
-    let u = startProxyServer($.toString((aliSharePlayUrl,file_id,share_id,alitoken) => {
+    let u = startProxyServer($.toString((aliSharePlayUrl,share_id,share_pwd,file_id,alitoken) => {
       function geturl(fileid,line){
         //预加载时会变file_id,所以ts过期更新时还取原来的id
-        let playUrlList = aliSharePlayUrl(share_id, fileid, alitoken) || [];
+        let playUrlList = aliSharePlayUrl(share_id,share_pwd,fileid,alitoken) || [];
         let aliurl;
         playUrlList.forEach((item) => {
           if(item.template_id == line){
@@ -275,13 +275,25 @@ function getAliUrl(share_id, file_id, alitoken) {
           });
       }else{
         //log('首次更新')
-        let line  = url.split('|')[1];
-        let ff = geturl(file_id,line);
+        //let line  = url.split('|')[1];
+        let aliurl = JSON.parse(request(url.split('|')[0], { headers: { 'Referer': 'https://www.aliyundrive.com/' }, onlyHeaders: true, redirect: false, timeout: 3000 })).headers.location[0];
+        //let ff = geturl(file_id,line);
+        //return ff;
+        let home = aliurl.split('media.m3u8')[0];
+        let f = fetch(aliurl, { headers: { 'Referer': 'https://www.aliyundrive.com/' }, timeout: 3000}).split("\n");
+        let ff = f.map(it => {
+            if (it.startsWith("media-")) {
+                return "/proxy?url=" + base64Encode(home+it);
+            }
+            return it;
+        }).join("\n");
+        //log('ufid-'+fileid);
+        writeFile('hiker://files/cache/_fileSelect_'+fileid+'.m3u8',ff);
         return ff;
       }
-    },aliSharePlayUrl,file_id,share_id,alitoken));
+    },aliSharePlayUrl,share_id,share_pwd,file_id,alitoken));
 
-    let playUrlList = aliSharePlayUrl(share_id, file_id, alitoken) || [];
+    let playUrlList = aliSharePlayUrl(share_id, share_pwd, file_id, alitoken) || [];
     if(playUrlList.length>0){
       playUrlList.forEach((item) => {
         urls.push(u + "?url=" + base64Encode(item.url+"|"+item.template_id) + "#.m3u8#pre#");
