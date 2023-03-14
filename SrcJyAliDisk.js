@@ -1,16 +1,3 @@
-let alistconfig = {};
-let alistfile = "hiker://files/rules/Src/Juying/Alist.json";
-try{
-  eval("var alistData = " + fetch(alistfile));
-  alistconfig = alistData.config;
-}catch(e){
-  log(e.message);
-  var alistData = {};
-}
-
-//let datalist = alistData.yunpans || [];
-let audiovisual = alistconfig.contain?alistconfig.contain.replace(/\./,""):'mp4|avi|mkv|rmvb|flv|mov|ts|mp3|m4a|wma|flac';//影音文件
-let contain = new RegExp(audiovisual,"i");//设置可显示的影音文件后缀
 
 function aliShareUrl(input) {
     let li = input.split('\n');
@@ -77,9 +64,8 @@ function aliShare(share_id,share_pwd,folder_id) {
                     title: item.name,
                     img: item.thumbnail || item.category=="video"?"hiker://files/cache/src/影片.svg":item.category=="audio"?"hiker://files/cache/src/音乐.svg":item.category=="image"?"hiker://files/cache/src/图片.png":"https://img.alicdn.com/imgextra/i1/O1CN01mhaPJ21R0UC8s9oik_!!6000000002049-2-tps-80-80.png",
                     url: $("hiker://empty##").lazyRule((share_id,share_pwd,file_id,sub_file_id) => {
-                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
                         let alitoken = alistconfig.alitoken;
-                        log(alitoken);
                         let play = getAliUrl(share_id,share_pwd,file_id,alitoken);
                         if (play.urls) {
                             let subtitles;
