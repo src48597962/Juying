@@ -216,7 +216,7 @@ let yijimenu = [
     }
 ]
 function JYsousuo(){
-    let datasource = getItem('JYdatasource', 'sougou');
+    let datasource = getItem('searchsource',getItem('JYdatasource', 'sougou'));
     var d = [];
     if(!/^hiker/.test(MY_URL)){
         var html = getResCode();
