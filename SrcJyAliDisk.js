@@ -126,8 +126,9 @@ function aliShareSearch(input) {
     let data = [];
     list.forEach(item => {
         if(item.page_url.indexOf('https://www.aliyundrive.com')>-1){
-            let share_id = item.page_url.indexOf('/folder/') > -1 ? item.page_url.split('/folder/')[0] : item.page_url;
-            let folder_id = item.page_url.indexOf('/folder/') > -1 ? item.page_url.split('/folder/')[1] : "root";
+            let itit = item.page_url.replace('https://www.aliyundrive.com/s/', '');
+            let share_id = itit.indexOf('/folder/') > -1 ? itit.split('/folder/')[0] : itit;
+            let folder_id = itit.indexOf('/folder/') > -1 ? itit.split('/folder/')[1] : "root";
             if(!data.some(it => it.shareid==share_id && it.folderid==folder_id)){
                 data.push({
                     id: 'UP云搜',
