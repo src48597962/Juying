@@ -13,7 +13,7 @@ let music = new RegExp("mp3|m4a|wma|flac","i");//进入音乐播放器
 let image = new RegExp("jpg|png|gif|bmp|ico|svg","i");//进入图片查看
 const transcoding = {UHD: "4K 超清",QHD: "2K 超清",FHD: "1080 全高清",HD: "720 高清",SD: "540 标清",LD: "360 流畅"};
 
-function aliSharePlayUrl(share_id,share_pwd,file_id,alitoken){
+function aliSharePlayUrl(share_id,file_id,alitoken,share_pwd){
   try{
     function getNowTime() {
       const yy = new Date().getFullYear()
@@ -92,15 +92,15 @@ function aliSharePlayUrl(share_id,share_pwd,file_id,alitoken){
   }
 }
 
-function getAliUrl(share_id, share_pwd, file_id, alitoken) {
+function getAliUrl(share_id, file_id, alitoken,share_pwd) {
   try {
     let urls = [];
     let names = [];
     let heads = [];
-    let u = startProxyServer($.toString((aliSharePlayUrl,share_id,share_pwd,file_id,alitoken) => {
+    let u = startProxyServer($.toString((aliSharePlayUrl,share_id,file_id,alitoken,share_pwd) => {
       function geturl(fileid,line){
         //预加载时会变file_id,所以ts过期更新时还取原来的id
-        let playUrlList = aliSharePlayUrl(share_id,share_pwd,fileid,alitoken) || [];
+        let playUrlList = aliSharePlayUrl(share_id,fileid,alitoken,share_pwd) || [];
         let aliurl;
         playUrlList.forEach((item) => {
           if(item.template_id == line){
@@ -167,9 +167,9 @@ function getAliUrl(share_id, share_pwd, file_id, alitoken) {
         let ff = geturl(file_id,line);
         return ff;
       }
-    },aliSharePlayUrl,share_id,share_pwd,file_id,alitoken));
+    },aliSharePlayUrl,share_id,file_id,alitoken,share_pwd));
 
-    let playUrlList = aliSharePlayUrl(share_id, share_pwd, file_id, alitoken) || [];
+    let playUrlList = aliSharePlayUrl(share_id,file_id,alitoken,share_pwd) || [];
     if(playUrlList.length>0){
       playUrlList.forEach((item) => {
         urls.push(u + "?url=" + base64Encode(item.url+"|"+item.template_id) + "#.m3u8#pre#");
@@ -191,7 +191,7 @@ function getAliUrl(share_id, share_pwd, file_id, alitoken) {
   }
 }
 
-function getSubtitle(share_id,share_pwd,sub_file_id){
+function getSubtitle(share_id,sub_file_id,share_pwd){
     try{
         share_pwd = share_pwd&&share_pwd.length==4?share_pwd:"";
         let sharetoken = JSON.parse(request('https://api.aliyundrive.com/v2/share_link/get_share_token', { body: { "share_pwd": share_pwd, "share_id": share_id }, method: 'POST', timeout: 3000 })).share_token;
