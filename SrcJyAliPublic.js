@@ -225,7 +225,7 @@ function getSubtitle(share_id,share_pwd,sub_file_id){
         let substr = fetch(downurl, {headers:{"referer": "https://www.aliyundrive.com/"},timeout:3000});
         if(substr){
             writeFile("hiker://files/cache/src/subtitles.srt",substr);
-            return "hiker://files/cache/src/subtitles.srt";//getPath("hiker://files/cache/src/subtitles.srt");
+            return getPath("hiker://files/cache/src/subtitles.srt");
         }
     }catch(e){
         log('获取字幕失败>'+e.message);
