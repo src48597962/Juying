@@ -59,55 +59,14 @@ let yijimenu = [
         col_type: 'icon_5',
         extra: {
             longClick: [{
-                title: "阿里链接",
+                title: "Ali云盘链接",
                 js: $.toString(() => {
                     return $("","阿里共享链接").input(() => {
                         return $("hiker://empty##fypage#noRecordHistory##noHistory#").rule((input) => {
-                            //input = input.replace('https://www.aliyundrive.com/s/','');
-                            //let share_id = input.indexOf('/folder/')>-1?input.split('/folder/')[0]:input;
-                            //let folder_id = input.indexOf('/folder/')>-1?input.split('/folder/')[1]:"root";
                             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
-                            //aliShare(share_id,'',folder_id);
                             aliShareUrl(input);
                         },input);
                     }) 
-                })
-            },{
-                title: "🔍切换为"+(getItem('searchmode')=="hiker"?"聚合搜索":"视界搜索"),
-                js: $.toString(() => {
-                    if(getItem('searchmode')=="hiker"){
-                        clearItem('searchmode');
-                    }else{
-                        setItem('searchmode','hiker');
-                    }
-                    refreshPage(false);
-                    return "toast://已切换";
-                })
-            },{
-                title: "📑"+(getItem('searchrecordide')=='1'?"关闭":"开启")+"搜索记录",
-                js: $.toString(() => {
-                    if(getItem('searchrecordide')=='1'){
-                        clearItem('searchrecordide');
-                    }else{
-                        setItem('searchrecordide','1');
-                    }
-                    refreshPage(false);
-                    return "toast://已切换"
-                })
-            },{
-                title: "🍭搜索模式："+(typeof(getSearchMode)!="undefined"&&getSearchMode()==1?"精准":"默认"),
-                js: $.toString(() => {
-                    try{
-                        if(getSearchMode()==1){
-                            setSearchMode(0);
-                        }else{
-                            setSearchMode(1);
-                        }
-                        refreshPage(false);
-                        return "toast://已切换";
-                    }catch(e){
-                        return "toast://软件版本过低，不支持此方法";
-                    }
                 })
             }]
         }
