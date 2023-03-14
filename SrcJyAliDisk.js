@@ -73,6 +73,7 @@ function aliShare(share_id, folder_id, share_pwd) {
                         }
                     })
                 }
+                let filesize = item.size/1024/1024;
                 d.push({
                     title: item.name,
                     img: item.thumbnail || item.category == "video" ? "hiker://files/cache/src/影片.svg" : item.category == "audio" ? "hiker://files/cache/src/音乐.svg" : item.category == "image" ? "hiker://files/cache/src/图片.png" : "https://img.alicdn.com/imgextra/i1/O1CN01mhaPJ21R0UC8s9oik_!!6000000002049-2-tps-80-80.png",
@@ -91,6 +92,7 @@ function aliShare(share_id, folder_id, share_pwd) {
                             return JSON.stringify(play);
                         }
                     }, item.share_id, item.file_id, sub_file_id, share_pwd),
+                    desc: filesize < 1024 ? filesize.toFixed(2) + 'MB' : (filesize/1024).toFixed(2) + 'GB',
                     col_type: 'avatar',
                     extra: {
                         id: item.file_id
