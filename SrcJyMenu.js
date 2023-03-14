@@ -168,22 +168,6 @@ function lookset(){
         col_type: "text_2"
     });
     d.push({
-        title: (JYconfig['alistLine']==1?getide(1):getide(0))+'Alist搜索',
-        url: $('#noLoading#').lazyRule((JYconfig,cfgfile) => {
-                if(JYconfig['alistLine'] != 1){
-                    JYconfig['alistLine'] = 1;
-                    putMyVar('alistLine','1');
-                }else{
-                    JYconfig['alistLine'] = 0;
-                    putMyVar('alistLine','0');
-                }
-                writeFile(cfgfile, JSON.stringify(JYconfig));
-                refreshPage(false);
-                return 'toast://'+JYconfig['alistLine']?'已开启Alist搜索线路':'已关闭Alist搜索线路';
-            }, JYconfig, cfgfile),
-        col_type: "text_2"
-    });
-    d.push({
         title: (JYconfig['yundiskLine']==1?getide(1):getide(0))+'云盘搜索',
         url: $('#noLoading#').lazyRule((JYconfig,cfgfile) => {
                 if(JYconfig['yundiskLine'] != 1){
@@ -196,6 +180,22 @@ function lookset(){
                 writeFile(cfgfile, JSON.stringify(JYconfig));
                 refreshPage(false);
                 return 'toast://'+JYconfig['alistLine']?'已开启云盘搜索线路':'已关闭云盘搜索线路';
+            }, JYconfig, cfgfile),
+        col_type: "text_2"
+    });
+    d.push({
+        title: (JYconfig['alistLine']==1?getide(1):getide(0))+'Alist搜索',
+        url: $('#noLoading#').lazyRule((JYconfig,cfgfile) => {
+                if(JYconfig['alistLine'] != 1){
+                    JYconfig['alistLine'] = 1;
+                    putMyVar('alistLine','1');
+                }else{
+                    JYconfig['alistLine'] = 0;
+                    putMyVar('alistLine','0');
+                }
+                writeFile(cfgfile, JSON.stringify(JYconfig));
+                refreshPage(false);
+                return 'toast://'+JYconfig['alistLine']?'已开启Alist搜索线路':'已关闭Alist搜索线路';
             }, JYconfig, cfgfile),
         col_type: "text_2"
     });
