@@ -98,6 +98,11 @@ function aliShare(share_id, folder_id, share_pwd) {
                 })
             }
         })
+        d.push({
+          title: "““””<small><font color=#f20c00>已开启文件过滤，仅显示视频文件</font></small>",
+          url: "hiker://empty",
+          col_type: "text_center_1"
+        })
     }catch(e){
         d.push({
             title: '来晚啦，该分享已失效',
@@ -147,16 +152,33 @@ function aliShareSearch(input) {
             let searchlist = datalist.map(item => {
                 return {
                     title: item.title + ' - ' + item.id,
+                    img: "hiker://files/cache/src/影片.svg",
                     url: $("hiker://empty##fypage#noRecordHistory##noHistory#").rule((shareid,folderid) => {
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
                         aliShare(shareid,folderid||'root','');
                     },item.shareid,item.folderid),
-                    col_type: "text_1",
+                    col_type: "avatar",
                     extra: {
                         cls: "loadlist"
                     }
                 };
             })
+            if(searchlist.length>0){
+                searchlist.unshift({
+                    title: obj.name + " 找到" + searchlist.length + "条 “" + input + "” 相关",
+                    url: "hiker://empty",
+                    col_type: "text_center_1",
+                    extra: {
+                        cls: "loadlist"
+                    }
+                });
+                searchlist.unshift({
+                    col_type: "line_blank",
+                    extra: {
+                        cls: "loadlist"
+                    }
+                });
+            }
             addItemBefore('listloading', searchlist);
         }catch(e){
           
