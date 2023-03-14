@@ -110,31 +110,62 @@ function aliShare(share_id, folder_id, share_pwd) {
 }
 
 function aliShareSearch(input) {
-    let list = JSON.parse(request('https://gitcafe.net/tool/alipaper/', { body: "action=search&keyword=" + input, method: 'POST', timeout: 5000 }));
-    let datalist = list.map(item => {
+    deleteItemByCls('loadlist');
+
+    let datalist = [{ id: '小纸条', parse: function (input) {let list = JSON.parse(request('https://gitcafe.net/tool/alipaper/', { body: "action=search&keyword=" + input, method: 'POST', timeout: 5000 }));
+    let data = list.map(item => {
         return {
             id: '小纸条',
             title: item.title,
             key: item.key
         }
     })
-    deleteItemByCls('loadlist');
-    let searchlist = [];
-    datalist.forEach(item => {
-        searchlist.push({
-            title: item.title + ' - ' + item.id,
-            url: $("hiker://empty##fypage#noRecordHistory##noHistory#").rule((input) => {
-                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
-                //aliShareUrl('https://www.aliyundrive.com/s/'+input);
-                aliShare(input, 'root', '');
-            },item.key),
-            col_type: "text_1",
-            extra: {
-                cls: "loadlist"
+    return data;}},{ id: '大纸条', parse: function (input) {let list = JSON.parse(request('https://gitcafe.net/tool/alipaper/', { body: "action=search&keyword=" + input, method: 'POST', timeout: 5000 }));
+    let data = list.map(item => {
+        return {
+            id: '大纸条',
+            title: item.title,
+            key: item.key
+        }
+    })
+    return data;}}];
+    
+    let task = function(obj) {
+        try{
+            let datalist = obj.parse(input) || [];
+            let searchlist = datalist.map(item => {
+                return {
+                    title: item.title + ' - ' + item.id,
+                    url: $("hiker://empty##fypage#noRecordHistory##noHistory#").rule((input) => {
+                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+                        aliShare(input, 'root', '');
+                    },item.key),
+                    col_type: "text_1",
+                    extra: {
+                        cls: "loadlist"
+                    }
+                };
+            })
+            addItemBefore('listloading', searchlist);
+        }catch(e){
+          
+        }
+        return 1;
+    }
+    let list = datalist.map((item)=>{
+        return {
+          func: task,
+          param: item,
+          id: item.id
+        }
+    });
+    if(list.length>0){
+        be(list, {
+            func: function(obj, id, error, taskResult) {
+            },
+            param: {
             }
         });
-    })
+    }
     
-    addItemBefore('listloading', searchlist);
-
 }
