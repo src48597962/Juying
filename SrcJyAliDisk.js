@@ -1,6 +1,6 @@
 let alistfile = "hiker://files/rules/Src/Juying/Alist.json";
 try{
-  var alistData = JSON.parse(fetch(alistfile));
+  eval("var alistData = " + fetch(alistfile));
   let jknum = alistData.yunpans.length;
 }catch(e){
   var alistData = {};
@@ -202,7 +202,6 @@ function aliSharePlayUrl(share_id,share_pwd,file_id,alitoken){
     return "";
   }
 }
-
 
 function getAliUrl(share_id, share_pwd, file_id, alitoken) {
   try {
