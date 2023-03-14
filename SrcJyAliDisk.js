@@ -95,6 +95,7 @@ function aliShare(share_id, folder_id, share_pwd) {
 
 function aliShareSearch(input) {
     let list = JSON.parse(request('https://gitcafe.net/tool/alipaper/', { body: "action=search&keyword=" + input, method: 'POST', timeout: 5000 }));
+    log(list);
     let datalist = list.map(item => {
         return {
             id: '小纸条',
