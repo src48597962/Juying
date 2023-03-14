@@ -99,7 +99,12 @@ function aliShare(share_id, folder_id, share_pwd) {
             }
         })
     }catch(e){
-        toast('获取文件列表失败,下拉刷新重试.');
+        d.push({
+            title: '来晚啦，该分享已失效',
+            url: 'hiker://empty##',
+            col_type: "text_center_1"
+        })
+        toast('来晚啦，该分享已失效.');
     }
     setResult(d);
 }
@@ -120,9 +125,10 @@ function aliShareSearch(input) {
             title: item.title + ' - ' + item.id,
             url: $("hiker://empty##fypage#noRecordHistory##noHistory#").rule((input) => {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
-                aliShareUrl('https://www.aliyundrive.com/s/'+input);
+                //aliShareUrl('https://www.aliyundrive.com/s/'+input);
+                aliShare(input, 'root', '');
             },item.key),
-            col_type: "text_center_1",
+            col_type: "text_1",
             extra: {
                 cls: "loadlist"
             }
