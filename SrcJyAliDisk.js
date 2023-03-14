@@ -33,7 +33,7 @@ function aliShare(share_id, folder_id, share_pwd) {
     let sharelist = [];
     try{
         let sharetoken = JSON.parse(request('https://api.aliyundrive.com/v2/share_link/get_share_token', { headers: headers, body: { "share_pwd": share_pwd, "share_id": share_id }, method: 'POST', timeout: 3000 })).share_token;
-        let postdata = { "share_id": share_id, "parent_file_id": folder_id || "root", "limit": 20, "image_thumbnail_process": "image/resize,w_256/format,jpeg", "image_url_process": "image/resize,w_1920/format,jpeg/interlace,1", "video_thumbnail_process": "video/snapshot,t_1000,f_jpg,ar_auto,w_256", "order_by": "name", "order_direction": "DESC" };
+        let postdata = { "share_id": share_id, "parent_file_id": folder_id || "root", "limit": 500, "image_thumbnail_process": "image/resize,w_256/format,jpeg", "image_url_process": "image/resize,w_1920/format,jpeg/interlace,1", "video_thumbnail_process": "video/snapshot,t_1000,f_jpg,ar_auto,w_256", "order_by": "name", "order_direction": "DESC" };
         headers['x-share-token'] = sharetoken;
         sharelist = JSON.parse(request('https://api.aliyundrive.com/adrive/v2/file/list_by_share', { headers: headers, body: postdata, method: 'POST', timeout: 3000 })).items;
     }catch(e){
