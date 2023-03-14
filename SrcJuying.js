@@ -614,7 +614,7 @@ function sousuo2() {
     });
     d.push({
         title: getItem('searchsource')=="360"?"源：360":getItem('searchsource')=="sougou"?"源：搜狗":"源：接口",
-        url: $(["接口","搜狗","360"],1,"选择搜索数据源").select(()=>{
+        url: $(["接口","sougou","360"],1,"选择搜索数据源").select(()=>{
             setItem('searchsource',input);
             refreshPage(false);
             return "toast://已切换"
