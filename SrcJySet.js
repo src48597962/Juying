@@ -3036,11 +3036,11 @@ function yundiskjiekou() {
                 col_type: 'input',
                 desc: "建议非懂勿动",
                 extra: {
-                    defaultValue: storage0.getMyVar('yundiskapi')?JSON.parse(JSON.stringify(storage0.getMyVar('yundiskapi'), null, "\t")):"",
+                    defaultValue: storage0.getMyVar('yundiskapi')?storage0.getMyVar('yundiskapi'):"",
                     titleVisible: false,
                     type: "textarea",
                     highlight: true,
-                    height: 10,
+                    height: 12,
                     onChange: 'storage0.putMyVar("yundiskapi",input)'
                 }
             });
@@ -3134,6 +3134,7 @@ function yundiskjiekou() {
     });
 
     datalist.forEach(item => {
+        log(item);
         d.push({
             title: item.name,
             url: $(["复制地址", "分享接口"], 1).select(() => {
