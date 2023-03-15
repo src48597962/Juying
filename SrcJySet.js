@@ -3036,6 +3036,7 @@ function yundiskjiekou() {
                 col_type: 'input',
                 desc: "建议非懂勿动",
                 extra: {
+                    defaultValue: storage0.getMyVar('yundiskapi')?JSON.stringify(storage0.getMyVar('yundiskapi'), null, "\t"):"",
                     titleVisible: false,
                     type: "textarea",
                     highlight: true,
