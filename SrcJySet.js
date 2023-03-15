@@ -3041,7 +3041,7 @@ function yundiskjiekou() {
                     type: "textarea",
                     highlight: true,
                     height: 12,
-                    onChange: `putMyVar("yundiskapi",JSON.stringify(JSON.parse(input))`
+                    onChange: `log(input)`//putMyVar("yundiskapi",JSON.stringify(JSON.parse(input))
                 }
             });
             d.push({
