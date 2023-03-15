@@ -3036,21 +3036,21 @@ function yundiskjiekou() {
                 col_type: 'input',
                 desc: "建议非懂勿动",
                 extra: {
-                    defaultValue: storage0.getMyVar('yundiskapi')?storage0.getMyVar('yundiskapi'):"",//JSON.stringify(JSON.parse(getMyVar('yundiskapi')), null, "\t"):"",
+                    defaultValue: getMyVar('yundiskapi')?JSON.stringify(JSON.parse(getMyVar('yundiskapi')), null, "\t"):"",
                     titleVisible: false,
                     type: "textarea",
                     highlight: true,
                     height: 12,
-                    onChange: '/{|}/.test(input)?storage0.putMyVar("yundiskapi",input):""'//,JSON.stringify(JSON.parse(input))
+                    onChange: '/{|}/.test(input)?putMyVar("yundiskapi",JSON.stringify(JSON.parse(input)):""'
                 }
             });
             d.push({
                 title:'保存',
                 col_type:'text_center_1',
                 url:$("确定保存新接口").confirm((filepath)=>{
-                    if(storage0.getMyVar('yundiskapi')){
+                    if(getMyVar('yundiskapi')){
                         try{
-                            let newapi = JSON.parse(storage0.getMyVar('yundiskapi'));//JSON.parse(getMyVar('yundiskapi'));
+                            let newapi = JSON.parse(getMyVar('yundiskapi'));
                             let datafile = fetch(filepath);
                             if(datafile != ""){
                                 try{
