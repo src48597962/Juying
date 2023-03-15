@@ -3010,5 +3010,94 @@ function JYimport(input) {
 }
 
 function yundiskjiekou() {
-    
+    setPageTitle('☁️云盘接口');
+    let filepath = "hiker://files/rules/Src/Juying/yundisk.json";
+    let datafile = fetch(filepath);
+    if(datafile != ""){
+        try{
+            eval("var datalist=" + datafile+ ";");
+        }catch(e){
+            var datalist = [];
+        }
+    }else{
+        var datalist = [];
+    }
+
+    var d = [];
+    d.push({
+        title: '增加',
+        url: '',
+        img: "https://lanmeiguojiang.com/tubiao/more/25.png",
+        col_type: "icon_small_3"
+    });
+    d.push({
+        title: '导入',
+        url: $("", "alist分享口令的云剪贴板").input((alistfile) => {
+            try {
+                let inputname = input.split('￥')[0];
+                if (inputname == "聚影Alist") {
+                    showLoading("正在导入，请稍后...");
+                    let parseurl = aesDecode('Juying', input.split('￥')[1]);
+                    let content = parsePaste(parseurl);
+                    let datalist = JSON.parse(aesDecode('Juying', content));
+                    try {
+                        eval("var alistData=" + fetch(alistfile));
+                        let jknum = alistData.drives.length;
+                    } catch (e) {
+                        hideLoading();
+                        var alistData = { drives: [] };
+                    }
+                    let newdatalist = alistData.drives;
+                    let num = 0;
+                    for (let i = 0; i < datalist.length; i++) {
+                        if (!newdatalist.some(item => item.server == datalist[i].server)) {
+                            newdatalist.push(datalist[i]);
+                            num = num + 1;
+                        }
+                    }
+                    alistData.drives = newdatalist;
+                    writeFile(alistfile, JSON.stringify(alistData));
+                    hideLoading();
+                    refreshPage(false);
+                    return "toast://合计" + datalist.length + "个，导入" + num + "个";
+                } else {
+                    return "toast://聚影√：非Alist口令";
+                }
+            } catch (e) {
+                return "toast://聚影√：口令有误";
+            }
+        }, filepath),
+        img: "https://lanmeiguojiang.com/tubiao/more/43.png",
+        col_type: "icon_small_3"
+    });
+    d.push({
+        title: '分享',
+        url: datalist.length == 0 ? "toast://云盘接口为0，无法分享" : $().lazyRule((datalist) => {
+            let pasteurl = sharePaste(aesEncode('Juying', JSON.stringify(datalist)));
+            if (pasteurl) {
+                let code = '聚影Alist￥' + aesEncode('Juying', pasteurl) + '￥共' + datalist.length + '条';
+                copy(code);
+                return "toast://(全部)Alist分享口令已生成";
+            } else {
+                return "toast://分享失败，剪粘板或网络异常";
+            }
+        }, datalist),
+        img: "https://lanmeiguojiang.com/tubiao/more/3.png",
+        col_type: "icon_small_3"
+    });
+    d.push({
+        col_type: "line"
+    });
+
+    datalist.forEach(item => {
+        d.push({
+            title: item.name,
+            url: $(["复制地址", "分享接口"], 1).select(() => {
+                
+            }),
+            col_type: "text_1"
+        });
+    })
+
+    setResult(d);
 }
