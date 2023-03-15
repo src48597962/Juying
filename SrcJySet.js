@@ -23,7 +23,7 @@ function SRCSet() {
         col_type: "icon_small_3",
         extra: {
             longClick: [{
-                title: "云盘接口",
+                title: "☁️云盘接口",
                 js: $.toString(() => {
                     return $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
@@ -3010,7 +3010,7 @@ function JYimport(input) {
 }
 
 function yundiskjiekou() {
-    setPageTitle('☁️云盘接口');
+    setPageTitle('☁️云盘接口 | ♥管理');
     let filepath = "hiker://files/rules/Src/Juying/yundisk.json";
     let datafile = fetch(filepath);
     if(datafile != ""){
@@ -3026,7 +3026,46 @@ function yundiskjiekou() {
     var d = [];
     d.push({
         title: '增加',
-        url: '',
+        url: $('hiker://empty#noRecordHistory##noHistory#').rule((filepath) => {
+            addListener("onClose", $.toString(() => {
+                clearMyVar('yundiskapi');
+            }));
+            let d = [];
+            d.push({
+                title:'添加',
+                col_type: 'input',
+                desc: "建议非懂勿动",
+                extra: {
+                    titleVisible: false,
+                    type: "textarea",
+                    height: 10,
+                    onChange: 'storage0.putMyVar("yundiskapi",input)'
+                }
+            });
+            d.push({
+                title:'保存',
+                col_type:'text_center_1',
+                url:$("确定保存新接口").confirm((filepath)=>{
+                    let newapi = storage0.getMyVar("yundiskapi");
+                    if(newapi){
+                        let datafile = fetch(filepath);
+                        if(datafile != ""){
+                            try{
+                                eval("var datalist=" + datafile+ ";");
+                            }catch(e){
+                                var datalist = [];
+                            }
+                        }else{
+                            var datalist = [];
+                        }
+                        datalist.push(newapi);
+                        return "toast://已保存";
+                    }else{
+                        return "toast://为空不能保存";
+                    }
+                },filepath)
+            });
+        },filepath),
         img: "https://lanmeiguojiang.com/tubiao/more/25.png",
         col_type: "icon_small_3"
     });
