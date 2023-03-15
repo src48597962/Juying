@@ -3036,34 +3036,38 @@ function yundiskjiekou() {
                 col_type: 'input',
                 desc: "建议非懂勿动",
                 extra: {
-                    defaultValue: storage0.getMyVar('yundiskapi')?storage0.getMyVar('yundiskapi'):"",
+                    defaultValue: getMyVar('yundiskapi')?JSON.stringify(JSON.parse(getMyVar('yundiskapi')), null, "\t"):"",
                     titleVisible: false,
                     type: "textarea",
                     highlight: true,
                     height: 12,
-                    onChange: 'storage0.putMyVar("yundiskapi",input)'
+                    onChange: '/{|}/.test(input)?putMyVar("yundiskapi",JSON.stringify(JSON.parse(input))):""'
                 }
             });
             d.push({
                 title:'保存',
                 col_type:'text_center_1',
                 url:$("确定保存新接口").confirm((filepath)=>{
-                    let newapi = storage0.getMyVar("yundiskapi");
-                    if(newapi){
-                        let datafile = fetch(filepath);
-                        if(datafile != ""){
-                            try{
-                                eval("var datalist=" + datafile+ ";");
-                            }catch(e){
+                    if(getMyVar('yundiskapi')){
+                        try{
+                            let newapi = JSON.parse(getMyVar('yundiskapi'));
+                            let datafile = fetch(filepath);
+                            if(datafile != ""){
+                                try{
+                                    eval("var datalist=" + datafile+ ";");
+                                }catch(e){
+                                    var datalist = [];
+                                }
+                            }else{
                                 var datalist = [];
                             }
-                        }else{
-                            var datalist = [];
+                            datalist.push(newapi);
+                            writeFile(filepath, JSON.stringify(datalist));
+                            back(true);
+                            return "toast://已保存";
+                        }catch(e){
+                            return "toast://接口数据异常，请确认对象格式";
                         }
-                        datalist.push(newapi);
-                        writeFile(filepath, JSON.stringify(datalist));
-                        back(true);
-                        return "toast://已保存";
                     }else{
                         return "toast://为空不能保存";
                     }
@@ -3134,12 +3138,12 @@ function yundiskjiekou() {
     });
 
     datalist.forEach(item => {
-        log(item);
         d.push({
             title: item.name,
             url: $(["复制地址", "分享接口"], 1).select(() => {
                 
             }),
+            desc: '',
             col_type: "text_1"
         });
     })
