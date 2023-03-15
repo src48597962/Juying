@@ -3028,32 +3028,68 @@ function yundiskjiekou() {
         title: '增加',
         url: $('hiker://empty#noRecordHistory##noHistory#').rule((filepath) => {
             addListener("onClose", $.toString(() => {
-                clearMyVar('yundiskapi');
+                clearMyVar('yundiskname');
+                clearMyVar('yundiskparse');
+                clearMyVar('yundiskerparse');
             }));
             let d = [];
             d.push({
-                title:'添加',
+                title:'名称',
                 col_type: 'input',
-                desc: "建议非懂勿动",
+                desc: "接口名称",
                 extra: {
-                    defaultValue: getMyVar('yundiskapi')?getMyVar('yundiskapi'):"",
+                    defaultValue: getMyVar('yundiskname')?getMyVar('yundiskname'):"",
                     titleVisible: false,
-                    type: "textarea",
-                    highlight: true,
-                    height: 12,
                     onChange: $.toString(() => {
-                        putMyVar('yundiskapi',input);
-                        //refreshPage(false);
-                    })//putMyVar("yundiskapi",JSON.stringify(JSON.parse(input))
+                        putMyVar('yundiskname',input);
+                    })
                 }
             });
             d.push({
-                title:'保存',
-                col_type:'text_center_1',
-                url:$("确定保存新接口").confirm((filepath)=>{
+                title:'一解',
+                col_type: 'input',
+                desc: "一解函数",
+                extra: {
+                    defaultValue: getMyVar('yundiskparse')?getMyVar('yundiskparse'):"",
+                    titleVisible: false,
+                    type: "textarea",
+                    highlight: true,
+                    height: 5,
+                    onChange: $.toString(() => {
+                        putMyVar('yundiskparse',input);
+                    })
+                }
+            });
+            d.push({
+                title:'二解',
+                col_type: 'input',
+                desc: "二解函数, 可以留空",
+                extra: {
+                    defaultValue: getMyVar('yundiskerparse')?getMyVar('yundiskerparse'):"",
+                    titleVisible: false,
+                    type: "textarea",
+                    highlight: true,
+                    height: 5,
+                    onChange: $.toString(() => {
+                        putMyVar('yundiskerparse',input);
+                    })
+                }
+            });
+            d.push({
+                title: '保存',
+                col_type: 'text_center_1',
+                url: !getMyVar('yundiskname')||!getMyVar('yundiskparse')?"toast://名称和一解函数不能为空":$("确定保存新接口").confirm((filepath)=>{
                     try{
-                        eval("var newapi = " +getMyVar('yundiskapi'));
-                        if(typeof(newapi)=="object"){
+                        let name = getMyVar('yundiskname');
+                        let parse = getMyVar('yundiskparse');
+                        let erparse = getMyVar('yundiskerparse');
+                        let newapi = {
+                            name: name,
+                            parse: parse,
+                            erparse :erparse
+                        }
+                        //eval("var newapi = " +getMyVar('yundiskapi'));
+                        //if(typeof(newapi)=="object"){
                             let datafile = fetch(filepath);
                             if(datafile != ""){
                                 try{
@@ -3068,9 +3104,9 @@ function yundiskjiekou() {
                             writeFile(filepath, JSON.stringify(datalist));
                             back(true);
                             return "toast://已保存";
-                        }else{
-                            return "toast://格式不正确";
-                        }
+                        //}else{
+                        //    return "toast://格式不正确";
+                        //}
                     }catch(e){
                         return "toast://接口数据异常，请确认对象格式";
                     }
