@@ -3065,6 +3065,7 @@ function yundiskjiekou() {
                     }
                 },filepath)
             });
+            setResult(d);
         },filepath),
         img: "https://lanmeiguojiang.com/tubiao/more/25.png",
         col_type: "icon_small_3"
