@@ -3041,7 +3041,7 @@ function yundiskjiekou() {
                     type: "textarea",
                     highlight: true,
                     height: 12,
-                    onChange: '/{|}/.test(input)?storage0.putMyVar("yundiskapi"):""'//,JSON.stringify(JSON.parse(input))
+                    onChange: '/{|}/.test(input)?storage0.putMyVar("yundiskapi",input):""'//,JSON.stringify(JSON.parse(input))
                 }
             });
             d.push({
