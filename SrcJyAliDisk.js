@@ -141,7 +141,18 @@ function aliShareSearch(input) {
                 return {
                     title: item.title,
                     img: "hiker://files/cache/src/文件夹.svg",
-                    url: $("hiker://empty##"+item.url).rule((input) => {
+                    url: obj.erparse?$("hiker://empty##").lazyRule((url,erparse) => {
+                        eval('let Parse = '+erparse)
+                        let aurl = Parse(url);
+                        if(aurl.indexOf('aliyundrive.com')>-1){
+                            return $("hiker://empty##"+item.url).rule((input) => {
+                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+                                aliShareUrl(input);
+                            },aurl)
+                        }else{
+                            return "toast://二解云盘共享链接失败";
+                        }
+                    },item.url,obj.erparse):$("hiker://empty##"+item.url).rule((input) => {
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
                         aliShareUrl(input);
                     },item.url),
