@@ -3190,7 +3190,7 @@ function yundiskjiekou() {
 
     datalist.forEach(item => {
         d.push({
-            title: "💽" + item.name + "  (" + (item.erparse?"二解接口":"一解接口") + ")",
+            title: "💽 " + item.name + "   (" + (item.erparse?"二解接口":"一解接口") + ")",
             url: $(["编辑", "删除"], 1).select((filepath,yundiskapi,data) => {
                 if(input == "编辑"){
                     return $('hiker://empty#noRecordHistory##noHistory#').rule((filepath,yundiskapi,data) => {
