@@ -3154,7 +3154,7 @@ function yundiskjiekou() {
                             num = num + 1;
                         }
                     }
-                    writeFile(alistfile, JSON.stringify(datalist));
+                    writeFile(filepath, JSON.stringify(datalist));
                     hideLoading();
                     refreshPage(false);
                     return "toast://合计" + datalist.length + "个，导入" + num + "个";
