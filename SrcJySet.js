@@ -3036,7 +3036,7 @@ function yundiskjiekou() {
                 col_type: 'input',
                 desc: "建议非懂勿动",
                 extra: {
-                    defaultValue: getMyVar('yundiskapi')?JSON.stringify(JSON.parse(getMyVar('yundiskapi')), null, "\t"):"",
+                    defaultValue: getMyVar('yundiskapi')?getMyVar('yundiskapi'):"",
                     titleVisible: false,
                     type: "textarea",
                     highlight: true,
@@ -3051,10 +3051,9 @@ function yundiskjiekou() {
                 title:'保存',
                 col_type:'text_center_1',
                 url:$("确定保存新接口").confirm((filepath)=>{
-                    log(getMyVar('yundiskapi'));
-                    if(getMyVar('yundiskapi')){
-                        try{
-                            let newapi = JSON.parse(getMyVar('yundiskapi'));
+                    try{
+                        eval("var newapi = " +getMyVar('yundiskapi'));
+                        if(typeof(newapi)=="object"){
                             let datafile = fetch(filepath);
                             if(datafile != ""){
                                 try{
@@ -3069,11 +3068,11 @@ function yundiskjiekou() {
                             writeFile(filepath, JSON.stringify(datalist));
                             back(true);
                             return "toast://已保存";
-                        }catch(e){
-                            return "toast://接口数据异常，请确认对象格式";
+                        }else{
+                            return "toast://格式不正确";
                         }
-                    }else{
-                        return "toast://为空不能保存";
+                    }catch(e){
+                        return "toast://接口数据异常，请确认对象格式";
                     }
                 },filepath)
             });
