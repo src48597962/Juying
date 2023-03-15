@@ -3162,6 +3162,7 @@ function yundiskjiekou() {
                     return "toast://聚影√：非云盘口令";
                 }
             } catch (e) {
+                log(e.message);
                 return "toast://聚影√：口令有误";
             }
         }, filepath),
