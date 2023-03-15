@@ -3038,6 +3038,7 @@ function yundiskjiekou() {
                 extra: {
                     titleVisible: false,
                     type: "textarea",
+                    highlight: true,
                     height: 10,
                     onChange: 'storage0.putMyVar("yundiskapi",input)'
                 }
@@ -3059,6 +3060,8 @@ function yundiskjiekou() {
                             var datalist = [];
                         }
                         datalist.push(newapi);
+                        writeFile(filepath, JSON.stringify(datalist));
+                        back(true);
                         return "toast://已保存";
                     }else{
                         return "toast://为空不能保存";
