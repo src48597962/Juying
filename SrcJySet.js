@@ -3041,7 +3041,10 @@ function yundiskjiekou() {
                     type: "textarea",
                     highlight: true,
                     height: 12,
-                    onChange: `log(input)`//putMyVar("yundiskapi",JSON.stringify(JSON.parse(input))
+                    onChange: $.toString(() => {
+                        putMyVar('yundiskapi',input);
+                        //refreshPage(false);
+                    })//putMyVar("yundiskapi",JSON.stringify(JSON.parse(input))
                 }
             });
             d.push({
