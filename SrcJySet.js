@@ -3022,7 +3022,7 @@ function yundiskjiekou() {
     }else{
         var datalist = [];
     }
-    function yundiskapi(data){
+    function yundiskapi(filepath,data){
         addListener("onClose", $.toString(() => {
             clearMyVar('yundiskname');
             clearMyVar('yundiskparse');
@@ -3117,8 +3117,7 @@ function yundiskjiekou() {
     d.push({
         title: '增加',
         url: $('hiker://empty#noRecordHistory##noHistory#').rule((filepath,yundiskapi) => {
-            let filepath = filepath;
-            yundiskapi();
+            yundiskapi(filepath);
         },filepath,yundiskapi),
         img: "https://lanmeiguojiang.com/tubiao/more/25.png",
         col_type: "icon_small_3"
@@ -3188,8 +3187,7 @@ function yundiskjiekou() {
             url: $(["编辑", "删除"], 1).select((filepath,yundiskapi,data) => {
                 if(input == "编辑"){
                     return $('hiker://empty#noRecordHistory##noHistory#').rule((filepath,yundiskapi,data) => {
-                        let filepath = filepath;
-                        yundiskapi(data);
+                        yundiskapi(filepath,data);
                     },filepath,yundiskapi,data)
                 } else if (input == "删除") {
                     let datafile = fetch(filepath);
