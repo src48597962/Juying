@@ -135,7 +135,8 @@ function aliShareSearch(input) {
     }
     let task = function(obj) {
         try{
-            let datalist = obj.parse(input) || [];
+            eval('let Parse = '+obj.parse)
+            let datalist = Parse(input) || [];
             let searchlist = datalist.map(item => {
                 return {
                     title: item.title,
