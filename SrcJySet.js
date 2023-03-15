@@ -3050,7 +3050,7 @@ function yundiskjiekou() {
                 url:$("确定保存新接口").confirm((filepath)=>{
                     if(storage0.getMyVar('yundiskapi')){
                         try{
-                            let newapi = storage0.getMyVar('yundiskapi');//JSON.parse(getMyVar('yundiskapi'));
+                            let newapi = JSON.parse(storage0.getMyVar('yundiskapi'));//JSON.parse(getMyVar('yundiskapi'));
                             let datafile = fetch(filepath);
                             if(datafile != ""){
                                 try{
