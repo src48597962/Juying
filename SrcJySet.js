@@ -3041,13 +3041,14 @@ function yundiskjiekou() {
                     type: "textarea",
                     highlight: true,
                     height: 12,
-                    onChange: '/{|}/.test(input)?putMyVar("yundiskapi",JSON.stringify(JSON.parse(input)):""'
+                    onChange: 'putMyVar("yundiskapi",JSON.stringify(JSON.parse(input))'
                 }
             });
             d.push({
                 title:'保存',
                 col_type:'text_center_1',
                 url:$("确定保存新接口").confirm((filepath)=>{
+                    log(getMyVar('yundiskapi'));
                     if(getMyVar('yundiskapi')){
                         try{
                             let newapi = JSON.parse(getMyVar('yundiskapi'));
