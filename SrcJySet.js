@@ -3102,10 +3102,15 @@ function yundiskjiekou() {
                     }else{
                         var datalist = [];
                     }
-                    datalist.push(newapi);
-                    writeFile(filepath, JSON.stringify(datalist));
-                    back(true);
-                    return "toast://已保存";
+                    let index = datalist.indexOf(datalist.filter(d=>d.name == name)[0]);
+                    if(index>-1){
+                        return "toast://已存在-"+name;
+                    }else{
+                        datalist.push(newapi);
+                        writeFile(filepath, JSON.stringify(datalist));
+                        back(true);
+                        return "toast://已保存";
+                    }
                 }catch(e){
                     return "toast://接口数据异常，请确认对象格式";
                 }
@@ -3183,7 +3188,7 @@ function yundiskjiekou() {
 
     datalist.forEach(item => {
         d.push({
-            title: item.name + " - " + item.erparse?"二解接口":"一解接口",
+            title: item.name + " - " + (item.erparse?"二解接口":"一解接口"),
             url: $(["编辑", "删除"], 1).select((filepath,yundiskapi,data) => {
                 if(input == "编辑"){
                     return $('hiker://empty#noRecordHistory##noHistory#').rule((filepath,yundiskapi,data) => {
