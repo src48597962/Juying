@@ -3022,98 +3022,103 @@ function yundiskjiekou() {
     }else{
         var datalist = [];
     }
-
+    function yundiskapi(data){
+        addListener("onClose", $.toString(() => {
+            clearMyVar('yundiskname');
+            clearMyVar('yundiskparse');
+            clearMyVar('yundiskerparse');
+        }));
+        if(data){
+            putMyVar('yundiskname',data.name);
+            putMyVar('yundiskparse',data.parse);
+            putMyVar('yundiskerparse',data.erparse?data.erparse:"");
+        }
+        let d = [];
+        d.push({
+            title:'名称',
+            col_type: 'input',
+            desc: "接口名称",
+            extra: {
+                defaultValue: getMyVar('yundiskname')?getMyVar('yundiskname'):"",
+                titleVisible: false,
+                onChange: $.toString(() => {
+                    putMyVar('yundiskname',input);
+                })
+            }
+        });
+        d.push({
+            title:'一解',
+            col_type: 'input',
+            desc: "一解函数",
+            extra: {
+                defaultValue: getMyVar('yundiskparse')?getMyVar('yundiskparse'):"",
+                titleVisible: false,
+                type: "textarea",
+                highlight: true,
+                height: 5,
+                onChange: $.toString(() => {
+                    putMyVar('yundiskparse',input);
+                })
+            }
+        });
+        d.push({
+            title:'二解',
+            col_type: 'input',
+            desc: "二解函数, 可以留空",
+            extra: {
+                defaultValue: getMyVar('yundiskerparse')?getMyVar('yundiskerparse'):"",
+                titleVisible: false,
+                type: "textarea",
+                highlight: true,
+                height: 5,
+                onChange: $.toString(() => {
+                    putMyVar('yundiskerparse',input);
+                })
+            }
+        });
+        d.push({
+            title: '保存',
+            col_type: 'text_center_1',
+            url: $("确定保存新接口").confirm((filepath)=>{
+                if(!getMyVar('yundiskname')||!getMyVar('yundiskparse')){
+                    return "toast://名称和一解函数不能为空";
+                }
+                try{
+                    let name = getMyVar('yundiskname');
+                    let parse = getMyVar('yundiskparse');
+                    let erparse = getMyVar('yundiskerparse');
+                    let newapi = {
+                        name: name,
+                        parse: parse
+                    }
+                    newapi['erparse'] = erparse;
+                    let datafile = fetch(filepath);
+                    if(datafile != ""){
+                        try{
+                            eval("var datalist=" + datafile+ ";");
+                        }catch(e){
+                            var datalist = [];
+                        }
+                    }else{
+                        var datalist = [];
+                    }
+                    datalist.push(newapi);
+                    writeFile(filepath, JSON.stringify(datalist));
+                    back(true);
+                    return "toast://已保存";
+                }catch(e){
+                    return "toast://接口数据异常，请确认对象格式";
+                }
+            },filepath)
+        });
+        setResult(d);
+    }
     var d = [];
     d.push({
         title: '增加',
-        url: $('hiker://empty#noRecordHistory##noHistory#').rule((filepath) => {
-            addListener("onClose", $.toString(() => {
-                clearMyVar('yundiskname');
-                clearMyVar('yundiskparse');
-                clearMyVar('yundiskerparse');
-            }));
-            let d = [];
-            d.push({
-                title:'名称',
-                col_type: 'input',
-                desc: "接口名称",
-                extra: {
-                    defaultValue: getMyVar('yundiskname')?getMyVar('yundiskname'):"",
-                    titleVisible: false,
-                    onChange: $.toString(() => {
-                        putMyVar('yundiskname',input);
-                    })
-                }
-            });
-            d.push({
-                title:'一解',
-                col_type: 'input',
-                desc: "一解函数",
-                extra: {
-                    defaultValue: getMyVar('yundiskparse')?getMyVar('yundiskparse'):"",
-                    titleVisible: false,
-                    type: "textarea",
-                    highlight: true,
-                    height: 5,
-                    onChange: $.toString(() => {
-                        putMyVar('yundiskparse',input);
-                    })
-                }
-            });
-            d.push({
-                title:'二解',
-                col_type: 'input',
-                desc: "二解函数, 可以留空",
-                extra: {
-                    defaultValue: getMyVar('yundiskerparse')?getMyVar('yundiskerparse'):"",
-                    titleVisible: false,
-                    type: "textarea",
-                    highlight: true,
-                    height: 5,
-                    onChange: $.toString(() => {
-                        putMyVar('yundiskerparse',input);
-                    })
-                }
-            });
-            d.push({
-                title: '保存',
-                col_type: 'text_center_1',
-                url: !getMyVar('yundiskname')||!getMyVar('yundiskparse')?"toast://名称和一解函数不能为空":$("确定保存新接口").confirm((filepath)=>{
-                    try{
-                        let name = getMyVar('yundiskname');
-                        let parse = getMyVar('yundiskparse');
-                        let erparse = getMyVar('yundiskerparse');
-                        let newapi = {
-                            name: name,
-                            parse: parse,
-                            erparse :erparse
-                        }
-                        //eval("var newapi = " +getMyVar('yundiskapi'));
-                        //if(typeof(newapi)=="object"){
-                            let datafile = fetch(filepath);
-                            if(datafile != ""){
-                                try{
-                                    eval("var datalist=" + datafile+ ";");
-                                }catch(e){
-                                    var datalist = [];
-                                }
-                            }else{
-                                var datalist = [];
-                            }
-                            datalist.push(newapi);
-                            writeFile(filepath, JSON.stringify(datalist));
-                            back(true);
-                            return "toast://已保存";
-                        //}else{
-                        //    return "toast://格式不正确";
-                        //}
-                    }catch(e){
-                        return "toast://接口数据异常，请确认对象格式";
-                    }
-                },filepath)
-            });
-            setResult(d);
-        },filepath),
+        url: $('hiker://empty#noRecordHistory##noHistory#').rule((filepath,yundiskapi) => {
+            yundiskapi();
+        },filepath,yundiskapi),
         img: "https://lanmeiguojiang.com/tubiao/more/25.png",
         col_type: "icon_small_3"
     });
@@ -3178,10 +3183,22 @@ function yundiskjiekou() {
 
     datalist.forEach(item => {
         d.push({
-            title: item.name,
-            url: $(["复制地址", "分享接口"], 1).select(() => {
-                
-            }),
+            title: item.name + " - " + item.erparse?"二解接口":"一解接口",
+            url: $(["编辑", "删除"], 1).select((filepath,yundiskapi,data) => {
+                if(input == "编辑"){
+                    return $('hiker://empty#noRecordHistory##noHistory#').rule((filepath,yundiskapi,data) => {
+                        yundiskapi(data);
+                    },filepath,yundiskapi,data)
+                } else if (input == "删除") {
+                    let datafile = fetch(filepath);
+                    eval("var datalist=" + datafile+ ";");
+                    let index = datalist.indexOf(datalist.filter(d=>d.name == data.name)[0]);
+                    datalist.splice(index, 1);
+                    writeFile(filepath, JSON.stringify(datalist));
+                    refreshPage(false);
+                    return 'toast://已删除';
+                } 
+            },filepath,yundiskapi,item),
             desc: '',
             col_type: "text_1"
         });
