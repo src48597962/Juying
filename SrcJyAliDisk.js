@@ -119,35 +119,17 @@ function aliShare(share_id, folder_id, share_pwd) {
 function aliShareSearch(input) {
     deleteItemByCls('loadlist');
     showLoading('搜索中，请稍后...');
-    let datalist = [{ name: '小纸条', parse: function (input) {let list = JSON.parse(request('https://gitcafe.net/tool/alipaper/', { body: "action=search&keyword=" + input, method: 'POST', timeout: 5000 }));
-    let data = list.map(item => {
-        return {
-            title: item.title,
-            url: 'https://www.aliyundrive.com/s/' + item.key
+    let filepath = "hiker://files/rules/Src/Juying/yundisk.json";
+    let datafile = fetch(filepath);
+    if(datafile != ""){
+        try{
+            eval("var datalist=" + datafile+ ";");
+        }catch(e){
+            var datalist = [];
         }
-    })
-    return data;}},{ name: 'UP云搜', parse: function (input) {
-        let list = JSON.parse(base64Decode(request('https://upapi.juapp9.com/search?keyword='+input+'&page=1&s_type=2', { timeout: 5000 }))).result.items;
-
-    let data = [];
-    list.forEach(item => {
-        if(item.page_url.indexOf('https://www.aliyundrive.com')>-1){
-            data.push({
-                title: [].filter.call(item.title,function(s,i,o){return o.indexOf(s)==i;}).join(''),
-                url: item.page_url
-            })
-        }
-    })
-    return data;}},{ name: '易搜', parse: function (input) {
-        let list = JSON.parse(request('https://yiso.fun/api/search?name='+input+'&pageNo=1&from=ali', { timeout: 5000 })).data.list;
-
-    let data = list.map(item => {
-        return {
-            title: item.name.replace(/<[^>]+>/g,""),
-            url: item.url
-        }
-    })
-    return data;}}];
+    }else{
+        var datalist = [];
+    }
     if(datalist.length==0){
         toast('无接口，无法搜索');
     }
