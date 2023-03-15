@@ -3129,36 +3129,37 @@ function yundiskjiekou() {
     });
     d.push({
         title: '导入',
-        url: $("", "alist分享口令的云剪贴板").input((alistfile) => {
+        url: $("", "云盘分享口令的云剪贴板").input((filepath) => {
             try {
                 let inputname = input.split('￥')[0];
-                if (inputname == "聚影Alist") {
+                if (inputname == "聚影云盘") {
                     showLoading("正在导入，请稍后...");
                     let parseurl = aesDecode('Juying', input.split('￥')[1]);
                     let content = parsePaste(parseurl);
-                    let datalist = JSON.parse(aesDecode('Juying', content));
-                    try {
-                        eval("var alistData=" + fetch(alistfile));
-                        let jknum = alistData.drives.length;
-                    } catch (e) {
-                        hideLoading();
-                        var alistData = { drives: [] };
+                    let datalist2 = JSON.parse(aesDecode('Juying', content));
+                    let datafile = fetch(filepath);
+                    if(datafile != ""){
+                        try{
+                            eval("var datalist=" + datafile+ ";");
+                        }catch(e){
+                            var datalist = [];
+                        }
+                    }else{
+                        var datalist = [];
                     }
-                    let newdatalist = alistData.drives;
                     let num = 0;
-                    for (let i = 0; i < datalist.length; i++) {
-                        if (!newdatalist.some(item => item.server == datalist[i].server)) {
-                            newdatalist.push(datalist[i]);
+                    for (let i = 0; i < datalist2.length; i++) {
+                        if (!datalist.some(item => item.name == datalist2[i].name)) {
+                            datalist.push(datalist2[i]);
                             num = num + 1;
                         }
                     }
-                    alistData.drives = newdatalist;
-                    writeFile(alistfile, JSON.stringify(alistData));
+                    writeFile(alistfile, JSON.stringify(datalist));
                     hideLoading();
                     refreshPage(false);
                     return "toast://合计" + datalist.length + "个，导入" + num + "个";
                 } else {
-                    return "toast://聚影√：非Alist口令";
+                    return "toast://聚影√：非云盘口令";
                 }
             } catch (e) {
                 return "toast://聚影√：口令有误";
@@ -3172,9 +3173,9 @@ function yundiskjiekou() {
         url: datalist.length == 0 ? "toast://云盘接口为0，无法分享" : $().lazyRule((datalist) => {
             let pasteurl = sharePaste(aesEncode('Juying', JSON.stringify(datalist)));
             if (pasteurl) {
-                let code = '聚影Alist￥' + aesEncode('Juying', pasteurl) + '￥共' + datalist.length + '条';
+                let code = '聚影云盘￥' + aesEncode('Juying', pasteurl) + '￥共' + datalist.length + '条';
                 copy(code);
-                return "toast://(全部)Alist分享口令已生成";
+                return "toast://(全部)云盘分享口令已生成";
             } else {
                 return "toast://分享失败，剪粘板或网络异常";
             }
@@ -3188,7 +3189,7 @@ function yundiskjiekou() {
 
     datalist.forEach(item => {
         d.push({
-            title: item.name + " - " + (item.erparse?"二解接口":"一解接口"),
+            title: "💽" + item.name + "  (" + (item.erparse?"二解接口":"一解接口") + ")",
             url: $(["编辑", "删除"], 1).select((filepath,yundiskapi,data) => {
                 if(input == "编辑"){
                     return $('hiker://empty#noRecordHistory##noHistory#').rule((filepath,yundiskapi,data) => {
