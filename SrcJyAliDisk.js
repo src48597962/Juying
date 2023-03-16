@@ -151,8 +151,7 @@ function aliShareSearch(input) {
                 let home = "https://www.aliyundrive.com/s/";
                 if(item.url.includes(home)){
                     let share_id = item.url.replace(home, '').replace('/folder/','');
-                    let getis = request("https://api.aliyundrive.com/adrive/v3/share_link/get_share_by_anonymous",{headers: {referer: "https://www.aliyundrive.com/"}, body: {"share_id": share_id}, method: 'POST', timeout: 3000 }).file_infos || [];
-                    log(getis);
+                    let getis = JSON.parse(request("https://api.aliyundrive.com/adrive/v3/share_link/get_share_by_anonymous",{headers: {referer: "https://www.aliyundrive.com/"}, body: {"share_id": share_id}, method: 'POST', timeout: 3000 })).file_infos || [];
                     if(getis.length>0){
                         arr.url = $("hiker://empty##"+item.url).rule((input) => {
                             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
