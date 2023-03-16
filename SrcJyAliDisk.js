@@ -152,6 +152,7 @@ function aliShareSearch(input) {
                 if(item.url.includes(home)){
                     let share_id = item.url.replace(home, '').replace('/folder/','');
                     let getis = request("https://api.aliyundrive.com/adrive/v3/share_link/get_share_by_anonymous",{headers: {referer: "https://www.aliyundrive.com/"}, body: {"share_id": share_id}, method: 'POST', timeout: 3000 }).file_infos || [];
+                    log(getis);
                     if(getis.length>0){
                         arr.url = $("hiker://empty##"+item.url).rule((input) => {
                             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
