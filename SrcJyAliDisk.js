@@ -76,7 +76,7 @@ function aliShare(share_id, folder_id, share_pwd) {
                 let filesize = item.size/1024/1024;
                 d.push({
                     title: item.name,
-                    img: item.thumbnail || item.category == "video" ? "hiker://files/cache/src/影片.svg" : item.category == "audio" ? "hiker://files/cache/src/音乐.svg" : item.category == "image" ? "hiker://files/cache/src/图片.png" : "https://img.alicdn.com/imgextra/i1/O1CN01mhaPJ21R0UC8s9oik_!!6000000002049-2-tps-80-80.png",
+                    img: item.thumbnail || (item.category == "video" ? "hiker://files/cache/src/影片.svg" : item.category == "audio" ? "hiker://files/cache/src/音乐.svg" : item.category == "image" ? "hiker://files/cache/src/图片.png" : "https://img.alicdn.com/imgextra/i1/O1CN01mhaPJ21R0UC8s9oik_!!6000000002049-2-tps-80-80.png"),
                     url: $("hiker://empty##").lazyRule((share_id, file_id, sub_file_id, share_pwd) => {
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliPublic.js');
                         let alitoken = alistconfig.alitoken;
@@ -137,11 +137,30 @@ function aliShareSearch(input) {
         try{
             eval('let Parse = '+obj.parse)
             let datalist = Parse(input) || [];
-            let searchlist = datalist.map(item => {
-                return {
+            let searchlist = [];
+            datalist.forEach(item => {
+                let arr = {
                     title: item.title,
                     img: "hiker://files/cache/src/文件夹.svg",
-                    url: obj.erparse?$("hiker://empty##").lazyRule((url,erparse) => {
+                    col_type: "avatar",
+                    extra: {
+                        cls: "loadlist",
+                        dirname: input
+                    }
+                };
+                let home = "https://www.aliyundrive.com/s/";
+                if(item.url.includes(home)){
+                    let share_id = item.url.replace(home, '').replace('/folder/','');
+                    let getis = request("https://api.aliyundrive.com/adrive/v3/share_link/get_share_by_anonymous",{headers: {referer: "https://www.aliyundrive.com/"}, body: {"share_id": share_id}, method: 'POST', timeout: 3000 }).file_infos || [];
+                    if(getis.length>0){
+                        arr.url = $("hiker://empty##"+item.url).rule((input) => {
+                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+                            aliShareUrl(input);
+                        },item.url);
+                        searchlist.push(arr);
+                    }
+                } else if (obj.erparse) {
+                    arr.url = $("hiker://empty##").lazyRule((url,erparse) => {
                         eval('let Parse = '+erparse)
                         let aurl = Parse(url);
                         if(aurl.indexOf('aliyundrive.com')>-1){
@@ -152,16 +171,9 @@ function aliShareSearch(input) {
                         }else{
                             return "toast://二解云盘共享链接失败";
                         }
-                    },item.url,obj.erparse):$("hiker://empty##"+item.url).rule((input) => {
-                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
-                        aliShareUrl(input);
-                    },item.url),
-                    col_type: "avatar",
-                    extra: {
-                        cls: "loadlist",
-                        dirname: input
-                    }
-                };
+                    },item.url,obj.erparse);
+                    searchlist.push(arr);
+                }
             })
             if(searchlist.length>0){
                 hideLoading();
