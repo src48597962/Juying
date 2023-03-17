@@ -3027,8 +3027,10 @@ function yundiskjiekou() {
             clearMyVar('yundiskname');
             clearMyVar('yundiskparse');
             clearMyVar('yundiskerparse');
+            clearMyVar('yundiskedit');
         }));
         if(data){
+            putMyVar('yundiskedit','1');
             putMyVar('yundiskname',data.name);
             putMyVar('yundiskparse',data.parse);
             putMyVar('yundiskerparse',data.erparse?data.erparse:"");
@@ -3079,7 +3081,7 @@ function yundiskjiekou() {
         d.push({
             title: '保存',
             col_type: 'text_center_1',
-            url: $("确定保存新接口").confirm((filepath)=>{
+            url: $().lazyRule((filepath)=>{
                 if(!getMyVar('yundiskname')||!getMyVar('yundiskparse')){
                     return "toast://名称和一解函数不能为空";
                 }
@@ -3103,9 +3105,12 @@ function yundiskjiekou() {
                         var datalist = [];
                     }
                     let index = datalist.indexOf(datalist.filter(d=>d.name == name)[0]);
-                    if(index>-1){
+                    if(index>-1 && getMyVar('yundiskedit')!="1"){
                         return "toast://已存在-"+name;
                     }else{
+                        if(getMyVar('yundiskedit')=="1"){
+                            datalist.splice(index,1);
+                        }
                         datalist.push(newapi);
                         writeFile(filepath, JSON.stringify(datalist));
                         back(true);
