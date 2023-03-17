@@ -168,7 +168,7 @@ function aliShareSearch(input) {
                         eval('let Parse = '+erparse)
                         let aurl = Parse(url);
                         if(aurl.indexOf('aliyundrive.com')>-1){
-                            return $("hiker://empty##"+item.url).rule((input) => {
+                            return $("hiker://empty##").rule((input) => {
                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
                                 aliShareUrl(input);
                             },aurl)
