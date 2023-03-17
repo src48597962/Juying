@@ -3162,7 +3162,7 @@ function yundiskjiekou() {
                     writeFile(filepath, JSON.stringify(datalist));
                     hideLoading();
                     refreshPage(false);
-                    return "toast://合计" + datalist.length + "个，导入" + num + "个";
+                    return "toast://合计" + datalist2.length + "个，导入" + num + "个";
                 } else {
                     return "toast://聚影√：非云盘口令";
                 }
