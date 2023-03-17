@@ -3108,7 +3108,7 @@ function yundiskjiekou() {
                     if(index>-1 && getMyVar('yundiskedit')!="1"){
                         return "toast://已存在-"+name;
                     }else{
-                        if(getMyVar('yundiskedit')=="1"){
+                        if(getMyVar('yundiskedit')=="1" && index>-1){
                             datalist.splice(index,1);
                         }
                         datalist.push(newapi);
