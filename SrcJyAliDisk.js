@@ -114,6 +114,9 @@ function aliShare(share_id, folder_id, share_pwd) {
         toast('来晚啦，该分享已失效.');
     }
     setResult(d);
+    setLastChapterRule('js:' + $.toString(()=>{
+        setResult('');
+    }))
 }
 
 function aliShareSearch(input) {
@@ -148,6 +151,7 @@ function aliShareSearch(input) {
                         dirname: input
                     }
                 };
+                log(MY_PARAMS.pic);
                 let home = "https://www.aliyundrive.com/s/";
                 if(item.url.includes(home)){
                     //let share_id = item.url.replace(home, '').replace('/folder/','');
