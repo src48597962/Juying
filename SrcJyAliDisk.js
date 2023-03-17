@@ -151,7 +151,7 @@ function aliShareSearch(input) {
                         dirname: input
                     }
                 };
-                log(MY_PARAMS.pic);
+
                 let home = "https://www.aliyundrive.com/s/";
                 if(item.url.includes(home)){
                     //let share_id = item.url.replace(home, '').replace('/folder/','');
