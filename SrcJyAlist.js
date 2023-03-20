@@ -453,13 +453,12 @@ function logintoken(api) {
         writeFile(alistfile, JSON.stringify(alistData));
         log("自动重新获取登录用户令牌成功");
         return true;
-      }else{
-        return false;
       }
     }
   }catch(e){
-    return false;
+    log("自动重新获取登录用户令牌失败>"+e.message);
   }
+  return false;
 }
 
 function alistSearch(alistapi,input,notoast) {
