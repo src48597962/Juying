@@ -90,6 +90,8 @@ function aliShare(share_id, folder_id, share_pwd) {
                                 play['subtitle'] = subtitle;
                             }
                             return JSON.stringify(play);
+                        }else{
+                            return "toast://获取转码播放列表失败，是不是没有设置阿里token";
                         }
                     }, item.share_id, item.file_id, sub_file_id, share_pwd),
                     desc: filesize < 1024 ? filesize.toFixed(2) + 'MB' : (filesize/1024).toFixed(2) + 'GB',
