@@ -397,6 +397,8 @@ function alistUrl(alistapi,path,sign,subtitle) {
                 play['subtitle'] = subtitle;
               }
               return JSON.stringify(play);
+            }else{
+              log('获取转码播放列表失败，是不是没有设置阿里token');
             }
           }catch(e){}
         }
