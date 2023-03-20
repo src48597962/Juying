@@ -79,7 +79,7 @@ function aliShare(share_id, folder_id, share_pwd) {
                     img: item.thumbnail || (item.category == "video" ? "hiker://files/cache/src/影片.svg" : item.category == "audio" ? "hiker://files/cache/src/音乐.svg" : item.category == "image" ? "hiker://files/cache/src/图片.png" : "https://img.alicdn.com/imgextra/i1/O1CN01mhaPJ21R0UC8s9oik_!!6000000002049-2-tps-80-80.png"),
                     url: $("hiker://empty##").lazyRule((share_id, file_id, sub_file_id, share_pwd) => {
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliPublic.js');
-                        let alitoken = alistconfig.alitoken;
+                        //let alitoken = alistconfig.alitoken;
                         let play = getAliUrl(share_id, file_id, alitoken, share_pwd);
                         if (play.urls) {
                             let subtitle;
