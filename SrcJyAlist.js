@@ -813,6 +813,9 @@ function alistSet() {
               datalist.splice(index, 1);
               alistData.drives = datalist;
               writeFile(alistfile, JSON.stringify(alistData));
+              let atokenlist = storage0.getItem('atokenlist', {});
+              delete atokenlist[item.server];
+              storage0.setItem('atokenlist', atokenlist);
               refreshPage(false);
               return 'toast://已删除';
             } else if (input == "全局过滤" || input == "禁止过滤") {
