@@ -1,17 +1,48 @@
 let alistfile = "hiker://files/rules/Src/Juying/Alist.json";
-try{
-  var alistData= JSON.parse(fetch(alistfile));
-}catch(e){
+try {
+  var alistData = JSON.parse(fetch(alistfile));
+} catch (e) {
   var alistData = {};
 }
 let datalist = alistData.drives || [];
 let alistconfig = alistData.config || {};
-let fileFilter = alistconfig['fileFilter']==0?0:1;
-let audiovisual = alistconfig.contain?alistconfig.contain.replace(/\./,""):'mp4|avi|mkv|rmvb|flv|mov|ts|mp3|m4a|wma|flac';//影音文件
-let contain = new RegExp(audiovisual,"i");//设置可显示的影音文件后缀
-let music = new RegExp("mp3|m4a|wma|flac","i");//进入音乐播放器
-let image = new RegExp("jpg|png|gif|bmp|ico|svg","i");//进入图片查看
-const transcoding = {UHD: "4K 超清",QHD: "2K 超清",FHD: "1080 全高清",HD: "720 高清",SD: "540 标清",LD: "360 流畅"};
+let fileFilter = alistconfig['fileFilter'] == 0 ? 0 : 1;
+let audiovisual = alistconfig.contain ? alistconfig.contain.replace(/\./, "") : 'mp4|avi|mkv|rmvb|flv|mov|ts|mp3|m4a|wma|flac';//影音文件
+let contain = new RegExp(audiovisual, "i");//设置可显示的影音文件后缀
+let music = new RegExp("mp3|m4a|wma|flac", "i");//进入音乐播放器
+let image = new RegExp("jpg|png|gif|bmp|ico|svg", "i");//进入图片查看
+const transcoding = { UHD: "4K 超清", QHD: "2K 超清", FHD: "1080 全高清", HD: "720 高清", SD: "540 标清", LD: "360 流畅" };
+
+let alitoken = alistconfig.alitoken;
+if (!alitoken && getMyVar('getalitoken') !="1") {
+  putMyVar('getalitoken','1');
+  try {
+    //节约资源，如果有获取过用户信息，就重复利用一下
+    let icyfilepath = "hiker://files/rules/icy/icy-ali-token.json";
+    let joefilepath = "hiker://files/rules/joe/ali.json";
+    let alifile = fetch(icyfilepath);
+    if (alifile) {
+      let tokenlist = eval(alifile);
+      if (tokenlist.length > 0) {
+        alitoken = tokenlist[0].refresh_token;
+      }
+    }
+    if(!alitoken){
+      alifile = fetch(joefilepath);
+      if (alifile) {
+        let token = eval(alifile);
+        alitoken = token.refresh_token;
+      }
+    }
+    if (alitoken) {
+      alistconfig.alitoken = alitoken;
+      alistData.config = alistconfig;
+      writeFile(alistfile, JSON.stringify(alistData));
+    }
+  } catch (e) {
+    log('自动取ali-token失败' + e.message)
+  }
+}
 
 function SortList(v1, v2) {
   var a = v1.name;
