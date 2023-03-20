@@ -215,7 +215,11 @@ function alistHome() {
         let filelist = getlist(json.data.content||[],0,alistapi.nofilter?0:fileFilter);
         addItemBefore('listloading', arrayAdd(filelist,0,alistapi));
       }else if(json.code==401){
-        toast('登录令牌token失效，需要重新获取');
+        if(logintoken(alistapi.server)){
+          refreshPage(false);
+        }else{
+          toast('登录令牌token失效，需要重新获取');
+        }
       }else if(json.code==500){
         toast('获取列表失败，下拉刷新重试.'+json.message);
       }
@@ -269,7 +273,11 @@ function alistList(alistapi,dirname){
         });
       }
     }else if(json.code==401){
-      toast('登录令牌token失效，需要重新获取');
+      if(logintoken(alistapi.server)){
+        alistList(alistapi,dirname);
+      }else{
+        toast('登录令牌token失效，需要重新获取');
+      }
     }else if(json.code==500){
       toast('获取列表失败，下拉刷新重试.'+json.message);
     }
@@ -429,6 +437,31 @@ function alistUrl(alistapi,path,sign,subtitle) {
   }
 }
 
+function logintoken(api) {
+  try{
+    let atokenlist = storage0.getItem('atokenlist', {});
+    let atoken = atokenlist[api];
+    if(atoken){
+      let html = fetch(api+"/api/auth/login", {headers:{'content-type':'application/json;charset=UTF-8' },body: {"Username":atoken.user,"Password":atoken.pwd},method:'POST',timeout:10000});
+      let json = JSON.parse(html);
+      if(json.code==200){
+        eval("var alistData=" + fetch(alistfile));
+        let datalist = alistData.drives;
+        let index = datalist.indexOf(datalist.filter(d=>d.server == api)[0]);
+        datalist[index].token = json.data.token;
+        alistData.drives = datalist;
+        writeFile(alistfile, JSON.stringify(alistData));
+        log("自动重新获取登录用户令牌成功");
+        return true;
+      }else{
+        return false;
+      }
+    }
+  }catch(e){
+    return false;
+  }
+}
+
 function alistSearch(alistapi,input,notoast) {
   let dirlist = [];
   let filelist = [];
@@ -444,7 +477,11 @@ function alistSearch(alistapi,input,notoast) {
     }else if(json.code==500){
       if(!notoast){toast(alistapi.name+' 搜索失败.'+json.message);}
     }else if(json.code==401){
-      if(!notoast){toast(alistapi.name+' 登录令牌token失效，需要重新获取');}
+      if(logintoken(alistapi.server)){
+        alistSearch(alistapi,input,notoast);
+      }else{
+        if(!notoast){toast(alistapi.name+' 登录令牌token失效，需要重新获取');}
+      }
     }
   }catch(e){
     //log(alistapi.name+' 内置搜索出错,偿试小雅搜索>'+e.message);
@@ -751,6 +788,9 @@ function alistSet() {
                     datalist[index].token = json.data.token;
                     alistData.drives = datalist;
                     writeFile(alistfile, JSON.stringify(alistData));
+                    let atokenlist = storage0.getItem('atokenlist', {});
+                    atokenlist[api] = {user: user, pwd: input};
+                    storage0.setItem('atokenlist', atokenlist);
                     return "toast://登录用户令牌已获取成功";
                   }else{
                     return "toast://" + json.message;
