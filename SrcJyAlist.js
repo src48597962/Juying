@@ -258,7 +258,7 @@ function alistList(alistapi,dirname){
       }
     }else if(json.code==401){
       if(logintoken(alistapi.server)){
-        alistList(alistapi,dirname);
+        refreshPage(false);
       }else{
         toast('登录令牌token失效，需要重新获取');
       }
@@ -465,7 +465,7 @@ function alistSearch(alistapi,input,notoast) {
       if(!notoast){toast(alistapi.name+' 搜索失败.'+json.message);}
     }else if(json.code==401){
       if(logintoken(alistapi.server)){
-        alistSearch(alistapi,input,notoast);
+        //alistSearch(alistapi,input,notoast);
       }else{
         if(!notoast){toast(alistapi.name+' 登录令牌token失效，需要重新获取');}
       }
