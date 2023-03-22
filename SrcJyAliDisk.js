@@ -23,7 +23,7 @@ function aliShareUrl(input) {
 
 function aliShare(share_id, folder_id, share_pwd) {
     let d = [];
-    setPageTitle(MY_PARAMS && MY_PARAMS.dirname ? MY_PARAMS.dirname : '云盘共享文件 | 聚影√');
+    setPageTitle(typeof(MY_PARAMS)!="undefined" && MY_PARAMS.dirname ? MY_PARAMS.dirname : '云盘共享文件 | 聚影√');
     let headers = {
         'content-type': 'application/json;charset=UTF-8',
         "origin": "https://www.aliyundrive.com",
