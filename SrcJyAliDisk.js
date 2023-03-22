@@ -14,7 +14,6 @@ function aliShareUrl(input) {
         }
         if (it.indexOf("https://www.aliyundrive.com") > -1) {
             it = it.replace('https://www.aliyundrive.com/s/', '').replace('链接：', '');
-            log(it)
             share_id = it.indexOf('/folder/') > -1 ? it.split('/folder/')[0] : it;
             folder_id = it.indexOf('/folder/') > -1 ? it.split('/folder/')[1] : "root";
         }
