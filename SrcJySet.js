@@ -3196,8 +3196,21 @@ function yundiskjiekou() {
     datalist.forEach(item => {
         d.push({
             title: "💽 " + item.name + "   (" + (item.erparse?"二解接口":"一解接口") + ")",
-            url: $(["编辑", "删除"], 1).select((filepath,yundiskapi,data) => {
-                if(input == "编辑"){
+            url: $(["分享", "编辑", "删除"], 1).select((filepath,yundiskapi,data) => {
+                if(input == "分享"){
+                    showLoading('分享上传中，请稍后...');
+                    let oneshare = []
+                    oneshare.push(data);
+                    let pasteurl = sharePaste(aesEncode('Juying', JSON.stringify(oneshare)));
+                    hideLoading();
+                    if(pasteurl){
+                        let code = '聚影云盘￥'+aesEncode('Juying', pasteurl)+'￥'+data.name;
+                        copy(code);
+                        return "toast://(单个)云盘分享口令已生成";
+                    }else{
+                        return "toast://分享失败，剪粘板或网络异常";
+                    }
+                }else if(input == "编辑"){
                     return $('hiker://empty#noRecordHistory##noHistory#').rule((filepath,yundiskapi,data) => {
                         yundiskapi(filepath,data);
                     },filepath,yundiskapi,data)
