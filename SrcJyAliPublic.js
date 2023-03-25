@@ -51,7 +51,7 @@ if(alitoken){
   if (aliuserinfo && aliuserinfo.user_id && nowtime < (oldtime + 2 * 60 * 60 * 1000)) {
     userinfo = aliuserinfo;
   } else {
-    userinfo = JSON.parse(request('https://auth.aliyundrive.com/v2/account/token', { headers: headers, body: { "refresh_token": alitoken, "grant_type": "refresh_token" }, method: 'POST', timeout: 3000 }));
+    userinfo = JSON.parse(request('https://auth.aliyundrive.com/v2/account/token', { body: { "refresh_token": alitoken, "grant_type": "refresh_token" }, method: 'POST', timeout: 3000 }));
     storage0.putMyVar('aliuserinfo', userinfo);
     putMyVar('userinfoChecktime', nowtime + 'time');
   }
