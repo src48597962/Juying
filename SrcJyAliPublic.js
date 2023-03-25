@@ -43,19 +43,6 @@ if (!alitoken && getMyVar('getalitoken') != "1") {
     log('自动取ali-token失败' + e.message)
   }
 }
-if(alitoken){
-  let nowtime = Date.now();
-  let oldtime = parseInt(getMyVar('userinfoChecktime', '0').replace('time', ''));
-  let userinfo;
-  let aliuserinfo = storage0.getMyVar('aliuserinfo');
-  if (aliuserinfo && aliuserinfo.user_id && nowtime < (oldtime + 2 * 60 * 60 * 1000)) {
-    userinfo = aliuserinfo;
-  } else {
-    userinfo = JSON.parse(request('https://auth.aliyundrive.com/v2/account/token', { headers: headers, body: { "refresh_token": alitoken, "grant_type": "refresh_token" }, method: 'POST', timeout: 3000 }));
-    storage0.putMyVar('aliuserinfo', userinfo);
-    putMyVar('userinfoChecktime', nowtime + 'time');
-  }
-}
 
 function SortList(v1, v2) {
   var a = v1.name;
