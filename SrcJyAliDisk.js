@@ -370,8 +370,8 @@ function aliMyPlayUrl(file_id){
         let heads = [];
       aliyunUrl.forEach((item) => {
         urls.push(item.url + "#.m3u8#pre#");
-        names.push(item.template_id);//transcoding[item.template_id] ? transcoding[item.template_id] : item.template_height
-        heads.push({ 'Referer': 'https://www.aliyundrive.com/' });
+        names.push(transcoding[item.template_id] ? transcoding[item.template_id] : item.template_height);
+        heads.push({'Referer':'https://www.aliyundrive.com/'});
       })
       return {
           urls: urls,
