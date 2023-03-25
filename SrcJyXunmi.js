@@ -1259,12 +1259,13 @@ function xunmierji(type,ua) {
         eval('var SrcMark = ' + fetch("hiker://files/cache/SrcMark.json"));
         if (SrcMark != "") {
             if (SrcMark.route[MY_URL] != undefined) {
+                var SrcMarkline = SrcMark.route[MY_URL];
                 putMyVar(MY_URL, SrcMark.route[MY_URL]);
             }
         }
     } catch (e) { }
     var Marksum = 30;//设置记录线路足迹数量
-
+    var lineindex = getMyVar(MY_URL, typeof(SrcMarkline) != "undefined"?SrcMarkline:'0');
     //线路部份
     var Color1 = getItem('SrcJy$linecolor1','#09c11b')||'#09c11b';//#f13b66a
     var Color2 = getItem('SrcJy$linecolor2','');;//#098AC1
@@ -1289,7 +1290,7 @@ function xunmierji(type,ua) {
     function setTabs(tabs, vari) {
         d.push({
             title: getMyVar('shsort') == '1'?'““””<b><span style="color: #FF0000">∨</span></b>' : '““””<b><span style="color: #1aad19">∧</span></b>',
-            url: $("#noLoading#").lazyRule(() => {
+            url: lineindex=="98"||lineindex=="99"?"toast://当前线路不支持切换排序":$("#noLoading#").lazyRule(() => {
                 if (getMyVar('shsort') == '1') { putMyVar('shsort', '0'); } else { putMyVar('shsort', '1') };
                 refreshPage(false);
                 return 'toast://切换排序成功'
@@ -1302,28 +1303,33 @@ function xunmierji(type,ua) {
                 d.push({
                     title: getMyVar(vari, '0') == i ? getHead(tabs[i],Color1,1) : getHead(tabs[i],Color2),
                     url: $("#noLoading#").lazyRule((vari, i, Marksum) => {
-                        try {
-                            eval('var SrcMark = ' + fetch("hiker://files/cache/SrcMark.json"));
-                        } catch (e) {
-                            var SrcMark = "";
+                        if (parseInt(getMyVar(vari, '0')) != i) {
+                            if(getMyVar('diskSearch')=="1"){
+                                return 'toast://搜索线程中，稍等片刻.'
+                            }
+                            try {
+                                eval('var SrcMark = ' + fetch("hiker://files/cache/SrcMark.json"));
+                            } catch (e) {
+                                var SrcMark = "";
+                            }
+                            if (SrcMark == "") {
+                                SrcMark = { route: {} };
+                            } else if (SrcMark.route == undefined) {
+                                SrcMark.route = {};
+                            }
+                            SrcMark.route[vari] = i;
+                            var key = 0;
+                            var one = "";
+                            for (var k in SrcMark.route) {
+                                key++;
+                                if (key == 1) { one = k }
+                            }
+                            if (key > Marksum) { delete SrcMark.route[one]; }
+                            writeFile("hiker://files/cache/SrcMark.json", JSON.stringify(SrcMark));
+                            putMyVar(vari, i);
+                            refreshPage(false);
                         }
-                        if (SrcMark == "") {
-                            SrcMark = { route: {} };
-                        } else if (SrcMark.route == undefined) {
-                            SrcMark.route = {};
-                        }
-                        SrcMark.route[vari] = i;
-                        var key = 0;
-                        var one = "";
-                        for (var k in SrcMark.route) {
-                            key++;
-                            if (key == 1) { one = k }
-                        }
-                        if (key > Marksum) { delete SrcMark.route[one]; }
-                        writeFile("hiker://files/cache/SrcMark.json", JSON.stringify(SrcMark));
-                        putMyVar(vari, i);
-                        refreshPage(false);
-                        return 'toast://切换成功'
+                        return '#noHistory#hiker://empty'
                     }, vari, i, Marksum),
                     col_type: 'scroll_button'
                 })
@@ -1333,27 +1339,70 @@ function xunmierji(type,ua) {
     setTabs(tabs, MY_URL);
     if(getMyVar('yundiskLine','0')==1){
         d.push({
-            title: '云盘搜索',
-            url: $("#noLoading#").lazyRule((name) => {
-                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
-                aliShareSearch(name);
-                return "toast://搜索完成";
-            },MY_PARAMS.name),
+            title: lineindex == "98" ? getHead('云盘搜索',Color1,1) : getHead('云盘搜索',Color2),
+            url: $("#noLoading#").lazyRule((vari,Marksum) => {
+                let i = 98;
+                if (parseInt(getMyVar(vari, '0')) != i) {
+                    try {
+                        eval('var SrcMark = ' + fetch("hiker://files/cache/SrcMark.json"));
+                    } catch (e) {
+                        var SrcMark = "";
+                    }
+                    if (SrcMark == "") {
+                        SrcMark = { route: {} };
+                    } else if (SrcMark.route == undefined) {
+                        SrcMark.route = {};
+                    }
+                    SrcMark.route[vari] = i;
+                    var key = 0;
+                    var one = "";
+                    for (var k in SrcMark.route) {
+                        key++;
+                        if (key == 1) { one = k }
+                    }
+                    if (key > Marksum) { delete SrcMark.route[one]; }
+                    writeFile("hiker://files/cache/SrcMark.json", JSON.stringify(SrcMark));
+                    putMyVar(vari, i);
+                    refreshPage(false);
+                }
+                return '#noHistory#hiker://empty'
+            }, vari, Marksum),
             col_type: 'scroll_button'
         })
     }
     if(getMyVar('alistLine','0')==1){
         d.push({
-            title: 'Alist搜索',
-            url: $("#noLoading#").lazyRule((name) => {
-                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
-                if(datalist.length>0){
-                    alistSearch2(name,1);
-                    return "toast://搜索完成";
-                }else{
-                    return "toast://无Alist接口";
+            title: lineindex == "99" ? getHead('Alist搜索',Color1,1) : getHead('Alist搜索',Color2),
+            url: $("#noLoading#").lazyRule((vari,Marksum) => {
+                let i = 99;
+                if (parseInt(getMyVar(vari, '0')) != i) {
+                    if(getMyVar('diskSearch')=="1"){
+                        return 'toast://搜索线程中，稍等片刻.'
+                    }
+                    try {
+                        eval('var SrcMark = ' + fetch("hiker://files/cache/SrcMark.json"));
+                    } catch (e) {
+                        var SrcMark = "";
+                    }
+                    if (SrcMark == "") {
+                        SrcMark = { route: {} };
+                    } else if (SrcMark.route == undefined) {
+                        SrcMark.route = {};
+                    }
+                    SrcMark.route[vari] = i;
+                    var key = 0;
+                    var one = "";
+                    for (var k in SrcMark.route) {
+                        key++;
+                        if (key == 1) { one = k }
+                    }
+                    if (key > Marksum) { delete SrcMark.route[one]; }
+                    writeFile("hiker://files/cache/SrcMark.json", JSON.stringify(SrcMark));
+                    putMyVar(vari, i);
+                    refreshPage(false);
                 }
-            },MY_PARAMS.name),
+                return '#noHistory#hiker://empty'
+            }, vari, Marksum),
             col_type: 'scroll_button'
         })
     }
@@ -1545,7 +1594,9 @@ function xunmierji(type,ua) {
             }
         }
     }
-    setLists(lists, getMyVar(MY_URL, '0'));
+    if(lineindex != "98" && lineindex != "99"){
+        setLists(lists, lineindex);
+    }
     //底部说明
     d.push({
         desc: '‘‘’’<small><font color=#f20c00>此规则仅限学习交流使用，请于导入后24小时内删除，任何团体或个人不得以任何方式方法传播此规则的整体或部分！</font></small>',
@@ -1557,6 +1608,24 @@ function xunmierji(type,ua) {
         }
     });
     setResult(d);
+    if(lineindex == "98"){
+        let diskMark = storage0.getMyVar('diskMark') || {};
+        if(diskMark[MY_PARAMS.name]){
+            deleteItemByCls('loadlist');
+            addItemBefore('listloading', diskMark[MY_PARAMS.name]);
+        }else{
+            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+            aliShareSearch(MY_PARAMS.name);
+        }
+    }else if(lineindex == "99"){
+        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
+        if(datalist.length>0){
+            alistSearch2(MY_PARAMS.name,1);
+            return "toast://搜索完成";
+        }else{
+            return "toast://无Alist接口";
+        }
+    }
     setLastChapterRule('js:' + $.toString((type,ua,data)=>{
         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLastChapter.js');
         xunmi(type,ua,data);
