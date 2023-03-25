@@ -25,15 +25,6 @@ function aliShare(share_id, folder_id, share_pwd) {
     let d = [];
     setPageTitle(typeof(MY_PARAMS)!="undefined" && MY_PARAMS.dirname ? MY_PARAMS.dirname : '云盘共享文件 | 聚影√');
     share_pwd = share_pwd || "";
-    /*
-    let headers = {
-        'content-type': 'application/json;charset=UTF-8',
-        "origin": "https://www.aliyundrive.com",
-        "referer": "https://www.aliyundrive.com/",
-        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36 Edg/110.0.1587.41",
-        "x-canary": "client=web,app=share,version=v2.3.1"
-    };
-    */
     try{
         let sharetoken = JSON.parse(request('https://api.aliyundrive.com/v2/share_link/get_share_token', { headers: headers, body: { "share_pwd": share_pwd, "share_id": share_id }, method: 'POST', timeout: 3000 })).share_token;
         let postdata = { "share_id": share_id, "parent_file_id": folder_id || "root", "limit": 200, "image_thumbnail_process": "image/resize,w_256/format,jpeg", "image_url_process": "image/resize,w_1920/format,jpeg/interlace,1", "video_thumbnail_process": "video/snapshot,t_1000,f_jpg,ar_auto,w_256", "order_by": "name", "order_direction": "DESC" };
@@ -89,7 +80,6 @@ function aliShare(share_id, folder_id, share_pwd) {
                     img: item.thumbnail || (item.category == "video" ? "hiker://files/cache/src/影片.svg" : item.category == "audio" ? "hiker://files/cache/src/音乐.svg" : item.category == "image" ? "hiker://files/cache/src/图片.png" : "https://img.alicdn.com/imgextra/i1/O1CN01mhaPJ21R0UC8s9oik_!!6000000002049-2-tps-80-80.png"),
                     url: $("hiker://empty##").lazyRule((share_id, file_id, sub_file_id, share_pwd) => {
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliPublic.js');
-                        //let alitoken = alistconfig.alitoken;
                         let play = getAliUrl(share_id, file_id, alitoken, share_pwd);
                         if (play.urls) {
                             let subtitle;
@@ -101,7 +91,7 @@ function aliShare(share_id, folder_id, share_pwd) {
                             }
                             return JSON.stringify(play);
                         }else{
-                            return "toast://获取转码播放列表失败，是不是没有设置阿里token";
+                            return "toast://获取转码播放列表失败，阿里token无效";
                         }
                     }, item.share_id, item.file_id, sub_file_id, share_pwd),
                     desc: filesize < 1024 ? filesize.toFixed(2) + 'MB' : (filesize/1024).toFixed(2) + 'GB',
@@ -235,15 +225,6 @@ function aliShareSearch(input) {
 function aliMyDisk(folder_id) {
     let d = [];
     setPageTitle(typeof(MY_PARAMS)!="undefined" && MY_PARAMS.dirname ? MY_PARAMS.dirname : '我的云盘文件 | 聚影√');
-    /*
-    let headers = {
-        'content-type': 'application/json;charset=UTF-8',
-        "origin": "https://www.aliyundrive.com",
-        "referer": "https://www.aliyundrive.com/",
-        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36 Edg/110.0.1587.41",
-        "x-canary": "client=web,app=share,version=v2.3.1"
-    };
-    */
     try{
         let drive_id = userinfo.default_drive_id;
         let postdata = {"drive_id":drive_id,"parent_file_id":folder_id,"limit":200,"all":true,"url_expire_sec":86400,"image_thumbnail_process":"image/resize,w_400/format,jpeg","image_url_process":"image/resize,w_1920/format,jpeg","video_thumbnail_process":"video/snapshot,t_1000,f_jpg,ar_auto,w_300","order_by":"name","order_direction":"ASC"};
