@@ -399,7 +399,7 @@ function JYerji(){
         }
         if(JYconfig['yundiskLine']==1){
             d.push({
-                title: '云盘搜索',
+                title: getMyVar(vari, '98') == i ? getHead('云盘搜索',Color1,1) : getHead('云盘搜索',Color2),
                 url: $("#noLoading#").lazyRule((name,vari,Marksum) => {
                     let i = 98;
                     if (parseInt(getMyVar(vari, '0')) != i) {
@@ -423,9 +423,8 @@ function JYerji(){
                         if (key > Marksum) { delete SrcMark.route[one]; }
                         writeFile("hiker://files/cache/SrcMark.json", JSON.stringify(SrcMark));
                         putMyVar(vari, i);
-                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
-                        aliShareSearch(name);
-                        return "toast://搜索完成";
+                        refreshPage(false);
+                        return 'toast://切换成功'
                     } else {
                         return '#noHistory#hiker://empty'
                     }
