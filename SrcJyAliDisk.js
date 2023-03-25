@@ -367,13 +367,13 @@ function aliMyPlayUrl(file_id){
     let urls = [];
     let names = [];
     let heads = [];
-    urls.push(file_url + "#.m3u8#pre#");
+    urls.push(file_url);
     names.push("原始 文件");
     heads.push({'Referer':'https://www.aliyundrive.com/'});
 
     if(aliyunUrl.length>0){
       aliyunUrl.forEach((item) => {
-        urls.push(item.url + "#.m3u8#pre#");
+        urls.push(item.url + "#pre#");
         names.push(transcoding[item.template_id] ? transcoding[item.template_id] : item.template_height);
         heads.push({'Referer':'https://www.aliyundrive.com/'});
       })
