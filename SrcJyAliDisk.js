@@ -24,6 +24,7 @@ function aliShareUrl(input) {
 function aliShare(share_id, folder_id, share_pwd) {
     let d = [];
     setPageTitle(typeof(MY_PARAMS)!="undefined" && MY_PARAMS.dirname ? MY_PARAMS.dirname : '云盘共享文件 | 聚影√');
+    share_pwd = share_pwd || "";
     /*
     let headers = {
         'content-type': 'application/json;charset=UTF-8',
@@ -40,7 +41,7 @@ function aliShare(share_id, folder_id, share_pwd) {
         let sharelist = JSON.parse(request('https://api.aliyundrive.com/adrive/v2/file/list_by_share', { headers: headers, body: postdata, method: 'POST' })).items;
         if(sharelist.length>0){
             d.push({
-                title: "☁️☁️☁️保存到我的云盘☁️☁️☁️",
+                title: "⛅⛅⛅保存到我的云盘⛅⛅⛅",
                 url: "smartdrive://share/browse?shareId="+share_id+"&sharePwd="+share_pwd,
                 col_type: 'text_center_1'
             })
