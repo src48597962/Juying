@@ -155,7 +155,12 @@ function aliShareSearch(input) {
                 };
 
                 let home = "https://www.aliyundrive.com/s/";
-                if(item.url.includes(home)){
+                if(obj.name=="我的云盘"){
+                    arr.url = $("hiker://empty##").rule((input) => {
+                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+                        aliMyDisk(input);
+                    },item.url);
+                }else if(item.url.includes(home)){
                     //let share_id = item.url.replace(home, '').replace('/folder/','');
                     //let getis = JSON.parse(request("https://api.aliyundrive.com/adrive/v3/share_link/get_share_by_anonymous",{headers: {referer: "https://www.aliyundrive.com/"}, body: {"share_id": share_id}, method: 'POST', timeout: 3000 })).file_infos || [];
                     //if(getis.length>0){
@@ -163,7 +168,6 @@ function aliShareSearch(input) {
                             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
                             aliShareUrl(input);
                         },item.url);
-                        searchlist.push(arr);
                     //}
                 } else if (obj.erparse) {
                     arr.url = $("hiker://empty##").lazyRule((url,erparse) => {
@@ -178,8 +182,8 @@ function aliShareSearch(input) {
                             return "toast://二解云盘共享链接失败";
                         }
                     },item.url,obj.erparse);
-                    searchlist.push(arr);
                 }
+                searchlist.push(arr);
             })
             if(searchlist.length>0){
                 hideLoading();
@@ -233,6 +237,7 @@ function aliMyDisk(folder_id) {
         "x-canary": "client=web,app=share,version=v2.3.1"
     };
     try{
+        /*
         let nowtime = Date.now();
         let oldtime = parseInt(getMyVar('userinfoChecktime','0').replace('time',''));
         let userinfo;
@@ -244,6 +249,7 @@ function aliMyDisk(folder_id) {
             storage0.putMyVar('aliuserinfo', userinfo);
             putMyVar('userinfoChecktime', nowtime+'time');
         }
+        */
         let drive_id = userinfo.default_drive_id;
         let postdata = {"drive_id":drive_id,"parent_file_id":folder_id,"limit":200,"all":true,"url_expire_sec":86400,"image_thumbnail_process":"image/resize,w_400/format,jpeg","image_url_process":"image/resize,w_1920/format,jpeg","video_thumbnail_process":"video/snapshot,t_1000,f_jpg,ar_auto,w_300","order_by":"name","order_direction":"ASC"};
         headers['authorization'] = 'Bearer ' + userinfo.access_token;
@@ -293,7 +299,7 @@ function aliMyDisk(folder_id) {
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliPublic.js');
 
 
-function aliMyPlayUrl(file_id,alitoken){
+function aliMyPlayUrl(file_id){
   try{
     function getNowTime() {
       const yy = new Date().getFullYear()
@@ -310,6 +316,7 @@ function aliMyPlayUrl(file_id,alitoken){
       "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36 Edg/110.0.1587.41",
       "x-canary": "client=web,app=adrive,version=v3.1.0"
     };
+    /*
     let nowtime = Date.now();
     let oldtime = parseInt(getMyVar('userinfoChecktime','0').replace('time',''));
     let userinfo;
@@ -321,6 +328,7 @@ function aliMyPlayUrl(file_id,alitoken){
       storage0.putMyVar('aliuserinfo', userinfo);
       putMyVar('userinfoChecktime', nowtime+'time');
     }
+    */
     let authorization = 'Bearer ' + userinfo.access_token;
     let deviceId = userinfo.device_id;
     let userId = userinfo.user_id;
