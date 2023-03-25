@@ -354,7 +354,7 @@ function JYerji(){
     function setTabs(tabs, vari) {
         d.push({
             title: getMyVar('shsort') == '1'?'““””<b><span style="color: #FF0000">∨</span></b>' : '““””<b><span style="color: #1aad19">∧</span></b>',
-            url: $("#noLoading#").lazyRule(() => {
+            url: lineindex=="98"||lineindex=="99"?"toast://当前线路不支持切换排序":$("#noLoading#").lazyRule(() => {
                 if (getMyVar('shsort') == '1') { putMyVar('shsort', '0'); } else { putMyVar('shsort', '1') };
                 refreshPage(false);
                 return 'toast://切换排序成功'
@@ -368,7 +368,7 @@ function JYerji(){
                     url: $("#noLoading#").lazyRule((vari, i, Marksum) => {
                         if (parseInt(getMyVar(vari, '0')) != i) {
                             if(getMyVar('diskSearch')=="1"){
-                                return 'toast://搜索线程中，稍等再切换线路.'
+                                return 'toast://搜索线程中，稍等片刻.'
                             }
                             try {
                                 eval('var SrcMark = ' + fetch("hiker://files/cache/SrcMark.json"));
@@ -438,7 +438,7 @@ function JYerji(){
                     let i = 99;
                     if (parseInt(getMyVar(vari, '0')) != i) {
                         if(getMyVar('diskSearch')=="1"){
-                            return 'toast://搜索线程中，稍等再切换线路.'
+                            return 'toast://搜索线程中，稍等片刻.'
                         }
                         try {
                             eval('var SrcMark = ' + fetch("hiker://files/cache/SrcMark.json"));
@@ -680,8 +680,14 @@ function JYerji(){
     });
     setResult(d);
     if(lineindex == "98"){
-        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
-        aliShareSearch(MY_PARAMS.name);
+        let diskMark = storage0.getMyVar('diskMark') || {};
+        if(diskMark[MY_PARAMS.name]){
+            deleteItemByCls('loadlist');
+            addItemBefore('listloading', diskMark[MY_PARAMS.name]);
+        }else{
+            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+            aliShareSearch(MY_PARAMS.name);
+        }
     }else if(lineindex == "99"){
         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
         if(datalist.length>0){
