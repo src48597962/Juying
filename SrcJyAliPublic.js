@@ -43,6 +43,13 @@ if (!alitoken && getMyVar('getalitoken') != "1") {
     log('自动取ali-token失败' + e.message)
   }
 }
+let headers = {
+  'content-type': 'application/json;charset=UTF-8',
+  "origin": "https://www.aliyundrive.com",
+  "referer": "https://www.aliyundrive.com/",
+  "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36 Edg/110.0.1587.41",
+  "x-canary": "client=web,app=adrive,version=v3.1.0"
+};
 if(alitoken){
   let nowtime = Date.now();
   let oldtime = parseInt(getMyVar('userinfoChecktime', '0').replace('time', ''));
@@ -51,7 +58,7 @@ if(alitoken){
   if (aliuserinfo && aliuserinfo.user_id && nowtime < (oldtime + 2 * 60 * 60 * 1000)) {
     userinfo = aliuserinfo;
   } else {
-    userinfo = JSON.parse(request('https://auth.aliyundrive.com/v2/account/token', { body: { "refresh_token": alitoken, "grant_type": "refresh_token" }, method: 'POST', timeout: 3000 }));
+    userinfo = JSON.parse(request('https://auth.aliyundrive.com/v2/account/token', { headers: headers,body: { "refresh_token": alitoken, "grant_type": "refresh_token" }, method: 'POST', timeout: 3000 }));
     storage0.putMyVar('aliuserinfo', userinfo);
     putMyVar('userinfoChecktime', nowtime + 'time');
   }
