@@ -436,7 +436,7 @@ function JYerji(){
         }
         if(JYconfig['alistLine']==1){
             d.push({
-                title: getMyVar(vari, '0') == "98" ? getHead('Alist搜索',Color1,1) : getHead('Alist搜索',Color2),
+                title: getMyVar(vari, '0') == "99" ? getHead('Alist搜索',Color1,1) : getHead('Alist搜索',Color2),
                 url: $("#noLoading#").lazyRule((vari,Marksum) => {
                     let i = 99;
                     if (parseInt(getMyVar(vari, '0')) != i) {
