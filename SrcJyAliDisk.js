@@ -294,7 +294,7 @@ function aliMyDisk(folder_id) {
                 let filesize = item.size/1024/1024;
                 d.push({
                     title: item.name,
-                    img: item.thumbnail || (item.category == "video" ? "hiker://files/cache/src/影片.svg" : item.category == "audio" ? "hiker://files/cache/src/音乐.svg" : item.category == "image" ? "hiker://files/cache/src/图片.png" : "https://img.alicdn.com/imgextra/i1/O1CN01mhaPJ21R0UC8s9oik_!!6000000002049-2-tps-80-80.png"),
+                    img: item.thumbnail+"@Referer=https://www.aliyundrive.com/" || (item.category == "video" ? "hiker://files/cache/src/影片.svg" : item.category == "audio" ? "hiker://files/cache/src/音乐.svg" : item.category == "image" ? "hiker://files/cache/src/图片.png" : "https://img.alicdn.com/imgextra/i1/O1CN01mhaPJ21R0UC8s9oik_!!6000000002049-2-tps-80-80.png"),
                     url: $("hiker://empty##").lazyRule((file_id, sub_file_id) => {
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliPublic.js');
 
@@ -309,6 +309,7 @@ function aliMyPlayUrl(file_id){
       const mm = new Date().getMinutes() < 10 ? '0' + new Date().getMinutes() : new Date().getMinutes()
       return yy + '' + dd + '' + HH + '' + MM + '' + mm
     }
+    /*
     let headers = {
       'content-type': 'application/json;charset=UTF-8',
       "origin": "https://www.aliyundrive.com",
@@ -316,7 +317,7 @@ function aliMyPlayUrl(file_id){
       "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36 Edg/110.0.1587.41",
       "x-canary": "client=web,app=adrive,version=v3.1.0"
     };
-    /*
+    
     let nowtime = Date.now();
     let oldtime = parseInt(getMyVar('userinfoChecktime','0').replace('time',''));
     let userinfo;
