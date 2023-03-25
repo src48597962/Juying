@@ -1369,7 +1369,7 @@ function xunmierji(type,ua) {
                     refreshPage(false);
                 }
                 return '#noHistory#hiker://empty'
-            }, vari, Marksum),
+            }, MY_URL, Marksum),
             col_type: 'scroll_button'
         })
     }
@@ -1405,7 +1405,7 @@ function xunmierji(type,ua) {
                     refreshPage(false);
                 }
                 return '#noHistory#hiker://empty'
-            }, vari, Marksum),
+            }, MY_URL, Marksum),
             col_type: 'scroll_button'
         })
     }
