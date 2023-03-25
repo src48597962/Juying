@@ -122,7 +122,6 @@ function aliShare(share_id, folder_id, share_pwd) {
 }
 
 function aliShareSearch(input) {
-    deleteItemByCls('loadlist');
     showLoading('搜索中，请稍后...');
     let filepath = "hiker://files/rules/Src/Juying/yundisk.json";
     let datafile = fetch(filepath);
@@ -135,14 +134,7 @@ function aliShareSearch(input) {
     }else{
         var datalist = [];
     }
-    if(datalist.length==0){
-        hideLoading();
-        toast('无接口，无法搜索');
-    }
-    let diskMark = storage0.getMyVar('diskMark') || [];
-    if(diskMark.length>20){
-        diskMark.splice(0,1);
-    }
+    
     let task = function(obj) {
         try{
             eval('let Parse = '+obj.parse)
@@ -218,7 +210,12 @@ function aliShareSearch(input) {
         }
     });
     if(list.length>0){
+        deleteItemByCls('loadlist');
         putMyVar('diskSearch', '1');
+        let diskMark = storage0.getMyVar('diskMark') || {};
+        if(diskMark.length>20){
+            diskMark.splice(0,1);
+        }
         be(list, {
             func: function(obj, id, error, taskResult) {
             },
@@ -228,6 +225,9 @@ function aliShareSearch(input) {
         storage0.putMyVar('diskMark',diskMark);
         clearMyVar('diskSearch');
         toast('搜索完成');
+    }else{
+        hideLoading();
+        toast('无接口，无法搜索');
     }
 }
 
