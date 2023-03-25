@@ -624,6 +624,11 @@ function sousuo2() {
     d.push({
         title: "♻"+(getItem('searchsource')=="360"?"源：360":getItem('searchsource')=="sougou"?"源：搜狗":"源：接口"),
         url: $(["接口","sougou","360"],1,"选择搜索数据源").select(()=>{
+            if(input=="接口"){
+                clearItem('searchmode');
+            }else{
+                setItem('searchmode','hiker');
+            }
             setItem('searchsource',input);
             refreshPage(false);
             return "toast://已切换"
@@ -635,6 +640,7 @@ function sousuo2() {
         url: $('#noLoading#').lazyRule(() => {
             if(getItem('searchmode')=='hiker'){
                 clearItem('searchmode');
+                setItem('searchsource',"接口");
             }else{
                 setItem('searchmode','hiker');
             }
