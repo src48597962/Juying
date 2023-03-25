@@ -289,10 +289,103 @@ function aliMyDisk(folder_id) {
                 d.push({
                     title: item.name,
                     img: item.thumbnail || (item.category == "video" ? "hiker://files/cache/src/影片.svg" : item.category == "audio" ? "hiker://files/cache/src/音乐.svg" : item.category == "image" ? "hiker://files/cache/src/图片.png" : "https://img.alicdn.com/imgextra/i1/O1CN01mhaPJ21R0UC8s9oik_!!6000000002049-2-tps-80-80.png"),
-                    url: $("hiker://empty##").lazyRule((share_id, file_id, sub_file_id, share_pwd) => {
+                    url: $("hiker://empty##").lazyRule((file_id, sub_file_id) => {
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliPublic.js');
-                        let play = getAliUrl(share_id, file_id, alitoken, share_pwd);
+
+
+function aliMyPlayUrl(file_id,alitoken){
+  try{
+    function getNowTime() {
+      const yy = new Date().getFullYear()
+      const MM = (new Date().getMonth() + 1) < 10 ? '0' + (new Date().getMonth() + 1) : (new Date().getMonth() + 1)
+      const dd = new Date().getDate() < 10 ? '0' + new Date().getDate() : new Date().getDate()
+      const HH = new Date().getHours() < 10 ? '0' + new Date().getHours() : new Date().getHours()
+      const mm = new Date().getMinutes() < 10 ? '0' + new Date().getMinutes() : new Date().getMinutes()
+      return yy + '' + dd + '' + HH + '' + MM + '' + mm
+    }
+    let headers = {
+      'content-type': 'application/json;charset=UTF-8',
+      "origin": "https://www.aliyundrive.com",
+      "referer": "https://www.aliyundrive.com/",
+      "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36 Edg/110.0.1587.41",
+      "x-canary": "client=web,app=adrive,version=v3.1.0"
+    };
+    let nowtime = Date.now();
+    let oldtime = parseInt(getMyVar('userinfoChecktime','0').replace('time',''));
+    let userinfo;
+    let aliuserinfo = storage0.getMyVar('aliuserinfo');
+    if (aliuserinfo && aliuserinfo.user_id && nowtime < (oldtime+2*60*60*1000)) {
+      userinfo = aliuserinfo;
+    } else {
+      userinfo = JSON.parse(request('https://auth.aliyundrive.com/v2/account/token', { headers: headers, body: { "refresh_token": alitoken, "grant_type": "refresh_token" }, method: 'POST', timeout: 3000 }));
+      storage0.putMyVar('aliuserinfo', userinfo);
+      putMyVar('userinfoChecktime', nowtime+'time');
+    }
+    let authorization = 'Bearer ' + userinfo.access_token;
+    let deviceId = userinfo.device_id;
+    let userId = userinfo.user_id;
+    let drive_id = userinfo.default_drive_id;
+    let signature;
+    let public_key;
+    let getaliecc = JSON.parse(request('http://124.221.241.174:87/api', { body: 'did=' + deviceId + '&uid=' + userId + '&token=' + md5(getNowTime()), method: 'POST', timeout: 3000 }));
+    if (getaliecc.code == 200) {
+      signature = getaliecc.sign;
+      public_key = getaliecc.key;
+    }
+    /*
+    let a = justTestSign('5dde4e1bdf9e4966b387ba58f4b3fdc3',deviceId,userId);
+    signature = a.split('##')[0];
+    public_key = a.split('##')[1];
+    */
+    headers['authorization'] = authorization;
+    headers['x-device-id'] = deviceId;
+    headers['x-signature'] = signature;
+    let data = {
+      "deviceName": "Edge浏览器",
+      "modelName": "Windows网页版",
+      "pubKey": public_key,
+    }
+    let aliyunUrl = [];
+    if (signature && public_key) {
+      let req = JSON.parse(request("https://api.aliyundrive.com/users/v1/users/device/create_session", { headers: headers, body: data, timeout: 3000 }));
+      if (req.success) {
+        data = {"drive_id":drive_id,"file_id":file_id,"category":"live_transcoding","template_id":"","get_subtitle_info":true}
+        let json = JSON.parse(request('https://api.aliyundrive.com/v2/file/get_video_preview_play_info', { headers: headers, body: data, method: 'POST', timeout: 3000 }));
+        aliyunUrl = json.video_preview_play_info.live_transcoding_task_list;
+        aliyunUrl.reverse();
+      }
+    }
+    if(aliyunUrl.length>0){
+        let urls = [];
+        let names = [];
+        let heads = [];
+      aliyunUrl.forEach((item) => {
+        urls.push(item.url + "#.m3u8#pre#");
+        names.push(transcoding[item.template_id] ? transcoding[item.template_id] : item.template_height);
+        heads.push({ 'Referer': 'https://www.aliyundrive.com/' });
+      })
+      return {
+          urls: urls,
+          names: names,
+          headers: heads
+      };
+    }else{
+      log('未获取阿里播放地址，建议重进软件再试一次')
+      return {};
+    }
+  }catch(e){
+    log('获取我的云盘播放地址失败>'+e.message);
+    return {};
+  }
+}
+
+
+                        let play = aliMyPlayUrl(file_id,alitoken);
+
+                        
+
                         if (play.urls) {
+                            /*
                             let subtitle;
                             if (sub_file_id) {
                                 subtitle = getSubtitle(share_id, sub_file_id, share_pwd);
@@ -300,11 +393,12 @@ function aliMyDisk(folder_id) {
                             if (subtitle) {
                                 play['subtitle'] = subtitle;
                             }
+                            */
                             return JSON.stringify(play);
                         }else{
                             return "toast://获取转码播放列表失败，阿里token可能无效";
                         }
-                    }, item.share_id, item.file_id, sub_file_id, share_pwd),
+                    }, item.file_id, sub_file_id),
                     desc: filesize < 1024 ? filesize.toFixed(2) + 'MB' : (filesize/1024).toFixed(2) + 'GB',
                     col_type: 'avatar',
                     extra: {
