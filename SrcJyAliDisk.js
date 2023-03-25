@@ -301,11 +301,14 @@ function aliMyDisk(folder_id) {
                             let play = aliMyPlayUrl(file_id);
                             if (play.urls) {
                                 if (sub_file_url) {
+                                    play['subtitle'] = sub_file_url;
+                                    /*
                                     let substr = fetch(sub_file_url, {headers:{"referer": "https://www.aliyundrive.com/"},timeout:3000});
                                     if(substr){
                                         writeFile("hiker://files/cache/src/subtitles.srt",substr);
                                         play['subtitle'] = getPath("hiker://files/cache/src/subtitles.srt");
                                     }
+                                    */
                                 }
                                 play.urls.unshift(file_url);
                                 play.names.unshift("原始 文件");
