@@ -281,13 +281,13 @@ function aliMyDisk(folder_id) {
         filelist.sort(SortList);
         filelist.forEach((item) => {
             if (item.category == "video") {
-                let sub_file_id;
+                let sub_file_url;
                 if (sublist.length == 1) {
-                    sub_file_id = sublist[0].file_id;
+                    sub_file_url = sublist[0].url;
                 } else if (sublist.length > 1) {
                     sublist.forEach(it => {
                         if (it.name.substring(0, it.name.lastIndexOf(".")) == item.name.substring(0, item.name.lastIndexOf("."))) {
-                            sub_file_id = it.file_id;
+                            sub_file_url = it.url;
                         }
                     })
                 }
@@ -295,20 +295,18 @@ function aliMyDisk(folder_id) {
                 d.push({
                     title: item.name,
                     img: item.thumbnail+"@Referer=https://www.aliyundrive.com/" || (item.category == "video" ? "hiker://files/cache/src/影片.svg" : item.category == "audio" ? "hiker://files/cache/src/音乐.svg" : item.category == "image" ? "hiker://files/cache/src/图片.png" : "https://img.alicdn.com/imgextra/i1/O1CN01mhaPJ21R0UC8s9oik_!!6000000002049-2-tps-80-80.png"),
-                    url: $("hiker://empty##").lazyRule((file_id,file_url,sub_file_id) => {
+                    url: $("hiker://empty##").lazyRule((file_id,file_url,sub_file_url) => {
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliPublic.js');
                         if(alitoken){
                             let play = aliMyPlayUrl(file_id);
                             if (play.urls) {
-                                /*
-                                let subtitle;
-                                if (sub_file_id) {
-                                    subtitle = getSubtitle(share_id, sub_file_id, share_pwd);
+                                if (sub_file_url) {
+                                    let substr = fetch(sub_file_url, {headers:{"referer": "https://www.aliyundrive.com/"},timeout:3000});
+                                    if(substr){
+                                        writeFile("hiker://files/cache/src/subtitles.srt",substr);
+                                        play['subtitle'] = getPath("hiker://files/cache/src/subtitles.srt");
+                                    }
                                 }
-                                if (subtitle) {
-                                    play['subtitle'] = subtitle;
-                                }
-                                */
                                 play.urls.unshift(file_url);
                                 play.names.unshift("原始 文件");
                                 play.heads.unshift({'Referer':'https://www.aliyundrive.com/'});
@@ -319,7 +317,7 @@ function aliMyDisk(folder_id) {
                         }else{
                             return "toast://未获取到阿里token";
                         }
-                    }, item.file_id, item.url, sub_file_id),
+                    }, item.file_id, item.url, sub_file_url),
                     desc: filesize < 1024 ? filesize.toFixed(2) + 'MB' : (filesize/1024).toFixed(2) + 'GB',
                     col_type: 'avatar',
                     extra: {
