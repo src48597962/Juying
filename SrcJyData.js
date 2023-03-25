@@ -399,7 +399,7 @@ function JYerji(){
         }
         if(JYconfig['yundiskLine']==1){
             d.push({
-                title: getMyVar(vari, '98') == i ? getHead('云盘搜索',Color1,1) : getHead('云盘搜索',Color2),
+                title: lineindex == "98" ? getHead('云盘搜索',Color1,1) : getHead('云盘搜索',Color2),
                 url: $("#noLoading#").lazyRule((name,vari,Marksum) => {
                     let i = 98;
                     if (parseInt(getMyVar(vari, '0')) != i) {
