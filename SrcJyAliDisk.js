@@ -24,6 +24,7 @@ function aliShareUrl(input) {
 function aliShare(share_id, folder_id, share_pwd) {
     let d = [];
     setPageTitle(typeof(MY_PARAMS)!="undefined" && MY_PARAMS.dirname ? MY_PARAMS.dirname : '云盘共享文件 | 聚影√');
+    /*
     let headers = {
         'content-type': 'application/json;charset=UTF-8',
         "origin": "https://www.aliyundrive.com",
@@ -31,11 +32,19 @@ function aliShare(share_id, folder_id, share_pwd) {
         "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36 Edg/110.0.1587.41",
         "x-canary": "client=web,app=share,version=v2.3.1"
     };
+    */
     try{
         let sharetoken = JSON.parse(request('https://api.aliyundrive.com/v2/share_link/get_share_token', { headers: headers, body: { "share_pwd": share_pwd, "share_id": share_id }, method: 'POST', timeout: 3000 })).share_token;
         let postdata = { "share_id": share_id, "parent_file_id": folder_id || "root", "limit": 200, "image_thumbnail_process": "image/resize,w_256/format,jpeg", "image_url_process": "image/resize,w_1920/format,jpeg/interlace,1", "video_thumbnail_process": "video/snapshot,t_1000,f_jpg,ar_auto,w_256", "order_by": "name", "order_direction": "DESC" };
         headers['x-share-token'] = sharetoken;
         let sharelist = JSON.parse(request('https://api.aliyundrive.com/adrive/v2/file/list_by_share', { headers: headers, body: postdata, method: 'POST' })).items;
+        if(sharelist.length>0){
+            d.push({
+                title: "☁️☁️☁️保存到我的云盘☁️☁️☁️",
+                url: "smartdrive://share/browse?shareId="+share_id+"&sharePwd="+share_pwd,
+                col_type: 'text_center_1'
+            })
+        }
         let sublist = sharelist.filter(item => {
             return item.type == "file" && /srt|vtt|ass/.test(item.file_extension);
         })
@@ -161,14 +170,10 @@ function aliShareSearch(input) {
                         aliMyDisk(input);
                     },item.url);
                 }else if(item.url.includes(home)){
-                    //let share_id = item.url.replace(home, '').replace('/folder/','');
-                    //let getis = JSON.parse(request("https://api.aliyundrive.com/adrive/v3/share_link/get_share_by_anonymous",{headers: {referer: "https://www.aliyundrive.com/"}, body: {"share_id": share_id}, method: 'POST', timeout: 3000 })).file_infos || [];
-                    //if(getis.length>0){
-                        arr.url = $("hiker://empty##").rule((input) => {
-                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
-                            aliShareUrl(input);
-                        },item.url);
-                    //}
+                    arr.url = $("hiker://empty##").rule((input) => {
+                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+                        aliShareUrl(input);
+                    },item.url);
                 } else if (obj.erparse) {
                     arr.url = $("hiker://empty##").lazyRule((url,erparse) => {
                         eval('let Parse = '+erparse)
@@ -229,6 +234,7 @@ function aliShareSearch(input) {
 function aliMyDisk(folder_id) {
     let d = [];
     setPageTitle(typeof(MY_PARAMS)!="undefined" && MY_PARAMS.dirname ? MY_PARAMS.dirname : '我的云盘文件 | 聚影√');
+    /*
     let headers = {
         'content-type': 'application/json;charset=UTF-8',
         "origin": "https://www.aliyundrive.com",
@@ -236,20 +242,8 @@ function aliMyDisk(folder_id) {
         "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36 Edg/110.0.1587.41",
         "x-canary": "client=web,app=share,version=v2.3.1"
     };
+    */
     try{
-        /*
-        let nowtime = Date.now();
-        let oldtime = parseInt(getMyVar('userinfoChecktime','0').replace('time',''));
-        let userinfo;
-        let aliuserinfo = storage0.getMyVar('aliuserinfo');
-        if (aliuserinfo && aliuserinfo.user_id && nowtime < (oldtime+2*60*60*1000)) {
-            userinfo = aliuserinfo;
-        } else {
-            userinfo = JSON.parse(request('https://auth.aliyundrive.com/v2/account/token', { headers: headers, body: { "refresh_token": alitoken, "grant_type": "refresh_token" }, method: 'POST', timeout: 3000 }));
-            storage0.putMyVar('aliuserinfo', userinfo);
-            putMyVar('userinfoChecktime', nowtime+'time');
-        }
-        */
         let drive_id = userinfo.default_drive_id;
         let postdata = {"drive_id":drive_id,"parent_file_id":folder_id,"limit":200,"all":true,"url_expire_sec":86400,"image_thumbnail_process":"image/resize,w_400/format,jpeg","image_url_process":"image/resize,w_1920/format,jpeg","video_thumbnail_process":"video/snapshot,t_1000,f_jpg,ar_auto,w_300","order_by":"name","order_direction":"ASC"};
         headers['authorization'] = 'Bearer ' + userinfo.access_token;
@@ -302,13 +296,6 @@ function aliMyDisk(folder_id) {
                             if (play.urls) {
                                 if (sub_file_url) {
                                     play['subtitle'] = sub_file_url;
-                                    /*
-                                    let substr = fetch(sub_file_url, {headers:{"referer": "https://www.aliyundrive.com/"},timeout:3000});
-                                    if(substr){
-                                        writeFile("hiker://files/cache/src/subtitles.srt",substr);
-                                        play['subtitle'] = getPath("hiker://files/cache/src/subtitles.srt");
-                                    }
-                                    */
                                 }
                                 play.urls.unshift(file_url);
                                 play.names.unshift("原始 文件");
