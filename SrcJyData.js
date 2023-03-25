@@ -404,6 +404,9 @@ function JYerji(){
                 url: $("#noLoading#").lazyRule((vari,Marksum) => {
                     let i = 98;
                     if (parseInt(getMyVar(vari, '0')) != i) {
+                        if(getMyVar('diskSearch')=="1"){
+                            return 'toast://搜索线程中，稍等片刻.'
+                        }
                         try {
                             eval('var SrcMark = ' + fetch("hiker://files/cache/SrcMark.json"));
                         } catch (e) {
@@ -689,12 +692,18 @@ function JYerji(){
             aliShareSearch(MY_PARAMS.name);
         }
     }else if(lineindex == "99"){
-        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
-        if(datalist.length>0){
-            alistSearch2(MY_PARAMS.name,1);
-            return "toast://搜索完成";
+        let alistMark = storage0.getMyVar('alistMark') || {};
+        if(alistMark[MY_PARAMS.name]){
+            deleteItemByCls('loadlist');
+            addItemBefore('listloading', alistMark[MY_PARAMS.name]);
         }else{
-            return "toast://无Alist接口";
+            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
+            if(datalist.length>0){
+                alistSearch2(MY_PARAMS.name,1);
+                return "toast://搜索完成";
+            }else{
+                return "toast://无Alist接口";
+            }
         }
     }
 }
