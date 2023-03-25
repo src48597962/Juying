@@ -388,10 +388,8 @@ function JYerji(){
                             writeFile("hiker://files/cache/SrcMark.json", JSON.stringify(SrcMark));
                             putMyVar(vari, i);
                             refreshPage(false);
-                            return 'toast://切换成功'
-                        } else {
-                            return '#noHistory#hiker://empty'
                         }
+                        return '#noHistory#hiker://empty'
                     }, vari, i, Marksum),
                     col_type: 'scroll_button'
                 })
@@ -424,10 +422,8 @@ function JYerji(){
                         writeFile("hiker://files/cache/SrcMark.json", JSON.stringify(SrcMark));
                         putMyVar(vari, i);
                         refreshPage(false);
-                        return 'toast://切换成功'
-                    } else {
-                        return '#noHistory#hiker://empty'
                     }
+                    return '#noHistory#hiker://empty'
                 }, vari, Marksum),
                 col_type: 'scroll_button'
             })
@@ -459,10 +455,8 @@ function JYerji(){
                         writeFile("hiker://files/cache/SrcMark.json", JSON.stringify(SrcMark));
                         putMyVar(vari, i);
                         refreshPage(false);
-                        return 'toast://切换成功'
-                    } else {
-                        return '#noHistory#hiker://empty'
                     }
+                    return '#noHistory#hiker://empty'
                 },vari,Marksum),
                 col_type: 'scroll_button'
             }, vari, Marksum)
