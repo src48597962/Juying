@@ -309,7 +309,7 @@ function aliMyDisk(folder_id) {
                                 }
                                 play.urls.unshift(file_url);
                                 play.names.unshift("原始 文件");
-                                play.heads.unshift({'Referer':'https://www.aliyundrive.com/'});
+                                play.headers.unshift({'Referer':'https://www.aliyundrive.com/'});
                                 return JSON.stringify(play);
                             }else{
                                 return "toast://"+play.message;
