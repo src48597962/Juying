@@ -399,7 +399,7 @@ function JYerji(){
         }
         if(JYconfig['yundiskLine']==1){
             d.push({
-                title: lineindex == "98" ? getHead('云盘搜索',Color1,1) : getHead('云盘搜索',Color2),
+                title: getMyVar(vari, '0') == "98" ? getHead('云盘搜索',Color1,1) : getHead('云盘搜索',Color2),
                 url: $("#noLoading#").lazyRule((name,vari,Marksum) => {
                     let i = 98;
                     if (parseInt(getMyVar(vari, '0')) != i) {
@@ -644,11 +644,9 @@ function JYerji(){
             }
         }
     }
-    if(lineindex=="98"){
-        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
-        aliShareSearch(MY_PARAMS.name);
-    }else{
+    if(lineindex != "98"){
         setLists(lists, lineindex);
+        
     }
 
     //底部说明
@@ -662,6 +660,10 @@ function JYerji(){
         }
     });
     setResult(d);
+    if(lineindex == "98"){
+        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+        aliShareSearch(MY_PARAMS.name);
+    }
 }
 function JYyiji(){    
     downloadicon();//下载图标
