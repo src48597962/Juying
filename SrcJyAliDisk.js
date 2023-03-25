@@ -295,7 +295,7 @@ function aliMyDisk(folder_id) {
                 d.push({
                     title: item.name,
                     img: item.thumbnail+"@Referer=https://www.aliyundrive.com/" || (item.category == "video" ? "hiker://files/cache/src/影片.svg" : item.category == "audio" ? "hiker://files/cache/src/音乐.svg" : item.category == "image" ? "hiker://files/cache/src/图片.png" : "https://img.alicdn.com/imgextra/i1/O1CN01mhaPJ21R0UC8s9oik_!!6000000002049-2-tps-80-80.png"),
-                    url: $("hiker://empty##").lazyRule((file_id, sub_file_id) => {
+                    url: $("hiker://empty##").lazyRule((file_id,file_url,sub_file_id) => {
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliPublic.js');
 
 
@@ -364,24 +364,27 @@ function aliMyPlayUrl(file_id){
         aliyunUrl.reverse();
       }
     }
+    let urls = [];
+    let names = [];
+    let heads = [];
+    urls.push(file_url + "#.m3u8#pre#");
+    names.push("原始 文件");
+    heads.push({'Referer':'https://www.aliyundrive.com/'});
+
     if(aliyunUrl.length>0){
-        let urls = [];
-        let names = [];
-        let heads = [];
       aliyunUrl.forEach((item) => {
         urls.push(item.url + "#.m3u8#pre#");
         names.push(transcoding[item.template_id] ? transcoding[item.template_id] : item.template_height);
         heads.push({'Referer':'https://www.aliyundrive.com/'});
       })
-      return {
-          urls: urls,
-          names: names,
-          headers: heads
-      };
     }else{
-      log('未获取阿里播放地址，建议重进软件再试一次')
-      return {};
+      log('未获取阿里转码播放地址，建议重进软件再试一次')
     }
+    return {
+        urls: urls,
+        names: names,
+        headers: heads
+    };
   }catch(e){
     log('获取我的云盘播放地址失败>'+e.message);
     return {};
@@ -407,7 +410,7 @@ function aliMyPlayUrl(file_id){
                         }else{
                             return "toast://获取转码播放列表失败，阿里token可能无效";
                         }
-                    }, item.file_id, sub_file_id),
+                    }, item.file_id, item.url, sub_file_id),
                     desc: filesize < 1024 ? filesize.toFixed(2) + 'MB' : (filesize/1024).toFixed(2) + 'GB',
                     col_type: 'avatar',
                     extra: {
