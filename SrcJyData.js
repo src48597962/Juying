@@ -305,7 +305,7 @@ function JYerji(){
                         var urllist = json.defaultepisode;
                     }else{
                          try {
-                            var getjson = JSON.parse(request(MY_URL + '&start=1&end=' + (json.upinfo > 200 ? 200 : json.upinfo) + '&year=' + tag + '&site=' + sitename, { headers: { 'User-Agent': PC_UA } })).data;
+                             var getjson = JSON.parse(request(MY_URL + '&start=1&end=' + (json.upinfo > 200 ? 200 : json.upinfo) + '&year=' + tag + '&site=' + sitename, { headers: { 'User-Agent': PC_UA } })).data;
                          }catch(e){
                              var getjson = JSON.parse(request(MY_URL+'&site='+sitename, { headers: { 'User-Agent': PC_UA } })).data;
                          }
@@ -366,6 +366,43 @@ function JYerji(){
                 d.push({
                     title: getMyVar(vari, '0') == i ? getHead(tabs[i],Color1,1) : getHead(tabs[i],Color2),
                     url: $("#noLoading#").lazyRule((vari, i, Marksum) => {
+                        if (parseInt(getMyVar(vari, '0')) != i) {
+                            try {
+                                eval('var SrcMark = ' + fetch("hiker://files/cache/SrcMark.json"));
+                            } catch (e) {
+                                var SrcMark = "";
+                            }
+                            if (SrcMark == "") {
+                                SrcMark = { route: {} };
+                            } else if (SrcMark.route == undefined) {
+                                SrcMark.route = {};
+                            }
+                            SrcMark.route[vari] = i;
+                            var key = 0;
+                            var one = "";
+                            for (var k in SrcMark.route) {
+                                key++;
+                                if (key == 1) { one = k }
+                            }
+                            if (key > Marksum) { delete SrcMark.route[one]; }
+                            writeFile("hiker://files/cache/SrcMark.json", JSON.stringify(SrcMark));
+                            putMyVar(vari, i);
+                            refreshPage(false);
+                            return 'toast://切换成功'
+                        } else {
+                            return '#noHistory#hiker://empty'
+                        }
+                    }, vari, i, Marksum),
+                    col_type: 'scroll_button'
+                })
+            }
+        }
+        if(JYconfig['yundiskLine']==1){
+            d.push({
+                title: '云盘搜索',
+                url: $("#noLoading#").lazyRule((name,vari,Marksum) => {
+                    let i = 98;
+                    if (parseInt(getMyVar(vari, '0')) != i) {
                         try {
                             eval('var SrcMark = ' + fetch("hiker://files/cache/SrcMark.json"));
                         } catch (e) {
@@ -386,21 +423,13 @@ function JYerji(){
                         if (key > Marksum) { delete SrcMark.route[one]; }
                         writeFile("hiker://files/cache/SrcMark.json", JSON.stringify(SrcMark));
                         putMyVar(vari, i);
-                        refreshPage(false);
-                        return 'toast://切换成功'
-                    }, vari, i, Marksum),
-                    col_type: 'scroll_button'
-                })
-            }
-        }
-        if(JYconfig['yundiskLine']==1){
-            d.push({
-                title: '云盘搜索',
-                url: $("#noLoading#").lazyRule((name) => {
-                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
-                    aliShareSearch(name);
-                    return "toast://搜索完成";
-                },MY_PARAMS.name),
+                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+                        aliShareSearch(name);
+                        return "toast://搜索完成";
+                    } else {
+                        return '#noHistory#hiker://empty'
+                    }
+                },MY_PARAMS.name, vari, Marksum),
                 col_type: 'scroll_button'
             })
         }
@@ -616,7 +645,12 @@ function JYerji(){
             }
         }
     }
-    setLists(lists, lineindex);
+    if(lineindex=="98"){
+        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+        aliShareSearch(MY_PARAMS.name);
+    }else{
+        setLists(lists, lineindex);
+    }
 
     //底部说明
     d.push({
