@@ -367,6 +367,9 @@ function JYerji(){
                     title: getMyVar(vari, '0') == i ? getHead(tabs[i],Color1,1) : getHead(tabs[i],Color2),
                     url: $("#noLoading#").lazyRule((vari, i, Marksum) => {
                         if (parseInt(getMyVar(vari, '0')) != i) {
+                            if(getMyVar('diskSearch')=="1"){
+                                return 'toast://搜索线程中，稍等再切换线路.'
+                            }
                             try {
                                 eval('var SrcMark = ' + fetch("hiker://files/cache/SrcMark.json"));
                             } catch (e) {
@@ -434,6 +437,9 @@ function JYerji(){
                 url: $("#noLoading#").lazyRule((vari,Marksum) => {
                     let i = 99;
                     if (parseInt(getMyVar(vari, '0')) != i) {
+                        if(getMyVar('diskSearch')=="1"){
+                            return 'toast://搜索线程中，稍等再切换线路.'
+                        }
                         try {
                             eval('var SrcMark = ' + fetch("hiker://files/cache/SrcMark.json"));
                         } catch (e) {
