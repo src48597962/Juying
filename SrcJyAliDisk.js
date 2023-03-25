@@ -136,9 +136,11 @@ function aliShareSearch(input) {
         var datalist = [];
     }
     if(datalist.length==0){
+        return "toast://无接口，无法搜索"
         hideLoading();
         toast('无接口，无法搜索');
     }
+
     let task = function(obj) {
         try{
             eval('let Parse = '+obj.parse)
