@@ -400,7 +400,7 @@ function JYerji(){
         if(JYconfig['yundiskLine']==1){
             d.push({
                 title: getMyVar(vari, '0') == "98" ? getHead('云盘搜索',Color1,1) : getHead('云盘搜索',Color2),
-                url: $("#noLoading#").lazyRule((name,vari,Marksum) => {
+                url: $("#noLoading#").lazyRule((vari,Marksum) => {
                     let i = 98;
                     if (parseInt(getMyVar(vari, '0')) != i) {
                         try {
@@ -428,24 +428,44 @@ function JYerji(){
                     } else {
                         return '#noHistory#hiker://empty'
                     }
-                },MY_PARAMS.name, vari, Marksum),
+                }, vari, Marksum),
                 col_type: 'scroll_button'
             })
         }
         if(JYconfig['alistLine']==1){
             d.push({
                 title: 'Alist搜索',
-                url: $("#noLoading#").lazyRule((name) => {
-                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
-                    if(datalist.length>0){
-                        alistSearch2(name,1);
-                        return "toast://搜索完成";
-                    }else{
-                        return "toast://无Alist接口";
+                url: $("#noLoading#").lazyRule((vari,Marksum) => {
+                    let i = 99;
+                    if (parseInt(getMyVar(vari, '0')) != i) {
+                        try {
+                            eval('var SrcMark = ' + fetch("hiker://files/cache/SrcMark.json"));
+                        } catch (e) {
+                            var SrcMark = "";
+                        }
+                        if (SrcMark == "") {
+                            SrcMark = { route: {} };
+                        } else if (SrcMark.route == undefined) {
+                            SrcMark.route = {};
+                        }
+                        SrcMark.route[vari] = i;
+                        var key = 0;
+                        var one = "";
+                        for (var k in SrcMark.route) {
+                            key++;
+                            if (key == 1) { one = k }
+                        }
+                        if (key > Marksum) { delete SrcMark.route[one]; }
+                        writeFile("hiker://files/cache/SrcMark.json", JSON.stringify(SrcMark));
+                        putMyVar(vari, i);
+                        refreshPage(false);
+                        return 'toast://切换成功'
+                    } else {
+                        return '#noHistory#hiker://empty'
                     }
-                },MY_PARAMS.name),
+                },vari,Marksum),
                 col_type: 'scroll_button'
-            })
+            }, vari, Marksum)
         }
         
         //推送tvbox
@@ -644,9 +664,8 @@ function JYerji(){
             }
         }
     }
-    if(lineindex != "98"){
+    if(lineindex != "98" && lineindex != "99"){
         setLists(lists, lineindex);
-        
     }
 
     //底部说明
@@ -663,6 +682,14 @@ function JYerji(){
     if(lineindex == "98"){
         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
         aliShareSearch(MY_PARAMS.name);
+    }else if(lineindex == "99"){
+        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
+        if(datalist.length>0){
+            alistSearch2(MY_PARAMS.name,1);
+            return "toast://搜索完成";
+        }else{
+            return "toast://无Alist接口";
+        }
     }
 }
 function JYyiji(){    
