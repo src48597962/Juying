@@ -698,12 +698,7 @@ function JYerji(){
             addItemBefore('listloading', alistMark[MY_PARAMS.name]);
         }else{
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
-            if(datalist.length>0){
-                alistSearch2(MY_PARAMS.name,1);
-                return "toast://搜索完成";
-            }else{
-                return "toast://无Alist接口";
-            }
+            alistSearch2(MY_PARAMS.name,1);
         }
     }
 }
