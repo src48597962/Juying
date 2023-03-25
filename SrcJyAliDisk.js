@@ -197,7 +197,8 @@ function aliShareSearch(input) {
                         cls: "loadlist"
                     }
                 });
-                diskMark[input] = searchlist;
+                diskMark[input] = diskMark[input] || [];
+                diskMark[input] = diskMark[input].concat(searchlist);
                 addItemBefore('listloading', searchlist);
             }
         }catch(e){
