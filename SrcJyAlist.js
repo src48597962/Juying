@@ -523,11 +523,11 @@ function alistSearch(alistapi,input,notoast) {
 }
 
 function alistSearch2(input,notoast){
-    if(datalist.length==0){
-      toast('无接口，无法搜索');
-    }
-    deleteItemByCls('loadlist');
     showLoading('搜索中，请稍后...');
+    let alistkMark = storage0.getMyVar('alistkMark') || {};
+    if(alistkMark.length>20){
+        alistkMark.splice(0,1);
+    }
     let task = function(obj) {
         try{
             let searchlist = alistSearch(obj,input,notoast);
@@ -547,6 +547,8 @@ function alistSearch2(input,notoast){
                       cls: "loadlist"
                   }
               });
+              alistMark[input] = alistMark[input] || [];
+              alistMark[input] = alistMark[input].concat(searchlist);
               addItemBefore('listloading', searchlist);
             }else{
               if(!notoast){log(obj.name+">未搜索到 “"+input+"”");}
@@ -564,12 +566,20 @@ function alistSearch2(input,notoast){
         }
     });
     if(list.length>0){
+        deleteItemByCls('loadlist');
+        putMyVar('diskSearch', '1');
         be(list, {
             func: function(obj, id, error, taskResult) {
             },
             param: {
             }
         });
+        storage0.putMyVar('alistMark',alistMark);
+        clearMyVar('diskSearch');
+        toast('搜索完成');
+    }else{
+      hideLoading();
+      toast('无接口，无法搜索');
     }
 }
 
