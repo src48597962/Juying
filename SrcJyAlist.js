@@ -524,9 +524,9 @@ function alistSearch(alistapi,input,notoast) {
 
 function alistSearch2(input,notoast){
     showLoading('搜索中，请稍后...');
-    let alistkMark = storage0.getMyVar('alistkMark') || {};
-    if(alistkMark.length>20){
-        alistkMark.splice(0,1);
+    let alistMark = storage0.getMyVar('alistMark') || {};
+    if(alistMark.length>20){
+        alistMark.splice(0,1);
     }
     let task = function(obj) {
         try{
