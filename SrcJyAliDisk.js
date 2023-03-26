@@ -284,14 +284,13 @@ function aliMyDisk(folder_id,nofilter) {
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliPublic.js');
                         if(alitoken){
                             file_url = base64Decode(file_url);
-                            sub_file_url = base64Decode(sub_file_url);
+                            sub_file_url = sub_file_url?base64Decode(sub_file_url):"";
                             let play = aliMyPlayUrl(file_id);
-                            log(play)
                             if (play.urls) {
                                 if (sub_file_url) {
                                     play['subtitle'] = sub_file_url;
                                 }
-                                play.urls.unshift(file_url);
+                                play.urls.unshift(file_url+ "#.m3u8#pre#");
                                 play.names.unshift("原始 文件");
                                 play.headers.unshift({'Referer':'https://www.aliyundrive.com/'});
                                 log(play)
@@ -302,7 +301,7 @@ function aliMyDisk(folder_id,nofilter) {
                         }else{
                             return "toast://未获取到阿里token";
                         }
-                    }, item.file_id, base64Encode(item.url), base64Encode(sub_file_url)),
+                    }, item.file_id, base64Encode(item.url), sub_file_url?base64Encode(sub_file_url):""),
                     desc: filesize < 1024 ? filesize.toFixed(2) + 'MB' : (filesize/1024).toFixed(2) + 'GB',
                     col_type: 'avatar',
                     extra: {
