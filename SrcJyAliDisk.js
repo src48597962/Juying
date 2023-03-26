@@ -236,10 +236,10 @@ function aliMyDisk(folder_id,nofilter) {
     setPageTitle(typeof(MY_PARAMS)!="undefined" && MY_PARAMS.dirname ? MY_PARAMS.dirname : '我的云盘文件 | 聚影√');
     if(userinfo&&userinfo.user_id){
         if(folder_id=="root"){
-            log(userinfo.user_id);
             d.push({
-                title: "我的云盘",
-                url: "",
+                title: userinfo.nick_name,
+                url: "toast://已登录",
+                img: userinfo.avatar,
                 col_type: 'avatar'
             })
         }
@@ -336,29 +336,27 @@ function aliMyDisk(folder_id,nofilter) {
                 var d = [];
                 let url = 'https://auth.aliyundrive.com/v2/oauth/authorize?login_type=custom&response_type=code&redirect_uri=https%3A%2F%2Fwww.aliyundrive.com%2Fsign%2Fcallback&client_id=25dzX3vbYqktVxyX&state=%7B%22origin%22%3A%22*%22%7D#/login'
                 var js = $.toString(() => {
-                    const tokenFunction = function() {
+                    const tokenFunction = function () {
                         var token = JSON.parse(localStorage.getItem('token'))
-                        if (token && token.refresh_token) {
-                            let alistfile = "hiker://files/rules/Src/Juying/Alist.json";
-                            try {
-                                var alistData = JSON.parse(fy_bridge_app.fetch(alistfile));
-                            } catch (e) {
-                                fba.log(e.message);
-                                var alistData = {};
+                        if (token && token.user_id) {
+                            let token_url = 'hiker://files/rules/Joe/ali.json';
+                            fy_bridge_app.writeFile(token_url, JSON.stringify(token));
+                            let icy = "hiker://files/rules/icy/icy-ali-token.json";
+                            let a = fy_bridge_app.fetch(icy);
+                            if (!a || a == "") {
+                                let b = [];
+                                b.push(token);
+                                fy_bridge_app.writeFile(icy, JSON.stringify(b));
                             }
-                            let alistconfig = alistData.config || {};
-                            alistconfig.alitoken = token.refresh_token;
-                            alistData.config = alistconfig;
-                            fy_bridge_app.writeFile(alistfile, JSON.stringify(alistData));
                             localStorage.clear();
-                            //alert('TOKEN获取成功，请勿泄漏个人隐私!退出该页面后刷新重试！');
-                            fy_bridge_app.back(true);
+                            alert('TOKEN获取成功！');
+                            fy_bridge_app.back();
                             return;
                         } else {
                             token_timer();
                         }
                     }
-                    var token_timer = function() {
+                    var token_timer = function () {
                         setTimeout(tokenFunction, 500)
                     };
                     token_timer();
@@ -374,6 +372,7 @@ function aliMyDisk(folder_id,nofilter) {
                 })
                 setResult(d);
             }),
+            img: "https://lanmeiguojiang.com/tubiao/messy/158.svg",
             col_type: 'avatar'
         })
     }
