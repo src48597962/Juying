@@ -560,6 +560,14 @@ function lookset(){
 }
 //主页导航按钮菜单
 let buttonmenu = {
+    "管理": {
+        name: "管理",
+        img: "https://lanmeiguojiang.com/tubiao/more/129.png",
+        url: $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
+            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+            SRCSet();
+        })
+    },
     "历史": {
         name: "历史",
         img: "https://lanmeiguojiang.com/tubiao/more/213.png",
