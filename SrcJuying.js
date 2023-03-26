@@ -601,7 +601,7 @@ function sousuo2() {
                                                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
                                                     xunmi(name);
                                                 }, name)
-                                            },item)
+                                            },sug.title)
                                         },{
                                             title: "🔎云盘搜索",
                                             js: $.toString((name) => {
@@ -620,7 +620,7 @@ function sousuo2() {
                                                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
                                                     aliDiskSearch(name);
                                                 }, name)
-                                            },item)
+                                            },sug.title)
                                         },{
                                             title: "🔎Alist搜索",
                                             js: $.toString((name) => {
@@ -639,7 +639,7 @@ function sousuo2() {
                                                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
                                                     alistSearch2(name,1);
                                                 }, name)
-                                            },item)
+                                            },sug.title)
                                         }]
                                     }
                                 }
