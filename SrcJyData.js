@@ -1,4 +1,7 @@
 //本代码仅用于个人学习，请勿用于其他作用，下载后请24小时内删除，代码虽然是公开学习的，但请尊重作者，应留下说明
+//临时
+clearItem('zhanshibutton');
+clearItem('zhibobutton');
 var cfgfile = "hiker://files/rules/Src/Juying/config.json";
 var Juyingcfg=fetch(cfgfile);
 if(Juyingcfg != ""){
@@ -7,45 +10,6 @@ if(Juyingcfg != ""){
     var JYconfig= {};
 }
 
-require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyMenu.js');
-let yijimenu = [
-    {
-        title: "管理",
-        url: $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
-                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
-                SRCSet();
-            }),
-        pic_url: 'https://lanmeiguojiang.com/tubiao/more/129.png',
-        col_type: 'icon_5'
-    },
-    {
-        title: storage0.getItem('buttonmenu2',buttonmenu["收藏"]).name,
-        url: storage0.getItem('buttonmenu2',buttonmenu["收藏"]).url,
-        pic_url: storage0.getItem('buttonmenu2',buttonmenu["收藏"]).img,
-        col_type: 'icon_5'
-    },
-    {
-        title: storage0.getItem('buttonmenu3',buttonmenu["搜索"]).name,
-        url: storage0.getItem('buttonmenu3',buttonmenu["搜索"]).url,
-        pic_url: storage0.getItem('buttonmenu3',buttonmenu["搜索"]).img,
-        col_type: 'icon_5'
-    },
-    {
-        title: storage0.getItem('buttonmenu4',buttonmenu["展示"]).name,
-        url: storage0.getItem('buttonmenu4',buttonmenu["展示"]).url,
-        pic_url: storage0.getItem('buttonmenu4',buttonmenu["展示"]).img,
-        col_type: 'icon_5'
-    },
-    {
-        title: storage0.getItem('buttonmenu5',buttonmenu["直播"]).name,
-        url: storage0.getItem('buttonmenu5',buttonmenu["直播"]).url,
-        pic_url: storage0.getItem('buttonmenu5',buttonmenu["直播"]).img,
-        col_type: 'icon_5'
-    },
-    {
-        col_type: 'line'
-    }
-]
 function JYsousuo(){
     let datasource = getItem('searchsource',getItem('JYdatasource', 'sougou'));
     var d = [];
@@ -459,11 +423,13 @@ function JYerji(){
     });
     if(!getMyVar('superwebM3U8')){
         try{
+            /*
             var cfgfile = "hiker://files/rules/Src/Juying/config.json";
             var Juyingcfg=fetch(cfgfile);
             if(Juyingcfg != ""){
                 eval("var JYconfig=" + Juyingcfg+ ";");
-            }
+            }*/
+            log(JYconfig);
             putMyVar('superwebM3U8',JYconfig.cachem3u8!=0&&JYconfig.superweb==1?'1':'0');
         }catch(e){}
     }
@@ -589,6 +555,45 @@ function JYerji(){
 }
 function JYyiji(){    
     downloadicon();//下载图标
+    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyMenu.js');
+    let yijimenu = [
+        {
+            title: "管理",
+            url: $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                    SRCSet();
+                }),
+            pic_url: 'https://lanmeiguojiang.com/tubiao/more/129.png',
+            col_type: 'icon_5'
+        },
+        {
+            title: storage0.getItem('buttonmenu2',buttonmenu["收藏"]).name,
+            url: storage0.getItem('buttonmenu2',buttonmenu["收藏"]).url,
+            pic_url: storage0.getItem('buttonmenu2',buttonmenu["收藏"]).img,
+            col_type: 'icon_5'
+        },
+        {
+            title: storage0.getItem('buttonmenu3',buttonmenu["搜索"]).name,
+            url: storage0.getItem('buttonmenu3',buttonmenu["搜索"]).url,
+            pic_url: storage0.getItem('buttonmenu3',buttonmenu["搜索"]).img,
+            col_type: 'icon_5'
+        },
+        {
+            title: storage0.getItem('buttonmenu4',buttonmenu["展示"]).name,
+            url: storage0.getItem('buttonmenu4',buttonmenu["展示"]).url,
+            pic_url: storage0.getItem('buttonmenu4',buttonmenu["展示"]).img,
+            col_type: 'icon_5'
+        },
+        {
+            title: storage0.getItem('buttonmenu5',buttonmenu["直播"]).name,
+            url: storage0.getItem('buttonmenu5',buttonmenu["直播"]).url,
+            pic_url: storage0.getItem('buttonmenu5',buttonmenu["直播"]).img,
+            col_type: 'icon_5'
+        },
+        {
+            col_type: 'line'
+        }
+    ]
     let datasource = getItem('JYdatasource', 'sougou');
     var d = [];
     const Color = "#3399cc";
