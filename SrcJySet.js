@@ -2205,43 +2205,50 @@ function extension(){
         extra:{textSize:12}
     });
     let buttonmenu = {
-        "历史":{
+        "历史": {
+            name: "历史",
             img: "https://lanmeiguojiang.com/tubiao/more/109.png",
             url: "hiker://history"
         },
-        "收藏":{
+        "收藏": {
+            name: "收藏",
             img: "https://lanmeiguojiang.com/tubiao/more/109.png",
             url: "hiker://collection"
         },
-        "搜索":{
+        "搜索": {
+            name: "搜索",
             img: "https://lanmeiguojiang.com/tubiao/more/101.png",
             url: $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
                 require(config.依赖);
                 sousuo2();
             })
         },
-        "展示":{
+        "展示": {
+            name: "展示",
             img: "https://lanmeiguojiang.com/tubiao/more/105.png",
             url: $("hiker://empty##fypage#noRecordHistory##noHistory#").rule(() => {
                 require(config.依赖);
                 jiekouyiji();
             })
         },
-        "直播":{
+        "直播": {
+            name: "直播",
             img: "https://lanmeiguojiang.com/tubiao/more/87.png",
             url: $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLive.js');
                 Live();
             })
         },
-        "Alist":{
+        "Alist": {
+            name: "Alist",
             img: "hiker://files/cache/src/Alist.svg",
             url: $("hiker://empty###noRecordHistory##noHistory#").rule(() => {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
                 alistHome();
             })
         },
-        "云盘":{
+        "云盘": {
+            name: "云盘",
             img: "https://lanmeiguojiang.com/tubiao/more/109.png",
             url: "hiker://collection"
         }
@@ -2254,9 +2261,8 @@ function extension(){
         col_type: 'icon_5'
     })
     d.push({
-        title: storage0.getItem('buttonmenu2',buttonmenu["收藏"]).title || "收藏",
+        title: storage0.getItem('buttonmenu2',buttonmenu["收藏"]).name,
         url: $(["历史","收藏","搜索","展示","直播","Alist","云盘"],2,"自定义第2个按钮功能").select((buttonmenu) => {
-            buttonmenu[input].title = input;
             storage0.setItem('buttonmenu2',buttonmenu[input])
             refreshPage(false);
             return 'toast://第2按钮已设置为'+input;
@@ -2268,15 +2274,15 @@ function extension(){
                 title: "♻️重置",
                 js: $.toString(() => {
                     clearItem('buttonmenu2');
+                    refreshPage(false);
                     return "toast://已恢复默认"
                 })
             }]
         }
     })
     d.push({
-        title: storage0.getItem('buttonmenu3',buttonmenu["搜索"]).title || "搜索",
+        title: storage0.getItem('buttonmenu3',buttonmenu["搜索"]).name,
         url: $(["历史","收藏","搜索","展示","直播","Alist","云盘"],2,"自定义第3个按钮功能").select((buttonmenu) => {
-            buttonmenu[input].title = input;
             storage0.setItem('buttonmenu3',buttonmenu[input])
             refreshPage(false);
             return 'toast://第3按钮已设置为'+input;
@@ -2288,15 +2294,15 @@ function extension(){
                 title: "♻️重置",
                 js: $.toString(() => {
                     clearItem('buttonmenu3');
+                    refreshPage(false);
                     return "toast://已恢复默认"
                 })
             }]
         }
     })
     d.push({
-        title: storage0.getItem('buttonmenu4',buttonmenu["展示"]).title || "展示",
+        title: storage0.getItem('buttonmenu4',buttonmenu["展示"]).name,
         url: $(["历史","收藏","搜索","展示","直播","Alist","云盘"],2,"自定义第4个按钮功能").select((buttonmenu) => {
-            buttonmenu[input].title = input;
             storage0.setItem('buttonmenu4',buttonmenu[input])
             refreshPage(false);
             return 'toast://第4按钮已设置为'+input;
@@ -2308,15 +2314,15 @@ function extension(){
                 title: "♻️重置",
                 js: $.toString(() => {
                     clearItem('buttonmenu4');
+                    refreshPage(false);
                     return "toast://已恢复默认"
                 })
             }]
         }
     })
     d.push({
-        title: storage0.getItem('buttonmenu5',buttonmenu["直播"]).title || "直播",
+        title: storage0.getItem('buttonmenu5',buttonmenu["直播"]).name,
         url: $(["历史","收藏","搜索","展示","直播","Alist","云盘"],2,"自定义第5个按钮功能").select((buttonmenu) => {
-            buttonmenu[input].title = input;
             storage0.setItem('buttonmenu5',buttonmenu[input])
             refreshPage(false);
             return 'toast://第5按钮已设置为'+input;
@@ -2328,6 +2334,7 @@ function extension(){
                 title: "♻️重置",
                 js: $.toString(() => {
                     clearItem('buttonmenu5');
+                    refreshPage(false);
                     return "toast://已恢复默认"
                 })
             }]
