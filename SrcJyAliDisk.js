@@ -121,7 +121,7 @@ function aliShare(share_id, folder_id, share_pwd) {
     }))
 }
 
-function aliShareSearch(input) {
+function aliYunSearch(input) {
     showLoading('搜索中，请稍后...');
     let filepath = "hiker://files/rules/Src/Juying/yundisk.json";
     let datafile = fetch(filepath);
