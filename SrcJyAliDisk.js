@@ -349,9 +349,9 @@ function aliMyDisk(folder_id,nofilter) {
                                 fy_bridge_app.writeFile(icy, JSON.stringify(b));
                             }
                             localStorage.clear();
-                            //alert('TOKEN获取成功！');
-                            fy_bridge_app.parseLazyRule(`hiker://empty@lazyRule=.js:clearMyVar('getalitoken');`)
-                            fy_bridge_app.back();
+                            alert('TOKEN获取成功！');
+                            fba.parseLazyRule(`hiker://empty@lazyRule=.js:clearMyVar('getalitoken');back();`);
+                            //fy_bridge_app.back();
                         } else {
                             token_timer();
                         }
