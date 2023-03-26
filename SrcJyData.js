@@ -551,13 +551,19 @@ function JYyiji(){
     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyMenu.js');
     let yijimenu = [
         {
-            title: "管理",
-            url: $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
-                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
-                    SRCSet();
-                }),
-            pic_url: 'https://lanmeiguojiang.com/tubiao/more/129.png',
-            col_type: 'icon_5'
+            title: storage0.getItem('buttonmenu1',buttonmenu["管理"]).name,
+            url: storage0.getItem('buttonmenu1',buttonmenu["管理"]).url,
+            pic_url: storage0.getItem('buttonmenu1',buttonmenu["管理"]).img,
+            col_type: 'icon_5',
+            extra: {
+                longClick: [{
+                    title: "♥️管理",
+                    js: $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
+                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                        SRCSet();
+                    })
+                }]
+            }
         },
         {
             title: storage0.getItem('buttonmenu2',buttonmenu["收藏"]).name,
