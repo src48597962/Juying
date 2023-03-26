@@ -1643,6 +1643,10 @@ function extension(){
         delete JYconfig['codedyname'];
         writeFile(cfgfile, JSON.stringify(JYconfig));
     }
+    if(JYconfig['recordentry']){
+        delete JYconfig['recordentry'];
+        writeFile(cfgfile, JSON.stringify(JYconfig));
+    }
     //上面临时存放几个版本，将订阅id名称改一下
     if(JYconfig['Jydouli']){
         JYconfig['zsjiekou'] = JYconfig['Jydouli'];
@@ -2160,22 +2164,6 @@ function extension(){
                     refreshPage(false);
                     return 'toast://app自带有效解析保留数量已设置为：'+input;
                 }
-            }, JYconfig, cfgfile),
-        col_type: "text_3"
-    });
-    d.push({
-        title: JYconfig['recordentry']!=2?'历史记录':'收藏记录',
-        url: $('#noLoading#').lazyRule((JYconfig,cfgfile) => {
-                if(JYconfig['recordentry'] == 2){
-                    JYconfig['recordentry'] = 1;
-                    var sm = "首页观看记录入口改为历史列表";
-                }else{
-                    JYconfig['recordentry'] = 2;
-                    var sm = "首页观看记录入口改为收藏列表";
-                }
-                writeFile(cfgfile, JSON.stringify(JYconfig));
-                refreshPage(false);
-                return 'toast://' + sm + '，返回主页后刷新生效';
             }, JYconfig, cfgfile),
         col_type: "text_3"
     });
