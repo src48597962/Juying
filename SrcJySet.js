@@ -2204,56 +2204,8 @@ function extension(){
         col_type: "rich_text",
         extra:{textSize:12}
     });
-    let buttonmenu = {
-        "历史": {
-            name: "历史",
-            img: "https://lanmeiguojiang.com/tubiao/more/109.png",
-            url: "hiker://history"
-        },
-        "收藏": {
-            name: "收藏",
-            img: "https://lanmeiguojiang.com/tubiao/more/109.png",
-            url: "hiker://collection"
-        },
-        "搜索": {
-            name: "搜索",
-            img: "https://lanmeiguojiang.com/tubiao/more/101.png",
-            url: $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
-                require(config.依赖);
-                sousuo2();
-            })
-        },
-        "展示": {
-            name: "展示",
-            img: "https://lanmeiguojiang.com/tubiao/more/105.png",
-            url: $("hiker://empty##fypage#noRecordHistory##noHistory#").rule(() => {
-                require(config.依赖);
-                jiekouyiji();
-            })
-        },
-        "直播": {
-            name: "直播",
-            img: "https://lanmeiguojiang.com/tubiao/more/87.png",
-            url: $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
-                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLive.js');
-                Live();
-            })
-        },
-        "Alist": {
-            name: "Alist",
-            img: "hiker://files/cache/src/Alist.svg",
-            url: $("hiker://empty###noRecordHistory##noHistory#").rule(() => {
-                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
-                alistHome();
-            })
-        },
-        "云盘": {
-            name: "云盘",
-            img: "https://lanmeiguojiang.com/tubiao/more/109.png",
-            url: "hiker://collection"
-        }
-    }
-
+    
+    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyMenu.js');
     d.push({
         title: "管理",
         url: "toast://这个按钮不能自定义",
