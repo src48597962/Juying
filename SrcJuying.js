@@ -567,6 +567,7 @@ function sousuo2() {
         title: "🔍",
         url: $.toString((searchurl) => {
                 if(input.indexOf('https://www.aliyundrive.com/s/')>-1){
+                    input = input.replace('http','\nhttp');
                     return $("hiker://empty##fypage#noRecordHistory##noHistory#").rule((input) => {
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
                         aliShareUrl(input);
@@ -575,7 +576,7 @@ function sousuo2() {
                     return input + searchurl;
                 }
             },searchurl),
-        desc: "搜你想看的...",
+        desc: "搜你想看的...|云盘链接",
         col_type: "input",
         extra: {
             titleVisible: true,
