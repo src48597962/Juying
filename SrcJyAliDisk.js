@@ -351,14 +351,16 @@ function aliMyDisk(folder_id,nofilter) {
                             fy_bridge_app.writeFile(alistfile, JSON.stringify(alistData));
                             localStorage.clear();
                             alert('TOKEN获取成功，请勿泄漏个人隐私!退出该页面后刷新重试！');
-                            fy_bridge_app.back(true);
+                            fy_bridge_app.back();
                             return;
                         } else {
                             token_timer();
                         }
                     }
-                    setTimeout(tokenFunction, 500)
-                    //tokenFunction();
+                    var token_timer = function() {
+                        setTimeout(tokenFunction, 500)
+                    };
+                    token_timer();
                 })
                 d.push({
                     url: url,
