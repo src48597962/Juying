@@ -250,10 +250,10 @@ function aliMyDisk(folder_id,nofilter) {
             d.push({
                 title: item.name,
                 img: "hiker://files/cache/src/文件夹.svg",
-                url: $("hiker://empty").rule((folder_id) => {
+                url: $("hiker://empty").rule((folder_id,nofilter) => {
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
                     aliMyDisk(folder_id,nofilter);
-                }, item.file_id),
+                }, item.file_id,nofilter),
                 col_type: 'avatar',
                 extra: {
                     dirname: item.name
