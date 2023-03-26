@@ -423,13 +423,6 @@ function JYerji(){
     });
     if(!getMyVar('superwebM3U8')){
         try{
-            /*
-            var cfgfile = "hiker://files/rules/Src/Juying/config.json";
-            var Juyingcfg=fetch(cfgfile);
-            if(Juyingcfg != ""){
-                eval("var JYconfig=" + Juyingcfg+ ";");
-            }*/
-            log(JYconfig);
             putMyVar('superwebM3U8',JYconfig.cachem3u8!=0&&JYconfig.superweb==1?'1':'0');
         }catch(e){}
     }
