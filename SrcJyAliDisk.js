@@ -343,6 +343,7 @@ function aliMyDisk(folder_id,nofilter) {
                             try {
                                 var alistData = JSON.parse(fy_bridge_app.fetch(alistfile));
                             } catch (e) {
+                                fba.log(e.message);
                                 var alistData = {};
                             }
                             let alistconfig = alistData.config || {};
@@ -350,8 +351,8 @@ function aliMyDisk(folder_id,nofilter) {
                             alistData.config = alistconfig;
                             fy_bridge_app.writeFile(alistfile, JSON.stringify(alistData));
                             localStorage.clear();
-                            alert('TOKEN获取成功，请勿泄漏个人隐私!退出该页面后刷新重试！');
-                            fy_bridge_app.back();
+                            //alert('TOKEN获取成功，请勿泄漏个人隐私!退出该页面后刷新重试！');
+                            fy_bridge_app.back(true);
                             return;
                         } else {
                             token_timer();
