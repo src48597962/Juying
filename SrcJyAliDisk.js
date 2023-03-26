@@ -283,6 +283,8 @@ function aliMyDisk(folder_id,nofilter) {
                     url: $("hiker://empty##").lazyRule((file_id,file_url,sub_file_url) => {
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliPublic.js');
                         if(alitoken){
+                            file_url = base64Decode(file_url);
+                            sub_file_url = base64Decode(sub_file_url);
                             let play = aliMyPlayUrl(file_id);
                             log(play)
                             if (play.urls) {
@@ -300,7 +302,7 @@ function aliMyDisk(folder_id,nofilter) {
                         }else{
                             return "toast://未获取到阿里token";
                         }
-                    }, item.file_id, item.url, sub_file_url),
+                    }, item.file_id, base64Encode(item.url), base64Encode(sub_file_url)),
                     desc: filesize < 1024 ? filesize.toFixed(2) + 'MB' : (filesize/1024).toFixed(2) + 'GB',
                     col_type: 'avatar',
                     extra: {
