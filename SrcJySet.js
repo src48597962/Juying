@@ -2254,7 +2254,7 @@ function extension(){
         col_type: 'icon_5'
     })
     d.push({
-        title: storage0.getItem('buttonmenu2',buttonmenu["收藏"]).title,
+        title: storage0.getItem('buttonmenu2',buttonmenu["收藏"]).title || "收藏",
         url: $(["历史","收藏","搜索","展示","直播","Alist","云盘"],2,"自定义第2个按钮功能").select((buttonmenu) => {
             buttonmenu[input].title = input;
             storage0.setItem('buttonmenu2',buttonmenu[input])
@@ -2262,10 +2262,19 @@ function extension(){
             return 'toast://第2按钮已设置为'+input;
         }, buttonmenu),
         pic_url: storage0.getItem('buttonmenu2',buttonmenu["收藏"]).img,
-        col_type: 'icon_5'
+        col_type: 'icon_5',
+        extra: {
+            longClick: [{
+                title: "♻️重置",
+                js: $.toString(() => {
+                    clearItem('buttonmenu2');
+                    return "toast://已恢复默认"
+                })
+            }]
+        }
     })
     d.push({
-        title: storage0.getItem('buttonmenu3',buttonmenu["搜索"]).title,
+        title: storage0.getItem('buttonmenu3',buttonmenu["搜索"]).title || "搜索",
         url: $(["历史","收藏","搜索","展示","直播","Alist","云盘"],2,"自定义第3个按钮功能").select((buttonmenu) => {
             buttonmenu[input].title = input;
             storage0.setItem('buttonmenu3',buttonmenu[input])
@@ -2273,10 +2282,19 @@ function extension(){
             return 'toast://第3按钮已设置为'+input;
         }, buttonmenu),
         pic_url: storage0.getItem('buttonmenu3',buttonmenu["搜索"]).img,
-        col_type: 'icon_5'
+        col_type: 'icon_5',
+        extra: {
+            longClick: [{
+                title: "♻️重置",
+                js: $.toString(() => {
+                    clearItem('buttonmenu3');
+                    return "toast://已恢复默认"
+                })
+            }]
+        }
     })
     d.push({
-        title: storage0.getItem('buttonmenu4',buttonmenu["展示"]).title,
+        title: storage0.getItem('buttonmenu4',buttonmenu["展示"]).title || "展示",
         url: $(["历史","收藏","搜索","展示","直播","Alist","云盘"],2,"自定义第4个按钮功能").select((buttonmenu) => {
             buttonmenu[input].title = input;
             storage0.setItem('buttonmenu4',buttonmenu[input])
@@ -2284,10 +2302,19 @@ function extension(){
             return 'toast://第4按钮已设置为'+input;
         }, buttonmenu),
         pic_url: storage0.getItem('buttonmenu4',buttonmenu["展示"]).img,
-        col_type: 'icon_5'
+        col_type: 'icon_5',
+        extra: {
+            longClick: [{
+                title: "♻️重置",
+                js: $.toString(() => {
+                    clearItem('buttonmenu4');
+                    return "toast://已恢复默认"
+                })
+            }]
+        }
     })
     d.push({
-        title: storage0.getItem('buttonmenu5',buttonmenu["直播"]).title,
+        title: storage0.getItem('buttonmenu5',buttonmenu["直播"]).title || "直播",
         url: $(["历史","收藏","搜索","展示","直播","Alist","云盘"],2,"自定义第5个按钮功能").select((buttonmenu) => {
             buttonmenu[input].title = input;
             storage0.setItem('buttonmenu5',buttonmenu[input])
@@ -2295,7 +2322,16 @@ function extension(){
             return 'toast://第5按钮已设置为'+input;
         }, buttonmenu),
         pic_url: storage0.getItem('buttonmenu5',buttonmenu["直播"]).img,
-        col_type: 'icon_5'
+        col_type: 'icon_5',
+        extra: {
+            longClick: [{
+                title: "♻️重置",
+                js: $.toString(() => {
+                    clearItem('buttonmenu5');
+                    return "toast://已恢复默认"
+                })
+            }]
+        }
     })
     /*
     d.push({
