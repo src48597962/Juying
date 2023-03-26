@@ -1618,7 +1618,7 @@ function xunmierji(type,ua) {
             addItemBefore('listloading', diskMark[MY_PARAMS.name]);
         }else{
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
-            aliShareSearch(MY_PARAMS.name);
+            aliDiskSearch(MY_PARAMS.name);
         }
     }else if(lineindex == "99"){
         let alistMark = storage0.getMyVar('alistMark') || {};
