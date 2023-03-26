@@ -849,6 +849,25 @@ function JYyiji(){
                         }, name)
                     },list[i].name)
                 },{
+                    title: "🔎云盘搜索",
+                    js: $.toString((name) => {
+                        return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
+                            let d = [];
+                            d.push({
+                                title: name+"-云盘聚合搜索",
+                                url: "hiker://empty",
+                                col_type: "text_center_1",
+                                extra: {
+                                    id: "listloading",
+                                    lineVisible: false
+                                }
+                            })
+                            setResult(d);
+                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+                            aliDiskSearch(name);
+                        }, name)
+                    },list[i].name)
+                },{
                     title: "🔎Alist搜索",
                     js: $.toString((name) => {
                         return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
