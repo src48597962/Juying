@@ -562,7 +562,7 @@ function lookset(){
 let buttonmenu = {
     "历史": {
         name: "历史",
-        img: "https://lanmeiguojiang.com/tubiao/more/109.png",
+        img: "https://lanmeiguojiang.com/tubiao/more/213.png",
         url: "hiker://history"
     },
     "收藏": {
