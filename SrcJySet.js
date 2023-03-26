@@ -2195,10 +2195,24 @@ function extension(){
     
     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyMenu.js');
     d.push({
-        title: "管理",
-        url: "toast://这个按钮不能自定义",
-        pic_url: 'https://lanmeiguojiang.com/tubiao/more/129.png',
-        col_type: 'icon_5'
+        title: storage0.getItem('buttonmenu1',buttonmenu["管理"]).name,
+        url: $(["历史","收藏","搜索","展示","直播","Alist","云盘"],2,"自定义第1个按钮功能").select((buttonmenu) => {
+            storage0.setItem('buttonmenu1',buttonmenu[input])
+            refreshPage(false);
+            return 'toast://第1按钮已设置为'+input;
+        }, buttonmenu),
+        pic_url: storage0.getItem('buttonmenu1',buttonmenu["管理"]).img,
+        col_type: 'icon_5',
+        extra: {
+            longClick: [{
+                title: "♻️重置",
+                js: $.toString(() => {
+                    clearItem('buttonmenu1');
+                    refreshPage(false);
+                    return "toast://已恢复默认"
+                })
+            }]
+        }
     })
     d.push({
         title: storage0.getItem('buttonmenu2',buttonmenu["收藏"]).name,
