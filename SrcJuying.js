@@ -576,7 +576,7 @@ function sousuo2() {
                     return input + searchurl;
                 }
             },searchurl),
-        desc: "搜你想看的...|云盘链接",
+        desc: "搜你想看的...",
         col_type: "input",
         extra: {
             titleVisible: true,
