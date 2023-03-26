@@ -590,27 +590,69 @@ function sousuo2() {
                         var list = JSON.parse(html)||[];
                         let suggest = list.map((sug)=>{
                             try {
-                                if(sug.img!=""){
-                                    return {
-                                        title: sug.title,
-                                        img: sug.img + '@Referer=',
-                                        url: sug.title + searchurl,
-                                        desc: "年份：" + sug.year,
-                                        col_type: "movie_1_vertical_pic",
-                                        extra: {
-                                            cls: 'suggest'
-                                        }
-                                    }
-                                }else{
-                                    return {
-                                        title: "⚡" + sug.title,
-                                        url: sug.title + searchurl,
-                                        col_type: "text_1",
-                                        extra: {
-                                            cls: 'suggest'
-                                        }
+                                let sugitem = {
+                                    url: sug.title + searchurl,
+                                    extra: {
+                                        cls: 'suggest',
+                                        longClick: [{
+                                            title: "🔍快速聚搜",
+                                            js: $.toString((name) => {
+                                                return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
+                                                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
+                                                    xunmi(name);
+                                                }, name)
+                                            },item)
+                                        },{
+                                            title: "🔎云盘搜索",
+                                            js: $.toString((name) => {
+                                                return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
+                                                    let d = [];
+                                                    d.push({
+                                                        title: name+"-云盘聚合搜索",
+                                                        url: "hiker://empty",
+                                                        col_type: "text_center_1",
+                                                        extra: {
+                                                            id: "listloading",
+                                                            lineVisible: false
+                                                        }
+                                                    })
+                                                    setResult(d);
+                                                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+                                                    aliDiskSearch(name);
+                                                }, name)
+                                            },item)
+                                        },{
+                                            title: "🔎Alist搜索",
+                                            js: $.toString((name) => {
+                                                return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
+                                                    let d = [];
+                                                    d.push({
+                                                        title: name+"-Alist聚合搜索",
+                                                        url: "hiker://empty",
+                                                        col_type: "text_center_1",
+                                                        extra: {
+                                                            id: "listloading",
+                                                            lineVisible: false
+                                                        }
+                                                    })
+                                                    setResult(d);
+                                                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
+                                                    alistSearch2(name,1);
+                                                }, name)
+                                            },item)
+                                        }]
                                     }
                                 }
+                                if(sug.img!=""){
+                                    sugitem.title = sug.title;
+                                    sugitem.img = sug.img + '@Referer=';
+                                    sugitem.desc = "年份：" + sug.year;
+                                    sugitem.col_type = "movie_1_vertical_pic";
+                                }else{
+                                    sugitem.title = "⚡" + sug.title;
+                                    sugitem.col_type = "text_1";
+                                }
+                                return sugitem;
                             } catch (e) {  }
                         });
                         if(suggest.length>0){
@@ -709,7 +751,54 @@ function sousuo2() {
                 url: item + searchurl,
                 col_type: 'scroll_button',
                 extra: {
-                    cls: 'searchrecord'
+                    cls: 'searchrecord',
+                    longClick: [{
+                        title: "🔍快速聚搜",
+                        js: $.toString((name) => {
+                            return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
+                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
+                                xunmi(name);
+                            }, name)
+                        },item)
+                    },{
+                        title: "🔎云盘搜索",
+                        js: $.toString((name) => {
+                            return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
+                                let d = [];
+                                d.push({
+                                    title: name+"-云盘聚合搜索",
+                                    url: "hiker://empty",
+                                    col_type: "text_center_1",
+                                    extra: {
+                                        id: "listloading",
+                                        lineVisible: false
+                                    }
+                                })
+                                setResult(d);
+                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+                                aliDiskSearch(name);
+                            }, name)
+                        },item)
+                    },{
+                        title: "🔎Alist搜索",
+                        js: $.toString((name) => {
+                            return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
+                                let d = [];
+                                d.push({
+                                    title: name+"-Alist聚合搜索",
+                                    url: "hiker://empty",
+                                    col_type: "text_center_1",
+                                    extra: {
+                                        id: "listloading",
+                                        lineVisible: false
+                                    }
+                                })
+                                setResult(d);
+                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
+                                alistSearch2(name,1);
+                            }, name)
+                        },item)
+                    }]
                 }
             });
         })
@@ -741,11 +830,61 @@ function sousuo2() {
     }
 
     for (var i in list) {
+        let name = pdfh(list[i], "a&&Text");
         d.push({
-            title: i=="0"?'““””<span style="color:#ff3300">' + (parseInt(i)+1).toString() + '</span>' + "\t\t\t" + pdfh(list[i], "a&&Text"):i=="1"?'““””<span style="color:#ff6600">' + (parseInt(i)+1).toString() + '</span>' + "\t\t\t" + pdfh(list[i], "a&&Text"):i=="2"?'““””<span style="color:#ff9900">' + (parseInt(i)+1).toString() + '</span>' + "\t\t\t" + pdfh(list[i], "a&&Text"):'““””<span>' + (parseInt(i)+1).toString() + '</span>' + "\t\t\t" + pdfh(list[i], "a&&Text"),
-            url: pdfh(list[i], "a&&Text") + searchurl,
-            col_type: "text_1"
-        }, );
+            title: i=="0"?'““””<span style="color:#ff3300">' + (parseInt(i)+1).toString() + '</span>' + "\t\t\t" + name:i=="1"?'““””<span style="color:#ff6600">' + (parseInt(i)+1).toString() + '</span>' + "\t\t\t" + name:i=="2"?'““””<span style="color:#ff9900">' + (parseInt(i)+1).toString() + '</span>' + "\t\t\t" + name:'““””<span>' + (parseInt(i)+1).toString() + '</span>' + "\t\t\t" + name,
+            url: name + searchurl,
+            col_type: "text_1",
+            extra: {
+                longClick: [{
+                    title: "🔍快速聚搜",
+                    js: $.toString((name) => {
+                        return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
+                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
+                            xunmi(name);
+                        }, name)
+                    },name)
+                },{
+                    title: "🔎云盘搜索",
+                    js: $.toString((name) => {
+                        return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
+                            let d = [];
+                            d.push({
+                                title: name+"-云盘聚合搜索",
+                                url: "hiker://empty",
+                                col_type: "text_center_1",
+                                extra: {
+                                    id: "listloading",
+                                    lineVisible: false
+                                }
+                            })
+                            setResult(d);
+                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+                            aliDiskSearch(name);
+                        }, name)
+                    },name)
+                },{
+                    title: "🔎Alist搜索",
+                    js: $.toString((name) => {
+                        return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
+                            let d = [];
+                            d.push({
+                                title: name+"-Alist聚合搜索",
+                                url: "hiker://empty",
+                                col_type: "text_center_1",
+                                extra: {
+                                    id: "listloading",
+                                    lineVisible: false
+                                }
+                            })
+                            setResult(d);
+                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
+                            alistSearch2(name,1);
+                        }, name)
+                    },name)
+                }]
+            }
+        });
     }
 
     setResult(d);
