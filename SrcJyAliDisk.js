@@ -349,7 +349,7 @@ function aliMyDisk(folder_id,nofilter) {
                                 fy_bridge_app.writeFile(icy, JSON.stringify(b));
                             }
                             localStorage.clear();
-                            //alert('TOKEN获取成功！');
+                            alert('TOKEN获取成功！');
                             //fy_bridge_app.back();
                             return $$$("#noLoading#").lazyRule(() => {
                                 clearMyVar('getalitoken');
@@ -362,7 +362,7 @@ function aliMyDisk(folder_id,nofilter) {
                     var token_timer = function () {
                         setTimeout(tokenFunction, 500)
                     };
-                    //token_timer();
+                    token_timer();
                     tokenFunction();
                 })
                 d.push({
