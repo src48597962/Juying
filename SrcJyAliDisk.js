@@ -348,7 +348,7 @@ function aliMyDisk(folder_id,nofilter) {
                             let alistconfig = alistData.config || {};
                             alistconfig.alitoken = token.refresh_token;
                             alistData.config = alistconfig;
-                            fy_bridge_appwriteFile(alistfile, JSON.stringify(alistData));
+                            fy_bridge_app.writeFile(alistfile, JSON.stringify(alistData));
                             localStorage.clear();
                             alert('TOKEN获取成功，请勿泄漏个人隐私!退出该页面后刷新重试！');
                             fy_bridge_app.back(true);
@@ -357,10 +357,7 @@ function aliMyDisk(folder_id,nofilter) {
                             token_timer();
                         }
                     }
-                    var token_timer = function() {
-                        setTimeout(tokenFunction, 300)
-                    };
-                    token_timer();
+                    setTimeout(tokenFunction, 500)
                     //tokenFunction();
                 })
                 d.push({
