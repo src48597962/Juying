@@ -1,8 +1,8 @@
 let alistfile = "hiker://files/rules/Src/Juying/Alist.json";
 try {
-  var alistData = JSON.parse(fetch(alistfile));
+  eval("var alistData = " + fetch(alistfile));
+  let alistconfig = alistData.config
 } catch (e) {
-  log(e.message);
   var alistData = {};
 }
 let datalist = alistData.drives || [];
