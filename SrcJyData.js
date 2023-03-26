@@ -558,9 +558,11 @@ function JYyiji(){
             extra: {
                 longClick: [{
                     title: "♥️管理",
-                    js: $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
-                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
-                        SRCSet();
+                    js: $.toString(() => {
+                        return $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
+                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                            SRCSet();
+                        })
                     })
                 }]
             }
