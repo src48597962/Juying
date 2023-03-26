@@ -2199,6 +2199,104 @@ function extension(){
             }, JYconfig, cfgfile),
         col_type: "text_center_1"
     });
+    d.push({
+        title: '主页导航菜单功能设置',
+        col_type: "rich_text",
+        extra:{textSize:12}
+    });
+    let buttonmenu = {
+        "历史":{
+            img: "https://lanmeiguojiang.com/tubiao/more/109.png",
+            url: "hiker://history"
+        },
+        "收藏":{
+            img: "https://lanmeiguojiang.com/tubiao/more/109.png",
+            url: "hiker://collection"
+        },
+        "搜索":{
+            img: "https://lanmeiguojiang.com/tubiao/more/101.png",
+            url: $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
+                require(config.依赖);
+                sousuo2();
+            })
+        },
+        "展示":{
+            img: "https://lanmeiguojiang.com/tubiao/more/105.png",
+            url: $("hiker://empty##fypage#noRecordHistory##noHistory#").rule(() => {
+                require(config.依赖);
+                jiekouyiji();
+            })
+        },
+        "直播":{
+            img: "https://lanmeiguojiang.com/tubiao/more/87.png",
+            url: $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
+                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLive.js');
+                Live();
+            })
+        },
+        "Alist":{
+            img: "hiker://files/cache/src/Alist.svg",
+            url: $("hiker://empty###noRecordHistory##noHistory#").rule(() => {
+                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
+                alistHome();
+            })
+        },
+        "云盘":{
+            img: "https://lanmeiguojiang.com/tubiao/more/109.png",
+            url: "hiker://collection"
+        }
+    }
+
+    d.push({
+        title: "管理",
+        url: "toast://这个按钮不能自定义",
+        pic_url: 'https://lanmeiguojiang.com/tubiao/more/129.png',
+        col_type: 'icon_5'
+    })
+    d.push({
+        title: storage0.getItem('buttonmenu2',buttonmenu["收藏"]).title,
+        url: $(["历史","收藏","搜索","展示","直播","Alist","云盘"],2,"自定义第2个按钮功能").select((buttonmenu) => {
+            buttonmenu[input].title = input;
+            storage0.setItem('buttonmenu2',buttonmenu[input])
+            refreshPage(false);
+            return 'toast://第2按钮已设置为'+input;
+        }, buttonmenu),
+        pic_url: storage0.getItem('buttonmenu2',buttonmenu["收藏"]).img,
+        col_type: 'icon_5'
+    })
+    d.push({
+        title: storage0.getItem('buttonmenu3',buttonmenu["搜索"]).title,
+        url: $(["历史","收藏","搜索","展示","直播","Alist","云盘"],2,"自定义第3个按钮功能").select((buttonmenu) => {
+            buttonmenu[input].title = input;
+            storage0.setItem('buttonmenu3',buttonmenu[input])
+            refreshPage(false);
+            return 'toast://第3按钮已设置为'+input;
+        }, buttonmenu),
+        pic_url: storage0.getItem('buttonmenu3',buttonmenu["搜索"]).img,
+        col_type: 'icon_5'
+    })
+    d.push({
+        title: storage0.getItem('buttonmenu4',buttonmenu["展示"]).title,
+        url: $(["历史","收藏","搜索","展示","直播","Alist","云盘"],2,"自定义第4个按钮功能").select((buttonmenu) => {
+            buttonmenu[input].title = input;
+            storage0.setItem('buttonmenu4',buttonmenu[input])
+            refreshPage(false);
+            return 'toast://第4按钮已设置为'+input;
+        }, buttonmenu),
+        pic_url: storage0.getItem('buttonmenu4',buttonmenu["展示"]).img,
+        col_type: 'icon_5'
+    })
+    d.push({
+        title: storage0.getItem('buttonmenu5',buttonmenu["直播"]).title,
+        url: $(["历史","收藏","搜索","展示","直播","Alist","云盘"],2,"自定义第5个按钮功能").select((buttonmenu) => {
+            buttonmenu[input].title = input;
+            storage0.setItem('buttonmenu5',buttonmenu[input])
+            refreshPage(false);
+            return 'toast://第5按钮已设置为'+input;
+        }, buttonmenu),
+        pic_url: storage0.getItem('buttonmenu5',buttonmenu["直播"]).img,
+        col_type: 'icon_5'
+    })
     /*
     d.push({
         col_type: "line_blank"
