@@ -350,8 +350,8 @@ function aliMyDisk(folder_id,nofilter) {
                             }
                             localStorage.clear();
                             //alert('TOKEN获取成功！');
-                            //fy_bridge_app.back();
-                            fy_bridge_app.parseLazyRule(`hiker://empty@lazyRule=.js:clearMyVar('getalitoken');back(true);`)
+                            fy_bridge_app.parseLazyRule(`hiker://empty@lazyRule=.js:clearMyVar('getalitoken');`)
+                            fy_bridge_app.back();
                         } else {
                             token_timer();
                         }
