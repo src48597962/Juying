@@ -231,7 +231,7 @@ function aliDiskSearch(input) {
     }
 }
 
-function aliMyDisk(folder_id) {
+function aliMyDisk(folder_id,nofilter) {
     let d = [];
     setPageTitle(typeof(MY_PARAMS)!="undefined" && MY_PARAMS.dirname ? MY_PARAMS.dirname : '我的云盘文件 | 聚影√');
     try{
@@ -252,7 +252,7 @@ function aliMyDisk(folder_id) {
                 img: "hiker://files/cache/src/文件夹.svg",
                 url: $("hiker://empty").rule((folder_id) => {
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
-                    aliMyDisk(folder_id);
+                    aliMyDisk(folder_id,nofilter);
                 }, item.file_id),
                 col_type: 'avatar',
                 extra: {
@@ -265,7 +265,7 @@ function aliMyDisk(folder_id) {
         })
         filelist.sort(SortList);
         filelist.forEach((item) => {
-            if (item.category == "video") {
+            if (item.category == "video" || nofilter) {
                 let sub_file_url;
                 if (sublist.length == 1) {
                     sub_file_url = sublist[0].url;
@@ -284,6 +284,7 @@ function aliMyDisk(folder_id) {
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliPublic.js');
                         if(alitoken){
                             let play = aliMyPlayUrl(file_id);
+                            log(play)
                             if (play.urls) {
                                 if (sub_file_url) {
                                     play['subtitle'] = sub_file_url;
@@ -291,6 +292,7 @@ function aliMyDisk(folder_id) {
                                 play.urls.unshift(file_url);
                                 play.names.unshift("原始 文件");
                                 play.headers.unshift({'Referer':'https://www.aliyundrive.com/'});
+                                log(play)
                                 return JSON.stringify(play);
                             }else{
                                 return "toast://"+play.message;
@@ -307,11 +309,13 @@ function aliMyDisk(folder_id) {
                 })
             }
         })
-        d.push({
-          title: "““””<small><font color=#f20c00>已开启文件过滤，仅显示视频文件</font></small>",
-          url: "hiker://empty",
-          col_type: "text_center_1"
-        })
+        if(!nofilter){
+            d.push({
+                title: "““””<small><font color=#f20c00>已开启文件过滤，仅显示视频文件</font></small>",
+                url: "hiker://empty",
+                col_type: "text_center_1"
+            })
+        }
     }catch(e){
         log(e.message);
         toast('有异常，可查看日志');
