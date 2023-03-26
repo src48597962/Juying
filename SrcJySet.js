@@ -2196,7 +2196,7 @@ function extension(){
     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyMenu.js');
     d.push({
         title: storage0.getItem('buttonmenu1',buttonmenu["管理"]).name,
-        url: $(["历史","收藏","搜索","展示","直播","Alist","云盘"],2,"自定义第1个按钮功能").select((buttonmenu) => {
+        url: $(["管理","历史","收藏","搜索","展示","直播","Alist","云盘"],2,"自定义第1个按钮功能").select((buttonmenu) => {
             storage0.setItem('buttonmenu1',buttonmenu[input])
             refreshPage(false);
             return 'toast://第1按钮已设置为'+input;
@@ -2216,7 +2216,7 @@ function extension(){
     })
     d.push({
         title: storage0.getItem('buttonmenu2',buttonmenu["收藏"]).name,
-        url: $(["历史","收藏","搜索","展示","直播","Alist","云盘"],2,"自定义第2个按钮功能").select((buttonmenu) => {
+        url: $(["管理","历史","收藏","搜索","展示","直播","Alist","云盘"],2,"自定义第2个按钮功能").select((buttonmenu) => {
             storage0.setItem('buttonmenu2',buttonmenu[input])
             refreshPage(false);
             return 'toast://第2按钮已设置为'+input;
@@ -2236,7 +2236,7 @@ function extension(){
     })
     d.push({
         title: storage0.getItem('buttonmenu3',buttonmenu["搜索"]).name,
-        url: $(["历史","收藏","搜索","展示","直播","Alist","云盘"],2,"自定义第3个按钮功能").select((buttonmenu) => {
+        url: $(["管理","历史","收藏","搜索","展示","直播","Alist","云盘"],2,"自定义第3个按钮功能").select((buttonmenu) => {
             storage0.setItem('buttonmenu3',buttonmenu[input])
             refreshPage(false);
             return 'toast://第3按钮已设置为'+input;
@@ -2256,7 +2256,7 @@ function extension(){
     })
     d.push({
         title: storage0.getItem('buttonmenu4',buttonmenu["展示"]).name,
-        url: $(["历史","收藏","搜索","展示","直播","Alist","云盘"],2,"自定义第4个按钮功能").select((buttonmenu) => {
+        url: $(["管理","历史","收藏","搜索","展示","直播","Alist","云盘"],2,"自定义第4个按钮功能").select((buttonmenu) => {
             storage0.setItem('buttonmenu4',buttonmenu[input])
             refreshPage(false);
             return 'toast://第4按钮已设置为'+input;
@@ -2276,7 +2276,7 @@ function extension(){
     })
     d.push({
         title: storage0.getItem('buttonmenu5',buttonmenu["直播"]).name,
-        url: $(["历史","收藏","搜索","展示","直播","Alist","云盘"],2,"自定义第5个按钮功能").select((buttonmenu) => {
+        url: $(["管理","历史","收藏","搜索","展示","直播","Alist","云盘"],2,"自定义第5个按钮功能").select((buttonmenu) => {
             storage0.setItem('buttonmenu5',buttonmenu[input])
             refreshPage(false);
             return 'toast://第5按钮已设置为'+input;
