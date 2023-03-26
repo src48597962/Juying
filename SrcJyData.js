@@ -7,6 +7,7 @@ if(Juyingcfg != ""){
     var JYconfig= {};
 }
 
+require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyMenu.js');
 let yijimenu = [
     {
         title: "管理",
@@ -18,144 +19,28 @@ let yijimenu = [
         col_type: 'icon_5'
     },
     {
-        title: JYconfig['recordentry']!=2?"历史":"收藏",
-        url: JYconfig['recordentry']!=2?"hiker://history":"hiker://collection",
-        pic_url: 'https://lanmeiguojiang.com/tubiao/more/109.png',
-        col_type: 'icon_5',
-        extra: {
-            id: "lishishoucang",
-            longClick: [{
-                title: "切换为历史按钮",
-                js: $.toString((JYconfig,cfgfile) => {
-                    updateItem("lishishoucang", {
-                        title: "历史",
-                        url: "hiker://history"
-                    });
-                    JYconfig['recordentry'] = 1;
-                    writeFile(cfgfile, JSON.stringify(JYconfig));
-                    return "toast://已切换按钮为历史"
-                },JYconfig,cfgfile)
-            }, {
-                title: "切换为收藏按钮",
-                js: $.toString((JYconfig,cfgfile) => {
-                    updateItem("lishishoucang", {
-                        title: "收藏",
-                        url: "hiker://collection"
-                    });
-                    JYconfig['recordentry'] = 2;
-                    writeFile(cfgfile, JSON.stringify(JYconfig));
-                    return "toast://已切换按钮为收藏"
-                },JYconfig,cfgfile)
-            }]
-        }
-    },
-    {
-        title: "搜索",
-        url: $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
-                require(config.依赖);
-                sousuo2();
-            }),
-        pic_url: 'https://lanmeiguojiang.com/tubiao/more/101.png',
+        title: storage0.getItem('buttonmenu2',buttonmenu["收藏"]).name,
+        url: storage0.getItem('buttonmenu2',buttonmenu["收藏"]).url,
+        pic_url: storage0.getItem('buttonmenu2',buttonmenu["收藏"]).img,
         col_type: 'icon_5'
     },
     {
-        title: getItem('zhanshibutton')=="alist"?"Alist":getItem('zhanshibutton')=="history"?"历史":"展示",
-        url: getItem('zhanshibutton')=="alist"?$("hiker://empty###noRecordHistory##noHistory#").rule(() => {
-                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
-                alistHome();
-            }):getItem('zhanshibutton')=="history"?"hiker://history":$("hiker://empty##fypage#noRecordHistory##noHistory#").rule(() => {
-                require(config.依赖);
-                jiekouyiji();
-            }),
-        pic_url: getItem('zhanshibutton')=="alist"?'hiker://files/cache/src/Alist.svg':'https://lanmeiguojiang.com/tubiao/more/105.png',
-        col_type: 'icon_5',
-        extra: {
-            id: "zhanshibutton",
-            longClick: [{
-                title: "切为展示",
-                js: $.toString(() => {
-                    clearItem('zhanshibutton');
-                    updateItem("zhanshibutton", {
-                        title: "展示",
-                        pic_url: 'https://lanmeiguojiang.com/tubiao/more/105.png',
-                        url: $("hiker://empty##fypage#noRecordHistory##noHistory#").rule(() => {
-                            require(config.依赖);
-                            jiekouyiji();
-                        })
-                    });
-                    return "toast://已切换为展示按钮";
-                })
-            },{
-                title: "切为历史",
-                js: $.toString(() => {
-                    setItem('zhanshibutton','history');
-                    updateItem("zhanshibutton", {
-                        title: "历史",
-                        pic_url: 'https://lanmeiguojiang.com/tubiao/more/105.png',
-                        url: "hiker://history"
-                    });
-                    return "toast://已切换为历史按钮";
-                })
-            },{
-                title: "切为Alist网盘",
-                js: $.toString(() => {
-                    setItem('zhanshibutton','alist');
-                    updateItem("zhanshibutton", {
-                        title: "Alist",
-                        pic_url: 'hiker://files/cache/src/Alist.svg',
-                        url: $("hiker://empty###noRecordHistory##noHistory#").rule(() => {
-                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
-                            alistHome();
-                        })
-                    });
-                    return "toast://已切换为Alist网盘按钮";
-                })
-            }]
-        }
+        title: storage0.getItem('buttonmenu3',buttonmenu["搜索"]).name,
+        url: storage0.getItem('buttonmenu3',buttonmenu["搜索"]).url,
+        pic_url: storage0.getItem('buttonmenu3',buttonmenu["搜索"]).img,
+        col_type: 'icon_5'
     },
     {
-        title: getItem('zhibobutton')=="alist"?"Alist":"直播",
-        url: getItem('zhibobutton')=="alist"?$("hiker://empty###noRecordHistory##noHistory#").rule(() => {
-                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
-                alistHome();
-            }):$("hiker://empty#noRecordHistory##noHistory#").rule(() => {
-                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLive.js');
-                Live();
-            }),
-        pic_url: getItem('zhibobutton')=="alist"?'hiker://files/cache/src/Alist.svg':'https://lanmeiguojiang.com/tubiao/more/87.png',
-        col_type: 'icon_5',
-        extra: {
-            id: "zhibobutton",
-            longClick: [{
-                title: "切为直播",
-                js: $.toString(() => {
-                    clearItem('zhibobutton');
-                    updateItem("zhibobutton", {
-                        title: "直播",
-                        pic_url: 'https://lanmeiguojiang.com/tubiao/more/87.png',
-                        url: $("hiker://empty##fypage#noRecordHistory##noHistory#").rule(() => {
-                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLive.js');
-                            Live();
-                        })
-                    });
-                    return "toast://已切换为直播按钮";
-                })
-            },{
-                title: "切为Alist网盘",
-                js: $.toString(() => {
-                    setItem('zhibobutton','alist');
-                    updateItem("zhibobutton", {
-                        title: "Alist",
-                        pic_url: 'hiker://files/cache/src/Alist.svg',
-                        url: $("hiker://empty###noRecordHistory##noHistory#").rule(() => {
-                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
-                            alistHome();
-                        })
-                    });
-                    return "toast://已切换为Alist网盘按钮";
-                })
-            }]
-        }
+        title: storage0.getItem('buttonmenu4',buttonmenu["展示"]).name,
+        url: storage0.getItem('buttonmenu4',buttonmenu["展示"]).url,
+        pic_url: storage0.getItem('buttonmenu4',buttonmenu["展示"]).img,
+        col_type: 'icon_5'
+    },
+    {
+        title: storage0.getItem('buttonmenu5',buttonmenu["直播"]).name,
+        url: storage0.getItem('buttonmenu5',buttonmenu["直播"]).url,
+        pic_url: storage0.getItem('buttonmenu5',buttonmenu["直播"]).img,
+        col_type: 'icon_5'
     },
     {
         col_type: 'line'
