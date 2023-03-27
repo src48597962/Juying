@@ -248,7 +248,7 @@ function aliMyDisk(folder_id,nofilter) {
         }
         try{
             let drive_id = userinfo.default_drive_id;
-            let postdata = {"drive_id":drive_id,"parent_file_id":folder_id,"limit":200,"all":true,"url_expire_sec":86400,"image_thumbnail_process":"image/resize,w_400/format,jpeg","image_url_process":"image/resize,w_1920/format,jpeg","video_thumbnail_process":"video/snapshot,t_1000,f_jpg,ar_auto,w_300","order_by":"name","order_direction":"ASC"};
+            let postdata = {"drive_id":drive_id,"parent_file_id":folder_id,"limit":200,"all":false,"url_expire_sec":14400,"image_thumbnail_process":"image/resize,w_256/format,jpeg","image_url_process":"image/resize,w_1920/format,jpeg/interlace,1","video_thumbnail_process":"video/snapshot,t_1000,f_jpg,ar_auto,w_256","fields":"*","order_by":"updated_at","order_direction":"DESC"};
             headers['authorization'] = 'Bearer ' + userinfo.access_token;
             let myfilelist = JSON.parse(request('https://api.aliyundrive.com/adrive/v3/file/list', { headers: headers, body: postdata, method: 'POST' })).items;
             let sublist = myfilelist.filter(item => {
@@ -277,7 +277,6 @@ function aliMyDisk(folder_id,nofilter) {
             })
             filelist.sort(SortList);
             filelist.forEach((item) => {
-                log(item.name + ">" +item.type + ">" + (item.url||""))
                 if (item.category == "video" || nofilter) {
                     let sub_file_url;
                     if (sublist.length == 1) {
@@ -292,7 +291,7 @@ function aliMyDisk(folder_id,nofilter) {
                     let filesize = item.size/1024/1024;
                     d.push({
                         title: item.name,
-                        img: item.thumbnail+"@Referer=https://www.aliyundrive.com/" || (item.category == "video" ? "hiker://files/cache/src/影片.svg" : item.category == "audio" ? "hiker://files/cache/src/音乐.svg" : item.category == "image" ? "hiker://files/cache/src/图片.png" : "https://img.alicdn.com/imgextra/i1/O1CN01mhaPJ21R0UC8s9oik_!!6000000002049-2-tps-80-80.png"),
+                        img: item.thumbnail+"@Referer=https://www.aliyundrive.com/" || (item.category == "video" ? "hiker://files/cache/src/影片.svg" : item.category == "audio" ? "hiker://files/cache/src/音乐.svg" : item.category == "image" ? "hiker://files/cache/src/图片.png" : "https://img.alicdn.com/imgextra/i1/O1CN01mhaPJ21R0UC8s9oik_!!6000000002049-2-tps-80-80.png@Referer="),
                         url: $("hiker://empty##").lazyRule((category,file_id,file_url,sub_file_url) => {
                             if(category=="video"){
                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliPublic.js');
