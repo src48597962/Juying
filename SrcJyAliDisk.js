@@ -314,7 +314,7 @@ function aliMyDisk(folder_id,nofilter) {
                             }else if(category == "audio"){
                                 return file_url + ";{Referer@https://www.aliyundrive.com/}#isMusic=true#";
                             }else if(category == "image"){
-                                return file_url + "@Referer=https://www.aliyundrive.com/";
+                                return file_url + "#.jpg@Referer=https://www.aliyundrive.com/";
                             }else{
                                 return "download://" + file_url + ";{Referer@https://www.aliyundrive.com/}";
                             }
