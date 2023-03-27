@@ -612,7 +612,7 @@ let buttonmenu = {
     },
     "云盘": {
         name: "云盘",
-        img: "https://img.alicdn.com/imgextra/i1/O1CN01JDQCi21Dc8EfbRwvF_!!6000000000236-73-tps-64-64.ico",
+        img: "https://lanmeiguojiang.com/tubiao/more/65.png",
         url: $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
             aliMyDisk("root",1);
