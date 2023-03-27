@@ -325,7 +325,8 @@ function aliMyDisk(folder_id,nofilter) {
                             desc: filesize < 1024 ? filesize.toFixed(2) + 'MB' : (filesize/1024).toFixed(2) + 'GB',
                             col_type: 'avatar',
                             extra: {
-                                id: item.file_id
+                                id: item.file_id,
+                                inheritTitle: false
                             }
                         })
                     }
