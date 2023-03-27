@@ -120,7 +120,7 @@ function aliMyDisk(folder_id,nofilter) {
     }else{
         d.push({
             title: "⚡登录云盘⚡",
-            url: $("hiker://empty##").rule(() => {
+            url: $("hiker://empty###noRecordHistory##noHistory#").rule(() => {
                 let d = [];
                 let url = 'https://auth.aliyundrive.com/v2/oauth/authorize?login_type=custom&response_type=code&redirect_uri=https%3A%2F%2Fwww.aliyundrive.com%2Fsign%2Fcallback&client_id=25dzX3vbYqktVxyX&state=%7B%22origin%22%3A%22*%22%7D#/login'
                 let js = $.toString(() => {
