@@ -312,11 +312,11 @@ function aliMyDisk(folder_id,nofilter) {
                                     return "toast://未获取到阿里token";
                                 }
                             }else if(category == "audio"){
-                                return file_url + "#isMusic=true#";
+                                return file_url + ";{Referer@https://www.aliyundrive.com/}#isMusic=true#";
                             }else if(category == "image"){
-                                return file_url + "@Referer=";
+                                return file_url + "@Referer=https://www.aliyundrive.com/";
                             }else{
-                                return "download://" + file_url;
+                                return "download://" + file_url + ";{Referer@https://www.aliyundrive.com/}";
                             }
                         }, item.category, item.file_id, item.url, sub_file_url||""),
                         desc: filesize < 1024 ? filesize.toFixed(2) + 'MB' : (filesize/1024).toFixed(2) + 'GB',
