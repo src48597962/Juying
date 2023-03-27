@@ -98,12 +98,12 @@ var SrcParseS = {
                     if(fy_bridge_app.getHeaderUrl&&vipUrl.indexOf("=http")==-1)
                         return $$$("#noLoading#").lazyRule((url) => {
                             url = base64Decode(url);
-                            fba.log('进来了');
-                            if (/ffzy|lz-cdn/.test(url) && fy_bridge_app.clearM3u8Ad) {
-                                fba.log('进来了2');
-                                return fy_bridge_app.clearM3u8Ad(url).replace(";{", "#ignoreImg=true##isVideo=true#;{");
+                            log('进来了');
+                            if (/ffzy|lz-cdn/.test(url) && typeof(clearM3u8Ad) != "undefined") {
+                                log('进来了2');
+                                return clearM3u8Ad(url.split(";{")[0], {timeout: 2000})+"#ignoreImg=true##isVideo=true#;{"+url.split(";{")[1];
                             }else if (getMyVar('SrcM3U8', '1') == "1"&&url.indexOf('.m3u8')>-1) {
-                                fba.log('进来了3');
+                                log('进来了3');
                                 return cacheM3u8(url.split(";{")[0], {timeout: 2000})+"#ignoreImg=true##isVideo=true#;{"+url.split(";{")[1];
                             }else{
                                 return url.replace(";{", "#ignoreImg=true##isVideo=true#;{");
