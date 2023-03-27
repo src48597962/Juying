@@ -152,6 +152,8 @@ function aliMyDisk(folder_id,nofilter) {
                             //alert('TOKEN获取成功！');
                             //fba.parseLazyRule(`hiker://empty@lazyRule=.js:back(true);`);
                             fy_bridge_app.back();
+                            fy_bridge_app.back();
+                            fy_bridge_app.back();
                             //return;
                         } else {
                             token_timer();
