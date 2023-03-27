@@ -96,7 +96,9 @@ var SrcParseS = {
                     if(fy_bridge_app.getHeaderUrl&&vipUrl.indexOf("=http")==-1)
                         return $$$("#noLoading#").lazyRule((url) => {
                             url = base64Decode(url);
-                            if (getMyVar('SrcM3U8', '1') == "1"&&url.indexOf('.m3u8')>-1) {
+                            if (/ffzy|lz-cdn/.test(url) && typeof(fy_bridge_app.clearM3u8Ad) != "undefined") {
+                                return fy_bridge_app.clearM3u8Ad(url).replace(";{", "#ignoreImg=true##isVideo=true#;{");
+                            }else if (getMyVar('SrcM3U8', '1') == "1"&&url.indexOf('.m3u8')>-1) {
                                 return cacheM3u8(url.split(";{")[0], {timeout: 2000})+"#ignoreImg=true##isVideo=true#;{"+url.split(";{")[1];
                             }else{
                                 return url.replace(";{", "#ignoreImg=true##isVideo=true#;{");
@@ -436,6 +438,9 @@ var SrcParseS = {
         if(contain.test(vipUrl)&&!exclude.test(vipUrl)&&!needparse.test(vipUrl)){
             if(printlog==1){log("直链视频地址，直接播放")}; 
             if(vipUrl.indexOf('app.grelighting.cn')>-1){vipUrl = vipUrl.replace('app.','ht.')}
+            if (/ffzy|lz-cdn/.test(vipUrl) && typeof(clearM3u8Ad) != "undefined") {
+                vipUrl = clearM3u8Ad(vipUrl,{timeout:3000});
+            }
             return vipUrl + '#isVideo=true#';
         }else if (vipUrl.indexOf('sa.sogou') != -1) {
             if(printlog==1){log("优看视频，直接明码解析")}; 
