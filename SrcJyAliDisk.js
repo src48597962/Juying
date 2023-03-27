@@ -342,7 +342,7 @@ function aliMyDisk(folder_id,nofilter) {
             }
         }catch(e){
             log(e.message);
-            toast('有异常，可查看日志');
+            toast('有异常查看日志，可刷新确认下');
         }
     }else{
         d.push({
