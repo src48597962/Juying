@@ -242,6 +242,9 @@ function aliMyDisk(folder_id,nofilter) {
                 img: userinfo.avatar,
                 col_type: 'avatar'
             })
+            d.push({
+                col_type: "line"
+            });
         }
         try{
             let drive_id = userinfo.default_drive_id;
@@ -292,15 +295,13 @@ function aliMyDisk(folder_id,nofilter) {
                         url: $("hiker://empty##").lazyRule((file_id,file_url,sub_file_url) => {
                             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliPublic.js');
                             if(alitoken){
-                                //file_url = base64Decode(file_url);
-                                //sub_file_url = sub_file_url?base64Decode(sub_file_url):"";
                                 let play = aliMyPlayUrl(file_id);
                                 if (play.urls) {
                                     if (sub_file_url) {
                                         play['subtitle'] = sub_file_url;
                                     }
                                     play.urls.unshift(file_url+ "#isVideo=true##pre#");
-                                    play.names.unshift("原始 文件");
+                                    play.names.unshift("原始 画质");
                                     play.headers.unshift({'Referer':'https://www.aliyundrive.com/'});
                                     return JSON.stringify(play);
                                 }else{
@@ -308,7 +309,7 @@ function aliMyDisk(folder_id,nofilter) {
                                 }
                             }else{
                                 return "toast://未获取到阿里token";
-                            }//base64Encode(item.url)
+                            }
                         }, item.file_id, item.url, sub_file_url||""),
                         desc: filesize < 1024 ? filesize.toFixed(2) + 'MB' : (filesize/1024).toFixed(2) + 'GB',
                         col_type: 'avatar',
@@ -331,11 +332,11 @@ function aliMyDisk(folder_id,nofilter) {
         }
     }else{
         d.push({
-            title: "登录云盘",
+            title: "⚡登录云盘⚡",
             url: $("hiker://empty##").rule(() => {
-                var d = [];
+                let d = [];
                 let url = 'https://auth.aliyundrive.com/v2/oauth/authorize?login_type=custom&response_type=code&redirect_uri=https%3A%2F%2Fwww.aliyundrive.com%2Fsign%2Fcallback&client_id=25dzX3vbYqktVxyX&state=%7B%22origin%22%3A%22*%22%7D#/login'
-                var js = $.toString(() => {
+                let js = $.toString(() => {
                     const tokenFunction = function () {
                         var token = JSON.parse(localStorage.getItem('token'))
                         if (token && token.user_id) {
@@ -374,8 +375,7 @@ function aliMyDisk(folder_id,nofilter) {
                 })
                 setResult(d);
             }),
-            img: "https://lanmeiguojiang.com/tubiao/messy/158.svg",
-            col_type: 'avatar'
+            col_type: 'text_center_1'
         })
     }
     
