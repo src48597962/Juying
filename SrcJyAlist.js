@@ -365,7 +365,7 @@ function alistUrl(alistapi,path,sign,subtitle) {
               let names = [];
               let heads = [];
               urls.push(url);
-              names.push('原始 文件');
+              names.push('原始 画质');
               heads.push({'Referer':'https://www.aliyundrive.com/'});
               playurl.forEach((item) => {
                 urls.push(item.url+"#isVideo=true##pre#");
