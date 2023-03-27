@@ -1,7 +1,6 @@
 let alistfile = "hiker://files/rules/Src/Juying/Alist.json";
 try {
-  eval("var alistData = " + fetch(alistfile));
-  let alistconfig = alistData.config
+  var alistData = JSON.parse(fetch(alistfile));
 } catch (e) {
   var alistData = {};
 }
@@ -13,6 +12,7 @@ let contain = new RegExp(audiovisual, "i");//设置可显示的影音文件后�
 let music = new RegExp("mp3|m4a|wma|flac", "i");//进入音乐播放器
 let image = new RegExp("jpg|png|gif|bmp|ico|svg", "i");//进入图片查看
 let transcoding = { UHD: "4K 超清", QHD: "2K 超清", FHD: "1080 全高清", HD: "720 高清", SD: "540 标清", LD: "360 流畅" };
+
 let alitoken = alistconfig.alitoken;
 if (!alitoken && getMyVar('getalitoken') != "1") {
   putMyVar('getalitoken', '1');
