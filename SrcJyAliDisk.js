@@ -290,7 +290,7 @@ function aliMyDisk(folder_id,nofilter) {
                                 if (sub_file_url) {
                                     play['subtitle'] = sub_file_url;
                                 }
-                                play.urls.unshift(file_url+ "#.m3u8#pre#");
+                                play.urls.unshift(file_url);
                                 play.names.unshift("原始 文件");
                                 play.headers.unshift({'Referer':'https://www.aliyundrive.com/'});
                                 log(play)
