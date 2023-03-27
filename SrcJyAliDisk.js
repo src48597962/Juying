@@ -277,6 +277,7 @@ function aliMyDisk(folder_id,nofilter) {
             })
             filelist.sort(SortList);
             filelist.forEach((item) => {
+                log(item.name + ">" +item.type + ">" + (item.url||""))
                 if (item.category == "video" || nofilter) {
                     let sub_file_url;
                     if (sublist.length == 1) {
@@ -318,7 +319,7 @@ function aliMyDisk(folder_id,nofilter) {
                             }else{
                                 return "download://" + file_url + ";{Referer@https://www.aliyundrive.com/}";
                             }
-                        }, item.category, item.file_id, item.url, sub_file_url||""),
+                        }, item.category, item.file_id, item.url||"", sub_file_url||""),
                         desc: filesize < 1024 ? filesize.toFixed(2) + 'MB' : (filesize/1024).toFixed(2) + 'GB',
                         col_type: 'avatar',
                         extra: {
