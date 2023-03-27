@@ -29,6 +29,7 @@ function aliShare(share_id, folder_id, share_pwd) {
         let sharetoken = JSON.parse(request('https://api.aliyundrive.com/v2/share_link/get_share_token', { headers: headers, body: { "share_pwd": share_pwd, "share_id": share_id }, method: 'POST', timeout: 3000 })).share_token;
         let postdata = { "share_id": share_id, "parent_file_id": folder_id || "root", "limit": 200, "image_thumbnail_process": "image/resize,w_256/format,jpeg", "image_url_process": "image/resize,w_1920/format,jpeg/interlace,1", "video_thumbnail_process": "video/snapshot,t_1000,f_jpg,ar_auto,w_256", "order_by": "name", "order_direction": "DESC" };
         headers['x-share-token'] = sharetoken;
+        headers['x-canary:'] = "client=web,app=share,version=v2.3.1";
         let sharelist = JSON.parse(request('https://api.aliyundrive.com/adrive/v2/file/list_by_share', { headers: headers, body: postdata, method: 'POST' })).items;
         if(sharelist.length>0){
             d.push({
@@ -248,8 +249,9 @@ function aliMyDisk(folder_id,nofilter) {
         }
         try{
             let drive_id = userinfo.default_drive_id;
-            let postdata = {"drive_id":drive_id,"parent_file_id":folder_id,"limit":200,"all":false,"url_expire_sec":14400,"image_thumbnail_process":"image/resize,w_256/format,jpeg","image_url_process":"image/resize,w_1920/format,jpeg/interlace,1","video_thumbnail_process":"video/snapshot,t_1000,f_jpg,ar_auto,w_256","fields":"*","order_by":"updated_at","order_direction":"DESC"};
+            let postdata = {"drive_id":drive_id,"parent_file_id":folder_id,"limit":200};
             headers['authorization'] = 'Bearer ' + userinfo.access_token;
+            headers['x-canary:'] = "client=web,app=adrive,version=v4.1.1";
             let myfilelist = JSON.parse(request('https://api.aliyundrive.com/adrive/v3/file/list', { headers: headers, body: postdata, method: 'POST' })).items;
             let sublist = myfilelist.filter(item => {
                 return item.type == "file" && /srt|vtt|ass/.test(item.file_extension);
