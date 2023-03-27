@@ -98,7 +98,7 @@ var SrcParseS = {
                     if(fy_bridge_app.getHeaderUrl&&vipUrl.indexOf("=http")==-1)
                         return $$$("#noLoading#").lazyRule((url) => {
                             url = base64Decode(url);
-                            if (/ffzy|lz-cdn/.test(url) && typeof(fy_bridge_app.clearM3u8Ad) != "undefined") {
+                            if (/ffzy|lz-cdn/.test(url) && fy_bridge_app.clearM3u8Ad) {
                                 return fy_bridge_app.clearM3u8Ad(url).replace(";{", "#ignoreImg=true##isVideo=true#;{");
                             }else if (getMyVar('SrcM3U8', '1') == "1"&&url.indexOf('.m3u8')>-1) {
                                 return cacheM3u8(url.split(";{")[0], {timeout: 2000})+"#ignoreImg=true##isVideo=true#;{"+url.split(";{")[1];
