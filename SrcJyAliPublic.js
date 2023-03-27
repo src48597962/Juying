@@ -8,7 +8,6 @@ try {
 } catch (e) {
   var alistData = {};
 }
-let datalist = alistData.drives || [];
 let alistconfig = alistData.config || {};
 let fileFilter = alistconfig['fileFilter'] == 0 ? 0 : 1;
 let audiovisual = alistconfig.contain ? alistconfig.contain.replace(/\./, "") : 'mp4|avi|mkv|rmvb|flv|mov|ts|mp3|m4a|wma|flac';//影音文件
