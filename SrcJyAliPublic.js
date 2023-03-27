@@ -1,6 +1,10 @@
 let alistfile = "hiker://files/rules/Src/Juying/Alist.json";
 try {
-  var alistData = JSON.parse(fetch(alistfile));
+  if(fetch(alistfile)){
+    eval("var alistData = " + fetch(alistfile));
+  }else{
+    var alistData = {};
+  }
 } catch (e) {
   var alistData = {};
 }
@@ -12,7 +16,6 @@ let contain = new RegExp(audiovisual, "i");//设置可显示的影音文件后�
 let music = new RegExp("mp3|m4a|wma|flac", "i");//进入音乐播放器
 let image = new RegExp("jpg|png|gif|bmp|ico|svg", "i");//进入图片查看
 let transcoding = { UHD: "4K 超清", QHD: "2K 超清", FHD: "1080 全高清", HD: "720 高清", SD: "540 标清", LD: "360 流畅" };
-
 let alitoken = alistconfig.alitoken;
 if (!alitoken && getMyVar('getalitoken') != "1") {
   putMyVar('getalitoken', '1');
@@ -47,8 +50,7 @@ let headers = {
   'content-type': 'application/json;charset=UTF-8',
   "origin": "https://www.aliyundrive.com",
   "referer": "https://www.aliyundrive.com/",
-  "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36 Edg/110.0.1587.41",
-  //"x-canary": "client=web,app=adrive,version=v3.1.0"
+  "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36 Edg/110.0.1587.41"
 };
 let userinfo = {};
 if (alitoken) {
