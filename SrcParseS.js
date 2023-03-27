@@ -9,7 +9,9 @@ var SrcParseS = {
             }else {
                 if (url[0] == '/') { url = 'https:' + url }
                 if (i == undefined) {
-                    if (getMyVar('SrcM3U8', '1') == "1"&&url.indexOf('.m3u8')>-1) {
+                    if (/ffzy|lz-cdn/.test(url) && typeof(clearM3u8Ad) != "undefined") {
+                        url = clearM3u8Ad(url, {timeout: 2000});
+                    }else if (getMyVar('SrcM3U8', '1') == "1"&&url.indexOf('.m3u8')>-1) {
                         url = cacheM3u8(url, {timeout: 2000});
                     }
                     if(url.indexOf('User-Agent')==-1){
