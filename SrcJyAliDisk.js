@@ -127,6 +127,7 @@ function aliMyDisk(folder_id,nofilter) {
                     const tokenFunction = function () {
                         var token = JSON.parse(localStorage.getItem('token'))
                         if (token && token.user_id) {
+                            /*
                             let token_url = 'hiker://files/rules/Joe/ali.json';
                             fy_bridge_app.writeFile(token_url, JSON.stringify(token));
                             let icy = "hiker://files/rules/icy/icy-ali-token.json";
@@ -136,9 +137,21 @@ function aliMyDisk(folder_id,nofilter) {
                                 b.push(token);
                                 fy_bridge_app.writeFile(icy, JSON.stringify(b));
                             }
+                            */
+                            let alistfile = "hiker://files/rules/Src/Juying/Alist.json";
+                            if(fy_bridge_app.fetch(alistfile)){
+                                eval("var alistData = " + fy_bridge_app.fetch(alistfile));
+                            }else{
+                                var alistData = {};
+                            }
+                            let alistconfig = alistData.config || {};
+                            alistconfig.alitoken = token.refresh_token;
+                            alistData.config = alistconfig;
+                            fy_bridge_app.writeFile(alistfile, JSON.stringify(alistData));
                             localStorage.clear();
                             alert('TOKEN获取成功！');
-                            fy_bridge_app.back();
+                            fba.parseLazyRule(`hiker://empty@lazyRule=.js:back(true);`);
+                            //fy_bridge_app.back();
                             return;
                         } else {
                             token_timer();
@@ -147,7 +160,6 @@ function aliMyDisk(folder_id,nofilter) {
                     var token_timer = function () {
                         setTimeout(tokenFunction, 500)
                     };
-                    //token_timer();
                     tokenFunction();
                 })
                 d.push({
