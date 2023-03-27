@@ -191,7 +191,7 @@ function lookset(){
                     }
                     writeFile(cfgfile, JSON.stringify(JYconfig));
                     refreshPage(false);
-                    return 'toast://'+JYconfig['alistLine']?'已开启云盘搜索线路':'已关闭云盘搜索线路';
+                    return 'toast://'+(JYconfig['alistLine']?'已开启云盘搜索线路':'已关闭云盘搜索线路');
                 }, JYconfig, cfgfile),
             col_type: "text_2"
         });
@@ -208,7 +208,7 @@ function lookset(){
                 }
                 writeFile(cfgfile, JSON.stringify(JYconfig));
                 refreshPage(false);
-                return 'toast://'+JYconfig['alistLine']?'已开启Alist搜索线路':'已关闭Alist搜索线路';
+                return 'toast://'+(JYconfig['alistLine']?'已开启Alist搜索线路':'已关闭Alist搜索线路');
             }, JYconfig, cfgfile),
         col_type: "text_2"
     });
