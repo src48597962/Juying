@@ -25,21 +25,13 @@ function myDiskMenu(islogin){
     let onlogin = [{
         title: userinfo.nick_name,
         url: $().lazyRule((alistfile, alistData) => {
-            /*
-            let alistfile = "hiker://files/rules/Src/Juying/Alist.json";
-            if(fetch(alistfile)){
-                eval("var alistData = " + fetch(alistfile));
-            }else{
-                var alistData = {};
-            }
-            */
             let alistconfig = alistData.config || {};
             let alitoken = alistconfig.alitoken;
             return $(alitoken||"","refresh_token").input((alistfile,alistData,alistconfig)=>{
-            alistconfig.alitoken = input;
-            alistData.config = alistconfig;
-            writeFile(alistfile, JSON.stringify(alistData));
-            return "toast://已设置";
+                alistconfig.alitoken = input;
+                alistData.config = alistconfig;
+                writeFile(alistfile, JSON.stringify(alistData));
+                return "toast://已设置";
             },alistfile,alistData,alistconfig)
         }, alistfile, alistData),
         img: userinfo.avatar,
@@ -52,16 +44,18 @@ function myDiskMenu(islogin){
         url: $("hiker://empty###noRecordHistory##noHistory#").rule(() => {
             let d = [];
             let url = 'https://auth.aliyundrive.com/v2/oauth/authorize?login_type=custom&response_type=code&redirect_uri=https%3A%2F%2Fwww.aliyundrive.com%2Fsign%2Fcallback&client_id=25dzX3vbYqktVxyX&state=%7B%22origin%22%3A%22*%22%7D#/login'
-            let js = $.toString(() => {
+            let js = $.toString((alistfile, alistData) => {
                 const tokenFunction = function () {
                     var token = JSON.parse(localStorage.getItem('token'))
                     if (token && token.user_id) {
+                        /*
                         let alistfile = "hiker://files/rules/Src/Juying/Alist.json";
                         if(fy_bridge_app.fetch(alistfile)){
                             eval("var alistData = " + fy_bridge_app.fetch(alistfile));
                         }else{
                             var alistData = {};
                         }
+                        */
                         let alistconfig = alistData.config || {};
                         alistconfig.alitoken = token.refresh_token;
                         alistData.config = alistconfig;
@@ -78,7 +72,7 @@ function myDiskMenu(islogin){
                     setTimeout(tokenFunction, 500)
                 };
                 tokenFunction();
-            })
+            }, alistfile, alistData)
             d.push({
                 url: url,
                 col_type: 'x5_webview_single',
@@ -93,13 +87,15 @@ function myDiskMenu(islogin){
         col_type: 'text_center_1'
     },{
         title: "⭐手工填写token⭐",
-        url: $().lazyRule(() => {
+        url: $().lazyRule((alistfile,alistData) => {
+            /*
             let alistfile = "hiker://files/rules/Src/Juying/Alist.json";
             if(fetch(alistfile)){
                 eval("var alistData = " + fetch(alistfile));
             }else{
                 var alistData = {};
             }
+            */
             let alistconfig = alistData.config || {};
             return $("", "refresh_token").input((alistfile, alistData, alistconfig) => {
                 alistconfig.alitoken = input;
@@ -107,7 +103,7 @@ function myDiskMenu(islogin){
                 writeFile(alistfile, JSON.stringify(alistData));
                 return "toast://已设置，刷新页面！";
             }, alistfile, alistData, alistconfig)
-        }),
+        }, alistfile, alistData),
         col_type: 'text_center_1'
     }]
     if(islogin){
