@@ -561,7 +561,6 @@ function lookset(){
 //主页导航按钮菜单
 let buttonmenu = {
     "管理": {
-        name: "管理",
         img: "https://lanmeiguojiang.com/tubiao/more/129.png",
         url: $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
@@ -569,17 +568,14 @@ let buttonmenu = {
         })
     },
     "历史": {
-        name: "历史",
         img: "https://lanmeiguojiang.com/tubiao/more/213.png",
         url: "hiker://history"
     },
     "收藏": {
-        name: "收藏",
         img: "https://lanmeiguojiang.com/tubiao/more/109.png",
         url: "hiker://collection"
     },
     "搜索": {
-        name: "搜索",
         img: "https://lanmeiguojiang.com/tubiao/more/101.png",
         url: $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
             require(config.依赖);
@@ -587,7 +583,6 @@ let buttonmenu = {
         })
     },
     "展示": {
-        name: "展示",
         img: "https://lanmeiguojiang.com/tubiao/more/105.png",
         url: $("hiker://empty##fypage#noRecordHistory##noHistory#").rule(() => {
             require(config.依赖);
@@ -595,7 +590,6 @@ let buttonmenu = {
         })
     },
     "直播": {
-        name: "直播",
         img: "https://lanmeiguojiang.com/tubiao/more/87.png",
         url: $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLive.js');
@@ -603,7 +597,6 @@ let buttonmenu = {
         })
     },
     "Alist": {
-        name: "Alist",
         img: "hiker://files/cache/src/Alist.svg",
         url: $("hiker://empty###noRecordHistory##noHistory#").rule(() => {
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
@@ -611,7 +604,6 @@ let buttonmenu = {
         })
     },
     "云盘": {
-        name: "云盘",
         img: "https://lanmeiguojiang.com/tubiao/more/65.png",
         url: $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
