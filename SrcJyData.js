@@ -667,7 +667,7 @@ function JYyiji(){
     }
 
     if(MY_PAGE==1){
-        log(Juyingcfg.aliecctype);
+        log(Juyingcfg);
         if(Juyingcfg.aliecctype){
             log('1');
             setItem('aliecctype',"1");
