@@ -143,9 +143,9 @@ function aliMyDisk(folder_id,nofilter) {
                             alistData.config = alistconfig;
                             fy_bridge_app.writeFile(alistfile, JSON.stringify(alistData));
                             localStorage.clear();
-                            fba.parseLazyRule(`hiker://empty@lazyRule=.js:refreshX5WebView('');`);
                             alert('TOKEN获取成功，返回后刷新页面！');
-                            fba.parseLazyRule(`hiker://empty@lazyRule=.js:back(true);`);
+                            fba.parseLazyRule(`hiker://empty@lazyRule=.js:refreshX5WebView('');`);
+                            fba.back();
                             return;
                         } else {
                             token_timer();
