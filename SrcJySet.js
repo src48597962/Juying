@@ -2204,7 +2204,7 @@ function extension(){
         url: $(["管理","历史","收藏","搜索","展示","直播","Alist","云盘"],2,"自定义第1个按钮功能").select(() => {
             setItem('buttonmenu1',input);
             refreshPage(false);
-            return 'toast://第1按钮已设置为'+input;
+            return 'toast://第1按钮已设置为'+input+(inpu=="管理"?"":"，通过主页长按第1个按钮进入管理");
         }),
         pic_url: buttonmenu[btnmn1].img,
         col_type: 'icon_5',
