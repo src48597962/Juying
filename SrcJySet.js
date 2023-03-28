@@ -2194,21 +2194,6 @@ function extension(){
     });
     
     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyMenu.js');
-    if($.type(storage0.getItem('buttonmenu1'))=="object"){
-        setItem('buttonmenu1',storage0.getItem('buttonmenu1').name);
-    }
-    if($.type(storage0.getItem('buttonmenu2'))=="object"){
-        setItem('buttonmenu2',storage0.getItem('buttonmenu2').name);
-    }
-    if($.type(storage0.getItem('buttonmenu3'))=="object"){
-        setItem('buttonmenu3',storage0.getItem('buttonmenu3').name);
-    }
-    if($.type(storage0.getItem('buttonmenu4'))=="object"){
-        setItem('buttonmenu4',storage0.getItem('buttonmenu4').name);
-    }
-    if($.type(storage0.getItem('buttonmenu5'))=="object"){
-        setItem('buttonmenu5',storage0.getItem('buttonmenu5').name);
-    }
     let btnmn1 = getItem('buttonmenu1',"管理");
     let btnmn2 = getItem('buttonmenu2',"收藏");
     let btnmn3 = getItem('buttonmenu3',"搜索");
