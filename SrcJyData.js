@@ -549,7 +549,7 @@ function JYerji(){
 function JYyiji(){    
     downloadicon();//下载图标
     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyMenu.js');
-    
+    log(getItem('buttonmenu5'))
     if($.type(storage0.getItem('buttonmenu1'))=="object"){
         setItem('buttonmenu1',storage0.getItem('buttonmenu1').name);
     }
