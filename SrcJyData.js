@@ -573,8 +573,8 @@ function JYyiji(){
     let yijimenu = [
         {
             title: btnmn1,
-            url: buttonmenu["btnmn1"].url,
-            pic_url: buttonmenu["btnmn1"].img,
+            url: buttonmenu[btnmn1].url,
+            pic_url: buttonmenu[btnmn1].img,
             col_type: 'icon_5',
             extra: {
                 longClick: [{
@@ -590,26 +590,26 @@ function JYyiji(){
         },
         {
             title: btnmn2,
-            url: buttonmenu["btnmn2"].url,
-            pic_url: buttonmenu["btnmn2"].img,
+            url: buttonmenu[btnmn2].url,
+            pic_url: buttonmenu[btnmn2].img,
             col_type: 'icon_5'
         },
         {
             title: btnmn3,
-            url: buttonmenu["btnmn3"].url,
-            pic_url: buttonmenu["btnmn3"].img,
+            url: buttonmenu[btnmn3].url,
+            pic_url: buttonmenu[btnmn3].img,
             col_type: 'icon_5'
         },
         {
             title: btnmn4,
-            url: buttonmenu["btnmn4"].url,
-            pic_url: buttonmenu["btnmn4"].img,
+            url: buttonmenu[btnmn4].url,
+            pic_url: buttonmenu[btnmn4].img,
             col_type: 'icon_5'
         },
         {
             title: btnmn5,
-            url: buttonmenu["btnmn5"].url,
-            pic_url: buttonmenu["btnmn5"].img,
+            url: buttonmenu[btnmn5].url,
+            pic_url: buttonmenu[btnmn5].img,
             col_type: 'icon_5'
         },
         {
