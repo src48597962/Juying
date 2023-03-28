@@ -14,10 +14,6 @@ function myDiskMenu(){
         col_type: 'avatar'
     },{
         col_type: "line"
-    },{
-        title: "🔍搜索",
-        url: "toast://已登录",
-        col_type: 'scroll_button'
     }]
 }
 
@@ -28,17 +24,6 @@ function aliMyDisk(folder_id,nofilter) {
         if(folder_id=="root"){
             let mydisk = myDiskMenu() || [];
             d = d.concat(mydisk);
-            /*
-            d.push({
-                title: userinfo.nick_name,
-                url: "toast://已登录",
-                img: userinfo.avatar,
-                col_type: 'avatar'
-            })
-            d.push({
-                col_type: "line"
-            });
-            */
         }
         try{
             let drive_id = userinfo.default_drive_id;
@@ -158,7 +143,9 @@ function aliMyDisk(folder_id,nofilter) {
                             alistData.config = alistconfig;
                             fy_bridge_app.writeFile(alistfile, JSON.stringify(alistData));
                             localStorage.clear();
+                            fba.parseLazyRule(`hiker://empty@lazyRule=.js:refreshX5WebView('');`);
                             alert('TOKEN获取成功，返回后刷新页面！');
+                            fba.parseLazyRule(`hiker://empty@lazyRule=.js:back(true);`);
                             return;
                         } else {
                             token_timer();
