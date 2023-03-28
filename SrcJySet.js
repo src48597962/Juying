@@ -2194,14 +2194,34 @@ function extension(){
     });
     
     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyMenu.js');
+    if($.type(storage0.getItem('buttonmenu1'))=="object"){
+        setItem('buttonmenu1',storage0.getItem('buttonmenu1').name);
+    }
+    if($.type(storage0.getItem('buttonmenu2'))=="object"){
+        setItem('buttonmenu2',storage0.getItem('buttonmenu2').name);
+    }
+    if($.type(storage0.getItem('buttonmenu3'))=="object"){
+        setItem('buttonmenu3',storage0.getItem('buttonmenu3').name);
+    }
+    if($.type(storage0.getItem('buttonmenu4'))=="object"){
+        setItem('buttonmenu4',storage0.getItem('buttonmenu4').name);
+    }
+    if($.type(storage0.getItem('buttonmenu5'))=="object"){
+        setItem('buttonmenu5',storage0.getItem('buttonmenu5').name);
+    }
+    let btnmn1 = getItem('buttonmenu1',"管理");
+    let btnmn2 = getItem('buttonmenu2',"收藏");
+    let btnmn3 = getItem('buttonmenu3',"搜索");
+    let btnmn4 = getItem('buttonmenu4',"展示");
+    let btnmn5 = getItem('buttonmenu5',"直播");
     d.push({
-        title: storage0.getItem('buttonmenu1',buttonmenu["管理"]).name,
-        url: $(["管理","历史","收藏","搜索","展示","直播","Alist","云盘"],2,"自定义第1个按钮功能").select((buttonmenu) => {
-            storage0.setItem('buttonmenu1',buttonmenu[input])
+        title: btnmn1,
+        url: $(["管理","历史","收藏","搜索","展示","直播","Alist","云盘"],2,"自定义第1个按钮功能").select(() => {
+            setItem('buttonmenu1',input);
             refreshPage(false);
             return 'toast://第1按钮已设置为'+input;
-        }, buttonmenu),
-        pic_url: storage0.getItem('buttonmenu1',buttonmenu["管理"]).img,
+        }),
+        pic_url: buttonmenu[btnmn1].img,
         col_type: 'icon_5',
         extra: {
             longClick: [{
@@ -2215,13 +2235,13 @@ function extension(){
         }
     })
     d.push({
-        title: storage0.getItem('buttonmenu2',buttonmenu["收藏"]).name,
-        url: $(["管理","历史","收藏","搜索","展示","直播","Alist","云盘"],2,"自定义第2个按钮功能").select((buttonmenu) => {
-            storage0.setItem('buttonmenu2',buttonmenu[input])
+        title: btnmn2,
+        url: $(["管理","历史","收藏","搜索","展示","直播","Alist","云盘"],2,"自定义第2个按钮功能").select(() => {
+            setItem('buttonmenu2',input);
             refreshPage(false);
             return 'toast://第2按钮已设置为'+input;
-        }, buttonmenu),
-        pic_url: storage0.getItem('buttonmenu2',buttonmenu["收藏"]).img,
+        }),
+        pic_url: buttonmenu[btnmn2].img,
         col_type: 'icon_5',
         extra: {
             longClick: [{
@@ -2235,13 +2255,13 @@ function extension(){
         }
     })
     d.push({
-        title: storage0.getItem('buttonmenu3',buttonmenu["搜索"]).name,
-        url: $(["管理","历史","收藏","搜索","展示","直播","Alist","云盘"],2,"自定义第3个按钮功能").select((buttonmenu) => {
-            storage0.setItem('buttonmenu3',buttonmenu[input])
+        title: btnmn3,
+        url: $(["管理","历史","收藏","搜索","展示","直播","Alist","云盘"],2,"自定义第3个按钮功能").select(() => {
+            setItem('buttonmenu3',input);
             refreshPage(false);
             return 'toast://第3按钮已设置为'+input;
-        }, buttonmenu),
-        pic_url: storage0.getItem('buttonmenu3',buttonmenu["搜索"]).img,
+        }),
+        pic_url: buttonmenu[btnmn3].img,
         col_type: 'icon_5',
         extra: {
             longClick: [{
@@ -2255,13 +2275,13 @@ function extension(){
         }
     })
     d.push({
-        title: storage0.getItem('buttonmenu4',buttonmenu["展示"]).name,
-        url: $(["管理","历史","收藏","搜索","展示","直播","Alist","云盘"],2,"自定义第4个按钮功能").select((buttonmenu) => {
-            storage0.setItem('buttonmenu4',buttonmenu[input])
+        title: btnmn4,
+        url: $(["管理","历史","收藏","搜索","展示","直播","Alist","云盘"],2,"自定义第4个按钮功能").select(() => {
+            setItem('buttonmenu4',input);
             refreshPage(false);
             return 'toast://第4按钮已设置为'+input;
-        }, buttonmenu),
-        pic_url: storage0.getItem('buttonmenu4',buttonmenu["展示"]).img,
+        }),
+        pic_url: buttonmenu[btnmn4].img,
         col_type: 'icon_5',
         extra: {
             longClick: [{
@@ -2275,13 +2295,13 @@ function extension(){
         }
     })
     d.push({
-        title: storage0.getItem('buttonmenu5',buttonmenu["直播"]).name,
-        url: $(["管理","历史","收藏","搜索","展示","直播","Alist","云盘"],2,"自定义第5个按钮功能").select((buttonmenu) => {
-            storage0.setItem('buttonmenu5',buttonmenu[input])
+        title: btnmn5,
+        url: $(["管理","历史","收藏","搜索","展示","直播","Alist","云盘"],2,"自定义第5个按钮功能").select(() => {
+            setItem('buttonmenu5',input);
             refreshPage(false);
             return 'toast://第5按钮已设置为'+input;
-        }, buttonmenu),
-        pic_url: storage0.getItem('buttonmenu5',buttonmenu["直播"]).img,
+        }),
+        pic_url: buttonmenu[btnmn5].img,
         col_type: 'icon_5',
         extra: {
             longClick: [{
