@@ -63,7 +63,8 @@ function myDiskMenu(islogin){
                         fy_bridge_app.writeFile(alistfile, JSON.stringify(alistData));
                         localStorage.clear();
                         alert('TOKEN获取成功，返回后刷新页面！');
-                        fba.back();
+                        fy_bridge_app.parseLazyRule(`hiker://empty@lazyRule=.js:refreshX5WebView('');`);
+                        fy_bridge_app.back();
                         return;
                     } else {
                         token_timer();
