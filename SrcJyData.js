@@ -9,8 +9,7 @@ if(Juyingcfg != ""){
 }else{
     var JYconfig= {};
 }
-        log(Juyingcfg.alistLine);
-        log(Juyingcfg.aliecctype);
+
 function JYsousuo(){
     let datasource = getItem('searchsource',getItem('JYdatasource', 'sougou'));
     var d = [];
@@ -548,74 +547,6 @@ function JYerji(){
     }
 }
 function JYyiji(){    
-    downloadicon();//下载图标
-    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyMenu.js');
-    if($.type(storage0.getItem('buttonmenu1'))=="object"){
-        setItem('buttonmenu1',storage0.getItem('buttonmenu1').name);
-    }
-    if($.type(storage0.getItem('buttonmenu2'))=="object"){
-        setItem('buttonmenu2',storage0.getItem('buttonmenu2').name);
-    }
-    if($.type(storage0.getItem('buttonmenu3'))=="object"){
-        setItem('buttonmenu3',storage0.getItem('buttonmenu3').name);
-    }
-    if($.type(storage0.getItem('buttonmenu4'))=="object"){
-        setItem('buttonmenu4',storage0.getItem('buttonmenu4').name);
-    }
-    if($.type(storage0.getItem('buttonmenu5'))=="object"){
-        setItem('buttonmenu5',storage0.getItem('buttonmenu5').name);
-    }
-    let btnmn1 = getItem('buttonmenu1',"管理");
-    let btnmn2 = getItem('buttonmenu2',"收藏");
-    let btnmn3 = getItem('buttonmenu3',"搜索");
-    let btnmn4 = getItem('buttonmenu4',"展示");
-    let btnmn5 = getItem('buttonmenu5',"直播");
-    let yijimenu = [
-        {
-            title: btnmn1,
-            url: buttonmenu[btnmn1].url,
-            pic_url: buttonmenu[btnmn1].img,
-            col_type: 'icon_5',
-            extra: {
-                longClick: [{
-                    title: "♥️管理",
-                    js: $.toString(() => {
-                        return $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
-                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
-                            SRCSet();
-                        })
-                    })
-                }]
-            }
-        },
-        {
-            title: btnmn2,
-            url: buttonmenu[btnmn2].url,
-            pic_url: buttonmenu[btnmn2].img,
-            col_type: 'icon_5'
-        },
-        {
-            title: btnmn3,
-            url: buttonmenu[btnmn3].url,
-            pic_url: buttonmenu[btnmn3].img,
-            col_type: 'icon_5'
-        },
-        {
-            title: btnmn4,
-            url: buttonmenu[btnmn4].url,
-            pic_url: buttonmenu[btnmn4].img,
-            col_type: 'icon_5'
-        },
-        {
-            title: btnmn5,
-            url: buttonmenu[btnmn5].url,
-            pic_url: buttonmenu[btnmn5].img,
-            col_type: 'icon_5'
-        },
-        {
-            col_type: 'line'
-        }
-    ]
     let datasource = getItem('JYdatasource', 'sougou');
     var d = [];
     const Color = "#3399cc";
@@ -668,11 +599,77 @@ function JYyiji(){
     }
 
     if(MY_PAGE==1){
-
-        if(Juyingcfg.aliecctype){
-            log('1');
+        if(JYconfig.aliecctype){
             setItem('aliecctype',"1");
         }
+            downloadicon();//下载图标
+        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyMenu.js');
+        if($.type(storage0.getItem('buttonmenu1'))=="object"){
+            setItem('buttonmenu1',storage0.getItem('buttonmenu1').name);
+        }
+        if($.type(storage0.getItem('buttonmenu2'))=="object"){
+            setItem('buttonmenu2',storage0.getItem('buttonmenu2').name);
+        }
+        if($.type(storage0.getItem('buttonmenu3'))=="object"){
+            setItem('buttonmenu3',storage0.getItem('buttonmenu3').name);
+        }
+        if($.type(storage0.getItem('buttonmenu4'))=="object"){
+            setItem('buttonmenu4',storage0.getItem('buttonmenu4').name);
+        }
+        if($.type(storage0.getItem('buttonmenu5'))=="object"){
+            setItem('buttonmenu5',storage0.getItem('buttonmenu5').name);
+        }
+        let btnmn1 = getItem('buttonmenu1',"管理");
+        let btnmn2 = getItem('buttonmenu2',"收藏");
+        let btnmn3 = getItem('buttonmenu3',"搜索");
+        let btnmn4 = getItem('buttonmenu4',"展示");
+        let btnmn5 = getItem('buttonmenu5',"直播");
+        let yijimenu = [
+            {
+                title: btnmn1,
+                url: buttonmenu[btnmn1].url,
+                pic_url: buttonmenu[btnmn1].img,
+                col_type: 'icon_5',
+                extra: {
+                    longClick: [{
+                        title: "♥️管理",
+                        js: $.toString(() => {
+                            return $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
+                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                                SRCSet();
+                            })
+                        })
+                    }]
+                }
+            },
+            {
+                title: btnmn2,
+                url: buttonmenu[btnmn2].url,
+                pic_url: buttonmenu[btnmn2].img,
+                col_type: 'icon_5'
+            },
+            {
+                title: btnmn3,
+                url: buttonmenu[btnmn3].url,
+                pic_url: buttonmenu[btnmn3].img,
+                col_type: 'icon_5'
+            },
+            {
+                title: btnmn4,
+                url: buttonmenu[btnmn4].url,
+                pic_url: buttonmenu[btnmn4].img,
+                col_type: 'icon_5'
+            },
+            {
+                title: btnmn5,
+                url: buttonmenu[btnmn5].url,
+                pic_url: buttonmenu[btnmn5].img,
+                col_type: 'icon_5'
+            },
+            {
+                col_type: 'line'
+            }
+        ]
         for(var i in yijimenu){
             d.push(
                 yijimenu[i]
