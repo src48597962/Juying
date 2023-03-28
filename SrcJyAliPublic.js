@@ -128,7 +128,7 @@ function createsession(headers,deviceId,userId){
         return yy + '' + dd + '' + HH + '' + MM + '' + mm
     }
 
-    for(let i=0; i<3; i++){
+    for(let i=1; i<5; i++){
       let signature;
       let public_key;
       if(getItem('aliecctype')=="1"){
