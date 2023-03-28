@@ -131,6 +131,7 @@ function createsession(headers,deviceId,userId){
     for(let i=1; i<5; i++){
       let signature;
       let public_key;
+      log(getItem('aliecctype'));
       if(getItem('aliecctype')=="1"){
           let getaliecc = JSON.parse(request('http://124.221.241.174:87/api', { body: 'did=' + deviceId + '&uid=' + userId + '&token=' + md5(getNowTime()), method: 'POST', timeout: 3000 }));
           if (getaliecc.code == 200) {
