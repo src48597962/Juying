@@ -123,8 +123,8 @@ function getAliUrl(share_id, file_id, alitoken,share_pwd) {
     let urls = [];
     let names = [];
     let heads = [];
-    let u = startProxyServer($.toString((aliSharePlayUrl,share_id,file_id,alitoken,share_pwd,jyconfig) => {
-      log(jyconfig);
+    let u = startProxyServer($.toString((aliSharePlayUrl,share_id,file_id,alitoken,share_pwd,config) => {
+      log(config);
       function geturl(fileid,line){
         //预加载时会变file_id,所以ts过期更新时还取原来的id
         let playUrlList = aliSharePlayUrl(share_id,fileid,alitoken,share_pwd) || [];
