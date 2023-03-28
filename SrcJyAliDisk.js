@@ -29,6 +29,7 @@ function myDiskMenu(islogin){
             alistconfig.alitoken = input;
             alistData.config = alistconfig;
             writeFile(alistfile, JSON.stringify(alistData));
+            clearMyVar('getalitoken');
             refreshPage(false);
             return "toast://已设置";
         },alistfile,alistData,alistconfig)
