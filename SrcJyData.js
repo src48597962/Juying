@@ -550,7 +550,7 @@ function JYyiji(){
     downloadicon();//下载图标
     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyMenu.js');
     let btnmn5 = getItem('buttonmenu5');
-    log($.type(btnmn5));
+    log($.type(storage0.getItem('buttonmenu5')));
     let yijimenu = [
         {
             title: storage0.getItem('buttonmenu1',buttonmenu["管理"]).name,
