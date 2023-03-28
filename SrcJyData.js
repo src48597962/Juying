@@ -549,13 +549,32 @@ function JYerji(){
 function JYyiji(){    
     downloadicon();//下载图标
     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyMenu.js');
-    let btnmn5 = getItem('buttonmenu5');
-    log($.type(storage0.getItem('buttonmenu6')));
+    
+    if($.type(storage0.getItem('buttonmenu1'))=="object"){
+        setItem('buttonmenu1',storage0.getItem('buttonmenu1').name);
+    }
+    if($.type(storage0.getItem('buttonmenu2'))=="object"){
+        setItem('buttonmenu2',storage0.getItem('buttonmenu2').name);
+    }
+    if($.type(storage0.getItem('buttonmenu3'))=="object"){
+        setItem('buttonmenu3',storage0.getItem('buttonmenu3').name);
+    }
+    if($.type(storage0.getItem('buttonmenu4'))=="object"){
+        setItem('buttonmenu4',storage0.getItem('buttonmenu4').name);
+    }
+    if($.type(storage0.getItem('buttonmenu5'))=="object"){
+        setItem('buttonmenu5',storage0.getItem('buttonmenu5').name);
+    }
+    let btnmn1 = getItem('buttonmenu1',"管理");
+    let btnmn2 = getItem('buttonmenu2',"收藏");
+    let btnmn3 = getItem('buttonmenu3',"搜索");
+    let btnmn4 = getItem('buttonmenu4',"展示");
+    let btnmn5 = getItem('buttonmenu5',"直播");
     let yijimenu = [
         {
-            title: storage0.getItem('buttonmenu1',buttonmenu["管理"]).name,
-            url: storage0.getItem('buttonmenu1',buttonmenu["管理"]).url,
-            pic_url: storage0.getItem('buttonmenu1',buttonmenu["管理"]).img,
+            title: btnmn1,
+            url: buttonmenu["btnmn1"].url,
+            pic_url: buttonmenu["btnmn1"].img,
             col_type: 'icon_5',
             extra: {
                 longClick: [{
@@ -570,27 +589,27 @@ function JYyiji(){
             }
         },
         {
-            title: storage0.getItem('buttonmenu2',buttonmenu["收藏"]).name,
-            url: storage0.getItem('buttonmenu2',buttonmenu["收藏"]).url,
-            pic_url: storage0.getItem('buttonmenu2',buttonmenu["收藏"]).img,
+            title: btnmn2,
+            url: buttonmenu["btnmn2"].url,
+            pic_url: buttonmenu["btnmn2"].img,
             col_type: 'icon_5'
         },
         {
-            title: storage0.getItem('buttonmenu3',buttonmenu["搜索"]).name,
-            url: storage0.getItem('buttonmenu3',buttonmenu["搜索"]).url,
-            pic_url: storage0.getItem('buttonmenu3',buttonmenu["搜索"]).img,
+            title: btnmn3,
+            url: buttonmenu["btnmn3"].url,
+            pic_url: buttonmenu["btnmn3"].img,
             col_type: 'icon_5'
         },
         {
-            title: storage0.getItem('buttonmenu4',buttonmenu["展示"]).name,
-            url: storage0.getItem('buttonmenu4',buttonmenu["展示"]).url,
-            pic_url: storage0.getItem('buttonmenu4',buttonmenu["展示"]).img,
+            title: btnmn4,
+            url: buttonmenu["btnmn4"].url,
+            pic_url: buttonmenu["btnmn4"].img,
             col_type: 'icon_5'
         },
         {
-            title: storage0.getItem('buttonmenu5',buttonmenu["直播"]).name,
-            url: storage0.getItem('buttonmenu5',buttonmenu["直播"]).url,
-            pic_url: storage0.getItem('buttonmenu5',buttonmenu["直播"]).img,
+            title: btnmn5,
+            url: buttonmenu["btnmn5"].url,
+            pic_url: buttonmenu["btnmn5"].img,
             col_type: 'icon_5'
         },
         {
