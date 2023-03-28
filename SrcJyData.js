@@ -9,7 +9,8 @@ if(Juyingcfg != ""){
 }else{
     var JYconfig= {};
 }
-
+        log(Juyingcfg.alistLine);
+        log(Juyingcfg.aliecctype);
 function JYsousuo(){
     let datasource = getItem('searchsource',getItem('JYdatasource', 'sougou'));
     var d = [];
@@ -667,8 +668,7 @@ function JYyiji(){
     }
 
     if(MY_PAGE==1){
-        log(Juyingcfg.alistLine);
-        log(Juyingcfg.aliecctype);
+
         if(Juyingcfg.aliecctype){
             log('1');
             setItem('aliecctype',"1");
