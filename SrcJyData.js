@@ -667,7 +667,7 @@ function JYyiji(){
     }
 
     if(MY_PAGE==1){
-        if(config.aliecctype){
+        if(Juyingcfg.aliecctype){
             setItem('aliecctype',"1");
         }
         for(var i in yijimenu){
