@@ -579,9 +579,9 @@ function alistSearch2(input,notoast){
         clearMyVar('diskSearch');
         toast('搜索完成');
     }else{
-      hideLoading();
       toast('无接口，无法搜索');
     }
+    hideLoading();
 }
 
 function alistSet() {
