@@ -526,9 +526,13 @@ function alistSearch(alistapi,input,notoast) {
 function alistSearch2(input,notoast){
     showLoading('搜索中，请稍后...');
     let alistMark = storage0.getMyVar('alistMark') || {};
-    if(alistMark.length>20){
-        alistMark.splice(0,1);
+    let i = 0;
+    let one = "";
+    for (var k in alistMark) {
+        i++;
+        if (i == 1) { one = k }
     }
+    if (i > 30) { delete alistMark[one]; }
     let task = function(obj) {
         try{
             let searchlist = alistSearch(obj,input,notoast);
