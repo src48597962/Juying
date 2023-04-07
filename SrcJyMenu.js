@@ -569,11 +569,11 @@ let buttonmenu = {
     },
     "历史": {
         img: "https://lanmeiguojiang.com/tubiao/more/213.png",
-        url: "hiker://history"
+        url: "hiker://history?rule="+MY_RULE.title
     },
     "收藏": {
         img: "https://lanmeiguojiang.com/tubiao/more/109.png",
-        url: "hiker://collection"
+        url: "hiker://collection?rule="+MY_RULE.title
     },
     "搜索": {
         img: "https://lanmeiguojiang.com/tubiao/more/101.png",
