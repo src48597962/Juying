@@ -3324,10 +3324,11 @@ function yundiskjiekou() {
                     return 'toast://已删除';
                 } else if (input == "测试") {
                     return $(getItem('searchtestkey', '斗罗大陆'),"输入测试搜索关键字").input(()=>{
+                        setItem("searchtestkey",input);
                         return $("hiker://empty#noRecordHistory##noHistory#").rule((name,data) => {
                             let d = [];
                             d.push({
-                                title: "",
+                                title: data.name+"-搜索测试",
                                 url: 'hiker://empty',
                                 col_type: 'text_center_1',
                                 extra: {
