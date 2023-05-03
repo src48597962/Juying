@@ -3323,7 +3323,7 @@ function yundiskjiekou() {
                     refreshPage(false);
                     return 'toast://已删除';
                 } else if (input == "测试") {
-                    return $(getItem('searchtestkey', '斗罗大陆'),"输入测试搜索关键字").input(()=>{
+                    return $(getItem('searchtestkey', '斗罗大陆'),"输入测试搜索关键字").input((data)=>{
                         setItem("searchtestkey",input);
                         return $("hiker://empty#noRecordHistory##noHistory#").rule((name,data) => {
                             let d = [];
@@ -3340,7 +3340,7 @@ function yundiskjiekou() {
                             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
                             aliDiskSearch(name,data);
                         },input,data)
-                    })
+                    },data)
                 } 
             },filepath,yundiskapi,item),
             desc: '',
