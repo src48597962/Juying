@@ -3296,8 +3296,8 @@ function yundiskjiekou() {
     datalist.forEach(item => {
         d.push({
             title: "💽 " + item.name + "   (" + (item.erparse?"二解接口":"一解接口") + ")",
-            url: $(["分享", "编辑", "删除"], 1).select((filepath,yundiskapi,data) => {
-                if(input == "分享"){
+            url: $(["分享", "编辑", "删除", "测试"], 1).select((filepath,yundiskapi,data) => {
+                if (input == "分享") {
                     showLoading('分享上传中，请稍后...');
                     let oneshare = []
                     oneshare.push(data);
@@ -3310,7 +3310,7 @@ function yundiskjiekou() {
                     }else{
                         return "toast://分享失败，剪粘板或网络异常";
                     }
-                }else if(input == "编辑"){
+                } else if (input == "编辑") {
                     return $('hiker://empty#noRecordHistory##noHistory#').rule((filepath,yundiskapi,data) => {
                         yundiskapi(filepath,data);
                     },filepath,yundiskapi,data)
@@ -3322,6 +3322,24 @@ function yundiskjiekou() {
                     writeFile(filepath, JSON.stringify(datalist));
                     refreshPage(false);
                     return 'toast://已删除';
+                } else if (input == "测试") {
+                    return $(getItem('searchtestkey', '斗罗大陆'),"输入测试搜索关键字").input(()=>{
+                        return $("hiker://empty#noRecordHistory##noHistory#").rule((name,data) => {
+                            let d = [];
+                            d.push({
+                                title: "",
+                                url: 'hiker://empty',
+                                col_type: 'text_center_1',
+                                extra: {
+                                    id: "listloading",
+                                    lineVisible: false
+                                }
+                            });
+                            setResult(d);
+                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+                            aliDiskSearch(name,data);
+                        },input,data)
+                    })
                 } 
             },filepath,yundiskapi,item),
             desc: '',
