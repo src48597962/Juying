@@ -559,6 +559,9 @@ function JYyiji(){
     const 资源 = getMyVar('SrcJuying$资源', '');
     const 明星 = getMyVar('SrcJuying$明星', '');
     const 排序 = getMyVar('SrcJuying$排序', '');
+    let headers = {
+        'User-Agent': PC_UA
+    }
     if(datasource=="sougou"){
         MY_URL = "https://waptv.sogou.com/napi/video/classlist?abtest=0&iploc=CN1304&spver=&listTab=" + getMyVar('SrcJuying$listTab', 'teleplay') + "&filter=&start="+ (MY_PAGE-1)*15 +"&len=15&fr=filter";
         if(类型 != ""){
@@ -596,6 +599,7 @@ function JYyiji(){
         if(明星 != ""){
             MY_URL = MY_URL + "&act=" + 明星;
         }
+        headers.Referer = "https://www.360kan.com";
     }
 
     if(MY_PAGE==1){
@@ -712,7 +716,7 @@ function JYyiji(){
             col_type: "blank_block"
         });
         try{
-            var html = JSON.parse(request(MY_URL));
+            var html = JSON.parse(request(MY_URL,{headers: headers}));
         }catch(e){
             setItem('JYdatasource', getItem('JYdatasource', 'sougou')=='sougou'?'360':'sougou');
             refreshPage(true);
