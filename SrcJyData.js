@@ -253,6 +253,8 @@ function JYerji(){
                 })
             }
         }
+    }
+    function setTabs2(){
         //云盘搜索
         if(JYconfig['yundiskLine']==1){
             d.push({
@@ -381,7 +383,6 @@ function JYerji(){
             })
         }
     }
-    
     try{
         var playsinfo = datasource=='sougou'&&plays.length>0?plays[0].info:isline;
     }catch(e){
@@ -393,10 +394,11 @@ function JYerji(){
         playsinfo = 1;
     }
     */
-    setTabs(tabs, MY_URL);
     if(playsinfo||shows){
-        
+        setTabs(tabs, MY_URL);
+        setTabs2();
     }else{
+        setTabs2();
         d.push({
             col_type: "line"
         })
