@@ -65,7 +65,13 @@ function JYerji(){
 
     var lineindex = getMyVar(MY_URL, typeof(SrcMarkline) != "undefined"?SrcMarkline:'0');
     var d = [];
-    var html = request(MY_URL, { headers: { 'User-Agent': PC_UA } });
+    let headers = {
+        'User-Agent': PC_UA
+    }
+    if(datasource=="360"){
+        headers.Referer = "https://www.360kan.com";
+    }
+    var html = request(MY_URL, { headers: headers });
 
     let json = datasource=="sougou"?JSON.parse(html.match(/INITIAL_STATE.*?({.*});/)[1]).detail.itemData:JSON.parse(html).data;
     let plays = datasource=="sougou"?json.play.item_list:[];
