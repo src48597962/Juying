@@ -257,7 +257,7 @@ function JYerji(){
     //云盘搜索
     if(JYconfig['yundiskLine']==1){
         d.push({
-            title: getMyVar(vari, '0') == "98" ? getHead('云盘搜索',Color1,1) : getHead('云盘搜索',Color2),
+            title: getMyVar(MY_URL, '0') == "98" ? getHead('云盘搜索',Color1,1) : getHead('云盘搜索',Color2),
             url: $("#noLoading#").lazyRule((vari,Marksum) => {
                 let i = 98;
                 if (parseInt(getMyVar(vari, '0')) != i) {
@@ -294,7 +294,7 @@ function JYerji(){
     //alist搜索
     if(JYconfig['alistLine']==1){
         d.push({
-            title: getMyVar(vari, '0') == "99" ? getHead('Alist搜索',Color1,1) : getHead('Alist搜索',Color2),
+            title: getMyVar(MY_URL, '0') == "99" ? getHead('Alist搜索',Color1,1) : getHead('Alist搜索',Color2),
             url: $("#noLoading#").lazyRule((vari,Marksum) => {
                 let i = 99;
                 if (parseInt(getMyVar(vari, '0')) != i) {
