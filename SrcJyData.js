@@ -134,7 +134,7 @@ function JYerji(){
                         if(end>listlength){end = listlength;}
                         try{
                             for(let k=0;k<3;k++){
-                                var getjson = JSON.parse(request(MY_URL+'&start='+start+'&end='+end+'&site='+sitename, { headers: { 'User-Agent': PC_UA } })).data;
+                                var getjson = JSON.parse(request(MY_URL+'&start='+start+'&end='+end+'&site='+sitename, { headers: headers })).data;
                                 if(getjson==null){
                                     end--;
                                 }else{
@@ -160,9 +160,9 @@ function JYerji(){
                         var urllist = json.defaultepisode;
                     }else{
                          try {
-                             var getjson = JSON.parse(request(MY_URL + '&start=1&end=' + (json.upinfo > 200 ? 200 : json.upinfo) + '&year=' + tag + '&site=' + sitename, { headers: { 'User-Agent': PC_UA } })).data;
+                             var getjson = JSON.parse(request(MY_URL + '&start=1&end=' + (json.upinfo > 200 ? 200 : json.upinfo) + '&year=' + tag + '&site=' + sitename, { headers: headers })).data;
                          }catch(e){
-                             var getjson = JSON.parse(request(MY_URL+'&site='+sitename, { headers: { 'User-Agent': PC_UA } })).data;
+                             var getjson = JSON.parse(request(MY_URL+'&site='+sitename, { headers: headers })).data;
                          }
                         var urllist = getjson.defaultepisode;
                     }
@@ -840,7 +840,7 @@ function JYyiji(){
             }
         }
     }else{
-        var html = JSON.parse(request(MY_URL));
+        var html = JSON.parse(request(MY_URL,{headers: headers}));
     }
     var seachurl = $('').lazyRule(() => {
         return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
