@@ -444,12 +444,6 @@ var SrcParseS = {
                 vipUrl = clearM3u8Ad(vipUrl,{timeout:3000});
             }
             return vipUrl + '#isVideo=true#';
-        }else if(vipUrl.indexOf('https://www.aliyundrive.com/s/')>-1){
-            vipUrl = vipUrl.replace('http','\nhttp');
-            return $("hiker://empty##fypage#noRecordHistory##noHistory#").rule((input) => {
-                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
-                aliShareUrl(input);
-            },vipUrl);
         }else if (vipUrl.indexOf('sa.sogou') != -1) {
             if(printlog==1){log("优看视频，直接明码解析")}; 
             return unescape(request(vipUrl).match(/"url":"([^"]*)"/)[1].replace(/\\u/g, "%u"));
