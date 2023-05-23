@@ -1498,6 +1498,12 @@ function xunmierji(type,ua) {
                             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
                             return SrcParseS.聚影(input);
                         });
+                    }else if(playurl.indexOf('https://www.aliyundrive.com/s/')>-1){
+                        playurl = playurl.replace('http','\nhttp');
+                        return $("hiker://empty##fypage#noRecordHistory##noHistory#").rule((input) => {
+                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+                            aliShareUrl(input);
+                        },playurl);
                     }else{
                         var DTJX = $("").lazyRule(() => {
                             if(getMyVar('superweb')=="1"){// && getMyVar('pushboxplay')!="1"){
