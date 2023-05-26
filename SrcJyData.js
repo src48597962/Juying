@@ -615,10 +615,7 @@ function JYyiji(){
     }
 
     if(MY_PAGE==1){
-        if(JYconfig.aliecctype){
-            setItem('aliecctype',"1");
-        }
-            downloadicon();//下载图标
+        downloadicon();//下载图标
         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyMenu.js');
         if($.type(storage0.getItem('buttonmenu1'))=="object"){
             setItem('buttonmenu1',storage0.getItem('buttonmenu1').name);
