@@ -42,7 +42,7 @@ if (!alitoken && getMyVar('getalitoken') != "1") {
       writeFile(alistfile, JSON.stringify(alistData));
     }
   } catch (e) {
-    log('自动取ali-token失败' + e.message)
+    log('自动取ali-token失败' + e.message);
   }
 }
 let headers = {
