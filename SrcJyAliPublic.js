@@ -128,6 +128,7 @@ function getSubtitle(share_id,sub_file_id,share_pwd){
         headers["x-share-token"] = sharetoken;
         let data = {"expire_sec":600,"file_id":sub_file_id,"share_id":share_id};
         let downurl = JSON.parse(request("https://api.aliyundrive.com/v2/file/get_share_link_download_url", { headers: headers, body: data, timeout: 3000 })).download_url;
+        return downurl;
         log(downurl);
         let subfile = 'hiker://files/_cache/subtitles/'+sub_file_id+'.srt';
         downloadFile(downurl, subfile, {"referer": "https://www.aliyundrive.com/"})
