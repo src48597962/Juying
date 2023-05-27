@@ -129,7 +129,7 @@ function getSubtitle(share_id,sub_file_id,share_pwd){
         let data = {"expire_sec":600,"file_id":sub_file_id,"share_id":share_id};
         let downurl = JSON.parse(request("https://api.aliyundrive.com/v2/file/get_share_link_download_url", { headers: headers, body: data, timeout: 3000 })).download_url;
         downloadFile(downurl, 'hiker://files/cache/src/subtitles.srt', {"referer": "https://www.aliyundrive.com/"})
-        return downurl;
+        return getPath("hiker://files/cache/src/subtitles.srt");
         /*
         let substr = fetch(downurl, {headers:{"referer": "https://www.aliyundrive.com/"},timeout:3000});
         if(substr){
