@@ -128,15 +128,13 @@ function getSubtitle(share_id,sub_file_id,share_pwd){
         headers["x-share-token"] = sharetoken;
         let data = {"expire_sec":600,"file_id":sub_file_id,"share_id":share_id};
         let downurl = JSON.parse(request("https://api.aliyundrive.com/v2/file/get_share_link_download_url", { headers: headers, body: data, timeout: 3000 })).download_url;
-        downloadFile(downurl, 'hiker://files/cache/src/subtitles.srt', {"referer": "https://www.aliyundrive.com/"})
-        return getPath("hiker://files/cache/src/subtitles.srt");
-        /*
-        let substr = fetch(downurl, {headers:{"referer": "https://www.aliyundrive.com/"},timeout:3000});
-        if(substr){
-            writeFile("hiker://files/cache/src/subtitles.srt",substr);
-            return getPath("hiker://files/cache/src/subtitles.srt");
+        let subfile = 'hiker://files/_cache/subtitles/'+sub_file_id+'.srt';
+        downloadFile(downurl, subfile, {"referer": "https://www.aliyundrive.com/"})
+        if(!fileExist(subfile)){
+            return getPath(subfile);
+        }else{
+            return "";
         }
-        */
     }catch(e){
         log('获取字幕失败>'+e.message);
     }
