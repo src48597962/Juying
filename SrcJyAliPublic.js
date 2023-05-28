@@ -150,7 +150,6 @@ function aliMyPlayUrl(file_id) {
       headers['authorization'] = 'Bearer ' + opentoken;
       let data3 = {"drive_id":drive_id,"file_id":file_id}
       let json3 = JSON.parse(request('https://open.aliyundrive.com/adrive/v1.0/openFile/getDownloadUrl', { headers: headers, body: data3, method: 'POST', timeout: 3000 }));
-      log(json3);
       return json3.url || "";
     } catch (e) {
       log('获取我的云盘开放原始播放地址失败>' + e.message);
@@ -185,15 +184,12 @@ function aliMyPlayUrl(file_id) {
     } else {
       log('未获取阿里转码播放地址，建议重进软件再试一次')
     }
-    log("11");
     let file_url = aliMyOpenPlayUrl(file_id);
-    log(file_url);
     if(file_url){
       urls.unshift(file_url+ "#isVideo=true##pre#");
       names.unshift("原始 画质");
-      headers.unshift({'Referer':'https://www.aliyundrive.com/'});
+      heads.unshift({'Referer':'https://www.aliyundrive.com/'});
     }
-    log("22");
     return {
       urls: urls,
       names: names,
