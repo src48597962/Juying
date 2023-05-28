@@ -196,7 +196,7 @@ function aliMyOpenPlayUrl(file_id) {
     let json3 = JSON.parse(request('https://open.aliyundrive.com/adrive/v1.0/openFile/getDownloadUrl', { headers: headers, body: data3, method: 'POST', timeout: 3000 }));
     return json3.url || "";
   } catch (e) {
-    //log('获取我的云盘开放原始播放地址失败>' + e.message);
+    log('获取我的云盘开放原始播放地址失败>' + e.message);
   }
   return "";
 }
