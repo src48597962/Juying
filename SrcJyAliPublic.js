@@ -162,26 +162,36 @@ function aliMyPlayUrl(file_id) {
 }
 function aliMyOpenPlayUrl(file_id) {
   try {
-    let authorization = 'Bearer ' + userinfo.access_token;
+    function getopentoken(token) {
+      let authorization = 'Bearer ' + token;
+      headers['authorization'] = authorization;
+      headers['x-canary'] = "client=web,app=adrive,version=v4.3.1";
+      let data = {"authorize":"1","scope":"user:base,file:all:read,file:all:write"}
+      let json = JSON.parse(request('https://open.aliyundrive.com/oauth/users/authorize?client_id=76917ccccd4441c39457a04f6084fb2f&redirect_uri=https://alist.nn.ci/tool/aliyundrive/callback&scope=user:base,file:all:read,file:all:write&state=', { headers: headers, body: data, method: 'POST', timeout: 3000 }));
+      let code = json.redirectUri.split("code=")[1];
+      let data2 = {"code":code,"grant_type":"authorization_code"}
+      let json2 = JSON.parse(request('https://api.nn.ci/alist/ali_open/code', { body: data2, method: 'POST', timeout: 3000 }));
+      return json2.access_token || "";
+    }
+    let opentoken;
+    let nowtime = Date.now();
+    let oldtime = parseInt(getMyVar('opentokenChecktime', '0').replace('time', ''));
+    let aliopentoken = getMyVar('aliopentoken');
+    if (aliopentoken && nowtime < (oldtime + 1 * 60 * 60 * 1000)) {
+      opentoken = aliopentoken;
+    } else {
+      opentoken = getopentoken(userinfo.access_token);
+      putMyVar('aliopeninfo', opentoken);
+      putMyVar('opentokenChecktime', nowtime + 'time');
+    }
     let drive_id = userinfo.default_drive_id;
-    headers['authorization'] = authorization;
-    headers['x-canary'] = "client=web,app=adrive,version=v4.3.1";
-    let data = {"authorize":"1","scope":"user:base,file:all:read,file:all:write"}
-    let json = JSON.parse(request('https://open.aliyundrive.com/oauth/users/authorize?client_id=76917ccccd4441c39457a04f6084fb2f&redirect_uri=https://alist.nn.ci/tool/aliyundrive/callback&scope=user:base,file:all:read,file:all:write&state=', { headers: headers, body: data, method: 'POST', timeout: 3000 }));
-    let code = json.redirectUri.split("code=")[1];
-    let data2 = {"code":code,"grant_type":"authorization_code"}
-    let json2 = JSON.parse(request('https://api.nn.ci/alist/ali_open/code', { body: data2, method: 'POST', timeout: 3000 }));
-    headers['authorization'] = 'Bearer ' + json2.access_token;
+    headers['authorization'] = 'Bearer ' + opentoken;
     let data3 = {"drive_id":drive_id,"file_id":file_id}
     let json3 = JSON.parse(request('https://open.aliyundrive.com/adrive/v1.0/openFile/getDownloadUrl', { headers: headers, body: data3, method: 'POST', timeout: 3000 }));
-    return {
-      urls: [json3.url],
-      names: ['原始 画质'],
-      headers: [{ 'Referer': 'https://www.aliyundrive.com/' }]
-    };
+    return json3.url || "";
   } catch (e) {
     log('获取我的云盘开放原始播放地址失败>' + e.message);
-    return { message: '获取我的云盘开放原始播放地址失败>' + e.message };
   }
+  return "";
 }
-//evalPrivateJS('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')
+evalPrivateJS('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')
