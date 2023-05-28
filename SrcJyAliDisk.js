@@ -161,7 +161,7 @@ function aliMyDisk(folder_id,nofilter) {
                                 if(category=="video"){
                                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliPublic.js');
                                     if(alitoken){
-                                        let play = aliMyOpenPlayUrl(file_id);
+                                        let play = aliMyPlayUrl(file_id);
                                         if (play.urls) {
                                             if (sub_file_url) {
                                                 play['subtitle'] = sub_file_url;
