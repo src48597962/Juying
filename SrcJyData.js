@@ -254,20 +254,12 @@ function JYerji(){
             }
         }
     }
-    function setTabs2(){
-        //云盘搜索
-        if(JYconfig['yundiskLine']==1){
+    function setTabs2(s){
+        if(s && (getMyVar(MY_URL, '0') == "98" || getMyVar(MY_URL, '0') == "99")){
             d.push({
-                title: getMyVar(MY_URL, '0') == "98" ? getHead('云盘搜索',Color1,1) : getHead('云盘搜索',Color2),
+                title: '聚影线路',
                 url: $("#noLoading#").lazyRule((vari,Marksum) => {
-                    let i = 98;
-                    if (parseInt(getMyVar(vari, '0')) != i) {
-                        if(getMyVar('diskSearch')=="1"){
-                            return 'toast://搜索线程中，稍等片刻.'
-                        }
-                    }else{
-                        i = 0;
-                    }
+                    let i = 0;
                     try {
                         eval('var SrcMark = ' + fetch("hiker://files/cache/SrcMark.json"));
                     } catch (e) {
@@ -294,6 +286,43 @@ function JYerji(){
                 col_type: 'scroll_button'
             })
         }
+        //云盘搜索
+        if(JYconfig['yundiskLine']==1){
+            d.push({
+                title: getMyVar(MY_URL, '0') == "98" ? getHead('云盘搜索',Color1,1) : getHead('云盘搜索',Color2),
+                url: $("#noLoading#").lazyRule((vari,Marksum) => {
+                    let i = 98;
+                    if (parseInt(getMyVar(vari, '0')) != i) {
+                        if(getMyVar('diskSearch')=="1"){
+                            return 'toast://搜索线程中，稍等片刻.'
+                        }
+                        try {
+                            eval('var SrcMark = ' + fetch("hiker://files/cache/SrcMark.json"));
+                        } catch (e) {
+                            var SrcMark = "";
+                        }
+                        if (SrcMark == "") {
+                            SrcMark = { route: {} };
+                        } else if (SrcMark.route == undefined) {
+                            SrcMark.route = {};
+                        }
+                        SrcMark.route[vari] = i;
+                        var key = 0;
+                        var one = "";
+                        for (var k in SrcMark.route) {
+                            key++;
+                            if (key == 1) { one = k }
+                        }
+                        if (key > Marksum) { delete SrcMark.route[one]; }
+                        writeFile("hiker://files/cache/SrcMark.json", JSON.stringify(SrcMark));
+                        putMyVar(vari, i);
+                        refreshPage(false);
+                    }
+                    return '#noHistory#hiker://empty'
+                }, MY_URL, Marksum),
+                col_type: 'scroll_button'
+            })
+        }
         //alist搜索
         if(JYconfig['alistLine']==1){
             d.push({
@@ -304,30 +333,28 @@ function JYerji(){
                         if(getMyVar('diskSearch')=="1"){
                             return 'toast://搜索线程中，稍等片刻.'
                         }
-                    }else{
-                        i = 0;
+                        try {
+                            eval('var SrcMark = ' + fetch("hiker://files/cache/SrcMark.json"));
+                        } catch (e) {
+                            var SrcMark = "";
+                        }
+                        if (SrcMark == "") {
+                            SrcMark = { route: {} };
+                        } else if (SrcMark.route == undefined) {
+                            SrcMark.route = {};
+                        }
+                        SrcMark.route[vari] = i;
+                        var key = 0;
+                        var one = "";
+                        for (var k in SrcMark.route) {
+                            key++;
+                            if (key == 1) { one = k }
+                        }
+                        if (key > Marksum) { delete SrcMark.route[one]; }
+                        writeFile("hiker://files/cache/SrcMark.json", JSON.stringify(SrcMark));
+                        putMyVar(vari, i);
+                        refreshPage(false);
                     }
-                    try {
-                        eval('var SrcMark = ' + fetch("hiker://files/cache/SrcMark.json"));
-                    } catch (e) {
-                        var SrcMark = "";
-                    }
-                    if (SrcMark == "") {
-                        SrcMark = { route: {} };
-                    } else if (SrcMark.route == undefined) {
-                        SrcMark.route = {};
-                    }
-                    SrcMark.route[vari] = i;
-                    var key = 0;
-                    var one = "";
-                    for (var k in SrcMark.route) {
-                        key++;
-                        if (key == 1) { one = k }
-                    }
-                    if (key > Marksum) { delete SrcMark.route[one]; }
-                    writeFile("hiker://files/cache/SrcMark.json", JSON.stringify(SrcMark));
-                    putMyVar(vari, i);
-                    refreshPage(false);
                     return '#noHistory#hiker://empty'
                 },MY_URL,Marksum),
                 col_type: 'scroll_button'
@@ -400,9 +427,9 @@ function JYerji(){
     */
     if(playsinfo||shows){
         setTabs(tabs, MY_URL);
-        setTabs2();
+        setTabs2(0);
     }else{
-        setTabs2();
+        setTabs2(1);
         d.push({
             col_type: "line"
         })
