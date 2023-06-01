@@ -265,28 +265,30 @@ function JYerji(){
                         if(getMyVar('diskSearch')=="1"){
                             return 'toast://搜索线程中，稍等片刻.'
                         }
-                        try {
-                            eval('var SrcMark = ' + fetch("hiker://files/cache/SrcMark.json"));
-                        } catch (e) {
-                            var SrcMark = "";
-                        }
-                        if (SrcMark == "") {
-                            SrcMark = { route: {} };
-                        } else if (SrcMark.route == undefined) {
-                            SrcMark.route = {};
-                        }
-                        SrcMark.route[vari] = i;
-                        var key = 0;
-                        var one = "";
-                        for (var k in SrcMark.route) {
-                            key++;
-                            if (key == 1) { one = k }
-                        }
-                        if (key > Marksum) { delete SrcMark.route[one]; }
-                        writeFile("hiker://files/cache/SrcMark.json", JSON.stringify(SrcMark));
-                        putMyVar(vari, i);
-                        refreshPage(false);
+                    }else{
+                        i = 0;
                     }
+                    try {
+                        eval('var SrcMark = ' + fetch("hiker://files/cache/SrcMark.json"));
+                    } catch (e) {
+                        var SrcMark = "";
+                    }
+                    if (SrcMark == "") {
+                        SrcMark = { route: {} };
+                    } else if (SrcMark.route == undefined) {
+                        SrcMark.route = {};
+                    }
+                    SrcMark.route[vari] = i;
+                    var key = 0;
+                    var one = "";
+                    for (var k in SrcMark.route) {
+                        key++;
+                        if (key == 1) { one = k }
+                    }
+                    if (key > Marksum) { delete SrcMark.route[one]; }
+                    writeFile("hiker://files/cache/SrcMark.json", JSON.stringify(SrcMark));
+                    putMyVar(vari, i);
+                    refreshPage(false);
                     return '#noHistory#hiker://empty'
                 }, MY_URL, Marksum),
                 col_type: 'scroll_button'
@@ -302,28 +304,30 @@ function JYerji(){
                         if(getMyVar('diskSearch')=="1"){
                             return 'toast://搜索线程中，稍等片刻.'
                         }
-                        try {
-                            eval('var SrcMark = ' + fetch("hiker://files/cache/SrcMark.json"));
-                        } catch (e) {
-                            var SrcMark = "";
-                        }
-                        if (SrcMark == "") {
-                            SrcMark = { route: {} };
-                        } else if (SrcMark.route == undefined) {
-                            SrcMark.route = {};
-                        }
-                        SrcMark.route[vari] = i;
-                        var key = 0;
-                        var one = "";
-                        for (var k in SrcMark.route) {
-                            key++;
-                            if (key == 1) { one = k }
-                        }
-                        if (key > Marksum) { delete SrcMark.route[one]; }
-                        writeFile("hiker://files/cache/SrcMark.json", JSON.stringify(SrcMark));
-                        putMyVar(vari, i);
-                        refreshPage(false);
+                    }else{
+                        i = 0;
                     }
+                    try {
+                        eval('var SrcMark = ' + fetch("hiker://files/cache/SrcMark.json"));
+                    } catch (e) {
+                        var SrcMark = "";
+                    }
+                    if (SrcMark == "") {
+                        SrcMark = { route: {} };
+                    } else if (SrcMark.route == undefined) {
+                        SrcMark.route = {};
+                    }
+                    SrcMark.route[vari] = i;
+                    var key = 0;
+                    var one = "";
+                    for (var k in SrcMark.route) {
+                        key++;
+                        if (key == 1) { one = k }
+                    }
+                    if (key > Marksum) { delete SrcMark.route[one]; }
+                    writeFile("hiker://files/cache/SrcMark.json", JSON.stringify(SrcMark));
+                    putMyVar(vari, i);
+                    refreshPage(false);
                     return '#noHistory#hiker://empty'
                 },MY_URL,Marksum),
                 col_type: 'scroll_button'
