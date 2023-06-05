@@ -655,7 +655,7 @@ function alistSet() {
           try{
             let getapi = JSON.parse(fetch(apiurl,{timeout:10000}));
             hideLoading();
-            if(getapi.code==200 && /^v3|^3/.test(getapi.data.version)){
+            if(getapi.code==200 && /^v3|^3|小幸运内置/.test(getapi.data.version)){
               return $("","当前链接有效，起个名保存吧").input((alistfile,api) => {
                   try{
                     eval("var alistData=" + fetch(alistfile));
