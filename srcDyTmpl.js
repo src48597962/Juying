@@ -1527,7 +1527,7 @@ function SRCSet(setupPages) {
         d.push({
             title: GJFS == '1' ? getTitle('规则', '#f13b66a') : '规则',
             url: `#noLoading#@lazyRule=.js:setItem('SrcGJFS','1');putMyVar('SrcGJFS','1');refreshPage(false);'toast://官方资源解析方式：规则lazy自定义';`,
-            img: "https://lanmeiguojiang.com/tubiao/ke/23.png",
+            img: "https://hikerfans.com/tubiao/ke/23.png",
             col_type: "icon_small_3"
         });
     }
@@ -1535,13 +1535,13 @@ function SRCSet(setupPages) {
         d.push({
             title: GJFS == '2' ? getTitle('断插', '#f13b66a') : '断插',
             url: `#noLoading#@lazyRule=.js:setItem('SrcGJFS','2');putMyVar('SrcGJFS','2');refreshPage(false);'toast://官方资源解析方式：调用断插解析';`,
-            img: "https://lanmeiguojiang.com/tubiao/ke/24.png",
+            img: "https://hikerfans.com/tubiao/ke/24.png",
             col_type: "icon_small_3"
         });
         d.push({
             title: GJFS == '3' ? getTitle('嗅探', '#f13b66a') : '嗅探',
             url: `#noLoading#@lazyRule=.js:setItem('SrcGJFS','3');putMyVar('SrcGJFS','3');refreshPage(false);'toast://官方资源解析方式：模板嗅探解析';`,
-            img: "https://lanmeiguojiang.com/tubiao/ke/25.png",
+            img: "https://hikerfans.com/tubiao/ke/25.png",
             col_type: "icon_small_3"
         });
     }
@@ -1562,13 +1562,13 @@ function SRCSet(setupPages) {
         d.push({
             title: '断插接口设置',
             url: fileExist('hiker://files/cache/fileLinksᴰⁿ.txt') ? setupPages("设置") : "hiker://page/Route?rule=MyFieldᴰⁿ&type=设置#noHistory#",
-            img: "https://lanmeiguojiang.com/tubiao/messy/30.svg",
+            img: "https://hikerfans.com/tubiao/messy/30.svg",
             col_type: "icon_2"
         });
         d.push({
             title: '解析接口管理',
             url: fileExist('hiker://files/cache/fileLinksᴰⁿ.txt') ? setupPages("编辑") : "hiker://page/Route?rule=MyFieldᴰⁿ&type=编辑#noRecordHistory#",
-            img: "https://lanmeiguojiang.com/tubiao/messy/17.svg",
+            img: "https://hikerfans.com/tubiao/messy/17.svg",
             col_type: "icon_2"
         });
         for (let i = 0; i < 10; i++) {
@@ -1594,13 +1594,13 @@ function SRCSet(setupPages) {
         d.push({
             title: '使用x5内核',
             url: `#noLoading#@lazyRule=.js:setItem('SrcXTNH','x5');putMyVar('SrcXTNH','x5');refreshPage(false);'toast://通用嗅探内核：腾讯x5内核';`,
-            img: "https://lanmeiguojiang.com/tubiao/ke/127.png",
+            img: "https://hikerfans.com/tubiao/ke/127.png",
             col_type: "icon_2"
         });
         d.push({
             title: '使用web内核',
             url: `#noLoading#@lazyRule=.js:setItem('SrcXTNH','web');putMyVar('SrcXTNH','web');refreshPage(false);'toast://通用嗅探内核：webview内核';`,
-            img: "https://lanmeiguojiang.com/tubiao/more/251.png",
+            img: "https://hikerfans.com/tubiao/more/251.png",
             col_type: "icon_2"
         });
         for (let i = 0; i < 10; i++) {
@@ -1643,13 +1643,13 @@ function SRCSet(setupPages) {
     d.push({
         title: '恢复设置',
         url: `#noLoading#@lazyRule=.js:clearItem('SrcQJJX');clearMyVar('SrcQJJX');clearItem('SrcGJFS');clearMyVar('SrcGJFS');clearItem('SrcXTNH');clearMyVar('SrcXTNH');clearItem('SrcM3U8');clearMyVar('SrcM3U8');refreshPage(false);'toast://已恢复小程序默认设置';`,
-        img: "https://lanmeiguojiang.com/tubiao/ke/56.png",
+        img: "https://hikerfans.com/tubiao/ke/56.png",
         col_type: "icon_4"
     });
     d.push({
         title: '清除缓存',
         url: `#noLoading#@lazyRule=.js:deleteCache();back(true);'toast://已清除小程序所有依赖缓存';`,
-        img: "https://lanmeiguojiang.com/tubiao/more/334.png",
+        img: "https://hikerfans.com/tubiao/more/334.png",
         col_type: "icon_4"
     });
     setResult(d);
