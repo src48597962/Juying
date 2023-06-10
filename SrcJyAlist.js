@@ -618,7 +618,7 @@ function alistSet() {
         refreshPage(false);
         return 'toast://'+sm;
       }, fileFilter, alistData, alistfile),
-      img: fileFilter?"https://lanmeiguojiang.com/tubiao/messy/55.svg":"https://lanmeiguojiang.com/tubiao/messy/56.svg",
+      img: fileFilter?"https://hikerfans.com/tubiao/messy/55.svg":"https://hikerfans.com/tubiao/messy/56.svg",
       col_type: "icon_2"
   });
   d.push({
@@ -635,7 +635,7 @@ function alistSet() {
         refreshPage(false);
         return 'toast://已设置音视频文件格式后缀';
       }, alistData, alistfile),
-      img: "https://lanmeiguojiang.com/tubiao/messy/145.svg",
+      img: "https://hikerfans.com/tubiao/messy/145.svg",
       col_type: "icon_2"
   });
   d.push({
@@ -686,7 +686,7 @@ function alistSet() {
             return 'toast://链接无效';
           }
       }, alistfile),
-      img: "https://lanmeiguojiang.com/tubiao/more/25.png",
+      img: "https://hikerfans.com/tubiao/more/25.png",
       col_type: "icon_small_3"
   });
   d.push({
@@ -726,7 +726,7 @@ function alistSet() {
             return "toast://聚影√：口令有误";
         }
       }, alistfile),
-      img: "https://lanmeiguojiang.com/tubiao/more/43.png",
+      img: "https://hikerfans.com/tubiao/more/43.png",
       col_type: "icon_small_3"
   });
   d.push({
@@ -741,7 +741,7 @@ function alistSet() {
             return "toast://分享失败，剪粘板或网络异常";
           }
       },datalist),
-      img: "https://lanmeiguojiang.com/tubiao/more/3.png",
+      img: "https://hikerfans.com/tubiao/more/3.png",
       col_type: "icon_small_3"
   });
   d.push({
@@ -884,7 +884,7 @@ function alistSet() {
                         return "hiker://empty";
                       },input,api,alistData,alistfile)
                     },item.server,alistData,alistfile),
-                    img: "https://lanmeiguojiang.com/tubiao/movie/98.svg",
+                    img: "https://hikerfans.com/tubiao/movie/98.svg",
                     col_type: "text_center_1"
                 });
                 for (let i = 0; i < datalist.length; i++) {
