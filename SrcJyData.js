@@ -975,13 +975,13 @@ function downloadicon() {
             downloadFile(config.依赖.match(/http(s)?:\/\/.*\//)[0] + "img/文件夹.svg", 'hiker://files/cache/src/文件夹.svg');
         }
         if(!fileExist('hiker://files/cache/src/影片.svg')){
-            downloadFile("https://lanmeiguojiang.com/tubiao/movie/13.svg", 'hiker://files/cache/src/影片.svg');
+            downloadFile("https://hikerfans.com/tubiao/movie/13.svg", 'hiker://files/cache/src/影片.svg');
         }
         if(!fileExist('hiker://files/cache/src/音乐.svg')){
-            downloadFile("https://lanmeiguojiang.com/tubiao/music/46.svg", 'hiker://files/cache/src/音乐.svg');
+            downloadFile("https://hikerfans.com/tubiao/music/46.svg", 'hiker://files/cache/src/音乐.svg');
         }
         if(!fileExist('hiker://files/cache/src/图片.png')){
-            downloadFile("https://lanmeiguojiang.com/tubiao/more/38.png", 'hiker://files/cache/src/图片.png');
+            downloadFile("https://hikerfans.com/tubiao/more/38.png", 'hiker://files/cache/src/图片.png');
         }
         if(!fileExist('hiker://files/cache/src/Alist.svg')){
             downloadFile(config.依赖.match(/http(s)?:\/\/.*\//)[0] + "img/Alist.svg", 'hiker://files/cache/src/Alist.svg');
