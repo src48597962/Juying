@@ -19,7 +19,7 @@ function SRCSet() {
     d.push({
         title: getMyVar('guanli', 'jk')=="jk"?getTitle('接口管理', '#f13b66a'):'接口管理',
         url: `#noLoading#@lazyRule=.js:putMyVar('guanli','jk');refreshPage(false);'toast://已切换到接口管理';`,
-        img: "https://lanmeiguojiang.com/tubiao/movie/98.svg",
+        img: "https://hikerfans.com/tubiao/movie/98.svg",
         col_type: "icon_small_3",
         extra: {
             longClick: [{
@@ -36,7 +36,7 @@ function SRCSet() {
     d.push({
         title: getMyVar('guanli', 'jk')=="jk"?'解析管理':getTitle('解析管理', '#f13b66a'),
         url: `#noLoading#@lazyRule=.js:putMyVar('guanli','jx');refreshPage(false);'toast://已切换到解析管理';`,
-        img: "https://lanmeiguojiang.com/tubiao/movie/105.svg",
+        img: "https://hikerfans.com/tubiao/movie/105.svg",
         col_type: "icon_small_3"
     });
     d.push({
@@ -45,7 +45,7 @@ function SRCSet() {
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
             extension();
         }),
-        img: "https://lanmeiguojiang.com/tubiao/ke/156.png",
+        img: "https://hikerfans.com/tubiao/ke/156.png",
         col_type: "icon_small_3"
     });
 
@@ -202,7 +202,7 @@ function SRCSet() {
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
             jiexi('add');
         }),
-        img: "https://lanmeiguojiang.com/tubiao/more/25.png",
+        img: "https://hikerfans.com/tubiao/more/25.png",
         col_type: "icon_small_4"
     });
     d.push({
@@ -244,7 +244,7 @@ function SRCSet() {
                 })
             }
         }),
-        img: getMyVar('guanlicz')=="1"?"https://lanmeiguojiang.com/tubiao/more/292.png":getMyVar('guanlicz')=="2"?"https://lanmeiguojiang.com/tubiao/more/275.png":getMyVar('guanlicz')=="3"?"https://lanmeiguojiang.com/tubiao/more/216.png":getMyVar('guanlicz')=="4"?"https://lanmeiguojiang.com/tubiao/more/213.png":"https://lanmeiguojiang.com/tubiao/more/290.png",
+        img: getMyVar('guanlicz')=="1"?"https://hikerfans.com/tubiao/more/292.png":getMyVar('guanlicz')=="2"?"https://hikerfans.com/tubiao/more/275.png":getMyVar('guanlicz')=="3"?"https://hikerfans.com/tubiao/more/216.png":getMyVar('guanlicz')=="4"?"https://hikerfans.com/tubiao/more/213.png":"https://hikerfans.com/tubiao/more/290.png",
         col_type: "icon_small_4"
     });
     d.push({
@@ -259,7 +259,7 @@ function SRCSet() {
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
             return JYimport(input);
         }),
-        img: "https://lanmeiguojiang.com/tubiao/more/43.png",
+        img: "https://hikerfans.com/tubiao/more/43.png",
         col_type: "icon_small_4"
     });
     let iscloudshare = (MY_NAME=="海阔视界"&&getAppVersion()>=3470)||(MY_NAME=="嗅觉浏览器"&&getAppVersion()>=852)?1:0;
@@ -281,7 +281,7 @@ function SRCSet() {
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
             return JYshare(1,3600);
         }),
-        img: "https://lanmeiguojiang.com/tubiao/more/3.png",
+        img: "https://hikerfans.com/tubiao/more/3.png",
         col_type: "icon_small_4"
     });
     d.push({
@@ -3229,7 +3229,7 @@ function yundiskjiekou() {
         url: $('hiker://empty#noRecordHistory##noHistory#').rule((filepath,yundiskapi) => {
             yundiskapi(filepath);
         },filepath,yundiskapi),
-        img: "https://lanmeiguojiang.com/tubiao/more/25.png",
+        img: "https://hikerfans.com/tubiao/more/25.png",
         col_type: "icon_small_3"
     });
     d.push({
@@ -3271,7 +3271,7 @@ function yundiskjiekou() {
                 return "toast://聚影√：口令有误";
             }
         }, filepath),
-        img: "https://lanmeiguojiang.com/tubiao/more/43.png",
+        img: "https://hikerfans.com/tubiao/more/43.png",
         col_type: "icon_small_3"
     });
     d.push({
@@ -3286,7 +3286,7 @@ function yundiskjiekou() {
                 return "toast://分享失败，剪粘板或网络异常";
             }
         }, datalist),
-        img: "https://lanmeiguojiang.com/tubiao/more/3.png",
+        img: "https://hikerfans.com/tubiao/more/3.png",
         col_type: "icon_small_3"
     });
     d.push({
