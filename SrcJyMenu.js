@@ -50,7 +50,7 @@ var erjimenu = [
                     col_type: 'long_text'
                 }]);
             }),
-        pic_url: 'https://lanmeiguojiang.com/tubiao/messy/32.svg',
+        pic_url: 'https://hikerfans.com/tubiao/messy/32.svg',
         col_type: 'icon_small_3'
     },
     {
@@ -59,7 +59,7 @@ var erjimenu = [
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyMenu.js');
                 lookset();
             }),
-        pic_url: 'https://lanmeiguojiang.com/tubiao/messy/37.svg',
+        pic_url: 'https://hikerfans.com/tubiao/messy/37.svg',
         col_type: 'icon_small_3'
     },
     {
@@ -68,7 +68,7 @@ var erjimenu = [
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
             xunmi(name);
         }, MY_PARAMS.name),
-        pic_url: 'https://lanmeiguojiang.com/tubiao/messy/25.svg',
+        pic_url: 'https://hikerfans.com/tubiao/messy/25.svg',
         col_type: 'icon_small_3',
         extra: {
             key: MY_PARAMS.name,
@@ -561,36 +561,36 @@ function lookset(){
 //主页导航按钮菜单
 let buttonmenu = {
     "管理": {
-        img: "https://lanmeiguojiang.com/tubiao/more/129.png",
+        img: "https://hikerfans.com/tubiao/more/129.png",
         url: $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
             SRCSet();
         })
     },
     "历史": {
-        img: "https://lanmeiguojiang.com/tubiao/more/213.png",
+        img: "https://hikerfans.com/tubiao/more/213.png",
         url: "hiker://history?rule="+MY_RULE.title
     },
     "收藏": {
-        img: "https://lanmeiguojiang.com/tubiao/more/109.png",
+        img: "https://hikerfans.com/tubiao/more/109.png",
         url: "hiker://collection?rule="+MY_RULE.title
     },
     "搜索": {
-        img: "https://lanmeiguojiang.com/tubiao/more/101.png",
+        img: "https://hikerfans.com/tubiao/more/101.png",
         url: $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
             require(config.依赖);
             sousuo2();
         })
     },
     "展示": {
-        img: "https://lanmeiguojiang.com/tubiao/more/105.png",
+        img: "https://hikerfans.com/tubiao/more/105.png",
         url: $("hiker://empty##fypage#noRecordHistory##noHistory#").rule(() => {
             require(config.依赖);
             jiekouyiji();
         })
     },
     "直播": {
-        img: "https://lanmeiguojiang.com/tubiao/more/87.png",
+        img: "https://hikerfans.com/tubiao/more/87.png",
         url: $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLive.js');
             Live();
@@ -604,7 +604,7 @@ let buttonmenu = {
         })
     },
     "云盘": {
-        img: "https://lanmeiguojiang.com/tubiao/more/65.png",
+        img: "https://hikerfans.com/tubiao/more/65.png",
         url: $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
             aliMyDisk("root",1);
