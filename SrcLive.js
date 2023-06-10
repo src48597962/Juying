@@ -302,7 +302,7 @@ function GroupEdit(groupname,mode,lists) {
     }else if(mode=='pushBox'){
         let push = {
             "name": groupname,
-            "pic": 'https://lanmeiguojiang.com/tubiao/ke/156.png',
+            "pic": 'https://hikerfans.com/tubiao/ke/156.png',
             "content": '聚影直播推送',
             "director": "分组推送",
             "actor": "列表可能有点凌乱"
@@ -405,7 +405,7 @@ function guanlidata(datalist) {
         }
         list.push({
             title: name,
-            img: 'https://lanmeiguojiang.com/tubiao/ke/156.png',
+            img: 'https://hikerfans.com/tubiao/ke/156.png',
             col_type: 'icon_2_round',
             url: $('#noLoading#').lazyRule((name) => {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLive.js');
@@ -512,7 +512,7 @@ function LiveEdit(name,mode) {
     }else if(mode=='pushBox'){
         let push = {
             "name": name,
-            "pic": 'https://lanmeiguojiang.com/tubiao/ke/156.png',
+            "pic": 'https://hikerfans.com/tubiao/ke/156.png',
             "content": '聚影直播推送',
             "director": "频道推送",
             "actor": "单个频道所有线路"
