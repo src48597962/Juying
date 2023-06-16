@@ -175,10 +175,10 @@ function aliOpenPlayUrl(file_id) {
       headers['authorization'] = authorization;
       headers['x-canary'] = "client=web,app=adrive,version=v4.3.1";
       let data = {"authorize":"1","scope":"user:base,file:all:read,file:all:write"}
-      let json = JSON.parse(request('https://open.aliyundrive.com/oauth/users/authorize?client_id=76917ccccd4441c39457a04f6084fb2f&redirect_uri=https://api-cf.nn.ci/tool/aliyundrive/callback&scope=user:base,file:all:read,file:all:write&state=', { headers: headers, body: data, method: 'POST', timeout: 3000 }));
+      let json = JSON.parse(request('https://open.aliyundrive.com/oauth/users/authorize?client_id=76917ccccd4441c39457a04f6084fb2f&redirect_uri=https://alist.nn.ci/tool/aliyundrive/callback&scope=user:base,file:all:read,file:all:write&state=', { headers: headers, body: data, method: 'POST', timeout: 3000 }));
       let code = json.redirectUri.split("code=")[1];
       let data2 = {"code":code,"grant_type":"authorization_code"}
-      let json2 = JSON.parse(request('https://api-cf.nn.ci/alist/ali_open/code', { body: data2, method: 'POST', timeout: 3000 }));
+      let json2 = JSON.parse(request('https://alist.nn.ci/alist/ali_open/code', { body: data2, method: 'POST', timeout: 3000 }));
       return json2.access_token || "";
     }
     let opentoken;
