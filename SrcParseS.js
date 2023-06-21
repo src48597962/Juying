@@ -632,6 +632,7 @@ var SrcParseS = {
             }
             //明码解析线程代码
             var task = function(obj) {
+                log("0");
                 if(/^function/.test(obj.ulist.parse.trim())){
                     eval('var JSparse = '+obj.ulist.parse)
                     var rurl = JSparse(obj.vipUrl);
@@ -686,6 +687,8 @@ var SrcParseS = {
                             }else{
                                 log("1");
                                 let html = fetchCodeByWebView(obj.ulist.parse+obj.vipUrl, {
+                                    blockRules: ['.m4a','.mp3','.gif','.jpg','.jpeg','.png','.ico','hm.baidu.com','/ads/*.js'],
+                                    jsLoadingInject: true,
                                     checkJs: $.toString((parse) => {
                                         fba.log("11");
                                         var urls = _getUrls();
