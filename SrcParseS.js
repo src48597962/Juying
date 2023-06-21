@@ -689,12 +689,12 @@ var SrcParseS = {
                                     checkJs: $.toString(() => {
                                         fba.log("11");
                                         var urls = _getUrls();
-                                        fba.log(fy_bridge_app.getUrls());
+                                        fba.log(urls);//fy_bridge_app.getUrls()
                                         var contain = /\.mp4|\.m3u8|\.flv|\.avi|\.mpeg|\.wmv|\.mov|\.rmvb|\.dat|qqBFdownload|mime=video%2F|video_mp4|\.ts\?|TG@UosVod|video\/tos\/cn\/tos|m3u8\?pt=m3u8/;//设置符合条件的正确地址
                                         for (var i in urls) {
                                             if (contain.test(urls[i])) {
-                                                fba.log("ok");
-                                                //return urls[i];
+                                                fba.log(urls[i]);
+                                                return urls[i];
                                             }
                                         }
                                     })
