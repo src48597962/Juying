@@ -684,11 +684,18 @@ var SrcParseS = {
                                     if(printlog==1){log('明码获取错误：'+e.message)};
                                 }
                             }else{
+                                log("1");
                                 let html = fetchCodeByWebView(obj.ulist.parse+obj.vipUrl, {
                                     checkJs: $.toString(() => {
-                                        let urls = _getUrls;
                                         fba.log("11");
-                                        return urls;
+                                        var urls = _getUrls();
+                                        var exclude = /\/404\.m3u8|\/xiajia\.mp4|\/余额不足\.m3u8|\.css|\.js|\.gif|\.png|\.jpg|\.jpeg|html,http|m3u88.com\/admin|\.php\?v=h|\?url=h|\&url=h|\?vid=h|%253Furl%253Dh|#amp=1|\.t-ui\.cn/;//设置排除地址
+                                        var contain = /\.mp4|\.m3u8|\.flv|\.avi|\.mpeg|\.wmv|\.mov|\.rmvb|\.dat|qqBFdownload|mime=video%2F|video_mp4|\.ts\?|TG@UosVod|video\/tos\/cn\/tos|m3u8\?pt=m3u8/;//设置符合条件的正确地址
+                                        for (var i in urls) {
+                                            if (!exclude.test(urls[i]) && contain.test(urls[i])) {
+                                                return urls[i];
+                                            }
+                                        }
                                     })
                                 })
                                 log(html);
