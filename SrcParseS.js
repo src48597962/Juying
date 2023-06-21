@@ -686,7 +686,7 @@ var SrcParseS = {
                             }else{
                                 log("1");
                                 let html = fetchCodeByWebView(obj.ulist.parse+obj.vipUrl, {
-                                    checkJs: $.toString(() => {
+                                    checkJs: $.toString((parse) => {
                                         fba.log("11");
                                         var urls = _getUrls();
                                         fba.log(urls);//fy_bridge_app.getUrls()
@@ -694,12 +694,16 @@ var SrcParseS = {
                                         for (var i in urls) {
                                             if (contain.test(urls[i])) {
                                                 fba.log(urls[i]);
+                                                putVar(parse, urls[i]);
                                                 return urls[i];
                                             }
                                         }
-                                    })
+                                    }, obj.ulist.parse)
                                 })
-                                log(html);
+                                rurl = getVar(obj.ulist.parse, '');
+                                //log(html);
+                                clearVar(obj.ulist.parse);
+                                log(rurl);
                             }
                         }
                         var x5 = 0;
