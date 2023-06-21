@@ -660,9 +660,10 @@ var SrcParseS = {
                     if (getjson.body&&getjson.statusCode==200){
                         var gethtml = getjson.body;
                         var rurl = "";
+                        var isjson = 0;
                         try {
                             rurl = JSON.parse(gethtml).url||JSON.parse(gethtml).data.url||JSON.parse(gethtml).data;
-                            var isjson = 1;
+                            isjson = 1;
                         } catch (e) {
                             if(/\.m3u8|\.mp4/.test(getjson.url)&&getjson.url.indexOf('=http')==-1){
                                 rurl = getjson.url;
@@ -682,8 +683,16 @@ var SrcParseS = {
                                 } catch (e) {
                                     if(printlog==1){log('明码获取错误：'+e.message)};
                                 }
+                            }else{
+                                let html = fetchCodeByWebView(obj.ulist.parse+obj.vipUrl, {
+                                    checkJs: $.toString(() => {
+                                        let urls = _getUrls;
+                                        fba.log("11");
+                                        return urls;
+                                    })
+                                })
+                                log(html);
                             }
-                            var isjson = 0;
                         }
                         var x5 = 0;
                         if(rurl == ""){
