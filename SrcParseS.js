@@ -694,7 +694,7 @@ var SrcParseS = {
                                         for (var i in urls) {
                                             if (contain.test(urls[i])) {
                                                 fba.log(urls[i]);
-                                                putVar(parse, urls[i]);
+                                                fba.putVar(parse, urls[i]);
                                                 return urls[i];
                                             }
                                         }
