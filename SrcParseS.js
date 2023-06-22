@@ -575,7 +575,7 @@ var SrcParseS = {
                                         }catch(e){
                                             fba.log(e.message);
                                         }
-                                    }, obj.ulist.parse,contain,exclude)
+                                    }, obj.ulist.parse,obj.contain,obj.exclude)
                                 })
                                 rurl = getVar(obj.ulist.parse, '');
                                 //log(html);
@@ -683,7 +683,9 @@ var SrcParseS = {
                             param: {
                                 ulist: list,
                                 vipUrl: vipUrl,
-                                testurl: this.testvideourl
+                                testurl: this.testvideourl,
+                                contain: contain,
+                                exclude: exclude
                             },
                             id: list.parse
                         }
