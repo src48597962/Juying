@@ -466,6 +466,8 @@ var SrcParseS = {
                             rurl = JSON.parse(gethtml).url||JSON.parse(gethtml).data.url||JSON.parse(gethtml).data;
                             isjson = 1;
                         } catch (e) {
+                            
+                            log(MY_NAME)
                             function geturl(gethtml) {
                                 let rurl = "";
                                 try {
@@ -489,41 +491,7 @@ var SrcParseS = {
                                 rurl = getjson.url;
                             }else if(/\.m3u8|\.mp4|\.flv/.test(gethtml) && geturl(gethtml)){
                                 rurl = geturl(gethtml);
-                            }else{
-                                /*
-                                let html = fetchCodeByWebView(obj.ulist.parse+obj.vipUrl, {
-                                    blockRules: ['.m4a','.mp3','.gif','.jpg','.jpeg','.png','.ico','hm.baidu.com','/ads/*.js','/klad/*.php','layer.css'],
-                                    jsLoadingInject: true,
-                                    checkJs: $.toString((parse) => {
-                                        try{
-                                            if (window.c == null) {
-                                                if (typeof (request) == 'undefined' || !request) {
-                                                    eval(fba.getInternalJs());
-                                                };
-                                                window.c = 0;
-                                            };
-                                            window.c++;
-                                            if (window.c * 250 >= 8 * 1000) {
-                                                return "1";
-                                            }
-                                            var urls = _getUrls();
-                                            //fba.log(fy_bridge_app.getUrls());
-                                            var exclude = /\/404\.m3u8|\/xiajia\.mp4|\/余额不足\.m3u8|\.css|\.js|\.gif|\.png|\.jpg|\.jpeg|html,http|m3u88.com\/admin|\.php\?v=h|\?url=h|\&url=h|\?vid=h|%253Furl%253Dh|#amp=1|\.t-ui\.cn|ac=dm/;//设置排除地址
-                                            var contain = /\.mp4|\.m3u8|\.flv|\.avi|\.mpeg|\.wmv|\.mov|\.rmvb|\.dat|qqBFdownload|mime=video%2F|video_mp4|\.ts\?|TG@UosVod|video\/tos\/cn\/tos|m3u8\?pt=m3u8/;//设置符合条件的正确地址
-                                            for (var i in urls) {
-                                                if (contain.test(urls[i])&&!exclude.test(urls[i])) {
-                                                    //fba.log("fbw解析到>"+urls[i]);
-                                                    fba.putVar(parse, urls[i]);
-                                                    return urls[i];
-                                                }
-                                            }
-                                        }catch(e){
-                                            //fba.log(e.message);
-                                        }
-                                    }, obj.ulist.parse)
-                                })
-                                rurl = getVar(obj.ulist.parse, '');
-                                */
+                            }else if((MY_NAME=="海阔视界"&&getAppVersion()>=4094)||(MY_NAME=="嗅觉浏览器"&&getAppVersion()>=1359)){
                                 rurl = executeWebRule(obj.ulist.parse+obj.vipUrl, $.toString(() => {
                                         try{
                                             if (typeof (request) == 'undefined' || !request) {
@@ -545,7 +513,7 @@ var SrcParseS = {
                                     }), {
                                         blockRules: ['.m4a','.mp3','.gif','.jpg','.jpeg','.png','.ico','hm.baidu.com','/ads/*.js','/klad/*.php','layer.css'],
                                         jsLoadingInject: true,
-                                        timeout: 1000
+                                        timeout: 8000
                                     }
                                 );
                                 //log(html);
