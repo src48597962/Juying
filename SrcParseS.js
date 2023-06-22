@@ -146,143 +146,6 @@ var SrcParseS = {
             } catch (e) {}*/
         }, this.formatUrl, vipUrl, excludeurl, getparse)
     },
-    智能: function (vipUrl, input) {
-        showLoading('√智能解析中，请稍候');
-        var video = "";
-        try {
-            if (vipUrl.search(/LT-/) > -1) {
-                var jxList = ["https://ltjx.jeeves.vip/home/api?type=ys&uid=461939&key=degkpqruyzACEJLORW&url=", "https://ltjx.jeeves.vip/home/api?type=ys&uid=1589472&key=aehjpzAHILOPQRU456&url=", "https://vip.legendwhb.cn/m3u8.php?url=", "https://jx.zjmiao.com/?url=", "https://09tv.top/jx/?url="];
-                var keyList = ["", "", "D63D64E0EDA774E3", "63f49d21a0dccf3c", "A42EAC0C2B408472"];
-                var refList = ["", "", "https://wnvod.net", "", "https://09tv.top"];
-                var jxLX = ["O", "O", "M", "M", "M"];
-                for (var i = 0; i < jxList.length; i++) {
-                    if (jxLX[i] != "M") {
-                        video = this.明码(jxList[i] + vipUrl);
-                        if (video.slice(0, 4) == 'http') {
-                            break;
-                        } else {
-                            log('线路LT：' + jxList[i] + ' 解析异常');
-                        }
-                    } else {
-                        video = this.maoss(jxList[i] + vipUrl, refList[i], keyList[i]);
-                        if (video.slice(0, 4) == 'http') {
-                            break;
-                        } else {
-                            log('线路LT：' + jxList[i] + ' 解析异常');
-                        }
-                    }
-                }
-            } else if (/renrenmi-/.test(vipUrl)) {
-                var jxList = ["https://jx.blbo.cc:4433/analysis.php?v=", "https://jx.renrenmi.cc/?url=", "https://a.dxzj88.com/jxrrm/jiami.php?url="];
-                for (var i = 0; i < jxList.length; i++) {
-                    video = this.明码(jxList[i] + vipUrl);
-                    if (video.slice(0, 4) == 'http') {
-                        break;
-                    } else {
-                        log('线路RR：' + jxList[i] + ' 解析异常');
-                    }
-                }
-            } else if (/RongXingVR/.test(vipUrl)) {
-                var jxList = ["https://vip.rongxingvr.top/api/?key=CMTJsEtHIzsLqZ6OGl&url=", "https://tc.yuanmajs.cn/jxplayer.php?v="];
-                for (var i = 0; i < jxList.length; i++) {
-                    video = this.明码(jxList[i] + vipUrl);
-                    if (video.slice(0, 4) == 'http') {
-                        break;
-                    } else {
-                        log('线路RX：' + jxList[i] + ' 解析异常');
-                    }
-                }
-            } else if (/wuduyun-/.test(vipUrl)) {
-                var jxList = ["http://jf.1080p.icu:3232/home/api?type=dsp&uid=147565&key=adilmopuBEFJNUV067&url="];
-                for (var i = 0; i < jxList.length; i++) {
-                    video = this.明码(jxList[i] + vipUrl);
-                    if (video.slice(0, 4) == 'http') {
-                        break;
-                    } else {
-                        log('线路WD：' + jxList[i] + ' 解析异常');
-                    }
-                }
-            } else if (/xueren-/.test(vipUrl)) {
-                var jxList = ["https://www.shangjihuoke.com/json.php/?url="];
-                for (var i = 0; i < jxList.length; i++) {
-                    video = this.明码(jxList[i] + vipUrl);
-                    if (video.slice(0, 4) == 'http') {
-                        break;
-                    } else {
-                        log('线路XR：' + jxList[i] + ' 解析异常');
-                    }
-                }
-            } else if (/\.suoyo|adHuRo0dcuHoM163L1/.test(vipUrl)) {
-                var apiList = ["https://p.tjomet.com/duoduo/api.php", "https://jiexi.ysgc.xyz/api.php"];
-                var refList = ["https://www.ysgc.cc/", "https://www.ysgc.cc/"];
-                if (/suoyo/.test(vipUrl)) {
-                    //明码https://a.dxzj88.com/jxdd/dd.php?url=
-                    vipUrl = 'adHuRo0dcuHoM163L1y49tM3U4LmNhY2hlLnN1b3lvLmNj' + base64Encode(vipUrl.replace('https://m3u8.cache.suoyo.cc', ''));
-                }
-                for (var i = 0; i < apiList.length; i++) {
-                    video = this.DD(vipUrl, apiList[i], refList[i]);
-                    if (video.slice(0, 4) == 'http') {
-                        break;
-                    } else {
-                        log('线路DD：' + apiList[i] + ' 解析异常');
-                    }
-                }
-            } else if (/ruifenglb/.test(vipUrl)) {
-                var jxList = ["http://player.yjhan.com:8090/api/?key=sQWHLErduwNEmxfx3V&url=", "https://004.summ.vip/?url=", "https://shangjihuoke.com/CL4K/?url="];
-                var keyList = ["", "A42EAC0C2B408472", "A42EAC0C2B408472"];
-                var refList = ["", "", ""];
-                var jxLX = ["O", "M", "M"];
-                for (var i = 0; i < jxList.length; i++) {
-                    if (jxLX[i] != "M") {
-                        video = this.明码(jxList[i] + vipUrl);
-                        if (video.slice(0, 4) == 'http') {
-                            break;
-                        } else {
-                            log('线路RX：' + jxList[i] + ' 解析异常');
-                        }
-                    } else {
-                        video = this.maoss(jxList[i] + vipUrl, refList[i], keyList[i]);
-                        if (video.slice(0, 4) == 'http') {
-                            break;
-                        } else {
-                            log('线路CL4K：' + jxList[i] + ' 解析异常');
-                        }
-                    }
-                }
-            } else if (/xfy-/.test(vipUrl)) {
-                video = this.maoss("https://jx.zjmiao.com/?url=" + vipUrl, "", "63f49d21a0dccf3c");
-            } else if (/\.mp4|\.m3u8/.test(vipUrl)) {
-                video = vipUrl;
-            } else if (/youku|mgtv|ixigua|qq\.com|iqiyi|migu|bilibili|sohu|pptv|\.le\.|\.1905|cctv/.test(vipUrl)) {
-                if (getMyVar('SrcGJFS', '1') == "2") {
-                    return this.DN(vipUrl);
-                } else {
-                    return this.嗅探(input);
-                }
-            }
-        } catch (e) { }
-        if (video == "") {
-            return this.嗅探(input);
-        } else {
-            return this.formatUrl(video);
-        }
-    },
-    官网: function (vipUrl, jxUrl, isDn) {
-        try {
-            if (getMyVar('SrcGJFS', '1') == "2" || isDn == "1") {
-                return this.DN(vipUrl);
-            } else {
-                if (getMyVar('author') == "帅√`人才") {
-                    return this.聚嗅(vipUrl);
-                } else {
-                    if (jxUrl == "" || jxUrl == undefined) { jxUrl = "https://jx.blbo.cc:4433/?url=" }
-                    return this.嗅探(jxUrl + vipUrl);
-                }
-            }
-        } catch (e) {
-            return '';
-        }
-    },
     明码: function (playUrl, ref) {
         try {
             if (ref == "") {
@@ -433,8 +296,8 @@ var SrcParseS = {
             vipUrl = vipUrl.split('html?')[0]+'html';
         }
         if(printlog==1){log("影片地址："+vipUrl)}; 
-        var exclude = /404\.m3u8|xiajia\.mp4|余额不足\.m3u8|\.m3u8\.tv/;//设置排除地址
-        var contain = /\.mp4|\.m3u8|\.flv|\.avi|\.mpeg|\.wmv|\.mov|\.rmvb|\.dat|qqBFdownload|mime=video%2F|video_mp4|\.ts\?/;//设置符合条件的正确地址
+        var exclude = /\/404\.m3u8|\/xiajia\.mp4|\/余额不足\.m3u8|\.css|\.js|\.gif|\.png|\.jpg|\.jpeg|html,http|m3u88.com\/admin|\.php\?v=h|\?url=h|\&url=h|\?vid=h|%253Furl%253Dh|#amp=1|\.t-ui\.cn/;//设置排除地址
+        var contain = /\.mp4|\.m3u8|\.flv|\.avi|\.mpeg|\.wmv|\.mov|\.rmvb|\.dat|qqBFdownload|mime=video%2F|video_mp4|\.ts\?|TG@UosVod|video\/tos\/cn\/tos|m3u8\?pt=m3u8/;//设置符合条件的正确地址
         var needparse = /suoyo\.cc|fen\.laodi|ruifenglb/;//设置需要解析的视频地址
 
         if(contain.test(vipUrl)&&!exclude.test(vipUrl)&&!needparse.test(vipUrl)){
@@ -632,7 +495,6 @@ var SrcParseS = {
             }
             //明码解析线程代码
             var task = function(obj) {
-                log("0");
                 if(/^function/.test(obj.ulist.parse.trim())){
                     eval('var JSparse = '+obj.ulist.parse)
                     var rurl = JSparse(obj.vipUrl);
@@ -685,28 +547,36 @@ var SrcParseS = {
                                     if(printlog==1){log('明码获取错误：'+e.message)};
                                 }
                             }else{
-                                log("1");
                                 let html = fetchCodeByWebView(obj.ulist.parse+obj.vipUrl, {
                                     blockRules: ['.m4a','.mp3','.gif','.jpg','.jpeg','.png','.ico','hm.baidu.com','/ads/*.js'],
                                     jsLoadingInject: true,
-                                    checkJs: $.toString((parse) => {
-                                        fba.log("11");
+                                    checkJs: $.toString((parse,contain,exclude) => {
+                                        if (window.c == null) {
+                                            if (typeof (request) == 'undefined' || !request) {
+                                                eval(fba.getInternalJs());
+                                            };
+                                            window.c = 0;
+                                        };
+                                        window.c++;
+                                        if (window.c * 250 >= 8 * 1000) {
+                                            return "1";
+                                        }
                                         var urls = _getUrls();
-                                        fba.log(urls);//fy_bridge_app.getUrls()
-                                        var contain = /\.mp4|\.m3u8|\.flv|\.avi|\.mpeg|\.wmv|\.mov|\.rmvb|\.dat|qqBFdownload|mime=video%2F|video_mp4|\.ts\?|TG@UosVod|video\/tos\/cn\/tos|m3u8\?pt=m3u8/;//设置符合条件的正确地址
+                                        //fba.log(fy_bridge_app.getUrls());
+                                        //var contain = /\.mp4|\.m3u8|\.flv|\.avi|\.mpeg|\.wmv|\.mov|\.rmvb|\.dat|qqBFdownload|mime=video%2F|video_mp4|\.ts\?|TG@UosVod|video\/tos\/cn\/tos|m3u8\?pt=m3u8/;//设置符合条件的正确地址
                                         for (var i in urls) {
-                                            if (contain.test(urls[i])) {
-                                                fba.log(urls[i]);
+                                            if (contain.test(urls[i])&&!exclude.test(urls[i])) {
+                                                //fba.log(urls[i]);
                                                 fba.putVar(parse, urls[i]);
                                                 return urls[i];
                                             }
                                         }
-                                    }, obj.ulist.parse)
+                                    }, obj.ulist.parse,contain,exclude)
                                 })
                                 rurl = getVar(obj.ulist.parse, '');
                                 //log(html);
                                 clearVar(obj.ulist.parse);
-                                log(rurl);
+                                //log(rurl);
                             }
                         }
                         var x5 = 0;
@@ -821,6 +691,12 @@ var SrcParseS = {
                         let beurl = taskResult.url;
                         if(beurl!=""&&needparse.test(beurl)&&beurl.indexOf('?')==-1){
                             beurl = "";
+                        }
+                        if(/cdn\.oss-cn-m3u8\.tv-nanjing-chengdu\.myqcloud\.com\.zh188.net/.test(beurl)){
+                            let getbeurl = request(beurl,{timeout:1500})||"";
+                            if(getbeurl.indexOf("token过期了")>-1){
+                                beurl = "";
+                            }
                         }
                         obj.results.push(beurl);
                         obj.parses.push(taskResult.ulist);
