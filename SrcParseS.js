@@ -219,7 +219,7 @@ var SrcParseS = {
         var appjiexinum = JYconfig['appjiexinum'] || 50;
         putMyVar('SrcM3U8',JYconfig.cachem3u8);
         if(JYconfig.xiutannh){putMyVar('SrcXTNH',JYconfig.xiutannh);}
-        var mulnum = JYconfig.mulnum||2;
+        var mulnum = 2 || JYconfig.mulnum;
         if((MY_NAME=="海阔视界"&&getAppVersion()>=3369)||(MY_NAME=="嗅觉浏览器"&&getAppVersion()>=798)){
             JYconfig['superweb'] = JYconfig.superweb==0?0:1;
         }
