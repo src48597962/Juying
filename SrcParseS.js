@@ -466,10 +466,8 @@ var SrcParseS = {
                             rurl = JSON.parse(gethtml).url||JSON.parse(gethtml).data.url||JSON.parse(gethtml).data;
                             isjson = 1;
                         } catch (e) {
-                            if(/\.m3u8|\.mp4/.test(getjson.url)&&getjson.url.indexOf('=http')==-1){
-                                rurl = getjson.url;
-                            }else if(/http(s)?:\/\/.*?\.m3u8|http(s)?:\/\/.*?\.mp4|http(s)?:\/\/.*?\.flv/.test(gethtml)){
-                                log("1");
+                            function geturl(gethtml) {
+                                let rurl = "";
                                 try {
                                     if(gethtml.indexOf('urls = "') != -1){
                                         rurl = gethtml.match(/urls = "(.*?)"/)[1];
@@ -483,10 +481,15 @@ var SrcParseS = {
                                         //if(printlog==1){log('将日志提交给作者，帮助完善解析逻辑>>>'+gethtml)};
                                     }
                                 } catch (e) {
-                                    if(printlog==1){log('明码获取错误：'+e.message)};
+                                    //if(printlog==1){log('明码获取错误：'+e.message)};
                                 }
+                                return rurl;
+                            }
+                            if(/\.m3u8|\.mp4/.test(getjson.url)&&getjson.url.indexOf('=http')==-1){
+                                rurl = getjson.url;
+                            }else if(/\.m3u8|\.mp4|\.flv/.test(gethtml) && geturl(gethtml)){
+                                rurl = geturl(gethtml);
                             }else{
-                                log("2");
                                 let html = fetchCodeByWebView(obj.ulist.parse+obj.vipUrl, {
                                     blockRules: ['.m4a','.mp3','.gif','.jpg','.jpeg','.png','.ico','hm.baidu.com','/ads/*.js'],
                                     jsLoadingInject: true,
