@@ -551,25 +551,29 @@ var SrcParseS = {
                                     blockRules: ['.m4a','.mp3','.gif','.jpg','.jpeg','.png','.ico','hm.baidu.com','/ads/*.js'],
                                     jsLoadingInject: true,
                                     checkJs: $.toString((parse,contain,exclude) => {
-                                        if (window.c == null) {
-                                            if (typeof (request) == 'undefined' || !request) {
-                                                eval(fba.getInternalJs());
+                                        try{
+                                            if (window.c == null) {
+                                                if (typeof (request) == 'undefined' || !request) {
+                                                    eval(fba.getInternalJs());
+                                                };
+                                                window.c = 0;
                                             };
-                                            window.c = 0;
-                                        };
-                                        window.c++;
-                                        if (window.c * 250 >= 8 * 1000) {
-                                            return "1";
-                                        }
-                                        var urls = _getUrls();
-                                        //fba.log(fy_bridge_app.getUrls());
-                                        //var contain = /\.mp4|\.m3u8|\.flv|\.avi|\.mpeg|\.wmv|\.mov|\.rmvb|\.dat|qqBFdownload|mime=video%2F|video_mp4|\.ts\?|TG@UosVod|video\/tos\/cn\/tos|m3u8\?pt=m3u8/;//设置符合条件的正确地址
-                                        for (var i in urls) {
-                                            if (contain.test(urls[i])&&!exclude.test(urls[i])) {
-                                                //fba.log(urls[i]);
-                                                fba.putVar(parse, urls[i]);
-                                                return urls[i];
+                                            window.c++;
+                                            if (window.c * 250 >= 8 * 1000) {
+                                                return "1";
                                             }
+                                            var urls = _getUrls();
+                                            //fba.log(fy_bridge_app.getUrls());
+                                            //var contain = /\.mp4|\.m3u8|\.flv|\.avi|\.mpeg|\.wmv|\.mov|\.rmvb|\.dat|qqBFdownload|mime=video%2F|video_mp4|\.ts\?|TG@UosVod|video\/tos\/cn\/tos|m3u8\?pt=m3u8/;//设置符合条件的正确地址
+                                            for (var i in urls) {
+                                                if (contain.test(urls[i])&&!exclude.test(urls[i])) {
+                                                    fba.log("fbw解析到>"+urls[i]);
+                                                    fba.putVar(parse, urls[i]);
+                                                    return urls[i];
+                                                }
+                                            }
+                                        }catch(e){
+                                            fba.log(e.message);
                                         }
                                     }, obj.ulist.parse,contain,exclude)
                                 })
