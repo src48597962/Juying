@@ -519,7 +519,7 @@ var SrcParseS = {
                         getjson = {};
                         if(printlog==1){log(obj.ulist.name+'>解析地址访问失败')};
                     }
-                        
+                    log(getjson);
                     if (getjson.body&&getjson.statusCode==200){
                         var gethtml = getjson.body;
                         var rurl = "";
