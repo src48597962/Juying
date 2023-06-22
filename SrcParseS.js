@@ -456,9 +456,9 @@ var SrcParseS = {
                         getjson = {};
                         if(printlog==1){log(obj.ulist.name+'>解析地址访问失败')};
                     }
-                    log(getjson);
+                    //log(getjson);
                     if (getjson.body&&getjson.statusCode==200){
-                        log("0");
+                        //log("0");
                         var gethtml = getjson.body;
                         var rurl = "";
                         var isjson = 0;
@@ -466,10 +466,10 @@ var SrcParseS = {
                             rurl = JSON.parse(gethtml).url||JSON.parse(gethtml).data.url||JSON.parse(gethtml).data;
                             isjson = 1;
                         } catch (e) {
-                            log("1");
                             if(/\.m3u8|\.mp4/.test(getjson.url)&&getjson.url.indexOf('=http')==-1){
                                 rurl = getjson.url;
-                            }else if(/\.m3u8|\.mp4|\.flv/.test(gethtml)){
+                            }else if(/http(s)?:\/\/.*?\.m3u8|http(s)?:\/\/.*?\.mp4|http(s)?:\/\/.*?\.flv/.test(gethtml)){
+                                log("1");
                                 try {
                                     if(gethtml.indexOf('urls = "') != -1){
                                         rurl = gethtml.match(/urls = "(.*?)"/)[1];
@@ -486,6 +486,7 @@ var SrcParseS = {
                                     if(printlog==1){log('明码获取错误：'+e.message)};
                                 }
                             }else{
+                                log("2");
                                 let html = fetchCodeByWebView(obj.ulist.parse+obj.vipUrl, {
                                     blockRules: ['.m4a','.mp3','.gif','.jpg','.jpeg','.png','.ico','hm.baidu.com','/ads/*.js'],
                                     jsLoadingInject: true,
@@ -522,7 +523,6 @@ var SrcParseS = {
                                 clearVar(obj.ulist.parse);
                                 //log(rurl);
                             }
-                            log("2");
                         }
                         var x5 = 0;
                         if(rurl == ""){
