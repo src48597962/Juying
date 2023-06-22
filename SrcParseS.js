@@ -554,7 +554,7 @@ var SrcParseS = {
                                     }, obj.ulist.parse), {
                                         blockRules: ['.m4a','.mp3','.gif','.jpg','.jpeg','.png','.ico','hm.baidu.com','/ads/*.js','/klad/*.php','layer.css'],
                                         jsLoadingInject: true,
-                                        timeout: 5000
+                                        timeout: 1000
                                     }
                                 ) || "";
                                 //log(html);
