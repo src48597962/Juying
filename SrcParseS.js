@@ -524,7 +524,7 @@ var SrcParseS = {
                                 })
                                 rurl = getVar(obj.ulist.parse, '');
                                 */
-                                rurl = executeWebRule(obj.ulist.parse+obj.vipUrl, $.toString((parse) => {
+                                rurl = executeWebRule(obj.ulist.parse+obj.vipUrl, $.toString(() => {
                                         try{
                                             if (typeof (request) == 'undefined' || !request) {
                                                 eval(fba.getInternalJs());
@@ -535,18 +535,17 @@ var SrcParseS = {
                                             var contain = /\.mp4|\.m3u8|\.flv|\.avi|\.mpeg|\.wmv|\.mov|\.rmvb|\.dat|qqBFdownload|mime=video%2F|video_mp4|\.ts\?|TG@UosVod|video\/tos\/cn\/tos|m3u8\?pt=m3u8/;//设置符合条件的正确地址
                                             for (var i in urls) {
                                                 if (contain.test(urls[i])&&!exclude.test(urls[i])) {
-                                                    //fba.log("fbw解析到>"+urls[i]);
-                                                    fba.putVar(parse, urls[i]);
+                                                    //fba.log("exeweb解析到>"+urls[i]);
                                                     return urls[i];
                                                 }
                                             }
                                         }catch(e){
                                             //fba.log(e.message);
                                         }
-                                    }, obj.ulist.parse), {
+                                    }), {
                                         blockRules: ['.m4a','.mp3','.gif','.jpg','.jpeg','.png','.ico','hm.baidu.com','/ads/*.js','/klad/*.php','layer.css'],
                                         jsLoadingInject: true,
-                                        timeout: 8000
+                                        timeout: 1000
                                     }
                                 );
                                 //log(html);
