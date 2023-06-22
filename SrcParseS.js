@@ -288,7 +288,7 @@ var SrcParseS = {
         var appjiexinum = JYconfig['appjiexinum'] || 50;
         putMyVar('SrcM3U8',JYconfig.cachem3u8);
         if(JYconfig.xiutannh){putMyVar('SrcXTNH',JYconfig.xiutannh);}
-        var mulnum = JYconfig.mulnum||1;
+        var mulnum = JYconfig.mulnum||3;
         if((MY_NAME=="海阔视界"&&getAppVersion()>=3369)||(MY_NAME=="嗅觉浏览器"&&getAppVersion()>=798)){
             JYconfig['superweb'] = JYconfig.superweb==0?0:1;
         }
@@ -568,13 +568,13 @@ var SrcParseS = {
                                             var contain = /\.mp4|\.m3u8|\.flv|\.avi|\.mpeg|\.wmv|\.mov|\.rmvb|\.dat|qqBFdownload|mime=video%2F|video_mp4|\.ts\?|TG@UosVod|video\/tos\/cn\/tos|m3u8\?pt=m3u8/;//设置符合条件的正确地址
                                             for (var i in urls) {
                                                 if (contain.test(urls[i])&&!exclude.test(urls[i])) {
-                                                    fba.log("fbw解析到>"+urls[i]);
+                                                    //fba.log("fbw解析到>"+urls[i]);
                                                     fba.putVar(parse, urls[i]);
                                                     return urls[i];
                                                 }
                                             }
                                         }catch(e){
-                                            fba.log(e.message);
+                                            //fba.log(e.message);
                                         }
                                     }, obj.ulist.parse)
                                 })
