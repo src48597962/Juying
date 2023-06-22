@@ -524,19 +524,11 @@ var SrcParseS = {
                                 })
                                 rurl = getVar(obj.ulist.parse, '');
                                 */
-
                                 rurl = executeWebRule(obj.ulist.parse+obj.vipUrl, $.toString((parse) => {
                                         try{
-                                            if (window.c == null) {
-                                                if (typeof (request) == 'undefined' || !request) {
-                                                    eval(fba.getInternalJs());
-                                                };
-                                                window.c = 0;
+                                            if (typeof (request) == 'undefined' || !request) {
+                                                eval(fba.getInternalJs());
                                             };
-                                            window.c++;
-                                            if (window.c * 250 >= 8 * 1000) {
-                                                return "1";
-                                            }
                                             var urls = _getUrls();
                                             //fba.log(fy_bridge_app.getUrls());
                                             var exclude = /\/404\.m3u8|\/xiajia\.mp4|\/余额不足\.m3u8|\.css|\.js|\.gif|\.png|\.jpg|\.jpeg|html,http|m3u88.com\/admin|\.php\?v=h|\?url=h|\&url=h|\?vid=h|%253Furl%253Dh|#amp=1|\.t-ui\.cn|ac=dm/;//设置排除地址
@@ -554,16 +546,16 @@ var SrcParseS = {
                                     }, obj.ulist.parse), {
                                         blockRules: ['.m4a','.mp3','.gif','.jpg','.jpeg','.png','.ico','hm.baidu.com','/ads/*.js','/klad/*.php','layer.css'],
                                         jsLoadingInject: true,
-                                        timeout: 1000
+                                        timeout: 8000
                                     }
-                                ) || "";
+                                );
                                 //log(html);
                                 clearVar(obj.ulist.parse);
                                 //log(rurl);
                             }
                         }
                         var x5 = 0;
-                        if(rurl == ""){
+                        if(!rurl){
                             if(!/404 /.test(gethtml)&&obj.ulist.parse.indexOf('key=')==-1&&isjson==0){
                                 if(x5jxlist.length<5){
                                     x5jxlist.push(obj.ulist.parse);
