@@ -458,6 +458,7 @@ var SrcParseS = {
                     }
                     log(getjson);
                     if (getjson.body&&getjson.statusCode==200){
+                        log("0");
                         var gethtml = getjson.body;
                         var rurl = "";
                         var isjson = 0;
@@ -465,6 +466,7 @@ var SrcParseS = {
                             rurl = JSON.parse(gethtml).url||JSON.parse(gethtml).data.url||JSON.parse(gethtml).data;
                             isjson = 1;
                         } catch (e) {
+                            log("1");
                             if(/\.m3u8|\.mp4/.test(getjson.url)&&getjson.url.indexOf('=http')==-1){
                                 rurl = getjson.url;
                             }else if(/\.m3u8|\.mp4|\.flv/.test(gethtml)){
@@ -520,6 +522,7 @@ var SrcParseS = {
                                 clearVar(obj.ulist.parse);
                                 //log(rurl);
                             }
+                            log("2");
                         }
                         var x5 = 0;
                         if(rurl == ""){
