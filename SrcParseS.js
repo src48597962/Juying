@@ -518,9 +518,6 @@ var SrcParseS = {
                                         timeout: 8000
                                     }
                                 );
-                                //log(html);
-                                clearVar(obj.ulist.parse);
-                                //log(rurl);
                             }
                         }
                         var x5 = 0;
