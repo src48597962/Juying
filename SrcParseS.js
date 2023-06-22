@@ -166,75 +166,6 @@ var SrcParseS = {
             return '';
         }
     },
-    maoss: function (playUrl, ref, key) {
-        try {
-            if (ref) {
-                var html = request(playUrl, { headers: { 'Referer': ref }, timeout: 8000 });
-            } else {
-                var html = request(playUrl, { timeout: 8000 });
-            }
-            if (html.indexOf('&btwaf=') != -1) {
-                html = request(playUrl + '&btwaf' + html.match(/&btwaf(.*?)"/)[1], { headers: { 'Referer': ref }, timeout: 8000 })
-            }
-            var iv = html.match(/_token = "(.*?)"/)[1];
-
-            var getVideoInfo = function (text) {
-                eval(getCryptoJS());
-                var video = CryptoJS.AES.decrypt(text, CryptoJS.enc.Utf8.parse(key), {
-                    'iv': CryptoJS.enc.Utf8.parse(iv),
-                    'mode': CryptoJS.mode.CBC
-                }).toString(CryptoJS.enc.Utf8);
-                return video;
-            };
-            eval(html.match(/var config = {[\s\S]*?}/)[0]);
-            if (config.url.slice(0, 4) != 'http') {
-                config.url = getVideoInfo(config.url);
-            }
-            if (config.url != "" && config.url.slice(0, 4) != 'http') {
-                config.url = decodeURIComponent(config.url);
-            }
-            return config.url;
-        } catch (e) {
-            return '';
-        }
-    },
-    DD: function (vipUrl, apiUrl, ref) {
-        try {
-            if (apiUrl == "" || apiUrl == undefined) { 
-                apiUrl = "https://ysgc.tjomet.com/gTko58tsjpjPcRmh.jpg" ;
-            }
-            var html = request("https://ysgc.tjomet.com/?url="+vipUrl,{timeout:5000});
-            eval(html.match(/var config = {[\s\S]*?}/)[0] + '');
-            var bod = 'url=' + config.url + "&vkey=" + config.vkey + "&token=" + config.token + "&sign=TzNHJtiW8aWDtUMS";
-            var json = JSON.parse(request(apiUrl, { method: 'POST', body: bod }));
-            eval(fetch("https://vkceyugu.cdn.bspapp.com/VKCEYUGU-03ee1f89-f0d4-49aa-a2b3-50e203514d8a/2e54cc42-9b4c-457d-b2de-0cdf3e2aeeaa.js"));//https://p.tjomet.com/duoduo/js/decode.js
-            let url = getVideoInfo(json.url);
-            return url;
-        } catch (e) {
-            return '';
-        }
-    },
-    DD2: function (vipUrl, apiUrl, ref) {
-        try {
-            if(/youku|mgtv|ixigua|qq\.com|iqiyi|migu|bilibili|sohu|pptv|\.le\.|\.1905|cctv/.test(url)) {
-                return SrcParseS.官网(url);
-            } else {
-                if (apiUrl == "" || apiUrl == undefined) { apiUrl = "https://bo.dd520.cc/xmplayer/duoduo.php" }
-                if (ref == "" || ref == undefined) { ref = "http://www.xawqxh.net" }
-                vipUrl = "ahHgRj0kceHdMc66L5y4" + base64Encode(vipUrl).slice(10);
-                //var json = JSON.parse(request(apiUrl, { headers: { 'Referer': ref }, method: 'POST', body: 'url=' + vipUrl }));
-                var json = JSON.parse(request(apiUrl, { method: 'POST', body: 'url=' + vipUrl }));
-                eval(getCryptoJS());
-                return CryptoJS.AES.decrypt(json.url, CryptoJS.enc.Utf8.parse(CryptoJS.MD5('rXjWvXl6')), {
-                    'iv': CryptoJS.enc.Utf8.parse('NXbHoWJbpsEOin8b'),
-                    'mode': CryptoJS.mode.CBC,
-                    'padding': CryptoJS.pad.ZeroPadding
-                }).toString(CryptoJS.enc.Utf8);
-            }
-        } catch (e) {
-            return '';
-        }
-    },
     DN: function (vipUrl) {
         evalPrivateJS("OjB3OHrVodkVQlHIU8UUAC5W0ZBgTQEC4h9eUEcAT9kEM0hY/45YOxs7PDeQEnxjVhaWW2tIqO5GQimD4ssHKSka505+O0avEtQQZ9zRy6GxaBZdTHrbCPcoNIajmr3+JG22tRswOJFYDX5aYk0PfUDEFsZa2OjZbz+xTthnoUPLNm0R2g1kBFnWwGKBWUxEhEsFwFruhFSaxJi1E1WZ7WlbP0v4OpoQgn6M7UXGahP9h2fHi8UBVDGfjzIuVuJSCgICLlVGaAbT0ghic+Kfbp3TmjRhAo1DKretYp1U53apDMvO2Q+6oAyO1js5TJwx51ygFSUqVGAu0C2DLxkG0Z3+L8UPZyJa4KVDlqq/goE=")
         return aytmParse(vipUrl);
@@ -311,7 +242,7 @@ var SrcParseS = {
             if(printlog==1){log("优看视频，直接明码解析")}; 
             return unescape(request(vipUrl).match(/"url":"([^"]*)"/)[1].replace(/\\u/g, "%u"));
         }else if (/magnet|torrent/.test(vipUrl)) {
-            if(printlog==1){log("磁力/BT视频地址，由视界解析")}; 
+            if(printlog==1){log("磁力/BT视频地址，由海阔解析")}; 
             return vipUrl;
         }else if (/\/share\//.test(vipUrl)) {
             if(printlog==1){log("资源网云播地址")}; 
@@ -327,7 +258,7 @@ var SrcParseS = {
                 }else if(vipUrl.indexOf('suoyo.cc') != -1){
                     from = 'duoduozy';
                 }else if(vipUrl.indexOf('.') != -1){
-                    var host = vipUrl.match(/\.(.*?)\//)[1];
+                    var host = vipUrl.replace('m.tv.','m.').match(/\.(.*?)\//)[1];
                     from = host.split('.')[0];
                 }else if(vipUrl.indexOf('-') != -1){
                     from = vipUrl.split('-')[0];
@@ -440,21 +371,27 @@ var SrcParseS = {
                                 }
                             }
                             arr["sort"] = -1;
+                            Uparselist.unshift(arr);
+                            /*
                             if(myJXlist[j].web==1){
                                 Wparselist.unshift(arr);
                             }else if(parsemode==1){
                                 Uparselist.unshift(arr);
                             }
+                            */
                             myjxnum = myjxnum + 1;
                         }else{
                             if(myJXlist[j].stopfrom.indexOf(from)==-1&&excludeparse.indexOf(myJXlist[j].parse)==-1&&!Uparselist.some(item => item.parse ==myJXlist[j].parse)){
                                 let sort = myJXlist[j]['sort']||0;
                                 arr["sort"] = sort;
+                                Uparselist.push(arr);
+                                /*
                                 if(myJXlist[j].web==1){
                                     Wparselist.push(arr);
                                 }else if(parsemode==1){
                                     Uparselist.push(arr);
                                 }
+                                */
                                 myjxnum = myjxnum + 1;
                                 //非强制优先、非排除片源、非屏蔽优先调用
                             }
