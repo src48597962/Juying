@@ -433,7 +433,7 @@ var SrcParseS = {
                     }
                     */
                     require('http://124.221.241.174:13000/src48597962/hkbak/raw/branch/main/SrcGetParse.js');
-                    log($.type(bpParse))
+                    log(bpParse.toString())
                     let a = bpParse('https://m.iqiyi.com/v_sa04mvdzk8.html','m8');
                     log(a)
                     let parsename = MY_PARAMS.name.join("");
