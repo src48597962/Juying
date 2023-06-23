@@ -431,8 +431,13 @@ var SrcParseS = {
                 if(/^function/.test(obj.ulist.parse.trim())){
                     obj.ulist['x5'] = 0;
                     let rurl = "";
-                    eval('var JSparse = '+obj.ulist.parse)
-                    rurl = JSparse(obj.vipUrl);
+                    try{
+                        eval('var JSparse = '+obj.ulist.parse)
+                        rurl = JSparse(obj.vipUrl);
+                    }catch(e){
+                        log("解析有错误")
+                    }
+                    
                     if(/^toast/.test(rurl)){
                         if(printlog==1){log(obj.ulist.name+'>提示：'+rurl.replace('toast://',''))};
                         rurl = "";
