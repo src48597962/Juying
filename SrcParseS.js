@@ -435,6 +435,7 @@ var SrcParseS = {
                     eval('var JSparse = '+obj.ulist.parse)
                     log("22")
                     try{
+                        log(JSparse.toString())
                         rurl = JSparse(obj.vipUrl);
                     }catch(e){}
                     log("33")
