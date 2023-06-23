@@ -432,10 +432,7 @@ var SrcParseS = {
                         });
                     }
                     */
-                    require('http://124.221.241.174:13000/src48597962/hkbak/raw/branch/main/SrcGetParse.js');
-                    log(bpParse.toString())
-                    let a = bpParse('https://m.iqiyi.com/v_sa04mvdzk8.html','m8');
-                    log(a)
+
                     let parsename = MY_PARAMS.name.join("");
                     log("我在代理解析>" + parsename);
                     let playUrl = "";
@@ -454,8 +451,7 @@ var SrcParseS = {
                     }catch(e){
                         log(parsename+">解析错误>"+e.message);
                     }
-                    
-                    log(parsename+">播放地址>"+playUrl);
+                    //log(parsename+">播放地址>"+playUrl);
                     let f = cacheM3u8(playUrl, {timeout: 2000});
                     return readFile(f.split("##")[0]); //'#isVideo=true#';
                 },Uparselist,vipUrl,this.task,this.testvideourl,this.formatUrl));
