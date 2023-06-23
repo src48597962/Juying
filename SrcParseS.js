@@ -474,7 +474,7 @@ var SrcParseS = {
                 }
             }
             //测试进播放用代理播放
-            let u = startProxyServer($.toString((Uparselist,vipUrl,task,testvideourl) => {
+            let u = startProxyServer($.toString((Uparselist,vipUrl,task,testvideourl,formatUrl) => {
                 let url = MY_PARAMS.url || "";
                 /*
                 if (url.includes(".ts")) {
@@ -508,8 +508,8 @@ var SrcParseS = {
                 }
                 
                 log(parsename+">播放地址>"+playUrl.url);
-                let f = cacheM3u8(playUrl.url);
-                return readFile(f.split("##")[0]);
+                //let f = cacheM3u8(playUrl.url);
+                return formatUrl(playUrl.url);
                 /*
                 function geturl(fileid,line){
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliPublic.js');
@@ -583,7 +583,7 @@ var SrcParseS = {
                     return ff;
                 }
                 */
-            },Uparselist,vipUrl,this.task,this.testvideourl));
+            },Uparselist,vipUrl,this.task,this.testvideourl,this.formatUrl));
             Uparselist.forEach((item) => {
                 urls.push(u + "?name=" + item.name + "#.m3u8#pre#");
                 names.push(item.name);
