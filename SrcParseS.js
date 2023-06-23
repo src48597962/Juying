@@ -431,21 +431,14 @@ var SrcParseS = {
                 if(/^function/.test(obj.ulist.parse.trim())){
                     obj.ulist['x5'] = 0;
                     let rurl = "";
-                    log("11")
                     eval('var JSparse = '+obj.ulist.parse)
-                    log("22")
-                    try{
-                        log(JSparse.toString())
-                        rurl = JSparse(obj.vipUrl);
-                    }catch(e){}
-                    log("33")
+                    rurl = JSparse(obj.vipUrl);
                     if(/^toast/.test(rurl)){
                         if(printlog==1){log(obj.ulist.name+'>提示：'+rurl.replace('toast://',''))};
                         rurl = "";
                     }else if(/^http/.test(rurl)&&obj.testurl(rurl,obj.ulist.name)==0){
                         rurl = "";
                     }
-                    log("44")
                     return {url: rurl,ulist: obj.ulist}; 
                 }else{            
                     let taskheader = {withStatusCode:true,timeout:8000};
@@ -658,7 +651,9 @@ var SrcParseS = {
                         errors: beerrors
                     }
                 });
-
+                log(beparses)
+                log(beurls)
+                log(beerrors)
                 for(let k in beparses){
                     var parseurl = beparses[k].parse;
                     if(beerrors[k]==null&&contain.test(beurls[k])&&!exclude.test(beurls[k])&&excludeurl.indexOf(beurls[k])==-1){
