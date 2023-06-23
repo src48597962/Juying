@@ -403,6 +403,30 @@ function SRCSet() {
                 });
             }else{
                 d.push({
+                    title: "重置优先",
+                    url: $('#noLoading#').lazyRule(()=>{
+                            let duoselect = storage0.getMyVar('duoselect')?storage0.getMyVar('duoselect'):[];
+                            if(duoselect.length>0){
+                                return $("确定重置选定的"+duoselect.length+"个解析优先片源记录吗？").confirm((duoselect)=>{
+                                    var filepath = "hiker://files/rules/Src/Juying/myjiexi.json";
+                                    var datafile = fetch(filepath);
+                                    eval("var datalist=" + datafile+ ";");
+                                    for(var i=0;i<datalist.length;i++){
+                                        if(duoselect.indexOf(datalist[i].parse)>-1){
+                                            datalist[i].priorfrom = [];
+                                        }
+                                    }
+                                    writeFile(filepath, JSON.stringify(datalist));
+                                    refreshPage(false);
+                                    return "toast://已批量重置选定解析的优先片源记录";
+                                }, duoselect)
+                            }else{
+                                return "toast://请选择";
+                            }
+                        }),
+                    col_type: "scroll_button"
+                });
+                d.push({
                     title: "重置排除",
                     url: $('#noLoading#').lazyRule(()=>{
                             let duoselect = storage0.getMyVar('duoselect')?storage0.getMyVar('duoselect'):[];
@@ -1266,10 +1290,27 @@ function jiexi(lx,data) {
                 title:'选择好了，点此返回',
                 col_type:'text_center_1',
                 url: $('#noLoading#').lazyRule((lx)=>{
+                    let selectfrom = getMyVar('selectfrom','');
                     if(lx=="prior"){
-                        putMyVar('priorfrom',getMyVar('selectfrom',''));
+                        putMyVar('priorfrom',selectfrom);
+                        let stopfrom = getMyVar('stopfrom')?getMyVar('stopfrom','').replace(/,|，/g,",").split(','):[];
+                        let newstopfrom = [];
+                        stopfrom.forEach(it=>{
+                            if(selectfrom.indexOf(it)==-1){
+                                newstopfrom.push(it);
+                            }
+                        })
+                        putMyVar('stopfrom',newstopfrom.join(","));
                     }else{
-                        putMyVar('stopfrom',getMyVar('selectfrom',''));
+                        putMyVar('stopfrom',selectfrom);
+                        let priorfrom = getMyVar('priorfrom')?getMyVar('priorfrom','').replace(/,|，/g,",").split(','):[];
+                        let newpriorfrom = [];
+                        priorfrom.forEach(it=>{
+                            if(selectfrom.indexOf(it)==-1){
+                                newpriorfrom.push(it);
+                            }
+                        })
+                        putMyVar('priorfrom',newpriorfrom.join(","));
                     }
                     back(true);
                     return "hiker://empty";
