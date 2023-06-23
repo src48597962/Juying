@@ -663,6 +663,9 @@ var SrcParseS = {
                             if(printlog==1){log(beparses[k].name+'>测试成功>'+beurls[k])};
                         }else if(beparses[k].type!="dn"){
                             //记录除断插线程以外最快的，做为下次优先
+                            log(beparses[k].name);
+                            log(beurls[k]);
+                            /*
                             if(printlog==1){
                                 if(priorparse.indexOf(beparses[k].name)>-1){
                                     log(beparses[k].name+'>优先上次解析成功>'+beurls[k]);
@@ -670,6 +673,7 @@ var SrcParseS = {
                                     log(beparses[k].name+'>解析成功>'+beurls[k]+'，记录为片源'+from+'的优先');
                                 }
                             }
+                            */
                             if(beparses[k].type=="myjx"){//私有解析保存解析名
                                 if(recordname.indexOf(beparses[k].name)==-1){recordname.push(beparses[k].name)}
                             }else if(/app/.test(beparses[k].type)){//app接口解析保存链接
