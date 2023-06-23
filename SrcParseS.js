@@ -476,7 +476,7 @@ var SrcParseS = {
             //测试进播放用代理播放
             let u = startProxyServer($.toString((Uparselist,vipUrl,task,testvideourl) => {
                 log(MY_PARAMS);
-                let url = MY_PARAMS.url;
+                let url = MY_PARAMS.url || "";
                 /*
                 if (url.includes(".ts")) {
                     log("代理ts：" + url);
@@ -490,13 +490,13 @@ var SrcParseS = {
                 }
                 */
                 log("我在代理" + url);
-                let parsename = url;
+                let parsename = MY_PARAMS.name.join("");
                 let playUrl = "";
                 try{
                     //require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
                     let ulist = Uparselist.filter(item => {
                         return item.name==parsename;
-                    })
+                    })[0];
                     let obj = {
                         ulist: ulist,
                         vipUrl: vipUrl,
@@ -585,7 +585,7 @@ var SrcParseS = {
                 */
             },Uparselist,vipUrl,this.task,this.testvideourl));
             Uparselist.forEach((item) => {
-                urls.push(u + "?url=" + item.name + "&url2="+vipUrl+"#.m3u8#pre#");
+                urls.push(u + "?name=" + item.name + "#.m3u8#pre#");
                 names.push(item.name);
             })
             return {
