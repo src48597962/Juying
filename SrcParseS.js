@@ -1001,7 +1001,7 @@ var SrcParseS = {
                             }), {
                                 blockRules: ['.m4a','.mp3','.gif','.jpg','.jpeg','.png','.ico','hm.baidu.com','/ads/*.js','/klad/*.php','layer.css'],
                                 jsLoadingInject: true,
-                                //checkTime: 150,
+                                checkTime: 200,
                                 timeout: 8000
                             }
                         );
