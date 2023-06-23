@@ -416,7 +416,7 @@ var SrcParseS = {
             //var appzdchange = 0;//app自带解析是否加入黑名单
 
             //测试进播放用代理播放
-            parsemode =4;
+            //parsemode =4;
             if(parsemode==4){
                 let u = startProxyServer($.toString((Uparselist,vipUrl,task,testvideourl,formatUrl) => {
                     let url = MY_PARAMS.url || "";
