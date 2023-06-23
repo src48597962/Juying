@@ -77,7 +77,7 @@ var SrcParseS = {
             }
             //fba.log(fy_bridge_app.getUrls());
             var urls = _getUrls();
-            var exclude = /\/404\.m3u8|\/xiajia\.mp4|\/余额不足\.m3u8|\.css|\.js|\.gif|\.png|\.jpg|\.jpeg|html,http|m3u88.com\/admin|\.php\?v=h|\?url=h|\&url=h|\?vid=h|%253Furl%253Dh|#amp=1|\.t-ui\.cn/;//设置排除地址
+            var exclude = /\/404\.m3u8|\/xiajia\.mp4|\/余额不足\.m3u8|\.css|\.js|\.gif|\.png|\.jpg|\.jpeg|html,http|m3u88.com\/admin|\.php\?v=h|\?url=h|\?vid=h|%253Furl%253Dh|#amp=1|\.t-ui\.cn/;//设置排除地址
             var contain = /\.mp4|\.m3u8|\.flv|\.avi|\.mpeg|\.wmv|\.mov|\.rmvb|\.dat|qqBFdownload|mime=video%2F|video_mp4|\.ts\?|TG@UosVod|video\/tos\/cn\/tos|m3u8\?pt=m3u8/;//设置符合条件的正确地址
             for (var i in urls) {
                 if(getparse&&!fba.getVar('Srcgetparse')&&/url=h|v=h|youku|mgtv|ixigua|qq\.com|iqiyi|migu|bilibili|sohu|pptv|\.le\.|\.1905|cctv/.test(urls[i])&&!/\/bid\?|\.gif\?|ads\?|img\.php|index\/\?|cityjson/.test(urls[i])){
@@ -401,9 +401,23 @@ var SrcParseS = {
                 eval(fetch(config.cj));
                 return aytmParse(vipUrl);
             }
+            //log(Uparselist)
+
+            var playurl = "";//视频地址
+            var x5jxlist = []; //x5嗅探接口存放数组
+            var x5namelist = [];//x5解析名称
+            var urls = [];//多线路地址
+            var names = [];//多线路名称
+            var headers = [];//多线路头信息
+            var danmu = "";//多线路弹幕
+            var dellist = [];//需从本地解析中删除列表
+            var appJXchange = 0;//app解析是否有发现新的或增加可解片源
+            var myJXchange = 0;//私有解析是否排除片源
+            //var appzdchange = 0;//app自带解析是否加入黑名单
+
+            //测试进播放用代理播放
             parsemode =4;
             if(parsemode==4&&!parseStr){
-                    //测试进播放用代理播放
                 let u = startProxyServer($.toString((Uparselist,vipUrl,task,testvideourl,formatUrl) => {
                     let url = MY_PARAMS.url || "";
                     /*
@@ -451,21 +465,6 @@ var SrcParseS = {
                     names: names
                 };
             }
-            
-            //log(Uparselist)
-
-            var playurl = "";//视频地址
-            var x5jxlist = []; //x5嗅探接口存放数组
-            var x5namelist = [];//x5解析名称
-            var urls = [];//多线路地址
-            var names = [];//多线路名称
-            var headers = [];//多线路头信息
-            var danmu = "";//多线路弹幕
-            var dellist = [];//需从本地解析中删除列表
-            var appJXchange = 0;//app解析是否有发现新的或增加可解片源
-            var myJXchange = 0;//私有解析是否排除片源
-            //var appzdchange = 0;//app自带解析是否加入黑名单
-
             //断插线程代码
             var dnaytmParse = function(vipUrl) {
                 try{
@@ -988,7 +987,7 @@ var SrcParseS = {
                                     };
                                     var urls = _getUrls();
                                     //fba.log(fy_bridge_app.getUrls());
-                                    var exclude = /\/404\.m3u8|\/xiajia\.mp4|\/余额不足\.m3u8|\.css|\.js|\.gif|\.png|\.jpg|\.jpeg|html,http|m3u88.com\/admin|\.php\?v=h|\?url=h|\&url=h|\?vid=h|%253Furl%253Dh|#amp=1|\.t-ui\.cn|ac=dm/;//设置排除地址
+                                    var exclude = /\/404\.m3u8|\/xiajia\.mp4|\/余额不足\.m3u8|\.css|\.js|\.gif|\.png|\.jpg|\.jpeg|html,http|m3u88.com\/admin|\.php\?v=h|\?url=h|\?vid=h|%253Furl%253Dh|#amp=1|\.t-ui\.cn|ac=dm/;//设置排除地址
                                     var contain = /\.mp4|\.m3u8|\.flv|\.avi|\.mpeg|\.wmv|\.mov|\.rmvb|\.dat|qqBFdownload|mime=video%2F|video_mp4|\.ts\?|TG@UosVod|video\/tos\/cn\/tos|m3u8\?pt=m3u8/;//设置符合条件的正确地址
                                     for (var i in urls) {
                                         if (contain.test(urls[i])&&!exclude.test(urls[i])) {
