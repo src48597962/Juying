@@ -474,7 +474,7 @@ var SrcParseS = {
                 }
             }
             //测试进播放用代理播放
-            let u = startProxyServer($.toString((Uparselist) => {
+            let u = startProxyServer($.toString((Uparselist,vipUrl) => {
                 let url = base64Decode(MY_PARAMS.url);
                 /*
                 if (url.includes(".ts")) {
@@ -489,8 +489,7 @@ var SrcParseS = {
                 }
                 */
                 log("我在代理" + url);
-                let vipUrl  = url.split('|')[0];
-                let parsename = url.split('|')[1];
+                let parsename = url;
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
                 let ulist = Uparselist.filter(item => {
                     return item.name==parsename;
@@ -577,9 +576,9 @@ var SrcParseS = {
                     return ff;
                 }
                 */
-            },Uparselist));
+            },Uparselist,vipUrl));
             Uparselist.forEach((item) => {
-                urls.push(u + "?url=" + base64Encode(item.url+"|"+item.name) + "#.m3u8#pre#");
+                urls.push(u + "?url=" + base64Encode(item.name) + "#.m3u8#pre#");
                 names.push(item.name);
             })
             return {
