@@ -624,6 +624,7 @@ var SrcParseS = {
 
                 be(Urlparses, {
                     func: function(obj, id, error, taskResult) {
+                        log(taskResult)
                         let beurl = taskResult.url;
                         if(beurl!=""&&needparse.test(beurl)&&beurl.indexOf('?')==-1){
                             beurl = "";
@@ -640,8 +641,8 @@ var SrcParseS = {
                         if (contain.test(beurl)&&!exclude.test(beurl)&&excludeurl.indexOf(beurl)==-1) {
                             sccess = sccess + 1;
                             if(sccess>=mulnum){
-                                if(printlog==1){log("线程中止，已捕获视频")};
-                                return "break";
+                                //if(printlog==1){log("线程中止，已捕获视频")};
+                                //return "break";
                             }
                         }else{
                             //if(printlog==1&&taskResult.ulist.x5==0){log(taskResult.ulist.name + '>解析失败');}
@@ -653,8 +654,8 @@ var SrcParseS = {
                         errors: beerrors
                     }
                 });
-                log(beurls)
-                log(beerrors)
+                //log(beurls)
+                //log(beerrors)
                 for(let k in beparses){
                     var parseurl = beparses[k].parse;
                     if(beerrors[k]==null&&contain.test(beurls[k])&&!exclude.test(beurls[k])&&excludeurl.indexOf(beurls[k])==-1){
