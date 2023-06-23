@@ -502,14 +502,15 @@ var SrcParseS = {
                         vipUrl: vipUrl,
                         testurl: testvideourl
                     }
-                    playUrl = task(obj);
+                    let getUrl = task(obj);
+                    playUrl = formatUrl(getUrl.url);
                 }catch(e){
                     log(parsename+">解析错误>"+e.message);
                 }
                 
-                log(parsename+">播放地址>"+playUrl.url);
+                log(parsename+">播放地址>"+playUrl);
                 //let f = cacheM3u8(playUrl.url);
-                return formatUrl(playUrl.url);
+                return playUrl;
                 /*
                 function geturl(fileid,line){
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliPublic.js');
