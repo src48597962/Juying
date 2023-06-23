@@ -509,8 +509,8 @@ var SrcParseS = {
                 }
                 
                 log(parsename+">播放地址>"+playUrl);
-                //let f = cacheM3u8(playUrl.url);
-                return playUrl + '#isVideo=true#';
+                let f = cacheM3u8(playUrl);
+                return readFile(f.split("##")[0]); //'#isVideo=true#';
                 /*
                 function geturl(fileid,line){
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliPublic.js');
