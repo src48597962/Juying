@@ -417,7 +417,7 @@ var SrcParseS = {
 
             //测试进播放用代理播放
             parsemode =4;
-            if(parsemode==4&&!parseStr){
+            if(parsemode==4){
                 let u = startProxyServer($.toString((Uparselist,vipUrl,task,testvideourl,formatUrl) => {
                     let url = MY_PARAMS.url || "";
                     /*
@@ -453,7 +453,7 @@ var SrcParseS = {
                     }
                     
                     log(parsename+">播放地址>"+playUrl);
-                    let f = cacheM3u8(playUrl);
+                    let f = cacheM3u8(playUrl, {timeout: 2000});
                     return readFile(f.split("##")[0]); //'#isVideo=true#';
                 },Uparselist,vipUrl,this.task,this.testvideourl,this.formatUrl));
                 Uparselist.forEach((item) => {
