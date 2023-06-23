@@ -922,6 +922,7 @@ var SrcParseS = {
             try{
                 eval('var JSparse = '+obj.ulist.parse)
                 rurl = JSparse(obj.vipUrl);
+                log("线程"+rurl);
             }catch(e){
                 log("解析有错误"+e.message)
             }
