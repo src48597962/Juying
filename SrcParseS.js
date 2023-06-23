@@ -922,9 +922,8 @@ var SrcParseS = {
             try{
                 eval('var JSparse = '+obj.ulist.parse)
                 rurl = JSparse(obj.vipUrl);
-                log("线程"+rurl);
             }catch(e){
-                log("解析有错误"+e.message)
+                //log("解析有错误"+e.message)
             }
             if(/^toast/.test(rurl)){
                 if(printlog==1){log(obj.ulist.name+'>提示：'+rurl.replace('toast://',''))};
