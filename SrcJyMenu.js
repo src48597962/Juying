@@ -330,7 +330,7 @@ function lookset(){
                     }
                     writeFile(recordfile, JSON.stringify(recordlist));   
                     refreshPage(false);
-                    return sm;
+                    return "toast://"+sm;
                 },recordfile,recordlist,input,lists)
             }else{
                 delete recordlist.priorparse[input];
