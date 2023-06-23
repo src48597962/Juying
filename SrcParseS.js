@@ -447,6 +447,7 @@ var SrcParseS = {
                             testurl: testvideourl
                         }
                         let getUrl = task(obj);
+                        log(getUrl);
                         playUrl = getUrl.url;
                     }catch(e){
                         log(parsename+">解析错误>"+e.message);
