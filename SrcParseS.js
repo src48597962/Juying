@@ -653,7 +653,8 @@ var SrcParseS = {
                         errors: beerrors
                     }
                 });
-                log(beparses);
+                log(beurls)
+                log(beerrors)
                 for(let k in beparses){
                     var parseurl = beparses[k].parse;
                     if(beerrors[k]==null&&contain.test(beurls[k])&&!exclude.test(beurls[k])&&excludeurl.indexOf(beurls[k])==-1){
