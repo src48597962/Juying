@@ -427,120 +427,7 @@ var SrcParseS = {
                 return {url: rurl, ulist: {type:"dn",name:'dn',parse:'dn',x5:0}}; 
             }
             //明码解析线程代码
-            var task = function(obj) {
-                if(/^function/.test(obj.ulist.parse.trim())){
-                    obj.ulist['x5'] = 0;
-                    let rurl = "";
-                    try{
-                        eval('var JSparse = '+obj.ulist.parse)
-                        rurl = JSparse(obj.vipUrl);
-                    }catch(e){
-                        //log("解析有错误")
-                    }
-                    if(/^toast/.test(rurl)){
-                        if(printlog==1){log(obj.ulist.name+'>提示：'+rurl.replace('toast://',''))};
-                        rurl = "";
-                    }else if(/^http/.test(rurl)&&obj.testurl(rurl,obj.ulist.name)==0){
-                        rurl = "";
-                    }
-                    return {url: rurl,ulist: obj.ulist}; 
-                }else{            
-                    let taskheader = {withStatusCode:true,timeout:8000};
-                    let head = obj.ulist.header||{};
-                    if(JSON.stringify(head) != "{}"){
-                        taskheader['header'] = head;
-                    }
-                    let getjson;
-                    try{
-                        getjson = JSON.parse(request(obj.ulist.parse+obj.vipUrl,taskheader));
-                    }catch(e){
-                        getjson = {};
-                        if(printlog==1){log(obj.ulist.name+'>解析地址访问失败')};
-                    }
-                    //log(getjson);
-                    if (getjson.body&&getjson.statusCode==200){
-                        //log("0");
-                        var gethtml = getjson.body;
-                        var rurl = "";
-                        var isjson = 0;
-                        try {
-                            let json =JSON.parse(gethtml);
-                            isjson = 1;
-                            rurl = json.url||json.data.url||json.data;
-                        } catch (e) {
-                            function geturl(gethtml) {
-                                let rurl = "";
-                                try {
-                                    if(gethtml.indexOf('urls = "') != -1){
-                                        rurl = gethtml.match(/urls = "(.*?)"/)[1];
-                                    }else if(gethtml.indexOf('"url":"') != -1){
-                                        rurl = gethtml.match(/"url":"(.*?)"/)[1];
-                                    }else if(gethtml.indexOf('id="video" src="') != -1){
-                                        rurl = gethtml.match(/id="video" src="(.*?)"/)[1];
-                                    }else if(gethtml.indexOf('url: "') != -1){
-                                        rurl = gethtml.match(/url: "(.*?)"/)[1];
-                                    }else{
-                                        //if(printlog==1){log('将日志提交给作者，帮助完善解析逻辑>>>'+gethtml)};
-                                    }
-                                } catch (e) {
-                                    //if(printlog==1){log('明码获取错误：'+e.message)};
-                                }
-                                return rurl;
-                            }
-                            if(/\.m3u8|\.mp4/.test(getjson.url)&&getjson.url.indexOf('=http')==-1){
-                                rurl = getjson.url;
-                            }else if(/\.m3u8|\.mp4|\.flv/.test(gethtml) && geturl(gethtml)){
-                                rurl = geturl(gethtml);
-                            }else if((MY_NAME=="海阔视界"&&getAppVersion()>=4094)||(MY_NAME=="嗅觉浏览器"&&getAppVersion()>=1359)){
-                                rurl = executeWebRule(obj.ulist.parse+obj.vipUrl, $.toString(() => {
-                                        try{
-                                            if (typeof (request) == 'undefined' || !request) {
-                                                eval(fba.getInternalJs());
-                                            };
-                                            var urls = _getUrls();
-                                            //fba.log(fy_bridge_app.getUrls());
-                                            var exclude = /\/404\.m3u8|\/xiajia\.mp4|\/余额不足\.m3u8|\.css|\.js|\.gif|\.png|\.jpg|\.jpeg|html,http|m3u88.com\/admin|\.php\?v=h|\?url=h|\&url=h|\?vid=h|%253Furl%253Dh|#amp=1|\.t-ui\.cn|ac=dm/;//设置排除地址
-                                            var contain = /\.mp4|\.m3u8|\.flv|\.avi|\.mpeg|\.wmv|\.mov|\.rmvb|\.dat|qqBFdownload|mime=video%2F|video_mp4|\.ts\?|TG@UosVod|video\/tos\/cn\/tos|m3u8\?pt=m3u8/;//设置符合条件的正确地址
-                                            for (var i in urls) {
-                                                if (contain.test(urls[i])&&!exclude.test(urls[i])) {
-                                                    //fba.log("exeweb解析到>"+urls[i]);
-                                                    return urls[i];
-                                                }
-                                            }
-                                        }catch(e){
-                                            //fba.log(e.message);
-                                        }
-                                    }), {
-                                        blockRules: ['.m4a','.mp3','.gif','.jpg','.jpeg','.png','.ico','hm.baidu.com','/ads/*.js','/klad/*.php','layer.css'],
-                                        jsLoadingInject: true,
-                                        timeout: 8000
-                                    }
-                                );
-                            }
-                        }
-                        var x5 = 0;
-                        if(!rurl){
-                            if(!/404 /.test(gethtml)&&obj.ulist.parse.indexOf('key=')==-1&&isjson==0){
-                                if(x5jxlist.length<5){
-                                    x5jxlist.push(obj.ulist.parse);
-                                    if(printlog==1){log(obj.ulist.name + '>加入x5嗅探列表');}
-                                    x5namelist.push(obj.ulist.name);
-                                }
-                                x5 = 1;
-                            }
-                        }else{
-                            if(obj.testurl(rurl,obj.ulist.name)==0){
-                                rurl = "";
-                            }
-                        }
-                        obj.ulist['x5'] = x5;
-                        return {url: rurl,ulist: obj.ulist}; 
-                    }else{
-                        obj.ulist['x5'] = 0;
-                        return {url: "",ulist: obj.ulist}; 
-                    }
-                }
-            };
+            var task = this.task;
 
             var iscalldn = 0;//是否调用断插标识
             var recordname = []; //解析成功的作为优先解析临时组
@@ -976,6 +863,120 @@ var SrcParseS = {
         } catch(e) {
             log(name+'>错误：探测异常未拦截，可能是失败的>'+e.message);
             return 1;
+        }
+    },
+    task: function(obj) {
+        if(/^function/.test(obj.ulist.parse.trim())){
+            obj.ulist['x5'] = 0;
+            let rurl = "";
+            try{
+                eval('var JSparse = '+obj.ulist.parse)
+                rurl = JSparse(obj.vipUrl);
+            }catch(e){
+                //log("解析有错误")
+            }
+            if(/^toast/.test(rurl)){
+                if(printlog==1){log(obj.ulist.name+'>提示：'+rurl.replace('toast://',''))};
+                rurl = "";
+            }else if(/^http/.test(rurl)&&obj.testurl(rurl,obj.ulist.name)==0){
+                rurl = "";
+            }
+            return {url: rurl,ulist: obj.ulist}; 
+        }else{            
+            let taskheader = {withStatusCode:true,timeout:8000};
+            let head = obj.ulist.header||{};
+            if(JSON.stringify(head) != "{}"){
+                taskheader['header'] = head;
+            }
+            let getjson;
+            try{
+                getjson = JSON.parse(request(obj.ulist.parse+obj.vipUrl,taskheader));
+            }catch(e){
+                getjson = {};
+                if(printlog==1){log(obj.ulist.name+'>解析地址访问失败')};
+            }
+            //log(getjson);
+            if (getjson.body&&getjson.statusCode==200){
+                //log("0");
+                var gethtml = getjson.body;
+                var rurl = "";
+                var isjson = 0;
+                try {
+                    let json =JSON.parse(gethtml);
+                    isjson = 1;
+                    rurl = json.url||json.data.url||json.data;
+                } catch (e) {
+                    function geturl(gethtml) {
+                        let rurl = "";
+                        try {
+                            if(gethtml.indexOf('urls = "') != -1){
+                                rurl = gethtml.match(/urls = "(.*?)"/)[1];
+                            }else if(gethtml.indexOf('"url":"') != -1){
+                                rurl = gethtml.match(/"url":"(.*?)"/)[1];
+                            }else if(gethtml.indexOf('id="video" src="') != -1){
+                                rurl = gethtml.match(/id="video" src="(.*?)"/)[1];
+                            }else if(gethtml.indexOf('url: "') != -1){
+                                rurl = gethtml.match(/url: "(.*?)"/)[1];
+                            }else{
+                                //if(printlog==1){log('将日志提交给作者，帮助完善解析逻辑>>>'+gethtml)};
+                            }
+                        } catch (e) {
+                            //if(printlog==1){log('明码获取错误：'+e.message)};
+                        }
+                        return rurl;
+                    }
+                    if(/\.m3u8|\.mp4/.test(getjson.url)&&getjson.url.indexOf('=http')==-1){
+                        rurl = getjson.url;
+                    }else if(/\.m3u8|\.mp4|\.flv/.test(gethtml) && geturl(gethtml)){
+                        rurl = geturl(gethtml);
+                    }else if((MY_NAME=="海阔视界"&&getAppVersion()>=4094)||(MY_NAME=="嗅觉浏览器"&&getAppVersion()>=1359)){
+                        rurl = executeWebRule(obj.ulist.parse+obj.vipUrl, $.toString(() => {
+                                try{
+                                    if (typeof (request) == 'undefined' || !request) {
+                                        eval(fba.getInternalJs());
+                                    };
+                                    var urls = _getUrls();
+                                    //fba.log(fy_bridge_app.getUrls());
+                                    var exclude = /\/404\.m3u8|\/xiajia\.mp4|\/余额不足\.m3u8|\.css|\.js|\.gif|\.png|\.jpg|\.jpeg|html,http|m3u88.com\/admin|\.php\?v=h|\?url=h|\&url=h|\?vid=h|%253Furl%253Dh|#amp=1|\.t-ui\.cn|ac=dm/;//设置排除地址
+                                    var contain = /\.mp4|\.m3u8|\.flv|\.avi|\.mpeg|\.wmv|\.mov|\.rmvb|\.dat|qqBFdownload|mime=video%2F|video_mp4|\.ts\?|TG@UosVod|video\/tos\/cn\/tos|m3u8\?pt=m3u8/;//设置符合条件的正确地址
+                                    for (var i in urls) {
+                                        if (contain.test(urls[i])&&!exclude.test(urls[i])) {
+                                            //fba.log("exeweb解析到>"+urls[i]);
+                                            return urls[i];
+                                        }
+                                    }
+                                }catch(e){
+                                    //fba.log(e.message);
+                                }
+                            }), {
+                                blockRules: ['.m4a','.mp3','.gif','.jpg','.jpeg','.png','.ico','hm.baidu.com','/ads/*.js','/klad/*.php','layer.css'],
+                                jsLoadingInject: true,
+                                timeout: 8000
+                            }
+                        );
+                    }
+                }
+                var x5 = 0;
+                if(!rurl){
+                    if(!/404 /.test(gethtml)&&obj.ulist.parse.indexOf('key=')==-1&&isjson==0){
+                        if(x5jxlist.length<5){
+                            x5jxlist.push(obj.ulist.parse);
+                            if(printlog==1){log(obj.ulist.name + '>加入x5嗅探列表');}
+                            x5namelist.push(obj.ulist.name);
+                        }
+                        x5 = 1;
+                    }
+                }else{
+                    if(obj.testurl(rurl,obj.ulist.name)==0){
+                        rurl = "";
+                    }
+                }
+                obj.ulist['x5'] = x5;
+                return {url: rurl,ulist: obj.ulist}; 
+            }else{
+                obj.ulist['x5'] = 0;
+                return {url: "",ulist: obj.ulist}; 
+            }
         }
     }
 }
