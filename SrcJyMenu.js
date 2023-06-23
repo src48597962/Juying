@@ -276,41 +276,52 @@ function lookset(){
             var recordparse=fetch(recordfile);
             eval("var recordlist=" + recordparse+ ";");
             var priorparse = recordlist.priorparse[input];
-            delete recordlist.priorparse[input];
             
-            var filepath = "hiker://files/rules/Src/Juying/myjiexi.json";
-            var datafile = fetch(filepath);
-            if(datafile != ""){
-                eval("var datalist=" + datafile+ ";");
-            }else{
-                var datalist = [];
-            }
             let list = priorparse.split(';;');
-            for(let i=0;i<list.length;i++){     
-                if(datalist.some(item => item.name == list[i])){
-                    //私有解析在屏蔽优先时，仅排除片源
-                    for(var j=0;j<datalist.length;j++){
-                        if(datalist[j].name==list[i]&&datalist[j].stopfrom.indexOf(input)==-1){
-                            datalist[j].stopfrom[datalist[j].stopfrom.length] = input;
-                            break;
-                        }
-                    }
-                    writeFile(filepath, JSON.stringify(datalist));
-                    var sm = '私有解析('+list[i]+')>排除片源>'+input;
-                    log('已屏蔽'+input+' 优先解析：'+sm);
-                }else if(/^http/.test(list[i])){
-                    //app自带的解析在屏蔽优先时，直接加入黑名单
-                    recordlist['excludeparse'] = recordlist['excludeparse']||[];
-                    if(recordlist['excludeparse'].indexOf(list[i])==-1){
-                        recordlist['excludeparse'].push(list[i]);
-                    }
-                    var sm = list[i]+'>接口自带解析加入全局黑名单';
-                    log('已屏蔽'+input+' 优先解析：'+sm);
+            let lists = [];
+            for(let i=0;i<list.length;i++){    
+                if(list[i]){
+                    lists.push(list[i]);
                 }
             }
-            writeFile(recordfile, JSON.stringify(recordlist));   
-            refreshPage(false);
-            return 'toast://已屏蔽'+input+'优先解析';
+            if(lists.length>0){
+                return $(lists,2,"选择需屏蔽的解析").select((recordfile,recordlist,from)=>{
+                    var filepath = "hiker://files/rules/Src/Juying/myjiexi.json";
+                    var datafile = fetch(filepath);
+                    if(datafile != ""){
+                        eval("var datalist=" + datafile+ ";");
+                    }else{
+                        var datalist = [];
+                    }
+                    if(datalist.some(item => item.name == input)){
+                        //私有解析在屏蔽优先时，仅排除片源
+                        for(var j=0;j<datalist.length;j++){
+                            if(datalist[j].name==input&&datalist[j].stopfrom.indexOf(from)==-1){
+                                datalist[j].stopfrom[datalist[j].stopfrom.length] = from;
+                                break;
+                            }
+                        }
+                        writeFile(filepath, JSON.stringify(datalist));
+                        var sm = '私有解析('+input+')>排除片源>'+from;
+                        log('已屏蔽'+from+' 优先解析：'+sm);
+                    }else if(/^http/.test(input)){
+                        //app自带的解析在屏蔽优先时，直接加入黑名单
+                        recordlist['excludeparse'] = recordlist['excludeparse']||[];
+                        if(recordlist['excludeparse'].indexOf(input)==-1){
+                            recordlist['excludeparse'].push(input);
+                        }
+                        var sm = input+'>接口自带解析加入全局黑名单';
+                        log('已屏蔽'+input+' 优先解析：'+sm);
+                    }
+                    writeFile(recordfile, JSON.stringify(recordlist));   
+                    refreshPage(false);
+                    return 'toast://已屏蔽'+from+'优先解析';
+                },recordfile,recordlist,input)
+            }else{
+                delete recordlist.priorparse[input];
+                refreshPage(false);
+                return "toast://已清空优先";
+            }
         }),
         col_type: "text_2"
     });
