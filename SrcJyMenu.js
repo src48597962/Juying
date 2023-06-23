@@ -315,7 +315,7 @@ function lookset(){
                     }
                     writeFile(recordfile, JSON.stringify(recordlist));   
                     refreshPage(false);
-                    return 'toast://已屏蔽'+from+'优先解析';
+                    return sm;
                 },recordfile,recordlist,input)
             }else{
                 delete recordlist.priorparse[input];
