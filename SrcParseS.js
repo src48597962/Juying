@@ -371,30 +371,22 @@ var SrcParseS = {
                                 }
                             }
                             arr["sort"] = -1;
-                            if((MY_NAME=="海阔视界"&&getAppVersion()>=4094)||(MY_NAME=="嗅觉浏览器"&&getAppVersion()>=1359)){
-                                //新版支持直接在js环境获取web嗅探结果
+                            if(parsemode==1 || (parsemode==1&&((MY_NAME=="海阔视界"&&getAppVersion()>=4094)||(MY_NAME=="嗅觉浏览器"&&getAppVersion()>=1359)))){
                                 Uparselist.unshift(arr);
-                            }else{
-                                if(myJXlist[j].web==1){
-                                    Wparselist.unshift(arr);
-                                }else if(parsemode==1){
-                                    Uparselist.unshift(arr);
-                                }
+                                //新版支持直接在js环境获取web嗅探结果
+                            }else if(myJXlist[j].web==1){
+                                Wparselist.unshift(arr);
                             }
                             myjxnum = myjxnum + 1;
                         }else{
                             if(myJXlist[j].stopfrom.indexOf(from)==-1&&excludeparse.indexOf(myJXlist[j].parse)==-1&&!Uparselist.some(item => item.parse ==myJXlist[j].parse)){
                                 let sort = myJXlist[j]['sort']||0;
                                 arr["sort"] = sort;
-                                if((MY_NAME=="海阔视界"&&getAppVersion()>=4094)||(MY_NAME=="嗅觉浏览器"&&getAppVersion()>=1359)){
-                                    //新版支持直接在js环境获取web嗅探结果
+                                if(parsemode==1 || (parsemode==1&&((MY_NAME=="海阔视界"&&getAppVersion()>=4094)||(MY_NAME=="嗅觉浏览器"&&getAppVersion()>=1359)))){
                                     Uparselist.push(arr);
-                                }else{
-                                    if(myJXlist[j].web==1){
-                                        Wparselist.push(arr);
-                                    }else if(parsemode==1){
-                                        Uparselist.push(arr);
-                                    }
+                                    //新版支持直接在js环境获取web嗅探结果
+                                }else if(myJXlist[j].web==1){
+                                    Wparselist.push(arr);
                                 }
                                 myjxnum = myjxnum + 1;
                                 //非强制优先、非排除片源、非屏蔽优先调用
