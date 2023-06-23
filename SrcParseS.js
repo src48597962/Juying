@@ -488,8 +488,9 @@ var SrcParseS = {
                     });
                 }
                 */
-                log("我在代理" + url);
+                
                 let parsename = MY_PARAMS.name.join("");
+                log("我在代理解析>" + parsename);
                 let playUrl = "";
                 try{
                     //require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
@@ -506,7 +507,7 @@ var SrcParseS = {
                     log(parsename+">解析错误>"+e.message);
                 }
                 
-                log("解析到播放地址>"+playUrl.url);
+                log(parsename+">播放地址>"+playUrl.url);
                 let f = cacheM3u8(playUrl.url);
                 return readFile(f.split("##")[0]);
                 /*
