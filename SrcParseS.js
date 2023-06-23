@@ -447,7 +447,6 @@ var SrcParseS = {
                             testurl: testvideourl
                         }
                         let getUrl = task(obj);
-                        log(getUrl);
                         playUrl = getUrl.url;
                     }catch(e){
                         log(parsename+">解析错误>"+e.message);
@@ -924,7 +923,7 @@ var SrcParseS = {
                 eval('var JSparse = '+obj.ulist.parse)
                 rurl = JSparse(obj.vipUrl);
             }catch(e){
-                //log("解析有错误")
+                log("解析有错误"+e.message)
             }
             if(/^toast/.test(rurl)){
                 if(printlog==1){log(obj.ulist.name+'>提示：'+rurl.replace('toast://',''))};
