@@ -623,6 +623,7 @@ var SrcParseS = {
                 be(Urlparses, {
                     func: function(obj, id, error, taskResult) {
                         //log(taskResult)
+                        log("11")
                         let beurl = taskResult.url;
                         if(beurl!=""&&needparse.test(beurl)&&beurl.indexOf('?')==-1){
                             beurl = "";
@@ -652,7 +653,6 @@ var SrcParseS = {
                         errors: beerrors
                     }
                 });
-                log("11")
 
                 for(let k in beparses){
                     var parseurl = beparses[k].parse;
