@@ -285,7 +285,7 @@ function lookset(){
                 }
             }
             if(lists.length>0){
-                return $(lists,2,"选择需屏蔽的解析").select((recordfile,recordlist,from)=>{
+                return $(lists,2,"选择需屏蔽的解析").select((recordfile,recordlist,from,lists)=>{
                     var filepath = "hiker://files/rules/Src/Juying/myjiexi.json";
                     var datafile = fetch(filepath);
                     if(datafile != ""){
@@ -313,10 +313,25 @@ function lookset(){
                         var sm = input+'>接口自带解析加入全局黑名单';
                         log('已屏蔽'+input+' 优先解析：'+sm);
                     }
+                    let lists = lists || [];
+                    function removeByValue(arr, val) {
+                        for(var i = 0; i < arr.length; i++) {
+                            if(arr[i] == val) {
+                            arr.splice(i, 1);
+                            break;
+                            }
+                        }
+                    }
+                    removeByValue(lists,input);
+                    if(lists.length>0){
+                        recordlist.priorparse[from] = lists.join(";;");
+                    }else{
+                        delete recordlist.priorparse[from];
+                    }
                     writeFile(recordfile, JSON.stringify(recordlist));   
                     refreshPage(false);
                     return sm;
-                },recordfile,recordlist,input)
+                },recordfile,recordlist,input,lists)
             }else{
                 delete recordlist.priorparse[input];
                 refreshPage(false);
