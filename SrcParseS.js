@@ -432,7 +432,10 @@ var SrcParseS = {
                         });
                     }
                     */
-                    
+                    require('http://124.221.241.174:13000/src48597962/hkbak/raw/branch/main/SrcGetParse.js');
+                    log($.type(bpParse))
+                    let a = bpParse('https://m.iqiyi.com/v_sa04mvdzk8.html','m8');
+                    log(a)
                     let parsename = MY_PARAMS.name.join("");
                     log("我在代理解析>" + parsename);
                     let playUrl = "";
