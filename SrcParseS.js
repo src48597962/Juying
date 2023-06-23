@@ -475,7 +475,6 @@ var SrcParseS = {
             }
             //测试进播放用代理播放
             let u = startProxyServer($.toString((Uparselist,vipUrl,task,testvideourl) => {
-                log(MY_PARAMS);
                 let url = MY_PARAMS.url || "";
                 /*
                 if (url.includes(".ts")) {
@@ -507,8 +506,8 @@ var SrcParseS = {
                     log(parsename+">解析错误>"+e.message);
                 }
                 
-                log("解析到播放地址>"+playUrl);
-                let f = cacheM3u8(playUrl);
+                log("解析到播放地址>"+playUrl.url);
+                let f = cacheM3u8(playUrl.url);
                 return readFile(f.split("##")[0]);
                 /*
                 function geturl(fileid,line){
