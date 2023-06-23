@@ -474,8 +474,9 @@ var SrcParseS = {
                 }
             }
             //测试进播放用代理播放
-            let u = startProxyServer($.toString((Uparselist,vipUrl) => {
-                let url = base64Decode(MY_PARAMS.url);
+            let u = startProxyServer($.toString((Uparselist,vipUrl,task,testvideourl) => {
+                log(MY_PARAMS);
+                let url = MY_PARAMS.url;
                 /*
                 if (url.includes(".ts")) {
                     log("代理ts：" + url);
@@ -490,16 +491,22 @@ var SrcParseS = {
                 */
                 log("我在代理" + url);
                 let parsename = url;
-                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
-                let ulist = Uparselist.filter(item => {
-                    return item.name==parsename;
-                })
-                let obj = {
-                    ulist: ulist,
-                    vipUrl: vipUrl,
-                    testurl: SrcParseS.testvideourl
+                let playUrl = "";
+                try{
+                    //require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
+                    let ulist = Uparselist.filter(item => {
+                        return item.name==parsename;
+                    })
+                    let obj = {
+                        ulist: ulist,
+                        vipUrl: vipUrl,
+                        testurl: testvideourl
+                    }
+                    playUrl = task(obj);
+                }catch(e){
+                    log(parsename+">解析错误>"+e.message);
                 }
-                let playUrl = SrcParseS.task(obj);
+                
                 log("解析到播放地址>"+playUrl);
                 let f = cacheM3u8(playUrl);
                 return readFile(f.split("##")[0]);
@@ -576,9 +583,9 @@ var SrcParseS = {
                     return ff;
                 }
                 */
-            },Uparselist,vipUrl));
+            },Uparselist,vipUrl,this.task,this.testvideourl));
             Uparselist.forEach((item) => {
-                urls.push(u + "?url=" + base64Encode(item.name) + "#.m3u8#pre#");
+                urls.push(u + "?url=" + item.name + "&url2="+vipUrl+"#.m3u8#pre#");
                 names.push(item.name);
             })
             return {
