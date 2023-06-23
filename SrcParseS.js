@@ -431,16 +431,14 @@ var SrcParseS = {
                 if(/^function/.test(obj.ulist.parse.trim())){
                     obj.ulist['x5'] = 0;
                     let rurl = "";
-                    try{
-                        eval('var JSparse = '+obj.ulist.parse)
-                        rurl = JSparse(obj.vipUrl);
-                        if(/^toast/.test(rurl)){
-                            if(printlog==1){log(obj.ulist.name+'>提示：'+rurl.replace('toast://',''))};
-                            rurl = "";
-                        }else if(/^http/.test(rurl)&&obj.testurl(rurl,obj.ulist.name)==0){
-                            rurl = "";
-                        }
-                    }catch(e){ }
+                    eval('var JSparse = '+obj.ulist.parse)
+                    rurl = JSparse(obj.vipUrl);
+                    if(/^toast/.test(rurl)){
+                        if(printlog==1){log(obj.ulist.name+'>提示：'+rurl.replace('toast://',''))};
+                        rurl = "";
+                    }else if(/^http/.test(rurl)&&obj.testurl(rurl,obj.ulist.name)==0){
+                        rurl = "";
+                    }
                     return {url: rurl,ulist: obj.ulist}; 
                 }else{            
                     let taskheader = {withStatusCode:true,timeout:8000};
@@ -624,7 +622,7 @@ var SrcParseS = {
 
                 be(Urlparses, {
                     func: function(obj, id, error, taskResult) {
-                        log(taskResult)
+                        //log(taskResult)
                         let beurl = taskResult.url;
                         if(beurl!=""&&needparse.test(beurl)&&beurl.indexOf('?')==-1){
                             beurl = "";
