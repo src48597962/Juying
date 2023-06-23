@@ -1319,6 +1319,7 @@ function jiexi(lx,data) {
             setHomeResult(d);
         }
         let priorfrom = getMyVar('priorfrom', data&&data.priorfrom?data.priorfrom:"");
+        putMyVar('priorfrom',priorfrom);
         d.push({
             title:'优先片源：' + priorfrom,
             col_type: 'text_1',
@@ -1327,6 +1328,7 @@ function jiexi(lx,data) {
             },selectfrom,'prior',priorfrom)
         });
         let stopfrom = getMyVar('stopfrom', lx=="update"?data.stopfrom:"");
+        putMyVar('stopfrom',stopfrom);
         d.push({
             title:'排除片源：' + stopfrom,
             col_type: 'text_1',
