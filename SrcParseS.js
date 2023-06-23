@@ -416,9 +416,9 @@ var SrcParseS = {
             //var appzdchange = 0;//app自带解析是否加入黑名单
 
             //测试进播放用代理播放
-            //parsemode =4;
+            parsemode =4;
             if(parsemode==4){
-                let u = startProxyServer($.toString((Uparselist,vipUrl,task,testvideourl,formatUrl) => {
+                let u = startProxyServer($.toString((Uparselist,vipUrl,task,formatUrl) => {
                     let url = MY_PARAMS.url || "";
                     /*
                     if (url.includes(".ts")) {
@@ -444,7 +444,7 @@ var SrcParseS = {
                         let obj = {
                             ulist: ulist,
                             vipUrl: vipUrl,
-                            testurl: testvideourl
+                            parsemode: 4
                         }
                         let getUrl = task(obj);
                         playUrl = getUrl.url;
@@ -454,7 +454,7 @@ var SrcParseS = {
                     //log(parsename+">播放地址>"+playUrl);
                     let f = cacheM3u8(playUrl, {timeout: 2000});
                     return readFile(f.split("##")[0]); //'#isVideo=true#';
-                },Uparselist,vipUrl,this.task,this.testvideourl,this.formatUrl));
+                },Uparselist,vipUrl,this.task,this.formatUrl));
                 Uparselist.forEach((item) => {
                     urls.push(u + "?name=" + item.name + "#.m3u8#pre#");
                     names.push(item.name);
@@ -554,7 +554,8 @@ var SrcParseS = {
                             param: {
                                 ulist: list,
                                 vipUrl: vipUrl,
-                                testurl: this.testvideourl
+                                testurl: this.testvideourl,
+                                parsemode: 1
                             },
                             id: list.parse
                         }
@@ -928,7 +929,7 @@ var SrcParseS = {
             if(/^toast/.test(rurl)){
                 if(printlog==1){log(obj.ulist.name+'>提示：'+rurl.replace('toast://',''))};
                 rurl = "";
-            }else if(/^http/.test(rurl)&&obj.testurl(rurl,obj.ulist.name)==0){
+            }else if(obj.parsemode==1 && /^http/.test(rurl) && obj.testurl(rurl,obj.ulist.name)==0){
                 rurl = "";
             }
             return {url: rurl,ulist: obj.ulist}; 
@@ -1008,18 +1009,20 @@ var SrcParseS = {
                     }
                 }
                 var x5 = 0;
-                if(!rurl){
-                    if(!/404 /.test(gethtml)&&obj.ulist.parse.indexOf('key=')==-1&&isjson==0){
-                        if(x5jxlist.length<5){
-                            x5jxlist.push(obj.ulist.parse);
-                            if(printlog==1){log(obj.ulist.name + '>加入x5嗅探列表');}
-                            x5namelist.push(obj.ulist.name);
+                if(obj.parsemode==1){//智能解析模式下
+                    if(!rurl){
+                        if(!/404 /.test(gethtml)&&obj.ulist.parse.indexOf('key=')==-1&&isjson==0){
+                            if(x5jxlist.length<5){
+                                x5jxlist.push(obj.ulist.parse);
+                                if(printlog==1){log(obj.ulist.name + '>加入x5嗅探列表');}
+                                x5namelist.push(obj.ulist.name);
+                            }
+                            x5 = 1;
                         }
-                        x5 = 1;
-                    }
-                }else{
-                    if(obj.testurl(rurl,obj.ulist.name)==0){
-                        rurl = "";
+                    }else{
+                        if(obj.testurl(rurl,obj.ulist.name)==0){
+                            rurl = "";
+                        }
                     }
                 }
                 obj.ulist['x5'] = x5;
