@@ -464,9 +464,9 @@ var SrcParseS = {
                         var rurl = "";
                         var isjson = 0;
                         try {
-                            log($.type(JSON.parse(gethtml)));
-                            rurl = JSON.parse(gethtml).url||JSON.parse(gethtml).data.url||JSON.parse(gethtml).data;
+                            let json =JSON.parse(gethtml);
                             isjson = 1;
+                            rurl = json.url||json.data.url||json.data;
                         } catch (e) {
                             function geturl(gethtml) {
                                 let rurl = "";
