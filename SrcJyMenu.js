@@ -373,8 +373,8 @@ function lookset(){
         var isdn = 0;
     };
     d.push({
-        title: '当前解析模式：' + (parsemode==1?'聚影智能':parsemode==2?'强制断插':'强制嗅探'),
-        desc: parsemode==1?'上次优先>接口自带+私有解析'+(haveDN&&isdn?'+断插解析':''):parsemode==2?'走断插(含魔断)或帅助手设置的解析逻辑':'接口自带和私有解析中的直链进行聚合嗅探',
+        title: '当前解析模式：' + (parsemode==1?'聚影智能':parsemode==2?'强制断插':parsemode==3?'强制嗅探':'手动模式'),
+        desc: parsemode==1?'上次优先>接口自带+私有解析'+(haveDN&&isdn?'+断插解析':''):parsemode==2?'走断插(含魔断)或帅助手设置的解析逻辑':parsemode==3?'接口自带和私有解析中的直链进行聚合嗅探':'先进播放器，再通过线路选择解析',
         url: 'hiker://empty',
         col_type: "text_center_1"
     });
@@ -467,6 +467,16 @@ function lookset(){
                 writeFile(cfgfile, JSON.stringify(JYconfig));
                 refreshPage(false);
                 return 'toast://嗅探内核：x5';
+            }, JYconfig, cfgfile),
+        col_type: "text_3"
+    });
+    d.push({
+        title: (parsemode==4?getide(1):getide(0))+'手动切换',
+        url: $('#noLoading#').lazyRule((JYconfig,cfgfile) => {
+                JYconfig['parsemode'] = 4;
+                writeFile(cfgfile, JSON.stringify(JYconfig));
+                refreshPage(false);
+                return 'toast://解析模式：手动切换';
             }, JYconfig, cfgfile),
         col_type: "text_3"
     });
