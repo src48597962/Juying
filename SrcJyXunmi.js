@@ -1524,6 +1524,7 @@ function xunmierji(type,ua) {
                     id: playurl,
                     jsLoadingInject: true,
                     blockRules: ['.m4a', '.mp3', '.gif', '.jpeg', '.jpg', '.ico', '.png', 'hm.baidu.com', '/ads/*.js', 'cnzz.com'],
+                    videoExcludeRule: ['m3u8.js'],
                     cls: "loadlist"
                 }
                 
