@@ -62,6 +62,9 @@ if (alitoken) {
     userinfo = JSON.parse(request('https://auth.aliyundrive.com/v2/account/token', { headers: headers, body: { "refresh_token": alitoken, "grant_type": "refresh_token" }, method: 'POST', timeout: 3000 }));
     storage0.putMyVar('aliuserinfo', userinfo);
     putMyVar('userinfoChecktime', nowtime + 'time');
+    alistconfig.alitoken = userinfo.refresh_token;
+    alistData.config = alistconfig;
+    writeFile(alistfile, JSON.stringify(alistData));
   }
 }
 
