@@ -416,28 +416,12 @@ var SrcParseS = {
             //var appzdchange = 0;//app自带解析是否加入黑名单
 
             //测试进播放用代理播放
-            parsemode =4;
             if(parsemode==4){
                 let u = startProxyServer($.toString((Uparselist,vipUrl,task,formatUrl) => {
-                    let url = MY_PARAMS.url || "";
-                    /*
-                    if (url.includes(".ts")) {
-                        log("代理ts：" + url);
-                        //此时可以根据实际逻辑得到真实有效的ts地址
-                        return JSON.stringify({
-                            statusCode: 302,
-                            headers: {
-                                //"Location": "https://v8.dious.cc" + url
-                            }
-                        });
-                    }
-                    */
-
                     let parsename = MY_PARAMS.name.join("");
                     log("我在代理解析>" + parsename);
                     let playUrl = "";
                     try{
-                        //require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
                         let ulist = Uparselist.filter(item => {
                             return item.name==parsename;
                         })[0];
@@ -454,6 +438,14 @@ var SrcParseS = {
                     //log(parsename+">播放地址>"+playUrl);
                     let f = cacheM3u8(playUrl, {timeout: 2000});
                     return readFile(f.split("##")[0]); //'#isVideo=true#';
+                    /*
+                    return JSON.stringify({
+                        statusCode: 302,
+                        headers: {
+                            "Location": url
+                        }
+                    });
+                    */
                 },Uparselist,vipUrl,this.task,this.formatUrl));
                 Uparselist.forEach((item) => {
                     urls.push(u + "?name=" + item.name + "#.m3u8#pre#");
