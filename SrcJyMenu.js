@@ -480,46 +480,47 @@ function lookset(){
             }, JYconfig, cfgfile),
         col_type: "text_3"
     });
+    if(parsemode!=4){
     if((MY_NAME=="海阔视界"&&getAppVersion()>=3369)||(MY_NAME=="嗅觉浏览器"&&getAppVersion()>=798)){
-        JYconfig['superweb'] = JYconfig.superweb==0?0:1;
+            JYconfig['superweb'] = JYconfig.superweb==0?0:1;
+            d.push({
+                col_type: "line"
+            });
+            d.push({
+                title:  (JYconfig.superweb==1?getide(1):getide(0)) + '播放器超级嗅探：' + (JYconfig.superweb==1?'开启':'关闭'),
+                desc: JYconfig.superweb==1?'无法在选集页下载，无法预加载，但是可以多线路':'普通模式先嗅探到播放地址再进播放器',
+                url: $('#noLoading#').lazyRule((JYconfig,cfgfile) => {
+                    if(JYconfig['superweb'] == 1){
+                        JYconfig['superweb'] = 0;
+                    }else{
+                        JYconfig['superweb'] = 1;
+                    }
+                    putMyVar('superweb',JYconfig['superweb']);
+                    writeFile(cfgfile, JSON.stringify(JYconfig));
+                    refreshPage(false);
+                    return 'toast://切换成功';
+                }, JYconfig, cfgfile),
+                col_type: "text_center_1"
+            });
+        }
         d.push({
             col_type: "line"
         });
         d.push({
-            title:  (JYconfig.superweb==1?getide(1):getide(0)) + '播放器超级嗅探：' + (JYconfig.superweb==1?'开启':'关闭'),
-            desc: JYconfig.superweb==1?'无法在选集页下载，无法预加载，但是可以多线路':'普通模式先嗅探到播放地址再进播放器',
-            url: $('#noLoading#').lazyRule((JYconfig,cfgfile) => {
-                if(JYconfig['superweb'] == 1){
-                    JYconfig['superweb'] = 0;
+            title: (getItem('dmRoute', '0')=="1"?getide(1):getide(0)) + 'dm盒子弹幕：' + (getItem('dmRoute', '0')=="1"?'开启':'关闭'),
+            desc: '1.仅对官链有效，2.拥有dm盒子小程序-版本29+',
+            url: $('#noLoading#').lazyRule(() => {
+                if(getItem('dmRoute', '0')=="1"){
+                    setItem('dmRoute', '0');
                 }else{
-                    JYconfig['superweb'] = 1;
+                    setItem('dmRoute', '1');
                 }
-                putMyVar('superweb',JYconfig['superweb']);
-                writeFile(cfgfile, JSON.stringify(JYconfig));
                 refreshPage(false);
                 return 'toast://切换成功';
-            }, JYconfig, cfgfile),
+            }),
             col_type: "text_center_1"
         });
     }
-    d.push({
-        col_type: "line"
-    });
-    d.push({
-        title: (getItem('dmRoute', '0')=="1"?getide(1):getide(0)) + 'dm盒子弹幕：' + (getItem('dmRoute', '0')=="1"?'开启':'关闭'),
-        desc: '1.仅对官链有效，2.拥有dm盒子小程序-版本29+',
-        url: $('#noLoading#').lazyRule(() => {
-            if(getItem('dmRoute', '0')=="1"){
-                setItem('dmRoute', '0');
-            }else{
-                setItem('dmRoute', '1');
-            }
-            refreshPage(false);
-            return 'toast://切换成功';
-        }),
-        col_type: "text_center_1"
-    });
-
     d.push({
         col_type: "line_blank"
     });
