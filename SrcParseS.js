@@ -320,7 +320,7 @@ var SrcParseS = {
                 let arr = {type:'test',name:parseStr.name,parse:parseStr.parse,sort:0};
                 if(parseStr.header){arr['header'] = parseStr.header}
                 Uparselist.push(arr);
-            }else if(parsemode==1||parsemode==3){
+            }else if(parsemode==1||parsemode==3||parsemode==4){
                 if(parsemode==1){
                     //读取app自带的解析，将未屏蔽的入备选
                     var appParses = getMyVar('parse_api', '');
@@ -371,7 +371,7 @@ var SrcParseS = {
                                 }
                             }
                             arr["sort"] = -1;
-                            if(parsemode==1 || (parsemode==1&&((MY_NAME=="海阔视界"&&getAppVersion()>=4094)||(MY_NAME=="嗅觉浏览器"&&getAppVersion()>=1359)))){
+                            if(parsemode==1 || (parsemode!=3&&((MY_NAME=="海阔视界"&&getAppVersion()>=4094)||(MY_NAME=="嗅觉浏览器"&&getAppVersion()>=1359)))){
                                 Uparselist.unshift(arr);
                                 //新版支持直接在js环境获取web嗅探结果
                             }else if(myJXlist[j].web==1){
@@ -382,7 +382,7 @@ var SrcParseS = {
                             if(myJXlist[j].stopfrom.indexOf(from)==-1&&excludeparse.indexOf(myJXlist[j].parse)==-1&&!Uparselist.some(item => item.parse ==myJXlist[j].parse)){
                                 let sort = myJXlist[j]['sort']||0;
                                 arr["sort"] = sort;
-                                if(parsemode==1 || (parsemode==1&&((MY_NAME=="海阔视界"&&getAppVersion()>=4094)||(MY_NAME=="嗅觉浏览器"&&getAppVersion()>=1359)))){
+                                if(parsemode==1 || (parsemode!=3&&((MY_NAME=="海阔视界"&&getAppVersion()>=4094)||(MY_NAME=="嗅觉浏览器"&&getAppVersion()>=1359)))){
                                     Uparselist.push(arr);
                                     //新版支持直接在js环境获取web嗅探结果
                                 }else if(myJXlist[j].web==1){
