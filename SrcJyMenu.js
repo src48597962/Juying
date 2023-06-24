@@ -374,7 +374,7 @@ function lookset(){
     };
     d.push({
         title: '当前解析模式：' + (parsemode==1?'聚影智能':parsemode==2?'强制断插':parsemode==3?'强制嗅探':'手动模式'),
-        desc: parsemode==1?'上次优先>接口自带+私有解析'+(haveDN&&isdn?'+断插解析':''):parsemode==2?'走断插(含魔断)或帅助手设置的解析逻辑':parsemode==3?'接口自带和私有解析中的直链进行聚合嗅探':'先进播放器，再通过线路选择解析',
+        desc: parsemode==1?'上次优先>接口自带+私有解析'+(haveDN&&isdn?'+断插解析':''):parsemode==2?'走断插(含魔断)或帅助手设置的解析逻辑':parsemode==3?'接口自带和私有解析中的直链进行聚合嗅探':'先进播放器，再通过线路选择解析，无法在选集页下载，无法预加载',
         url: 'hiker://empty',
         col_type: "text_center_1"
     });
@@ -470,18 +470,20 @@ function lookset(){
             }, JYconfig, cfgfile),
         col_type: "text_3"
     });
-    d.push({
-        title: (parsemode==4?getide(1):getide(0))+'手动切换',
-        url: $('#noLoading#').lazyRule((JYconfig,cfgfile) => {
-                JYconfig['parsemode'] = 4;
-                writeFile(cfgfile, JSON.stringify(JYconfig));
-                refreshPage(false);
-                return 'toast://解析模式：手动切换';
-            }, JYconfig, cfgfile),
-        col_type: "text_3"
-    });
+    if((MY_NAME=="海阔视界"&&getAppVersion()>=4094)||(MY_NAME=="嗅觉浏览器"&&getAppVersion()>=1359)){
+        d.push({
+            title: (parsemode==4?getide(1):getide(0))+'手动切换',
+            url: $('#noLoading#').lazyRule((JYconfig,cfgfile) => {
+                    JYconfig['parsemode'] = 4;
+                    writeFile(cfgfile, JSON.stringify(JYconfig));
+                    refreshPage(false);
+                    return 'toast://解析模式：手动切换';
+                }, JYconfig, cfgfile),
+            col_type: "text_3"
+        });
+    }
     if(parsemode!=4){
-    if((MY_NAME=="海阔视界"&&getAppVersion()>=3369)||(MY_NAME=="嗅觉浏览器"&&getAppVersion()>=798)){
+        if((MY_NAME=="海阔视界"&&getAppVersion()>=3369)||(MY_NAME=="嗅觉浏览器"&&getAppVersion()>=798)){
             JYconfig['superweb'] = JYconfig.superweb==0?0:1;
             d.push({
                 col_type: "line"
