@@ -3297,10 +3297,11 @@ function yundiskjiekou() {
                     }
                     let num = 0;
                     for (let i = 0; i < datalist2.length; i++) {
-                        if (!datalist.some(item => item.name == datalist2[i].name)) {
-                            datalist.push(datalist2[i]);
-                            num = num + 1;
+                        if (datalist.some(item => item.name == datalist2[i].name)) {
+                            datalist.splice(i, 1);
                         }
+                        datalist.push(datalist2[i]);
+                        num = num + 1;
                     }
                     writeFile(filepath, JSON.stringify(datalist));
                     hideLoading();
