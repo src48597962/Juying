@@ -3375,7 +3375,7 @@ function yundiskjiekou() {
                     hideLoading();
                     if(pasteurl){
                         let code = '聚影云盘￥'+aesEncode('Juying', pasteurl)+'￥'+data.name;
-                        copy(code);
+                        copy('云口令：'+code+`@import=js:$.require("hiker://page/cloudimport?rule=聚影√");`);
                         return "toast://(单个)云盘分享口令已生成";
                     }else{
                         return "toast://分享失败，剪粘板或网络异常";
