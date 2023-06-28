@@ -3099,9 +3099,7 @@ function JYimport(input) {
     }
     try{
         var inputname = input.split('￥')[0];
-        log(inputname);
         if (inputname == "聚影云盘") {
-            log("1");
             let filepath = "hiker://files/rules/Src/Juying/yundisk.json";
             let parseurl = aesDecode('Juying', input.split('￥')[1]);
             let content = parsePaste(parseurl);
