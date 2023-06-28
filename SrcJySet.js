@@ -3117,7 +3117,8 @@ function JYimport(input) {
             let num = 0;
             for (let i = 0; i < datalist2.length; i++) {
                 if (datalist.some(item => item.name == datalist2[i].name)) {
-                    datalist.splice(i, 1);
+                    let index = datalist.indexOf(datalist.filter(d => d.name==datalist2[i].name)[0]);
+                    datalist.splice(index, 1);
                 }
                 datalist.push(datalist2[i]);
                 num = num + 1;
@@ -3324,7 +3325,8 @@ function yundiskjiekou() {
                     let num = 0;
                     for (let i = 0; i < datalist2.length; i++) {
                         if (datalist.some(item => item.name == datalist2[i].name)) {
-                            datalist.splice(i, 1);
+                            let index = datalist.indexOf(datalist.filter(d => d.name==datalist2[i].name)[0]);
+                            datalist.splice(index, 1);
                         }
                         datalist.push(datalist2[i]);
                         num = num + 1;
