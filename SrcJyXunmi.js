@@ -472,8 +472,9 @@ function xunmi(name,data,ishkss) {
                     if(jkfile){
                         eval(jkfile);
                         let getdata = customparse[url_api](name);
-                        log(getdata);
-                        if($.type(getdata)=="Object"){
+                        log($.type(getdata));
+                        log(getdata.toString());
+                        if($.type(getdata)=="object"){
                             lists = getdata.list;
                         }else{
                             lists = getdata;
