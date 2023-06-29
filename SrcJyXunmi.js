@@ -471,7 +471,12 @@ function xunmi(name,data,ishkss) {
                     let jkfile = fetchCache(jsondata.ext,72);
                     if(jkfile){
                         eval(jkfile);
-                        lists = customparse[url_api](name);
+                        let getdata = customparse[url_api](name);
+                        if($.type(getdata)=="Object"){
+                            lists = getdata.list;
+                        }else{
+                            lists = getdata;
+                        }
                     }
                 }catch(e){
                     log(e.message);
