@@ -74,7 +74,7 @@ let customparse = {
             var lists = [];
             let html = request("https://zhuiyingmao2.com/index.php/ajax/suggest?mid=1&wd="+name+"&limit=10" );
             let data = JSON.parse(html).list;
-            let cook = getCookie('https://zhuiyingmao.com');
+            let cook = getCookie('https://zhuiyingmao2.com');
             data.forEach(item => {
                 let maoname = item.name;
                 if (maoname == name) {
@@ -108,7 +108,7 @@ let customparse = {
                 }
             })
         } catch (e) {
-            log(e.message);
+            //log(e.message);
             var lists = [];
         }
         
