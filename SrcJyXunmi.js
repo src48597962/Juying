@@ -836,6 +836,8 @@ function xunmierji(type,ua) {
         } else if (/xpath|biubiu|custom|XBPQ/.test(type)) {
             try{
                 let jsondata = MY_PARAMS.data;
+                log(jsondata);
+                log(jsondata.url);
                 if(type=='custom' && jsondata.url){
                     html = jsondata.url(MY_URL.split('##')[1]);
                 }else{
