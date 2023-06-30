@@ -1106,8 +1106,8 @@ function xunmierji(type,ua) {
             details2 = data.detail2||'';
             pic = data.img || pic;
             desc = data.desc||'';
-            arts = data.line||[];
-            conts = data.list||[];
+            arts = data.lines||[];
+            conts = data.lists||[];
         }else{
             //自定义接口/web自动匹配
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcAutoTmpl.js');
