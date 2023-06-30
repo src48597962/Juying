@@ -474,7 +474,7 @@ function xunmi(name,data,ishkss) {
                         let getdata = customparse[url_api](name);
                         if($.type(getdata)=="object"){
                             lists = getdata.list;
-                            jsondata = JSON.stringify(getdata.erji);
+                            jsondata = getdata.erji.toString();
                         }else{
                             lists = getdata;
                         }
