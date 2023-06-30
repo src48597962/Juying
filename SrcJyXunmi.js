@@ -476,6 +476,7 @@ function xunmi(name,data,ishkss) {
                         log(getdata.toString());
                         if($.type(getdata)=="object"){
                             lists = getdata.list;
+                            jsondata = getdata.erji;
                         }else{
                             lists = getdata;
                         }
@@ -819,25 +820,32 @@ function xunmierji(type,ua) {
     require(configfile);
 
     //自动判断是否需要更新请求
+    var html = "";
     if (getMyVar('myurl', '0') != MY_URL || !configvar || configvar.标识 != MY_URL) {
         if (/v1|app|v2|iptv|cms/.test(type)) {
             try{
-                var gethtml = request(MY_URL.split('##')[1], { headers: { 'User-Agent': ua } });
+                let gethtml = request(MY_URL.split('##')[1], { headers: { 'User-Agent': ua } });
                 if(/cms/.test(type)&&/<\?xml/.test(gethtml)){
-                    var html = gethtml;
+                    html = gethtml;
                     var isxml = 1;
                 }else{
-                    var html = JSON.parse(gethtml.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,''));
+                    html = JSON.parse(gethtml.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,''));
                     var isxml = 0;
                 }
             } catch (e) {
-                var html = "";
+                
             }
         } else if (/xpath|biubiu|custom|XBPQ/.test(type)) {
             try{
-                var html = request(MY_URL.split('##')[1], { headers: { 'User-Agent': ua } });
+                let jsondata = MY_PARAMS.data;
+                if(type=='custom' && jsondata.url){
+                    html = jsondata.url(MY_URL.split('##')[1]);
+                }else{
+                    html = request(MY_URL.split('##')[1], { headers: { 'User-Agent': ua } });
+                }
+                log(html)
             } catch (e) {
-                var html = "";
+                log(e.message);
             }
         } else {
             //后续网页类
