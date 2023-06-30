@@ -160,17 +160,20 @@ let customparse = {
             })
             return {
                 list: list,//搜索结果列表
-                urlparse: function (url) {//影片链接解析处理
-
-                },
-                erjiparse: {//二级解析代码
-                    detail: function (html) {//影片详情
-
+                erji: {//二级解析代码
+                    url: function (vid) {//影片链接解析处理
+                        let qqtime = parseInt(new Date().getTime() / 1000) + '';
+                        let qqtok = md5('/api.php/provide/videoDetailrealme4ac3fe96a6133de96904b8d3c8cfe16d'+vid+'40.954705116.801239RMX1931com.sevenVideo.app.android010110005'+ qqtime +'android7.1.22.1.4'+ qqtime +'XSpeUFjJ');
+                        let html = request('https://api.tyun77.cn/api.php/provide/videoDetail?brand=realme&devid=4ac3fe96a6133de96904b8d3c8cfe16d&ids='+vid+'&lat=40.954705&lon=116.801239&model=RMX1931&package=com.sevenVideo.app.android&pcode=010110005&sj='+qqtime+'&sys=android&sysver=7.1.2&version=2.1.4', {
+                            headers: {
+                                "User-Agent": "okhttp/3.12.0",
+                                "t": qqtime,
+                                "TK": qqtok
+                            }
+                        });
+                        return html;
                     },
-                    line: function (html) {//线路
-
-                    },
-                    list: function (html) {//选集
+                    data: function (html) {//影片详情、线路、选集
 
                     }
                 }
