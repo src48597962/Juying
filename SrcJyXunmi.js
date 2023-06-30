@@ -834,15 +834,14 @@ function xunmierji(type,ua) {
                     let jkfile = fetchCache(jsondata.ext,72);
                     if(jkfile){
                         eval(jkfile);
-                        let erji = customparse[MY_PARAMS.id.replace('xunmi-','')]("取二级方法","erji");
-                        if(erji.url){
-                            html = erji.url(MY_URL.split('##')[1]);
+                        var erjiparse = customparse[MY_PARAMS.id.replace('xunmi-','')]("取二级方法","erji");
+                        if(erjiparse.url){
+                            html = erjiparse.url(MY_URL.split('##')[1]);
                         }
                     }
                 }else{
                     html = request(MY_URL.split('##')[1], { headers: { 'User-Agent': ua } });
                 }
-                log(html)
             } catch (e) {
                 log(e.message);
             }
@@ -1101,6 +1100,14 @@ function xunmierji(type,ua) {
             }catch(e){
                 log(getsm+'失败>'+e.message)
             }    
+        }else if(type=="custom" && erjiparse.data) {
+            let data = erjiparse.data(html);
+            details1 = data.detail1||'';
+            details2 = data.detail2||'';
+            pic = data.img || pic;
+            desc = data.desc||'';
+            arts = data.line||[];
+            conts = data.list||[];
         }else{
             //自定义接口/web自动匹配
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcAutoTmpl.js');
