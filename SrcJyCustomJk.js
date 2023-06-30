@@ -175,10 +175,43 @@ let customparse = {
                             "TK": qqtok
                         }
                     });
-                    return html;
+                    return {html:html,vid:vid};
                 },
-                data: function (html) {//影片详情、线路、选集
-
+                data: function (obj) {//影片详情、线路、选集
+                    let json = JSON.parse(obj.html).data;
+                    let detail1 = '主演：' + json.actor + '\n地区：'+json.area+' 年份：'+json.year;
+                    let detail2 = '分类：' + json.subCategory + '\n状态：'+json.msg;
+                    let img = json.videoCover;
+                    let desc = json.brief;
+                    let qqtime = parseInt(new Date().getTime() / 1000) + '';
+                    let vid = obj.vid;
+                    let qqtok = md5('/api.php/provide/videoPlaylistrealme4ac3fe96a6133de96904b8d3c8cfe16d'+vid+'40.954705116.801239RMX1931com.sevenVideo.app.android010110005'+ qqtime +'android7.1.22.1.4'+ qqtime +'XSpeUFjJ');
+                    let html = fetch('https://api.tyun77.cn/api.php/provide/videoPlaylist?brand=realme&devid=4ac3fe96a6133de96904b8d3c8cfe16d&ids='+vid+'&lat=40.954705&lon=116.801239&model=RMX1931&package=com.sevenVideo.app.android&pcode=010110005&sj='+qqtime+'&sys=android&sysver=7.1.2&version=2.1.4', {
+                        headers: {
+                            "User-Agent": "okhttp/3.12.0",
+                            "t": qqtime,
+                            "TK": qqtok
+                        }
+                    });
+                    let lines =[];//线路数组
+                    let lists =[];//选集数组
+                    let list =[];//单选集临时
+                    let data = JSON.parse(html).data.episodes;
+                    data.forEach(it=>{
+                        if(lines.indexOf(it.source)==-1){
+                            lines.push(it.source);
+                        }
+                        list.push(it.title.replace(it.albumTitle,'')+'$'+it.playurl);
+                    })
+                    lists.push(list.join('#'));
+                    return {
+                        detail1:detail1,
+                        detail2:detail2,
+                        img:img,
+                        desc:desc,
+                        lines:lines,
+                        lists:lists
+                    }
                 }
             }
         }
