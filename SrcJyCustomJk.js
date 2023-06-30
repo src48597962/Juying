@@ -142,46 +142,46 @@ let customparse = {
         }
         return list;
     },
-    csp_custom_77: function (name) {
-        let list = [];
-        try {
-            let html = request("https://api.tyun77.cn/api.php/provide/searchVideo?searchName="+name);
-            let data = JSON.parse(html).data;
-            data.forEach(item=>{
-                let dataname = item.videoName;
-                if(dataname == name || (getSearchMode()==0&&dataname.indexOf(name)>-1)){
-                    list.push({
-                        vodname: dataname,
-                        vodpic: item.videoCover.replace(/http.*?\?url=/,''),
-                        voddesc: item.msg,
-                        vodurl: item.id
-                    })
-                }
-            })
-            return {
-                list: list,//搜索结果列表
-                erji: {//二级解析代码
-                    url: function (vid) {//影片链接解析处理
-                        let qqtime = parseInt(new Date().getTime() / 1000) + '';
-                        let qqtok = md5('/api.php/provide/videoDetailrealme4ac3fe96a6133de96904b8d3c8cfe16d'+vid+'40.954705116.801239RMX1931com.sevenVideo.app.android010110005'+ qqtime +'android7.1.22.1.4'+ qqtime +'XSpeUFjJ');
-                        let html = request('https://api.tyun77.cn/api.php/provide/videoDetail?brand=realme&devid=4ac3fe96a6133de96904b8d3c8cfe16d&ids='+vid+'&lat=40.954705&lon=116.801239&model=RMX1931&package=com.sevenVideo.app.android&pcode=010110005&sj='+qqtime+'&sys=android&sysver=7.1.2&version=2.1.4', {
-                            headers: {
-                                "User-Agent": "okhttp/3.12.0",
-                                "t": qqtime,
-                                "TK": qqtok
-                            }
-                        });
-                        return html;
-                    },
-                    data: function (html) {//影片详情、线路、选集
-
+    csp_custom_77: function (name,type) {
+        if(type=="ss"){//搜索
+            let list = [];
+            try {
+                let html = request("https://api.tyun77.cn/api.php/provide/searchVideo?searchName="+name);
+                let data = JSON.parse(html).data;
+                data.forEach(item=>{
+                    let dataname = item.videoName;
+                    if(dataname == name || (getSearchMode()==0&&dataname.indexOf(name)>-1)){
+                        list.push({
+                            vodname: dataname,
+                            vodpic: item.videoCover.replace(/http.*?\?url=/,''),
+                            voddesc: item.msg,
+                            vodurl: item.id
+                        })
                     }
+                })
+            } catch (e) {
+                log(e.message);
+            }
+            return list;
+        }else if(type=="erji"){
+            return {
+                url: function (vid) {//影片链接解析处理
+                    let qqtime = parseInt(new Date().getTime() / 1000) + '';
+                    let qqtok = md5('/api.php/provide/videoDetailrealme4ac3fe96a6133de96904b8d3c8cfe16d'+vid+'40.954705116.801239RMX1931com.sevenVideo.app.android010110005'+ qqtime +'android7.1.22.1.4'+ qqtime +'XSpeUFjJ');
+                    let html = request('https://api.tyun77.cn/api.php/provide/videoDetail?brand=realme&devid=4ac3fe96a6133de96904b8d3c8cfe16d&ids='+vid+'&lat=40.954705&lon=116.801239&model=RMX1931&package=com.sevenVideo.app.android&pcode=010110005&sj='+qqtime+'&sys=android&sysver=7.1.2&version=2.1.4', {
+                        headers: {
+                            "User-Agent": "okhttp/3.12.0",
+                            "t": qqtime,
+                            "TK": qqtok
+                        }
+                    });
+                    return html;
+                },
+                data: function (html) {//影片详情、线路、选集
+
                 }
             }
-        } catch (e) {
-            log(e.message);
         }
-        return list;
     }
 }
 
