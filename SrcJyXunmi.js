@@ -472,17 +472,15 @@ function xunmi(name,data,ishkss) {
                     if(jkfile){
                         eval(jkfile);
                         let getdata = customparse[url_api](name);
-                        log($.type(getdata));
-                        log(getdata.toString());
                         if($.type(getdata)=="object"){
                             lists = getdata.list;
-                            jsondata = getdata.erji;
+                            jsondata = JSON.stringify(getdata.erji);
                         }else{
                             lists = getdata;
                         }
                     }
                 }catch(e){
-                    log(e.message);
+                    //log(e.message);
                 }
             }else if(obj.type=="XBPQ"){
                 try{
