@@ -471,13 +471,7 @@ function xunmi(name,data,ishkss) {
                     let jkfile = fetchCache(jsondata.ext,72);
                     if(jkfile){
                         eval(jkfile);
-                        let getdata = customparse[url_api](name);
-                        if($.type(getdata)=="object"){
-                            lists = getdata.list;
-                            jsondata = $.toString(getdata.erji);
-                        }else{
-                            lists = getdata;
-                        }
+                        lists = customparse[url_api](name,"ss");
                     }
                 }catch(e){
                     //log(e.message);
@@ -560,7 +554,7 @@ function xunmi(name,data,ishkss) {
                                         },obj.type, urlua),
                                     col_type: "movie_1_vertical_pic",
                                     extra: {
-                                        id: 'xumi-'+url_api,
+                                        id: 'xunmi-'+url_api,
                                         pic: vodpic,
                                         name: vodname,
                                         title: vodname+'-'+obj.name,
@@ -707,7 +701,7 @@ function xunmi(name,data,ishkss) {
                                     }
                                 }
                                 writeFile(filepath, JSON.stringify(datalist));
-                                deleteItem('xumi-'+api);
+                                deleteItem('xunmi-'+api);
                                 return "toast://已删除";
                             }else if(input=="加入待处理"){
                                 let filepath = "hiker://files/rules/Src/Juying/jiekou.json";
@@ -720,7 +714,7 @@ function xunmi(name,data,ishkss) {
                                     }
                                 }
                                 writeFile(filepath, JSON.stringify(datalist));
-                                deleteItem('xumi-'+api);
+                                deleteItem('xunmi-'+api);
                                 let baoliujk = getMyVar('baoliujk','')?getMyVar('baoliujk','').split(','):[];
                                 if(baoliujk.indexOf(api)==-1){
                                     baoliujk.push(api);
@@ -728,7 +722,7 @@ function xunmi(name,data,ishkss) {
                                 }
                                 return "toast://已将“"+name+"”，调整到失败待处理分组";
                             }else if(input=="保留此接口"){
-                                deleteItem('xumi-'+api);
+                                deleteItem('xunmi-'+api);
                                 let baoliujk = getMyVar('baoliujk','')?getMyVar('baoliujk','').split(','):[];
                                 if(baoliujk.indexOf(api)==-1){
                                     baoliujk.push(api);
@@ -743,7 +737,7 @@ function xunmi(name,data,ishkss) {
                                     for (let k in beerrors) {
                                         for(let i=0;i<datalist.length;i++){
                                             if(datalist[i].url==beerrors[k].apiurl&&getMyVar('baoliujk','').indexOf(datalist[i].url)==-1){
-                                                deleteItem('xumi-'+datalist[i].url);
+                                                deleteItem('xunmi-'+datalist[i].url);
                                                 datalist.splice(i,1);
                                                 break;
                                             }
@@ -759,7 +753,7 @@ function xunmi(name,data,ishkss) {
                                 for (let k in beerrors) {
                                     for(let i=0;i<datalist.length;i++){
                                         if(datalist[i].url==beerrors[k].apiurl){
-                                            deleteItem('xumi-'+datalist[i].url);
+                                            deleteItem('xunmi-'+datalist[i].url);
                                             datalist[i].group = "失败待处理";
                                             break;
                                         }
@@ -771,7 +765,7 @@ function xunmi(name,data,ishkss) {
                         }, beerrors[k].name, beerrors[k].url, beerrors[k].apiurl, beerrors),
                         col_type: "text_1",
                         extra: {
-                            id: 'xumi-'+beerrors[k].apiurl,
+                            id: 'xunmi-'+beerrors[k].apiurl,
                             cls: 'xunmilist'
                         }
                     });
@@ -835,11 +829,16 @@ function xunmierji(type,ua) {
             }
         } else if (/xpath|biubiu|custom|XBPQ/.test(type)) {
             try{
-                let jsondata = MY_PARAMS.data;
-                log(jsondata);
-                log(jsondata.url);
-                if(type=='custom' && jsondata.url){
-                    html = jsondata.url(MY_URL.split('##')[1]);
+                if(type=='custom'){
+                    let jsondata = MY_PARAMS.data;
+                    let jkfile = fetchCache(jsondata.ext,72);
+                    if(jkfile){
+                        eval(jkfile);
+                        let erji = customparse[MY_PARAMS.id.replace('xunmi-','')]("取二级方法","erji");
+                        if(erji.url){
+                            html = erji.url(MY_URL.split('##')[1]);
+                        }
+                    }
                 }else{
                     html = request(MY_URL.split('##')[1], { headers: { 'User-Agent': ua } });
                 }
@@ -1158,7 +1157,7 @@ function xunmierji(type,ua) {
             let datafile = fetch(filepath);
             eval("let datalist=" + datafile+ ";");
             for(let i=0;i<datalist.length;i++){
-                if(datalist[i].url==id.replace('xumi-','')){
+                if(datalist[i].url==id.replace('xunmi-','')){
                     datalist.splice(i,1);
                     break;
                 }
