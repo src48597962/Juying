@@ -93,8 +93,11 @@ let customparse = {
                     htmls.forEach(it => {
                         try {
                             let sitename = pdfh(it, ".website-name&&Text");
+                            log(sitename);
                             let vodname = pdfh(it, ".title&&Text");
+                            log(vodname);
                             let vodurl = pdfh(it, "a&&href");
+                            log(vodurl);
                             if (vodname == maoname && !lists.some(ii => ii.url == vodurl)) {
                                 lists.push({
                                     name: vodname,
@@ -104,7 +107,7 @@ let customparse = {
                                 });
                             }
                         } catch (e) {
-                            log(e.message);
+                            //log(e.message);
                         }
                     });
                     log(lists)
@@ -163,7 +166,7 @@ let customparse = {
                     }
                 })
             } catch (e) {
-                log(e.message);
+                //log(e.message);
             }
             return list;
         }else if(type=="erji"){
