@@ -95,7 +95,7 @@ let customparse = {
                         let vodurl = pdfh(it, "a&&href");
                         if (!list.some(ii => ii.url == vodurl)) {
                             list.push({
-                                vodname: vodname,
+                                vodname: maoname,
                                 vodpic: maopic.replace(/http.*?\?url=/,''),
                                 voddesc: sitename,
                                 vodurl: vodurl
