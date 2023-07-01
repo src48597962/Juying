@@ -74,7 +74,7 @@ let customparse = {
         try {
             let html = request("https://zhuiyingmao2.com/index.php/ajax/suggest?mid=1&wd="+name+"&limit=10" );
             let data = JSON.parse(html).list;
-            //let cook = getCookie('https://zhuiyingmao2.com');
+            let cook = getCookie('https://zhuiyingmao2.com');
             data.forEach(item => {
                 let maoname = item.name;
                 if (maoname == name) {
@@ -89,6 +89,7 @@ let customparse = {
                     let maohtml = request(maourl, {
                         //headers: headers
                     });
+                    log(maohtml);
                     let htmls = pdfa(maohtml, ".search-result-container&&a");
                     htmls.forEach(it => {
                         let sitename = pdfh(it, ".website-name&&Text");
