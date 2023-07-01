@@ -103,7 +103,9 @@ let customparse = {
                                     site: sitename
                                 });
                             }
-                        } catch (e) {}
+                        } catch (e) {
+                            log(e.message);
+                        }
                     });
                     log(lists)
                 }
