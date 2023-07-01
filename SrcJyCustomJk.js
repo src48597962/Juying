@@ -70,11 +70,11 @@ let customparse = {
         return list;
     },
     csp_custom_zhuiyingmao: function(name) {
+        var list = [];
         try {
-            var lists = [];
             let html = request("https://zhuiyingmao2.com/index.php/ajax/suggest?mid=1&wd="+name+"&limit=10" );
             let data = JSON.parse(html).list;
-            let cook = getCookie('https://zhuiyingmao2.com');
+            //let cook = getCookie('https://zhuiyingmao2.com');
             data.forEach(item => {
                 let maoname = item.name;
                 if (maoname == name) {
@@ -87,64 +87,25 @@ let customparse = {
                         "Cookie": cook
                     };
                     let maohtml = request(maourl, {
-                        headers: headers
+                        //headers: headers
                     });
                     let htmls = pdfa(maohtml, ".search-result-container&&a");
                     htmls.forEach(it => {
-                        try {
-                            let sitename = pdfh(it, ".website-name&&Text");
-                            log(sitename);
-                            let vodname = pdfh(it, ".title&&Text");
-                            log(vodname);
-                            let vodurl = pdfh(it, "a&&href");
-                            log(vodurl);
-                            if (vodname == maoname && !lists.some(ii => ii.url == vodurl)) {
-                                lists.push({
-                                    name: vodname,
-                                    pic: maopic,
-                                    url: vodurl,
-                                    site: sitename
-                                });
-                            }
-                        } catch (e) {
-                            //log(e.message);
+                        let sitename = pdfh(it, ".website-name&&Text");
+                        let vodurl = pdfh(it, "a&&href");
+                        if (!list.some(ii => ii.url == vodurl)) {
+                            list.push({
+                                vodname: vodname,
+                                vodpic: maopic.replace(/http.*?\?url=/,''),
+                                voddesc: sitename,
+                                vodurl: vodurl
+                            });
                         }
                     });
-                    log(lists)
                 }
             })
         } catch (e) {
             //log(e.message);
-            var lists = [];
-        }
-        
-        let list = [];
-        let task = function(obj) {
-            try {
-                let vodurl = obj.url;
-                if (!/qq|mgtv|iptv|iqiyi|youku|bilibili|souhu|cctv|icaqd|cokemv|mhyyy|fun4k|jpys\.me|31kan|37dyw|kpkuang/.test(vodurl) && !list.some(ii => ii.vodurl == vodurl)) {
-                    list.push({
-                        vodname: obj.name,
-                        vodpic: obj.pic.replace(/http.*?\?url=/, ''),
-                        voddesc: obj.site,
-                        vodurl: vodurl
-                    });
-                }
-            } catch (e) {}
-            return 1;
-        }
-        let maolist = lists.map((item) => {
-            return {
-                func: task,
-                param: item,
-                id: item.url
-            }
-        });
-        if (maolist.length > 0) {
-            be(maolist, {
-                func: function(obj, id, error, taskResult) {},
-                param: {}
-            });
         }
         return list;
     },
