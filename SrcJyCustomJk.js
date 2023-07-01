@@ -89,7 +89,6 @@ let customparse = {
                     let maohtml = request(maourl, {
                         //headers: headers
                     });
-                    log(maohtml);
                     let htmls = pdfa(maohtml, ".search-result-container&&a");
                     htmls.forEach(it => {
                         let sitename = pdfh(it, ".website-name&&Text");
