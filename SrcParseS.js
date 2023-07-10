@@ -956,7 +956,7 @@ var SrcParseS = {
         }
         if(webUrl){
             let rurl = "";
-            let gethtml = request(webUrl, {timeout:2000});
+            let gethtml = request(webUrl, {timeout:3000});
             try{
                 if (/player_aaaa/.test(gethtml)) {
                     let  html = JSON.parse(gethtml.match(/r player_aaaa.*?=(.*?)</)[1]);
@@ -970,14 +970,10 @@ var SrcParseS = {
                         rurl = "";
                     }
                 }
-            }catch(e){
-            }
-            if(!rurl){
-                if(/\.m3u8|\.mp4|\.flv/.test(gethtml) && geturl(gethtml)){
+                if(!rurl && /\.m3u8|\.mp4|\.flv/.test(gethtml) && geturl(gethtml)){
                     rurl = geturl(gethtml);
-                }else if((MY_NAME=="海阔视界"&&getAppVersion()>=4094)||(MY_NAME=="嗅觉浏览器"&&getAppVersion()>=1359)){
-                    rurl = exeWebRule(webUrl) || "";
                 }
+            }catch(e){
             }
             if(rurl){
                 return rurl;
@@ -985,8 +981,12 @@ var SrcParseS = {
                 if(getMyVar('superweb')=="1"){// && getMyVar('pushboxplay')!="1"){
                     return 'video://'+webUrl;
                 }else{
-                    //require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
-                    return this.嗅探(webUrl,[],1);
+                    if((MY_NAME=="海阔视界"&&getAppVersion()>=4094)||(MY_NAME=="嗅觉浏览器"&&getAppVersion()>=1359)){
+                        return exeWebRule(webUrl) || "";
+                    }else{
+                            //require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
+                        return this.嗅探(webUrl,[],1);
+                    }
                 }
             }
         }else if(/^function/.test(obj.ulist.parse.trim())){
