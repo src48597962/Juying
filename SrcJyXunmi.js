@@ -1529,12 +1529,16 @@ function xunmierji(type,ua) {
                         },playurl);
                     }else{
                         var DTJX = $("").lazyRule(() => {
+                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
+                            return SrcParseS.task({},input);
+                            /*
                             if(getMyVar('superweb')=="1"){// && getMyVar('pushboxplay')!="1"){
                                 return 'video://'+input;
                             }else{
                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
                                 return SrcParseS.嗅探(input,[],1);
                             }
+                            */
                         });
                     }
                 }else{
