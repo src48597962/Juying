@@ -499,7 +499,7 @@ function JYerji(){
                             d.push({
                                 title: getHead(name + '', Color3),
                                 url: url + easy,
-                                extra: { id: urlid, jsLoadingInject: true, cacheM3u8: getMyVar('superwebM3U8')=="1"?true:false, blockRules: block, cls: "loadlist" },
+                                extra: { id: urlid, jsLoadingInject: true, cacheM3u8: getMyVar('superwebM3U8')=="1"?true:false, blockRules: block, cls: "loadlist",videoExcludeRule: ['m3u8.js','?url='] },
                                 col_type: listonename.length>6?'text_2':'text_4'
                             });
                         }
@@ -536,7 +536,7 @@ function JYerji(){
                     title: getHead("第" + arr[k] + "期", Color3),
                     col_type: "text_2",
                     url: url + easy,
-                    extra: { id: MY_URL+k, jsLoadingInject: true, cacheM3u8: getMyVar('superwebM3U8')=="1"?true:false, blockRules: block, cls: "loadlist"  }
+                    extra: { id: MY_URL+k, jsLoadingInject: true, cacheM3u8: getMyVar('superwebM3U8')=="1"?true:false, blockRules: block, cls: "loadlist",videoExcludeRule: ['m3u8.js','?url=']  }
                 });
             }
         } else if (plays.length==0) {
@@ -549,7 +549,7 @@ function JYerji(){
                     img: 'http://dlweb.sogoucdn.com/video/wap/static/img/logo/' + plays[m].sitename[1],
                     url: url + easy,
                     col_type: "icon_2",
-                    extra: { id: MY_URL, jsLoadingInject: true, cacheM3u8: getMyVar('superwebM3U8')=="1"?true:false, blockRules: block, cls: "loadlist" },
+                    extra: { id: MY_URL, jsLoadingInject: true, cacheM3u8: getMyVar('superwebM3U8')=="1"?true:false, blockRules: block, cls: "loadlist",videoExcludeRule: ['m3u8.js','?url='] },
                 })
             }
         }
