@@ -958,8 +958,8 @@ var SrcParseS = {
             let rurl = "";
             let gethtml = request(webUrl, {timeout:3000});
             try{
-                if (/player_aaaa/.test(gethtml)) {
-                    let  html = JSON.parse(gethtml.match(/r player_aaaa.*?=(.*?)</)[1]);
+                if (/player_.*?=/.test(gethtml)) {
+                    let  html = JSON.parse(gethtml.match(/r player_.*?=(.*?)</)[1]);
                     rurl = html.url;
                     if (html.encrypt == '1') {
                         rurl = unescape(rurl);
