@@ -908,6 +908,52 @@ var SrcParseS = {
         }
     },
     task: function(obj) {
+        function geturl(gethtml) {
+            let rurl = "";
+            try {
+                if(gethtml.indexOf('urls = "') != -1){
+                    rurl = gethtml.match(/urls = "(.*?)"/)[1];
+                }else if(gethtml.indexOf('"url":"') != -1){
+                    rurl = gethtml.match(/"url":"(.*?)"/)[1];
+                }else if(gethtml.indexOf('id="video" src="') != -1){
+                    rurl = gethtml.match(/id="video" src="(.*?)"/)[1];
+                }else if(gethtml.indexOf('url: "') != -1){
+                    rurl = gethtml.match(/url: "(.*?)"/)[1];
+                }else{
+                    //if(printlog==1){log('将日志提交给作者，帮助完善解析逻辑>>>'+gethtml)};
+                }
+            } catch (e) {
+                //if(printlog==1){log('明码获取错误：'+e.message)};
+            }
+            return rurl;
+        }
+        function exeWebRule(exewebUrl) {
+            return executeWebRule(exewebUrl, $.toString(() => {
+                    try{
+                        if (typeof (request) == 'undefined' || !request) {
+                            eval(fba.getInternalJs());
+                        };
+                        var urls = _getUrls();
+                        //fba.log(fy_bridge_app.getUrls());
+                        var exclude = /\/404\.m3u8|\/xiajia\.mp4|\/余额不足\.m3u8|\.css|\.js|\.gif|\.png|\.jpg|\.jpeg|html,http|m3u88.com\/admin|\.php\?v=h|\?url=h|\?vid=h|%253Furl%253Dh|#amp=1|\.t-ui\.cn|ac=dm/;//设置排除地址
+                        var contain = /\.mp4|\.m3u8|\.flv|\.avi|\.mpeg|\.wmv|\.mov|\.rmvb|\.dat|qqBFdownload|mime=video%2F|video_mp4|\.ts\?|TG@UosVod|video\/tos\/cn\/tos|m3u8\?pt=m3u8/;//设置符合条件的正确地址
+                        for (var i in urls) {
+                            if (contain.test(urls[i])&&!exclude.test(urls[i])) {
+                                //fba.log("exeweb解析到>"+urls[i]);
+                                return urls[i];
+                            }
+                        }
+                    }catch(e){
+                        //fba.log(e.message);
+                    }
+                }), {
+                    blockRules: ['.m4a','.mp3','.gif','.jpg','.jpeg','.png','.ico','hm.baidu.com','/ads/*.js','/klad/*.php','layer.css'],
+                    jsLoadingInject: true,
+                    checkTime: 100,
+                    timeout: 8000
+                }
+            )
+        }
         if(/^function/.test(obj.ulist.parse.trim())){
             obj.ulist['x5'] = 0;
             let rurl = "";
@@ -948,55 +994,12 @@ var SrcParseS = {
                     isjson = 1;
                     rurl = json.url||json.data.url||json.data;
                 } catch (e) {
-                    function geturl(gethtml) {
-                        let rurl = "";
-                        try {
-                            if(gethtml.indexOf('urls = "') != -1){
-                                rurl = gethtml.match(/urls = "(.*?)"/)[1];
-                            }else if(gethtml.indexOf('"url":"') != -1){
-                                rurl = gethtml.match(/"url":"(.*?)"/)[1];
-                            }else if(gethtml.indexOf('id="video" src="') != -1){
-                                rurl = gethtml.match(/id="video" src="(.*?)"/)[1];
-                            }else if(gethtml.indexOf('url: "') != -1){
-                                rurl = gethtml.match(/url: "(.*?)"/)[1];
-                            }else{
-                                //if(printlog==1){log('将日志提交给作者，帮助完善解析逻辑>>>'+gethtml)};
-                            }
-                        } catch (e) {
-                            //if(printlog==1){log('明码获取错误：'+e.message)};
-                        }
-                        return rurl;
-                    }
                     if(/\.m3u8|\.mp4/.test(getjson.url)&&getjson.url.indexOf('=http')==-1){
                         rurl = getjson.url;
                     }else if(/\.m3u8|\.mp4|\.flv/.test(gethtml) && geturl(gethtml)){
                         rurl = geturl(gethtml);
                     }else if((MY_NAME=="海阔视界"&&getAppVersion()>=4094)||(MY_NAME=="嗅觉浏览器"&&getAppVersion()>=1359)){
-                        rurl = executeWebRule(obj.ulist.parse+obj.vipUrl, $.toString(() => {
-                                try{
-                                    if (typeof (request) == 'undefined' || !request) {
-                                        eval(fba.getInternalJs());
-                                    };
-                                    var urls = _getUrls();
-                                    //fba.log(fy_bridge_app.getUrls());
-                                    var exclude = /\/404\.m3u8|\/xiajia\.mp4|\/余额不足\.m3u8|\.css|\.js|\.gif|\.png|\.jpg|\.jpeg|html,http|m3u88.com\/admin|\.php\?v=h|\?url=h|\?vid=h|%253Furl%253Dh|#amp=1|\.t-ui\.cn|ac=dm/;//设置排除地址
-                                    var contain = /\.mp4|\.m3u8|\.flv|\.avi|\.mpeg|\.wmv|\.mov|\.rmvb|\.dat|qqBFdownload|mime=video%2F|video_mp4|\.ts\?|TG@UosVod|video\/tos\/cn\/tos|m3u8\?pt=m3u8/;//设置符合条件的正确地址
-                                    for (var i in urls) {
-                                        if (contain.test(urls[i])&&!exclude.test(urls[i])) {
-                                            //fba.log("exeweb解析到>"+urls[i]);
-                                            return urls[i];
-                                        }
-                                    }
-                                }catch(e){
-                                    //fba.log(e.message);
-                                }
-                            }), {
-                                blockRules: ['.m4a','.mp3','.gif','.jpg','.jpeg','.png','.ico','hm.baidu.com','/ads/*.js','/klad/*.php','layer.css'],
-                                jsLoadingInject: true,
-                                checkTime: 100,
-                                timeout: 8000
-                            }
-                        );
+                        rurl = exeWebRule(obj.ulist.parse+obj.vipUrl) || "";
                     }
                 }
                 var x5 = 0;
