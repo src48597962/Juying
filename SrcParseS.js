@@ -985,8 +985,8 @@ var SrcParseS = {
                 if(getMyVar('superweb')=="1"){// && getMyVar('pushboxplay')!="1"){
                     return 'video://'+webUrl;
                 }else{
-                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
-                    return SrcParseS.嗅探(webUrl,[],1);
+                    //require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
+                    return this.嗅探(webUrl,[],1);
                 }
             }
         }else if(/^function/.test(obj.ulist.parse.trim())){
