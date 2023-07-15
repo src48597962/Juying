@@ -4,7 +4,7 @@ let juyingLink;
 eval("let JYconfig=" + (fetch(cfgfile)||"{}") + ";");
 if(!JYconfig["juying"]){
     JYconfig["juying"] = config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/');
-    writeFile(cfgfile, JSON.stringify(Juconfig));
+    writeFile(cfgfile, JSON.stringify(JYconfig));
 }
 juyingLink = JYconfig["juying"];
 require(juyingLink + 'SrcJyAliPublic.js');
