@@ -1,7 +1,3 @@
-//如果是聚阅调用
-if(/聚阅/.test(MY_RULE.title)){
-    initConfig({依赖: config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/')});
-}
 //引入Ali公用文件
 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliPublic.js');
 
