@@ -2,8 +2,11 @@
 let cfgfile = "hiker://files/rules/Src/config.json";
 let juyingLink;
 eval("let JYconfig=" + (fetch(cfgfile)||"{}") + ";");
-JYconfig["juying"] = config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/');
-writeFile(cfgfile, JSON.stringify(JYconfig));
+try{
+    JYconfig["juying"] = config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/');
+    writeFile(cfgfile, JSON.stringify(JYconfig));
+}catch(e){
+}
 juyingLink = JYconfig["juying"];
 require(juyingLink + 'SrcJyAliPublic.js');
 
