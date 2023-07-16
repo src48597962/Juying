@@ -102,7 +102,7 @@ function JYerji(){
         putMyVar('moviedesc',desc);
     }
     //二级统一菜单
-    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyMenu.js');
+    require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyMenu.js');
     for(var i in erjimenu){
         d.push(
             erjimenu[i]
@@ -455,13 +455,13 @@ function JYerji(){
                 return "toast://本集无播放地址，可从更多片源中寻找";
             }
             //log(input)
-            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
+            require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcParseS.js');
             return SrcParseS.聚影(input);
         }catch(e){
             return input;
         }
     }):$("").lazyRule(() => {
-        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
+        require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcParseS.js');
         return SrcParseS.聚影(input);
     });
     if(!getMyVar('superwebM3U8')){
@@ -575,7 +575,7 @@ function JYerji(){
             deleteItemByCls('loadlist');
             addItemBefore('listloading', diskMark[MY_PARAMS.name]);
         }else{
-            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+            require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyAliDisk.js');
             aliDiskSearch(MY_PARAMS.name);
         }
     }else if(lineindex == "99"){
@@ -584,7 +584,7 @@ function JYerji(){
             deleteItemByCls('loadlist');
             addItemBefore('listloading', alistMark[MY_PARAMS.name]);
         }else{
-            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
+            require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyAlist.js');
             alistSearch2(MY_PARAMS.name,1);
         }
     }
@@ -647,7 +647,7 @@ function JYyiji(){
 
     if(MY_PAGE==1){
         downloadicon();//下载图标
-        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyMenu.js');
+        require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyMenu.js');
         if($.type(storage0.getItem('buttonmenu1'))=="object"){
             setItem('buttonmenu1',storage0.getItem('buttonmenu1').name);
         }
@@ -679,7 +679,7 @@ function JYyiji(){
                         title: "♥️管理",
                         js: $.toString(() => {
                             return $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
-                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJySet.js');
                                 SRCSet();
                             })
                         })
@@ -878,7 +878,7 @@ function JYyiji(){
     }
     var seachurl = $('').lazyRule(() => {
         return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
-            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
+            require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyXunmi.js');
             xunmi(name);
         }, input);
     });
@@ -919,7 +919,7 @@ function JYyiji(){
                     title: "🔍快速聚搜",
                     js: $.toString((name) => {
                         return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
-                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
+                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyXunmi.js');
                             xunmi(name);
                         }, name)
                     },list[i].name)
@@ -938,7 +938,7 @@ function JYyiji(){
                                 }
                             })
                             setResult(d);
-                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyAliDisk.js');
                             aliDiskSearch(name);
                         }, name)
                     },list[i].name)
@@ -957,7 +957,7 @@ function JYyiji(){
                                 }
                             })
                             setResult(d);
-                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
+                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyAlist.js');
                             alistSearch2(name,1);
                         }, name)
                     },list[i].name)
@@ -972,7 +972,7 @@ function JYyiji(){
 function downloadicon() {
     try{
         if(!fileExist('hiker://files/cache/src/文件夹.svg')){
-            downloadFile(config.依赖.match(/http(s)?:\/\/.*\//)[0] + "img/文件夹.svg", 'hiker://files/cache/src/文件夹.svg');
+            downloadFile(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + "img/文件夹.svg", 'hiker://files/cache/src/文件夹.svg');
         }
         if(!fileExist('hiker://files/cache/src/影片.svg')){
             downloadFile("https://hikerfans.com/tubiao/movie/13.svg", 'hiker://files/cache/src/影片.svg');
@@ -984,7 +984,7 @@ function downloadicon() {
             downloadFile("https://hikerfans.com/tubiao/more/38.png", 'hiker://files/cache/src/图片.png');
         }
         if(!fileExist('hiker://files/cache/src/Alist.svg')){
-            downloadFile(config.依赖.match(/http(s)?:\/\/.*\//)[0] + "img/Alist.svg", 'hiker://files/cache/src/Alist.svg');
+            downloadFile(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + "img/Alist.svg", 'hiker://files/cache/src/Alist.svg');
         }
     }catch(e){}
 }
