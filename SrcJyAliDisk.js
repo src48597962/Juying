@@ -1,15 +1,4 @@
 //引入Ali公用文件
-/*
-let cfgfile = "hiker://files/rules/Src/config.json";
-let juyingLink;
-eval("let JYconfig=" + (fetch(cfgfile)||"{}") + ";");
-try{
-    JYconfig["juying"] = config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/');
-    writeFile(cfgfile, JSON.stringify(JYconfig));
-}catch(e){
-}
-juyingLink = JYconfig["juying"];
-*/
 require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyAliPublic.js');
 
 function aliShareUrl(input) {
