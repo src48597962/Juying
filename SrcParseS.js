@@ -171,7 +171,7 @@ var SrcParseS = {
         return aytmParse(vipUrl);
     },
     聚嗅: function (vipUrl, x5jxlist, excludeurl) {
-        var jxhtml = config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJiexi.html';
+        var jxhtml = config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJiexi.html';
         fc(jxhtml, 96);
         let libsjxjs = fetch("hiker://files/libs/" + md5(jxhtml) + ".js");
         if (x5jxlist != undefined) {
@@ -459,7 +459,7 @@ var SrcParseS = {
             //断插线程代码
             var dnaytmParse = function(vipUrl) {
                 try{
-                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAuto.js');
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyAuto.js');
                     var rurl = aytmParse(vipUrl);
                 }catch(e){
                     log("断插执行异常>"+e.message);
@@ -984,7 +984,6 @@ var SrcParseS = {
                     if((MY_NAME=="海阔视界"&&getAppVersion()>=4094)||(MY_NAME=="嗅觉浏览器"&&getAppVersion()>=1359)){
                         return exeWebRule(webUrl) || "";
                     }else{
-                            //require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
                         return this.嗅探(webUrl,[],1);
                     }
                 }
