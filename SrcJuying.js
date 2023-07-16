@@ -286,7 +286,7 @@ function jiekouyiji() {
             var searchurl = $('').lazyRule((data) => {
                 if(data){
                     return $('hiker://empty#noRecordHistory##noHistory#').rule((name,data) => {
-                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
+                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyXunmi.js');
                         xunmi(name,data);
                     }, input,data);
                 }else{
@@ -424,7 +424,7 @@ function jiekouyiji() {
                         desc: voddesc,
                         pic_url: vodpic,
                         url: list.play?list.play:$("hiker://empty##" + vodurl + "#immersiveTheme#").rule((type,ua) => {
-                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
+                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyXunmi.js');
                                 xunmierji(type,ua)
                             },api_type, api_ua),
                         col_type: 'movie_3',
@@ -465,11 +465,11 @@ function erji() {
         clearMyVar('SrcXTNH');
     }));
     clearMyVar('SrcJy$back');
-    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
+    require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyData.js');
     JYerji();
 
     setLastChapterRule('js:' + $.toString(param=>{
-        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLastChapter.js');
+        require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcLastChapter.js');
         param=='sougou'?sougou():JY360();
     }, MY_PARAMS.datasource))
 }
@@ -498,7 +498,7 @@ function yiji() {
     }
     */  
     clearMyVar('SrcJy$back');
-    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
+    require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyData.js');
     JYyiji();
     if(getMyVar('jydingyue','0')=="0"&&JYconfig['codedyid']&&JYconfig['codeid']!=JYconfig['codedyid']){
         putMyVar('jydingyue','1');
@@ -510,7 +510,7 @@ function yiji() {
                 let text = parsePaste('https://netcut.cn/p/'+aesDecode('Juying', pasteurl));
                 if(pasteurl&&!/^error/.test(text)){
                     let pastedata = JSON.parse(base64Decode(text));
-                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJySet.js');
                     let jknum = 0;
                     let jxnum = 0;
                     var jkdatalist = pastedata.jiekou||[];
@@ -557,7 +557,7 @@ function sousuo2() {
             return "hiker://search?rule=" + MY_RULE.title + "&s=" + input;
         }else{
             return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
-                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
+                require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyXunmi.js');
                 xunmi(name);
             }, input);
         }
@@ -569,7 +569,7 @@ function sousuo2() {
                 if(input.indexOf('https://www.aliyundrive.com/s/')>-1){
                     input = input.replace('http','\nhttp');
                     return $("hiker://empty##fypage#noRecordHistory##noHistory#").rule((input) => {
-                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyAliDisk.js');
                         aliShareUrl(input);
                     },input);
                 }else{
@@ -599,7 +599,7 @@ function sousuo2() {
                                             title: "🔍快速聚搜",
                                             js: $.toString((name) => {
                                                 return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
-                                                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
+                                                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyXunmi.js');
                                                     xunmi(name);
                                                 }, name)
                                             },sug.title)
@@ -618,7 +618,7 @@ function sousuo2() {
                                                         }
                                                     })
                                                     setResult(d);
-                                                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+                                                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyAliDisk.js');
                                                     aliDiskSearch(name);
                                                 }, name)
                                             },sug.title)
@@ -637,7 +637,7 @@ function sousuo2() {
                                                         }
                                                     })
                                                     setResult(d);
-                                                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
+                                                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyAlist.js');
                                                     alistSearch2(name,1);
                                                 }, name)
                                             },sug.title)
@@ -757,7 +757,7 @@ function sousuo2() {
                         title: "🔍快速聚搜",
                         js: $.toString((name) => {
                             return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
-                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
+                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyXunmi.js');
                                 xunmi(name);
                             }, name)
                         },item)
@@ -776,7 +776,7 @@ function sousuo2() {
                                     }
                                 })
                                 setResult(d);
-                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyAliDisk.js');
                                 aliDiskSearch(name);
                             }, name)
                         },item)
@@ -795,7 +795,7 @@ function sousuo2() {
                                     }
                                 })
                                 setResult(d);
-                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
+                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyAlist.js');
                                 alistSearch2(name,1);
                             }, name)
                         },item)
@@ -841,7 +841,7 @@ function sousuo2() {
                     title: "🔍快速聚搜",
                     js: $.toString((name) => {
                         return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
-                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
+                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyXunmi.js');
                             xunmi(name);
                         }, name)
                     },name)
@@ -860,7 +860,7 @@ function sousuo2() {
                                 }
                             })
                             setResult(d);
-                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyAliDisk.js');
                             aliDiskSearch(name);
                         }, name)
                     },name)
@@ -879,7 +879,7 @@ function sousuo2() {
                                 }
                             })
                             setResult(d);
-                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
+                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyAlist.js');
                             alistSearch2(name,1);
                         }, name)
                     },name)
@@ -907,7 +907,7 @@ function sousuo() {
     }
 
     if((!fileExist('hiker://files/rules/Src/Juying/jiekou.json')||sousuoms==1) && getItem('searchsource')!="接口"){
-        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
+        require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyData.js');
         JYsousuo();
     }else{
         if(MY_PAGE==1){
@@ -919,7 +919,7 @@ function sousuo() {
                     col_type: "text_1"
                 }]);
             }else if(name.trim()){
-                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
+                require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyXunmi.js');
                 xunmi(name,false,true);
             }else{
                 setResult([{
@@ -941,7 +941,7 @@ function Version() {
     var oldtime = parseInt(getItem('VersionChecktime','0').replace('time',''));
     if (getMyVar('SrcJuying-VersionCheck', '0') == '0' && nowtime > (oldtime+12*60*60*1000)) {
         try {
-            eval(request(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcTmplVersion.js'))
+            eval(request(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcTmplVersion.js'))
             if (parseFloat(newVersion.SrcJuying) > parseFloat(nowVersion)) {
                 confirm({
                     title:'发现新版本，是否更新？', 
