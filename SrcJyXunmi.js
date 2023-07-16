@@ -62,7 +62,7 @@ function xunmi(name,data,ishkss) {
                 }else{
                     var DYdatalist = [];
                     let TVBoxDY = JYconfig.TVBoxDY;
-                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJySet.js');
                     dydatas = Resourceimport(TVBoxDY,'1',{is:1,sl:datalist.length});
                     DYdatalist = dydatas.jiekou;
                     writeFile(TVBoxTmpfile, JSON.stringify(dydatas));
@@ -549,7 +549,7 @@ function xunmi(name,data,ishkss) {
                                     content: voddesc,
                                     pic_url: vodpic,
                                     url: $("hiker://empty##" + vodurl + "#immersiveTheme#"+(getMyVar('debug','0')=="0"?"#autoCache#":"")).rule((type,ua) => {
-                                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
+                                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyXunmi.js');
                                             xunmierji(type,ua)
                                         },obj.type, urlua),
                                     col_type: "movie_1_vertical_pic",
@@ -808,7 +808,7 @@ function xunmierji(type,ua) {
     var d = [];
     if(MY_PARAMS.title){setPageTitle(MY_PARAMS.title);}
     //加载本地自定义变量缓存文件
-    var configfile = config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'srcconfig.js';
+    var configfile = config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'srcconfig.js';
     require(configfile);
 
     //自动判断是否需要更新请求
@@ -1110,7 +1110,7 @@ function xunmierji(type,ua) {
             conts = data.lists||[];
         }else{
             //自定义接口/web自动匹配
-            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcAutoTmpl.js');
+            require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcAutoTmpl.js');
             let data = autoerji(MY_URL.split('##')[1].split('#')[0],html);
             var details1 = data.details1||'自动匹配失败';
             var details2 = data.details2||'';
@@ -1121,7 +1121,7 @@ function xunmierji(type,ua) {
         }
         if(/xpath|biubiu|XBPQ/.test(type)&&html&&(arts.length==0||conts.length==0)&&getMyVar('debug','0')=="0"&&html.indexOf(MY_PARAMS.title)>-1){
             log('开启模板自动匹配、AI识片，获取播放选集');
-            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcAutoTmpl.js');
+            require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcAutoTmpl.js');
             let data = autoerji(MY_URL.split('##')[1].split('#')[0],html);
             remarks = remarks||"获取数据存在错误";
             pubdate = data.details2||"";
@@ -1181,7 +1181,7 @@ function xunmierji(type,ua) {
     });
 
     //二级统一菜单
-    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyMenu.js');
+    require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyMenu.js');
     putMyVar('moviedesc',desc)
     for(var i in erjimenu){
         d.push(
@@ -1508,7 +1508,7 @@ function xunmierji(type,ua) {
                     }
                     putMyVar('parse_api', parse_api);
                     var DTJX = $("").lazyRule(() => {
-                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
+                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcParseS.js');
                         return SrcParseS.聚影(input);
                     });
                 }else if (/xpath|biubiu|custom|XBPQ/.test(type)) {
@@ -1516,29 +1516,21 @@ function xunmierji(type,ua) {
                     var playurl = list[j].split('$')[1];
                     if(/\.mp4|\.m3u8/.test(playurl) || (/qq\.com|douyin|youku|mgtv|ixigua|bili|iqiyi|sohu|pptv|migu|1905|le\.com/.test(playurl) && /html/.test(playurl))){
                         var DTJX = $("").lazyRule(() => {
-                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
+                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcParseS.js');
                             return SrcParseS.聚影(input);
                         });
                     }else if(playurl.indexOf('https://www.aliyundrive.com/s/')>-1){
                         var DTJX = $("").lazyRule((input) => {
                             input = input.replace('http','\nhttp');
                             return $("hiker://empty##fypage#noRecordHistory##noHistory#").rule((input) => {
-                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyAliDisk.js');
                                 aliShareUrl(input);
                             },input);
                         },playurl);
                     }else{
                         var DTJX = $("").lazyRule(() => {
-                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
+                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcParseS.js');
                             return SrcParseS.task({},input);
-                            /*
-                            if(getMyVar('superweb')=="1"){// && getMyVar('pushboxplay')!="1"){
-                                return 'video://'+input;
-                            }else{
-                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
-                                return SrcParseS.嗅探(input,[],1);
-                            }
-                            */
                         });
                     }
                 }else{
@@ -1651,7 +1643,7 @@ function xunmierji(type,ua) {
             deleteItemByCls('loadlist');
             addItemBefore('listloading', diskMark[MY_PARAMS.name]);
         }else{
-            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+            require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyAliDisk.js');
             aliDiskSearch(MY_PARAMS.name);
         }
     }else if(lineindex == "99"){
@@ -1660,12 +1652,12 @@ function xunmierji(type,ua) {
             deleteItemByCls('loadlist');
             addItemBefore('listloading', alistMark[MY_PARAMS.name]);
         }else{
-            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
+            require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyAlist.js');
             alistSearch2(MY_PARAMS.name,1);
         } 
     }
     setLastChapterRule('js:' + $.toString((type,ua,data)=>{
-        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLastChapter.js');
+        require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcLastChapter.js');
         xunmi(type,ua,data);
     }, type, ua, MY_PARAMS.data))
 }
