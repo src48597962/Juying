@@ -132,13 +132,6 @@ function aliShare(share_id, folder_id, share_pwd) {
                     col_type: 'text_center_1'
                 })
             }
-            /*
-            d.push({
-                title: "💾保存到我的云盘☁️",
-                url: "smartdrive://share/browse?shareId="+share_id+"&sharePwd="+share_pwd,
-                col_type: 'text_center_1'
-            })
-            */
             d.push(
                 {
                     title: getItem('aliyun_style', 'avatar'),
@@ -257,11 +250,11 @@ function aliShare(share_id, folder_id, share_pwd) {
         }
     }catch(e){
         d.push({
-            title: '来晚啦，该分享已失效',
+            title: '该分享已失效或异常',
             url: 'hiker://empty##',
             col_type: "text_center_1"
         })
-        toast('该分享已失效或超时，可刷新确认下');
+        toast('该分享已失效或异常，可刷新确认下');
     }
     setResult(d);
     setLastChapterRule('js:' + $.toString(()=>{
