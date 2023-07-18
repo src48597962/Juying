@@ -113,6 +113,7 @@ function aliShare(share_id, folder_id, share_pwd) {
         };
         let ordersKeys = Object.keys(orders);
         let orderskey = orders[getItem('aliyun_order', '聚影排序')];
+        let style = getItem('aliyun_style', 'avatar');
         let postdata = { "share_id": share_id, "parent_file_id": folder_id || "root", "limit": 200, "image_thumbnail_process": "image/resize,w_256/format,jpeg", "image_url_process": "image/resize,w_1920/format,jpeg/interlace,1", "video_thumbnail_process": "video/snapshot,t_1000,f_jpg,ar_auto,w_256", "order_by": orderskey.split('#')[0], "order_direction": orderskey.split('#')[1] };
         headers['x-share-token'] = sharetoken;
         let sharelist = JSON.parse(request('https://api.aliyundrive.com/adrive/v2/file/list_by_share', { headers: headers, body: postdata, method: 'POST' })).items;
@@ -193,7 +194,7 @@ function aliShare(share_id, folder_id, share_pwd) {
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyAliDisk.js');
                         aliShare(share_id, folder_id, share_pwd);
                     }, item.share_id, item.file_id, share_pwd),
-                    col_type: 'avatar',
+                    col_type: style,
                     extra: {
                         dirname: item.name
                     }
@@ -202,7 +203,7 @@ function aliShare(share_id, folder_id, share_pwd) {
             let filelist = sharelist.filter((item) => {
                 return item.type == "file";
             })
-            if(getItem('aliyun_order')=="聚影排序"){
+            if(getItem('aliyun_order','聚影排序')=="聚影排序"){
                 filelist.sort(SortList);
             }
             filelist.forEach((item) => {
@@ -239,7 +240,7 @@ function aliShare(share_id, folder_id, share_pwd) {
                             }
                         }, item.share_id, item.file_id, sub_file_id||"", share_pwd),
                         desc: filesize < 1024 ? filesize.toFixed(2) + 'MB' : (filesize/1024).toFixed(2) + 'GB',
-                        col_type: 'avatar',
+                        col_type: style,
                         extra: {
                             id: item.file_id
                         }
