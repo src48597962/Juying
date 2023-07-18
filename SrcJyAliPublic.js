@@ -225,29 +225,32 @@ function getAliUrl(share_id, file_id, share_pwd) {
         return ff;
       }
     },share_id,file_id,share_pwd,config));
-    let sharetoken = JSON.parse(request('https://api.aliyundrive.com/v2/share_link/get_share_token', { body: { "share_pwd": share_pwd, "share_id": share_id }, method: 'POST', timeout: 3000 })).share_token;
-    let openUrl = aliOpenPlayUrl(file_id,{sharetoken:sharetoken,share_id:share_id});
-    if(openUrl){
-      urls.push(openUrl);
-      names.push("原始 文件");
-      heads.push({ 'Referer': 'https://www.aliyundrive.com/' });
-    }
-    let playUrlList = aliSharePlayUrl(share_id,file_id,share_pwd) || [];
-    if(playUrlList.length>0){
-      playUrlList.forEach((item) => {
-        urls.push(u + "?url=" + base64Encode(item.url+"|"+item.template_id) + "#.m3u8#pre#");
-        names.push(transcoding[item.template_id] ? transcoding[item.template_id] : item.template_height);
+    if(getItem('aliyun_playMode', '组合')=="组合" || getItem('aliyun_playMode', '组合')=="原画"){
+      let sharetoken = JSON.parse(request('https://api.aliyundrive.com/v2/share_link/get_share_token', { body: { "share_pwd": share_pwd, "share_id": share_id }, method: 'POST', timeout: 3000 })).share_token;
+      let openUrl = aliOpenPlayUrl(file_id,{sharetoken:sharetoken,share_id:share_id});
+      if(openUrl){
+        urls.push(openUrl);
+        names.push("原始 文件");
         heads.push({ 'Referer': 'https://www.aliyundrive.com/' });
-      })
-      return {
-          urls: urls,
-          names: names,
-          headers: heads
-      };
-    }else{
-      log('未获取阿里播放地址，建议重进软件再试一次')
-      return {};
+      }
     }
+    if(getItem('aliyun_playMode', '组合')=="组合" || getItem('aliyun_playMode', '组合')=="转码"){
+      let playUrlList = aliSharePlayUrl(share_id,file_id,share_pwd) || [];
+      if(playUrlList.length>0){
+        playUrlList.forEach((item) => {
+          urls.push(u + "?url=" + base64Encode(item.url+"|"+item.template_id) + "#.m3u8#pre#");
+          names.push(transcoding[item.template_id] ? transcoding[item.template_id] : item.template_height);
+          heads.push({ 'Referer': 'https://www.aliyundrive.com/' });
+        })
+      }else{
+        log('未获取阿里播放地址，建议重进软件再试一次')
+      }
+    }
+    return {
+        urls: urls,
+        names: names,
+        headers: heads
+    };
   } catch (e) {
     log('获取共享链接播放地址失败>' + e.message);
     return {};
