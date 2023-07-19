@@ -63,9 +63,7 @@ function myDiskMenu(islogin){
                         fy_bridge_app.writeFile(alistfile, JSON.stringify(alistData));
                         localStorage.clear();
                         fy_bridge_app.back(true);
-                        alert('TOKEN获取成功，请勿泄漏！');
-                        //fy_bridge_app.parseLazyRule(`hiker://empty@lazyRule=.js:refreshX5WebView('');`);
-                        //fy_bridge_app.back();
+                        fy_bridge_app.toast('TOKEN获取成功，请勿泄漏！');
                         return;
                     } else {
                         token_timer();
