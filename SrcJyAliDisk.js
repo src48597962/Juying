@@ -62,16 +62,17 @@ function myDiskMenu(islogin){
                         alistData.config = alistconfig;
                         fy_bridge_app.writeFile(alistfile, JSON.stringify(alistData));
                         localStorage.clear();
-                        alert('TOKEN获取成功，返回后刷新页面！');
-                        fy_bridge_app.parseLazyRule(`hiker://empty@lazyRule=.js:refreshX5WebView('');`);
-                        fy_bridge_app.back();
+                        fy_bridge_app.back(true);
+                        alert('TOKEN获取成功，请勿泄漏！');
+                        //fy_bridge_app.parseLazyRule(`hiker://empty@lazyRule=.js:refreshX5WebView('');`);
+                        //fy_bridge_app.back();
                         return;
                     } else {
                         token_timer();
                     }
                 }
                 var token_timer = function () {
-                    setTimeout(tokenFunction, 500)
+                    setTimeout(tokenFunction, 300)
                 };
                 tokenFunction();
             })
@@ -81,7 +82,8 @@ function myDiskMenu(islogin){
                 desc: '100%&&float',
                 extra: {
                     canBack: true,
-                    js: js
+                    js: js,
+                    urlInterceptor: $.toString(() => true)
                 }
             })
             setResult(d);
