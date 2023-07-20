@@ -105,10 +105,13 @@ function aliShare(share_id, folder_id, share_pwd) {
         rulepages.push(folder_id);
         storage0.putMyVar('rulepages',rulepages);
     }
+    log("a");
+    log(rulepages);
     addListener("onClose", $.toString(() => {
         let rulepages = storage0.getMyVar('rulepages') || [];
         rulepages.length = rulepages.length-1;
         storage0.putMyVar('rulepages',rulepages);
+        log("b");
         log(rulepages);
         if(rulepages.length>0){
             back(false);
@@ -147,10 +150,10 @@ function aliShare(share_id, folder_id, share_pwd) {
                 d.push(
                     {
                         title: "home",
-                        url: $().lazyRule(() => {
+                        url: $().lazyRule((rulepages) => {
                             rulepages.length = rulepages.length-1;
                             return 'hiker://empty';
-                        }),
+                        },rulepages),
                         col_type: 'icon_5',//icon_round_small_4
                         img: 'https://hikerfans.com/img/ali_icon.svg',
                     },
