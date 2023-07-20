@@ -1,6 +1,6 @@
 //引入Ali公用文件
 require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliPublic.js');
-let folderFilter = new RegExp("点击头像订阅|购买年超级会员|购买会员享8T", "i");//文件夹过滤
+let folderFilter = new RegExp("点左上角头像订阅|点击头像订阅|购买年超级会员|购买会员享8T", "i");//文件夹过滤
 
 function aliShareUrl(input) {
     let li = input.split('\n');
