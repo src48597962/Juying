@@ -107,6 +107,7 @@ function aliShare(share_id, folder_id, share_pwd) {
     }
     addListener("onClose", $.toString(() => {
         let rulepages = storage0.getMyVar('rulepages') || [];
+        rulepages.length = rulepages.length-1;
         if(rulepages.length>0){
             back(false);
         }
