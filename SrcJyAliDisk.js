@@ -100,6 +100,11 @@ function myDiskMenu(islogin) {
     }
 }
 function aliShare(share_id, folder_id, share_pwd) {
+    let rulepages = storage0.getMyVar('rulepages') || [];
+    if(rulepages.indexOf(folder_id)==-1){
+        rulepages.push(folder_id);
+        storage0.putMyVar('rulepages',rulepages);
+    }
     setPageTitle(typeof (MY_PARAMS) != "undefined" && MY_PARAMS.dirname ? MY_PARAMS.dirname : '云盘共享文件 | 聚影√');
     let d = [];
     try {
@@ -130,13 +135,25 @@ function aliShare(share_id, folder_id, share_pwd) {
             }else if (sharelist.length > 0) {
                 d.push(
                     {
+                        title: "home",
+                        url: $().lazyRule(() => {
+                            let rulepages = storage0.getMyVar('rulepages') || [];
+                            for (let i = 0; i < rulepages.length; i++) {
+                                back();
+                            }
+                            return 'toast://已切换';
+                        }),
+                        col_type: 'icon_5',//icon_round_small_4
+                        img: 'https://hikerfans.com/img/ali_icon.svg',
+                    },
+                    {
                         title: getItem('aliyun_style', 'avatar'),
                         url: $(['text_1', 'movie_2', 'card_pic_3', 'avatar']).select(() => {
                             setItem('aliyun_style', input);
                             refreshPage();
                             return 'toast://已切换';
                         }),
-                        col_type: 'icon_round_small_4',
+                        col_type: 'icon_5',//icon_round_small_4
                         img: 'https://hikerfans.com/img/ali_icon.svg',
                     },
                     {
@@ -146,7 +163,7 @@ function aliShare(share_id, folder_id, share_pwd) {
                             refreshPage();
                             return 'toast://切换成功';
                         }),
-                        col_type: 'icon_round_small_4',
+                        col_type: 'icon_5',
                         img: 'https://hikerfans.com/img/ali_sort.svg',
                     },
                     {
@@ -156,13 +173,13 @@ function aliShare(share_id, folder_id, share_pwd) {
                             refreshPage();
                             return 'toast://切换成功';
                         }),
-                        col_type: 'icon_round_small_4',
+                        col_type: 'icon_5',
                         img: 'https://hikerfans.com/img/ali_play.svg',
                     },
                     {
                         title: '转存网盘',
                         url: `smartdrive://share/browse?shareId=${share_id}&sharePwd=${share_pwd}`,
-                        col_type: 'icon_round_small_4',
+                        col_type: 'icon_5',
                         img: 'https://hikerfans.com/img/ali_fileinto.svg',
                     },
                     {
