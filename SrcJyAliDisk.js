@@ -109,6 +109,7 @@ function aliShare(share_id, folder_id, share_pwd) {
         let rulepages = storage0.getMyVar('rulepages') || [];
         rulepages.length = rulepages.length-1;
         storage0.putMyVar('rulepages',rulepages);
+        log(rulepages);
         if(rulepages.length>0){
             back(false);
         }
@@ -139,13 +140,15 @@ function aliShare(share_id, folder_id, share_pwd) {
                 return item.type == "file" || (item.type == "folder" && !folderFilter.test(item.name));
             })
             if(sharelist.length==1 && sharelist[0].type=="folder"){
+                rulepages.length = rulepages.length-1;
+                storage0.putMyVar('rulepages',rulepages);
                 aliShare(share_id, sharelist[0].file_id, share_pwd);
             }else if (sharelist.length > 0) {
                 d.push(
                     {
                         title: "home",
                         url: $().lazyRule(() => {
-                            back(false);
+                            rulepages.length = rulepages.length-1;
                             return 'hiker://empty';
                         }),
                         col_type: 'icon_5',//icon_round_small_4
