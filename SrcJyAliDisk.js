@@ -1,5 +1,6 @@
 //引入Ali公用文件
 require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliPublic.js');
+let folderFilter = new RegExp("点击头像订阅|购买年超级会员|购买会员享8T", "i");//文件夹过滤
 
 function aliShareUrl(input) {
     let li = input.split('\n');
@@ -122,9 +123,11 @@ function aliShare(share_id, folder_id, share_pwd) {
             headers['x-share-token'] = sharetoken;
             let sharelist = JSON.parse(request('https://api.aliyundrive.com/adrive/v2/file/list_by_share', { headers: headers, body: postdata, method: 'POST' })).items;
             sharelist = sharelist.filter(item => {
-                return item.type == "file" || (item.type == "folder" && !/点击头像订阅|购买年超级会员|购买会员享8T/.test(item.name));
+                return item.type == "file" || (item.type == "folder" && !folderFilter.test(item.name));
             })
-            if (sharelist.length > 0) {
+            if(sharelist.length==1 && sharelist[0].type=="folder"){
+                aliShare(share_id, sharelist[0].file_id, share_pwd);
+            }else if (sharelist.length > 0) {
                 d.push(
                     {
                         title: getItem('aliyun_style', 'avatar'),
