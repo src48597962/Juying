@@ -112,6 +112,7 @@ function aliShare(share_id, folder_id, share_pwd) {
     if(rulepages.indexOf(folder_id)==-1){
         rulepages.push(folder_id);
         storage0.putMyVar('rulepages',rulepages);
+        clearMyVar('聚影云盘自动返回');
     }
     log("a");
     log(rulepages);
@@ -121,7 +122,7 @@ function aliShare(share_id, folder_id, share_pwd) {
         storage0.putMyVar('rulepages',rulepages);
         log("b");
         log(rulepages);
-        if(rulepages.length>0){
+        if(rulepages.length>0 && getMyVar('聚影云盘自动返回')=="1"){
             back(false);
         }
     }));
@@ -148,8 +149,12 @@ function aliShare(share_id, folder_id, share_pwd) {
             headers['x-share-token'] = sharetoken;
             let getShare = JSON.parse(request('https://api.aliyundrive.com/adrive/v2/file/list_by_share', { headers: headers, body: postdata, method: 'POST' }));
             if(errorCode[getShare.code]){
-                log(errorCode[getShare.code]);
-                return "toast://" + errorCode[getShare.code];
+                d.push({
+                    title: errorCode[getShare.code],
+                    url: 'hiker://empty##',
+                    col_type: "text_center_1"
+                })
+                setResult(d);
             }
             let sharelist = getShare.items || [];
             sharelist = sharelist.filter(item => {
@@ -163,10 +168,11 @@ function aliShare(share_id, folder_id, share_pwd) {
                 d.push(
                     {
                         title: "home",
-                        url: $().lazyRule((rulepages) => {
-                            rulepages.length = rulepages.length-1;
+                        url: $().lazyRule(() => {
+                            putMyVar('聚影云盘自动返回','1');
+                            back(false);
                             return 'hiker://empty';
-                        },rulepages),
+                        }),
                         col_type: 'icon_5',//icon_round_small_4
                         img: 'https://hikerfans.com/img/ali_icon.svg',
                     },
