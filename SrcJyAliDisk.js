@@ -139,7 +139,7 @@ function aliShare(share_id, folder_id, share_pwd) {
                         url: $().lazyRule(() => {
                             let rulepages = storage0.getMyVar('rulepages') || [];
                             for (let i = 0; i < rulepages.length; i++) {
-                                back();
+                                back(false);
                             }
                             return 'toast://已切换';
                         }),
