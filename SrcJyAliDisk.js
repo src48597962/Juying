@@ -1,6 +1,14 @@
 //引入Ali公用文件
 require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliPublic.js');
 let folderFilter = new RegExp("点左上角头像订阅|点击头像订阅|购买年超级会员|购买会员享8T", "i");//文件夹过滤
+let errorCode = {
+    'ShareLink.Cancelled': '分享链接已失效',
+    'ShareLink.Forbidden': '违规资源已被封禁',
+    'NotFound.ShareLink': '不存在该链接请核对',
+    'AccessTokenInvalid': '访问令牌失效，请重新登陆',
+    'ShareLinkTokenInvalid': '分享令牌失效',
+    'ParamFlowException': '访问过于频繁，请稍后再试'
+}
 
 function aliShareUrl(input) {
     let li = input.split('\n');
@@ -139,20 +147,10 @@ function aliShare(share_id, folder_id, share_pwd) {
             let postdata = { "share_id": share_id, "parent_file_id": folder_id || "root", "limit": 200, "image_thumbnail_process": "image/resize,w_256/format,jpeg", "image_url_process": "image/resize,w_1920/format,jpeg/interlace,1", "video_thumbnail_process": "video/snapshot,t_1000,f_jpg,ar_auto,w_256", "order_by": orderskey.split('#')[0], "order_direction": orderskey.split('#')[1] };
             headers['x-share-token'] = sharetoken;
             let getShare = JSON.parse(request('https://api.aliyundrive.com/adrive/v2/file/list_by_share', { headers: headers, body: postdata, method: 'POST' }));
-            let errorCodeMap = new Map([
-                ['ShareLink.Cancelled', ['分享链接已失效']],
-                ['ShareLink.Forbidden', ['违规资源已被封禁']],
-                ['NotFound.ShareLink', ['不存在该链接请核对']],
-                ['AccessTokenInvalid', ['访问令牌失效，请重新登陆']],
-                ['ShareLinkTokenInvalid', ['分享令牌失效']],
-                ['ParamFlowException', ['访问过于频繁，请稍后再试', 3]],
-            ]);
-            log(errorCodeMap);
-            /*
-            if(getShare.code==){
-
+            if(errorCode[getShare.code]){
+                log(errorCode[getShare.code]);
+                return "toast://" + errorCode[getShare.code];
             }
-            */
             let sharelist = getShare.items || [];
             sharelist = sharelist.filter(item => {
                 return item.type == "file" || (item.type == "folder" && !folderFilter.test(item.name));
