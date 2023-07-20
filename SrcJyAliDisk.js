@@ -105,6 +105,12 @@ function aliShare(share_id, folder_id, share_pwd) {
         rulepages.push(folder_id);
         storage0.putMyVar('rulepages',rulepages);
     }
+    addListener("onClose", $.toString(() => {
+        let rulepages = storage0.getMyVar('rulepages') || [];
+        if(rulepages.length>0){
+            back(false);
+        }
+    }));
     setPageTitle(typeof (MY_PARAMS) != "undefined" && MY_PARAMS.dirname ? MY_PARAMS.dirname : '云盘共享文件 | 聚影√');
     let d = [];
     try {
@@ -137,11 +143,8 @@ function aliShare(share_id, folder_id, share_pwd) {
                     {
                         title: "home",
                         url: $().lazyRule(() => {
-                            let rulepages = storage0.getMyVar('rulepages') || [];
-                            for (let i = 0; i < rulepages.length; i++) {
-                                back(false);
-                            }
-                            return 'toast://已切换';
+                            back(false);
+                            return 'hiker://empty';
                         }),
                         col_type: 'icon_5',//icon_round_small_4
                         img: 'https://hikerfans.com/img/ali_icon.svg',
