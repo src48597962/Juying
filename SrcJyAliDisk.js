@@ -217,17 +217,28 @@ function aliShare(share_id, folder_id, share_pwd) {
             d = d.concat(myDiskMenu(0));
         } else {
             share_pwd = share_pwd || "";
-            let sharetoken = JSON.parse(request('https://api.aliyundrive.com/v2/share_link/get_share_token', { headers: headers, body: { "share_pwd": share_pwd, "share_id": share_id }, method: 'POST' })).share_token;
-            let postdata = { "share_id": share_id, "parent_file_id": folder_id || "root", "limit": 200, "image_thumbnail_process": "image/resize,w_256/format,jpeg", "image_url_process": "image/resize,w_1920/format,jpeg/interlace,1", "video_thumbnail_process": "video/snapshot,t_1000,f_jpg,ar_auto,w_256", "order_by": orderskey.split('#')[0], "order_direction": orderskey.split('#')[1] };
-            headers['x-share-token'] = sharetoken;
-            let getShare = JSON.parse(request('https://api.aliyundrive.com/adrive/v2/file/list_by_share', { headers: headers, body: postdata, method: 'POST' }));
-            if(errorCode[getShare.code]){
+            let getsharetoken = JSON.parse(request('https://api.aliyundrive.com/v2/share_link/get_share_token', { headers: headers, body: { "share_pwd": share_pwd, "share_id": share_id }, method: 'POST' }));
+            let sharetoken = getsharetoken.share_token;
+            let getShare = {};
+            if(errorCode[getsharetoken.code]){
                 d.push({
-                    title: errorCode[getShare.code],
+                    title: errorCode[getsharetoken.code],
                     url: 'hiker://empty',
                     col_type: "text_center_1"
                 })
                 setResult(d);
+            }else{
+                let postdata = { "share_id": share_id, "parent_file_id": folder_id || "root", "limit": 200, "image_thumbnail_process": "image/resize,w_256/format,jpeg", "image_url_process": "image/resize,w_1920/format,jpeg/interlace,1", "video_thumbnail_process": "video/snapshot,t_1000,f_jpg,ar_auto,w_256", "order_by": orderskey.split('#')[0], "order_direction": orderskey.split('#')[1] };
+                headers['x-share-token'] = sharetoken;
+                getShare = JSON.parse(request('https://api.aliyundrive.com/adrive/v2/file/list_by_share', { headers: headers, body: postdata, method: 'POST' }));
+                if(errorCode[getShare.code]){
+                    d.push({
+                        title: errorCode[getShare.code],
+                        url: 'hiker://empty',
+                        col_type: "text_center_1"
+                    })
+                    setResult(d);
+                }
             }
             let sharelist = getShare.items || [];
             sharelist = sharelist.filter(item => {
