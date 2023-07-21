@@ -27,6 +27,7 @@ function aliShareUrl(input) {
         }
     })
     clearMyVar('SrcJyDisk$name');//清除之前搜索的影片名
+    putMyVar('SrcJy$back','1');//云盘列表页换源按钮回退标识
     aliShare(share_id, folder_id, share_pwd);
 }
 
