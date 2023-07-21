@@ -198,7 +198,7 @@ function aliShare(share_id, folder_id, share_pwd) {
             title: '转存',
             url: `smartdrive://share/browse?shareId=${share_id}&sharePwd=${share_pwd}`,
             col_type: 'icon_5',
-            img: 'https://hikerfans.com/img/ali_fileinto.svg',
+            img: 'https://hikerfans.com/tubiao/grey/206.png',
         },
         {
             col_type: 'line_blank',
