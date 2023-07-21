@@ -569,6 +569,10 @@ function JYerji(){
         }
     });
     setResult(d);
+    addListener("onClose", $.toString(() => {
+        clearMyVar('SrcJyDisk$back');
+        log("搜索清除1");
+    }));
     if(lineindex == "98"){
         let diskMark = storage0.getMyVar('diskMark') || {};
         if(diskMark[MY_PARAMS.name]){
