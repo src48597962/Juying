@@ -224,7 +224,7 @@ function aliShare(share_id, folder_id, share_pwd) {
             if(errorCode[getShare.code]){
                 d.push({
                     title: errorCode[getShare.code],
-                    url: 'hiker://empty##',
+                    url: 'hiker://empty',
                     col_type: "text_center_1"
                 })
                 setResult(d);
@@ -282,7 +282,7 @@ function aliShare(share_id, folder_id, share_pwd) {
                         d.push({
                             title: item.name,
                             img: item.thumbnail || (item.category == "video" ? "hiker://files/cache/src/影片.svg" : item.category == "audio" ? "hiker://files/cache/src/音乐.svg" : item.category == "image" ? "hiker://files/cache/src/图片.png" : "https://img.alicdn.com/imgextra/i1/O1CN01mhaPJ21R0UC8s9oik_!!6000000002049-2-tps-80-80.png"),
-                            url: $("hiker://empty##").lazyRule((share_id, file_id, sub_file_id, share_pwd) => {
+                            url: $("").lazyRule((share_id, file_id, sub_file_id, share_pwd) => {
                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliPublic.js');
                                 let play = getAliUrl(share_id, file_id, share_pwd);
                                 if (play.urls) {
@@ -319,7 +319,7 @@ function aliShare(share_id, folder_id, share_pwd) {
         log('获取共享文件列表失败>'+e.message);
         d.push({
             title: '该分享已失效或异常',
-            url: 'hiker://empty##',
+            url: 'hiker://empty',
             col_type: "text_center_1"
         })
         toast('该分享已失效或异常，可刷新确认下');
@@ -373,21 +373,21 @@ function aliDiskSearch(input,data) {
 
                 let home = "https://www.aliyundrive.com/s/";
                 if(obj.name=="我的云盘"){
-                    arr.url = $("hiker://empty##").rule((input) => {
+                    arr.url = $(item.url).rule((input) => {
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyAliDisk.js');
                         aliMyDisk(input);
                     },item.url);
                 }else if(item.url.includes(home)){
-                    arr.url = $("hiker://empty##").rule((input) => {
+                    arr.url = $(item.url).rule((input) => {
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyAliDisk.js');
                         aliShareUrl(input);
                     },item.url);
                 } else if (obj.erparse) {
-                    arr.url = $("hiker://empty##").lazyRule((url,erparse) => {
+                    arr.url = $("hiker://empty").lazyRule((url,erparse) => {
                         eval('let Parse = '+erparse)
                         let aurl = Parse(url);
                         if(aurl.indexOf('aliyundrive.com')>-1){
-                            return $("hiker://empty##").rule((input) => {
+                            return $(aurl).rule((input) => {
                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyAliDisk.js');
                                 aliShareUrl(input);
                             },aurl)
