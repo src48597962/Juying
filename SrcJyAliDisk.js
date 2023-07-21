@@ -165,7 +165,7 @@ function aliShare(share_id, folder_id, share_pwd) {
             img: 'https://hikerfans.com/tubiao/grey/175.png',
         },
         {
-            title: getItem('aliyun_style', 'avatar'),
+            title: "样式",
             url: $(['text_1', 'movie_2', 'card_pic_3', 'avatar']).select(() => {
                 setItem('aliyun_style', input);
                 refreshPage();
@@ -175,27 +175,27 @@ function aliShare(share_id, folder_id, share_pwd) {
             img: 'https://hikerfans.com/tubiao/grey/168.png',
         },
         {
-            title: getItem('aliyun_order', '聚影排序'),
+            title: "排序",
             url: $(ordersKeys, 2).select(() => {
                 setItem('aliyun_order', input);
                 refreshPage();
                 return 'toast://切换成功';
             }),
             col_type: 'icon_5',
-            img: 'https://hikerfans.com/tubiao/grey/76.png',
+            img: 'https://hikerfans.com/tubiao/grey/221.png',
         },
         {
-            title: getItem('aliyun_playMode', '智能') + '播放',
+            title: getItem('aliyun_playMode', '智能'),
             url: $(['转码', '原画', '智能']).select(() => {
                 setItem('aliyun_playMode', input);
                 refreshPage();
                 return 'toast://切换成功';
             }),
             col_type: 'icon_5',
-            img: 'https://hikerfans.com/img/ali_play.svg',
+            img: 'https://hikerfans.com/tubiao/grey/100.png',
         },
         {
-            title: '转存网盘',
+            title: '转存',
             url: `smartdrive://share/browse?shareId=${share_id}&sharePwd=${share_pwd}`,
             col_type: 'icon_5',
             img: 'https://hikerfans.com/img/ali_fileinto.svg',
