@@ -1,8 +1,8 @@
 //引入Ali公用文件
 require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliPublic.js');
-let folderFilter = new RegExp("点左上角头像订阅|点击头像订阅|购买年超级会员|购买会员享8T", "i");//文件夹过滤
+let folderFilter = new RegExp("可获优惠券|点左上角头像订阅|点击头像订阅|购买年超级会员|购买会员享8T", "i");//文件夹过滤
 let errorCode = {
-    'ShareLink.Cancelled': '分享链接已失效',
+    'ShareLink.Cancelled': '来晚啦，该分享已失效',
     'ShareLink.Forbidden': '违规资源已被封禁',
     'NotFound.ShareLink': '不存在该链接请核对',
     'AccessTokenInvalid': '访问令牌失效，请重新登陆',
