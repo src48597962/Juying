@@ -463,11 +463,6 @@ function erji() {
     addListener("onClose", $.toString(() => {
         clearMyVar('SrcM3U8');
         clearMyVar('SrcXTNH');
-        log("二级清除");
-    }));
-    addListener("onClose", $.toString(() => {
-        clearMyVar('SrcJyDisk$back');
-        log("搜索清除");
     }));
     clearMyVar('SrcJy$back');
     require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyData.js');
