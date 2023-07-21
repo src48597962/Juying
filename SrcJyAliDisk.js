@@ -26,9 +26,14 @@ function aliShareUrl(input) {
             folder_id = it.indexOf('/folder/') > -1 ? it.split('/folder/')[1] : "root";
         }
     })
-    clearMyVar('SrcJyDisk$name');//清除之前搜索的影片名
-    putMyVar('SrcJy$back','1');//云盘列表页换源按钮回退标识
-    aliShare(share_id, folder_id, share_pwd);
+    if(share_id && share_id!="undefined"){
+        clearMyVar('SrcJyDisk$name');//清除之前搜索的影片名
+        putMyVar('SrcJy$back','1');//云盘列表页换源按钮回退标识
+        aliShare(share_id, folder_id, share_pwd);
+    }else{
+        back(false);
+        toast("链接地址不正确");
+    }
 }
 
 function myDiskMenu(islogin) {
