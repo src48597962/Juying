@@ -570,7 +570,6 @@ function JYerji(){
     });
     addListener("onClose", $.toString(() => {
         clearMyVar('SrcJyDisk$back');
-        log("搜索清除1");
     }));
     setResult(d);
     if(lineindex == "98"){
