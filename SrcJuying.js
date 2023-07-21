@@ -463,8 +463,8 @@ function erji() {
     addListener("onClose", $.toString(() => {
         clearMyVar('SrcM3U8');
         clearMyVar('SrcXTNH');
+        clearMyVar('SrcJy$back');
     }));
-    clearMyVar('SrcJy$back');
     require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyData.js');
     JYerji();
 
