@@ -320,7 +320,7 @@ function aliOpenPlayUrl(file_id,sharedata) {
     }
     function copy(obj) {
         try {
-            let json = fetch('https://api.aliyundrive.com/adrive/v2/batch', {
+            let json = JSON.parse(fetch('https://api.aliyundrive.com/adrive/v2/batch', {
                 headers: {
                     'User-Agent': PC_UA,
                     'Referer': 'https://www.aliyundrive.com/',
@@ -342,9 +342,11 @@ function aliOpenPlayUrl(file_id,sharedata) {
                     "resource": "file"
                 },
                 method: 'POST'
-            });
-            log(json);
-            return JSON.parse(json).responses[0].body.file_id;
+            })).responses[0].body;
+            if(/size/.test(json.message)){
+                log('云盘没有空间，无法操作转存');
+            }
+            return json.file_id;
         } catch (e) {
             return "";
         }
