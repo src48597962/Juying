@@ -132,14 +132,14 @@ function aliOpenPlayUrl(file_id,sharedata) {
       headers['authorization'] = authorization;
       headers['x-canary'] = "client=web,app=adrive,version=v4.3.1";
       let data = {"authorize":"1","scope":"user:base,file:all:read,file:all:write"}
-      let json = JSON.parse(request('https://open.aliyundrive.com/oauth/users/authorize?client_id=76917ccccd4441c39457a04f6084fb2f&redirect_uri=https://alist.nn.ci/tool/aliyundrive/callback&scope=user:base,file:all:read,file:all:write&state=', { headers: headers, body: data, method: 'POST', timeout: 3000 }));
+      let json = JSON.parse(request('https://open.aliyundrive.com/oauth/users/authorize?client_id=76917ccccd4441c39457a04f6084fb2f&redirect_uri=https://alist.nn.ci/tool/aliyundrive/callback&scope=user:base,file:all:read,file:all:write&state=', { headers: headers, body: data, method: 'POST', timeout: 8000 }));
       let code = json.redirectUri.split("code=")[1];
       let data2 = {"code":code,"grant_type":"authorization_code"}
       let json2;
       try{
-        json2 = JSON.parse(request('https://api-cf.nn.ci/alist/ali_open/code', { body: data2, method: 'POST', timeout: 3000 }));
+        json2 = JSON.parse(request('https://api-cf.nn.ci/alist/ali_open/code', { body: data2, method: 'POST', timeout: 8000 }));
       } catch(e) {
-        json2 = JSON.parse(request('https://api.xhofe.top/alist/ali_open/code', { body: data2, method: 'POST', timeout: 3000 }));
+        json2 = JSON.parse(request('https://api.xhofe.top/alist/ali_open/code', { body: data2, method: 'POST', timeout: 8000 }));
       }
       return json2.access_token || "";
     }
@@ -171,7 +171,6 @@ function aliOpenPlayUrl(file_id,sharedata) {
             if(/size/.test(json.message)){
                 log('云盘没有空间，无法操作转存');
             }
-            log(json);
             return json.file_id;
         } catch (e) {
             return "";
@@ -227,8 +226,7 @@ function aliOpenPlayUrl(file_id,sharedata) {
     }
     headers['authorization'] = 'Bearer ' + opentoken;
     let data3 = {"drive_id":drive_id,"file_id":newfile_id||file_id}
-    let json3 = JSON.parse(request('https://open.aliyundrive.com/adrive/v1.0/openFile/getDownloadUrl', { headers: headers, body: data3, method: 'POST', timeout: 3000 }));
-    log(json3);
+    let json3 = JSON.parse(request('https://open.aliyundrive.com/adrive/v1.0/openFile/getDownloadUrl', { headers: headers, body: data3, method: 'POST', timeout: 8000}));
     if (newfile_id) {
         sharedata.file_id = newfile_id;
         fdel(sharedata);
