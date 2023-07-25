@@ -213,27 +213,33 @@ function aliOpenPlayUrl(file_id,sharedata) {
         return "";
       }
     }
-    let opentoken;
-    let nowtime = Date.now();
-    let oldtime = parseInt(getMyVar('opentokenChecktime', '0').replace('time', ''));
-    let aliopentoken = getMyVar('aliopentoken');
-    if (aliopentoken && nowtime < (oldtime + 1 * 60 * 60 * 1000)) {
-      opentoken = aliopentoken;
-    } else {
-      opentoken = getopentoken(authorization);
-      putMyVar('aliopeninfo', opentoken);
-      putMyVar('opentokenChecktime', nowtime + 'time');
+    let url = '';
+    try{
+        let opentoken;
+        let nowtime = Date.now();
+        let oldtime = parseInt(getMyVar('opentokenChecktime', '0').replace('time', ''));
+        let aliopentoken = getMyVar('aliopentoken');
+        if (aliopentoken && nowtime < (oldtime + 1 * 60 * 60 * 1000)) {
+          opentoken = aliopentoken;
+        } else {
+          opentoken = getopentoken(authorization);
+          putMyVar('aliopeninfo', opentoken);
+          putMyVar('opentokenChecktime', nowtime + 'time');
+        }
+        headers['authorization'] = 'Bearer ' + opentoken;
+        let data3 = {"drive_id":drive_id,"file_id":newfile_id||file_id}
+        let json3 = JSON.parse(request('https://open.aliyundrive.com/adrive/v1.0/openFile/getDownloadUrl', { headers: headers, body: data3, method: 'POST', timeout: 8000}));
+        url = json3.url;
+    }catch(e){
+      log('获取原画播放地址失败>' + e.message);
     }
-    headers['authorization'] = 'Bearer ' + opentoken;
-    let data3 = {"drive_id":drive_id,"file_id":newfile_id||file_id}
-    let json3 = JSON.parse(request('https://open.aliyundrive.com/adrive/v1.0/openFile/getDownloadUrl', { headers: headers, body: data3, method: 'POST', timeout: 8000}));
     if (newfile_id) {
         sharedata.file_id = newfile_id;
         fdel(sharedata);
     }
-    return json3.url || "";
+    return url;
   } catch (e) {
-    log('获取我的云盘开放原画播放地址失败>' + e.message);
+    log('获取我的云盘原画出现异常>' + e.message);
   }
   return "";
 }
