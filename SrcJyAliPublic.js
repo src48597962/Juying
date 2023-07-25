@@ -143,7 +143,7 @@ function aliOpenPlayUrl(file_id,sharedata) {
       }
       return json2.access_token || "";
     }
-    function copy(obj) {
+    function fcopy(obj) {
         try {
             let json = JSON.parse(fetch('https://api.aliyundrive.com/adrive/v2/batch', {
                 headers: {
@@ -177,7 +177,7 @@ function aliOpenPlayUrl(file_id,sharedata) {
             return "";
         }
     };
-    function del(obj) {
+    function fdel(obj) {
         fetch('https://api.aliyundrive.com/adrive/v2/batch', {
             headers: {
                 'User-Agent': PC_UA,
@@ -209,7 +209,7 @@ function aliOpenPlayUrl(file_id,sharedata) {
       sharedata.file_id = file_id;
       sharedata.drive_id = drive_id;
       sharedata.authorization = authorization;
-      newfile_id = copy(sharedata);
+      newfile_id = fcopy(sharedata);
       if(!newfile_id){
         return "";
       }
@@ -228,9 +228,10 @@ function aliOpenPlayUrl(file_id,sharedata) {
     headers['authorization'] = 'Bearer ' + opentoken;
     let data3 = {"drive_id":drive_id,"file_id":newfile_id||file_id}
     let json3 = JSON.parse(request('https://open.aliyundrive.com/adrive/v1.0/openFile/getDownloadUrl', { headers: headers, body: data3, method: 'POST', timeout: 3000 }));
+    log(json3);
     if (newfile_id) {
         sharedata.file_id = newfile_id;
-        del(sharedata);
+        fdel(sharedata);
     }
     return json3.url || "";
   } catch (e) {
