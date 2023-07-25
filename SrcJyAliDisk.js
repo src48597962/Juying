@@ -71,12 +71,18 @@ function myDiskMenu(islogin) {
                     if (token && token.user_id) {
                         let alistfile = "hiker://files/rules/Src/Juying/Alist.json";
                         if (fy_bridge_app.fetch(alistfile)) {
-                            eval("var alistData = " + fy_bridge_app.fetch(alistfile));
+                            try{
+                                eval("var alistData = " + fy_bridge_app.fetch(alistfile));
+                            }catch(e){
+                                var alistData = {};
+                            }
                         } else {
                             var alistData = {};
                         }
                         let alistconfig = alistData.config || {};
                         alistconfig.alitoken = token.refresh_token;
+                        fy_bridge_app.copy(alistconfig.alitoken);
+                        fy_bridge_app.log(alistconfig.alitoken);
                         alistData.config = alistconfig;
                         fy_bridge_app.writeFile(alistfile, JSON.stringify(alistData));
                         localStorage.clear();
@@ -88,7 +94,7 @@ function myDiskMenu(islogin) {
                     }
                 }
                 var token_timer = function () {
-                    setTimeout(tokenFunction, 300);
+                    setTimeout(tokenFunction, 500);
                 }
                 tokenFunction();
             })
