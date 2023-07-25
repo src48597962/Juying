@@ -646,7 +646,7 @@ function sousuo2() {
                                 }
                                 if(sug.img!=""){
                                     sugitem.title = sug.title;
-                                    sugitem.img = sug.img + '@Referer=';
+                                    sugitem.img = sug.img + '@Referer=https://www.douban.com';
                                     sugitem.desc = "年份：" + sug.year;
                                     sugitem.col_type = "movie_1_vertical_pic";
                                 }else{
