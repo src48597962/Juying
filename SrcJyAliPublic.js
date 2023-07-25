@@ -275,7 +275,7 @@ function aliMyPlayUrl(file_id) {
     let heads = [];
     if (aliyunUrl.length > 0) {
       aliyunUrl.forEach((item) => {
-        urls.push(item.url + "#pre#");
+        urls.push(item.url + "#isVideo=true##pre#");
         names.push(transcoding[item.template_id] ? transcoding[item.template_id] : item.template_height);
         heads.push({ 'Referer': 'https://www.aliyundrive.com/' });
       })
