@@ -203,7 +203,7 @@ function getAliUrl(share_id, file_id, share_pwd) {
       let sharetoken = JSON.parse(request('https://api.aliyundrive.com/v2/share_link/get_share_token', { body: { "share_pwd": share_pwd, "share_id": share_id }, method: 'POST', timeout: 3000 })).share_token;
       let openUrl = aliOpenPlayUrl(file_id,{sharetoken:sharetoken,share_id:share_id});
       if(openUrl){
-        urls.push(openUrl + "#.m3u8#pre#");
+        urls.push(openUrl + "#isVideo=true##pre#");
         names.push("原始 画质");
         heads.push({ 'Referer': 'https://www.aliyundrive.com/' });
       }else{
