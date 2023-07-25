@@ -5,7 +5,7 @@ let errorCode = {
     'ShareLink.Cancelled': '来晚啦，该分享已失效',
     'ShareLink.Forbidden': '违规资源已被封禁',
     'NotFound.ShareLink': '不存在该链接请核对',
-    'AccessTokenInvalid': '访问令牌失效，请重新登陆',
+    'AccessTokenInvalid': '访问令牌失效，请重新登陆或稍后再试',
     'ShareLinkTokenInvalid': '分享令牌失效',
     'ParamFlowException': '访问过于频繁，请稍后再试'
 }
