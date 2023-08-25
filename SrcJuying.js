@@ -477,26 +477,30 @@ function erji() {
 
 //一级
 function yiji() {
-    Version();
+    
     /*
     addListener("onClose", $.toString(() => {
         clearMyVar('isverifyA');
     }));
     */
-    /*
-    if(MY_RULE.version<9){
-        confirm({
-            title: "温馨提示",
-            content: "发现小程序新版本",
-            confirm: $.toString(() => {
-                return "海阔视界首页频道规则【聚影√】￥home_rule_url￥http://hiker.nokia.press/hikerule/rulelist.json?id=5102"
-            }),
-            cancel: $.toString(() => {
-                return "toast://当前代码需要配合新小程序版本9以上"
-            })
-        });
+
+    if(getMyVar('SrcJuying-VersionCheck', '0') == '0'){
+        let programversion = $.require("config").version || 0;
+        if(programversion<10){
+            confirm({
+                title: "温馨提示",
+                content: "发现小程序新版本",
+                confirm: $.toString(() => {
+                    return "海阔视界首页频道规则【聚影√】￥home_rule_url￥http://hiker.nokia.press/hikerule/rulelist.json?id=6629"
+                }),
+                cancel: $.toString(() => {
+                    return "toast://不升级小程序，功能不全或有异常"
+                })
+            });
+        }
+        Version();
     }
-    */  
+
     clearMyVar('SrcJy$back');
     require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyData.js');
     JYyiji();
@@ -936,7 +940,7 @@ function sousuo() {
 
 //版本检测
 function Version() {
-    var nowVersion = "7.8";//现在版本 
+    var nowVersion = getItem('Version', "7.9");//现在版本 
     var nowtime = Date.now();
     var oldtime = parseInt(getItem('VersionChecktime','0').replace('time',''));
     if (getMyVar('SrcJuying-VersionCheck', '0') == '0' && nowtime > (oldtime+12*60*60*1000)) {
@@ -946,12 +950,13 @@ function Version() {
                 confirm({
                     title:'发现新版本，是否更新？', 
                     content:nowVersion+'=>'+newVersion.SrcJuying+'\n'+newVersion.SrcJuyingdesc[newVersion.SrcJuying], 
-                    confirm: $.toString((nowtime) => {
+                    confirm: $.toString((nowtime,newVersion) => {
+                        setItem('Version', newVersion);
                         setItem('VersionChecktime', nowtime+'time');
                         deleteCache();
                         delete config.依赖;
                         refreshPage();
-                    },nowtime),
+                    },nowtime, newVersion.SrcJuying),
                     cancel:''
                 })
                 log('检测到新版本！\nV'+newVersion.SrcJuying+'版本》'+newVersion.SrcJuyingdesc[newVersion.SrcJuying]);
