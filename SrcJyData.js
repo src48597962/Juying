@@ -8,6 +8,8 @@ if(Juyingcfg != ""){
     eval("var JYconfig=" + Juyingcfg+ ";");
 }else{
     var JYconfig= {};
+    JYconfig["依赖"] = config.依赖;
+    writeFile(cfgfile, JSON.stringify(JYconfig));
 }
 
 function JYsousuo(){
