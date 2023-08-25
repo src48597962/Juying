@@ -485,7 +485,10 @@ function yiji() {
     */
 
     if(getMyVar('SrcJuying-VersionCheck', '0') == '0'){
-        let programversion = $.require("config").version || 0;
+        let programversion = 0;
+        try{
+            programversion = $.require("config").version || 0;
+        }catch(e){}
         if(programversion<10){
             confirm({
                 title: "温馨提示",
