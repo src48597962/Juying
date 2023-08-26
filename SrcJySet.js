@@ -3132,32 +3132,9 @@ function JYimport(input) {
     try{
         var inputname = input.split('￥')[0];
         if (inputname == "聚影云盘") {
-            //let filepath = "hiker://files/rules/Src/Juying/yundisk.json";
             let parseurl = aesDecode('Juying', input.split('￥')[1]);
             let content = parsePaste(parseurl);
             let datalist2 = JSON.parse(aesDecode('Juying', content));
-            /*
-            let datafile = fetch(filepath);
-            if(datafile != ""){
-                try{
-                    eval("var datalist=" + datafile+ ";");
-                }catch(e){
-                    var datalist = [];
-                }
-            }else{
-                var datalist = [];
-            }
-            let num = 0;
-            for (let i = 0; i < datalist2.length; i++) {
-                if (datalist.some(item => item.name == datalist2[i].name)) {
-                    let index = datalist.indexOf(datalist.filter(d => d.name==datalist2[i].name)[0]);
-                    datalist.splice(index, 1);
-                }
-                datalist.push(datalist2[i]);
-                num = num + 1;
-            }
-            writeFile(filepath, JSON.stringify(datalist));
-            */
             let num = yundisksave(datalist2);
             return "toast://合计" + datalist2.length + "个，导入" + num + "个";
         }else if(cloudimport&&inputname=="聚影接口"){
@@ -3338,7 +3315,7 @@ function yundiskjiekou() {
     });
     d.push({
         title: '导入',
-        url: $("", "云盘分享口令的云剪贴板").input((filepath) => {
+        url: $("", "云盘分享口令的云剪贴板").input(() => {
             try {
                 input = input.split('@import=js:')[0].replace('云口令：','')
                 let inputname = input.split('￥')[0];
@@ -3347,28 +3324,6 @@ function yundiskjiekou() {
                     let parseurl = aesDecode('Juying', input.split('￥')[1]);
                     let content = parsePaste(parseurl);
                     let datalist2 = JSON.parse(aesDecode('Juying', content));
-                    /*
-                    let datafile = fetch(filepath);
-                    if(datafile != ""){
-                        try{
-                            eval("var datalist=" + datafile+ ";");
-                        }catch(e){
-                            var datalist = [];
-                        }
-                    }else{
-                        var datalist = [];
-                    }
-                    let num = 0;
-                    for (let i = 0; i < datalist2.length; i++) {
-                        if (datalist.some(item => item.name == datalist2[i].name)) {
-                            let index = datalist.indexOf(datalist.filter(d => d.name==datalist2[i].name)[0]);
-                            datalist.splice(index, 1);
-                        }
-                        datalist.push(datalist2[i]);
-                        num = num + 1;
-                    }
-                    writeFile(filepath, JSON.stringify(datalist));
-                    */
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                     let num = yundisksave(datalist2);
                     hideLoading();
@@ -3381,7 +3336,7 @@ function yundiskjiekou() {
                 log(e.message);
                 return "toast://聚影√：口令有误";
             }
-        }, filepath),
+        }),
         img: "https://hikerfans.com/tubiao/more/43.png",
         col_type: "icon_small_3"
     });
