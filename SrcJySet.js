@@ -1667,6 +1667,7 @@ function extension(){
         clearMyVar('uploadjiekou');
         clearMyVar('uploadjiexi');
         clearMyVar('uploadlive');
+        clearMyVar('uploadyundisk');
         refreshPage(false);
     }));
     var d = [];
@@ -1755,6 +1756,7 @@ function extension(){
             putMyVar('uploadjiekou','1');
             putMyVar('uploadjiexi','0');
             putMyVar('uploadlive','0');
+            putMyVar('uploadyundisk','0');
             refreshPage(false);
             return 'toast://选择上传同步云端的项';
         }):'toast://请先申请聚影资源码',
@@ -1797,7 +1799,7 @@ function extension(){
         });
         d.push({
             title:(getMyVar('uploadjiekou','0')=="1"?getide(1):getide(0))+'影视接口',
-            col_type:'text_3',
+            col_type:'text_4',
             url:$('#noLoading#').lazyRule(() => {
                 if(getMyVar('uploadjiekou')=="1"){
                     putMyVar('uploadjiekou','0');
@@ -1810,7 +1812,7 @@ function extension(){
         });
         d.push({
             title:(getMyVar('uploadjiexi','0')=="1"?getide(1):getide(0))+'解析接口',
-            col_type:'text_3',
+            col_type:'text_4',
             url:$('#noLoading#').lazyRule(() => {
                 if(getMyVar('uploadjiexi')=="1"){
                     putMyVar('uploadjiexi','0');
@@ -1825,12 +1827,25 @@ function extension(){
         });
         d.push({
             title:(getMyVar('uploadlive','0')=="1"?getide(1):getide(0))+'直播接口',
-            col_type:'text_3',
+            col_type:'text_4',
             url:$('#noLoading#').lazyRule(() => {
                 if(getMyVar('uploadlive')=="1"){
                     putMyVar('uploadlive','0');
                 }else{
                     putMyVar('uploadlive','1');
+                }
+                refreshPage(false);
+                return "hiker://empty";
+            })
+        });
+        d.push({
+            title:(getMyVar('uploadyundisk','0')=="1"?getide(1):getide(0))+'云盘接口',
+            col_type:'text_4',
+            url:$('#noLoading#').lazyRule(() => {
+                if(getMyVar('uploadyundisk')=="1"){
+                    putMyVar('uploadyundisk','0');
+                }else{
+                    putMyVar('uploadyundisk','1');
                 }
                 refreshPage(false);
                 return "hiker://empty";
@@ -1843,6 +1858,7 @@ function extension(){
                 clearMyVar('uploadjiekou');
                 clearMyVar('uploadjiexi');
                 clearMyVar('uploadlive');
+                clearMyVar('uploadyundisk');
                 refreshPage(false);
                 return "hiker://empty";
             }),
@@ -1882,6 +1898,16 @@ function extension(){
                     }
                     text['live'] = liveconfig;
                 }
+                if(getMyVar('uploadyundisk','0')=="1"){
+                    var filepath = "hiker://files/rules/Src/Juying/yundisk.json";
+                    var datafile = fetch(filepath);
+                    if(datafile==""){
+                        var datalist={};
+                    }else{
+                        eval("var datalist=" + datafile+ ";");
+                    }
+                    text['yundisk'] = datalist;
+                }
                 let textcontent = base64Encode(JSON.stringify(text));
                 if(textcontent.length>=200000){
                     log('分享失败：字符数超过最大限制，请精简接口，重点减少xpath和biubiu类型'); 
@@ -1899,6 +1925,7 @@ function extension(){
                     clearMyVar('uploadjiekou');
                     clearMyVar('uploadjiexi');
                     clearMyVar('uploadlive');
+                    clearMyVar('uploadyundisk');
                     refreshPage(false);
                     if(status==1){
                         JYconfig['sharetime'] = sharetime;
