@@ -520,6 +520,7 @@ function yiji() {
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJySet.js');
                     let jknum = 0;
                     let jxnum = 0;
+                    let ypnum = 0;
                     var jkdatalist = pastedata.jiekou||[];
                     if(jkdatalist.length>0){
                         jknum = jiekousave(jkdatalist, 0, JYconfig['codedytype']||1);
@@ -533,7 +534,11 @@ function yiji() {
                         let liveconfig = pastedata.live;
                         writeFile(livefilepath, JSON.stringify(liveconfig));
                     }
-                    log("订阅资源码自动同步完成，接口："+jknum+"，解析："+jxnum);
+                    let ypdatalist = pastedata.yundisk||[];
+                    if(ypdatalist.length>0){
+                        ypnum = yundisksave(ypdatalist);
+                    }
+                    log("订阅资源码自动同步完成，接口："+jknum+"，解析："+jxnum+"，云盘："+ypnum);
                 }else{
                     log("订阅资源码自动同步口令错误或已失效");
                 }
