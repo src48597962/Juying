@@ -3347,6 +3347,7 @@ function yundiskjiekou() {
                     let parseurl = aesDecode('Juying', input.split('￥')[1]);
                     let content = parsePaste(parseurl);
                     let datalist2 = JSON.parse(aesDecode('Juying', content));
+                    /*
                     let datafile = fetch(filepath);
                     if(datafile != ""){
                         try{
@@ -3367,6 +3368,9 @@ function yundiskjiekou() {
                         num = num + 1;
                     }
                     writeFile(filepath, JSON.stringify(datalist));
+                    */
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                    let num = yundisksave(datalist2);
                     hideLoading();
                     refreshPage(false);
                     return "toast://合计" + datalist2.length + "个，导入" + num + "个";
