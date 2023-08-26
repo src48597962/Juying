@@ -1798,7 +1798,7 @@ function extension(){
             extra:{textSize:12}
         });
         d.push({
-            title:(getMyVar('uploadjiekou','0')=="1"?getide(1):getide(0))+'影视接口',
+            title:(getMyVar('uploadjiekou','0')=="1"?getide(1):getide(0))+'接口',
             col_type:'text_4',
             url:$('#noLoading#').lazyRule(() => {
                 if(getMyVar('uploadjiekou')=="1"){
@@ -1811,7 +1811,7 @@ function extension(){
             })
         });
         d.push({
-            title:(getMyVar('uploadjiexi','0')=="1"?getide(1):getide(0))+'解析接口',
+            title:(getMyVar('uploadjiexi','0')=="1"?getide(1):getide(0))+'解析',
             col_type:'text_4',
             url:$('#noLoading#').lazyRule(() => {
                 if(getMyVar('uploadjiexi')=="1"){
@@ -1826,7 +1826,7 @@ function extension(){
             })
         });
         d.push({
-            title:(getMyVar('uploadlive','0')=="1"?getide(1):getide(0))+'直播接口',
+            title:(getMyVar('uploadlive','0')=="1"?getide(1):getide(0))+'直播',
             col_type:'text_4',
             url:$('#noLoading#').lazyRule(() => {
                 if(getMyVar('uploadlive')=="1"){
@@ -1839,7 +1839,7 @@ function extension(){
             })
         });
         d.push({
-            title:(getMyVar('uploadyundisk','0')=="1"?getide(1):getide(0))+'云盘接口',
+            title:(getMyVar('uploadyundisk','0')=="1"?getide(1):getide(0))+'云盘',
             col_type:'text_4',
             url:$('#noLoading#').lazyRule(() => {
                 if(getMyVar('uploadyundisk')=="1"){
@@ -1902,7 +1902,7 @@ function extension(){
                     var filepath = "hiker://files/rules/Src/Juying/yundisk.json";
                     var datafile = fetch(filepath);
                     if(datafile==""){
-                        var datalist={};
+                        var datalist=[];
                     }else{
                         eval("var datalist=" + datafile+ ";");
                     }
@@ -2051,6 +2051,7 @@ function extension(){
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                         let jknum = 0;
                         let jxnum = 0;
+                        let ypnum = 0;
                         let jkdatalist = pastedata.jiekou||[];
                         if(jkdatalist.length>0){
                             jknum = jiekousave(jkdatalist, 0, codedytype||1);
@@ -2065,8 +2066,12 @@ function extension(){
                             writeFile(livefilepath, JSON.stringify(liveconfig));
                             var sm = "，直播订阅已同步"
                         }
+                        let ypdatalist = pastedata.yundisk||[];
+                        if(ypdatalist.length>0){
+                            ypnum = yundisksave(ypdatalist);
+                        }
                         hideLoading();
-                        return "toast://同步完成，接口："+jknum+"，解析："+jxnum+(sm?sm:"");
+                        return "toast://同步完成，接口："+jknum+"，解析："+jxnum+(sm?sm:"")+"，云盘："+ypnum;
                     }else{
                         hideLoading();
                         return "toast://口令错误或资源码已失效";
@@ -3127,10 +3132,11 @@ function JYimport(input) {
     try{
         var inputname = input.split('￥')[0];
         if (inputname == "聚影云盘") {
-            let filepath = "hiker://files/rules/Src/Juying/yundisk.json";
+            //let filepath = "hiker://files/rules/Src/Juying/yundisk.json";
             let parseurl = aesDecode('Juying', input.split('￥')[1]);
             let content = parsePaste(parseurl);
             let datalist2 = JSON.parse(aesDecode('Juying', content));
+            /*
             let datafile = fetch(filepath);
             if(datafile != ""){
                 try{
@@ -3151,6 +3157,8 @@ function JYimport(input) {
                 num = num + 1;
             }
             writeFile(filepath, JSON.stringify(datalist));
+            */
+            let num = yundisksave(datalist2);
             return "toast://合计" + datalist2.length + "个，导入" + num + "个";
         }else if(cloudimport&&inputname=="聚影接口"){
             var cloudtype = "jk";
@@ -3450,4 +3458,28 @@ function yundiskjiekou() {
     setResult(d);
 }
 
-
+function yundisksave(datas){
+    let filepath = "hiker://files/rules/Src/Juying/yundisk.json";
+    let datalist2 = datas;
+    let datafile = fetch(filepath);
+    if(datafile != ""){
+        try{
+            eval("var datalist=" + datafile+ ";");
+        }catch(e){
+            var datalist = [];
+        }
+    }else{
+        var datalist = [];
+    }
+    let num = 0;
+    for (let i = 0; i < datalist2.length; i++) {
+        if (datalist.some(item => item.name == datalist2[i].name)) {
+            let index = datalist.indexOf(datalist.filter(d => d.name==datalist2[i].name)[0]);
+            datalist.splice(index, 1);
+        }
+        datalist.push(datalist2[i]);
+        num = num + 1;
+    }
+    writeFile(filepath, JSON.stringify(datalist));
+    return num;
+}
