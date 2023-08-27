@@ -28,10 +28,10 @@ function JYsousuo(){
             var html = "";
         }
     }
-    log(JSON.parse(html.match(/INITIAL_STATE.*?({.*});/)[1]));
     try {
         var list = datasource=='sougou'?JSON.parse(html.match(/INITIAL_STATE.*?({.*});/)[1]).result.resultData.searchData.results:JSON.parse(html).data.longData.rows;
         list.forEach(item => {
+            log(item);
             try{
                 d.push({
                     title: datasource=='sougou'?item.name.replace(/|/g,''):item.titleTxt,
