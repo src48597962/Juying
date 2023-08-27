@@ -288,7 +288,7 @@ function xunmi(name,data,ishkss) {
                     }else if (/页面已拦截/.test(html)) {
                         html = fetchCodeByWebView(ssurl, { headers: headers, 'blockRules': ['.png', '.jpg'], timeout:timeout});
                         html = pdfh(html,'body&&pre&&Text');
-                    }else if (/系统安全验证/.test(html)) {
+                    }else if (/系统安全验证|安全验证\.\.\./.test(html)) {
                         log(obj.name+'>'+ssurl+'>页面有验证码拦截');
                         function ocr(codeurl,headers) {
                             headers= headers || {};
