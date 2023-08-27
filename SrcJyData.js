@@ -21,7 +21,7 @@ function JYsousuo(){
     }else{
         let wd = MY_URL.split('##')[1];
         let page = MY_URL.split('##')[2];
-        MY_URL = datasource=='sougou'?('https://v.sogou.com/v?query='+wd+'&typemask=6&p=&dp=&dr=&_asf=v.sogou.com&enter=1&ie=utf8'):('https://api.so.360kan.com/index?force_v=1&kw='+wd+'&pageno='+page+'&v_ap=1&tab=all');
+        MY_URL = datasource=='sougou'?('https://waptv.sogou.com/film/result?ie=utf8&query=' + wd):('https://api.so.360kan.com/index?force_v=1&kw='+wd+'&pageno='+page+'&v_ap=1&tab=all');
         if((datasource=='sougou'&&page==1)||datasource=='360'){
             var html = request(MY_URL, { headers: { 'User-Agent': PC_UA } });
         }else{
@@ -29,12 +29,12 @@ function JYsousuo(){
         }
     }
     try {
-        var list = datasource=='sougou'?JSON.parse(html.match(/INITIAL_STATE.*?({.*});/)[1]).result.longVideo.results:JSON.parse(html).data.longData.rows;
+        var list = datasource=='sougou'?JSON.parse(html.match(/INITIAL_STATE.*?({.*});/)[1]).result.resultData.searchData.results:JSON.parse(html).data.longData.rows;
         list.forEach(item => {
             try{
                 d.push({
                     title: datasource=='sougou'?item.name.replace(/|/g,''):item.titleTxt,
-                    url: 'hiker://empty##'+(datasource=='sougou'?('https://v.sogou.com' + item.tiny_url):('https://api.web.360kan.com/v1/detail?cat=' + item.cat_id + '&id=' + item.en_id)) + '#immersiveTheme##autoCache#',
+                    url: 'hiker://empty##'+(datasource=='sougou'?('https://v.sogou.com' + item.tiny_url.replace(/teleplay|cartoon/g, 'series')):('https://api.web.360kan.com/v1/detail?cat=' + item.cat_id + '&id=' + item.en_id)) + '#immersiveTheme##autoCache#',
                     desc: datasource=='sougou'?item.list_category.join(','):(item.year+','+item.area+','+(item.coverInfo.txt||item.tag)),
                     content: datasource=='sougou'?item.introduction:item.description,
                     img: datasource=='sougou'?(item.v_picurl + '@Referer='):(item.cover + '@Referer='),
