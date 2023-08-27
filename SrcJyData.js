@@ -31,12 +31,11 @@ function JYsousuo(){
     try {
         var list = datasource=='sougou'?JSON.parse(html.match(/INITIAL_STATE.*?({.*});/)[1]).result.resultData.searchData.results:JSON.parse(html).data.longData.rows;
         list.forEach(item => {
-            log(item);
             try{
                 d.push({
                     title: datasource=='sougou'?item.name.replace(/|/g,''):item.titleTxt,
                     url: 'hiker://empty##'+(datasource=='sougou'?('https://v.sogou.com' + item.tiny_url.replace(/teleplay|cartoon/g, 'series')):('https://api.web.360kan.com/v1/detail?cat=' + item.cat_id + '&id=' + item.en_id)) + '#immersiveTheme##autoCache#',
-                    desc: datasource=='sougou'?item.list_category.join(','):(item.year+','+item.area+','+(item.coverInfo.txt||item.tag)),
+                    desc: datasource=='sougou'?item.listCategory.join(','):(item.year+','+item.area+','+(item.coverInfo.txt||item.tag)),
                     content: datasource=='sougou'?item.introduction:item.description,
                     img: datasource=='sougou'?(item.v_picurl + '@Referer='):(item.cover + '@Referer='),
                     extra: {
