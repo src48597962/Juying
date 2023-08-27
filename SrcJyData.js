@@ -28,6 +28,7 @@ function JYsousuo(){
             var html = "";
         }
     }
+    log(JSON.parse(html.match(/INITIAL_STATE.*?({.*});/)[1]));
     try {
         var list = datasource=='sougou'?JSON.parse(html.match(/INITIAL_STATE.*?({.*});/)[1]).result.resultData.searchData.results:JSON.parse(html).data.longData.rows;
         list.forEach(item => {
