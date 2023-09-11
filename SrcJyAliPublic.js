@@ -74,6 +74,10 @@ if (alitoken) {
   }
 }
 
+function getsharetoken(share_id,share_pwd) {
+    return JSON.parse(request('https://api.aliyundrive.com/v2/share_link/get_share_token', { body: { "share_pwd": share_pwd, "share_id": share_id }, method: 'POST', timeout: 3000 })) || {};
+}
+
 function SortList(v1, v2) {
   var a = v1.name;
   var b = v2.name;
