@@ -18,7 +18,7 @@ function aliShareUrl(input) {
     li.forEach(it => {
         it = it.trim();
         if (it.indexOf("提取码") > -1) {
-            share_pwd = it.replace('提取码: ', '');
+            share_pwd = it.replace(/提取码|:| |：/g, '');
         }
         if (it.indexOf("https://www.aliyundrive.com") > -1) {
             it = it.replace('https://www.aliyundrive.com/s/', '').replace('链接：', '');
@@ -170,7 +170,7 @@ function aliDiskSearch(input,data) {
                         aliMyDisk(input);
                     },item.url);
                 }else if(item.url.includes(home)){
-                    arr.url = $(item.url).rule((input) => {
+                    arr.url = $(item.url.split('\n')[0]).rule((input) => {
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyAliDisk.js');
                         aliShareUrl(input);
                     },item.url);
