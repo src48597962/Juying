@@ -3102,9 +3102,9 @@ function JYshare(lx,time) {
         return 'toast://分享同步失败，接口字符数超过最大限制';
     }
     try{
-        var pasteurl = JSON.parse(request('https://netcut.cn/api/note/create/', {
+        var pasteurl = JSON.parse(request('https://netcut.cn/api/note2/save/', {
             headers: { 'Referer': 'https://netcut.cn/' },
-            body: 'note_name=Juying'+num+'&note_content='+textcontent+'&note_pwd=0&expire_time='+time,//3600时，604800周，2592000月，31536000年
+            body: 'note_name=Juying'+num+'&note_id=&note_content='+textcontent+'&note_token=&note_pwd=0&expire_time='+time,//3600时，604800周，2592000月，31536000年
             method: 'POST'
         })).data.note_id || "";
     }catch(e){
