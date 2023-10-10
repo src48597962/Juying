@@ -1732,7 +1732,7 @@ function extension(){
                 try{
                     var pastecreate = JSON.parse(request('https://netcut.cn/api/note/create/', {
                         headers: { 'Referer': 'https://netcut.cn/' },
-                        body: 'note_name=Juying'+num+'&note_content=&note_pwd=0&expire_time=94608000',
+                        body: 'note_name=Juying'+num+'&note_content=&note_pwd=&expire_time=94608000',
                         method: 'POST'
                     })).data;
                     var codeid = pastecreate.note_id;
@@ -1766,9 +1766,9 @@ function extension(){
         title: '❎ 删除云端',
         url: JYconfig['codeid']?$("确定要删除吗，删除后无法找回？").confirm((JYconfig,cfgfile)=>{
                 try{
-                    var pastedelete = JSON.parse(request('https://netcut.cn/api/note/del_note/', {
+                    var pastedelete = JSON.parse(request('https://netcut.cn/api/note2/deleteNote/', {
                         headers: { 'Referer': 'https://netcut.cn/' },
-                        body: 'note_id='+aesDecode('Juying', JYconfig['codeid']),
+                        body: 'note_id='+aesDecode('Juying', JYconfig['codeid'])+'&note_toke=&note_name=',
                         method: 'POST'
                     }));
                     var status = pastedelete.status
