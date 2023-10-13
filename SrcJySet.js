@@ -1680,25 +1680,14 @@ function extension(){
         var JYconfig= {};
     }
     //临时保存几个版本，以后删除
-    if(JYconfig['codeid2']){
-        JYconfig['codedyid'] = JYconfig['codeid2'];
-        delete JYconfig['codeid2'];
-        let dyname = JYconfig['codedyname'];
-        JYconfig['codedyname'] = dyname;
-        delete JYconfig['codedyname'];
-        writeFile(cfgfile, JSON.stringify(JYconfig));
-    }
-    if(JYconfig['recordentry']){
-        delete JYconfig['recordentry'];
-        writeFile(cfgfile, JSON.stringify(JYconfig));
-    }
-    //上面临时存放几个版本，将订阅id名称改一下
-    if(JYconfig['Jydouli']){
-        JYconfig['zsjiekou'] = JYconfig['Jydouli'];
-        delete JYconfig['Jydouli'];
-        writeFile(cfgfile, JSON.stringify(JYconfig));
-    }
-    //上面临时存放几个版本，独立展示接口改个名
+    delete JYconfig['codeid2'];
+    delete JYconfig['codedyname'];
+    delete JYconfig['recordentry'];
+    delete JYconfig['Jydouli'];
+    delete JYconfig['codeid'];
+    delete JYconfig['codetime'];
+    delete JYconfig['sharetime'];
+    writeFile(cfgfile, JSON.stringify(JYconfig));
     
     function getide(is) {
         if(is==1){
@@ -1716,43 +1705,47 @@ function extension(){
         title: '🌐 聚影分享',
         col_type: "rich_text"
     });
-    
+    let num = ''; 
+    for (var i = 0; i < 10; i++) {
+        num += Math.floor(Math.random() * 10);
+    }
+    let note_name = 'Juying'+num;
+    let sharecode = JYconfig['sharecode'] || {};
+    sharecode['note_name'] = sharecode['note_name'] || note_name;
     d.push({
-        title: JYconfig['codeid']?'复制聚影资源码口令':'申请聚影资源码',//sharetime
-        desc: JYconfig['codetime']?JYconfig['codetime']+' 有效期三年\n'+(JYconfig['sharetime']?JYconfig['sharetime']+" 上次同步时间":"暂未分享同步"):'点击申请三年长期资源码',
-        url: JYconfig['codeid']?$().lazyRule((codeid)=>{
+        title: sharecode['note_id']?'复制聚影资源码口令':'申请聚影资源码',//sharetime
+        desc: sharecode['time']?sharecode['time']+' 有效期三年\n'+(sharecode['time']?sharecode['time']+" 上次同步时间":"暂未分享同步"):'点击申请三年长期资源码',
+        url: sharecode['note_id']?$().lazyRule((codeid)=>{
                 let code = '聚影资源码￥'+codeid;
                 copy(code);
                 return "hiker://empty";
-            },JYconfig['codeid']):$().lazyRule((JYconfig,cfgfile) => {
-                var num = ''; 
-                for (var i = 0; i < 6; i++) {
-                    num += Math.floor(Math.random() * 10);
-                }
-                
+            },aesEncode('Juying', sharecode['note_name'])):$().lazyRule((JYconfig,cfgfile,note_name) => {
                 try{
-                    var pastecreate = JSON.parse(request('https://netcut.cn/api/note/create/', {
+                    let pastecreate = JSON.parse(request('https://netcut.cn/api/note2/save/', {
                         headers: { 'Referer': 'https://netcut.cn/' },
-                        body: 'note_name=Juying'+num+'&note_content=&note_pwd=&expire_time=94608000',
+                        body: 'note_name='+note_name+'&note_id=&note_content=&note_token=&note_pwd=&expire_time=94608000',
                         method: 'POST'
-                    })).data;
-                    var codeid = pastecreate.note_id;
-                    var codetime = pastecreate.created_time;
+                    }));
+                    if(pastecreate.status==1){
+                        let pastedata = pastecreate.data || {};
+                        pastedata['note_name'] = note_name;
+                        JYconfig['sharecode'] = pastedata;
+                        writeFile(cfgfile, JSON.stringify(JYconfig));
+                        refreshPage(false);
+                        return 'toast://申领成功';
+                    }else{
+                        return 'toast://申领失败：'+pastecreate.error;
+                    }
                 } catch (e) {
                     log('申请失败：'+e.message); 
                     return 'toast://申请失败，请重新再试';
                 }
-                JYconfig['codeid'] = aesEncode('Juying', codeid);
-                JYconfig['codetime'] = codetime;
-                writeFile(cfgfile, JSON.stringify(JYconfig));
-                refreshPage(false);
-                return 'toast://申领成功';
-            }, JYconfig, cfgfile),
+            }, JYconfig, cfgfile, sharecode['note_name']),
         col_type: "text_center_1"
     });
     d.push({
         title: '✅ 分享同步',
-        url: JYconfig['codeid']?$('#noLoading#').lazyRule(()=>{
+        url: sharecode['note_id']?$('#noLoading#').lazyRule(()=>{
             putMyVar('uploads','1');
             putMyVar('uploadjiekou','1');
             putMyVar('uploadjiexi','0');
@@ -1765,18 +1758,17 @@ function extension(){
     });
     d.push({
         title: '❎ 删除云端',
-        url: JYconfig['codeid']?$("确定要删除吗，删除后无法找回？").confirm((JYconfig,cfgfile)=>{
+        url: sharecode['note_id']?$("确定要删除吗，删除后无法找回？").confirm((JYconfig,cfgfile)=>{
                 try{
+                    let sharecode = JYconfig['sharecode'] || {};
                     var pastedelete = JSON.parse(request('https://netcut.cn/api/note2/deleteNote/', {
                         headers: { 'Referer': 'https://netcut.cn/' },
-                        body: 'note_id='+aesDecode('Juying', JYconfig['codeid'])+'&note_toke=&note_name=',
+                        body: 'note_id='+sharecode.note_id+'&note_toke='+sharecode.note_toke+'&note_name='+sharecode.note_name,
                         method: 'POST'
                     }));
                     var status = pastedelete.status
 
-                    delete JYconfig['codeid'];
-                    delete JYconfig['codetime'];
-                    delete JYconfig['sharetime'];
+                    delete JYconfig['sharecode'];
                     writeFile(cfgfile, JSON.stringify(JYconfig));
                     refreshPage(false);
                     
@@ -1915,13 +1907,14 @@ function extension(){
                     return 'toast://分享同步失败，超过最大限制，请精简接口';
                 }
                 try{
-                    var pasteupdate = JSON.parse(request('https://netcut.cn/api/note/update/', {
+                    let sharecode = JYconfig['sharecode'] || {};
+                    var pasteupdate = JSON.parse(request('https://netcut.cn/api/note2/save/', {
                         headers: { 'Referer': 'https://netcut.cn/' },
-                        body: 'note_id='+aesDecode('Juying', JYconfig['codeid'])+'&note_content='+textcontent,
+                        body: 'note_name='+sharecode.note_name+'&note_id='+sharecode.note_id+'&note_content='+textcontent+'&note_token='+sharecode.note_token+'&note_pwd=&expire_time=94608000',
                         method: 'POST'
                     }));
                     var status = pasteupdate.status
-                    var sharetime = pasteupdate.data.updated_time;
+                    
                     clearMyVar('uploads');
                     clearMyVar('uploadjiekou');
                     clearMyVar('uploadjiexi');
@@ -1929,11 +1922,11 @@ function extension(){
                     clearMyVar('uploadyundisk');
                     refreshPage(false);
                     if(status==1){
-                        JYconfig['sharetime'] = sharetime;
+                        let pastedata = pasteupdate.data || {};
+                        pastedata['note_name'] = sharecode.note_name;
+                        JYconfig['sharecode'] = pastedata;
                         writeFile(cfgfile, JSON.stringify(JYconfig));
                         refreshPage(false);
-                        //let code = '聚影资源码￥'+JYconfig['codeid'];
-                        //copy(code);
                         return "toast://分享同步云端数据成功";
                     }else{
                         return 'toast://分享同步失败，资源码应该不存在';
