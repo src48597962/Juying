@@ -1968,8 +1968,10 @@ function extension(){
                         }
                         showLoading('正在较验有效性')
                         let codeid = input.split('￥')[1];
+                        log('https://netcut.cn/'+aesDecode('Juying', codeid));
                         let text = parsePaste('https://netcut.cn/'+aesDecode('Juying', codeid));
                         hideLoading();
+                        log(text);
                         if(codeid&&!/^error/.test(text)){
                             return $("","当前资源码有效，起个名保存吧").input((JYconfig,cfgfile,codeid) => {
                                 let dydatalist = JYconfig.dingyue||[];
