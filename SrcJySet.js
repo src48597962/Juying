@@ -262,24 +262,14 @@ function SRCSet() {
         img: "https://hikerfans.com/tubiao/more/43.png",
         col_type: "icon_small_4"
     });
-    let iscloudshare = (MY_NAME=="海阔视界"&&getAppVersion()>=3470)||(MY_NAME=="嗅觉浏览器"&&getAppVersion()>=852)?1:0;
+    let pastes = getPastes();
+    pastes.push('云口令文件');
     d.push({
         title: '分享',
-        url: datalist.length==0?'toast://数据为空，无法分享':iscloudshare?$(['云口令(时)','云口令(周)','云口令(月)','云口令(年)'],2).select(()=>{
+        url: datalist.length==0?'toast://数据为空，无法分享':$(pastes,2).select(()=>{
+            let lx = getMyVar('guanli', 'jk');
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
-            if(input=="云口令(时)"){
-                var time = 3600;
-            }else if(input=="云口令(周)"){
-                var time = 604800;
-            }else if(input=="云口令(月)"){
-                var time = 2592000;
-            }else if(input=="云口令(年)"){
-                var time = 31536000;
-            }
-            return JYshare(2,time);
-        }):$().lazyRule(()=>{
-            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
-            return JYshare(1,3600);
+            return JYshare(lx, input);
         }),
         img: "https://hikerfans.com/tubiao/more/3.png",
         col_type: "icon_small_4"
@@ -3066,12 +3056,12 @@ function Resourceimport(input,importtype,boxdy){
 }
 
 //资源分享
-function JYshare(lx,time) {
+function JYshare(lx,input) {
     time = time||3600;
-    if(getMyVar('guanli', 'jk')=="jk"){
+    if(lx=="jk"){
     var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
         var sm = "聚影接口";
-    }else{
+    }else if(lx=="jx"){
         var filepath = "hiker://files/rules/Src/Juying/myjiexi.json";
         var sm = "聚影解析";
     }
@@ -3094,36 +3084,16 @@ function JYshare(lx,time) {
         }
     }
     
-    let text = JSON.stringify(datalist);
-    var num = ''; 
-    for (var i = 0; i < 6; i++) {
-        num += Math.floor(Math.random() * 10);
-    }
-    let textcontent = base64Encode(text);
-    if(textcontent.length>=200000){
-        log('分享失败：接口字符数超过最大限制，请精简接口，重点减少xpath和biubiu类型'); 
-        return 'toast://分享同步失败，接口字符数超过最大限制';
-    }
-    try{
-        var pasteurl = JSON.parse(request('https://netcut.cn/api/note2/save/', {
-            headers: { 'Referer': 'https://netcut.cn/' },
-            body: 'note_name=Juying'+num+'&note_id=&note_content='+textcontent+'&note_token=&note_pwd=0&expire_time='+time,//3600时，604800周，2592000月，31536000年
-            method: 'POST'
-        })).data.note_id || "";
-    }catch(e){
-        var pasteurl = "";
-    }
+    showLoading('分享生成中，请稍后...');
+    let pasteurl = sharePaste(aesEncode('Juying', JSON.stringify(datalist)), input);
+    hideLoading();
 
-    if(pasteurl){
-        let code = sm+'￥'+aesEncode('Juying', pasteurl)+'￥'+(time==3600?'1小时':time==604800?'1周':time==2592000?'1个月':time==31536000?'1年':'限期')+'内有效';
-        if(lx!=2){
-            copy(code);
-        }else{
-            copy('云口令：'+code+`@import=js:$.require("hiker://page/cloudimport?rule=聚影√");`);
-        }
+    if(/^http/.test(pasteurl)){
+        let code = sm+'￥'+aesEncode('Juying', pasteurl)+'￥共' + datalist.length + '条('+input+')';
+        copy('云口令：'+code+`@import=js:$.require("hiker://page/cloudimport?rule=聚影√");`);
         return "toast://"+sm2;
     }else{
-        return "toast://分享失败，剪粘板或网络异常";
+        return "toast://分享失败，剪粘板或网络异常>"+pasteurl;
     }
 }
 //资源导入
@@ -3195,6 +3165,7 @@ function JYimport(input) {
 
 function yundiskjiekou() {
     setPageTitle('☁️云盘接口 | ♥管理');
+    clearMyVar('duoselect');
     let filepath = "hiker://files/rules/Src/Juying/yundisk.json";
     let datafile = fetch(filepath);
     if(datafile != ""){
