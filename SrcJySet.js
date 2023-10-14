@@ -1711,11 +1711,15 @@ function extension(){
     let note_name = 'Juying'+num;
     let sharecode = JYconfig['sharecode'] || {};
     sharecode['note_name'] = sharecode['note_name'] || note_name;
-    let noteinfo = JSON.parse(request('https://netcut.cn/api/note2/info/', {
-        headers: { 'Referer': 'https://netcut.cn/' },
-        body: 'note_name='+sharecode['note_name'],
-        method: 'POST'
-    }));
+    let noteinfo = {};
+    if(sharecode['note_id']){
+        try{
+            noteinfo = JSON.parse(request('https://netcut.cn/api/note2/info/?note_id='+sharecode['note_id'], {
+                headers: { 'Referer': 'https://netcut.cn/' }
+            }));
+        }catch(e){}
+    }
+    
 
     d.push({
         title: noteinfo.status==1&&sharecode['note_id']?'复制聚影资源码口令':'申请聚影资源码',//sharetime
@@ -1724,7 +1728,7 @@ function extension(){
                 let code = '聚影资源码￥'+codeid;
                 copy(code);
                 return "hiker://empty";
-            },aesEncode('Juying', sharecode['note_name'])):$().lazyRule((JYconfig,cfgfile,note_name) => {
+            },aesEncode('Juying', sharecode['note_id'])):$().lazyRule((JYconfig,cfgfile,note_name) => {
                 try{
                     let pastecreate = JSON.parse(request('https://netcut.cn/api/note2/save/', {
                         headers: { 'Referer': 'https://netcut.cn/' },
@@ -1750,7 +1754,7 @@ function extension(){
     });
     d.push({
         title: '✅ 分享同步',
-        url: sharecode['note_id']?$('#noLoading#').lazyRule(()=>{
+        url: noteinfo.status==1&&sharecode['note_id']?$('#noLoading#').lazyRule(()=>{
             putMyVar('uploads','1');
             putMyVar('uploadjiekou','1');
             putMyVar('uploadjiexi','0');
