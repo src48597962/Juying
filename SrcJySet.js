@@ -1972,10 +1972,8 @@ function extension(){
                         }
                         showLoading('正在较验有效性')
                         let codeid = input.split('￥')[1];
-                        log('https://netcut.cn/'+aesDecode('Juying', codeid));
-                        let text = parsePaste('https://netcut.cn/'+aesDecode('Juying', codeid));
+                        let text = parsePaste('https://netcut.cn/p/'+aesDecode('Juying', codeid));
                         hideLoading();
-                        log(text);
                         if(codeid&&!/^error/.test(text)){
                             return $("","当前资源码有效，起个名保存吧").input((JYconfig,cfgfile,codeid) => {
                                 let dydatalist = JYconfig.dingyue||[];
@@ -2050,7 +2048,7 @@ function extension(){
                 try{
                     showLoading('请稍候...')
                     let codeid = codedyid;
-                    let text = parsePaste('https://netcut.cn/'+aesDecode('Juying', codeid));
+                    let text = parsePaste('https://netcut.cn/p/'+aesDecode('Juying', codeid));
                     if(codeid&&!/^error/.test(text)){
                         let pastedata = JSON.parse(base64Decode(text));
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
@@ -3164,7 +3162,7 @@ function JYimport(input) {
             var codelx = "share";
         }
         let pasteurl = input.split('￥')[1];
-        let text = parsePaste('https://netcut.cn/'+aesDecode('Juying', pasteurl));
+        let text = parsePaste('https://netcut.cn/p/'+aesDecode('Juying', pasteurl));
         if(pasteurl&&!/^error/.test(text)){
             let pastedata = JSON.parse(base64Decode(text));
             let urlnum = 0;
