@@ -1719,7 +1719,7 @@ function extension(){
     log(noteinfo);
     d.push({
         title: noteinfo.status==1&&sharecode['note_id']?'复制聚影资源码口令':'申请聚影资源码',//sharetime
-        desc: noteinfo.status==1&&sharecode['sharetime']?noteinfo.data.created_time+' 有效期三年\n'+(sharecode['time']?sharecode['time']+" 上次同步时间":"暂未分享同步"):'点击申请三年长期资源码',
+        desc: noteinfo.status==1&&sharecode['time']?noteinfo.data.created_time+' 有效期三年\n'+(sharecode['time']?sharecode['time']+" 上次同步时间":"暂未分享同步"):'点击申请三年长期资源码',
         url: sharecode['note_id']?$().lazyRule((codeid)=>{
                 let code = '聚影资源码￥'+codeid;
                 copy(code);
