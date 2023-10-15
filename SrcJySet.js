@@ -254,7 +254,7 @@ function SRCSet() {
                 return 'toast://不能为空';
             }
             if(input.indexOf('@import=js:')>-1){
-                input = input.split('@import=js:')[0].replace('云口令：','');
+                input = input.split('@import=js:')[0].replace('云口令：','').trim();
             }
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
             return JYimport(input);
@@ -3134,7 +3134,7 @@ function JYimport(input) {
         }else{
             return "toast://聚影√：无法识别的口令";
         }
-
+        log(pasteurl);
         
         let text = parsePaste(pasteurl);
         if(pasteurl&&!/^error/.test(text)){
