@@ -3134,11 +3134,12 @@ function JYimport(input) {
         }else{
             return "toast://聚影√：无法识别的口令";
         }
-        log(pasteurl);
-        
+
         let text = parsePaste(pasteurl);
+        log(text);
         if(pasteurl&&!/^error/.test(text)){
             let pastedata = JSON.parse(base64Decode(text));
+            log(pastedata);
             let urlnum = 0;
             if(inputname=="聚影接口"){
                 if(codelx=="share"){
