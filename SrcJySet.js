@@ -3120,6 +3120,7 @@ function JYimport(input) {
     }catch(e){
         return "toast://聚影√：口令有误>"+e.message;
     }
+    log(inputname);
     try{
         if (inputname == "聚影云盘") {
             let content = parsePaste(pasteurl);
@@ -3136,6 +3137,7 @@ function JYimport(input) {
         }
         showLoading('获取数据中，请稍后...');
         let text = parsePaste(pasteurl);
+        hideLoading();
         if(pasteurl&&!/^error/.test(text)){
             let pastedata = JSON.parse(base64Decode(text));           
             let urlnum = 0;
