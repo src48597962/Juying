@@ -3136,11 +3136,8 @@ function JYimport(input) {
         }
 
         let text = parsePaste(pasteurl);
-        log(text);
         if(pasteurl&&!/^error/.test(text)){
-            log(base64Decode(text));
-            let pastedata = JSON.parse(base64Decode(text));
-            
+            let pastedata = JSON.parse(aesDecode('Juying', text));           
             let urlnum = 0;
             if(inputname=="聚影接口"){
                 if(codelx=="share"){
