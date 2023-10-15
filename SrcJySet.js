@@ -3082,18 +3082,28 @@ function JYshare(lx,input) {
             //clearMyVar('duoselect');
         }
     }
-    log(base64Encode(JSON.stringify(datalist)).length);
-    log(aesEncode('Juying', JSON.stringify(datalist)).length);
-    showLoading('分享生成中，请稍后...');
-    let pasteurl = sharePaste(base64Encode(JSON.stringify(datalist)), input);
-    hideLoading();
-
-    if(/^http/.test(pasteurl)){
-        let code = sm+'￥'+aesEncode('Juying', pasteurl)+'￥共' + datalist.length + '条('+input+')';
-        copy('云口令：'+code+`@import=js:$.require("hiker://page/cloudimport?rule=聚影√");`);
-        return "toast://"+sm2;
+    if(input=='云口令文件'){
+        let sharetxt = base64Encode(JSON.stringify(datalist));
+        let code = sm + '￥' + aesEncode('Juying', sharetxt) + '￥云口令文件';
+        let sharefile = 'hiker://files/_cache/Juying_'+sharelist.length+'_'+$.dateFormat(new Date(),"HHmmss")+'.hiker';
+        writeFile(sharefile, '云口令：'+code+`@import=js:$.require("hiker://page/import?rule=`+MY_RULE.title+`");`);
+        if(fileExist(sharefile)){
+            return 'share://'+sharefile;
+        }else{
+            return 'toast://云口令文件生成失败';
+        }
     }else{
-        return "toast://分享失败，剪粘板或网络异常>"+pasteurl;
+        showLoading('分享生成中，请稍后...');
+        let pasteurl = sharePaste(base64Encode(JSON.stringify(datalist)), input);
+        hideLoading();
+
+        if(/^http/.test(pasteurl)){
+            let code = sm+'￥'+aesEncode('Juying', pasteurl)+'￥共' + datalist.length + '条('+input+')';
+            copy('云口令：'+code+`@import=js:$.require("hiker://page/cloudimport?rule=聚影√");`);
+            return "toast://"+sm2;
+        }else{
+            return "toast://分享失败，剪粘板或网络异常>"+pasteurl;
+        }
     }
 }
 //资源导入
@@ -3135,9 +3145,14 @@ function JYimport(input) {
         }else{
             return "toast://聚影√：无法识别的口令";
         }
-        showLoading('获取数据中，请稍后...');
-        let text = parsePaste(pasteurl);
-        hideLoading();
+        let text;
+        if(/http/.test(pasteurl)){
+            showLoading('获取数据中，请稍后...');
+            text = parsePaste(pasteurl);
+            hideLoading();
+        }else{
+            text = pasteurl;
+        }
         if(pasteurl&&!/^error/.test(text)){
             let pastedata = JSON.parse(base64Decode(text));           
             let urlnum = 0;
