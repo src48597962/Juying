@@ -3134,7 +3134,7 @@ function JYimport(input) {
         }else{
             return "toast://聚影√：无法识别的口令";
         }
-
+        showLoading('获取数据中，请稍后...');
         let text = parsePaste(pasteurl);
         if(pasteurl&&!/^error/.test(text)){
             let pastedata = JSON.parse(base64Decode(text));           
