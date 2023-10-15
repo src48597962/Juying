@@ -3057,7 +3057,6 @@ function Resourceimport(input,importtype,boxdy){
 
 //资源分享
 function JYshare(lx,input) {
-    time = time||3600;
     if(lx=="jk"){
     var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
         var sm = "聚影接口";
@@ -3098,52 +3097,57 @@ function JYshare(lx,input) {
 }
 //资源导入
 function JYimport(input) {
+    let cloudimport;
     if(/^云口令：/.test(input)){
-        input = input.replace('云口令：','');
-        var cloudimport = 1;
+        input = input.replace('云口令：','').trim();
+        cloudimport = 1;
+    }
+    let pasteurl;
+    let inputname;
+    let codelx = "share";
+    try{
+        pasteurl = aesDecode('Juying', input.split('￥')[1]);
+        inputname = input.split('￥')[0];
+        if(inputname=="聚影资源码"){
+            codelx = "dingyue";
+            pasteurl = 'https://netcut.cn/p/' + pasteurl;
+            if(getMyVar('guanli')=="jk"){
+                inputname = "聚影接口";
+            }else if(getMyVar('guanli')=="jx"){
+                inputname = "聚影解析";
+            }
+        }
+    }catch(e){
+        return "toast://聚影√：口令有误>"+e.message;
     }
     try{
-        var inputname = input.split('￥')[0];
         if (inputname == "聚影云盘") {
-            let parseurl = aesDecode('Juying', input.split('￥')[1]);
-            let content = parsePaste(parseurl);
+            let content = parsePaste(pasteurl);
             let datalist2 = JSON.parse(aesDecode('Juying', content));
             let num = yundisksave(datalist2);
             return "toast://合计" + datalist2.length + "个，导入" + num + "个";
-        }else if(cloudimport&&inputname=="聚影接口"){
-            var cloudtype = "jk";
-        }else if(cloudimport&&inputname=="聚影解析"){
-            var cloudtype = "jx";
         }
-    }catch(e){
-        return "toast://聚影√：口令有误";
-    }
-    try{
-        if(((inputname=="聚影接口"||input.split('￥')[0]=="聚影资源码")&&getMyVar('guanli')=="jk")||cloudtype=="jk"){
+        if(inputname=="聚影接口"){
             var sm = "聚影√：接口";
-        }else if(((inputname=="聚影解析"||input.split('￥')[0]=="聚影资源码")&&getMyVar('guanli')=="jx")||cloudtype=="jx"){
+        }else if(inputname=="聚影解析"){
             var sm = "聚影√：解析";
         }else{
             return "toast://聚影√：无法识别的口令";
         }
-        if(inputname=="聚影资源码"){
-            var codelx = "dingyue";
-        }else{
-            var codelx = "share";
-        }
-        let pasteurl = input.split('￥')[1];
-        let text = parsePaste('https://netcut.cn/p/'+aesDecode('Juying', pasteurl));
+
+        
+        let text = parsePaste(pasteurl);
         if(pasteurl&&!/^error/.test(text)){
             let pastedata = JSON.parse(base64Decode(text));
             let urlnum = 0;
-            if(getMyVar('guanli')=="jk"||cloudtype=="jk"){
+            if(inputname=="聚影接口"){
                 if(codelx=="share"){
                     var pastedatalist = pastedata;
                 }else if(codelx=="dingyue"){
                     var pastedatalist = pastedata.jiekou;
                 }
                 urlnum = jiekousave(pastedatalist);
-            }else if(getMyVar('guanli')=="jx"||cloudtype=="jx"){
+            }else if(inputname=="聚影解析"){
                 if(codelx=="share"){
                     var pastedatalist = pastedata;
                 }else if(codelx=="dingyue"){
@@ -3159,7 +3163,7 @@ function JYimport(input) {
             return "toast://聚影√：口令错误或已失效";
         }
     } catch (e) {
-        return "toast://聚影√：无法识别的口令";
+        return "toast://聚影√：无法识别的口令>"+e.message;
     }
 }
 
