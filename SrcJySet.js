@@ -3082,7 +3082,8 @@ function JYshare(lx,input) {
             //clearMyVar('duoselect');
         }
     }
-    
+    log(base64Encode(JSON.stringify(datalist)).length);
+    log(aesEncode('Juying', JSON.stringify(datalist)).length);
     showLoading('分享生成中，请稍后...');
     let pasteurl = sharePaste(base64Encode(JSON.stringify(datalist)), input);
     hideLoading();
