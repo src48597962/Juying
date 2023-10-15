@@ -8,32 +8,8 @@ var SrcParseS = {
                 return url;
             }else {
                 if (url[0] == '/') { url = 'https:' + url }
-                function clearM3u8(url) {
-                    if(url.includes("index.m3u8")){
-                        let houz=request(url).split("\n")[2];
-                        url=url.replace("index.m3u8",houz);
-                    }
-                    let f = cacheM3u8(url, {timeout: 2000});
-                    let c = readFile(f.split("##")[0]);
-                    if (c.includes("#EXT-X-DISCONTINUITY")&&/\d{6}\.ts/.test(c)) {
-                        let arr = c.split("#EXT-X-DISCONTINUITY");
-                        let lib = [];
-                        arr.forEach((key) => {
-                            if (key.includes('EXT-X-')||/\d{6}\.ts/.test(key)) {
-                                lib.push(key);
-                            }
-                        });
-                        if(lib.length > 3){
-                            writeFile(f.split("##")[0], lib.join('#EXT-X-DISCONTINUITY'));
-                        }
-                    }
-                    return f;
-                }
                 if (i == undefined) {
-                    if (/ffzy|lz-cdn/.test(url) && typeof(clearM3u8Ad) != "undefined") {
-                        log('去广告');
-                        url = clearM3u8(url);//clearM3u8Ad(url, {timeout: 2000});
-                    }else if (getMyVar('SrcM3U8', '1') == "1"&&url.indexOf('.m3u8')>-1) {
+                    if (getMyVar('SrcM3U8', '1') == "1"&&url.indexOf('.m3u8')>-1) {
                         url = cacheM3u8(url, {timeout: 2000});
                     }
                     if(url.indexOf('User-Agent')==-1){
@@ -120,9 +96,7 @@ var SrcParseS = {
                     if(fy_bridge_app.getHeaderUrl&&vipUrl.indexOf("=http")==-1)
                         return $$$("#noLoading#").lazyRule((url) => {
                             url = base64Decode(url);
-                            if (/ffzy|lz-cdn/.test(url) && typeof(clearM3u8Ad) != "undefined") {
-                                return clearM3u8Ad(url.split(";{")[0], {timeout: 2000})+"#ignoreImg=true##isVideo=true#;{"+url.split(";{")[1];
-                            }else if (getMyVar('SrcM3U8', '1') == "1"&&url.indexOf('.m3u8')>-1) {
+                            if (getMyVar('SrcM3U8', '1') == "1"&&url.indexOf('.m3u8')>-1) {
                                 return cacheM3u8(url.split(";{")[0], {timeout: 2000})+"#ignoreImg=true##isVideo=true#;{"+url.split(";{")[1];
                             }else{
                                 return url.replace(";{", "#ignoreImg=true##isVideo=true#;{");
@@ -257,7 +231,28 @@ var SrcParseS = {
             if(printlog==1){log("直链视频地址，直接播放")}; 
             if(vipUrl.indexOf('app.grelighting.cn')>-1){vipUrl = vipUrl.replace('app.','ht.')}
             if (/ffzy|lz-cdn/.test(vipUrl) && typeof(clearM3u8Ad) != "undefined") {
-                vipUrl = clearM3u8Ad(vipUrl,{timeout:3000});
+                function clearM3u8(url) {
+                    if(url.includes("index.m3u8")){
+                        let houz=request(url).split("\n")[2];
+                        url=url.replace("index.m3u8",houz);
+                    }
+                    let f = cacheM3u8(url, {timeout: 2000});
+                    let c = readFile(f.split("##")[0]);
+                    if (c.includes("#EXT-X-DISCONTINUITY")&&/\d{6}\.ts/.test(c)) {
+                        let arr = c.split("#EXT-X-DISCONTINUITY");
+                        let lib = [];
+                        arr.forEach((key) => {
+                            if (key.includes('EXT-X-')||/\d{6}\.ts/.test(key)) {
+                                lib.push(key);
+                            }
+                        });
+                        if(lib.length > 3){
+                            writeFile(f.split("##")[0], lib.join('#EXT-X-DISCONTINUITY'));
+                        }
+                    }
+                    return f;
+                }
+                vipUrl = clearM3u8(vipUrl);
             }
             return vipUrl + '#isVideo=true#';
         }else if (vipUrl.indexOf('sa.sogou') != -1) {
