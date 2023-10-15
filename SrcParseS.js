@@ -8,9 +8,31 @@ var SrcParseS = {
                 return url;
             }else {
                 if (url[0] == '/') { url = 'https:' + url }
+                function clearM3u8(url) {
+                    if(url.includes("index.m3u8")){
+                        let houz=request(url).split("\n")[2];
+                        url=url.replace("index.m3u8",houz);
+                    }
+                    let f = cacheM3u8(url, {timeout: 2000});
+                    let c = readFile(f.split("##")[0]);
+                    if (c.includes("#EXT-X-DISCONTINUITY")&&/\d{6}\.ts/.test(c)) {
+                        let arr = c.split("#EXT-X-DISCONTINUITY");
+                        let lib = [];
+                        arr.forEach((key) => {
+                            if (key.includes('EXT-X-')||/\d{6}\.ts/.test(key)) {
+                                lib.push(key);
+                            }
+                        });
+                        if(lib.length > 3){
+                            writeFile(f.split("##")[0], lib.join('#EXT-X-DISCONTINUITY'));
+                        }
+                    }
+                    return f;
+                }
                 if (i == undefined) {
                     if (/ffzy|lz-cdn/.test(url) && typeof(clearM3u8Ad) != "undefined") {
-                        url = clearM3u8Ad(url, {timeout: 2000});
+                        log('去广告');
+                        url = clearM3u8(url);//clearM3u8Ad(url, {timeout: 2000});
                     }else if (getMyVar('SrcM3U8', '1') == "1"&&url.indexOf('.m3u8')>-1) {
                         url = cacheM3u8(url, {timeout: 2000});
                     }
