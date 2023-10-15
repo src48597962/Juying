@@ -230,13 +230,13 @@ var SrcParseS = {
         if(contain.test(vipUrl)&&!exclude.test(vipUrl)&&!needparse.test(vipUrl)){
             if(printlog==1){log("直链视频地址，直接播放")}; 
             if(vipUrl.indexOf('app.grelighting.cn')>-1){vipUrl = vipUrl.replace('app.','ht.')}
-            if (/ffzy|lz-cdn/.test(vipUrl) && typeof(clearM3u8Ad) != "undefined") {
+            if (/ffzy|lz-cdn/.test(vipUrl)) {
                 function clearM3u8(url) {
                     if(url.includes("index.m3u8")){
                         let houz=request(url).split("\n")[2];
                         url=url.replace("index.m3u8",houz);
                     }
-                    let f = cacheM3u8(url, {timeout: 2000});
+                    let f = cacheM3u8(url, {timeout: 3000});
                     let c = readFile(f.split("##")[0]);
                     if (c.includes("#EXT-X-DISCONTINUITY")&&/\d{6}\.ts/.test(c)) {
                         let arr = c.split("#EXT-X-DISCONTINUITY");
