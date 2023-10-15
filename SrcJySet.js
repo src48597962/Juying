@@ -3084,7 +3084,7 @@ function JYshare(lx,input) {
     }
     
     showLoading('分享生成中，请稍后...');
-    let pasteurl = sharePaste(aesEncode('Juying', JSON.stringify(datalist)), input);
+    let pasteurl = sharePaste(base64Encode(JSON.stringify(datalist)), input);
     hideLoading();
 
     if(/^http/.test(pasteurl)){
@@ -3123,7 +3123,7 @@ function JYimport(input) {
     try{
         if (inputname == "聚影云盘") {
             let content = parsePaste(pasteurl);
-            let datalist2 = JSON.parse(aesDecode('Juying', content));
+            let datalist2 = JSON.parse(base64Decode(content));
             let num = yundisksave(datalist2);
             return "toast://合计" + datalist2.length + "个，导入" + num + "个";
         }
@@ -3137,7 +3137,7 @@ function JYimport(input) {
 
         let text = parsePaste(pasteurl);
         if(pasteurl&&!/^error/.test(text)){
-            let pastedata = JSON.parse(aesDecode('Juying', text));           
+            let pastedata = JSON.parse(base64Decode(text));           
             let urlnum = 0;
             if(inputname=="聚影接口"){
                 if(codelx=="share"){
@@ -3300,7 +3300,7 @@ function yundiskjiekou() {
                     showLoading("正在导入，请稍后...");
                     let parseurl = aesDecode('Juying', input.split('￥')[1]);
                     let content = parsePaste(parseurl);
-                    let datalist2 = JSON.parse(aesDecode('Juying', content));
+                    let datalist2 = JSON.parse(base64Decode(content));
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                     let num = yundisksave(datalist2);
                     hideLoading();
@@ -3320,7 +3320,7 @@ function yundiskjiekou() {
     d.push({
         title: '分享',
         url: datalist.length == 0 ? "toast://云盘接口为0，无法分享" : $().lazyRule((datalist) => {
-            let pasteurl = sharePaste(aesEncode('Juying', JSON.stringify(datalist)));
+            let pasteurl = sharePaste(base64Encode(JSON.stringify(datalist)));
             if (pasteurl) {
                 let code = '聚影云盘￥' + aesEncode('Juying', pasteurl) + '￥共' + datalist.length + '条';
                 copy('云口令：'+code+`@import=js:$.require("hiker://page/cloudimport?rule=聚影√");`);
@@ -3344,7 +3344,7 @@ function yundiskjiekou() {
                     showLoading('分享上传中，请稍后...');
                     let oneshare = []
                     oneshare.push(data);
-                    let pasteurl = sharePaste(aesEncode('Juying', JSON.stringify(oneshare)));
+                    let pasteurl = sharePaste(base64Encode(JSON.stringify(oneshare)));
                     hideLoading();
                     if(pasteurl){
                         let code = '聚影云盘￥'+aesEncode('Juying', pasteurl)+'￥'+data.name;
