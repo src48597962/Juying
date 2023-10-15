@@ -3086,7 +3086,7 @@ function JYshare(lx,input) {
         let sharetxt = base64Encode(JSON.stringify(datalist));
         let code = sm + '￥' + aesEncode('Juying', sharetxt) + '￥云口令文件';
         let sharefile = 'hiker://files/_cache/Juying_'+datalist.length+'_'+$.dateFormat(new Date(),"HHmmss")+'.hiker';
-        writeFile(sharefile, '云口令：'+code+`@import=js:$.require("hiker://page/import?rule=`+MY_RULE.title+`");`);
+        writeFile(sharefile, '云口令：'+code+`@import=js:$.require("hiker://page/cloudimport?rule=聚影√");`);
         if(fileExist(sharefile)){
             return 'share://'+sharefile;
         }else{
