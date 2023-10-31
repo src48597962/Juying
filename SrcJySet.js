@@ -3097,7 +3097,7 @@ function JYshare(lx,input) {
         let pasteurl = sharePaste(base64Encode(JSON.stringify(datalist)), input);
         hideLoading();
 
-        if(/^http/.test(pasteurl)){
+        if(/^http|^云/.test(pasteurl) && pasteurl.includes('/')){
             let code = sm+'￥'+aesEncode('Juying', pasteurl)+'￥共' + datalist.length + '条('+input+')';
             copy('云口令：'+code+`@import=js:$.require("hiker://page/cloudimport?rule=聚影√");`);
             return "toast://"+sm2;
