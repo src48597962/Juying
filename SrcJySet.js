@@ -3096,8 +3096,8 @@ function JYshare(lx,input) {
         showLoading('分享生成中，请稍后...');
         let pasteurl = sharePaste(base64Encode(JSON.stringify(datalist)), input);
         hideLoading();
-
         if(/^http|^云/.test(pasteurl) && pasteurl.includes('/')){
+            pasteurl = pasteurl.replace('云6oooole', 'https://pasteme.tyrantg.com').replace('云2oooole', 'https://netcut.cn').replace('云5oooole', 'https://cmd.im').replace('云7oooole', 'https://note.ms').replace('云9oooole', 'https://txtpbbd.cn').replace('云10oooole', 'https://hassdtebin.com');   
             let code = sm+'￥'+aesEncode('Juying', pasteurl)+'￥共' + datalist.length + '条('+input+')';
             copy('云口令：'+code+`@import=js:$.require("hiker://page/cloudimport?rule=聚影√");`);
             return "toast://"+sm2;
@@ -3339,6 +3339,7 @@ function yundiskjiekou() {
         url: datalist.length == 0 ? "toast://云盘接口为0，无法分享" : $().lazyRule((datalist) => {
             let pasteurl = sharePaste(base64Encode(JSON.stringify(datalist)));
             if (pasteurl) {
+                pasteurl = pasteurl.replace('云6oooole', 'https://pasteme.tyrantg.com').replace('云2oooole', 'https://netcut.cn').replace('云5oooole', 'https://cmd.im').replace('云7oooole', 'https://note.ms').replace('云9oooole', 'https://txtpbbd.cn').replace('云10oooole', 'https://hassdtebin.com');
                 let code = '聚影云盘￥' + aesEncode('Juying', pasteurl) + '￥共' + datalist.length + '条';
                 copy('云口令：'+code+`@import=js:$.require("hiker://page/cloudimport?rule=聚影√");`);
                 return "toast://(全部)云盘分享口令已生成";
@@ -3364,6 +3365,7 @@ function yundiskjiekou() {
                     let pasteurl = sharePaste(base64Encode(JSON.stringify(oneshare)));
                     hideLoading();
                     if(pasteurl){
+                        pasteurl = pasteurl.replace('云6oooole', 'https://pasteme.tyrantg.com').replace('云2oooole', 'https://netcut.cn').replace('云5oooole', 'https://cmd.im').replace('云7oooole', 'https://note.ms').replace('云9oooole', 'https://txtpbbd.cn').replace('云10oooole', 'https://hassdtebin.com');
                         let code = '聚影云盘￥'+aesEncode('Juying', pasteurl)+'￥'+data.name;
                         copy('云口令：'+code+`@import=js:$.require("hiker://page/cloudimport?rule=聚影√");`);
                         return "toast://(单个)云盘分享口令已生成";
