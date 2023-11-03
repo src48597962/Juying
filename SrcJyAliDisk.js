@@ -188,7 +188,9 @@ function aliDiskSearch(input,data) {
                         }
                     },item.url,obj.erparse);
                 }
-                searchlist.push(arr);
+                if(arr.title.toLowerCase().includes(input.toLowerCase())){
+                    searchlist.push(arr);
+                }
             })
             if(searchlist.length>0){
                 hideLoading();
