@@ -249,7 +249,7 @@ function aliShare(share_id, folder_id, share_pwd) {
     clearMyVar('聚影云盘自动返回');
     //用于二级套娃自动返回计数
     if(MY_PARAMS.back && !getMyVar('rulepageid')){
-        putMyVar('rulepageid', MY_PARAMS.dirid);
+        putMyVar('rulepageid', share_id+'_'+folder_id+'_'+share_pwd);
     }
     setPageTitle(typeof (MY_PARAMS) != "undefined" && MY_PARAMS.dirname ? MY_PARAMS.dirname : '云盘共享文件 | 聚影√');
     let d = [];
