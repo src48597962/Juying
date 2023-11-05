@@ -292,15 +292,21 @@ function aliShare(share_id, folder_id, share_pwd) {
             extra: {
                 longClick: [{
                     title: "上级目录",
-                    js: $.toString((id) => {
+                    js: $.toString((isback,id) => {
                         if(!id){
                             return "toast://已经是根目录了";
+                        }else if(isback){
+                            clearMyVar('聚影云盘自动返回');
+                            back(false);
+                            return 'hiker://empty';
                         }else{
                             let ids = id.split;
-                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyAliDisk.js');
-                            aliShare(ids[0], ids[1], ids[2]);
+                            return $("").rule((ids) => {
+                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyAliDisk.js');
+                                aliShare(ids[0], ids[1], ids[2]);
+                            },ids);
                         }
-                    },MY_PARAMS.dirid||"")
+                    },MY_PARAMS.back||0,MY_PARAMS.dirid||"")
                 }]
             }
         },
