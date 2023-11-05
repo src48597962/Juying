@@ -239,11 +239,11 @@ function aliDiskSearch(input,data) {
     hideLoading();
 }
 function aliShare(share_id, folder_id, share_pwd) {
-    addListener("onClose", $.toString((isback) => {
-        if(getMyVar('聚影云盘自动返回')&&isback){
+    addListener("onClose", $.toString((isback,dirid) => {
+        if(getMyVar('聚影云盘自动返回')&&isback&&dirid){
             back(false);
         }
-    },MY_PARAMS.back||0));
+    },MY_PARAMS.back||0,MY_PARAMS.dirid||"0"));
     clearMyVar('聚影云盘自动返回');
     setPageTitle(typeof (MY_PARAMS) != "undefined" && MY_PARAMS.dirname ? MY_PARAMS.dirname : '云盘共享文件 | 聚影√');
     let d = [];
