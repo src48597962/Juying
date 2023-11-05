@@ -155,7 +155,8 @@ function aliDiskSearch(input,data) {
                     extra: {
                         cls: "loadlist",
                         name: input,
-                        dirname: item.title
+                        dirname: item.title,
+                        back: 1
                     }
                 };
 
