@@ -240,11 +240,17 @@ function aliDiskSearch(input,data) {
 }
 function aliShare(share_id, folder_id, share_pwd) {
     addListener("onClose", $.toString((isback,dirid) => {
-        if(getMyVar('聚影云盘自动返回')&&isback&&dirid){
+        if(getMyVar('聚影云盘自动返回')&&isback&&dirid!=getMyVar('rulepageid')){
             back(false);
+        }else{
+            clearMyVar('rulepageid');
         }
-    },MY_PARAMS.back||0,MY_PARAMS.dirid||"0"));
+    },MY_PARAMS.back||0,MY_PARAMS.dirid));
     clearMyVar('聚影云盘自动返回');
+    //用于二级套娃自动返回计数
+    if(MY_PARAMS.back && !getMyVar('rulepageid')){
+        putMyVar('rulepageid', MY_PARAMS.dirid);
+    }
     setPageTitle(typeof (MY_PARAMS) != "undefined" && MY_PARAMS.dirname ? MY_PARAMS.dirname : '云盘共享文件 | 聚影√');
     let d = [];
     let orders = {
