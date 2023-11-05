@@ -156,7 +156,7 @@ function aliDiskSearch(input,data) {
                         cls: "loadlist",
                         name: input,
                         dirname: item.title,
-                        back: 1
+                        back: 2
                     }
                 };
 
@@ -239,18 +239,13 @@ function aliDiskSearch(input,data) {
     hideLoading();
 }
 function aliShare(share_id, folder_id, share_pwd) {
-    addListener("onClose", $.toString((isback,dirid) => {
-        if(getMyVar('聚影云盘自动返回')&&isback&&dirid!=getMyVar('rulepageid')){
+    addListener("onClose", $.toString((isback) => {
+        if(getMyVar('聚影云盘自动返回')&&isback==1){
             back(false);
-        }else{
-            clearMyVar('rulepageid');
         }
-    },MY_PARAMS.back||0,MY_PARAMS.dirid));
+    },MY_PARAMS.back||0));
     clearMyVar('聚影云盘自动返回');
-    //用于二级套娃自动返回计数
-    if(MY_PARAMS.back && !getMyVar('rulepageid')){
-        putMyVar('rulepageid', share_id+'_'+folder_id+'_'+share_pwd);
-    }
+
     setPageTitle(typeof (MY_PARAMS) != "undefined" && MY_PARAMS.dirname ? MY_PARAMS.dirname : '云盘共享文件 | 聚影√');
     let d = [];
     let orders = {
@@ -268,7 +263,7 @@ function aliShare(share_id, folder_id, share_pwd) {
         {
             title: "换源",
             url: $().lazyRule((name,isback) => {
-                if(isback){
+                if(isback>0){
                     putMyVar('聚影云盘自动返回','1');
                     back(false);
                     return 'hiker://empty';
@@ -382,8 +377,6 @@ function aliShare(share_id, folder_id, share_pwd) {
                 return item.type == "file" || (item.type == "folder" && !folderFilter.test(item.name));
             })
             if(sharelist.length==1 && sharelist[0].type=="folder"){
-                rulepages.length = rulepages.length-1;
-                storage0.putMyVar('rulepages',rulepages);
                 aliShare(share_id, sharelist[0].file_id, share_pwd);
             }else if (sharelist.length > 0) {
                 let sublist = sharelist.filter(item => {
