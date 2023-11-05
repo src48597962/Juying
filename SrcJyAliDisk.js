@@ -260,8 +260,8 @@ function aliShare(share_id, folder_id, share_pwd) {
     d.push(
         {
             title: "换源",
-            url: $().lazyRule((name) => {
-                if(MY_PARAMS.back){
+            url: $().lazyRule((name,isback) => {
+                if(isback){
                     putMyVar('聚影云盘自动返回','1');
                     back(false);
                     return 'hiker://empty';
@@ -284,7 +284,7 @@ function aliShare(share_id, folder_id, share_pwd) {
                 }else{
                     return 'hiker://empty';
                 }
-            },MY_PARAMS.name||""),
+            },MY_PARAMS.name||"",MY_PARAMS.back||0),
             col_type: 'icon_5',
             img: 'https://hikerfans.com/tubiao/grey/175.png',
             extra: {
