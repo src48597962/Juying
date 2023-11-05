@@ -27,10 +27,6 @@ function aliShareUrl(input) {
         }
     })
     if(share_id && share_id!="undefined"){
-        addListener("onClose", $.toString(() => {
-            putMyVar('SrcJy$back','1');
-        }));
-        putMyVar('SrcJy$back','1');
         aliShare(share_id, folder_id, share_pwd);
     }else{
         back(false);
@@ -242,20 +238,12 @@ function aliDiskSearch(input,data) {
     hideLoading();
 }
 function aliShare(share_id, folder_id, share_pwd) {
-    let rulepages = storage0.getMyVar('rulepages') || [];
-    if(rulepages.indexOf(folder_id)==-1){
-        rulepages.push(folder_id);
-        storage0.putMyVar('rulepages',rulepages);
-        clearMyVar('聚影云盘自动返回');
-    }
-    addListener("onClose", $.toString(() => {
-        let rulepages = storage0.getMyVar('rulepages') || [];
-        rulepages.length = rulepages.length-1;
-        storage0.putMyVar('rulepages',rulepages);
-        if(rulepages.length>0 && getMyVar('聚影云盘自动返回')=="1"){
+    addListener("onClose", $.toString((isback) => {
+        if(getMyVar('聚影云盘自动返回')&&isback){
             back(false);
         }
-    }));
+    },MY_PARAMS.back||0));
+    clearMyVar('聚影云盘自动返回');
     setPageTitle(typeof (MY_PARAMS) != "undefined" && MY_PARAMS.dirname ? MY_PARAMS.dirname : '云盘共享文件 | 聚影√');
     let d = [];
     let orders = {
@@ -273,7 +261,7 @@ function aliShare(share_id, folder_id, share_pwd) {
         {
             title: "换源",
             url: $().lazyRule((name) => {
-                if(getMyVar('SrcJy$back')=='1'){
+                if(MY_PARAMS.back){
                     putMyVar('聚影云盘自动返回','1');
                     back(false);
                     return 'hiker://empty';
@@ -301,11 +289,16 @@ function aliShare(share_id, folder_id, share_pwd) {
             img: 'https://hikerfans.com/tubiao/grey/175.png',
             extra: {
                 longClick: [{
-                    title: "清除返回",
-                    js: $.toString(() => {
-                        clearMyVar('SrcJy$back');
-                        return "toast://已清除，再次点击换源吧";
-                    })
+                    title: "上级目录",
+                    js: $.toString((id) => {
+                        if(!id){
+                            return "toast://已经是根目录了";
+                        }else{
+                            let ids = id.split;
+                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyAliDisk.js');
+                            aliShare(ids[0], ids[1], ids[2]);
+                        }
+                    },MY_PARAMS.dirid||"")
                 }]
             }
         },
@@ -403,7 +396,9 @@ function aliShare(share_id, folder_id, share_pwd) {
                         col_type: style,
                         extra: {
                             dirname: item.name,
-                            name: MY_PARAMS.name||""
+                            name: MY_PARAMS.name||"",
+                            back: 1,
+                            dirid: share_id+'_'+folder_id+'_'+share_pwd
                         }
                     })
                 })
