@@ -1704,7 +1704,7 @@ function extension(){
     let noteinfo = {};
     if(sharecode['note_id']){
         try{
-            noteinfo = JSON.parse(request('https://netcut.cn/api/note2/info/?note_id='+sharecode['note_id'], {
+            noteinfo = JSON.parse(request('https://netcut.txtbin.cn/api/note2/info/?note_id='+sharecode['note_id'], {
                 headers: { 'Referer': 'https://netcut.cn/' }
             }));
         }catch(e){}
@@ -1720,7 +1720,7 @@ function extension(){
                 return "hiker://empty";
             },aesEncode('Juying', sharecode['note_id'])):$().lazyRule((JYconfig,cfgfile,note_name) => {
                 try{
-                    let pastecreate = JSON.parse(request('https://netcut.cn/api/note2/save/', {
+                    let pastecreate = JSON.parse(request('https://netcut.txtbin.cn/api/note2/save/', {
                         headers: { 'Referer': 'https://netcut.cn/' },
                         body: 'note_name='+note_name+'&note_id=&note_content=&note_token=&note_pwd=&expire_time=94608000',
                         method: 'POST'
@@ -1760,7 +1760,7 @@ function extension(){
         url: sharecode['note_id']?$("确定要删除吗，删除后无法找回？").confirm((JYconfig,cfgfile)=>{
                 try{
                     let sharecode = JYconfig['sharecode'] || {};
-                    var pastedelete = JSON.parse(request('https://netcut.cn/api/note2/deleteNote/', {
+                    var pastedelete = JSON.parse(request('https://netcut.txtbin.cn/api/note2/deleteNote/', {
                         headers: { 'Referer': 'https://netcut.cn/' },
                         body: 'note_id='+sharecode.note_id+'&note_toke='+sharecode.note_toke+'&note_name='+sharecode.note_name,
                         method: 'POST'
@@ -1907,7 +1907,7 @@ function extension(){
                 }
                 try{
                     let sharecode = JYconfig['sharecode'] || {};
-                    var pasteupdate = JSON.parse(request('https://netcut.cn/api/note2/save/', {
+                    var pasteupdate = JSON.parse(request('https://netcut.txtbin.cn/api/note2/save/', {
                         headers: { 'Referer': 'https://netcut.cn/' },
                         body: 'note_name='+sharecode.note_name+'&note_id='+sharecode.note_id+'&note_content='+textcontent+'&note_token='+sharecode.note_token+'&note_pwd=&expire_time=94608000',
                         method: 'POST'
