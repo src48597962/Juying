@@ -1670,7 +1670,6 @@ function extension(){
     }
     //临时保存几个版本，以后删除
     delete JYconfig['codeid2'];
-    delete JYconfig['codedyname'];
     delete JYconfig['recordentry'];
     delete JYconfig['Jydouli'];
     delete JYconfig['codeid'];
