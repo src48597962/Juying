@@ -380,6 +380,7 @@ function aliShare(share_id, folder_id, share_pwd) {
             })
             if(sharelist.length==1 && sharelist[0].type=="folder"){
                 setPageTitle(typeof (MY_PARAMS) != "undefined" && MY_PARAMS.dirname ? MY_PARAMS.dirname : sharelist[0].name+' | 聚影√');
+                java.lang.Thread.sleep(1000);
                 aliShare(share_id, sharelist[0].file_id, share_pwd);
             }else if (sharelist.length > 0) {
                 let sublist = sharelist.filter(item => {
