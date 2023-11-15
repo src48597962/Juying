@@ -548,8 +548,14 @@ function aliDiskSearch(input,data) {
     if (i > 30) { delete diskMark[one]; }
     let task = function(obj) {
         try{
-            eval('let Parse = '+obj.parse)
-            let datalist2 = Parse(input) || [];
+            let datalist2 = [];
+            try{
+                eval('let Parse = '+obj.parse);
+                datalist2 = Parse(input);
+            }catch(e){
+                log(obj.name+'>一解出错>'+e.message);
+            }
+            
             let searchlist = [];
             datalist2.forEach(item => {
                 let arr = {
