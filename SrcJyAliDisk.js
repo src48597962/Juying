@@ -658,4 +658,5 @@ function aliDiskSearch(input,data) {
     }
     hideLoading();
     clearMyVar("停止搜索线程");
+    deleteItem("yundisklistloading");
 }
