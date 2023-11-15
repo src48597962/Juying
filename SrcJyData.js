@@ -295,9 +295,6 @@ function JYerji(){
                 url: $("#noLoading#").lazyRule((vari,Marksum) => {
                     let i = 98;
                     if (parseInt(getMyVar(vari, '0')) != i) {
-                        if(getMyVar('diskSearch')=="1"){
-                            return 'toast://搜索线程中，稍等片刻.'
-                        }
                         try {
                             eval('var SrcMark = ' + fetch("hiker://files/cache/SrcMark.json"));
                         } catch (e) {
