@@ -156,7 +156,7 @@ function aliShare(share_id, folder_id, share_pwd) {
                             url: "hiker://empty",
                             col_type: "text_center_1",
                             extra: {
-                                id: "yundisklistloading",
+                                id: "listloading",
                                 lineVisible: false
                             }
                         })
@@ -529,10 +529,10 @@ function aliDiskSearch(input,data) {
         let waittime = 10;
         for (let i = 0; i < waittime; i++) {
             if(getMyVar("停止搜索线程","0")=="0"){
-                updateItem('yundisklistloading', { title: '搜索中...' });
+                updateItem('listloading', { title: '搜索中...' });
                 break;
             }
-            updateItem('yundisklistloading', { title: '等待上次线程结束，'+(waittime-i-1)+'s' });
+            updateItem('listloading', { title: '等待上次线程结束，'+(waittime-i-1)+'s' });
             java.lang.Thread.sleep(1000);
         }
     }
@@ -559,6 +559,14 @@ function aliDiskSearch(input,data) {
         if (i == 1) { one = k }
     }
     if (i > 30) { delete diskMark[one]; }
+
+    addItemBefore("listloading", {
+        col_type: "blank_block",
+        extra: {
+            id: "yundisklistloading"
+        }
+    })
+
     let task = function(obj) {
         try{
             let datalist2 = [];
