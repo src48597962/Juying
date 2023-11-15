@@ -156,7 +156,7 @@ function aliShare(share_id, folder_id, share_pwd) {
                             url: "hiker://empty",
                             col_type: "text_center_1",
                             extra: {
-                                id: "listloading",
+                                id: "yundisklistloading",
                                 lineVisible: false
                             }
                         })
@@ -524,6 +524,19 @@ function aliMyDisk(folder_id,nofilter) {
 
 function aliDiskSearch(input,data) {
     showLoading('搜索中，请稍后...');
+    if(getMyVar('diskSearch')){
+        putMyVar("停止搜索线程", "1");
+        let waittime = 10;
+        for (let i = 0; i < waittime; i++) {
+            if(getMyVar("停止搜索线程","0")=="0"){
+                updateItem('yundisklistloading', { title: '搜索中...' });
+                break;
+            }
+            updateItem('yundisklistloading', { title: '等待上次线程结束，'+(waittime-i-1)+'s' });
+            java.lang.Thread.sleep(1000);
+        }
+    }
+    
     let datalist = [];
     if(data){
         datalist.push(data);
@@ -598,49 +611,12 @@ function aliDiskSearch(input,data) {
                         }
                     }
                 }
-    /*
-                else if(item.url.includes("https://www.aliyundrive.com/s/")){
-                    arr.url = $(item.url.split('\n')[0]).rule((input) => {
-                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyAliDisk.js');
-                        aliShareUrl(input);
-                    },item.url);
-                } else if (obj.erparse) {
-                    arr.url = $("hiker://empty").lazyRule((url,erparse) => {
-                        eval('let Parse = '+erparse)
-                        let aurl = Parse(url);
-                        if(aurl.indexOf('aliyundrive.com')>-1){
-                            return $(aurl).rule((input) => {
-                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyAliDisk.js');
-                                aliShareUrl(input);
-                            },aurl)
-                        }else{
-                            return "toast://二解云盘共享链接失败";
-                        }
-                    },item.url,obj.erparse);
-                }
-                */
             })
             if(searchlist.length>0){
                 hideLoading();
-                /*
-                searchlist.unshift({
-                    title: obj.name + " 找到" + searchlist.length + "条 “" + input + "” 相关",
-                    url: "hiker://empty",
-                    col_type: "text_center_1",
-                    extra: {
-                        cls: "loadlist"
-                    }
-                });
-                searchlist.unshift({
-                    col_type: "line_blank",
-                    extra: {
-                        cls: "loadlist"
-                    }
-                });
-               */
                 diskMark[input] = diskMark[input] || [];
                 diskMark[input] = diskMark[input].concat(searchlist);
-                addItemBefore('listloading', searchlist);
+                addItemBefore('yundisklistloading', searchlist);
             }
         }catch(e){
             log(obj.name + '>' + e.message);
@@ -659,6 +635,9 @@ function aliDiskSearch(input,data) {
         putMyVar('diskSearch', '1');
         be(list, {
             func: function(obj, id, error, taskResult) {
+                if(getMyVar("停止搜索线程")=="1"){
+                    return "break";
+                }
             },
             param: {
             }
@@ -670,4 +649,5 @@ function aliDiskSearch(input,data) {
         toast('无接口，无法搜索');
     }
     hideLoading();
+    clearMyVar("停止搜索线程");
 }
