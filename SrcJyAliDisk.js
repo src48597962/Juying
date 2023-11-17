@@ -412,7 +412,7 @@ function aliMyDisk(folder_id,nofilter) {
             })
             d.push({
                 title: getMyVar("selectDisk","1")=="3"?"““””<b>盘搜索</b>":"盘搜索",
-                img: "https://hikerfans.com/tubiao/grey/218.png",
+                img: "https://hikerfans.com/tubiao/grey/85.png",
                 url: $('#noLoading#').lazyRule(() => {
                     putMyVar("selectDisk","3");
                     refreshPage(false);
@@ -422,7 +422,7 @@ function aliMyDisk(folder_id,nofilter) {
             })
         }
         if(getMyVar("selectDisk","1")=="3"){
-
+            
         }else{
             try{
                 let drive_id = getMyVar("selectDisk","1")=="1"?userinfo.default_drive_id:userinfo2.resource_drive_id;
