@@ -398,7 +398,7 @@ function aliMyDisk(folder_id,nofilter) {
                     refreshPage(false);
                     return "hiker://empty";
                 }),
-                col_type: 'icon_2'
+                col_type: 'icon_small_3'
             })
             d.push({
                 title: getMyVar("selectDisk","1")=="2"?"““””<b>资源库</b>":"资源库",
@@ -408,7 +408,17 @@ function aliMyDisk(folder_id,nofilter) {
                     refreshPage(false);
                     return "hiker://empty";
                 }),
-                col_type: 'icon_2'
+                col_type: 'icon_small_3'
+            })
+            d.push({
+                title: getMyVar("selectDisk","1")=="3"?"““””<b>盘搜索</b>":"盘搜索",
+                img: "https://hikerfans.com/tubiao/grey/126.png",
+                url: $('#noLoading#').lazyRule(() => {
+                    putMyVar("selectDisk","3");
+                    refreshPage(false);
+                    return "hiker://empty";
+                }),
+                col_type: 'icon_small_3'
             })
         }
         try{
