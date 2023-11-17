@@ -391,7 +391,7 @@ function aliMyDisk(folder_id,nofilter) {
             let mydisk = myDiskMenu(1) || [];
             d = d.concat(mydisk);
             d.push({
-                title: getMyVar("selectDisk","1")=="1"?"‘‘’’<b>备份盘</b>":"备份盘",
+                title: getMyVar("selectDisk","1")=="1"?"““””<b>备份盘</b>":"备份盘",
                 img: "https://hikerfans.com/tubiao/grey/167.png",
                 url: $('#noLoading#').lazyRule(() => {
                     putMyVar("selectDisk","1");
@@ -412,7 +412,7 @@ function aliMyDisk(folder_id,nofilter) {
             })
             d.push({
                 title: getMyVar("selectDisk","1")=="3"?"““””<b>盘搜索</b>":"盘搜索",
-                img: "https://hikerfans.com/tubiao/grey/126.png",
+                img: "https://hikerfans.com/tubiao/grey/218.png",
                 url: $('#noLoading#').lazyRule(() => {
                     putMyVar("selectDisk","3");
                     refreshPage(false);
@@ -421,106 +421,110 @@ function aliMyDisk(folder_id,nofilter) {
                 col_type: 'icon_3_fill'
             })
         }
-        try{
-            let drive_id = getMyVar("selectDisk","1")=="1"?userinfo.default_drive_id:userinfo2.resource_drive_id;
-            let postdata = {"drive_id":drive_id,"parent_file_id":folder_id,"limit":200,"all":false,"url_expire_sec":14400,"image_thumbnail_process":"image/resize,w_256/format,avif","image_url_process":"image/resize,w_1920/format,avif","video_thumbnail_process":"video/snapshot,t_1000,f_jpg,ar_auto,w_256","fields":"*","order_by":"updated_at","order_direction":"DESC"};
-            headers['authorization'] = 'Bearer ' + userinfo.access_token;
-            headers['x-canary'] = "client=web,app=adrive,version=v4.1.1";
-            let getfiles = request('https://api.aliyundrive.com/adrive/v3/file/list', { headers: headers, body: postdata, method: 'POST' });
-            let myfilelist = JSON.parse(getfiles).items;
-            if(myfilelist.length>0){
-                let sublist = myfilelist.filter(item => {
-                    return item.type == "file" && /srt|vtt|ass/.test(item.file_extension);
-                })
-                let dirlist = myfilelist.filter((item) => {
-                    return item.type == "folder";
-                })
-                dirlist.forEach((item) => {
-                    d.push({
-                        title: item.name,
-                        img: "hiker://files/cache/src/文件夹.svg",
-                        url: $("hiker://empty").rule((folder_id,nofilter) => {
-                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyAliDisk.js');
-                            aliMyDisk(folder_id,nofilter);
-                        }, item.file_id,nofilter),
-                        col_type: 'avatar',
-                        extra: {
-                            dirname: item.name
-                        }
+        if(getMyVar("selectDisk","1")=="3"){
+
+        }else{
+            try{
+                let drive_id = getMyVar("selectDisk","1")=="1"?userinfo.default_drive_id:userinfo2.resource_drive_id;
+                let postdata = {"drive_id":drive_id,"parent_file_id":folder_id,"limit":200,"all":false,"url_expire_sec":14400,"image_thumbnail_process":"image/resize,w_256/format,avif","image_url_process":"image/resize,w_1920/format,avif","video_thumbnail_process":"video/snapshot,t_1000,f_jpg,ar_auto,w_256","fields":"*","order_by":"updated_at","order_direction":"DESC"};
+                headers['authorization'] = 'Bearer ' + userinfo.access_token;
+                headers['x-canary'] = "client=web,app=adrive,version=v4.1.1";
+                let getfiles = request('https://api.aliyundrive.com/adrive/v3/file/list', { headers: headers, body: postdata, method: 'POST' });
+                let myfilelist = JSON.parse(getfiles).items;
+                if(myfilelist.length>0){
+                    let sublist = myfilelist.filter(item => {
+                        return item.type == "file" && /srt|vtt|ass/.test(item.file_extension);
                     })
-                })
-                let filelist = myfilelist.filter((item) => {
-                    return item.type == "file";
-                })
-                filelist.sort(SortList);
-                filelist.forEach((item) => {
-                    if (item.category == "video" || nofilter) {
-                        let sub_file_url;
-                        if (sublist.length == 1) {
-                            sub_file_url = sublist[0].url;
-                        } else if (sublist.length > 1) {
-                            sublist.forEach(it => {
-                                let subnmae = it.name.substring(0, it.name.lastIndexOf(".")).replace(/\.chs|\.eng/g,'');
-                                if (item.name.includes(subnmae)) {
-                                    sub_file_url = it.url;
+                    let dirlist = myfilelist.filter((item) => {
+                        return item.type == "folder";
+                    })
+                    dirlist.forEach((item) => {
+                        d.push({
+                            title: item.name,
+                            img: "hiker://files/cache/src/文件夹.svg",
+                            url: $("hiker://empty").rule((folder_id,nofilter) => {
+                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyAliDisk.js');
+                                aliMyDisk(folder_id,nofilter);
+                            }, item.file_id,nofilter),
+                            col_type: 'avatar',
+                            extra: {
+                                dirname: item.name
+                            }
+                        })
+                    })
+                    let filelist = myfilelist.filter((item) => {
+                        return item.type == "file";
+                    })
+                    filelist.sort(SortList);
+                    filelist.forEach((item) => {
+                        if (item.category == "video" || nofilter) {
+                            let sub_file_url;
+                            if (sublist.length == 1) {
+                                sub_file_url = sublist[0].url;
+                            } else if (sublist.length > 1) {
+                                sublist.forEach(it => {
+                                    let subnmae = it.name.substring(0, it.name.lastIndexOf(".")).replace(/\.chs|\.eng/g,'');
+                                    if (item.name.includes(subnmae)) {
+                                        sub_file_url = it.url;
+                                    }
+                                })
+                            }
+                            let filesize = item.size/1024/1024;
+                            d.push({
+                                title: item.name,
+                                img: item.thumbnail? item.thumbnail+"@Referer=https://www.aliyundrive.com/" : item.category == "video" ? "hiker://files/cache/src/影片.svg" : item.category == "audio" ? "hiker://files/cache/src/音乐.svg" : item.category == "image" ? "hiker://files/cache/src/图片.png" : "https://img.alicdn.com/imgextra/i1/O1CN01mhaPJ21R0UC8s9oik_!!6000000002049-2-tps-80-80.png@Referer=",
+                                url: $("hiker://empty##").lazyRule((category,file_id,file_url,sub_file_url) => {
+                                    if(category=="video"){
+                                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyAliPublic.js');
+                                        if(alitoken){
+                                            let play = aliMyPlayUrl(file_id);
+                                            if (play.urls) {
+                                                if (sub_file_url) {
+                                                    let subfile = 'hiker://files/_cache/subtitles/'+file_id+'.srt';
+                                                    downloadFile(sub_file_url, subfile, {"referer": "https://www.aliyundrive.com/"})
+                                                    if(fetch(subfile)){
+                                                        play['subtitle'] = getPath(subfile);
+                                                    }
+                                                }
+                                                return JSON.stringify(play);
+                                            }else{
+                                                return "toast://"+play.message;
+                                            }
+                                        }else{
+                                            return "toast://未获取到阿里token";
+                                        }
+                                    }else if(category == "audio"){
+                                        return file_url + ";{Referer@https://www.aliyundrive.com/}#isMusic=true#";
+                                    }else if(category == "image"){
+                                        return file_url + "#.jpg@Referer=https://www.aliyundrive.com/";
+                                    }else{
+                                        return "download://" + file_url + ";{Referer@https://www.aliyundrive.com/}";
+                                    }
+                                }, item.category, item.file_id, item.url||"", sub_file_url||""),
+                                desc: filesize < 1024 ? filesize.toFixed(2) + 'MB' : (filesize/1024).toFixed(2) + 'GB',
+                                col_type: 'avatar',
+                                extra: {
+                                    id: item.file_id,
+                                    cls: "playlist " + item.category,
+                                    inheritTitle: false
                                 }
                             })
                         }
-                        let filesize = item.size/1024/1024;
+                    })
+                    if(!nofilter){
                         d.push({
-                            title: item.name,
-                            img: item.thumbnail? item.thumbnail+"@Referer=https://www.aliyundrive.com/" : item.category == "video" ? "hiker://files/cache/src/影片.svg" : item.category == "audio" ? "hiker://files/cache/src/音乐.svg" : item.category == "image" ? "hiker://files/cache/src/图片.png" : "https://img.alicdn.com/imgextra/i1/O1CN01mhaPJ21R0UC8s9oik_!!6000000002049-2-tps-80-80.png@Referer=",
-                            url: $("hiker://empty##").lazyRule((category,file_id,file_url,sub_file_url) => {
-                                if(category=="video"){
-                                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyAliPublic.js');
-                                    if(alitoken){
-                                        let play = aliMyPlayUrl(file_id);
-                                        if (play.urls) {
-                                            if (sub_file_url) {
-                                                let subfile = 'hiker://files/_cache/subtitles/'+file_id+'.srt';
-                                                downloadFile(sub_file_url, subfile, {"referer": "https://www.aliyundrive.com/"})
-                                                if(fetch(subfile)){
-                                                    play['subtitle'] = getPath(subfile);
-                                                }
-                                            }
-                                            return JSON.stringify(play);
-                                        }else{
-                                            return "toast://"+play.message;
-                                        }
-                                    }else{
-                                        return "toast://未获取到阿里token";
-                                    }
-                                }else if(category == "audio"){
-                                    return file_url + ";{Referer@https://www.aliyundrive.com/}#isMusic=true#";
-                                }else if(category == "image"){
-                                    return file_url + "#.jpg@Referer=https://www.aliyundrive.com/";
-                                }else{
-                                    return "download://" + file_url + ";{Referer@https://www.aliyundrive.com/}";
-                                }
-                            }, item.category, item.file_id, item.url||"", sub_file_url||""),
-                            desc: filesize < 1024 ? filesize.toFixed(2) + 'MB' : (filesize/1024).toFixed(2) + 'GB',
-                            col_type: 'avatar',
-                            extra: {
-                                id: item.file_id,
-                                cls: "playlist " + item.category,
-                                inheritTitle: false
-                            }
+                            title: "““””<small><font color=#f20c00>已开启文件过滤，仅显示视频文件</font></small>",
+                            url: "hiker://empty",
+                            col_type: "text_center_1"
                         })
                     }
-                })
-                if(!nofilter){
-                    d.push({
-                        title: "““””<small><font color=#f20c00>已开启文件过滤，仅显示视频文件</font></small>",
-                        url: "hiker://empty",
-                        col_type: "text_center_1"
-                    })
+                }else{
+                    toast('列表为空');
                 }
-            }else{
-                toast('列表为空');
+            }catch(e){
+                log(e.message);
+                toast('有异常查看日志，可刷新确认下');
             }
-        }catch(e){
-            log(e.message);
-            toast('有异常查看日志，可刷新确认下');
         }
     }else{
         let mydisk = myDiskMenu(0) || [];
