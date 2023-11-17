@@ -391,14 +391,14 @@ function aliMyDisk(folder_id,nofilter) {
             let mydisk = myDiskMenu(1) || [];
             d = d.concat(mydisk);
             d.push({
-                title: getMyVar("selectDisk","1")=="1"?"““””<b>备份盘</b>":"备份盘",
+                title: getMyVar("selectDisk","1")=="1"?"‘‘’’<b>备份盘</b>":"备份盘",
                 img: "https://hikerfans.com/tubiao/grey/167.png",
                 url: $('#noLoading#').lazyRule(() => {
                     putMyVar("selectDisk","1");
                     refreshPage(false);
                     return "hiker://empty";
                 }),
-                col_type: 'icon_small_3'
+                col_type: 'icon_3_fill'
             })
             d.push({
                 title: getMyVar("selectDisk","1")=="2"?"““””<b>资源库</b>":"资源库",
@@ -408,7 +408,7 @@ function aliMyDisk(folder_id,nofilter) {
                     refreshPage(false);
                     return "hiker://empty";
                 }),
-                col_type: 'icon_small_3'
+                col_type: 'icon_3_fill'
             })
             d.push({
                 title: getMyVar("selectDisk","1")=="3"?"““””<b>盘搜索</b>":"盘搜索",
@@ -418,7 +418,7 @@ function aliMyDisk(folder_id,nofilter) {
                     refreshPage(false);
                     return "hiker://empty";
                 }),
-                col_type: 'icon_small_3'
+                col_type: 'icon_3_fill'
             })
         }
         try{
