@@ -844,7 +844,7 @@ function sousuo2(d, disk) {
 
     var nowtime = Date.now();
     var oldtime = JYresou.updatetime||0;
-    if(nowtime > (oldtime+24*60*60*1000)){
+    if(list.length==0 || nowtime > (oldtime+24*60*60*1000)){
         try{
             let html = request("https://ranks.hao.360.com/video-api/v1/rank?cat="+fenleiid[ids]+"&size=30");
             list = JSON.parse(html).data;
