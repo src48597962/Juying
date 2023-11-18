@@ -551,7 +551,7 @@ function yiji() {
 }
 
 //搜索页
-function sousuo2() {
+function sousuo2(d, disk) {
     addListener("onClose", $.toString(() => {
         clearMyVar('sousuo$input');
     }));
@@ -574,7 +574,7 @@ function sousuo2() {
             }, input);
         }
     });
-    var d = [];
+    var d = d || [];
     d.push({
         title: "🔍",
         url: $.toString((searchurl) => {
@@ -676,32 +676,34 @@ function sousuo2() {
             }, searchurl)
         }
     });
-    d.push({
-        title: "♻"+(getItem('searchsource')=="360"?"源：360":getItem('searchsource')=="sougou"?"源：搜狗":"源：接口"),
-        url: $(["接口","sougou","360"],1,"选择搜索数据源").select(()=>{
-            if(input!="接口"){
-                setItem('searchmode','hiker');
-            }
-            setItem('searchsource',input);
-            refreshPage(false);
-            return "toast://已切换"
-        }),
-        col_type: 'scroll_button'
-    });
-    d.push({
-        title: "💡"+(getItem('searchmode')=="hiker"?"软件层搜索":"新窗口搜索"),
-        url: $('#noLoading#').lazyRule(() => {
-            if(getItem('searchmode')=='hiker'){
-                clearItem('searchmode');
-                setItem('searchsource',"接口");
-            }else{
-                setItem('searchmode','hiker');
-            }
-            refreshPage(false);
-            return "toast://已切换"
-        }),
-        col_type: 'scroll_button'
-    });
+    if(!disk){
+        d.push({
+            title: "♻"+(getItem('searchsource')=="360"?"源：360":getItem('searchsource')=="sougou"?"源：搜狗":"源：接口"),
+            url: $(["接口","sougou","360"],1,"选择搜索数据源").select(()=>{
+                if(input!="接口"){
+                    setItem('searchmode','hiker');
+                }
+                setItem('searchsource',input);
+                refreshPage(false);
+                return "toast://已切换"
+            }),
+            col_type: 'scroll_button'
+        });
+        d.push({
+            title: "💡"+(getItem('searchmode')=="hiker"?"软件层搜索":"新窗口搜索"),
+            url: $('#noLoading#').lazyRule(() => {
+                if(getItem('searchmode')=='hiker'){
+                    clearItem('searchmode');
+                    setItem('searchsource',"接口");
+                }else{
+                    setItem('searchmode','hiker');
+                }
+                refreshPage(false);
+                return "toast://已切换"
+            }),
+            col_type: 'scroll_button'
+        });
+    }
     d.push({
         title: "📑"+(getItem('searchrecordide')=='1'?"关闭":"开启")+"记录",
         url: $('#noLoading#').lazyRule(() => {
@@ -823,32 +825,43 @@ function sousuo2() {
         col_type: 'icon_small_3'
     });
     
-    var resoufile = "hiker://files/rules/Src/Juying/resou.json";
-    var Juyingresou=fetch(resoufile);
+    let resoufile = "hiker://files/rules/Src/Juying/resou.json";
+    let Juyingresou = fetch(resoufile);
+    let JYresou = {};
     if(Juyingresou != ""){
-        eval("var JYresou=" + Juyingresou+ ";");
-        var list = JYresou['resoulist'] || [];
-    }else{
-        var JYresou= {};
-        var list = [];
+        try{
+            eval("JYresou=" + Juyingresou+ ";");
+            delete JYresou['resoulist'];
+        }catch(e){}
     }
+    let resoudata = JYresou['data'] || {};
+    let fenlei = ["电视剧","电影","动漫","综艺"];
+    let fenleiid = ["3","2","5","4"];
+    let ids = getMyVar("热榜分类","0");
+    let list = resoudata[fenlei[ids]] || [];
+
     var nowtime = Date.now();
     var oldtime = JYresou.updatetime||0;
-    if(list.length==0||nowtime > (oldtime+24*60*60*1000)){
-        var html = request("https://waptv.sogou.com/hotsugg");
-        var list = pdfa(html, "body&&.hot-list&&li");
-        JYresou['resoulist'] = list;
-        JYresou['updatetime'] = nowtime;
-        writeFile(resoufile, JSON.stringify(JYresou));
+    if(nowtime > (oldtime+24*60*60*1000)){
+        try{
+            let html = request("https://ranks.hao.360.com/video-api/v1/rank?cat="+fenleiid[ids]+"&size=30");
+            list = JSON.parse(html).data;
+            resoudata[fenlei[ids]] = list;
+            JYresou['data'] = resoudata;
+            JYresou['updatetime'] = nowtime;
+            writeFile(resoufile, JSON.stringify(JYresou));
+        }catch(e){}
     }
 
-    for (var i in list) {
-        let name = pdfh(list[i], "a&&Text");
+    list.forEach((item,i)=>{
         d.push({
-            title: i=="0"?'““””<span style="color:#ff3300">' + (parseInt(i)+1).toString() + '</span>' + "\t\t\t" + name:i=="1"?'““””<span style="color:#ff6600">' + (parseInt(i)+1).toString() + '</span>' + "\t\t\t" + name:i=="2"?'““””<span style="color:#ff9900">' + (parseInt(i)+1).toString() + '</span>' + "\t\t\t" + name:'““””<span>' + (parseInt(i)+1).toString() + '</span>' + "\t\t\t" + name,
-            url: name + searchurl,
-            col_type: "text_1",
+            title: i=="0"?'““””<span style="color:#ff3300">' + (parseInt(i)+1).toString() + '</span>' + "\t\t\t" + item.title:i=="1"?'““””<span style="color:#ff6600">' + (parseInt(i)+1).toString() + '</span>' + "\t\t\t" + item.title:i=="2"?'““””<span style="color:#ff9900">' + (parseInt(i)+1).toString() + '</span>' + "\t\t\t" + item.title:'““””<span>' + (parseInt(i)+1).toString() + '</span>' + "\t\t\t" + item.title,
+            url: item.title + searchurl,
+            pic_url: item.cover,
+            desc: item.description,
+            col_type: "movie_1_vertical_pic",
             extra: {
+                /*
                 longClick: [{
                     title: "🔍快速聚搜",
                     js: $.toString((name) => {
@@ -896,9 +909,10 @@ function sousuo2() {
                         }, name)
                     },name)
                 }]
+                */
             }
         });
-    }
+    })
 
     setResult(d);
 }
