@@ -555,7 +555,7 @@ function sousuo2(d, disk) {
     addListener("onClose", $.toString(() => {
         clearMyVar('sousuo$input');
     }));
-    var searchurl = $('').lazyRule(() => {
+    var searchurl = $('').lazyRule((disk) => {
         let recordlist = storage0.getItem('searchrecord') || [];
         if(recordlist.indexOf(input)>-1){
             recordlist = recordlist.filter((item) => item !== input);
@@ -565,15 +565,33 @@ function sousuo2(d, disk) {
             recordlist.splice(recordlist.length-1,1);
         }
         storage0.setItem('searchrecord', recordlist);
-        if(getItem('searchmode')=="hiker" || (getItem('searchsource')=="360"||getItem('searchsource')=="搜狗")){
-            return "hiker://search?rule=" + MY_RULE.title + "&s=" + input;
-        }else{
+        if(disk){
             return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
-                require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyXunmi.js');
-                xunmi(name);
-            }, input);
+                let d = [];
+                d.push({
+                    title: name+"-云盘聚合搜索",
+                    url: "hiker://empty",
+                    col_type: "text_center_1",
+                    extra: {
+                        id: "listloading",
+                        lineVisible: false
+                    }
+                })
+                setResult(d);
+                require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyAliDisk.js');
+                aliDiskSearch(name);
+            }, input)
+        }else{
+            if(getItem('searchmode')=="hiker" || (getItem('searchsource')=="360"||getItem('searchsource')=="搜狗")){
+                return "hiker://search?rule=" + MY_RULE.title + "&s=" + input;
+            }else{
+                return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyXunmi.js');
+                    xunmi(name);
+                }, input);
+            }
         }
-    });
+    }, disk||0);
     var d = d || [];
     d.push({
         title: "🔍",
@@ -852,29 +870,19 @@ function sousuo2(d, disk) {
     }
     d.push({
         title: '<span style="color:#ff6600"><b>\t热搜榜\t\t\t</b></span>',
-        desc: fenlei[ids],
+        desc: '✅'+fenlei[ids],
         url: $(fenlei, 2).select((fenlei) => {
             putMyVar("热榜分类",fenlei.indexOf(input));
             refreshPage(false);
             return "hiker://empty";
         },fenlei),
         pic_url: 'https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=3779990328,1416553241&fm=179&app=35&f=PNG?w=60&h=70&s=E7951B62A4639D153293A4E90300401B',
-        col_type: 'icon_small_3'
+        col_type: 'avatar'
     });
-    fenlei.forEach((item,i)=>{
-        d.push({
-            title: (ids==i?'✅':'')+item,
-            url: $('#noLoading#').lazyRule((i) => {
-                putMyVar("热榜分类",i);
-                refreshPage(false);
-                return "hiker://empty";
-            },i),
-            col_type: 'scroll_button'
-        });
-    })
+
     list.forEach((item,i)=>{
         d.push({
-            title: (i=="0"?'““””<span style="color:#ff3300">' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title:i=="1"?'““””<span style="color:#ff6600">' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title:i=="2"?'““””<span style="color:#ff9900">' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title:'““””<span>' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title)+'\n\t\t〰️<small>'+item.comment+'</small>',
+            title: (i=="0"?'““””<span style="color:#ff3300">' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title:i=="1"?'““””<span style="color:#ff6600">' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title:i=="2"?'““””<span style="color:#ff9900">' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title:'““””<span>' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title)+'\n\t\t<small>'+item.comment+'</small>',
             url: item.title + searchurl,
             pic_url: item.cover,
             desc: item.description,
