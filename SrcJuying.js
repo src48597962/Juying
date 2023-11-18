@@ -842,8 +842,8 @@ function sousuo2(d, disk) {
     let ids = getMyVar("热榜分类","0");
     let list = resoudata[fenlei[ids]] || [];
 
-    var nowtime = Date.now();
-    var oldtime = JYresou.updatetime||0;
+    let nowtime = Date.now();
+    let oldtime = JYresou.updatetime || 0;
     if(list.length==0 || nowtime > (oldtime+24*60*60*1000)){
         try{
             let html = request("https://ranks.hao.360.com/video-api/v1/rank?cat="+fenleiid[ids]+"&size=30");
@@ -857,9 +857,19 @@ function sousuo2(d, disk) {
         }
     }
 
+    fenlei.forEach((item,i)=>{
+        d.push({
+            title: '🔥'+item+'热搜榜',
+            url: $('#noLoading#').lazyRule((i) => {
+                putMyVar("热榜分类",i);
+                return "hiker://empty";
+            },i),
+            col_type: 'scroll_button'
+        });
+    })
     list.forEach((item,i)=>{
         d.push({
-            title: i=="0"?'““””<span style="color:#ff3300">' + (parseInt(i)+1).toString() + '</span>' + "\t\t\t" + item.title:i=="1"?'““””<span style="color:#ff6600">' + (parseInt(i)+1).toString() + '</span>' + "\t\t\t" + item.title:i=="2"?'““””<span style="color:#ff9900">' + (parseInt(i)+1).toString() + '</span>' + "\t\t\t" + item.title:'““””<span>' + (parseInt(i)+1).toString() + '</span>' + "\t\t\t" + item.title,
+            title: (i=="0"?'““””<span style="color:#ff3300">' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title:i=="1"?'““””<span style="color:#ff6600">' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title:i=="2"?'““””<span style="color:#ff9900">' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title:'““””<span>' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title)+'\n<small>'+item.comment+'</small>',
             url: item.title + searchurl,
             pic_url: item.cover,
             desc: item.description,
