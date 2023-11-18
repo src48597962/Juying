@@ -889,7 +889,6 @@ function sousuo2(d, disk) {
             desc: item.description,
             col_type: "movie_1_vertical_pic",
             extra: {
-                /*
                 longClick: [{
                     title: "🔍快速聚搜",
                     js: $.toString((name) => {
@@ -897,7 +896,7 @@ function sousuo2(d, disk) {
                             require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyXunmi.js');
                             xunmi(name);
                         }, name)
-                    },name)
+                    },item.title)
                 },{
                     title: "🔎云盘搜索",
                     js: $.toString((name) => {
@@ -916,7 +915,7 @@ function sousuo2(d, disk) {
                             require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyAliDisk.js');
                             aliDiskSearch(name);
                         }, name)
-                    },name)
+                    },item.title)
                 },{
                     title: "🔎Alist搜索",
                     js: $.toString((name) => {
@@ -935,9 +934,8 @@ function sousuo2(d, disk) {
                             require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyAlist.js');
                             alistSearch2(name,1);
                         }, name)
-                    },name)
+                    },item.title)
                 }]
-                */
             }
         });
     })
