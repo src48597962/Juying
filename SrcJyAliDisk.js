@@ -422,7 +422,8 @@ function aliMyDisk(folder_id,nofilter) {
             })
         }
         if(getMyVar("selectDisk","1")=="3"){
-            
+            require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJuying.js');
+            sousuo2(d, 1);
         }else{
             try{
                 let drive_id = getMyVar("selectDisk","1")=="1"?userinfo.default_drive_id:userinfo2.resource_drive_id;
