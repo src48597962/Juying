@@ -818,12 +818,6 @@ function sousuo2(d, disk) {
             });
         })
     }
-    d.push({
-        title: '<span style="color:#ff6600"><b>\t热搜榜\t\t\t</b></span>',
-        url: "hiker://empty",
-        pic_url: 'https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=3779990328,1416553241&fm=179&app=35&f=PNG?w=60&h=70&s=E7951B62A4639D153293A4E90300401B',
-        col_type: 'icon_small_3'
-    });
     
     let resoufile = "hiker://files/rules/Src/Juying/resou.json";
     let Juyingresou = fetch(resoufile);
@@ -856,12 +850,23 @@ function sousuo2(d, disk) {
             log("获取热搜榜出错>"+e.message);
         }
     }
-
+    d.push({
+        title: '<span style="color:#ff6600"><b>\t热搜榜\t\t\t</b></span>',
+        desc: fenlei[ids],
+        url: $(fenlei, 2).select((fenlei) => {
+            putMyVar("热榜分类",fenlei.indexOf(input));
+            refreshPage(false);
+            return "hiker://empty";
+        },fenlei),
+        pic_url: 'https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=3779990328,1416553241&fm=179&app=35&f=PNG?w=60&h=70&s=E7951B62A4639D153293A4E90300401B',
+        col_type: 'icon_small_3'
+    });
     fenlei.forEach((item,i)=>{
         d.push({
             title: (ids==i?'✅':'')+item,
             url: $('#noLoading#').lazyRule((i) => {
                 putMyVar("热榜分类",i);
+                refreshPage(false);
                 return "hiker://empty";
             },i),
             col_type: 'scroll_button'
