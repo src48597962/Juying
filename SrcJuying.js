@@ -567,6 +567,7 @@ function sousuo2(d, disk) {
         storage0.setItem('searchrecord', recordlist);
         if(disk){
             return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
+                setPageTitle('云盘搜索>'+name);
                 let d = [];
                 d.push({
                     title: name+"-云盘聚合搜索",
@@ -882,7 +883,7 @@ function sousuo2(d, disk) {
 
     list.forEach((item,i)=>{
         d.push({
-            title: (i=="0"?'““””<span style="color:#ff3300">' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title:i=="1"?'““””<span style="color:#ff6600">' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title:i=="2"?'““””<span style="color:#ff9900">' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title:'““””<span>' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title)+'\n\t\t<small>'+item.comment+'</small>',
+            title: (i=="0"?'““””<span style="color:#ff3300">' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title:i=="1"?'““””<span style="color:#ff6600">' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title:i=="2"?'““””<span style="color:#ff9900">' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title:'““””<span>' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title)+'\n<small>'+item.comment+'</small>',
             url: item.title + searchurl,
             pic_url: item.cover,
             desc: item.description,
