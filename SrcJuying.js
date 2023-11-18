@@ -832,7 +832,9 @@ function sousuo2(d, disk) {
         try{
             eval("JYresou=" + Juyingresou+ ";");
             delete JYresou['resoulist'];
-        }catch(e){}
+        }catch(e){
+            log("加载热搜缓存出错>"+e.message);
+        }
     }
     let resoudata = JYresou['data'] || {};
     let fenlei = ["电视剧","电影","动漫","综艺"];
@@ -850,7 +852,9 @@ function sousuo2(d, disk) {
             JYresou['data'] = resoudata;
             JYresou['updatetime'] = nowtime;
             writeFile(resoufile, JSON.stringify(JYresou));
-        }catch(e){}
+        }catch(e){
+            log("获取热搜榜出错>"+e.message);
+        }
     }
 
     list.forEach((item,i)=>{
