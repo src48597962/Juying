@@ -611,6 +611,7 @@ function aliDiskSearch(input,data) {
 
     //多线程执行代码
     let task = function(obj) {
+        log(obj);
         try{
             let datalist2 = [];
             try{
