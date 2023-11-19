@@ -3208,7 +3208,7 @@ function yundiskjiekou() {
             putMyVar('yundiskedit','1');
             putMyVar('yundiskname',getMyVar('yundiskname',data.name));
             putMyVar('yundiskparse',getMyVar('yundiskparse',data.parse));
-            putMyVar('yundiskerparse',getMyVar('yundiskerparse',data.erparse?data.erparse:""));
+            putMyVar('yundiskerparse',getMyVar('yundiskerparse',data.erparse||""));
             putMyVar('yundiskcheck',getMyVar('yundiskcheck', data.check?"1":"0"));
         }
         let d = [];
@@ -3284,7 +3284,10 @@ function yundiskjiekou() {
                         name: name,
                         parse: parse
                     }
-                    newapi['erparse'] = erparse;
+                    
+                    if(erparse){
+                        newapi['erparse'] = erparse;
+                    }
                     if(check){
                         newapi['check'] = parseInt(check);
                     }
@@ -3328,7 +3331,9 @@ function yundiskjiekou() {
                         name: name,
                         parse: parse
                     }
-                    newapi['erparse'] = erparse;
+                    if(erparse){
+                        newapi['erparse'] = erparse;
+                    }
                     if(check){
                         newapi['check'] = parseInt(check);
                     }
