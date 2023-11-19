@@ -3202,14 +3202,12 @@ function yundiskjiekou() {
             clearMyVar('yundiskparse');
             clearMyVar('yundiskerparse');
             clearMyVar('yundiskedit');
-            clearMyVar('yundiskcheck');
         }));
         if(data){
             putMyVar('yundiskedit','1');
             putMyVar('yundiskname',getMyVar('yundiskname',data.name));
             putMyVar('yundiskparse',getMyVar('yundiskparse',data.parse));
             putMyVar('yundiskerparse',getMyVar('yundiskerparse',data.erparse||""));
-            putMyVar('yundiskcheck',getMyVar('yundiskcheck', data.check?"1":"0"));
         }
         let d = [];
         d.push({
@@ -3255,20 +3253,6 @@ function yundiskjiekou() {
             }
         });
         d.push({
-            title: '有效性检测：'+(getMyVar('yundiskcheck', '0')=="0"?'否':'是'),
-            desc: getMyVar('yundiskcheck', '0')=="0"?'不检测共享链接有效性，搜索速度快':'网站失效较多时，建议检测，体验好',
-            col_type:'text_1',
-            url:$('#noLoading#').lazyRule(()=>{
-                if(getMyVar('yundiskcheck', '0')=="0"){
-                    putMyVar('yundiskcheck', '1');
-                }else{
-                    putMyVar('yundiskcheck', '0');
-                }
-                refreshPage(false);
-                return 'toast://已切换';
-            })
-        });
-        d.push({
             title: '测试',
             col_type: 'text_2',
             url: $().lazyRule(()=>{
@@ -3279,17 +3263,12 @@ function yundiskjiekou() {
                     let name = getMyVar('yundiskname');
                     let parse = getMyVar('yundiskparse');
                     let erparse = getMyVar('yundiskerparse');
-                    let check = getMyVar('yundiskcheck');
                     let newapi = {
                         name: name,
                         parse: parse
                     }
-                    
                     if(erparse){
                         newapi['erparse'] = erparse;
-                    }
-                    if(check){
-                        newapi['check'] = parseInt(check);
                     }
                     
                     return $(getItem('searchtestkey', '斗罗大陆'),"输入测试搜索关键字").input((data)=>{
@@ -3326,7 +3305,6 @@ function yundiskjiekou() {
                     let name = getMyVar('yundiskname');
                     let parse = getMyVar('yundiskparse');
                     let erparse = getMyVar('yundiskerparse');
-                    let check = getMyVar('yundiskcheck');
                     let newapi = {
                         name: name,
                         parse: parse
@@ -3334,9 +3312,7 @@ function yundiskjiekou() {
                     if(erparse){
                         newapi['erparse'] = erparse;
                     }
-                    if(check){
-                        newapi['check'] = parseInt(check);
-                    }
+
                     let datafile = fetch(filepath);
                     if(datafile != ""){
                         try{
