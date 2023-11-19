@@ -3209,7 +3209,7 @@ function yundiskjiekou() {
             putMyVar('yundiskname',data.name);
             putMyVar('yundiskparse',data.parse);
             putMyVar('yundiskerparse',data.erparse?data.erparse:"");
-            putMyVar('yundiskcheck',data.check?"1":"0");
+            putMyVar('yundiskcheck',getMyVar('yundiskcheck', data.check?"1":"0"));
         }
         let d = [];
         d.push({
