@@ -589,7 +589,8 @@ function aliDiskSearch(input,data) {
                 url: "https://api.aliyundrive.com/adrive/v3/share_link/get_share_by_anonymous",
                 options: {
                     headers: {
-                        referer: "https://www.aliyundrive.com/"
+                        "referer": "https://www.aliyundrive.com/",
+                        "User-Agent": PC_UA
                     },
                     body: {
                         "share_id": it.url.split('@rule')[0].replace('https://www.aliyundrive.com/s/', '').split('/folder/')[0]
