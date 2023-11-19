@@ -608,21 +608,7 @@ function aliDiskSearch(input,data) {
         })
         return data;
     }
-    function checkShareUrl(aliurl){
-        let html = request("https://api.aliyundrive.com/adrive/v3/share_link/get_share_by_anonymous",{
-            headers: {
-                referer: "https://www.aliyundrive.com/"
-            },
-            body: {
-                "share_id": aliurl.replace('https://www.aliyundrive.com/s/', '').split('/folder/')[0]
-            },
-            method: 'POST',
-            timeout: 3000
-        })
 
-        let infos = JSON.parse(html).file_infos || [];
-        return infos.length;
-    }
     //多线程执行代码
     let task = function(obj) {
         try{
@@ -635,6 +621,7 @@ function aliDiskSearch(input,data) {
             }
             
             let searchlist = [];
+            let checklist = [];
             datalist2.forEach(item => {
                 let arr = {
                     title: item.title,
@@ -668,23 +655,23 @@ function aliDiskSearch(input,data) {
                             }
                         }
                         if(surl.indexOf(alihome)>-1){
-                            /*
                             if(item.check){
-
-                            }
-                            */
-                            if(checkShareUrl(surl)){
+                                arr.url = surl.split('\n')[0];
+                                checklist.push(arr);
+                            }else{
                                 arr.url = $(surl.split('\n')[0]).rule((input) => {
                                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyAliDisk.js');
                                     aliShareUrl(input);
                                 },surl);
                                 searchlist.push(arr);
                             }
-                            
                         }
                     }
                 }
             })
+            if(checklist.length){
+                searchlist = checkShare(checklist);
+            }
             if(searchlist.length>0){
                 hideLoading();
                 diskMark[input] = diskMark[input] || [];
