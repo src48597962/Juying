@@ -392,7 +392,7 @@ function aliMyDisk(folder_id,nofilter) {
             d = d.concat(mydisk);
             d.push({
                 title: getMyVar("selectDisk","1")=="1"?"““””<b>备份盘</b>":"备份盘",
-                img: "https://hikerfans.com/tubiao/grey/135.png",
+                img: "https://hikerfans.com/tubiao/grey/147.png",
                 url: $('#noLoading#').lazyRule(() => {
                     putMyVar("selectDisk","1");
                     refreshPage(false);
