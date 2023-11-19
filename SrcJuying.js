@@ -567,7 +567,7 @@ function sousuo2(d, disk) {
         storage0.setItem('searchrecord', recordlist);
         if(disk){
             return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
-                setPageTitle('云盘搜索>'+name);
+                setPageTitle('云盘搜索 | 聚影√');
                 let d = [];
                 d.push({
                     title: name+"-云盘聚合搜索",
@@ -736,27 +736,28 @@ function sousuo2(d, disk) {
         }),
         col_type: 'scroll_button'
     });
-    d.push({
-        title: "🍭模式："+(typeof(getSearchMode)!="undefined"&&getSearchMode()==1?"精准":"默认"),
-        url: $('#noLoading#').lazyRule(() => {
-            try{
-                let sm;
-                if(getSearchMode()==1){
-                    setSearchMode(0);
-                    sm = "为默认模式，结果包含关键字";
-                }else{
-                    setSearchMode(1);
-                    sm = "为精准模式，结果等于关键字";
+    if(!disk){
+        d.push({
+            title: "🍭模式："+(typeof(getSearchMode)!="undefined"&&getSearchMode()==1?"精准":"默认"),
+            url: $('#noLoading#').lazyRule(() => {
+                try{
+                    let sm;
+                    if(getSearchMode()==1){
+                        setSearchMode(0);
+                        sm = "为默认模式，结果包含关键字";
+                    }else{
+                        setSearchMode(1);
+                        sm = "为精准模式，结果等于关键字";
+                    }
+                    refreshPage(false);
+                    return "toast://已切换"+sm;
+                }catch(e){
+                    return "toast://软件版本过低，不支持此方法";
                 }
-                refreshPage(false);
-                return "toast://已切换"+sm;
-            }catch(e){
-                return "toast://软件版本过低，不支持此方法";
-            }
-        }),
-        col_type: 'scroll_button'
-    });
-    
+            }),
+            col_type: 'scroll_button'
+        });
+    }
     d.push({
         col_type: "blank_block"
     });
