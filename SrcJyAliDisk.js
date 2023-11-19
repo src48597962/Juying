@@ -611,7 +611,6 @@ function aliDiskSearch(input,data) {
 
     //多线程执行代码
     let task = function(obj) {
-        log(obj);
         try{
             let datalist2 = [];
             try{
@@ -656,7 +655,7 @@ function aliDiskSearch(input,data) {
                             }
                         }
                         if(surl.indexOf(alihome)>-1){
-                            if(item.check){
+                            if(obj.check){
                                 arr.url = surl.split('\n')[0];
                                 checklist.push(arr);
                             }else{
