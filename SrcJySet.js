@@ -3206,9 +3206,9 @@ function yundiskjiekou() {
         }));
         if(data){
             putMyVar('yundiskedit','1');
-            putMyVar('yundiskname',data.name);
-            putMyVar('yundiskparse',data.parse);
-            putMyVar('yundiskerparse',data.erparse?data.erparse:"");
+            putMyVar('yundiskname',getMyVar('yundiskname',data.name));
+            putMyVar('yundiskparse',getMyVar('yundiskparse',data.parse));
+            putMyVar('yundiskerparse',getMyVar('yundiskerparse',data.erparse?data.erparse:""));
             putMyVar('yundiskcheck',getMyVar('yundiskcheck', data.check?"1":"0"));
         }
         let d = [];
@@ -3217,7 +3217,7 @@ function yundiskjiekou() {
             col_type: 'input',
             desc: "接口名称",
             extra: {
-                defaultValue: getMyVar('yundiskname')?getMyVar('yundiskname'):"",
+                defaultValue: getMyVar('yundiskname',''),
                 titleVisible: false,
                 onChange: $.toString(() => {
                     putMyVar('yundiskname',input);
@@ -3229,7 +3229,7 @@ function yundiskjiekou() {
             col_type: 'input',
             desc: "一解函数",
             extra: {
-                defaultValue: getMyVar('yundiskparse')?getMyVar('yundiskparse'):"",
+                defaultValue: getMyVar('yundiskparse',''),
                 titleVisible: false,
                 type: "textarea",
                 highlight: true,
@@ -3244,7 +3244,7 @@ function yundiskjiekou() {
             col_type: 'input',
             desc: "二解函数, 可以留空",
             extra: {
-                defaultValue: getMyVar('yundiskerparse')?getMyVar('yundiskerparse'):"",
+                defaultValue: getMyVar('yundiskerparse',''),
                 titleVisible: false,
                 type: "textarea",
                 highlight: true,
