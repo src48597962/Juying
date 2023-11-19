@@ -583,7 +583,7 @@ function aliDiskSearch(input,data) {
     })
     //验证分享链接有效性方法
     function checkShare(data){
-        log("1");
+        log("1-"+data.length);
         let bflist = data.map(it => {
             return {
                 url: "https://api.aliyundrive.com/adrive/v3/share_link/get_share_by_anonymous",
@@ -607,7 +607,7 @@ function aliDiskSearch(input,data) {
         data = data.filter(item => {
             return item.infos > 0;
         })
-        log("2");
+        log("2-"+data.length);
         return data;
     }
 
@@ -696,6 +696,7 @@ function aliDiskSearch(input,data) {
         putMyVar('diskSearch', '1');
         be(list, {
             func: function(obj, id, error, taskResult) {
+                log(id+'-结束');
                 if(getMyVar("停止搜索线程")=="1"){
                     return "break";
                 }
