@@ -583,6 +583,7 @@ function aliDiskSearch(input,data) {
     })
     //验证分享链接有效性方法
     function checkShare(data){
+        log("1");
         let bflist = data.map(it => {
             return {
                 url: "https://api.aliyundrive.com/adrive/v3/share_link/get_share_by_anonymous",
@@ -591,7 +592,7 @@ function aliDiskSearch(input,data) {
                         referer: "https://www.aliyundrive.com/"
                     },
                     body: {
-                        "share_id": it.url.replace('https://www.aliyundrive.com/s/', '').split('/folder/')[0]
+                        "share_id": it.url.split('@rule')[0].replace('https://www.aliyundrive.com/s/', '').split('/folder/')[0]
                     },
                     method: 'POST',
                     timeout: 3000
@@ -606,6 +607,7 @@ function aliDiskSearch(input,data) {
         data = data.filter(item => {
             return item.infos > 0;
         })
+        log("2");
         return data;
     }
 
@@ -655,14 +657,13 @@ function aliDiskSearch(input,data) {
                             }
                         }
                         if(surl.indexOf(alihome)>-1){
+                            arr.url = $(surl.split('\n')[0]).rule((input) => {
+                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyAliDisk.js');
+                                aliShareUrl(input);
+                            },surl);
                             if(obj.check){
-                                arr.url = surl.split('\n')[0];
                                 checklist.push(arr);
                             }else{
-                                arr.url = $(surl.split('\n')[0]).rule((input) => {
-                                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyAliDisk.js');
-                                    aliShareUrl(input);
-                                },surl);
                                 searchlist.push(arr);
                             }
                         }
