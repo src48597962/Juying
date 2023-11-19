@@ -3262,7 +3262,7 @@ function yundiskjiekou() {
                 if(getMyVar('yundiskcheck', '0')=="0"){
                     putMyVar('yundiskcheck', '1');
                 }else{
-                    clearMyVar('yundiskcheck');
+                    putMyVar('yundiskcheck', '0');
                 }
                 refreshPage(false);
                 return 'toast://已切换';
