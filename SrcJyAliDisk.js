@@ -660,7 +660,6 @@ function aliDiskSearch(input,data) {
         putMyVar('diskSearch', '1');
         be(list, {
             func: function(obj, id, error, taskResult) {
-                log(id+'-结束');
                 if(getMyVar("停止搜索线程")=="1"){
                     return "break";
                 }
