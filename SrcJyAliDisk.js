@@ -584,32 +584,41 @@ function aliDiskSearch(input,data) {
     //验证分享链接有效性方法
     function checkShare(data){
         log("1-"+data.length);
-        let bflist = data.map(it => {
-            return {
-                url: "https://api.aliyundrive.com/adrive/v3/share_link/get_share_by_anonymous",
-                options: {
-                    headers: {
-                        "referer": "https://www.aliyundrive.com/",
-                        "User-Agent": PC_UA
-                    },
-                    body: {
-                        "share_id": it.url.split('@rule')[0].replace('https://www.aliyundrive.com/s/', '').split('/folder/')[0]
-                    },
-                    method: 'POST',
-                    timeout: 3000
-                }
+        let datas = []
+        for (let i=0;i<data.length;i++) {
+            let list = [];
+            let p = i + 5;
+            if(p>data.length){p=data.length}
+            for(let s=i;s<p;s++){
+                list.push(data[s]);
+                i=s;
             }
-        })
-        let getbf = batchFetch(bflist);
-        getbf.forEach((bf, i) => {
-            let it = JSON.parse(bf).file_infos || [];
-            data[i].infos = it.length;
-        })
-        data = data.filter(item => {
-            return item.infos > 0;
-        })
-        log("2-"+data.length);
-        return data;
+            let bflist = list.map(it => {
+                return {
+                    url: "https://api.aliyundrive.com/adrive/v3/share_link/get_share_by_anonymous",
+                    options: {
+                        headers: {
+                            "referer": "https://www.aliyundrive.com/"
+                        },
+                        body: {
+                            "share_id": it.url.split('@rule')[0].replace('https://www.aliyundrive.com/s/', '').split('/folder/')[0]
+                        },
+                        method: 'POST',
+                        timeout: 3000
+                    }
+                }
+            })
+            let getbf = batchFetch(bflist);
+            getbf.forEach((bf, i) => {
+                let it = JSON.parse(bf).file_infos || [];
+                if(it.length>0){
+                    datas.push(list[i]);
+                }
+            })
+        }
+        
+        log("2-"+datas.length);
+        return datas;
     }
 
     //多线程执行代码
