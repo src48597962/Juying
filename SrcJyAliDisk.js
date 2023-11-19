@@ -581,7 +581,49 @@ function aliDiskSearch(input,data) {
             id: "yundisklistloading"
         }
     })
+    //验证分享链接有效性方法
+    function checkShare(data){
+        let bflist = data.map(it => {
+            return {
+                url: "https://api.aliyundrive.com/adrive/v3/share_link/get_share_by_anonymous",
+                options: {
+                    headers: {
+                        referer: "https://www.aliyundrive.com/"
+                    },
+                    body: {
+                        "share_id": it.url.replace('https://www.aliyundrive.com/s/', '').split('/folder/')[0]
+                    },
+                    method: 'POST',
+                    timeout: 3000
+                }
+            }
+        })
+        let getbf = batchFetch(bflist);
+        getbf.forEach((bf, i) => {
+            let it = JSON.parse(bf).file_infos || [];
+            data[i].infos = it.length;
+        })
+        data = data.filter(item => {
+            return item.infos > 0;
+        })
+        return data;
+    }
+    function checkShareUrl(aliurl){
+        let html = request("https://api.aliyundrive.com/adrive/v3/share_link/get_share_by_anonymous",{
+            headers: {
+                referer: "https://www.aliyundrive.com/"
+            },
+            body: {
+                "share_id": aliurl.replace('https://www.aliyundrive.com/s/', '').split('/folder/')[0]
+            },
+            method: 'POST',
+            timeout: 3000
+        })
 
+        let infos = JSON.parse(html).file_infos || [];
+        return infos.length;
+    }
+    //多线程执行代码
     let task = function(obj) {
         try{
             let datalist2 = [];
@@ -626,11 +668,19 @@ function aliDiskSearch(input,data) {
                             }
                         }
                         if(surl.indexOf(alihome)>-1){
-                            arr.url = $(surl.split('\n')[0]).rule((input) => {
-                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyAliDisk.js');
-                                aliShareUrl(input);
-                            },surl);
-                            searchlist.push(arr);
+                            /*
+                            if(item.check){
+
+                            }
+                            */
+                            if(checkShareUrl(surl)){
+                                arr.url = $(surl.split('\n')[0]).rule((input) => {
+                                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyAliDisk.js');
+                                    aliShareUrl(input);
+                                },surl);
+                                searchlist.push(arr);
+                            }
+                            
                         }
                     }
                 }
