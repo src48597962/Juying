@@ -609,10 +609,10 @@ function aliDiskSearch(input,data) {
                 }
             })
             let getbf = batchFetch(bflist);
-            getbf.forEach((bf, i) => {
+            getbf.forEach((bf, j) => {
                 let it = JSON.parse(bf).file_infos || [];
                 if(it.length>0){
-                    datas.push(list[i]);
+                    datas.push(list[j]);
                 }
             })
         }
