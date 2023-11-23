@@ -20,8 +20,8 @@ function aliShareUrl(input) {
         if (it.indexOf("提取码") > -1) {
             share_pwd = it.replace(/提取码|:| |：/g, '');
         }
-        if (it.indexOf("https://www.aliyundrive.com") > -1) {
-            it = it.replace('https://www.aliyundrive.com/s/', '').replace('链接：', '');
+        if (/www\.aliyundrive\.com|www\.alipan\.com/.test(it)) {
+            it = it.replace('https://www.aliyundrive.com/s/', '').replace('https://www.alipan.com/s/', '').replace('链接：', '');
             share_id = it.indexOf('/folder/') > -1 ? it.split('/folder/')[0] : it;
             folder_id = it.indexOf('/folder/') > -1 ? it.split('/folder/')[1] : "root";
         }
@@ -616,9 +616,8 @@ function aliDiskSearch(input,data) {
                     searchlist.push(arr);
                 }else{
                     if(arr.title.toLowerCase().includes(input.toLowerCase())){//搜索结果包含关键字才行
-                        let alihome = "www.aliyundrive.com/s/";
                         let surl = item.url;
-                        if(!surl.includes(alihome) && obj.erparse){
+                        if(!/www\.aliyundrive\.com|www\.alipan\.com/.test(surl) && obj.erparse){
                             try{
                                 eval('let Parse2 = ' + obj.erparse)
                                 surl = Parse2(surl);
@@ -626,7 +625,7 @@ function aliDiskSearch(input,data) {
                                 log(obj.name+'>二解出错>'+e.message);
                             }
                         }
-                        if(surl.indexOf(alihome)>-1){
+                        if(/www\.aliyundrive\.com|www\.alipan\.com/.test(surl)){
                             arr.url = $(surl.split('\n')[0]).rule((input) => {
                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyAliDisk.js');
                                 aliShareUrl(input);
