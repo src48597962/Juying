@@ -78,9 +78,9 @@ var erjimenu = [
                     return "#noHistory#hiker://page/soup?rule=云盘君";
                 })
             },{
-                title: "AI影搜",
+                title: "云盘君.简",
                 js: $.toString(() => {
-                    return "#noHistory#hiker://page/soup?p=fypage&rule=AI影搜";
+                    return "#noHistory#hiker://page/soup?p=fypage&rule=云盘君.简";
                 })
             }]
         }
