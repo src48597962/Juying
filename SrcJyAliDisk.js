@@ -38,7 +38,7 @@ function myDiskMenu(islogin) {
     let setalitoken = $().lazyRule((alistfile, alistData) => {
         let alistconfig = alistData.config || {};
         let alitoken = alistconfig.alitoken;
-        return $(alitoken || "", "输入新token，为空则退出登录").input((alistfile, alistData, alistconfig) => {
+        return $(alitoken || "", "新的token，为空退出登录").input((alistfile, alistData, alistconfig) => {
             alistconfig.alitoken = input;
             alistData.config = alistconfig;
             writeFile(alistfile, JSON.stringify(alistData));
