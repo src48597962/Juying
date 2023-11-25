@@ -38,11 +38,12 @@ function myDiskMenu(islogin) {
     let setalitoken = $().lazyRule((alistfile, alistData) => {
         let alistconfig = alistData.config || {};
         let alitoken = alistconfig.alitoken;
-        return $(alitoken || "", "refresh_token").input((alistfile, alistData, alistconfig) => {
+        return $(alitoken || "", "输入新token，为空则退出登录").input((alistfile, alistData, alistconfig) => {
             alistconfig.alitoken = input;
             alistData.config = alistconfig;
             writeFile(alistfile, JSON.stringify(alistData));
             clearMyVar('getalitoken');
+            clearMyVar('aliuserinfo');
             refreshPage(false);
             return "toast://已设置";
         }, alistfile, alistData, alistconfig)
@@ -50,8 +51,18 @@ function myDiskMenu(islogin) {
 
     let onlogin = [{
         title: userinfo.nick_name,
-        url: setalitoken,
+        url: $(['云盘接口', 'ali_token'],2).select((setalitoken) => {
+            if(input=='云盘接口'){
+                return $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                    yundiskjiekou();
+                })
+            }else if(input=='ali_token'){
+                return setalitoken;
+            }
+        },setalitoken),
         img: userinfo.avatar,
+        desc: '管理',
         col_type: 'avatar'
     }, {
         col_type: "line"
