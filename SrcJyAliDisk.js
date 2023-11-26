@@ -606,15 +606,16 @@ function aliDiskSearch(input,data) {
             
             let searchlist = [];
             datalist2.forEach(item => {
+                let itemTitle = item.title.replace(/<\/?.+?>/g,"");
                 let arr = {
-                    title: item.title,
+                    title: itemTitle,
                     img: "hiker://files/cache/src/文件夹.svg",
                     col_type: "avatar",
                     desc: obj.name,
                     extra: {
                         cls: "loadlist",
                         name: input,
-                        dirname: item.title,
+                        dirname: itemTitle,
                         back: 2
                     }
                 };
@@ -626,7 +627,7 @@ function aliDiskSearch(input,data) {
                     },item.url);
                     searchlist.push(arr);
                 }else{
-                    if(arr.title.toLowerCase().includes(input.toLowerCase())){//搜索结果包含关键字才行
+                    if(itemTitle.toLowerCase().includes(input.toLowerCase())){//搜索结果包含关键字才行
                         let surl = item.url;
                         if(!/www\.aliyundrive\.com|www\.alipan\.com/.test(surl) && obj.erparse){
                             try{
