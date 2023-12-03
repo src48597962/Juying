@@ -12,14 +12,15 @@ if(fetch(alicfgfile)){
 }else if(fetch(alistfile)){
   try {
     eval("let alistdata = " + fetch(alistfile));
-    aliconfig = alistdata.config;
-    if(aliconfig && aliconfig.alitoken){
-      aliconfig.refresh_token = aliconfig.alitoken;
-      delete aliconfig.alitoken;
-      //writeFile(alicfgfile, JSON.stringify(aliconfig));
-      delete alistdata.config;
-      log(alistdata);
-      writeFile(alistfile, JSON.stringify(alistdata));
+    if(alistdata.config){
+      aliconfig = alistdata.config;
+      if(aliconfig.alitoken){
+        aliconfig.refresh_token = aliconfig.alitoken;
+        delete aliconfig.alitoken;
+        writeFile(alicfgfile, JSON.stringify(aliconfig));
+        delete alistdata.config;
+        writeFile(alistfile, JSON.stringify(alistdata));
+      }
     }
   } catch (e) {
     log("从alist拆分aliconfig文件失败");
