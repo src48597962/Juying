@@ -1,6 +1,15 @@
 //本代码仅用于个人学习，请勿用于其他作用，下载后请24小时内删除，代码虽然是公开学习的，但请尊重作者，应留下说明
 //引入Ali公用文件
 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliPublic.js');
+let alistfile = "hiker://files/rules/Src/Juying/Alist.json";
+let alistData = {};
+if(fetch(alistfile)){
+  try {
+    eval("alistData = " + fetch(alistfile));
+  } catch (e) {
+    alistData = {};
+  }
+}
 let datalist = alistData.drives || [];
 
 function getlist(data,isdir,filter) {
@@ -74,27 +83,7 @@ function alistHome() {
           require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
           alistSet();
       }),
-      col_type: 'scroll_button',
-      extra: {
-          longClick: [{
-              title: "🔑阿里token",
-              js: $.toString((alistfile) => {
-                  try{
-                    var alistData = JSON.parse(fetch(alistfile));
-                  }catch(e){
-                    var alistData = {};
-                  }
-                  let alistconfig = alistData.config || {};
-                  let alitoken = alistconfig.alitoken;
-                  return $(alitoken||"","refresh_token").input((alistfile,alistData,alistconfig)=>{
-                    alistconfig.alitoken = input;
-                    alistData.config = alistconfig;
-                    writeFile(alistfile, JSON.stringify(alistData));
-                    return "toast://已设置";
-                  },alistfile,alistData,alistconfig)
-              },alistfile)
-          }]
-      }
+      col_type: 'scroll_button'
   });
   d.push({
       title: '🔍搜索',
@@ -590,12 +579,14 @@ function alistSearch2(input,notoast){
 
 function alistSet() {
   setPageTitle('⚙设置 | Alist网盘');
+  /*
   try{
     eval("var alistData=" + fetch(alistfile));
     let jknum = alistData.drives.length;
   }catch(e){
     var alistData= {drives:[]};
   }
+  */
   let alistconfig = alistData.config || {};
   let contain = alistconfig.contain || audiovisual;
   let fileFilter = alistconfig['fileFilter']==0?0:1;
