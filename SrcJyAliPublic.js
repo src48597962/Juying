@@ -16,7 +16,7 @@ if(fetch(alicfgfile)){
     if(aliconfig && aliconfig.alitoken){
       aliconfig.refresh_token = aliconfig.alitoken;
       delete aliconfig.alitoken;
-      writeFile(alicfgfile, JSON.stringify(aliconfig));
+      //writeFile(alicfgfile, JSON.stringify(aliconfig));
       delete alistdata.config;
       log(alistdata);
       /*
