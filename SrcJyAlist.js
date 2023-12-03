@@ -160,7 +160,7 @@ function alistHome() {
               return "toast://阿里token还未填写，无法挂载";
             }
           }
-        },alistapi,aliconfig.refresh_token),
+        },alistapi,alitoken),
         col_type: 'scroll_button'
     });
   }
