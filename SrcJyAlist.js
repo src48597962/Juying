@@ -125,9 +125,9 @@ function alistHome() {
   if(alistapi.token){
     d.push({
         title: '🔗挂载',
-        url: $(["挂载阿里分享"],2).select((alistapi,alistconfig)=>{
+        url: $(["挂载阿里分享"],2).select((alistapi,alitoken)=>{
           if(input=='挂载阿里分享'){
-            if(alistconfig.alitoken){
+            if(alitoken){
               return $("","阿里分享链接").input((alistapi,alitoken)=>{
                 input = input.replace('https://www.aliyundrive.com/s/','');
                 let share_id = input.indexOf('/folder/')>-1?input.split('/folder/')[0]:input;
@@ -155,12 +155,12 @@ function alistHome() {
                     return "toast://已存在";
                   }
                 }
-              },alistapi,alistconfig.alitoken)
+              },alistapi,alitoken)
             }else{
               return "toast://阿里token还未填写，无法挂载";
             }
           }
-        },alistapi,alistconfig),
+        },alistapi,aliconfig.refresh_token),
         col_type: 'scroll_button'
     });
   }
@@ -586,46 +586,43 @@ function alistSet() {
   }catch(e){
     var alistData= {drives:[]};
   }
-  */
+  
   let alistconfig = alistData.config || {};
   let contain = alistconfig.contain || audiovisual;
   let fileFilter = alistconfig['fileFilter']==0?0:1;
   let datalist = alistData.drives;
+  */
   var d = [];
   d.push({
       title: fileFilter?'音视频过滤开':'音视频过滤关',
-      url: $('#noLoading#').lazyRule((fileFilter,alistData,alistfile) => {
-        let alistconfig = alistData.config || {};
+      url: $('#noLoading#').lazyRule((fileFilter,aliconfig,alicfgfile) => {
         let sm = "";
         if(fileFilter){
-          alistconfig['fileFilter'] =0;
+          aliconfig['fileFilter'] =0;
           sm = "已关闭音视频文件过滤，将显示全部文件";
         }else{
-          alistconfig['fileFilter'] =1;
+          aliconfig['fileFilter'] =1;
           sm = "已开启文件过滤，仅显示音视频文件";
         }
-        alistData.config = alistconfig;
-        writeFile(alistfile, JSON.stringify(alistData));
+        writeFile(alicfgfile, JSON.stringify(aliconfig));
         refreshPage(false);
         return 'toast://'+sm;
-      }, fileFilter, alistData, alistfile),
+      }, fileFilter, aliconfig, alicfgfile),
       img: fileFilter?"https://hikerfans.com/tubiao/messy/55.svg":"https://hikerfans.com/tubiao/messy/56.svg",
       col_type: "icon_2"
   });
   d.push({
       title: '音视频后缀名',
-      url: $(contain,"开启过滤后，仅允许显示的音频或视频文件格式，用|隔开").input((alistData,alistfile) => {
-        let alistconfig = alistData.config || {};
+      url: $(contain,"开启过滤后，仅允许显示的音频或视频文件格式，用|隔开").input((aliconfig,alicfgfile) => {
         if(input){
-          alistconfig['contain'] =input.replace(/\./g,"");
+          aliconfig['contain'] =input.replace(/\./g,"");
         }else{
-          delete alistconfig['contain'];
+          delete aliconfig['contain'];
         }
-        alistData.config = alistconfig;
-        writeFile(alistfile, JSON.stringify(alistData));
+        writeFile(alicfgfile, JSON.stringify(aliconfig));
         refreshPage(false);
         return 'toast://已设置音视频文件格式后缀';
-      }, alistData, alistfile),
+      }, aliconfig, alicfgfile),
       img: "https://hikerfans.com/tubiao/messy/145.svg",
       col_type: "icon_2"
   });
