@@ -1,21 +1,40 @@
+//本代码仅用于个人学习，请勿用于其他作用，下载后请24小时内删除，代码虽然是公开学习的，但请尊重作者，应留下说明
+//Ali公用文件
 let alistfile = "hiker://files/rules/Src/Juying/Alist.json";
-try {
-  if(fetch(alistfile)){
-    eval("var alistData = " + fetch(alistfile));
-  }else{
-    var alistData = {};
+let alicfgfile = "hiker://files/rules/Src/Juying/aliconfig.json";
+let aliconfig = {};
+if(fetch(alicfgfile)){
+  try {
+    eval("aliconfig = " + fetch(alicfgfile));
+  } catch (e) {
+    log("aliconfig文件加载失败");
   }
-} catch (e) {
-  var alistData = {};
+}else if(fetch(alistfile)){
+  try {
+    eval("let alistdata = " + fetch(alistfile));
+    aliconfig = alistdata.config;
+    if(aliconfig && aliconfig.alitoken){
+      aliconfig.refresh_token = aliconfig.alitoken;
+      delete aliconfig.alitoken;
+      writeFile(alicfgfile, JSON.stringify(aliconfig));
+      delete alistdata.config['alitoken'];
+      delete alistdata.config['fileFilter'];
+      delete alistdata.config['contain'];
+      writeFile(alistfile, JSON.stringify(alistdata));
+    }
+  } catch (e) {
+    log("从alist拆分aliconfig文件失败");
+  }
 }
-let alistconfig = alistData.config || {};
-let fileFilter = alistconfig['fileFilter'] == 0 ? 0 : 1;
-let audiovisual = alistconfig.contain ? alistconfig.contain.replace(/\./, "") : 'mp4|avi|mkv|rmvb|flv|mov|ts|mp3|m4a|wma|flac';//影音文件
+
+let alistconfig = aliconfig;
+let fileFilter = aliconfig['fileFilter'] == 0 ? 0 : 1;
+let audiovisual = aliconfig.contain ? aliconfig.contain.replace(/\./g, "") : 'mp4|avi|mkv|rmvb|flv|mov|ts|mp3|m4a|wma|flac';//影音文件
 let contain = new RegExp(audiovisual, "i");//设置可显示的影音文件后缀
 let music = new RegExp("mp3|m4a|wma|flac", "i");//进入音乐播放器
 let image = new RegExp("jpg|png|gif|bmp|ico|svg", "i");//进入图片查看
 let transcoding = {UHD: "4K 超清", QHD: "2K 超清", FHD: "1080 全高清", HD: "720 高清", SD: "540 标清", LD: "360 流畅" };
-let alitoken = alistconfig.alitoken;
+let alitoken = aliconfig.refresh_token;
 if (!alitoken && getMyVar('getalitoken') != "1") {
   putMyVar('getalitoken', '1');
   try {
@@ -37,9 +56,8 @@ if (!alitoken && getMyVar('getalitoken') != "1") {
       }
     }
     if (alitoken) {
-      alistconfig.alitoken = alitoken;
-      alistData.config = alistconfig;
-      writeFile(alistfile, JSON.stringify(alistData));
+      aliconfig.refresh_token = alitoken;
+      writeFile(alicfgfile, JSON.stringify(aliconfig));
     }
   } catch (e) {
     log('自动取ali-token失败' + e.message);
@@ -64,9 +82,8 @@ if (alitoken) {
     userinfo = JSON.parse(request('https://auth.aliyundrive.com/v2/account/token', { headers: headers, body: { "refresh_token": alitoken, "grant_type": "refresh_token" }, method: 'POST', timeout: 3000 }));
     storage0.putMyVar('aliuserinfo', userinfo);
     putMyVar('userinfoChecktime', nowtime + 'time');
-    alistconfig.alitoken = userinfo.refresh_token;
-    alistData.config = alistconfig;
-    writeFile(alistfile, JSON.stringify(alistData));
+    aliconfig.refresh_token = userinfo.refresh_token;
+    writeFile(alicfgfile, JSON.stringify(aliconfig));
     headers['authorization'] = 'Bearer ' + userinfo.access_token;
     userinfo2 = JSON.parse(request('https://user.aliyundrive.com/v2/user/get', { headers: headers, body: {}, method: 'POST', timeout: 3000 }));
     storage0.putMyVar('aliuserinfo2', userinfo2);
