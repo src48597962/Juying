@@ -17,9 +17,7 @@ if(fetch(alicfgfile)){
       aliconfig.refresh_token = aliconfig.alitoken;
       delete aliconfig.alitoken;
       writeFile(alicfgfile, JSON.stringify(aliconfig));
-      delete alistdata.config['alitoken'];
-      delete alistdata.config['fileFilter'];
-      delete alistdata.config['contain'];
+      delete alistdata.config;
       writeFile(alistfile, JSON.stringify(alistdata));
     }
   } catch (e) {
