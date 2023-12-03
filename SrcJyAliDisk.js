@@ -36,19 +36,16 @@ function aliShareUrl(input) {
 }
 
 function myDiskMenu(islogin) {
-    let setalitoken = $().lazyRule((alistfile, alistData) => {
-        let alistconfig = alistData.config || {};
-        let alitoken = alistconfig.alitoken;
-        return $(alitoken || "", "新的token，为空退出登录").input((alistfile, alistData, alistconfig) => {
-            alistconfig.alitoken = input;
-            alistData.config = alistconfig;
-            writeFile(alistfile, JSON.stringify(alistData));
+    let setalitoken = $().lazyRule((aliconfig,alicfgfile) => {
+        return $(aliconfig.refresh_token || "", "新的token，为空退出登录").input((aliconfig,alicfgfile) => {
+            aliconfig.refresh_token = input;
+            writeFile(alicfgfile, JSON.stringify(aliconfig));
             clearMyVar('getalitoken');
             clearMyVar('aliuserinfo');
             refreshPage(false);
             return "toast://已设置";
-        }, alistfile, alistData, alistconfig)
-    }, alistfile, alistData)
+        }, aliconfig, alicfgfile)
+    }, aliconfig, alicfgfile)
 
     let onlogin = [{
         title: userinfo.nick_name,
@@ -77,22 +74,19 @@ function myDiskMenu(islogin) {
                 const tokenFunction = function () {
                     var token = JSON.parse(localStorage.getItem('token'))
                     if (token && token.user_id) {
-                        let alistfile = "hiker://files/rules/Src/Juying/Alist.json";
-                        if (fy_bridge_app.fetch(alistfile)) {
+                        let alicfgfile = "hiker://files/rules/Src/Juying/aliconfig.json";
+                        let aliconfig = {};
+                        if (fy_bridge_app.fetch(alicfgfile)) {
                             try{
-                                eval("var alistData = " + fy_bridge_app.fetch(alistfile));
+                                eval("aliconfig = " + fy_bridge_app.fetch(alicfgfile));
                             }catch(e){
-                                var alistData = {};
+                                aliconfig = {};
                             }
-                        } else {
-                            var alistData = {};
                         }
-                        let alistconfig = alistData.config || {};
-                        alistconfig.alitoken = token.refresh_token;
-                        fy_bridge_app.copy(alistconfig.alitoken);
-                        fy_bridge_app.log(alistconfig.alitoken);
-                        alistData.config = alistconfig;
-                        fy_bridge_app.writeFile(alistfile, JSON.stringify(alistData));
+                        aliconfig.refresh_token = token.refresh_token;
+                        fy_bridge_app.copy(aliconfig.alitoken);
+                        fy_bridge_app.log(aliconfig.alitoken);
+                        fy_bridge_app.writeFile(alicfgfile, JSON.stringify(aliconfig));
                         localStorage.clear();
                         fy_bridge_app.back(true);
                         fy_bridge_app.toast('TOKEN获取成功，请勿泄漏！');
