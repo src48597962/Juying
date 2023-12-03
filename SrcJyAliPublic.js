@@ -19,9 +19,7 @@ if(fetch(alicfgfile)){
       //writeFile(alicfgfile, JSON.stringify(aliconfig));
       delete alistdata.config;
       log(alistdata);
-      /*
       writeFile(alistfile, JSON.stringify(alistdata));
-      */
     }
   } catch (e) {
     log("从alist拆分aliconfig文件失败");
