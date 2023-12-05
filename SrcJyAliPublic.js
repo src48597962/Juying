@@ -65,7 +65,7 @@ if (!alitoken && getMyVar('getalitoken') != "1") {
     }
 }
 let headers = {
-    'content-type': 'application/json;charset=UTF-8',
+    "content-type": "application/json;charset=UTF-8",
     "origin": "https://www.aliyundrive.com",
     "referer": "https://www.aliyundrive.com/",
     "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36 Edg/110.0.1587.41"
@@ -92,7 +92,7 @@ if (alitoken) {
     }
 }
 
-function getsharetoken(share_id, share_pwd) {
+function getShareToken(share_id, share_pwd) {
     return JSON.parse(request('https://api.aliyundrive.com/v2/share_link/get_share_token', { body: { "share_pwd": share_pwd, "share_id": share_id }, method: 'POST', timeout: 3000 })) || {};
 }
 
