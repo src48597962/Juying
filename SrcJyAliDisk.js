@@ -238,7 +238,7 @@ function aliShare(share_id, folder_id, share_pwd) {
             d = d.concat(myDiskMenu(0));
         } else {
             share_pwd = share_pwd || "";
-            let get_sharetoken = getsharetoken(share_id,share_pwd);
+            let get_sharetoken = getShareToken(share_id,share_pwd);
             let sharetoken = get_sharetoken.share_token;
             let getbyshare = {};
             if(errorCode[get_sharetoken.code]){
@@ -299,7 +299,7 @@ function aliShare(share_id, folder_id, share_pwd) {
                 if (getItem('aliyun_order', '聚影排序') == "聚影排序") {
                     filelist.sort(SortList);
                 }
-                let sharetoken =getsharetoken(share_id,share_pwd).share_token;
+                let sharetoken =getShareToken(share_id,share_pwd).share_token;
                 filelist.forEach((item) => {
                     let filesize = item.size / 1024 / 1024;
                     let it = {
