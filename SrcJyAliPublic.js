@@ -91,7 +91,18 @@ if (alitoken) {
         delete headers['authorization'];
     }
 }
-
+function getUserInfo(alitoken) {
+    userinfo = JSON.parse(request('https://auth.aliyundrive.com/v2/account/token', { headers: headers, body: { "refresh_token": alitoken, "grant_type": "refresh_token" }, method: 'POST', timeout: 3000 }));
+    storage0.putMyVar('aliuserinfo', userinfo);
+    putMyVar('userinfoChecktime', nowtime + 'time');
+    aliconfig.refresh_token = userinfo.refresh_token;
+    writeFile(alicfgfile, JSON.stringify(aliconfig));
+    headers['authorization'] = 'Bearer ' + userinfo.access_token;
+    userinfo2 = JSON.parse(request('https://user.aliyundrive.com/v2/user/get', { headers: headers, body: {}, method: 'POST', timeout: 3000 }));
+    storage0.putMyVar('aliuserinfo2', userinfo2);
+    delete headers['authorization'];
+    
+}
 function getShareToken(share_id, share_pwd) {
     return JSON.parse(request('https://api.aliyundrive.com/v2/share_link/get_share_token', { body: { "share_pwd": share_pwd, "share_id": share_id }, method: 'POST', timeout: 3000 })) || {};
 }
