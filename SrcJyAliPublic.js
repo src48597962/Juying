@@ -71,38 +71,35 @@ let headers = {
     "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36 Edg/110.0.1587.41"
 };
 let userinfo = {};
-let userinfo2 = {};
 if (alitoken) {
     let nowtime = Date.now();
     let oldtime = parseInt(getMyVar('userinfoChecktime', '0').replace('time', ''));
     let aliuserinfo = storage0.getMyVar('aliuserinfo');
     if (aliuserinfo && aliuserinfo.user_id && nowtime < (oldtime + 2 * 60 * 60 * 1000)) {
         userinfo = aliuserinfo;
-        userinfo2 = storage0.getMyVar('aliuserinfo2');
     } else {
         userinfo = JSON.parse(request('https://auth.aliyundrive.com/v2/account/token', { headers: headers, body: { "refresh_token": alitoken, "grant_type": "refresh_token" }, method: 'POST', timeout: 3000 }));
+        headers['authorization'] = 'Bearer ' + userinfo.access_token;
+        let json = JSON.parse(request('https://user.aliyundrive.com/v2/user/get', { headers: headers, body: {}, method: 'POST', timeout: 3000 }));
+        delete headers['authorization'];
+        userinfo.resource_drive_id = json.resource_drive_id;
         storage0.putMyVar('aliuserinfo', userinfo);
         putMyVar('userinfoChecktime', nowtime + 'time');
         aliconfig.refresh_token = userinfo.refresh_token;
         writeFile(alicfgfile, JSON.stringify(aliconfig));
-        headers['authorization'] = 'Bearer ' + userinfo.access_token;
-        userinfo2 = JSON.parse(request('https://user.aliyundrive.com/v2/user/get', { headers: headers, body: {}, method: 'POST', timeout: 3000 }));
-        storage0.putMyVar('aliuserinfo2', userinfo2);
-        delete headers['authorization'];
     }
 }
-function getUserInfo(alitoken) {
-    userinfo = JSON.parse(request('https://auth.aliyundrive.com/v2/account/token', { headers: headers, body: { "refresh_token": alitoken, "grant_type": "refresh_token" }, method: 'POST', timeout: 3000 }));
-    storage0.putMyVar('aliuserinfo', userinfo);
-    putMyVar('userinfoChecktime', nowtime + 'time');
-    aliconfig.refresh_token = userinfo.refresh_token;
-    writeFile(alicfgfile, JSON.stringify(aliconfig));
-    headers['authorization'] = 'Bearer ' + userinfo.access_token;
-    userinfo2 = JSON.parse(request('https://user.aliyundrive.com/v2/user/get', { headers: headers, body: {}, method: 'POST', timeout: 3000 }));
-    storage0.putMyVar('aliuserinfo2', userinfo2);
-    delete headers['authorization'];
-    
+function getUserInfo() {
+    let account = JSON.parse(request('https://auth.aliyundrive.com/v2/account/token', { headers: headers, body: { "refresh_token": alitoken, "grant_type": "refresh_token" }, method: 'POST', timeout: 3000 }));
+    if(account.refresh_token){
+        headers['authorization'] = 'Bearer ' + userinfo.access_token;
+        let user = JSON.parse(request('https://user.aliyundrive.com/v2/user/get', { headers: headers, body: {}, method: 'POST', timeout: 3000 }));
+        delete headers['authorization'];
+        account.resource_drive_id = user.resource_drive_id;
+    }
+    return account;
 }
+
 function getShareToken(share_id, share_pwd) {
     return JSON.parse(request('https://api.aliyundrive.com/v2/share_link/get_share_token', { body: { "share_pwd": share_pwd, "share_id": share_id }, method: 'POST', timeout: 3000 })) || {};
 }
