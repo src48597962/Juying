@@ -36,16 +36,19 @@ function aliShareUrl(input) {
 }
 
 function myDiskMenu(islogin) {
-    let setalitoken = $().lazyRule((aliconfig,alicfgfile) => {
-        return $(aliconfig.refresh_token || "", "新的token，为空退出登录").input((aliconfig,alicfgfile) => {
-            aliconfig.refresh_token = input;
-            writeFile(alicfgfile, JSON.stringify(aliconfig));
+    let setalitoken = $().lazyRule((alistfile, alistData) => {
+        let alistconfig = alistData.config || {};
+        let alitoken = alistconfig.alitoken;
+        return $(alitoken || "", "新的token，为空退出登录").input((alistfile, alistData, alistconfig) => {
+            alistconfig.alitoken = input;
+            alistData.config = alistconfig;
+            writeFile(alistfile, JSON.stringify(alistData));
             clearMyVar('getalitoken');
             clearMyVar('aliuserinfo');
             refreshPage(false);
             return "toast://已设置";
-        }, aliconfig, alicfgfile)
-    }, aliconfig, alicfgfile)
+        }, alistfile, alistData, alistconfig)
+    }, alistfile, alistData)
 
     let onlogin = [{
         title: userinfo.nick_name,
@@ -74,19 +77,22 @@ function myDiskMenu(islogin) {
                 const tokenFunction = function () {
                     var token = JSON.parse(localStorage.getItem('token'))
                     if (token && token.user_id) {
-                        let alicfgfile = "hiker://files/rules/Src/Juying/aliconfig.json";
-                        let aliconfig = {};
-                        if (fy_bridge_app.fetch(alicfgfile)) {
+                        let alistfile = "hiker://files/rules/Src/Juying/Alist.json";
+                        if (fy_bridge_app.fetch(alistfile)) {
                             try{
-                                eval("aliconfig = " + fy_bridge_app.fetch(alicfgfile));
+                                eval("var alistData = " + fy_bridge_app.fetch(alistfile));
                             }catch(e){
-                                aliconfig = {};
+                                var alistData = {};
                             }
+                        } else {
+                            var alistData = {};
                         }
-                        aliconfig.refresh_token = token.refresh_token;
-                        fy_bridge_app.copy(aliconfig.alitoken);
-                        fy_bridge_app.log(aliconfig.alitoken);
-                        fy_bridge_app.writeFile(alicfgfile, JSON.stringify(aliconfig));
+                        let alistconfig = alistData.config || {};
+                        alistconfig.alitoken = token.refresh_token;
+                        fy_bridge_app.copy(alistconfig.alitoken);
+                        fy_bridge_app.log(alistconfig.alitoken);
+                        alistData.config = alistconfig;
+                        fy_bridge_app.writeFile(alistfile, JSON.stringify(alistData));
                         localStorage.clear();
                         fy_bridge_app.back(true);
                         fy_bridge_app.toast('TOKEN获取成功，请勿泄漏！');
@@ -126,8 +132,6 @@ function myDiskMenu(islogin) {
 }
 
 function aliShare(share_id, folder_id, share_pwd) {
-    log(share_id);
-    log(folder_id);
     addListener("onClose", $.toString((isback) => {
         if(getMyVar('聚影云盘自动返回')&&isback==1){
             back(false);
@@ -240,7 +244,7 @@ function aliShare(share_id, folder_id, share_pwd) {
             d = d.concat(myDiskMenu(0));
         } else {
             share_pwd = share_pwd || "";
-            let get_sharetoken = getShareToken(share_id,share_pwd);
+            let get_sharetoken = getsharetoken(share_id,share_pwd);
             let sharetoken = get_sharetoken.share_token;
             let getbyshare = {};
             if(errorCode[get_sharetoken.code]){
@@ -301,7 +305,7 @@ function aliShare(share_id, folder_id, share_pwd) {
                 if (getItem('aliyun_order', '聚影排序') == "聚影排序") {
                     filelist.sort(SortList);
                 }
-                let sharetoken =getShareToken(share_id,share_pwd).share_token;
+                let sharetoken =getsharetoken(share_id,share_pwd).share_token;
                 filelist.forEach((item) => {
                     let filesize = item.size / 1024 / 1024;
                     let it = {
