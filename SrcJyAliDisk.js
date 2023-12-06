@@ -126,6 +126,8 @@ function myDiskMenu(islogin) {
 }
 
 function aliShare(share_id, folder_id, share_pwd) {
+    log(share_id);
+    log(folder_id);
     addListener("onClose", $.toString((isback) => {
         if(getMyVar('聚影云盘自动返回')&&isback==1){
             back(false);
