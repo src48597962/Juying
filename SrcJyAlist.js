@@ -160,7 +160,9 @@ function alistHome() {
                         toast("云盘未登录，获取token失败，无法挂载");
                         return $("hiker://empty").rule(() => {
                             require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js');
-                            aliMyDisk();
+                            let d = [];
+                            d = d.concat(myDiskMenu(0));
+                            setResult(d);
                         })
                     }
                 }
