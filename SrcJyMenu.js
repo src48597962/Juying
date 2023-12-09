@@ -633,7 +633,7 @@ let buttonmenu = {
         img: "https://hikerfans.com/tubiao/more/65.png",
         url: $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
-            aliMyDisk("root",1);
+            aliMyDisk();
         })
     }
 }
