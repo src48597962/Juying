@@ -362,7 +362,10 @@ function aliShare(share_id, folder_id, share_pwd) {
                     title: "““””<small><font color=#f20c00>已开启文件过滤，仅显示视频文件</font></small>",
                     url: filterFiles.length == 0 ? "hiker://empty" : $("").lazyRule((filterFiles, folder_id) => {
                         addItemAfter("sharelist_" + folder_id, filterFiles);
-                        updateItem("sharelist_" + folder_id, { title: "““””<small><font color=#f20c00>已显示全部文件</font></small>" });
+                        updateItem("sharelist_" + folder_id, {
+                            url: "hiker://empty",
+                            title: "““””<small><font color=#f20c00>已显示全部文件</font></small>" 
+                        });
                         return "toast://已加载全部文件";
                     }, filterFiles, folder_id),
                     col_type: "text_center_1",
