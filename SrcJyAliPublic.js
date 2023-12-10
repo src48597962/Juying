@@ -81,7 +81,6 @@ if (alitoken) {
         userinfo = aliuserinfo;
     } else {
         userinfo = getUserInfo(alitoken);
-        
     }
 }
 function getUserInfo(alitoken) {
