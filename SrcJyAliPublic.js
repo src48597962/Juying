@@ -37,8 +37,7 @@ let image = new RegExp("jpg|png|gif|bmp|ico|svg", "i");//进入图片查看
 let transcoding = { UHD: "4K 超清", QHD: "2K 超清", FHD: "1080 全高清", HD: "720 高清", SD: "540 标清", LD: "360 流畅" };
 let aliaccount = aliconfig.account || {};
 let alitoken = aliaccount.refresh_token || "";
-if (!alitoken && getMyVar('getalitoken') != "1") {
-    putMyVar('getalitoken', '1');
+if (!alitoken) {
     try {
         //节约资源，如果有获取过用户信息，就重复利用一下
         let icyfilepath = "hiker://files/rules/icy/icy-ali-token.json";
@@ -83,22 +82,30 @@ if (alitoken) {
         userinfo = getUserInfo(alitoken);
     }
 }
-function getUserInfo(alitoken) {
-    let account = JSON.parse(request('https://auth.aliyundrive.com/v2/account/token', { headers: headers, body: { "refresh_token": alitoken, "grant_type": "refresh_token" }, method: 'POST', timeout: 3000 }));
-    if(account.refresh_token){
-        headers['authorization'] = 'Bearer ' + account.access_token;
-        let user = JSON.parse(request('https://user.aliyundrive.com/v2/user/get', { headers: headers, body: {}, method: 'POST', timeout: 3000 }));
-        delete headers['authorization'];
-        account.resource_drive_id = user.resource_drive_id;
-        storage0.putMyVar('aliuserinfo', account);
-        putMyVar('userinfoChecktime', nowtime + 'time');
-        aliaccount.refresh_token = account.refresh_token;
+function getUserInfo(token) {
+    if(token){
+        let account = JSON.parse(request('https://auth.aliyundrive.com/v2/account/token', { headers: headers, body: { "refresh_token": token, "grant_type": "refresh_token" }, method: 'POST', timeout: 3000 }));
+        if(account.refresh_token){
+            headers['authorization'] = 'Bearer ' + account.access_token;
+            let user = JSON.parse(request('https://user.aliyundrive.com/v2/user/get', { headers: headers, body: {}, method: 'POST', timeout: 3000 }));
+            delete headers['authorization'];
+            account.resource_drive_id = user.resource_drive_id;
+            storage0.putMyVar('aliuserinfo', account);
+            putMyVar('userinfoChecktime', nowtime + 'time');
+            aliaccount.refresh_token = account.refresh_token;
+            aliconfig.account = aliaccount;
+            writeFile(alicfgfile, JSON.stringify(aliconfig));
+        }else{
+            toast("登陆失败>" + account.message);
+        }
+        return account;
+    }else{
+        clearMyVar('aliuserinfo');
+        delete aliaccount.refresh_token;
         aliconfig.account = aliaccount;
         writeFile(alicfgfile, JSON.stringify(aliconfig));
-    }else{
-        toast("登陆失败>" + account.message);
+        return 1;
     }
-    return account;
 }
 
 function getShareToken(share_id, share_pwd) {
