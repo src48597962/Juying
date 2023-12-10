@@ -36,29 +36,34 @@ function aliShareUrl(input) {
 }
 
 function myDiskMenu(islogin) {
-    let setalitoken = $().lazyRule((aliconfig, alicfgfile) => {
-        return $(aliconfig.refresh_token || "", "新的token，为空退出登录").input((aliconfig, alicfgfile) => {
-            let aliaccount = aliconfig.account || {};
-            aliaccount.refresh_token = input;
-            aliconfig.account = aliaccount;
-            writeFile(alicfgfile, JSON.stringify(aliconfig));
-            clearMyVar('getalitoken');
-            clearMyVar('aliuserinfo');
-            refreshPage(false);
-            return "toast://已设置";
-        }, aliconfig, alicfgfile)
-    }, aliconfig, alicfgfile)
+    let setalitoken = $().lazyRule(() => {
+        return $(aliconfig.refresh_token || "", "新的refresh_token").input(() => {
+            if(input){
+                require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliPublic.js');
+                let account = getUserInfo(input);
+                if(account.refresh_token){
+                    refreshPage(false);
+                    return "toast://已登录";
+                }
+            }
+        })
+    })
 
     let onlogin = [{
         title: userinfo.nick_name,
-        url: $(['云盘接口', 'ali_token'], 2).select((setalitoken) => {
+        url: $(['云盘接口', '更换token','退出登录'], 2).select((setalitoken) => {
             if (input == '云盘接口') {
                 return $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                     yundiskjiekou();
                 })
-            } else if (input == 'ali_token') {
+            } else if (input == '更换token') {
                 return setalitoken;
+            } else if (input == '退出登录') {
+                require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliPublic.js');
+                getUserInfo("");
+                refreshPage(false);
+                return "toast://已退出登录";
             }
         }, setalitoken),
         img: userinfo.avatar,
