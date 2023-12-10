@@ -36,8 +36,8 @@ function aliShareUrl(input) {
 }
 
 function myDiskMenu(islogin) {
-    let setalitoken = $().lazyRule(() => {
-        return $(aliconfig.refresh_token || "", "新的refresh_token").input(() => {
+    let setalitoken = $().lazyRule((alitoken) => {
+        return $(alitoken || "", "新的refresh_token").input(() => {
             if(input){
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliPublic.js');
                 let account = getUserInfo(input);
@@ -47,7 +47,7 @@ function myDiskMenu(islogin) {
                 }
             }
         })
-    })
+    }, alitoken)
 
     let onlogin = [{
         title: userinfo.nick_name,
