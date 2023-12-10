@@ -38,7 +38,9 @@ function aliShareUrl(input) {
 function myDiskMenu(islogin) {
     let setalitoken = $().lazyRule((aliconfig, alicfgfile) => {
         return $(aliconfig.refresh_token || "", "新的token，为空退出登录").input((aliconfig, alicfgfile) => {
-            aliconfig.refresh_token = input;
+            let aliaccount = aliconfig.account || {};
+            aliaccount.refresh_token = input;
+            aliconfig.account = aliaccount;
             writeFile(alicfgfile, JSON.stringify(aliconfig));
             clearMyVar('getalitoken');
             clearMyVar('aliuserinfo');
@@ -83,9 +85,11 @@ function myDiskMenu(islogin) {
                                 aliconfig = {};
                             }
                         }
-                        aliconfig.refresh_token = token.refresh_token;
-                        fy_bridge_app.copy(aliconfig.alitoken);
-                        fy_bridge_app.log(aliconfig.alitoken);
+                        let aliaccount = aliconfig.account || {};
+                        aliaccount.refresh_token = token.refresh_token;
+                        aliconfig.account = aliaccount;
+                        fy_bridge_app.copy(token.refresh_token);
+                        fy_bridge_app.log(token.refresh_token);
                         fy_bridge_app.writeFile(alicfgfile, JSON.stringify(aliconfig));
                         localStorage.clear();
                         fy_bridge_app.back(true);
