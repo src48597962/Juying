@@ -46,6 +46,7 @@ function myDiskMenu(islogin) {
                     return "toast://已登录";
                 }
             }
+            return "hiker://empty";
         })
     }, alitoken)
 
