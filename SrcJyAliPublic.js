@@ -80,28 +80,24 @@ if (alitoken) {
     if (aliuserinfo && aliuserinfo.user_id && nowtime < (oldtime + 2 * 60 * 60 * 1000)) {
         userinfo = aliuserinfo;
     } else {
-        /*
-        userinfo = JSON.parse(request('https://auth.aliyundrive.com/v2/account/token', { headers: headers, body: { "refresh_token": alitoken, "grant_type": "refresh_token" }, method: 'POST', timeout: 3000 }));
-        headers['authorization'] = 'Bearer ' + userinfo.access_token;
-        let json = JSON.parse(request('https://user.aliyundrive.com/v2/user/get', { headers: headers, body: {}, method: 'POST', timeout: 3000 }));
-        delete headers['authorization'];
-        userinfo.resource_drive_id = json.resource_drive_id;
-        */
-        userinfo = getUserInfo();
-        storage0.putMyVar('aliuserinfo', userinfo);
-        putMyVar('userinfoChecktime', nowtime + 'time');
-        aliaccount.refresh_token = userinfo.refresh_token;
-        aliconfig.account = aliaccount;
-        writeFile(alicfgfile, JSON.stringify(aliconfig));
+        userinfo = getUserInfo(alitoken);
+        
     }
 }
-function getUserInfo() {
+function getUserInfo(alitoken) {
     let account = JSON.parse(request('https://auth.aliyundrive.com/v2/account/token', { headers: headers, body: { "refresh_token": alitoken, "grant_type": "refresh_token" }, method: 'POST', timeout: 3000 }));
     if(account.refresh_token){
         headers['authorization'] = 'Bearer ' + account.access_token;
         let user = JSON.parse(request('https://user.aliyundrive.com/v2/user/get', { headers: headers, body: {}, method: 'POST', timeout: 3000 }));
         delete headers['authorization'];
         account.resource_drive_id = user.resource_drive_id;
+        storage0.putMyVar('aliuserinfo', account);
+        putMyVar('userinfoChecktime', nowtime + 'time');
+        aliaccount.refresh_token = account.refresh_token;
+        aliconfig.account = aliaccount;
+        writeFile(alicfgfile, JSON.stringify(aliconfig));
+    }else{
+        toast("登陆失败>" + account.message);
     }
     return account;
 }
