@@ -58,7 +58,8 @@ if (!alitoken && getMyVar('getalitoken') != "1") {
             }
         }
         if (alitoken) {
-            aliconfig.refresh_token = alitoken;
+            aliaccount.refresh_token = alitoken;
+            aliconfig.account = aliaccount;
             writeFile(alicfgfile, JSON.stringify(aliconfig));
         }
     } catch (e) {
@@ -89,7 +90,8 @@ if (alitoken) {
         userinfo = getUserInfo();
         storage0.putMyVar('aliuserinfo', userinfo);
         putMyVar('userinfoChecktime', nowtime + 'time');
-        aliconfig.refresh_token = userinfo.refresh_token;
+        aliaccount.refresh_token = userinfo.refresh_token;
+        aliconfig.account = aliaccount;
         writeFile(alicfgfile, JSON.stringify(aliconfig));
     }
 }
