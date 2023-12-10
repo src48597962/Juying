@@ -446,7 +446,7 @@ function aliMyDisk(folder_id, isSearch) {
             sousuo2(d, 1);
         } else {
             try {
-                let drive_id = getMyVar("selectDisk", "1") == "1" ? userinfo.default_drive_id : userinfo2.resource_drive_id;
+                let drive_id = getMyVar("selectDisk", "1") == "1" ? userinfo.default_drive_id : userinfo.resource_drive_id;
                 let postdata = { "drive_id": drive_id, "parent_file_id": folder_id, "limit": 200, "all": false, "url_expire_sec": 14400, "image_thumbnail_process": "image/resize,w_256/format,avif", "image_url_process": "image/resize,w_1920/format,avif", "video_thumbnail_process": "video/snapshot,t_1000,f_jpg,ar_auto,w_256", "fields": "*", "order_by": "updated_at", "order_direction": "DESC" };
                 headers['authorization'] = 'Bearer ' + userinfo.access_token;
                 headers['x-canary'] = "client=web,app=adrive,version=v4.1.1";
