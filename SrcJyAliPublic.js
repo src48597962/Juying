@@ -37,6 +37,7 @@ let image = new RegExp("jpg|png|gif|bmp|ico|svg", "i");//进入图片查看
 let transcoding = { UHD: "4K 超清", QHD: "2K 超清", FHD: "1080 全高清", HD: "720 高清", SD: "540 标清", LD: "360 流畅" };
 let aliaccount = aliconfig.account || {};
 let alitoken = aliaccount.refresh_token || "";
+/*
 if (!alitoken) {
     try {
         //节约资源，如果有获取过用户信息，就重复利用一下
@@ -65,6 +66,7 @@ if (!alitoken) {
         log('自动取ali-token失败' + e.message);
     }
 }
+*/
 let headers = {
     "content-type": "application/json;charset=UTF-8",
     "origin": "https://www.aliyundrive.com",
