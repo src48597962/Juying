@@ -73,9 +73,9 @@ let headers = {
     "referer": "https://www.aliyundrive.com/",
     "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36 Edg/110.0.1587.41"
 };
+let nowtime = Date.now();
 let userinfo = {};
 if (alitoken) {
-    let nowtime = Date.now();
     let oldtime = parseInt(getMyVar('userinfoChecktime', '0').replace('time', ''));
     let aliuserinfo = storage0.getMyVar('aliuserinfo');
     if (aliuserinfo && aliuserinfo.user_id && nowtime < (oldtime + 2 * 60 * 60 * 1000)) {
