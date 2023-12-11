@@ -249,57 +249,9 @@ function aliShare(share_id, folder_id, share_pwd) {
                                     setItem('aliyun_openInt', '2');
                                 }else{
                                     */
-                                    return $("hiker://empty###noRecordHistory##noHistory#").rule(() => {
-                                        let d = [];
-                                        let url = 'https://messense-aliyundrive-webdav-backendrefresh-token-ucs0wn.streamlit.app'
-                                        let js = $.toString(() => {
-                                            const tokenFunction = function () {
-                                                fba.log(localStorage);
-                                                /*
-                                                var token = JSON.parse(localStorage.getItem('token'))
-                                                if (token && token.user_id) {
-                                                    let alicfgfile = "hiker://files/rules/Src/Juying/aliconfig.json";
-                                                    let aliconfig = {};
-                                                    if (fy_bridge_app.fetch(alicfgfile)) {
-                                                        try {
-                                                            eval("aliconfig = " + fy_bridge_app.fetch(alicfgfile));
-                                                        } catch (e) {
-                                                            aliconfig = {};
-                                                        }
-                                                    }
-                                                    let aliaccount = aliconfig.account || {};
-                                                    aliaccount.refresh_token = token.refresh_token;
-                                                    aliconfig.account = aliaccount;
-                                                    fy_bridge_app.copy(token.refresh_token);
-                                                    fy_bridge_app.log(token.refresh_token);
-                                                    fy_bridge_app.writeFile(alicfgfile, JSON.stringify(aliconfig));
-                                                    localStorage.clear();
-                                                    fy_bridge_app.back(true);
-                                                    fy_bridge_app.toast('TOKEN获取成功，请勿泄漏！');
-                                                    return;
-                                                } else {
-                                                    token_timer();
-                                                }
-                                                */
-                                            }
-                                            var token_timer = function () {
-                                                setTimeout(tokenFunction, 500);
-                                            }
-                                            tokenFunction();
-                                        })
-                                        d.push({
-                                            url: url,
-                                            col_type: 'x5_webview_single',
-                                            desc: '100%&&float',
-                                            extra: {
-                                                canBack: true,
-                                                js: js,
-                                                urlInterceptor: $.toString(() => true)
-                                            }
-                                        })
-                                        setResult(d);
-                                    })
+                                    
                                 //}
+                                return 'web://https://messense-aliyundrive-webdav-backendrefresh-token-ucs0wn.streamlit.app'
                             }
                         }
                         refreshPage();
