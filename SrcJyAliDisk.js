@@ -228,10 +228,77 @@ function aliShare(share_id, folder_id, share_pwd) {
             url: $(['智能', '转码', '原画', '原画接口']).select(() => {
                 if(input=='原画接口'){
                     return $(['接口1(alist)', '接口2(webdav)']).select(() => {
+                        clearMyVar('aliopentoken');
                         if(input=='接口1(alist)'){
                             clearItem('aliyun_openInt');
                         }else{
-                            setItem('aliyun_openInt', '2');
+                            if(aliOpenTokenObj.refresh_token_2){
+                                setItem('aliyun_openInt', '2');
+                            }else{
+                                let loyopentoken2;
+                                try{
+                                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliPublic.js');
+                                    let loyopen = eval(fetch("hiker://files/rules/LoyDglk/aliOpenToken.json")) || {};
+                                    loyopentoken2 = loyopen.isV2?loyopen.RefreshTokenOpen:"";
+                                    aliOpenTokenObj.refresh_token_2 = loyopentoken2;
+                                    aliconfig.opentoken = aliOpenTokenObj;
+                                    writeFile(alicfgfile, JSON.stringify(aliconfig));
+                                }catch(e){}
+                                if(loyopentoken2){
+                                    setItem('aliyun_openInt', '2');
+                                }else{
+                                    return $("hiker://empty###noRecordHistory##noHistory#").rule(() => {
+                                        let d = [];
+                                        let url = 'https://messense-aliyundrive-webdav-backendrefresh-token-ucs0wn.streamlit.app'
+                                        let js = $.toString(() => {
+                                            const tokenFunction = function () {
+                                                fba.log(localStorage);
+                                                /*
+                                                var token = JSON.parse(localStorage.getItem('token'))
+                                                if (token && token.user_id) {
+                                                    let alicfgfile = "hiker://files/rules/Src/Juying/aliconfig.json";
+                                                    let aliconfig = {};
+                                                    if (fy_bridge_app.fetch(alicfgfile)) {
+                                                        try {
+                                                            eval("aliconfig = " + fy_bridge_app.fetch(alicfgfile));
+                                                        } catch (e) {
+                                                            aliconfig = {};
+                                                        }
+                                                    }
+                                                    let aliaccount = aliconfig.account || {};
+                                                    aliaccount.refresh_token = token.refresh_token;
+                                                    aliconfig.account = aliaccount;
+                                                    fy_bridge_app.copy(token.refresh_token);
+                                                    fy_bridge_app.log(token.refresh_token);
+                                                    fy_bridge_app.writeFile(alicfgfile, JSON.stringify(aliconfig));
+                                                    localStorage.clear();
+                                                    fy_bridge_app.back(true);
+                                                    fy_bridge_app.toast('TOKEN获取成功，请勿泄漏！');
+                                                    return;
+                                                } else {
+                                                    token_timer();
+                                                }
+                                                */
+                                            }
+                                            var token_timer = function () {
+                                                setTimeout(tokenFunction, 500);
+                                            }
+                                            tokenFunction();
+                                        })
+                                        d.push({
+                                            url: url,
+                                            col_type: 'x5_webview_single',
+                                            desc: '100%&&float',
+                                            extra: {
+                                                canBack: true,
+                                                js: js,
+                                                urlInterceptor: $.toString(() => true)
+                                            }
+                                        })
+                                        setResult(d);
+                                    })
+                                }
+                            }
                         }
                         refreshPage();
                         return 'toast://已切换为'+input;
