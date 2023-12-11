@@ -225,10 +225,22 @@ function aliShare(share_id, folder_id, share_pwd) {
         },
         {
             title: getItem('aliyun_playMode', '智能'),
-            url: $(['转码', '原画', '智能']).select(() => {
-                setItem('aliyun_playMode', input);
-                refreshPage();
-                return 'toast://切换成功';
+            url: $(['智能', '转码', '原画', '原画接口']).select(() => {
+                if(input=='原画接口'){
+                    return $(['接口1(alist)', '接口2(webdav)']).select(() => {
+                        if(input=='接口1(alist)'){
+                            clearItem('aliyun_openInt');
+                        }else{
+                            setItem('aliyun_openInt', '2');
+                        }
+                        refreshPage();
+                        return 'toast://已切换为'+input;
+                    })
+                }else{
+                    setItem('aliyun_playMode', input);
+                    refreshPage();
+                    return 'toast://已切换为'+input;
+                }
             }),
             col_type: 'icon_5',
             img: 'https://hikerfans.com/tubiao/grey/100.png',
