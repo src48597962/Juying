@@ -210,8 +210,8 @@ function aliShare(share_id, folder_id, share_pwd) {
                 refreshPage();
                 return 'toast://已切换';
             }),
-            col_type: 'icon_5',//icon_round_small_4
-            img: 'https://hikerfans.com/tubiao/grey/168.png',
+            col_type: 'icon_5',
+            img: 'https://hikerfans.com/tubiao/grey/168.png'
         },
         {
             title: "排序",
@@ -221,7 +221,7 @@ function aliShare(share_id, folder_id, share_pwd) {
                 return 'toast://切换成功';
             }),
             col_type: 'icon_5',
-            img: 'https://hikerfans.com/tubiao/grey/76.png',
+            img: 'https://hikerfans.com/tubiao/grey/76.png'
         },
         {
             title: getItem('aliyun_playMode', '智能'),
@@ -248,10 +248,18 @@ function aliShare(share_id, folder_id, share_pwd) {
                                 if(loyopentoken2){
                                     setItem('aliyun_openInt', '2');
                                 }else{
-                                    */
                                     
-                                //}
-                                return 'web://https://messense-aliyundrive-webdav-backendrefresh-token-ucs0wn.streamlit.app'
+                                    
+                                }
+                                */
+                                return $(['打开网页登录获取', '填写接口2开放token']).select(() => {
+                                    if(input=='打开网页登录获取'){
+                                        return 'web://https://messense-aliyundrive-webdav-backendrefresh-token-ucs0wn.streamlit.app';
+                                    }else{
+                                        
+                                    }
+                                })
+                                
                             }
                         }
                         refreshPage();
@@ -264,16 +272,16 @@ function aliShare(share_id, folder_id, share_pwd) {
                 }
             }),
             col_type: 'icon_5',
-            img: 'https://hikerfans.com/tubiao/grey/100.png',
+            img: 'https://hikerfans.com/tubiao/grey/100.png'
         },
         {
             title: '转存',
             url: `smartdrive://share/browse?shareId=${share_id}&sharePwd=${share_pwd}`,
             col_type: 'icon_5',
-            img: 'https://hikerfans.com/tubiao/grey/206.png',
+            img: 'https://hikerfans.com/tubiao/grey/206.png'
         },
         {
-            col_type: 'line_blank',
+            col_type: 'line_blank'
         }
     )
     try {
