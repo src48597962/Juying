@@ -232,13 +232,13 @@ function aliShare(share_id, folder_id, share_pwd) {
                         if(input=='接口1(alist)'){
                             clearItem('aliyun_openInt');
                         }else{
+                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliPublic.js');
                             if(aliOpenTokenObj.refresh_token_2){
                                 setItem('aliyun_openInt', '2');
                             }else{
                                 /*
                                 let loyopentoken2;
                                 try{
-                                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliPublic.js');
                                     let loyopen = eval(fetch("hiker://files/rules/LoyDglk/aliOpenToken.json")) || {};
                                     loyopentoken2 = loyopen.isV2?loyopen.RefreshTokenOpen:"";
                                     aliOpenTokenObj.refresh_token_2 = loyopentoken2;
