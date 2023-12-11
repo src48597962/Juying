@@ -235,6 +235,7 @@ function aliShare(share_id, folder_id, share_pwd) {
                             if(aliOpenTokenObj.refresh_token_2){
                                 setItem('aliyun_openInt', '2');
                             }else{
+                                /*
                                 let loyopentoken2;
                                 try{
                                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliPublic.js');
@@ -247,6 +248,7 @@ function aliShare(share_id, folder_id, share_pwd) {
                                 if(loyopentoken2){
                                     setItem('aliyun_openInt', '2');
                                 }else{
+                                    */
                                     return $("hiker://empty###noRecordHistory##noHistory#").rule(() => {
                                         let d = [];
                                         let url = 'https://messense-aliyundrive-webdav-backendrefresh-token-ucs0wn.streamlit.app'
@@ -297,7 +299,7 @@ function aliShare(share_id, folder_id, share_pwd) {
                                         })
                                         setResult(d);
                                     })
-                                }
+                                //}
                             }
                         }
                         refreshPage();
