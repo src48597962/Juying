@@ -501,7 +501,7 @@ function aliMyDisk(folder_id, isSearch, isdrive_id) {
                         return item.type == "file" && /srt|vtt|ass/.test(item.file_extension);
                     })
                     let dirlist = myfilelist.filter((item) => {
-                        return item.type == "folder";
+                        return item.type == "folder" && !folderFilter.test(item.name);
                     })
                     dirlist.forEach((item) => {
                         d.push({
