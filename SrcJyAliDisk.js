@@ -674,7 +674,7 @@ function aliDiskSearch(input, data) {
                 };
 
                 if (obj.name == "我的云盘") {
-                    arr.url = $(item.url).rule((input,drive_id) => {
+                    arr.url = $('').rule((input,drive_id) => {
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js');
                         aliMyDisk(input,1,drive_id);
                     }, item.url, item.drive_id);
