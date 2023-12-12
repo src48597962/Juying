@@ -445,7 +445,7 @@ function aliShare(share_id, folder_id, share_pwd) {
     }))
 }
 
-function aliMyDisk(folder_id, isSearch) {
+function aliMyDisk(folder_id, isSearch, isdrive_id) {
     folder_id = folder_id || "root";
     isSearch = isSearch || 0;
     let d = [];
@@ -485,12 +485,12 @@ function aliMyDisk(folder_id, isSearch) {
                 col_type: 'icon_3_fill'
             })
         }
-        if (getMyVar("selectDisk", "1") == "3") {
+        if (getMyVar("selectDisk", "1") == "3" && !isSearch) {
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJuying.js');
             sousuo2(d, 1);
         } else {
             try {
-                let drive_id = getMyVar("selectDisk", "1") == "1" ? userinfo.default_drive_id : userinfo.resource_drive_id;
+                let drive_id = isdrive_id?isdrive_id:getMyVar("selectDisk", "1") == "1" ? userinfo.default_drive_id : userinfo.resource_drive_id;
                 let postdata = { "drive_id": drive_id, "parent_file_id": folder_id, "limit": 200, "all": false, "url_expire_sec": 14400, "image_thumbnail_process": "image/resize,w_256/format,avif", "image_url_process": "image/resize,w_1920/format,avif", "video_thumbnail_process": "video/snapshot,t_1000,f_jpg,ar_auto,w_256", "fields": "*", "order_by": "updated_at", "order_direction": "DESC" };
                 headers['authorization'] = 'Bearer ' + userinfo.access_token;
                 headers['x-canary'] = "client=web,app=adrive,version=v4.1.1";
@@ -674,10 +674,10 @@ function aliDiskSearch(input, data) {
                 };
 
                 if (obj.name == "我的云盘") {
-                    arr.url = $(item.url).rule((input) => {
+                    arr.url = $(item.url).rule((input,drive_id) => {
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js');
-                        aliMyDisk(input,1);
-                    }, item.url);
+                        aliMyDisk(input,1,drive_id);
+                    }, item.url, item.drive_id);
                     searchlist.push(arr);
                 } else {
                     if (itemTitle.toLowerCase().includes(input.toLowerCase())) {//搜索结果包含关键字才行
