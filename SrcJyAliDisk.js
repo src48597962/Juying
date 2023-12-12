@@ -239,6 +239,7 @@ function aliShare(share_id, folder_id, share_pwd) {
                                 let loyopentoken2;
                                 try{
                                     let loyopen = eval(fetch("hiker://files/rules/LoyDglk/aliOpenToken.json")) || {};
+                                    log(loyopen);
                                     loyopentoken2 = loyopen.isV2?loyopen.RefreshTokenOpen:"";
                                     aliOpenTokenObj.refresh_token_2 = loyopentoken2;
                                     aliconfig.opentoken = aliOpenTokenObj;
