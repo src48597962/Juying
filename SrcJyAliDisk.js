@@ -495,7 +495,7 @@ function aliMyDisk(folder_id, isSearch, driveid) {
                 headers['authorization'] = 'Bearer ' + userinfo.access_token;
                 headers['x-canary'] = "client=web,app=adrive,version=v4.1.1";
                 let getfiles = request('https://api.aliyundrive.com/adrive/v3/file/list', { headers: headers, body: postdata, method: 'POST' });
-                let myfilelist = JSON.parse(getfiles).items;
+                let myfilelist = JSON.parse(getfiles).items || [];
                 if (myfilelist.length > 0) {
                     let sublist = myfilelist.filter(item => {
                         return item.type == "file" && /srt|vtt|ass/.test(item.file_extension);
