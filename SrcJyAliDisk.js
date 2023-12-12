@@ -252,13 +252,18 @@ function aliShare(share_id, folder_id, share_pwd) {
                                     
                                 }
                                 */
-                                return $(['打开网页登录获取', '填写接口2开放token']).select(() => {
-                                    if(input=='打开网页登录获取'){
+
+                                return $('','输入阿里webdav口令，留空打开网页获取').input((alicfgfile,aliconfig) => {
+                                    if(input==''){
                                         return 'web://https://messense-aliyundrive-webdav-backendrefresh-token-ucs0wn.streamlit.app';
                                     }else{
-                                        
+                                        let aliOpenTokenObj = aliconfig.opentoken || {};
+                                        aliOpenTokenObj.refresh_token_2 = input;
+                                        aliconfig.opentoken = aliOpenTokenObj;
+                                        writeFile(alicfgfile, JSON.stringify(aliconfig));
+                                        setItem('aliyun_openInt', '2');
                                     }
-                                })
+                                },alicfgfile,aliconfig)
                                 
                             }
                         }
