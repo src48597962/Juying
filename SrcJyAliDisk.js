@@ -236,7 +236,6 @@ function aliShare(share_id, folder_id, share_pwd) {
                             if(aliOpenTokenObj.refresh_token_2){
                                 setItem('aliyun_openInt', '2');
                             }else{
-                                /*
                                 let loyopentoken2;
                                 try{
                                     let loyopen = eval(fetch("hiker://files/rules/LoyDglk/aliOpenToken.json")) || {};
@@ -248,23 +247,19 @@ function aliShare(share_id, folder_id, share_pwd) {
                                 if(loyopentoken2){
                                     setItem('aliyun_openInt', '2');
                                 }else{
-                                    
+                                    return $('','输入阿里webdav口令，留空打开网页获取').input((alicfgfile,aliconfig) => {
+                                        if(input==''){
+                                            return 'web://https://messense-aliyundrive-webdav-backendrefresh-token-ucs0wn.streamlit.app';
+                                        }else{
+                                            let aliOpenTokenObj = aliconfig.opentoken || {};
+                                            aliOpenTokenObj.refresh_token_2 = input;
+                                            aliconfig.opentoken = aliOpenTokenObj;
+                                            writeFile(alicfgfile, JSON.stringify(aliconfig));
+                                            setItem('aliyun_openInt', '2');
+                                        }
+                                    },alicfgfile,aliconfig)
                                     
                                 }
-                                */
-
-                                return $('','输入阿里webdav口令，留空打开网页获取').input((alicfgfile,aliconfig) => {
-                                    if(input==''){
-                                        return 'web://https://messense-aliyundrive-webdav-backendrefresh-token-ucs0wn.streamlit.app';
-                                    }else{
-                                        let aliOpenTokenObj = aliconfig.opentoken || {};
-                                        aliOpenTokenObj.refresh_token_2 = input;
-                                        aliconfig.opentoken = aliOpenTokenObj;
-                                        writeFile(alicfgfile, JSON.stringify(aliconfig));
-                                        setItem('aliyun_openInt', '2');
-                                    }
-                                },alicfgfile,aliconfig)
-                                
                             }
                         }
                         refreshPage();
