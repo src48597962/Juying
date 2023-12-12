@@ -224,7 +224,7 @@ function aliShare(share_id, folder_id, share_pwd) {
             img: 'https://hikerfans.com/tubiao/grey/76.png'
         },
         {
-            title: getItem('aliyun_playMode', '智能'),
+            title: getItem('aliyun_playMode', '智能')=="原画"?"原画"+getItem('aliyun_openInt', '1'):getItem('aliyun_playMode', '智能'),
             url: $(['智能', '转码', '原画', '原画接口']).select(() => {
                 if(input=='原画接口'){
                     return $(['接口1(alist)', '接口2(webdav)']).select(() => {
