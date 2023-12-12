@@ -671,6 +671,7 @@ function JYyiji(){
                 pic_url: buttonmenu[btnmn1].img,
                 col_type: 'icon_5',
                 extra: {
+                    id: 'buttonmenu1',
                     longClick: [{
                         title: "♥️管理",
                         js: $.toString(() => {
@@ -694,35 +695,68 @@ function JYyiji(){
                 title: btnmn2,
                 url: buttonmenu[btnmn2].url,
                 pic_url: buttonmenu[btnmn2].img,
-                col_type: 'icon_5'
+                col_type: 'icon_5',
+                extra: {
+                    id: 'buttonmenu2'
+                }
             },
             {
                 title: btnmn3,
                 url: buttonmenu[btnmn3].url,
                 pic_url: buttonmenu[btnmn3].img,
-                col_type: 'icon_5'
+                col_type: 'icon_5',
+                extra: {
+                    id: 'buttonmenu2'
+                }
             },
             {
                 title: btnmn4,
                 url: buttonmenu[btnmn4].url,
                 pic_url: buttonmenu[btnmn4].img,
-                col_type: 'icon_5'
+                col_type: 'icon_5',
+                extra: {
+                    id: 'buttonmenu2'
+                }
             },
             {
                 title: btnmn5,
                 url: buttonmenu[btnmn5].url,
                 pic_url: buttonmenu[btnmn5].img,
-                col_type: 'icon_5'
+                col_type: 'icon_5',
+                extra: {
+                    id: 'buttonmenu2'
+                }
             },
             {
                 col_type: 'line'
             }
         ]
-        for(var i in yijimenu){
-            d.push(
-                yijimenu[i]
-            )
-        }
+        yijimenu.forEach(item=>{
+            if(item.title && item.title=="收藏"){
+                let extra = item.extra || {};
+                extra.longClick = [{
+                    title: "历史",
+                    js: $.toString((id) => {
+                        setItem(id, "历史");
+                        refreshPage(true);
+                        return "hiker://empty";
+                    },extra.id)
+                }]
+            }
+            if(item.title && item.title=="历史"){
+                let extra = item.extra || {};
+                extra.longClick = [{
+                    title: "收藏",
+                    js: $.toString((id) => {
+                        setItem(id, "收藏");
+                        refreshPage(true);
+                        return "hiker://empty";
+                    },extra.id)
+                }]
+            }
+            d.push(item);
+        })
+
         for (let i = 0; i < 10; i++) {
             d.push({
                 col_type: "blank_block"
