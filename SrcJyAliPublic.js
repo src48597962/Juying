@@ -19,9 +19,8 @@ if (fetch(alicfgfile)) {
             delete account.alitoken;
             aliconfig.account = account;
             writeFile(alicfgfile, JSON.stringify(aliconfig));
-            //delete alistdata.config;
-            //writeFile(alistfile, JSON.stringify(alistdata));
-            
+            delete alistdata.config;
+            writeFile(alistfile, JSON.stringify(alistdata));
         }
     } catch (e) {
         log("从alist拆分aliconfig文件失败");
