@@ -243,7 +243,9 @@ function aliShare(share_id, folder_id, share_pwd) {
                                     aliOpenTokenObj.refresh_token_2 = loyopentoken2;
                                     aliconfig.opentoken = aliOpenTokenObj;
                                     writeFile(alicfgfile, JSON.stringify(aliconfig));
-                                }catch(e){}
+                                }catch(e){
+                                    log(e.message);
+                                }
                                 if(loyopentoken2){
                                     setItem('aliyun_openInt', '2');
                                 }else{
