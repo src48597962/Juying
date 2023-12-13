@@ -510,7 +510,9 @@ function yiji() {
                     }
                     log(requirelist_tmp);
                     writeFile(requirefile, JSON.stringify(requirelist_tmp));
-                } catch (e) { }
+                } catch (e) {
+                    log(e.message);
+                }
             }
             confirm({
                 title: "温馨提示",
