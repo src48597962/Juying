@@ -504,6 +504,7 @@ function yiji() {
                         }
                     })
                     for (let i = 0; i < requirelist_tmp.length; i++) {
+                        log(requirelist_tmp[i]);
                         if(delquirelist.includes(requirelist_tmp[i].url)){
                             delete requirelist_tmp[i];
                             i = i - 1;
