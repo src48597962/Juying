@@ -497,7 +497,7 @@ function yiji() {
                 try {
                     eval("let requirelist_tmp=" + fetch(requirefile) + ";");
                     requirelist.forEach(it=>{
-                        let index = requirelist_tmp.indexOf(requirelist_tmp.filter(d=>d.name == it.url)[0]);
+                        let index = requirelist_tmp.indexOf(requirelist_tmp.filter(d=>d.url == it.url)[0]);
                         if(index==-1){
                             requirelist_tmp.push(it);
                         }
