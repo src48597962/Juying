@@ -490,16 +490,6 @@ function yiji() {
             programversion = $.require("config").version || 0;
         }catch(e){}
         if(programversion<11){
-            confirm({
-                title: "温馨提示",
-                content: "发现小程序新版本",
-                confirm: $.toString(() => {
-                    return "海阔视界首页频道规则【聚影√】￥home_rule_url￥http://hiker.nokia.press/hikerule/rulelist.json?id=6629"
-                }),
-                cancel: $.toString(() => {
-                    return "toast://不升级小程序，功能不全或有异常"
-                })
-            });
             let delquirelist = ['https://cdn.staticaly.com/gh/', 'https://ghproxy.com/https://raw.githubusercontent.com/'];
             let requirelist = [{ url: 'https://ghproxy.net/https://raw.githubusercontent.com/', sort: 0 }, { url: 'https://gh.con.sh/https://raw.githubusercontent.com/', sort: 0 }, { url: 'https://mirror.ghproxy.com/https://raw.githubusercontent.com/', sort: 0 }, { url: 'https://ghps.cc/https://raw.githubusercontent.com/', sort: 0 }, { url: 'https://github.jevons.vip/https://raw.githubusercontent.com/', sort: 0 }];
             let requirefile = "hiker://files/rules/Src/require.json";
@@ -518,9 +508,20 @@ function yiji() {
                             i = i - 1;
                         }
                     }
+                    log(requirelist_tmp);
                     writeFile(requirefile, JSON.stringify(requirelist_tmp));
                 } catch (e) { }
             }
+            confirm({
+                title: "温馨提示",
+                content: "发现小程序新版本",
+                confirm: $.toString(() => {
+                    return "海阔视界首页频道规则【聚影√】￥home_rule_url￥http://hiker.nokia.press/hikerule/rulelist.json?id=6629"
+                }),
+                cancel: $.toString(() => {
+                    return "toast://不升级小程序，功能不全或有异常"
+                })
+            });
         }
         Version();
     }
