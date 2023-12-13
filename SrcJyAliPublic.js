@@ -54,6 +54,7 @@ if (alitoken) {
         userinfo = getUserInfo(alitoken);
     }
 }
+let alidrive_id = getMyVar("selectDisk", "1") == "1" ? userinfo.default_drive_id : userinfo.resource_drive_id || userinfo.default_drive_id;
 function getUserInfo(token) {
     if(token){
         let account = JSON.parse(request('https://auth.aliyundrive.com/v2/account/token', { headers: headers, body: { "refresh_token": token, "grant_type": "refresh_token" }, method: 'POST', timeout: 3000 }));
