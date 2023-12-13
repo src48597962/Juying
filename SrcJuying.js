@@ -495,7 +495,8 @@ function yiji() {
             let requirefile = "hiker://files/rules/Src/require.json";
             if (fetch(requirefile)) {
                 try {
-                    eval("let requirelist_tmp=" + fetch(requirefile) + ";");
+                    let requirelist_tmp;
+                    eval("requirelist_tmp = " + fetch(requirefile) + ";");
                     requirelist.forEach(it=>{
                         let index = requirelist_tmp.indexOf(requirelist_tmp.filter(d=>d.url == it.url)[0]);
                         if(index==-1){
@@ -511,7 +512,7 @@ function yiji() {
                     log(requirelist_tmp);
                     writeFile(requirefile, JSON.stringify(requirelist_tmp));
                 } catch (e) {
-                    log(e.message);
+                    log("错误信息>" + e.toString() + " 错误行>" + e.lineNumber);
                 }
             }
             confirm({
