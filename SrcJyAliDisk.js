@@ -305,6 +305,7 @@ function aliShare(share_id, folder_id, share_pwd) {
                 let postdata = { "share_id": share_id, "parent_file_id": folder_id || "root", "limit": 200, "image_thumbnail_process": "image/resize,w_256/format,jpeg", "image_url_process": "image/resize,w_1920/format,jpeg/interlace,1", "video_thumbnail_process": "video/snapshot,t_1000,f_jpg,ar_auto,w_256", "order_by": orderskey.split('#')[0], "order_direction": orderskey.split('#')[1] };
                 headers['x-share-token'] = sharetoken;
                 getbyshare = JSON.parse(request('https://api.aliyundrive.com/adrive/v2/file/list_by_share', { headers: headers, body: postdata, method: 'POST' }));
+                
                 if (errorCode[getbyshare.code]) {
                     d.push({
                         title: errorCode[getbyshare.code],
@@ -319,7 +320,9 @@ function aliShare(share_id, folder_id, share_pwd) {
                 return item.type == "file" || (item.type == "folder" && !folderFilter.test(item.name));
             })
             if (sharelist.length == 1 && sharelist[0].type == "folder") {
-                setPageTitle(typeof (MY_PARAMS) != "undefined" && MY_PARAMS.dirname ? MY_PARAMS.dirname : sharelist[0].name + ' | 聚影√');
+                setPageTitle(sharelist[0].name + ' | 聚影√');
+                var MY_PARAMS = MY_PARAMS || {};
+                MY_PARAMS.dirname = sharelist[0].name;
                 java.lang.Thread.sleep(1000);
                 aliShare(share_id, sharelist[0].file_id, share_pwd);
             } else if (sharelist.length > 0) {
