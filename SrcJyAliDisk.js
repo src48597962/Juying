@@ -143,7 +143,6 @@ function aliShare(share_id, folder_id, share_pwd) {
     }, MY_PARAMS.back || 0));
     clearMyVar('聚影云盘自动返回');
 
-    setPageTitle(typeof (MY_PARAMS) != "undefined" && MY_PARAMS.dirname ? MY_PARAMS.dirname : '云盘共享文件 | 聚影√');
     let d = [];
     let orders = {
         名称正序: 'name#ASC',
@@ -321,11 +320,10 @@ function aliShare(share_id, folder_id, share_pwd) {
             })
             if (sharelist.length == 1 && sharelist[0].type == "folder") {
                 setPageTitle(sharelist[0].name + ' | 聚影√');
-                var MY_PARAMS = MY_PARAMS || {};
-                MY_PARAMS.dirname = sharelist[0].name;
                 java.lang.Thread.sleep(1000);
                 aliShare(share_id, sharelist[0].file_id, share_pwd);
             } else if (sharelist.length > 0) {
+                setPageTitle(typeof (MY_PARAMS) != "undefined" && MY_PARAMS.dirname ? MY_PARAMS.dirname : '云盘共享文件 | 聚影√');
                 let sublist = sharelist.filter(item => {
                     return item.type == "file" && /srt|vtt|ass/.test(item.file_extension);
                 })
