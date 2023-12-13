@@ -504,13 +504,11 @@ function yiji() {
                         }
                     })
                     for (let i = 0; i < requirelist_tmp.length; i++) {
-                        log(requirelist_tmp[i]);
                         if(delquirelist.includes(requirelist_tmp[i].url)){
-                            delete requirelist_tmp[i];
+                            requirelist_tmp.splice(i,1);
                             i = i - 1;
                         }
                     }
-                    log(requirelist_tmp);
                     writeFile(requirefile, JSON.stringify(requirelist_tmp));
                 } catch (e) {
                     log("错误信息>" + e.toString() + " 错误行>" + e.lineNumber);
