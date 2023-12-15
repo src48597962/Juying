@@ -44,12 +44,6 @@ let headers = {
     "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36 Edg/110.0.1587.41"
 };
 let nowtime = Date.now();
-let userinfo = {};
-if (alitoken) {
-    userinfo = getUserInfo(alitoken);
-}
-let alidrive_id = getMyVar("selectDisk", "1") == "1" ? userinfo.default_drive_id : userinfo.resource_drive_id || userinfo.default_drive_id;
-let authorization = 'Bearer ' + userinfo.access_token;
 function getUserInfo(token) {
     if(token){
         let account = {};
@@ -86,6 +80,14 @@ function getUserInfo(token) {
         return 1;
     }
 }
+let userinfo = {};
+if (alitoken) {
+    log("1");
+    userinfo = getUserInfo(alitoken);
+    log(userinfo);
+}
+let alidrive_id = getMyVar("selectDisk", "1") == "1" ? userinfo.default_drive_id : userinfo.resource_drive_id || userinfo.default_drive_id;
+let authorization = 'Bearer ' + userinfo.access_token;
 
 function getShareToken(share_id, share_pwd) {
     return JSON.parse(request('https://api.aliyundrive.com/v2/share_link/get_share_token', { body: { "share_pwd": share_pwd, "share_id": share_id }, method: 'POST', timeout: 3000 })) || {};
