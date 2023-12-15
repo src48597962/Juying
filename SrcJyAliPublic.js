@@ -46,30 +46,36 @@ let headers = {
 let nowtime = Date.now();
 let userinfo = {};
 if (alitoken) {
-    let oldtime = parseInt(getMyVar('userinfoChecktime', '0').replace('time', ''));
-    let aliuserinfo = storage0.getMyVar('aliuserinfo');
-    if (aliuserinfo && aliuserinfo.user_id && nowtime < (oldtime + 2 * 60 * 60 * 1000)) {
-        userinfo = aliuserinfo;
-    } else {
-        userinfo = getUserInfo(alitoken);
-    }
+    userinfo = getUserInfo(alitoken);
 }
 let alidrive_id = getMyVar("selectDisk", "1") == "1" ? userinfo.default_drive_id : userinfo.resource_drive_id || userinfo.default_drive_id;
+let authorization = 'Bearer ' + userinfo.access_token;
 function getUserInfo(token) {
     if(token){
-        let account = JSON.parse(request('https://auth.aliyundrive.com/v2/account/token', { headers: headers, body: { "refresh_token": token, "grant_type": "refresh_token" }, method: 'POST', timeout: 3000 }));
-        if(account.refresh_token){
-            headers['authorization'] = 'Bearer ' + account.access_token;
-            let user = JSON.parse(request('https://user.aliyundrive.com/v2/user/get', { headers: headers, body: {}, method: 'POST', timeout: 3000 }));
-            delete headers['authorization'];
-            account.resource_drive_id = user.resource_drive_id;
-            storage0.putMyVar('aliuserinfo', account);
-            putMyVar('userinfoChecktime', nowtime + 'time');
-            aliaccount.refresh_token = account.refresh_token;
-            aliconfig.account = aliaccount;
-            writeFile(alicfgfile, JSON.stringify(aliconfig));
+        let account = {};
+        let oldtime = parseInt(getMyVar('userinfoChecktime', '0').replace('time', ''));
+        let aliuserinfo = storage0.getMyVar('aliuserinfo');
+        if (aliuserinfo && aliuserinfo.user_id && nowtime < (oldtime + 2 * 60 * 60 * 1000)) {
+            account = aliuserinfo;
         }else{
-            toast("登陆失败>" + account.message);
+            try{
+                let account = JSON.parse(request('https://auth.aliyundrive.com/v2/account/token', { headers: headers, body: { "refresh_token": token, "grant_type": "refresh_token" }, method: 'POST', timeout: 3000 }));
+                if(account.refresh_token){
+                    headers['authorization'] = 'Bearer ' + account.access_token;
+                    let user = JSON.parse(request('https://user.aliyundrive.com/v2/user/get', { headers: headers, body: {}, method: 'POST', timeout: 3000 }));
+                    delete headers['authorization'];
+                    account.resource_drive_id = user.resource_drive_id;
+                    storage0.putMyVar('aliuserinfo', account);
+                    putMyVar('userinfoChecktime', nowtime + 'time');
+                    aliaccount.refresh_token = account.refresh_token;
+                    aliconfig.account = aliaccount;
+                    writeFile(alicfgfile, JSON.stringify(aliconfig));
+                }else{
+                    toast("登陆失败>" + account.message);
+                }
+            }catch(e){
+
+            }
         }
         return account;
     }else{
