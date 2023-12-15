@@ -346,7 +346,7 @@ function aliShare(share_id, folder_id, share_pwd) {
                         }, item.share_id, item.file_id, share_pwd),
                         col_type: style,
                         extra: {
-                            dirname: item.name,
+                            pageTitle: item.name,
                             name: MY_PARAMS.name || "",
                             back: 1,
                             dirid: share_id + '_' + folder_id + '_' + share_pwd
@@ -447,7 +447,9 @@ function aliShare(share_id, folder_id, share_pwd) {
         toast('该分享已失效或异常，可刷新确认下');
     }
     setResult(d);
-    setPageTitle(typeof (MY_PARAMS) != "undefined" && MY_PARAMS.dirname ? MY_PARAMS.dirname + ' | 聚影√' : getMyVar('云盘共享链接页面标题', '云盘共享文件') + ' | 聚影√');
+    if(typeof (MY_PARAMS) == "undefined" || !MY_PARAMS.pageTitle){
+        setPageTitle(getMyVar('云盘共享链接页面标题', '云盘共享文件') + ' | 聚影√');
+    }
     setLastChapterRule('js:' + $.toString(() => {
         setResult('');
     }))
@@ -520,7 +522,7 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                             }, item.file_id, isSearch, drive_id),
                             col_type: 'avatar',
                             extra: {
-                                dirname: item.name
+                                pageTitle: item.name
                             }
                         })
                     })
@@ -603,7 +605,9 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
         d = d.concat(mydisk);
     }
     setResult(d);
-    setPageTitle(typeof (MY_PARAMS) != "undefined" && MY_PARAMS.dirname ? MY_PARAMS.dirname : '我的云盘 | 聚影√');
+    if(typeof (MY_PARAMS) == "undefined" || !MY_PARAMS.pageTitle){
+        setPageTitle('我的云盘 | 聚影√');
+    }
     setLastChapterRule('js:' + $.toString(() => {
         setResult('');
     }))
@@ -676,7 +680,7 @@ function aliDiskSearch(input, data) {
                     extra: {
                         cls: "loadlist",
                         name: input,
-                        dirname: itemTitle,
+                        pageTitle: itemTitle,
                         back: 2
                     }
                 };
