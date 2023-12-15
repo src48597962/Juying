@@ -74,7 +74,7 @@ function getUserInfo(token) {
                     toast("登陆失败>" + account.message);
                 }
             }catch(e){
-
+                log('aliuserinfo获取失败>'+e.message);
             }
         }
         return account;
