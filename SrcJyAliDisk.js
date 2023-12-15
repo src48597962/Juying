@@ -786,7 +786,7 @@ function yundiskhistory() {
         arr.forEach(it=>{
             try{
                 let p = it.params;
-                log(p.find_rule);
+                log(p);
                 /*
                 if(p.find_rule.includes('aliMyDisk(')){
                     d.push({
