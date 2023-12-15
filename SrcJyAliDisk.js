@@ -804,6 +804,7 @@ function yundiskhistory() {
         let arr = recentList.items;
         arr.forEach(it=>{
             try{
+                let folder = JSON.parse(request('https://openapi.aliyundrive.com/adrive/v1.0/openFile/get', { headers: headers, body: {"drive_id":drive_id,"file_id":folder_id}, method: 'POST' })); 
                 d.push({
                     title: it.name,
                     url: $("hiker://empty#noRecordHistory#").rule((folder_id, isSearch, drive_id) => {
@@ -814,18 +815,15 @@ function yundiskhistory() {
                         if(MY_PARAMS.lastClick){
                             toast('上次观看足迹：' + MY_PARAMS.lastClick);
                         }
-                        let opentoken = getOpenToken(authorization);
-                        headers['authorization'] = 'Bearer ' + opentoken;
-                        let folder = JSON.parse(request('https://openapi.aliyundrive.com/adrive/v1.0/openFile/get', { headers: headers, body: {"drive_id":drive_id,"file_id":folder_id}, method: 'POST' })); 
-                        if(folder.name)
-                        {
-                            setPageTitle(folder.name + ' | 聚影√');
-                        }
+                        //let opentoken = getOpenToken(authorization);
+                        //headers['authorization'] = 'Bearer ' + opentoken;
+                        
                     }, it.parent_file_id, 0, it.drive_id),
                     img: it.thumbnail + "@Referer=https://www.aliyundrive.com/",
                     col_type: "avatar",
                     extra: {
-                        lastClick: it.name
+                        lastClick: it.name,
+                        pageTitle: folder.name
                     }
                 })
             }catch(e){
