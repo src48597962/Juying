@@ -53,7 +53,7 @@ function getUserInfo(token) {
             account = aliuserinfo;
         }else{
             try{
-                let account = JSON.parse(request('https://auth.aliyundrive.com/v2/account/token', { headers: headers, body: { "refresh_token": token, "grant_type": "refresh_token" }, method: 'POST', timeout: 3000 }));
+                account = JSON.parse(request('https://auth.aliyundrive.com/v2/account/token', { headers: headers, body: { "refresh_token": token, "grant_type": "refresh_token" }, method: 'POST', timeout: 3000 }));
                 if(account.refresh_token){
                     headers['authorization'] = 'Bearer ' + account.access_token;
                     let user = JSON.parse(request('https://user.aliyundrive.com/v2/user/get', { headers: headers, body: {}, method: 'POST', timeout: 3000 }));
