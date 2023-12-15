@@ -800,28 +800,31 @@ function yundiskhistory() {
     }else if(getMyVar('云盘历史','1')=='2'){
         let opentoken = getOpenToken(authorization);
         headers['authorization'] = 'Bearer ' + opentoken;
-        let recentList = JSON.parse(request('https://openapi.aliyundrive.com/adrive/v1.0/openFile/video/recentList', { headers: headers, body: {"image_thumbnail_width":480,"fields":"*","video_thumbnail_width":480}, method: 'POST' }));
-        log(recentList);
-        /*        
-        let arr = JSON.parse(fetch("hiker://history"));
+        let recentList = JSON.parse(request('https://openapi.aliyundrive.com/adrive/v1.0/openFile/video/recentList', { headers: headers, body: {"image_thumbnail_width":480,"fields":"*","video_thumbnail_width":480}, method: 'POST' }));     
+        let arr = recentList.items;
         arr.forEach(it=>{
             try{
-                let p = JSON.parse(it.params);
-                if(p.find_rule.includes('aliMyDisk') && p.title == MY_RULE.title){
-                    d.push({
-                        title: it.title,
-                        url: 'hiker://empty@rule=' + p.find_rule,
-                        img: it.picUrl,
-                        col_type: "avatar",
-                        extra: p.params
-                    })
-                }
+                d.push({
+                    title: it.name,
+                    url: $("hiker://empty#noHistory#").rule((folder_id, isSearch, drive_id) => {
+                        //require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js');
+                        eval(fetch(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js'));
+                        aliMyDisk(folder_id, isSearch, drive_id);
+                        if(MY_PARAMS.lastClick){
+                            toast('上次观看足迹：' + MY_PARAMS.lastClick);
+                        }
+                    }, it.parent_file_id, 0, it.drive_id),
+                    img: it.thumbnail + "@Referer=https://www.aliyundrive.com/",
+                    col_type: "avatar",
+                    extra: {
+                        lastClick: it.name
+                    }
+                })
             }catch(e){
                 log(e.message);
             }
             
         })
-        */
     }
     setResult(d);
 }
