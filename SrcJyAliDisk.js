@@ -777,20 +777,15 @@ function yundiskhistory() {
     });
     if(getMyVar('云盘历史','1')=='1'){
         let arr = JSON.parse(fetch("hiker://history"));
-        /*
-        arr = arr.filter(item=>{
-            return item.params.title == MY_RULE.title;
-        })
-        log(arr.length);
-        */
         arr.forEach(it=>{
             try{
                 let p = JSON.parse(it.params);
-                if(p.find_rule.includes('aliMyDisk(') && p.title == MY_RULE.title){
+                if(p.find_rule.includes('aliMyDisk') && p.title == MY_RULE.title){
                     d.push({
                         title: it.title,
                         url: 'hiker://empty@rule=' + p.find_rule,
                         img: it.picUrl,
+                        desc: it.lastClick,
                         col_type: "avatar"
                     })
                 }
