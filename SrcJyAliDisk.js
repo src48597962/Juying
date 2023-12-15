@@ -788,7 +788,7 @@ function yundiskhistory() {
                     })
                 }
             }catch(e){
-
+                log(e.message);
             }
             
         })
