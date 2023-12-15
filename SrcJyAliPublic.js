@@ -82,9 +82,7 @@ function getUserInfo(token) {
 }
 let userinfo = {};
 if (alitoken) {
-    log("1");
     userinfo = getUserInfo(alitoken);
-    log(userinfo);
 }
 let alidrive_id = getMyVar("selectDisk", "1") == "1" ? userinfo.default_drive_id : userinfo.resource_drive_id || userinfo.default_drive_id;
 let authorization = 'Bearer ' + userinfo.access_token;
