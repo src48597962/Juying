@@ -804,7 +804,7 @@ function yundiskhistory() {
         let items = recentList.items;
         let arr = [];
         items.forEach(it=>{
-            let index = arr.indexOf(arr.filter(d=>d.parent_file_id == parent_file_id)[0]);
+            let index = arr.indexOf(arr.filter(d=>d.parent_file_id == it.parent_file_id)[0]);
             if(index==-1){
                 arr.push(it);
             }
