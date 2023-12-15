@@ -783,7 +783,7 @@ function yundiskhistory() {
                 if(p.find_rule.includes('aliMyDisk') && p.title == MY_RULE.title){
                     d.push({
                         title: it.title,
-                        url: 'hiker://empty@rule=' + p.find_rule,
+                        url: it.url + '@rule=' + p.find_rule,
                         img: it.picUrl,
                         desc: it.lastClick,
                         col_type: "avatar",
