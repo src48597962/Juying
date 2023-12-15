@@ -67,7 +67,7 @@ function myDiskMenu(islogin) {
                 return "toast://已退出登录";
             } else if (input == '观看历史') {
                 return $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
-                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliPublic.js');
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js');
                     yundiskhistory();
                 })
             }
