@@ -778,8 +778,9 @@ function yundiskhistory() {
         let arr = JSON.parse(fetch("hiker://history?rule="+MY_RULE.title));
         arr.forEach(it=>{
             try{
+                log(it);
                 let params = it.params;
-                log(params.find_rule);
+                
                 if(params.find_rule.includes('aliMyDisk(')){
                     d.push({
                         title: it.title,
