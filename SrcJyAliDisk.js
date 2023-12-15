@@ -52,7 +52,7 @@ function myDiskMenu(islogin) {
 
     let onlogin = [{
         title: userinfo.nick_name,
-        url: $(['云盘接口', '更换token','退出登录'], 2).select((setalitoken) => {
+        url: $(['云盘接口', '更换token','观看历史','退出登录'], 2).select((setalitoken) => {
             if (input == '云盘接口') {
                 return $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
@@ -65,6 +65,11 @@ function myDiskMenu(islogin) {
                 getUserInfo("");
                 refreshPage(false);
                 return "toast://已退出登录";
+            } else if (input == '观看历史') {
+                return $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliPublic.js');
+                    yundiskhistory();
+                })
             }
         }, setalitoken),
         img: userinfo.avatar,
@@ -743,4 +748,42 @@ function aliDiskSearch(input, data) {
     hideLoading();
     clearMyVar("停止搜索线程");
     deleteItem("yundisklistloading");
+}
+function yundiskhistory() {
+    addListener("onClose", $.toString(() => {
+        clearMyVar('云盘历史');
+    }));
+    let d = [];
+    d.push({
+        title: ' 本地历史',
+        url: $('#noLoading#').lazyRule(() => {
+            if(Juconfig["bookCase_col_type"]=="movie_1_vertical_pic"){
+                Juconfig["bookCase_col_type"] = "movie_3_marquee";
+            }else{
+                Juconfig["bookCase_col_type"] = "movie_1_vertical_pic";
+            }
+            writeFile(cfgfile, JSON.stringify(Juconfig));
+            refreshPage(false);
+            return 'hiker://empty';
+        }),
+        img: "https://hikerfans.com/tubiao/messy/70.svg",
+        col_type: "icon_2"
+    });
+    d.push({
+        title: ' 云端历史',
+        url: $('#noLoading#').lazyRule(() => {
+            if(Juconfig["bookCase_col_type"]=="movie_1_vertical_pic"){
+                Juconfig["bookCase_col_type"] = "movie_3_marquee";
+            }else{
+                Juconfig["bookCase_col_type"] = "movie_1_vertical_pic";
+            }
+            writeFile(cfgfile, JSON.stringify(Juconfig));
+            refreshPage(false);
+            return 'hiker://empty';
+        }),
+        img: "https://hikerfans.com/tubiao/messy/85.svg",
+        col_type: "icon_2"
+    });
+    log(fetch('hiker://history'));
+    setResult(d);
 }
