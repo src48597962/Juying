@@ -785,11 +785,8 @@ function yundiskhistory() {
         */
         arr.forEach(it=>{
             try{
-                let p = it.params;
-                log($.type(p));
-                log(p['find_rule']);
-                /*
-                if(p.find_rule.includes('aliMyDisk(')){
+                let p = JSON.parse(it.params);
+                if(p.find_rule.includes('aliMyDisk(') && p.title == MY_RULE.title){
                     d.push({
                         title: it.title,
                         url: 'hiker://empty@rule=' + p.find_rule,
@@ -797,7 +794,6 @@ function yundiskhistory() {
                         col_type: "avatar"
                     })
                 }
-                */
             }catch(e){
                 log(e.message);
             }
