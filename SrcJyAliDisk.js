@@ -67,7 +67,8 @@ function myDiskMenu(islogin) {
                 return "toast://已退出登录";
             } else if (input == '观看历史') {
                 return $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
-                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js');
+                    //require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js');
+                    eval(fetch(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js'));
                     yundiskhistory();
                 })
             }
@@ -776,14 +777,17 @@ function yundiskhistory() {
     });
     if(getMyVar('云盘历史','1')=='1'){
         let arr = JSON.parse(fetch("hiker://history"));
+        /*
         arr = arr.filter(item=>{
             return item.params.title == MY_RULE.title;
         })
         log(arr.length);
+        */
         arr.forEach(it=>{
             try{
                 let p = it.params;
-                log(p);
+                log(p.find_rule);
+                /*
                 if(p.find_rule.includes('aliMyDisk(')){
                     d.push({
                         title: it.title,
@@ -792,6 +796,7 @@ function yundiskhistory() {
                         col_type: "avatar"
                     })
                 }
+                */
             }catch(e){
                 log(e.message);
             }
