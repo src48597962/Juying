@@ -786,7 +786,8 @@ function yundiskhistory() {
                         url: 'hiker://empty@rule=' + p.find_rule,
                         img: it.picUrl,
                         desc: it.lastClick,
-                        col_type: "avatar"
+                        col_type: "avatar",
+                        extra: p.params
                     })
                 }
             }catch(e){
