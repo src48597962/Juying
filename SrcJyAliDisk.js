@@ -788,7 +788,6 @@ function yundiskhistory() {
                         title: it.title,
                         url: 'hiker://empty@rule=' + p.find_rule,
                         img: it.picUrl,
-                        desc: it.lastClick,
                         col_type: "avatar",
                         extra: p.params
                     })
@@ -798,6 +797,31 @@ function yundiskhistory() {
             }
             
         })
+    }else if(getMyVar('云盘历史','1')=='2'){
+        let opentoken = getOpenToken(authorization);
+        headers['authorization'] = 'Bearer ' + opentoken;
+        let recentList = JSON.parse(request('https://openapi.aliyundrive.com/adrive/v1.0/openFile/video/recentList', { headers: headers, body: {"image_thumbnail_width":480,"fields":"*","video_thumbnail_width":480}, method: 'POST' }));
+        log(recentList);
+        /*        
+        let arr = JSON.parse(fetch("hiker://history"));
+        arr.forEach(it=>{
+            try{
+                let p = JSON.parse(it.params);
+                if(p.find_rule.includes('aliMyDisk') && p.title == MY_RULE.title){
+                    d.push({
+                        title: it.title,
+                        url: 'hiker://empty@rule=' + p.find_rule,
+                        img: it.picUrl,
+                        col_type: "avatar",
+                        extra: p.params
+                    })
+                }
+            }catch(e){
+                log(e.message);
+            }
+            
+        })
+        */
     }
     setResult(d);
 }
