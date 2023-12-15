@@ -781,10 +781,9 @@ function yundiskhistory() {
             try{
                 let p = JSON.parse(it.params);
                 if(p.find_rule.includes('aliMyDisk') && p.title == MY_RULE.title){
-                    log(it);
                     d.push({
                         title: it.title,
-                        url: it.url + '@rule=' + p.find_rule,
+                        url: 'hiker://empty@rule=' + p.find_rule,
                         img: it.picUrl,
                         desc: it.lastClick,
                         col_type: "avatar",
