@@ -326,12 +326,10 @@ function aliShare(share_id, folder_id, share_pwd) {
                 return item.type == "file" || (item.type == "folder" && !folderFilter.test(item.name));
             })
             if (sharelist.length == 1 && sharelist[0].type == "folder") {
-                setPageTitle(sharelist[0].name + ' | 聚影√');
                 putMyVar('云盘共享链接页面标题', sharelist[0].name);
                 java.lang.Thread.sleep(1000);
                 aliShare(share_id, sharelist[0].file_id, share_pwd);
             } else if (sharelist.length > 0) {
-                setPageTitle(typeof (MY_PARAMS) != "undefined" && MY_PARAMS.dirname ? MY_PARAMS.dirname + ' | 聚影√' : getMyVar('云盘共享链接页面标题', '云盘共享文件') + ' | 聚影√');
                 let sublist = sharelist.filter(item => {
                     return item.type == "file" && /srt|vtt|ass/.test(item.file_extension);
                 })
@@ -449,6 +447,7 @@ function aliShare(share_id, folder_id, share_pwd) {
         toast('该分享已失效或异常，可刷新确认下');
     }
     setResult(d);
+    setPageTitle(typeof (MY_PARAMS) != "undefined" && MY_PARAMS.dirname ? MY_PARAMS.dirname + ' | 聚影√' : getMyVar('云盘共享链接页面标题', '云盘共享文件') + ' | 聚影√');
     setLastChapterRule('js:' + $.toString(() => {
         setResult('');
     }))
@@ -459,7 +458,6 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
     isSearch = isSearch || 0;
     drive_id = drive_id || alidrive_id;
     let d = [];
-    setPageTitle(typeof (MY_PARAMS) != "undefined" && MY_PARAMS.dirname ? MY_PARAMS.dirname : '我的云盘 | 聚影√');
     if (userinfo && userinfo.user_id) {
         if (folder_id == "root") {
             let mydisk = myDiskMenu(1) || [];
@@ -605,6 +603,7 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
         d = d.concat(mydisk);
     }
     setResult(d);
+    setPageTitle(typeof (MY_PARAMS) != "undefined" && MY_PARAMS.dirname ? MY_PARAMS.dirname : '我的云盘 | 聚影√');
     setLastChapterRule('js:' + $.toString(() => {
         setResult('');
     }))
