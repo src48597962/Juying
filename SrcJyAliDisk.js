@@ -806,12 +806,20 @@ function yundiskhistory() {
             try{
                 d.push({
                     title: it.name,
-                    url: $("hiker://empty#noHistory#").rule((folder_id, isSearch, drive_id) => {
+                    url: $("hiker://empty#noRecordHistory#").rule((folder_id, isSearch, drive_id) => {
+                        
                         //require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js');
                         eval(fetch(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js'));
                         aliMyDisk(folder_id, isSearch, drive_id);
                         if(MY_PARAMS.lastClick){
                             toast('上次观看足迹：' + MY_PARAMS.lastClick);
+                        }
+                        let opentoken = getOpenToken(authorization);
+                        headers['authorization'] = 'Bearer ' + opentoken;
+                        let folder = JSON.parse(request('https://openapi.aliyundrive.com/adrive/v1.0/openFile/get', { headers: headers, body: {"drive_id":drive_id,"file_id":folder_id}, method: 'POST' })); 
+                        if(folder.name)
+                        {
+                            setPageTitle(folder.name + ' | 聚影√');
                         }
                     }, it.parent_file_id, 0, it.drive_id),
                     img: it.thumbnail + "@Referer=https://www.aliyundrive.com/",
