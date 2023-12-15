@@ -757,12 +757,7 @@ function yundiskhistory() {
     d.push({
         title: ' 本地历史',
         url: $('#noLoading#').lazyRule(() => {
-            if(Juconfig["bookCase_col_type"]=="movie_1_vertical_pic"){
-                Juconfig["bookCase_col_type"] = "movie_3_marquee";
-            }else{
-                Juconfig["bookCase_col_type"] = "movie_1_vertical_pic";
-            }
-            writeFile(cfgfile, JSON.stringify(Juconfig));
+            putMyVar('云盘历史','1');
             refreshPage(false);
             return 'hiker://empty';
         }),
@@ -772,18 +767,31 @@ function yundiskhistory() {
     d.push({
         title: ' 云端历史',
         url: $('#noLoading#').lazyRule(() => {
-            if(Juconfig["bookCase_col_type"]=="movie_1_vertical_pic"){
-                Juconfig["bookCase_col_type"] = "movie_3_marquee";
-            }else{
-                Juconfig["bookCase_col_type"] = "movie_1_vertical_pic";
-            }
-            writeFile(cfgfile, JSON.stringify(Juconfig));
+            putMyVar('云盘历史','2');
             refreshPage(false);
             return 'hiker://empty';
         }),
         img: "https://hikerfans.com/tubiao/messy/85.svg",
         col_type: "icon_2"
     });
-    log(fetch('hiker://history'));
+    if(getMyVar('云盘历史','1')=='1'){
+        let arr = eval('('+fetch('hiker://history')+')') || [];
+        arr.forEach(it=>{
+            try{
+                let params = it.params;
+                if(params.find_rule.includes('aliMyDisk(')){
+                    d.push({
+                        title: it.title,
+                        url: 'hiker://empty@rule='+params.find_rule,
+                        img: it.picUrl,
+                        col_type: "avatar"
+                    })
+                }
+            }catch(e){
+
+            }
+            
+        })
+    }
     setResult(d);
 }
