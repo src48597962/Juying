@@ -775,7 +775,7 @@ function yundiskhistory() {
         col_type: "icon_2"
     });
     if(getMyVar('云盘历史','1')=='1'){
-        let arr = eval('('+fetch('hiker://history')+')') || [];
+        let arr = JSON.parse(fetch("hiker://history?rule="+MY_RULE.title));
         arr.forEach(it=>{
             try{
                 let params = it.params;
