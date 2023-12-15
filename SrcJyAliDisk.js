@@ -804,7 +804,7 @@ function yundiskhistory() {
         let arr = recentList.items;
         arr.forEach(it=>{
             try{
-                let folder = JSON.parse(request('https://openapi.aliyundrive.com/adrive/v1.0/openFile/get', { headers: headers, body: {"drive_id":drive_id,"file_id":folder_id}, method: 'POST' })); 
+                let folder = JSON.parse(request('https://openapi.aliyundrive.com/adrive/v1.0/openFile/get', { headers: headers, body: {"drive_id":it.drive_id,"file_id":it.parent_file_id}, method: 'POST' })); 
                 d.push({
                     title: it.name,
                     url: $("hiker://empty#noRecordHistory#").rule((folder_id, isSearch, drive_id) => {
