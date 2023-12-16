@@ -133,7 +133,7 @@ function myDiskMenu(islogin) {
         url: setalitoken,
         col_type: 'text_center_1'
     }, {
-        title: "⭐其他小程序获取⭐",
+        title: "🌟其他小程序获取🌟",
         url: $().lazyRule(() => {
             try {
                 //节约资源，如果有获取过用户信息，就重复利用一下
