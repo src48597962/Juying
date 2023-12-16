@@ -499,6 +499,7 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJuying.js');
             sousuo2(d, 1);
         } else {
+            log($.type(MY_PARAMS));
             try {
                 let postdata = { "drive_id": drive_id, "parent_file_id": folder_id, "limit": 200, "all": false, "url_expire_sec": 14400, "image_thumbnail_process": "image/resize,w_256/format,avif", "image_url_process": "image/resize,w_1920/format,avif", "video_thumbnail_process": "video/snapshot,t_1000,f_jpg,ar_auto,w_256", "fields": "*", "order_by": "updated_at", "order_direction": "DESC" };
                 headers['authorization'] = authorization;
@@ -815,7 +816,11 @@ function yundiskhistory() {
                 d.push({
                     title: folder.name,
                     url: $("hiker://empty#noRecordHistory#").rule((folder_id, isSearch, drive_id) => {
-                        
+                        /*
+                        addListener("onClose", $.toString(() => {
+                            refreshPage(false);
+                        }));
+                        */
                         //require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js');
                         eval(fetch(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js'));
                         aliMyDisk(folder_id, isSearch, drive_id);
