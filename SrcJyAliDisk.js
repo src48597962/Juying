@@ -499,7 +499,6 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJuying.js');
             sousuo2(d, 1);
         } else {
-            log($.type(MY_PARAMS));
             try {
                 let postdata = { "drive_id": drive_id, "parent_file_id": folder_id, "limit": 200, "all": false, "url_expire_sec": 14400, "image_thumbnail_process": "image/resize,w_256/format,avif", "image_url_process": "image/resize,w_1920/format,avif", "video_thumbnail_process": "video/snapshot,t_1000,f_jpg,ar_auto,w_256", "fields": "*", "order_by": "updated_at", "order_direction": "DESC" };
                 headers['authorization'] = authorization;
@@ -546,7 +545,7 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                             }
                             let filesize = item.size / 1024 / 1024;
                             d.push({
-                                title: item.name==MY_PARAMS.lastClick?`<b><span style="color: #1aad19">`+item.name+`</span></b>`:item.name,
+                                title: $.type(MY_PARAMS)=="object"&&item.name==MY_PARAMS.lastClick?`<b><span style="color: #1aad19">`+item.name+`</span></b>`:item.name,
                                 img: item.thumbnail ? item.thumbnail + "@Referer=https://www.aliyundrive.com/" : item.category == "video" ? "hiker://files/cache/src/影片.svg" : item.category == "audio" ? "hiker://files/cache/src/音乐.svg" : item.category == "image" ? "hiker://files/cache/src/图片.png" : "https://img.alicdn.com/imgextra/i1/O1CN01mhaPJ21R0UC8s9oik_!!6000000002049-2-tps-80-80.png@Referer=",
                                 url: $("hiker://empty##").lazyRule((category, file_id, file_url, sub_file_url,drive_id) => {
                                     if (category == "video") {
