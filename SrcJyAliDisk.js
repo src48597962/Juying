@@ -850,47 +850,51 @@ function yundiskhistory() {
         })
     }else if(getMyVar('云盘历史','1')=='2'){
         let opentoken = getOpenToken(authorization);
-        headers['authorization'] = 'Bearer ' + opentoken;
-        let recentList = JSON.parse(request('https://openapi.aliyundrive.com/adrive/v1.0/openFile/video/recentList', { headers: headers, body: {"image_thumbnail_width":480,"fields":"*","video_thumbnail_width":480}, method: 'POST' }));     
-        let items = recentList.items;
-        let arr = [];
-        items.forEach(it=>{
-            let index = arr.indexOf(arr.filter(d=>d.parent_file_id == it.parent_file_id)[0]);
-            if(index==-1){
-                arr.push(it);
-            }
-        })
-        arr.forEach(it=>{
-            try{
-                let folder = JSON.parse(request('https://openapi.aliyundrive.com/adrive/v1.0/openFile/get', { headers: headers, body: {"drive_id":it.drive_id,"file_id":it.parent_file_id}, method: 'POST' })); 
-                d.push({
-                    title: folder.name,
-                    url: $("hiker://empty#noRecordHistory#").rule((folder_id, isSearch, drive_id) => {
-                        if(getItem('yundisk_updateRecord')=="1"){
-                            addListener("onClose", $.toString(() => {
-                                refreshPage(false);
-                            }));
-                        }
+        if(opentoken){
+            headers['authorization'] = 'Bearer ' + opentoken;
+            let recentList = JSON.parse(request('https://openapi.aliyundrive.com/adrive/v1.0/openFile/video/recentList', { headers: headers, body: {"image_thumbnail_width":480,"fields":"*","video_thumbnail_width":480}, method: 'POST' }));     
+            let items = recentList.items;
+            let arr = [];
+            items.forEach(it=>{
+                let index = arr.indexOf(arr.filter(d=>d.parent_file_id == it.parent_file_id)[0]);
+                if(index==-1){
+                    arr.push(it);
+                }
+            })
+            arr.forEach(it=>{
+                try{
+                    let folder = JSON.parse(request('https://openapi.aliyundrive.com/adrive/v1.0/openFile/get', { headers: headers, body: {"drive_id":it.drive_id,"file_id":it.parent_file_id}, method: 'POST' })); 
+                    d.push({
+                        title: folder.name,
+                        url: $("hiker://empty#noRecordHistory#").rule((folder_id, isSearch, drive_id) => {
+                            if(getItem('yundisk_updateRecord')=="1"){
+                                addListener("onClose", $.toString(() => {
+                                    refreshPage(false);
+                                }));
+                            }
 
-                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js');
-                        aliMyDisk(folder_id, isSearch, drive_id);
-                        if(MY_PARAMS.lastClick){
-                            toast('上次观看足迹：' + MY_PARAMS.lastClick);
+                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js');
+                            aliMyDisk(folder_id, isSearch, drive_id);
+                            if(MY_PARAMS.lastClick){
+                                toast('上次观看足迹：' + MY_PARAMS.lastClick);
+                            }
+                        }, it.parent_file_id, 0, it.drive_id),
+                        img: it.thumbnail + "@Referer=https://www.aliyundrive.com/",
+                        desc: it.name,
+                        col_type: "avatar",
+                        extra: {
+                            lastClick: it.name,
+                            pageTitle: folder.name
                         }
-                    }, it.parent_file_id, 0, it.drive_id),
-                    img: it.thumbnail + "@Referer=https://www.aliyundrive.com/",
-                    desc: it.name,
-                    col_type: "avatar",
-                    extra: {
-                        lastClick: it.name,
-                        pageTitle: folder.name
-                    }
-                })
-            }catch(e){
-                log(e.message);
-            }
-            
-        })
+                    })
+                }catch(e){
+                    log(e.message);
+                }
+                
+            })
+        }else{
+            toast('开放接口opentoken获取失败');
+        }
     }
     setResult(d);
 }
