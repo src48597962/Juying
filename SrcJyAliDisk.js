@@ -164,7 +164,7 @@ function myDiskMenu(islogin) {
                     }
                 }
             } catch (e) {
-                log('获取alitoken失败>' + e.message);
+                log("获取alitoken失败>" + e.toString() + " 错误行>" + e.lineNumber);
             }
             return "toast://获取失败";
         }),
