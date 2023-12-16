@@ -10,7 +10,7 @@ function Live() {
     var d = [];
     d.push({
         title: '<b>聚影√</b> &nbsp &nbsp <small>⚙直播设置⚙</small>',
-        img: "https://i.postimg.cc/9Q0rhbf0/image.png",
+        img: "hiker://files/cache/src/聚影.png" || "https://i.postimg.cc/9Q0rhbf0/image.png",
         url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLive.js');
                 LiveSet();
