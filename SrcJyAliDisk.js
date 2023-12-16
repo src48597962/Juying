@@ -67,8 +67,7 @@ function myDiskMenu(islogin) {
                 return "toast://已退出登录";
             } else if (input == '观看历史') {
                 return $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
-                    //require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js');
-                    eval(fetch(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js'));
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js');
                     yundiskhistory();
                 })
             }
@@ -545,7 +544,7 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                             }
                             let filesize = item.size / 1024 / 1024;
                             d.push({
-                                title: $.type(MY_PARAMS)=="object"&&item.name==MY_PARAMS.lastClick?`<b><span style="color: #1aad19">`+item.name+`</span></b>`:item.name,
+                                title: item.name,
                                 img: item.thumbnail ? item.thumbnail + "@Referer=https://www.aliyundrive.com/" : item.category == "video" ? "hiker://files/cache/src/影片.svg" : item.category == "audio" ? "hiker://files/cache/src/音乐.svg" : item.category == "image" ? "hiker://files/cache/src/图片.png" : "https://img.alicdn.com/imgextra/i1/O1CN01mhaPJ21R0UC8s9oik_!!6000000002049-2-tps-80-80.png@Referer=",
                                 url: $("hiker://empty##").lazyRule((category, file_id, file_url, sub_file_url,drive_id) => {
                                     if (category == "video") {
@@ -765,8 +764,8 @@ function yundiskhistory() {
             refreshPage(false);
             return 'hiker://empty';
         }),
-        img: "https://hikerfans.com/tubiao/messy/70.svg",
-        col_type: "icon_2"
+        img: "https://hikerfans.com/tubiao/grey/89.png",
+        col_type: "icon_3_fill"
     });
     d.push({
         title: ' 云端历史',
@@ -775,8 +774,23 @@ function yundiskhistory() {
             refreshPage(false);
             return 'hiker://empty';
         }),
-        img: "https://hikerfans.com/tubiao/messy/85.svg",
-        col_type: "icon_2"
+        img: "https://hikerfans.com/tubiao/grey/110.png",
+        col_type: "icon_3_fill"
+    });
+    d.push({
+        title: ' 记录上传',
+        url: $('#noLoading#').lazyRule(() => {
+            if(getItem('yundisk_updateRecord')=="1"){
+                clearItem('yundisk_updateRecord')
+                toast('已关闭观看记录同步云端');
+            }else{
+                setItem('yundisk_updateRecord','1')
+                toast('已开启观看记录同步云端');
+            }
+            return 'hiker://empty';
+        }),
+        img: "https://hikerfans.com/tubiao/grey/92.png",
+        col_type: "icon_3_fill"
     });
     if(getMyVar('云盘历史','1')=='1'){
         let arr = JSON.parse(fetch("hiker://history"));
@@ -815,20 +829,17 @@ function yundiskhistory() {
                 d.push({
                     title: folder.name,
                     url: $("hiker://empty#noRecordHistory#").rule((folder_id, isSearch, drive_id) => {
-                        /*
-                        addListener("onClose", $.toString(() => {
-                            refreshPage(false);
-                        }));
-                        */
-                        //require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js');
-                        eval(fetch(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js'));
+                        if(getItem('yundisk_updateRecord')=="1"){
+                            addListener("onClose", $.toString(() => {
+                                refreshPage(false);
+                            }));
+                        }
+
+                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js');
                         aliMyDisk(folder_id, isSearch, drive_id);
                         if(MY_PARAMS.lastClick){
                             toast('上次观看足迹：' + MY_PARAMS.lastClick);
                         }
-                        //let opentoken = getOpenToken(authorization);
-                        //headers['authorization'] = 'Bearer ' + opentoken;
-                        
                     }, it.parent_file_id, 0, it.drive_id),
                     img: it.thumbnail + "@Referer=https://www.aliyundrive.com/",
                     desc: it.name,
