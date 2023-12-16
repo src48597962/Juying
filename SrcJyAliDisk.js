@@ -142,11 +142,9 @@ function myDiskMenu(islogin) {
                 let alitoken;
                 let alifile = fetch(loyfilepath);
                 if (alifile) {
-                    let token = eval('('+alifile+')');
-                    log('0');
-                    alitoken = token.refresh_token;
+                    //let token = eval('('+alifile+')');
+                    //alitoken = token.refresh_token;
                 }
-                log('1');
                 if (!alitoken) {
                     alifile = fetch(icyfilepath);
                     if (alifile) {
@@ -161,6 +159,7 @@ function myDiskMenu(islogin) {
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliPublic.js');
                     let account = getUserInfo(alitoken);
                     if(account.refresh_token){
+                        log(account.refresh_token);
                         refreshPage(false);
                         return "toast://已登录";
                     }
