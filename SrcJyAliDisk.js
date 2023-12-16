@@ -79,7 +79,7 @@ function myDiskMenu(islogin) {
         col_type: "line"
     }];
     let nologin = [{
-        title: "⚡登录获取token⚡",
+        title: "⚡网页登录获取⚡",
         url: $("hiker://empty###noRecordHistory##noHistory#").rule(() => {
             let d = [];
             let url = 'https://auth.aliyundrive.com/v2/oauth/authorize?login_type=custom&response_type=code&redirect_uri=https%3A%2F%2Fwww.aliyundrive.com%2Fsign%2Fcallback&client_id=25dzX3vbYqktVxyX&state=%7B%22origin%22%3A%22*%22%7D#/login'
@@ -131,6 +131,43 @@ function myDiskMenu(islogin) {
     }, {
         title: "⭐手工填写token⭐",
         url: setalitoken,
+        col_type: 'text_center_1'
+    }, {
+        title: "⭐其他小程序获取⭐",
+        url: $().lazyRule(() => {
+            try {
+                //节约资源，如果有获取过用户信息，就重复利用一下
+                let loyfilepath = "hiker://files/rules/LoyDgIk/aliToken.json";
+                let icyfilepath = "hiker://files/rules/icy/icy-ali-token.json";
+                let alitoken;
+                let alifile = fetch(loyfilepath);
+                if (alifile) {
+                    let token = eval(alifile);
+                    alitoken = token.refresh_token;
+                }
+                if (!alitoken) {
+                    alifile = fetch(icyfilepath);
+                    if (alifile) {
+                        let tokenlist = eval(alifile);
+                        if (tokenlist.length > 0) {
+                            alitoken = tokenlist[0].refresh_token;
+                        }
+                    }
+                }
+
+                if (alitoken) {
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliPublic.js');
+                    let account = getUserInfo(alitoken);
+                    if(account.refresh_token){
+                        refreshPage(false);
+                        return "toast://已登录";
+                    }
+                }
+            } catch (e) {
+                log('获取alitoken失败>' + e.message);
+            }
+            return "toast://获取失败";
+        }),
         col_type: 'text_center_1'
     }]
     if (islogin) {
