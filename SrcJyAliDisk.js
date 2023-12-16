@@ -143,8 +143,10 @@ function myDiskMenu(islogin) {
                 let alifile = fetch(loyfilepath);
                 if (alifile) {
                     let token = eval(alifile);
+                    log('0');
                     alitoken = token.refresh_token;
                 }
+                log('1');
                 if (!alitoken) {
                     alifile = fetch(icyfilepath);
                     if (alifile) {
