@@ -545,7 +545,7 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                             }
                             let filesize = item.size / 1024 / 1024;
                             d.push({
-                                title: item.name==MY_PARAMS.lastClick?`““””<b><span style="color: #1aad19">`+item.name+`</span></b>`:item.name,
+                                title: item.name==MY_PARAMS.lastClick?`<b><span style="color: #1aad19">`+item.name+`</span></b>`:item.name,
                                 img: item.thumbnail ? item.thumbnail + "@Referer=https://www.aliyundrive.com/" : item.category == "video" ? "hiker://files/cache/src/影片.svg" : item.category == "audio" ? "hiker://files/cache/src/音乐.svg" : item.category == "image" ? "hiker://files/cache/src/图片.png" : "https://img.alicdn.com/imgextra/i1/O1CN01mhaPJ21R0UC8s9oik_!!6000000002049-2-tps-80-80.png@Referer=",
                                 url: $("hiker://empty##").lazyRule((category, file_id, file_url, sub_file_url,drive_id) => {
                                     if (category == "video") {
