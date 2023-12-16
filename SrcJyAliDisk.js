@@ -805,7 +805,7 @@ function yundiskhistory() {
         col_type: "icon_3_fill"
     });
     d.push({
-        title: getMyVar('云盘历史','1')=='1'?"““””<b>云端历史</b>":'云端历史',
+        title: getMyVar('云盘历史','1')=='2'?"““””<b>云端历史</b>":'云端历史',
         url: $('#noLoading#').lazyRule(() => {
             putMyVar('云盘历史','2');
             refreshPage(false);
@@ -815,7 +815,7 @@ function yundiskhistory() {
         col_type: "icon_3_fill"
     });
     d.push({
-        title: '记录上传',
+        title: getItem('yundisk_updateRecord')=="1"?"““””<b>记录上传</b>":'记录上传',
         url: $('#noLoading#').lazyRule(() => {
             if(getItem('yundisk_updateRecord')=="1"){
                 clearItem('yundisk_updateRecord')
