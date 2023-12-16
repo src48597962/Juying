@@ -1024,5 +1024,8 @@ function downloadicon() {
         if(!fileExist('hiker://files/cache/src/Alist.svg')){
             downloadFile(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + "img/Alist.svg", 'hiker://files/cache/src/Alist.svg');
         }
+        if(!fileExist('hiker://files/cache/src/聚影.png')){
+            downloadFile(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + "img/聚影.png", 'hiker://files/cache/src/聚影.png');
+        }
     }catch(e){}
 }
