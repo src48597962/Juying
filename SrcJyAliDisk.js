@@ -844,7 +844,7 @@ function yundiskhistory() {
                     })
                 }
             }catch(e){
-                log(e.message);
+                //log(e.message);
             }
             
         })
@@ -888,7 +888,7 @@ function yundiskhistory() {
                         }
                     })
                 }catch(e){
-                    log(e.message);
+                    //log(e.message);
                 }
                 
             })
