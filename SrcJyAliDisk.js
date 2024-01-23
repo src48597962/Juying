@@ -649,7 +649,7 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
     }))
 }
 
-function aliDiskSearch(input, data) {
+function aliDiskSearch(input, data, listid) {
     showLoading('搜索中，请稍后...');
     if (getMyVar('diskSearch')) {
         putMyVar("停止搜索线程", "1");
@@ -714,7 +714,7 @@ function aliDiskSearch(input, data) {
                     col_type: "avatar",
                     desc: obj.name,
                     extra: {
-                        cls: "loadlist",
+                        cls: listid || "loadlist",
                         name: input,
                         pageTitle: itemTitle,
                         back: 2
@@ -768,7 +768,7 @@ function aliDiskSearch(input, data) {
         }
     });
     if (list.length > 0) {
-        deleteItemByCls('loadlist');
+        deleteItemByCls(listid || 'loadlist');
         putMyVar('diskSearch', '1');
         be(list, {
             func: function (obj, id, error, taskResult) {
