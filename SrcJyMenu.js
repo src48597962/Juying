@@ -80,7 +80,7 @@ var erjimenu = [
             },{
                 title: "云盘君.简",
                 js: $.toString(() => {
-                    return "#noHistory#hiker://page/soup?p=fypage&rule=云盘君.简";
+                    return "#noHistory#hiker://page/sou?p=fypage&rule=云盘君.简";
                 })
             }]
         }
