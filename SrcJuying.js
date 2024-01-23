@@ -621,7 +621,7 @@ function sousuo2(d, disk) {
     d.push({
         title: "🔍",
         url: $.toString((searchurl) => {
-                if(input.indexOf('https://www.aliyundrive.com/s/')>-1){
+                if(/www\.aliyundrive\.com|www\.alipan\.com/.test(input)){
                     input = input.replace('http','\nhttp');
                     return $("hiker://empty#noRecordHistory##noHistory#").rule((input) => {
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyAliDisk.js');
