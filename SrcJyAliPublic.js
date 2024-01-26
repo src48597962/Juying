@@ -84,9 +84,10 @@ let userinfo = {};
 if (alitoken) {
     userinfo = getUserInfo(alitoken);
 }
+log(userinfo.backup_drive_id);
 let alidrive_id = getMyVar("selectDisk", "1") == "1" ? userinfo.backup_drive_id || userinfo.default_drive_id : userinfo.resource_drive_id || userinfo.default_drive_id;
 let authorization = 'Bearer ' + userinfo.access_token;
-
+log(alidrive_id);
 function getShareToken(share_id, share_pwd) {
     return JSON.parse(request('https://api.aliyundrive.com/v2/share_link/get_share_token', { body: { "share_pwd": share_pwd, "share_id": share_id }, method: 'POST', timeout: 3000 })) || {};
 }
