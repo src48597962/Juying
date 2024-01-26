@@ -539,7 +539,8 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                 let postdata = { "drive_id": drive_id, "parent_file_id": folder_id, "limit": 200, "all": false, "url_expire_sec": 14400, "image_thumbnail_process": "image/resize,w_256/format,avif", "image_url_process": "image/resize,w_1920/format,avif", "video_thumbnail_process": "video/snapshot,t_1000,f_jpg,ar_auto,w_256", "fields": "*", "order_by": "updated_at", "order_direction": "DESC" };
                 let posturl = "https://api.aliyundrive.com/adrive/v3/file/list";
                 headers['authorization'] = authorization;
-                headers['x-canary'] = "client=web,app=adrive,version=v4.1.1";
+                headers['x-canary'] = "client=web,app=adrive,version=v4.9.0";
+                headers['user-agent'] = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36";
                 /*
                 let opentoken = getOpenToken(authorization);
                 if(opentoken){
