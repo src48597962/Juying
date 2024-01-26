@@ -538,10 +538,16 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
             try {
                 let postdata = { "drive_id": drive_id, "parent_file_id": folder_id, "limit": 200, "all": false, "url_expire_sec": 14400, "image_thumbnail_process": "image/resize,w_256/format,avif", "image_url_process": "image/resize,w_1920/format,avif", "video_thumbnail_process": "video/snapshot,t_1000,f_jpg,ar_auto,w_256", "fields": "*", "order_by": "updated_at", "order_direction": "DESC" };
                 let posturl = "https://api.aliyundrive.com/adrive/v3/file/list";
+                let deviceId = userinfo.device_id;
+                let userId = userinfo.user_id;
                 headers['authorization'] = authorization;
+                headers['x-device-id'] = deviceId;
                 headers['x-canary'] = "client=web,app=adrive,version=v4.9.0";
-                headers['x-device-id'] = userinfo.device_id;
-                headers['User-Agent'] = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36";
+                let aliecc = createsession(headers, deviceId, userId);
+                if (aliecc.success) {
+                    headers['x-signature'] = aliecc.signature;
+                }
+                //headers['User-Agent'] = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36";
                 /*
                 let opentoken = getOpenToken(authorization);
                 if(opentoken){
