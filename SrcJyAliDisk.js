@@ -537,10 +537,18 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
         } else {
             try {
                 let postdata = { "drive_id": drive_id, "parent_file_id": folder_id, "limit": 200, "all": false, "url_expire_sec": 14400, "image_thumbnail_process": "image/resize,w_256/format,avif", "image_url_process": "image/resize,w_1920/format,avif", "video_thumbnail_process": "video/snapshot,t_1000,f_jpg,ar_auto,w_256", "fields": "*", "order_by": "updated_at", "order_direction": "DESC" };
-                headers['authorization'] = authorization;
-                headers['x-canary'] = "client=web,app=adrive,version=v4.1.1";
-                let getfiles = request('https://api.aliyundrive.com/adrive/v3/file/list', { headers: headers, body: postdata, method: 'POST' });
+                let posturl = "https://api.aliyundrive.com/adrive/v3/file/list";
+                let opentoken = getOpenToken(authorization);
+                if(opentoken){
+                    headers['authorization'] = "Bearer " + opentoken;
+                    posturl = "https://openapi.aliyundrive.com/adrive/v1.0/openFile/list";
+                }else{
+                    headers['authorization'] = authorization;
+                    headers['x-canary'] = "client=web,app=adrive,version=v4.1.1";
+                }
+                let getfiles = request(posturl, { headers: headers, body: postdata, method: 'POST' });
                 let myfilelist = JSON.parse(getfiles).items || [];
+                log(myfilelist);
                 if (myfilelist.length > 0) {
                     let sublist = myfilelist.filter(item => {
                         return item.type == "file" && /srt|vtt|ass/.test(item.file_extension);
