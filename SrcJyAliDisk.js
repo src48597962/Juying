@@ -540,7 +540,8 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                 let posturl = "https://api.aliyundrive.com/adrive/v3/file/list";
                 headers['authorization'] = authorization;
                 headers['x-canary'] = "client=web,app=adrive,version=v4.9.0";
-                headers['user-agent'] = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36";
+                headers['x-device-id'] = userinfo.device_id;
+                headers['User-Agent'] = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36";
                 /*
                 let opentoken = getOpenToken(authorization);
                 if(opentoken){
