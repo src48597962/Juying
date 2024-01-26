@@ -59,6 +59,7 @@ function getUserInfo(token) {
                     let user = JSON.parse(request('https://user.aliyundrive.com/v2/user/get', { headers: headers, body: {}, method: 'POST', timeout: 3000 }));
                     delete headers['authorization'];
                     account.resource_drive_id = user.resource_drive_id;
+                    account.backup_drive_id = user.backup_drive_id;
                     storage0.putMyVar('aliuserinfo', account);
                     putMyVar('userinfoChecktime', nowtime + 'time');
                     aliaccount.refresh_token = account.refresh_token;
@@ -84,10 +85,10 @@ let userinfo = {};
 if (alitoken) {
     userinfo = getUserInfo(alitoken);
 }
-log(userinfo.backup_drive_id);
+
 let alidrive_id = getMyVar("selectDisk", "1") == "1" ? userinfo.backup_drive_id || userinfo.default_drive_id : userinfo.resource_drive_id || userinfo.default_drive_id;
 let authorization = 'Bearer ' + userinfo.access_token;
-log(alidrive_id);
+
 function getShareToken(share_id, share_pwd) {
     return JSON.parse(request('https://api.aliyundrive.com/v2/share_link/get_share_token', { body: { "share_pwd": share_pwd, "share_id": share_id }, method: 'POST', timeout: 3000 })) || {};
 }
