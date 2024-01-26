@@ -547,16 +547,6 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                 if (aliecc.success) {
                     headers['x-signature'] = aliecc.signature;
                 }
-                //headers['User-Agent'] = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36";
-                /*
-                let opentoken = getOpenToken(authorization);
-                if(opentoken){
-                    headers['authorization'] = 'Bearer ' + opentoken;
-                    posturl = "https://openapi.aliyundrive.com/adrive/v1.0/openFile/list";
-                }else{
-                    
-                }
-                */
                 let getfiles = request(posturl, { headers: headers, body: postdata, method: 'POST' });
                 let myfilelist = JSON.parse(getfiles).items || [];
                 if (myfilelist.length > 0) {
