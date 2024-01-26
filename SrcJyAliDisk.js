@@ -540,7 +540,7 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                 let posturl = "https://api.aliyundrive.com/adrive/v3/file/list";
                 let opentoken = getOpenToken(authorization);
                 if(opentoken){
-                    headers['authorization'] = "Bearer " + opentoken;
+                    headers['authorization'] = 'Bearer ' + opentoken;
                     posturl = "https://openapi.aliyundrive.com/adrive/v1.0/openFile/list";
                 }else{
                     headers['authorization'] = authorization;
