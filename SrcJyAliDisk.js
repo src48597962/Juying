@@ -540,7 +540,7 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                 let posturl = "https://api.aliyundrive.com/adrive/v3/file/list";
                 let opentoken = getOpenToken(authorization);
                 if(opentoken){
-                    headers['authorization'] = "Bearer eyJraWQiOiJLcU8iLCJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzNDI2YWQ4ZWJhYTA0ZTFlYTllZTAxYmQ5OThkMDZkNCIsImF1ZCI6ImU5MGE3YjM2MGU4OTRjNjBiN2IzMTQ1NzlmNDI4MjdkIiwicyI6ImNkYSIsImQiOiIxMjI4NTkxMSw1MTkwOTIxMjMiLCJpc3MiOiJhbGlwYW4iLCJleHAiOjE3MDYyODA4MzMsImlhdCI6MTcwNjI3MzYzMCwianRpIjoiYmExODc2MDg4ODcxNDk0NmE5NmNmOTRlMTg0MzQxZTkifQ._plQK5vVHqRk60VFtXROTbx3gkFDZyw-oy8jT3fRKwQ";// + opentoken;
+                    headers['authorization'] = "Bearer " + opentoken;
                     posturl = "https://openapi.aliyundrive.com/adrive/v1.0/openFile/list";
                 }else{
                     headers['authorization'] = authorization;
