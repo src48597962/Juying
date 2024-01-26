@@ -495,6 +495,8 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
     folder_id = folder_id || "root";
     isSearch = isSearch || 0;
     drive_id = drive_id || alidrive_id;
+    log(alidrive_id);
+    log(drive_id);
     let d = [];
     if (userinfo && userinfo.user_id) {
         if (folder_id == "root") {
