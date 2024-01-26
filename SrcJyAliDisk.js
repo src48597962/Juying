@@ -536,11 +536,11 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
             sousuo2(d, 1);
         } else {
             try {
-                let postdata = { "drive_id": drive_id, "parent_file_id": folder_id, "limit": 200, "all": false, "url_expire_sec": 14400, "image_thumbnail_process": "image/resize,w_256/format,avif", "image_url_process": "image/resize,w_1920/format,avif", "video_thumbnail_process": "video/snapshot,t_1000,f_jpg,ar_auto,w_256", "fields": "*", "order_by": "updated_at", "order_direction": "DESC" };
+                let postdata = {"drive_id":"12285911","marker":"","parent_file_id":"root","limit":50,"image_thumbnail_width":300,"order_by":"name","order_direction":"ASC","fields":"*","video_thumbnail_width":300};//{ "drive_id": drive_id, "parent_file_id": folder_id, "limit": 200, "all": false, "url_expire_sec": 14400, "image_thumbnail_process": "image/resize,w_256/format,avif", "image_url_process": "image/resize,w_1920/format,avif", "video_thumbnail_process": "video/snapshot,t_1000,f_jpg,ar_auto,w_256", "fields": "*", "order_by": "updated_at", "order_direction": "DESC" };
                 let posturl = "https://api.aliyundrive.com/adrive/v3/file/list";
                 let opentoken = getOpenToken(authorization);
                 if(opentoken){
-                    headers['authorization'] = "Bearer " + opentoken;
+                    headers['authorization'] = "Bearer eyJraWQiOiJLcU8iLCJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzNDI2YWQ4ZWJhYTA0ZTFlYTllZTAxYmQ5OThkMDZkNCIsImF1ZCI6ImU5MGE3YjM2MGU4OTRjNjBiN2IzMTQ1NzlmNDI4MjdkIiwicyI6ImNkYSIsImQiOiIxMjI4NTkxMSw1MTkwOTIxMjMiLCJpc3MiOiJhbGlwYW4iLCJleHAiOjE3MDYyODA4MzMsImlhdCI6MTcwNjI3MzYzMCwianRpIjoiYmExODc2MDg4ODcxNDk0NmE5NmNmOTRlMTg0MzQxZTkifQ._plQK5vVHqRk60VFtXROTbx3gkFDZyw-oy8jT3fRKwQ";// + opentoken;
                     posturl = "https://openapi.aliyundrive.com/adrive/v1.0/openFile/list";
                 }else{
                     headers['authorization'] = authorization;
