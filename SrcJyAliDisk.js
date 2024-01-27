@@ -708,7 +708,7 @@ function aliDiskSearch(input, data) {
             let datalist2 = [];
             try {
                 eval('let Parse = ' + obj.parse);
-                datalist2 = Parse(input);
+                datalist2 = obj.nam =="我的云盘" ? myDiskSearch(input) : Parse(input);
             } catch (e) {
                 log(obj.name + '>一解出错>' + e.message);
             }
@@ -905,4 +905,30 @@ function yundiskhistory() {
         }
     }
     setResult(d);
+}
+
+function myDiskSearch(input) {
+    if(userinfo.access_token){
+        let deviceId = userinfo.device_id;
+        let userId = userinfo.user_id;
+        headers['authorization'] = authorization;
+        headers['x-device-id'] = deviceId;
+        headers['x-canary'] = "client=web,app=adrive,version=v4.9.0";
+        let aliecc = createsession(headers, deviceId, userId);
+        if (aliecc.success) {
+            headers['x-signature'] = aliecc.signature;
+            let drive_id = [userinfo.backup_drive_id || userinfo.default_drive_id, userinfo.resource_drive_id];
+            let postdata = {"drive_id":drive_id,"limit":100,"query":"name match \""+input+"\" and type = \"folder\"","image_thumbnail_process":"image/resize,w_200/format,jpeg","image_url_process":"image/resize,w_1920/format,jpeg","video_thumbnail_process":"video/snapshot,t_1000,f_jpg,ar_auto,w_300","order_by":"updated_at DESC"}
+            let list = JSON.parse(request('https://api.aliyundrive.com/adrive/v3/file/search', { headers: headers, body: postdata, method: 'POST', timeout: 3000 })).items;
+            let data = list.map(item => {
+                return {
+                    title: item.name,
+                    url: item.file_id,
+                    drive_id: item.drive_id
+                }
+            })
+            return data;
+        }
+    }
+    return [];
 }
