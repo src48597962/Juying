@@ -708,7 +708,7 @@ function aliDiskSearch(input, data) {
             let datalist2 = [];
             try {
                 eval('let Parse = ' + obj.parse);
-                datalist2 = obj.nam =="我的云盘" ? myDiskSearch(input) : Parse(input);
+                datalist2 = obj.name =="我的云盘" ? myDiskSearch(input) : Parse(input);
             } catch (e) {
                 log(obj.name + '>一解出错>' + e.message);
             }
