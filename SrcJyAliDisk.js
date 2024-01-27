@@ -593,13 +593,12 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                                 url: $().lazyRule((drive_id, folder_id, headers) => {
                                     let currentDate = new Date();
                                     let date = new Date(currentDate.getTime() + 7 * 24 * 60 * 60 * 1000);
-                                    
-                                    log(date.toISOString()); 
-                                    return;
-                                    let postdata = {"drive_id":drive_id,"file_id_list":[folder_id],"share_pwd":"","expiration":"2024-02-26T14:11:03.477Z","sync_to_homepage":false};
-                                    let posturl = "https://api.aliyundrive.com/adrive/v3/file/list";
-                                    let getfiles = request(posturl, { headers: headers, body: postdata, method: 'POST' });
-
+                                    let postdata = {"drive_id":drive_id,"file_id_list":[folder_id],"share_pwd":"","expiration":date.toISOString(),"sync_to_homepage":false};
+                                    let result = JSON.parse(request("https://api.aliyundrive.com/adrive/v2/share_link/create", { headers: headers, body: postdata, method: 'POST' }));
+                                    let share_txt = result.share_name+"\n"+result.share_url;
+                                    copy(share_txt);
+                                    log(share_txt);
+                                    return "toast://已生成分享链接"
                                 }, drive_id, folder_id, headers),
                                 col_type: 'icon_5',
                                 img: 'https://hikerfans.com/tubiao/grey/206.png'
