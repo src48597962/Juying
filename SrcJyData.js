@@ -731,8 +731,8 @@ function JYyiji(){
                 col_type: 'line'
             }
         ]
-        yijimenu.forEach(item=>{
-            if(item.title && item.title=="收藏"){
+        yijimenu.forEach((item,i)=>{
+            if(item.title && item.title=="收藏" && i>0){
                 let extra = item.extra || {};
                 extra.longClick = [{
                     title: "历史",
@@ -743,7 +743,7 @@ function JYyiji(){
                     },extra.id)
                 }]
             }
-            if(item.title && item.title=="历史"){
+            if(item.title && item.title=="历史" && i>0){
                 let extra = item.extra || {};
                 extra.longClick = [{
                     title: "收藏",
