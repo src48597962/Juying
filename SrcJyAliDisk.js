@@ -590,7 +590,15 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                             },
                             {
                                 title: '分享',
-                                url: ``,
+                                url: $().lazyRule((drive_id, folder_id, headers) => {
+                                    let text = "yyyy-MM-ddTHH:mm:ss.SZ";
+                                    log(new Date(),text); 
+                                    return;
+                                    let postdata = {"drive_id":drive_id,"file_id_list":[folder_id],"share_pwd":"","expiration":"2024-02-26T14:11:03.477Z","sync_to_homepage":false};
+                                    let posturl = "https://api.aliyundrive.com/adrive/v3/file/list";
+                                    let getfiles = request(posturl, { headers: headers, body: postdata, method: 'POST' });
+
+                                }, drive_id, folder_id, headers),
                                 col_type: 'icon_5',
                                 img: 'https://hikerfans.com/tubiao/grey/206.png'
                             },
