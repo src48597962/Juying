@@ -591,7 +591,10 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                             {
                                 title: '分享',
                                 url: $().lazyRule((drive_id, folder_id, headers) => {
-                                    log($.dateFormat(new Date(), "yyyy-MM-ddTHH:mm:ss.SZ")); 
+                                    let currentDate = new Date();
+                                    let date = new Date(currentDate.getTime() + 7 * 24 * 60 * 60 * 1000);
+                                    
+                                    log(date.toISOString()); 
                                     return;
                                     let postdata = {"drive_id":drive_id,"file_id_list":[folder_id],"share_pwd":"","expiration":"2024-02-26T14:11:03.477Z","sync_to_homepage":false};
                                     let posturl = "https://api.aliyundrive.com/adrive/v3/file/list";
