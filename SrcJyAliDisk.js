@@ -9,6 +9,16 @@ let errorCode = {
     'ShareLinkTokenInvalid': '分享令牌失效',
     'ParamFlowException': '访问过于频繁，请稍后再试'
 }
+let orders = {
+    名称正序: 'name#ASC',
+    名称倒序: 'name#DESC',
+    时间正序: 'updated_at#ASC',
+    时间倒序: 'updated_at#DESC',
+    聚影排序: 'name#DESC'
+};
+let ordersKeys = Object.keys(orders);
+let orderskey = orders[getItem('aliyun_order', '聚影排序')];
+let style = getItem('aliyun_style', 'avatar');
 
 function aliShareUrl(input) {
     let li = input.split('\n');
@@ -187,16 +197,6 @@ function aliShare(share_id, folder_id, share_pwd) {
     clearMyVar('聚影云盘自动返回');
 
     let d = [];
-    let orders = {
-        名称正序: 'name#ASC',
-        名称倒序: 'name#DESC',
-        时间正序: 'updated_at#ASC',
-        时间倒序: 'updated_at#DESC',
-        聚影排序: 'name#DESC'
-    };
-    let ordersKeys = Object.keys(orders);
-    let orderskey = orders[getItem('aliyun_order', '聚影排序')];
-    let style = getItem('aliyun_style', 'avatar');
     let filterFiles = [];
     d.push(
         {
@@ -536,7 +536,7 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
             sousuo2(d, 1);
         } else {
             try {
-                let postdata = { "drive_id": drive_id, "parent_file_id": folder_id, "limit": 200, "all": false, "url_expire_sec": 14400, "image_thumbnail_process": "image/resize,w_256/format,avif", "image_url_process": "image/resize,w_1920/format,avif", "video_thumbnail_process": "video/snapshot,t_1000,f_jpg,ar_auto,w_256", "fields": "*", "order_by": "updated_at", "order_direction": "DESC" };
+                let postdata = { "drive_id": drive_id, "parent_file_id": folder_id, "limit": 200, "all": false, "url_expire_sec": 14400, "image_thumbnail_process": "image/resize,w_256/format,avif", "image_url_process": "image/resize,w_1920/format,avif", "video_thumbnail_process": "video/snapshot,t_1000,f_jpg,ar_auto,w_256", "fields": "*", "order_by": orderskey.split('#')[0], "order_direction": orderskey.split('#')[1] };
                 let posturl = "https://api.aliyundrive.com/adrive/v3/file/list";
                 let deviceId = userinfo.device_id;
                 let userId = userinfo.user_id;
@@ -550,6 +550,55 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                 let getfiles = request(posturl, { headers: headers, body: postdata, method: 'POST' });
                 let myfilelist = JSON.parse(getfiles).items || [];
                 if (myfilelist.length > 0) {
+                    if(folder_id != "root"){
+                        d.push(
+                            {
+                                title: "转盘",
+                                url: $().lazyRule(() => {
+                                    
+                                }),
+                                col_type: 'icon_5',
+                                img: 'https://hikerfans.com/tubiao/grey/175.png'
+                            },
+                            {
+                                title: "样式",
+                                url: $(['text_1', 'movie_2', 'card_pic_3', 'avatar']).select(() => {
+                                    setItem('aliyun_style', input);
+                                    refreshPage();
+                                    return 'toast://已切换';
+                                }),
+                                col_type: 'icon_5',
+                                img: 'https://hikerfans.com/tubiao/grey/168.png'
+                            },
+                            {
+                                title: "排序",
+                                url: $(ordersKeys, 2).select(() => {
+                                    setItem('aliyun_order', input);
+                                    refreshPage();
+                                    return 'toast://切换成功';
+                                }),
+                                col_type: 'icon_5',
+                                img: 'https://hikerfans.com/tubiao/grey/76.png'
+                            },
+                            {
+                                title: getItem('aliyun_playMode', '智能')=="原画"?"原画"+getItem('aliyun_openInt', '1'):getItem('aliyun_playMode', '智能'),
+                                url: $(['智能', '转码', '原画']).select(() => {
+                                    setItem('aliyun_playMode', input);
+                                }),
+                                col_type: 'icon_5',
+                                img: 'https://hikerfans.com/tubiao/grey/100.png'
+                            },
+                            {
+                                title: '分享',
+                                url: ``,
+                                col_type: 'icon_5',
+                                img: 'https://hikerfans.com/tubiao/grey/206.png'
+                            },
+                            {
+                                col_type: 'line_blank'
+                            }
+                        )
+                    }
                     let sublist = myfilelist.filter(item => {
                         return item.type == "file" && /srt|vtt|ass/.test(item.file_extension);
                     })
@@ -564,7 +613,7 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js');
                                 aliMyDisk(folder_id, isSearch, drive_id);
                             }, item.file_id, isSearch, drive_id),
-                            col_type: 'avatar',
+                            col_type: style,
                             extra: {
                                 pageTitle: item.name
                             }
@@ -573,7 +622,9 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                     let filelist = myfilelist.filter((item) => {
                         return item.type == "file";
                     })
-                    filelist.sort(SortList);
+                    if (getItem('aliyun_order', '聚影排序') == "聚影排序") {
+                        filelist.sort(SortList);
+                    }
                     filelist.forEach((item) => {
                         if (item.category == "video" || !isSearch) {
                             let sub_file_url;
@@ -620,7 +671,7 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                                     }
                                 }, item.category, item.file_id, item.url || "", sub_file_url || "", drive_id),
                                 desc: filesize < 1024 ? filesize.toFixed(2) + 'MB' : (filesize / 1024).toFixed(2) + 'GB',
-                                col_type: 'avatar',
+                                col_type: style,
                                 extra: {
                                     id: item.file_id,
                                     cls: "playlist " + item.category,
