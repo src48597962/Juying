@@ -553,10 +553,17 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                     if(folder_id != "root"){
                         d.push(
                             {
-                                title: "转盘",
-                                url: $().lazyRule(() => {
-                                    
-                                }),
+                                title: "探索",
+                                url: $().lazyRule((headers) => {
+                                    let postdata = {};
+                                    let result = JSON.parse(request("https://api.aliyundrive.com/adrive/v1/bottle/fish", { headers: headers, body: postdata, method: 'POST' }));
+                                    let share_name = result.bottleName;
+                                    let share_id = result.shareId;
+                                    return $(share_name+"\n是否查看","探索发现到").confirm((input)=>{
+                                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js');
+                                        aliShareUrl(input);
+                                    }, share_id)
+                                }, headers),
                                 col_type: 'icon_5',
                                 img: 'https://hikerfans.com/tubiao/grey/175.png'
                             },
@@ -590,7 +597,7 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                             },
                             {
                                 title: '分享',
-                                url: $().lazyRule((drive_id, folder_id, headers) => {
+                                url: backup_drive_id==drive_id?"toast://备份盘文件不能分享":$().lazyRule((drive_id, folder_id, headers) => {
                                     let currentDate = new Date();
                                     let date = new Date(currentDate.getTime() + 7 * 24 * 60 * 60 * 1000);
                                     let postdata = {"drive_id":drive_id,"file_id_list":[folder_id],"share_pwd":"","expiration":date.toISOString(),"sync_to_homepage":false};
@@ -598,7 +605,7 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                                     let share_txt = result.share_name+"\n"+result.share_url;
                                     copy(share_txt);
                                     log(share_txt);
-                                    return "toast://已生成分享链接"
+                                    return "toast://已生成7天有效分享链接"
                                 }, drive_id, folder_id, headers),
                                 col_type: 'icon_5',
                                 img: 'https://hikerfans.com/tubiao/grey/206.png'
