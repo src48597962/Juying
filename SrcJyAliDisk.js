@@ -550,19 +550,22 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                 let getfiles = request(posturl, { headers: headers, body: postdata, method: 'POST' });
                 let myfilelist = JSON.parse(getfiles).items || [];
                 if (myfilelist.length > 0) {
-                    if(folder_id != "root"){
+                    //if(folder_id != "root"){
                         d.push(
                             {
                                 title: "探索",
                                 url: $().lazyRule((headers) => {
-                                    let postdata = {};
-                                    let result = JSON.parse(request("https://api.aliyundrive.com/adrive/v1/bottle/fish", { headers: headers, body: postdata, method: 'POST' }));
-                                    let share_name = result.bottleName;
-                                    let share_id = result.shareId;
-                                    return $(share_name+"\n是否查看","探索发现到").confirm((input)=>{
-                                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js');
-                                        aliShareUrl(input);
-                                    }, share_id)
+                                    let result = JSON.parse(request("https://api.aliyundrive.com/adrive/v1/bottle/fish", { headers: headers, body: {}, method: 'POST' }));
+                                    if(result.display_message){
+                                        return "toast://"+result.display_message;
+                                    }else{
+                                        let share_name = result.bottleName;
+                                        let share_id = result.shareId;
+                                        return $(share_name+"\n是否查看","探索发现到").confirm((input)=>{
+                                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js');
+                                            aliShare(input);
+                                        }, share_id)
+                                    }
                                 }, headers),
                                 col_type: 'icon_5',
                                 img: 'https://hikerfans.com/tubiao/grey/175.png'
@@ -614,7 +617,7 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                                 col_type: 'line_blank'
                             }
                         )
-                    }
+                    //}
                     let sublist = myfilelist.filter(item => {
                         return item.type == "file" && /srt|vtt|ass/.test(item.file_extension);
                     })
