@@ -550,7 +550,7 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                 let getfiles = request(posturl, { headers: headers, body: postdata, method: 'POST' });
                 let myfilelist = JSON.parse(getfiles).items || [];
                 if (myfilelist.length > 0) {
-                    //if(folder_id != "root"){
+                    if(folder_id != "root"){
                         d.push(
                             {
                                 title: "探索",
@@ -617,7 +617,7 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                                 col_type: 'line_blank'
                             }
                         )
-                    //}
+                    }
                     let sublist = myfilelist.filter(item => {
                         return item.type == "file" && /srt|vtt|ass/.test(item.file_extension);
                     })
