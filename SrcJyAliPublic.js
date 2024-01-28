@@ -85,8 +85,8 @@ let userinfo = {};
 if (alitoken) {
     userinfo = getUserInfo(alitoken);
 }
-
-let alidrive_id = getMyVar("selectDisk", "1") == "1" ? userinfo.backup_drive_id || userinfo.default_drive_id : userinfo.resource_drive_id || userinfo.default_drive_id;
+let backup_drive_id = userinfo.backup_drive_id || userinfo.default_drive_id;
+let alidrive_id = getMyVar("selectDisk", "1") == "1" ? backup_drive_id : userinfo.resource_drive_id || userinfo.default_drive_id;
 let authorization = 'Bearer ' + userinfo.access_token;
 
 function getShareToken(share_id, share_pwd) {
