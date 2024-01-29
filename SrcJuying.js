@@ -153,7 +153,7 @@ function jiekouyiji() {
                     extra: {
                         longClick: [{
                         title: "删除接口",
-                            js: $.toString((dataurl,filepath,Juyingcfg) => {
+                            js: $.toString((dataurl,filepath) => {
                                 let datalist = storage0.getMyVar('zsdatalist',[]);
                                 for(var i=0;i<datalist.length;i++){
                                     if(datalist[i].url==dataurl){
@@ -164,12 +164,8 @@ function jiekouyiji() {
                                 storage0.putMyVar('zsdatalist',datalist);
                                 writeFile(filepath, JSON.stringify(datalist));
 
-                                let cfgfile = "hiker://files/rules/Src/Juying/config.json";
-                                if(JYconfig.zsjiekou&&JYconfig.zsjiekou.api_url==dataurl){
-                                    delete JYconfig['zsjiekou'];
-                                    writeFile(cfgfile, JSON.stringify(JYconfig));
-                                }
-                            }, datalist[i].url,filepath,Juyingcfg)
+                                refreshPage(true);
+                            }, datalist[i].url,filepath)
                         }]
                     }
                 });
