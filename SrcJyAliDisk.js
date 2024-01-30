@@ -45,155 +45,18 @@ function aliShareUrl(input) {
     }
 }
 
-function myDiskMenu(islogin) {
-    let setalitoken = $().lazyRule((alitoken) => {
-        return $(alitoken || "", "新的refresh_token").input(() => {
-            if(input){
-                require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliPublic.js');
-                let account = getUserInfo(input);
-                if(account.refresh_token){
-                    refreshPage(false);
-                    return "toast://已登录";
-                }
-            }
-            return "hiker://empty";
-        })
-    }, alitoken)
-
-    let onlogin = [{
-        title: userinfo.nick_name,
-        url: $(['云盘接口', '更换token','观看历史','退出登录'], 2).select((setalitoken) => {
-            if (input == '云盘接口') {
-                return $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
-                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
-                    yundiskjiekou();
-                })
-            } else if (input == '更换token') {
-                return setalitoken;
-            } else if (input == '退出登录') {
-                require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliPublic.js');
-                getUserInfo("");
-                refreshPage(false);
-                return "toast://已退出登录";
-            } else if (input == '观看历史') {
-                return $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
-                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js');
-                    yundiskhistory();
-                })
-            }
-        }, setalitoken),
-        img: userinfo.avatar,
-        desc: '管理',
-        col_type: 'avatar'
-    }, {
-        col_type: "line"
-    }];
-    let nologin = [{
-        title: "⚡网页登录获取⚡",
-        url: $("hiker://empty###noRecordHistory##noHistory#").rule(() => {
-            let d = [];
-            let url = 'https://auth.aliyundrive.com/v2/oauth/authorize?login_type=custom&response_type=code&redirect_uri=https%3A%2F%2Fwww.aliyundrive.com%2Fsign%2Fcallback&client_id=25dzX3vbYqktVxyX&state=%7B%22origin%22%3A%22*%22%7D#/login'
-            let js = $.toString(() => {
-                const tokenFunction = function () {
-                    var token = JSON.parse(localStorage.getItem('token'))
-                    if (token && token.user_id) {
-                        let alicfgfile = "hiker://files/rules/Src/Juying/aliconfig.json";
-                        let aliconfig = {};
-                        if (fy_bridge_app.fetch(alicfgfile)) {
-                            try {
-                                eval("aliconfig = " + fy_bridge_app.fetch(alicfgfile));
-                            } catch (e) {
-                                aliconfig = {};
-                            }
-                        }
-                        let aliaccount = aliconfig.account || {};
-                        aliaccount.refresh_token = token.refresh_token;
-                        aliconfig.account = aliaccount;
-                        fy_bridge_app.copy(token.refresh_token);
-                        fy_bridge_app.log(token.refresh_token);
-                        fy_bridge_app.writeFile(alicfgfile, JSON.stringify(aliconfig));
-                        localStorage.clear();
-                        fy_bridge_app.back(true);
-                        fy_bridge_app.toast('TOKEN获取成功，请勿泄漏！');
-                        return;
-                    } else {
-                        token_timer();
-                    }
-                }
-                var token_timer = function () {
-                    setTimeout(tokenFunction, 500);
-                }
-                tokenFunction();
-            })
-            d.push({
-                url: url,
-                col_type: 'x5_webview_single',
-                desc: '100%&&float',
-                extra: {
-                    canBack: true,
-                    js: js,
-                    urlInterceptor: $.toString(() => true)
-                }
-            })
-            setResult(d);
-        }),
-        col_type: 'text_center_1'
-    }, {
-        title: "⭐手工填写token⭐",
-        url: setalitoken,
-        col_type: 'text_center_1'
-    }, {
-        title: "🌟其他小程序获取🌟",
-        url: $().lazyRule(() => {
-            try {
-                //节约资源，如果有获取过用户信息，就重复利用一下
-                let loyfilepath = "hiker://files/rules/LoyDgIk/aliToken.json";
-                let icyfilepath = "hiker://files/rules/icy/icy-ali-token.json";
-                let alitoken;
-                let alifile = fetch(loyfilepath);
-                if (alifile) {
-                    let token = eval('('+alifile+')');
-                    alitoken = token.refresh_token;
-                }
-                if (!alitoken) {
-                    alifile = fetch(icyfilepath);
-                    if (alifile) {
-                        let tokenlist = eval('('+alifile+')');
-                        if (tokenlist.length > 0) {
-                            alitoken = tokenlist[0].refresh_token;
-                        }
-                    }
-                }
-
-                if (alitoken) {
-                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliPublic.js');
-                    let account = getUserInfo(alitoken);
-                    if(account.refresh_token){
-                        refreshPage(false);
-                        return "toast://已登录";
-                    }
-                }
-            } catch (e) {
-                log("获取alitoken失败>" + e.toString() + " 错误行>" + e.lineNumber);
-            }
-            return "toast://获取失败";
-        }),
-        col_type: 'text_center_1'
-    }]
-    if (islogin) {
-        return onlogin;
-    } else {
-        return nologin;
-    }
-}
 
 function aliShare(share_id, folder_id, share_pwd) {
+    let my_params = {};
+    if($.type(MY_PARAMS)!='undefined'){
+        my_params = MY_PARAMS;
+    }
     addListener("onClose", $.toString((isback) => {
         if (getMyVar('聚影云盘自动返回') && isback == 1) {
             back(false);
         }
         clearMyVar('云盘共享链接页面标题');
-    }, MY_PARAMS.back || 0));
+    }, my_params.back || 0));
     clearMyVar('聚影云盘自动返回');
 
     let d = [];
@@ -225,7 +88,7 @@ function aliShare(share_id, folder_id, share_pwd) {
                 } else {
                     return 'hiker://empty';
                 }
-            }, MY_PARAMS.name || "", MY_PARAMS.back || 0),
+            }, my_params.name || "", my_params.back || 0),
             col_type: 'icon_5',
             img: 'https://hikerfans.com/tubiao/grey/175.png',
             extra: {
@@ -241,7 +104,7 @@ function aliShare(share_id, folder_id, share_pwd) {
                                 aliShare(ids[0], ids[1], ids[2]);
                             }, ids);
                         }
-                    }, MY_PARAMS.dirid || "")
+                    }, my_params.dirid || "")
                 }]
             }
         },
@@ -383,7 +246,7 @@ function aliShare(share_id, folder_id, share_pwd) {
                         col_type: style,
                         extra: {
                             pageTitle: item.name,
-                            name: MY_PARAMS.name || "",
+                            name: my_params.name || "",
                             back: 1,
                             dirid: share_id + '_' + folder_id + '_' + share_pwd
                         }
@@ -489,6 +352,148 @@ function aliShare(share_id, folder_id, share_pwd) {
     setLastChapterRule('js:' + $.toString(() => {
         setResult('');
     }))
+}
+
+function myDiskMenu(islogin) {
+    let setalitoken = $().lazyRule((alitoken) => {
+        return $(alitoken || "", "新的refresh_token").input(() => {
+            if(input){
+                require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliPublic.js');
+                let account = getUserInfo(input);
+                if(account.refresh_token){
+                    refreshPage(false);
+                    return "toast://已登录";
+                }
+            }
+            return "hiker://empty";
+        })
+    }, alitoken)
+
+    let onlogin = [{
+        title: userinfo.nick_name,
+        url: $(['云盘接口', '更换token','观看历史','退出登录'], 2).select((setalitoken) => {
+            if (input == '云盘接口') {
+                return $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                    yundiskjiekou();
+                })
+            } else if (input == '更换token') {
+                return setalitoken;
+            } else if (input == '退出登录') {
+                require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliPublic.js');
+                getUserInfo("");
+                refreshPage(false);
+                return "toast://已退出登录";
+            } else if (input == '观看历史') {
+                return $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js');
+                    yundiskhistory();
+                })
+            }
+        }, setalitoken),
+        img: userinfo.avatar,
+        desc: '管理',
+        col_type: 'avatar'
+    }, {
+        col_type: "line"
+    }];
+    let nologin = [{
+        title: "⚡网页登录获取⚡",
+        url: $("hiker://empty###noRecordHistory##noHistory#").rule(() => {
+            let d = [];
+            let url = 'https://auth.aliyundrive.com/v2/oauth/authorize?login_type=custom&response_type=code&redirect_uri=https%3A%2F%2Fwww.aliyundrive.com%2Fsign%2Fcallback&client_id=25dzX3vbYqktVxyX&state=%7B%22origin%22%3A%22*%22%7D#/login'
+            let js = $.toString(() => {
+                const tokenFunction = function () {
+                    var token = JSON.parse(localStorage.getItem('token'))
+                    if (token && token.user_id) {
+                        let alicfgfile = "hiker://files/rules/Src/Juying/aliconfig.json";
+                        let aliconfig = {};
+                        if (fy_bridge_app.fetch(alicfgfile)) {
+                            try {
+                                eval("aliconfig = " + fy_bridge_app.fetch(alicfgfile));
+                            } catch (e) {
+                                aliconfig = {};
+                            }
+                        }
+                        let aliaccount = aliconfig.account || {};
+                        aliaccount.refresh_token = token.refresh_token;
+                        aliconfig.account = aliaccount;
+                        fy_bridge_app.copy(token.refresh_token);
+                        fy_bridge_app.log(token.refresh_token);
+                        fy_bridge_app.writeFile(alicfgfile, JSON.stringify(aliconfig));
+                        localStorage.clear();
+                        fy_bridge_app.back(true);
+                        fy_bridge_app.toast('TOKEN获取成功，请勿泄漏！');
+                        return;
+                    } else {
+                        token_timer();
+                    }
+                }
+                var token_timer = function () {
+                    setTimeout(tokenFunction, 500);
+                }
+                tokenFunction();
+            })
+            d.push({
+                url: url,
+                col_type: 'x5_webview_single',
+                desc: '100%&&float',
+                extra: {
+                    canBack: true,
+                    js: js,
+                    urlInterceptor: $.toString(() => true)
+                }
+            })
+            setResult(d);
+        }),
+        col_type: 'text_center_1'
+    }, {
+        title: "⭐手工填写token⭐",
+        url: setalitoken,
+        col_type: 'text_center_1'
+    }, {
+        title: "🌟其他小程序获取🌟",
+        url: $().lazyRule(() => {
+            try {
+                //节约资源，如果有获取过用户信息，就重复利用一下
+                let loyfilepath = "hiker://files/rules/LoyDgIk/aliToken.json";
+                let icyfilepath = "hiker://files/rules/icy/icy-ali-token.json";
+                let alitoken;
+                let alifile = fetch(loyfilepath);
+                if (alifile) {
+                    let token = eval('('+alifile+')');
+                    alitoken = token.refresh_token;
+                }
+                if (!alitoken) {
+                    alifile = fetch(icyfilepath);
+                    if (alifile) {
+                        let tokenlist = eval('('+alifile+')');
+                        if (tokenlist.length > 0) {
+                            alitoken = tokenlist[0].refresh_token;
+                        }
+                    }
+                }
+
+                if (alitoken) {
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliPublic.js');
+                    let account = getUserInfo(alitoken);
+                    if(account.refresh_token){
+                        refreshPage(false);
+                        return "toast://已登录";
+                    }
+                }
+            } catch (e) {
+                log("获取alitoken失败>" + e.toString() + " 错误行>" + e.lineNumber);
+            }
+            return "toast://获取失败";
+        }),
+        col_type: 'text_center_1'
+    }]
+    if (islogin) {
+        return onlogin;
+    } else {
+        return nologin;
+    }
 }
 
 function aliMyDisk(folder_id, isSearch, drive_id) {
