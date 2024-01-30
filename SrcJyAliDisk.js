@@ -567,7 +567,7 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                                         let share_name = result.bottleName;
                                         let share_id = result.shareId;
                                         return $(share_name+"\n是否查看","探索发现到").confirm((input)=>{
-                                            return $("").rule((input)=>{
+                                            return $('https://www.alipan.com/s/'+input).rule((input)=>{
                                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js');
                                                 aliShare(input);
                                             }, input)
