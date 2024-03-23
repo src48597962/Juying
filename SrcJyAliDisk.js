@@ -393,7 +393,11 @@ function myDiskMenu(islogin) {
         }, setalitoken),
         img: userinfo.avatar,
         desc: '管理',
-        col_type: 'avatar'
+        col_type: 'avatar',
+        extra: {
+            newWindow: true,
+            windowId: MY_RULE.title + "云盘"
+        }
     }, {
         col_type: "line"
     }];
