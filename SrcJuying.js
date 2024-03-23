@@ -902,7 +902,7 @@ function sousuo2(d, disk) {
     let oldtime = JYresou.updatetime || 0;
     if(list.length==0 || nowtime > (oldtime+24*60*60*1000)){
         try{
-            let html = request("https://api.web.360kan.com/v1/rank?cat="+fenleiid[ids]);
+            let html = request("https://api.web.360kan.com/v1/rank?cat="+fenleiid[ids], {timeout: 3000});
             list = JSON.parse(html).data;
             resoudata[fenlei[ids]] = list;
             JYresou['data'] = resoudata;
