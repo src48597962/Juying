@@ -915,7 +915,7 @@ function sousuo2(d, disk) {
     d.push({
         title: '<span style="color:#ff6600"><b>\t热搜榜\t\t\t</b></span>',
         desc: '✅'+fenlei[ids],
-        url: $(fenlei, 2).select((fenlei) => {
+        url: $(fenlei, 2, '选择热榜分类').select((fenlei) => {
             putMyVar("热榜分类",fenlei.indexOf(input));
             refreshPage(false);
             return "hiker://empty";
