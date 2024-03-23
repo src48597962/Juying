@@ -23,7 +23,7 @@ function SRCSet() {
         col_type: "icon_small_3",
         extra: {
             newWindow: true,
-            windowId: MY_RULE.title + "管理",
+            windowId: MY_RULE.title + "云盘",
             longClick: [{
                 title: "☁️云盘接口",
                 js: $.toString(() => {
