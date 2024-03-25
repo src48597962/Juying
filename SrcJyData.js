@@ -434,8 +434,10 @@ function JYerji(){
     }
     var easy = datasource=="sougou"?$("").lazyRule(() => {
         try{
+            log(input);
             let html = request(input,{});
-            if(/访问的页面为第三方/.test(html)){
+            log(html);
+            if(/如需继续访问该页面/.test(html)){
                 input = pdfh(html, "body&&a&&href");
             }else{
                 input = html.split("('")[1].split("'")[0];
