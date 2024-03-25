@@ -434,8 +434,12 @@ function JYerji(){
     }
     var easy = datasource=="sougou"?$("").lazyRule(() => {
         try{
-            input=pdfh(request(input,{}), "body&&a&&href");//.split("('")[1].split("'")[0]
-
+            let html = request(input,{});
+            if(/访问的页面为第三方/.test(html)){
+                input = pdfh(html, "body&&a&&href");
+            }else{
+                input = html.split("('")[1].split("'")[0];
+            }
             if(input.match(/ixigua|iqiyi|qq.com|mgtv|le\.com|bili|sohu|youku|pptv|cctv|1905\.com/)){
                 input=input.split("?")[0];
             }else if(input.match(/huanxi/)){
