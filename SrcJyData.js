@@ -838,7 +838,7 @@ function JYyiji(){
                 }
             }else{
                 try{
-                    let filterjs = fetchCache('https://s.ssl.qhres2.com/static/ebf701e82844fbc9.js',360,{timeout:2000});//3deb65e2c118233e.js
+                    let filterjs = fetchCache('https://s.ssl.qhres2.com/static/762ca50f9e0daa08.js',360,{timeout:2000});
                     let filters = filterjs.split(`defaultId:"rankhot"},`);//filterjs.match(/defaultId:\"rankhot\"\},(.*?),o=i/)[1];
                     filters.splice(0,1);
                     filters = filters.map(item=>{
