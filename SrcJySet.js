@@ -3434,7 +3434,7 @@ function yundiskjiekou() {
                     let datafile = fetch(filepath);
                     eval("var datalist=" + datafile+ ";");
                     let index = datalist.indexOf(datalist.filter(d=>d.name == data.name)[0]);
-                    datalist[index].stop = input=="启用"?1:0;
+                    datalist[index].stop = input=="禁用"?1:0;
                     writeFile(filepath, JSON.stringify(datalist));
                     refreshPage(false);
                     return 'toast://已'+input;
