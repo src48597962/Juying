@@ -766,6 +766,9 @@ function aliDiskSearch(input, data) {
                 datalist = [];
             }
         }
+        datalist = datalist.filter(it=>{
+            return !it.stop;
+        });
     }
     let diskMark = storage0.getMyVar('diskMark') || {};
     let i = 0;
