@@ -3402,8 +3402,8 @@ function yundiskjiekou() {
 
     datalist.forEach(item => {
         d.push({
-            title: "💽 " + (itme.stop?"''''"+item.name:item.name) + "   (" + (item.erparse?"二解接口":"一解接口") + ")",
-            url: $(["分享", "编辑", "删除", itme.stop?"启用":"禁用", "测试"], 1).select((filepath,yundiskapi,data) => {
+            title: "💽 " + (item.stop?"''''"+item.name:item.name) + "   (" + (item.erparse?"二解接口":"一解接口") + ")",
+            url: $(["分享", "编辑", "删除", item.stop?"启用":"禁用", "测试"], 1).select((filepath,yundiskapi,data) => {
                 if (input == "分享") {
                     showLoading('分享上传中，请稍后...');
                     let oneshare = []
