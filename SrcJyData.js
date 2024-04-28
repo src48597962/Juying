@@ -648,126 +648,6 @@ function JYyiji(){
     }
 
     if(MY_PAGE==1){
-        downloadicon();//下载图标
-        require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyMenu.js');
-        if($.type(storage0.getItem('buttonmenu1'))=="object"){
-            setItem('buttonmenu1',storage0.getItem('buttonmenu1').name);
-        }
-        if($.type(storage0.getItem('buttonmenu2'))=="object"){
-            setItem('buttonmenu2',storage0.getItem('buttonmenu2').name);
-        }
-        if($.type(storage0.getItem('buttonmenu3'))=="object"){
-            setItem('buttonmenu3',storage0.getItem('buttonmenu3').name);
-        }
-        if($.type(storage0.getItem('buttonmenu4'))=="object"){
-            setItem('buttonmenu4',storage0.getItem('buttonmenu4').name);
-        }
-        if($.type(storage0.getItem('buttonmenu5'))=="object"){
-            setItem('buttonmenu5',storage0.getItem('buttonmenu5').name);
-        }
-        let btnmn1 = getItem('buttonmenu1',"管理");
-        let btnmn2 = getItem('buttonmenu2',"收藏");
-        let btnmn3 = getItem('buttonmenu3',"搜索");
-        let btnmn4 = getItem('buttonmenu4',"展示");
-        let btnmn5 = getItem('buttonmenu5',"直播");
-        let yijimenu = [
-            {
-                title: btnmn1,
-                url: buttonmenu[btnmn1].url,
-                pic_url: buttonmenu[btnmn1].img,
-                col_type: 'icon_5',
-                extra: {
-                    id: 'buttonmenu1',
-                    longClick: [{
-                        title: "♥️管理",
-                        js: $.toString(() => {
-                            return $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
-                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJySet.js');
-                                SRCSet();
-                            })
-                        })
-                    },{
-                        title: "💠扩展中心",
-                        js: $.toString(() => {
-                            return $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
-                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
-                                extension();
-                            })
-                        })
-                    }]
-                }
-            },
-            {
-                title: btnmn2,
-                url: buttonmenu[btnmn2].url,
-                pic_url: buttonmenu[btnmn2].img,
-                col_type: 'icon_5',
-                extra: {
-                    id: 'buttonmenu2'
-                }
-            },
-            {
-                title: btnmn3,
-                url: buttonmenu[btnmn3].url,
-                pic_url: buttonmenu[btnmn3].img,
-                col_type: 'icon_5',
-                extra: {
-                    id: 'buttonmenu2'
-                }
-            },
-            {
-                title: btnmn4,
-                url: buttonmenu[btnmn4].url,
-                pic_url: buttonmenu[btnmn4].img,
-                col_type: 'icon_5',
-                extra: {
-                    id: 'buttonmenu2'
-                }
-            },
-            {
-                title: btnmn5,
-                url: buttonmenu[btnmn5].url,
-                pic_url: buttonmenu[btnmn5].img,
-                col_type: 'icon_5',
-                extra: {
-                    id: 'buttonmenu2'
-                }
-            },
-            {
-                col_type: 'line'
-            }
-        ]
-        yijimenu.forEach((item,i)=>{
-            if(item.title && item.title=="收藏" && i>0){
-                let extra = item.extra || {};
-                extra.longClick = [{
-                    title: "历史",
-                    js: $.toString((id) => {
-                        setItem(id, "历史");
-                        refreshPage(true);
-                        return "hiker://empty";
-                    },extra.id)
-                }]
-            }
-            if(item.title && item.title=="历史" && i>0){
-                let extra = item.extra || {};
-                extra.longClick = [{
-                    title: "收藏",
-                    js: $.toString((id) => {
-                        setItem(id, "收藏");
-                        refreshPage(true);
-                        return "hiker://empty";
-                    },extra.id)
-                }]
-            }
-            d.push(item);
-        })
-
-        for (let i = 0; i < 10; i++) {
-            d.push({
-                col_type: "blank_block"
-            })
-        }
         d.push({
             title: fold === '1' ? '““””<b><span style="color: #F54343">∨</span></b>' : '““””<b><span style="color:' + Color + '">∧</span></b>',
             url: $('#noLoading#').lazyRule((fold) => {
@@ -1010,7 +890,7 @@ function JYyiji(){
         });
     }
     
-    setResult(d);
+    return d;
 }
 
 function downloadicon() {
