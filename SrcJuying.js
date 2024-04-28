@@ -549,7 +549,6 @@ function yiji() {
     clearMyVar('SrcJy$back');
     let d = [];
     if(MY_PAGE==1){
-        downloadicon();//下载图标
         require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyMenu.js');
         if($.type(storage0.getItem('buttonmenu1'))=="object"){
             setItem('buttonmenu1',storage0.getItem('buttonmenu1').name);
@@ -669,6 +668,23 @@ function yiji() {
             })
         }
         if (typeof(setPreResult)!="undefined") {
+            d.push({
+                title: "",
+                url: "hiker://empty",
+                col_type: "text_1",
+                extra: {
+                    lineVisible: false,
+                    cls: "loading_gif"
+                }
+            })
+            d.push({
+                pic_url: "https://hikerfans.com/weisyr/img/Loading1.gif",
+                col_type: "pic_1_center",
+                url: "hiker://empty",
+                extra: {
+                    cls: "loading_gif"
+                }
+            })
             setPreResult(d);
             d = [];
         }
@@ -676,7 +692,9 @@ function yiji() {
 
     require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyData.js');
     d = d.concat(JYyiji());
+    deleteItemByCls("loading_gif");
     setResult(d);
+    
     if(getMyVar('jydingyue','0')=="0"&&JYconfig['codedyid']&&JYconfig['codeid']!=JYconfig['codedyid']){
         putMyVar('jydingyue','1');
         try{
