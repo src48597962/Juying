@@ -64,6 +64,8 @@ function getUserInfo(token) {
                     putMyVar('userinfoChecktime', nowtime + 'time');
                     aliaccount.refresh_token = account.refresh_token;
                     aliconfig.account = aliaccount;
+                    aliOpenTokenObj.refresh_token_1 = "";
+                    aliconfig.opentoken = aliOpenTokenObj;
                     writeFile(alicfgfile, JSON.stringify(aliconfig));
                 }else{
                     toast("登陆失败>" + account.message);
