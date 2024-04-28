@@ -669,7 +669,7 @@ function yiji() {
                 col_type: "blank_block"
             })
         }
-        if (typeof(setPreResult)!="undefined") {
+        if (typeof(setPreResult)!="undefined" && getMyVar('动态加载loading')!='1') {
             d.push({
                 title: "",
                 url: "hiker://empty",
@@ -689,6 +689,7 @@ function yiji() {
             })
             setPreResult(d);
             d = [];
+            putMyVar('动态加载loading', '1');
         }
     }
 
