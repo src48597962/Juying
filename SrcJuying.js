@@ -501,7 +501,8 @@ function yiji() {
         clearMyVar('isverifyA');
     }));
     */
-
+    require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyData.js');
+    
     if(getMyVar('SrcJuying-VersionCheck', '0') == '0'){
         let programversion = 0;
         try{
@@ -544,6 +545,7 @@ function yiji() {
             });
         }
         Version();
+        downloadicon();//下载图标
     }
 
     clearMyVar('SrcJy$back');
@@ -690,7 +692,6 @@ function yiji() {
         }
     }
 
-    require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyData.js');
     d = d.concat(JYyiji());
     deleteItemByCls("loading_gif");
     setResult(d);
