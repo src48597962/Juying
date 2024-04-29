@@ -2270,7 +2270,7 @@ function extension(){
     let btnmn5 = getItem('buttonmenu5',"直播");
     d.push({
         title: btnmn1,
-        url: $(["管理","历史","收藏","搜索","展示","直播","Alist","云盘"],2,"自定义第1个按钮功能").select(() => {
+        url: $(menubtns,2,"自定义第1个按钮功能").select(() => {
             setItem('buttonmenu1',input);
             refreshPage(false);
             return 'toast://第1按钮已设置为'+input+(input=="管理"?"":"，通过主页长按第1个按钮进入管理");
@@ -2290,7 +2290,7 @@ function extension(){
     })
     d.push({
         title: btnmn2,
-        url: $(["管理","历史","收藏","搜索","展示","直播","Alist","云盘"],2,"自定义第2个按钮功能").select(() => {
+        url: $(menubtns,2,"自定义第2个按钮功能").select(() => {
             setItem('buttonmenu2',input);
             refreshPage(false);
             return 'toast://第2按钮已设置为'+input;
@@ -2310,7 +2310,7 @@ function extension(){
     })
     d.push({
         title: btnmn3,
-        url: $(["管理","历史","收藏","搜索","展示","直播","Alist","云盘"],2,"自定义第3个按钮功能").select(() => {
+        url: $(menubtns,2,"自定义第3个按钮功能").select(() => {
             setItem('buttonmenu3',input);
             refreshPage(false);
             return 'toast://第3按钮已设置为'+input;
@@ -2330,7 +2330,7 @@ function extension(){
     })
     d.push({
         title: btnmn4,
-        url: $(["管理","历史","收藏","搜索","展示","直播","Alist","云盘"],2,"自定义第4个按钮功能").select(() => {
+        url: $(menubtns,2,"自定义第4个按钮功能").select(() => {
             setItem('buttonmenu4',input);
             refreshPage(false);
             return 'toast://第4按钮已设置为'+input;
@@ -2350,7 +2350,7 @@ function extension(){
     })
     d.push({
         title: btnmn5,
-        url: $(["管理","历史","收藏","搜索","展示","直播","Alist","云盘"],2,"自定义第5个按钮功能").select(() => {
+        url: $(menubtns,2,"自定义第5个按钮功能").select(() => {
             setItem('buttonmenu5',input);
             refreshPage(false);
             return 'toast://第5按钮已设置为'+input;
