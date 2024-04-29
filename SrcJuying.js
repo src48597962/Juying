@@ -596,6 +596,15 @@ function yiji() {
                                 extension();
                             })
                         })
+                    },{
+                        title: "💡切换按钮",
+                        js: $.toString((menubtns) => {
+                            return $(menubtns,2,"自定义第1个按钮功能").select(() => {
+                                setItem('buttonmenu1',input);
+                                refreshPage(false);
+                                return 'toast://第1按钮已设置为'+input;
+                            })
+                        },menubtns)
                     }]
                 }
             },
@@ -605,7 +614,17 @@ function yiji() {
                 pic_url: buttonmenu[btnmn2].img,
                 col_type: 'icon_5',
                 extra: {
-                    id: 'buttonmenu2'
+                    id: 'buttonmenu2',
+                    longClick: [{
+                        title: "💡切换按钮",
+                        js: $.toString((menubtns) => {
+                            return $(menubtns,2,"自定义第2个按钮功能").select(() => {
+                                setItem('buttonmenu2',input);
+                                refreshPage(false);
+                                return 'toast://第2按钮已设置为'+input;
+                            })
+                        },menubtns)
+                    }]
                 }
             },
             {
@@ -614,7 +633,17 @@ function yiji() {
                 pic_url: buttonmenu[btnmn3].img,
                 col_type: 'icon_5',
                 extra: {
-                    id: 'buttonmenu2'
+                    id: 'buttonmenu3',
+                    longClick: [{
+                        title: "💡切换按钮",
+                        js: $.toString((menubtns) => {
+                            return $(menubtns,2,"自定义第3个按钮功能").select(() => {
+                                setItem('buttonmenu3',input);
+                                refreshPage(false);
+                                return 'toast://第3按钮已设置为'+input;
+                            })
+                        },menubtns)
+                    }]
                 }
             },
             {
@@ -623,7 +652,17 @@ function yiji() {
                 pic_url: buttonmenu[btnmn4].img,
                 col_type: 'icon_5',
                 extra: {
-                    id: 'buttonmenu2'
+                    id: 'buttonmenu4',
+                    longClick: [{
+                        title: "💡切换按钮",
+                        js: $.toString((menubtns) => {
+                            return $(menubtns,2,"自定义第4个按钮功能").select(() => {
+                                setItem('buttonmenu4',input);
+                                refreshPage(false);
+                                return 'toast://第4按钮已设置为'+input;
+                            })
+                        },menubtns)
+                    }]
                 }
             },
             {
@@ -632,38 +671,24 @@ function yiji() {
                 pic_url: buttonmenu[btnmn5].img,
                 col_type: 'icon_5',
                 extra: {
-                    id: 'buttonmenu2'
+                    id: 'buttonmenu5',
+                    longClick: [{
+                        title: "💡切换按钮",
+                        js: $.toString((menubtns) => {
+                            return $(menubtns,2,"自定义第5个按钮功能").select(() => {
+                                setItem('buttonmenu5',input);
+                                refreshPage(false);
+                                return 'toast://第5按钮已设置为'+input;
+                            })
+                        },menubtns)
+                    }]
                 }
             },
             {
                 col_type: 'line'
             }
         ]
-        yijimenu.forEach((item,i)=>{
-            if(item.title && item.title=="收藏" && i>0){
-                let extra = item.extra || {};
-                extra.longClick = [{
-                    title: "历史",
-                    js: $.toString((id) => {
-                        setItem(id, "历史");
-                        refreshPage(true);
-                        return "hiker://empty";
-                    },extra.id)
-                }]
-            }
-            if(item.title && item.title=="历史" && i>0){
-                let extra = item.extra || {};
-                extra.longClick = [{
-                    title: "收藏",
-                    js: $.toString((id) => {
-                        setItem(id, "收藏");
-                        refreshPage(true);
-                        return "hiker://empty";
-                    },extra.id)
-                }]
-            }
-            d.push(item);
-        })
+        
         for (let i = 0; i < 10; i++) {
             d.push({
                 col_type: "blank_block"
