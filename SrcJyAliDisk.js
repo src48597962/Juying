@@ -664,10 +664,10 @@ function aliMyDisk(folder_id, isSearch, drive_id, copydate) {
                         d.push({
                             title: item.name,
                             img: "hiker://files/cache/src/文件夹.svg",
-                            url: $("hiker://empty").rule((folder_id, isSearch, drive_id) => {
+                            url: $("hiker://empty").rule((folder_id, isSearch, drive_id, copydate) => {
                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js');
-                                aliMyDisk(folder_id, isSearch, drive_id);
-                            }, item.file_id, isSearch, drive_id),
+                                aliMyDisk(folder_id, isSearch, drive_id, copydate);
+                            }, item.file_id, isSearch, drive_id, copydate),
                             col_type: style,
                             extra: {
                                 pageTitle: item.name,
