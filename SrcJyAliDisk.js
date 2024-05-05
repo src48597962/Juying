@@ -650,6 +650,7 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                                     title: "❌删除",
                                     js: $.toString((fdel,obj) => {
                                         fdel(obj);
+                                        refreshPage(false);
                                         return 'toast://已执行删除';
                                     },fdel,{authorization:authorization,file_id:item.file_id,drive_id:drive_id})
                                 }]
@@ -717,6 +718,7 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                                         title: "❌删除",
                                         js: $.toString((fdel,obj) => {
                                             fdel(obj);
+                                            refreshPage(false);
                                             return 'toast://已执行删除';
                                         },fdel,{authorization:authorization,file_id:item.file_id,drive_id:drive_id})
                                     }]
