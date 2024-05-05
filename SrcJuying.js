@@ -393,7 +393,7 @@ function jiekouyiji() {
                             if(plays.length==1){
                                 let play = plays[0];
                                 if(play.indexOf('$')==-1&&play.indexOf('m3u8')>-1){
-                                    arr['play'] = play;
+                                    arr['play'] = play.trim();
                                 }
                             }
                             xmllist.push(arr)
