@@ -273,7 +273,7 @@ function aliShare(share_id, folder_id, share_pwd) {
                                 js: $.toString((fcopy,obj) => {
                                     fcopy(obj);
                                     return 'toast://已转存';
-                                },fcopy,{sharetoken:sharetoken,share_id:share_id,authorization:authorization,file_id:item.file_id,drive_id:drive_id})
+                                },fcopy,{sharetoken:sharetoken,share_id:share_id,authorization:authorization,file_id:item.file_id,drive_id:'519092123'})
                             }]
                         }
                     }
