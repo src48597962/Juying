@@ -645,7 +645,14 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                             }, item.file_id, isSearch, drive_id),
                             col_type: style,
                             extra: {
-                                pageTitle: item.name
+                                pageTitle: item.name,
+                                longClick: [{
+                                    title: "❌删除",
+                                    js: $.toString((fdel,obj) => {
+                                        fdel(obj);
+                                        return 'toast://已执行删除';
+                                    },fdel,{authorization:authorization,file_id:item.file_id,drive_id:drive_id})
+                                }]
                             }
                         })
                     })
@@ -705,7 +712,14 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                                 extra: {
                                     id: item.file_id,
                                     cls: "playlist " + item.category,
-                                    inheritTitle: false
+                                    inheritTitle: false,
+                                    longClick: [{
+                                        title: "❌删除",
+                                        js: $.toString((fdel,obj) => {
+                                            fdel(obj);
+                                            return 'toast://已执行删除';
+                                        },fdel,{authorization:authorization,file_id:item.file_id,drive_id:drive_id})
+                                    }]
                                 }
                             })
                         }
