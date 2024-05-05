@@ -162,7 +162,7 @@ function fcopy(obj) {
                         "file_id": obj.file_id,
                         "share_id": obj.share_id,
                         "auto_rename": true,
-                        "to_parent_file_id": "root",
+                        "to_parent_file_id": obj.folder_id || "root",
                         "to_drive_id": obj.drive_id
                     },
                     "headers": { "Content-Type": "application/json" }, "id": "0", "method": "POST", "url": "/file/copy"
