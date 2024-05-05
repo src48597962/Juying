@@ -255,6 +255,10 @@ function aliShare(share_id, folder_id, share_pwd) {
                                 js: $.toString((obj) => {
                                     storage0.putMyVar('copydate', obj);
                                     return $("hiker://empty").rule(() => {
+                                        addListener("onClose", $.toString(() => {
+                                            clearMyVar('copydate');
+                                        }));
+                                        
                                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js');
                                         aliMyDisk('', 0, '');
                                     })
@@ -284,6 +288,10 @@ function aliShare(share_id, folder_id, share_pwd) {
                                 js: $.toString((obj) => {
                                     storage0.putMyVar('copydate', obj);
                                     return $("hiker://empty").rule(() => {
+                                        addListener("onClose", $.toString(() => {
+                                            clearMyVar('copydate');
+                                        }));
+                                        
                                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js');
                                         aliMyDisk('', 0, '');
                                     })
