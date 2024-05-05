@@ -270,10 +270,12 @@ function aliShare(share_id, folder_id, share_pwd) {
                             id: item.file_id,
                             longClick: [{
                                 title: "💾转存",
-                                js: $.toString((fcopy,obj) => {
-                                    fcopy(obj);
-                                    return 'toast://已转存';
-                                },fcopy,{sharetoken:sharetoken,share_id:share_id,authorization:authorization,file_id:item.file_id,drive_id:'519092123'})
+                                js: $.toString((obj) => {
+                                    return $("hiker://empty").rule((obj) => {
+                                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js');
+                                        aliMyDisk('', isSearch, '', obj);
+                                    }, obj)
+                                },{sharetoken:sharetoken,share_id:share_id,authorization:authorization,file_id:item.file_id})
                             }]
                         }
                     }
@@ -507,10 +509,11 @@ function myDiskMenu(islogin) {
     }
 }
 
-function aliMyDisk(folder_id, isSearch, drive_id) {
+function aliMyDisk(folder_id, isSearch, drive_id, copydate) {
     folder_id = folder_id || "root";
     isSearch = isSearch || 0;
     drive_id = drive_id || alidrive_id;
+
     let d = [];
     if (userinfo && userinfo.user_id) {
         if (folder_id == "root") {
@@ -642,6 +645,19 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                     let dirlist = myfilelist.filter((item) => {
                         return item.type == "folder" && !folderFilter.test(item.name);
                     })
+                    if(copydate){
+                        copydate.drive_id = drive_id;
+                        d.push({
+                            title: '保存至此目录',
+                            col_type: 'text_center_1',
+                            url: $().lazyRule((fcopy,copydate) => {
+                                if(fcopy(copydate)){
+                                    return 'toast://转存成功';
+                                }
+                                return 'toast://转存失败';
+                            },fcopy,copydate)
+                        })
+                    }
                     dirlist.forEach((item) => {
                         d.push({
                             title: item.name,
