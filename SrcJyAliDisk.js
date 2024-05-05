@@ -61,6 +61,7 @@ function aliShare(share_id, folder_id, share_pwd) {
 
     let d = [];
     let filterFiles = [];
+    
     d.push(
         {
             title: "换源",
@@ -268,7 +269,7 @@ function aliShare(share_id, folder_id, share_pwd) {
                 if (getItem('aliyun_order', '聚影排序') == "聚影排序") {
                     filelist.sort(SortList);
                 }
-                let sharetoken = getShareToken(share_id, share_pwd).share_token;
+                
                 filelist.forEach((item) => {
                     let filesize = item.size / 1024 / 1024;
                     let it = {
