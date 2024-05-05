@@ -188,7 +188,7 @@ function fdel(obj) {
             'Referer': 'https://www.aliyundrive.com/',
             'authorization': obj.authorization,
             'x-canary': 'client=web,app=share,version=v2.3.1',
-            'x-share-token': obj.sharetoken
+            //'x-share-token': obj.sharetoken
         },
         body: {
             "requests": [{
