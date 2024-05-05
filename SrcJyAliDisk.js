@@ -667,11 +667,15 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                             url: $().lazyRule((fcopy,copydate) => {
                                 if(fcopy(copydate)){
                                     clearMyVar('copydate');
+                                    deleteItem('yundisksharecopy');
                                     refreshPage(false);
                                     return 'toast://转存成功';
                                 }
                                 return 'toast://转存失败';
-                            },fcopy,copydate)
+                            },fcopy,copydate),
+                            extra: {
+                                id: 'yundisksharecopy'
+                            }
                         })
                     }
                     dirlist.forEach((item) => {
