@@ -248,7 +248,17 @@ function aliShare(share_id, folder_id, share_pwd) {
                             pageTitle: item.name,
                             name: my_params.name || "",
                             back: 1,
-                            dirid: share_id + '_' + folder_id + '_' + share_pwd
+                            dirid: share_id + '_' + folder_id + '_' + share_pwd,
+                            longClick: [{
+                                title: "💾转存",
+                                js: $.toString((obj) => {
+                                    storage0.putMyVar('copydate', obj);
+                                    return $("hiker://empty").rule(() => {
+                                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js');
+                                        aliMyDisk('', 0, '');
+                                    })
+                                },{sharetoken:sharetoken,share_id:share_id,authorization:authorization,file_id:item.file_id})
+                            }]
                         }
                     })
                 })
@@ -271,10 +281,11 @@ function aliShare(share_id, folder_id, share_pwd) {
                             longClick: [{
                                 title: "💾转存",
                                 js: $.toString((obj) => {
-                                    return $("hiker://empty").rule((obj) => {
+                                    storage0.putMyVar('copydate', obj);
+                                    return $("hiker://empty").rule(() => {
                                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js');
-                                        aliMyDisk('', 0, '', obj);
-                                    }, obj)
+                                        aliMyDisk('', 0, '');
+                                    })
                                 },{sharetoken:sharetoken,share_id:share_id,authorization:authorization,file_id:item.file_id})
                             }]
                         }
@@ -509,7 +520,7 @@ function myDiskMenu(islogin) {
     }
 }
 
-function aliMyDisk(folder_id, isSearch, drive_id, copydate) {
+function aliMyDisk(folder_id, isSearch, drive_id) {
     folder_id = folder_id || "root";
     isSearch = isSearch || 0;
     drive_id = drive_id || alidrive_id;
@@ -645,14 +656,16 @@ function aliMyDisk(folder_id, isSearch, drive_id, copydate) {
                     let dirlist = myfilelist.filter((item) => {
                         return item.type == "folder" && !folderFilter.test(item.name);
                     })
+                    let copydate = storage0.getMyVar('copydate');
                     if(copydate){
+                        copydate.folder_id = folder_id;
                         copydate.drive_id = drive_id;
                         d.push({
                             title: '保存至此目录',
                             col_type: 'text_center_1',
                             url: $().lazyRule((fcopy,copydate) => {
                                 if(fcopy(copydate)){
-                                    copydate = undefined;
+                                    clearMyVar('copydate');
                                     refreshPage(false);
                                     return 'toast://转存成功';
                                 }
