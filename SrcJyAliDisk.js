@@ -267,7 +267,14 @@ function aliShare(share_id, folder_id, share_pwd) {
                         desc: filesize < 1024 ? filesize.toFixed(2) + 'MB' : (filesize / 1024).toFixed(2) + 'GB',
                         col_type: style,
                         extra: {
-                            id: item.file_id
+                            id: item.file_id,
+                            longClick: [{
+                                title: "💾转存",
+                                js: $.toString((fcopy,obj) => {
+                                    fcopy(obj);
+                                    return 'toast://已转存';
+                                },fcopy,{sharetoken:sharetoken,share_id:share_id,authorization:authorization,file_id:item.file_id,drive_id:drive_id})
+                            }]
                         }
                     }
                     if (item.category == "video") {
