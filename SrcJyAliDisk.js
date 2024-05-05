@@ -652,6 +652,8 @@ function aliMyDisk(folder_id, isSearch, drive_id, copydate) {
                             col_type: 'text_center_1',
                             url: $().lazyRule((fcopy,copydate) => {
                                 if(fcopy(copydate)){
+                                    copydate = undefined;
+                                    refreshPage(false);
                                     return 'toast://转存成功';
                                 }
                                 return 'toast://转存失败';
