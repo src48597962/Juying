@@ -62,136 +62,6 @@ function aliShare(share_id, folder_id, share_pwd) {
     let d = [];
     let filterFiles = [];
     
-    d.push(
-        {
-            title: "换源",
-            url: $().lazyRule((name, isback) => {
-                if (isback > 0) {
-                    putMyVar('聚影云盘自动返回', '1');
-                    back(false);
-                    return 'hiker://empty';
-                } else if (name) {
-                    return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
-                        let d = [];
-                        d.push({
-                            title: name + "-云盘聚合搜索",
-                            url: "hiker://empty",
-                            col_type: "text_center_1",
-                            extra: {
-                                id: "listloading",
-                                lineVisible: false
-                            }
-                        })
-                        setResult(d);
-                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js');
-                        aliDiskSearch(name);
-                    }, name)
-                } else {
-                    return 'hiker://empty';
-                }
-            }, my_params.name || "", my_params.back || 0),
-            col_type: 'icon_5',
-            img: 'https://hikerfans.com/tubiao/grey/175.png',
-            extra: {
-                longClick: [{
-                    title: "上级目录",
-                    js: $.toString((id) => {
-                        if (!id) {
-                            return "toast://已经是根目录了";
-                        } else {
-                            let ids = id.split;
-                            return $("").rule((ids) => {
-                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js');
-                                aliShare(ids[0], ids[1], ids[2]);
-                            }, ids);
-                        }
-                    }, my_params.dirid || "")
-                }]
-            }
-        },
-        {
-            title: "样式",
-            url: $(['text_1', 'movie_2', 'card_pic_3', 'avatar']).select(() => {
-                setItem('aliyun_style', input);
-                refreshPage();
-                return 'toast://已切换';
-            }),
-            col_type: 'icon_5',
-            img: 'https://hikerfans.com/tubiao/grey/168.png'
-        },
-        {
-            title: "排序",
-            url: $(ordersKeys, 2).select(() => {
-                setItem('aliyun_order', input);
-                refreshPage();
-                return 'toast://切换成功';
-            }),
-            col_type: 'icon_5',
-            img: 'https://hikerfans.com/tubiao/grey/76.png'
-        },
-        {
-            title: getItem('aliyun_playMode', '智能')=="原画"?"原画"+getItem('aliyun_openInt', '1'):getItem('aliyun_playMode', '智能'),
-            url: $(['智能', '转码', '原画', '原画接口']).select(() => {
-                if(input=='原画接口'){
-                    return $(['接口1(alist)', '接口2(webdav)']).select(() => {
-                        clearMyVar('aliopentoken');
-                        if(input=='接口1(alist)'){
-                            clearItem('aliyun_openInt');
-                        }else{
-                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliPublic.js');
-                            if(aliOpenTokenObj.refresh_token_2){
-                                setItem('aliyun_openInt', '2');
-                            }else{
-                                let loyopentoken2;
-                                try{
-                                    let loyopen = eval('('+fetch("hiker://files/rules/LoyDgIk/aliOpenToken.json")+')') || {};
-                                    loyopentoken2 = loyopen.isV2?loyopen.RefreshTokenOpen:"";
-                                    aliOpenTokenObj.refresh_token_2 = loyopentoken2;
-                                    aliconfig.opentoken = aliOpenTokenObj;
-                                    writeFile(alicfgfile, JSON.stringify(aliconfig));
-                                }catch(e){
-                                    log(e.message);
-                                }
-                                if(loyopentoken2){
-                                    setItem('aliyun_openInt', '2');
-                                }else{
-                                    return $('','输入阿里webdav口令，留空打开网页获取').input((alicfgfile,aliconfig) => {
-                                        if(input==''){
-                                            return 'web://https://messense-aliyundrive-webdav-backendrefresh-token-ucs0wn.streamlit.app';
-                                        }else{
-                                            let aliOpenTokenObj = aliconfig.opentoken || {};
-                                            aliOpenTokenObj.refresh_token_2 = input;
-                                            aliconfig.opentoken = aliOpenTokenObj;
-                                            writeFile(alicfgfile, JSON.stringify(aliconfig));
-                                            setItem('aliyun_openInt', '2');
-                                        }
-                                    },alicfgfile,aliconfig)
-                                    
-                                }
-                            }
-                        }
-                        refreshPage();
-                        return 'toast://已切换为'+input;
-                    })
-                }else{
-                    setItem('aliyun_playMode', input);
-                    refreshPage();
-                    return 'toast://已切换为'+input;
-                }
-            }),
-            col_type: 'icon_5',
-            img: 'https://hikerfans.com/tubiao/grey/100.png'
-        },
-        {
-            title: '转存',
-            url: `smartdrive://share/browse?shareId=${share_id}&sharePwd=${share_pwd}`,
-            col_type: 'icon_5',
-            img: 'https://hikerfans.com/tubiao/grey/206.png'
-        },
-        {
-            col_type: 'line_blank'
-        }
-    )
     try {
         if (!userinfo.refresh_token) {
             d = d.concat(myDiskMenu(0));
@@ -200,6 +70,152 @@ function aliShare(share_id, folder_id, share_pwd) {
             let get_sharetoken = getShareToken(share_id, share_pwd);
             let sharetoken = get_sharetoken.share_token;
             let getbyshare = {};
+
+            d.push({
+                title: "换源",
+                url: $().lazyRule((name, isback) => {
+                    if (isback > 0) {
+                        putMyVar('聚影云盘自动返回', '1');
+                        back(false);
+                        return 'hiker://empty';
+                    } else if (name) {
+                        return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
+                            let d = [];
+                            d.push({
+                                title: name + "-云盘聚合搜索",
+                                url: "hiker://empty",
+                                col_type: "text_center_1",
+                                extra: {
+                                    id: "listloading",
+                                    lineVisible: false
+                                }
+                            })
+                            setResult(d);
+                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js');
+                            aliDiskSearch(name);
+                        }, name)
+                    } else {
+                        return 'hiker://empty';
+                    }
+                }, my_params.name || "", my_params.back || 0),
+                col_type: 'icon_5',
+                img: 'https://hikerfans.com/tubiao/grey/175.png',
+                extra: {
+                    longClick: [{
+                        title: "上级目录",
+                        js: $.toString((id) => {
+                            if (!id) {
+                                return "toast://已经是根目录了";
+                            } else {
+                                let ids = id.split;
+                                return $("").rule((ids) => {
+                                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js');
+                                    aliShare(ids[0], ids[1], ids[2]);
+                                }, ids);
+                            }
+                        }, my_params.dirid || "")
+                    }]
+                }
+            },
+            {
+                title: "样式",
+                url: $(['text_1', 'movie_2', 'card_pic_3', 'avatar']).select(() => {
+                    setItem('aliyun_style', input);
+                    refreshPage();
+                    return 'toast://已切换';
+                }),
+                col_type: 'icon_5',
+                img: 'https://hikerfans.com/tubiao/grey/168.png'
+            },
+            {
+                title: "排序",
+                url: $(ordersKeys, 2).select(() => {
+                    setItem('aliyun_order', input);
+                    refreshPage();
+                    return 'toast://切换成功';
+                }),
+                col_type: 'icon_5',
+                img: 'https://hikerfans.com/tubiao/grey/76.png'
+            },
+            {
+                title: getItem('aliyun_playMode', '智能')=="原画"?"原画"+getItem('aliyun_openInt', '1'):getItem('aliyun_playMode', '智能'),
+                url: $(['智能', '转码', '原画', '原画接口']).select(() => {
+                    if(input=='原画接口'){
+                        return $(['接口1(alist)', '接口2(webdav)']).select(() => {
+                            clearMyVar('aliopentoken');
+                            if(input=='接口1(alist)'){
+                                clearItem('aliyun_openInt');
+                            }else{
+                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliPublic.js');
+                                if(aliOpenTokenObj.refresh_token_2){
+                                    setItem('aliyun_openInt', '2');
+                                }else{
+                                    let loyopentoken2;
+                                    try{
+                                        let loyopen = eval('('+fetch("hiker://files/rules/LoyDgIk/aliOpenToken.json")+')') || {};
+                                        loyopentoken2 = loyopen.isV2?loyopen.RefreshTokenOpen:"";
+                                        aliOpenTokenObj.refresh_token_2 = loyopentoken2;
+                                        aliconfig.opentoken = aliOpenTokenObj;
+                                        writeFile(alicfgfile, JSON.stringify(aliconfig));
+                                    }catch(e){
+                                        log(e.message);
+                                    }
+                                    if(loyopentoken2){
+                                        setItem('aliyun_openInt', '2');
+                                    }else{
+                                        return $('','输入阿里webdav口令，留空打开网页获取').input((alicfgfile,aliconfig) => {
+                                            if(input==''){
+                                                return 'web://https://messense-aliyundrive-webdav-backendrefresh-token-ucs0wn.streamlit.app';
+                                            }else{
+                                                let aliOpenTokenObj = aliconfig.opentoken || {};
+                                                aliOpenTokenObj.refresh_token_2 = input;
+                                                aliconfig.opentoken = aliOpenTokenObj;
+                                                writeFile(alicfgfile, JSON.stringify(aliconfig));
+                                                setItem('aliyun_openInt', '2');
+                                            }
+                                        },alicfgfile,aliconfig)
+                                        
+                                    }
+                                }
+                            }
+                            refreshPage();
+                            return 'toast://已切换为'+input;
+                        })
+                    }else{
+                        setItem('aliyun_playMode', input);
+                        refreshPage();
+                        return 'toast://已切换为'+input;
+                    }
+                }),
+                col_type: 'icon_5',
+                img: 'https://hikerfans.com/tubiao/grey/100.png'
+            },
+            {
+                title: '转存',
+                url: `smartdrive://share/browse?shareId=${share_id}&sharePwd=${share_pwd}`,
+                col_type: 'icon_5',
+                img: 'https://hikerfans.com/tubiao/grey/206.png',
+                extra: {
+                    longClick: [{
+                        title: "💾转存",
+                        js: $.toString((obj) => {
+                            storage0.putMyVar('copydate', obj);
+                            return $("hiker://empty").rule(() => {
+                                addListener("onClose", $.toString(() => {
+                                    clearMyVar('copydate');
+                                }));
+                                
+                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js');
+                                aliMyDisk('', 0, '');
+                            })
+                        },{sharetoken:sharetoken,share_id:share_id,authorization:authorization,file_id:folder_id})
+                    }]
+                }
+            },
+            {
+                col_type: 'line_blank'
+            })
+
             if (errorCode[get_sharetoken.code]) {
                 d.push({
                     title: errorCode[get_sharetoken.code],
