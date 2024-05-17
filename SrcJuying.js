@@ -509,30 +509,6 @@ function yiji() {
             programversion = $.require("config").version || 0;
         }catch(e){}
         if(programversion<11){
-            let delquirelist = ['https://cdn.staticaly.com/gh/', 'https://ghproxy.com/https://raw.githubusercontent.com/'];
-            let requirelist = [{ url: 'https://ghproxy.net/https://raw.githubusercontent.com/', sort: 0 }, { url: 'https://gh.con.sh/https://raw.githubusercontent.com/', sort: 0 }, { url: 'https://mirror.ghproxy.com/https://raw.githubusercontent.com/', sort: 0 }, { url: 'https://ghps.cc/https://raw.githubusercontent.com/', sort: 0 }, { url: 'https://github.jevons.vip/https://raw.githubusercontent.com/', sort: 0 }];
-            let requirefile = "hiker://files/rules/Src/require.json";
-            if (fetch(requirefile)) {
-                try {
-                    let requirelist_tmp;
-                    eval("requirelist_tmp = " + fetch(requirefile) + ";");
-                    requirelist.forEach(it=>{
-                        let index = requirelist_tmp.indexOf(requirelist_tmp.filter(d=>d.url == it.url)[0]);
-                        if(index==-1){
-                            requirelist_tmp.push(it);
-                        }
-                    })
-                    for (let i = 0; i < requirelist_tmp.length; i++) {
-                        if(delquirelist.includes(requirelist_tmp[i].url)){
-                            requirelist_tmp.splice(i,1);
-                            i = i - 1;
-                        }
-                    }
-                    writeFile(requirefile, JSON.stringify(requirelist_tmp));
-                } catch (e) {
-                    log("错误信息>" + e.toString() + " 错误行>" + e.lineNumber);
-                }
-            }
             confirm({
                 title: "温馨提示",
                 content: "发现小程序新版本",
@@ -1213,6 +1189,32 @@ function Version() {
         try {
             eval(request(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcTmplVersion.js'))
             if (parseFloat(newVersion.SrcJuying) > parseFloat(nowVersion)) {
+                //随版本更新依赖代理地址
+                let delquirelist = ['https://cdn.staticaly.com/gh/', 'https://ghproxy.com/https://raw.githubusercontent.com/','https://ghps.cc/https://raw.githubusercontent.com/'];
+                let requirelist = ['https://ghproxy.net/https://raw.githubusercontent.com/','https://gh.con.sh/https://raw.githubusercontent.com/','https://mirror.ghproxy.com/https://raw.githubusercontent.com/','https://github.jevons.vip/https://raw.githubusercontent.com/'];
+                let requirefile = "hiker://files/rules/Src/require.json";
+                if (fetch(requirefile)) {
+                    try {
+                        let requirelist_tmp;
+                        eval("requirelist_tmp = " + fetch(requirefile) + ";");
+                        requirelist.forEach(it=>{
+                            let index = requirelist_tmp.indexOf(requirelist_tmp.filter(d=>d.url == it)[0]);
+                            if(index==-1){
+                                requirelist_tmp.push({'url': it, 'sort': 0});
+                            }
+                        })
+                        for (let i = 0; i < requirelist_tmp.length; i++) {
+                            if(delquirelist.includes(requirelist_tmp[i].url)){
+                                requirelist_tmp.splice(i,1);
+                                i = i - 1;
+                            }
+                        }
+                        writeFile(requirefile, JSON.stringify(requirelist_tmp));
+                    } catch (e) {
+                        log("错误信息>" + e.toString() + " 错误行>" + e.lineNumber);
+                    }
+                }
+
                 confirm({
                     title:'发现新版本，是否更新？', 
                     content:nowVersion+'=>'+newVersion.SrcJuying+'\n'+newVersion.SrcJuyingdesc[newVersion.SrcJuying], 
