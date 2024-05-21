@@ -208,6 +208,7 @@ function yiji() {
 
 //获取数据
 function getDataList(type) {
+    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
     if(type=='yiji'){
         return JYyiji();
     }
