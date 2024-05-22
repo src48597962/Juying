@@ -16,7 +16,7 @@ function SRCSet() {
     let guanliType = getMyVar('guanli', 'jk');
     var d = [];
     d.push({
-        title: getMyVar('guanli', 'jk')=="jk"?getTitle('接口管理', '#f13b66a'):'接口管理',
+        title: guanliType=="jk"?colorTitle('接口管理', '#f13b66a'):'接口管理',
         url: `#noLoading#@lazyRule=.js:putMyVar('guanli','jk');refreshPage(false);'toast://已切换到接口管理';`,
         img: "https://hikerfans.com/tubiao/movie/98.svg",
         col_type: "icon_small_3",
@@ -35,7 +35,7 @@ function SRCSet() {
         }
     });
     d.push({
-        title: getMyVar('guanli', 'jk')=="jk"?'解析管理':getTitle('解析管理', '#f13b66a'),
+        title: gguanliType=="jk"?'解析管理':colorTitle('解析管理', '#f13b66a'),
         url: `#noLoading#@lazyRule=.js:putMyVar('guanli','jx');refreshPage(false);'toast://已切换到解析管理';`,
         img: "https://hikerfans.com/tubiao/movie/105.svg",
         col_type: "icon_small_3"
@@ -56,7 +56,7 @@ function SRCSet() {
 
     d.push({
         title: '增加',
-        url: getMyVar('guanli', 'jk')=="jk"?$('#noLoading#').lazyRule(() => {
+        url: guanliType=="jk"?$('#noLoading#').lazyRule(() => {
             return 'toast://不支持手工增加接口'
         }):$('hiker://empty#noRecordHistory##noHistory#').rule(() => {
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
@@ -85,7 +85,7 @@ function SRCSet() {
                 refreshPage(false);
                 return "toast://"+sm;
             }else if(input=="清空所有"){
-                if(getMyVar('guanli', 'jk')=="jk"){
+                if(guanliType=="jk"){
                     var sm = "接口";
                 }else{
                     var sm = "私有解析";
@@ -95,7 +95,7 @@ function SRCSet() {
                     writeFile(filepath, JSON.stringify(datalist));
                     refreshPage(false);
                     return 'toast://已全部清空';
-                }, getFile(getMyVar('guanli', 'jk')))
+                }, getFile(guanliType))
             }
         }),
         img: "https://hikerfans.com/tubiao/more/290.png",
@@ -116,20 +116,27 @@ function SRCSet() {
         img: "https://hikerfans.com/tubiao/more/43.png",
         col_type: "icon_small_4"
     });
-    let pastes = getPastes(getMyVar('guanli', 'jk'),);
+    let pastes = getPastes();
     pastes.push('云口令文件');
 
-    let datalist = getListData('');
-    let yxdatalist = datalist.filter(it=>{
+    let datalist = getDatas(guanliType);
+    let jkdatalist;
+    if(getMyVar("SrcJu_seacrhJiekou")){
+        jkdatalist = datalist.filter(it=>{
+            return it.name.indexOf(getMyVar("SrcJu_seacrhJiekou"))>-1;
+        })
+    }else{
+        jkdatalist = getListData("all", getMyVar("SrcJu_jiekouType","全部"));
+    }
+    let yxdatalist = jkdatalist.filter(it=>{
         return !it.stop;
     });
     d.push({
         title: '分享',
-        url: yxdatalist.length==0?'toast://有效数据为空，无法分享':$(pastes,2).select(()=>{
-            let lx = getMyVar('guanli', 'jk');
+        url: yxdatalist.length==0?'toast://有效数据为空，无法分享':$(pastes,2).select((lx)=>{
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
             return JYshare(lx, input);
-        }),
+        }, guanliType),
         img: "https://hikerfans.com/tubiao/more/3.png",
         col_type: "icon_small_4"
     });
