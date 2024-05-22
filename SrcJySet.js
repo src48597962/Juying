@@ -35,7 +35,7 @@ function SRCSet() {
         }
     });
     d.push({
-        title: gguanliType=="jk"?'解析管理':colorTitle('解析管理', '#f13b66a'),
+        title: guanliType=="jk"?'解析管理':colorTitle('解析管理', '#f13b66a'),
         url: `#noLoading#@lazyRule=.js:putMyVar('guanli','jx');refreshPage(false);'toast://已切换到解析管理';`,
         img: "https://hikerfans.com/tubiao/movie/105.svg",
         col_type: "icon_small_3"
