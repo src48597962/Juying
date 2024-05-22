@@ -12,9 +12,8 @@ function SRCSet() {
 
     if(getMyVar('guanli','')==""){putMyVar('guanli','jk');}
     clearMyVar('duoselect');
-    function getTitle(title, Color) {
-        return '<font color="' + Color + '">' + title + '</font>';
-    }
+
+    let guanliType = getMyVar('guanli', 'jk');
     var d = [];
     d.push({
         title: getMyVar('guanli', 'jk')=="jk"?getTitle('接口管理', '#f13b66a'):'接口管理',
@@ -117,10 +116,10 @@ function SRCSet() {
         img: "https://hikerfans.com/tubiao/more/43.png",
         col_type: "icon_small_4"
     });
-    let pastes = getPastes();
+    let pastes = getPastes(getMyVar('guanli', 'jk'),);
     pastes.push('云口令文件');
 
-    let datalist = getListData();
+    let datalist = getListData('');
     let yxdatalist = datalist.filter(it=>{
         return !it.stop;
     });
