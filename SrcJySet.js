@@ -701,7 +701,7 @@ function jiekousave(urls) {
         for (var i in urls) {
             let urlname = urls[i].name.replace(/(?:[\u2700-\u27bf]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff]|[\u0023-\u0039]\ufe0f?\u20e3|\u3299|\u3297|\u303d|\u3030|\u24c2|\ud83c[\udd70-\udd71]|\ud83c[\udd7e-\udd7f]|\ud83c\udd8e|\ud83c[\udd91-\udd9a]|\ud83c[\udde6-\uddff]|\ud83c[\ude01-\ude02]|\ud83c\ude1a|\ud83c\ude2f|\ud83c[\ude32-\ude3a]|\ud83c[\ude50-\ude51]|\u203c|\u2049|[\u25aa-\u25ab]|\u25b6|\u25c0|[\u25fb-\u25fe]|\u00a9|\u00ae|\u2122|\u2139|\ud83c\udc04|[\u2600-\u26FF]|\u2b05|\u2b06|\u2b07|\u2b1b|\u2b1c|\u2b50|\u2b55|\u231a|\u231b|\u2328|\u23cf|[\u23e9-\u23f3]|[\u23f8-\u23fa]|\ud83c\udccf|\u2934|\u2935|[\u2190-\u21ff])|\(XPF\)|\(萝卜\)|\(神马\)|\(切\)|\(聚\)|\(优\)|\(神马\)|\(XB\)|\(SP\)|\(XP\)|[\x00-\x1F\x7F]|┃.*/g,'');
             let urlurl = urls[i].url;
-            let urlua = urls[i].ua||"MOBILE_UA";
+            let urlua = urls[i].ua;
             let urltype = urls[i].type||getapitype(urlurl);
             let urlgroup = urls[i].group||"";
             let urlext = urls[i].ext||"";
@@ -711,8 +711,9 @@ function jiekousave(urls) {
             }
 
             if(!datalist.some(checkitem)&&urlname&&urltype){
-                let arr  = { "name": urlname, "url": urlurl, "ua": urlua, "type": urltype };
+                let arr  = { "name": urlname, "url": urlurl, "type": urltype };
                 if(urlgroup){arr['group'] = urlgroup}
+                if(urlua){arr['ua'] = urlua}
                 if(urlext){arr['ext'] = urlext}
                 if(urls.length == 1){
                     datalist.unshift(arr);
@@ -2139,14 +2140,20 @@ function Resourceimport(input,importtype){
                 if(/^file/.test(extfile)){
                     urlfile = extfile;
                 }else if(/^http/.test(extfile)){
-                    let content = fetch(extfile, {timeout:2000});
-                    if (content =='') {
-                        urlfile = '';
-                    }else{
-                        urlfile = 'hiker://files/cache/src/Jubox/libs/' + extfile.substr(lastOf + 1);
-                        writeFile(urlfile, content);
+                    try{
+                        log(extfile);
+                        let content = fetch(extfile, {timeout:2000});
+                        if (content =='') {
+                            urlfile = '';
+                        }else{
+                            urlfile = 'hiker://files/cache/src/Jubox/libs/' + extfile.substr(lastOf + 1);
+                            writeFile(urlfile, content);
+                        }
+                    }catch(e){
+                        log(obj.name + 'ext文件缓存失败>' + e.message);
                     }
                 }
+
 
                 if(/^csp_AppYs/.test(obj.api)){
                     urls.push({ "name": obj.name, "url": obj.ext, "type": getapitype(obj.ext), "group": "新导入"});
@@ -2180,8 +2187,7 @@ function Resourceimport(input,importtype){
                 param: {
                 }
             });
-            log(jiekou.length);
-            log(urls.length);
+
             try{
                 jknum = jiekousave(urls);
             }catch(e){
