@@ -38,8 +38,8 @@ function getDatas(lx) {
 }
 
 //获取接口列表数据
-function getListData(datas, group) {
-    let datalist = datas.filter(it=>{
+function getListData(lx, group) {
+    let datalist = getDatas(lx).filter(it=>{
         return !group || it.group==group;
     })
     if(getItem('ListSort','update') == 'update'){
