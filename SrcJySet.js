@@ -2,11 +2,10 @@
 function SRCSet() {
     addListener("onClose", $.toString(() => {
         clearMyVar('guanli');
-        clearMyVar('guanlicz');
+        clearMyVar('SrcJu_批量选择模式');
         clearMyVar('duoselect');
         clearMyVar('datalist');
         clearMyVar('groupmenu');
-        //refreshPage(false);
     }));
     setPageTitle("♥管理"+getMyVar('SrcJuying-Version', ''));
     if(getMyVar('guanli','')==""){putMyVar('guanli','jk');}
@@ -51,155 +50,14 @@ function SRCSet() {
         col_type: "icon_small_3"
     });
 
-    if(getMyVar('guanli', 'jk')=="jk"){
-        var filepath = "hiker://files/rules/Src/Jubox/jiekou.json";
-    }else if(getMyVar('guanli', 'jk')=="jx"){
-        var filepath = "hiker://files/rules/Src/Jubox/myjiexi.json";
-    }
-    var datafile = fetch(filepath);
-    if(datafile != ""){
-        try{
-            eval("var datalist=" + datafile+ ";");
-        }catch(e){
-            var datalist = [];
-        }
-    }else{
-        var datalist = [];
-    }
-    storage0.putMyVar('datalist',datalist);
     d.push({
         col_type: "line_blank"
     });
 
-    function guanlidata(data) {
-        try{
-            if(getMyVar('guanli', 'jk')=="jx"&&data.length > 0){
-                for(var i in data){
-                    data[i]['id'] = i;
-                    data[i]['sort'] = data[i]['sort']||0;
-                }
-                data.sort((a, b) => {
-                    if(a.sort!=b.sort){
-                        return a.sort - b.sort
-                    }else{
-                        return a.id - b.id;
-                    }
-                });
-            }
-            var czdatalist = data.map((datalist)=>{
-                if(getMyVar('guanli', 'jk')=="jk"){
-                    var dataurl = datalist.url;
-                    var dataname = datalist.name;
-                    var dataua = datalist.ua;
-                    var datatype = datalist.type;
-                    var datagroup = datalist.group;
-                    var datatitle = dataname + ' ('+datatype+')' + (datagroup&&datagroup!=datatype?' [' + datagroup + ']':"");
-                    var datadesc = dataurl;
-                    var dataarr = {name:dataname, url:dataurl, ua:dataua, type:datatype};
-                    if(datagroup){dataarr['group'] = datagroup}
-                    if(datalist.data){dataarr['data'] = datalist.data}
-                    var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
-                }else{
-                    var dataurl = datalist.parse;
-                    var dataname = datalist.name;
-                    var datastopfrom = datalist.stopfrom||[];
-                    var datapriorfrom = datalist.priorfrom||"";
-                    var datasort = datalist.sort||0;
-                    var datatitle = datasort+'-'+dataname+'-'+dataurl;
-                    var datadesc = "优先强制：" + datapriorfrom + "" + "\n排除片源：" + datastopfrom + "";
-                    var dataarr = {name:dataname, url:dataurl, stopfrom:datastopfrom+"", priorfrom:datapriorfrom+""};
-                    if(datalist.header){dataarr['header'] = datalist.header}
-                    if(datalist.web){dataarr['web'] = datalist.web}
-                    var filepath = "hiker://files/rules/Src/Jubox/myjiexi.json";
-                }
-                if(datalist.retain){dataarr['retain'] = 1}
-                
-                return {
-                    title: datatitle,
-                    desc: datadesc,
-                    url: getMyVar('guanlicz')=="1"?$('#noLoading#').lazyRule((name,url)=>{
-                            copy(name+'#'+url);
-                            return "hiker://empty";
-                        },dataname, dataurl):getMyVar('guanlicz')=="2"?$('hiker://empty#noRecordHistory##noHistory#').rule((data) => {
-                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
-                            if(getMyVar('guanli', 'jk')=="jk"){
-                                jiekou('update', data);
-                            }else{
-                                jiexi('update', data);
-                            }
-                        }, dataarr):getMyVar('guanlicz')=="3"?$("确定删除："+dataname).confirm((dataurl,filepath)=>{
-                            var datafile = fetch(filepath);
-                            eval("var datalist=" + datafile+ ";");
-                            if(getMyVar('guanli', 'jk')=="jk"){
-                                for(var i=0;i<datalist.length;i++){
-                                    if(datalist[i].url==dataurl){
-                                        datalist.splice(i,1);
-                                        break;
-                                    }
-                                }
-                                writeFile(filepath, JSON.stringify(datalist));
-
-                                let cfgfile = "hiker://files/rules/Src/Juying/config.json";
-                                let Juyingcfg=fetch(cfgfile);
-                                if(Juyingcfg != ""){
-                                    eval("var JYconfig=" + Juyingcfg+ ";");
-                                }else{
-                                    var JYconfig= {};
-                                }
-                                if(JYconfig.zsjiekou&&JYconfig.zsjiekou.api_url==dataurl){
-                                    delete JYconfig['zsjiekou'];
-                                    writeFile(cfgfile, JSON.stringify(JYconfig));
-                                }
-                            }else{
-                                for(var i=0;i<datalist.length;i++){
-                                    if(datalist[i].parse==dataurl){
-                                        datalist.splice(i,1);
-                                        break;
-                                    }
-                                }
-                                writeFile(filepath, JSON.stringify(datalist));
-                            }
-                            refreshPage(false);
-                            return "toast://已删除";
-                        }, dataurl,filepath):getMyVar('guanlicz')=="4"?$('#noLoading#').lazyRule((datatitle,dataurl)=>{
-                            let duoselect = storage0.getMyVar('duoselect')?storage0.getMyVar('duoselect'):[];
-                            if(duoselect.indexOf(dataurl)==-1){
-                                duoselect.push(dataurl);
-                                updateItem(dataurl,{title:'‘‘’’<span style="color:red">'+datatitle})
-                            }else{
-                                function removeByValue(arr, val) {
-                                    for(var i = 0; i < arr.length; i++) {
-                                        if(arr[i] == val) {
-                                        arr.splice(i, 1);
-                                        break;
-                                        }
-                                    }
-                                }
-                                removeByValue(duoselect,dataurl);
-                                updateItem(dataurl,{title:datatitle})
-                            }
-                            storage0.putMyVar('duoselect',duoselect);
-                            return "hiker://empty";
-                        }, datatitle,dataurl):"toast://功能异常",
-                    col_type: 'text_1',
-                    extra: {
-                        id: dataurl,
-                        cls: "guanlidatalist"
-                    }
-                }
-            })
-
-            return czdatalist;
-        } catch (e) {
-            log(e.message);
-            return [];
-        }
-    }
     d.push({
         title: '增加',
-        url: getMyVar('guanli', 'jk')=="jk"?$('hiker://empty#noRecordHistory##noHistory#').rule(() => {
-            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
-            jiekou('add')
+        url: getMyVar('guanli', 'jk')=="jk"?$('#noLoading#').lazyRule(() => {
+            return 'toast://不支持手工增加接口'
         }):$('hiker://empty#noRecordHistory##noHistory#').rule(() => {
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
             jiexi('add');
@@ -208,26 +66,25 @@ function SRCSet() {
         col_type: "icon_small_4"
     });
     d.push({
-        title: getMyVar('guanlicz')=="1"?'复制':getMyVar('guanlicz')=="2"?'变更':getMyVar('guanlicz')=="3"?'删除':getMyVar('guanlicz')=="4"?'多选':'操作',
-        url: $(["复制","变更","删除","清空","多选"],2,"选择操作功能项").select(()=>{
+        title: '操作',
+        url: $(["查看列表","批量选择","清空所有"],2,"选择操作功能项").select(()=>{
             clearMyVar('groupmenu');
-            if(input=="复制"){
-                putMyVar('guanlicz','1');
+            if(input=="批量多选"){
+                putMyVar('查看列表','looklist');
                 refreshPage(false);
-                return 'toast://已切换到复制模式';
-            }else if(input=="变更"){
-                putMyVar('guanlicz','2');
+                return 'toast://显示列表';
+            }else if(input=="批量选择"){
+                let sm;
+                if(getMyVar('SrcJu_批量选择模式')){
+                    clearMyVar('SrcJu_批量选择模式');
+                    sm = "退出批量选择模式";
+                }else{
+                    putMyVar('SrcJu_批量选择模式','1');
+                    sm = "进入批量选择模式";
+                }
                 refreshPage(false);
-                return 'toast://已切换到变更模式';
-            }else if(input=="删除"){
-                putMyVar('guanlicz','3');
-                refreshPage(false);
-                return 'toast://已切换到删除模式';
-            }else if(input=="多选"){
-                putMyVar('guanlicz','4');
-                refreshPage(false);
-                return 'toast://已切换到多选模式';
-            }else if(input=="清空"){
+                return "toast://"+sm;
+            }else if(input=="清空所有"){
                 if(getMyVar('guanli', 'jk')=="jk"){
                     var sm = "接口";
                 }else{
@@ -235,9 +92,9 @@ function SRCSet() {
                 }
                 return $("确定要删除本地所有的"+sm+"吗？").confirm(()=>{
                     if(getMyVar('guanli', 'jk')=="jk"){
-                        var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
+                        var filepath = "hiker://files/rules/Src/Jubox/jiekou.json";
                     }else if(getMyVar('guanli', 'jk')=="jx"){
-                        var filepath = "hiker://files/rules/Src/Juying/myjiexi.json";
+                        var filepath = "hiker://files/rules/Src/Jubox/myjiexi.json";
                     }
                     var datalist = [];
                     writeFile(filepath, JSON.stringify(datalist));
@@ -246,7 +103,7 @@ function SRCSet() {
                 })
             }
         }),
-        img: getMyVar('guanlicz')=="1"?"https://hikerfans.com/tubiao/more/292.png":getMyVar('guanlicz')=="2"?"https://hikerfans.com/tubiao/more/275.png":getMyVar('guanlicz')=="3"?"https://hikerfans.com/tubiao/more/216.png":getMyVar('guanlicz')=="4"?"https://hikerfans.com/tubiao/more/213.png":"https://hikerfans.com/tubiao/more/290.png",
+        img: "https://hikerfans.com/tubiao/more/290.png",
         col_type: "icon_small_4"
     });
     d.push({
@@ -280,349 +137,9 @@ function SRCSet() {
         col_type: "line"
     });
 
-    if(getMyVar('guanlicz','0')!="0"){
-        d.push({
-            title: "🔍",
-            url: $.toString((guanlidata,datalist) => {
-                    if(datalist.length>0){
-                        deleteItemByCls('guanlidatalist');
-                        var lists = datalist.filter(item => {
-                            if(item.url){
-                                return item.name.includes(input) || item.url.includes(input);
-                            }else{
-                                return item.name.includes(input) || item.parse.includes(input);
-                            }
-                        })
-                        let gldatalist = guanlidata(lists);
-                        addItemBefore('guanliloading', gldatalist);
-                    }
-                    return "hiker://empty";
-                },guanlidata,datalist),
-            desc: "搜你想要的...",
-            col_type: "input",
-            extra: {
-                titleVisible: true
-            }
-        });
-        if(getMyVar('guanlicz')=="4"){
-            d.push({
-                title: "全选",
-                url: $('#noLoading#').lazyRule(()=>{
-                        let datalist = storage0.getMyVar('datalist')?storage0.getMyVar('datalist'):[];
-                        let duoselect = [];
-                        for(let i=0;i<datalist.length;i++){
-                            if(getMyVar('guanli', 'jk')=="jk"){
-                                let dataname = datalist[i].name;
-                                let datatype = datalist[i].type;
-                                let datagroup = datalist[i].group;
-                                var dataurl = datalist[i].url;
-                                var datatitle = dataname + ' ('+datatype+')' + (datagroup&&datagroup!=datatype?' [' + datagroup + ']':"");
-                            }else{
-                                let dataname = datalist[i].name;
-                                let datasort = datalist[i].sort||0;
-                                var dataurl = datalist[i].parse;
-                                var datatitle = datasort+'-'+dataname+'-'+dataurl;
-                            }
-                            updateItem(dataurl,{title:'‘‘’’<span style="color:red">'+datatitle})
-                            duoselect.push(dataurl);
-                        }
-                        storage0.putMyVar('duoselect',duoselect);
-                        return "toast://合计选择："+duoselect.length;
-                    }),
-                col_type: "scroll_button"
-            });
-            d.push({
-                title: "批量删除",
-                url: $('#noLoading#').lazyRule(()=>{
-                        let duoselect = storage0.getMyVar('duoselect')?storage0.getMyVar('duoselect'):[];
-                        if(duoselect.length>0){
-                            if(getMyVar('guanli', 'jk')=="jk"){
-                                var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
-                                var sm = "确定删除选定的"+duoselect.length+"个接口吗？";
-                            }else if(getMyVar('guanli', 'jk')=="jx"){
-                                var filepath = "hiker://files/rules/Src/Juying/myjiexi.json";
-                                var sm = "确定删除选定的"+duoselect.length+"个解析吗？";
-                            }
-                            return $(sm).confirm((duoselect, filepath)=>{
-                                var datafile = fetch(filepath);
-                                eval("var datalist=" + datafile+ ";");
-                                for(var i=0;i<datalist.length;i++){
-                                    let dataurl = datalist[i].url?datalist[i].url:datalist[i].parse;
-                                    if(duoselect.indexOf(dataurl)>-1){
-                                        datalist.splice(i,1);
-                                        i = i - 1;
-                                    }
-                                }
-                                writeFile(filepath, JSON.stringify(datalist));
-                                refreshPage(false);
-                                return "toast://已删除"+duoselect.length;
-                            }, duoselect, filepath)
-                        }else{
-                            return "toast://请选择";
-                        }
-                    }),
-                col_type: "scroll_button"
-            });
-            if(getMyVar('guanli', 'jk')=="jk"){
-                d.push({
-                    title: "调整分组",
-                    url: $('#noLoading#').lazyRule(()=>{
-                            let duoselect = storage0.getMyVar('duoselect')?storage0.getMyVar('duoselect'):[];
-                            if(duoselect.length>0){
-                                return $("","选定的"+duoselect.length+"个接口新分组名").input((duoselect)=>{
-                                    var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
-                                    var datafile = fetch(filepath);
-                                    eval("var datalist=" + datafile+ ";");
-                                    for(var i=0;i<datalist.length;i++){
-                                        if(duoselect.indexOf(datalist[i].url)>-1){
-                                            if(input){
-                                                datalist[i].group  = input;
-                                            }else{
-                                                delete datalist[i].group;
-                                            }
-                                            delete datalist[i].failnum;
-                                        }
-                                    }
-                                    writeFile(filepath, JSON.stringify(datalist));
-                                    refreshPage(false);
-                                    return "toast://已批量调整接口分组";
-                                }, duoselect)
-                            }else{
-                                return "toast://请选择";
-                            }
-                        }),
-                    col_type: "scroll_button"
-                });
-            }else{
-                d.push({
-                    title: "重置优先",
-                    url: $('#noLoading#').lazyRule(()=>{
-                            let duoselect = storage0.getMyVar('duoselect')?storage0.getMyVar('duoselect'):[];
-                            if(duoselect.length>0){
-                                return $("确定重置选定的"+duoselect.length+"个解析优先片源记录吗？").confirm((duoselect)=>{
-                                    var filepath = "hiker://files/rules/Src/Juying/myjiexi.json";
-                                    var datafile = fetch(filepath);
-                                    eval("var datalist=" + datafile+ ";");
-                                    for(var i=0;i<datalist.length;i++){
-                                        if(duoselect.indexOf(datalist[i].parse)>-1){
-                                            datalist[i].priorfrom = [];
-                                        }
-                                    }
-                                    writeFile(filepath, JSON.stringify(datalist));
-                                    refreshPage(false);
-                                    return "toast://已批量重置选定解析的优先片源记录";
-                                }, duoselect)
-                            }else{
-                                return "toast://请选择";
-                            }
-                        }),
-                    col_type: "scroll_button"
-                });
-                d.push({
-                    title: "重置排除",
-                    url: $('#noLoading#').lazyRule(()=>{
-                            let duoselect = storage0.getMyVar('duoselect')?storage0.getMyVar('duoselect'):[];
-                            if(duoselect.length>0){
-                                return $("确定重置选定的"+duoselect.length+"个解析排除片源记录吗？").confirm((duoselect)=>{
-                                    var filepath = "hiker://files/rules/Src/Juying/myjiexi.json";
-                                    var datafile = fetch(filepath);
-                                    eval("var datalist=" + datafile+ ";");
-                                    for(var i=0;i<datalist.length;i++){
-                                        if(duoselect.indexOf(datalist[i].parse)>-1){
-                                            datalist[i].stopfrom = [];
-                                        }
-                                    }
-                                    writeFile(filepath, JSON.stringify(datalist));
-                                    refreshPage(false);
-                                    return "toast://已批量重置选定解析的排除片源记录";
-                                }, duoselect)
-                            }else{
-                                return "toast://请选择";
-                            }
-                        }),
-                    col_type: "scroll_button"
-                });
-                d.push({
-                    title: "重置排序",
-                    url: $('#noLoading#').lazyRule(()=>{
-                            let duoselect = storage0.getMyVar('duoselect')?storage0.getMyVar('duoselect'):[];
-                            if(duoselect.length>0){
-                                return $("确定重置选定的"+duoselect.length+"个解析失败排序记录吗？").confirm((duoselect)=>{
-                                    var filepath = "hiker://files/rules/Src/Juying/myjiexi.json";
-                                    var datafile = fetch(filepath);
-                                    eval("var datalist=" + datafile+ ";");
-                                    for(var i=0;i<datalist.length;i++){
-                                        if(duoselect.indexOf(datalist[i].parse)>-1){
-                                            datalist[i].sort = 0;
-                                        }
-                                    }
-                                    writeFile(filepath, JSON.stringify(datalist));
-                                    refreshPage(false);
-                                    return "toast://已批量重置选定解析的排除片源记录";
-                                }, duoselect)
-                            }else{
-                                return "toast://请选择";
-                            }
-                        }),
-                    col_type: "scroll_button"
-                });
-            }
-            d.push({
-                title: "批量保留",
-                url: $('#noLoading#').lazyRule(()=>{
-                        let duoselect = storage0.getMyVar('duoselect')?storage0.getMyVar('duoselect'):[];
-                        if(duoselect.length>0){
-                            if(getMyVar('guanli', 'jk')=="jk"){
-                                var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
-                                var sm = "确定在订阅更新时保留选定的"+duoselect.length+"个接口吗？";
-                            }else if(getMyVar('guanli', 'jk')=="jx"){
-                                var filepath = "hiker://files/rules/Src/Juying/myjiexi.json";
-                                var sm = "确定在订阅更新时保留选定的"+duoselect.length+"个解析吗？";
-                            }
-                            return $(sm).confirm((duoselect, filepath)=>{
-                                var datafile = fetch(filepath);
-                                eval("var datalist=" + datafile+ ";");
-                                for(var i=0;i<datalist.length;i++){
-                                    let dataurl = datalist[i].url?datalist[i].url:datalist[i].parse;
-                                    if(duoselect.indexOf(dataurl)>-1){
-                                        datalist[i].retain = 1;
-                                    }
-                                }
-                                writeFile(filepath, JSON.stringify(datalist));
-                                refreshPage(false);
-                                return "toast://已保留"+duoselect.length;
-                            }, duoselect, filepath)
-                        }else{
-                            return "toast://请选择";
-                        }
-                    }),
-                col_type: "scroll_button"
-            });
-            d.push({
-                title: "取消保留",
-                url: $('#noLoading#').lazyRule(()=>{
-                        let duoselect = storage0.getMyVar('duoselect')?storage0.getMyVar('duoselect'):[];
-                        if(duoselect.length>0){
-                            if(getMyVar('guanli', 'jk')=="jk"){
-                                var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
-                                var sm = "确定在订阅更新时取消保留选定的"+duoselect.length+"个接口吗？";
-                            }else if(getMyVar('guanli', 'jk')=="jx"){
-                                var filepath = "hiker://files/rules/Src/Juying/myjiexi.json";
-                                var sm = "确定在订阅更新时取消保留选定的"+duoselect.length+"个解析吗？";
-                            }
-                            return $(sm).confirm((duoselect, filepath)=>{
-                                var datafile = fetch(filepath);
-                                eval("var datalist=" + datafile+ ";");
-                                for(var i=0;i<datalist.length;i++){
-                                    let dataurl = datalist[i].url?datalist[i].url:datalist[i].parse;
-                                    if(duoselect.indexOf(dataurl)>-1){
-                                        delete datalist[i].retain;
-                                    }
-                                }
-                                writeFile(filepath, JSON.stringify(datalist));
-                                refreshPage(false);
-                                return "toast://已取消保留"+duoselect.length;
-                            }, duoselect, filepath)
-                        }else{
-                            return "toast://请选择";
-                        }
-                    }),
-                col_type: "scroll_button"
-            });
-        }
-        if(getMyVar('guanli', 'jk')=="jk"){
-            d.push({
-                col_type: "blank_block"
-            })
-            let grouplist = datalist.map((list)=>{
-                return list.group||list.type;
-            })
-            //去重复
-            function uniq(array){
-                var temp = []; //一个新的临时数组
-                for(var i = 0; i < array.length; i++){
-                    if(temp.indexOf(array[i]) == -1){
-                        temp.push(array[i]);
-                    }
-                }
-                return temp;
-            }
-            let datalist2 = [];
-            grouplist = uniq(grouplist);
-
-            let grouparr = storage0.getItem('grouparr')||[];
-            grouparr = grouparr.filter((item1) => grouplist.some((item2) => item1 === item2)).concat(grouplist);
-            grouplist = uniq(grouparr);
-            storage0.setItem('grouparr',grouplist);
-                
-            for(var i in grouplist){
-                let groupname = grouplist[i];
-                var lists = datalist.filter(item => {
-                    return item.group==groupname || !item.group&&item.type==groupname;
-                })
-                if(groupname==getMyVar('groupmenu')){
-                    datalist2 = lists;
-                }
-                d.push({
-                    title: groupname+'('+lists.length+')',
-                    url: $('#noLoading#').lazyRule((guanlidata,lists,groupmenu)=>{
-                            if(lists.length>0){
-                                deleteItemByCls('guanlidatalist');
-                                let gldatalist = guanlidata(lists);
-                                addItemBefore('guanliloading', gldatalist);
-                                storage0.putMyVar('datalist',lists);
-                                putMyVar('groupmenu',groupmenu);
-                            }
-                            return "hiker://empty";
-                        },guanlidata,lists,groupname),
-                    col_type: "scroll_button",
-                    extra: {
-                        id: groupname,
-                        longClick: [{
-                            title: "⏪分组置顶",
-                            js: $.toString((groupname) => {
-                                let grouparr = storage0.getItem('grouparr');
-                                grouparr.unshift(grouparr.splice(grouparr.indexOf(groupname), 1)[0]);
-                                storage0.setItem('grouparr',grouparr);
-                                refreshPage(false);
-                                return "hiker://empty";
-                            },groupname)
-                        },{
-                            title: "⏩分组置底",
-                            js: $.toString((groupname) => {
-                                let grouparr = storage0.getItem('grouparr');
-                                grouparr.push(grouparr.splice(grouparr.indexOf(groupname), 1)[0]);
-                                storage0.setItem('grouparr',grouparr);
-                                refreshPage(false);
-                                return "hiker://empty";
-                            },groupname)
-                        }]
-                    }
-                });
-            }
-            if(datalist2.length>0){
-                datalist = datalist2;
-            }
-            /*按分组排序进行展示接口，在管理中不需要
-            else{
-                datalist = datalist.sort((a,b)=>{
-                    let agroup = a.group||a.type;
-                    let bgroup = b.group||b.type;
-                    return grouparr.indexOf(agroup)-grouparr.indexOf(bgroup)
-                });
-            }*/
-        }
-        let gldatalist = guanlidata(datalist);
-        d = d.concat(gldatalist);
-    }
-    d.push({
-        title: '当前共有'+datalist.length+'个'+(getMyVar('guanli', 'jk')=="jk"?"接口":"私有解析"),
-        url: "hiker://empty",
-        col_type: "text_center_1",
-        extra: {
-            id: "guanliloading"
-        }
-    });
+    
+    
+    
     setResult(d);
 }
 
@@ -646,46 +163,6 @@ function getapitype(apiurl) {
     }
 }
 
-function similar(s, t, f) {//判断两个字符串之间的相似度
-    if (!s || !t) {
-        return 0
-    }
-    if(s === t){
-        return 100;
-    }
-    var l = s.length > t.length ? s.length : t.length;
-    var n = s.length;
-    var m = t.length;
-    var d = [];
-    f = f || 2;
-    var min = function (a, b, c) {
-        return a < b ? (a < c ? a : c) : (b < c ? b : c)
-    }
-    var i, j, si, tj, cost
-    if (n === 0) return m
-    if (m === 0) return n
-    for (i = 0; i <= n; i++) {
-        d[i] = [];
-        d[i][0] = i;
-    }
-    for (j = 0; j <= m; j++) {
-        d[0][j] = j;
-    }
-    for (i = 1; i <= n; i++) {
-        si = s.charAt(i - 1)
-        for (j = 1; j <= m; j++) {
-            tj = t.charAt(j - 1)
-            if (si === tj) {
-                cost = 0
-            } else {
-                cost = 1
-            }
-            d[i][j] = min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + cost);
-        }
-    }
-    let res = (1 - d[n][m] / l) *100 || 0;
-    return parseInt(res.toFixed(f));
-}
 //接口保存
 function jiekousave(urls) {
     if(urls.length==0){return 0;}
@@ -734,7 +211,7 @@ function jiekousave(urls) {
 function jiexisave(urls,update,codedytype) {
     if(urls.length==0){return 0;}
     try{
-        var filepath = "hiker://files/rules/Src/Juying/myjiexi.json";
+        var filepath = "hiker://files/rules/Src/Jubox/myjiexi.json";
         var datafile = fetch(filepath);
         if(datafile != ""){
             eval("var datalist=" + datafile+ ";");
@@ -880,7 +357,7 @@ function jiexi(lx,data) {
             d.push({
                 col_type: "line_blank"
             });
-            var recordfile = "hiker://files/rules/Src/Juying/parse.json";
+            var recordfile = "hiker://files/rules/Src/Jubox/parse.json";
             var recordparse=fetch(recordfile);
             if(recordparse!=""){
                 eval("var recordlist=" + recordparse+ ";");
@@ -1070,7 +547,7 @@ function jiexi(lx,data) {
                     cls: 'jxtest'
                 }
             })
-            var filepath = 'hiker://files/rules/Src/Juying/testurls.json';
+            var filepath = 'hiker://files/rules/Src/Jubox/testurls.json';
             var datafile = fetch(filepath);
             if(datafile != ""){
                 eval("var urls=" + datafile+ ";");
@@ -1123,7 +600,7 @@ function jiexi(lx,data) {
             addItemBefore('jxline2', {
                 title: '编辑测试',
                 url: $('#noRecordHistory##noHistory#').lazyRule(()=>{
-                    return "editFile://hiker://files/rules/Src/Juying/testurls.json";
+                    return "editFile://hiker://files/rules/Src/Jubox/testurls.json";
                 }),
                 col_type: "text_3",
                 extra:{
@@ -1144,7 +621,7 @@ function jiexi(lx,data) {
             title:'删除',
             col_type:'text_3',
             url: $("确定删除解析："+getMyVar('parsename',data.name)).confirm((dataurl)=>{
-                var filepath = "hiker://files/rules/Src/Juying/myjiexi.json";
+                var filepath = "hiker://files/rules/Src/Jubox/myjiexi.json";
                 var datafile = fetch(filepath);
                 eval("var datalist=" + datafile+ ";");
                 for(var i=0;i<datalist.length;i++){
@@ -1279,7 +756,6 @@ function extension(){
         clearMyVar('importlive');
         clearMyVar('importtype');
         clearMyVar('importinput');
-        clearMyVar('guanlicz');
         clearMyVar('uploads');
         clearMyVar('uploadjiekou');
         clearMyVar('uploadjiexi');
@@ -1288,7 +764,7 @@ function extension(){
         refreshPage(false);
     }));
     var d = [];
-    var cfgfile = "hiker://files/rules/Src/Juying/config.json";
+    var cfgfile = "hiker://files/rules/Src/Jubox/config.json";
     var Juyingcfg=fetch(cfgfile);
     if(Juyingcfg != ""){
         eval("var JYconfig=" + Juyingcfg+ ";");
@@ -1479,7 +955,7 @@ function extension(){
             url: $().lazyRule((JYconfig,cfgfile) => {
                 var text = {};
                 if(getMyVar('uploadjiekou','0')=="1"){
-                    var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
+                    var filepath = "hiker://files/rules/Src/Jubox/jiekou.json";
                     var datafile = fetch(filepath);
                     if(datafile==""){
                         var datalist = [];
@@ -1489,7 +965,7 @@ function extension(){
                     text['jiekou'] = datalist;
                 }
                 if(getMyVar('uploadjiexi','0')=="1"){
-                    var filepath = "hiker://files/rules/Src/Juying/myjiexi.json";
+                    var filepath = "hiker://files/rules/Src/Jubox/myjiexi.json";
                     var datafile = fetch(filepath);
                     if(datafile==""){
                         var datalist = [];
@@ -1499,7 +975,7 @@ function extension(){
                     text['jiexi'] = datalist;
                 }
                 if(getMyVar('uploadlive','0')=="1"){
-                    var filepath = "hiker://files/rules/Src/Juying/liveconfig.json";
+                    var filepath = "hiker://files/rules/Src/Jubox/liveconfig.json";
                     var datafile = fetch(filepath);
                     if(datafile==""){
                         var liveconfig={};
@@ -1509,7 +985,7 @@ function extension(){
                     text['live'] = liveconfig;
                 }
                 if(getMyVar('uploadyundisk','0')=="1"){
-                    var filepath = "hiker://files/rules/Src/Juying/yundisk.json";
+                    var filepath = "hiker://files/rules/Src/Jubox/yundisk.json";
                     var datafile = fetch(filepath);
                     if(datafile==""){
                         var datalist=[];
@@ -1672,7 +1148,7 @@ function extension(){
                             jxnum = jiexisave(jxdatalist, 0, codedytype||1);
                         }
                         if(pastedata.live){
-                            let livefilepath = "hiker://files/rules/Src/Juying/liveconfig.json";
+                            let livefilepath = "hiker://files/rules/Src/Jubox/liveconfig.json";
                             let liveconfig = pastedata.live;
                             writeFile(livefilepath, JSON.stringify(liveconfig));
                             var sm = "，直播订阅已同步"
@@ -1965,7 +1441,7 @@ function extension(){
                     refreshPage(false);
                 }));
                 setPageTitle("🆖资源导入-历史记录");
-                let cfgfile = "hiker://files/rules/Src/Juying/config.json";
+                let cfgfile = "hiker://files/rules/Src/Jubox/config.json";
                 let Juyingcfg=fetch(cfgfile);
                 if(Juyingcfg != ""){
                     eval("var JYconfig=" + Juyingcfg+ ";");
@@ -2250,7 +1726,7 @@ function Resourceimport(input,importtype){
                 }
                 if(urls.length>0){
                     livenum = 0;
-                    let livecfgfile = "hiker://files/rules/Src/Juying/liveconfig.json";
+                    let livecfgfile = "hiker://files/rules/Src/Jubox/liveconfig.json";
                     let livecfg = fetch(livecfgfile);
                     if(livecfg != ""){
                         eval("var liveconfig = " + livecfg);
@@ -2295,10 +1771,10 @@ function Resourceimport(input,importtype){
 //资源分享
 function JYshare(lx,input) {
     if(lx=="jk"){
-    var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
+    var filepath = "hiker://files/rules/Src/Jubox/jiekou.json";
         var sm = "聚影接口";
     }else if(lx=="jx"){
-        var filepath = "hiker://files/rules/Src/Juying/myjiexi.json";
+        var filepath = "hiker://files/rules/Src/Jubox/myjiexi.json";
         var sm = "聚影解析";
     }
     var datafile = fetch(filepath);
@@ -2418,313 +1894,4 @@ function JYimport(input) {
     } catch (e) {
         return "toast://聚影√：无法识别的口令>"+e.message;
     }
-}
-
-function yundiskjiekou() {
-    setPageTitle('☁️云盘接口 | ♥管理');
-    clearMyVar('duoselect');
-    let filepath = "hiker://files/rules/Src/Juying/yundisk.json";
-    let datafile = fetch(filepath);
-    if(datafile != ""){
-        try{
-            eval("var datalist=" + datafile+ ";");
-        }catch(e){
-            var datalist = [];
-        }
-    }else{
-        var datalist = [];
-    }
-    function yundiskapi(filepath,data){
-        addListener("onClose", $.toString(() => {
-            clearMyVar('yundiskname');
-            clearMyVar('yundiskparse');
-            clearMyVar('yundiskerparse');
-            clearMyVar('yundiskedit');
-        }));
-        if(data){
-            putMyVar('yundiskedit','1');
-            putMyVar('yundiskname',getMyVar('yundiskname',data.name));
-            putMyVar('yundiskparse',getMyVar('yundiskparse',data.parse));
-            putMyVar('yundiskerparse',getMyVar('yundiskerparse',data.erparse||""));
-        }
-        let d = [];
-        d.push({
-            title:'名称',
-            col_type: 'input',
-            desc: "接口名称",
-            extra: {
-                defaultValue: getMyVar('yundiskname',''),
-                titleVisible: false,
-                onChange: $.toString(() => {
-                    putMyVar('yundiskname',input);
-                })
-            }
-        });
-        d.push({
-            title:'一解',
-            col_type: 'input',
-            desc: "一解函数",
-            extra: {
-                defaultValue: getMyVar('yundiskparse',''),
-                titleVisible: false,
-                type: "textarea",
-                highlight: true,
-                height: 5,
-                onChange: $.toString(() => {
-                    putMyVar('yundiskparse',input);
-                })
-            }
-        });
-        d.push({
-            title:'二解',
-            col_type: 'input',
-            desc: "二解函数, 可以留空",
-            extra: {
-                defaultValue: getMyVar('yundiskerparse',''),
-                titleVisible: false,
-                type: "textarea",
-                highlight: true,
-                height: 5,
-                onChange: $.toString(() => {
-                    putMyVar('yundiskerparse',input);
-                })
-            }
-        });
-        d.push({
-            title: '测试',
-            col_type: 'text_2',
-            url: $().lazyRule(()=>{
-                if(!getMyVar('yundiskname')||!getMyVar('yundiskparse')){
-                    return "toast://名称和一解函数不能为空";
-                }
-                try{
-                    let name = getMyVar('yundiskname');
-                    let parse = getMyVar('yundiskparse');
-                    let erparse = getMyVar('yundiskerparse');
-                    let newapi = {
-                        name: name,
-                        parse: parse
-                    }
-                    if(erparse){
-                        newapi['erparse'] = erparse;
-                    }
-                    
-                    return $(getItem('searchtestkey', '斗罗大陆'),"输入测试搜索关键字").input((data)=>{
-                        setItem("searchtestkey",input);
-                        return $("hiker://empty#noRecordHistory##noHistory#").rule((name,data) => {
-                            let d = [];
-                            d.push({
-                                title: data.name+"-搜索测试",
-                                url: 'hiker://empty',
-                                col_type: 'text_center_1',
-                                extra: {
-                                    id: "listloading",
-                                    lineVisible: false
-                                }
-                            });
-                            setResult(d);
-                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
-                            aliDiskSearch(name,data);
-                        },input,data)
-                    },newapi)
-                }catch(e){
-                    return "toast://接口数据异常，请确认对象格式";
-                }
-            })
-        });
-        d.push({
-            title: '保存',
-            col_type: 'text_2',
-            url: $().lazyRule((filepath)=>{
-                if(!getMyVar('yundiskname')||!getMyVar('yundiskparse')){
-                    return "toast://名称和一解函数不能为空";
-                }
-                try{
-                    let name = getMyVar('yundiskname');
-                    let parse = getMyVar('yundiskparse');
-                    let erparse = getMyVar('yundiskerparse');
-                    let newapi = {
-                        name: name,
-                        parse: parse
-                    }
-                    if(erparse){
-                        newapi['erparse'] = erparse;
-                    }
-
-                    let datafile = fetch(filepath);
-                    if(datafile != ""){
-                        try{
-                            eval("var datalist=" + datafile+ ";");
-                        }catch(e){
-                            var datalist = [];
-                        }
-                    }else{
-                        var datalist = [];
-                    }
-                    let index = datalist.indexOf(datalist.filter(d=>d.name == name)[0]);
-                    if(index>-1 && getMyVar('yundiskedit')!="1"){
-                        return "toast://已存在-"+name;
-                    }else{
-                        if(getMyVar('yundiskedit')=="1" && index>-1){
-                            datalist.splice(index,1);
-                        }
-                        datalist.push(newapi);
-                        writeFile(filepath, JSON.stringify(datalist));
-                        back(true);
-                        return "toast://已保存";
-                    }
-                }catch(e){
-                    return "toast://接口数据异常，请确认对象格式";
-                }
-            },filepath)
-        });
-        setResult(d);
-    }
-    var d = [];
-    d.push({
-        title: '增加',
-        url: $('hiker://empty#noRecordHistory##noHistory#').rule((filepath,yundiskapi) => {
-            yundiskapi(filepath);
-        },filepath,yundiskapi),
-        img: "https://hikerfans.com/tubiao/more/25.png",
-        col_type: "icon_small_3"
-    });
-    d.push({
-        title: '导入',
-        url: $("", "云盘分享口令的云剪贴板").input(() => {
-            try {
-                input = input.split('@import=js:')[0].replace('云口令：','')
-                let inputname = input.split('￥')[0];
-                if (inputname == "聚影云盘") {
-                    showLoading("正在导入，请稍后...");
-                    let parseurl = aesDecode('Juying', input.split('￥')[1]);
-                    let content = parsePaste(parseurl);
-                    let datalist2 = JSON.parse(base64Decode(content));
-                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
-                    let num = yundisksave(datalist2);
-                    hideLoading();
-                    refreshPage(false);
-                    return "toast://合计" + datalist2.length + "个，导入" + num + "个";
-                } else {
-                    return "toast://聚影√：非云盘口令";
-                }
-            } catch (e) {
-                log(e.message);
-                return "toast://聚影√：口令有误";
-            }
-        }),
-        img: "https://hikerfans.com/tubiao/more/43.png",
-        col_type: "icon_small_3"
-    });
-    d.push({
-        title: '分享',
-        url: datalist.length == 0 ? "toast://云盘接口为0，无法分享" : $().lazyRule((datalist) => {
-            let pasteurl = sharePaste(base64Encode(JSON.stringify(datalist)));
-            if (pasteurl) {
-                pasteurl = pasteurl.replace('云6oooole', 'https://pasteme.tyrantg.com').replace('云2oooole', 'https://netcut.cn').replace('云5oooole', 'https://cmd.im').replace('云7oooole', 'https://note.ms').replace('云9oooole', 'https://txtpbbd.cn').replace('云10oooole', 'https://hassdtebin.com');
-                let code = '聚影云盘￥' + aesEncode('Juying', pasteurl) + '￥共' + datalist.length + '条';
-                copy('云口令：'+code+`@import=js:$.require("hiker://page/cloudimport?rule=聚影√");`);
-                return "toast://(全部)云盘分享口令已生成";
-            } else {
-                return "toast://分享失败，剪粘板或网络异常";
-            }
-        }, datalist),
-        img: "https://hikerfans.com/tubiao/more/3.png",
-        col_type: "icon_small_3"
-    });
-    d.push({
-        col_type: "line"
-    });
-
-    datalist.forEach(item => {
-        d.push({
-            title: "💽 " + (item.stop?"““"+item.name+"””":item.name) + "   (" + (item.erparse?"二解接口":"一解接口") + ")",
-            url: $(["分享", "编辑", "删除", item.stop?"启用":"禁用", "测试"], 1).select((filepath,yundiskapi,data) => {
-                if (input == "分享") {
-                    showLoading('分享上传中，请稍后...');
-                    let oneshare = []
-                    oneshare.push(data);
-                    let pasteurl = sharePaste(base64Encode(JSON.stringify(oneshare)));
-                    hideLoading();
-                    if(pasteurl){
-                        pasteurl = pasteurl.replace('云6oooole', 'https://pasteme.tyrantg.com').replace('云2oooole', 'https://netcut.cn').replace('云5oooole', 'https://cmd.im').replace('云7oooole', 'https://note.ms').replace('云9oooole', 'https://txtpbbd.cn').replace('云10oooole', 'https://hassdtebin.com');
-                        let code = '聚影云盘￥'+aesEncode('Juying', pasteurl)+'￥'+data.name;
-                        copy('云口令：'+code+`@import=js:$.require("hiker://page/cloudimport?rule=聚影√");`);
-                        return "toast://(单个)云盘分享口令已生成";
-                    }else{
-                        return "toast://分享失败，剪粘板或网络异常";
-                    }
-                } else if (input == "编辑") {
-                    return $('hiker://empty#noRecordHistory##noHistory#').rule((filepath,yundiskapi,data) => {
-                        yundiskapi(filepath,data);
-                    },filepath,yundiskapi,data)
-                } else if (input == "删除") {
-                    let datafile = fetch(filepath);
-                    eval("var datalist=" + datafile+ ";");
-                    let index = datalist.indexOf(datalist.filter(d=>d.name == data.name)[0]);
-                    datalist.splice(index, 1);
-                    writeFile(filepath, JSON.stringify(datalist));
-                    refreshPage(false);
-                    return 'toast://已删除';
-                } else if (input == "禁用" || input == "启用") {
-                    let datafile = fetch(filepath);
-                    eval("var datalist=" + datafile+ ";");
-                    let index = datalist.indexOf(datalist.filter(d=>d.name == data.name)[0]);
-                    datalist[index].stop = input=="禁用"?1:0;
-                    writeFile(filepath, JSON.stringify(datalist));
-                    refreshPage(false);
-                    return 'toast://已'+input;
-                } else if (input == "测试") {
-                    return $(getItem('searchtestkey', '斗罗大陆'),"输入测试搜索关键字").input((data)=>{
-                        setItem("searchtestkey",input);
-                        return $("hiker://empty#noRecordHistory##noHistory#").rule((name,data) => {
-                            let d = [];
-                            d.push({
-                                title: data.name+"-搜索测试",
-                                url: 'hiker://empty',
-                                col_type: 'text_center_1',
-                                extra: {
-                                    id: "listloading",
-                                    lineVisible: false
-                                }
-                            });
-                            setResult(d);
-                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
-                            aliDiskSearch(name,data);
-                        },input,data)
-                    },data)
-                } 
-            },filepath,yundiskapi,item),
-            desc: '',
-            col_type: "text_1"
-        });
-    })
-
-    setResult(d);
-}
-
-function yundisksave(datas){
-    let filepath = "hiker://files/rules/Src/Juying/yundisk.json";
-    let datalist2 = datas;
-    let datafile = fetch(filepath);
-    if(datafile != ""){
-        try{
-            eval("var datalist=" + datafile+ ";");
-        }catch(e){
-            var datalist = [];
-        }
-    }else{
-        var datalist = [];
-    }
-    let num = 0;
-    for (let i = 0; i < datalist2.length; i++) {
-        if (datalist.some(item => item.name == datalist2[i].name)) {
-            let index = datalist.indexOf(datalist.filter(d => d.name==datalist2[i].name)[0]);
-            datalist.splice(index, 1);
-        }
-        datalist.push(datalist2[i]);
-        num = num + 1;
-    }
-    writeFile(filepath, JSON.stringify(datalist));
-    return num;
 }
