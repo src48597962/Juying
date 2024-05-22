@@ -144,7 +144,116 @@ function SRCSet() {
         col_type: "line"
     });
 
-    
+    d.push({
+        title: "🔍",
+        url: $.toString(() => {
+            putMyVar("SrcJu_seacrhJiekou",input);
+            refreshPage(false);
+        }),
+        desc: "搜你想要的...",
+        col_type: "input",
+        extra: {
+            defaultValue: getMyVar('SrcJu_seacrhJiekou',''),
+            titleVisible: true
+        }
+    });
+    let sourcefile = getFile(guanliType);
+    jkdatalist.forEach(it => {
+        let selectmenu;
+        if(guanliType=="jk"){
+            var dataurl = it.url;
+            var dataname = it.name;
+            var dataua = it.ua;
+            var datatype = it.type;
+            var datagroup = it.group;
+            var datatitle = dataname + ' ('+datatype+')' + (datagroup&&datagroup!=datatype?' [' + datagroup + ']':"");
+            var datadesc = dataurl;
+            var dataarr = {name:dataname, url:dataurl, ua:dataua, type:datatype};
+            if(datagroup){dataarr['group'] = datagroup}
+            selectmenu = ["分享", "删除", it.stop?"启用":"禁用"];
+        }else{
+            var dataurl = it.parse;
+            var dataname = it.name;
+            var datastopfrom = it.stopfrom||[];
+            var datapriorfrom = it.priorfrom||"";
+            var datasort = it.sort||0;
+            var datatitle = datasort+'-'+dataname+'-'+dataurl;
+            var datadesc = "优先强制：" + datapriorfrom + "" + "\n排除片源：" + datastopfrom + "";
+            var dataarr = {name:dataname, url:dataurl, stopfrom:datastopfrom+"", priorfrom:datapriorfrom+""};
+            if(it.header){dataarr['header'] = it.header}
+            if(it.web){dataarr['web'] = it.web}
+            selectmenu = ["分享","编辑", "删除"];
+        }
+        if(it.retain){dataarr['retain'] = 1}
+
+        d.push({
+            title: datatitle,
+            url: getMyVar('SrcJu_批量选择模式')?$('#noLoading#').lazyRule((data) => {
+                data = JSON.parse(base64Decode(data));
+                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJuMethod.js');
+                duoselect(data);
+                return "hiker://empty";
+            },base64Encode(JSON.stringify(it))):$(selectmenu, 2).select((sourcefile,data,paste) => {
+                data = JSON.parse(base64Decode(data));
+                if (input == "分享") {
+                    showLoading('分享上传中，请稍后...');
+                    let oneshare = []
+                    oneshare.push(data);
+                    let pasteurl = sharePaste(aesEncode('SrcJuying2', JSON.stringify(oneshare)), paste||"");
+                    hideLoading();
+                    if (/^http|^云/.test(pasteurl) && pasteurl.includes('/')) {
+                        pasteurl = pasteurl.replace('云6oooole', 'https://pasteme.tyrantg.com').replace('云5oooole', 'https://cmd.im').replace('云7oooole', 'https://note.ms').replace('云9oooole', 'https://txtpbbd.cn').replace('云10oooole', 'https://hassdtebin.com');   
+                        log('剪贴板地址>'+pasteurl);
+                        let code = '聚阅接口￥' + aesEncode('SrcJu', pasteurl) + '￥' + data.name;
+                        copy('云口令：'+code+`@import=js:$.require("hiker://page/import?rule=`+MY_RULE.title+`");`);
+                        return "toast://(单个)分享口令已生成";
+                    } else {
+                        return "toast://分享失败，剪粘板或网络异常>"+pasteurl;
+                    }
+                } else if (input == "删除") {
+                    return $("确定删除："+data.name).confirm((sourcefile,data)=>{
+                        let sourcedata = fetch(sourcefile);
+                        eval("var datalist=" + sourcedata + ";");
+                        let dataurl = data.url?data.url:data.parse;
+                        let index = datalist.indexOf(datalist.filter(d => dataurl==(d.url?d.url:d.parse) )[0]);
+                        datalist.splice(index, 1);
+                        writeFile(sourcefile, JSON.stringify(datalist));
+                        clearMyVar('SrcJu_searchMark');
+                        refreshPage(false);
+                        return 'toast://已删除:'+data.name;
+                    },sourcefile,data)
+                } else if (input == "禁用" || input == "启用" ) {
+                    let sourcedata = fetch(sourcefile);
+                    eval("var datalist=" + sourcedata + ";");
+                    let dataurl = data.url?data.url:data.parse;
+                    let index = datalist.indexOf(datalist.filter(d => dataurl==(d.url?d.url:d.parse) )[0]);
+                    let sm;
+                    if(input == "禁用"){
+                        datalist[index].stop = 1;
+                        sm = data.name + "已禁用";
+                    }else{
+                        delete datalist[index].stop;
+                        sm = data.name + "已启用";
+                    }
+                    writeFile(sourcefile, JSON.stringify(datalist));
+                    clearMyVar('SrcJu_searchMark');
+                    refreshPage(false);
+                    return 'toast://' + sm;
+                }
+            }, sourcefile, base64Encode(JSON.stringify(it)), Juconfig['sharePaste']),
+            desc: (it.group?"["+it.group+"] ":"") + it.type,
+            img: it.img || "https://hikerfans.com/tubiao/ke/31.png",
+            col_type: "avatar",
+            extra: {
+                id: it.type+"_"+it.name
+            }
+        });
+    })
+    d.push({
+        title: "‘‘’’<small><font color=#f20c00>当前接口数：" + jkdatalist.length + "，总有效数："+yxdatalist.length+"</font></small>",
+        url: 'hiker://empty',
+        col_type: 'text_center_1'
+    });
     
     
     setResult(d);
