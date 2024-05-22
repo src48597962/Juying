@@ -15,6 +15,7 @@ function getFile(lx) {
     let file = lx=='jk'?jkfile:jxfile;
     return file;
 }
+//获取所有接口或解析
 function getDatas(lx) {
     let datalist = [];
     let sourcefile = getFile(lx);
@@ -28,9 +29,45 @@ function getDatas(lx) {
     }
 
     datalist.reverse();
+    // 禁用的放到最后
+    let withStop = datalist.filter(item => item.stop);
+    let withoutStop = datalist.filter(item => !item.stop);
+    // 合并数组
+    let result = withoutStop.concat(withStop);
+    return result;
+}
 
+//获取接口列表数据
+function getListData(datas, group) {
+    let datalist = datas.filter(it=>{
+        return !group || it.group==group;
+    })
+    if(getItem('ListSort','update') == 'update'){
+        datalist = sortByPinyin(datalist);
+    }
+    
     return datalist;
 }
 
 
-
+// 按拼音排序
+function sortByPinyin(arr) {
+    var arrNew = arr.sort((a, b) => a.name.localeCompare(b.name));
+    for (var m in arrNew) {
+        var mm = /^[\u4e00-\u9fa5]/.test(arrNew[m].name) ? m : '-1';
+        if (mm > -1) {
+            break;
+        }
+    }
+    for (var n = arrNew.length - 1; n >= 0; n--) {
+        var nn = /^[\u4e00-\u9fa5]/.test(arrNew[n].name) ? n : '-1';
+        if (nn > -1) {
+            break;
+        }
+    }
+    if (mm > -1) {
+        var arrTmp = arrNew.splice(m, parseInt(n - m) + 1);
+        arrNew = arrNew.concat(arrTmp);
+    }
+    return arrNew
+}
