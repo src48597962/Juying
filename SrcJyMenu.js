@@ -585,7 +585,7 @@ function lookset(){
     setHomeResult(d);
 }
 //主页导航按钮菜单
-let menubtns = ["管理","历史","收藏","搜索","展示","直播","Alist","云盘"];
+let menubtns = ["管理","历史","收藏","搜索","点播","直播","Alist","云盘"];
 let buttonmenu = {
     "管理": {
         img: "https://hikerfans.com/tubiao/more/129.png",
@@ -609,7 +609,7 @@ let buttonmenu = {
             sousuo2();
         })
     },
-    "展示": {
+    "点播": {
         img: "https://hikerfans.com/tubiao/more/105.png",
         url: $("hiker://empty##fypage#noRecordHistory##noHistory#").rule(() => {
             require(config.依赖);
