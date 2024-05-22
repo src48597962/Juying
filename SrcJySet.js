@@ -6,14 +6,12 @@ function SRCSet() {
         clearMyVar('guanli');
         clearMyVar('SrcJu_批量选择模式');
         clearMyVar('duoselect');
-        clearMyVar('datalist');
         clearMyVar('groupmenu');
     }));
     setPageTitle("♥管理"+getMyVar('SrcJuying-Version', ''));
 
     if(getMyVar('guanli','')==""){putMyVar('guanli','jk');}
     clearMyVar('duoselect');
-    clearMyVar('datalist');
     function getTitle(title, Color) {
         return '<font color="' + Color + '">' + title + '</font>';
     }
@@ -121,9 +119,14 @@ function SRCSet() {
     });
     let pastes = getPastes();
     pastes.push('云口令文件');
+
+    let datalist = getDatas();
+    let yxdatalist = datalist.filter(it=>{
+        return !it.stop;
+    });
     d.push({
         title: '分享',
-        url: datalist.length==0?'toast://数据为空，无法分享':$(pastes,2).select(()=>{
+        url: yxdatalist.length==0?'toast://有效数据为空，无法分享':$(pastes,2).select(()=>{
             let lx = getMyVar('guanli', 'jk');
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
             return JYshare(lx, input);
