@@ -2146,7 +2146,7 @@ function Resourceimport(input,importtype){
                         if (content =='') {
                             urlfile = '';
                         }else{
-                            urlfile = 'hiker://files/cache/src/Jubox/libs/' + extfile.substr(lastOf + 1);
+                            urlfile = 'hiker://files/cache/src/Jubox/libs/' + extfile.substr(extfile.lastIndexOf('/') + 1);
                             writeFile(urlfile, content);
                         }
                     }catch(e){
