@@ -2132,9 +2132,9 @@ function Resourceimport(input,importtype){
             var task = function(obj) {
 
                 if(/^csp_AppYs/.test(obj.api)){
-                    urls({ "name": obj.name, "url": obj.ext, "type": getapitype(obj.ext), "group": "新导入"});
+                    urls.push({ "name": obj.name, "url": obj.ext, "type": getapitype(obj.ext), "group": "新导入"});
                 }else if((obj.type==1||obj.type==0)&&obj.api.indexOf('cms.nokia.press')==-1){
-                    urls({ "name": obj.name, "url": obj.api, "type": "cms", "group": "新导入"});
+                    urls.push({ "name": obj.name, "url": obj.api, "type": "cms", "group": "新导入"});
                 }else{
                     let extfile = obj.ext;
                     if(/^clan:/.test(extfile)){
@@ -2174,7 +2174,7 @@ function Resourceimport(input,importtype){
                         }
                         if(urlfile){
                             arr['url'] = urlfile;
-                            urls(arr);
+                            urls.push(arr);
                         }
                     }
                 }
@@ -2195,8 +2195,7 @@ function Resourceimport(input,importtype){
                 param: {
                 }
             });
-            log(jiekou.length);
-            log(urls.length);
+
             try{
                 jknum = jiekousave(urls);
             }catch(e){
