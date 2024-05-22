@@ -41,7 +41,7 @@ function getDatas(lx) {
 function getListData(lx, group) {
     let datas = [];
     if(lx=="all"){
-        datas = datalist;
+        datas = getDatas(lx);
     }
     datas = datas.filter(it=>{
         return !group || it.group==group;
