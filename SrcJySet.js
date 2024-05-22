@@ -119,7 +119,7 @@ function SRCSet() {
     let pastes = getPastes();
     pastes.push('云口令文件');
 
-    eval("let datalist = " + getDatas(guanliType));
+    let datalist = getDatas(guanliType);
     let jkdatalist;
     if(getMyVar("SrcJu_seacrhJiekou")){
         jkdatalist = datalist.filter(it=>{
