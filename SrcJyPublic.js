@@ -71,3 +71,7 @@ function sortByPinyin(arr) {
     }
     return arrNew
 }
+//文字上色
+function colorTitle(title, Color) {
+    return '<font color="' + Color + '">' + title + '</font>';
+}
