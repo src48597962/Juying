@@ -2130,51 +2130,52 @@ function Resourceimport(input,importtype){
             var urls= [];
             //多线程处理
             var task = function(obj) {
-                let arr;
+
                 if(/^csp_AppYs/.test(obj.api)){
                     urls({ "name": obj.name, "url": obj.ext, "type": getapitype(obj.ext), "group": "新导入"});
                 }else if((obj.type==1||obj.type==0)&&obj.api.indexOf('cms.nokia.press')==-1){
                     urls({ "name": obj.name, "url": obj.api, "type": "cms", "group": "新导入"});
                 }else{
-                    if(/^csp_XBiubiu/.test(obj.api)){
-                        arr = { "name": obj.name, "type": "biubiu", "ext": obj.ext, "group": "新导入"};
-                    }else if(/^csp_XPath/.test(obj.api)){
-                        arr = { "name": obj.name, "type": "xpath", "ext": obj.ext, "group": "新导入"};
-                    }else if(obj.api=="csp_XBPQ"){
-                        arr = { "name": obj.name, "type": "XBPQ", "ext": obj.ext, "group": "新导入"};
-                    }else if(/drpy2/.test(obj.api)){
-                        arr = { "name": obj.name, "type": "drpy", "ext": obj.ext, "group": "新导入"};
-                    }else if(/^csp_XYQHiker/.test(obj.api)){
-                        arr = { "name": obj.name, "type": "XYQ", "ext": obj.ext, "group": "新导入"};
-                    }else{
-                        return 0;
-                    }
-
-                    let urlfile;
                     let extfile = obj.ext;
                     if(/^clan:/.test(extfile)){
                         extfile = extfile.replace("clan://TVBox/",input.match(/file.*\//)[0]);
                     }else if(/^./.test(extfile)){
                         extfile = input.match(/http(s)?:\/\/.*\//)[0]+extfile.replace("./","");
                     }
-                    if(/^file/.test(extfile)){
-                        urlfile = extfile;
-                    }else if(/^http/.test(extfile)){
-                        try{
-                            let content = fetch(extfile, {timeout:2000});
-                            if (content =='') {
-                                urlfile = '';
-                            }else{
-                                urlfile = 'hiker://files/cache/src/Jubox/libs/' + extfile.substr(extfile.lastIndexOf('/') + 1);
-                                writeFile(urlfile, content);
-                            }
-                        }catch(e){
-                            log(obj.name + 'ext文件缓存失败>' + e.message);
-                        }
+                    let arr;
+                    if(/^csp_XBiubiu/.test(obj.api)){
+                        arr = { "name": obj.name, "type": "biubiu", "ext": extfile, "group": "新导入"};
+                    }else if(/^csp_XPath/.test(obj.api)){
+                        arr = { "name": obj.name, "type": "xpath", "ext": extfile, "group": "新导入"};
+                    }else if(obj.api=="csp_XBPQ"){
+                        arr = { "name": obj.name, "type": "XBPQ", "ext": extfile, "group": "新导入"};
+                    }else if(/drpy2/.test(obj.api)){
+                        arr = { "name": obj.name, "type": "drpy", "ext": extfile, "group": "新导入"};
+                    }else if(/^csp_XYQHiker/.test(obj.api)){
+                        arr = { "name": obj.name, "type": "XYQ", "ext": extfile, "group": "新导入"};
                     }
-                    if(urlfile){
-                        arr['url'] = urlfile;
-                        urls(arr);
+
+                    if(arr){
+                        let urlfile;
+                        if(/^file/.test(extfile)){
+                            urlfile = extfile;
+                        }else if(/^http/.test(extfile)){
+                            try{
+                                let content = fetch(extfile, {timeout:2000});
+                                if (content == '') {
+                                    urlfile = '';
+                                }else{
+                                    urlfile = 'hiker://files/cache/src/Jubox/libs/' + extfile.substr(extfile.lastIndexOf('/') + 1);
+                                    writeFile(urlfile, content);
+                                }
+                            }catch(e){
+                                log(obj.name + 'ext文件缓存失败>' + e.message);
+                            }
+                        }
+                        if(urlfile){
+                            arr['url'] = urlfile;
+                            urls(arr);
+                        }
                     }
                 }
                 return 1;
