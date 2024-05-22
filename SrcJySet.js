@@ -2136,15 +2136,15 @@ function Resourceimport(input,importtype){
                 }else if((obj.type==1||obj.type==0)&&obj.api.indexOf('cms.nokia.press')==-1){
                     urls({ "name": obj.name, "url": obj.api, "type": "cms", "group": "新导入"});
                 }else{
-                    if(/^csp_XBiubiu/.test(obj.api) && urlfile){
+                    if(/^csp_XBiubiu/.test(obj.api)){
                         arr = { "name": obj.name, "type": "biubiu", "ext": obj.ext, "group": "新导入"};
-                    }else if(/^csp_XPath/.test(obj.api) && urlfile){
+                    }else if(/^csp_XPath/.test(obj.api)){
                         arr = { "name": obj.name, "type": "xpath", "ext": obj.ext, "group": "新导入"};
-                    }else if(obj.api=="csp_XBPQ" && urlfile){
+                    }else if(obj.api=="csp_XBPQ"){
                         arr = { "name": obj.name, "type": "XBPQ", "ext": obj.ext, "group": "新导入"};
-                    }else if(/drpy2/.test(obj.api) && urlfile){
+                    }else if(/drpy2/.test(obj.api)){
                         arr = { "name": obj.name, "type": "drpy", "ext": obj.ext, "group": "新导入"};
-                    }else if(/^csp_XYQHiker/.test(obj.api) && urlfile){
+                    }else if(/^csp_XYQHiker/.test(obj.api)){
                         arr = { "name": obj.name, "type": "XYQ", "ext": obj.ext, "group": "新导入"};
                     }else{
                         return 0;
