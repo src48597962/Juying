@@ -98,7 +98,7 @@ function SRCSet() {
                     writeFile(filepath, JSON.stringify(datalist));
                     refreshPage(false);
                     return 'toast://已全部清空';
-                }, getFilePath(getMyVar('guanli', 'jk')))
+                }, getFile(getMyVar('guanli', 'jk')))
             }
         }),
         img: "https://hikerfans.com/tubiao/more/290.png",
