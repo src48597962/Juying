@@ -39,14 +39,18 @@ function getDatas(lx) {
 
 //获取接口列表数据
 function getListData(lx, group) {
-    let datalist = getDatas(lx).filter(it=>{
+    let datas = [];
+    if(lx=="all"){
+        datas = datalist;
+    }
+    datas = datas.filter(it=>{
         return !group || it.group==group;
     })
     if(getItem('ListSort','update') == 'update'){
-        datalist = sortByPinyin(datalist);
+        datas = sortByPinyin(datas);
     }
     
-    return datalist;
+    return datas;
 }
 
 
