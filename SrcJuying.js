@@ -51,7 +51,7 @@ function yiji() {
         let btnmn1 = getItem('buttonmenu1',"管理");
         let btnmn2 = getItem('buttonmenu2',"收藏");
         let btnmn3 = getItem('buttonmenu3',"搜索");
-        let btnmn4 = getItem('buttonmenu4',"展示");
+        let btnmn4 = getItem('buttonmenu4',"点播");
         let btnmn5 = getItem('buttonmenu5',"直播");
         let yijimenu = [
             {
@@ -201,7 +201,7 @@ function yiji() {
         }
     }
 
-    d = d.concat(getDataList('yiji'));
+    //d = d.concat(getDataList('yiji'));
     deleteItemByCls("loading_gif");
     setResult(d);
 }
