@@ -2130,44 +2130,52 @@ function Resourceimport(input,importtype){
             var urls= [];
             //多线程处理
             var task = function(obj) {
-                let urlfile;
-                let extfile = obj.ext;
-                if(/^clan:/.test(extfile)){
-                    extfile = extfile.replace("clan://TVBox/",input.match(/file.*\//)[0]);
-                }else if(/^./.test(extfile)){
-                    extfile = input.match(/http(s)?:\/\/.*\//)[0]+extfile.replace("./","");
-                }
-                if(/^file/.test(extfile)){
-                    urlfile = extfile;
-                }else if(/^http/.test(extfile)){
-                    try{
-                        let content = fetch(extfile, {timeout:2000});
-                        if (content =='') {
-                            urlfile = '';
-                        }else{
-                            urlfile = 'hiker://files/cache/src/Jubox/libs/' + extfile.substr(extfile.lastIndexOf('/') + 1);
-                            writeFile(urlfile, content);
-                        }
-                    }catch(e){
-                        log(obj.name + 'ext文件缓存失败>' + e.message);
-                    }
-                }
-
-
+                let arr;
                 if(/^csp_AppYs/.test(obj.api)){
-                    urls.push({ "name": obj.name, "url": obj.ext, "type": getapitype(obj.ext), "group": "新导入"});
+                    urls({ "name": obj.name, "url": obj.ext, "type": getapitype(obj.ext), "group": "新导入"});
                 }else if((obj.type==1||obj.type==0)&&obj.api.indexOf('cms.nokia.press')==-1){
-                    urls.push({ "name": obj.name, "url": obj.api, "type": "cms", "group": "新导入"});
-                }else if(/^csp_XBiubiu/.test(obj.api) && urlfile){
-                    urls.push({ "name": obj.name, "url": urlfile, "type": "biubiu", "ext": obj.ext, "group": "新导入"});
-                }else if(/^csp_XPath/.test(obj.api) && urlfile){
-                    urls.push({ "name": obj.name, "url": urlfile, "type": "xpath", "ext": obj.ext, "group": "新导入"});
-                }else if(obj.api=="csp_XBPQ" && urlfile){
-                    urls.push({ "name": obj.name, "url": urlfile, "type": "XBPQ", "ext": obj.ext, "group": "新导入"});
-                }else if(/drpy2/.test(obj.api) && urlfile){
-                    urls.push({ "name": obj.name, "url": urlfile, "type": "drpy", "ext": obj.ext, "group": "新导入"});
-                }else if(/^csp_XYQHiker/.test(obj.api) && urlfile){
-                    urls.push({ "name": obj.name, "url": urlfile, "type": "XYQ", "ext": obj.ext, "group": "新导入"});
+                    urls({ "name": obj.name, "url": obj.api, "type": "cms", "group": "新导入"});
+                }else{
+                    if(/^csp_XBiubiu/.test(obj.api) && urlfile){
+                        arr = { "name": obj.name, "type": "biubiu", "ext": obj.ext, "group": "新导入"};
+                    }else if(/^csp_XPath/.test(obj.api) && urlfile){
+                        arr = { "name": obj.name, "type": "xpath", "ext": obj.ext, "group": "新导入"};
+                    }else if(obj.api=="csp_XBPQ" && urlfile){
+                        arr = { "name": obj.name, "type": "XBPQ", "ext": obj.ext, "group": "新导入"};
+                    }else if(/drpy2/.test(obj.api) && urlfile){
+                        arr = { "name": obj.name, "type": "drpy", "ext": obj.ext, "group": "新导入"};
+                    }else if(/^csp_XYQHiker/.test(obj.api) && urlfile){
+                        arr = { "name": obj.name, "type": "XYQ", "ext": obj.ext, "group": "新导入"};
+                    }else{
+                        return 0;
+                    }
+
+                    let urlfile;
+                    let extfile = obj.ext;
+                    if(/^clan:/.test(extfile)){
+                        extfile = extfile.replace("clan://TVBox/",input.match(/file.*\//)[0]);
+                    }else if(/^./.test(extfile)){
+                        extfile = input.match(/http(s)?:\/\/.*\//)[0]+extfile.replace("./","");
+                    }
+                    if(/^file/.test(extfile)){
+                        urlfile = extfile;
+                    }else if(/^http/.test(extfile)){
+                        try{
+                            let content = fetch(extfile, {timeout:2000});
+                            if (content =='') {
+                                urlfile = '';
+                            }else{
+                                urlfile = 'hiker://files/cache/src/Jubox/libs/' + extfile.substr(extfile.lastIndexOf('/') + 1);
+                                writeFile(urlfile, content);
+                            }
+                        }catch(e){
+                            log(obj.name + 'ext文件缓存失败>' + e.message);
+                        }
+                    }
+                    if(urlfile){
+                        arr['url'] = urlfile;
+                        urls(arr);
+                    }
                 }
                 return 1;
             }
@@ -2195,7 +2203,7 @@ function Resourceimport(input,importtype){
             } 
             hideLoading();    
         }
-        /*
+
         if((getMyVar('importjiexi','')=="1")&&jiexi.length>0){
             try{
                 let urls = [];
@@ -2272,7 +2280,7 @@ function Resourceimport(input,importtype){
                 log('TVBox导入live保存失败>'+e.message);
             }
         }
-        */
+
         let sm = (jknum>-1?' 接口保存'+jknum:'')+(jxnum>-1?' 解析保存'+jxnum:'')+(livenum>-1?livenum==0?' 直播订阅'+livesm:' 直播保存'+livenum:'');
         if(jknum>0||jxnum>0){back();}
         if(jknum==-1&&jxnum==-1&&livenum>-1){
