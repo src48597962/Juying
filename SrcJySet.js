@@ -1,4 +1,6 @@
 ////本代码仅用于个人学习，请勿用于其他作用，下载后请24小时内删除，代码虽然是公开学习的，但请尊重作者，应留下说明
+require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');//加载公共文件
+
 function SRCSet() {
     addListener("onClose", $.toString(() => {
         clearMyVar('guanli');
@@ -8,6 +10,7 @@ function SRCSet() {
         clearMyVar('groupmenu');
     }));
     setPageTitle("♥管理"+getMyVar('SrcJuying-Version', ''));
+
     if(getMyVar('guanli','')==""){putMyVar('guanli','jk');}
     clearMyVar('duoselect');
     clearMyVar('datalist');
@@ -90,17 +93,12 @@ function SRCSet() {
                 }else{
                     var sm = "私有解析";
                 }
-                return $("确定要删除本地所有的"+sm+"吗？").confirm(()=>{
-                    if(getMyVar('guanli', 'jk')=="jk"){
-                        var filepath = "hiker://files/rules/Src/Jubox/jiekou.json";
-                    }else if(getMyVar('guanli', 'jk')=="jx"){
-                        var filepath = "hiker://files/rules/Src/Jubox/myjiexi.json";
-                    }
-                    var datalist = [];
+                return $("确定要删除本地所有的"+sm+"吗？").confirm((filepath)=>{
+                    let datalist = [];
                     writeFile(filepath, JSON.stringify(datalist));
                     refreshPage(false);
                     return 'toast://已全部清空';
-                })
+                }, getFilePath(getMyVar('guanli', 'jk')))
             }
         }),
         img: "https://hikerfans.com/tubiao/more/290.png",
