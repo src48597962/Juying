@@ -2195,7 +2195,8 @@ function Resourceimport(input,importtype){
                 param: {
                 }
             });
-
+            log(jiekou.length);
+            log(urls.length);
             try{
                 jknum = jiekousave(urls);
             }catch(e){
