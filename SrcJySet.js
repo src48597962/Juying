@@ -120,7 +120,7 @@ function SRCSet() {
     let pastes = getPastes();
     pastes.push('云口令文件');
 
-    let datalist = getDatas();
+    let datalist = getListData();
     let yxdatalist = datalist.filter(it=>{
         return !it.stop;
     });
