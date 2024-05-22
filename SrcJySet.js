@@ -2165,6 +2165,7 @@ function Resourceimport(input,importtype){
                 }
                 return 1;
             }
+            
             let jiekous = jiekou.map((list)=>{
                 return {
                     func: task,
@@ -2179,7 +2180,8 @@ function Resourceimport(input,importtype){
                 param: {
                 }
             });
-
+            log(jiekou.length);
+            log(urls.length);
             try{
                 jknum = jiekousave(urls);
             }catch(e){
