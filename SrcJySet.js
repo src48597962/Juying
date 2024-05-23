@@ -241,9 +241,8 @@ function SRCSet() {
                     return 'toast://' + sm;
                 }
             }, sourcefile, base64Encode(JSON.stringify(it)), Juconfig['sharePaste']),
-            desc: (it.group?"["+it.group+"] ":"") + it.type,
-            img: it.img || "https://hikerfans.com/tubiao/ke/31.png",
-            col_type: "avatar",
+            desc: datadesc,
+            col_type: "text_1",
             extra: {
                 id: it.type+"_"+it.name
             }
