@@ -168,7 +168,7 @@ function SRCSet() {
             titleVisible: true
         }
     });
-    if(guanliType=='jk'){
+    if(guanliType=='jk' && jkdatalist.length){
         let groupNams = getJiekouGroups(jkdatalist);
         groupNams.unshift("全部");
         groupNams.forEach(it =>{
