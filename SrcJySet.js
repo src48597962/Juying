@@ -283,7 +283,7 @@ function getapitype(apiurl) {
 function jiekousave(urls) {
     if(urls.length==0){return 0;}
     try{
-        let filepath = "hiker://files/rules/Src/Jubox/jiekou.json";
+        let filepath = jkfile;
         let datalist = [];
         var datafile = fetch(filepath);
         if(datafile != ""){
@@ -327,7 +327,7 @@ function jiekousave(urls) {
 function jiexisave(urls,update,codedytype) {
     if(urls.length==0){return 0;}
     try{
-        var filepath = "hiker://files/rules/Src/Jubox/myjiexi.json";
+        var filepath = jxfile ;
         var datafile = fetch(filepath);
         if(datafile != ""){
             eval("var datalist=" + datafile+ ";");
@@ -473,7 +473,7 @@ function jiexi(lx,data) {
             d.push({
                 col_type: "line_blank"
             });
-            var recordfile = "hiker://files/rules/Src/Jubox/parse.json";
+            var recordfile = "hiker://files/rules/Src/Juying2/parse.json";
             var recordparse=fetch(recordfile);
             if(recordparse!=""){
                 eval("var recordlist=" + recordparse+ ";");
@@ -663,7 +663,7 @@ function jiexi(lx,data) {
                     cls: 'jxtest'
                 }
             })
-            var filepath = 'hiker://files/rules/Src/Jubox/testurls.json';
+            var filepath = 'hiker://files/rules/Src/Juying2/testurls.json';
             var datafile = fetch(filepath);
             if(datafile != ""){
                 eval("var urls=" + datafile+ ";");
@@ -716,7 +716,7 @@ function jiexi(lx,data) {
             addItemBefore('jxline2', {
                 title: '编辑测试',
                 url: $('#noRecordHistory##noHistory#').lazyRule(()=>{
-                    return "editFile://hiker://files/rules/Src/Jubox/testurls.json";
+                    return "editFile://hiker://files/rules/Src/Juying2/testurls.json";
                 }),
                 col_type: "text_3",
                 extra:{
@@ -737,7 +737,7 @@ function jiexi(lx,data) {
             title:'删除',
             col_type:'text_3',
             url: $("确定删除解析："+getMyVar('parsename',data.name)).confirm((dataurl)=>{
-                var filepath = "hiker://files/rules/Src/Jubox/myjiexi.json";
+                var filepath = "hiker://files/rules/Src/Juying2/myjiexi.json";
                 var datafile = fetch(filepath);
                 eval("var datalist=" + datafile+ ";");
                 for(var i=0;i<datalist.length;i++){
@@ -879,14 +879,7 @@ function extension(){
         clearMyVar('uploadyundisk');
         refreshPage(false);
     }));
-    var d = [];
-    var cfgfile = "hiker://files/rules/Src/Jubox/config.json";
-    var Juyingcfg=fetch(cfgfile);
-    if(Juyingcfg != ""){
-        eval("var JYconfig=" + Juyingcfg+ ";");
-    }else{
-        var JYconfig= {};
-    }
+    let d = [];
     
     function getide(is) {
         if(is==1){
@@ -1071,7 +1064,7 @@ function extension(){
             url: $().lazyRule((JYconfig,cfgfile) => {
                 var text = {};
                 if(getMyVar('uploadjiekou','0')=="1"){
-                    var filepath = "hiker://files/rules/Src/Jubox/jiekou.json";
+                    var filepath = "hiker://files/rules/Src/Juying2/jiekou.json";
                     var datafile = fetch(filepath);
                     if(datafile==""){
                         var datalist = [];
@@ -1081,7 +1074,7 @@ function extension(){
                     text['jiekou'] = datalist;
                 }
                 if(getMyVar('uploadjiexi','0')=="1"){
-                    var filepath = "hiker://files/rules/Src/Jubox/myjiexi.json";
+                    var filepath = "hiker://files/rules/Src/Juying2/jiexi.json";
                     var datafile = fetch(filepath);
                     if(datafile==""){
                         var datalist = [];
@@ -1091,7 +1084,7 @@ function extension(){
                     text['jiexi'] = datalist;
                 }
                 if(getMyVar('uploadlive','0')=="1"){
-                    var filepath = "hiker://files/rules/Src/Jubox/liveconfig.json";
+                    var filepath = "hiker://files/rules/Src/Juying2/liveconfig.json";
                     var datafile = fetch(filepath);
                     if(datafile==""){
                         var liveconfig={};
@@ -1101,7 +1094,7 @@ function extension(){
                     text['live'] = liveconfig;
                 }
                 if(getMyVar('uploadyundisk','0')=="1"){
-                    var filepath = "hiker://files/rules/Src/Jubox/yundisk.json";
+                    var filepath = "hiker://files/rules/Src/Juying2/yundisk.json";
                     var datafile = fetch(filepath);
                     if(datafile==""){
                         var datalist=[];
@@ -1264,7 +1257,7 @@ function extension(){
                             jxnum = jiexisave(jxdatalist, 0, codedytype||1);
                         }
                         if(pastedata.live){
-                            let livefilepath = "hiker://files/rules/Src/Jubox/liveconfig.json";
+                            let livefilepath = "hiker://files/rules/Src/Juying2/liveconfig.json";
                             let liveconfig = pastedata.live;
                             writeFile(livefilepath, JSON.stringify(liveconfig));
                             var sm = "，直播订阅已同步"
@@ -1557,7 +1550,7 @@ function extension(){
                     refreshPage(false);
                 }));
                 setPageTitle("🆖资源导入-历史记录");
-                let cfgfile = "hiker://files/rules/Src/Jubox/config.json";
+                let cfgfile = "hiker://files/rules/Src/Juying2/config.json";
                 let Juyingcfg=fetch(cfgfile);
                 if(Juyingcfg != ""){
                     eval("var JYconfig=" + Juyingcfg+ ";");
@@ -1757,7 +1750,7 @@ function Resourceimport(input,importtype){
                                 if (content == '') {
                                     urlfile = '';
                                 }else{
-                                    urlfile = 'hiker://files/cache/src/Jubox/libs/' + arr.type + '_' + extfile.substr(extfile.lastIndexOf('/') + 1);
+                                    urlfile = 'hiker://files/cache/src/Juying2/libs/' + arr.type + '_' + extfile.substr(extfile.lastIndexOf('/') + 1);
                                     writeFile(urlfile, content);
                                 }
                             }catch(e){
@@ -1847,7 +1840,7 @@ function Resourceimport(input,importtype){
                 }
                 if(urls.length>0){
                     livenum = 0;
-                    let livecfgfile = "hiker://files/rules/Src/Jubox/liveconfig.json";
+                    let livecfgfile = "hiker://files/rules/Src/Juying2/liveconfig.json";
                     let livecfg = fetch(livecfgfile);
                     if(livecfg != ""){
                         eval("var liveconfig = " + livecfg);
@@ -1892,10 +1885,10 @@ function Resourceimport(input,importtype){
 //资源分享
 function JYshare(lx,input) {
     if(lx=="jk"){
-    var filepath = "hiker://files/rules/Src/Jubox/jiekou.json";
+        var filepath = jkfile;
         var sm = "聚影接口";
     }else if(lx=="jx"){
-        var filepath = "hiker://files/rules/Src/Jubox/myjiexi.json";
+        var filepath = jxfile;
         var sm = "聚影解析";
     }
     var datafile = fetch(filepath);
