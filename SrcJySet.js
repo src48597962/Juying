@@ -67,7 +67,7 @@ function SRCSet() {
     });
     d.push({
         title: '操作',
-        url: $(["查看列表","批量选择","清空所有"],2,"选择操作功能项").select(()=>{
+        url: $(["查看列表","批量选择","清空所有"],2,"选择操作功能项").select((filepath,guanliType)=>{
             clearMyVar('groupmenu');
             if(input=="批量多选"){
                 putMyVar('查看列表','looklist');
@@ -105,9 +105,9 @@ function SRCSet() {
                     writeFile(filepath, JSON.stringify(datalist));
                     refreshPage(false);
                     return 'toast://已全部清空';
-                }, getFile(guanliType), guanliType)
+                }, filepath, guanliType)
             }
-        }),
+        },getFile(guanliType),guanliType),
         img: "https://hikerfans.com/tubiao/more/290.png",
         col_type: "icon_small_4"
     });
