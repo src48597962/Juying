@@ -43,7 +43,7 @@ function getGroupLists(datas, k) {
         let group = it.group||it.type;
         return !k || (k==group);
     })
-    if(getItem('ListSort','name') == 'update'){
+    if(getItem('sourceListSort','name') == 'update'){
         datas = sortByPinyin(datas);
     }
     return datas;
