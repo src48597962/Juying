@@ -117,6 +117,14 @@ function dataEnable(lx, data, input) {
     clearMyVar('SrcJu_duoselect');
     return sm;
 }
+// 获取接口对应的显示标题
+function getDataTitle(data) {
+    if(data.url){
+        return data.name + ' ('+data.type+')' + (data.group&&data.group!=data.type?' [' + data.group + ']':"");
+    }else{
+        return data.sort+'-'+data.name+'-'+data.parse;
+    }
+}
 //接口管理多选方法
 function duoselect(datas){
     let datalist = [];
@@ -130,7 +138,7 @@ function duoselect(datas){
         let id = data.url?data.url:data.parse;
         if(!duoselect.some(item => id==(item.url?item.url:item.parse))){
             duoselect.push(data);
-            updateItem(id, {title:'<font color=#3CB371>'+data.name + (data.parse ? " [主页源]" : "") + (data.erparse ? " [搜索源]" : "")});
+            updateItem(id, {title:'<font color=#3CB371>'+getDataTitle(data)});
         }else{
             for(var i = 0; i < duoselect.length; i++) {
                 if(id == (duoselect[i].url?duoselect[i].url:duoselect[i].parse)) {
@@ -138,7 +146,7 @@ function duoselect(datas){
                     break;
                 }
             }
-            updateItem(id, {title:(data.stop?`<font color=#f20c00>`:"") + data.name + (data.parse ? " [主页源]" : "") + (data.erparse ? " [搜索源]" : "") + (data.stop?`</font>`:"")});
+            updateItem(id, {title:(data.stop?`<font color=#f20c00>`:"") + getDataTitle(data)});
         }
     })
     storage0.putMyVar('SrcJu_duoselect',duoselect);
