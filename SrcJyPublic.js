@@ -73,14 +73,17 @@ function deleteData(lx, data){
     }else if($.type(data)=='array'){
         dellist = data;
     }
+    log(dellist.length);
     dellist.forEach(it => {
         if(lx=='jk' && /^hiker:\/\/files\/cache\/src\//.test(it.url)){
             deleteFile(it.url);
         }
         let dataurl = lx=='jk'?it.url:it.parse;
         let index = datalist.indexOf(datalist.filter(d => dataurl==(lx=='jk'?d.url:d.parse) )[0]);
+        log('删除>'+datalist[index].name);
         datalist.splice(index, 1);
     })
+    log(datalist.length);
     writeFile(sourcefile, JSON.stringify(datalist));
     clearMyVar('SrcJu_searchMark');
 }
