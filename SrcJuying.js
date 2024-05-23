@@ -62,24 +62,17 @@ function dianbo() {
         
         d.push(obj);
     })
-/*
-    d.push({
-        title: Juconfig['sitename'] || '选择主页源',
-        url: $(['选择源'], 2).select((sitenames, cfgfile, Juconfig) => {
-            if(input=='选择源'){
-                return $(sitenames, 2).select((cfgfile, Juconfig) => {
-                    Juconfig['sitename'] = input;
-                    writeFile(cfgfile, JSON.stringify(Juconfig));
-                    refreshPage(true);
-                    return 'toast://选择主页源：' + input;
-                }, cfgfile, Juconfig)
+    if(!sourceNmae){
+        d.push({
+            title: runMode+" 主页源不存在\n需先选择配置主页源",//\n设置-选择漫画/小说/听书/
+            desc: "点上面分类按钮皆可选择",//设置长按菜单可以开启界面切换开关
+            url: 'toast://点上面分类按钮',
+            col_type: "text_center_1",
+            extra: {
+                lineVisible: false
             }
-        }, sitenames, cfgfile, Juconfig),
-        desc: '管理',
-        img: "https://hikerfans.com/tubiao/ke/31.png",
-        col_type: "avatar"
-    })
-    */
+        })
+    }
     setResult(d);
 }
 //接口一级
