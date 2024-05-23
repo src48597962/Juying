@@ -127,13 +127,13 @@ function duoselect(datas){
     }
     let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
     datalist.forEach(data=>{
-        let id = data.type+"_"+data.name;
-        if(!duoselect.some(item => item.name == data.name && item.type==data.type)){
+        let id = data.url?data.url:data.parse;
+        if(!duoselect.some(item => id==(item.url?item.url:item.parse))){
             duoselect.push(data);
             updateItem(id, {title:'<font color=#3CB371>'+data.name + (data.parse ? " [主页源]" : "") + (data.erparse ? " [搜索源]" : "")});
         }else{
             for(var i = 0; i < duoselect.length; i++) {
-                if(duoselect[i].type+"_"+duoselect[i].name == id) {
+                if(id == (duoselect[i].url?duoselect[i].url:duoselect[i].parse)) {
                     duoselect.splice(i, 1);
                     break;
                 }
