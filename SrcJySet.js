@@ -88,14 +88,24 @@ function SRCSet() {
                 if(guanliType=="jk"){
                     var sm = "接口";
                 }else{
-                    var sm = "私有解析";
+                    var sm = "解析";
                 }
-                return $("确定要删除本地所有的"+sm+"吗？").confirm((filepath)=>{
+                return $("确定要删除本地所有的"+sm+"吗？").confirm((filepath,lx)=>{
                     let datalist = [];
+                    if(lx=='jk'){
+                        let sourcedata = fetch(filepath);
+                        eval("datalist=" + sourcedata + ";");
+                        datalist.forEach(it=>{
+                            if(/hiker:\/\/files\/cache\/src\/Juying2\/libs\//.test(it.url)){
+                                deleteFile(it.url);
+                            }
+                        })
+                        datalist = [];
+                    }
                     writeFile(filepath, JSON.stringify(datalist));
                     refreshPage(false);
                     return 'toast://已全部清空';
-                }, getFile(guanliType))
+                }, getFile(guanliType), guanliType)
             }
         }),
         img: "https://hikerfans.com/tubiao/more/290.png",
@@ -228,7 +238,7 @@ function SRCSet() {
         if(it.retain){dataarr['retain'] = 1}
 
         d.push({
-            title: it.stop?colorTitle(datatitle,'#f20c00'):datatitle,
+            title: it.stop?'‘‘’’'+colorTitle(datatitle,'#f20c00'):datatitle,
             url: getMyVar('SrcJu_批量选择模式')?$('#noLoading#').lazyRule((data) => {
                 data = JSON.parse(base64Decode(data));
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJuMethod.js');
