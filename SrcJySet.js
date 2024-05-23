@@ -99,7 +99,7 @@ function SRCSet() {
     });
     d.push({
         title: '导入',
-        url: $("","聚影口令").input(()=>{
+        url: $("","聚影2口令").input(()=>{
             if(input==""){
                 return 'toast://不能为空';
             }
@@ -237,7 +237,6 @@ function SRCSet() {
         })
     }
 
-    let sourcefile = getFile(guanliType);
     jkdatalist.forEach(it => {
         let selectmenu;
         if(guanliType=="jk"){
@@ -251,7 +250,6 @@ function SRCSet() {
             var dataarr = {name:dataname, url:dataurl, ua:dataua, type:datatype};
             if(datagroup){dataarr['group'] = datagroup}
             selectmenu = ["分享", "删除", it.stop?"启用":"禁用"];
-            var dataid = dataurl;
         }else{
             var dataurl = it.parse;
             var dataname = it.name;
@@ -264,7 +262,6 @@ function SRCSet() {
             if(it.header){dataarr['header'] = it.header}
             if(it.web){dataarr['web'] = it.web}
             selectmenu = ["分享","编辑", "删除"];
-            var dataid = dataname;
         }
         if(it.retain){dataarr['retain'] = 1}
 
@@ -309,7 +306,7 @@ function SRCSet() {
             desc: datadesc,
             col_type: "text_1",
             extra: {
-                id: dataid
+                id: dataurl
             }
         });
     })
@@ -364,7 +361,7 @@ function jiekousave(urls) {
             let urlext = urls[i].ext||"";
 
             function checkitem(item) {
-                return urltype==item.type && item.url==urlurl;
+                return item.url==urlurl;
             }
 
             if(!datalist.some(checkitem)&&urlname&&urltype){
@@ -425,7 +422,7 @@ function jiexisave(urls,update,codedytype) {
             }
             
             function checkitem(item) {
-                return item.parse==urlurl||item.name==urlname;
+                return item.parse==urlurl;
             }
 
             if(!datalist.some(checkitem)&&urlname&&/^http|^functio/.test(urlurl)){
