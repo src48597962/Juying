@@ -260,7 +260,7 @@ function SRCSet() {
                     }, data)
                 } else if (input == "禁用" || input == "启用" ) {
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
-                    dataEnable(getMyVar('guanli', 'jk'), data, input);
+                    let sm = dataEnable(getMyVar('guanli', 'jk'), data, input);
                     refreshPage(false);
                     return 'toast://' + sm;
                 }
