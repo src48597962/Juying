@@ -67,7 +67,7 @@ function SRCSet() {
     });
     d.push({
         title: '操作',
-        url: $(["查看列表","批量选择","清空所有"],2,"选择操作功能项").select((filepath,guanliType)=>{
+        url: $(["查看列表","批量选择","清空所有"],2,"选择操作功能项").select(()=>{
             clearMyVar('groupmenu');
             if(input=="批量多选"){
                 putMyVar('查看列表','looklist');
@@ -85,29 +85,19 @@ function SRCSet() {
                 refreshPage(false);
                 return "toast://"+sm;
             }else if(input=="清空所有"){
-                if(guanliType=="jk"){
+                if(getMyVar('guanli', 'jk')=="jk"){
                     var sm = "接口";
                 }else{
                     var sm = "解析";
                 }
-                return $("确定要删除本地所有的"+sm+"吗？").confirm((filepath,lx)=>{
-                    let datalist = [];
-                    if(lx=='jk'){
-                        let sourcedata = fetch(filepath);
-                        eval("datalist=" + sourcedata + ";");
-                        datalist.forEach(it=>{
-                            if(/hiker:\/\/files\/cache\/src\/Juying2\/libs\//.test(it.url)){
-                                deleteFile(it.url);
-                            }
-                        })
-                        datalist = [];
-                    }
-                    writeFile(filepath, JSON.stringify(datalist));
+                return $("确定要删除本地所有的"+sm+"吗？").confirm(()=>{
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                    deleteData(getMyVar('guanli', 'jk'));
                     refreshPage(false);
                     return 'toast://已全部清空';
-                }, filepath, guanliType)
+                })
             }
-        },getFile(guanliType),guanliType),
+        }),
         img: "https://hikerfans.com/tubiao/more/290.png",
         col_type: "icon_small_4"
     });
@@ -244,7 +234,7 @@ function SRCSet() {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJuMethod.js');
                 duoselect(data);
                 return "hiker://empty";
-            },base64Encode(JSON.stringify(it))):$(selectmenu, 2).select((sourcefile,data,paste) => {
+            },base64Encode(JSON.stringify(it))):$(selectmenu, 2).select((data,paste) => {
                 data = JSON.parse(base64Decode(data));
                 if (input == "分享") {
                     showLoading('分享上传中，请稍后...');
@@ -262,39 +252,19 @@ function SRCSet() {
                         return "toast://分享失败，剪粘板或网络异常>"+pasteurl;
                     }
                 } else if (input == "删除") {
-                    return $("确定删除："+data.name).confirm((sourcefile,data)=>{
-                        if(/hiker:\/\/files\/cache\/src\/Juying2\/libs\//.test(data.url)){
-                            deleteFile(data.url);
-                        }
-                        let sourcedata = fetch(sourcefile);
-                        eval("var datalist=" + sourcedata + ";");
-                        let dataurl = data.url?data.url:data.parse;
-                        let index = datalist.indexOf(datalist.filter(d => dataurl==(d.url?d.url:d.parse) )[0]);
-                        datalist.splice(index, 1);
-                        writeFile(sourcefile, JSON.stringify(datalist));
-                        clearMyVar('SrcJu_searchMark');
+                    return $("确定删除："+data.name).confirm((data)=>{
+                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                        deleteData(getMyVar('guanli', 'jk'), data);
                         refreshPage(false);
                         return 'toast://已删除:'+data.name;
-                    },sourcefile,data)
+                    }, data)
                 } else if (input == "禁用" || input == "启用" ) {
-                    let sourcedata = fetch(sourcefile);
-                    eval("var datalist=" + sourcedata + ";");
-                    let dataurl = data.url?data.url:data.parse;
-                    let index = datalist.indexOf(datalist.filter(d => dataurl==(d.url?d.url:d.parse) )[0]);
-                    let sm;
-                    if(input == "禁用"){
-                        datalist[index].stop = 1;
-                        sm = data.name + "已禁用";
-                    }else{
-                        delete datalist[index].stop;
-                        sm = data.name + "已启用";
-                    }
-                    writeFile(sourcefile, JSON.stringify(datalist));
-                    clearMyVar('SrcJu_searchMark');
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                    dataEnable(getMyVar('guanli', 'jk'), data, input);
                     refreshPage(false);
                     return 'toast://' + sm;
                 }
-            }, sourcefile, base64Encode(JSON.stringify(it)), Juconfig['sharePaste']),
+            }, base64Encode(JSON.stringify(it)), Juconfig['sharePaste']),
             desc: datadesc,
             col_type: "text_1",
             extra: {
