@@ -193,6 +193,9 @@ function SRCSet() {
     }
     if(getMyVar('SrcJu_批量选择模式')){
         d.push({
+            col_type: "line_blank"
+        });
+        d.push({
             title: "反向选择",
             url: $('#noLoading#').lazyRule((jkdatalist) => {
                 jkdatalist = JSON.parse(base64Decode(jkdatalist));
