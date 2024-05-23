@@ -67,13 +67,9 @@ function SRCSet() {
     });
     d.push({
         title: '操作',
-        url: $(["查看列表","批量选择","清空所有"],2,"选择操作功能项").select(()=>{
+        url: $(["批量选择","清空所有"],2,"选择操作功能项").select(()=>{
             clearMyVar('groupmenu');
-            if(input=="批量多选"){
-                putMyVar('查看列表','looklist');
-                refreshPage(false);
-                return 'toast://显示列表';
-            }else if(input=="批量选择"){
+            if(input=="批量选择"){
                 let sm;
                 if(getMyVar('SrcJu_批量选择模式')){
                     clearMyVar('SrcJu_批量选择模式');
