@@ -158,41 +158,43 @@ function SRCSet() {
             titleVisible: true
         }
     });
-    let groupNams = getJiekouGroups(jkdatalist);
-    groupNams.unshift("全部");
-    groupNams.forEach(it =>{
-        let obj = {
-            title: getMyVar("SrcJu_jiekouGroup","全部")==it?`““””<b><span style="color: #3399cc">`+it+`</span></b>`:it,
-            url: $('#noLoading#').lazyRule((it) => {
-                if(getMyVar("SrcJu_jiekouGroup")!=it){
-                    putMyVar("SrcJu_jiekouGroup",it);
-                    refreshPage(false);
-                }
-                return "hiker://empty";
-            },it),
-            col_type: 'scroll_button'
-        }
-        
-        if(it == "全部"){
-            obj.extra = {
-                longClick: [{
-                    title: "列表排序：" + getItem("sourceListSort", "update"),
-                    js: $.toString(() => {
-                        return $(["更新时间","接口名称"], 1).select(() => {
-                            if(input=='接口名称'){
-                                setItem("sourceListSort","name");
-                            }else{
-                                clearItem("sourceListSort");
-                            }
-                            refreshPage(false);
-                        })
-                    })
-                }]
+    if(guanliType=='jk'){
+        let groupNams = getJiekouGroups(jkdatalist);
+        groupNams.unshift("全部");
+        groupNams.forEach(it =>{
+            let obj = {
+                title: getMyVar("SrcJu_jiekouGroup","全部")==it?`““””<b><span style="color: #3399cc">`+it+`</span></b>`:it,
+                url: $('#noLoading#').lazyRule((it) => {
+                    if(getMyVar("SrcJu_jiekouGroup")!=it){
+                        putMyVar("SrcJu_jiekouGroup",it);
+                        refreshPage(false);
+                    }
+                    return "hiker://empty";
+                },it),
+                col_type: 'scroll_button'
             }
-        }
-        
-        d.push(obj);
-    })
+            
+            if(it == "全部"){
+                obj.extra = {
+                    longClick: [{
+                        title: "列表排序：" + getItem("sourceListSort", "update"),
+                        js: $.toString(() => {
+                            return $(["更新时间","接口名称"], 1).select(() => {
+                                if(input=='接口名称'){
+                                    setItem("sourceListSort","name");
+                                }else{
+                                    clearItem("sourceListSort");
+                                }
+                                refreshPage(false);
+                            })
+                        })
+                    }]
+                }
+            }
+            
+            d.push(obj);
+        })
+    }
 
     let sourcefile = getFile(guanliType);
     jkdatalist.forEach(it => {
@@ -208,6 +210,7 @@ function SRCSet() {
             var dataarr = {name:dataname, url:dataurl, ua:dataua, type:datatype};
             if(datagroup){dataarr['group'] = datagroup}
             selectmenu = ["分享", "删除", it.stop?"启用":"禁用"];
+            var dataid = dataurl;
         }else{
             var dataurl = it.parse;
             var dataname = it.name;
@@ -220,11 +223,12 @@ function SRCSet() {
             if(it.header){dataarr['header'] = it.header}
             if(it.web){dataarr['web'] = it.web}
             selectmenu = ["分享","编辑", "删除"];
+            var dataid = dataname;
         }
         if(it.retain){dataarr['retain'] = 1}
 
         d.push({
-            title: datatitle,
+            title: it.stop?colorTitle(datatitle,'#f20c00'):datatitle,
             url: getMyVar('SrcJu_批量选择模式')?$('#noLoading#').lazyRule((data) => {
                 data = JSON.parse(base64Decode(data));
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJuMethod.js');
@@ -241,7 +245,7 @@ function SRCSet() {
                     if (/^http|^云/.test(pasteurl) && pasteurl.includes('/')) {
                         pasteurl = pasteurl.replace('云6oooole', 'https://pasteme.tyrantg.com').replace('云5oooole', 'https://cmd.im').replace('云7oooole', 'https://note.ms').replace('云9oooole', 'https://txtpbbd.cn').replace('云10oooole', 'https://hassdtebin.com');   
                         log('剪贴板地址>'+pasteurl);
-                        let code = '聚阅接口￥' + aesEncode('SrcJu', pasteurl) + '￥' + data.name;
+                        let code = '聚影2接口￥' + aesEncode('SrcJuying2', pasteurl) + '￥' + data.name;
                         copy('云口令：'+code+`@import=js:$.require("hiker://page/import?rule=`+MY_RULE.title+`");`);
                         return "toast://(单个)分享口令已生成";
                     } else {
@@ -281,7 +285,7 @@ function SRCSet() {
             desc: datadesc,
             col_type: "text_1",
             extra: {
-                id: it.type+"_"+it.name
+                id: dataid
             }
         });
     })
