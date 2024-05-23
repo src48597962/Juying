@@ -100,7 +100,7 @@ function SRCSet() {
                                 deleteFile(it.url);
                             }
                         })
-                        datalist = datalist;
+                        datalist = [];
                     }
                     writeFile(filepath, JSON.stringify(datalist));
                     refreshPage(false);
@@ -263,6 +263,9 @@ function SRCSet() {
                     }
                 } else if (input == "删除") {
                     return $("确定删除："+data.name).confirm((sourcefile,data)=>{
+                        if(/hiker:\/\/files\/cache\/src\/Juying2\/libs\//.test(data.url)){
+                            deleteFile(data.url);
+                        }
                         let sourcedata = fetch(sourcefile);
                         eval("var datalist=" + sourcedata + ";");
                         let dataurl = data.url?data.url:data.parse;
