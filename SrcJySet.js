@@ -142,7 +142,7 @@ function SRCSet() {
     });
     if(getMyVar('SrcJu_批量选择模式')){
         d.push({
-            title: "反向选择",
+            title: "全部选择",
             url: $('#noLoading#').lazyRule((jkdatalist) => {
                 jkdatalist = JSON.parse(base64Decode(jkdatalist));
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
@@ -170,26 +170,18 @@ function SRCSet() {
         if(guanliType=='jk'){
             d.push({
                 title: "禁用所选",
-                url: $('#noLoading#').lazyRule((sourcefile) => {
+                url: $('#noLoading#').lazyRule(() => {
                     let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
                     if(duoselect.length==0){
                         return "toast://未选择";
                     }
-                    return $("确定要禁用选择的"+duoselect.length+"个接口？").confirm((sourcefile,duoselect)=>{
-                        let sourcedata = fetch(sourcefile);
-                        eval("var datalist=" + sourcedata + ";");
-                        for(let i = 0; i < datalist.length; i++) {
-                            if(duoselect.some(item => item.name == datalist[i].name && item.type==datalist[i].type)){
-                                datalist[i].stop = 1;
-                            }
-                        }
-                        writeFile(sourcefile, JSON.stringify(datalist));
-                        clearMyVar('SrcJu_searchMark');
-                        clearMyVar('SrcJu_duoselect');
+                    return $("确定要禁用选择的"+duoselect.length+"个接口？").confirm((duoselect)=>{
+                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                        dataEnable(getMyVar('guanli', 'jk'), duoselect, '禁用');
                         refreshPage(false);
                         return 'toast://已禁用选择';
-                    },sourcefile,duoselect)
-                },sourcefile),
+                    },duoselect)
+                }),
                 col_type: 'scroll_button'
             })
         }
