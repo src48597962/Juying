@@ -73,7 +73,7 @@ function deleteData(lx, data){
     }else if($.type(data)=='array'){
         dellist = data;
     }
-    log(dellist.length);
+
     dellist.forEach(it => {
         if(lx=='jk' && /^hiker:\/\/files\/cache\/src\//.test(it.url)){
             deleteFile(it.url);
@@ -83,7 +83,7 @@ function deleteData(lx, data){
         log('删除>'+datalist[index].name);
         datalist.splice(index, 1);
     })
-    log(datalist.length);
+
     writeFile(sourcefile, JSON.stringify(datalist));
     clearMyVar('SrcJu_searchMark');
 }
