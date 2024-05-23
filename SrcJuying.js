@@ -10,20 +10,35 @@ function dianbo() {
     let yxdatalist = datalist.filter(it=>{
         return !it.stop;
     });
-
-    let jkdatalist = getGroupLists(datalist, getMyVar("SrcJu_点播分组",""));
+    let indexSource = Juconfig['indexSource'] || '_';
+    let sourceType = indexSource.split('_')[0];
+    let sourceNmae = indexSource.split('_')[1];
+    let index = yxdatalist.indexOf(yxdatalist.filter(d => d.type==sourceType && d.name==sourceNmae )[0]);
+    let sourceData = yxdatalist[index] || {};
+    let selectGroup = sourceData.group || sourceData.type;
     
-    let groupNams = getJiekouGroups(yxdatalist);
-    groupNams.forEach(it =>{
+    
+    let groupNames = getJiekouGroups(yxdatalist);
+    groupNames.forEach(it =>{
         let obj = {
-            title: getMyVar("SrcJu_点播分组","")==it?`““””<b><span style="color: #3399cc">`+it+`</span></b>`:it,
+            title: selectGroup==it?`““””<b><span style="color: #3399cc">`+it+`</span></b>`:it,
             url: $('#noLoading#').lazyRule((it) => {
-                if(getMyVar("SrcJu_点播分组")!=it){
-                    putMyVar("SrcJu_点播分组",it);
-                    refreshPage(false);
-                }
-                return "hiker://empty";
-            },it),
+                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                let datalist = getDatas('jk');
+                let yxdatalist = datalist.filter(it=>{
+                    return !it.stop;
+                });
+                let jkdatalist = getGroupLists(yxdatalist, it);
+                let sitenames = jkdatalist.map(it=>{
+                    return it.name;
+                })
+                return $(sitenames, 2, "选择主页源").select((type, cfgfile, Juconfig) => {
+                    Juconfig['indexSource'] = type+'_'+input;
+                    writeFile(cfgfile, JSON.stringify(Juconfig));
+                    refreshPage(true);
+                    return 'toast://' + input;
+                }, it, cfgfile, Juconfig)
+            }, it),
             col_type: 'scroll_button'
         }
         
@@ -47,7 +62,7 @@ function dianbo() {
         
         d.push(obj);
     })
-
+/*
     d.push({
         title: Juconfig['sitename'] || '选择主页源',
         url: $(['选择源'], 2).select((sitenames, cfgfile, Juconfig) => {
@@ -64,6 +79,7 @@ function dianbo() {
         img: "https://hikerfans.com/tubiao/ke/31.png",
         col_type: "avatar"
     })
+    */
     setResult(d);
 }
 //接口一级
