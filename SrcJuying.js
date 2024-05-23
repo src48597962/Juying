@@ -16,7 +16,10 @@ function dianbo() {
     let index = yxdatalist.indexOf(yxdatalist.filter(d => d.type==sourceType && d.name==sourceNmae )[0]);
     let sourceData = yxdatalist[index] || {};
     let selectGroup = sourceData.group || sourceData.type;
-    
+    if(!selectGroup){
+        sourceType = '';
+        sourceNmae = '';
+    }
     
     let groupNames = getJiekouGroups(yxdatalist);
     groupNames.forEach(it =>{
@@ -73,6 +76,11 @@ function dianbo() {
             }
         })
     }
+
+
+
+
+
     setResult(d);
 }
 //接口一级
