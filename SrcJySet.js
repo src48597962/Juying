@@ -126,7 +126,7 @@ function SRCSet() {
             return it.name.indexOf(getMyVar("SrcJu_seacrhJiekou"))>-1;
         })
     }else{
-        jkdatalist = getListData("all", getMyVar("SrcJu_jiekouType","全部"));
+        jkdatalist = getFilterData(datalist, getMyVar("SrcJu_jiekouType","全部"));
     }
     let yxdatalist = jkdatalist.filter(it=>{
         return !it.stop;
