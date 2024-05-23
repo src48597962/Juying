@@ -67,7 +67,7 @@ function deleteData(lx, data){
     eval("let datalist=" + sourcedata + ";");
     let dellist= [];
     if(!data){
-        dellist = datalist;
+        dellist = Object.assign(dellist, datalist);
     }else if($.type(data)=='object'){
         dellist.push(data);
     }else if($.type(data)=='array'){
