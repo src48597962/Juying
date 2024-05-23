@@ -199,7 +199,7 @@ function SRCSet() {
             title: "反向选择",
             url: $('#noLoading#').lazyRule((jkdatalist) => {
                 jkdatalist = JSON.parse(base64Decode(jkdatalist));
-                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                 duoselect(jkdatalist);
                 return "toast://已反选";
             },base64Encode(JSON.stringify(jkdatalist))),
@@ -244,6 +244,7 @@ function SRCSet() {
                         let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
                         if(duoselect.length>0){
                             return $("","选定的"+duoselect.length+"个接口新分组名").input((duoselect)=>{
+                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                                 var filepath = getFile(getMyVar('guanli', 'jk'));
                                 var datafile = fetch(filepath);
                                 eval("var datalist=" + datafile+ ";");
