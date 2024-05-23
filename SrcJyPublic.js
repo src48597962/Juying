@@ -138,7 +138,7 @@ function duoselect(datas){
         let id = data.url?data.url:data.parse;
         if(!duoselect.some(item => id==(item.url?item.url:item.parse))){
             duoselect.push(data);
-            updateItem(id, {title:'<font color=#3CB371>'+getDataTitle(data)});
+            updateItem(id, {title:'‘‘’’'+colorTitle(getDataTitle(data),'#3CB371')});
         }else{
             for(var i = 0; i < duoselect.length; i++) {
                 if(id == (duoselect[i].url?duoselect[i].url:duoselect[i].parse)) {
@@ -146,7 +146,7 @@ function duoselect(datas){
                     break;
                 }
             }
-            updateItem(id, {title:(data.stop?`<font color=#f20c00>`:"") + getDataTitle(data)});
+            updateItem(id, {title:data.stop?`‘‘’’`+colorTitle(getDataTitle(data),'#f20c00'):getDataTitle(data)});
         }
     })
     storage0.putMyVar('SrcJu_duoselect',duoselect);
