@@ -269,7 +269,7 @@ function SRCSet() {
             title: it.stop?'‘‘’’'+colorTitle(datatitle,'#f20c00'):datatitle,
             url: getMyVar('SrcJu_批量选择模式')?$('#noLoading#').lazyRule((data) => {
                 data = JSON.parse(base64Decode(data));
-                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJuMethod.js');
+                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                 duoselect(data);
                 return "hiker://empty";
             },base64Encode(JSON.stringify(it))):$(selectmenu, 2).select((data,paste) => {
