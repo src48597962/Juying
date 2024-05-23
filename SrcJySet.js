@@ -193,7 +193,7 @@ function SRCSet() {
     }
     if(getMyVar('SrcJu_批量选择模式')){
         d.push({
-            col_type: "line_blank"
+            col_type: "blank_block"
         });
         d.push({
             title: "反向选择",
