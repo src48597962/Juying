@@ -117,6 +117,32 @@ function dataEnable(lx, data, input) {
     clearMyVar('SrcJu_duoselect');
     return sm;
 }
+//接口管理多选方法
+function duoselect(datas){
+    let datalist = [];
+    if($.type(datas)=="array"){
+        datalist = datalist.concat(datas);
+    }else if($.type(datas)=="object"){
+        datalist.push(datas);
+    }
+    let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
+    datalist.forEach(data=>{
+        let id = data.type+"_"+data.name;
+        if(!duoselect.some(item => item.name == data.name && item.type==data.type)){
+            duoselect.push(data);
+            updateItem(id, {title:'<font color=#3CB371>'+data.name + (data.parse ? " [主页源]" : "") + (data.erparse ? " [搜索源]" : "")});
+        }else{
+            for(var i = 0; i < duoselect.length; i++) {
+                if(duoselect[i].type+"_"+duoselect[i].name == id) {
+                    duoselect.splice(i, 1);
+                    break;
+                }
+            }
+            updateItem(id, {title:(data.stop?`<font color=#f20c00>`:"") + data.name + (data.parse ? " [主页源]" : "") + (data.erparse ? " [搜索源]" : "") + (data.stop?`</font>`:"")});
+        }
+    })
+    storage0.putMyVar('SrcJu_duoselect',duoselect);
+}
 // 按拼音排序
 function sortByPinyin(arr) {
     var arrNew = arr.sort((a, b) => a.name.localeCompare(b.name));
