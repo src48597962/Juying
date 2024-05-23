@@ -1,4 +1,71 @@
 //本代码仅用于个人学习，请勿用于其他作用，下载后请24小时内删除，代码虽然是公开学习的，但请尊重作者，应留下说明
+require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');//加载公共文件
+//点播
+function dianbo() {
+    addListener("onClose", $.toString(() => {
+        //clearMyVar('zsjiekou');
+    }));
+    let d = [];
+    let datalist = getDatas('jk');
+    let yxdatalist = datalist.filter(it=>{
+        return !it.stop;
+    });
+
+    let jkdatalist = getGroupLists(datalist, getMyVar("SrcJu_点播分组",""));
+    
+    let groupNams = getJiekouGroups(yxdatalist);
+    groupNams.forEach(it =>{
+        let obj = {
+            title: getMyVar("SrcJu_点播分组","")==it?`““””<b><span style="color: #3399cc">`+it+`</span></b>`:it,
+            url: $('#noLoading#').lazyRule((it) => {
+                if(getMyVar("SrcJu_点播分组")!=it){
+                    putMyVar("SrcJu_点播分组",it);
+                    refreshPage(false);
+                }
+                return "hiker://empty";
+            },it),
+            col_type: 'scroll_button'
+        }
+        
+      /*
+            obj.extra = {
+                longClick: [{
+                    title: "列表排序：" + getItem("sourceListSort", "update"),
+                    js: $.toString(() => {
+                        return $(["更新时间","接口名称"], 1).select(() => {
+                            if(input=='接口名称'){
+                                setItem("sourceListSort","name");
+                            }else{
+                                clearItem("sourceListSort");
+                            }
+                            refreshPage(false);
+                        })
+                    })
+                }]
+            }
+        */
+        
+        d.push(obj);
+    })
+
+    d.push({
+        title: Juconfig['sitename'] || '选择主页源',
+        url: $(['选择源'], 2).select((sitenames, cfgfile, Juconfig) => {
+            if(input=='选择源'){
+                return $(sitenames, 2).select((cfgfile, Juconfig) => {
+                    Juconfig['sitename'] = input;
+                    writeFile(cfgfile, JSON.stringify(Juconfig));
+                    refreshPage(true);
+                    return 'toast://选择主页源：' + input;
+                }, cfgfile, Juconfig)
+            }
+        }, sitenames, cfgfile, Juconfig),
+        desc: '管理',
+        img: "https://hikerfans.com/tubiao/ke/31.png",
+        col_type: "avatar"
+    })
+    setResult(d);
+}
 //接口一级
 function jiekouyiji() {
     addListener("onClose", $.toString(() => {
