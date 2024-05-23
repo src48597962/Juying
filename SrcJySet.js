@@ -238,6 +238,35 @@ function SRCSet() {
                 }),
                 col_type: 'scroll_button'
             })
+            d.push({
+                title: "调整分组",
+                url: $('#noLoading#').lazyRule(()=>{
+                        let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
+                        if(duoselect.length>0){
+                            return $("","选定的"+duoselect.length+"个接口新分组名").input((duoselect)=>{
+                                var filepath = getFile(getMyVar('guanli', 'jk'));
+                                var datafile = fetch(filepath);
+                                eval("var datalist=" + datafile+ ";");
+                                datalist.forEach(data=>{
+                                    if(duoselect.some(item => data.url==item.url)){
+                                        if(input){
+                                            data.group  = input;
+                                        }else{
+                                            delete data.group;
+                                        }
+                                    }
+                                })
+                                writeFile(filepath, JSON.stringify(datalist));
+                                clearMyVar('SrcJu_duoselect');
+                                refreshPage(false);
+                                return "toast://已批量调整接口分组";
+                            }, duoselect)
+                        }else{
+                            return "toast://请选择";
+                        }
+                    }),
+                col_type: "scroll_button"
+            });
         }
     }
 
