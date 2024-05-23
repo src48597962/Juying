@@ -142,7 +142,7 @@ function SRCSet() {
     });
     if(getMyVar('SrcJu_批量选择模式')){
         d.push({
-            title: "全部选择",
+            title: "反向选择",
             url: $('#noLoading#').lazyRule((jkdatalist) => {
                 jkdatalist = JSON.parse(base64Decode(jkdatalist));
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
