@@ -1722,11 +1722,11 @@ function Resourceimport(input,importtype){
             var urls= [];
             //多线程处理
             var task = function(obj) {
-
+                let arr;
                 if(/^csp_AppYs/.test(obj.api)){
-                    urls.push({ "name": obj.name, "url": obj.ext, "type": getapitype(obj.ext), "group": "新导入"});
+                    arr = { "name": obj.name, "url": obj.ext, "type": getapitype(obj.ext)};
                 }else if((obj.type==1||obj.type==0)&&obj.api.indexOf('cms.nokia.press')==-1){
-                    urls.push({ "name": obj.name, "url": obj.api, "type": "cms", "group": "新导入"});
+                    arr = { "name": obj.name, "url": obj.api, "type": "cms"};
                 }else{
                     let extfile = obj.ext;
                     if(/^clan:/.test(extfile)){
@@ -1734,17 +1734,17 @@ function Resourceimport(input,importtype){
                     }else if(/^./.test(extfile)){
                         extfile = input.match(/http(s)?:\/\/.*\//)[0]+extfile.replace("./","");
                     }
-                    let arr;
+                    
                     if(/^csp_XBiubiu/.test(obj.api)){
-                        arr = { "name": obj.name, "type": "biubiu", "ext": extfile, "group": "新导入"};
+                        arr = { "name": obj.name, "type": "biubiu", "ext": extfile};
                     }else if(/^csp_XPath/.test(obj.api)){
-                        arr = { "name": obj.name, "type": "xpath", "ext": extfile, "group": "新导入"};
+                        arr = { "name": obj.name, "type": "xpath", "ext": extfile};
                     }else if(obj.api=="csp_XBPQ"){
-                        arr = { "name": obj.name, "type": "XBPQ", "ext": extfile, "group": "新导入"};
+                        arr = { "name": obj.name, "type": "XBPQ", "ext": extfile};
                     }else if(/drpy2/.test(obj.api)){
-                        arr = { "name": obj.name, "type": "drpy", "ext": extfile, "group": "新导入"};
+                        arr = { "name": obj.name, "type": "drpy", "ext": extfile};
                     }else if(/^csp_XYQHiker/.test(obj.api)){
-                        arr = { "name": obj.name, "type": "XYQ", "ext": extfile, "group": "新导入"};
+                        arr = { "name": obj.name, "type": "XYQ", "ext": extfile};
                     }
 
                     if(arr){
@@ -1757,7 +1757,7 @@ function Resourceimport(input,importtype){
                                 if (content == '') {
                                     urlfile = '';
                                 }else{
-                                    urlfile = 'hiker://files/cache/src/Jubox/libs/' + extfile.substr(extfile.lastIndexOf('/') + 1);
+                                    urlfile = 'hiker://files/cache/src/Jubox/libs/' + arr.type + '_' + extfile.substr(extfile.lastIndexOf('/') + 1);
                                     writeFile(urlfile, content);
                                 }
                             }catch(e){
@@ -1766,9 +1766,14 @@ function Resourceimport(input,importtype){
                         }
                         if(urlfile){
                             arr['url'] = urlfile;
-                            urls.push(arr);
                         }
                     }
+                }
+                if(arr){
+                    arr['group'] = "新导入";
+                    arr['searchable'] = obj.searchable;
+                    arr['filterable'] = obj.filterable;
+                    urls.push(arr);
                 }
                 return 1;
             }
