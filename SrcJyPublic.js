@@ -39,6 +39,7 @@ function getDatas(lx) {
 
 //获取分组接口列表
 function getGroupLists(datas, k) {
+    k = k=="全部"?"":k;
     datas = datas.filter(it=>{
         let group = it.group||it.type;
         return !k || (k==group);
