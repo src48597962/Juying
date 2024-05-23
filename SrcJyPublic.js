@@ -46,7 +46,7 @@ function getListData(lx, group) {
     datas = datas.filter(it=>{
         return !group || it.group==group;
     })
-    if(getItem('ListSort','update') == 'update'){
+    if(getItem('ListSort','name') == 'update'){
         datas = sortByPinyin(datas);
     }
     
