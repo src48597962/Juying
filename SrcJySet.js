@@ -126,7 +126,10 @@ function SRCSet() {
             return it.name.indexOf(getMyVar("SrcJu_seacrhJiekou"))>-1;
         })
     }else{
-        jkdatalist = getFilterData(datalist, getMyVar("SrcJu_jiekouType",""));
+        let group = guanliType=='jk'?getMyVar("SrcJu_jiekouGroup",""):"";
+        jkdatalist = datalist.filter(it=>{
+            return !group || it.group==group;
+        });
     }
     let yxdatalist = jkdatalist.filter(it=>{
         return !it.stop;
@@ -157,6 +160,14 @@ function SRCSet() {
             titleVisible: true
         }
     });
+    let groupNams = [];
+    jkdatalist.forEach(it => {
+        let group = it.group||it.type;
+        if (groupNams.indexOf(group)==-1){
+            groupNams.push(group);
+        }
+    })
+
     let sourcefile = getFile(guanliType);
     jkdatalist.forEach(it => {
         let selectmenu;
