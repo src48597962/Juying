@@ -60,7 +60,30 @@ function getJiekouGroups(datas) {
     })
     return groupNams;
 }
-
+//删除统一入口
+function deleteData(lx, data){
+    let sourcefile = getFile(lx);
+    let sourcedata = fetch(sourcefile);
+    eval("let datalist=" + sourcedata + ";");
+    let dellist= [];
+    if(!data){
+        dellist = datalist;
+    }else if($.type(data)=='object'){
+        dellist.push(data);
+    }else if($.type(data)=='array'){
+        dellist = data;
+    }
+    dellist.forEach(it => {
+        if(lx=='jk' && /^hiker:\/\/files\/cache\/src\//.test(it.url)){
+            deleteFile(it.url);
+        }
+        let dataurl = lx=='jk'?it.url:it.parse;
+        let index = datalist.indexOf(datalist.filter(d => dataurl==(lx=='jk'?d.url:d.parse) )[0]);
+        datalist.splice(index, 1);
+    })
+    writeFile(sourcefile, JSON.stringify(datalist));
+    clearMyVar('SrcJu_searchMark');
+}
 // 按拼音排序
 function sortByPinyin(arr) {
     var arrNew = arr.sort((a, b) => a.name.localeCompare(b.name));
