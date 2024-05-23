@@ -86,6 +86,7 @@ function deleteData(lx, data){
 
     writeFile(sourcefile, JSON.stringify(datalist));
     clearMyVar('SrcJu_searchMark');
+    clearMyVar('SrcJu_duoselect');
 }
 //接口禁用启用
 function dataEnable(lx, data, input) {
@@ -113,6 +114,7 @@ function dataEnable(lx, data, input) {
     })
     writeFile(sourcefile, JSON.stringify(datalist));
     clearMyVar('SrcJu_searchMark');
+    clearMyVar('SrcJu_duoselect');
     return sm;
 }
 // 按拼音排序
