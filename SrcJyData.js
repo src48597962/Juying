@@ -1,16 +1,6 @@
 //本代码仅用于个人学习，请勿用于其他作用，下载后请24小时内删除，代码虽然是公开学习的，但请尊重作者，应留下说明
-//临时
-clearItem('zhanshibutton');
-clearItem('zhibobutton');
-var cfgfile = "hiker://files/rules/Src/Juying/config.json";
-var Juyingcfg=fetch(cfgfile);
-if(Juyingcfg != ""){
-    eval("var JYconfig=" + Juyingcfg+ ";");
-}else{
-    var JYconfig= {};
-    JYconfig["依赖"] = config.依赖;
-    writeFile(cfgfile, JSON.stringify(JYconfig));
-}
+require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');//加载公共文件
+
 
 function JYsousuo(){
     let datasource = getItem('searchsource',getItem('JYdatasource', 'sougou'));
