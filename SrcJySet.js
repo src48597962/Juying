@@ -100,7 +100,7 @@ function SRCSet() {
                                 deleteFile(it.url);
                             }
                         })
-                        datalist = [];
+                        datalist = datalist;
                     }
                     writeFile(filepath, JSON.stringify(datalist));
                     refreshPage(false);
