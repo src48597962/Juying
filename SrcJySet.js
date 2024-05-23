@@ -154,9 +154,9 @@ function SRCSet() {
         }
     });
     if(guanliType=='jk' && datalist.length){
-        let groupNams = getJiekouGroups(datalist);
-        groupNams.unshift("全部");
-        groupNams.forEach(it =>{
+        let groupNames = getJiekouGroups(datalist);
+        groupNames.unshift("全部");
+        groupNames.forEach(it =>{
             let obj = {
                 title: getMyVar("SrcJu_jiekouGroup","全部")==it?`““””<b><span style="color: #3399cc">`+it+`</span></b>`:it,
                 url: $('#noLoading#').lazyRule((it) => {
