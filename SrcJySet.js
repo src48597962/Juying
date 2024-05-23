@@ -5,13 +5,12 @@ function SRCSet() {
     addListener("onClose", $.toString(() => {
         clearMyVar('guanli');
         clearMyVar('SrcJu_批量选择模式');
-        clearMyVar('duoselect');
+        clearMyVar('SrcJu_duoselect');
         clearMyVar('groupmenu');
     }));
     setPageTitle("♥管理"+getMyVar('SrcJuying-Version', ''));
 
     if(getMyVar('guanli','')==""){putMyVar('guanli','jk');}
-    clearMyVar('duoselect');
 
     let guanliType = getMyVar('guanli', 'jk');
     var d = [];
@@ -154,8 +153,8 @@ function SRCSet() {
             titleVisible: true
         }
     });
-    if(guanliType=='jk' && jkdatalist.length){
-        let groupNams = getJiekouGroups(jkdatalist);
+    if(guanliType=='jk' && datalist.length){
+        let groupNams = getJiekouGroups(datalist);
         groupNams.unshift("全部");
         groupNams.forEach(it =>{
             let obj = {
@@ -1989,7 +1988,7 @@ function JYshare(lx,input) {
     var datafile = fetch(filepath);
     eval("var datalist=" + datafile+ ";");
     var sm2 = "聚影分享口令已生成";
-    let duoselect = storage0.getMyVar('duoselect')?storage0.getMyVar('duoselect'):[];
+    let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
     if(duoselect.length>0){
         var lists = datalist.filter(item => {
             if(item.url){
@@ -2001,7 +2000,6 @@ function JYshare(lx,input) {
         if(lists.length>0){
             var datalist = lists;
             sm2 = "(选定)聚影分享口令已生成";
-            //clearMyVar('duoselect');
         }
     }
     if(input=='云口令文件'){
