@@ -102,10 +102,10 @@ function dataEnable(lx, data, input) {
         let index = datalist.indexOf(datalist.filter(d => dataurl==(lx=='jk'?d.url:d.parse) )[0]);
         if(input == "禁用"){
             datalist[index].stop = 1;
-            sm = waitlist.length=1?'已禁用：'+it.name:'已禁用所选的'+waitlist.length+'个';
+            sm = waitlist.length==1?'已禁用：'+it.name:'已禁用所选的'+waitlist.length+'个';
         }else{
             delete datalist[index].stop;
-            sm = waitlist.length=1?'已启用：'+it.name:'已启用所选的'+waitlist.length+'个';
+            sm = waitlist.length==1?'已启用：'+it.name:'已启用所选的'+waitlist.length+'个';
         }
     })
     writeFile(sourcefile, JSON.stringify(datalist));
