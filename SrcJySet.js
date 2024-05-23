@@ -127,9 +127,7 @@ function SRCSet() {
         })
     }else{
         let group = guanliType=='jk'?getMyVar("SrcJu_jiekouGroup",""):"";
-        jkdatalist = datalist.filter(it=>{
-            return !group || it.group==group;
-        });
+        jkdatalist = getGroupLists(datalist, group);
     }
     let yxdatalist = jkdatalist.filter(it=>{
         return !it.stop;
@@ -160,12 +158,40 @@ function SRCSet() {
             titleVisible: true
         }
     });
-    let groupNams = [];
-    jkdatalist.forEach(it => {
-        let group = it.group||it.type;
-        if (groupNams.indexOf(group)==-1){
-            groupNams.push(group);
+    let groupNams = getJiekouGroups(jkdatalist);
+    groupNams.unshift("全部");
+    groupNams.forEach(it =>{
+        let obj = {
+            title: getMyVar("SrcJu_jiekouGroup","全部")==it?`““””<b><span style="color: #3399cc">`+it+`</span></b>`:it,
+            url: $('#noLoading#').lazyRule((it) => {
+                if(getMyVar("SrcJu_jiekouGroup")!=it){
+                    putMyVar("SrcJu_jiekouGroup",it);
+                    refreshPage(false);
+                }
+                return "hiker://empty";
+            },it),
+            col_type: 'scroll_button'
         }
+        
+        if(it == "全部"){
+            obj.extra = {
+                longClick: [{
+                    title: "列表排序：" + getItem("sourceListSort", "update"),
+                    js: $.toString(() => {
+                        return $(["更新时间","接口名称"], 1).select(() => {
+                            if(input=='接口名称'){
+                                setItem("sourceListSort","name");
+                            }else{
+                                clearItem("sourceListSort");
+                            }
+                            refreshPage(false);
+                        })
+                    })
+                }]
+            }
+        }
+        
+        d.push(obj);
     })
 
     let sourcefile = getFile(guanliType);
