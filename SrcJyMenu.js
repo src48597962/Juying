@@ -613,7 +613,7 @@ let buttonmenu = {
         img: "https://hikerfans.com/tubiao/more/105.png",
         url: $("hiker://empty##fypage#noRecordHistory##noHistory#").rule(() => {
             require(config.依赖);
-            jiekouyiji();
+            dianbo();
         })
     },
     "直播": {
