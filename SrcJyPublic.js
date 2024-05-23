@@ -84,6 +84,34 @@ function deleteData(lx, data){
     writeFile(sourcefile, JSON.stringify(datalist));
     clearMyVar('SrcJu_searchMark');
 }
+//接口禁用启用
+function dataEnable(lx, data, input) {
+    let sourcefile = getFile(lx);
+    let sourcedata = fetch(sourcefile);
+    eval("let datalist=" + sourcedata + ";");
+
+    let waitlist= [];
+    if($.type(data)=='object'){
+        waitlist.push(data);
+    }else if($.type(data)=='array'){
+        waitlist = data;
+    }
+    let sm;
+    waitlist.forEach(it => {
+        let dataurl = lx=='jk'?it.url:it.parse;
+        let index = datalist.indexOf(datalist.filter(d => dataurl==(lx=='jk'?d.url:d.parse) )[0]);
+        if(input == "禁用"){
+            datalist[index].stop = 1;
+            sm = waitlist.length=1?'已禁用：'+it.name:'已禁用所选的'+waitlist.length+'个';
+        }else{
+            delete datalist[index].stop;
+            sm = waitlist.length=1?'已启用：'+it.name:'已启用所选的'+waitlist.length+'个';
+        }
+    })
+    writeFile(sourcefile, JSON.stringify(datalist));
+    clearMyVar('SrcJu_searchMark');
+    return sm;
+}
 // 按拼音排序
 function sortByPinyin(arr) {
     var arrNew = arr.sort((a, b) => a.name.localeCompare(b.name));
