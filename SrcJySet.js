@@ -402,6 +402,7 @@ function jiekousave(urls) {
                 if(urlgroup){arr['group'] = urlgroup}
                 if(urlua){arr['ua'] = urlua}
                 if(urlext){arr['ext'] = urlext}
+                if(urls[i].categories){arr['categories'] = urls[i].categories}
                 if(urls.length == 1){
                     datalist.unshift(arr);
                 }else{
@@ -1813,7 +1814,7 @@ function Resourceimport(input,importtype){
                 if(/^csp_AppYs/.test(obj.api)){
                     arr = { "name": obj.name, "url": obj.ext, "type": getapitype(obj.ext)};
                 }else if((obj.type==1||obj.type==0)&&obj.api.indexOf('cms.nokia.press')==-1){
-                    arr = { "name": obj.name, "url": obj.api, "type": "cms"};
+                    arr = { "name": obj.name, "url": obj.api, "type": "cms", "categories": categories};
                 }else{
                     let extfile = obj.ext;
                     if(/^clan:/.test(extfile)){
