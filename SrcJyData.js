@@ -116,7 +116,7 @@ function getYiData(jkdata) {
             }catch(e){
                 log(api_name+' 接口访问异常，请更换接口！获取分类失败>'+e.message);
             }
-
+            
             if(typeclass.length>0){
                 let type_pids = [];
                 let type_ids = [];
