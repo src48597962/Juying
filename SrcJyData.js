@@ -109,6 +109,14 @@ function getYiData(jkdata) {
                             let typehtml = JSON.parse(gethtml);
                             typeclass = typehtml.class;
                         }
+                        if(jkdata.categories){
+                            for(var i=0;i<typeclass.length;i++){
+                                if(jkdata.categories.indexOf(typeclass[i].type_name)==-1){
+                                    typeclass.splice(i,1);
+                                    i = i -1;
+                                }
+                            }
+                        }
                     } else {
                         log('api类型错误')
                     }
