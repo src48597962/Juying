@@ -124,6 +124,7 @@ function getYiData(jkdata) {
                     if(type_pids.indexOf(it.type_pid)==-1){type_pids.push(it.type_pid)}
                     if(type_ids.indexOf(it.type_id)==-1){type_ids.push(it.type_id)}
                 })
+                log(typeclass);
 
                 if(type_pids.length > 0){
                     type_pids.sort((a, b) => {
