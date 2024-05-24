@@ -4,6 +4,7 @@ require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');//加载
 
 
 function getYiData(jkdata) {
+    let d = [];
     let api_name = jkdata.name||"";
     let api_type = jkdata.type||"";
     let api_url = jkdata.url||"";
@@ -176,6 +177,7 @@ function getYiData(jkdata) {
             });
         }
     }
+    return d;
 }
 
 function JYsousuo(){
