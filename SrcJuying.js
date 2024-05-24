@@ -26,6 +26,22 @@ function dianboerji() {
         }
     });
 
+    /*
+    {
+        "details1": details1,
+        "details2": details2,
+        "pic": pic,
+        "desc": desc,
+        "tabs": tabs,
+        "linecodes": linecodes,
+        "lists": lists
+    };
+    */
+    log(erdata.tabs);
+    log(erdata.linecodes);
+    log(erdata.lists);
+    
+    
 
     //底部说明
     d.push({
