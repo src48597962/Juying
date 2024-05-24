@@ -71,7 +71,7 @@ function dianboerji() {
             col_type: "blank_block"
         })
     }
-    
+    let parse_api;
     function setTabs(tabs, vari) {
         d.push({
             title: getMyVar('shsort') == '1'?'““””<b><span style="color: #FF0000">∨</span></b>' : '““””<b><span style="color: #1aad19">∧</span></b>',
