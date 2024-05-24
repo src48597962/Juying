@@ -124,9 +124,9 @@ function dianboerji() {
     function setLists(lists, index) {
         let type = jkdata.type;
         let list = lists[index];
-        log(lists);
-        log(index);
+
         log(list);
+        log(type);
         function playlist(lx, len) {//定义选集列表生成
             if (lx == '1') {
                 if (/v1|app|v2|iptv|cms/.test(type)) {
@@ -198,7 +198,7 @@ function dianboerji() {
             }
 
         }
-        if (list == undefined || list.length == 0) {
+        if (list.length == 0) {
             playlist('0');
         } else {
             if (/v1|app|v2|iptv|cms|xpath|biubiu|XBPQ/.test(type)) {
@@ -233,6 +233,7 @@ function dianboerji() {
                         playlist('1', len);
                     }
                 } catch (e) {
+                    log(e.message);
                     playlist('0');
                 }
 
