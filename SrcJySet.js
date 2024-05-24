@@ -1814,7 +1814,7 @@ function Resourceimport(input,importtype){
                 if(/^csp_AppYs/.test(obj.api)){
                     arr = { "name": obj.name, "url": obj.ext, "type": getapitype(obj.ext)};
                 }else if((obj.type==1||obj.type==0)&&obj.api.indexOf('cms.nokia.press')==-1){
-                    arr = { "name": obj.name, "url": obj.api, "type": "cms", "categories": categories};
+                    arr = { "name": obj.name, "url": obj.api, "type": "cms", "categories": obj.categories};
                 }else{
                     let extfile = obj.ext;
                     if(/^clan:/.test(extfile)){
