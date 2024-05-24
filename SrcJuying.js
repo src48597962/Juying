@@ -127,7 +127,7 @@ function dianboerji() {
 
         log(list);
         log(type);
-        function playlist(lx, len) {//定义选集列表生成
+        function playlist(lx, col_type) {//定义选集列表生成
             if (lx == '1') {
                 if (/v1|app|v2|iptv|cms/.test(type)) {
                     var playtitle = list[j].split('$')[0].trim();
@@ -187,7 +187,7 @@ function dianboerji() {
                     title: getHead(playtitle.replace(/第|集|话|期|-|new|最新|新/g, ''), Color3),
                     url: playurl + DTJX,
                     extra: extra,
-                    col_type: list.length > 4 && len < 7 ? 'text_4' : len > 20 ? 'text_1' :'text_3'
+                    col_type: col_type
                 });
             } else {
                 d.push({
@@ -201,28 +201,22 @@ function dianboerji() {
         if (list.length == 0) {
             playlist('0');
         } else {
-            if (/v1|app|v2|iptv|cms|xpath|biubiu|XBPQ/.test(type)) {
-                var listone = list[0].split('$')[0].trim();
-                try{
-                    let list1 = list[0].split('$')[0];
-                    let list2 = list[list.length-1].split('$')[0];
-                    if(parseInt(list1.match(/(\d+)/)[0])>parseInt(list2.match(/(\d+)/)[0])){
-                        list.reverse();
-                    }
-                }catch(e){
-                    //log('修正选集顺序失败>'+e.message)
+            try{
+                let list1 = list[0].split('$')[0];
+                let list2 = list[list.length-1].split('$')[0];
+                if(parseInt(list1.match(/(\d+)/)[0])>parseInt(list2.match(/(\d+)/)[0])){
+                    list.reverse();
                 }
-            }else{
-                
+            }catch(e){
+                //log('修正选集顺序失败>'+e.message)
             }
-            
-            if (listone) {
-                var len = listone.length;
-            }
+            let listone = list[0].split('$')[0].trim();
+            let len = listone.length;
+            let col_type = list.length > 4 && len < 7 ? 'text_4' : len > 20 ? 'text_1' :'text_3';
             if (getMyVar('shsort') == '1') {
                 try {
                     for (var j = list.length - 1; j >= 0; j--) {
-                        playlist('1', len);
+                        playlist('1', col_type);
                     }
                 } catch (e) {
                     playlist('0');
@@ -230,10 +224,9 @@ function dianboerji() {
             } else {
                 try {
                     for (var j = 0; j < list.length; j++) {
-                        playlist('1', len);
+                        playlist('1', col_type);
                     }
                 } catch (e) {
-                    log(e.message);
                     playlist('0');
                 }
 
