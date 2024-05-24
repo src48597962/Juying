@@ -2,6 +2,182 @@
 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');//加载公共文件
 
 
+
+function getYiData(jkdata) {
+    let api_name = jkdata.name||"";
+    let api_type = jkdata.type||"";
+    let api_url = jkdata.url||"";
+    let api_ua = jkdata.ua||"MOBILE_UA";
+    api_ua = api_ua=="MOBILE_UA"?MOBILE_UA:api_ua=="PC_UA"?PC_UA:api_ua;
+    
+    let vodurl,classurl,listurl,lists;
+    if(api_name&&api_type&&api_url){
+        if (api_type=="v1") {
+            let date = new Date();
+            let mm = date.getMonth()+1;
+            let dd = date.getDate();
+            let key = (mm<10?"0"+mm:mm)+""+(dd<10?"0"+dd:dd);
+            vodurl = api_url + '/detail?&key='+key+'&vod_id=';
+            classurl = api_url + "/types";
+            listurl = api_url + '?key='+key+'&page=';
+            lists = "html.data.list";
+        } else if (api_type=="app") {
+            vodurl = api_url + 'video_detail?id=';
+            classurl = api_url + "nav";
+            listurl = api_url + 'video?tid=@type_id&pg=';
+            lists = "html.list";
+        } else if (api_type=="v2") {
+            vodurl = api_url + 'video_detail?id=';
+            classurl = api_url + "nav";
+            listurl = api_url + 'video?tid=@type_id&pg=';
+            lists = "html.data";
+        } else if (api_type=="iptv") {
+            vodurl = api_url + '?ac=detail&ids=';
+            classurl = api_url + "?ac=flitter";
+            listurl = api_url + '?ac=list&page=';
+            lists = "html.data";
+        } else if (api_type=="cms") {
+            vodurl = api_url + '?ac=videolist&ids=';
+            classurl = api_url + "?ac=list";
+            listurl = api_url + '?ac=videolist&pg=';
+            lists = "html.list";
+        } else {
+            log('api类型错误')
+        }
+    }
+    if(MY_PAGE==1){
+        if(typeof(classurl) != "undefined"){
+            const Color = "#3399cc";
+            let typeclass = [];
+            try{
+                
+                    let gethtml = request(classurl, { headers: { 'User-Agent': api_ua }, timeout:5000 });
+                    if (api_type=="v1") {
+                        let typehtml = JSON.parse(gethtml);
+                        let typelist = typehtml.data.list||typehtml.data.typelist;
+                        typeclass = typelist.map((list)=>{
+                            return {
+                                "type_id": list.type_id,
+                                "type_pid": list.type_pid,
+                                "type_name": list.type_name
+                            }
+                        })
+                    } else if (/app|v2/.test(api_type)) {
+                        let typehtml = JSON.parse(gethtml);
+                        let typelist = typehtml.list||typehtml.data;
+                        typeclass = typelist.map((list)=>{
+                            return {
+                                "type_id": list.type_id,
+                                "type_pid": 0,
+                                "type_name": list.type_name
+                            }
+                        })
+                    } else if (api_type=="iptv") {
+                        let type_dict = {
+                            comic: '动漫',
+                            movie: '电影',
+                            tvplay: '电视剧',
+                            tvshow: '综艺',
+                            movie_4k: '4k',
+                            hanguoju: '韩剧',
+                            oumeiju: '欧美剧',
+                            tiyu: '体育'
+                        };
+                        let typehtml = JSON.parse(gethtml);
+                        typeclass = typehtml.map((list)=>{
+                            if(type_dict[list]){
+                                return {
+                                    "type_id": list,
+                                    "type_pid": 0,
+                                    "type_name": type_dict[list]
+                                }
+                            }
+                        })
+                        typeclass = typeclass.filter(n => n);
+                    } else if (api_type=="cms") {
+                        if(/<\?xml/.test(gethtml)){
+                            let typelist = pdfa(gethtml,'class&&ty');
+                            typeclass = typelist.map((list)=>{
+                                return {
+                                    "type_id": String(xpath(list,`//ty/@id`)).trim(),
+                                    "type_pid": 0,
+                                    "type_name": String(xpath(list,`//ty/text()`)).trim()
+                                }
+                            })
+                        }else{
+                            let typehtml = JSON.parse(gethtml);
+                            typeclass = typehtml.class;
+                        }
+                    } else {
+                        log('api类型错误')
+                    }
+                
+            }catch(e){
+                log(api_name+' 接口访问异常，请更换接口！获取分类失败>'+e.message);
+            }
+
+            if(typeclass.length>0){
+                let type_pids = [];
+                let type_ids = [];
+                typeclass.forEach(it=>{
+                    if(type_pids.indexOf(it.type_pid)==-1){type_pids.push(it.type_pid)}
+                    if(type_ids.indexOf(it.type_id)==-1){type_ids.push(it.type_id)}
+                })
+
+                if(type_pids.length > 0){
+                    type_pids.sort((a, b) => {
+                        return a - b
+                    })
+                };
+
+                if(/v2|app|XBPQ/.test(api_type)&&!getMyVar('SrcJu_dianbo$type_id')){
+                    putMyVar('SrcJu_dianbo$type_id',type_ids[0]);
+                }
+                for (var j in type_pids) {
+                    for (var i in typeclass) {
+                        if(typeclass[i].type_pid==type_pids[j]){
+                            d.push({
+                                title: getMyVar('SrcJu_dianbo$type_id')==typeclass[i].type_id?'““””<b><span style="color:' + Color + '">' + typeclass[i].type_name + '</span></b>':typeclass[i].type_name,
+                                url: $('#noLoading#').lazyRule((type_id) => {
+                                    putMyVar('SrcJu_dianbo$type_id', type_id);
+                                    refreshPage(true);
+                                    return "hiker://empty";
+                                }, typeclass[i].type_id),
+                                col_type: 'scroll_button'
+                            });
+                        }
+                    }
+                    d.push({
+                        col_type: "blank_block"
+                    });
+                }
+            }
+            
+            var searchurl = $('').lazyRule((data) => {
+                if(data){
+                    return $('hiker://empty#noRecordHistory##noHistory#').rule((name,data) => {
+                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyXunmi.js');
+                        xunmi(name,data);
+                    }, input,data);
+                }else{
+                    return 'toast://未找到接口数据'
+                }
+            },jkdata);
+            d.push({
+                title: "🔍",
+                url: $.toString((searchurl) => {
+                        return input + searchurl;
+                    },searchurl),
+                desc: "搜你想看的...",
+                col_type: "input",
+                extra: {
+                    titleVisible: true
+                }
+            });
+        }
+    }
+}
+
 function JYsousuo(){
     let datasource = getItem('searchsource',getItem('JYdatasource', 'sougou'));
     var d = [];
