@@ -124,7 +124,6 @@ function getYiData(jkdata) {
                     if(type_pids.indexOf(it.type_pid)==-1){type_pids.push(it.type_pid)}
                     if(type_ids.indexOf(it.type_id)==-1){type_ids.push(it.type_id)}
                 })
-                log(typeclass);
 
                 if(type_pids.length > 0){
                     type_pids.sort((a, b) => {
@@ -176,6 +175,150 @@ function getYiData(jkdata) {
                     titleVisible: true
                 }
             });
+        }
+    }
+    if(typeof(listurl) != "undefined"){
+        try{
+            if(api_type=="XBPQ"){
+                MY_URL = listurl.replace('{catePg}',jkdata["起始页"]?MY_PAGE>jkdata["起始页"]?MY_PAGE:"":MY_PAGE).replace('{cateId}',getMyVar('SrcJu_dianbo$type_id','1'));
+            }else{
+                MY_URL = listurl + MY_PAGE;
+                if(api_type=="v2"||api_type=="app"){
+                    MY_URL = MY_URL.replace('@type_id',getMyVar('SrcJu_dianbo$type_id','1'));
+                }else if(getMyVar('SrcJu_dianbo$type_id')){
+                    if (api_type=="v1") {
+                        MY_URL = MY_URL + '&type=' + getMyVar('SrcJu_dianbo$type_id');
+                    } else if (api_type=="iptv") {
+                        MY_URL = MY_URL + '&class=' + getMyVar('SrcJu_dianbo$type_id');
+                    } else {
+                        MY_URL = MY_URL + '&t=' + getMyVar('SrcJu_dianbo$type_id');
+                    }
+                }
+            }
+
+            try {
+                var gethtml = request(MY_URL, { headers: { 'User-Agent': api_ua }, timeout:5000 });
+                if(api_type=="XBPQ"){
+                    jkdata["二次截取"] = jkdata["二次截取"] || (gethtml.indexOf(`<ul class="stui-vodlist`)>-1?`<ul class="stui-vodlist&&</ul>`:gethtml.indexOf(`<ul class="myui-vodlist`)>-1?`<ul class="myui-vodlist&&</ul>`:"");
+                    if(jkdata["二次截取"]){
+                        gethtml = gethtml.split(jkdata["二次截取"].split('&&')[0])[1].split(jkdata["二次截取"].split('&&')[1])[0];
+                    }
+                    var list = [];
+                    jkdata["链接"] = jkdata["链接"] || `href="&&"`;
+                    jkdata["标题"] = jkdata["标题"] || `title="&&"`;
+                    jkdata["数组"] = jkdata["数组"] || `<a &&</a>`;
+                    let jklist = gethtml.match(new RegExp(jkdata["数组"].replace('&&','((?:.|[\r\n])*?)'), 'g'));
+                    jklist.forEach(item=>{
+                        if(!jkdata["图片"]){
+                            if(item.indexOf('original=')>-1){
+                                jkdata["图片"] = `original="&&"`;
+                            }else if(item.indexOf('<img src=')>-1){
+                                jkdata["图片"] = `<img src="&&"`;
+                            }
+                        };
+                        if(jkdata["图片"]&&item.indexOf(jkdata["图片"].split("&&")[0])>-1){
+                            let id = item.split(jkdata["链接"].split('&&')[0])[1].split(jkdata["链接"].split('&&')[1])[0];
+                            let name = item.split(jkdata["标题"].split('&&')[0])[1].split(jkdata["标题"].split('&&')[1])[0];
+                            let pic = "";
+                            try{
+                                pic = item.split(jkdata["图片"].split('&&')[0])[1].split(jkdata["图片"].split('&&')[1])[0];
+                            }catch(e){}
+                            let note = "";
+                            try{
+                                note = item.split(jkdata["副标题"].split('&&')[0])[1].split(jkdata["副标题"].split('&&')[1])[0];
+                            }catch(e){}
+                            let arr = {"vod_id":id,"vod_name":name,"vod_remarks":note,"vod_pic":pic};
+                            list.push(arr);
+                        }
+                    })
+                }else{
+                    if(/cms/.test(api_type)&&/<\?xml/.test(gethtml)){
+                        gethtml = gethtml.replace(/&lt;!\[CDATA\[|\]\]&gt;|<!\[CDATA\[|\]\]>/g,'');
+                        let xmllist = [];
+                        let videos = pdfa(gethtml,'list&&video');
+                        for(let i in videos){
+                            let id = String(xpath(videos[i],`//video/id/text()`)).trim();
+                            let name = String(xpath(videos[i],`//video/name/text()`)).trim();
+                            let pic = String(xpath(videos[i],`//video/pic/text()`)).trim();
+                            let note = String(xpath(videos[i],`//video/note/text()`)).trim();
+                            let arr = {"vod_id":id,"vod_name":name,"vod_remarks":note,"vod_pic":pic};
+                            let plays = xpathArray(videos[i],`//video/dl/dd/text()`);
+                            if(plays.length==1){
+                                let play = plays[0];
+                                if(play.indexOf('$')==-1&&play.indexOf('m3u8')>-1){
+                                    arr['play'] = play.trim();
+                                }
+                            }
+                            xmllist.push(arr)
+                        }
+                        var html = {"list":xmllist};
+                    }else if(!/{|}/.test(gethtml)&&gethtml!=""){
+                        var decfile = "hiker://files/rules/Src/Juying/appdec.js";
+                        var Juyingdec=fetch(decfile);
+                        if(Juyingdec != ""){
+                            eval(Juyingdec);
+                            var html = JSON.parse(xgdec(gethtml));
+                        }
+                    }else{
+                        var html = JSON.parse(gethtml);
+                    }
+                    try{
+                        var list = eval(lists)||html.list||html.data.list||html.data||[];
+                    } catch (e) {
+                        var list = html.list||html.data.list||html.data||[];
+                    }
+                }
+            } catch (e) {
+                var list = [];
+            }
+            
+            let videolist = list.map((list)=>{
+                let vodname = list.vod_name||list.title;
+                if(vodname){
+                    let vodpic = list.vod_pic||list.pic;
+                    let voddesc = list.vod_remarks||list.state||"";
+                    let vodurl = list.vod_id?url&&!/^http/.test(list.vod_id)?url+list.vod_id:list.vod_id:list.nextlink;
+                    vodpic = vodpic?vodpic.replace('/img.php?url=','').replace('/tu.php?tu=','') + "@Referer=":"https://www.xawqxh.net/mxtheme/images/loading.gif";
+                    if(/^\/upload|^upload/.test(vodpic)){
+                        vodpic = vodurl.match(/http(s)?:\/\/(.*?)\//)[0] + vodpic;
+                    }
+                    if(/^\/\//.test(vodpic)){
+                        vodpic = "https:" + vodpic;
+                    }
+                    if(api_type=='cms'&&list.vod_play_url){
+                        if(list.vod_play_url.indexOf('$')==-1&&list.vod_play_url.indexOf('m3u8')>-1){
+                            list['play'] = list.vod_play_url;
+                        }
+                    }
+                    return {
+                        title: vodname,
+                        desc: voddesc,
+                        pic_url: vodpic,
+                        url: list.play?list.play:$("hiker://empty##" + vodurl + "#immersiveTheme#").rule((type,ua) => {
+                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyXunmi.js');
+                                xunmierji(type,ua)
+                            },api_type, api_ua),
+                        col_type: 'movie_3',
+                        extra: {
+                            pic: vodpic,
+                            name: vodname,
+                            title: vodname+'-'+api_name,
+                            data: typeof(jsondata) =="undefined"|| jsondata ==null?{}:jsondata
+                        }
+                    }
+                }
+            });
+            videolist = videolist.filter(n => n);
+            d = d.concat(videolist);
+        }catch(e){
+            if(!list){
+                d.push({
+                    title: '接口访问异常，请更换接口！',
+                    url: '#noHistory#hiker://empty',
+                    col_type: 'text_center_1'
+                }); 
+            }
+            log(api_name+' 接口访问异常，请更换接口！获取影片失败>'+e.message)
         }
     }
     return d;
