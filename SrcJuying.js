@@ -9,12 +9,12 @@ function dianboerji() {
     let jkdata = MY_PARAMS.data;
 
     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
-    let erdata = {};//getErData(jkdata)
+    let erdata = getErData(jkdata)
 
     let details1 = erdata.details1;
     let details2 = erdata.details2;
-    let pic = MY_PARAMS.pic;
-
+    let pic = erdata.pic;
+    //海报
     d.push({
         title: details1,//详情1
         desc: details2,//详情2
@@ -25,8 +25,19 @@ function dianboerji() {
             gradient: true
         }
     });
-    setResult(d);
 
+
+    //底部说明
+    d.push({
+        desc: '‘‘’’<small><font color=#f20c00>此规则仅限学习交流使用，请于导入后24小时内删除，任何团体或个人不得以任何方式方法传播此规则的整体或部分！</font></small>',
+        url: 'toast://温馨提示：且用且珍惜！',
+        col_type: 'text_center_1',
+        extra: {
+            id: "listloading",
+            lineVisible: false
+        }
+    });
+    setResult(d);
 }
 
 //点播一级
