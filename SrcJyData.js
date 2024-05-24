@@ -139,7 +139,7 @@ function getYiData(jkdata) {
                     })
                 };
 
-                if(/v2|app|XBPQ/.test(api_type)&&!getMyVar('SrcJu_dianbo$type_id')){
+                if(type_ids.length>0&&!getMyVar('SrcJu_dianbo$type_id')){///v2|app|XBPQ/.test(api_type)
                     putMyVar('SrcJu_dianbo$type_id',type_ids[0]);
                 }
                 for (var j in type_pids) {
