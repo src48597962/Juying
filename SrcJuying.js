@@ -77,7 +77,8 @@ function dianbo() {
         })
     }
 
-
+    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
+    d = d.concat(getYiData(sourceData));
 
 
 
