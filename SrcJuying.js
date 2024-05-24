@@ -2,7 +2,30 @@
 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');//加载公共文件
 //点播二级
 function dianboerji() {
+    addListener("onClose", $.toString(() => {
 
+    }));
+    let d = [];
+    let jkdata = MY_PARAMS.data;
+
+    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
+    let erdata = {};//getErData(jkdata)
+
+    let details1 = erdata.details1;
+    let details2 = erdata.details2;
+    let pic = MY_PARAMS.pic;
+
+    d.push({
+        title: details1,//详情1
+        desc: details2,//详情2
+        pic_url: pic?pic + '@Referer=':'',//图片
+        url: pic + '#noHistory#',//链接
+        col_type: 'movie_1_vertical_pic_blur',
+        extra: {
+            gradient: true
+        }
+    });
+    setResult(d);
 
 }
 
