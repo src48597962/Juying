@@ -11,34 +11,34 @@ function getYiData(jkdata) {
     let api_ua = jkdata.ua||"MOBILE_UA";
     api_ua = api_ua=="MOBILE_UA"?MOBILE_UA:api_ua=="PC_UA"?PC_UA:api_ua;
     
-    let vodurl,classurl,listurl,lists;
+    let vodurlhead,classurl,listurl,lists;
     if(api_name&&api_type&&api_url){
         if (api_type=="v1") {
             let date = new Date();
             let mm = date.getMonth()+1;
             let dd = date.getDate();
             let key = (mm<10?"0"+mm:mm)+""+(dd<10?"0"+dd:dd);
-            vodurl = api_url + '/detail?&key='+key+'&vod_id=';
+            vodurlhead = api_url + '/detail?&key='+key+'&vod_id=';
             classurl = api_url + "/types";
             listurl = api_url + '?key='+key+'&page=';
             lists = "html.data.list";
         } else if (api_type=="app") {
-            vodurl = api_url + 'video_detail?id=';
+            vodurlhead = api_url + 'video_detail?id=';
             classurl = api_url + "nav";
             listurl = api_url + 'video?tid=@type_id&pg=';
             lists = "html.list";
         } else if (api_type=="v2") {
-            vodurl = api_url + 'video_detail?id=';
+            vodurlhead = api_url + 'video_detail?id=';
             classurl = api_url + "nav";
             listurl = api_url + 'video?tid=@type_id&pg=';
             lists = "html.data";
         } else if (api_type=="iptv") {
-            vodurl = api_url + '?ac=detail&ids=';
+            vodurlhead = api_url + '?ac=detail&ids=';
             classurl = api_url + "?ac=flitter";
             listurl = api_url + '?ac=list&page=';
             lists = "html.data";
         } else if (api_type=="cms") {
-            vodurl = api_url + '?ac=videolist&ids=';
+            vodurlhead = api_url + '?ac=videolist&ids=';
             classurl = api_url + "?ac=list";
             listurl = api_url + '?ac=videolist&pg=';
             lists = "html.list";
@@ -277,7 +277,7 @@ function getYiData(jkdata) {
                 if(vodname){
                     let vodpic = list.vod_pic||list.pic;
                     let voddesc = list.vod_remarks||list.state||"";
-                    let vodurl = list.vod_id?url&&!/^http/.test(list.vod_id)?url+list.vod_id:list.vod_id:list.nextlink;
+                    let vodurl = list.vod_id?vodurlhead&&!/^http/.test(list.vod_id)?vodurlhead+list.vod_id:list.vod_id:list.nextlink;
                     vodpic = vodpic?vodpic.replace('/img.php?url=','').replace('/tu.php?tu=','') + "@Referer=":"https://www.xawqxh.net/mxtheme/images/loading.gif";
                     if(/^\/upload|^upload/.test(vodpic)){
                         vodpic = vodurl.match(/http(s)?:\/\/(.*?)\//)[0] + vodpic;
