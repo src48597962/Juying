@@ -309,9 +309,9 @@ function getErData(jkdata) {
         details1 = details1.replace(/&ldquo;/g,'“').replace(/&rdquo;/g,'”').replace(/&middot;/g,'·').replace(/&hellip;/g,'…').replace(/&nbsp;|♥/g,' ');
         details2 = details2.replace(/&ldquo;/g,'“').replace(/&rdquo;/g,'”').replace(/&middot;/g,'·').replace(/&hellip;/g,'…').replace(/&nbsp;|♥/g,' ');
         desc = desc.replace(/&ldquo;/g,'“').replace(/&rdquo;/g,'”').replace(/&middot;/g,'·').replace(/&hellip;/g,'…').replace(/&nbsp;|♥/g,' ');
-        var newconfig = { 详情1: details1, 详情2: details2, 图片: pic, 简介: desc, 线路: arts, 影片: conts, 标识: MY_URL };
-        var libsfile = 'hiker://files/libs/' + md5(configfile) + '.js';
-        writeFile(libsfile, 'var configvar = ' + JSON.stringify(newconfig));
+        //var newconfig = { 详情1: details1, 详情2: details2, 图片: pic, 简介: desc, 线路: arts, 影片: conts, 标识: MY_URL };
+        //var libsfile = 'hiker://files/libs/' + md5(configfile) + '.js';
+        //writeFile(libsfile, 'var configvar = ' + JSON.stringify(newconfig));
     } else {
         details1 = configvar.详情1;
         details2 = configvar.详情2;
