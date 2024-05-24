@@ -66,7 +66,7 @@ function dianbo() {
         d.push(obj);
     })
     d.push({
-        col_type: "blank_block"
+        col_type: "line_blank"
     });
     if(!sourceNmae){
         d.push({
