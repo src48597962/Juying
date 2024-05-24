@@ -1,7 +1,680 @@
 //本代码仅用于个人学习，请勿用于其他作用，下载后请24小时内删除，代码虽然是公开学习的，但请尊重作者，应留下说明
 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');//加载公共文件
 
+function getErData(jkdata) {
+    addListener("onClose", $.toString(() => {
+        clearMyVar('parse_api');
+        clearMyVar('moviedesc');
+        clearMyVar('SrcM3U8');
+        clearMyVar('SrcXTNH');
+        clearMyVar('linecode');
+    }));
 
+    var d = [];
+    if(MY_PARAMS.title){setPageTitle(MY_PARAMS.title);}
+    //加载本地自定义变量缓存文件
+    var configfile = config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'srcconfig.js';
+    require(configfile);
+
+    //自动判断是否需要更新请求
+    var html = "";
+    if (getMyVar('myurl', '0') != MY_URL || !configvar || configvar.标识 != MY_URL) {
+        if (/v1|app|v2|iptv|cms/.test(type)) {
+            try{
+                let gethtml = request(MY_URL.split('##')[1], { headers: { 'User-Agent': ua } });
+                if(/cms/.test(type)&&/<\?xml/.test(gethtml)){
+                    html = gethtml;
+                    var isxml = 1;
+                }else{
+                    html = JSON.parse(gethtml.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,''));
+                    var isxml = 0;
+                }
+            } catch (e) {
+                
+            }
+        } else if (/xpath|biubiu|XBPQ/.test(type)) {
+            try{
+                html = request(MY_URL.split('##')[1], { headers: { 'User-Agent': ua } });
+            } catch (e) {
+                log(e.message);
+            }
+        } else {
+            //后续网页类
+        }
+        var zt = 1;
+        putMyVar('myurl', MY_URL);
+    } else {
+        var zt = 0;
+    }
+    if(!getMyVar('SrcM3U8')||!getMyVar('superwebM3U8')||!getMyVar('superweb')||!getMyVar('alistLine')||!getMyVar('yundiskLine')){
+        try{
+            var cfgfile = "hiker://files/rules/Src/Juying/config.json";
+            var Juyingcfg=fetch(cfgfile);
+            if(Juyingcfg != ""){
+                eval("var JYconfig=" + Juyingcfg+ ";");
+            }
+            putMyVar('SrcM3U8',JYconfig.cachem3u8==0?'0':'1');
+            putMyVar('superwebM3U8',JYconfig.cachem3u8!=0&&JYconfig.superweb==1?'1':'0');
+            putMyVar('superweb',JYconfig.superweb==1?'1':'0');
+            putMyVar('alistLine',JYconfig.alistLine==1?'1':'0');
+            putMyVar('yundiskLine',JYconfig.yundiskLine==1?'1':'0');
+        }catch(e){}
+    }
+        
+    //影片详情
+    if (zt == 1) {
+        var actor = "";
+        var director = "";
+        var area = "";
+        var year = "";
+        var remarks = "";
+        var pubdate = "";
+        var pic = MY_PARAMS.pic;
+        var desc = '...';
+        var arts = [];
+        var conts = [];
+        if(/cms/.test(type)&&isxml==1){
+            html = html.replace(/&lt;!\[CDATA\[|\]\]&gt;|<!\[CDATA\[|\]\]>/g,'');
+            arts = xpathArray(html,`//video/dl/dt/@name`);
+            if(arts.length==0){
+                arts = xpathArray(html,`//video/dl/dd/@flag`);
+            }
+            conts = xpathArray(html,`//video/dl/dd/text()`);
+            actor = String(xpath(html,`//video/actor/text()`)).trim().replace(/&middot;/g,'·') || "未知";
+            director = String(xpath(html,`//video/director/text()`)).trim().replace(/&middot;/g,'·') || "未知";
+            area = String(xpath(html,`//video/area/text()`)).trim();
+            year = String(xpath(html,`//video/year/text()`)).trim();
+            remarks = String(xpath(html,`//video/note/text()`)).trim() || "";
+            pubdate = String(xpath(html,`//video/type/text()`)).trim() || "";
+            pic = pic.indexOf('loading.gif')==-1?pic:xpath(html,`//video/pic/text()`);
+            desc = String(xpath(html.replace('<p>','').replace('</p>',''),`//video/des/text()`)) || '...';
+        }else if (/v1|app|v2|cms/.test(type)) {
+            if (/cms/.test(type)) {
+                try{
+                    var json = html.list[0];
+                }catch(e){
+                    var json = html.data.list[0];
+                }
+                if(json.vod_play_from&&json.vod_play_url){
+                    arts = json.vod_play_from.split('$$$');
+                    conts = json.vod_play_url.split('$$$');
+                }else if(html.from&&html.play){
+                    arts = html.from;
+                    for (let i = 0; i < html.play.length; i++) {
+                        let cont = [];
+                        let plays = html.play[i];
+                        for (let j = 0; j < plays.length; j++) {
+                            cont.push(plays[j][0]+"$"+plays[j][1])
+                        }
+                        conts.push(cont.join("#"))
+                    }
+                }
+            }else{
+                if($.type(html.data)=="array"){
+                    var json = html.data[0];
+                }else{
+                    var json = html.data;
+                }
+                if(json&&json.vod_info){
+                    json = json.vod_info;
+                }
+                arts = json.vod_play_list || json.vod_url_with_player || [];
+                conts = arts;
+                if(arts.length==0&&json.vod_play_from&&json.vod_play_url){
+                    arts = json.vod_play_from.split('$$$');
+                    conts = json.vod_play_url.split('$$$');
+                    type = "cms";
+                }
+            }
+            actor = json.vod_actor || "未知";
+            director = json.vod_director || "未知";
+            area = json.vod_area;
+            year = json.vod_year;
+            remarks = json.vod_remarks || "";
+            pubdate = json.vod_pubdate || json.vod_class || "";
+            pic = pic.indexOf('loading.gif')==-1?pic:json.vod_pic&&json.vod_pic.indexOf('ver.txt')==-1?json.vod_pic:pic;
+            desc = json.vod_blurb || '...';
+        }else if (/iptv/.test(type)) {
+            actor = html.actor.join(",") || "未知";
+            director = html.director.join(",") || "未知";
+            area = html.area.join(",");
+            year = html.pubtime;
+            remarks = html.trunk || "";
+            pubdate = html.type.join(",") || "";
+            pic = pic || html.img_url;
+            desc = html.intro || '...';
+            arts = html.videolist;
+            conts = arts;
+        }else if (/xpath/.test(type)) {
+            let jsondata = MY_PARAMS.data;
+            try{
+                actor = String(xpathArray(html, jsondata.dtActor).join(',')).replace('主演：','').replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "");
+            }catch(e){
+                log('xpath获取主演dtActor失败>'+e.message);
+            }
+            try{
+                director = String(xpathArray(html, jsondata.dtDirector).join(',')).replace('导演：','').replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "");
+            }catch(e){
+                log('xpath获取导演dtDirector失败>'+e.message);
+            }
+            try{
+                area = String(xpath(html, jsondata.dtArea)).replace('地区：','').replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "");
+            }catch(e){
+                log('xpath获取地区dtArea失败>'+e.message);
+            }
+            try{
+                year = String(xpath(html, jsondata.dtYear)).replace('年份：','').replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "");
+            }catch(e){
+                log('xpath获取年份dtYear失败>'+e.message);
+            }
+            try{
+                remarks = String(xpathArray(html, jsondata.dtCate).join(',')).replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "")||"xpath数据存在错误";
+            }catch(e){
+                log('xpath获取类型dtCate失败>'+e.message);
+            }
+            try{
+                pubdate = String(xpathArray(html, jsondata.dtMark).join(',')).replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "");
+            }catch(e){
+                log('xpath获取备注dtMark失败>'+e.message);
+            }
+            try{
+                pic = pic?pic:xpath(html, jsondata.dtImg);
+            }catch(e){
+                log('xpath获取图片dtImg失败>'+e.message);
+            }
+            try{
+                desc = String(xpath(html, jsondata.dtDesc)).replace(jsondata.filter?eval(jsondata.filter):"","");
+            }catch(e){
+                log('xpath获取简价dtDesc失败>'+e.message);
+            }
+            try{
+                arts = xpathArray(html, jsondata.dtFromNode+(jsondata.dtFromName.indexOf('concat(')>-1?'/text()':jsondata.dtFromName));
+            }catch(e){
+                log('xpath获取线路失改>'+e.message);
+            }
+            try{
+                for (let i = 1; i < arts.length+1; i++) {
+                    if(arts[i-1].indexOf("在线视频")>-1){arts[i-1] = '播放源'+i;}
+                    let contname = xpathArray(html, jsondata.dtUrlNode+'['+i+']'+jsondata.dtUrlSubNode+jsondata.dtUrlName);
+                    let conturl = xpathArray(html, jsondata.dtUrlNode+'['+i+']'+jsondata.dtUrlSubNode+(jsondata.dtUrlId=="@href"?'/'+jsondata.dtUrlId:jsondata.dtUrlId));
+                    let cont = [];
+                    for (let j = 0; j < contname.length; j++) {
+                        let urlid = jsondata.dtUrlIdR;
+                        if(urlid){
+                            let urlidl = urlid.split('(\\S+)')[0];
+                            let urlidr = urlid.split('(\\S+)')[1];
+                            var playUrl = conturl[j].replace(urlidl,'').replace(urlidr,'');
+                        }else{
+                            var playUrl = conturl[j];
+                        }
+                        cont.push(contname[j]+"$"+jsondata.playUrl.replace('{playUrl}',playUrl))
+                    }
+                    conts.push(cont.join("#"))
+                }
+            }catch(e){
+                log('xpath获取选集列表失败>'+e.message);
+            }
+        }else if (/biubiu/.test(type)) {
+            let getsm = "";
+            try{
+                getsm = "获取传递数据";
+                var jsondata = MY_PARAMS.data;
+                getsm = "获取播放地址数组bfjiequshuzuqian";
+                let bflist = html.split(jsondata.bfjiequshuzuqian.replace(/\\/g,""));
+                bflist.splice(0,1);
+                for (let i = 0; i < bflist.length; i++) {
+                    arts[i] = '播放源'+(i+1);
+                    bflist[i] = bflist[i].split(jsondata.bfjiequshuzuhou.replace(/\\/g,""))[0];
+                    let bfline = pdfa(bflist[i],"body&&a");
+                    let cont = [];
+                    for (let j = 0; j < bfline.length; j++) {
+                        let contname = pdfh(bfline[j],"a&&Text");
+                        let conturl = pd(bfline[j],"a&&href");
+                        cont.push(contname+"$"+conturl)
+                    }
+                    conts.push(cont.join("#"))
+                }
+                getsm = "获取备注zhuangtaiqian";
+                remarks = pdfh(html.split(jsondata.zhuangtaiqian.replace(/\\/g,""))[1].split(jsondata.zhuangtaihou.replace(/\\/g,""))[0],"Text").split('/')[0]||"biubiu数据存在错误";
+                getsm = "获取主演zhuyanqian";
+                actor = pdfh(html.split(jsondata.zhuyanqian.replace(/\\/g,""))[1].split(jsondata.zhuyanhou.replace(/\\/g,""))[0],"Text");
+                getsm = "获取导演daoyanqian";
+                director = pdfh(html.split(jsondata.daoyanqian.replace(/\\/g,""))[1].split(jsondata.daoyanhou.replace(/\\/g,""))[0],"Text");
+                getsm = "获取更新zhuangtaiqian";
+                pubdate = pdfh(html.split(jsondata.zhuangtaiqian.replace(/\\/g,""))[1].split(jsondata.zhuangtaihou.replace(/\\/g,""))[0],"Text").split('/')[1]||"";
+                getsm = "获取剧情简介juqingqian";
+                desc = pdfh(html.split(jsondata.juqingqian.replace(/\\/g,""))[1].split(jsondata.juqinghou.replace(/\\/g,""))[0],"Text") || '...';
+            }catch(e){
+                log(getsm+'失败>'+e.message)
+            }    
+        }else if (/XBPQ/.test(type)) {
+            let getsm = "";
+            try{
+                getsm = "获取传递数据";
+                var jsondata = MY_PARAMS.data;
+                let jkfile = fetchCache(jsondata.ext,72);
+                if(jkfile){
+                    eval("var jkdata = " + jkfile);
+                }
+                getsm = "获取线路";
+                let arthtml = html;
+                if(jkdata["线路二次截取"]){
+                    arthtml = arthtml.split(jkdata["线路二次截取"].split('&&')[0])[1].split(jkdata["线路二次截取"].split('&&')[1])[0];
+                }
+                let artlist = arthtml.match(new RegExp(jkdata["线路数组"].replace('&&','((?:.|[\r\n])*?)'), 'g'));
+                for (let i = 0; i < artlist.length; i++) {
+                    let arttitle = artlist[i].split(jkdata["线路数组"].split('&&')[0])[1].split(jkdata["线路数组"].split('&&')[1])[0].split(jkdata["线路标题"].split('&&')[0])[1].split(jkdata["线路标题"].split('&&')[1])[0];
+                    arts[i] = arttitle.replace(/<\/?.+?\/?>/g,'');
+                }
+                let conthtml = html;
+                if(jkdata["播放二次截取"]){
+                    conthtml = conthtml.split(jkdata["播放二次截取"].split('&&')[0])[1].split(jkdata["播放二次截取"].split('&&')[1])[0];
+                }
+                let contlist = conthtml.match(new RegExp(jkdata["播放数组"].replace('&&','((?:.|[\r\n])*?)'), 'g'));
+                for (let i = 0; i < contlist.length; i++) {
+                    let bfline = jkdata["播放列表"]?contlist[i].match(new RegExp(jkdata["播放列表"].replace('&&','((?:.|[\r\n])*?)'), 'g')):pdfa(contlist[i],"body&&a");
+                    let cont = [];
+                    for (let j = 0; j < bfline.length; j++) {
+                        let contname = jkdata["播放标题"]?bfline[j].split(jkdata["播放标题"].split('&&')[0])[1].split(jkdata["播放标题"].split('&&')[1])[0]:pdfh(bfline[j],"a&&Text");
+                        let conturl = jkdata["播放链接"]?bfline[j].split(jkdata["播放链接"].split('&&')[0])[1].split(jkdata["播放链接"].split('&&')[1])[0]:pd(bfline[j],"a&&href");
+                        cont.push(contname+"$"+conturl)
+                    }
+                    conts.push(cont.join("#"))
+                }
+                getsm = "获取副标";
+                remarks = jkdata["影片类型"]?html.split(jkdata["影片类型"].split('&&')[0])[1].split(jkdata["影片类型"].split('&&')[1])[0].replace(/<\/?.+?\/?>/g,''):"";
+                getsm = "获取主演";
+                actor = html.split(jkdata["主演"].split('&&')[0])[1].split(jkdata["主演"].split('&&')[1])[0].replace(/<\/?.+?\/?>/g,'');
+                getsm = "获取导演";
+                director = html.split(jkdata["导演"].split('&&')[0])[1].split(jkdata["导演"].split('&&')[1])[0].replace(/<\/?.+?\/?>/g,'');
+                pubdate = (jkdata["影片年代"]?html.split(jkdata["影片年代"].split('&&')[0])[1].split(jkdata["影片年代"].split('&&')[1])[0].replace(/<\/?.+?\/?>/g,''):"")+(jkdata["影片地区"]?" "+html.split(jkdata["影片地区"].split('&&')[0])[1].split(jkdata["影片地区"].split('&&')[1])[0].replace(/<\/?.+?\/?>/g,''):"");
+                getsm = "获取剧情简介";
+                desc = html.split(jkdata["简介"].split('&&')[0])[1].split(jkdata["简介"].split('&&')[1])[0].replace(/<\/?.+?\/?>/g,'') || '...';
+            }catch(e){
+                log(getsm+'失败>'+e.message)
+            }    
+        }else{
+            //自定义接口/web自动匹配
+            require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcAutoTmpl.js');
+            let data = autoerji(MY_URL.split('##')[1].split('#')[0],html);
+            var details1 = data.details1||'自动匹配失败';
+            var details2 = data.details2||'';
+            var pic = pic.indexOf('loading.gif')==-1?pic:data.pic;
+            var desc = data.desc||'';
+            var arts = data.arts||[];
+            var conts = data.conts||[];
+        }
+        if(/xpath|biubiu|XBPQ/.test(type)&&html&&(arts.length==0||conts.length==0)&&getMyVar('debug','0')=="0"&&html.indexOf(MY_PARAMS.title)>-1){
+            log('开启模板自动匹配、AI识片，获取播放选集');
+            require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcAutoTmpl.js');
+            let data = autoerji(MY_URL.split('##')[1].split('#')[0],html);
+            remarks = remarks||"获取数据存在错误";
+            pubdate = data.details2||"";
+            arts = data.arts;
+            conts = data.conts;
+            pic = pic||data.pic;
+        }
+        setPagePicUrl(pic);
+        actor = actor || "未知";
+        director = director || "未知";
+        let dqnf = "";
+        if(area){
+            dqnf = '\n地区：' + area + (year?'   年代：' + year:'')
+        }else{
+            dqnf = year?'\n年代：' + year:''
+        }
+        var details1 = details1?details1:'导演：' + director.substring(0, director.length<10?director.length:10) + '\n主演：' + actor.substring(0, actor.length<10||dqnf==""?actor.length:10) + dqnf;
+        var details2 = details2?details2:remarks.trim() + '\n' + pubdate.trim();
+        details1 = details1.replace(/&ldquo;/g,'“').replace(/&rdquo;/g,'”').replace(/&middot;/g,'·').replace(/&hellip;/g,'…').replace(/&nbsp;|♥/g,' ');
+        details2 = details2.replace(/&ldquo;/g,'“').replace(/&rdquo;/g,'”').replace(/&middot;/g,'·').replace(/&hellip;/g,'…').replace(/&nbsp;|♥/g,' ');
+        desc = desc.replace(/&ldquo;/g,'“').replace(/&rdquo;/g,'”').replace(/&middot;/g,'·').replace(/&hellip;/g,'…').replace(/&nbsp;|♥/g,' ');
+        var newconfig = { 详情1: details1, 详情2: details2, 图片: pic, 简介: desc, 线路: arts, 影片: conts, 标识: MY_URL };
+        var libsfile = 'hiker://files/libs/' + md5(configfile) + '.js';
+        writeFile(libsfile, 'var configvar = ' + JSON.stringify(newconfig));
+    } else {
+        var details1 = configvar.详情1;
+        var details2 = configvar.详情2;
+        var pic = configvar.图片;
+        var desc = configvar.简介;
+        var arts = configvar.线路;
+        var conts = configvar.影片;
+    }
+
+    d.push({
+        title: details1,//详情1
+        desc: details2,//详情2
+        pic_url: pic?pic + '@Referer=':'',//图片
+        url: getMyVar('deleteswitch')?$("确定要删除此接口吗").confirm((id)=>{
+            let filepath = "hiker://files/rules/Src/Juying/jiekou.json";
+            let datafile = fetch(filepath);
+            eval("let datalist=" + datafile+ ";");
+            for(let i=0;i<datalist.length;i++){
+                if(datalist[i].url==id.replace('xunmi-','')){
+                    datalist.splice(i,1);
+                    break;
+                }
+            }
+            writeFile(filepath, JSON.stringify(datalist));
+            back(false);
+            deleteItem(id);
+            return "toast://已删除";
+        },MY_PARAMS.id):pic + '#noHistory#',//链接
+        col_type: 'movie_1_vertical_pic_blur',
+        extra: {
+            gradient: true
+        }
+    });
+
+    //二级统一菜单
+    require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyMenu.js');
+    putMyVar('moviedesc',desc)
+    for(var i in erjimenu){
+        d.push(
+            erjimenu[i]
+        )
+    }
+    var parse_api = "";
+    var tabs = [];
+    var linecodes = [];
+    for (var i in arts) {
+        if (/v1|app|v2/.test(type)) {
+            let line = arts[i].name || arts[i].player_info.show;
+            tabs.push(line);
+            var linecode = arts[i].code || arts[i].player_info.from;
+
+            if (getMyVar(MY_URL, '0') == i) {
+                try {
+                    if(type=="v2"){
+                        var parse1 = arts[i].parse_api;
+                        var parse2 = arts[i].extra_parse_api;
+                    }else{
+                        var parse1 = arts[i].player_info.parse;
+                        var parse2 = arts[i].player_info.parse2;
+                    }
+                    if (parse2.indexOf('//') == -1) {
+                        parse_api = parse1;
+                    } else if (parse1.indexOf('//') == -1) {
+                        parse_api = parse2;
+                    } else {
+                        parse_api = parse2 + ',' + parse1;
+                    }
+                } catch (e) {
+                    parse_api = arts[i].parse_api;
+                }
+                if (parse_api != "" && parse_api != undefined) {
+                    parse_api = parse_api.replace(/\.\./g, '.').replace(/。\./g, '.');
+                }
+            }
+        }else if (/iptv/.test(type)) {
+            let line = i;
+            tabs.push(line);
+            var linecode = i;
+        }else if (/cms|xpath|biubiu|XBPQ/.test(type)) {
+            tabs.push(arts[i].replace(/[\r\ \n\t]/g, ""));
+            var linecode = arts[i];
+        }
+        linecodes.push(linecode);
+    }
+    
+    var lists = [];
+    for (var i in conts) {
+        if (/v1|app|v2/.test(type)) {
+            if(conts[i].url){
+                let single = conts[i].url||"";
+                if(single){lists.push(single.split('#'))};
+            }else{
+                let single = conts[i].urls||[];
+                if(single.length>0){
+                    var si = [];
+                    for (let j = 0; j < single.length; j++) {
+                        si.push(single[j].name+"$"+single[j].url);
+                    }
+                    lists.push(si);
+                };
+            }
+        }else if (/iptv/.test(type)) {
+            let single = conts[i]||[];
+            if(single.length>0){
+                var si = [];
+                for (let j = 0; j < single.length; j++) {
+                    si.push(single[j].title+"$"+single[j].url);
+                }
+                lists.push(si);
+            };
+        }else if (/cms|xpath|biubiu|XBPQ/.test(type)) {
+            let single = conts[i]||"";
+            if(single){
+                let lines = single.split('#');
+                if(type=='cms'){
+                    for(let i in lines){
+                        if(lines[i].indexOf('$')==-1){
+                            let ii = parseInt(i)+1;
+                            lines[i] = ii+'$'+lines[i];
+                        }else{
+                            break;
+                        }
+                    }
+                }
+                lists.push(lines)
+            };
+        }
+    }
+ 
+    //取之前足迹记录，用于自动定位之前的线路
+    try {
+        eval('var SrcMark = ' + fetch("hiker://files/cache/SrcMark.json"));
+        if (SrcMark != "") {
+            if (SrcMark.route[MY_URL] != undefined) {
+                var SrcMarkline = SrcMark.route[MY_URL];
+                putMyVar(MY_URL, SrcMark.route[MY_URL]);
+            }
+        }
+    } catch (e) { }
+    var Marksum = 30;//设置记录线路足迹数量
+    var lineindex = getMyVar(MY_URL, typeof(SrcMarkline) != "undefined"?SrcMarkline:'0');
+    //线路部份
+    var Color1 = getItem('SrcJy$linecolor1','#09c11b')||'#09c11b';//#f13b66a
+    var Color2 = getItem('SrcJy$linecolor2','');;//#098AC1
+    var Color3 = getItem('SrcJy$playcolor','');
+    function getHead(title,Color,strong) {
+        if(Color){
+            if(strong){
+                return '‘‘’’<strong><font color="' + Color + '">' + title + '</front></strong>';
+            }else{
+                return '‘‘’’<font color="' + Color + '">' + title + '</front>';
+            }
+        }else{
+            return title;
+        }
+    }
+    for (let i = 0; i < 9; i++) {
+        d.push({
+            col_type: "blank_block"
+        })
+    }
+
+    function setTabs(tabs, vari) {
+        d.push({
+            title: getMyVar('shsort') == '1'?'““””<b><span style="color: #FF0000">∨</span></b>' : '““””<b><span style="color: #1aad19">∧</span></b>',
+            url: $("#noLoading#").lazyRule(() => {
+                if (getMyVar('shsort') == '1') { putMyVar('shsort', '0'); } else { putMyVar('shsort', '1') };
+                refreshPage(false);
+                return 'toast://切换排序成功'
+            }),
+            col_type: 'scroll_button'
+        })
+        for (var i in tabs) {
+            if (tabs[i] != "") {
+                if(getMyVar(vari, '0') == i){putMyVar('linecode', linecodes[i])};
+                d.push({
+                    title: getMyVar(vari, '0') == i ? getHead(tabs[i],Color1,1) : getHead(tabs[i],Color2),
+                    url: $("#noLoading#").lazyRule((vari, i, Marksum) => {
+                        if (parseInt(getMyVar(vari, '0')) != i) {
+                            try {
+                                eval('var SrcMark = ' + fetch("hiker://files/cache/SrcMark.json"));
+                            } catch (e) {
+                                var SrcMark = "";
+                            }
+                            if (SrcMark == "") {
+                                SrcMark = { route: {} };
+                            } else if (SrcMark.route == undefined) {
+                                SrcMark.route = {};
+                            }
+                            SrcMark.route[vari] = i;
+                            var key = 0;
+                            var one = "";
+                            for (var k in SrcMark.route) {
+                                key++;
+                                if (key == 1) { one = k }
+                            }
+                            if (key > Marksum) { delete SrcMark.route[one]; }
+                            writeFile("hiker://files/cache/SrcMark.json", JSON.stringify(SrcMark));
+                            putMyVar(vari, i);
+                            refreshPage(false);
+                        }
+                        return '#noHistory#hiker://empty'
+                    }, vari, i, Marksum),
+                    col_type: 'scroll_button'
+                })
+            }
+        }
+    }
+    setTabs(tabs, MY_URL);
+
+    //选集部份
+    function setLists(lists, index) {
+        var list = lists[index];
+        function playlist(lx, len) {//定义选集列表生成
+            if (lx == '1') {
+                if (/v1|app|v2|iptv|cms/.test(type)) {
+                    var playtitle = list[j].split('$')[0].trim();
+                    if (/iptv/.test(type)) {
+                        var playurl = list[j].split('$')[1].split('=')[1];
+                        parse_api = list[j].split('$')[1].split('=')[0]+"=";
+                    }else{
+                        var playurl = list[j].split('$')[1];
+                    }
+                    putMyVar('parse_api', parse_api);
+                    var DTJX = $("").lazyRule(() => {
+                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcParseS.js');
+                        return SrcParseS.聚影(input);
+                    });
+                }else if (/xpath|biubiu|XBPQ/.test(type)) {
+                    var playtitle = list[j].split('$')[0].trim();
+                    var playurl = list[j].split('$')[1];
+                    if(/\.mp4|\.m3u8/.test(playurl) || (/qq\.com|douyin|youku|mgtv|ixigua|bili|iqiyi|sohu|pptv|migu|1905|le\.com/.test(playurl) && /html/.test(playurl))){
+                        var DTJX = $("").lazyRule(() => {
+                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcParseS.js');
+                            return SrcParseS.聚影(input);
+                        });
+                    }else if(playurl.indexOf('https://www.aliyundrive.com/s/')>-1){
+                        var DTJX = $("").lazyRule((input) => {
+                            input = input.replace('http','\nhttp');
+                            return $("hiker://empty##fypage#noRecordHistory##noHistory#").rule((input) => {
+                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyAliDisk.js');
+                                aliShareUrl(input);
+                            },input);
+                        },playurl);
+                    }else{
+                        var DTJX = $("").lazyRule(() => {
+                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcParseS.js');
+                            return SrcParseS.task({},input);
+                        });
+                    }
+                }else{
+                    //网页
+                }
+
+                let extra = {
+                    id: playurl,
+                    jsLoadingInject: true,
+                    blockRules: ['.m4a', '.mp3', '.gif', '.jpeg', '.jpg', '.ico', '.png', 'hm.baidu.com', '/ads/*.js', 'cnzz.com'],
+                    videoExcludeRule: ['m3u8.js','?url='],
+                    cls: "loadlist"
+                }
+                
+                if(!/qq|youku|mgtv|bili|qiyi|sohu|pptv/.test(playurl) && /html/.test(playurl)){
+                    extra.referer = playurl;
+                }
+                if(getMyVar('superwebM3U8') == "1"){
+                    extra.cacheM3u8 = true;
+                }
+
+                d.push({
+                    title: getHead(playtitle.replace(/第|集|话|期|-|new|最新|新/g, ''), Color3),
+                    url: playurl + DTJX,
+                    extra: extra,
+                    col_type: list.length > 4 && len < 7 ? 'text_4' : len > 20 ? 'text_1' :'text_3'
+                });
+            } else {
+                d.push({
+                    title: '当前无播放选集，点更多片源试试！',
+                    url: '#noHistory#hiker://empty',
+                    col_type: 'text_center_1'
+                });
+            }
+
+        }
+        if (list == undefined || list.length == 0) {
+            playlist('0');
+        } else {
+            if (/v1|app|v2|iptv|cms|xpath|biubiu|XBPQ/.test(type)) {
+                var listone = list[0].split('$')[0].trim();
+                try{
+                    let list1 = list[0].split('$')[0];
+                    let list2 = list[list.length-1].split('$')[0];
+                    if(parseInt(list1.match(/(\d+)/)[0])>parseInt(list2.match(/(\d+)/)[0])){
+                        list.reverse();
+                    }
+                }catch(e){
+                    //log('修正选集顺序失败>'+e.message)
+                }
+            }else{
+                
+            }
+            
+            if (listone) {
+                var len = listone.length;
+            }
+            if (getMyVar('shsort') == '1') {
+                try {
+                    for (var j = list.length - 1; j >= 0; j--) {
+                        playlist('1', len);
+                    }
+                } catch (e) {
+                    playlist('0');
+                }
+            } else {
+                try {
+                    for (var j = 0; j < list.length; j++) {
+                        playlist('1', len);
+                    }
+                } catch (e) {
+                    playlist('0');
+                }
+
+            }
+        }
+    }
+    setLists(lists, lineindex);
+    //底部说明
+    d.push({
+        desc: '‘‘’’<small><font color=#f20c00>此规则仅限学习交流使用，请于导入后24小时内删除，任何团体或个人不得以任何方式方法传播此规则的整体或部分！</font></small>',
+        url: 'toast://温馨提示：且用且珍惜！',
+        col_type: 'text_center_1',
+        extra: {
+            id: "listloading",
+            lineVisible: false
+        }
+    });
+    setResult(d);
+/*
+    setLastChapterRule('js:' + $.toString((type,ua,data)=>{
+        require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcLastChapter.js');
+        xunmi(type,ua,data);
+    }, type, ua, MY_PARAMS.data))
+    */
+}
 
 function getYiData(jkdata) {
     let d = [];
@@ -11,7 +684,7 @@ function getYiData(jkdata) {
     let api_ua = jkdata.ua||"MOBILE_UA";
     api_ua = api_ua=="MOBILE_UA"?MOBILE_UA:api_ua=="PC_UA"?PC_UA:api_ua;
     
-    let vodurlhead,classurl,listurl,lists;
+    let vodurlhead,classurl,listurl,listnode;
     if(api_name&&api_type&&api_url){
         if (api_type=="v1") {
             let date = new Date();
@@ -21,27 +694,27 @@ function getYiData(jkdata) {
             vodurlhead = api_url + '/detail?&key='+key+'&vod_id=';
             classurl = api_url + "/types";
             listurl = api_url + '?key='+key+'&page=';
-            lists = "html.data.list";
+            listnode = "html.data.list";
         } else if (api_type=="app") {
             vodurlhead = api_url + 'video_detail?id=';
             classurl = api_url + "nav";
             listurl = api_url + 'video?tid=@type_id&pg=';
-            lists = "html.list";
+            listnode = "html.list";
         } else if (api_type=="v2") {
             vodurlhead = api_url + 'video_detail?id=';
             classurl = api_url + "nav";
             listurl = api_url + 'video?tid=@type_id&pg=';
-            lists = "html.data";
+            listnode = "html.data";
         } else if (api_type=="iptv") {
             vodurlhead = api_url + '?ac=detail&ids=';
             classurl = api_url + "?ac=flitter";
             listurl = api_url + '?ac=list&page=';
-            lists = "html.data";
+            listnode = "html.data";
         } else if (api_type=="cms") {
             vodurlhead = api_url + '?ac=videolist&ids=';
             classurl = api_url + "?ac=list";
             listurl = api_url + '?ac=videolist&pg=';
-            lists = "html.list";
+            listnode = "html.list";
         } else {
             log('api类型错误')
         }
@@ -186,6 +859,7 @@ function getYiData(jkdata) {
         }
     }
     if(typeof(listurl) != "undefined"){
+        let lists = [];
         try{
             if(api_type=="XBPQ"){
                 MY_URL = listurl.replace('{catePg}',jkdata["起始页"]?MY_PAGE>jkdata["起始页"]?MY_PAGE:"":MY_PAGE).replace('{cateId}',getMyVar('SrcJu_dianbo$type_id','1'));
@@ -203,7 +877,6 @@ function getYiData(jkdata) {
                     }
                 }
             }
-
             try {
                 var gethtml = request(MY_URL, { headers: { 'User-Agent': api_ua }, timeout:5000 });
                 if(api_type=="XBPQ"){
@@ -211,7 +884,6 @@ function getYiData(jkdata) {
                     if(jkdata["二次截取"]){
                         gethtml = gethtml.split(jkdata["二次截取"].split('&&')[0])[1].split(jkdata["二次截取"].split('&&')[1])[0];
                     }
-                    var list = [];
                     jkdata["链接"] = jkdata["链接"] || `href="&&"`;
                     jkdata["标题"] = jkdata["标题"] || `title="&&"`;
                     jkdata["数组"] = jkdata["数组"] || `<a &&</a>`;
@@ -236,10 +908,11 @@ function getYiData(jkdata) {
                                 note = item.split(jkdata["副标题"].split('&&')[0])[1].split(jkdata["副标题"].split('&&')[1])[0];
                             }catch(e){}
                             let arr = {"vod_id":id,"vod_name":name,"vod_remarks":note,"vod_pic":pic};
-                            list.push(arr);
+                            lists.push(arr);
                         }
                     })
                 }else{
+                    let json;
                     if(/cms/.test(api_type)&&/<\?xml/.test(gethtml)){
                         gethtml = gethtml.replace(/&lt;!\[CDATA\[|\]\]&gt;|<!\[CDATA\[|\]\]>/g,'');
                         let xmllist = [];
@@ -259,28 +932,28 @@ function getYiData(jkdata) {
                             }
                             xmllist.push(arr)
                         }
-                        var html = {"list":xmllist};
+                        json = {"list":xmllist};
                     }else if(!/{|}/.test(gethtml)&&gethtml!=""){
                         var decfile = "hiker://files/rules/Src/Juying/appdec.js";
                         var Juyingdec=fetch(decfile);
                         if(Juyingdec != ""){
                             eval(Juyingdec);
-                            var html = JSON.parse(xgdec(gethtml));
+                            json = JSON.parse(xgdec(gethtml));
                         }
                     }else{
-                        var html = JSON.parse(gethtml);
+                        json = JSON.parse(gethtml);
                     }
                     try{
-                        var list = eval(lists)||html.list||html.data.list||html.data||[];
+                        lists = eval(listnode)||json.list||json.data.list||json.data||[];
                     } catch (e) {
-                        var list = html.list||html.data.list||html.data||[];
+                        lists = json.list||json.data.list||json.data||[];
                     }
                 }
             } catch (e) {
-                var list = [];
+                
             }
             
-            let videolist = list.map((list)=>{
+            let videolist = lists.map((list)=>{
                 let vodname = list.vod_name||list.title;
                 if(vodname){
                     let vodpic = list.vod_pic||list.pic;
@@ -309,9 +982,8 @@ function getYiData(jkdata) {
                         col_type: 'movie_3',
                         extra: {
                             pic: vodpic,
-                            name: vodname,
-                            title: vodname+'-'+api_name,
-                            data: typeof(jsondata) =="undefined"|| jsondata ==null?{}:jsondata
+                            pageTitle: vodname,
+                            data: jkdata
                         }
                     }
                 }
@@ -319,7 +991,7 @@ function getYiData(jkdata) {
             videolist = videolist.filter(n => n);
             d = d.concat(videolist);
         }catch(e){
-            if(!list){
+            if(lists.length==0){
                 d.push({
                     title: '接口访问异常，请更换接口！',
                     url: '#noHistory#hiker://empty',
