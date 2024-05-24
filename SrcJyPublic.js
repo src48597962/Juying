@@ -80,7 +80,6 @@ function deleteData(lx, data){
         }
         let dataurl = lx=='jk'?it.url:it.parse;
         let index = datalist.indexOf(datalist.filter(d => dataurl==(lx=='jk'?d.url:d.parse) )[0]);
-        log('删除>'+datalist[index].name);
         datalist.splice(index, 1);
     })
 
