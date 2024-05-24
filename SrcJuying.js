@@ -37,11 +37,203 @@ function dianboerji() {
         "lists": lists
     };
     */
-    log(erdata.tabs);
-    log(erdata.linecodes);
-    log(erdata.lists);
+    //取之前足迹记录，用于自动定位之前的线路
+    try {
+        eval('var SrcMark = ' + fetch("hiker://files/cache/SrcMark.json"));
+        if (SrcMark != "") {
+            if (SrcMark.route[MY_URL] != undefined) {
+                var SrcMarkline = SrcMark.route[MY_URL];
+                putMyVar(MY_URL, SrcMark.route[MY_URL]);
+            }
+        }
+    } catch (e) { }
+    let Marksum = 30;//设置记录线路足迹的数量
+    let lineindex = getMyVar(MY_URL, typeof(SrcMarkline) != "undefined"?SrcMarkline:'0');
+    //线路部份
+    let Color1 = getItem('SrcJy$linecolor1','#09c11b')||'#09c11b';//#f13b66a
+    let Color2 = getItem('SrcJy$linecolor2','');;//#098AC1
+    let Color3 = getItem('SrcJy$playcolor','');
+    function getHead(title,Color,strong) {
+        if(Color){
+            if(strong){
+                return '‘‘’’<strong><font color="' + Color + '">' + title + '</front></strong>';
+            }else{
+                return '‘‘’’<font color="' + Color + '">' + title + '</front>';
+            }
+        }else{
+            return title;
+        }
+    }
+    for (let i = 0; i < 9; i++) {
+        d.push({
+            col_type: "blank_block"
+        })
+    }
     
-    
+    function setTabs(tabs, vari) {
+        d.push({
+            title: getMyVar('shsort') == '1'?'““””<b><span style="color: #FF0000">∨</span></b>' : '““””<b><span style="color: #1aad19">∧</span></b>',
+            url: $("#noLoading#").lazyRule(() => {
+                if (getMyVar('shsort') == '1') { putMyVar('shsort', '0'); } else { putMyVar('shsort', '1') };
+                refreshPage(false);
+                return 'toast://切换排序成功'
+            }),
+            col_type: 'scroll_button'
+        })
+        for (var i in tabs) {
+            if (tabs[i] != "") {
+                if(getMyVar(vari, '0') == i){putMyVar('linecode', linecodes[i])};
+                d.push({
+                    title: getMyVar(vari, '0') == i ? getHead(tabs[i],Color1,1) : getHead(tabs[i],Color2),
+                    url: $("#noLoading#").lazyRule((vari, i, Marksum) => {
+                        if (parseInt(getMyVar(vari, '0')) != i) {
+                            try {
+                                eval('var SrcMark = ' + fetch("hiker://files/cache/SrcMark.json"));
+                            } catch (e) {
+                                var SrcMark = "";
+                            }
+                            if (SrcMark == "") {
+                                SrcMark = { route: {} };
+                            } else if (SrcMark.route == undefined) {
+                                SrcMark.route = {};
+                            }
+                            SrcMark.route[vari] = i;
+                            var key = 0;
+                            var one = "";
+                            for (var k in SrcMark.route) {
+                                key++;
+                                if (key == 1) { one = k }
+                            }
+                            if (key > Marksum) { delete SrcMark.route[one]; }
+                            writeFile("hiker://files/cache/SrcMark.json", JSON.stringify(SrcMark));
+                            putMyVar(vari, i);
+                            refreshPage(false);
+                        }
+                        return '#noHistory#hiker://empty'
+                    }, vari, i, Marksum),
+                    col_type: 'scroll_button'
+                })
+            }
+        }
+    }
+    setTabs(erdata.tabs, MY_URL);
+
+    //选集部份
+    function setLists(lists, index) {
+        let list = lists[index];
+        function playlist(lx, len) {//定义选集列表生成
+            if (lx == '1') {
+                if (/v1|app|v2|iptv|cms/.test(type)) {
+                    var playtitle = list[j].split('$')[0].trim();
+                    if (/iptv/.test(type)) {
+                        var playurl = list[j].split('$')[1].split('=')[1];
+                        parse_api = list[j].split('$')[1].split('=')[0]+"=";
+                    }else{
+                        var playurl = list[j].split('$')[1];
+                    }
+                    putMyVar('parse_api', parse_api);
+                    var DTJX = $("").lazyRule(() => {
+                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcParseS.js');
+                        return SrcParseS.聚影(input);
+                    });
+                }else if (/xpath|biubiu|XBPQ/.test(type)) {
+                    var playtitle = list[j].split('$')[0].trim();
+                    var playurl = list[j].split('$')[1];
+                    if(/\.mp4|\.m3u8/.test(playurl) || (/qq\.com|douyin|youku|mgtv|ixigua|bili|iqiyi|sohu|pptv|migu|1905|le\.com/.test(playurl) && /html/.test(playurl))){
+                        var DTJX = $("").lazyRule(() => {
+                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcParseS.js');
+                            return SrcParseS.聚影(input);
+                        });
+                    }else if(playurl.indexOf('https://www.aliyundrive.com/s/')>-1){
+                        var DTJX = $("").lazyRule((input) => {
+                            input = input.replace('http','\nhttp');
+                            return $("hiker://empty##fypage#noRecordHistory##noHistory#").rule((input) => {
+                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyAliDisk.js');
+                                aliShareUrl(input);
+                            },input);
+                        },playurl);
+                    }else{
+                        var DTJX = $("").lazyRule(() => {
+                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcParseS.js');
+                            return SrcParseS.task({},input);
+                        });
+                    }
+                }else{
+                    //网页
+                }
+
+                let extra = {
+                    id: playurl,
+                    jsLoadingInject: true,
+                    blockRules: ['.m4a', '.mp3', '.gif', '.jpeg', '.jpg', '.ico', '.png', 'hm.baidu.com', '/ads/*.js', 'cnzz.com'],
+                    videoExcludeRule: ['m3u8.js','?url='],
+                    cls: "loadlist"
+                }
+                
+                if(!/qq|youku|mgtv|bili|qiyi|sohu|pptv/.test(playurl) && /html/.test(playurl)){
+                    extra.referer = playurl;
+                }
+                if(getMyVar('superwebM3U8') == "1"){
+                    extra.cacheM3u8 = true;
+                }
+
+                d.push({
+                    title: getHead(playtitle.replace(/第|集|话|期|-|new|最新|新/g, ''), Color3),
+                    url: playurl + DTJX,
+                    extra: extra,
+                    col_type: list.length > 4 && len < 7 ? 'text_4' : len > 20 ? 'text_1' :'text_3'
+                });
+            } else {
+                d.push({
+                    title: '当前无播放选集，点更多片源试试！',
+                    url: '#noHistory#hiker://empty',
+                    col_type: 'text_center_1'
+                });
+            }
+
+        }
+        if (list == undefined || list.length == 0) {
+            playlist('0');
+        } else {
+            if (/v1|app|v2|iptv|cms|xpath|biubiu|XBPQ/.test(type)) {
+                var listone = list[0].split('$')[0].trim();
+                try{
+                    let list1 = list[0].split('$')[0];
+                    let list2 = list[list.length-1].split('$')[0];
+                    if(parseInt(list1.match(/(\d+)/)[0])>parseInt(list2.match(/(\d+)/)[0])){
+                        list.reverse();
+                    }
+                }catch(e){
+                    //log('修正选集顺序失败>'+e.message)
+                }
+            }else{
+                
+            }
+            
+            if (listone) {
+                var len = listone.length;
+            }
+            if (getMyVar('shsort') == '1') {
+                try {
+                    for (var j = list.length - 1; j >= 0; j--) {
+                        playlist('1', len);
+                    }
+                } catch (e) {
+                    playlist('0');
+                }
+            } else {
+                try {
+                    for (var j = 0; j < list.length; j++) {
+                        playlist('1', len);
+                    }
+                } catch (e) {
+                    playlist('0');
+                }
+
+            }
+        }
+    }
+    setLists(erdata.lists, lineindex);
 
     //底部说明
     d.push({
