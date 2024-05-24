@@ -20,72 +20,75 @@ function dianbo() {
         sourceType = '';
         sourceNmae = '';
     }
-    
-    let groupNames = getJiekouGroups(yxdatalist);
-    groupNames.forEach(it =>{
-        let obj = {
-            title: selectGroup==it?`““””<b><span style="color: #3399cc">`+it+`</span></b>`:it,
-            url: $('#noLoading#').lazyRule((it) => {
-                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
-                let datalist = getDatas('jk');
-                let yxdatalist = datalist.filter(it=>{
-                    return !it.stop;
-                });
-                let jkdatalist = getGroupLists(yxdatalist, it);
-                let sitenames = jkdatalist.map(it=>{
-                    return it.name;
-                })
-                return $(sitenames, 2, "选择主页源").select((type, cfgfile, Juconfig) => {
-                    Juconfig['indexSource'] = type+'_'+input;
-                    writeFile(cfgfile, JSON.stringify(Juconfig));
-                    clearMyVar('SrcJu_dianbo$type_id');
-                    refreshPage(true);
-                    return 'toast://' + input;
-                }, it, cfgfile, Juconfig)
-            }, it),
-            col_type: 'scroll_button'
-        }
-        
-      /*
-            obj.extra = {
-                longClick: [{
-                    title: "列表排序：" + getItem("sourceListSort", "update"),
-                    js: $.toString(() => {
-                        return $(["更新时间","接口名称"], 1).select(() => {
-                            if(input=='接口名称'){
-                                setItem("sourceListSort","name");
-                            }else{
-                                clearItem("sourceListSort");
-                            }
-                            refreshPage(false);
-                        })
-                    })
-                }]
-            }
-        */
-        
-        d.push(obj);
-    })
-    d.push({
-        col_type: "line_blank"
-    });
-    for (let i = 0; i < 9; i++) {
-        d.push({
-            col_type: "blank_block"
-        })
-    }
-    if(!sourceNmae){
-        d.push({
-            title: "主页源不存在\n需先选择配置主页源",//\n设置-选择漫画/小说/听书/
-            desc: "点上面分类按钮皆可选择",//设置长按菜单可以开启界面切换开关
-            url: 'toast://点上面分类按钮',
-            col_type: "text_center_1",
-            extra: {
-                lineVisible: false
-            }
-        })
-    }
 
+    if(MY_PAGE==1){
+        let groupNames = getJiekouGroups(yxdatalist);
+        groupNames.forEach(it =>{
+            let obj = {
+                title: selectGroup==it?`““””<b><span style="color: #3399cc">`+it+`</span></b>`:it,
+                url: $('#noLoading#').lazyRule((it) => {
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                    let datalist = getDatas('jk');
+                    let yxdatalist = datalist.filter(it=>{
+                        return !it.stop;
+                    });
+                    let jkdatalist = getGroupLists(yxdatalist, it);
+                    let sitenames = jkdatalist.map(it=>{
+                        return it.name;
+                    })
+                    return $(sitenames, 2, "选择主页源").select((type, cfgfile, Juconfig) => {
+                        Juconfig['indexSource'] = type+'_'+input;
+                        writeFile(cfgfile, JSON.stringify(Juconfig));
+                        clearMyVar('SrcJu_dianbo$type_id');
+                        refreshPage(true);
+                        return 'toast://' + input;
+                    }, it, cfgfile, Juconfig)
+                }, it),
+                col_type: 'scroll_button'
+            }
+            
+        /*
+                obj.extra = {
+                    longClick: [{
+                        title: "列表排序：" + getItem("sourceListSort", "update"),
+                        js: $.toString(() => {
+                            return $(["更新时间","接口名称"], 1).select(() => {
+                                if(input=='接口名称'){
+                                    setItem("sourceListSort","name");
+                                }else{
+                                    clearItem("sourceListSort");
+                                }
+                                refreshPage(false);
+                            })
+                        })
+                    }]
+                }
+            */
+            
+            d.push(obj);
+        })
+        d.push({
+            col_type: "line_blank"
+        });
+        for (let i = 0; i < 9; i++) {
+            d.push({
+                col_type: "blank_block"
+            })
+        }
+        if(!sourceNmae){
+            d.push({
+                title: "主页源不存在\n需先选择配置主页源",//\n设置-选择漫画/小说/听书/
+                desc: "点上面分类按钮皆可选择",//设置长按菜单可以开启界面切换开关
+                url: 'toast://点上面分类按钮',
+                col_type: "text_center_1",
+                extra: {
+                    lineVisible: false
+                }
+            })
+        }else{
+            setPageTitle(indexSource + ' | 聚影√2');
+        }
+    }
     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
     d = d.concat(getYiData(sourceData));
 
