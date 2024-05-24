@@ -124,6 +124,7 @@ function dianboerji() {
     function setLists(lists, index) {
         let list = lists[index];
         function playlist(lx, len) {//定义选集列表生成
+            let type = jkdata.type;
             if (lx == '1') {
                 if (/v1|app|v2|iptv|cms/.test(type)) {
                     var playtitle = list[j].split('$')[0].trim();
