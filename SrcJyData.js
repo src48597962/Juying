@@ -975,10 +975,10 @@ function getYiData(jkdata) {
                         title: vodname,
                         desc: voddesc,
                         pic_url: vodpic,
-                        url: list.play?list.play:$("hiker://empty##" + vodurl + "#immersiveTheme#").rule((type,ua) => {
-                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyXunmi.js');
-                                xunmierji(type,ua)
-                            },api_type, api_ua),
+                        url: list.play?list.play:$("hiker://empty##" + vodurl + "#immersiveTheme#").rule(() => {
+                            require(config.依赖);
+                            dianboerji()
+                        }),
                         col_type: 'movie_3',
                         extra: {
                             pic: vodpic,
