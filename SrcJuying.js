@@ -38,6 +38,7 @@ function dianbo() {
                 return $(sitenames, 2, "选择主页源").select((type, cfgfile, Juconfig) => {
                     Juconfig['indexSource'] = type+'_'+input;
                     writeFile(cfgfile, JSON.stringify(Juconfig));
+                    clearMyVar('SrcJu_dianbo$type_id');
                     refreshPage(true);
                     return 'toast://' + input;
                 }, it, cfgfile, Juconfig)
