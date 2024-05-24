@@ -65,6 +65,9 @@ function dianbo() {
         
         d.push(obj);
     })
+    d.push({
+        col_type: "blank_block"
+    });
     if(!sourceNmae){
         d.push({
             title: "主页源不存在\n需先选择配置主页源",//\n设置-选择漫画/小说/听书/
