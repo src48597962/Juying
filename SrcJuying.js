@@ -37,6 +37,8 @@ function dianboerji() {
         "lists": lists
     };
     */
+    let linecodes = erdata.linecodes;
+    
     //取之前足迹记录，用于自动定位之前的线路
     try {
         eval('var SrcMark = ' + fetch("hiker://files/cache/SrcMark.json"));
