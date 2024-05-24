@@ -124,6 +124,9 @@ function dianboerji() {
     function setLists(lists, index) {
         let type = jkdata.type;
         let list = lists[index];
+        log(lists);
+        log(index);
+        log(list);
         function playlist(lx, len) {//定义选集列表生成
             if (lx == '1') {
                 if (/v1|app|v2|iptv|cms/.test(type)) {
