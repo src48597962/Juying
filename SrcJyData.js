@@ -2,29 +2,31 @@
 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');//加载公共文件
 
 function getErData(jkdata) {
-    let type = jkdata.type;
-    let ua = jkdata.ua;
-    
-    let d = [];
+    let api_type = jkdata.type;
+    let api_url = jkdata.url||"";
+    let api_ua = jkdata.ua||"MOBILE_UA";
+    api_ua = api_ua=="MOBILE_UA"?MOBILE_UA:api_ua=="PC_UA"?PC_UA:api_ua;
+    MY_URL = MY_URL.split('##')[1].split('#')[0];
+
     //自动判断是否需要更新请求
-    let html = "";
-    if (getMyVar('myurl', '0') != MY_URL || !configvar || configvar.标识 != MY_URL) {
-        if (/v1|app|v2|iptv|cms/.test(type)) {
+    let html,isxml;
+    //if (!configvar || configvar.标识 != MY_URL) {
+        if (/v1|app|v2|iptv|cms/.test(api_type)) {
             try{
-                let gethtml = request(MY_URL.split('##')[1], { headers: { 'User-Agent': ua } });
-                if(/cms/.test(type)&&/<\?xml/.test(gethtml)){
+                let gethtml = request(MY_URL, {headers: {'User-Agent': api_ua}, timeout:5000});
+                if(/cms/.test(api_type)&&/<\?xml/.test(gethtml)){
                     html = gethtml;
-                    var isxml = 1;
+                    isxml = 1;
                 }else{
                     html = JSON.parse(gethtml.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,''));
-                    var isxml = 0;
+                    isxml = 0;
                 }
             } catch (e) {
                 
             }
-        } else if (/xpath|biubiu|XBPQ/.test(type)) {
+        } else if (/xpath|biubiu|XBPQ/.test(api_type)) {
             try{
-                html = request(MY_URL.split('##')[1], { headers: { 'User-Agent': ua } });
+                html = request(MY_URL, {headers: {'User-Agent': api_ua}, timeout:5000});
             } catch (e) {
                 log(e.message);
             }
@@ -32,24 +34,25 @@ function getErData(jkdata) {
             //后续网页类
         }
         var zt = 1;
-        putMyVar('myurl', MY_URL);
+        /*
     } else {
         var zt = 0;
     }
-        
+    */
+    let pic,details1,details2,desc,arts,conts;
     //影片详情
     if (zt == 1) {
-        var actor = "";
-        var director = "";
-        var area = "";
-        var year = "";
-        var remarks = "";
-        var pubdate = "";
-        var pic = MY_PARAMS.pic;
-        var desc = '...';
-        var arts = [];
-        var conts = [];
-        if(/cms/.test(type)&&isxml==1){
+        let actor = "";
+        let director = "";
+        let area = "";
+        let year = "";
+        let remarks = "";
+        let pubdate = "";
+        pic = MY_PARAMS.pic;
+        desc = '...';
+        arts = [];
+        conts = [];
+        if(/cms/.test(api_type)&&isxml==1){
             html = html.replace(/&lt;!\[CDATA\[|\]\]&gt;|<!\[CDATA\[|\]\]>/g,'');
             arts = xpathArray(html,`//video/dl/dt/@name`);
             if(arts.length==0){
@@ -64,12 +67,13 @@ function getErData(jkdata) {
             pubdate = String(xpath(html,`//video/type/text()`)).trim() || "";
             pic = pic.indexOf('loading.gif')==-1?pic:xpath(html,`//video/pic/text()`);
             desc = String(xpath(html.replace('<p>','').replace('</p>',''),`//video/des/text()`)) || '...';
-        }else if (/v1|app|v2|cms/.test(type)) {
-            if (/cms/.test(type)) {
+        }else if (/v1|app|v2|cms/.test(api_type)) {
+            let json;
+            if (/cms/.test(api_type)) {
                 try{
-                    var json = html.list[0];
+                    json = html.list[0];
                 }catch(e){
-                    var json = html.data.list[0];
+                    json = html.data.list[0];
                 }
                 if(json.vod_play_from&&json.vod_play_url){
                     arts = json.vod_play_from.split('$$$');
@@ -87,9 +91,9 @@ function getErData(jkdata) {
                 }
             }else{
                 if($.type(html.data)=="array"){
-                    var json = html.data[0];
+                    json = html.data[0];
                 }else{
-                    var json = html.data;
+                    json = html.data;
                 }
                 if(json&&json.vod_info){
                     json = json.vod_info;
@@ -99,7 +103,7 @@ function getErData(jkdata) {
                 if(arts.length==0&&json.vod_play_from&&json.vod_play_url){
                     arts = json.vod_play_from.split('$$$');
                     conts = json.vod_play_url.split('$$$');
-                    type = "cms";
+                    api_type = "cms";
                 }
             }
             actor = json.vod_actor || "未知";
@@ -110,7 +114,7 @@ function getErData(jkdata) {
             pubdate = json.vod_pubdate || json.vod_class || "";
             pic = pic.indexOf('loading.gif')==-1?pic:json.vod_pic&&json.vod_pic.indexOf('ver.txt')==-1?json.vod_pic:pic;
             desc = json.vod_blurb || '...';
-        }else if (/iptv/.test(type)) {
+        }else if (/iptv/.test(api_type)) {
             actor = html.actor.join(",") || "未知";
             director = html.director.join(",") || "未知";
             area = html.area.join(",");
@@ -121,7 +125,7 @@ function getErData(jkdata) {
             desc = html.intro || '...';
             arts = html.videolist;
             conts = arts;
-        }else if (/xpath/.test(type)) {
+        }else if (/xpath/.test(api_type)) {
             let jsondata = MY_PARAMS.data;
             try{
                 actor = String(xpathArray(html, jsondata.dtActor).join(',')).replace('主演：','').replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "");
@@ -176,12 +180,13 @@ function getErData(jkdata) {
                     let cont = [];
                     for (let j = 0; j < contname.length; j++) {
                         let urlid = jsondata.dtUrlIdR;
+                        let playUrl;
                         if(urlid){
                             let urlidl = urlid.split('(\\S+)')[0];
                             let urlidr = urlid.split('(\\S+)')[1];
-                            var playUrl = conturl[j].replace(urlidl,'').replace(urlidr,'');
+                            playUrl = conturl[j].replace(urlidl,'').replace(urlidr,'');
                         }else{
-                            var playUrl = conturl[j];
+                            playUrl = conturl[j];
                         }
                         cont.push(contname[j]+"$"+jsondata.playUrl.replace('{playUrl}',playUrl))
                     }
@@ -190,7 +195,7 @@ function getErData(jkdata) {
             }catch(e){
                 log('xpath获取选集列表失败>'+e.message);
             }
-        }else if (/biubiu/.test(type)) {
+        }else if (/biubiu/.test(api_type)) {
             let getsm = "";
             try{
                 getsm = "获取传递数据";
@@ -223,7 +228,7 @@ function getErData(jkdata) {
             }catch(e){
                 log(getsm+'失败>'+e.message)
             }    
-        }else if (/XBPQ/.test(type)) {
+        }else if (/XBPQ/.test(api_type)) {
             let getsm = "";
             try{
                 getsm = "获取传递数据";
@@ -272,18 +277,18 @@ function getErData(jkdata) {
         }else{
             //自定义接口/web自动匹配
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcAutoTmpl.js');
-            let data = autoerji(MY_URL.split('##')[1].split('#')[0],html);
-            var details1 = data.details1||'自动匹配失败';
-            var details2 = data.details2||'';
-            var pic = pic.indexOf('loading.gif')==-1?pic:data.pic;
-            var desc = data.desc||'';
-            var arts = data.arts||[];
-            var conts = data.conts||[];
+            let data = autoerji(MY_URL, html);
+            details1 = data.details1||'自动匹配失败';
+            details2 = data.details2||'';
+            pic = pic.indexOf('loading.gif')==-1?pic:data.pic;
+            desc = data.desc||'';
+            arts = data.arts||[];
+            conts = data.conts||[];
         }
-        if(/xpath|biubiu|XBPQ/.test(type)&&html&&(arts.length==0||conts.length==0)&&getMyVar('debug','0')=="0"&&html.indexOf(MY_PARAMS.title)>-1){
+        if(/xpath|biubiu|XBPQ/.test(api_type)&&html&&(arts.length==0||conts.length==0)&&getMyVar('debug','0')=="0"&&html.indexOf(MY_PARAMS.title)>-1){
             log('开启模板自动匹配、AI识片，获取播放选集');
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcAutoTmpl.js');
-            let data = autoerji(MY_URL.split('##')[1].split('#')[0],html);
+            let data = autoerji(MY_URL, html);
             remarks = remarks||"获取数据存在错误";
             pubdate = data.details2||"";
             arts = data.arts;
@@ -299,8 +304,8 @@ function getErData(jkdata) {
         }else{
             dqnf = year?'\n年代：' + year:''
         }
-        var details1 = details1?details1:'导演：' + director.substring(0, director.length<10?director.length:10) + '\n主演：' + actor.substring(0, actor.length<10||dqnf==""?actor.length:10) + dqnf;
-        var details2 = details2?details2:remarks.trim() + '\n' + pubdate.trim();
+        details1 = details1?details1:'导演：' + director.substring(0, director.length<10?director.length:10) + '\n主演：' + actor.substring(0, actor.length<10||dqnf==""?actor.length:10) + dqnf;
+        details2 = details2?details2:remarks.trim() + '\n' + pubdate.trim();
         details1 = details1.replace(/&ldquo;/g,'“').replace(/&rdquo;/g,'”').replace(/&middot;/g,'·').replace(/&hellip;/g,'…').replace(/&nbsp;|♥/g,' ');
         details2 = details2.replace(/&ldquo;/g,'“').replace(/&rdquo;/g,'”').replace(/&middot;/g,'·').replace(/&hellip;/g,'…').replace(/&nbsp;|♥/g,' ');
         desc = desc.replace(/&ldquo;/g,'“').replace(/&rdquo;/g,'”').replace(/&middot;/g,'·').replace(/&hellip;/g,'…').replace(/&nbsp;|♥/g,' ');
@@ -308,27 +313,28 @@ function getErData(jkdata) {
         var libsfile = 'hiker://files/libs/' + md5(configfile) + '.js';
         writeFile(libsfile, 'var configvar = ' + JSON.stringify(newconfig));
     } else {
-        var details1 = configvar.详情1;
-        var details2 = configvar.详情2;
-        var pic = configvar.图片;
-        var desc = configvar.简介;
-        var arts = configvar.线路;
-        var conts = configvar.影片;
+        details1 = configvar.详情1;
+        details2 = configvar.详情2;
+        pic = configvar.图片;
+        desc = configvar.简介;
+        arts = configvar.线路;
+        conts = configvar.影片;
     }
 
 
-    var parse_api = "";
-    var tabs = [];
-    var linecodes = [];
+    let parse_api = "";
+    let tabs = [];
+    let linecodes = [];
     for (var i in arts) {
-        if (/v1|app|v2/.test(type)) {
+        let linecode;
+        if (/v1|app|v2/.test(api_type)) {
             let line = arts[i].name || arts[i].player_info.show;
             tabs.push(line);
-            var linecode = arts[i].code || arts[i].player_info.from;
+            linecode = arts[i].code || arts[i].player_info.from;
 
             if (getMyVar(MY_URL, '0') == i) {
                 try {
-                    if(type=="v2"){
+                    if(api_type=="v2"){
                         var parse1 = arts[i].parse_api;
                         var parse2 = arts[i].extra_parse_api;
                     }else{
@@ -348,48 +354,49 @@ function getErData(jkdata) {
                 if (parse_api != "" && parse_api != undefined) {
                     parse_api = parse_api.replace(/\.\./g, '.').replace(/。\./g, '.');
                 }
+                log(parse_api);
             }
-        }else if (/iptv/.test(type)) {
+        }else if (/iptv/.test(api_type)) {
             let line = i;
             tabs.push(line);
-            var linecode = i;
-        }else if (/cms|xpath|biubiu|XBPQ/.test(type)) {
+            linecode = i;
+        }else if (/cms|xpath|biubiu|XBPQ/.test(api_type)) {
             tabs.push(arts[i].replace(/[\r\ \n\t]/g, ""));
-            var linecode = arts[i];
+            linecode = arts[i];
         }
         linecodes.push(linecode);
     }
     
-    var lists = [];
+    let lists = [];
     for (var i in conts) {
-        if (/v1|app|v2/.test(type)) {
+        if (/v1|app|v2/.test(api_type)) {
             if(conts[i].url){
                 let single = conts[i].url||"";
                 if(single){lists.push(single.split('#'))};
             }else{
                 let single = conts[i].urls||[];
                 if(single.length>0){
-                    var si = [];
+                    let si = [];
                     for (let j = 0; j < single.length; j++) {
                         si.push(single[j].name+"$"+single[j].url);
                     }
                     lists.push(si);
                 };
             }
-        }else if (/iptv/.test(type)) {
+        }else if (/iptv/.test(api_type)) {
             let single = conts[i]||[];
             if(single.length>0){
-                var si = [];
+                let si = [];
                 for (let j = 0; j < single.length; j++) {
                     si.push(single[j].title+"$"+single[j].url);
                 }
                 lists.push(si);
             };
-        }else if (/cms|xpath|biubiu|XBPQ/.test(type)) {
+        }else if (/cms|xpath|biubiu|XBPQ/.test(api_type)) {
             let single = conts[i]||"";
             if(single){
                 let lines = single.split('#');
-                if(type=='cms'){
+                if(api_type=='cms'){
                     for(let i in lines){
                         if(lines[i].indexOf('$')==-1){
                             let ii = parseInt(i)+1;
@@ -404,7 +411,15 @@ function getErData(jkdata) {
         }
     }
  
-    return d;
+    return {
+        "details1": details1,
+        "details2": details2,
+        "pic": pic,
+        "desc": desc,
+        "tabs": tabs,
+        "linecodes": linecodes,
+        "lists": lists
+    };
 }
 
 function getYiData(jkdata) {
