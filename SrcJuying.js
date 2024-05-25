@@ -327,7 +327,7 @@ function dianboerji() {
 //点播一级
 function dianboyiji() {
     addListener("onClose", $.toString(() => {
-        //clearMyVar('zsjiekou');
+        clearMyVar('动态加载loading');
     }));
     let d = [];
     let datalist = getDatas('jk');
@@ -358,9 +358,9 @@ function dianboyiji() {
             }
              obj.extra = {
                 longClick: [{
-                    title: "搜索接口",
+                    title: "快速筛选",
                     js: $.toString((it) => {
-                        return $("","筛选“"+it+"”分组中指定接口").input((it)=>{
+                        return $("","筛选“"+it+"”分组中指定源").input((it)=>{
                             if(input==""){
                                 return 'hiker://empty';
                             }
@@ -370,24 +370,6 @@ function dianboyiji() {
                     }, it)
                 }]
             }
-            
-        /*
-                obj.extra = {
-                    longClick: [{
-                        title: "列表排序：" + getItem("sourceListSort", "update"),
-                        js: $.toString(() => {
-                            return $(["更新时间","接口名称"], 1).select(() => {
-                                if(input=='接口名称'){
-                                    setItem("sourceListSort","name");
-                                }else{
-                                    clearItem("sourceListSort");
-                                }
-                                refreshPage(false);
-                            })
-                        })
-                    }]
-                }
-            */
             
             d.push(obj);
         })
@@ -410,14 +392,34 @@ function dianboyiji() {
                 }
             })
         }else{
-            setPageTitle(indexSource + ' | 聚影√2');
+            setPageTitle(indexSource);
+            if (typeof(setPreResult)!="undefined" && getMyVar('动态加载loading')!='1') {
+                d.push({
+                    title: "",
+                    url: "hiker://empty",
+                    col_type: "text_1",
+                    extra: {
+                        lineVisible: false,
+                        cls: "loading_gif"
+                    }
+                })
+                d.push({
+                    pic_url: "https://hikerfans.com/weisyr/img/Loading1.gif",
+                    col_type: "pic_1_center",
+                    url: "hiker://empty",
+                    extra: {
+                        cls: "loading_gif"
+                    }
+                })
+                setPreResult(d);
+                d = [];
+                putMyVar('动态加载loading', '1');
+            }
         }
     }
     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
     d = d.concat(getYiData(sourceData));
-
-
-
+    deleteItemByCls("loading_gif");
     setResult(d);
 }
 
@@ -428,7 +430,7 @@ function yiji() {
         clearMyVar('isverifyA');
     }));
     */
-    //require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyData.js');
+    
     
     if(getMyVar('SrcJuying-VersionCheck', '0') == '0'){
         let programversion = 0;
@@ -447,8 +449,8 @@ function yiji() {
                 })
             });
         }
-        //Version();
-        //downloadicon();//下载图标
+        Version();
+        downloadicon();//下载图标
     }
 
     let d = [];
@@ -622,7 +624,60 @@ function yiji() {
         }
     }
 
-    //d = d.concat(getDataList('yiji'));
+    let resoufile = "hiker://files/rules/Src/Juying/resou.json";
+    let Juyingresou = fetch(resoufile);
+    let JYresou = {};
+    if(Juyingresou != ""){
+        try{
+            eval("JYresou=" + Juyingresou+ ";");
+            delete JYresou['resoulist'];
+        }catch(e){
+            log("加载热搜缓存出错>"+e.message);
+        }
+    }
+    let resoudata = JYresou['data'] || {};
+    let fenlei = ["电视剧","电影","动漫","综艺"];
+    let fenleiid = ["3","2","5","4"];
+    let ids = getMyVar("热榜分类","0");
+    let list = resoudata[fenlei[ids]] || [];
+
+    let nowtime = Date.now();
+    let oldtime = JYresou.updatetime || 0;
+    if(list.length==0 || nowtime > (oldtime+24*60*60*1000)){
+        try{
+            let html = request("https://api.web.360kan.com/v1/rank?cat="+fenleiid[ids], {timeout: 3000});
+            list = JSON.parse(html).data;
+            resoudata[fenlei[ids]] = list;
+            JYresou['data'] = resoudata;
+            JYresou['updatetime'] = nowtime;
+            writeFile(resoufile, JSON.stringify(JYresou));
+        }catch(e){
+            log("获取热搜榜出错>"+e.message);
+        }
+    }
+    d.push({
+        title: '<span style="color:#ff6600"><b>\t热搜榜\t\t\t</b></span>',
+        desc: '✅'+fenlei[ids],
+        url: $(fenlei, 2, '选择热榜分类').select((fenlei) => {
+            putMyVar("热榜分类",fenlei.indexOf(input));
+            refreshPage(false);
+            return "hiker://empty";
+        },fenlei),
+        pic_url: 'https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=3779990328,1416553241&fm=179&app=35&f=PNG?w=60&h=70&s=E7951B62A4639D153293A4E90300401B',
+        col_type: 'avatar'
+    });
+
+    list.forEach((item,i)=>{
+        d.push({
+            title: (i=="0"?'““””<span style="color:#ff3300">' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title:i=="1"?'““””<span style="color:#ff6600">' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title:i=="2"?'““””<span style="color:#ff9900">' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title:'““””<span>' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title)+'\n<small><span style="color:#00ba99">'+item.comment+'</small>',
+            url: item.title + searchurl,
+            pic_url: item.cover,
+            desc: item.description,
+            col_type: "movie_1_vertical_pic"
+        });
+    })
+
+
     deleteItemByCls("loading_gif");
     setResult(d);
 }
