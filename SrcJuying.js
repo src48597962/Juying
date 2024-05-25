@@ -4,7 +4,7 @@ require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');//加载
 function search(name, sstype, jkdata) {
     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
     let ssdata = getSsData(name, jkdata);
-    
+    log(ssdata);
     if(sstype=='hkjusou'){
         
         return ssdata;
