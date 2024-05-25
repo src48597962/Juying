@@ -7,10 +7,31 @@ function dianboerji() {
     }));
     let d = [];
     let jkdata = MY_PARAMS.data;
-    MY_URL = MY_PARAMS.url;
+    let name = MY_PARAMS.pageTitle;
+    let url = MY_PARAMS.url;
+    MY_URL = url;
 
-    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
-    let erdata = getErData(jkdata)
+    let detailsmark;
+    let cacheDataFile = 'hiker://files/cache/src/Juying2/Details.json';
+    let cacheData = fetch(cacheDataFile);
+    if (cacheData != "") {
+        try{
+            eval("let detailsjson=" + cacheData + ";");
+            if(detailsjson.surl==jkdata.url && detailsjson.url==url){
+                detailsmark = detailsjson.data;//本地缓存接口+链接对得上则取本地，用于切换排序和样式时加快
+            }
+        }catch(e){ }
+    }
+    let erdata;
+    if(detailsmark){
+        erdata = detailsmark;
+    }else{
+        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
+        erdata = getErData(jkdata);
+        let markData = {surl: jkdata.url, url: url, data: erdata}
+        writeFile(cacheDataFile, JSON.stringify(markData));
+    }
+
 
     let details1 = erdata.details1;
     let details2 = erdata.details2;
@@ -27,21 +48,11 @@ function dianboerji() {
         }
     });
 
-    /*
-    {
-        "details1": details1,
-        "details2": details2,
-        "pic": pic,
-        "desc": desc,
-        "tabs": tabs,
-        "linecodes": linecodes,
-        "lists": lists
-    };
-    */
+
     let linecodes = erdata.linecodes;
     
     // 影片标识
-    let vodId = MY_PARAMS.pageTitle;
+    let vodId = name;
     // 线路标识
     let vodLine = vodId + '_线路';
     // 线路id
@@ -49,7 +60,7 @@ function dianboerji() {
     if(!getMyVar(vodId)){
         //取之前足迹记录，用于自动定位之前的线路
         try {
-            eval('let SrcMark = ' + fetch("hiker://files/cache/src/Jy2Mark.json"));
+            eval('let SrcMark = ' + fetch("hiker://files/cache/src/Juying2/Mark.json"));
             if (SrcMark != "") {
                 if (SrcMark.lineid[vodLine]) {
                     putMyVar(vodLine, SrcMark.lineid[vodLine]);
@@ -97,7 +108,7 @@ function dianboerji() {
                     title: getMyVar(vodLine, '0') == i ? getHead(tabs[i],Color1,1) : getHead(tabs[i],Color2),
                     url: $("#noLoading#").lazyRule((vodLine, i, Marksum) => {
                         if (parseInt(getMyVar(vodLine, '0')) != i) {
-                            let markFile = 'hiker://files/cache/src/Jy2Mark.json';
+                            let markFile = 'hiker://files/cache/src/Juying2/Mark.json';
                             let SrcMark = "";
                             try {
                                 eval('SrcMark = ' + markFile);
@@ -132,9 +143,6 @@ function dianboerji() {
     function setLists(lists, index) {
         let type = jkdata.type;
         let list = lists[index];
-
-        log(list);
-        log(type);
         function playlist(lx, col_type) {//定义选集列表生成
             if (lx == '1') {
                 let playtitle = list[j].split('$')[0].trim();
