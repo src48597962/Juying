@@ -4,9 +4,25 @@ require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');//加载
 function search(name, sstype, jkdata) {
     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
     let ssdata = getSsData(name, jkdata);
-    log(ssdata);
     if(sstype=='hkjusou'){
-        
+        ssdata = ssdata.map(it => {
+            return {
+                title: it.title,
+                desc: it.desc,
+                content: it.content,
+                pic_url: it.pic_url,
+                url: $("hiker://empty#immersiveTheme##autoCache#").rule(() => {
+                    require(config.依赖);
+                    dianboerji()
+                }),
+                extra: {
+                    url: it.url,
+                    pic: it.pic_url,
+                    pageTitle: it.title,
+                    data: jkdata
+                }
+            }
+        })
         return ssdata;
     }
 
@@ -43,7 +59,7 @@ function sousuo() {
                     data.push({
                         "title": it.name,
                         "search_url": "hiker://empty##fypage",
-                        "searchFind": `js: require(config.依赖); let d = search('` + name + `', 'hkjusou' ,` + JSON.stringify(it) + `); log(d);setResult(d);`
+                        "searchFind": `js: require(config.依赖); let d = search('` + name + `', 'hkjusou' ,` + JSON.stringify(it) + `); setResult(d);`
                     });
                 })
                 return JSON.stringify(data)
