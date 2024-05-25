@@ -6,7 +6,6 @@ function getErData(jkdata) {
     let api_url = jkdata.url||"";
     let api_ua = jkdata.ua||"MOBILE_UA";
     api_ua = api_ua=="MOBILE_UA"?MOBILE_UA:api_ua=="PC_UA"?PC_UA:api_ua;
-    MY_URL = MY_URL.split('##')[1].split('#')[0];
 
     //自动判断是否需要更新请求
     let html,isxml;
