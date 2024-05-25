@@ -280,7 +280,7 @@ function getSsData(name, jkdata) {
             log(e.message);
         }
     }
-
+    log(lists);
     if(lists.length>0){
         try {
             let search = lists.map((list)=>{
