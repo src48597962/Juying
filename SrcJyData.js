@@ -881,7 +881,7 @@ function getYiData(jkdata) {
                         setResult(ssdata);
                     }, input, data);
                     */
-                    return 'hiker://search?s='+input+'||'+data.url;
+                    return 'hiker://search?s='+input+'||'+data.url+'&rule='+MY_URL.title+'&simple=false';
                 }else{
                     return 'toast://未找到接口数据'
                 }
