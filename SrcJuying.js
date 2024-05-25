@@ -7,18 +7,18 @@ function search(name, sstype, jkdata) {
     if(sstype=='hkjusou'){
         ssdata = ssdata.map(it => {
             return {
-                title: it.title,
-                desc: it.desc,
-                content: it.content,
-                pic_url: it.pic_url,
+                title: it.vodname,
+                desc: it.voddesc,
+                content: it.vodcontent,
+                pic_url: it.vodpic,
                 url: $("hiker://empty#immersiveTheme##autoCache#").rule(() => {
                     require(config.依赖);
                     dianboerji()
                 }),
                 extra: {
-                    url: it.url,
-                    pic: it.pic_url,
-                    pageTitle: it.title,
+                    url: it.vodurl,
+                    pic: it.vodpic,
+                    pageTitle: it.vodname,
                     data: jkdata
                 }
             }
