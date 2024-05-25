@@ -639,16 +639,19 @@ function yiji() {
     d.push({
         title: "搜索",
         url: $.toString((searchurl) => {
-                if(/www\.aliyundrive\.com|www\.alipan\.com/.test(input)){
-                    input = input.replace('http','\nhttp');
-                    return $("hiker://empty#noRecordHistory##noHistory#").rule((input) => {
-                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
-                        aliShareUrl(input);
-                    },input);
-                }else{
-                    return input + searchurl;
-                }
-            },searchurl),
+            if(input.trim() == ''){
+                return "hiker://empty"
+            }
+            if(/www\.aliyundrive\.com|www\.alipan\.com/.test(input)){
+                input = input.replace('http','\nhttp');
+                return $("hiker://empty#noRecordHistory##noHistory#").rule((input) => {
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+                    aliShareUrl(input);
+                },input);
+            }else{
+                return input + searchurl;
+            }
+        },searchurl),
         desc: "搜你想看的...",
         col_type: "input",
         extra: {
