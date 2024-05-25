@@ -623,6 +623,73 @@ function yiji() {
             putMyVar('动态加载loading', '1');
         }
     }
+    var searchurl = $('').lazyRule(() => {
+        let recordlist = storage0.getItem('searchrecord') || [];
+        if(recordlist.indexOf(input)>-1){
+            recordlist = recordlist.filter((item) => item !== input);
+        }
+        recordlist.unshift(input);
+        if(recordlist.length>20){
+            recordlist.splice(recordlist.length-1,1);
+        }
+        storage0.setItem('searchrecord', recordlist);
+        return "hiker://search?rule=" + MY_RULE.title + "&s=" + input;
+    });
+
+    d.push({
+        title: "🔍",
+        url: $.toString((searchurl) => {
+                if(/www\.aliyundrive\.com|www\.alipan\.com/.test(input)){
+                    input = input.replace('http','\nhttp');
+                    return $("hiker://empty#noRecordHistory##noHistory#").rule((input) => {
+                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+                        aliShareUrl(input);
+                    },input);
+                }else{
+                    return input + searchurl;
+                }
+            },searchurl),
+        desc: "搜你想看的...",
+        col_type: "input",
+        extra: {
+            titleVisible: true,
+            id: "searchinput",
+            onChange: $.toString((searchurl) => {
+                if(input.indexOf('https://www.aliyundrive.com/s/')==-1){
+                    if(input.length==1){deleteItemByCls('suggest');}
+                    if(input.length>1&&input!=getMyVar('sousuo$input', '')){
+                        putMyVar('sousuo$input', input);
+                        deleteItemByCls('suggest');
+                        var html = request("https://movie.douban.com/j/subject_suggest?q=" + input, {timeout: 3000});
+                        var list = JSON.parse(html)||[];
+                        let suggest = list.map((sug)=>{
+                            try {
+                                let sugitem = {
+                                    url: sug.title + searchurl,
+                                    extra: {
+                                        cls: 'suggest'
+                                    }
+                                }
+                                if(sug.img!=""){
+                                    sugitem.title = sug.title;
+                                    sugitem.img = sug.img + '@Referer=https://www.douban.com';
+                                    sugitem.desc = "年份：" + sug.year;
+                                    sugitem.col_type = "movie_1_vertical_pic";
+                                }else{
+                                    sugitem.title = "⚡" + sug.title;
+                                    sugitem.col_type = "text_1";
+                                }
+                                return sugitem;
+                            } catch (e) {  }
+                        });
+                        if(suggest.length>0){
+                            addItemAfter('searchinput', suggest);
+                        }
+                    }
+                }
+            }, searchurl)
+        }
+    });
 
     let resoufile = "hiker://files/rules/Src/Juying/resou.json";
     let Juyingresou = fetch(resoufile);
@@ -666,22 +733,11 @@ function yiji() {
         pic_url: 'https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=3779990328,1416553241&fm=179&app=35&f=PNG?w=60&h=70&s=E7951B62A4639D153293A4E90300401B',
         col_type: 'avatar'
     });
-    fenlei.forEach((it,i) => {
-        d.push({
-            title: getMyVar("热榜分类","0")==i?'✅'+it:it,
-            url: $('#noLoading#').lazyRule((i) => {
-                putMyVar("热榜分类",i);
-                refreshPage(false);
-                return "hiker://empty";
-            }, i),
-            col_type: 'flex_button'//scroll_button
-        });
-    })
 
     list.forEach((item,i)=>{
         d.push({
             title: (i=="0"?'““””<span style="color:#ff3300">' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title:i=="1"?'““””<span style="color:#ff6600">' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title:i=="2"?'““””<span style="color:#ff9900">' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title:'““””<span>' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title)+'\n<small><span style="color:#00ba99">'+item.comment+'</small>',
-            url: 'hiker://search?s='+item.title+'&rule='+MY_RULE.title,
+            url: item.title + searchurl,
             pic_url: item.cover,
             desc: item.description,
             col_type: "movie_1_vertical_pic"
