@@ -4,6 +4,7 @@ require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');//加载
 function search(name, sstype, jkdata) {
     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
     let ssdata = getSsData(jkdata);
+    
     if(sstype=='hkjusou'){
         
         return ssdata;
@@ -27,7 +28,7 @@ function sousuo() {
 
                 let data = [];
                 yxdatalist.forEach(it=>{
-                    ssdata.push({
+                    data.push({
                         "title": it.name,
                         "search_url": "hiker://empty##fypage",
                         "searchFind": `js: require(config.依赖); let d = search('` + name + `', 'hkjusou' ,` + JSON.stringify(it) + `); setResult(d);`
