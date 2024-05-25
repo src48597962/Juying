@@ -136,11 +136,13 @@ function getSsData(name, jkdata) {
                     let vodpic = list.vod_pic||list.pic||"";
                     let voddesc = list.vod_remarks||list.state||"";
                     let vodurl = list.vod_id?vodurlhead + list.vod_id:list.nextlink;
+                    let vodcontent = list.vod_blurb || "";
                     return {
                         vodname: vodname,
                         vodpic: vodpic.indexOf('ver.txt')>-1?"":vodpic,
                         voddesc: voddesc,
-                        vodurl: vodurl
+                        vodurl: vodurl,
+                        vodcontent: vodcontent
                     }
                 }
             })
@@ -286,11 +288,7 @@ function getSsData(name, jkdata) {
         try {
             let search = lists.map((list)=>{
                 if(list){
-                    let vodname = list.vodname
-                    let vodpic = list.vodpic?list.vodpic.replace(/http.*\/tu\.php\?tu=|\/img\.php\?url=| |\/tu\.php\?tu=/g,'') + "@Referer=":"https://www.xawqxh.net/mxtheme/images/loading.gif@Referer=";
-                    let voddesc = list.voddesc;
-                    
-                    let vodurl = list.vodurl;
+                    let vodpic = list.vodpic?list.vodpic.replace(/http.*\/tu\.php\?tu=|\/img\.php\?url=| |\/tu\.php\?tu=/g,''):"https://www.xawqxh.net/mxtheme/images/loading.gif";
                     if(/^\/\//.test(vodpic)){
                         vodpic = "https:" + vodpic;
                     }   
@@ -298,28 +296,14 @@ function getSsData(name, jkdata) {
                         vodpic = vodurl.match(/http(s)?:\/\/(.*?)\//)[0] + vodpic;
                     }
 
-                    let searchIncludes = typeof(searchContains) =="undefined" ? vodname.indexOf(name)>-1?1:0 :searchContains(vodname,name,true);
-                    if(searchIncludes) {
-                        return {
-                            title: vodname,
-                            desc: voddesc,
-                            content: jkdata.name,
-                            pic_url: vodpic,
-                            url: $("hiker://empty##" + vodurl + "#immersiveTheme#"+(getMyVar('debug','0')=="0"?"#autoCache#":"")).rule((type,ua) => {
-                                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyXunmi.js');
-                                    xunmierji(type,ua)
-                                },api_type, api_ua),
-                            col_type: "movie_1_vertical_pic",
-                            extra: {
-                                id: 'xunmi-'+url_api,
-                                pic: vodpic,
-                                name: vodname,
-                                title: vodname+'-'+api_name,
-                                //data: typeof(jsondata) =="undefined"|| jsondata ==null?{}:jsondata,
-                                cls: 'xunmilist'
-                            }
-                        }
-                    }   
+                    return {
+                        title: list.vodname,
+                        desc: list.voddesc,
+                        content: lsit.vodcontent,
+                        pic_url: vodpic,
+                        url: list.vodurl,
+                        col_type: "movie_1_vertical_pic"
+                    }
                 }
             });
             searchs = search.filter(n => n);
