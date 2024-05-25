@@ -99,6 +99,7 @@ function dianboerji() {
         let markData = {surl: jkdata.url, url: url, data: erdata}
         writeFile(cacheDataFile, JSON.stringify(markData));
     }
+    log(erdata);
 
 
     let details1 = erdata.details1;
@@ -206,11 +207,11 @@ function dianboerji() {
         }
     }
     setTabs(erdata.tabs, lineId);
-
+    log(erdata.tabs);
     //选集部份
     function setLists(lists, index) {
         let type = jkdata.type;
-        let list = lists[index];
+        let list = lists[index] || [];
         function playlist(lx, col_type) {//定义选集列表生成
             if (lx == '1') {
                 let playtitle = list[j].split('$')[0].trim();
@@ -309,8 +310,6 @@ function dianboerji() {
             }
         }
     }
-    log(erdata.lists);
-    log(lineindex);
     setLists(erdata.lists, lineindex);
 
     //底部说明
