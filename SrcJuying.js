@@ -3,7 +3,7 @@ require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');//加载
 // 搜索逻辑代码
 function search(name, sstype, jkdata) {
     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
-    let ssdata = getSsData(jkdata);
+    let ssdata = getSsData(name, jkdata);
     
     if(sstype=='hkjusou'){
         
