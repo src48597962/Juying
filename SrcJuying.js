@@ -666,6 +666,17 @@ function yiji() {
         pic_url: 'https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=3779990328,1416553241&fm=179&app=35&f=PNG?w=60&h=70&s=E7951B62A4639D153293A4E90300401B',
         col_type: 'avatar'
     });
+    fenlei.forEach((it,i) => {
+        d.push({
+            title: getMyVar("热榜分类","0")==i?'✅'+it:it,
+            url: $(fenlei, 2, '选择热榜分类').select((i) => {
+                putMyVar("热榜分类",i);
+                refreshPage(false);
+                return "hiker://empty";
+            }, i),
+            col_type: 'text_4'
+        });
+    })
 
     list.forEach((item,i)=>{
         d.push({
