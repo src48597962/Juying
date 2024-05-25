@@ -13,18 +13,30 @@ function search(name, sstype, jkdata) {
 }
 // 软件搜索
 function sousuo() {
-    let name = MY_URL.split('##')[1].trim();
+    let k = MY_URL.split('##')[1];
+    let name,surl;
+    if(k.includes('||')){
+        name = k.split('||')[0].trim();
+        surl = k.split('||')[1];
+    }else{
+        name = k.trim();
+    }
     setResult([{
         title: "视界聚搜",
         url: "hiker://search?s=" + name,
         extra: {
             delegateOnlySearch: true,
-            rules: $.toString((name) => {
+            rules: $.toString((name,surl) => {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                 let datalist = getDatas('jk');
                 let yxdatalist = datalist.filter(it=>{
                     return !it.stop;
                 });
+                if(surl){
+                    yxdatalist = yxdatalist.filter(it=>{
+                        return it.url==surl;
+                    });
+                }
 
                 let data = [];
                 yxdatalist.forEach(it=>{
@@ -35,7 +47,7 @@ function sousuo() {
                     });
                 })
                 return JSON.stringify(data)
-            },name)
+            },name,surl)
         }
     }])
 }
