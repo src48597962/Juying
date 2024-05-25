@@ -670,7 +670,7 @@ function yiji() {
     list.forEach((item,i)=>{
         d.push({
             title: (i=="0"?'““””<span style="color:#ff3300">' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title:i=="1"?'““””<span style="color:#ff6600">' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title:i=="2"?'““””<span style="color:#ff9900">' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title:'““””<span>' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title)+'\n<small><span style="color:#00ba99">'+item.comment+'</small>',
-            url: item.title + searchurl,
+            url: 'hiker://search?s='+item.title+'&rule='+MY_RULE.title,
             pic_url: item.cover,
             desc: item.description,
             col_type: "movie_1_vertical_pic"
