@@ -79,7 +79,6 @@ function getSsData(name, jkdata) {
     
     let lists = [];
     let gethtml = "";
-    let geterror;
     if(/v1|app|iptv|v2|cms/.test(api_type)){
         let json;
         try {
@@ -148,7 +147,6 @@ function getSsData(name, jkdata) {
             })
         } catch (e) {
             //log(2);//log(obj.name+'>'+e.message);
-            geterror = 1;
         }
     }else if(api_type=="xpath"||api_type=="biubiu"){
         try {
@@ -233,7 +231,6 @@ function getSsData(name, jkdata) {
             })
         } catch (e) {
             //log(3);//log(obj.name+'>'+e.message);
-            geterror = 1;
         }
     }else if(api_type=="XBPQ"){
         try{
@@ -296,18 +293,15 @@ function getSsData(name, jkdata) {
                 }
 
                 searchs.push({
-                    title: list.vodname,
-                    desc: list.voddesc,
-                    content: list.vodcontent,
-                    pic_url: vodpic,
-                    url: list.vodurl,
-                    col_type: "movie_1_vertical_pic"
+                    vodname: list.vodname,
+                    voddesc: list.voddesc,
+                    vodcontent: list.vodcontent,
+                    vodpic: vodpic,
+                    vodurl: list.vodurl
                 })
             });
         } catch (e) {
-            //log(4);
             log(jkdata.name + '输出结果报错>'+e.message);
-            geterror = 1;
         }
     }
     return searchs;
