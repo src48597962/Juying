@@ -298,7 +298,7 @@ function getSsData(name, jkdata) {
                 searchs.push({
                     title: list.vodname,
                     desc: list.voddesc,
-                    content: lsit.vodcontent,
+                    content: list.vodcontent,
                     pic_url: vodpic,
                     url: list.vodurl,
                     col_type: "movie_1_vertical_pic"
