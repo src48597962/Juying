@@ -84,7 +84,9 @@ function deleteData(lx, data){
     })
 
     writeFile(sourcefile, JSON.stringify(datalist));
-    clearMyVar('SrcJu_searchMark');
+    if(lx=='jk'){
+        clearMyVar('SrcJu_searchMark');
+    }
     clearMyVar('SrcJu_duoselect');
 }
 //接口禁用启用
@@ -112,7 +114,9 @@ function dataEnable(lx, data, input) {
         }
     })
     writeFile(sourcefile, JSON.stringify(datalist));
-    clearMyVar('SrcJu_searchMark');
+    if(lx='jk'){
+        clearMyVar('SrcJu_searchMark');
+    }
     clearMyVar('SrcJu_duoselect');
     return sm;
 }
@@ -149,6 +153,30 @@ function duoselect(datas){
         }
     })
     storage0.putMyVar('SrcJu_duoselect',duoselect);
+}
+// 点播主页选择源接口
+function selectSource(group, k) {
+    let datalist = getDatas('jk');
+    let yxdatalist = datalist.filter(it=>{
+        return !it.stop;
+    });
+    let jkdatalist = getGroupLists(yxdatalist, group);
+    let sitenames = jkdatalist.map(it=>{
+        return it.name;
+    })
+    if(k){
+        sitenames = sitenames.filter(it => {
+            return it.indexOf(k)>-1;
+        })
+    }
+
+    return $(sitenames, 2, "选择主页源").select((group, cfgfile, Juconfig) => {
+        Juconfig['indexSource'] = group+'_'+input;
+        writeFile(cfgfile, JSON.stringify(Juconfig));
+        clearMyVar('SrcJu_dianbo$type_id');
+        refreshPage(true);
+        return 'toast://' + input;
+    }, group, cfgfile, Juconfig)
 }
 // 按拼音排序
 function sortByPinyin(arr) {
