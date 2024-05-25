@@ -885,7 +885,7 @@ function getYiData(jkdata) {
                 }
             },jkdata);
             d.push({
-                title: "🔍",
+                title: "搜索",
                 url: $.toString((searchurl) => {
                         return input + searchurl;
                     },searchurl),
