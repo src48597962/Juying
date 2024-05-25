@@ -893,9 +893,10 @@ function getYiData(jkdata) {
             var searchurl = $('').lazyRule((data) => {
                 if(data){
                     return $('hiker://empty#noRecordHistory##noHistory#').rule((name,data) => {
-                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyXunmi.js');
-                        xunmi(name,data);
-                    }, input,data);
+                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
+                        let ssdata = getSsData(name,data);
+                        setResult(ssdata);
+                    }, input, data);
                 }else{
                     return 'toast://未找到接口数据'
                 }
