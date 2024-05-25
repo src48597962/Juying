@@ -1,8 +1,338 @@
 // 本代码仅用于个人学习，请勿用于其他作用，下载后请24小时内删除，代码虽然是公开学习的，但请尊重作者，应留下说明
 // 获取搜索数据
-function getSsData(jkdata) {
+function getSsData(name, jkdata) {
+    name = name.replace(/全集.*|国语.*|粤语.*/g,'');
+    let api_name = jkdata.name||"";
+    let api_type = jkdata.type||"";
+    let api_url = jkdata.url||"";
+    let api_ua = jkdata.ua||"MOBILE_UA";
+    api_ua = api_ua=="MOBILE_UA"?MOBILE_UA:api_ua=="PC_UA"?PC_UA:api_ua;
+
+    let vodurlhead,ssurl,listnode;
+    if (api_type=="v1") {
+        let date = new Date();
+        let mm = date.getMonth()+1;
+        let dd = date.getDate();
+        let key = (mm<10?"0"+mm:mm)+""+(dd<10?"0"+dd:dd);
+        vodurlhead = api_url + '/detail?&key='+key+'&vod_id=';
+        ssurl = api_url + '?ac=videolist&limit=10&wd='+name+'&key='+key;
+        listnode = "html.data.list";
+    } else if (api_type=="app") {
+        vodurlhead = api_url + 'video_detail?id=';
+        ssurl = api_url + 'search?limit=10&text='+name;
+        listnode = "html.list";
+    } else if (api_type=="v2") {
+        vodurlhead = api_url + 'video_detail?id=';
+        ssurl = api_url + 'search?limit=10&text='+name;
+        listnode = "html.data";
+    } else if (api_type=="iptv") {
+        vodurlhead = api_url + '?ac=detail&ids=';
+        ssurl = api_url + '?ac=list&zm='+name+'&wd='+name; 
+        listnode = "html.data";
+    } else if (api_type=="cms") {
+        vodurlhead = api_url + '?ac=videolist&ids=';
+        ssurl = api_url + '?ac=videolist&wd='+name;
+        listnode = "html.list";
+    } else if (api_type=="xpath"||api_type=="biubiu"||api_type=="XBPQ") {
+        var jsondata = obj.data;
+    } else {
+        log('api类型错误')
+    }
+    function getHtmlCode(ssurl,ua,timeout){
+        let headers = {
+            "User-Agent": ua,
+            "Referer": ssurl
+        };
+        let html = request(ssurl, { headers: headers, timeout:timeout });
+        try{
+            if (html.indexOf('检测中') != -1) {
+                html = request(ssurl + '&btwaf' + html.match(/btwaf(.*?)\"/)[1], {headers: headers, timeout: timeout});
+            }else if (/页面已拦截/.test(html)) {
+                html = fetchCodeByWebView(ssurl, { headers: headers, 'blockRules': ['.png', '.jpg', '.gif', '.mp3', '.mp4'], timeout:timeout});
+                html = pdfh(html,'body&&pre&&Text');
+            }else if (/系统安全验证/.test(html)) {
+                log(api_name+'>'+ssurl+'>页面有验证码拦截');
+                function ocr(codeurl,headers) {
+                    headers= headers || {};
+                    let img = convertBase64Image(codeurl,headers).replace('data:image/jpeg;base64,','');
+                    let code = request('https://api.xhofe.top/ocr/b64/text', { body: img, method: 'POST', headers: {"Content-Type":"text/html"}});
+                    code = code.replace(/o/g, '0').replace(/u/g, '0').replace(/I/g, '1').replace(/l/g, '1').replace(/g/g, '9');
+                    log('识别验证码：'+code);
+                    return code;
+                }
+                let www = ssurl.split('/');
+                let home = www[0]+'//'+www[2];
+                let codeurl = home+(ssurl.indexOf('search-pg-1-wd-')>-1?'/inc/common/code.php?a=search':'/index.php/verify/index.html?');
+                let cook = fetchCookie(codeurl, {headers: headers});
+                headers.Cookie = JSON.parse(cook||'[]').join(';');
+                let vcode = ocr(codeurl,headers);
+                fetch(home+(ssurl.indexOf('search-pg-1-wd-')>-1?'/inc/ajax.php?ac=code_check&type=search&code=':html.match(/\/index.php.*?verify=/)[0]) + vcode, {
+                    headers: headers,
+                    method: ssurl.indexOf('search-pg-1-wd-')>-1?'GET':'POST'
+                })
+
+                html = fetch(ssurl, { headers: headers, timeout:timeout});
+            }
+        }catch(e){}
+        return html;
+    }
+    
+    let lists = [];
+    let gethtml = "";
+    if(/v1|app|iptv|v2|cms/.test(api_type)){
+        let json;
+        try {
+            gethtml = getHtmlCode(ssurl,api_ua,5000);
+            if(/cms/.test(api_type)){
+                if(gethtml&&gethtml.indexOf(name)==-1){
+                    gethtml = getHtmlCode(ssurl.replace('videolist','list'),api_ua,5000);
+                }
+                if(/<\?xml/.test(gethtml)){
+                    gethtml = gethtml.replace(/&lt;!\[CDATA\[|\]\]&gt;|<!\[CDATA\[|\]\]>/g,'');
+                    let xmllist = [];
+                    let videos = pdfa(gethtml,'list&&video');
+                    for(let i in videos){
+                        let id = String(xpath(videos[i],`//video/id/text()`)).trim();
+                        let name = String(xpath(videos[i],`//video/name/text()`)).trim();
+                        let pic = String(xpath(videos[i],`//video/pic/text()`)).trim();
+                        let note = String(xpath(videos[i],`//video/note/text()`)).trim();
+                        xmllist.push({"vod_id":id,"vod_name":name,"vod_remarks":note,"vod_pic":pic})
+                    }
+                    json = {"list":xmllist};
+                }else{
+                    json = JSON.parse(gethtml);
+                }
+            }else if(!/{|}/.test(gethtml)&&gethtml!=""){
+                let decfile = "hiker://files/rules/Src/Juying/appdec.js";
+                let Juyingdec=fetch(decfile);
+                if(Juyingdec != ""){
+                    eval(Juyingdec);
+                    json = JSON.parse(xgdec(gethtml));
+                }
+            }else{
+                json = JSON.parse(gethtml.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,''));
+            }
+        } catch (e) {
+            json = { data: [] };
+            if(gethtml){geterror = 1;}
+            //log(1);//log(obj.name+'>'+e.message);
+        }
+        try{
+            try{
+                lists = eval(listnode)||json.list||json.data.list||json.data||[];
+            } catch (e) {
+                lists = json.list||json.data.list||json.data||[];
+            }
+            
+            if(lists.length==0&&api_type=="iptv"){
+                ssurl = ssurl.replace('&zm='+name,'');
+                json = JSON.parse(getHtmlCode(ssurl,api_ua,5000));
+                lists = json.data||[];
+            }
+            lists = lists.map(list=>{
+            let vodname = list.vod_name||list.title;
+                if(vodname.indexOf(name)>-1){
+                    let vodpic = list.vod_pic||list.pic||"";
+                    let voddesc = list.vod_remarks||list.state||"";
+                    let vodurl = list.vod_id?url + list.vod_id:list.nextlink;
+                    return {
+                        vodname: vodname,
+                        vodpic: vodpic.indexOf('ver.txt')>-1?"":vodpic,
+                        voddesc: voddesc,
+                        vodurl: vodurl
+                    }
+                }
+            })
+        } catch (e) {
+            //log(2);//log(obj.name+'>'+e.message);
+            geterror = 1;
+        }
+    }else if(api_type=="xpath"||api_type=="biubiu"){
+        try {
+            if(api_type=="xpath"){
+                var ssurl = jsondata.searchUrl.replace('{wd}',name);
+                if(jsondata.scVodNode=="json:list"){
+                    gethtml = getHtmlCode(ssurl,api_ua,5000);
+                    let json = JSON.parse(gethtml);
+                    lists = json.list||[];
+                    lists.forEach(item => {
+                        if(jsondata.scVodId){
+                            item.id = item[jsondata.scVodId];
+                        }
+                    })
+                }else{
+                    let sstype = ssurl.indexOf(';post')>-1?"post":"get";
+                    if(sstype == "post"){
+                        let ssstr = ssurl.replace(';post','').split('?');
+                        let postcs = ssstr[ssstr.length-1];
+                        if(ssstr.length>2){
+                            ssstr.length = ssstr.length-1;
+                        }
+                        ssurl = ssstr.join('?');
+                        gethtml = request(ssurl, { headers: { 'User-Agent': api_ua }, timeout:5000, method: 'POST', body: postcs  });
+                    }else{
+                        gethtml = getHtmlCode(ssurl,api_ua,5000);
+                    }
+                    let title = xpathArray(gethtml, jsondata.scVodNode+jsondata.scVodName);
+                    let href = xpathArray(gethtml, jsondata.scVodNode+jsondata.scVodId);
+                    let img = xpathArray(gethtml, jsondata.scVodNode+jsondata.scVodImg);
+                    let mark = xpathArray(gethtml, jsondata.scVodNode+jsondata.scVodMark)||"";
+                    for(let j in title){
+                        lists.push({"id":/^http/.test(href[j])||/\{vid}$/.test(jsondata.dtUrl)?href[j]:href[j].replace(/\/.*?\/|\.html/g,''),"name":title[j],"pic":img[j],"desc":mark[j]})
+                    }
+                }
+                var ssvodurl = `jsondata.dtUrl.replace('{vid}', list.id)`;
+            }else{
+                var ssurl = jsondata.url+jsondata.sousuoqian+name+jsondata.sousuohou;
+                if(jsondata.ssmoshi=="0"){
+                    gethtml = getHtmlCode(ssurl,api_ua,5000);
+                    let html = JSON.parse(gethtml);
+                    lists = html.list||[];
+                }else{
+                    let sstype = ssurl.indexOf(';post')>-1?"post":"get";
+                    if(sstype == "post"){
+                        /*
+                        let ssstr = ssurl.replace(';post','').split('?');
+                        var postcs = ssstr[ssstr.length-1];
+                        if(ssstr.length>2){
+                            ssstr.length = ssstr.length-1;
+                        }
+                        var gethtml = request(ssurl, { headers: { 'User-Agent': api_ua }, timeout:5000, method: 'POST', body: postcs  });
+                    */
+                    }else{
+                        gethtml = getHtmlCode(ssurl,api_ua,5000);
+                    }
+                    let sslist = gethtml.split(jsondata.jiequshuzuqian.replace(/\\/g,""));
+                    sslist.splice(0,1);
+                    for (let i = 0; i < sslist.length; i++) {
+                        sslist[i] = sslist[i].split(jsondata.jiequshuzuhou.replace(/\\/g,""))[0];
+                        let title = sslist[i].split(jsondata.biaotiqian.replace(/\\/g,""))[1].split(jsondata.biaotihou.replace(/\\/g,""))[0];
+                        let href = sslist[i].split(jsondata.lianjieqian.replace(/\\/g,""))[1].split(jsondata.lianjiehou.replace(/\\/g,""))[0].replace(jsondata.sousuohouzhui.replace(/\\/g,""),"");//.replace('.html','')
+                        let img = sslist[i].split(jsondata.tupianqian.replace(/\\/g,""))[1].split(jsondata.tupianhou.replace(/\\/g,""))[0];
+                        let mark = "";
+                        lists.push({"id":href,"name":title,"pic":img,"desc":mark})
+                    }
+                    if(jsondata.sousuohouzhui=="/vod/"){jsondata.sousuohouzhui = "/index.php/vod/detail/id/"}
+                }
+                var ssvodurl = `jsondata.url+jsondata.sousuohouzhui+list.id`;//+'.html'
+            }
+            lists = lists.map(list=>{
+                let vodname = list.name;
+                let vodpic = list.pic||"";
+                let voddesc = list.desc||"";
+                let vodurl = eval(ssvodurl);
+                return {
+                    vodname: vodname,
+                    vodpic: vodpic,
+                    voddesc: voddesc,
+                    vodurl: vodurl
+                }
+            })
+        } catch (e) {
+            //log(3);//log(obj.name+'>'+e.message);
+            geterror = 1;
+        }
+    }else if(api_type=="XBPQ"){
+        try{
+            let jkfile = fetchCache(jsondata.ext,72);
+            if(jkfile){
+                eval("var jkdata = " + jkfile);
+                jkdata["搜索url"] = jkdata["搜索url"] || "/index.php/ajax/suggest?mid=1&wd={wd}&limit=500";
+                var ssurl = jkdata["搜索url"].replace('{wd}',name).replace('{pg}','1');
+                ssurl = /^http/.test(ssurl)?ssurl:jkdata["主页url"]+ssurl;
+                if(jkdata["搜索模式"]=="0"&&jkdata["搜索后缀"]){
+                    gethtml = getHtmlCode(ssurl,api_ua,5000);
+                    let html = JSON.parse(gethtml);
+                    lists = html.list||[];
+                    var ssvodurl = `jkdata["主页url"] + jkdata["搜索后缀"] + list.id + '.html'`;
+                }else{
+                    let sstype = ssurl.indexOf(';post')>-1?"post":"get";
+                    if(sstype == "post"){
+                        let postcs = ssurl.split(';')[2];
+                        ssurl = ssurl.split(';')[0];
+                        gethtml = request(ssurl, { headers: { 'User-Agent': api_ua }, timeout:5000, method: 'POST', body: postcs  });
+                    }else{
+                        gethtml = getHtmlCode(ssurl,api_ua,5000);
+                    }
+                    let sslist = gethtml.match(new RegExp(jkdata["搜索数组"].replace('&&','((?:.|[\r\n])*?)'), 'g'));
+                    for (let i = 0; i < sslist.length; i++) {
+                        let title = sslist[i].split(jkdata["搜索标题"].split('&&')[0])[1].split(jkdata["搜索标题"].split('&&')[1])[0];
+                        let href = sslist[i].split(jkdata["搜索链接"].split('&&')[0])[1].split(jkdata["搜索链接"].split('&&')[1])[0];
+                        let img = sslist[i].split(jkdata["搜索图片"].split('&&')[0])[1].split(jkdata["搜索图片"].split('&&')[1])[0];
+                        let mark = sslist[i].split(jkdata["搜索副标题"].split('&&')[0])[1].split(jkdata["搜索副标题"].split('&&')[1])[0];
+                        lists.push({"id":/^http/.test(href)?href:jkdata["主页url"]+href,"name":title,"pic":img,"desc":mark})
+                    }
+                    var ssvodurl = "";
+                }
+                lists = lists.map(list=>{
+                    let vodurl = ssvodurl?eval(ssvodurl):list.id;
+                    return {
+                        vodname: list.name,
+                        vodpic: list.pic||"",
+                        voddesc: list.desc||"",
+                        vodurl: vodurl
+                    }
+                })
+            }else{
+                lists = [];
+            }
+        }catch(e){
+            log(e.message);
+        }
+    }
+
+    if(lists.length>0){
+        try {
+            let search = lists.map((list)=>{
+                if(list){
+                    let vodname = list.vodname
+                    let vodpic = list.vodpic?list.vodpic.replace(/http.*\/tu\.php\?tu=|\/img\.php\?url=| |\/tu\.php\?tu=/g,'') + "@Referer=":"https://www.xawqxh.net/mxtheme/images/loading.gif@Referer=";
+                    let voddesc = list.voddesc;
+                    
+                    let vodurl = list.vodurl;
+                    if(/^\/\//.test(vodpic)){
+                        vodpic = "https:" + vodpic;
+                    }   
+                    if(/^\/upload|^upload/.test(vodpic)){
+                        vodpic = vodurl.match(/http(s)?:\/\/(.*?)\//)[0] + vodpic;
+                    }
+
+                    let searchIncludes = typeof(searchContains) =="undefined" ? vodname.indexOf(name)>-1?1:0 :searchContains(vodname,name,true);
+                    if(searchIncludes) {
+                        return {
+                            title: vodname,
+                            desc: voddesc,
+                            content: voddesc,
+                            pic_url: vodpic,
+                            url: $("hiker://empty##" + vodurl + "#immersiveTheme#"+(getMyVar('debug','0')=="0"?"#autoCache#":"")).rule((type,ua) => {
+                                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyXunmi.js');
+                                    xunmierji(type,ua)
+                                },api_type, api_ua),
+                            col_type: "movie_1_vertical_pic",
+                            extra: {
+                                id: 'xunmi-'+url_api,
+                                pic: vodpic,
+                                name: vodname,
+                                title: vodname+'-'+api_name,
+                                //data: typeof(jsondata) =="undefined"|| jsondata ==null?{}:jsondata,
+                                cls: 'xunmilist'
+                            }
+                        }
+                    }   
+                }
+            });
+            search = search.filter(n => n);
+            if(search.length>0){
+                return {result:1, apiurl:url_api, add:search};
+            }
+        } catch (e) {
+            //log(4);//log(obj.name+'>'+e.message);
+            geterror = 1;
+        }
+    }
 
 }
+
 // 获取二级数据
 function getErData(jkdata) {
     let api_type = jkdata.type;
@@ -451,75 +781,74 @@ function getYiData(jkdata) {
             let typeclass = [];
             try{
                 
-                    let gethtml = request(classurl, { headers: { 'User-Agent': api_ua }, timeout:5000 });
-                    if (api_type=="v1") {
-                        let typehtml = JSON.parse(gethtml);
-                        let typelist = typehtml.data.list||typehtml.data.typelist;
-                        typeclass = typelist.map((list)=>{
+                let gethtml = request(classurl, { headers: { 'User-Agent': api_ua }, timeout:5000 });
+                if (api_type=="v1") {
+                    let typehtml = JSON.parse(gethtml);
+                    let typelist = typehtml.data.list||typehtml.data.typelist;
+                    typeclass = typelist.map((list)=>{
+                        return {
+                            "type_id": list.type_id,
+                            "type_pid": list.type_pid,
+                            "type_name": list.type_name
+                        }
+                    })
+                } else if (/app|v2/.test(api_type)) {
+                    let typehtml = JSON.parse(gethtml);
+                    let typelist = typehtml.list||typehtml.data;
+                    typeclass = typelist.map((list)=>{
+                        return {
+                            "type_id": list.type_id,
+                            "type_pid": 0,
+                            "type_name": list.type_name
+                        }
+                    })
+                } else if (api_type=="iptv") {
+                    let type_dict = {
+                        comic: '动漫',
+                        movie: '电影',
+                        tvplay: '电视剧',
+                        tvshow: '综艺',
+                        movie_4k: '4k',
+                        hanguoju: '韩剧',
+                        oumeiju: '欧美剧',
+                        tiyu: '体育'
+                    };
+                    let typehtml = JSON.parse(gethtml);
+                    typeclass = typehtml.map((list)=>{
+                        if(type_dict[list]){
                             return {
-                                "type_id": list.type_id,
-                                "type_pid": list.type_pid,
-                                "type_name": list.type_name
-                            }
-                        })
-                    } else if (/app|v2/.test(api_type)) {
-                        let typehtml = JSON.parse(gethtml);
-                        let typelist = typehtml.list||typehtml.data;
-                        typeclass = typelist.map((list)=>{
-                            return {
-                                "type_id": list.type_id,
+                                "type_id": list,
                                 "type_pid": 0,
-                                "type_name": list.type_name
+                                "type_name": type_dict[list]
+                            }
+                        }
+                    })
+                    typeclass = typeclass.filter(n => n);
+                } else if (api_type=="cms") {
+                    if(/<\?xml/.test(gethtml)){
+                        let typelist = pdfa(gethtml,'class&&ty');
+                        typeclass = typelist.map((list)=>{
+                            return {
+                                "type_id": String(xpath(list,`//ty/@id`)).trim(),
+                                "type_pid": 0,
+                                "type_name": String(xpath(list,`//ty/text()`)).trim()
                             }
                         })
-                    } else if (api_type=="iptv") {
-                        let type_dict = {
-                            comic: '动漫',
-                            movie: '电影',
-                            tvplay: '电视剧',
-                            tvshow: '综艺',
-                            movie_4k: '4k',
-                            hanguoju: '韩剧',
-                            oumeiju: '欧美剧',
-                            tiyu: '体育'
-                        };
+                    }else{
                         let typehtml = JSON.parse(gethtml);
-                        typeclass = typehtml.map((list)=>{
-                            if(type_dict[list]){
-                                return {
-                                    "type_id": list,
-                                    "type_pid": 0,
-                                    "type_name": type_dict[list]
-                                }
-                            }
-                        })
-                        typeclass = typeclass.filter(n => n);
-                    } else if (api_type=="cms") {
-                        if(/<\?xml/.test(gethtml)){
-                            let typelist = pdfa(gethtml,'class&&ty');
-                            typeclass = typelist.map((list)=>{
-                                return {
-                                    "type_id": String(xpath(list,`//ty/@id`)).trim(),
-                                    "type_pid": 0,
-                                    "type_name": String(xpath(list,`//ty/text()`)).trim()
-                                }
-                            })
-                        }else{
-                            let typehtml = JSON.parse(gethtml);
-                            typeclass = typehtml.class;
-                        }
-                        if(jkdata.categories){
-                            for(var i=0;i<typeclass.length;i++){
-                                if(jkdata.categories.indexOf(typeclass[i].type_name)==-1){
-                                    typeclass.splice(i,1);
-                                    i = i -1;
-                                }
-                            }
-                        }
-                    } else {
-                        log('api类型错误')
+                        typeclass = typehtml.class;
                     }
-                
+                    if(jkdata.categories){
+                        for(var i=0;i<typeclass.length;i++){
+                            if(jkdata.categories.indexOf(typeclass[i].type_name)==-1){
+                                typeclass.splice(i,1);
+                                i = i -1;
+                            }
+                        }
+                    }
+                } else {
+                    log('api类型错误')
+                }
             }catch(e){
                 log(api_name+' 接口访问异常，请更换接口！获取分类失败>'+e.message);
             }
