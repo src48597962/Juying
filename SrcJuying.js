@@ -674,7 +674,7 @@ function yiji() {
                 refreshPage(false);
                 return "hiker://empty";
             }, i),
-            col_type: 'text_4'
+            col_type: 'flex_button'//scroll_button
         });
     })
 
