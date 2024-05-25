@@ -71,7 +71,7 @@ function dianboerji() {
             col_type: "blank_block"
         })
     }
-    let parse_api;
+
     function setTabs(tabs, vari) {
         d.push({
             title: getMyVar('shsort') == '1'?'““””<b><span style="color: #FF0000">∨</span></b>' : '““””<b><span style="color: #1aad19">∧</span></b>',
@@ -131,13 +131,8 @@ function dianboerji() {
             if (lx == '1') {
                 if (/v1|app|v2|iptv|cms/.test(type)) {
                     var playtitle = list[j].split('$')[0].trim();
-                    if (/iptv/.test(type)) {
-                        var playurl = list[j].split('$')[1].split('=')[1];
-                        parse_api = list[j].split('$')[1].split('=')[0]+"=";
-                    }else{
-                        var playurl = list[j].split('$')[1];
-                    }
-                    putMyVar('parse_api', parse_api);
+                    var playurl = list[j].split('$')[1].split('=')[1];
+                    
                     var DTJX = $("").lazyRule(() => {
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcParseS.js');
                         return SrcParseS.聚影(input);
