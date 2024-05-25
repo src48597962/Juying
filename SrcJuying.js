@@ -39,18 +39,25 @@ function dianboerji() {
     */
     let linecodes = erdata.linecodes;
     
-    //取之前足迹记录，用于自动定位之前的线路
-    try {
-        eval('var SrcMark = ' + fetch("hiker://files/cache/SrcMark.json"));
-        if (SrcMark != "") {
-            if (SrcMark.route[MY_URL] != undefined) {
-                var SrcMarkline = SrcMark.route[MY_URL];
-                putMyVar(MY_URL, SrcMark.route[MY_URL]);
+    // 影片标识
+    let vodId = MY_PARAMS.pageTitle;
+    // 线路标识
+    let vodLine = vodId + '_线路';
+    // 线路id
+    let lineindex = getMyVar(vodLine, '0');
+    if(!getMyVar(vodId)){
+        //取之前足迹记录，用于自动定位之前的线路
+        try {
+            eval('let SrcMark = ' + fetch("hiker://files/cache/src/Jy2Mark.json"));
+            if (SrcMark != "") {
+                if (SrcMark.lineid[vodLine]) {
+                    putMyVar(vodLine, SrcMark.lineid[vodLine]);
+                }
             }
-        }
-    } catch (e) { }
-    let Marksum = 30;//设置记录线路足迹的数量
-    let lineindex = getMyVar(MY_URL, typeof(SrcMarkline) != "undefined"?SrcMarkline:'0');
+        } catch (e) { }
+    }
+    //设置记录线路足迹的数量
+    let Marksum = 30;
     //线路部份
     let Color1 = getItem('SrcJy$linecolor1','#09c11b')||'#09c11b';//#f13b66a
     let Color2 = getItem('SrcJy$linecolor2','');;//#098AC1
@@ -72,7 +79,7 @@ function dianboerji() {
         })
     }
 
-    function setTabs(tabs, vari) {
+    function setTabs(tabs, vodLine) {
         d.push({
             title: getMyVar('shsort') == '1'?'““””<b><span style="color: #FF0000">∨</span></b>' : '““””<b><span style="color: #1aad19">∧</span></b>',
             url: $("#noLoading#").lazyRule(() => {
@@ -84,41 +91,41 @@ function dianboerji() {
         })
         for (var i in tabs) {
             if (tabs[i] != "") {
-                if(getMyVar(vari, '0') == i){putMyVar('linecode', linecodes[i])};
+                if(getMyVar(vodLine, '0') == i){putMyVar('linecode', linecodes[i])};
                 d.push({
-                    title: getMyVar(vari, '0') == i ? getHead(tabs[i],Color1,1) : getHead(tabs[i],Color2),
-                    url: $("#noLoading#").lazyRule((vari, i, Marksum) => {
-                        if (parseInt(getMyVar(vari, '0')) != i) {
+                    title: getMyVar(vodLine, '0') == i ? getHead(tabs[i],Color1,1) : getHead(tabs[i],Color2),
+                    url: $("#noLoading#").lazyRule((vodLine, i, Marksum) => {
+                        if (parseInt(getMyVar(vodLine, '0')) != i) {
+                            let markFile = 'hiker://files/cache/src/Jy2Mark.json';
+                            let SrcMark = "";
                             try {
-                                eval('var SrcMark = ' + fetch("hiker://files/cache/SrcMark.json"));
-                            } catch (e) {
-                                var SrcMark = "";
-                            }
+                                eval('SrcMark = ' + markFile);
+                            } catch (e) {  }
                             if (SrcMark == "") {
-                                SrcMark = { route: {} };
-                            } else if (SrcMark.route == undefined) {
-                                SrcMark.route = {};
+                                SrcMark = { lineid: {} };
+                            } else if (!SrcMark.lineid) {
+                                SrcMark.lineid = {};
                             }
-                            SrcMark.route[vari] = i;
-                            var key = 0;
-                            var one = "";
-                            for (var k in SrcMark.route) {
+                            SrcMark.lineid[vodLine] = i;
+                            let key = 0;
+                            let one = "";
+                            for (var k in SrcMark.lineid) {
                                 key++;
                                 if (key == 1) { one = k }
                             }
-                            if (key > Marksum) { delete SrcMark.route[one]; }
-                            writeFile("hiker://files/cache/SrcMark.json", JSON.stringify(SrcMark));
-                            putMyVar(vari, i);
+                            if (key > Marksum) { delete SrcMark.lineid[one]; }
+                            writeFile(markFile, JSON.stringify(SrcMark));
+                            putMyVar(vodLine, i);
                             refreshPage(false);
                         }
                         return '#noHistory#hiker://empty'
-                    }, vari, i, Marksum),
+                    }, vodLine, i, Marksum),
                     col_type: 'scroll_button'
                 })
             }
         }
     }
-    setTabs(erdata.tabs, MY_URL);
+    setTabs(erdata.tabs, vodLine);
 
     //选集部份
     function setLists(lists, index) {
@@ -129,17 +136,14 @@ function dianboerji() {
         log(type);
         function playlist(lx, col_type) {//定义选集列表生成
             if (lx == '1') {
+                let playtitle = list[j].split('$')[0].trim();
+                let playurl = list[j].split('$')[1].trim();
                 if (/v1|app|v2|iptv|cms/.test(type)) {
-                    var playtitle = list[j].split('$')[0].trim();
-                    var playurl = list[j].split('$')[1].split('=')[1];
-                    
                     var DTJX = $("").lazyRule(() => {
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcParseS.js');
                         return SrcParseS.聚影(input);
                     });
                 }else if (/xpath|biubiu|XBPQ/.test(type)) {
-                    var playtitle = list[j].split('$')[0].trim();
-                    var playurl = list[j].split('$')[1];
                     if(/\.mp4|\.m3u8/.test(playurl) || (/qq\.com|douyin|youku|mgtv|ixigua|bili|iqiyi|sohu|pptv|migu|1905|le\.com/.test(playurl) && /html/.test(playurl))){
                         var DTJX = $("").lazyRule(() => {
                             require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcParseS.js');
