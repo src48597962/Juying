@@ -43,7 +43,7 @@ function sousuo() {
                     data.push({
                         "title": it.name,
                         "search_url": "hiker://empty##fypage",
-                        "searchFind": `js: require(config.依赖); let d = search('` + name + `', 'hkjusou' ,` + JSON.stringify(it) + `); setResult(d);`
+                        "searchFind": `js: require(config.依赖); let d = search('` + name + `', 'hkjusou' ,` + JSON.stringify(it) + `); log(d);setResult(d);`
                     });
                 })
                 return JSON.stringify(data)
