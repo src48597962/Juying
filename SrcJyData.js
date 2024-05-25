@@ -286,29 +286,27 @@ function getSsData(name, jkdata) {
     let searchs = [];
     if(lists.length>0){
         try {
-            let search = lists.map((list)=>{
-                if(list){
-                    let vodpic = list.vodpic?list.vodpic.replace(/http.*\/tu\.php\?tu=|\/img\.php\?url=| |\/tu\.php\?tu=/g,''):"https://www.xawqxh.net/mxtheme/images/loading.gif";
-                    if(/^\/\//.test(vodpic)){
-                        vodpic = "https:" + vodpic;
-                    }   
-                    if(/^\/upload|^upload/.test(vodpic)){
-                        vodpic = vodurl.match(/http(s)?:\/\/(.*?)\//)[0] + vodpic;
-                    }
-
-                    return {
-                        title: list.vodname,
-                        desc: list.voddesc,
-                        content: lsit.vodcontent,
-                        pic_url: vodpic,
-                        url: list.vodurl,
-                        col_type: "movie_1_vertical_pic"
-                    }
+            lists.forEach((list)=>{
+                let vodpic = list.vodpic?list.vodpic.replace(/http.*\/tu\.php\?tu=|\/img\.php\?url=| |\/tu\.php\?tu=/g,''):"https://www.xawqxh.net/mxtheme/images/loading.gif";
+                if(/^\/\//.test(vodpic)){
+                    vodpic = "https:" + vodpic;
+                }   
+                if(/^\/upload|^upload/.test(vodpic)){
+                    vodpic = vodurl.match(/http(s)?:\/\/(.*?)\//)[0] + vodpic;
                 }
+
+                searchs.push({
+                    title: list.vodname,
+                    desc: list.voddesc,
+                    content: lsit.vodcontent,
+                    pic_url: vodpic,
+                    url: list.vodurl,
+                    col_type: "movie_1_vertical_pic"
+                })
             });
-            searchs = search.filter(n => n);
         } catch (e) {
-            //log(4);//log(obj.name+'>'+e.message);
+            //log(4);
+            log(jkdata.name + '输出结果报错>'+e.message);
             geterror = 1;
         }
     }
