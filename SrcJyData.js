@@ -722,12 +722,13 @@ function getYiData(jkdata) {
                         title: vodname,
                         desc: voddesc,
                         pic_url: vodpic,
-                        url: list.play?list.play:$("hiker://empty##" + vodurl + "#immersiveTheme#").rule(() => {
+                        url: list.play?list.play:$("hiker://empty#immersiveTheme##autoCache#").rule(() => {
                             require(config.依赖);
                             dianboerji()
                         }),
                         col_type: 'movie_3',
                         extra: {
+                            url: vodurl,
                             pic: vodpic,
                             pageTitle: vodname,
                             data: jkdata
