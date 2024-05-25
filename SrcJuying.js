@@ -269,7 +269,7 @@ function dianboyiji() {
     let indexSource = Juconfig['indexSource'] || '_';
     let sourceType = indexSource.split('_')[0];
     let sourceNmae = indexSource.split('_')[1];
-    let index = yxdatalist.indexOf(yxdatalist.filter(d => d.type==sourceType && d.name==sourceNmae )[0]);
+    let index = yxdatalist.indexOf(yxdatalist.filter(d => (d.group==sourceType || d.type==sourceType) && d.name==sourceNmae )[0]);
     let sourceData = yxdatalist[index] || {};
     let selectGroup = sourceData.group || sourceData.type;
     if(!selectGroup){
@@ -284,23 +284,23 @@ function dianboyiji() {
                 title: selectGroup==it?`““””<b><span style="color: #3399cc">`+it+`</span></b>`:it,
                 url: $('#noLoading#').lazyRule((it) => {
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
-                    let datalist = getDatas('jk');
-                    let yxdatalist = datalist.filter(it=>{
-                        return !it.stop;
-                    });
-                    let jkdatalist = getGroupLists(yxdatalist, it);
-                    let sitenames = jkdatalist.map(it=>{
-                        return it.name;
-                    })
-                    return $(sitenames, 2, "选择主页源").select((type, cfgfile, Juconfig) => {
-                        Juconfig['indexSource'] = type+'_'+input;
-                        writeFile(cfgfile, JSON.stringify(Juconfig));
-                        clearMyVar('SrcJu_dianbo$type_id');
-                        refreshPage(true);
-                        return 'toast://' + input;
-                    }, it, cfgfile, Juconfig)
+                    return selectSource(it);
                 }, it),
                 col_type: 'scroll_button'
+            }
+             obj.extra = {
+                longClick: [{
+                    title: "搜索接口",
+                    js: $.toString((it) => {
+                        return $("","筛选分组“"+it+"”中指定接口").input((it)=>{
+                            if(input==""){
+                                return 'hiker://empty';
+                            }
+                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                            return selectSource(it, input);
+                        }, it)
+                    }, it)
+                }]
             }
             
         /*
@@ -365,7 +365,7 @@ function yiji() {
     if(getMyVar('SrcJuying-VersionCheck', '0') == '0'){
         let programversion = 0;
         try{
-            programversion = $.require("config").version || 0;
+            programversion = $.require("config").version || MY_RULE.version || 0;
         }catch(e){}
         if(programversion<11){
             confirm({
@@ -379,8 +379,8 @@ function yiji() {
                 })
             });
         }
-        Version();
-        downloadicon();//下载图标
+        //Version();
+        //downloadicon();//下载图标
     }
 
     let d = [];
