@@ -874,11 +874,14 @@ function getYiData(jkdata) {
             
             var searchurl = $('').lazyRule((data) => {
                 if(data){
+                    /*
                     return $('hiker://empty#noRecordHistory##noHistory#').rule((name,data) => {
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
                         let ssdata = getSsData(name,data);
                         setResult(ssdata);
                     }, input, data);
+                    */
+                    return 'hiker://search?s='+input+'||'+data.url;
                 }else{
                     return 'toast://未找到接口数据'
                 }
