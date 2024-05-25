@@ -81,7 +81,6 @@ function getSsData(name, jkdata) {
     let gethtml = "";
     let geterror;
     if(/v1|app|iptv|v2|cms/.test(api_type)){
-        log('1');
         let json;
         try {
             gethtml = getHtmlCode(ssurl,api_ua,5000);
@@ -282,7 +281,7 @@ function getSsData(name, jkdata) {
             log(e.message);
         }
     }
-    log(lists);
+    let searchs = [];
     if(lists.length>0){
         try {
             let search = lists.map((list)=>{
@@ -304,7 +303,7 @@ function getSsData(name, jkdata) {
                         return {
                             title: vodname,
                             desc: voddesc,
-                            content: voddesc,
+                            content: jkdata.name,
                             pic_url: vodpic,
                             url: $("hiker://empty##" + vodurl + "#immersiveTheme#"+(getMyVar('debug','0')=="0"?"#autoCache#":"")).rule((type,ua) => {
                                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyXunmi.js');
@@ -323,16 +322,13 @@ function getSsData(name, jkdata) {
                     }   
                 }
             });
-            search = search.filter(n => n);
-            if(search.length>0){
-                return {result:1, apiurl:url_api, add:search};
-            }
+            searchs = search.filter(n => n);
         } catch (e) {
             //log(4);//log(obj.name+'>'+e.message);
             geterror = 1;
         }
     }
-
+    return searchs;
 }
 
 // 获取二级数据
