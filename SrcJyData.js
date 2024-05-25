@@ -79,7 +79,9 @@ function getSsData(name, jkdata) {
     
     let lists = [];
     let gethtml = "";
+    let geterror;
     if(/v1|app|iptv|v2|cms/.test(api_type)){
+        log('1');
         let json;
         try {
             gethtml = getHtmlCode(ssurl,api_ua,5000);
@@ -134,7 +136,7 @@ function getSsData(name, jkdata) {
                 if(vodname.indexOf(name)>-1){
                     let vodpic = list.vod_pic||list.pic||"";
                     let voddesc = list.vod_remarks||list.state||"";
-                    let vodurl = list.vod_id?url + list.vod_id:list.nextlink;
+                    let vodurl = list.vod_id?vodurlhead + list.vod_id:list.nextlink;
                     return {
                         vodname: vodname,
                         vodpic: vodpic.indexOf('ver.txt')>-1?"":vodpic,
@@ -143,6 +145,7 @@ function getSsData(name, jkdata) {
                     }
                 }
             })
+            log(lists);
         } catch (e) {
             //log(2);//log(obj.name+'>'+e.message);
             geterror = 1;
@@ -280,7 +283,7 @@ function getSsData(name, jkdata) {
             log(e.message);
         }
     }
-    log(lists);
+    
     if(lists.length>0){
         try {
             let search = lists.map((list)=>{
