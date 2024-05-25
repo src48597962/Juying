@@ -122,16 +122,16 @@ function dianboerji() {
     // 影片标识
     let vodId = name;
     // 线路标识
-    let vodLine = vodId + '_线路';
+    let lineId = vodId + '_线路';
     // 线路id
-    let lineindex = getMyVar(vodLine, '0');
+    let lineindex = getMyVar(lineId, '0');
     if(!getMyVar(vodId)){
         //取之前足迹记录，用于自动定位之前的线路
         try {
             eval('let SrcMark = ' + fetch("hiker://files/cache/src/Juying2/Mark.json"));
             if (SrcMark != "") {
-                if (SrcMark.lineid[vodLine]) {
-                    putMyVar(vodLine, SrcMark.lineid[vodLine]);
+                if (SrcMark.line[lineId]) {
+                    putMyVar(lineId, SrcMark.line[lineId]);
                 }
             }
         } catch (e) { }
@@ -159,7 +159,7 @@ function dianboerji() {
         })
     }
 
-    function setTabs(tabs, vodLine) {
+    function setTabs(tabs, lineId) {
         d.push({
             title: getMyVar('shsort') == '1'?'““””<b><span style="color: #FF0000">∨</span></b>' : '““””<b><span style="color: #1aad19">∧</span></b>',
             url: $("#noLoading#").lazyRule(() => {
@@ -171,11 +171,11 @@ function dianboerji() {
         })
         for (var i in tabs) {
             if (tabs[i] != "") {
-                if(getMyVar(vodLine, '0') == i){putMyVar('linecode', linecodes[i])};
+                if(getMyVar(lineId, '0') == i){putMyVar('linecode', linecodes[i])};
                 d.push({
-                    title: getMyVar(vodLine, '0') == i ? getHead(tabs[i],Color1,1) : getHead(tabs[i],Color2),
-                    url: $("#noLoading#").lazyRule((vodLine, i, Marksum) => {
-                        if (parseInt(getMyVar(vodLine, '0')) != i) {
+                    title: getMyVar(lineId, '0') == i ? getHead(tabs[i],Color1,1) : getHead(tabs[i],Color2),
+                    url: $("#noLoading#").lazyRule((lineId, i, Marksum) => {
+                        if (parseInt(getMyVar(lineId, '0')) != i) {
                             let markFile = 'hiker://files/cache/src/Juying2/Mark.json';
                             let SrcMark = "";
                             try {
@@ -183,29 +183,29 @@ function dianboerji() {
                             } catch (e) {  }
                             if (SrcMark == "") {
                                 SrcMark = { lineid: {} };
-                            } else if (!SrcMark.lineid) {
-                                SrcMark.lineid = {};
+                            } else if (!SrcMark.line) {
+                                SrcMark.line = {};
                             }
-                            SrcMark.lineid[vodLine] = i;
+                            SrcMark.line[lineId] = i;
                             let key = 0;
                             let one = "";
-                            for (var k in SrcMark.lineid) {
+                            for (var k in SrcMark.line) {
                                 key++;
                                 if (key == 1) { one = k }
                             }
-                            if (key > Marksum) { delete SrcMark.lineid[one]; }
+                            if (key > Marksum) { delete SrcMark.line[one]; }
                             writeFile(markFile, JSON.stringify(SrcMark));
-                            putMyVar(vodLine, i);
+                            putMyVar(lineId, i);
                             refreshPage(false);
                         }
                         return '#noHistory#hiker://empty'
-                    }, vodLine, i, Marksum),
+                    }, lineId, i, Marksum),
                     col_type: 'scroll_button'
                 })
             }
         }
     }
-    setTabs(erdata.tabs, vodLine);
+    setTabs(erdata.tabs, lineId);
 
     //选集部份
     function setLists(lists, index) {
@@ -309,6 +309,8 @@ function dianboerji() {
             }
         }
     }
+    log(erdata.lists);
+    log(lineindex);
     setLists(erdata.lists, lineindex);
 
     //底部说明
