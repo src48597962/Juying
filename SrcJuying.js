@@ -991,10 +991,30 @@ function sousuo2(d, disk) {
 
     setResult(d);
 }
-
-
-
-//版本检测
+// 下载必要图标
+function downloadicon() {
+    try{
+        if(!fileExist('hiker://files/cache/src/文件夹.svg')){
+            downloadFile(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + "img/文件夹.svg", 'hiker://files/cache/src/文件夹.svg');
+        }
+        if(!fileExist('hiker://files/cache/src/影片.svg')){
+            downloadFile("https://hikerfans.com/tubiao/movie/13.svg", 'hiker://files/cache/src/影片.svg');
+        }
+        if(!fileExist('hiker://files/cache/src/音乐.svg')){
+            downloadFile("https://hikerfans.com/tubiao/music/46.svg", 'hiker://files/cache/src/音乐.svg');
+        }
+        if(!fileExist('hiker://files/cache/src/图片.png')){
+            downloadFile("https://hikerfans.com/tubiao/more/38.png", 'hiker://files/cache/src/图片.png');
+        }
+        if(!fileExist('hiker://files/cache/src/Alist.svg')){
+            downloadFile(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + "img/Alist.svg", 'hiker://files/cache/src/Alist.svg');
+        }
+        if(!fileExist('hiker://files/cache/src/聚影.png')){
+            downloadFile(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + "img/聚影.png", 'hiker://files/cache/src/聚影.png');
+        }
+    }catch(e){}
+}
+// 版本检测
 function Version() {
     var nowVersion = getItem('Version', "7.9");//现在版本 
     var nowtime = Date.now();
