@@ -354,7 +354,6 @@ function getErData(jkdata) {
                 if (parse_api != "" && parse_api != undefined) {
                     parse_api = parse_api.replace(/\.\./g, '.').replace(/。\./g, '.');
                 }
-                log(parse_api);
             }
         }else if (/iptv/.test(api_type)) {
             let line = i;
@@ -388,7 +387,8 @@ function getErData(jkdata) {
             if(single.length>0){
                 let si = [];
                 for (let j = 0; j < single.length; j++) {
-                    si.push(single[j].title+"$"+single[j].url);
+                    si.push(single[j].title+"$"+single[j].url.split('=')[1]);
+                    parse_api = single[j].url.split('=')[0]+"=";
                 }
                 lists.push(si);
             };
@@ -418,7 +418,8 @@ function getErData(jkdata) {
         "desc": desc,
         "tabs": tabs,
         "linecodes": linecodes,
-        "lists": lists
+        "lists": lists,
+        "parse_api": parse_api
     };
 }
 
