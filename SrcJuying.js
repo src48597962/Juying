@@ -1,6 +1,45 @@
-//本代码仅用于个人学习，请勿用于其他作用，下载后请24小时内删除，代码虽然是公开学习的，但请尊重作者，应留下说明
+// 本代码仅用于个人学习，请勿用于其他作用，下载后请24小时内删除，代码虽然是公开学习的，但请尊重作者，应留下说明
 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');//加载公共文件
-//点播二级
+// 搜索逻辑代码
+function search(name, sstype, jkdata) {
+    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
+    let ssdata = getSsData(jkdata);
+    if(sstype=='hkjusou'){
+        
+        return ssdata;
+    }
+
+}
+// 软件搜索
+function sousuo() {
+    let name = MY_URL.split('##')[1].trim();
+    setResult([{
+        title: "视界聚搜",
+        url: "hiker://search?s=" + name,
+        extra: {
+            delegateOnlySearch: true,
+            rules: $.toString((name) => {
+                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                let datalist = getDatas('jk');
+                let yxdatalist = datalist.filter(it=>{
+                    return !it.stop;
+                });
+
+                let data = [];
+                yxdatalist.forEach(it=>{
+                    ssdata.push({
+                        "title": it.name,
+                        "search_url": "hiker://empty##fypage",
+                        "searchFind": `js: require(config.依赖); let d = search('` + name + `', 'hkjusou' ,` + JSON.stringify(it) + `); setResult(d);`
+                    });
+                })
+                return JSON.stringify(data)
+            },name)
+        }
+    }])
+}
+
+// 点播二级
 function dianboerji() {
     addListener("onClose", $.toString(() => {
 
@@ -292,7 +331,7 @@ function dianboyiji() {
                 longClick: [{
                     title: "搜索接口",
                     js: $.toString((it) => {
-                        return $("","筛选分组“"+it+"”中指定接口").input((it)=>{
+                        return $("","筛选“"+it+"”分组中指定接口").input((it)=>{
                             if(input==""){
                                 return 'hiker://empty';
                             }
@@ -953,48 +992,7 @@ function sousuo2(d, disk) {
     setResult(d);
 }
 
-//搜索
-function sousuo() {
-    let sousuoms;
-    let cfgfile = "hiker://files/rules/Src/Juying/config.json";
-    let Juyingcfg=fetch(cfgfile);
-    if(Juyingcfg != ""){
-        try{
-            eval("var JYconfig=" + Juyingcfg+ ";");
-            sousuoms = JYconfig.sousuoms;
-        }catch(e){
-            var JYconfig= {};
-            sousuoms==1
-        }
-    }
 
-    if((!fileExist('hiker://files/rules/Src/Juying/jiekou.json')||sousuoms==1) && getItem('searchsource')!="接口"){
-        require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyData.js');
-        JYsousuo();
-    }else{
-        if(MY_PAGE==1){
-            let name = MY_URL.split('##')[1];
-            if(name == undefined){
-                setResult([{
-                    title: "当前小程序版本过低，需升级新版本",
-                    url: "hiker://empty",
-                    col_type: "text_1"
-                }]);
-            }else if(name.trim()){
-                require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyXunmi.js');
-                xunmi(name,false,true);
-            }else{
-                setResult([{
-                    title: "搜索关键词不能为空",
-                    url: "hiker://empty",
-                    col_type: "text_1"
-                }]);
-            }
-        }else{
-            setResult([]);
-        }
-    }
-}
 
 //版本检测
 function Version() {
