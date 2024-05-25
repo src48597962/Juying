@@ -145,7 +145,6 @@ function getSsData(name, jkdata) {
                     }
                 }
             })
-            log(lists);
         } catch (e) {
             //log(2);//log(obj.name+'>'+e.message);
             geterror = 1;
@@ -283,7 +282,7 @@ function getSsData(name, jkdata) {
             log(e.message);
         }
     }
-    
+    log(lists);
     if(lists.length>0){
         try {
             let search = lists.map((list)=>{
