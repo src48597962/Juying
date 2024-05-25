@@ -7,6 +7,7 @@ function dianboerji() {
     }));
     let d = [];
     let jkdata = MY_PARAMS.data;
+    MY_URL = MY_PARAMS.url;
 
     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
     let erdata = getErData(jkdata)
