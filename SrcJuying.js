@@ -656,7 +656,7 @@ function yiji() {
             id: "searchinput",
             onChange: $.toString((searchurl) => {
                 if(input.indexOf('https://www.aliyundrive.com/s/')==-1){
-                    if(input.length==1){deleteItemByCls('suggest');}
+                    if(input.length==0){deleteItemByCls('suggest');}
                     if(input.length>1&&input!=getMyVar('sousuo$input', '')){
                         putMyVar('sousuo$input', input);
                         deleteItemByCls('suggest');
@@ -690,6 +690,52 @@ function yiji() {
             }, searchurl)
         }
     });
+    d.push({
+        title: "📑"+(getItem('searchrecordide')=='1'?"关闭":"开启")+"记录",
+        url: $('#noLoading#').lazyRule(() => {
+            if(getItem('searchrecordide')=='1'){
+                clearItem('searchrecordide');
+            }else{
+                setItem('searchrecordide','1');
+            }
+            refreshPage(false);
+            return "toast://已切换"
+        }),
+        col_type: 'scroll_button'
+    });
+    d.push({
+        col_type: "blank_block"
+    });
+    if(getItem('searchrecordide','0')=='1'){
+        let recordlist = storage0.getItem('searchrecord') || [];
+        if(recordlist.length>0){
+            d.push({
+                title: '🗑清空',
+                url: $('#noLoading#').lazyRule(() => {
+                    clearItem('searchrecord');
+                    deleteItemByCls('searchrecord');
+                    return "toast://已清空";
+                }),
+                col_type: 'scroll_button'
+            });
+        }else{
+            d.push({
+                title: '↻无记录',
+                url: "hiker://empty",
+                col_type: 'scroll_button'
+            });
+        }
+        recordlist.forEach(item=>{
+            d.push({
+                title: item,
+                url: item + searchurl,
+                col_type: 'scroll_button',
+                extra: {
+                    cls: 'searchrecord'
+                }
+            });
+        })
+    }
 
     let resoufile = "hiker://files/rules/Src/Juying/resou.json";
     let Juyingresou = fetch(resoufile);
