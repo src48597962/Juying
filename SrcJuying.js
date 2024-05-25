@@ -637,7 +637,7 @@ function yiji() {
     });
 
     d.push({
-        title: "🔍",
+        title: "搜索",
         url: $.toString((searchurl) => {
                 if(/www\.aliyundrive\.com|www\.alipan\.com/.test(input)){
                     input = input.replace('http','\nhttp');
