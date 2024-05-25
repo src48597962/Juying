@@ -669,7 +669,7 @@ function yiji() {
     fenlei.forEach((it,i) => {
         d.push({
             title: getMyVar("热榜分类","0")==i?'✅'+it:it,
-            url: $(fenlei, 2, '选择热榜分类').select((i) => {
+            url: $('#noLoading#').lazyRule((i) => {
                 putMyVar("热榜分类",i);
                 refreshPage(false);
                 return "hiker://empty";
