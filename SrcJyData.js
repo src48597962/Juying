@@ -872,6 +872,22 @@ function getYiData(jkdata) {
             }
             
             if(typeclass.length>0){
+                let yicates = typeclass.filter(it=>{
+                    return it.type_pid==0;
+                })
+                yicates.forEach(it=>{
+                    d.push({
+                        title: getMyVar('SrcJu_dianbo$cate_id')==it.type_id?'““””<b><span style="color:' + Color + '">' + it.type_name + '</span></b>':it.type_name,
+                        url: $('#noLoading#').lazyRule((cate_id) => {
+                            putMyVar('SrcJu_dianbo$cate_id', cate_id);
+                            refreshPage(true);
+                            return "hiker://empty";
+                        }, it.type_id),
+                        col_type: 'scroll_button'
+                    });
+                })
+                
+
                 let type_pids = [];
                 let type_ids = [];
                 typeclass.forEach(it=>{
