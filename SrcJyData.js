@@ -873,6 +873,7 @@ function getYiData(jkdata) {
             }catch(e){
                 log(api_name+'>访问异常，请更换源接口！获取分类失败>'+e.message);
             }
+            const fold = getMyVar('SrcJu_dianbo$fold', "0");
             d.push({
                 title: fold === '1' ? '““””<b><span style="color: #F54343">∨</span></b>' : '““””<b><span style="color:' + Color + '">∧</span></b>',
                 url: $('#noLoading#').lazyRule((fold) => {
@@ -900,10 +901,10 @@ function getYiData(jkdata) {
                 let cates = typeclass.filter(it=>{
                     return it.type_pid==0;
                 })
-                
+                let cate_id = getMyVar('SrcJu_dianbo$cate_id', recommends.length>0?'0':cates[0].type_id.toString());
                 cates.forEach(it=>{
                     d.push({
-                        title: getMyVar('SrcJu_dianbo$cate_id')==it.type_id?'““””<b><span style="color:' + Color + '">' + it.type_name + '</span></b>':it.type_name,
+                        title: cate_id==it.type_id?'““””<b><span style="color:' + Color + '">' + it.type_name + '</span></b>':it.type_name,
                         url: $('#noLoading#').lazyRule((cate_id) => {
                             putMyVar('SrcJu_dianbo$cate_id', cate_id);
                             refreshPage(true);
@@ -915,15 +916,15 @@ function getYiData(jkdata) {
                 d.push({
                     col_type: "blank_block"
                 });
-                const fold = getMyVar('SrcJu_dianbo$fold', "0");
+                
                 if(fold=='1'){
-                    let cate_id = getMyVar('SrcJu_dianbo$cate_id', recommends.length>0?'0':cates[0].type_id.toString());
                     let types = typeclass.filter(it=>{
                         return it.type_pid==cate_id;
                     })
+                    let type_id = getMyVar('SrcJu_dianbo$type_id', types[0].type_id.toString());
                     types.forEach(it=>{
                         d.push({
-                            title: getMyVar('SrcJu_dianbo$type_id')==it.type_id?'““””<b><span style="color:' + Color + '">' + it.type_name + '</span></b>':it.type_name,
+                            title: type_id==it.type_id?'““””<b><span style="color:' + Color + '">' + it.type_name + '</span></b>':it.type_name,
                             url: $('#noLoading#').lazyRule((type_id) => {
                                 putMyVar('SrcJu_dianbo$type_id', type_id);
                                 refreshPage(true);
