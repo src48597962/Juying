@@ -853,6 +853,7 @@ function getYiData(jkdata) {
                             let typehtml = JSON.parse(gethtml);
                             typeclass = typehtml.class;
                         }
+                        /*
                         if(jkdata.categories){
                             for(var i=0;i<typeclass.length;i++){
                                 if(jkdata.categories.indexOf(typeclass[i].type_name)==-1 && typeclass[i].pid !=0){
@@ -861,6 +862,7 @@ function getYiData(jkdata) {
                                 }
                             }
                         }
+                        */
                     }else {
                         log('api类型错误')
                     }
