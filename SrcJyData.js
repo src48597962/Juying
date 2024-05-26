@@ -887,12 +887,14 @@ function getYiData(jkdata) {
                         col_type: 'scroll_button'
                     });
                 })
+                log("1");
                 d.push({
                     col_type: "blank_block"
                 });
                 let types = typeclass.filter(it=>{
                     return it.type_pid==cate_id;
                 })
+                log("2");
                 types.forEach(it=>{
                     d.push({
                         title: getMyVar('SrcJu_dianbo$type_id')==it.type_id?'““””<b><span style="color:' + Color + '">' + it.type_name + '</span></b>':it.type_name,
@@ -907,6 +909,7 @@ function getYiData(jkdata) {
                 d.push({
                     col_type: "blank_block"
                 });
+                log("3");
                 /*
                 let type_pids = [];
                 let type_ids = [];
@@ -967,6 +970,7 @@ function getYiData(jkdata) {
             });
         }
     }
+    log(d.length);
     return d;
     if(typeof(listurl) != "undefined"){
         let lists = [];
