@@ -770,7 +770,7 @@ function getYiData(jkdata) {
         }
     }
     if(MY_PAGE==1){
-        if(typeof(classurl) != "undefined"){
+        if(classurl){
             const Color = "#3399cc";
             let typeclass = [];
             try{
@@ -855,7 +855,7 @@ function getYiData(jkdata) {
                         }
                         if(jkdata.categories){
                             for(var i=0;i<typeclass.length;i++){
-                                if(jkdata.categories.indexOf(typeclass[i].type_name)==-1){
+                                if(jkdata.categories.indexOf(typeclass[i].type_name)==-1 && typeclass[i].pid !=0){
                                     typeclass.splice(i,1);
                                     i = i -1;
                                 }
@@ -877,11 +877,6 @@ function getYiData(jkdata) {
                     if(type_ids.indexOf(it.type_id)==-1){type_ids.push(it.type_id)}
                 })
 
-                if(type_pids.length > 0){
-                    type_pids.sort((a, b) => {
-                        return a - b
-                    })
-                };
 
                 if(type_ids.length>0&&!getMyVar('SrcJu_dianbo$type_id')){///v2|app|XBPQ/.test(api_type)
                     putMyVar('SrcJu_dianbo$type_id',type_ids[0]);
