@@ -881,7 +881,7 @@ function getYiData(jkdata) {
                     lists = recommends;//当前分类为推荐，取推荐列表
                 }
                 d.push({
-                    title: getMyVar('SrcJu_dianbo$cate_id')=='0'?'““””<b><span style="color:' + Color + '">' + '推荐' + '</span></b>':'推荐',
+                    title: getMyVar('SrcJu_dianbo$cate_id','0')=='0'?'““””<b><span style="color:' + Color + '">' + '推荐' + '</span></b>':'推荐',
                     url: $('#noLoading#').lazyRule(() => {
                         putMyVar('SrcJu_dianbo$cate_id', '0');
                         refreshPage(true);
