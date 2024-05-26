@@ -904,7 +904,6 @@ function getYiData(jkdata) {
                         col_type: 'scroll_button'
                     });
                 })
-
                 d.push({
                     col_type: "blank_block"
                 });
@@ -968,6 +967,7 @@ function getYiData(jkdata) {
             });
         }
     }
+    return d;
     if(typeof(listurl) != "undefined"){
         let lists = [];
         try{
