@@ -1213,6 +1213,9 @@ function downloadicon() {
         if(!fileExist('hiker://files/cache/src/聚影.png')){
             downloadFile(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + "img/聚影.png", 'hiker://files/cache/src/聚影.png');
         }
+        if(!fileExist('hiker://files/cache/src/picloading.gif')){
+            downloadFile(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + "img/picloading.gif", 'hiker://files/cache/src/picloading.gif');
+        }
     }catch(e){}
 }
 // 版本检测
