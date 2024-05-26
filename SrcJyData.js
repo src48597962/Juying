@@ -875,7 +875,7 @@ function getYiData(jkdata) {
                 let cates = typeclass.filter(it=>{
                     return it.type_pid==0;
                 })
-                let cate_id = getMyVar('SrcJu_dianbo$cate_id', cates[0].type_id);
+                
                 cates.forEach(it=>{
                     d.push({
                         title: getMyVar('SrcJu_dianbo$cate_id')==it.type_id?'““””<b><span style="color:' + Color + '">' + it.type_name + '</span></b>':it.type_name,
@@ -891,6 +891,8 @@ function getYiData(jkdata) {
                 d.push({
                     col_type: "blank_block"
                 });
+                
+                let cate_id = getMyVar('SrcJu_dianbo$cate_id', cates[0].type_id);
                 let types = typeclass.filter(it=>{
                     return it.type_pid==cate_id;
                 })
