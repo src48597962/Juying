@@ -887,13 +887,12 @@ function getYiData(jkdata) {
                         col_type: 'scroll_button'
                     });
                 })
-                log("1");
+
                 d.push({
                     col_type: "blank_block"
                 });
-                let cateid = cates[0].type_id;
-                log(cateid);
-                let cate_id = getMyVar('SrcJu_dianbo$cate_id', cateid);
+
+                let cate_id = getMyVar('SrcJu_dianbo$cate_id', cates[0].type_id.toString());
                 log(cate_id);
                 let types = typeclass.filter(it=>{
                     return it.type_pid==cate_id;
