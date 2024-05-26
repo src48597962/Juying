@@ -109,7 +109,7 @@ function dianboerji() {
     d.push({
         title: details1,//详情1
         desc: details2,//详情2
-        pic_url: pic?pic:'',//图片
+        pic_url: pic?/^http/.test(pic)&&!pic.includes('@Referer=')?pic+'@Referer=':pic:'',//图片
         url: pic + '#noHistory#',//链接
         col_type: 'movie_1_vertical_pic_blur',
         extra: {
@@ -183,7 +183,7 @@ function dianboerji() {
                                 eval('SrcMark = ' + markFile);
                             } catch (e) {  }
                             if (SrcMark == "") {
-                                SrcMark = { lineid: {} };
+                                SrcMark = { line: {} };
                             } else if (!SrcMark.line) {
                                 SrcMark.line = {};
                             }
