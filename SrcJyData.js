@@ -769,7 +769,9 @@ function getYiData(jkdata) {
             log('api类型错误')
         }
     }
+    let lists = []; //影片列表
     if(MY_PAGE==1){
+        let recommends =[];
         if(classurl){
             const Color = "#3399cc";
             let typeclass = [];
@@ -851,7 +853,10 @@ function getYiData(jkdata) {
                             })
                         }else{
                             let typehtml = JSON.parse(gethtml);
-                            typeclass = typehtml.class;
+                            typeclass = typehtml.class;//分类列表
+                            if(getMyVar('SrcJu_dianbo$cate_id','0')=='0'){
+                                lists = typehtml.list;//推荐影片
+                            }
                         }
                         
                         if(jkdata.categories){
@@ -870,7 +875,17 @@ function getYiData(jkdata) {
             }catch(e){
                 log(api_name+'>访问异常，请更换源接口！获取分类失败>'+e.message);
             }
-            
+            if(recommends.length>0){
+                d.push({
+                    title: getMyVar('SrcJu_dianbo$cate_id')=='0'?'““””<b><span style="color:' + Color + '">' + '推荐' + '</span></b>':'推荐',
+                    url: $('#noLoading#').lazyRule(() => {
+                        putMyVar('SrcJu_dianbo$cate_id', '0');
+                        refreshPage(true);
+                        return "hiker://empty";
+                    }),
+                    col_type: 'scroll_button'
+                });
+            }
             if(typeclass.length>0){
                 let cates = typeclass.filter(it=>{
                     return it.type_pid==0;
@@ -893,11 +908,10 @@ function getYiData(jkdata) {
                 });
 
                 let cate_id = getMyVar('SrcJu_dianbo$cate_id', cates[0].type_id.toString());
-                log(cate_id);
                 let types = typeclass.filter(it=>{
                     return it.type_pid==cate_id;
                 })
-                log("2");
+
                 types.forEach(it=>{
                     d.push({
                         title: getMyVar('SrcJu_dianbo$type_id')==it.type_id?'““””<b><span style="color:' + Color + '">' + it.type_name + '</span></b>':it.type_name,
@@ -912,7 +926,6 @@ function getYiData(jkdata) {
                 d.push({
                     col_type: "blank_block"
                 });
-                log("3");
                 /*
                 let type_pids = [];
                 let type_ids = [];
@@ -973,10 +986,8 @@ function getYiData(jkdata) {
             });
         }
     }
-    log(d.length);
-    return d;
-    if(typeof(listurl) != "undefined"){
-        let lists = [];
+
+    if(listurl && lists.length==0){
         try{
             if(api_type=="XBPQ"){
                 MY_URL = listurl.replace('{catePg}',extdata["起始页"]?MY_PAGE>extdata["起始页"]?MY_PAGE:"":MY_PAGE).replace('{cateId}',getMyVar('SrcJu_dianbo$type_id','1'));
@@ -994,130 +1005,126 @@ function getYiData(jkdata) {
                     }
                 }
             }
-            try {
-                var gethtml = request(MY_URL, { headers: { 'User-Agent': api_ua }, timeout:5000 });
-                if(api_type=="XBPQ"){
-                    jkdata["二次截取"] = jkdata["二次截取"] || (gethtml.indexOf(`<ul class="stui-vodlist`)>-1?`<ul class="stui-vodlist&&</ul>`:gethtml.indexOf(`<ul class="myui-vodlist`)>-1?`<ul class="myui-vodlist&&</ul>`:"");
-                    if(jkdata["二次截取"]){
-                        gethtml = gethtml.split(jkdata["二次截取"].split('&&')[0])[1].split(jkdata["二次截取"].split('&&')[1])[0];
-                    }
-                    jkdata["链接"] = jkdata["链接"] || `href="&&"`;
-                    jkdata["标题"] = jkdata["标题"] || `title="&&"`;
-                    jkdata["数组"] = jkdata["数组"] || `<a &&</a>`;
-                    let jklist = gethtml.match(new RegExp(jkdata["数组"].replace('&&','((?:.|[\r\n])*?)'), 'g'));
-                    jklist.forEach(item=>{
-                        if(!jkdata["图片"]){
-                            if(item.indexOf('original=')>-1){
-                                jkdata["图片"] = `original="&&"`;
-                            }else if(item.indexOf('<img src=')>-1){
-                                jkdata["图片"] = `<img src="&&"`;
-                            }
-                        };
-                        if(jkdata["图片"]&&item.indexOf(jkdata["图片"].split("&&")[0])>-1){
-                            let id = item.split(jkdata["链接"].split('&&')[0])[1].split(jkdata["链接"].split('&&')[1])[0];
-                            let name = item.split(jkdata["标题"].split('&&')[0])[1].split(jkdata["标题"].split('&&')[1])[0];
-                            let pic = "";
-                            try{
-                                pic = item.split(jkdata["图片"].split('&&')[0])[1].split(jkdata["图片"].split('&&')[1])[0];
-                            }catch(e){}
-                            let note = "";
-                            try{
-                                note = item.split(jkdata["副标题"].split('&&')[0])[1].split(jkdata["副标题"].split('&&')[1])[0];
-                            }catch(e){}
-                            let arr = {"vod_id":id,"vod_name":name,"vod_remarks":note,"vod_pic":pic};
-                            lists.push(arr);
+
+            let gethtml = request(MY_URL, { headers: { 'User-Agent': api_ua }, timeout:5000 });
+            if(api_type=="XBPQ"){
+                jkdata["二次截取"] = jkdata["二次截取"] || (gethtml.indexOf(`<ul class="stui-vodlist`)>-1?`<ul class="stui-vodlist&&</ul>`:gethtml.indexOf(`<ul class="myui-vodlist`)>-1?`<ul class="myui-vodlist&&</ul>`:"");
+                if(jkdata["二次截取"]){
+                    gethtml = gethtml.split(jkdata["二次截取"].split('&&')[0])[1].split(jkdata["二次截取"].split('&&')[1])[0];
+                }
+                jkdata["链接"] = jkdata["链接"] || `href="&&"`;
+                jkdata["标题"] = jkdata["标题"] || `title="&&"`;
+                jkdata["数组"] = jkdata["数组"] || `<a &&</a>`;
+                let jklist = gethtml.match(new RegExp(jkdata["数组"].replace('&&','((?:.|[\r\n])*?)'), 'g'));
+                jklist.forEach(item=>{
+                    if(!jkdata["图片"]){
+                        if(item.indexOf('original=')>-1){
+                            jkdata["图片"] = `original="&&"`;
+                        }else if(item.indexOf('<img src=')>-1){
+                            jkdata["图片"] = `<img src="&&"`;
                         }
-                    })
+                    };
+                    if(jkdata["图片"]&&item.indexOf(jkdata["图片"].split("&&")[0])>-1){
+                        let id = item.split(jkdata["链接"].split('&&')[0])[1].split(jkdata["链接"].split('&&')[1])[0];
+                        let name = item.split(jkdata["标题"].split('&&')[0])[1].split(jkdata["标题"].split('&&')[1])[0];
+                        let pic = "";
+                        try{
+                            pic = item.split(jkdata["图片"].split('&&')[0])[1].split(jkdata["图片"].split('&&')[1])[0];
+                        }catch(e){}
+                        let note = "";
+                        try{
+                            note = item.split(jkdata["副标题"].split('&&')[0])[1].split(jkdata["副标题"].split('&&')[1])[0];
+                        }catch(e){}
+                        let arr = {"vod_id":id,"vod_name":name,"vod_remarks":note,"vod_pic":pic};
+                        lists.push(arr);
+                    }
+                })
+            }else{
+                let json;
+                if(/cms/.test(api_type)&&/<\?xml/.test(gethtml)){
+                    gethtml = gethtml.replace(/&lt;!\[CDATA\[|\]\]&gt;|<!\[CDATA\[|\]\]>/g,'');
+                    let xmllist = [];
+                    let videos = pdfa(gethtml,'list&&video');
+                    for(let i in videos){
+                        let id = String(xpath(videos[i],`//video/id/text()`)).trim();
+                        let name = String(xpath(videos[i],`//video/name/text()`)).trim();
+                        let pic = String(xpath(videos[i],`//video/pic/text()`)).trim();
+                        let note = String(xpath(videos[i],`//video/note/text()`)).trim();
+                        let arr = {"vod_id":id,"vod_name":name,"vod_remarks":note,"vod_pic":pic};
+                        let plays = xpathArray(videos[i],`//video/dl/dd/text()`);
+                        if(plays.length==1){
+                            let play = plays[0];
+                            if(play.indexOf('$')==-1&&play.indexOf('m3u8')>-1){
+                                arr['play'] = play.trim();
+                            }
+                        }
+                        xmllist.push(arr)
+                    }
+                    json = {"list":xmllist};
+                }else if(!/{|}/.test(gethtml)&&gethtml!=""){
+                    var decfile = "hiker://files/rules/Src/Juying/appdec.js";
+                    var Juyingdec=fetch(decfile);
+                    if(Juyingdec != ""){
+                        eval(Juyingdec);
+                        json = JSON.parse(xgdec(gethtml));
+                    }
                 }else{
-                    let json;
-                    if(/cms/.test(api_type)&&/<\?xml/.test(gethtml)){
-                        gethtml = gethtml.replace(/&lt;!\[CDATA\[|\]\]&gt;|<!\[CDATA\[|\]\]>/g,'');
-                        let xmllist = [];
-                        let videos = pdfa(gethtml,'list&&video');
-                        for(let i in videos){
-                            let id = String(xpath(videos[i],`//video/id/text()`)).trim();
-                            let name = String(xpath(videos[i],`//video/name/text()`)).trim();
-                            let pic = String(xpath(videos[i],`//video/pic/text()`)).trim();
-                            let note = String(xpath(videos[i],`//video/note/text()`)).trim();
-                            let arr = {"vod_id":id,"vod_name":name,"vod_remarks":note,"vod_pic":pic};
-                            let plays = xpathArray(videos[i],`//video/dl/dd/text()`);
-                            if(plays.length==1){
-                                let play = plays[0];
-                                if(play.indexOf('$')==-1&&play.indexOf('m3u8')>-1){
-                                    arr['play'] = play.trim();
-                                }
-                            }
-                            xmllist.push(arr)
-                        }
-                        json = {"list":xmllist};
-                    }else if(!/{|}/.test(gethtml)&&gethtml!=""){
-                        var decfile = "hiker://files/rules/Src/Juying/appdec.js";
-                        var Juyingdec=fetch(decfile);
-                        if(Juyingdec != ""){
-                            eval(Juyingdec);
-                            json = JSON.parse(xgdec(gethtml));
-                        }
-                    }else{
-                        json = JSON.parse(gethtml);
-                    }
-                    try{
-                        lists = eval(listnode)||json.list||json.data.list||json.data||[];
-                    } catch (e) {
-                        lists = json.list||json.data.list||json.data||[];
-                    }
+                    json = JSON.parse(gethtml);
                 }
-            } catch (e) {
-                
-            }
-            
-            let videolist = lists.map((list)=>{
-                let vodname = list.vod_name||list.title;
-                if(vodname){
-                    let vodpic = list.vod_pic||list.pic;
-                    let voddesc = list.vod_remarks||list.state||"";
-                    let vodurl = list.vod_id?vodurlhead&&!/^http/.test(list.vod_id)?vodurlhead+list.vod_id:list.vod_id:list.nextlink;
-                    vodpic = vodpic?vodpic.replace('/img.php?url=','').replace('/tu.php?tu=','') + "@Referer=":"hiker://files/cache/src/picloading.gif";
-                    if(/^\/upload|^upload/.test(vodpic)){
-                        vodpic = vodurl.match(/http(s)?:\/\/(.*?)\//)[0] + vodpic;
-                    }
-                    if(/^\/\//.test(vodpic)){
-                        vodpic = "https:" + vodpic;
-                    }
-                    if(api_type=='cms'&&list.vod_play_url){
-                        if(list.vod_play_url.indexOf('$')==-1&&list.vod_play_url.indexOf('m3u8')>-1){
-                            list['play'] = list.vod_play_url;
-                        }
-                    }
-                    return {
-                        title: vodname,
-                        desc: voddesc,
-                        pic_url: vodpic,
-                        url: list.play?list.play:$("hiker://empty#immersiveTheme##autoCache#").rule(() => {
-                            require(config.依赖);
-                            dianboerji()
-                        }),
-                        col_type: 'movie_3',
-                        extra: {
-                            url: vodurl,
-                            pic: vodpic,
-                            pageTitle: vodname,
-                            data: jkdata
-                        }
-                    }
+                try{
+                    lists = eval(listnode)||json.list||json.data.list||json.data||[];
+                } catch (e) {
+                    lists = json.list||json.data.list||json.data||[];
                 }
-            });
-            videolist = videolist.filter(n => n);
-            d = d.concat(videolist);
+            }       
         }catch(e){
-            if(lists.length==0){
-                d.push({
-                    title: '接口访问异常，请更换接口！',
-                    url: '#noHistory#hiker://empty',
-                    col_type: 'text_center_1'
-                }); 
-            }
             log(api_name+' 接口访问异常，请更换接口！获取影片失败>'+e.message)
         }
     }
+    if(lists.length==0){
+        d.push({
+            title: '接口访问异常，请更换接口！',
+            url: '#noHistory#hiker://empty',
+            col_type: 'text_center_1'
+        }); 
+    }else{
+        lists.forEach((list)=>{
+            let vodname = list.vod_name||list.title;
+            if(vodname){
+                let vodpic = list.vod_pic||list.pic;
+                let voddesc = list.vod_remarks||list.state||"";
+                let vodurl = list.vod_id?vodurlhead&&!/^http/.test(list.vod_id)?vodurlhead+list.vod_id:list.vod_id:list.nextlink;
+                vodpic = vodpic?vodpic.replace('/img.php?url=','').replace('/tu.php?tu=','') + "@Referer=":"hiker://files/cache/src/picloading.gif";
+                if(/^\/upload|^upload/.test(vodpic)){
+                    vodpic = vodurl.match(/http(s)?:\/\/(.*?)\//)[0] + vodpic;
+                }
+                if(/^\/\//.test(vodpic)){
+                    vodpic = "https:" + vodpic;
+                }
+                if(api_type=='cms'&&list.vod_play_url){
+                    if(list.vod_play_url.indexOf('$')==-1&&list.vod_play_url.indexOf('m3u8')>-1){
+                        list['play'] = list.vod_play_url;
+                    }
+                }
+                d.push({
+                    title: vodname,
+                    desc: voddesc,
+                    pic_url: vodpic,
+                    url: list.play?list.play:$("hiker://empty#immersiveTheme##autoCache#").rule(() => {
+                        require(config.依赖);
+                        dianboerji()
+                    }),
+                    col_type: 'movie_3',
+                    extra: {
+                        url: vodurl,
+                        pic: vodpic,
+                        pageTitle: vodname,
+                        data: jkdata
+                    }
+                })
+            }
+        });
+    }
+    
     return d;
 }
