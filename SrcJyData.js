@@ -772,6 +772,7 @@ function getYiData(jkdata) {
     let lists = []; //影片列表
     if(MY_PAGE==1){
         if(classurl){
+            let recommends = []; //推荐影片
             const Color = "#3399cc";
             let typeclass = [];
             try{
@@ -854,7 +855,7 @@ function getYiData(jkdata) {
                             let typehtml = JSON.parse(gethtml);
                             typeclass = typehtml.class;//分类列表
                             if(getMyVar('SrcJu_dianbo$cate_id','0')=='0'){
-                                lists = typehtml.list;//推荐影片
+                                recommends = typehtml.list;//推荐影片
                             }
                         }
                         
@@ -874,7 +875,11 @@ function getYiData(jkdata) {
             }catch(e){
                 log(api_name+'>访问异常，请更换源接口！获取分类失败>'+e.message);
             }
-            if(getMyVar('SrcJu_dianbo$cate_id','0')=='0'){
+
+            if(recommends.length>0){
+                if(getMyVar('SrcJu_dianbo$cate_id','0')=='0'){
+                    lists = recommends;//当前分类为推荐，取推荐列表
+                }
                 d.push({
                     title: getMyVar('SrcJu_dianbo$cate_id')=='0'?'““””<b><span style="color:' + Color + '">' + '推荐' + '</span></b>':'推荐',
                     url: $('#noLoading#').lazyRule(() => {
