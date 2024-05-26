@@ -771,7 +771,6 @@ function getYiData(jkdata) {
     }
     let lists = []; //影片列表
     if(MY_PAGE==1){
-        let recommends =[];
         if(classurl){
             const Color = "#3399cc";
             let typeclass = [];
@@ -875,7 +874,7 @@ function getYiData(jkdata) {
             }catch(e){
                 log(api_name+'>访问异常，请更换源接口！获取分类失败>'+e.message);
             }
-            if(recommends.length>0){
+            if(getMyVar('SrcJu_dianbo$cate_id','0')=='0'){
                 d.push({
                     title: getMyVar('SrcJu_dianbo$cate_id')=='0'?'““””<b><span style="color:' + Color + '">' + '推荐' + '</span></b>':'推荐',
                     url: $('#noLoading#').lazyRule(() => {
