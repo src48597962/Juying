@@ -873,7 +873,15 @@ function getYiData(jkdata) {
             }catch(e){
                 log(api_name+'>访问异常，请更换源接口！获取分类失败>'+e.message);
             }
-
+            d.push({
+                title: fold === '1' ? '““””<b><span style="color: #F54343">∨</span></b>' : '““””<b><span style="color:' + Color + '">∧</span></b>',
+                url: $('#noLoading#').lazyRule((fold) => {
+                    putMyVar('SrcJu_dianbo$fold', fold === '1' ? '0' : '1');
+                    refreshPage(false);
+                    return "hiker://empty";
+                }, fold),
+                col_type: 'scroll_button',
+            })
             if(recommends.length>0){
                 if(getMyVar('SrcJu_dianbo$cate_id','0')=='0'){
                     lists = recommends;//当前分类为推荐，取推荐列表
