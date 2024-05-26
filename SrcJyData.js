@@ -770,6 +770,7 @@ function getYiData(jkdata) {
         }
     }
     let lists = []; //影片列表
+    let type_id = getMyVar('SrcJu_dianbo$type_id', '1');
     if(MY_PAGE==1){
         if(classurl){
             let recommends = []; //推荐影片
@@ -916,12 +917,11 @@ function getYiData(jkdata) {
                 d.push({
                     col_type: "blank_block"
                 });
-                
+                let types = typeclass.filter(it=>{
+                    return it.type_pid == cate_id && it.type_pid != 0;
+                })
+                type_id = getMyVar('SrcJu_dianbo$type_id', types[0].type_id.toString());
                 if(fold=='1'){
-                    let types = typeclass.filter(it=>{
-                        return it.type_pid==cate_id;
-                    })
-                    let type_id = getMyVar('SrcJu_dianbo$type_id', types[0].type_id.toString());
                     types.forEach(it=>{
                         d.push({
                             title: type_id==it.type_id?'““””<b><span style="color:' + Color + '">' + it.type_name + '</span></b>':it.type_name,
@@ -1007,7 +1007,7 @@ function getYiData(jkdata) {
             }else{
                 MY_URL = listurl + MY_PAGE;
                 if(api_type=="v2"||api_type=="app"){
-                    MY_URL = MY_URL.replace('@type_id',getMyVar('SrcJu_dianbo$type_id','1'));
+                    MY_URL = MY_URL.replace('@type_id',getMyVar('SrcJu_dianbo$type_id'));
                 }else if(getMyVar('SrcJu_dianbo$type_id')){
                     if (api_type=="v1") {
                         MY_URL = MY_URL + '&type=' + getMyVar('SrcJu_dianbo$type_id');
@@ -1107,7 +1107,7 @@ function getYiData(jkdata) {
                 let vodpic = list.vod_pic||list.pic;
                 let voddesc = list.vod_remarks||list.state||"";
                 let vodurl = list.vod_id?vodurlhead&&!/^http/.test(list.vod_id)?vodurlhead+list.vod_id:list.vod_id:list.nextlink;
-                vodpic = vodpic?vodpic.replace('/img.php?url=','').replace('/tu.php?tu=','') + "@Referer=":"hiker://files/cache/src/picloading.gif";
+                vodpic = vodpic?vodpic.replace('/img.php?url=','').replace('/tu.php?tu=',''):"hiker://files/cache/src/picloading.gif";
                 if(/^\/upload|^upload/.test(vodpic)){
                     vodpic = vodurl.match(/http(s)?:\/\/(.*?)\//)[0] + vodpic;
                 }
