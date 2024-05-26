@@ -872,10 +872,11 @@ function getYiData(jkdata) {
             }
             
             if(typeclass.length>0){
-                let yicates = typeclass.filter(it=>{
+                let cates = typeclass.filter(it=>{
                     return it.type_pid==0;
                 })
-                yicates.forEach(it=>{
+                let cate_id = getMyVar('SrcJu_dianbo$cate_id', yicates[0].type_id);
+                cates.forEach(it=>{
                     d.push({
                         title: getMyVar('SrcJu_dianbo$cate_id')==it.type_id?'““””<b><span style="color:' + Color + '">' + it.type_name + '</span></b>':it.type_name,
                         url: $('#noLoading#').lazyRule((cate_id) => {
@@ -886,8 +887,28 @@ function getYiData(jkdata) {
                         col_type: 'scroll_button'
                     });
                 })
-                
+                d.push({
+                    col_type: "blank_block"
+                });
+                let types = typeclass.filter(it=>{
+                    return it.type_pid==cate_id;
+                })
+                types.forEach(it=>{
+                    d.push({
+                        title: getMyVar('SrcJu_dianbo$type_id')==it.type_id?'““””<b><span style="color:' + Color + '">' + it.type_name + '</span></b>':it.type_name,
+                        url: $('#noLoading#').lazyRule((type_id) => {
+                            putMyVar('SrcJu_dianbo$type_id', type_id);
+                            refreshPage(true);
+                            return "hiker://empty";
+                        }, it.type_id),
+                        col_type: 'scroll_button'
+                    });
+                })
 
+                d.push({
+                    col_type: "blank_block"
+                });
+                /*
                 let type_pids = [];
                 let type_ids = [];
                 typeclass.forEach(it=>{
@@ -917,6 +938,7 @@ function getYiData(jkdata) {
                         col_type: "blank_block"
                     });
                 }
+                */
             }
             
             var searchurl = $('').lazyRule((data) => {
