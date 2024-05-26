@@ -866,7 +866,7 @@ function getYiData(jkdata) {
                     }
                 } 
             }catch(e){
-                log(api_name+' 接口访问异常，请更换接口！获取分类失败>'+e.message);
+                log(api_name+'>访问异常，请更换源接口！获取分类失败>'+e.message);
             }
             
             if(typeclass.length>0){
