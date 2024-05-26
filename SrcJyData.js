@@ -856,7 +856,7 @@ function getYiData(jkdata) {
                         
                         if(jkdata.categories){
                             for(var i=0;i<typeclass.length;i++){
-                                if(jkdata.categories.indexOf(typeclass[i].type_name)>-1 && typeclass[i].pid !=0){
+                                if(jkdata.categories.indexOf(typeclass[i].type_name)==-1 && typeclass[i].pid>0){
                                     typeclass.splice(i,1);
                                     i = i -1;
                                 }
