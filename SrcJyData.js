@@ -854,9 +854,7 @@ function getYiData(jkdata) {
                         }else{
                             let typehtml = JSON.parse(gethtml);
                             typeclass = typehtml.class;//分类列表
-                            if(getMyVar('SrcJu_dianbo$cate_id','0')=='0'){
-                                recommends = typehtml.list;//推荐影片
-                            }
+                            recommends = typehtml.list;//推荐影片
                         }
                         
                         if(jkdata.categories){
@@ -906,30 +904,32 @@ function getYiData(jkdata) {
                         col_type: 'scroll_button'
                     });
                 })
-
                 d.push({
                     col_type: "blank_block"
                 });
-
-                let cate_id = getMyVar('SrcJu_dianbo$cate_id', cates[0].type_id.toString());
-                let types = typeclass.filter(it=>{
-                    return it.type_pid==cate_id;
-                })
-
-                types.forEach(it=>{
+                const fold = getMyVar('SrcJu_dianbo$fold', "0");
+                if(fold=='1'){
+                    let cate_id = getMyVar('SrcJu_dianbo$cate_id', recommends.length>0?'0':cates[0].type_id.toString());
+                    let types = typeclass.filter(it=>{
+                        return it.type_pid==cate_id;
+                    })
+                    types.forEach(it=>{
+                        d.push({
+                            title: getMyVar('SrcJu_dianbo$type_id')==it.type_id?'““””<b><span style="color:' + Color + '">' + it.type_name + '</span></b>':it.type_name,
+                            url: $('#noLoading#').lazyRule((type_id) => {
+                                putMyVar('SrcJu_dianbo$type_id', type_id);
+                                refreshPage(true);
+                                return "hiker://empty";
+                            }, it.type_id),
+                            col_type: 'scroll_button'
+                        });
+                    })
                     d.push({
-                        title: getMyVar('SrcJu_dianbo$type_id')==it.type_id?'““””<b><span style="color:' + Color + '">' + it.type_name + '</span></b>':it.type_name,
-                        url: $('#noLoading#').lazyRule((type_id) => {
-                            putMyVar('SrcJu_dianbo$type_id', type_id);
-                            refreshPage(true);
-                            return "hiker://empty";
-                        }, it.type_id),
-                        col_type: 'scroll_button'
+                        col_type: "blank_block"
                     });
-                })
-                d.push({
-                    col_type: "blank_block"
-                });
+                }
+                
+
                 /*
                 let type_pids = [];
                 let type_ids = [];
