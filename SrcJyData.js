@@ -284,7 +284,7 @@ function getSsData(name, jkdata) {
     if(lists.length>0){
         try {
             lists.forEach((list)=>{
-                let vodpic = list.vodpic?list.vodpic.replace(/http.*\/tu\.php\?tu=|\/img\.php\?url=| |\/tu\.php\?tu=/g,''):"https://www.xawqxh.net/mxtheme/images/loading.gif";
+                let vodpic = list.vodpic?list.vodpic.replace(/http.*\/tu\.php\?tu=|\/img\.php\?url=| |\/tu\.php\?tu=/g,''):"hiker://files/cache/src/picloading.gif";
                 if(/^\/\//.test(vodpic)){
                     vodpic = "https:" + vodpic;
                 }   
@@ -360,7 +360,7 @@ function getErData(jkdata) {
         year = String(xpath(html,`//video/year/text()`)).trim();
         remarks = String(xpath(html,`//video/note/text()`)).trim() || "";
         pubdate = String(xpath(html,`//video/type/text()`)).trim() || "";
-        pic = pic.indexOf('loading.gif')==-1?pic:xpath(html,`//video/pic/text()`);
+        pic = pic.indexOf('picloading.gif')==-1?pic:xpath(html,`//video/pic/text()`);
         desc = String(xpath(html.replace('<p>','').replace('</p>',''),`//video/des/text()`)) || '...';
     }else if (/v1|app|v2|cms/.test(api_type)) {
         let json;
@@ -407,7 +407,7 @@ function getErData(jkdata) {
         year = json.vod_year;
         remarks = json.vod_remarks || "";
         pubdate = json.vod_pubdate || json.vod_class || "";
-        pic = pic.indexOf('loading.gif')==-1?pic:json.vod_pic&&json.vod_pic.indexOf('ver.txt')==-1?json.vod_pic:pic;
+        pic = pic.indexOf('picloading.gif')==-1?pic:json.vod_pic&&json.vod_pic.indexOf('ver.txt')==-1?json.vod_pic:pic;
         desc = json.vod_blurb || '...';
     }else if (/iptv/.test(api_type)) {
         actor = html.actor.join(",") || "未知";
@@ -575,7 +575,7 @@ function getErData(jkdata) {
         let data = autoerji(MY_URL, html);
         details1 = data.details1||'自动匹配失败';
         details2 = data.details2||'';
-        pic = pic.indexOf('loading.gif')==-1?pic:data.pic;
+        pic = pic.indexOf('picloading.gif')==-1?pic:data.pic;
         desc = data.desc||'';
         arts = data.arts||[];
         conts = data.conts||[];
@@ -992,7 +992,7 @@ function getYiData(jkdata) {
                     let vodpic = list.vod_pic||list.pic;
                     let voddesc = list.vod_remarks||list.state||"";
                     let vodurl = list.vod_id?vodurlhead&&!/^http/.test(list.vod_id)?vodurlhead+list.vod_id:list.vod_id:list.nextlink;
-                    vodpic = vodpic?vodpic.replace('/img.php?url=','').replace('/tu.php?tu=','') + "@Referer=":"https://www.xawqxh.net/mxtheme/images/loading.gif";
+                    vodpic = vodpic?vodpic.replace('/img.php?url=','').replace('/tu.php?tu=','') + "@Referer=":"hiker://files/cache/src/picloading.gif";
                     if(/^\/upload|^upload/.test(vodpic)){
                         vodpic = vodurl.match(/http(s)?:\/\/(.*?)\//)[0] + vodpic;
                     }
