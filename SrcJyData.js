@@ -244,7 +244,7 @@ function getYiData(jkdata) {
                             clearMyVar('SrcJu_dianbo$类型');//大分类切换时清除小分类
                             refreshPage(true);
                             return "hiker://empty";
-                        }, itid, i),
+                        }, itid),
                         col_type: 'scroll_button'
                     });
                 })
@@ -253,6 +253,7 @@ function getYiData(jkdata) {
                 });
                 
                 type_id = 筛选?type_id:getMyVar('SrcJu_dianbo$类型', (api_type=='cms'&&类型.length>0) ? 类型[index].split('#')[0].split('$')[1] : cate_id.split('$')[1]);
+                log(type_id);
                 putMyVar('SrcJu_dianbo$类型', type_id);
                 if(fold=='1' || (api_type=='cms' && cate_id!='tj')){
                     if(类型.length>0){
@@ -374,7 +375,7 @@ function getYiData(jkdata) {
                     MY_URL = MY_URL + '&t=' + type_id;
                 }
             }
-
+            log(MY_URL);
             let gethtml = request(MY_URL, { headers: { 'User-Agent': api_ua }, timeout:5000 });
             if(api_type=="XBPQ"){
                 jkdata["二次截取"] = jkdata["二次截取"] || (gethtml.indexOf(`<ul class="stui-vodlist`)>-1?`<ul class="stui-vodlist&&</ul>`:gethtml.indexOf(`<ul class="myui-vodlist`)>-1?`<ul class="myui-vodlist&&</ul>`:"");
