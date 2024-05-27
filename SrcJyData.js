@@ -73,9 +73,9 @@ function getYiData(jkdata) {
             let recommends = []; //推荐影片
             const Color = "#3399cc";
             let typeclass = [];
-            if(getMyVar('SrcJu_dianbo$typeclass')){
-                typeclass = storage0.getMyVar('SrcJu_dianbo$typeclass'). typeclass;
-                recommends =  storage0.getMyVar('SrcJu_dianbo$typeclass'). recommends;
+            if(getMyVar('SrcJu_dianbo$classCache')){
+                typeclass = storage0.getMyVar('SrcJu_dianbo$classCache').typeclass;
+                recommends =  storage0.getMyVar('SrcJu_dianbo$classCache').recommends;
             }else{
                 try{
                     if(api_type=="XBPQ"){
@@ -175,7 +175,7 @@ function getYiData(jkdata) {
                 }catch(e){
                     log(api_name+'>访问异常，请更换源接口！获取分类失败>'+e.message);
                 }
-                storage0.putMyVar('SrcJu_dianbo$typeclass', {typeclass:typeclass, recommends:recommends});
+                storage0.putMyVar('SrcJu_dianbo$classCache', {typeclass:typeclass, recommends:recommends});
             }
 
             d.push({
