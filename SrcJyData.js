@@ -66,8 +66,7 @@ function getYiData(jkdata) {
     }
     let lists = []; //影片列表
     let fold = getMyVar('SrcJu_dianbo$fold', "0");//是否展开小分类筛选
-    let cate_id = getMyVar('SrcJu_dianbo$cate_id', '1');//大分类id
-    let type_id = getMyVar('SrcJu_dianbo$type_id', '1');//小分类id
+    let type_id = getMyVar('SrcJu_dianbo$type_id', '');//小分类id
     let 筛选 = 0;//是否有小分类
     if(MY_PAGE==1){
         if(classurl){
@@ -173,7 +172,6 @@ function getYiData(jkdata) {
                 log(api_name+'>访问异常，请更换源接口！获取分类失败>'+e.message);
             }
 
-
             d.push({
                 title: fold === '1' ? '““””<b><span style="color: #F54343">∨</span></b>' : '““””<b><span style="color:' + Color + '">∧</span></b>',
                 url: $('#noLoading#').lazyRule((fold) => {
@@ -188,7 +186,7 @@ function getYiData(jkdata) {
                 let cates = typeclass.filter(it=>{
                     return it.type_pid==0;
                 })
-                cate_id = getMyVar('SrcJu_dianbo$cate_id', recommends.length>0?'tj':cates[0].type_id.toString());
+                let cate_id = getMyVar('SrcJu_dianbo$cate_id', recommends.length>0?'tj':cates[0].type_id.toString());
                 if(recommends.length>0){
                     if(cate_id == 'tj'){
                         lists = recommends;//当前分类为推荐，取推荐列表
@@ -303,19 +301,17 @@ function getYiData(jkdata) {
     if(listurl && lists.length==0){
         try{
             if(api_type=="XBPQ"){
-                MY_URL = listurl.replace('{catePg}',extdata["起始页"]?MY_PAGE>extdata["起始页"]?MY_PAGE:"":MY_PAGE).replace('{cateId}',getMyVar('SrcJu_dianbo$type_id','1'));
+                MY_URL = listurl.replace('{catePg}',extdata["起始页"]?MY_PAGE>extdata["起始页"]?MY_PAGE:"":MY_PAGE).replace('{cateId}', type_id);
             }else{
                 MY_URL = listurl + MY_PAGE;
                 if(api_type=="v2"||api_type=="app"){
-                    MY_URL = MY_URL.replace('@type_id',getMyVar('SrcJu_dianbo$type_id'));
-                }else if(getMyVar('SrcJu_dianbo$type_id')){
-                    if (api_type=="v1") {
-                        MY_URL = MY_URL + '&type=' + getMyVar('SrcJu_dianbo$type_id');
-                    } else if (api_type=="iptv") {
-                        MY_URL = MY_URL + '&class=' + getMyVar('SrcJu_dianbo$type_id');
-                    } else {
-                        MY_URL = MY_URL + '&t=' + getMyVar('SrcJu_dianbo$type_id');
-                    }
+                    MY_URL = MY_URL.replace('@type_id',type_id);
+                }else if (api_type=="v1") {
+                    MY_URL = MY_URL + '&type=' + type_id;
+                } else if (api_type=="iptv") {
+                    MY_URL = MY_URL + '&class=' + type_id;
+                } else {
+                    MY_URL = MY_URL + '&t=' + type_id;
                 }
             }
 
