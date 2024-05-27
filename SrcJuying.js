@@ -416,10 +416,13 @@ function dianboyiji() {
                 d = [];
                 putMyVar('动态加载loading', '1');
             }
+            
         }
     }
-    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
-    d = d.concat(getYiData(sourceData));
+    if(sourceNmae){
+        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
+        d = d.concat(getYiData(sourceData));
+    }
     deleteItemByCls("loading_gif");
     setResult(d);
 }
