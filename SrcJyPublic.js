@@ -173,8 +173,11 @@ function selectSource(group, k) {
     return $(sitenames, 2, "选择主页源").select((group, cfgfile, Juconfig) => {
         Juconfig['indexSource'] = group+'_'+input;
         writeFile(cfgfile, JSON.stringify(Juconfig));
-        clearMyVar('SrcJu_dianbo$cate_id');
-        clearMyVar('SrcJu_dianbo$type_id');
+        clearMyVar('SrcJu_dianbo$分类');
+        clearMyVar('SrcJu_dianbo$类型');
+        clearMyVar('SrcJu_dianbo$地区');
+        clearMyVar('SrcJu_dianbo$年份');
+        clearMyVar('SrcJu_dianbo$排序');
         clearMyVar('SrcJu_dianbo$classCache');
         refreshPage(true);
         return 'toast://' + input;
