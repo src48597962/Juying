@@ -66,29 +66,33 @@ function getYiData(jkdata) {
     }
     let lists = []; //影片列表
     let fold = getMyVar('SrcJu_dianbo$fold', "0");//是否展开小分类筛选
-    let type_id = getMyVar('SrcJu_dianbo$type_id', '');//小分类id
+    let type_id = getMyVar('SrcJu_dianbo$类型', '');
+    let area_id = getMyVar('SrcJu_dianbo$地区', '');
+    let year_id = getMyVar('SrcJu_dianbo$年份', '');
+    let sort_id = getMyVar('SrcJu_dianbo$排序', '');
 
     if(MY_PAGE==1){
         if(classurl){
-            let 分类;
+            let 分类 = [];
             let 类型 = [];
             let 地区 = [];
             let 年份 = [];
             let 排序 = [];
             let recommends = []; //推荐影片
+            let 筛选;
             const Color = "#3399cc";
-            let typeclass = [];
+
             if(getMyVar('SrcJu_dianbo$classCache')){
-                typeclass = storage0.getMyVar('SrcJu_dianbo$classCache').typeclass;
-                recommends =  storage0.getMyVar('SrcJu_dianbo$classCache').recommends;
+                //typeclass = storage0.getMyVar('SrcJu_dianbo$classCache').typeclass;
+                //recommends =  storage0.getMyVar('SrcJu_dianbo$classCache').recommends;
             }else{
                 try{
                     if(api_type=="XBPQ"){
                         if(extdata["分类"].indexOf('$')>-1){
-                            分类 = extdata["分类"];
+                            分类 = extdata["分类"].split('#');
                             let ss = extdata["筛选"];
                             if(ss && ss.includes('#')){
-                                分类.split('#').forEach(it=>{
+                                分类.forEach(it=>{
                                     let id = it.split('$')[1];
                                     let sss = ss[id] || [];
                                     sss.forEach(itit=>{
@@ -108,37 +112,29 @@ function getYiData(jkdata) {
                                         }
                                     })
                                 })
-                                
+                                筛选 = 1;
                             }
                         }else if(extdata["分类"].indexOf('&')>-1&&extdata["分类值"]){
                             let typenames = extdata["分类"].split('&');
                             let typeids = extdata["分类值"].split('&');
-                            let ids = [];
                             for(let i in typeids){
-                                ids.push(typenames[i]+'$'+typeids[i]);
+                                分类.push(typenames[i]+'$'+typeids[i]);
                             }
-                            分类 = ids.join('#');
                         }
                     }else{
                         let gethtml = request(classurl, { headers: { 'User-Agent': api_ua }, timeout:5000 });
                         if (api_type=="v1") {
                             let typehtml = JSON.parse(gethtml);
                             let typelist = typehtml.data.list||typehtml.data.typelist;
-                            typeclass = typelist.map((list)=>{
-                                return {
-                                    "type_id": list.type_id,
-                                    "type_pid": list.type_pid,
-                                    "type_name": list.type_name
-                                }
+                            typelist.map((it)=>{
+                                分类.push(it.type_name+'$'+it.type_id);
                             })
                         } else if (/app|v2/.test(api_type)) {
                             let typehtml = JSON.parse(gethtml);
                             let typelist = typehtml.list||typehtml.data;
-                            let ids = [];
                             typelist.forEach(it=>{
-                                ids.push(it.type_name+'$'+it.type_id);
+                                分类.push(it.type_name+'$'+it.type_id);
                             })
-                            分类 = ids.join('#');
                         } else if (api_type=="iptv") {
                             let type_dict = {
                                 comic: '动漫',
@@ -151,36 +147,31 @@ function getYiData(jkdata) {
                                 tiyu: '体育'
                             };
                             let typelist = JSON.parse(gethtml);
-                            let ids = [];
                             typelist.forEach((it)=>{
                                 if(type_dict[it]){
-                                    ids.push(type_dict[list]+'$'+it);
+                                    分类.push(type_dict[it]+'$'+it);
                                 }
                             })
-                            分类 = ids.join('#');
                         } else if (api_type=="cms") {
                             if(/<\?xml/.test(gethtml)){
                                 let typelist = pdfa(gethtml,'class&&ty');
-                                let ids = [];
                                 typelist.forEach((it)=>{
-                                    ids.push(String(xpath(it,`//ty/text()`)).trim()+'$'+String(xpath(it,`//ty/@id`)).trim());
+                                    分类.push(String(xpath(it,`//ty/text()`)).trim()+'$'+String(xpath(it,`//ty/@id`)).trim());
                                 })
-                                分类 = ids.join('#');
                             }else{
                                 let typehtml = JSON.parse(gethtml);
                                 let typelist = typehtml.class;
                                 if(jkdata.categories){
                                     for(var i=0;i<typelist.length;i++){
-                                        if(jkdata.categories.indexOf(typelist[i].type_name)==-1){
+                                        if(jkdata.categories.indexOf(typelist[i].type_name)==-1 && typelist[i].pid !=0){
                                             typelist.splice(i,1);
                                             i = i -1;
                                         }
                                     }
                                 }
-                                let ids = [];
                                 typelist.forEach((it)=>{
                                     if(it.type_pid==0){
-                                        ids.push(it.type_name+'$'+it.type_id);
+                                        分类.push(it.type_name+'$'+it.type_id);
                                         let values = [];
                                         typelist.forEach((itit)=>{
                                             if(itit.type_pid==it.type_id){
@@ -190,7 +181,6 @@ function getYiData(jkdata) {
                                         类型.push(values.join('#'));
                                     }
                                 })
-                                分类 = ids.join('#');
                                 recommends = typehtml.list;//推荐影片
                             }
                         }else {
@@ -200,18 +190,12 @@ function getYiData(jkdata) {
                 }catch(e){
                     log(api_name+'>访问异常，请更换源接口！获取分类失败>'+e.message);
                 }
-                storage0.putMyVar('SrcJu_dianbo$classCache', {typeclass:typeclass, recommends:recommends});
+                //storage0.putMyVar('SrcJu_dianbo$classCache', {typeclass:typeclass, recommends:recommends});
             }
             
-            if(typeclass.length>0){
-                let cates = typeclass.filter(it=>{
-                    return it.type_pid==0;
-                })
-                let cate_id = getMyVar('SrcJu_dianbo$cate_id', recommends.length>0?'tj':cates[0].type_id.toString());
-                let types = typeclass.filter(it=>{
-                    return it.type_pid == cate_id;
-                })
-                if(types.length>0){
+            if(分类.length>0){
+                let cate_id = getMyVar('SrcJu_dianbo$分类', recommends.length>0?'tj':分类[0].split('$')[0]);
+                if(筛选){
                     d.push({
                         title: fold === '1' ? '““””<b><span style="color: #F54343">∨</span></b>' : '““””<b><span style="color:' + Color + '">∧</span></b>',
                         url: $('#noLoading#').lazyRule((fold) => {
@@ -231,23 +215,25 @@ function getYiData(jkdata) {
                     d.push({
                         title: cate_id=='tj'?'““””<b><span style="color:' + Color + '">' + '推荐' + '</span></b>':'推荐',
                         url: $('#noLoading#').lazyRule(() => {
-                            putMyVar('SrcJu_dianbo$cate_id', 'tj');
-                            clearMyVar('SrcJu_dianbo$type_id');
+                            putMyVar('SrcJu_dianbo$分类', 'tj');
+                            clearMyVar('SrcJu_dianbo$类型');
                             refreshPage(true);
                             return "hiker://empty";
                         }),
                         col_type: 'scroll_button'
                     });
                 }
-                cates.forEach(it=>{
+                分类.forEach(it=>{
+                    let itname = it.split('$')[0];
+                    let itid = it.split('$')[1];
                     d.push({
-                        title: cate_id==it.type_id?'““””<b><span style="color:' + Color + '">' + it.type_name + '</span></b>':it.type_name,
+                        title: cate_id==itid?'““””<b><span style="color:' + Color + '">' + itname + '</span></b>':itname,
                         url: $('#noLoading#').lazyRule((cate_id) => {
-                            putMyVar('SrcJu_dianbo$cate_id', cate_id);
-                            clearMyVar('SrcJu_dianbo$type_id');//大分类切换时清除小分类
+                            putMyVar('SrcJu_dianbo$分类', cate_id);
+                            clearMyVar('SrcJu_dianbo$类型');//大分类切换时清除小分类
                             refreshPage(true);
                             return "hiker://empty";
-                        }, it.type_id),
+                        }, itid),
                         col_type: 'scroll_button'
                     });
                 })
@@ -255,57 +241,82 @@ function getYiData(jkdata) {
                     col_type: "blank_block"
                 });
                 
-                type_id = types.length>0?getMyVar('SrcJu_dianbo$type_id', types[0].type_id.toString()):cate_id;
-                putMyVar('SrcJu_dianbo$type_id', type_id);
-                if(fold=='1'){
-                    types.forEach(it=>{
-                        d.push({
-                            title: type_id==it.type_id?'““””<b><span style="color:' + Color + '">' + it.type_name + '</span></b>':it.type_name,
-                            url: $('#noLoading#').lazyRule((type_id) => {
-                                putMyVar('SrcJu_dianbo$type_id', type_id);
-                                refreshPage(true);
-                                return "hiker://empty";
-                            }, it.type_id),
-                            col_type: 'scroll_button'
-                        });
-                    })
-                    d.push({
-                        col_type: "blank_block"
-                    });
-                }
-                
-
-                /*
-                let type_pids = [];
-                let type_ids = [];
-                typeclass.forEach(it=>{
-                    if(type_pids.indexOf(it.type_pid)==-1){type_pids.push(it.type_pid)}
-                    if(type_ids.indexOf(it.type_id)==-1){type_ids.push(it.type_id)}
-                })
-
-
-                if(type_ids.length>0&&!getMyVar('SrcJu_dianbo$type_id')){///v2|app|XBPQ/.test(api_type)
-                    putMyVar('SrcJu_dianbo$type_id',type_ids[0]);
-                }
-                for (var j in type_pids) {
-                    for (var i in typeclass) {
-                        if(typeclass[i].type_pid==type_pids[j]){
+                type_id = 筛选?getMyVar('SrcJu_dianbo$类型', (api_type=='cms'&&类型.length>0)?类型[0].split('$')[1]:''):cate_id;
+                putMyVar('SrcJu_dianbo$类型', type_id);
+                if(fold=='1' || api_type=='cms'){
+                    if(类型.length>0){
+                        类型.forEach(it=>{
+                            let itname = it.split('$')[0];
+                            let itid = it.split('$')[1];
                             d.push({
-                                title: getMyVar('SrcJu_dianbo$type_id')==typeclass[i].type_id?'““””<b><span style="color:' + Color + '">' + typeclass[i].type_name + '</span></b>':typeclass[i].type_name,
+                                title: type_id==itid?'““””<b><span style="color:' + Color + '">' + itname + '</span></b>':itname,
                                 url: $('#noLoading#').lazyRule((type_id) => {
-                                    putMyVar('SrcJu_dianbo$type_id', type_id);
+                                    putMyVar('SrcJu_dianbo$类型', type_id);
                                     refreshPage(true);
                                     return "hiker://empty";
-                                }, typeclass[i].type_id),
+                                }, itid),
                                 col_type: 'scroll_button'
                             });
-                        }
+                        })
+                        d.push({
+                            col_type: "blank_block"
+                        });
                     }
-                    d.push({
-                        col_type: "blank_block"
-                    });
+                    if(地区.length>0){
+                        地区.forEach(it=>{
+                            let itname = it.split('$')[0];
+                            let itid = it.split('$')[1];
+                            d.push({
+                                title: type_id==itid?'““””<b><span style="color:' + Color + '">' + itname + '</span></b>':itname,
+                                url: $('#noLoading#').lazyRule((type_id) => {
+                                    putMyVar('SrcJu_dianbo$地区', type_id);
+                                    refreshPage(true);
+                                    return "hiker://empty";
+                                }, itid),
+                                col_type: 'scroll_button'
+                            });
+                        })
+                        d.push({
+                            col_type: "blank_block"
+                        });
+                    }
+                    if(年份.length>0){
+                        年份.forEach(it=>{
+                            let itname = it.split('$')[0];
+                            let itid = it.split('$')[1];
+                            d.push({
+                                title: type_id==itid?'““””<b><span style="color:' + Color + '">' + itname + '</span></b>':itname,
+                                url: $('#noLoading#').lazyRule((type_id) => {
+                                    putMyVar('SrcJu_dianbo$年份', type_id);
+                                    refreshPage(true);
+                                    return "hiker://empty";
+                                }, itid),
+                                col_type: 'scroll_button'
+                            });
+                        })
+                        d.push({
+                            col_type: "blank_block"
+                        });
+                    }
+                    if(排序.length>0){
+                        排序.forEach(it=>{
+                            let itname = it.split('$')[0];
+                            let itid = it.split('$')[1];
+                            d.push({
+                                title: type_id==itid?'““””<b><span style="color:' + Color + '">' + itname + '</span></b>':itname,
+                                url: $('#noLoading#').lazyRule((type_id) => {
+                                    putMyVar('SrcJu_dianbo$排序', type_id);
+                                    refreshPage(true);
+                                    return "hiker://empty";
+                                }, itid),
+                                col_type: 'scroll_button'
+                            });
+                        })
+                        d.push({
+                            col_type: "blank_block"
+                        });
+                    }
                 }
-                */
             }
             
             var searchurl = $('').lazyRule((data) => {
