@@ -195,6 +195,7 @@ function getYiData(jkdata) {
                         title: cate_id=='tj'?'““””<b><span style="color:' + Color + '">' + '推荐' + '</span></b>':'推荐',
                         url: $('#noLoading#').lazyRule(() => {
                             putMyVar('SrcJu_dianbo$cate_id', 'tj');
+                            clearMyVar('SrcJu_dianbo$type_id');
                             refreshPage(true);
                             return "hiker://empty";
                         }),
@@ -206,6 +207,7 @@ function getYiData(jkdata) {
                         title: cate_id==it.type_id?'““””<b><span style="color:' + Color + '">' + it.type_name + '</span></b>':it.type_name,
                         url: $('#noLoading#').lazyRule((cate_id) => {
                             putMyVar('SrcJu_dianbo$cate_id', cate_id);
+                            clearMyVar('SrcJu_dianbo$type_id');//大分类切换时清除小分类
                             refreshPage(true);
                             return "hiker://empty";
                         }, it.type_id),
