@@ -240,11 +240,9 @@ function getYiData(jkdata) {
                     col_type: "blank_block"
                 });
                 
-                type_id = 筛选?getMyVar('SrcJu_dianbo$类型', (api_type=='cms'&&类型.length>0)?类型[0].split('#')[0].split('$')[1]:''):cate_id[0].split('$')[1];
+                type_id = 筛选?type_id:(api_type=='cms'&&类型.length>0)?类型[0].split('#')[0].split('$')[1]:cate_id[0].split('$')[1];
                 putMyVar('SrcJu_dianbo$类型', type_id);
-                log(类型[0]);
-                log(类型[0].split('#')[0]);
-                log(类型[0].split('#')[0].split('$')[1]);
+
                 let index = 分类.indexOf(cate_id);
                 if(fold=='1' || (api_type=='cms' && cate_id!='tj')){
                     if(类型.length>0){
