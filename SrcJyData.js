@@ -195,7 +195,6 @@ function getYiData(jkdata) {
             }
 
             if(分类.length>0){
-                let cate_index = 0;
                 let cate_id = getMyVar('SrcJu_dianbo$分类', recommends.length>0?'tj':分类[0]);
                 if(筛选){
                     d.push({
@@ -244,10 +243,12 @@ function getYiData(jkdata) {
                 
                 type_id = 筛选?getMyVar('SrcJu_dianbo$类型', (api_type=='cms'&&类型.length>0)?类型[0].split('$')[1]:''):cate_id[0].split('$')[1];
                 putMyVar('SrcJu_dianbo$类型', type_id);
+                log(分类);
+                log(cate_id)
                 let index = 分类.indexOf(cate_id);
                 if(fold=='1' || (api_type=='cms' && cate_id!='tj')){
                     if(类型.length>0){
-                        类型[index].forEach(it=>{
+                        类型[index].split('#').forEach(it=>{
                             let itname = it.split('$')[0];
                             let itid = it.split('$')[1];
                             d.push({
@@ -265,7 +266,7 @@ function getYiData(jkdata) {
                         });
                     }
                     if(地区.length>0){
-                        地区[index].forEach(it=>{
+                        地区[index].split('#').forEach(it=>{
                             let itname = it.split('$')[0];
                             let itid = it.split('$')[1];
                             d.push({
@@ -283,7 +284,7 @@ function getYiData(jkdata) {
                         });
                     }
                     if(年份.length>0){
-                        年份[index].forEach(it=>{
+                        年份[index].split('#').forEach(it=>{
                             let itname = it.split('$')[0];
                             let itid = it.split('$')[1];
                             d.push({
@@ -301,7 +302,7 @@ function getYiData(jkdata) {
                         });
                     }
                     if(排序.length>0){
-                        排序[index].forEach(it=>{
+                        排序[index].split('#').forEach(it=>{
                             let itname = it.split('$')[0];
                             let itid = it.split('$')[1];
                             d.push({
