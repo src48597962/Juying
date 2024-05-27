@@ -74,18 +74,24 @@ function getYiData(jkdata) {
 
     if(MY_PAGE==1){
         if(classurl){
+            let 推荐 = [];
             let 分类 = [];
             let 类型 = [];
             let 地区 = [];
             let 年份 = [];
             let 排序 = [];
-            let recommends = []; //推荐影片
-            let 筛选;
+            let 筛选 = 0;
+            
             const Color = "#3399cc";
-
-            if(getMyVar('SrcJu_dianbo$classCache')){
-                //typeclass = storage0.getMyVar('SrcJu_dianbo$classCache').typeclass;
-                //recommends =  storage0.getMyVar('SrcJu_dianbo$classCache').recommends;
+            let classCache = storage0.getMyVar('SrcJu_dianbo$classCache');
+            if(classCache){
+                推荐 = classCache.推荐;
+                分类 = classCache.分类;
+                类型 = classCache.类型;
+                地区 = classCache.地区;
+                年份 = classCache.年份;
+                排序 = classCache.排序;
+                筛选 = classCache.筛选;
             }else{
                 try{
                     if(api_type=="XBPQ"){
@@ -182,7 +188,6 @@ function getYiData(jkdata) {
                                         类型.push(values.join('#'));
                                     }
                                 })
-                                recommends = typehtml.list;//推荐影片
                             }
                         }else {
                             log('api类型错误')
@@ -191,7 +196,7 @@ function getYiData(jkdata) {
                 }catch(e){
                     log(api_name+'>访问异常，请更换源接口！获取分类失败>'+e.message);
                 }
-                //storage0.putMyVar('SrcJu_dianbo$classCache', {typeclass:typeclass, recommends:recommends});
+                storage0.putMyVar('SrcJu_dianbo$classCache', {分类:分类,类型:类型,地区:地区,年份:年份,排序:排序,筛选:筛选,推荐:推荐});
             }
 
             if(分类.length>0){
@@ -207,11 +212,11 @@ function getYiData(jkdata) {
                     })
                 }
 
-                cate_id = getMyVar('SrcJu_dianbo$分类', recommends.length>0?'tj':分类[0].split('$')[1]);
+                cate_id = getMyVar('SrcJu_dianbo$分类', 推荐.length>0?'tj':分类[0].split('$')[1]);
                 putMyVar('SrcJu_dianbo$分类', cate_id);
-                if(recommends.length>0){
+                if(推荐.length>0){
                     if(cate_id == 'tj'){
-                        lists = recommends;//当前分类为推荐，取推荐列表
+                        lists = 推荐;//当前分类为推荐，取推荐列表
                     }
                     d.push({
                         title: cate_id=='tj'?'““””<b><span style="color:' + Color + '">' + '推荐' + '</span></b>':'推荐',
