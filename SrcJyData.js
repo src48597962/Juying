@@ -177,21 +177,26 @@ function getYiData(jkdata) {
                 }
                 storage0.putMyVar('SrcJu_dianbo$classCache', {typeclass:typeclass, recommends:recommends});
             }
-
-            d.push({
-                title: fold === '1' ? '““””<b><span style="color: #F54343">∨</span></b>' : '““””<b><span style="color:' + Color + '">∧</span></b>',
-                url: $('#noLoading#').lazyRule((fold) => {
-                    putMyVar('SrcJu_dianbo$fold', fold === '1' ? '0' : '1');
-                    refreshPage(false);
-                    return "hiker://empty";
-                }, fold),
-                col_type: 'scroll_button',
-            })
             
             if(typeclass.length>0){
                 let cates = typeclass.filter(it=>{
                     return it.type_pid==0;
                 })
+                let types = typeclass.filter(it=>{
+                    return it.type_pid == cate_id;
+                })
+                if(types.length>0){
+                    d.push({
+                        title: fold === '1' ? '““””<b><span style="color: #F54343">∨</span></b>' : '““””<b><span style="color:' + Color + '">∧</span></b>',
+                        url: $('#noLoading#').lazyRule((fold) => {
+                            putMyVar('SrcJu_dianbo$fold', fold === '1' ? '0' : '1');
+                            refreshPage(false);
+                            return "hiker://empty";
+                        }, fold),
+                        col_type: 'scroll_button',
+                    })
+                }
+                
                 let cate_id = getMyVar('SrcJu_dianbo$cate_id', recommends.length>0?'tj':cates[0].type_id.toString());
                 if(recommends.length>0){
                     if(cate_id == 'tj'){
@@ -223,9 +228,7 @@ function getYiData(jkdata) {
                 d.push({
                     col_type: "blank_block"
                 });
-                let types = typeclass.filter(it=>{
-                    return it.type_pid == cate_id;
-                })
+                
                 type_id = types.length>0?getMyVar('SrcJu_dianbo$type_id', types[0].type_id.toString()):cate_id;
                 putMyVar('SrcJu_dianbo$type_id', type_id);
                 if(fold=='1'){
