@@ -66,6 +66,7 @@ function getYiData(jkdata) {
     }
     let lists = []; //影片列表
     let fold = getMyVar('SrcJu_dianbo$fold', "0");//是否展开小分类筛选
+    let cate_id = getMyVar('SrcJu_dianbo$分类', '');
     let type_id = getMyVar('SrcJu_dianbo$类型', '');
     let area_id = getMyVar('SrcJu_dianbo$地区', '');
     let year_id = getMyVar('SrcJu_dianbo$年份', '');
@@ -194,7 +195,6 @@ function getYiData(jkdata) {
             }
 
             if(分类.length>0){
-                let cate_id = getMyVar('SrcJu_dianbo$分类', recommends.length>0?'tj':分类[0]);
                 if(筛选){
                     d.push({
                         title: fold === '1' ? '““””<b><span style="color: #F54343">∨</span></b>' : '““””<b><span style="color:' + Color + '">∧</span></b>',
@@ -206,8 +206,9 @@ function getYiData(jkdata) {
                         col_type: 'scroll_button',
                     })
                 }
-                
-                
+
+                cate_id = getMyVar('SrcJu_dianbo$分类', recommends.length>0?'tj':分类[0].split('$')[1]);
+                putMyVar('SrcJu_dianbo$分类', cate_id);
                 if(recommends.length>0){
                     if(cate_id == 'tj'){
                         lists = recommends;//当前分类为推荐，取推荐列表
@@ -223,16 +224,22 @@ function getYiData(jkdata) {
                         col_type: 'scroll_button'
                     });
                 }
-                分类.forEach(it=>{
+
+                let index = 0; //分类数组索引
+                分类.forEach((it,i)=>{
                     let itname = it.split('$')[0];
+                    let itid = it.split('$')[1];
+                    if(cate_id==itid){
+                        index = i;
+                    }
                     d.push({
-                        title: cate_id==it?'““””<b><span style="color:' + Color + '">' + itname + '</span></b>':itname,
-                        url: $('#noLoading#').lazyRule((cate_id) => {
-                            putMyVar('SrcJu_dianbo$分类', cate_id);
+                        title: cate_id==itid?'““””<b><span style="color:' + Color + '">' + itname + '</span></b>':itname,
+                        url: $('#noLoading#').lazyRule((itid) => {
+                            putMyVar('SrcJu_dianbo$分类', itid);
                             clearMyVar('SrcJu_dianbo$类型');//大分类切换时清除小分类
                             refreshPage(true);
                             return "hiker://empty";
-                        }, it, i),
+                        }, itid, i),
                         col_type: 'scroll_button'
                     });
                 })
@@ -240,11 +247,8 @@ function getYiData(jkdata) {
                     col_type: "blank_block"
                 });
                 
-                let index = 分类.indexOf(cate_id);
-
                 type_id = 筛选?type_id:getMyVar('SrcJu_dianbo$类型', (api_type=='cms'&&类型.length>0) ? 类型[index].split('#')[0].split('$')[1] : cate_id.split('$')[1]);
                 putMyVar('SrcJu_dianbo$类型', type_id);
-                
                 if(fold=='1' || (api_type=='cms' && cate_id!='tj')){
                     if(类型.length>0){
                         类型[index].split('#').forEach(it=>{
