@@ -183,25 +183,26 @@ function getYiData(jkdata) {
                 }, fold),
                 col_type: 'scroll_button',
             })
-            if(recommends.length>0){
-                if(getMyVar('SrcJu_dianbo$cate_id','0')=='0'){
-                    lists = recommends;//当前分类为推荐，取推荐列表
-                }
-                d.push({
-                    title: getMyVar('SrcJu_dianbo$cate_id','0')=='0'?'““””<b><span style="color:' + Color + '">' + '推荐' + '</span></b>':'推荐',
-                    url: $('#noLoading#').lazyRule(() => {
-                        putMyVar('SrcJu_dianbo$cate_id', '0');
-                        refreshPage(true);
-                        return "hiker://empty";
-                    }),
-                    col_type: 'scroll_button'
-                });
-            }
+            
             if(typeclass.length>0){
                 let cates = typeclass.filter(it=>{
                     return it.type_pid==0;
                 })
-                let cate_id = getMyVar('SrcJu_dianbo$cate_id', recommends.length>0?'0':cates[0].type_id.toString());
+                cate_id = getMyVar('SrcJu_dianbo$cate_id', recommends.length>0?'tj':cates[0].type_id.toString());
+                if(recommends.length>0){
+                    if(cate_id == 'tj'){
+                        lists = recommends;//当前分类为推荐，取推荐列表
+                    }
+                    d.push({
+                        title: cate_id=='tj'?'““””<b><span style="color:' + Color + '">' + '推荐' + '</span></b>':'推荐',
+                        url: $('#noLoading#').lazyRule(() => {
+                            putMyVar('SrcJu_dianbo$cate_id', '0');
+                            refreshPage(true);
+                            return "hiker://empty";
+                        }),
+                        col_type: 'scroll_button'
+                    });
+                }
                 cates.forEach(it=>{
                     d.push({
                         title: cate_id==it.type_id?'““””<b><span style="color:' + Color + '">' + it.type_name + '</span></b>':it.type_name,
@@ -217,9 +218,9 @@ function getYiData(jkdata) {
                     col_type: "blank_block"
                 });
                 let types = typeclass.filter(it=>{
-                    return it.type_pid == cate_id && it.type_pid != 0;
+                    return it.type_pid == cate_id;
                 })
-                type_id = getMyVar('SrcJu_dianbo$type_id', types[0].type_id.toString());
+                type_id = types.length>0?getMyVar('SrcJu_dianbo$type_id', types[0].type_id.toString()):cate_id;
                 if(fold=='1'){
                     types.forEach(it=>{
                         d.push({
