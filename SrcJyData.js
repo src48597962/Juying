@@ -193,9 +193,10 @@ function getYiData(jkdata) {
                 }
                 //storage0.putMyVar('SrcJu_dianbo$classCache', {typeclass:typeclass, recommends:recommends});
             }
-            log(分类);
+
             if(分类.length>0){
-                let cate_id = getMyVar('SrcJu_dianbo$分类', recommends.length>0?'tj':分类[0].split('$')[0]);
+                let cate_index = 0;
+                let cate_id = getMyVar('SrcJu_dianbo$分类', recommends.length>0?'tj':分类[0]);
                 if(筛选){
                     d.push({
                         title: fold === '1' ? '““””<b><span style="color: #F54343">∨</span></b>' : '““””<b><span style="color:' + Color + '">∧</span></b>',
@@ -226,15 +227,14 @@ function getYiData(jkdata) {
                 }
                 分类.forEach(it=>{
                     let itname = it.split('$')[0];
-                    let itid = it.split('$')[1];
                     d.push({
-                        title: cate_id==itid?'““””<b><span style="color:' + Color + '">' + itname + '</span></b>':itname,
+                        title: cate_id==it?'““””<b><span style="color:' + Color + '">' + itname + '</span></b>':itname,
                         url: $('#noLoading#').lazyRule((cate_id) => {
                             putMyVar('SrcJu_dianbo$分类', cate_id);
                             clearMyVar('SrcJu_dianbo$类型');//大分类切换时清除小分类
                             refreshPage(true);
                             return "hiker://empty";
-                        }, itid),
+                        }, it, i),
                         col_type: 'scroll_button'
                     });
                 })
@@ -242,18 +242,18 @@ function getYiData(jkdata) {
                     col_type: "blank_block"
                 });
                 
-                type_id = 筛选?getMyVar('SrcJu_dianbo$类型', (api_type=='cms'&&类型.length>0)?类型[0].split('$')[1]:''):cate_id;
+                type_id = 筛选?getMyVar('SrcJu_dianbo$类型', (api_type=='cms'&&类型.length>0)?类型[0].split('$')[1]:''):cate_id[0].split('$')[1];
                 putMyVar('SrcJu_dianbo$类型', type_id);
-                log(类型);
-                if(fold=='1' || api_type=='cms'){
+                let index = 分类.indexOf(cate_id);
+                if(fold=='1' || (api_type=='cms' && cate_id!='tj')){
                     if(类型.length>0){
-                        类型.forEach(it=>{
+                        类型[index].forEach(it=>{
                             let itname = it.split('$')[0];
                             let itid = it.split('$')[1];
                             d.push({
                                 title: type_id==itid?'““””<b><span style="color:' + Color + '">' + itname + '</span></b>':itname,
-                                url: $('#noLoading#').lazyRule((type_id) => {
-                                    putMyVar('SrcJu_dianbo$类型', type_id);
+                                url: $('#noLoading#').lazyRule((itid) => {
+                                    putMyVar('SrcJu_dianbo$类型', itid);
                                     refreshPage(true);
                                     return "hiker://empty";
                                 }, itid),
@@ -265,13 +265,13 @@ function getYiData(jkdata) {
                         });
                     }
                     if(地区.length>0){
-                        地区.forEach(it=>{
+                        地区[index].forEach(it=>{
                             let itname = it.split('$')[0];
                             let itid = it.split('$')[1];
                             d.push({
                                 title: type_id==itid?'““””<b><span style="color:' + Color + '">' + itname + '</span></b>':itname,
-                                url: $('#noLoading#').lazyRule((type_id) => {
-                                    putMyVar('SrcJu_dianbo$地区', type_id);
+                                url: $('#noLoading#').lazyRule((itid) => {
+                                    putMyVar('SrcJu_dianbo$地区', itid);
                                     refreshPage(true);
                                     return "hiker://empty";
                                 }, itid),
@@ -283,13 +283,13 @@ function getYiData(jkdata) {
                         });
                     }
                     if(年份.length>0){
-                        年份.forEach(it=>{
+                        年份[index].forEach(it=>{
                             let itname = it.split('$')[0];
                             let itid = it.split('$')[1];
                             d.push({
                                 title: type_id==itid?'““””<b><span style="color:' + Color + '">' + itname + '</span></b>':itname,
-                                url: $('#noLoading#').lazyRule((type_id) => {
-                                    putMyVar('SrcJu_dianbo$年份', type_id);
+                                url: $('#noLoading#').lazyRule((itid) => {
+                                    putMyVar('SrcJu_dianbo$年份', itid);
                                     refreshPage(true);
                                     return "hiker://empty";
                                 }, itid),
@@ -301,13 +301,13 @@ function getYiData(jkdata) {
                         });
                     }
                     if(排序.length>0){
-                        排序.forEach(it=>{
+                        排序[index].forEach(it=>{
                             let itname = it.split('$')[0];
                             let itid = it.split('$')[1];
                             d.push({
                                 title: type_id==itid?'““””<b><span style="color:' + Color + '">' + itname + '</span></b>':itname,
-                                url: $('#noLoading#').lazyRule((type_id) => {
-                                    putMyVar('SrcJu_dianbo$排序', type_id);
+                                url: $('#noLoading#').lazyRule((itid) => {
+                                    putMyVar('SrcJu_dianbo$排序', itid);
                                     refreshPage(true);
                                     return "hiker://empty";
                                 }, itid),
