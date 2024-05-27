@@ -1,4 +1,445 @@
 // 本代码仅用于个人学习，请勿用于其他作用，下载后请24小时内删除，代码虽然是公开学习的，但请尊重作者，应留下说明
+
+// extData缓存
+function extDataCache(jkdata) {
+    if(jkdata.ext && /^http/.test(jkdata.ext) && /^hiker/.test(jkdata.url)){
+        if (!fileExist(jkdata.url)) {
+            let content = fetch(extfile, {timeout:2000});
+            if (content) {
+                writeFile(jkdata.url, content);
+            }
+        }
+    }
+    return fetch(jkdata.url);
+}
+// 获取一级数据
+function getYiData(jkdata) {
+    let d = [];
+    let api_name = jkdata.name||"";
+    let api_type = jkdata.type||"";
+    let api_url = jkdata.url||"";
+    let api_ua = jkdata.ua||"MOBILE_UA";
+    api_ua = api_ua=="MOBILE_UA"?MOBILE_UA:api_ua=="PC_UA"?PC_UA:api_ua;
+    
+    let vodurlhead,classurl,listurl,listnode,extdata;
+    if(api_name&&api_type&&api_url){
+        if (api_type=="v1") {
+            let date = new Date();
+            let mm = date.getMonth()+1;
+            let dd = date.getDate();
+            let key = (mm<10?"0"+mm:mm)+""+(dd<10?"0"+dd:dd);
+            vodurlhead = api_url + '/detail?&key='+key+'&vod_id=';
+            classurl = api_url + "/types";
+            listurl = api_url + '?key='+key+'&page=';
+            listnode = "html.data.list";
+        } else if (api_type=="app") {
+            vodurlhead = api_url + 'video_detail?id=';
+            classurl = api_url + "nav";
+            listurl = api_url + 'video?tid=@type_id&pg=';
+            listnode = "html.list";
+        } else if (api_type=="v2") {
+            vodurlhead = api_url + 'video_detail?id=';
+            classurl = api_url + "nav";
+            listurl = api_url + 'video?tid=@type_id&pg=';
+            listnode = "html.data";
+        } else if (api_type=="iptv") {
+            vodurlhead = api_url + '?ac=detail&ids=';
+            classurl = api_url + "?ac=flitter";
+            listurl = api_url + '?ac=list&page=';
+            listnode = "html.data";
+        } else if (api_type=="cms") {
+            vodurlhead = api_url + '?ac=videolist&ids=';
+            classurl = api_url + "?ac=list";
+            listurl = api_url + '?ac=videolist&pg=';
+            listnode = "html.list";
+        } else if (api_type=="XBPQ") {
+            let cacheData = extDataCache(jkdata)
+            if(cacheData){
+                eval("extdata = " + cacheData);
+                let host = extdata["主页url"];
+                classurl = extdata["分类"];
+                listurl = /^http/.test(extdata["分类url"])?extdata["分类url"]:host + extdata["分类url"];
+            }
+        } else {
+            log('api类型错误')
+        }
+    }
+    let lists = []; //影片列表
+    let fold = getMyVar('SrcJu_dianbo$fold', "0");//是否展开小分类筛选
+    let cate_id = getMyVar('SrcJu_dianbo$cate_id', '1');//大分类id
+    let type_id = getMyVar('SrcJu_dianbo$type_id', '1');//小分类id
+    let 筛选 = 0;//是否有小分类
+    if(MY_PAGE==1){
+        if(classurl){
+            let recommends = []; //推荐影片
+            const Color = "#3399cc";
+            let typeclass = [];
+            try{
+                if(api_type=="XBPQ"){
+                    if(extdata["分类"].indexOf('$')>-1){
+                        let types = extdata["分类"].split('#');
+                        typeclass = types.map((type)=>{
+                            return {
+                                "type_id": type.split('$')[1],
+                                "type_pid": 0,
+                                "type_name": type.split('$')[0]
+                            }
+                        })
+                    }else if(extdata["分类"].indexOf('&')>-1&&extdata["分类值"]){
+                        let typenames = extdata["分类"].split('&');
+                        let typeids = extdata["分类值"].split('&');
+                        for(let i in typeids){
+                            typeclass.push({
+                                "type_id": typeids[i],
+                                "type_pid": 0,
+                                "type_name": typenames[i]
+                            })
+                        }
+                    }
+                }else{
+                    let gethtml = request(classurl, { headers: { 'User-Agent': api_ua }, timeout:5000 });
+                    if (api_type=="v1") {
+                        let typehtml = JSON.parse(gethtml);
+                        let typelist = typehtml.data.list||typehtml.data.typelist;
+                        typeclass = typelist.map((list)=>{
+                            return {
+                                "type_id": list.type_id,
+                                "type_pid": list.type_pid,
+                                "type_name": list.type_name
+                            }
+                        })
+                    } else if (/app|v2/.test(api_type)) {
+                        let typehtml = JSON.parse(gethtml);
+                        let typelist = typehtml.list||typehtml.data;
+                        typeclass = typelist.map((list)=>{
+                            return {
+                                "type_id": list.type_id,
+                                "type_pid": 0,
+                                "type_name": list.type_name
+                            }
+                        })
+                    } else if (api_type=="iptv") {
+                        let type_dict = {
+                            comic: '动漫',
+                            movie: '电影',
+                            tvplay: '电视剧',
+                            tvshow: '综艺',
+                            movie_4k: '4k',
+                            hanguoju: '韩剧',
+                            oumeiju: '欧美剧',
+                            tiyu: '体育'
+                        };
+                        let typehtml = JSON.parse(gethtml);
+                        typeclass = typehtml.map((list)=>{
+                            if(type_dict[list]){
+                                return {
+                                    "type_id": list,
+                                    "type_pid": 0,
+                                    "type_name": type_dict[list]
+                                }
+                            }
+                        })
+                        typeclass = typeclass.filter(n => n);
+                    } else if (api_type=="cms") {
+                        if(/<\?xml/.test(gethtml)){
+                            let typelist = pdfa(gethtml,'class&&ty');
+                            typeclass = typelist.map((list)=>{
+                                return {
+                                    "type_id": String(xpath(list,`//ty/@id`)).trim(),
+                                    "type_pid": 0,
+                                    "type_name": String(xpath(list,`//ty/text()`)).trim()
+                                }
+                            })
+                        }else{
+                            let typehtml = JSON.parse(gethtml);
+                            typeclass = typehtml.class;//分类列表
+                            recommends = typehtml.list;//推荐影片
+                        }
+                        
+                        if(jkdata.categories){
+                            for(var i=0;i<typeclass.length;i++){
+                                if(jkdata.categories.indexOf(typeclass[i].type_name)==-1 && typeclass[i].type_pid>0){
+                                    typeclass.splice(i,1);
+                                    i = i -1;
+                                }
+                            }
+                        }
+                        
+                    }else {
+                        log('api类型错误')
+                    }
+                }
+            }catch(e){
+                log(api_name+'>访问异常，请更换源接口！获取分类失败>'+e.message);
+            }
+
+
+            d.push({
+                title: fold === '1' ? '““””<b><span style="color: #F54343">∨</span></b>' : '““””<b><span style="color:' + Color + '">∧</span></b>',
+                url: $('#noLoading#').lazyRule((fold) => {
+                    putMyVar('SrcJu_dianbo$fold', fold === '1' ? '0' : '1');
+                    refreshPage(false);
+                    return "hiker://empty";
+                }, fold),
+                col_type: 'scroll_button',
+            })
+            if(recommends.length>0){
+                if(getMyVar('SrcJu_dianbo$cate_id','0')=='0'){
+                    lists = recommends;//当前分类为推荐，取推荐列表
+                }
+                d.push({
+                    title: getMyVar('SrcJu_dianbo$cate_id','0')=='0'?'““””<b><span style="color:' + Color + '">' + '推荐' + '</span></b>':'推荐',
+                    url: $('#noLoading#').lazyRule(() => {
+                        putMyVar('SrcJu_dianbo$cate_id', '0');
+                        refreshPage(true);
+                        return "hiker://empty";
+                    }),
+                    col_type: 'scroll_button'
+                });
+            }
+            if(typeclass.length>0){
+                let cates = typeclass.filter(it=>{
+                    return it.type_pid==0;
+                })
+                let cate_id = getMyVar('SrcJu_dianbo$cate_id', recommends.length>0?'0':cates[0].type_id.toString());
+                cates.forEach(it=>{
+                    d.push({
+                        title: cate_id==it.type_id?'““””<b><span style="color:' + Color + '">' + it.type_name + '</span></b>':it.type_name,
+                        url: $('#noLoading#').lazyRule((cate_id) => {
+                            putMyVar('SrcJu_dianbo$cate_id', cate_id);
+                            refreshPage(true);
+                            return "hiker://empty";
+                        }, it.type_id),
+                        col_type: 'scroll_button'
+                    });
+                })
+                d.push({
+                    col_type: "blank_block"
+                });
+                let types = typeclass.filter(it=>{
+                    return it.type_pid == cate_id && it.type_pid != 0;
+                })
+                type_id = getMyVar('SrcJu_dianbo$type_id', types[0].type_id.toString());
+                if(fold=='1'){
+                    types.forEach(it=>{
+                        d.push({
+                            title: type_id==it.type_id?'““””<b><span style="color:' + Color + '">' + it.type_name + '</span></b>':it.type_name,
+                            url: $('#noLoading#').lazyRule((type_id) => {
+                                putMyVar('SrcJu_dianbo$type_id', type_id);
+                                refreshPage(true);
+                                return "hiker://empty";
+                            }, it.type_id),
+                            col_type: 'scroll_button'
+                        });
+                    })
+                    d.push({
+                        col_type: "blank_block"
+                    });
+                }
+                
+
+                /*
+                let type_pids = [];
+                let type_ids = [];
+                typeclass.forEach(it=>{
+                    if(type_pids.indexOf(it.type_pid)==-1){type_pids.push(it.type_pid)}
+                    if(type_ids.indexOf(it.type_id)==-1){type_ids.push(it.type_id)}
+                })
+
+
+                if(type_ids.length>0&&!getMyVar('SrcJu_dianbo$type_id')){///v2|app|XBPQ/.test(api_type)
+                    putMyVar('SrcJu_dianbo$type_id',type_ids[0]);
+                }
+                for (var j in type_pids) {
+                    for (var i in typeclass) {
+                        if(typeclass[i].type_pid==type_pids[j]){
+                            d.push({
+                                title: getMyVar('SrcJu_dianbo$type_id')==typeclass[i].type_id?'““””<b><span style="color:' + Color + '">' + typeclass[i].type_name + '</span></b>':typeclass[i].type_name,
+                                url: $('#noLoading#').lazyRule((type_id) => {
+                                    putMyVar('SrcJu_dianbo$type_id', type_id);
+                                    refreshPage(true);
+                                    return "hiker://empty";
+                                }, typeclass[i].type_id),
+                                col_type: 'scroll_button'
+                            });
+                        }
+                    }
+                    d.push({
+                        col_type: "blank_block"
+                    });
+                }
+                */
+            }
+            
+            var searchurl = $('').lazyRule((data) => {
+                if(data){
+                    /*
+                    return $('hiker://empty#noRecordHistory##noHistory#').rule((name,data) => {
+                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
+                        let ssdata = getSsData(name,data);
+                        setResult(ssdata);
+                    }, input, data);
+                    */
+                    return 'hiker://search?s='+input+'||'+data.url+'&rule='+MY_RULE.title;
+                }else{
+                    return 'toast://未找到接口数据'
+                }
+            },jkdata);
+            d.push({
+                title: "搜索",
+                url: $.toString((searchurl) => {
+                        return input + searchurl;
+                    },searchurl),
+                desc: "搜你想看的...",
+                col_type: "input",
+                extra: {
+                    titleVisible: true
+                }
+            });
+        }
+    }
+
+    if(listurl && lists.length==0){
+        try{
+            if(api_type=="XBPQ"){
+                MY_URL = listurl.replace('{catePg}',extdata["起始页"]?MY_PAGE>extdata["起始页"]?MY_PAGE:"":MY_PAGE).replace('{cateId}',getMyVar('SrcJu_dianbo$type_id','1'));
+            }else{
+                MY_URL = listurl + MY_PAGE;
+                if(api_type=="v2"||api_type=="app"){
+                    MY_URL = MY_URL.replace('@type_id',getMyVar('SrcJu_dianbo$type_id'));
+                }else if(getMyVar('SrcJu_dianbo$type_id')){
+                    if (api_type=="v1") {
+                        MY_URL = MY_URL + '&type=' + getMyVar('SrcJu_dianbo$type_id');
+                    } else if (api_type=="iptv") {
+                        MY_URL = MY_URL + '&class=' + getMyVar('SrcJu_dianbo$type_id');
+                    } else {
+                        MY_URL = MY_URL + '&t=' + getMyVar('SrcJu_dianbo$type_id');
+                    }
+                }
+            }
+
+            let gethtml = request(MY_URL, { headers: { 'User-Agent': api_ua }, timeout:5000 });
+            if(api_type=="XBPQ"){
+                jkdata["二次截取"] = jkdata["二次截取"] || (gethtml.indexOf(`<ul class="stui-vodlist`)>-1?`<ul class="stui-vodlist&&</ul>`:gethtml.indexOf(`<ul class="myui-vodlist`)>-1?`<ul class="myui-vodlist&&</ul>`:"");
+                if(jkdata["二次截取"]){
+                    gethtml = gethtml.split(jkdata["二次截取"].split('&&')[0])[1].split(jkdata["二次截取"].split('&&')[1])[0];
+                }
+                jkdata["链接"] = jkdata["链接"] || `href="&&"`;
+                jkdata["标题"] = jkdata["标题"] || `title="&&"`;
+                jkdata["数组"] = jkdata["数组"] || `<a &&</a>`;
+                let jklist = gethtml.match(new RegExp(jkdata["数组"].replace('&&','((?:.|[\r\n])*?)'), 'g'));
+                jklist.forEach(item=>{
+                    if(!jkdata["图片"]){
+                        if(item.indexOf('original=')>-1){
+                            jkdata["图片"] = `original="&&"`;
+                        }else if(item.indexOf('<img src=')>-1){
+                            jkdata["图片"] = `<img src="&&"`;
+                        }
+                    };
+                    if(jkdata["图片"]&&item.indexOf(jkdata["图片"].split("&&")[0])>-1){
+                        let id = item.split(jkdata["链接"].split('&&')[0])[1].split(jkdata["链接"].split('&&')[1])[0];
+                        let name = item.split(jkdata["标题"].split('&&')[0])[1].split(jkdata["标题"].split('&&')[1])[0];
+                        let pic = "";
+                        try{
+                            pic = item.split(jkdata["图片"].split('&&')[0])[1].split(jkdata["图片"].split('&&')[1])[0];
+                        }catch(e){}
+                        let note = "";
+                        try{
+                            note = item.split(jkdata["副标题"].split('&&')[0])[1].split(jkdata["副标题"].split('&&')[1])[0];
+                        }catch(e){}
+                        let arr = {"vod_id":id,"vod_name":name,"vod_remarks":note,"vod_pic":pic};
+                        lists.push(arr);
+                    }
+                })
+            }else{
+                let json;
+                if(/cms/.test(api_type)&&/<\?xml/.test(gethtml)){
+                    gethtml = gethtml.replace(/&lt;!\[CDATA\[|\]\]&gt;|<!\[CDATA\[|\]\]>/g,'');
+                    let xmllist = [];
+                    let videos = pdfa(gethtml,'list&&video');
+                    for(let i in videos){
+                        let id = String(xpath(videos[i],`//video/id/text()`)).trim();
+                        let name = String(xpath(videos[i],`//video/name/text()`)).trim();
+                        let pic = String(xpath(videos[i],`//video/pic/text()`)).trim();
+                        let note = String(xpath(videos[i],`//video/note/text()`)).trim();
+                        let arr = {"vod_id":id,"vod_name":name,"vod_remarks":note,"vod_pic":pic};
+                        let plays = xpathArray(videos[i],`//video/dl/dd/text()`);
+                        if(plays.length==1){
+                            let play = plays[0];
+                            if(play.indexOf('$')==-1&&play.indexOf('m3u8')>-1){
+                                arr['play'] = play.trim();
+                            }
+                        }
+                        xmllist.push(arr)
+                    }
+                    json = {"list":xmllist};
+                }else if(!/{|}/.test(gethtml)&&gethtml!=""){
+                    var decfile = "hiker://files/rules/Src/Juying/appdec.js";
+                    var Juyingdec=fetch(decfile);
+                    if(Juyingdec != ""){
+                        eval(Juyingdec);
+                        json = JSON.parse(xgdec(gethtml));
+                    }
+                }else{
+                    json = JSON.parse(gethtml);
+                }
+                try{
+                    lists = eval(listnode)||json.list||json.data.list||json.data||[];
+                } catch (e) {
+                    lists = json.list||json.data.list||json.data||[];
+                }
+            }       
+        }catch(e){
+            log(api_name+' 接口访问异常，请更换接口！获取影片失败>'+e.message)
+        }
+    }
+    if(lists.length==0){
+        d.push({
+            title: '接口访问异常，请更换接口！',
+            url: '#noHistory#hiker://empty',
+            col_type: 'text_center_1'
+        }); 
+    }else{
+        lists.forEach((list)=>{
+            let vodname = list.vod_name||list.title;
+            if(vodname){
+                let vodpic = list.vod_pic||list.pic;
+                let voddesc = list.vod_remarks||list.state||"";
+                let vodurl = list.vod_id?vodurlhead&&!/^http/.test(list.vod_id)?vodurlhead+list.vod_id:list.vod_id:list.nextlink;
+                vodpic = vodpic?vodpic.replace('/img.php?url=','').replace('/tu.php?tu=',''):"hiker://files/cache/src/picloading.gif";
+                if(/^\/upload|^upload/.test(vodpic)){
+                    vodpic = vodurl.match(/http(s)?:\/\/(.*?)\//)[0] + vodpic;
+                }
+                if(/^\/\//.test(vodpic)){
+                    vodpic = "https:" + vodpic;
+                }
+                if(api_type=='cms'&&list.vod_play_url){
+                    if(list.vod_play_url.indexOf('$')==-1&&list.vod_play_url.indexOf('m3u8')>-1){
+                        list['play'] = list.vod_play_url;
+                    }
+                }
+                d.push({
+                    title: vodname,
+                    desc: voddesc,
+                    pic_url: vodpic,
+                    url: list.play?list.play:$("hiker://empty#immersiveTheme##autoCache#").rule(() => {
+                        require(config.依赖);
+                        dianboerji()
+                    }),
+                    col_type: 'movie_3',
+                    extra: {
+                        url: vodurl,
+                        pic: vodpic,
+                        pageTitle: vodname,
+                        data: jkdata
+                    }
+                })
+            }
+        });
+    }
+    
+    return d;
+}
 // 获取搜索数据
 function getSsData(name, jkdata) {
     name = name.replace(/全集.*|国语.*|粤语.*/g,'');
@@ -704,440 +1145,4 @@ function getErData(jkdata) {
         "lists": lists,
         "parse_api": parse_api
     };
-}
-// extData缓存
-function extDataCache(jkdata) {
-    if(jkdata.ext && /^http/.test(jkdata.ext) && /^hiker/.test(jkdata.url)){
-        if (!fileExist(jkdata.url)) {
-            let content = fetch(extfile, {timeout:2000});
-            if (content) {
-                writeFile(jkdata.url, content);
-            }
-        }
-    }
-    return fetch(jkdata.url);
-}
-// 获取一级数据
-function getYiData(jkdata) {
-    let d = [];
-    let api_name = jkdata.name||"";
-    let api_type = jkdata.type||"";
-    let api_url = jkdata.url||"";
-    let api_ua = jkdata.ua||"MOBILE_UA";
-    api_ua = api_ua=="MOBILE_UA"?MOBILE_UA:api_ua=="PC_UA"?PC_UA:api_ua;
-    
-    let vodurlhead,classurl,listurl,listnode,extdata;
-    if(api_name&&api_type&&api_url){
-        if (api_type=="v1") {
-            let date = new Date();
-            let mm = date.getMonth()+1;
-            let dd = date.getDate();
-            let key = (mm<10?"0"+mm:mm)+""+(dd<10?"0"+dd:dd);
-            vodurlhead = api_url + '/detail?&key='+key+'&vod_id=';
-            classurl = api_url + "/types";
-            listurl = api_url + '?key='+key+'&page=';
-            listnode = "html.data.list";
-        } else if (api_type=="app") {
-            vodurlhead = api_url + 'video_detail?id=';
-            classurl = api_url + "nav";
-            listurl = api_url + 'video?tid=@type_id&pg=';
-            listnode = "html.list";
-        } else if (api_type=="v2") {
-            vodurlhead = api_url + 'video_detail?id=';
-            classurl = api_url + "nav";
-            listurl = api_url + 'video?tid=@type_id&pg=';
-            listnode = "html.data";
-        } else if (api_type=="iptv") {
-            vodurlhead = api_url + '?ac=detail&ids=';
-            classurl = api_url + "?ac=flitter";
-            listurl = api_url + '?ac=list&page=';
-            listnode = "html.data";
-        } else if (api_type=="cms") {
-            vodurlhead = api_url + '?ac=videolist&ids=';
-            classurl = api_url + "?ac=list";
-            listurl = api_url + '?ac=videolist&pg=';
-            listnode = "html.list";
-        } else if (api_type=="XBPQ") {
-            let cacheData = extDataCache(jkdata)
-            if(cacheData){
-                eval("extdata = " + cacheData);
-                let host = extdata["主页url"];
-                classurl = extdata["分类"];
-                listurl = /^http/.test(extdata["分类url"])?extdata["分类url"]:host + extdata["分类url"];
-            }
-        } else {
-            log('api类型错误')
-        }
-    }
-    let lists = []; //影片列表
-    let type_id = getMyVar('SrcJu_dianbo$type_id', '1');
-    if(MY_PAGE==1){
-        if(classurl){
-            let recommends = []; //推荐影片
-            const Color = "#3399cc";
-            let typeclass = [];
-            try{
-                if(api_type=="XBPQ"){
-                    if(extdata["分类"].indexOf('$')>-1){
-                        let types = extdata["分类"].split('#');
-                        typeclass = types.map((type)=>{
-                            return {
-                                "type_id": type.split('$')[1],
-                                "type_pid": 0,
-                                "type_name": type.split('$')[0]
-                            }
-                        })
-                    }else if(extdata["分类"].indexOf('&')>-1&&extdata["分类值"]){
-                        let typenames = extdata["分类"].split('&');
-                        let typeids = extdata["分类值"].split('&');
-                        for(let i in typeids){
-                            typeclass.push({
-                                "type_id": typeids[i],
-                                "type_pid": 0,
-                                "type_name": typenames[i]
-                            })
-                        }
-                    }
-                }else{
-                    let gethtml = request(classurl, { headers: { 'User-Agent': api_ua }, timeout:5000 });
-                    if (api_type=="v1") {
-                        let typehtml = JSON.parse(gethtml);
-                        let typelist = typehtml.data.list||typehtml.data.typelist;
-                        typeclass = typelist.map((list)=>{
-                            return {
-                                "type_id": list.type_id,
-                                "type_pid": list.type_pid,
-                                "type_name": list.type_name
-                            }
-                        })
-                    } else if (/app|v2/.test(api_type)) {
-                        let typehtml = JSON.parse(gethtml);
-                        let typelist = typehtml.list||typehtml.data;
-                        typeclass = typelist.map((list)=>{
-                            return {
-                                "type_id": list.type_id,
-                                "type_pid": 0,
-                                "type_name": list.type_name
-                            }
-                        })
-                    } else if (api_type=="iptv") {
-                        let type_dict = {
-                            comic: '动漫',
-                            movie: '电影',
-                            tvplay: '电视剧',
-                            tvshow: '综艺',
-                            movie_4k: '4k',
-                            hanguoju: '韩剧',
-                            oumeiju: '欧美剧',
-                            tiyu: '体育'
-                        };
-                        let typehtml = JSON.parse(gethtml);
-                        typeclass = typehtml.map((list)=>{
-                            if(type_dict[list]){
-                                return {
-                                    "type_id": list,
-                                    "type_pid": 0,
-                                    "type_name": type_dict[list]
-                                }
-                            }
-                        })
-                        typeclass = typeclass.filter(n => n);
-                    } else if (api_type=="cms") {
-                        if(/<\?xml/.test(gethtml)){
-                            let typelist = pdfa(gethtml,'class&&ty');
-                            typeclass = typelist.map((list)=>{
-                                return {
-                                    "type_id": String(xpath(list,`//ty/@id`)).trim(),
-                                    "type_pid": 0,
-                                    "type_name": String(xpath(list,`//ty/text()`)).trim()
-                                }
-                            })
-                        }else{
-                            let typehtml = JSON.parse(gethtml);
-                            typeclass = typehtml.class;//分类列表
-                            recommends = typehtml.list;//推荐影片
-                        }
-                        
-                        if(jkdata.categories){
-                            for(var i=0;i<typeclass.length;i++){
-                                if(jkdata.categories.indexOf(typeclass[i].type_name)==-1 && typeclass[i].type_pid>0){
-                                    typeclass.splice(i,1);
-                                    i = i -1;
-                                }
-                            }
-                        }
-                        
-                    }else {
-                        log('api类型错误')
-                    }
-                } 
-            }catch(e){
-                log(api_name+'>访问异常，请更换源接口！获取分类失败>'+e.message);
-            }
-            const fold = getMyVar('SrcJu_dianbo$fold', "0");
-            d.push({
-                title: fold === '1' ? '““””<b><span style="color: #F54343">∨</span></b>' : '““””<b><span style="color:' + Color + '">∧</span></b>',
-                url: $('#noLoading#').lazyRule((fold) => {
-                    putMyVar('SrcJu_dianbo$fold', fold === '1' ? '0' : '1');
-                    refreshPage(false);
-                    return "hiker://empty";
-                }, fold),
-                col_type: 'scroll_button',
-            })
-            if(recommends.length>0){
-                if(getMyVar('SrcJu_dianbo$cate_id','0')=='0'){
-                    lists = recommends;//当前分类为推荐，取推荐列表
-                }
-                d.push({
-                    title: getMyVar('SrcJu_dianbo$cate_id','0')=='0'?'““””<b><span style="color:' + Color + '">' + '推荐' + '</span></b>':'推荐',
-                    url: $('#noLoading#').lazyRule(() => {
-                        putMyVar('SrcJu_dianbo$cate_id', '0');
-                        refreshPage(true);
-                        return "hiker://empty";
-                    }),
-                    col_type: 'scroll_button'
-                });
-            }
-            if(typeclass.length>0){
-                let cates = typeclass.filter(it=>{
-                    return it.type_pid==0;
-                })
-                let cate_id = getMyVar('SrcJu_dianbo$cate_id', recommends.length>0?'0':cates[0].type_id.toString());
-                cates.forEach(it=>{
-                    d.push({
-                        title: cate_id==it.type_id?'““””<b><span style="color:' + Color + '">' + it.type_name + '</span></b>':it.type_name,
-                        url: $('#noLoading#').lazyRule((cate_id) => {
-                            putMyVar('SrcJu_dianbo$cate_id', cate_id);
-                            refreshPage(true);
-                            return "hiker://empty";
-                        }, it.type_id),
-                        col_type: 'scroll_button'
-                    });
-                })
-                d.push({
-                    col_type: "blank_block"
-                });
-                let types = typeclass.filter(it=>{
-                    return it.type_pid == cate_id && it.type_pid != 0;
-                })
-                type_id = getMyVar('SrcJu_dianbo$type_id', types[0].type_id.toString());
-                if(fold=='1'){
-                    types.forEach(it=>{
-                        d.push({
-                            title: type_id==it.type_id?'““””<b><span style="color:' + Color + '">' + it.type_name + '</span></b>':it.type_name,
-                            url: $('#noLoading#').lazyRule((type_id) => {
-                                putMyVar('SrcJu_dianbo$type_id', type_id);
-                                refreshPage(true);
-                                return "hiker://empty";
-                            }, it.type_id),
-                            col_type: 'scroll_button'
-                        });
-                    })
-                    d.push({
-                        col_type: "blank_block"
-                    });
-                }
-                
-
-                /*
-                let type_pids = [];
-                let type_ids = [];
-                typeclass.forEach(it=>{
-                    if(type_pids.indexOf(it.type_pid)==-1){type_pids.push(it.type_pid)}
-                    if(type_ids.indexOf(it.type_id)==-1){type_ids.push(it.type_id)}
-                })
-
-
-                if(type_ids.length>0&&!getMyVar('SrcJu_dianbo$type_id')){///v2|app|XBPQ/.test(api_type)
-                    putMyVar('SrcJu_dianbo$type_id',type_ids[0]);
-                }
-                for (var j in type_pids) {
-                    for (var i in typeclass) {
-                        if(typeclass[i].type_pid==type_pids[j]){
-                            d.push({
-                                title: getMyVar('SrcJu_dianbo$type_id')==typeclass[i].type_id?'““””<b><span style="color:' + Color + '">' + typeclass[i].type_name + '</span></b>':typeclass[i].type_name,
-                                url: $('#noLoading#').lazyRule((type_id) => {
-                                    putMyVar('SrcJu_dianbo$type_id', type_id);
-                                    refreshPage(true);
-                                    return "hiker://empty";
-                                }, typeclass[i].type_id),
-                                col_type: 'scroll_button'
-                            });
-                        }
-                    }
-                    d.push({
-                        col_type: "blank_block"
-                    });
-                }
-                */
-            }
-            
-            var searchurl = $('').lazyRule((data) => {
-                if(data){
-                    /*
-                    return $('hiker://empty#noRecordHistory##noHistory#').rule((name,data) => {
-                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
-                        let ssdata = getSsData(name,data);
-                        setResult(ssdata);
-                    }, input, data);
-                    */
-                    return 'hiker://search?s='+input+'||'+data.url+'&rule='+MY_RULE.title;
-                }else{
-                    return 'toast://未找到接口数据'
-                }
-            },jkdata);
-            d.push({
-                title: "搜索",
-                url: $.toString((searchurl) => {
-                        return input + searchurl;
-                    },searchurl),
-                desc: "搜你想看的...",
-                col_type: "input",
-                extra: {
-                    titleVisible: true
-                }
-            });
-        }
-    }
-
-    if(listurl && lists.length==0){
-        try{
-            if(api_type=="XBPQ"){
-                MY_URL = listurl.replace('{catePg}',extdata["起始页"]?MY_PAGE>extdata["起始页"]?MY_PAGE:"":MY_PAGE).replace('{cateId}',getMyVar('SrcJu_dianbo$type_id','1'));
-            }else{
-                MY_URL = listurl + MY_PAGE;
-                if(api_type=="v2"||api_type=="app"){
-                    MY_URL = MY_URL.replace('@type_id',getMyVar('SrcJu_dianbo$type_id'));
-                }else if(getMyVar('SrcJu_dianbo$type_id')){
-                    if (api_type=="v1") {
-                        MY_URL = MY_URL + '&type=' + getMyVar('SrcJu_dianbo$type_id');
-                    } else if (api_type=="iptv") {
-                        MY_URL = MY_URL + '&class=' + getMyVar('SrcJu_dianbo$type_id');
-                    } else {
-                        MY_URL = MY_URL + '&t=' + getMyVar('SrcJu_dianbo$type_id');
-                    }
-                }
-            }
-
-            let gethtml = request(MY_URL, { headers: { 'User-Agent': api_ua }, timeout:5000 });
-            if(api_type=="XBPQ"){
-                jkdata["二次截取"] = jkdata["二次截取"] || (gethtml.indexOf(`<ul class="stui-vodlist`)>-1?`<ul class="stui-vodlist&&</ul>`:gethtml.indexOf(`<ul class="myui-vodlist`)>-1?`<ul class="myui-vodlist&&</ul>`:"");
-                if(jkdata["二次截取"]){
-                    gethtml = gethtml.split(jkdata["二次截取"].split('&&')[0])[1].split(jkdata["二次截取"].split('&&')[1])[0];
-                }
-                jkdata["链接"] = jkdata["链接"] || `href="&&"`;
-                jkdata["标题"] = jkdata["标题"] || `title="&&"`;
-                jkdata["数组"] = jkdata["数组"] || `<a &&</a>`;
-                let jklist = gethtml.match(new RegExp(jkdata["数组"].replace('&&','((?:.|[\r\n])*?)'), 'g'));
-                jklist.forEach(item=>{
-                    if(!jkdata["图片"]){
-                        if(item.indexOf('original=')>-1){
-                            jkdata["图片"] = `original="&&"`;
-                        }else if(item.indexOf('<img src=')>-1){
-                            jkdata["图片"] = `<img src="&&"`;
-                        }
-                    };
-                    if(jkdata["图片"]&&item.indexOf(jkdata["图片"].split("&&")[0])>-1){
-                        let id = item.split(jkdata["链接"].split('&&')[0])[1].split(jkdata["链接"].split('&&')[1])[0];
-                        let name = item.split(jkdata["标题"].split('&&')[0])[1].split(jkdata["标题"].split('&&')[1])[0];
-                        let pic = "";
-                        try{
-                            pic = item.split(jkdata["图片"].split('&&')[0])[1].split(jkdata["图片"].split('&&')[1])[0];
-                        }catch(e){}
-                        let note = "";
-                        try{
-                            note = item.split(jkdata["副标题"].split('&&')[0])[1].split(jkdata["副标题"].split('&&')[1])[0];
-                        }catch(e){}
-                        let arr = {"vod_id":id,"vod_name":name,"vod_remarks":note,"vod_pic":pic};
-                        lists.push(arr);
-                    }
-                })
-            }else{
-                let json;
-                if(/cms/.test(api_type)&&/<\?xml/.test(gethtml)){
-                    gethtml = gethtml.replace(/&lt;!\[CDATA\[|\]\]&gt;|<!\[CDATA\[|\]\]>/g,'');
-                    let xmllist = [];
-                    let videos = pdfa(gethtml,'list&&video');
-                    for(let i in videos){
-                        let id = String(xpath(videos[i],`//video/id/text()`)).trim();
-                        let name = String(xpath(videos[i],`//video/name/text()`)).trim();
-                        let pic = String(xpath(videos[i],`//video/pic/text()`)).trim();
-                        let note = String(xpath(videos[i],`//video/note/text()`)).trim();
-                        let arr = {"vod_id":id,"vod_name":name,"vod_remarks":note,"vod_pic":pic};
-                        let plays = xpathArray(videos[i],`//video/dl/dd/text()`);
-                        if(plays.length==1){
-                            let play = plays[0];
-                            if(play.indexOf('$')==-1&&play.indexOf('m3u8')>-1){
-                                arr['play'] = play.trim();
-                            }
-                        }
-                        xmllist.push(arr)
-                    }
-                    json = {"list":xmllist};
-                }else if(!/{|}/.test(gethtml)&&gethtml!=""){
-                    var decfile = "hiker://files/rules/Src/Juying/appdec.js";
-                    var Juyingdec=fetch(decfile);
-                    if(Juyingdec != ""){
-                        eval(Juyingdec);
-                        json = JSON.parse(xgdec(gethtml));
-                    }
-                }else{
-                    json = JSON.parse(gethtml);
-                }
-                try{
-                    lists = eval(listnode)||json.list||json.data.list||json.data||[];
-                } catch (e) {
-                    lists = json.list||json.data.list||json.data||[];
-                }
-            }       
-        }catch(e){
-            log(api_name+' 接口访问异常，请更换接口！获取影片失败>'+e.message)
-        }
-    }
-    if(lists.length==0){
-        d.push({
-            title: '接口访问异常，请更换接口！',
-            url: '#noHistory#hiker://empty',
-            col_type: 'text_center_1'
-        }); 
-    }else{
-        lists.forEach((list)=>{
-            let vodname = list.vod_name||list.title;
-            if(vodname){
-                let vodpic = list.vod_pic||list.pic;
-                let voddesc = list.vod_remarks||list.state||"";
-                let vodurl = list.vod_id?vodurlhead&&!/^http/.test(list.vod_id)?vodurlhead+list.vod_id:list.vod_id:list.nextlink;
-                vodpic = vodpic?vodpic.replace('/img.php?url=','').replace('/tu.php?tu=',''):"hiker://files/cache/src/picloading.gif";
-                if(/^\/upload|^upload/.test(vodpic)){
-                    vodpic = vodurl.match(/http(s)?:\/\/(.*?)\//)[0] + vodpic;
-                }
-                if(/^\/\//.test(vodpic)){
-                    vodpic = "https:" + vodpic;
-                }
-                if(api_type=='cms'&&list.vod_play_url){
-                    if(list.vod_play_url.indexOf('$')==-1&&list.vod_play_url.indexOf('m3u8')>-1){
-                        list['play'] = list.vod_play_url;
-                    }
-                }
-                d.push({
-                    title: vodname,
-                    desc: voddesc,
-                    pic_url: vodpic,
-                    url: list.play?list.play:$("hiker://empty#immersiveTheme##autoCache#").rule(() => {
-                        require(config.依赖);
-                        dianboerji()
-                    }),
-                    col_type: 'movie_3',
-                    extra: {
-                        url: vodurl,
-                        pic: vodpic,
-                        pageTitle: vodname,
-                        data: jkdata
-                    }
-                })
-            }
-        });
-    }
-    
-    return d;
 }
