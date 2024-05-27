@@ -192,7 +192,7 @@ function getYiData(jkdata) {
                 }
                 //storage0.putMyVar('SrcJu_dianbo$classCache', {typeclass:typeclass, recommends:recommends});
             }
-            
+            log(分类);
             if(分类.length>0){
                 let cate_id = getMyVar('SrcJu_dianbo$分类', recommends.length>0?'tj':分类[0].split('$')[0]);
                 if(筛选){
@@ -243,6 +243,7 @@ function getYiData(jkdata) {
                 
                 type_id = 筛选?getMyVar('SrcJu_dianbo$类型', (api_type=='cms'&&类型.length>0)?类型[0].split('$')[1]:''):cate_id;
                 putMyVar('SrcJu_dianbo$类型', type_id);
+                log(类型);
                 if(fold=='1' || api_type=='cms'){
                     if(类型.length>0){
                         类型.forEach(it=>{
