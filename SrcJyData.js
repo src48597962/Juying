@@ -169,7 +169,6 @@ function getYiData(jkdata) {
                                         }
                                     }
                                 }
-                                log(typelist);
                                 typelist.forEach((it)=>{
                                     if(it.type_pid==0){
                                         分类.push(it.type_name+'$'+it.type_id);
@@ -243,8 +242,7 @@ function getYiData(jkdata) {
                 
                 type_id = 筛选?getMyVar('SrcJu_dianbo$类型', (api_type=='cms'&&类型.length>0)?类型[0].split('#')[0].split('$')[1]:''):cate_id[0].split('$')[1];
                 putMyVar('SrcJu_dianbo$类型', type_id);
-                log(分类);
-                log(cate_id)
+                log(type_id);
                 let index = 分类.indexOf(cate_id);
                 if(fold=='1' || (api_type=='cms' && cate_id!='tj')){
                     if(类型.length>0){
