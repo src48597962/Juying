@@ -178,6 +178,7 @@ function selectSource(group, k) {
         clearMyVar('SrcJu_dianbo$地区');
         clearMyVar('SrcJu_dianbo$年份');
         clearMyVar('SrcJu_dianbo$排序');
+        clearMyVar('SrcJu_dianbo$fold');
         clearMyVar('SrcJu_dianbo$classCache');
         refreshPage(true);
         return 'toast://' + input;
