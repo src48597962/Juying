@@ -221,6 +221,7 @@ function getYiData(jkdata) {
                     return it.type_pid == cate_id;
                 })
                 type_id = types.length>0?getMyVar('SrcJu_dianbo$type_id', types[0].type_id.toString()):cate_id;
+                putMyVar('SrcJu_dianbo$type_id', type_id);
                 if(fold=='1'){
                     types.forEach(it=>{
                         d.push({
