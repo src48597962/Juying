@@ -242,7 +242,7 @@ function getYiData(jkdata) {
                 
                 let index = 分类.indexOf(cate_id);
 
-                type_id = 筛选?type_id:(api_type=='cms'&&类型.length>0)?类型[index].split('#')[0].split('$')[1]:cate_id[0].split('$')[1];
+                type_id = 筛选?type_id:getMyVar('SrcJu_dianbo$类型', (api_type=='cms'&&类型.length>0) ? 类型[index].split('#')[0].split('$')[1] : cate_id.split('$')[1]);
                 putMyVar('SrcJu_dianbo$类型', type_id);
                 
                 if(fold=='1' || (api_type=='cms' && cate_id!='tj')){
