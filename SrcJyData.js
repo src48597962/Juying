@@ -328,33 +328,32 @@ function getYiData(jkdata) {
                         });
                     }
                 }
+                let searchurl = $('').lazyRule((data) => {
+                    if(data){
+                        /*
+                        return $('hiker://empty#noRecordHistory##noHistory#').rule((name,data) => {
+                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
+                            let ssdata = getSsData(name,data);
+                            setResult(ssdata);
+                        }, input, data);
+                        */
+                        return 'hiker://search?s='+input+'||'+data.url+'&rule='+MY_RULE.title;
+                    }else{
+                        return 'toast://未找到接口数据'
+                    }
+                },jkdata);
+                d.push({
+                    title: "搜索",
+                    url: $.toString((searchurl) => {
+                            return input + searchurl;
+                        },searchurl),
+                    desc: "搜你想看的...",
+                    col_type: "input",
+                    extra: {
+                        titleVisible: true
+                    }
+                });
             }
-            
-            var searchurl = $('').lazyRule((data) => {
-                if(data){
-                    /*
-                    return $('hiker://empty#noRecordHistory##noHistory#').rule((name,data) => {
-                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
-                        let ssdata = getSsData(name,data);
-                        setResult(ssdata);
-                    }, input, data);
-                    */
-                    return 'hiker://search?s='+input+'||'+data.url+'&rule='+MY_RULE.title;
-                }else{
-                    return 'toast://未找到接口数据'
-                }
-            },jkdata);
-            d.push({
-                title: "搜索",
-                url: $.toString((searchurl) => {
-                        return input + searchurl;
-                    },searchurl),
-                desc: "搜你想看的...",
-                col_type: "input",
-                extra: {
-                    titleVisible: true
-                }
-            });
         }
     }
 
@@ -837,13 +836,13 @@ function getErData(jkdata) {
     let details1 = '';
     let details2 = '';
     let desc = '...';
+    let arts = [];
+    let conts = [];
     let tabs = [];
     let linecodes = [];
     let parse_api = "";
 
     if(html){
-        let arts = [];
-        let conts = [];
         let actor = "";
         let director = "";
         let area = "";
