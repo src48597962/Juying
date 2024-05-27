@@ -73,103 +73,109 @@ function getYiData(jkdata) {
             let recommends = []; //推荐影片
             const Color = "#3399cc";
             let typeclass = [];
-            try{
-                if(api_type=="XBPQ"){
-                    if(extdata["分类"].indexOf('$')>-1){
-                        let types = extdata["分类"].split('#');
-                        typeclass = types.map((type)=>{
-                            return {
-                                "type_id": type.split('$')[1],
-                                "type_pid": 0,
-                                "type_name": type.split('$')[0]
-                            }
-                        })
-                    }else if(extdata["分类"].indexOf('&')>-1&&extdata["分类值"]){
-                        let typenames = extdata["分类"].split('&');
-                        let typeids = extdata["分类值"].split('&');
-                        for(let i in typeids){
-                            typeclass.push({
-                                "type_id": typeids[i],
-                                "type_pid": 0,
-                                "type_name": typenames[i]
-                            })
-                        }
-                    }
-                }else{
-                    let gethtml = request(classurl, { headers: { 'User-Agent': api_ua }, timeout:5000 });
-                    if (api_type=="v1") {
-                        let typehtml = JSON.parse(gethtml);
-                        let typelist = typehtml.data.list||typehtml.data.typelist;
-                        typeclass = typelist.map((list)=>{
-                            return {
-                                "type_id": list.type_id,
-                                "type_pid": list.type_pid,
-                                "type_name": list.type_name
-                            }
-                        })
-                    } else if (/app|v2/.test(api_type)) {
-                        let typehtml = JSON.parse(gethtml);
-                        let typelist = typehtml.list||typehtml.data;
-                        typeclass = typelist.map((list)=>{
-                            return {
-                                "type_id": list.type_id,
-                                "type_pid": 0,
-                                "type_name": list.type_name
-                            }
-                        })
-                    } else if (api_type=="iptv") {
-                        let type_dict = {
-                            comic: '动漫',
-                            movie: '电影',
-                            tvplay: '电视剧',
-                            tvshow: '综艺',
-                            movie_4k: '4k',
-                            hanguoju: '韩剧',
-                            oumeiju: '欧美剧',
-                            tiyu: '体育'
-                        };
-                        let typehtml = JSON.parse(gethtml);
-                        typeclass = typehtml.map((list)=>{
-                            if(type_dict[list]){
+            if(getMyVar('SrcJu_dianbo$typeclass')){
+                typeclass = storage0.getMyVar('SrcJu_dianbo$typeclass'). typeclass;
+                recommends =  storage0.getMyVar('SrcJu_dianbo$typeclass'). recommends;
+            }else{
+                try{
+                    if(api_type=="XBPQ"){
+                        if(extdata["分类"].indexOf('$')>-1){
+                            let types = extdata["分类"].split('#');
+                            typeclass = types.map((type)=>{
                                 return {
-                                    "type_id": list,
+                                    "type_id": type.split('$')[1],
                                     "type_pid": 0,
-                                    "type_name": type_dict[list]
+                                    "type_name": type.split('$')[0]
                                 }
+                            })
+                        }else if(extdata["分类"].indexOf('&')>-1&&extdata["分类值"]){
+                            let typenames = extdata["分类"].split('&');
+                            let typeids = extdata["分类值"].split('&');
+                            for(let i in typeids){
+                                typeclass.push({
+                                    "type_id": typeids[i],
+                                    "type_pid": 0,
+                                    "type_name": typenames[i]
+                                })
                             }
-                        })
-                        typeclass = typeclass.filter(n => n);
-                    } else if (api_type=="cms") {
-                        if(/<\?xml/.test(gethtml)){
-                            let typelist = pdfa(gethtml,'class&&ty');
+                        }
+                    }else{
+                        let gethtml = request(classurl, { headers: { 'User-Agent': api_ua }, timeout:5000 });
+                        if (api_type=="v1") {
+                            let typehtml = JSON.parse(gethtml);
+                            let typelist = typehtml.data.list||typehtml.data.typelist;
                             typeclass = typelist.map((list)=>{
                                 return {
-                                    "type_id": String(xpath(list,`//ty/@id`)).trim(),
-                                    "type_pid": 0,
-                                    "type_name": String(xpath(list,`//ty/text()`)).trim()
+                                    "type_id": list.type_id,
+                                    "type_pid": list.type_pid,
+                                    "type_name": list.type_name
                                 }
                             })
-                        }else{
+                        } else if (/app|v2/.test(api_type)) {
                             let typehtml = JSON.parse(gethtml);
-                            typeclass = typehtml.class;//分类列表
-                            recommends = typehtml.list;//推荐影片
-                        }
-                        
-                        if(jkdata.categories){
-                            for(var i=0;i<typeclass.length;i++){
-                                if(jkdata.categories.indexOf(typeclass[i].type_name)==-1 && typeclass[i].type_pid>0){
-                                    typeclass.splice(i,1);
-                                    i = i -1;
+                            let typelist = typehtml.list||typehtml.data;
+                            typeclass = typelist.map((list)=>{
+                                return {
+                                    "type_id": list.type_id,
+                                    "type_pid": 0,
+                                    "type_name": list.type_name
+                                }
+                            })
+                        } else if (api_type=="iptv") {
+                            let type_dict = {
+                                comic: '动漫',
+                                movie: '电影',
+                                tvplay: '电视剧',
+                                tvshow: '综艺',
+                                movie_4k: '4k',
+                                hanguoju: '韩剧',
+                                oumeiju: '欧美剧',
+                                tiyu: '体育'
+                            };
+                            let typehtml = JSON.parse(gethtml);
+                            typeclass = typehtml.map((list)=>{
+                                if(type_dict[list]){
+                                    return {
+                                        "type_id": list,
+                                        "type_pid": 0,
+                                        "type_name": type_dict[list]
+                                    }
+                                }
+                            })
+                            typeclass = typeclass.filter(n => n);
+                        } else if (api_type=="cms") {
+                            if(/<\?xml/.test(gethtml)){
+                                let typelist = pdfa(gethtml,'class&&ty');
+                                typeclass = typelist.map((list)=>{
+                                    return {
+                                        "type_id": String(xpath(list,`//ty/@id`)).trim(),
+                                        "type_pid": 0,
+                                        "type_name": String(xpath(list,`//ty/text()`)).trim()
+                                    }
+                                })
+                            }else{
+                                let typehtml = JSON.parse(gethtml);
+                                typeclass = typehtml.class;//分类列表
+                                recommends = typehtml.list;//推荐影片
+                            }
+                            
+                            if(jkdata.categories){
+                                for(var i=0;i<typeclass.length;i++){
+                                    if(jkdata.categories.indexOf(typeclass[i].type_name)==-1 && typeclass[i].type_pid>0){
+                                        typeclass.splice(i,1);
+                                        i = i -1;
+                                    }
                                 }
                             }
+                            
+                        }else {
+                            log('api类型错误')
                         }
-                        
-                    }else {
-                        log('api类型错误')
                     }
+                }catch(e){
+                    log(api_name+'>访问异常，请更换源接口！获取分类失败>'+e.message);
                 }
-            }catch(e){
-                log(api_name+'>访问异常，请更换源接口！获取分类失败>'+e.message);
+                storage0.putMyVar('SrcJu_dianbo$typeclass', {typeclass:typeclass, recommends:recommends});
             }
 
             d.push({
