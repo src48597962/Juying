@@ -194,7 +194,7 @@ function getYiData(jkdata) {
                     d.push({
                         title: cate_id=='tj'?'““””<b><span style="color:' + Color + '">' + '推荐' + '</span></b>':'推荐',
                         url: $('#noLoading#').lazyRule(() => {
-                            putMyVar('SrcJu_dianbo$cate_id', '0');
+                            putMyVar('SrcJu_dianbo$cate_id', 'tj');
                             refreshPage(true);
                             return "hiker://empty";
                         }),
