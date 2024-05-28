@@ -1128,7 +1128,7 @@ function getErData(jkdata) {
             dqnf = year?'\n年代：' + year:''
         }
         details1 = details1?details1:director.substring(0, director.length<10?director.length:10) + '\n' + actor.substring(0, actor.length<10||dqnf==""?actor.length:10) + dqnf;
-        details2 = details2?details2:remarks.trim() + '\n' + pubdate.trim();
+        details2 = details2?details2:remarks + '\n' + pubdate;
         details1 = details1.replace(/&ldquo;/g,'“').replace(/&rdquo;/g,'”').replace(/&middot;/g,'·').replace(/&hellip;/g,'…').replace(/&nbsp;|♥/g,' ');
         details2 = details2.replace(/&ldquo;/g,'“').replace(/&rdquo;/g,'”').replace(/&middot;/g,'·').replace(/&hellip;/g,'…').replace(/&nbsp;|♥/g,' ');
         desc = desc || '...';
