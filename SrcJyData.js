@@ -571,11 +571,12 @@ function getSsData(name, jkdata) {
     } else if (api_type=="xpath"||api_type=="biubiu"||api_type=="XBPQ") {
         extdata = extDataCache(jkdata)
         if($.type(extdata)=='object'){
-
-            //let host = extdata["主页url"];
-            //classurl = extdata["分类"];
-            //listurl = /^http/.test(extdata["分类url"])?extdata["分类url"].split(';;')[0].split('[')[0]:host + extdata["分类url"].split(';;')[0].split('[')[0];
-            //vodurlhead = getHome(listurl);
+            if(api_type=="XBPQ"){
+                extdata["搜索url"] = extdata["搜索url"] || "/index.php/ajax/suggest?mid=1&wd={wd}&limit=500";
+                ssurl = extdata["搜索url"].replace('{wd}',name).replace('{pg}','1');
+                ssurl = /^http/.test(ssurl)?ssurl:extdata["主页url"]+ssurl;
+                vodurlhead = getHome(listurl);
+            }
         }
     } else {
         log('api类型错误')
@@ -776,9 +777,6 @@ function getSsData(name, jkdata) {
         }
     }else if(api_type=="XBPQ"){
         try{
-            extdata["搜索url"] = extdata["搜索url"] || "/index.php/ajax/suggest?mid=1&wd={wd}&limit=500";
-            ssurl = extdata["搜索url"].replace('{wd}',name).replace('{pg}','1');
-            ssurl = /^http/.test(ssurl)?ssurl:extdata["主页url"]+ssurl;
             if(extdata["搜索模式"]=="0"&&extdata["搜索后缀"]){
                 gethtml = getHtmlCode(ssurl,api_ua,5000);
                 let html = JSON.parse(gethtml);
