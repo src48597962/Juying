@@ -376,6 +376,20 @@ function getYiData(jkdata) {
                         titleVisible: true
                     }
                 });
+                d.push({
+                    title: "搜索",
+                    url: $.toString((jkdata) => {
+                            return $('hiker://empty#noRecordHistory##noHistory#').rule((input,jkdata) => {
+                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
+                                getSsData(input, jkdata);
+                            }, input, jkdata)
+                        },jkdata),
+                    desc: "测试",
+                    col_type: "input",
+                    extra: {
+                        titleVisible: true
+                    }
+                });
             }
         }
     }
