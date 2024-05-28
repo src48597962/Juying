@@ -99,8 +99,6 @@ function dianboerji() {
         let markData = {surl: jkdata.url, url: url, data: erdata}
         writeFile(cacheDataFile, JSON.stringify(markData));
     }
-    log(erdata);
-
 
     let details1 = erdata.details1;
     let details2 = erdata.details2;
@@ -117,7 +115,7 @@ function dianboerji() {
         }
     });
 
-
+    // 片源标识数组
     let linecodes = erdata.linecodes;
     
     // 影片标识
@@ -207,7 +205,7 @@ function dianboerji() {
         }
     }
     setTabs(erdata.tabs, lineId);
-    log(erdata.tabs);
+
     //选集部份
     function setLists(lists, index) {
         let type = jkdata.type;
