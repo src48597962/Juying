@@ -48,12 +48,13 @@ function sousuo() {
                 let yxdatalist = datalist.filter(it=>{
                     return !it.stop && it.searchable!=0;
                 });
+                log(yxdatalist.length);
                 if(surl){
                     yxdatalist = yxdatalist.filter(it=>{
                         return it.url==surl;
                     });
                 }
-
+                log(yxdatalist.length);
                 let data = [];
                 yxdatalist.forEach(it=>{
                     data.push({
