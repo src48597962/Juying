@@ -380,8 +380,28 @@ function getYiData(jkdata) {
                     title: "搜索",
                     url: $.toString((jkdata) => {
                             return $('hiker://empty#noRecordHistory##noHistory#').rule((input,jkdata) => {
+                                
                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
-                                getSsData(input, jkdata);
+                                let ssdata = getSsData('除三害', jkdata);
+                                ssdata = ssdata.map(it => {
+                                    return {
+                                        title: it.vodname,
+                                        desc: it.voddesc,
+                                        content: it.vodcontent,
+                                        pic_url: it.vodpic,
+                                        url: $("hiker://empty#immersiveTheme##autoCache#").rule(() => {
+                                            require(config.依赖);
+                                            dianboerji()
+                                        }),
+                                        extra: {
+                                            url: it.vodurl,
+                                            pic: it.vodpic,
+                                            pageTitle: it.vodname,
+                                            data: jkdata
+                                        }
+                                    }
+                                })
+                                setResult(ssdata);
                             }, input, jkdata)
                         },jkdata),
                     desc: "测试",
