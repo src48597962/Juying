@@ -120,7 +120,7 @@ function getYiData(jkdata) {
                                         itvalue.forEach(value=>{
                                             values.push(value.n+'$'+value.v)
                                         })
-                                        if(itit.key=='cateId'){
+                                        if(itit.key=='cateId' || itit.key=='class'){
                                             类型.push(values.join('#'));
                                         }else if(itit.key=='area'){
                                             地区.push(values.join('#'));
@@ -322,12 +322,11 @@ function getYiData(jkdata) {
                         });
                     }
                     if(排序.length>0 && 排序[index]){
-                        let 排序默认值= 排序[index].split('#')[0];
                         排序[index].split('#').forEach(it=>{
                             let itname = it.split('$')[0];
                             let itid = it.split('$')[1];
                             d.push({
-                                title: (sort_id==itid || 排序默认值==it)?'““””<b><span style="color:' + Color + '">' + itname + '</span></b>':itname,
+                                title: sort_id==itid?'““””<b><span style="color:' + Color + '">' + itname + '</span></b>':itname,
                                 url: $('#noLoading#').lazyRule((itid) => {
                                     putMyVar('SrcJu_dianbo$排序', itid);
                                     refreshPage(true);
