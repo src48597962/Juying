@@ -464,7 +464,8 @@ function getYiData(jkdata) {
     if(lists.length==0){
         d.push({
             title: '接口访问异常，请更换接口！',
-            url: '#noHistory#hiker://empty',
+            desc: '点击访问原网页',
+            url: MY_URL,
             col_type: 'text_center_1'
         }); 
     }else{
