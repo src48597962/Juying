@@ -414,6 +414,38 @@ function getYiData(jkdata) {
             if(api_type=="XBPQ"){
                 extdata["二次截取"] = extdata["二次截取"] || (gethtml.indexOf(`<ul class="stui-vodlist`)>-1?`<ul class="stui-vodlist&&</ul>`:gethtml.indexOf(`<ul class="myui-vodlist`)>-1?`<ul class="myui-vodlist&&</ul>`:"");
                 if(extdata["二次截取"]){
+                    gethtml = gethtml.split(extdata["二次截取"].split('&&')[0])[1].split(extdata["二次截取"].split('&&')[1])[0];
+                }
+                extdata["链接"] = extdata["链接"] || `href="&&"`;
+                extdata["标题"] = extdata["标题"] || `title="&&"`;
+                extdata["数组"] = extdata["数组"] || `<a &&</a>`;
+                let jklist = gethtml.match(new RegExp(extdata["数组"].replace('&&','((?:.|[\r\n])*?)'), 'g'));
+                jklist.forEach(item=>{
+                    if(!extdata["图片"]){
+                        if(item.indexOf('original=')>-1){
+                            extdata["图片"] = `original="&&"`;
+                        }else if(item.indexOf('<img src=')>-1){
+                            extdata["图片"] = `<img src="&&"`;
+                        }
+                    };
+                    if(extdata["图片"]&&item.indexOf(extdata["图片"].split("&&")[0])>-1){
+                        let id = item.split(extdata["链接"].split('&&')[0])[1].split(extdata["链接"].split('&&')[1])[0];
+                        let name = item.split(extdata["标题"].split('&&')[0])[1].split(extdata["标题"].split('&&')[1])[0];
+                        let pic = "";
+                        try{
+                            pic = item.split(extdata["图片"].split('&&')[0])[1].split(extdata["图片"].split('&&')[1])[0];
+                        }catch(e){}
+                        let note = "";
+                        try{
+                            note = item.split(extdata["副标题"].split('&&')[0])[1].split(extdata["副标题"].split('&&')[1])[0];
+                        }catch(e){}
+                        let arr = {"vod_id":id,"vod_name":name,"vod_remarks":note,"vod_pic":pic};
+                        lists.push(arr);
+                    }
+                })
+                /*
+                extdata["二次截取"] = extdata["二次截取"] || (gethtml.indexOf(`<ul class="stui-vodlist`)>-1?`<ul class="stui-vodlist&&</ul>`:gethtml.indexOf(`<ul class="myui-vodlist`)>-1?`<ul class="myui-vodlist&&</ul>`:"");
+                if(extdata["二次截取"]){
                     gethtml = getBetweenStr(gethtml, extdata["二次截取"]);
                 }
                 extdata["链接"] = extdata["链接"] || `href="&&"`;
@@ -443,6 +475,7 @@ function getYiData(jkdata) {
                         lists.push(arr);
                     }
                 })
+                */
             }else{
                 let json;
                 if(/cms/.test(api_type)&&/<\?xml/.test(gethtml)){
