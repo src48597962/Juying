@@ -589,7 +589,7 @@ function getSsData(name, jkdata) {
                 extdata["搜索url"] = extdata["搜索url"] || "/index.php/ajax/suggest?mid=1&wd={wd}&limit=500";
                 ssurl = extdata["搜索url"].replace('{wd}',name).replace('{pg}','1');
                 ssurl = /^http/.test(ssurl)?ssurl:extdata["主页url"]+ssurl;
-                vodurlhead = getHome(listurl);
+                vodurlhead = getHome(ssurl);
             }
         }
     } else {
