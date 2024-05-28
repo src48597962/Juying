@@ -266,6 +266,8 @@ function getYiData(jkdata) {
                 type_id = 筛选?type_id:getMyVar('SrcJu_dianbo$类型', (api_type=='cms'&&类型.length>0) ? 类型[index].split('#')[0].split('$')[1] : cate_id);
                 putMyVar('SrcJu_dianbo$类型', type_id);
                 if(fold=='1' || (api_type=='cms' && cate_id!='tj')){
+                    log(类型);
+                    log(类型[0]);
                     if(类型.length>0 && 类型[0]){
                         类型[index].split('#').forEach(it=>{
                             let itname = it.split('$')[0];
