@@ -25,12 +25,12 @@ function extDataCache(jkdata) {
     return {};
 }
 //截取中间字符
-function getContentBetween(str, prefix, suffix) {
-    log(prefix);
-    log(suffix);
+function getBetweenStr(str, condition) {
+    const prefix = condition.split('&&')[0];
+    const suffix = condition.split('&&')[1];
     const regex = new RegExp(prefix + '(.*?)' + suffix, 's'); // 's' 使 . 匹配换行符
     const match = str.match(regex);
-    return match ? match[1] : '';
+    return match ? match[1].replace(/<\/?.+?\/?>/g,'') : '';
 }
 // 获取一级数据
 function getYiData(jkdata) {
@@ -1074,6 +1074,7 @@ function getErData(jkdata) {
                     let arttitle = artlist[i].split(extdata["线路数组"].split('&&')[0])[1].split(extdata["线路数组"].split('&&')[1])[0].split(extdata["线路标题"].split('&&')[0])[1].split(extdata["线路标题"].split('&&')[1])[0];
                     arts[i] = arttitle.replace(/<\/?.+?\/?>/g,'');
                 }
+                getsm = "获取选集";
                 let conthtml = html;
                 if(extdata["播放二次截取"]){
                     conthtml = conthtml.split(extdata["播放二次截取"].split('&&')[0])[1].split(extdata["播放二次截取"].split('&&')[1])[0];
@@ -1090,12 +1091,7 @@ function getErData(jkdata) {
                     conts.push(cont.join("#"))
                 }
                 getsm = "获取副标";
-                let strs = extdata["主演"].split('&&');
-                log(getContentBetween(html, strs[0], strs[1]));
-                //log(extdata["影片类型"].split('&&')[0]);
-                //log(html.split(extdata["影片类型"].split('&&')[0])[1]);
-                //log(html.split(extdata["影片类型"].split('&&')[0])[1].split(extdata["影片类型"].split('&&')[1])[0].replace(/<\/?.+?\/?>/g,''));
-
+                log(getBetweenStr(html, extdata["副标题"]));
                 remarks = extdata["影片类型"]?html.split(extdata["影片类型"].split('&&')[0])[1].split(extdata["影片类型"].split('&&')[1])[0].replace(/<\/?.+?\/?>/g,''):"";
                 getsm = "获取主演";
                 actor = html.split(extdata["主演"].split('&&')[0])[1].split(extdata["主演"].split('&&')[1])[0].replace(/<\/?.+?\/?>/g,'');
