@@ -26,9 +26,11 @@ function extDataCache(jkdata) {
 }
 //截取中间字符
 function getContentBetween(str, prefix, suffix) {
-  const regex = new RegExp(prefix + '(.*?)' + suffix, 's'); // 's' 使 . 匹配换行符
-  const match = str.match(regex);
-  return match ? match[1] : '';
+    log(prefix);
+    log(suffix);
+    const regex = new RegExp(prefix + '(.*?)' + suffix, 's'); // 's' 使 . 匹配换行符
+    const match = str.match(regex);
+    return match ? match[1] : '';
 }
 // 获取一级数据
 function getYiData(jkdata) {
