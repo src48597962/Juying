@@ -351,8 +351,8 @@ function getYiData(jkdata) {
                         });
                     }
                 }
-                let searchurl = $('').lazyRule((data) => {
-                    if(data){
+                let searchurl = $('').lazyRule((jkdata) => {
+                    if(jkdata){
                         /*
                         return $('hiker://empty#noRecordHistory##noHistory#').rule((name,data) => {
                             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
@@ -360,7 +360,8 @@ function getYiData(jkdata) {
                             setResult(ssdata);
                         }, input, data);
                         */
-                        return 'hiker://search?s='+input+'||'+data.url+'&rule='+MY_RULE.title;
+                        log(jkdata.url);
+                        return 'hiker://search?s='+input+'||'+jkdata.url+'&rule='+MY_RULE.title;
                     }else{
                         return 'toast://未找到接口数据'
                     }
