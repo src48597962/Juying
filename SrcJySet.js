@@ -1817,10 +1817,13 @@ function Resourceimport(input,importtype){
                     arr = { "name": obj.name, "url": obj.api, "type": "cms", "categories": obj.categories};
                 }else{
                     let extfile = obj.ext;
-                    if(/^clan:/.test(extfile)){
-                        extfile = extfile.replace("clan://TVBox/",input.match(/file.*\//)[0]);
-                    }else if(/^./.test(extfile)){
-                        extfile = input.match(/http(s)?:\/\/.*\//)[0]+extfile.replace("./","");
+                    if($.type(extfile)=='string'){
+                        if(/^clan:/.test(extfile)){
+                            extfile = extfile.replace("clan://TVBox/",input.match(/file.*\//)[0]);
+                        }else if(/^./.test(extfile)){
+                            extfile = input.match(/http(s)?:\/\/.*\//)[0]+extfile.replace("./","");
+                        }
+                        log($.type(extfile));
                     }
                     
                     if(/^csp_XBiubiu/.test(obj.api)){
@@ -1837,8 +1840,11 @@ function Resourceimport(input,importtype){
 
                     if(arr){
                         let urlfile;
-                        if(/^file/.test(extfile)){
-                            urlfile = extfile;
+                        if($.type(extfile)=='object'){
+                            urlfile = arr.type + '_' + arr.name;
+                            writeFile(urlfile, content);
+                        }else if(/^file/.test(extfile)){
+                            urlfile = 'hiker://files/' + extfile.split('/files/Documents/')[1];
                         }else if(/^http/.test(extfile)){
                             try{
                                 let content = fetch(extfile, {timeout:2000});
@@ -1857,7 +1863,7 @@ function Resourceimport(input,importtype){
                         }
                     }
                 }
-                if(arr){
+                if(arr && arr.url){
                     arr['searchable'] = obj.searchable;
                     arr['filterable'] = obj.filterable;
                     urls.push(arr);
