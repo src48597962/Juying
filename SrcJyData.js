@@ -373,7 +373,7 @@ function getYiData(jkdata) {
     if(listurl && lists.length==0){
         try{
             if(api_type=="XBPQ"){
-                MY_URL = MY_URL.replace('/lang/{lang}','');
+                MY_URL = listurl.replace('/lang/{lang}','');
                 if(!type_id){
                     MY_URL = MY_URL.replace('/class/{class}','');
                 }
@@ -386,7 +386,7 @@ function getYiData(jkdata) {
                 if(!sort_id){
                     MY_URL = MY_URL.replace('/by/{by}','');
                 }
-                MY_URL = listurl.replace('{catePg}',extdata["起始页"]?MY_PAGE>extdata["起始页"]?MY_PAGE:extdata["起始页"]:MY_PAGE).replace('{year}', year_id).replace('{area}', area_id).replace('{by}', sort_id).replace('{class}', type_id).replace('{cateId}', cate_id);
+                MY_URL = MY_URL.replace('{catePg}',extdata["起始页"]?MY_PAGE>extdata["起始页"]?MY_PAGE:extdata["起始页"]:MY_PAGE).replace('{year}', year_id).replace('{area}', area_id).replace('{by}', sort_id).replace('{class}', type_id).replace('{cateId}', cate_id);
             }else{
                 MY_URL = listurl + MY_PAGE;
                 if(api_type=="v2"||api_type=="app"){
