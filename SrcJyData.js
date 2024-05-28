@@ -543,7 +543,7 @@ function getSsData(name, jkdata) {
     let api_ua = jkdata.ua||"MOBILE_UA";
     api_ua = api_ua=="MOBILE_UA"?MOBILE_UA:api_ua=="PC_UA"?PC_UA:api_ua;
 
-    let vodurlhead,ssurl,listnode;
+    let vodurlhead,ssurl,listnode,extdata;
     if (api_type=="v1") {
         let date = new Date();
         let mm = date.getMonth()+1;
@@ -569,7 +569,13 @@ function getSsData(name, jkdata) {
         ssurl = api_url + '?ac=videolist&wd='+name;
         listnode = "html.list";
     } else if (api_type=="xpath"||api_type=="biubiu"||api_type=="XBPQ") {
-        var jsondata = obj.data;
+        extdata = extDataCache(jkdata)
+        if($.type(extdata)=='object'){
+            //let host = extdata["主页url"];
+            //classurl = extdata["分类"];
+            //listurl = /^http/.test(extdata["分类url"])?extdata["分类url"].split(';;')[0].split('[')[0]:host + extdata["分类url"].split(';;')[0].split('[')[0];
+            //vodurlhead = getHome(listurl);
+        }
     } else {
         log('api类型错误')
     }
@@ -686,14 +692,14 @@ function getSsData(name, jkdata) {
     }else if(api_type=="xpath"||api_type=="biubiu"){
         try {
             if(api_type=="xpath"){
-                var ssurl = jsondata.searchUrl.replace('{wd}',name);
-                if(jsondata.scVodNode=="json:list"){
+                ssurl = extdata.searchUrl.replace('{wd}',name);
+                if(extdata.scVodNode=="json:list"){
                     gethtml = getHtmlCode(ssurl,api_ua,5000);
                     let json = JSON.parse(gethtml);
                     lists = json.list||[];
                     lists.forEach(item => {
-                        if(jsondata.scVodId){
-                            item.id = item[jsondata.scVodId];
+                        if(extdata.scVodId){
+                            item.id = item[extdata.scVodId];
                         }
                     })
                 }else{
@@ -709,18 +715,18 @@ function getSsData(name, jkdata) {
                     }else{
                         gethtml = getHtmlCode(ssurl,api_ua,5000);
                     }
-                    let title = xpathArray(gethtml, jsondata.scVodNode+jsondata.scVodName);
-                    let href = xpathArray(gethtml, jsondata.scVodNode+jsondata.scVodId);
-                    let img = xpathArray(gethtml, jsondata.scVodNode+jsondata.scVodImg);
-                    let mark = xpathArray(gethtml, jsondata.scVodNode+jsondata.scVodMark)||"";
+                    let title = xpathArray(gethtml, extdata.scVodNode+extdata.scVodName);
+                    let href = xpathArray(gethtml, extdata.scVodNode+extdata.scVodId);
+                    let img = xpathArray(gethtml, extdata.scVodNode+extdata.scVodImg);
+                    let mark = xpathArray(gethtml, extdata.scVodNode+extdata.scVodMark)||"";
                     for(let j in title){
-                        lists.push({"id":/^http/.test(href[j])||/\{vid}$/.test(jsondata.dtUrl)?href[j]:href[j].replace(/\/.*?\/|\.html/g,''),"name":title[j],"pic":img[j],"desc":mark[j]})
+                        lists.push({"id":/^http/.test(href[j])||/\{vid}$/.test(extdata.dtUrl)?href[j]:href[j].replace(/\/.*?\/|\.html/g,''),"name":title[j],"pic":img[j],"desc":mark[j]})
                     }
                 }
-                var ssvodurl = `jsondata.dtUrl.replace('{vid}', list.id)`;
+                var ssvodurl = `extdata.dtUrl.replace('{vid}', list.id)`;
             }else{
-                var ssurl = jsondata.url+jsondata.sousuoqian+name+jsondata.sousuohou;
-                if(jsondata.ssmoshi=="0"){
+                ssurl = extdata.url+extdata.sousuoqian+name+extdata.sousuohou;
+                if(extdata.ssmoshi=="0"){
                     gethtml = getHtmlCode(ssurl,api_ua,5000);
                     let html = JSON.parse(gethtml);
                     lists = html.list||[];
@@ -738,19 +744,19 @@ function getSsData(name, jkdata) {
                     }else{
                         gethtml = getHtmlCode(ssurl,api_ua,5000);
                     }
-                    let sslist = gethtml.split(jsondata.jiequshuzuqian.replace(/\\/g,""));
+                    let sslist = gethtml.split(extdata.jiequshuzuqian.replace(/\\/g,""));
                     sslist.splice(0,1);
                     for (let i = 0; i < sslist.length; i++) {
-                        sslist[i] = sslist[i].split(jsondata.jiequshuzuhou.replace(/\\/g,""))[0];
-                        let title = sslist[i].split(jsondata.biaotiqian.replace(/\\/g,""))[1].split(jsondata.biaotihou.replace(/\\/g,""))[0];
-                        let href = sslist[i].split(jsondata.lianjieqian.replace(/\\/g,""))[1].split(jsondata.lianjiehou.replace(/\\/g,""))[0].replace(jsondata.sousuohouzhui.replace(/\\/g,""),"");//.replace('.html','')
-                        let img = sslist[i].split(jsondata.tupianqian.replace(/\\/g,""))[1].split(jsondata.tupianhou.replace(/\\/g,""))[0];
+                        sslist[i] = sslist[i].split(extdata.jiequshuzuhou.replace(/\\/g,""))[0];
+                        let title = sslist[i].split(extdata.biaotiqian.replace(/\\/g,""))[1].split(extdata.biaotihou.replace(/\\/g,""))[0];
+                        let href = sslist[i].split(extdata.lianjieqian.replace(/\\/g,""))[1].split(extdata.lianjiehou.replace(/\\/g,""))[0].replace(extdata.sousuohouzhui.replace(/\\/g,""),"");//.replace('.html','')
+                        let img = sslist[i].split(extdata.tupianqian.replace(/\\/g,""))[1].split(extdata.tupianhou.replace(/\\/g,""))[0];
                         let mark = "";
                         lists.push({"id":href,"name":title,"pic":img,"desc":mark})
                     }
-                    if(jsondata.sousuohouzhui=="/vod/"){jsondata.sousuohouzhui = "/index.php/vod/detail/id/"}
+                    if(extdata.sousuohouzhui=="/vod/"){extdata.sousuohouzhui = "/index.php/vod/detail/id/"}
                 }
-                var ssvodurl = `jsondata.url+jsondata.sousuohouzhui+list.id`;//+'.html'
+                var ssvodurl = `extdata.url+extdata.sousuohouzhui+list.id`;//+'.html'
             }
             lists = lists.map(list=>{
                 let vodname = list.name;
@@ -769,48 +775,42 @@ function getSsData(name, jkdata) {
         }
     }else if(api_type=="XBPQ"){
         try{
-            let jkfile = fetchCache(jsondata.ext,72);
-            if(jkfile){
-                eval("var jkdata = " + jkfile);
-                jkdata["搜索url"] = jkdata["搜索url"] || "/index.php/ajax/suggest?mid=1&wd={wd}&limit=500";
-                var ssurl = jkdata["搜索url"].replace('{wd}',name).replace('{pg}','1');
-                ssurl = /^http/.test(ssurl)?ssurl:jkdata["主页url"]+ssurl;
-                if(jkdata["搜索模式"]=="0"&&jkdata["搜索后缀"]){
-                    gethtml = getHtmlCode(ssurl,api_ua,5000);
-                    let html = JSON.parse(gethtml);
-                    lists = html.list||[];
-                    var ssvodurl = `jkdata["主页url"] + jkdata["搜索后缀"] + list.id + '.html'`;
-                }else{
-                    let sstype = ssurl.indexOf(';post')>-1?"post":"get";
-                    if(sstype == "post"){
-                        let postcs = ssurl.split(';')[2];
-                        ssurl = ssurl.split(';')[0];
-                        gethtml = request(ssurl, { headers: { 'User-Agent': api_ua }, timeout:5000, method: 'POST', body: postcs  });
-                    }else{
-                        gethtml = getHtmlCode(ssurl,api_ua,5000);
-                    }
-                    let sslist = gethtml.match(new RegExp(jkdata["搜索数组"].replace('&&','((?:.|[\r\n])*?)'), 'g'));
-                    for (let i = 0; i < sslist.length; i++) {
-                        let title = sslist[i].split(jkdata["搜索标题"].split('&&')[0])[1].split(jkdata["搜索标题"].split('&&')[1])[0];
-                        let href = sslist[i].split(jkdata["搜索链接"].split('&&')[0])[1].split(jkdata["搜索链接"].split('&&')[1])[0];
-                        let img = sslist[i].split(jkdata["搜索图片"].split('&&')[0])[1].split(jkdata["搜索图片"].split('&&')[1])[0];
-                        let mark = sslist[i].split(jkdata["搜索副标题"].split('&&')[0])[1].split(jkdata["搜索副标题"].split('&&')[1])[0];
-                        lists.push({"id":/^http/.test(href)?href:jkdata["主页url"]+href,"name":title,"pic":img,"desc":mark})
-                    }
-                    var ssvodurl = "";
-                }
-                lists = lists.map(list=>{
-                    let vodurl = ssvodurl?eval(ssvodurl):list.id;
-                    return {
-                        vodname: list.name,
-                        vodpic: list.pic||"",
-                        voddesc: list.desc||"",
-                        vodurl: vodurl
-                    }
-                })
+            extdata["搜索url"] = extdata["搜索url"] || "/index.php/ajax/suggest?mid=1&wd={wd}&limit=500";
+            ssurl = extdata["搜索url"].replace('{wd}',name).replace('{pg}','1');
+            ssurl = /^http/.test(ssurl)?ssurl:extdata["主页url"]+ssurl;
+            if(extdata["搜索模式"]=="0"&&extdata["搜索后缀"]){
+                gethtml = getHtmlCode(ssurl,api_ua,5000);
+                let html = JSON.parse(gethtml);
+                lists = html.list||[];
+                var ssvodurl = `extdata["主页url"] + extdata["搜索后缀"] + list.id + '.html'`;
             }else{
-                lists = [];
+                let sstype = ssurl.indexOf(';post')>-1?"post":"get";
+                if(sstype == "post"){
+                    let postcs = ssurl.split(';')[2];
+                    ssurl = ssurl.split(';')[0];
+                    gethtml = request(ssurl, { headers: { 'User-Agent': api_ua }, timeout:5000, method: 'POST', body: postcs  });
+                }else{
+                    gethtml = getHtmlCode(ssurl,api_ua,5000);
+                }
+                let sslist = gethtml.match(new RegExp(extdata["搜索数组"].replace('&&','((?:.|[\r\n])*?)'), 'g'));
+                for (let i = 0; i < sslist.length; i++) {
+                    let title = sslist[i].split(extdata["搜索标题"].split('&&')[0])[1].split(extdata["搜索标题"].split('&&')[1])[0];
+                    let href = sslist[i].split(extdata["搜索链接"].split('&&')[0])[1].split(extdata["搜索链接"].split('&&')[1])[0];
+                    let img = sslist[i].split(extdata["搜索图片"].split('&&')[0])[1].split(extdata["搜索图片"].split('&&')[1])[0];
+                    let mark = sslist[i].split(extdata["搜索副标题"].split('&&')[0])[1].split(extdata["搜索副标题"].split('&&')[1])[0];
+                    lists.push({"id":/^http/.test(href)?href:extdata["主页url"]+href,"name":title,"pic":img,"desc":mark})
+                }
+                var ssvodurl = "";
             }
+            lists = lists.map(list=>{
+                let vodurl = ssvodurl?eval(ssvodurl):list.id;
+                return {
+                    vodname: list.name,
+                    vodpic: list.pic||"",
+                    voddesc: list.desc||"",
+                    vodurl: vodurl
+                }
+            })
         }catch(e){
             log(e.message);
         }
