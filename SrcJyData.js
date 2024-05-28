@@ -377,40 +377,6 @@ function getYiData(jkdata) {
                         titleVisible: true
                     }
                 });
-                d.push({
-                    title: "搜索",
-                    url: $.toString((jkdata) => {
-                            return $('hiker://empty#noRecordHistory##noHistory#').rule((input,jkdata) => {
-                                
-                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
-                                let ssdata = getSsData('除三害', jkdata);
-                                ssdata = ssdata.map(it => {
-                                    return {
-                                        title: it.vodname,
-                                        desc: it.voddesc,
-                                        content: it.vodcontent,
-                                        pic_url: it.vodpic,
-                                        url: $("hiker://empty#immersiveTheme##autoCache#").rule(() => {
-                                            require(config.依赖);
-                                            dianboerji()
-                                        }),
-                                        extra: {
-                                            url: it.vodurl,
-                                            pic: it.vodpic,
-                                            pageTitle: it.vodname,
-                                            data: jkdata
-                                        }
-                                    }
-                                })
-                                setResult(ssdata);
-                            }, input, jkdata)
-                        },jkdata),
-                    desc: "测试",
-                    col_type: "input",
-                    extra: {
-                        titleVisible: true
-                    }
-                });
             }
         }
     }
@@ -828,11 +794,11 @@ function getSsData(name, jkdata) {
                 }
                 let sslist = gethtml.match(new RegExp(extdata["搜索数组"].replace('&&','((?:.|[\r\n])*?)'), 'g'));
                 for (let i = 0; i < sslist.length; i++) {
-                    let title = sslist[i].split(extdata["搜索标题"].split('&&')[0])[1].split(extdata["搜索标题"].split('&&')[1])[0];
-                    let href = sslist[i].split(extdata["搜索链接"].split('&&')[0])[1].split(extdata["搜索链接"].split('&&')[1])[0];
-                    let img = sslist[i].split(extdata["搜索图片"].split('&&')[0])[1].split(extdata["搜索图片"].split('&&')[1])[0];
-                    let mark = sslist[i].split(extdata["搜索副标题"].split('&&')[0])[1].split(extdata["搜索副标题"].split('&&')[1])[0];
-                    lists.push({"id":/^http/.test(href)?href:extdata["主页url"]+href,"name":title,"pic":img,"desc":mark})
+                    let title = getBetweenStr(sslist[i], extdata["搜索标题"]);//sslist[i].split(extdata["搜索标题"].split('&&')[0])[1].split(extdata["搜索标题"].split('&&')[1])[0];
+                    let href = getBetweenStr(sslist[i], extdata["搜索链接"]);//sslist[i].split(extdata["搜索链接"].split('&&')[0])[1].split(extdata["搜索链接"].split('&&')[1])[0];
+                    let img = getBetweenStr(sslist[i], extdata["搜索图片"]);//sslist[i].split(extdata["搜索图片"].split('&&')[0])[1].split(extdata["搜索图片"].split('&&')[1])[0];
+                    let mark = getBetweenStr(sslist[i], extdata["搜索副标题"]);//sslist[i].split(extdata["搜索副标题"].split('&&')[0])[1].split(extdata["搜索副标题"].split('&&')[1])[0];
+                    lists.push({"id":/^http/.test(href)?href:vodurlhead+href,"name":title,"pic":img,"desc":mark})
                 }
                 var ssvodurl = "";
             }
