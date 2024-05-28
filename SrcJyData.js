@@ -69,7 +69,7 @@ function getYiData(jkdata) {
             if($.type(extdata)=='object'){
                 let host = extdata["主页url"];
                 classurl = extdata["分类"];
-                listurl = /^http/.test(extdata["分类url"])?extdata["分类url"]:host + extdata["分类url"];
+                listurl = /^http/.test(extdata["分类url"])?extdata["分类url"].split(';;')[0]:host + extdata["分类url"].split(';;')[0];
             }
         } else {
             log('api类型错误')
@@ -371,7 +371,7 @@ function getYiData(jkdata) {
     if(listurl && lists.length==0){
         try{
             if(api_type=="XBPQ"){
-                MY_URL = listurl.replace('{catePg}',extdata["起始页"]?MY_PAGE>extdata["起始页"]?MY_PAGE:"":MY_PAGE).replace('{cateId}', type_id);
+                MY_URL = listurl.replace('{catePg}',extdata["起始页"]?MY_PAGE>extdata["起始页"]?MY_PAGE:"":MY_PAGE).replace('{year}', year_id).replace('{area}', area_id).replace('{by}', sort_id).replace('{class}', type_id).replace('{cateId}', cate_id).replace('{lang}', '');
             }else{
                 MY_URL = listurl + MY_PAGE;
                 if(api_type=="v2"||api_type=="app"){
@@ -384,6 +384,7 @@ function getYiData(jkdata) {
                     MY_URL = MY_URL + '&t=' + type_id;
                 }
             }
+            log(MY_URL);
 
             let gethtml = request(MY_URL, { headers: { 'User-Agent': api_ua }, timeout:5000 });
             if(api_type=="XBPQ"){
