@@ -187,16 +187,20 @@ function getYiData(jkdata) {
                                         }
                                     }
                                 }
+                                log(typelist);
                                 typelist.forEach((it)=>{
                                     if(it.type_pid==0){
                                         分类.push(it.type_name+'$'+it.type_id);
                                         let values = [];
                                         typelist.forEach((itit)=>{
                                             if(itit.type_pid==it.type_id){
+                                                log(itit);
                                                 values.push(itit.type_name+'$'+itit.type_id);
                                             }
                                         })
                                         类型.push(values.join('#'));
+
+                                        log(values.join('#'));
                                     }
                                 })
                             }
