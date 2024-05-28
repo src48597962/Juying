@@ -1864,7 +1864,6 @@ function Resourceimport(input,importtype){
                 }
                 if(arr && arr.url){
                     arr['searchable'] = obj.searchable;
-                    arr['filterable'] = obj.filterable;
                     urls.push(arr);
                 }
                 return 1;
