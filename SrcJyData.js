@@ -414,7 +414,7 @@ function getYiData(jkdata) {
             if(api_type=="XBPQ"){
                 extdata["二次截取"] = extdata["二次截取"] || (gethtml.indexOf(`<ul class="stui-vodlist`)>-1?`<ul class="stui-vodlist&&</ul>`:gethtml.indexOf(`<ul class="myui-vodlist`)>-1?`<ul class="myui-vodlist&&</ul>`:"");
                 if(extdata["二次截取"]){
-                    gethtml = gethtml.split(extdata["二次截取"].split('&&')[0])[1].split(extdata["二次截取"].split('&&')[1])[0];
+                    gethtml = getBetweenStr(gethtml, extdata["二次截取"]);
                 }
                 extdata["链接"] = extdata["链接"] || `href="&&"`;
                 extdata["标题"] = extdata["标题"] || `title="&&"`;
@@ -429,15 +429,15 @@ function getYiData(jkdata) {
                         }
                     };
                     if(extdata["图片"]&&item.indexOf(extdata["图片"].split("&&")[0])>-1){
-                        let id = item.split(extdata["链接"].split('&&')[0])[1].split(extdata["链接"].split('&&')[1])[0];
-                        let name = item.split(extdata["标题"].split('&&')[0])[1].split(extdata["标题"].split('&&')[1])[0];
+                        let id = getBetweenStr(item, extdata["链接"]);
+                        let name = getBetweenStr(item, extdata["标题"]);
                         let pic = "";
                         try{
-                            pic = item.split(extdata["图片"].split('&&')[0])[1].split(extdata["图片"].split('&&')[1])[0];
+                            pic = getBetweenStr(item, extdata["图片"]);
                         }catch(e){}
                         let note = "";
                         try{
-                            note = item.split(extdata["副标题"].split('&&')[0])[1].split(extdata["副标题"].split('&&')[1])[0];
+                            note = getBetweenStr(item, extdata["副标题"]);
                         }catch(e){}
                         let arr = {"vod_id":id,"vod_name":name,"vod_remarks":note,"vod_pic":pic};
                         lists.push(arr);
@@ -495,9 +495,10 @@ function getYiData(jkdata) {
     }else{
         lists.forEach((list)=>{
             let vodname = list.vod_name||list.title;
+            vodname = vodname.replace(/<\/?.+?\/?>/g,'');
             if(vodname){
                 let vodpic = list.vod_pic||list.pic;
-                let voddesc = list.vod_remarks||list.state||"";
+                let voddesc = list.vod_remarks.replace(/<\/?.+?\/?>/g,'')||list.state.replace(/<\/?.+?\/?>/g,'')||"";
                 let vodurl = list.vod_id?vodurlhead&&!/^http/.test(list.vod_id)?vodurlhead+list.vod_id:list.vod_id:list.nextlink;
                 vodpic = vodpic?vodpic.replace('/img.php?url=','').replace('/tu.php?tu=',''):"hiker://files/cache/src/picloading.gif";
                 if(/^\/upload|^upload/.test(vodpic)){
