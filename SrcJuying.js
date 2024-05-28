@@ -46,7 +46,7 @@ function sousuo() {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                 let datalist = getDatas('jk');
                 let yxdatalist = datalist.filter(it=>{
-                    return !it.stop;
+                    return !it.stop && it.searchable!=0;
                 });
                 if(surl){
                     yxdatalist = yxdatalist.filter(it=>{
