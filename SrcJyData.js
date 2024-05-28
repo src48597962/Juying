@@ -69,7 +69,7 @@ function getYiData(jkdata) {
             if($.type(extdata)=='object'){
                 let host = extdata["主页url"];
                 classurl = extdata["分类"];
-                listurl = /^http/.test(extdata["分类url"])?extdata["分类url"].split(';;')[0]:host + extdata["分类url"].split(';;')[0];
+                listurl = /^http/.test(extdata["分类url"])?extdata["分类url"].split(';;')[0].split('[')[0]:host + extdata["分类url"].split(';;')[0].split('[')[0];
             }
         } else {
             log('api类型错误')
