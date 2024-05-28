@@ -330,6 +330,7 @@ function dianboerji() {
 function dianboyiji() {
     addListener("onClose", $.toString(() => {
         clearMyVar('动态加载loading');
+        clearMyVar('搜索临时搜索数据');
     }));
     let d = [];
     let datalist = getDatas('jk');
