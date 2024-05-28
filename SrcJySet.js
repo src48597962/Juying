@@ -1819,11 +1819,10 @@ function Resourceimport(input,importtype){
                     let extfile = obj.ext;
                     if($.type(extfile)=='string'){
                         if(/^clan:/.test(extfile)){
-                            extfile = extfile.replace("clan://TVBox/",input.match(/file.*\//)[0]);
+                            extfile = extfile.replace("clan://TVBox/", input.match(/file.*\//)[0]);
                         }else if(/^./.test(extfile)){
                             extfile = input.match(/http(s)?:\/\/.*\//)[0]+extfile.replace("./","");
                         }
-                        log($.type(extfile));
                     }
                     
                     if(/^csp_XBiubiu/.test(obj.api)){
