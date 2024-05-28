@@ -571,6 +571,7 @@ function getSsData(name, jkdata) {
     } else if (api_type=="xpath"||api_type=="biubiu"||api_type=="XBPQ") {
         extdata = extDataCache(jkdata)
         if($.type(extdata)=='object'){
+
             //let host = extdata["主页url"];
             //classurl = extdata["分类"];
             //listurl = /^http/.test(extdata["分类url"])?extdata["分类url"].split(';;')[0].split('[')[0]:host + extdata["分类url"].split(';;')[0].split('[')[0];
@@ -957,60 +958,60 @@ function getErData(jkdata) {
             arts = html.videolist;
             conts = arts;
         }else if (/xpath/.test(api_type)) {
-            let jsondata = MY_PARAMS.data;
+            let extdata = extDataCache(jkdata)
             try{
-                actor = String(xpathArray(html, jsondata.dtActor).join(',')).replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "");
+                actor = String(xpathArray(html, extdata.dtActor).join(',')).replace(extdata.filter?eval(extdata.filter):"","").replace(/[\r\ \n]/g, "");
             }catch(e){
                 log('xpath获取主演dtActor失败>'+e.message);
             }
             try{
-                director = String(xpathArray(html, jsondata.dtDirector).join(',')).replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "");
+                director = String(xpathArray(html, extdata.dtDirector).join(',')).replace(extdata.filter?eval(extdata.filter):"","").replace(/[\r\ \n]/g, "");
             }catch(e){
                 log('xpath获取导演dtDirector失败>'+e.message);
             }
             try{
-                area = String(xpath(html, jsondata.dtArea)).replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "");
+                area = String(xpath(html, extdata.dtArea)).replace(extdata.filter?eval(extdata.filter):"","").replace(/[\r\ \n]/g, "");
             }catch(e){
                 log('xpath获取地区dtArea失败>'+e.message);
             }
             try{
-                year = String(xpath(html, jsondata.dtYear)).replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "");
+                year = String(xpath(html, extdata.dtYear)).replace(extdata.filter?eval(extdata.filter):"","").replace(/[\r\ \n]/g, "");
             }catch(e){
                 log('xpath获取年份dtYear失败>'+e.message);
             }
             try{
-                remarks = String(xpathArray(html, jsondata.dtCate).join(',')).replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "")||"xpath数据存在错误";
+                remarks = String(xpathArray(html, extdata.dtCate).join(',')).replace(extdata.filter?eval(extdata.filter):"","").replace(/[\r\ \n]/g, "")||"xpath数据存在错误";
             }catch(e){
                 log('xpath获取类型dtCate失败>'+e.message);
             }
             try{
-                pubdate = String(xpathArray(html, jsondata.dtMark).join(',')).replace(jsondata.filter?eval(jsondata.filter):"","").replace(/[\r\ \n]/g, "");
+                pubdate = String(xpathArray(html, extdata.dtMark).join(',')).replace(extdata.filter?eval(extdata.filter):"","").replace(/[\r\ \n]/g, "");
             }catch(e){
                 log('xpath获取备注dtMark失败>'+e.message);
             }
             try{
-                pic = xpath(html, jsondata.dtImg);
+                pic = xpath(html, extdata.dtImg);
             }catch(e){
                 log('xpath获取图片dtImg失败>'+e.message);
             }
             try{
-                desc = String(xpath(html, jsondata.dtDesc)).replace(jsondata.filter?eval(jsondata.filter):"","");
+                desc = String(xpath(html, extdata.dtDesc)).replace(extdata.filter?eval(extdata.filter):"","");
             }catch(e){
                 log('xpath获取简价dtDesc失败>'+e.message);
             }
             try{
-                arts = xpathArray(html, jsondata.dtFromNode+(jsondata.dtFromName.indexOf('concat(')>-1?'/text()':jsondata.dtFromName));
+                arts = xpathArray(html, extdata.dtFromNode+(extdata.dtFromName.indexOf('concat(')>-1?'/text()':extdata.dtFromName));
             }catch(e){
                 log('xpath获取线路失改>'+e.message);
             }
             try{
                 for (let i = 1; i < arts.length+1; i++) {
                     if(arts[i-1].indexOf("在线视频")>-1){arts[i-1] = '播放源'+i;}
-                    let contname = xpathArray(html, jsondata.dtUrlNode+'['+i+']'+jsondata.dtUrlSubNode+jsondata.dtUrlName);
-                    let conturl = xpathArray(html, jsondata.dtUrlNode+'['+i+']'+jsondata.dtUrlSubNode+(jsondata.dtUrlId=="@href"?'/'+jsondata.dtUrlId:jsondata.dtUrlId));
+                    let contname = xpathArray(html, extdata.dtUrlNode+'['+i+']'+extdata.dtUrlSubNode+extdata.dtUrlName);
+                    let conturl = xpathArray(html, extdata.dtUrlNode+'['+i+']'+extdata.dtUrlSubNode+(extdata.dtUrlId=="@href"?'/'+extdata.dtUrlId:extdata.dtUrlId));
                     let cont = [];
                     for (let j = 0; j < contname.length; j++) {
-                        let urlid = jsondata.dtUrlIdR;
+                        let urlid = extdata.dtUrlIdR;
                         let playUrl;
                         if(urlid){
                             let urlidl = urlid.split('(\\S+)')[0];
@@ -1019,7 +1020,7 @@ function getErData(jkdata) {
                         }else{
                             playUrl = conturl[j];
                         }
-                        cont.push(contname[j]+"$"+jsondata.playUrl.replace('{playUrl}',playUrl))
+                        cont.push(contname[j]+"$"+extdata.playUrl.replace('{playUrl}',playUrl))
                     }
                     conts.push(cont.join("#"))
                 }
@@ -1030,13 +1031,13 @@ function getErData(jkdata) {
             let getsm = "";
             try{
                 getsm = "获取传递数据";
-                var jsondata = MY_PARAMS.data;
+                let extdata = extDataCache(jkdata)
                 getsm = "获取播放地址数组bfjiequshuzuqian";
-                let bflist = html.split(jsondata.bfjiequshuzuqian.replace(/\\/g,""));
+                let bflist = html.split(extdata.bfjiequshuzuqian.replace(/\\/g,""));
                 bflist.splice(0,1);
                 for (let i = 0; i < bflist.length; i++) {
                     arts[i] = '播放源'+(i+1);
-                    bflist[i] = bflist[i].split(jsondata.bfjiequshuzuhou.replace(/\\/g,""))[0];
+                    bflist[i] = bflist[i].split(extdata.bfjiequshuzuhou.replace(/\\/g,""))[0];
                     let bfline = pdfa(bflist[i],"body&&a");
                     let cont = [];
                     for (let j = 0; j < bfline.length; j++) {
@@ -1047,15 +1048,15 @@ function getErData(jkdata) {
                     conts.push(cont.join("#"))
                 }
                 getsm = "获取备注zhuangtaiqian";
-                remarks = pdfh(html.split(jsondata.zhuangtaiqian.replace(/\\/g,""))[1].split(jsondata.zhuangtaihou.replace(/\\/g,""))[0],"Text").split('/')[0]||"biubiu数据存在错误";
+                remarks = pdfh(html.split(extdata.zhuangtaiqian.replace(/\\/g,""))[1].split(extdata.zhuangtaihou.replace(/\\/g,""))[0],"Text").split('/')[0]||"biubiu数据存在错误";
                 getsm = "获取主演zhuyanqian";
-                actor = pdfh(html.split(jsondata.zhuyanqian.replace(/\\/g,""))[1].split(jsondata.zhuyanhou.replace(/\\/g,""))[0],"Text");
+                actor = pdfh(html.split(extdata.zhuyanqian.replace(/\\/g,""))[1].split(extdata.zhuyanhou.replace(/\\/g,""))[0],"Text");
                 getsm = "获取导演daoyanqian";
-                director = pdfh(html.split(jsondata.daoyanqian.replace(/\\/g,""))[1].split(jsondata.daoyanhou.replace(/\\/g,""))[0],"Text");
+                director = pdfh(html.split(extdata.daoyanqian.replace(/\\/g,""))[1].split(extdata.daoyanhou.replace(/\\/g,""))[0],"Text");
                 getsm = "获取更新zhuangtaiqian";
-                pubdate = pdfh(html.split(jsondata.zhuangtaiqian.replace(/\\/g,""))[1].split(jsondata.zhuangtaihou.replace(/\\/g,""))[0],"Text").split('/')[1]||"";
+                pubdate = pdfh(html.split(extdata.zhuangtaiqian.replace(/\\/g,""))[1].split(extdata.zhuangtaihou.replace(/\\/g,""))[0],"Text").split('/')[1]||"";
                 getsm = "获取剧情简介juqingqian";
-                desc = pdfh(html.split(jsondata.juqingqian.replace(/\\/g,""))[1].split(jsondata.juqinghou.replace(/\\/g,""))[0],"Text");
+                desc = pdfh(html.split(extdata.juqingqian.replace(/\\/g,""))[1].split(extdata.juqinghou.replace(/\\/g,""))[0],"Text");
             }catch(e){
                 log(getsm+'失败>'+e.message)
             }    
