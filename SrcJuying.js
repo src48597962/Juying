@@ -29,7 +29,7 @@ function search(name, sstype, jkdata) {
 }
 // 软件搜索
 function sousuo() {
-    let k = MY_KEYWORD;
+    let k = MY_URL.split('##')[1];
     log(k);
     let name,surl;
     if(k.includes('||')){
