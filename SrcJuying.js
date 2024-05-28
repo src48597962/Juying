@@ -102,7 +102,7 @@ function dianboerji() {
 
     let details1 = erdata.details1;
     let details2 = erdata.details2;
-    let pic = erdata.pic;
+    let pic = erdata.pic || MY_PARAMS.pic;
     //海报
     d.push({
         title: details1,//详情1
