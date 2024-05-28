@@ -429,15 +429,15 @@ function getYiData(jkdata) {
                         }
                     };
                     if(extdata["图片"]&&item.indexOf(extdata["图片"].split("&&")[0])>-1){
-                        let id = item.split(extdata["链接"].split('&&')[0])[1].split(extdata["链接"].split('&&')[1])[0];
-                        let name = item.split(extdata["标题"].split('&&')[0])[1].split(extdata["标题"].split('&&')[1])[0];
+                        let id = getBetweenStr(item, extdata["链接"]);
+                        let name = getBetweenStr(item, extdata["标题"]);
                         let pic = "";
                         try{
-                            pic = item.split(extdata["图片"].split('&&')[0])[1].split(extdata["图片"].split('&&')[1])[0];
+                            pic = getBetweenStr(item, extdata["图片"]);
                         }catch(e){}
                         let note = "";
                         try{
-                            note = item.split(extdata["副标题"].split('&&')[0])[1].split(extdata["副标题"].split('&&')[1])[0];
+                            note = getBetweenStr(item, extdata["副标题"]);
                         }catch(e){}
                         let arr = {"vod_id":id,"vod_name":name,"vod_remarks":note,"vod_pic":pic};
                         lists.push(arr);
