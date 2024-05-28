@@ -25,9 +25,12 @@ function extDataCache(jkdata) {
     return {};
 }
 //截取中间字符
-function getBetweenStr(str, condition) {
-    const prefix = condition.split('&&')[0];
-    const suffix = condition.split('&&')[1];
+function getBetweenStr(str, key) {
+    if(!str || !key){
+        return '';
+    }
+    const prefix = key.split('&&')[0];
+    const suffix = key.split('&&')[1];
     const regex = new RegExp(prefix + '(.*?)' + suffix, 's'); // 's' 使 . 匹配换行符
     const match = str.match(regex);
     return match ? match[1].replace(/<\/?.+?\/?>/g,'') : '';
@@ -1090,16 +1093,18 @@ function getErData(jkdata) {
                     }
                     conts.push(cont.join("#"))
                 }
-                getsm = "获取副标";
-                log(getBetweenStr(html, extdata["副标题"]));
-                remarks = extdata["影片类型"]?html.split(extdata["影片类型"].split('&&')[0])[1].split(extdata["影片类型"].split('&&')[1])[0].replace(/<\/?.+?\/?>/g,''):"";
+                
                 getsm = "获取主演";
-                actor = html.split(extdata["主演"].split('&&')[0])[1].split(extdata["主演"].split('&&')[1])[0].replace(/<\/?.+?\/?>/g,'');
+                actor = getBetweenStr(html, extdata["主演"]);
                 getsm = "获取导演";
-                director = html.split(extdata["导演"].split('&&')[0])[1].split(extdata["导演"].split('&&')[1])[0].replace(/<\/?.+?\/?>/g,'');
-                pubdate = (extdata["影片年代"]?html.split(extdata["影片年代"].split('&&')[0])[1].split(extdata["影片年代"].split('&&')[1])[0].replace(/<\/?.+?\/?>/g,''):"")+(extdata["影片地区"]?" "+html.split(extdata["影片地区"].split('&&')[0])[1].split(extdata["影片地区"].split('&&')[1])[0].replace(/<\/?.+?\/?>/g,''):"");
+                director = getBetweenStr(html, extdata["导演"]);
+                getsm = "获取副标";
+                remarks = getBetweenStr(html, extdata["副标题"]);
+                getsm = "影片类型";
+                pubdate = getBetweenStr(html, extdata["影片类型"])||getBetweenStr(html, extdata["影片状态"])||getBetweenStr(html, extdata["影片年代"]);
                 getsm = "获取剧情简介";
-                desc = html.split(extdata["简介"].split('&&')[0])[1].split(extdata["简介"].split('&&')[1])[0].replace(/<\/?.+?\/?>/g,'') || '...';
+                extdata["简介"] = extdata["简介"]&&extdata["简介"].includes('+')?extdata["简介"].split('+')[1]:extdata["简介"];
+                desc = getBetweenStr(html, extdata["简介"]) || '...';
             }catch(e){
                 log(getsm+'失败>'+e.message)
             }    
