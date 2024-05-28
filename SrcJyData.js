@@ -196,7 +196,9 @@ function getYiData(jkdata) {
                                                 values.push(itit.type_name+'$'+itit.type_id);
                                             }
                                         })
+                                        log(values);
                                         类型.push(values.join('#'));
+                                        log(类型);
                                     }
                                 })
                             }
