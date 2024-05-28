@@ -2,15 +2,18 @@
 
 // extData缓存
 function extDataCache(jkdata) {
-    if(jkdata.ext && /^http/.test(jkdata.ext) && /^hiker/.test(jkdata.url)){
+    if($.type(jkdata.ext)=='object'){
+        return jkdata.ext;
+    }else if(jkdata.ext && /^http/.test(jkdata.ext) && /^hiker/.test(jkdata.url)){
         if (!fileExist(jkdata.url)) {
             let content = fetch(extfile, {timeout:2000});
             if (content) {
                 writeFile(jkdata.url, content);
             }
         }
+        eval("let extdata = " + fetch(jkdata.url));
+        return extdata;
     }
-    return fetch(jkdata.url);
 }
 // 获取一级数据
 function getYiData(jkdata) {
@@ -53,9 +56,8 @@ function getYiData(jkdata) {
             listurl = api_url + '?ac=videolist&pg=';
             listnode = "html.list";
         } else if (api_type=="XBPQ") {
-            let cacheData = extDataCache(jkdata)
-            if(cacheData){
-                eval("extdata = " + cacheData);
+            extdata = extDataCache(jkdata)
+            if($.type(extdata)=='object'){
                 let host = extdata["主页url"];
                 classurl = extdata["分类"];
                 listurl = /^http/.test(extdata["分类url"])?extdata["分类url"]:host + extdata["分类url"];
