@@ -24,6 +24,12 @@ function extDataCache(jkdata) {
     toast('此源接口数据有异常');
     return {};
 }
+//截取中间字符
+function getContentBetween(str, prefix, suffix) {
+  const regex = new RegExp(prefix + '(.*?)' + suffix, 's'); // 's' 使 . 匹配换行符
+  const match = str.match(regex);
+  return match ? match[1] : '';
+}
 // 获取一级数据
 function getYiData(jkdata) {
     let d = [];
@@ -1082,9 +1088,11 @@ function getErData(jkdata) {
                     conts.push(cont.join("#"))
                 }
                 getsm = "获取副标";
-                log(extdata["影片类型"].split('&&')[0]);
-                log(html.split(extdata["影片类型"].split('&&')[0])[1]);
-                log(html.split(extdata["影片类型"].split('&&')[0])[1].split(extdata["影片类型"].split('&&')[1])[0].replace(/<\/?.+?\/?>/g,''));
+                let strs = extdata["影片类型"].split('&&');
+                log(getContentBetween(html, strs[0], strs[1]));
+                //log(extdata["影片类型"].split('&&')[0]);
+                //log(html.split(extdata["影片类型"].split('&&')[0])[1]);
+                //log(html.split(extdata["影片类型"].split('&&')[0])[1].split(extdata["影片类型"].split('&&')[1])[0].replace(/<\/?.+?\/?>/g,''));
 
                 remarks = extdata["影片类型"]?html.split(extdata["影片类型"].split('&&')[0])[1].split(extdata["影片类型"].split('&&')[1])[0].replace(/<\/?.+?\/?>/g,''):"";
                 getsm = "获取主演";
