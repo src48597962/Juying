@@ -360,8 +360,8 @@ function getYiData(jkdata) {
                             setResult(ssdata);
                         }, input, data);
                         */
-                        log(jkdata.url);
-                        return 'hiker://search?s='+input+'||'+jkdata.url+'&rule='+MY_RULE.title;
+                        storage0.putMyVar('搜索临时搜索数据', jkdata);
+                        return 'hiker://search?s='+input+'  '+'&rule='+MY_RULE.title;
                     }else{
                         return 'toast://未找到接口数据'
                     }
