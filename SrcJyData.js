@@ -290,7 +290,7 @@ function getYiData(jkdata) {
                             let itname = it.split('$')[0];
                             let itid = it.split('$')[1];
                             d.push({
-                                title: type_id==itid?'““””<b><span style="color:' + Color + '">' + itname + '</span></b>':itname,
+                                title: area_id==itid?'““””<b><span style="color:' + Color + '">' + itname + '</span></b>':itname,
                                 url: $('#noLoading#').lazyRule((itid) => {
                                     putMyVar('SrcJu_dianbo$地区', itid);
                                     refreshPage(true);
@@ -308,7 +308,7 @@ function getYiData(jkdata) {
                             let itname = it.split('$')[0];
                             let itid = it.split('$')[1];
                             d.push({
-                                title: type_id==itid?'““””<b><span style="color:' + Color + '">' + itname + '</span></b>':itname,
+                                title: year_id==itid?'““””<b><span style="color:' + Color + '">' + itname + '</span></b>':itname,
                                 url: $('#noLoading#').lazyRule((itid) => {
                                     putMyVar('SrcJu_dianbo$年份', itid);
                                     refreshPage(true);
@@ -322,11 +322,12 @@ function getYiData(jkdata) {
                         });
                     }
                     if(排序.length>0 && 排序[index]){
+                        let 排序默认值= 排序[index].split('#')[0];
                         排序[index].split('#').forEach(it=>{
                             let itname = it.split('$')[0];
                             let itid = it.split('$')[1];
                             d.push({
-                                title: type_id==itid?'““””<b><span style="color:' + Color + '">' + itname + '</span></b>':itname,
+                                title: (sort_id==itid || 排序默认值==it)?'““””<b><span style="color:' + Color + '">' + itname + '</span></b>':itname,
                                 url: $('#noLoading#').lazyRule((itid) => {
                                     putMyVar('SrcJu_dianbo$排序', itid);
                                     refreshPage(true);
@@ -372,7 +373,20 @@ function getYiData(jkdata) {
     if(listurl && lists.length==0){
         try{
             if(api_type=="XBPQ"){
-                MY_URL = listurl.replace('{catePg}',extdata["起始页"]?MY_PAGE>extdata["起始页"]?MY_PAGE:"":MY_PAGE).replace('{year}', year_id).replace('{area}', area_id).replace('{by}', sort_id).replace('{class}', type_id).replace('{cateId}', cate_id).replace('{lang}', '');
+                MY_URL = MY_URL.replace('/lang/{lang}','');
+                if(!type_id){
+                    MY_URL = MY_URL.replace('/class/{class}','');
+                }
+                if(!area_id){
+                    MY_URL = MY_URL.replace('/area/{area}','');
+                }
+                if(!year_id){
+                    MY_URL = MY_URL.replace('/year/{year}','');
+                }
+                if(!sort_id){
+                    MY_URL = MY_URL.replace('/by/{by}','');
+                }
+                MY_URL = listurl.replace('{catePg}',extdata["起始页"]?MY_PAGE>extdata["起始页"]?MY_PAGE:extdata["起始页"]:MY_PAGE).replace('{year}', year_id).replace('{area}', area_id).replace('{by}', sort_id).replace('{class}', type_id).replace('{cateId}', cate_id);
             }else{
                 MY_URL = listurl + MY_PAGE;
                 if(api_type=="v2"||api_type=="app"){
@@ -465,7 +479,7 @@ function getYiData(jkdata) {
         d.push({
             title: '接口访问异常，请更换接口！',
             desc: '点击访问原网页',
-            url: MY_URL,
+            url: MY_URL + '#noHistory#',
             col_type: 'text_center_1'
         }); 
     }else{
