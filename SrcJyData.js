@@ -1055,45 +1055,41 @@ function getErData(jkdata) {
             let getsm = "";
             try{
                 getsm = "获取传递数据";
-                var jsondata = MY_PARAMS.data;
-                let jkfile = fetchCache(jsondata.ext,72);
-                if(jkfile){
-                    eval("var jkdata = " + jkfile);
-                }
+                let extdata = extDataCache(jkdata)
                 getsm = "获取线路";
                 let arthtml = html;
-                if(jkdata["线路二次截取"]){
-                    arthtml = arthtml.split(jkdata["线路二次截取"].split('&&')[0])[1].split(jkdata["线路二次截取"].split('&&')[1])[0];
+                if(extdata["线路二次截取"]){
+                    arthtml = arthtml.split(extdata["线路二次截取"].split('&&')[0])[1].split(extdata["线路二次截取"].split('&&')[1])[0];
                 }
-                let artlist = arthtml.match(new RegExp(jkdata["线路数组"].replace('&&','((?:.|[\r\n])*?)'), 'g'));
+                let artlist = arthtml.match(new RegExp(extdata["线路数组"].replace('&&','((?:.|[\r\n])*?)'), 'g'));
                 for (let i = 0; i < artlist.length; i++) {
-                    let arttitle = artlist[i].split(jkdata["线路数组"].split('&&')[0])[1].split(jkdata["线路数组"].split('&&')[1])[0].split(jkdata["线路标题"].split('&&')[0])[1].split(jkdata["线路标题"].split('&&')[1])[0];
+                    let arttitle = artlist[i].split(extdata["线路数组"].split('&&')[0])[1].split(extdata["线路数组"].split('&&')[1])[0].split(extdata["线路标题"].split('&&')[0])[1].split(extdata["线路标题"].split('&&')[1])[0];
                     arts[i] = arttitle.replace(/<\/?.+?\/?>/g,'');
                 }
                 let conthtml = html;
-                if(jkdata["播放二次截取"]){
-                    conthtml = conthtml.split(jkdata["播放二次截取"].split('&&')[0])[1].split(jkdata["播放二次截取"].split('&&')[1])[0];
+                if(extdata["播放二次截取"]){
+                    conthtml = conthtml.split(extdata["播放二次截取"].split('&&')[0])[1].split(extdata["播放二次截取"].split('&&')[1])[0];
                 }
-                let contlist = conthtml.match(new RegExp(jkdata["播放数组"].replace('&&','((?:.|[\r\n])*?)'), 'g'));
+                let contlist = conthtml.match(new RegExp(extdata["播放数组"].replace('&&','((?:.|[\r\n])*?)'), 'g'));
                 for (let i = 0; i < contlist.length; i++) {
-                    let bfline = jkdata["播放列表"]?contlist[i].match(new RegExp(jkdata["播放列表"].replace('&&','((?:.|[\r\n])*?)'), 'g')):pdfa(contlist[i],"body&&a");
+                    let bfline = extdata["播放列表"]?contlist[i].match(new RegExp(extdata["播放列表"].replace('&&','((?:.|[\r\n])*?)'), 'g')):pdfa(contlist[i],"body&&a");
                     let cont = [];
                     for (let j = 0; j < bfline.length; j++) {
-                        let contname = jkdata["播放标题"]?bfline[j].split(jkdata["播放标题"].split('&&')[0])[1].split(jkdata["播放标题"].split('&&')[1])[0]:pdfh(bfline[j],"a&&Text");
-                        let conturl = jkdata["播放链接"]?bfline[j].split(jkdata["播放链接"].split('&&')[0])[1].split(jkdata["播放链接"].split('&&')[1])[0]:pd(bfline[j],"a&&href");
+                        let contname = extdata["播放标题"]?bfline[j].split(extdata["播放标题"].split('&&')[0])[1].split(extdata["播放标题"].split('&&')[1])[0]:pdfh(bfline[j],"a&&Text");
+                        let conturl = extdata["播放链接"]?bfline[j].split(extdata["播放链接"].split('&&')[0])[1].split(extdata["播放链接"].split('&&')[1])[0]:pd(bfline[j],"a&&href");
                         cont.push(contname+"$"+conturl)
                     }
                     conts.push(cont.join("#"))
                 }
                 getsm = "获取副标";
-                remarks = jkdata["影片类型"]?html.split(jkdata["影片类型"].split('&&')[0])[1].split(jkdata["影片类型"].split('&&')[1])[0].replace(/<\/?.+?\/?>/g,''):"";
+                remarks = extdata["影片类型"]?html.split(extdata["影片类型"].split('&&')[0])[1].split(extdata["影片类型"].split('&&')[1])[0].replace(/<\/?.+?\/?>/g,''):"";
                 getsm = "获取主演";
-                actor = html.split(jkdata["主演"].split('&&')[0])[1].split(jkdata["主演"].split('&&')[1])[0].replace(/<\/?.+?\/?>/g,'');
+                actor = html.split(extdata["主演"].split('&&')[0])[1].split(extdata["主演"].split('&&')[1])[0].replace(/<\/?.+?\/?>/g,'');
                 getsm = "获取导演";
-                director = html.split(jkdata["导演"].split('&&')[0])[1].split(jkdata["导演"].split('&&')[1])[0].replace(/<\/?.+?\/?>/g,'');
-                pubdate = (jkdata["影片年代"]?html.split(jkdata["影片年代"].split('&&')[0])[1].split(jkdata["影片年代"].split('&&')[1])[0].replace(/<\/?.+?\/?>/g,''):"")+(jkdata["影片地区"]?" "+html.split(jkdata["影片地区"].split('&&')[0])[1].split(jkdata["影片地区"].split('&&')[1])[0].replace(/<\/?.+?\/?>/g,''):"");
+                director = html.split(extdata["导演"].split('&&')[0])[1].split(extdata["导演"].split('&&')[1])[0].replace(/<\/?.+?\/?>/g,'');
+                pubdate = (extdata["影片年代"]?html.split(extdata["影片年代"].split('&&')[0])[1].split(extdata["影片年代"].split('&&')[1])[0].replace(/<\/?.+?\/?>/g,''):"")+(extdata["影片地区"]?" "+html.split(extdata["影片地区"].split('&&')[0])[1].split(extdata["影片地区"].split('&&')[1])[0].replace(/<\/?.+?\/?>/g,''):"");
                 getsm = "获取剧情简介";
-                desc = html.split(jkdata["简介"].split('&&')[0])[1].split(jkdata["简介"].split('&&')[1])[0].replace(/<\/?.+?\/?>/g,'') || '...';
+                desc = html.split(extdata["简介"].split('&&')[0])[1].split(extdata["简介"].split('&&')[1])[0].replace(/<\/?.+?\/?>/g,'') || '...';
             }catch(e){
                 log(getsm+'失败>'+e.message)
             }    
