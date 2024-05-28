@@ -30,6 +30,7 @@ function search(name, sstype, jkdata) {
 // 软件搜索
 function sousuo() {
     let k = MY_KEYWORD;
+    log(k);
     let name,surl;
     if(k.includes('||')){
         name = k.split('||')[0].trim();
@@ -48,7 +49,8 @@ function sousuo() {
                 let yxdatalist = datalist.filter(it=>{
                     return !it.stop && it.searchable!=0;
                 });
-                log(yxdatalist.length);
+                log(surl);
+
                 if(surl){
                     yxdatalist = yxdatalist.filter(it=>{
                         return it.url==surl;
