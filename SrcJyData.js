@@ -414,7 +414,8 @@ function getYiData(jkdata) {
             if(api_type=="XBPQ"){
                 extdata["二次截取"] = extdata["二次截取"] || (gethtml.indexOf(`<ul class="stui-vodlist`)>-1?`<ul class="stui-vodlist&&</ul>`:gethtml.indexOf(`<ul class="myui-vodlist`)>-1?`<ul class="myui-vodlist&&</ul>`:"");
                 if(extdata["二次截取"]){
-                    gethtml = getBetweenStr(gethtml, extdata["二次截取"]);
+                    //gethtml = getBetweenStr(gethtml, extdata["二次截取"]);
+                    gethtml = gethtml.split(extdata["二次截取"].split('&&')[0])[1].split(extdata["二次截取"].split('&&')[1])[0];
                 }
                 extdata["链接"] = extdata["链接"] || `href="&&"`;
                 extdata["标题"] = extdata["标题"] || `title="&&"`;
