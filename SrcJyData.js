@@ -1090,7 +1090,7 @@ function getErData(jkdata) {
                     conts.push(cont.join("#"))
                 }
                 getsm = "获取副标";
-                let strs = extdata["影片类型"].split('&&');
+                let strs = extdata["主演"].split('&&');
                 log(getContentBetween(html, strs[0], strs[1]));
                 //log(extdata["影片类型"].split('&&')[0]);
                 //log(html.split(extdata["影片类型"].split('&&')[0])[1]);
