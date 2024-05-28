@@ -384,36 +384,35 @@ function getYiData(jkdata) {
                     MY_URL = MY_URL + '&t=' + type_id;
                 }
             }
-
             let gethtml = request(MY_URL, { headers: { 'User-Agent': api_ua }, timeout:5000 });
-
+            
             if(api_type=="XBPQ"){
-                jkdata["二次截取"] = jkdata["二次截取"] || (gethtml.indexOf(`<ul class="stui-vodlist`)>-1?`<ul class="stui-vodlist&&</ul>`:gethtml.indexOf(`<ul class="myui-vodlist`)>-1?`<ul class="myui-vodlist&&</ul>`:"");
-                if(jkdata["二次截取"]){
-                    gethtml = gethtml.split(jkdata["二次截取"].split('&&')[0])[1].split(jkdata["二次截取"].split('&&')[1])[0];
+                extdata["二次截取"] = extdata["二次截取"] || (gethtml.indexOf(`<ul class="stui-vodlist`)>-1?`<ul class="stui-vodlist&&</ul>`:gethtml.indexOf(`<ul class="myui-vodlist`)>-1?`<ul class="myui-vodlist&&</ul>`:"");
+                if(extdata["二次截取"]){
+                    gethtml = gethtml.split(extdata["二次截取"].split('&&')[0])[1].split(extdata["二次截取"].split('&&')[1])[0];
                 }
-                jkdata["链接"] = jkdata["链接"] || `href="&&"`;
-                jkdata["标题"] = jkdata["标题"] || `title="&&"`;
-                jkdata["数组"] = jkdata["数组"] || `<a &&</a>`;
-                let jklist = gethtml.match(new RegExp(jkdata["数组"].replace('&&','((?:.|[\r\n])*?)'), 'g'));
+                extdata["链接"] = extdata["链接"] || `href="&&"`;
+                extdata["标题"] = extdata["标题"] || `title="&&"`;
+                extdata["数组"] = extdata["数组"] || `<a &&</a>`;
+                let jklist = gethtml.match(new RegExp(extdata["数组"].replace('&&','((?:.|[\r\n])*?)'), 'g'));
                 jklist.forEach(item=>{
-                    if(!jkdata["图片"]){
+                    if(!extdata["图片"]){
                         if(item.indexOf('original=')>-1){
-                            jkdata["图片"] = `original="&&"`;
+                            extdata["图片"] = `original="&&"`;
                         }else if(item.indexOf('<img src=')>-1){
-                            jkdata["图片"] = `<img src="&&"`;
+                            extdata["图片"] = `<img src="&&"`;
                         }
                     };
-                    if(jkdata["图片"]&&item.indexOf(jkdata["图片"].split("&&")[0])>-1){
-                        let id = item.split(jkdata["链接"].split('&&')[0])[1].split(jkdata["链接"].split('&&')[1])[0];
-                        let name = item.split(jkdata["标题"].split('&&')[0])[1].split(jkdata["标题"].split('&&')[1])[0];
+                    if(extdata["图片"]&&item.indexOf(extdata["图片"].split("&&")[0])>-1){
+                        let id = item.split(extdata["链接"].split('&&')[0])[1].split(extdata["链接"].split('&&')[1])[0];
+                        let name = item.split(extdata["标题"].split('&&')[0])[1].split(extdata["标题"].split('&&')[1])[0];
                         let pic = "";
                         try{
-                            pic = item.split(jkdata["图片"].split('&&')[0])[1].split(jkdata["图片"].split('&&')[1])[0];
+                            pic = item.split(extdata["图片"].split('&&')[0])[1].split(extdata["图片"].split('&&')[1])[0];
                         }catch(e){}
                         let note = "";
                         try{
-                            note = item.split(jkdata["副标题"].split('&&')[0])[1].split(jkdata["副标题"].split('&&')[1])[0];
+                            note = item.split(extdata["副标题"].split('&&')[0])[1].split(extdata["副标题"].split('&&')[1])[0];
                         }catch(e){}
                         let arr = {"vod_id":id,"vod_name":name,"vod_remarks":note,"vod_pic":pic};
                         lists.push(arr);
