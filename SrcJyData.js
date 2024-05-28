@@ -109,7 +109,7 @@ function getYiData(jkdata) {
                         if(extdata["分类"].indexOf('$')>-1){
                             分类 = extdata["分类"].split('#');
                             let ss = extdata["筛选"];
-                            if(ss && ss.includes('#')){
+                            if(ss){
                                 分类.forEach(it=>{
                                     let id = it.split('$')[1];
                                     let sss = ss[id] || [];
@@ -384,9 +384,9 @@ function getYiData(jkdata) {
                     MY_URL = MY_URL + '&t=' + type_id;
                 }
             }
-            log(MY_URL);
 
             let gethtml = request(MY_URL, { headers: { 'User-Agent': api_ua }, timeout:5000 });
+
             if(api_type=="XBPQ"){
                 jkdata["二次截取"] = jkdata["二次截取"] || (gethtml.indexOf(`<ul class="stui-vodlist`)>-1?`<ul class="stui-vodlist&&</ul>`:gethtml.indexOf(`<ul class="myui-vodlist`)>-1?`<ul class="myui-vodlist&&</ul>`:"");
                 if(jkdata["二次截取"]){
