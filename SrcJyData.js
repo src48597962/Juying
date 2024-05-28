@@ -4,16 +4,25 @@
 function extDataCache(jkdata) {
     if($.type(jkdata.ext)=='object'){
         return jkdata.ext;
-    }else if(jkdata.ext && /^http/.test(jkdata.ext) && /^hiker/.test(jkdata.url)){
-        if (!fileExist(jkdata.url)) {
-            let content = fetch(extfile, {timeout:2000});
-            if (content) {
-                writeFile(jkdata.url, content);
+    }else if(/^hiker/.test(jkdata.url)){
+        if (jkdata.ext && /^http/.test(jkdata.ext)) {
+            if(!fileExist(jkdata.url)){
+                let content = fetch(jkdata.ext, {timeout:3000});
+                if (content) {
+                    writeFile(jkdata.url, content);
+                }
             }
         }
-        eval("let extdata = " + fetch(jkdata.url));
-        return extdata;
+        if(fileExist(jkdata.url)){
+            eval("let extdata = " + fetch(jkdata.url));
+            return extdata;
+        }else{
+            toast('数据文件获取失败');
+            return {};
+        }
     }
+    toast('此源接口数据有异常');
+    return {};
 }
 // 获取一级数据
 function getYiData(jkdata) {
