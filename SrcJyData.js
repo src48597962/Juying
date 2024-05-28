@@ -1082,6 +1082,10 @@ function getErData(jkdata) {
                     conts.push(cont.join("#"))
                 }
                 getsm = "获取副标";
+                log(extdata["影片类型"].split('&&'));
+                log(html.split(extdata["影片类型"].split('&&')[0])[1].split(extdata["影片类型"].split('&&')[1])[0]);
+                log(html.split(extdata["影片类型"].split('&&')[0])[1].split(extdata["影片类型"].split('&&')[1])[0].replace(/<\/?.+?\/?>/g,''));
+
                 remarks = extdata["影片类型"]?html.split(extdata["影片类型"].split('&&')[0])[1].split(extdata["影片类型"].split('&&')[1])[0].replace(/<\/?.+?\/?>/g,''):"";
                 getsm = "获取主演";
                 actor = html.split(extdata["主演"].split('&&')[0])[1].split(extdata["主演"].split('&&')[1])[0].replace(/<\/?.+?\/?>/g,'');
