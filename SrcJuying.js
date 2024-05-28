@@ -30,11 +30,10 @@ function search(name, sstype, jkdata) {
 // 软件搜索
 function sousuo() {
     let k = MY_URL.split('##')[1];
-    log(k);
-    let name,surl;
-    if(k.includes('||')){
-        name = k.split('||')[0].trim();
-        surl = k.split('||')[1];
+    let name,jkdata;
+    if(k.includes('  ')){
+        name = k.split('  ')[0].trim();
+        jkdata = storage0.getMyVar('搜索临时搜索数据');
     }else{
         name = k.trim();
     }
@@ -43,30 +42,28 @@ function sousuo() {
         url: "hiker://search?s=" + name,
         extra: {
             delegateOnlySearch: true,
-            rules: $.toString((name,surl) => {
-                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
-                let datalist = getDatas('jk');
-                let yxdatalist = datalist.filter(it=>{
-                    return !it.stop && it.searchable!=0;
-                });
-                log(surl);
-
-                if(surl){
-                    yxdatalist = yxdatalist.filter(it=>{
-                        return it.url==surl;
+            rules: $.toString((name,jkdata) => {
+                let yxdatalist = [];
+                if(jkdata){
+                    yxdatalist.push(jkdata);
+                }else{
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                    let datalist = getDatas('jk');
+                    yxdatalist = datalist.filter(it=>{
+                        return !it.stop && it.searchable!=0;
                     });
                 }
-                log(yxdatalist.length);
-                let data = [];
+
+                let judata = [];
                 yxdatalist.forEach(it=>{
-                    data.push({
+                    judata.push({
                         "title": it.name,
                         "search_url": "hiker://empty##fypage",
                         "searchFind": `js: require(config.依赖); let d = search('` + name + `', 'hkjusou' ,` + JSON.stringify(it) + `); setResult(d);`
                     });
                 })
-                return JSON.stringify(data)
-            },name,surl)
+                return JSON.stringify(judata);
+            },name,jkdata)
         }
     }])
 }
