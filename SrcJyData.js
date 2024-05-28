@@ -119,16 +119,14 @@ function getYiData(jkdata) {
                                         itvalue.forEach(value=>{
                                             values.push(value.n+'$'+value.v)
                                         })
-                                        if(values.length>0){
-                                            if(itit.key=='cateId'){
-                                                类型.push(values.join('#'));
-                                            }else if(itit.key=='area'){
-                                                地区.push(values.join('#'));
-                                            }else if(itit.key=='year'){
-                                                年份.push(values.join('#'));
-                                            }else if(itit.key=='by'){
-                                                排序.push(values.join('#'));
-                                            }
+                                        if(itit.key=='cateId'){
+                                            类型.push(values.join('#'));
+                                        }else if(itit.key=='area'){
+                                            地区.push(values.join('#'));
+                                        }else if(itit.key=='year'){
+                                            年份.push(values.join('#'));
+                                        }else if(itit.key=='by'){
+                                            排序.push(values.join('#'));
                                         }
                                     })
                                 })
@@ -198,9 +196,7 @@ function getYiData(jkdata) {
                                                 values.push(itit.type_name+'$'+itit.type_id);
                                             }
                                         })
-                                        if(values.length>0){
-                                            类型.push(values.join('#'));
-                                        }
+                                        类型.push(values.join('#'));
                                     }
                                 })
                             }
@@ -270,7 +266,7 @@ function getYiData(jkdata) {
                 type_id = 筛选?type_id:getMyVar('SrcJu_dianbo$类型', (api_type=='cms'&&类型.length>0) ? 类型[index].split('#')[0].split('$')[1] : cate_id);
                 putMyVar('SrcJu_dianbo$类型', type_id);
                 if(fold=='1' || (api_type=='cms' && cate_id!='tj')){
-                    if(类型.length>0){
+                    if(类型.length>0 && 类型[0]){
                         类型[index].split('#').forEach(it=>{
                             let itname = it.split('$')[0];
                             let itid = it.split('$')[1];
@@ -288,7 +284,7 @@ function getYiData(jkdata) {
                             col_type: "blank_block"
                         });
                     }
-                    if(地区.length>0){
+                    if(地区.length>0 && 地区[0]){
                         地区[index].split('#').forEach(it=>{
                             let itname = it.split('$')[0];
                             let itid = it.split('$')[1];
@@ -306,7 +302,7 @@ function getYiData(jkdata) {
                             col_type: "blank_block"
                         });
                     }
-                    if(年份.length>0){
+                    if(年份.length>0 && 年份[0]){
                         年份[index].split('#').forEach(it=>{
                             let itname = it.split('$')[0];
                             let itid = it.split('$')[1];
@@ -324,7 +320,7 @@ function getYiData(jkdata) {
                             col_type: "blank_block"
                         });
                     }
-                    if(排序.length>0){
+                    if(排序.length>0 && 排序[0]){
                         排序[index].split('#').forEach(it=>{
                             let itname = it.split('$')[0];
                             let itid = it.split('$')[1];
