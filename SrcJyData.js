@@ -85,7 +85,7 @@ function getYiData(jkdata) {
                 vodurlhead = getHome(listurl);
             }
         } else if (api_type=="drpy") {
-            require(drpymuban);
+            eval(fetch(drpymuban).replace('export default {muban, getMubans};',''));
             eval(fetch(jkdata.url));
             if(rule['模板']){
                 extdata = Object.assign(muban[rule['模板']], rule);
