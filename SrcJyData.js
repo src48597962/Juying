@@ -151,6 +151,14 @@ function getYiData(jkdata) {
                             let chtml = request(extdata["host"], {headers:headers, timeout:5000});
                             let fls = _pdfa(chtml, cparses[0]);
                             fls.forEach(it=>{
+                                let typename = _pdfh(it, cparses[1]);
+                                let typeurl = _pdfh(it, cparses[2]);
+                                log(typeurl.match(cparses[3]));
+                                /*
+                                if(cparses.length==4){
+                                    typeurl = typeurl.match(cparses[3])
+                                }
+                                */
                                 分类.push(_pdfh(it, cparses[1])+'$'+_pdfh(it, cparses[2]));
                             }) 
                             log(分类);
