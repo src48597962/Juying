@@ -183,6 +183,11 @@ function getYiData(jkdata) {
                                 })
                             })
                             筛选 = 1;
+                                log(分类);
+                                log(类型);
+                                log(地区);
+                                log(年份);
+                                log(排序);
                         }
                     }else if(api_type=="XBPQ"){
                         if(extdata["分类"].indexOf('$')>-1){
@@ -210,11 +215,6 @@ function getYiData(jkdata) {
                                     })
                                 })
                                 筛选 = 1;
-                                log(分类);
-                                log(类型);
-                                log(地区);
-                                log(年份);
-                                log(排序);
                             }
                         }else if(extdata["分类"].indexOf('&')>-1&&extdata["分类值"]){
                             let typenames = extdata["分类"].split('&');
@@ -291,7 +291,7 @@ function getYiData(jkdata) {
                 }catch(e){
                     log(api_name+'>访问异常，请更换源接口！获取分类失败>'+e.message + " 错误行#" + e.lineNumber);
                 }
-                storage0.putMyVar('SrcJu_dianbo$classCache', {分类:分类,类型:类型,地区:地区,年份:年份,排序:排序,筛选:筛选,推荐:推荐});
+                //storage0.putMyVar('SrcJu_dianbo$classCache', {分类:分类,类型:类型,地区:地区,年份:年份,排序:排序,筛选:筛选,推荐:推荐});
             }
 
             if(分类.length>0){
