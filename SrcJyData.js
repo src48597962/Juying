@@ -398,7 +398,6 @@ function getYiData(jkdata) {
                     MY_URL = MY_URL.replace('/by/{by}','');
                 }
                 MY_URL = MY_URL.replace('{catePg}',extdata["起始页"]?MY_PAGE>extdata["起始页"]?MY_PAGE:extdata["起始页"]:MY_PAGE).replace('{year}', year_id).replace('{area}', area_id).replace('{by}', sort_id).replace('{class}', type_id).replace('{cateId}', cate_id);
-                api_ua = extdata['请求头'] || api_ua;
             }else{
                 MY_URL = listurl + MY_PAGE;
                 if(api_type=="v2"||api_type=="app"){
@@ -779,7 +778,6 @@ function getSsData(name, jkdata) {
         }
     }else if(api_type=="XBPQ"){
         try{
-            api_ua = extdata['请求头'] || api_ua;
             if(extdata["搜索模式"]=="0"&&extdata["搜索后缀"]){
                 gethtml = getHtmlCode(ssurl,api_ua,5000);
                 let html = JSON.parse(gethtml);
@@ -794,10 +792,13 @@ function getSsData(name, jkdata) {
                 }else{
                     gethtml = getHtmlCode(ssurl,api_ua,5000);
                 }
+                if(extdata["搜索二次截取"]){
+                    gethtml = gethtml.split(extdata["搜索二次截取"].split('&&')[0])[1].split(extdata["搜索二次截取"].split('&&')[1])[0];
+                }
                 let sslist = gethtml.match(new RegExp(extdata["搜索数组"].replace('&&','((?:.|[\r\n])*?)'), 'g'));
                 for (let i = 0; i < sslist.length; i++) {
                     let title = getBetweenStr(sslist[i], extdata["搜索标题"]);//sslist[i].split(extdata["搜索标题"].split('&&')[0])[1].split(extdata["搜索标题"].split('&&')[1])[0];
-                    let href = getBetweenStr(sslist[i], extdata["搜索链接"]);//sslist[i].split(extdata["搜索链接"].split('&&')[0])[1].split(extdata["搜索链接"].split('&&')[1])[0];
+                    let href = getBetweenStr(sslist[i], extdata["搜索链接"].replace(`+\"id\":`,'').replace(`,+`,'.'));//sslist[i].split(extdata["搜索链接"].split('&&')[0])[1].split(extdata["搜索链接"].split('&&')[1])[0];
                     let img = getBetweenStr(sslist[i], extdata["搜索图片"]);//sslist[i].split(extdata["搜索图片"].split('&&')[0])[1].split(extdata["搜索图片"].split('&&')[1])[0];
                     let mark = getBetweenStr(sslist[i], extdata["搜索副标题"]);//sslist[i].split(extdata["搜索副标题"].split('&&')[0])[1].split(extdata["搜索副标题"].split('&&')[1])[0];
                     lists.push({"id":/^http/.test(href)?href:vodurlhead+href,"name":title,"pic":img,"desc":mark})
@@ -867,7 +868,6 @@ function getErData(jkdata) {
     } else if (/xpath|biubiu|XBPQ/.test(api_type)) {
         extdata = extDataCache(jkdata)
         try{
-            api_ua = extdata['请求头'] || api_ua;
             html = request(MY_URL, {headers: {'User-Agent': api_ua}, timeout:5000});
         } catch (e) {
             log(e.message + " 错误行#" + e.lineNumber);
