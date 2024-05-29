@@ -18,11 +18,11 @@ function extDataCache(jkdata) {
             return extdata;
         }else{
             toast('数据文件获取失败');
-            return {};
+            return '';
         }
     }
     toast('此源接口数据有异常');
-    return {};
+    return '';
 }
 //截取中间字符
 function getBetweenStr(str, key) {
@@ -80,7 +80,8 @@ function getYiData(jkdata) {
             if($.type(extdata)=='object'){
                 let host = extdata["主页url"] || '';
                 classurl = extdata["分类"];
-                listurl = /^http/.test(extdata["分类url"])?extdata["分类url"].split(';;')[0].split('[')[0]:host + extdata["分类url"].split(';;')[0].split('[')[0];
+                extdata["分类url"] = extdata["分类url"]?extdata["分类url"].split(';;')[0].split('[')[0]:"";
+                listurl = extdata["分类url"]?/^http/.test(extdata["分类url"])?extdata["分类url"]:host + extdata["分类url"]:"";
                 vodurlhead = getHome(listurl);
             }
         } else {
