@@ -27,7 +27,7 @@ function extDataCache(jkdata) {
 //截取中间字符
 function getBetweenStr(str, key) {
     if(!str || !key){
-        return str;
+        return '';
     }
     const prefix = key.split('&&')[0];
     const suffix = key.split('&&')[1];
@@ -1114,11 +1114,11 @@ function getErData(jkdata) {
             log('开启模板自动匹配、AI识片，获取播放选集');
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcAutoTmpl.js');
             let data = autoerji(MY_URL, html);
-            remarks = remarks||"获取数据存在错误";
-            pubdate = data.details2||"";
-            arts = data.arts;
+            remarks = remarks || "";
+            details2 = data.details2 || "";
+            arts = data.arts || area;
             conts = data.conts;
-            pic = data.pic;
+            pic = data.pic || pic;
         }
         actor = actor?actor.includes('主演')?actor:'主演：'+actor:'';
         director = director?director.includes('导演')?director:'导演：'+director:'';
