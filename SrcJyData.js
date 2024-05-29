@@ -133,13 +133,16 @@ function getYiData(jkdata) {
             }else{
                 try{
                     if(api_type=="drpy"){
+                        log('11');
                         if(extdata["class_name"] && extdata["class_url"]){
                             let cnames = extdata["class_name"].split('&');
                             let curls = extdata["class_url"].split('&');
                             分类 = cnames.map((it,i) => {
                                 return it+'$'+curls[i];
                             });
+                            log('22');
                         }else if(extdata["class_parse"]){
+                            log('33');
                             let cparses = extdata["class_parse"].split(';');
                             let headers = extdata["headers"] || {};
                             if(headers['User-Agent']){
@@ -153,6 +156,7 @@ function getYiData(jkdata) {
                             }) 
                             log(分类);
                         }
+                        log('44');
                         let ss = extdata["filter"];
                         if(ss){
                             if($.type(ss)=='string'){//gzip解密
