@@ -133,7 +133,6 @@ function getYiData(jkdata) {
             }else{
                 try{
                     if(api_type=="drpy"){
-                        log('11');
                         if(extdata["class_name"] && extdata["class_url"]){
                             let cnames = extdata["class_name"].split('&');
                             let curls = extdata["class_url"].split('&');
@@ -141,9 +140,7 @@ function getYiData(jkdata) {
                                 return it+'$'+curls[i];
                             });
                         }else if(extdata["class_parse"]){
-                            log('33');
                             let cparses = extdata["class_parse"].split(';');
-                            log(cparses);
                             let headers = extdata["headers"] || {};
                             if(headers['User-Agent']){
                                 headers['User-Agent'] = headers['User-Agent']=='PC_UA'?PC_UA:MOBILE_UA;
@@ -158,9 +155,7 @@ function getYiData(jkdata) {
                                 }
                                 分类.push(typename+'$'+typeurl);
                             }) 
-                            log(分类);
                         }
-                        log('44');
                         let ss = extdata["filter"];
                         if(ss){
                             if($.type(ss)=='string'){//gzip解密
@@ -187,11 +182,6 @@ function getYiData(jkdata) {
                                 })
                             })
                             筛选 = 1;
-                                log(分类);
-                                log(类型);
-                                log(地区);
-                                log(年份);
-                                log(排序);
                         }
                     }else if(api_type=="XBPQ"){
                         if(extdata["分类"].indexOf('$')>-1){
@@ -459,7 +449,22 @@ function getYiData(jkdata) {
 
     if(listurl && lists.length==0){
         try{
-            if(api_type=="XBPQ"){
+            if(api_type=="drpy"){
+                MY_URL = listurl.replace('{{fl.lang}}','').replace('{{fl.letter}}','').replace('{{fl.字母}}','').replace('{{fl.语言}}','').replace('{{fl.地区}}','{{fl.area}}').replace('{{fl.年份}}','{{fl.year}}').replace('{{fl.剧情}}','{{fl.class}}').replace('{{fl.排序}}','{{fl.by}}');
+                if(!type_id){
+                    MY_URL = MY_URL.replace('{{fl.class}}','');
+                }
+                if(!area_id){
+                    MY_URL = MY_URL.replace('{{fl.area}}','');
+                }
+                if(!year_id){
+                    MY_URL = MY_URL.replace('{{fl.year}}','');
+                }
+                if(!sort_id){
+                    MY_URL = MY_URL.replace('{{fl.by}}','');
+                }
+                MY_URL = MY_URL.replace('{catePg}',extdata["起始页"]?MY_PAGE>extdata["起始页"]?MY_PAGE:extdata["起始页"]:MY_PAGE).replace('{year}', year_id).replace('{area}', area_id).replace('{by}', sort_id).replace('{class}', type_id).replace('{cateId}', cate_id);
+            }else if(api_type=="XBPQ"){
                 MY_URL = listurl.replace('/lang/{lang}','');
                 if(!type_id){
                     MY_URL = MY_URL.replace('/class/{class}','');
