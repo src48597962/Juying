@@ -1786,6 +1786,9 @@ function Resourceimport(input,importtype){
             showLoading('检测文件有效性');
             if(/\/storage\/emulated\//.test(input)){input = "file://" + input}
             var html = request(input,{timeout:2000});
+            if(html.includes('LuUPraez**')){
+                html = base64Decode(html.split('LuUPraez**')[1]);
+            }
             var reg = /("([^\\\"]*(\\.)?)*")|('([^\\\']*(\\.)?)*')|(\/{2,}.*?(\r|\n|$))|(\/\*(\n|.)*?\*\/)/g;
             html = html.replace(/api\"\:csp/g,'api":"csp').replace(reg, function(word) { 
                 return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
@@ -1841,7 +1844,6 @@ function Resourceimport(input,importtype){
                         let urlfile;
                         if($.type(extfile)=='object'){
                             urlfile = arr.type + '_' + arr.name;
-                            writeFile(urlfile, content);
                         }else if(/^file/.test(extfile)){
                             urlfile = 'hiker://files/' + extfile.split('/files/Documents/')[1];
                         }else if(/^http/.test(extfile)){
