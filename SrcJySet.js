@@ -1828,16 +1828,17 @@ function Resourceimport(input,importtype){
                         }
                     }
                     
-                    if(/^csp_XBiubiu/.test(obj.api)){
+                    if(/drpy2/.test(obj.api)){
+                        arr = { "name": obj.name, "type": "drpy", "ext": extfile};
+                    }
+                    /*
+                    else if(/^csp_XBiubiu/.test(obj.api)){
                         arr = { "name": obj.name, "type": "biubiu", "ext": extfile};
                     }else if(/^csp_XPath/.test(obj.api)){
                         arr = { "name": obj.name, "type": "xpath", "ext": extfile};
                     }else if(obj.api=="csp_XBPQ"){
                         arr = { "name": obj.name, "type": "XBPQ", "ext": extfile};
-                    }else if(/drpy2/.test(obj.api)){
-                        arr = { "name": obj.name, "type": "drpy", "ext": extfile};
-                    }
-                    /*else if(/^csp_XYQHiker/.test(obj.api)){
+                    }else if(/^csp_XYQHiker/.test(obj.api)){
                         arr = { "name": obj.name, "type": "XYQ", "ext": extfile};
                     }
                     */
