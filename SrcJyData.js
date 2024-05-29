@@ -84,6 +84,20 @@ function getYiData(jkdata) {
                 listurl = extdata["分类url"]?/^http/.test(extdata["分类url"])?extdata["分类url"]:host + extdata["分类url"]:"";
                 vodurlhead = getHome(listurl);
             }
+        } else if (api_type=="drpy") {
+            require(drpymuban);
+            eval(fetch(jkdata.url));
+            if(rule['模板']){
+                extdata = Object.assign(muban[rule['模板']], rule);
+            }else{
+                extdata = rule;
+            }
+            if(extdata){
+                let host = extdata["host"] || '';
+                classurl = host + filter_url;
+                listurl = classurl;
+                vodurlhead = getHome(listurl);
+            }
         } else {
             log('api类型错误')
         }
@@ -118,7 +132,48 @@ function getYiData(jkdata) {
                 筛选 = classCache.筛选;
             }else{
                 try{
-                    if(api_type=="XBPQ"){
+                    if(api_type=="drpy"){
+                        if(extdata["class_name"] && extdata["class_url"]){
+                            let cnames = extdata["class_name"].split('&');
+                            let curls = extdata["class_url"].split('&');
+                            分类 = cnames.map((it,i) => {
+                                return it+'$'+curls[i];
+                            });
+                            let ss = extdata["filter"];
+                            if(ss){
+                                if($.type(ss)=='string'){//gzip解密
+
+                                }
+                                分类.forEach(it=>{
+                                    let id = it.split('$')[1];
+                                    let sss = ss[id] || [];
+                                    sss.forEach(itit=>{
+                                        let itvalue = itit.value;
+                                        let values = [];
+                                        itvalue.forEach(value=>{
+                                            values.push(value.n+'$'+value.v)
+                                        })
+                                        if(itit.key=='cateId' || itit.key=='class'){
+                                            类型.push(values.join('#'));
+                                        }else if(itit.key=='area'){
+                                            地区.push(values.join('#'));
+                                        }else if(itit.key=='year'){
+                                            年份.push(values.join('#'));
+                                        }else if(itit.key=='by'){
+                                            排序.push(values.join('#'));
+                                        }
+                                    })
+                                })
+                                筛选 = 1;
+                            }
+                        }else if(extdata["分类"].indexOf('&')>-1&&extdata["分类值"]){
+                            let typenames = extdata["分类"].split('&');
+                            let typeids = extdata["分类值"].split('&');
+                            for(let i in typeids){
+                                分类.push(typenames[i]+'$'+typeids[i]);
+                            }
+                        }
+                    }else if(api_type=="XBPQ"){
                         if(extdata["分类"].indexOf('$')>-1){
                             分类 = extdata["分类"].split('#');
                             let ss = extdata["筛选"];
@@ -144,6 +199,11 @@ function getYiData(jkdata) {
                                     })
                                 })
                                 筛选 = 1;
+                                log(分类);
+                                log(类型);
+                                log(地区);
+                                log(年份);
+                                log(排序);
                             }
                         }else if(extdata["分类"].indexOf('&')>-1&&extdata["分类值"]){
                             let typenames = extdata["分类"].split('&');
