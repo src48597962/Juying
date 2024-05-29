@@ -144,15 +144,17 @@ function getYiData(jkdata) {
                         }else if(extdata["class_parse"]){
                             log('33');
                             let cparses = extdata["class_parse"].split(';');
+                            log(cparses);
                             let headers = extdata["headers"] || {};
                             if(headers['User-Agent']){
                                 headers['User-Agent'] = headers['User-Agent']=='PC_UA'?PC_UA:MOBILE_UA;
                             }
                             let chtml = request(extdata["host"], {headers:headers, timeout:5000});
-                            let fls = pdfa(chtml, eval(cparses[0]));
+                            log(chtml);
+                            let fls = pdfa(chtml, cparses[0]);
                             log(fls);
                             fls.forEach(it=>{
-                                分类.push(pdfh(it, eval(cparses[1]))+'$'+pdfh(it, eval(cparses[2])));
+                                分类.push(pdfh(it, cparses[1])+'$'+pdfh(it, cparses[2]));
                             }) 
                             log(分类);
                         }
