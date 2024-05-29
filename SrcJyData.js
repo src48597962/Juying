@@ -217,7 +217,7 @@ function getYiData(jkdata) {
                         }
                     }
                 }catch(e){
-                    log(api_name+'>访问异常，请更换源接口！获取分类失败>'+e.message);
+                    log(api_name+'>访问异常，请更换源接口！获取分类失败>'+e.message + " 错误行#" + e.lineNumber);
                 }
                 storage0.putMyVar('SrcJu_dianbo$classCache', {分类:分类,类型:类型,地区:地区,年份:年份,排序:排序,筛选:筛选,推荐:推荐});
             }
@@ -398,6 +398,7 @@ function getYiData(jkdata) {
                     MY_URL = MY_URL.replace('/by/{by}','');
                 }
                 MY_URL = MY_URL.replace('{catePg}',extdata["起始页"]?MY_PAGE>extdata["起始页"]?MY_PAGE:extdata["起始页"]:MY_PAGE).replace('{year}', year_id).replace('{area}', area_id).replace('{by}', sort_id).replace('{class}', type_id).replace('{cateId}', cate_id);
+                api_ua = extdata['请求头'] || api_ua;
             }else{
                 MY_URL = listurl + MY_PAGE;
                 if(api_type=="v2"||api_type=="app"){
@@ -483,7 +484,7 @@ function getYiData(jkdata) {
                 }
             }       
         }catch(e){
-            log(api_name+' 接口访问异常，请更换接口！获取影片失败>'+e.message)
+            log(api_name+' 接口访问异常，请更换接口！获取影片失败>'+e.message + " 错误行#" + e.lineNumber)
         }
     }
     if(lists.length==0){
@@ -659,7 +660,7 @@ function getSsData(name, jkdata) {
         } catch (e) {
             json = { data: [] };
             if(gethtml){geterror = 1;}
-            //log(1);//log(obj.name+'>'+e.message);
+            //log(1);//log(obj.name+'>'+e.message + " 错误行#" + e.lineNumber);
         }
         try{
             try{
@@ -778,6 +779,7 @@ function getSsData(name, jkdata) {
         }
     }else if(api_type=="XBPQ"){
         try{
+            api_ua = extdata['请求头'] || api_ua;
             if(extdata["搜索模式"]=="0"&&extdata["搜索后缀"]){
                 gethtml = getHtmlCode(ssurl,api_ua,5000);
                 let html = JSON.parse(gethtml);
@@ -812,7 +814,7 @@ function getSsData(name, jkdata) {
                 }
             })
         }catch(e){
-            log(e.message);
+            log(e.message + " 错误行#" + e.lineNumber);
         }
     }
     let searchs = [];
@@ -836,7 +838,7 @@ function getSsData(name, jkdata) {
                 })
             });
         } catch (e) {
-            log(jkdata.name + '输出结果报错>'+e.message);
+            log(jkdata.name + '输出结果报错>'+e.message + " 错误行#" + e.lineNumber);
         }
     }
     return searchs;
@@ -848,7 +850,7 @@ function getErData(jkdata) {
     let api_ua = jkdata.ua||"MOBILE_UA";
     api_ua = api_ua=="MOBILE_UA"?MOBILE_UA:api_ua=="PC_UA"?PC_UA:api_ua;
 
-    let html,isxml;
+    let html,isxml,extdata;
     if (/v1|app|v2|iptv|cms/.test(api_type)) {
         try{
             let gethtml = request(MY_URL, {headers: {'User-Agent': api_ua}, timeout:5000});
@@ -863,10 +865,12 @@ function getErData(jkdata) {
             
         }
     } else if (/xpath|biubiu|XBPQ/.test(api_type)) {
+        extdata = extDataCache(jkdata)
         try{
+            api_ua = extdata['请求头'] || api_ua;
             html = request(MY_URL, {headers: {'User-Agent': api_ua}, timeout:5000});
         } catch (e) {
-            log(e.message);
+            log(e.message + " 错误行#" + e.lineNumber);
         }
     }
     
@@ -957,7 +961,6 @@ function getErData(jkdata) {
             arts = html.videolist;
             conts = arts;
         }else if (/xpath/.test(api_type)) {
-            let extdata = extDataCache(jkdata)
             try{
                 actor = String(xpathArray(html, extdata.dtActor).join(',')).replace(extdata.filter?eval(extdata.filter):"","").replace(/[\r\ \n]/g, "");
             }catch(e){
@@ -1029,8 +1032,6 @@ function getErData(jkdata) {
         }else if (/biubiu/.test(api_type)) {
             let getsm = "";
             try{
-                getsm = "获取传递数据";
-                let extdata = extDataCache(jkdata)
                 getsm = "获取播放地址数组bfjiequshuzuqian";
                 let bflist = html.split(extdata.bfjiequshuzuqian.replace(/\\/g,""));
                 bflist.splice(0,1);
@@ -1057,11 +1058,10 @@ function getErData(jkdata) {
                 getsm = "获取剧情简介juqingqian";
                 desc = pdfh(html.split(extdata.juqingqian.replace(/\\/g,""))[1].split(extdata.juqinghou.replace(/\\/g,""))[0],"Text");
             }catch(e){
-                log(getsm+'失败>'+e.message)
+                log(getsm+'失败>'+e.message + " 错误行#" + e.lineNumber)
             }    
         }else if (/XBPQ/.test(api_type)) {
             try{
-                let extdata = extDataCache(jkdata)
                 let arthtml = html;
                 if(extdata["线路二次截取"]){
                     arthtml = arthtml.split(extdata["线路二次截取"].split('&&')[0])[1].split(extdata["线路二次截取"].split('&&')[1])[0];
@@ -1097,7 +1097,7 @@ function getErData(jkdata) {
                 extdata["简介"] = extdata["简介"]&&extdata["简介"].includes('+')?extdata["简介"].split('+')[1]:extdata["简介"];
                 desc = getBetweenStr(html, extdata["简介"]);
             }catch(e){
-                log('失败>'+e.message)
+                log('失败>'+e.message + " 错误行#" + e.lineNumber)
             }    
         }else{
             //自定义接口/web自动匹配
