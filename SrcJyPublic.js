@@ -10,6 +10,7 @@ if(Jucfg != ""){
 
 let jkfile = "hiker://files/rules/Src/Juying2/jiekou.json";
 let jxfile = "hiker://files/rules/Src/Juying2/jiexi.json";
+let drpymuban = "https://raw.gitmirror.com/hjdhnx/hipy-server/master/app/t4/files/drpy_libs/%E6%A8%A1%E6%9D%BF.js";
 
 function getFile(lx) {
     let file = lx=='jk'?jkfile:jxfile;
