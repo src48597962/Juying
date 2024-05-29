@@ -133,6 +133,7 @@ function getYiData(jkdata) {
             }else{
                 try{
                     if(api_type=="drpy"){
+                        log(extdata);
                         if(extdata["class_name"] && extdata["class_url"]){
                             let cnames = extdata["class_name"].split('&');
                             let curls = extdata["class_url"].split('&');
@@ -165,12 +166,6 @@ function getYiData(jkdata) {
                                     })
                                 })
                                 筛选 = 1;
-                            }
-                        }else if(extdata["分类"].indexOf('&')>-1&&extdata["分类值"]){
-                            let typenames = extdata["分类"].split('&');
-                            let typeids = extdata["分类值"].split('&');
-                            for(let i in typeids){
-                                分类.push(typenames[i]+'$'+typeids[i]);
                             }
                         }
                     }else if(api_type=="XBPQ"){
