@@ -92,6 +92,7 @@ function getYiData(jkdata) {
             }else{
                 extdata = rule;
             }
+            log(extdata);
             if(extdata){
                 let host = extdata["host"] || '';
                 classurl = host + extdata["filter_url"];
@@ -133,7 +134,6 @@ function getYiData(jkdata) {
             }else{
                 try{
                     if(api_type=="drpy"){
-                        log(extdata);
                         if(extdata["class_name"] && extdata["class_url"]){
                             let cnames = extdata["class_name"].split('&');
                             let curls = extdata["class_url"].split('&');
