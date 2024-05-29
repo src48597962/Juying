@@ -1836,10 +1836,11 @@ function Resourceimport(input,importtype){
                         arr = { "name": obj.name, "type": "XBPQ", "ext": extfile};
                     }else if(/drpy2/.test(obj.api)){
                         arr = { "name": obj.name, "type": "drpy", "ext": extfile};
-                    }else if(/^csp_XYQHiker/.test(obj.api)){
+                    }
+                    /*else if(/^csp_XYQHiker/.test(obj.api)){
                         arr = { "name": obj.name, "type": "XYQ", "ext": extfile};
                     }
-
+                    */
                     if(arr){
                         let urlfile;
                         if($.type(extfile)=='object'){
