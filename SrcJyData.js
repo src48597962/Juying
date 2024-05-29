@@ -92,7 +92,6 @@ function getYiData(jkdata) {
             }else{
                 extdata = rule;
             }
-            log(extdata);
             if(extdata){
                 let host = extdata["host"] || '';
                 classurl = host + extdata["filter_url"];
@@ -140,33 +139,46 @@ function getYiData(jkdata) {
                             分类 = cnames.map((it,i) => {
                                 return it+'$'+curls[i];
                             });
-                            let ss = extdata["filter"];
-                            if(ss){
-                                if($.type(ss)=='string'){//gzip解密
-
-                                }
-                                分类.forEach(it=>{
-                                    let id = it.split('$')[1];
-                                    let sss = ss[id] || [];
-                                    sss.forEach(itit=>{
-                                        let itvalue = itit.value;
-                                        let values = [];
-                                        itvalue.forEach(value=>{
-                                            values.push(value.n+'$'+value.v)
-                                        })
-                                        if(itit.key=='cateId' || itit.key=='class'){
-                                            类型.push(values.join('#'));
-                                        }else if(itit.key=='area'){
-                                            地区.push(values.join('#'));
-                                        }else if(itit.key=='year'){
-                                            年份.push(values.join('#'));
-                                        }else if(itit.key=='by'){
-                                            排序.push(values.join('#'));
-                                        }
-                                    })
-                                })
-                                筛选 = 1;
+                        }else if(extdata["class_parse"]){
+                            let cparses = extdata["class_parse"].split(';');
+                            let headers = extdata["headers"] || {};
+                            if(headers['User-Agent']){
+                                headers['User-Agent'] = headers['User-Agent']=='PC_UA'?PC_UA:MOBILE_UA;
                             }
+                            let chtml = request(extdata["host"], {headers:headers, timeout:5000});
+                            let fls = pdfa(chtml, cparses[0]);
+                            log(fls);
+                            fls.forEach(it=>{
+                                分类.push(pdfh(it,cparses[1])+'$'+pdfh(it,cparses[2]));
+                            }) 
+                            log(分类);
+                        }
+                        let ss = extdata["filter"];
+                        if(ss){
+                            if($.type(ss)=='string'){//gzip解密
+
+                            }
+                            分类.forEach(it=>{
+                                let id = it.split('$')[1];
+                                let sss = ss[id] || [];
+                                sss.forEach(itit=>{
+                                    let itvalue = itit.value;
+                                    let values = [];
+                                    itvalue.forEach(value=>{
+                                        values.push(value.n+'$'+value.v)
+                                    })
+                                    if(itit.key=='cateId' || itit.key=='class'){
+                                        类型.push(values.join('#'));
+                                    }else if(itit.key=='area'){
+                                        地区.push(values.join('#'));
+                                    }else if(itit.key=='year'){
+                                        年份.push(values.join('#'));
+                                    }else if(itit.key=='by'){
+                                        排序.push(values.join('#'));
+                                    }
+                                })
+                            })
+                            筛选 = 1;
                         }
                     }else if(api_type=="XBPQ"){
                         if(extdata["分类"].indexOf('$')>-1){
