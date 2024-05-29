@@ -153,13 +153,10 @@ function getYiData(jkdata) {
                             fls.forEach(it=>{
                                 let typename = _pdfh(it, cparses[1]);
                                 let typeurl = _pdfh(it, cparses[2]);
-                                log(typeurl.match(cparses[3]));
-                                /*
                                 if(cparses.length==4){
-                                    typeurl = typeurl.match(cparses[3])
+                                    typeurl = typeurl.match(cparses[3])[1];
                                 }
-                                */
-                                分类.push(_pdfh(it, cparses[1])+'$'+_pdfh(it, cparses[2]));
+                                分类.push(typename+'$'+typeurl);
                             }) 
                             log(分类);
                         }
