@@ -94,7 +94,7 @@ function getYiData(jkdata) {
             }
             if(extdata){
                 let host = extdata["host"] || '';
-                classurl = host + filter_url;
+                classurl = host + extdata["filter_url"];
                 listurl = classurl;
                 vodurlhead = getHome(listurl);
             }
