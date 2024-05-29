@@ -140,7 +140,6 @@ function getYiData(jkdata) {
                             分类 = cnames.map((it,i) => {
                                 return it+'$'+curls[i];
                             });
-                            log('22');
                         }else if(extdata["class_parse"]){
                             log('33');
                             let cparses = extdata["class_parse"].split(';');
@@ -150,9 +149,9 @@ function getYiData(jkdata) {
                                 headers['User-Agent'] = headers['User-Agent']=='PC_UA'?PC_UA:MOBILE_UA;
                             }
                             let chtml = request(extdata["host"], {headers:headers, timeout:5000});
-                            log(chtml);
                             let fls = pdfa(chtml, cparses[0]);
                             log(fls);
+                            log(_pdfa(chtml, cparses[0]))
                             fls.forEach(it=>{
                                 分类.push(pdfh(it, cparses[1])+'$'+pdfh(it, cparses[2]));
                             }) 
