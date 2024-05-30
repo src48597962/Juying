@@ -161,6 +161,7 @@ function getYiData(jkdata) {
                                     let typeurl = _pdfh(it, cparses[2]);
                                     log(typeurl);
                                     if(cparses.length==4 && cparses[3]){
+                                        log(typeurl.match(cparses[3]));
                                         typeurl = typeurl.match(cparses[3])[1];
                                     }
                                     if(cate_exclude(typename)==-1){
