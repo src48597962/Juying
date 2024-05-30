@@ -94,8 +94,8 @@ function getYiData(jkdata) {
             }
             if(extdata){
                 let host = extdata["host"] || '';
-                classurl = host + extdata["filter_url"];
-                listurl = classurl;
+                classurl = host;
+                listurl = classurl + '/' + extdata["filter_url"];
                 vodurlhead = getHome(listurl);
             }
         } else {
@@ -450,7 +450,7 @@ function getYiData(jkdata) {
     if(listurl && lists.length==0){
         try{
             if(api_type=="drpy"){
-                MY_URL = listurl.replace('{{fl.lang}}','').replace('{{fl.letter}}','').replace('{{fl.字母}}','').replace('{{fl.语言}}','').replace('or','||');
+                MY_URL = listurl.replace('{{fl.lang}}','').replace('{{fl.letter}}','').replace('{{fl.字母}}','').replace('{{fl.语言}}','');
                 MY_URL = MY_URL.replace('fl.地区','area_id').replace('fl.年份','year_id').replace('fl.剧情','type_id').replace('fl.排序','sort_id');
                 MY_URL = MY_URL.replace('fl.cateId', 'cate_id').replace('fl.area','area_id').replace('fl.year','year_id').replace('fl.class','type_id').replace('fl.by','sort_id');
                 /*if(!type_id){
@@ -465,7 +465,7 @@ function getYiData(jkdata) {
                 if(!sort_id){
                     MY_URL = MY_URL.replace('{{fl.by}}','');
                 }*/
-                MY_URL = MY_URL.replace(/{{/g, '${').replace(/}}/g, '}');
+                MY_URL = MY_URL.replace('or', '||').replace('fypage', MY_PAGE).replace(/{{/g, '${').replace(/}}/g, '}');
                 eval(`MY_URL = \`${MY_URL}\`;`);
                 log(MY_URL);
                 //MY_URL = MY_URL.replace('fypage',MY_PAGE).replace('{{fl.year}}', year_id).replace('{{fl.area}}', area_id).replace('{{fl.by}}', sort_id).replace('{{fl.class}}', type_id).replace('{{fl.cateId}}', cate_id);
