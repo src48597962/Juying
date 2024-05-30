@@ -35,6 +35,21 @@ function getBetweenStr(str, key) {
     const match = str.match(regex);
     return match ? match[1].replace(/<\/?.+?\/?>/g,'') : '';
 }
+function dealJson(html) {
+    try {
+        // html = html.match(/[\w|\W|\s|\S]*?(\{[\w|\W|\s|\S]*\})/).group[1];
+        html = html.trim();
+        if(!((html.startsWith('{') && html.endsWith('}'))||(html.startsWith('[') && html.endsWith(']')))){
+            html = '{'+html.match(/.*?\{(.*)\}/m)[1]+'}';
+        }
+    } catch (e) {
+    }
+    try {
+        html = JSON.parse(html);
+    }catch (e) {}
+    // console.log(typeof(html));
+    return html;
+}
 // 获取一级数据
 function getYiData(jkdata) {
     let d = [];
@@ -556,7 +571,7 @@ function getYiData(jkdata) {
                 let id,name,pic,note
                 let dws = extdata["一级"].split(';');
                 if(/^json:/.test(dws[0])){
-                    gethtml = JSON.parse(gethtml)
+                    gethtml = dealJson(gethtml)
                 }
                 //else{
                     let vodlist = _pdfa(gethtml, dws[0].replace('json:',''));
