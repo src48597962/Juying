@@ -1,55 +1,5 @@
 // 本代码仅用于个人学习，请勿用于其他作用，下载后请24小时内删除，代码虽然是公开学习的，但请尊重作者，应留下说明
 
-// extData缓存
-function extDataCache(jkdata) {
-    if($.type(jkdata.ext)=='object'){
-        return jkdata.ext;
-    }else if(/^hiker/.test(jkdata.url)){
-        if (jkdata.ext && /^http/.test(jkdata.ext)) {
-            if(!fileExist(jkdata.url)){
-                let content = fetch(jkdata.ext, {timeout:3000});
-                if (content) {
-                    writeFile(jkdata.url, content);
-                }
-            }
-        }
-        if(fileExist(jkdata.url)){
-            eval("let extdata = " + fetch(jkdata.url));
-            return extdata;
-        }else{
-            toast('数据文件获取失败');
-            return '';
-        }
-    }
-    toast('此源接口数据有异常');
-    return '';
-}
-//截取中间字符
-function getBetweenStr(str, key) {
-    if(!str || !key){
-        return '';
-    }
-    const prefix = key.split('&&')[0];
-    const suffix = key.split('&&')[1];
-    const regex = new RegExp(prefix + '(.*?)' + suffix, 's'); // 's' 使 . 匹配换行符
-    const match = str.match(regex);
-    return match ? match[1].replace(/<\/?.+?\/?>/g,'') : '';
-}
-function dealJson(html) {
-    try {
-        // html = html.match(/[\w|\W|\s|\S]*?(\{[\w|\W|\s|\S]*\})/).group[1];
-        html = html.trim();
-        if(!((html.startsWith('{') && html.endsWith('}'))||(html.startsWith('[') && html.endsWith(']')))){
-            html = '{'+html.match(/.*?\{(.*)\}/m)[1]+'}';
-        }
-    } catch (e) {
-    }
-    try {
-        html = JSON.parse(html);
-    }catch (e) {}
-    // console.log(typeof(html));
-    return html;
-}
 // 获取一级数据
 function getYiData(jkdata) {
     let d = [];
@@ -1424,4 +1374,54 @@ function getErData(jkdata) {
         "lists": lists,
         "parse_api": parse_api
     };
+}
+
+
+// extData缓存
+function extDataCache(jkdata) {
+    if($.type(jkdata.ext)=='object'){
+        return jkdata.ext;
+    }else if(/^hiker/.test(jkdata.url)){
+        if (jkdata.ext && /^http/.test(jkdata.ext)) {
+            if(!fileExist(jkdata.url)){
+                let content = fetch(jkdata.ext, {timeout:3000});
+                if (content) {
+                    writeFile(jkdata.url, content);
+                }
+            }
+        }
+        if(fileExist(jkdata.url)){
+            eval("let extdata = " + fetch(jkdata.url));
+            return extdata;
+        }else{
+            toast('数据文件获取失败');
+            return '';
+        }
+    }
+    toast('此源接口数据有异常');
+    return '';
+}
+//截取中间字符
+function getBetweenStr(str, key) {
+    if(!str || !key){
+        return '';
+    }
+    const prefix = key.split('&&')[0];
+    const suffix = key.split('&&')[1];
+    const regex = new RegExp(prefix + '(.*?)' + suffix, 's'); // 's' 使 . 匹配换行符
+    const match = str.match(regex);
+    return match ? match[1].replace(/<\/?.+?\/?>/g,'') : '';
+}
+//归整转为json对象
+function dealJson(html) {
+    try {
+        html = html.trim();
+        if(!((html.startsWith('{') && html.endsWith('}'))||(html.startsWith('[') && html.endsWith(']')))){
+            html = '{'+html.match(/.*?\{(.*)\}/m)[1]+'}';
+        }
+    } catch (e) {  }
+    try {
+        html = JSON.parse(html);
+    }catch (e) {}
+    return html;
 }
