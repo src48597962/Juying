@@ -155,7 +155,7 @@ function getYiData(jkdata) {
                             }
                             let chtml = request(extdata["host"], {headers:headers, timeout:5000});
                             let fls = _pdfa(chtml, cparses[0]);
-                            log(cparses);
+                            log(fls);
                             fls.forEach(it=>{
                                 let typename = _pdfh(it, cparses[1]);
                                 let typeurl = _pdfh(it, cparses[2]);
