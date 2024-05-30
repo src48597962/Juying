@@ -123,6 +123,7 @@ function getYiData(jkdata) {
             let 排序 = [];
             let 筛选 = 0;
             
+            let cate_exclude = ['主页','求片/留言'];
             const Color = "#3399cc";
             let classCache = storage0.getMyVar('SrcJu_dianbo$classCache');
             if(classCache){
@@ -145,9 +146,8 @@ function getYiData(jkdata) {
                             });
                         }else if(extdata["class_parse"]){
                             let cparses = extdata["class_parse"].split(';');
-                            let cate_exclude = [];
                             if(extdata["cate_exclude"]){
-                                cate_exclude = extdata["cate_exclude"].split('|');
+                                cate_exclude = cate_exclude.concat(extdata["cate_exclude"].split('|'));
                             }
                             headers = extdata["headers"] || headers;
                             if(headers['User-Agent']){
@@ -512,6 +512,7 @@ function getYiData(jkdata) {
             if(api_type=="drpy"){
                 log(listurl);
                 if(extdata['filter_url']){
+                    let fl = {};
                     let filter_url = extdata['filter_url'].replace('{{fl.lang}}','').replace('{{fl.letter}}','').replace('{{fl.字母}}','').replace('{{fl.语言}}','');
                     filter_url = filter_url.replace('fl.类型',type_id?'type_id':'cate_id').replace('fl.地区','area_id').replace('fl.年份','year_id').replace('fl.剧情','class_id').replace('fl.排序','sort_id');
                     filter_url = filter_url.replace('fl.cateId', type_id?'type_id':'cate_id').replace('fl.area','area_id').replace('fl.year','year_id').replace('fl.class','class_id').replace('fl.by','sort_id');
