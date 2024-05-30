@@ -145,6 +145,7 @@ function getYiData(jkdata) {
                             });
                         }else if(extdata["class_parse"]){
                             let cparses = extdata["class_parse"].split(';');
+                            let cate_exclude = extdata["cate_exclude"].split('|');
                             headers = extdata["headers"] || headers;
                             if(headers['User-Agent']){
                                 headers['User-Agent'] = headers['User-Agent']=='PC_UA'?PC_UA:MOBILE_UA;
@@ -157,7 +158,9 @@ function getYiData(jkdata) {
                                 if(cparses.length==4 && cparses[3]){
                                     typeurl = typeurl.match(cparses[3])[1];
                                 }
-                                分类.push(typename+'$'+typeurl);
+                                if(cate_exclude(typename)==-1){
+                                    分类.push(typename+'$'+typeurl);
+                                }
                             }) 
                         }
                         let ss = extdata["filter"];
