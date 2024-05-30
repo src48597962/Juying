@@ -486,9 +486,9 @@ function getYiData(jkdata) {
             if(api_type=="drpy"){
                 let id,name,pic,note
                 let dws = extdata["一级"].split(';');
-                let vodlist = _pd(gethtml, dws[0], MY_URL);
+                let vodlist = _pd(gethtml, dws[0]);
                 vodlist.forEach(it=>{
-                    id = _pdfh(it, dws[4]);
+                    id = _pd(it, dws[4], MY_URL);
                     name = _pdfh(it, dws[1]);
                     pic = _pdfh(it, dws[2]);
                     note = _pdfh(it, dws[3]);
