@@ -523,6 +523,9 @@ function getYiData(jkdata) {
                     note = _pdfh(it, dws[3]);
                     lists.push({"vod_id":id,"vod_name":name,"vod_remarks":note,"vod_pic":pic});
                 })
+                if(vodlist.length==0){
+                    lists.push({"vod_id":'hiker://empty',"vod_name":'未获取到列表',"vod_remarks":'列表为空',"vod_pic":'hiker://files/cache/src/picloading.gif'});
+                }
             }else if(api_type=="XBPQ"){
                 extdata["二次截取"] = extdata["二次截取"] || (gethtml.indexOf(`<ul class="stui-vodlist`)>-1?`<ul class="stui-vodlist&&</ul>`:gethtml.indexOf(`<ul class="myui-vodlist`)>-1?`<ul class="myui-vodlist&&</ul>`:"");
                 if(extdata["二次截取"]){
