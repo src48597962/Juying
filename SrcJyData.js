@@ -551,7 +551,7 @@ function getYiData(jkdata) {
             }
 
             let gethtml = request(MY_URL, { headers: headers, timeout:5000 });
-            log(gethtml);
+
             if(api_type=="drpy"){
                 let id,name,pic,note
                 let dws = extdata["一级"].split(';');
