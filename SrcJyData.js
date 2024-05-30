@@ -614,7 +614,7 @@ function getYiData(jkdata) {
             if(vodname){
                 let vodpic = list.vod_pic||list.pic;
                 let voddesc = list.vod_remarks.replace(/<\/?.+?\/?>/g,'')||list.state.replace(/<\/?.+?\/?>/g,'')||"";
-                let vodurl = list.vod_id?vodurlhead&&!/^http/.test(list.vod_id)?vodurlhead+list.vod_id:list.vod_id:list.nextlink;
+                let vodurl = /^hiker/.test(list.vodid)?list.vodid:list.vod_id?vodurlhead&&!/^http/.test(list.vod_id)?vodurlhead+list.vod_id:list.vod_id:list.nextlink;
                 vodpic = vodpic?vodpic.replace('/img.php?url=','').replace('/tu.php?tu=',''):"hiker://files/cache/src/picloading.gif";
                 if(/^\/upload|^upload/.test(vodpic)){
                     vodpic = vodurl.match(/http(s)?:\/\/(.*?)\//)[0] + vodpic;
@@ -631,7 +631,7 @@ function getYiData(jkdata) {
                     title: vodname,
                     desc: voddesc,
                     pic_url: vodpic,
-                    url: list.play?list.play:$("hiker://empty#immersiveTheme##autoCache#").rule(() => {
+                    url: /^hiker/.test(vodurl)?vodurl:list.play?list.play:$("hiker://empty#immersiveTheme##autoCache#").rule(() => {
                         require(config.依赖);
                         dianboerji()
                     }),
