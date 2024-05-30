@@ -43,6 +43,7 @@ function getYiData(jkdata) {
     let api_url = jkdata.url||"";
     let api_ua = jkdata.ua||"MOBILE_UA";
     api_ua = api_ua=="MOBILE_UA"?MOBILE_UA:api_ua=="PC_UA"?PC_UA:api_ua;
+    let headers = { 'User-Agent': api_ua };
     
     let vodurlhead,classurl,listurl,listnode,extdata;
     if(api_name&&api_type&&api_url){
@@ -141,7 +142,7 @@ function getYiData(jkdata) {
                             });
                         }else if(extdata["class_parse"]){
                             let cparses = extdata["class_parse"].split(';');
-                            let headers = extdata["headers"] || {};
+                            headers = extdata["headers"] || headers;
                             if(headers['User-Agent']){
                                 headers['User-Agent'] = headers['User-Agent']=='PC_UA'?PC_UA:MOBILE_UA;
                             }
@@ -158,9 +159,6 @@ function getYiData(jkdata) {
                         }
                         let ss = extdata["filter"];
                         if(ss){
-                            if($.type(ss)=='string'){//gzip解密
-
-                            }
                             分类.forEach(it=>{
                                 let id = it.split('$')[1];
                                 let sss = ss[id] || [];
@@ -285,7 +283,7 @@ function getYiData(jkdata) {
                 }catch(e){
                     log(api_name+'>访问异常，请更换源接口！获取分类失败>'+e.message + " 错误行#" + e.lineNumber);
                 }
-                //storage0.putMyVar('SrcJu_dianbo$classCache', {分类:分类,类型:类型,地区:地区,年份:年份,排序:排序,筛选:筛选,推荐:推荐});
+                storage0.putMyVar('SrcJu_dianbo$classCache', {分类:分类,类型:类型,地区:地区,年份:年份,排序:排序,筛选:筛选,推荐:推荐});
             }
 
             if(分类.length>0){
@@ -456,7 +454,6 @@ function getYiData(jkdata) {
                 filter_url = filter_url.replace('fypage', MY_PAGE).replace(/ or /g, '||').replace(/{{/g, '${').replace(/}}/g, '}');
                 eval(`filter_url = \`${filter_url}\`;`);
                 MY_URL = listurl.replace('fyfilter', filter_url);
-                log(MY_URL);
             }else if(api_type=="XBPQ"){
                 MY_URL = listurl.replace('/lang/{lang}','');
                 if(!type_id){
@@ -484,9 +481,20 @@ function getYiData(jkdata) {
                     MY_URL = MY_URL + '&t=' + type_id;
                 }
             }
-            let gethtml = request(MY_URL, { headers: { 'User-Agent': api_ua }, timeout:5000 });
+            let gethtml = request(MY_URL, { headers: headers, timeout:5000 });
             
-            if(api_type=="XBPQ"){
+            if(api_type=="drpy"){
+                let id,name,pic,note
+                let dws = extdata["一级"].split(';');
+                let vodlist = _pdfa(gethtml, dws[0]);
+                vodlist.forEach(it=>{
+                    id = _pd(it, dws[4]);
+                    name = _pdfh(it, dws[1]);
+                    pic = _pdfh(it, dws[2]);
+                    note = _pdfh(it, dws[2]);
+                    lists.push({"vod_id":id,"vod_name":name,"vod_remarks":note,"vod_pic":pic});
+                })
+            }else if(api_type=="XBPQ"){
                 extdata["二次截取"] = extdata["二次截取"] || (gethtml.indexOf(`<ul class="stui-vodlist`)>-1?`<ul class="stui-vodlist&&</ul>`:gethtml.indexOf(`<ul class="myui-vodlist`)>-1?`<ul class="myui-vodlist&&</ul>`:"");
                 if(extdata["二次截取"]){
                     gethtml = gethtml.split(extdata["二次截取"].split('&&')[0])[1].split(extdata["二次截取"].split('&&')[1])[0];
