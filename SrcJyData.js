@@ -514,8 +514,7 @@ function getYiData(jkdata) {
                 
                 if(extdata['filter_url']){
                     let fl = {};
-                    let filter_url = extdata['filter_url'].replace('fyclass', cate_id).replace('fypage', MY_PAGE).replace('{{fl.lang}}','').replace('{{fl.letter}}','').replace('{{fl.字母}}','').replace('{{fl.语言}}','');
-                    log(filter_url);
+                    let filter_url = extdata['filter_url'].replace('{{fl.lang}}','').replace('{{fl.letter}}','').replace('{{fl.字母}}','').replace('{{fl.语言}}','');
                     filter_url = filter_url.replace('fl.类型',type_id?'type_id':'cate_id').replace('fl.地区','area_id').replace('fl.年份','year_id').replace('fl.剧情','class_id').replace('fl.排序','sort_id');
                     filter_url = filter_url.replace('fl.cateId', type_id?'type_id':'cate_id').replace('fl.area','area_id').replace('fl.year','year_id').replace('fl.class','class_id').replace('fl.by','sort_id');
                     filter_url = filter_url.replace(/ or /g, '||').replace(/{{/g, '${').replace(/}}/g, '}');
@@ -524,6 +523,7 @@ function getYiData(jkdata) {
                 }else{
                     MY_URL = listurl.replace('fyclass', cate_id).replace('fypage', MY_PAGE);
                 }
+                MY_URL = MY_URL.replace('fyclass', cate_id).replace('fypage', MY_PAGE);
                 log(MY_URL);
             }else if(api_type=="XBPQ"){
                 MY_URL = listurl.replace('/lang/{lang}','');
