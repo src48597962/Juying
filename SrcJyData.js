@@ -155,18 +155,17 @@ function getYiData(jkdata) {
                             }
                             let chtml = request(extdata["host"], {headers:headers, timeout:5000});
                             let fls = _pdfa(chtml, cparses[0]);
-                            log(fls);
                             fls.forEach(it=>{
-                                let typename = _pdfh(it, cparses[1]);
-                                let typeurl = _pdfh(it, cparses[2]);
-                                if(cparses.length==4 && cparses[3]){
-                                    log(typeurl);
-                                    log(cparses[3]);
-                                    typeurl = typeurl.match(cparses[3])[1];
-                                }
-                                if(cate_exclude(typename)==-1){
-                                    分类.push(typename+'$'+typeurl);
-                                }
+                                try{
+                                    let typename = _pdfh(it, cparses[1]);
+                                    let typeurl = _pdfh(it, cparses[2]);
+                                    if(cparses.length==4 && cparses[3]){
+                                        typeurl = typeurl.match(cparses[3])[1];
+                                    }
+                                    if(cate_exclude(typename)==-1){
+                                        分类.push(typename+'$'+typeurl);
+                                    }
+                                }catch(e){}
                             }) 
                         }
                         let ss = extdata["filter"];
