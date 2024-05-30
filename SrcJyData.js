@@ -486,12 +486,12 @@ function getYiData(jkdata) {
             if(api_type=="drpy"){
                 let id,name,pic,note
                 let dws = extdata["一级"].split(';');
-                let vodlist = _pdfa(gethtml, dws[0]);
+                let vodlist = _pd(gethtml, dws[0], MY_URL);
                 vodlist.forEach(it=>{
-                    id = _pd(it, dws[4]);
+                    id = _pdfh(it, dws[4]);
                     name = _pdfh(it, dws[1]);
                     pic = _pdfh(it, dws[2]);
-                    note = _pdfh(it, dws[2]);
+                    note = _pdfh(it, dws[3]);
                     lists.push({"vod_id":id,"vod_name":name,"vod_remarks":note,"vod_pic":pic});
                 })
             }else if(api_type=="XBPQ"){
