@@ -543,15 +543,21 @@ function getYiData(jkdata) {
                 let dws = extdata["一级"].split(';');
                 let vodlist = _pdfa(gethtml, dws[0]);
                 vodlist.forEach(it=>{
-                    try{
+                    if(dws[4]){
                         id = _pd(it, dws[4], MY_URL);
+                    }
+                    if(dws[1]){
                         name = _pdfh(it, dws[1]);
+                    }
+                    if(dws[2]){
                         pic = _pdfh(it, dws[2]);
+                    }
+                    if(dws[3]){
                         note = _pdfh(it, dws[3]);
-                        lists.push({"vod_id":id,"vod_name":name,"vod_remarks":note,"vod_pic":pic});
-                    }catch(e){
-                        log('生成列表有错误>'+e.message + " 错误行#" + e.lineNumber);
-                    } 
+                    }
+                    if(id&&name){
+                        lists.push({"vod_id":id,"vod_name":name,"vod_remarks":note||"","vod_pic":pic||""});
+                    }
                 })
             }else if(api_type=="XBPQ"){
                 extdata["二次截取"] = extdata["二次截取"] || (gethtml.indexOf(`<ul class="stui-vodlist`)>-1?`<ul class="stui-vodlist&&</ul>`:gethtml.indexOf(`<ul class="myui-vodlist`)>-1?`<ul class="myui-vodlist&&</ul>`:"");
