@@ -655,7 +655,7 @@ function getYiData(jkdata) {
             let vodpic = list.vod_pic||list.pic;
             let voddesc = list.vod_remarks.replace(/<\/?.+?\/?>/g,'')||list.state.replace(/<\/?.+?\/?>/g,'')||"";
             let vodurl = /^hiker/.test(list.vodid)?list.vodid:list.vod_id?vodurlhead&&!/^http/.test(list.vod_id)?vodurlhead+list.vod_id:list.vod_id:list.nextlink;
-            vodpic = vodpic?vodpic.replace('/img.php?url=','').replace('/tu.php?tu=',''):"hiker://files/cache/src/picloading.gif";
+            vodpic = vodpic?vodpic.replace('/img.php?url=','').replace('/tu.php?tu=',''):"hiker://files/cache/src/404.jpg";
             if(/^\/upload|^upload/.test(vodpic)){
                 vodpic = vodurl.match(/http(s)?:\/\/(.*?)\//)[0] + vodpic;
             }
