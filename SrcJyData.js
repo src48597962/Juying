@@ -301,7 +301,9 @@ function getYiData(jkdata) {
                     }); 
                     log(api_name+'>获取分类数据异常>'+e.message + " 错误行#" + e.lineNumber);
                 }
-                storage0.putMyVar('SrcJu_dianbo$classCache', {分类:分类,类型:类型,剧情:剧情,地区:地区,年份:年份,排序:排序,筛选:筛选,推荐:推荐});
+                if(分类.length>0){
+                    storage0.putMyVar('SrcJu_dianbo$classCache', {分类:分类,类型:类型,剧情:剧情,地区:地区,年份:年份,排序:排序,筛选:筛选,推荐:推荐});
+                }
             }
 
             if(分类.length>0){
