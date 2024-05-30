@@ -653,7 +653,8 @@ function getYiData(jkdata) {
         vodname = vodname.replace(/<\/?.+?\/?>/g,'');
         if(vodname){
             let vodpic = list.vod_pic||list.pic;
-            let voddesc = list.vod_remarks.replace(/<\/?.+?\/?>/g,'')||list.state.replace(/<\/?.+?\/?>/g,'')||"";
+            let voddesc = list.vod_remarks||list.state||"";
+            voddesc = voddesc.replace(/<\/?.+?\/?>/g,'');
             let vodurl = /^hiker/.test(list.vodid)?list.vodid:list.vod_id?vodurlhead&&!/^http/.test(list.vod_id)?vodurlhead+list.vod_id:list.vod_id:list.nextlink;
             vodpic = vodpic?vodpic.replace('/img.php?url=','').replace('/tu.php?tu=',''):"hiker://files/cache/src/404.jpg";
             if(/^\/upload|^upload/.test(vodpic)){
