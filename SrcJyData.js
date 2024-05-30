@@ -510,8 +510,6 @@ function getYiData(jkdata) {
     if(listurl && lists.length==0){
         try{
             if(api_type=="drpy"){
-                log(listurl);
-                
                 if(extdata['filter_url']){
                     let fl = {};
                     let filter_url = extdata['filter_url'].replace('{{fl.lang}}','').replace('{{fl.letter}}','').replace('{{fl.字母}}','').replace('{{fl.语言}}','');
@@ -521,10 +519,9 @@ function getYiData(jkdata) {
                     eval(`filter_url = \`${filter_url}\`;`);
                     MY_URL = listurl.replace('fyfilter', filter_url);
                 }else{
-                    MY_URL = listurl.replace('fyclass', cate_id).replace('fypage', MY_PAGE);
+                    MY_URL = listurl;
                 }
                 MY_URL = MY_URL.replace('fyclass', cate_id).replace('fypage', MY_PAGE);
-                log(MY_URL);
             }else if(api_type=="XBPQ"){
                 MY_URL = listurl.replace('/lang/{lang}','');
                 if(!type_id){
@@ -554,7 +551,7 @@ function getYiData(jkdata) {
             }
 
             let gethtml = request(MY_URL, { headers: headers, timeout:5000 });
-
+            log(gethtml);
             if(api_type=="drpy"){
                 let id,name,pic,note
                 let dws = extdata["一级"].split(';');
