@@ -304,6 +304,11 @@ function getYiData(jkdata) {
                             title: fold === '1' ? '““””<b><span style="color: #F54343">∨</span></b>' : '““””<b><span style="color:' + Color + '">∧</span></b>',
                             url: $('#noLoading#').lazyRule((fold) => {
                                 putMyVar('SrcJu_dianbo$fold', fold === '1' ? '0' : '1');
+                                clearMyVar('SrcJu_dianbo$类型');
+                                clearMyVar('SrcJu_dianbo$剧情');
+                                clearMyVar('SrcJu_dianbo$地区');
+                                clearMyVar('SrcJu_dianbo$年份');
+                                clearMyVar('SrcJu_dianbo$排序');
                                 refreshPage(false);
                                 return "hiker://empty";
                             }, fold),
@@ -608,7 +613,15 @@ function getYiData(jkdata) {
                 } catch (e) {
                     lists = json.list||json.data.list||json.data||[];
                 }
-            }       
+            }
+            if(lists.length==0){
+                d.push({
+                    title: '列表为空',
+                    desc: '点击访问原网页',
+                    url: MY_URL + '#noHistory#',
+                    col_type: 'text_center_1'
+                }); 
+            }
         }catch(e){
             d.push({
                 title: '获取列表数据失败！',
