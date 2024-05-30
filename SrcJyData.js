@@ -573,6 +573,8 @@ function getYiData(jkdata) {
                 if(/^json:/.test(dws[0])){
                     gethtml = dealJson(gethtml)
                 }
+                log($.type(gethtml));
+                log(gethtml);
                 //else{
                     let vodlist = _pdfa(gethtml, dws[0].replace('json:',''));
                     vodlist.forEach(it=>{
