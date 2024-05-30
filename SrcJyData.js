@@ -467,7 +467,7 @@ function getYiData(jkdata) {
                 }*/
                 MY_URL = MY_URL.replace('or', '||').replace(/{{/g, '${').replace(/}}/g, '}');
                 eval(`MY_URL = \`${MY_URL}\`;`);
-                log(MY_URL.replace('fypage', MY_PAGE));
+                log(MY_URL);
                 //MY_URL = MY_URL.replace('fypage',MY_PAGE).replace('{{fl.year}}', year_id).replace('{{fl.area}}', area_id).replace('{{fl.by}}', sort_id).replace('{{fl.class}}', type_id).replace('{{fl.cateId}}', cate_id);
             }else if(api_type=="XBPQ"){
                 MY_URL = listurl.replace('/lang/{lang}','');
