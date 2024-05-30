@@ -162,11 +162,11 @@ function getYiData(jkdata) {
                                     if(cparses.length==4 && cparses[3]){
                                         typeurl = typeurl.match(cparses[3])[1];
                                     }
-                                    if(cate_exclude(typename)==-1){
+                                    if(cate_exclude.indexOf(typename)==-1){
                                         分类.push(typename+'$'+typeurl);
                                     }
                                 }catch(e){
-                                    log(e.message);
+                                    //log(e.message);
                                 }
                             }) 
                         }
