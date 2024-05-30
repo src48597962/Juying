@@ -349,7 +349,7 @@ function getYiData(jkdata) {
                 
                 if(筛选 && (fold=='1' || api_type=='cms')){
                     if(类型.length>0 && 类型[index]){
-                        type_id = getMyVar('SrcJu_dianbo$类型', (api_type=='cms'&&类型.length>0) ? 类型[index].split('#')[0].split('$')[1] : '');
+                        type_id = getMyVar('SrcJu_dianbo$类型', 类型[index].split('#')[0].split('$')[1]);
                         类型[index].split('#').forEach(it=>{
                             let itname = it.split('$')[0];
                             let itid = it.split('$')[1];
@@ -478,9 +478,9 @@ function getYiData(jkdata) {
         try{
             if(api_type=="drpy"){
                 let filter_url = extdata['filter_url'].replace('{{fl.lang}}','').replace('{{fl.letter}}','').replace('{{fl.字母}}','').replace('{{fl.语言}}','');
-                filter_url = filter_url.replace('fl.地区','area_id').replace('fl.年份','year_id').replace('fl.剧情','class_id').replace('fl.排序','sort_id');
-                filter_url = filter_url.replace('fl.cateId', 'cate_id').replace('fl.area','area_id').replace('fl.year','year_id').replace('fl.class','class_id').replace('fl.by','sort_id');
-                filter_url = filter_url.replace('fypage', MY_PAGE).replace(/ or /g, '||').replace(/{{/g, '${').replace(/}}/g, '}');
+                filter_url = filter_url.replace('fl.类型',type_id?'type_id':'cate_id').replace('fl.地区','area_id').replace('fl.年份','year_id').replace('fl.剧情','class_id').replace('fl.排序','sort_id');
+                filter_url = filter_url.replace('fl.cateId', type_id?'type_id':'cate_id').replace('fl.area','area_id').replace('fl.year','year_id').replace('fl.class','class_id').replace('fl.by','sort_id');
+                filter_url = filter_url.replace('fyclass', 'cate_id').replace('fypage', MY_PAGE).replace(/ or /g, '||').replace(/{{/g, '${').replace(/}}/g, '}');
                 eval(`filter_url = \`${filter_url}\`;`);
                 MY_URL = listurl.replace('fyfilter', filter_url);
             }else if(api_type=="XBPQ"){
