@@ -805,7 +805,7 @@ function yiji() {
 function downloadicon() {
     try{
         if(!fileExist('hiker://files/cache/src/文件夹.svg')){
-            downloadFile(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + "img/文件夹.svg", 'hiker://files/cache/src/文件夹.svg');
+            downloadFile(config.依赖.match(/http(s)?:\/\/.*\//)[0] + "img/文件夹.svg", 'hiker://files/cache/src/文件夹.svg');
         }
         if(!fileExist('hiker://files/cache/src/影片.svg')){
             downloadFile("https://hikerfans.com/tubiao/movie/13.svg", 'hiker://files/cache/src/影片.svg');
@@ -817,13 +817,16 @@ function downloadicon() {
             downloadFile("https://hikerfans.com/tubiao/more/38.png", 'hiker://files/cache/src/图片.png');
         }
         if(!fileExist('hiker://files/cache/src/Alist.svg')){
-            downloadFile(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + "img/Alist.svg", 'hiker://files/cache/src/Alist.svg');
+            downloadFile(config.依赖.match(/http(s)?:\/\/.*\//)[0] + "img/Alist.svg", 'hiker://files/cache/src/Alist.svg');
         }
         if(!fileExist('hiker://files/cache/src/聚影.png')){
-            downloadFile(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + "img/聚影.png", 'hiker://files/cache/src/聚影.png');
+            downloadFile(config.依赖.match(/http(s)?:\/\/.*\//)[0] + "img/聚影.png", 'hiker://files/cache/src/聚影.png');
         }
         if(!fileExist('hiker://files/cache/src/picloading.gif')){
-            downloadFile(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + "img/picloading.gif", 'hiker://files/cache/src/picloading.gif');
+            downloadFile(config.依赖.match(/http(s)?:\/\/.*\//)[0] + "img/picloading.gif", 'hiker://files/cache/src/picloading.gif');
+        }
+        if(!fileExist('hiker://files/cache/src/404.jpg')){
+            downloadFile(config.依赖.match(/http(s)?:\/\/.*\//)[0] + "img/404.jpg", 'hiker://files/cache/src/404.jpg');
         }
     }catch(e){}
 }
