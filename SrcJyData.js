@@ -105,13 +105,12 @@ function getYiData(jkdata) {
     }
     let lists = []; //影片列表
     let fold = getMyVar('SrcJu_dianbo$fold', "0");//是否展开小分类筛选
-    let cate_id = getMyVar('SrcJu_dianbo$分类', '');
-    let class_id = getMyVar('SrcJu_dianbo$剧情', '');
-    let type_id = getMyVar('SrcJu_dianbo$类型', '');
-    let area_id = getMyVar('SrcJu_dianbo$地区', '');
-    let year_id = getMyVar('SrcJu_dianbo$年份', '');
-    let sort_id = getMyVar('SrcJu_dianbo$排序', '');
-    let fl = {};
+    let cate_id = '';
+    let type_id = '';
+    let class_id = '';
+    let area_id = '';
+    let year_id = '';
+    let sort_id = '';
 
     if(MY_PAGE==1){
         if(classurl){
@@ -172,15 +171,15 @@ function getYiData(jkdata) {
                                     itvalue.forEach(value=>{
                                         values.push(value.n+'$'+value.v)
                                     })
-                                    if(itit.key=='cateId'){
+                                    if(itit.key=='cateId' || itit.key=='类型'){
                                         类型.push(values.join('#'));
-                                    }else if(itit.key=='class'){
+                                    }else if(itit.key=='class' || itit.key=='剧情'){
                                         剧情.push(values.join('#'));
-                                    }else if(itit.key=='area'){
+                                    }else if(itit.key=='area' || itit.key=='地区'){
                                         地区.push(values.join('#'));
-                                    }else if(itit.key=='year'){
+                                    }else if(itit.key=='year' || itit.key=='年份'){
                                         年份.push(values.join('#'));
-                                    }else if(itit.key=='by'){
+                                    }else if(itit.key=='by' || itit.key=='排序'){
                                         排序.push(values.join('#'));
                                     }
                                 })
@@ -315,7 +314,6 @@ function getYiData(jkdata) {
                         title: cate_id=='tj'?'““””<b><span style="color:' + Color + '">' + '推荐' + '</span></b>':'推荐',
                         url: $('#noLoading#').lazyRule(() => {
                             putMyVar('SrcJu_dianbo$分类', 'tj');
-                            clearMyVar('SrcJu_dianbo$类型');
                             refreshPage(true);
                             return "hiker://empty";
                         }),
@@ -348,11 +346,10 @@ function getYiData(jkdata) {
                 d.push({
                     col_type: "blank_block"
                 });
-
-                type_id = 筛选?type_id:getMyVar('SrcJu_dianbo$类型', (api_type=='cms'&&类型.length>0) ? 类型[index].split('#')[0].split('$')[1] : cate_id);
-                putMyVar('SrcJu_dianbo$类型', type_id);
-                if(fold=='1' || (api_type=='cms' && cate_id!='tj')){
+                
+                if(筛选 && (fold=='1' || api_type=='cms')){
                     if(类型.length>0 && 类型[index]){
+                        type_id = getMyVar('SrcJu_dianbo$类型', (api_type=='cms'&&类型.length>0) ? 类型[index].split('#')[0].split('$')[1] : '');
                         类型[index].split('#').forEach(it=>{
                             let itname = it.split('$')[0];
                             let itid = it.split('$')[1];
@@ -370,7 +367,27 @@ function getYiData(jkdata) {
                             col_type: "blank_block"
                         });
                     }
+                    if(剧情.length>0 && 剧情[index]){
+                        class_id = getMyVar('SrcJu_dianbo$剧情', 剧情[index].split('#')[0].split('$')[1]);
+                        剧情[index].split('#').forEach(it=>{
+                            let itname = it.split('$')[0];
+                            let itid = it.split('$')[1];
+                            d.push({
+                                title: class_id==itid?'““””<b><span style="color:' + Color + '">' + itname + '</span></b>':itname,
+                                url: $('#noLoading#').lazyRule((itid) => {
+                                    putMyVar('SrcJu_dianbo$剧情', itid);
+                                    refreshPage(true);
+                                    return "hiker://empty";
+                                }, itid),
+                                col_type: 'scroll_button'
+                            });
+                        })
+                        d.push({
+                            col_type: "blank_block"
+                        });
+                    }
                     if(地区.length>0 && 地区[index]){
+                        area_id = getMyVar('SrcJu_dianbo$地区', 地区[index].split('#')[0].split('$')[1]);
                         地区[index].split('#').forEach(it=>{
                             let itname = it.split('$')[0];
                             let itid = it.split('$')[1];
@@ -389,6 +406,7 @@ function getYiData(jkdata) {
                         });
                     }
                     if(年份.length>0 && 年份[index]){
+                        year_id = getMyVar('SrcJu_dianbo$年份', 年份[index].split('#')[0].split('$')[1]);
                         年份[index].split('#').forEach(it=>{
                             let itname = it.split('$')[0];
                             let itid = it.split('$')[1];
@@ -407,6 +425,7 @@ function getYiData(jkdata) {
                         });
                     }
                     if(排序.length>0 && 排序[index]){
+                        sort_id = getMyVar('SrcJu_dianbo$排序', 排序[index].split('#')[0].split('$')[1]);
                         排序[index].split('#').forEach(it=>{
                             let itname = it.split('$')[0];
                             let itid = it.split('$')[1];
@@ -459,8 +478,8 @@ function getYiData(jkdata) {
         try{
             if(api_type=="drpy"){
                 let filter_url = extdata['filter_url'].replace('{{fl.lang}}','').replace('{{fl.letter}}','').replace('{{fl.字母}}','').replace('{{fl.语言}}','');
-                filter_url = filter_url.replace('fl.地区','area_id').replace('fl.年份','year_id').replace('fl.剧情','type_id').replace('fl.排序','sort_id');
-                filter_url = filter_url.replace('fl.cateId', 'cate_id').replace('fl.area','area_id').replace('fl.year','year_id').replace('fl.class','type_id').replace('fl.by','sort_id');
+                filter_url = filter_url.replace('fl.地区','area_id').replace('fl.年份','year_id').replace('fl.剧情','class_id').replace('fl.排序','sort_id');
+                filter_url = filter_url.replace('fl.cateId', 'cate_id').replace('fl.area','area_id').replace('fl.year','year_id').replace('fl.class','class_id').replace('fl.by','sort_id');
                 filter_url = filter_url.replace('fypage', MY_PAGE).replace(/ or /g, '||').replace(/{{/g, '${').replace(/}}/g, '}');
                 eval(`filter_url = \`${filter_url}\`;`);
                 MY_URL = listurl.replace('fyfilter', filter_url);
