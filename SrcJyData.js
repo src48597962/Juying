@@ -145,7 +145,10 @@ function getYiData(jkdata) {
                             });
                         }else if(extdata["class_parse"]){
                             let cparses = extdata["class_parse"].split(';');
-                            let cate_exclude = extdata["cate_exclude"].split('|');
+                            let cate_exclude = [];
+                            if(extdata["cate_exclude"]){
+                                cate_exclude = extdata["cate_exclude"].split('|');
+                            }
                             headers = extdata["headers"] || headers;
                             if(headers['User-Agent']){
                                 headers['User-Agent'] = headers['User-Agent']=='PC_UA'?PC_UA:MOBILE_UA;
