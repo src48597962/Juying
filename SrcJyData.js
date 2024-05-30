@@ -159,15 +159,15 @@ function getYiData(jkdata) {
                                 try{
                                     let typename = _pdfh(it, cparses[1]);
                                     let typeurl = _pdfh(it, cparses[2]);
-                                    log(typeurl);
                                     if(cparses.length==4 && cparses[3]){
-                                        log(typeurl.match(cparses[3]));
                                         typeurl = typeurl.match(cparses[3])[1];
                                     }
                                     if(cate_exclude(typename)==-1){
                                         分类.push(typename+'$'+typeurl);
                                     }
-                                }catch(e){}
+                                }catch(e){
+                                    log(e.message);
+                                }
                             }) 
                         }
                         let ss = extdata["filter"];
