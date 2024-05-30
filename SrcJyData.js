@@ -535,12 +535,14 @@ function getYiData(jkdata) {
                     MY_URL = MY_URL + '&t=' + type_id;
                 }
             }
+            log('1');
             let gethtml = request(MY_URL, { headers: headers, timeout:5000 });
-            
+            log('2');
             if(api_type=="drpy"){
                 let id,name,pic,note
                 let dws = extdata["一级"].split(';');
                 let vodlist = _pdfa(gethtml, dws[0]);
+                log('3');
                 vodlist.forEach(it=>{
                     id = _pd(it, dws[4], MY_URL);
                     name = _pdfh(it, dws[1]);
