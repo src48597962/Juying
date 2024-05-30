@@ -535,20 +535,23 @@ function getYiData(jkdata) {
                     MY_URL = MY_URL + '&t=' + type_id;
                 }
             }
-            log('1');
+
             let gethtml = request(MY_URL, { headers: headers, timeout:5000 });
-            log('2');
+
             if(api_type=="drpy"){
                 let id,name,pic,note
                 let dws = extdata["一级"].split(';');
                 let vodlist = _pdfa(gethtml, dws[0]);
-                log('3');
                 vodlist.forEach(it=>{
-                    id = _pd(it, dws[4], MY_URL);
-                    name = _pdfh(it, dws[1]);
-                    pic = _pdfh(it, dws[2]);
-                    note = _pdfh(it, dws[3]);
-                    lists.push({"vod_id":id,"vod_name":name,"vod_remarks":note,"vod_pic":pic});
+                    try{
+                        id = _pd(it, dws[4], MY_URL);
+                        name = _pdfh(it, dws[1]);
+                        pic = _pdfh(it, dws[2]);
+                        note = _pdfh(it, dws[3]);
+                        lists.push({"vod_id":id,"vod_name":name,"vod_remarks":note,"vod_pic":pic});
+                    }catch(e){
+                        log('生成列表有错误>'+e.message + " 错误行#" + e.lineNumber);
+                    } 
                 })
             }else if(api_type=="XBPQ"){
                 extdata["二次截取"] = extdata["二次截取"] || (gethtml.indexOf(`<ul class="stui-vodlist`)>-1?`<ul class="stui-vodlist&&</ul>`:gethtml.indexOf(`<ul class="myui-vodlist`)>-1?`<ul class="myui-vodlist&&</ul>`:"");
