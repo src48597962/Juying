@@ -106,16 +106,19 @@ function getYiData(jkdata) {
     let lists = []; //影片列表
     let fold = getMyVar('SrcJu_dianbo$fold', "0");//是否展开小分类筛选
     let cate_id = getMyVar('SrcJu_dianbo$分类', '');
+    let class_id = getMyVar('SrcJu_dianbo$剧情', '');
     let type_id = getMyVar('SrcJu_dianbo$类型', '');
     let area_id = getMyVar('SrcJu_dianbo$地区', '');
     let year_id = getMyVar('SrcJu_dianbo$年份', '');
     let sort_id = getMyVar('SrcJu_dianbo$排序', '');
+    let fl = {};
 
     if(MY_PAGE==1){
         if(classurl){
             let 推荐 = [];
             let 分类 = [];
             let 类型 = [];
+            let 剧情 = [];
             let 地区 = [];
             let 年份 = [];
             let 排序 = [];
@@ -127,6 +130,7 @@ function getYiData(jkdata) {
                 推荐 = classCache.推荐;
                 分类 = classCache.分类;
                 类型 = classCache.类型;
+                剧情 = classCache.剧情;
                 地区 = classCache.地区;
                 年份 = classCache.年份;
                 排序 = classCache.排序;
@@ -168,8 +172,10 @@ function getYiData(jkdata) {
                                     itvalue.forEach(value=>{
                                         values.push(value.n+'$'+value.v)
                                     })
-                                    if(itit.key=='cateId' || itit.key=='class'){
+                                    if(itit.key=='cateId'){
                                         类型.push(values.join('#'));
+                                    }else if(itit.key=='class'){
+                                        剧情.push(values.join('#'));
                                     }else if(itit.key=='area'){
                                         地区.push(values.join('#'));
                                     }else if(itit.key=='year'){
@@ -283,7 +289,7 @@ function getYiData(jkdata) {
                 }catch(e){
                     log(api_name+'>访问异常，请更换源接口！获取分类失败>'+e.message + " 错误行#" + e.lineNumber);
                 }
-                storage0.putMyVar('SrcJu_dianbo$classCache', {分类:分类,类型:类型,地区:地区,年份:年份,排序:排序,筛选:筛选,推荐:推荐});
+                storage0.putMyVar('SrcJu_dianbo$classCache', {分类:分类,类型:类型,剧情:剧情,地区:地区,年份:年份,排序:排序,筛选:筛选,推荐:推荐});
             }
 
             if(分类.length>0){
@@ -328,7 +334,11 @@ function getYiData(jkdata) {
                         title: cate_id==itid?'““””<b><span style="color:' + Color + '">' + itname + '</span></b>':itname,
                         url: $('#noLoading#').lazyRule((itid) => {
                             putMyVar('SrcJu_dianbo$分类', itid);
-                            clearMyVar('SrcJu_dianbo$类型');//大分类切换时清除小分类
+                            clearMyVar('SrcJu_dianbo$类型');
+                            clearMyVar('SrcJu_dianbo$剧情');
+                            clearMyVar('SrcJu_dianbo$地区');
+                            clearMyVar('SrcJu_dianbo$年份');
+                            clearMyVar('SrcJu_dianbo$排序');
                             refreshPage(true);
                             return "hiker://empty";
                         }, itid),
