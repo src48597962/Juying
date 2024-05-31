@@ -4,7 +4,7 @@
 function getYiData(jkdata) {
     let flLists = [];
     let vodLists = [];
-    let error = '';
+    let error = {};
     let api_name = jkdata.name||"";
     let api_type = jkdata.type||"";
     let api_url = jkdata.url||"";
@@ -259,17 +259,9 @@ function getYiData(jkdata) {
                                     }
                                 })
                             }
-                        }else {
-                            log('api类型错误')
                         }
                     }
                 }catch(e){
-                    d.push({
-                        title: '获取分类数据失败！',
-                        desc: '看一下日志具体信息',
-                        url: classurl + '#noHistory#',
-                        col_type: 'text_center_1'
-                    }); 
                     log(api_name+'>获取分类数据异常>'+e.message + " 错误行#" + e.lineNumber);
                 }
                 if(分类.length>0){
@@ -463,7 +455,7 @@ function getYiData(jkdata) {
                         }
                     });
                 }catch(e){
-                    error = api_name+'>生成分类数据异常>'+e.message + " 错误行#" + e.lineNumber;
+                    log(api_name+'>生成分类数据异常>'+e.message + " 错误行#" + e.lineNumber);
                 }
             }
         }
@@ -579,6 +571,22 @@ function getYiData(jkdata) {
                         }
                     })
                 }
+                if(extdata.图片替换 && extdata.图片替换.includes('=>')){
+                    let replace_from = extdata.图片替换.split('=>')[0];
+                    let replace_to = extdata.图片替换.split('=>')[1];
+                    vodLists.forEach(it=>{
+                        if(it.vod_pic&&it.vod_pic.startsWith('http')){
+                            it.vod_pic = it.vod_pic.replace(replace_from,replace_to);
+                        }
+                    });
+                }
+                if(extdata.图片来源){
+                    vodLists.forEach(it=>{
+                        if(it.vod_pic&&it.vod_pic.startsWith('http')){
+                            it.vod_pic = it.vod_pic + extdata.图片来源;
+                        }
+                    });
+                }
             }else if(api_type=="XBPQ"){
                 let gethtml = request(MY_URL, { headers: headers, timeout:5000 });
                 extdata["二次截取"] = extdata["二次截取"] || (gethtml.indexOf(`<ul class="stui-vodlist`)>-1?`<ul class="stui-vodlist&&</ul>`:gethtml.indexOf(`<ul class="myui-vodlist`)>-1?`<ul class="myui-vodlist&&</ul>`:"");
@@ -657,65 +665,28 @@ function getYiData(jkdata) {
                             it['play'] = it.vod_play_url;
                         }
                     }
-                    let arr = {"vod_url":it.vod_id,"vod_name":it.vod_name||it.title,"vod_desc":it.vod_remarks||it.state||"","vod_pic":it.vod_pic||it.pic, "vod_play":it.play};
+                    let vodurl = it.vod_id?vodurlhead&&!/^http/.test(it.vod_id)?vodurlhead+it.vod_id:it.vod_id:it.nextlink;
+                    let vodpic = it.vod_pic||it.pic||"";
+                    vodpic = vodpic.replace('/img.php?url=','').replace('/tu.php?tu=','');
+                    if(/^\/upload|^upload/.test(vodpic)){
+                        vodpic = vodurl.match(/http(s)?:\/\/(.*?)\//)[0] + vodpic;
+                    }
+                    if(/^\/\//.test(vodpic)){
+                        vodpic = "https:" + vodpic;
+                    }
+                    let arr = {"vod_url":vodurl,"vod_name":it.vod_name||it.title,"vod_desc":it.vod_remarks||it.state||"","vod_pic":vodpic, "vod_play":it.play};
                     vodLists.push(arr);
                 })
             }
         }catch(e){
-            error = '获取列表异常>'+e.message + " 错误行#" + e.lineNumber;
             log(api_name+'>获取列表异常>'+e.message + " 错误行#" + e.lineNumber)
         }
     }
-    vodLists.forEach(list=>{
-        list.vod_name = list.vod_name.replace(/<\/?.+?\/?>/g,'');
-        list.vod_desc = list.vod_desc.replace(/<\/?.+?\/?>/g,'');
-
-    })
-    /*
-    lists.forEach((list)=>{
-        let vodname = list.vod_name||list.title;
-        vodname = vodname.replace(/<\/?.+?\/?>/g,'');
-        if(vodname){
-            let vodpic = list.vod_pic||list.pic;
-            let voddesc = list.vod_remarks||list.state||"";
-            voddesc = voddesc.replace(/<\/?.+?\/?>/g,'');
-            let vodurl = /^hiker/.test(list.vodid)?list.vodid:list.vod_id?vodurlhead&&!/^http/.test(list.vod_id)?vodurlhead+list.vod_id:list.vod_id:list.nextlink;
-            vodpic = vodpic?vodpic.replace('/img.php?url=','').replace('/tu.php?tu=',''):"hiker://files/cache/src/404.jpg";
-            if(/^\/upload|^upload/.test(vodpic)){
-                vodpic = vodurl.match(/http(s)?:\/\/(.*?)\//)[0] + vodpic;
-            }
-            if(/^\/\//.test(vodpic)){
-                vodpic = "https:" + vodpic;
-            }
-            if(api_type=='cms'&&list.vod_play_url){
-                if(list.vod_play_url.indexOf('$')==-1&&list.vod_play_url.indexOf('m3u8')>-1){
-                    list['play'] = list.vod_play_url;
-                }
-            }
-            d.push({
-                title: vodname,
-                desc: voddesc,
-                pic_url: vodpic,
-                url: /^hiker/.test(vodurl)?vodurl:list.play?list.play:$("hiker://empty#immersiveTheme##autoCache#").rule(() => {
-                    require(config.依赖);
-                    dianboerji()
-                }),
-                col_type: 'movie_3',
-                extra: {
-                    url: vodurl,
-                    pic: vodpic,
-                    pageTitle: vodname,
-                    data: jkdata
-                }
-            })
-        }
-    });
-    */
+    
     return {
         flLists: flLists,
         vodLists: vodLists,
-        flurl: MY_URL,
-        error: error
+        flurl: MY_URL
     }
 }
 // 获取搜索数据
