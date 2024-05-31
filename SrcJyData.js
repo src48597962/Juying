@@ -539,9 +539,11 @@ function getYiData(jkdata) {
                         input = HOST + '/api/video/search?key=' + cateObj.tid + '&page=' + + MY_PAGE;
                     }
                     
-                    let dynamicCode = yicode.replace('js:','').replace('setResult(d)','return d').trim();
+                    let dynamicCode = yicode.replace('js:','').replace('setResult(d);').trim();
+                    log(dynamicCode);
                     function executeDynamicCode() {
-                        return eval(dynamicCode);
+                        eval(dynamicCode)
+                        return d;
                     }
                     log(executeDynamicCode());
                     
