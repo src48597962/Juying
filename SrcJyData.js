@@ -521,7 +521,21 @@ function getYiData(jkdata) {
             if(api_type=="drpy"){
                 let id,name,pic,note
                 let dws = extdata["一级"].split(';');
-                if(/^json:/.test(dws[0])){
+                if(/^js:/){
+                    let cateObj = {
+                        url: extdata.url,
+                        一级: extdata.一级,
+                        tid: cate_id,
+                        pg: MY_PAGE,
+                        filter: extdata.filter,
+                        extend: extend
+                    };
+                    let HOST = extdata['host'];
+
+                    const functionBody = `(function() { ${dws[0].replace('js:','').replace('setResult(d)','return d')} })`;  
+                    const dynamicFunction = new Function('', functionBody);
+                    log(dynamicFunction);
+                }else if(/^json:/.test(dws[0])){
                     let json = dealJson(gethtml);
                     let vodlist = getJsonValue(json, dws[0].replace('json:',''));
                     vodlist.forEach(it=>{
