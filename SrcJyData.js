@@ -243,6 +243,7 @@ function getYiData(jkdata) {
                                         }
                                     }
                                 }
+                                log(typelist);
                                 typelist.forEach((it)=>{
                                     if(it.type_pid==0){
                                         分类.push(it.type_name+'$'+it.type_id);
@@ -255,6 +256,8 @@ function getYiData(jkdata) {
                                         类型.push(values.join('#'));
                                     }
                                 })
+                                log(分类);
+                                log(类型);
                             }
                         }else {
                             log('api类型错误')
@@ -275,8 +278,6 @@ function getYiData(jkdata) {
             }
 
             if(分类.length>0){
-                log(分类);
-                log(类型);
                 try{
                     if(筛选){
                         d.push({
