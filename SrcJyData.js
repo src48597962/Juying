@@ -532,7 +532,8 @@ function getYiData(jkdata) {
                         extend: extdata.extend
                     };
                     let HOST = extdata['host'];
-                    eval(yicode.replace('js:','').replace('setResult(d)',''));
+                    let input = '';
+                    eval(yicode.replace('js:',''));//.replace('setResult(d)',''));
                     log(d);
                 }else if(/^json:/.test(dws[0])){
                     let json = dealJson(gethtml);
