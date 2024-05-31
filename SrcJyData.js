@@ -534,7 +534,8 @@ function getYiData(jkdata) {
 
                     const functionBody = `(function() { ${dws[0].replace('js:','').replace('setResult(d)','return d')} })`;  
                     const dynamicFunction = new Function('', functionBody);
-                    log(dynamicFunction);
+                    let ddd = dynamicFunction();
+                    log(ddd);
                 }else if(/^json:/.test(dws[0])){
                     let json = dealJson(gethtml);
                     let vodlist = getJsonValue(json, dws[0].replace('json:',''));
