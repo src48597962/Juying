@@ -533,8 +533,27 @@ function getYiData(jkdata) {
                     };
                     let HOST = extdata['host'];
                     let input = '';
+                    cateObj.tid = cateObj.tid+'';
+                    if (cateObj.tid.endsWith('_clicklink')) {
+                        cateObj.tid = cateObj.tid.split('_')[0];
+                        input = HOST + '/api/video/search?key=' + cateObj.tid + '&page=' + + MY_PAGE;
+                    }
+                    var dd = [];
+                    let html = request(input);
+                    html = JSON.parse(html).data;
+                    html.forEach(it => {
+                        dd.push({
+                            title: it.title,
+                            img: it.thumbnail||it.path,
+                            desc: (it.mask || it.playlist.title) + ' ⭐' + it.score,
+                            url: it.id
+                        })
+                    });
+                    log(dd);
+                    /*
                     eval(yicode.replace('js:',''));//.replace('setResult(d)',''));
                     log(d);
+                    */
                 }else if(/^json:/.test(dws[0])){
                     let json = dealJson(gethtml);
                     let vodlist = getJsonValue(json, dws[0].replace('json:',''));
