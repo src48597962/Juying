@@ -531,15 +531,9 @@ function getYiData(jkdata) {
                         extend: extdata.extend
                     };
                     let HOST = extdata['host'];
-                    let dynamicCode = dws[0].replace('js:','').replace('setResult(d)','return d');
-                    function executeDynamicCode() {
-                    // 使用eval执行动态代码。注意：eval应当谨慎使用，因为它会执行字符串中的任何JavaScript代码。
-                    // 在生产环境中，直接使用eval可能会带来安全风险。
-                        return eval(dynamicCode);
-                    }
-                    log(executeDynamicCode.toString());
-                    let ddd = executeDynamicCode();
-                    log(ddd);
+                    log(dws[0].replace('js:',''));
+                    eval(dws[0].replace('js:','').replace('setResult(d)',''));
+                    log(d);
                 }else if(/^json:/.test(dws[0])){
                     let json = dealJson(gethtml);
                     let vodlist = getJsonValue(json, dws[0].replace('json:',''));
