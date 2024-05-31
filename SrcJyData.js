@@ -275,6 +275,8 @@ function getYiData(jkdata) {
             }
 
             if(分类.length>0){
+                log(分类);
+                log(类型);
                 try{
                     if(筛选){
                         d.push({
