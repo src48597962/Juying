@@ -534,9 +534,7 @@ function getYiData(jkdata) {
                         }
                     })
                 }else{
-                    log(dws[0]);
                     let vodlist = _pdfa(gethtml, dws[0]);
-                    log(vodlist);
                     vodlist.forEach(it=>{
                         if(dws[4]){
                             id = _pd(it, dws[4], MY_URL);
