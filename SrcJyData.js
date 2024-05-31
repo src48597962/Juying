@@ -532,7 +532,7 @@ function getYiData(jkdata) {
                         extend: extdata.extend
                     };
                     let HOST = extdata['host'];
-                    let input = '';
+                    let input = MY_URL;
                     cateObj.tid = cateObj.tid+'';
                     if (cateObj.tid.endsWith('_clicklink')) {
                         cateObj.tid = cateObj.tid.split('_')[0];
