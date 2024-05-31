@@ -519,9 +519,10 @@ function getYiData(jkdata) {
             let gethtml = request(MY_URL, { headers: headers, timeout:5000 });
 
             if(api_type=="drpy"){
-                let id,name,pic,note
-                let dws = extdata["一级"].split(';');
-                if(/^js:/){
+                let id,name,pic,note;
+                let yicode = extdata["一级"] || "";
+                let dws = yicode.split(';');
+                if(/^js:/.test(yicode)){
                     let cateObj = {
                         url: extdata.url,
                         一级: extdata.一级,
@@ -531,8 +532,7 @@ function getYiData(jkdata) {
                         extend: extdata.extend
                     };
                     let HOST = extdata['host'];
-                    log(dws[0].replace('js:',''));
-                    eval(dws[0].replace('js:','').replace('setResult(d)',''));
+                    eval(yicode.replace('js:','').replace('setResult(d)',''));
                     log(d);
                 }else if(/^json:/.test(dws[0])){
                     let json = dealJson(gethtml);
