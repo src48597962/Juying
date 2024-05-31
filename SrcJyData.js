@@ -229,9 +229,12 @@ function getYiData(jkdata) {
                         } else if (api_type=="cms") {
                             if(/<\?xml/.test(gethtml)){
                                 let typelist = pdfa(gethtml,'class&&ty');
+                                log('xml');
+                                log(typelist);
                                 typelist.forEach((it)=>{
                                     分类.push(String(xpath(it,`//ty/text()`)).trim()+'$'+String(xpath(it,`//ty/@id`)).trim());
                                 })
+                                log(分类);
                             }else{
                                 let typehtml = JSON.parse(gethtml);
                                 let typelist = typehtml.class;
