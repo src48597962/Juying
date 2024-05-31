@@ -528,7 +528,7 @@ function getYiData(jkdata) {
                         tid: cate_id,
                         pg: MY_PAGE,
                         filter: extdata.filter,
-                        extend: extend
+                        extend: {}
                     };
                     let HOST = extdata['host'];
 
