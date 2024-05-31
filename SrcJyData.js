@@ -531,11 +531,20 @@ function getYiData(jkdata) {
                         extend: extdata.extend
                     };
                     let HOST = extdata['host'];
-
-                    const functionBody = `(function() { ${dws[0].replace('js:','').replace('setResult(d)','return d')} })`;  
-                    const dynamicFunction = new Function('', functionBody);
-                    log(dynamicFunction.toString());
-                    let ddd = dynamicFunction();
+                    function createFunctionFromCode(codeString) {
+                        // 使用字符串模板创建一个函数体
+                        // 注意：这里假设代码字符串只包含一个返回语句，没有其他副作用
+                        const functionBody = `(function() { ${codeString} })`;  
+                        
+                        // 将函数体转换为函数并返回
+                        const dynamicFunction = new Function('', functionBody);
+                        
+                        return dynamicFunction;
+                    }
+                    // 通过上述函数创建一个新的函数实例
+                    const myDynamicFunction = createFunctionFromCode(dws[0].replace('js:','').replace('setResult(d)','return d'));
+                    log(myDynamicFunction.toString());
+                    let ddd = myDynamicFunction();
                     log(ddd);
                 }else if(/^json:/.test(dws[0])){
                     let json = dealJson(gethtml);
