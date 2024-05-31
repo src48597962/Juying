@@ -336,7 +336,7 @@ function getYiData(jkdata) {
                         col_type: "blank_block"
                     });
                     
-                    if(筛选 && (fold=='1' || api_type=='cms')){
+                    if(fold=='1' || api_type=='cms'){
                         if(类型.length>0 && 类型[index]){
                             type_id = getMyVar('SrcJu_dianbo$类型', 类型[index].split('#')[0].split('$')[1]);
                             类型[index].split('#').forEach(it=>{
@@ -549,8 +549,7 @@ function getYiData(jkdata) {
                             note = _pdfh(it, dws[3]);
                         }
                         if(id&&name){
-                            let vodUrl = /fyid/.test(vodurlhead)?vodurlhead.replace('fyid',id):vodurlhead+id;
-                            lists.push({"vod_id":vodUrl,"vod_name":name,"vod_remarks":note||"","vod_pic":pic||""});
+                            lists.push({"vod_id":id,"vod_name":name,"vod_remarks":note||"","vod_pic":pic||""});
                         }
                     })
                 }
