@@ -22,27 +22,27 @@ function getYiData(jkdata) {
             vodurlhead = api_url + '/detail?&key='+key+'&vod_id=';
             classurl = api_url + "/types";
             listurl = api_url + '?key='+key+'&page=';
-            listnode = "html.data.list";
+            listnode = "json.data.list";
         } else if (api_type=="app") {
             vodurlhead = api_url + 'video_detail?id=';
             classurl = api_url + "nav";
             listurl = api_url + 'video?tid=@type_id&pg=';
-            listnode = "html.list";
+            listnode = "json.list";
         } else if (api_type=="v2") {
             vodurlhead = api_url + 'video_detail?id=';
             classurl = api_url + "nav";
             listurl = api_url + 'video?tid=@type_id&pg=';
-            listnode = "html.data";
+            listnode = "json.data";
         } else if (api_type=="iptv") {
             vodurlhead = api_url + '?ac=detail&ids=';
             classurl = api_url + "?ac=flitter";
             listurl = api_url + '?ac=list&page=';
-            listnode = "html.data";
+            listnode = "json.data";
         } else if (api_type=="cms") {
             vodurlhead = api_url + '?ac=videolist&ids=';
             classurl = api_url + "?ac=list";
             listurl = api_url + '?ac=videolist&pg=';
-            listnode = "html.list";
+            listnode = "json.list";
         } else if (api_type=="XBPQ") {
             extdata = extDataCache(jkdata)
             if($.type(extdata)=='object'){
@@ -652,7 +652,12 @@ function getYiData(jkdata) {
                     vodlist = json.list||json.data.list||json.data||[];
                 }
                 vodlist.forEach(it=>{
-                    let arr = {"vod_url":it.vod_id,"vod_name":it.vod_name,"vod_desc":it.vod_remarks,"vod_pic":it.vod_pic, "vod_play":it.play};
+                    if(api_type=='cms'&&it.vod_play_url){
+                        if(it.vod_play_url.indexOf('$')==-1&&it.vod_play_url.indexOf('m3u8')>-1){
+                            it['play'] = it.vod_play_url;
+                        }
+                    }
+                    let arr = {"vod_url":it.vod_id,"vod_name":it.vod_name||it.title,"vod_desc":it.vod_remarks||it.state||"","vod_pic":it.vod_pic||it.pic, "vod_play":it.play};
                     vodLists.push(arr);
                 })
             }
@@ -661,6 +666,11 @@ function getYiData(jkdata) {
             log(api_name+'>获取列表异常>'+e.message + " 错误行#" + e.lineNumber)
         }
     }
+    vodLists.forEach(list=>{
+        list.vod_name = list.vod_name.replace(/<\/?.+?\/?>/g,'');
+        list.vod_desc = list.vod_desc.replace(/<\/?.+?\/?>/g,'');
+
+    })
     /*
     lists.forEach((list)=>{
         let vodname = list.vod_name||list.title;
