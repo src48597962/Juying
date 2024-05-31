@@ -516,7 +516,7 @@ function getYiData(jkdata) {
                 }
             }
 
-            let gethtml = request(MY_URL, { headers: headers, timeout:5000 });
+            
 
             if(api_type=="drpy"){
                 let id,name,pic,note;
@@ -538,23 +538,12 @@ function getYiData(jkdata) {
                         cateObj.tid = cateObj.tid.split('_')[0];
                         input = HOST + '/api/video/search?key=' + cateObj.tid + '&page=' + + MY_PAGE;
                     }
-                    var dd = [];
-                    let html = request(input);
-                    html = JSON.parse(html).data;
-                    html.forEach(it => {
-                        dd.push({
-                            title: it.title,
-                            img: it.thumbnail||it.path,
-                            desc: (it.mask || it.playlist.title) + ' ⭐' + it.score,
-                            url: it.id
-                        })
-                    });
-                    log(dd);
-                    /*
-                    eval(yicode.replace('js:',''));//.replace('setResult(d)',''));
+                    
+                    eval(yicode.replace('js:','').replace('setResult(d)',''));
                     log(d);
-                    */
+                    
                 }else if(/^json:/.test(dws[0])){
+                    let gethtml = request(MY_URL, { headers: headers, timeout:5000 });
                     let json = dealJson(gethtml);
                     let vodlist = getJsonValue(json, dws[0].replace('json:',''));
                     vodlist.forEach(it=>{
@@ -568,6 +557,7 @@ function getYiData(jkdata) {
                         }
                     })
                 }else{
+                    let gethtml = request(MY_URL, { headers: headers, timeout:5000 });
                     let vodlist = _pdfa(gethtml, dws[0]);
                     vodlist.forEach(it=>{
                         if(dws[4]){
@@ -588,6 +578,7 @@ function getYiData(jkdata) {
                     })
                 }
             }else if(api_type=="XBPQ"){
+                let gethtml = request(MY_URL, { headers: headers, timeout:5000 });
                 extdata["二次截取"] = extdata["二次截取"] || (gethtml.indexOf(`<ul class="stui-vodlist`)>-1?`<ul class="stui-vodlist&&</ul>`:gethtml.indexOf(`<ul class="myui-vodlist`)>-1?`<ul class="myui-vodlist&&</ul>`:"");
                 if(extdata["二次截取"]){
                     gethtml = gethtml.split(extdata["二次截取"].split('&&')[0])[1].split(extdata["二次截取"].split('&&')[1])[0];
@@ -620,6 +611,7 @@ function getYiData(jkdata) {
                     }
                 })
             }else{
+                let gethtml = request(MY_URL, { headers: headers, timeout:5000 });
                 let json;
                 if(/cms/.test(api_type)&&/<\?xml/.test(gethtml)){
                     gethtml = gethtml.replace(/&lt;!\[CDATA\[|\]\]&gt;|<!\[CDATA\[|\]\]>/g,'');
