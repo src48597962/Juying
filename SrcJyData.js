@@ -522,7 +522,7 @@ function getYiData(jkdata) {
                 let dws = extdata["一级"].split(';');
                 if(/^json:/.test(dws[0])){
                     let json = dealJson(gethtml);
-                    eval(`let items = \`${json+'.'+dws[0].replace('json:')}\`;`);
+                    let items = getJsonValue(json, dws[0].replace('json:'));
                     log(items);
 
                 }else{
@@ -1424,4 +1424,17 @@ function dealJson(html) {
         html = JSON.parse(html);
     }catch (e) {}
     return html;
+}
+//获取对象指定路径值
+function getJsonValue(obj, path) {
+    const parts = path.split('.');
+    let current = obj;
+    for (let part of parts) {
+        if (current[part]) { 
+            current = current[part];
+        } else {
+            return undefined;
+        }
+    }
+    return current;
 }
