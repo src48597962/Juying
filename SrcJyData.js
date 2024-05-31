@@ -522,6 +522,8 @@ function getYiData(jkdata) {
                 let dws = extdata["一级"].split(';');
                 if(/^json:/.test(dws[0])){
                     let json = dealJson(gethtml);
+                    log(json);
+                    log(dws[0].replace('json:'));
                     let items = getJsonValue(json, dws[0].replace('json:'));
                     log(items);
 
