@@ -419,8 +419,13 @@ function dianboyiji() {
         }
     }
     if(sourceNmae){
-        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
-        d = d.concat(getYiData(sourceData));
+        try{
+            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
+            let objdata = getYiData(sourceData);
+            d = d.concat(objdata.flLists);
+        }catch(e){
+            log(sourceData.name+'>调用一级数据异常>' + ' 错误行#' + e.lineNumber);
+        }
     }
     deleteItemByCls("loading_gif");
     setResult(d);
