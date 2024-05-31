@@ -522,12 +522,16 @@ function getYiData(jkdata) {
                 let dws = extdata["一级"].split(';');
                 if(/^json:/.test(dws[0])){
                     let json = dealJson(gethtml);
-                    log(dws[0]);
-
-                    log(dws[0].replace('json:',''));
-                    let items = getJsonValue(json, dws[0].replace('json:',''));
-                    log(items);
-
+                    let vodlist = getJsonValue(json, dws[0].replace('json:',''));
+                    vodlist.forEach(it=>{
+                        name = getJsonValue(it, dws[1]);
+                        pic = getJsonValue(it, dws[2]);
+                        note = getJsonValue(it, dws[3]);
+                        id = getJsonValue(it, dws[4]);
+                        if(id&&name){
+                            lists.push({"vod_id":id,"vod_name":name,"vod_remarks":note||"","vod_pic":pic||""});
+                        }
+                    })
                 }else{
                     let vodlist = _pdfa(gethtml, dws[0].replace('json:',''));
                     vodlist.forEach(it=>{
