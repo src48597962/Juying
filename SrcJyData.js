@@ -62,7 +62,7 @@ function getYiData(jkdata) {
                 let host = extdata["host"] || '';
                 classurl = host;
                 listurl = classurl + extdata["url"];
-                vodurlhead = getHome(listurl);
+                vodurlhead = getHome(listurl)+(extdata["detailUrl"]||"");
             }
         } else {
             log('api类型错误')
@@ -528,8 +528,9 @@ function getYiData(jkdata) {
                         pic = getJsonValue(it, dws[2]);
                         note = getJsonValue(it, dws[3]);
                         id = getJsonValue(it, dws[4]);
+                        let vodUrl = /fyid/.test(vodurlhead)?vodurlhead.replace('fyid',id):vodurlhead+id;
                         if(id&&name){
-                            lists.push({"vod_id":id,"vod_name":name,"vod_remarks":note||"","vod_pic":pic||""});
+                            lists.push({"vod_id":vodUrl,"vod_name":name,"vod_remarks":note||"","vod_pic":pic||""});
                         }
                     })
                 }else{
@@ -548,7 +549,8 @@ function getYiData(jkdata) {
                             note = _pdfh(it, dws[3]);
                         }
                         if(id&&name){
-                            lists.push({"vod_id":id,"vod_name":name,"vod_remarks":note||"","vod_pic":pic||""});
+                            let vodUrl = /fyid/.test(vodurlhead)?vodurlhead.replace('fyid',id):vodurlhead+id;
+                            lists.push({"vod_id":vodUrl,"vod_name":name,"vod_remarks":note||"","vod_pic":pic||""});
                         }
                     })
                 }
