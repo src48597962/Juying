@@ -540,13 +540,14 @@ function getYiData(jkdata) {
                     }
                     
                     let dynamicCode = yicode.replace('js:','').replace('setResult(d);').trim();
-                    log(dynamicCode);
                     function executeDynamicCode() {
                         eval(dynamicCode)
                         return d;
                     }
-                    log(executeDynamicCode());
-                    
+                    let vodlist = executeDynamicCode();
+                    vodlist.forEach(it=>{
+                        lists.push({"vod_id":it.url,"vod_name":it.title,"vod_remarks":it.desc||"","vod_pic":it.img||""});
+                    })
                 }else if(/^json:/.test(dws[0])){
                     let gethtml = request(MY_URL, { headers: headers, timeout:5000 });
                     let json = dealJson(gethtml);
