@@ -437,11 +437,13 @@ function dianboyiji() {
             if(vodlists.length>0){
                 vodlists.forEach(list=>{
                     log(list);
-                    let vodname =list.vod_name.replace(/<\/?.+?\/?>/g,'');
+                    let vodname =list.vod_name;
                     if(vodname){
+                        vodname = vodname.replace(/<\/?.+?\/?>/g,'');
+                        let voddesc = list.vod_desc || "";
                         d.push({
                             title: vodname,
-                            desc: list.desc.replace(/<\/?.+?\/?>/g,''),
+                            desc: voddesc.replace(/<\/?.+?\/?>/g,''),
                             pic_url: list.vod_pic,
                             url: /^hiker/.test(list.vod_url)?list.vod_url:list.play?list.play:$("hiker://empty#immersiveTheme##autoCache#").rule(() => {
                                 require(config.依赖);
