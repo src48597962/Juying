@@ -328,7 +328,7 @@ function getYiData(jkdata) {
             //拼接生成分类页url链接
             if(api_type=="drpy"){
                 listurl = listurl.replace('((fypage-1)*21)',((MY_PAGE-1)*21)).replace('((fypage-1)*15)',((MY_PAGE-1)*15));
-                listurl = listurl.replace('fypage', MY_PAGE).replace(/ or /g, ' || ').replace(/{{/g, '${').replace(/}}/g, '}');
+                listurl = listurl.replace('{{fl}','').replace('fypage', MY_PAGE).replace(/ or /g, ' || ').replace(/{{/g, '${').replace(/}}/g, '}');
                 eval(`listurl = \`${listurl}\`;`);
                 MY_URL = listurl.replace(/undefined/g,'').replace('fyclass', cate_id);
             }else if(api_type=="XBPQ"){
