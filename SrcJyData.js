@@ -120,7 +120,7 @@ function getYiData(jkdata) {
                             if(headers['User-Agent']){
                                 headers['User-Agent'] = headers['User-Agent']=='PC_UA'?PC_UA:MOBILE_UA;
                             }
-                            let chtml = request(extdata["host"], {headers:headers, timeout:5000});
+                            let chtml = request(extdata["host"], {headers:headers, timeout:8000});
                             let fls = _pdfa(chtml, cparses[0]);
                             fls.forEach(it=>{
                                 try{
@@ -198,7 +198,7 @@ function getYiData(jkdata) {
                             }
                         }
                     }else{
-                        let gethtml = request(classurl, { headers: { 'User-Agent': api_ua }, timeout:5000 });
+                        let gethtml = request(classurl, { headers: { 'User-Agent': api_ua }, timeout:8000 });
                         if (api_type=="v1") {
                             let typehtml = JSON.parse(gethtml);
                             let typelist = typehtml.data.list||typehtml.data.typelist;
@@ -512,7 +512,7 @@ function getYiData(jkdata) {
                         vodlists.push({"vod_url":vodUrl,"vod_name":it.title,"vod_desc":it.desc||"","vod_pic":it.img||""});
                     })
                 }else if(/^json:/.test(dws[0])){
-                    let gethtml = request(MY_URL, { headers: headers, timeout:5000 });
+                    let gethtml = request(MY_URL, { headers: headers, timeout:8000 });
                     let json = dealJson(gethtml);
                     let vodlist = getJsonValue(json, dws[0].replace('json:',''));
                     vodlist.forEach(it=>{
@@ -526,7 +526,7 @@ function getYiData(jkdata) {
                         }
                     })
                 }else{
-                    let gethtml = request(MY_URL, { headers: headers, timeout:5000 });
+                    let gethtml = request(MY_URL, { headers: headers, timeout:8000 });
                     let vodlist = _pdfa(gethtml, dws[0]);
                     vodlist.forEach(it=>{
                         if(dws[4]){
@@ -563,7 +563,7 @@ function getYiData(jkdata) {
                     });
                 }
             }else if(api_type=="XBPQ"){
-                let gethtml = request(MY_URL, { headers: headers, timeout:5000 });
+                let gethtml = request(MY_URL, { headers: headers, timeout:8000 });
                 extdata["二次截取"] = extdata["二次截取"] || (gethtml.indexOf(`<ul class="stui-vodlist`)>-1?`<ul class="stui-vodlist&&</ul>`:gethtml.indexOf(`<ul class="myui-vodlist`)>-1?`<ul class="myui-vodlist&&</ul>`:"");
                 if(extdata["二次截取"]){
                     gethtml = gethtml.split(extdata["二次截取"].split('&&')[0])[1].split(extdata["二次截取"].split('&&')[1])[0];
@@ -596,7 +596,7 @@ function getYiData(jkdata) {
                     }
                 })
             }else{
-                let gethtml = request(MY_URL, { headers: headers, timeout:5000 });
+                let gethtml = request(MY_URL, { headers: headers, timeout:8000 });
                 let json;
                 if(/cms/.test(api_type)&&/<\?xml/.test(gethtml)){
                     gethtml = gethtml.replace(/&lt;!\[CDATA\[|\]\]&gt;|<!\[CDATA\[|\]\]>/g,'');
