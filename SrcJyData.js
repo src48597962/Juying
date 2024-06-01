@@ -75,7 +75,7 @@ function getYiData(jkdata) {
                         listurl = listurl.split('[')[0];
                     }
                 }
-                listurl = (/^http/.test(listurl)?"":classurl) + listurl;
+                listurl = (/^http/.test(listurl)?"":host) + listurl;
                 listurl = listurl.replace('((fypage-1)*21)',((fypage-1)*21));
                 vodurlhead = getHome(listurl)+(extdata["detailUrl"]||"");
             }
