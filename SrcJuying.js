@@ -422,7 +422,53 @@ function dianboyiji() {
         try{
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
             let objdata = getYiData(sourceData);
-            d = d.concat(objdata.flLists);
+            let fllists = objdata.fllists || [];
+            if(fllists.length>0){
+                d = d.concat(fllists);
+            }else if(objdata.error['fl']){
+                d.push({
+                    title: objdata.error['fl'],
+                    url: 'hiker://empty',
+                    col_type: 'text_center_1'
+                }); 
+            }
+
+            let vodlists = objdata.vodlists || [];
+            if(vodlists.length>0){
+                vodLists.forEach(list=>{
+                    let vodname =list.vod_name.replace(/<\/?.+?\/?>/g,'');
+                    if(vodname){
+                        d.push({
+                            title: vodname,
+                            desc: list.desc.replace(/<\/?.+?\/?>/g,''),
+                            pic_url: list.vod_pic,
+                            url: /^hiker/.test(list.vod_url)?list.vod_url:list.play?list.play:$("hiker://empty#immersiveTheme##autoCache#").rule(() => {
+                                require(config.依赖);
+                                dianboerji()
+                            }),
+                            col_type: 'movie_3',
+                            extra: {
+                                url: list.vod_url,
+                                pic: list.vod_pic,
+                                pageTitle: vodname,
+                                data: sourceData
+                            }
+                        })
+                    }
+                })
+            }else if(objdata.error['vod']){
+                d.push({
+                    title: objdata.error['vod'],
+                    url: 'hiker://empty',
+                    col_type: 'text_center_1'
+                }); 
+            }else{
+                d.push({
+                    title: '列表为空',
+                    url: 'hiker://empty',
+                    col_type: 'text_center_1'
+                });
+            }
         }catch(e){
             log(sourceData.name+'>调用一级数据异常>' + ' 错误行#' + e.lineNumber);
         }
