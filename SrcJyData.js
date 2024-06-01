@@ -325,18 +325,10 @@ function getYiData(jkdata) {
             fl.cateId = fl.cateId || cate_id;
             //拼接生成分类页url链接
             if(api_type=="drpy"){
-                log(listurl);
-                
-                listurl = listurl.replace(/ or /g, ' || ').replace(/{{/g, '${').replace(/}}/g, '}');
+                listurl = listurl.replace('((fypage-1)*21)',((MY_PAGE-1)*21)).replace('((fypage-1)*15)',((MY_PAGE-1)*15));
+                listurl = listurl.replace('fypage', MY_PAGE).replace(/ or /g, ' || ').replace(/{{/g, '${').replace(/}}/g, '}');
                 eval(`listurl = \`${listurl}\`;`);
-                MY_URL = listurl.replace(/undefined/g,'').replace('fyclass', cate_id).replace('fypage', MY_PAGE);
-                let match = MY_URL.match(/\(\(.+?)\)\)/);
-                if (match) {
-                    let expr = match[1]; // 提取表达式内容
-                    let result = eval(expr); // 计算表达式
-                    MY_URL = MY_URL.replace(/\(\(.+?)\)/, result); // 替换回计算结果
-                }
-                log(MY_URL);
+                MY_URL = listurl.replace(/undefined/g,'').replace('fyclass', cate_id);
             }else if(api_type=="XBPQ"){
                 type_id = fl.cateId || "";
                 MY_URL = listurl.replace('/lang/{lang}','');
