@@ -86,7 +86,6 @@ function getYiData(jkdata) {
                         listurl = listurl.replace('fyfilter', extdata.filter_url);
                     }
                 }
-                listurl = calculateAndReplaceExpression(listurl);
                 vodurlhead = getHome(listurl)+(extdata["detailUrl"]||"");
             }
         } else {
@@ -326,6 +325,9 @@ function getYiData(jkdata) {
             fl.cateId = fl.cateId || cate_id;
             //拼接生成分类页url链接
             if(api_type=="drpy"){
+                log(listurl);
+                listurl = calculateAndReplaceExpression(listurl);
+                log(listurl);
                 listurl = listurl.replace(/ or /g, ' || ').replace(/{{/g, '${').replace(/}}/g, '}');
                 eval(`listurl = \`${listurl}\`;`);
                 MY_URL = listurl.replace(/undefined/g,'').replace('fyclass', cate_id).replace('fypage', MY_PAGE);
