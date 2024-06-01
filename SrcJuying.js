@@ -441,10 +441,17 @@ function dianboyiji() {
                     if(vodname){
                         vodname = vodname.replace(/<\/?.+?\/?>/g,'');
                         let voddesc = list.vod_desc || "";
+                        let vodpic = list.vod_pic;
+                        if(/^\/upload|^upload/.test(vodpic)){
+                            vodpic = MY_URL.match(/http(s)?:\/\/(.*?)\//)[0] + vodpic;
+                        }
+                        if(/^\/\//.test(vodpic)){
+                            vodpic = "https:" + vodpic;
+                        }
                         d.push({
                             title: vodname,
                             desc: voddesc.replace(/<\/?.+?\/?>/g,''),
-                            pic_url: list.vod_pic + (/eferer=/.test(list.vod_pic)?"":list.vod_pic+"@Referer="),
+                            pic_url: vodpic + (/eferer=/.test(vodpic)?"":vodpic+"@Referer="),
                             url: /^hiker/.test(list.vod_url)?list.vod_url:list.play?list.play:$("hiker://empty#immersiveTheme##autoCache#").rule(() => {
                                 require(config.依赖);
                                 dianboerji()
