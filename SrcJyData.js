@@ -518,6 +518,8 @@ function getYiData(jkdata) {
                     vodlist.forEach(it=>{
                         vod_name = getJsonValue(it, dws[1]);
                         vod_pic = getJsonValue(it, dws[2]);
+                        log(it);
+                        log(vod_pic);
                         vod_desc = getJsonValue(it, dws[3]);
                         let id = getJsonValue(it, dws[4]);
                         vod_url = /fyid/.test(vodurlhead)?vodurlhead.replace('fyid',id):vodurlhead+id;
