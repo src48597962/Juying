@@ -66,7 +66,7 @@ function getYiData(jkdata) {
             }
             if(extdata){
                 let host = extdata["host"] || '';
-                classurl = host;
+                classurl = extdata["homeUrl"]? host + extdata["homeUrl"]: host;
                 listurl = extdata["url"] || "";
                 if(listurl.includes('[')){
                     if(MY_PAGE==1){
@@ -91,6 +91,8 @@ function getYiData(jkdata) {
     let area_id = '';
     let year_id = '';
     let sort_id = '';
+    let fl = {};
+
     //一级第1页生成分类数据
     if(MY_PAGE==1){
         if(classurl){
@@ -101,7 +103,8 @@ function getYiData(jkdata) {
             let 地区 = [];
             let 年份 = [];
             let 排序 = [];
-            let 筛选 = 0;
+            let 是否筛选 = 0;
+            let 筛选;
             
             let cate_exclude = ['主页','求片/留言'];
             const Color = "#3399cc";
@@ -114,7 +117,7 @@ function getYiData(jkdata) {
                 地区 = classCache.地区;
                 年份 = classCache.年份;
                 排序 = classCache.排序;
-                筛选 = classCache.筛选;
+                是否筛选 = classCache.是否筛选;
             }else{
                 try{
                     if(api_type=="drpy"){
@@ -150,6 +153,8 @@ function getYiData(jkdata) {
                                 }
                             }) 
                         }
+                        筛选 = extdata["filter"];
+                        /*
                         let ss = extdata["filter"];
                         if(ss){
                             分类.forEach(it=>{
@@ -174,8 +179,9 @@ function getYiData(jkdata) {
                                     }
                                 })
                             })
-                            筛选 = 1;
+                            是否筛选 = 1;
                         }
+                        */
                     }else if(api_type=="XBPQ"){
                         if(extdata["分类"].indexOf('$')>-1){
                             分类 = extdata["分类"].split('#');
@@ -201,7 +207,7 @@ function getYiData(jkdata) {
                                         }
                                     })
                                 })
-                                筛选 = 1;
+                                是否筛选 = 1;
                             }
                         }else if(extdata["分类"].indexOf('&')>-1&&extdata["分类值"]){
                             let typenames = extdata["分类"].split('&');
@@ -279,7 +285,7 @@ function getYiData(jkdata) {
                     log(api_name+'>获取分类数据异常>'+e.message + " 错误行#" + e.lineNumber);
                 }
                 if(分类.length>0){
-                    storage0.putMyVar('SrcJu_dianbo$classCache', {分类:分类,类型:类型,剧情:剧情,地区:地区,年份:年份,排序:排序,筛选:筛选,推荐:推荐});
+                    //storage0.putMyVar('SrcJu_dianbo$classCache', {分类:分类,类型:类型,剧情:剧情,地区:地区,年份:年份,排序:排序,是否筛选:是否筛选,推荐:推荐});
                 }
             }
 
@@ -346,6 +352,29 @@ function getYiData(jkdata) {
                     });
                     
                     if(fold=='1' || api_type=='cms'){
+                        Object.entries(筛选).forEach(([key, value]) => {
+                            //console.log(`Key: ${key}, Value: ${value}`);
+                            if(key==cate_id){
+                                value.forEach(it=>{
+                                    it.value.forEach((itit,i)=>{
+                                        if(i==0){
+                                            fl[it.key] = fl[it.key] || itit.v;
+                                        }
+                                        fllists.push({
+                                            title: fl[it.key]==itit.v?'““””<b><span style="color:' + Color + '">' + itit.n + '</span></b>':itit.n,
+                                            url: $('#noLoading#').lazyRule((fl,flkey,itid) => {
+                                                fl[flkey] = itid;
+                                                storage0.putMyVar('SrcJu_dianbo$flCache', fl);
+                                                refreshPage(true);
+                                                return "hiker://empty";
+                                            },fl ,it.key, itit.v),
+                                            col_type: 'scroll_button'
+                                        });
+                                    })
+                                })
+                            }
+                        });
+                        /*
                         if(类型.length>0 && 类型[index]){
                             type_id = getMyVar('SrcJu_dianbo$类型', 类型[index].split('#')[0].split('$')[1]);
                             类型[index].split('#').forEach(it=>{
@@ -441,6 +470,7 @@ function getYiData(jkdata) {
                                 col_type: "blank_block"
                             });
                         }
+                        */
                     }
                 }catch(e){
                     log(api_name+'>生成分类数据异常>'+e.message + " 错误行#" + e.lineNumber);
