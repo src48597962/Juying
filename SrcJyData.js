@@ -1309,7 +1309,14 @@ function calculateAndReplace(str) {
     const pattern = /\(\(\d+\s*[+-]\s*\d+)\)/;
     
     // 查找寻所有匹配项
-    const matches = [...str.matchAll(pattern)];
+    // 创建一个空数组用于存放所有匹配项
+    const matches = [];
+    
+    // 使用matchAll获取迭代器，然后手动遍历并收集到数组中
+    const matchIterator = str.matchAll(pattern);
+    for (const match of matchIterator) {
+        matches.push(match);
+    }
     
     // 遍历所有匹配项，计算并替换
     matches.forEach(match => {
