@@ -76,7 +76,6 @@ function getYiData(jkdata) {
                     }
                 }
                 listurl = (/^http/.test(listurl)?"":host) + listurl;
-                listurl = listurl.replace('((fypage-1)*21)',((fypage-1)*21));
                 if(extdata.filter_url){
                     if(!/fyfilter/.test(listurl)){
                         if(!listurl.endsWith('&')&&!extdata.filter_url.startsWith('&')){
@@ -87,6 +86,7 @@ function getYiData(jkdata) {
                         listurl = listurl.replace('fyfilter', extdata.filter_url);
                     }
                 }
+                listurl = calculateAndReplaceExpression(listurl);
                 vodurlhead = getHome(listurl)+(extdata["detailUrl"]||"");
             }
         } else {
@@ -1300,4 +1300,14 @@ function getJsonValue(obj, path) {
         }
     }
     return current;
+}
+// 查找形如 '((任意数字运算)' 的表达式，执行计算并替换
+function calculateAndReplaceExpression(url) {
+  const expressionRegex = /\(\(\d+\s*[-+\*/]\s*\d+\s*)\))/;
+  const replacedUrl = url.replace(expressionRegex, (match, expr) => {
+    // 使用eval计算表达式的值，注意：仅当内容来源安全时才使用eval
+    const calculatedValue = eval(expr);
+    return calculatedValue.toString(); // 确保替换回字符串形式
+  });
+  return replacedUrl;
 }
