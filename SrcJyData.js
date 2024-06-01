@@ -522,7 +522,7 @@ function getYiData(jkdata) {
                         let id = getJsonValue(it, dws[4]);
                         vod_url = /fyid/.test(vodurlhead)?vodurlhead.replace('fyid',id):vodurlhead+id;
                         if(vod_url&&vod_name){
-                            vodlists.push({"vod_url":vod_url,"vod_name":vod_name,"vod_desc":note||"","vod_pic":vod_pic||""});
+                            vodlists.push({"vod_url":vod_url,"vod_name":vod_name,"vod_desc":vod_desc||"","vod_pic":vod_pic||""});
                         }
                     })
                 }else{
