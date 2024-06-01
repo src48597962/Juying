@@ -326,11 +326,17 @@ function getYiData(jkdata) {
             //拼接生成分类页url链接
             if(api_type=="drpy"){
                 log(listurl);
-                listurl = calculateAndReplace(listurl);
-                log(listurl);
+                
                 listurl = listurl.replace(/ or /g, ' || ').replace(/{{/g, '${').replace(/}}/g, '}');
                 eval(`listurl = \`${listurl}\`;`);
                 MY_URL = listurl.replace(/undefined/g,'').replace('fyclass', cate_id).replace('fypage', MY_PAGE);
+                let match = MY_URL.match(/\(\(.+?)\)\)/);
+                if (match) {
+                    let expr = match[1]; // 提取表达式内容
+                    let result = eval(expr); // 计算表达式
+                    MY_URL = MY_URL.replace(/\(\(.+?)\)/, result); // 替换回计算结果
+                }
+                log(MY_URL);
             }else if(api_type=="XBPQ"){
                 type_id = fl.cateId || "";
                 MY_URL = listurl.replace('/lang/{lang}','');
@@ -1302,28 +1308,4 @@ function getJsonValue(obj, path) {
         }
     }
     return current;
-}
-// 查找形如 '((任意数字运算)' 的表达式，执行计算并替换
-function calculateAndReplace(str) {
-    // 正则表达式匹配形如'((数字 运算符 数字))'的模式，例如 '((1-1)'
-    const pattern = /\(\(\d+\s*[+-]\s*\d+)\)/;
-    
-    // 查找寻所有匹配项
-    // 创建一个空数组用于存放所有匹配项
-    const matches = [];
-    
-    // 使用matchAll获取迭代器，然后手动遍历并收集到数组中
-    const matchIterator = str.matchAll(pattern);
-    for (const match of matchIterator) {
-        matches.push(match);
-    }
-    
-    // 遍历所有匹配项，计算并替换
-    matches.forEach(match => {
-        const expr = match[1]; // 获取匹配的表达式部分
-        const calculatedValue = eval(expr); // 计算表达式的值
-        str = str.replace(match[0], calculatedValue); // 替换整个匹配的表达式为计算结果
-    });
-    
-    return str;
 }
