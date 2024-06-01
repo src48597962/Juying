@@ -428,7 +428,8 @@ function dianboyiji() {
             }else if(objdata.error['fl']){
                 d.push({
                     title: objdata.error['fl'],
-                    url: MY_URL + '#noHistory#',
+                    desc: '点击查看网页',
+                    url: getHome(MY_URL) + '#noHistory#',
                     col_type: 'text_center_1'
                 }); 
             }
@@ -461,12 +462,14 @@ function dianboyiji() {
             }else if(objdata.error['vod']){
                 d.push({
                     title: objdata.error['vod'],
+                    desc: '点击查看网页',
                     url: MY_URL + '#noHistory#',
                     col_type: 'text_center_1'
                 }); 
             }else{
                 d.push({
                     title: '列表为空',
+                    desc: '点击查看网页',
                     url: MY_URL + '#noHistory#',
                     col_type: 'text_center_1'
                 });
