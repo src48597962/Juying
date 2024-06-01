@@ -444,7 +444,7 @@ function dianboyiji() {
                         d.push({
                             title: vodname,
                             desc: voddesc.replace(/<\/?.+?\/?>/g,''),
-                            pic_url: list.vod_pic,
+                            pic_url: list.vod_pic + (/eferer=/.test(list.vod_pic)?"":list.vod_pic+"@Referer="),
                             url: /^hiker/.test(list.vod_url)?list.vod_url:list.play?list.play:$("hiker://empty#immersiveTheme##autoCache#").rule(() => {
                                 require(config.依赖);
                                 dianboerji()
