@@ -58,6 +58,7 @@ function getYiData(jkdata) {
             eval(fetch(jkdata.url));
             var print = log;
             var fetch_params = headers;
+            var fypage = MY_PAGE;
             if(rule['模板']){
                 extdata = Object.assign(muban[rule['模板']], rule);
             }else{
