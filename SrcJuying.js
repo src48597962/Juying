@@ -435,7 +435,7 @@ function dianboyiji() {
 
             let vodlists = objdata.vodlists || [];
             if(vodlists.length>0){
-                vodLists.forEach(list=>{
+                vodlists.forEach(list=>{
                     let vodname =list.vod_name.replace(/<\/?.+?\/?>/g,'');
                     if(vodname){
                         d.push({
@@ -470,7 +470,7 @@ function dianboyiji() {
                 });
             }
         }catch(e){
-            log(sourceData.name+'>调用一级数据异常>' + ' 错误行#' + e.lineNumber);
+            log(sourceData.name+'>调用一级数据异常>' + e.message + ' 错误行#' + e.lineNumber);
         }
     }
     deleteItemByCls("loading_gif");
