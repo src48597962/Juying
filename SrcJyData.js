@@ -77,6 +77,15 @@ function getYiData(jkdata) {
                 }
                 listurl = (/^http/.test(listurl)?"":host) + listurl;
                 listurl = listurl.replace('((fypage-1)*21)',((fypage-1)*21));
+                if(extdata.filter_url){
+                if(!/fyfilter/.test(listurl)){
+                    if(!listurl.endsWith('&')&&!extdata.filter_url.startsWith('&')){
+                        listurl+='&'
+                    }
+                    listurl+=extdata.filter_url;
+                }else{
+                    listurl = listurl.replace('fyfilter', extdata.filter_url);
+                }
                 vodurlhead = getHome(listurl)+(extdata["detailUrl"]||"");
             }
         } else {
@@ -316,15 +325,9 @@ function getYiData(jkdata) {
             fl.cateId = fl.cateId || cate_id;
             //拼接生成分类页url链接
             if(api_type=="drpy"){
-                if(extdata['filter_url']){
-                    let fl = {};
-                    let filter_url = extdata['filter_url'];
-                    filter_url = filter_url.replace(/ or /g, ' || ').replace(/{{/g, '${').replace(/}}/g, '}');
-                    eval(`filter_url = \`${filter_url}\`;`);
-                    MY_URL = listurl.replace('fyfilter', filter_url);
-                }else{
-                    MY_URL = listurl;
-                }
+                let fl = {};
+                listurl = listurl.replace(/ or /g, ' || ').replace(/{{/g, '${').replace(/}}/g, '}');
+                eval(`listurl = \`${listurl}\`;`);
                 MY_URL = MY_URL.replace(/undefined/g,'').replace('fyclass', cate_id).replace('fypage', MY_PAGE);
             }else if(api_type=="XBPQ"){
                 type_id = fl.cateId || "";
