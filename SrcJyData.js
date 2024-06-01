@@ -327,9 +327,11 @@ function getYiData(jkdata) {
             //拼接生成分类页url链接
             if(api_type=="drpy"){
                 let fl = {};
+                log(listurl);
                 listurl = listurl.replace(/ or /g, ' || ').replace(/{{/g, '${').replace(/}}/g, '}');
                 eval(`listurl = \`${listurl}\`;`);
                 MY_URL = MY_URL.replace(/undefined/g,'').replace('fyclass', cate_id).replace('fypage', MY_PAGE);
+                log(MY_URL);
             }else if(api_type=="XBPQ"){
                 type_id = fl.cateId || "";
                 MY_URL = listurl.replace('/lang/{lang}','');
