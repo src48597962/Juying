@@ -66,7 +66,7 @@ function getYiData(jkdata) {
             if(extdata){
                 let host = extdata["host"] || '';
                 classurl = host;
-                listurl = extdata["url"];
+                listurl = extdata["url"] || "";
                 if(listurl.includes('[')){
                     if(MY_PAGE==1){
                         listurl = listurl.split('[')[1].split(']')[0];
@@ -75,6 +75,7 @@ function getYiData(jkdata) {
                     }
                 }
                 listurl = (/^http/.test(listurl)?"":classurl) + listurl;
+                listurl = listurl.replace('((fypage-1)*21)',((fypage-1)*21));
                 vodurlhead = getHome(listurl)+(extdata["detailUrl"]||"");
             }
         } else {
