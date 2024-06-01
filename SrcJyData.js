@@ -518,8 +518,6 @@ function getYiData(jkdata) {
                     vodlist.forEach(it=>{
                         vod_name = getJsonValue(it, dws[1]);
                         vod_pic = getJsonValue(it, dws[2]);
-                        log(it);
-                        log(vod_pic);
                         vod_desc = getJsonValue(it, dws[3]);
                         let id = getJsonValue(it, dws[4]);
                         vod_url = /fyid/.test(vodurlhead)?vodurlhead.replace('fyid',id):vodurlhead+id;
@@ -645,12 +643,6 @@ function getYiData(jkdata) {
                     let vodurl = it.vod_id?vodurlhead&&!/^http/.test(it.vod_id)?vodurlhead+it.vod_id:it.vod_id:it.nextlink;
                     let vodpic = it.vod_pic||it.pic||"";
                     vodpic = vodpic.replace('/img.php?url=','').replace('/tu.php?tu=','');
-                    if(/^\/upload|^upload/.test(vodpic)){
-                        vodpic = vodurl.match(/http(s)?:\/\/(.*?)\//)[0] + vodpic;
-                    }
-                    if(/^\/\//.test(vodpic)){
-                        vodpic = "https:" + vodpic;
-                    }
                     let arr = {"vod_url":vodurl,"vod_name":it.vod_name||it.title,"vod_desc":it.vod_remarks||it.state||"","vod_pic":vodpic, "vod_play":it.play};
                     vodlists.push(arr);
                 })
