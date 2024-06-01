@@ -60,6 +60,7 @@ function getYiData(jkdata) {
             var fetch_params = headers;
             var fypage = MY_PAGE;
             var stringify = JSON.stringify;
+            var encodeUrl = encodeURI;
             if(rule['模板']){
                 extdata = Object.assign(muban[rule['模板']], rule);
             }else{
