@@ -12,7 +12,7 @@ function getYiData(jkdata) {
     api_ua = api_ua=="MOBILE_UA"?MOBILE_UA:api_ua=="PC_UA"?PC_UA:api_ua;
     let headers = { 'User-Agent': api_ua };
     let vodurlhead,classurl,listurl,listnode,extdata;
-    let print = log;
+    
     //基础链接拼接
     if(api_name&&api_type&&api_url){
         if (api_type=="v1") {
@@ -56,6 +56,8 @@ function getYiData(jkdata) {
         } else if (api_type=="drpy") {
             eval(fetchCache(drpymuban,9999).replace('export default {muban, getMubans};',''));
             eval(fetch(jkdata.url));
+            var print = log;
+            var fetch_params = headers;
             if(rule['模板']){
                 extdata = Object.assign(muban[rule['模板']], rule);
             }else{
