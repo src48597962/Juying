@@ -78,13 +78,14 @@ function getYiData(jkdata) {
                 listurl = (/^http/.test(listurl)?"":host) + listurl;
                 listurl = listurl.replace('((fypage-1)*21)',((fypage-1)*21));
                 if(extdata.filter_url){
-                if(!/fyfilter/.test(listurl)){
-                    if(!listurl.endsWith('&')&&!extdata.filter_url.startsWith('&')){
-                        listurl+='&'
+                    if(!/fyfilter/.test(listurl)){
+                        if(!listurl.endsWith('&')&&!extdata.filter_url.startsWith('&')){
+                            listurl+='&'
+                        }
+                        listurl+=extdata.filter_url;
+                    }else{
+                        listurl = listurl.replace('fyfilter', extdata.filter_url);
                     }
-                    listurl+=extdata.filter_url;
-                }else{
-                    listurl = listurl.replace('fyfilter', extdata.filter_url);
                 }
                 vodurlhead = getHome(listurl)+(extdata["detailUrl"]||"");
             }
