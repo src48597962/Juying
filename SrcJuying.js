@@ -428,7 +428,7 @@ function dianboyiji() {
             }else if(objdata.error['fl']){
                 d.push({
                     title: objdata.error['fl'],
-                    url: MY_RULE + '#noHistory#',
+                    url: MY_URL + '#noHistory#',
                     col_type: 'text_center_1'
                 }); 
             }
@@ -461,13 +461,13 @@ function dianboyiji() {
             }else if(objdata.error['vod']){
                 d.push({
                     title: objdata.error['vod'],
-                    url: MY_RULE + '#noHistory#',
+                    url: MY_URL + '#noHistory#',
                     col_type: 'text_center_1'
                 }); 
             }else{
                 d.push({
                     title: '列表为空',
-                    url: MY_RULE + '#noHistory#',
+                    url: MY_URL + '#noHistory#',
                     col_type: 'text_center_1'
                 });
             }
