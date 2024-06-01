@@ -436,6 +436,7 @@ function dianboyiji() {
             let vodlists = objdata.vodlists || [];
             if(vodlists.length>0){
                 vodlists.forEach(list=>{
+                    log(list);
                     let vodname =list.vod_name.replace(/<\/?.+?\/?>/g,'');
                     if(vodname){
                         d.push({
