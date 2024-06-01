@@ -356,21 +356,24 @@ function getYiData(jkdata) {
                             //console.log(`Key: ${key}, Value: ${value}`);
                             if(key==cate_id){
                                 value.forEach(it=>{
-                                    it.value.forEach((itit,i)=>{
-                                        if(i==0){
-                                            fl[it.key] = fl[it.key] || itit.v;
-                                        }
+                                    if(it.value.length>0){
+                                        fl[it.key] = fl[it.key] || it.value[0].v;
+                                        it.value.forEach((itit)=>{
+                                            fllists.push({
+                                                title: fl[it.key]==itit.v?'““””<b><span style="color:' + Color + '">' + itit.n + '</span></b>':itit.n,
+                                                url: $('#noLoading#').lazyRule((fl,flkey,itid) => {
+                                                    fl[flkey] = itid;
+                                                    storage0.putMyVar('SrcJu_dianbo$flCache', fl);
+                                                    refreshPage(true);
+                                                    return "hiker://empty";
+                                                },fl ,it.key, itit.v),
+                                                col_type: 'scroll_button'
+                                            });
+                                        })
                                         fllists.push({
-                                            title: fl[it.key]==itit.v?'““””<b><span style="color:' + Color + '">' + itit.n + '</span></b>':itit.n,
-                                            url: $('#noLoading#').lazyRule((fl,flkey,itid) => {
-                                                fl[flkey] = itid;
-                                                storage0.putMyVar('SrcJu_dianbo$flCache', fl);
-                                                refreshPage(true);
-                                                return "hiker://empty";
-                                            },fl ,it.key, itit.v),
-                                            col_type: 'scroll_button'
+                                            col_type: "blank_block"
                                         });
-                                    })
+                                    }
                                 })
                             }
                         });
