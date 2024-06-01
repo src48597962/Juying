@@ -87,10 +87,6 @@ function getYiData(jkdata) {
     let fold = getMyVar('SrcJu_dianbo$fold', "0");//是否展开小分类筛选
     let cate_id = '';
     let type_id = '';
-    let class_id = '';
-    let area_id = '';
-    let year_id = '';
-    let sort_id = '';
     let fl = storage0.getMyVar('SrcJu_dianbo$flCache') || {};
 
     //一级第1页生成分类数据
@@ -214,7 +210,7 @@ function getYiData(jkdata) {
                                         })
                                         if(value.length>0){
                                             筛选 = 筛选 || {};
-                                            筛选[it.type_id] = {"key":"type","name":"类型","value":value};
+                                            筛选[it.type_id] = {"key":"cateId","name":it.type_name,"value":value};
                                         }
                                     }
                                 })
@@ -226,13 +222,13 @@ function getYiData(jkdata) {
                     log(api_name+'>获取分类数据异常>'+e.message + " 错误行#" + e.lineNumber);
                 }
                 if(分类.length>0){
-                    //storage0.putMyVar('SrcJu_dianbo$classCache', {分类:分类,类型:类型,剧情:剧情,地区:地区,年份:年份,排序:排序,是否筛选:是否筛选,推荐:推荐});
+                    storage0.putMyVar('SrcJu_dianbo$classCache', {分类:分类,筛选:筛选,推荐:推荐});
                 }
             }
 
             if(分类.length>0){
                 try{
-                    if(筛选){
+                    if(筛选 && api_type!='cms'){
                         fllists.push({
                             title: fold === '1' ? '““””<b><span style="color: #F54343">∨</span></b>' : '““””<b><span style="color:' + Color + '">∧</span></b>',
                             url: $('#noLoading#').lazyRule((fold) => {
@@ -317,21 +313,21 @@ function getYiData(jkdata) {
 
     if(listurl && vodlists.length==0){
         try{
+            fl.cateId = fl.cateId || cate_id;
             //拼接生成分类页url链接
             if(api_type=="drpy"){
                 if(extdata['filter_url']){
                     let fl = {};
-                    let filter_url = extdata['filter_url'].replace('{{fl.lang}}','').replace('{{fl.letter}}','').replace('{{fl.字母}}','').replace('{{fl.语言}}','');
-                    filter_url = filter_url.replace('fl.类型',type_id?'type_id':'cate_id').replace('fl.地区','area_id').replace('fl.年份','year_id').replace('fl.剧情','class_id').replace('fl.排序','sort_id');
-                    filter_url = filter_url.replace('fl.cateId', type_id?'type_id':'cate_id').replace('fl.area','area_id').replace('fl.year','year_id').replace('fl.class','class_id').replace('fl.by','sort_id');
-                    filter_url = filter_url.replace(/ or /g, '||').replace(/{{/g, '${').replace(/}}/g, '}');
+                    let filter_url = extdata['filter_url'];
+                    filter_url = filter_url.replace(/ or /g, ' || ').replace(/{{/g, '${').replace(/}}/g, '}');
                     eval(`filter_url = \`${filter_url}\`;`);
                     MY_URL = listurl.replace('fyfilter', filter_url);
                 }else{
                     MY_URL = listurl;
                 }
-                MY_URL = MY_URL.replace('fyclass', cate_id).replace('fypage', MY_PAGE);
+                MY_URL = MY_URL.replace(/undefined/g,'').replace('fyclass', cate_id).replace('fypage', MY_PAGE);
             }else if(api_type=="XBPQ"){
+                type_id = fl.cateId || "";
                 MY_URL = listurl.replace('/lang/{lang}','');
                 if(!type_id){
                     MY_URL = MY_URL.replace('/class/{class}','');
@@ -345,9 +341,10 @@ function getYiData(jkdata) {
                 if(!sort_id){
                     MY_URL = MY_URL.replace('/by/{by}','');
                 }
-                MY_URL = MY_URL.replace('{catePg}',extdata["起始页"]?MY_PAGE>extdata["起始页"]?MY_PAGE:extdata["起始页"]:MY_PAGE).replace('{year}', year_id).replace('{area}', area_id).replace('{by}', sort_id).replace('{class}', type_id).replace('{cateId}', cate_id);
+                //MY_URL = MY_URL.replace('{catePg}',extdata["起始页"]?MY_PAGE>extdata["起始页"]?MY_PAGE:extdata["起始页"]:MY_PAGE).replace('{year}', year_id).replace('{area}', area_id).replace('{by}', sort_id).replace('{class}', type_id).replace('{cateId}', cate_id);
             }else{
                 MY_URL = listurl + MY_PAGE;
+                type_id = fl.cateId || "";
                 if(api_type=="v2"||api_type=="app"){
                     MY_URL = MY_URL.replace('@type_id',type_id);
                 }else if (api_type=="v1") {
