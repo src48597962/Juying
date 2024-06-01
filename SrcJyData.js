@@ -326,7 +326,7 @@ function getYiData(jkdata) {
             //拼接生成分类页url链接
             if(api_type=="drpy"){
                 log(listurl);
-                listurl = calculateAndReplaceExpression(listurl);
+                listurl = calculateAndReplace(listurl);
                 log(listurl);
                 listurl = listurl.replace(/ or /g, ' || ').replace(/{{/g, '${').replace(/}}/g, '}');
                 eval(`listurl = \`${listurl}\`;`);
@@ -1304,12 +1304,19 @@ function getJsonValue(obj, path) {
     return current;
 }
 // 查找形如 '((任意数字运算)' 的表达式，执行计算并替换
-function calculateAndReplaceExpression(url) {
-  const expressionRegex = /\(\(\d+\s*[-+\*/]\s*\d+\s*)\))/;
-  const replacedUrl = url.replace(expressionRegex, (match, expr) => {
-    // 使用eval计算表达式的值，注意：仅当内容来源安全时才使用eval
-    const calculatedValue = eval(expr);
-    return calculatedValue.toString(); // 确保替换回字符串形式
-  });
-  return replacedUrl;
+function calculateAndReplace(str) {
+    // 正则表达式匹配形如'((数字 运算符 数字))'的模式，例如 '((1-1)'
+    const pattern = /\(\(\d+\s*[+-]\s*\d+)\)/;
+    
+    // 查找寻所有匹配项
+    const matches = [...str.matchAll(pattern)];
+    
+    // 遍历所有匹配项，计算并替换
+    matches.forEach(match => {
+        const expr = match[1]; // 获取匹配的表达式部分
+        const calculatedValue = eval(expr); // 计算表达式的值
+        str = str.replace(match[0], calculatedValue); // 替换整个匹配的表达式为计算结果
+    });
+    
+    return str;
 }
