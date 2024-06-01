@@ -63,7 +63,15 @@ function getYiData(jkdata) {
             if(extdata){
                 let host = extdata["host"] || '';
                 classurl = host;
-                listurl = (/^http/.test(extdata["url"])?"":classurl) + extdata["url"];
+                listurl = extdata["url"];
+                if(listurl.includes('[')){
+                    if(MY_PAGE==1){
+                        listurl = listurl.split('[')[1].split(']')[0];
+                    }else{
+                        listurl = listurl.split('[')[0];
+                    }
+                }
+                listurl = (/^http/.test(listurl)?"":classurl) + listurl;
                 vodurlhead = getHome(listurl)+(extdata["detailUrl"]||"");
             }
         } else {
