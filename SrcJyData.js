@@ -2,8 +2,9 @@
 
 // 获取一级数据
 function getYiData(jkdata) {
-    let lists = [];
-    let vodLists = [];
+    let fllists = [];
+    let vodlists = [];
+    let error ={};
     let api_name = jkdata.name||"";
     let api_type = jkdata.type||"";
     let api_url = jkdata.url||"";
@@ -261,6 +262,7 @@ function getYiData(jkdata) {
                         }
                     }
                 }catch(e){
+                    error.fl = '获取分类数据异常>'+e.message + ' 错误行#' + e.lineNumber;
                     log(api_name+'>获取分类数据异常>'+e.message + " 错误行#" + e.lineNumber);
                 }
                 if(分类.length>0){
@@ -271,7 +273,7 @@ function getYiData(jkdata) {
             if(分类.length>0){
                 try{
                     if(筛选){
-                        lists.push({
+                        fllists.push({
                             title: fold === '1' ? '““””<b><span style="color: #F54343">∨</span></b>' : '““””<b><span style="color:' + Color + '">∧</span></b>',
                             url: $('#noLoading#').lazyRule((fold) => {
                                 putMyVar('SrcJu_dianbo$fold', fold === '1' ? '0' : '1');
@@ -291,9 +293,9 @@ function getYiData(jkdata) {
                     putMyVar('SrcJu_dianbo$分类', cate_id);
                     if(推荐.length>0){
                         if(cate_id == 'tj'){
-                            vodLists = 推荐;//当前分类为推荐，取推荐列表
+                            vodlists = 推荐;//当前分类为推荐，取推荐列表
                         }
-                        lists.push({
+                        fllists.push({
                             title: cate_id=='tj'?'““””<b><span style="color:' + Color + '">' + '推荐' + '</span></b>':'推荐',
                             url: $('#noLoading#').lazyRule(() => {
                                 putMyVar('SrcJu_dianbo$分类', 'tj');
@@ -311,7 +313,7 @@ function getYiData(jkdata) {
                         if(cate_id==itid){
                             index = i;
                         }
-                        lists.push({
+                        fllists.push({
                             title: cate_id==itid?'““””<b><span style="color:' + Color + '">' + itname + '</span></b>':itname,
                             url: $('#noLoading#').lazyRule((itid) => {
                                 putMyVar('SrcJu_dianbo$分类', itid);
@@ -326,7 +328,7 @@ function getYiData(jkdata) {
                             col_type: 'scroll_button'
                         });
                     })
-                    lists.push({
+                    fllists.push({
                         col_type: "blank_block"
                     });
                     
@@ -336,7 +338,7 @@ function getYiData(jkdata) {
                             类型[index].split('#').forEach(it=>{
                                 let itname = it.split('$')[0];
                                 let itid = it.split('$')[1];
-                                lists.push({
+                                fllists.push({
                                     title: type_id==itid?'““””<b><span style="color:' + Color + '">' + itname + '</span></b>':itname,
                                     url: $('#noLoading#').lazyRule((itid) => {
                                         putMyVar('SrcJu_dianbo$类型', itid);
@@ -346,7 +348,7 @@ function getYiData(jkdata) {
                                     col_type: 'scroll_button'
                                 });
                             })
-                            lists.push({
+                            fllists.push({
                                 col_type: "blank_block"
                             });
                         }
@@ -393,7 +395,7 @@ function getYiData(jkdata) {
                             年份[index].split('#').forEach(it=>{
                                 let itname = it.split('$')[0];
                                 let itid = it.split('$')[1];
-                                lists.push({
+                                fllists.push({
                                     title: year_id==itid?'““””<b><span style="color:' + Color + '">' + itname + '</span></b>':itname,
                                     url: $('#noLoading#').lazyRule((itid) => {
                                         putMyVar('SrcJu_dianbo$年份', itid);
@@ -403,7 +405,7 @@ function getYiData(jkdata) {
                                     col_type: 'scroll_button'
                                 });
                             })
-                            lists.push({
+                            fllists.push({
                                 col_type: "blank_block"
                             });
                         }
@@ -412,7 +414,7 @@ function getYiData(jkdata) {
                             排序[index].split('#').forEach(it=>{
                                 let itname = it.split('$')[0];
                                 let itid = it.split('$')[1];
-                                lists.push({
+                                fllists.push({
                                     title: sort_id==itid?'““””<b><span style="color:' + Color + '">' + itname + '</span></b>':itname,
                                     url: $('#noLoading#').lazyRule((itid) => {
                                         putMyVar('SrcJu_dianbo$排序', itid);
@@ -422,37 +424,11 @@ function getYiData(jkdata) {
                                     col_type: 'scroll_button'
                                 });
                             })
-                            lists.push({
+                            fllists.push({
                                 col_type: "blank_block"
                             });
                         }
                     }
-                    let searchurl = $('').lazyRule((jkdata) => {
-                        if(jkdata){
-                            /*
-                            return $('hiker://empty#noRecordHistory##noHistory#').rule((name,data) => {
-                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
-                                let ssdata = getSsData(name,data);
-                                setResult(ssdata);
-                            }, input, data);
-                            */
-                            storage0.putMyVar('搜索临时搜索数据', jkdata);
-                            return 'hiker://search?s='+input+'  '+'&rule='+MY_RULE.title;
-                        }else{
-                            return 'toast://未找到接口数据'
-                        }
-                    },jkdata);
-                    lists.push({
-                        title: "搜索",
-                        url: $.toString((searchurl) => {
-                                return input + searchurl;
-                            },searchurl),
-                        desc: "搜你想看的...",
-                        col_type: "input",
-                        extra: {
-                            titleVisible: true
-                        }
-                    });
                 }catch(e){
                     log(api_name+'>生成分类数据异常>'+e.message + " 错误行#" + e.lineNumber);
                 }
@@ -460,7 +436,7 @@ function getYiData(jkdata) {
         }
     }
 
-    if(listurl && vodLists.length==0){
+    if(listurl && vodlists.length==0){
         try{
             //拼接生成分类页url链接
             if(api_type=="drpy"){
@@ -533,7 +509,7 @@ function getYiData(jkdata) {
                     let vodlist = executeDynamicCode();
                     vodlist.forEach(it=>{
                         let vodUrl = /fyid/.test(vodurlhead)?vodurlhead.replace('fyid',it.url):vodurlhead+it.url;
-                        vodLists.push({"vod_url":vodUrl,"vod_name":it.title,"vod_desc":it.desc||"","vod_pic":it.img||""});
+                        vodlists.push({"vod_url":vodUrl,"vod_name":it.title,"vod_desc":it.desc||"","vod_pic":it.img||""});
                     })
                 }else if(/^json:/.test(dws[0])){
                     let gethtml = request(MY_URL, { headers: headers, timeout:5000 });
@@ -546,7 +522,7 @@ function getYiData(jkdata) {
                         let id = getJsonValue(it, dws[4]);
                         vod_url = /fyid/.test(vodurlhead)?vodurlhead.replace('fyid',id):vodurlhead+id;
                         if(vod_url&&vod_name){
-                            vodLists.push({"vod_url":vod_url,"vod_name":vod_name,"vod_desc":note||"","vod_pic":vod_pic||""});
+                            vodlists.push({"vod_url":vod_url,"vod_name":vod_name,"vod_desc":note||"","vod_pic":vod_pic||""});
                         }
                     })
                 }else{
@@ -566,21 +542,21 @@ function getYiData(jkdata) {
                             vod_desc = _pdfh(it, dws[3]);
                         }
                         if(vod_url&&vod_name){
-                            vodLists.push({"vod_url":vod_url,"vod_name":vod_name,"vod_desc":vod_desc||"","vod_pic":vod_pic||""});
+                            vodlists.push({"vod_url":vod_url,"vod_name":vod_name,"vod_desc":vod_desc||"","vod_pic":vod_pic||""});
                         }
                     })
                 }
                 if(extdata.图片替换 && extdata.图片替换.includes('=>')){
                     let replace_from = extdata.图片替换.split('=>')[0];
                     let replace_to = extdata.图片替换.split('=>')[1];
-                    vodLists.forEach(it=>{
+                    vodlists.forEach(it=>{
                         if(it.vod_pic&&it.vod_pic.startsWith('http')){
                             it.vod_pic = it.vod_pic.replace(replace_from,replace_to);
                         }
                     });
                 }
                 if(extdata.图片来源){
-                    vodLists.forEach(it=>{
+                    vodlists.forEach(it=>{
                         if(it.vod_pic&&it.vod_pic.startsWith('http')){
                             it.vod_pic = it.vod_pic + extdata.图片来源;
                         }
@@ -616,7 +592,7 @@ function getYiData(jkdata) {
                             vod_desc = getBetweenStr(item, extdata["副标题"]);
                         }catch(e){}
                         let arr = {"vod_url":vod_url,"vod_name":vod_name,"vod_desc":vod_desc,"vod_pic":vod_pic};
-                        vodLists.push(arr);
+                        vodlists.push(arr);
                     }
                 })
             }else{
@@ -674,38 +650,19 @@ function getYiData(jkdata) {
                         vodpic = "https:" + vodpic;
                     }
                     let arr = {"vod_url":vodurl,"vod_name":it.vod_name||it.title,"vod_desc":it.vod_remarks||it.state||"","vod_pic":vodpic, "vod_play":it.play};
-                    vodLists.push(arr);
+                    vodlists.push(arr);
                 })
             }
         }catch(e){
-            log(api_name+'>获取列表异常>'+e.message + " 错误行#" + e.lineNumber)
+            error.vod = '获取列表异常>'+e.message + ' 错误行#' + e.lineNumber
+            log(api_name+'>获取列表异常>'+e.message + ' 错误行#' + e.lineNumber);
         }
     }
-    vodLists.forEach(list=>{
-        let vodname =list.vod_name.replace(/<\/?.+?\/?>/g,'');
-        if(vodname){
-            lists.push({
-                title: vodname,
-                desc: list.desc.replace(/<\/?.+?\/?>/g,''),
-                pic_url: list.vod_pic,
-                url: /^hiker/.test(list.vod_url)?list.vod_url:list.play?list.play:$("hiker://empty#immersiveTheme##autoCache#").rule(() => {
-                    require(config.依赖);
-                    dianboerji()
-                }),
-                col_type: 'movie_3',
-                extra: {
-                    url: list.vod_url,
-                    pic: list.vod_pic,
-                    pageTitle: vodname,
-                    data: jkdata
-                }
-            })
-        }
-    })
         
     return {
-        lists: lists,
-        flurl: MY_URL
+        fllists: fllists,
+        vodlists: vodlists,
+        error: error
     }
 }
 // 获取搜索数据
