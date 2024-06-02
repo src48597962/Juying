@@ -385,8 +385,6 @@ function getYiData(jkdata) {
                         extend: extdata.extend
                     };
                     let HOST = extdata['host'];
-                    log(fl.tid);
-                    log(MY_URL);
                     let input = MY_URL;
                     let MY_FL = fl;
                     let MY_CATE = cate_id;
@@ -400,8 +398,13 @@ function getYiData(jkdata) {
                     
                     let dynamicCode = yicode.replace('js:','').replace('setResult(d);','').replace('request(input)','request(input,fetch_params)').trim();
                     function executeDynamicCode() {
+                        let VODS = [];
                         eval(dynamicCode)
-                        return d;
+                        if(dynamicCode.includes('setResult(d)')){
+                            return d;
+                        }else{
+                            return VODS;
+                        }
                     }
                     let vodlist = executeDynamicCode();
                     vodlist.forEach(it=>{
