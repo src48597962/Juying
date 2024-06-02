@@ -378,6 +378,7 @@ function getYiData(jkdata) {
                         extend: extdata.extend
                     };
                     let HOST = extdata['host'];
+                    log(MY_URL);
                     let input = MY_URL;
                     let MY_FL = fl;
                     let MY_CATE = cate_id;
