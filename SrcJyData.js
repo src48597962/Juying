@@ -366,6 +366,12 @@ function getYiData(jkdata) {
 
             let vod_name,vod_pic,vod_url,vod_desc;
             if(api_type=="drpy"){
+                let tid =  cate_id;
+                let pg = MY_PAGE;
+                let filter = 筛选;
+                let extend = {fl:fl};
+                log(category(tid, pg, filter, extend));
+                /*
                 let yicode = extdata["一级"] || "";
                 let dws = yicode.split(';');
                 if(/^js:/.test(yicode)){
@@ -448,6 +454,7 @@ function getYiData(jkdata) {
                         }
                     });
                 }
+                */
             }else if(api_type=="XBPQ"){
                 let gethtml = request(MY_URL, { headers: headers, timeout:8000 });
                 extdata["二次截取"] = extdata["二次截取"] || (gethtml.indexOf(`<ul class="stui-vodlist`)>-1?`<ul class="stui-vodlist&&</ul>`:gethtml.indexOf(`<ul class="myui-vodlist`)>-1?`<ul class="myui-vodlist&&</ul>`:"");
@@ -1315,4 +1322,172 @@ function encodeUrl(str){
         str = (str + '').toString();
         return encodeURIComponent(str).replace(/%2F/g, '/').replace(/%3F/g, '?').replace(/%3A/g, ':').replace(/%40/g, '@').replace(/%3D/g, '=').replace(/%3A/g, ':').replace(/%2C/g, ',').replace(/%2B/g, '+').replace(/%24/g, '$');
     }
+}
+function categoryParse(cateObj) {
+    fetch_params = JSON.parse(JSON.stringify(rule_fetch_params));
+    let p = cateObj.一级;
+    if(!p||typeof(p)!=='string'){
+        return '{}'
+    }
+    let d = [];
+    // let url = cateObj.url.replaceAll('fyclass', cateObj.tid).replaceAll('fypage', cateObj.pg);
+    let url = cateObj.url.replaceAll('fyclass', cateObj.tid);
+    if(cateObj.pg === 1 && url.includes('[')&&url.includes(']')){
+        url = url.split('[')[1].split(']')[0];
+    }else if(cateObj.pg > 1 && url.includes('[')&&url.includes(']')){
+        url = url.split('[')[0];
+    }
+    if(rule.filter_url){
+        if(!/fyfilter/.test(url)){
+            if(!url.endsWith('&')&&!rule.filter_url.startsWith('&')){
+                url+='&'
+            }
+            url+=rule.filter_url;
+        }else{
+            url = url.replace('fyfilter', rule.filter_url);
+        }
+        // filter_url支持fyclass
+        url = url.replaceAll('fyclass', cateObj.tid);
+        // console.log('filter:'+cateObj.filter);
+        let fl = cateObj.filter?cateObj.extend:{};
+        // 自动合并 不同分类对应的默认筛选
+        if(rule.filter_def && typeof(rule.filter_def)==='object'){
+            try {
+                if(Object.keys(rule.filter_def).length>0 && rule.filter_def.hasOwnProperty(cateObj.tid)){
+                    let self_fl_def = rule.filter_def[cateObj.tid];
+                    if(self_fl_def && typeof(self_fl_def)==='object'){
+                        // 引用传递转值传递,避免污染self变量
+                        let fl_def = JSON.parse(JSON.stringify(self_fl_def));
+                        fl = Object.assign(fl_def,fl);
+                    }
+                }
+            }catch (e) {
+                print('合并不同分类对应的默认筛选出错:'+e.message);
+            }
+        }
+        let new_url;
+        new_url = cheerio.jinja2(url,{fl:fl});
+        // console.log('jinjia2执行后的new_url类型为:'+typeof(new_url));
+        url = new_url;
+    }
+    if(/fypage/.test(url)){
+        if(url.includes('(')&&url.includes(')')){
+            let url_rep = url.match(/.*?\((.*)\)/)[1];
+            // console.log(url_rep);
+            let cnt_page = url_rep.replaceAll('fypage', cateObj.pg);
+            // console.log(cnt_page);
+            let cnt_pg = eval(cnt_page);
+            // console.log(cnt_pg);
+            url = url.replaceAll(url_rep,cnt_pg).replaceAll('(','').replaceAll(')','');
+        }else{
+            url = url.replaceAll('fypage',cateObj.pg);
+        }
+    }
+
+    MY_URL = url;
+    // setItem('MY_URL',MY_URL);
+    console.log(MY_URL);
+    p = p.trim();
+    const MY_CATE = cateObj.tid;
+    if(p.startsWith('js:')){
+        var MY_FL = cateObj.extend;
+        const TYPE = 'cate';
+        var input = MY_URL;
+        const MY_PAGE = cateObj.pg;
+        var desc = '';
+        eval(p.trim().replace('js:',''));
+        d = VODS;
+    }else {
+        p = p.split(';');
+        if (p.length < 5) {
+            return '{}'
+        }
+        let _ps = parseTags.getParse(p[0]);
+        _pdfa = _ps.pdfa;
+        _pdfh = _ps.pdfh;
+        _pd = _ps.pd;
+        let is_json = p[0].startsWith('json:');
+        p[0] = p[0].replace(/^(jsp:|json:|jq:)/,'');
+        try {
+            let html = getHtml(MY_URL);
+            if (html) {
+                if(is_json){
+                    html = dealJson(html);
+                }
+                let list = _pdfa(html, p[0]);
+                list.forEach(it => {
+                    let links = p[4].split('+').map(p4=>{
+                        return !rule.detailUrl?_pd(it, p4,MY_URL):_pdfh(it, p4);
+                    });
+                    let link = links.join('$');
+                    let vod_id = rule.detailUrl?MY_CATE+'$'+link:link;
+
+                    let vod_name = _pdfh(it, p[1]).replace(/\n|\t/g,'').trim();
+                    let vod_pic = _pd(it, p[2],MY_URL);
+
+                    if(rule.二级==='*'){
+                        vod_id = vod_id+'@@'+vod_name+'@@'+vod_pic;
+                    }
+                    d.push({
+                        'vod_id': vod_id,
+                        'vod_name': vod_name,
+                        'vod_pic': vod_pic,
+                        'vod_remarks': _pdfh(it, p[3]).replace(/\n|\t/g,'').trim(),
+                    });
+                });
+            }
+        } catch (e) {
+            console.log(e.message);
+        }
+    }
+    if(rule.图片替换 && rule.图片替换.includes('=>')){
+        let replace_from = rule.图片替换.split('=>')[0];
+        let replace_to = rule.图片替换.split('=>')[1];
+        d.forEach(it=>{
+            if(it.vod_pic&&it.vod_pic.startsWith('http')){
+                it.vod_pic = it.vod_pic.replace(replace_from,replace_to);
+            }
+        });
+    }
+    if(rule.图片来源){
+        d.forEach(it=>{
+            if(it.vod_pic&&it.vod_pic.startsWith('http')){
+                it.vod_pic = it.vod_pic + rule.图片来源;
+            }
+        });
+    }
+    // print(d);
+    if(d.length>0){
+        print(d.slice(0,2));
+    }
+    let pagecount = 0;
+    if(rule.pagecount && typeof(rule.pagecount) === 'object' && rule.pagecount.hasOwnProperty(MY_CATE)){
+        print(`MY_CATE:${MY_CATE},pagecount:${JSON.stringify(rule.pagecount)}`);
+        pagecount = parseInt(rule.pagecount[MY_CATE]);
+    }
+    let nodata = {
+        list:[{vod_name:'无数据,防无限请求',vod_id:'no_data',vod_remarks:'不要点,会崩的',vod_pic:'https://ghproxy.net/https://raw.githubusercontent.com/hjdhnx/dr_py/main/404.jpg'}],
+        total:1,pagecount:1,page:1,limit:1
+    };
+    let vod =  d.length<1?JSON.stringify(nodata):JSON.stringify({
+        'page': parseInt(cateObj.pg),
+        'pagecount': pagecount||999,
+        'limit': 20,
+        'total': 999,
+        'list': d,
+    });
+    // print(vod);
+    return vod
+}
+function category(tid, pg, filter, extend) {
+    let cateObj = {
+        url: rule.url,
+        一级: rule.一级,
+        tid: tid,
+        pg: parseInt(pg),
+        filter: filter,
+        extend: extend
+    };
+    // console.log(JSON.stringify(extend));
+    return categoryParse(cateObj)
 }
