@@ -387,13 +387,13 @@ function getYiData(jkdata) {
                         cateObj.tid = cateObj.tid.split('_')[0];
                         input = HOST + '/api/video/search?key=' + cateObj.tid + '&page=' + + MY_PAGE;
                     }
-                    /*
+                    
                     let dynamicCode = yicode.replace('js:','').replace('setResult(d);').trim();
                     function executeDynamicCode() {
                         eval(dynamicCode)
                         return d;
-                    }*/
-                    
+                    }
+                    /*
                     function executeDynamicCode() {
                         let d = []; 
                         MY_FL.type = MY_CATE; 
@@ -408,7 +408,6 @@ function getYiData(jkdata) {
                                 input = input.replace("optionRefresh=1", "session=" + encodeUrl(old_session)) 
                             } 
                         } 
-                        log(fetch_params);
                         let html = fetch(input, fetch_params); 
                         try {
                             html = JSON.parse(html); 
@@ -440,7 +439,8 @@ function getYiData(jkdata) {
                     }
                     
                     log(executeDynamicCode());
-                    //let vodlist = executeDynamicCode();
+                    */
+                    let vodlist = executeDynamicCode();
                     vodlist.forEach(it=>{
                         let vodUrl = /fyid/.test(vodurlhead)?vodurlhead.replace('fyid',it.url):vodurlhead+it.url;
                         vodlists.push({"vod_url":vodUrl,"vod_name":it.title,"vod_desc":it.desc||"","vod_pic":it.img||""});
