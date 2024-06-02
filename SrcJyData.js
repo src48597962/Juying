@@ -83,9 +83,7 @@ function getYiData(jkdata) {
                         listurl = listurl.split('[')[0];
                     }
                 }
-                log(listurl);
                 listurl = (/^http/.test(listurl)?"":host) + listurl;
-                log(listurl);
                 if(extdata.filter_url){
                     if(!/fyfilter/.test(listurl)){
                         if(!listurl.endsWith('&')&&!extdata.filter_url.startsWith('&')){
@@ -96,8 +94,7 @@ function getYiData(jkdata) {
                         listurl = listurl.replace('fyfilter', extdata.filter_url);
                     }
                 }
-                log(listurl);
-                vodurlhead = getHome(listurl)+(extdata["detailUrl"]||"");
+                vodurlhead = extdata["detailUrl"]?/^http/.test(extdata["detailUrl"])?extdata["detailUrl"]:getHome(listurl)+extdata["detailUrl"]:getHome(listurl);
             }
         } else {
             log(api_type+'>api类型错误');
@@ -395,53 +392,6 @@ function getYiData(jkdata) {
                         eval(dynamicCode)
                         return d;
                     }
-                    /*
-                    function executeDynamicCode() {
-                        let d = []; 
-                        MY_FL.type = MY_CATE; 
-                        let fl = stringify(MY_FL); 
-                        fl = encodeUrl(fl); 
-                        input = input.split("{")[0] + fl; 
-                        if (MY_PAGE > 1) { 
-                            let old_session = getItem("yk_session_" + MY_CATE, "{}"); 
-                            if (MY_PAGE === 2) { 
-                                input = input.replace("optionRefresh=1", "session=" + encodeUrl(old_session)) 
-                            } else { 
-                                input = input.replace("optionRefresh=1", "session=" + encodeUrl(old_session)) 
-                            } 
-                        } 
-                        let html = fetch(input, fetch_params); 
-                        try {
-                            html = JSON.parse(html); 
-                            let lists = html.data.filterData.listData; 
-                            let session = html.data.filterData.session; 
-                            session = stringify(session); 
-                            if (session !== getItem("yk_session_" + MY_CATE, "{}")) { 
-                                setItem("yk_session_" + MY_CATE, session) 
-                            } 
-                            lists.forEach(function (it) { 
-                                let vid; 
-                                if (it.videoLink.includes("id_")) { 
-                                    vid = it.videoLink.split("id_")[1].split(".html")[0] 
-                                } else { 
-                                    vid = "msearch:" 
-                                } 
-                                d.push({ 
-                                    title: it.title, 
-                                    img: it.img, 
-                                    desc: it.summary, 
-                                    url: "https://search.youku.com/api/search?appScene=show_episode&showIds=" + vid, 
-                                    content: it.subTitle 
-                                }) 
-                            }) 
-                        } catch (e) { 
-                            log("一级列表解析发生错误:" + e.message) 
-                        } 
-                        return d;
-                    }
-                    
-                    log(executeDynamicCode());
-                    */
                     let vodlist = executeDynamicCode();
                     vodlist.forEach(it=>{
                         let vodUrl = /fyid/.test(vodurlhead)?vodurlhead.replace('fyid',it.url):(/^http/.test(it.url)?"":vodurlhead)+it.url;
