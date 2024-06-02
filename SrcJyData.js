@@ -12,7 +12,6 @@ function getYiData(jkdata) {
     api_ua = api_ua=="MOBILE_UA"?MOBILE_UA:api_ua=="PC_UA"?PC_UA:api_ua;
     let headers = { 'User-Agent': api_ua };
     let vodurlhead,classurl,listurl,listnode,extdata;
-    let 筛选;
     
     //基础链接拼接
     if(api_name&&api_type&&api_url){
@@ -112,7 +111,7 @@ function getYiData(jkdata) {
         if(classurl){
             let 推荐 = [];
             let 分类 = [];
-            //let 筛选;
+            let 筛选;
             
             let cate_exclude = ['主页','求片/留言'];
             const Color = "#3399cc";
@@ -367,9 +366,10 @@ function getYiData(jkdata) {
 
             let vod_name,vod_pic,vod_url,vod_desc;
             if(api_type=="drpy"){
+                let rule = extdata;
                 let tid =  cate_id;
                 let pg = MY_PAGE;
-                let filter = 筛选;
+                let filter = extdata.filter;
                 let extend = {fl:fl};
                 log(category(tid, pg, filter, extend));
                 /*
