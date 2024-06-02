@@ -60,19 +60,21 @@ function getYiData(jkdata) {
             
             var fypage = MY_PAGE;
             var stringify = JSON.stringify;
-            var encodeUrl = urlencode;
+            //var encodeUrl = encodeUrl;
             if(rule['模板']){
                 extdata = Object.assign(muban[rule['模板']], rule);
             }else{
                 extdata = rule;
             }
             if(extdata){
+                let host = extdata["host"] || '';
                 headers = extdata["headers"] || headers;
                 if(headers['User-Agent']){
                     headers['User-Agent'] = headers['User-Agent']=='PC_UA'?PC_UA:MOBILE_UA;
                 }
+                headers['referer'] = host;
                 var fetch_params = {headers:headers};
-                let host = extdata["host"] || '';
+                
                 classurl = extdata["homeUrl"]? host + extdata["homeUrl"]: host;
                 listurl = extdata["url"] || "";
                 if(listurl.includes('[')){
@@ -1354,8 +1356,11 @@ function getJsonValue(obj, path) {
     }
     return current;
 }
-function urlencode (str) {
-    str = (str + '').toString();
-    return encodeURIComponent(str).replace(/!/g, '%21').replace(/'/g, '%27').replace(/\(/g, '%28').
-    replace(/\)/g, '%29').replace(/\*/g, '%2A').replace(/%20/g, '+');
+function encodeUrl(str){
+    if(typeof(encodeURI) == 'function'){
+        return encodeURI(str)
+    }else{
+        str = (str + '').toString();
+        return encodeURIComponent(str).replace(/%2F/g, '/').replace(/%3F/g, '?').replace(/%3A/g, ':').replace(/%40/g, '@').replace(/%3D/g, '=').replace(/%3A/g, ':').replace(/%2C/g, ',').replace(/%2B/g, '+').replace(/%24/g, '$');
+    }
 }
