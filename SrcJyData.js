@@ -893,7 +893,7 @@ function getErData(jkdata) {
         } catch (e) {
             
         }
-    } else if (/xpath|biubiu|XBPQ/.test(api_type)) {
+    } else if (/xpath|biubiu|XBPQ|drpy/.test(api_type)) {
         extdata = extDataCache(jkdata)
         try{
             html = request(MY_URL, {headers: {'User-Agent': api_ua}, timeout:5000});
