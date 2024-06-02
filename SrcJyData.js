@@ -327,10 +327,15 @@ function getYiData(jkdata) {
     if(listurl && vodlists.length==0){
         try{
             fl.cateId = fl.cateId || cate_id;
-            log(fl.cateId);
-            log(fl.tid);
             //拼接生成分类页url链接
             if(api_type=="drpy"){
+                if(extdata['filter_def']){
+                    let filter_def = extdata['filter_def'];
+                    let filter_def_obj = filter_def[fl.cateId] || {};
+                    Object.entries(filter_def_obj).forEach(([key, value]) => {
+                        fl[key] = value;
+                    })
+                }
                 listurl = listurl.replace('((fypage-1)*21)',((MY_PAGE-1)*21)).replace('((fypage-1)*15)',((MY_PAGE-1)*15));
                 listurl = listurl.replace('{{fl}','{}').replace('fypage', MY_PAGE).replace(/ or /g, ' || ').replace(/{{/g, '${').replace(/}}/g, '}');
                 eval(`listurl = \`${listurl}\`;`);
@@ -380,6 +385,7 @@ function getYiData(jkdata) {
                         extend: extdata.extend
                     };
                     let HOST = extdata['host'];
+                    log(fl.tid);
                     log(MY_URL);
                     let input = MY_URL;
                     let MY_FL = fl;
