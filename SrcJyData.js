@@ -380,7 +380,7 @@ function getYiData(jkdata) {
                     };
                     let HOST = extdata['host'];
                     let input = MY_URL;
-                    let MY_FL = {};
+                    let MY_FL = fl;
                     let MY_CATE = cate_id;
                     cateObj.tid = cateObj.tid+'';
                     if (cateObj.tid.endsWith('_clicklink')) {
