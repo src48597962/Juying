@@ -383,12 +383,14 @@ function getYiData(jkdata) {
                         cateObj.tid = cateObj.tid.split('_')[0];
                         input = HOST + '/api/video/search?key=' + cateObj.tid + '&page=' + + MY_PAGE;
                     }
-                    
+                    /*
                     let dynamicCode = yicode.replace('js:','').replace('setResult(d);').trim();
                     function executeDynamicCode() {
                         eval(dynamicCode)
                         return d;
-                    }
+                    }*/
+                    eval(yicode);
+                    log(d);
                     let vodlist = executeDynamicCode();
                     vodlist.forEach(it=>{
                         let vodUrl = /fyid/.test(vodurlhead)?vodurlhead.replace('fyid',it.url):vodurlhead+it.url;
