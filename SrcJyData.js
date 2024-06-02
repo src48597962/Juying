@@ -57,7 +57,6 @@ function getYiData(jkdata) {
             eval(fetchCache(drpymuban,9999).replace('export default {muban, getMubans};',''));
             eval(fetch(jkdata.url));
             var print = log;
-            
             var fypage = MY_PAGE;
             var stringify = JSON.stringify;
             //var encodeUrl = encodeUrl;
@@ -84,7 +83,9 @@ function getYiData(jkdata) {
                         listurl = listurl.split('[')[0];
                     }
                 }
+                log(listurl);
                 listurl = (/^http/.test(listurl)?"":host) + listurl;
+                log(listurl);
                 if(extdata.filter_url){
                     if(!/fyfilter/.test(listurl)){
                         if(!listurl.endsWith('&')&&!extdata.filter_url.startsWith('&')){
@@ -95,6 +96,7 @@ function getYiData(jkdata) {
                         listurl = listurl.replace('fyfilter', extdata.filter_url);
                     }
                 }
+                log(listurl);
                 vodurlhead = getHome(listurl)+(extdata["detailUrl"]||"");
             }
         } else {
