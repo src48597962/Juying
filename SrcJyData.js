@@ -447,20 +447,19 @@ function getYiData(jkdata) {
                     log(videos);
                     */
                     
-                    let dynamicCode = yicode.replace('js:','').replace('setResult(d);','return d;').replace('request(input)','request(input,fetch_params)').replaceAll(`\'`,`'`).replace(`log("名称替换👉"+title)`,'').trim();
+                    let dynamicCode = yicode.replace('js:','').replace('setResult(d);','return d;').replace('request(input)','request(input,fetch_params)').replaceAll(`\'`,`'`).replace(/log\(.*\)/g,'').trim();
                     log(dynamicCode);
                     function executeDynamicCode() {
                         let VODS = [];
                         eval(dynamicCode)
-                        log(videos);
-                        log(VODS);
                         return VODS;
                     }
                     
                     let vodlist = executeDynamicCode();
                     vodlist.forEach(it=>{
-                        let vodUrl = /fyid/.test(vodurlhead)?vodurlhead.replace('fyid',it.url):(/^http/.test(it.url)?"":vodurlhead)+it.url;
-                        vodlists.push({"vod_url":vodUrl,"vod_name":it.title,"vod_desc":it.desc||"","vod_pic":it.img||""});
+                        let vodUrl = it.url || it.vod_id;
+                        vodUrl = /fyid/.test(vodurlhead)?vodurlhead.replace('fyid',vodUrl):(/^http/.test(vodUrl)?"":vodurlhead)+vodUrl;
+                        vodlists.push({"vod_url":vodUrl,"vod_name":it.title||it.vod_name,"vod_desc":it.desc||it.vod_remarks||"","vod_pic":it.img||it.vod_pic||""});
                     })
                 }else if(/^json:/.test(dws[0])){
                     let gethtml = request(MY_URL, { headers: headers, timeout:8000 });
