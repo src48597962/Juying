@@ -395,7 +395,7 @@ function getYiData(jkdata) {
                         cateObj.tid = cateObj.tid.split('_')[0];
                         input = HOST + '/api/video/search?key=' + cateObj.tid + '&page=' + + MY_PAGE;
                     }
-                    let html=request(input);
+                    let html=request(input,fetch_params);
                     function title_rep(title){
                         if(/keyword/.test(title)){
                             title=title.replace('<em class="keyword">',"").replace("</em>","");
