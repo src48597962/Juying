@@ -67,6 +67,11 @@ function getYiData(jkdata) {
                 extdata = rule;
             }
             if(extdata){
+                headers = extdata["headers"] || headers;
+                if(headers['User-Agent']){
+                    headers['User-Agent'] = headers['User-Agent']=='PC_UA'?PC_UA:MOBILE_UA;
+                }
+                
                 let host = extdata["host"] || '';
                 classurl = extdata["homeUrl"]? host + extdata["homeUrl"]: host;
                 listurl = extdata["url"] || "";
@@ -128,10 +133,7 @@ function getYiData(jkdata) {
                             if(extdata["cate_exclude"]){
                                 cate_exclude = cate_exclude.concat(extdata["cate_exclude"].split('|'));
                             }
-                            headers = extdata["headers"] || headers;
-                            if(headers['User-Agent']){
-                                headers['User-Agent'] = headers['User-Agent']=='PC_UA'?PC_UA:MOBILE_UA;
-                            }
+                            
                             let chtml = request(extdata["host"], {headers:headers, timeout:8000});
                             let fls = _pdfa(chtml, cparses[0]);
                             fls.forEach(it=>{
@@ -389,6 +391,7 @@ function getYiData(jkdata) {
                         eval(dynamicCode)
                         return d;
                     }*/
+                    log(fetch_params);
                     function executeDynamicCode() {
                         let d = []; 
                         MY_FL.type = MY_CATE; 
