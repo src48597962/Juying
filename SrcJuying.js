@@ -427,7 +427,7 @@ function dianboyiji() {
                 d = d.concat(fllists);
             }else if(objdata.error['fl'] || !fllists){
                 d.push({
-                    title: objdata.error['fl'],
+                    title: objdata.error['fl'] || "分类获取失败",
                     desc: '无法访问或源失效，点击查看网页',
                     url: getHome(MY_URL) + '#noHistory#',
                     col_type: 'text_center_1'
