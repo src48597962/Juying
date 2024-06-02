@@ -366,12 +366,12 @@ function getYiData(jkdata) {
 
             let vod_name,vod_pic,vod_url,vod_desc;
             if(api_type=="drpy"){
-                var rule = extdata;
+                
                 let tid =  cate_id;
                 let pg = MY_PAGE;
                 let filter = extdata.filter;
                 let extend = {fl:fl};
-                log(category(tid, pg, filter, extend));
+                log(category(extdata, tid, pg, filter, extend));
                 /*
                 let yicode = extdata["一级"] || "";
                 let dws = yicode.split(';');
@@ -1480,7 +1480,7 @@ function categoryParse(cateObj) {
     // print(vod);
     return vod
 }
-function category(tid, pg, filter, extend) {
+function category(rule, tid, pg, filter, extend) {
     let cateObj = {
         url: rule.url,
         一级: rule.一级,
