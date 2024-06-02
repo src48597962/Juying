@@ -366,7 +366,7 @@ function getYiData(jkdata) {
 
             let vod_name,vod_pic,vod_url,vod_desc;
             if(api_type=="drpy"){
-                let rule = extdata;
+                var rule = extdata;
                 let tid =  cate_id;
                 let pg = MY_PAGE;
                 let filter = extdata.filter;
