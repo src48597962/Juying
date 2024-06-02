@@ -447,7 +447,7 @@ function getYiData(jkdata) {
                     log(videos);
                     */
                     
-                    let dynamicCode = yicode.replace('js:','').replace('setResult(d);','return d;').replace('request(input)','request(input,fetch_params)').replaceAll(`\'`,`'`).replace(/log\(.*?\)/g,'').trim();
+                    let dynamicCode = yicode.replace('js:','').replace('setResult(d);','return d;').replace('request(input)','request(input,fetch_params)').trim();
     
                     function executeDynamicCode() {
                         let VODS = [];
