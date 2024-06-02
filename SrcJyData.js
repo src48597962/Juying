@@ -444,7 +444,7 @@ function getYiData(jkdata) {
                     */
                     let vodlist = executeDynamicCode();
                     vodlist.forEach(it=>{
-                        let vodUrl = /fyid/.test(vodurlhead)?vodurlhead.replace('fyid',it.url):vodurlhead+it.url;
+                        let vodUrl = /fyid/.test(vodurlhead)?vodurlhead.replace('fyid',it.url):(/^http/.test(it.url)?"":vodurlhead)+it.url;
                         vodlists.push({"vod_url":vodUrl,"vod_name":it.title,"vod_desc":it.desc||"","vod_pic":it.img||""});
                     })
                 }else if(/^json:/.test(dws[0])){
