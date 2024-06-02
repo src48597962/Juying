@@ -2,8 +2,8 @@
 
 // 获取一级数据
 function getYiData(jkdata) {
-    let fllists = [];
-    let vodlists = [];
+    let fllists;
+    let vodlists;
     let error ={};
     let api_name = jkdata.name||"";
     let api_type = jkdata.type||"";
@@ -108,6 +108,7 @@ function getYiData(jkdata) {
     //一级第1页生成分类数据
     if(MY_PAGE==1){
         if(classurl){
+            fllists = [];
             let 推荐 = [];
             let 分类 = [];
             let 筛选;
@@ -324,7 +325,8 @@ function getYiData(jkdata) {
         }
     }
 
-    if(listurl && vodlists.length==0 && !error.fl){
+    if(listurl && !vodlists && !error.fl){
+        vodlists = [];
         try{
             fl.cateId = fl.cateId || cate_id;
             //拼接生成分类页url链接
