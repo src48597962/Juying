@@ -327,6 +327,8 @@ function getYiData(jkdata) {
     if(listurl && vodlists.length==0){
         try{
             fl.cateId = fl.cateId || cate_id;
+            log(fl.cateId);
+            log(fl.tid);
             //拼接生成分类页url链接
             if(api_type=="drpy"){
                 listurl = listurl.replace('((fypage-1)*21)',((MY_PAGE-1)*21)).replace('((fypage-1)*15)',((MY_PAGE-1)*15));
