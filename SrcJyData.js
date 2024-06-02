@@ -326,8 +326,7 @@ function getYiData(jkdata) {
         }
     }
 
-    if(listurl && !vodlists && !error.fl){
-        vodlists = [];
+    if(listurl && !vodlists && fllists){
         try{
             fl.cateId = fl.cateId || cate_id;
             //拼接生成分类页url链接
@@ -372,7 +371,7 @@ function getYiData(jkdata) {
                     MY_URL = MY_URL + '&t=' + type_id;
                 }
             }
-
+            vodlists = [];
             let vod_name,vod_pic,vod_url,vod_desc;
             if(api_type=="drpy"){
             
