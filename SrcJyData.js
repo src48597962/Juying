@@ -447,15 +447,12 @@ function getYiData(jkdata) {
                     log(videos);
                     */
                     
-                    let dynamicCode = yicode.replace('js:','').replace('setResult(d);','').replace('request(input)','request(input,fetch_params)').replaceAll(`\'`,`'`).trim();
+                    let dynamicCode = yicode.replace('js:','').replace('setResult(d);','return d;').replace('request(input)','request(input,fetch_params)').replaceAll(`\'`,`'`).trim();
+                    log(dynamicCode);
                     function executeDynamicCode() {
                         let VODS = [];
                         eval(dynamicCode)
-                        if(dynamicCode.includes('setResult(d)')){
-                            return d;
-                        }else{
-                            return VODS;
-                        }
+                        return VODS;
                     }
                     
                     let vodlist = executeDynamicCode();
