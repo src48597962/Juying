@@ -71,7 +71,7 @@ function getYiData(jkdata) {
                 if(headers['User-Agent']){
                     headers['User-Agent'] = headers['User-Agent']=='PC_UA'?PC_UA:MOBILE_UA;
                 }
-                var fetch_params = headers;
+                var fetch_params = {headers:headers};
                 let host = extdata["host"] || '';
                 classurl = extdata["homeUrl"]? host + extdata["homeUrl"]: host;
                 listurl = extdata["url"] || "";
@@ -391,7 +391,7 @@ function getYiData(jkdata) {
                         eval(dynamicCode)
                         return d;
                     }*/
-                    log(fetch_params);
+                    
                     function executeDynamicCode() {
                         let d = []; 
                         MY_FL.type = MY_CATE; 
@@ -406,6 +406,7 @@ function getYiData(jkdata) {
                                 input = input.replace("optionRefresh=1", "session=" + encodeUrl(old_session)) 
                             } 
                         } 
+                        log(fetch_params);
                         let html = fetch(input, fetch_params); 
                         try {
                             html = JSON.parse(html); 
