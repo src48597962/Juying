@@ -395,63 +395,15 @@ function getYiData(jkdata) {
                         cateObj.tid = cateObj.tid.split('_')[0];
                         input = HOST + '/api/video/search?key=' + cateObj.tid + '&page=' + + MY_PAGE;
                     }
-                    /*
-                    let html=request(input,fetch_params);
-                    function title_rep(title){
-                        if(/keyword/.test(title)){
-                            title=title.replace('<em class="keyword">',"").replace("</em>","");
-                            //log("名称替换👉"+title)
-                        };
-                        return title
-                    }
-                    function turnDHM(duration){
-                        let min=duration.split(":")[0];
-                        let sec=duration.split(":")[1];
-                        if(min==0){
-                            return sec+"秒"
-                        }else if(0<min&&min<60){
-                            return min+"分"
-                        }else if(60<=min&&min<1440){
-                            if(min%60==0){
-                                let h=min/60;return h+"小时"
-                            }else{
-                                let h=min/60;h=(h+"").split(".")[0];let m=min%60;return h+"小时"+m+"分"
-                            }
-                        }else if(min>=1440){
-                            let d=min/60/24;d=(d+"").split(".")[0];
-                            let h=min/60%24;h=(h+"").split(".")[0];
-                            let m=min%60;let dhm="";if(d>0){
-                                dhm=d+"天"
-                            }
-                            if(h>=1){
-                                dhm=dhm+h+"小时"
-                            }if(m>0){
-                                dhm=dhm+m+"分"
-                            }
-                            return dhm
-                        }
-                        return null
-                    }
-                    let videos=[];
-                    let vodList=JSON.parse(html).data.result;
-                    vodList.forEach(function(vod){
-                        let aid=vod["aid"];
-                        let title=vod["title"].trim().replace("&quot;","\'");
-                        title=title_rep(title);
-                        title=title_rep(title);
-                        title=title_rep(title);
-                        let img="https:"+vod["pic"];
-                        let remark=turnDHM(vod["duration"]);
-                        videos.push({vod_id:aid,vod_name:title,vod_pic:img,vod_remarks:remark})
-                    });
-                    log(videos);
-                    */
-                    
-                    let dynamicCode = yicode.replace('js:','').replace('setResult(d);','return d;').replace('request(input)','request(input,fetch_params)').trim();
+                                        
+                    let dynamicCode = yicode.replace('js:','').replace('setResult(d);','').replace('request(input)','request(input,fetch_params)').trim();
     
                     function executeDynamicCode() {
                         let VODS = [];
                         eval(dynamicCode)
+                        if($.type(d)=='array'){
+                            return d;
+                        }
                         return VODS;
                     }
                     
