@@ -423,7 +423,7 @@ function dianboyiji() {
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
             let objdata = getYiData(sourceData);
             let fllists = objdata.fllists;
-            if(fllists.length>0){
+            if(fllists && fllists.length>0){
                 d = d.concat(fllists);
             }else if(objdata.error['fl']){
                 d.push({
