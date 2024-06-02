@@ -109,7 +109,6 @@ function getYiData(jkdata) {
     if(MY_PAGE==1){
         if(classurl){
             MY_URL = classurl;
-            fllists = [];
             let 推荐 = [];
             let 分类 = [];
             let 筛选;
@@ -242,6 +241,7 @@ function getYiData(jkdata) {
             }
 
             if(分类.length>0){
+                fllists = [];
                 try{
                     if(筛选 && api_type!='cms'){
                         fllists.push({
