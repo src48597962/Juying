@@ -60,7 +60,7 @@ function getYiData(jkdata) {
             
             var fypage = MY_PAGE;
             var stringify = JSON.stringify;
-            var encodeUrl = encodeURI;
+            var encodeUrl = urlencode;
             if(rule['模板']){
                 extdata = Object.assign(muban[rule['模板']], rule);
             }else{
@@ -1353,4 +1353,9 @@ function getJsonValue(obj, path) {
         }
     }
     return current;
+}
+function urlencode (str) {
+    str = (str + '').toString();
+    return encodeURIComponent(str).replace(/!/g, '%21').replace(/'/g, '%27').replace(/\(/g, '%28').
+    replace(/\)/g, '%29').replace(/\*/g, '%2A').replace(/%20/g, '+');
 }
