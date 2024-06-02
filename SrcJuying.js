@@ -428,7 +428,7 @@ function dianboyiji() {
             }else if(objdata.error['fl']){
                 d.push({
                     title: objdata.error['fl'],
-                    desc: '点击查看网页',
+                    desc: '应该是无法访问，点击查看网页',
                     url: getHome(MY_URL) + '#noHistory#',
                     col_type: 'text_center_1'
                 }); 
@@ -469,7 +469,7 @@ function dianboyiji() {
             }else if(objdata.error['vod']){
                 d.push({
                     title: objdata.error['vod'],
-                    desc: '点击查看网页',
+                    desc: '应该是无法访问，点击查看网页',
                     url: MY_URL + '#noHistory#',
                     col_type: 'text_center_1'
                 }); 
@@ -482,6 +482,12 @@ function dianboyiji() {
                 });
             }
         }catch(e){
+            d.push({
+                title: '源接口异常了，请更换',
+                desc: '调用一级数据异常>' + e.message + ' 错误行#' + e.lineNumber,
+                url: MY_URL + '#noHistory#',
+                col_type: 'text_center_1'
+            });
             log(sourceData.name+'>调用一级数据异常>' + e.message + ' 错误行#' + e.lineNumber);
         }
     }
