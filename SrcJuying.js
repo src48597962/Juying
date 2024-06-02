@@ -425,7 +425,7 @@ function dianboyiji() {
             let fllists = objdata.fllists;
             if(fllists && fllists.length>0){
                 d = d.concat(fllists);
-            }else if(objdata.error['fl']){
+            }else if(objdata.error['fl'] || !fllists){
                 d.push({
                     title: objdata.error['fl'],
                     desc: '无法访问或源失效，点击查看网页',
