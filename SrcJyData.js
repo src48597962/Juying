@@ -456,7 +456,7 @@ function getYiData(jkdata) {
                         vod_pic = getJsonValue(it, dws[2]);
                         vod_desc = getJsonValue(it, dws[3]);
                         let id = getJsonValue(it, dws[4]);
-                        vod_url = /fyid/.test(vodurlhead)?vodurlhead.replace('fyid',id):vodurlhead+id;
+                        vod_url = /fyid/.test(vodurlhead)?vodurlhead.replace('fyid',id):(/^http/.test(id)?"":vodurlhead)+id;
                         if(vod_url&&vod_name){
                             vodlists.push({"vod_url":vod_url,"vod_name":vod_name,"vod_desc":vod_desc||"","vod_pic":vod_pic||""});
                         }
