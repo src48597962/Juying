@@ -57,7 +57,7 @@ function getYiData(jkdata) {
             eval(fetchCache(drpymuban,9999).replace('export default {muban, getMubans};',''));
             eval(fetch(jkdata.url));
             var print = log;
-            var fetch_params = headers;
+            
             var fypage = MY_PAGE;
             var stringify = JSON.stringify;
             var encodeUrl = encodeURI;
@@ -71,7 +71,7 @@ function getYiData(jkdata) {
                 if(headers['User-Agent']){
                     headers['User-Agent'] = headers['User-Agent']=='PC_UA'?PC_UA:MOBILE_UA;
                 }
-                
+                var fetch_params = headers;
                 let host = extdata["host"] || '';
                 classurl = extdata["homeUrl"]? host + extdata["homeUrl"]: host;
                 listurl = extdata["url"] || "";
