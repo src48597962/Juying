@@ -395,6 +395,7 @@ function getYiData(jkdata) {
                         cateObj.tid = cateObj.tid.split('_')[0];
                         input = HOST + '/api/video/search?key=' + cateObj.tid + '&page=' + + MY_PAGE;
                     }
+                    /*
                     let html=request(input,fetch_params);
                     function title_rep(title){
                         if(/keyword/.test(title)){
@@ -444,8 +445,9 @@ function getYiData(jkdata) {
                         videos.push({vod_id:aid,vod_name:title,vod_pic:img,vod_remarks:remark})
                     });
                     log(videos);
-                    /*
-                    let dynamicCode = yicode.replace('js:','').replace('setResult(d);','').replace('request(input)','request(input,fetch_params)').trim();
+                    */
+                    
+                    let dynamicCode = yicode.replace('js:','').replace('setResult(d);','').replace('request(input)','request(input,fetch_params)').replace(`\'`,`'`).trim();
                     function executeDynamicCode() {
                         let VODS = [];
                         eval(dynamicCode)
@@ -455,7 +457,7 @@ function getYiData(jkdata) {
                             return VODS;
                         }
                     }
-                    */
+                    
                     let vodlist = executeDynamicCode();
                     vodlist.forEach(it=>{
                         let vodUrl = /fyid/.test(vodurlhead)?vodurlhead.replace('fyid',it.url):(/^http/.test(it.url)?"":vodurlhead)+it.url;
