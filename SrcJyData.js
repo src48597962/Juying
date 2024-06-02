@@ -447,11 +447,13 @@ function getYiData(jkdata) {
                     log(videos);
                     */
                     
-                    let dynamicCode = yicode.replace('js:','').replace('setResult(d);','return d;').replace('request(input)','request(input,fetch_params)').replaceAll(`\'`,`'`).trim();
+                    let dynamicCode = yicode.replace('js:','').replace('setResult(d);','return d;').replace('request(input)','request(input,fetch_params)').replaceAll(`\'`,`'`).replace(`log("名称替换👉"+title)`,'').trim();
                     log(dynamicCode);
                     function executeDynamicCode() {
                         let VODS = [];
                         eval(dynamicCode)
+                        log(videos);
+                        log(VODS);
                         return VODS;
                     }
                     
