@@ -59,7 +59,6 @@ function getYiData(jkdata) {
             var print = log;
             var fypage = MY_PAGE;
             var stringify = JSON.stringify;
-            //var encodeUrl = encodeUrl;
             if(rule['模板']){
                 extdata = Object.assign(muban[rule['模板']], rule);
             }else{
@@ -366,13 +365,7 @@ function getYiData(jkdata) {
 
             let vod_name,vod_pic,vod_url,vod_desc;
             if(api_type=="drpy"){
-                
-                let tid =  cate_id;
-                let pg = MY_PAGE;
-                let filter = extdata.filter;
-                let extend = {fl:fl};
-                log(category(extdata, tid, pg, filter, extend));
-                /*
+            
                 let yicode = extdata["一级"] || "";
                 let dws = yicode.split(';');
                 if(/^js:/.test(yicode)){
@@ -388,6 +381,8 @@ function getYiData(jkdata) {
                     let input = MY_URL;
                     let MY_FL = fl;
                     let MY_CATE = cate_id;
+                    const TYPE = 'cate';
+                    let desc = '';
                     cateObj.tid = cateObj.tid+'';
                     if (cateObj.tid.endsWith('_clicklink')) {
                         cateObj.tid = cateObj.tid.split('_')[0];
@@ -455,7 +450,6 @@ function getYiData(jkdata) {
                         }
                     });
                 }
-                */
             }else if(api_type=="XBPQ"){
                 let gethtml = request(MY_URL, { headers: headers, timeout:8000 });
                 extdata["二次截取"] = extdata["二次截取"] || (gethtml.indexOf(`<ul class="stui-vodlist`)>-1?`<ul class="stui-vodlist&&</ul>`:gethtml.indexOf(`<ul class="myui-vodlist`)>-1?`<ul class="myui-vodlist&&</ul>`:"");
