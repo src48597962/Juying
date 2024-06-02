@@ -422,20 +422,20 @@ function dianboyiji() {
         try{
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
             let objdata = getYiData(sourceData);
-            let fllists = objdata.fllists || [];
+            let fllists = objdata.fllists;
             if(fllists.length>0){
                 d = d.concat(fllists);
             }else if(objdata.error['fl']){
                 d.push({
                     title: objdata.error['fl'],
-                    desc: '应该是无法访问，点击查看网页',
+                    desc: '无法访问或源失效，点击查看网页',
                     url: getHome(MY_URL) + '#noHistory#',
                     col_type: 'text_center_1'
                 }); 
             }
 
-            let vodlists = objdata.vodlists || [];
-            if(vodlists.length>0){
+            let vodlists = objdata.vodlists;
+            if(vodlists && vodlists.length>0){
                 vodlists.forEach(list=>{
                     let vodname =list.vod_name;
                     if(vodname){
@@ -469,11 +469,11 @@ function dianboyiji() {
             }else if(objdata.error['vod']){
                 d.push({
                     title: objdata.error['vod'],
-                    desc: '应该是无法访问，点击查看网页',
+                    desc: '无法访问或源失效，点击查看网页',
                     url: MY_URL + '#noHistory#',
                     col_type: 'text_center_1'
                 }); 
-            }else{
+            }else if(vodlists && vodlists.length == 0){
                 d.push({
                     title: '列表为空',
                     desc: '点击查看网页',
