@@ -263,9 +263,7 @@ function detailParse(Obj){
     if(rule.图片来源 && vod.vod_pic && vod.vod_pic.startsWith('http')){
         vod.vod_pic = vod.vod_pic + rule.图片来源;
     }
-    if(!vod.vod_id||(vod_id.includes('$')&&vod.vod_id!==vod_id)){
-        vod.vod_id = vod_id;
-    }
+
     let t2 = (new Date()).getTime();
     console.log(`加载二级界面${MY_URL}耗时:${t2-t1}毫秒`);
     // print(vod);
