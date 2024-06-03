@@ -266,12 +266,7 @@ function detailParse(Obj){
 
     let t2 = (new Date()).getTime();
     console.log(`加载二级界面${MY_URL}耗时:${t2-t1}毫秒`);
-    // print(vod);
-    try {
-     vod = vodDeal(vod);
-    }catch (e) {
-     console.log(`vodDeal发生错误:${e.message}`);
-    }
+
     // print(vod);
     return JSON.stringify({
         list: [vod]
