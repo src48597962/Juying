@@ -24,7 +24,7 @@ return {
     };
 */
 eval(fetchCache(drpymuban,9999).replace('export default {muban, getMubans};',''));
-eval(fetch(jkdata.url));
+eval(fetch(jkdata_url));
 /**
  * 二级详情页数据解析
  * @param detailObj
