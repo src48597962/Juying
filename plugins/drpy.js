@@ -1,17 +1,5 @@
 //修改自道长drpy2.js文件中的一些方法，修改后用于drpy接口解析
 /*
-let detailObj = {
-        orId: orId,
-        url:url,
-        二级:rule.二级,
-        二级访问前:rule.二级访问前,
-        detailUrl:detailUrl,
-        fyclass:fyclass,
-        tab_exclude:rule.tab_exclude,
-    }
-detailParse(detailObj)
-
-
 return {
         "details1": details1,
         "details2": details2,
@@ -23,7 +11,7 @@ return {
         "parse_api": parse_api
     };
 */
-let print = log;
+
 // 获取drpy的rule对象
 function getRule(data){
     eval(fetchCache(drpymuban,9999).replace('export default {muban, getMubans};',''));
@@ -397,7 +385,21 @@ const parseTags = {
         }
     }
 };
+function encodeUrl(str){
+    if(typeof(encodeURI) == 'function'){
+        return encodeURI(str)
+    }else{
+        str = (str + '').toString();
+        return encodeURIComponent(str).replace(/%2F/g, '/').replace(/%3F/g, '?').replace(/%3A/g, ':').replace(/%40/g, '@').replace(/%3D/g, '=').replace(/%3A/g, ':').replace(/%2C/g, ',').replace(/%2B/g, '+').replace(/%24/g, '$');
+    }
+}
+function urlencode (str) {
+    str = (str + '').toString();
+    return encodeURIComponent(str).replace(/!/g, '%21').replace(/'/g, '%27').replace(/\(/g, '%28').
+    replace(/\)/g, '%29').replace(/\*/g, '%2A').replace(/%20/g, '+');
+}
 
+const print = log;
 const stringify = JSON.stringify;
 const jsp = parseTags.jsp;
 const jq = parseTags.jq;
