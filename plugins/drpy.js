@@ -23,30 +23,33 @@ return {
         "parse_api": parse_api
     };
 */
-eval(fetchCache(drpymuban,9999).replace('export default {muban, getMubans};',''));
-eval(fetch(jkdata_url));
-/**
- * 二级详情页数据解析
- * @param detailObj
- * @returns {string}
- */
-function detailParse(detailObj){
+let print = log;
+// 获取drpy的rule对象
+function getRule(data){
+    eval(fetchCache(drpymuban,9999).replace('export default {muban, getMubans};',''));
+    eval(fetch(data.url));
+    return rule;
+}
+// 二级详情页数据解析
+function detailParse(Obj){
+    let rule = getRule(Obj.data);
+    let MY_URL = Obj.url;
+    let detailObj = rule;
+    let VOD;
+
     let t1 = (new Date()).getTime();
-    //fetch_params = JSON.parse(JSON.stringify(rule_fetch_params));
-    let orId = detailObj.orId;
-    let vod_name = '片名';
-    let vod_pic = '';
-    let vod_id = orId;
-    if(rule.二级==='*'){
-        let extra = orId.split('@@');
-        vod_name = extra.length>1?extra[1]:vod_name;
-        vod_pic = extra.length>2?extra[2]:vod_pic;
+    
+    let headers = rule["headers"] || {};
+    if(headers['User-Agent']){
+        headers['User-Agent'] = headers['User-Agent']=='PC_UA'?PC_UA:MOBILE_UA;
     }
 
+    let fetch_params = {headers:headers, timeout:10000};
+
     let vod = {
-        vod_id: vod_id, 
-        vod_name: vod_name,
-        vod_pic: vod_pic,
+        vod_id: '', 
+        vod_name: '',
+        vod_pic: '',
         type_name: "类型",
         vod_year: "年份",
         vod_area: "地区",
@@ -60,7 +63,7 @@ function detailParse(detailObj){
     let detailUrl = detailObj.detailUrl;
     let fyclass = detailObj.fyclass;
     let tab_exclude = detailObj.tab_exclude;
-    let html = detailObj.html||'';
+
     MY_URL = url;
     if(detailObj.二级访问前){
         try {
@@ -86,9 +89,7 @@ function detailParse(detailObj){
         console.log(JSON.stringify(vod));
     }else if(p&&typeof(p)==='object'){
         let tt1 = (new Date()).getTime();
-        if(!html){
-            html = getHtml(MY_URL);
-        }
+        let html = request(MY_URL, fetch_params);
         print(`二级${MY_URL}仅获取源码耗时:${(new Date()).getTime()-tt1}毫秒`);
         let _ps;
         if(p.is_json){
@@ -104,8 +105,6 @@ function detailParse(detailObj){
         }else{
             print('二级默认jq');
             _ps = parseTags.jq;
-            // print('二级默认jsp');
-            // _ps = parseTags.jsp;
         }
         let tt2 = (new Date()).getTime();
         print(`二级${MY_URL}获取并装载源码耗时:${tt2-tt1}毫秒`);
@@ -292,3 +291,113 @@ function detailParse(detailObj){
         list: [vod]
     })
 }
+
+
+
+const parseTags = {
+    jsp:{
+        pdfh:pdfh2,
+        pdfa:pdfa2,
+        pd:pd2,
+    },
+    json:{
+        pdfh(html, parse) {
+            if (!parse || !parse.trim()){
+                return '';
+            }
+            if (typeof(html) === 'string'){
+                // print('jsonpath:pdfh字符串转dict');
+                html = JSON.parse(html);
+            }
+            parse = parse.trim();
+            if (!parse.startsWith('$.')){
+                parse = '$.' + parse;
+            }
+            parse = parse.split('||');
+            for (let ps of parse) {
+                let ret = cheerio.jp(ps, html);
+                if (Array.isArray(ret)){
+                    ret = ret[0] || '';
+                } else{
+                    ret = ret || ''
+                }
+                if (ret && typeof (ret) !== 'string'){
+                    ret = ret.toString();
+                }
+                if(ret){
+                    return ret
+                }
+            }
+            return '';
+        },
+        pdfa(html, parse) {
+            if (!parse || !parse.trim()){
+                return '';
+            }
+            if (typeof(html) === 'string'){
+                // print('jsonpath:pdfa字符串转dict');
+                html = JSON.parse(html);
+            }
+            parse = parse.trim()
+            if (!parse.startsWith('$.')){
+                parse = '$.' + parse;
+            }
+            let ret = cheerio.jp(parse, html);
+            if (Array.isArray(ret) && Array.isArray(ret[0]) && ret.length === 1){
+                return ret[0] || []
+            }
+            return ret || []
+        },
+        pd(html,parse){
+            let ret = parseTags.json.pdfh(html,parse);
+            if(ret){
+                return urljoin(MY_URL,ret);
+            }
+            return ret
+        },
+    },
+    jq:{
+        pdfh(html, parse) {
+            if (!html||!parse || !parse.trim()) {
+                return ''
+            }
+            parse = parse.trim();
+            let result = defaultParser.pdfh(html,parse);
+            // print(`pdfh解析${parse}=>${result}`);
+            return result;
+        },
+        pdfa(html, parse) {
+            if (!html||!parse || !parse.trim()) {
+                return [];
+            }
+            parse = parse.trim();
+            let result = defaultParser.pdfa(html,parse);
+            // print(result);
+            print(`pdfa解析${parse}=>${result.length}`);
+            return result;
+        },
+        pd(html,parse,base_url){
+            if (!html||!parse || !parse.trim()) {
+                return ''
+            }
+            parse = parse.trim();
+            base_url = base_url||MY_URL;
+            return defaultParser.pd(html, parse, base_url);
+        },
+    },
+    getParse(p0){//非js开头的情况自动获取解析标签
+        if(p0.startsWith('jsp:')){
+            return this.jsp
+        }else if(p0.startsWith('json:')){
+            return this.json
+        }else if(p0.startsWith('jq:')){
+            return this.jq
+        }else {
+            return this.jq
+        }
+    }
+};
+
+const stringify = JSON.stringify;
+const jsp = parseTags.jsp;
+const jq = parseTags.jq;
