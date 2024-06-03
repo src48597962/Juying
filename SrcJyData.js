@@ -912,7 +912,7 @@ function getErData(jkdata) {
         */
         let jkdata_url = jkdata.url;
         log(jkdata_url);
-        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'plugins/drpy.js');
+        eval(fetch(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'plugins/drpy.js'));
         let detailObj = {
             orId: MY_PARAMS.url,
             url:MY_PARAMS.url,
