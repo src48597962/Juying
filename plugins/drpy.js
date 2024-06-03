@@ -242,7 +242,7 @@ function detailParse(Obj){
                             vodList =  _pdfa(html, p1);
                             console.log('len(vodList):'+vodList.length);
                         }catch (e) {
-                             console.log(e.message);
+                             console.log('获取列表失败>'+e.message);
                         }
                         for (let i = 0; i < vodList.length; i++) {
                             let it = vodList[i];
@@ -504,3 +504,9 @@ const print = log;
 const stringify = JSON.stringify;
 const jsp = parseTags.jsp;
 const jq = parseTags.jq;
+
+
+// 导出函数对象
+$.exports = {
+    detailParse
+};
