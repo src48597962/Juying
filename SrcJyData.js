@@ -901,28 +901,7 @@ function getErData(jkdata) {
             log(e.message + " 错误行#" + e.lineNumber);
         }
     } else if (/drpy/.test(api_type)){
-        /*
-        eval(fetchCache(drpymuban,9999).replace('export default {muban, getMubans};',''));
-        eval(fetch(jkdata.url));
-        try{
-            html = request(MY_URL, {headers: {'User-Agent': api_ua}, timeout:5000});
-        } catch (e) {
-            log(e.message + " 错误行#" + e.lineNumber);
-        }
-        */
-        let jkdata_url = jkdata.url;
-        log(jkdata_url);
-        eval(fetch(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'plugins/drpy.js'));
-        let detailObj = {
-            orId: MY_PARAMS.url,
-            url:MY_PARAMS.url,
-            二级:rule.二级,
-            二级访问前:rule.二级访问前,
-            detailUrl:MY_PARAMS.url,
-            fyclass:'1',
-            tab_exclude:rule.tab_exclude,
-        }
-        log(detailParse(detailObj));
+        html = MY_PARAMS.pageTitle;
     } else {
         try{
             html = request(MY_URL, {headers: {'User-Agent': api_ua}, timeout:5000});
@@ -1156,26 +1135,25 @@ function getErData(jkdata) {
             }catch(e){
                 log('失败>'+e.message + " 错误行#" + e.lineNumber)
             }    
-        }else{
-            //自定义接口/web自动匹配
-            require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcAutoTmpl.js');
-            let data = autoerji(MY_URL, html);
-            details1 = data.details1||'自动匹配失败';
-            details2 = data.details2||'';
-            pic = data.pic;
-            desc = data.desc;
-            arts = data.arts||[];
-            conts = data.conts||[];
+        }else if(api_type=='drpy'){
+            let detailObj = {
+                data: jkdata,
+                url: MY_URL
+            }
+            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'plugins/drpy.js');
+            log(detailParse(detailObj));
         }
-        if(/xpath|biubiu|XBPQ/.test(api_type)&&html&&(arts.length==0||conts.length==0)&&getMyVar('debug','0')=="0"&&html.indexOf(MY_PARAMS.pageTitle)>-1){
+        if(/xpath|biubiu|XBPQ|drpy/.test(api_type)&&html&&(arts.length==0||conts.length==0)&&getMyVar('debug','0')=="0"&&html.indexOf(MY_PARAMS.pageTitle)>-1){
             log('开启模板自动匹配、AI识片，获取播放选集');
-            require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcAutoTmpl.js');
+            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcAutoTmpl.js');
             let data = autoerji(MY_URL, html);
             remarks = remarks || "";
+            details1 = data.details1 || "通过模块匹配、AI识片获取";
             details2 = data.details2 || "";
             arts = data.arts || area;
             conts = data.conts;
             pic = data.pic || pic;
+            desc = data.desc || desc;
         }
         actor = actor?actor.includes('主演')?actor:'主演：'+actor:'';
         director = director?director.includes('导演')?director:'导演：'+director:'';
