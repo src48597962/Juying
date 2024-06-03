@@ -399,6 +399,45 @@ function urlencode (str) {
     return encodeURIComponent(str).replace(/!/g, '%21').replace(/'/g, '%27').replace(/\(/g, '%28').
     replace(/\)/g, '%29').replace(/\*/g, '%2A').replace(/%20/g, '+');
 }
+/**
+ * 强制正序算法
+ * @param lists  待正序列表
+ * @param key 正序键
+ * @param option 单个元素处理函数
+ * @returns {*}
+ */
+function forceOrder(lists,key,option){
+    let start = Math.floor(lists.length/2);
+    let end = Math.min(lists.length-1,start+1);
+    if(start >= end){
+        return lists;
+    }
+    let first = lists[start];
+    let second = lists[end];
+    if(key){
+        try {
+            first = first[key];
+            second = second[key];
+        }catch (e) {}
+    }
+    if(option && typeof(option)==='function'){
+        try {
+            first = option(first);
+            second = option(second);
+        }catch (e) {}
+    }
+    first+='';
+    second+='';
+    // console.log(first,second);
+    if(first.match(/(\d+)/)&&second.match(/(\d+)/)){
+        let num1 = Number(first.match(/(\d+)/)[1]);
+        let num2 = Number(second.match(/(\d+)/)[1]);
+        if (num1 > num2){
+            lists.reverse();
+        }
+    }
+    return lists
+}
 
 /**
  *  url拼接
