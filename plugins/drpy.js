@@ -399,6 +399,107 @@ function urlencode (str) {
     replace(/\)/g, '%29').replace(/\*/g, '%2A').replace(/%20/g, '+');
 }
 
+/**
+ *  url拼接
+ * @param fromPath 初始当前页面url
+ * @param nowPath 相对当前页面url
+ * @returns {*}
+ */
+function urljoin(fromPath, nowPath) {
+    fromPath = fromPath||'';
+    nowPath = nowPath||'';
+    return joinUrl(fromPath, nowPath);
+    // try {
+    //     // import Uri from './uri.min.js';
+    //     // var Uri = require('./uri.min.js');
+    //     // eval(request('https://cdn.bootcdn.net/ajax/libs/URI.js/1.19.11/URI.min.js'));
+    //     // let new_uri = URI(nowPath, fromPath);
+
+    //     let new_uri = Uri(nowPath, fromPath);
+    //     new_uri = new_uri.toString();
+    //     // console.log(new_uri);
+    //     // return fromPath + nowPath
+    //     return new_uri
+    // }
+    // catch (e) {
+    //     console.log('urljoin发生错误:'+e.message);
+    //     if(nowPath.startsWith('http')){
+    //         return nowPath
+    //     }if(nowPath.startsWith('/')){
+    //         return getHome(fromPath)+nowPath
+    //     }
+    //     return fromPath+nowPath
+    // }
+}
+var urljoin2 = urljoin;
+
+// 内置 pdfh,pdfa,pd
+const defaultParser = {
+    pdfh:pdfh,
+    pdfa:pdfa,
+    pd:pd,
+};
+function pdfh2(html,parse){
+    let html2 = html;
+    try {
+        if(typeof(html)!=='string'){
+            html2 = html.rr(html.ele).toString();
+        }
+    }catch (e) {
+        print('html对象转文本发生了错误:'+e.message);
+    }
+    let result = defaultParser.pdfh(html2,parse);
+    let option = parse.includes('&&')?parse.split('&&').slice(-1)[0]:parse.split(' ').slice(-1)[0];
+    if(/style/.test(option.toLowerCase())&&/url\(/.test(result)){
+        try {
+            result =  result.match(/url\((.*?)\)/)[1];
+            // 2023/07/28新增 style取内部链接自动去除首尾单双引号
+            result = result.replace(/^['|"](.*)['|"]$/, "$1");
+        }catch (e) {}
+    }
+    return result
+}
+
+/**
+ * pdfa原版优化,可以转换jq的html对象
+ * @param html
+ * @param parse
+ * @returns {*}
+ */
+function pdfa2(html,parse){
+    let html2 = html;
+    try {
+        if(typeof(html)!=='string'){
+            html2 = html.rr(html.ele).toString();
+        }
+    }catch (e) {
+        print('html对象转文本发生了错误:'+e.message);
+    }
+    return defaultParser.pdfa(html2,parse);
+}
+
+/**
+ * pd原版方法重写-增加自动urljoin
+ * @param html
+ * @param parse
+ * @param uri
+ * @returns {*}
+ */
+function pd2(html,parse,uri){
+    let ret = pdfh2(html,parse);
+    if(typeof(uri)==='undefined'||!uri){
+        uri = '';
+    }
+    if(DOM_CHECK_ATTR.test(parse) && !SPECIAL_URL.test(ret)){
+        if(/http/.test(ret)){
+            ret = ret.slice(ret.indexOf('http'));
+        }else{
+            ret = urljoin(MY_URL,ret)
+        }
+    }
+    return ret
+}
+
 const print = log;
 const stringify = JSON.stringify;
 const jsp = parseTags.jsp;
