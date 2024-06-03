@@ -1140,8 +1140,8 @@ function getErData(jkdata) {
                 data: jkdata,
                 url: MY_URL
             }
-            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'plugins/drpy.js');
-            log(detailParse(detailObj));
+            let drpy = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'plugins/drpy.js');
+            log(drpy.detailParse(detailObj));
         }
         if(/xpath|biubiu|XBPQ|drpy/.test(api_type)&&html&&(arts.length==0||conts.length==0)&&getMyVar('debug','0')=="0"&&html.indexOf(MY_PARAMS.pageTitle)>-1){
             log('开启模板自动匹配、AI识片，获取播放选集');
