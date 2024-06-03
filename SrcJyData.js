@@ -893,8 +893,22 @@ function getErData(jkdata) {
         } catch (e) {
             
         }
-    } else if (/xpath|biubiu|XBPQ|drpy/.test(api_type)) {
+    } else if (/xpath|biubiu|XBPQ/.test(api_type)) {
         extdata = extDataCache(jkdata)
+        try{
+            html = request(MY_URL, {headers: {'User-Agent': api_ua}, timeout:5000});
+        } catch (e) {
+            log(e.message + " 错误行#" + e.lineNumber);
+        }
+    } else if (/drpy/.test(api_type)){
+        eval(fetchCache(drpymuban,9999).replace('export default {muban, getMubans};',''));
+        eval(fetch(jkdata.url));
+        try{
+            html = request(MY_URL, {headers: {'User-Agent': api_ua}, timeout:5000});
+        } catch (e) {
+            log(e.message + " 错误行#" + e.lineNumber);
+        }
+    } else {
         try{
             html = request(MY_URL, {headers: {'User-Agent': api_ua}, timeout:5000});
         } catch (e) {
