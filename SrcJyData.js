@@ -901,6 +901,7 @@ function getErData(jkdata) {
             log(e.message + " 错误行#" + e.lineNumber);
         }
     } else if (/drpy/.test(api_type)){
+        /*
         eval(fetchCache(drpymuban,9999).replace('export default {muban, getMubans};',''));
         eval(fetch(jkdata.url));
         try{
@@ -908,6 +909,17 @@ function getErData(jkdata) {
         } catch (e) {
             log(e.message + " 错误行#" + e.lineNumber);
         }
+        */
+        let detailObj = {
+            orId: MY_PARAMS.url,
+            url:MY_PARAMS.url,
+            二级:rule.二级,
+            二级访问前:rule.二级访问前,
+            detailUrl:MY_PARAMS.url,
+            fyclass:'1',
+            tab_exclude:rule.tab_exclude,
+        }
+        log(detailParse(detailObj));
     } else {
         try{
             html = request(MY_URL, {headers: {'User-Agent': api_ua}, timeout:5000});
