@@ -239,14 +239,13 @@ function detailParse(Obj){
                     }else {
                         let vodList = [];
                         try {
-                            log(html);
                             log(p1);
-                            log(_pdfa.toString())
                             vodList =  _pdfa(html, p1);
                             console.log('len(vodList):'+vodList.length);
                         }catch (e) {
                              console.log('获取列表失败>'+e.message);
                         }
+                        log(vodList);
                         for (let i = 0; i < vodList.length; i++) {
                             let it = vodList[i];
                             new_vod_list.push(_pdfh(it, list_text).trim() + '$' + list_url_prefix + _pd(it, list_url, MY_URL));
@@ -438,9 +437,9 @@ var urljoin2 = urljoin;
 
 // 内置 pdfh,pdfa,pd
 const defaultParser = {
-    pdfh:_pdfh,
-    pdfa:_pdfa,
-    pd:_pd,
+    pdfh:pdfh,
+    pdfa:pdfa,
+    pd:pd,
 };
 function pdfh2(html,parse){
     let html2 = html;
