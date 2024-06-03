@@ -23,7 +23,8 @@ return {
         "parse_api": parse_api
     };
 */
-
+eval(fetchCache(drpymuban,9999).replace('export default {muban, getMubans};',''));
+eval(fetch(jkdata.url));
 /**
  * 二级详情页数据解析
  * @param detailObj
