@@ -239,11 +239,10 @@ function detailParse(Obj){
                     }else {
                         let vodList = [];
                         try {
-                            log(p1);
                             vodList =  _pdfa(html, p1);
-                            console.log('len(vodList):'+vodList.length);
+                            //console.log('len(vodList):'+vodList.length);
                         }catch (e) {
-                             console.log('获取列表失败>'+e.message);
+                             //console.log('获取列表失败>'+e.message);
                         }
                         log(vodList);
                         for (let i = 0; i < vodList.length; i++) {
@@ -437,9 +436,9 @@ var urljoin2 = urljoin;
 
 // 内置 pdfh,pdfa,pd
 const defaultParser = {
-    pdfh:pdfh,
-    pdfa:pdfa,
-    pd:pd,
+    pdfh:_pdfh,
+    pdfa:_pdfa,
+    pd:_pd,
 };
 function pdfh2(html,parse){
     let html2 = html;
