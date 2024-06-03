@@ -19,7 +19,7 @@ const cheerio = {
         })[0];
     }
 }
-eval(getCryptoJS());
+
 // import cheerio from "https://ghproxy.net/https://raw.githubusercontent.com/hjdhnx/dr_py/main/libs/cheerio.min.js";
 // import "https://ghproxy.net/https://raw.githubusercontent.com/hjdhnx/dr_py/main/libs/crypto-js.js";
 // import 模板 from"https://ghproxy.net/https://raw.githubusercontent.com/hjdhnx/dr_py/main/js/模板.js";
@@ -3380,6 +3380,15 @@ function DRPY(){//导出函数
     }
 }
 
+/**
+ * 导出函数无法简写成下面的形式:
+
+ export default {
+  ...DRPY,
+  DRPY
+ }
+
+ */
 
 // 导出函数对象
 $.exports = {
