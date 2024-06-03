@@ -242,7 +242,7 @@ function detailParse(Obj){
                             vodList =  _pdfa(html, p1);
                             console.log('len(vodList):'+vodList.length);
                         }catch (e) {
-                            // console.log(e.message);
+                             console.log(e.message);
                         }
                         for (let i = 0; i < vodList.length; i++) {
                             let it = vodList[i];
@@ -253,7 +253,7 @@ function detailParse(Obj){
                         new_vod_list = forceOrder(new_vod_list,'',x=>x.split('$')[0]);
                         console.log(`drpy影响性能代码共计列表数循环次数:${new_vod_list.length},耗时:${(new Date()).getTime()-tt1}毫秒`);
                     }
-                    // print(new_vod_list);
+                    print(new_vod_list);
                     let vlist = new_vod_list.join('#');
                     vod_tab_list.push(vlist);
                 }
