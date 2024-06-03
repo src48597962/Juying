@@ -20,8 +20,10 @@ function getRule(data){
 }
 // 二级详情页数据解析
 function detailParse(Obj){
+    MY_URL = Obj.url;
+
     let rule = getRule(Obj.data);
-    let MY_URL = Obj.url;
+    
     let detailObj = rule;
     let VOD;
 
@@ -52,7 +54,6 @@ function detailParse(Obj){
     let fyclass = detailObj.fyclass;
     let tab_exclude = detailObj.tab_exclude;
 
-    MY_URL = url;
     if(detailObj.二级访问前){
         try {
             print(`尝试在二级访问前执行代码:${detailObj.二级访问前}`);
