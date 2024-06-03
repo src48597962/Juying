@@ -16,7 +16,13 @@ return {
 function getRule(data){
     eval(fetchCache(drpymuban,9999).replace('export default {muban, getMubans};',''));
     eval(fetch(data.url));
-    return rule;
+    let extdata;
+    if(rule['模板']){
+        extdata = Object.assign(muban[rule['模板']], rule);
+    }else{
+        extdata = rule;
+    }
+    return extdata;
 }
 // 二级详情页数据解析
 function detailParse(Obj){
