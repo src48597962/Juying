@@ -14,7 +14,6 @@ return {
 
 // 获取drpy的rule对象
 function getRule(data){
-    log(drpymuban);
     eval(fetchCache(drpymuban,9999).replace('export default {muban, getMubans};',''));
     eval(fetch(data.url));
     let extdata;
@@ -80,6 +79,8 @@ function detailParse(Obj){
         const TYPE = 'detail';
         var input = MY_URL;
         var play_url = '';
+        log(input);
+        log(fetch_params);
         eval(p.trim().replace('js:',''));
         vod = VOD;
         console.log(JSON.stringify(vod));
