@@ -1146,7 +1146,7 @@ function getErData(jkdata) {
                 return it.split('#');
             })
         }
-        if(/xpath|biubiu|XBPQ|drpy/.test(api_type)&&html&&(arts.length==0||conts.length==0)&&getMyVar('debug','0')=="0"&&html.indexOf(MY_PARAMS.pageTitle)>-1){
+        if(/xpath|biubiu|XBPQ/.test(api_type)&&html&&(arts.length==0||conts.length==0)&&getMyVar('debug','0')=="0"&&html.indexOf(MY_PARAMS.pageTitle)>-1){
             log('开启模板自动匹配、AI识片，获取播放选集');
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcAutoTmpl.js');
             let data = autoerji(MY_URL, html);
