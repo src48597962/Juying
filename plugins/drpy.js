@@ -14,6 +14,7 @@ return {
 
 // 获取drpy的rule对象
 function getRule(data){
+    log(drpymuban);
     eval(fetchCache(drpymuban,9999).replace('export default {muban, getMubans};',''));
     eval(fetch(data.url));
     let extdata;
@@ -187,7 +188,6 @@ function detailParse(Obj){
         }
         vod.vod_play_from = playFrom.join(vod_play_from);
 
-// console.log(3);
         let vod_play_url = '$$$';
         let vod_tab_list = [];
         if(p.lists){
