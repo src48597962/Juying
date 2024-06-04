@@ -44,56 +44,48 @@ function autoerji(url,html){
 	//线程
 	let task = function(obj) {
         //log('【'+obj.id+'】');
-		let tabs = pdfa(html, obj.tabs);
-		var arts = [];
-		tabs.forEach(item => {
+		let arts = _pdfa(html, obj.tabs);
+		let tabs = [];
+		arts.forEach(item => {
 			let name = pdfh(item, obj.tab_text?obj.tab_text:'h3||a||span||body&&Text');
 			if(name&&!/更多精品/.test(name)){
-				arts.push(name);
+				tabs.push(name);
 			}
 		});
-		let lists = pdfa(html,'body&&'+obj.lists.split(';')[0]);//全线路影片列表
-		var conts = [];
+		let conts = _pdfa(html,'body&&'+obj.lists.split(';')[0]);//全线路影片列表
+		let lists = [];
 		let key = obj.lists.split(';')[1];
-		lists.forEach(item=>{
-			let list = pdfa(item, key);//单线路影片列表
-			let cont = [];
-			for (let j = 0; j < list.length; j++) {
-				let contname = pdfh(list[j],"a&&Text");
-				let conturl = pd(list[j],obj.tab_id?obj.tab_id:'a&&href');
-				cont.push(contname+"$"+conturl)
+		conts.forEach(item=>{
+			let cont = _pdfa(item, key);//单线路影片列表
+			let list = [];
+			for (let j = 0; j < cont.length; j++) {
+				let listname = _pdfh(cont[j],"a&&Text");
+				let listurl = _pd(cont[j],obj.tab_id?obj.tab_id:'a&&href');
+				list.push(listname+"$"+listurl)
 			}
-			conts.push(cont.join("#"))
+			lists.push(list);
 		})
+		let details2,pic,desc;
 		try{
-			var details = obj.desc.split(';');
-			var details1 = pdfh(html, details[0]);
-			var details2 = "";
-			for(let j=1;j<details.length;j++){
-				details2 = details2.concat(pdfh(html, details[j]));
+			let details = obj.desc.split(';');
+			details2 = "";
+			for(let j=0;j<details.length;j++){
+				details2 = details2.concat(_pdfh(html, details[j]));
 			}
-			if(details1&&!detail.details1){detail.details1 = details1;}
 			if(details2&&!detail.details2){detail.details2 = details2;}
-		}catch(e){
-			var details1 = "";
-			var details2 = "";
-		}
+		}catch(e){}
 		try{
-			var pic = pdfh(html, obj.img).replace(/http.*\/tu\.php\?tu=|\/img\.php\?url=| |\/tu\.php\?tu=/g,'');
+			pic = pdfh(html, obj.img).replace(/http.*\/tu\.php\?tu=|\/img\.php\?url=| |\/tu\.php\?tu=/g,'');
 			if(!/^http/.test(pic)&&pic){
 				pic = urldomian + pic;
 			}
 			if(pic&&!detail.pic){detail.pic = pic;}
-		}catch(e){
-			var pic = "";
-		}
+		}catch(e){}
 		try{
-			var desc = obj.content?pdfh(html,obj.content):"";
+			desc = obj.content?pdfh(html,obj.content):"";
 			if(desc&&!detail.desc){detail.desc = desc;}
-		}catch(e){
-			var desc = "";
-		}
-        return {details1:details1,details2:details2,pic:pic,desc:desc,arts:arts,conts:conts};
+		}catch(e){}
+        return {details2:details2,pic:pic,desc:desc,tabs:tabs,lists:lists};
     };
 	let setid = 0;
     for(let i in erjiTmpl){
@@ -117,7 +109,7 @@ function autoerji(url,html){
 		let t = {};
 		be(Tmpls, {
             func: function(obj, id, error, taskResult) {
-				if (taskResult.arts.length>0&&taskResult.conts.length>0&&taskResult.conts[0]) {
+				if (taskResult.tabs.length>0&&taskResult.lists.length>0) {
 					setid = id;
 					data = taskResult;
 					o = obj;
@@ -128,7 +120,7 @@ function autoerji(url,html){
 				o: t,
             }
         });
-        if(setid>0&&data.arts.length>0&&data.conts.length>0){
+        if(setid>0&&data.tabs.length>0&&data.lists.length>0){
 			putMyVar('Tmpl-'+urldomian,JSON.stringify(t));
 			let sortidex = sortlist.findIndex(it=>it.id===setid);
 			if(sortidex>-1) {
@@ -136,10 +128,10 @@ function autoerji(url,html){
 			}else{
 				sortlist.push({id:setid,sort:1});
 			}
-			if(data.arts.length>data.conts.length){
-				data.arts.splice(data.conts.length-1,data.arts.length-data.conts.length);
+			if(data.tabs.length>data.lists.length){
+				data.tabs.splice(data.lists.length-1,data.tabs.length-data.lists.length);
 			}
-			data.details1 = data.details1||detail.details1||"";
+			data.details1 = "选集列表来源于模板匹配";
 			data.details2 = data.details2||detail.details2||"模板未匹配到信息";
 			data.pic = data.pic||detail.pic||"";
 			data.desc = data.desc||detail.desc||"";
@@ -147,7 +139,7 @@ function autoerji(url,html){
 			data = {};
 		}
     }
-	if(data.conts){
+	if(data.lists){
 		return data;
 	}else{
 		return aierji(html,url,detail);
@@ -280,8 +272,8 @@ function aierji(html,url,detail){
 		setResult(d);
 	} else {
 		//线路分割
-		let arts = ["播放源1"];
-		let conts = [];
+		let tabs = ["播放源1"];
+		let lists = [];
 		let d2 = [];
 		for (let i = 0; i < d.length; i++) {
 			d2.push(d[i].title+'$'+d[i].url);
@@ -291,17 +283,17 @@ function aierji(html,url,detail){
 				let next = d[i + 1];
 				let t2 = parseInt(clearText(next.title));
 				if (t2 - t1 > 1 || t1 - t2 > 1) {
-					conts.push(d2.join('#'));
+					lists.push(d2);
 					let s = arts.length+1;
-					arts.push("播放源"+s);
+					tabs.push("播放源"+s);
 					d2 = [];
 				}
 			}else{
-				conts.push(d2.join('#'));
+				lists.push(d2);
 			}
 		}
 		if(conts.length==0){arts = [];}
-		return {details1:detail.details1||"",details2:detail.details2||"选集列表来源于AI识片技术",pic:detail.pic||"",desc:detail.desc||"暂无信息",arts:arts,conts:conts};
+		return {details1: "选集列表来源于AI识片",details2:detail.details2||"",pic:detail.pic||"",desc:detail.desc||"暂无信息",tabs:tabs,lists:lists};
 	}
 	return {};
 }
