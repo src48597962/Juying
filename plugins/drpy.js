@@ -587,6 +587,22 @@ function setHomeResult(res){
     }
     return setResult(res.list);
 }
+function 是否正版(vipUrl){
+    let flag = new RegExp('qq\.com|iqiyi\.com|youku\.com|mgtv\.com|bilibili\.com|sohu\.com|ixigua\.com|pptv\.com|miguvideo\.com|le\.com|1905\.com|fun\.tv');
+    return  flag.test(vipUrl);
+}
+function urlDeal(vipUrl){
+    if(!vipUrl){
+        return ''
+    }
+    if(!是否正版(vipUrl)){
+        return vipUrl
+    }
+    if(!/miguvideo/.test(vipUrl)){
+        vipUrl=vipUrl.split('#')[0].split('?')[0];
+    }
+    return vipUrl
+}
 /*** 以下是内置变量和解析方法 **/
 const MOBILE_UA = 'Mozilla/5.0 (Linux; Android 11; Pixel 5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.91 Mobile Safari/537.36';
 const PC_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36';
