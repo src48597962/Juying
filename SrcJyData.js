@@ -342,6 +342,7 @@ function getYiData(jkdata) {
                 listurl = listurl.replace('{{fl}','{}').replace('fypage', MY_PAGE).replace(/ or /g, ' || ').replace(/{{/g, '${').replace(/}}/g, '}');
                 eval(`listurl = \`${listurl}\`;`);
                 MY_URL = listurl.replace(/undefined/g,'').replace('fyclass', cate_id);
+                log(MY_URL);
             }else if(api_type=="XBPQ"){
                 type_id = fl.cateId || "";
                 MY_URL = listurl.replace('/lang/{lang}','');
