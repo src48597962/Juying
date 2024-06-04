@@ -1275,14 +1275,14 @@ function getErData(jkdata) {
 // 获取网页源码
 function getHtml(url, headers) {
     headers = headers || {};
-    let html = request(url, {headers: headers, timeout: 1, withStatusCode:true});
-    log(html);
-    let json = JSON.parse(html);
-    if(json.statusCode==200){
-        return json.body;
-    }else{
-        return '';
-    }
+    let html = request(url, {headers: headers, timeout: timeout, withStatusCode:true});
+    try{
+        let json = JSON.parse(html);
+        if(json.statusCode==200){
+            return json.body;
+        }
+    }catch(e){}
+    return '';
 }
 // extData缓存
 function extDataCache(jkdata) {
