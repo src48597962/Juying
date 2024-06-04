@@ -1135,7 +1135,16 @@ function getErData(jkdata) {
                 url: MY_URL
             }
             let drpy = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'plugins/drpy.js');
-            log(drpy.detailParse(detailObj));
+            let json = drpy.detailParse(detailObj).list[0];
+            actor = json.vod_actor;
+            director = json.vod_director;
+            remarks = json.vod_remarks;
+            pic = json.vod_pic;
+            desc = json.vod_content;
+            tabs = json.vod_play_from.split('$$$');
+            lists = json.vod_play_url.split('$$$').map(it=>{
+                return it.split('#');
+            })
         }
         if(/xpath|biubiu|XBPQ|drpy/.test(api_type)&&html&&(arts.length==0||conts.length==0)&&getMyVar('debug','0')=="0"&&html.indexOf(MY_PARAMS.pageTitle)>-1){
             log('开启模板自动匹配、AI识片，获取播放选集');
