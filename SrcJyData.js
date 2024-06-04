@@ -1135,7 +1135,7 @@ function getErData(jkdata) {
                 url: MY_URL
             }
             let drpy = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'plugins/drpy.js');
-            let json = drpy.detailParse(detailObj).list[0];
+            let json = JSON.parse(drpy.detailParse(detailObj)).list[0];
             actor = json.vod_actor;
             director = json.vod_director;
             remarks = json.vod_remarks;
