@@ -1146,32 +1146,7 @@ function getErData(jkdata) {
                 return it.split('#');
             })
         }
-        if(/xpath|biubiu|XBPQ/.test(api_type)&&html&&(arts.length==0||conts.length==0)&&getMyVar('debug','0')=="0"&&html.indexOf(MY_PARAMS.pageTitle)>-1){
-            log('开启模板自动匹配、AI识片，获取播放选集');
-            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcAutoTmpl.js');
-            let data = autoerji(MY_URL, html);
-            details1 = data.details1 || "通过模块匹配、AI识片获取";
-            details2 = data.details2 || "";
-            pic = data.pic || pic;
-            desc = data.desc || desc;
-            arts = data.arts;
-            conts = data.conts;
-        }
-        actor = actor?actor.includes('主演')?actor:'主演：'+actor:'';
-        director = director?director.includes('导演')?director:'导演：'+director:'';
-        let dqnf = "";
-        if(area){
-            dqnf = '\n地区：' + area + (year?'   年代：' + year:'')
-        }else{
-            dqnf = year?'\n年代：' + year:''
-        }
-        details1 = details1?details1:director.substring(0, director.length<10?director.length:10) + '\n' + actor.substring(0, actor.length<10||dqnf==""?actor.length:10) + dqnf;
-        details2 = details2?details2:remarks + '\n' + pubdate;
-        details1 = details1.replace(/&ldquo;/g,'“').replace(/&rdquo;/g,'”').replace(/&middot;/g,'·').replace(/&hellip;/g,'…').replace(/&nbsp;|♥/g,' ');
-        details2 = details2.replace(/&ldquo;/g,'“').replace(/&rdquo;/g,'”').replace(/&middot;/g,'·').replace(/&hellip;/g,'…').replace(/&nbsp;|♥/g,' ');
-        desc = desc || '...';
-        desc = desc.replace(/&ldquo;/g,'“').replace(/&rdquo;/g,'”').replace(/&middot;/g,'·').replace(/&hellip;/g,'…').replace(/&nbsp;|♥/g,' ');
-        
+
         //获取线路
         for (var i in arts) {
             let linecode;
@@ -1257,6 +1232,33 @@ function getErData(jkdata) {
                 };
             }
         }
+        
+        if(/xpath|biubiu|XBPQ|drpy/.test(api_type)&&html&&(tabs.length==0||lists.length==0)&&getMyVar('debug','0')=="0"&&html.indexOf(MY_PARAMS.pageTitle)>-1){
+            log('开启模板自动匹配、AI识片，获取播放选集');
+            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcAutoTmpl.js');
+            let data = autoerji(MY_URL, html);
+            details1 = data.details1 || "通过模块匹配、AI识片获取";
+            details2 = data.details2 || "";
+            pic = data.pic || pic;
+            desc = data.desc || desc;
+            tabs = data.tabs;
+            lists = data.lists;
+        }
+        actor = actor?actor.includes('主演')?actor:'主演：'+actor:'';
+        director = director?director.includes('导演')?director:'导演：'+director:'';
+        let dqnf = "";
+        if(area){
+            dqnf = '\n地区：' + area + (year?'   年代：' + year:'')
+        }else{
+            dqnf = year?'\n年代：' + year:''
+        }
+        details1 = details1?details1:director.substring(0, director.length<10?director.length:10) + '\n' + actor.substring(0, actor.length<10||dqnf==""?actor.length:10) + dqnf;
+        details2 = details2?details2:remarks + '\n' + pubdate;
+        details1 = details1.replace(/&ldquo;/g,'“').replace(/&rdquo;/g,'”').replace(/&middot;/g,'·').replace(/&hellip;/g,'…').replace(/&nbsp;|♥/g,' ');
+        details2 = details2.replace(/&ldquo;/g,'“').replace(/&rdquo;/g,'”').replace(/&middot;/g,'·').replace(/&hellip;/g,'…').replace(/&nbsp;|♥/g,' ');
+        desc = desc || '...';
+        desc = desc.replace(/&ldquo;/g,'“').replace(/&rdquo;/g,'”').replace(/&middot;/g,'·').replace(/&hellip;/g,'…').replace(/&nbsp;|♥/g,' ');
+
     }
     
     
