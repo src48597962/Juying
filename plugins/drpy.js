@@ -539,6 +539,53 @@ function pd2(html,parse,uri){
     }
     return ret
 }
+function setResult(d){
+    if(!Array.isArray(d)){
+        return []
+    }
+    VODS = [];
+    // print(d);
+    d.forEach(function (it){
+        let obj = {
+            vod_id:it.url||'',
+            vod_name: it.title||'',
+            vod_remarks: it.desc||'',
+            vod_content: it.content||'',
+            vod_pic: it.pic_url||it.img||'',
+        };
+        let keys = Object.keys(it);
+        if(keys.includes('tname')){
+            obj.type_name = it.tname||'';
+        }
+        if(keys.includes('tid')){
+            obj.type_id = it.tid||'';
+        }
+        if(keys.includes('year')){
+            obj.vod_year = it.year||'';
+        }
+        if(keys.includes('actor')){
+            obj.vod_actor = it.actor||'';
+        }
+        if(keys.includes('director')){
+            obj.vod_director = it.director||'';
+        }
+        if(keys.includes('area')){
+            obj.vod_area = it.area||'';
+        }
+        VODS.push(obj);
+    });
+    return VODS
+}
+function setResult2(res){
+    VODS = res.list||[];
+    return VODS
+}
+function setHomeResult(res){
+    if(!res||typeof(res)!=='object'){
+        return []
+    }
+    return setResult(res.list);
+}
 /*** 以下是内置变量和解析方法 **/
 const MOBILE_UA = 'Mozilla/5.0 (Linux; Android 11; Pixel 5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.91 Mobile Safari/537.36';
 const PC_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36';
