@@ -1275,7 +1275,7 @@ function getErData(jkdata) {
 // 获取网页源码
 function getHtml(url, headers) {
     headers = headers || {};
-    let html = request(url, {headers: headers, timeout: 1000, withStatusCode:true});
+    let html = request(url, {headers: headers, timeout: 1, withStatusCode:true});
     log(html);
     let json = JSON.parse(html);
     if(json.statusCode==200){
