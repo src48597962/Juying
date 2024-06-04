@@ -12,7 +12,7 @@ function getYiData(jkdata) {
     api_ua = api_ua=="MOBILE_UA"?MOBILE_UA:api_ua=="PC_UA"?PC_UA:api_ua;
     let headers = { 'User-Agent': api_ua };
     let vodurlhead,classurl,listurl,listnode,extdata;
-    log(getHtml('http://bbs.qiqiv.cn/thread-5210-1-1.html'));
+
     //基础链接拼接
     if(api_name&&api_type&&api_url){
         if (api_type=="v1") {
@@ -878,11 +878,12 @@ function getErData(jkdata) {
     let api_type = jkdata.type;
     let api_ua = jkdata.ua||"MOBILE_UA";
     api_ua = api_ua=="MOBILE_UA"?MOBILE_UA:api_ua=="PC_UA"?PC_UA:api_ua;
+    let headers = { 'User-Agent': api_ua };
 
     let html,isxml,extdata;
     if (/v1|app|v2|iptv|cms/.test(api_type)) {
         try{
-            let gethtml = request(MY_URL, {headers: {'User-Agent': api_ua}, timeout:5000});
+            let gethtml = getHtml(MY_URL, headers);
             if(/cms/.test(api_type)&&/<\?xml/.test(gethtml)){
                 html = gethtml;
                 isxml = 1;
@@ -895,19 +896,11 @@ function getErData(jkdata) {
         }
     } else if (/xpath|biubiu|XBPQ/.test(api_type)) {
         extdata = extDataCache(jkdata)
-        try{
-            html = request(MY_URL, {headers: {'User-Agent': api_ua}, timeout:5000});
-        } catch (e) {
-            log(e.message + " 错误行#" + e.lineNumber);
-        }
+        html = getHtml(MY_URL, headers);
     } else if (/drpy/.test(api_type)){
         html = MY_PARAMS.pageTitle;
     } else {
-        try{
-            html = request(MY_URL, {headers: {'User-Agent': api_ua}, timeout:5000});
-        } catch (e) {
-            log(e.message + " 错误行#" + e.lineNumber);
-        }
+        html = getHtml(MY_URL, headers);
     }
     
     let pic = '';
