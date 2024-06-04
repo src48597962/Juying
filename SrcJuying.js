@@ -99,7 +99,7 @@ function dianboerji() {
         let markData = {surl: jkdata.url, url: url, data: erdata}
         writeFile(cacheDataFile, JSON.stringify(markData));
     }
-
+    log(erdata);
     let details1 = erdata.details1;
     let details2 = erdata.details2;
     let pic = erdata.pic || MY_PARAMS.pic;
