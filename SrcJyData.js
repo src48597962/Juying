@@ -342,7 +342,6 @@ function getYiData(jkdata) {
                 listurl = listurl.replace('{{fl}','{}').replace('fypage', MY_PAGE).replace(/ or /g, ' || ').replace(/{{/g, '${').replace(/}}/g, '}');
                 eval(`listurl = \`${listurl}\`;`);
                 MY_URL = listurl.replace(/undefined/g,'').replace('fyclass', cate_id);
-                log(MY_URL);
             }else if(api_type=="XBPQ"){
                 type_id = fl.cateId || "";
                 MY_URL = listurl.replace('/lang/{lang}','');
@@ -414,6 +413,7 @@ function getYiData(jkdata) {
                     vodlist.forEach(it=>{
                         let vodUrl = it.url || it.vod_id;
                         vodUrl = /fyid/.test(vodurlhead)?vodurlhead.replace('fyid',vodUrl):(/^http/.test(vodUrl)?"":vodurlhead)+vodUrl;
+                        vodUrl = vodUrl.replace('fyclass', cate_id);
                         vodlists.push({"vod_url":vodUrl,"vod_name":it.title||it.vod_name,"vod_desc":it.desc||it.vod_remarks||"","vod_pic":it.img||it.vod_pic||""});
                     })
                 }else if(/^json:/.test(dws[0])){
