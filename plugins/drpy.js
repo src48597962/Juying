@@ -539,7 +539,34 @@ function pd2(html,parse,uri){
     }
     return ret
 }
-
+/*** 以下是内置变量和解析方法 **/
+const MOBILE_UA = 'Mozilla/5.0 (Linux; Android 11; Pixel 5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.91 Mobile Safari/537.36';
+const PC_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36';
+const UA = 'Mozilla/5.0';
+const UC_UA = 'Mozilla/5.0 (Linux; U; Android 9; zh-CN; MI 9 Build/PKQ1.181121.001) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/57.0.2987.108 UCBrowser/12.5.5.1035 Mobile Safari/537.36';
+const IOS_UA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1';
+const RULE_CK = 'cookie'; // 源cookie的key值
+// const KEY = typeof(key)!=='undefined'&&key?key:'drpy_' + (rule.title || rule.host); // 源的唯一标识
+const CATE_EXCLUDE = '首页|留言|APP|下载|资讯|新闻|动态';
+const TAB_EXCLUDE = '猜你|喜欢|下载|剧情|热播';
+const OCR_RETRY = 3;//ocr验证重试次数
+// const OCR_API = 'http://drpy.nokia.press:8028/ocr/drpy/text';//ocr在线识别接口
+const OCR_API = 'https://api.nn.ci/ocr/b64/text';//ocr在线识别接口
+if(typeof(MY_URL)==='undefined'){
+    var MY_URL; // 全局注入变量,pd函数需要
+}
+var HOST;
+var RKEY; // 源的唯一标识
+var rule_fetch_params;
+var fetch_params; // 每个位置单独的
+var oheaders;
+const DOM_CHECK_ATTR = /(url|src|href|-original|-src|-play|-url|style)$/;
+// 过滤特殊链接,不走urlJoin
+const SPECIAL_URL = /^(ftp|magnet|thunder|ws):/;
+const NOADD_INDEX = /:eq|:lt|:gt|:first|:last|^body$|^#/;  // 不自动加eq下标索引
+const URLJOIN_ATTR = /(url|src|href|-original|-src|-play|-url|style)$|^(data-|url-|src-)/;  // 需要自动urljoin的属性
+const SELECT_REGEX = /:eq|:lt|:gt|#/g;
+const SELECT_REGEX_A = /:eq|:lt|:gt/g;
 const print = log;
 const stringify = JSON.stringify;
 const jsp = parseTags.jsp;
