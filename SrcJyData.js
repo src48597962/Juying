@@ -914,6 +914,7 @@ function getErData(jkdata) {
     let details1 = '';
     let details2 = '';
     let desc = '...';
+
     let tabs = [];
     let lists = [];
     let linecodes = [];
@@ -1271,7 +1272,17 @@ function getErData(jkdata) {
     };
 }
 
-
+// 获取网页源码
+function getHtml(url, headers) {
+    let html = request(url, {headers: headers, timeout: 1000, withStatusCode:true});
+    log(html);
+    let json = JSON.parse(html);
+    if(json.statusCode==200){
+        return json.body;
+    }else{
+        return '';
+    }
+}
 // extData缓存
 function extDataCache(jkdata) {
     if($.type(jkdata.ext)=='object'){
