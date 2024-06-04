@@ -1150,13 +1150,12 @@ function getErData(jkdata) {
             log('开启模板自动匹配、AI识片，获取播放选集');
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcAutoTmpl.js');
             let data = autoerji(MY_URL, html);
-            remarks = remarks || "";
             details1 = data.details1 || "通过模块匹配、AI识片获取";
             details2 = data.details2 || "";
-            arts = data.arts || area;
-            conts = data.conts;
             pic = data.pic || pic;
             desc = data.desc || desc;
+            arts = data.arts;
+            conts = data.conts;
         }
         actor = actor?actor.includes('主演')?actor:'主演：'+actor:'';
         director = director?director.includes('导演')?director:'导演：'+director:'';
