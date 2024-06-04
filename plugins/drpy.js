@@ -167,7 +167,7 @@ function detailParse(Obj){
                     if(!v_title){
                         v_title = '线路空'
                     }
-                    console.log(v_title);
+                    //console.log(v_title);
                     if(tab_exclude&& (new RegExp(tab_exclude)).test(v_title)){
                         continue;
                     }
@@ -182,7 +182,7 @@ function detailParse(Obj){
                     playFrom.push(v_title);
                 }
             }
-            console.log(JSON.stringify(playFrom));
+            //console.log(JSON.stringify(playFrom));
         }else{
             playFrom = ['道长在线']
         }
@@ -226,7 +226,7 @@ function detailParse(Obj){
                     let p1 = p.lists.replaceAll('#idv', tab_name).replaceAll('#id', i);
                     tab_ext = tab_ext.replaceAll('#idv', tab_name).replaceAll('#id', i);
                     let tabName = tab_ext?_pdfh(html, tab_ext):tab_name;
-                    console.log(tabName);
+                    //console.log(tabName);
                     // print('tab_ext:'+tab_ext);
                     let new_vod_list = [];
                     let tt1 = (new Date()).getTime();
@@ -244,7 +244,7 @@ function detailParse(Obj){
                         }catch (e) {
                              //console.log('获取列表失败>'+e.message);
                         }
-                        log(vodList);
+                        //log(vodList);
                         for (let i = 0; i < vodList.length; i++) {
                             let it = vodList[i];
                             new_vod_list.push(_pdfh(it, list_text).trim() + '$' + list_url_prefix + _pd(it, list_url, MY_URL));
@@ -254,7 +254,7 @@ function detailParse(Obj){
                         new_vod_list = forceOrder(new_vod_list,'',x=>x.split('$')[0]);
                         console.log(`drpy影响性能代码共计列表数循环次数:${new_vod_list.length},耗时:${(new Date()).getTime()-tt1}毫秒`);
                     }
-                    print(new_vod_list);
+                    //print(new_vod_list);
                     let vlist = new_vod_list.join('#');
                     vod_tab_list.push(vlist);
                 }
