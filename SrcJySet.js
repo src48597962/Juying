@@ -1831,7 +1831,6 @@ function Resourceimport(input,importtype){
                     if(/drpy2/.test(obj.api)){
                         arr = { "name": obj.name, "type": "drpy", "ext": extfile};
                     }
-                    /*
                     else if(/^csp_XBiubiu/.test(obj.api)){
                         arr = { "name": obj.name, "type": "biubiu", "ext": extfile};
                     }else if(/^csp_XPath/.test(obj.api)){
@@ -1841,7 +1840,7 @@ function Resourceimport(input,importtype){
                     }else if(/^csp_XYQHiker/.test(obj.api)){
                         arr = { "name": obj.name, "type": "XYQ", "ext": extfile};
                     }
-                    */
+
                     if(arr){
                         let urlfile;
                         if($.type(extfile)=='object'){
@@ -1854,7 +1853,7 @@ function Resourceimport(input,importtype){
                                 if (content == '') {
                                     urlfile = '';
                                 }else{
-                                    urlfile = 'hiker://files/cache/src/Juying2/libs/' + arr.type + '_' + extfile.substr(extfile.lastIndexOf('/') + 1);
+                                    urlfile = 'hiker://files/data/'+MY_RULE.title+'/libs/' + arr.type + '_' + extfile.substr(extfile.lastIndexOf('/') + 1);
                                     writeFile(urlfile, content);
                                 }
                             }catch(e){
