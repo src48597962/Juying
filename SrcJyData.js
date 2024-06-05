@@ -910,50 +910,66 @@ function getErData(jkdata) {
 
     let tabs = [];
     let lists = [];
-    let linecodes = [];
-    let parse_api = "";
+    let flags = [];
+    let parse_api = [];
 
     if(html){
         let arts = [];
         let conts = [];
         let actor,director,area,year,remarks,pubdate;
-        if(/cms/.test(api_type)&&isxml==1){
-            html = html.replace(/&lt;!\[CDATA\[|\]\]&gt;|<!\[CDATA\[|\]\]>/g,'');
-            arts = xpathArray(html,`//video/dl/dt/@name`);
-            if(arts.length==0){
-                arts = xpathArray(html,`//video/dl/dd/@flag`);
-            }
-            conts = xpathArray(html,`//video/dl/dd/text()`);
-            actor = String(xpath(html,`//video/actor/text()`)).trim().replace(/&middot;/g,'·') || "";
-            director = String(xpath(html,`//video/director/text()`)).trim().replace(/&middot;/g,'·') || "";
-            area = String(xpath(html,`//video/area/text()`)).trim();
-            year = String(xpath(html,`//video/year/text()`)).trim();
-            remarks = String(xpath(html,`//video/note/text()`)).trim() || "";
-            pubdate = String(xpath(html,`//video/type/text()`)).trim() || "";
-            pic = xpath(html,`//video/pic/text()`);
-            desc = String(xpath(html.replace('<p>','').replace('</p>',''),`//video/des/text()`));
-        }else if (/v1|app|v2|cms/.test(api_type)) {
-            let json;
+        if (/v1|app|v2|cms/.test(api_type)) {
+            let json = {};
             if (/cms/.test(api_type)) {
-                try{
-                    json = html.list[0];
-                }catch(e){
-                    json = html.data.list[0];
-                }
-                if(json.vod_play_from&&json.vod_play_url){
-                    arts = json.vod_play_from.split('$$$');
-                    conts = json.vod_play_url.split('$$$');
-                }else if(html.from&&html.play){
-                    arts = html.from;
-                    for (let i = 0; i < html.play.length; i++) {
-                        let cont = [];
-                        let plays = html.play[i];
-                        for (let j = 0; j < plays.length; j++) {
-                            cont.push(plays[j][0]+"$"+plays[j][1])
+                if(isxml==1){
+                    html = html.replace(/&lt;!\[CDATA\[|\]\]&gt;|<!\[CDATA\[|\]\]>/g,'');
+                    arts = xpathArray(html,`//video/dl/dt/@name`);
+                    if(arts.length==0){
+                        arts = xpathArray(html,`//video/dl/dd/@flag`);
+                    }
+                    conts = xpathArray(html,`//video/dl/dd/text()`);
+                    json.vod_actor = String(xpath(html,`//video/actor/text()`)).trim().replace(/&middot;/g,'·') || "";
+                    json.vod_director = String(xpath(html,`//video/director/text()`)).trim().replace(/&middot;/g,'·') || "";
+                    json.vod_area = String(xpath(html,`//video/area/text()`)).trim();
+                    json.vod_year = String(xpath(html,`//video/year/text()`)).trim();
+                    json.vod_remarks = String(xpath(html,`//video/note/text()`)).trim() || "";
+                    json.vod_pubdate = String(xpath(html,`//video/type/text()`)).trim() || "";
+                    json.vod_pic = xpath(html,`//video/pic/text()`);
+                    json.vod_blurb = String(xpath(html.replace('<p>','').replace('</p>',''),`//video/des/text()`));
+                } else {
+                    try{
+                        json = html.list[0];
+                    }catch(e){
+                        json = html.data.list[0];
+                    }
+                    if(json.vod_play_from&&json.vod_play_url){
+                        arts = json.vod_play_from.split('$$$');
+                        conts = json.vod_play_url.split('$$$');
+                    }else if(html.from&&html.play){
+                        arts = html.from;
+                        for (let i = 0; i < html.play.length; i++) {
+                            let cont = [];
+                            let plays = html.play[i];
+                            for (let j = 0; j < plays.length; j++) {
+                                cont.push(plays[j][0]+"$"+plays[j][1])
+                            }
+                            conts.push(cont.join("#"));
                         }
-                        conts.push(cont.join("#"))
                     }
                 }
+                tabs = arts.map(it=>{
+                    return it.replace(/[\r\ \n\t]/g, "");
+                })
+                lists = conts.map(it=>{
+                    let lines = it.split('#');
+                    lines = lines.map((itit,i)=>{
+                        if(itit.indexOf('$')==-1){
+                            let ii = parseInt(i)+1;
+                            itit = ii+'$'+itit;
+                        }
+                        return itit;
+                    })
+                    return lines;
+                })
             }else{
                 if($.type(html.data)=="array"){
                     json = html.data[0];
@@ -964,10 +980,39 @@ function getErData(jkdata) {
                     json = json.vod_info;
                 }
                 arts = json.vod_play_list || json.vod_url_with_player || [];
-                conts = arts;
+                arts.forEach(it=>{
+                    let linename = it.name || it.player_info.show;
+                    if(linename){
+                        tabs.push(linename);
+                        let flag = arts[i].code || arts[i].player_info.from || "";
+                        flags.push(flag);
+                    }
+
+                    try {
+                        let parse1 = it.parse_api || it.player_info.parse || "";
+                        let parse2 = it.extra_parse_api || it.player_info.parse2 || "";
+                        if(parse1){
+                            parse_api.push(parse1.replace(/\.\./g, '.').replace(/。\./g, '.'));
+                        }
+                        if(parse2){
+                            parse_api.push(parse2.replace(/\.\./g, '.').replace(/。\./g, '.'));
+                        }
+                    } catch (e) {}
+                })
                 if(arts.length==0&&json.vod_play_from&&json.vod_play_url){
-                    arts = json.vod_play_from.split('$$$');
+                    tabs = json.vod_play_from.split('$$$');
                     conts = json.vod_play_url.split('$$$');
+                    lists = conts.map(it=>{
+                        let lines = it.split('#');
+                        lines = lines.map((itit,i)=>{
+                            if(itit.indexOf('$')==-1){
+                                let ii = parseInt(i)+1;
+                                itit = ii+'$'+itit;
+                            }
+                            return itit;
+                        })
+                        return lines;
+                    })
                     api_type = "cms";
                 }
             }
@@ -988,8 +1033,19 @@ function getErData(jkdata) {
             pubdate = html.type.join(",") || "";
             pic = html.img_url;
             desc = html.intro;
-            arts = html.videolist;
-            conts = arts;
+            tabs = html.videolist;
+            conts = html.videolist;
+            /*
+            let single = conts[i]||[];
+                if(single.length>0){
+                    let si = [];
+                    for (let j = 0; j < single.length; j++) {
+                        si.push(single[j].title+"$"+single[j].url.split('=')[1]);
+                        parse_api = single[j].url.split('=')[0]+"=";
+                    }
+                    lists.push(si);
+                };
+                */
         }else if (/xpath/.test(api_type)) {
             try{
                 actor = String(xpathArray(html, extdata.dtActor).join(',')).replace(extdata.filter?eval(extdata.filter):"","").replace(/[\r\ \n]/g, "");
@@ -1038,7 +1094,9 @@ function getErData(jkdata) {
             }
             try{
                 for (let i = 1; i < arts.length+1; i++) {
-                    if(arts[i-1].indexOf("在线视频")>-1){arts[i-1] = '播放源'+i;}
+                    if(arts[i-1].indexOf("在线视频")>-1){
+                        tabs.push('播放源'+i);
+                    }
                     let contname = xpathArray(html, extdata.dtUrlNode+'['+i+']'+extdata.dtUrlSubNode+extdata.dtUrlName);
                     let conturl = xpathArray(html, extdata.dtUrlNode+'['+i+']'+extdata.dtUrlSubNode+(extdata.dtUrlId=="@href"?'/'+extdata.dtUrlId:extdata.dtUrlId));
                     let cont = [];
@@ -1054,7 +1112,7 @@ function getErData(jkdata) {
                         }
                         cont.push(contname[j]+"$"+extdata.playUrl.replace('{playUrl}',playUrl))
                     }
-                    conts.push(cont.join("#"))
+                    lists.push(cont);
                 }
             }catch(e){
                 log('xpath获取选集列表失败>'+e.message);
@@ -1066,7 +1124,7 @@ function getErData(jkdata) {
                 let bflist = html.split(extdata.bfjiequshuzuqian.replace(/\\/g,""));
                 bflist.splice(0,1);
                 for (let i = 0; i < bflist.length; i++) {
-                    arts[i] = '播放源'+(i+1);
+                    tabs.push('播放源'+(i+1));
                     bflist[i] = bflist[i].split(extdata.bfjiequshuzuhou.replace(/\\/g,""))[0];
                     let bfline = pdfa(bflist[i],"body&&a");
                     let cont = [];
@@ -1075,7 +1133,7 @@ function getErData(jkdata) {
                         let conturl = pd(bfline[j],"a&&href");
                         cont.push(contname+"$"+conturl)
                     }
-                    conts.push(cont.join("#"))
+                    lists.push(cont);
                 }
                 getsm = "获取备注zhuangtaiqian";
                 remarks = pdfh(html.split(extdata.zhuangtaiqian.replace(/\\/g,""))[1].split(extdata.zhuangtaihou.replace(/\\/g,""))[0],"Text").split('/')[0]||"biubiu数据存在错误";
@@ -1099,7 +1157,7 @@ function getErData(jkdata) {
                 let artlist = arthtml.match(new RegExp(extdata["线路数组"].split('[')[0].replace('&&','((?:.|[\r\n])*?)'), 'g'));
                 for (let i = 0; i < artlist.length; i++) {
                     let arttitle = artlist[i].split(extdata["线路数组"].split('&&')[0])[1].split(extdata["线路数组"].split('&&')[1])[0].split(extdata["线路标题"].split('&&')[0])[1].split(extdata["线路标题"].split('&&')[1])[0];
-                    arts[i] = arttitle.replace(/<\/?.+?\/?>/g,'');
+                    tabs.push(arttitle.replace(/<\/?.+?\/?>/g,''));
                 }
 
                 let conthtml = html;
@@ -1115,7 +1173,7 @@ function getErData(jkdata) {
                         let conturl = extdata["播放链接"]?bfline[j].split(extdata["播放链接"].split('&&')[0])[1].split(extdata["播放链接"].split('&&')[1])[0]:pd(bfline[j],"a&&href");
                         cont.push(contname+"$"+conturl)
                     }
-                    conts.push(cont.join("#"))
+                    lists.push(cont);
                 }
                 
                 actor = getBetweenStr(html, extdata["主演"]);
@@ -1147,47 +1205,6 @@ function getErData(jkdata) {
             })
         }
 
-        //获取线路
-        for (var i in arts) {
-            let linecode;
-            if (/v1|app|v2/.test(api_type)) {
-                let line = arts[i].name || arts[i].player_info.show;
-                tabs.push(line);
-                linecode = arts[i].code || arts[i].player_info.from;
-
-                if (getMyVar(MY_URL, '0') == i) {
-                    try {
-                        if(api_type=="v2"){
-                            var parse1 = arts[i].parse_api;
-                            var parse2 = arts[i].extra_parse_api;
-                        }else{
-                            var parse1 = arts[i].player_info.parse;
-                            var parse2 = arts[i].player_info.parse2;
-                        }
-                        if (parse2.indexOf('//') == -1) {
-                            parse_api = parse1;
-                        } else if (parse1.indexOf('//') == -1) {
-                            parse_api = parse2;
-                        } else {
-                            parse_api = parse2 + ',' + parse1;
-                        }
-                    } catch (e) {
-                        parse_api = arts[i].parse_api;
-                    }
-                    if (parse_api != "" && parse_api != undefined) {
-                        parse_api = parse_api.replace(/\.\./g, '.').replace(/。\./g, '.');
-                    }
-                }
-            }else if (/iptv/.test(api_type)) {
-                let line = i;
-                tabs.push(line);
-                linecode = i;
-            }else if (/cms|xpath|biubiu|XBPQ/.test(api_type)) {
-                tabs.push(arts[i].replace(/[\r\ \n\t]/g, ""));
-                linecode = arts[i];
-            }
-            linecodes.push(linecode);
-        }
         //获取选集
         for (var i in conts) {
             if (/v1|app|v2/.test(api_type)) {
@@ -1214,22 +1231,8 @@ function getErData(jkdata) {
                     }
                     lists.push(si);
                 };
-            }else if (/cms|xpath|biubiu|XBPQ/.test(api_type)) {
-                let single = conts[i]||"";
-                if(single){
-                    let lines = single.split('#');
-                    if(api_type=='cms'){
-                        for(let i in lines){
-                            if(lines[i].indexOf('$')==-1){
-                                let ii = parseInt(i)+1;
-                                lines[i] = ii+'$'+lines[i];
-                            }else{
-                                break;
-                            }
-                        }
-                    }
-                    lists.push(lines)
-                };
+            }else if (/cms/.test(api_type)) {
+                
             }
         }
         
@@ -1260,8 +1263,6 @@ function getErData(jkdata) {
         desc = desc.replace(/&ldquo;/g,'“').replace(/&rdquo;/g,'”').replace(/&middot;/g,'·').replace(/&hellip;/g,'…').replace(/&nbsp;|♥/g,' ');
 
     }
-    
-    
  
     return {
         "details1": details1,
@@ -1269,8 +1270,8 @@ function getErData(jkdata) {
         "pic": pic,
         "desc": desc,
         "tabs": tabs,
-        "linecodes": linecodes,
         "lists": lists,
+        "flags": flags,
         "parse_api": parse_api
     };
 }
