@@ -290,8 +290,8 @@ function getYiData(jkdata) {
                     fllists.push({
                         col_type: "blank_block"
                     });
-                    log(筛选);
-                    if(fold=='1' || api_type=='cms'){
+
+                    if(筛选 && (fold=='1' || api_type=='cms')){
                         Object.entries(筛选).forEach(([key, value]) => {
                             //console.log(`Key: ${key}, Value: ${value}`);
                             if(key==cate_id){
