@@ -984,7 +984,7 @@ function getErData(jkdata) {
                     let linename = it.name || it.player_info.show;
                     if(linename){
                         tabs.push(linename);
-                        let flag = arts[i].code || arts[i].player_info.from || "";
+                        let flag = it.code || it.player_info.from || "";
                         flags.push(flag);
                     }
 
