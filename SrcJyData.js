@@ -216,12 +216,14 @@ function getYiData(jkdata) {
                                 typelist.forEach((it)=>{
                                     if(it.type_pid==0){
                                         分类.push(it.type_name+'$'+it.type_id);
+                                        log(it.type_name+'$'+it.type_id);
                                         let value = [];
                                         typelist.forEach((itit)=>{
                                             if(itit.type_pid==it.type_id){
                                                 values.push({n:itit.type_name,v:itit.type_id});
                                             }
                                         })
+                                        log(value);
                                         if(value.length>0){
                                             筛选 = 筛选 || {};
                                             筛选[it.type_id] = {"key":"cateId","name":it.type_name,"value":value};
