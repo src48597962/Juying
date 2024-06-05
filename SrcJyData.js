@@ -224,7 +224,7 @@ function getYiData(jkdata) {
                                         })
                                         if(value.length>0){
                                             筛选 = 筛选 || {};
-                                            筛选[it.type_id] = {"key":"cateId","name":it.type_name,"value":value};
+                                            筛选[it.type_id] = [{"key":"cateId","name":it.type_name,"value":value}];
                                         }
                                     }
                                 })
