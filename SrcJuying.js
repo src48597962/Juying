@@ -116,7 +116,7 @@ function dianboerji() {
     });
 
     // 片源标识数组
-    let linecodes = erdata.linecodes;
+    let flags = erdata.flags;
     
     // 影片标识
     let vodId = name;
@@ -170,7 +170,7 @@ function dianboerji() {
         })
         for (var i in tabs) {
             if (tabs[i] != "") {
-                if(getMyVar(lineId, '0') == i){putMyVar('linecode', linecodes[i])};
+                //if(getMyVar(lineId, '0') == i){putMyVar('linecode', linecodes[i])};
                 d.push({
                     title: getMyVar(lineId, '0') == i ? getHead(tabs[i],Color1,1) : getHead(tabs[i],Color2),
                     url: $("#noLoading#").lazyRule((lineId, i, Marksum) => {
