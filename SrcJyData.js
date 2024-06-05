@@ -228,8 +228,6 @@ function getYiData(jkdata) {
                                         }
                                     }
                                 })
-                                log(分类);
-                                log(筛选);
                             }
                         }
                     }
