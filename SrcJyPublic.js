@@ -77,7 +77,7 @@ function deleteData(lx, data){
     }
 
     dellist.forEach(it => {
-        if(lx=='jk' && /^hiker:\/\/files\/cache\/src\//.test(it.url)){
+        if(lx=='jk' && /^hiker:\/\/files\/data\//.test(it.url)){
             deleteFile(it.url);
         }
         let dataurl = lx=='jk'?it.url:it.parse;
