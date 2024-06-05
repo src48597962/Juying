@@ -999,6 +999,23 @@ function getErData(jkdata) {
                         }
                     } catch (e) {}
                 })
+                conts = json.vod_play_list || json.vod_url_with_player || [];
+                conts.forEach(it=>{
+                    if(it.url){
+                        let single = it.url||"";
+                        if(single){lists.push(single.split('#'))};
+                    }else{
+                        let single = it.urls||[];
+                        if(single.length>0){
+                            let si = [];
+                            for (let j = 0; j < single.length; j++) {
+                                si.push(single[j].name+"$"+single[j].url);
+                            }
+                            lists.push(si);
+                        };
+                    }
+                })
+                
                 if(arts.length==0&&json.vod_play_from&&json.vod_play_url){
                     tabs = json.vod_play_from.split('$$$');
                     conts = json.vod_play_url.split('$$$');
