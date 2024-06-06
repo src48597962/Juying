@@ -198,7 +198,14 @@ function getYiData(jkdata) {
                         } else if (api_type=="cms") {
                             if(/<\?xml/.test(gethtml)){
                                 let typelist = pdfa(gethtml,'class&&ty');
-                                log(typelist);
+                                if(jkdata.categories){
+                                    for(var i=0;i<typelist.length;i++){
+                                        if(jkdata.categories.indexOf(String(xpath(typelist[i],`//ty/text()`)).trim())==-1){
+                                            typelist.splice(i,1);
+                                            i = i -1;
+                                        }
+                                    }
+                                }
                                 typelist.forEach((it)=>{
                                     分类.push(String(xpath(it,`//ty/text()`)).trim()+'$'+String(xpath(it,`//ty/@id`)).trim());
                                 })
