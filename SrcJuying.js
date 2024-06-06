@@ -381,7 +381,7 @@ function dianboyiji() {
             url: $('#noLoading#').lazyRule((it) => {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                 return selectSource(it);
-            }, it),
+            }, sourceType),
             pic_url: "https://hikerfans.com/tubiao/system/130.png",
             col_type: "icon_3_round_fill"
         })
@@ -412,6 +412,36 @@ function dianboyiji() {
                 col_type: "blank_block"
             })
         }
+
+
+        /*
+        let searchurl = $('').lazyRule((jkdata) => {
+                        if(jkdata){
+                            
+                            return $('hiker://empty#noRecordHistory##noHistory#').rule((name,data) => {
+                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
+                                let ssdata = getSsData(name,data);
+                                setResult(ssdata);
+                            }, input, data);
+                            
+                            storage0.putMyVar('搜索临时搜索数据', jkdata);
+                            return 'hiker://search?s='+input+'  '+'&rule='+MY_RULE.title;
+                        }else{
+                            return 'toast://未找到接口数据'
+                        }
+                    },jkdata);
+                    d.push({
+                        title: "搜索",
+                        url: $.toString((searchurl) => {
+                                return input + searchurl;
+                            },searchurl),
+                        desc: "搜你想看的...",
+                        col_type: "input",
+                        extra: {
+                            titleVisible: true
+                        }
+                    });
+        */
         if(!sourceNmae){
             d.push({
                 title: "主页源不存在\n需先选择配置主页源",//\n设置-选择漫画/小说/听书/
