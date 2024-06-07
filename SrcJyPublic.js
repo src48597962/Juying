@@ -223,11 +223,14 @@ function selectSource() {
             pop.dismiss();
 
             let input = s.replace(/[’‘]/g, "");
-
-            Juconfig["homeSource"] = sourceList[i];
-            writeFile(cfgfile, JSON.stringify(Juconfig));
-            refreshPage(false);
-            return 'toast://' + '主页源已设置为：' + input;
+            if(sourceList[i].name==s){
+                Juconfig["homeSource"] = sourceList[i];
+                writeFile(cfgfile, JSON.stringify(Juconfig));
+                refreshPage(false);
+                return 'toast://' + '主页源已设置为：' + input;
+            }else{
+                return 'toast://源列表索引异常'
+            }
         },
         menuClick(manage) {
             hikerPop.selectCenter({
