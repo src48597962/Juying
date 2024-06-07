@@ -205,19 +205,17 @@ function selectSource() {
             defaultValue: "",
             click(s, manage) {
                 let groupnames = getJiekouGroups(sourceAllList);
-                
+                inputBox.setDefaultValue("");
+                //inputBox.setTitle("换分组");
                 //inputBox.setHint("不好了");
-                showSelectOptions({
-                    title: "切换源分组",
-                    options: groupnames,
-                    col: 2,
-                    js: $.toString((inputBox,manage,getGroupLists,sourceAllList) => {
-                        inputBox.setTitle(input);
-                        inputBox.setDefaultValue("");
-                        let sourceList = getGroupLists(sourceAllList, input);
-                        manage.list = sourceList;
-                        manage.change();
-                    },inputBox,manage,getGroupLists,sourceAllList)
+                hikerPop.selectCenter({
+                    options: groupnames, 
+                    columns: 2, 
+                    title: "切换源分组", 
+                    //position: 2, 
+                    click(a) {
+                        inputBox.setTitle(a);
+                    }
                 });
             },
             titleVisible: true
@@ -322,4 +320,7 @@ function sortByPinyin(arr) {
 function colorTitle(title, Color) {
     return '<font color="' + Color + '">' + title + '</font>';
 }
+
+
+
 
