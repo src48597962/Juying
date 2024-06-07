@@ -334,14 +334,10 @@ function dianboyiji() {
     let yxdatalist = datalist.filter(it=>{
         return !it.stop;
     });
-    let indexSource = Juconfig['indexSource'] || '_';
-    let sourceType = indexSource.split('_')[0];
-    let sourceNmae = indexSource.split('_')[1];
     let index = yxdatalist.indexOf(yxdatalist.filter(d => (d.group==sourceType || d.type==sourceType) && d.name==sourceNmae )[0]);
     let sourceData = yxdatalist[index] || {};
     let selectGroup = sourceData.group || sourceData.type;
     if(!selectGroup){
-        sourceType = '';
         sourceNmae = '';
     }
 
@@ -378,10 +374,10 @@ function dianboyiji() {
         */
         d.push({
             title: sourceNmae || "换源",
-            url: $('#noLoading#').lazyRule((it) => {
+            url: $('#noLoading#').lazyRule(() => {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
-                return selectSource(it);
-            }, sourceType),
+                return selectSource();
+            }),
             pic_url: "https://hikerfans.com/tubiao/system/130.png",
             col_type: "icon_3_round_fill"
         })
