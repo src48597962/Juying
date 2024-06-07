@@ -449,7 +449,7 @@ function dianboyiji() {
                 }
             })
         }else{
-            setPageTitle(indexSource);
+            setPageTitle(sourceGroup+'_'+sourceName);
             if (typeof(setPreResult)!="undefined" && getMyVar('动态加载loading')!='1') {
                 d.push({
                     title: "",
