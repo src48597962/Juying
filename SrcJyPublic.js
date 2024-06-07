@@ -169,6 +169,7 @@ function selectSource() {
     const hikerPop = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6966");
     let sourceAllList = getDatas("jk", 1);
     let sourceList = getGroupLists(sourceAllList, sourceGroup);
+    let tmpList = sourceList;
 
     hikerPop.setUseStartActivity(false);
     let index = 0;
@@ -194,6 +195,7 @@ function selectSource() {
             onChange(s, manage) {
                 //log("onChange:"+s);
                 let flist = names.filter(x => x.includes(s));
+                tmpList = sourceList.filter(x => x.name.includes(s));
                 manage.list.length = 0;
                 flist.forEach(x => {
                     manage.list.push(x);
@@ -223,8 +225,8 @@ function selectSource() {
             pop.dismiss();
 
             let input = s.replace(/[’‘]/g, "");
-            if(sourceList[i].name==s){
-                Juconfig["homeSource"] = sourceList[i];
+            if(tmpList[i].name==s){
+                Juconfig["homeSource"] = tmpList[i];
                 writeFile(cfgfile, JSON.stringify(Juconfig));
                 refreshPage(false);
                 return 'toast://' + '主页源已设置为：' + input;
@@ -244,7 +246,6 @@ function selectSource() {
                         manage.scrollToPosition(index, false);
                     } else if (i === 2) {
                         manage.list.reverse();
-                        names.reverse();
                         manage.change();
                         manage.scrollToPosition(index, true);
                     }
