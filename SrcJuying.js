@@ -342,36 +342,6 @@ function dianboyiji() {
     }
 
     if(MY_PAGE==1){
-
-        /*
-        let groupNames = getJiekouGroups(yxdatalist);
-        groupNames.forEach(it =>{
-            let obj = {
-                title: selectGroup==it?`““””<b><span style="color: #3399cc">`+it+`</span></b>`:it,
-                url: $('#noLoading#').lazyRule((it) => {
-                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
-                    return selectSource(it);
-                }, it),
-                col_type: 'scroll_button'
-            }
-             obj.extra = {
-                longClick: [{
-                    title: "快速筛选",
-                    js: $.toString((it) => {
-                        return $("","筛选“"+it+"”分组中指定源").input((it)=>{
-                            if(input==""){
-                                return 'hiker://empty';
-                            }
-                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
-                            return selectSource(it, input);
-                        }, it)
-                    }, it)
-                }]
-            }
-            
-            d.push(obj);
-        })
-        */
         d.push({
             title: "换源",
             url: $('#noLoading#').lazyRule(() => {
@@ -399,6 +369,8 @@ function dianboyiji() {
             pic_url: "https://hikerfans.com/tubiao/messy/30.svg",
             col_type: "icon_3_round_fill"
         })
+        
+        /*
         d.push({
             col_type: "line_blank"
         });
@@ -408,36 +380,8 @@ function dianboyiji() {
                 col_type: "blank_block"
             })
         }
-
-
-        /*
-        let searchurl = $('').lazyRule((jkdata) => {
-                        if(jkdata){
-                            
-                            return $('hiker://empty#noRecordHistory##noHistory#').rule((name,data) => {
-                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
-                                let ssdata = getSsData(name,data);
-                                setResult(ssdata);
-                            }, input, data);
-                            
-                            storage0.putMyVar('搜索临时搜索数据', jkdata);
-                            return 'hiker://search?s='+input+'  '+'&rule='+MY_RULE.title;
-                        }else{
-                            return 'toast://未找到接口数据'
-                        }
-                    },jkdata);
-                    d.push({
-                        title: "搜索",
-                        url: $.toString((searchurl) => {
-                                return input + searchurl;
-                            },searchurl),
-                        desc: "搜你想看的...",
-                        col_type: "input",
-                        extra: {
-                            titleVisible: true
-                        }
-                    });
         */
+
         if(!sourceName){
             d.push({
                 title: "主页源不存在\n需先选择配置主页源",//\n设置-选择漫画/小说/听书/
@@ -450,6 +394,7 @@ function dianboyiji() {
             })
         }else{
             setPageTitle(sourceGroup+'_'+sourceName);
+
             if (typeof(setPreResult)!="undefined" && getMyVar('动态加载loading')!='1') {
                 d.push({
                     title: "",
@@ -476,6 +421,32 @@ function dianboyiji() {
         }
     }
     if(sourceName){
+        let searchurl = $('').lazyRule((jkdata) => {
+            if(jkdata){
+                /*
+                return $('hiker://empty#noRecordHistory##noHistory#').rule((name,data) => {
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
+                    let ssdata = getSsData(name,data);
+                    setResult(ssdata);
+                }, input, data);
+                */
+                storage0.putMyVar('搜索临时搜索数据', jkdata);
+                return 'hiker://search?s='+input+'  '+'&rule='+MY_RULE.title;
+            }else{
+                return 'toast://未找到接口数据'
+            }
+        },sourceData);
+        d.push({
+            title: "搜索",
+            url: $.toString((searchurl) => {
+                    return input + searchurl;
+                },searchurl),
+            desc: "搜你想看的...",
+            col_type: "input",
+            extra: {
+                titleVisible: true
+            }
+        });
         try{
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
             let objdata = getYiData(sourceData);
