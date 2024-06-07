@@ -191,7 +191,7 @@ function selectSource() {
         toPosition: index,
         extraInputBox: new hikerPop.ResExtraInputBox({
             hint: "源关键字",
-            title: "ok",
+            title: sourceGroup || "全部",
             onChange(s, manage) {
                 //log("onChange:"+s);
                 let flist = names.filter(x => x.includes(s));
@@ -204,8 +204,21 @@ function selectSource() {
             },
             defaultValue: "",
             click(s, manage) {
-                //toast(s);
-                //log(manage.list);
+                let groupnames = getJiekouGroups(sourceAllList);
+                
+                //inputBox.setHint("不好了");
+                showSelectOptions({
+                    title: "切换源分组",
+                    options: groupnames,
+                    col: 2,
+                    js: $.toString(() => {
+                        inputBox.setTitle(input);
+                        inputBox.setDefaultValue("");
+                        let sourceList = getGroupLists(sourceAllList, input);
+                        manage.list = sourceList;
+                        manage.change();
+                    })
+                });
             },
             titleVisible: false
         }),
