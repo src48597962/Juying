@@ -334,11 +334,11 @@ function dianboyiji() {
     let yxdatalist = datalist.filter(it=>{
         return !it.stop;
     });
-    let index = yxdatalist.indexOf(yxdatalist.filter(d => (d.group==sourceType || d.type==sourceType) && d.name==sourceNmae )[0]);
+    let index = yxdatalist.indexOf(yxdatalist.filter(d => d.type==sourceType && d.name==sourceName )[0]);
     let sourceData = yxdatalist[index] || {};
     let selectGroup = sourceData.group || sourceData.type;
     if(!selectGroup){
-        sourceNmae = '';
+        sourceName = '';
     }
 
     if(MY_PAGE==1){
@@ -373,7 +373,7 @@ function dianboyiji() {
         })
         */
         d.push({
-            title: sourceNmae || "换源",
+            title: "换源",
             url: $('#noLoading#').lazyRule(() => {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                 return selectSource();
@@ -438,7 +438,7 @@ function dianboyiji() {
                         }
                     });
         */
-        if(!sourceNmae){
+        if(!sourceName){
             d.push({
                 title: "主页源不存在\n需先选择配置主页源",//\n设置-选择漫画/小说/听书/
                 desc: "点上面分类按钮皆可选择",//设置长按菜单可以开启界面切换开关
@@ -475,7 +475,7 @@ function dianboyiji() {
             
         }
     }
-    if(sourceNmae){
+    if(sourceName){
         try{
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
             let objdata = getYiData(sourceData);
