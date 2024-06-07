@@ -204,8 +204,9 @@ function selectSource() {
             },
             defaultValue: "",
             click(s, manage) {
+                log(inputBox.title);
                 let groupnames = getJiekouGroups(sourceAllList);
-                inputBox.setDefaultValue("");
+                //inputBox.setDefaultValue("");
                 //inputBox.setTitle("换分组");
                 //inputBox.setHint("不好了");
                 hikerPop.selectCenter({
@@ -215,6 +216,8 @@ function selectSource() {
                     //position: 2, 
                     click(a) {
                         inputBox.setTitle(a);
+                        inputBox.setDefaultValue("");
+
                     }
                 });
             },
