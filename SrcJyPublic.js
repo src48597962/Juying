@@ -182,7 +182,7 @@ function selectSource() {
         return vname;
     });
     let spen = 3;
-
+    let inputBox;
     let pop = hikerPop.selectBottomRes({
         options: names,
         columns: spen,
@@ -320,7 +320,4 @@ function sortByPinyin(arr) {
 function colorTitle(title, Color) {
     return '<font color="' + Color + '">' + title + '</font>';
 }
-
-
-
 
