@@ -189,7 +189,7 @@ function selectSource() {
         title: "当前源>" + (sourceName?(sourceGroup + "_" + sourceName):""),
         noAutoDismiss: true,
         toPosition: index,
-        extraInputBox: new hikerPop.ResExtraInputBox({
+        extraInputBox: (inputBox = new hikerPop.ResExtraInputBox({
             hint: "源关键字",
             title: sourceGroup || "全部",
             onChange(s, manage) {
@@ -219,7 +219,7 @@ function selectSource() {
                 });
             },
             titleVisible: true
-        }),
+        })),
         longClick(s, i) {
             /*
             showSelectOptions({
