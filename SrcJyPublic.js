@@ -7,6 +7,11 @@ if(Jucfg != ""){
     Juconfig["依赖"] = config.依赖;
     writeFile(cfgfile, JSON.stringify(Juconfig));
 }
+let homeSource = Juconfig['homeSource'] || {};
+let sourceType = homeSource.type;
+let sourceName = homeSource.name;
+let sourceGroup = homeSource.group || homeSource.type;
+let sourceUrl = homeSource.url;
 
 let jkfile = "hiker://files/rules/Src/Juying2/jiekou.json";
 let jxfile = "hiker://files/rules/Src/Juying2/jiexi.json";
@@ -18,7 +23,7 @@ function getFile(lx) {
     return file;
 }
 //获取所有接口或解析
-function getDatas(lx) {
+function getDatas(lx, isyx) {
     let datalist = [];
     let sourcefile = getFile(lx);
     let sourcedata = fetch(sourcefile);
@@ -32,8 +37,11 @@ function getDatas(lx) {
 
     datalist.reverse();
     // 禁用的放到最后
-    let withStop = datalist.filter(item => item.stop);
     let withoutStop = datalist.filter(item => !item.stop);
+    if(isyx){
+        return withoutStop;
+    }
+    let withStop = datalist.filter(item => item.stop);
     // 合并数组
     let result = withoutStop.concat(withStop);
     return result;
@@ -157,6 +165,101 @@ function duoselect(datas){
     storage0.putMyVar('SrcJu_duoselect',duoselect);
 }
 // 点播主页选择源接口
+function selectSource() {
+    const hikerPop = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6966");
+    let sourceAllList = getDatas("jk", 1);
+    let sourceList = getGroupLists(sourceAllList, sourceGroup);
+
+    hikerPop.setUseStartActivity(false);
+    let index = 0;
+    let names = sourceList.map((v,i) => {
+        let vname = v.name;
+        if(v.url == sourceUrl){
+            index = i;
+            vname = "‘‘" + v.name + "’’";
+        }
+        return vname;
+    });
+    let spen = 3;
+
+    let pop = hikerPop.selectBottomRes({
+        options: names,
+        columns: spen,
+        title: "当前源>" + sourceName?(sourceGroup + "_" + sourceName):"",
+        noAutoDismiss: true,
+        toPosition: index,
+        extraInputBox: new hikerPop.ResExtraInputBox({
+            hint: "源关键字",
+            title: "ok",
+            onChange(s, manage) {
+                //log("onChange:"+s);
+                let flist = names.filter(x => x.includes(s));
+                manage.list.length = 0;
+                flist.forEach(x => {
+                    manage.list.push(x);
+                });
+                manage.change();
+            },
+            defaultValue: "",
+            click(s, manage) {
+                //toast(s);
+                //log(manage.list);
+            },
+            titleVisible: false
+        }),
+        longClick(s, i) {
+            /*
+            showSelectOptions({
+                title: "分享视频源",
+                options: ["JS文件分享"].concat(getPastes()),
+                col: 2,
+                js: $.toString(name => {
+                    
+                }, s.replace(/[’‘]/g, ""))
+            });
+            */
+        },
+        click(s, i, manage) {
+            pop.dismiss();
+
+            let input = s.replace(/[’‘]/g, "");
+
+            Juconfig["runMode"] = runMode;
+            Juconfig[runMode + 'sourcename'] = input;
+            writeFile(cfgfile, JSON.stringify(Juconfig));
+            refreshPage(false);
+            return 'toast://' + runMode + ' 主页源已设置为：' + input;
+        },
+        menuClick(manage) {
+            hikerPop.selectCenter({
+                options: ["改变样式", "排序方法:" + (getItem('sourceListSort', 'update') == 'name' ? "名称" : "时间"), "列表倒序"],
+                columns: 2,
+                title: "请选择",
+                click(s, i) {
+                    if (i === 0) {
+                        spen = spen == 3 ? 2 : 3;
+                        manage.changeColumns(spen);
+                    } else if (i === 1) {
+                        setItem("sourceListSort", getItem('sourceListSort') == 'name' ? "" : "name");
+                        manage.list.length = 0;
+                        let names = getListData("yi", selectType).map(v => v.name == sourcename ? "‘‘" + v.name + "’’" : v.name);
+                        names.forEach(x => {
+                            manage.list.push(x);
+                        });
+                        manage.change();
+                    } else if (i === 2) {
+                        manage.list.reverse();
+                        names.reverse();
+                        manage.change();
+                    }
+                }
+            });
+        }
+    });
+    return 'hiker://empty';
+
+}
+/*
 function selectSource(group, k) {
     let datalist = getDatas('jk');
     let yxdatalist = datalist.filter(it=>{
@@ -183,6 +286,7 @@ function selectSource(group, k) {
         return 'toast://' + input;
     }, group, cfgfile, Juconfig)
 }
+*/
 // 按拼音排序
 function sortByPinyin(arr) {
     var arrNew = arr.sort((a, b) => a.name.localeCompare(b.name));
@@ -208,3 +312,4 @@ function sortByPinyin(arr) {
 function colorTitle(title, Color) {
     return '<font color="' + Color + '">' + title + '</font>';
 }
+
