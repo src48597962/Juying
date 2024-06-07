@@ -204,7 +204,6 @@ function selectSource() {
             },
             defaultValue: "",
             click(s, manage) {
-                log(inputBox.title);
                 let groupnames = getJiekouGroups(sourceAllList);
                 //inputBox.setDefaultValue("");
                 //inputBox.setTitle("换分组");
@@ -213,7 +212,7 @@ function selectSource() {
                     options: groupnames, 
                     columns: 2, 
                     title: "切换源分组", 
-                    //position: 2, 
+                    position: groupnames.indexOf(sourceName), 
                     click(a) {
                         inputBox.setTitle(a);
                         inputBox.setDefaultValue("");
