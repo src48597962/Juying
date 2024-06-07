@@ -234,25 +234,19 @@ function selectSource() {
         },
         menuClick(manage) {
             hikerPop.selectCenter({
-                options: ["改变样式", "排序方法:" + (getItem('sourceListSort', 'update') == 'name' ? "名称" : "时间"), "列表倒序"],
+                options: ["改变样式", "列表倒序"],
                 columns: 2,
                 title: "请选择",
                 click(s, i) {
                     if (i === 0) {
                         spen = spen == 3 ? 2 : 3;
                         manage.changeColumns(spen);
-                    } else if (i === 1) {
-                        setItem("sourceListSort", getItem('sourceListSort') == 'name' ? "" : "name");
-                        manage.list.length = 0;
-                        let names = getListData("yi", selectType).map(v => v.name == sourcename ? "‘‘" + v.name + "’’" : v.name);
-                        names.forEach(x => {
-                            manage.list.push(x);
-                        });
-                        manage.change();
+                        manage.scrollToPosition(index, false);
                     } else if (i === 2) {
                         manage.list.reverse();
                         names.reverse();
                         manage.change();
+                        manage.scrollToPosition(index, true);
                     }
                 }
             });
