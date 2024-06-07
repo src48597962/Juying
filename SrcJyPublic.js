@@ -211,13 +211,13 @@ function selectSource() {
                     title: "切换源分组",
                     options: groupnames,
                     col: 2,
-                    js: $.toString(() => {
+                    js: $.toString((inputBox,manage,getGroupLists,sourceAllList) => {
                         inputBox.setTitle(input);
                         inputBox.setDefaultValue("");
                         let sourceList = getGroupLists(sourceAllList, input);
                         manage.list = sourceList;
                         manage.change();
-                    })
+                    },inputBox,manage,getGroupLists,sourceAllList)
                 });
             },
             titleVisible: true
