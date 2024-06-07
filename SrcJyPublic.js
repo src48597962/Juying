@@ -211,14 +211,13 @@ function selectSource() {
                     columns: 2, 
                     title: "切换源分组", 
                     //position: groupnames.indexOf(sourceName), 
-                    click(a, manage) {
+                    click(a) {
                         inputBox.setTitle(a);
                         inputBox.setDefaultValue("");
                         sourceList = getGroupLists(sourceAllList, a);
                         names = sourceList.map((v,i) => {
                             return v.name;
                         });
-                        log(names);
                         manage.list = names;
                         manage.change();
                     }
