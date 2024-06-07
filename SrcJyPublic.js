@@ -190,12 +190,12 @@ function selectSource() {
         noAutoDismiss: true,
         toPosition: index,
         extraInputBox: (inputBox = new hikerPop.ResExtraInputBox({
-            hint: "源关键字",
+            hint: "源关键字筛选，右边切换源分组",
             title: sourceGroup || "全部",
             onChange(s, manage) {
                 //log("onChange:"+s);
-                let flist = names.filter(x => x.includes(s));
-                tmpList = sourceList.filter(x => x.name.includes(s));
+                let flist = names.filter(x => x.toLowerCase().includes(s.toLowerCase()));
+                tmpList = sourceList.filter(x => x.name.toLowerCase().includes(s.toLowerCase()));
                 manage.list.length = 0;
                 flist.forEach(x => {
                     manage.list.push(x);
