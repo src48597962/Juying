@@ -205,18 +205,21 @@ function selectSource() {
             defaultValue: "",
             click(s, manage) {
                 let groupnames = getJiekouGroups(sourceAllList);
-                //inputBox.setDefaultValue("");
-                //inputBox.setTitle("换分组");
-                //inputBox.setHint("不好了");
+                //inputBox.setHint("提示");
                 hikerPop.selectCenter({
                     options: groupnames, 
                     columns: 2, 
                     title: "切换源分组", 
-                    position: groupnames.indexOf(sourceName), 
+                    //position: groupnames.indexOf(sourceName), 
                     click(a) {
                         inputBox.setTitle(a);
                         inputBox.setDefaultValue("");
-
+                        sourceList = getGroupLists(sourceAllList, a);
+                        names = sourceList.map((v,i) => {
+                            return v.name;
+                        });
+                        manage.list = names;
+                        manage.change();
                     }
                 });
             },
