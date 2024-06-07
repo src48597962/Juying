@@ -185,7 +185,7 @@ function selectSource() {
     let pop = hikerPop.selectBottomRes({
         options: names,
         columns: spen,
-        title: "当前源>" + sourceName?(sourceGroup + "_" + sourceName):"",
+        title: "当前源>" + (sourceName?(sourceGroup + "_" + sourceName):""),
         noAutoDismiss: true,
         toPosition: index,
         extraInputBox: new hikerPop.ResExtraInputBox({
@@ -224,11 +224,10 @@ function selectSource() {
 
             let input = s.replace(/[’‘]/g, "");
 
-            Juconfig["runMode"] = runMode;
-            Juconfig[runMode + 'sourcename'] = input;
+            Juconfig["homeSource"] = sourceList[i];
             writeFile(cfgfile, JSON.stringify(Juconfig));
             refreshPage(false);
-            return 'toast://' + runMode + ' 主页源已设置为：' + input;
+            return 'toast://' + '主页源已设置为：' + input;
         },
         menuClick(manage) {
             hikerPop.selectCenter({
