@@ -383,19 +383,19 @@ function dianboyiji() {
         })
         d.push({
             title: "搜索",
-            url: $('#noLoading#').lazyRule((it) => {
+            url: $('#noLoading#').lazyRule(() => {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
-                return selectSource(it);
-            }, it),
+                return selectSource();
+            }),
             pic_url: "https://hikerfans.com/tubiao/messy/25.svg",
             col_type: "icon_3_round_fill"
         })
         d.push({
             title: "设置",
-            url: $('#noLoading#').lazyRule((it) => {
+            url: $('#noLoading#').lazyRule(() => {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
-                return selectSource(it);
-            }, it),
+                return selectSource();
+            }),
             pic_url: "https://hikerfans.com/tubiao/messy/30.svg",
             col_type: "icon_3_round_fill"
         })
