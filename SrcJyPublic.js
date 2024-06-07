@@ -214,11 +214,14 @@ function selectSource() {
                     click(a) {
                         inputBox.setTitle(a);
                         inputBox.setDefaultValue("");
-                        sourceList = getGroupLists(sourceAllList, a);
-                        names = sourceList.map((v,i) => {
+                        tmpList = getGroupLists(sourceAllList, a);
+                        names = tmpList.map((v,i) => {
                             return v.name;
                         });
-                        manage.list = names;
+                        manage.list.length = 0;
+                        names.forEach(x => {
+                            manage.list.push(x);
+                        });
                         manage.change();
                     }
                 });
