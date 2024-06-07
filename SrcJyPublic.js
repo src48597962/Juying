@@ -244,7 +244,7 @@ function selectSource() {
                         spen = spen == 3 ? 2 : 3;
                         manage.changeColumns(spen);
                         manage.scrollToPosition(index, false);
-                    } else if (i === 2) {
+                    } else if (i === 1) {
                         manage.list.reverse();
                         manage.change();
                         manage.scrollToPosition(index, true);
