@@ -326,7 +326,7 @@ function dianboerji() {
 //点播一级
 function dianboyiji() {
     addListener("onClose", $.toString(() => {
-        clearMyVar('动态加载loading');
+        clearMyVar('点播动态加载loading');
         clearMyVar('搜索临时搜索数据');
     }));
     let d = [];
@@ -352,7 +352,7 @@ function dianboyiji() {
             col_type: "icon_3_round_fill"
         })
         d.push({
-            title: "搜索",
+            title: "占位",
             url: $('#noLoading#').lazyRule(() => {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                 return selectSource();
@@ -395,7 +395,7 @@ function dianboyiji() {
         }else{
             setPageTitle(sourceGroup+'_'+sourceName);
 
-            if (typeof(setPreResult)!="undefined" && getMyVar('动态加载loading')!='1') {
+            if (typeof(setPreResult)!="undefined" && getMyVar('点播动态加载loading')!='1') {
                 d.push({
                     title: "",
                     url: "hiker://empty",
@@ -415,7 +415,7 @@ function dianboyiji() {
                 })
                 setPreResult(d);
                 d = [];
-                putMyVar('动态加载loading', '1');
+                putMyVar('点播动态加载loading', '1');
             }
             
         }
