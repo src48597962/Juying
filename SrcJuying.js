@@ -860,9 +860,10 @@ function yiji() {
     }
 
     if(getItem('historyEnable')=='1'){
+        log(fetch('hiker://history?rule='+MY_RULE.title));
         let items = JSON.parse(fetch('hiker://history?rule='+MY_RULE.title));
-        log(items[0]);
-        
+        log(items.length);
+        log(items.slice(0, 3));
     }
 
     let resoufile = "hiker://files/rules/Src/Juying/resou.json";
