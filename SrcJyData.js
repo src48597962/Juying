@@ -101,7 +101,7 @@ function getYiData(jkdata) {
     }
     //分类变量
     let fold = getMyVar('SrcJu_dianbo$fold', "0");//是否展开小分类筛选
-    let cate_id = '';
+    let cate_id = getMyVar('SrcJu_dianbo$分类', '');
     let type_id = '';
     let fl = storage0.getMyVar('SrcJu_dianbo$flCache') || {};
 
@@ -334,7 +334,7 @@ function getYiData(jkdata) {
         }
     }
 
-    if(listurl && !vodlists && fllists){
+    if(listurl && !vodlists){
         try{
             fl.cateId = fl.cateId || cate_id;
             //拼接生成分类页url链接
