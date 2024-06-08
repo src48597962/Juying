@@ -860,8 +860,8 @@ function yiji() {
     }
 
     if(getItem('historyEnable')=='1'){
-        let items = fetch('hiker://history?rule='+MY_RULE.title);
-        log($.type(items));
+        let items = JSON.parse(fetch('hiker://history?rule='+MY_RULE.title));
+        log(items[0]);
         
     }
 
