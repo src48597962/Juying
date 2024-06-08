@@ -436,11 +436,7 @@ function dianboyiji() {
                 return 'toast://未找到接口数据'
             }
         },sourceData);
-        for (let i = 0; i < 4; i++) {
-            d.push({
-                col_type: "blank_block"
-            })
-        }
+        
         d.push({
             title: "搜索",
             url: $.toString((searchurl) => {
@@ -452,6 +448,12 @@ function dianboyiji() {
                 titleVisible: true
             }
         });
+        for (let i = 0; i < 4; i++) {
+            d.push({
+                col_type: "blank_block"
+            })
+        }
+        
         try{
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
             let objdata = getYiData(sourceData);
