@@ -244,9 +244,13 @@ function selectSource() {
             pop.dismiss();
 
             let input = s.replace(/[’‘]/g, "");
-            if(tmpList[i].name==s){
+            if(tmpList[i].name==input){
                 Juconfig["homeSource"] = tmpList[i];
                 writeFile(cfgfile, JSON.stringify(Juconfig));
+                clearMyVar('SrcJu_dianbo$分类');
+                clearMyVar('SrcJu_dianbo$fold');
+                clearMyVar('SrcJu_dianbo$classCache');
+                clearMyVar('SrcJu_dianbo$flCache');
                 refreshPage(false);
                 return 'toast://' + '主页源已设置为：' + input;
             }else{
