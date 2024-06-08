@@ -866,11 +866,11 @@ function yiji() {
             log(item.params.params);
             d.push({
                 title: item.title,
-                url: item.ruleBaseUrl + '@rule=' + item.params.find_rule,
+                url: item.ruleBaseUrl + '@rule=' + JSON.parse(item.params).find_rule,
                 pic_url: item.picUrl,
                 desc: item.lastClick?item.lastClick.split('@@')[0]:"",
                 col_type: "movie_3",
-                extra: item.params.params
+                extra: JSON.parse(item.params).params
             });
         })
     }
