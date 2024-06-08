@@ -860,10 +860,17 @@ function yiji() {
     }
 
     if(getItem('historyEnable')=='1'){
-        log(fetch('hiker://history?rule='+MY_RULE.title));
-        let items = JSON.parse(fetch('hiker://history?rule='+MY_RULE.title));
-        log(items.length);
-        log(items.slice(0, 3));
+        let items = JSON.parse(fetch('hiker://history?rule='+MY_RULE.title)).slice(0, 3);
+        items.forEach(item=>{
+            d.push({
+                title: item.title,
+                url: item.ruleBaseUrl + '@rule=' + item.find_rule,
+                pic_url: item.picUrl,
+                desc: '足迹:'+item.lastClick.split('@@')[0],
+                col_type: "movie_3",
+                extra: item.params.params
+            });
+        })
     }
 
     let resoufile = "hiker://files/rules/Src/Juying/resou.json";
