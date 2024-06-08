@@ -340,6 +340,14 @@ function getYiData(jkdata) {
             fl.cateId = fl.cateId || cate_id;
             //拼接生成分类页url链接
             if(api_type=="XBPQ"){
+                let execStrs = getExecStrs(listurl);
+                execStrs.forEach(k=>{
+                    if(!fl[k]){
+                        listurl = listurl.replace('/'+k+'/{'+k+'}','');
+                    }
+                })
+                log(listurl);
+                /*
                 if(!fl.area){
                     listurl = listurl.replace('/area/{area}','');
                 }
@@ -355,6 +363,7 @@ function getYiData(jkdata) {
                 if(!fl.by){
                     listurl = listurl.replace('/by/{by}','');
                 }
+                */
                 listurl = listurl.replace('{catePg}',extdata["起始页"]?MY_PAGE>extdata["起始页"]?MY_PAGE:extdata["起始页"]:MY_PAGE).replace(/{/g, '${fl.').replace(/}/g, ' || ""}');
                 eval(`listurl = \`${listurl}\`;`);
                 MY_URL = listurl;
@@ -1373,4 +1382,16 @@ function encodeUrl(str){
         str = (str + '').toString();
         return encodeURIComponent(str).replace(/%2F/g, '/').replace(/%3F/g, '?').replace(/%3A/g, ':').replace(/%40/g, '@').replace(/%3D/g, '=').replace(/%3A/g, ':').replace(/%2C/g, ',').replace(/%2B/g, '+').replace(/%24/g, '$');
     }
+}
+//正则获取{}中间的所有值返回数组
+function getExecStrs(str) {
+    var reg = /\{(.+?)\}/g
+    var list = []
+    var result = null
+    do {
+        result = reg.exec(str)
+        result && list.push(result[1])
+    } while (result)
+    console.log(list);
+    return list
 }
