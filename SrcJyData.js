@@ -4,7 +4,7 @@
 function getYiData(jkdata) {
     let fllists;
     let vodlists;
-    let error ={};
+    let error = {};
     let api_name = jkdata.name||"";
     let api_type = jkdata.type||"";
     let api_url = jkdata.url||"";
@@ -111,7 +111,9 @@ function getYiData(jkdata) {
             timeout: timeout,
             categories: jkdata.categories
         }
-        fllists = getCateData(flobj);
+        let catedate = getCateData(flobj);
+        error.fl = catedate.error;
+        fllists = catedate.list;
     }
 
     if(listurl && !vodlists){
