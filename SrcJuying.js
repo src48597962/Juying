@@ -864,7 +864,7 @@ function yiji() {
         items.forEach(item=>{
             d.push({
                 title: item.title,
-                url: item.ruleBaseUrl + '@rule=' + item.find_rule,
+                url: item.ruleBaseUrl + '@rule=' + item.params.find_rule,
                 pic_url: item.picUrl,
                 desc: item.lastClick?item.lastClick.split('@@')[0]:"",
                 col_type: "movie_3",
