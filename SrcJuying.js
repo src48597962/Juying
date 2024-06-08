@@ -866,7 +866,7 @@ function yiji() {
                 title: item.title,
                 url: item.ruleBaseUrl + '@rule=' + item.find_rule,
                 pic_url: item.picUrl,
-                desc: '足迹:'+item.lastClick.split('@@')[0],
+                desc: item.lastClick?item.lastClick.split('@@')[0]:"",
                 col_type: "movie_3",
                 extra: item.params.params
             });
