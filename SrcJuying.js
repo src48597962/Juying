@@ -370,19 +370,11 @@ function dianboyiji() {
             col_type: "icon_3_round_fill"
         })
         
-        /*
-        d.push({
-            col_type: "line_blank"
-        });
-
-        for (let i = 0; i < 9; i++) {
-            d.push({
-                col_type: "blank_block"
-            })
-        }
-        */
 
         if(!sourceName){
+            d.push({
+                col_type: "line_blank"
+            });
             d.push({
                 title: "主页源不存在\n需先选择配置主页源",//\n设置-选择漫画/小说/听书/
                 desc: "点上面分类按钮皆可选择",//设置长按菜单可以开启界面切换开关
@@ -459,9 +451,9 @@ function dianboyiji() {
             let fllists = objdata.fllists;
             if(fllists && fllists.length>0){
                 d = d.concat(fllists);
-            }else if(objdata.error['fl'] || !fllists){
+            }else if(objdata.error['fl']){
                 d.push({
-                    title: objdata.error['fl'] || "分类获取失败",
+                    title: "分类获取失败",
                     desc: '无法访问或源失效，点击查看网页',
                     url: getHome(MY_URL) + '#noHistory#',
                     col_type: 'text_center_1'
@@ -502,7 +494,7 @@ function dianboyiji() {
                 })
             }else if(objdata.error['vod']){
                 d.push({
-                    title: objdata.error['vod'],
+                    title: "列表获取失败",
                     desc: '无法访问或源失效，点击查看网页',
                     url: MY_URL + '#noHistory#',
                     col_type: 'text_center_1'
