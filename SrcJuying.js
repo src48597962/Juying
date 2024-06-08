@@ -538,7 +538,6 @@ function yiji() {
     }));
     */
     
-    
     if(getMyVar('SrcJuying-VersionCheck', '0') == '0'){
         let programversion = 0;
         try{
@@ -801,12 +800,25 @@ function yiji() {
         }
     });
     d.push({
-        title: "📑"+(getItem('searchrecordide')=='1'?"关闭":"开启")+"记录",
+        title: "📑"+(getItem('searchrecordide')=='1'?"关":"开")+"搜索记录",
         url: $('#noLoading#').lazyRule(() => {
             if(getItem('searchrecordide')=='1'){
                 clearItem('searchrecordide');
             }else{
                 setItem('searchrecordide','1');
+            }
+            refreshPage(false);
+            return "toast://已切换"
+        }),
+        col_type: 'scroll_button'
+    });
+    d.push({
+        title: "🎥"+(getItem('historyEnable')=='1'?"关":"开")+"观看记录",
+        url: $('#noLoading#').lazyRule(() => {
+            if(getItem('historyEnable')=='1'){
+                clearItem('historyEnable');
+            }else{
+                setItem('historyEnable','1');
             }
             refreshPage(false);
             return "toast://已切换"
@@ -845,6 +857,12 @@ function yiji() {
                 }
             });
         })
+    }
+
+    if(getItem('historyEnable')=='1'){
+        let items = fetch('hiker://history?rule='+MY_RULE.title);
+        log(items);
+        
     }
 
     let resoufile = "hiker://files/rules/Src/Juying/resou.json";
