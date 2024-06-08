@@ -19,90 +19,46 @@ function getYiData(jkdata) {
     let fl = storage0.getMyVar('SrcJu_dianbo$flCache') || {};
 
     //基础链接拼接
-    if(api_name&&api_type&&api_url){
-        if (api_type=="v1") {
-            let date = new Date();
-            let mm = date.getMonth()+1;
-            let dd = date.getDate();
-            let key = (mm<10?"0"+mm:mm)+""+(dd<10?"0"+dd:dd);
-            vodurlhead = api_url + '/detail?&key='+key+'&vod_id=';
-            classurl = api_url + "/types";
-            listurl = api_url + '?key='+key+'&page=';
-            listnode = "json.data.list";
-        } else if (api_type=="app") {
-            vodurlhead = api_url + 'video_detail?id=';
-            classurl = api_url + "nav";
-            listurl = api_url + 'video?tid=@type_id&pg=';
-            listnode = "json.list";
-        } else if (api_type=="v2") {
-            vodurlhead = api_url + 'video_detail?id=';
-            classurl = api_url + "nav";
-            listurl = api_url + 'video?tid=@type_id&pg=';
-            listnode = "json.data";
-        } else if (api_type=="iptv") {
-            vodurlhead = api_url + '?ac=detail&ids=';
-            classurl = api_url + "?ac=flitter";
-            listurl = api_url + '?ac=list&page=';
-            listnode = "json.data";
-        } else if (api_type=="cms") {
-            vodurlhead = api_url + '?ac=videolist&ids=';
-            classurl = api_url + "?ac=list";
-            listurl = api_url + '?ac=videolist&pg=';
-            listnode = "json.list";
-        } else if (api_type=="XBPQ") {
-            extdata = extDataCache(jkdata)
-            if($.type(extdata)=='object'){
-                let host = extdata["主页url"] || '';
-                classurl = extdata["分类"];
-                extdata["分类url"] = extdata["分类url"]?extdata["分类url"].split(';;')[0].split('[')[0]:"";
-                listurl = extdata["分类url"]?/^http/.test(extdata["分类url"])?extdata["分类url"]:host + extdata["分类url"]:"";
-                vodurlhead = getHome(listurl);
-            }
-        } else if (api_type=="drpy") {
-            eval(fetchCache(drpymuban,9999).replace('export default {muban, getMubans};',''));
-            eval(fetch(jkdata.url));
-            var print = log;
-            var fypage = MY_PAGE;
-            var stringify = JSON.stringify;
-            if(rule['模板']){
-                extdata = Object.assign(muban[rule['模板']], rule);
-            }else{
-                extdata = rule;
-            }
-            if(extdata){
-                let host = extdata["host"] || '';
-                headers = extdata["headers"] || headers;
-                if(headers['User-Agent']){
-                    headers['User-Agent'] = headers['User-Agent']=='PC_UA'?PC_UA:MOBILE_UA;
-                }
-                headers['referer'] = host;
-                var fetch_params = {headers:headers};
-                
-                classurl = extdata["homeUrl"]? host + extdata["homeUrl"]: host;
-                listurl = extdata["url"] || "";
-                if(listurl.includes('[')){
-                    if(MY_PAGE==1){
-                        listurl = listurl.split('[')[1].split(']')[0];
-                    }else{
-                        listurl = listurl.split('[')[0];
-                    }
-                }
-                listurl = (/^http/.test(listurl)?"":host) + listurl;
-                if(extdata.filter_url){
-                    if(!/fyfilter/.test(listurl)){
-                        if(!listurl.endsWith('&')&&!extdata.filter_url.startsWith('&')){
-                            listurl+='&'
-                        }
-                        listurl+=extdata.filter_url;
-                    }else{
-                        listurl = listurl.replace('fyfilter', extdata.filter_url);
-                    }
-                }
-                vodurlhead = extdata["detailUrl"]?/^http/.test(extdata["detailUrl"])?extdata["detailUrl"]:getHome(listurl)+extdata["detailUrl"]:getHome(listurl);
-            }
-        } else {
-            log(api_type+'>api类型错误');
+    if (api_type=="v1") {
+        let date = new Date();
+        let mm = date.getMonth()+1;
+        let dd = date.getDate();
+        let key = (mm<10?"0"+mm:mm)+""+(dd<10?"0"+dd:dd);
+        vodurlhead = api_url + '/detail?&key='+key+'&vod_id=';
+        classurl = api_url + "/types";
+        listurl = api_url + '?key='+key+'&page=';
+        listnode = "json.data.list";
+    } else if (api_type=="app") {
+        vodurlhead = api_url + 'video_detail?id=';
+        classurl = api_url + "nav";
+        listurl = api_url + 'video?tid=@type_id&pg=';
+        listnode = "json.list";
+    } else if (api_type=="v2") {
+        vodurlhead = api_url + 'video_detail?id=';
+        classurl = api_url + "nav";
+        listurl = api_url + 'video?tid=@type_id&pg=';
+        listnode = "json.data";
+    } else if (api_type=="iptv") {
+        vodurlhead = api_url + '?ac=detail&ids=';
+        classurl = api_url + "?ac=flitter";
+        listurl = api_url + '?ac=list&page=';
+        listnode = "json.data";
+    } else if (api_type=="cms") {
+        vodurlhead = api_url + '?ac=videolist&ids=';
+        classurl = api_url + "?ac=list";
+        listurl = api_url + '?ac=videolist&pg=';
+        listnode = "json.list";
+    } else if (api_type=="XBPQ") {
+        extdata = extDataCache(jkdata)
+        if($.type(extdata)=='object'){
+            let host = extdata["主页url"] || '';
+            classurl = extdata["分类"];
+            extdata["分类url"] = extdata["分类url"]?extdata["分类url"].split(';;')[0].split('[')[0]:"";
+            listurl = extdata["分类url"]?/^http/.test(extdata["分类url"])?extdata["分类url"]:host + extdata["分类url"]:"";
+            vodurlhead = getHome(listurl);
         }
+    } else {
+        log(api_type+'>api类型错误');
     }
 
     //一级第1页生成分类数据
@@ -129,7 +85,9 @@ function getYiData(jkdata) {
                             let typenames = extdata["分类"].split('&');
                             let typeids = extdata["分类值"].split('&');
                             for(let i in typeids){
-                                分类.push(typenames[i]+'$'+typeids[i]);
+                                if(cate_exclude.indexOf(typenames[i])==-1){
+                                    分类.push(typenames[i]+'$'+typeids[i]);
+                                }
                             }
                         }
                         筛选 = extdata["筛选"];
@@ -296,6 +254,7 @@ function getYiData(jkdata) {
                             }
                         });
                     }
+                storage0.putMyVar('SrcJu_dianbo$flCache', fl);
                 }catch(e){
                     error.fl = 1;
                     log(api_name+'>生成分类数据异常>'+e.message + " 错误行#" + e.lineNumber);
@@ -427,7 +386,7 @@ function getYiData(jkdata) {
     }
         
     return {
-        fllists: MY_PAGE>1? []: fllists,
+        fllists: fllists || [],
         vodlists: vodlists,
         error: error
     }
