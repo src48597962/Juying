@@ -13,8 +13,6 @@ function getYiData(jkdata) {
     let headers = { 'User-Agent': api_ua };
     let vodurlhead,classurl,listurl,listnode,extdata;
     
-    let type_id = '';
-    
 
     //基础链接拼接
     if(api_name&&api_type&&api_url){
@@ -117,146 +115,28 @@ function getYiData(jkdata) {
     }
 
     if(listurl && !vodlists){
+        let cate_id = getMyVar('SrcJu_dianbo$分类', '');
+        let fl = storage0.getMyVar('SrcJu_dianbo$flCache') || {};
         try{
-            fl.cateId = fl.cateId || cate_id;
-            //拼接生成分类页url链接
-            if(api_type=="drpy"){
-                if(extdata['filter_def']){
-                    let filter_def = extdata['filter_def'];
-                    let filter_def_obj = filter_def[fl.cateId] || {};
-                    Object.entries(filter_def_obj).forEach(([key, value]) => {
-                        fl[key] = value;
-                    })
-                }
-                listurl = listurl.replace('((fypage-1)*21)',((MY_PAGE-1)*21)).replace('((fypage-1)*15)',((MY_PAGE-1)*15));
-                listurl = listurl.replace('{{fl}','{}').replace('fypage', MY_PAGE).replace(/ or /g, ' || ').replace(/{{/g, '${').replace(/}}/g, '}');
+            if(api_type=="XBPQ"){
+                listurl = listurl.replace('{catePg}',extdata["起始页"]?MY_PAGE>extdata["起始页"]?MY_PAGE:extdata["起始页"]:MY_PAGE).replace(/{/g, '${fl.');
                 eval(`listurl = \`${listurl}\`;`);
-                MY_URL = listurl.replace(/undefined/g,'').replace('fyclass', cate_id);
-            }else if(api_type=="XBPQ"){
-                type_id = fl.cateId || "";
-                MY_URL = listurl.replace('/lang/{lang}','');
-                if(!type_id){
-                    MY_URL = MY_URL.replace('/class/{class}','');
-                }
-                if(!area_id){
-                    MY_URL = MY_URL.replace('/area/{area}','');
-                }
-                if(!year_id){
-                    MY_URL = MY_URL.replace('/year/{year}','');
-                }
-                if(!sort_id){
-                    MY_URL = MY_URL.replace('/by/{by}','');
-                }
-                //MY_URL = MY_URL.replace('{catePg}',extdata["起始页"]?MY_PAGE>extdata["起始页"]?MY_PAGE:extdata["起始页"]:MY_PAGE).replace('{year}', year_id).replace('{area}', area_id).replace('{by}', sort_id).replace('{class}', type_id).replace('{cateId}', cate_id);
+                MY_URL = listurl;
             }else{
                 MY_URL = listurl + MY_PAGE;
-                type_id = fl.cateId || "";
                 if(api_type=="v2"||api_type=="app"){
-                    MY_URL = MY_URL.replace('@type_id',type_id);
+                    MY_URL = MY_URL.replace('@type_id',cate_id);
                 }else if (api_type=="v1") {
-                    MY_URL = MY_URL + '&type=' + type_id;
+                    MY_URL = MY_URL + '&type=' + cate_id;
                 } else if (api_type=="iptv") {
-                    MY_URL = MY_URL + '&class=' + type_id;
+                    MY_URL = MY_URL + '&class=' + cate_id;
                 } else {
-                    MY_URL = MY_URL + '&t=' + type_id;
+                    MY_URL = MY_URL + '&t=' + cate_id;
                 }
             }
             vodlists = [];
             let vod_name,vod_pic,vod_url,vod_desc;
-            if(api_type=="drpy"){
-            
-                let yicode = extdata["一级"] || "";
-                let dws = yicode.split(';');
-                if(/^js:/.test(yicode)){
-                    let cateObj = {
-                        url: extdata.url,
-                        一级: extdata.一级,
-                        tid: cate_id,
-                        pg: MY_PAGE,
-                        filter: extdata.filter,
-                        extend: extdata.extend
-                    };
-                    let HOST = extdata['host'];
-                    let input = MY_URL;
-                    let MY_FL = fl;
-                    let MY_CATE = cate_id;
-                    const TYPE = 'cate';
-                    let desc = '';
-                    cateObj.tid = cateObj.tid+'';
-                    if (cateObj.tid.endsWith('_clicklink')) {
-                        cateObj.tid = cateObj.tid.split('_')[0];
-                        input = HOST + '/api/video/search?key=' + cateObj.tid + '&page=' + + MY_PAGE;
-                    }
-                                        
-                    let dynamicCode = yicode.replace('js:','').replace('setResult(d);','').replace('request(input)','request(input,fetch_params)').trim();
-    
-                    function executeDynamicCode() {
-                        let VODS = [];
-                        eval(dynamicCode)
-                        if($.type(d)=='array'){
-                            return d;
-                        }
-                        return VODS;
-                    }
-                    
-                    let vodlist = executeDynamicCode();
-                    vodlist.forEach(it=>{
-                        let vodUrl = it.url || it.vod_id;
-                        vodUrl = /fyid/.test(vodurlhead)?vodurlhead.replace('fyid',vodUrl):(/^http/.test(vodUrl)?"":vodurlhead)+vodUrl;
-                        vodlists.push({"vod_url":vodUrl.replace('fyclass', cate_id),"vod_name":it.title||it.vod_name,"vod_desc":it.desc||it.vod_remarks||"","vod_pic":it.img||it.vod_pic||""});
-                    })
-                }else if(/^json:/.test(dws[0])){
-                    let gethtml = request(MY_URL, { headers: headers, timeout:8000 });
-                    let json = dealJson(gethtml);
-                    let vodlist = getJsonValue(json, dws[0].replace('json:',''));
-                    vodlist.forEach(it=>{
-                        vod_name = getJsonValue(it, dws[1]);
-                        vod_pic = getJsonValue(it, dws[2]);
-                        vod_desc = getJsonValue(it, dws[3]);
-                        let id = getJsonValue(it, dws[4]);
-                        vod_url = /fyid/.test(vodurlhead)?vodurlhead.replace('fyid',id):(/^http/.test(id)?"":vodurlhead)+id;
-                        if(vod_url&&vod_name){
-                            vodlists.push({"vod_url":vod_url.replace('fyclass', cate_id),"vod_name":vod_name,"vod_desc":vod_desc||"","vod_pic":vod_pic||""});
-                        }
-                    })
-                }else{
-                    let gethtml = request(MY_URL, { headers: headers, timeout:8000 });
-                    let vodlist = _pdfa(gethtml, dws[0]);
-                    vodlist.forEach(it=>{
-                        if(dws[4]){
-                            vod_url = _pd(it, dws[4], MY_URL);
-                        }
-                        if(dws[1]){
-                            vod_name = _pdfh(it, dws[1]);
-                        }
-                        if(dws[2]){
-                            vod_pic = _pdfh(it, dws[2]);
-                        }
-                        if(dws[3]){
-                            vod_desc = _pdfh(it, dws[3]);
-                        }
-                        if(vod_url&&vod_name){
-                            vodlists.push({"vod_url":vod_url.replace('fyclass', cate_id),"vod_name":vod_name,"vod_desc":vod_desc||"","vod_pic":vod_pic||""});
-                        }
-                    })
-                }
-                if(extdata.图片替换 && extdata.图片替换.includes('=>')){
-                    let replace_from = extdata.图片替换.split('=>')[0];
-                    let replace_to = extdata.图片替换.split('=>')[1];
-                    vodlists.forEach(it=>{
-                        if(it.vod_pic&&it.vod_pic.startsWith('http')){
-                            it.vod_pic = it.vod_pic.replace(replace_from,replace_to);
-                        }
-                    });
-                }
-                if(extdata.图片来源){
-                    vodlists.forEach(it=>{
-                        if(it.vod_pic&&it.vod_pic.startsWith('http')){
-                            it.vod_pic = it.vod_pic + extdata.图片来源;
-                        }
-                    });
-                }
-            }else if(api_type=="XBPQ"){
+            if(api_type=="XBPQ"){
                 let gethtml = request(MY_URL, { headers: headers, timeout:8000 });
                 extdata["二次截取"] = extdata["二次截取"] || (gethtml.indexOf(`<ul class="stui-vodlist`)>-1?`<ul class="stui-vodlist&&</ul>`:gethtml.indexOf(`<ul class="myui-vodlist`)>-1?`<ul class="myui-vodlist&&</ul>`:"");
                 if(extdata["二次截取"]){
