@@ -862,6 +862,8 @@ function yiji() {
     if(getItem('historyEnable')=='1'){
         let items = JSON.parse(fetch('hiker://history?rule='+MY_RULE.title)).slice(0, 3);
         items.forEach(item=>{
+            log($.type(item.params));
+            log(item.params.params);
             d.push({
                 title: item.title,
                 url: item.ruleBaseUrl + '@rule=' + item.params.find_rule,
