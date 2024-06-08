@@ -865,8 +865,8 @@ function yiji() {
             pic_url: 'https://hikerfans.com/tubiao/red/40.png',
             col_type: 'avatar'
         });
-        log(JSON.parse(fetch('hiker://history')));
-        let items = JSON.parse(fetch('hiker://history')).filter(v=>JSON.parse(v.params).title==MY_RULE.title).slice(0, 3);
+
+        let items = JSON.parse(fetch('hiker://history')).filter(v=> v.type!="网页浏览" && JSON.parse(v.params).title==MY_RULE.title).slice(0, 3);
         items.forEach(item=>{
             d.push({
                 title: item.title,
