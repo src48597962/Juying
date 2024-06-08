@@ -41,6 +41,7 @@ function getYiData(jkdata) {
             listurl = api_url + '?ac=list&page=';
             listnode = "json.data";
         } else if (api_type=="cms") {
+            api_url = api_url.replace('at/xml/','');
             vodurlhead = api_url + '?ac=videolist&ids=';
             classurl = api_url + "?ac=list";
             listurl = api_url + '?ac=videolist&pg=';
