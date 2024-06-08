@@ -860,6 +860,12 @@ function yiji() {
     }
 
     if(getItem('historyEnable')=='1'){
+        d.push({
+            title: '<span style="color:#ff6600"><b>\t观看记录\t\t\t</b></span>',
+            url: 'hiker://empty',
+            pic_url: 'https://hikerfans.com/tubiao/red/40.png',
+            col_type: 'avatar'
+        });
         let items = JSON.parse(fetch('hiker://history')).filter(v=>JSON.parse(v.params).title==MY_RULE.title).slice(0, 3);
         items.forEach(item=>{
             d.push({
@@ -905,7 +911,7 @@ function yiji() {
         }
     }
     d.push({
-        title: '<span style="color:#ff6600"><b>\t热搜榜\t\t\t</b></span>',
+        title: '<span style="color:#ff6600"><b>\t热搜榜单\t\t\t</b></span>',
         desc: '✅'+fenlei[ids],
         url: $(fenlei, 2, '选择热榜分类').select((fenlei) => {
             putMyVar("热榜分类",fenlei.indexOf(input));
