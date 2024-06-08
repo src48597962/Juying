@@ -861,7 +861,7 @@ function yiji() {
 
     if(getItem('historyEnable')=='1'){
         let items = fetch('hiker://history?rule='+MY_RULE.title);
-        log(items);
+        log($.type(items));
         
     }
 
