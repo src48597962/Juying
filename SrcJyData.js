@@ -12,6 +12,11 @@ function getYiData(jkdata) {
     api_ua = api_ua=="MOBILE_UA"?MOBILE_UA:api_ua=="PC_UA"?PC_UA:api_ua;
     let headers = { 'User-Agent': api_ua };
     let vodurlhead,classurl,listurl,listnode,extdata;
+    //分类变量
+    let fold = getMyVar('SrcJu_dianbo$fold', "0");//是否展开小分类筛选
+    let cate_id = getMyVar('SrcJu_dianbo$分类', '');
+    let type_id = '';
+    let fl = storage0.getMyVar('SrcJu_dianbo$flCache') || {};
 
     //基础链接拼接
     if(api_name&&api_type&&api_url){
@@ -99,11 +104,6 @@ function getYiData(jkdata) {
             log(api_type+'>api类型错误');
         }
     }
-    //分类变量
-    let fold = getMyVar('SrcJu_dianbo$fold', "0");//是否展开小分类筛选
-    let cate_id = getMyVar('SrcJu_dianbo$分类', '');
-    let type_id = '';
-    let fl = storage0.getMyVar('SrcJu_dianbo$flCache') || {};
 
     //一级第1页生成分类数据
     if(MY_PAGE==1){
@@ -566,7 +566,7 @@ function getYiData(jkdata) {
     }
         
     return {
-        fllists: fllists,
+        fllists: MY_PAGE>1? []: fllists,
         vodlists: vodlists,
         error: error
     }
