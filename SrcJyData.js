@@ -340,6 +340,21 @@ function getYiData(jkdata) {
             fl.cateId = fl.cateId || cate_id;
             //拼接生成分类页url链接
             if(api_type=="XBPQ"){
+                if(!fl.area){
+                    listurl = listurl.replace('/area/{area}','');
+                }
+                if(!fl.year){
+                    listurl = listurl.replace('/year/{year}','');
+                }
+                if(!fl.lang){
+                    listurl = listurl.replace('/lang/{lang}','');
+                }
+                if(!fl.class){
+                    listurl = listurl.replace('/class/{class}','');
+                }
+                if(!fl.by){
+                    listurl = listurl.replace('/by/{by}','');
+                }
                 listurl = listurl.replace('{catePg}',extdata["起始页"]?MY_PAGE>extdata["起始页"]?MY_PAGE:extdata["起始页"]:MY_PAGE).replace(/{/g, '${fl.').replace(/}/g, ' || ""}');
                 eval(`listurl = \`${listurl}\`;`);
                 MY_URL = listurl;
