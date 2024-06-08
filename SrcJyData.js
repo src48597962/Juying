@@ -118,8 +118,9 @@ function getYiData(jkdata) {
     }
 
     if(listurl && !vodlists){
-        let cate_id = getMyVar('SrcJu_dianbo$分类', '');
         let fl = storage0.getMyVar('SrcJu_dianbo$flCache') || {};
+        let cate_id = getMyVar('SrcJu_dianbo$分类', '');
+        let type_id = fl.cateId || cate_id;
         try{
             if(api_type=="XBPQ"){
                 listurl = listurl.replace('{catePg}',extdata["起始页"]?MY_PAGE>extdata["起始页"]?MY_PAGE:extdata["起始页"]:MY_PAGE).replace(/{/g, '${fl.');
@@ -128,13 +129,13 @@ function getYiData(jkdata) {
             }else{
                 MY_URL = listurl + MY_PAGE;
                 if(api_type=="v2"||api_type=="app"){
-                    MY_URL = MY_URL.replace('@type_id',cate_id);
+                    MY_URL = MY_URL.replace('@type_id',type_id);
                 }else if (api_type=="v1") {
-                    MY_URL = MY_URL + '&type=' + cate_id;
+                    MY_URL = MY_URL + '&type=' + type_id;
                 } else if (api_type=="iptv") {
-                    MY_URL = MY_URL + '&class=' + cate_id;
+                    MY_URL = MY_URL + '&class=' + type_id;
                 } else {
-                    MY_URL = MY_URL + '&t=' + cate_id;
+                    MY_URL = MY_URL + '&t=' + type_id;
                 }
             }
             vodlists = [];
