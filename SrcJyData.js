@@ -122,41 +122,9 @@ function getYiData(jkdata) {
                 筛选 = classCache.筛选;
             }else{
                 try{
-                    if(api_type=="drpy"){
-                        if(extdata["class_name"] && extdata["class_url"]){
-                            let cnames = extdata["class_name"].split('&');
-                            let curls = extdata["class_url"].split('&');
-                            分类 = cnames.map((it,i) => {
-                                return it+'$'+curls[i];
-                            });
-                        }else if(extdata["class_parse"]){
-                            let cparses = extdata["class_parse"].split(';');
-                            if(extdata["cate_exclude"]){
-                                cate_exclude = cate_exclude.concat(extdata["cate_exclude"].split('|'));
-                            }
-                            
-                            let chtml = request(extdata["host"], {headers:headers, timeout:8000});
-                            let fls = _pdfa(chtml, cparses[0]);
-                            fls.forEach(it=>{
-                                try{
-                                    let typename = _pdfh(it, cparses[1]);
-                                    let typeurl = _pdfh(it, cparses[2]);
-                                    if(cparses.length==4 && cparses[3]){
-                                        typeurl = typeurl.match(cparses[3])[1];
-                                    }
-                                    if(cate_exclude.indexOf(typename)==-1){
-                                        分类.push(typename+'$'+typeurl);
-                                    }
-                                }catch(e){
-                                    //log(e.message);
-                                }
-                            }) 
-                        }
-                        筛选 = extdata["filter"];
-                    }else if(api_type=="XBPQ"){
+                    if(api_type=="XBPQ"){
                         if(extdata["分类"].indexOf('$')>-1){
                             分类 = extdata["分类"].split('#');
-                            筛选 = extdata["筛选"];
                         }else if(extdata["分类"].indexOf('&')>-1&&extdata["分类值"]){
                             let typenames = extdata["分类"].split('&');
                             let typeids = extdata["分类值"].split('&');
@@ -164,6 +132,7 @@ function getYiData(jkdata) {
                                 分类.push(typenames[i]+'$'+typeids[i]);
                             }
                         }
+                        筛选 = extdata["筛选"];
                     }else{
                         let gethtml = request(classurl, { headers: { 'User-Agent': api_ua }, timeout:8000 });
                         if (api_type=="v1") {
@@ -340,30 +309,13 @@ function getYiData(jkdata) {
             fl.cateId = fl.cateId || cate_id;
             //拼接生成分类页url链接
             if(api_type=="XBPQ"){
+                fl.catePg = MY_PAGE;
                 let execStrs = getExecStrs(listurl);
                 execStrs.forEach(k=>{
-                    if(!fl[k]){
+                    if(!fl[k] ){
                         listurl = listurl.replace('/'+k+'/{'+k+'}','');
                     }
                 })
-                log(listurl);
-                /*
-                if(!fl.area){
-                    listurl = listurl.replace('/area/{area}','');
-                }
-                if(!fl.year){
-                    listurl = listurl.replace('/year/{year}','');
-                }
-                if(!fl.lang){
-                    listurl = listurl.replace('/lang/{lang}','');
-                }
-                if(!fl.class){
-                    listurl = listurl.replace('/class/{class}','');
-                }
-                if(!fl.by){
-                    listurl = listurl.replace('/by/{by}','');
-                }
-                */
                 listurl = listurl.replace('{catePg}',extdata["起始页"]?MY_PAGE>extdata["起始页"]?MY_PAGE:extdata["起始页"]:MY_PAGE).replace(/{/g, '${fl.').replace(/}/g, ' || ""}');
                 eval(`listurl = \`${listurl}\`;`);
                 MY_URL = listurl;
@@ -382,100 +334,7 @@ function getYiData(jkdata) {
             }
             vodlists = [];
             let vod_name,vod_pic,vod_url,vod_desc;
-            if(api_type=="drpy"){
-            
-                let yicode = extdata["一级"] || "";
-                let dws = yicode.split(';');
-                if(/^js:/.test(yicode)){
-                    let cateObj = {
-                        url: extdata.url,
-                        一级: extdata.一级,
-                        tid: cate_id,
-                        pg: MY_PAGE,
-                        filter: extdata.filter,
-                        extend: extdata.extend
-                    };
-                    let HOST = extdata['host'];
-                    let input = MY_URL;
-                    let MY_FL = fl;
-                    let MY_CATE = cate_id;
-                    const TYPE = 'cate';
-                    let desc = '';
-                    cateObj.tid = cateObj.tid+'';
-                    if (cateObj.tid.endsWith('_clicklink')) {
-                        cateObj.tid = cateObj.tid.split('_')[0];
-                        input = HOST + '/api/video/search?key=' + cateObj.tid + '&page=' + + MY_PAGE;
-                    }
-                                        
-                    let dynamicCode = yicode.replace('js:','').replace('setResult(d);','').replace('request(input)','request(input,fetch_params)').trim();
-    
-                    function executeDynamicCode() {
-                        let VODS = [];
-                        eval(dynamicCode)
-                        if($.type(d)=='array'){
-                            return d;
-                        }
-                        return VODS;
-                    }
-                    
-                    let vodlist = executeDynamicCode();
-                    vodlist.forEach(it=>{
-                        let vodUrl = it.url || it.vod_id;
-                        vodUrl = /fyid/.test(vodurlhead)?vodurlhead.replace('fyid',vodUrl):(/^http/.test(vodUrl)?"":vodurlhead)+vodUrl;
-                        vodlists.push({"vod_url":vodUrl.replace('fyclass', cate_id),"vod_name":it.title||it.vod_name,"vod_desc":it.desc||it.vod_remarks||"","vod_pic":it.img||it.vod_pic||""});
-                    })
-                }else if(/^json:/.test(dws[0])){
-                    let gethtml = request(MY_URL, { headers: headers, timeout:8000 });
-                    let json = dealJson(gethtml);
-                    let vodlist = getJsonValue(json, dws[0].replace('json:',''));
-                    vodlist.forEach(it=>{
-                        vod_name = getJsonValue(it, dws[1]);
-                        vod_pic = getJsonValue(it, dws[2]);
-                        vod_desc = getJsonValue(it, dws[3]);
-                        let id = getJsonValue(it, dws[4]);
-                        vod_url = /fyid/.test(vodurlhead)?vodurlhead.replace('fyid',id):(/^http/.test(id)?"":vodurlhead)+id;
-                        if(vod_url&&vod_name){
-                            vodlists.push({"vod_url":vod_url.replace('fyclass', cate_id),"vod_name":vod_name,"vod_desc":vod_desc||"","vod_pic":vod_pic||""});
-                        }
-                    })
-                }else{
-                    let gethtml = request(MY_URL, { headers: headers, timeout:8000 });
-                    let vodlist = _pdfa(gethtml, dws[0]);
-                    vodlist.forEach(it=>{
-                        if(dws[4]){
-                            vod_url = _pd(it, dws[4], MY_URL);
-                        }
-                        if(dws[1]){
-                            vod_name = _pdfh(it, dws[1]);
-                        }
-                        if(dws[2]){
-                            vod_pic = _pdfh(it, dws[2]);
-                        }
-                        if(dws[3]){
-                            vod_desc = _pdfh(it, dws[3]);
-                        }
-                        if(vod_url&&vod_name){
-                            vodlists.push({"vod_url":vod_url.replace('fyclass', cate_id),"vod_name":vod_name,"vod_desc":vod_desc||"","vod_pic":vod_pic||""});
-                        }
-                    })
-                }
-                if(extdata.图片替换 && extdata.图片替换.includes('=>')){
-                    let replace_from = extdata.图片替换.split('=>')[0];
-                    let replace_to = extdata.图片替换.split('=>')[1];
-                    vodlists.forEach(it=>{
-                        if(it.vod_pic&&it.vod_pic.startsWith('http')){
-                            it.vod_pic = it.vod_pic.replace(replace_from,replace_to);
-                        }
-                    });
-                }
-                if(extdata.图片来源){
-                    vodlists.forEach(it=>{
-                        if(it.vod_pic&&it.vod_pic.startsWith('http')){
-                            it.vod_pic = it.vod_pic + extdata.图片来源;
-                        }
-                    });
-                }
-            }else if(api_type=="XBPQ"){
+            if(api_type=="XBPQ"){
                 let gethtml = request(MY_URL, { headers: headers, timeout:8000 });
                 extdata["二次截取"] = extdata["二次截取"] || (gethtml.indexOf(`<ul class="stui-vodlist`)>-1?`<ul class="stui-vodlist&&</ul>`:gethtml.indexOf(`<ul class="myui-vodlist`)>-1?`<ul class="myui-vodlist&&</ul>`:"");
                 if(extdata["二次截取"]){
@@ -1175,6 +1034,7 @@ function getErData(jkdata) {
                 log(getsm+'失败>'+e.message + " 错误行#" + e.lineNumber)
             }    
         }else if (/XBPQ/.test(api_type)) {
+            log("二级进入XBPQ");
             try{
                 let arthtml = html;
                 if(extdata["线路二次截取"]){
@@ -1185,7 +1045,7 @@ function getErData(jkdata) {
                     let arttitle = artlist[i].split(extdata["线路数组"].split('&&')[0])[1].split(extdata["线路数组"].split('&&')[1])[0].split(extdata["线路标题"].split('&&')[0])[1].split(extdata["线路标题"].split('&&')[1])[0];
                     tabs.push(arttitle.replace(/<\/?.+?\/?>/g,''));
                 }
-
+                log(tabs);
                 let conthtml = html;
                 if(extdata["播放二次截取"]){
                     conthtml = conthtml.split(extdata["播放二次截取"].split('&&')[0])[1].split(extdata["播放二次截取"].split('&&')[1])[0];
@@ -1392,6 +1252,5 @@ function getExecStrs(str) {
         result = reg.exec(str)
         result && list.push(result[1])
     } while (result)
-    console.log(list);
     return list
 }
