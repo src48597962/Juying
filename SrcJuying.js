@@ -417,43 +417,42 @@ function dianboyiji() {
                 d = [];
                 putMyVar('点播动态加载loading', '1');
             }
+
+            let searchurl = $('').lazyRule((jkdata) => {
+                if(jkdata){
+                    /*
+                    return $('hiker://empty#noRecordHistory##noHistory#').rule((name,data) => {
+                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
+                        let ssdata = getSsData(name,data);
+                        setResult(ssdata);
+                    }, input, data);
+                    */
+                    storage0.putMyVar('搜索临时搜索数据', jkdata);
+                    return 'hiker://search?s='+input+'  '+'&rule='+MY_RULE.title;
+                }else{
+                    return 'toast://未找到接口数据'
+                }
+            },sourceData);
             
+            d.push({
+                title: "搜索",
+                url: $.toString((searchurl) => {
+                        return input + searchurl;
+                    },searchurl),
+                desc: "搜你想看的...",
+                col_type: "input",
+                extra: {
+                    titleVisible: true
+                }
+            });
+            for (let i = 0; i < 4; i++) {
+                d.push({
+                    col_type: "blank_block"
+                })
+            }
         }
     }
     if(sourceName){
-        let searchurl = $('').lazyRule((jkdata) => {
-            if(jkdata){
-                /*
-                return $('hiker://empty#noRecordHistory##noHistory#').rule((name,data) => {
-                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
-                    let ssdata = getSsData(name,data);
-                    setResult(ssdata);
-                }, input, data);
-                */
-                storage0.putMyVar('搜索临时搜索数据', jkdata);
-                return 'hiker://search?s='+input+'  '+'&rule='+MY_RULE.title;
-            }else{
-                return 'toast://未找到接口数据'
-            }
-        },sourceData);
-        
-        d.push({
-            title: "搜索",
-            url: $.toString((searchurl) => {
-                    return input + searchurl;
-                },searchurl),
-            desc: "搜你想看的...",
-            col_type: "input",
-            extra: {
-                titleVisible: true
-            }
-        });
-        for (let i = 0; i < 4; i++) {
-            d.push({
-                col_type: "blank_block"
-            })
-        }
-        
         try{
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
             let objdata = getYiData(sourceData);
@@ -866,6 +865,7 @@ function yiji() {
             pic_url: 'https://hikerfans.com/tubiao/red/40.png',
             col_type: 'avatar'
         });
+        log(JSON.parse(fetch('hiker://history')));
         let items = JSON.parse(fetch('hiker://history')).filter(v=>JSON.parse(v.params).title==MY_RULE.title).slice(0, 3);
         items.forEach(item=>{
             d.push({
