@@ -1240,8 +1240,9 @@ function getCateData(obj) {
             log(api_name+'>生成分类数据异常>'+e.message + " 错误行#" + e.lineNumber);
         }
     }
+    log(fl);
     return {
-        error:error,
-        list:fllists
+        error: error||0,
+        list: fllists
     }
 }
