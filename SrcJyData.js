@@ -240,7 +240,7 @@ function getYiData(jkdata) {
                         }
                     }
                 }catch(e){
-                    error.fl = '获取分类数据异常>'+e.message + ' 错误行#' + e.lineNumber;
+                    error.fl = 1;
                     log(api_name+'>获取分类数据异常>'+e.message + " 错误行#" + e.lineNumber);
                 }
                 if(分类.length>0){
@@ -328,6 +328,7 @@ function getYiData(jkdata) {
                         });
                     }
                 }catch(e){
+                    error.fl = 1;
                     log(api_name+'>生成分类数据异常>'+e.message + " 错误行#" + e.lineNumber);
                 }
             }
@@ -560,7 +561,7 @@ function getYiData(jkdata) {
                 })
             }
         }catch(e){
-            error.vod = '获取列表异常>'+e.message + ' 错误行#' + e.lineNumber
+            error.vod = 1;
             log(api_name+'>获取列表异常>'+e.message + ' 错误行#' + e.lineNumber);
         }
     }
