@@ -286,7 +286,7 @@ function getYiData(jkdata) {
         }
     }
 
-    if(listurl && !vodlists){
+    if(listurl && !vodlists && !error.fl){
         try{
             fl.cateId = fl.cateId || cate_id;
             //拼接生成分类页url链接
