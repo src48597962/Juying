@@ -936,6 +936,7 @@ function getErData(jkdata) {
                 };
                 */
         }else if (api_type=="XPath") {
+            log("xpath进来了");
             try{
                 actor = String(xpathArray(html, extdata.dtActor).join(',')).replace(extdata.filter?eval(extdata.filter):"","").replace(/[\r\ \n]/g, "");
             }catch(e){
