@@ -432,7 +432,7 @@ function getYiData(jkdata) {
     }
         
     return {
-        fllists: fllists || [],
+        fllists: fllists,
         vodlists: vodlists,
         error: error
     }
