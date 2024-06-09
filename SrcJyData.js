@@ -994,7 +994,6 @@ function getErData(jkdata) {
                 log(getsm+'失败>'+e.message + " 错误行#" + e.lineNumber)
             }    
         }else if (/XBPQ/.test(api_type)) {
-            log("二级进入XBPQ");
             try{
                 let arthtml = html;
                 if(extdata["线路二次截取"]){
@@ -1009,7 +1008,7 @@ function getErData(jkdata) {
                     let arttitle = artlist[i].split(extdata["线路数组"].split('&&')[0])[1].split(extdata["线路数组"].split('&&')[1])[0].split(extdata["线路标题"].split('&&')[0])[1].split(extdata["线路标题"].split('&&')[1])[0];
                     tabs.push(arttitle.replace(/<\/?.+?\/?>/g,''));
                 }
-                log(tabs);
+
                 let conthtml = html;
                 if(extdata["播放二次截取"]){
                     conthtml = conthtml.split(extdata["播放二次截取"].split('&&')[0])[1].split(extdata["播放二次截取"].split('&&')[1])[0];
@@ -1026,12 +1025,12 @@ function getErData(jkdata) {
                     lists.push(cont);
                 }
                 
-                actor = getBetweenStr(html, extdata["主演"]);
-                director = getBetweenStr(html, extdata["导演"]);
-                remarks = getBetweenStr(html, extdata["影片状态"]);
-                pubdate = getBetweenStr(html, extdata["影片类型"]);
-                year = getBetweenStr(html, extdata["影片年代"]);
-                area = getBetweenStr(html, extdata["影片地区"]);
+                actor = getBetweenStr(html, extdata["主演"]).replace(/\/n/g,'');
+                director = getBetweenStr(html, extdata["导演"]).replace(/\/n/g,'');
+                remarks = getBetweenStr(html, extdata["影片状态"]).replace(/\/n/g,'');
+                pubdate = getBetweenStr(html, extdata["影片类型"]).replace(/\/n/g,'');
+                year = getBetweenStr(html, extdata["影片年代"]).replace(/\/n/g,'');
+                area = getBetweenStr(html, extdata["影片地区"]).replace(/\/n/g,'');
                 extdata["简介"] = extdata["简介"]&&extdata["简介"].includes('+')?extdata["简介"].split('+')[1]:extdata["简介"];
                 desc = getBetweenStr(html, extdata["简介"]);
             }catch(e){
