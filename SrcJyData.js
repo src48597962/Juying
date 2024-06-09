@@ -936,7 +936,6 @@ function getErData(jkdata) {
                 };
                 */
         }else if (api_type=="XPath") {
-            log("xpath进来了");
             try{
                 actor = String(xpathArray(html, extdata.dtActor).join(',')).replace(/[\r\ \n]/g, "");
                 area = String(xpath(html, extdata.dtArea)).replace(/[\r\ \n]/g, "");
@@ -949,20 +948,14 @@ function getErData(jkdata) {
                 log('xpath获取海报信息失败>'+e.message + " 错误行#" + e.lineNumber);
             }
             try{
-                arts = xpathArray(html, extdata.dtFromNode+(extdata.dtFromName.indexOf('concat(')>-1?'/text()':extdata.dtFromName));
+                tabs = xpathArray(html, extdata.dtFromNode+(extdata.dtFromName.indexOf('concat(')>-1?'/text()':extdata.dtFromName));
             }catch(e){
                 log('xpath获取线路失改>'+e.message);
             }
-            log(arts);
             try{
-                for (let i = 1; i < arts.length+1; i++) {
-                    if(arts[i-1].indexOf("在线视频")>-1){
-                        tabs.push('播放源'+i);
-                    }
+                for (let i = 1; i < tabs.length+1; i++) {
                     let contname = xpathArray(html, extdata.dtUrlNode+'['+i+']'+extdata.dtUrlSubNode+extdata.dtUrlName);
-                    log(contname);
                     let conturl = xpathArray(html, extdata.dtUrlNode+'['+i+']'+extdata.dtUrlSubNode+(extdata.dtUrlId=="@href"?'/'+extdata.dtUrlId:extdata.dtUrlId));
-                    log(conturl);
                     let cont = [];
                     for (let j = 0; j < contname.length; j++) {
                         let playUrl;
@@ -975,7 +968,6 @@ function getErData(jkdata) {
                     }
                     lists.push(cont);
                 }
-                log(lists);
             }catch(e){
                 log('xpath获取选集列表失败>'+e.message);
             }
