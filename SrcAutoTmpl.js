@@ -57,7 +57,7 @@ function autoerji(url,html){
 			if(pic&&!detail.pic){detail.pic = pic;}
 		}catch(e){}
 		try{
-			desc = obj.content?pdfh(html,obj.content):"";
+			desc = obj.content?_pdfh(html,obj.content):"";
 			if(desc&&!detail.desc){detail.desc = desc;}
 		}catch(e){}
         return {details1:details1,pic:pic,desc:desc,tabs:tabs,lists:lists};
@@ -101,7 +101,7 @@ function autoerji(url,html){
 				data.tabs.splice(data.lists.length-1,data.tabs.length-data.lists.length);
 			}
 			data.details2 = "数据来源：模板匹配";
-			data.details1 = data.details1||detail.details1||"模板未匹配到信息";
+			data.details1 = data.details1||detail.details1||"";
 			data.pic = data.pic||detail.pic||"";
 			data.desc = data.desc||detail.desc||"";
 		}else{
