@@ -1814,10 +1814,6 @@ function Resourceimport(input,importtype){
             var urls= [];
             //多线程处理
             var task = function(obj) {
-                if(obj.name=="💥自营影视B"){
-                    log(obj);
-                }
-                
                 let arr;
                 if(/^csp_AppYs/.test(obj.api)){
                     arr = { "name": obj.name, "url": obj.ext, "type": getapitype(obj.ext)};
