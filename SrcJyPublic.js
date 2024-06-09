@@ -333,7 +333,7 @@ function colorTitle(title, Color) {
     return '<font color="' + Color + '">' + title + '</font>';
 }
 //取前三历史记录
-function historyList(){
+function getHistory(){
     let h = [];
     let items = JSON.parse(fetch('hiker://history')).filter(v=> v.type!="网页浏览" && JSON.parse(v.params).title==MY_RULE.title).slice(0, 3);
     items.forEach(item=>{
