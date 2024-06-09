@@ -186,6 +186,7 @@ function getYiData(jkdata) {
                                         }
                                     }
                                 })
+                                log(筛选);
                             }
                         }
                     }
