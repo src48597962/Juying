@@ -943,7 +943,7 @@ function getErData(jkdata) {
                 remarks = String(xpathArray(html, extdata.dtCate).join(',')).replace(/[\r\ \n]/g, "");
                 pubdate = String(xpathArray(html, extdata.dtMark).join(',')).replace(/[\r\ \n]/g, "");
                 desc = String(xpath(html, extdata.dtDesc));
-                pic = xpath(html, extdata.dtImg);
+                pic = String(xpath(html, extdata.dtImg)).replace(/[\r\ \n]/g, "");
             }catch(e){
                 log('xpath获取海报信息失败>'+e.message + " 错误行#" + e.lineNumber);
             }
