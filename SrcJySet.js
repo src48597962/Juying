@@ -1827,6 +1827,9 @@ function Resourceimport(input,importtype){
                             extfile = input.match(/http(s)?:\/\/.*\//)[0]+extfile.replace("./","");
                         }
                     }
+                    if(obj.name=="💥自营影视B"){
+                        log(extfile);
+                    }
                     
                     if(/drpy2/.test(obj.api)){
                         arr = { "name": obj.name, "type": "drpy", "ext": extfile};
