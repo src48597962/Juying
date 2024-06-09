@@ -859,26 +859,18 @@ function yiji() {
     }
 
     if(getItem('historyEnable')=='1'){
-        let h = [];
-        h.push({
+        d.push({
             title: '<span style="color:#ff6600"><b>\t观看记录\t\t\t</b></span>',
             url: 'hiker://empty',
             pic_url: 'https://hikerfans.com/tubiao/red/40.png',
-            col_type: 'avatar'
+            col_type: 'avatar',
+            extra: {
+                id: "historyid"
+            }
         });
 
-        let items = JSON.parse(fetch('hiker://history')).filter(v=> v.type!="网页浏览" && JSON.parse(v.params).title==MY_RULE.title).slice(0, 3);
-        items.forEach(item=>{
-            h.push({
-                title: item.title,
-                url: item.ruleBaseUrl + '@rule=' + JSON.parse(item.params).find_rule,
-                pic_url: item.picUrl,
-                desc: item.lastClick?item.lastClick.split('@@')[0]:"",
-                col_type: "movie_3",
-                extra: JSON.parse(item.params).params
-            });
-        })
-        addItemBefore("rousoubang", h);
+        let items = historyList();
+        d = d.concat(items);
     }
 
     let resoufile = "hiker://files/rules/Src/Juying/resou.json";
