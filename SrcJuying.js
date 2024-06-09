@@ -859,7 +859,8 @@ function yiji() {
     }
 
     if(getItem('historyEnable')=='1'){
-        d.push({
+        let h = [];
+        h.push({
             title: '<span style="color:#ff6600"><b>\t观看记录\t\t\t</b></span>',
             url: 'hiker://empty',
             pic_url: 'https://hikerfans.com/tubiao/red/40.png',
@@ -868,7 +869,7 @@ function yiji() {
 
         let items = JSON.parse(fetch('hiker://history')).filter(v=> v.type!="网页浏览" && JSON.parse(v.params).title==MY_RULE.title).slice(0, 3);
         items.forEach(item=>{
-            d.push({
+            h.push({
                 title: item.title,
                 url: item.ruleBaseUrl + '@rule=' + JSON.parse(item.params).find_rule,
                 pic_url: item.picUrl,
@@ -877,6 +878,7 @@ function yiji() {
                 extra: JSON.parse(item.params).params
             });
         })
+        addItemBefore("rousoubang", h);
     }
 
     let resoufile = "hiker://files/rules/Src/Juying/resou.json";
@@ -919,7 +921,10 @@ function yiji() {
             return "hiker://empty";
         },fenlei),
         pic_url: 'https://hikerfans.com/tubiao/red/73.png',//'https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=3779990328,1416553241&fm=179&app=35&f=PNG?w=60&h=70&s=E7951B62A4639D153293A4E90300401B',
-        col_type: 'avatar'
+        col_type: 'avatar',
+        extra: {
+            id: "rousoubang"
+        }
     });
 
     list.forEach((item,i)=>{
