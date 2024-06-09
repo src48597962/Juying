@@ -1026,6 +1026,7 @@ function getErData(jkdata) {
                 }
                 
                 actor = getBetweenStr(html, extdata["主演"]).replace(/\/n/g,'');
+                log(actor);
                 director = getBetweenStr(html, extdata["导演"]).replace(/\/n/g,'');
                 remarks = getBetweenStr(html, extdata["影片状态"]).replace(/\/n/g,'');
                 pubdate = getBetweenStr(html, extdata["影片类型"]).replace(/\/n/g,'');
