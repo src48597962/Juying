@@ -190,7 +190,7 @@ function selectSource() {
         noAutoDismiss: true,
         toPosition: index,
         extraInputBox: (inputBox = new hikerPop.ResExtraInputBox({
-            hint: "源关键字筛选，右边切换源分组",
+            hint: "源关键字筛选，右边切换分组",
             title: sourceGroup || "全部",
             onChange(s, manage) {
                 //log("onChange:"+s);
