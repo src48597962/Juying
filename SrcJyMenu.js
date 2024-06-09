@@ -30,7 +30,7 @@ var erjimenu = [
                 }]);
             }
             return "hiker://empty";
-        }, erdata.desc||""),
+        }, `${erdata.desc}`||""),
         pic_url: "https://hikerfans.com/tubiao/messy/32.svg",
         col_type: 'icon_small_3',
         extra: {
