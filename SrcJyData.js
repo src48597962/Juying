@@ -971,7 +971,7 @@ function getErData(jkdata) {
             }catch(e){
                 log('xpath获取选集列表失败>'+e.message);
             }
-        }else if (/biubiu/.test(api_type)) {
+        }else if (api_type=="biubiu") {
             let getsm = "";
             try{
                 getsm = "获取播放地址数组bfjiequshuzuqian";
@@ -1000,7 +1000,7 @@ function getErData(jkdata) {
             }catch(e){
                 log(getsm+'失败>'+e.message + " 错误行#" + e.lineNumber)
             }    
-        }else if (/XBPQ1/.test(api_type)) {
+        }else if (api_type=="XBPQ") {
             try{
                 let arthtml = html;
                 if(extdata["线路二次截取"]){
@@ -1064,9 +1064,9 @@ function getErData(jkdata) {
             log('开启模板自动匹配、AI识片，获取播放选集');
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcAutoTmpl.js');
             let data = autoerji(MY_URL, html);
-            details1 = data.details1 || "通过模块匹配、AI识片获取";
-            details2 = data.details2 || "";
-            pic = data.pic;
+            details1 = data.details1
+            details2 = data.details2;
+            pic = data.pic || pic;
             desc = data.desc || desc;
             tabs = data.tabs;
             lists = data.lists;
@@ -1084,7 +1084,6 @@ function getErData(jkdata) {
         details2 = details2.replace(/&ldquo;/g,'“').replace(/&rdquo;/g,'”').replace(/&middot;/g,'·').replace(/&hellip;/g,'…').replace(/&nbsp;|♥/g,' ');
         desc = desc || '...';
         desc = desc.replace(/&ldquo;/g,'“').replace(/&rdquo;/g,'”').replace(/&middot;/g,'·').replace(/&hellip;/g,'…').replace(/&nbsp;|♥/g,' ');
-
     }
  
     return {
