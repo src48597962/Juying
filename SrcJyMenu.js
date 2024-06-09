@@ -2,56 +2,40 @@
 //二级统一菜单
 var erjimenu = [
     {
-        title: "剧情简介",
-        url: /\.sogou\./.test(MY_URL)?$('hiker://empty#noRecordHistory##noHistory#').rule((url) => {
-                var d=[];
-                var html = request(url, {headers:{ 'User-Agent': PC_UA }, timeout:3000 });
-                var story=parseDomForHtml(html, 'body&&.srch-result-info&&Html').replace(/<\/a><a/g,',</a><a');
-                for(let i = 0;;i++){
-                    try{
-                        d.push({
-                            title:parseDomForHtml(story, 'div,' +i+ '&&Text').replace('更多',''),
-                            col_type: 'rich_text'
-                        });
-                        d.push({
-                            col_type: 'line'
-                        });
-                    }catch(e){
-                        break;
+        title: "详情简介",
+        url: $("#noLoading#").lazyRule((desc) => {
+            if(getMyVar('二级简介打开标识')=="1"){
+                clearMyVar('二级简介打开标识');
+                deleteItemByCls("SrcJudescload");
+            }else{
+                putMyVar('二级简介打开标识',"1");
+                addItemAfter('detailid', [{
+                    title: `<font color="#098AC1">详情简介 </font><small><font color="#f47983"> ></font></small>`,
+                    col_type: "avatar",
+                    url: $("#noLoading#").lazyRule(() => {
+                        clearMyVar('二级简介打开标识');
+                        deleteItemByCls("SrcJudescload");
+                        return "hiker://empty";
+                    }),
+                    pic_url: "https://hikerfans.com/tubiao/ke/91.png",
+                    extra: {
+                        cls: "SrcJudescload"
                     }
-                };
-
-                try{
-                    var photos=parseDomForArray(html, '#photoList&&.sort_lst_bx&&a');
-                    if(photos.length>0){
-                        d.push({
-                            title: '剧照：',
-                            col_type: 'rich_text'
-                        });
-                        d.push({
-                            col_type: 'line'
-                        });
+                },{
+                    title: desc,
+                    col_type: "rich_text",
+                    extra: {
+                        cls: "SrcJudescload"
                     }
-                    for(var i in photos){
-                        d.push({
-                            pic_url: parseDomForHtml(photos[i], 'img&&data-src'),
-                            url: 'hiker://empty',
-                            col_type: 'pic_1_full'
-                        });
-                        d.push({
-                            col_type: 'line'
-                        });
-                    }
-                }catch(e){};
-                setHomeResult(d);
-            }, MY_URL): $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
-                setHomeResult([{
-                    title: '影片简介：\n' + getMyVar('moviedesc',''),
-                    col_type: 'long_text'
                 }]);
-            }),
-        pic_url: 'https://hikerfans.com/tubiao/messy/32.svg',
-        col_type: 'icon_small_3'
+            }
+            return "hiker://empty";
+        }, erdata.desc||""),
+        pic_url: "https://hikerfans.com/tubiao/messy/32.svg",
+        col_type: 'icon_small_3',
+        extra: {
+            cls: "Juloadlist"
+        }
     },
     {
         title: "观影设置",
