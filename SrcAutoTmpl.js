@@ -2,38 +2,9 @@
 function autoerji(url,html){
     let data = {};
     if(!/http/.test(url)){return data;}
-    let html = html||request(url, {headers: {'User-Agent': PC_UA }});
+    let html = html||request(url, {headers: {'User-Agent': PC_UA }, timeout: 5000});
     let urldomian = url.match(/http(s)?:\/\/(.*?)\//)[0];
-	let tmplSortfile = "hiker://files/rules/Src/Juying/TmplSort.json";
-	let tmplSortfiles = fetch(tmplSortfile);
-    if(tmplSortfiles!=""){
-		eval("var tmplSort = " + tmplSortfiles+ ";");
-	}else{
-		var tmplSort = {};
-	}
-	let sortlist = [];
-	if(tmplSort.erji){
-		Object.assign(sortlist, tmplSort.erji);
-	}
-	erjiTmpl = erjiTmpl.map(item => {
-		item.sort = 0;
-		for(let j=0;j<sortlist.length;j++){
-			if(sortlist[j].id==item.id){
-				item.sort = sortlist[j].sort;
-				break;
-			}
-		}
-		return item;
-	})
-	//定义排序函数
-    function sortData(a, b) {
-        if(a.sort!=b.sort){
-            return b.sort - a.sort
-        }else{
-            return a.id - b.id;
-        }
-    };
-	erjiTmpl.sort(sortData)
+	
     let urltmpl = JSON.parse(getMyVar('Tmpl-'+urldomian,'{}'));
     let tmplidex = erjiTmpl.findIndex(it=>it.id===urltmpl.id);
     if(tmplidex>-1) {
@@ -60,22 +31,26 @@ function autoerji(url,html){
 			let list = [];
 			for (let j = 0; j < cont.length; j++) {
 				let listname = _pdfh(cont[j],"a&&Text");
-				let listurl = _pd(cont[j],obj.tab_id?obj.tab_id:'a&&href');
-				list.push(listname+"$"+listurl)
+				let listurl = _pd(cont[j], obj.tab_id||'a&&href', urldomian);
+				if(listname&&listurl){
+					list.push(listname+"$"+listurl);
+				}
 			}
-			lists.push(list);
+			if(list.length>0){
+				lists.push(list);
+			}
 		})
-		let details2,pic,desc;
+		let details1,pic,desc;
 		try{
 			let details = obj.desc.split(';');
-			details2 = "";
+			details1 = "";
 			for(let j=0;j<details.length;j++){
-				details2 = details2.concat(_pdfh(html, details[j]));
+				details1 = details1.concat(_pdfh(html, details[j]));
 			}
-			if(details2&&!detail.details2){detail.details2 = details2;}
+			if(details1&&!detail.details1){detail.details1 = details1;}
 		}catch(e){}
 		try{
-			pic = pdfh(html, obj.img).replace(/http.*\/tu\.php\?tu=|\/img\.php\?url=| |\/tu\.php\?tu=/g,'');
+			pic = _pdfh(html, obj.img).replace(/http.*\/tu\.php\?tu=|\/img\.php\?url=| |\/tu\.php\?tu=/g,'');
 			if(!/^http/.test(pic)&&pic){
 				pic = urldomian + pic;
 			}
@@ -85,7 +60,7 @@ function autoerji(url,html){
 			desc = obj.content?pdfh(html,obj.content):"";
 			if(desc&&!detail.desc){detail.desc = desc;}
 		}catch(e){}
-        return {details2:details2,pic:pic,desc:desc,tabs:tabs,lists:lists};
+        return {details1:details1,pic:pic,desc:desc,tabs:tabs,lists:lists};
     };
 	let setid = 0;
     for(let i in erjiTmpl){
@@ -131,8 +106,8 @@ function autoerji(url,html){
 			if(data.tabs.length>data.lists.length){
 				data.tabs.splice(data.lists.length-1,data.tabs.length-data.lists.length);
 			}
-			data.details1 = "选集列表来源于模板匹配";
-			data.details2 = data.details2||detail.details2||"模板未匹配到信息";
+			data.details2 = "数据来源：模板匹配";
+			data.details1 = data.details1||detail.details1||"模板未匹配到信息";
 			data.pic = data.pic||detail.pic||"";
 			data.desc = data.desc||detail.desc||"";
 		}else{
@@ -293,7 +268,7 @@ function aierji(html,url,detail){
 			}
 		}
 		if(conts.length==0){arts = [];}
-		return {details1: "选集列表来源于AI识片",details2:detail.details2||"",pic:detail.pic||"",desc:detail.desc||"暂无信息",tabs:tabs,lists:lists};
+		return {details2: "数据来源：AI识片",details1:detail.details1||"",pic:detail.pic,desc:detail.desc,tabs:tabs,lists:lists};
 	}
 	return {};
 }
