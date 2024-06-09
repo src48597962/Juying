@@ -1059,37 +1059,6 @@ function getErData(jkdata) {
                 return it.split('#');
             })
         }
-
-        //获取选集
-        for (var i in conts) {
-            if (/v1|app|v2/.test(api_type)) {
-                if(conts[i].url){
-                    let single = conts[i].url||"";
-                    if(single){lists.push(single.split('#'))};
-                }else{
-                    let single = conts[i].urls||[];
-                    if(single.length>0){
-                        let si = [];
-                        for (let j = 0; j < single.length; j++) {
-                            si.push(single[j].name+"$"+single[j].url);
-                        }
-                        lists.push(si);
-                    };
-                }
-            }else if (/iptv/.test(api_type)) {
-                let single = conts[i]||[];
-                if(single.length>0){
-                    let si = [];
-                    for (let j = 0; j < single.length; j++) {
-                        si.push(single[j].title+"$"+single[j].url.split('=')[1]);
-                        parse_api = single[j].url.split('=')[0]+"=";
-                    }
-                    lists.push(si);
-                };
-            }else if (/cms/.test(api_type)) {
-                
-            }
-        }
         
         if(/XPath|biubiu|XBPQ|drpy/.test(api_type)&&html&&(tabs.length==0||lists.length==0)&&getMyVar('debug','0')=="0"&&html.indexOf(MY_PARAMS.pageTitle)>-1){
             log('开启模板自动匹配、AI识片，获取播放选集');
