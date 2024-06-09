@@ -101,7 +101,7 @@ function dianboerji() {
     log(erdata);
     let details1 = erdata.details1;
     let details2 = erdata.details2;
-    let pic = erdata.pic?erdata.pic:MY_PARAMS.pic;
+    let pic = erdata.pic!=""?erdata.pic:MY_PARAMS.pic;
     log(erdata.pic);
     log(MY_PARAMS.pic);
     log(pic);
