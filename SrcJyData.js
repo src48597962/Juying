@@ -57,6 +57,15 @@ function getYiData(jkdata) {
             listurl = extdata["分类url"]?/^http/.test(extdata["分类url"])?extdata["分类url"]:host + extdata["分类url"]:"";
             vodurlhead = getHome(listurl);
         }
+    } else if (api_type=="xpath") {
+        extdata = extDataCache(jkdata)
+        if($.type(extdata)=='object'){
+            let host = extdata["homeUrl"] || '';
+            classurl = host;
+            extdata["cateUrl"] = extdata["cateUrl"]?extdata["cateUrl"].split(';;')[0].split('[')[0]:"";
+            listurl = extdata["cateUrl"]?/^http/.test(extdata["cateUrl"])?extdata["cateUrl"]:host + extdata["cateUrl"]:"";
+            vodurlhead = getHome(listurl);
+        }
     } else {
         log(api_type+'>api类型错误');
     }
@@ -78,7 +87,11 @@ function getYiData(jkdata) {
                 筛选 = classCache.筛选;
             }else{
                 try{
-                    if(api_type=="XBPQ"){
+                    if(api_type=="xpath"){
+                        let gethtml = request(classurl, { headers: { 'User-Agent': api_ua }, timeout:8000 });
+                        let typelist = xpathArray(gethtml,extdata['cateNode']);
+                        log(typelist);
+                    }else if(api_type=="XBPQ"){
                         if(extdata["分类"].indexOf('$')>-1){
                             分类 = extdata["分类"].split('#');
                         }else if(extdata["分类"].indexOf('&')>-1&&extdata["分类值"]){
