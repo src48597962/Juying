@@ -335,7 +335,11 @@ function dianboyiji() {
     addListener("onClose", $.toString(() => {
         clearMyVar('点播动态加载loading');
         clearMyVar('搜索临时搜索数据');
-        refreshPage(false);
+        if(getItem('historyEnable')=='1'){
+            deleteItemByCls('historylist');
+            let h = getHistory();
+            addItemAfter("historyid", h);
+        }
     }));
     let d = [];
     let datalist = getDatas('jk');
@@ -869,7 +873,7 @@ function yiji() {
             }
         });
 
-        let items = historyList();
+        let items = getHistory();
         d = d.concat(items);
     }
 
