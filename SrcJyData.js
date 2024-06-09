@@ -1000,7 +1000,7 @@ function getErData(jkdata) {
             }catch(e){
                 log(getsm+'失败>'+e.message + " 错误行#" + e.lineNumber)
             }    
-        }else if (/XBPQ/.test(api_type)) {
+        }else if (/XBPQ1/.test(api_type)) {
             try{
                 let arthtml = html;
                 if(extdata["线路二次截取"]){
