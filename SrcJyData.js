@@ -1084,15 +1084,15 @@ function getErData(jkdata) {
             tabs = data.tabs;
             lists = data.lists;
         }
-        actor = actor?actor.includes('主演')?actor.replace(/\\n/g,''):'主演：'+actor.replace(/\\n/g,''):'';
+        actor = actor?actor.includes('主演')?actor.replace(/\n+/g, ''):'主演：'+actor.replace(/\n+/g, ''):'';
         let dqnf = "";
         if(area){
-            dqnf = '\n地区：' + area.replace(/\\n/g,'') + (year?'   年代：' + year.replace(/\\n/g,''):'')
+            dqnf = '\n地区：' + area.replace(/\n+/g, '') + (year?'   年代：' + year.replace(/\n+/g, ''):'')
         }else{
-            dqnf = year?'\n年代：' + year.replace(/\\n/g,''):''
+            dqnf = year?'\n年代：' + year.replace(/\n+/g, ''):''
         }
         details1 = details1?details1:actor.substring(0, actor.length<10||dqnf==""?actor.length:10) + dqnf;
-        details2 = details2?details2:remarks + '\n' + pubdate;
+        details2 = details2?details2:remarks.replace(/\n+/g, '') + '\n' + pubdate.replace(/\n+/g, '');
         details1 = details1.replace(/&ldquo;/g,'“').replace(/&rdquo;/g,'”').replace(/&middot;/g,'·').replace(/&hellip;/g,'…').replace(/&nbsp;|♥/g,' ');
         details2 = details2.replace(/&ldquo;/g,'“').replace(/&rdquo;/g,'”').replace(/&middot;/g,'·').replace(/&hellip;/g,'…').replace(/&nbsp;|♥/g,' ');
         desc = desc || '...';
