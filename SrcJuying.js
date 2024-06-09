@@ -116,7 +116,7 @@ function dianboerji() {
     });
     //二级统一菜单
     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyMenu.js');
-    erjimenu.forEach(it=>{
+    erjimenu(erdata.desc).forEach(it=>{
         d.push(it);
     })
 
