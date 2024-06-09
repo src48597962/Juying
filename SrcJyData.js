@@ -1097,7 +1097,7 @@ function getErData(jkdata) {
             let data = autoerji(MY_URL, html);
             details1 = data.details1 || "通过模块匹配、AI识片获取";
             details2 = data.details2 || "";
-            pic = data.pic || pic;
+            pic = data.pic;
             desc = data.desc || desc;
             tabs = data.tabs;
             lists = data.lists;
