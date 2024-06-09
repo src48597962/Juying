@@ -328,18 +328,17 @@ function getYiData(jkdata) {
             vodlists = [];
             let vod_name,vod_pic,vod_url,vod_desc;
             if(api_type=="XPath"){
-                log(MY_URL);
                 let gethtml = request(MY_URL, { headers: headers, timeout:8000 });
                 let vodnames = xpathArray(gethtml, extdata["homeVodNode"]+extdata["homeVodName"]);
                 let vodids = xpathArray(gethtml, extdata["homeVodNode"]+extdata["homeVodId"]);
                 let vodimgs = xpathArray(gethtml, extdata["homeVodNode"]+extdata["homeVodImg"]);
                 let vodmarks = xpathArray(gethtml, extdata["homeVodNode"]+extdata["homeVodMark"]);
-                log(vodnames[0]);
-                log(vodids[0]);
-                log(vodimgs[0]);
-                log(vodmarks[0]);
-                //let arr = {"vod_url":vod_url,"vod_name":vod_name,"vod_desc":vod_desc,"vod_pic":vod_pic};
-                //vodlists.push(arr);
+                for(let i in vodids){
+                    if(vodids[i]&&vodnames[i]){
+                        let arr = {"vod_url":vodurlhead+vodids[i],"vod_name":vodnames[i],"vod_desc":vodmarks[i],"vod_pic":vodimgs[i]};
+                        vodlists.push(arr);
+                    }
+                }
             }else if(api_type=="XBPQ"){
                 let gethtml = request(MY_URL, { headers: headers, timeout:8000 });
                 extdata["二次截取"] = extdata["二次截取"] || (gethtml.indexOf(`<ul class="stui-vodlist`)>-1?`<ul class="stui-vodlist&&</ul>`:gethtml.indexOf(`<ul class="myui-vodlist`)>-1?`<ul class="myui-vodlist&&</ul>`:"");
