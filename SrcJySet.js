@@ -1844,7 +1844,8 @@ function Resourceimport(input,importtype){
                     if(arr){
                         let urlfile;
                         if($.type(extfile)=='object'){
-                            urlfile = arr.type + '_' + arr.name;
+                            urlfile = 'hiker://files/data/'+MY_RULE.title+'/libs/' + arr.type + '_' + arr.name + '.json';
+                            writeFile(urlfile, JSON.stringify(extfile));
                         }else if(/^file/.test(extfile)){
                             urlfile = 'hiker://files/' + extfile.split('/files/Documents/')[1];
                         }else if(/^http/.test(extfile)){
