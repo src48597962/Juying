@@ -738,8 +738,9 @@ function getErData(jkdata) {
 
     let tabs = [];
     let lists = [];
-    let flags = [];
-    let parse_api = [];
+    let flags = [];//线路标识
+    let parse_api = [];//自带解析
+    let sniffer = [];//嗅探词
 
     if(html){
         let arts = [];
@@ -1022,6 +1023,7 @@ function getErData(jkdata) {
                 area = getBetweenStr(html, extdata["影片地区"]);
                 extdata["简介"] = extdata["简介"]&&extdata["简介"].includes('+')?extdata["简介"].split('+')[1]:extdata["简介"];
                 desc = getBetweenStr(html, extdata["简介"]);
+                sniffer = extdata["嗅探词"]?extdata["嗅探词"].split('#'):sniffer;
             }catch(e){
                 log('失败>'+e.message + " 错误行#" + e.lineNumber)
             }    
@@ -1108,7 +1110,8 @@ function getErData(jkdata) {
         "tabs": tabs,
         "lists": lists,
         "flags": flags,
-        "parse_api": parse_api
+        "parse_api": parse_api,
+        "sniffer": sniffer
     };
 }
 
