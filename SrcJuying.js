@@ -76,8 +76,7 @@ function dianboerji() {
     let d = [];
     let jkdata = MY_PARAMS.data;
     let name = MY_PARAMS.pageTitle;
-    let url = MY_PARAMS.url;
-    MY_URL = url;
+    MY_URL = MY_PARAMS.url;
 
     let detailsmark;
     let cacheDataFile = 'hiker://files/cache/src/Juying2/Details.json';
@@ -85,7 +84,7 @@ function dianboerji() {
     if (cacheData != "") {
         try{
             eval("let detailsjson=" + cacheData + ";");
-            if(detailsjson.surl==jkdata.url && detailsjson.url==url){
+            if(detailsjson.surl==jkdata.url && detailsjson.url==MY_URL){
                 detailsmark = detailsjson.data;//本地缓存接口+链接对得上则取本地，用于切换排序和样式时加快
             }
         }catch(e){ }
@@ -96,7 +95,7 @@ function dianboerji() {
     }else{
         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
         erdata = getErData(jkdata);
-        let markData = {surl: jkdata.url, url: url, data: erdata}
+        let markData = {surl: jkdata.url, url: MY_URL, data: erdata}
         writeFile(cacheDataFile, JSON.stringify(markData));
     }
     log(erdata);
@@ -108,16 +107,21 @@ function dianboerji() {
         title: details1,//详情1
         desc: details2,//详情2
         pic_url: pic?/^http/.test(pic)&&!pic.includes('@Referer=')?pic+'@Referer=':pic:'',//图片
-        url: pic + '#noHistory#',//链接
+        url: MY_URL + '#noHistory#',//链接
         col_type: 'movie_1_vertical_pic_blur',
         extra: {
-            gradient: true
+            gradient: true,
+            id: "detailid"
         }
     });
+    //二级统一菜单
+    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyMenu.js');
+    erjimenu.forEach(it=>{
+        d.push(it);
+    })
 
     // 片源标识数组
     let flags = erdata.flags;
-    
     // 影片标识
     let vodId = name;
     // 线路标识
