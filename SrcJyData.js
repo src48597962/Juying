@@ -744,7 +744,7 @@ function getErData(jkdata) {
     if(html){
         let arts = [];
         let conts = [];
-        let actor,director,area,year,remarks,pubdate;
+        let actor,area,year,remarks,pubdate;
         if (/v1|app|v2|cms/.test(api_type)) {
             let json = {};
             if (/cms/.test(api_type)) {
@@ -756,7 +756,6 @@ function getErData(jkdata) {
                     }
                     conts = xpathArray(html,`//video/dl/dd/text()`);
                     json.vod_actor = String(xpath(html,`//video/actor/text()`)).trim().replace(/&middot;/g,'·') || "";
-                    json.vod_director = String(xpath(html,`//video/director/text()`)).trim().replace(/&middot;/g,'·') || "";
                     json.vod_area = String(xpath(html,`//video/area/text()`)).trim();
                     json.vod_year = String(xpath(html,`//video/year/text()`)).trim();
                     json.vod_remarks = String(xpath(html,`//video/note/text()`)).trim() || "";
@@ -862,7 +861,6 @@ function getErData(jkdata) {
                 }
             }
             actor = json.vod_actor;
-            director = json.vod_director;
             area = json.vod_area;
             year = json.vod_year;
             remarks = json.vod_remarks || "";
@@ -871,7 +869,6 @@ function getErData(jkdata) {
             desc = json.vod_blurb;
         }else if (/iptv/.test(api_type)) {
             actor = html.actor.join(",");
-            director = html.director.join(",");
             area = html.area.join(",");
             year = html.pubtime;
             remarks = html.trunk || "";
@@ -896,11 +893,6 @@ function getErData(jkdata) {
                 actor = String(xpathArray(html, extdata.dtActor).join(',')).replace(extdata.filter?eval(extdata.filter):"","").replace(/[\r\ \n]/g, "");
             }catch(e){
                 log('xpath获取主演dtActor失败>'+e.message);
-            }
-            try{
-                director = String(xpathArray(html, extdata.dtDirector).join(',')).replace(extdata.filter?eval(extdata.filter):"","").replace(/[\r\ \n]/g, "");
-            }catch(e){
-                log('xpath获取导演dtDirector失败>'+e.message);
             }
             try{
                 area = String(xpath(html, extdata.dtArea)).replace(extdata.filter?eval(extdata.filter):"","").replace(/[\r\ \n]/g, "");
@@ -984,8 +976,6 @@ function getErData(jkdata) {
                 remarks = pdfh(html.split(extdata.zhuangtaiqian.replace(/\\/g,""))[1].split(extdata.zhuangtaihou.replace(/\\/g,""))[0],"Text").split('/')[0]||"biubiu数据存在错误";
                 getsm = "获取主演zhuyanqian";
                 actor = pdfh(html.split(extdata.zhuyanqian.replace(/\\/g,""))[1].split(extdata.zhuyanhou.replace(/\\/g,""))[0],"Text");
-                getsm = "获取导演daoyanqian";
-                director = pdfh(html.split(extdata.daoyanqian.replace(/\\/g,""))[1].split(extdata.daoyanhou.replace(/\\/g,""))[0],"Text");
                 getsm = "获取更新zhuangtaiqian";
                 pubdate = pdfh(html.split(extdata.zhuangtaiqian.replace(/\\/g,""))[1].split(extdata.zhuangtaihou.replace(/\\/g,""))[0],"Text").split('/')[1]||"";
                 getsm = "获取剧情简介juqingqian";
@@ -1025,13 +1015,11 @@ function getErData(jkdata) {
                     lists.push(cont);
                 }
                 
-                actor = getBetweenStr(html, extdata["主演"]).replace(/\/n/g,'');
-                log(actor);
-                director = getBetweenStr(html, extdata["导演"]).replace(/\/n/g,'');
-                remarks = getBetweenStr(html, extdata["影片状态"]).replace(/\/n/g,'');
-                pubdate = getBetweenStr(html, extdata["影片类型"]).replace(/\/n/g,'');
-                year = getBetweenStr(html, extdata["影片年代"]).replace(/\/n/g,'');
-                area = getBetweenStr(html, extdata["影片地区"]).replace(/\/n/g,'');
+                actor = getBetweenStr(html, extdata["主演"]);
+                remarks = getBetweenStr(html, extdata["影片状态"]);
+                pubdate = getBetweenStr(html, extdata["影片类型"]);
+                year = getBetweenStr(html, extdata["影片年代"]);
+                area = getBetweenStr(html, extdata["影片地区"]);
                 extdata["简介"] = extdata["简介"]&&extdata["简介"].includes('+')?extdata["简介"].split('+')[1]:extdata["简介"];
                 desc = getBetweenStr(html, extdata["简介"]);
             }catch(e){
@@ -1045,7 +1033,6 @@ function getErData(jkdata) {
             let drpy = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'plugins/drpy.js');
             let json = JSON.parse(drpy.detailParse(detailObj)).list[0];
             actor = json.vod_actor;
-            director = json.vod_director;
             remarks = json.vod_remarks;
             pic = json.vod_pic;
             desc = json.vod_content;
@@ -1097,15 +1084,14 @@ function getErData(jkdata) {
             tabs = data.tabs;
             lists = data.lists;
         }
-        actor = actor?actor.includes('主演')?actor:'主演：'+actor:'';
-        director = director?director.includes('导演')?director:'导演：'+director:'';
+        actor = actor?actor.includes('主演')?actor.replace(/\\n/g,''):'主演：'+actor.replace(/\\n/g,''):'';
         let dqnf = "";
         if(area){
-            dqnf = '\n地区：' + area + (year?'   年代：' + year:'')
+            dqnf = '\n地区：' + area.replace(/\\n/g,'') + (year?'   年代：' + year.replace(/\\n/g,''):'')
         }else{
-            dqnf = year?'\n年代：' + year:''
+            dqnf = year?'\n年代：' + year.replace(/\\n/g,''):''
         }
-        details1 = details1?details1:director.substring(0, director.length<10?director.length:10) + '\n' + actor.substring(0, actor.length<10||dqnf==""?actor.length:10) + dqnf;
+        details1 = details1?details1:actor.substring(0, actor.length<10||dqnf==""?actor.length:10) + dqnf;
         details2 = details2?details2:remarks + '\n' + pubdate;
         details1 = details1.replace(/&ldquo;/g,'“').replace(/&rdquo;/g,'”').replace(/&middot;/g,'·').replace(/&hellip;/g,'…').replace(/&nbsp;|♥/g,' ');
         details2 = details2.replace(/&ldquo;/g,'“').replace(/&rdquo;/g,'”').replace(/&middot;/g,'·').replace(/&hellip;/g,'…').replace(/&nbsp;|♥/g,' ');
