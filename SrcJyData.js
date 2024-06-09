@@ -938,7 +938,7 @@ function getErData(jkdata) {
         }else if (api_type=="XPath") {
             log("xpath进来了");
             try{
-                actor = String(xpathArray(html, extdata.dtActor).join(',')).replace(extdata.filter?eval(extdata.filter):"","").replace(/[\r\ \n]/g, "");
+                actor = String(xpathArray(html, extdata.dtActor).join(',')).replace(/[\r\ \n]/g, "");
             }catch(e){
                 log('xpath获取主演dtActor失败>'+e.message);
             }
@@ -977,6 +977,7 @@ function getErData(jkdata) {
             }catch(e){
                 log('xpath获取线路失改>'+e.message);
             }
+            log(arts);
             try{
                 for (let i = 1; i < arts.length+1; i++) {
                     if(arts[i-1].indexOf("在线视频")>-1){
