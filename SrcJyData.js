@@ -170,7 +170,7 @@ function getYiData(jkdata) {
                                         }
                                     }
                                 }
-
+                                log(typelist);
                                 typelist.forEach((it)=>{
                                     if(it.type_pid==0){
                                         分类.push(it.type_name+'$'+it.type_id);
