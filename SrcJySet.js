@@ -1200,7 +1200,7 @@ function extension(){
                 }
                 let textcontent = base64Encode(JSON.stringify(text));
                 if(textcontent.length>=200000){
-                    log('分享失败：字符数超过最大限制，请精简接口，重点减少xpath和biubiu类型'); 
+                    log('分享失败：字符数超过最大限制，请精简接口，重点减少XPath和biubiu类型'); 
                     return 'toast://分享同步失败，超过最大限制，请精简接口';
                 }
                 try{
@@ -1836,7 +1836,7 @@ function Resourceimport(input,importtype){
                     else if(/^csp_XBiubiu/.test(obj.api)){
                         arr = { "name": obj.name, "type": "biubiu", "ext": extfile};
                     }else if(/^csp_XPath/.test(obj.api)){
-                        arr = { "name": obj.name, "type": "xpath", "ext": extfile};
+                        arr = { "name": obj.name, "type": "XPath", "ext": extfile};
                     }else if(obj.api=="csp_XBPQ"){
                         arr = { "name": obj.name, "type": "XBPQ", "ext": extfile};
                     }else if(/^csp_XYQHiker/.test(obj.api)){
