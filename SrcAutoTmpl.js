@@ -97,12 +97,6 @@ function autoerji(url,html){
         });
         if(setid>0&&data.tabs.length>0&&data.lists.length>0){
 			putMyVar('Tmpl-'+urldomian,JSON.stringify(t));
-			let sortidex = sortlist.findIndex(it=>it.id===setid);
-			if(sortidex>-1) {
-				sortlist[sortidex].sort++;
-			}else{
-				sortlist.push({id:setid,sort:1});
-			}
 			if(data.tabs.length>data.lists.length){
 				data.tabs.splice(data.lists.length-1,data.tabs.length-data.lists.length);
 			}
