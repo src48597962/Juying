@@ -332,7 +332,7 @@ function dianboerji() {
 
 //点播一级
 function dianboyiji() {
-    addListener("onClose", $.toString(() => {
+    addListener("onClose", $.toString((getHistory) => {
         clearMyVar('点播动态加载loading');
         clearMyVar('搜索临时搜索数据');
         if(getItem('historyEnable')=='1'){
@@ -340,7 +340,7 @@ function dianboyiji() {
             let h = getHistory();
             addItemAfter("historyid", h);
         }
-    }));
+    },getHistory));
     let d = [];
     let datalist = getDatas('jk');
     let yxdatalist = datalist.filter(it=>{
