@@ -459,9 +459,9 @@ function dianboyiji() {
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
             let objdata = getYiData(sourceData);
             let fllists = objdata.fllists;
-            if(fllists && fllists.length>0){
+            if(fllists){
                 d = d.concat(fllists);
-            }else if(objdata.error['fl'] && MY_PAGE==1){
+            }else if(objdata.error['fl']){
                 d.push({
                     title: "分类获取失败",
                     desc: '无法访问或源失效，点击查看网页',
