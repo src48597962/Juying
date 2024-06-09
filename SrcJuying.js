@@ -328,6 +328,7 @@ function dianboyiji() {
     addListener("onClose", $.toString(() => {
         clearMyVar('点播动态加载loading');
         clearMyVar('搜索临时搜索数据');
+        refreshPage(false);
     }));
     let d = [];
     let datalist = getDatas('jk');
