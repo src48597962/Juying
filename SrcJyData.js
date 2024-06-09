@@ -476,8 +476,12 @@ function getSsData(name, jkdata) {
         if($.type(extdata)=='object'){
             if(api_type=="XBPQ"){
                 extdata["搜索url"] = extdata["搜索url"] || "/index.php/ajax/suggest?mid=1&wd={wd}&limit=500";
-                ssurl = extdata["搜索url"].replace('{wd}',name).replace('{pg}','1');
+                ssurl = extdata["搜索url"].replace('{wd}',name).replace('{pg}',MY_PAGE);
                 ssurl = /^http/.test(ssurl)?ssurl:extdata["主页url"]+ssurl;
+                vodurlhead = getHome(ssurl);
+            }else if(api_type=="XPath"){
+                ssurl = extdata["searchUrl"].replace('{wd}',name).replace('{pg}',MY_PAGE);
+                ssurl = /^http/.test(ssurl)?ssurl:extdata["homeUrl"]+ssurl;
                 vodurlhead = getHome(ssurl);
             }
         }
@@ -597,7 +601,6 @@ function getSsData(name, jkdata) {
     }else if(api_type=="XPath"||api_type=="biubiu"){
         try {
             if(api_type=="XPath"){
-                ssurl = extdata.searchUrl.replace('{wd}',name);
                 if(extdata.scVodNode=="json:list"){
                     gethtml = getHtmlCode(ssurl,api_ua,5000);
                     let json = JSON.parse(gethtml);
