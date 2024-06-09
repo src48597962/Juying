@@ -57,7 +57,7 @@ function getYiData(jkdata) {
             listurl = extdata["分类url"]?/^http/.test(extdata["分类url"])?extdata["分类url"]:host + extdata["分类url"]:"";
             vodurlhead = getHome(listurl);
         }
-    } else if (api_type=="xpath") {
+    } else if (api_type=="XPath") {
         extdata = extDataCache(jkdata)
         if($.type(extdata)=='object'){
             let host = extdata["homeUrl"] || '';
@@ -87,17 +87,20 @@ function getYiData(jkdata) {
                 筛选 = classCache.筛选;
             }else{
                 try{
-                    if(api_type=="xpath"){
+                    if(api_type=="XPath"){
                         let gethtml = request(classurl, { headers: { 'User-Agent': api_ua }, timeout:8000 });
                         let typenames = xpathArray(gethtml,extdata['cateNode']+extdata['cateName']);
-                        log(typenames);
                         let typeids = xpathArray(gethtml,extdata['cateNode']+extdata['cateId']);
                         if(extdata['cateIdR']){
                             typeids = typeids.map(x=>{
                                 return x.match(extdata['cateIdR'])[1];
                             })
                         }
-                        log(typeids);
+                        for(let i in typeids){
+                            if(cate_exclude.indexOf(typenames[i])==-1){
+                                分类.push(typenames[i]+'$'+typeids[i]);
+                            }
+                        }
                     }else if(api_type=="XBPQ"){
                         if(extdata["分类"].indexOf('$')>-1){
                             分类 = extdata["分类"].split('#');
@@ -287,7 +290,18 @@ function getYiData(jkdata) {
         try{
             fl.cateId = fl.cateId || cate_id;
             //拼接生成分类页url链接
-            if(api_type=="XBPQ"){
+            if(api_type=="XPath"){
+                fl.catePg = MY_PAGE;
+                let execStrs = getExecStrs(listurl);
+                execStrs.forEach(k=>{
+                    if(!fl[k] ){
+                        listurl = listurl.replace('/'+k+'/{'+k+'}','');
+                    }
+                })
+                listurl = listurl.replace('{catePg}',extdata["起始页"]?MY_PAGE>extdata["起始页"]?MY_PAGE:extdata["起始页"]:MY_PAGE).replace(/{/g, '${fl.').replace(/}/g, ' || ""}');
+                eval(`listurl = \`${listurl}\`;`);
+                MY_URL = listurl;
+            }else if(api_type=="XBPQ"){
                 fl.catePg = MY_PAGE;
                 let execStrs = getExecStrs(listurl);
                 execStrs.forEach(k=>{
@@ -445,7 +459,7 @@ function getSsData(name, jkdata) {
         vodurlhead = api_url + '?ac=videolist&ids=';
         ssurl = api_url + '?ac=videolist&wd='+name;
         listnode = "html.list";
-    } else if (api_type=="xpath"||api_type=="biubiu"||api_type=="XBPQ") {
+    } else if (api_type=="XPath"||api_type=="biubiu"||api_type=="XBPQ") {
         extdata = extDataCache(jkdata)
         if($.type(extdata)=='object'){
             if(api_type=="XBPQ"){
@@ -568,9 +582,9 @@ function getSsData(name, jkdata) {
         } catch (e) {
             //log(2);//log(obj.name+'>'+e.message);
         }
-    }else if(api_type=="xpath"||api_type=="biubiu"){
+    }else if(api_type=="XPath"||api_type=="biubiu"){
         try {
-            if(api_type=="xpath"){
+            if(api_type=="XPath"){
                 ssurl = extdata.searchUrl.replace('{wd}',name);
                 if(extdata.scVodNode=="json:list"){
                     gethtml = getHtmlCode(ssurl,api_ua,5000);
@@ -742,7 +756,7 @@ function getErData(jkdata) {
         } catch (e) {
             
         }
-    } else if (/xpath|biubiu|XBPQ/.test(api_type)) {
+    } else if (/XPath|biubiu|XBPQ/.test(api_type)) {
         extdata = extDataCache(jkdata)
         html = getHtml(MY_URL, headers);
     } else if (/drpy/.test(api_type)){
@@ -909,7 +923,7 @@ function getErData(jkdata) {
                     lists.push(si);
                 };
                 */
-        }else if (/xpath/.test(api_type)) {
+        }else if (api_type=="XPath") {
             try{
                 actor = String(xpathArray(html, extdata.dtActor).join(',')).replace(extdata.filter?eval(extdata.filter):"","").replace(/[\r\ \n]/g, "");
             }catch(e){
@@ -1095,7 +1109,7 @@ function getErData(jkdata) {
             }
         }
         
-        if(/xpath|biubiu|XBPQ|drpy/.test(api_type)&&html&&(tabs.length==0||lists.length==0)&&getMyVar('debug','0')=="0"&&html.indexOf(MY_PARAMS.pageTitle)>-1){
+        if(/XPath|biubiu|XBPQ|drpy/.test(api_type)&&html&&(tabs.length==0||lists.length==0)&&getMyVar('debug','0')=="0"&&html.indexOf(MY_PARAMS.pageTitle)>-1){
             log('开启模板自动匹配、AI识片，获取播放选集');
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcAutoTmpl.js');
             let data = autoerji(MY_URL, html);
