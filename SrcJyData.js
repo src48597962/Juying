@@ -92,6 +92,11 @@ function getYiData(jkdata) {
                         let typenames = xpathArray(gethtml,extdata['cateNode']+extdata['cateName']);
                         log(typenames);
                         let typeids = xpathArray(gethtml,extdata['cateNode']+extdata['cateId']);
+                        if(extdata['cateIdR']){
+                            typeids = typeids.map(x=>{
+                                return x.match(extdata['cateIdR'])[1];
+                            })
+                        }
                         log(typeids);
                     }else if(api_type=="XBPQ"){
                         if(extdata["分类"].indexOf('$')>-1){
