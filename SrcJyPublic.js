@@ -332,4 +332,21 @@ function sortByPinyin(arr) {
 function colorTitle(title, Color) {
     return '<font color="' + Color + '">' + title + '</font>';
 }
-
+//取前三历史记录
+function historyList(){
+    let h = [];
+    let items = JSON.parse(fetch('hiker://history')).filter(v=> v.type!="网页浏览" && JSON.parse(v.params).title==MY_RULE.title).slice(0, 3);
+    items.forEach(item=>{
+        let extra = JSON.parse(item.params).params;
+        extra.cls = "historylist";
+        h.push({
+            title: item.title,
+            url: item.ruleBaseUrl + '@rule=' + JSON.parse(item.params).find_rule,
+            pic_url: item.picUrl,
+            desc: item.lastClick?item.lastClick.split('@@')[0]:"",
+            col_type: "movie_3",
+            extra: extra
+        });
+    })
+    return h;
+}
