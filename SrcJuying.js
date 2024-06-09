@@ -106,7 +106,7 @@ function dianboerji() {
     //海报
     d.push({
         title: details1,//详情1
-        desc: details2,//详情2
+        desc: "源接口："+(jkdata.group||jkdata.type)+"_"+jkdata.name+"\n"+details2,//详情2
         pic_url: pic?/^http/.test(pic)&&!pic.includes('@Referer=')?pic+'@Referer=':pic:'',//图片
         url: MY_URL + '#noHistory#',//链接
         col_type: 'movie_1_vertical_pic_blur',
