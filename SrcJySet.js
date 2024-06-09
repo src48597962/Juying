@@ -1789,10 +1789,11 @@ function Resourceimport(input,importtype){
             if(html.includes('LuUPraez**')){
                 html = base64Decode(html.split('LuUPraez**')[1]);
             }
-            var reg = /("([^\\\"]*(\\.)?)*")|('([^\\\']*(\\.)?)*')|(\/{2,}.*?(\r|\n|$))|(\/\*(\n|.)*?\*\/)/g;
-            html = html.replace(/api\"\:csp/g,'api":"csp').replace(reg, function(word) { 
-                return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
-            }).replace(/^.*#.*$/gm,"").replace(/\,\,/g,',');//.replace(/=\\n\"/g,'="')|[\t\r\n].replace(/\s+/g, "").replace(/<\/?.+?>/g,"").replace(/[\r\n]/g, "")
+            
+            //var reg = /("([^\\\"]*(\\.)?)*")|('([^\\\']*(\\.)?)*')|(\/{2,}.*?(\r|\n|$))|(\/\*(\n|.)*?\*\/)/g;
+            //html = html.replace(/api\"\:csp/g,'api":"csp').replace(reg, function(word) { 
+            //    return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
+            //}).replace(/^.*#.*$/gm,"").replace(/\,\,/g,',');//.replace(/=\\n\"/g,'="')|[\t\r\n].replace(/\s+/g, "").replace(/<\/?.+?>/g,"").replace(/[\r\n]/g, "")
             //log(html);
             eval('var data = ' + html)
             //var data = JSON.parse(html);                        
