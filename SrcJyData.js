@@ -962,14 +962,12 @@ function getErData(jkdata) {
                     let contname = xpathArray(html, extdata.dtUrlNode+'['+i+']'+extdata.dtUrlSubNode+extdata.dtUrlName);
                     log(contname);
                     let conturl = xpathArray(html, extdata.dtUrlNode+'['+i+']'+extdata.dtUrlSubNode+(extdata.dtUrlId=="@href"?'/'+extdata.dtUrlId:extdata.dtUrlId));
+                    log(conturl);
                     let cont = [];
                     for (let j = 0; j < contname.length; j++) {
-                        let urlid = extdata.dtUrlIdR;
                         let playUrl;
-                        if(urlid){
-                            let urlidl = urlid.split('(\\S+)')[0];
-                            let urlidr = urlid.split('(\\S+)')[1];
-                            playUrl = conturl[j].replace(urlidl,'').replace(urlidr,'');
+                        if(extdata.dtUrlIdR){
+                            playUrl = conturl[j].match(extdata.dtUrlIdR)[1];
                         }else{
                             playUrl = conturl[j];
                         }
@@ -977,6 +975,7 @@ function getErData(jkdata) {
                     }
                     lists.push(cont);
                 }
+                log(lists);
             }catch(e){
                 log('xpath获取选集列表失败>'+e.message);
             }
