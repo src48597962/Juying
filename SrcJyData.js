@@ -939,38 +939,14 @@ function getErData(jkdata) {
             log("xpath进来了");
             try{
                 actor = String(xpathArray(html, extdata.dtActor).join(',')).replace(/[\r\ \n]/g, "");
-            }catch(e){
-                log('xpath获取主演dtActor失败>'+e.message);
-            }
-            try{
-                area = String(xpath(html, extdata.dtArea)).replace(extdata.filter?eval(extdata.filter):"","").replace(/[\r\ \n]/g, "");
-            }catch(e){
-                log('xpath获取地区dtArea失败>'+e.message);
-            }
-            try{
-                year = String(xpath(html, extdata.dtYear)).replace(extdata.filter?eval(extdata.filter):"","").replace(/[\r\ \n]/g, "");
-            }catch(e){
-                log('xpath获取年份dtYear失败>'+e.message);
-            }
-            try{
-                remarks = String(xpathArray(html, extdata.dtCate).join(',')).replace(extdata.filter?eval(extdata.filter):"","").replace(/[\r\ \n]/g, "")||"xpath数据存在错误";
-            }catch(e){
-                log('xpath获取类型dtCate失败>'+e.message);
-            }
-            try{
-                pubdate = String(xpathArray(html, extdata.dtMark).join(',')).replace(extdata.filter?eval(extdata.filter):"","").replace(/[\r\ \n]/g, "");
-            }catch(e){
-                log('xpath获取备注dtMark失败>'+e.message);
-            }
-            try{
+                area = String(xpath(html, extdata.dtArea)).replace(/[\r\ \n]/g, "");
+                year = String(xpath(html, extdata.dtYear)).replace(/[\r\ \n]/g, "");
+                remarks = String(xpathArray(html, extdata.dtCate).join(',')).replace(/[\r\ \n]/g, "");
+                pubdate = String(xpathArray(html, extdata.dtMark).join(',')).replace(/[\r\ \n]/g, "");
+                desc = String(xpath(html, extdata.dtDesc));
                 pic = xpath(html, extdata.dtImg);
             }catch(e){
-                log('xpath获取图片dtImg失败>'+e.message);
-            }
-            try{
-                desc = String(xpath(html, extdata.dtDesc)).replace(extdata.filter?eval(extdata.filter):"","");
-            }catch(e){
-                log('xpath获取简价dtDesc失败>'+e.message);
+                log('xpath获取海报信息失败>'+e.message + " 错误行#" + e.lineNumber);
             }
             try{
                 arts = xpathArray(html, extdata.dtFromNode+(extdata.dtFromName.indexOf('concat(')>-1?'/text()':extdata.dtFromName));
@@ -984,6 +960,7 @@ function getErData(jkdata) {
                         tabs.push('播放源'+i);
                     }
                     let contname = xpathArray(html, extdata.dtUrlNode+'['+i+']'+extdata.dtUrlSubNode+extdata.dtUrlName);
+                    log(contname);
                     let conturl = xpathArray(html, extdata.dtUrlNode+'['+i+']'+extdata.dtUrlSubNode+(extdata.dtUrlId=="@href"?'/'+extdata.dtUrlId:extdata.dtUrlId));
                     let cont = [];
                     for (let j = 0; j < contname.length; j++) {
