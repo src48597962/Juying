@@ -89,8 +89,10 @@ function getYiData(jkdata) {
                 try{
                     if(api_type=="xpath"){
                         let gethtml = request(classurl, { headers: { 'User-Agent': api_ua }, timeout:8000 });
-                        let typelist = xpathArray(gethtml,extdata['cateNode']);
-                        log(typelist);
+                        let typenames = xpathArray(gethtml,extdata['cateNode']+extdata['cateName']);
+                        log(typenames);
+                        let typeids = xpathArray(gethtml,extdata['cateNode']+extdata['cateId']);
+                        log(typeids);
                     }else if(api_type=="XBPQ"){
                         if(extdata["分类"].indexOf('$')>-1){
                             分类 = extdata["分类"].split('#');
