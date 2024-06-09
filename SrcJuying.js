@@ -223,7 +223,7 @@ function dianboerji() {
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcParseS.js');
                         return SrcParseS.聚影(input);
                     });
-                }else if (/xpath|biubiu|XBPQ/.test(type)) {
+                }else if (/XPath|biubiu|XBPQ/.test(type)) {
                     if(/\.mp4|\.m3u8/.test(playurl) || (/qq\.com|douyin|youku|mgtv|ixigua|bili|iqiyi|sohu|pptv|migu|1905|le\.com/.test(playurl) && /html/.test(playurl))){
                         var DTJX = $("").lazyRule(() => {
                             require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcParseS.js');
