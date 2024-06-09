@@ -294,6 +294,7 @@ function getYiData(jkdata) {
             vodlists = [];
             let vod_name,vod_pic,vod_url,vod_desc;
             if(api_type=="XBPQ"){
+                log(extdata);
                 let gethtml = request(MY_URL, { headers: headers, timeout:8000 });
                 extdata["二次截取"] = extdata["二次截取"] || (gethtml.indexOf(`<ul class="stui-vodlist`)>-1?`<ul class="stui-vodlist&&</ul>`:gethtml.indexOf(`<ul class="myui-vodlist`)>-1?`<ul class="myui-vodlist&&</ul>`:"");
                 if(extdata["二次截取"]){
@@ -302,6 +303,7 @@ function getYiData(jkdata) {
                 extdata["链接"] = extdata["链接"] || `href="&&"`;
                 extdata["标题"] = extdata["标题"] || `title="&&"`;
                 extdata["数组"] = extdata["数组"] || `<a &&</a>`;
+                log(extdata["数组"]);
                 let vodlist = gethtml.match(new RegExp(extdata["数组"].replace('&&','((?:.|[\r\n])*?)'), 'g'));
                 vodlist.forEach(item=>{
                     if(!extdata["图片"]){
