@@ -408,7 +408,7 @@ function getYiData(jkdata) {
                         let voddesc = pdfh(it, extdata['分类片单副标题']);
                         if(vodname && vodid){
                             vodimg = /^\//.test(vodimg)?vodurlhead+vodimg:vodimg;
-                            vodimg = vodimg.includes('(')?vodimg.match(/(\'(.*?)\')/)[1]:vodimg;
+                            vodimg = vodimg.includes('(')?vodimg.match(/\(\'(.*?)\'\)/)[1]:vodimg;
                             let arr = {"vod_url":vodid,"vod_name":vodname,"vod_desc":voddesc,"vod_pic":vodimg};
                             vodlists.push(arr);
                         }
