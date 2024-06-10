@@ -107,18 +107,16 @@ function getYiData(jkdata) {
                                 extdata['筛选'+it+'替换词'] = extdata['筛选'+it+'替换词']=="*"?extdata['筛选'+it+'名称']:extdata['筛选'+it+'替换词'];
                                 let catenames = extdata['筛选'+it+'名称'].split('||');
                                 let cateids = extdata['筛选'+it+'替换词'].split('||');
-                                typeids.forEach((x,i)=>{
-                                    if(catenames[i]&&cateids[i]){
-                                        let value = [];
-                                        let names = catenames[i].split('&');
-                                        let ids = cateids[i].split('&');
-                                        for(let i in names){
-                                            value.push({n:names[i],v:ids[i]});
-                                        }
-                                        if(value.length>0){
-                                            筛选 = 筛选 || {};
-                                            筛选[x] = [{"key":筛选循环id[id],"name":it,"value":value}];
-                                        }
+                                cateids.forEach((x,i)=>{
+                                    let value = [];
+                                    let names = catenames[i].split('&');
+                                    let ids = cateids[i].split('&');
+                                    for(let j in names){
+                                        value.push({n:names[j],v:ids[j]});
+                                    }
+                                    if(value.length>0){
+                                        筛选 = 筛选 || {};
+                                        筛选[typeids[i]] = [{"key":筛选循环id[id],"name":it,"value":value}];
                                     }
                                 })
                             }
