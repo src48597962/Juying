@@ -262,7 +262,9 @@ function getYiData(jkdata) {
             if(分类.length>0){
                 fllists = [];
                 try{
-                    if(筛选 && api_type!='cms'){
+                    cate_id = getMyVar('SrcJu_dianbo$分类', 推荐.length>0?'tj':分类[0].split('$')[1]);
+
+                    if(筛选 && api_type!='cms' && cate_id !='tj'){
                         fllists.push({
                             title: fold === '1' ? '““””<b><span style="color: #F54343">∨</span></b>' : '““””<b><span style="color:' + Color + '">∧</span></b>',
                             url: $('#noLoading#').lazyRule((fold) => {
@@ -275,7 +277,6 @@ function getYiData(jkdata) {
                         })
                     }
 
-                    cate_id = getMyVar('SrcJu_dianbo$分类', 推荐.length>0?'tj':分类[0].split('$')[1]);
                     putMyVar('SrcJu_dianbo$分类', cate_id);
                     if(推荐.length>0){
                         if(cate_id == 'tj'){
