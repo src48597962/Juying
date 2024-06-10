@@ -62,6 +62,12 @@ function getYiData(jkdata) {
                 extdata["cateUrl"] = extdata["cateUrl"]?extdata["cateUrl"].split(';;')[0].split('[')[0]:"";
                 listurl = extdata["cateUrl"]?/^http/.test(extdata["cateUrl"])?extdata["cateUrl"]:host + extdata["cateUrl"]:"";
             }else if (api_type=="XYQ") {
+                if(extdata["请求头参数"]){
+                    extdata["请求头参数"].split('#').forEach(v=>{
+                        headers[v.split('$')[0]] = v.split('$')[1];
+                    })
+                    headers["User-Agent"] = (headers["User-Agent"]=="手机"||headers["User-Agent"]=="MOBILE_UA")?MOBILE_UA:PC_UA;
+                }
                 let host = extdata["首页推荐链接"] || '';
                 classurl = host;
                 extdata["分类链接"] = extdata["分类链接"]?extdata["分类链接"].split(';;')[0].split('[')[0]:"";
@@ -404,7 +410,7 @@ function getYiData(jkdata) {
                     pdfa(gethtml, extdata['分类列表数组规则']).forEach(it=>{
                         let vodname = pdfh(it, extdata['分类片单标题']);
                         let vodid = pd(it, extdata['分类片单链接'], vodurlhead);
-                        let vodimg = pdfh(it, extdata['分类片单图片']);
+                        let vodimg = (extdata["分类片单链接加前缀"] || "") + pdfh(it, extdata['分类片单图片']);
                         let voddesc = pdfh(it, extdata['分类片单副标题']);
                         if(vodname && vodid){
                             vodimg = /^\//.test(vodimg)?vodurlhead+vodimg:vodimg;
