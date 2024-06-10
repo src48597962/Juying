@@ -404,7 +404,7 @@ function getYiData(jkdata) {
                     pdfa(gethtml, extdata['分类列表数组规则']).forEach(it=>{
                         let vodname = pdfh(it, extdata['分类片单标题']);
                         let vodid = pd(it, extdata['分类片单链接'], vodurlhead);
-                        let vodimg = pd(it, extdata['分类片单图片'], vodurlhead);
+                        let vodimg = pdfh(it, extdata['分类片单图片']);
                         let voddesc = pdfh(it, extdata['分类片单副标题']);
                         if(vodname && vodid){
                             let arr = {"vod_url":vodid,"vod_name":vodname,"vod_desc":voddesc,"vod_pic":vodimg};
