@@ -401,7 +401,7 @@ function getYiData(jkdata) {
             if(api_type=="XYQ"){
                 let gethtml = getHtml(MY_URL, headers);
                 if(extdata['分类片单是否Jsoup写法'] && extdata['分类列表数组规则']){
-                    _pdfa(gethtml, extdata['分类列表数组规则']).forEach(it=>{
+                    pdfa(gethtml, extdata['分类列表数组规则']).forEach(it=>{
                         let vodname = _pdfh(it, extdata['分类片单标题']);
                         let vodid = _pd(it, extdata['分类片单链接'], vodurlhead);
                         let vodimg = _pdfh(it, extdata['分类片单图片']);
