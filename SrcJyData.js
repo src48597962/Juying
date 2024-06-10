@@ -868,7 +868,7 @@ function getErData(jkdata) {
         } catch (e) {
             
         }
-    } else if (/XPath|biubiu|XBPQ/.test(api_type)) {
+    } else if (/XPath|biubiu|XBPQ|XYQ/.test(api_type)) {
         extdata = extDataCache(jkdata)
         html = getHtml(MY_URL, headers);
     } else if (/drpy/.test(api_type)){
@@ -1050,7 +1050,7 @@ function getErData(jkdata) {
             try{
                 tabs = xpathArray(html, extdata.dtFromNode+(extdata.dtFromName.indexOf('concat(')>-1?'/text()':extdata.dtFromName));
             }catch(e){
-                log('xpath获取线路失改>'+e.message);
+                log('xpath获取线路失败>'+e.message);
             }
             try{
                 for (let i = 1; i < tabs.length+1; i++) {
@@ -1143,6 +1143,64 @@ function getErData(jkdata) {
             }catch(e){
                 log('失败>'+e.message + " 错误行#" + e.lineNumber)
             }    
+        }else if (api_type=="XYQ") {
+            try{
+                if(extdata["详情是否Jsoup写法"]){
+
+                }else{
+                    remarks = getBetweenStr(html, extdata["类型详情"]);
+                    year = getBetweenStr(html, extdata["年代详情"]);
+                    area = getBetweenStr(html, extdata["地区详情"]);
+                    actor = getBetweenStr(html, extdata["演员详情"]);
+                    desc = getBetweenStr(html, extdata["简介详情"]);
+                }
+            }catch(e){
+                log('xpath获取海报信息失败>'+e.message + " 错误行#" + e.lineNumber);
+            }
+            try{
+                if(extdata["线路列表数组规则"]){
+                    pdfa(html, extdata["线路列表数组规则"]).forEach(it=>{
+                        let linename = "";
+                        it.split('+').forEach(v=>{
+                            let n;
+                            if(v == "_"){
+                                n = v;
+                            }else{
+                                n = pdfh(it, v);
+                            }
+                            linename = linename.concat(n);
+                        })
+                        tabs.push(linename);
+                    })
+                }else{
+                    tabs = ["线路1"];
+                }
+            }catch(e){
+                log('XYQ获取线路失败>'+e.message);
+            }
+            try{
+                for (let i = 1; i < tabs.length+1; i++) {
+                    let contlist = pdfa(html, extdata["播放列表数组规则"]);
+                    for (let i = 0; i < contlist.length; i++) {
+                        let bfline = pdfa(contlist[i], extdata["选集列表数组规则"]);
+                        let cont = [];
+                        for (let j = 0; j < bfline.length; j++) {
+                            let contname,conturl;
+                            if(extdata["选集标题链接是否Jsoup写法"]){
+                                contname = pdfh(bfline[j], extdata["选集标题"] || "a&&Text");
+                                conturl = (extdata["选集链接加前缀"]||"")+pdfh(bfline[j], extdata["选集链接"] || "a&&href")+(extdata["选集链接加后缀"]||"");
+                            }
+                            cont.push(contname+"$"+conturl)
+                        }
+                        if(extdata["是否反转选集序列"]){
+                            cont.reverse();
+                        }
+                        lists.push(cont);
+                    }
+                }
+            }catch(e){
+                log('XYQ获取选集列表失败>'+e.message);
+            }
         }else if(api_type=='drpy'){
             let detailObj = {
                 data: jkdata,
@@ -1160,7 +1218,7 @@ function getErData(jkdata) {
             })
         }
         
-        if(/XPath|biubiu|XBPQ|drpy/.test(api_type)&&html&&(tabs.length==0||lists.length==0)&&getMyVar('debug','0')=="0"&&html.indexOf(MY_PARAMS.pageTitle)>-1){
+        if(/XPath|biubiu|XBPQ|drpy|XYQ/.test(api_type)&&html&&(tabs.length==0||lists.length==0)&&getMyVar('debug','0')=="0"&&html.indexOf(MY_PARAMS.pageTitle)>-1){
             log('开启模板自动匹配、AI识片，获取播放选集');
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcAutoTmpl.js');
             let data = autoerji(MY_URL, html);
