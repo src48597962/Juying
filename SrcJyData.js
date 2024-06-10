@@ -106,8 +106,6 @@ function getYiData(jkdata) {
                                 })
                             })
                         }
-                        log(推荐);
-                        log(推荐.length);
                         let typenames = extdata['分类名称']?extdata['分类名称'].split('&'):[];
                         let typeids = extdata['分类名称替换词']?extdata['分类名称替换词'].split('&'):[];
                         for(let i in typeids){
@@ -352,7 +350,18 @@ function getYiData(jkdata) {
         try{
             fl.cateId = fl.cateId || cate_id;
             //拼接生成分类页url链接
-            if(api_type=="XPath"){
+            if(api_type=="XYQ"){
+                fl.catePg = MY_PAGE;
+                let execStrs = getExecStrs(listurl);
+                execStrs.forEach(k=>{
+                    if(!fl[k] ){
+                        listurl = listurl.replace('/'+k+'/{'+k+'}','');
+                    }
+                })
+                listurl = listurl.replace('{catePg}',MY_PAGE).replace(/{/g, '${fl.').replace(/}/g, ' || ""}');
+                eval(`listurl = \`${listurl}\`;`);
+                MY_URL = listurl;
+            }else if(api_type=="XPath"){
                 fl.catePg = MY_PAGE;
                 let execStrs = getExecStrs(listurl);
                 execStrs.forEach(k=>{
@@ -389,7 +398,21 @@ function getYiData(jkdata) {
             }
             vodlists = [];
             let vod_name,vod_pic,vod_url,vod_desc;
-            if(api_type=="XPath"){
+            if(api_type=="XYQ"){
+                let gethtml = getHtml(MY_URL, headers);
+                if(extdata['分类片单是否Jsoup写法'] && extdata['分类列表数组规则']){
+                    _pdfa(gethtml, extdata['分类列表数组规则']).forEach(it=>{
+                        let vodname = _pdfh(it, extdata['分类片单标题']);
+                        let vodid = _pd(it, extdata['分类片单链接'], vodurlhead);
+                        let vodimg = _pdfh(it, extdata['分类片单图片']);
+                        let voddesc = _pdfh(it, extdata['分类片单副标题']);
+                        if(vodname && vodid){
+                            let arr = {"vod_url":vodid,"vod_name":vodname,"vod_desc":voddesc,"vod_pic":vodimg};
+                            vodlists.push(arr);
+                        }
+                    })
+                }
+            }else if(api_type=="XPath"){
                 let gethtml = request(MY_URL, { headers: headers, timeout:8000 });
                 let vodnames = xpathArray(gethtml, extdata["homeVodNode"]+extdata["homeVodName"]);
                 let vodids = xpathArray(gethtml, extdata["homeVodNode"]+extdata["homeVodId"]);
