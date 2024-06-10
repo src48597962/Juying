@@ -91,7 +91,7 @@ function getYiData(jkdata) {
             }else{
                 try{
                     if(api_type=="XYQ"){
-                        let gethtml = request(classurl, { headers: { 'User-Agent': api_ua }, timeout:8000 });
+                        //let gethtml = request(classurl, { headers: { 'User-Agent': api_ua }, timeout:8000 });
 
                         let typenames = extdata['分类名称']?extdata['分类名称'].split('&'):[];
                         let typeids = extdata['分类名称替换词']?extdata['分类名称替换词'].split('&'):[];
