@@ -111,6 +111,9 @@ function getYiData(jkdata) {
                                     let value = [];
                                     let names = catenames[i].split('&');
                                     let ids = cateids[i].split('&');
+                                    log(typenames[i]);
+                                    log(names);
+                                    log(ids);
                                     for(let j in names){
                                         value.push({n:names[j],v:ids[j]});
                                     }
@@ -123,6 +126,7 @@ function getYiData(jkdata) {
                         })
                         
                         log(筛选);
+                        error.fl =1;
                     }else if(api_type=="XPath"){
                         let gethtml = request(classurl, { headers: { 'User-Agent': api_ua }, timeout:8000 });
                         let typenames = xpathArray(gethtml,extdata['cateNode']+extdata['cateName']);
