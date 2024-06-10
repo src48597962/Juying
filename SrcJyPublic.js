@@ -251,7 +251,7 @@ function selectSource() {
                 clearMyVar('SrcJu_dianbo$fold');
                 clearMyVar('SrcJu_dianbo$classCache');
                 clearMyVar('SrcJu_dianbo$flCache');
-                refreshPage(false);
+                refreshPage(true);
                 return 'toast://' + '主页源已设置为：' + input;
             }else{
                 return 'toast://源列表索引异常'
