@@ -91,7 +91,12 @@ function getYiData(jkdata) {
             }else{
                 try{
                     if(api_type=="XYQ"){
-                        //let gethtml = request(classurl, { headers: { 'User-Agent': api_ua }, timeout:8000 });
+                        if(extdata['是否开启获取首页数据']){
+                            let gethtml = getHtml(classurl,headers);
+                            let 首页列表数组 = _pdfa(gethtml, extdata['首页列表数组规则']);
+                            log(首页列表数组);
+                            log(首页列表数组.length);
+                        }
 
                         let typenames = extdata['分类名称']?extdata['分类名称'].split('&'):[];
                         let typeids = extdata['分类名称替换词']?extdata['分类名称替换词'].split('&'):[];
@@ -100,40 +105,39 @@ function getYiData(jkdata) {
                                 分类.push(typenames[i]+'$'+typeids[i]);
                             }
                         }
-                        let 筛选循环 = ["子分类","类型","地区","年份","语言","排序"];
-                        let 筛选循环id = ["cateId","class","area","year","lang","by"];
-                        筛选循环.forEach((it,id)=>{
-                            if(extdata['筛选'+it+'名称'] && extdata['筛选'+it+'替换词']){
-                                extdata['筛选'+it+'替换词'] = extdata['筛选'+it+'替换词']=="*"?extdata['筛选'+it+'名称']:extdata['筛选'+it+'替换词'];
-                                let catenames = extdata['筛选'+it+'名称'].split('||');
-                                let cateids = extdata['筛选'+it+'替换词'].split('||');
-                                if(it=="排序"){
-                                    for (let i = 0; i < typeids.length; i++) {
-                                        catenames = catenames.concat(catenames);
-                                        cateids = cateids.concat(cateids);
-                                    }
-                                }
-                                cateids.forEach((x,i)=>{
-                                    let value = [];
-                                    let names = catenames[i].split('&');
-                                    let ids = cateids[i].split('&');
-                                    for(let j in names){
-                                        value.push({n:names[j],v:ids[j]});
-                                    }
-                                    if(value.length>0){
-                                        if(it!="排序"){
-                                            value.unshift({n:"全部",v:""});
+                        if($.type(extdata['筛选数据'])=="string" && extdata['筛选数据']=="ext"){
+                            let 筛选循环 = ["子分类","类型","地区","年份","语言","排序"];
+                            let 筛选循环id = ["cateId","class","area","year","lang","by"];
+                            筛选循环.forEach((it,id)=>{
+                                if(extdata['筛选'+it+'名称'] && extdata['筛选'+it+'替换词']){
+                                    extdata['筛选'+it+'替换词'] = extdata['筛选'+it+'替换词']=="*"?extdata['筛选'+it+'名称']:extdata['筛选'+it+'替换词'];
+                                    let catenames = extdata['筛选'+it+'名称'].split('||');
+                                    let cateids = extdata['筛选'+it+'替换词'].split('||');
+                                    if(it=="排序"){
+                                        for (let i = 0; i < typeids.length; i++) {
+                                            catenames = catenames.concat(catenames);
+                                            cateids = cateids.concat(cateids);
                                         }
-                                        筛选 = 筛选 || {};
-                                        筛选[typeids[i]] = 筛选[typeids[i]] || [];
-                                        筛选[typeids[i]].push({"key":筛选循环id[id],"name":it,"value":value});
                                     }
-                                })
-                            }
-                        })
-                        
-                        log(筛选);
-                        error.fl =1;
+                                    cateids.forEach((x,i)=>{
+                                        let value = [];
+                                        let names = catenames[i].split('&');
+                                        let ids = cateids[i].split('&');
+                                        for(let j in names){
+                                            value.push({n:names[j],v:ids[j]});
+                                        }
+                                        if(value.length>0){
+                                            if(it!="排序"){
+                                                value.unshift({n:"全部",v:""});
+                                            }
+                                            筛选 = 筛选 || {};
+                                            筛选[typeids[i]] = 筛选[typeids[i]] || [];
+                                            筛选[typeids[i]].push({"key":筛选循环id[id],"name":it,"value":value});
+                                        }
+                                    })
+                                }
+                            })
+                        }
                     }else if(api_type=="XPath"){
                         let gethtml = request(classurl, { headers: { 'User-Agent': api_ua }, timeout:8000 });
                         let typenames = xpathArray(gethtml,extdata['cateNode']+extdata['cateName']);
