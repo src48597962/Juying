@@ -93,14 +93,14 @@ function getYiData(jkdata) {
                     if(api_type=="XYQ"){
                         if(extdata['是否开启获取首页数据'] && extdata['首页列表数组规则']){
                             let gethtml = getHtml(classurl,headers);
-                            let 首页列表数组 = _pdfa(gethtml, extdata['首页列表数组规则']);
+                            let 首页列表数组 = pdfa(gethtml, extdata['首页列表数组规则']);
                             首页列表数组.forEach(it=>{
-                                _pdfa(it, extdata['首页片单列表数组规则']).forEach(v=>{
+                                pdfa(it, extdata['首页片单列表数组规则']).forEach(v=>{
                                     if(extdata['首页片单是否Jsoup写法']){
-                                        let vodurl = _pd(v, extdata['首页片单链接']||extdata['分类片单链接'], vodurlhead);
-                                        let vodname = _pdfh(v, extdata['首页片单标题']||extdata['分类片单标题']);
-                                        let vodpic = _pdfh(v, extdata['首页片单图片']||extdata['分类片单图片']);
-                                        let voddesc = _pdfh(v, extdata['首页片单副标题']||extdata['分类片单副标题']);
+                                        let vodurl = pd(v, extdata['首页片单链接']||extdata['分类片单链接'], vodurlhead);
+                                        let vodname = pdfh(v, extdata['首页片单标题']||extdata['分类片单标题']);
+                                        let vodpic = pdfh(v, extdata['首页片单图片']||extdata['分类片单图片']);
+                                        let voddesc = pdfh(v, extdata['首页片单副标题']||extdata['分类片单副标题']);
                                         推荐.push({"vod_url":vodurl,"vod_name":vodname,"vod_desc":voddesc,"vod_pic":vodpic});
                                     }
                                 })
@@ -402,10 +402,10 @@ function getYiData(jkdata) {
                 let gethtml = getHtml(MY_URL, headers);
                 if(extdata['分类片单是否Jsoup写法'] && extdata['分类列表数组规则']){
                     pdfa(gethtml, extdata['分类列表数组规则']).forEach(it=>{
-                        let vodname = _pdfh(it, extdata['分类片单标题']);
-                        let vodid = _pd(it, extdata['分类片单链接'], vodurlhead);
-                        let vodimg = _pdfh(it, extdata['分类片单图片']);
-                        let voddesc = _pdfh(it, extdata['分类片单副标题']);
+                        let vodname = pdfh(it, extdata['分类片单标题']);
+                        let vodid = pd(it, extdata['分类片单链接'], vodurlhead);
+                        let vodimg = pd(it, extdata['分类片单图片']);
+                        let voddesc = pdfh(it, extdata['分类片单副标题']);
                         if(vodname && vodid){
                             let arr = {"vod_url":vodid,"vod_name":vodname,"vod_desc":voddesc,"vod_pic":vodimg};
                             vodlists.push(arr);
