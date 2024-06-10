@@ -1240,6 +1240,8 @@ function getErData(jkdata) {
         }else{
             dqnf = year?'\n年代：' + year.replace(/\n+/g, ''):''
         }
+        remarks = remarks || "";
+        pubdate = pubdate || "";
         details1 = details1?details1:actor.substring(0, actor.length<10||dqnf==""?actor.length:10) + dqnf;
         details2 = details2?details2:remarks.replace(/\n+/g, '') + '\n' + pubdate.replace(/\n+/g, '');
         details1 = details1.replace(/&ldquo;/g,'“').replace(/&rdquo;/g,'”').replace(/&middot;/g,'·').replace(/&hellip;/g,'…').replace(/&nbsp;|♥/g,' ');
