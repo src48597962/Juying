@@ -63,11 +63,15 @@ function getYiData(jkdata) {
                 listurl = extdata["cateUrl"]?/^http/.test(extdata["cateUrl"])?extdata["cateUrl"]:host + extdata["cateUrl"]:"";
             }else if (api_type=="XYQ") {
                 if(extdata["请求头参数"]){
-                    extdata["请求头参数"].split('#').forEach(v=>{
-                        headers[v.split('$')[0]] = v.split('$')[1];
-                    })
-                    headers["User-Agent"] = (headers["User-Agent"]=="手机"||headers["User-Agent"]=="MOBILE_UA")?MOBILE_UA:PC_UA;
+                    if(extdata["请求头参数"].includes('#')){
+                        extdata["请求头参数"].split('#').forEach(v=>{
+                            headers[v.split('$')[0]] = v.split('$')[1];
+                        })
+                    }else{
+                        headers["User-Agent"] = extdata["请求头参数"] || headers["User-Agent"];
+                    }
                 }
+                headers["User-Agent"] = (headers["User-Agent"]=="手机"||headers["User-Agent"]=="MOBILE_UA")?MOBILE_UA:PC_UA;
                 let host = extdata["首页推荐链接"] || '';
                 classurl = host;
                 extdata["分类链接"] = extdata["分类链接"]?extdata["分类链接"].split(';;')[0].split('[')[0]:"";
