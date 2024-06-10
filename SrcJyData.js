@@ -111,15 +111,13 @@ function getYiData(jkdata) {
                                     let value = [];
                                     let names = catenames[i].split('&');
                                     let ids = cateids[i].split('&');
-                                    log(typenames[i]);
-                                    log(names);
-                                    log(ids);
                                     for(let j in names){
                                         value.push({n:names[j],v:ids[j]});
                                     }
                                     if(value.length>0){
                                         筛选 = 筛选 || {};
-                                        筛选[typeids[i]] = [{"key":筛选循环id[id],"name":it,"value":value}];
+                                        筛选[typeids[i]] = 筛选[typeids[i]] || [];
+                                        筛选[typeids[i]].push({"key":筛选循环id[id],"name":it,"value":value});
                                     }
                                 })
                             }
