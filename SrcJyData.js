@@ -48,22 +48,25 @@ function getYiData(jkdata) {
         classurl = api_url + "?ac=list";
         listurl = api_url + '?ac=videolist&pg=';
         listnode = "json.list";
-    } else if (api_type=="XBPQ") {
+    } else if (/XBPQ|XPath|XYQ/.test(api_type)) {
         extdata = extDataCache(jkdata)
         if($.type(extdata)=='object'){
-            let host = extdata["主页url"] || '';
-            classurl = extdata["分类"];
-            extdata["分类url"] = extdata["分类url"]?extdata["分类url"].split(';;')[0].split('[')[0]:"";
-            listurl = extdata["分类url"]?/^http/.test(extdata["分类url"])?extdata["分类url"]:host + extdata["分类url"]:"";
-            vodurlhead = getHome(listurl);
-        }
-    } else if (api_type=="XPath") {
-        extdata = extDataCache(jkdata)
-        if($.type(extdata)=='object'){
-            let host = extdata["homeUrl"] || '';
-            classurl = host;
-            extdata["cateUrl"] = extdata["cateUrl"]?extdata["cateUrl"].split(';;')[0].split('[')[0]:"";
-            listurl = extdata["cateUrl"]?/^http/.test(extdata["cateUrl"])?extdata["cateUrl"]:host + extdata["cateUrl"]:"";
+            if(api_type=="XBPQ"){
+                let host = extdata["主页url"] || '';
+                classurl = extdata["分类"];
+                extdata["分类url"] = extdata["分类url"]?extdata["分类url"].split(';;')[0].split('[')[0]:"";
+                listurl = extdata["分类url"]?/^http/.test(extdata["分类url"])?extdata["分类url"]:host + extdata["分类url"]:"";
+            }else if (api_type=="XPath") {
+                let host = extdata["homeUrl"] || '';
+                classurl = host;
+                extdata["cateUrl"] = extdata["cateUrl"]?extdata["cateUrl"].split(';;')[0].split('[')[0]:"";
+                listurl = extdata["cateUrl"]?/^http/.test(extdata["cateUrl"])?extdata["cateUrl"]:host + extdata["cateUrl"]:"";
+            }else if (api_type=="XYQ") {
+                let host = extdata["首页推荐链接"] || '';
+                classurl = host;
+                extdata["分类链接"] = extdata["分类链接"]?extdata["分类链接"].split(';;')[0].split('[')[0]:"";
+                listurl = extdata["分类链接"]?/^http/.test(extdata["分类链接"])?extdata["分类链接"]:host + extdata["分类链接"]:"";
+            }
             vodurlhead = getHome(listurl);
         }
     } else {
@@ -87,7 +90,40 @@ function getYiData(jkdata) {
                 筛选 = classCache.筛选;
             }else{
                 try{
-                    if(api_type=="XPath"){
+                    if(api_type=="XYQ"){
+                        let gethtml = request(classurl, { headers: { 'User-Agent': api_ua }, timeout:8000 });
+
+                        let typenames = extdata['分类名称']?extdata['分类名称'].split('&'):[];
+                        let typeids = extdata['分类名称替换词']?extdata['分类名称替换词'].split('&'):[];
+                        for(let i in typeids){
+                            if(cate_exclude.indexOf(typenames[i])==-1){
+                                分类.push(typenames[i]+'$'+typeids[i]);
+                            }
+                        }
+                        let 筛选循环 = ["子分类","类型","地区","年份","语言","排序"];
+                        let 筛选循环id = ["cateId","class","area","year","lang","by"];
+                        筛选循环.forEach((it,id)=>{
+                            if(extdata['筛选'+it+'名称']&&extdata['筛选'+it+'替换词']){
+                                extdata['筛选'+it+'替换词'] = extdata['筛选'+it+'替换词']=="*"?extdata['筛选'+it+'名称']:extdata['筛选'+it+'替换词'];
+                                let catenames = extdata['筛选'+it+'名称'].split('||');
+                                let cateids = extdata['筛选'+it+'替换词'].split('||');
+                                typeids.forEach((x,i)=>{
+                                    let value = [];
+                                    let names = catenames[i].split('&');
+                                    let ids = cateids[i].split('&');
+                                    for(let i in names){
+                                        value.push({n:names[i],v:ids[i]});
+                                    }
+                                    if(value.length>0){
+                                        筛选 = 筛选 || {};
+                                        筛选[x] = [{"key":筛选循环id[id],"name":it,"value":value}];
+                                    }
+                                })
+                            }
+                        })
+                        
+                        log(筛选);
+                    }else if(api_type=="XPath"){
                         let gethtml = request(classurl, { headers: { 'User-Agent': api_ua }, timeout:8000 });
                         let typenames = xpathArray(gethtml,extdata['cateNode']+extdata['cateName']);
                         let typeids = xpathArray(gethtml,extdata['cateNode']+extdata['cateId']);
