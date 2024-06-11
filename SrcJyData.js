@@ -1149,7 +1149,7 @@ function getErData(jkdata) {
             }    
         }else if (api_type=="XYQ") {
             try{
-                if(extdata["详情是否Jsoup写法"]){
+                if(extdata["详情是否Jsoup写法"]=="1"){
 
                 }else{
                     log("111");
@@ -1174,6 +1174,7 @@ function getErData(jkdata) {
                             }else{
                                 n = pdfh(it, v);
                             }
+                            log(n);
                             linename = linename.concat(n);
                         })
                         tabs.push(linename);
