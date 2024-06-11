@@ -572,7 +572,7 @@ function lookset() {
     setHomeResult(d);
 }
 //主页导航按钮菜单
-let menubtns = ["管理", "历史", "收藏", "搜索", "点播", "直播", "Alist", "云盘"];
+let menubtns = ["管理", "历史", "收藏", "点播", "直播", "Alist", "云盘"];//"搜索",
 let buttonmenu = {
     "管理": {
         img: "https://hikerfans.com/tubiao/more/129.png",
