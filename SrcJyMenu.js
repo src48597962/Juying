@@ -611,14 +611,14 @@ let buttonmenu = {
         })
     },
     "Alist": {
-        img: "hiker://files/cache/src/Alist.svg",
+        img: "https://hikerfans.com/tubiao/more/62.png",//hiker://files/cache/src/Alist.svg
         url: $("hiker://empty###noRecordHistory##noHistory#").rule(() => {
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
             alistHome();
         })
     },
     "云盘": {
-        img: "https://hikerfans.com/tubiao/more/65.png",
+        img: "https://hikerfans.com/tubiao/more/97.png",
         url: $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
             aliMyDisk();
