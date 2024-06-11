@@ -1283,8 +1283,6 @@ function getHtml(url, headers) {
     let html = request(url, {headers: headers, timeout: timeout, withStatusCode:true});
     try{
         let json = JSON.parse(html);
-        log(json.statusCode);
-        log(html);
         if(json.statusCode==200){
             return json.body;
         }
