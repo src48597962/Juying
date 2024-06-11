@@ -1818,7 +1818,10 @@ function Resourceimport(input,importtype){
                 if(/^csp_AppYs/.test(obj.api)){
                     arr = { "name": obj.name, "url": obj.ext, "type": getapitype(obj.ext)};
                 }else if((obj.type==1||obj.type==0)&&obj.api.indexOf('cms.nokia.press')==-1){
-                    arr = { "name": obj.name, "url": obj.api, "type": "cms", "categories": obj.categories};
+                    arr = { "name": obj.name, "url": obj.api, "type": "cms"};
+                    if(obj.categories){
+                        arr["categories"] = obj.categories;
+                    }
                 }else{
                     let extfile = obj.ext;
                     if($.type(extfile)=='string'){
@@ -1829,11 +1832,9 @@ function Resourceimport(input,importtype){
                         }
                     }
                     
-                    
                     if(/drpy2/.test(obj.api)){
                         arr = { "name": obj.name, "type": "drpy", "ext": extfile};
-                    }
-                    else if(/^csp_XBiubiu/.test(obj.api)){
+                    }else if(/^csp_XBiubiu/.test(obj.api)){
                         arr = { "name": obj.name, "type": "biubiu", "ext": extfile};
                     }else if(/^csp_XPath/.test(obj.api)){
                         arr = { "name": obj.name, "type": "XPath", "ext": extfile};
@@ -1856,6 +1857,9 @@ function Resourceimport(input,importtype){
                                 if (content == '') {
                                     urlfile = '';
                                 }else{
+                                    if(arr.type=="XYQ" && !/分类片单标题/.test(content)){
+                                        arr['onlysearch'] = 1;
+                                    }
                                     urlfile = 'hiker://files/data/'+MY_RULE.title+'/libs/' + arr.type + '_' + extfile.substr(extfile.lastIndexOf('/') + 1);
                                     writeFile(urlfile, content);
                                 }
