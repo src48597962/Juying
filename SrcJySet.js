@@ -1436,45 +1436,7 @@ function extension(){
         title: '⚙ 个性设置',
         col_type: "rich_text"
     });
-    d.push({
-        title: getItem('JYdatasource', 'sougou')=="sougou"?'主页数据调用：搜狗':'主页数据调用：360',
-        url: $('#noLoading#').lazyRule(() => {
-                if(getItem('JYdatasource', 'sougou')=="sougou"){
-                    setItem('JYdatasource', '360');
-                    var sm = "聚影主页数据源切换为360";
-                }else{
-                    setItem('JYdatasource', 'sougou');
-                    var sm = "聚影主页数据源切换为sougou";
-                }
-                clearMyVar('SrcJuying$listTab');
-                clearMyVar('SrcJuying$类型');
-                clearMyVar('SrcJuying$地区');
-                clearMyVar('SrcJuying$年代');
-                clearMyVar('SrcJuying$资源');
-                clearMyVar('SrcJuying$明星');
-                clearMyVar('SrcJuying$排序');
-                refreshPage(false);
-                return 'toast://' + sm + '，返回主页后刷新生效';
-            }),
-        col_type: "text_center_1"
-    });
-    d.push({
-        title: Juconfig['erjimode']!=2?'当前二级模式：常规':'当前二级模式：搜索',
-        desc: Juconfig['erjimode']!=2?'一级选片点击先用进二级，再扩展更多片源':'一级选片点击调用接口搜索扩展更多片源',
-        url: $('#noLoading#').lazyRule((Juconfig,cfgfile) => {
-                if(Juconfig['erjimode'] == 2){
-                    Juconfig['erjimode'] = 1;
-                    var sm = "从一级先进二级常规模式";
-                }else{
-                    Juconfig['erjimode'] = 2;
-                    var sm = "从一级直接调接口到搜索模式";
-                }
-                writeFile(cfgfile, JSON.stringify(Juconfig));
-                refreshPage(false);
-                return 'toast://切换为：' + sm + '，返回主页后刷新生效';
-            }, Juconfig, cfgfile),
-        col_type: "text_center_1"
-    });
+
     d.push({
         title: '搜索分组',
         url: $(Juconfig['xunmigroup']?Juconfig['xunmigroup']:"全部","设置搜索时默认分组").input((Juconfig,cfgfile) => {
@@ -1485,20 +1447,9 @@ function extension(){
             }, Juconfig, cfgfile),
         col_type: "text_3"
     });
+
     d.push({
-        title: '搜索线程',
-        url: $(Juconfig['xunminum']?Juconfig['xunminum']:"10","每次搜索成功停止线程数").input((Juconfig,cfgfile) => {
-                if(!parseInt(input)||parseInt(input)<1||parseInt(input)>100){return 'toast://输入有误，请输入1-100数字'}else{
-                    Juconfig['xunminum'] = parseInt(input);
-                    writeFile(cfgfile, JSON.stringify(Juconfig));
-                    refreshPage(false);
-                    return 'toast://每次搜索成功线程数已设置为：'+input;
-                }
-            }, Juconfig, cfgfile),
-        col_type: "text_3"
-    });
-    d.push({
-        title: '搜索时长',
+        title: '超时时长',
         url: $(Juconfig['xunmitimeout']?Juconfig['xunmitimeout']:"5","设置接口搜索超时时长(秒)").input((Juconfig,cfgfile) => {
                 if(!parseInt(input)||parseInt(input)<1||parseInt(input)>10){return 'toast://输入有误，请输入1-10数字'}else{
                     Juconfig['xunmitimeout'] = parseInt(input);
@@ -1522,37 +1473,9 @@ function extension(){
         col_type: "text_3"
     });
     d.push({
-        title: '解析保留',
-        url: $(Juconfig['appjiexinum']?Juconfig['appjiexinum']:"50","控制app自带有效解析保留数量").input((Juconfig,cfgfile) => {
-                if(!parseInt(input)||parseInt(input)<1||parseInt(input)>100){return 'toast://输入有误，请输入1-100数字'}else{
-                    Juconfig['appjiexinum'] = parseInt(input);
-                    writeFile(cfgfile, JSON.stringify(Juconfig));
-                    refreshPage(false);
-                    return 'toast://app自带有效解析保留数量已设置为：'+input;
-                }
-            }, Juconfig, cfgfile),
-        col_type: "text_3"
-    });
-    d.push({
         col_type: "line"
     });
-    d.push({
-        title: Juconfig['sousuoms']==1?'搜索数据来源：'+(getItem('JYdatasource', 'sougou')=="sougou"?'搜狗':'360'):'搜索数据来源：接口',
-        desc: Juconfig['sousuoms']==1?'视界原生搜索按钮改为调用搜狗搜索影片':'视界原生搜索按钮改为调用接口聚搜影片',
-        url: $('#noLoading#').lazyRule((Juconfig,cfgfile) => {
-                if(Juconfig['sousuoms'] == 1){
-                    Juconfig['sousuoms'] = 2;
-                    var sm = "视界原生搜索按钮搜索数据来源：聚搜接口";
-                }else{
-                    Juconfig['sousuoms'] = 1;
-                    var sm = "视界原生搜索按钮搜索数据来源：搜狗数据";
-                }
-                writeFile(cfgfile, JSON.stringify(Juconfig));
-                refreshPage(false);
-                return 'toast://' + sm + '，返回主页后刷新生效';
-            }, Juconfig, cfgfile),
-        col_type: "text_center_1"
-    });
+
     
     /*
     d.push({
