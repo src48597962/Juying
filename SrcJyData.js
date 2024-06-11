@@ -1152,9 +1152,7 @@ function getErData(jkdata) {
                 if(extdata["详情是否Jsoup写法"]=="1"){
 
                 }else{
-                    log("111");
                     remarks = getBetweenStr(html, extdata["类型详情"]);
-                    log(remarks);
                     year = getBetweenStr(html, extdata["年代详情"]);
                     area = getBetweenStr(html, extdata["地区详情"]);
                     actor = getBetweenStr(html, extdata["演员详情"]);
@@ -1174,7 +1172,6 @@ function getErData(jkdata) {
                             }else{
                                 n = pdfh(it, v);
                             }
-                            log(n);
                             linename = linename.concat(n);
                         })
                         tabs.push(linename);
@@ -1189,7 +1186,9 @@ function getErData(jkdata) {
                 for (let i = 1; i < tabs.length+1; i++) {
                     let contlist = pdfa(html, extdata["播放列表数组规则"]);
                     for (let i = 0; i < contlist.length; i++) {
+                        log(contlist[i]);
                         let bfline = pdfa(contlist[i], extdata["选集列表数组规则"]);
+                        log(bfline);
                         let cont = [];
                         for (let j = 0; j < bfline.length; j++) {
                             let contname,conturl;
