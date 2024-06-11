@@ -417,6 +417,8 @@ function getYiData(jkdata) {
                 log(headers);
                 let gethtml = getHtml(MY_URL, headers);
                 if(extdata['分类片单是否Jsoup写法']=="1" && extdata['分类列表数组规则']){
+                    log("ok");
+                    log(pdfa(gethtml, extdata['分类列表数组规则']).length);
                     pdfa(gethtml, extdata['分类列表数组规则']).forEach(it=>{
                         log(it);
                         let vodname = pdfh(it, extdata['分类片单标题']);
