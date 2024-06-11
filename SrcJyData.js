@@ -106,7 +106,7 @@ function getYiData(jkdata) {
                             let 首页列表数组 = pdfa(gethtml, extdata['首页列表数组规则']);
                             首页列表数组.forEach(it=>{
                                 pdfa(it, extdata['首页片单列表数组规则']).forEach(v=>{
-                                    if(extdata['首页片单是否Jsoup写法']){
+                                    if(extdata['首页片单是否Jsoup写法']=="1"){
                                         let vodid = pd(v, extdata['首页片单链接']||extdata['分类片单链接'], vodurlhead);
                                         let vodname = pdfh(v, extdata['首页片单标题']||extdata['分类片单标题']);
                                         let vodpic = pdfh(v, extdata['首页片单图片']||extdata['分类片单图片']);
@@ -416,7 +416,7 @@ function getYiData(jkdata) {
                 log(MY_URL);
                 log(headers);
                 let gethtml = getHtml(MY_URL, headers);
-                if(extdata['分类片单是否Jsoup写法'] && extdata['分类列表数组规则']){
+                if(extdata['分类片单是否Jsoup写法']=="1" && extdata['分类列表数组规则']){
                     pdfa(gethtml, extdata['分类列表数组规则']).forEach(it=>{
                         log(it);
                         let vodname = pdfh(it, extdata['分类片单标题']);
@@ -1208,7 +1208,7 @@ function getErData(jkdata) {
                     let cont = [];
                     for (let j = 0; j < bfline.length; j++) {
                         let contname,conturl;
-                        if(extdata["选集标题链接是否Jsoup写法"]){
+                        if(extdata["选集标题链接是否Jsoup写法"]=="1"){
                             contname = pdfh(bfline[j], extdata["选集标题"] || "a&&Text");
                             conturl = (extdata["选集链接加前缀"]||"")+pdfh(bfline[j], extdata["选集链接"] || "a&&href")+(extdata["选集链接加后缀"]||"");
                         }
