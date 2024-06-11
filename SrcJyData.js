@@ -1148,7 +1148,6 @@ function getErData(jkdata) {
                 log('失败>'+e.message + " 错误行#" + e.lineNumber)
             }    
         }else if (api_type=="XYQ") {
-            log("0");
             try{
                 if(extdata["详情是否Jsoup写法"]){
 
@@ -1162,7 +1161,11 @@ function getErData(jkdata) {
             }catch(e){
                 log('xpath获取海报信息失败>'+e.message + " 错误行#" + e.lineNumber);
             }
-            log("1");
+            log(remarks);
+            log(year);
+            log(area);
+            log(actor);
+            log(desc);
             try{
                 if(extdata["线路列表数组规则"]){
                     pdfa(html, extdata["线路列表数组规则"]).forEach(it=>{
@@ -1184,7 +1187,6 @@ function getErData(jkdata) {
             }catch(e){
                 log('XYQ获取线路失败>'+e.message);
             }
-            log("2");
             try{
                 for (let i = 1; i < tabs.length+1; i++) {
                     let contlist = pdfa(html, extdata["播放列表数组规则"]);
@@ -1208,7 +1210,6 @@ function getErData(jkdata) {
             }catch(e){
                 log('XYQ获取选集列表失败>'+e.message);
             }
-            log("3");
         }else if(api_type=='drpy'){
             let detailObj = {
                 data: jkdata,
@@ -1225,7 +1226,7 @@ function getErData(jkdata) {
                 return it.split('#');
             })
         }
-        log("4");
+
         if(/XPath|biubiu|XBPQ|drpy|XYQ/.test(api_type)&&html&&(tabs.length==0||lists.length==0)&&getMyVar('debug','0')=="0"&&html.indexOf(MY_PARAMS.pageTitle)>-1){
             log('开启模板自动匹配、AI识片，获取播放选集');
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcAutoTmpl.js');
@@ -1237,7 +1238,6 @@ function getErData(jkdata) {
             tabs = data.tabs;
             lists = data.lists;
         }
-        log("5");
         actor = actor?actor.includes('主演')?actor.replace(/\n+/g, ''):'主演：'+actor.replace(/\n+/g, ''):'';
         let dqnf = "";
         if(area){
@@ -1245,7 +1245,6 @@ function getErData(jkdata) {
         }else{
             dqnf = year?'\n年代：' + year.replace(/\n+/g, ''):''
         }
-        log("6");
         remarks = remarks || "";
         pubdate = pubdate || "";
         details1 = details1?details1:actor.substring(0, actor.length<10||dqnf==""?actor.length:10) + dqnf;
@@ -1254,7 +1253,6 @@ function getErData(jkdata) {
         details2 = details2.replace(/&ldquo;/g,'“').replace(/&rdquo;/g,'”').replace(/&middot;/g,'·').replace(/&hellip;/g,'…').replace(/&nbsp;|♥/g,' ');
         desc = desc || '...';
         desc = desc.replace(/&ldquo;/g,'“').replace(/&rdquo;/g,'”').replace(/&middot;/g,'·').replace(/&hellip;/g,'…').replace(/&nbsp;|♥/g,' ');
-        log("7");
     }
  
     return {
