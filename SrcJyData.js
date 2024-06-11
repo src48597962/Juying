@@ -1148,6 +1148,7 @@ function getErData(jkdata) {
                 log('失败>'+e.message + " 错误行#" + e.lineNumber)
             }    
         }else if (api_type=="XYQ") {
+            log("0");
             try{
                 if(extdata["详情是否Jsoup写法"]){
 
