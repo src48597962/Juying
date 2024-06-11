@@ -251,6 +251,7 @@ function selectSource() {
                 clearMyVar('SrcJu_dianbo$fold');
                 clearMyVar('SrcJu_dianbo$classCache');
                 clearMyVar('SrcJu_dianbo$flCache');
+                clearMyVar('点播动态加载loading');
                 refreshPage(true);
                 return 'toast://' + '主页源已设置为：' + input;
             }else{
