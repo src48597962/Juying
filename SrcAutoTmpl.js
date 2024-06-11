@@ -253,7 +253,7 @@ function aierji(html,url,detail){
 				let t2 = parseInt(clearText(next.title));
 				if (t2 - t1 > 1 || t1 - t2 > 1) {
 					lists.push(d2);
-					let s = arts.length+1;
+					let s = tabs.length+1;
 					tabs.push("播放源"+s);
 					d2 = [];
 				}
@@ -261,7 +261,7 @@ function aierji(html,url,detail){
 				lists.push(d2);
 			}
 		}
-		if(conts.length==0){arts = [];}
+		if(lists.length==0){tabs = [];}
 		return {details2: "数据来源：AI识片",details1:detail.details1||"",pic:detail.pic,desc:detail.desc,tabs:tabs,lists:lists};
 	}
 	return {};
