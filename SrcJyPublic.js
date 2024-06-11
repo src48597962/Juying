@@ -340,9 +340,10 @@ function getHistory(){
     items.forEach(item=>{
         //log(JSON.parse(item.params).params);
         let extra = JSON.parse(JSON.stringify(JSON.parse(item.params).params || {}));
-        extra["cls"] = "historylist";
+        //extra["cls"] = "historylist";
+        log(extra);
         let e = Object.assign({}, extra);
-        e["cls"] = "historylist";
+        //e["cls"] = "historylist";
         log(e);
         h.push({
             title: item.title,
