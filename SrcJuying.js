@@ -571,14 +571,6 @@ function yiji() {
                         js: $.toString(() => {
                             return $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJySet.js');
-                                SRCSet();
-                            })
-                        })
-                    },{
-                        title: "💠扩展中心",
-                        js: $.toString(() => {
-                            return $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
-                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                                 extension();
                             })
                         })
