@@ -212,7 +212,7 @@ function aierji(html,url,detail){
 	for (let i = 0; i < arr.length; i++) {
 		let it = arr[i];
 		let t = it.text;
-		if (!it.href || it.href==url || /voddetail|s\/guoyu|vodshow/.test(it.href)) {
+		if (!it.href || it.href.split('/').length<5 || /voddetail|s\/guoyu|vodshow/.test(it.href)) {
 			continue;
 		}
 		let pre = i == 0 ? null : arr[i - 1];
