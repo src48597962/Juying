@@ -1152,7 +1152,9 @@ function getErData(jkdata) {
                 if(extdata["详情是否Jsoup写法"]){
 
                 }else{
+                    log("111");
                     remarks = getBetweenStr(html, extdata["类型详情"]);
+                    log(remarks);
                     year = getBetweenStr(html, extdata["年代详情"]);
                     area = getBetweenStr(html, extdata["地区详情"]);
                     actor = getBetweenStr(html, extdata["演员详情"]);
@@ -1161,16 +1163,11 @@ function getErData(jkdata) {
             }catch(e){
                 log('xpath获取海报信息失败>'+e.message + " 错误行#" + e.lineNumber);
             }
-            log(remarks);
-            log(year);
-            log(area);
-            log(actor);
-            log(desc);
             try{
                 if(extdata["线路列表数组规则"]){
                     pdfa(html, extdata["线路列表数组规则"]).forEach(it=>{
                         let linename = "";
-                        it.split('+').forEach(v=>{
+                        extdata["线路标题"].split('+').forEach(v=>{
                             let n;
                             if(v == "_"){
                                 n = v;
@@ -1210,6 +1207,8 @@ function getErData(jkdata) {
             }catch(e){
                 log('XYQ获取选集列表失败>'+e.message);
             }
+            log(tabs);
+            log(lists);
         }else if(api_type=='drpy'){
             let detailObj = {
                 data: jkdata,
