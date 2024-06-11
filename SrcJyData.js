@@ -161,7 +161,7 @@ function getYiData(jkdata) {
                             })
                         }
                     }else if(api_type=="XPath"){
-                        let gethtml = request(classurl, { headers: { 'User-Agent': api_ua }, timeout:8000 });
+                        let gethtml = getHtml(classurl, headers);
                         let typenames = xpathArray(gethtml,extdata['cateNode']+extdata['cateName']);
                         let typeids = xpathArray(gethtml,extdata['cateNode']+extdata['cateId']);
                         if(extdata['cateIdR']){
@@ -188,7 +188,7 @@ function getYiData(jkdata) {
                         }
                         筛选 = extdata["筛选"];
                     }else{
-                        let gethtml = request(classurl, { headers: { 'User-Agent': api_ua }, timeout:8000 });
+                        let gethtml = getHtml(classurl, headers);
                         if (api_type=="v1") {
                             let typehtml = JSON.parse(gethtml);
                             let typelist = typehtml.data.list||typehtml.data.typelist;
@@ -429,7 +429,7 @@ function getYiData(jkdata) {
                     })
                 }
             }else if(api_type=="XPath"){
-                let gethtml = request(MY_URL, { headers: headers, timeout:8000 });
+                let gethtml = getHtml(MY_URL, headers);
                 let vodnames = xpathArray(gethtml, extdata["homeVodNode"]+extdata["homeVodName"]);
                 let vodids = xpathArray(gethtml, extdata["homeVodNode"]+extdata["homeVodId"]);
                 let vodimgs = xpathArray(gethtml, extdata["homeVodNode"]+extdata["homeVodImg"]);
@@ -441,7 +441,7 @@ function getYiData(jkdata) {
                     }
                 }
             }else if(api_type=="XBPQ"){
-                let gethtml = request(MY_URL, { headers: headers, timeout:8000 });
+                let gethtml = getHtml(MY_URL, headers);
                 extdata["二次截取"] = extdata["二次截取"] || (gethtml.indexOf(`<ul class="stui-vodlist`)>-1?`<ul class="stui-vodlist&&</ul>`:gethtml.indexOf(`<ul class="myui-vodlist`)>-1?`<ul class="myui-vodlist&&</ul>`:"");
                 if(extdata["二次截取"]){
                     gethtml = gethtml.split(extdata["二次截取"].split('&&')[0])[1].split(extdata["二次截取"].split('&&')[1])[0];
@@ -475,7 +475,7 @@ function getYiData(jkdata) {
                     }
                 })
             }else{
-                let gethtml = request(MY_URL, { headers: headers, timeout:8000 });
+                let gethtml = getHtml(MY_URL, headers);
                 let json;
                 if(/cms/.test(api_type)&&/<\?xml/.test(gethtml)){
                     gethtml = gethtml.replace(/&lt;!\[CDATA\[|\]\]&gt;|<!\[CDATA\[|\]\]>/g,'');
@@ -622,7 +622,7 @@ function getSsData(name, jkdata) {
                     method: ssurl.indexOf('search-pg-1-wd-')>-1?'GET':'POST'
                 })
 
-                html = fetch(ssurl, { headers: headers, timeout:timeout});
+                html = request(ssurl, { headers: headers, timeout:timeout});
             }
         }catch(e){}
         return html;
@@ -1283,9 +1283,12 @@ function getHtml(url, headers) {
     let html = request(url, {headers: headers, timeout: timeout, withStatusCode:true});
     try{
         let json = JSON.parse(html);
+        log(json.statusCode);
+        log(html);
         if(json.statusCode==200){
             return json.body;
         }
+        
     }catch(e){}
     return '';
 }
