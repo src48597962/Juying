@@ -71,7 +71,7 @@ function getYiData(jkdata) {
                         headers["User-Agent"] = extdata["请求头参数"] || headers["User-Agent"];
                     }
                 }
-                headers["User-Agent"] = (headers["User-Agent"]=="手机"||headers["User-Agent"]=="MOBILE_UA")?MOBILE_UA:PC_UA;
+                headers["User-Agent"] = (headers["User-Agent"]=="电脑"||headers["User-Agent"]=="PC_UA")?PC_UA:MOBILE_UA;
                 let host = extdata["首页推荐链接"] || '';
                 classurl = host;
                 extdata["分类链接"] = extdata["分类链接"]?extdata["分类链接"].split(';;')[0].split('[')[0]:"";
@@ -874,6 +874,18 @@ function getErData(jkdata) {
         }
     } else if (/XPath|biubiu|XBPQ|XYQ/.test(api_type)) {
         extdata = extDataCache(jkdata)
+        if(api_type=="XYQ"){
+            if(extdata["请求头参数"]){
+                if(extdata["请求头参数"].includes('#')){
+                    extdata["请求头参数"].split('#').forEach(v=>{
+                        headers[v.split('$')[0]] = v.split('$')[1];
+                    })
+                }else{
+                    headers["User-Agent"] = extdata["请求头参数"] || headers["User-Agent"];
+                }
+            }
+            headers["User-Agent"] = (headers["User-Agent"]=="电脑"||headers["User-Agent"]=="PC_UA")?PC_UA:MOBILE_UA;
+        }
         html = getHtml(MY_URL, headers);
     } else if (/drpy/.test(api_type)){
         html = MY_PARAMS.pageTitle;
