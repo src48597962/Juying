@@ -340,12 +340,12 @@ function getHistory(){
     items.forEach(item=>{
         //log(JSON.parse(item.params).params);
         let extra = JSON.parse(JSON.parse(item.params).params) || {};
-        //extra["cls"] = "historylist";
+        extra["cls"] = "historylist";
         log(extra);
-        log($.type(extra));
-        let e = Object.assign({"cls": "historylist"}, extra);
+        //log($.type(extra));
+        //let e = Object.assign({"cls": "historylist"}, extra);
         //e["cls"] = "historylist";
-        log(e);
+
         h.push({
             title: item.title,
             url: item.ruleBaseUrl + '@rule=' + JSON.parse(item.params).find_rule,
