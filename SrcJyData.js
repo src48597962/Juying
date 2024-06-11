@@ -201,6 +201,17 @@ function getYiData(jkdata) {
                             typelist.forEach(it => {
                                 分类.push(it.type_name + '$' + it.type_id);
                             })
+                            if(api_type=="app"){
+                                try{
+                                    let gettjhtml = getHtml(jkdata.url+'index_video?token=', headers);
+                                    let tjlist = JSON.parse(gettjhtml).list;
+                                    tjlist.forEach(it=>{
+                                        it.vlist.forEach(v=>{
+                                            推荐.push({ "vod_url": vodurlhead + v.vod_id, "vod_name": v.vod_name, "vod_desc": v.vod_remarks, "vod_pic": v.vod_pic });
+                                        })
+                                    })
+                                }catch(e){}
+                            }
                         } else if (api_type == "iptv") {
                             let type_dict = {
                                 comic: '动漫',
