@@ -14,6 +14,7 @@ function SRCSet() {
 
     let guanliType = getMyVar('guanli', 'jk');
     var d = [];
+    /*
     d.push({
         title: guanliType=="jk"?colorTitle('接口管理', '#f13b66a'):'接口管理',
         url: `#noLoading#@lazyRule=.js:putMyVar('guanli','jk');refreshPage(false);'toast://已切换到接口管理';`,
@@ -52,7 +53,7 @@ function SRCSet() {
     d.push({
         col_type: "line_blank"
     });
-
+    */
     d.push({
         title: '增加',
         url: guanliType=="jk"?$('#noLoading#').lazyRule(() => {
@@ -972,7 +973,7 @@ function extension(){
         clearMyVar('uploadjiexi');
         clearMyVar('uploadlive');
         clearMyVar('uploadyundisk');
-        refreshPage(false);
+        //refreshPage(false);
     }));
     let d = [];
     
