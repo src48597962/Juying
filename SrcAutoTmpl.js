@@ -225,21 +225,7 @@ function aierji(html,url,detail){
 		}
 	}
 	//log(d);
-	if (d.length == 0&&!/502|403|404|Unavailable/.test(html)) {
-		//匹配失败
-		d.push({
-			title: "",
-			url: url,
-			col_type: "x5_webview_single",
-			desc: "float&&100%",
-			pic_url: "",
-			extra: {
-				canBack: true
-			}
-		});
-		//toast("AI匹配失败，已使用X5加载");
-		setResult(d);
-	} else {
+	if (d.length > 0) {
 		//线路分割
 		let tabs = ["线路1"];
 		let lists = [];
