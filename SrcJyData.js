@@ -1183,26 +1183,25 @@ function getErData(jkdata) {
                 log('XYQ获取线路失败>'+e.message);
             }
             try{
-                for (let i = 1; i < tabs.length+1; i++) {
-                    let contlist = pdfa(html, extdata["播放列表数组规则"]);
-                    for (let i = 0; i < contlist.length; i++) {
-                        log(contlist[i]);
-                        let bfline = pdfa(contlist[i], extdata["选集列表数组规则"]);
-                        log(bfline);
-                        let cont = [];
-                        for (let j = 0; j < bfline.length; j++) {
-                            let contname,conturl;
-                            if(extdata["选集标题链接是否Jsoup写法"]){
-                                contname = pdfh(bfline[j], extdata["选集标题"] || "a&&Text");
-                                conturl = (extdata["选集链接加前缀"]||"")+pdfh(bfline[j], extdata["选集链接"] || "a&&href")+(extdata["选集链接加后缀"]||"");
-                            }
-                            cont.push(contname+"$"+conturl)
+                let contlist = pdfa(html, extdata["播放列表数组规则"]);
+                log(contlist.length);
+                for (let i = 0; i < contlist.length; i++) {
+                    log(contlist[i]);
+                    let bfline = pdfa(contlist[i], extdata["选集列表数组规则"]);
+                    log(bfline);
+                    let cont = [];
+                    for (let j = 0; j < bfline.length; j++) {
+                        let contname,conturl;
+                        if(extdata["选集标题链接是否Jsoup写法"]){
+                            contname = pdfh(bfline[j], extdata["选集标题"] || "a&&Text");
+                            conturl = (extdata["选集链接加前缀"]||"")+pdfh(bfline[j], extdata["选集链接"] || "a&&href")+(extdata["选集链接加后缀"]||"");
                         }
-                        if(extdata["是否反转选集序列"]){
-                            cont.reverse();
-                        }
-                        lists.push(cont);
+                        cont.push(contname+"$"+conturl)
                     }
+                    if(extdata["是否反转选集序列"]){
+                        cont.reverse();
+                    }
+                    lists.push(cont);
                 }
             }catch(e){
                 log('XYQ获取选集列表失败>'+e.message);
