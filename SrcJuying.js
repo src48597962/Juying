@@ -342,7 +342,7 @@ function dianboyiji() {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                 return selectSource();
             }),
-            pic_url: "https://hikerfans.com/tubiao/messy/25.svg",
+            pic_url: "hiker://files/cache/src/sou.png",
             col_type: "icon_3_round_fill"
         })
         d.push({
@@ -367,7 +367,7 @@ function dianboyiji() {
                     })
                 }
             }),
-            pic_url: "https://hikerfans.com/tubiao/messy/30.svg",
+            pic_url: "hiker://files/cache/src/set.png",
             col_type: "icon_3_round_fill"
         })
 
