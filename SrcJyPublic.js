@@ -339,11 +339,11 @@ function getHistory(){
     let items = JSON.parse(fetch('hiker://history')).filter(v=> v.type!="网页浏览" && JSON.parse(v.params).title==MY_RULE.title).slice(0, 3);
     items.forEach(item=>{
         //log(JSON.parse(item.params).params);
-        let extra = JSON.parse(item.params).params;
+        let extra = JSON.parse(JSON.parse(item.params).params) || {};
         //extra["cls"] = "historylist";
         log(extra);
         log($.type(extra));
-        let e = Object.assign({}, extra);
+        let e = Object.assign({"cls": "historylist"}, extra);
         //e["cls"] = "historylist";
         log(e);
         h.push({
