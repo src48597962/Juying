@@ -212,7 +212,7 @@ function aierji(html,url,detail){
 	for (let i = 0; i < arr.length; i++) {
 		let it = arr[i];
 		let t = it.text;
-		if (!it.href || it.href == "" || (it.href==url&&it.href.indexOf('-')==-1) || /voddetail|s\/guoyu|vodshow/.test(it.href)) {
+		if (!it.href || it.href==url || /voddetail|s\/guoyu|vodshow/.test(it.href)) {
 			continue;
 		}
 		let pre = i == 0 ? null : arr[i - 1];
@@ -225,7 +225,7 @@ function aierji(html,url,detail){
 		}
 	}
 	//log(d);
-	if (d.length == 0&&!/502|403|Unavailable/.test(html)) {
+	if (d.length == 0&&!/502|403|404|Unavailable/.test(html)) {
 		//匹配失败
 		d.push({
 			title: "",
@@ -241,7 +241,7 @@ function aierji(html,url,detail){
 		setResult(d);
 	} else {
 		//线路分割
-		let tabs = ["播放源1"];
+		let tabs = ["线路1"];
 		let lists = [];
 		let d2 = [];
 		for (let i = 0; i < d.length; i++) {
@@ -254,7 +254,7 @@ function aierji(html,url,detail){
 				if (t2 - t1 > 1 || t1 - t2 > 1) {
 					lists.push(d2);
 					let s = tabs.length+1;
-					tabs.push("播放源"+s);
+					tabs.push("线路"+s);
 					d2 = [];
 				}
 			}else{
