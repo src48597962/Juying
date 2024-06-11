@@ -862,12 +862,12 @@ function getSsData(name, jkdata) {
     if (lists.length > 0) {
         try {
             lists.forEach((list) => {
-                let vodpic = list.vodpic ? list.vodpic.replace(/http.*\/tu\.php\?tu=|\/img\.php\?url=| |\/tu\.php\?tu=/g, '') : "hiker://files/cache/src/picloading.gif";
+                let vodpic = list.vodpic ? list.vodpic.replace(/http.*\/tu\.php\?tu=|\/img\.php\?url=| |\/tu\.php\?tu=/g, '') : "hiker://files/cache/src/404.jpg";
                 if (/^\/\//.test(vodpic)) {
                     vodpic = "https:" + vodpic;
                 }else if (/^\//.test(vodpic)) {
                     vodpic = vodurlhead + vodpic;
-                }else if (!/^http/.test(vodpic) && !/^\//.test(vodpic)){
+                }else if (!/^http/.test(vodpic) && !/^hiker/.test(vodpic) && !/^\//.test(vodpic)){
                     vodpic = vodurlhead + '/' + vodpic;
                 }
 
