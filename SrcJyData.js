@@ -109,12 +109,12 @@ function getYiData(jkdata) {
                                     if(extdata['首页片单是否Jsoup写法']){
                                         let vodid = pd(v, extdata['首页片单链接']||extdata['分类片单链接'], vodurlhead);
                                         let vodname = pdfh(v, extdata['首页片单标题']||extdata['分类片单标题']);
-                                        let vodimg = pdfh(v, extdata['首页片单图片']||extdata['分类片单图片']);
+                                        let vodpic = pdfh(v, extdata['首页片单图片']||extdata['分类片单图片']);
                                         let voddesc = pdfh(v, extdata['首页片单副标题']||extdata['分类片单副标题']);
                                         if(vodid&&vodname){
-                                            vodimg = /^\//.test(vodimg)?vodurlhead+vodimg:vodimg;
-                                            vodimg = vodimg.includes('(')?vodimg.match(/\(\'(.*?)\'\)/)[1]:vodimg;
-                                            推荐.push({"vod_url":vodid,"vod_name":vodname,"vod_desc":voddesc,"vod_pic":vodimg});
+                                            vodpic = /^\//.test(vodpic)?vodurlhead+vodpic:vodpic;
+                                            vodpic = vodpic.includes('(')?vodpic.match(/\(\'(.*?)\'\)/)[1]:vodpic;
+                                            推荐.push({"vod_url":vodid,"vod_name":vodname,"vod_desc":voddesc,"vod_pic":vodpic});
                                         }
                                     }
                                 })
