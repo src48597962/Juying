@@ -933,14 +933,14 @@ function downloadicon() {
         if(!fileExist('hiker://files/cache/src/图片.png')){
             downloadFile("https://hikerfans.com/tubiao/more/38.png", 'hiker://files/cache/src/图片.png');
         }
-        if(!fileExist('hiker://files/cache/src/Alist.svg')){
-            downloadFile(config.依赖.match(/http(s)?:\/\/.*\//)[0] + "img/Alist.svg", 'hiker://files/cache/src/Alist.svg');
-        }
         if(!fileExist('hiker://files/cache/src/聚影.png')){
             downloadFile(config.依赖.match(/http(s)?:\/\/.*\//)[0] + "img/聚影.png", 'hiker://files/cache/src/聚影.png');
         }
-        if(!fileExist('hiker://files/cache/src/picloading.gif')){
-            downloadFile(config.依赖.match(/http(s)?:\/\/.*\//)[0] + "img/picloading.gif", 'hiker://files/cache/src/picloading.gif');
+        if(!fileExist('hiker://files/cache/src/sou.png')){
+            downloadFile(config.依赖.match(/http(s)?:\/\/.*\//)[0] + "img/sou.png", 'hiker://files/cache/src/sou.png');
+        }
+        if(!fileExist('hiker://files/cache/src/set.png')){
+            downloadFile(config.依赖.match(/http(s)?:\/\/.*\//)[0] + "img/set.png", 'hiker://files/cache/src/set.png');
         }
         if(!fileExist('hiker://files/cache/src/404.jpg')){
             downloadFile(config.依赖.match(/http(s)?:\/\/.*\//)[0] + "img/404.jpg", 'hiker://files/cache/src/404.jpg');
