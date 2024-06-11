@@ -495,7 +495,7 @@ function dianboyiji() {
                             col_type: 'movie_3',
                             extra: {
                                 url: list.vod_url,
-                                pic: list.vod_pic,
+                                pic: vodpic,
                                 pageTitle: vodname,
                                 data: sourceData
                             }
