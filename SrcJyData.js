@@ -1210,7 +1210,7 @@ function getErData(jkdata) {
                         }
                         cont.push(contname+"$"+conturl)
                     }
-                    if(extdata["是否反转选集序列"]){
+                    if(extdata["是否反转选集序列"]=="1"){
                         cont.reverse();
                     }
                     lists.push(cont);
