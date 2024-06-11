@@ -1162,7 +1162,11 @@ function getErData(jkdata) {
         }else if (api_type=="XYQ") {
             try{
                 if(extdata["详情是否Jsoup写法"]=="1"){
-
+                    remarks = pdfh(html, extdata["类型详情"]);
+                    year = pdfh(html, extdata["年代详情"]);
+                    area = pdfh(html, extdata["地区详情"]);
+                    actor = pdfh(html, extdata["演员详情"]);
+                    desc = pdfh(html, extdata["简介详情"]);
                 }else{
                     remarks = getBetweenStr(html, extdata["类型详情"]);
                     year = getBetweenStr(html, extdata["年代详情"]);
@@ -1196,11 +1200,8 @@ function getErData(jkdata) {
             }
             try{
                 let contlist = pdfa(html, extdata["播放列表数组规则"]);
-                log(contlist.length);
                 for (let i = 0; i < contlist.length; i++) {
-                    log(contlist[i]);
                     let bfline = pdfa(contlist[i], extdata["选集列表数组规则"]);
-                    log(bfline);
                     let cont = [];
                     for (let j = 0; j < bfline.length; j++) {
                         let contname,conturl;
@@ -1218,8 +1219,6 @@ function getErData(jkdata) {
             }catch(e){
                 log('XYQ获取选集列表失败>'+e.message);
             }
-            log(tabs);
-            log(lists);
         }else if(api_type=='drpy'){
             let detailObj = {
                 data: jkdata,
