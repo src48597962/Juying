@@ -611,7 +611,7 @@ let buttonmenu = {
         })
     },
     "Alist": {
-        img: "https://hikerfans.com/tubiao/more/62.png",//hiker://files/cache/src/Alist.svg
+        img: "https://hikerfans.com/tubiao/more/226.png",//hiker://files/cache/src/Alist.svg
         url: $("hiker://empty###noRecordHistory##noHistory#").rule(() => {
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
             alistHome();
