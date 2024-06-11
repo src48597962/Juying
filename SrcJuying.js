@@ -353,7 +353,7 @@ function dianboyiji() {
 
     if(MY_PAGE==1){
         d.push({
-            title: "换源",
+            title: "换主页源",
             url: $('#noLoading#').lazyRule(() => {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                 return selectSource();
@@ -362,7 +362,7 @@ function dianboyiji() {
             col_type: "icon_3_round_fill"
         })
         d.push({
-            title: "占位",
+            title: "搜索方式",
             url: $('#noLoading#').lazyRule(() => {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                 return selectSource();
@@ -371,7 +371,7 @@ function dianboyiji() {
             col_type: "icon_3_round_fill"
         })
         d.push({
-            title: "设置",
+            title: "我的设置",
             url: $('#noLoading#').lazyRule(() => {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                 return selectSource();
