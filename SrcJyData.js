@@ -413,14 +413,9 @@ function getYiData(jkdata) {
             vodlists = [];
             let vod_name, vod_pic, vod_url, vod_desc;
             if (api_type == "XYQ") {
-                log(MY_URL);
-                log(headers);
                 let gethtml = getHtml(MY_URL, headers);
                 if (extdata['分类片单是否Jsoup写法'] == "1" && extdata['分类列表数组规则']) {
-                    log("ok");
-                    log(pdfa(gethtml, extdata['分类列表数组规则']).length);
                     pdfa(gethtml, extdata['分类列表数组规则']).forEach(it => {
-                        log(it);
                         let vodname = pdfh(it, extdata['分类片单标题']);
                         let vodid = pd(it, extdata['分类片单链接'], vodurlhead);
                         let vodimg = (extdata["分类片单链接加前缀"] || "") + pdfh(it, extdata['分类片单图片']);
@@ -861,7 +856,7 @@ function getSsData(name, jkdata) {
                     vodpic = "https:" + vodpic;
                 }
                 if (/^\/|^upload/.test(vodpic)) {
-                    vodpic = vodurl.match(/http(s)?:\/\/(.*?)\//)[0] + vodpic;
+                    vodpic = list.vodurl.match(/http(s)?:\/\/(.*?)\//)[0] + vodpic;
                 }
 
                 searchs.push({
