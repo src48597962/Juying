@@ -347,14 +347,29 @@ function dianboyiji() {
         })
         d.push({
             title: "我的设置",
-            url: $('#noLoading#').lazyRule(() => {
-                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
-                return selectSource();
+            url: $(["接口管理","解析管理","扩展中心"],1).select(()=>{
+                if(input=="接口管理"){
+                    putMyVar('guanli','jk');
+                    return $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
+                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                        SRCSet();
+                    })
+                }else if(input=="解析管理"){
+                    putMyVar('guanli','jx');
+                    return $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
+                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                        SRCSet();
+                    })
+                }else if(input=="扩展中心"){
+                    return $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
+                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                        extension();
+                    })
+                }
             }),
             pic_url: "https://hikerfans.com/tubiao/messy/30.svg",
             col_type: "icon_3_round_fill"
         })
-        
 
         if(!sourceName){
             d.push({
