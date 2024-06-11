@@ -338,22 +338,20 @@ function getHistory(){
     let h = [];
     let items = JSON.parse(fetch('hiker://history')).filter(v=> v.type!="网页浏览" && JSON.parse(v.params).title==MY_RULE.title).slice(0, 3);
     items.forEach(item=>{
-        //log(JSON.parse(item.params).params);
-        let extra = JSON.parse(JSON.parse(item.params).params) || {};
-        extra["cls"] = "historylist";
-        log(extra);
-        //log($.type(extra));
-        //let e = Object.assign({"cls": "historylist"}, extra);
-        //e["cls"] = "historylist";
-
-        h.push({
-            title: item.title,
-            url: item.ruleBaseUrl + '@rule=' + JSON.parse(item.params).find_rule,
-            pic_url: item.picUrl,
-            desc: item.lastClick?item.lastClick.split('@@')[0]:"足迹：无",
-            col_type: "movie_3",
-            extra: extra
-        });
+        try{
+            let extra = JSON.parse(JSON.parse(item.params).params) || {};
+            extra["cls"] = "historylist";
+            h.push({
+                title: item.title,
+                url: item.ruleBaseUrl + '@rule=' + JSON.parse(item.params).find_rule,
+                pic_url: item.picUrl,
+                desc: item.lastClick?item.lastClick.split('@@')[0]:"足迹：无",
+                col_type: "movie_3",
+                extra: extra
+            });
+        }catch(e){
+            log('加载观看记录异常>'+e.message + " 错误行#" + e.lineNumber);
+        }
     })
     return h;
 }
