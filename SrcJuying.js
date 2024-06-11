@@ -213,40 +213,15 @@ function dianboerji() {
 
     //选集部份
     function setLists(lists, index) {
-        let type = jkdata.type;
         let list = lists[index] || [];
         function playlist(lx, col_type) {//定义选集列表生成
             if (lx == '1') {
                 let playtitle = list[j].split('$')[0].trim();
                 let playurl = list[j].split('$')[1].trim();
-                if (/v1|app|v2|iptv|cms/.test(type)) {
-                    var DTJX = $("").lazyRule(() => {
-                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcParseS.js');
-                        return SrcParseS.聚影(input);
-                    });
-                }else if (/XPath|biubiu|XBPQ/.test(type)) {
-                    if(/\.mp4|\.m3u8/.test(playurl) || (/qq\.com|douyin|youku|mgtv|ixigua|bili|iqiyi|sohu|pptv|migu|1905|le\.com/.test(playurl) && /html/.test(playurl))){
-                        var DTJX = $("").lazyRule(() => {
-                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcParseS.js');
-                            return SrcParseS.聚影(input);
-                        });
-                    }else if(playurl.indexOf('https://www.aliyundrive.com/s/')>-1){
-                        var DTJX = $("").lazyRule((input) => {
-                            input = input.replace('http','\nhttp');
-                            return $("hiker://empty##fypage#noRecordHistory##noHistory#").rule((input) => {
-                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyAliDisk.js');
-                                aliShareUrl(input);
-                            },input);
-                        },playurl);
-                    }else{
-                        var DTJX = $("").lazyRule(() => {
-                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcParseS.js');
-                            return SrcParseS.task({},input);
-                        });
-                    }
-                }else{
-                    //网页
-                }
+                let lazy = $("").lazyRule(() => {
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
+                    return SrcParseS.聚影(input);
+                });
 
                 let extra = {
                     id: playurl,
@@ -265,7 +240,7 @@ function dianboerji() {
 
                 d.push({
                     title: getHead(playtitle.replace(/第|集|话|期|-|new|最新|新/g, ''), Color3),
-                    url: playurl + DTJX,
+                    url: playurl + lazy,
                     extra: extra,
                     col_type: col_type
                 });
