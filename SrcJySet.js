@@ -532,7 +532,7 @@ function jiexi(lx,data) {
     });
     let parsetype = data.type;
     d.push({
-        title: parsetype,//'是否为web嗅探解析：' + (getMyVar('parsetype', parsetype)=="0"?"是":"否"),
+        title: parsetype.toString(),//'是否为web嗅探解析：' + (getMyVar('parsetype', parsetype)=="0"?"是":"否"),
         col_type: 'text_1',
         url:$().lazyRule(()=>{
             if(/^http/.test(getMyVar('parseurl',''))&&!/id=|key=/.test(getMyVar('parseurl',''))){
