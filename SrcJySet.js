@@ -135,7 +135,26 @@ function SRCSet() {
             return JYshare(lx, input);
         }, guanliType),
         img: "https://hikerfans.com/tubiao/more/3.png",
-        col_type: "icon_small_4"
+        col_type: "icon_small_4",
+        extra: {
+            longClick: [{
+                title: '单接口分享剪贴板：' + (Juconfig['sharePaste'] || "自动选择"),
+                js: $.toString((cfgfile, Juconfig) => {
+                    let pastes = getPastes();
+                    pastes.unshift('自动选择');
+                    return $(pastes,2,'指定单接口分享时用哪个剪贴板').select((cfgfile,Juconfig) => {
+                        if(input=="自动选择"){
+                            delete Juconfig["sharePaste"];
+                        }else{
+                            Juconfig["sharePaste"] = input;
+                        }
+                        writeFile(cfgfile, JSON.stringify(Juconfig));
+                        refreshPage(false);
+                        return 'toast://单接口分享剪贴板已设置为：' + input;
+                    }, cfgfile, Juconfig)
+                },cfgfile, Juconfig)
+            }]
+        }
     });
     d.push({
         col_type: "line"
@@ -272,32 +291,16 @@ function SRCSet() {
     }
 
     jkdatalist.forEach(it => {
-        let selectmenu;
+        let selectmenu,datatitle,datadesc;
         if(guanliType=="jk"){
-            var dataurl = it.url;
-            var dataname = it.name;
-            var dataua = it.ua;
-            var datatype = it.type;
-            var datagroup = it.group;
-            var datatitle = dataname + ' ('+datatype+')' + (datagroup&&datagroup!=datatype?' [' + datagroup + ']':"");
-            var datadesc = dataurl;
-            var dataarr = {name:dataname, url:dataurl, ua:dataua, type:datatype};
-            if(datagroup){dataarr['group'] = datagroup}
+            datatitle = it.name + ' ('+it.type+')' + (it.group?' [' + it.group + ']':"");
+            datadesc = it.url;
             selectmenu = ["分享", "删除", it.stop?"启用":"禁用"];
         }else{
-            var dataurl = it.parse;
-            var dataname = it.name;
-            var datastopfrom = it.stopfrom||[];
-            var datapriorfrom = it.priorfrom||"";
-            var datasort = it.sort||0;
-            var datatitle = datasort+'-'+dataname+'-'+dataurl;
-            var datadesc = "优先强制：" + datapriorfrom + "" + "\n排除片源：" + datastopfrom + "";
-            var dataarr = {name:dataname, url:dataurl, stopfrom:datastopfrom+"", priorfrom:datapriorfrom+""};
-            if(it.header){dataarr['header'] = it.header}
-            if(it.web){dataarr['web'] = it.web}
+            datatitle = (it.sort||0)+'-'+it.name+'-'+it.url;
+            datadesc = it.ext?it.ext.flag||[]:"";
             selectmenu = ["分享","编辑", "删除"];
         }
-        if(it.retain){dataarr['retain'] = 1}
 
         d.push({
             title: it.stop?'‘‘’’'+colorTitle(datatitle,'#f20c00'):datatitle,
@@ -340,7 +343,7 @@ function SRCSet() {
             desc: datadesc,
             col_type: "text_1",
             extra: {
-                id: dataurl
+                id: it.url
             }
         });
     })
