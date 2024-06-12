@@ -351,17 +351,20 @@ function dianboyiji() {
                 if(input=="接口管理"){
                     putMyVar('guanli','jk');
                     return $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
+                        setPageTitle('接口管理');
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                         SRCSet();
                     })
                 }else if(input=="解析管理"){
                     putMyVar('guanli','jx');
                     return $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
+                        setPageTitle('解析管理');
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                         SRCSet();
                     })
                 }else if(input=="资源管理"){
                     return $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
+                        setPageTitle('资源管理');
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                         resource();
                     })
