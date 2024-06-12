@@ -297,7 +297,7 @@ function SRCSet() {
             selectmenu = ["分享", "删除", it.stop?"启用":"禁用"];
         }else{
             datatitle = (it.sort||0)+'-'+it.name+'-'+it.url;
-            datadesc = it.ext?it.ext.flag||[]:"";
+            datadesc = it.ext&&it.ext.flag?it.ext.flag.join(','):"";
             selectmenu = ["分享","编辑", "删除"];
         }
 
@@ -503,7 +503,7 @@ function jiexi(lx,data) {
     }else{
         if(getMyVar('isload', '0')=="0"){
             setPageTitle("♥解析管理-变更");
-            putMyVar('isretain', data.retain?data.retain:"");
+            putMyVar('isretain', data.retain||"");
             putMyVar('isload', '1');
         }
     }
@@ -530,7 +530,7 @@ function jiexi(lx,data) {
         }
     });
     d.push({
-        title:'是否为web嗅探解析：' + (getMyVar('parsetype','0')=="0"?"是":"否"),
+        title:'是否为web嗅探解析：' + (getMyVar('parsetype',data.type||"0")=="0"?"是":"否"),
         col_type: 'text_1',
         url:$().lazyRule(()=>{
             if(/^http/.test(getMyVar('parseurl',''))&&!/id=|key=/.test(getMyVar('parseurl',''))){
@@ -563,9 +563,9 @@ function jiexi(lx,data) {
     d.push({
         title: 'ext数据',
         col_type: 'input',
-        desc: "解析ext数据，如headers、flag, 可以留空",
+        desc: "ext对象数据，如headers、flag, 可以留空",
         extra: {
-            defaultValue: storage0.getMyVar('parseext') || "",
+            defaultValue: storage0.getMyVar('parseext', data.ext) || "",
             titleVisible: false,
             type: "textarea",
             highlight: true,
@@ -581,7 +581,7 @@ function jiexi(lx,data) {
     d.push({
         title:'测试',
         col_type:'text_3',
-        url: $().lazyRule((data)=>{
+        url: $().lazyRule(()=>{
             var dataurl = getMyVar('parseurl');
             var dataname = getMyVar('parsename')||'测试';
             var datatype = getMyVar('parsetype','0');
@@ -665,7 +665,7 @@ function jiexi(lx,data) {
                 url: "hiker://empty"
             })
             return "hiker://empty";
-        }, data),
+        }),
         extra:{
             id: 'jxtest'
         }
@@ -709,13 +709,16 @@ function jiexi(lx,data) {
             if(!/^http|^functio/.test(getMyVar('parseurl',''))){
                 return "toast://解析地址不正确"
             }
+            let parseext = storage0.getMyVar('parseext');
+            if(parseext && $.type(parseext)!="object"){
+                return "toast://ext对象数据不正确"
+            }
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
-
             let urls= [];
             let parseurl = getMyVar('parseurl');
             let parsename = getMyVar('parsename');
             let parsetype = getMyVar('parsetype','0');
-            let parseext = storage0.getMyVar('parseext');
+            
             if(parseurl&&parsename){
                 let arr  = { "name": parsename.trim(), "type": parseInt(parsetype),"url": parseurl.trim()};
                 if(parseext){
