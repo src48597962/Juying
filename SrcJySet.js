@@ -1716,6 +1716,7 @@ function resource() {
 //资源导入
 function Resourceimport(input,importtype,importmode){
     if(importtype=="1"){//tvbox导入
+        let data;
         try{
             showLoading('检测文件有效性');
             if(/\/storage\/emulated\//.test(input)){input = "file://" + input}
@@ -1729,23 +1730,22 @@ function Resourceimport(input,importtype,importmode){
             //    return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
             //}).replace(/^.*#.*$/gm,"").replace(/\,\,/g,',');//.replace(/=\\n\"/g,'="')|[\t\r\n].replace(/\s+/g, "").replace(/<\/?.+?>/g,"").replace(/[\r\n]/g, "")
             //log(html);
-            eval('var data = ' + html)
-            //var data = JSON.parse(html);                        
-            var jiekou = data.sites||[];
-            var jiexi = data.parses||[];
+            eval('data = ' + html)
+            //data = JSON.parse(html);                        
         } catch (e) {
             hideLoading();
             log('TVBox文件检测失败>'+e.message); 
             return "toast://TVBox导入失败：链接文件无效或内容有错";
         }
         hideLoading();
-        var jknum = -1;
-        var jxnum = -1;
-        var livenum = -1;
-        var livesm = "";
+
+        let jknum = -1;
+        let jxnum = -1;
+        let livenum = -1;
         if((getMyVar('importjiekou','')=="1")&&jiekou.length>0){
             showLoading('正在多线程抓取数据中');
-            var urls= [];
+            let urls= [];
+            let jiekoulist = data.sites||[];
             //多线程处理
             var task = function(obj) {
                 let arr;
@@ -1813,7 +1813,7 @@ function Resourceimport(input,importtype,importmode){
                 return 1;
             }
             
-            let jiekous = jiekou.map((list)=>{
+            let jiekous = jiekoulist.map((list)=>{
                 return {
                     func: task,
                     param: list,
@@ -1837,11 +1837,14 @@ function Resourceimport(input,importtype,importmode){
             hideLoading();    
         }
 
-        if((getMyVar('importjiexi','')=="1")&&jiexi.length>0){
+        if((getMyVar('importjiexi','')=="1")&&jiexilist.length>0){
+            let jiexilist = data.parses||[];
             try{
-                let urls = jiexi.filter(it=>{
+                log(jiexilist.length);
+                let urls = jiexilist.filter(it=>{
                     return /^http/.test(it.url);
                 })
+                log(urls.length);
                 jxnum = jiexisave(urls, importmode);
             } catch (e) {
                 jxnum = -1;
@@ -1851,7 +1854,7 @@ function Resourceimport(input,importtype,importmode){
         if(getMyVar('importlive','')=="1"){
             try{
                 let urls = [];
-                let lives = data.lives;
+                let lives = data.lives || [];
                 for (let i=0;i<lives.length;i++) {
                     let channels = lives[i].channels||[];
                     if(channels.length>0){
@@ -1890,11 +1893,7 @@ function Resourceimport(input,importtype,importmode){
                                 let id = livedata.length + 1;
                                 livedata.push({name:'JY订阅'+id,url:urls[i]});
                                 livenum++;
-                            }else{
-                                livesm = "链接无效或非通用tv格式文件";
                             }
-                        }else{
-                            livesm = "已存在";
                         }
                     }
                     if(livenum>0){
@@ -1907,7 +1906,7 @@ function Resourceimport(input,importtype,importmode){
             }
         }
 
-        let sm = (jknum>-1?' 接口保存'+jknum:'')+(jxnum>-1?' 解析保存'+jxnum:'')+(livenum>-1?livenum==0?' 直播订阅'+livesm:' 直播保存'+livenum:'');
+        let sm = (jknum>-1?' 接口保存'+jknum:'')+(jxnum>-1?' 解析保存'+jxnum:'')+(livenum>-1?' 直播保存'+livenum:'');
         if(jknum>0||jxnum>0){back();}
         if(jknum==-1&&jxnum==-1&&livenum>-1){
             clearMyVar('importinput');
