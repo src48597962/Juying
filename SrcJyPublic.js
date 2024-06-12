@@ -7,16 +7,18 @@ if(Jucfg != ""){
     Juconfig["依赖"] = config.依赖;
     writeFile(cfgfile, JSON.stringify(Juconfig));
 }
+Juconfig["路径"] = "hiker://files/rules/Src/Juying2/";
+
 let homeSource = Juconfig['homeSource'] || {};
 let sourceType = homeSource.type;
 let sourceName = homeSource.name;
 let sourceGroup = homeSource.group || homeSource.type;
 let sourceUrl = homeSource.url;
 
-let jkfile = "hiker://files/rules/Src/Juying2/jiekou.json";
-let jxfile = "hiker://files/rules/Src/Juying2/jiexi.json";
+let jkfile = Juconfig["路径"] + "jiekou.json";
+let jxfile = Juconfig["路径"] + "jiexi.json";
 let drpymuban = "https://raw.gitmirror.com/hjdhnx/hipy-server/master/app/t4/files/drpy_libs/%E6%A8%A1%E6%9D%BF.js";
-let timeout = 8000;
+let timeout = 6000;
 
 function getFile(lx) {
     let file = lx=='jk'?jkfile:jxfile;
