@@ -433,6 +433,7 @@ function jiekousave(urls, mode) {
 //解析保存
 function jiexisave(urls, mode) {
     if(urls.length==0){return 0;}
+    let num = 0;
     try{
         let datalist = getDatas('jx');
         if(mode==1){
@@ -444,7 +445,6 @@ function jiexisave(urls, mode) {
             }
         }
         
-        let num = 0;
         urls.forEach(it=>{
             if(mode==2){
                 for(let i=0;i<datalist.length;i++){
@@ -471,7 +471,7 @@ function jiexisave(urls, mode) {
         if(num>0){writeFile(jxfile, JSON.stringify(datalist));}
     } catch (e) {
         log('导入失败：'+e.message); 
-        return -1;
+        num = -1;
     }
     return num;
 }
