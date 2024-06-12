@@ -333,7 +333,7 @@ function dianboyiji() {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                 return selectSource();
             }),
-            pic_url: "https://hikerfans.com/tubiao/system/130.png",
+            pic_url: "https://hikerfans.com/tubiao/system/136.png",
             col_type: "icon_3_round_fill"
         })
         d.push({
