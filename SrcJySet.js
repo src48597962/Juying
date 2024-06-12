@@ -1702,7 +1702,7 @@ function resource() {
                 }, Juconfig, cfgfile),
             col_type: "text_2"
         });
-    
+    setResult(d);
 }
 //资源导入
 function Resourceimport(input,importtype){
