@@ -325,6 +325,15 @@ function SRCSet() {
                     } else {
                         return "toast://分享失败，剪粘板或网络异常>"+pasteurl;
                     }
+                } else if (input == "编辑") {
+                    return $('hiker://empty#noRecordHistory##noHistory#').rule((data) => {
+                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                        if(getMyVar('guanli', 'jk')=="jk"){
+                            jiekou('update', data);
+                        }else{
+                            jiexi('update', data);
+                        }
+                    }, data)
                 } else if (input == "删除") {
                     return $("确定删除："+data.name).confirm((data)=>{
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
