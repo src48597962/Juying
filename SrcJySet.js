@@ -529,8 +529,9 @@ function jiexi(lx,data) {
             onChange: 'putMyVar("parseurl",input)'
         }
     });
+    let parsetype = data.type || "0";
     d.push({
-        title:'是否为web嗅探解析：' + (getMyVar('parsetype',data.type||"0")=="0"?"是":"否"),
+        title:'是否为web嗅探解析：' + (getMyVar('parsetype', parsetype)=="0"?"是":"否"),
         col_type: 'text_1',
         url:$().lazyRule(()=>{
             if(/^http/.test(getMyVar('parseurl',''))&&!/id=|key=/.test(getMyVar('parseurl',''))){
