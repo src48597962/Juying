@@ -1610,7 +1610,7 @@ function resource() {
             title:'本地',
             col_type: 'input',
             desc: '请输入链接地址',
-            url: $('#noLoading#').lazyRule(() => {
+            url: $('#noLoading#').toString(() => {
                 return `fileSelect://`+$.toString(()=>{
                     if(/JYshare_/.test(input) && input.endsWith('txt')){
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJuSet.js');
