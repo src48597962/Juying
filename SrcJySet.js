@@ -8,7 +8,6 @@ function SRCSet() {
         clearMyVar('SrcJu_duoselect');
         clearMyVar('groupmenu');
     }));
-    setPageTitle("♥管理"+getMyVar('SrcJuying-Version', ''));
 
     if(getMyVar('guanli','')==""){putMyVar('guanli','jk');}
 
@@ -398,7 +397,7 @@ function jiekousave(urls, mode) {
         }
         //.replace(/(?:[\u2700-\u27bf]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff]|[\u0023-\u0039]\ufe0f?\u20e3|\u3299|\u3297|\u303d|\u3030|\u24c2|\ud83c[\udd70-\udd71]|\ud83c[\udd7e-\udd7f]|\ud83c\udd8e|\ud83c[\udd91-\udd9a]|\ud83c[\udde6-\uddff]|\ud83c[\ude01-\ude02]|\ud83c\ude1a|\ud83c\ude2f|\ud83c[\ude32-\ude3a]|\ud83c[\ude50-\ude51]|\u203c|\u2049|[\u25aa-\u25ab]|\u25b6|\u25c0|[\u25fb-\u25fe]|\u00a9|\u00ae|\u2122|\u2139|\ud83c\udc04|[\u2600-\u26FF]|\u2b05|\u2b06|\u2b07|\u2b1b|\u2b1c|\u2b50|\u2b55|\u231a|\u231b|\u2328|\u23cf|[\u23e9-\u23f3]|[\u23f8-\u23fa]|\ud83c\udccf|\u2934|\u2935|[\u2190-\u21ff])|\(XPF\)|\(萝卜\)|\(神马\)|\(切\)|\(聚\)|\(优\)|\(神马\)|\(XB\)|\(SP\)|\(XP\)|[\x00-\x1F\x7F]/g,'');
         urls.forEach(it=>{
-            if(mode==2){
+            if(it.oldurl){
                 for(let i=0;i<datalist.length;i++){
                     if(datalist[i].url==it.url||datalist[i].url==it.oldurl){
                         if(/^hiker:\/\/files\/data\//.test(datalist[i].url)){
@@ -449,7 +448,7 @@ function jiexisave(urls, mode) {
         }
         
         urls.forEach(it=>{
-            if(mode==2){
+            if(it.oldurl){
                 for(let i=0;i<datalist.length;i++){
                     if(datalist[i].url==it.url||datalist[i].url==it.oldurl){
                         datalist.splice(i,1);
@@ -478,36 +477,20 @@ function jiexisave(urls, mode) {
     }
     return num;
 }
-
+//解析新增或编辑
 function jiexi(lx,data) {
     addListener("onClose", $.toString(() => {
         clearMyVar('parsename');
         clearMyVar('parseurl');
-        clearMyVar('parseurls');
-        clearMyVar('addtype');
-        clearMyVar('stopfrom');
-        clearMyVar('priorfrom');
-        clearMyVar('parseheader');
-        clearMyVar('parseisweb');
+        clearMyVar('parsetype');
+        clearMyVar('parseext');
         clearMyVar('isretain');
         clearMyVar('isload');
     }));
-    var d = [];
+
+    let d = [];
     if(lx!="update"){
         setPageTitle("♥解析管理-新增");
-        d.push({
-            title: '添加方式：点击切换',
-            col_type:'text_1',
-            url: $('#noLoading#').lazyRule(()=>{
-                if(getMyVar('addtype', '1')=="1"){
-                    putMyVar('addtype', '2');
-                }else{
-                    putMyVar('addtype', '1');
-                }
-                refreshPage(false);
-                return'toast://已切换';
-            })
-        });
     }else{
         if(getMyVar('isload', '0')=="0"){
             setPageTitle("♥解析管理-变更");
@@ -515,229 +498,85 @@ function jiexi(lx,data) {
             putMyVar('isload', '1');
         }
     }
-    if(getMyVar('addtype', '1')=="1"){
-        d.push({
-            title:'parseurl',
-            col_type: 'input',
-            desc: "解析名称",
-            extra: {
-                titleVisible: false,
-                defaultValue: getMyVar('parsename', lx=="update"?data.name:""),
-                onChange: 'putMyVar("parsename",input)'
-            }
-        });
-        d.push({
-            title:'parseurl',
-            col_type: 'input',
-            desc: "链接地址",
-            extra: {
-                highlight: true,
-                type: "textarea",
-                titleVisible: false,
-                defaultValue: getMyVar('parseurl', lx=="update"?data.url:""),
-                onChange: 'putMyVar("parseurl",input)'
-            }
-        });
-        function selectfrom(lx,oldfrom){
-            addListener("onClose", $.toString(() => {
-                clearMyVar('selectfrom');
-            }));
-            var d = [];
-            d.push({
-                title: lx=="prior"?'优先片源标识不为空时，优先级在上次优先之后':'排除对应片源后，解析将不再调用',
-                col_type: "rich_text"
-            });
-            d.push({
-                col_type: "line"
-            });
-            d.push({
-                title:lx=="prior"?'优先片源':'排除片源',
-                col_type: 'input',
-                desc: getMyVar('selectfrom',oldfrom),
-                extra: {
-                    titleVisible: false,
-                    defaultValue: getMyVar('selectfrom', oldfrom),
-                    onChange: 'putMyVar("selectfrom",input)'
-                }
-            });
-            d.push({
-                title: '选择对应的片源标识>',
-                col_type: "rich_text"
-            });
-            d.push({
-                col_type: "line_blank"
-            });
-            var recordfile = "hiker://files/rules/Src/Juying2/parse.json";
-            var recordparse=fetch(recordfile);
-            if(recordparse!=""){
-                eval("var recordlist=" + recordparse+ ";");
-            }else{
-                var recordlist={};
-            }
-            var froms = recordlist.from || ['youku','mgtv','iqiyi','qq'];
-            for(var i in froms){
-                d.push({
-                    title:getMyVar('selectfrom',oldfrom).indexOf(froms[i])>-1?'‘‘’’<span style="color:red">'+froms[i]:froms[i],
-                    col_type:'text_4',
-                    url: $('#noLoading#').lazyRule((from)=>{
-                            let selectfrom = getMyVar('selectfrom')?getMyVar('selectfrom','').replace(/,|，/g,",").split(','):[];
-                            if(selectfrom.indexOf(from)==-1){
-                                selectfrom.push(from);
-                                var sm = '选择片源>'+from;
-                            }else{
-                                function removeByValue(arr, val) {
-                                    for(var i = 0; i < arr.length; i++) {
-                                        if(arr[i] == val) {
-                                        arr.splice(i, 1);
-                                        break;
-                                        }
-                                    }
-                                }
-                                removeByValue(selectfrom,from);
-                                var sm = '删除片源>'+from;
-                            }
-                            putMyVar('selectfrom',selectfrom.join(','));
-                            refreshPage(false);
-                            return 'toast://'+sm;
-                    }, froms[i])
-                })
-            }
-            d.push({
-                col_type: "line_blank"
-            });
-            d.push({
-                title:'选择好了，点此返回',
-                col_type:'text_center_1',
-                url: $('#noLoading#').lazyRule((lx)=>{
-                    let selectfrom = getMyVar('selectfrom','');
-                    if(lx=="prior"){
-                        putMyVar('priorfrom',selectfrom);
-                        let stopfrom = getMyVar('stopfrom')?getMyVar('stopfrom','').replace(/,|，/g,",").split(','):[];
-                        let newstopfrom = [];
-                        stopfrom.forEach(it=>{
-                            if(selectfrom.indexOf(it)==-1){
-                                newstopfrom.push(it);
-                            }
-                        })
-                        putMyVar('stopfrom',newstopfrom.join(","));
-                    }else{
-                        putMyVar('stopfrom',selectfrom);
-                        let priorfrom = getMyVar('priorfrom')?getMyVar('priorfrom','').replace(/,|，/g,",").split(','):[];
-                        let newpriorfrom = [];
-                        priorfrom.forEach(it=>{
-                            if(selectfrom.indexOf(it)==-1){
-                                newpriorfrom.push(it);
-                            }
-                        })
-                        putMyVar('priorfrom',newpriorfrom.join(","));
-                    }
-                    back(true);
-                    return "hiker://empty";
-                },lx)
-            });
-            setHomeResult(d);
+    d.push({
+        title:'parseurl',
+        col_type: 'input',
+        desc: "解析名称",
+        extra: {
+            titleVisible: false,
+            defaultValue: getMyVar('parsename', lx=="update"?data.name:""),
+            onChange: 'putMyVar("parsename",input)'
         }
-        let priorfrom = getMyVar('priorfrom', data&&data.priorfrom?data.priorfrom:"");
-        putMyVar('priorfrom',priorfrom);
-        d.push({
-            title:'优先片源：' + priorfrom,
-            col_type: 'text_1',
-            url:$('hiker://empty#noRecordHistory##noHistory#').rule((selectfrom,lx,oldfrom) => {
-                selectfrom(lx,oldfrom);
-            },selectfrom,'prior',priorfrom)
-        });
-        let stopfrom = getMyVar('stopfrom', lx=="update"?data.stopfrom:"");
-        putMyVar('stopfrom',stopfrom);
-        d.push({
-            title:'排除片源：' + stopfrom,
-            col_type: 'text_1',
-            url: $('hiker://empty#noRecordHistory##noHistory#').rule((selectfrom,lx,oldfrom) => {
-                selectfrom(lx,oldfrom);
-            },selectfrom,'stop',stopfrom)
-        });
-        let parseheader = getMyVar('parseheader', lx=="update"&&data.header?JSON.stringify(data.header):"");
-        d.push({
-            title:'header信息：' + parseheader,
-            col_type: 'text_1',
-            url:$().lazyRule((parseheader)=>{
-                function sethead(parse){
-                    if(!/^http/.test(parse)){
-                        return "";
-                    }else{
-                        let head = {"User-Agent": "okhttp/4.1.0"};
-                        let referer = parse.match(/http(s)?:\/\/(.*?)\//)[0]||"";
-                        if(referer){
-                            head["referer"] = referer;
-                        }
-                        return head;
-                    }
-                }
-                return $(parseheader?parseheader:sethead(getMyVar('parseurl', '')),"提示防盗的解析可能就是需要header，比如Referer、UA").input(()=>{
-                    if((getMyVar("parseurl")&&/{|}/.test(input))||input==""){
-                        putMyVar("parseheader",input);
-                        refreshPage(false);
-                        return "hiker://empty";
-                    }else{
-                        return "toast://链接地址不能为空，或输入信息不正常"
-                    }
-                })
-            }, parseheader)
-        });
-        if(lx=="update"&&getMyVar('parseisweb',data&&data.web==1?"1":"0")=="1"){
-            putMyVar('parseisweb','1');
+    });
+    d.push({
+        title:'parseurl',
+        col_type: 'input',
+        desc: "链接地址",
+        extra: {
+            highlight: true,
+            type: "textarea",
+            titleVisible: false,
+            defaultValue: getMyVar('parseurl', lx=="update"?data.url:""),
+            onChange: 'putMyVar("parseurl",input)'
         }
-        d.push({
-            title:'是否明确为web普通解析：' + (getMyVar('parseisweb')=="1"?"是":"否"),
-            col_type: 'text_1',
-            url:$().lazyRule(()=>{
-                if(/^http/.test(getMyVar('parseurl',''))&&!/id=|key=/.test(getMyVar('parseurl',''))){
-                    if(getMyVar('parseisweb')=="1"){
-                        putMyVar('parseisweb','0');
-                    }else{
-                        putMyVar('parseisweb','1');
-                    }
-                    refreshPage(false);
-                    return "hiker://empty";
+    });
+    d.push({
+        title:'是否为web嗅探解析：' + (getMyVar('parsetype','0')=="0"?"是":"否"),
+        col_type: 'text_1',
+        url:$().lazyRule(()=>{
+            if(/^http/.test(getMyVar('parseurl',''))&&!/id=|key=/.test(getMyVar('parseurl',''))){
+                if(getMyVar('parsetype')=="1"){
+                    putMyVar('parsetype','0');
                 }else{
-                    return "toast://以http开头的普通解析才能标记"
-                }
-            })
-        });
-        d.push({
-            title: getMyVar('isretain', '')!="1"?'强制保留：否':'强制保留：是',
-            desc: getMyVar('isretain', '')!="1"?'资源码订阅更新时会被覆盖':'资源码订阅更新时保留此接口',
-            col_type:'text_1',
-            url:$('#noLoading#').lazyRule(()=>{
-                if(getMyVar('isretain', '')!="1"){
-                    putMyVar('isretain', '1');
-                }else{
-                    clearMyVar('isretain');
+                    putMyVar('parsetype','1');
                 }
                 refreshPage(false);
-                return 'toast://已切换';
-            })
-        });
-    }else{
-        d.push({
-            title:'批量添加',
-            col_type: 'input',
-            desc: "一行一个解析\n格式：解析名称#链接地址\n分隔符#可以用,号代替\n\n\n断插解析导入\n明码格式：★xxx★xxx\n云分享链接也支持的",
-            extra: {
-                titleVisible: false,
-                type: "textarea",
-                height: 10,
-                onChange: 'putMyVar("parseurls",input)'
+                return "hiker://empty";
+            }else{
+                return "toast://以http开头的普通解析才能标记"
             }
-        });
-    }
-
+        })
+    });
+    d.push({
+        title: getMyVar('isretain', '')!="1"?'强制保留：否':'强制保留：是',
+        desc: getMyVar('isretain', '')!="1"?'资源码订阅更新时会被覆盖':'资源码订阅更新时保留此接口',
+        col_type:'text_1',
+        url:$('#noLoading#').lazyRule(()=>{
+            if(getMyVar('isretain', '')!="1"){
+                putMyVar('isretain', '1');
+            }else{
+                clearMyVar('isretain');
+            }
+            refreshPage(false);
+            return 'toast://已切换';
+        })
+    });
+    d.push({
+        title: 'ext数据',
+        col_type: 'input',
+        desc: "解析ext数据，如headers、flag, 可以留空",
+        extra: {
+            defaultValue: storage0.getMyVar('parseext') || "",
+            titleVisible: false,
+            type: "textarea",
+            highlight: true,
+            height: 3,
+            onChange: $.toString(() => {
+                if (/{|}/.test(input) || !input) {
+                    storage0.putMyVar("parseext", input)
+                }
+            })
+        }
+    });
+    
     d.push({
         title:'测试',
         col_type:'text_3',
         url: $().lazyRule((data)=>{
             var dataurl = getMyVar('parseurl');
             var dataname = getMyVar('parsename')||'测试';
-            var datahead = getMyVar('parseheader',data&&data.header?JSON.stringify(data.header):"");
+            var datatype = getMyVar('parsetype','0');
+            var dataext = storage0.getMyVar('parseext') || {};
             if(!dataurl||!/^http|^functio/.test(dataurl.trim())){
                 return "toast://获取解析地址失败，无法测试";
             }
@@ -777,11 +616,7 @@ function jiexi(lx,data) {
                 }
                 writeFile(filepath, JSON.stringify(urls));
             }
-            let parsearr = {name:dataname,parse:dataurl};
-            try{
-                if(datahead){parsearr['header']= JSON.parse(datahead)}
-            }catch(e){}
-            if(getMyVar('parseisweb')=="1"){parsearr['web']= 1}
+            let parsearr = {name:dataname,url:dataurl,type:datatype,ext:dataext};
             urls['自定义'] = "";
             for(var key in urls){
                 addItemBefore('jxline2', {
@@ -831,11 +666,11 @@ function jiexi(lx,data) {
             title:'删除',
             col_type:'text_3',
             url: $("确定删除解析："+getMyVar('parsename',data.name)).confirm((dataurl)=>{
-                var filepath = "hiker://files/rules/Src/Juying2/myjiexi.json";
+                var filepath = "hiker://files/rules/Src/Juying2/jiexi.json";
                 var datafile = fetch(filepath);
                 eval("var datalist=" + datafile+ ";");
                 for(var i=0;i<datalist.length;i++){
-                    if(datalist[i].parse==dataurl){
+                    if(datalist[i].url==dataurl){
                         datalist.splice(i,1);
                         break;
                     }
@@ -852,7 +687,7 @@ function jiexi(lx,data) {
             url:$("确定要清空上面填写的内容？").confirm(()=>{
                 clearMyVar('parsename');
                 clearMyVar('parseurl');
-                clearMyVar('parseurls');
+                clearMyVar('parseext');
                 refreshPage(false);
                 return "toast://已清空";
             })
@@ -862,37 +697,28 @@ function jiexi(lx,data) {
         title:'保存',
         col_type:'text_3',
         url: $().lazyRule((lx,data)=>{
-            if(getMyVar('addtype', '1')=="1"&&!/^http|^functio/.test(getMyVar('parseurl',''))){return "toast://解析地址不正确"}
+            if(!/^http|^functio/.test(getMyVar('parseurl',''))){
+                return "toast://解析地址不正确"
+            }
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
 
             let urls= [];
             let parseurl = getMyVar('parseurl');
             let parsename = getMyVar('parsename');
-            let parseurls = getMyVar('parseurls');
-            let parsestopfrom = getMyVar('stopfrom',data&&data.stopfrom?data.stopfrom:"");
-            let pasrepriorfrom = getMyVar('priorfrom',data&&data.priorfrom?data.priorfrom:"");
-            let parseheader = getMyVar('parseheader',data&&data.header?JSON.stringify(data.header):"");
-            if(getMyVar('addtype', '1')=="1"&&parseurl&&parsename){
-                let isupdate = 0;
-                let stopfrom = parsestopfrom.replace('，',',').split(',');
-                stopfrom = stopfrom.filter(n => n);
-                let priorfrom = pasrepriorfrom.replace('，',',').split(',');
-                priorfrom = priorfrom.filter(n => n);
-                let arr  = { "name": parsename.trim(), "parse": parseurl.trim(), "stopfrom": stopfrom, "priorfrom": priorfrom, "sort": 0};
-                try{
-                    if(parseheader){arr['header']= JSON.parse(parseheader)}
-                }catch(e){     }
-                try{
-                    if(getMyVar('parseisweb')=="1"){arr['web']= 1}
-                }catch(e){}
+            let parsetype = getMyVar('parsetype','0');
+            let parseext = storage0.getMyVar('parseext');
+            if(parseurl&&parsename){
+                let arr  = { "name": parsename.trim(), "type": parseInt(parsetype),"url": parseurl.trim()};
+                if(parseext){
+                    arr['ext']=  parseext;
+                }
                 let isretain = getMyVar('isretain')=="1"?1:0;
                 if(isretain){arr['retain'] = 1;}
                 if(lx=="update"){
-                    isupdate = 1;
                     arr['oldurl'] = data.url;
                 }
                 urls.push(arr);
-                let num = jiexisave(urls,isupdate);
+                let num = jiexisave(urls);
                 if(num==1){
                     back(true);
                     return "toast://已保存";
@@ -900,51 +726,6 @@ function jiexi(lx,data) {
                     return "toast://已存在";
                 }else{
                     return "toast://保存出错";
-                }
-            }else if(getMyVar('addtype', '1')=="2"&&parseurls){
-                if(parseurls.indexOf('★')>-1){
-                    try{
-                        if(/^https:\/\/netcut\.cn/.test(parseurls)&&parseurls.indexOf('★MyParseS合集★')>-1){
-                            let parsesurl = parsePaste(parseurls);
-                            eval(base64Decode(parsesurl.replace('MyParseS合集★@base64://','')));
-                            for (let i=0;i<parseTitle.length;i++) {
-                                let urlname = parseTitle[i].trim();                            
-                                let urlurl = $.stringify(ParseS[urlname]).trim();
-                                let arr  = { "name": urlname, "parse": urlurl, "stopfrom": [], "priorfrom": [], "sort": 0 };
-                                urls.push(arr);
-                            }
-                        }else{                        
-                            if(/^https:\/\/netcut\.cn/.test(parseurls)){
-                                parseurls = parsePaste(parseurls);
-                                var urlname = parseurls.split('★')[1].trim();
-                                var urlurl = base64Decode(parseurls.split('★')[2]).trim();
-                            }else{
-                                var urlname = parseurls.split('★')[1].trim();
-                                var urlurl = parseurls.split('★')[2].trim();
-                            }
-                            let arr  = { "name": urlname, "parse": urlurl, "stopfrom": [], "priorfrom": [], "sort": 0 };
-                            urls.push(arr);
-                        }
-                    }catch(e){
-                        return "toast://断插解析识别出错";
-                    }
-                }else{
-                    let list = parseurls.replace(/,|，/g,"#").split('\n');
-                    for (let i in list) {
-                        let urlname = list[i].split('#')[0];
-                        let urlurl = list[i].split('#')[1];
-                        let arr  = { "name": urlname, "parse": urlurl, "stopfrom": [], "priorfrom": [], "sort": 0 };
-                        urls.push(arr);
-                    }
-                }               
-                if(urls.length>0){
-                    let num = jiexisave(urls);
-                    if(num>=0){
-                        back(true);
-                        return "toast://成功保存解析："+num;
-                    }else{
-                        return "toast://保存出错";
-                    } 
                 }
             }else{
                 return "toast://无法保存，检查项目填写完整性";
@@ -961,11 +742,6 @@ function jiexi(lx,data) {
 //扩展中心
 function extension(){
     addListener("onClose", $.toString(() => {
-        clearMyVar('importjiekou');
-        clearMyVar('importjiexi');
-        clearMyVar('importlive');
-        clearMyVar('importtype');
-        clearMyVar('importinput');
         clearMyVar('uploads');
         clearMyVar('uploadjiekou');
         clearMyVar('uploadjiexi');
@@ -973,8 +749,9 @@ function extension(){
         clearMyVar('uploadyundisk');
         //refreshPage(false);
     }));
+    setPageTitle("♥管理"+getMyVar('SrcJuying-Version', ''));
+
     let d = [];
-    
     /*
     d.push({
         col_type: "line_blank"
@@ -999,7 +776,6 @@ function extension(){
             }));
         }catch(e){}
     }
-    
 
     d.push({
         title: noteinfo.status==1&&sharecode['note_id']?'复制聚影资源码口令':'申请聚影资源码',//sharetime
@@ -1337,11 +1113,11 @@ function extension(){
                         let ypnum = 0;
                         let jkdatalist = pastedata.jiekou||[];
                         if(jkdatalist.length>0){
-                            jknum = jiekousave(jkdatalist, 0, codedytype||1);
+                            jknum = jiekousave(jkdatalist, codedytype||1);
                         }
                         let jxdatalist = pastedata.jiexi||[];
                         if(jxdatalist.length>0){
-                            jxnum = jiexisave(jxdatalist, 0, codedytype||1);
+                            jxnum = jiexisave(jxdatalist, codedytype||1);
                         }
                         if(pastedata.live){
                             let livefilepath = "hiker://files/rules/Src/Juying2/liveconfig.json";
