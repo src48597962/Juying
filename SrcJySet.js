@@ -447,9 +447,9 @@ function jiexisave(urls, mode) {
         let num = 0;
         urls.forEach(it=>{
             if(mode==2){
-                for(var j=0;j<datalist.length;j++){
-                    if(datalist[j].url==it.url||datalist[j].url==it.oldurl){
-                        datalist.splice(j,1);
+                for(let i=0;i<datalist.length;i++){
+                    if(datalist[i].url==it.url||datalist[i].url==it.oldurl){
+                        datalist.splice(i,1);
                         break;
                     }
                 }
@@ -459,7 +459,7 @@ function jiexisave(urls, mode) {
                 return item.url==it.url;
             }
 
-            if(!datalist.some(checkitem)&&it.url&&it.name&&/^http|^functio/.test(urlurl)){
+            if(!datalist.some(checkitem)&&it.url&&it.name&&/^http|^functio/.test(it.url)){
                 if(urls.length == 1){
                     datalist.unshift(it);
                 }else{
@@ -1839,11 +1839,9 @@ function Resourceimport(input,importtype,importmode){
         let jiexis = data.parses||[];
         if((getMyVar('importjiexi','')=="1")&&jiexis.length>0){
             try{
-                log(jiexis.length);
                 let urls = jiexis.filter(it=>{
                     return /^http/.test(it.url);
                 })
-                log(urls.length);
                 jxnum = jiexisave(urls, importmode);
             } catch (e) {
                 jxnum = -1;
