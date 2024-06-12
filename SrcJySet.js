@@ -1546,9 +1546,6 @@ function resource() {
     setPageTitle("资源管理");
     let d = [];
     d.push({
-        col_type: "line"
-    });
-    d.push({
         title: '🎁 资源导入类型',
         col_type: "rich_text"
     });
@@ -1676,7 +1673,21 @@ function resource() {
                 }
                 setHomeResult(d);
             },cfgfile,Juconfig),
-            col_type: "text_2"
+            col_type: "text_3"
+        });
+        d.push({
+            title: '🔂 ' + (Juconfig["importmode"] || "全量导入"),
+            url: $('#noLoading#').lazyRule((Juconfig,cfgfile) => {
+                    if(Juconfig["importmode"]=="增量导入"){
+                        Juconfig["importmode"] = "全量导入";
+                    }else{
+                        Juconfig["importmode"] = "增量导入";
+                    }
+                    writeFile(cfgfile, JSON.stringify(Juconfig));
+                    refreshPage(false);
+                    return "hiker://empty";
+                }, Juconfig, cfgfile),
+            col_type: "text_3"
         });
         d.push({
             title: '🆗 确定导入',
@@ -1700,7 +1711,7 @@ function resource() {
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                     return Resourceimport(input,getMyVar('importtype','0'));
                 }, Juconfig, cfgfile),
-            col_type: "text_2"
+            col_type: "text_3"
         });
     setResult(d);
 }
