@@ -977,13 +977,6 @@ function extension(){
     }));
     let d = [];
     
-    function getide(is) {
-        if(is==1){
-            return '‘‘’’<strong><font color="#f13b66a">◉ </front></strong>';
-        }else{
-            return '‘‘’’<strong><font color="#F54343">◉ </front></strong>';
-        }
-    }
     /*
     d.push({
         col_type: "line_blank"
@@ -1483,20 +1476,85 @@ function extension(){
         col_type: "line_blank"
     });
     */
+    
+    /*
+    d.push({
+        col_type: "line_blank"
+    });
+    */
+    d.push({
+        col_type: "line"
+    });
+
+    d.push({
+        title: '💝 关于聚影',
+        desc: '这是一个空壳小程序，仅用于个人学习研究！',
+        col_type: 'text_1',
+        url: 'toast://哥就是帅',
+        extra:{
+            lineVisible:false,
+            longClick: [{
+                title: "📑更新日志",
+                js: $.toString(() => {
+                    return $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
+                        setPageTitle("💝 关于聚影");
+                        var d = [];
+                        try{
+                            eval(fetchCache(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcTmplVersion.js', 1, { timeout:2000 }))
+                            var SrcJuyingdesc = newVersion.SrcJuyingdesc;
+                        }catch(e){
+
+                        }
+                        if(SrcJuyingdesc){
+                            d.push({
+                                title: '📑 更新日志',
+                                col_type: "rich_text"
+                            });
+                            d.push({
+                                col_type: "line"
+                            });
+                            var updatedesc = [];
+                            for(let key in SrcJuyingdesc){
+                                updatedesc.push('版本V'+key+(parseFloat(key) > parseFloat(getMyVar('SrcJuying-Version','').replace('-V',''))?"(内测)":"")+'：'+SrcJuyingdesc[key]);
+                            }
+                            d.push({
+                                title: updatedesc.reverse().slice(0,3).join('<br>'),
+                                col_type: "rich_text"
+                            });
+                        }
+                        setHomeResult(d);
+                    })
+                })
+            }]
+        }
+    });
+    d.push({
+        title: '<br>',
+        col_type: 'rich_text'
+    });
+    setHomeResult(d);
+}
+//资源管理
+function resource() {
+    addListener("onClose", $.toString(() => {
+        clearMyVar('importjiekou');
+        clearMyVar('importjiexi');
+        clearMyVar('importlive');
+        clearMyVar('importtype');
+        clearMyVar('importinput');
+    }));
+    setPageTitle("资源管理");
+    let d = [];
     d.push({
         col_type: "line"
     });
     d.push({
-        title: '🎁 其他资源',
+        title: '🎁 资源导入类型',
         col_type: "rich_text"
     });
+    let importtype = getMyVar('importtype','1');
     d.push({
-        title: '选择需要的功能类型',
-        col_type: "rich_text",
-        extra:{textSize:12}
-    });
-    d.push({
-        title: (getMyVar('importtype','0')=="1"?"👉":"")+"TVBox导入",
+        title: (importtype=="1"?"👉":"")+"TVBox导入",
         col_type: 'scroll_button',
         url: $('#noLoading#').lazyRule(() => {
             putMyVar('importtype','1');
@@ -1505,8 +1563,7 @@ function extension(){
         })
     });
 
-    if(getMyVar('importtype','0')!="0"){
-        if(getMyVar('importtype','0')!="2"){
+        if(importtype=="1"){
             d.push({
                 title: '选择需要的导入项目',
                 col_type: "rich_text",
@@ -1645,63 +1702,7 @@ function extension(){
                 }, Juconfig, cfgfile),
             col_type: "text_2"
         });
-    }
-    /*
-    d.push({
-        col_type: "line_blank"
-    });
-    */
-    d.push({
-        col_type: "line"
-    });
-
-    d.push({
-        title: '💝 关于聚影',
-        desc: '这是一个空壳小程序，仅用于个人学习研究！',
-        col_type: 'text_1',
-        url: 'toast://哥就是帅',
-        extra:{
-            lineVisible:false,
-            longClick: [{
-                title: "📑更新日志",
-                js: $.toString(() => {
-                    return $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
-                        setPageTitle("💝 关于聚影");
-                        var d = [];
-                        try{
-                            eval(fetchCache(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcTmplVersion.js', 1, { timeout:2000 }))
-                            var SrcJuyingdesc = newVersion.SrcJuyingdesc;
-                        }catch(e){
-
-                        }
-                        if(SrcJuyingdesc){
-                            d.push({
-                                title: '📑 更新日志',
-                                col_type: "rich_text"
-                            });
-                            d.push({
-                                col_type: "line"
-                            });
-                            var updatedesc = [];
-                            for(let key in SrcJuyingdesc){
-                                updatedesc.push('版本V'+key+(parseFloat(key) > parseFloat(getMyVar('SrcJuying-Version','').replace('-V',''))?"(内测)":"")+'：'+SrcJuyingdesc[key]);
-                            }
-                            d.push({
-                                title: updatedesc.reverse().slice(0,3).join('<br>'),
-                                col_type: "rich_text"
-                            });
-                        }
-                        setHomeResult(d);
-                    })
-                })
-            }]
-        }
-    });
-    d.push({
-        title: '<br>',
-        col_type: 'rich_text'
-    });
-    setHomeResult(d);
+    
 }
 //资源导入
 function Resourceimport(input,importtype){
