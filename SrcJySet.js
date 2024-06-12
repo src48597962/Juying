@@ -530,7 +530,7 @@ function jiexi(lx,data) {
             onChange: 'putMyVar("parseurl",input)'
         }
     });
-    let parsetype = data.type || "0";
+    let parsetype = data.type;
     d.push({
         title: parsetype,//'是否为web嗅探解析：' + (getMyVar('parsetype', parsetype)=="0"?"是":"否"),
         col_type: 'text_1',
