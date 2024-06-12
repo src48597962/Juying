@@ -1610,8 +1610,10 @@ function resource() {
             title:'本地',
             col_type: 'input',
             desc: '请输入链接地址',
-            url: "fileSelect://" + $.toString(()=>{
-                return "toast://"+input;
+            url: $('#noLoading#').lazyRule(() => {
+                return "fileSelect://" + $.toString(()=>{
+                    return "toast://"+input;
+                })
             }),
             extra: {
                 titleVisible: true,
@@ -1673,24 +1675,10 @@ function resource() {
                 }
                 setHomeResult(d);
             },cfgfile,Juconfig),
-            col_type: "text_3"
+            col_type: "text_2"
         });
         d.push({
-            title: '🔂 ' + (Juconfig["importmode"] || "全量导入"),
-            url: $('#noLoading#').lazyRule((Juconfig,cfgfile) => {
-                    if(Juconfig["importmode"]=="增量导入"){
-                        Juconfig["importmode"] = "全量导入";
-                    }else{
-                        Juconfig["importmode"] = "增量导入";
-                    }
-                    writeFile(cfgfile, JSON.stringify(Juconfig));
-                    refreshPage(false);
-                    return "hiker://empty";
-                }, Juconfig, cfgfile),
-            col_type: "text_3"
-        });
-        d.push({
-            title: '🆗 确定导入',
+            title: '🆗 确定导入' + (Juconfig["importmode"] || "全"),
             url: getMyVar('importjiekou')!="1"&&getMyVar('importjiexi')!="1"&&getMyVar('importlive')!="1"?'toast://请选择导入项目':$('#noLoading#').lazyRule((Juconfig,cfgfile) => {
                     if(getMyVar('importinput', '')==""){
                         return 'toast://请先输入链接地址'
@@ -1711,7 +1699,22 @@ function resource() {
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                     return Resourceimport(input,getMyVar('importtype','0'));
                 }, Juconfig, cfgfile),
-            col_type: "text_3"
+            col_type: "text_2",
+            extra: {
+                longClick: [{
+                    title: Juconfig["importmode"] + "量导入",
+                    js: $.toString((cfgfile, Juconfig) => {
+                        if(Juconfig["importmode"]=="增"){
+                            Juconfig["importmode"] = "全";
+                        }else{
+                            Juconfig["importmode"] = "增";
+                        }
+                        writeFile(cfgfile, JSON.stringify(Juconfig));
+                        refreshPage(false);
+                        return 'toast://导入方式设置为：' + Juconfig["importmode"] + "量导入";
+                    },cfgfile, Juconfig)
+                }]
+            }
         });
     setResult(d);
 }
