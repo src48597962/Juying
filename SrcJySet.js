@@ -379,15 +379,10 @@ function jiekousave(urls, mode) {
     if(urls.length==0){return 0;}
     let num = 0;
     try{
-        let filepath = jkfile;
-        let datalist = [];
-        var datafile = fetch(filepath);
-        if(datafile != ""){
-            eval("datalist=" + datafile+ ";");
-        }
+        let datalist = getDatas('jk');
         let olddatanum = datalist.length;
 
-        if(mode){//全量模式时，先删除本地
+        if(mode==1){//全量模式时，先删除本地
             for(let i=0;i<datalist.length;i++){
                 if(datalist[i].retain!=1){
                     if(/^hiker:\/\/files\/data\//.test(datalist[i].url)){
@@ -398,34 +393,37 @@ function jiekousave(urls, mode) {
                 }
             }
         }
-
-        for (var i in urls) {
-            let urlname = urls[i].name;//.replace(/(?:[\u2700-\u27bf]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff]|[\u0023-\u0039]\ufe0f?\u20e3|\u3299|\u3297|\u303d|\u3030|\u24c2|\ud83c[\udd70-\udd71]|\ud83c[\udd7e-\udd7f]|\ud83c\udd8e|\ud83c[\udd91-\udd9a]|\ud83c[\udde6-\uddff]|\ud83c[\ude01-\ude02]|\ud83c\ude1a|\ud83c\ude2f|\ud83c[\ude32-\ude3a]|\ud83c[\ude50-\ude51]|\u203c|\u2049|[\u25aa-\u25ab]|\u25b6|\u25c0|[\u25fb-\u25fe]|\u00a9|\u00ae|\u2122|\u2139|\ud83c\udc04|[\u2600-\u26FF]|\u2b05|\u2b06|\u2b07|\u2b1b|\u2b1c|\u2b50|\u2b55|\u231a|\u231b|\u2328|\u23cf|[\u23e9-\u23f3]|[\u23f8-\u23fa]|\ud83c\udccf|\u2934|\u2935|[\u2190-\u21ff])|\(XPF\)|\(萝卜\)|\(神马\)|\(切\)|\(聚\)|\(优\)|\(神马\)|\(XB\)|\(SP\)|\(XP\)|[\x00-\x1F\x7F]/g,'');
-            let urlurl = urls[i].url;
-            let urlua = urls[i].ua;
-            let urltype = urls[i].type||getapitype(urlurl);
-            let urlgroup = urls[i].group||(olddatanum>0?"新导入":"");
-            let urlext = urls[i].ext||"";
-
-            function checkitem(item) {
-                return item.url==urlurl;
+        //.replace(/(?:[\u2700-\u27bf]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff]|[\u0023-\u0039]\ufe0f?\u20e3|\u3299|\u3297|\u303d|\u3030|\u24c2|\ud83c[\udd70-\udd71]|\ud83c[\udd7e-\udd7f]|\ud83c\udd8e|\ud83c[\udd91-\udd9a]|\ud83c[\udde6-\uddff]|\ud83c[\ude01-\ude02]|\ud83c\ude1a|\ud83c\ude2f|\ud83c[\ude32-\ude3a]|\ud83c[\ude50-\ude51]|\u203c|\u2049|[\u25aa-\u25ab]|\u25b6|\u25c0|[\u25fb-\u25fe]|\u00a9|\u00ae|\u2122|\u2139|\ud83c\udc04|[\u2600-\u26FF]|\u2b05|\u2b06|\u2b07|\u2b1b|\u2b1c|\u2b50|\u2b55|\u231a|\u231b|\u2328|\u23cf|[\u23e9-\u23f3]|[\u23f8-\u23fa]|\ud83c\udccf|\u2934|\u2935|[\u2190-\u21ff])|\(XPF\)|\(萝卜\)|\(神马\)|\(切\)|\(聚\)|\(优\)|\(神马\)|\(XB\)|\(SP\)|\(XP\)|[\x00-\x1F\x7F]/g,'');
+        urls.forEach(it=>{
+            if(mode==2){
+                for(let i=0;i<datalist.length;i++){
+                    if(datalist[i].url==it.url||datalist[i].url==it.oldurl){
+                        if(/^hiker:\/\/files\/data\//.test(datalist[i].url)){
+                            deleteFile(datalist[i].url);
+                        }
+                        datalist.splice(i,1);
+                        break;
+                    }
+                }
             }
 
-            if(!datalist.some(checkitem)&&urlname&&urltype){
-                let arr  = { "name": urlname, "url": urlurl, "type": urltype };
-                if(urlgroup){arr['group'] = urlgroup}
-                if(urlua){arr['ua'] = urlua}
-                if(urlext){arr['ext'] = urlext}
-                if(urls[i].categories){arr['categories'] = urls[i].categories}
+            function checkitem(item) {
+                return item.url==it.url;
+            }
+            
+            if(!datalist.some(checkitem)&&it.name&&it.url&&it.type){
+                if(olddatanum>0){
+                    it.group = it.group || "新导入";
+                }
                 if(urls.length == 1){
-                    datalist.unshift(arr);
+                    datalist.unshift(it);
                 }else{
-                    datalist.push(arr);
+                    datalist.push(it);
                 }
                 num = num + 1;
             }
-        }
-        if(num>0){writeFile(filepath, JSON.stringify(datalist));}
+        })
+        if(num>0){writeFile(jkfile, JSON.stringify(datalist));}
     } catch (e) {
         log('导入失败：'+e.message); 
         return -1;
@@ -433,17 +431,11 @@ function jiekousave(urls, mode) {
     return num;
 }
 //解析保存
-function jiexisave(urls,update,codedytype) {
+function jiexisave(urls, mode) {
     if(urls.length==0){return 0;}
     try{
-        var filepath = jxfile ;
-        var datafile = fetch(filepath);
-        if(datafile != ""){
-            eval("var datalist=" + datafile+ ";");
-        }else{
-            var datalist = [];
-        }
-        if(codedytype==1){
+        let datalist = getDatas('jx');
+        if(mode==1){
             for(let i=0;i<datalist.length;i++){
                 if(datalist[i].retain!=1){
                     datalist.splice(i,1);
@@ -452,41 +444,31 @@ function jiexisave(urls,update,codedytype) {
             }
         }
         
-        var num = 0;
-        for (var i in urls) {
-            let urlname = urls[i].name;
-            let urlurl = urls[i].parse;
-            let urlstopfrom = urls[i].stopfrom||[];
-            let urlpriorfrom = urls[i].priorfrom||[];
-            let urlsort = urls[i].sort||0;
-
-            if(update==1){
+        let num = 0;
+        urls.forEach(it=>{
+            if(mode==2){
                 for(var j=0;j<datalist.length;j++){
-                    if(datalist[j].parse==urlurl||datalist[j].parse==urls[i].oldurl){
+                    if(datalist[j].url==it.url||datalist[j].url==it.oldurl){
                         datalist.splice(j,1);
                         break;
                     }
                 }
             }
-            
+
             function checkitem(item) {
-                return item.parse==urlurl;
+                return item.url==it.url;
             }
 
-            if(!datalist.some(checkitem)&&urlname&&/^http|^functio/.test(urlurl)){
-                let arr  = { "name": urlname, "parse": urlurl, "stopfrom": urlstopfrom, "priorfrom": urlpriorfrom, "sort": urlsort };
-                if(urls[i].web){arr['web'] = urls[i].web}
-                if(urls[i].retain){arr['retain'] = 1;}
-                if(urls[i].header){arr['header'] = urls[i].header;}
+            if(!datalist.some(checkitem)&&it.url&&it.name&&/^http|^functio/.test(urlurl)){
                 if(urls.length == 1){
-                    datalist.unshift(arr);
+                    datalist.unshift(it);
                 }else{
-                    datalist.push(arr);
+                    datalist.push(it);
                 }
                 num = num + 1;
             }
-        }
-        if(num>0){writeFile(filepath, JSON.stringify(datalist));}
+        })
+        if(num>0){writeFile(jxfile, JSON.stringify(datalist));}
     } catch (e) {
         log('导入失败：'+e.message); 
         return -1;
@@ -1691,7 +1673,7 @@ function resource() {
             col_type: "text_2"
         });
         d.push({
-            title: '🆗 确定导入(' + (Juconfig["importmode"] || "全")+')',
+            title: '🆗 确定导入(' + (Juconfig["importmode"]?"全":"增")+')',
             url: getMyVar('importjiekou')!="1"&&getMyVar('importjiexi')!="1"&&getMyVar('importlive')!="1"?'toast://请选择导入项目':$('#noLoading#').lazyRule((Juconfig,cfgfile) => {
                     if(getMyVar('importinput', '')==""){
                         return 'toast://请先输入链接地址'
@@ -1710,21 +1692,21 @@ function resource() {
                     }
 
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
-                    return Resourceimport(input,getMyVar('importtype','0'));
+                    return Resourceimport(input,getMyVar('importtype','1'),Juconfig['importmode']?1:0);
                 }, Juconfig, cfgfile),
             col_type: "text_2",
             extra: {
                 longClick: [{
                     title: "导入方式",
                     js: $.toString((cfgfile, Juconfig) => {
-                        if(Juconfig["importmode"]=="增"){
-                            Juconfig["importmode"] = "全";
+                        if(Juconfig["importmode"]){
+                            Juconfig["importmode"] = 0;
                         }else{
-                            Juconfig["importmode"] = "增";
+                            Juconfig["importmode"] = 1;
                         }
                         writeFile(cfgfile, JSON.stringify(Juconfig));
                         refreshPage(false);
-                        return 'toast://导入方式设置为：' + Juconfig["importmode"] + "量导入";
+                        return 'toast://导入方式设置为：' + (Juconfig["importmode"]?"全":"增") + "量导入";
                     },cfgfile, Juconfig)
                 }]
             }
@@ -1732,7 +1714,7 @@ function resource() {
     setResult(d);
 }
 //资源导入
-function Resourceimport(input,importtype){
+function Resourceimport(input,importtype,importmode){
     if(importtype=="1"){//tvbox导入
         try{
             showLoading('检测文件有效性');
@@ -1847,7 +1829,7 @@ function Resourceimport(input,importtype){
             });
 
             try{
-                jknum = jiekousave(urls);
+                jknum = jiekousave(urls, importmode);
             }catch(e){
                 jknum =-1;
                 log('TVBox导入接口保存有异常>'+e.message);
@@ -1857,17 +1839,10 @@ function Resourceimport(input,importtype){
 
         if((getMyVar('importjiexi','')=="1")&&jiexi.length>0){
             try{
-                let urls = [];
-                for (let i=0;i<jiexi.length;i++) {
-                    if(/^http/.test(jiexi[i].url)){
-                        let arr  = { "name": jiexi[i].name, "parse": jiexi[i].url, "stopfrom": [], "priorfrom": [], "sort": 1 };
-                        if(jiexi[i].ext&&jiexi[i].ext.header){
-                            arr['header'] = jiexi[i].ext.header;
-                        }
-                        urls.push(arr);
-                    }
-                }
-                jxnum = jiexisave(urls);
+                let urls = jiexi.filter(it=>{
+                    return /^http/.test(it.url);
+                })
+                jxnum = jiexisave(urls, importmode);
             } catch (e) {
                 jxnum = -1;
                 log('TVBox导入解析保存失败>'+e.message);
