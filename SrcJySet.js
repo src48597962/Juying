@@ -529,7 +529,10 @@ function jiexi(lx,data) {
             onChange: 'putMyVar("parseurl",input)'
         }
     });
+    log(data.type);
     let parsetype = data.type || "0";
+    log(parsetype);
+    log(parsetype.toString());
     d.push({
         title:'是否为web嗅探解析：' + (getMyVar('parsetype', parsetype)=="0"?"是":"否"),
         col_type: 'text_1',
