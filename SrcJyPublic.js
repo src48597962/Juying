@@ -333,6 +333,14 @@ function sortByPinyin(arr) {
 function colorTitle(title, Color) {
     return '<font color="' + Color + '">' + title + '</font>';
 }
+//选中状态标识
+function getide(is) {
+    if(is==1){
+        return '‘‘’’<strong><font color="#f13b66a">◉ </front></strong>';
+    }else{
+        return '‘‘’’<strong><font color="#F54343">◉ </front></strong>';
+    }
+}
 //取前三历史记录
 function getHistory(){
     let h = [];
