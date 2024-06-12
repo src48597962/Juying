@@ -326,6 +326,7 @@ function SRCSet() {
                         return "toast://分享失败，剪粘板或网络异常>"+pasteurl;
                     }
                 } else if (input == "编辑") {
+                    log(data);
                     return $('hiker://empty#noRecordHistory##noHistory#').rule((data) => {
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                         if(getMyVar('guanli', 'jk')=="jk"){
@@ -496,7 +497,7 @@ function jiexi(lx,data) {
         clearMyVar('isretain');
         clearMyVar('isload');
     }));
-
+    log(data);
     let d = [];
     if(lx!="update"){
         setPageTitle("♥解析管理-新增");
@@ -547,7 +548,6 @@ function jiexi(lx,data) {
             }
         })
     });
-    log("22");
     d.push({
         title: getMyVar('isretain', '')!="1"?'强制保留：否':'强制保留：是',
         desc: getMyVar('isretain', '')!="1"?'资源码订阅更新时会被覆盖':'资源码订阅更新时保留此接口',
