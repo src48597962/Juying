@@ -1610,7 +1610,7 @@ function resource() {
             title:'本地',
             col_type: 'input',
             desc: '请输入链接地址',
-            url: `fileSelect://`+$.toString(()=>{
+            url: "fileSelect://" + $.toString(()=>{
                 return "toast://"+input;
             }),
             extra: {
