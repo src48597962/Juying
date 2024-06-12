@@ -360,10 +360,10 @@ function dianboyiji() {
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                         SRCSet();
                     })
-                }else if(input=="扩展中心"){
+                }else if(input=="资源管理"){
                     return $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
-                        extension();
+                        resource();
                     })
                 }
             }),
