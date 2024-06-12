@@ -1611,8 +1611,18 @@ function resource() {
             col_type: 'input',
             desc: '请输入链接地址',
             url: $('#noLoading#').lazyRule(() => {
-                return "fileSelect://" + $.toString(()=>{
-                    return "toast://"+input;
+                return `fileSelect://`+$.toString(()=>{
+                    if(/JYshare_/.test(input) && input.endsWith('txt')){
+                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJuSet.js');
+                        input = '聚阅接口￥' + aesEncode('SrcJu', input) + '￥文件导入';
+                        return JYimport(input);
+                    }else if(/JYimport_/.test(input) && input.endsWith('hiker')){
+                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJuSet.js');
+                        let content = fetch('file://'+input);
+                        return JYimport(content);
+                    }else{
+                        return "toast://请选择正确的聚阅接口分享文件"
+                    }
                 })
             }),
             extra: {
@@ -1678,7 +1688,7 @@ function resource() {
             col_type: "text_2"
         });
         d.push({
-            title: '🆗 确定导入' + (Juconfig["importmode"] || "全"),
+            title: '🆗 确定导入(' + (Juconfig["importmode"] || "全")+')',
             url: getMyVar('importjiekou')!="1"&&getMyVar('importjiexi')!="1"&&getMyVar('importlive')!="1"?'toast://请选择导入项目':$('#noLoading#').lazyRule((Juconfig,cfgfile) => {
                     if(getMyVar('importinput', '')==""){
                         return 'toast://请先输入链接地址'
@@ -1702,7 +1712,7 @@ function resource() {
             col_type: "text_2",
             extra: {
                 longClick: [{
-                    title: Juconfig["importmode"] + "量导入",
+                    title: "导入方式",
                     js: $.toString((cfgfile, Juconfig) => {
                         if(Juconfig["importmode"]=="增"){
                             Juconfig["importmode"] = "全";
