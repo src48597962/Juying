@@ -1563,80 +1563,77 @@ function resource() {
         })
     });
 
-        if(importtype=="1"){
-            d.push({
-                title: '选择需要的导入项目',
-                col_type: "rich_text",
-                extra:{textSize:12}
-            });
-            d.push({
-                title:(getMyVar('importjiekou','0')=="1"?getide(1):getide(0))+'影视接口',
-                col_type:'text_3',
-                url:$('#noLoading#').lazyRule(() => {
-                    if(getMyVar('importjiekou')=="1"){
-                        putMyVar('importjiekou','0');
-                    }else{
-                        putMyVar('importjiekou','1');
-                    }
-                    refreshPage(false);
-                    return "hiker://empty";
-                })
-            });
-            d.push({
-                title:(getMyVar('importjiexi','0')=="1"?getide(1):getide(0))+'解析接口',
-                col_type:'text_3',
-                url:$('#noLoading#').lazyRule(() => {
-                    if(getMyVar('importjiexi')=="1"){
-                        putMyVar('importjiexi','0');
-                    }else{
-                        putMyVar('importjiexi','1');
-                    }
-                    refreshPage(false);
-                    return "hiker://empty";
-                })
-            });
-            d.push({
-                title:(getMyVar('importlive','0')=="1"?getide(1):getide(0))+'直播接口',
-                col_type:'text_3',
-                url:$('#noLoading#').lazyRule(() => {
-                    if(getMyVar('importlive')=="1"){
-                        putMyVar('importlive','0');
-                    }else{
-                        putMyVar('importlive','1');
-                    }
-                    refreshPage(false);
-                    return "hiker://empty";
-                })
-            });
-        }
+    if(importtype=="1"){
+        d.push({
+            title: '选择需要的导入项目',
+            col_type: "rich_text",
+            extra:{textSize:12}
+        });
+        d.push({
+            title:(getMyVar('importjiekou','0')=="1"?getide(1):getide(0))+'影视接口',
+            col_type:'text_3',
+            url:$('#noLoading#').lazyRule(() => {
+                if(getMyVar('importjiekou')=="1"){
+                    putMyVar('importjiekou','0');
+                }else{
+                    putMyVar('importjiekou','1');
+                }
+                refreshPage(false);
+                return "hiker://empty";
+            })
+        });
+        d.push({
+            title:(getMyVar('importjiexi','0')=="1"?getide(1):getide(0))+'解析接口',
+            col_type:'text_3',
+            url:$('#noLoading#').lazyRule(() => {
+                if(getMyVar('importjiexi')=="1"){
+                    putMyVar('importjiexi','0');
+                }else{
+                    putMyVar('importjiexi','1');
+                }
+                refreshPage(false);
+                return "hiker://empty";
+            })
+        });
+        d.push({
+            title:(getMyVar('importlive','0')=="1"?getide(1):getide(0))+'直播接口',
+            col_type:'text_3',
+            url:$('#noLoading#').lazyRule(() => {
+                if(getMyVar('importlive')=="1"){
+                    putMyVar('importlive','0');
+                }else{
+                    putMyVar('importlive','1');
+                }
+                refreshPage(false);
+                return "hiker://empty";
+            })
+        });
+    }
         d.push({
             title:'本地',
             col_type: 'input',
             desc: '请输入链接地址',
+            url: `fileSelect://`+$.toString(()=>{
+                return "toast://"+input;
+            }),
             extra: {
-                titleVisible: false,
+                titleVisible: true,
                 defaultValue: getMyVar('importinput', ''),
                 onChange: 'putMyVar("importinput",input)'
             }
         });
         d.push({
             title: '🆖 历史记录',
-            url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
+            url: $('hiker://empty#noRecordHistory##noHistory#').rule((cfgfile,Juconfig) => {
                 addListener("onClose", $.toString(() => {
                     refreshPage(false);
                 }));
                 setPageTitle("🆖资源导入-历史记录");
-                let cfgfile = "hiker://files/rules/Src/Juying2/config.json";
-                let Juyingcfg=fetch(cfgfile);
-                if(Juyingcfg != ""){
-                    eval("var Juconfig=" + Juyingcfg+ ";");
-                }else{
-                    var Juconfig= {};
-                }
+                
                 var d = [];
                 let importrecord = Juconfig['importrecord']||[];
                 let lists = importrecord.filter(item => {
-                    return item.type==getMyVar('importtype','0');
+                    return item.type==getMyVar('importtype','1');
                 })
                 if(lists.length>0){
                     d.push({
@@ -1657,7 +1654,7 @@ function resource() {
                                     }else if(input=="删除"){
                                         let importrecord = Juconfig['importrecord']||[];
                                         for(let i=0;i<importrecord.length;i++){
-                                            if(importrecord[i].url==url&&importrecord[i].type==getMyVar('importtype','0')){
+                                            if(importrecord[i].url==url&&importrecord[i].type==getMyVar('importtype','1')){
                                                 importrecord.splice(i,1);
                                                 break;
                                             }
@@ -1678,20 +1675,23 @@ function resource() {
                     });
                 }
                 setHomeResult(d);
-            }),
+            },cfgfile,Juconfig),
             col_type: "text_2"
         });
         d.push({
             title: '🆗 确定导入',
-            url: getMyVar('importtype')!="2"&&getMyVar('importjiekou')!="1"&&getMyVar('importjiexi')!="1"&&getMyVar('importlive')!="1"?'toast://请选择导入项目':$('#noLoading#').lazyRule((Juconfig,cfgfile) => {
-                    if(getMyVar('importinput', '')==""&&getMyVar('importtype','0')!="2"){
+            url: getMyVar('importjiekou')!="1"&&getMyVar('importjiexi')!="1"&&getMyVar('importlive')!="1"?'toast://请选择导入项目':$('#noLoading#').lazyRule((Juconfig,cfgfile) => {
+                    if(getMyVar('importinput', '')==""){
                         return 'toast://请先输入链接地址'
                     }
                     let input = getMyVar('importinput', '');
                     if(input){
                         let importrecord = Juconfig['importrecord']||[];
-                        if(!importrecord.some(item => item.url==input && item.type==getMyVar('importtype','0'))){
-                            importrecord.push({type:getMyVar('importtype','0'),url:input});
+                        if(importrecord.length>20){//保留20个记录
+                            importrecord.shift();
+                        }
+                        if(!importrecord.some(item => item.url==input && item.type==getMyVar('importtype','1'))){
+                            importrecord.push({type:getMyVar('importtype','1'),url:input});
                             Juconfig['importrecord'] = importrecord;
                             writeFile(cfgfile, JSON.stringify(Juconfig));
                         }
