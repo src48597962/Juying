@@ -529,12 +529,9 @@ function jiexi(lx,data) {
             onChange: 'putMyVar("parseurl",input)'
         }
     });
-    log(data.type);
     let parsetype = data.type || "0";
-    log(parsetype);
-    log(parsetype.toString());
     d.push({
-        title:'是否为web嗅探解析：' + (getMyVar('parsetype', parsetype)=="0"?"是":"否"),
+        title: parsetype,//'是否为web嗅探解析：' + (getMyVar('parsetype', parsetype)=="0"?"是":"否"),
         col_type: 'text_1',
         url:$().lazyRule(()=>{
             if(/^http/.test(getMyVar('parseurl',''))&&!/id=|key=/.test(getMyVar('parseurl',''))){
@@ -550,6 +547,7 @@ function jiexi(lx,data) {
             }
         })
     });
+    log("22");
     d.push({
         title: getMyVar('isretain', '')!="1"?'强制保留：否':'强制保留：是',
         desc: getMyVar('isretain', '')!="1"?'资源码订阅更新时会被覆盖':'资源码订阅更新时保留此接口',
