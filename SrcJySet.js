@@ -1742,10 +1742,10 @@ function Resourceimport(input,importtype,importmode){
         let jknum = -1;
         let jxnum = -1;
         let livenum = -1;
-        if((getMyVar('importjiekou','')=="1")&&jiekou.length>0){
+        let jiekous = data.sites||[];
+        if((getMyVar('importjiekou','')=="1")&&jiekous.length>0){
             showLoading('正在多线程抓取数据中');
             let urls= [];
-            let jiekoulist = data.sites||[];
             //多线程处理
             var task = function(obj) {
                 let arr;
@@ -1813,7 +1813,7 @@ function Resourceimport(input,importtype,importmode){
                 return 1;
             }
             
-            let jiekous = jiekoulist.map((list)=>{
+            let jiekoutask = jiekous.map((list)=>{
                 return {
                     func: task,
                     param: list,
@@ -1821,7 +1821,7 @@ function Resourceimport(input,importtype,importmode){
                 }
             });
 
-            be(jiekous, {
+            be(jiekoutask, {
                 func: function(obj, id, error, taskResult) {                            
                 },
                 param: {
@@ -1836,12 +1836,11 @@ function Resourceimport(input,importtype,importmode){
             } 
             hideLoading();    
         }
-
-        if((getMyVar('importjiexi','')=="1")&&jiexilist.length>0){
-            let jiexilist = data.parses||[];
+        let jiexis = data.parses||[];
+        if((getMyVar('importjiexi','')=="1")&&jiexis.length>0){
             try{
-                log(jiexilist.length);
-                let urls = jiexilist.filter(it=>{
+                log(jiexis.length);
+                let urls = jiexis.filter(it=>{
                     return /^http/.test(it.url);
                 })
                 log(urls.length);
@@ -1851,10 +1850,10 @@ function Resourceimport(input,importtype,importmode){
                 log('TVBox导入解析保存失败>'+e.message);
             }
         }
-        if(getMyVar('importlive','')=="1"){
+        let lives = data.lives || [];
+        if(getMyVar('importlive','')=="1"&&lives.length>0){
             try{
                 let urls = [];
-                let lives = data.lives || [];
                 for (let i=0;i<lives.length;i++) {
                     let channels = lives[i].channels||[];
                     if(channels.length>0){
