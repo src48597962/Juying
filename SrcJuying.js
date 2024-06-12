@@ -347,7 +347,7 @@ function dianboyiji() {
         })
         d.push({
             title: "我的设置",
-            url: $(["接口管理","解析管理","扩展中心"],1).select(()=>{
+            url: $(["接口管理","解析管理","资源管理"],1).select(()=>{
                 if(input=="接口管理"){
                     putMyVar('guanli','jk');
                     return $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
