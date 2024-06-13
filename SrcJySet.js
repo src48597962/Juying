@@ -508,7 +508,7 @@ function jiekou(data) {
             putMyVar('apiurl', data.url);
             putMyVar('apitype', data.type);
             putMyVar('apigroup', data.group||"");
-            putMyVar('apiext', data.ext&&$.type(data.ext)=="object"?JSON.stringify(data.ext):data.ext);//JSON.stringify(JSON.parse(getMyVar('apiext')), null, "\t")
+            putMyVar('apiext', data.ext&&$.type(data.ext)=="object"?JSON.stringify(data.ext):(data.ext||""));//JSON.stringify(JSON.parse(getMyVar('apiext')), null, "\t")
             putMyVar('isretain', data.retain||"");
             putMyVar('isload', '1');
         }
