@@ -114,8 +114,7 @@ function dataEnable(lx, data, input) {
     }
     let sm;
     waitlist.forEach(it => {
-        let dataurl = lx=='jk'?it.url:it.parse;
-        let index = datalist.indexOf(datalist.filter(d => dataurl==(lx=='jk'?d.url:d.parse) )[0]);
+        let index = datalist.indexOf(datalist.filter(d => it.url==d.url)[0]);
         if(input == "禁用"){
             datalist[index].stop = 1;
             sm = waitlist.length==1?'已禁用：'+it.name:'已禁用所选的'+waitlist.length+'个';
