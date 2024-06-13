@@ -246,7 +246,7 @@ function getYiData(jkdata) {
                                     分类.push(String(xpath(it, `//ty/text()`)).trim() + '$' + String(xpath(it, `//ty/@id`)).trim());
                                 })
                             } else {
-                                log(gethtml);
+                                log($.type(gethtml));
                                 let typehtml = JSON.parse(gethtml);
                                 let typelist = typehtml.class;
                                 if (jkdata.categories) {
