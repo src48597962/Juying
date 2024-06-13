@@ -189,6 +189,7 @@ function getYiData(jkdata) {
                         }
                         筛选 = extdata["筛选"];
                     } else {
+                        log(classurl);
                         let gethtml = getHtml(classurl, headers);
                         if (api_type == "v1") {
                             let typehtml = JSON.parse(gethtml);
@@ -245,6 +246,7 @@ function getYiData(jkdata) {
                                     分类.push(String(xpath(it, `//ty/text()`)).trim() + '$' + String(xpath(it, `//ty/@id`)).trim());
                                 })
                             } else {
+                                log(gethtml);
                                 let typehtml = JSON.parse(gethtml);
                                 let typelist = typehtml.class;
                                 if (jkdata.categories) {
