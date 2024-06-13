@@ -250,7 +250,7 @@ function getYiData(jkdata) {
 
                                 if (jkdata.categories) {
                                     for (var i = 0; i < typelist.length; i++) {
-                                        if (jkdata.categories.indexOf(typelist[i].type_name) == -1 typelist[i].type_pid!=0) {
+                                        if (jkdata.categories.indexOf(typelist[i].type_name) == -1 && typelist[i].type_pid!=0) {
                                             typelist.splice(i, 1);
                                             i = i - 1;
                                         }
