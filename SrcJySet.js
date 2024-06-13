@@ -361,7 +361,6 @@ function SRCSet() {
         col_type: 'text_center_1'
     });
     
-    
     setResult(d);
 }
 
@@ -516,7 +515,7 @@ function jiekou(data) {
     }
     
         d.push({
-            title:'apiname',
+            title: 'apiname',
             col_type: 'input',
             desc: "接口名称",
             extra: {
@@ -526,11 +525,14 @@ function jiekou(data) {
             }
         });
         d.push({
-            title:'apiurl',
+            title: '查看',
             col_type: 'input',
             desc: "接口地址",
+            url: $.toString(() => {
+                return "editFile://"+getMyVar('apiurl','');
+            }),
             extra: {
-                titleVisible: false,
+                titleVisible: /^hiker/.test(getMyVar('apiurl',''))?true:false,
                 defaultValue: getMyVar('apiurl',''),
                 onChange: 'putMyVar("apiurl",input)'
             }
