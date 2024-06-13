@@ -251,7 +251,7 @@ function getYiData(jkdata) {
                                 eval("typehtml = " + gethtml);
                                 log($.type(typehtml));
                                 let typelist = typehtml["class"] || [];
-
+                                log(typelist.length);
                                 if (jkdata.categories) {
                                     for (var i = 0; i < typelist.length; i++) {
                                         if (jkdata.categories.indexOf(typelist[i].type_name) == -1 && typelist[i].type_pid != 0) {
