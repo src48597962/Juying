@@ -1376,7 +1376,9 @@ function dealJson(html) {
     } catch (e) { }
     try {
         html = JSON.parse(html);
-    } catch (e) { }
+    } catch (e) {
+        log("转换为json对象失败>"+e.message);
+    }
     return html;
 }
 //获取对象指定路径值
