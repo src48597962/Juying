@@ -59,7 +59,7 @@ function SRCSet() {
             return 'toast://不支持手工增加接口'
         }):$('hiker://empty#noRecordHistory##noHistory#').rule(() => {
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
-            jiexi('add');
+            jiexi();
         }),
         img: "https://hikerfans.com/tubiao/more/25.png",
         col_type: "icon_small_4"
@@ -326,13 +326,12 @@ function SRCSet() {
                         return "toast://分享失败，剪粘板或网络异常>"+pasteurl;
                     }
                 } else if (input == "编辑") {
-                    log(data);
                     return $('hiker://empty#noRecordHistory##noHistory#').rule((data) => {
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                         if(getMyVar('guanli', 'jk')=="jk"){
-                            jiekou('update', data);
+                            jiekou(data);
                         }else{
-                            jiexi('update', data);
+                            jiexi(data);
                         }
                     }, data)
                 } else if (input == "删除") {
@@ -487,8 +486,299 @@ function jiexisave(urls, mode) {
     }
     return num;
 }
+//接口新增或编辑
+function jiekou(data) {
+    addListener("onClose", $.toString(() => {
+        clearMyVar('apiname');
+        clearMyVar('apiurl');
+        clearMyVar('apitype');
+        clearMyVar('apiua');
+        clearMyVar('isload');
+        clearMyVar('apigroup');
+        clearMyVar('apidata');
+        clearMyVar('isretain');
+        clearMyVar('isSaveAs');
+    }));
+
+    var d = [];
+    if(data){
+        setPageTitle("接口新增");
+    }else{
+        if(getMyVar('isload', '0')=="0"){
+            setPageTitle("接口变更");
+            putMyVar('apiname', data.name);
+            putMyVar('apiurl', data.url);
+            putMyVar('apitype', data.type);
+            putMyVar('apiua', data.ua);
+            putMyVar('apigroup', data.group?data.group:"");
+            putMyVar('isretain', data.retain?data.retain:"");
+            putMyVar('isload', '1');
+        }
+    }
+    
+        d.push({
+            title:'apiname',
+            col_type: 'input',
+            desc: "接口名称",
+            extra: {
+                titleVisible: false,
+                defaultValue: getMyVar('apiname', ''),
+                onChange: 'putMyVar("apiname",input)'
+            }
+        });
+        d.push({
+            title:'apiurl',
+            col_type: 'input',
+            desc: getMyVar('apitype')=="xpath"?"接口地址以csp_xpath_为前缀":getMyVar('apitype')=="biubiu"?"接口地址以csp_biubiu_为前缀":getMyVar('apitype')=="XBPQ"?"接口地址以csp_XBPQ_为前缀":getMyVar('apitype')=="custom"?"接口地址以csp_custom_为前缀":"接口地址",
+            extra: {
+                titleVisible: false,
+                defaultValue: getMyVar('apiurl','')?getMyVar('apiurl',''):getMyVar('apitype')=="xpath"?'csp_xpath_':getMyVar('apitype')=="biubiu"?'csp_biubiu_':getMyVar('apitype')=="XBPQ"?'csp_XBPQ_':getMyVar('apitype')=="custom"?'csp_custom_':"",
+                onChange: 'putMyVar("apiurl",input)'
+            }
+        });
+        if(getMyVar('apitype')=="xpath"||getMyVar('apitype')=="biubiu"||getMyVar('apitype')=="XBPQ"||getMyVar('apitype')=="custom"){
+            d.push({
+                title:'data代码',
+                col_type: 'input',
+                desc: "对象数据格式要求非常高\n大佬来偿试写接口呀",
+                extra: {
+                    titleVisible: false,
+                    highlight: true,//getMyVar('apidata', data&&data.data?JSON.stringify(data.data):"")
+                    defaultValue: getMyVar('apidata')?JSON.stringify(JSON.parse(getMyVar('apidata')), null, "\t"):data&&data.data?JSON.stringify(data.data, null, "\t"):"",
+                    type: "textarea",
+                    height: 5,
+                    onChange: '/{|}/.test(input)?putMyVar("apidata",JSON.stringify(JSON.parse(input))):""'
+                }
+            });
+        }
+        d.push({
+            title: getMyVar('apitype', '')==""?'类型：自动识别':'类型：'+getMyVar('apitype'),
+            col_type:'text_1',
+            url:$(["v1","app","v2","iptv","cms","xpath","biubiu","XBPQ","custom","自动"],3).select(()=>{
+                if(input=="自动"){
+                    clearMyVar('apitype');
+                    clearMyVar('apidata');
+                }else{
+                    putMyVar('apitype', input);
+                }
+                refreshPage(false);
+                return'toast://已选择类型：' + input;
+            })
+        });
+
+    d.push({
+        title: 'User-Agent：'+getMyVar('apiua','MOBILE_UA'),
+        col_type:'text_1',
+        url:$(["Dalvik/2.1.0","Dart/2.13 (dart:io)","MOBILE_UA","PC_UA","自定义"],2).select(()=>{
+            if(input=="自定义"){
+                return $(getMyVar('apiua','MOBILE_UA'),"输入指定ua").input(()=>{
+                    putMyVar('apiua', input);
+                    refreshPage(true);
+                    return "toast://已指定ua："+input;
+                })
+            }else{
+                putMyVar('apiua', input);
+                refreshPage(true);
+                return "toast://已指定ua："+input;
+            }
+        })
+    });
+    d.push({
+        title:'分组名称：' + getMyVar('apigroup', ''),
+        col_type: 'text_1',
+        url:$(getMyVar('apigroup', ''),"输入分组名称，为空则取类型").input(()=>{
+            putMyVar('apigroup', input);
+            refreshPage(true);
+            return "toast://"+input;
+        })
+    });
+    if(data){
+        d.push({
+            title: getMyVar('isSaveAs', '')!="1"?'保存方式：覆盖':'保存方式：另存',
+            col_type:'text_1',
+            url:$('#noLoading#').lazyRule(()=>{
+                if(getMyVar('isSaveAs', '')!="1"){
+                    putMyVar('isSaveAs', '1');
+                }else{
+                    clearMyVar('isSaveAs');
+                }
+                refreshPage(false);
+                return 'toast://已切换';
+            })
+        });
+    }
+    d.push({
+        title: getMyVar('isretain', '')!="1"?'强制保留：否':'强制保留：是',
+        desc: getMyVar('isretain', '')!="1"?'资源码订阅全量同步时会被覆盖':'资源码订阅全量同步时保留此接口',
+        col_type:'text_1',
+        url:$('#noLoading#').lazyRule(()=>{
+            if(getMyVar('isretain', '')!="1"){
+                putMyVar('isretain', '1');
+            }else{
+                clearMyVar('isretain');
+            }
+            refreshPage(false);
+            return 'toast://已切换';
+        })
+    });
+    for (let i = 0; i < 10; i++) {
+        d.push({
+            col_type: "blank_block"
+        })
+    }
+    
+    d.push({
+        title:'测试',
+        col_type:'text_3',
+        url: $(getItem('searchtestkey', '斗罗大陆'),"输入测试搜索关键字").input(()=>{
+                setItem("searchtestkey",input);
+                if(!/^http/.test(getMyVar('apiurl',''))){
+                    return "toast://接口地址不正确"
+                }
+                return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
+                    let apiurl = getMyVar('apiurl');
+                    let apiname = getMyVar('apiname');
+                    let apiua = getMyVar('apiua','MOBILE_UA');
+                    let datalist = [];
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                    if(apiname&&apiurl){
+                        let urltype = getMyVar('apitype')||getapitype(apiurl);
+                        let urlgroup = getMyVar('apigroup');
+                        let arr = {"name": apiname, "url": apiurl, "ua": apiua, "type": urltype };
+                        if(urlgroup){arr['group'] = urlgroup}
+                        if(getMyVar('apidata')){
+                            try{
+                                arr['data'] = JSON.parse(getMyVar('apidata'));
+                            }catch(e){
+                                return "toast://data对象数据异常";
+                            }
+                        }
+                        datalist.push(arr);
+                    }else{
+                        return "toast://无法测试，检查项目填写完整性";
+                    }
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
+                    xunmi(name, datalist);
+                },input);
+            })
+    });
+    if(data){
+        d.push({
+            title:'删除',
+            col_type:'text_3',
+            url: $("确定删除接口："+data.name).confirm((dataurl)=>{
+                var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
+                var datafile = fetch(filepath);
+                eval("var datalist=" + datafile+ ";");
+                for(var i=0;i<datalist.length;i++){
+                    if(datalist[i].url==dataurl){
+                        datalist.splice(i,1);
+                        break;
+                    }
+                }
+                writeFile(filepath, JSON.stringify(datalist));
+
+                let cfgfile = "hiker://files/rules/Src/Juying/config.json";
+                let Juyingcfg=fetch(cfgfile);
+                if(Juyingcfg != ""){
+                    eval("var JYconfig=" + Juyingcfg+ ";");
+                }else{
+                    var JYconfig= {};
+                }
+                if(JYconfig.zsjiekou&&JYconfig.zsjiekou.api_url==dataurl){
+                    delete JYconfig['zsjiekou'];
+                    writeFile(cfgfile, JSON.stringify(JYconfig));
+                }
+                back(true);
+                return "toast://已删除";
+            }, data.url)
+        });   
+    }else{
+        d.push({
+            title:'清空',
+            col_type:'text_3',
+            url:$("确定要清空上面填写的内容？").confirm(()=>{
+                    clearMyVar('apiname');
+                    clearMyVar('apiurl');
+                    clearMyVar('apitype');
+                    return "toast://已清空";
+                })
+        });
+    }
+    d.push({
+        title:'保存',
+        col_type:'text_3',
+        url: $().lazyRule((data)=>{
+            if(!/^http|hiker/.test(getMyVar('apiurl',''))){
+                return "toast://接口地址不正确";
+            }
+            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+            var urls= [];
+            let apiurl = getMyVar('apiurl');
+            let apiname = getMyVar('apiname');
+            let apiua = getMyVar('apiua','MOBILE_UA');
+            let isupdate = 0;
+            if(apiname&&apiurl){
+                let urltype = getMyVar('apitype')||getapitype(apiurl);
+                if(!urltype){
+                    return "toast://无法自动识别接口类型，请检查链接";
+                }
+                let apigroup = getMyVar('apigroup');
+                let apidata = getMyVar('apidata');
+                let arr = {"name": apiname.trim(), "url": apiurl.trim(), "ua": apiua, "type": urltype };
+                if(apigroup){arr['group'] = apigroup}
+                if(apidata){
+                    try{
+                        arr['data'] = JSON.parse(apidata);
+                    }catch(e){
+                        return "toast://data对象数据异常";
+                    }
+                }
+                let isretain = getMyVar('isretain')=="1"?1:0;
+                if(isretain){arr['retain'] = 1;}
+                if(data){
+                    isupdate = 1;
+                    if((apiurl==data.url&&apiname==data.name&&apiua==data.ua&&urltype==data.type&&isretain==data.retain&&apigroup==(data.group?data.group:'')&&apidata==(data.data?JSON.stringify(data.data):''))){
+                        return "toast://未修改";
+                    }else{
+                        arr['oldurl'] = data.url;
+                    }
+                }
+                urls.push(arr);
+            }else{
+                return "toast://无法保存，检查项目填写完整性";
+            }
+            if(urls.length==0){
+                    return'toast://失败>无数据';
+            }else{
+                if(getMyVar('isSaveAs','')=="1"){
+                    isupdate = 0;
+                }
+                var jknum = jiekousave(urls, isupdate);
+                if(jknum<0){
+                    return'toast://失败>内容异常';
+                }else if(jknum==0&&urls.length==1){
+                    return'toast://已存在';
+                }else{
+                    back(true);
+                    if(urls.length==1){
+                        return "toast://保存成功";
+                    }else{
+                        return "toast://合计："+urls.length+"，保存："+jknum;
+                    }
+                }
+            } 
+        }, data)
+    });
+    for (let i = 0; i < 10; i++) {
+        d.push({
+            col_type: "blank_block"
+        })
+    }
+    setResult(d);
+}
 //解析新增或编辑
-function jiexi(lx,data) {
+function jiexi(data) {
     addListener("onClose", $.toString(() => {
         clearMyVar('parsename');
         clearMyVar('parseurl');
@@ -497,9 +787,8 @@ function jiexi(lx,data) {
         clearMyVar('isretain');
         clearMyVar('isload');
     }));
-    log(data);
     let d = [];
-    if(lx!="update"){
+    if(data){
         setPageTitle("♥解析管理-新增");
     }else{
         if(getMyVar('isload', '0')=="0"){
@@ -514,7 +803,7 @@ function jiexi(lx,data) {
         desc: "解析名称",
         extra: {
             titleVisible: false,
-            defaultValue: getMyVar('parsename', lx=="update"?data.name:""),
+            defaultValue: getMyVar('parsename', data?data.name:""),
             onChange: 'putMyVar("parsename",input)'
         }
     });
@@ -526,7 +815,7 @@ function jiexi(lx,data) {
             highlight: true,
             type: "textarea",
             titleVisible: false,
-            defaultValue: getMyVar('parseurl', lx=="update"?data.url:""),
+            defaultValue: getMyVar('parseurl', data?data.url:""),
             onChange: 'putMyVar("parseurl",input)'
         }
     });
@@ -671,7 +960,7 @@ function jiexi(lx,data) {
             id: 'jxtest'
         }
     });
-    if(lx=="update"){
+    if(data){
         d.push({
             title:'删除',
             col_type:'text_3',
@@ -706,7 +995,7 @@ function jiexi(lx,data) {
     d.push({
         title:'保存',
         col_type:'text_3',
-        url: $().lazyRule((lx,data)=>{
+        url: $().lazyRule((data)=>{
             if(!/^http|^functio/.test(getMyVar('parseurl',''))){
                 return "toast://解析地址不正确"
             }
@@ -727,7 +1016,7 @@ function jiexi(lx,data) {
                 }
                 let isretain = getMyVar('isretain')=="1"?1:0;
                 if(isretain){arr['retain'] = 1;}
-                if(lx=="update"){
+                if(data){
                     arr['oldurl'] = data.url;
                 }
                 urls.push(arr);
@@ -744,13 +1033,13 @@ function jiexi(lx,data) {
                 return "toast://无法保存，检查项目填写完整性";
             }
                 
-        },lx,data)
+        },data)
     });
     d.push({
         col_type: "line",
         extra:{id:'jxline'}
     })
-    setHomeResult(d);
+    setResult(d);
 }
 //扩展中心
 function extension(){
