@@ -246,15 +246,12 @@ function getYiData(jkdata) {
                                     分类.push(String(xpath(it, `//ty/text()`)).trim() + '$' + String(xpath(it, `//ty/@id`)).trim());
                                 })
                             } else {
-                                log($.type(gethtml));
                                 let typehtml = dealJson(gethtml);
-                                //eval("typehtml = " + gethtml);
-                                log($.type(typehtml));
                                 let typelist = typehtml["class"] || [];
-                                log(typelist.length);
+
                                 if (jkdata.categories) {
                                     for (var i = 0; i < typelist.length; i++) {
-                                        if (jkdata.categories.indexOf(typelist[i].type_name) == -1 && typelist[i].type_pid != 0) {
+                                        if (jkdata.categories.indexOf(typelist[i].type_name) == -1 && !typelist[i].type_pid) {
                                             typelist.splice(i, 1);
                                             i = i - 1;
                                         }
@@ -1377,7 +1374,7 @@ function dealJson(html) {
     try {
         html = JSON.parse(html);
     } catch (e) {
-        log("转换为json对象失败>"+e.message);
+        //log("转换为json对象失败>"+e.message);
     }
     return html;
 }
