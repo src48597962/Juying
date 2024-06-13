@@ -530,9 +530,8 @@ function jiexi(lx,data) {
             onChange: 'putMyVar("parseurl",input)'
         }
     });
-    let parsetype = data.type;
     d.push({
-        title: parsetype.toString(),//'是否为web嗅探解析：' + (getMyVar('parsetype', parsetype)=="0"?"是":"否"),
+        title: '是否为web嗅探解析：' + (getMyVar('parsetype', data.type.toString())=="0"?"是":"否"),
         col_type: 'text_1',
         url:$().lazyRule(()=>{
             if(/^http/.test(getMyVar('parseurl',''))&&!/id=|key=/.test(getMyVar('parseurl',''))){
@@ -627,7 +626,7 @@ function jiexi(lx,data) {
                 }
                 writeFile(filepath, JSON.stringify(urls));
             }
-            let parsearr = {name:dataname,url:dataurl,type:datatype,ext:dataext};
+            let parsearr = {name:dataname,url:dataurl,type:parseInt(datatype),ext:dataext};
             urls['自定义'] = "";
             for(var key in urls){
                 addItemBefore('jxline2', {
