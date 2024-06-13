@@ -294,7 +294,7 @@ function SRCSet() {
         if(guanliType=="jk"){
             datatitle = it.name + ' ('+it.type+')' + (it.group?' [' + it.group + ']':"");
             datadesc = it.url;
-            selectmenu = ["分享", "删除", it.stop?"启用":"禁用"];
+            selectmenu = ["分享","编辑", "删除", it.stop?"启用":"禁用"];
         }else{
             datatitle = (it.sort||0)+'-'+it.name+'-'+it.url;
             datadesc = it.ext&&it.ext.flag?it.ext.flag.join(','):"";
@@ -492,7 +492,6 @@ function jiekou(data) {
         clearMyVar('apiname');
         clearMyVar('apiurl');
         clearMyVar('apitype');
-        clearMyVar('apiua');
         clearMyVar('isload');
         clearMyVar('apigroup');
         clearMyVar('apidata');
@@ -509,9 +508,9 @@ function jiekou(data) {
             putMyVar('apiname', data.name);
             putMyVar('apiurl', data.url);
             putMyVar('apitype', data.type);
-            putMyVar('apiua', data.ua);
-            putMyVar('apigroup', data.group?data.group:"");
-            putMyVar('isretain', data.retain?data.retain:"");
+            putMyVar('apigroup', data.group||"");
+            putMyVar('apiext', data.ext&&$.type(data.ext)=="object"?JSON.stringify(data.ext):data.ext);//JSON.stringify(JSON.parse(getMyVar('apiext')), null, "\t")
+            putMyVar('isretain', data.retain||"");
             putMyVar('isload', '1');
         }
     }
@@ -529,35 +528,19 @@ function jiekou(data) {
         d.push({
             title:'apiurl',
             col_type: 'input',
-            desc: getMyVar('apitype')=="xpath"?"接口地址以csp_xpath_为前缀":getMyVar('apitype')=="biubiu"?"接口地址以csp_biubiu_为前缀":getMyVar('apitype')=="XBPQ"?"接口地址以csp_XBPQ_为前缀":getMyVar('apitype')=="custom"?"接口地址以csp_custom_为前缀":"接口地址",
+            desc: "接口地址",
             extra: {
                 titleVisible: false,
-                defaultValue: getMyVar('apiurl','')?getMyVar('apiurl',''):getMyVar('apitype')=="xpath"?'csp_xpath_':getMyVar('apitype')=="biubiu"?'csp_biubiu_':getMyVar('apitype')=="XBPQ"?'csp_XBPQ_':getMyVar('apitype')=="custom"?'csp_custom_':"",
+                defaultValue: getMyVar('apiurl',''),
                 onChange: 'putMyVar("apiurl",input)'
             }
         });
-        if(getMyVar('apitype')=="xpath"||getMyVar('apitype')=="biubiu"||getMyVar('apitype')=="XBPQ"||getMyVar('apitype')=="custom"){
-            d.push({
-                title:'data代码',
-                col_type: 'input',
-                desc: "对象数据格式要求非常高\n大佬来偿试写接口呀",
-                extra: {
-                    titleVisible: false,
-                    highlight: true,//getMyVar('apidata', data&&data.data?JSON.stringify(data.data):"")
-                    defaultValue: getMyVar('apidata')?JSON.stringify(JSON.parse(getMyVar('apidata')), null, "\t"):data&&data.data?JSON.stringify(data.data, null, "\t"):"",
-                    type: "textarea",
-                    height: 5,
-                    onChange: '/{|}/.test(input)?putMyVar("apidata",JSON.stringify(JSON.parse(input))):""'
-                }
-            });
-        }
         d.push({
-            title: getMyVar('apitype', '')==""?'类型：自动识别':'类型：'+getMyVar('apitype'),
+            title: '类型：' + getMyVar('apitype', ''),
             col_type:'text_1',
-            url:$(["v1","app","v2","iptv","cms","xpath","biubiu","XBPQ","custom","自动"],3).select(()=>{
-                if(input=="自动"){
+            url:$(["v1","app","v2","iptv","cms","XPath","biubiu","XBPQ","XYQ","drpy","app类自动"],3).select(()=>{
+                if(input=="app类自动"){
                     clearMyVar('apitype');
-                    clearMyVar('apidata');
                 }else{
                     putMyVar('apitype', input);
                 }
@@ -567,23 +550,6 @@ function jiekou(data) {
         });
 
     d.push({
-        title: 'User-Agent：'+getMyVar('apiua','MOBILE_UA'),
-        col_type:'text_1',
-        url:$(["Dalvik/2.1.0","Dart/2.13 (dart:io)","MOBILE_UA","PC_UA","自定义"],2).select(()=>{
-            if(input=="自定义"){
-                return $(getMyVar('apiua','MOBILE_UA'),"输入指定ua").input(()=>{
-                    putMyVar('apiua', input);
-                    refreshPage(true);
-                    return "toast://已指定ua："+input;
-                })
-            }else{
-                putMyVar('apiua', input);
-                refreshPage(true);
-                return "toast://已指定ua："+input;
-            }
-        })
-    });
-    d.push({
         title:'分组名称：' + getMyVar('apigroup', ''),
         col_type: 'text_1',
         url:$(getMyVar('apigroup', ''),"输入分组名称，为空则取类型").input(()=>{
@@ -591,6 +557,19 @@ function jiekou(data) {
             refreshPage(true);
             return "toast://"+input;
         })
+    });
+    d.push({
+        title:'ext',
+        col_type: 'input',
+        desc: "ext数据，需要就写，不懂不动",
+        extra: {
+            titleVisible: false,
+            highlight: true,
+            defaultValue: getMyVar('apiext',''),
+            type: "textarea",
+            height: 3,
+            onChange: 'putMyVar("apiext", /{|}/.test(input)?JSON.stringify(JSON.parse(input)):input)'
+        }
     });
     if(data){
         d.push({
@@ -627,45 +606,10 @@ function jiekou(data) {
         })
     }
     
-    d.push({
-        title:'测试',
-        col_type:'text_3',
-        url: $(getItem('searchtestkey', '斗罗大陆'),"输入测试搜索关键字").input(()=>{
-                setItem("searchtestkey",input);
-                if(!/^http/.test(getMyVar('apiurl',''))){
-                    return "toast://接口地址不正确"
-                }
-                return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
-                    let apiurl = getMyVar('apiurl');
-                    let apiname = getMyVar('apiname');
-                    let apiua = getMyVar('apiua','MOBILE_UA');
-                    let datalist = [];
-                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
-                    if(apiname&&apiurl){
-                        let urltype = getMyVar('apitype')||getapitype(apiurl);
-                        let urlgroup = getMyVar('apigroup');
-                        let arr = {"name": apiname, "url": apiurl, "ua": apiua, "type": urltype };
-                        if(urlgroup){arr['group'] = urlgroup}
-                        if(getMyVar('apidata')){
-                            try{
-                                arr['data'] = JSON.parse(getMyVar('apidata'));
-                            }catch(e){
-                                return "toast://data对象数据异常";
-                            }
-                        }
-                        datalist.push(arr);
-                    }else{
-                        return "toast://无法测试，检查项目填写完整性";
-                    }
-                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyXunmi.js');
-                    xunmi(name, datalist);
-                },input);
-            })
-    });
     if(data){
         d.push({
             title:'删除',
-            col_type:'text_3',
+            col_type:'text_2',
             url: $("确定删除接口："+data.name).confirm((dataurl)=>{
                 var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
                 var datafile = fetch(filepath);
@@ -696,7 +640,7 @@ function jiekou(data) {
     }else{
         d.push({
             title:'清空',
-            col_type:'text_3',
+            col_type:'text_2',
             url:$("确定要清空上面填写的内容？").confirm(()=>{
                     clearMyVar('apiname');
                     clearMyVar('apiurl');
@@ -707,42 +651,43 @@ function jiekou(data) {
     }
     d.push({
         title:'保存',
-        col_type:'text_3',
+        col_type:'text_2',
         url: $().lazyRule((data)=>{
             if(!/^http|hiker/.test(getMyVar('apiurl',''))){
                 return "toast://接口地址不正确";
             }
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
-            var urls= [];
+            let urls= [];
             let apiurl = getMyVar('apiurl');
             let apiname = getMyVar('apiname');
-            let apiua = getMyVar('apiua','MOBILE_UA');
-            let isupdate = 0;
             if(apiname&&apiurl){
                 let urltype = getMyVar('apitype')||getapitype(apiurl);
                 if(!urltype){
                     return "toast://无法自动识别接口类型，请检查链接";
                 }
+                let arr = {"name": apiname.trim(), "url": apiurl.trim(), "type": urltype };
                 let apigroup = getMyVar('apigroup');
-                let apidata = getMyVar('apidata');
-                let arr = {"name": apiname.trim(), "url": apiurl.trim(), "ua": apiua, "type": urltype };
-                if(apigroup){arr['group'] = apigroup}
-                if(apidata){
-                    try{
-                        arr['data'] = JSON.parse(apidata);
-                    }catch(e){
-                        return "toast://data对象数据异常";
+                if(apigroup){
+                    arr['group'] = apigroup;
+                }
+                let apiext = getMyVar('apiext');
+                if(apiext){
+                    if(apiext.startsWith('{')){
+                        try{
+                            arr['ext'] = JSON.parse(apiext);
+                        }catch(e){
+                            return "toast://data对象数据异常";
+                        }
+                    }else{
+                        arr['ext'] = apiext;
                     }
                 }
                 let isretain = getMyVar('isretain')=="1"?1:0;
-                if(isretain){arr['retain'] = 1;}
+                if(isretain){
+                    arr['retain'] = 1;
+                }
                 if(data){
-                    isupdate = 1;
-                    if((apiurl==data.url&&apiname==data.name&&apiua==data.ua&&urltype==data.type&&isretain==data.retain&&apigroup==(data.group?data.group:'')&&apidata==(data.data?JSON.stringify(data.data):''))){
-                        return "toast://未修改";
-                    }else{
-                        arr['oldurl'] = data.url;
-                    }
+                    arr['oldurl'] = data.url;
                 }
                 urls.push(arr);
             }else{
@@ -751,10 +696,7 @@ function jiekou(data) {
             if(urls.length==0){
                     return'toast://失败>无数据';
             }else{
-                if(getMyVar('isSaveAs','')=="1"){
-                    isupdate = 0;
-                }
-                var jknum = jiekousave(urls, isupdate);
+                var jknum = jiekousave(urls);
                 if(jknum<0){
                     return'toast://失败>内容异常';
                 }else if(jknum==0&&urls.length==1){
