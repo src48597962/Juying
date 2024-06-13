@@ -189,7 +189,6 @@ function getYiData(jkdata) {
                         }
                         筛选 = extdata["筛选"];
                     } else {
-                        log(classurl);
                         let gethtml = getHtml(classurl, headers);
                         if (api_type == "v1") {
                             let typehtml = JSON.parse(gethtml);
@@ -251,7 +250,7 @@ function getYiData(jkdata) {
 
                                 if (jkdata.categories) {
                                     for (var i = 0; i < typelist.length; i++) {
-                                        if (jkdata.categories.indexOf(typelist[i].type_name) == -1 && !typelist[i].type_pid) {
+                                        if (jkdata.categories.indexOf(typelist[i].type_name) == -1 typelist[i].type_pid!=0) {
                                             typelist.splice(i, 1);
                                             i = i - 1;
                                         }
@@ -259,17 +258,20 @@ function getYiData(jkdata) {
                                 }
 
                                 typelist.forEach((it) => {
-                                    if (it.type_pid == 0) {
-                                        分类.push(it.type_name + '$' + it.type_id);
-                                        let value = [];
-                                        typelist.forEach((itit) => {
-                                            if (itit.type_pid == it.type_id) {
-                                                value.push({ n: itit.type_name, v: itit.type_id });
+                                    if(it.type_name && it.type_id){
+                                        if(!it.type_pid){
+                                            分类.push(it.type_name + '$' + it.type_id);
+                                        }else if (it.type_pid==0) {
+                                            let value = [];
+                                            typelist.forEach((itit) => {
+                                                if (itit.type_pid == it.type_id) {
+                                                    value.push({ n: itit.type_name, v: itit.type_id });
+                                                }
+                                            })
+                                            if (value.length > 0) {
+                                                筛选 = 筛选 || {};
+                                                筛选[it.type_id] = [{ "key": "cateId", "name": it.type_name, "value": value }];
                                             }
-                                        })
-                                        if (value.length > 0) {
-                                            筛选 = 筛选 || {};
-                                            筛选[it.type_id] = [{ "key": "cateId", "name": it.type_name, "value": value }];
                                         }
                                     }
                                 })
