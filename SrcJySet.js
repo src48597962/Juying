@@ -494,13 +494,13 @@ function jiekou(data) {
         clearMyVar('apitype');
         clearMyVar('isload');
         clearMyVar('apigroup');
-        clearMyVar('apidata');
+        clearMyVar('apiext');
         clearMyVar('isretain');
         clearMyVar('isSaveAs');
     }));
 
     var d = [];
-    if(data){
+    if(!data){
         setPageTitle("接口新增");
     }else{
         if(getMyVar('isload', '0')=="0"){
@@ -571,6 +571,20 @@ function jiekou(data) {
             onChange: 'putMyVar("apiext", /{|}/.test(input)?JSON.stringify(JSON.parse(input)):input)'
         }
     });
+    d.push({
+        title: getMyVar('isretain')=="1"?'强制保留：是':'强制保留：否',
+        desc: getMyVar('isretain')=="1"?'全量同步时保留此接口':'',
+        col_type:'text_1',
+        url:$('#noLoading#').lazyRule(()=>{
+            if(getMyVar('isretain', '')!="1"){
+                putMyVar('isretain', '1');
+            }else{
+                clearMyVar('isretain');
+            }
+            refreshPage(false);
+            return 'toast://已切换';
+        })
+    });
     if(data){
         d.push({
             title: getMyVar('isSaveAs', '')!="1"?'保存方式：覆盖':'保存方式：另存',
@@ -586,20 +600,7 @@ function jiekou(data) {
             })
         });
     }
-    d.push({
-        title: getMyVar('isretain', '')!="1"?'强制保留：否':'强制保留：是',
-        desc: getMyVar('isretain', '')!="1"?'资源码订阅全量同步时会被覆盖':'资源码订阅全量同步时保留此接口',
-        col_type:'text_1',
-        url:$('#noLoading#').lazyRule(()=>{
-            if(getMyVar('isretain', '')!="1"){
-                putMyVar('isretain', '1');
-            }else{
-                clearMyVar('isretain');
-            }
-            refreshPage(false);
-            return 'toast://已切换';
-        })
-    });
+    
     for (let i = 0; i < 10; i++) {
         d.push({
             col_type: "blank_block"
@@ -730,7 +731,7 @@ function jiexi(data) {
         clearMyVar('isload');
     }));
     let d = [];
-    if(data){
+    if(!data){
         setPageTitle("♥解析管理-新增");
     }else{
         if(getMyVar('isload', '0')=="0"){
@@ -780,7 +781,7 @@ function jiexi(data) {
     });
     d.push({
         title: getMyVar('isretain', '')!="1"?'强制保留：否':'强制保留：是',
-        desc: getMyVar('isretain', '')!="1"?'资源码订阅更新时会被覆盖':'资源码订阅更新时保留此接口',
+        desc: getMyVar('isretain', '')!="1"?'':'全量更新时保留此接口',
         col_type:'text_1',
         url:$('#noLoading#').lazyRule(()=>{
             if(getMyVar('isretain', '')!="1"){
