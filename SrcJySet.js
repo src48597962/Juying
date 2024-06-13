@@ -48,7 +48,6 @@ function SRCSet() {
         img: "https://hikerfans.com/tubiao/ke/156.png",
         col_type: "icon_small_3"
     });
-
     d.push({
         col_type: "line_blank"
     });
@@ -425,6 +424,7 @@ function jiekousave(urls, mode) {
                 if(olddatanum>0){
                     it.group = it.group || "新导入";
                 }
+                delete it['oldurl'];
                 if(urls.length == 1){
                     datalist.unshift(it);
                 }else{
@@ -470,6 +470,7 @@ function jiexisave(urls, mode) {
             }
 
             if(!datalist.some(checkitem)&&it.url&&it.name&&/^http|^functio/.test(it.url)){
+                delete it['oldurl'];
                 if(urls.length == 1){
                     datalist.unshift(it);
                 }else{
@@ -491,9 +492,8 @@ function jiekou(data) {
         clearMyVar('apiname');
         clearMyVar('apiurl');
         clearMyVar('apitype');
-        clearMyVar('isload');
         clearMyVar('apigroup');
-        clearMyVar('apiext');
+        clearMyVar('isload');
         clearMyVar('isretain');
         clearMyVar('isSaveAs');
     }));
@@ -508,49 +508,46 @@ function jiekou(data) {
             putMyVar('apiurl', data.url);
             putMyVar('apitype', data.type);
             putMyVar('apigroup', data.group||"");
-            putMyVar('apiext', data.ext&&$.type(data.ext)=="object"?JSON.stringify(data.ext):(data.ext||""));//JSON.stringify(JSON.parse(getMyVar('apiext')), null, "\t")
             putMyVar('isretain', data.retain||"");
             putMyVar('isload', '1');
         }
     }
-    
-        d.push({
-            title: 'apiname',
-            col_type: 'input',
-            desc: "接口名称",
-            extra: {
-                titleVisible: false,
-                defaultValue: getMyVar('apiname', ''),
-                onChange: 'putMyVar("apiname",input)'
+    d.push({
+        title: 'apiname',
+        col_type: 'input',
+        desc: "接口名称",
+        extra: {
+            titleVisible: false,
+            defaultValue: getMyVar('apiname', ''),
+            onChange: 'putMyVar("apiname",input)'
+        }
+    });
+    d.push({
+        title: '查看',
+        col_type: 'input',
+        desc: "接口地址",
+        url: $.toString(() => {
+            return "editFile://"+getMyVar('apiurl','');
+        }),
+        extra: {
+            titleVisible: /^hiker/.test(getMyVar('apiurl',''))?true:false,
+            defaultValue: getMyVar('apiurl',''),
+            onChange: 'putMyVar("apiurl",input)'
+        }
+    });
+    d.push({
+        title: '类型：' + getMyVar('apitype', ''),
+        col_type:'text_1',
+        url:$(["v1","app","v2","iptv","cms","XPath","biubiu","XBPQ","XYQ","drpy","app类自动"],3).select(()=>{
+            if(input=="app类自动"){
+                clearMyVar('apitype');
+            }else{
+                putMyVar('apitype', input);
             }
-        });
-        d.push({
-            title: '查看',
-            col_type: 'input',
-            desc: "接口地址",
-            url: $.toString(() => {
-                return "editFile://"+getMyVar('apiurl','');
-            }),
-            extra: {
-                titleVisible: /^hiker/.test(getMyVar('apiurl',''))?true:false,
-                defaultValue: getMyVar('apiurl',''),
-                onChange: 'putMyVar("apiurl",input)'
-            }
-        });
-        d.push({
-            title: '类型：' + getMyVar('apitype', ''),
-            col_type:'text_1',
-            url:$(["v1","app","v2","iptv","cms","XPath","biubiu","XBPQ","XYQ","drpy","app类自动"],3).select(()=>{
-                if(input=="app类自动"){
-                    clearMyVar('apitype');
-                }else{
-                    putMyVar('apitype', input);
-                }
-                refreshPage(false);
-                return'toast://已选择类型：' + input;
-            })
-        });
-
+            refreshPage(false);
+            return'toast://已选择类型：' + input;
+        })
+    });
     d.push({
         title:'分组名称：' + getMyVar('apigroup', ''),
         col_type: 'text_1',
@@ -559,19 +556,6 @@ function jiekou(data) {
             refreshPage(true);
             return "toast://"+input;
         })
-    });
-    d.push({
-        title:'ext',
-        col_type: 'input',
-        desc: "ext数据，需要就写，不懂不动",
-        extra: {
-            titleVisible: false,
-            highlight: true,
-            defaultValue: getMyVar('apiext',''),
-            type: "textarea",
-            height: 3,
-            onChange: 'putMyVar("apiext", /{|}/.test(input)?JSON.stringify(JSON.parse(input)):input)'
-        }
     });
     d.push({
         title: getMyVar('isretain')=="1"?'强制保留：是':'强制保留：否',
@@ -673,17 +657,9 @@ function jiekou(data) {
                 if(apigroup){
                     arr['group'] = apigroup;
                 }
-                let apiext = getMyVar('apiext');
-                if(apiext){
-                    if(apiext.startsWith('{')){
-                        try{
-                            arr['ext'] = JSON.parse(apiext);
-                        }catch(e){
-                            return "toast://data对象数据异常";
-                        }
-                    }else{
-                        arr['ext'] = apiext;
-                    }
+
+                if(data.ext){
+                    arr['ext'] = data.ext;
                 }
                 let isretain = getMyVar('isretain')=="1"?1:0;
                 if(isretain){
