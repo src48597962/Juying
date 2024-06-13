@@ -298,7 +298,7 @@ function SRCSet() {
         }else{
             datatitle = (it.sort||0)+'-'+it.name+'-'+it.url;
             datadesc = it.ext&&it.ext.flag?it.ext.flag.join(','):"";
-            selectmenu = ["分享","编辑", "删除"];
+            selectmenu = ["分享","编辑", "删除", it.stop?"启用":"禁用"];
         }
 
         d.push({
