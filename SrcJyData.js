@@ -247,7 +247,8 @@ function getYiData(jkdata) {
                                 })
                             } else {
                                 log($.type(gethtml));
-                                let typehtml = $.parse(gethtml);
+                                let typehtml;
+                                eval("typehtml = " + gethtml);
                                 let typelist = typehtml.class;
                                 if (jkdata.categories) {
                                     for (var i = 0; i < typelist.length; i++) {
