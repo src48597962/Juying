@@ -224,86 +224,81 @@ function dianboerji() {
             })
         }
     })
-    
+    //生成选集
+    let list = erdata.lists[lineindex] || [];
+    function playlist(lx, col_type) {//定义选集列表生成
+        if (lx == '1') {
+            let playtitle = list[j].split('$')[0].trim();
+            let playurl = list[j].split('$')[1].trim();
+            let lazy = $("").lazyRule(() => {
+                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
+                return SrcParseS.聚影(input);
+            });
 
-    //选集部份
-    function setLists(lists, index) {
-        let list = lists[index] || [];
-        function playlist(lx, col_type) {//定义选集列表生成
-            if (lx == '1') {
-                let playtitle = list[j].split('$')[0].trim();
-                let playurl = list[j].split('$')[1].trim();
-                let lazy = $("").lazyRule(() => {
-                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
-                    return SrcParseS.聚影(input);
-                });
-
-                let extra = {
-                    id: playurl,
-                    jsLoadingInject: true,
-                    blockRules: ['.m4a', '.mp3', '.gif', '.jpeg', '.jpg', '.ico', '.png', 'hm.baidu.com', '/ads/*.js', 'cnzz.com'],
-                    videoExcludeRule: ['m3u8.js','?url='],
-                    cls: "loadlist"
-                }
-                
-                if(!/qq|youku|mgtv|bili|qiyi|sohu|pptv/.test(playurl) && /html/.test(playurl)){
-                    extra.referer = playurl;
-                }
-                if(getMyVar('superwebM3U8') == "1"){
-                    extra.cacheM3u8 = true;
-                }
-
-                d.push({
-                    title: getHead(playtitle.replace(/第|集|话|期|-|new|最新|新/g, ''), Color3),
-                    url: playurl + lazy,
-                    extra: extra,
-                    col_type: col_type
-                });
-            } else {
-                d.push({
-                    title: '当前无播放选集，点更多片源试试！',
-                    url: '#noHistory#hiker://empty',
-                    col_type: 'text_center_1'
-                });
+            let extra = {
+                id: playurl,
+                jsLoadingInject: true,
+                blockRules: ['.m4a', '.mp3', '.gif', '.jpeg', '.jpg', '.ico', '.png', 'hm.baidu.com', '/ads/*.js', 'cnzz.com'],
+                videoExcludeRule: ['m3u8.js','?url='],
+                cls: "playlist"
+            }
+            
+            if(!/qq|youku|mgtv|bili|qiyi|sohu|pptv/.test(playurl) && /html/.test(playurl)){
+                extra.referer = playurl;
+            }
+            if(getMyVar('superwebM3U8') == "1"){
+                extra.cacheM3u8 = true;
             }
 
-        }
-        if (list.length == 0) {
-            playlist('0');
+            d.push({
+                title: getHead(playtitle.replace(/第|集|话|期|-|new|最新|新/g, ''), Color3),
+                url: playurl + lazy,
+                extra: extra,
+                col_type: col_type
+            });
         } else {
-            try{
-                let list1 = list[0].split('$')[0];
-                let list2 = list[list.length-1].split('$')[0];
-                if(parseInt(list1.match(/(\d+)/)[0])>parseInt(list2.match(/(\d+)/)[0])){
-                    list.reverse();
-                }
-            }catch(e){
-                //log('修正选集顺序失败>'+e.message)
-            }
-            let listone = list[0].split('$')[0].trim();
-            let len = listone.length;
-            let col_type = list.length > 4 && len < 7 ? 'text_4' : len > 20 ? 'text_1' :'text_3';
-            if (getMyVar('shsort') == '1') {
-                try {
-                    for (var j = list.length - 1; j >= 0; j--) {
-                        playlist('1', col_type);
-                    }
-                } catch (e) {
-                    playlist('0');
-                }
-            } else {
-                try {
-                    for (var j = 0; j < list.length; j++) {
-                        playlist('1', col_type);
-                    }
-                } catch (e) {
-                    playlist('0');
-                }
+            d.push({
+                title: '当前无播放选集，点更多片源试试！',
+                url: '#noHistory#hiker://empty',
+                col_type: 'text_center_1'
+            });
+        }
 
+    }
+    if (list.length == 0) {
+        playlist('0');
+    } else {
+        try{
+            let list1 = list[0].split('$')[0];
+            let list2 = list[list.length-1].split('$')[0];
+            if(parseInt(list1.match(/(\d+)/)[0])>parseInt(list2.match(/(\d+)/)[0])){
+                list.reverse();
             }
+        }catch(e){
+            //log('修正选集顺序失败>'+e.message)
+        }
+        let listone = list[0].split('$')[0].trim();
+        let len = listone.length;
+        let col_type = list.length > 4 && len < 7 ? 'text_4' : len > 20 ? 'text_1' :'text_3';
+        if (getMyVar('shsort') == '1') {
+            try {
+                for (var j = list.length - 1; j >= 0; j--) {
+                    playlist('1', col_type);
+                }
+            } catch (e) {
+                playlist('0');
+            }
+        } else {
+            try {
+                for (var j = 0; j < list.length; j++) {
+                    playlist('1', col_type);
+                }
+            } catch (e) {
+                playlist('0');
+            }
+
         }
     }
-    setLists(erdata.lists, lineindex);
 
     //底部说明
     d.push({
