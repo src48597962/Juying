@@ -162,12 +162,8 @@ var SrcParseS = {
             return '';
         }
     },
-    DN: function (vipUrl) {
-        evalPrivateJS("OjB3OHrVodkVQlHIU8UUAC5W0ZBgTQEC4h9eUEcAT9kEM0hY/45YOxs7PDeQEnxjVhaWW2tIqO5GQimD4ssHKSka505+O0avEtQQZ9zRy6GxaBZdTHrbCPcoNIajmr3+JG22tRswOJFYDX5aYk0PfUDEFsZa2OjZbz+xTthnoUPLNm0R2g1kBFnWwGKBWUxEhEsFwFruhFSaxJi1E1WZ7WlbP0v4OpoQgn6M7UXGahP9h2fHi8UBVDGfjzIuVuJSCgICLlVGaAbT0ghic+Kfbp3TmjRhAo1DKretYp1U53apDMvO2Q+6oAyO1js5TJwx51ygFSUqVGAu0C2DLxkG0Z3+L8UPZyJa4KVDlqq/goE=")
-        return aytmParse(vipUrl);
-    },
     聚嗅: function (vipUrl, x5jxlist, excludeurl) {
-        var jxhtml = config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJiexi.html';
+        var jxhtml = config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJiexi.html';
         fc(jxhtml, 96);
         let libsjxjs = fetch("hiker://files/libs/" + md5(jxhtml) + ".js");
         if (x5jxlist != undefined) {
@@ -198,19 +194,14 @@ var SrcParseS = {
     },
     聚影: function (vipUrl,parseStr) {
         //聚影采用新的、独立的解析逻辑
-        var cfgfile = "hiker://files/rules/Src/Juying/config.json";
-        var Juyingcfg=fetch(cfgfile);
-        if(Juyingcfg != ""){
-            eval("var JYconfig=" + Juyingcfg+ ";");
-        }else{
-            var JYconfig= {printlog: 0, isdn: 0, cachem3u8: 1, parsemode: 1, appjiexinum: 50, xiutannh: 'web'};
+        let cfgfile = "hiker://files/rules/Src/Juying2/config.json";
+        let Juconfig= {};
+        let Jucfg=fetch(cfgfile);
+        if(Jucfg != ""){
+            eval("Juconfig=" + Jucfg+ ";");
         }
+        let jxconfig = Juconfig['jiexi'] || {log: 0, cachem3u8: 1, video: 1, xiutannh: 'web'};
         var printlog = JYconfig.printlog||0;
-        var isdn = JYconfig.isdn==0?0:1;
-        if(isdn==0){
-            evalPrivateJS("wPd5kY+5GJ5BmsZlzZbh4M6UMvsO/POw5Ccr79sJzidJZhtuvcJM7a2RSma0qjk0OCYh38QrsLE3Y65hZZbjbpV7Na+g+LCR2Ievu8d5D0I/MROm914q3X0lPf5PZOen1xfNlWFj/HrVGjv7kkqtoyfX1BHEh1r5PH6cp8PgZGDEM4Sb+MgHLxeO5vUnSkf39Pm3xcfIe2AYNNADLOnIiiuOKLeuLncZ50H8JRU7fCY=")
-            isdn = dndn();
-        }
         var parsemode = JYconfig.parsemode || 1;
         var appjiexinum = JYconfig['appjiexinum'] || 50;
         putMyVar('SrcM3U8',JYconfig.cachem3u8);
@@ -522,11 +513,6 @@ var SrcParseS = {
                             }
                         }
                     }
-
-                    if(isdn==1&&Uparselist.length==0){
-                        Uparselist.push({type:'dn',name:'断插'});
-                        iscalldn = 1;
-                    }
                 }else{
                     Uparselist = [];
                 }
@@ -548,10 +534,6 @@ var SrcParseS = {
                     i=s;
                 }
                 if(printlog==1){log("本轮排队解析："+Namelist)};
-                if(isdn==1&&iscalldn==0&&Uparselist.length>0&&!parseStr){
-                    iscalldn = 1;//断插辅助只调用一轮
-                    UrlList.push({type:'dn'});
-                }
 
                 let Urlparses = UrlList.map((list)=>{
                     if(list.type=="dn"){
