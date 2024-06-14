@@ -180,54 +180,51 @@ function dianboerji() {
             col_type: "blank_block"
         })
     }
-
-    function setTabs(tabs, lineId) {
-        d.push({
-            title: getMyVar('shsort') == '1'?'““””<b><span style="color: #FF0000">∨</span></b>' : '““””<b><span style="color: #1aad19">∧</span></b>',
-            url: $("#noLoading#").lazyRule(() => {
-                if (getMyVar('shsort') == '1') { putMyVar('shsort', '0'); } else { putMyVar('shsort', '1') };
-                refreshPage(false);
-                return 'toast://切换排序成功'
-            }),
-            col_type: 'scroll_button'
-        })
-        for (var i in tabs) {
-            if (tabs[i] != "") {
-                //if(getMyVar(lineId, '0') == i){putMyVar('linecode', linecodes[i])};
-                d.push({
-                    title: getMyVar(lineId, '0') == i ? getHead(tabs[i],Color1,1) : getHead(tabs[i],Color2),
-                    url: $("#noLoading#").lazyRule((lineId, i, Marksum) => {
-                        if (parseInt(getMyVar(lineId, '0')) != i) {
-                            let markFile = 'hiker://files/cache/src/Juying2/Mark.json';
-                            let SrcMark = "";
-                            try {
-                                eval('SrcMark = ' + markFile);
-                            } catch (e) {  }
-                            if (SrcMark == "") {
-                                SrcMark = { line: {} };
-                            } else if (!SrcMark.line) {
-                                SrcMark.line = {};
-                            }
-                            SrcMark.line[lineId] = i;
-                            let key = 0;
-                            let one = "";
-                            for (var k in SrcMark.line) {
-                                key++;
-                                if (key == 1) { one = k }
-                            }
-                            if (key > Marksum) { delete SrcMark.line[one]; }
-                            writeFile(markFile, JSON.stringify(SrcMark));
-                            putMyVar(lineId, i);
-                            refreshPage(false);
+    //生成线路
+    d.push({
+        title: getMyVar('shsort') == '1'?'““””<b><span style="color: #FF0000">∨</span></b>' : '““””<b><span style="color: #1aad19">∧</span></b>',
+        url: $("#noLoading#").lazyRule(() => {
+            if (getMyVar('shsort') == '1') { putMyVar('shsort', '0'); } else { putMyVar('shsort', '1') };
+            refreshPage(false);
+            return 'toast://切换排序成功'
+        }),
+        col_type: 'scroll_button'
+    })
+    erdata.tabs.forEach((it,i)=>{
+        if(it){
+            d.push({
+                title: getMyVar(lineId, '0') == i ? getHead(it,Color1,1) : getHead(it,Color2),
+                url: $("#noLoading#").lazyRule((lineId, i, Marksum) => {
+                    if (parseInt(getMyVar(lineId, '0')) != i) {
+                        let markFile = 'hiker://files/cache/src/Juying2/Mark.json';
+                        let SrcMark = "";
+                        try {
+                            eval('SrcMark = ' + markFile);
+                        } catch (e) {  }
+                        if (SrcMark == "") {
+                            SrcMark = { line: {} };
+                        } else if (!SrcMark.line) {
+                            SrcMark.line = {};
                         }
-                        return '#noHistory#hiker://empty'
-                    }, lineId, i, Marksum),
-                    col_type: 'scroll_button'
-                })
-            }
+                        SrcMark.line[lineId] = i;
+                        let key = 0;
+                        let one = "";
+                        for (var k in SrcMark.line) {
+                            key++;
+                            if (key == 1) { one = k }
+                        }
+                        if (key > Marksum) { delete SrcMark.line[one]; }
+                        writeFile(markFile, JSON.stringify(SrcMark));
+                        putMyVar(lineId, i);
+                        refreshPage(false);
+                    }
+                    return '#noHistory#hiker://empty'
+                }, lineId, i, Marksum),
+                col_type: 'scroll_button'
+            })
         }
-    }
-    setTabs(erdata.tabs, lineId);
+    })
+    
 
     //选集部份
     function setLists(lists, index) {
