@@ -23,9 +23,27 @@ function search(name, sstype, jkdata) {
                 }
             }
         })
-        return ssdata;
+    }else if(sstype=='dianboyiji'){
+        ssdata = ssdata.map(it => {
+            return {
+                title: it.vodname,
+                desc: it.voddesc,
+                pic_url: it.vodpic,
+                url: $("hiker://empty#immersiveTheme##autoCache#").rule(() => {
+                    require(config.依赖);
+                    dianboerji()
+                }),
+                extra: {
+                    cls: 'dianbosousuolist',
+                    url: it.vodurl,
+                    pic: it.vodpic,
+                    pageTitle: it.vodname,
+                    data: jkdata
+                }
+            }
+        })
     }
-
+    return ssdata;
 }
 // 软件搜索
 function sousuo() {
@@ -333,16 +351,16 @@ function dianboyiji() {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                 return selectSource();
             }),
-            pic_url: "https://hikerfans.com/tubiao/system/136.png",
+            pic_url: "https://hikerfans.com/tubiao/more/47.png",
             col_type: "icon_3_round_fill"
         })
         d.push({
             title: "搜索方式",
-            url: $('#noLoading#').lazyRule(() => {
-                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
-                return selectSource();
+            url: $(["海阔聚搜","海阔搜索","当前页面"],1).select(()=>{
+                setItem("接口搜索方式",input);
+                return "toast://搜索方式设置为："+input;
             }),
-            pic_url: "hiker://files/cache/src/sou.png",
+            pic_url: "https://hikerfans.com/tubiao/more/103.png",
             col_type: "icon_3_round_fill"
         })
         d.push({
@@ -370,7 +388,7 @@ function dianboyiji() {
                     })
                 }
             }),
-            pic_url: "hiker://files/cache/src/set.png",
+            pic_url: "https://hikerfans.com/tubiao/more/44.png",
             col_type: "icon_3_round_fill"
         })
 
@@ -412,20 +430,32 @@ function dianboyiji() {
                 d = [];
                 putMyVar('点播动态加载loading', '1');
             }
-
-            let searchurl = $('').lazyRule((jkdata) => {
-                if(jkdata){
-                    /*
+/*
                     return $('hiker://empty#noRecordHistory##noHistory#').rule((name,data) => {
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
                         let ssdata = getSsData(name,data);
                         setResult(ssdata);
                     }, input, data);
                     */
-                    storage0.putMyVar('搜索临时搜索数据', jkdata);
+            let searchurl = $('').lazyRule((jkdata) => {
+                if(getItem('接口搜索方式')=="海阔搜索"){
+                    if(jkdata){
+                        storage0.putMyVar('搜索临时搜索数据', jkdata);
+                        return 'hiker://search?s='+input+'  '+'&rule='+MY_RULE.title;
+                    }else{
+                        return 'toast://未找到接口数据'
+                    }
+                }else if(getItem('接口搜索方式')=="海阔聚搜"){
                     return 'hiker://search?s='+input+'  '+'&rule='+MY_RULE.title;
-                }else{
-                    return 'toast://未找到接口数据'
+                }else if(getItem('接口搜索方式')=="当前页面"){
+                    require(config.依赖); 
+                    let d = search(input, 'dianboyiji' , jkdata);
+                    if(d.length>0){
+                        addItemAfter('dianbosousuoid', d);
+                    }else{
+                        return 'toast://无结果';
+                    }
+                    return 'hikery://empty';
                 }
             },sourceData);
             
@@ -437,7 +467,13 @@ function dianboyiji() {
                 desc: "搜你想看的...",
                 col_type: "input",
                 extra: {
-                    titleVisible: true
+                    id: 'dianbosousuoid',
+                    titleVisible: true,
+                    onChange: $.toString(() => {
+                        if(input==""){
+                            deleteItemByCls('dianbosousuolist');
+                        }
+                    })
                 }
             });
             for (let i = 0; i < 4; i++) {
@@ -453,6 +489,10 @@ function dianboyiji() {
             let objdata = getYiData(sourceData);
             let fllists = objdata.fllists;
             if(fllists){
+                fllists.forEach(it=>{
+                    it.extra =  it.extra || {};
+                    it.extra.cls = "dianboyijilist";
+                })
                 d = d.concat(fllists);
             }else if(objdata.error['fl']){
                 d.push({
@@ -487,6 +527,7 @@ function dianboyiji() {
                             }),
                             col_type: 'movie_3',
                             extra: {
+                                cls: "dianboyijilist",
                                 url: list.vod_url,
                                 pic: vodpic,
                                 pageTitle: vodname,
