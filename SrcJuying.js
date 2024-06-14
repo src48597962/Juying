@@ -356,7 +356,7 @@ function dianboyiji() {
         })
         d.push({
             title: "搜索方式",
-            url: $(["海阔聚搜","海阔搜索","当前页面"],1).select(()=>{
+            url: $(["代理聚搜","软件搜索","当前页面"],1).select(()=>{
                 setItem("接口搜索方式",input);
                 return "toast://搜索方式设置为："+input;
             }),
@@ -438,14 +438,14 @@ function dianboyiji() {
                     }, input, data);
                     */
             let searchurl = $('').lazyRule((jkdata) => {
-                if(getItem('接口搜索方式')=="海阔搜索"){
+                if(getItem('接口搜索方式','软件搜索')=="软件搜索"){
                     if(jkdata){
                         storage0.putMyVar('搜索临时搜索数据', jkdata);
                         return 'hiker://search?s='+input+'  '+'&rule='+MY_RULE.title;
                     }else{
                         return 'toast://未找到接口数据'
                     }
-                }else if(getItem('接口搜索方式')=="海阔聚搜"){
+                }else if(getItem('接口搜索方式')=="代理聚搜"){
                     return 'hiker://search?s='+input+'  '+'&rule='+MY_RULE.title;
                 }else if(getItem('接口搜索方式')=="当前页面"){
                     require(config.依赖); 
