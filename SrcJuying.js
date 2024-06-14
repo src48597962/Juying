@@ -489,10 +489,6 @@ function dianboyiji() {
             let objdata = getYiData(sourceData);
             let fllists = objdata.fllists;
             if(fllists){
-                fllists.forEach(it=>{
-                    it.extra =  it.extra || {};
-                    it.extra.cls = "dianboyijilist";
-                })
                 d = d.concat(fllists);
             }else if(objdata.error['fl']){
                 d.push({
@@ -527,7 +523,6 @@ function dianboyiji() {
                             }),
                             col_type: 'movie_3',
                             extra: {
-                                cls: "dianboyijilist",
                                 url: list.vod_url,
                                 pic: vodpic,
                                 pageTitle: vodname,
