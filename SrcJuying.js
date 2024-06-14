@@ -446,6 +446,7 @@ function dianboyiji() {
                         return 'toast://未找到接口数据'
                     }
                 }else if(getItem('接口搜索方式')=="代理聚搜"){
+                    clearMyVar('搜索临时搜索数据');
                     return 'hiker://search?s='+input+'  '+'&rule='+MY_RULE.title;
                 }else if(getItem('接口搜索方式')=="当前页面"){
                     require(config.依赖); 
