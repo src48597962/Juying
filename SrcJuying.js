@@ -226,6 +226,7 @@ function dianboerji() {
     })
     //生成选集
     let list = erdata.lists[lineindex] || [];
+    let flag = flags.length>0?flags[lineindex]:"";
     function playlist(lx, col_type) {//定义选集列表生成
         if (lx == '1') {
             let playtitle = list[j].split('$')[0].trim();
@@ -233,6 +234,9 @@ function dianboerji() {
             let dataObj = {};
             if(erdata.parse_api&&erdata.parse_api.length>0){
                 dataObj.parse_api = erdata.parse_api;
+            }
+            if(flag){
+                dataObj.flag = flag;
             }
             let lazy = $("").lazyRule((dataObj) => {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
