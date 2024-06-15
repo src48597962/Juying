@@ -55,7 +55,14 @@ function erjimenu(desc) {
         }
     ]
 }
-
+//选中状态标识
+function getide(is) {
+    if(is==1){
+        return '‘‘’’<strong><font color="#f13b66a">◉ </front></strong>';
+    }else{
+        return '‘‘’’<strong><font color="#F54343">◉ </front></strong>';
+    }
+}
 function lookset() {
     setPageTitle("♥观影设置");
     let recordfile = "hiker://files/rules/Src/Juying2/parse.json";//解析相关记录文件
@@ -337,13 +344,5 @@ let buttonmenu = {
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
             aliMyDisk();
         })
-    }
-}
-//选中状态标识
-function getide(is) {
-    if(is==1){
-        return '‘‘’’<strong><font color="#f13b66a">◉ </front></strong>';
-    }else{
-        return '‘‘’’<strong><font color="#F54343">◉ </front></strong>';
     }
 }
