@@ -230,10 +230,14 @@ function dianboerji() {
         if (lx == '1') {
             let playtitle = list[j].split('$')[0].trim();
             let playurl = list[j].split('$')[1].trim();
-            let lazy = $("").lazyRule(() => {
+            let parseObj = {};
+            if(erdata.parse_api&&erdata.parse_api.length>0){
+                parseObj.parse_api = erdata.parse_api;
+            }
+            let lazy = $("").lazyRule((parseObj) => {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
-                return SrcParseS.聚影(input);
-            });
+                return SrcParseS.聚影(input, parseObj);
+            }, parseObj);
 
             let extra = {
                 id: playurl,
