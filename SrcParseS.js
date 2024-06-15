@@ -233,8 +233,8 @@ var SrcParseS = {
             }
             isVip = 1;
         }else if(!needparse.test(vipUrl)){
-            log("普通播放地址，自动处理");
-
+            log("普通网页播放地址");
+            return "video://" + vipUrl;
         }
 
 
@@ -272,6 +272,7 @@ var SrcParseS = {
 
         if(dataObj.parse){
             //指定解析用于测试
+            dataObj.parse["stype"] = "test";
             parselist.push(dataObj.parse);
         }else{
             if(parsemode==1){
@@ -298,6 +299,7 @@ var SrcParseS = {
                     jxList[j].ext = jxList[j].ext||{};
                     let flag = jxList[j].ext.flag || [];
                     if(flag.length==0 || flag.indexOf(from)>-1){
+                        jxList[j].stype = "myjx";
                         parselist.push(jxList[j]);
                     }
                 }
@@ -308,7 +310,7 @@ var SrcParseS = {
 
         //修正排序
         parselist.sort((a, b) => {
-            return a.sort - b.sort
+            return b.sort - a.sort
         })
         if(lastparse){
             //优先上次成功的
@@ -331,7 +333,6 @@ var SrcParseS = {
         var myJXchange = 0;//私有解析是否有变化需要保存
         var x5jxlist = [];
         var x5namelist = [];
-        var task = this.解析;//解析线程代码
 
         //模式3手工解析使用代理播放
         if(parsemode==3){
@@ -406,13 +407,14 @@ var SrcParseS = {
             log("本轮排队解析："+Namelist);
 
             let UrlParses = UrlList.map((list)=>{
-                if (/^\/\//.test(list.url)) { list.parse = 'https:' + list.url }
+                if (/^\/\//.test(list.url)) { list.url = 'https:' + list.url }
                 return {
-                    func: task,
+                    func: this.解析,
                     param: {
                         ulist: list,
                         vipUrl: vipUrl,
-                        testurl: this.testvideourl,
+                        isTest: jxconfig.test || 0,
+                        testVideo: this.testVideo,
                         parsemode: 1
                     },
                     id: list.parse
@@ -422,15 +424,10 @@ var SrcParseS = {
             be(UrlParses, {
                 func: function(obj, id, error, taskResult) {
                     let beurl = taskResult.url;
-                    if(beurl!=""&&needparse.test(beurl)&&beurl.indexOf('?')==-1){
+                    if(beurl!=""&&needparse.test(beurl)){//&&beurl.indexOf('?')==-1
                         beurl = "";
                     }
-                    if(/cdn\.oss-cn-m3u8\.tv-nanjing-chengdu\.myqcloud\.com\.zh188.net/.test(beurl)){
-                        let getbeurl = request(beurl,{timeout:1500})||"";
-                        if(getbeurl.indexOf("token过期了")>-1){
-                            beurl = "";
-                        }
-                    }
+
                     obj.results.push(beurl);
                     obj.parses.push(taskResult.ulist);
                     obj.errors.push(error);
@@ -441,7 +438,7 @@ var SrcParseS = {
                             return "break";
                         }
                     }else{
-                        //if(printlog==1&&taskResult.ulist.x5==0){log(taskResult.ulist.name + '>解析失败');}
+                        //if(taskResult.ulist.x5==0){log(taskResult.ulist.name + '>解析失败');}
                     }
                 },
                 param: {
@@ -452,34 +449,26 @@ var SrcParseS = {
             });
 
             for(let k in beparses){
-                var parseurl = beparses[k].parse;
+                var parseurl = beparses[k].url;
                 if(beerrors[k]==null&&contain.test(beurls[k])&&!exclude.test(beurls[k])&&excludeurl.indexOf(beurls[k])==-1){
                     if(playurl==""){playurl = beurls[k];}
-                    if(beparses[k].type=="test"){
-                        //当前为测试
-                        log(beparses[k].name+'>测试成功>'+beurls[k]);
+                    //记录除断插线程以外最快的，做为下次优先
+                    if(beparses[k].name==lastparse){
+                        log(beparses[k].name+'>优先上次解析成功>'+beurls[k]);
                     }else{
-                        //记录除断插线程以外最快的，做为下次优先
-                        if(beparses[k].name==lastparse){
-                            log(beparses[k].name+'>优先上次解析成功>'+beurls[k]);
-                        }else{
-                            log(beparses[k].name+'>解析成功>'+beurls[k]+'，记录为片源'+from+'的优先');
-                            lastparse = beparses[k].name;
-                        }
+                        log(beparses[k].name+'>解析成功>'+beurls[k]+'，记录为片源'+from+'的优先');
+                        lastparse = beparses[k].name;
+                    }
 
-                        //私有解析成功的，提升一下排序
-                        for(var j=0;j<jxList.length;j++){
-                            if(parseurl==jxList[j].parse){
-                                //解析成功的,排序+1
-                                jxList[j]['sort'] = jxList[j]['sort']||0;
-                                if(jxList[j].sort>0){
-                                    jxList[j].sort = jxList[j].sort - 1;
-                                    myJXchange = 1;
-                                }
-                                break;
-                            }
+                    //私有解析成功的，提升一下排序
+                    for(var j=0;j<jxList.length;j++){
+                        if(parseurl==jxList[j].url){
+                            //解析成功的,排序+1
+                            jxList[j]['sort'] = jxList[j]['sort']||0;
+                            jxList[j].sort = jxList[j].sort + 1;
+                            myJXchange = 1;
+                            break;
                         }
-                        
                     }
                     
                     //组一个多线路播放地址备用，log($.type(beurls[k]));
@@ -518,9 +507,7 @@ var SrcParseS = {
                     }
                     //if(ismul==0){break;}
                 }else{
-                    if(beparses[k].type!="test"){
-                        dellist.push(beparses[k])
-                    };
+                    dellist.push(beparses[k]);
                 }
             }//排队解析结果循环
         }//解析全列表循环
@@ -528,14 +515,14 @@ var SrcParseS = {
         var failparse = [];
         //失败的解析，处理
         for(var p=0;p<dellist.length;p++){
-            if(dellist[p].type=="myjx"){
+            if(dellist[p].stype=="myjx"){
                 for(var j=0;j<jxList.length;j++){
-                    if(dellist[p].parse==jxList[j].parse){
+                    if(dellist[p].url==jxList[j].url){
                         if(dellist[p].x5==1){
                             jxList[j]['type'] = 0;
                         }
                         jxList[j]['sort'] = jxList[j]['sort']||0;
-                        jxList[j].sort = jxList[j].sort + 1;
+                        jxList[j].sort = jxList[j].sort - 1;
                         /*
                         //解析失败的,且排序大于5次从私有中排除片源
                         failparse.push(jxList[j].name);//加入提示失败列表，仅提示
@@ -549,9 +536,13 @@ var SrcParseS = {
                     }
                 }
             }
-
-            
-
+            if(dellist[p].stype=="app"){
+                //app自带的解析在解析失败时，直接加入黑名单
+                parseRecord['excludeparse'] = parseRecord['excludeparse']||[];
+                if(parseRecord['excludeparse'].indexOf(dellist[p].url)==-1){
+                    parseRecord['excludeparse'].push(dellist[p].url);
+                }
+            }
         }
         
         if(!dataObj.parse){
@@ -567,6 +558,10 @@ var SrcParseS = {
 
         //播放
         if(playurl){
+            let dm;
+            if(isVip && jxconfig.dmRoute==1){
+                dm = this.弹幕(vipUrl);
+            }
             if(urls.length>1){
                 log('解析完成，进入播放2');
                 return JSON.stringify({
@@ -577,7 +572,7 @@ var SrcParseS = {
                 }); 
             }else{
                 log('解析完成，进入播放1');
-                if(dm && getItem('dmRoute', '0')=="1"){
+                if(dm){
                     let MulUrl = this.formatMulUrl(playurl, 0);
                     urls = [];
                     headers= [];
@@ -593,34 +588,23 @@ var SrcParseS = {
                 }
             }
         }else{
-            if(dataObj.parse){
-                if(x5jxlist.length>0){
-                    return this.嗅探(dataObj.parse.url+vipUrl,excludeurl);
-                }else{
-                    return "toast://解析失败";
-                }
+            if(x5namelist.length>0){
+                log('进入嗅探解析列表：' + x5namelist)
+            }
+            
+            if(x5jxlist.length>0){
+                log('开启播放器超级嗅探模式');
+                let weburls = x5jxlist.map(item => "video://" + item +vipUrl);
+                return JSON.stringify({
+                    urls: weburls,
+                    names: x5namelist,
+                    danmu: dm
+                }); 
             }else{
-                if(x5namelist.length>0){
-                    log('进入嗅探解析列表：' + x5namelist)
-                }
-                
-                if(JYconfig.superweb==1&x5jxlist.length>0){
-                    log('开启播放器超级嗅探模式');
-                    let weburls = x5jxlist.map(item => "video://" + item +vipUrl);
-                    return JSON.stringify({
-                        urls: weburls,
-                        names: x5namelist,
-                        danmu: dm
-                    }); 
-                }else if(x5jxlist.length>0){
-                    return this.聚嗅(vipUrl, x5jxlist,excludeurl);
-                }else{
-                    log('没有解析，跳转原网页');
-                    return vipUrl;
-                }
+                log('没有解析，跳转原网页');
+                return vipUrl;
             }
         }
-        
     },
     //处理多线路播放地址
     formatMulUrl: function (url,i) {
@@ -640,7 +624,7 @@ var SrcParseS = {
         }   
     },
     //测试视频地址有效性
-    testvideourl: function (url,name,times) {
+    testVideo: function (url,name,times) {
         if(!url){return 0}
         if(!name){name = "解析"}
         if(!times){times = 120}
@@ -712,7 +696,7 @@ var SrcParseS = {
         }catch(e){}
         return dm;
     },
-    解析: function(obj,webUrl) {
+    解析: function(obj, webUrl) {
         function geturl(gethtml) {
             let rurl = "";
             try {
@@ -794,11 +778,11 @@ var SrcParseS = {
                     }
                 }
             }
-        }else if(/^function/.test(obj.ulist.parse.trim())){
+        }else if(/^function/.test(obj.ulist.url.trim())){
             obj.ulist['x5'] = 0;
             let rurl = "";
             try{
-                eval('var JSparse = '+obj.ulist.parse)
+                eval('var JSparse = '+obj.ulist.url)
                 rurl = JSparse(obj.vipUrl);
             }catch(e){
                 //log("解析有错误"+e.message)
@@ -806,7 +790,7 @@ var SrcParseS = {
             if(/^toast/.test(rurl)){
                 log(obj.ulist.name+'>提示：'+rurl.replace('toast://',''));
                 rurl = "";
-            }else if(obj.parsemode==1 && /^http/.test(rurl) && obj.testurl(rurl,obj.ulist.name)==0){
+            }else if(obj.parsemode==1 && /^http/.test(rurl) && obj.testVideo(rurl,obj.ulist.name)==0){
                 rurl = "";
             }
             return {url: rurl,ulist: obj.ulist}; 
@@ -818,7 +802,7 @@ var SrcParseS = {
             }
             let getjson;
             try{
-                getjson = JSON.parse(request(obj.ulist.parse+obj.vipUrl,taskheader));
+                getjson = JSON.parse(request(obj.ulist.url+obj.vipUrl,taskheader));
             }catch(e){
                 getjson = {};
                 log(obj.ulist.name+'>解析地址访问失败');
@@ -846,15 +830,10 @@ var SrcParseS = {
                 if(obj.parsemode==1){//智能解析模式下
                     if(!rurl){
                         if(!/404 /.test(gethtml)&&obj.ulist.parse.indexOf('key=')==-1&&isjson==0){
-                            if(x5jxlist.length<5){
-                                x5jxlist.push(obj.ulist.parse);
-                                log(obj.ulist.name + '>加入x5嗅探列表');
-                                x5namelist.push(obj.ulist.name);
-                            }
                             x5 = 1;
                         }
                     }else{
-                        if(obj.testurl(rurl,obj.ulist.name)==0){
+                        if(obj.isTest && obj.testVideo(rurl,obj.ulist.name)==0){
                             rurl = "";
                         }
                     }
