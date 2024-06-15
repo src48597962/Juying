@@ -68,7 +68,6 @@ function lookset() {
     }
     
     let d = [];
-
     d.push({
         title: '功能开关',
         col_type: "rich_text"
@@ -108,8 +107,6 @@ function lookset() {
         title: '屏蔽操作',
         col_type: "rich_text"
     });
-    
-
     d.push({
         title: '无效播放地址',
         url: $("", "屏蔽无法播放的地址").input((parseRecord, recordfile) => {
@@ -135,115 +132,11 @@ function lookset() {
     d.push({
         col_type: "line"
     });
-    /*
-    let parsefrom = [];
-    var recordparse = fetch(recordfile);
-    if (recordparse != "") {
-        eval("var recordlist=" + recordparse + ";");
-        try {
-            for (var key in recordlist.priorparse) {
-                parsefrom.push(key);
-            }
-        } catch (e) { }
-    }
-    d.push({
-        title: '屏蔽优先解析',
-        url: parsefrom.length == 0 ? 'toast://没有优先解析，无需操作' : $(parsefrom, 3, "选择片源屏蔽优先解析").select(() => {
-            var recordfile = "hiker://files/rules/Src/Juying/parse.json";
-            var recordparse = fetch(recordfile);
-            eval("var recordlist=" + recordparse + ";");
-            var priorparse = recordlist.priorparse[input];
-
-            let list = priorparse.split(';;');
-            let lists = [];
-            for (let i = 0; i < list.length; i++) {
-                if (list[i]) {
-                    lists.push(list[i]);
-                }
-            }
-            if (lists.length > 0) {
-                return $(lists, 2, "选择需屏蔽的解析").select((recordfile, recordlist, from, lists) => {
-                    var filepath = "hiker://files/rules/Src/Juying/myjiexi.json";
-                    var datafile = fetch(filepath);
-                    if (datafile != "") {
-                        eval("var datalist=" + datafile + ";");
-                    } else {
-                        var datalist = [];
-                    }
-                    if (datalist.some(item => item.name == input)) {
-                        //私有解析在屏蔽优先时，仅排除片源
-                        for (var j = 0; j < datalist.length; j++) {
-                            if (datalist[j].name == input && datalist[j].stopfrom.indexOf(from) == -1) {
-                                datalist[j].stopfrom[datalist[j].stopfrom.length] = from;
-                                break;
-                            }
-                        }
-                        writeFile(filepath, JSON.stringify(datalist));
-                        var sm = '私有解析(' + input + ')>排除片源>' + from;
-                        log('已屏蔽' + from + ' 优先解析：' + sm);
-                    } else if (/^http/.test(input)) {
-                        //app自带的解析在屏蔽优先时，直接加入黑名单
-                        recordlist['excludeparse'] = recordlist['excludeparse'] || [];
-                        if (recordlist['excludeparse'].indexOf(input) == -1) {
-                            recordlist['excludeparse'].push(input);
-                        }
-                        var sm = input + '>接口自带解析加入全局黑名单';
-                        log('已屏蔽' + input + ' 优先解析：' + sm);
-                    }
-                    let lists = lists || [];
-                    function removeByValue(arr, val) {
-                        for (var i = 0; i < arr.length; i++) {
-                            if (arr[i] == val) {
-                                arr.splice(i, 1);
-                                break;
-                            }
-                        }
-                    }
-                    removeByValue(lists, input);
-                    if (lists.length > 0) {
-                        recordlist.priorparse[from] = lists.join(";;");
-                    } else {
-                        delete recordlist.priorparse[from];
-                    }
-                    writeFile(recordfile, JSON.stringify(recordlist));
-                    refreshPage(false);
-                    return "toast://" + sm;
-                }, recordfile, recordlist, input, lists)
-            } else {
-                delete recordlist.priorparse[input];
-                refreshPage(false);
-                return "toast://已清空优先";
-            }
-        }),
-        col_type: "text_2"
-    });
-    d.push({
-        title: '清除优先拦截记录',
-        url: $("清除接口自带解析拦截黑名单记录？").confirm(() => {
-            var recordfile = "hiker://files/rules/Src/Juying/parse.json";
-            var recordparse = fetch(recordfile);
-            if (recordparse != "") {
-                eval("var recordlist=" + recordparse + ";");
-                recordlist['excludeparse'] = [];
-                writeFile(recordfile, JSON.stringify(recordlist));
-                refreshPage(false);
-                return 'toast://已清除接口自带解析拦截黑名单记录';
-            } else {
-                return 'toast://无记录';
-            }
-        }),
-        col_type: "text_2"
-    });
-    d.push({
-        col_type: "line_blank"
-    });
-    */
+    
     d.push({
         title: '解析设置',
         col_type: "rich_text"
     });
-
-    parseRecord, recordfile
     let parsemode = parseRecord.parsemode || 1;
     d.push({
         title: '当前解析模式：' + (parsemode == 1 ? '聚影智能' : parsemode == 2 ? '强制嗅探' : parsemode == 3 ? '手动模式' : '异常'),
@@ -284,7 +177,6 @@ function lookset() {
     d.push({
         col_type: "line"
     });
-    
     d.push({
         title: '嗅探内核：'+(parseRecord['xiutannh']||"web"),
         url: $('#noLoading#').lazyRule((parseRecord, recordfile) => {
@@ -302,27 +194,24 @@ function lookset() {
         }, parseRecord, recordfile),
         col_type: "text_3"
     });
-
     d.push({
-        col_type: "line"
-    });
-    d.push({
-        title: (getItem('dmRoute', '0') == "1" ? getide(1) : getide(0)) + 'dm盒子弹幕：' + (getItem('dmRoute', '0') == "1" ? '开启' : '关闭'),
-        desc: '1.仅对官链有效，2.拥有dm盒子小程序-版本29+',
-        url: $('#noLoading#').lazyRule(() => {
-            if (getItem('dmRoute', '0') == "1") {
-                setItem('dmRoute', '0');
+        title: (parseRecord['dmRoute'] == "1" ? getide(1) : getide(0)) + 'dm盒子弹幕',
+        url: $('#noLoading#').lazyRule((parseRecord, recordfile) => {
+            if (parseRecord['dmRoute'] == "1") {
+                parseRecord['dmRoute'] = 0;
             } else {
-                setItem('dmRoute', '1');
+                parseRecord['dmRoute'] = 1;
             }
+            writeFile(recordfile, JSON.stringify(parseRecord));
             refreshPage(false);
             return 'toast://切换成功';
-        }),
-        col_type: "text_center_1"
+        }, parseRecord, recordfile),
+        col_type: "text_3"
     });
     d.push({
         col_type: "line_blank"
     });
+    /*
     d.push({
         title: (getItem('enabledpush', '') == '1' ? getide(1) : getide(0)) + 'TVBOX推送',
         url: $('#noLoading#').lazyRule(() => {
@@ -357,6 +246,7 @@ function lookset() {
     d.push({
         col_type: "line_blank"
     });
+    
     d.push({
         title: '颜色设置',
         col_type: "rich_text"
@@ -388,11 +278,13 @@ function lookset() {
         }),
         col_type: "text_3"
     })
+    */
+    
     d.push({
         title: '<br>',
         col_type: 'rich_text'
     });
-    setHomeResult(d);
+    setResult(d);
 }
 //主页导航按钮菜单
 let menubtns = ["管理", "历史", "收藏", "点播", "直播", "Alist", "云盘"];//"搜索",
