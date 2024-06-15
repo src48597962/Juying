@@ -175,8 +175,8 @@ var SrcParseS = {
     聚影: function (vipUrl, parseObj) {
         //聚影采用新的、独立的解析逻辑
         let cfgfile = "hiker://files/rules/Src/Juying2/config.json";
-        let Juconfig= {};
-        let Jucfg=fetch(cfgfile);
+        let Juconfig = {};
+        let Jucfg = fetch(cfgfile);
         if(Jucfg != ""){
             eval("Juconfig=" + Jucfg+ ";");
         }
@@ -186,6 +186,7 @@ var SrcParseS = {
         let exclude = /\/404\.m3u8|\/xiajia\.mp4|\/余额不足\.m3u8/;//设置排除地址
         let contain = /\.mp4|\.m3u8|\.flv|\.avi|\.mpeg|\.wmv|\.mov|\.rmvb|\.dat|qqBFdownload|mime=video%2F|video_mp4|\.ts\?|TG@UosVod|video\/tos\/cn\/tos|m3u8\?pt=m3u8/;//设置符合条件的正确地址
         let needparse = /suoyo\.cc|fen\.laodi|ruifenglb/;//设置需要解析的视频地址
+        let isVip = 0;
         if(printlog==1){log("影片地址："+vipUrl)}; 
         if (/magnet|torrent/.test(vipUrl)) {
             if(printlog==1){log("磁力/BT视频地址，由海阔解析")}; 
@@ -207,12 +208,16 @@ var SrcParseS = {
             if(printlog==1){log("网页嗅探播放")}; 
             return this.嗅探(vipUrl);
         }
-        if(vipUrl.match(/youku|iqiyi|ixigua|migu|sohu|pptv|le\.|cctv|1905|mgtv|qq\.com/) && ipUrl.indexOf('html?')>-1){
-            vipUrl = vipUrl.split('html?')[0]+'html';
+        if(vipUrl.match(/youku|iqiyi|ixigua|migu|sohu|pptv|le\.|cctv|1905|mgtv|qq\.com/)){
+            if(vipUrl.indexOf('html?')>-1){
+                vipUrl = vipUrl.split('html?')[0]+'html';
+            }
+            isVip = 1;
         }
-        
+
+        parseObj = parseObj || {};
         let from;
-        if(parseObj&&parseObj.flag){
+        if(parseObj.flag){
             from = parseObj.flag;
         }else{
             try{
@@ -240,39 +245,36 @@ var SrcParseS = {
         if(JYconfig.xiutannh){putMyVar('SrcXTNH',JYconfig.xiutannh);}
         let mulnum = JYconfig.mulnum || 1;
 
-    
-            
-        let Uparselist = [];//待进线程执行的解析列表
-        let Wparselist = [];//web解析临时存放列表
-        var myJXlist= [];//读取私有解析列表
-        var recordfile = "hiker://files/rules/Src/Juying/parse.json";
-        var parserecord=fetch(recordfile);
-        if(parserecord!=""){
+        let jxfile = "hiker://files/rules/Src/Juying2/jiexi.json";//解析存放文件
+        let parselist = [];//待进线程执行的解析列表
+        let wparselist = [];//web解析临时存放列表
+        let jxList= [];//读取私有解析列表
+
+        //解析记录：上次成功、手工屏蔽的
+        let recordfile = "hiker://files/rules/Src/Juying2/parse.json";
+        let record = fetch(recordfile);
+        let parseRecord = {};
+        if(record!=""){
             try{
-                eval("var recordlist=" + parserecord+ ";");
+                eval("parseRecord =" + record + ";");
             }catch(e){
-                var recordlist={};
+                parseRecord = {};
             }
-        }else{
-            var recordlist={};
         }
-        recordlist['from'] = recordlist['from']||[];
-        if(recordlist['from'].indexOf(from)==-1){recordlist['from'].push(from)}//记录到片源标识组
-        var excludeurl = recordlist.excludeurl||[];//屏蔽的播放地址
-        var excludeparse = recordlist.excludeparse||[];//屏蔽的解析
-        try{
-            var priorparse = recordlist.priorparse[from].split(';;');//优先上次解析
-        }catch(e){
-            var priorparse = [];
-        }
+        parseRecord['from'] = parseRecord['from']||[];
+        if(parseRecord['from'].indexOf(from)==-1){parseRecord['from'].push(from)}//记录到片源标识组
+        let excludeurl = parseRecord.excludeurl||[];//屏蔽的播放地址
+        let excludeparse = parseRecord.excludeparse||[];//屏蔽的解析
+        let lastparse = parseRecord.lastparse?(parseRecord.lastparse[from] || ""):"";//对应的片源上次解析
         
         let parseStr = parseObj.parse;
         if(parseStr){
             //指定解析用于测试
             let arr = {type:'test',name:parseStr.name,parse:parseStr.parse,sort:0};
             if(parseStr.header){arr['header'] = parseStr.header}
-            Uparselist.push(arr);
-        }else if(parsemode==1||parsemode==3||parsemode==4){
+            parselist.push(arr);
+        }else{
+
             if(parsemode==1){
                 //读取app自带的解析，将未屏蔽的入备选
                 var appParses = getMyVar('parse_api', '');
@@ -281,51 +283,51 @@ var SrcParseS = {
                     appParselist = uniq(appParselist);//去重
                     for (var i in appParselist) {
                         if(excludeparse.indexOf(appParselist[i])==-1){
-                            Uparselist.push({type:'appz',name:'appz'+i,parse:appParselist[i],sort:0});
+                            parselist.push({type:'appz',name:'appz'+i,parse:appParselist[i],sort:0});
                         }
                     }
-                    if(printlog==1){log("接口自带的解析数："+Uparselist.length)}; 
+                    if(printlog==1){log("接口自带的解析数："+parselist.length)}; 
                 }
 
             }
             
-            //读取私有增加的解析，将可用加入备选
-            var myJXfile = "hiker://files/rules/Src/Juying/myjiexi.json";
-            var myJX=fetch(myJXfile);
-            if(myJX != ""){
-                eval("var myJXlist=" + myJX+ ";");
+            //读取解析，将可用加入备选
+            if(fetch(jxfile)){
+                try{
+                    eval("jxList=" + fetch(jxfile)+ ";");
+                }catch(e){}
                 var myjxnum = 0;
-                for(var j=0;j<myJXlist.length;j++){
-                    let priorfrom = myJXlist[j].priorfrom || [];
-                    let arr = {type:'myjx',name:myJXlist[j].name.replace(/,/g,''),parse:myJXlist[j].parse};
-                    if(myJXlist[j].header){arr["header"] = myJXlist[j].header}
+                for(var j=0;j<jxList.length;j++){
+                    let priorfrom = jxList[j].priorfrom || [];
+                    let arr = {type:'myjx',name:jxList[j].name.replace(/,/g,''),parse:jxList[j].parse};
+                    if(jxList[j].header){arr["header"] = jxList[j].header}
 
                     if(priorfrom.indexOf(from)>-1){
-                        if(Uparselist.some(item => item.parse ==myJXlist[j].parse)){
-                            for(var i=0;i<Uparselist.length;i++){
-                                if(Uparselist[i].parse==myJXlist[j].parse){
-                                    Uparselist.splice(i,1);
+                        if(parselist.some(item => item.parse ==jxList[j].parse)){
+                            for(var i=0;i<parselist.length;i++){
+                                if(parselist[i].parse==jxList[j].parse){
+                                    parselist.splice(i,1);
                                     break;
                                 }
                             }
                         }
                         arr["sort"] = -1;
                         if(parsemode==1 || (parsemode!=3&&((MY_NAME=="海阔视界"&&getAppVersion()>=4094)||(MY_NAME=="嗅觉浏览器"&&getAppVersion()>=1359)))){
-                            Uparselist.unshift(arr);
+                            parselist.unshift(arr);
                             //新版支持直接在js环境获取web嗅探结果
-                        }else if(myJXlist[j].web==1){
-                            Wparselist.unshift(arr);
+                        }else if(jxList[j].web==1){
+                            wparselist.unshift(arr);
                         }
                         myjxnum = myjxnum + 1;
                     }else{
-                        if(myJXlist[j].stopfrom.indexOf(from)==-1&&excludeparse.indexOf(myJXlist[j].parse)==-1&&!Uparselist.some(item => item.parse ==myJXlist[j].parse)){
-                            let sort = myJXlist[j]['sort']||0;
+                        if(jxList[j].stopfrom.indexOf(from)==-1&&excludeparse.indexOf(jxList[j].parse)==-1&&!parselist.some(item => item.parse ==jxList[j].parse)){
+                            let sort = jxList[j]['sort']||0;
                             arr["sort"] = sort;
                             if(parsemode==1 || (parsemode!=3&&((MY_NAME=="海阔视界"&&getAppVersion()>=4094)||(MY_NAME=="嗅觉浏览器"&&getAppVersion()>=1359)))){
-                                Uparselist.push(arr);
+                                parselist.push(arr);
                                 //新版支持直接在js环境获取web嗅探结果
-                            }else if(myJXlist[j].web==1){
-                                Wparselist.push(arr);
+                            }else if(jxList[j].web==1){
+                                wparselist.push(arr);
                             }
                             myjxnum = myjxnum + 1;
                             //非强制优先、非排除片源、非屏蔽优先调用
@@ -334,13 +336,8 @@ var SrcParseS = {
                 }
                 if(printlog==1){log("私有的可用解析数：" + myjxnum)}; 
             }
-        }else if(parsemode==2){
-            if(printlog==1){log("开启强制断插模式，以下日志都是断插的")}; 
-            eval("var config =" + fetch("hiker://files/cache/MyParseSet.json"));
-            eval(fetch(config.cj));
-            return aytmParse(vipUrl);
         }
-        //log(Uparselist)
+        //log(parselist)
 
         var playurl = "";//视频地址
         var x5jxlist = []; //x5嗅探接口存放数组
@@ -350,7 +347,6 @@ var SrcParseS = {
         var headers = [];//多线路头信息
         var danmu = "";//多线路弹幕
         var dellist = [];//需从本地解析中删除列表
-        var appJXchange = 0;//app解析是否有发现新的或增加可解片源
         var myJXchange = 0;//私有解析是否排除片源
         //var appzdchange = 0;//app自带解析是否加入黑名单
 
@@ -358,47 +354,46 @@ var SrcParseS = {
         //解析线程代码
         var task = this.解析;
 
-        var iscalldn = 0;//是否调用断插标识
-        var recordname = []; //解析成功的作为优先解析临时组
         if(playurl==""&&!parseStr){
-            if(Wparselist.length > 0){
-                Wparselist.sort((a, b) => {
+            if(wparselist.length > 0){
+                wparselist.sort((a, b) => {
                     return a.sort - b.sort
                 })
             };
 
-            for (let i=0;i<Wparselist.length;i++) {
+            for (let i=0;i<wparselist.length;i++) {
                 if(x5jxlist.length<5||JYconfig.superweb==1){
-                    x5jxlist.push(Wparselist[i].parse);
-                    x5namelist.push(Wparselist[i].name);
+                    x5jxlist.push(wparselist[i].parse);
+                    x5namelist.push(wparselist[i].name);
                 }else{
                     break;
                 }
             }
 
             if(parsemode==1){
-                if(Uparselist.length > 0){
-                    Uparselist.sort((a, b) => {
+                if(parselist.length > 0){
+                    parselist.sort((a, b) => {
                         return a.sort - b.sort
                     })
                 };
 
-                if(priorparse.length>0){
+                if(lastparse){
                     //优先上次成功的
-                    for(let i=0; i<Uparselist.length; i++) {
-                        if(priorparse.indexOf(Uparselist[i].name)>-1 || (/app/.test(Uparselist[i].type)&&priorparse.indexOf(Uparselist[i].parse)>-1)) {
-                            let Uparseobj = Uparselist[i];
-                            Uparselist.splice(i,1);
-                            Uparselist.unshift(Uparseobj);
+                    for(let i=0; i<parselist.length; i++) {
+                        if(parselist[i].name==lastparse) {
+                            let Uparseobj = parselist[i];
+                            parselist.splice(i,1);
+                            parselist.unshift(Uparseobj);
+                            break;
                         }
                     }
                 }
             }else{
-                Uparselist = [];
+                parselist = [];
             }
         }
         
-        for (var i=0;i<Uparselist.length;i++) {
+        for (var i=0;i<parselist.length;i++) {
             if(playurl!=""){break;}
             let UrlList = [];
             let Namelist = [];
@@ -407,10 +402,10 @@ var SrcParseS = {
             var beerrors = [];//用于存储多线程是否有错误
             var sccess = 0;//计算成功的结果数
             let p = i + mulnum + 2;
-            if(p>Uparselist.length){p=Uparselist.length}
+            if(p>parselist.length){p=parselist.length}
             for(let s=i;s<p;s++){
-                UrlList.push(Uparselist[s]);
-                Namelist.push(Uparselist[s].name);
+                UrlList.push(parselist[s]);
+                Namelist.push(parselist[s].name);
                 i=s;
             }
             if(printlog==1){log("本轮排队解析："+Namelist)};
@@ -470,37 +465,32 @@ var SrcParseS = {
                     if(beparses[k].type=="test"){
                         //当前为测试
                         if(printlog==1){log(beparses[k].name+'>测试成功>'+beurls[k])};
-                    }else if(beparses[k].type!="dn"){
+                    }else{
                         //记录除断插线程以外最快的，做为下次优先
                         if(printlog==1){
-                            if(priorparse.indexOf(beparses[k].name)>-1){
+                            if(beparses[k].name==lastparse){
                                 log(beparses[k].name+'>优先上次解析成功>'+beurls[k]);
                             }else{
                                 log(beparses[k].name+'>解析成功>'+beurls[k]+'，记录为片源'+from+'的优先');
                             }
                         }
-                        if(beparses[k].type=="myjx"){//私有解析保存解析名
-                            if(recordname.indexOf(beparses[k].name)==-1){recordname.push(beparses[k].name)}
-                        }else if(/app/.test(beparses[k].type)){//app接口解析保存链接
-                            if(recordname.indexOf(parseurl)==-1){recordname.push(parseurl)}
-                        }
+
+                        lastparse = beparses[k].name;
 
 
                             //私有解析成功的，提升一下排序
-                            for(var j=0;j<myJXlist.length;j++){
-                                if(parseurl==myJXlist[j].parse){
+                            for(var j=0;j<jxList.length;j++){
+                                if(parseurl==jxList[j].parse){
                                     //解析成功的,排序+1
-                                    myJXlist[j]['sort'] = myJXlist[j]['sort']||0;
-                                    if(myJXlist[j].sort>0){
-                                        myJXlist[j].sort = myJXlist[j].sort - 1;
+                                    jxList[j]['sort'] = jxList[j]['sort']||0;
+                                    if(jxList[j].sort>0){
+                                        jxList[j].sort = jxList[j].sort - 1;
                                         myJXchange = 1;
                                     }
                                     break;
                                 }
                             }
                         
-                    }else{
-                        if(printlog==1){log('当前播放地址通过断插解析获得')};
                     }
                     
                     //组一个多线路播放地址备用，log($.type(beurls[k]));
@@ -550,57 +540,46 @@ var SrcParseS = {
         //失败的解析，处理
         for(var p=0;p<dellist.length;p++){
             if(dellist[p].type=="myjx"){
-                for(var j=0;j<myJXlist.length;j++){
-                    if(dellist[p].parse==myJXlist[j].parse){
+                for(var j=0;j<jxList.length;j++){
+                    if(dellist[p].parse==jxList[j].parse){
                         if(dellist[p].x5==1){
-                            myJXlist[j]['web'] = 1;
-                            myJXlist[j]['sort'] = myJXlist[j]['sort']||0;
-                            myJXlist[j].sort = myJXlist[j].sort + 1;
+                            jxList[j]['web'] = 1;
+                            jxList[j]['sort'] = jxList[j]['sort']||0;
+                            jxList[j].sort = jxList[j].sort + 1;
                         }else{
-                            myJXlist[j]['sort'] = myJXlist[j]['sort']||0;
-                            myJXlist[j].sort = myJXlist[j].sort + 1;
+                            jxList[j]['sort'] = jxList[j]['sort']||0;
+                            jxList[j].sort = jxList[j].sort + 1;
                         }
                         //解析失败的,且排序大于5次从私有中排除片源
-                        failparse.push(myJXlist[j].name);//加入提示失败列表，仅提示
-                        if(myJXlist[j].sort>5 && myJXlist[j].stopfrom.indexOf(from)==-1){
-                            myJXlist[j].stopfrom[myJXlist[j].stopfrom.length] = from;
-                            if(printlog==1){log(myJXlist[j].name+'>解析失败大于5次，排除片源'+from)};
+                        failparse.push(jxList[j].name);//加入提示失败列表，仅提示
+                        if(jxList[j].sort>5 && jxList[j].stopfrom.indexOf(from)==-1){
+                            jxList[j].stopfrom[jxList[j].stopfrom.length] = from;
+                            if(printlog==1){log(jxList[j].name+'>解析失败大于5次，排除片源'+from)};
                         }
                         myJXchange = 1;
                         break;
                     }
                 }
             }
-            if(dellist[p].type=="appz"){
-                //app自带的解析在解析失败时，直接加入黑名单
-                recordlist['excludeparse'] = recordlist['excludeparse']||[];
-                if(recordlist['excludeparse'].indexOf(dellist[p].parse)==-1){
-                    recordlist['excludeparse'].push(dellist[p].parse);
-                    //appzdchange = 1;
-                }
-            }
+
             
 
         }
         
         if(!parseStr){
             //私有解析有排除片源
-            if(myJXchange == 1){writeFile(myJXfile, JSON.stringify(myJXlist));}
+            if(myJXchange == 1){writeFile(jxfile, JSON.stringify(jxList));}
             //私有解析失败的统一提示
             if(failparse.length>0&&printlog==1){log(failparse+'<以上私有解析失败，排序-1')}
             //记录上次优先解析和自带解析有加入黑名单的保存                
-            recordlist['priorparse'] = recordlist['priorparse']||{};
-            recordlist['priorparse'][from] = recordname.join(';;');
-            delete recordlist['parse'];
-            delete recordlist['exclude'];
-            delete recordlist['name'];
-            delete recordlist['head'];
-            writeFile(recordfile, JSON.stringify(recordlist));
+            parseRecord['lastparse'] = parseRecord['lastparse']||{};
+            parseRecord['lastparse'][from] = lastparse;
+            writeFile(recordfile, JSON.stringify(parseRecord));
         } 
 
         //dm盒子弹幕
         let dm = "";
-        if(getItem('dmRoute', '0')=="1" && vipUrl.match(/youku|iqiyi|ixigua|migu|sohu|pptv|le|cctv|1905|mgtv|qq.com/)){
+        if(getItem('dmRoute', '0')=="1" && isVip){
             try{
                 dm = $.require('hiker://page/dmFun?rule=dm盒子').dmRoute(vipUrl);
             }catch(e){}
