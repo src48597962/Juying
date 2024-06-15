@@ -1010,7 +1010,9 @@ function getErData(jkdata) {
                     json = json.vod_info;
                 }
                 arts = json.vod_play_list || json.vod_url_with_player || [];
+                log("1");
                 arts.forEach(it => {
+                    log("2");
                     let linename = it.name || it.player_info.show;
                     if (linename) {
                         tabs.push(linename);
@@ -1045,8 +1047,9 @@ function getErData(jkdata) {
                         };
                     }
                 })
-
+                log("3");
                 if (arts.length == 0 && json.vod_play_from && json.vod_play_url) {
+                    log("4");
                     tabs = json.vod_play_from.split('$$$');
                     conts = json.vod_play_url.split('$$$');
                     lists = conts.map(it => {
@@ -1063,6 +1066,7 @@ function getErData(jkdata) {
                     api_type = "cms";
                 }
             }
+            log(tabs);
             actor = json.vod_actor;
             area = json.vod_area;
             year = json.vod_year;
