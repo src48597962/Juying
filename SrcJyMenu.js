@@ -93,9 +93,9 @@ function lookset() {
         col_type: "text_2"
     });
     d.push({
-        title: (parseRecord['cachem3u8'] != 0 ? getide(1) : getide(0)) + 'm3u8缓存',
+        title: (parseRecord['cachem3u8'] == 1 ? getide(1) : getide(0)) + 'm3u8缓存',
         url: $('#noLoading#').lazyRule((parseRecord, recordfile) => {
-            if (parseRecord['cachem3u8'] == 0) {
+            if (parseRecord['cachem3u8'] != 1) {
                 parseRecord['cachem3u8'] = 1;
             } else {
                 parseRecord['cachem3u8'] = 0;
@@ -136,9 +136,8 @@ function lookset() {
         col_type: "text_2"
     });
     d.push({
-        col_type: "line"
+        col_type: "line_blank"
     });
-    
     d.push({
         title: '解析设置',
         col_type: "rich_text"
@@ -198,7 +197,7 @@ function lookset() {
             refreshPage(false);
             return 'toast://嗅探内核切换为：'+sm;
         }, parseRecord, recordfile),
-        col_type: "text_3"
+        col_type: "text_2"
     });
     d.push({
         title: (parseRecord['dmRoute'] == "1" ? getide(1) : getide(0)) + 'dm盒子弹幕',
@@ -212,11 +211,9 @@ function lookset() {
             refreshPage(false);
             return 'toast://切换成功';
         }, parseRecord, recordfile),
-        col_type: "text_3"
+        col_type: "text_2"
     });
-    d.push({
-        col_type: "line_blank"
-    });
+    
     /*
     d.push({
         title: (getItem('enabledpush', '') == '1' ? getide(1) : getide(0)) + 'TVBOX推送',
