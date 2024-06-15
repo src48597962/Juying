@@ -13,7 +13,7 @@ if(record!=""){
 let excludeurl = parseRecord.excludeurl||[];//屏蔽的播放地址
 let excludeparse = parseRecord.excludeparse||[];//屏蔽的解析
 let lastparse = parseRecord.lastparse?(parseRecord.lastparse[from] || ""):"";//对应的片源上次解析
-let jxconfig = {printlog: parseRecord['printlog']||0, cachem3u8: parseRecord['cachem3u8']||1, parsemode: parseRecord['parsemode']||1, xiutannh: parseRecord['xiutannh']||'web', mulnum: 2};
+let jxconfig = {printlog: parseRecord['printlog']||0, cachem3u8: parseRecord['cachem3u8']||1, parsemode: parseRecord['parsemode']||1, xiutannh: parseRecord['xiutannh']||'web', dmRoute:parseRecord['dmRoute']||0, mulnum: 1};
 if(!jxconfig.printlog){
     log = function (msg) {
         //未开启打印解析日志>不打印
@@ -209,11 +209,8 @@ var SrcParseS = {
     },
     聚影: function (vipUrl, dataObj) {
         //聚影采用新的、独立的解析逻辑
-        parseRecord['from'] = parseRecord['from']||[];
-        if(parseRecord['from'].indexOf(from)==-1){parseRecord['from'].push(from)}//记录到片源标识组
-        
-        let isVip = 0;
         log("影片地址："+vipUrl); 
+        let isVip = 0;
         if (/magnet|torrent/.test(vipUrl)) {
             log("磁力/BT视频地址，由海阔解析"); 
             return vipUrl;
@@ -230,16 +227,16 @@ var SrcParseS = {
         }else if (/douyin\.com/.test(vipUrl)) {
             log("抖音视频，偿试嗅探"); 
             return this.嗅探(vipUrl);
-        }else if(!needparse.test(vipUrl)){
-            log("网页嗅探播放"); 
-            return this.嗅探(vipUrl);
-        }
-        if(vipUrl.match(/youku|iqiyi|ixigua|migu|sohu|pptv|le\.|cctv|1905|mgtv|qq\.com/)){
+        }else if(/youku|iqiyi|ixigua|migu|sohu|pptv|le\.|cctv|1905|mgtv|qq\.com/.test(vipUrl)){
             if(vipUrl.indexOf('html?')>-1){
                 vipUrl = vipUrl.split('html?')[0]+'html';
             }
             isVip = 1;
+        }else if(!needparse.test(vipUrl)){
+            log("普通播放地址，自动处理");
+
         }
+
 
         dataObj = dataObj || {};
         let from;
@@ -264,6 +261,8 @@ var SrcParseS = {
             }
         }
         log("片源标识："+from+"，需要解析"); 
+        parseRecord['flag'] = parseRecord['flag']||[];
+        if(parseRecord['flag'].indexOf(from)==-1){parseRecord['flag'].push(from)}//记录到片源标识组
 
         let parsemode = jxconfig.parsemode || 1;//解析模式
         let mulnum = jxconfig.mulnum || 1;//多线程数
@@ -307,20 +306,6 @@ var SrcParseS = {
         }
         //log(parselist)
 
-        var playurl = "";//视频地址
-        var urls = [];//多线路地址
-        var names = [];//多线路名称
-        var headers = [];//多线路头信息
-        var danmu = "";//多线路弹幕
-        var dellist = [];//需从本地解析中删除列表
-        var myJXchange = 0;//私有解析是否有变化需要保存
-        var x5jxlist = [];
-        var x5namelist = [];
-
-    
-        //解析线程代码
-        var task = this.解析;
-
         //修正排序
         parselist.sort((a, b) => {
             return a.sort - b.sort
@@ -336,7 +321,73 @@ var SrcParseS = {
                 }
             }
         }
-        
+        //解析播放地址需要的一些变量
+        var playurl = "";//视频地址
+        var urls = [];//多线路地址
+        var names = [];//多线路名称
+        var headers = [];//多线路头信息
+        var danmu = "";//多线路弹幕
+        var dellist = [];//需从本地解析中删除列表
+        var myJXchange = 0;//私有解析是否有变化需要保存
+        var x5jxlist = [];
+        var x5namelist = [];
+        var task = this.解析;//解析线程代码
+
+        //模式3手工解析使用代理播放
+        if(parsemode==3){
+            let u = startProxyServer($.toString((parselist,vipUrl,task,getheader,log) => {
+                let parsename = MY_PARAMS.name.join("");
+                log("我在代理解析>" + parsename);
+                let playUrl = "";
+                try{
+                    let ulist = parselist.filter(item => {
+                        return item.name==parsename;
+                    })[0];
+                    let obj = {
+                        ulist: ulist,
+                        vipUrl: vipUrl,
+                        parsemode: 3
+                    }
+                    let getUrl = task(obj);
+                    playUrl = getUrl.url;
+                }catch(e){
+                    log(parsename+">解析错误>"+e.message);
+                }
+                //log(parsename+">播放地址>"+playUrl);
+                let f = cacheM3u8(playUrl, {header: getheader(playUrl), timeout: 2000});
+                return readFile(f.split("##")[0]); //'#isVideo=true#';
+                /*
+                return JSON.stringify({
+                    statusCode: 302,
+                    headers: {
+                        "Location": url
+                    }
+                });
+                */
+            },parselist,vipUrl,this.解析,this.mulheader,log));
+            parselist.forEach((item) => {
+                urls.push(u + "?name=" + item.name + "#.m3u8#pre#");
+                names.push(item.name);
+            })
+            return {
+                urls: urls,
+                names: names
+            };
+        }else if(parsemode==2){//强制嗅探走video
+            let dm;
+            if(isVip && jxconfig.dmRoute==1){
+                dm = this.弹幕(vipUrl);
+            }
+            let list = parselist.filter(v => v.type==0);
+            let weburls = list.map(item => "video://" + item.url +vipUrl);
+            let webnames = list.map(item => item.name);
+            return JSON.stringify({
+                urls: weburls,
+                names: webnames,
+                danmu: dm
+            }); 
+        }
+        //模式1，聚影智能
         for (var i=0;i<parselist.length;i++) {
             if(playurl!=""){break;}
             let UrlList = [];
@@ -354,23 +405,21 @@ var SrcParseS = {
             }
             log("本轮排队解析："+Namelist);
 
-            let Urlparses = UrlList.map((list)=>{
-
-                    if (/^\/\//.test(list.parse)) { list.parse = 'https:' + list.parse }
-                    return {
-                        func: task,
-                        param: {
-                            ulist: list,
-                            vipUrl: vipUrl,
-                            testurl: this.testvideourl,
-                            parsemode: 1
-                        },
-                        id: list.parse
-                    }
-
+            let UrlParses = UrlList.map((list)=>{
+                if (/^\/\//.test(list.url)) { list.parse = 'https:' + list.url }
+                return {
+                    func: task,
+                    param: {
+                        ulist: list,
+                        vipUrl: vipUrl,
+                        testurl: this.testvideourl,
+                        parsemode: 1
+                    },
+                    id: list.parse
+                }
             });
 
-            be(Urlparses, {
+            be(UrlParses, {
                 func: function(obj, id, error, taskResult) {
                     let beurl = taskResult.url;
                     if(beurl!=""&&needparse.test(beurl)&&beurl.indexOf('?')==-1){
@@ -516,14 +565,6 @@ var SrcParseS = {
             writeFile(recordfile, JSON.stringify(parseRecord));
         } 
 
-        //dm盒子弹幕
-        let dm = "";
-        if(getItem('dmRoute', '0')=="1" && isVip){
-            try{
-                dm = $.require('hiker://page/dmFun?rule=dm盒子').dmRoute(vipUrl);
-            }catch(e){}
-        }
-
         //播放
         if(playurl){
             if(urls.length>1){
@@ -662,6 +703,14 @@ var SrcParseS = {
             log(name+'>错误：探测异常未拦截，可能是失败的>'+e.message);
             return 1;
         }
+    },
+    弹幕: function(vipUrl){
+        //dm盒子弹幕
+        let dm = "";
+        try{
+            dm = $.require('hiker://page/dmFun?rule=dm盒子').dmRoute(vipUrl);
+        }catch(e){}
+        return dm;
     },
     解析: function(obj,webUrl) {
         function geturl(gethtml) {
