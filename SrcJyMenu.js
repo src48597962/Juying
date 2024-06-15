@@ -79,7 +79,7 @@ function lookset() {
         col_type: "rich_text"
     });
     d.push({
-        title: (parseRecord['printlog'] == 1 ? getide(1) : getide(0)) + '解析日志',
+        title: (parseRecord['printlog'] ? getide(1) : getide(0)) + '解析日志',
         url: $('#noLoading#').lazyRule((parseRecord, recordfile) => {
             if (parseRecord['printlog'] != 1) {
                 parseRecord['printlog'] = 1;
@@ -93,7 +93,7 @@ function lookset() {
         col_type: "text_2"
     });
     d.push({
-        title: (parseRecord['cachem3u8'] == 1 ? getide(1) : getide(0)) + 'm3u8缓存',
+        title: (parseRecord['cachem3u8'] ? getide(1) : getide(0)) + 'm3u8缓存',
         url: $('#noLoading#').lazyRule((parseRecord, recordfile) => {
             if (parseRecord['cachem3u8'] != 1) {
                 parseRecord['cachem3u8'] = 1;
@@ -200,9 +200,9 @@ function lookset() {
         col_type: "text_2"
     });
     d.push({
-        title: (parseRecord['dmRoute'] == "1" ? getide(1) : getide(0)) + 'dm盒子弹幕',
+        title: (parseRecord['dmRoute'] ? getide(1) : getide(0)) + 'dm盒子弹幕',
         url: $('#noLoading#').lazyRule((parseRecord, recordfile) => {
-            if (parseRecord['dmRoute'] == "1") {
+            if (parseRecord['dmRoute']) {
                 parseRecord['dmRoute'] = 0;
             } else {
                 parseRecord['dmRoute'] = 1;
