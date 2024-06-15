@@ -1010,7 +1010,6 @@ function getErData(jkdata) {
                     json = json.vod_info;
                 }
                 arts = json.vod_play_list || json.vod_url_with_player || [];
-                log(arts);
                 arts.forEach(it => {
                     let linename = it.name || it.player_info.show;
                     if (linename) {
@@ -1063,7 +1062,6 @@ function getErData(jkdata) {
                     api_type = "cms";
                 }
             }
-            log(tabs);
             actor = json.vod_actor;
             area = json.vod_area;
             year = json.vod_year;
