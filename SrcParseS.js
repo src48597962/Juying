@@ -12,8 +12,9 @@ if(record!=""){
 
 let excludeurl = parseRecord.excludeurl||[];//屏蔽的播放地址
 let excludeparse = parseRecord.excludeparse||[];//屏蔽的解析
-let jxconfig = {printlog: parseRecord['printlog']||0, cachem3u8: parseRecord['cachem3u8']||0, parsemode: parseRecord['parsemode']||1, video: parseRecord['video']!=0?1:0,xiutannh: parseRecord['xiutannh']||'web', dmRoute:parseRecord['dmRoute']||0, isTest:parseRecord['isTest']||0, mulnum: 1};
-if(!jxconfig.printlog){
+let defaultSet = {printlog:0,cachem3u8:0,parsemode:1,video:1,xiutannh:"web",dmRoute:0,isTest:0,mulnum:1};
+let playSet = Object.assign(defaultSet, storage0.getItem('playSet') || {});
+if(!playSet.printlog){
     log = function (msg) {
         //未开启打印解析日志>不打印
     }
@@ -67,7 +68,7 @@ var SrcParseS = {
             let obj = {
                 vipUrl: vipUrl,
                 isWeb: 1,
-                video: jxconfig.video
+                video: playSet.video
             }
             return this.解析方法(obj);
         }
@@ -98,8 +99,8 @@ var SrcParseS = {
         parseRecord['flag'] = parseRecord['flag']||[];
         if(parseRecord['flag'].indexOf(from)==-1){parseRecord['flag'].push(from)}//记录到片源标识组
 
-        let parsemode = jxconfig.parsemode || 1;//解析模式
-        let mulnum = jxconfig.mulnum || 1;//多线程数
+        let parsemode = playSet.parsemode || 1;//解析模式
+        let mulnum = playSet.mulnum || 1;//多线程数
         let jxfile = "hiker://files/rules/Src/Juying2/jiexi.json";//解析存放文件
         let parselist = [];//待进线程执行的解析列表
         let jxList= [];//读取解析列表
@@ -215,7 +216,7 @@ var SrcParseS = {
             };
         }else if(parsemode==2){//强制嗅探走video
             let dm;
-            if(isVip && jxconfig.dmRoute==1){
+            if(isVip && playSet.dmRoute==1){
                 dm = this.弹幕(vipUrl);
             }
             let list = parselist.filter(v => v.type==0);
@@ -252,7 +253,7 @@ var SrcParseS = {
                     param: {
                         ulist: list,
                         vipUrl: vipUrl,
-                        isTest: jxconfig.isTest || 0,
+                        isTest: playSet.isTest || 0,
                         testVideo: this.testVideo,
                         parsemode: 1
                     },
@@ -398,7 +399,7 @@ var SrcParseS = {
         //播放
         if(playurl){
             let dm;
-            if(isVip && jxconfig.dmRoute==1){
+            if(isVip && playSet.dmRoute==1){
                 dm = this.弹幕(vipUrl);
             }
             if(urls.length>1){
