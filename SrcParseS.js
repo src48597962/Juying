@@ -12,7 +12,6 @@ if(record!=""){
 
 let excludeurl = parseRecord.excludeurl||[];//屏蔽的播放地址
 let excludeparse = parseRecord.excludeparse||[];//屏蔽的解析
-let lastparse = parseRecord.lastparse?(parseRecord.lastparse[from] || ""):"";//对应的片源上次解析
 let jxconfig = {printlog: parseRecord['printlog']||0, cachem3u8: parseRecord['cachem3u8']||0, parsemode: parseRecord['parsemode']||1, video: parseRecord['video']!=0?1:0,xiutannh: parseRecord['xiutannh']||'web', dmRoute:parseRecord['dmRoute']||0, isTest:parseRecord['isTest']||0, mulnum: 1};
 if(!jxconfig.printlog){
     log = function (msg) {
@@ -147,6 +146,7 @@ var SrcParseS = {
         parselist.sort((a, b) => {
             return b.sort - a.sort
         })
+        let lastparse = parseRecord.lastparse?(parseRecord.lastparse[from] || ""):"";//对应的片源上次解析
         if(lastparse){
             //优先上次成功的
             for(let i=0; i<parselist.length; i++) {
