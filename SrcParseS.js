@@ -187,9 +187,9 @@ var SrcParseS = {
                     let getUrl = task(obj);
                     playUrl = getUrl.url;
                 }catch(e){
-                    log(parsename+">解析错误>"+e.message);
+                    log(parsename+">解析错误>" + e.message + " 错误行#" + e.lineNumber);
                 }
-                //log(parsename+">播放地址>"+playUrl);
+                log(parsename+">播放地址>"+playUrl);
                 let f = cacheM3u8(playUrl, {header: getheader(playUrl), timeout: 2000});
                 return readFile(f.split("##")[0]); //'#isVideo=true#';
                 /*
