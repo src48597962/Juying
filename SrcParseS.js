@@ -185,14 +185,17 @@ var SrcParseS = {
                         parsemode: 3
                     }
                     let getUrl = task(obj);
-                    log("解析方法结果>"+getUrl);
                     playUrl = getUrl.url;
                 }catch(e){
                     log(parsename+">解析错误>" + e.message + " 错误行#" + e.lineNumber);
                 }
-                log(parsename+">播放地址>"+playUrl);
-                let f = cacheM3u8(playUrl, {header: getheader(playUrl), timeout: 2000});
-                return readFile(f.split("##")[0]); //'#isVideo=true#';
+                if(playUrl){
+                    log(parsename+">播放地址>"+playUrl);
+                    let f = cacheM3u8(playUrl, {header: getheader(playUrl), timeout: 2000});
+                    return f?readFile(f.split("##")[0]):playUrl; //'#isVideo=true#';
+                }else{
+                    return '';
+                }
                 /*
                 return JSON.stringify({
                     statusCode: 302,
@@ -603,8 +606,7 @@ var SrcParseS = {
                 rurl = "";
             }
             return {url: rurl,ulist: obj.ulist}; 
-        }else{            
-            log("进来了")
+        }else{
             let taskheader = {withStatusCode:true,timeout:8000};
             let head = obj.ulist.header||{};
             if(JSON.stringify(head) != "{}"){
@@ -619,7 +621,6 @@ var SrcParseS = {
             }
             //log(getjson);
             if (getjson.body&&getjson.statusCode==200){
-                log("0");
                 var gethtml = getjson.body;
                 var rurl = "";
                 var isjson = 0;
@@ -627,21 +628,15 @@ var SrcParseS = {
                     let json =JSON.parse(gethtml);
                     isjson = 1;
                     rurl = json.url||json.data.url||json.data;
-                    log("1");
                 } catch (e) {
-                    log("2");
                     if(/\.m3u8|\.mp4/.test(getjson.url)&&getjson.url.indexOf('=http')==-1){
-                        log("21");
                         rurl = getjson.url;
                     }else if(/\.m3u8|\.mp4|\.flv/.test(gethtml) && geturl(gethtml)){
-                        log("22");
                         rurl = geturl(gethtml);
                     }else if((MY_NAME=="海阔视界"&&getAppVersion()>=4094)||(MY_NAME=="嗅觉浏览器"&&getAppVersion()>=1359)){
-                        log("23");
                         rurl = exeWebRule(obj.ulist.url+obj.vipUrl) || "";
                     }
                 }
-                log(rurl);
                 var x5 = 0;
                 if(!rurl){
                     if(!/404 /.test(gethtml)&&obj.ulist.url.indexOf('key=')==-1&&isjson==0){
