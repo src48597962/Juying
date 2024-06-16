@@ -113,38 +113,39 @@ function lookset() {
         title: '分页设置',
         col_type: "rich_text"
     });
+    let partpage = storage0.getItem('partpage') || {};
     d.push({
-        title: (playSet['ispage'] ? getide(1) : getide(0)) + '分页开关',
-        url: $('#noLoading#').lazyRule((playSet) => {
-            if (playSet['ispage'] != 1) {
-                playSet['ispage'] = 1;
+        title: (partpage['ispage'] ? getide(1) : getide(0)) + '选集开启分页设置',
+        url: $('#noLoading#').lazyRule((partpage) => {
+            if (partpage['ispage'] != 1) {
+                partpage['ispage'] = 1;
             } else {
-                playSet['ispage'] = 0;
+                partpage['ispage'] = 0;
             }
-            storage0.setItem('playSet', playSet);
+            storage0.setItem('partpage', partpage);
             refreshPage(false);
             return 'toast://切换成功';
-        }, playSet),
+        }, partpage),
         col_type: "text_center_1"
     });
     d.push({
-        title: '每页数量'+(playSet['pagenum']||40),
-        url: $(playSet['pagenum']||"40","每页选集数量").input((playSet) => {
-            playSet['pagenum'] = parseInt(input);
-            storage0.setItem('playSet',playSet);
+        title: '每页数量'+(partpage['pagenum']||40),
+        url: $(partpage['pagenum']||"40","每页选集数量").input((partpage) => {
+            partpage['pagenum'] = parseInt(input);
+            storage0.setItem('partpage',partpage);
             refreshPage(false);
             return 'hiker://empty'
-        },playSet),
+        },partpage),
         col_type: "text_2"
     });
     d.push({
-        title: '分页阀值'+(playSet['partnum']||100),
-        url: $(playSet['partnum']||"100","选集数量超过多少才分页").input((playSet) => {
-            playSet['partnum'] = parseInt(input);
-            storage0.setItem('playSet',playSet);
+        title: '分页阀值'+(partpage['partnum']||100),
+        url: $(partpage['partnum']||"100","选集数量超过多少才分页").input((partpage) => {
+            partpage['partnum'] = parseInt(input);
+            storage0.setItem('partpage',partpage);
             refreshPage(false);
             return 'hiker://empty'
-        },playSet),
+        },partpage),
         col_type: "text_2"
     });
     d.push({
