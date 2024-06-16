@@ -247,7 +247,7 @@ function dianboerji() {
     //分页定义
     let partpage = storage0.getItem('partpage') || {};
     if(partpage.ispage){//启用分页
-        let 每页数量 = partpage.pagenum || 45; // 分页的每页数量       
+        let 每页数量 = partpage.pagenum || 40; // 分页的每页数量       
         let 翻页阀值 = partpage.partnum || 100; // 分页的翻页阀值，超过多少才显示翻页
         
         if (列表.length > 翻页阀值) { 
