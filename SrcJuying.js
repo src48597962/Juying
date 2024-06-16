@@ -327,7 +327,7 @@ function dianboerji() {
         if(flag){
             dataObj.flag = flag;
         }
-        let jixieSet = storage0.getItem('jixieSet') || {};
+        let playSet = storage0.getItem('playSet') || {};
         let listone = 列表[0].split('$')[0].trim();
         let len = listone.length;
         let col_type = list.length > 4 && len < 7 ? 'text_4' : len > 20 ? 'text_1' :'text_3';
@@ -350,7 +350,7 @@ function dianboerji() {
             if(!/qq|youku|mgtv|bili|qiyi|sohu|pptv|le/.test(playurl) && /html/.test(playurl)){
                 extra.referer = playurl;
             }
-            if(jixieSet.cacheM3u8){
+            if(playSet.cacheM3u8){
                 extra.cacheM3u8 = true;
             }
             d.push({
