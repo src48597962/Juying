@@ -238,7 +238,7 @@ var SrcParseS = {
             let obj = {
                         vipUrl: vipUrl,
                         isWeb: 1,
-                        parsemode: 2
+                        parsemode: jxconfig.parsemode
                     }
             return this.解析(obj);
 
@@ -777,11 +777,14 @@ var SrcParseS = {
                 return rurl;
             }else{
                 if(obj.parsemode==2){// && getMyVar('pushboxplay')!="1"){
+                    log("网页播放走-video")
                     return 'video://'+obj.vipUrl;
                 }else{
                     if((MY_NAME=="海阔视界"&&getAppVersion()>=4094)||(MY_NAME=="嗅觉浏览器"&&getAppVersion()>=1359)){
+                        log("网页播放走-exeWebRule")
                         return exeWebRule(obj.vipUrl) || "";
                     }else{
+                        log("网页播放走-嗅探")
                         return this.嗅探(obj.vipUrl,[],1);
                     }
                 }
