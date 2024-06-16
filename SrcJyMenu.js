@@ -72,38 +72,38 @@ function lookset() {
             eval("parseRecord =" + fetch(recordfile) + ";");
         }catch(e){}
     }
-    
+    let playSet = storage0.getItem('playSet') || {};
     let d = [];
     d.push({
         title: '功能开关',
         col_type: "rich_text"
     });
     d.push({
-        title: (parseRecord['printlog'] ? getide(1) : getide(0)) + '解析日志',
-        url: $('#noLoading#').lazyRule((parseRecord, recordfile) => {
-            if (parseRecord['printlog'] != 1) {
-                parseRecord['printlog'] = 1;
+        title: (playSet['printlog'] ? getide(1) : getide(0)) + '解析日志',
+        url: $('#noLoading#').lazyRule((playSet) => {
+            if (playSet['printlog'] != 1) {
+                playSet['printlog'] = 1;
             } else {
-                parseRecord['printlog'] = 0;
+                playSet['printlog'] = 0;
             }
-            writeFile(recordfile, JSON.stringify(parseRecord));
+            storage0.setItem('playSet', playSet);
             refreshPage(false);
             return 'toast://切换成功';
-        }, parseRecord, recordfile),
+        }, playSet),
         col_type: "text_2"
     });
     d.push({
-        title: (parseRecord['cachem3u8'] ? getide(1) : getide(0)) + 'm3u8缓存',
-        url: $('#noLoading#').lazyRule((parseRecord, recordfile) => {
-            if (parseRecord['cachem3u8'] != 1) {
-                parseRecord['cachem3u8'] = 1;
+        title: (playSet['cachem3u8'] ? getide(1) : getide(0)) + 'm3u8缓存',
+        url: $('#noLoading#').lazyRule((playSet) => {
+            if (playSet['cachem3u8'] != 1) {
+                playSet['cachem3u8'] = 1;
             } else {
-                parseRecord['cachem3u8'] = 0;
+                playSet['cachem3u8'] = 0;
             }
-            writeFile(recordfile, JSON.stringify(parseRecord));
+            storage0.setItem('playSet', playSet);
             refreshPage(false);
             return 'toast://切换成功';
-        }, parseRecord, recordfile),
+        }, playSet),
         col_type: "text_2"
     });
     d.push({
@@ -142,7 +142,7 @@ function lookset() {
         title: '解析设置',
         col_type: "rich_text"
     });
-    let parsemode = parseRecord.parsemode || 1;
+    let parsemode = playSet["parsemode"] || 1;
     d.push({
         title: '当前解析模式：' + (parsemode == 1 ? '聚影智能' : parsemode == 2 ? '强制嗅探' : parsemode == 3 ? '手动模式' : '异常'),
         desc: parsemode == 1 ? '上次优先>接口自带+私有解析' : parsemode == 2 ? '使用video将web解析组线路进播放器' : parsemode == 3 ? '使用代理播放模式，在播放页手动选择解析' : '',
@@ -151,96 +151,96 @@ function lookset() {
     });
     d.push({
         title: (parsemode == 1 ? getide(1) : getide(0)) + '聚影智能',
-        url: $('#noLoading#').lazyRule((parseRecord, recordfile) => {
-            parseRecord['parsemode'] = 1;
-            writeFile(recordfile, JSON.stringify(parseRecord));
+        url: $('#noLoading#').lazyRule((playSet) => {
+            playSet['parsemode'] = 1;
+            storage0.setItem('playSet', playSet);
             refreshPage(false);
             return 'toast://解析模式：聚影智能';
-        }, parseRecord, recordfile),
+        }, playSet),
         col_type: "text_3"
     });
     d.push({
         title: (parsemode == 2 ? getide(1) : getide(0)) + '强制嗅探',
-        url: $('#noLoading#').lazyRule((parseRecord, recordfile) => {
-            parseRecord['parsemode'] = 2;
-            writeFile(recordfile, JSON.stringify(parseRecord));
+        url: $('#noLoading#').lazyRule((playSet) => {
+            playSet['parsemode'] = 2;
+            storage0.setItem('playSet', playSet);
             refreshPage(false);
             return 'toast://解析模式：强制嗅探';
-        }, parseRecord, recordfile),
+        }, playSet),
         col_type: "text_3"
     });
     d.push({
         title: (parsemode == 3 ? getide(1) : getide(0)) + '手动切换',
-        url: $('#noLoading#').lazyRule((parseRecord, recordfile) => {
-            parseRecord['parsemode'] = 3;
-            writeFile(recordfile, JSON.stringify(parseRecord));
+        url: $('#noLoading#').lazyRule((playSet) => {
+            playSet['parsemode'] = 3;
+            storage0.setItem('playSet', playSet);
             refreshPage(false);
             return 'toast://解析模式：手动切换';
-        }, parseRecord, recordfile),
+        }, playSet),
         col_type: "text_3"
     });
     d.push({
         col_type: "line"
     });
     d.push({
-        title: '嗅探内核：'+(parseRecord['xiutannh']||"web"),
-        url: $('#noLoading#').lazyRule((parseRecord, recordfile) => {
+        title: '嗅探内核：'+(playSet['xiutannh']||"web"),
+        url: $('#noLoading#').lazyRule((playSet) => {
             let sm;
-            if(parseRecord['xiutannh'] == 'x5'){
-                parseRecord['xiutannh'] = 'web';
+            if(playSet['xiutannh'] == 'x5'){
+                playSet['xiutannh'] = 'web';
                 sm = 'web';
             }else{
-                parseRecord['xiutannh'] = 'x5';
+                playSet['xiutannh'] = 'x5';
                 sm = 'x5';
             }
-            writeFile(recordfile, JSON.stringify(parseRecord));
+            storage0.setItem('playSet', playSet);
             refreshPage(false);
             return 'toast://嗅探内核切换为：'+sm;
-        }, parseRecord, recordfile),
+        }, playSet),
         col_type: "text_2"
     });
     d.push({
-        title: '嗅探方式：'+(parseRecord['video']!=0?"video":"WebRule"),
-        url: $('#noLoading#').lazyRule((parseRecord, recordfile) => {
-            if (parseRecord['video'] != 0) {
-                parseRecord['video'] = 0;
+        title: '嗅探方式：'+(playSet['video']!=0?"video":"WebRule"),
+        url: $('#noLoading#').lazyRule((playSet) => {
+            if (playSet['video'] != 0) {
+                playSet['video'] = 0;
             } else {
-                parseRecord['video'] = 1;
+                playSet['video'] = 1;
             }
-            writeFile(recordfile, JSON.stringify(parseRecord));
+            storage0.setItem('playSet', playSet);
             refreshPage(false);
             return 'toast://已切换';
-        }, parseRecord, recordfile),
+        }, playSet),
         col_type: "text_2"
     });
     d.push({
-        title: (parseRecord['isTest'] ? getide(1) : getide(0)) + '解析结果有效性检测',
+        title: (playSet['isTest'] ? getide(1) : getide(0)) + '解析结果有效性检测',
         desc: "除video方式外，其他解析结果是否开启检测",
-        url: $('#noLoading#').lazyRule((parseRecord, recordfile) => {
-            if (parseRecord['isTest']) {
-                parseRecord['isTest'] = 0;
+        url: $('#noLoading#').lazyRule((playSet) => {
+            if (playSet['isTest']) {
+                playSet['isTest'] = 0;
             } else {
-                parseRecord['isTest'] = 1;
+                playSet['isTest'] = 1;
             }
-            writeFile(recordfile, JSON.stringify(parseRecord));
+            storage0.setItem('playSet', playSet);
             refreshPage(false);
             return 'toast://切换成功';
-        }, parseRecord, recordfile),
+        }, playSet),
         col_type: "text_1"
     });
     d.push({
-        title: (parseRecord['dmRoute'] ? getide(1) : getide(0)) + 'dm盒子弹幕',
+        title: (playSet['dmRoute'] ? getide(1) : getide(0)) + 'dm盒子弹幕',
         desc: "仅针对官网地址有效，dm盒子小程序最新版本",
-        url: $('#noLoading#').lazyRule((parseRecord, recordfile) => {
-            if (parseRecord['dmRoute']) {
-                parseRecord['dmRoute'] = 0;
+        url: $('#noLoading#').lazyRule((playSet) => {
+            if (playSet['dmRoute']) {
+                playSet['dmRoute'] = 0;
             } else {
-                parseRecord['dmRoute'] = 1;
+                playSet['dmRoute'] = 1;
             }
-            writeFile(recordfile, JSON.stringify(parseRecord));
+            storage0.setItem('playSet', playSet);
             refreshPage(false);
             return 'toast://切换成功';
-        }, parseRecord, recordfile),
+        }, playSet),
         col_type: "text_1"
     });
     
