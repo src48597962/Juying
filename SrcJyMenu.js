@@ -200,19 +200,16 @@ function lookset() {
         col_type: "text_2"
     });
     d.push({
-        title: '嗅探方式：'+(parseRecord['video']?"video":"WebRule"),
+        title: '嗅探方式：'+(parseRecord['video']!=0?"video":"WebRule"),
         url: $('#noLoading#').lazyRule((parseRecord, recordfile) => {
-            let sm;
-            if(parseRecord['xiutannh'] == 'x5'){
-                parseRecord['xiutannh'] = 'web';
-                sm = 'web';
-            }else{
-                parseRecord['xiutannh'] = 'x5';
-                sm = 'x5';
+            if (parseRecord['video'] != 0) {
+                parseRecord['video'] = 0;
+            } else {
+                parseRecord['video'] = 1;
             }
             writeFile(recordfile, JSON.stringify(parseRecord));
             refreshPage(false);
-            return 'toast://嗅探内核切换为：'+sm;
+            return 'toast://已切换';
         }, parseRecord, recordfile),
         col_type: "text_2"
     });
