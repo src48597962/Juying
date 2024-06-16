@@ -44,169 +44,6 @@ function removeByValue(arr, val) {
 }
 
 var SrcParseS = {
-    formatUrl: function (url, i) {
-        try {
-            if (url.trim() == "") {
-                return "toast://解析失败，建议切换线路或更换解析方式";
-            } else if(/^{/.test(url)){
-                return url;
-            }else {
-                if (url[0] == '/') { url = 'https:' + url }
-                if (i == undefined) {
-                    if (getMyVar('SrcM3U8', '1') == "1"&&url.indexOf('.m3u8')>-1) {
-                        url = cacheM3u8(url, {timeout: 2000});
-                    }
-                    if(url.indexOf('User-Agent')==-1){
-                        if (/wkfile/.test(url)) {
-                            url = url + ';{User-Agent@Mozilla/5.0&&Referer@https://fantuan.tv/}';
-                        } else if (/bilibili|bilivideo/.test(url)) {
-                            url = url + ";{User-Agent@bili2021&&Referer@https://www.bilibili.com/}";
-                        } else if (/mgtv/.test(url)) {
-                            url = url + ";{User-Agent@Mozilla/5.0}";
-                        }/* else {
-                            url = url + ";{User-Agent@Mozilla/5.0}";
-                        }*/
-                    }
-                } else {
-                    if ((getMyVar('SrcM3U8', '1') == "1"||url.indexOf('vkey=')>-1)&&url.indexOf('.m3u8')>-1) {
-                        url = cacheM3u8(url, {timeout: 2000}, 'video' + parseInt(i) + '.m3u8') + '#pre#';
-                    }
-                }
-                if(url.indexOf('#isVideo=true#')==-1){
-                    url = url + '#isVideo=true#';
-                }
-                return url;
-            }
-        } catch (e) {
-            return url;
-        }
-    },
-    mulheader: function (url) {
-        if (/mgtv/.test(url)) {
-            var header = { 'User-Agent': 'Mozilla/5.0', 'Referer': 'www.mgtv.com' };
-        } else if (/bilibili|bilivideo/.test(url)) {
-            var header = { 'User-Agent': 'bili2021', 'Referer': 'www.bilibili.com' };
-        } else if (/wkfile/.test(url)) {
-            var header = { 'User-Agent': 'Mozilla/5.0', 'Referer': 'fantuan.tv' };
-        } else {
-            var header = {};
-        }
-        return header;
-    },
-    嗅探: function (vipUrl, excludeurl, getparse) {
-        showLoading('√视频解析中，请稍候...');
-        excludeurl = excludeurl||[];
-        clearVar('Srcgetparse');
-        return (getMyVar('SrcXTNH', 'web') == 'x5' ? 'x5Rule://' : 'webRule://') + vipUrl + '@' + $.toString((formatUrl,vipUrl,excludeurl,getparse) => {
-            if (window.c == null) {
-                if (typeof (request) == 'undefined' || !request) {
-                    eval(fba.getInternalJs());
-                };
-                window.c = 0;
-            };
-            window.c++;
-            if (window.c * 250 >= 15 * 1000) {
-                fba.clearVar('Srcgetparse');
-                fba.log("嗅探失败>超过15秒未获取到");
-                fba.hideLoading();
-                try{
-                    let videourl = vipUrl.split('url=')[1];
-                    if(/^http/.test(videourl)){
-                        return videourl;
-                    }
-                }catch(e){ }
-                return "toast://解析超时，建议切换线路或更换解析方式";
-            }
-            //fba.log(fy_bridge_app.getUrls());
-            var urls = _getUrls();
-            var exclude = /\/404\.m3u8|\/xiajia\.mp4|\/余额不足\.m3u8|\.css|\.js|\.gif|\.png|\.jpg|\.jpeg|html,http|m3u88.com\/admin|\.php\?v=h|\?url=h|\?vid=h|%253Furl%253Dh|#amp=1|\.t-ui\.cn/;//设置排除地址
-            var contain = /\.mp4|\.m3u8|\.flv|\.avi|\.mpeg|\.wmv|\.mov|\.rmvb|\.dat|qqBFdownload|mime=video%2F|video_mp4|\.ts\?|TG@UosVod|video\/tos\/cn\/tos|m3u8\?pt=m3u8/;//设置符合条件的正确地址
-            for (var i in urls) {
-                if(getparse&&!fba.getVar('Srcgetparse')&&/url=h|v=h|youku|mgtv|ixigua|qq\.com|iqiyi|migu|bilibili|sohu|pptv|\.le\.|\.1905|cctv/.test(urls[i])&&!/\/bid\?|\.gif\?|ads\?|img\.php|index\/\?|cityjson/.test(urls[i])){
-                    try{
-                        fba.log(urls[i].match(/http.*?=/)[0]);
-                        fba.putVar('Srcgetparse','1');
-                    }catch(e){}
-                }
-                var tc = 1;
-                if(/cdn\.oss-cn-m3u8\.tv-nanjing-chengdu\.myqcloud\.com\.zh188.net/.test(urls[i])&&vipUrl.indexOf("=http")>-1){
-                    var html = request(urls[i],{timeout:1500})||"";
-                    if(html.indexOf("token过期了")>-1){tc = 0;}
-                }
-                if (!exclude.test(urls[i]) && contain.test(urls[i]) && excludeurl.indexOf(urls[i])==-1 && tc==1) {
-                    fba.clearVar('Srcgetparse');
-                    fba.log("嗅探成功>"+urls[i]);
-                    //return urls[i]+'#isVideo=true#';
-                    if(fy_bridge_app.getHeaderUrl&&vipUrl.indexOf("=http")==-1)
-                        return $$$("#noLoading#").lazyRule((url) => {
-                            url = base64Decode(url);
-                            if (getMyVar('SrcM3U8', '1') == "1"&&url.indexOf('.m3u8')>-1) {
-                                return cacheM3u8(url.split(";{")[0], {timeout: 2000})+"#ignoreImg=true##isVideo=true#;{"+url.split(";{")[1];
-                            }else{
-                                return url.replace(";{", "#ignoreImg=true##isVideo=true#;{");
-                            }
-                        }, fy_bridge_app.base64Encode(fy_bridge_app.getHeaderUrl(urls[i])));
-                    else {
-                        return $$$("#noLoading#").lazyRule((url, formatUrl, vipUrl) => {
-                            try{
-                                vipUrl = vipUrl.split("=")[1];
-                            }catch(e){
-                                vipUrl = "";
-                            }
-                            let dm = "";
-                            if(getItem('dmRoute', '0')=="1" && vipUrl.match(/youku|iqiyi|ixigua|migu|sohu|pptv|le|cctv|1905|mgtv|qq.com/)){
-                                try{
-                                    dm = $.require('hiker://page/dmFun?rule=dm盒子').dmRoute(vipUrl);
-                                }catch(e){}
-                            }
-                            if(dm){
-                                let playUrl = formatUrl(url);
-                                let urls = [];
-                                let headers= [{'User-Agent': 'Mozilla/5.0'}];
-                                if(playUrl.indexOf(";{")>-1){
-                                    urls.push(playUrl.split(";{")[0]);
-                                }else{
-                                    urls.push(playUrl);
-                                }
-                                return JSON.stringify({
-                                    urls: urls,
-                                    headers: headers,
-                                    danmu: dm 
-                                }); 
-                            }else{
-                                return formatUrl(url)+"#ignoreImg=true#";
-                            }
-                        }, urls[i], formatUrl, vipUrl);
-                    }
-                }
-            }
-            /*
-            try {
-                document.querySelector("#count-down").click()
-            } catch (e) {}*/
-        }, this.formatUrl, vipUrl, excludeurl, getparse)
-    },
-    聚嗅: function (vipUrl, jxlist, excludeurl) {
-        var jxhtml = config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJiexi.html';
-        fc(jxhtml, 96);
-        let libsjxjs = fetch("hiker://files/libs/" + md5(jxhtml) + ".js");
-        if (jxlist != undefined) {
-            if (jxlist.length > 0) {
-                var a = JSON.parse(libsjxjs.match(/apiArray=(.*?);/)[1]);
-                /*
-                for (var i = 0; i < jxlist.length; i++) {
-                    a.push(jxlist[i]);
-                }
-                a = uniq(a);//去重
-                */
-                a = jxlist;
-                libsjxjs = libsjxjs.replace(libsjxjs.match(/apiArray=(.*?);/)[1], JSON.stringify(a))
-            }
-        }
-        let libsjxhtml = "hiker://files/libs/" + md5(jxhtml) + ".html";
-        writeFile(libsjxhtml, libsjxjs);
-        return this.嗅探(getPath(libsjxhtml) + '?url=' + vipUrl, excludeurl);
-    },
     聚影: function (vipUrl, dataObj) {
         //聚影采用新的、独立的解析逻辑
         log("影片地址："+vipUrl); 
@@ -221,20 +58,13 @@ var SrcParseS = {
         }else if (vipUrl.indexOf('sa.sogou') != -1) {
             log("优看视频，直接明码解析"); 
             return unescape(request(vipUrl).match(/"url":"([^"]*)"/)[1].replace(/\\u/g, "%u"));
-        }else if (/\/share\//.test(vipUrl)) {
-            log("cms资源网云播地址，嗅探播放"); 
-            return this.嗅探(vipUrl);
-        }else if (/douyin\.com/.test(vipUrl)) {
-            log("抖音视频，偿试嗅探"); 
-            return this.嗅探(vipUrl);
         }else if(/youku|iqiyi|ixigua|migu|sohu|pptv|le\.|cctv|1905|mgtv|qq\.com/.test(vipUrl)){
             if(vipUrl.indexOf('html?')>-1){
                 vipUrl = vipUrl.split('html?')[0]+'html';
             }
             isVip = 1;
         }else if(!needparse.test(vipUrl)){
-            log("普通网页播放地址");
-            //return "video://" + vipUrl;
+            log("网页播放地址");
             let obj = {
                 vipUrl: vipUrl,
                 isWeb: 1,
@@ -821,6 +651,169 @@ var SrcParseS = {
                 return {url: "", ulist: obj.ulist, error: 1};//网页无法访问状态码不等于200 
             }
         }
+    },
+    formatUrl: function (url, i) {
+        try {
+            if (url.trim() == "") {
+                return "toast://解析失败，建议切换线路或更换解析方式";
+            } else if(/^{/.test(url)){
+                return url;
+            }else {
+                if (url[0] == '/') { url = 'https:' + url }
+                if (i == undefined) {
+                    if (getMyVar('SrcM3U8', '1') == "1"&&url.indexOf('.m3u8')>-1) {
+                        url = cacheM3u8(url, {timeout: 2000});
+                    }
+                    if(url.indexOf('User-Agent')==-1){
+                        if (/wkfile/.test(url)) {
+                            url = url + ';{User-Agent@Mozilla/5.0&&Referer@https://fantuan.tv/}';
+                        } else if (/bilibili|bilivideo/.test(url)) {
+                            url = url + ";{User-Agent@bili2021&&Referer@https://www.bilibili.com/}";
+                        } else if (/mgtv/.test(url)) {
+                            url = url + ";{User-Agent@Mozilla/5.0}";
+                        }/* else {
+                            url = url + ";{User-Agent@Mozilla/5.0}";
+                        }*/
+                    }
+                } else {
+                    if ((getMyVar('SrcM3U8', '1') == "1"||url.indexOf('vkey=')>-1)&&url.indexOf('.m3u8')>-1) {
+                        url = cacheM3u8(url, {timeout: 2000}, 'video' + parseInt(i) + '.m3u8') + '#pre#';
+                    }
+                }
+                if(url.indexOf('#isVideo=true#')==-1){
+                    url = url + '#isVideo=true#';
+                }
+                return url;
+            }
+        } catch (e) {
+            return url;
+        }
+    },
+    mulheader: function (url) {
+        if (/mgtv/.test(url)) {
+            var header = { 'User-Agent': 'Mozilla/5.0', 'Referer': 'www.mgtv.com' };
+        } else if (/bilibili|bilivideo/.test(url)) {
+            var header = { 'User-Agent': 'bili2021', 'Referer': 'www.bilibili.com' };
+        } else if (/wkfile/.test(url)) {
+            var header = { 'User-Agent': 'Mozilla/5.0', 'Referer': 'fantuan.tv' };
+        } else {
+            var header = {};
+        }
+        return header;
+    },
+    嗅探: function (vipUrl, excludeurl, getparse) {
+        showLoading('√视频解析中，请稍候...');
+        excludeurl = excludeurl||[];
+        clearVar('Srcgetparse');
+        return (getMyVar('SrcXTNH', 'web') == 'x5' ? 'x5Rule://' : 'webRule://') + vipUrl + '@' + $.toString((formatUrl,vipUrl,excludeurl,getparse) => {
+            if (window.c == null) {
+                if (typeof (request) == 'undefined' || !request) {
+                    eval(fba.getInternalJs());
+                };
+                window.c = 0;
+            };
+            window.c++;
+            if (window.c * 250 >= 15 * 1000) {
+                fba.clearVar('Srcgetparse');
+                fba.log("嗅探失败>超过15秒未获取到");
+                fba.hideLoading();
+                try{
+                    let videourl = vipUrl.split('url=')[1];
+                    if(/^http/.test(videourl)){
+                        return videourl;
+                    }
+                }catch(e){ }
+                return "toast://解析超时，建议切换线路或更换解析方式";
+            }
+            //fba.log(fy_bridge_app.getUrls());
+            var urls = _getUrls();
+            var exclude = /\/404\.m3u8|\/xiajia\.mp4|\/余额不足\.m3u8|\.css|\.js|\.gif|\.png|\.jpg|\.jpeg|html,http|m3u88.com\/admin|\.php\?v=h|\?url=h|\?vid=h|%253Furl%253Dh|#amp=1|\.t-ui\.cn/;//设置排除地址
+            var contain = /\.mp4|\.m3u8|\.flv|\.avi|\.mpeg|\.wmv|\.mov|\.rmvb|\.dat|qqBFdownload|mime=video%2F|video_mp4|\.ts\?|TG@UosVod|video\/tos\/cn\/tos|m3u8\?pt=m3u8/;//设置符合条件的正确地址
+            for (var i in urls) {
+                if(getparse&&!fba.getVar('Srcgetparse')&&/url=h|v=h|youku|mgtv|ixigua|qq\.com|iqiyi|migu|bilibili|sohu|pptv|\.le\.|\.1905|cctv/.test(urls[i])&&!/\/bid\?|\.gif\?|ads\?|img\.php|index\/\?|cityjson/.test(urls[i])){
+                    try{
+                        fba.log(urls[i].match(/http.*?=/)[0]);
+                        fba.putVar('Srcgetparse','1');
+                    }catch(e){}
+                }
+                var tc = 1;
+                if(/cdn\.oss-cn-m3u8\.tv-nanjing-chengdu\.myqcloud\.com\.zh188.net/.test(urls[i])&&vipUrl.indexOf("=http")>-1){
+                    var html = request(urls[i],{timeout:1500})||"";
+                    if(html.indexOf("token过期了")>-1){tc = 0;}
+                }
+                if (!exclude.test(urls[i]) && contain.test(urls[i]) && excludeurl.indexOf(urls[i])==-1 && tc==1) {
+                    fba.clearVar('Srcgetparse');
+                    fba.log("嗅探成功>"+urls[i]);
+                    //return urls[i]+'#isVideo=true#';
+                    if(fy_bridge_app.getHeaderUrl&&vipUrl.indexOf("=http")==-1)
+                        return $$$("#noLoading#").lazyRule((url) => {
+                            url = base64Decode(url);
+                            if (getMyVar('SrcM3U8', '1') == "1"&&url.indexOf('.m3u8')>-1) {
+                                return cacheM3u8(url.split(";{")[0], {timeout: 2000})+"#ignoreImg=true##isVideo=true#;{"+url.split(";{")[1];
+                            }else{
+                                return url.replace(";{", "#ignoreImg=true##isVideo=true#;{");
+                            }
+                        }, fy_bridge_app.base64Encode(fy_bridge_app.getHeaderUrl(urls[i])));
+                    else {
+                        return $$$("#noLoading#").lazyRule((url, formatUrl, vipUrl) => {
+                            try{
+                                vipUrl = vipUrl.split("=")[1];
+                            }catch(e){
+                                vipUrl = "";
+                            }
+                            let dm = "";
+                            if(getItem('dmRoute', '0')=="1" && vipUrl.match(/youku|iqiyi|ixigua|migu|sohu|pptv|le|cctv|1905|mgtv|qq.com/)){
+                                try{
+                                    dm = $.require('hiker://page/dmFun?rule=dm盒子').dmRoute(vipUrl);
+                                }catch(e){}
+                            }
+                            if(dm){
+                                let playUrl = formatUrl(url);
+                                let urls = [];
+                                let headers= [{'User-Agent': 'Mozilla/5.0'}];
+                                if(playUrl.indexOf(";{")>-1){
+                                    urls.push(playUrl.split(";{")[0]);
+                                }else{
+                                    urls.push(playUrl);
+                                }
+                                return JSON.stringify({
+                                    urls: urls,
+                                    headers: headers,
+                                    danmu: dm 
+                                }); 
+                            }else{
+                                return formatUrl(url)+"#ignoreImg=true#";
+                            }
+                        }, urls[i], formatUrl, vipUrl);
+                    }
+                }
+            }
+            /*
+            try {
+                document.querySelector("#count-down").click()
+            } catch (e) {}*/
+        }, this.formatUrl, vipUrl, excludeurl, getparse)
+    },
+    聚嗅: function (vipUrl, jxlist, excludeurl) {
+        var jxhtml = config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJiexi.html';
+        fc(jxhtml, 96);
+        let libsjxjs = fetch("hiker://files/libs/" + md5(jxhtml) + ".js");
+        if (jxlist != undefined) {
+            if (jxlist.length > 0) {
+                var a = JSON.parse(libsjxjs.match(/apiArray=(.*?);/)[1]);
+                /*
+                for (var i = 0; i < jxlist.length; i++) {
+                    a.push(jxlist[i]);
+                }
+                a = uniq(a);//去重
+                */
+                a = jxlist;
+                libsjxjs = libsjxjs.replace(libsjxjs.match(/apiArray=(.*?);/)[1], JSON.stringify(a))
+            }
+        }
+        let libsjxhtml = "hiker://files/libs/" + md5(jxhtml) + ".html";
+        writeFile(libsjxhtml, libsjxjs);
+        return this.嗅探(getPath(libsjxhtml) + '?url=' + vipUrl, excludeurl);
     }
 }
 
