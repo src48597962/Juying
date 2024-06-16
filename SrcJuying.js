@@ -215,7 +215,7 @@ function dianboerji() {
                         }
                         if (key > Marksum) { delete SrcMark[one]; }
                         writeFile(markFile, JSON.stringify(SrcMark));
-                        putMyVar(url+"_line", i);
+                        putMyVar(url+"_line", newid);
                         refreshPage(false);
                     }
                     return '#noHistory#hiker://empty'
