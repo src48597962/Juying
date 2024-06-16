@@ -836,24 +836,27 @@ function jiexi(data) {
                 }
                 writeFile(filepath, JSON.stringify(urls));
             }
-            let parsearr = {name:dataname,url:dataurl,type:parseInt(datatype),ext:dataext};
+
+            let dataObj = {};
+            dataObj.parse = {name:dataname,url:dataurl,type:parseInt(datatype),ext:dataext};
+
             urls['自定义'] = "";
             for(var key in urls){
                 addItemBefore('jxline2', {
                     title: key,
-                    url: key!="自定义"?$('#noRecordHistory##noHistory#').lazyRule((vipUrl,parseStr)=>{
+                    url: key!="自定义"?$('#noRecordHistory##noHistory#').lazyRule((vipUrl,dataObj)=>{
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
-                        return SrcParseS.聚影(vipUrl, parseStr);
-                    },urls[key],parsearr):$("","输入自定义播放地址").input((parseStr) => {
+                        return SrcParseS.聚影(vipUrl, dataObj);
+                    },urls[key],dataObj):$("","输入自定义播放地址").input((dataObj) => {
                         if(input==""){
                             return "toast://未输入自定义地址，无法测试";
                         }else{
-                            return $().lazyRule((vipUrl,parseStr)=>{
+                            return $().lazyRule((vipUrl,dataObj)=>{
                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
-                                return SrcParseS.聚影(vipUrl, parseStr);
-                            }, input, parseStr)
+                                return SrcParseS.聚影(vipUrl, dataObj);
+                            }, input, dataObj)
                         }
-                    }, parsearr),
+                    }, dataObj),
                     col_type: "text_3",
                     extra:{
                         cls: 'jxtest',
