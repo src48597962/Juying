@@ -125,7 +125,7 @@ function lookset() {
             refreshPage(false);
             return 'toast://切换成功';
         }, playSet),
-        col_type: "text_3"
+        col_type: "text_center_1"
     });
     d.push({
         title: '每页数量'+(playSet['pagenum']||40),
@@ -135,7 +135,7 @@ function lookset() {
             refreshPage(false);
             return 'hiker://empty'
         },playSet),
-        col_type: "text_3"
+        col_type: "text_2"
     });
     d.push({
         title: '分页阀值'+(playSet['partnum']||100),
@@ -145,7 +145,7 @@ function lookset() {
             refreshPage(false);
             return 'hiker://empty'
         },playSet),
-        col_type: "text_3"
+        col_type: "text_2"
     });
     d.push({
         col_type: "line_blank"
