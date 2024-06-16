@@ -13,7 +13,7 @@ if(record!=""){
 let excludeurl = parseRecord.excludeurl||[];//屏蔽的播放地址
 let excludeparse = parseRecord.excludeparse||[];//屏蔽的解析
 let lastparse = parseRecord.lastparse?(parseRecord.lastparse[from] || ""):"";//对应的片源上次解析
-let jxconfig = {printlog: parseRecord['printlog']||0, cachem3u8: parseRecord['cachem3u8']||1, parsemode: parseRecord['parsemode']||1, xiutannh: parseRecord['xiutannh']||'web', dmRoute:parseRecord['dmRoute']||0, mulnum: 1};
+let jxconfig = {printlog: parseRecord['printlog']||0, cachem3u8: parseRecord['cachem3u8']||1, parsemode: parseRecord['parsemode']||1, video: parseRecord['video']||1,xiutannh: parseRecord['xiutannh']||'web', dmRoute:parseRecord['dmRoute']||0, mulnum: 1};
 if(!jxconfig.printlog){
     log = function (msg) {
         //未开启打印解析日志>不打印
@@ -234,16 +234,14 @@ var SrcParseS = {
             isVip = 1;
         }else if(!needparse.test(vipUrl)){
             log("普通网页播放地址");
-            return "video://" + vipUrl;
+            //return "video://" + vipUrl;
             let obj = {
-                        vipUrl: vipUrl,
-                        isWeb: 1,
-                        parsemode: jxconfig.parsemode
-                    }
+                vipUrl: vipUrl,
+                isWeb: 1,
+                video: jxconfig.video
+            }
             return this.解析(obj);
-
         }
-
 
         dataObj = dataObj || {};
         let from;
@@ -753,41 +751,11 @@ var SrcParseS = {
         }
 
         if(obj.isWeb){
-            let rurl = "";
-            let gethtml = request(obj.vipUrl, {timeout:3000});
-            try{
-                if (/player_.*?=/.test(gethtml)) {
-                    let  html = JSON.parse(gethtml.match(/r player_.*?=(.*?)</)[1]);
-                    rurl = html.url;
-                    if (html.encrypt == '1') {
-                        rurl = unescape(rurl);
-                    } else if (html.encrypt == '2') {
-                        rurl = unescape(base64Decode(rurl));
-                    }
-                    if (!/\.m3u8|\.mp4|\.flv/.test(rurl)) {
-                        rurl = "";
-                    }
-                }
-                if(!rurl && /\.m3u8|\.mp4|\.flv/.test(gethtml) && geturl(gethtml)){
-                    rurl = geturl(gethtml);
-                }
-            }catch(e){
-            }
-            if(rurl){
-                return rurl;
+            if(obj.video){// && getMyVar('pushboxplay')!="1"){
+                log("网页播放走-video")
+                return 'video://'+obj.vipUrl;
             }else{
-                if(obj.parsemode==2){// && getMyVar('pushboxplay')!="1"){
-                    log("网页播放走-video")
-                    return 'video://'+obj.vipUrl;
-                }else{
-                    if((MY_NAME=="海阔视界"&&getAppVersion()>=4094)||(MY_NAME=="嗅觉浏览器"&&getAppVersion()>=1359)){
-                        log("网页播放走-exeWebRule")
-                        return exeWebRule(obj.vipUrl) || "";
-                    }else{
-                        log("网页播放走-嗅探")
-                        return this.嗅探(obj.vipUrl,[],1);
-                    }
-                }
+                return exeWebRule(obj.vipUrl) || "toast://exeWebRule获取失败，可试试video";
             }
         }else if(/^function/.test(obj.ulist.url.trim())){
             obj.ulist['x5'] = 0;
