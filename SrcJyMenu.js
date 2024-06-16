@@ -214,6 +214,21 @@ function lookset() {
         col_type: "text_2"
     });
     d.push({
+        title: (parseRecord['isTest'] ? getide(1) : getide(0)) + '解析结果有效性检测',
+        desc: "除video方式外，其他解析结果是否开启检测",
+        url: $('#noLoading#').lazyRule((parseRecord, recordfile) => {
+            if (parseRecord['isTest']) {
+                parseRecord['isTest'] = 0;
+            } else {
+                parseRecord['isTest'] = 1;
+            }
+            writeFile(recordfile, JSON.stringify(parseRecord));
+            refreshPage(false);
+            return 'toast://切换成功';
+        }, parseRecord, recordfile),
+        col_type: "text_1"
+    });
+    d.push({
         title: (parseRecord['dmRoute'] ? getide(1) : getide(0)) + 'dm盒子弹幕',
         desc: "仅针对官网地址有效，dm盒子小程序最新版本",
         url: $('#noLoading#').lazyRule((parseRecord, recordfile) => {
