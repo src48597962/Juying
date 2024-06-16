@@ -200,7 +200,25 @@ function lookset() {
         col_type: "text_2"
     });
     d.push({
+        title: '嗅探方式：'+(parseRecord['video']?"video":"WebRule"),
+        url: $('#noLoading#').lazyRule((parseRecord, recordfile) => {
+            let sm;
+            if(parseRecord['xiutannh'] == 'x5'){
+                parseRecord['xiutannh'] = 'web';
+                sm = 'web';
+            }else{
+                parseRecord['xiutannh'] = 'x5';
+                sm = 'x5';
+            }
+            writeFile(recordfile, JSON.stringify(parseRecord));
+            refreshPage(false);
+            return 'toast://嗅探内核切换为：'+sm;
+        }, parseRecord, recordfile),
+        col_type: "text_2"
+    });
+    d.push({
         title: (parseRecord['dmRoute'] ? getide(1) : getide(0)) + 'dm盒子弹幕',
+        desc: "仅针对官网地址有效，dm盒子小程序最新版本",
         url: $('#noLoading#').lazyRule((parseRecord, recordfile) => {
             if (parseRecord['dmRoute']) {
                 parseRecord['dmRoute'] = 0;
@@ -211,7 +229,7 @@ function lookset() {
             refreshPage(false);
             return 'toast://切换成功';
         }, parseRecord, recordfile),
-        col_type: "text_2"
+        col_type: "text_1"
     });
     
     /*
