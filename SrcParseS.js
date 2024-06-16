@@ -13,7 +13,7 @@ if(record!=""){
 let excludeurl = parseRecord.excludeurl||[];//屏蔽的播放地址
 let excludeparse = parseRecord.excludeparse||[];//屏蔽的解析
 let lastparse = parseRecord.lastparse?(parseRecord.lastparse[from] || ""):"";//对应的片源上次解析
-let jxconfig = {printlog: parseRecord['printlog']||0, cachem3u8: parseRecord['cachem3u8']||0, parsemode: parseRecord['parsemode']||1, video: parseRecord['video']!=0?1:0,xiutannh: parseRecord['xiutannh']||'web', dmRoute:parseRecord['dmRoute']||0, mulnum: 1};
+let jxconfig = {printlog: parseRecord['printlog']||0, cachem3u8: parseRecord['cachem3u8']||0, parsemode: parseRecord['parsemode']||1, video: parseRecord['video']!=0?1:0,xiutannh: parseRecord['xiutannh']||'web', dmRoute:parseRecord['dmRoute']||0, isTest:parseRecord['isTest']||0, mulnum: 1};
 if(!jxconfig.printlog){
     log = function (msg) {
         //未开启打印解析日志>不打印
@@ -240,7 +240,7 @@ var SrcParseS = {
                 isWeb: 1,
                 video: jxconfig.video
             }
-            return this.解析(obj);
+            return this.解析方法(obj);
         }
 
         dataObj = dataObj || {};
@@ -370,7 +370,7 @@ var SrcParseS = {
                     }
                 });
                 */
-            },parselist,vipUrl,this.解析,this.mulheader,log));
+            },parselist,vipUrl,this.解析方法,this.mulheader,log));
             parselist.forEach((item) => {
                 urls.push(u + "?name=" + item.name + "#.m3u8#pre#");
                 names.push(item.name);
@@ -414,11 +414,11 @@ var SrcParseS = {
             let UrlParses = UrlList.map((list)=>{
                 if (/^\/\//.test(list.url)) { list.url = 'https:' + list.url }
                 return {
-                    func: this.解析,
+                    func: this.解析方法,
                     param: {
                         ulist: list,
                         vipUrl: vipUrl,
-                        isTest: jxconfig.test || 0,
+                        isTest: jxconfig.isTest || 0,
                         testVideo: this.testVideo,
                         parsemode: 1
                     },
@@ -701,7 +701,7 @@ var SrcParseS = {
         }catch(e){}
         return dm;
     },
-    解析: function(obj) {
+    解析方法: function(obj) {
         function geturl(gethtml) {
             let rurl = "";
             try {
@@ -722,8 +722,8 @@ var SrcParseS = {
             //let rurl = JSON.parse(html).url || JSON.parse(html).data;
             return rurl;
         }
-        function exeWebRule(exewebUrl) {
-            return executeWebRule(exewebUrl, $.toString(() => {
+        function exeWebRule(webUrl) {
+            return executeWebRule(webUrl, $.toString(() => {
                     try{
                         if (typeof (request) == 'undefined' || !request) {
                             eval(fba.getInternalJs());
@@ -768,7 +768,7 @@ var SrcParseS = {
             if(/^toast/.test(rurl)){
                 log(obj.ulist.name+'>提示：'+rurl.replace('toast://',''));
                 rurl = "";
-            }else if(obj.parsemode==1 && /^http/.test(rurl) && obj.testVideo(rurl,obj.ulist.name)==0){
+            }else if(obj.isTest && /^http/.test(rurl) && obj.testVideo(rurl,obj.ulist.name)==0){
                 rurl = "";
             }
             return {url: rurl,ulist: obj.ulist}; 
@@ -805,22 +805,20 @@ var SrcParseS = {
                     }
                 }
                 var x5 = 0;
-                if(obj.parsemode==1){//智能解析模式下
-                    if(!rurl){
-                        if(!/404 /.test(gethtml)&&obj.ulist.parse.indexOf('key=')==-1&&isjson==0){
-                            x5 = 1;
-                        }
-                    }else{
-                        if(obj.isTest && obj.testVideo(rurl,obj.ulist.name)==0){
-                            rurl = "";
-                        }
+                if(!rurl){
+                    if(!/404 /.test(gethtml)&&obj.ulist.parse.indexOf('key=')==-1&&isjson==0){
+                        x5 = 1;
+                    }
+                }else{
+                    if(obj.isTest && /^http/.test(rurl) && obj.testVideo(rurl,obj.ulist.name)==0){
+                        rurl = "";
                     }
                 }
                 obj.ulist['x5'] = x5;
-                return {url: rurl,ulist: obj.ulist}; 
+                return {url: rurl, ulist: obj.ulist}; 
             }else{
                 obj.ulist['x5'] = 0;
-                return {url: "",ulist: obj.ulist}; 
+                return {url: "", ulist: obj.ulist, error: 1};//网页无法访问状态码不等于200 
             }
         }
     }
