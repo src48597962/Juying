@@ -94,6 +94,8 @@ function dianboerji() {
     let d = [];
     let jkdata = MY_PARAMS.data;
     let name = MY_PARAMS.pageTitle;
+    let sgroup = jkdata.group||jkdata.type;
+    let sname = jkdata.name;
     MY_URL = MY_PARAMS.url;
 
     let detailsmark;
@@ -124,7 +126,7 @@ function dianboerji() {
     //海报
     d.push({
         title: details1,//详情1
-        desc: "当前接口："+(jkdata.group||jkdata.type)+"_"+jkdata.name+"\n"+details2,//详情2
+        desc: "当前接口："+sgroup+"_"+sname+"\n"+details2,//详情2
         pic_url: pic?/^http/.test(pic)&&!pic.includes('@Referer=')?pic+'@Referer=':pic:'',//图片
         url: MY_URL + '#noHistory#',//链接
         col_type: 'movie_1_vertical_pic_blur',
@@ -139,25 +141,20 @@ function dianboerji() {
         d.push(it);
     })
 
-    // 片源标识数组
-    let flags = erdata.flags;
-    // 影片标识
-    let vodId = name;
-    // 线路标识
-    let lineId = vodId + '_' + (jkdata.group||jkdata.type);
-    // 线路id
-    let lineindex = getMyVar(lineId, '0');
-    if(!getMyVar(vodId)){
-        //取之前足迹记录，用于自动定位之前的线路
-        try {
-            eval('let SrcMark = ' + fetch("hiker://files/cache/src/Juying2/Mark.json"));
-            if (SrcMark != "") {
-                if (SrcMark.line[lineId]) {
-                    putMyVar(lineId, SrcMark.line[lineId]);
-                }
-            }
-        } catch (e) { }
-    }
+    //取之前足迹记录，用于自动定位之前的线路和分页
+    let smark = {};
+    try {
+        eval('SrcMark = ' + fetch("hiker://files/cache/src/Juying2/Mark.json"));
+        if (SrcMark[MY_URL]) {
+            smark.line = SrcMark[MY_URL].line;
+            smark.page = SrcMark[MY_URL].page;
+        }
+    } catch (e) { }
+
+    // 标识
+    let lineid = parseInt(getMyVar(MY_URL+"_line", (smark.line||0).toString()));//线路index
+    let pageid = parseInt(getMyVar(MY_URL+"_page", (smark.page||0).toString()));//分页index
+
     //设置记录线路足迹的数量
     let Marksum = 100;
     //线路部份
@@ -193,118 +190,175 @@ function dianboerji() {
     erdata.tabs.forEach((it,i)=>{
         if(it){
             d.push({
-                title: getMyVar(lineId, '0') == i ? getHead(it,Color1,1) : getHead(it,Color2),
-                url: $("#noLoading#").lazyRule((lineId, i, Marksum) => {
-                    if (parseInt(getMyVar(lineId, '0')) != i) {
+                title: getMyVar(MY_URL+"_line", '0') == i ? getHead(it,Color1,1) : getHead(it,Color2),
+                url: $("#noLoading#").lazyRule((url, nowid, newid, Marksum) => {
+                    if (nowid != newid) {
                         let markFile = 'hiker://files/cache/src/Juying2/Mark.json';
                         let SrcMark = "";
                         try {
                             eval('SrcMark = ' + markFile);
                         } catch (e) {  }
                         if (SrcMark == "") {
-                            SrcMark = { line: {} };
-                        } else if (!SrcMark.line) {
-                            SrcMark.line = {};
+                            SrcMark = {};
                         }
-                        SrcMark.line[lineId] = i;
+                        SrcMark[url] = SrcMark[url] || {};
+                        SrcMark[url].line = newid;
                         let key = 0;
                         let one = "";
-                        for (var k in SrcMark.line) {
+                        for (var k in SrcMark) {
                             key++;
                             if (key == 1) { one = k }
                         }
-                        if (key > Marksum) { delete SrcMark.line[one]; }
+                        if (key > Marksum) { delete SrcMark[one]; }
                         writeFile(markFile, JSON.stringify(SrcMark));
-                        putMyVar(lineId, i);
+                        putMyVar(url+"_line", i);
                         refreshPage(false);
                     }
                     return '#noHistory#hiker://empty'
-                }, lineId, i, Marksum),
+                }, MY_URL, lineid, i, Marksum),
                 col_type: 'scroll_button'
             })
         }
     })
     //生成选集
-    let list = erdata.lists[lineindex] || [];
-    let flag = flags.length>0?flags[lineindex]:"";
-    function playlist(lx, col_type) {//定义选集列表生成
-        if (lx == '1') {
-            let playtitle = list[j].split('$')[0].trim();
-            let playurl = list[j].split('$')[1].trim();
-            let dataObj = {};
-            if(erdata.parse_api&&erdata.parse_api.length>0){
-                dataObj.parse_api = erdata.parse_api;
+    let 列表 = erdata.lists[lineid] || [];
+    if(列表.length>0){
+        try{
+            let i1 = parseInt(列表.length / 6);
+            let i2 = parseInt(列表.length / 4);
+            let i3 = parseInt(列表.length / 2);
+            let list1 = 列表[i1].split('$')[0];
+            let list2 = 列表[i2].split('$')[0];
+            let list3 = 列表[i3].split('$')[0];
+            if(parseInt(list1.match(/(\d+)/)[0])>parseInt(list2.match(/(\d+)/)[0]) && parseInt(list2.match(/(\d+)/)[0])>parseInt(list3.match(/(\d+)/)[0])){
+                列表.reverse();
             }
-            if(flag){
-                dataObj.flag = flag;
+        }catch(e){
+            //xlog('√强制修正选集顺序失败>'+e.message)
+        }
+    }
+    if (getMyVar('shsort') == '1') {
+        列表.reverse();
+    }
+    //分页定义
+    let partpage = storage0.getItem('partpage') || {};
+    if(partpage.ispage){//启用分页
+        let 每页数量 = partpage.pagenum || 45; // 分页的每页数量       
+        let 翻页阀值 = partpage.partnum || 100; // 分页的翻页阀值，超过多少才显示翻页
+        
+        if (列表.length > 翻页阀值) { 
+            let 最大页数 = Math.ceil(列表.length / 每页数量);  
+            let 分页页码 = pageid + 1; //当前页数
+            if (分页页码 > 最大页数) { //防止切换线路导致页数数组越界
+                分页页码 = 最大页数;
             }
+            let 分页链接 = [];
+            let 分页名 = [];
+            function getNewArray(array, subGroupLength) {
+                let index = 0;
+                let newArray = [];
+                while(index < array.length) {
+                    newArray.push(array.slice(index, index += subGroupLength));
+                }
+                return newArray;
+            }
+            let 分页s = getNewArray(列表, 每页数量);//按每页数据切割成小数组
+
+            分页s.forEach((it,i)=>{
+                分页链接.push($("#noLoading#").lazyRule((url,nowid,newid) => {
+                    if(nowid != newid){
+                        putMyVar(url+"_page", newid);
+                        refreshPage(false);
+                    }
+                    return 'hiker://empty'
+                }, MY_URL, pageid, i))
+                let start = i * 每页数量 + 1;
+                let end = i * 每页数量 + it.length;
+                let title = start + ' - ' + end;
+                分页名.push(pageid==i?'““””<span style="color: #87CEFA">'+title:title)
+            })
+            d.push({
+                col_type: "blank_block",
+                extra: {
+                    cls: "Juloadlist"
+                }
+            });
+            d.push({
+                title: 分页页码==1?"↪️尾页":"⏮️上页",
+                url: 分页页码==1?分页链接[分页名.length-1]:分页链接[pageid-1],
+                col_type: 'text_4',
+                extra: {
+                    cls: "Juloadlist"
+                }
+            })
+            d.push({
+                title: 分页名[pageid],
+                url: $(分页名, 2).select((分页名,分页链接) => {
+                    return 分页链接[分页名.indexOf(input)];
+                },分页名,分页链接),
+                col_type: 'text_2',
+                extra: {
+                    cls: "Juloadlist"
+                }
+            })
+            d.push({
+                title: 分页页码==分页名.length?"首页↩️":"下页⏭️",
+                url: 分页页码==分页名.length?分页链接[0]:分页链接[pageid+1],
+                col_type: 'text_4',
+                extra: {
+                    cls: "Juloadlist"
+                }
+            })
+            列表 = 分页s[pageid];//取当前分页的选集列表
+        }
+    }
+    if(列表.length==0){
+        d.push({
+            title: '当前无播放选集，点更多片源试试！',
+            url: '#noHistory#hiker://empty',
+            col_type: 'text_center_1'
+        });
+    }else{
+        let flag = erdata.flags.length>0?erdata.flags[lineid]:"";
+        let dataObj = {};
+        if(erdata.parse_api&&erdata.parse_api.length>0){
+            dataObj.parse_api = erdata.parse_api;
+        }
+        if(flag){
+            dataObj.flag = flag;
+        }
+        let jixieSet = storage0.getItem('jixieSet') || {};
+        let listone = 列表[0].split('$')[0].trim();
+        let len = listone.length;
+        let col_type = list.length > 4 && len < 7 ? 'text_4' : len > 20 ? 'text_1' :'text_3';
+        for(let i=0; i<列表.length; i++) {
+            let playtitle = 列表[i].split('$')[0].trim();
+            let playurl = 列表[i].split('$')[1].trim();
+            
             let lazy = $("").lazyRule((dataObj) => {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
                 return SrcParseS.聚影(input, dataObj);
             }, dataObj);
 
             let extra = {
-                id: lineId + "_选集_" + lineindex + "_0_" + j,//标识_选集_线路index_分页index_列表index
+                id: name + "_选集_" + (pageid?pageid+"_":"") + i,
                 jsLoadingInject: true,
                 blockRules: ['.m4a', '.mp3', '.gif', '.jpeg', '.jpg', '.ico', '.png', 'hm.baidu.com', '/ads/*.js', 'cnzz.com'],
                 videoExcludeRule: ['m3u8.js','?url='],
                 cls: "playlist"
             }
-            
-            if(!/qq|youku|mgtv|bili|qiyi|sohu|pptv/.test(playurl) && /html/.test(playurl)){
+            if(!/qq|youku|mgtv|bili|qiyi|sohu|pptv|le/.test(playurl) && /html/.test(playurl)){
                 extra.referer = playurl;
             }
-            if(getMyVar('superwebM3U8') == "1"){
+            if(jixieSet.cacheM3u8){
                 extra.cacheM3u8 = true;
             }
-
             d.push({
                 title: getHead(playtitle.replace(/第|集|话|期|-|new|最新|新/g, ''), Color3),
                 url: playurl + lazy,
-                extra: extra,
-                col_type: col_type
+                col_type: col_type,
+                extra: extra
             });
-        } else {
-            d.push({
-                title: '当前无播放选集，点更多片源试试！',
-                url: '#noHistory#hiker://empty',
-                col_type: 'text_center_1'
-            });
-        }
-
-    }
-    if (list.length == 0) {
-        playlist('0');
-    } else {
-        try{
-            let list1 = list[0].split('$')[0];
-            let list2 = list[list.length-1].split('$')[0];
-            if(parseInt(list1.match(/(\d+)/)[0])>parseInt(list2.match(/(\d+)/)[0])){
-                list.reverse();
-            }
-        }catch(e){
-            //log('修正选集顺序失败>'+e.message)
-        }
-        let listone = list[0].split('$')[0].trim();
-        let len = listone.length;
-        let col_type = list.length > 4 && len < 7 ? 'text_4' : len > 20 ? 'text_1' :'text_3';
-        if (getMyVar('shsort') == '1') {
-            try {
-                for (var j = list.length - 1; j >= 0; j--) {
-                    playlist('1', col_type);
-                }
-            } catch (e) {
-                playlist('0');
-            }
-        } else {
-            try {
-                for (var j = 0; j < list.length; j++) {
-                    playlist('1', col_type);
-                }
-            } catch (e) {
-                playlist('0');
-            }
-
         }
     }
 
