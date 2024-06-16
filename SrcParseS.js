@@ -529,10 +529,16 @@ var SrcParseS = {
     },
     弹幕: function(vipUrl){
         //dm盒子弹幕
+        log("开始获取弹幕");
         let dm = "";
         try{
             dm = $.require('hiker://page/dmFun?rule=dm盒子').dmRoute(vipUrl);
         }catch(e){}
+        if(dm){
+            log("获取弹幕成功");
+        }else{
+            log("获取弹幕失败");
+        }
         return dm;
     },
     解析方法: function(obj) {
