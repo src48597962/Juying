@@ -13,7 +13,7 @@ if(record!=""){
 let excludeurl = parseRecord.excludeurl||[];//屏蔽的播放地址
 let excludeparse = parseRecord.excludeparse||[];//屏蔽的解析
 let lastparse = parseRecord.lastparse?(parseRecord.lastparse[from] || ""):"";//对应的片源上次解析
-let jxconfig = {printlog: parseRecord['printlog']||0, cachem3u8: parseRecord['cachem3u8']||1, parsemode: parseRecord['parsemode']||1, video: parseRecord['video']||1,xiutannh: parseRecord['xiutannh']||'web', dmRoute:parseRecord['dmRoute']||0, mulnum: 1};
+let jxconfig = {printlog: parseRecord['printlog']||0, cachem3u8: parseRecord['cachem3u8']||0, parsemode: parseRecord['parsemode']||1, video: parseRecord['video']!=0?1:0,xiutannh: parseRecord['xiutannh']||'web', dmRoute:parseRecord['dmRoute']||0, mulnum: 1};
 if(!jxconfig.printlog){
     log = function (msg) {
         //未开启打印解析日志>不打印
@@ -752,10 +752,9 @@ var SrcParseS = {
 
         if(obj.isWeb){
             if(obj.video){// && getMyVar('pushboxplay')!="1"){
-                log("网页播放走-video")
                 return 'video://'+obj.vipUrl;
             }else{
-                return exeWebRule(obj.vipUrl) || "toast://exeWebRule获取失败，可试试video";
+                return exeWebRule(obj.vipUrl) || "toast://WebRule获取失败，可试试video";
             }
         }else if(/^function/.test(obj.ulist.url.trim())){
             obj.ulist['x5'] = 0;
