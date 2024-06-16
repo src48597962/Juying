@@ -116,7 +116,7 @@ function dianboerji() {
         let markData = {surl: jkdata.url, url: MY_URL, data: erdata}
         writeFile(cacheDataFile, JSON.stringify(markData));
     }
-    log(erdata);
+    //log(erdata);
     let details1 = erdata.details1;
     let details2 = erdata.details2;
     let pic = erdata.pic||MY_PARAMS.pic;
@@ -144,7 +144,7 @@ function dianboerji() {
     // 影片标识
     let vodId = name;
     // 线路标识
-    let lineId = vodId + '_线路';
+    let lineId = vodId + '_' + (jkdata.group||jkdata.type);
     // 线路id
     let lineindex = getMyVar(lineId, '0');
     if(!getMyVar(vodId)){
@@ -159,7 +159,7 @@ function dianboerji() {
         } catch (e) { }
     }
     //设置记录线路足迹的数量
-    let Marksum = 30;
+    let Marksum = 100;
     //线路部份
     let Color1 = getItem('SrcJy$linecolor1','#09c11b')||'#09c11b';//#f13b66a
     let Color2 = getItem('SrcJy$linecolor2','');;//#098AC1
@@ -244,7 +244,7 @@ function dianboerji() {
             }, dataObj);
 
             let extra = {
-                id: playurl,
+                id: lineId + "_选集_" + lineindex + "_0_" + j,//标识_选集_线路index_分页index_列表index
                 jsLoadingInject: true,
                 blockRules: ['.m4a', '.mp3', '.gif', '.jpeg', '.jpg', '.ico', '.png', 'hm.baidu.com', '/ads/*.js', 'cnzz.com'],
                 videoExcludeRule: ['m3u8.js','?url='],
