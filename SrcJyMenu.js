@@ -145,7 +145,7 @@ function lookset() {
     let parsemode = parseRecord.parsemode || 1;
     d.push({
         title: '当前解析模式：' + (parsemode == 1 ? '聚影智能' : parsemode == 2 ? '强制嗅探' : parsemode == 3 ? '手动模式' : '异常'),
-        desc: parsemode == 1 ? '上次优先>接口自带+私有解析' : parsemode == 2 ? 'web解析使用video进行嗅探' : parsemode == 3 ? '使用代理播放模式，在播放页手动选择解析' : '',
+        desc: parsemode == 1 ? '上次优先>接口自带+私有解析' : parsemode == 2 ? '使用video将web解析组线路进播放器' : parsemode == 3 ? '使用代理播放模式，在播放页手动选择解析' : '',
         url: 'hiker://empty',
         col_type: "text_center_1"
     });
