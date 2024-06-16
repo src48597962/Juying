@@ -234,7 +234,14 @@ var SrcParseS = {
             isVip = 1;
         }else if(!needparse.test(vipUrl)){
             log("普通网页播放地址");
-            return "video://" + vipUrl;
+            //return "video://" + vipUrl;
+            let obj = {
+                        vipUrl: vipUrl,
+                        isWeb: 1,
+                        parsemode: 2
+                    }
+            return this.解析(obj);
+
         }
 
 
@@ -696,7 +703,7 @@ var SrcParseS = {
         }catch(e){}
         return dm;
     },
-    解析: function(obj, webUrl) {
+    解析: function(obj) {
         function geturl(gethtml) {
             let rurl = "";
             try {
@@ -744,9 +751,10 @@ var SrcParseS = {
                 }
             )
         }
-        if(webUrl){
+
+        if(obj.isWeb){
             let rurl = "";
-            let gethtml = request(webUrl, {timeout:3000});
+            let gethtml = request(obj.vipUrl, {timeout:3000});
             try{
                 if (/player_.*?=/.test(gethtml)) {
                     let  html = JSON.parse(gethtml.match(/r player_.*?=(.*?)</)[1]);
@@ -768,13 +776,13 @@ var SrcParseS = {
             if(rurl){
                 return rurl;
             }else{
-                if(getMyVar('superweb')=="1"){// && getMyVar('pushboxplay')!="1"){
-                    return 'video://'+webUrl;
+                if(obj.parsemode==2){// && getMyVar('pushboxplay')!="1"){
+                    return 'video://'+obj.vipUrl;
                 }else{
                     if((MY_NAME=="海阔视界"&&getAppVersion()>=4094)||(MY_NAME=="嗅觉浏览器"&&getAppVersion()>=1359)){
-                        return exeWebRule(webUrl) || "";
+                        return exeWebRule(obj.vipUrl) || "";
                     }else{
-                        return this.嗅探(webUrl,[],1);
+                        return this.嗅探(obj.vipUrl,[],1);
                     }
                 }
             }
