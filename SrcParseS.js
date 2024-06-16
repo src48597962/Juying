@@ -631,17 +631,20 @@ var SrcParseS = {
                 } catch (e) {
                     log("2");
                     if(/\.m3u8|\.mp4/.test(getjson.url)&&getjson.url.indexOf('=http')==-1){
+                        log("21");
                         rurl = getjson.url;
                     }else if(/\.m3u8|\.mp4|\.flv/.test(gethtml) && geturl(gethtml)){
+                        log("22");
                         rurl = geturl(gethtml);
                     }else if((MY_NAME=="海阔视界"&&getAppVersion()>=4094)||(MY_NAME=="嗅觉浏览器"&&getAppVersion()>=1359)){
-                        rurl = exeWebRule(obj.ulist.parse+obj.vipUrl) || "";
+                        log("23");
+                        rurl = exeWebRule(obj.ulist.url+obj.vipUrl) || "";
                     }
                 }
                 log(rurl);
                 var x5 = 0;
                 if(!rurl){
-                    if(!/404 /.test(gethtml)&&obj.ulist.parse.indexOf('key=')==-1&&isjson==0){
+                    if(!/404 /.test(gethtml)&&obj.ulist.url.indexOf('key=')==-1&&isjson==0){
                         x5 = 1;
                     }
                 }else{
