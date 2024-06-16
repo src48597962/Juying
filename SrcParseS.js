@@ -185,6 +185,7 @@ var SrcParseS = {
                         parsemode: 3
                     }
                     let getUrl = task(obj);
+                    log("解析方法结果>"+getUrl);
                     playUrl = getUrl.url;
                 }catch(e){
                     log(parsename+">解析错误>" + e.message + " 错误行#" + e.lineNumber);
@@ -603,6 +604,7 @@ var SrcParseS = {
             }
             return {url: rurl,ulist: obj.ulist}; 
         }else{            
+            log("进来了")
             let taskheader = {withStatusCode:true,timeout:8000};
             let head = obj.ulist.header||{};
             if(JSON.stringify(head) != "{}"){
@@ -617,7 +619,7 @@ var SrcParseS = {
             }
             //log(getjson);
             if (getjson.body&&getjson.statusCode==200){
-                //log("0");
+                log("0");
                 var gethtml = getjson.body;
                 var rurl = "";
                 var isjson = 0;
@@ -625,7 +627,9 @@ var SrcParseS = {
                     let json =JSON.parse(gethtml);
                     isjson = 1;
                     rurl = json.url||json.data.url||json.data;
+                    log("1");
                 } catch (e) {
+                    log("2");
                     if(/\.m3u8|\.mp4/.test(getjson.url)&&getjson.url.indexOf('=http')==-1){
                         rurl = getjson.url;
                     }else if(/\.m3u8|\.mp4|\.flv/.test(gethtml) && geturl(gethtml)){
@@ -634,6 +638,7 @@ var SrcParseS = {
                         rurl = exeWebRule(obj.ulist.parse+obj.vipUrl) || "";
                     }
                 }
+                log(rurl);
                 var x5 = 0;
                 if(!rurl){
                     if(!/404 /.test(gethtml)&&obj.ulist.parse.indexOf('key=')==-1&&isjson==0){
