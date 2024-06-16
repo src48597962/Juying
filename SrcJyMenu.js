@@ -110,30 +110,42 @@ function lookset() {
         col_type: "line_blank"
     });
     d.push({
-        title: '屏蔽操作',
+        title: '分页设置',
         col_type: "rich_text"
     });
     d.push({
-        title: '无效播放地址',
-        url: $("", "屏蔽无法播放的地址").input((parseRecord, recordfile) => {
-            parseRecord['excludeurl'] = parseRecord['excludeurl'] || [];
-            let url = input.split(';{')[0].replace('file:///storage/emulated/0/Android/data/com.example.hikerview/files/Documents/cache/video.m3u8##', '').replace('#isVideo=true#', '');
-            if (parseRecord['excludeurl'].indexOf(url) == -1) {
-                parseRecord['excludeurl'].push(url);
+        title: (playSet['ispage'] ? getide(1) : getide(0)) + '分页开关',
+        url: $('#noLoading#').lazyRule((playSet) => {
+            if (playSet['ispage'] != 1) {
+                playSet['ispage'] = 1;
+            } else {
+                playSet['ispage'] = 0;
             }
-            writeFile(recordfile, JSON.stringify(parseRecord));
-            return 'toast://屏蔽无效播放地址成功';
-        }, parseRecord, recordfile),
-        col_type: "text_2"
+            storage0.setItem('playSet', playSet);
+            refreshPage(false);
+            return 'toast://切换成功';
+        }, playSet),
+        col_type: "text_3"
     });
     d.push({
-        title: '清空播放拦载记录',
-        url: $("清空拦截无法播放地址记录？").confirm((parseRecord, recordfile) => {
-            delete parseRecord['excludeurl'];
-            writeFile(recordfile, JSON.stringify(parseRecord));
-            return 'toast://无清空';
-        }, parseRecord, recordfile),
-        col_type: "text_2"
+        title: '每页数量'+(playSet['pagenum']||40),
+        url: $(playSet['pagenum']||"40","每页选集数量").input((playSet) => {
+            playSet['pagenum'] = parseInt(input);
+            storage0.setItem('playSet',playSet);
+            refreshPage(false);
+            return 'hiker://empty'
+        },playSet),
+        col_type: "text_3"
+    });
+    d.push({
+        title: '分页阀值'+(playSet['partnum']||100),
+        url: $(playSet['partnum']||"100","选集数量超过多少才分页").input((playSet) => {
+            playSet['partnum'] = parseInt(input);
+            storage0.setItem('playSet',playSet);
+            refreshPage(false);
+            return 'hiker://empty'
+        },playSet),
+        col_type: "text_3"
     });
     d.push({
         col_type: "line_blank"
@@ -211,6 +223,31 @@ function lookset() {
             refreshPage(false);
             return 'toast://已切换';
         }, playSet),
+        col_type: "text_2"
+    });
+    d.push({
+        col_type: "line"
+    });
+    d.push({
+        title: '无效播放地址',
+        url: $("", "输入无法播放的地址进行屏蔽").input((parseRecord, recordfile) => {
+            parseRecord['excludeurl'] = parseRecord['excludeurl'] || [];
+            let url = input.split(';{')[0].replace('file:///storage/emulated/0/Android/data/com.example.hikerview/files/Documents/cache/video.m3u8##', '').replace('#isVideo=true#', '');
+            if (parseRecord['excludeurl'].indexOf(url) == -1) {
+                parseRecord['excludeurl'].push(url);
+            }
+            writeFile(recordfile, JSON.stringify(parseRecord));
+            return 'toast://对此播放地址将拦截';
+        }, parseRecord, recordfile),
+        col_type: "text_2"
+    });
+    d.push({
+        title: '清空播放拦截记录',
+        url: $("清空拦截无法播放地址记录？").confirm((parseRecord, recordfile) => {
+            delete parseRecord['excludeurl'];
+            writeFile(recordfile, JSON.stringify(parseRecord));
+            return 'toast://无清空';
+        }, parseRecord, recordfile),
         col_type: "text_2"
     });
     d.push({
