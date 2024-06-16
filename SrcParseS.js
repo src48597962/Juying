@@ -234,7 +234,7 @@ var SrcParseS = {
             isVip = 1;
         }else if(!needparse.test(vipUrl)){
             log("普通网页播放地址");
-            //return "video://" + vipUrl;
+            return "video://" + vipUrl;
             let obj = {
                         vipUrl: vipUrl,
                         isWeb: 1,
