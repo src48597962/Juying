@@ -88,9 +88,13 @@ function sousuo() {
 
 // 点播二级
 function dianboerji() {
-    addListener("onClose", $.toString(() => {
-
-    }));
+    addListener("onClose", $.toString((getHistory,cls) => {
+        if(getItem('historyEnable')=='1' && cls=="historylist"){
+            deleteItemByCls('historylist');
+            let h = getHistory();
+            addItemAfter("historyid", h);
+        }
+    },getHistory, MY_PARAMS.cls));
     let d = [];
     let jkdata = MY_PARAMS.data;
     let name = MY_PARAMS.pageTitle;
@@ -330,7 +334,7 @@ function dianboerji() {
         let playSet = storage0.getItem('playSet') || {};
         let listone = 列表[0].split('$')[0].trim();
         let len = listone.length;
-        let col_type = list.length > 4 && len < 7 ? 'text_4' : len > 20 ? 'text_1' :'text_3';
+        let col_type = 列表.length > 4 && len < 7 ? 'text_4' : len > 20 ? 'text_1' :'text_3';
         for(let i=0; i<列表.length; i++) {
             let playtitle = 列表[i].split('$')[0].trim();
             let playurl = 列表[i].split('$')[1].trim();
