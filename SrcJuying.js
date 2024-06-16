@@ -350,7 +350,7 @@ function dianboerji() {
             if(!/qq|youku|mgtv|bili|qiyi|sohu|pptv|le/.test(playurl) && /html/.test(playurl)){
                 extra.referer = playurl;
             }
-            if(playSet.cacheM3u8){
+            if(playSet.cachem3u8){
                 extra.cacheM3u8 = true;
             }
             d.push({
