@@ -88,13 +88,13 @@ function sousuo() {
 
 // 点播二级
 function dianboerji() {
-    addListener("onClose", $.toString((getHistory,cls) => {
-        if(getItem('historyEnable')=='1' && cls=="historylist"){
+    addListener("onClose", $.toString((getHistory) => {
+        if(getItem('historyEnable')=='1'){
             deleteItemByCls('historylist');
             let h = getHistory();
             addItemAfter("historyid", h);
         }
-    },getHistory, MY_PARAMS.cls));
+    },getHistory));
     let d = [];
     let jkdata = MY_PARAMS.data;
     let name = MY_PARAMS.pageTitle;
@@ -381,15 +381,10 @@ function dianboerji() {
 
 //点播一级
 function dianboyiji() {
-    addListener("onClose", $.toString((getHistory) => {
+    addListener("onClose", $.toString(() => {
         clearMyVar('点播动态加载loading');
         clearMyVar('搜索临时搜索数据');
-        if(getItem('historyEnable')=='1'){
-            deleteItemByCls('historylist');
-            let h = getHistory();
-            addItemAfter("historyid", h);
-        }
-    },getHistory));
+    }));
     let d = [];
     let datalist = getDatas('jk');
     let yxdatalist = datalist.filter(it=>{
