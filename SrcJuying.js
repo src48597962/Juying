@@ -269,13 +269,31 @@ function dianboerji() {
             let 分页s = getNewArray(列表, 每页数量);//按每页数据切割成小数组
 
             分页s.forEach((it,i)=>{
-                分页链接.push($("#noLoading#").lazyRule((url,nowid,newid) => {
+                分页链接.push($("#noLoading#").lazyRule((url,nowid,newid,Marksum) => {
                     if(nowid != newid){
+                        let markFile = 'hiker://files/cache/src/Juying2/Mark.json';
+                        let SrcMark = "";
+                        try {
+                            eval('SrcMark = ' + markFile);
+                        } catch (e) {  }
+                        if (SrcMark == "") {
+                            SrcMark = {};
+                        }
+                        SrcMark[url] = SrcMark[url] || {};
+                        SrcMark[url].page = newid;
+                        let key = 0;
+                        let one = "";
+                        for (var k in SrcMark) {
+                            key++;
+                            if (key == 1) { one = k }
+                        }
+                        if (key > Marksum) { delete SrcMark[one]; }
+                        writeFile(markFile, JSON.stringify(SrcMark));
                         putMyVar(url+"_page", newid);
                         refreshPage(false);
                     }
                     return 'hiker://empty'
-                }, MY_URL, pageid, i))
+                }, MY_URL, pageid, i, Marksum))
                 let start = i * 每页数量 + 1;
                 let end = i * 每页数量 + it.length;
                 let title = start + ' - ' + end;
