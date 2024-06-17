@@ -405,7 +405,17 @@ function dianboyiji() {
                 return selectSource();
             }),
             pic_url: "https://hikerfans.com/tubiao/more/47.png",
-            col_type: "icon_3_round_fill"
+            col_type: "icon_3_round_fill",
+            extra: {
+                longClick: [{
+                    title: "删除当前源",
+                    js: $.toString(() => {
+                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                        deleteData('jk', homeSource);
+                        return "toast://已处理";
+                    })
+                }]
+            }
         })
         d.push({
             title: "搜索方式",
