@@ -679,7 +679,7 @@ function yiji() {
                         js: $.toString(() => {
                             return $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJySet.js');
-                                extension();
+                                manageSet();
                             })
                         })
                     },{
