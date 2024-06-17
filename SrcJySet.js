@@ -43,7 +43,7 @@ function SRCSet() {
         title: '扩展中心',
         url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
-            extension();
+            manageSet();
         }),
         img: "https://hikerfans.com/tubiao/ke/156.png",
         col_type: "icon_small_3"
@@ -965,8 +965,13 @@ function jiexi(data) {
     })
     setResult(d);
 }
-//扩展中心
-function extension(){
+//管理中心
+function manageSet(){
+    setResult([{
+        title: '暂未开放',
+        col_type: "rich_text"
+    }]);
+
     addListener("onClose", $.toString(() => {
         clearMyVar('uploads');
         clearMyVar('uploadjiekou');
