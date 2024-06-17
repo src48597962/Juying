@@ -571,12 +571,15 @@ function dianboyiji() {
                         vodname = vodname.replace(/<\/?.+?\/?>/g,'').replace(/在线观看/g,'');
                         let voddesc = list.vod_desc || "";
                         let vodpic = list.vod_pic;
-                        if(/^\/upload|^upload/.test(vodpic)){
-                            vodpic = MY_URL.match(/http(s)?:\/\/(.*?)\//)[0] + vodpic;
-                        }
+                        vodpic = vodpic.replace('/img.php?url=', '').replace('/tu.php?tu=', '');
+                        vodpic = vodpic.includes('(') ? vodpic.match(/\(\'(.*?)\'\)/)[1] : vodpic;
                         if(/^\/\//.test(vodpic)){
                             vodpic = "https:" + vodpic;
                         }
+                        if(!/^http|hiker/.test(vodpic)){
+                            vodpic = MY_URL.match(/http(s)?:\/\/(.*?)\//)[0] + vodpic;
+                        }
+                        
                         d.push({
                             title: vodname,
                             desc: voddesc.replace(/<\/?.+?\/?>/g,''),
