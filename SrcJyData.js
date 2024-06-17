@@ -113,8 +113,6 @@ function getYiData(jkdata) {
                                         let vodpic = pdfh(v, extdata['首页片单图片'] || extdata['分类片单图片']);
                                         let voddesc = pdfh(v, extdata['首页片单副标题'] || extdata['分类片单副标题']);
                                         if (vodid && vodname) {
-                                            vodpic = /^\//.test(vodpic) ? vodurlhead + vodpic : vodpic;
-                                            vodpic = vodpic.includes('(') ? vodpic.match(/\(\'(.*?)\'\)/)[1] : vodpic;
                                             推荐.push({ "vod_url": vodid, "vod_name": vodname, "vod_desc": voddesc, "vod_pic": vodpic });
                                         }
                                     }
@@ -437,9 +435,6 @@ function getYiData(jkdata) {
                         let vodimg = pdfh(it, extdata['分类片单图片']);
                         let voddesc = pdfh(it, extdata['分类片单副标题']);
                         if (vodname && vodid) {
-                            vodimg = /^\//.test(vodimg) ? (extdata["分类片单链接加前缀"] || vodurlhead) + vodimg : vodimg;
-                            vodimg = vodimg.includes('(') ? vodimg.match(/\(\'(.*?)\'\)/)[1] : vodimg;
-                            vodimg = !/^\//.test(vodimg) ? vodurlhead + '/' + vodimg : vodimg;
                             let arr = { "vod_url": vodid, "vod_name": vodname, "vod_desc": voddesc, "vod_pic": vodimg };
                             vodlists.push(arr);
                         }
@@ -538,7 +533,6 @@ function getYiData(jkdata) {
                     }
                     let vodurl = it.vod_id ? vodurlhead && !/^http/.test(it.vod_id) ? vodurlhead + it.vod_id : it.vod_id : it.nextlink;
                     let vodpic = it.vod_pic || it.pic || "";
-                    vodpic = vodpic.replace('/img.php?url=', '').replace('/tu.php?tu=', '');
                     let arr = { "vod_url": vodurl, "vod_name": it.vod_name || it.title, "vod_desc": it.vod_remarks || it.state || "", "vod_pic": vodpic, "vod_play": it.play };
                     vodlists.push(arr);
                 })
