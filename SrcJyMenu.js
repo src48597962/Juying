@@ -364,7 +364,7 @@ let buttonmenu = {
         img: "https://hikerfans.com/tubiao/more/129.png",
         url: $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
-            extension();
+            manageSet();
         })
     },
     "历史": {
