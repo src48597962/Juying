@@ -229,16 +229,22 @@ function selectSource() {
             titleVisible: true
         })),
         longClick(s, i) {
-            /*
-            showSelectOptions({
-                title: "分享视频源",
-                options: ["JS文件分享"].concat(getPastes()),
-                col: 2,
-                js: $.toString(name => {
+            confirm({
+                title:'删除提示', 
+                content:'是否立即删除"'+s+'"？', 
+                confirm:$.toString((i,tmpList,manage)=>{
+                    manage.list.length = 0;
+                    tmpList.forEach((x,ii) => {
+                        if(i != ii){
+                            manage.list.push(x);
+                        }
+                    });
+                    manage.change();
+                },i,tmpList,manage), 
+                cancel:$.toString(()=>{
                     
-                }, s.replace(/[’‘]/g, ""))
-            });
-            */
+                })
+            })
         },
         click(s, i, manage) {
             pop.dismiss();
@@ -363,3 +369,4 @@ function getHistory(){
     })
     return h;
 }
+
