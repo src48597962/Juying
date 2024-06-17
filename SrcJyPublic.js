@@ -228,7 +228,7 @@ function selectSource() {
             },
             titleVisible: true
         })),
-        longClick(s, i) {
+        longClick(s, i, manage) {
             confirm({
                 title:'删除提示', 
                 content:'是否立即删除"'+s+'"？', 
