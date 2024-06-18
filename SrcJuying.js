@@ -33,11 +33,29 @@ function search(name, sstype, jkdata) {
                     require(config.依赖);
                     dianboerji()
                 }),
+                col_type: 'movie_3',
                 extra: {
                     cls: 'dianbosousuolist',
                     url: it.vodurl,
                     pic: it.vodpic,
                     pageTitle: it.vodname,
+                    data: jkdata
+                }
+            }
+        })
+    }else if(sstype=='dianboerji'){
+        ssdata = getSsData(name, jkdata, 1).map(it => {
+            return {
+                title: jkdata.name,
+                desc: it.voddesc,
+                pic_url: it.vodpic,
+                url: $("hiker://empty#immersiveTheme##autoCache#").rule(() => {
+                    require(config.依赖);
+                    dianboerji()
+                }),
+                col_type: 'avatar',
+                extra: {
+                    url: it.vodurl,
                     data: jkdata
                 }
             }
@@ -85,7 +103,101 @@ function sousuo() {
         }
     }])
 }
+//二级切源搜索
+function erjisousuo(name, group) {
+    let updateItemid = name+"_playlistloading";
+    let searchMark = storage0.getMyVar('SrcJu_searchMark') || {};//二级换源缓存
+    if(searchMark[name]){
+        addItemBefore(updateItemid, searchMark[name]);
+        updateItem(updateItemid, {
+            title: "‘‘’’<small>当前搜索为缓存</small>",
+            url: $("确定删除“"+name+"”搜索缓存吗？").confirm((name)=>{
+                let searchMark = storage0.getMyVar('SrcJu_searchMark') || {};
+                delete searchMark[name];
+                storage0.putMyVar('SrcJu_searchMark', searchMark);
+                refreshPage(true);
+                return "toast://已清除";
+            },name)
+        });
+        let i = 0;
+        let one = "";
+        for (var k in searchMark) {
+            i++;
+            if (i == 1) { one = k }
+        }
+        if (i > 20) { delete searchMark[one]; }
+        hideLoading();
+        return "hiker://empty";
+    }else{
+        updateItem(updateItemid, {
+            title:"搜源中..."
+        });
+    }
 
+    let datalist = getDatas('jk');
+    let ssdatalist = datalist.filter(it=>{
+        return !it.stop && it.searchable!=0 && group==(it.group||it.type);
+    });
+    let nosousuolist = storage0.getMyVar('nosousuolist') || [];
+    if (nosousuolist.length>0){
+        ssdatalist = ssdatalist.filter(it => {
+            return nosousuolist.indexOf(it.url) == -1;
+        })
+    }
+
+    let task = function (obj) {
+        try {
+            let lists = obj.search(obj.name, "dianboerji", obj.data);
+            return {result:lists, success:1};
+        } catch (e) {
+            log('√'+obj.data.name + '>搜索失败>' + e.message);
+            return {result:[], success:0};
+        }
+    }
+    let list = ssdatalist.map((item) => {
+        return {
+            func: task,
+            param: {"data":item,"name":name,"fun":search},
+            id: item.url
+        }
+    });
+    let success = 0;
+    if (list.length > 0) {
+        be(list, {
+            func: function (obj, id, error, taskResult) {
+                if(getMyVar("SrcJu_停止搜索线程")=="1"){
+                    return "break";
+                }else if(taskResult.success==1){
+                    let data = taskResult.result;
+                    if(data.length>0){
+                        success++;
+                        let searchMark = storage0.getMyVar('SrcJu_searchMark') || {};//二级换源缓存
+                        searchMark[name] = searchMark[name] || [];
+                        searchMark[name] = searchMark[name].concat(data);
+                        storage0.putMyVar('SrcJu_searchMark', searchMark);
+                        if(!getMyVar('换源变更列表id')){
+                            addItemBefore("Julistloading", data);
+                        }
+                        hideLoading();
+                    }else{
+                        nosousuolist.push(id);
+                        storage0.putMyVar('nosousuolist', nosousuolist);
+                    }
+                }
+            },
+            param: {
+            }
+        });
+        hideLoading();
+        clearMyVar("SrcJu_停止搜索线程");
+        let sousuosm = "‘‘’’<small><font color=#f13b66a>" + success + "</font>/" + list.length + "，搜索完成</small>";
+        updateItem(updateItemid, { title: sousuosm });
+    } else {
+        hideLoading();
+        clearMyVar("SrcJu_停止搜索线程");
+        toast("无接口");
+    }
+}
 // 点播二级
 function dianboerji() {
     addListener("onClose", $.toString((getHistory) => {
