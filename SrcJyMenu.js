@@ -45,13 +45,19 @@ function erjimenu(desc) {
                 lookset();
             }),
             pic_url: 'https://hikerfans.com/tubiao/messy/37.svg',
-            col_type: 'icon_small_3'
+            col_type: 'icon_small_3',
+            extra: {
+                cls: "Juloadlist"
+            }
         },
         {
             title: "切换站源",
             url: !fileExist(jxfile) ? "toast://分享页面或没有接口，无法扩展更多片源" : "toast://暂未上线",
             pic_url: 'https://hikerfans.com/tubiao/messy/20.svg',
-            col_type: 'icon_small_3'
+            col_type: 'icon_small_3',
+            extra: {
+                cls: "Juloadlist"
+            }
         }
     ]
 }
