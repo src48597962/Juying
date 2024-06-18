@@ -702,24 +702,20 @@ function getSsData(name, jkdata, page) {
                 json = JSON.parse(getHtmlCode(ssurl, headers));
                 lists = json.data || [];
             }
-            let newlists = [];
-             lists.forEach(list => {
+            lists = lists.map(list => {
                 let vodname = list.vod_name || list.title;
-                if (vodname.indexOf(name) > -1) {
-                    let vodpic = list.vod_pic || list.pic || "";
-                    let voddesc = list.vod_remarks || list.state || "";
-                    let vodurl = list.vod_id ? vodurlhead + list.vod_id : list.nextlink;
-                    let vodcontent = list.vod_blurb || "";
-                    newlists.push({
-                        vodname: vodname,
-                        vodpic: vodpic.indexOf('ver.txt') > -1 ? "" : vodpic,
-                        voddesc: voddesc,
-                        vodurl: vodurl,
-                        vodcontent: vodcontent
-                    })
+                let vodpic = list.vod_pic || list.pic || "";
+                let voddesc = list.vod_remarks || list.state || "";
+                let vodurl = list.vod_id ? vodurlhead + list.vod_id : list.nextlink;
+                let vodcontent = list.vod_blurb || "";
+                return {
+                    vodname: vodname,
+                    vodpic: vodpic.indexOf('ver.txt') > -1 ? "" : vodpic,
+                    voddesc: voddesc,
+                    vodurl: vodurl,
+                    vodcontent: vodcontent
                 }
             })
-            lists = newlists;
         } else {
             if (api_type == "XPath") {
                 if (extdata.scVodNode == "json:list") {
@@ -872,14 +868,15 @@ function getSsData(name, jkdata, page) {
                 }else if (!/^http/.test(vodpic) && !/^hiker/.test(vodpic) && !/^\//.test(vodpic)){
                     vodpic = vodurlhead + '/' + vodpic;
                 }
-
-                searchs.push({
-                    vodname: list.vodname,
-                    voddesc: list.voddesc,
-                    vodcontent: list.vodcontent,
-                    vodpic: vodpic,
-                    vodurl: list.vodurl
-                })
+                if (list.vodname.includes(name)) {
+                    searchs.push({
+                        vodname: list.vodname,
+                        voddesc: list.voddesc,
+                        vodcontent: list.vodcontent,
+                        vodpic: vodpic,
+                        vodurl: list.vodurl
+                    })
+                }
             });
         } catch (e) {
             log(jkdata.name + ' 输出结果报错>' + e.message + " 错误行#" + e.lineNumber);
