@@ -75,7 +75,7 @@ function getYiData(jkdata) {
                 headers["User-Agent"] = (headers["User-Agent"] == "电脑" || headers["User-Agent"] == "PC_UA") ? PC_UA : MOBILE_UA;
                 let host = extdata["首页推荐链接"] || '';
                 classurl = host;
-                extdata["分类链接"] = extdata["分类链接"] ? extdata["分类链接"].split(';;')[0].split('[')[0] : "";
+                extdata["分类链接"] = extdata["分类链接"].includes('firstPage=')&&MY_PAGE==1?extdata["分类链接"].split('firstPage=')[1].split(']')[0]:extdata["分类链接"].split('[')[0];
                 listurl = extdata["分类链接"] ? /^http/.test(extdata["分类链接"]) ? extdata["分类链接"] : host + extdata["分类链接"] : "";
             }
             vodurlhead = getHome(listurl);
