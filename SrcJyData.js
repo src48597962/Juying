@@ -461,7 +461,7 @@ function getYiData(jkdata) {
                 extdata["链接"] = extdata["链接"] || `href="&&"`;
                 extdata["标题"] = extdata["标题"] || `title="&&"`;
                 extdata["数组"] = extdata["数组"] || `<a &&</a>`;
-                let vodlist = gethtml.match(new RegExp(extdata["数组"].split('[')[0].replace('&&', '((?:.|[\r\n])*?)'), 'g'));
+                let vodlist = gethtml.match(new RegExp(extdata["数组"].split('[')[0].replace('&&', '((?:.|[\r\n])*?)'), 'g')) || [];
                 vodlist.forEach(item => {
                     if (!extdata["图片"]) {
                         if (item.indexOf('original=') > -1) {
@@ -802,7 +802,7 @@ function getSsData(name, jkdata, page) {
                     if (extdata["搜索二次截取"]) {
                         gethtml = gethtml.split(extdata["搜索二次截取"].split('&&')[0])[1].split(extdata["搜索二次截取"].split('&&')[1])[0];
                     }
-                    let sslist = gethtml.match(new RegExp(extdata["搜索数组"].replace('&&', '((?:.|[\r\n])*?)'), 'g'));
+                    let sslist = gethtml.match(new RegExp(extdata["搜索数组"].replace('&&', '((?:.|[\r\n])*?)'), 'g')) || [];
                     for (let i = 0; i < sslist.length; i++) {
                         let title = getBetweenStr(sslist[i], extdata["搜索标题"]);//sslist[i].split(extdata["搜索标题"].split('&&')[0])[1].split(extdata["搜索标题"].split('&&')[1])[0];
                         let href = getBetweenStr(sslist[i], extdata["搜索链接"].replace(`+\"id\":`, '').replace(`,+`, '.'));//sslist[i].split(extdata["搜索链接"].split('&&')[0])[1].split(extdata["搜索链接"].split('&&')[1])[0];
@@ -1157,7 +1157,7 @@ function getErData(jkdata) {
                     arthtml = arthtml.split(extdata["线路二次截取"].split('&&')[0])[1].split(extdata["线路二次截取"].split('&&')[1])[0];
                 }
                 extdata["线路数组"] = extdata["线路数组"].split('[')[0];
-                let artlist = arthtml.match(new RegExp(extdata["线路数组"].replace('&&', '((?:.|[\r\n])*?)'), 'g'));
+                let artlist = arthtml.match(new RegExp(extdata["线路数组"].replace('&&', '((?:.|[\r\n])*?)'), 'g')) || [];
                 if (extdata["线路标题"].includes('+')) {
                     extdata["线路标题"] = extdata["线路标题"].split('+')[1];
                 }
@@ -1170,9 +1170,9 @@ function getErData(jkdata) {
                 if (extdata["播放二次截取"]) {
                     conthtml = conthtml.split(extdata["播放二次截取"].split('&&')[0])[1].split(extdata["播放二次截取"].split('&&')[1])[0];
                 }
-                let contlist = conthtml.match(new RegExp(extdata["播放数组"].replace('&&', '((?:.|[\r\n])*?)'), 'g'));
+                let contlist = conthtml.match(new RegExp(extdata["播放数组"].replace('&&', '((?:.|[\r\n])*?)'), 'g')) || [];
                 for (let i = 0; i < contlist.length; i++) {
-                    let bfline = extdata["播放列表"] ? contlist[i].match(new RegExp(extdata["播放列表"].replace('&&', '((?:.|[\r\n])*?)'), 'g')) : pdfa(contlist[i], "body&&a");
+                    let bfline = extdata["播放列表"] ? (contlist[i].match(new RegExp(extdata["播放列表"].replace('&&', '((?:.|[\r\n])*?)'), 'g')) || []) : pdfa(contlist[i], "body&&a");
                     let cont = [];
                     for (let j = 0; j < bfline.length; j++) {
                         let contname = extdata["播放标题"] ? bfline[j].split(extdata["播放标题"].split('&&')[0])[1].split(extdata["播放标题"].split('&&')[1])[0] : pdfh(bfline[j], "a&&Text");
