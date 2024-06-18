@@ -550,7 +550,7 @@ function getYiData(jkdata) {
     }
 }
 // 获取搜索数据
-function getSsData(name, jkdata) {
+function getSsData(name, jkdata, page) {
     name = name.replace(/全集.*|国语.*|粤语.*/g, '');
     let api_name = jkdata.name || "";
     let api_type = jkdata.type || "";
@@ -589,11 +589,11 @@ function getSsData(name, jkdata) {
         if ($.type(extdata) == 'object') {
             if (api_type == "XBPQ") {
                 extdata["搜索url"] = extdata["搜索url"] || "/index.php/ajax/suggest?mid=1&wd={wd}&limit=500";
-                ssurl = extdata["搜索url"].replace('{wd}', name).replace('{pg}', MY_PAGE);
+                ssurl = extdata["搜索url"].replace('{wd}', name).replace('{pg}', page);
                 ssurl = /^http/.test(ssurl) ? ssurl : extdata["主页url"] + ssurl;
                 vodurlhead = getHome(ssurl);
             } else if (api_type == "XPath") {
-                ssurl = extdata["searchUrl"].replace('{wd}', name).replace('{pg}', MY_PAGE);
+                ssurl = extdata["searchUrl"].replace('{wd}', name).replace('{pg}', page);
                 ssurl = /^http/.test(ssurl) ? ssurl : extdata["homeUrl"] + ssurl;
                 vodurlhead = getHome(ssurl);
             } else if (api_type == "XYQ") {
@@ -607,10 +607,10 @@ function getSsData(name, jkdata) {
                     }
                 }
                 headers["User-Agent"] = (headers["User-Agent"] == "电脑" || headers["User-Agent"] == "PC_UA") ? PC_UA : MOBILE_UA;
-                ssurl = extdata["搜索链接"].replace('{wd}', name).replace('{pg}', MY_PAGE);
+                ssurl = extdata["搜索链接"].replace('{wd}', name).replace('{pg}', page);
                 if (extdata["POST请求数据"] != "") {
                     ssurl = ssurl.split(';')[0];
-                    postdata = extdata["POST请求数据"].replace('{wd}', name).replace('{pg}', MY_PAGE);
+                    postdata = extdata["POST请求数据"].replace('{wd}', name).replace('{pg}', page);
                 }
                 vodurlhead = getHome(ssurl);
             }
