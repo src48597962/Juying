@@ -804,12 +804,12 @@ function getSsData(name, jkdata, page) {
                     if (extdata["搜索二次截取"]) {
                         gethtml = gethtml.split(extdata["搜索二次截取"].split('&&')[0])[1].split(extdata["搜索二次截取"].split('&&')[1])[0];
                     }
-                    let sslist = gethtml.match(new RegExp(extdata["搜索数组"].replace('&&', '((?:.|[\r\n])*?)'), 'g')) || [];
+                    let sslist = gethtml.match(new RegExp((extdata["搜索数组"]||extdata["数组"]).replace('&&', '((?:.|[\r\n])*?)'), 'g')) || [];
                     for (let i = 0; i < sslist.length; i++) {
-                        let title = getBetweenStr(sslist[i], extdata["搜索标题"]);//sslist[i].split(extdata["搜索标题"].split('&&')[0])[1].split(extdata["搜索标题"].split('&&')[1])[0];
-                        let href = getBetweenStr(sslist[i], extdata["搜索链接"].replace(`+\"id\":`, '').replace(`,+`, '.'));//sslist[i].split(extdata["搜索链接"].split('&&')[0])[1].split(extdata["搜索链接"].split('&&')[1])[0];
-                        let img = getBetweenStr(sslist[i], extdata["搜索图片"]);//sslist[i].split(extdata["搜索图片"].split('&&')[0])[1].split(extdata["搜索图片"].split('&&')[1])[0];
-                        let desc = getBetweenStr(sslist[i], extdata["搜索副标题"]);//sslist[i].split(extdata["搜索副标题"].split('&&')[0])[1].split(extdata["搜索副标题"].split('&&')[1])[0];
+                        let title = getBetweenStr(sslist[i], (extdata["搜索标题"]||extdata["标题"]));//sslist[i].split(extdata["搜索标题"].split('&&')[0])[1].split(extdata["搜索标题"].split('&&')[1])[0];
+                        let href = getBetweenStr(sslist[i], (extdata["搜索链接"]||extdata["链接"]).replace(`+\"id\":`, '').replace(`,+`, '.'));//sslist[i].split(extdata["搜索链接"].split('&&')[0])[1].split(extdata["搜索链接"].split('&&')[1])[0];
+                        let img = getBetweenStr(sslist[i], (extdata["搜索图片"]||extdata["图片"]));//sslist[i].split(extdata["搜索图片"].split('&&')[0])[1].split(extdata["搜索图片"].split('&&')[1])[0];
+                        let desc = getBetweenStr(sslist[i], (extdata["搜索副标题"]||extdata["副标题"]));//sslist[i].split(extdata["搜索副标题"].split('&&')[0])[1].split(extdata["搜索副标题"].split('&&')[1])[0];
                         lists.push({ "id": /^http/.test(href) ? href : vodurlhead + href, "name": title, "pic": img, "desc": desc })
                     }
                     ssvodurl = "";
