@@ -702,22 +702,24 @@ function getSsData(name, jkdata, page) {
                 json = JSON.parse(getHtmlCode(ssurl, headers));
                 lists = json.data || [];
             }
-            lists = lists.map(list => {
+            let newlists = [];
+             lists.forEach(list => {
                 let vodname = list.vod_name || list.title;
                 if (vodname.indexOf(name) > -1) {
                     let vodpic = list.vod_pic || list.pic || "";
                     let voddesc = list.vod_remarks || list.state || "";
                     let vodurl = list.vod_id ? vodurlhead + list.vod_id : list.nextlink;
                     let vodcontent = list.vod_blurb || "";
-                    return {
+                    newlists.push({
                         vodname: vodname,
                         vodpic: vodpic.indexOf('ver.txt') > -1 ? "" : vodpic,
                         voddesc: voddesc,
                         vodurl: vodurl,
                         vodcontent: vodcontent
-                    }
+                    })
                 }
             })
+            lists = newlists;
         } else {
             if (api_type == "XPath") {
                 if (extdata.scVodNode == "json:list") {
