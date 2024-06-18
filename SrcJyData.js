@@ -678,7 +678,6 @@ function getSsData(name, jkdata, page) {
                     }
                     json = { "list": xmllist };
                 } else {
-                    log(gethtml);
                     json = JSON.parse(gethtml);
                 }
             } else if (!/{|}/.test(gethtml) && gethtml != "") {
