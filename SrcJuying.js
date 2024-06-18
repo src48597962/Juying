@@ -3,9 +3,9 @@ require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');//加载
 // 搜索逻辑代码
 function search(name, sstype, jkdata) {
     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
-    let ssdata = getSsData(name, jkdata);
+    let ssdata;
     if(sstype=='hkjusou'){
-        ssdata = ssdata.map(it => {
+        ssdata = getSsData(name, jkdata, MY_PAGE).map(it => {
             return {
                 title: it.vodname,
                 desc: it.voddesc,
@@ -24,7 +24,7 @@ function search(name, sstype, jkdata) {
             }
         })
     }else if(sstype=='dianboyiji'){
-        ssdata = ssdata.map(it => {
+        ssdata = getSsData(name, jkdata, 1).map(it => {
             return {
                 title: it.vodname,
                 desc: it.voddesc,
