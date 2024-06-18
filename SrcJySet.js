@@ -1804,6 +1804,9 @@ function Resourceimport(input,importtype,importmode){
                                     if(arr.type=="XYQ" && !/分类片单标题/.test(content)){
                                         arr['onlysearch'] = 1;
                                     }
+                                    if(arr.type=="XYQ" && !/搜索数组/.test(content)){
+                                        obj.searchable = 0;
+                                    }
                                     urlfile = 'hiker://files/data/'+MY_RULE.title+'/libs/' + arr.type + '_' + extfile.substr(extfile.lastIndexOf('/') + 1);
                                     writeFile(urlfile, content);
                                 }
