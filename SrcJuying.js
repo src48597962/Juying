@@ -200,7 +200,7 @@ function erjisousuo(name, group) {
 }
 // 点播二级
 function dianboerji() {
-    log(MY_RULE.title);
+    log(fetch("hiker://home@"+MY_RULE.title));
     addListener("onClose", $.toString((getHistory) => {
         if(getItem('historyEnable')=='1'){
             deleteItemByCls('historylist');
