@@ -200,7 +200,6 @@ function erjisousuo(name, group) {
 }
 // 点播二级
 function dianboerji() {
-    log(fetch("hiker://home@"+MY_RULE.title));
     addListener("onClose", $.toString((getHistory) => {
         if(getItem('historyEnable')=='1'){
             deleteItemByCls('historylist');
@@ -771,7 +770,7 @@ function yiji() {
         try{
             programversion = $.require("config").version || MY_RULE.version || 0;
         }catch(e){}
-        if(programversion<11){
+        if(programversion<1){
             confirm({
                 title: "温馨提示",
                 content: "发现小程序新版本",
