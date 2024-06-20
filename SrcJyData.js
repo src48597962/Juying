@@ -1236,7 +1236,7 @@ function getErData(jkdata) {
                 log('播放列表数组'+contlist.length);
                 for (let i = 0; i < contlist.length; i++) {
                     log(contlist[i]);
-                    let bfline = pdfa(contlist[i], extdata["选集列表数组规则"]);
+                    let bfline = pdfa(contlist[i], "body&&"+extdata["选集列表数组规则"]);
                     log('选集列表数组'+bfline.length);
                     let cont = [];
                     for (let j = 0; j < bfline.length; j++) {
