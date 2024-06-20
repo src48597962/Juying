@@ -921,7 +921,7 @@ function yiji() {
         yijimenu.forEach((item)=>{
             d.push(item);
         })
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 5; i++) {
             d.push({
                 col_type: "blank_block"
             })
