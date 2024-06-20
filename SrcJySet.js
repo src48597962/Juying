@@ -54,12 +54,14 @@ function SRCSet() {
     */
     d.push({
         title: '增加',
-        url: guanliType=="jk"?$('#noLoading#').lazyRule(() => {
-            return 'toast://不支持手工增加接口'
-        }):$('hiker://empty#noRecordHistory##noHistory#').rule(() => {
+        url: $('hiker://empty#noRecordHistory##noHistory#').rule((guanliType) => {
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
-            jiexi();
-        }),
+            if(guanliType=="jk"){
+                jiekou();
+            }else{
+                jiexi();
+            }
+        }, guanliType),
         img: "https://hikerfans.com/tubiao/more/25.png",
         col_type: "icon_small_4"
     });
@@ -721,7 +723,7 @@ function jiexi(data) {
         }
     });
     d.push({
-        title: '是否为web嗅探解析：' + (getMyVar('parsetype', data.type.toString())=="0"?"是":"否"),
+        title: '是否为web嗅探解析：' + (getMyVar('parsetype', data?data.type.toString():'0')=="0"?"是":"否"),
         col_type: 'text_1',
         url:$().lazyRule(()=>{
             if(/^http/.test(getMyVar('parseurl',''))&&!/id=|key=/.test(getMyVar('parseurl',''))){
