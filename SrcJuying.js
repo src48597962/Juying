@@ -786,6 +786,7 @@ function yiji() {
         }
         Version();
         downloadicon();//下载图标
+        putMyVar('SrcJuying-VersionCheck', '1');
     }
 
     let d = [];
@@ -1184,7 +1185,7 @@ function Version() {
     var nowVersion = getItem('Version', "7.9");//现在版本 
     var nowtime = Date.now();
     var oldtime = parseInt(getItem('VersionChecktime','0').replace('time',''));
-    if (getMyVar('SrcJuying-VersionCheck', '0') == '0' && nowtime > (oldtime+12*60*60*1000)) {
+    if (nowtime > (oldtime+12*60*60*1000)) {
         try {
             eval(request(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcTmplVersion.js'))
             if (parseFloat(newVersion.SrcJuying) > parseFloat(nowVersion)) {
@@ -1230,7 +1231,6 @@ function Version() {
             }
             putMyVar('SrcJuying-Version', '-V'+newVersion.SrcJuying);
         } catch (e) { }
-        putMyVar('SrcJuying-VersionCheck', '1');
     }else{
         putMyVar('SrcJuying-Version', '-V'+nowVersion);
     }
