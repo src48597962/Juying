@@ -200,6 +200,8 @@ function erjisousuo(name, group) {
 }
 // 点播二级
 function dianboerji() {
+    log("二级测试1"+getItem("依赖"));
+    log("二级测试2"+config.依赖);
     addListener("onClose", $.toString((getHistory) => {
         if(getItem('historyEnable')=='1'){
             deleteItemByCls('historylist');
