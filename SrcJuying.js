@@ -200,8 +200,6 @@ function erjisousuo(name, group) {
 }
 // 点播二级
 function dianboerji() {
-    log("二级测试1"+getItem("依赖"));
-    log("二级测试2"+config.依赖);
     addListener("onClose", $.toString((getHistory) => {
         if(getItem('historyEnable')=='1'){
             deleteItemByCls('historylist');
@@ -358,6 +356,7 @@ function dianboerji() {
     if (getMyVar('shsort') == '1') {
         列表.reverse();
     }
+    log(列表.length);
     //分页定义
     let partpage = storage0.getItem('partpage') || {};
     if(partpage.ispage){//启用分页
@@ -455,6 +454,7 @@ function dianboerji() {
             col_type: 'text_center_1'
         });
     }else{
+        log(列表.length);
         let flag = erdata.flags.length>0?erdata.flags[lineid]:"";
         let dataObj = {};
         if(erdata.parse_api&&erdata.parse_api.length>0){
