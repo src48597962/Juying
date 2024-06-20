@@ -921,11 +921,13 @@ function yiji() {
         yijimenu.forEach((item)=>{
             d.push(item);
         })
+        /*
         for (let i = 0; i < 5; i++) {
             d.push({
                 col_type: "blank_block"
             })
         }
+        */
         if (typeof(setPreResult)!="undefined" && getMyVar('动态加载loading')!='1') {
             d.push({
                 title: "",
