@@ -597,32 +597,12 @@ function jiekou(data) {
         d.push({
             title:'删除',
             col_type:'text_2',
-            url: $("确定删除接口："+data.name).confirm((dataurl)=>{
-                var filepath = "hiker://files/rules/Src/Juying/jiekou.json";
-                var datafile = fetch(filepath);
-                eval("var datalist=" + datafile+ ";");
-                for(var i=0;i<datalist.length;i++){
-                    if(datalist[i].url==dataurl){
-                        datalist.splice(i,1);
-                        break;
-                    }
-                }
-                writeFile(filepath, JSON.stringify(datalist));
-
-                let cfgfile = "hiker://files/rules/Src/Juying/config.json";
-                let Juyingcfg=fetch(cfgfile);
-                if(Juyingcfg != ""){
-                    eval("var JYconfig=" + Juyingcfg+ ";");
-                }else{
-                    var JYconfig= {};
-                }
-                if(JYconfig.zsjiekou&&JYconfig.zsjiekou.api_url==dataurl){
-                    delete JYconfig['zsjiekou'];
-                    writeFile(cfgfile, JSON.stringify(JYconfig));
-                }
+            url: $("确定删除接口："+data.name).confirm((data)=>{
+                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                deleteData('jk', data);
                 back(true);
                 return "toast://已删除";
-            }, data.url)
+            }, data)
         });   
     }else{
         d.push({
@@ -888,20 +868,12 @@ function jiexi(data) {
         d.push({
             title:'删除',
             col_type:'text_3',
-            url: $("确定删除解析："+getMyVar('parsename',data.name)).confirm((dataurl)=>{
-                var filepath = "hiker://files/rules/Src/Juying2/jiexi.json";
-                var datafile = fetch(filepath);
-                eval("var datalist=" + datafile+ ";");
-                for(var i=0;i<datalist.length;i++){
-                    if(datalist[i].url==dataurl){
-                        datalist.splice(i,1);
-                        break;
-                    }
-                }
-                writeFile(filepath, JSON.stringify(datalist));
+            url: $("确定删除解析："+getMyVar('parsename',data.name)).confirm((data)=>{
+                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                deleteData('jx', data);
                 back(true);
                 return "toast://已删除";
-            }, data.url)
+            }, data)
         });    
     }else{
         d.push({
