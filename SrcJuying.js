@@ -337,9 +337,7 @@ function dianboerji() {
         }
     })
     //生成选集
-    log(erdata.lists);
     let 列表 = erdata.lists[lineid] || [];
-    log(列表.length);
     if(列表.length>0){
         try{
             let i1 = parseInt(列表.length / 6);
@@ -358,7 +356,6 @@ function dianboerji() {
     if (getMyVar('shsort') == '1') {
         列表.reverse();
     }
-    log(列表.length);
     //分页定义
     let partpage = storage0.getItem('partpage') || {};
     if(partpage.ispage){//启用分页
@@ -456,7 +453,6 @@ function dianboerji() {
             col_type: 'text_center_1'
         });
     }else{
-        log(列表.length);
         let flag = erdata.flags.length>0?erdata.flags[lineid]:"";
         let dataObj = {};
         if(erdata.parse_api&&erdata.parse_api.length>0){
