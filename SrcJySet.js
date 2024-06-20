@@ -758,7 +758,7 @@ function jiexi(data) {
         col_type: 'input',
         desc: "ext对象数据，如headers、flag, 可以留空",
         extra: {
-            defaultValue: storage0.getMyVar('parseext', data.ext) || "",
+            defaultValue: storage0.getMyVar('parseext', data?data.ext:"") || "",
             titleVisible: false,
             type: "textarea",
             highlight: true,
