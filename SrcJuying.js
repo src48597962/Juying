@@ -337,7 +337,9 @@ function dianboerji() {
         }
     })
     //生成选集
+    log(erdata.lists);
     let 列表 = erdata.lists[lineid] || [];
+    log(列表.length);
     if(列表.length>0){
         try{
             let i1 = parseInt(列表.length / 6);
