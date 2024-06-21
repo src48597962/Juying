@@ -624,7 +624,9 @@ function getSsData(name, jkdata, page) {
         try {
             if (html.indexOf('cf-wrapper') != -1) {
                 html = fetchCodeByWebView(ssurl, { headers: headers, 'blockRules': ['.png', '.jpg'],checkJs: $.toString((name)=>{
-                     return document.body.innerHTML.includes(name);
+                    if(document.body.innerHTML.includes(name)) {
+                        return 1;
+                    }
                 },name) });
                 log(html);
             }else if (html.indexOf('检测中') != -1) {
