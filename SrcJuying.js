@@ -104,8 +104,9 @@ function sousuo() {
     }])
 }
 //二级切源搜索
-function erjisousuo(name, group) {
-    let updateItemid = name+"_playlistloading";
+function erjisousuo(name,sgroup) {
+    let group = getMyVar("SrcJu_二级切源分源",sgroup);
+    let updateItemid = name + "_loading";
     let searchMark = storage0.getMyVar('SrcJu_searchMark') || {};//二级换源缓存
     if(searchMark[name]){
         addItemBefore(updateItemid, searchMark[name]);
