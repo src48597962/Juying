@@ -628,7 +628,7 @@ function getSsData(name, jkdata, page) {
                         return 1;
                     }
                 },name) });
-                log(html);
+                //log(html);
             }else if (html.indexOf('检测中') != -1) {
                 html = request(ssurl + '&btwaf' + html.match(/btwaf(.*?)\"/)[1], { headers: headers, timeout: timeout });
             } else if (/页面已拦截/.test(html)) {
@@ -712,6 +712,7 @@ function getSsData(name, jkdata, page) {
             lists = lists.map(list => {
                 let vodname = list.vod_name || list.title;
                 let vodpic = list.vod_pic || list.pic || "";
+                log(vodpic);
                 let voddesc = list.vod_remarks || list.state || "";
                 let vodurl = list.vod_id ? vodurlhead + list.vod_id : list.nextlink;
                 let vodcontent = list.vod_blurb || "";
@@ -877,7 +878,6 @@ function getSsData(name, jkdata, page) {
                     }
                 }
                 if (list.vodname.includes(name)) {
-                    log(vodpic);
                     searchs.push({
                         vodname: list.vodname,
                         voddesc: list.voddesc,
