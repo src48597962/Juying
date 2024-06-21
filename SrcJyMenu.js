@@ -1,6 +1,6 @@
 //本代码仅用于个人学习，请勿用于其他作用，下载后请24小时内删除，代码虽然是公开学习的，但请尊重作者，应留下说明
 //二级统一菜单
-function erjimenu(desc,name) {
+function erjimenu(desc,name,sgroup) {
     return [
         {
             title: "详情简介",
@@ -52,12 +52,12 @@ function erjimenu(desc,name) {
         },
         {
             title: "切换站源",
-            url: !fileExist(jkfile) ? "toast://分享页面或没有接口，无法扩展更多片源" : $("#noLoading#").lazyRule((name) => {
+            url: !fileExist(jkfile) ? "toast://分享页面或没有接口，无法扩展更多片源" : $("#noLoading#").lazyRule((name,sgroup) => {
                 showloading("搜源中");
                 require(config.依赖);
-                erjisousuo(name);
+                erjisousuo(name,sgroup);
                 return  "hiker://empty";
-            },name),
+            },name,sgroup),
             pic_url: 'https://hikerfans.com/tubiao/messy/20.svg',
             col_type: 'icon_small_3',
             extra: {
