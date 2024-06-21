@@ -1,4 +1,10 @@
-let cfgfile = "hiker://files/rules/Src/Juying2/config.json";
+let rulepath = "hiker://files/rules/Src/Juying2/"; //规则文件路径
+let datapath = "hiker://files/data2/" + MY_RULE.title + "/"; //数据文件路径
+let cachepath = "hiker://files/cache/src/Juying2/"; //缓存文件路径
+let jkfile = rulepath + "jiekou.json";
+let jxfile = rulepath + "jiexi.json";
+let cfgfile = rulepath + "config.json";
+
 let Juconfig= {};
 let Jucfg=fetch(cfgfile);
 if(Jucfg != ""){
@@ -8,20 +14,14 @@ if(Jucfg != ""){
     writeFile(cfgfile, JSON.stringify(Juconfig));
 }
 
+let timeout = 6000;
 let homeSource = Juconfig['homeSource'] || {};
 let sourceType = homeSource.type;
 let sourceName = homeSource.name;
 let sourceGroup = homeSource.group || homeSource.type;
 let sourceUrl = homeSource.url;
 
-let rulepath = "hiker://files/rules/Src/Juying2/"; //规则文件路径
-let datapath = "hiker://files/data2/" + MY_RULE.title + "/"; //数据文件路径
-let cachepath = "hiker://files/cache/src/Juying2/"; //缓存文件路径
-let jkfile = rulepath + "jiekou.json";
-let jxfile = rulepath + "jiexi.json";
-let timeout = 6000;
-
-globalMap0.putMyVar('gmParams',{rulepath:rulepath,datapath:datapath,cachepath:cachepath,jkfile:jkfile,jxfile:jxfile});
+globalMap0.putMyVar('gmParams',{rulepath:rulepath,datapath:datapath,cachepath:cachepath,jkfile:jkfile,jxfile:jxfile,cfgfile:cfgfile});
 
 function getFile(lx) {
     let file = lx=='jk'?jkfile:jxfile;
@@ -90,7 +90,7 @@ function deleteData(lx, data){
     }
 
     dellist.forEach(it => {
-        if(lx=='jk' && it.url.includes('hiker://files/data')){
+        if(lx=='jk' && it.url.includes(datapath)){
             deleteFile(it.url);
         }
         let dataurl = lx=='jk'?it.url:it.parse;
