@@ -621,7 +621,6 @@ function getSsData(name, jkdata, page) {
     }
     function getHtmlCode(ssurl, headers) {
         let html = request(ssurl, { headers: headers, timeout: timeout });
-        log(html);
         try {
             if (html.indexOf('检测中') != -1) {
                 html = request(ssurl + '&btwaf' + html.match(/btwaf(.*?)\"/)[1], { headers: headers, timeout: timeout });
@@ -663,6 +662,7 @@ function getSsData(name, jkdata, page) {
             let json;
             gethtml = getHtmlCode(ssurl, headers);
             if (/cms/.test(api_type)) {
+                log(gethtml);
                 if (gethtml && gethtml.indexOf(name) == -1) {
                     gethtml = getHtmlCode(ssurl.replace('videolist', 'list'), headers);
                 }
@@ -871,6 +871,7 @@ function getSsData(name, jkdata, page) {
                     }
                 }
                 if (list.vodname.includes(name)) {
+                    log(vodpic);
                     searchs.push({
                         vodname: list.vodname,
                         voddesc: list.voddesc,
