@@ -71,7 +71,7 @@ function getide(is) {
 }
 function lookset() {
     setPageTitle("♥观影设置");
-    let recordfile = "hiker://files/rules/Src/Juying2/parse.json";//解析相关记录文件
+    let recordfile = globalMap0.getMyVar('gmParams').rulepath + "parse.json";//解析相关记录文件
     let parseRecord = {};
     if(fetch(recordfile)){
         try{
@@ -239,7 +239,7 @@ function lookset() {
         title: '无效播放地址',
         url: $("", "输入无法播放的地址进行屏蔽").input((parseRecord, recordfile) => {
             parseRecord['excludeurl'] = parseRecord['excludeurl'] || [];
-            let url = input.split(';{')[0].replace('file:///storage/emulated/0/Android/data/com.example.hikerview/files/Documents/cache/video.m3u8##', '').replace('#isVideo=true#', '');
+            let url = input.split(';{')[0].replace(/file.*video\.m3u8##/, '').replace('#isVideo=true#', '');
             if (parseRecord['excludeurl'].indexOf(url) == -1) {
                 parseRecord['excludeurl'].push(url);
             }
