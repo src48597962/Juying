@@ -798,7 +798,7 @@ function jiexi(data) {
                     cls: 'jxtest'
                 }
             })
-            var filepath = 'hiker://files/rules/Src/Juying2/testurls.json';
+            var filepath = globalMap0.getMyVar('gmParams').rulepath + "testurls.json";
             var datafile = fetch(filepath);
             if(datafile != ""){
                 eval("var urls=" + datafile+ ";");
@@ -850,7 +850,7 @@ function jiexi(data) {
             addItemBefore('jxline2', {
                 title: '编辑测试',
                 url: $('#noRecordHistory##noHistory#').lazyRule(()=>{
-                    return "editFile://hiker://files/rules/Src/Juying2/testurls.json";
+                    return "editFile://" + globalMap0.getMyVar('gmParams').rulepath + "testurls.json";
                 }),
                 col_type: "text_3",
                 extra:{
@@ -1130,9 +1130,10 @@ function manageSet(){
         d.push({
             title: '🔝 确定上传',
             url: $().lazyRule((Juconfig,cfgfile) => {
-                var text = {};
+                let text = {};
+                let rulepath = globalMap0.getMyVar('gmParams').rulepath;
                 if(getMyVar('uploadjiekou','0')=="1"){
-                    var filepath = "hiker://files/rules/Src/Juying2/jiekou.json";
+                    var filepath = rulepath + "jiekou.json";
                     var datafile = fetch(filepath);
                     if(datafile==""){
                         var datalist = [];
@@ -1142,7 +1143,7 @@ function manageSet(){
                     text['jiekou'] = datalist;
                 }
                 if(getMyVar('uploadjiexi','0')=="1"){
-                    var filepath = "hiker://files/rules/Src/Juying2/jiexi.json";
+                    var filepath = rulepath + "jiexi.json";
                     var datafile = fetch(filepath);
                     if(datafile==""){
                         var datalist = [];
@@ -1152,7 +1153,7 @@ function manageSet(){
                     text['jiexi'] = datalist;
                 }
                 if(getMyVar('uploadlive','0')=="1"){
-                    var filepath = "hiker://files/rules/Src/Juying2/liveconfig.json";
+                    var filepath = rulepath + "liveconfig.json";
                     var datafile = fetch(filepath);
                     if(datafile==""){
                         var liveconfig={};
@@ -1162,7 +1163,7 @@ function manageSet(){
                     text['live'] = liveconfig;
                 }
                 if(getMyVar('uploadyundisk','0')=="1"){
-                    var filepath = "hiker://files/rules/Src/Juying2/yundisk.json";
+                    var filepath = rulepath + "yundisk.json";
                     var datafile = fetch(filepath);
                     if(datafile==""){
                         var datalist=[];
@@ -1325,7 +1326,7 @@ function manageSet(){
                             jxnum = jiexisave(jxdatalist, codedytype||1);
                         }
                         if(pastedata.live){
-                            let livefilepath = "hiker://files/rules/Src/Juying2/liveconfig.json";
+                            let livefilepath = globalMap0.getMyVar('gmParams').rulepath + "liveconfig.json";
                             let liveconfig = pastedata.live;
                             writeFile(livefilepath, JSON.stringify(liveconfig));
                             var sm = "，直播订阅已同步"
@@ -1730,6 +1731,7 @@ function Resourceimport(input,importtype,importmode){
         if((getMyVar('importjiekou','')=="1")&&jiekous.length>0){
             showLoading('正在多线程抓取数据中');
             let urls= [];
+            let datapath = globalMap0.getMyVar('gmParams').datapath;
             //多线程处理
             var task = function(obj) {
                 let arr;
@@ -1765,7 +1767,7 @@ function Resourceimport(input,importtype,importmode){
                     if(arr){
                         let urlfile;
                         if($.type(extfile)=='object'){
-                            urlfile = 'hiker://files/data2/'+MY_RULE.title+'/' + arr.type + '_' + arr.name + '.json';
+                            urlfile = datapath + arr.type + '_' + arr.name + '.json';
                             writeFile(urlfile, JSON.stringify(extfile));
                         }else if(/^file/.test(extfile)){
                             urlfile = 'hiker://files/' + extfile.split('/files/Documents/')[1];
@@ -1781,7 +1783,7 @@ function Resourceimport(input,importtype,importmode){
                                     if(arr.type=="XBPQ" && !/搜索url/.test(content)){
                                         obj.searchable = 0;
                                     }
-                                    urlfile = 'hiker://files/data2/'+MY_RULE.title+'/' + arr.type + '_' + extfile.substr(extfile.lastIndexOf('/') + 1);
+                                    urlfile = datapath + arr.type + '_' + extfile.substr(extfile.lastIndexOf('/') + 1);
                                     writeFile(urlfile, content);
                                 }
                             }catch(e){
@@ -1862,7 +1864,7 @@ function Resourceimport(input,importtype,importmode){
                 }
                 if(urls.length>0){
                     livenum = 0;
-                    let livecfgfile = "hiker://files/rules/Src/Juying2/liveconfig.json";
+                    let livecfgfile = globalMap0.getMyVar('gmParams').rulepath + "liveconfig.json";
                     let livecfg = fetch(livecfgfile);
                     if(livecfg != ""){
                         eval("var liveconfig = " + livecfg);
