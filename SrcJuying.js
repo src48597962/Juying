@@ -480,7 +480,7 @@ function dianboerji() {
                 jsLoadingInject: true,
                 blockRules: ['.m4a', '.mp3', '.gif', '.jpeg', '.jpg', '.ico', '.png', 'hm.baidu.com', '/ads/*.js', 'cnzz.com'],
                 videoExcludeRule: ['m3u8.js','?url='],
-                cls: "playlist"
+                cls: "Juloadlist playlist"
             }
             if(!/qq|youku|mgtv|bili|qiyi|sohu|pptv|le/.test(playurl) && /html/.test(playurl)){
                 extra.referer = playurl;
@@ -503,7 +503,7 @@ function dianboerji() {
         url: 'toast://温馨提示：且用且珍惜！',
         col_type: 'text_center_1',
         extra: {
-            id: "listloading",
+            id: name + "_loading",
             lineVisible: false
         }
     });
