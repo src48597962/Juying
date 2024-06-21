@@ -510,7 +510,7 @@ function getYiData(jkdata) {
                     }
                     json = { "list": xmllist };
                 } else if (!/{|}/.test(gethtml) && gethtml != "") {
-                    var decfile = "hiker://files/rules/Src/Juying/appdec.js";
+                    var decfile = "hiker://files/rules/Src/Juying2/appdec.js";
                     var Juyingdec = fetch(decfile);
                     if (Juyingdec != "") {
                         eval(Juyingdec);
@@ -681,7 +681,7 @@ function getSsData(name, jkdata, page) {
                     json = JSON.parse(gethtml);
                 }
             } else if (!/{|}/.test(gethtml) && gethtml != "") {
-                let decfile = "hiker://files/rules/Src/Juying/appdec.js";
+                let decfile = "hiker://files/rules/Src/Juying2/appdec.js";
                 let Juyingdec = fetch(decfile);
                 if (Juyingdec != "") {
                     eval(Juyingdec);
