@@ -55,6 +55,7 @@ function search(name, sstype, jkdata) {
                 }),
                 col_type: 'avatar',
                 extra: {
+                    cls: "Juloadlist",
                     url: it.vodurl,
                     data: jkdata
                 }
