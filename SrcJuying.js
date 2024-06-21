@@ -200,6 +200,7 @@ function erjisousuo(name, group) {
 }
 // 点播二级
 function dianboerji() {
+    log(globalMap0.getMyVar('gmParams').jkfile);
     addListener("onClose", $.toString((getHistory) => {
         if(getItem('historyEnable')=='1'){
             deleteItemByCls('historylist');
