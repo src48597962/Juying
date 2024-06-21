@@ -623,7 +623,7 @@ function getSsData(name, jkdata, page) {
         let html = request(ssurl, { headers: headers, timeout: timeout });
         try {
             if (html.indexOf('cf-wrapper') != -1) {
-                html = fetchCodeByWebView(ssurl, { headers: headers, 'blockRules': ['.png', '.jpg'], timeout: timeout,checkJs: $.toString((name)=>{
+                html = fetchCodeByWebView(ssurl, { headers: headers, 'blockRules': ['.png', '.jpg'],checkJs: $.toString((name)=>{
                      return document.body.innerHTML.includes(name);
                 },name) });
                 log(html);
