@@ -201,7 +201,6 @@ function erjisousuo(name,sgroup) {
 }
 // 点播二级
 function dianboerji() {
-    log(globalMap0.getMyVar('gmParams').jkfile);
     addListener("onClose", $.toString((getHistory) => {
         if(getItem('historyEnable')=='1'){
             deleteItemByCls('historylist');
@@ -255,7 +254,7 @@ function dianboerji() {
     });
     //二级统一菜单
     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyMenu.js');
-    erjimenu(erdata.desc,sgroup).forEach(it=>{
+    erjimenu(erdata.desc, sgroup).forEach(it=>{
         d.push(it);
     })
 
