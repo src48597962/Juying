@@ -394,7 +394,7 @@ function jiekousave(urls, mode) {
         if(mode==1){//全量模式时，先删除本地
             for(let i=0;i<datalist.length;i++){
                 if(datalist[i].retain!=1){
-                    if(/^hiker:\/\/files\/data\//.test(datalist[i].url)){
+                    if(datalist[i].url.includes('hiker://files/data')){
                         deleteFile(datalist[i].url);
                     }
                     datalist.splice(i,1);
@@ -409,7 +409,7 @@ function jiekousave(urls, mode) {
             if(it.oldurl){
                 for(let i=0;i<datalist.length;i++){
                     if(datalist[i].url==it.url||datalist[i].url==it.oldurl){
-                        if(/^hiker:\/\/files\/data\//.test(datalist[i].url)){
+                        if(datalist[i].url.includes('hiker://files/data')){
                             deleteFile(datalist[i].url);
                         }
                         datalist.splice(i,1);
