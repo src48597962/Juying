@@ -621,6 +621,7 @@ function getSsData(name, jkdata, page) {
     }
     function getHtmlCode(ssurl, headers) {
         let html = request(ssurl, { headers: headers, timeout: timeout });
+        log(html);
         try {
             if (html.indexOf('检测中') != -1) {
                 html = request(ssurl + '&btwaf' + html.match(/btwaf(.*?)\"/)[1], { headers: headers, timeout: timeout });
@@ -861,12 +862,13 @@ function getSsData(name, jkdata, page) {
         try {
             lists.forEach((list) => {
                 let vodpic = list.vodpic ? list.vodpic.replace(/http.*\/tu\.php\?tu=|\/img\.php\?url=| |\/tu\.php\?tu=/g, '') : "hiker://files/cache/src/404.jpg";
-                if (/^\/\//.test(vodpic)) {
-                    vodpic = "https:" + vodpic;
-                }else if (/^\//.test(vodpic)) {
-                    vodpic = vodurlhead + vodpic;
-                }else if (!/^http/.test(vodpic) && !/^hiker/.test(vodpic) && !/^\//.test(vodpic)){
-                    vodpic = vodurlhead + '/' + vodpic;
+                if(!/^hiker/.test(vodpic)){
+                    if (/^\/\//.test(vodpic)) {
+                        vodpic = "https:" + vodpic;
+                    }
+                    if(!/^http/.test(vodpic)){
+                        vodpic = getHome(list.vodurl) + vodpic;
+                    }
                 }
                 if (list.vodname.includes(name)) {
                     searchs.push({
