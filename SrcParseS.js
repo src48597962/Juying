@@ -1,5 +1,5 @@
 //本代码仅用于个人学习，请勿用于其他作用，下载后请24小时内删除，代码虽然是公开学习的，但请尊重作者，应留下说明
-let recordfile = "hiker://files/rules/Src/Juying2/parse.json";//取解析设置、上次成功、手工屏蔽的
+let recordfile = globalMap0.getMyVar('gmParams').rulepath + "parse.json";//取解析设置、上次成功、手工屏蔽的
 let record = fetch(recordfile);
 let parseRecord = {};
 if(record!=""){
@@ -101,7 +101,7 @@ var SrcParseS = {
 
         let parsemode = playSet.parsemode || 1;//解析模式
         let mulnum = playSet.mulnum || 1;//多线程数
-        let jxfile = "hiker://files/rules/Src/Juying2/jiexi.json";//解析存放文件
+        let jxfile = globalMap0.getMyVar('gmParams').rulepath + "jiexi.json";//解析存放文件
         let parselist = [];//待进线程执行的解析列表
         let jxList= [];//读取解析列表
 
