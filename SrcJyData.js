@@ -620,7 +620,7 @@ function getSsData(name, jkdata, page) {
         return [];
     }
     function getHtmlCode(ssurl, headers) {
-        let html = fetch(ssurl, { headers: headers, timeout: timeout });
+        let html = request(ssurl);//, { headers: headers, timeout: timeout }
         log(html);
         try {
             if (html.indexOf('检测中') != -1) {
