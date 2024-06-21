@@ -1765,7 +1765,7 @@ function Resourceimport(input,importtype,importmode){
                     if(arr){
                         let urlfile;
                         if($.type(extfile)=='object'){
-                            urlfile = 'hiker://files/data/'+MY_RULE.title+'/libs/' + arr.type + '_' + arr.name + '.json';
+                            urlfile = 'hiker://files/data2/'+MY_RULE.title+'/' + arr.type + '_' + arr.name + '.json';
                             writeFile(urlfile, JSON.stringify(extfile));
                         }else if(/^file/.test(extfile)){
                             urlfile = 'hiker://files/' + extfile.split('/files/Documents/')[1];
@@ -1781,7 +1781,7 @@ function Resourceimport(input,importtype,importmode){
                                     if(arr.type=="XBPQ" && !/搜索url/.test(content)){
                                         obj.searchable = 0;
                                     }
-                                    urlfile = 'hiker://files/data/'+MY_RULE.title+'/libs/' + arr.type + '_' + extfile.substr(extfile.lastIndexOf('/') + 1);
+                                    urlfile = 'hiker://files/data2/'+MY_RULE.title+'/' + arr.type + '_' + extfile.substr(extfile.lastIndexOf('/') + 1);
                                     writeFile(urlfile, content);
                                 }
                             }catch(e){
