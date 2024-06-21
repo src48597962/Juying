@@ -14,14 +14,14 @@ let sourceName = homeSource.name;
 let sourceGroup = homeSource.group || homeSource.type;
 let sourceUrl = homeSource.url;
 
-let rulePath = "hiker://files/rules/Src/Juying2/"; //规则文件路径
-let dataPath = "hiker://files/data2/" + MY_RULE.title + "/"; //数据文件路径
-let cachePath = "hiker://files/cache/src/Juying2/"; //缓存文件路径
-let jkfile = rulePath + "jiekou.json";
-let jxfile = rulePath + "jiexi.json";
+let rulepath = "hiker://files/rules/Src/Juying2/"; //规则文件路径
+let datapath = "hiker://files/data2/" + MY_RULE.title + "/"; //数据文件路径
+let cachepath = "hiker://files/cache/src/Juying2/"; //缓存文件路径
+let jkfile = rulepath + "jiekou.json";
+let jxfile = rulepath + "jiexi.json";
 let timeout = 6000;
 
-globalMap0.putMyVar('gmParams',{rulePath:rulePath,dataPath:dataPath,cachePath:cachePath});
+globalMap0.putMyVar('gmParams',{rulepath:rulepath,datapath:datapath,cachepath:cachepath,jkfile:jkfile,jxfile:jxfile});
 
 function getFile(lx) {
     let file = lx=='jk'?jkfile:jxfile;
