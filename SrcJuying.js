@@ -216,7 +216,7 @@ function dianboerji() {
     MY_URL = MY_PARAMS.url;
 
     let detailsmark;
-    let cacheDataFile = 'hiker://files/cache/src/Juying2/Details.json';
+    let cacheDataFile = globalMap0.getMyVar('gmParams').cachepath + "Details.json";
     let cacheData = fetch(cacheDataFile);
     if (cacheData != "") {
         try{
@@ -261,7 +261,7 @@ function dianboerji() {
     //取之前足迹记录，用于自动定位之前的线路和分页
     let smark = {};
     try {
-        eval('SrcMark = ' + fetch("hiker://files/cache/src/Juying2/Mark.json"));
+        eval('SrcMark = ' + fetch(globalMap0.getMyVar('gmParams').cachepath + "Mark.json"));
         if (SrcMark[MY_URL]) {
             smark.line = SrcMark[MY_URL].line;
             smark.page = SrcMark[MY_URL].page;
@@ -310,7 +310,7 @@ function dianboerji() {
                 title: getMyVar(MY_URL+"_line", '0') == i ? getHead(it,Color1,1) : getHead(it,Color2),
                 url: $("#noLoading#").lazyRule((url, nowid, newid, Marksum) => {
                     if (nowid != newid) {
-                        let markFile = 'hiker://files/cache/src/Juying2/Mark.json';
+                        let markFile = globalMap0.getMyVar('gmParams').cachepath + "Mark.json";
                         let SrcMark = "";
                         try {
                             eval('SrcMark = ' + markFile);
@@ -384,7 +384,7 @@ function dianboerji() {
             分页s.forEach((it,i)=>{
                 分页链接.push($("#noLoading#").lazyRule((url,nowid,newid,Marksum) => {
                     if(nowid != newid){
-                        let markFile = 'hiker://files/cache/src/Juying2/Mark.json';
+                        let markFile = globalMap0.getMyVar('gmParams').cachepath + "Mark.json";
                         let SrcMark = "";
                         try {
                             eval('SrcMark = ' + markFile);
@@ -1097,7 +1097,7 @@ function yiji() {
         d = d.concat(items);
     }
 
-    let resoufile = "hiker://files/rules/Src/Juying/resou.json";
+    let resoufile = globalMap0.getMyVar('gmParams').cachepath + "resou.json";
     let Juyingresou = fetch(resoufile);
     let JYresou = {};
     if(Juyingresou != ""){
