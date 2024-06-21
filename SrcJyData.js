@@ -712,7 +712,6 @@ function getSsData(name, jkdata, page) {
             lists = lists.map(list => {
                 let vodname = list.vod_name || list.title;
                 let vodpic = list.vod_pic || list.pic || "";
-                log(vodpic);
                 let voddesc = list.vod_remarks || list.state || "";
                 let vodurl = list.vod_id ? vodurlhead + list.vod_id : list.nextlink;
                 let vodcontent = list.vod_blurb || "";
