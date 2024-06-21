@@ -53,11 +53,11 @@ function erjimenu(desc,name,sgroup) {
         {
             title: "切换站源",
             url: !fileExist(jkfile) ? "toast://分享页面或没有接口，无法扩展更多片源" : $("#noLoading#").lazyRule((name,sgroup) => {
-                showloading("搜源中");
+                showLoading("搜源中");
                 require(config.依赖);
-                erjisousuo(name,sgroup);
+                erjisousuo(name, sgroup);
                 return  "hiker://empty";
-            },name,sgroup),
+            },name, sgroup),
             pic_url: 'https://hikerfans.com/tubiao/messy/20.svg',
             col_type: 'icon_small_3',
             extra: {
