@@ -177,7 +177,7 @@ function erjisousuo(name,sgroup) {
                         searchMark[name] = searchMark[name].concat(data);
                         storage0.putMyVar('SrcJu_searchMark', searchMark);
                         if(!getMyVar('换源变更列表id')){
-                            addItemBefore("Julistloading", data);
+                            addItemBefore(updateItemid, data);
                         }
                         hideLoading();
                     }else{
