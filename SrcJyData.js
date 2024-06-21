@@ -620,10 +620,11 @@ function getSsData(name, jkdata, page) {
         return [];
     }
     function getHtmlCode(ssurl, headers) {
-        let html = request(ssurl);//, { headers: headers, timeout: timeout }
-        log(html);
+        let html = request(ssurl, { headers: headers, timeout: timeout });
         try {
-            if (html.indexOf('检测中') != -1) {
+            if (html.indexOf('cf-wrapper') != -1) {
+                html = fetchCodeByWebView(ssurl, { headers: headers, 'blockRules': ['.png', '.jpg'], timeout: timeout });
+            }else if (html.indexOf('检测中') != -1) {
                 html = request(ssurl + '&btwaf' + html.match(/btwaf(.*?)\"/)[1], { headers: headers, timeout: timeout });
             } else if (/页面已拦截/.test(html)) {
                 html = fetchCodeByWebView(ssurl, { headers: headers, 'blockRules': ['.png', '.jpg', '.gif', '.mp3', '.mp4'], timeout: timeout });
