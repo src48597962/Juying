@@ -16,7 +16,6 @@ let sourceUrl = homeSource.url;
 
 let jkfile = "hiker://files/rules/Src/Juying2/jiekou.json";
 let jxfile = "hiker://files/rules/Src/Juying2/jiexi.json";
-let drpymuban = "https://raw.gitmirror.com/hjdhnx/hipy-server/master/app/t4/files/drpy_libs/%E6%A8%A1%E6%9D%BF.js";
 let timeout = 6000;
 
 function getFile(lx) {
@@ -86,7 +85,7 @@ function deleteData(lx, data){
     }
 
     dellist.forEach(it => {
-        if(lx=='jk' && /^hiker:\/\/files\/data\//.test(it.url)){
+        if(lx=='jk' && it.url.includes('hiker://files/data')){
             deleteFile(it.url);
         }
         let dataurl = lx=='jk'?it.url:it.parse;
