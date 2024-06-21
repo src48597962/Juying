@@ -148,7 +148,7 @@ function erjisousuo(name,sgroup) {
 
     let task = function (obj) {
         try {
-            let lists = obj.search(obj.name, "dianboerji", obj.data);
+            let lists = obj.fun(obj.name, "dianboerji", obj.data);
             return {result:lists, success:1};
         } catch (e) {
             log('√'+obj.data.name + '>搜索失败>' + e.message);
