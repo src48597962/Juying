@@ -180,10 +180,10 @@ function erjisousuo(name,sgroup) {
                             addItemBefore(updateItemid, data);
                         }
                         hideLoading();
-                    }else{
-                        nosousuolist.push(id);
-                        storage0.putMyVar('nosousuolist', nosousuolist);
                     }
+                }else if(taskResult.success==0){
+                    nosousuolist.push(id);
+                    storage0.putMyVar('nosousuolist', nosousuolist);
                 }
             },
             param: {
