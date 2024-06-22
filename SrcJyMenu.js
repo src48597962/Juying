@@ -53,8 +53,6 @@ function erjimenu(desc,name,sgroup) {
         {
             title: "切换站源",
             url: !fileExist(jkfile) ? "toast://分享页面或没有接口，无法扩展更多片源" : $("#noLoading#").lazyRule((name,sgroup) => {
-                showLoading("搜源中");
-                deleteItemByCls('Juloadlist');
                 require(config.依赖);
                 erjisousuo(name, sgroup);
                 return  "hiker://empty";
