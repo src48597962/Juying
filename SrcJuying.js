@@ -136,7 +136,7 @@ function erjisousuo(name,group) {
         return "hiker://empty";
     }else{
         updateItem(updateItemid, {
-            title:"搜源中..."
+            title: "搜源中..."
         });
     }
     let datalist = getDatas('jk',1);
