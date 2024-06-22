@@ -125,7 +125,7 @@ function alistHome() {
     if (alistapi.token) {
         d.push({
             title: '🔗挂载',
-            url: $(["挂载阿里分享"], 2).select((alistapi, alitoken) => {
+            url: $(["挂载阿里分享", "设置alitoken"], 1).select((alistapi, alitoken) => {
                 if (input == '挂载阿里分享') {
                     if (alitoken) {
                         return $("", "阿里分享链接").input((alistapi, alitoken) => {
@@ -157,16 +157,24 @@ function alistHome() {
                             }
                         }, alistapi, alitoken)
                     } else {
-                        toast("云盘未登录，获取token失败，无法挂载");
-                        return $("hiker://empty").rule(() => {
-                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js');
-                            let d = [];
-                            d = d.concat(myDiskMenu(0));
-                            setResult(d);
-                        })
+                        toast("无法挂载，请先设置alitoken");
                     }
+                }else if(input=="设置alitoken"){
+                    return $("","输入alitoken").input(()=>{
+                        let alistfile = "hiker://files/rules/Src/Juying/Alist.json";
+                        let alistData = {};
+                        if (fetch(alistfile)) {
+                            try {
+                                eval("alistData = " + fetch(alistfile));
+                            } catch (e) {}
+                        }
+                        alistData.alitoken = input;
+                        writeFile(alistfile, JSON.stringify(alistData));
+                        refreshPage(true);
+                        return "toast://已设置";
+                    })
                 }
-            }, alistapi, alitoken),
+            }, alistapi, alistData.alitoken),
             col_type: 'scroll_button'
         });
     }
