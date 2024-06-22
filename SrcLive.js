@@ -1,5 +1,6 @@
 //本代码仅用于个人学习，请勿用于其他作用，下载后请24小时内删除，代码虽然是公开学习的，但请尊重作者，应留下说明
 let datapath = "hiker://files/data/聚影✓/";
+putMyVar('JY直播数据路径', datapath);
 function Live() {
     addListener("onClose", $.toString(() => {
         clearMyVar('editmode');
@@ -7,6 +8,7 @@ function Live() {
         clearMyVar('JYlivedyurl');
         clearMyVar('selectgroup');
         clearMyVar('JYlivelocal');
+        clearMyVar('JY直播数据路径');
     }));
     
     var d = [];
@@ -577,7 +579,7 @@ function LiveSet() {
                 //refreshPage(false);
             }));
             //setPageTitle("⚙直播设置⚙");
-            let livecfgfile = datapath + "liveconfig.json";
+            let livecfgfile = getMyVar('JY直播数据路径') + "liveconfig.json";
             let livecfg = fetch(livecfgfile);
             if(livecfg != ""){
                 eval("var liveconfig = " + livecfg);
@@ -711,7 +713,7 @@ function LiveSet() {
                                     }
                                     if(YClives.length>0){
                                         let importnum = 0;
-                                        let JYlivefile = "hiker://files/data/聚影✓/live.txt";
+                                        let JYlivefile = getMyVar('JY直播数据路径') + "live.txt";
                                         let JYlive=fetch(JYlivefile);
                                         if(JYlive){
                                             var JYlives = JYlive.split('\n');
@@ -795,7 +797,7 @@ function LiveSet() {
             addListener("onClose", $.toString(() => {
                 clearMyVar('importinput');
             }));
-            let cfgfile = datapath + "config.json";
+            let cfgfile = getMyVar('JY直播数据路径') + "config.json";
             let Juconfig= {};
             let Jucfg=fetch(cfgfile);
             if(Jucfg != ""){
@@ -892,7 +894,7 @@ function LiveSet() {
                             }
                             if(urls.length>0){
                                 livenum = 0;
-                                let livecfgfile = "hiker://files/data/聚影✓/liveconfig.json";
+                                let livecfgfile = getMyVar('JY直播数据路径') + "liveconfig.json";
                                 let livecfg = fetch(livecfgfile);
                                 if(livecfg != ""){
                                     eval("var liveconfig = " + livecfg);
@@ -987,7 +989,7 @@ function LiveSet() {
         title: '♻ 清空直播源',
         col_type: 'text_2',
         url: $("确定清空聚影直播本地文件？").confirm(()=>{
-            writeFile("hiker://files/rules/Src/Juying/live.txt", "");
+            writeFile(getMyVar('JY直播数据路径') + "live.txt", "");
             if(getMyVar('JYlivedyurl','juying')=="juying"){
                 putMyVar('isEdit','1');
             }
@@ -1006,7 +1008,7 @@ function LiveSet() {
         url: $('#noLoading#').lazyRule(() => {
             putMyVar('isEdit','1');
             let urls = [];
-            let JYlivefile="hiker://files/rules/Src/Juying/live.txt";
+            let JYlivefile = getMyVar('JY直播数据路径') + "live.txt";
             let JYlive = fetch(JYlivefile);
             if(JYlive!=""){
                 var task = function(obj) {
