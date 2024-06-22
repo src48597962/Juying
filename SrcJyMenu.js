@@ -60,23 +60,19 @@ function erjimenu(desc,name,sgroup) {
                     grouparr.push({
                         title: group==it?`““””<b><span style="color: #3399cc">`+it+`</span></b>`:it,
                         url: $('#noLoading#').lazyRule((name,oldgroup,newgroup) => {
-                            if(oldgroup==newgroup){
-                                return "hiker://emtpy";
-                            }else{
-                                updateItem("id_"+oldgroup, {
-                                    title: oldgroup
-                                })
-                                updateItem("id_"+newgroup, {
-                                    title: `““””<b><span style="color: #3399cc">`+newgroup+`</span></b>`
-                                })
-                                updateItem(oldgroup+"_"+name+"_loading", {
-                                    extra: {"id":newgroup+"_"+name+"_loading","lineVisible":false}
-                                })
-                                deleteItemByCls('groupload');
-                                require(config.依赖);
-                                erjisousuo(name, newgroup);
-                                return 'toast://切源分组已切为：' + newgroup;
-                            }
+                            updateItem("id_"+oldgroup, {
+                                title: oldgroup
+                            })
+                            updateItem("id_"+newgroup, {
+                                title: `““””<b><span style="color: #3399cc">`+newgroup+`</span></b>`
+                            })
+                            updateItem(oldgroup+"_"+name+"_loading", {
+                                extra: {"id":newgroup+"_"+name+"_loading","lineVisible":false}
+                            })
+                            deleteItemByCls('groupload');
+                            require(config.依赖);
+                            erjisousuo(name, newgroup);
+                            return 'toast://切源分组已切为：' + newgroup;
                         }, name, group, it),
                         col_type: "scroll_button",
                         extra: {
