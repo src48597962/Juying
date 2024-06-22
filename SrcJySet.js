@@ -1519,7 +1519,6 @@ function resource() {
     addListener("onClose", $.toString(() => {
         clearMyVar('importjiekou');
         clearMyVar('importjiexi');
-        clearMyVar('importlive');
         clearMyVar('importtype');
         clearMyVar('importinput');
     }));
@@ -1547,39 +1546,26 @@ function resource() {
             extra:{textSize:12}
         });
         d.push({
-            title:(getMyVar('importjiekou','0')=="1"?getide(1):getide(0))+'影视接口',
+            title:(getMyVar('importjiekou','1')=="1"?getide(1):getide(0))+'影视接口',
             col_type:'text_3',
             url:$('#noLoading#').lazyRule(() => {
-                if(getMyVar('importjiekou')=="1"){
-                    putMyVar('importjiekou','0');
-                }else{
+                if(getMyVar('importjiekou')=="0"){
                     putMyVar('importjiekou','1');
+                }else{
+                    putMyVar('importjiekou','0');
                 }
                 refreshPage(false);
                 return "hiker://empty";
             })
         });
         d.push({
-            title:(getMyVar('importjiexi','0')=="1"?getide(1):getide(0))+'解析接口',
+            title:(getMyVar('importjiexi','1')=="1"?getide(1):getide(0))+'解析接口',
             col_type:'text_3',
             url:$('#noLoading#').lazyRule(() => {
-                if(getMyVar('importjiexi')=="1"){
-                    putMyVar('importjiexi','0');
-                }else{
+                if(getMyVar('importjiexi')=="0"){
                     putMyVar('importjiexi','1');
-                }
-                refreshPage(false);
-                return "hiker://empty";
-            })
-        });
-        d.push({
-            title:(getMyVar('importlive','0')=="1"?getide(1):getide(0))+'直播接口',
-            col_type:'text_3',
-            url:$('#noLoading#').lazyRule(() => {
-                if(getMyVar('importlive')=="1"){
-                    putMyVar('importlive','0');
                 }else{
-                    putMyVar('importlive','1');
+                    putMyVar('importjiexi','0');
                 }
                 refreshPage(false);
                 return "hiker://empty";
@@ -1603,11 +1589,12 @@ function resource() {
         });
         d.push({
             title: '🆖 历史记录',
-            url: $('hiker://empty#noRecordHistory##noHistory#').rule((cfgfile,Juconfig) => {
+            url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
                 addListener("onClose", $.toString(() => {
                     refreshPage(false);
                 }));
                 setPageTitle("🆖资源导入-历史记录");
+                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                 
                 var d = [];
                 let importrecord = Juconfig['importrecord']||[];
@@ -1654,12 +1641,12 @@ function resource() {
                     });
                 }
                 setHomeResult(d);
-            },cfgfile,Juconfig),
+            }),
             col_type: "text_2"
         });
         d.push({
             title: '🆗 确定导入(' + (Juconfig["importmode"]?"全":"增")+')',
-            url: getMyVar('importjiekou')!="1"&&getMyVar('importjiexi')!="1"&&getMyVar('importlive')!="1"?'toast://请选择导入项目':$('#noLoading#').lazyRule((Juconfig,cfgfile) => {
+            url: getMyVar('importjiekou','1')!="1"&&getMyVar('importjiexi','1')!="1"?'toast://请选择导入项目':$('#noLoading#').lazyRule((Juconfig,cfgfile) => {
                     if(getMyVar('importinput', '')==""){
                         return 'toast://请先输入链接地址'
                     }
@@ -1726,10 +1713,9 @@ function Resourceimport(input,importtype,importmode){
 
         let jknum = -1;
         let jxnum = -1;
-        let livenum = -1;
         let jiekous = data.sites||[];
-        if((getMyVar('importjiekou','')=="1")&&jiekous.length>0){
-            showLoading('正在多线程抓取数据中');
+        showLoading('正在多线程抓取数据中');
+        if((getMyVar('importjiekou','1')=="1")&&jiekous.length>0){
             let urls= [];
             let datapath = globalMap0.getMyVar('gmParams').datapath + "libs_jk/";
             //多线程处理
@@ -1823,10 +1809,9 @@ function Resourceimport(input,importtype,importmode){
                 jknum =-1;
                 log('TVBox导入接口保存有异常>'+e.message);
             } 
-            hideLoading();    
         }
         let jiexis = data.parses||[];
-        if((getMyVar('importjiexi','')=="1")&&jiexis.length>0){
+        if((getMyVar('importjiexi','1')=="1")&&jiexis.length>0){
             try{
                 let urls = jiexis.filter(it=>{
                     return /^http/.test(it.url);
@@ -1837,65 +1822,10 @@ function Resourceimport(input,importtype,importmode){
                 log('TVBox导入解析保存失败>'+e.message);
             }
         }
-        let lives = data.lives || [];
-        if(getMyVar('importlive','')=="1"&&lives.length>0){
-            try{
-                let urls = [];
-                for (let i=0;i<lives.length;i++) {
-                    if(lives[i].channels){
-                        let channels = lives[i].channels;
-                        if(channels.length>0){
-                            for (let j=0;j<channels.length;j++) {
-                                let live = channels[i].urls;
-                                for (let k=0;k<live.length;k++) {
-                                    let url = live[i].replace('proxy://do=live&type=txt&ext=','');
-                                    if(!/^http/.test(url)){
-                                        url = base64Decode(url);
-                                    }
-                                    urls.push({name:url.substr(url.lastIndexOf('/') + 1).split('.')[0], url:url});
-                                }
-                            }
-                        }
-                    }else if(lives[i].url){
-                        let url = lives[i].url;
-                        if(/^\./.test(url)){
-                            url = input.match(/http(s)?:\/\/.*\//)[0] + url.replace("./","");
-                        }
-                        urls.push({name:lives[i].name||url.substr(url.lastIndexOf('/') + 1).split('.')[0], url:url});
-                    }
-                }
-                if(urls.length>0){
-                    livenum = 0;
-                    let livecfgfile = globalMap0.getMyVar('gmParams').datapath + "liveconfig.json";
-                    let livecfg = fetch(livecfgfile);
-                    if(livecfg != ""){
-                        eval("var liveconfig = " + livecfg);
-                    }else{
-                        var liveconfig = {};
-                    }
-                    let livedata = liveconfig['data']||[];
-                    for(let i=0;i<urls.length;i++){
-                        if(!livedata.some(item => item.url==urls[i].url)){
-                            let YChtml = request(urls[i].url,{timeout:5000}).replace(/TV-/g,'TV');
-                            if(YChtml.indexOf('#genre#')>-1){
-                                livedata.push(urls[i]);
-                                livenum++;
-                            }
-                        }
-                    }
-                    if(livenum>0){
-                        liveconfig['data'] = livedata;
-                        writeFile(livecfgfile, JSON.stringify(liveconfig));
-                    }
-                }
-            } catch (e) {
-                log('TVBox导入live保存失败>'+e.message);
-            }
-        }
-
-        let sm = (jknum>-1?' 接口保存'+jknum:'')+(jxnum>-1?' 解析保存'+jxnum:'')+(livenum>-1?' 直播保存'+livenum:'');
+        hideLoading(); 
+        let sm = (jknum>-1?' 接口保存'+jknum:'')+(jxnum>-1?' 解析保存'+jxnum:'');
         if(jknum>0||jxnum>0){back();}
-        if(jknum==-1&&jxnum==-1&&livenum>-1){
+        if(jknum==-1&&jxnum==-1){
             clearMyVar('importinput');
             refreshPage(false);
         }
