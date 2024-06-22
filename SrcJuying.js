@@ -262,7 +262,7 @@ function dianboerji() {
     });
     //二级统一菜单
     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyMenu.js');
-    erjimenu(erdata.desc, name, getMyVar("SrcJu_二级切源分组",sgroup)).forEach(it=>{
+    erjimenu(erdata.desc, name, sgroup).forEach(it=>{
         d.push(it);
     })
 
