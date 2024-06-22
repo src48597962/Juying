@@ -70,7 +70,7 @@ function erjimenu(desc,name,sgroup) {
                                     title: `““””<b><span style="color: #3399cc">`+newgroup+`</span></b>`
                                 })
                                 updateItem(oldgroup+"_"+name+"_loading", {
-                                    id: newgroup+"_"+name+"_loading"
+                                    extra: {"id":newgroup+"_"+name+"_loading","lineVisible":false}
                                 })
                                 deleteItemByCls('groupload');
                                 require(config.依赖);
