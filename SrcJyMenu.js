@@ -52,9 +52,32 @@ function erjimenu(desc,name,sgroup) {
         },
         {
             title: "切换站源",
-            url: !fileExist(jkfile) ? "toast://分享页面或没有接口，无法扩展更多片源" : $("#noLoading#").lazyRule((name,sgroup) => {
+            url: !fileExist(jkfile) ? "toast://分享页面或没有接口，无法扩展更多片源" : $("#noLoading#").lazyRule((name,group) => {
+                deleteItemByCls('Juloadlist');
+                let datalist = getDatas('jk',1);
+                let grouparr = [];
+                getJiekouGroups(datalist.filter(v=>v.searchable!=0)).forEach(it=>{
+                    grouparr.push({
+                        title: group==it?`““””<b><span style="color: #3399cc">`+it+`</span></b>`:it,
+                        url: $('#noLoading#').lazyRule((oldgroup,newgroup) => {
+                            if(oldgroup==newgroup){
+                                return "hiker://emtpy";
+                            }else{
+                                deleteItemByCls('groupload');
+                                require(config.依赖);
+                                erjisousuo(name, newgroup);
+                                return 'toast://切源分组已切为：' + newgroup;
+                            }
+                        }, group, it),
+                        col_type: "scroll_button",
+                        extra: {
+                            cls: "Juloadlist"
+                        }
+                    })
+                })
+                addItemBefore(group + "_" +name + "_loading", grouparr);// 生成切源分组
                 require(config.依赖);
-                erjisousuo(name, sgroup);
+                erjisousuo(name, group);
                 return  "hiker://empty";
             },name, sgroup),
             pic_url: 'https://hikerfans.com/tubiao/messy/20.svg',
