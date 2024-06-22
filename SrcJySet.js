@@ -1747,7 +1747,7 @@ function Resourceimport(input,importtype,importmode){
                     if($.type(extfile)=='string'){
                         if(/^clan:/.test(extfile)){
                             extfile = extfile.replace("clan://TVBox/", input.match(/file.*\//)[0]);
-                        }else if(/^./.test(extfile)){
+                        }else if(/^\./.test(extfile)){
                             extfile = input.match(/http(s)?:\/\/.*\//)[0]+extfile.replace("./","");
                         }
                     }
@@ -1842,24 +1842,26 @@ function Resourceimport(input,importtype,importmode){
             try{
                 let urls = [];
                 for (let i=0;i<lives.length;i++) {
-                    let channels = lives[i].channels||[];
-                    if(channels.length>0){
-                        for (let j=0;j<channels.length;j++) {
-                            let live = channels[i].urls;
-                            for (let k=0;k<live.length;k++) {
-                                let url = live[i].replace('proxy://do=live&type=txt&ext=','');
-                                if(/^http/.test(url)){
-                                    urls.push(url);
-                                }else{
-                                    urls.push(base64Decode(url));
+                    if(lives[i].channels){
+                        let channels = lives[i].channels;
+                        if(channels.length>0){
+                            for (let j=0;j<channels.length;j++) {
+                                let live = channels[i].urls;
+                                for (let k=0;k<live.length;k++) {
+                                    let url = live[i].replace('proxy://do=live&type=txt&ext=','');
+                                    if(!/^http/.test(url)){
+                                        url = base64Decode(url);
+                                    }
+                                    urls.push({name:url.substr(url.lastIndexOf('/') + 1).split('.')[0], url:url});
                                 }
                             }
                         }
-                    }else{
-                        let url = lives[i].url || "";
-                        if(/^http/.test(url)){
-                            urls.push(url);
+                    }else if(lives[i].url){
+                        let url = lives[i].url;
+                        if(/^\./.test(url)){
+                            url = input.match(/http(s)?:\/\/.*\//)[0] + url.replace("./","");
                         }
+                        urls.push({name:lives[i].name||url.substr(url.lastIndexOf('/') + 1).split('.')[0], url:url});
                     }
                 }
                 if(urls.length>0){
@@ -1873,11 +1875,10 @@ function Resourceimport(input,importtype,importmode){
                     }
                     let livedata = liveconfig['data']||[];
                     for(let i=0;i<urls.length;i++){
-                        if(!livedata.some(item => item.url==urls[i])){
-                            let YChtml = request(urls[i],{timeout:5000}).replace(/TV-/g,'TV');
+                        if(!livedata.some(item => item.url==urls[i].url)){
+                            let YChtml = request(urls[i].url,{timeout:5000}).replace(/TV-/g,'TV');
                             if(YChtml.indexOf('#genre#')>-1){
-                                let id = livedata.length + 1;
-                                livedata.push({name:'JY订阅'+id,url:urls[i]});
+                                livedata.push(urls[i]);
                                 livenum++;
                             }
                         }
