@@ -798,7 +798,7 @@ function jiexi(data) {
                     cls: 'jxtest'
                 }
             })
-            var filepath = globalMap0.getMyVar('gmParams').rulepath + "testurls.json";
+            var filepath = globalMap0.getMyVar('gmParams').datapath + "testurls.json";
             var datafile = fetch(filepath);
             if(datafile != ""){
                 eval("var urls=" + datafile+ ";");
@@ -850,7 +850,7 @@ function jiexi(data) {
             addItemBefore('jxline2', {
                 title: '编辑测试',
                 url: $('#noRecordHistory##noHistory#').lazyRule(()=>{
-                    return "editFile://" + globalMap0.getMyVar('gmParams').rulepath + "testurls.json";
+                    return "editFile://" + globalMap0.getMyVar('gmParams').datapath + "testurls.json";
                 }),
                 col_type: "text_3",
                 extra:{
@@ -1131,9 +1131,9 @@ function manageSet(){
             title: '🔝 确定上传',
             url: $().lazyRule((Juconfig,cfgfile) => {
                 let text = {};
-                let rulepath = globalMap0.getMyVar('gmParams').rulepath;
+                let datapath = globalMap0.getMyVar('gmParams').datapath;
                 if(getMyVar('uploadjiekou','0')=="1"){
-                    var filepath = rulepath + "jiekou.json";
+                    var filepath = datapath + "jiekou.json";
                     var datafile = fetch(filepath);
                     if(datafile==""){
                         var datalist = [];
@@ -1143,7 +1143,7 @@ function manageSet(){
                     text['jiekou'] = datalist;
                 }
                 if(getMyVar('uploadjiexi','0')=="1"){
-                    var filepath = rulepath + "jiexi.json";
+                    var filepath = datapath + "jiexi.json";
                     var datafile = fetch(filepath);
                     if(datafile==""){
                         var datalist = [];
@@ -1153,7 +1153,7 @@ function manageSet(){
                     text['jiexi'] = datalist;
                 }
                 if(getMyVar('uploadlive','0')=="1"){
-                    var filepath = rulepath + "liveconfig.json";
+                    var filepath = datapath + "liveconfig.json";
                     var datafile = fetch(filepath);
                     if(datafile==""){
                         var liveconfig={};
@@ -1163,7 +1163,7 @@ function manageSet(){
                     text['live'] = liveconfig;
                 }
                 if(getMyVar('uploadyundisk','0')=="1"){
-                    var filepath = rulepath + "yundisk.json";
+                    var filepath = datapath + "yundisk.json";
                     var datafile = fetch(filepath);
                     if(datafile==""){
                         var datalist=[];
@@ -1326,7 +1326,7 @@ function manageSet(){
                             jxnum = jiexisave(jxdatalist, codedytype||1);
                         }
                         if(pastedata.live){
-                            let livefilepath = globalMap0.getMyVar('gmParams').rulepath + "liveconfig.json";
+                            let livefilepath = globalMap0.getMyVar('gmParams').datapath + "liveconfig.json";
                             let liveconfig = pastedata.live;
                             writeFile(livefilepath, JSON.stringify(liveconfig));
                             var sm = "，直播订阅已同步"
@@ -1731,7 +1731,7 @@ function Resourceimport(input,importtype,importmode){
         if((getMyVar('importjiekou','')=="1")&&jiekous.length>0){
             showLoading('正在多线程抓取数据中');
             let urls= [];
-            let datapath = globalMap0.getMyVar('gmParams').datapath;
+            let datapath = globalMap0.getMyVar('gmParams').datapath + "libs_jk/";
             //多线程处理
             var task = function(obj) {
                 let arr;
@@ -1864,7 +1864,7 @@ function Resourceimport(input,importtype,importmode){
                 }
                 if(urls.length>0){
                     livenum = 0;
-                    let livecfgfile = globalMap0.getMyVar('gmParams').rulepath + "liveconfig.json";
+                    let livecfgfile = globalMap0.getMyVar('gmParams').datapath + "liveconfig.json";
                     let livecfg = fetch(livecfgfile);
                     if(livecfg != ""){
                         eval("var liveconfig = " + livecfg);
