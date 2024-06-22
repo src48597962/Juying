@@ -53,7 +53,7 @@ function erjimenu(desc,name,sgroup) {
         {
             title: "切换站源",
             url: !fileExist(jkfile) ? "toast://分享页面或没有接口，无法扩展更多片源" : $("#noLoading#").lazyRule((name,group) => {
-                deleteItemByCls('Juloadlist');
+                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                 let datalist = getDatas('jk',1);
                 let grouparr = [];
                 getJiekouGroups(datalist.filter(v=>v.searchable!=0)).forEach(it=>{
@@ -75,6 +75,7 @@ function erjimenu(desc,name,sgroup) {
                         }
                     })
                 })
+                deleteItemByCls('Juloadlist');
                 addItemBefore(group + "_" +name + "_loading", grouparr);// 生成切源分组
                 require(config.依赖);
                 erjisousuo(name, group);
