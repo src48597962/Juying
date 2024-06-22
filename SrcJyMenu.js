@@ -109,7 +109,7 @@ function getide(is) {
 }
 function lookset() {
     setPageTitle("♥观影设置");
-    let recordfile = globalMap0.getMyVar('gmParams').rulepath + "parse.json";//解析相关记录文件
+    let recordfile = globalMap0.getMyVar('gmParams').datapath + "parse.json";//解析相关记录文件
     let parseRecord = {};
     if(fetch(recordfile)){
         try{
