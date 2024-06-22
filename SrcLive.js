@@ -9,7 +9,7 @@ function Live() {
     }));
     var d = [];
     d.push({
-        title: '⚙直播管理中心⚙',
+        title: '⚙管理中心⚙',
         img: "hiker://files/cache/src/聚影.png" || "https://i.postimg.cc/9Q0rhbf0/image.png",
         url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLive.js');
@@ -559,7 +559,7 @@ function LiveSet() {
         }
         clearMyVar('isEdit');
     }));
-    setPageTitle("⚙直播设置⚙");
+    //setPageTitle("⚙直播设置⚙");
     var d = [];
     d.push({
         title: '👦哥就是帅，不接受反驳...',
@@ -944,11 +944,11 @@ function LiveSet() {
                         url: $(["选择","删除"],1,"").select((Juconfig, cfgfile, url)=>{
                                 if(input=="选择"){
                                     putMyVar('importinput', url);
-                                    back(true);
+                                    refreshPage(true);
                                 }else if(input=="删除"){
                                     let importrecord = Juconfig['importrecord']||[];
                                     for(let i=0;i<importrecord.length;i++){
-                                        if(importrecord[i].url==url&&importrecord[i].type==getMyVar('importtype','1')){
+                                        if(importrecord[i].url==url&&importrecord[i].type=='1'){
                                             importrecord.splice(i,1);
                                             break;
                                         }
