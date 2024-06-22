@@ -117,16 +117,16 @@ function erjisousuo(name,group) {
     let grouparr = [];
     getJiekouGroups(datalist.filter(v=>v.searchable!=0)).forEach(it=>{
         grouparr.push({
-            title: getMyVar('SrcJu_二级切源分组')==it?`““””<b><span style="color: #3399cc">`+it+`</span></b>`:it,
-            url: $('#noLoading#').lazyRule((input) => {
-                if(getMyVar('SrcJu_二级切源分组')==input){
+            title: group==it?`““””<b><span style="color: #3399cc">`+it+`</span></b>`:it,
+            url: $('#noLoading#').lazyRule((group,input) => {
+                if(group==input){
                     return "hiker://emtpy";
                 }else{
                     putMyVar('SrcJu_二级切源分组', input);
                     refreshPage(false);
                     return 'toast://切源分组已切为：' + input;
                 }
-            }, it),
+            }, group, it),
             col_type: "scroll_button"
         })
     })
