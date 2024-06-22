@@ -72,6 +72,8 @@ function erjimenu(desc,name,sgroup) {
                                 extra: {"id":newgroup+"_"+name+"_loading","lineVisible":false}
                             })
                             deleteItemByCls('groupload');
+                            putMyVar("切源旧分组", newgroup);
+                            
                             require(config.依赖);
                             erjisousuo(name, newgroup);
                             return 'toast://切源分组已切为：' + newgroup;
