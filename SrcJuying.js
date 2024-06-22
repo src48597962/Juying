@@ -520,7 +520,7 @@ function dianboerji() {
         url: 'toast://温馨提示：且用且珍惜！',
         col_type: 'text_center_1',
         extra: {
-            id: name + "_loading",
+            id: sgroup + "_" + name + "_loading",
             lineVisible: false
         }
     });
