@@ -64,7 +64,7 @@ function erjimenu(desc,name,sgroup) {
                                 return "hiker://emtpy";
                             }else{
                                 updateItem("id_"+oldgroup, {
-                                    title: it
+                                    title: oldgroup
                                 })
                                 updateItem("id_"+newgroup, {
                                     title: `““””<b><span style="color: #3399cc">`+newgroup+`</span></b>`
