@@ -59,7 +59,7 @@ function erjimenu(desc,name,sgroup) {
                 getJiekouGroups(datalist.filter(v=>v.searchable!=0)).forEach(it=>{
                     grouparr.push({
                         title: group==it?`““””<b><span style="color: #3399cc">`+it+`</span></b>`:it,
-                        url: $('#noLoading#').lazyRule((oldgroup,newgroup) => {
+                        url: $('#noLoading#').lazyRule((name,oldgroup,newgroup) => {
                             if(oldgroup==newgroup){
                                 return "hiker://emtpy";
                             }else{
@@ -68,7 +68,7 @@ function erjimenu(desc,name,sgroup) {
                                 erjisousuo(name, newgroup);
                                 return 'toast://切源分组已切为：' + newgroup;
                             }
-                        }, group, it),
+                        }, name, group, it),
                         col_type: "scroll_button",
                         extra: {
                             cls: "Juloadlist"
