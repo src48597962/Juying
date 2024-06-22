@@ -63,6 +63,12 @@ function erjimenu(desc,name,sgroup) {
                             if(oldgroup==newgroup){
                                 return "hiker://emtpy";
                             }else{
+                                updateItem("id_"+oldgroup, {
+                                    title: it
+                                })
+                                updateItem("id_"+newgroup, {
+                                    title: `““””<b><span style="color: #3399cc">`+newgroup+`</span></b>`
+                                })
                                 deleteItemByCls('groupload');
                                 require(config.依赖);
                                 erjisousuo(name, newgroup);
@@ -71,6 +77,7 @@ function erjimenu(desc,name,sgroup) {
                         }, name, group, it),
                         col_type: "scroll_button",
                         extra: {
+                            id: "id_"+it,
                             cls: "Juloadlist"
                         }
                     })
