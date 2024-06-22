@@ -108,21 +108,43 @@ function sousuo() {
     }])
 }
 //二级切源搜索
-function erjisousuo(name,sgroup) {
-    let group = getMyVar("SrcJu_二级切源分源",sgroup);
+function erjisousuo(name,group) {
+    showLoading("搜源中");
+    deleteItemByCls('Juloadlist');
     let updateItemid = name + "_loading";
+    let datalist = getDatas('jk',1);
+    
+    let grouparr = [];
+    getJiekouGroups(datalist.filter(v=>v.searchable!=0)).forEach(it=>{
+        grouparr.push({
+            title: getMyVar('SrcJu_二级切源分组')==it?`““””<b><span style="color: #3399cc">`+it+`</span></b>`:it,
+            url: $('#noLoading#').lazyRule((input) => {
+                if(getMyVar('SrcJu_二级切源分组')==input){
+                    return "hiker://emtpy";
+                }else{
+                    putMyVar('SrcJu_二级切源分组', input);
+                    refreshPage(false);
+                    return 'toast://切源分组已切为：' + input;
+                }
+            }, it),
+            col_type: "scroll_button"
+        })
+    })
+    addItemBefore(updateItemid, grouparr);// 生成切源分组
+    
     let searchMark = storage0.getMyVar('SrcJu_searchMark') || {};//二级换源缓存
-    if(searchMark[name]){
-        addItemBefore(updateItemid, searchMark[name]);
+    let markId = group+'_'+name;
+    if(searchMark[markId]){
+        addItemBefore(updateItemid, searchMark[markId]);
         updateItem(updateItemid, {
             title: "‘‘’’<small>当前搜索为缓存</small>",
-            url: $("确定删除“"+name+"”搜索缓存吗？").confirm((name)=>{
+            url: $("确定删除“"+name+"”搜索缓存吗？").confirm((markId)=>{
                 let searchMark = storage0.getMyVar('SrcJu_searchMark') || {};
-                delete searchMark[name];
+                delete searchMark[markId];
                 storage0.putMyVar('SrcJu_searchMark', searchMark);
                 refreshPage(true);
                 return "toast://已清除";
-            },name)
+            },markId)
         });
         let i = 0;
         let one = "";
@@ -139,9 +161,8 @@ function erjisousuo(name,sgroup) {
         });
     }
 
-    let datalist = getDatas('jk');
     let ssdatalist = datalist.filter(it=>{
-        return !it.stop && it.searchable!=0 && group==(it.group||it.type);
+        return it.searchable!=0 && group==(it.group||it.type);
     });
     let nosousuolist = storage0.getMyVar('nosousuolist') || [];
     if (nosousuolist.length>0){
@@ -177,8 +198,8 @@ function erjisousuo(name,sgroup) {
                     if(data.length>0){
                         success++;
                         let searchMark = storage0.getMyVar('SrcJu_searchMark') || {};//二级换源缓存
-                        searchMark[name] = searchMark[name] || [];
-                        searchMark[name] = searchMark[name].concat(data);
+                        searchMark[markId] = searchMark[markId] || [];
+                        searchMark[markId] = searchMark[markId].concat(data);
                         storage0.putMyVar('SrcJu_searchMark', searchMark);
                         if(!getMyVar('换源变更列表id')){
                             addItemBefore(updateItemid, data);
@@ -262,7 +283,7 @@ function dianboerji() {
     });
     //二级统一菜单
     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyMenu.js');
-    erjimenu(erdata.desc, name, sgroup).forEach(it=>{
+    erjimenu(erdata.desc, name, getMyVar("SrcJu_二级切源分组",sgroup)).forEach(it=>{
         d.push(it);
     })
 
