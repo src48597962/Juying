@@ -1,5 +1,5 @@
-let datapath = "hiker://files/data/" + MY_RULE.title + "/"; //数据文件路径
-let cachepath = "hiker://files/cache/" + MY_RULE.title + "/"; //缓存文件路径
+let datapath = "hiker://files/data/聚影✓/"; //数据文件路径
+let cachepath = "hiker://files/cache/聚影✓/"; //缓存文件路径
 let jkfile = datapath + "jiekou.json";
 let jxfile = datapath + "jiexi.json";
 let cfgfile = datapath + "config.json";
