@@ -1,29 +1,12 @@
 //本代码仅用于个人学习，请勿用于其他作用，下载后请24小时内删除，代码虽然是公开学习的，但请尊重作者，应留下说明
 //Ali公用文件
-let alistfile = "hiker://files/rules/Src/Juying/Alist.json";
-let alicfgfile = "hiker://files/rules/Src/Juying/aliconfig.json";
+let alicfgfile = "hiker://files/data/聚影✓/aliconfig.json";
 let aliconfig = {};
 if (fetch(alicfgfile)) {
     try {
         eval("aliconfig = " + fetch(alicfgfile));
     } catch (e) {
         log("aliconfig文件加载失败");
-    }
-} else if (fetch(alistfile)) {
-    try {
-        eval("let alistdata = " + fetch(alistfile));
-        let alistconfig = alistdata.config || {};
-        if (alistconfig.alitoken) {
-            let account = Object.assign({},alistconfig);
-            account.refresh_token = alistconfig.alitoken;
-            delete account.alitoken;
-            aliconfig.account = account;
-            writeFile(alicfgfile, JSON.stringify(aliconfig));
-            delete alistdata.config;
-            writeFile(alistfile, JSON.stringify(alistdata));
-        }
-    } catch (e) {
-        log("从alist拆分aliconfig文件失败");
     }
 }
 
