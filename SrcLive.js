@@ -1,4 +1,5 @@
 //本代码仅用于个人学习，请勿用于其他作用，下载后请24小时内删除，代码虽然是公开学习的，但请尊重作者，应留下说明
+let datapath = "hiker://files/data/聚影✓/";
 function Live() {
     addListener("onClose", $.toString(() => {
         clearMyVar('editmode');
@@ -7,6 +8,7 @@ function Live() {
         clearMyVar('selectgroup');
         clearMyVar('JYlivelocal');
     }));
+    
     var d = [];
     d.push({
         title: '⚙管理中心⚙',
@@ -17,7 +19,7 @@ function Live() {
             }),
         col_type: 'avatar'
     });
-    let livecfgfile = "hiker://files/rules/Src/Juying/liveconfig.json";
+    let livecfgfile = datapath + "liveconfig.json";
     let livecfg = fetch(livecfgfile);
     if(livecfg != ""){
         eval("var liveconfig = " + livecfg);
@@ -29,7 +31,7 @@ function Live() {
         return item.show!=0;
     })
 
-    let JYlivefile = "hiker://files/rules/Src/Juying/live.txt";
+    let JYlivefile = "hiker://files/data/聚影✓/live.txt";
     let JYlive = "";
     let JYlivedyurl = getMyVar('JYlivedyurl','juying');
     if(getMyVar('JYlivelocal','0')=="1"){
@@ -252,7 +254,7 @@ function Live() {
 }
 
 function GroupEdit(groupname,mode,lists) {
-    let JYlivefile= "hiker://files/rules/Src/Juying/live.txt";
+    let JYlivefile= datapath + "live.txt";
     if(mode=='del'){
         try{
             showLoading('删除中，请稍候...');
@@ -421,7 +423,7 @@ function guanlidata(datalist) {
     return list;
 }
 function LivePlay(name) {
-    let JYlive= getMyVar('JYlivedyurl','juying')=="juying"?fetch("hiker://files/rules/Src/Juying/live.txt"):fetchCache(getMyVar('JYlivedyurl'),24,{timeout:3000});
+    let JYlive= getMyVar('JYlivedyurl','juying')=="juying"?fetch(datapath + "live.txt"):fetchCache(getMyVar('JYlivedyurl'),24,{timeout:3000});
     if(JYlive.indexOf('#genre#')>-1){
         var JYlives = JYlive.split('\n');
     }else if(JYlive.indexOf('#EXTINF:-1')>-1){
@@ -473,7 +475,7 @@ https://ypmnkbb.saejeuj.com/api/app/media/m3u8/av/ph/gr/7v/78/af7b145ecae246b2ac
     }
 } 
 function LiveEdit(name,mode) {
-    let JYlivefile= "hiker://files/rules/Src/Juying/live.txt";
+    let JYlivefile= datapath + "live.txt";
     if(mode=='del'){
         let JYlive= fetch(JYlivefile);
         let JYlives = JYlive.split('\n');
@@ -575,7 +577,7 @@ function LiveSet() {
                 //refreshPage(false);
             }));
             //setPageTitle("⚙直播设置⚙");
-            let livecfgfile = "hiker://files/rules/Src/Juying/liveconfig.json";
+            let livecfgfile = datapath + "liveconfig.json";
             let livecfg = fetch(livecfgfile);
             if(livecfg != ""){
                 eval("var liveconfig = " + livecfg);
@@ -709,7 +711,7 @@ function LiveSet() {
                                     }
                                     if(YClives.length>0){
                                         let importnum = 0;
-                                        let JYlivefile = "hiker://files/rules/Src/Juying/live.txt";
+                                        let JYlivefile = "hiker://files/data/聚影✓/live.txt";
                                         let JYlive=fetch(JYlivefile);
                                         if(JYlive){
                                             var JYlives = JYlive.split('\n');
@@ -793,7 +795,7 @@ function LiveSet() {
             addListener("onClose", $.toString(() => {
                 clearMyVar('importinput');
             }));
-            let cfgfile = "hiker://files/data/聚影✓/config.json";
+            let cfgfile = datapath + "config.json";
             let Juconfig= {};
             let Jucfg=fetch(cfgfile);
             if(Jucfg != ""){
@@ -829,7 +831,7 @@ function LiveSet() {
             d.push({
                 title: '确定导入',
                 col_type: 'text_2',
-                url: $().lazyRule((Juconfig,cfgfile) => {
+                url: $('#noLoading#').lazyRule((Juconfig,cfgfile) => {
                     let input = getMyVar('importinput', '');
                     if(input == ""){
                         return 'toast://请先输入链接地址'
