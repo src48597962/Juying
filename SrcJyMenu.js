@@ -69,6 +69,9 @@ function erjimenu(desc,name,sgroup) {
                                 updateItem("id_"+newgroup, {
                                     title: `““””<b><span style="color: #3399cc">`+newgroup+`</span></b>`
                                 })
+                                updateItem(oldgroup+"_"+name+"_loading", {
+                                    id: newgroup+"_"+name+"_loading"
+                                })
                                 deleteItemByCls('groupload');
                                 require(config.依赖);
                                 erjisousuo(name, newgroup);
