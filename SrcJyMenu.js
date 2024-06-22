@@ -53,13 +53,15 @@ function erjimenu(desc,name,sgroup) {
         {
             title: "切换站源",
             url: !fileExist(jkfile) ? "toast://分享页面或没有接口，无法扩展更多片源" : $("#noLoading#").lazyRule((name,group) => {
+                putMyVar("切源旧分组", group);
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                 let datalist = getDatas('jk',1);
                 let grouparr = [];
                 getJiekouGroups(datalist.filter(v=>v.searchable!=0)).forEach(it=>{
                     grouparr.push({
                         title: group==it?`““””<b><span style="color: #3399cc">`+it+`</span></b>`:it,
-                        url: $('#noLoading#').lazyRule((name,oldgroup,newgroup) => {
+                        url: $('#noLoading#').lazyRule((name,newgroup) => {
+                            let oldgroup = getMyVar("切源旧分组","");
                             updateItem("id_"+oldgroup, {
                                 title: oldgroup
                             })
@@ -73,7 +75,7 @@ function erjimenu(desc,name,sgroup) {
                             require(config.依赖);
                             erjisousuo(name, newgroup);
                             return 'toast://切源分组已切为：' + newgroup;
-                        }, name, group, it),
+                        }, name, it),
                         col_type: "scroll_button",
                         extra: {
                             id: "id_"+it,
