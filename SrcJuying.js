@@ -46,7 +46,7 @@ function search(name, sstype, jkdata) {
     }else if(sstype=='dianboerji'){
         ssdata = getSsData(name, jkdata, 1).map(it => {
             let extra = {
-                cls: "Juloadlist",
+                cls: "Juloadlist groupload",
                 url: it.vodurl,
                 pic: it.vodpic,
                 data: jkdata
@@ -110,28 +110,7 @@ function sousuo() {
 //二级切源搜索
 function erjisousuo(name,group) {
     showLoading("搜源中");
-    deleteItemByCls('Juloadlist');
-    let updateItemid = name + "_loading";
-    let datalist = getDatas('jk',1);
-    
-    let grouparr = [];
-    getJiekouGroups(datalist.filter(v=>v.searchable!=0)).forEach(it=>{
-        grouparr.push({
-            title: group==it?`““””<b><span style="color: #3399cc">`+it+`</span></b>`:it,
-            url: $('#noLoading#').lazyRule((group,input) => {
-                if(group==input){
-                    return "hiker://emtpy";
-                }else{
-                    putMyVar('SrcJu_二级切源分组', input);
-                    refreshPage(false);
-                    return 'toast://切源分组已切为：' + input;
-                }
-            }, group, it),
-            col_type: "scroll_button"
-        })
-    })
-    addItemBefore(updateItemid, grouparr);// 生成切源分组
-    
+    let updateItemid = group + "_" +name + "_loading";
     let searchMark = storage0.getMyVar('SrcJu_searchMark') || {};//二级换源缓存
     let markId = group+'_'+name;
     if(searchMark[markId]){
@@ -160,7 +139,7 @@ function erjisousuo(name,group) {
             title:"搜源中..."
         });
     }
-
+    let datalist = getDatas('jk',1);
     let ssdatalist = datalist.filter(it=>{
         return it.searchable!=0 && group==(it.group||it.type);
     });
