@@ -9,7 +9,7 @@ function Live() {
     }));
     var d = [];
     d.push({
-        title: '<b>聚影√</b> &nbsp &nbsp <small>⚙直播设置⚙</small>',
+        title: '⚙直播管理中心⚙',
         img: "hiker://files/cache/src/聚影.png" || "https://i.postimg.cc/9Q0rhbf0/image.png",
         url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLive.js');
@@ -574,7 +574,7 @@ function LiveSet() {
             addListener("onClose", $.toString(() => {
                 //refreshPage(false);
             }));
-            setPageTitle("⚙直播设置⚙");
+            //setPageTitle("⚙直播设置⚙");
             let livecfgfile = "hiker://files/rules/Src/Juying/liveconfig.json";
             let livecfg = fetch(livecfgfile);
             if(livecfg != ""){
@@ -640,7 +640,7 @@ function LiveSet() {
                     d.push({
                         title: (livedata[i].show!=0?getide(1):getide(0))+livedata[i].name,
                         desc: livedata[i].url,
-                        url: $(["复制链接","导入聚影√","更新缓存","导入聚直播","删除订阅",livedata[i].show!=0?"停用订阅":"启用订阅"],2,"").select((livecfgfile, url)=>{
+                        url: $(["复制链接","导入本地","更新缓存","导入聚直播","删除订阅",livedata[i].show!=0?"停用订阅":"启用订阅"],2,"").select((livecfgfile, url)=>{
                             try{
                                 if(input=="更新缓存"){
                                     showLoading('正在缓存，请稍后.');
@@ -699,7 +699,7 @@ function LiveSet() {
                                     }else{
                                         return "toast://仓库先导入聚直播小程序";
                                     }
-                                }else if(input=="导入聚影√"){
+                                }else if(input=="导入本地"){
                                     showLoading('叠加导入直播，最大万行限制');
                                     let YChtml = fetchCache(url,24,{timeout:3000}).replace(/TV-/g,'TV').replace(/\[.*\]/g,'');
                                     if(YChtml.indexOf('#genre#')>-1){
@@ -787,31 +787,183 @@ function LiveSet() {
         col_type: "text_2"
     });
     d.push({
-        title: '🎦 导入聚直播',
+        title: '🎦 TVBox订阅',
         col_type: 'text_2',
-        url: $('#noLoading#').lazyRule(() => {
-            let Julivefile = "hiker://files/rules/live/config.json";
-            let Julive = fetch(Julivefile);
-            if(Julive != ""){
-                try{
-                    eval("var Judata=" + Julive+ ";");
-                    let Judatalist = Judata['data']||[];
-                    let JYlivefile = "hiker://files/rules/Src/Juying/live.txt";
-                    if(!Judatalist.some(item => item.url==JYlivefile)){
-                        Judatalist.push({"name":"聚影√", "url":JYlivefile})
-                        Judata['data'] = Judatalist;
-                        writeFile(Julivefile, JSON.stringify(Judata));
-                        return "toast://导入聚直播订阅成功";
-                    }else{
-                        return "toast://已存在聚直播订阅";
-                    }
-                }catch(e){
-                    log("导入聚直播订阅失败>"+e.message);
-                    return "toast://导入聚直播订阅失败";
-                }
-            }else{
-                return "toast://仓库先导入聚直播小程序";
+        url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
+            addListener("onClose", $.toString(() => {
+                clearMyVar('importinput');
+            }));
+            let cfgfile = "hiker://files/data/聚影✓/config.json";
+            let Juconfig= {};
+            let Jucfg=fetch(cfgfile);
+            if(Jucfg != ""){
+                eval("Juconfig=" + Jucfg+ ";");
             }
+            let d = [];
+            d.push({
+                title:'本地',
+                col_type: 'input',
+                desc: '请输入链接地址',
+                url: $.toString(() => {
+                    return `fileSelect://`+$.toString(()=>{
+                        return "toast://"+input;
+                    })
+                }),
+                extra: {
+                    titleVisible: false,
+                    defaultValue: getMyVar('importinput', ''),
+                    onChange: 'putMyVar("importinput",input)'
+                }
+            });
+            d.push({
+                title: '本地文件',
+                col_type: 'text_2',
+                url: $.toString(() => {
+                    return `fileSelect://`+$.toString(()=>{
+                        putMyVar("importinput",input);
+                        refreshPage();
+                        return "toast://"+input;
+                    })
+                })
+            })
+            d.push({
+                title: '确定导入',
+                col_type: 'text_2',
+                url: $().lazyRule((Juconfig,cfgfile) => {
+                    let input = getMyVar('importinput', '');
+                    if(input == ""){
+                        return 'toast://请先输入链接地址'
+                    }
+
+                    let importrecord = Juconfig['importrecord']||[];
+                    if(importrecord.length>20){//保留20个记录
+                        importrecord.shift();
+                    }
+                    if(!importrecord.some(item => item.url==input && item.type=='1')){
+                        importrecord.push({type:'1',url:input});
+                        Juconfig['importrecord'] = importrecord;
+                        writeFile(cfgfile, JSON.stringify(Juconfig));
+                    }
+
+                    let data;
+                    try{
+                        showLoading('检测文件有效性');
+                        if(/\/storage\/emulated\//.test(input)){input = "file://" + input}
+                        let html = request(input,{timeout:2000});
+                        if(html.includes('LuUPraez**')){
+                            html = base64Decode(html.split('LuUPraez**')[1]);
+                        }
+                        eval('data = ' + html)                     
+                    } catch (e) {
+                        hideLoading();
+                        log('TVBox文件检测失败>'+e.message); 
+                        return "toast://TVBox导入失败：链接文件无效或内容有错";
+                    }
+                    hideLoading();
+                    let lives = data.lives || [];
+                    if(lives.length>0){
+                        showLoading('正在导入');
+                        try{
+                            let urls = [];
+                            for (let i=0;i<lives.length;i++) {
+                                if(lives[i].channels){
+                                    let channels = lives[i].channels;
+                                    if(channels.length>0){
+                                        for (let j=0;j<channels.length;j++) {
+                                            let live = channels[i].urls;
+                                            for (let k=0;k<live.length;k++) {
+                                                let url = live[i].replace('proxy://do=live&type=txt&ext=','');
+                                                if(!/^http/.test(url)){
+                                                    url = base64Decode(url);
+                                                }
+                                                urls.push({name:url.substr(url.lastIndexOf('/') + 1).split('.')[0], url:url});
+                                            }
+                                        }
+                                    }
+                                }else if(lives[i].url){
+                                    let url = lives[i].url;
+                                    if(/^\./.test(url)){
+                                        url = input.match(/http(s)?:\/\/.*\//)[0] + url.replace("./","");
+                                    }
+                                    urls.push({name:lives[i].name||url.substr(url.lastIndexOf('/') + 1).split('.')[0], url:url});
+                                }
+                            }
+                            if(urls.length>0){
+                                livenum = 0;
+                                let livecfgfile = "hiker://files/data/聚影✓/liveconfig.json";
+                                let livecfg = fetch(livecfgfile);
+                                if(livecfg != ""){
+                                    eval("var liveconfig = " + livecfg);
+                                }else{
+                                    var liveconfig = {};
+                                }
+                                let livedata = liveconfig['data']||[];
+                                for(let i=0;i<urls.length;i++){
+                                    if(!livedata.some(item => item.url==urls[i].url)){
+                                        let YChtml = request(urls[i].url,{timeout:5000}).replace(/TV-/g,'TV');
+                                        if(YChtml.indexOf('#genre#')>-1){
+                                            livedata.push(urls[i]);
+                                            livenum++;
+                                        }
+                                    }
+                                }
+                                if(livenum>0){
+                                    liveconfig['data'] = livedata;
+                                    writeFile(livecfgfile, JSON.stringify(liveconfig));
+                                }
+                                return 'toast://成功订阅：'+livenum;     
+                            }
+                        } catch (e) {
+                            log('TVBox导入live保存失败>'+e.message);
+                        }
+                    }
+                    return 'toast://失败';     
+                },Juconfig,cfgfile)
+            })
+
+            d.push({
+                title: '🆖 历史记录',
+                col_type: "rich_text"
+            });
+            let importrecord = Juconfig['importrecord']||[];
+            let lists = importrecord.filter(item => {
+                return item.type=='1';
+            })
+            if(lists.length>0){
+                d.push({
+                    title: '点击下方的历史条目，进行操作👇',
+                    col_type: "rich_text"
+                });
+                d.push({
+                    col_type: "line"
+                });
+                lists.reverse();
+                for(let i=0;i<lists.length;i++){
+                    d.push({
+                        title: lists[i].url,
+                        url: $(["选择","删除"],1,"").select((Juconfig, cfgfile, url)=>{
+                                if(input=="选择"){
+                                    putMyVar('importinput', url);
+                                    back(true);
+                                }else if(input=="删除"){
+                                    let importrecord = Juconfig['importrecord']||[];
+                                    for(let i=0;i<importrecord.length;i++){
+                                        if(importrecord[i].url==url&&importrecord[i].type==getMyVar('importtype','1')){
+                                            importrecord.splice(i,1);
+                                            break;
+                                        }
+                                    }
+                                    Juconfig['importrecord'] = importrecord; 
+                                    writeFile(cfgfile, JSON.stringify(Juconfig));
+                                    refreshPage(false);
+                                }
+                                return "hiker://empty";
+                            }, Juconfig, cfgfile, lists[i].url),
+                        col_type: "text_1"
+                    });
+                }
+            }
+            setResult(d);
         })
     });
     d.push({
