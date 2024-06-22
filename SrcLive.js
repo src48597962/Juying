@@ -915,12 +915,14 @@ function LiveSet() {
                                     liveconfig['data'] = livedata;
                                     writeFile(livecfgfile, JSON.stringify(liveconfig));
                                 }
+                                hideLoading();
                                 return 'toast://成功订阅：'+livenum;     
                             }
                         } catch (e) {
                             log('TVBox导入live保存失败>'+e.message);
                         }
                     }
+                    hideLoading();
                     return 'toast://失败';     
                 },Juconfig,cfgfile)
             })
