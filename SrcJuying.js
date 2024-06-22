@@ -45,20 +45,23 @@ function search(name, sstype, jkdata) {
         })
     }else if(sstype=='dianboerji'){
         ssdata = getSsData(name, jkdata, 1).map(it => {
+            let extra = {
+                cls: "Juloadlist",
+                url: it.vodurl,
+                pic: it.vodpic,
+                data: jkdata
+            }
             return {
                 title: jkdata.name,
                 desc: it.voddesc,
                 pic_url: it.vodpic,
-                url: $("hiker://empty#immersiveTheme##autoCache#").rule(() => {
-                    require(config.依赖);
-                    dianboerji()
-                }),
+                url: "hiker://empty##"+ it.vodurl + $("#noLoading#").b64().lazyRule((extra) => {
+                    storage0.putMyVar('二级附加临时对象', extra);
+                    refreshPage(false);
+                    return "toast://已切换源：" + extra.data.name;
+                }, extra),
                 col_type: 'avatar',
-                extra: {
-                    cls: "Juloadlist",
-                    url: it.vodurl,
-                    data: jkdata
-                }
+                extra: extra
             }
         })
     }
@@ -203,6 +206,7 @@ function erjisousuo(name,sgroup) {
 // 点播二级
 function dianboerji() {
     addListener("onClose", $.toString((getHistory) => {
+        clearMyVar('二级附加临时对象');
         if(getItem('historyEnable')=='1'){
             deleteItemByCls('historylist');
             let h = getHistory();
@@ -210,11 +214,12 @@ function dianboerji() {
         }
     },getHistory));
     let d = [];
-    let jkdata = MY_PARAMS.data;
+    let sextra = storage0.getMyVar('二级附加临时对象') || {};//二级换源时临时extra数据
+    let jkdata = sextra.data || MY_PARAMS.data;
     let name = MY_PARAMS.pageTitle;
     let sgroup = jkdata.group||jkdata.type;
     let sname = jkdata.name;
-    MY_URL = MY_PARAMS.url;
+    MY_URL = sextra.url || MY_PARAMS.url;
 
     let detailsmark;
     let cacheDataFile = globalMap0.getMyVar('gmParams').cachepath + "Details.json";
@@ -239,8 +244,10 @@ function dianboerji() {
     //log(erdata);
     let details1 = erdata.details1;
     let details2 = erdata.details2;
-    let pic = erdata.pic||MY_PARAMS.pic;
-
+    let pic = erdata.pic || sextra.pic || MY_PARAMS.pic;
+    if(pic && pic!=MY_PARAMS.pic && !/^hiker/.test(pic)){
+        setPagePicUrl(pic);
+    }
     //海报
     d.push({
         title: details1,//详情1
@@ -303,7 +310,10 @@ function dianboerji() {
             refreshPage(false);
             return 'toast://切换排序成功'
         }),
-        col_type: 'scroll_button'
+        col_type: 'scroll_button',
+        extra: {
+            cls: "Juloadlist"
+        }
     })
     erdata.tabs.forEach((it,i)=>{
         if(it){
@@ -334,7 +344,10 @@ function dianboerji() {
                     }
                     return '#noHistory#hiker://empty'
                 }, MY_URL, lineid, i, Marksum),
-                col_type: 'scroll_button'
+                col_type: 'scroll_button',
+                extra: {
+                    cls: "Juloadlist"
+                }
             })
         }
     })
@@ -452,7 +465,10 @@ function dianboerji() {
         d.push({
             title: '当前无播放选集，点更多片源试试！',
             url: '#noHistory#hiker://empty',
-            col_type: 'text_center_1'
+            col_type: 'text_center_1',
+            extra: {
+                cls: "Juloadlist"
+            }
         });
     }else{
         let flag = erdata.flags.length>0?erdata.flags[lineid]:"";
@@ -509,6 +525,15 @@ function dianboerji() {
         }
     });
     setResult(d);
+    if(列表.length>0 && sextra.url && sextra.url!=MY_PARAMS.url){
+        let erjiextra = {
+            url: sextra.url,
+            pic: pic,
+            pageTitle: name,
+            data: jkdata
+        }
+        setPageParams(erjiextra);
+    }
 }
 
 //点播一级
