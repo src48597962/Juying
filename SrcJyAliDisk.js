@@ -1105,26 +1105,26 @@ function myDiskSearch(input) {
 function yunDiskSearch(name) {
     showLoading('搜源中，请稍后...');
     let updateItemid = "云盘_" + name + "_loading";
-    let searchMark = storage0.getMyVar('diskMark') || {};//二级换源缓存
-    if(searchMark[name]){
-        addItemBefore(updateItemid, searchMark[name]);
+    let diskMark = storage0.getMyVar('diskMark') || {};//二级换源缓存
+    if(diskMark[name]){
+        addItemBefore(updateItemid, diskMark[name]);
         updateItem(updateItemid, {
             title: "‘‘’’<small>当前搜索为缓存</small>",
             url: $("确定删除“"+name+"”搜索缓存吗？").confirm((name)=>{
-                let searchMark = storage0.getMyVar('diskMark') || {};
-                delete searchMark[name];
-                storage0.putMyVar('diskMark', searchMark);
+                let diskMark = storage0.getMyVar('diskMark') || {};
+                delete diskMark[name];
+                storage0.putMyVar('diskMark', diskMark);
                 refreshPage(true);
                 return "toast://已清除";
             },name)
         });
         let i = 0;
         let one = "";
-        for (var k in searchMark) {
+        for (var k in diskMark) {
             i++;
             if (i == 1) { one = k }
         }
-        if (i > 30) { delete searchMark[one]; }
+        if (i > 30) { delete diskMark[one]; }
         hideLoading();
         return "hiker://empty";
     }else{
@@ -1245,9 +1245,11 @@ function yunDiskSearch(name) {
             param: {
             }
         });
-        storage0.putMyVar('diskMark', diskMark);
-        hideLoading();
+        if (getMyVar("SrcJu_停止搜索线程") != "1") {
+            storage0.putMyVar('diskMark', diskMark);
+        }
         clearMyVar("SrcJu_停止搜索线程");
+        hideLoading();
         let sousuosm = "‘‘’’<small><font color=#f13b66a>" + success + "</font>/" + list.length + "，搜索完成</small>";
         updateItem(updateItemid, { title: sousuosm });
     } else {
