@@ -1103,7 +1103,7 @@ function myDiskSearch(input) {
 
 // 聚影二级切源
 function yunDiskSearch(name) {
-    showLoading('搜源中，请稍后...');
+    //showLoading('搜源中，请稍后...');
     let updateItemid = "云盘_" + name + "_loading";
     let diskMark = storage0.getMyVar('diskMark') || {};//二级换源缓存
     if(diskMark[name]){
@@ -1215,6 +1215,7 @@ function yunDiskSearch(name) {
             return {result:[], success:0};
         }
     }
+    log(ssdatalist.length);
     let list = ssdatalist.map((item) => {
         return {
             func: task,
@@ -1230,6 +1231,7 @@ function yunDiskSearch(name) {
                     return "break";
                 }else if(taskResult.success==1){
                     let data = taskResult.result;
+                    log(data);
                     if(data.length>0){
                         success++;
                         diskMark[name] = diskMark[name] || [];
