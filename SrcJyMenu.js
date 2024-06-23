@@ -56,8 +56,9 @@ function erjimenu(desc,name,sgroup) {
                 putMyVar("切源旧分组", group);
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                 let datalist = getDatas('jk',1);
+                let groups = getJiekouGroups(datalist.filter(v=>v.searchable!=0)).concat(['云盘']);
                 let grouparr = [];
-                getJiekouGroups(datalist.filter(v=>v.searchable!=0)).forEach(it=>{
+                groups.forEach(it=>{
                     grouparr.push({
                         title: group==it?`““””<b><span style="color: #3399cc">`+it+`</span></b>`:it,
                         url: $('#noLoading#').lazyRule((name,newgroup) => {
