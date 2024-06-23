@@ -1460,8 +1460,6 @@ function JuErjiAliShare(share_id, folder_id, share_pwd) {
                                 extra: {
                                     cls: "Juloadlist groupload",
                                     pageTitle: item.name,
-                                    name: my_params.name || "",
-                                    back: 1,
                                     dirid: share_id + '_' + folder_id + '_' + share_pwd,
                                     longClick: [{
                                         title: "💾转存",
@@ -1554,7 +1552,7 @@ function JuErjiAliShare(share_id, folder_id, share_pwd) {
             }
         }
     } catch (e) {
-        errorStr = e.message;
+        errorStr = "异常报错>" + e.message + " 错误行#" + e.lineNumber;
     }
     return {
         errorStr: errorStr,
