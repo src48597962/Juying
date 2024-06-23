@@ -215,6 +215,7 @@ function dianboerji() {
     },getHistory));
     let d = [];
     let sextra = storage0.getMyVar('二级附加临时对象') || {};//二级换源时临时extra数据
+    log(sextra);
     let jkdata = sextra.data || MY_PARAMS.data;
     let name = MY_PARAMS.pageTitle;
     let sgroup = jkdata.group||jkdata.type;
