@@ -52,8 +52,8 @@ function search(name, sstype, jkdata) {
                 data: jkdata
             }
             return {
-                title: jkdata.name,
-                desc: it.voddesc,
+                title: it.voddesc||"正片",
+                desc: jkdata.name,
                 pic_url: it.vodpic,
                 url: "hiker://empty##"+ it.vodurl + $("#noLoading#").b64().lazyRule((extra) => {
                     storage0.putMyVar('二级附加临时对象', extra);
@@ -236,8 +236,12 @@ function dianboerji() {
     if(detailsmark){
         erdata = detailsmark;
     }else{
-        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
-        erdata = getErData(jkdata);
+        if(jkdata.type=="yundisk"){
+            
+        }else{
+            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
+            erdata = getErData(jkdata);
+        }
         let markData = {surl: jkdata.url, url: MY_URL, data: erdata}
         writeFile(cacheDataFile, JSON.stringify(markData));
     }
