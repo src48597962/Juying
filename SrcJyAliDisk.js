@@ -20,7 +20,7 @@ let ordersKeys = Object.keys(orders);
 let orderskey = orders[getItem('aliyun_order', '聚影排序')];
 let style = getItem('aliyun_style', 'avatar');
 
-function aliShareUrl(input) {
+function aliShareUrl(input,jyerji) {
     let li = input.split('\n');
     let share_id;
     let folder_id;
@@ -36,12 +36,15 @@ function aliShareUrl(input) {
             folder_id = it.indexOf('/folder/') > -1 ? it.split('/folder/')[1] : "root";
         }
     })
-
-    if (share_id) {
-        aliShare(share_id, folder_id, share_pwd);
-    } else {
-        back(false);
-        toast("链接地址不正确");
+    if(jyerji && share_id){
+        JuErjiAliShare(share_id, folder_id, share_pwd)
+    }else{
+        if (share_id) {
+            aliShare(share_id, folder_id, share_pwd);
+        } else {
+            back(false);
+            toast("链接地址不正确");
+        }
     }
 }
 
@@ -1102,7 +1105,7 @@ function myDiskSearch(input) {
 }
 
 // 聚影二级切源
-function JYerjiSousuo(name) {
+function JuErjiSousuo(name) {
     //showLoading('搜源中，请稍后...');
     let updateItemid = "云盘_" + name + "_loading";
     let diskMark = storage0.getMyVar('diskMark') || {};//二级换源缓存
@@ -1260,22 +1263,8 @@ function JYerjiSousuo(name) {
     }
 }
 
-function JYerjiAliShare(share_id, folder_id, share_pwd) {
-    let my_params = {};
-    if($.type(MY_PARAMS)!='undefined'){
-        my_params = MY_PARAMS;
-    }
-    addListener("onClose", $.toString((isback) => {
-        if (getMyVar('聚影云盘自动返回') && isback == 1) {
-            back(false);
-        }
-        clearMyVar('云盘共享链接页面标题');
-    }, my_params.back || 0));
-    clearMyVar('聚影云盘自动返回');
-
+function JuErjiAliShare(share_id, folder_id, share_pwd) {
     let d = [];
-    let filterFiles = [];
-    
     try {
         if (!userinfo.refresh_token) {
             d = d.concat(myDiskMenu(0));
@@ -1286,50 +1275,12 @@ function JYerjiAliShare(share_id, folder_id, share_pwd) {
             let getbyshare = {};
 
             d.push({
-                title: "换源",
-                url: $().lazyRule((name, isback) => {
-                    if (isback > 0) {
-                        putMyVar('聚影云盘自动返回', '1');
-                        back(false);
-                        return 'hiker://empty';
-                    } else if (name) {
-                        return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
-                            let d = [];
-                            d.push({
-                                title: name + "-云盘聚合搜索",
-                                url: "hiker://empty",
-                                col_type: "text_center_1",
-                                extra: {
-                                    id: "listloading",
-                                    lineVisible: false
-                                }
-                            })
-                            setResult(d);
-                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js');
-                            aliDiskSearch(name);
-                        }, name)
-                    } else {
-                        return 'hiker://empty';
-                    }
-                }, my_params.name || "", my_params.back || 0),
+                title: "主页",
+                url: $().lazyRule(() => {
+                    return 'hiker://empty';
+                }),
                 col_type: 'icon_5',
-                img: 'https://hikerfans.com/tubiao/grey/175.png',
-                extra: {
-                    longClick: [{
-                        title: "上级目录",
-                        js: $.toString((id) => {
-                            if (!id) {
-                                return "toast://已经是根目录了";
-                            } else {
-                                let ids = id.split;
-                                return $("").rule((ids) => {
-                                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js');
-                                    aliShare(ids[0], ids[1], ids[2]);
-                                }, ids);
-                            }
-                        }, my_params.dirid || "")
-                    }]
-                }
+                img: 'https://hikerfans.com/tubiao/grey/175.png'
             },
             {
                 title: "样式",
@@ -1456,7 +1407,6 @@ function JYerjiAliShare(share_id, folder_id, share_pwd) {
                 return item.type == "file" || (item.type == "folder" && !folderFilter.test(item.name));
             })
             if (sharelist.length == 1 && sharelist[0].type == "folder") {
-                putMyVar('云盘共享链接页面标题', sharelist[0].name);
                 java.lang.Thread.sleep(1000);
                 aliShare(share_id, sharelist[0].file_id, share_pwd);
             } else if (sharelist.length > 0) {
@@ -1561,34 +1511,6 @@ function JYerjiAliShare(share_id, folder_id, share_pwd) {
                             }
                         }, item.share_id, item.file_id, sub_file_id || "", share_pwd);
                         d.push(it);
-                    } else {
-                        it.url = $("").lazyRule((category, file_id, sharedata) => {
-                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliPublic.js');
-                            let file_url = aliOpenPlayUrl(file_id, sharedata);
-                            if (category == "audio") {
-                                return file_url + ";{Referer@https://www.aliyundrive.com/}#isMusic=true#";
-                            } else if (category == "image") {
-                                return file_url + "#.jpg@Referer=https://www.aliyundrive.com/";
-                            } else {
-                                return "download://" + file_url + ";{Referer@https://www.aliyundrive.com/}";
-                            }
-                        }, item.category, item.file_id, { sharetoken: sharetoken, share_id: item.share_id });
-                        filterFiles.push(it);
-                    }
-                })
-                d.push({
-                    title: "““””<small><font color=#f20c00>已开启文件过滤，仅显示视频文件</font></small>",
-                    url: filterFiles.length == 0 ? "hiker://empty" : $("").lazyRule((filterFiles, folder_id) => {
-                        addItemAfter("sharelist_" + folder_id, filterFiles);
-                        updateItem("sharelist_" + folder_id, {
-                            url: "hiker://empty",
-                            title: "““””<small><font color=#f20c00>已显示全部文件</font></small>" 
-                        });
-                        return "toast://已加载全部文件";
-                    }, filterFiles, folder_id),
-                    col_type: "text_center_1",
-                    extra: {
-                        id: "sharelist_" + folder_id
                     }
                 })
             } else {
@@ -1604,11 +1526,7 @@ function JYerjiAliShare(share_id, folder_id, share_pwd) {
         })
         toast('该分享已失效或异常，可刷新确认下');
     }
-    setResult(d);
-    if(typeof (MY_PARAMS) == "undefined" || !MY_PARAMS.pageTitle){
-        setPageTitle(getMyVar('云盘共享链接页面标题', '云盘共享文件') + ' | 聚影√');
-    }
-    setLastChapterRule('js:' + $.toString(() => {
-        setResult('');
-    }))
+    return {
+        "lists": d
+    };
 }
