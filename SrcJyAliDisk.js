@@ -20,7 +20,7 @@ let ordersKeys = Object.keys(orders);
 let orderskey = orders[getItem('aliyun_order', '聚影排序')];
 let style = getItem('aliyun_style', 'avatar');
 
-function aliShareUrl(input,jyerji) {
+function aliShareUrl(input,jkdata) {
     let li = input.split('\n');
     let share_id;
     let folder_id;
@@ -36,7 +36,7 @@ function aliShareUrl(input,jyerji) {
             folder_id = it.indexOf('/folder/') > -1 ? it.split('/folder/')[1] : "root";
         }
     })
-    if(jyerji && share_id){
+    if(jkdata && share_id){
         let html = request("https://api.aliyundrive.com/adrive/v3/share_link/get_share_by_anonymous",{
             headers: {
                 referer: "https://www.aliyundrive.com/"
@@ -51,10 +51,20 @@ function aliShareUrl(input,jyerji) {
         if(files.length==0){
             return "toast://分享链接已失效";
         }else{
-            return "toast://"+files.length;
+            let data = JuErjiAliShare(share_id, folder_id, share_pwd);
+            if(data.errorStr){
+                return "toast://" + data.errorStr;
+            }else{
+                deleteItemByCls('Juloadlist');
+                let menus = data.menus
+                let d = menus.concat(data.lists);
+                addItemBefore(jkdata.updateItemid, d);// 生成切源分组
+                updateItem(jkdata.updateItemid, {
+                    title: ""
+                })
+                return "toast://已切换源：" + jkdata.name;
+            }
         }
-
-        return JuErjiAliShare(share_id, folder_id, share_pwd);
     }else{
         if (share_id) {
             aliShare(share_id, folder_id, share_pwd);
@@ -1220,11 +1230,11 @@ function JuErjiSousuo(name) {
                         if (/www\.aliyundrive\.com|www\.alipan\.com/.test(surl)) {
                             let extra = {
                                 url: surl,
-                                data: {name: obj.name, type: "yundisk", group: "云盘", url: obj.name}
+                                data: {name: obj.name, type: "yundisk", group: "云盘", url: obj.name, updateItemid: "云盘_" +name + "_loading"}
                             }
-                            arr.url = $("#noLoading#").lazyRule((extra) => {
+                            arr.url = $().lazyRule((extra) => {
                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
-                                return aliShareUrl(extra.url, 1);
+                                return aliShareUrl(extra.url, extra.data);
                             }, extra),
                             searchlist.push(arr);
                         }
@@ -1283,6 +1293,8 @@ function JuErjiSousuo(name) {
 
 function JuErjiAliShare(share_id, folder_id, share_pwd) {
     let d = [];
+    let menus = [];
+    let errorStr;
     try {
         if (!userinfo.refresh_token) {
             d = d.concat(myDiskMenu(0));
@@ -1292,7 +1304,7 @@ function JuErjiAliShare(share_id, folder_id, share_pwd) {
             let sharetoken = get_sharetoken.share_token;
             let getbyshare = {};
 
-            d.push({
+            menus.push({
                 title: "刷新",
                 url: $().lazyRule(() => {
                     return 'hiker://empty';
@@ -1413,153 +1425,140 @@ function JuErjiAliShare(share_id, folder_id, share_pwd) {
             })
 
             if (errorCode[get_sharetoken.code]) {
-                d.push({
-                    title: errorCode[get_sharetoken.code],
-                    url: 'hiker://empty',
-                    col_type: "text_center_1"
-                })
-                setResult(d);
+                errorStr = errorCode[get_sharetoken.code];
             } else {
                 let postdata = { "share_id": share_id, "parent_file_id": folder_id || "root", "limit": 200, "image_thumbnail_process": "image/resize,w_256/format,jpeg", "image_url_process": "image/resize,w_1920/format,jpeg/interlace,1", "video_thumbnail_process": "video/snapshot,t_1000,f_jpg,ar_auto,w_256", "order_by": orderskey.split('#')[0], "order_direction": orderskey.split('#')[1] };
                 headers['x-share-token'] = sharetoken;
                 getbyshare = JSON.parse(request('https://api.aliyundrive.com/adrive/v2/file/list_by_share', { headers: headers, body: postdata, method: 'POST' }));
                 
                 if (errorCode[getbyshare.code]) {
-                    d.push({
-                        title: errorCode[getbyshare.code],
-                        url: 'hiker://empty',
-                        col_type: "text_center_1"
+                    errorStr = errorCode[getbyshare.code];
+                }else{
+                    let sharelist = getbyshare.items || [];
+                    sharelist = sharelist.filter(item => {
+                        return item.type == "file" || (item.type == "folder" && !folderFilter.test(item.name));
                     })
-                    setResult(d);
-                }
-            }
-            let sharelist = getbyshare.items || [];
-            sharelist = sharelist.filter(item => {
-                return item.type == "file" || (item.type == "folder" && !folderFilter.test(item.name));
-            })
-            if (sharelist.length == 1 && sharelist[0].type == "folder") {
-                java.lang.Thread.sleep(1000);
-                aliShare(share_id, sharelist[0].file_id, share_pwd);
-            } else if (sharelist.length > 0) {
-                let sublist = sharelist.filter(item => {
-                    return item.type == "file" && /srt|vtt|ass/.test(item.file_extension);
-                })
-                let dirlist = sharelist.filter((item) => {
-                    return item.type == "folder";
-                })
-                dirlist.forEach((item) => {
-                    d.push({
-                        title: item.name,
-                        img: "hiker://files/cache/src/文件夹.svg",
-                        url: $("hiker://empty##https://www.aliyundrive.com/s/" + item.share_id + (item.file_id ? "/folder/" + item.file_id : "")).rule((share_id, folder_id, share_pwd) => {
-                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js');
-                            aliShare(share_id, folder_id, share_pwd);
-                        }, item.share_id, item.file_id, share_pwd),
-                        col_type: style,
-                        extra: {
-                            cls: "Juloadlist groupload",
-                            pageTitle: item.name,
-                            name: my_params.name || "",
-                            back: 1,
-                            dirid: share_id + '_' + folder_id + '_' + share_pwd,
-                            longClick: [{
-                                title: "💾转存",
-                                js: $.toString((obj) => {
-                                    storage0.putMyVar('copydate', obj);
-                                    return $("hiker://empty").rule(() => {
-                                        addListener("onClose", $.toString(() => {
-                                            clearMyVar('copydate');
-                                        }));
-                                        
-                                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js');
-                                        aliMyDisk('', 0, '');
-                                    })
-                                },{sharetoken:sharetoken,share_id:share_id,authorization:authorization,file_id:item.file_id})
-                            }]
-                        }
-                    })
-                })
-                let filelist = sharelist.filter((item) => {
-                    return item.type == "file";
-                })
-                if (getItem('aliyun_order', '聚影排序') == "聚影排序") {
-                    filelist.sort(SortList);
-                }
-                
-                filelist.forEach((item) => {
-                    let filesize = item.size / 1024 / 1024;
-                    let it = {
-                        title: item.name,
-                        img: item.thumbnail || (item.category == "video" ? "hiker://files/cache/src/影片.svg" : item.category == "audio" ? "hiker://files/cache/src/音乐.svg" : item.category == "image" ? "hiker://files/cache/src/图片.png" : "https://img.alicdn.com/imgextra/i1/O1CN01mhaPJ21R0UC8s9oik_!!6000000002049-2-tps-80-80.png"),
-                        desc: filesize < 1024 ? filesize.toFixed(2) + 'MB' : (filesize / 1024).toFixed(2) + 'GB',
-                        col_type: style,
-                        extra: {
-                            id: item.file_id,
-                            cls: "Juloadlist groupload",
-                            longClick: [{
-                                title: "💾转存",
-                                js: $.toString((obj) => {
-                                    storage0.putMyVar('copydate', obj);
-                                    return $("hiker://empty").rule(() => {
-                                        addListener("onClose", $.toString(() => {
-                                            clearMyVar('copydate');
-                                        }));
-                                        
-                                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js');
-                                        aliMyDisk('', 0, '');
-                                    })
-                                },{sharetoken:sharetoken,share_id:share_id,authorization:authorization,file_id:item.file_id})
-                            }]
-                        }
-                    }
-                    if (item.category == "video") {
-                        let sub_file_id;
-                        if (sublist.length == 1) {
-                            sub_file_id = sublist[0].file_id;
-                        } else if (sublist.length > 1) {
-                            sublist.forEach(it => {
-                                let subnmae = it.name.substring(0, it.name.lastIndexOf(".")).replace(/\.chs|\.eng/g, '');
-                                if (item.name.includes(subnmae)) {
-                                    sub_file_id = it.file_id;
+                        if (sharelist.length == 1 && sharelist[0].type == "folder") {
+                        java.lang.Thread.sleep(1000);
+                        aliShare(share_id, sharelist[0].file_id, share_pwd);
+                    } else if (sharelist.length > 0) {
+                        let sublist = sharelist.filter(item => {
+                            return item.type == "file" && /srt|vtt|ass/.test(item.file_extension);
+                        })
+                        let dirlist = sharelist.filter((item) => {
+                            return item.type == "folder";
+                        })
+                        dirlist.forEach((item) => {
+                            d.push({
+                                title: item.name,
+                                img: "hiker://files/cache/src/文件夹.svg",
+                                url: $("hiker://empty##https://www.aliyundrive.com/s/" + item.share_id + (item.file_id ? "/folder/" + item.file_id : "")).rule((share_id, folder_id, share_pwd) => {
+                                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js');
+                                    aliShare(share_id, folder_id, share_pwd);
+                                }, item.share_id, item.file_id, share_pwd),
+                                col_type: style,
+                                extra: {
+                                    cls: "Juloadlist groupload",
+                                    pageTitle: item.name,
+                                    name: my_params.name || "",
+                                    back: 1,
+                                    dirid: share_id + '_' + folder_id + '_' + share_pwd,
+                                    longClick: [{
+                                        title: "💾转存",
+                                        js: $.toString((obj) => {
+                                            storage0.putMyVar('copydate', obj);
+                                            return $("hiker://empty").rule(() => {
+                                                addListener("onClose", $.toString(() => {
+                                                    clearMyVar('copydate');
+                                                }));
+                                                
+                                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js');
+                                                aliMyDisk('', 0, '');
+                                            })
+                                        },{sharetoken:sharetoken,share_id:share_id,authorization:authorization,file_id:item.file_id})
+                                    }]
                                 }
                             })
-                            if (!sub_file_id) {
-                                sub_file_id = sublist[0].file_id;
-                            }
+                        })
+                        let filelist = sharelist.filter((item) => {
+                            return item.type == "file";
+                        })
+                        if (getItem('aliyun_order', '聚影排序') == "聚影排序") {
+                            filelist.sort(SortList);
                         }
-                        it.url = $("").lazyRule((share_id, file_id, sub_file_id, share_pwd) => {
-                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliPublic.js');
-                            let play = getAliUrl(share_id, file_id, share_pwd);
-                            if (play.urls && play.urls.length > 0) {
-                                let subtitle;
-                                if (sub_file_id) {
-                                    subtitle = getSubtitle(share_id, sub_file_id, share_pwd);
-                                    if (subtitle) {
-                                        play['subtitle'] = subtitle;
+                        
+                        filelist.forEach((item) => {
+                            let filesize = item.size / 1024 / 1024;
+                            let it = {
+                                title: item.name,
+                                img: item.thumbnail || (item.category == "video" ? "hiker://files/cache/src/影片.svg" : item.category == "audio" ? "hiker://files/cache/src/音乐.svg" : item.category == "image" ? "hiker://files/cache/src/图片.png" : "https://img.alicdn.com/imgextra/i1/O1CN01mhaPJ21R0UC8s9oik_!!6000000002049-2-tps-80-80.png"),
+                                desc: filesize < 1024 ? filesize.toFixed(2) + 'MB' : (filesize / 1024).toFixed(2) + 'GB',
+                                col_type: style,
+                                extra: {
+                                    id: item.file_id,
+                                    cls: "Juloadlist groupload",
+                                    longClick: [{
+                                        title: "💾转存",
+                                        js: $.toString((obj) => {
+                                            storage0.putMyVar('copydate', obj);
+                                            return $("hiker://empty").rule(() => {
+                                                addListener("onClose", $.toString(() => {
+                                                    clearMyVar('copydate');
+                                                }));
+                                                
+                                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js');
+                                                aliMyDisk('', 0, '');
+                                            })
+                                        },{sharetoken:sharetoken,share_id:share_id,authorization:authorization,file_id:item.file_id})
+                                    }]
+                                }
+                            }
+                            if (item.category == "video") {
+                                let sub_file_id;
+                                if (sublist.length == 1) {
+                                    sub_file_id = sublist[0].file_id;
+                                } else if (sublist.length > 1) {
+                                    sublist.forEach(it => {
+                                        let subnmae = it.name.substring(0, it.name.lastIndexOf(".")).replace(/\.chs|\.eng/g, '');
+                                        if (item.name.includes(subnmae)) {
+                                            sub_file_id = it.file_id;
+                                        }
+                                    })
+                                    if (!sub_file_id) {
+                                        sub_file_id = sublist[0].file_id;
                                     }
                                 }
-                                return JSON.stringify(play);
-                            } else {
-                                return "toast://获取播放列表失败，看日志有无异常或token无效";
+                                it.url = $("").lazyRule((share_id, file_id, sub_file_id, share_pwd) => {
+                                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliPublic.js');
+                                    let play = getAliUrl(share_id, file_id, share_pwd);
+                                    if (play.urls && play.urls.length > 0) {
+                                        let subtitle;
+                                        if (sub_file_id) {
+                                            subtitle = getSubtitle(share_id, sub_file_id, share_pwd);
+                                            if (subtitle) {
+                                                play['subtitle'] = subtitle;
+                                            }
+                                        }
+                                        return JSON.stringify(play);
+                                    } else {
+                                        return "toast://获取播放列表失败，看日志有无异常或token无效";
+                                    }
+                                }, item.share_id, item.file_id, sub_file_id || "", share_pwd);
+                                d.push(it);
                             }
-                        }, item.share_id, item.file_id, sub_file_id || "", share_pwd);
-                        d.push(it);
+                        })
+                    } else {
+                        errorStr = '列表为空';
                     }
-                })
-            } else {
-                toast('列表为空');
+                }
             }
         }
     } catch (e) {
-        log('获取共享文件列表失败>' + e.message);
-        d.push({
-            title: '该分享已失效或异常',
-            url: 'hiker://empty',
-            col_type: "text_center_1"
-        })
-        toast('该分享已失效或异常，可刷新确认下');
+        errorStr = e.message;
     }
     return {
-        "lists": d
+        errorStr: errorStr,
+        menus: menus,
+        lists: d
     };
 }
