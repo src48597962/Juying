@@ -1275,12 +1275,15 @@ function JuErjiAliShare(share_id, folder_id, share_pwd) {
             let getbyshare = {};
 
             d.push({
-                title: "主页",
+                title: "刷新",
                 url: $().lazyRule(() => {
                     return 'hiker://empty';
                 }),
                 col_type: 'icon_5',
-                img: 'https://hikerfans.com/tubiao/grey/175.png'
+                img: 'https://hikerfans.com/tubiao/grey/175.png',
+                extra: {
+                    cls: "Juloadlist"
+                }
             },
             {
                 title: "样式",
@@ -1290,7 +1293,10 @@ function JuErjiAliShare(share_id, folder_id, share_pwd) {
                     return 'toast://已切换';
                 }),
                 col_type: 'icon_5',
-                img: 'https://hikerfans.com/tubiao/grey/168.png'
+                img: 'https://hikerfans.com/tubiao/grey/168.png',
+                extra: {
+                    cls: "Juloadlist"
+                }
             },
             {
                 title: "排序",
@@ -1300,7 +1306,10 @@ function JuErjiAliShare(share_id, folder_id, share_pwd) {
                     return 'toast://切换成功';
                 }),
                 col_type: 'icon_5',
-                img: 'https://hikerfans.com/tubiao/grey/76.png'
+                img: 'https://hikerfans.com/tubiao/grey/76.png',
+                extra: {
+                    cls: "Juloadlist"
+                }
             },
             {
                 title: getItem('aliyun_playMode', '智能')=="原画"?"原画"+getItem('aliyun_openInt', '1'):getItem('aliyun_playMode', '智能'),
@@ -1353,7 +1362,10 @@ function JuErjiAliShare(share_id, folder_id, share_pwd) {
                     }
                 }),
                 col_type: 'icon_5',
-                img: 'https://hikerfans.com/tubiao/grey/100.png'
+                img: 'https://hikerfans.com/tubiao/grey/100.png',
+                extra: {
+                    cls: "Juloadlist"
+                }
             },
             {
                 title: '转存',
@@ -1361,6 +1373,7 @@ function JuErjiAliShare(share_id, folder_id, share_pwd) {
                 col_type: 'icon_5',
                 img: 'https://hikerfans.com/tubiao/grey/206.png',
                 extra: {
+                    cls: "Juloadlist",
                     longClick: [{
                         title: "💾转存",
                         js: $.toString((obj) => {
@@ -1419,13 +1432,14 @@ function JuErjiAliShare(share_id, folder_id, share_pwd) {
                 dirlist.forEach((item) => {
                     d.push({
                         title: item.name,
-                        img: "hiker://files/cache/src/文件夹.svg",//#noRecordHistory##noHistory#
+                        img: "hiker://files/cache/src/文件夹.svg",
                         url: $("hiker://empty##https://www.aliyundrive.com/s/" + item.share_id + (item.file_id ? "/folder/" + item.file_id : "")).rule((share_id, folder_id, share_pwd) => {
                             require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js');
                             aliShare(share_id, folder_id, share_pwd);
                         }, item.share_id, item.file_id, share_pwd),
                         col_type: style,
                         extra: {
+                            cls: "Juloadlist groupload",
                             pageTitle: item.name,
                             name: my_params.name || "",
                             back: 1,
@@ -1463,6 +1477,7 @@ function JuErjiAliShare(share_id, folder_id, share_pwd) {
                         col_type: style,
                         extra: {
                             id: item.file_id,
+                            cls: "Juloadlist groupload",
                             longClick: [{
                                 title: "💾转存",
                                 js: $.toString((obj) => {
