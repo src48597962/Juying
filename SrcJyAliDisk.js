@@ -1160,7 +1160,7 @@ function yunDiskSearch(name) {
             } catch (e) {
                 log(obj.name + '>一解出错>' + e.message);
             }
-
+            log(datalist2);
             let searchlist = [];
             datalist2.forEach(item => {
                 let itemTitle = item.title.replace(/<\/?.+?>/g, "");
@@ -1215,7 +1215,6 @@ function yunDiskSearch(name) {
             return {result:[], success:0};
         }
     }
-    log(ssdatalist.length);
     let list = ssdatalist.map((item) => {
         return {
             func: task,
@@ -1231,7 +1230,6 @@ function yunDiskSearch(name) {
                     return "break";
                 }else if(taskResult.success==1){
                     let data = taskResult.result;
-                    log(data);
                     if(data.length>0){
                         success++;
                         diskMark[name] = diskMark[name] || [];
