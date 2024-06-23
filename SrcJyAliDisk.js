@@ -1164,10 +1164,10 @@ function yunDiskSearch(name) {
             datalist2.forEach(item => {
                 let itemTitle = item.title.replace(/<\/?.+?>/g, "");
                 let arr = {
-                    title: obj.name,
+                    title: itemTitle,
                     img: item.pic || "hiker://files/cache/src/文件夹.svg",
                     col_type: "avatar",
-                    desc: itemTitle,
+                    desc: obj.name,
                     extra: {
                         cls: "Juloadlist groupload"
                     }
