@@ -237,7 +237,8 @@ function dianboerji() {
         erdata = detailsmark;
     }else{
         if(jkdata.type=="yundisk"){
-            
+            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+            erdata = aliShareUrl(MY_URL, 1);
         }else{
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
             erdata = getErData(jkdata);
@@ -246,8 +247,8 @@ function dianboerji() {
         writeFile(cacheDataFile, JSON.stringify(markData));
     }
     //log(erdata);
-    let details1 = erdata.details1;
-    let details2 = erdata.details2;
+    let details1 = erdata.details1 || "";
+    let details2 = erdata.details2 || "";
     let pic = erdata.pic || sextra.pic || MY_PARAMS.pic;
     if(pic && pic!=MY_PARAMS.pic && !/^hiker/.test(pic)){
         setPagePicUrl(pic);
@@ -306,217 +307,225 @@ function dianboerji() {
             col_type: "blank_block"
         })
     }
-    //生成线路
-    d.push({
-        title: getMyVar('shsort') == '1'?'““””<b><span style="color: #FF0000">∨</span></b>' : '““””<b><span style="color: #1aad19">∧</span></b>',
-        url: $("#noLoading#").lazyRule(() => {
-            if (getMyVar('shsort') == '1') { putMyVar('shsort', '0'); } else { putMyVar('shsort', '1') };
-            refreshPage(false);
-            return 'toast://切换排序成功'
-        }),
-        col_type: 'scroll_button',
-        extra: {
-            cls: "Juloadlist"
-        }
-    })
-    erdata.tabs.forEach((it,i)=>{
-        if(it){
-            d.push({
-                title: getMyVar(MY_URL+"_line", '0') == i ? getHead(it,Color1,1) : getHead(it,Color2),
-                url: $("#noLoading#").lazyRule((url, nowid, newid, Marksum) => {
-                    if (nowid != newid) {
-                        let markFile = globalMap0.getMyVar('gmParams').cachepath + "Mark.json";
-                        let SrcMark = "";
-                        try {
-                            eval('SrcMark = ' + markFile);
-                        } catch (e) {  }
-                        if (SrcMark == "") {
-                            SrcMark = {};
-                        }
-                        SrcMark[url] = SrcMark[url] || {};
-                        SrcMark[url].line = newid;
-                        let key = 0;
-                        let one = "";
-                        for (var k in SrcMark) {
-                            key++;
-                            if (key == 1) { one = k }
-                        }
-                        if (key > Marksum) { delete SrcMark[one]; }
-                        writeFile(markFile, JSON.stringify(SrcMark));
-                        putMyVar(url+"_line", newid);
-                        refreshPage(false);
-                    }
-                    return '#noHistory#hiker://empty'
-                }, MY_URL, lineid, i, Marksum),
-                col_type: 'scroll_button',
-                extra: {
-                    cls: "Juloadlist"
-                }
-            })
-        }
-    })
-    //生成选集
-    let 列表 = erdata.lists[lineid] || [];
-    if(列表.length>0){
-        try{
-            let i1 = parseInt(列表.length / 6);
-            let i2 = parseInt(列表.length / 4);
-            let i3 = parseInt(列表.length / 2);
-            let list1 = 列表[i1].split('$')[0];
-            let list2 = 列表[i2].split('$')[0];
-            let list3 = 列表[i3].split('$')[0];
-            if(parseInt(list1.match(/(\d+)/)[0])>parseInt(list2.match(/(\d+)/)[0]) && parseInt(list2.match(/(\d+)/)[0])>parseInt(list3.match(/(\d+)/)[0])){
-                列表.reverse();
-            }
-        }catch(e){
-            //xlog('√强制修正选集顺序失败>'+e.message)
-        }
-    }
-    if (getMyVar('shsort') == '1') {
-        列表.reverse();
-    }
-    //分页定义
-    let partpage = storage0.getItem('partpage') || {};
-    if(partpage.ispage){//启用分页
-        let 每页数量 = partpage.pagenum || 40; // 分页的每页数量       
-        let 翻页阀值 = partpage.partnum || 100; // 分页的翻页阀值，超过多少才显示翻页
-        
-        if (列表.length > 翻页阀值) { 
-            let 最大页数 = Math.ceil(列表.length / 每页数量);  
-            let 分页页码 = pageid + 1; //当前页数
-            if (分页页码 > 最大页数) { //防止切换线路导致页数数组越界
-                分页页码 = 最大页数;
-            }
-            let 分页链接 = [];
-            let 分页名 = [];
-            function getNewArray(array, subGroupLength) {
-                let index = 0;
-                let newArray = [];
-                while(index < array.length) {
-                    newArray.push(array.slice(index, index += subGroupLength));
-                }
-                return newArray;
-            }
-            let 分页s = getNewArray(列表, 每页数量);//按每页数据切割成小数组
-
-            分页s.forEach((it,i)=>{
-                分页链接.push($("#noLoading#").lazyRule((url,nowid,newid,Marksum) => {
-                    if(nowid != newid){
-                        let markFile = globalMap0.getMyVar('gmParams').cachepath + "Mark.json";
-                        let SrcMark = "";
-                        try {
-                            eval('SrcMark = ' + markFile);
-                        } catch (e) {  }
-                        if (SrcMark == "") {
-                            SrcMark = {};
-                        }
-                        SrcMark[url] = SrcMark[url] || {};
-                        SrcMark[url].page = newid;
-                        let key = 0;
-                        let one = "";
-                        for (var k in SrcMark) {
-                            key++;
-                            if (key == 1) { one = k }
-                        }
-                        if (key > Marksum) { delete SrcMark[one]; }
-                        writeFile(markFile, JSON.stringify(SrcMark));
-                        putMyVar(url+"_page", newid);
-                        refreshPage(false);
-                    }
-                    return 'hiker://empty'
-                }, MY_URL, pageid, i, Marksum))
-                let start = i * 每页数量 + 1;
-                let end = i * 每页数量 + it.length;
-                let title = start + ' - ' + end;
-                分页名.push(pageid==i?'““””<span style="color: #87CEFA">'+title:title)
-            })
-            d.push({
-                col_type: "blank_block",
-                extra: {
-                    cls: "Juloadlist"
-                }
-            });
-            d.push({
-                title: 分页页码==1?"↪️尾页":"⏮️上页",
-                url: 分页页码==1?分页链接[分页名.length-1]:分页链接[pageid-1],
-                col_type: 'text_4',
-                extra: {
-                    cls: "Juloadlist"
-                }
-            })
-            d.push({
-                title: 分页名[pageid],
-                url: $(分页名, 2).select((分页名,分页链接) => {
-                    return 分页链接[分页名.indexOf(input)];
-                },分页名,分页链接),
-                col_type: 'text_2',
-                extra: {
-                    cls: "Juloadlist"
-                }
-            })
-            d.push({
-                title: 分页页码==分页名.length?"首页↩️":"下页⏭️",
-                url: 分页页码==分页名.length?分页链接[0]:分页链接[pageid+1],
-                col_type: 'text_4',
-                extra: {
-                    cls: "Juloadlist"
-                }
-            })
-            列表 = 分页s[pageid];//取当前分页的选集列表
-        }
-    }
-    if(列表.length==0){
+    let isload;
+    if(jkdata.type=="yundisk"){
+        d = d.concat(erdata.lists);
+    }else{
+        //生成线路
         d.push({
-            title: '当前无播放选集，点更多片源试试！',
-            url: '#noHistory#hiker://empty',
-            col_type: 'text_center_1',
+            title: getMyVar('shsort') == '1'?'““””<b><span style="color: #FF0000">∨</span></b>' : '““””<b><span style="color: #1aad19">∧</span></b>',
+            url: $("#noLoading#").lazyRule(() => {
+                if (getMyVar('shsort') == '1') { putMyVar('shsort', '0'); } else { putMyVar('shsort', '1') };
+                refreshPage(false);
+                return 'toast://切换排序成功'
+            }),
+            col_type: 'scroll_button',
             extra: {
                 cls: "Juloadlist"
             }
-        });
-    }else{
-        let flag = erdata.flags.length>0?erdata.flags[lineid]:"";
-        let dataObj = {};
-        if(erdata.parse_api&&erdata.parse_api.length>0){
-            dataObj.parse_api = erdata.parse_api;
+        })
+        erdata.tabs.forEach((it,i)=>{
+            if(it){
+                d.push({
+                    title: getMyVar(MY_URL+"_line", '0') == i ? getHead(it,Color1,1) : getHead(it,Color2),
+                    url: $("#noLoading#").lazyRule((url, nowid, newid, Marksum) => {
+                        if (nowid != newid) {
+                            let markFile = globalMap0.getMyVar('gmParams').cachepath + "Mark.json";
+                            let SrcMark = "";
+                            try {
+                                eval('SrcMark = ' + markFile);
+                            } catch (e) {  }
+                            if (SrcMark == "") {
+                                SrcMark = {};
+                            }
+                            SrcMark[url] = SrcMark[url] || {};
+                            SrcMark[url].line = newid;
+                            let key = 0;
+                            let one = "";
+                            for (var k in SrcMark) {
+                                key++;
+                                if (key == 1) { one = k }
+                            }
+                            if (key > Marksum) { delete SrcMark[one]; }
+                            writeFile(markFile, JSON.stringify(SrcMark));
+                            putMyVar(url+"_line", newid);
+                            refreshPage(false);
+                        }
+                        return '#noHistory#hiker://empty'
+                    }, MY_URL, lineid, i, Marksum),
+                    col_type: 'scroll_button',
+                    extra: {
+                        cls: "Juloadlist"
+                    }
+                })
+            }
+        })
+        //生成选集
+        let 列表 = erdata.lists[lineid] || [];
+        if(列表.length>0){
+            try{
+                let i1 = parseInt(列表.length / 6);
+                let i2 = parseInt(列表.length / 4);
+                let i3 = parseInt(列表.length / 2);
+                let list1 = 列表[i1].split('$')[0];
+                let list2 = 列表[i2].split('$')[0];
+                let list3 = 列表[i3].split('$')[0];
+                if(parseInt(list1.match(/(\d+)/)[0])>parseInt(list2.match(/(\d+)/)[0]) && parseInt(list2.match(/(\d+)/)[0])>parseInt(list3.match(/(\d+)/)[0])){
+                    列表.reverse();
+                }
+            }catch(e){
+                //xlog('√强制修正选集顺序失败>'+e.message)
+            }
         }
-        if(flag){
-            dataObj.flag = flag;
+        if (getMyVar('shsort') == '1') {
+            列表.reverse();
         }
-        let playSet = storage0.getItem('playSet') || {};
-        let listone = 列表[0].split('$')[0].trim();
-        let len = listone.length;
-        let col_type = 列表.length > 4 && len < 7 ? 'text_4' : len > 20 ? 'text_1' :'text_3';
-        for(let i=0; i<列表.length; i++) {
-            let playtitle = 列表[i].split('$')[0].trim();
-            let playurl = 列表[i].split('$')[1].trim();
+        //分页定义
+        let partpage = storage0.getItem('partpage') || {};
+        if(partpage.ispage){//启用分页
+            let 每页数量 = partpage.pagenum || 40; // 分页的每页数量       
+            let 翻页阀值 = partpage.partnum || 100; // 分页的翻页阀值，超过多少才显示翻页
             
-            let lazy = $("").lazyRule((dataObj) => {
-                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
-                return SrcParseS.聚影(input, dataObj);
-            }, dataObj);
+            if (列表.length > 翻页阀值) { 
+                let 最大页数 = Math.ceil(列表.length / 每页数量);  
+                let 分页页码 = pageid + 1; //当前页数
+                if (分页页码 > 最大页数) { //防止切换线路导致页数数组越界
+                    分页页码 = 最大页数;
+                }
+                let 分页链接 = [];
+                let 分页名 = [];
+                function getNewArray(array, subGroupLength) {
+                    let index = 0;
+                    let newArray = [];
+                    while(index < array.length) {
+                        newArray.push(array.slice(index, index += subGroupLength));
+                    }
+                    return newArray;
+                }
+                let 分页s = getNewArray(列表, 每页数量);//按每页数据切割成小数组
 
-            let extra = {
-                id: name + "_选集_" + (pageid?pageid+"_":"") + i,
-                jsLoadingInject: true,
-                blockRules: ['.m4a', '.mp3', '.gif', '.jpeg', '.jpg', '.ico', '.png', 'hm.baidu.com', '/ads/*.js', 'cnzz.com'],
-                videoExcludeRule: ['m3u8.js','?url='],
-                cls: "Juloadlist playlist"
+                分页s.forEach((it,i)=>{
+                    分页链接.push($("#noLoading#").lazyRule((url,nowid,newid,Marksum) => {
+                        if(nowid != newid){
+                            let markFile = globalMap0.getMyVar('gmParams').cachepath + "Mark.json";
+                            let SrcMark = "";
+                            try {
+                                eval('SrcMark = ' + markFile);
+                            } catch (e) {  }
+                            if (SrcMark == "") {
+                                SrcMark = {};
+                            }
+                            SrcMark[url] = SrcMark[url] || {};
+                            SrcMark[url].page = newid;
+                            let key = 0;
+                            let one = "";
+                            for (var k in SrcMark) {
+                                key++;
+                                if (key == 1) { one = k }
+                            }
+                            if (key > Marksum) { delete SrcMark[one]; }
+                            writeFile(markFile, JSON.stringify(SrcMark));
+                            putMyVar(url+"_page", newid);
+                            refreshPage(false);
+                        }
+                        return 'hiker://empty'
+                    }, MY_URL, pageid, i, Marksum))
+                    let start = i * 每页数量 + 1;
+                    let end = i * 每页数量 + it.length;
+                    let title = start + ' - ' + end;
+                    分页名.push(pageid==i?'““””<span style="color: #87CEFA">'+title:title)
+                })
+                d.push({
+                    col_type: "blank_block",
+                    extra: {
+                        cls: "Juloadlist"
+                    }
+                });
+                d.push({
+                    title: 分页页码==1?"↪️尾页":"⏮️上页",
+                    url: 分页页码==1?分页链接[分页名.length-1]:分页链接[pageid-1],
+                    col_type: 'text_4',
+                    extra: {
+                        cls: "Juloadlist"
+                    }
+                })
+                d.push({
+                    title: 分页名[pageid],
+                    url: $(分页名, 2).select((分页名,分页链接) => {
+                        return 分页链接[分页名.indexOf(input)];
+                    },分页名,分页链接),
+                    col_type: 'text_2',
+                    extra: {
+                        cls: "Juloadlist"
+                    }
+                })
+                d.push({
+                    title: 分页页码==分页名.length?"首页↩️":"下页⏭️",
+                    url: 分页页码==分页名.length?分页链接[0]:分页链接[pageid+1],
+                    col_type: 'text_4',
+                    extra: {
+                        cls: "Juloadlist"
+                    }
+                })
+                列表 = 分页s[pageid];//取当前分页的选集列表
             }
-            if(!/qq|youku|mgtv|bili|qiyi|sohu|pptv|le/.test(playurl) && /html/.test(playurl)){
-                extra.referer = playurl;
-            }
-            if(playSet.cachem3u8){
-                extra.cacheM3u8 = true;
-            }
-            d.push({
-                title: getHead(playtitle.replace(/第|集|话|期|-|new|最新|新/g, ''), Color3),
-                url: playurl + lazy,
-                col_type: col_type,
-                extra: extra
-            });
         }
+        if(列表.length==0){
+            d.push({
+                title: '当前无播放选集，点更多片源试试！',
+                url: '#noHistory#hiker://empty',
+                col_type: 'text_center_1',
+                extra: {
+                    cls: "Juloadlist"
+                }
+            });
+        }else{
+            let flag = erdata.flags.length>0?erdata.flags[lineid]:"";
+            let dataObj = {};
+            if(erdata.parse_api&&erdata.parse_api.length>0){
+                dataObj.parse_api = erdata.parse_api;
+            }
+            if(flag){
+                dataObj.flag = flag;
+            }
+            let playSet = storage0.getItem('playSet') || {};
+            let listone = 列表[0].split('$')[0].trim();
+            let len = listone.length;
+            let col_type = 列表.length > 4 && len < 7 ? 'text_4' : len > 20 ? 'text_1' :'text_3';
+            for(let i=0; i<列表.length; i++) {
+                let playtitle = 列表[i].split('$')[0].trim();
+                let playurl = 列表[i].split('$')[1].trim();
+                
+                let lazy = $("").lazyRule((dataObj) => {
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
+                    return SrcParseS.聚影(input, dataObj);
+                }, dataObj);
+
+                let extra = {
+                    id: name + "_选集_" + (pageid?pageid+"_":"") + i,
+                    jsLoadingInject: true,
+                    blockRules: ['.m4a', '.mp3', '.gif', '.jpeg', '.jpg', '.ico', '.png', 'hm.baidu.com', '/ads/*.js', 'cnzz.com'],
+                    videoExcludeRule: ['m3u8.js','?url='],
+                    cls: "Juloadlist playlist"
+                }
+                if(!/qq|youku|mgtv|bili|qiyi|sohu|pptv|le/.test(playurl) && /html/.test(playurl)){
+                    extra.referer = playurl;
+                }
+                if(playSet.cachem3u8){
+                    extra.cacheM3u8 = true;
+                }
+                d.push({
+                    title: getHead(playtitle.replace(/第|集|话|期|-|new|最新|新/g, ''), Color3),
+                    url: playurl + lazy,
+                    col_type: col_type,
+                    extra: extra
+                });
+            }
+            isload = 1;
+        }
+
     }
+    
 
     //底部说明
     d.push({
@@ -529,7 +538,7 @@ function dianboerji() {
         }
     });
     setResult(d);
-    if(列表.length>0 && sextra.url && sextra.url!=MY_PARAMS.url){
+    if(isload && sextra.url && sextra.url!=MY_PARAMS.url){
         let erjiextra = {
             url: sextra.url,
             pic: pic,
