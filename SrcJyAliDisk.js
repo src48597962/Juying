@@ -964,6 +964,7 @@ function aliDiskSearch(input, data) {
     clearMyVar("停止搜索线程");
     deleteItem("yundisklistloading");
 }
+
 function yundiskhistory() {
     addListener("onClose", $.toString(() => {
         clearMyVar('云盘历史');
@@ -1098,4 +1099,160 @@ function myDiskSearch(input) {
         }
     }
     return [];
+}
+
+// 聚影二级切源
+function yunDiskSearch(name) {
+    showLoading('搜源中，请稍后...');
+    let updateItemid = "云盘_" + name + "_loading";
+    let searchMark = storage0.getMyVar('diskMark') || {};//二级换源缓存
+    if(searchMark[name]){
+        addItemBefore(updateItemid, searchMark[name]);
+        updateItem(updateItemid, {
+            title: "‘‘’’<small>当前搜索为缓存</small>",
+            url: $("确定删除“"+name+"”搜索缓存吗？").confirm((name)=>{
+                let searchMark = storage0.getMyVar('diskMark') || {};
+                delete searchMark[name];
+                storage0.putMyVar('diskMark', searchMark);
+                refreshPage(true);
+                return "toast://已清除";
+            },name)
+        });
+        let i = 0;
+        let one = "";
+        for (var k in searchMark) {
+            i++;
+            if (i == 1) { one = k }
+        }
+        if (i > 30) { delete searchMark[one]; }
+        hideLoading();
+        return "hiker://empty";
+    }else{
+        updateItem(updateItemid, {
+            title: "搜源中..."
+        });
+    }
+
+    let ssdatalist = [];
+    let filepath = "hiker://files/data/聚影✓/yundisk.json";
+    let datafile = fetch(filepath);
+    if (datafile != "") {
+        try {
+            eval("ssdatalist=" + datafile + ";");
+        } catch (e) {}
+    }
+    ssdatalist = ssdatalist.filter(it=>{
+        return !it.stop;
+    });
+    let nosousuolist = storage0.getMyVar('nosousuolist_yundisk') || [];
+    if (nosousuolist.length>0){
+        ssdatalist = ssdatalist.filter(it => {
+            return nosousuolist.indexOf(it.name) == -1;
+        })
+    }
+    //多线程执行代码
+    let task = function (obj) {
+        try {
+            let datalist2 = [];
+            try {
+                eval('let Parse = ' + obj.parse);
+                datalist2 = obj.name =="我的云盘" ? myDiskSearch(name) : Parse(name);
+            } catch (e) {
+                log(obj.name + '>一解出错>' + e.message);
+            }
+
+            let searchlist = [];
+            datalist2.forEach(item => {
+                let itemTitle = item.title.replace(/<\/?.+?>/g, "");
+                let arr = {
+                    title: obj.name,
+                    col_type: "avatar",
+                    desc: itemTitle,
+                    extra: {
+                        cls: "Juloadlist groupload"
+                    }
+                };
+                
+                
+                if (obj.name == "我的云盘") {
+                    let extra = {
+                        data: {name: obj.name, type: "yundisk", group: "云盘", drive_id: item.drive_id}
+                    }
+                    arr.url = $("#noLoading#").b64().lazyRule((extra) => {
+                        storage0.putMyVar('二级附加临时对象', extra);
+                        refreshPage(false);
+                        return "toast://已切换源：" + extra.data.name;
+                    }, extra);
+                    searchlist.push(arr);
+                } else {
+                    if (itemTitle.toLowerCase().includes(name.toLowerCase())) {//搜索结果包含关键字才行
+                        let surl = item.url;
+                        if (!/www\.aliyundrive\.com|www\.alipan\.com/.test(surl) && obj.erparse) {
+                            try {
+                                eval('let Parse2 = ' + obj.erparse)
+                                surl = Parse2(surl);
+                            } catch (e) {
+                                log(obj.name + '>二解出错>' + e.message);
+                            }
+                        }
+                        if (/www\.aliyundrive\.com|www\.alipan\.com/.test(surl)) {
+                            let extra = {
+                                data: {name: obj.name, type: "yundisk", group: "云盘", url: surl}
+                            }
+                            arr.url = "hiker://empty##"+ surl.split('\n')[0] + $("#noLoading#").b64().lazyRule((extra) => {
+                                storage0.putMyVar('二级附加临时对象', extra);
+                                refreshPage(false);
+                                return "toast://已切换源：" + extra.data.name;
+                            }, extra),
+                            searchlist.push(arr);
+                        }
+                    }
+                }
+            })
+            return {result:searchlist, success:1};
+        } catch (e) {
+            log(obj.name + '>' + e.message);
+            return {result:[], success:0};
+        }
+    }
+    let list = ssdatalist.map((item) => {
+        return {
+            func: task,
+            param: item,
+            id: item.name
+        }
+    });
+    let success = 0;
+    if (list.length > 0) {
+        be(list, {
+            func: function (obj, id, error, taskResult) {
+                if (getMyVar("SrcJu_停止搜索线程") == "1") {
+                    return "break";
+                }else if(taskResult.success==1){
+                    let data = taskResult.result;
+                    if(data.length>0){
+                        success++;
+                        diskMark[name] = diskMark[name] || [];
+                        diskMark[name] = diskMark[name].concat(data);
+                        addItemBefore(updateItemid, data);
+                        hideLoading();
+                    }
+                }else if(taskResult.success==0){
+                    nosousuolist.push(id);
+                    storage0.putMyVar('nosousuolist_yundisk', nosousuolist);
+                }
+            },
+            param: {
+            }
+        });
+        storage0.putMyVar('diskMark', diskMark);
+        hideLoading();
+        clearMyVar("SrcJu_停止搜索线程");
+        let sousuosm = "‘‘’’<small><font color=#f13b66a>" + success + "</font>/" + list.length + "，搜索完成</small>";
+        updateItem(updateItemid, { title: sousuosm });
+    } else {
+        hideLoading();
+        clearMyVar("SrcJu_停止搜索线程");
+        toast("无接口");
+    }
 }
