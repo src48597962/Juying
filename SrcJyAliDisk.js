@@ -1160,12 +1160,12 @@ function yunDiskSearch(name) {
             } catch (e) {
                 log(obj.name + '>一解出错>' + e.message);
             }
-            log(datalist2);
             let searchlist = [];
             datalist2.forEach(item => {
                 let itemTitle = item.title.replace(/<\/?.+?>/g, "");
                 let arr = {
                     title: obj.name,
+                    img: item.pic || "hiker://files/cache/src/文件夹.svg",
                     col_type: "avatar",
                     desc: itemTitle,
                     extra: {
@@ -1178,7 +1178,7 @@ function yunDiskSearch(name) {
                     let extra = {
                         data: {name: obj.name, type: "yundisk", group: "云盘", drive_id: item.drive_id}
                     }
-                    arr.url = $("#noLoading#").b64().lazyRule((extra) => {
+                    arr.url = $("#noLoading#").lazyRule((extra) => {
                         storage0.putMyVar('二级附加临时对象', extra);
                         refreshPage(false);
                         return "toast://已切换源：" + extra.data.name;
@@ -1199,7 +1199,7 @@ function yunDiskSearch(name) {
                             let extra = {
                                 data: {name: obj.name, type: "yundisk", group: "云盘", url: surl}
                             }
-                            arr.url = "hiker://empty##"+ surl.split('\n')[0] + $("#noLoading#").b64().lazyRule((extra) => {
+                            arr.url = "hiker://empty##"+ surl.split('\n')[0] + $("#noLoading#").lazyRule((extra) => {
                                 storage0.putMyVar('二级附加临时对象', extra);
                                 refreshPage(false);
                                 return "toast://已切换源：" + extra.data.name;
