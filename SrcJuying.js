@@ -209,11 +209,8 @@ function dianboerji() {
         
         if(getItem('historyEnable')=='1'){
             deleteItemByCls('historylist');
-            log("删除");
             let h = getHistory();
-            log(h.length);
             addItemAfter("historyid", h);
-            log("添加");
         }
     },getHistory));
     let d = [];
