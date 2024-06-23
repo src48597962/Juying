@@ -1180,7 +1180,8 @@ function JuErjiSousuo(name) {
                 
                 if (obj.name == "我的云盘") {
                     let extra = {
-                        data: {name: obj.name, type: "yundisk", group: "云盘", drive_id: item.drive_id}
+                        url: item.url,
+                        data: {name: obj.name, type: "yundisk", group: "云盘", drive_id: item.drive_id, url: obj.name}
                     }
                     arr.url = $("#noLoading#").lazyRule((extra) => {
                         storage0.putMyVar('二级附加临时对象', extra);
@@ -1201,7 +1202,8 @@ function JuErjiSousuo(name) {
                         }
                         if (/www\.aliyundrive\.com|www\.alipan\.com/.test(surl)) {
                             let extra = {
-                                data: {name: obj.name, type: "yundisk", group: "云盘", url: surl}
+                                url: surl,
+                                data: {name: obj.name, type: "yundisk", group: "云盘", url: obj.name}
                             }
                             arr.url = "hiker://empty##"+ surl.split('\n')[0] + $("#noLoading#").lazyRule((extra) => {
                                 storage0.putMyVar('二级附加临时对象', extra);
