@@ -131,7 +131,7 @@ function erjisousuo(name,group) {
             i++;
             if (i == 1) { one = k }
         }
-        if (i > 20) { delete searchMark[one]; }
+        if (i > 30) { delete searchMark[one]; }
         hideLoading();
         return "hiker://empty";
     }else{
@@ -176,13 +176,9 @@ function erjisousuo(name,group) {
                     let data = taskResult.result;
                     if(data.length>0){
                         success++;
-                        let searchMark = storage0.getMyVar('SrcJu_searchMark') || {};//二级换源缓存
                         searchMark[markId] = searchMark[markId] || [];
                         searchMark[markId] = searchMark[markId].concat(data);
-                        storage0.putMyVar('SrcJu_searchMark', searchMark);
-                        if(!getMyVar('换源变更列表id')){
-                            addItemBefore(updateItemid, data);
-                        }
+                        addItemBefore(updateItemid, data);
                         hideLoading();
                     }
                 }else if(taskResult.success==0){
@@ -195,6 +191,7 @@ function erjisousuo(name,group) {
         });
         hideLoading();
         clearMyVar("SrcJu_停止搜索线程");
+        storage0.putMyVar('SrcJu_searchMark', searchMark);
         let sousuosm = "‘‘’’<small><font color=#f13b66a>" + success + "</font>/" + list.length + "，搜索完成</small>";
         updateItem(updateItemid, { title: sousuosm });
     } else {
