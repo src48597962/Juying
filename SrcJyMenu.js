@@ -74,9 +74,13 @@ function erjimenu(desc,name,sgroup) {
                             })
                             deleteItemByCls('groupload');
                             putMyVar("切源旧分组", newgroup);
-                            
-                            require(config.依赖);
-                            erjisousuo(name, newgroup);
+                            if(newgroup=="云盘"){
+                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+                                yunDiskSearch(name);
+                            }else{
+                                require(config.依赖);
+                                erjisousuo(name, newgroup);
+                            }
                             return 'toast://切源分组已切为：' + newgroup;
                         }, name, it),
                         col_type: "scroll_button",
@@ -91,7 +95,7 @@ function erjimenu(desc,name,sgroup) {
                 require(config.依赖);
                 erjisousuo(name, group);
                 return  "hiker://empty";
-            },name, sgroup),
+            },name, group),
             pic_url: 'https://hikerfans.com/tubiao/messy/20.svg',
             col_type: 'icon_small_3',
             extra: {
