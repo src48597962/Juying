@@ -236,9 +236,13 @@ function dianboerji() {
     if(detailsmark){
         erdata = detailsmark;
     }else{
+        log("1");
         if(jkdata.type=="yundisk"){
+            log("2");
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+            log(MY_URL);
             erdata = aliShareUrl(MY_URL, 1);
+            log(erdata);
         }else{
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
             erdata = getErData(jkdata);
