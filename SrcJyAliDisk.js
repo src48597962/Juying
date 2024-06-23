@@ -37,7 +37,7 @@ function aliShareUrl(input,jyerji) {
         }
     })
     if(jyerji && share_id){
-        JuErjiAliShare(share_id, folder_id, share_pwd)
+        return JuErjiAliShare(share_id, folder_id, share_pwd);
     }else{
         if (share_id) {
             aliShare(share_id, folder_id, share_pwd);
