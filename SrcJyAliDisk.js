@@ -1169,6 +1169,7 @@ function yunDiskSearch(name) {
                     col_type: "avatar",
                     desc: obj.name,
                     extra: {
+                        url: item.url,
                         cls: "Juloadlist groupload"
                     }
                 };
