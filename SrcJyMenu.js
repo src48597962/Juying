@@ -76,7 +76,7 @@ function erjimenu(desc,name,group) {
                             putMyVar("切源旧分组", newgroup);
                             if(newgroup=="云盘"){
                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
-                                yunDiskSearch(name);
+                                JuErjiSousuo(name);
                             }else{
                                 require(config.依赖);
                                 erjisousuo(name, newgroup);
