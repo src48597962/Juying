@@ -215,7 +215,6 @@ function dianboerji() {
     },getHistory));
     let d = [];
     let sextra = storage0.getMyVar('二级附加临时对象') || {};//二级换源时临时extra数据
-    log(sextra);
     let jkdata = sextra.data || MY_PARAMS.data;
     let name = MY_PARAMS.pageTitle;
     let sgroup = jkdata.group||jkdata.type;
@@ -237,13 +236,9 @@ function dianboerji() {
     if(detailsmark){
         erdata = detailsmark;
     }else{
-        log("1");
         if(jkdata.type=="yundisk"){
-            log("2");
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
-            log(MY_URL);
             erdata = aliShareUrl(MY_URL, 1);
-            log(erdata);
         }else{
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
             erdata = getErData(jkdata);
@@ -276,22 +271,6 @@ function dianboerji() {
         d.push(it);
     })
 
-    //取之前足迹记录，用于自动定位之前的线路和分页
-    let smark = {};
-    try {
-        eval('SrcMark = ' + fetch(globalMap0.getMyVar('gmParams').cachepath + "Mark.json"));
-        if (SrcMark[MY_URL]) {
-            smark.line = SrcMark[MY_URL].line;
-            smark.page = SrcMark[MY_URL].page;
-        }
-    } catch (e) { }
-
-    // 标识
-    let lineid = parseInt(getMyVar(MY_URL+"_line", (smark.line||0).toString()));//线路index
-    let pageid = parseInt(getMyVar(MY_URL+"_page", (smark.page||0).toString()));//分页index
-
-    //设置记录线路足迹的数量
-    let Marksum = 100;
     //线路部份
     let Color1 = getItem('SrcJy$linecolor1','#09c11b')||'#09c11b';//#f13b66a
     let Color2 = getItem('SrcJy$linecolor2','');;//#098AC1
@@ -312,10 +291,25 @@ function dianboerji() {
             col_type: "blank_block"
         })
     }
-    let isload;
+
     if(jkdata.type=="yundisk"){
         d = d.concat(erdata.lists);
     }else{
+        //取之前足迹记录，用于自动定位之前的线路和分页
+        let smark = {};
+        try {
+            eval('SrcMark = ' + fetch(globalMap0.getMyVar('gmParams').cachepath + "Mark.json"));
+            if (SrcMark[MY_URL]) {
+                smark.line = SrcMark[MY_URL].line;
+                smark.page = SrcMark[MY_URL].page;
+            }
+        } catch (e) { }
+        // 标识
+        let lineid = parseInt(getMyVar(MY_URL+"_line", (smark.line||0).toString()));//线路index
+        let pageid = parseInt(getMyVar(MY_URL+"_page", (smark.page||0).toString()));//分页index
+        //设置记录线路足迹的数量
+        let Marksum = 100;
+
         //生成线路
         d.push({
             title: getMyVar('shsort') == '1'?'““””<b><span style="color: #FF0000">∨</span></b>' : '““””<b><span style="color: #1aad19">∧</span></b>',
@@ -526,12 +520,18 @@ function dianboerji() {
                     extra: extra
                 });
             }
-            isload = 1;
+            if(sextra.url && sextra.url!=MY_PARAMS.url){
+                let erjiextra = {
+                    url: sextra.url,
+                    pic: pic,
+                    pageTitle: name,
+                    data: jkdata
+                }
+                setPageParams(erjiextra);
+            }
         }
-
     }
     
-
     //底部说明
     d.push({
         desc: '‘‘’’<small><font color=#f20c00>此规则仅限学习交流使用，请于导入后24小时内删除，任何团体或个人不得以任何方式方法传播此规则的整体或部分！</font></small>',
@@ -543,15 +543,6 @@ function dianboerji() {
         }
     });
     setResult(d);
-    if(isload && sextra.url && sextra.url!=MY_PARAMS.url){
-        let erjiextra = {
-            url: sextra.url,
-            pic: pic,
-            pageTitle: name,
-            data: jkdata
-        }
-        setPageParams(erjiextra);
-    }
 }
 
 //点播一级
