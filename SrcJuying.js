@@ -190,8 +190,10 @@ function erjisousuo(name,group) {
             }
         });
         hideLoading();
+        if(getMyVar("SrcJu_停止搜索线程")!="1"){
+            storage0.putMyVar('SrcJu_searchMark', searchMark);
+        }
         clearMyVar("SrcJu_停止搜索线程");
-        storage0.putMyVar('SrcJu_searchMark', searchMark);
         let sousuosm = "‘‘’’<small><font color=#f13b66a>" + success + "</font>/" + list.length + "，搜索完成</small>";
         updateItem(updateItemid, { title: sousuosm });
     } else {
@@ -204,6 +206,7 @@ function erjisousuo(name,group) {
 function dianboerji() {
     addListener("onClose", $.toString((getHistory) => {
         clearMyVar('二级附加临时对象');
+        
         if(getItem('historyEnable')=='1'){
             deleteItemByCls('historylist');
             let h = getHistory();
