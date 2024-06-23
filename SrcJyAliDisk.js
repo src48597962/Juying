@@ -37,6 +37,23 @@ function aliShareUrl(input,jyerji) {
         }
     })
     if(jyerji && share_id){
+        let html = request("https://api.aliyundrive.com/adrive/v3/share_link/get_share_by_anonymous",{
+            headers: {
+                referer: "https://www.aliyundrive.com/"
+            },
+            body: {
+                "share_id": share_id
+            },
+            method: 'POST',
+            timeout: 3000
+        })
+        let files = JSON.parse(html).file_infos || [];
+        if(files.length==0){
+            return "toast://分享链接已失效";
+        }else{
+            return "toast://"+files.length;
+        }
+
         return JuErjiAliShare(share_id, folder_id, share_pwd);
     }else{
         if (share_id) {
@@ -1205,10 +1222,9 @@ function JuErjiSousuo(name) {
                                 url: surl,
                                 data: {name: obj.name, type: "yundisk", group: "云盘", url: obj.name}
                             }
-                            arr.url = "hiker://empty##"+ surl.split('\n')[0] + $("#noLoading#").lazyRule((extra) => {
-                                storage0.putMyVar('二级附加临时对象', extra);
-                                refreshPage(false);
-                                return "toast://已切换源：" + extra.data.name;
+                            arr.url = $("#noLoading#").lazyRule((extra) => {
+                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+                                return aliShareUrl(extra.url, 1);
                             }, extra),
                             searchlist.push(arr);
                         }
