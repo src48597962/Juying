@@ -55,8 +55,10 @@ function search(name, sstype, jkdata) {
                 title: it.voddesc||"正片",
                 desc: jkdata.name,
                 pic_url: it.vodpic,
-                url: "hiker://empty##"+ it.vodurl + $("#noLoading#").b64().lazyRule((extra) => {
-                    storage0.putMyVar('二级附加临时对象', extra);
+                url: "hiker://empty##"+ it.vodurl + $("#noLoading#").lazyRule((newextra) => {
+                    delete extra['cls'];
+                    let oldextra = storage0.getMyVar('二级附加临时对象') || {};
+                    storage0.putMyVar('二级附加临时对象', Object.assign(oldextra, newextra));
                     refreshPage(false);
                     return "toast://已切换源：" + extra.data.name;
                 }, extra),
@@ -213,16 +215,22 @@ function dianboerji() {
             addItemAfter("historyid", h);
         }
     },getHistory));
-    log(getMyVar('二级附加临时对象'));
-    log($.type(getMyVar('二级附加临时对象')));
-    
-    let d = [];
+
+    if(!getMyVar('二级附加临时对象')){
+        storage0.putMyVar('二级附加临时对象', MY_PARAMS);
+    }
     let sextra = storage0.getMyVar('二级附加临时对象') || {};//二级换源时临时extra数据
-    let jkdata = sextra.data || MY_PARAMS.data;
-    let name = MY_PARAMS.pageTitle;
+    let d = [];
+    
+    //MY_URL = sextra.url || MY_PARAMS.url;
+    //let jkdata = sextra.data || MY_PARAMS.data;
+    //let name = MY_PARAMS.pageTitle;
+    MY_URL = sextra.url;
+    let jkdata = sextra.data;
+    let name = sextra.pageTitle;
     let sgroup = jkdata.group||jkdata.type;
     let sname = jkdata.name;
-    MY_URL = sextra.url || MY_PARAMS.url;
+    
 
     let detailsmark;
     let cacheDataFile = globalMap0.getMyVar('gmParams').cachepath + "Details.json";
@@ -252,7 +260,7 @@ function dianboerji() {
     //log(erdata);
     let details1 = erdata.details1 || "";
     let details2 = erdata.details2 || "";
-    let pic = erdata.pic || sextra.pic || MY_PARAMS.pic;
+    let pic = erdata.pic || sextra.pic;// || MY_PARAMS.pic;
     if(pic && pic!=MY_PARAMS.pic && !/^hiker/.test(pic)){
         setPagePicUrl(pic);
     }
@@ -524,13 +532,12 @@ function dianboerji() {
                 });
             }
             if(sextra.url && sextra.url!=MY_PARAMS.url){
-                let erjiextra = {
+                setPageParams({
                     url: sextra.url,
                     pic: pic,
                     pageTitle: name,
                     data: jkdata
-                }
-                setPageParams(erjiextra);
+                });
             }
         }
     }
