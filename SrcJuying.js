@@ -213,6 +213,8 @@ function dianboerji() {
             addItemAfter("historyid", h);
         }
     },getHistory));
+    log($.type(getMyVar('二级附加临时对象')));
+    
     let d = [];
     let sextra = storage0.getMyVar('二级附加临时对象') || {};//二级换源时临时extra数据
     let jkdata = sextra.data || MY_PARAMS.data;
