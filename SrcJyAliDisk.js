@@ -1327,7 +1327,7 @@ function JuErjiAliShare(share_id, folder_id, share_pwd) {
                 col_type: 'icon_5',
                 img: 'https://hikerfans.com/tubiao/grey/175.png',
                 extra: {
-                    cls: "Juloadlist Diskloadlist"
+                    cls: "Juloadlist"
                 }
             },
             {
@@ -1340,7 +1340,7 @@ function JuErjiAliShare(share_id, folder_id, share_pwd) {
                 col_type: 'icon_5',
                 img: 'https://hikerfans.com/tubiao/grey/168.png',
                 extra: {
-                    cls: "Juloadlist Diskloadlist"
+                    cls: "Juloadlist"
                 }
             },
             {
@@ -1353,7 +1353,7 @@ function JuErjiAliShare(share_id, folder_id, share_pwd) {
                 col_type: 'icon_5',
                 img: 'https://hikerfans.com/tubiao/grey/76.png',
                 extra: {
-                    cls: "Juloadlist Diskloadlist"
+                    cls: "Juloadlist"
                 }
             },
             {
@@ -1409,7 +1409,7 @@ function JuErjiAliShare(share_id, folder_id, share_pwd) {
                 col_type: 'icon_5',
                 img: 'https://hikerfans.com/tubiao/grey/100.png',
                 extra: {
-                    cls: "Juloadlist Diskloadlist"
+                    cls: "Juloadlist"
                 }
             },
             {
@@ -1418,7 +1418,7 @@ function JuErjiAliShare(share_id, folder_id, share_pwd) {
                 col_type: 'icon_5',
                 img: 'https://hikerfans.com/tubiao/grey/206.png',
                 extra: {
-                    cls: "Juloadlist Diskloadlist",
+                    cls: "Juloadlist",
                     longClick: [{
                         title: "💾转存",
                         js: $.toString((obj) => {
@@ -1439,7 +1439,7 @@ function JuErjiAliShare(share_id, folder_id, share_pwd) {
                 col_type: 'line_blank',
                 extra: {
                     id: "yundiskloadid",
-                    cls: "Juloadlist Diskloadlist"
+                    cls: "Juloadlist"
                 }
             })
 
