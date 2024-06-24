@@ -94,7 +94,7 @@ function cutSource(name, group) {
                 updateItem(oldgroup+"_"+name+"_loading", {
                     extra: {"id":newgroup+"_"+name+"_loading","lineVisible":false}
                 })
-                deleteItemByCls('groupload');
+                deleteItemByCls('grouploadlist');
                 putMyVar("切源旧分组", newgroup);
                 if(newgroup=="云盘"){
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
