@@ -78,12 +78,23 @@ function aliShareUrl(input,jkdata) {
                 },
                 {
                     title: "样式",
-                    url: $(['text_1', 'movie_2', 'card_pic_3', 'avatar']).select((refreshurl) => {
+                    url: $(['text_1', 'movie_2', 'card_pic_3', 'avatar'],2).select(() => {
                         setItem('aliyun_style', input);
-                        return refreshurl;
-                    },refreshurl),
+
+                        let 列表 = findItemsByCls('Diskloadlist') || [];
+                        if(列表.length==0){
+                            return 'toast://未获取到列表'
+                        }
+                        deleteItemByCls('Diskloadlist');
+                        let list_col_type = input;
+                        列表.forEach(item => {
+                            item.col_type = list_col_type;
+                        })
+                        addItemAfter("yundiskloadid", 列表);
+                        return "hiker://empty";
+                    }),
                     col_type: 'icon_5',
-                    img: 'https://hikerfans.com/tubiao/grey/168.png',
+                    img: 'https://hikerfans.com/tubiao/grey/79.png',
                     extra: {
                         cls: "Juloadlist"
                     }
@@ -141,12 +152,12 @@ function aliShareUrl(input,jkdata) {
                                         }
                                     }
                                 }
-                                updateItem("yundiskplaymode", getItem('aliyun_playMode', '智能')=="原画"?"原画"+getItem('aliyun_openInt', '1'):getItem('aliyun_playMode', '智能'));
+                                updateItem("yundiskplaymode", {title: getItem('aliyun_playMode', '智能')=="原画"?"原画"+getItem('aliyun_openInt', '1'):getItem('aliyun_playMode', '智能')});
                                 return 'toast://已切换为'+input;
                             })
                         }else{
                             setItem('aliyun_playMode', input);
-                            updateItem("yundiskplaymode", getItem('aliyun_playMode', '智能')=="原画"?"原画"+getItem('aliyun_openInt', '1'):getItem('aliyun_playMode', '智能'));
+                            updateItem("yundiskplaymode", {title: getItem('aliyun_playMode', '智能')=="原画"?"原画"+getItem('aliyun_openInt', '1'):getItem('aliyun_playMode', '智能')});
                             return 'toast://已切换为'+input;
                         }
                     }),
