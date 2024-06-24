@@ -44,8 +44,7 @@ function aliShareUrl(input,jkdata) {
             body: {
                 "share_id": share_id
             },
-            method: 'POST',
-            timeout: 3000
+            method: 'POST'
         })
         let files = JSON.parse(html).file_infos || [];
         if(files.length==0){
@@ -1282,6 +1281,7 @@ function JuErjiSousuo(name) {
         }
         clearMyVar("SrcJu_停止搜索线程");
         hideLoading();
+        setPageParams({a:1});
         let sousuosm = "‘‘’’<small><font color=#f13b66a>" + success + "</font>/" + list.length + "，搜索完成</small>";
         updateItem(updateItemid, { title: sousuosm });
     } else {
