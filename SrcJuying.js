@@ -213,6 +213,7 @@ function dianboerji() {
             addItemAfter("historyid", h);
         }
     },getHistory));
+    log(getMyVar('二级附加临时对象'));
     log($.type(getMyVar('二级附加临时对象')));
     
     let d = [];
