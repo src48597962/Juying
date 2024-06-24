@@ -1332,10 +1332,10 @@ function JuErjiAliShare(share_id, folder_id, share_pwd) {
                     }
                     return "hiker://empty";
                 }, share_id, "root", share_pwd),
-                url: "https://www.aliyundrive.com/s/" + share_id,
                 col_type: 'icon_5',
                 img: 'https://hikerfans.com/tubiao/grey/175.png',
                 extra: {
+                    url: "https://www.aliyundrive.com/s/" + share_id,
                     cls: "Juloadlist"
                 }
             },
