@@ -1199,7 +1199,7 @@ function JuErjiSousuo(name) {
                     desc: obj.name,
                     extra: {
                         url: item.url,
-                        cls: "Juloadlist groupload"
+                        cls: "Juloadlist"
                     }
                 };
                 
@@ -1281,7 +1281,9 @@ function JuErjiSousuo(name) {
         }
         clearMyVar("SrcJu_停止搜索线程");
         hideLoading();
-        setPageParams({a:1});
+        log($.type(MY_PARAMS));
+        log(getRule());
+        //setPageParams({a:1});
         let sousuosm = "‘‘’’<small><font color=#f13b66a>" + success + "</font>/" + list.length + "，搜索完成</small>";
         updateItem(updateItemid, { title: sousuosm });
     } else {
@@ -1312,7 +1314,7 @@ function JuErjiAliShare(share_id, folder_id, share_pwd) {
                 col_type: 'icon_5',
                 img: 'https://hikerfans.com/tubiao/grey/175.png',
                 extra: {
-                    cls: "Juloadlist"
+                    cls: "Juloadlist Diskloadlist"
                 }
             },
             {
@@ -1325,7 +1327,7 @@ function JuErjiAliShare(share_id, folder_id, share_pwd) {
                 col_type: 'icon_5',
                 img: 'https://hikerfans.com/tubiao/grey/168.png',
                 extra: {
-                    cls: "Juloadlist"
+                    cls: "Juloadlist Diskloadlist"
                 }
             },
             {
@@ -1338,7 +1340,7 @@ function JuErjiAliShare(share_id, folder_id, share_pwd) {
                 col_type: 'icon_5',
                 img: 'https://hikerfans.com/tubiao/grey/76.png',
                 extra: {
-                    cls: "Juloadlist"
+                    cls: "Juloadlist Diskloadlist"
                 }
             },
             {
@@ -1394,7 +1396,7 @@ function JuErjiAliShare(share_id, folder_id, share_pwd) {
                 col_type: 'icon_5',
                 img: 'https://hikerfans.com/tubiao/grey/100.png',
                 extra: {
-                    cls: "Juloadlist"
+                    cls: "Juloadlist Diskloadlist"
                 }
             },
             {
@@ -1403,7 +1405,7 @@ function JuErjiAliShare(share_id, folder_id, share_pwd) {
                 col_type: 'icon_5',
                 img: 'https://hikerfans.com/tubiao/grey/206.png',
                 extra: {
-                    cls: "Juloadlist",
+                    cls: "Juloadlist Diskloadlist",
                     longClick: [{
                         title: "💾转存",
                         js: $.toString((obj) => {
@@ -1421,7 +1423,10 @@ function JuErjiAliShare(share_id, folder_id, share_pwd) {
                 }
             },
             {
-                col_type: 'line_blank'
+                col_type: 'line_blank',
+                extra: {
+                    cls: "Juloadlist Diskloadlist"
+                }
             })
 
             if (errorCode[get_sharetoken.code]) {
@@ -1458,7 +1463,7 @@ function JuErjiAliShare(share_id, folder_id, share_pwd) {
                                 }, item.share_id, item.file_id, share_pwd),
                                 col_type: style,
                                 extra: {
-                                    cls: "Juloadlist groupload",
+                                    cls: "Juloadlist Diskloadlist",
                                     pageTitle: item.name,
                                     dirid: share_id + '_' + folder_id + '_' + share_pwd,
                                     longClick: [{
@@ -1494,7 +1499,7 @@ function JuErjiAliShare(share_id, folder_id, share_pwd) {
                                 col_type: style,
                                 extra: {
                                     id: item.file_id,
-                                    cls: "Juloadlist groupload",
+                                    cls: "Juloadlist Diskloadlist",
                                     longClick: [{
                                         title: "💾转存",
                                         js: $.toString((obj) => {
