@@ -53,52 +53,8 @@ function erjimenu(desc,name,group) {
         {
             title: "切换站源",
             url: !fileExist(jkfile) ? "toast://分享页面或没有接口，无法扩展更多片源" : $("#noLoading#").lazyRule((name,group) => {
-                putMyVar("切源旧分组", group);
-                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
-                let datalist = getDatas('jk',1);
-                let groups = getJiekouGroups(datalist.filter(v=>v.searchable!=0)).concat(['云盘']);
-                let grouparr = [];
-                groups.forEach(it=>{
-                    grouparr.push({
-                        title: group==it?`““””<b><span style="color: #3399cc">`+it+`</span></b>`:it,
-                        url: $('#noLoading#').lazyRule((name,newgroup) => {
-                            let oldgroup = getMyVar("切源旧分组","");
-                            updateItem("id_"+oldgroup, {
-                                title: oldgroup
-                            })
-                            updateItem("id_"+newgroup, {
-                                title: `““””<b><span style="color: #3399cc">`+newgroup+`</span></b>`
-                            })
-                            updateItem(oldgroup+"_"+name+"_loading", {
-                                extra: {"id":newgroup+"_"+name+"_loading","lineVisible":false}
-                            })
-                            deleteItemByCls('groupload');
-                            putMyVar("切源旧分组", newgroup);
-                            if(newgroup=="云盘"){
-                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
-                                JuErjiSousuo(name);
-                            }else{
-                                require(config.依赖);
-                                erjisousuo(name, newgroup);
-                            }
-                            return 'toast://切源分组已切为：' + newgroup;
-                        }, name, it),
-                        col_type: "scroll_button",
-                        extra: {
-                            id: "id_"+it,
-                            cls: "Juloadlist"
-                        }
-                    })
-                })
-                deleteItemByCls('Juloadlist');
-                addItemBefore(group + "_" +name + "_loading", grouparr);// 生成切源分组
-                if(group=="云盘"){
-                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
-                    JuErjiSousuo(name);
-                }else{
-                    require(config.依赖);
-                    erjisousuo(name, group);
-                }
+                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyMenu.js');
+                cutSource(name,group);
                 return  "hiker://empty";
             },name, group),
             pic_url: 'https://hikerfans.com/tubiao/messy/20.svg',
@@ -115,6 +71,55 @@ function getide(is) {
         return '‘‘’’<strong><font color="#f13b66a">◉ </front></strong>';
     }else{
         return '‘‘’’<strong><font color="#F54343">◉ </front></strong>';
+    }
+}
+//切源事件
+function cutSource(name, group) {
+    putMyVar("切源旧分组", group);
+    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+    let datalist = getDatas('jk',1);
+    let groups = getJiekouGroups(datalist.filter(v=>v.searchable!=0)).concat(['云盘']);
+    let grouparr = [];
+    groups.forEach(it=>{
+        grouparr.push({
+            title: group==it?`““””<b><span style="color: #3399cc">`+it+`</span></b>`:it,
+            url: $('#noLoading#').lazyRule((name,newgroup) => {
+                let oldgroup = getMyVar("切源旧分组","");
+                updateItem("id_"+oldgroup, {
+                    title: oldgroup
+                })
+                updateItem("id_"+newgroup, {
+                    title: `““””<b><span style="color: #3399cc">`+newgroup+`</span></b>`
+                })
+                updateItem(oldgroup+"_"+name+"_loading", {
+                    extra: {"id":newgroup+"_"+name+"_loading","lineVisible":false}
+                })
+                deleteItemByCls('groupload');
+                putMyVar("切源旧分组", newgroup);
+                if(newgroup=="云盘"){
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+                    JuErjiSousuo(name);
+                }else{
+                    require(config.依赖);
+                    erjisousuo(name, newgroup);
+                }
+                return 'toast://切源分组已切为：' + newgroup;
+            }, name, it),
+            col_type: "scroll_button",
+            extra: {
+                id: "id_"+it,
+                cls: "Juloadlist"
+            }
+        })
+    })
+    deleteItemByCls('Juloadlist');
+    addItemBefore(group + "_" +name + "_loading", grouparr);// 生成切源分组
+    if(group=="云盘"){
+        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+        JuErjiSousuo(name);
+    }else{
+        require(config.依赖);
+        erjisousuo(name, group);
     }
 }
 function lookset() {
