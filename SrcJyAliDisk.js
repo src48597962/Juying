@@ -212,8 +212,6 @@ function aliShareUrl(input,jkdata) {
                 params.lists = d;
                 params.data = jkdata;
                 setPageParams(params);
-                log("1111");
-                log(params);
                 return "toast://已切换源：" + jkdata.name;
             }
         }
