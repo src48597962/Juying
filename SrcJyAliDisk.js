@@ -1132,7 +1132,7 @@ function myDiskSearch(input) {
 
 // 聚影二级切源
 function JuErjiSousuo(name) {
-    //showLoading('搜源中，请稍后...');
+    showLoading('搜源中，请稍后...');
     let updateItemid = "云盘_" + name + "_loading";
     let diskMark = storage0.getMyVar('diskMark') || {};//二级换源缓存
     if(diskMark[name]){
@@ -1295,6 +1295,7 @@ function JuErjiSousuo(name) {
     } else {
         hideLoading();
         clearMyVar("SrcJu_停止搜索线程");
+        updateItem(updateItemid, { title: '' });
         toast("无接口");
     }
 }
