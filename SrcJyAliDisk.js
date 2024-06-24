@@ -61,7 +61,7 @@ function aliShareUrl(input,jkdata) {
                     if(data.errorStr){
                         return "toast://" + data.errorStr;
                     }else{
-                        deleteItemByCls('Diskloadlist');
+                        deleteItemByCls('grouploadlist');
                         addItemAfter("yundiskloadid", data.lists);// 生成切源分组
                     }
                     return "hiker://empty";
@@ -81,11 +81,11 @@ function aliShareUrl(input,jkdata) {
                     url: $(['text_1', 'movie_2', 'card_pic_3', 'avatar'],2).select(() => {
                         setItem('aliyun_style', input);
 
-                        let 列表 = findItemsByCls('Diskloadlist') || [];
+                        let 列表 = findItemsByCls('grouploadlist') || [];
                         if(列表.length==0){
                             return 'toast://未获取到列表'
                         }
-                        deleteItemByCls('Diskloadlist');
+                        deleteItemByCls('grouploadlist');
                         let list_col_type = input;
                         列表.forEach(item => {
                             item.col_type = list_col_type;
@@ -1492,14 +1492,14 @@ function JuErjiAliShare(share_id, folder_id, share_pwd) {
                                     if(data.errorStr){
                                         return "toast://" + data.errorStr;
                                     }else{
-                                        deleteItemByCls('Diskloadlist');
+                                        deleteItemByCls('grouploadlist');
                                         addItemAfter("yundiskloadid", data.lists);// 生成切源分组
                                     }
                                     return "hiker://empty";
                                 }, item.share_id, item.file_id, share_pwd),
                                 col_type: style,
                                 extra: {
-                                    cls: "Juloadlist Diskloadlist",
+                                    cls: "Juloadlist grouploadlist",
                                     url: "https://www.aliyundrive.com/s/" + item.share_id + (item.file_id ? "/folder/" + item.file_id : ""),
                                     longClick: [{
                                         title: "💾转存",
@@ -1534,7 +1534,7 @@ function JuErjiAliShare(share_id, folder_id, share_pwd) {
                                 col_type: style,
                                 extra: {
                                     id: item.file_id,
-                                    cls: "Juloadlist Diskloadlist",
+                                    cls: "Juloadlist grouploadlist",
                                     longClick: [{
                                         title: "💾转存",
                                         js: $.toString((obj) => {
