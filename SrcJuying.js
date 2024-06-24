@@ -242,11 +242,8 @@ function dianboerji() {
         erdata = detailsmark;
     }else{
         if(jkdata.type=="yundisk"){
-            /*
-            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
-            erdata = aliShareUrl(MY_URL, 1);
-            */
-            erdata = {lists: MY_PARAMS.lists||[]};
+            log(MY_PARAMS.lists);
+            erdata = {lists: MY_PARAMS.lists || []};
             if(getMyVar('二级详情临时对象')){
                 let detailTmp = storage0.getMyVar('二级详情临时对象') || {};
                 erdata.details1 = detailTmp.details1 || "";
