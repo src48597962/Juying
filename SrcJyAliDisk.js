@@ -1545,7 +1545,7 @@ function JuErjiAliShare(share_id, folder_id, share_pwd) {
                                     }
                                 }
                                 it.url = $("").lazyRule((share_id, file_id, sub_file_id, share_pwd) => {
-                                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliPublic.js');
+                                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliPublic.js');
                                     let play = getAliUrl(share_id, file_id, share_pwd);
                                     if (play.urls && play.urls.length > 0) {
                                         let subtitle;
