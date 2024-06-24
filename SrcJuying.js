@@ -281,11 +281,6 @@ function dianboerji() {
             id: "detailid"
         }
     });
-    //二级统一菜单
-    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyMenu.js');
-    erjimenu(erdata.desc, name, sgroup).forEach(it=>{
-        d.push(it);
-    })
 
     //线路部份
     let Color1 = getItem('SrcJy$linecolor1','#09c11b')||'#09c11b';//#f13b66a
@@ -311,6 +306,11 @@ function dianboerji() {
     if(jkdata.type=="yundisk"){
         d = d.concat(erdata.lists);
     }else{
+        //二级统一菜单
+        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyMenu.js');
+        erjimenu(erdata.desc, name, sgroup).forEach(it=>{
+            d.push(it);
+        })
         //取之前足迹记录，用于自动定位之前的线路和分页
         let smark = {};
         try {
