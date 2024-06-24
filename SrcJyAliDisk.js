@@ -69,7 +69,7 @@ function aliShareUrl(input,jkdata) {
                         return "hiker://empty";
                     }, share_id, "root", share_pwd),
                     col_type: 'icon_5',
-                    img: 'https://hikerfans.com/tubiao/grey/123.png',
+                    img: 'https://hikerfans.com/tubiao/grey/125.png',
                     extra: {
                         url: "https://www.aliyundrive.com/s/" + share_id,
                         cls: "Juloadlist"
