@@ -1456,11 +1456,10 @@ function JuErjiAliShare(share_id, folder_id, share_pwd) {
                     sharelist = sharelist.filter(item => {
                         return item.type == "file" || (item.type == "folder" && !folderFilter.test(item.name));
                     })
-                    //if (sharelist.length == 1 && sharelist[0].type == "folder") {
-                        //java.lang.Thread.sleep(1000);
-                        //JuErjiAliShare(share_id, sharelist[0].file_id, share_pwd);
-                    //} else 
-                    if (sharelist.length > 0) {
+                    if (sharelist.length == 1 && sharelist[0].type == "folder") {
+                        java.lang.Thread.sleep(1000);
+                        return JuErjiAliShare(share_id, sharelist[0].file_id, share_pwd);
+                    } else if (sharelist.length > 0) {
                         let sublist = sharelist.filter(item => {
                             return item.type == "file" && /srt|vtt|ass/.test(item.file_extension);
                         })
@@ -1471,15 +1470,23 @@ function JuErjiAliShare(share_id, folder_id, share_pwd) {
                             d.push({
                                 title: item.name,
                                 img: "hiker://files/cache/src/文件夹.svg",
-                                url: $("hiker://empty##https://www.aliyundrive.com/s/" + item.share_id + (item.file_id ? "/folder/" + item.file_id : "")).rule((share_id, folder_id, share_pwd) => {
+                                url: $().lazyRule((share_id, folder_id, share_pwd) => {
                                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
-                                    JuErjiAliShare(share_id, folder_id, share_pwd);
+                                    let data = JuErjiAliShare(share_id, folder_id, share_pwd);
+                                    if(data.errorStr){
+                                        return "toast://" + data.errorStr;
+                                    }else{
+                                        deleteItemByCls('Juloadlist');
+                                        let menus = data.menus
+                                        let d = menus.concat(data.lists);
+                                        addItemBefore(jkdata.updateItemid, d);// 生成切源分组
+                                    }
+                                    return "hiker://empty";
                                 }, item.share_id, item.file_id, share_pwd),
                                 col_type: style,
                                 extra: {
                                     cls: "Juloadlist Diskloadlist",
-                                    pageTitle: item.name,
-                                    dirid: share_id + '_' + folder_id + '_' + share_pwd,
+                                    url: "https://www.aliyundrive.com/s/" + item.share_id + (item.file_id ? "/folder/" + item.file_id : ""),
                                     longClick: [{
                                         title: "💾转存",
                                         js: $.toString((obj) => {
