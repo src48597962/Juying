@@ -297,11 +297,6 @@ function dianboerji() {
             return title;
         }
     }
-    for (let i = 0; i < 9; i++) {
-        d.push({
-            col_type: "blank_block"
-        })
-    }
 
     if(jkdata.type=="yundisk"){
         d = d.concat(erdata.lists);
