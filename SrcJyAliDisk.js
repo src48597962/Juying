@@ -61,6 +61,15 @@ function aliShareUrl(input,jkdata) {
                 updateItem(jkdata.updateItemid, {
                     title: ""
                 })
+                if(getMyVar(jkdata.url+'_云盘搜索缓存'))
+                {
+                    let diskparams = storage0.getMyVar(jkdata.url+'_云盘搜索缓存');
+                    let params = JSON.parse(JSON.parse(getRule()).params);
+                    params.lists = diskparams.lists;
+                    params.data = diskparams.data;
+                    setPageParams(params);
+                    clearMyVar(jkdata.url+'_云盘搜索缓存');
+                }
                 return "toast://已切换源：" + jkdata.name;
             }
         }
@@ -1207,7 +1216,7 @@ function JuErjiSousuo(name) {
                 if (obj.name == "我的云盘") {
                     let extra = {
                         url: item.url,
-                        data: {name: obj.name, type: "yundisk", group: "云盘", drive_id: item.drive_id, url: obj.name}
+                        data: {name: obj.name, type: "yundisk", group: "云盘", drive_id: item.drive_id, url: name}
                     }
                     arr.url = $("#noLoading#").lazyRule((extra) => {
                         storage0.putMyVar('二级附加临时对象', extra);
@@ -1229,7 +1238,7 @@ function JuErjiSousuo(name) {
                         if (/www\.aliyundrive\.com|www\.alipan\.com/.test(surl)) {
                             let extra = {
                                 url: surl,
-                                data: {name: obj.name, type: "yundisk", group: "云盘", url: obj.name, updateItemid: "云盘_" +name + "_loading"}
+                                data: {name: obj.name, type: "yundisk", group: "云盘", url: name, updateItemid: "云盘_" +name + "_loading"}
                             }
                             arr.url = $().lazyRule((extra) => {
                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
@@ -1286,10 +1295,7 @@ function JuErjiSousuo(name) {
         try{
             let disklist = diskMark[name] || [];
             if(disklist.length>0){
-                let params = JSON.parse(JSON.parse(getRule()).params);
-                params.lists = disklist;
-                params.data = {name: "云盘接口", type: "yundisk", group: "云盘", url: name};
-                setPageParams(params);
+                storage0.putMyVar(name+'_云盘搜索缓存', {data: {name: "接口搜索", type: "yundisk", group: "云盘", url: name}, lists: disklist});
             }
         }catch(e){}
     } else {
