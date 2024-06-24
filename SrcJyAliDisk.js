@@ -1456,10 +1456,11 @@ function JuErjiAliShare(share_id, folder_id, share_pwd) {
                     sharelist = sharelist.filter(item => {
                         return item.type == "file" || (item.type == "folder" && !folderFilter.test(item.name));
                     })
-                        if (sharelist.length == 1 && sharelist[0].type == "folder") {
-                        java.lang.Thread.sleep(1000);
-                        JuErjiAliShare(share_id, sharelist[0].file_id, share_pwd);
-                    } else if (sharelist.length > 0) {
+                    //if (sharelist.length == 1 && sharelist[0].type == "folder") {
+                        //java.lang.Thread.sleep(1000);
+                        //JuErjiAliShare(share_id, sharelist[0].file_id, share_pwd);
+                    //} else 
+                    if (sharelist.length > 0) {
                         let sublist = sharelist.filter(item => {
                             return item.type == "file" && /srt|vtt|ass/.test(item.file_extension);
                         })
@@ -1572,6 +1573,7 @@ function JuErjiAliShare(share_id, folder_id, share_pwd) {
     } catch (e) {
         errorStr = "异常报错>" + e.message + " 错误行#" + e.lineNumber;
     }
+    log(d);
     return {
         errorStr: errorStr,
         menus: menus,
