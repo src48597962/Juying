@@ -55,19 +55,20 @@ function aliShareUrl(input,jkdata) {
                 return "toast://" + data.errorStr;
             }else{
                 deleteItemByCls('Juloadlist');
+                let refreshurl = $().lazyRule((share_id, folder_id, share_pwd) => {
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+                    let data = JuErjiAliShare(share_id, folder_id, share_pwd);
+                    if(data.errorStr){
+                        return "toast://" + data.errorStr;
+                    }else{
+                        deleteItemByCls('Diskloadlist');
+                        addItemAfter("yundiskloadid", data.lists);// 生成切源分组
+                    }
+                    return "hiker://empty";
+                }, share_id, "root", share_pwd)
                 let menus = [{
                     title: "刷新",
-                    url: $().lazyRule((share_id, folder_id, share_pwd) => {
-                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
-                        let data = JuErjiAliShare(share_id, folder_id, share_pwd);
-                        if(data.errorStr){
-                            return "toast://" + data.errorStr;
-                        }else{
-                            deleteItemByCls('Diskloadlist');
-                            addItemAfter("yundiskloadid", data.lists);// 生成切源分组
-                        }
-                        return "hiker://empty";
-                    }, share_id, "root", share_pwd),
+                    url: refreshurl,
                     col_type: 'icon_5',
                     img: 'https://hikerfans.com/tubiao/grey/125.png',
                     extra: {
@@ -77,11 +78,10 @@ function aliShareUrl(input,jkdata) {
                 },
                 {
                     title: "样式",
-                    url: $(['text_1', 'movie_2', 'card_pic_3', 'avatar']).select(() => {
+                    url: $(['text_1', 'movie_2', 'card_pic_3', 'avatar']).select((refreshurl) => {
                         setItem('aliyun_style', input);
-                        refreshPage();
-                        return 'toast://已切换';
-                    }),
+                        return refreshurl;
+                    },refreshurl),
                     col_type: 'icon_5',
                     img: 'https://hikerfans.com/tubiao/grey/168.png',
                     extra: {
@@ -90,11 +90,10 @@ function aliShareUrl(input,jkdata) {
                 },
                 {
                     title: "排序",
-                    url: $(ordersKeys, 2).select(() => {
+                    url: $(ordersKeys, 2).select((refreshurl) => {
                         setItem('aliyun_order', input);
-                        refreshPage();
-                        return 'toast://切换成功';
-                    }),
+                        return refreshurl;
+                    },refreshurl),
                     col_type: 'icon_5',
                     img: 'https://hikerfans.com/tubiao/grey/76.png',
                     extra: {
@@ -110,7 +109,7 @@ function aliShareUrl(input,jkdata) {
                                 if(input=='接口1(alist)'){
                                     clearItem('aliyun_openInt');
                                 }else{
-                                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliPublic.js');
+                                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliPublic.js');
                                     if(aliOpenTokenObj.refresh_token_2){
                                         setItem('aliyun_openInt', '2');
                                     }else{
@@ -142,18 +141,19 @@ function aliShareUrl(input,jkdata) {
                                         }
                                     }
                                 }
-                                refreshPage();
+                                updateItem("yundiskplaymode", getItem('aliyun_playMode', '智能')=="原画"?"原画"+getItem('aliyun_openInt', '1'):getItem('aliyun_playMode', '智能'));
                                 return 'toast://已切换为'+input;
                             })
                         }else{
                             setItem('aliyun_playMode', input);
-                            refreshPage();
+                            updateItem("yundiskplaymode", getItem('aliyun_playMode', '智能')=="原画"?"原画"+getItem('aliyun_openInt', '1'):getItem('aliyun_playMode', '智能'));
                             return 'toast://已切换为'+input;
                         }
                     }),
                     col_type: 'icon_5',
                     img: 'https://hikerfans.com/tubiao/grey/100.png',
                     extra: {
+                        id: "yundiskplaymode",
                         cls: "Juloadlist"
                     }
                 },
