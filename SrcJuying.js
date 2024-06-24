@@ -200,6 +200,7 @@ function erjisousuo(name,group) {
     } else {
         hideLoading();
         clearMyVar("SrcJu_停止搜索线程");
+        updateItem(updateItemid, { title: '' });
         toast("无接口");
     }
 }
