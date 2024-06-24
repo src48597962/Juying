@@ -208,24 +208,12 @@ function aliShareUrl(input,jkdata) {
                 updateItem(jkdata.updateItemid, {
                     title: ""
                 })
-                /*
-                                        try{
-            let disklist = diskMark[name] || [];
-            if(disklist.length>0){
-                storage0.putMyVar(name+'_云盘搜索缓存', {data: {name: "接口搜索", type: "yundisk", group: "云盘", url: name}, lists: disklist});
-            }
-        }catch(e){}
-                if(getMyVar(jkdata.url+'_云盘搜索缓存'))
-                {
-                    let diskparams = storage0.getMyVar(jkdata.url+'_云盘搜索缓存');
-                    
-                    clearMyVar(jkdata.url+'_云盘搜索缓存');
-                }
-                */
                 let params = JSON.parse(JSON.parse(getRule()).params);
                 params.lists = d;
                 params.data = jkdata;
                 setPageParams(params);
+                log("1111");
+                log(params);
                 return "toast://已切换源：" + jkdata.name;
             }
         }
