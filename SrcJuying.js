@@ -55,10 +55,9 @@ function search(name, sstype, jkdata) {
                 title: it.voddesc||"正片",
                 desc: jkdata.name,
                 pic_url: it.vodpic,
-                url: "hiker://empty##"+ it.vodurl + $("#noLoading#").lazyRule((newextra) => {
+                url: "hiker://empty##"+ it.vodurl + $("#noLoading#").lazyRule((extra) => {
                     delete extra['cls'];
-                    let oldextra = storage0.getMyVar('二级附加临时对象') || {};
-                    storage0.putMyVar('二级附加临时对象', Object.assign(oldextra, newextra));
+                    storage0.putMyVar('二级附加临时对象', extra);
                     refreshPage(false);
                     return "toast://已切换源：" + extra.data.name;
                 }, extra),
@@ -216,10 +215,7 @@ function dianboerji() {
         }
     },getHistory));
 
-    if(!getMyVar('二级附加临时对象')){
-        storage0.putMyVar('二级附加临时对象', MY_PARAMS);
-    }
-    let sextra = storage0.getMyVar('二级附加临时对象') || {};//二级换源时临时extra数据
+    let sextra = Object.assign(MY_PARAMS, storage0.getMyVar('二级附加临时对象') || {});//二级换源时临时extra数据合并到MY_PARAMS
     let d = [];
     
     //MY_URL = sextra.url || MY_PARAMS.url;
