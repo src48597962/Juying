@@ -1281,10 +1281,17 @@ function JuErjiSousuo(name) {
         }
         clearMyVar("SrcJu_停止搜索线程");
         hideLoading();
-        log($.type(getRule()));
-        //setPageParams({a:1});
         let sousuosm = "‘‘’’<small><font color=#f13b66a>" + success + "</font>/" + list.length + "，搜索完成</small>";
         updateItem(updateItemid, { title: sousuosm });
+        try{
+            let disklist = diskMark[name] || [];
+            if(disklist.length>0){
+                let params = JSON.parse(JSON.parse(getRule()).params);
+                params.lists = disklist;
+                params.data = {name: "云盘接口", type: "yundisk", group: "云盘", url: name};
+                setPageParams(params);
+            }
+        }catch(e){}
     } else {
         hideLoading();
         clearMyVar("SrcJu_停止搜索线程");
