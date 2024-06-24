@@ -1321,9 +1321,18 @@ function JuErjiAliShare(share_id, folder_id, share_pwd) {
 
             menus.push({
                 title: "刷新",
-                url: $().lazyRule(() => {
-                    return 'hiker://empty';
-                }),
+                url: $().lazyRule((share_id, folder_id, share_pwd) => {
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+                    let data = JuErjiAliShare(share_id, folder_id, share_pwd);
+                    if(data.errorStr){
+                        return "toast://" + data.errorStr;
+                    }else{
+                        deleteItemByCls('Diskloadlist');
+                        addItemAfter("yundiskloadid", data.lists);// 生成切源分组
+                    }
+                    return "hiker://empty";
+                }, share_id, "root", share_pwd),
+                url: "https://www.aliyundrive.com/s/" + share_id,
                 col_type: 'icon_5',
                 img: 'https://hikerfans.com/tubiao/grey/175.png',
                 extra: {
@@ -1579,7 +1588,6 @@ function JuErjiAliShare(share_id, folder_id, share_pwd) {
     } catch (e) {
         errorStr = "异常报错>" + e.message + " 错误行#" + e.lineNumber;
     }
-    log(d);
     return {
         errorStr: errorStr,
         menus: menus,
