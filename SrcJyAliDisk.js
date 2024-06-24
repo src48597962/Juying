@@ -1438,6 +1438,7 @@ function JuErjiAliShare(share_id, folder_id, share_pwd) {
             {
                 col_type: 'line_blank',
                 extra: {
+                    id: "yundiskloadid",
                     cls: "Juloadlist Diskloadlist"
                 }
             })
@@ -1476,10 +1477,8 @@ function JuErjiAliShare(share_id, folder_id, share_pwd) {
                                     if(data.errorStr){
                                         return "toast://" + data.errorStr;
                                     }else{
-                                        deleteItemByCls('Juloadlist');
-                                        let menus = data.menus
-                                        let d = menus.concat(data.lists);
-                                        addItemBefore(jkdata.updateItemid, d);// 生成切源分组
+                                        deleteItemByCls('Diskloadlist');
+                                        addItemAfter("yundiskloadid", data.lists);// 生成切源分组
                                     }
                                     return "hiker://empty";
                                 }, item.share_id, item.file_id, share_pwd),
