@@ -1281,7 +1281,7 @@ function JuErjiSousuo(name) {
         }
         clearMyVar("SrcJu_停止搜索线程");
         hideLoading();
-        log(getRule());
+        log($.type(getRule()));
         //setPageParams({a:1});
         let sousuosm = "‘‘’’<small><font color=#f13b66a>" + success + "</font>/" + list.length + "，搜索完成</small>";
         updateItem(updateItemid, { title: sousuosm });
