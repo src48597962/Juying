@@ -215,19 +215,15 @@ function dianboerji() {
         }
     },getHistory));
 
-    let sextra = Object.assign(MY_PARAMS, storage0.getMyVar('二级附加临时对象') || {});//二级换源时临时extra数据合并到MY_PARAMS
+    let sextra = storage0.getMyVar('二级附加临时对象') || {};//二级换源时临时extra数据
     let d = [];
     
-    //MY_URL = sextra.url || MY_PARAMS.url;
-    //let jkdata = sextra.data || MY_PARAMS.data;
-    //let name = MY_PARAMS.pageTitle;
-    MY_URL = sextra.url;
-    let jkdata = sextra.data;
-    let name = sextra.pageTitle;
+    MY_URL = sextra.url || MY_PARAMS.url;
+    let jkdata = sextra.data || MY_PARAMS.data;
+    let name = MY_PARAMS.pageTitle;
     let sgroup = jkdata.group||jkdata.type;
     let sname = jkdata.name;
     
-
     let detailsmark;
     let cacheDataFile = globalMap0.getMyVar('gmParams').cachepath + "Details.json";
     let cacheData = fetch(cacheDataFile);
@@ -256,7 +252,7 @@ function dianboerji() {
     //log(erdata);
     let details1 = erdata.details1 || "";
     let details2 = erdata.details2 || "";
-    let pic = erdata.pic || sextra.pic;// || MY_PARAMS.pic;
+    let pic = erdata.pic || sextra.pic || MY_PARAMS.pic;
     if(pic && pic!=MY_PARAMS.pic && !/^hiker/.test(pic)){
         setPagePicUrl(pic);
     }
