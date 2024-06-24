@@ -180,7 +180,7 @@ function aliShareUrl(input,jkdata) {
                                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js');
                                     aliMyDisk('', 0, '');
                                 })
-                            },{sharetoken:sharetoken,share_id:share_id,authorization:authorization,file_id:folder_id})
+                            }, data.saveinfo)
                         }]
                     }
                 },
@@ -1448,6 +1448,7 @@ function JuErjiSousuo(name) {
 function JuErjiAliShare(share_id, folder_id, share_pwd) {
     let d = [];
     let errorStr;
+    let saveinfo;
     try {
         if (!userinfo.refresh_token) {
             d = d.concat(myDiskMenu(0));
@@ -1460,6 +1461,7 @@ function JuErjiAliShare(share_id, folder_id, share_pwd) {
             if (errorCode[get_sharetoken.code]) {
                 errorStr = errorCode[get_sharetoken.code];
             } else {
+                saveinfo = {sharetoken:sharetoken,share_id:share_id,authorization:authorization,file_id:folder_id};
                 let postdata = { "share_id": share_id, "parent_file_id": folder_id || "root", "limit": 200, "image_thumbnail_process": "image/resize,w_256/format,jpeg", "image_url_process": "image/resize,w_1920/format,jpeg/interlace,1", "video_thumbnail_process": "video/snapshot,t_1000,f_jpg,ar_auto,w_256", "order_by": orderskey.split('#')[0], "order_direction": orderskey.split('#')[1] };
                 headers['x-share-token'] = sharetoken;
                 getbyshare = JSON.parse(request('https://api.aliyundrive.com/adrive/v2/file/list_by_share', { headers: headers, body: postdata, method: 'POST' }));
@@ -1595,6 +1597,7 @@ function JuErjiAliShare(share_id, folder_id, share_pwd) {
     }
     return {
         errorStr: errorStr,
+        saveinfo: saveinfo,
         lists: d
     };
 }
