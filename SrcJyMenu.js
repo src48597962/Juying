@@ -92,8 +92,13 @@ function erjimenu(desc,name,group) {
                 })
                 deleteItemByCls('Juloadlist');
                 addItemBefore(group + "_" +name + "_loading", grouparr);// 生成切源分组
-                require(config.依赖);
-                erjisousuo(name, group);
+                if(group=="云盘"){
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+                    JuErjiSousuo(name);
+                }else{
+                    require(config.依赖);
+                    erjisousuo(name, group);
+                }
                 return  "hiker://empty";
             },name, group),
             pic_url: 'https://hikerfans.com/tubiao/messy/20.svg',
