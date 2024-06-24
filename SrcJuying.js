@@ -46,7 +46,7 @@ function search(name, sstype, jkdata) {
     }else if(sstype=='dianboerji'){
         ssdata = getSsData(name, jkdata, 1).map(it => {
             let extra = {
-                cls: "Juloadlist groupload",
+                cls: "Juloadlist grouploadlist",
                 url: it.vodurl,
                 pic: it.vodpic,
                 data: jkdata
