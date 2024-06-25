@@ -587,8 +587,173 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
             })
         }
         if (getMyVar("selectDisk", "1") == "3" && !isSearch) {
-            require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJuying.js');
-            sousuo2(d, 1);
+            let searchurl = $('').lazyRule(() => {
+                let recordlist = storage0.getItem('searchrecord') || [];
+                if(recordlist.indexOf(input)>-1){
+                    recordlist = recordlist.filter((item) => item !== input);
+                }
+                recordlist.unshift(input);
+                if(recordlist.length>20){
+                    recordlist.splice(recordlist.length-1,1);
+                }
+                storage0.setItem('searchrecord', recordlist);
+
+                return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
+                    setPageTitle('云盘搜索 | 聚影√');
+                    let d = [];
+                    d.push({
+                        title: name+"-云盘聚合搜索",
+                        url: "hiker://empty",
+                        col_type: "text_center_1",
+                        extra: {
+                            id: "listloading",
+                            lineVisible: false
+                        }
+                    })
+                    setResult(d);
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyAliDisk.js');
+                    aliDiskSearch(name);
+                }, input)
+            });
+
+            d.push({
+                title: "搜索",
+                url: $.toString((searchurl) => {
+                        if(/www\.aliyundrive\.com|www\.alipan\.com/.test(input)){
+                            input = input.replace('http','\nhttp');
+                            return $("hiker://empty#noRecordHistory##noHistory#").rule((input) => {
+                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyAliDisk.js');
+                                aliShareUrl(input);
+                            },input);
+                        }else{
+                            return input + searchurl;
+                        }
+                    },searchurl),
+                desc: "搜你想看的...",
+                col_type: "input",
+                extra: {
+                    titleVisible: true,
+                    id: "searchinput",
+                    onChange: $.toString((searchurl) => {
+                        if(input.indexOf('https://www.aliyundrive.com/s/')==-1){
+                            if(input.length==1){deleteItemByCls('suggest');}
+                            if(input.length>1&&input!=getMyVar('sousuo$input', '')){
+                                putMyVar('sousuo$input', input);
+                                deleteItemByCls('suggest');
+                                var html = request("https://movie.douban.com/j/subject_suggest?q=" + input, {timeout: 3000});
+                                var list = JSON.parse(html)||[];
+                                let suggest = list.map((sug)=>{
+                                    try {
+                                        let sugitem = {
+                                            url: sug.title + searchurl,
+                                            extra: {
+                                                cls: 'suggest'
+                                            }
+                                        }
+                                        if(sug.img!=""){
+                                            sugitem.title = sug.title;
+                                            sugitem.img = sug.img + '@Referer=https://www.douban.com';
+                                            sugitem.desc = "年份：" + sug.year;
+                                            sugitem.col_type = "movie_1_vertical_pic";
+                                        }else{
+                                            sugitem.title = "⚡" + sug.title;
+                                            sugitem.col_type = "text_1";
+                                        }
+                                        return sugitem;
+                                    } catch (e) {  }
+                                });
+                                if(suggest.length>0){
+                                    addItemAfter('searchinput', suggest);
+                                }
+                            }
+                        }
+                    }, searchurl)
+                }
+            });
+
+            if(getItem('searchrecordide','0')=='1'){
+                let recordlist = storage0.getItem('searchrecord') || [];
+                if(recordlist.length>0){
+                    d.push({
+                        title: '🗑清空',
+                        url: $('#noLoading#').lazyRule(() => {
+                            clearItem('searchrecord');
+                            deleteItemByCls('searchrecord');
+                            return "toast://已清空";
+                        }),
+                        col_type: 'scroll_button'
+                    });
+                }else{
+                    d.push({
+                        title: '↻无记录',
+                        url: "hiker://empty",
+                        col_type: 'scroll_button'
+                    });
+                }
+                recordlist.forEach(item=>{
+                    d.push({
+                        title: item,
+                        url: item + searchurl,
+                        col_type: 'scroll_button',
+                        extra: {
+                            cls: 'searchrecord'
+                        }
+                    });
+                })
+            }
+            
+            let resoufile = "hiker://files/cache/聚影✓/resou.json";
+            let Juyingresou = fetch(resoufile);
+            let JYresou = {};
+            if(Juyingresou != ""){
+                try{
+                    eval("JYresou=" + Juyingresou+ ";");
+                    delete JYresou['resoulist'];
+                }catch(e){
+                    log("加载热搜缓存出错>"+e.message);
+                }
+            }
+            let resoudata = JYresou['data'] || {};
+            let fenlei = ["电视剧","电影","动漫","综艺"];
+            let fenleiid = ["3","2","5","4"];
+            let ids = getMyVar("热榜分类","0");
+            let list = resoudata[fenlei[ids]] || [];
+
+            let nowtime = Date.now();
+            let oldtime = JYresou.updatetime || 0;
+            if(list.length==0 || nowtime > (oldtime+24*60*60*1000)){
+                try{
+                    let html = request("https://api.web.360kan.com/v1/rank?cat="+fenleiid[ids], {timeout: 3000});
+                    list = JSON.parse(html).data;
+                    resoudata[fenlei[ids]] = list;
+                    JYresou['data'] = resoudata;
+                    JYresou['updatetime'] = nowtime;
+                    writeFile(resoufile, JSON.stringify(JYresou));
+                }catch(e){
+                    log("获取热搜榜出错>"+e.message);
+                }
+            }
+            d.push({
+                title: '<span style="color:#ff6600"><b>\t热搜榜\t\t\t</b></span>',
+                desc: '✅'+fenlei[ids],
+                url: $(fenlei, 2, '选择热榜分类').select((fenlei) => {
+                    putMyVar("热榜分类",fenlei.indexOf(input));
+                    refreshPage(false);
+                    return "hiker://empty";
+                },fenlei),
+                pic_url: 'https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=3779990328,1416553241&fm=179&app=35&f=PNG?w=60&h=70&s=E7951B62A4639D153293A4E90300401B',
+                col_type: 'avatar'
+            });
+
+            list.forEach((item,i)=>{
+                d.push({
+                    title: (i=="0"?'““””<span style="color:#ff3300">' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title:i=="1"?'““””<span style="color:#ff6600">' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title:i=="2"?'““””<span style="color:#ff9900">' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title:'““””<span>' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title)+'\n<small><span style="color:#00ba99">'+item.comment+'</small>',
+                    url: item.title + searchurl,
+                    pic_url: item.cover,
+                    desc: item.description,
+                    col_type: "movie_1_vertical_pic"
+                });
+            })
         } else {
             try {
                 let postdata = { "drive_id": drive_id, "parent_file_id": folder_id, "limit": 200, "all": false, "url_expire_sec": 14400, "image_thumbnail_process": "image/resize,w_256/format,avif", "image_url_process": "image/resize,w_1920/format,avif", "video_thumbnail_process": "video/snapshot,t_1000,f_jpg,ar_auto,w_256", "fields": "*", "order_by": orderskey.split('#')[0], "order_direction": orderskey.split('#')[1] };
