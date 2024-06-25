@@ -1514,20 +1514,50 @@ function erjiAliShare(share_id, folder_id, share_pwd) {
                             filelist.sort(SortList);
                         }
                         function removeSameCharactersInTitles(arr) {
+                            if(arr.length<2){
+                                return arr;
+                            }
+                            // 计算最长标题长度，用于后续循环
+                            let maxLength = Math.max(...arr.map(obj => obj.title.length));
+
+                            // 初始化一个数组，存储每个位置上的字符是否需要保留
+                            let keepChars = Array(maxLength).fill(true);
+
+                            // 遍历每个标题的每个字符位置
+                            for (let i = 0; i < maxLength; i++) {
+                                // 检查当前位置上的字符是否在所有标题中都相同
+                                let currentChar = null;
+                                let isFirst = true;
+                                for (const obj of arr) {
+                                    if (i >= obj.title.length) {
+                                        // 如果当前标题在这个位置没有字符，则不需要继续比较
+                                        keepChars[i] = false;
+                                        break;
+                                    }
+                                    if (isFirst) {
+                                        // 第一次迭代时，记录当前字符
+                                        currentChar = obj.title[i];
+                                        isFirst = false;
+                                    } else if (obj.title[i] !== currentChar) {
+                                        // 如果找到不同的字符，则不需要保留该位置的字符
+                                        keepChars[i] = false;
+                                        break;
+                                    }
+                                }
+                                // 如果所有标题在该位置上的字符都相同，则保留该位置的true值
+                                if (isFirst) {
+                                    keepChars[i] = false;
+                                }
+                            }
+
+                            // 使用keepChars数组更新每个对象的title
                             return arr.map(obj => {
                                 const title = obj.title;
                                 let newTitle = '';
                                 for (let i = 0; i < title.length; i++) {
-                                let isSame = false;
-                                for (let j = 0; j < arr.length; j++) {
-                                    if (i < arr[j].title.length && title[i] === arr[j].title[i]) {
-                                    isSame = true;
-                                    break;
+                                    if (keepChars[i]) {
+                                        newTitle += title[i];
                                     }
-                                }
-                                if (!isSame) {
-                                    newTitle += title[i];
-                                }
                                 }
                                 obj.title = newTitle;
                                 return obj;
