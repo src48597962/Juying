@@ -1626,7 +1626,8 @@ function erjiAliShareUrl(input, dataObj) {
                         },input, dataObj),
                         col_type: "text_2",
                         extra: {
-                            url: aliUrl
+                            url: aliUrl,
+                            cls: "Juloadlist"
                         }
                     }]
                     params.lists = list;
