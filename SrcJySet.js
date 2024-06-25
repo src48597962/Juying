@@ -423,7 +423,7 @@ function jiekousave(urls, mode) {
             }
             
             if(!datalist.some(checkitem)&&it.name&&it.url&&it.type){
-                if(olddatanum>0){
+                if(!it.oldurl && olddatanum>0){
                     it.group = it.group || "新导入";
                 }
                 delete it['oldurl'];
@@ -989,7 +989,7 @@ function manageSet(){
                 let code = '聚影资源码￥'+codeid;
                 copy(code);
                 return "hiker://empty";
-            },aesEncode('Juying', sharecode['note_id'])):$().lazyRule((Juconfig,cfgfile,note_name) => {
+            },aesEncode('SrcJuying2', sharecode['note_id'])):$().lazyRule((Juconfig,cfgfile,note_name) => {
                 try{
                     let pastecreate = JSON.parse(request('https://netcut.txtbin.cn/api/note2/save/', {
                         headers: { 'Referer': 'https://netcut.cn/' },
@@ -1234,7 +1234,7 @@ function manageSet(){
                         }
                         showLoading('正在较验有效性')
                         let codeid = input.split('￥')[1];
-                        let text = parsePaste('https://netcut.cn/p/'+aesDecode('Juying', codeid));
+                        let text = parsePaste('https://netcut.cn/p/'+aesDecode('SrcJuying2', codeid));
                         hideLoading();
                         if(codeid&&!/^error/.test(text)){
                             return $("","当前资源码有效，起个名保存吧").input((Juconfig,cfgfile,codeid) => {
@@ -1310,7 +1310,7 @@ function manageSet(){
                 try{
                     showLoading('请稍候...')
                     let codeid = codedyid;
-                    let text = parsePaste('https://netcut.cn/p/'+aesDecode('Juying', codeid));
+                    let text = parsePaste('https://netcut.cn/p/'+aesDecode('SrcJuying2', codeid));
                     if(codeid&&!/^error/.test(text)){
                         let pastedata = JSON.parse(base64Decode(text));
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
@@ -1738,9 +1738,10 @@ function Resourceimport(input,importtype,importmode){
                         }
                     }
                     
-                    if(/drpy2/.test(obj.api)){
+                    /*if(/drpy2/.test(obj.api)){
                         arr = { "name": obj.name, "type": "drpy", "ext": extfile};
-                    }else if(/^csp_XBiubiu/.test(obj.api)){
+                    }else */
+                    if(/^csp_XBiubiu/.test(obj.api)){
                         arr = { "name": obj.name, "type": "biubiu", "ext": extfile};
                     }else if(/^csp_XPath/.test(obj.api)){
                         arr = { "name": obj.name, "type": "XPath", "ext": extfile};
@@ -1861,9 +1862,9 @@ function JYshare(lx,input) {
     }
     if(input=='云口令文件'){
         let sharetxt = base64Encode(JSON.stringify(datalist));
-        let code = sm + '￥' + aesEncode('Juying', sharetxt) + '￥云口令文件';
+        let code = sm + '￥' + aesEncode('SrcJuying2', sharetxt) + '￥云口令文件';
         let sharefile = 'hiker://files/_cache/Juying_'+datalist.length+'_'+$.dateFormat(new Date(),"HHmmss")+'.hiker';
-        writeFile(sharefile, '云口令：'+code+`@import=js:$.require("hiker://page/cloudimport?rule=聚影✓");`);
+        writeFile(sharefile, '云口令：'+code+`@import=js:$.require("hiker://page/import?rule=聚影✓");`);
         if(fileExist(sharefile)){
             return 'share://'+sharefile;
         }else{
@@ -1875,8 +1876,8 @@ function JYshare(lx,input) {
         hideLoading();
         if(/^http|^云/.test(pasteurl) && pasteurl.includes('/')){
             pasteurl = pasteurl.replace('云6oooole', 'https://pasteme.tyrantg.com').replace('云2oooole', 'https://netcut.cn').replace('云5oooole', 'https://cmd.im').replace('云7oooole', 'https://note.ms').replace('云9oooole', 'https://txtpbbd.cn').replace('云10oooole', 'https://hassdtebin.com');   
-            let code = sm+'￥'+aesEncode('Juying', pasteurl)+'￥共' + datalist.length + '条('+input+')';
-            copy('云口令：'+code+`@import=js:$.require("hiker://page/cloudimport?rule=聚影✓");`);
+            let code = sm+'￥'+aesEncode('SrcJuying2', pasteurl)+'￥共' + datalist.length + '条('+input+')';
+            copy('云口令：'+code+`@import=js:$.require("hiker://page/import?rule=聚影✓");`);
             return "toast://"+sm2;
         }else{
             return "toast://分享失败，剪粘板或网络异常>"+pasteurl;
@@ -1894,7 +1895,7 @@ function JYimport(input) {
     let inputname;
     let codelx = "share";
     try{
-        pasteurl = aesDecode('Juying', input.split('￥')[1]);
+        pasteurl = aesDecode('SrcJuying2', input.split('￥')[1]);
         inputname = input.split('￥')[0];
         if(inputname=="聚影资源码"){
             codelx = "dingyue";
