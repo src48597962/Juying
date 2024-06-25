@@ -1620,7 +1620,7 @@ function erjiAliShareUrl(input, dataObj) {
                     let params = JSON.parse(JSON.parse(getRule()).params);
                     let list = [{
                         title: "云盘在线",
-                        url: $().lazyRule((input) => {
+                        url: $().lazyRule((input,dataObj) => {
                             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
                             return erjiAliShareUrl(input, dataObj);
                         },input, dataObj),
