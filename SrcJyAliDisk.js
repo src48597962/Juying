@@ -1003,7 +1003,7 @@ function aliDiskSearch(input, data) {
     if (data) {
         datalist.push(data);
     } else {
-        let filepath = "hiker://files/data2/"+MY_RULE.title+"/yundisk.json";
+        let filepath = "hiker://files/data/"+MY_RULE.title+"/yundisk.json";
         let datafile = fetch(filepath);
         if (datafile != "") {
             try {
@@ -1297,7 +1297,7 @@ function erjiSousuo(name) {
     }
 
     let ssdatalist = [];
-    let filepath = "hiker://files/data2/"+MY_RULE.title+"/yundisk.json";
+    let filepath = "hiker://files/data/"+MY_RULE.title+"/yundisk.json";
     let datafile = fetch(filepath);
     if (datafile != "") {
         try {
