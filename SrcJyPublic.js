@@ -8,9 +8,6 @@ let Juconfig= {};
 let Jucfg=fetch(cfgfile);
 if(Jucfg != ""){
     eval("Juconfig=" + Jucfg+ ";");
-}else{
-    Juconfig["依赖"] = config.依赖;
-    writeFile(cfgfile, JSON.stringify(Juconfig));
 }
 
 let timeout = 6000;
