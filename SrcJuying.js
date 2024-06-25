@@ -282,15 +282,15 @@ function dianboerji() {
             return title;
         }
     }
+    //二级统一菜单
+    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyMenu.js');
+    erjimenu(erdata.desc, name, sgroup).forEach(it=>{
+        d.push(it);
+    })
 
     if(jkdata.type=="yundisk"){
         d = d.concat(erdata.lists);
     }else{
-        //二级统一菜单
-        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyMenu.js');
-        erjimenu(erdata.desc, name, sgroup).forEach(it=>{
-            d.push(it);
-        })
         //取之前足迹记录，用于自动定位之前的线路和分页
         let smark = {};
         try {
