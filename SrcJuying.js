@@ -738,7 +738,7 @@ function dianboyiji() {
                             vodpic = "https:" + vodpic;
                         }
                         if(!/^http|hiker/.test(vodpic)){
-                            vodpic = MY_URL.match(/http(s)?:\/\/(.*?)\//)[0] + vodpic;
+                            vodpic = getHome(list.vod_url) + '/' + vodpic;
                         }
                         
                         d.push({
