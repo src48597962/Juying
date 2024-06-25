@@ -220,7 +220,7 @@ function alistHome() {
             });
         }
     } else {
-        setPageTitle('Alist网盘 | 聚影√');
+        setPageTitle('Alist网盘 | 聚影✓');
         updateItem('listloading', {
             title: "Alist列表为空"
         });
@@ -722,10 +722,10 @@ function alistSet() {
                     refreshPage(false);
                     return "toast://合计" + datalist.length + "个，导入" + num + "个";
                 } else {
-                    return "toast://聚影√：非Alist口令";
+                    return "toast://聚影✓：非Alist口令";
                 }
             } catch (e) {
-                return "toast://聚影√：口令有误";
+                return "toast://聚影✓：口令有误";
             }
         }, alistfile),
         img: "https://hikerfans.com/tubiao/more/43.png",
