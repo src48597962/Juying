@@ -823,10 +823,10 @@ function LiveSet() {
                 title: '本地文件',
                 col_type: 'text_2',
                 url: `fileSelect://`+$.toString(()=>{
-                        putMyVar("importinput",input);
-                        refreshPage();
-                        return "toast://"+input;
-                    })
+                    putMyVar("importinput","file://"+input);
+                    refreshPage();
+                    return "toast://"+input;
+                })
             })
             d.push({
                 title: '确定导入',
