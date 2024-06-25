@@ -1863,7 +1863,7 @@ function JYshare(lx,input) {
         let sharetxt = base64Encode(JSON.stringify(datalist));
         let code = sm + '￥' + aesEncode('Juying', sharetxt) + '￥云口令文件';
         let sharefile = 'hiker://files/_cache/Juying_'+datalist.length+'_'+$.dateFormat(new Date(),"HHmmss")+'.hiker';
-        writeFile(sharefile, '云口令：'+code+`@import=js:$.require("hiker://page/cloudimport?rule=聚影√");`);
+        writeFile(sharefile, '云口令：'+code+`@import=js:$.require("hiker://page/cloudimport?rule=聚影✓");`);
         if(fileExist(sharefile)){
             return 'share://'+sharefile;
         }else{
@@ -1876,7 +1876,7 @@ function JYshare(lx,input) {
         if(/^http|^云/.test(pasteurl) && pasteurl.includes('/')){
             pasteurl = pasteurl.replace('云6oooole', 'https://pasteme.tyrantg.com').replace('云2oooole', 'https://netcut.cn').replace('云5oooole', 'https://cmd.im').replace('云7oooole', 'https://note.ms').replace('云9oooole', 'https://txtpbbd.cn').replace('云10oooole', 'https://hassdtebin.com');   
             let code = sm+'￥'+aesEncode('Juying', pasteurl)+'￥共' + datalist.length + '条('+input+')';
-            copy('云口令：'+code+`@import=js:$.require("hiker://page/cloudimport?rule=聚影√");`);
+            copy('云口令：'+code+`@import=js:$.require("hiker://page/cloudimport?rule=聚影✓");`);
             return "toast://"+sm2;
         }else{
             return "toast://分享失败，剪粘板或网络异常>"+pasteurl;
@@ -1906,7 +1906,7 @@ function JYimport(input) {
             }
         }
     }catch(e){
-        return "toast://聚影√：口令有误>"+e.message;
+        return "toast://聚影✓：口令有误>"+e.message;
     }
     try{
         if (inputname == "聚影云盘") {
@@ -1916,11 +1916,11 @@ function JYimport(input) {
             return "toast://合计" + datalist2.length + "个，导入" + num + "个";
         }
         if(inputname=="聚影接口"){
-            var sm = "聚影√：接口";
+            var sm = "聚影✓：接口";
         }else if(inputname=="聚影解析"){
-            var sm = "聚影√：解析";
+            var sm = "聚影✓：解析";
         }else{
-            return "toast://聚影√：无法识别的口令";
+            return "toast://聚影✓：无法识别的口令";
         }
         let text;
         if(/http/.test(pasteurl)){
@@ -1953,9 +1953,9 @@ function JYimport(input) {
             }
             return "toast://"+sm+"合计："+pastedatalist.length+"，保存："+urlnum;
         }else{
-            return "toast://聚影√：口令错误或已失效";
+            return "toast://聚影✓：口令错误或已失效";
         }
     } catch (e) {
-        return "toast://聚影√：无法识别的口令>"+e.message;
+        return "toast://聚影✓：无法识别的口令>"+e.message;
     }
 }
