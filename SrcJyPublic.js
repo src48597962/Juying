@@ -1,8 +1,8 @@
-let datapath = "hiker://files/data/聚影✓/"; //数据文件路径
-let cachepath = "hiker://files/cache/聚影✓/"; //缓存文件路径
+let datapath = "hiker://files/data2/"+MY_RULE.title+"/"; //数据文件路径
+let rulepath = "hiker://files/rules/Src/Juying2/"; //缓存文件路径
 let jkfile = datapath + "jiekou.json";
 let jxfile = datapath + "jiexi.json";
-let cfgfile = datapath + "config.json";
+let cfgfile = rulepath + "config.json";
 
 let Juconfig= {};
 let Jucfg=fetch(cfgfile);
@@ -20,7 +20,7 @@ let sourceName = homeSource.name;
 let sourceGroup = homeSource.group || homeSource.type;
 let sourceUrl = homeSource.url;
 
-globalMap0.putMyVar('gmParams',{datapath:datapath,cachepath:cachepath,jkfile:jkfile,jxfile:jxfile,cfgfile:cfgfile});
+globalMap0.putMyVar('gmParams',{datapath:datapath,rulepath:rulepath,jkfile:jkfile,jxfile:jxfile,cfgfile:cfgfile});
 
 function getFile(lx) {
     let file = lx=='jk'?jkfile:jxfile;
