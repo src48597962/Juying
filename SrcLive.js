@@ -822,13 +822,11 @@ function LiveSet() {
             d.push({
                 title: '本地文件',
                 col_type: 'text_2',
-                url: $.toString(() => {
-                    return `fileSelect://`+$.toString(()=>{
+                url: `fileSelect://`+$.toString(()=>{
                         putMyVar("importinput",input);
                         refreshPage();
                         return "toast://"+input;
                     })
-                })
             })
             d.push({
                 title: '确定导入',
