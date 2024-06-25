@@ -941,11 +941,6 @@ function jiexi(data) {
 }
 //管理中心
 function manageSet(){
-    setResult([{
-        title: '暂未开放',
-        col_type: "rich_text"
-    }]);
-
     addListener("onClose", $.toString(() => {
         clearMyVar('uploads');
         clearMyVar('uploadjiekou');
@@ -962,6 +957,28 @@ function manageSet(){
         col_type: "line_blank"
     });
     */
+    d.push({
+        title: '🏠 依赖管理',
+        col_type: "rich_text"
+    });
+    d.push({
+        title: 'github代理',
+        url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
+            $.require('ghproxy').proxyPage();
+        }),
+        col_type: "text_2"
+    });
+    d.push({
+        title: '代码库地址',
+        url: $(getItem('依赖', ''),"手工指定聚影代码库地址").input(()=>{
+            return $("确定要指定聚影代码库地址"+input).confirm((input)=>{
+                setItem('依赖', input);
+                return "toast://已设置"
+            },input)
+        }),
+        col_type: "text_2"
+    });
+    /*
     d.push({
         title: '🌐 聚影分享',
         col_type: "rich_text"
@@ -1210,11 +1227,6 @@ function manageSet(){
             col_type: "text_2"
         });
     }
-    /*
-    d.push({
-        col_type: "line_blank"
-    });
-    */
     d.push({
         col_type: "line"
     });
@@ -1398,11 +1410,6 @@ function manageSet(){
         }, Juconfig, cfgfile):'toast://请先订阅聚影资源码',
         col_type: "text_2"
     });
-    /*
-    d.push({
-        col_type: "line_blank"
-    });
-    */
     d.push({
         col_type: "line"
     });
@@ -1450,18 +1457,6 @@ function manageSet(){
         col_type: "line"
     });
 
-    
-    /*
-    d.push({
-        col_type: "line_blank"
-    });
-    */
-    
-    /*
-    d.push({
-        col_type: "line_blank"
-    });
-    */
     d.push({
         col_type: "line"
     });
@@ -1508,11 +1503,12 @@ function manageSet(){
             }]
         }
     });
+    */
     d.push({
         title: '<br>',
         col_type: 'rich_text'
     });
-    setHomeResult(d);
+    setResult(d);
 }
 //资源管理
 function resource() {
