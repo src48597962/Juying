@@ -1513,7 +1513,27 @@ function erjiAliShare(share_id, folder_id, share_pwd) {
                         if (getItem('aliyun_order', '聚影排序') == "聚影排序") {
                             filelist.sort(SortList);
                         }
-                        
+                        function removeSameCharactersInTitles(arr) {
+                            return arr.map(obj => {
+                                const title = obj.title;
+                                let newTitle = '';
+                                for (let i = 0; i < title.length; i++) {
+                                let isSame = false;
+                                for (let j = 0; j < arr.length; j++) {
+                                    if (i < arr[j].title.length && title[i] === arr[j].title[i]) {
+                                    isSame = true;
+                                    break;
+                                    }
+                                }
+                                if (!isSame) {
+                                    newTitle += title[i];
+                                }
+                                }
+                                obj.title = newTitle;
+                                return obj;
+                            });
+                        }
+                        let vodlist = [];
                         filelist.forEach((item) => {
                             let filesize = item.size / 1024 / 1024;
                             let it = {
@@ -1571,9 +1591,10 @@ function erjiAliShare(share_id, folder_id, share_pwd) {
                                         return "toast://获取播放列表失败，看日志有无异常或token无效";
                                     }
                                 }, item.share_id, item.file_id, sub_file_id || "", share_pwd);
-                                d.push(it);
+                                vodlist.push(it);
                             }
                         })
+                        d = d.concat(removeSameCharactersInTitles(vodlist));
                     }
                     if(d.length==0){
                         errorStr = '列表为空';
