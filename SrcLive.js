@@ -21,7 +21,7 @@ function Live() {
             }),
         col_type: 'avatar'
     });
-    let livecfgfile = datapath + "liveconfig.json";
+    let livecfgfile = "hiker://files/rules/Src/Juying2/liveconfig.json";
     let livecfg = fetch(livecfgfile);
     if(livecfg != ""){
         eval("var liveconfig = " + livecfg);
@@ -579,7 +579,7 @@ function LiveSet() {
                 //refreshPage(false);
             }));
             //setPageTitle("⚙直播设置⚙");
-            let livecfgfile = getMyVar('JY直播数据路径') + "liveconfig.json";
+            let livecfgfile = "hiker://files/rules/Src/Juying2/liveconfig.json";
             let livecfg = fetch(livecfgfile);
             if(livecfg != ""){
                 eval("var liveconfig = " + livecfg);
@@ -797,7 +797,7 @@ function LiveSet() {
             addListener("onClose", $.toString(() => {
                 clearMyVar('importinput');
             }));
-            let cfgfile = getMyVar('JY直播数据路径') + "config.json";
+            let cfgfile = "hiker://files/rules/Src/Juying2/config.json";
             let Juconfig= {};
             let Jucfg=fetch(cfgfile);
             if(Jucfg != ""){
@@ -894,7 +894,7 @@ function LiveSet() {
                             }
                             if(urls.length>0){
                                 livenum = 0;
-                                let livecfgfile = getMyVar('JY直播数据路径') + "liveconfig.json";
+                                let livecfgfile = "hiker://files/rules/Src/Juying2/liveconfig.json";
                                 let livecfg = fetch(livecfgfile);
                                 if(livecfg != ""){
                                     eval("var liveconfig = " + livecfg);
