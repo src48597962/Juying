@@ -156,7 +156,7 @@ function erjisousuo(name,group) {
             let lists = obj.fun(obj.name, "dianboerji", obj.data);
             return {result:lists, success:1};
         } catch (e) {
-            log('√'+obj.data.name + '>搜索失败>' + e.message);
+            log('✓'+obj.data.name + '>搜索失败>' + e.message);
             return {result:[], success:0};
         }
     }
@@ -369,7 +369,7 @@ function dianboerji() {
                     列表.reverse();
                 }
             }catch(e){
-                //xlog('√强制修正选集顺序失败>'+e.message)
+                //xlog('✓强制修正选集顺序失败>'+e.message)
             }
         }
         if (getMyVar('shsort') == '1') {
@@ -806,7 +806,7 @@ function yiji() {
                 title: "温馨提示",
                 content: "发现小程序新版本",
                 confirm: $.toString(() => {
-                    return "海阔视界首页频道规则【聚影√】￥home_rule_url￥http://hiker.nokia.press/hikerule/rulelist.json?id=6629"
+                    return "海阔视界首页频道规则【聚影✓】￥home_rule_url￥http://hiker.nokia.press/hikerule/rulelist.json?id=6629"
                 }),
                 cancel: $.toString(() => {
                     return "toast://不升级小程序，功能不全或有异常"
