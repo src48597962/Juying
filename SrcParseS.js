@@ -459,7 +459,7 @@ var SrcParseS = {
             }
             return {url:url, header:header};
         } catch (e) {
-            log("√错误："+e.message);
+            log("✓错误："+e.message);
             return url;
         }   
     },
@@ -485,7 +485,7 @@ var SrcParseS = {
                         var tstime = urlcode.body.match(/#EXT-X-TARGETDURATION:(.*?)\n/)[1];
                         var urltss = urlcode.body.replace(/#.*?\n/g,'').replace('#EXT-X-ENDLIST','').split('\n');
                     }catch(e){
-                        log(name+'>√错误：探测异常未拦截>'+e.message);
+                        log(name+'>✓错误：探测异常未拦截>'+e.message);
                         return 1;
                     }
                     if(parseInt(tstime)*parseInt(urltss.length) < times){
@@ -712,7 +712,7 @@ var SrcParseS = {
         return header;
     },
     嗅探: function (vipUrl, excludeurl, getparse) {
-        showLoading('√视频解析中，请稍候...');
+        showLoading('✓视频解析中，请稍候...');
         excludeurl = excludeurl||[];
         clearVar('Srcgetparse');
         return (getMyVar('SrcXTNH', 'web') == 'x5' ? 'x5Rule://' : 'webRule://') + vipUrl + '@' + $.toString((formatUrl,vipUrl,excludeurl,getparse) => {
