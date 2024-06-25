@@ -1518,7 +1518,12 @@ function erjiAliShare(share_id, folder_id, share_pwd) {
                                 return arr;
                             }
                             // 计算最长标题长度，用于后续循环
-                            let maxLength = Math.max(...arr.map(obj => obj.title.length));
+                            let maxLength = 0;
+                            for (let i = 0; i < arr.length; i++) {
+                                if (arr[i].title.length > maxLength) {
+                                    maxLength = arr[i].title.length;
+                                }
+                            }
 
                             // 初始化一个数组，存储每个位置上的字符是否需要保留
                             let keepChars = Array(maxLength).fill(true);
