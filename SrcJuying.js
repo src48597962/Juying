@@ -729,7 +729,7 @@ function dianboyiji() {
                 vodlists.forEach(list=>{
                     let vodname =list.vod_name;
                     if(vodname){
-                        vodname = vodname.replace(/<\/?.+?\/?>/g,'').replace(/在线观看/g,'');
+                        vodname = vodname.replace(/<\/?.+?\/?>/g,'').replace(/在线观看/g,'').replace('&middot;','·');
                         let voddesc = list.vod_desc || "";
                         let vodpic = list.vod_pic;
                         vodpic = vodpic.replace('/img.php?url=', '').replace('/tu.php?tu=', '');
