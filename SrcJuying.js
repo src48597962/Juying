@@ -208,7 +208,6 @@ function erjisousuo(name,group) {
 function dianboerji() {
     addListener("onClose", $.toString((getHistory) => {
         clearMyVar('二级附加临时对象');
-        clearMyVar('二级详情临时对象');
         
         if(getItem('historyEnable')=='1'){
             deleteItemByCls('historylist');
@@ -238,24 +237,13 @@ function dianboerji() {
         }catch(e){ }
     }
     let erdata;
-    if(detailsmark){
+    if(jkdata.type=="yundisk"){
+        erdata = {lists: MY_PARAMS.lists};
+    }else if(detailsmark){
         erdata = detailsmark;
     }else{
-        if(jkdata.type=="yundisk"){
-            log(MY_PARAMS.lists);
-            erdata = {lists: MY_PARAMS.lists || []};
-            if(getMyVar('二级详情临时对象')){
-                let detailTmp = storage0.getMyVar('二级详情临时对象') || {};
-                erdata.details1 = detailTmp.details1 || "";
-                erdata.details2 = detailTmp.details2 || "";
-                erdata.pic = detailTmp.pic || "";
-                erdata.desc = detailTmp.desc || "";
-            }
-        }else{
-            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
-            erdata = getErData(jkdata);
-            storage0.putMyVar('二级详情临时对象', erdata);
-        }
+        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
+        erdata = getErData(jkdata);
         let markData = {surl: jkdata.url, url: MY_URL, data: erdata}
         writeFile(cacheDataFile, JSON.stringify(markData));
     }
