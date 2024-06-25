@@ -226,7 +226,7 @@ function dianboerji() {
     let sname = jkdata.name;
     
     let detailsmark;
-    let cacheDataFile = "hiker://files/_cache/Juying/Details.json";
+    let cacheDataFile = "hiker://files/_cache/SrcJuying_details.json";
     let cacheData = fetch(cacheDataFile);
     if (cacheData != "") {
         try{
