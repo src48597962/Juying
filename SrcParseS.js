@@ -1,5 +1,5 @@
 //本代码仅用于个人学习，请勿用于其他作用，下载后请24小时内删除，代码虽然是公开学习的，但请尊重作者，应留下说明
-let recordfile = globalMap0.getMyVar('gmParams').datapath + "parse.json";//取解析设置、上次成功、手工屏蔽的
+let recordfile = globalMap0.getMyVar('gmParams').rulepath + "parse.json";//取解析设置、上次成功、手工屏蔽的
 let record = fetch(recordfile);
 let parseRecord = {};
 if(record!=""){
