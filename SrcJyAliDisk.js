@@ -455,14 +455,12 @@ function myDiskMenu(islogin) {
                 const tokenFunction = function () {
                     var token = JSON.parse(localStorage.getItem('token'))
                     if (token && token.user_id) {
-                        let alicfgfile = "hiker://files/data/聚影✓/aliconfig.json";
+                        let alicfgfile = "hiker://files/rules/Src/Juying2/aliconfig.json";
                         let aliconfig = {};
                         if (fy_bridge_app.fetch(alicfgfile)) {
                             try {
                                 eval("aliconfig = " + fy_bridge_app.fetch(alicfgfile));
-                            } catch (e) {
-                                aliconfig = {};
-                            }
+                            } catch (e) {}
                         }
                         let aliaccount = aliconfig.account || {};
                         aliaccount.refresh_token = token.refresh_token;
@@ -1005,7 +1003,7 @@ function aliDiskSearch(input, data) {
     if (data) {
         datalist.push(data);
     } else {
-        let filepath = "hiker://files/data/聚影✓/yundisk.json";
+        let filepath = "hiker://files/data2/"+MY_RULE.title+"/yundisk.json";
         let datafile = fetch(filepath);
         if (datafile != "") {
             try {
@@ -1299,7 +1297,7 @@ function erjiSousuo(name) {
     }
 
     let ssdatalist = [];
-    let filepath = "hiker://files/data/聚影✓/yundisk.json";
+    let filepath = "hiker://files/data2/"+MY_RULE.title+"/yundisk.json";
     let datafile = fetch(filepath);
     if (datafile != "") {
         try {
