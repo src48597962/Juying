@@ -1533,7 +1533,7 @@ function erjiAliShare(share_id, folder_id, share_pwd) {
                                 // 检查当前位置上的字符是否在所有标题中都相同
                                 let currentChar = null;
                                 let isFirst = true;
-                                for (const obj of arr) {
+                                for (let obj of arr) {
                                     if (i >= obj.title.length) {
                                         // 如果当前标题在这个位置没有字符，则不需要继续比较
                                         keepChars[i] = false;
