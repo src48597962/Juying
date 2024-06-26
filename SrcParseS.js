@@ -75,7 +75,7 @@ var SrcParseS = {
 
         dataObj = dataObj || {};
         let from;
-        if(dataObj.flag){
+        if(dataObj.flag && !isVip){
             from = dataObj.flag;
         }else{
             try{
@@ -86,6 +86,8 @@ var SrcParseS = {
                 }else if(vipUrl.indexOf('.') != -1){
                     var host = vipUrl.replace('m.tv.','m.').match(/\.(.*?)\//)[1];
                     from = host.split('.')[0];
+                    parseRecord['flag'] = parseRecord['flag']||[];
+                    if(parseRecord['flag'].indexOf(from)==-1){parseRecord['flag'].push(from)}//记录到片源标识组
                 }else if(vipUrl.indexOf('-') != -1){
                     from = vipUrl.split('-')[0];
                 }else{
@@ -96,8 +98,6 @@ var SrcParseS = {
             }
         }
         log("片源标识："+from+"，需要解析"); 
-        parseRecord['flag'] = parseRecord['flag']||[];
-        if(parseRecord['flag'].indexOf(from)==-1){parseRecord['flag'].push(from)}//记录到片源标识组
 
         let parsemode = playSet.parsemode || 1;//解析模式
         let mulnum = playSet.mulnum || 1;//多线程数
