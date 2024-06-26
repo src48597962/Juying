@@ -588,7 +588,7 @@ function dianboyiji() {
             col_type: "icon_3_round_fill"
         })
         d.push({
-            title: "我的设置",
+            title: "管理设置",
             url: $(["接口管理","解析管理","资源管理"],1).select(()=>{
                 if(input=="接口管理"){
                     putMyVar('guanli','jk');
