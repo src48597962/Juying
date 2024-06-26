@@ -735,7 +735,7 @@ function jiexi(data) {
     d.push({
         title: 'ext数据',
         col_type: 'input',
-        desc: "ext对象数据，如headers、flag, 可以留空",
+        desc: "ext对象数据{}，如headers、flag, 可以留空",
         extra: {
             defaultValue: storage0.getMyVar('parseext', data?data.ext:"") || "",
             titleVisible: false,
@@ -743,8 +743,8 @@ function jiexi(data) {
             highlight: true,
             height: 3,
             onChange: $.toString(() => {
-                if (/{|}/.test(input) || !input) {
-                    storage0.putMyVar("parseext", input)
+                if (/{|}/.test(input)) {
+                    storage0.putMyVar("parseext", JSON.parse(input))
                 }
             })
         }
