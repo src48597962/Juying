@@ -1943,3 +1943,312 @@ function JYimport(input) {
         return "toast://聚影✓：无法识别的口令>"+e.message;
     }
 }
+//云盘的接口方法
+function yundiskjiekou() {
+    setPageTitle('☁️云盘接口 | ♥管理');
+    clearMyVar('duoselect');
+    let filepath = "hiker://files/rules/Src/Juying/yundisk.json";
+    let datafile = fetch(filepath);
+    if(datafile != ""){
+        try{
+            eval("var datalist=" + datafile+ ";");
+        }catch(e){
+            var datalist = [];
+        }
+    }else{
+        var datalist = [];
+    }
+    function yundiskapi(filepath,data){
+        addListener("onClose", $.toString(() => {
+            clearMyVar('yundiskname');
+            clearMyVar('yundiskparse');
+            clearMyVar('yundiskerparse');
+            clearMyVar('yundiskedit');
+        }));
+        if(data){
+            putMyVar('yundiskedit','1');
+            putMyVar('yundiskname',getMyVar('yundiskname',data.name));
+            putMyVar('yundiskparse',getMyVar('yundiskparse',data.parse));
+            putMyVar('yundiskerparse',getMyVar('yundiskerparse',data.erparse||""));
+        }
+        let d = [];
+        d.push({
+            title:'名称',
+            col_type: 'input',
+            desc: "接口名称",
+            extra: {
+                defaultValue: getMyVar('yundiskname',''),
+                titleVisible: false,
+                onChange: $.toString(() => {
+                    putMyVar('yundiskname',input);
+                })
+            }
+        });
+        d.push({
+            title:'一解',
+            col_type: 'input',
+            desc: "一解函数",
+            extra: {
+                defaultValue: getMyVar('yundiskparse',''),
+                titleVisible: false,
+                type: "textarea",
+                highlight: true,
+                height: 5,
+                onChange: $.toString(() => {
+                    putMyVar('yundiskparse',input);
+                })
+            }
+        });
+        d.push({
+            title:'二解',
+            col_type: 'input',
+            desc: "二解函数, 可以留空",
+            extra: {
+                defaultValue: getMyVar('yundiskerparse',''),
+                titleVisible: false,
+                type: "textarea",
+                highlight: true,
+                height: 5,
+                onChange: $.toString(() => {
+                    putMyVar('yundiskerparse',input);
+                })
+            }
+        });
+        d.push({
+            title: '测试',
+            col_type: 'text_2',
+            url: $().lazyRule(()=>{
+                if(!getMyVar('yundiskname')||!getMyVar('yundiskparse')){
+                    return "toast://名称和一解函数不能为空";
+                }
+                try{
+                    let name = getMyVar('yundiskname');
+                    let parse = getMyVar('yundiskparse');
+                    let erparse = getMyVar('yundiskerparse');
+                    let newapi = {
+                        name: name,
+                        parse: parse
+                    }
+                    if(erparse){
+                        newapi['erparse'] = erparse;
+                    }
+                    
+                    return $(getItem('searchtestkey', '斗罗大陆'),"输入测试搜索关键字").input((data)=>{
+                        setItem("searchtestkey",input);
+                        return $("hiker://empty#noRecordHistory##noHistory#").rule((name,data) => {
+                            let d = [];
+                            d.push({
+                                title: data.name+"-搜索测试",
+                                url: 'hiker://empty',
+                                col_type: 'text_center_1',
+                                extra: {
+                                    id: "listloading",
+                                    lineVisible: false
+                                }
+                            });
+                            setResult(d);
+                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+                            aliDiskSearch(name,data);
+                        },input,data)
+                    },newapi)
+                }catch(e){
+                    return "toast://接口数据异常，请确认对象格式";
+                }
+            })
+        });
+        d.push({
+            title: '保存',
+            col_type: 'text_2',
+            url: $().lazyRule((filepath)=>{
+                if(!getMyVar('yundiskname')||!getMyVar('yundiskparse')){
+                    return "toast://名称和一解函数不能为空";
+                }
+                try{
+                    let name = getMyVar('yundiskname');
+                    let parse = getMyVar('yundiskparse');
+                    let erparse = getMyVar('yundiskerparse');
+                    let newapi = {
+                        name: name,
+                        parse: parse
+                    }
+                    if(erparse){
+                        newapi['erparse'] = erparse;
+                    }
+
+                    let datafile = fetch(filepath);
+                    if(datafile != ""){
+                        try{
+                            eval("var datalist=" + datafile+ ";");
+                        }catch(e){
+                            var datalist = [];
+                        }
+                    }else{
+                        var datalist = [];
+                    }
+                    let index = datalist.indexOf(datalist.filter(d=>d.name == name)[0]);
+                    if(index>-1 && getMyVar('yundiskedit')!="1"){
+                        return "toast://已存在-"+name;
+                    }else{
+                        if(getMyVar('yundiskedit')=="1" && index>-1){
+                            datalist.splice(index,1);
+                        }
+                        datalist.push(newapi);
+                        writeFile(filepath, JSON.stringify(datalist));
+                        back(true);
+                        return "toast://已保存";
+                    }
+                }catch(e){
+                    return "toast://接口数据异常，请确认对象格式";
+                }
+            },filepath)
+        });
+        setResult(d);
+    }
+    var d = [];
+    d.push({
+        title: '增加',
+        url: $('hiker://empty#noRecordHistory##noHistory#').rule((filepath,yundiskapi) => {
+            yundiskapi(filepath);
+        },filepath,yundiskapi),
+        img: "https://hikerfans.com/tubiao/more/25.png",
+        col_type: "icon_small_3"
+    });
+    d.push({
+        title: '导入',
+        url: $("", "云盘分享口令的云剪贴板").input(() => {
+            try {
+                input = input.split('@import=js:')[0].replace('云口令：','')
+                let inputname = input.split('￥')[0];
+                if (inputname == "聚影云盘") {
+                    showLoading("正在导入，请稍后...");
+                    let parseurl = aesDecode('Juying', input.split('￥')[1]);
+                    let content = parsePaste(parseurl);
+                    let datalist2 = JSON.parse(base64Decode(content));
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                    let num = yundisksave(datalist2);
+                    hideLoading();
+                    refreshPage(false);
+                    return "toast://合计" + datalist2.length + "个，导入" + num + "个";
+                } else {
+                    return "toast://聚影✓：非云盘口令";
+                }
+            } catch (e) {
+                log(e.message);
+                return "toast://聚影✓：口令有误";
+            }
+        }),
+        img: "https://hikerfans.com/tubiao/more/43.png",
+        col_type: "icon_small_3"
+    });
+    d.push({
+        title: '分享',
+        url: datalist.length == 0 ? "toast://云盘接口为0，无法分享" : $().lazyRule((datalist) => {
+            let pasteurl = sharePaste(base64Encode(JSON.stringify(datalist)));
+            if (pasteurl) {
+                pasteurl = pasteurl.replace('云6oooole', 'https://pasteme.tyrantg.com').replace('云2oooole', 'https://netcut.cn').replace('云5oooole', 'https://cmd.im').replace('云7oooole', 'https://note.ms').replace('云9oooole', 'https://txtpbbd.cn').replace('云10oooole', 'https://hassdtebin.com');
+                let code = '聚影云盘￥' + aesEncode('Juying', pasteurl) + '￥共' + datalist.length + '条';
+                copy('云口令：'+code+`@import=js:$.require("hiker://page/cloudimport?rule=聚影✓");`);
+                return "toast://(全部)云盘分享口令已生成";
+            } else {
+                return "toast://分享失败，剪粘板或网络异常";
+            }
+        }, datalist),
+        img: "https://hikerfans.com/tubiao/more/3.png",
+        col_type: "icon_small_3"
+    });
+    d.push({
+        col_type: "line"
+    });
+
+    datalist.forEach(item => {
+        d.push({
+            title: "💽 " + (item.stop?"““"+item.name+"””":item.name) + "   (" + (item.erparse?"二解接口":"一解接口") + ")",
+            url: $(["分享", "编辑", "删除", item.stop?"启用":"禁用", "测试"], 1).select((filepath,yundiskapi,data) => {
+                if (input == "分享") {
+                    showLoading('分享上传中，请稍后...');
+                    let oneshare = []
+                    oneshare.push(data);
+                    let pasteurl = sharePaste(base64Encode(JSON.stringify(oneshare)));
+                    hideLoading();
+                    if(pasteurl){
+                        pasteurl = pasteurl.replace('云6oooole', 'https://pasteme.tyrantg.com').replace('云2oooole', 'https://netcut.cn').replace('云5oooole', 'https://cmd.im').replace('云7oooole', 'https://note.ms').replace('云9oooole', 'https://txtpbbd.cn').replace('云10oooole', 'https://hassdtebin.com');
+                        let code = '聚影云盘￥'+aesEncode('Juying', pasteurl)+'￥'+data.name;
+                        copy('云口令：'+code+`@import=js:$.require("hiker://page/cloudimport?rule=聚影✓");`);
+                        return "toast://(单个)云盘分享口令已生成";
+                    }else{
+                        return "toast://分享失败，剪粘板或网络异常";
+                    }
+                } else if (input == "编辑") {
+                    return $('hiker://empty#noRecordHistory##noHistory#').rule((filepath,yundiskapi,data) => {
+                        yundiskapi(filepath,data);
+                    },filepath,yundiskapi,data)
+                } else if (input == "删除") {
+                    let datafile = fetch(filepath);
+                    eval("var datalist=" + datafile+ ";");
+                    let index = datalist.indexOf(datalist.filter(d=>d.name == data.name)[0]);
+                    datalist.splice(index, 1);
+                    writeFile(filepath, JSON.stringify(datalist));
+                    refreshPage(false);
+                    return 'toast://已删除';
+                } else if (input == "禁用" || input == "启用") {
+                    let datafile = fetch(filepath);
+                    eval("var datalist=" + datafile+ ";");
+                    let index = datalist.indexOf(datalist.filter(d=>d.name == data.name)[0]);
+                    datalist[index].stop = input=="禁用"?1:0;
+                    writeFile(filepath, JSON.stringify(datalist));
+                    refreshPage(false);
+                    return 'toast://已'+input;
+                } else if (input == "测试") {
+                    return $(getItem('searchtestkey', '斗罗大陆'),"输入测试搜索关键字").input((data)=>{
+                        setItem("searchtestkey",input);
+                        return $("hiker://empty#noRecordHistory##noHistory#").rule((name,data) => {
+                            let d = [];
+                            d.push({
+                                title: data.name+"-搜索测试",
+                                url: 'hiker://empty',
+                                col_type: 'text_center_1',
+                                extra: {
+                                    id: "listloading",
+                                    lineVisible: false
+                                }
+                            });
+                            setResult(d);
+                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+                            aliDiskSearch(name,data);
+                        },input,data)
+                    },data)
+                } 
+            },filepath,yundiskapi,item),
+            desc: '',
+            col_type: "text_1"
+        });
+    })
+
+    setResult(d);
+}
+
+function yundisksave(datas){
+    let filepath = datapath + "yundisk.json";
+    let datalist2 = datas;
+    let datafile = fetch(filepath);
+    if(datafile != ""){
+        try{
+            eval("var datalist=" + datafile+ ";");
+        }catch(e){
+            var datalist = [];
+        }
+    }else{
+        var datalist = [];
+    }
+    let num = 0;
+    for (let i = 0; i < datalist2.length; i++) {
+        if (datalist.some(item => item.name == datalist2[i].name)) {
+            let index = datalist.indexOf(datalist.filter(d => d.name==datalist2[i].name)[0]);
+            datalist.splice(index, 1);
+        }
+        datalist.push(datalist2[i]);
+        num = num + 1;
+    }
+    writeFile(filepath, JSON.stringify(datalist));
+    return num;
+}
