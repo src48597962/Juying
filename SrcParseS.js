@@ -63,7 +63,7 @@ var SrcParseS = {
                 vipUrl = vipUrl.split('html?')[0]+'html';
             }
             isVip = 1;
-        }else if(!needparse.test(vipUrl)){
+        }else if(!needparse.test(vipUrl) && /^http/.test(vipUrl)){
             log("网页播放地址");
             let obj = {
                 vipUrl: vipUrl,
