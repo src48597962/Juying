@@ -2147,7 +2147,7 @@ function yundiskjiekou() {
             if (pasteurl) {
                 pasteurl = pasteurl.replace('云6oooole', 'https://pasteme.tyrantg.com').replace('云2oooole', 'https://netcut.cn').replace('云5oooole', 'https://cmd.im').replace('云7oooole', 'https://note.ms').replace('云9oooole', 'https://txtpbbd.cn').replace('云10oooole', 'https://hassdtebin.com');
                 let code = '聚影云盘￥' + aesEncode('Juying', pasteurl) + '￥共' + datalist.length + '条';
-                copy('云口令：'+code+`@import=js:$.require("hiker://page/cloudimport?rule=聚影✓");`);
+                copy('云口令：'+code+`@import=js:$.require("hiker://page/import?rule=聚影✓");`);
                 return "toast://(全部)云盘分享口令已生成";
             } else {
                 return "toast://分享失败，剪粘板或网络异常";
@@ -2173,7 +2173,7 @@ function yundiskjiekou() {
                     if(pasteurl){
                         pasteurl = pasteurl.replace('云6oooole', 'https://pasteme.tyrantg.com').replace('云2oooole', 'https://netcut.cn').replace('云5oooole', 'https://cmd.im').replace('云7oooole', 'https://note.ms').replace('云9oooole', 'https://txtpbbd.cn').replace('云10oooole', 'https://hassdtebin.com');
                         let code = '聚影云盘￥'+aesEncode('Juying', pasteurl)+'￥'+data.name;
-                        copy('云口令：'+code+`@import=js:$.require("hiker://page/cloudimport?rule=聚影✓");`);
+                        copy('云口令：'+code+`@import=js:$.require("hiker://page/import?rule=聚影✓");`);
                         return "toast://(单个)云盘分享口令已生成";
                     }else{
                         return "toast://分享失败，剪粘板或网络异常";
