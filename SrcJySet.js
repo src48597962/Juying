@@ -414,11 +414,7 @@ function jiekousave(urls, mode) {
                     it.group = it.group || "新导入";
                 }
                 delete it['oldurl'];
-                if(urls.length == 1){
-                    datalist.unshift(it);
-                }else{
-                    datalist.push(it);
-                }
+                datalist.push(it);
                 num = num + 1;
             }
         })
@@ -460,11 +456,7 @@ function jiexisave(urls, mode) {
 
             if(!datalist.some(checkitem)&&it.url&&it.name&&/^http|^functio/.test(it.url)){
                 delete it['oldurl'];
-                if(urls.length == 1){
-                    datalist.unshift(it);
-                }else{
-                    datalist.push(it);
-                }
+                datalist.push(it);
                 num = num + 1;
             }
         })
