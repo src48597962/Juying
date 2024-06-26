@@ -1945,19 +1945,17 @@ function JYimport(input) {
 }
 //云盘的接口方法
 function yundiskjiekou() {
-    setPageTitle('☁️云盘接口 | ♥管理');
+    setPageTitle('☁️云盘接口 | 聚影✓');
     clearMyVar('duoselect');
-    let filepath = "hiker://files/rules/Src/Juying/yundisk.json";
+    let filepath = datapath + "yundisk.json";
+    let datalist = [];
     let datafile = fetch(filepath);
     if(datafile != ""){
         try{
-            eval("var datalist=" + datafile+ ";");
-        }catch(e){
-            var datalist = [];
-        }
-    }else{
-        var datalist = [];
+            eval("datalist=" + datafile+ ";");
+        }catch(e){}
     }
+
     function yundiskapi(filepath,data){
         addListener("onClose", $.toString(() => {
             clearMyVar('yundiskname');
