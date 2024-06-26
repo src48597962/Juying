@@ -991,6 +991,7 @@ function getErData(jkdata) {
                 tabs = arts.map(it => {
                     return it.replace(/[\r\ \n\t]/g, "");
                 })
+                flags = tabs;
                 lists = conts.map(it => {
                     let lines = it.split('#');
                     lines = lines.map((itit, i) => {
@@ -1049,6 +1050,7 @@ function getErData(jkdata) {
                 })
                 if (arts.length == 0 && json.vod_play_from && json.vod_play_url) {
                     tabs = json.vod_play_from.split('$$$');
+                    flags = tabs;
                     conts = json.vod_play_url.split('$$$');
                     lists = conts.map(it => {
                         let lines = it.split('#');
@@ -1070,7 +1072,7 @@ function getErData(jkdata) {
             remarks = json.vod_remarks || "";
             pubdate = json.vod_pubdate || json.vod_class || "";
             pic = json.vod_pic && json.vod_pic.indexOf('ver.txt') == -1 ? json.vod_pic : '';
-            desc = json.vod_blurb;
+            desc = json.vod_content || json.vod_blurb;
         } else if (/iptv/.test(api_type)) {
             actor = html.actor.join(",");
             area = html.area.join(",");
