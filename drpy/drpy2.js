@@ -71,19 +71,6 @@ const req = function (url, cobj) {
     }
 }
 
-if (isCloseLog) {
-    // 重写console.log函数
-    console.log = function () {
-        // 检查传入参数的数量
-        if (arguments.length > 1) {
-            // 如果参数数量大于1，调用原始的console.log函数
-            //originalLog.apply(console, arguments);
-        } else {
-            return;
-        }
-        // 如果参数只有一个，则不做任何操作
-    };
-}
 
 
 function init_test() {
