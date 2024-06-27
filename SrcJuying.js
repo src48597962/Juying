@@ -712,7 +712,7 @@ function dianboyiji() {
         if(jkdata.type=="drpy"){
             let drpy = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + "drpy/drpy2.js");
             log(Object.keys(this).length);
-            drpy.init(getPath(getjkdata.url));
+            drpy.init(getPath(jkdata.url));
             log(Object.keys(this).length);
         }else{
             try{
