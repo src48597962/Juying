@@ -20,16 +20,7 @@ const cheerio = {
     }
 }
 
-const isCloseLog = !getItem("useLog", "");
 
-
-const getProxy = function () {
-    return getMyVar("Proxy_Url", "http://127.0.0.1:52020/proxy") + "?hikerSkey=" + encodeURIComponent(skey) + "&do=js";
-}
-//eval(getCryptoJS());
-
-let $request = request;
-let $post = post;
 const req = function (url, cobj) {
     try {
         let res = {};
@@ -79,13 +70,7 @@ const req = function (url, cobj) {
         log("Error" + e.toString());
     }
 }
-String.prototype.replaceAll = function (search, replacement) {
-    return this.split(search).join(replacement);
-};
-let $toString = Function.prototype.toString;
-Function.prototype.toString = function () {
-    return $toString.apply(this).trim();
-};
+
 if (isCloseLog) {
     // 重写console.log函数
     console.log = function () {
