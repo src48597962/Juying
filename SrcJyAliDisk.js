@@ -1247,6 +1247,7 @@ function myDiskSearch(input) {
             let drive_list = [userinfo.backup_drive_id || userinfo.default_drive_id, userinfo.resource_drive_id];
             let postdata = {"drive_id_list":drive_list,"limit":20,"query":"name match \""+input+"\" and type = \"folder\"","image_thumbnail_process":"image/resize,w_256/format,avif","image_url_process":"image/resize,w_1920/format,avif","video_thumbnail_process":"video/snapshot,t_120000,f_jpg,m_lfit,w_256,ar_auto,m_fast","order_by":"updated_at DESC"}
             let list = JSON.parse(request('https://api.aliyundrive.com/adrive/v3/file/search', { headers: headers, body: postdata, method: 'POST' })).items;
+            log(list);
             let data = list.map(item => {
                 return {
                     title: item.name,
