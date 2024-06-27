@@ -3083,14 +3083,16 @@ function init(ext) {
     rule_fetch_params = {};
     fetch_params = null;
     try {
+        console.log("0");
         let muban = 模板.getMubans();
+        console.log("1");
         // print(typeof (muban));
         // print(muban);
         if (typeof ext == 'object') {
             rule = ext;
         } else if (typeof ext == 'string') {
             if (ext.startsWith('http') || ext.startsWith('file://')) {
-                console.log("1");
+                console.log("11");
                 let query = getQuery(ext); // 获取链接传参
                 let js = request(ext, {'method': 'GET'});
                 if (js) {
