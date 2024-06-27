@@ -125,7 +125,7 @@ function SRCSet() {
         col_type: "icon_small_4",
         extra: {
             longClick: [{
-                title: '单接口分享剪贴板：' + (getItem("sharePaste") || "自动选择"),
+                title: '单接口分享剪贴板：' + (getItem("sharePaste","") || "自动选择"),
                 js: $.toString(() => {
                     let pastes = getPastes();
                     pastes.unshift('自动选择');
@@ -301,7 +301,7 @@ function SRCSet() {
                     showLoading('分享上传中，请稍后...');
                     let oneshare = []
                     oneshare.push(data);
-                    let pasteurl = sharePaste(base64Encode(JSON.stringify(oneshare)), getItem("sharePaste")||"");
+                    let pasteurl = sharePaste(base64Encode(JSON.stringify(oneshare)), getItem("sharePaste",""));
                     hideLoading();
                     if (/^http|^云/.test(pasteurl) && pasteurl.includes('/')) {
                         pasteurl = pasteurl.replace('云6oooole', 'https://pasteme.tyrantg.com').replace('云5oooole', 'https://cmd.im').replace('云7oooole', 'https://note.ms').replace('云9oooole', 'https://txtpbbd.cn').replace('云10oooole', 'https://hassdtebin.com');   
@@ -2131,7 +2131,7 @@ function yundiskjiekou() {
     d.push({
         title: '分享',
         url: datalist.length == 0 ? "toast://云盘接口为0，无法分享" : $().lazyRule((datalist) => {
-            let pasteurl = sharePaste(base64Encode(JSON.stringify(datalist)), getItem("sharePaste")||"");
+            let pasteurl = sharePaste(base64Encode(JSON.stringify(datalist)), getItem("sharePaste",""));
             if (pasteurl) {
                 let code = '聚影云盘￥' + aesEncode('Juying', pasteurl) + '￥共' + datalist.length + '条';
                 copy('云口令：'+code+`@import=js:$.require("hiker://page/import?rule=聚影✓");`);
@@ -2144,7 +2144,7 @@ function yundiskjiekou() {
         col_type: "icon_small_3",
         extra: {
             longClick: [{
-                title: '分享剪贴板：' + (getItem("sharePaste") || "自动选择"),
+                title: '分享剪贴板：' + (getItem("sharePaste","") || "自动选择"),
                 js: $.toString(() => {
                     let pastes = getPastes();
                     pastes.unshift('自动选择');
@@ -2173,7 +2173,7 @@ function yundiskjiekou() {
                     showLoading('分享上传中，请稍后...');
                     let oneshare = []
                     oneshare.push(data);
-                    let pasteurl = sharePaste(base64Encode(JSON.stringify(oneshare)), getItem("sharePaste")||"");
+                    let pasteurl = sharePaste(base64Encode(JSON.stringify(oneshare)), getItem("sharePaste",""));
                     hideLoading();
                     if(pasteurl){
                         let code = '聚影云盘￥'+aesEncode('Juying', pasteurl)+'￥'+data.name;
