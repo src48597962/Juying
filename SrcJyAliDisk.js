@@ -1922,7 +1922,6 @@ function erjiAliMyDiskSs(extra){
                 },extra),
                 col_type: "text_2",
                 extra: {
-                    url: aliUrl,
                     cls: "Juloadlist"
                 }
             }]
