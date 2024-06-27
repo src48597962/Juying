@@ -711,7 +711,9 @@ function dianboyiji() {
     if(sourceName){
         if(jkdata.type=="drpy"){
             let drpy = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + "drpy/drpy2.js");
+            log("init开始");
             drpy.init(getPath(jkdata.url));
+            log("init完成");
         }else{
             try{
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
