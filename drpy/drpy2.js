@@ -3504,13 +3504,13 @@ const isCloseLog = !getItem("useLog", "");
 const localKey = "drpy";
 const CryptoUtil = $.require("hiker://assets/crypto-java.js");
 const local = {
-    set: function set(rulekey, k, v) {
+    "set": function (rulekey, k, v) {
         storage0.setItem(localKey + "@" + rulekey + "@" + k, v);
     },
-    get: function get(rulekey, k, v) {
+    "get": function (rulekey, k, v) {
         return storage0.getItem(localKey + "@" + rulekey + "@" + k, "") || v;
     },
-    delete: function delete(rulekey, k) {
+    "delete": function (rulekey, k) {
         storage0.clearItem(localKey + "@" + rulekey + "@" + k);
     }
 };
