@@ -3078,10 +3078,12 @@ function runMain(main_func_code, arg) {
  */
 function init(ext) {
     console.log('init');
+    console.log("00");
     // init前重置rule和fetch_params
     rule = {};
     rule_fetch_params = {};
     fetch_params = null;
+    console.log("000");
     try {
         console.log("0");
         let muban = 模板.getMubans();
