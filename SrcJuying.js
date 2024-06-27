@@ -709,9 +709,11 @@ function dianboyiji() {
         }
     }
     if(sourceName){
-        log(Object.keys(this));
         if(jkdata.type=="drpy"){
-            log(Object.keys(this));
+            let drpy = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + "plugins/drpy2.js");
+            log(Object.keys(this).length);
+            drpy.init(getPath(getjkdata.url));
+            log(Object.keys(this).length);
         }else{
             try{
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
