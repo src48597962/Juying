@@ -3078,6 +3078,7 @@ function runMain(main_func_code, arg) {
  * @param ext
  */
 function init(ext) {
+    log(ext);
     console.log('init');
     console.log("00");
     // init前重置rule和fetch_params
