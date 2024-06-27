@@ -709,8 +709,9 @@ function dianboyiji() {
         }
     }
     if(sourceName){
+        log(Object.keys(this));
         if(jkdata.type=="drpy"){
-            
+            log(Object.keys(this));
         }else{
             try{
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
