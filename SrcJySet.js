@@ -125,7 +125,7 @@ function SRCSet() {
         col_type: "icon_small_4",
         extra: {
             longClick: [{
-                title: '单接口分享剪贴板：' + (getItem("sharePaste","") || "自动选择"),
+                title: '单接口分享剪贴板：' + getItem("sharePaste","自动选择"),
                 js: $.toString(() => {
                     let pastes = getPastes();
                     pastes.unshift('自动选择');
@@ -2144,7 +2144,7 @@ function yundiskjiekou() {
         col_type: "icon_small_3",
         extra: {
             longClick: [{
-                title: '分享剪贴板：' + (getItem("sharePaste","") || "自动选择"),
+                title: '分享剪贴板：' + getItem("sharePaste","自动选择"),
                 js: $.toString(() => {
                     let pastes = getPastes();
                     pastes.unshift('自动选择');
@@ -2155,7 +2155,7 @@ function yundiskjiekou() {
                             setItem("sharePaste", input);
                         }
                         refreshPage(false);
-                        return 'toast://单接口分享剪贴板已设置为：' + input;
+                        return 'toast://分享剪贴板已设置为：' + input;
                     })
                 })
             }]
