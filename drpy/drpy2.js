@@ -26,7 +26,7 @@ const isCloseLog = !getItem("useLog", "");
 const getProxy = function () {
     return getMyVar("Proxy_Url", "http://127.0.0.1:52020/proxy") + "?hikerSkey=" + encodeURIComponent(skey) + "&do=js";
 }
-eval(getCryptoJS());
+//eval(getCryptoJS());
 
 let $request = request;
 let $post = post;
