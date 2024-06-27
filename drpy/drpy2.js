@@ -1208,9 +1208,9 @@ var urljoin2 = urljoin;
 
 // 内置 pdfh,pdfa,pd
 const defaultParser = {
-    pdfh: pdfh,
-    pdfa: pdfa,
-    pd: pd,
+    pdfh: _pdfh,
+    pdfa: _pdfa,
+    pd: _pd,
 };
 
 
@@ -3497,7 +3497,59 @@ function isVideo(url) {
     }
     return result
 }
+function req (url, cobj) {
+    try {
+        let res = {};
+        let obj = Object.assign({}, cobj);
+        if (obj.data) {
+            obj.body = obj.data;
+            delete obj.data;
+        }
 
+        if (obj.hasOwnProperty("redirect")) obj.redirect = !!obj.redirect;
+        if (obj.buffer === 2) {
+            obj.toHex = true;
+        }
+        obj.headers = Object.assign({
+            Cookie: "#noCookie#"
+        }, obj.headers);
+        if (url === "https://api.nn.ci/ocr/b64/text" && obj.headers) {
+            obj.headers["Content-Type"] = "text/plain";
+        }
+
+        if (url.startsWith("file://") && (url.includes("?type=") || url.includes("?params="))) {
+            url = url.slice(0, url.lastIndexOf("?"));
+        }
+        for (let key in obj.headers) {
+            if (typeof obj.headers[key] !== "string") {
+                obj.headers[key] = String(obj.headers[key]);
+            }
+        }
+        let r = "";
+        /* if (String(obj.method).toLowerCase() === "post") {
+                r = $post(url, obj);
+            } else {
+                r = $request(url, obj);
+            }*/
+        r = $request(url, obj);
+        if (obj.withHeaders) {
+            r = JSON.parse(r);
+            res.content = r.body;
+            res.headers = {};
+            for (let [k, v] of Object.entries(r.headers || {})) {
+                res.headers[k] = v[0];
+            }
+        } else {
+            res.content = r;
+        }
+        if (obj.buffer === 2) {
+            res.content = CryptoUtil.Data.parseHex(res.content).toBase64(_base64.NO_WRAP);
+        }
+        return res;
+    } catch (e) {
+        log("Error" + e.toString());
+    }
+}
 /**
  * 获取规则
  * @returns {{}}
