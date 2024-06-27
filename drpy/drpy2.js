@@ -20,7 +20,8 @@ const cheerio = {
     }
 }
 
-
+let $request = request;
+let $post = post;
 const req = function (url, cobj) {
     try {
         let res = {};
