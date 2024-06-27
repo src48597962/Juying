@@ -1247,7 +1247,6 @@ function myDiskSearch(input) {
             let drive_list = [userinfo.backup_drive_id || userinfo.default_drive_id, userinfo.resource_drive_id];
             let postdata = {"drive_id_list":drive_list,"limit":20,"query":"name match \""+input+"\" and type = \"folder\"","image_thumbnail_process":"image/resize,w_256/format,avif","image_url_process":"image/resize,w_1920/format,avif","video_thumbnail_process":"video/snapshot,t_120000,f_jpg,m_lfit,w_256,ar_auto,m_fast","order_by":"updated_at DESC"}
             let list = JSON.parse(request('https://api.aliyundrive.com/adrive/v3/file/search', { headers: headers, body: postdata, method: 'POST' })).items;
-            log(list);
             let data = list.map(item => {
                 return {
                     title: item.name,
@@ -1821,9 +1820,9 @@ function erjiAliMyDiskSs(extra){
         return "toast://" + data.errorStr;
     }else{
         deleteItemByCls('Juloadlist');
-        let refreshlist = $().lazyRule((share_id, folder_id, share_pwd) => {
+        let refreshlist = $().lazyRule((folder_id, drive_id) => {
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
-            let data = erjiAliShare(share_id, folder_id, share_pwd);
+            let data = erjiAliMyDisk(folder_id, drive_id);
             if(data.errorStr){
                 return "toast://" + data.errorStr;
             }else{
@@ -1831,7 +1830,7 @@ function erjiAliMyDiskSs(extra){
                 addItemAfter("yundiskloadid", data.lists);// 生成切源分组
             }
             return "hiker://empty";
-        }, share_id, "root", share_pwd);
+        }, folder_id, drive_id);
         let menus = [{
             title: "刷新",
             url: refreshlist,
