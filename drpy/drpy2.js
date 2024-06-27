@@ -3283,6 +3283,7 @@ function init(ext) {
         oheaders = rule.headers || {};
         RKEY = typeof (key) !== 'undefined' && key ? key : 'drpy_' + (rule.title || rule.host);
         pre(); // 预处理
+        log(Object.keys(this));
         init_test();
     } catch (e) {
         console.log(`init_test发生错误:${e.message}`);
