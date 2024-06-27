@@ -22,7 +22,7 @@ const cheerio = {
 
 const isCloseLog = !getItem("useLog", "");
 const CryptoUtil = $.require("hiker://assets/crypto-java.js");
-eval(getCryptoJS());
+//eval(getCryptoJS());
 
 
 let $request = request;
