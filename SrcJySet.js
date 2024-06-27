@@ -1711,10 +1711,7 @@ function Resourceimport(input,importtype,importmode){
                             extfile = input.match(/http(s)?:\/\/.*\//)[0]+extfile.replace("./","");
                         }
                     }
-                    
-                    /*if(/drpy2/.test(obj.api)){
-                        arr = { "name": obj.name, "type": "drpy", "ext": extfile};
-                    }else */
+
                     if(/^csp_XBiubiu/.test(obj.api)){
                         arr = { "name": obj.name, "type": "biubiu", "ext": extfile};
                     }else if(/^csp_XPath/.test(obj.api)){
@@ -1723,6 +1720,8 @@ function Resourceimport(input,importtype,importmode){
                         arr = { "name": obj.name, "type": "XBPQ", "ext": extfile};
                     }else if(/^csp_XYQHiker/.test(obj.api)){
                         arr = { "name": obj.name, "type": "XYQ", "ext": extfile};
+                    }else if(/drpy2/.test(obj.api)){
+                        arr = { "name": obj.name, "type": "drpy", "ext": extfile};
                     }
 
                     if(arr){
