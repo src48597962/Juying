@@ -3090,6 +3090,7 @@ function init(ext) {
             rule = ext;
         } else if (typeof ext == 'string') {
             if (ext.startsWith('http') || ext.startsWith('file://')) {
+                console.log("1");
                 let query = getQuery(ext); // 获取链接传参
                 let js = request(ext, {'method': 'GET'});
                 if (js) {
@@ -3109,12 +3110,14 @@ function init(ext) {
                 // eval("(function(){'use strict';"+ext.replace('var rule', 'rule')+"})()");
                 eval("(function(){" + ext.replace('var rule', 'rule') + "})()");
             }
+            console.log("2");
         } else {
             console.log(`规则加载失败,不支持的规则类型:${typeof ext}`);
             return
         }
         rule.host = (rule.host || '').rstrip('/');
         HOST = rule.host;
+        log(HOST);
         if (rule.hostJs) {
             console.log(`检测到hostJs,准备执行...`);
             try {
@@ -3160,6 +3163,7 @@ function init(ext) {
             print('继承模板:' + rule.模板);
             rule = Object.assign(muban[rule.模板], rule);
         }
+        console.log("3");
         /** 处理一下 rule规则关键字段没传递的情况 **/
         let rule_cate_excludes = (rule.cate_exclude || '').split('|').filter(it => it.trim());
         let rule_tab_excludes = (rule.tab_exclude || '').split('|').filter(it => it.trim());
