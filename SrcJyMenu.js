@@ -85,6 +85,9 @@ function cutSource(name, group) {
             title: group==it?`““””<b><span style="color: #3399cc">`+it+`</span></b>`:it,
             url: $('#noLoading#').lazyRule((name,newgroup) => {
                 let oldgroup = getMyVar("切源旧分组","");
+                if(oldgroup==newgroup){
+                    return "hiker://empty";
+                }
                 updateItem("id_"+oldgroup, {
                     title: oldgroup
                 })
