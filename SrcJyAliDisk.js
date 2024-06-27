@@ -1965,9 +1965,16 @@ function erjiAliMyDisk(folder_id, drive_id) {
                     d.push({
                         title: item.name,
                         img: "hiker://files/cache/src/文件夹.svg",
-                        url: $("hiker://empty").rule((folder_id, drive_id) => {
+                        url: $().lazyRule((folder_id, drive_id) => {
                             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
-                            erjiAliMyDisk(folder_id, drive_id);
+                            let data = erjiAliMyDisk(folder_id, drive_id);
+                            if(data.errorStr){
+                                return "toast://" + data.errorStr;
+                            }else{
+                                deleteItemByCls('grouploadlist');
+                                addItemAfter("yundiskloadid", data.lists);// 生成切源分组
+                            }
+                            return "hiker://empty";
                         }, item.file_id, drive_id),
                         col_type: style,
                         extra: {
@@ -1998,7 +2005,7 @@ function erjiAliMyDisk(folder_id, drive_id) {
                         d.push({
                             title: item.name,
                             img: item.thumbnail ? item.thumbnail + "@Referer=https://www.aliyundrive.com/" : "hiker://files/cache/src/影片.svg",
-                            url: $("hiker://empty##").lazyRule((file_id, sub_file_url,drive_id) => {
+                            url: $().lazyRule((file_id, sub_file_url,drive_id) => {
                                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliPublic.js');
                                     if (alitoken) {
                                         let play = aliMyPlayUrl(file_id,drive_id);
