@@ -19,89 +19,10 @@ const cheerio = {
         })[0];
     }
 }
-
-const isCloseLog = !getItem("useLog", "");
-//
-//eval(getCryptoJS());
-
-
-let $request = request;
-let $post = post;
-const req = function (url, cobj) {
-    try {
-        let res = {};
-        let obj = Object.assign({}, cobj);
-        if (obj.data) {
-            obj.body = obj.data;
-            delete obj.data;
-        }
-
-        if (obj.hasOwnProperty("redirect")) obj.redirect = !!obj.redirect;
-        if (obj.buffer === 2) {
-            obj.toHex = true;
-        }
-        obj.headers = Object.assign({
-            Cookie: "#noCookie#"
-        }, obj.headers);
-        if (url === "https://api.nn.ci/ocr/b64/text" && obj.headers) {
-            obj.headers["Content-Type"] = "text/plain";
-        }
-
-        if (url.startsWith("file://") && (url.includes("?type=") || url.includes("?params="))) {
-            url = url.slice(0, url.lastIndexOf("?"));
-        }
-        for (let key in obj.headers) {
-            if (typeof obj.headers[key] !== "string") {
-                obj.headers[key] = String(obj.headers[key]);
-            }
-        }
-        let r = "";
-        /* if (String(obj.method).toLowerCase() === "post") {
-                r = $post(url, obj);
-            } else {
-                r = $request(url, obj);
-            }*/
-        r = $request(url, obj);
-        if (obj.withHeaders) {
-            r = JSON.parse(r);
-            res.content = r.body;
-            res.headers = {};
-            for (let [k, v] of Object.entries(r.headers || {})) {
-                res.headers[k] = v[0];
-            }
-        } else {
-            res.content = r;
-        }
-        if (obj.buffer === 2) {
-            const CryptoUtil = $.require("hiker://assets/crypto-java.js");
-            res.content = CryptoUtil.Data.parseHex(res.content).toBase64(_base64.NO_WRAP);
-        }
-        return res;
-    } catch (e) {
-        log("Error" + e.toString());
-    }
-}
-
-String.prototype.replaceAll = function (search, replacement) {
-    return this.split(search).join(replacement);
-};
-let $toString = Function.prototype.toString;
-Function.prototype.toString = function () {
-    return $toString.apply(this).trim();
-};
-if (isCloseLog) {
-    // 重写console.log函数
-    console.log = function () {
-        // 检查传入参数的数量
-        if (arguments.length > 1) {
-            // 如果参数数量大于1，调用原始的console.log函数
-            //originalLog.apply(console, arguments);
-        } else {
-            return;
-        }
-        // 如果参数只有一个，则不做任何操作
-    };
-}
+// import cheerio from "https://ghproxy.net/https://raw.githubusercontent.com/hjdhnx/dr_py/main/libs/cheerio.min.js";
+// import "https://ghproxy.net/https://raw.githubusercontent.com/hjdhnx/dr_py/main/libs/crypto-js.js";
+// import 模板 from"https://ghproxy.net/https://raw.githubusercontent.com/hjdhnx/dr_py/main/js/模板.js";
+// import {gbkTool} from 'https://ghproxy.net/https://raw.githubusercontent.com/hjdhnx/dr_py/main/libs/gbk.js'
 
 function init_test() {
     // console.log(typeof(CryptoJS));
@@ -111,10 +32,55 @@ function init_test() {
     console.log("当前版本号:" + VERSION);
     console.log('本地代理地址:' + getProxyUrl());
     console.log(RKEY);
+    // ocr_demo_test();
+    // rsa_demo_test();
 
+    // console.log('Uint8Array:'+typeof(Uint8Array)+' '+'Uint16Array:'+typeof(Uint16Array));
+    // console.log('encodeURIComponent:'+typeof(encodeURIComponent)+' '+'decodeURIComponent:'+typeof(decodeURIComponent));
+    // console.log('atob:'+typeof(atob)+' '+'btoa:'+typeof(btoa));
+    // log('typeof (JSEncrypt):'+typeof (JSEncrypt));
+    // log('typeof (pako):'+typeof (pako));
+    // let b64_str = btoa('hello hipy');
+    // let str = atob(b64_str);
+    // console.log(`btoa加密文本:${b64_str},atob解密文本:${str}`)
+    // let gzip_str = gzip('{"a":"电影","b":"电影","c":"电影","d":"电影","e":"电影","f":"电影"}');
+    // let ungzip_str = ungzip(gzip_str);
+    // console.log(`gzip加密文本:${gzip_str},长度:${gzip_str.length},ungzip解密文本:${ungzip_str},长度:${ungzip_str.length}`);
+    // let a = {"1":[{"key":"类型","name":"类型","value":[{"n":"全部","v":""},{"n":"Netflix","v":"NETFLIX"},{"n":"剧情","v":"剧情"},{"n":"喜剧","v":"喜剧"},{"n":"动作","v":"动作"},{"n":"爱情","v":"爱情"},{"n":"恐怖","v":"恐怖"},{"n":"惊悚","v":"惊悚"},{"n":"犯罪","v":"犯罪"},{"n":"科幻","v":"科幻"},{"n":"悬疑","v":"悬疑"},{"n":"奇幻","v":"奇幻"},{"n":"冒险","v":"冒险"},{"n":"战争","v":"战争"},{"n":"历史","v":"历史"},{"n":"古装","v":"古装"},{"n":"家庭","v":"家庭"},{"n":"传记","v":"传记"},{"n":"武侠","v":"武侠"},{"n":"歌舞","v":"歌舞"},{"n":"短片","v":"短片"},{"n":"动画","v":"动画"},{"n":"儿童","v":"儿童"},{"n":"职场","v":"职场"}]},{"key":"地区","name":"地区","value":[{"n":"全部","v":""},{"n":"大陆","v":"中国大陆"},{"n":"香港","v":"中国香港"},{"n":"台湾","v":"中国台湾"},{"n":"美国","v":"美国"},{"n":"日本","v":"日本"},{"n":"韩国","v":"韩国"},{"n":"英国","v":"英国"},{"n":"法国","v":"法国"},{"n":"德国","v":"德国"},{"n":"印度","v":"印度"},{"n":"泰国","v":"泰国"},{"n":"丹麦","v":"丹麦"},{"n":"瑞典","v":"瑞典"},{"n":"巴西","v":"巴西"},{"n":"加拿大","v":"加拿大"},{"n":"俄罗斯","v":"俄罗斯"},{"n":"意大利","v":"意大利"},{"n":"比利时","v":"比利时"},{"n":"爱尔兰","v":"爱尔兰"},{"n":"西班牙","v":"西班牙"},{"n":"澳大利亚","v":"澳大利亚"},{"n":"其他","v":"其他"}]},{"key":"语言","name":"语言","value":[{"n":"全部","v":""},{"n":"国语","v":"国语"},{"n":"粤语","v":"粤语"},{"n":"英语","v":"英语"},{"n":"日语","v":"日语"},{"n":"韩语","v":"韩语"},{"n":"法语","v":"法语"},{"n":"其他","v":"其他"}]},{"key":"年份","name":"年份","value":[{"n":"全部","v":""},{"n":"2024","v":"2024"},{"n":"2023","v":"2023"},{"n":"2022","v":"2022"},{"n":"2021","v":"2021"},{"n":"2020","v":"2020"},{"n":"10年代","v":"2010_2019"},{"n":"00年代","v":"2000_2009"},{"n":"90年代","v":"1990_1999"},{"n":"80年代","v":"1980_1989"},{"n":"更早","v":"0_1979"}]},{"key":"排序","name":"排序","value":[{"n":"综合","v":""},{"n":"最新","v":"2"},{"n":"最热","v":"3"},{"n":"评分","v":"4"}]}],"2":[{"key":"类型","name":"类型","value":[{"n":"全部","v":""},{"n":"Netflix","v":"Netflix"},{"n":"剧情","v":"剧情"},{"n":"爱情","v":"爱情"},{"n":"喜剧","v":"喜剧"},{"n":"犯罪","v":"犯罪"},{"n":"悬疑","v":"悬疑"},{"n":"古装","v":"古装"},{"n":"动作","v":"动作"},{"n":"家庭","v":"家庭"},{"n":"惊悚","v":"惊悚"},{"n":"奇幻","v":"奇幻"},{"n":"美剧","v":"美剧"},{"n":"科幻","v":"科幻"},{"n":"历史","v":"历史"},{"n":"战争","v":"战争"},{"n":"韩剧","v":"韩剧"},{"n":"武侠","v":"武侠"},{"n":"言情","v":"言情"},{"n":"恐怖","v":"恐怖"},{"n":"冒险","v":"冒险"},{"n":"都市","v":"都市"},{"n":"职场","v":"职场"}]},{"key":"地区","name":"地区","value":[{"n":"地区","v":""},{"n":"大陆","v":"中国大陆"},{"n":"香港","v":"中国香港"},{"n":"韩国","v":"韩国"},{"n":"美国","v":"美国"},{"n":"日本","v":"日本"},{"n":"法国","v":"法国"},{"n":"英国","v":"英国"},{"n":"德国","v":"德国"},{"n":"台湾","v":"中国台湾"},{"n":"泰国","v":"泰国"},{"n":"印度","v":"印度"},{"n":"其他","v":"其他"}]},{"key":"语言","name":"语言","value":[{"n":"全部","v":""},{"n":"国语","v":"国语"},{"n":"粤语","v":"粤语"},{"n":"英语","v":"英语"},{"n":"日语","v":"日语"},{"n":"韩语","v":"韩语"},{"n":"法语","v":"法语"},{"n":"其他","v":"其他"}]},{"key":"年份","name":"年份","value":[{"n":"全部","v":""},{"n":"2024","v":"2024"},{"n":"2023","v":"2023"},{"n":"2022","v":"2022"},{"n":"2021","v":"2021"},{"n":"2020","v":"2020"},{"n":"10年代","v":"2010_2019"},{"n":"00年代","v":"2000_2009"},{"n":"90年代","v":"1990_1999"},{"n":"80年代","v":"1980_1989"},{"n":"更早","v":"0_1979"}]},{"key":"排序","name":"排序","value":[{"n":"综合","v":""},{"n":"最新","v":"2"},{"n":"最热","v":"3"},{"n":"评分","v":"4"}]}],"3":[{"key":"类型","name":"类型","value":[{"n":"全部","v":""},{"n":"Netflix","v":"Netflix"},{"n":"动态漫画","v":"动态漫画"},{"n":"剧情","v":"剧情"},{"n":"动画","v":"动画"},{"n":"喜剧","v":"喜剧"},{"n":"冒险","v":"冒险"},{"n":"动作","v":"动作"},{"n":"奇幻","v":"奇幻"},{"n":"科幻","v":"科幻"},{"n":"儿童","v":"儿童"},{"n":"搞笑","v":"搞笑"},{"n":"爱情","v":"爱情"},{"n":"家庭","v":"家庭"},{"n":"短片","v":"短片"},{"n":"热血","v":"热血"},{"n":"益智","v":"益智"},{"n":"悬疑","v":"悬疑"},{"n":"经典","v":"经典"},{"n":"校园","v":"校园"},{"n":"Anime","v":"Anime"},{"n":"运动","v":"运动"},{"n":"亲子","v":"亲子"},{"n":"青春","v":"青春"},{"n":"恋爱","v":"恋爱"},{"n":"武侠","v":"武侠"},{"n":"惊悚","v":"惊悚"}]},{"key":"地区","name":"地区","value":[{"n":"全部","v":""},{"n":"日本","v":"日本"},{"n":"大陆","v":"中国大陆"},{"n":"台湾","v":"中国台湾"},{"n":"美国","v":"美国"},{"n":"香港","v":"中国香港"},{"n":"韩国","v":"韩国"},{"n":"英国","v":"英国"},{"n":"法国","v":"法国"},{"n":"德国","v":"德国"},{"n":"印度","v":"印度"},{"n":"泰国","v":"泰国"},{"n":"丹麦","v":"丹麦"},{"n":"瑞典","v":"瑞典"},{"n":"巴西","v":"巴西"},{"n":"加拿大","v":"加拿大"},{"n":"俄罗斯","v":"俄罗斯"},{"n":"意大利","v":"意大利"},{"n":"比利时","v":"比利时"},{"n":"爱尔兰","v":"爱尔兰"},{"n":"西班牙","v":"西班牙"},{"n":"澳大利亚","v":"澳大利亚"},{"n":"其他","v":"其他"}]},{"key":"语言","name":"语言","value":[{"n":"全部","v":""},{"n":"国语","v":"国语"},{"n":"粤语","v":"粤语"},{"n":"英语","v":"英语"},{"n":"日语","v":"日语"},{"n":"韩语","v":"韩语"},{"n":"法语","v":"法语"},{"n":"其他","v":"其他"}]},{"key":"年份","name":"年份","value":[{"n":"全部","v":""},{"n":"2024","v":"2024"},{"n":"2023","v":"2023"},{"n":"2022","v":"2022"},{"n":"2021","v":"2021"},{"n":"2020","v":"2020"},{"n":"10年代","v":"2010_2019"},{"n":"00年代","v":"2000_2009"},{"n":"90年代","v":"1990_1999"},{"n":"80年代","v":"1980_1989"},{"n":"更早","v":"0_1979"}]},{"key":"排序","name":"排序","value":[{"n":"综合","v":""},{"n":"最新","v":"2"},{"n":"最热","v":"3"},{"n":"评分","v":"4"}]}],"4":[{"key":"类型","name":"类型","value":[{"n":"全部","v":""},{"n":"纪录","v":"纪录"},{"n":"真人秀","v":"真人秀"},{"n":"记录","v":"记录"},{"n":"脱口秀","v":"脱口秀"},{"n":"剧情","v":"剧情"},{"n":"历史","v":"历史"},{"n":"喜剧","v":"喜剧"},{"n":"传记","v":"传记"},{"n":"相声","v":"相声"},{"n":"节目","v":"节目"},{"n":"歌舞","v":"歌舞"},{"n":"冒险","v":"冒险"},{"n":"运动","v":"运动"},{"n":"Season","v":"Season"},{"n":"犯罪","v":"犯罪"},{"n":"短片","v":"短片"},{"n":"搞笑","v":"搞笑"},{"n":"晚会","v":"晚会"}]},{"key":"地区","name":"地区","value":[{"n":"全部","v":""},{"n":"大陆","v":"中国大陆"},{"n":"香港","v":"中国香港"},{"n":"台湾","v":"中国台湾"},{"n":"美国","v":"美国"},{"n":"日本","v":"日本"},{"n":"韩国","v":"韩国"},{"n":"其他","v":"其他"}]},{"key":"语言","name":"语言","value":[{"n":"全部","v":""},{"n":"国语","v":"国语"},{"n":"粤语","v":"粤语"},{"n":"英语","v":"英语"},{"n":"日语","v":"日语"},{"n":"韩语","v":"韩语"},{"n":"法语","v":"法语"},{"n":"其他","v":"其他"}]},{"key":"年份","name":"年份","value":[{"n":"全部","v":""},{"n":"2024","v":"2024"},{"n":"2023","v":"2023"},{"n":"2022","v":"2022"},{"n":"2021","v":"2021"},{"n":"2020","v":"2020"},{"n":"10年代","v":"2010_2019"},{"n":"00年代","v":"2000_2009"},{"n":"90年代","v":"1990_1999"},{"n":"80年代","v":"1980_1989"},{"n":"更早","v":"0_1979"}]},{"key":"排序","name":"排序","value":[{"n":"综合","v":""},{"n":"最新","v":"2"},{"n":"最热","v":"3"},{"n":"评分","v":"4"}]}],"6":[{"key":"类型","name":"类型","value":[{"n":"类型","v":""},{"n":"逆袭","v":"逆袭"},{"n":"甜宠","v":"甜宠"},{"n":"虐恋","v":"虐恋"},{"n":"穿越","v":"穿越"},{"n":"重生","v":"重生"},{"n":"剧情","v":"剧情"},{"n":"科幻","v":"科幻"},{"n":"武侠","v":"武侠"},{"n":"爱情","v":"爱情"},{"n":"动作","v":"动作"},{"n":"战争","v":"战争"},{"n":"冒险","v":"冒险"},{"n":"其它","v":"其它"}]},{"key":"排序","name":"排序","value":[{"n":"综合","v":""},{"n":"最新","v":"2"},{"n":"最热","v":"3"}]}]};
+    // log(gzip(JSON.stringify(a)));
 
     console.log(JSON.stringify(rule));
     console.log("init_test_end");
+
+
+    // log('typeof (JSEncrypt):'+typeof (JSEncrypt));
+    // let publicKey = 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwEc7wBMtYKkxvrQNI3+ITBZwAkPkGvsv4TsAHFskKGZWz9eYl3scivhmlEfWHlEkdyb0m82CmB1qAgef+pD4cZu+Cdmm2e9lnExhLwm8cBgpkAen9QRNdjojZgxM0W+JcReH4W6pw+uFXiLRn4AIQkDftWGNLg6wlNS+39Z/RvP9zyATJLZ9AKDdHp62XMxEK1KZvWBuIg+Oa5UzgA9jy+2XyIqwhBtO8tPbUl21t2pvTzHoLUjSkPNm2LurcUk6+jQ2r6aiS2CN1NXIucPJU6mkuIQ821SjvkYPtIdRMntW4y2u4cyiqVEEQwlzWVMHh+/vfrWAQr9fgjDuYYtvPQIDAQAB';
+    // let privateKey  = 'MIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDARzvAEy1gqTG+tA0jf4hMFnACQ+Qa+y/hOwAcWyQoZlbP15iXexyK+GaUR9YeUSR3JvSbzYKYHWoCB5/6kPhxm74J2abZ72WcTGEvCbxwGCmQB6f1BE12OiNmDEzRb4lxF4fhbqnD64VeItGfgAhCQN+1YY0uDrCU1L7f1n9G8/3PIBMktn0AoN0enrZczEQrUpm9YG4iD45rlTOAD2PL7ZfIirCEG07y09tSXbW3am9PMegtSNKQ82bYu6txSTr6NDavpqJLYI3U1ci5w8lTqaS4hDzbVKO+Rg+0h1Eye1bjLa7hzKKpUQRDCXNZUweH7+9+tYBCv1+CMO5hi289AgMBAAECggEBAIRbRJUWXmEwdq64kGbELlV6CIZ2p3mvOSlIjO34Cy7IK7AMz9xOgbpj/XDK9miOIJTouu7ZC7GcZdGZ4BUCYBMMS0fKjGFuurpZlXhkslNTPqEHtCUkXhIpOR7RDrwIlErGEOIsZC4aXQcM3tF1t7mroJLh4OY4dHMu82lv5NM4hhFMNvHzXVvrPXeTzw26gddHVG/ke0WUYOcB5j3cPp8xaVp7JV8bdxtGtkqIfBLY/dIczzJu/3F3cBpU2nNwt8uVUF/w/HKlr7j8FqqFHXWh182beU0n5AIdRyRJBrRUAEhdtsUnvJOVBDqzZa+9DJ5395F7V8KRlQptxETdhCECgYEA4x/2HM9fnVIhG6wTbEt1LhGTKYb/igMAHLqquEMfRsB44tobI8gVNwR3qJQY/nKXxcQemQV29PcdqpENCKyXUXGD8SI1UPg15rHFBI8CIqlCXfzJybdHjmzlhaA9I5lofIVh+5MW7WkvHZoRy7NeDMhHUuaiveuqC4OJ8n+dD2kCgYEA2LkmUVef3WkBBwUBRdkyoog3DMwR+/ubb0ncJVYy3ItYVJltQ4HqmrRiJc8xBAoFnG8rbiqDnmTnDR3WbuxU1G2hml09fqId+rQds2UfESswCXHU43A4f77m1XyA6PprBxpozVIcmK69N4rR9jOXflLWo3O+p2ipUbmNpId7+rUCgYBSpcbBJRT+AmzZzPwkZDD32p1ady114zGfQq3s7z/qVw+mPQezNZPCuXVxerK9pKVl6b/Ynwxyh5nb/3xms6c8k7oXfQM5u5ihof63cfKs+jqUSPCE3pTDVw0OWwjkc2Z6KW9GRHgLXEMw2mevYE3RCPArUpHV2nO+TNddzuIwQQKBgQDOZwdnUNygMfEYjlu3+jOPN8u2FGTMZ8SRKPbRWFb4VH27lKPLN2AIFuOivsEf56uQYRAry7GumMq0Y0ZmPg5Mglz2dvaqNBv5OLFQuW3tHAST+iWWtroYb+fISts7B8QG79AAO8OgZksvKrbslBYj6SEiaomZRsR7YQzVNXOOQQKBgQCovElZ50c8ZJ6m9D9fw3Nes7u9vshpyyac5tt4tZ7yfU4l5pWGrIUqCE703qZp4NAqEvlZUCJbj9kkysaj/2MfFb2b9jSvdNB+V/YW9Cwg+5TziYoOcQzN1z2u4p4goTAv0S+pTNSr3qWaTUI4TXUXQajif45Fexv+MrP5AAXQyw=='
+    // // let text = '你好';
+    // let text = '[{"vod_name":"兔小贝原创儿歌","vod_pic":"https://resource-cdn.tuxiaobei.com/video-album/FnQ8ieJHgsbgCKWXNBg4uoOmKgG5.jpg","vod_remarks":"共229首","vod_content":"","vod_id":"/subject/17@@兔小贝原创儿歌@@https://resource-cdn.tuxiaobei.com/video-album/FnQ8ieJHgsbgCKWXNBg4uoOmKgG5.jpg"},{"vod_name":"英文儿歌","vod_pic":"https://resource-cdn.tuxiaobei.com/video-album/Fqjpx2H_-QaYNAYn2MekRuDpeyUv.jpg","vod_remarks":"共10首","vod_content":"","vod_id":"/subject/23@@英文儿歌@@https://resource-cdn.tuxiaobei.com/video-album/Fqjpx2H_-QaYNAYn2MekRuDpeyUv.jpg"}]';
+    // let str = RSA.encode(text, publicKey);
+    // console.log("加密数据：" + str);
+    // let str1 = 'Wa2c/868VOm0PgpGG2s2aMrDbGOlJRdZXlSGswjFgywd3nZNB7ND8kVMdNB/OsNFoQXJXSJMvPaE73BH7rs8fz54JGdYQK+qTgfQRqQZvomCjbzseSR4bm4NOrtIOOslL3WqxlzOuU0M1P1eERmkLEVU2WSyc3RGtJro3b3MOWYCNdKMoZdncfOHJndkl4wm9V3GGc3uH98hs6OxLvBWgXoW9jZQ3n0vR2FtS2KYrPGuSuKGkxlt9Kw5TD6nri142NOimz05WK55Xe04YUQ1VZd51t0wzJGXolWgfzIQaK2zzhk5Zjlm+IQJxXqEWiJ2+O6TJ+lIttvsDSaUflcDXQ==';
+    // let str2 = 'R86mW9DzBw05pxBSh9ECh1stXxINmnudgZBbzU/cz1EcFgrEgdk0Zk4ruAiJZB2fP5c7d3gMmN8+Dv19IfARWSzw85xCEjUhpdcMJ0jn6ZE5H+muadND9LzjeVisojqwYxot3YVdKof7HMhPFN8QR0jfzqhjmnGFTlY1jMXzJK0MSOLNRLDar480CdKNb/cxALC8+xKIlhM9E4B31t8J4rNMUWSCAr49lbZ3jx3PxieBpTQUdDJz96AttR93Pc+c51wrxh0Ch/Mt4Rs09HGMXwIpNV+CxsGwSGRQUlyJo2k3d0WqsVzpz6S8A4VGEMTRLGI3IjEt+eWt7wM3nAXarg==';
+    // let str3 = 'D4eOsRqua+jYA5+ZOR9PLI2PExKjKfArQfv9/wGeG50bQSjWypShJPY6RQfO+rghyf0juzHIUSxqH91OxinhCFkONaF2Vod2QVyphyn9eh73dAcEFKIFFKGXoPCjbMWrr3p4d+hgVrHzrFeGqkRq8JFOvG2L5XDxVfWbV8KmUA0DKuz6QwWg7P4kesy+C7BbLALy5W/wfZchD3gnsBvx/pjFoe11VfAify9isLxg9a15jj52xr6lzQ9kge9C2JcV8yq85bFKaUpJWgobzz+BSIv3lVMU6vgcldmOrhkyiETpFGFGGF00DphGCEoK6uAyyNDh7+Jn8P17zf/DW1wV3A==';
+    // let uncrypted = RSA.decode(str, privateKey);
+    // log('解密数据:'+uncrypted);
+    // uncrypted = RSA.decode(str1, privateKey);
+    // log('解密数据1:'+uncrypted);
+    // uncrypted = RSA.decode(str2, privateKey);
+    // log('解密数据2:'+uncrypted);
+    // uncrypted = RSA.decode(str3, privateKey);
+    // log('解密数据3:'+uncrypted);
+
+    // log('rsax:'+typeof(rsax));
+    // log('rsaX:'+typeof(rsaX));
+    // let data = base64Encode('你好');
+    // let publicKey = 'dzyyds';
+    // console.log(typeof (RSA.encode));
+    // let encryptBase64Data = RSA.encode(data,publicKey);
+    // log('encryptBase64Data:'+encryptBase64Data);
+    // let str = RSA.decode(data,publicKey);
+    // log('str:'+str);
 }
 
 /**
@@ -311,6 +277,27 @@ function pre() {
 let rule = {};
 let vercode = typeof (pdfl) === 'function' ? 'drpy2.1' : 'drpy2';
 const VERSION = vercode + ' 3.9.50beta31 20240617';
+/** 已知问题记录
+ * 1.影魔的jinjia2引擎不支持 {{fl}}对象直接渲染 (有能力解决的话尽量解决下，支持对象直接渲染字符串转义,如果加了|safe就不转义)[影魔牛逼，最新的文件发现这问题已经解决了]
+ * Array.prototype.append = Array.prototype.push; 这种js执行后有毛病,for in 循环列表会把属性给打印出来 (这个大毛病需要重点排除一下)
+ * 2.import es6py.js但是里面的函数没有被装载进来.比如drpy规则报错setResult2 is undefiend(合并文件了可以不管了)
+ * 3.无法重复导入cheerio(怎么解决drpy和parseTag里都需要导入cheerio的问题) 无法在副文件导入cheerio (现在是全部放在drpy一个文件里了,凑合解决?)
+ * 4.有个错误不知道哪儿来的 executeScript: com.quickjs.JSObject$Undefined cannot be cast to java.lang.String 在 点击选集播放打印init_test_end后面打印(貌似不影响使用)
+ * 5.需要实现 stringify 函数,比起JSON.strifngify函数,它会原封不动保留中文不会编码unicode
+ * 6.base64Encode,base64Decode,md5函数还没有实现 (抄影魔代码实现了)
+ * 7.eval(getCryptoJS());还没有实现 (可以空实现了,以后遇到能忽略)
+ * done:  jsp:{pdfa,pdfh,pd},json:{pdfa,pdfh,pd},jq:{pdfa,pdfh,pd}
+ * 8.req函数不支持传递字符串的data参数 {'content-type':'text/plain'} 类型数据，因此无法直接调用alist的ocr接口
+ *  * 电脑看日志调试
+ adb tcpip 5555
+ adb connect 192.168.10.192
+ adb devices -l
+ adb logcat -c
+ adb logcat | grep -i QuickJS
+ adb logcat -c -b events
+ adb logcat -c -b main -b events -b radio -b system
+ adb logcat > 2.log DRPY:E | grep -i QuickJS
+ * **/
 
 
 /*** 以下是内置变量和解析方法 **/
@@ -695,6 +682,7 @@ function rc(js) {
 //猫函数
 function maoss(jxurl, ref, key) {
     fetch_params = JSON.parse(JSON.stringify(rule_fetch_params));
+    eval(getCryptoJS());
     try {
         var getVideoInfo = function (text) {
             return CryptoJS.AES.decrypt(text, key, {iv: iv, padding: CryptoJS.pad.Pkcs7}).toString(CryptoJS.enc.Utf8);
@@ -874,6 +862,11 @@ function decodeStr(input, encoding) {
         input = strTool.decode(input);
     }
     return input
+}
+
+function getCryptoJS() {
+    // return request('https://ghproxy.net/https://raw.githubusercontent.com/hjdhnx/dr_py/main/libs/crypto-hiker.js');
+    return 'console.log("CryptoJS已装载");'
 }
 
 // 封装的RSA加解密类
@@ -1215,9 +1208,9 @@ var urljoin2 = urljoin;
 
 // 内置 pdfh,pdfa,pd
 const defaultParser = {
-    pdfh: _pdfh,
-    pdfa: _pdfa,
-    pd: _pd
+    pdfh: pdfh,
+    pdfa: pdfa,
+    pd: pd,
 };
 
 
@@ -1515,6 +1508,36 @@ function verifyCode(url) {
     }
     return cookie
 }
+
+/**
+ * 存在数据库配置表里, key字段对应值value,没有就新增,有就更新,调用此方法会清除key对应的内存缓存
+ * @param k 键
+ * @param v 值
+ */
+function setItem(k, v) {
+    local.set(RKEY, k, v);
+    console.log(`规则${RKEY}设置${k} => ${v}`)
+}
+
+/**
+ *  获取数据库配置表对应的key字段的value，没有这个key就返回value默认传参.需要有缓存,第一次获取后会存在内存里
+ * @param k 键
+ * @param v 值
+ * @returns {*}
+ */
+function getItem(k, v) {
+    return local.get(RKEY, k) || v;
+}
+
+/**
+ *  删除数据库key对应的一条数据,并清除此key对应的内存缓存
+ * @param k
+ */
+function clearItem(k) {
+    local.delete(RKEY, k);
+}
+
+/*** js自封装的方法 ***/
 
 /**
  * 获取链接的host(带http协议的完整链接)
@@ -3078,25 +3101,28 @@ function runMain(main_func_code, arg) {
  * @param ext
  */
 function init(ext) {
-    log(ext);
     console.log('init');
-    console.log("00");
     // init前重置rule和fetch_params
     rule = {};
     rule_fetch_params = {};
     fetch_params = null;
-    console.log("000");
     try {
-        console.log("0");
+        // make shared jsContext happy muban不能import,不然会造成换源继承后变量被篡改
+        // if (typeof (globalThis.mubanJs) === 'undefined') {
+        //     let mubanJs = request('https://ghproxy.net/https://raw.githubusercontent.com/hjdhnx/dr_py/main/js/模板.js', { 'User-Agent': MOBILE_UA });
+        //     mubanJs = mubanJs.replace('export default', '(function() {return muban;}()) // export default');
+        //     // console.log(mubanJs);
+        //     globalThis.mubanJs = mubanJs;
+        // }
+        // let muban = eval(globalThis.mubanJs);
+
         let muban = 模板.getMubans();
-        console.log("1");
         // print(typeof (muban));
         // print(muban);
         if (typeof ext == 'object') {
             rule = ext;
         } else if (typeof ext == 'string') {
             if (ext.startsWith('http') || ext.startsWith('file://')) {
-                console.log("11");
                 let query = getQuery(ext); // 获取链接传参
                 let js = request(ext, {'method': 'GET'});
                 if (js) {
@@ -3116,14 +3142,12 @@ function init(ext) {
                 // eval("(function(){'use strict';"+ext.replace('var rule', 'rule')+"})()");
                 eval("(function(){" + ext.replace('var rule', 'rule') + "})()");
             }
-            console.log("2");
         } else {
             console.log(`规则加载失败,不支持的规则类型:${typeof ext}`);
             return
         }
         rule.host = (rule.host || '').rstrip('/');
         HOST = rule.host;
-        log(HOST);
         if (rule.hostJs) {
             console.log(`检测到hostJs,准备执行...`);
             try {
@@ -3169,7 +3193,6 @@ function init(ext) {
             print('继承模板:' + rule.模板);
             rule = Object.assign(muban[rule.模板], rule);
         }
-        console.log("3");
         /** 处理一下 rule规则关键字段没传递的情况 **/
         let rule_cate_excludes = (rule.cate_exclude || '').split('|').filter(it => it.trim());
         let rule_tab_excludes = (rule.tab_exclude || '').split('|').filter(it => it.trim());
