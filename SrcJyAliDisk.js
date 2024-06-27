@@ -1837,7 +1837,6 @@ function erjiAliMyDiskSs(extra){
             col_type: 'icon_5',
             img: 'https://hikerfans.com/tubiao/grey/125.png',
             extra: {
-                url: "https://www.aliyundrive.com/s/" + share_id,
                 cls: "Juloadlist"
             }
         },
