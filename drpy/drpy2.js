@@ -21,28 +21,16 @@ const cheerio = {
 }
 
 const isCloseLog = !getItem("useLog", "");
-const localKey = "drpy";
-const CryptoUtil = $.require("hiker://assets/crypto-java.js");
-globalThis.local = {
-    set(rulekey, k, v) {
-        storage0.setItem(localKey + "@" + rulekey + "@" + k, v);
-    },
-    get(rulekey, k, v) {
-        return storage0.getItem(localKey + "@" + rulekey + "@" + k, "") || v;
-    },
-    delete(rulekey, k) {
-        storage0.clearItem(localKey + "@" + rulekey + "@" + k);
-    }
-};
-globalThis.getProxy = function () {
+
+
+const getProxy = function () {
     return getMyVar("Proxy_Url", "http://127.0.0.1:52020/proxy") + "?hikerSkey=" + encodeURIComponent(skey) + "&do=js";
 }
 eval(getCryptoJS());
-globalThis.CryptoJS = CryptoJS;
 
 let $request = request;
 let $post = post;
-globalThis.req = function (url, cobj) {
+const req = function (url, cobj) {
     try {
         let res = {};
         let obj = Object.assign({}, cobj);
@@ -83,6 +71,7 @@ globalThis.req = function (url, cobj) {
             res.content = r;
         }
         if (obj.buffer === 2) {
+            const CryptoUtil = $.require("hiker://assets/crypto-java.js");
             res.content = CryptoUtil.Data.parseHex(res.content).toBase64(_base64.NO_WRAP);
         }
         return res;
@@ -90,10 +79,6 @@ globalThis.req = function (url, cobj) {
         log("Error" + e.toString());
     }
 }
-globalThis.pdfa = _pdfa;
-
-globalThis.pd = _pd;
-globalThis.pdfh = _pdfh;
 String.prototype.replaceAll = function (search, replacement) {
     return this.split(search).join(replacement);
 };
@@ -1599,34 +1584,6 @@ function verifyCode(url) {
         cnt += 1
     }
     return cookie
-}
-
-/**
- * 存在数据库配置表里, key字段对应值value,没有就新增,有就更新,调用此方法会清除key对应的内存缓存
- * @param k 键
- * @param v 值
- */
-function setItem(k, v) {
-    local.set(RKEY, k, v);
-    console.log(`规则${RKEY}设置${k} => ${v}`)
-}
-
-/**
- *  获取数据库配置表对应的key字段的value，没有这个key就返回value默认传参.需要有缓存,第一次获取后会存在内存里
- * @param k 键
- * @param v 值
- * @returns {*}
- */
-function getItem(k, v) {
-    return local.get(RKEY, k) || v;
-}
-
-/**
- *  删除数据库key对应的一条数据,并清除此key对应的内存缓存
- * @param k
- */
-function clearItem(k) {
-    local.delete(RKEY, k);
 }
 
 /*** js自封装的方法 ***/
