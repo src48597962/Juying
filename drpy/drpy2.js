@@ -22,20 +22,6 @@ const cheerio = {
 
 const isCloseLog = !getItem("useLog", "");
 const localKey = "drpy";
-const CryptoUtil = $.require("hiker://assets/crypto-java.js");
-const local = {
-    "set": function (rulekey, k, v) {
-        storage0.setItem(localKey + "@" + rulekey + "@" + k, v);
-    },
-    "get": function (rulekey, k, v) {
-        return storage0.getItem(localKey + "@" + rulekey + "@" + k, "") || v;
-    },
-    "delete": function (rulekey, k) {
-        storage0.clearItem(localKey + "@" + rulekey + "@" + k);
-    }
-};
-eval(getCryptoJS());
-const CryptoJS = CryptoJS;
 
 let $request = request;
 let $post = post;
@@ -100,7 +86,6 @@ let $toString = Function.prototype.toString;
 Function.prototype.toString = function () {
     return $toString.apply(this).trim();
 };
-/*
 if (isCloseLog) {
     // 重写console.log函数
     console.log = function () {
@@ -114,7 +99,7 @@ if (isCloseLog) {
         // 如果参数只有一个，则不做任何操作
     };
 }
-*/
+
 
 function init_test() {
     // console.log(typeof(CryptoJS));
@@ -1599,34 +1584,6 @@ function verifyCode(url) {
         cnt += 1
     }
     return cookie
-}
-
-/**
- * 存在数据库配置表里, key字段对应值value,没有就新增,有就更新,调用此方法会清除key对应的内存缓存
- * @param k 键
- * @param v 值
- */
-function setItem(k, v) {
-    local.set(RKEY, k, v);
-    console.log(`规则${RKEY}设置${k} => ${v}`)
-}
-
-/**
- *  获取数据库配置表对应的key字段的value，没有这个key就返回value默认传参.需要有缓存,第一次获取后会存在内存里
- * @param k 键
- * @param v 值
- * @returns {*}
- */
-function getItem(k, v) {
-    return local.get(RKEY, k) || v;
-}
-
-/**
- *  删除数据库key对应的一条数据,并清除此key对应的内存缓存
- * @param k
- */
-function clearItem(k) {
-    local.delete(RKEY, k);
 }
 
 /*** js自封装的方法 ***/
