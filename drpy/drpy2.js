@@ -694,7 +694,6 @@ function rc(js) {
 //猫函数
 function maoss(jxurl, ref, key) {
     fetch_params = JSON.parse(JSON.stringify(rule_fetch_params));
-    eval(getCryptoJS());
     try {
         var getVideoInfo = function (text) {
             return CryptoJS.AES.decrypt(text, key, {iv: iv, padding: CryptoJS.pad.Pkcs7}).toString(CryptoJS.enc.Utf8);
@@ -874,11 +873,6 @@ function decodeStr(input, encoding) {
         input = strTool.decode(input);
     }
     return input
-}
-
-function getCryptoJS() {
-    // return request('https://ghproxy.net/https://raw.githubusercontent.com/hjdhnx/dr_py/main/libs/crypto-hiker.js');
-    return 'console.log("CryptoJS已装载");'
 }
 
 // 封装的RSA加解密类
