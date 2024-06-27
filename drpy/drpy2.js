@@ -2895,15 +2895,6 @@ function init(ext) {
     rule_fetch_params = {};
     fetch_params = null;
     try {
-        // make shared jsContext happy muban不能import,不然会造成换源继承后变量被篡改
-        // if (typeof (globalThis.mubanJs) === 'undefined') {
-        //     let mubanJs = request('https://ghproxy.net/https://raw.githubusercontent.com/hjdhnx/dr_py/main/js/模板.js', { 'User-Agent': MOBILE_UA });
-        //     mubanJs = mubanJs.replace('export default', '(function() {return muban;}()) // export default');
-        //     // console.log(mubanJs);
-        //     globalThis.mubanJs = mubanJs;
-        // }
-        // let muban = eval(globalThis.mubanJs);
-
         let muban = 模板.getMubans();
         // print(typeof (muban));
         // print(muban);
@@ -3070,9 +3061,10 @@ function init(ext) {
         rule_fetch_params = {'headers': rule.headers || false, 'timeout': rule.timeout, 'encoding': rule.encoding};
         oheaders = rule.headers || {};
         RKEY = typeof (key) !== 'undefined' && key ? key : 'drpy_' + (rule.title || rule.host);
+        
+        console.log("准备显示");
+        //log(Object.keys(this));
         pre(); // 预处理
-        log("准备显示");
-        log(Object.keys(this));
         init_test();
     } catch (e) {
         console.log(`init_test发生错误:${e.message}`);
