@@ -713,8 +713,9 @@ function dianboyiji() {
         if(jkdata.type=="drpy"){
             let env = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
             const drpy = env.createOrGetEnvironment(sgroup+'_'+sname);
-            drpy.init('https://raw.liucn.cc/box/libs/js/%E4%B8%8A%E5%A4%B4%E7%9F%AD%E5%89%A7.js'); 
-            log(drpy.getRule()); 
+            drpy.init(getPath(jkdata.url)); 
+
+            log(drpy.home(true)); 
         }else{
             try{
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
