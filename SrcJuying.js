@@ -719,8 +719,9 @@ function dianboyiji() {
             log(drpy.getRule());
             //log(drpy.home(true)); 主页分类筛选数据
             //log(drpy.homeVod()); //获取首页推荐数据
-            let env2 = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
-            const drpy2 = env2.createOrGetEnvironment(sgroup+'_'+sname, getPath(jkdata.url));
+            const drpy2 = env.createOrGetEnvironment('123', 'https://raw.liucn.cc/box/libs/js/a8%E9%9F%B3%E4%B9%90.js');
+            //drpy.init(getPath(jkdata.url)); 
+            //log(Object.keys(this).length);
             log(drpy2.getRule());
         }else{
             try{
