@@ -90,7 +90,8 @@ if (isCloseLog) {
 }
 
 const MAX_ENVIRONMENTS = 10;
-globalThis.environments = globalThis.environments || {};
+//globalThis.environments = globalThis.environments || {};
+let environments = globalMap0.getMyVar('environments',{});
 let nextEnvId = 0;
 
 function createOrGetEnvironment(id, ext) {
@@ -129,6 +130,7 @@ function createOrGetEnvironment(id, ext) {
         }
     })();
     environments[id].init(ext);
+    globalMap0.putMyVar('environments', environments);
     return environments[id];
 }
 /*
