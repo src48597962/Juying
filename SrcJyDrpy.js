@@ -1,6 +1,5 @@
 //drpy运行环境相关
 
-js:
 const isCloseLog = !getItem("useLog", "");
 const localKey = "drpy";
 const CryptoUtil = $.require("hiker://assets/crypto-java.js");
@@ -144,10 +143,9 @@ for (let i = 0; i < MAX_ENVIRONMENTS; i++) {
     createOrGetEnvironment();
 }
 
-*/
 // 现在只有最近的10个环境存在
 log(Object.keys(environments).length); // 输出: 10
-
+*/
 
 $.exports = {
     createOrGetEnvironment
