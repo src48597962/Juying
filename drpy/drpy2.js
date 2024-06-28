@@ -1,4 +1,4 @@
-const testPath = module.modulePath.slice(0, module.modulePath.lastIndexOf("/")) + "/";
+const testPath = module.modulePath.slice(0, module.modulePath.lastIndexOf("/")) + "/drpy/";
 const {
     gbkTool
 } = $.require(testPath + 'gbk.js');
