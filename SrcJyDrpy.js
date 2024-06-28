@@ -100,6 +100,7 @@ function createOrGetEnvironment(id) {
     }
 
     if (environments[id]) {
+        log(id+'>取初始化缓存');
         return environments[id];
     }
 
@@ -137,13 +138,13 @@ log(env1.getRule());
 const env2 = createOrGetEnvironment('aa');
 //env2.init('https://raw.liucn.cc/box/libs/js/a8%E9%9F%B3%E4%B9%90.js'); 
 log(env2.getRule()); 
-*/
+
 // 继续创建直到达到最大限制
 for (let i = 0; i < MAX_ENVIRONMENTS; i++) {
     createOrGetEnvironment();
 }
 
-
+*/
 // 现在只有最近的10个环境存在
 log(Object.keys(environments).length); // 输出: 10
 
