@@ -3533,7 +3533,7 @@ function DRPY() {//导出函数
  }
 
  */
-
+/*
 // 导出函数对象
 $.exports = {
     runMain,
@@ -3551,3 +3551,19 @@ $.exports = {
     fixAdM3u8Ai,
     DRPY,
 };
+*/
+return {
+    runMain: runMain,
+    getRule: getRule,
+    init: init,
+    home: home,
+    homeVod: homeVod,
+    category: category,
+    detail: detail,
+    play: play,
+    search: search,
+    proxy: proxy,
+    sniffer: sniffer,
+    isVideo: isVideo,
+    fixAdM3u8Ai: fixAdM3u8Ai,
+}
