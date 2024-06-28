@@ -125,6 +125,9 @@ function createOrGetEnvironment(id) {
             sniffer: sniffer,
             isVideo: isVideo,
             fixAdM3u8Ai: fixAdM3u8Ai,
+            getrule: function() {
+                return rule;
+            }
         }
     })();
 
