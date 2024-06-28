@@ -553,8 +553,9 @@ function dianboyiji() {
     });
     let index = yxdatalist.indexOf(yxdatalist.filter(d => d.type==sourceType && d.name==sourceName )[0]);
     let jkdata = yxdatalist[index] || {};
-    let selectGroup = jkdata.group || jkdata.type;
-    if(!selectGroup){
+    let sgroup = jkdata.group || jkdata.type;
+    let sname = jkdata.name;
+    if(!sgroup){
         sourceName = '';
     }
 
@@ -710,7 +711,10 @@ function dianboyiji() {
     }
     if(sourceName){
         if(jkdata.type=="drpy"){
-
+            let env = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
+            const drpy = env.createOrGetEnvironment(sgroup+'_'+sname);
+            drpy.init('https://raw.liucn.cc/box/libs/js/%E4%B8%8A%E5%A4%B4%E7%9F%AD%E5%89%A7.js'); 
+            log(drpy.getRule()); 
         }else{
             try{
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
