@@ -101,7 +101,7 @@ function createOrGetEnvironment(id) {
     if (environments[id]) {
         return environments[id];
     }
-    log(Object.keys(environments).length);
+
     if (Object.keys(environments).length >= MAX_ENVIRONMENTS) {
         const oldestId = Object.keys(environments).sort((a, b) => a - b)[0];
         delete environments[oldestId];
@@ -131,7 +131,7 @@ function createOrGetEnvironment(id) {
 
     return environments[id];
 }
-
+log(Object.keys(environments).length);
 /*
 const MAX_ENVIRONMENTS = 10;
 let environments = {};
