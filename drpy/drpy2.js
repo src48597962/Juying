@@ -3533,7 +3533,7 @@ function DRPY() {//导出函数
  }
 
  */
-/*
+
 // 导出函数对象
 $.exports = {
     runMain,
@@ -3551,4 +3551,3 @@ $.exports = {
     fixAdM3u8Ai,
     DRPY,
 };
-*/
