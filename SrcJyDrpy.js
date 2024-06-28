@@ -137,7 +137,7 @@ env1.init('https://raw.liucn.cc/box/libs/js/%E4%B8%8A%E5%A4%B4%E7%9F%AD%E5%89%A7
 log(env1.getRule()); 
 
 // 继续创建直到达到最大限制
-for (let i = 0; i < MAX_ENVIRONMENTS - 2; i++) {
+for (let i = 0; i < MAX_ENVIRONMENTS + 10; i++) {
     createOrGetEnvironment();
 }
 
