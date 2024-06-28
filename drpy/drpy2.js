@@ -3552,18 +3552,3 @@ $.exports = {
     DRPY,
 };
 */
-return {
-    runMain: runMain,
-    getRule: getRule,
-    init: init,
-    home: home,
-    homeVod: homeVod,
-    category: category,
-    detail: detail,
-    play: play,
-    search: search,
-    proxy: proxy,
-    sniffer: sniffer,
-    isVideo: isVideo,
-    fixAdM3u8Ai: fixAdM3u8Ai,
-}
