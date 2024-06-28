@@ -133,7 +133,8 @@ function createOrGetEnvironment(id) {
 
     return environments[id];
 }
-
+// 现在只有最近的10个环境存在
+console.log(Object.keys(environments).length); // 输出: 10
 
 /*
 function createOrGetEnvironment(id) {
