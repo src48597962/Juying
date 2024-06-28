@@ -1,4 +1,4 @@
-const testPath = "http://124.221.241.174:13000/src48597962/Juying/raw/branch/master/drpy/";//module.modulePath.slice(0, module.modulePath.lastIndexOf("/")) + 
+const testPath = module.modulePath.slice(0, module.modulePath.lastIndexOf("/")) + 
 const {
     gbkTool
 } = $.require(testPath + 'gbk.js');
