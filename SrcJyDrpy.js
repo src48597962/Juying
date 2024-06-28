@@ -110,7 +110,7 @@ function createOrGetEnvironment(id) {
     }
 
     environments[id] = (function() {
-        let drpy2 = $.require(module.modulePath.slice(0, module.modulePath.lastIndexOf("/")) +'drpy/drpy2.js');
+        let drpy2 = $.require(module.modulePath.slice(0, module.modulePath.lastIndexOf("/")) +'/drpy/drpy2.js');
         return {
             runMain: drpy2.runMain,
             getRule: drpy2.getRule,
