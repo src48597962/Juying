@@ -1,5 +1,6 @@
 //drpy运行环境相关
 
+js:
 const isCloseLog = !getItem("useLog", "");
 const localKey = "drpy";
 const CryptoUtil = $.require("hiker://assets/crypto-java.js");
@@ -94,43 +95,54 @@ let environments = {};
 let nextId = 0;
 
 function createOrGetEnvironment(id) {
-    if (id === undefined) {
-        id = nextId++;
-    }
+if (id === undefined) {
+id = nextId++;
+}
 
-    if (environments[id]) {
-        return environments[id];
-    }
-
-    if (Object.keys(environments).length >= MAX_ENVIRONMENTS) {
-        const oldestId = Object.keys(environments).sort((a, b) => a - b)[0];
-        delete environments[oldestId];
-    }
-
-    environments[id] = (function() {
-        eval(fetch('http://124.221.241.174:13000/src48597962/Juying/raw/branch/master/drpy/drpy2.js'));
-        return {
-            runMain: runMain,
-            getRule: getRule,
-            init: init,
-            home: home,
-            homeVod: homeVod,
-            category: category,
-            detail: detail,
-            play: play,
-            search: search,
-            proxy: proxy,
-            sniffer: sniffer,
-            isVideo: isVideo,
-            fixAdM3u8Ai: fixAdM3u8Ai,
-            getrule: function() {
-                return rule;
-            }
-        }
-    })();
-
+if (environments[id]) {
     return environments[id];
 }
+
+if (Object.keys(environments).length >= MAX_ENVIRONMENTS) {
+    const oldestId = Object.keys(environments).sort((a, b) => a - b)[0];
+    environments[oldestId].destroy();
+    delete environments[oldestId];
+}
+
+environments[id] = (function() {
+    let drpy = $.require('http://124.221.241.174:13000/src48597962/Juying/raw/branch/master/drpy/drpy2.js');
+    return {
+        runMain: drpy.runMain,
+        getRule: drpy.getRule,
+        init: drpy.init,
+        home: drpy.home,
+        homeVod: drpy.homeVod,
+        category: drpy.category,
+        detail: drpy.detail,
+        play: drpy.play,
+        search: drpy.search,
+        proxy: drpy.proxy,
+        sniffer: drpy.sniffer,
+        isVideo: drpy.isVideo,
+        fixAdM3u8Ai: drpy.fixAdM3u8Ai,
+    }
+})();
+
+return environments[id];
+}
+
+// 示例使用
+const env1 = createOrGetEnvironment('11');
+env1.init('https://raw.liucn.cc/box/libs/js/%E4%B8%8A%E5%A4%B4%E7%9F%AD%E5%89%A7.js'); 
+log(env1.getRule()); 
+
+const env2 = createOrGetEnvironment('11');
+//env2.init('https://raw.liucn.cc/box/libs/js/a8%E9%9F%B3%E4%B9%90.js'); 
+log(env2.getRule()); 
+
+
+// 现在只有最近的10个环境存在
+console.log(Object.keys(environments).length); // 输出: 10
 
 /*
 const MAX_ENVIRONMENTS = 10;
