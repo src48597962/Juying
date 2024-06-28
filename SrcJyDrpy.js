@@ -105,7 +105,6 @@ if (environments[id]) {
 
 if (Object.keys(environments).length >= MAX_ENVIRONMENTS) {
     const oldestId = Object.keys(environments).sort((a, b) => a - b)[0];
-    environments[oldestId].destroy();
     delete environments[oldestId];
 }
 
