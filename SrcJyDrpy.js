@@ -1,7 +1,5 @@
 //drpy运行环境相关
-const isCloseLog = !getItem("useLog", "");
 const localKey = "drpy";
-const CryptoUtil = $.require("hiker://assets/crypto-java.js");
 globalThis.local = {
     set(rulekey, k, v) {
         storage0.setItem(localKey + "@" + rulekey + "@" + k, v);
@@ -59,6 +57,7 @@ globalThis.req = function (url, cobj) {
             res.content = r;
         }
         if (obj.buffer === 2) {
+            const CryptoUtil = $.require("hiker://assets/crypto-java.js");
             res.content = CryptoUtil.Data.parseHex(res.content).toBase64(_base64.NO_WRAP);
         }
         return res;
@@ -74,19 +73,6 @@ let $toString = Function.prototype.toString;
 Function.prototype.toString = function () {
     return $toString.apply(this).trim();
 };
-if (isCloseLog) {
-    // 重写console.log函数
-    console.log = function () {
-        // 检查传入参数的数量
-        if (arguments.length > 1) {
-            // 如果参数数量大于1，调用原始的console.log函数
-            //originalLog.apply(console, arguments);
-        } else {
-            return;
-        }
-        // 如果参数只有一个，则不做任何操作
-    };
-}
 
 //ENVIRONMENTS沙箱环境
 const MAX_ENVS = 10;
@@ -113,23 +99,6 @@ function createOrGetEnvironment(id, ext) {
     drpyEnvS[id] = (function() {
         let drpy2 = $.require(module.modulePath.slice(0, module.modulePath.lastIndexOf("/")) +'/drpy/drpy2.js');
         return drpy2.DRPY();
-        
-        /*{
-            runMain: drpy2.runMain,
-            getRule: drpy2.getRule,
-            init: drpy2.init,
-            home: drpy2.home,
-            homeVod: drpy2.homeVod,
-            category: drpy2.category,
-            detail: drpy2.detail,
-            play: drpy2.play,
-            search: drpy2.search,
-            proxy: drpy2.proxy,
-            sniffer: drpy2.sniffer,
-            isVideo: drpy2.isVideo,
-            fixAdM3u8Ai: drpy2.fixAdM3u8Ai,
-        }
-        */
     })();
     drpyEnvS[id].init(ext);
     globalMap0.putMyVar('drpyEnvS', drpyEnvS);
