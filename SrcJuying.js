@@ -710,96 +710,81 @@ function dianboyiji() {
         }
     }
     if(sourceName){
-        if(jkdata.type=="drpy"){
-            //log(Object.keys(this).length);
-            let env = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
-            const drpy = env.createOrGetEnvironment(sgroup+'_'+sname, getPath(jkdata.url));
-            //drpy.init(getPath(jkdata.url)); 
-            //log(Object.keys(this).length);
-            log(drpy.getRule());
-            //log(drpy.home(true)); 主页分类筛选数据
-            //log(drpy.homeVod()); //获取首页推荐数据
-            const drpy2 = env.createOrGetEnvironment('123', 'https://raw.liucn.cc/box/libs/js/a8%E9%9F%B3%E4%B9%90.js');
-            //drpy.init(getPath(jkdata.url)); 
-            //log(Object.keys(this).length);
-            log(drpy2.getRule());
-        }else{
-            try{
-                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
-                let objdata = getYiData(jkdata);
-                let fllists = objdata.fllists;
-                if(fllists){
-                    d = d.concat(fllists);
-                }else if(objdata.error['fl']){
-                    d.push({
-                        title: "分类获取失败",
-                        desc: '无法访问或源失效，点击查看网页',
-                        url: getHome(MY_URL) + '#noHistory#',
-                        col_type: 'text_center_1'
-                    }); 
-                }
-
-                let vodlists = objdata.vodlists;
-                if(vodlists && vodlists.length>0){
-                    vodlists.forEach(list=>{
-                        let vodname =list.vod_name;
-                        if(vodname){
-                            vodname = vodname.replace(/<\/?.+?\/?>/g,'').replace(/在线观看/g,'').replace('&middot;','·');
-                            let voddesc = list.vod_desc || "";
-                            let vodpic = list.vod_pic;
-                            vodpic = vodpic.replace('/img.php?url=', '').replace('/tu.php?tu=', '');
-                            vodpic = vodpic.includes('(') ? vodpic.match(/\(\'(.*?)\'\)/)[1] : vodpic;
-                            if(/^\/\//.test(vodpic)){
-                                vodpic = "https:" + vodpic;
-                            }
-                            if(!/^http|hiker/.test(vodpic)){
-                                vodpic = getHome(list.vod_url) + '/' + vodpic;
-                            }
-                            
-                            d.push({
-                                title: vodname,
-                                desc: voddesc.replace(/<\/?.+?\/?>/g,''),
-                                pic_url: vodpic + (/eferer=/.test(vodpic)?"":"@Referer="),
-                                url: /^hiker/.test(list.vod_url)?list.vod_url:list.play?list.play:$("hiker://empty#immersiveTheme##autoCache#").rule(() => {
-                                    require(config.依赖);
-                                    dianboerji()
-                                }),
-                                col_type: 'movie_3',
-                                extra: {
-                                    url: list.vod_url,
-                                    pic: vodpic,
-                                    pageTitle: vodname,
-                                    data: jkdata
-                                }
-                            })
-                        }
-                    })
-                }else if(objdata.error['vod'] && MY_PAGE==1){
-                    d.push({
-                        title: "列表获取失败",
-                        desc: '无法访问或源失效，点击查看网页',
-                        url: MY_URL + '#noHistory#',
-                        col_type: 'text_center_1'
-                    }); 
-                }else if(vodlists && vodlists.length == 0 && MY_PAGE==1){
-                    d.push({
-                        title: '列表为空',
-                        desc: '点击查看网页',
-                        url: MY_URL + '#noHistory#',
-                        col_type: 'text_center_1'
-                    });
-                }
-            }catch(e){
+        try{
+            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
+            let objdata = getYiData(jkdata);
+            let fllists = objdata.fllists;
+            if(fllists){
+                d = d.concat(fllists);
+            }else if(objdata.error['fl']){
                 d.push({
-                    title: '源接口异常了，请更换',
-                    desc: '调用一级数据异常>' + e.message + ' 错误行#' + e.lineNumber,
+                    title: "分类获取失败",
+                    desc: '无法访问或源失效，点击查看网页',
+                    url: getHome(MY_URL) + '#noHistory#',
+                    col_type: 'text_center_1'
+                }); 
+            }
+
+            let vodlists = objdata.vodlists;
+            if(vodlists && vodlists.length>0){
+                vodlists.forEach(list=>{
+                    let vodname =list.vod_name;
+                    if(vodname){
+                        vodname = vodname.replace(/<\/?.+?\/?>/g,'').replace(/在线观看/g,'').replace('&middot;','·');
+                        let voddesc = list.vod_desc || "";
+                        let vodpic = list.vod_pic;
+                        vodpic = vodpic.replace('/img.php?url=', '').replace('/tu.php?tu=', '');
+                        vodpic = vodpic.includes('(') ? vodpic.match(/\(\'(.*?)\'\)/)[1] : vodpic;
+                        if(/^\/\//.test(vodpic)){
+                            vodpic = "https:" + vodpic;
+                        }
+                        if(!/^http|hiker/.test(vodpic)){
+                            vodpic = getHome(list.vod_url) + '/' + vodpic;
+                        }
+                        
+                        d.push({
+                            title: vodname,
+                            desc: voddesc.replace(/<\/?.+?\/?>/g,''),
+                            pic_url: vodpic + (/eferer=/.test(vodpic)?"":"@Referer="),
+                            url: /^hiker/.test(list.vod_url)?list.vod_url:list.play?list.play:$("hiker://empty#immersiveTheme##autoCache#").rule(() => {
+                                require(config.依赖);
+                                dianboerji()
+                            }),
+                            col_type: 'movie_3',
+                            extra: {
+                                url: list.vod_url,
+                                pic: vodpic,
+                                pageTitle: vodname,
+                                data: jkdata
+                            }
+                        })
+                    }
+                })
+            }else if(objdata.error['vod'] && MY_PAGE==1){
+                d.push({
+                    title: "列表获取失败",
+                    desc: '无法访问或源失效，点击查看网页',
+                    url: MY_URL + '#noHistory#',
+                    col_type: 'text_center_1'
+                }); 
+            }else if(vodlists && vodlists.length == 0 && MY_PAGE==1){
+                d.push({
+                    title: '列表为空',
+                    desc: '点击查看网页',
                     url: MY_URL + '#noHistory#',
                     col_type: 'text_center_1'
                 });
-                log(jkdata.name+'>调用一级数据异常>' + e.message + ' 错误行#' + e.lineNumber);
             }
+        }catch(e){
+            d.push({
+                title: '源接口异常了，请更换',
+                desc: '调用一级数据异常>' + e.message + ' 错误行#' + e.lineNumber,
+                url: MY_URL + '#noHistory#',
+                col_type: 'text_center_1'
+            });
+            log(jkdata.name+'>调用一级数据异常>' + e.message + ' 错误行#' + e.lineNumber);
         }
-    } 
+    }
     deleteItemByCls("loading_gif");
     setResult(d);
 }
