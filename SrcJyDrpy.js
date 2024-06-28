@@ -1,5 +1,5 @@
 //drpy运行环境相关
-
+/*
 const isCloseLog = !getItem("useLog", "");
 const localKey = "drpy";
 const CryptoUtil = $.require("hiker://assets/crypto-java.js");
@@ -133,10 +133,12 @@ function createOrGetEnvironment(id) {
 
     return environments[id];
 }
-// 现在只有最近的10个环境存在
-console.log(Object.keys(environments).length); // 输出: 10
+*/
 
-/*
+const MAX_ENVIRONMENTS = 10;
+let environments = {};
+let nextId = 0;
+
 function createOrGetEnvironment(id) {
     if (id === undefined) {
         id = nextId++;
@@ -199,4 +201,3 @@ console.log(env11.getVariable('z')); // 输出: 30
 
 // 现在只有最近的10个环境存在
 console.log(Object.keys(environments).length); // 输出: 10
-*/
