@@ -131,7 +131,7 @@ function createOrGetEnvironment(id) {
 
     return environments[id];
 }
-log(Object.keys(environments).length);
+
 /*
 const MAX_ENVIRONMENTS = 10;
 let environments = {};
