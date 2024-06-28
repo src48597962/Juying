@@ -716,7 +716,7 @@ function dianboyiji() {
             drpy.init(getPath(jkdata.url)); 
 
             //log(drpy.home(true)); 主页分类筛选数据
-            log(homeVod()); //获取首页推荐数据
+            log(drpy.homeVod()); //获取首页推荐数据
 
         }else{
             try{
