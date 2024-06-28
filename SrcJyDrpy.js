@@ -111,9 +111,10 @@ function createOrGetEnvironment(id, ext) {
     }
 
     drpyEnvS[id] = (function() {
-        /*
         let drpy2 = $.require(module.modulePath.slice(0, module.modulePath.lastIndexOf("/")) +'/drpy/drpy2.js');
-        return {
+        return drpy2.DRPY();
+        
+        /*{
             runMain: drpy2.runMain,
             getRule: drpy2.getRule,
             init: drpy2.init,
@@ -127,23 +128,8 @@ function createOrGetEnvironment(id, ext) {
             sniffer: drpy2.sniffer,
             isVideo: drpy2.isVideo,
             fixAdM3u8Ai: drpy2.fixAdM3u8Ai,
-        }*/
-        eval(fetch(module.modulePath.slice(0, module.modulePath.lastIndexOf("/")) +'/drpy/drpy2.js'));
-        return {
-            runMain: runMain,
-            getRule: getRule,
-            init: init,
-            home: home,
-            homeVod: homeVod,
-            category: category,
-            detail: detail,
-            play: play,
-            search: search,
-            proxy: proxy,
-            sniffer: sniffer,
-            isVideo: isVideo,
-            fixAdM3u8Ai: fixAdM3u8Ai,
         }
+        */
     })();
     drpyEnvS[id].init(ext);
     globalMap0.putMyVar('drpyEnvS', drpyEnvS);
