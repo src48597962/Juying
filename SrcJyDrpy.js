@@ -136,6 +136,11 @@ const env1 = createOrGetEnvironment('11');
 env1.init('https://raw.liucn.cc/box/libs/js/%E4%B8%8A%E5%A4%B4%E7%9F%AD%E5%89%A7.js'); 
 log(env1.getRule()); 
 
+// 继续创建直到达到最大限制
+for (let i = 0; i < MAX_ENVIRONMENTS - 2; i++) {
+    createOrGetEnvironment();
+}
+
 const env2 = createOrGetEnvironment('11');
 //env2.init('https://raw.liucn.cc/box/libs/js/a8%E9%9F%B3%E4%B9%90.js'); 
 log(env2.getRule()); 
