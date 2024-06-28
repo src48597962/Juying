@@ -111,6 +111,7 @@ function createOrGetEnvironment(id) {
 
     environments[id] = (function() {
         eval(fetch('http://124.221.241.174:13000/src48597962/Juying/raw/branch/master/drpy/drpy2.js'));
+        DRPY();
     })();
 
     return environments[id];
