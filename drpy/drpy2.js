@@ -19,60 +19,10 @@ const cheerio = {
         })[0];
     }
 }
-
-let $request = request;
-let $post = post;
-const req = function (url, cobj) {
-    try {
-        let res = {};
-        let obj = Object.assign({}, cobj);
-        if (obj.data) {
-            obj.body = obj.data;
-            delete obj.data;
-        }
-
-        if (obj.hasOwnProperty("redirect")) obj.redirect = !!obj.redirect;
-        if (obj.buffer === 2) {
-            obj.toHex = true;
-        }
-        obj.headers = Object.assign({
-            Cookie: "#noCookie#"
-        }, obj.headers);
-        if (url === "https://api.nn.ci/ocr/b64/text" && obj.headers) {
-            obj.headers["Content-Type"] = "text/plain";
-        }
-
-        if (url.startsWith("file://") && (url.includes("?type=") || url.includes("?params="))) {
-            url = url.slice(0, url.lastIndexOf("?"));
-        }
-        for (let key in obj.headers) {
-            if (typeof obj.headers[key] !== "string") {
-                obj.headers[key] = String(obj.headers[key]);
-            }
-        }
-        let r = "";
-        r = $request(url, obj);
-        if (obj.withHeaders) {
-            r = JSON.parse(r);
-            res.content = r.body;
-            res.headers = {};
-            for (let [k, v] of Object.entries(r.headers || {})) {
-                res.headers[k] = v[0];
-            }
-        } else {
-            res.content = r;
-        }
-        if (obj.buffer === 2) {
-            const CryptoUtil = $.require("hiker://assets/crypto-java.js");
-            res.content = CryptoUtil.Data.parseHex(res.content).toBase64(_base64.NO_WRAP);
-        }
-        return res;
-    } catch (e) {
-        log("Error" + e.toString());
-    }
-}
-
-
+// import cheerio from "https://ghproxy.net/https://raw.githubusercontent.com/hjdhnx/dr_py/main/libs/cheerio.min.js";
+// import "https://ghproxy.net/https://raw.githubusercontent.com/hjdhnx/dr_py/main/libs/crypto-js.js";
+// import 模板 from"https://ghproxy.net/https://raw.githubusercontent.com/hjdhnx/dr_py/main/js/模板.js";
+// import {gbkTool} from 'https://ghproxy.net/https://raw.githubusercontent.com/hjdhnx/dr_py/main/libs/gbk.js'
 
 function init_test() {
     // console.log(typeof(CryptoJS));
@@ -1557,6 +1507,34 @@ function verifyCode(url) {
         cnt += 1
     }
     return cookie
+}
+
+/**
+ * 存在数据库配置表里, key字段对应值value,没有就新增,有就更新,调用此方法会清除key对应的内存缓存
+ * @param k 键
+ * @param v 值
+ */
+function setItem(k, v) {
+    local.set(RKEY, k, v);
+    console.log(`规则${RKEY}设置${k} => ${v}`)
+}
+
+/**
+ *  获取数据库配置表对应的key字段的value，没有这个key就返回value默认传参.需要有缓存,第一次获取后会存在内存里
+ * @param k 键
+ * @param v 值
+ * @returns {*}
+ */
+function getItem(k, v) {
+    return local.get(RKEY, k) || v;
+}
+
+/**
+ *  删除数据库key对应的一条数据,并清除此key对应的内存缓存
+ * @param k
+ */
+function clearItem(k) {
+    local.delete(RKEY, k);
 }
 
 /*** js自封装的方法 ***/
