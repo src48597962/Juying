@@ -711,12 +711,13 @@ function dianboyiji() {
     }
     if(sourceName){
         if(jkdata.type=="drpy"){
+            log(Object.key(this).length);
             let env = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
             const drpy = env.createOrGetEnvironment(sgroup+'_'+sname);
             drpy.init(getPath(jkdata.url)); 
-
+            log(Object.key(this).length);
             //log(drpy.home(true)); 主页分类筛选数据
-            log(drpy.homeVod()); //获取首页推荐数据
+            //log(drpy.homeVod()); //获取首页推荐数据
 
         }else{
             try{
