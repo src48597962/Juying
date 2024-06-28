@@ -129,8 +129,7 @@ function createOrGetEnvironment(id, ext) {
             fixAdM3u8Ai: drpy2.fixAdM3u8Ai,
         }*/
         eval(fetch(module.modulePath.slice(0, module.modulePath.lastIndexOf("/")) +'/drpy/drpy2.js'));
-        return DRPY();
-        /*{
+        return {
             runMain: runMain,
             getRule: getRule,
             init: init,
@@ -144,7 +143,7 @@ function createOrGetEnvironment(id, ext) {
             sniffer: sniffer,
             isVideo: isVideo,
             fixAdM3u8Ai: fixAdM3u8Ai,
-        }*/
+        }
     })();
     drpyEnvS[id].init(ext);
     globalMap0.putMyVar('drpyEnvS', drpyEnvS);
