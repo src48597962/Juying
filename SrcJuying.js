@@ -715,7 +715,9 @@ function dianboyiji() {
             const drpy = env.createOrGetEnvironment(sgroup+'_'+sname);
             drpy.init(getPath(jkdata.url)); 
 
-            log(drpy.home(true)); 
+            //log(drpy.home(true)); 主页分类筛选数据
+            log(homeVod()); //获取首页推荐数据
+
         }else{
             try{
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
