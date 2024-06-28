@@ -711,7 +711,7 @@ function dianboyiji() {
     }
     if(sourceName){
         if(jkdata.type=="drpy"){
-            log(Object.keys(this).length);
+            //log(Object.keys(this).length);
             let env = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
             const drpy = env.createOrGetEnvironment(sgroup+'_'+sname, getPath(jkdata.url));
             //drpy.init(getPath(jkdata.url)); 
@@ -719,7 +719,9 @@ function dianboyiji() {
             log(drpy.getRule());
             //log(drpy.home(true)); 主页分类筛选数据
             //log(drpy.homeVod()); //获取首页推荐数据
-
+            let env2 = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
+            const drpy2 = env2.createOrGetEnvironment(sgroup+'_'+sname, getPath(jkdata.url));
+            log(drpy2.getRule());
         }else{
             try{
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
