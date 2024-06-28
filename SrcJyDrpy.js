@@ -1,5 +1,4 @@
 //drpy运行环境相关
-
 const isCloseLog = !getItem("useLog", "");
 const localKey = "drpy";
 const CryptoUtil = $.require("hiker://assets/crypto-java.js");
@@ -89,9 +88,9 @@ if (isCloseLog) {
     };
 }
 
-const MAX_ENVIRONMENTS = 10;
-//globalThis.environments = globalThis.environments || {};
-let environments = globalMap0.getMyVar('environments',{});
+//ENVIRONMENTS沙箱环境
+const MAX_ENVS = 10;
+let drpyEnvS = globalMap0.getMyVar('drpyEnvS',{});
 let nextEnvId = 0;
 
 function createOrGetEnvironment(id, ext) {
@@ -99,19 +98,20 @@ function createOrGetEnvironment(id, ext) {
     id = nextEnvId++;
     }
 
-    if (environments[id]) {
-        log(id+'>取初始化缓存');
-        return environments[id];
+    if (drpyEnvS[id]) {
+        log(id+'>drpy取缓存');
+        return drpyEnvS[id];
     }else{
         log(id+'>drpy初始化');
     }
 
-    if (Object.keys(environments).length >= MAX_ENVIRONMENTS) {
-        const oldestId = Object.keys(environments).sort((a, b) => a - b)[0];
-        delete environments[oldestId];
+    if (Object.keys(drpyEnvS).length >= MAX_ENVS) {
+        const oldestId = Object.keys(drpyEnvS).sort((a, b) => a - b)[0];
+        delete drpyEnvS[oldestId];
     }
 
-    environments[id] = (function() {
+    drpyEnvS[id] = (function() {
+        /*
         let drpy2 = $.require(module.modulePath.slice(0, module.modulePath.lastIndexOf("/")) +'/drpy/drpy2.js');
         return {
             runMain: drpy2.runMain,
@@ -127,36 +127,35 @@ function createOrGetEnvironment(id, ext) {
             sniffer: drpy2.sniffer,
             isVideo: drpy2.isVideo,
             fixAdM3u8Ai: drpy2.fixAdM3u8Ai,
+        }*/
+        eval(fetch(module.modulePath.slice(0, module.modulePath.lastIndexOf("/")) +'/drpy/drpy2.js'));
+        return {
+            runMain: runMain,
+            getRule: getRule,
+            init: init,
+            home: home,
+            homeVod: homeVod,
+            category: category,
+            detail: detail,
+            play: play,
+            search: search,
+            proxy: proxy,
+            sniffer: sniffer,
+            isVideo: isVideo,
+            fixAdM3u8Ai: fixAdM3u8Ai,
         }
     })();
-    environments[id].init(ext);
-    globalMap0.putMyVar('environments', environments);
-    return environments[id];
+    drpyEnvS[id].init(ext);
+    globalMap0.putMyVar('drpyEnvS', drpyEnvS);
+    return drpyEnvS[id];
 }
-/*
-// 示例使用
-const env1 = createOrGetEnvironment('aa');
-env1.init('https://raw.liucn.cc/box/libs/js/%E4%B8%8A%E5%A4%B4%E7%9F%AD%E5%89%A7.js'); 
-log(env1.getRule()); 
-const env2 = createOrGetEnvironment('aa');
-//env2.init('https://raw.liucn.cc/box/libs/js/a8%E9%9F%B3%E4%B9%90.js'); 
-log(env2.getRule()); 
-
-// 继续创建直到达到最大限制
-for (let i = 0; i < MAX_ENVIRONMENTS; i++) {
-    createOrGetEnvironment();
-}
-
-// 现在只有最近的10个环境存在
-log(Object.keys(environments).length); // 输出: 10
-*/
 
 $.exports = {
     createOrGetEnvironment
 }
 
 /*
-const MAX_ENVIRONMENTS = 10;
+const MAX_ENVS = 10;
 let environments = {};
 let nextId = 0;
 
@@ -169,7 +168,7 @@ function createOrGetEnvironment(id) {
         return environments[id];
     }
 
-    if (Object.keys(environments).length >= MAX_ENVIRONMENTS) {
+    if (Object.keys(environments).length >= MAX_ENVS) {
         const oldestId = Object.keys(environments).sort((a, b) => a - b)[0];
         environments[oldestId].destroy();
         delete environments[oldestId];
@@ -211,7 +210,7 @@ const env2Again = createOrGetEnvironment(123);
 console.log(env2Again.getVariable('y')); // 输出: 20，验证环境重用
 
 // 继续创建直到达到最大限制
-for (let i = 0; i < MAX_ENVIRONMENTS - 2; i++) {
+for (let i = 0; i < MAX_ENVS - 2; i++) {
     createOrGetEnvironment();
 }
 
