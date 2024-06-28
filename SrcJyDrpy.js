@@ -95,58 +95,62 @@ let environments = {};
 let nextId = 0;
 
 function createOrGetEnvironment(id) {
-if (id === undefined) {
-id = nextId++;
-}
+    if (id === undefined) {
+    id = nextId++;
+    }
 
-if (environments[id]) {
+    if (environments[id]) {
+        return environments[id];
+    }
+
+    if (Object.keys(environments).length >= MAX_ENVIRONMENTS) {
+        const oldestId = Object.keys(environments).sort((a, b) => a - b)[0];
+        delete environments[oldestId];
+    }
+
+    environments[id] = (function() {
+        let drpy = $.require('http://124.221.241.174:13000/src48597962/Juying/raw/branch/master/drpy/drpy2.js');
+        return {
+            runMain: drpy.runMain,
+            getRule: drpy.getRule,
+            init: drpy.init,
+            home: drpy.home,
+            homeVod: drpy.homeVod,
+            category: drpy.category,
+            detail: drpy.detail,
+            play: drpy.play,
+            search: drpy.search,
+            proxy: drpy.proxy,
+            sniffer: drpy.sniffer,
+            isVideo: drpy.isVideo,
+            fixAdM3u8Ai: drpy.fixAdM3u8Ai,
+        }
+    })();
+
     return environments[id];
 }
-
-if (Object.keys(environments).length >= MAX_ENVIRONMENTS) {
-    const oldestId = Object.keys(environments).sort((a, b) => a - b)[0];
-    delete environments[oldestId];
-}
-
-environments[id] = (function() {
-    let drpy = $.require('http://124.221.241.174:13000/src48597962/Juying/raw/branch/master/drpy/drpy2.js');
-    return {
-        runMain: drpy.runMain,
-        getRule: drpy.getRule,
-        init: drpy.init,
-        home: drpy.home,
-        homeVod: drpy.homeVod,
-        category: drpy.category,
-        detail: drpy.detail,
-        play: drpy.play,
-        search: drpy.search,
-        proxy: drpy.proxy,
-        sniffer: drpy.sniffer,
-        isVideo: drpy.isVideo,
-        fixAdM3u8Ai: drpy.fixAdM3u8Ai,
-    }
-})();
-
-return environments[id];
-}
-
+/*
 // 示例使用
-const env1 = createOrGetEnvironment('11');
+const env1 = createOrGetEnvironment('aa');
 env1.init('https://raw.liucn.cc/box/libs/js/%E4%B8%8A%E5%A4%B4%E7%9F%AD%E5%89%A7.js'); 
 log(env1.getRule()); 
-
-// 继续创建直到达到最大限制
-for (let i = 0; i < MAX_ENVIRONMENTS + 10; i++) {
-    createOrGetEnvironment();
-}
-
-const env2 = createOrGetEnvironment('11');
+const env2 = createOrGetEnvironment('aa');
 //env2.init('https://raw.liucn.cc/box/libs/js/a8%E9%9F%B3%E4%B9%90.js'); 
 log(env2.getRule()); 
+*/
+// 继续创建直到达到最大限制
+for (let i = 0; i < MAX_ENVIRONMENTS; i++) {
+    createOrGetEnvironment();
+}
 
 
 // 现在只有最近的10个环境存在
 log(Object.keys(environments).length); // 输出: 10
+
+
+$.exports = {
+    createOrGetEnvironment
+}
 
 /*
 const MAX_ENVIRONMENTS = 10;
