@@ -80,6 +80,12 @@ function getYiData(jkdata) {
             }
             vodurlhead = getHome(listurl);
         }
+    } else if (api_type=='drpy') {
+            let env = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
+            var drpy = env.createOrGetEnvironment(api_name, getPath(api_url));
+            log(drpy.getRule());
+            //log(drpy.home(true)); 主页分类筛选数据
+            //log(drpy.homeVod()); //获取首页推荐数据
     } else {
         log(api_type + '>api类型错误');
     }
