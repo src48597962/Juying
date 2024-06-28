@@ -142,7 +142,7 @@ log(env2.getRule());
 
 
 // 现在只有最近的10个环境存在
-console.log(Object.keys(environments).length); // 输出: 10
+log(Object.keys(environments).length); // 输出: 10
 
 /*
 const MAX_ENVIRONMENTS = 10;
