@@ -110,21 +110,21 @@ function createOrGetEnvironment(id) {
     }
 
     environments[id] = (function() {
-        let drpy = $.require('http://124.221.241.174:13000/src48597962/Juying/raw/branch/master/drpy/drpy2.js');
+        let drpy2 = $.require(module.modulePath.slice(0, module.modulePath.lastIndexOf("/")) +'drpy/drpy2.js');
         return {
-            runMain: drpy.runMain,
-            getRule: drpy.getRule,
-            init: drpy.init,
-            home: drpy.home,
-            homeVod: drpy.homeVod,
-            category: drpy.category,
-            detail: drpy.detail,
-            play: drpy.play,
-            search: drpy.search,
-            proxy: drpy.proxy,
-            sniffer: drpy.sniffer,
-            isVideo: drpy.isVideo,
-            fixAdM3u8Ai: drpy.fixAdM3u8Ai,
+            runMain: drpy2.runMain,
+            getRule: drpy2.getRule,
+            init: drpy2.init,
+            home: drpy2.home,
+            homeVod: drpy2.homeVod,
+            category: drpy2.category,
+            detail: drpy2.detail,
+            play: drpy2.play,
+            search: drpy2.search,
+            proxy: drpy2.proxy,
+            sniffer: drpy2.sniffer,
+            isVideo: drpy2.isVideo,
+            fixAdM3u8Ai: drpy2.fixAdM3u8Ai,
         }
     })();
 
