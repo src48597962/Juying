@@ -90,17 +90,19 @@ if (isCloseLog) {
 }
 
 const MAX_ENVIRONMENTS = 10;
-let environments = {};
-let nextId = 0;
+globalThis.environments = globalThis.environments || {};
+let nextEnvId = 0;
 
-function createOrGetEnvironment(id) {
+function createOrGetEnvironment(id, ext) {
     if (id === undefined) {
-    id = nextId++;
+    id = nextEnvId++;
     }
 
     if (environments[id]) {
         log(id+'>取初始化缓存');
         return environments[id];
+    }else{
+        log(id+'>drpy初始化');
     }
 
     if (Object.keys(environments).length >= MAX_ENVIRONMENTS) {
@@ -126,7 +128,7 @@ function createOrGetEnvironment(id) {
             fixAdM3u8Ai: drpy2.fixAdM3u8Ai,
         }
     })();
-
+    environments[id].init(ext);
     return environments[id];
 }
 /*
