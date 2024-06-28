@@ -52,7 +52,7 @@ function erjimenu(desc,name,group) {
         },
         {
             title: "切换站源",
-            url: !fileExist(jkfile) ? "toast://分享页面或没有接口，无法扩展更多片源" : $("#noLoading#").lazyRule((name,group) => {
+            url: !fileExist(jkfile) ? "toast://聚搜、分享页面，无法扩展更多片源" : $("#noLoading#").lazyRule((name,group) => {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyMenu.js');
                 cutSource(name,group);
                 return  "hiker://empty";
