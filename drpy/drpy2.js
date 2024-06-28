@@ -1,4 +1,4 @@
-const testPath = config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'drpy/';
+const testPath = module.modulePath.slice(0, module.modulePath.lastIndexOf("/")) + "/";
 const {
     gbkTool
 } = $.require(testPath + 'gbk.js');
