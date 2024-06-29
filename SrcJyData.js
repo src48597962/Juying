@@ -17,6 +17,13 @@ function getYiData(jkdata) {
     let cate_id = getMyVar('SrcJu_dianbo$分类', '');
     let type_id = '';
     let fl = storage0.getMyVar('SrcJu_dianbo$flCache') || {};
+    if(cate_id=="tj"){
+        return {
+            fllists: [],
+            vodlists: [],
+            error: {}
+        }
+    }
 
     //基础链接拼接
     if (api_type == "v1") {
