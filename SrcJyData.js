@@ -17,7 +17,7 @@ function getYiData(jkdata) {
     let cate_id = getMyVar('SrcJu_dianbo$分类', '');
     let type_id = '';
     let fl = storage0.getMyVar('SrcJu_dianbo$flCache') || {};
-    if(cate_id=="tj"){
+    if(cate_id=="tj" && MY_PAGE>1){
         return {
             fllists: [],
             vodlists: [],
