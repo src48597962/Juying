@@ -57,7 +57,7 @@ function getYiData(jkdata) {
         listurl = api_url + '?ac=videolist&pg=';
         listnode = "json.list";
     } else if (/XBPQ|XPath|XYQ/.test(api_type)) {
-        extdata = extDataCache(jkdata)
+        extdata = extDataCache(jkdata);
         if ($.type(extdata) == 'object') {
             if (api_type == "XBPQ") {
                 let host = extdata["主页url"] || '';
@@ -88,11 +88,15 @@ function getYiData(jkdata) {
             vodurlhead = getHome(listurl);
         }
     } else if (api_type=='drpy') {
+        let apifile = getDrpyFile(jkdata);
+        if(apifile){
             let env = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
-            var drpy = env.createOrGetEnvironment(api_name, getPath(api_url));
+            var drpy = env.createOrGetEnvironment(api_name, apifile);
             let rule = drpy.getRule();
             classurl = rule.homeUrl || rule.host;
             listurl = rule.filter_url || rule.host;
+        }
+        
             //detailUrl;
             //log(drpy.home(true));
             //log(drpy.getRule());
@@ -1374,10 +1378,47 @@ function getHtml(url, headers) {
     } catch (e) { }
     return '';
 }
+// drpy接口缓存文件路径
+function getDrpyFile(jkdata) {
+    if (/^hiker/.test(jkdata.url)) {
+        if (!fileExist(jkdata.url)) {
+            if(!fileExist("hiker://files/data/"+MY_RULE.title+"/jiekou.json")){
+                jkdata.url = jkdata.url.replace('/data/','/_cache/');
+            }
+            if (jkdata.ext && /^http/.test(jkdata.ext)) {
+                let content;
+                if(jkdata.ext.startsWith('https://raw.github')){
+                    let ghproxy = $.require('ghproxy').getproxy();
+                    for(let i=0;i<ghproxy.length;i++){
+                        content = fetch(ghproxy[i]+jkdata.ext, {timeout:3000});
+                        if (content) {
+                            break;
+                        }
+                    }
+                }
+                if(!content){
+                    content = fetch(jkdata.ext, { timeout: 3000 });
+                }
+                if (content) {
+                    writeFile(jkdata.url, content);
+                }
+            }
+        }
+        if (fileExist(jkdata.url)) {
+            return getPate(jkdata.url);
+        }
+    }else if(/^file/.test(jkdata.url)){
+        return jkdata.url;
+    }
+    return '';
+}
 // extData缓存
 function extDataCache(jkdata) {
     if (/^hiker/.test(jkdata.url)) {
         if (!fileExist(jkdata.url)) {
+            if(!fileExist("hiker://files/data/"+MY_RULE.title+"/jiekou.json")){
+                jkdata.url = jkdata.url.replace('/data/','/_cache/');
+            }
             if (jkdata.ext && /^http/.test(jkdata.ext)) {
                 let content = fetch(jkdata.ext, { timeout: 3000 });
                 if (content) {
