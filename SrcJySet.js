@@ -1649,7 +1649,7 @@ function resource() {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                 if(getMyVar('importtype','1')=="1"){
                     return Resourceimport(input,getMyVar('importtype','1'),Juconfig['importmode']?1:0);
-                }else if(getMyVar('importtype','1')=="1"){
+                }else if(getMyVar('importtype','1')=="2"){
                     let html = request('https://github.com/hjdhnx/hipy-server/tree/master/app/t4/files/drpy_js');
                     log(html);
                     return "hiker://empty";
