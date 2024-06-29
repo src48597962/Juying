@@ -92,8 +92,8 @@ function getYiData(jkdata) {
         if(apifile){
             let env = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
             var drpy = env.createOrGetEnvironment(api_name, apifile);
-            var rule = drpy.getRule();
-            log(rule);
+            let rule = drpy.getRule();
+            //log(rule);
             classurl = rule.homeUrl || rule.host;
             listurl = rule.filter_url || rule.host;
         }
@@ -125,7 +125,7 @@ function getYiData(jkdata) {
             } else {
                 try {
                     if (api_type == "drpy") {
-                        let home = JSON.parse(drpy.home(true,'',rule.class_parse));
+                        let home = JSON.parse(drpy.home(true));
                         log(home);
                         let typelist = home['class'] || [];
                         typelist.forEach(v=>{
