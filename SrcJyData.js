@@ -1323,18 +1323,9 @@ function getErData(jkdata) {
             desc = json.vod_content || "";
             pic = json.vod_pic;
             tabs = json.vod_play_from.split('$$$');
-            conts = json.vod_play_url.split('$$$');
-            lists = conts.map(it => {
-                let lines = it.split('#');
-                lines = lines.map((itit, i) => {
-                    if (itit && itit.indexOf('$') == -1) {
-                        let ii = parseInt(i) + 1;
-                        itit = ii + '$' + itit;
-                    }
-                    return itit;
-                })
-                return lines;
-            })
+            lists = json.vod_play_url.split('$$$').map(it => {
+                return it.split('#');
+            });
         }
 
         if (/XPath|biubiu|XBPQ|drpy|XYQ/.test(api_type) && html && (tabs.length == 0 || lists.length == 0) && getMyVar('debug', '0') == "0" && html.indexOf(MY_PARAMS.pageTitle) > -1) {
