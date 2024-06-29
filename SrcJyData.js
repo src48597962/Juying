@@ -1405,7 +1405,7 @@ function getDrpyFile(jkdata) {
             }
         }
         if (fileExist(jkdata.url)) {
-            return getPate(jkdata.url);
+            return getPath(jkdata.url);
         }
     }else if(/^file/.test(jkdata.url)){
         return jkdata.url;
