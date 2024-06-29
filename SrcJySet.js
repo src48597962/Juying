@@ -1688,7 +1688,7 @@ function DrpyImport(input, importmode){
     let jiekous = list.filter(v=>v.contentType=="file").map(it=>{
         return {
             name: it.name,
-            url: input + it.path.substr(it.path.lastIndexOf('/')),
+            url: input.replace('github.com','raw.githubusercontent.com').replace('/tree/','/') + it.path.substr(it.path.lastIndexOf('/')),
             ghproxy: ghproxy
         }
     });
