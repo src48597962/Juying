@@ -1706,7 +1706,7 @@ function DrpyImport(input, importmode){
         function getcontent() {
             for(let i=0;i<proxys.length;i++){
                 let content = fetch(proxys[i]+obj.url, {timeout:3000});
-                if (content && !content.includes('<!DOCTYPE html>')) {
+                if (content && !content.trim().startsWith('<!DOCTYPE html>') && !content.startsWith('<html>')) {
                     return content;
                 }
             }
