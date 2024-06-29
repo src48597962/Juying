@@ -465,6 +465,7 @@ function dianboerji() {
                 列表 = 分页s[pageid];//取当前分页的选集列表
             }
         }
+        log(列表);
         if(列表.length==0){
             d.push({
                 title: '当前无播放选集，点更多片源试试！',
