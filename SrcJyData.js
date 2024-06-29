@@ -982,11 +982,10 @@ function getErData(jkdata) {
         if(apifile){
             let env = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
             var drpy = env.createOrGetEnvironment(jkdata.name, apifile);
-            log(drpy.detail(MY_PARAMS.url));
-            //let rule = drpy.getRule();
-            //log(rule);
+            html = drpy.detail(MY_PARAMS.url);
+        }else{
+            html = '{}';
         }
-        html = MY_PARAMS.pageTitle;
     } else {
         html = getHtml(MY_URL, headers);
     }
@@ -1047,7 +1046,6 @@ function getErData(jkdata) {
                 tabs = arts.map(it => {
                     return it.replace(/[\r\ \n\t]/g, "");
                 })
-                flags = tabs;
                 lists = conts.map(it => {
                     let lines = it.split('#');
                     lines = lines.map((itit, i) => {
@@ -1106,7 +1104,6 @@ function getErData(jkdata) {
                 })
                 if (arts.length == 0 && json.vod_play_from && json.vod_play_url) {
                     tabs = json.vod_play_from.split('$$$');
-                    flags = tabs;
                     conts = json.vod_play_url.split('$$$');
                     lists = conts.map(it => {
                         let lines = it.split('#');
@@ -1319,19 +1316,24 @@ function getErData(jkdata) {
                 log('XYQ获取选集列表失败>' + e.message);
             }
         } else if (api_type == 'drpy') {
-            let detailObj = {
-                data: jkdata,
-                url: MY_URL
-            }
-            let drpy = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'plugins/drpy.js');
-            let json = JSON.parse(drpy.detailParse(detailObj)).list[0];
+            let json = JSON.parse(html).list[0];
             actor = json.vod_actor;
-            remarks = json.vod_remarks;
+            area = json.vod_area;
+            remarks = json.vod_remarks || json.vod_class || "";
+            desc = json.vod_content || "";
             pic = json.vod_pic;
-            desc = json.vod_content;
             tabs = json.vod_play_from.split('$$$');
-            lists = json.vod_play_url.split('$$$').map(it => {
-                return it.split('#');
+            conts = json.vod_play_url.split('$$$');
+            lists = conts.map(it => {
+                let lines = it.split('#');
+                lines = lines.map((itit, i) => {
+                    if (itit.indexOf('$') == -1) {
+                        let ii = parseInt(i) + 1;
+                        itit = ii + '$' + itit;
+                    }
+                    return itit;
+                })
+                return lines;
             })
         }
 
