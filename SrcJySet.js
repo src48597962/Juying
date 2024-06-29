@@ -1565,7 +1565,7 @@ function resource() {
             })
         }),
         extra: {
-            titleVisible: true,
+            titleVisible: importtype=="1"?true:false,
             defaultValue: getMyVar('importinput', ''),
             onChange: 'putMyVar("importinput",input)'
         }
@@ -1602,9 +1602,9 @@ function resource() {
                                     back(true);
                                 }else if(input=="删除"){
                                     let importrecord = Juconfig['importrecord']||[];
-                                    for(let i=0;i<importrecord.length;i++){
-                                        if(importrecord[i].url==url&&importrecord[i].type==getMyVar('importtype','1')){
-                                            importrecord.splice(i,1);
+                                    for(let j=0;j<importrecord.length;i++){
+                                        if(importrecord[j].url==url&&importrecord[j].type==getMyVar('importtype','1')){
+                                            importrecord.splice(j,1);
                                             break;
                                         }
                                     }
@@ -1630,20 +1630,22 @@ function resource() {
     d.push({
         title: '🆗 确定导入(' + (Juconfig["importmode"]?"全":"增")+')',
         url: importtype=="1"&&getMyVar('importjiekou','1')!="1"&&getMyVar('importjiexi','1')!="1"?'toast://请选择导入项目':$('#noLoading#').lazyRule((Juconfig,cfgfile) => {
-                if(getMyVar('importinput', '')==""){
+                let input = getMyVar('importinput', '');
+                if(input==""){
                     return 'toast://请先输入链接地址'
                 }
-                let input = getMyVar('importinput', '');
-                if(input){
-                    let importrecord = Juconfig['importrecord']||[];
-                    if(importrecord.length>20){//保留20个记录
-                        importrecord.shift();
-                    }
-                    if(!importrecord.some(item => item.url==input && item.type==getMyVar('importtype','1'))){
-                        importrecord.push({type:getMyVar('importtype','1'),url:input});
-                        Juconfig['importrecord'] = importrecord;
-                        writeFile(cfgfile, JSON.stringify(Juconfig));
-                    }
+                
+                if(input.endsWith('/')){
+                    input = input.substring(0, input.length - 1);
+                }
+                let importrecord = Juconfig['importrecord']||[];
+                if(importrecord.length>20){//保留20个记录
+                    importrecord.shift();
+                }
+                if(!importrecord.some(item => item.url==input && item.type==getMyVar('importtype','1'))){
+                    importrecord.push({type:getMyVar('importtype','1'),url:input});
+                    Juconfig['importrecord'] = importrecord;
+                    writeFile(cfgfile, JSON.stringify(Juconfig));
                 }
 
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
@@ -1655,8 +1657,78 @@ function resource() {
                     }
                     let html = request(input);
                     let json = JSON.parse(html.split(`data-target="react-app.embeddedData">`)[1].split(`</script>`)[0]);
-                    log(json);
-                    return "hiker://empty";
+                    let list = json.tree.items;
+                    let ghproxy = $.require('ghproxy').getproxy();
+                    let jiekous = list.filter(v=>v.contentType=="file").map(it=>{
+                        return {
+                            name: it.name,
+                            url: input + path.substr(path.lastIndexOf('/')),
+                            ghproxy: ghproxy
+                        }
+                    });
+
+                    let urls= [];
+                    let datapath = globalMap0.getMyVar('gmParams').datapath + "libs_jk/";
+                    //多线程处理
+                    var task = function(obj) {
+                        function shuffleArray(array) {
+                            array.sort(() => Math.random() - 0.5);
+                            return array;
+                        }
+                        let proxys = obj.ghproxy;
+                        shuffleArray(proxys)
+                        function getcontent() {
+                            for(let i=0;i<proxys.length;i++){
+                                let content = fetch(proxys[i]+obj.url, {timeout:3000});
+                                if (content) {
+                                    return content;
+                                }
+                            }
+                            return fetch(obj.url, {timeout:3000});
+                        }
+                        let arr = { "name": obj.name.split('.')[0], "type": "drpy", "ext": obj.url}
+                        let urlfile;
+                        try{
+                            let content = getcontent();
+                            if (content) {
+                                urlfile = datapath + arr.type + '_' + obj.name;
+                                writeFile(urlfile, content);
+                            }
+                        }catch(e){
+                            log(obj.name + '>drpy库文件缓存失败>' + e.message);
+                        }
+                        
+                        if(urlfile){
+                            arr['url'] = urlfile;
+                        }
+                        if(arr.url){
+                            urls.push(arr);
+                        }
+                        return 1;
+                    }
+                    
+                    let jiekoutask = jiekous.map((list)=>{
+                        return {
+                            func: task,
+                            param: list,
+                            id: list.name
+                        }
+                    });
+
+                    be(jiekoutask, {
+                        func: function(obj, id, error, taskResult) {                            
+                        },
+                        param: {
+                        }
+                    });
+                    let jknum = 0;
+                    try{
+                        jknum = jiekousave(urls, importmode);
+                    }catch(e){
+                        jknum =-1;
+                        log('TVBox导入接口保存有异常>'+e.message);
+                    } 
+                    return 'toast://drpy库>查询'+jiekous.length+'，导入'+jknum;     
                 }
             }, Juconfig, cfgfile),
         col_type: "text_2",
@@ -1739,12 +1811,10 @@ function Resourceimport(input,importtype,importmode){
                         arr = { "name": obj.name, "type": "XBPQ", "ext": extfile};
                     }else if(/^csp_XYQHiker/.test(obj.api)){
                         arr = { "name": obj.name, "type": "XYQ", "ext": extfile};
-                    }
-                    /*
-                    else if(/drpy2/.test(obj.api)){
+                    }else if(/drpy2/.test(obj.api)){
                         arr = { "name": obj.name, "type": "drpy", "ext": extfile};
                     }
-                    */
+
                     if(arr){
                         let urlfile;
                         if($.type(extfile)=='object'){
