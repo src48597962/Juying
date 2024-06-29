@@ -1649,7 +1649,7 @@ function resource() {
                 if(getMyVar('importtype','1')=="1"){
                     return Resourceimport(input,getMyVar('importtype','1'),Juconfig['importmode']?1:0);
                 }else if(getMyVar('importtype','1')=="2"){
-                    return DrpyImport(input);
+                    return DrpyImport(input,Juconfig['importmode']?1:0);
                 }
             }, Juconfig, cfgfile),
         col_type: "text_2",
@@ -1672,16 +1672,18 @@ function resource() {
     setResult(d);
 }
 //drpy库导入
-function DrpyImport(input){
+function DrpyImport(input, importmode){
     if(input.startsWith('http') && !input.includes('github.com')){
         return "toast://在线只支持github库"
     }
     if(input.endsWith('/')){
         input = input.substring(0, input.length - 1);
     }
+    showLoading('检测地址有效性');
     let html = request(input);
     let json = JSON.parse(html.split(`data-target="react-app.embeddedData">`)[1].split(`</script>`)[0]);
     let list = json.payload.tree.items;
+    showLoading('检测到文件'+list.length+'，执行多线程导入');
     let ghproxy = $.require('ghproxy').getproxy();
     let jiekous = list.filter(v=>v.contentType=="file").map(it=>{
         return {
@@ -1751,8 +1753,9 @@ function DrpyImport(input){
     }catch(e){
         jknum =-1;
         log('TVBox导入接口保存有异常>'+e.message);
-    } 
-    return 'toast://drpy库>查询'+jiekous.length+'，导入'+jknum;     
+    }
+    hideLoading();
+    return 'toast://drpy库>查询' + jiekous.length + (jknum>-1?' 接口保存'+jknum:' 导入异常');     
 }
 //资源导入
 function Resourceimport(input,importtype,importmode){
