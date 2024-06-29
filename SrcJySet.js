@@ -1650,8 +1650,12 @@ function resource() {
                 if(getMyVar('importtype','1')=="1"){
                     return Resourceimport(input,getMyVar('importtype','1'),Juconfig['importmode']?1:0);
                 }else if(getMyVar('importtype','1')=="2"){
-                    let html = request('https://github.com/hjdhnx/hipy-server/tree/master/app/t4/files/drpy_js');
-                    log(html);
+                    if(input.startsWith('http') && !input.includes('github.com')){
+                        return "toast://在线只支持github库"
+                    }
+                    let html = request(input);
+                    let json = JSON.parse(html.split(`data-target="react-app.embeddedData">`)[1].split(`</script>`)[0]);
+                    log(json);
                     return "hiker://empty";
                 }
             }, Juconfig, cfgfile),
