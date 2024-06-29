@@ -475,7 +475,7 @@ function dianboerji() {
                 }
             });
         }else{
-            let flag = erdata.flags.length>0?erdata.flags[lineid]:"";
+            let flag = erdata.flags.length>=lineid+1?erdata.flags[lineid]:erdata.tabs.length>=lineid+1?erdata.tabs[lineid]:"";
             let dataObj = {};
             if(erdata.parse_api&&erdata.parse_api.length>0){
                 dataObj.parse_api = erdata.parse_api;
