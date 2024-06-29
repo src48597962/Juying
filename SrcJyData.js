@@ -126,7 +126,6 @@ function getYiData(jkdata) {
                 try {
                     if (api_type == "drpy") {
                         let home = JSON.parse(drpy.home());
-                        log(home);
                         let typelist = home['class'] || [];
                         typelist.forEach(v=>{
                             分类.push(v.type_name + '$' + v.type_id);
@@ -319,15 +318,13 @@ function getYiData(jkdata) {
                     storage0.putMyVar('SrcJu_dianbo$classCache', { 分类: 分类, 筛选: 筛选, 推荐: 推荐 });
                 }
             }
-            log(推荐);
-            log(分类);
-            log(筛选);
+
             if (分类.length > 0) {
                 fllists = [];
                 try {
                     cate_id = getMyVar('SrcJu_dianbo$分类', 推荐.length > 0 ? 'tj' : 分类[0].split('$')[1]);
 
-                    if (筛选 && api_type != 'cms' && cate_id != 'tj') {
+                    if ($.type(筛选)=='object' && api_type != 'cms' && cate_id != 'tj') {
                         fllists.push({
                             title: fold === '1' ? '““””<b><span style="color: #F54343">∨</span></b>' : '““””<b><span style="color:' + Color + '">∧</span></b>',
                             url: $('#noLoading#').lazyRule((fold) => {
