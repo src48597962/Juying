@@ -25,7 +25,7 @@ const cheerio = {
 // import {gbkTool} from 'https://ghproxy.net/https://raw.githubusercontent.com/hjdhnx/dr_py/main/libs/gbk.js'
 
 console.log = function(s) {
-    return;
+    log('drpy日志');
 }
 
 function init_test() {
