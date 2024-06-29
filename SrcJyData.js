@@ -118,9 +118,8 @@ function getYiData(jkdata) {
                         typelist.forEach(v=>{
                             分类.push(v.type_name + '$' + v.type_id);
                         })
-                        log(分类);
                         筛选 = home['filters'] || {};
-                        let homeVod = drpy.homeVod().list || [];
+                        let homeVod = JSON.parse(drpy.homeVod()).list || [];
                         homeVod.forEach(it=>{
                             推荐.push({ "vod_url": it.vod_id, "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic });
                         })
@@ -331,7 +330,6 @@ function getYiData(jkdata) {
                     if (推荐.length > 0) {
                         if (cate_id == 'tj') {
                             vodlists = 推荐;//当前分类为推荐，取推荐列表
-                            log("分类为推荐");
                         }
                         fllists.push({
                             title: cate_id == 'tj' ? '““””<b><span style="color:' + Color + '">' + '推荐' + '</span></b>' : '推荐',
@@ -454,7 +452,11 @@ function getYiData(jkdata) {
             vodlists = [];
             let vod_name, vod_pic, vod_url, vod_desc;
             if (api_type=="drpy") {
-                log(drpy.category(fl.cateId, MY_PAGE, false, 筛选));
+                let vodlist = JSON.parse(drpy.category(fl.cateId, MY_PAGE, false, 筛选)).list || [];
+                vodlist.forEach(it=>{
+                    vodlists.push({ "vod_url": it.vod_id, "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic });
+                })
+
             }else if (api_type == "XYQ") {
                 let gethtml = getHtml(MY_URL, headers);
                 if (extdata['分类片单是否Jsoup写法'] == "1" && extdata['分类列表数组规则']) {
