@@ -1391,7 +1391,7 @@ function getDrpyFile(jkdata) {
                     let ghproxy = $.require('ghproxy').getproxy();
                     for(let i=0;i<ghproxy.length;i++){
                         content = fetch(ghproxy[i]+jkdata.ext, {timeout:3000});
-                        if (content) {
+                        if (content && !content.includes('<!DOCTYPE html>')) {
                             break;
                         }
                     }
