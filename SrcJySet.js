@@ -1634,10 +1634,7 @@ function resource() {
                 if(input==""){
                     return 'toast://请先输入链接地址'
                 }
-                
-                if(input.endsWith('/')){
-                    input = input.substring(0, input.length - 1);
-                }
+
                 let importrecord = Juconfig['importrecord']||[];
                 if(importrecord.length>20){//保留20个记录
                     importrecord.shift();
@@ -1652,83 +1649,7 @@ function resource() {
                 if(getMyVar('importtype','1')=="1"){
                     return Resourceimport(input,getMyVar('importtype','1'),Juconfig['importmode']?1:0);
                 }else if(getMyVar('importtype','1')=="2"){
-                    if(input.startsWith('http') && !input.includes('github.com')){
-                        return "toast://在线只支持github库"
-                    }
-                    let html = request(input);
-                    let json = JSON.parse(html.split(`data-target="react-app.embeddedData">`)[1].split(`</script>`)[0]);
-                    let list = json.payload.tree.items;
-                    let ghproxy = $.require('ghproxy').getproxy();
-                    let jiekous = list.filter(v=>v.contentType=="file").map(it=>{
-                        return {
-                            name: it.name,
-                            url: input + path.substr(path.lastIndexOf('/')),
-                            ghproxy: ghproxy
-                        }
-                    });
-
-                    let urls= [];
-                    let datapath = globalMap0.getMyVar('gmParams').datapath + "libs_jk/";
-                    //多线程处理
-                    var task = function(obj) {
-                        function shuffleArray(array) {
-                            array.sort(() => Math.random() - 0.5);
-                            return array;
-                        }
-                        let proxys = obj.ghproxy;
-                        shuffleArray(proxys)
-                        function getcontent() {
-                            for(let i=0;i<proxys.length;i++){
-                                let content = fetch(proxys[i]+obj.url, {timeout:3000});
-                                if (content) {
-                                    return content;
-                                }
-                            }
-                            return fetch(obj.url, {timeout:3000});
-                        }
-                        let arr = { "name": obj.name.split('.')[0], "type": "drpy", "ext": obj.url}
-                        let urlfile;
-                        try{
-                            let content = getcontent();
-                            if (content) {
-                                urlfile = datapath + arr.type + '_' + obj.name;
-                                writeFile(urlfile, content);
-                            }
-                        }catch(e){
-                            log(obj.name + '>drpy库文件缓存失败>' + e.message);
-                        }
-                        
-                        if(urlfile){
-                            arr['url'] = urlfile;
-                        }
-                        if(arr.url){
-                            urls.push(arr);
-                        }
-                        return 1;
-                    }
-                    
-                    let jiekoutask = jiekous.map((list)=>{
-                        return {
-                            func: task,
-                            param: list,
-                            id: list.name
-                        }
-                    });
-
-                    be(jiekoutask, {
-                        func: function(obj, id, error, taskResult) {                            
-                        },
-                        param: {
-                        }
-                    });
-                    let jknum = 0;
-                    try{
-                        jknum = jiekousave(urls, importmode);
-                    }catch(e){
-                        jknum =-1;
-                        log('TVBox导入接口保存有异常>'+e.message);
-                    } 
-                    return 'toast://drpy库>查询'+jiekous.length+'，导入'+jknum;     
+                    return DrpyImport(input);
                 }
             }, Juconfig, cfgfile),
         col_type: "text_2",
@@ -1749,6 +1670,89 @@ function resource() {
         }
     });
     setResult(d);
+}
+//drpy库导入
+function DrpyImport(input){
+    if(input.startsWith('http') && !input.includes('github.com')){
+        return "toast://在线只支持github库"
+    }
+    if(input.endsWith('/')){
+        input = input.substring(0, input.length - 1);
+    }
+    let html = request(input);
+    let json = JSON.parse(html.split(`data-target="react-app.embeddedData">`)[1].split(`</script>`)[0]);
+    let list = json.payload.tree.items;
+    let ghproxy = $.require('ghproxy').getproxy();
+    let jiekous = list.filter(v=>v.contentType=="file").map(it=>{
+        return {
+            name: it.name,
+            url: input + it.path.substr(it.path.lastIndexOf('/')),
+            ghproxy: ghproxy
+        }
+    });
+
+    let urls= [];
+    let datapath = globalMap0.getMyVar('gmParams').datapath + "libs_jk/";
+    //多线程处理
+    var task = function(obj) {
+        function shuffleArray(array) {
+            array.sort(() => Math.random() - 0.5);
+            return array;
+        }
+        let proxys = obj.ghproxy;
+        shuffleArray(proxys)
+        function getcontent() {
+            for(let i=0;i<proxys.length;i++){
+                let content = fetch(proxys[i]+obj.url, {timeout:3000});
+                if (content) {
+                    return content;
+                }
+            }
+            return fetch(obj.url, {timeout:3000});
+        }
+        let arr = { "name": obj.name.split('.')[0], "type": "drpy", "ext": obj.url}
+        let urlfile;
+        try{
+            let content = getcontent();
+            if (content) {
+                urlfile = datapath + arr.type + '_' + obj.name;
+                writeFile(urlfile, content);
+            }
+        }catch(e){
+            log(obj.name + '>drpy库文件缓存失败>' + e.message);
+        }
+        
+        if(urlfile){
+            arr['url'] = urlfile;
+        }
+        if(arr.url){
+            urls.push(arr);
+        }
+        return 1;
+    }
+    
+    let jiekoutask = jiekous.map((list)=>{
+        return {
+            func: task,
+            param: list,
+            id: list.name
+        }
+    });
+
+    be(jiekoutask, {
+        func: function(obj, id, error, taskResult) {                            
+        },
+        param: {
+        }
+    });
+    let jknum = 0;
+    try{
+        jknum = jiekousave(urls, importmode);
+    }catch(e){
+        jknum =-1;
+        log('TVBox导入接口保存有异常>'+e.message);
+    } 
+    return 'toast://drpy库>查询'+jiekous.length+'，导入'+jknum;     
 }
 //资源导入
 function Resourceimport(input,importtype,importmode){
