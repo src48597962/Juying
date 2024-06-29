@@ -982,7 +982,7 @@ function getErData(jkdata) {
         if(apifile){
             let env = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
             var drpy = env.createOrGetEnvironment(jkdata.name, apifile);
-            log(drpy.detai(MY_PARAMS.url));
+            log(drpy.detail(MY_PARAMS.url));
             //let rule = drpy.getRule();
             //log(rule);
         }
