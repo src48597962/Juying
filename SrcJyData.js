@@ -102,13 +102,13 @@ function getYiData(jkdata) {
         log(api_type + '>api类型错误');
     }
 
-    let 筛选;
     //一级第1页生成分类数据
     if (MY_PAGE == 1) {
         if (classurl) {
             MY_URL = classurl;
             let 推荐 = [];
             let 分类 = [];
+            let 筛选;
 
             let cate_exclude = ['主页', '求片/留言'];
             const Color = "#3399cc";
@@ -407,9 +407,7 @@ function getYiData(jkdata) {
         try {
             fl.cateId = fl.cateId || cate_id;
             //拼接生成分类页url链接
-            if (api_type == "drpy") {
-                log(fl);
-            } else if (api_type == "XYQ") {
+            if (api_type == "XYQ") {
                 fl.catePg = MY_PAGE;
                 let execStrs = getExecStrs(listurl);
                 execStrs.forEach(k => {
@@ -458,7 +456,7 @@ function getYiData(jkdata) {
             vodlists = [];
             let vod_name, vod_pic, vod_url, vod_desc;
             if (api_type=="drpy") {
-                let vodlist = JSON.parse(drpy.category(fl.cateId, MY_PAGE, false, 筛选)).list || [];
+                let vodlist = JSON.parse(drpy.category(fl.cateId, MY_PAGE, false, fl)).list || [];
                 vodlist.forEach(it=>{
                     vodlists.push({ "vod_url": it.vod_id, "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic });
                 })
