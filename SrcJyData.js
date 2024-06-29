@@ -95,13 +95,13 @@ function getYiData(jkdata) {
         log(api_type + '>api类型错误');
     }
 
+    let 筛选;
     //一级第1页生成分类数据
     if (MY_PAGE == 1) {
         if (classurl) {
             MY_URL = classurl;
             let 推荐 = [];
             let 分类 = [];
-            let 筛选;
 
             let cate_exclude = ['主页', '求片/留言'];
             const Color = "#3399cc";
