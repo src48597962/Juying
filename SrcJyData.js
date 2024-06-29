@@ -306,7 +306,7 @@ function getYiData(jkdata) {
                     storage0.putMyVar('SrcJu_dianbo$classCache', { 分类: 分类, 筛选: 筛选, 推荐: 推荐 });
                 }
             }
-
+            log(分类);
             if (分类.length > 0) {
                 fllists = [];
                 try {
@@ -329,6 +329,7 @@ function getYiData(jkdata) {
                     if (推荐.length > 0) {
                         if (cate_id == 'tj') {
                             vodlists = 推荐;//当前分类为推荐，取推荐列表
+                            log("分类为推荐");
                         }
                         fllists.push({
                             title: cate_id == 'tj' ? '““””<b><span style="color:' + Color + '">' + '推荐' + '</span></b>' : '推荐',
