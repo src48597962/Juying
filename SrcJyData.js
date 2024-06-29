@@ -1327,7 +1327,7 @@ function getErData(jkdata) {
             lists = conts.map(it => {
                 let lines = it.split('#');
                 lines = lines.map((itit, i) => {
-                    if (itit.indexOf('$') == -1) {
+                    if (itit && itit.indexOf('$') == -1) {
                         let ii = parseInt(i) + 1;
                         itit = ii + '$' + itit;
                     }
