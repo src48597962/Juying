@@ -24,6 +24,10 @@ const cheerio = {
 // import 模板 from"https://ghproxy.net/https://raw.githubusercontent.com/hjdhnx/dr_py/main/js/模板.js";
 // import {gbkTool} from 'https://ghproxy.net/https://raw.githubusercontent.com/hjdhnx/dr_py/main/libs/gbk.js'
 
+console.log = function(s) {
+    return;
+}
+
 function init_test() {
     // console.log(typeof(CryptoJS));
     console.log("init_test_start");
