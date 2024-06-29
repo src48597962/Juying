@@ -84,7 +84,9 @@ function getYiData(jkdata) {
             let env = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
             var drpy = env.createOrGetEnvironment(api_name, getPath(api_url));
             let rule = drpy.getRule();
-            classurl = rule.host;
+            classurl = rule.homeUrl || rule.host;
+            listurl = rule.filter_url || rule.host;
+            //detailUrl;
             //log(drpy.home(true));
             //log(drpy.getRule());
             //log(drpy.home(true)); 主页分类筛选数据
@@ -118,7 +120,9 @@ function getYiData(jkdata) {
                         })
                         筛选 = home['filters'] || {};
                         let homeVod = drpy.homeVod() || [];
-                        log(homeVod);
+                        homeVod.forEach(it=>{
+                            推荐.push({ "vod_url": it.vod_id, "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic });
+                        })
                     } else if (api_type == "XYQ") {
                         if (extdata['是否开启获取首页数据'] && extdata['首页列表数组规则']) {
                             let gethtml = getHtml(classurl, headers);
@@ -396,7 +400,9 @@ function getYiData(jkdata) {
         try {
             fl.cateId = fl.cateId || cate_id;
             //拼接生成分类页url链接
-            if (api_type == "XYQ") {
+            if (api_type == "drpy") {
+
+            } else if (api_type == "XYQ") {
                 fl.catePg = MY_PAGE;
                 let execStrs = getExecStrs(listurl);
                 execStrs.forEach(k => {
@@ -444,7 +450,9 @@ function getYiData(jkdata) {
             }
             vodlists = [];
             let vod_name, vod_pic, vod_url, vod_desc;
-            if (api_type == "XYQ") {
+            if (api_type=="drpy") {
+                log(drpy.category(fl.cateId, MY_PAGE, false, 筛选));
+            }else if (api_type == "XYQ") {
                 let gethtml = getHtml(MY_URL, headers);
                 if (extdata['分类片单是否Jsoup写法'] == "1" && extdata['分类列表数组规则']) {
                     pdfa(gethtml, extdata['分类列表数组规则']).forEach(it => {
