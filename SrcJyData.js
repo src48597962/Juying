@@ -125,7 +125,7 @@ function getYiData(jkdata) {
             } else {
                 try {
                     if (api_type == "drpy") {
-                        let home = JSON.parse(drpy.home(true));
+                        let home = JSON.parse(drpy.home());
                         log(home);
                         let typelist = home['class'] || [];
                         typelist.forEach(v=>{
