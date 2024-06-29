@@ -1683,7 +1683,7 @@ function DrpyImport(input, importmode){
     let html = request(input);
     let json = JSON.parse(html.split(`data-target="react-app.embeddedData">`)[1].split(`</script>`)[0]);
     let list = json.payload.tree.items;
-    showLoading('检测到文件'+list.length+'，执行多线程导入');
+    showLoading('执行多线程导入'+list.length);
     let ghproxy = $.require('ghproxy').getproxy();
     let jiekous = list.filter(v=>v.contentType=="file").map(it=>{
         return {
