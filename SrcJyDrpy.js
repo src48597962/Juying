@@ -65,7 +65,9 @@ globalThis.req = function (url, cobj) {
         log("Error" + e.toString());
     }
 }
-
+pdfa = _pdfa;
+pd = _pd;
+pdfh = _pdfh;
 String.prototype.replaceAll = function (search, replacement) {
     return this.split(search).join(replacement);
 };
