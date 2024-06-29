@@ -456,7 +456,7 @@ function getYiData(jkdata) {
             vodlists = [];
             let vod_name, vod_pic, vod_url, vod_desc;
             if (api_type=="drpy") {
-                let vodlist = JSON.parse(drpy.category(fl.cateId, MY_PAGE, false, fl)).list || [];
+                let vodlist = JSON.parse(drpy.category(fl.cateId, MY_PAGE, true, fl)).list || [];
                 vodlist.forEach(it=>{
                     vodlists.push({ "vod_url": it.vod_id, "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic });
                 })
