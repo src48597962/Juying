@@ -977,7 +977,15 @@ function getErData(jkdata) {
             headers["User-Agent"] = (headers["User-Agent"] == "电脑" || headers["User-Agent"] == "PC_UA") ? PC_UA : MOBILE_UA;
         }
         html = getHtml(MY_URL, headers);
-    } else if (/drpy/.test(api_type)) {
+    } else if (api_type=="drpy") {
+        let apifile = getDrpyFile(jkdata);
+        if(apifile){
+            let env = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
+            var drpy = env.createOrGetEnvironment(jkdata.name, apifile);
+            log(drpy.detai(MY_PARAMS.url));
+            //let rule = drpy.getRule();
+            //log(rule);
+        }
         html = MY_PARAMS.pageTitle;
     } else {
         html = getHtml(MY_URL, headers);
