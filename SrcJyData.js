@@ -126,6 +126,7 @@ function getYiData(jkdata) {
                 try {
                     if (api_type == "drpy") {
                         let home = JSON.parse(drpy.home());
+                        log(home);
                         let typelist = home['class'] || [];
                         typelist.forEach(v=>{
                             分类.push(v.type_name + '$' + v.type_id);
