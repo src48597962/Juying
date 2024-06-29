@@ -1706,11 +1706,11 @@ function DrpyImport(input, importmode){
         function getcontent() {
             for(let i=0;i<proxys.length;i++){
                 let content = fetch(proxys[i]+obj.url, {timeout:3000});
-                if (content) {
+                if (content && !content.includes('<!DOCTYPE html>')) {
                     return content;
                 }
             }
-            return fetch(obj.url, {timeout:3000});
+            return fetch(obj.url, {timeout:6000});
         }
         let arr = { "name": obj.name.split('.')[0], "type": "drpy", "ext": obj.url}
         let urlfile;
