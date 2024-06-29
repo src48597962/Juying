@@ -1216,9 +1216,9 @@ var urljoin2 = urljoin;
 
 // 内置 pdfh,pdfa,pd
 const defaultParser = {
-    pdfh: pdfh,
-    pdfa: pdfa,
-    pd: pd,
+    pdfh: _pdfh,
+    pdfa: _pdfa,
+    pd: _pd
 };
 
 
