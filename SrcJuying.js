@@ -322,7 +322,7 @@ function dianboerji() {
         erdata.tabs.forEach((it,i)=>{
             if(it){
                 d.push({
-                    title: getMyVar(MY_URL+"_line", '0') == i ? getHead(it,Color1,1) : getHead(it,Color2),
+                    title: lineid == i ? getHead(it,Color1,1) : getHead(it,Color2),
                     url: $("#noLoading#").lazyRule((url, nowid, newid, Marksum) => {
                         if (nowid != newid) {
                             let markFile = globalMap0.getMyVar('gmParams').rulepath + "Mark.json";
