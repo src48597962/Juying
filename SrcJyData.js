@@ -317,7 +317,9 @@ function getYiData(jkdata) {
                     storage0.putMyVar('SrcJu_dianbo$classCache', { 分类: 分类, 筛选: 筛选, 推荐: 推荐 });
                 }
             }
-
+            log(推荐);
+            log(分类);
+            log(筛选);
             if (分类.length > 0) {
                 fllists = [];
                 try {
@@ -1391,7 +1393,7 @@ function getDrpyFile(jkdata) {
                     let ghproxy = $.require('ghproxy').getproxy();
                     for(let i=0;i<ghproxy.length;i++){
                         content = fetch(ghproxy[i]+jkdata.ext, {timeout:3000});
-                        if (content && !content.includes('<!DOCTYPE html>')) {
+                        if (content && !content.trim().startsWith('<!DOCTYPE html>') && !content.startsWith('<html>')) {
                             break;
                         }
                     }
