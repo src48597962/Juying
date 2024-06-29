@@ -115,9 +115,11 @@ function getYiData(jkdata) {
                     if (api_type == "drpy") {
                         let home = drpy.home(true);
                         let typelist = home['class'] || [];
+                        log(typelist);
                         typelist.forEach(v=>{
                             分类.push(v.type_name + '$' + v.type_id);
                         })
+                        log(分类);
                         筛选 = home['filters'] || {};
                         let homeVod = drpy.homeVod().list || [];
                         homeVod.forEach(it=>{
@@ -306,7 +308,7 @@ function getYiData(jkdata) {
                     storage0.putMyVar('SrcJu_dianbo$classCache', { 分类: 分类, 筛选: 筛选, 推荐: 推荐 });
                 }
             }
-            log(分类);
+
             if (分类.length > 0) {
                 fllists = [];
                 try {
