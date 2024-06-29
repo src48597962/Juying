@@ -83,7 +83,9 @@ function getYiData(jkdata) {
     } else if (api_type=='drpy') {
             let env = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
             var drpy = env.createOrGetEnvironment(api_name, getPath(api_url));
-            log(drpy.home(true));
+            let rule = drpy.getRule();
+            classurl = rule.host;
+            //log(drpy.home(true));
             //log(drpy.getRule());
             //log(drpy.home(true)); 主页分类筛选数据
             //log(drpy.homeVod()); //获取首页推荐数据
@@ -108,8 +110,16 @@ function getYiData(jkdata) {
                 筛选 = classCache.筛选;
             } else {
                 try {
-
-                    if (api_type == "XYQ") {
+                    if (api_type == "drpy") {
+                        let home = drpy.home(true);
+                        let typelist = home['class'] || [];
+                        typelist.forEach(v=>{
+                            分类.push(v.type_name + '$' + v.type_id);
+                        })
+                        筛选 = home['filters'] || {};
+                        let homeVod = drpy.homeVod() || [];
+                        log(homeVod);
+                    } else if (api_type == "XYQ") {
                         if (extdata['是否开启获取首页数据'] && extdata['首页列表数组规则']) {
                             let gethtml = getHtml(classurl, headers);
                             let 首页列表数组 = pdfa(gethtml, extdata['首页列表数组规则']);
