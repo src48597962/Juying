@@ -23,14 +23,14 @@ const cheerio = {
 // import "https://ghproxy.net/https://raw.githubusercontent.com/hjdhnx/dr_py/main/libs/crypto-js.js";
 // import 模板 from"https://ghproxy.net/https://raw.githubusercontent.com/hjdhnx/dr_py/main/js/模板.js";
 // import {gbkTool} from 'https://ghproxy.net/https://raw.githubusercontent.com/hjdhnx/dr_py/main/libs/gbk.js'
-
+/*
 var xlog = console.log;
 console.log = function(msg) {
     if (getMyVar("SrcJu_调试模式") || getItem("SrcJu_接口日志")) {
         xlog(msg);
     }
 }
-
+*/
 function init_test() {
     // console.log(typeof(CryptoJS));
     console.log("init_test_start");
