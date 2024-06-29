@@ -1657,6 +1657,7 @@ function resource() {
                     }
                     let html = request(input);
                     let json = JSON.parse(html.split(`data-target="react-app.embeddedData">`)[1].split(`</script>`)[0]);
+                    log(json);
                     let list = json.tree.items;
                     let ghproxy = $.require('ghproxy').getproxy();
                     let jiekous = list.filter(v=>v.contentType=="file").map(it=>{
