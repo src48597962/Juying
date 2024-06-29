@@ -113,10 +113,8 @@ function getYiData(jkdata) {
             } else {
                 try {
                     if (api_type == "drpy") {
-                        let home = drpy.home(true);
-                        log($.type(home));
+                        let home = JSON.parse(drpy.home(true));
                         let typelist = home['class'] || [];
-                        log(typelist);
                         typelist.forEach(v=>{
                             分类.push(v.type_name + '$' + v.type_id);
                         })
@@ -126,6 +124,7 @@ function getYiData(jkdata) {
                         homeVod.forEach(it=>{
                             推荐.push({ "vod_url": it.vod_id, "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic });
                         })
+                        log(推荐);
                     } else if (api_type == "XYQ") {
                         if (extdata['是否开启获取首页数据'] && extdata['首页列表数组规则']) {
                             let gethtml = getHtml(classurl, headers);
