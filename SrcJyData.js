@@ -130,7 +130,9 @@ function getYiData(jkdata) {
                         typelist.forEach(v=>{
                             分类.push(v.type_name + '$' + v.type_id);
                         })
-                        筛选 = home['filters'] || {};
+                        if(home['filters']){
+                            筛选 = home['filters'];
+                        }
                         let homeVod = JSON.parse(drpy.homeVod()).list || [];
                         homeVod.forEach(it=>{
                             推荐.push({ "vod_url": it.vod_id, "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic });
