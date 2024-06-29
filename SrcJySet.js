@@ -1512,6 +1512,15 @@ function resource() {
             return "hiker://empty";
         })
     });
+    d.push({
+        title: (importtype=="2"?"👉":"")+"道长drpy库",
+        col_type: 'scroll_button',
+        url: $('#noLoading#').lazyRule(() => {
+            putMyVar('importtype','2');
+            refreshPage(false);
+            return "hiker://empty";
+        })
+    });
 
     if(importtype=="1"){
         d.push({
@@ -1546,117 +1555,123 @@ function resource() {
             })
         });
     }
-        d.push({
-            title:'本地',
-            col_type: 'input',
-            desc: '请输入链接地址',
-            url: $.toString(() => {
-                return `fileSelect://`+$.toString(()=>{
-                    return "toast://"+input;
-                })
-            }),
-            extra: {
-                titleVisible: true,
-                defaultValue: getMyVar('importinput', ''),
-                onChange: 'putMyVar("importinput",input)'
-            }
-        });
-        d.push({
-            title: '🆖 历史记录',
-            url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
-                addListener("onClose", $.toString(() => {
-                    refreshPage(false);
-                }));
-                setPageTitle("🆖资源导入-历史记录");
-                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
-                
-                var d = [];
-                let importrecord = Juconfig['importrecord']||[];
-                let lists = importrecord.filter(item => {
-                    return item.type==getMyVar('importtype','1');
-                })
-                if(lists.length>0){
+    d.push({
+        title:'本地',
+        col_type: 'input',
+        desc: '请输入链接地址',
+        url: $.toString(() => {
+            return `fileSelect://`+$.toString(()=>{
+                return "toast://"+input;
+            })
+        }),
+        extra: {
+            titleVisible: true,
+            defaultValue: getMyVar('importinput', ''),
+            onChange: 'putMyVar("importinput",input)'
+        }
+    });
+    d.push({
+        title: '🆖 历史记录',
+        url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
+            addListener("onClose", $.toString(() => {
+                refreshPage(false);
+            }));
+            setPageTitle("🆖资源导入-历史记录");
+            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+            
+            var d = [];
+            let importrecord = Juconfig['importrecord']||[];
+            let lists = importrecord.filter(item => {
+                return item.type==getMyVar('importtype','1');
+            })
+            if(lists.length>0){
+                d.push({
+                    title: '点击下方的历史条目，进行操作👇',
+                    col_type: "rich_text"
+                });
+                d.push({
+                    col_type: "line"
+                });
+                lists.reverse();
+                for(let i=0;i<lists.length;i++){
                     d.push({
-                        title: '点击下方的历史条目，进行操作👇',
-                        col_type: "rich_text"
-                    });
-                    d.push({
-                        col_type: "line"
-                    });
-                    lists.reverse();
-                    for(let i=0;i<lists.length;i++){
-                        d.push({
-                            title: lists[i].url,
-                            url: $(["选择","删除"],1,"").select((Juconfig, cfgfile, url)=>{
-                                    if(input=="选择"){
-                                        putMyVar('importinput', url);
-                                        back(true);
-                                    }else if(input=="删除"){
-                                        let importrecord = Juconfig['importrecord']||[];
-                                        for(let i=0;i<importrecord.length;i++){
-                                            if(importrecord[i].url==url&&importrecord[i].type==getMyVar('importtype','1')){
-                                                importrecord.splice(i,1);
-                                                break;
-                                            }
+                        title: lists[i].url,
+                        url: $(["选择","删除"],1,"").select((Juconfig, cfgfile, url)=>{
+                                if(input=="选择"){
+                                    putMyVar('importinput', url);
+                                    back(true);
+                                }else if(input=="删除"){
+                                    let importrecord = Juconfig['importrecord']||[];
+                                    for(let i=0;i<importrecord.length;i++){
+                                        if(importrecord[i].url==url&&importrecord[i].type==getMyVar('importtype','1')){
+                                            importrecord.splice(i,1);
+                                            break;
                                         }
-                                        Juconfig['importrecord'] = importrecord; 
-                                        writeFile(cfgfile, JSON.stringify(Juconfig));
-                                        refreshPage(false);
                                     }
-                                    return "hiker://empty";
-                                }, Juconfig, cfgfile, lists[i].url),
-                            col_type: "text_1"
-                        });
-                    }
-                }else{
-                    d.push({
-                        title: '↻无记录',
-                        col_type: "rich_text"
+                                    Juconfig['importrecord'] = importrecord; 
+                                    writeFile(cfgfile, JSON.stringify(Juconfig));
+                                    refreshPage(false);
+                                }
+                                return "hiker://empty";
+                            }, Juconfig, cfgfile, lists[i].url),
+                        col_type: "text_1"
                     });
                 }
-                setHomeResult(d);
-            }),
-            col_type: "text_2"
-        });
-        d.push({
-            title: '🆗 确定导入(' + (Juconfig["importmode"]?"全":"增")+')',
-            url: getMyVar('importjiekou','1')!="1"&&getMyVar('importjiexi','1')!="1"?'toast://请选择导入项目':$('#noLoading#').lazyRule((Juconfig,cfgfile) => {
-                    if(getMyVar('importinput', '')==""){
-                        return 'toast://请先输入链接地址'
-                    }
-                    let input = getMyVar('importinput', '');
-                    if(input){
-                        let importrecord = Juconfig['importrecord']||[];
-                        if(importrecord.length>20){//保留20个记录
-                            importrecord.shift();
-                        }
-                        if(!importrecord.some(item => item.url==input && item.type==getMyVar('importtype','1'))){
-                            importrecord.push({type:getMyVar('importtype','1'),url:input});
-                            Juconfig['importrecord'] = importrecord;
-                            writeFile(cfgfile, JSON.stringify(Juconfig));
-                        }
-                    }
-
-                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
-                    return Resourceimport(input,getMyVar('importtype','1'),Juconfig['importmode']?1:0);
-                }, Juconfig, cfgfile),
-            col_type: "text_2",
-            extra: {
-                longClick: [{
-                    title: "导入方式",
-                    js: $.toString((cfgfile, Juconfig) => {
-                        if(Juconfig["importmode"]){
-                            Juconfig["importmode"] = 0;
-                        }else{
-                            Juconfig["importmode"] = 1;
-                        }
-                        writeFile(cfgfile, JSON.stringify(Juconfig));
-                        refreshPage(false);
-                        return 'toast://导入方式设置为：' + (Juconfig["importmode"]?"全":"增") + "量导入";
-                    },cfgfile, Juconfig)
-                }]
+            }else{
+                d.push({
+                    title: '↻无记录',
+                    col_type: "rich_text"
+                });
             }
-        });
+            setHomeResult(d);
+        }),
+        col_type: "text_2"
+    });
+    d.push({
+        title: '🆗 确定导入(' + (Juconfig["importmode"]?"全":"增")+')',
+        url: importtype=="1"&&getMyVar('importjiekou','1')!="1"&&getMyVar('importjiexi','1')!="1"?'toast://请选择导入项目':$('#noLoading#').lazyRule((Juconfig,cfgfile) => {
+                if(getMyVar('importinput', '')==""){
+                    return 'toast://请先输入链接地址'
+                }
+                let input = getMyVar('importinput', '');
+                if(input){
+                    let importrecord = Juconfig['importrecord']||[];
+                    if(importrecord.length>20){//保留20个记录
+                        importrecord.shift();
+                    }
+                    if(!importrecord.some(item => item.url==input && item.type==getMyVar('importtype','1'))){
+                        importrecord.push({type:getMyVar('importtype','1'),url:input});
+                        Juconfig['importrecord'] = importrecord;
+                        writeFile(cfgfile, JSON.stringify(Juconfig));
+                    }
+                }
+
+                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                if(getMyVar('importtype','1')=="1"){
+                    return Resourceimport(input,getMyVar('importtype','1'),Juconfig['importmode']?1:0);
+                }else if(getMyVar('importtype','1')=="1"){
+                    let html = request('https://github.com/hjdhnx/hipy-server/tree/master/app/t4/files/drpy_js');
+                    log(html);
+                    return "hiker://empty";
+                }
+            }, Juconfig, cfgfile),
+        col_type: "text_2",
+        extra: {
+            longClick: [{
+                title: "导入方式",
+                js: $.toString((cfgfile, Juconfig) => {
+                    if(Juconfig["importmode"]){
+                        Juconfig["importmode"] = 0;
+                    }else{
+                        Juconfig["importmode"] = 1;
+                    }
+                    writeFile(cfgfile, JSON.stringify(Juconfig));
+                    refreshPage(false);
+                    return 'toast://导入方式设置为：' + (Juconfig["importmode"]?"全":"增") + "量导入";
+                },cfgfile, Juconfig)
+            }]
+        }
+    });
     setResult(d);
 }
 //资源导入
