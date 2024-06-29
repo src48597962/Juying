@@ -130,7 +130,6 @@ function getYiData(jkdata) {
                         homeVod.forEach(it=>{
                             推荐.push({ "vod_url": it.vod_id, "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic });
                         })
-                        log(推荐);
                     } else if (api_type == "XYQ") {
                         if (extdata['是否开启获取首页数据'] && extdata['首页列表数组规则']) {
                             let gethtml = getHtml(classurl, headers);
@@ -409,7 +408,7 @@ function getYiData(jkdata) {
             fl.cateId = fl.cateId || cate_id;
             //拼接生成分类页url链接
             if (api_type == "drpy") {
-
+                log(fl);
             } else if (api_type == "XYQ") {
                 fl.catePg = MY_PAGE;
                 let execStrs = getExecStrs(listurl);
