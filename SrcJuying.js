@@ -490,13 +490,17 @@ function dianboerji() {
                 dataObj.sname = jkdata.name;
                 dataObj.surl = jkdata.url.startsWith('hiker://')?getPath(jkdata.url):jkdata.url;
             }
-            let novel = erdata.drpytype=="小说";
+            let novel = erdata.detailtype=="小说";
             if(novel){
                 lazy = $("#readTheme##autoPage#").rule((dataObj)=>{
-                    let env = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
-                    let drpy = env.createOrGetEnvironment(dataObj.sname, dataObj.surl);
-                    let play = JSON.parse(drpy.play(dataObj.flag, MY_URL.split('##')[1].split('#')[0], []));
-                    let data = JSON.parse(play.url.replace('novel://',''));
+                    let data = {};
+                    if(dataObj.stype=="hipy_t3"){
+                        let env = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
+                        let drpy = env.createOrGetEnvironment(dataObj.sname, dataObj.surl);
+                        let play = JSON.parse(drpy.play(dataObj.flag, MY_URL.split('##')[1].split('#')[0], []));
+                        data = JSON.parse(play.url.replace('novel://',''));
+                    }  
+                    
                     let d = [];
                     d.push({
                         title: '<big>' + data.title + '</big>',
