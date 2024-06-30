@@ -48,6 +48,7 @@ var SrcParseS = {
         //聚影采用新的、独立的解析逻辑
         log("影片地址："+vipUrl); 
         let isVip = 0;
+        dataObj = dataObj || {};
         if (/magnet|torrent/.test(vipUrl)) {
             log("磁力/BT视频地址，由海阔解析"); 
             return vipUrl;
@@ -58,17 +59,45 @@ var SrcParseS = {
         }else if (vipUrl.indexOf('sa.sogou') != -1) {
             log("优看视频，直接明码解析"); 
             return unescape(request(vipUrl).match(/"url":"([^"]*)"/)[1].replace(/\\u/g, "%u"));
-        }else if(dataObj.stype=="drpy"){
-            let env = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
-            var drpy = env.createOrGetEnvironment(dataObj.sname, dataObj.surl);
-            log(drpy.play(dataObj.flag, vipUrl, []));
-            return '';
-        }else if(/youku|iqiyi|ixigua|migu|sohu|pptv|le\.|cctv|1905|mgtv|qq\.com/.test(vipUrl)){
+        }else if(/qq\.com|iqiyi\.com|youku\.com|mgtv\.com|bilibili\.com|sohu\.com|ixigua\.com|pptv\.com|miguvideo\.com|le\.com|1905\.com|fun\.tv|cctv\.com/.test(vipUrl)){
             if(vipUrl.indexOf('html?')>-1){
                 vipUrl = vipUrl.split('html?')[0]+'html';
             }
             isVip = 1;
-        }else if(!needparse.test(vipUrl) && /^http/.test(vipUrl)){
+        }
+        
+        if(dataObj.stype=="drpy"){
+            let env = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
+            let drpy = env.createOrGetEnvironment(dataObj.sname, dataObj.surl);
+            let play = drpy.play(dataObj.flag, vipUrl, []);
+            if(play.url.startWith("pics://")){
+                return play.url;
+            }else if(play.url.startWith("novel://")){
+                let data = JSON.parse(play.url.replace('novel://',''));
+                return $("hiker://empty###readTheme##autoPage#").rule((data)=>{
+                    let d = [];
+                    d.push({
+                        title: '<big>' + data.title + '</big>',
+                        col_type: 'rich_text',
+                        extra: {
+                            click: true
+                        }
+                    });
+                    d.push({
+                        title: data.content.replace(/(&nbsp;){1,}/g, '　　'),
+                        col_type: "rich_text",
+                        extra: {
+                            textSize: 18,
+                            click: true
+                        }
+                    });
+                    setResult(d)
+                }, data);
+            }
+            log(drpy.play(dataObj.flag, vipUrl, []));
+            return '';
+        }
+        if(!needparse.test(vipUrl) && /^http/.test(vipUrl)){
             log("网页播放地址");
             let obj = {
                 vipUrl: vipUrl,
@@ -77,8 +106,7 @@ var SrcParseS = {
             }
             return this.解析方法(obj);
         }
-
-        dataObj = dataObj || {};
+        
         let from;
         if(dataObj.flag && !isVip){
             from = dataObj.flag;
