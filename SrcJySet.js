@@ -1521,6 +1521,15 @@ function resource() {
             return "hiker://empty";
         })
     });
+    d.push({
+        title: (importtype=="3"?"👉":"")+"配置文件订阅",
+        col_type: 'scroll_button',
+        url: $('#noLoading#').lazyRule(() => {
+            putMyVar('importtype','3');
+            refreshPage(false);
+            return "toast://订阅只支持app类、cms、hipy_t4，无法管理接口";
+        })
+    });
 
     if(importtype=="1"){
         d.push({
@@ -1565,7 +1574,7 @@ function resource() {
             })
         }),
         extra: {
-            titleVisible: importtype=="1"?true:false,
+            titleVisible: importtype=="2"?false:true,
             defaultValue: getMyVar('importinput', ''),
             onChange: 'putMyVar("importinput",input)'
         }
@@ -1650,6 +1659,10 @@ function resource() {
                     return Resourceimport(input,getMyVar('importtype','1'),Juconfig['importmode']?1:0);
                 }else if(getMyVar('importtype','1')=="2"){
                     return HipyImport(input,Juconfig['importmode']?1:0);
+                }else if(getMyVar('importtype','1')=="3"){
+                    Juconfig['dySource'] = input;
+                    writeFile(cfgfile, JSON.stringify(Juconfig));
+                    return "toast://已订阅";
                 }
             }, Juconfig, cfgfile),
         col_type: "text_2",
