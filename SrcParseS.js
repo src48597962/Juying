@@ -58,6 +58,11 @@ var SrcParseS = {
         }else if (vipUrl.indexOf('sa.sogou') != -1) {
             log("优看视频，直接明码解析"); 
             return unescape(request(vipUrl).match(/"url":"([^"]*)"/)[1].replace(/\\u/g, "%u"));
+        }else if(dataObj.stype=="drpy"){
+            let env = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
+            var drpy = env.createOrGetEnvironment(dataObj.sname, dataObj.surl);
+            log(drpy.play(dataObj.flag, vipUrl, []));
+            return '';
         }else if(/youku|iqiyi|ixigua|migu|sohu|pptv|le\.|cctv|1905|mgtv|qq\.com/.test(vipUrl)){
             if(vipUrl.indexOf('html?')>-1){
                 vipUrl = vipUrl.split('html?')[0]+'html';
@@ -77,12 +82,6 @@ var SrcParseS = {
         let from;
         if(dataObj.flag && !isVip){
             from = dataObj.flag;
-            if(dataObj.stype=="drpy"){
-                let env = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
-                var drpy = env.createOrGetEnvironment(dataObj.sname, dataObj.surl);
-                log(drpy.play(from, vipUrl, []));
-                return '';
-            }
         }else{
             try{
                 if(vipUrl.indexOf('-yanaifei.html') != -1){
