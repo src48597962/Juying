@@ -778,8 +778,7 @@ function dianboyiji() {
                         let voddesc = list.vod_desc || "";
                         let vodpic = list.vod_pic;
                         vodpic = vodpic.replace('/img.php?url=', '').replace('/tu.php?tu=', '');
-                        log(vodpic);
-                        vodpic = vodpic.includes('(') ? vodpic.match(/\(\'(.*?)\'\)/)[1] : vodpic;
+                        vodpic = !vodpic.startsWith('http')&&vodpic.includes('(') ? vodpic.match(/\(\'(.*?)\'\)/)[1] : vodpic;
                         if(/^\/\//.test(vodpic)){
                             vodpic = "https:" + vodpic;
                         }
