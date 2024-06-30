@@ -26,7 +26,7 @@ function getFile(lx) {
 //获取所有接口或解析
 function getDatas(lx, isyx) {
     let datalist = [];
-    if(getItem('runMode','1')=='1'){
+    if(getItem('sourceMode','1')=='1'){
         let sourcefile = getFile(lx);
         let sourcedata = fetch(sourcefile);
         if(sourcedata != ""){
@@ -36,7 +36,7 @@ function getDatas(lx, isyx) {
                 datalist = [];
             }
         }
-    }else if(getItem('runMode','1')=='2'){
+    }else if(getItem('sourceMode','1')=='2'){
         if(Juconfig['dySource']){
             let dyJkTmpFile = "hiker://files/_cache/"+md5(Juconfig['dySource'])+".txt";
             if(!fileExist(dyJkTmpFile)){
@@ -48,18 +48,24 @@ function getDatas(lx, isyx) {
             if(fileExist(dyJkTmpFile)){
                 try{
                     let data = JSON.parse(fetch(dyJkTmpFile));
-                    let jklist = data.sites || [];
-                    jklist.forEach(obj=>{
+                    let list = lx=="jk"?data.sites:data.parses || [];
+                    list.forEach(obj=>{
                         let arr;
-                        if(/^csp_AppYs/.test(obj.api)){
-                            arr = { "name": obj.name, "url": obj.ext, "type": getapitype(obj.ext)};
-                        }else if((obj.type==1||obj.type==0)&&obj.api.indexOf('cms.nokia.press')==-1){
-                            arr = { "name": obj.name, "url": obj.api, "type": "cms"};
-                            if(obj.categories){
-                                arr["categories"] = obj.categories;
+                        if(lx=="jk"){
+                            if(/^csp_AppYs/.test(obj.api)){
+                                arr = { "name": obj.name, "url": obj.ext, "type": getapitype(obj.ext)};
+                            }else if((obj.type==1||obj.type==0)&&obj.api.indexOf('cms.nokia.press')==-1){
+                                arr = { "name": obj.name, "url": obj.api, "type": "cms"};
+                                if(obj.categories){
+                                    arr["categories"] = obj.categories;
+                                }
+                            }else if(obj.type==4){
+                                arr = { "name": obj.name, "url": obj.api, "type": "t4", "ext": obj.ext};
                             }
-                        }else if(obj.type==4){
-                            arr = { "name": obj.name, "url": obj.api, "type": "t4", "ext": obj.ext};
+                        }else{
+                            if(obj.url.startsWith('http')){
+                                arr = obj;
+                            }
                         }
                         if(arr){
                             datalist.push(arr);
