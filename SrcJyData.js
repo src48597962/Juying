@@ -972,7 +972,7 @@ function getErData(jkdata) {
     api_ua = api_ua == "MOBILE_UA" ? MOBILE_UA : api_ua == "PC_UA" ? PC_UA : api_ua;
     let headers = { 'User-Agent': api_ua };
 
-    let html, isxml, extdata, drpytype;
+    let html, isxml, extdata, detailtype;
     if (/v1|app|v2|iptv|cms/.test(api_type)) {
         try {
             let gethtml = getHtml(MY_URL, headers);
@@ -1007,7 +1007,7 @@ function getErData(jkdata) {
             let env = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
             var drpy = env.createOrGetEnvironment(jkdata.name, apifile);
             html = drpy.detail(MY_PARAMS.url);
-            drpytype = drpy.getRule('类型');
+            detailtype = drpy.getRule('类型');
         }else{
             html = '{}';
         }
@@ -1344,7 +1344,6 @@ function getErData(jkdata) {
             }
         } else if (api_type == 'hipy_t3' || api_type == 'hipy_t4') {
             let json = JSON.parse(html).list[0];
-            log(json);
             actor = json.vod_actor;
             area = json.vod_area;
             remarks = json.vod_remarks || json.vod_class || "";
@@ -1354,7 +1353,6 @@ function getErData(jkdata) {
             lists = json.vod_play_url.split('$$$').map(it => {
                 return it.split('#');
             });
-            log(lists);
         }
 
         if (/XPath|biubiu|XBPQ|XYQ/.test(api_type) && html && (tabs.length == 0 || lists.length == 0) && getMyVar('debug', '0') == "0" && html.indexOf(MY_PARAMS.pageTitle) > -1) {
@@ -1395,7 +1393,7 @@ function getErData(jkdata) {
         "flags": flags,
         "parse_api": parse_api,
         "sniffer": sniffer,
-        "drpytype": drpytype
+        "detailtype": detailtype
     };
 }
 
