@@ -468,7 +468,7 @@ function dianboerji() {
         
         if(列表.length==0){
             d.push({
-                title: '当前无播放选集，点更多片源试试！',
+                title: '当前无播放选集，可切换站源试试！',
                 url: '#noHistory#hiker://empty',
                 col_type: 'text_center_1',
                 extra: {
