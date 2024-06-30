@@ -96,7 +96,7 @@ function getYiData(jkdata) {
             classurl = rule.homeUrl || rule.host;
             listurl = rule.filter_url || rule.host;
         }
-    } else if (api_type == "t4") {
+    } else if (api_type == "hipy_t4") {
         classurl = api_url + "&filter=true";
         listurl = api_url + "&t={cate_id}&ac=detail&pg="+MY_PAGE+"&ext="+jkdata.ext;
         //listnode = "json.list";
@@ -121,7 +121,7 @@ function getYiData(jkdata) {
                 筛选 = classCache.筛选;
             } else {
                 try {
-                    if (api_type == "t4"){
+                    if (api_type == "hipy_t4"){
                         let home = JSON.parse(getHtml(classurl, headers));
                         let typelist = home['class'] || [];
                         typelist.forEach(v=>{
@@ -457,7 +457,7 @@ function getYiData(jkdata) {
                 listurl = listurl.replace('{catePg}', extdata["起始页"] ? MY_PAGE > extdata["起始页"] ? MY_PAGE : extdata["起始页"] : MY_PAGE).replace(/{/g, '${fl.').replace(/}/g, ' || ""}');
                 eval(`listurl = \`${listurl}\`;`);
                 MY_URL = listurl;
-            } else if (api_type='t4'){
+            } else if (api_type='hipy_t4'){
                 MY_URL = listurl.replace('{cate_id}', cate_id);
             } else {
                 MY_URL = listurl + MY_PAGE;
@@ -474,7 +474,7 @@ function getYiData(jkdata) {
             }
             vodlists = [];
             let vod_name, vod_pic, vod_url, vod_desc;
-            if (api_type=="t4") {
+            if (api_type=="hipy_t4") {
                 let vodlist = JSON.parse(getHtml(MY_URL, headers)).list || [];
                 vodlist.forEach(it=>{
                     vodlists.push({ "vod_url": it.vod_id.toString(), "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic });
@@ -1011,7 +1011,7 @@ function getErData(jkdata) {
         }else{
             html = '{}';
         }
-    } else if (api_type=="t4") {
+    } else if (api_type=="hipy_t4") {
         html = getHtml(jkdata.url+"&ac=detail&ids="+MY_PARAMS.pageTitle+"###"+MY_PARAMS.url+"###"+MY_PARAMS.pic, headers);
     } else {
         html = getHtml(MY_URL, headers);
@@ -1342,7 +1342,7 @@ function getErData(jkdata) {
             } catch (e) {
                 log('XYQ获取选集列表失败>' + e.message);
             }
-        } else if (api_type == 'hipy_t3' || api_type == 't4') {
+        } else if (api_type == 'hipy_t3' || api_type == 'hipy_t4') {
             let json = JSON.parse(html).list[0];
             log(json);
             actor = json.vod_actor;
