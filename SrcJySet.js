@@ -518,7 +518,7 @@ function jiekou(data) {
     d.push({
         title: '类型：' + getMyVar('apitype', ''),
         col_type:'text_1',
-        url:$(["v1","app","v2","iptv","cms","XPath","biubiu","XBPQ","XYQ","drpy","app类自动"],3).select(()=>{
+        url:$(["v1","app","v2","iptv","cms","XPath","biubiu","XBPQ","XYQ","hipy_t3","app类自动"],3).select(()=>{
             if(input=="app类自动"){
                 clearMyVar('apitype');
             }else{
@@ -1513,7 +1513,7 @@ function resource() {
         })
     });
     d.push({
-        title: (importtype=="2"?"👉":"")+"道长drpy库",
+        title: (importtype=="2"?"👉":"")+"道长hipy库",
         col_type: 'scroll_button',
         url: $('#noLoading#').lazyRule(() => {
             putMyVar('importtype','2');
@@ -1649,7 +1649,7 @@ function resource() {
                 if(getMyVar('importtype','1')=="1"){
                     return Resourceimport(input,getMyVar('importtype','1'),Juconfig['importmode']?1:0);
                 }else if(getMyVar('importtype','1')=="2"){
-                    return DrpyImport(input,Juconfig['importmode']?1:0);
+                    return HipyImport(input,Juconfig['importmode']?1:0);
                 }
             }, Juconfig, cfgfile),
         col_type: "text_2",
@@ -1671,8 +1671,8 @@ function resource() {
     });
     setResult(d);
 }
-//drpy库导入
-function DrpyImport(input, importmode){
+//hipy库导入
+function HipyImport(input, importmode){
     if(input.startsWith('http') && !input.includes('github.com')){
         return "toast://在线只支持github库"
     }
@@ -1712,7 +1712,7 @@ function DrpyImport(input, importmode){
             }
             return fetch(obj.url, {timeout:6000});
         }
-        let arr = { "name": obj.name.split('.')[0], "type": "drpy", "ext": obj.url}
+        let arr = { "name": obj.name.split('.')[0], "type": "hipy_t3", "ext": obj.url}
         let urlfile;
         try{
             let content = getcontent();
@@ -1721,7 +1721,7 @@ function DrpyImport(input, importmode){
                 writeFile(urlfile, content);
             }
         }catch(e){
-            log(obj.name + '>drpy库文件缓存失败>' + e.message);
+            log(obj.name + '>hipy库文件缓存失败>' + e.message);
         }
         
         if(urlfile){
@@ -1755,7 +1755,7 @@ function DrpyImport(input, importmode){
         log('TVBox导入接口保存有异常>'+e.message);
     }
     hideLoading();
-    return 'toast://drpy库>查询' + jiekous.length + (jknum>-1?' 接口保存'+jknum:' 导入异常');     
+    return 'toast://hipy库>查询' + jiekous.length + (jknum>-1?' 接口保存'+jknum:' 导入异常');     
 }
 //资源导入
 function Resourceimport(input,importtype,importmode){
@@ -1818,8 +1818,8 @@ function Resourceimport(input,importtype,importmode){
                         arr = { "name": obj.name, "type": "XBPQ", "ext": extfile};
                     }else if(/^csp_XYQHiker/.test(obj.api)){
                         arr = { "name": obj.name, "type": "XYQ", "ext": extfile};
-                    }else if(/drpy2/.test(obj.api)){
-                        arr = { "name": obj.name, "type": "drpy", "ext": extfile};
+                    }else if(/drpy2/.test(obj.api) && obj.type==3){
+                        arr = { "name": obj.name, "type": "hipy_t3", "ext": extfile};
                     }
 
                     if(arr){
