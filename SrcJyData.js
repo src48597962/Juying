@@ -97,10 +97,9 @@ function getYiData(jkdata) {
             listurl = rule.filter_url || rule.host;
         }
     } else if (api_type == "t4") {
-        vodurlhead = api_url + '?ac=videolist&ids=';
-        classurl = api_url + "?ac=list";
-        listurl = api_url + '?ac=videolist&pg=';
-        listnode = "json.list";
+        classurl = api_url + "&filter=true";
+        listurl = api_url + "&t="+cate_id+"&ac=detail&pg="+MY_PAGE+"&ext="+jkdata.ext;
+        //listnode = "json.list";
     } else {
         log(api_type + '>api类型错误');
     }
@@ -122,7 +121,20 @@ function getYiData(jkdata) {
                 筛选 = classCache.筛选;
             } else {
                 try {
-                    if (api_type == "hipy_t3") {
+                    if (api_type == "t4"){
+                        let home = JSON.parse(getHtml(classurl, headers));
+                        let typelist = home['class'] || [];
+                        typelist.forEach(v=>{
+                            分类.push(v.type_name + '$' + v.type_id);
+                        })
+                        if(home['filters']){
+                            筛选 = home['filters'];
+                        }
+                        let homeVod = JSON.parse(drpy.homeVod()).list || [];
+                        homeVod.forEach(it=>{
+                            推荐.push({ "vod_url": it.vod_id, "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic });
+                        })
+                    }else if (api_type == "hipy_t3") {
                         let home = JSON.parse(drpy.home());
                         let typelist = home['class'] || [];
                         typelist.forEach(v=>{
@@ -460,7 +472,12 @@ function getYiData(jkdata) {
             }
             vodlists = [];
             let vod_name, vod_pic, vod_url, vod_desc;
-            if (api_type=="hipy_t3") {
+            if (api_type=="t4") {
+                let vodlist = JSON.parse(getHtml(listurl, headers)).list || [];
+                vodlist.forEach(it=>{
+                    vodlists.push({ "vod_url": it.vod_id.toString(), "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic });
+                })
+            }else if (api_type=="hipy_t3") {
                 let vodlist = JSON.parse(drpy.category(fl.cateId, MY_PAGE, true, fl)).list || [];
                 vodlist.forEach(it=>{
                     vodlists.push({ "vod_url": it.vod_id.toString(), "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic });
@@ -983,6 +1000,16 @@ function getErData(jkdata) {
         }
         html = getHtml(MY_URL, headers);
     } else if (api_type=="hipy_t3") {
+        let apifile = getDrpyFile(jkdata);
+        if(apifile){
+            let env = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
+            var drpy = env.createOrGetEnvironment(jkdata.name, apifile);
+            html = drpy.detail(MY_PARAMS.url);
+            drpytype = drpy.getRule('类型');
+        }else{
+            html = '{}';
+        }
+    } else if (api_type=="t4") {
         let apifile = getDrpyFile(jkdata);
         if(apifile){
             let env = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
