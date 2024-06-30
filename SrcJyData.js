@@ -606,23 +606,23 @@ function getSsData(name, jkdata, page) {
         let key = (mm < 10 ? "0" + mm : mm) + "" + (dd < 10 ? "0" + dd : dd);
         vodurlhead = api_url + '/detail?&key=' + key + '&vod_id=';
         ssurl = api_url + '?ac=videolist&limit=10&wd=' + name + '&key=' + key;
-        listnode = "html.data.list";
+        listnode = "json.data.list";
     } else if (api_type == "app") {
         vodurlhead = api_url + 'video_detail?id=';
         ssurl = api_url + 'search?limit=10&text=' + name;
-        listnode = "html.list";
+        listnode = "json.list";
     } else if (api_type == "v2") {
         vodurlhead = api_url + 'video_detail?id=';
         ssurl = api_url + 'search?limit=10&text=' + name;
-        listnode = "html.data";
+        listnode = "json.data";
     } else if (api_type == "iptv") {
         vodurlhead = api_url + '?ac=detail&ids=';
         ssurl = api_url + '?ac=list&zm=' + name + '&wd=' + name;
-        listnode = "html.data";
+        listnode = "json.data";
     } else if (api_type == "cms") {
         vodurlhead = api_url + '?ac=videolist&ids=';
         ssurl = api_url + '?ac=videolist&wd=' + name;
-        listnode = "html.list";
+        listnode = "json.list";
     } else if (/XPath|biubiu|XBPQ|XYQ/.test(api_type)) {
         extdata = extDataCache(jkdata)
         if ($.type(extdata) == 'object') {
@@ -655,15 +655,8 @@ function getSsData(name, jkdata, page) {
             }
         }
     } else if (api_type=="drpy") {
-        let apifile = getDrpyFile(jkdata);
-        if(apifile){
-            let env = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
-            var drpy = env.createOrGetEnvironment(jkdata.name, apifile);
-            html = drpy.search(name, 0, page);
-            log(html);
-        }else{
-            html = '{}';
-        }
+        vodurlhead = "";
+        listnode = "json.list";
     } else {
         log('api类型错误');
         return [];
@@ -716,35 +709,46 @@ function getSsData(name, jkdata, page) {
     try {
         if (/v1|app|iptv|v2|cms/.test(api_type)) {
             let json;
-            gethtml = getHtmlCode(ssurl, headers);
-            if (/cms/.test(api_type)) {
-                if (gethtml && gethtml.indexOf(name) == -1) {
-                    gethtml = getHtmlCode(ssurl.replace('videolist', 'list'), headers);
+            if(api_type=="drpy"){
+                let apifile = getDrpyFile(jkdata);
+                if(apifile){
+                    let env = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
+                    let drpy = env.createOrGetEnvironment(jkdata.name, apifile);
+                    json = JSON.parse(drpy.search(name, 0, page));
+                }else{
+                    json = {};
                 }
-                if (/<\?xml/.test(gethtml)) {
-                    gethtml = gethtml.replace(/&lt;!\[CDATA\[|\]\]&gt;|<!\[CDATA\[|\]\]>/g, '');
-                    let xmllist = [];
-                    let videos = pdfa(gethtml, 'list&&video');
-                    for (let i in videos) {
-                        let id = String(xpath(videos[i], `//video/id/text()`)).trim();
-                        let name = String(xpath(videos[i], `//video/name/text()`)).trim();
-                        let pic = String(xpath(videos[i], `//video/pic/text()`)).trim();
-                        let note = String(xpath(videos[i], `//video/note/text()`)).trim();
-                        xmllist.push({ "vod_id": id, "vod_name": name, "vod_remarks": note, "vod_pic": pic })
+            }else{
+                gethtml = getHtmlCode(ssurl, headers);
+                if (/cms/.test(api_type)) {
+                    if (gethtml && gethtml.indexOf(name) == -1) {
+                        gethtml = getHtmlCode(ssurl.replace('videolist', 'list'), headers);
                     }
-                    json = { "list": xmllist };
+                    if (/<\?xml/.test(gethtml)) {
+                        gethtml = gethtml.replace(/&lt;!\[CDATA\[|\]\]&gt;|<!\[CDATA\[|\]\]>/g, '');
+                        let xmllist = [];
+                        let videos = pdfa(gethtml, 'list&&video');
+                        for (let i in videos) {
+                            let id = String(xpath(videos[i], `//video/id/text()`)).trim();
+                            let name = String(xpath(videos[i], `//video/name/text()`)).trim();
+                            let pic = String(xpath(videos[i], `//video/pic/text()`)).trim();
+                            let note = String(xpath(videos[i], `//video/note/text()`)).trim();
+                            xmllist.push({ "vod_id": id, "vod_name": name, "vod_remarks": note, "vod_pic": pic })
+                        }
+                        json = { "list": xmllist };
+                    } else {
+                        json = JSON.parse(gethtml);
+                    }
+                } else if (!/{|}/.test(gethtml) && gethtml != "") {
+                    let decfile = globalMap0.getMyVar('gmParams').datapath + "appdec.js";
+                    let Juyingdec = fetch(decfile);
+                    if (Juyingdec != "") {
+                        eval(Juyingdec);
+                        json = JSON.parse(xgdec(gethtml));
+                    }
                 } else {
-                    json = JSON.parse(gethtml);
+                    json = JSON.parse(gethtml.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, ''));
                 }
-            } else if (!/{|}/.test(gethtml) && gethtml != "") {
-                let decfile = globalMap0.getMyVar('gmParams').datapath + "appdec.js";
-                let Juyingdec = fetch(decfile);
-                if (Juyingdec != "") {
-                    eval(Juyingdec);
-                    json = JSON.parse(xgdec(gethtml));
-                }
-            } else {
-                json = JSON.parse(gethtml.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, ''));
             }
 
             try {
@@ -763,7 +767,7 @@ function getSsData(name, jkdata, page) {
                 let vodpic = list.vod_pic || list.pic || "";
                 let voddesc = list.vod_remarks || list.state || "";
                 let vodurl = list.vod_id ? vodurlhead + list.vod_id : list.nextlink;
-                let vodcontent = list.vod_blurb || "";
+                let vodcontent = list.vod_content || list.vod_blurb || "";
                 return {
                     vodname: vodname,
                     vodpic: vodpic.indexOf('ver.txt') > -1 ? "" : vodpic,
