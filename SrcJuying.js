@@ -624,7 +624,7 @@ function dianboyiji() {
         })
         d.push({
             title: "管理设置",
-            url: $(["接口管理","解析管理","资源管理"],1).select(()=>{
+            url: $(["接口管理","解析管理","资源管理","运行模式"],1).select(()=>{
                 if(input=="接口管理"){
                     putMyVar('guanli','jk');
                     return $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
@@ -644,6 +644,16 @@ function dianboyiji() {
                         setPageTitle('资源管理');
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                         resource();
+                    })
+                }else if(input=="站源获取"){
+                    let modes = ["本地接口", "订阅文件"];
+                    return $(modes,2).select(()=>{
+                        if(input=="本地接口"){
+                            clearItem("sourceMode");
+                        }else if(input=="订阅文件"){
+                            setItem("sourceMode","1");
+                        }
+                        return "toast://站源获取设置为"+input;
                     })
                 }
             }),
