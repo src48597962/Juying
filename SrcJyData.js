@@ -1010,15 +1010,7 @@ function getErData(jkdata) {
             html = '{}';
         }
     } else if (api_type=="t4") {
-        let apifile = getDrpyFile(jkdata);
-        if(apifile){
-            let env = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
-            var drpy = env.createOrGetEnvironment(jkdata.name, apifile);
-            html = drpy.detail(MY_PARAMS.url);
-            drpytype = drpy.getRule('类型');
-        }else{
-            html = '{}';
-        }
+        html = getHtml(jkdata.url+"&ac=detail&ids="+MY_PARAMS.pageTitle+"###"+MY_PARAMS.url+"###"+MY_PARAMS.pic, headers);
     } else {
         html = getHtml(MY_URL, headers);
     }
@@ -1348,7 +1340,7 @@ function getErData(jkdata) {
             } catch (e) {
                 log('XYQ获取选集列表失败>' + e.message);
             }
-        } else if (api_type == 'hipy_t3') {
+        } else if (api_type == 'hipy_t3' || api_type == 't4') {
             let json = JSON.parse(html).list[0];
             actor = json.vod_actor;
             area = json.vod_area;
