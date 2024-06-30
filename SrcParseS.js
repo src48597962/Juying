@@ -48,19 +48,23 @@ var SrcParseS = {
         //聚影采用新的、独立的解析逻辑
         vipUrl = vipUrl.startsWith('tvbox-xg:')?vipUrl.replace('tvbox-xg:',''):vipUrl.startsWith('push://')?vipUrl.replace('push://',''):vipUrl
         dataObj = dataObj || {};
-        if (/magnet|torrent/.test(vipUrl)) {
-            log("磁力/BT视频地址，由海阔解析"); 
-            return vipUrl;
-        }else if(contain.test(vipUrl)&&!exclude.test(vipUrl)&&!needparse.test(vipUrl)){
-            log("直链视频地址，直接播放"); 
-            if(vipUrl.indexOf('app.grelighting.cn')>-1){vipUrl = vipUrl.replace('app.','ht.')}
-            return vipUrl + '#isVideo=true#';
-        }else if (vipUrl.indexOf('sa.sogou') != -1) {
-            log("优看视频，直接明码解析"); 
-            return unescape(request(vipUrl).match(/"url":"([^"]*)"/)[1].replace(/\\u/g, "%u"));
-        }else if (vipUrl.startsWith("https://pan.quark.cn/")) {
-            return "hiker://page/quarkList?rule=Quark.简&realurl=" + encodeURIComponent(vipUrl) + "&sharePwd=";
+        function 直链(vipUrl){
+            if (/magnet|torrent/.test(vipUrl)) {
+                log("磁力/BT视频地址，由海阔解析"); 
+                return vipUrl;
+            }else if(contain.test(vipUrl)&&!exclude.test(vipUrl)&&!needparse.test(vipUrl)){
+                log("直链视频地址，直接播放"); 
+                if(vipUrl.indexOf('app.grelighting.cn')>-1){vipUrl = vipUrl.replace('app.','ht.')}
+                return vipUrl + '#isVideo=true#';
+            }else if (vipUrl.indexOf('sa.sogou') != -1) {
+                log("优看视频，直接明码解析"); 
+                return unescape(request(vipUrl).match(/"url":"([^"]*)"/)[1].replace(/\\u/g, "%u"));
+            }else if (vipUrl.startsWith("https://pan.quark.cn/")) {
+                return "hiker://page/quarkList?rule=Quark.简&realurl=" + encodeURIComponent(vipUrl) + "&sharePwd=";
+            }
+            return;
         }
+        直链(vipUrl);
         
         if(/hipy_/.test(dataObj.stype)){
             let play;
@@ -76,6 +80,7 @@ var SrcParseS = {
                 return play.url;
             }
             vipUrl = play.url || vipUrl;
+            直链(vipUrl);
         }
         log("影片地址："+vipUrl); 
         let isVip = 0;
