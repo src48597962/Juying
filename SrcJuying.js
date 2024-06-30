@@ -484,6 +484,9 @@ function dianboerji() {
             if(flag){
                 dataObj.flag = flag;
             }
+            if(jkdata.type=="drpy"){
+                dataObj.stype = jkdata.type;
+            }
             let playSet = storage0.getItem('playSet') || {};
             let listone = 列表[0].split('$')[0].trim();
             let len = listone.length;
