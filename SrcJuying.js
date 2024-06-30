@@ -485,7 +485,7 @@ function dianboerji() {
                 dataObj.flag = flag;
             }
             let lazy;
-            if(jkdata.type=="drpy"){
+            if(jkdata.type=="hipy_t3"){
                 dataObj.stype = jkdata.type;
                 dataObj.sname = jkdata.name;
                 dataObj.surl = jkdata.url.startsWith('hiker://')?getPath(jkdata.url):jkdata.url;
