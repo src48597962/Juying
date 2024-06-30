@@ -98,7 +98,7 @@ function getYiData(jkdata) {
         }
     } else if (api_type == "t4") {
         classurl = api_url + "&filter=true";
-        listurl = api_url + "&t="+cate_id+"&ac=detail&pg="+MY_PAGE+"&ext="+jkdata.ext;
+        listurl = api_url + "&t={cate_id}&ac=detail&pg="+MY_PAGE+"&ext="+jkdata.ext;
         //listnode = "json.list";
     } else {
         log(api_type + '>api类型错误');
@@ -457,6 +457,8 @@ function getYiData(jkdata) {
                 listurl = listurl.replace('{catePg}', extdata["起始页"] ? MY_PAGE > extdata["起始页"] ? MY_PAGE : extdata["起始页"] : MY_PAGE).replace(/{/g, '${fl.').replace(/}/g, ' || ""}');
                 eval(`listurl = \`${listurl}\`;`);
                 MY_URL = listurl;
+            } else if (api_type='t4'){
+                MY_URL = listurl.replace('{cate_id}', cate_id);
             } else {
                 MY_URL = listurl + MY_PAGE;
                 type_id = fl.cateId || "";
@@ -473,7 +475,7 @@ function getYiData(jkdata) {
             vodlists = [];
             let vod_name, vod_pic, vod_url, vod_desc;
             if (api_type=="t4") {
-                let vodlist = JSON.parse(getHtml(listurl, headers)).list || [];
+                let vodlist = JSON.parse(getHtml(MY_URL, headers)).list || [];
                 vodlist.forEach(it=>{
                     vodlists.push({ "vod_url": it.vod_id.toString(), "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic });
                 })
@@ -1342,6 +1344,7 @@ function getErData(jkdata) {
             }
         } else if (api_type == 'hipy_t3' || api_type == 't4') {
             let json = JSON.parse(html).list[0];
+            log(json);
             actor = json.vod_actor;
             area = json.vod_area;
             remarks = json.vod_remarks || json.vod_class || "";
@@ -1351,6 +1354,7 @@ function getErData(jkdata) {
             lists = json.vod_play_url.split('$$$').map(it => {
                 return it.split('#');
             });
+            log(lists);
         }
 
         if (/XPath|biubiu|XBPQ|XYQ/.test(api_type) && html && (tabs.length == 0 || lists.length == 0) && getMyVar('debug', '0') == "0" && html.indexOf(MY_PARAMS.pageTitle) > -1) {
