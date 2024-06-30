@@ -422,9 +422,13 @@ function getYiData(jkdata) {
 
     if (listurl && cate_id!="tj" && !error.fl) {
         try {
+            log(fl);
+            log(cate_id);
             fl.cateId = fl.cateId || cate_id;
             //拼接生成分类页url链接
-            if (api_type == "XYQ") {
+            if (api_type='hipy_t4'){
+                MY_URL = listurl.replace('{cate_id}', cate_id);
+            } else if (api_type == "XYQ") {
                 fl.catePg = MY_PAGE;
                 let execStrs = getExecStrs(listurl);
                 execStrs.forEach(k => {
@@ -457,8 +461,6 @@ function getYiData(jkdata) {
                 listurl = listurl.replace('{catePg}', extdata["起始页"] ? MY_PAGE > extdata["起始页"] ? MY_PAGE : extdata["起始页"] : MY_PAGE).replace(/{/g, '${fl.').replace(/}/g, ' || ""}');
                 eval(`listurl = \`${listurl}\`;`);
                 MY_URL = listurl;
-            } else if (api_type='hipy_t4'){
-                MY_URL = listurl.replace('{cate_id}', cate_id);
             } else {
                 MY_URL = listurl + MY_PAGE;
                 type_id = fl.cateId || "";
@@ -475,6 +477,7 @@ function getYiData(jkdata) {
             vodlists = [];
             let vod_name, vod_pic, vod_url, vod_desc;
             if (api_type=="hipy_t4") {
+                log(MY_URL);
                 let vodlist = JSON.parse(getHtml(MY_URL, headers)).list || [];
                 vodlist.forEach(it=>{
                     vodlists.push({ "vod_url": it.vod_id.toString(), "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic });
