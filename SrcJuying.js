@@ -484,11 +484,43 @@ function dianboerji() {
             if(flag){
                 dataObj.flag = flag;
             }
+            let lazy;
             if(jkdata.type=="drpy"){
                 dataObj.stype = jkdata.type;
                 dataObj.sname = jkdata.name;
                 dataObj.surl = jkdata.url.startsWith('hiker://')?getPath(jkdata.url):jkdata.url;
             }
+            if(erdata.drpytype=="小说"){
+                lazy = $("#readTheme##autoPage#").rule((dataObj)=>{
+                    let env = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
+                    let drpy = env.createOrGetEnvironment(dataObj.sname, dataObj.surl);
+                    let play = JSON.parse(drpy.play(dataObj.flag, MY_URL, []));
+                    let data = JSON.parse(play.url.replace('novel://',''));
+                    let d = [];
+                    d.push({
+                        title: '<big>' + data.title + '</big>',
+                        col_type: 'rich_text',
+                        extra: {
+                            click: true
+                        }
+                    });
+                    d.push({
+                        title: data.content.replace(/(&nbsp;){1,}/g, '　　'),
+                        col_type: "rich_text",
+                        extra: {
+                            textSize: 18,
+                            click: true
+                        }
+                    });
+                    setResult(d)
+                }, dataObj);
+            }else{
+                lazy = $("").lazyRule((dataObj) => {
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
+                    return SrcParseS.聚影(input, dataObj);
+                }, dataObj);
+            }
+
             let playSet = storage0.getItem('playSet') || {};
             let listone = 列表[0].split('$')[0].trim();
             let len = listone.length;
@@ -496,11 +528,6 @@ function dianboerji() {
             for(let i=0; i<列表.length; i++) {
                 let playtitle = 列表[i].split('$')[0].trim();
                 let playurl = 列表[i].split('$')[1].trim();
-                
-                let lazy = $("").lazyRule((dataObj) => {
-                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
-                    return SrcParseS.聚影(input, dataObj);
-                }, dataObj);
 
                 let extra = {
                     id: name + "_选集_" + (pageid?pageid+"_":"") + i,
