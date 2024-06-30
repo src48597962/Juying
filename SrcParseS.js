@@ -70,10 +70,9 @@ var SrcParseS = {
             let env = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
             let drpy = env.createOrGetEnvironment(dataObj.sname, dataObj.surl);
             let play = JSON.parse(drpy.play(dataObj.flag, vipUrl, []));
-            log(play.url);
-            if(play.url.startWith("pics://")){
+            if(play.url.startsWith("pics://")){
                 return play.url;
-            }else if(play.url.startWith("novel://")){
+            }else if(play.url.startsWith("novel://")){
                 let data = JSON.parse(play.url.replace('novel://',''));
                 return $("hiker://empty###readTheme##autoPage#").rule((data)=>{
                     let d = [];
