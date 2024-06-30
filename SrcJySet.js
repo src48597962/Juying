@@ -1726,6 +1726,9 @@ function HipyImport(input, importmode){
             return fetch(obj.url, {timeout:6000});
         }
         let arr = { "name": obj.name.split('.')[0], "type": "hipy_t3", "ext": obj.url}
+        if(arr.name.includes('[搜]')){
+            arr['onlysearch'] = 1;
+        }
         let urlfile;
         try{
             let content = getcontent();
@@ -1740,6 +1743,7 @@ function HipyImport(input, importmode){
         if(urlfile){
             arr['url'] = urlfile;
         }
+        
         if(arr.url){
             urls.push(arr);
         }
@@ -1833,6 +1837,9 @@ function Resourceimport(input,importtype,importmode){
                         arr = { "name": obj.name, "type": "XYQ", "ext": extfile};
                     }else if(/drpy2/.test(obj.api) && obj.type==3){
                         arr = { "name": obj.name, "type": "hipy_t3", "ext": extfile};
+                        if(arr.name.includes('[搜]')){
+                            arr['onlysearch'] = 1;
+                        }
                     }
 
                     if(arr){
@@ -1854,6 +1861,7 @@ function Resourceimport(input,importtype,importmode){
                                     if(arr.type=="XBPQ" && !/搜索url/.test(content)){
                                         obj.searchable = 0;
                                     }
+                                    
                                     urlfile = datapath + arr.type + '_' + extfile.substr(extfile.lastIndexOf('/') + 1);
                                     writeFile(urlfile, content);
                                 }
