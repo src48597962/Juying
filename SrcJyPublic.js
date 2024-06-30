@@ -68,6 +68,7 @@ function getDatas(lx, isyx) {
                             }
                         }
                         if(arr){
+                            arr['searchable'] = obj.searchable;
                             datalist.push(arr);
                         }
                     })
