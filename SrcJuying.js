@@ -651,7 +651,7 @@ function dianboyiji() {
                         if(input=="本地接口"){
                             clearItem("sourceMode");
                         }else if(input=="订阅文件"){
-                            setItem("sourceMode","1");
+                            setItem("sourceMode","2");
                         }
                         return "toast://站源获取设置为"+input;
                     })
