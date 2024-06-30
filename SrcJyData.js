@@ -707,7 +707,7 @@ function getSsData(name, jkdata, page) {
     let gethtml = "";
     let ssvodurl;
     try {
-        if (/v1|app|iptv|v2|cms/.test(api_type)) {
+        if (/v1|app|iptv|v2|cms|drpy/.test(api_type)) {
             let json;
             if(api_type=="drpy"){
                 let apifile = getDrpyFile(jkdata);
