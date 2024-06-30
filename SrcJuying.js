@@ -492,6 +492,7 @@ function dianboerji() {
             }
             if(erdata.drpytype=="小说"){
                 lazy = $("#readTheme##autoPage#").rule((dataObj)=>{
+                    log(MY_URL);
                     let env = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
                     let drpy = env.createOrGetEnvironment(dataObj.sname, dataObj.surl);
                     let play = JSON.parse(drpy.play(dataObj.flag, MY_URL, []));
