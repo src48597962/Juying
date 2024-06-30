@@ -356,7 +356,7 @@ function dianboerji() {
             }
         })
         //生成选集
-        let 列表 = erdata.lists[lineid] || [];
+        let 列表 = erdata.lists.length>lineid?erdata.lists[lineid].filter(v=>v):[];
         if(列表.length>0){
             try{
                 let i1 = parseInt(列表.length / 6);
@@ -465,7 +465,7 @@ function dianboerji() {
                 列表 = 分页s[pageid];//取当前分页的选集列表
             }
         }
-        log(列表);
+        
         if(列表.length==0){
             d.push({
                 title: '当前无播放选集，点更多片源试试！',
@@ -476,7 +476,7 @@ function dianboerji() {
                 }
             });
         }else{
-            let flag = erdata.flags.length>=lineid+1?erdata.flags[lineid]:erdata.tabs.length>=lineid+1?erdata.tabs[lineid]:"";
+            let flag = erdata.flags.length>lineid?erdata.flags[lineid]:erdata.tabs.length>lineid?erdata.tabs[lineid]:"";
             let dataObj = {};
             if(erdata.parse_api&&erdata.parse_api.length>0){
                 dataObj.parse_api = erdata.parse_api;
