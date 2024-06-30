@@ -77,6 +77,12 @@ var SrcParseS = {
         let from;
         if(dataObj.flag && !isVip){
             from = dataObj.flag;
+            if(dataObj.stype=="drpy"){
+                let env = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
+                var drpy = env.createOrGetEnvironment(dataObj.sname, dataObj.surl);
+                log(drpy.play(from, vipUrl, []));
+                return '';
+            }
         }else{
             try{
                 if(vipUrl.indexOf('-yanaifei.html') != -1){
