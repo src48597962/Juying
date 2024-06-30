@@ -96,6 +96,11 @@ function getYiData(jkdata) {
             classurl = rule.homeUrl || rule.host;
             listurl = rule.filter_url || rule.host;
         }
+    } else if (api_type == "t4") {
+        vodurlhead = api_url + '?ac=videolist&ids=';
+        classurl = api_url + "?ac=list";
+        listurl = api_url + '?ac=videolist&pg=';
+        listnode = "json.list";
     } else {
         log(api_type + '>api类型错误');
     }
