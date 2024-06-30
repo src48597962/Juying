@@ -948,7 +948,7 @@ function getErData(jkdata) {
     api_ua = api_ua == "MOBILE_UA" ? MOBILE_UA : api_ua == "PC_UA" ? PC_UA : api_ua;
     let headers = { 'User-Agent': api_ua };
 
-    let html, isxml, extdata;
+    let html, isxml, extdata, drpytype;
     if (/v1|app|v2|iptv|cms/.test(api_type)) {
         try {
             let gethtml = getHtml(MY_URL, headers);
@@ -983,6 +983,7 @@ function getErData(jkdata) {
             let env = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
             var drpy = env.createOrGetEnvironment(jkdata.name, apifile);
             html = drpy.detail(MY_PARAMS.url);
+            drpytype = drpy.getRule('类型');
         }else{
             html = '{}';
         }
@@ -1365,7 +1366,8 @@ function getErData(jkdata) {
         "lists": lists,
         "flags": flags,
         "parse_api": parse_api,
-        "sniffer": sniffer
+        "sniffer": sniffer,
+        "drpytype": drpytype
     };
 }
 
