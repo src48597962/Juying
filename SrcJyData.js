@@ -87,20 +87,15 @@ function getYiData(jkdata) {
             }
             vodurlhead = getHome(listurl);
         }
-    } else if (api_type=='drpy') {
+    } else if (api_type=='hipy_t3') {
         let apifile = getDrpyFile(jkdata);
         if(apifile){
             let env = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
             var drpy = env.createOrGetEnvironment(api_name, apifile);
             let rule = drpy.getRule();
-            //log(rule);
             classurl = rule.homeUrl || rule.host;
             listurl = rule.filter_url || rule.host;
         }
-            //log(drpy.home(true));
-            //log(drpy.getRule());
-            //log(drpy.home(true)); 主页分类筛选数据
-            //log(drpy.homeVod()); //获取首页推荐数据
     } else {
         log(api_type + '>api类型错误');
     }
@@ -122,7 +117,7 @@ function getYiData(jkdata) {
                 筛选 = classCache.筛选;
             } else {
                 try {
-                    if (api_type == "drpy") {
+                    if (api_type == "hipy_t3") {
                         let home = JSON.parse(drpy.home());
                         let typelist = home['class'] || [];
                         typelist.forEach(v=>{
@@ -460,7 +455,7 @@ function getYiData(jkdata) {
             }
             vodlists = [];
             let vod_name, vod_pic, vod_url, vod_desc;
-            if (api_type=="drpy") {
+            if (api_type=="hipy_t3") {
                 let vodlist = JSON.parse(drpy.category(fl.cateId, MY_PAGE, true, fl)).list || [];
                 vodlist.forEach(it=>{
                     vodlists.push({ "vod_url": it.vod_id.toString(), "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic });
@@ -654,7 +649,7 @@ function getSsData(name, jkdata, page) {
                 vodurlhead = getHome(ssurl);
             }
         }
-    } else if (api_type=="drpy") {
+    } else if (api_type=="hipy_t3") {
         vodurlhead = "";
         listnode = "json.list";
     } else {
@@ -707,9 +702,9 @@ function getSsData(name, jkdata, page) {
     let gethtml = "";
     let ssvodurl;
     try {
-        if (/v1|app|iptv|v2|cms|drpy/.test(api_type)) {
+        if (/v1|app|iptv|v2|cms|hipy_t3/.test(api_type)) {
             let json;
-            if(api_type=="drpy"){
+            if(api_type=="hipy_t3"){
                 let apifile = getDrpyFile(jkdata);
                 if(apifile){
                     let env = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
@@ -982,7 +977,7 @@ function getErData(jkdata) {
             headers["User-Agent"] = (headers["User-Agent"] == "电脑" || headers["User-Agent"] == "PC_UA") ? PC_UA : MOBILE_UA;
         }
         html = getHtml(MY_URL, headers);
-    } else if (api_type=="drpy") {
+    } else if (api_type=="hipy_t3") {
         let apifile = getDrpyFile(jkdata);
         if(apifile){
             let env = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
@@ -1321,7 +1316,7 @@ function getErData(jkdata) {
             } catch (e) {
                 log('XYQ获取选集列表失败>' + e.message);
             }
-        } else if (api_type == 'drpy') {
+        } else if (api_type == 'hipy_t3') {
             let json = JSON.parse(html).list[0];
             actor = json.vod_actor;
             area = json.vod_area;
@@ -1334,7 +1329,7 @@ function getErData(jkdata) {
             });
         }
 
-        if (/XPath|biubiu|XBPQ|drpy|XYQ/.test(api_type) && html && (tabs.length == 0 || lists.length == 0) && getMyVar('debug', '0') == "0" && html.indexOf(MY_PARAMS.pageTitle) > -1) {
+        if (/XPath|biubiu|XBPQ|XYQ/.test(api_type) && html && (tabs.length == 0 || lists.length == 0) && getMyVar('debug', '0') == "0" && html.indexOf(MY_PARAMS.pageTitle) > -1) {
             log('开启模板自动匹配、AI识片，获取播放选集');
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcAutoTmpl.js');
             let data = autoerji(MY_URL, html);
