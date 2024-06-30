@@ -70,6 +70,7 @@ var SrcParseS = {
             let env = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
             let drpy = env.createOrGetEnvironment(dataObj.sname, dataObj.surl);
             let play = JSON.parse(drpy.play(dataObj.flag, vipUrl, []));
+            log(play.url);
             if(play.url.startWith("pics://")){
                 return play.url;
             }else if(play.url.startWith("novel://")){
