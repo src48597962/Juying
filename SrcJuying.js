@@ -490,12 +490,12 @@ function dianboerji() {
                 dataObj.sname = jkdata.name;
                 dataObj.surl = jkdata.url.startsWith('hiker://')?getPath(jkdata.url):jkdata.url;
             }
-            if(erdata.drpytype=="小说"){
+            let novel = erdata.drpytype=="小说";
+            if(novel){
                 lazy = $("#readTheme##autoPage#").rule((dataObj)=>{
-                    log(MY_URL);
                     let env = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
                     let drpy = env.createOrGetEnvironment(dataObj.sname, dataObj.surl);
-                    let play = JSON.parse(drpy.play(dataObj.flag, MY_URL, []));
+                    let play = JSON.parse(drpy.play(dataObj.flag, MY_URL.split('##')[1].split('#')[0], []));
                     let data = JSON.parse(play.url.replace('novel://',''));
                     let d = [];
                     d.push({
@@ -528,7 +528,7 @@ function dianboerji() {
             let col_type = 列表.length > 4 && len < 7 ? 'text_4' : len > 20 ? 'text_1' :'text_3';
             for(let i=0; i<列表.length; i++) {
                 let playtitle = 列表[i].split('$')[0].trim();
-                let playurl = 列表[i].split('$')[1].trim();
+                let playurl = (novel?"hiker://empty##":"")+列表[i].split('$')[1].trim();
 
                 let extra = {
                     id: name + "_选集_" + (pageid?pageid+"_":"") + i,
