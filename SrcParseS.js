@@ -46,7 +46,7 @@ function removeByValue(arr, val) {
 var SrcParseS = {
     聚影: function (vipUrl, dataObj) {
         //聚影采用新的、独立的解析逻辑
-        let isVip = 0;
+        vipUrl = vipUrl.startsWith('tvbox-xg:')?vipUrl.replace('tvbox-xg:',''):vipUrl.startsWith('push://')?vipUrl.replace('push://',''):vipUrl
         dataObj = dataObj || {};
         if (/magnet|torrent/.test(vipUrl)) {
             log("磁力/BT视频地址，由海阔解析"); 
@@ -58,24 +58,33 @@ var SrcParseS = {
         }else if (vipUrl.indexOf('sa.sogou') != -1) {
             log("优看视频，直接明码解析"); 
             return unescape(request(vipUrl).match(/"url":"([^"]*)"/)[1].replace(/\\u/g, "%u"));
-        }else if(/qq\.com|iqiyi\.com|youku\.com|mgtv\.com|bilibili\.com|sohu\.com|ixigua\.com|pptv\.com|miguvideo\.com|le\.com|1905\.com|fun\.tv|cctv\.com/.test(vipUrl)){
-            if(vipUrl.indexOf('html?')>-1){
-                vipUrl = vipUrl.split('html?')[0]+'html';
-            }
-            isVip = 1;
+        }else if (vipUrl.startsWith("https://pan.quark.cn/")) {
+            return "hiker://page/quarkList?rule=Quark.简&realurl=" + encodeURIComponent(vipUrl) + "&sharePwd=";
         }
         
-        if(dataObj.stype=="hipy_t3"){
-            let env = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
-            let drpy = env.createOrGetEnvironment(dataObj.sname, dataObj.surl);
-            let play = JSON.parse(drpy.play(dataObj.flag, vipUrl, []));
+        if(/hipy_/.test(dataObj.stype)){
+            let play;
+            if(/t3/.test(dataObj.stype)){
+                let env = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
+                let drpy = env.createOrGetEnvironment(dataObj.sname, dataObj.surl);
+                play = JSON.parse(drpy.play(dataObj.flag, vipUrl, []));
+            }else{
+                play = JSON.parse(fetch(dataObj.surl+'&flag='+dataObj.flag+'&play='+vipUrl, {timeout: 10000}));
+            }
+
             if(play.url.startsWith("pics://")){
                 return play.url;
             }
             vipUrl = play.url || vipUrl;
         }
         log("影片地址："+vipUrl); 
-        if(!needparse.test(vipUrl) && /^http/.test(vipUrl)){
+        let isVip = 0;
+        if(/qq\.com|iqiyi\.com|youku\.com|mgtv\.com|bilibili\.com|sohu\.com|ixigua\.com|pptv\.com|miguvideo\.com|le\.com|1905\.com|fun\.tv|cctv\.com/.test(vipUrl)){
+            if(vipUrl.indexOf('html?')>-1){
+                vipUrl = vipUrl.split('html?')[0]+'html';
+            }
+            isVip = 1;
+        }else if(!needparse.test(vipUrl) && /^http/.test(vipUrl)){
             log("网页播放地址");
             let obj = {
                 vipUrl: vipUrl,
