@@ -486,6 +486,8 @@ function dianboerji() {
             }
             if(jkdata.type=="drpy"){
                 dataObj.stype = jkdata.type;
+                dataObj.sname = jkdata.name;
+                dataObj.surl = jkdata.url.startsWith('hiker://')?getPath(jkdata.url):jkdata.url;
             }
             let playSet = storage0.getItem('playSet') || {};
             let listone = 列表[0].split('$')[0].trim();
