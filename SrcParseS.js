@@ -46,7 +46,6 @@ function removeByValue(arr, val) {
 var SrcParseS = {
     聚影: function (vipUrl, dataObj) {
         //聚影采用新的、独立的解析逻辑
-        log("影片地址："+vipUrl); 
         let isVip = 0;
         dataObj = dataObj || {};
         if (/magnet|torrent/.test(vipUrl)) {
@@ -66,37 +65,16 @@ var SrcParseS = {
             isVip = 1;
         }
         
-        if(dataObj.stype=="drpy"){
+        if(dataObj.stype=="hipy_t3"){
             let env = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
             let drpy = env.createOrGetEnvironment(dataObj.sname, dataObj.surl);
             let play = JSON.parse(drpy.play(dataObj.flag, vipUrl, []));
             if(play.url.startsWith("pics://")){
                 return play.url;
-            }else if(play.url.startsWith("novel://")){
-                let data = JSON.parse(play.url.replace('novel://',''));
-                return $("hiker://empty###readTheme##autoPage#").rule((data)=>{
-                    let d = [];
-                    d.push({
-                        title: '<big>' + data.title + '</big>',
-                        col_type: 'rich_text',
-                        extra: {
-                            click: true
-                        }
-                    });
-                    d.push({
-                        title: data.content.replace(/(&nbsp;){1,}/g, '　　'),
-                        col_type: "rich_text",
-                        extra: {
-                            textSize: 18,
-                            click: true
-                        }
-                    });
-                    setResult(d)
-                }, data);
             }
-            log(drpy.play(dataObj.flag, vipUrl, []));
-            return '';
+            vipUrl = play.url || vipUrl;
         }
+        log("影片地址："+vipUrl); 
         if(!needparse.test(vipUrl) && /^http/.test(vipUrl)){
             log("网页播放地址");
             let obj = {
