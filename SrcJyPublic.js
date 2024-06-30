@@ -61,6 +61,9 @@ function getDatas(lx, isyx) {
                                 }
                             }else if(obj.type==4 && obj.api.includes('api/v1/vod')){
                                 arr = { "name": obj.name, "url": obj.api, "type": "hipy_t4", "ext": obj.ext};
+                                if(arr.name.includes('[搜]')){
+                                    arr['onlysearch'] = 1;
+                                }
                             }
                         }else{
                             if(obj.url.startsWith('http')){
