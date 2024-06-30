@@ -1527,7 +1527,7 @@ function resource() {
         url: $('#noLoading#').lazyRule(() => {
             putMyVar('importtype','3');
             refreshPage(false);
-            return "toast://订阅只支持app类、cms、hipy_t4，无法管理接口";
+            return "toast://订阅只支持app类、cms、t4，且无法管理接口";
         })
     });
 
