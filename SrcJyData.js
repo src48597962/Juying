@@ -97,8 +97,6 @@ function getYiData(jkdata) {
             classurl = rule.homeUrl || rule.host;
             listurl = rule.filter_url || rule.host;
         }
-        
-            //detailUrl;
             //log(drpy.home(true));
             //log(drpy.getRule());
             //log(drpy.home(true)); 主页分类筛选数据
@@ -463,17 +461,10 @@ function getYiData(jkdata) {
             vodlists = [];
             let vod_name, vod_pic, vod_url, vod_desc;
             if (api_type=="drpy") {
-                log({
-                    tid: fl.cateId, 
-                    pg: MY_PAGE, 
-                    filter: true, 
-                    extend: fl
-                })
                 let vodlist = JSON.parse(drpy.category(fl.cateId, MY_PAGE, true, fl)).list || [];
                 vodlist.forEach(it=>{
                     vodlists.push({ "vod_url": it.vod_id.toString(), "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic });
                 })
-
             }else if (api_type == "XYQ") {
                 let gethtml = getHtml(MY_URL, headers);
                 if (extdata['分类片单是否Jsoup写法'] == "1" && extdata['分类列表数组规则']) {
@@ -662,6 +653,16 @@ function getSsData(name, jkdata, page) {
                 }
                 vodurlhead = getHome(ssurl);
             }
+        }
+    } else if (api_type=="drpy") {
+        let apifile = getDrpyFile(jkdata);
+        if(apifile){
+            let env = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
+            var drpy = env.createOrGetEnvironment(jkdata.name, apifile);
+            html = drpy.search(name, 0, page);
+            log(html);
+        }else{
+            html = '{}';
         }
     } else {
         log('api类型错误');
