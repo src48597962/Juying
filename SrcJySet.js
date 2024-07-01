@@ -409,9 +409,9 @@ function jiekousave(urls, mode) {
             }
             
             if(!datalist.some(checkitem)&&it.name&&it.url&&it.type){
-                if(!it.oldurl && olddatanum>0){
-                    it.group = it.group || "新导入";
-                }
+                //if(!it.oldurl && olddatanum>0){
+                //    it.group = it.group || "新导入";
+                //}
                 delete it['oldurl'];
                 datalist.push(it);
                 num = num + 1;
@@ -1570,7 +1570,9 @@ function resource() {
         desc: '请输入链接地址',
         url: $.toString(() => {
             return `fileSelect://`+$.toString(()=>{
-                return "toast://"+input;
+                putMyVar("importinput",input);
+                refreshPage();
+                return "hiker://empty";
             })
         }),
         extra: {
