@@ -1826,8 +1826,8 @@ function Resourceimport(input,importtype,importmode){
                     if($.type(extfile)=='string'){
                         if(/^clan:/.test(extfile)){
                             extfile = extfile.replace("clan://TVBox/", input.match(/file.*\//)[0]);
-                        }else if(/^\./.test(extfile)){
-                            extfile = input.match(/http(s)?:\/\/.*\//)[0]+extfile.replace("./","");
+                        }else if(extfile.startsWith('./')){
+                            extfile = extfile.substr(0, extfile.lastIndexOf('/')+1) + extfile.replace("./","");//input.match(/http(s)?:\/\/.*\//)[0]
                         }
                     }
 
