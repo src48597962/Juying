@@ -632,6 +632,9 @@ function dianboyiji() {
             title: "管理设置",
             url: $(["接口管理","解析管理","资源管理","站源设置"],1).select(()=>{
                 if(input=="接口管理"){
+                    if(getItem("sourceMode")=="2"){
+                        return "toast://订阅文件模式，无法管理本地接口";
+                    }
                     putMyVar('guanli','jk');
                     return $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
                         setPageTitle('接口管理');
@@ -639,6 +642,9 @@ function dianboyiji() {
                         SRCSet();
                     })
                 }else if(input=="解析管理"){
+                    if(getItem("sourceMode")=="2"){
+                        return "toast://订阅文件模式，无法管理本地解析";
+                    }
                     putMyVar('guanli','jx');
                     return $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
                         setPageTitle('解析管理');
