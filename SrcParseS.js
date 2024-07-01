@@ -79,6 +79,7 @@ var SrcParseS = {
                 return play.url;
             }
             vipUrl = play.url || vipUrl;
+            log("hipy解析结果>"+vipUrl);
             直链(vipUrl);
         }
         log("影片地址："+vipUrl); 
