@@ -485,7 +485,7 @@ function dianboerji() {
                 dataObj.flag = flag;
             }
             let lazy;
-            if(jkdata.type=="hipy_t3"){
+            if(/hipy_/.test(jkdata.type)){
                 dataObj.stype = jkdata.type;
                 dataObj.sname = jkdata.name;
                 dataObj.surl = jkdata.url.startsWith('hiker://')?getPath(jkdata.url):jkdata.url;
@@ -493,14 +493,16 @@ function dianboerji() {
             let novel = erdata.detailtype=="小说";
             if(novel){
                 lazy = $("#readTheme##autoPage#").rule((dataObj)=>{
-                    let data = {};
+                    let vipUrl = MY_URL.split('##')[1].split('#')[0];
+                    let play;
                     if(dataObj.stype=="hipy_t3"){
                         let env = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
                         let drpy = env.createOrGetEnvironment(dataObj.sname, dataObj.surl);
-                        let play = JSON.parse(drpy.play(dataObj.flag, MY_URL.split('##')[1].split('#')[0], []));
-                        data = JSON.parse(play.url.replace('novel://',''));
-                    }  
-                    
+                        play = JSON.parse(drpy.play(dataObj.flag, vipUrl, []));
+                    }else if(dataObj.stype=="hipy_t4"){
+                        play = JSON.parse(request(dataObj.surl+'&flag='+dataObj.sname+'&play='+vipUrl));
+                    }
+                    let data = JSON.parse(play.url.replace('novel://',''));
                     let d = [];
                     d.push({
                         title: '<big>' + data.title + '</big>',
