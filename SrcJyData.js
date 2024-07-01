@@ -977,16 +977,12 @@ function getErData(jkdata) {
     let html, isxml, extdata, detailtype;
     if (/v1|app|v2|iptv|cms/.test(api_type)) {
         try {
-            log("进来获取");
-            log(MY_URL);
             let gethtml = getHtml(MY_URL, headers);
-            log(gethtml);
             if (/cms/.test(api_type) && /<\?xml/.test(gethtml)) {
                 html = gethtml;
                 isxml = 1;
             } else {
                 html = JSON.parse(gethtml.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, ''));
-                log(html);
                 isxml = 0;
             }
         } catch (e) {
