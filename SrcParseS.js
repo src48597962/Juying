@@ -59,9 +59,13 @@ var SrcParseS = {
             }else if(dataObj.stype=="hipy_t4"){
                 play = JSON.parse(fetch(dataObj.surl+'&flag='+dataObj.flag+'&play='+vipUrl, {timeout: 10000}));
             }
-            log(play);
             if(play.url.startsWith("pics://")){
                 return play.url;
+            }else if(/\.mp3|\.mp4|\.m3u8/.test(play.url) && play.header){
+                return JSON.stringify({
+                    urls: [play.url],
+                    headers: [play.header]
+                }); 
             }
             vipUrl = play.url || vipUrl;
         }
