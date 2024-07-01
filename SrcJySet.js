@@ -1576,7 +1576,7 @@ function resource() {
             })
         }),
         extra: {
-            titleVisible: importtype=="2"?false:true,
+            titleVisible: false,
             defaultValue: getMyVar('importinput', ''),
             onChange: 'putMyVar("importinput",input)'
         }
