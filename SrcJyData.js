@@ -587,8 +587,7 @@ function getYiData(jkdata) {
                             it['play'] = it.vod_play_url;
                         }
                     }
-                    let vodurl = it.vod_id ? vodhost + it.vod_id : it.nextlink;
-                    log(vodurl);
+                    let vodurl = it.vod_id ? detailurl + it.vod_id : it.nextlink;
                     let vodpic = it.vod_pic || it.pic || "";
                     if(vodurl){
                         let arr = { "vod_url": vodurl, "vod_name": it.vod_name || it.title, "vod_desc": it.vod_remarks || it.state || "", "vod_pic": vodpic, "vod_play": it.play };
