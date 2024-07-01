@@ -11,11 +11,10 @@ function getYiData(jkdata) {
     let api_ua = jkdata.ua || "MOBILE_UA";
     api_ua = api_ua == "MOBILE_UA" ? MOBILE_UA : api_ua == "PC_UA" ? PC_UA : api_ua;
     let headers = { 'User-Agent': api_ua };
-    let vodhost, vodurlhead, classurl, listurl, detailurl, listnode, extdata;
+    let vodhost, classurl, listurl, detailurl, listnode, extdata;
     //分类变量
     let fold = getMyVar('SrcJu_dianbo$fold', "0");//是否展开小分类筛选
     let cate_id = getMyVar('SrcJu_dianbo$分类', '');
-    let type_id = '';
     let fl = storage0.getMyVar('SrcJu_dianbo$flCache') || {};
     if(cate_id=="tj" && MY_PAGE>1){
         return {
@@ -85,7 +84,7 @@ function getYiData(jkdata) {
                 extdata["分类链接"] = extdata["分类链接"].includes('firstPage=')&&MY_PAGE==1?extdata["分类链接"].split('firstPage=')[1].split(']')[0]:extdata["分类链接"].split('[')[0];
                 listurl = extdata["分类链接"] ? /^http/.test(extdata["分类链接"]) ? extdata["分类链接"] : host + extdata["分类链接"] : "";
             }
-            vodurlhead = getHome(listurl);
+            vodhost = getHome(listurl);
         }
     } else if (api_type=='hipy_t3') {
         let apifile = getDrpyFile(jkdata);
@@ -159,7 +158,7 @@ function getYiData(jkdata) {
                             首页列表数组.forEach(it => {
                                 pdfa(it, extdata['首页片单列表数组规则']).forEach(v => {
                                     if (extdata['首页片单是否Jsoup写法'] == "1") {
-                                        let vodid = pd(v, extdata['首页片单链接'] || extdata['分类片单链接'], vodurlhead);
+                                        let vodid = pd(v, extdata['首页片单链接'] || extdata['分类片单链接'], vodhost);
                                         let vodname = pdfh(v, extdata['首页片单标题'] || extdata['分类片单标题']);
                                         let vodpic = pdfh(v, extdata['首页片单图片'] || extdata['分类片单图片']);
                                         let voddesc = pdfh(v, extdata['首页片单副标题'] || extdata['分类片单副标题']);
@@ -257,7 +256,7 @@ function getYiData(jkdata) {
                                     let tjlist = JSON.parse(gettjhtml).list;
                                     tjlist.forEach(it=>{
                                         it.vlist.forEach(v=>{
-                                            推荐.push({ "vod_url": vodurlhead + v.vod_id, "vod_name": v.vod_name, "vod_desc": v.vod_remarks, "vod_pic": v.vod_pic });
+                                            推荐.push({ "vod_url": detailurl + v.vod_id, "vod_name": v.vod_name, "vod_desc": v.vod_remarks, "vod_pic": v.vod_pic });
                                         })
                                     })
                                 }catch(e){}
@@ -486,7 +485,7 @@ function getYiData(jkdata) {
                 if (extdata['分类片单是否Jsoup写法'] == "1" && extdata['分类列表数组规则']) {
                     pdfa(gethtml, extdata['分类列表数组规则']).forEach(it => {
                         let vodname = pdfh(it, extdata['分类片单标题']);
-                        let vodid = pd(it, extdata['分类片单链接'], vodurlhead);
+                        let vodid = pd(it, extdata['分类片单链接'], vodhost);
                         let vodimg = pdfh(it, extdata['分类片单图片']);
                         let voddesc = pdfh(it, extdata['分类片单副标题']);
                         if (vodname && vodid) {
@@ -503,7 +502,7 @@ function getYiData(jkdata) {
                 let vodmarks = xpathArray(gethtml, extdata["homeVodNode"] + extdata["homeVodMark"]);
                 for (let i in vodids) {
                     if (vodids[i] && vodnames[i]) {
-                        let arr = { "vod_url": vodurlhead + vodids[i], "vod_name": vodnames[i], "vod_desc": vodmarks[i], "vod_pic": vodimgs[i] };
+                        let arr = { "vod_url": vodhost + vodids[i], "vod_name": vodnames[i], "vod_desc": vodmarks[i], "vod_pic": vodimgs[i] };
                         vodlists.push(arr);
                     }
                 }
@@ -527,7 +526,7 @@ function getYiData(jkdata) {
                     };
                     if (extdata["图片"] && item.indexOf(extdata["图片"].split("&&")[0]) > -1) {
                         vod_url = getBetweenStr(item, extdata["链接"]);
-                        vod_url = /^http/.test(vod_url) ? vod_url : vodurlhead + vod_url;
+                        vod_url = /^http/.test(vod_url) ? vod_url : vodhost + vod_url;
                         vod_name = getBetweenStr(item, extdata["标题"]);
                         vod_pic = "";
                         try {
