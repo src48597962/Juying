@@ -50,8 +50,8 @@ var SrcParseS = {
         let isVip = 0;
         dataObj = dataObj || {};
 
-        if(/hipy_/.test(dataObj.stype)){
-            let play;
+        if(dataObj.stype && /hipy_/.test(dataObj.stype)){
+            let play = {url: ""};
             if(dataObj.stype=="hipy_t3"){
                 let env = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
                 let drpy = env.createOrGetEnvironment(dataObj.sname, dataObj.surl);
