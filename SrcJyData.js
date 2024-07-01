@@ -542,9 +542,7 @@ function getYiData(jkdata) {
                     }
                 })
             } else {
-                log(MY_URL);
                 let gethtml = getHtml(MY_URL, headers);
-                log(gethtml);
                 let json;
                 if (api_type=="cms" && /<\?xml/.test(gethtml)) {
                     gethtml = gethtml.replace(/&lt;!\[CDATA\[|\]\]&gt;|<!\[CDATA\[|\]\]>/g, '');
@@ -582,7 +580,7 @@ function getYiData(jkdata) {
                 } catch (e) {
                     vodlist = json.list || json.data.list || json.data || [];
                 }
-                log(vodlist);
+ 
                 vodlist.forEach(it => {
                     if (api_type == 'cms' && it.vod_play_url) {
                         if (it.vod_play_url.indexOf('$') == -1 && it.vod_play_url.indexOf('m3u8') > -1) {
@@ -590,6 +588,7 @@ function getYiData(jkdata) {
                         }
                     }
                     let vodurl = it.vod_id ? vodhost + it.vod_id : it.nextlink;
+                    log(vodurl);
                     let vodpic = it.vod_pic || it.pic || "";
                     if(vodurl){
                         let arr = { "vod_url": vodurl, "vod_name": it.vod_name || it.title, "vod_desc": it.vod_remarks || it.state || "", "vod_pic": vodpic, "vod_play": it.play };
