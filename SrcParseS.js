@@ -68,11 +68,11 @@ var SrcParseS = {
         
         if(/hipy_/.test(dataObj.stype)){
             let play;
-            if(/t3/.test(dataObj.stype)){
+            if(dataObj.stype=="hipy_t3"){
                 let env = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
                 let drpy = env.createOrGetEnvironment(dataObj.sname, dataObj.surl);
                 play = JSON.parse(drpy.play(dataObj.flag, vipUrl, []));
-            }else{
+            }else if(dataObj.stype=="hipy_t4"){
                 play = JSON.parse(fetch(dataObj.surl+'&flag='+dataObj.flag+'&play='+vipUrl, {timeout: 10000}));
             }
 
