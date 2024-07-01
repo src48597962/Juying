@@ -744,8 +744,11 @@ function dianboyiji() {
             d.push({
                 title: "搜索",
                 url: $.toString((searchurl) => {
-                        return input + searchurl;
-                    },searchurl),
+                    if(input.trim() == ''){
+                        return "hiker://empty"
+                    }
+                    return input + searchurl;
+                },searchurl),
                 desc: "搜你想看的...",
                 col_type: "input",
                 extra: {
