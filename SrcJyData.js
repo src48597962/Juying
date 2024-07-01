@@ -424,7 +424,8 @@ function getYiData(jkdata) {
             }
         }
     }
-
+    log(cate_id);
+    log(listurl);
     if (listurl && cate_id!="tj" && !error.fl) {
         try {
             fl.cateId = fl.cateId || cate_id;
@@ -477,7 +478,8 @@ function getYiData(jkdata) {
                     MY_URL = MY_URL + '&t=' + type_id;
                 }
             }
-
+            log(MY_URL);
+            log(api_type);
             vodlists = [];
             let vod_name, vod_pic, vod_url, vod_desc;
             if (api_type=="hipy_t4") {
@@ -551,7 +553,7 @@ function getYiData(jkdata) {
                     }
                 })
             } else {
-                log(MY_URL);
+                
                 let gethtml = getHtml(MY_URL, headers);
                 let json;
                 if (/cms/.test(api_type) && /<\?xml/.test(gethtml)) {
