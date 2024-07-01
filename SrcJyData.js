@@ -102,6 +102,11 @@ function getYiData(jkdata) {
         //listnode = "json.list";
     } else {
         log(api_type + '>api类型错误');
+        return {
+            fllists: [],
+            vodlists: [],
+            error: {}
+        }
     }
 
     //一级第1页生成分类数据
@@ -472,6 +477,7 @@ function getYiData(jkdata) {
                     MY_URL = MY_URL + '&t=' + type_id;
                 }
             }
+
             vodlists = [];
             let vod_name, vod_pic, vod_url, vod_desc;
             if (api_type=="hipy_t4") {
@@ -545,6 +551,7 @@ function getYiData(jkdata) {
                     }
                 })
             } else {
+                log(MY_URL);
                 let gethtml = getHtml(MY_URL, headers);
                 let json;
                 if (/cms/.test(api_type) && /<\?xml/.test(gethtml)) {
