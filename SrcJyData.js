@@ -100,7 +100,7 @@ function getYiData(jkdata) {
         }
     } else if (api_type == "hipy_t4") {
         classurl = api_url + "&filter=true";
-        listurl = api_url + "&t={cate_id}&ac=detail&pg="+MY_PAGE+"&ext="+jkdata.ext;
+        listurl = api_url + "&t={cate_id}&ac=detail&pg="+MY_PAGE+"&extend="+jkdata.ext+"&ext={flb64}";
         //listnode = "json.list";
     } else {
         log(api_type + '>api类型错误');
@@ -433,7 +433,7 @@ function getYiData(jkdata) {
             fl.cateId = fl.cateId || cate_id;
             //拼接生成分类页url链接
             if (api_type='hipy_t4'){
-                MY_URL = listurl.replace('{cate_id}', fl.cateId);
+                MY_URL = listurl.replace('{cate_id}', fl.cateId).replace('{flb64}', base64Encode(JSON.stringify(fl)));
             } else if (api_type == "XYQ") {
                 fl.catePg = MY_PAGE;
                 let execStrs = getExecStrs(listurl);
