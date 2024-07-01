@@ -1013,6 +1013,7 @@ function getErData(jkdata) {
         }
     } else if (api_type=="hipy_t4") {
         html = getHtml(jkdata.url+"&ac=detail&ids="+MY_PARAMS.url, headers);
+        detailtype = JSON.parse(html).type;
     } else {
         html = getHtml(MY_URL, headers);
     }
