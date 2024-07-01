@@ -630,7 +630,7 @@ function dianboyiji() {
         })
         d.push({
             title: "管理设置",
-            url: $(["接口管理","解析管理","资源管理","来源设置"],1).select(()=>{
+            url: $(["接口管理","解析管理","资源管理","站源设置"],1).select(()=>{
                 if(input=="接口管理"){
                     putMyVar('guanli','jk');
                     return $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
@@ -651,9 +651,9 @@ function dianboyiji() {
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                         resource();
                     })
-                }else if(input=="来源设置"){
+                }else if(input=="站源设置"){
                     let modes = ["本地接口", "订阅文件"];
-                    return $(modes,2,"设置站源来源").select(()=>{
+                    return $(modes,2,"设置站源获取位置").select(()=>{
                         if(input=="本地接口"){
                             clearItem("sourceMode");
                         }else if(input=="订阅文件"){
