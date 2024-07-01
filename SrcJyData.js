@@ -983,6 +983,7 @@ function getErData(jkdata) {
                 isxml = 1;
             } else {
                 html = JSON.parse(gethtml.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, ''));
+                log(html);
                 isxml = 0;
             }
         } catch (e) {
