@@ -242,8 +242,10 @@ function dianboerji() {
     }else if(detailsmark){
         erdata = detailsmark;
     }else{
+        log("进来");
         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
         erdata = getErData(jkdata);
+        log(erdata);
         let markData = {surl: jkdata.url, url: MY_URL, data: erdata}
         writeFile(cacheDataFile, JSON.stringify(markData));
     }
