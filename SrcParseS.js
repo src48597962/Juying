@@ -59,14 +59,14 @@ var SrcParseS = {
             }else if(dataObj.stype=="hipy_t4"){
                 play = JSON.parse(fetch(dataObj.surl+'&flag='+dataObj.flag+'&play='+vipUrl, {timeout: 10000}));
             }
-
+            log(play);
             if(play.url.startsWith("pics://")){
                 return play.url;
             }
             vipUrl = play.url || vipUrl;
         }
 
-        log("影片地址："+vipUrl); 
+        log("请求地址："+vipUrl); 
         
         if (/magnet|torrent/.test(vipUrl)) {
             log("磁力/BT视频地址，由海阔解析"); 
