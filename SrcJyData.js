@@ -53,7 +53,7 @@ function getYiData(jkdata) {
     } else if (api_type == "cms") {
         api_url = api_url.replace('?ac=list','');
         classurl = api_url + "?ac=list";
-        listurl = api_url + '?ac=videolist&t=${fl.cateId}&pg=';
+        listurl = api_url + '?ac=videolist&t=${fl.cateId}&pg=' + MY_PAGE;
         detailurl = api_url + '?ac=videolist&ids=';
         listnode = "json.list";
     } else if (/XBPQ|XPath|XYQ/.test(api_type)) {
