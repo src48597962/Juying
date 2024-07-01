@@ -11,7 +11,7 @@ function getYiData(jkdata) {
     let api_ua = jkdata.ua || "MOBILE_UA";
     api_ua = api_ua == "MOBILE_UA" ? MOBILE_UA : api_ua == "PC_UA" ? PC_UA : api_ua;
     let headers = { 'User-Agent': api_ua };
-    let vodurlhead, classurl, listurl, listnode, extdata;
+    let vodhost, vodurlhead, classurl, listurl, detailurl, listnode, extdata;
     //分类变量
     let fold = getMyVar('SrcJu_dianbo$fold', "0");//是否展开小分类筛选
     let cate_id = getMyVar('SrcJu_dianbo$分类', '');
@@ -31,30 +31,30 @@ function getYiData(jkdata) {
         let mm = date.getMonth() + 1;
         let dd = date.getDate();
         let key = (mm < 10 ? "0" + mm : mm) + "" + (dd < 10 ? "0" + dd : dd);
-        vodurlhead = api_url + '/detail?&key=' + key + '&vod_id=';
         classurl = api_url + "/types";
-        listurl = api_url + '?key=' + key + '&page=';
+        listurl = api_url + '?key=' + key + '&type=${fl.cateId}&page=' + MY_PAGE;
+        detailurl = api_url + '/detail?&key=' + key + '&vod_id=';
         listnode = "json.data.list";
     } else if (api_type == "app") {
-        vodurlhead = api_url + 'video_detail?id=';
         classurl = api_url + "nav";
-        listurl = api_url + 'video?tid=@type_id&pg=';
+        listurl = api_url + 'video?tid=${fl.cateId}&pg=' + MY_PAGE;
+        detailurl = api_url + 'video_detail?id=';
         listnode = "json.list";
     } else if (api_type == "v2") {
-        vodurlhead = api_url + 'video_detail?id=';
         classurl = api_url + "nav";
-        listurl = api_url + 'video?tid=@type_id&pg=';
+        listurl = api_url + 'video?tid=${fl.cateId}&pg=' + MY_PAGE;
+        detailurl = api_url + 'video_detail?id=';
         listnode = "json.data";
     } else if (api_type == "iptv") {
-        vodurlhead = api_url + '?ac=detail&ids=';
         classurl = api_url + "?ac=flitter";
-        listurl = api_url + '?ac=list&page=';
+        listurl = api_url + '?ac=list&class=${fl.cateId}&page=' + MY_PAGE;
+        detailurl = api_url + '?ac=detail&ids=';
         listnode = "json.data";
     } else if (api_type == "cms") {
         api_url = api_url.replace('?ac=list','');
-        vodurlhead = api_url + '?ac=videolist&ids=';
         classurl = api_url + "?ac=list";
-        listurl = api_url + '?ac=videolist&pg=';
+        listurl = api_url + '?ac=videolist&t=${fl.cateId}&pg=';
+        detailurl = api_url + '?ac=videolist&ids=';
         listnode = "json.list";
     } else if (/XBPQ|XPath|XYQ/.test(api_type)) {
         extdata = extDataCache(jkdata);
@@ -465,17 +465,8 @@ function getYiData(jkdata) {
                 eval(`listurl = \`${listurl}\`;`);
                 MY_URL = listurl;
             } else {
-                MY_URL = listurl + MY_PAGE;
-                type_id = fl.cateId || "";
-                if (api_type == "v2" || api_type == "app") {
-                    MY_URL = MY_URL.replace('@type_id', type_id);
-                } else if (api_type == "v1") {
-                    MY_URL = MY_URL + '&type=' + type_id;
-                } else if (api_type == "iptv") {
-                    MY_URL = MY_URL + '&class=' + type_id;
-                } else {
-                    MY_URL = MY_URL + '&t=' + type_id;
-                }
+                eval(`listurl = \`${listurl}\`;`);
+                MY_URL = listurl;
             }
 
             vodlists = [];
@@ -596,10 +587,12 @@ function getYiData(jkdata) {
                             it['play'] = it.vod_play_url;
                         }
                     }
-                    let vodurl = it.vod_id ? vodurlhead && !/^http/.test(it.vod_id) ? vodurlhead + it.vod_id : it.vod_id : it.nextlink;
+                    let vodurl = it.vod_id ? vodhost + it.vod_id : it.nextlink;
                     let vodpic = it.vod_pic || it.pic || "";
-                    let arr = { "vod_url": vodurl, "vod_name": it.vod_name || it.title, "vod_desc": it.vod_remarks || it.state || "", "vod_pic": vodpic, "vod_play": it.play };
-                    vodlists.push(arr);
+                    if(vodurl){
+                        let arr = { "vod_url": vodurl, "vod_name": it.vod_name || it.title, "vod_desc": it.vod_remarks || it.state || "", "vod_pic": vodpic, "vod_play": it.play };
+                        vodlists.push(arr);
+                    }
                 })
             }
         } catch (e) {
