@@ -542,10 +542,11 @@ function getYiData(jkdata) {
                     }
                 })
             } else {
-                
+                log(MY_URL);
                 let gethtml = getHtml(MY_URL, headers);
+                log(gethtml);
                 let json;
-                if (/cms/.test(api_type) && /<\?xml/.test(gethtml)) {
+                if (api_type=="cms" && /<\?xml/.test(gethtml)) {
                     gethtml = gethtml.replace(/&lt;!\[CDATA\[|\]\]&gt;|<!\[CDATA\[|\]\]>/g, '');
                     let xmllist = [];
                     let videos = pdfa(gethtml, 'list&&video');
@@ -581,6 +582,7 @@ function getYiData(jkdata) {
                 } catch (e) {
                     vodlist = json.list || json.data.list || json.data || [];
                 }
+                log(vodlist);
                 vodlist.forEach(it => {
                     if (api_type == 'cms' && it.vod_play_url) {
                         if (it.vod_play_url.indexOf('$') == -1 && it.vod_play_url.indexOf('m3u8') > -1) {
