@@ -1827,10 +1827,9 @@ function Resourceimport(input,importtype,importmode){
                         if(/^clan:/.test(extfile)){
                             extfile = extfile.replace("clan://TVBox/", input.match(/file.*\//)[0]);
                         }else if(extfile.startsWith('./')){
-                            extfile = extfile.substr(0, extfile.lastIndexOf('/')+1) + extfile.replace("./","");//input.match(/http(s)?:\/\/.*\//)[0]
+                            extfile = input.substr(0, input.lastIndexOf('/')+1) + extfile.replace("./","");//input.match(/http(s)?:\/\/.*\//)[0]
                         }
                     }
-
                     if(/^csp_XBiubiu/.test(obj.api)){
                         arr = { "name": obj.name, "type": "biubiu", "ext": extfile};
                     }else if(/^csp_XPath/.test(obj.api)){
