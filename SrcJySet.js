@@ -1645,16 +1645,18 @@ function resource() {
                 if(input==""){
                     return 'toast://请先输入链接地址'
                 }
-
-                let importrecord = Juconfig['importrecord']||[];
-                if(importrecord.length>20){//保留20个记录
-                    importrecord.shift();
+                if(input.startsWith('http')){
+                    let importrecord = Juconfig['importrecord']||[];
+                    if(importrecord.length>20){//保留20个记录
+                        importrecord.shift();
+                    }
+                    if(!importrecord.some(item => item.url==input && item.type==getMyVar('importtype','1'))){
+                        importrecord.push({type:getMyVar('importtype','1'),url:input});
+                        Juconfig['importrecord'] = importrecord;
+                        writeFile(cfgfile, JSON.stringify(Juconfig));
+                    }
                 }
-                if(!importrecord.some(item => item.url==input && item.type==getMyVar('importtype','1'))){
-                    importrecord.push({type:getMyVar('importtype','1'),url:input});
-                    Juconfig['importrecord'] = importrecord;
-                    writeFile(cfgfile, JSON.stringify(Juconfig));
-                }
+                if(input.startsWith('/storage/emulated')){input = "file://" + input}
 
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                 if(getMyVar('importtype','1')=="1"){
@@ -1782,7 +1784,7 @@ function Resourceimport(input,importtype,importmode){
         let data;
         try{
             showLoading('检测文件有效性');
-            if(/\/storage\/emulated\//.test(input)){input = "file://" + input}
+            if(input.startsWith('/storage/emulated')){input = "file://" + input}
             var html = request(input,{timeout:2000});
             if(html.includes('LuUPraez**')){
                 html = base64Decode(html.split('LuUPraez**')[1]);
