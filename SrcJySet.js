@@ -1830,8 +1830,6 @@ function Resourceimport(input,importtype,importmode){
                             extfile = input.substr(0, input.lastIndexOf('/')+1) + extfile.replace("./","");//input.match(/http(s)?:\/\/.*\//)[0]
                         }
                     }
-                    log(input.substr(0, input.lastIndexOf('/')+1));
-                    log(input);
 
                     if(/^csp_XBiubiu/.test(obj.api)){
                         arr = { "name": obj.name, "type": "biubiu", "ext": extfile};
@@ -1855,7 +1853,6 @@ function Resourceimport(input,importtype,importmode){
                             writeFile(urlfile, JSON.stringify(extfile));
                         }else if(/^file/.test(extfile)){
                             urlfile = 'hiker://files/' + extfile.split('/files/Documents/')[1];
-                            log(urlfile);
                         }else if(/^http/.test(extfile)){
                             try{
                                 let content = fetch(extfile, {timeout:2000});
