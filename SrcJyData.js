@@ -673,7 +673,7 @@ function getSsData(name, jkdata, page) {
                 vodurlhead = getHome(ssurl);
             }
         }
-    } else if (api_type=="hipy_t3") {
+    } else if (api_type=="hipy_t3" || api_type=="hipy_t4") {
         vodurlhead = "";
         listnode = "json.list";
     } else {
@@ -726,9 +726,11 @@ function getSsData(name, jkdata, page) {
     let gethtml = "";
     let ssvodurl;
     try {
-        if (/v1|app|iptv|v2|cms|hipy_t3/.test(api_type)) {
+        if (/v1|app|iptv|v2|cms|hipy_/.test(api_type)) {
             let json;
-            if(api_type=="hipy_t3"){
+            if(api_type=="hipy_t4"){
+                json = JSON.parse(getHtml(jkdata.url+"&wd="+name+"&quick=false", headers));
+            }else if(api_type=="hipy_t3"){
                 let apifile = getDrpyFile(jkdata);
                 if(apifile){
                     let env = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
