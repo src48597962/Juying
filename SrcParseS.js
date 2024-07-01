@@ -62,7 +62,6 @@ var SrcParseS = {
             }else if (vipUrl.startsWith("https://pan.quark.cn/")) {
                 return "hiker://page/quarkList?rule=Quark.简&realurl=" + encodeURIComponent(vipUrl) + "&sharePwd=";
             }
-            return;
         }
         直链(vipUrl);
         
