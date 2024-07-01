@@ -1007,13 +1007,13 @@ function getErData(jkdata) {
             let env = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
             var drpy = env.createOrGetEnvironment(jkdata.name, apifile);
             html = drpy.detail(MY_PARAMS.url);
-            detailtype = drpy.getRule('类型');
+            detailtype = drpy.getRule('类型') || (jkdata.name.includes('[书]')?"小说":"");
         }else{
             html = '{}';
         }
     } else if (api_type=="hipy_t4") {
         html = getHtml(jkdata.url+"&ac=detail&ids="+MY_PARAMS.url, headers);
-        detailtype = JSON.parse(html).type;
+        detailtype = JSON.parse(html).type || (jkdata.name.includes('[书]')?"小说":"");
     } else {
         html = getHtml(MY_URL, headers);
     }
