@@ -2,6 +2,7 @@
 
 // 获取一级数据
 function getYiData(jkdata) {
+    log(jkdata);
     let fllists;
     let vodlists;
     let error = {};
@@ -24,6 +25,7 @@ function getYiData(jkdata) {
             error: {}
         }
     }
+    log(api_type);
 
     //基础链接拼接
     if (api_type == "v1") {
