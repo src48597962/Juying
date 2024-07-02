@@ -105,13 +105,14 @@ function createOrGetEnvironment(id, ext, drpy2) {
                 log("删除后" + Object.keys(drpyEnvS).length)
             }
 
-            drpyEnvS[id] = (function() {
+            drpyEnvS[id] = (function(ext) {
                 //let path = module.modulePath.slice(0, module.modulePath.lastIndexOf("/")) + '/drpy/drpy2.js';
-                //let drpy2 = $.require(module.modulePath.slice(0, module.modulePath.lastIndexOf("/")) + '/drpy/drpy2.js');
+                let drpy2 = $.require(module.modulePath.slice(0, module.modulePath.lastIndexOf("/")) + '/drpy/drpy2.js');
                 //$.require.cache.delete($.require.resolve(path));
+                drpy2.init(ext);
                 return drpy2.DRPY();
-            })();
-            drpyEnvS[id].init(ext);
+            })(ext);
+            //drpyEnvS[id].init(ext);
             
             return drpyEnvS[id];
     //    },
@@ -119,7 +120,6 @@ function createOrGetEnvironment(id, ext, drpy2) {
    //         id, ext
    //     }
     //});
-    //return drpyEnvS[id];
 }
 
 $.exports = {
