@@ -77,7 +77,7 @@ Function.prototype.toString = function () {
 };
 
 //ENVIRONMENTS沙箱环境
-const MAX_ENVS = 10;
+const MAX_ENVS = 1;
 let drpyEnvS = globalMap0.getMyVar('drpyEnvS',{});
 let nextEnvId = 0;
 
