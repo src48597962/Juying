@@ -734,7 +734,8 @@ function getSsData(name, jkdata, page) {
                 let apifile = getDrpyFile(jkdata);
                 if(apifile){
                     let env = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js", false);
-                    let drpy = env.createOrGetEnvironment(jkdata.name, apifile);
+                    let drpy2 = $.require(module.modulePath.slice(0, module.modulePath.lastIndexOf("/")) + '/drpy/drpy2.js');
+                    let drpy = env.createOrGetEnvironment(jkdata.name, apifile, drpy2);
                     json = JSON.parse(drpy.search(name, 0, page));
                     log(jkdata.name + ' 搜索结果>' + json.list);
                 }else{
