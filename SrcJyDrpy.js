@@ -107,7 +107,7 @@ function createOrGetEnvironment(id, ext) {
     globalMap0.putVar('drpyEnvS', drpyEnvS);
     return drpyEnvS[id];
 }
-xlog(Object.keys(drpyEnvS).length);
+log(Object.keys(drpyEnvS).length);
 $.exports = {
     createOrGetEnvironment
 }
