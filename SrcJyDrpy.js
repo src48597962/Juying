@@ -80,7 +80,7 @@ Function.prototype.toString = function () {
 const MAX_ENVS = 10;
 let drpyEnvS = globalMap0.getVar('drpyEnvS',{});
 let nextEnvId = 0;
-log(drpyEnvS.length);
+log(Object.keys(drpyEnvS).length);
 function createOrGetEnvironment(id, ext) {
     if (id === undefined) {
     id = nextEnvId++;
