@@ -78,6 +78,7 @@ Function.prototype.toString = function () {
 function sync(func, sp) {
     return new org.mozilla.javascript.Synchronizer(func, sp || {});
 }
+let drpy2 = $.require(module.modulePath.slice(0, module.modulePath.lastIndexOf("/")) + '/drpy/drpy2.js');
 
 const MAX_ENVS = 5;
 let drpyEnvS = {};
@@ -106,9 +107,9 @@ function createOrGetEnvironment(id, ext) {
             }
 
             drpyEnvS[id] = (function() {
-                let path = module.modulePath.slice(0, module.modulePath.lastIndexOf("/")) + '/drpy/drpy2.js';
-                let drpy2 = $.require(path);
-                $.require.cache.delete($.require.resolve(path));
+                //let path = module.modulePath.slice(0, module.modulePath.lastIndexOf("/")) + '/drpy/drpy2.js';
+                //let drpy2 = $.require(module.modulePath.slice(0, module.modulePath.lastIndexOf("/")) + '/drpy/drpy2.js');
+                //$.require.cache.delete($.require.resolve(path));
                 return drpy2.DRPY();
             })();
             drpyEnvS[id].init(ext);
