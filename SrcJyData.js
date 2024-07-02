@@ -86,7 +86,7 @@ function getYiData(jkdata) {
             }
             vodhost = getHome(listurl);
         }
-    } else if (api_type=='hipy_t3') {
+    } else if (api_type == 'hipy_t3') {
         let apifile = getDrpyFile(jkdata);
         if(apifile){
             let env = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
@@ -471,6 +471,7 @@ function getYiData(jkdata) {
             vodlists = [];
             let vod_name, vod_pic, vod_url, vod_desc;
             if (api_type=="hipy_t4") {
+                log(MY_URL);
                 let vodlist = JSON.parse(getHtml(MY_URL, headers)).list || [];
                 vodlist.forEach(it=>{
                     vodlists.push({ "vod_url": it.vod_id.toString(), "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic });
