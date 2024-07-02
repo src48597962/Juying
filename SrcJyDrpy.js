@@ -83,39 +83,42 @@ let nextEnvId = 0;
 let lock = false;
 
 function createOrGetEnvironment(id, ext) {
-    while (lock) {
-        // 等待锁释放
-    }
-    lock = true;
-    try {
-        if (id === undefined) {
-        id = nextEnvId++;
-        }
+    syncExecute({
+        func: ({
+            id, ext
+        }) => {
+            if (id === undefined) {
+                id = nextEnvId++;
+            }
+            if (drpyEnvS[id]) {
+                log(id + '>drpy取缓存');
+                return drpyEnvS[id];
+            } else {
+                log(id + '>drpy初始化');
+            }
+            log("删除前" + Object.keys(drpyEnvS).length)
+            if (Object.keys(drpyEnvS).length >= MAX_ENVS) {
+                const oldestId = Object.keys(drpyEnvS).sort((a, b) => a - b)[0];
 
-        if (drpyEnvS[id]) {
-            log(id+'>drpy取缓存');
-            return drpyEnvS[id];
-        }else{
-            log(id+'>drpy初始化');
+                delete drpyEnvS[oldestId];
+                log("删除后" + Object.keys(drpyEnvS).length)
+            }
+                drpyEnvS[id] = (function() {
+                    let drpy2 = $.require(module.modulePath.slice(0, module.modulePath.lastIndexOf("/")) + '/drpy/drpy2.js');
+                    return drpy2.DRPY();
+                })();
+                drpyEnvS[id].init(ext);
+            
+            globalMap0.putVar('drpyEnvS', drpyEnvS);
+            //return drpyEnvS[id];
+        },
+        param: {
+            id, ext
         }
-
-        if (Object.keys(drpyEnvS).length >= MAX_ENVS) {
-            const oldestId = Object.keys(drpyEnvS).sort((a, b) => a - b)[0];
-            log(oldestId+'>drpy删除');
-            delete drpyEnvS[oldestId];
-        }
-
-        drpyEnvS[id] = (function() {
-            let drpy2 = $.require(module.modulePath.slice(0, module.modulePath.lastIndexOf("/")) +'/drpy/drpy2.js');
-            return drpy2.DRPY();
-        })();
-        drpyEnvS[id].init(ext);
-        globalMap0.putVar('drpyEnvS', drpyEnvS);
-        return drpyEnvS[id];
-    } finally {
-        lock = false;
-    }
+    });
+    return drpyEnvS[id];
 }
+
 log(Object.keys(drpyEnvS).length);
 $.exports = {
     createOrGetEnvironment
