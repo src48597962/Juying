@@ -1,136 +1,6 @@
 //ENVIRONMENTS沙箱环境
-const MAX_ENVIRONMENTS = 10;
-let environments = {};
-let nextId = 0;
-let envCreationQueue = []; // 创建环境的队列
 
-function createOrGetEnvironment(id, ext) {
-    return new Promise((resolve, reject) => {
-        envCreationQueue.push(() => {
-            try {
-                if (id === undefined) {
-                    id = nextId++;
-                }
-
-                // 如果环境已存在，直接返回
-                if (environments[id]) {
-                    resolve(environments[id]);
-                    return;
-                }
-
-                // 环境数量达到上限，删除最早的环境
-                if (Object.keys(environments).length >= MAX_ENVIRONMENTS) {
-                    const oldestId = Object.keys(environments).sort((a, b) => a - b)[0];
-                    delete environments[oldestId];
-                }
-
-                // 创建新的环境
-                environments[id] = (function() {
-                    // 创建一个闭包来隔离环境变量
-                    //drpy运行环境相关
-                    const localKey = "drpy";
-                    globalThis.local = {
-                        set(rulekey, k, v) {
-                            storage0.setItem(localKey + "@" + rulekey + "@" + k, v);
-                        },
-                        get(rulekey, k, v) {
-                            return storage0.getItem(localKey + "@" + rulekey + "@" + k, "") || v;
-                        },
-                        delete(rulekey, k) {
-                            storage0.clearItem(localKey + "@" + rulekey + "@" + k);
-                        }
-                    };
-                    eval(getCryptoJS());
-                    globalThis.CryptoJS = CryptoJS;
-
-                    let $request = request;
-                    let $post = post;
-                    globalThis.req = function (url, cobj) {
-                        try {
-                            let res = {};
-                            let obj = Object.assign({}, cobj);
-                            if (obj.data) {
-                                obj.body = obj.data;
-                                delete obj.data;
-                            }
-
-                            if (obj.hasOwnProperty("redirect")) obj.redirect = !!obj.redirect;
-                            if (obj.buffer === 2) {
-                                obj.toHex = true;
-                            }
-                            obj.headers = Object.assign({
-                                Cookie: "#noCookie#"
-                            }, obj.headers);
-                            if (url === "https://api.nn.ci/ocr/b64/text" && obj.headers) {
-                                obj.headers["Content-Type"] = "text/plain";
-                            }
-
-                            if (url.startsWith("file://") && (url.includes("?type=") || url.includes("?params="))) {
-                                url = url.slice(0, url.lastIndexOf("?"));
-                            }
-                            for (let key in obj.headers) {
-                                if (typeof obj.headers[key] !== "string") {
-                                    obj.headers[key] = String(obj.headers[key]);
-                                }
-                            }
-                            let r = "";
-                            r = $request(url, obj);
-                            if (obj.withHeaders) {
-                                r = JSON.parse(r);
-                                res.content = r.body;
-                                res.headers = {};
-                                for (let [k, v] of Object.entries(r.headers || {})) {
-                                    res.headers[k] = v[0];
-                                }
-                            } else {
-                                res.content = r;
-                            }
-                            if (obj.buffer === 2) {
-                                const CryptoUtil = $.require("hiker://assets/crypto-java.js");
-                                res.content = CryptoUtil.Data.parseHex(res.content).toBase64(_base64.NO_WRAP);
-                            }
-                            return res;
-                        } catch (e) {
-                            log("Error" + e.toString());
-                        }
-                    }
-                    pdfa = _pdfa;
-                    pd = _pd;
-                    pdfh = _pdfh;
-                    String.prototype.replaceAll = function (search, replacement) {
-                        return this.split(search).join(replacement);
-                    };
-                    let $toString = Function.prototype.toString;
-                    Function.prototype.toString = function () {
-                        return $toString.apply(this).trim();
-                    };
-                    let drpy2 = $.require(module.modulePath.slice(0, module.modulePath.lastIndexOf("/")) + '/drpy/drpy2.js');
-                    return drpy2.DRPY();
-                })();
-                environments[id].init(ext);
-                log($.type(environments[id]));
-                resolve(environments[id]);
-            } catch (error) {
-                reject(error);
-            } finally {
-                // 移除已完成的队列项
-                envCreationQueue.shift();
-                // 如果队列还有等待中的请求，执行下一个
-                if (envCreationQueue.length > 0) {
-                    envCreationQueue[0]();
-                }
-            }
-        });
-    });
-}
-
-log(Object.keys(environments).length);
-$.exports = {
-    createOrGetEnvironment
-}
-
-/*
-const MAX_ENVS = 10;
+const MAX_ENVS = 5;
 let drpyEnvS = globalMap0.getVar('drpyEnvS',{});
 let nextEnvId = 0;
 
@@ -160,13 +30,13 @@ function createOrGetEnvironment(id, ext) {
                 const localKey = "drpy";
                 globalThis.local = {
                     set(rulekey, k, v) {
-                        storage0.setItem(localKey + "@" + rulekey + "@" + k, v);
+                        storage0.putVar(localKey + "@" + rulekey + "@" + k, v);
                     },
                     get(rulekey, k, v) {
-                        return storage0.getItem(localKey + "@" + rulekey + "@" + k, "") || v;
+                        return storage0.getVar(localKey + "@" + rulekey + "@" + k, "") || v;
                     },
                     delete(rulekey, k) {
-                        storage0.clearItem(localKey + "@" + rulekey + "@" + k);
+                        storage0.clearVar(localKey + "@" + rulekey + "@" + k);
                     }
                 };
                 eval(getCryptoJS());
@@ -252,7 +122,7 @@ log(Object.keys(drpyEnvS).length);
 $.exports = {
     createOrGetEnvironment
 }
-*/
+
 
 
 /*
