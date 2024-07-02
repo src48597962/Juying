@@ -38,16 +38,23 @@ function getDatas(lx, isyx) {
         }
     }else if(getItem('sourceMode','1')=='2'){
         if(Juconfig['dySource']){
-            let dyJkTmpFile = "hiker://files/_cache/"+md5(Juconfig['dySource'])+".txt";
-            if(!fileExist(dyJkTmpFile)){
-                let contnet = getJkContnet(Juconfig['dySource']);
-                if(contnet){
-                    writeFile(dyJkTmpFile, contnet);
+            let input = Juconfig['dySource'];
+            if(input.startsWith('http')){
+                let dyJkTmpFile = "hiker://files/_cache/"+md5(Juconfig['dySource'])+".json";
+                if(!fileExist(dyJkTmpFile)){
+                    let contnet = getJkContnet(Juconfig['dySource']);
+                    if(contnet){
+                        writeFile(dyJkTmpFile, contnet);
+                    }
                 }
+                input = dyJkTmpFile;
+            }else if(!input.startsWith('file://')){
+                input = '';
             }
-            if(fileExist(dyJkTmpFile)){
+            
+            if(fileExist(input)){
                 try{
-                    let data = JSON.parse(fetch(dyJkTmpFile));
+                    let data = JSON.parse(fetch(input));
                     let list = lx=="jk"?data.sites:data.parses || [];
                     list.forEach(obj=>{
                         let arr;
@@ -64,16 +71,26 @@ function getDatas(lx, isyx) {
                                 if(arr.name.includes('[搜]')){
                                     arr['onlysearch'] = 1;
                                 }
+                            }else if(/drpy2/.test(obj.api) && obj.type==3 && input.startsWith('file://')){
+                                let extfile = obj.ext;
+                                if(extfile.startsWith('./')){
+                                    extfile = input.substr(0, input.lastIndexOf('/')+1) + extfile.replace("./","");
+                                }
+                                let urlfile = 'hiker://files/' + extfile.split('/files/Documents/')[1];
+                                arr = { "name": obj.name, "url": urlfile, "type": "hipy_t3", "ext": extfile};
+                                if(arr.name.includes('[搜]')){
+                                    arr['onlysearch'] = 1;
+                                }
+                            }
+                            if(arr){
+                                arr['searchable'] = obj.searchable;
                             }
                         }else{
                             if(obj.url.startsWith('http')){
                                 arr = obj;
                             }
                         }
-                        if(arr){
-                            arr['searchable'] = obj.searchable;
-                            datalist.push(arr);
-                        }
+                        datalist.push(arr);
                     })
                 }catch(e){}
             }
