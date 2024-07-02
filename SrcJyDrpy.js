@@ -111,13 +111,13 @@ function createOrGetEnvironment(id, ext) {
             })();
             drpyEnvS[id].init(ext);
             
-            //return drpyEnvS[id];
+            return drpyEnvS[id];
         },
         param: {
             id, ext
         }
     });
-    return drpyEnvS[id];
+    //return drpyEnvS[id];
 }
 
 $.exports = {
