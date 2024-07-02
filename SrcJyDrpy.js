@@ -85,30 +85,39 @@ let drpyEnvS = {};
 let nextEnvId = 0;
 
 function createOrGetEnvironment(id, ext) {
-    if (id === undefined) {
-        id = nextEnvId++;
-    }
-    if (drpyEnvS[id]) {
-        log(id + '>drpy取缓存');
-        return drpyEnvS[id];
-    } else {
-        log(id + '>drpy初始化');
-    }
-    log("删除前" + Object.keys(drpyEnvS).length)
-    if (Object.keys(drpyEnvS).length >= MAX_ENVS) {
-        const oldestId = Object.keys(drpyEnvS).sort((a, b) => a - b)[0];
+    syncExecute({
+        func: ({
+            id, ext
+        }) => {
+            if (id === undefined) {
+                id = nextEnvId++;
+            }
+            if (drpyEnvS[id]) {
+                log(id + '>drpy取缓存');
+                return drpyEnvS[id];
+            } else {
+                log(id + '>drpy初始化');
+            }
+            log("删除前" + Object.keys(drpyEnvS).length)
+            if (Object.keys(drpyEnvS).length >= MAX_ENVS) {
+                const oldestId = Object.keys(drpyEnvS).sort((a, b) => a - b)[0];
 
-        delete drpyEnvS[oldestId];
-        log("删除后" + Object.keys(drpyEnvS).length)
-    }
-    return sync(() => {
-        drpyEnvS[id] = (function() {
-            return drpy2.DRPY();
-        })();
-        drpyEnvS[id].init(ext);
-        
-        return drpyEnvS[id];
-    }, this).call();
+                delete drpyEnvS[oldestId];
+                log("删除后" + Object.keys(drpyEnvS).length)
+            }
+
+            drpyEnvS[id] = (function() {
+                return drpy2.DRPY();
+            })();
+            drpyEnvS[id].init(ext);
+            
+            //return drpyEnvS[id];
+        },
+        param: {
+            id, ext
+        }
+    });
+    return drpyEnvS[id];
 }
 
 $.exports = {
