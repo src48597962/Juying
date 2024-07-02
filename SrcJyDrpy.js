@@ -75,6 +75,7 @@ let $toString = Function.prototype.toString;
 Function.prototype.toString = function () {
     return $toString.apply(this).trim();
 };
+let drpy2 = $.require(module.modulePath.slice(0, module.modulePath.lastIndexOf("/")) + '/drpy/drpy2.js');
 
 const MAX_ENVS = 5;
 let drpyEnvS = {};
@@ -98,7 +99,6 @@ function createOrGetEnvironment(id, ext) {
         log("删除后" + Object.keys(drpyEnvS).length)
     }
     drpyEnvS[id] = (function() {
-        let drpy2 = $.require(module.modulePath.slice(0, module.modulePath.lastIndexOf("/")) + '/drpy/drpy2.js');
         return drpy2.DRPY();
     })();
     drpyEnvS[id].init(ext);
