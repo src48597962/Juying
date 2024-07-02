@@ -83,7 +83,7 @@ const MAX_ENVS = 5;
 let drpyEnvS = {};
 let nextEnvId = 0;
 
-function createOrGetEnvironment(id, ext, drpy2) {
+function createOrGetEnvironment(id, ext) {
    // syncExecute({
     //    func: ({
     //        id, ext
@@ -105,14 +105,23 @@ function createOrGetEnvironment(id, ext, drpy2) {
                 log("删除后" + Object.keys(drpyEnvS).length)
             }
 
-            drpyEnvS[id] = (function(id,ext) {
+            drpyEnvS[id] = (function(ext) {
+                /*
                 let path = module.modulePath.slice(0, module.modulePath.lastIndexOf("/")) + '/drpy/drpy2.js';
-                let id = $.require(path);
-                $.require.cache.delete($.require.resolve(path));
-                id.init(ext);
-                return id.DRPY();
-            })(id,ext);
-            //drpyEnvS[id].init(ext);
+                let drpy2 = $.require(path);
+                drpy2.init(ext);
+                return drpy2.DRPY();
+                */
+                const path = module.modulePath.slice(0, module.modulePath.lastIndexOf("/")) + '/drpy/drpy2.js';
+                const drpy2 = $.require(path);
+                const initCode = `
+                    (${drpy2.init}).call(this, ${JSON.stringify(ext)});
+                    return (${drpy2.DRPY}).call(this)();
+                `;
+                const fn = new Function(initCode);
+                return fn.call({});
+            })(ext);
+            //drpyEnvS[id].init(ext);$.require.cache.delete($.require.resolve(path));
             
             return drpyEnvS[id];
     //    },
