@@ -80,34 +80,41 @@ Function.prototype.toString = function () {
 const MAX_ENVS = 10;
 let drpyEnvS = globalMap0.getVar('drpyEnvS',{});
 let nextEnvId = 0;
+let lock = false;
 
 function createOrGetEnvironment(id, ext) {
-    
-    if (id === undefined) {
-    id = nextEnvId++;
+    while (lock) {
+        // 等待锁释放
     }
+    lock = true;
+    try {
+        if (id === undefined) {
+        id = nextEnvId++;
+        }
 
-    if (drpyEnvS[id]) {
-        log(id+'>drpy取缓存');
+        if (drpyEnvS[id]) {
+            log(id+'>drpy取缓存');
+            return drpyEnvS[id];
+        }else{
+            log(id+'>drpy初始化');
+        }
+
+        if (Object.keys(drpyEnvS).length >= MAX_ENVS) {
+            const oldestId = Object.keys(drpyEnvS).sort((a, b) => a - b)[0];
+            log(oldestId+'>drpy删除');
+            delete drpyEnvS[oldestId];
+        }
+
+        drpyEnvS[id] = (function() {
+            let drpy2 = $.require(module.modulePath.slice(0, module.modulePath.lastIndexOf("/")) +'/drpy/drpy2.js');
+            return drpy2.DRPY();
+        })();
+        drpyEnvS[id].init(ext);
+        globalMap0.putVar('drpyEnvS', drpyEnvS);
         return drpyEnvS[id];
-    }else{
-        log(id+'>drpy初始化');
+    } finally {
+        lock = false;
     }
-
-    if (Object.keys(drpyEnvS).length >= MAX_ENVS) {
-        const oldestId = Object.keys(drpyEnvS).sort((a, b) => a - b)[0];
-        log(oldestId+'>drpy删除');
-        delete drpyEnvS[oldestId];
-        //globalMap0.putVar('drpyEnvS', drpyEnvS);
-    }
-
-    drpyEnvS[id] = (function() {
-        let drpy2 = $.require(module.modulePath.slice(0, module.modulePath.lastIndexOf("/")) +'/drpy/drpy2.js');
-        return drpy2.DRPY();
-    })();
-    drpyEnvS[id].init(ext);
-    //globalMap0.putVar('drpyEnvS', drpyEnvS);
-    return drpyEnvS[id];
 }
 log(Object.keys(drpyEnvS).length);
 $.exports = {
