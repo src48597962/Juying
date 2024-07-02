@@ -84,10 +84,10 @@ let drpyEnvS = {};
 let nextEnvId = 0;
 
 function createOrGetEnvironment(id, ext) {
-    syncExecute({
-        func: ({
-            id, ext
-        }) => {
+   // syncExecute({
+    //    func: ({
+    //        id, ext
+    //    }) => {
             if (id === undefined) {
                 id = nextEnvId++;
             }
@@ -108,17 +108,17 @@ function createOrGetEnvironment(id, ext) {
             drpyEnvS[id] = (function() {
                 let path = module.modulePath.slice(0, module.modulePath.lastIndexOf("/")) + '/drpy/drpy2.js';
                 let drpy2 = $.require(path);
-                //$.require.cache.delete($.require.resolve(path));
+                $.require.cache.delete($.require.resolve(path));
                 return drpy2.DRPY();
             })();
             drpyEnvS[id].init(ext);
             
             return drpyEnvS[id];
-        },
-        param: {
-            id, ext
-        }
-    });
+    //    },
+   //     param: {
+   //         id, ext
+   //     }
+    //});
     //return drpyEnvS[id];
 }
 
