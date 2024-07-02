@@ -736,6 +736,7 @@ function getSsData(name, jkdata, page) {
                     let env = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js", false);
                     let drpy = env.createOrGetEnvironment(jkdata.name, apifile);
                     json = JSON.parse(drpy.search(name, 0, page));
+                    log(jkdata.name + ' 搜索结果>' + json.list);
                 }else{
                     json = {};
                 }
@@ -964,7 +965,6 @@ function getSsData(name, jkdata, page) {
             log(jkdata.name + ' 输出结果报错>' + e.message + " 错误行#" + e.lineNumber);
         }
     }
-    log(jkdata.name+'>搜索结果>'+searchs.length);
     return searchs;
 }
 
