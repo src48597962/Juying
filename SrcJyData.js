@@ -952,7 +952,7 @@ function getSsData(name, jkdata, page) {
                 }
                 if (list.vodname.includes(name)) {
                     searchs.push({
-                        vodname: list.vodname.replace('立即播放',''),
+                        vodname: list.vodname.replace('立刻播放',''),
                         voddesc: list.voddesc,
                         vodcontent: list.vodcontent,
                         vodpic: vodpic,
