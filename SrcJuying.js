@@ -734,6 +734,7 @@ function dianboyiji() {
                     require(config.依赖); 
                     let d = search(input, 'dianboyiji' , jkdata);
                     if(d.length>0){
+                        deleteItemByCls('dianbosousuolist');
                         addItemAfter('dianbosousuoid', d);
                     }else{
                         return 'toast://无结果';
