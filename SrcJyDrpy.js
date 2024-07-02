@@ -78,13 +78,12 @@ Function.prototype.toString = function () {
 function sync(func, sp) {
     return new org.mozilla.javascript.Synchronizer(func, sp || {});
 }
-let drpy2 = $.require(module.modulePath.slice(0, module.modulePath.lastIndexOf("/")) + '/drpy/drpy2.js');
 
 const MAX_ENVS = 5;
 let drpyEnvS = {};
 let nextEnvId = 0;
 
-function createOrGetEnvironment(id, ext) {
+function createOrGetEnvironment(id, ext, drpy2) {
    // syncExecute({
     //    func: ({
     //        id, ext
