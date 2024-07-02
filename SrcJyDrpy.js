@@ -77,8 +77,8 @@ Function.prototype.toString = function () {
 };
 
 //ENVIRONMENTS沙箱环境
-const MAX_ENVS = 1;
-let drpyEnvS = globalMap0.getMyVar('drpyEnvS',{});
+const MAX_ENVS = 10;
+let drpyEnvS = globalMap0.getVar('drpyEnvS',{});
 let nextEnvId = 0;
 
 function createOrGetEnvironment(id, ext) {
@@ -103,7 +103,7 @@ function createOrGetEnvironment(id, ext) {
         return drpy2.DRPY();
     })();
     drpyEnvS[id].init(ext);
-    globalMap0.putMyVar('drpyEnvS', drpyEnvS);
+    globalMap0.putVar('drpyEnvS', drpyEnvS);
     return drpyEnvS[id];
 }
 
