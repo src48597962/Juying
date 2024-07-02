@@ -80,13 +80,14 @@ Function.prototype.toString = function () {
 const MAX_ENVS = 5;
 let drpyEnvS = globalMap0.getVar('drpyEnvS',{});
 let nextEnvId = 0;
-let lock = false;
+let lock = Promise.resolve();
 
 function createOrGetEnvironment(id, ext) {
-    syncExecute({
-        func: ({
-            id, ext
-        }) => {
+    //syncExecute({
+    //    func: ({
+    //        id, ext
+    //    }) => {
+    return lock = lock.then(() => {
             if (id === undefined) {
                 id = nextEnvId++;
             }
@@ -103,20 +104,24 @@ function createOrGetEnvironment(id, ext) {
                 delete drpyEnvS[oldestId];
                 log("删除后" + Object.keys(drpyEnvS).length)
             }
-                drpyEnvS[id] = (function() {
-                    let drpy2 = $.require(module.modulePath.slice(0, module.modulePath.lastIndexOf("/")) + '/drpy/drpy2.js');
-                    return drpy2.DRPY();
-                })();
-                drpyEnvS[id].init(ext);
+            drpyEnvS[id] = (function() {
+                let drpy2 = $.require(module.modulePath.slice(0, module.modulePath.lastIndexOf("/")) + '/drpy/drpy2.js');
+                return drpy2.DRPY();
+            })();
+            drpyEnvS[id].init(ext);
             
             globalMap0.putVar('drpyEnvS', drpyEnvS);
             //return drpyEnvS[id];
-        },
-        param: {
-            id, ext
-        }
+        //},
+        //param: {
+        //    id, ext
+        //}
+    //});
+    //return drpyEnvS[id];
+    
+
+        return Promise.resolve(drpyEnvS[id]);
     });
-    return drpyEnvS[id];
 }
 
 log(Object.keys(drpyEnvS).length);
