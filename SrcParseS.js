@@ -57,7 +57,7 @@ var SrcParseS = {
                 let drpy = env.createOrGetEnvironment(dataObj.sname, dataObj.surl);
                 play = JSON.parse(drpy.play(dataObj.flag, vipUrl, []));
             }else if(dataObj.stype=="hipy_t4"){
-                play = JSON.parse(fetch(dataObj.surl+'&flag='+dataObj.flag+'&play='+vipUrl, {timeout: 10000}));
+                play = JSON.parse(fetch(dataObj.surl+'&flag='+dataObj.flag+"&extend="+dataObj.sext+'&play='+vipUrl, {timeout: 10000}));
             }
             if(play.url.startsWith("pics://")){
                 return play.url;
