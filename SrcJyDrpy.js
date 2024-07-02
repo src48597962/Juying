@@ -98,6 +98,7 @@ function createOrGetEnvironment(id, ext) {
         const oldestId = Object.keys(drpyEnvS).sort((a, b) => a - b)[0];
         log(oldestId+'>drpy删除');
         delete drpyEnvS[oldestId];
+        globalMap0.putVar('drpyEnvS', drpyEnvS);
     }
 
     drpyEnvS[id] = (function() {
