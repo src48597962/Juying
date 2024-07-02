@@ -1414,6 +1414,12 @@ function getHtml(url, headers) {
 }
 // drpy接口缓存文件路径
 function getDrpyFile(jkdata) {
+/*<$>
+@include start
+http://hiker.nokia.press/hikerule/rulelist.json?id=6916&auth=1d35e8f0-22e8-5270-a9d1-826f53f177ad
+@include end
+<$>*/
+
     if (/^hiker/.test(jkdata.url)) {
         if (!fileExist(jkdata.url)) {
             if(!fileExist("hiker://files/data/"+MY_RULE.title+"/jiekou.json")){
