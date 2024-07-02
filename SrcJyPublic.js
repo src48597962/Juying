@@ -90,13 +90,15 @@ function getDatas(lx, isyx) {
                                 arr = obj;
                             }
                         }
-                        datalist.push(arr);
+                        if(arr){
+                            datalist.push(arr);
+                        }
                     })
                 }catch(e){}
             }
         }
     }
-    log(datalist);
+
     datalist.reverse();
     // 禁用的放到最后
     let withoutStop = datalist.filter(item => !item.stop);
