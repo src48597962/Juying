@@ -964,6 +964,7 @@ function getSsData(name, jkdata, page) {
             log(jkdata.name + ' 输出结果报错>' + e.message + " 错误行#" + e.lineNumber);
         }
     }
+    log(jkdata.name+'>搜索结果>'+searchs.length);
     return searchs;
 }
 
