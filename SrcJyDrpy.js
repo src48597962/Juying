@@ -105,13 +105,13 @@ function createOrGetEnvironment(id, ext, drpy2) {
                 log("删除后" + Object.keys(drpyEnvS).length)
             }
 
-            drpyEnvS[id] = (function(ext) {
+            drpyEnvS[id] = (function(id,ext) {
                 //let path = module.modulePath.slice(0, module.modulePath.lastIndexOf("/")) + '/drpy/drpy2.js';
-                let drpy2 = $.require(module.modulePath.slice(0, module.modulePath.lastIndexOf("/")) + '/drpy/drpy2.js');
+                let id = $.require(module.modulePath.slice(0, module.modulePath.lastIndexOf("/")) + '/drpy/drpy2.js');
                 //$.require.cache.delete($.require.resolve(path));
-                drpy2.init(ext);
-                return drpy2.DRPY();
-            })(ext);
+                id.init(ext);
+                return id.DRPY();
+            })(id,ext);
             //drpyEnvS[id].init(ext);
             
             return drpyEnvS[id];
