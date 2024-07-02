@@ -489,6 +489,7 @@ function dianboerji() {
                 dataObj.stype = jkdata.type;
                 dataObj.sname = jkdata.name;
                 dataObj.surl = jkdata.url.startsWith('hiker://')?getPath(jkdata.url):jkdata.url;
+                dataObj.sext = jkdata.ext;
             }
             let novel = erdata.detailtype=="小说";
             if(novel){
@@ -500,7 +501,7 @@ function dianboerji() {
                         let drpy = env.createOrGetEnvironment(dataObj.sname, dataObj.surl);
                         play = JSON.parse(drpy.play(dataObj.flag, vipUrl, []));
                     }else if(dataObj.stype=="hipy_t4"){
-                        play = JSON.parse(request(dataObj.surl+'&flag='+dataObj.sname+'&play='+vipUrl));
+                        play = JSON.parse(request(dataObj.surl+'&flag='+dataObj.sname+"&extend="+dataObj.sext+'&play='+vipUrl));
                     }
                     let data = JSON.parse(play.url.replace('novel://',''));
                     let d = [];
