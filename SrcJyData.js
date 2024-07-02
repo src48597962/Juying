@@ -96,7 +96,7 @@ function getYiData(jkdata) {
             listurl = rule.filter_url || rule.host;
         }
     } else if (api_type == "hipy_t4") {
-        classurl = api_url + "&filter=true";
+        classurl = api_url + "&extend=" + jkdata.ext + "&filter=true";
         listurl = api_url + "&t={cate_id}&ac=detail&pg="+MY_PAGE+"&extend="+jkdata.ext+"&ext={flb64}";
         //listnode = "json.list";
     } else {
@@ -471,7 +471,6 @@ function getYiData(jkdata) {
             vodlists = [];
             let vod_name, vod_pic, vod_url, vod_desc;
             if (api_type=="hipy_t4") {
-                log(MY_URL);
                 let vodlist = JSON.parse(getHtml(MY_URL, headers)).list || [];
                 vodlist.forEach(it=>{
                     vodlists.push({ "vod_url": it.vod_id.toString(), "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic });
@@ -729,7 +728,7 @@ function getSsData(name, jkdata, page) {
         if (/v1|app|iptv|v2|cms|hipy_/.test(api_type)) {
             let json;
             if(api_type=="hipy_t4"){
-                json = JSON.parse(getHtml(jkdata.url+"&wd="+name+"&quick=false", headers));
+                json = JSON.parse(getHtml(jkdata.url+"&wd="+name+"&extend="+jkdata.ext+"&quick=false", headers));
             }else if(api_type=="hipy_t3"){
                 let apifile = getDrpyFile(jkdata);
                 if(apifile){
@@ -1014,7 +1013,7 @@ function getErData(jkdata) {
             html = '{}';
         }
     } else if (api_type=="hipy_t4") {
-        html = getHtml(jkdata.url+"&ac=detail&ids="+MY_PARAMS.url, headers);
+        html = getHtml(jkdata.url+"&extend="+jkdata.ext+"&ac=detail&ids="+MY_PARAMS.url, headers);
         detailtype = JSON.parse(html).type || (jkdata.name.includes('[书]')?"小说":"");
     } else {
         html = getHtml(MY_URL, headers);
