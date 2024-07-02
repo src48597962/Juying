@@ -82,7 +82,7 @@ let drpyEnvS = globalMap0.getVar('drpyEnvS',{});
 let nextEnvId = 0;
 
 function createOrGetEnvironment(id, ext) {
-    log(Object.keys(drpyEnvS).length);
+    
     if (id === undefined) {
     id = nextEnvId++;
     }
@@ -107,7 +107,7 @@ function createOrGetEnvironment(id, ext) {
     globalMap0.putVar('drpyEnvS', drpyEnvS);
     return drpyEnvS[id];
 }
-
+console.log(Object.keys(drpyEnvS).length);
 $.exports = {
     createOrGetEnvironment
 }
