@@ -733,7 +733,7 @@ function getSsData(name, jkdata, page) {
             }else if(api_type=="hipy_t3"){
                 let apifile = getDrpyFile(jkdata);
                 if(apifile){
-                    let env = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
+                    let env = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js", false);
                     let drpy = env.createOrGetEnvironment(jkdata.name, apifile);
                     json = JSON.parse(drpy.search(name, 0, page));
                 }else{
@@ -1006,7 +1006,7 @@ function getErData(jkdata) {
     } else if (api_type=="hipy_t3") {
         let apifile = getDrpyFile(jkdata);
         if(apifile){
-            let env = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
+            let env = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js", false);
             var drpy = env.createOrGetEnvironment(jkdata.name, apifile);
             html = drpy.detail(MY_PARAMS.url);
             detailtype = drpy.getRule('类型') || (jkdata.name.includes('[书]')?"小说":"");
