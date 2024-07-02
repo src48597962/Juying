@@ -1499,12 +1499,12 @@ function resource() {
     setPageTitle("资源管理");
     let d = [];
     d.push({
-        title: '🎁 资源导入类型',
+        title: '🎁 选择资源类型',
         col_type: "rich_text"
     });
     let importtype = getMyVar('importtype','1');
     d.push({
-        title: (importtype=="1"?"👉":"")+"TVBox导入",
+        title: (importtype=="1"?"👉":"")+"box配置文件导入",
         col_type: 'scroll_button',
         url: $('#noLoading#').lazyRule(() => {
             putMyVar('importtype','1');
@@ -1513,7 +1513,7 @@ function resource() {
         })
     });
     d.push({
-        title: (importtype=="2"?"👉":"")+"道长hipy库",
+        title: (importtype=="2"?"👉":"")+"道长hipy库导入",
         col_type: 'scroll_button',
         url: $('#noLoading#').lazyRule(() => {
             putMyVar('importtype','2');
@@ -1645,17 +1645,16 @@ function resource() {
                 if(input==""){
                     return 'toast://请先输入链接地址'
                 }
-                if(input.startsWith('http')){
-                    let importrecord = Juconfig['importrecord']||[];
-                    if(importrecord.length>20){//保留20个记录
-                        importrecord.shift();
-                    }
-                    if(!importrecord.some(item => item.url==input && item.type==getMyVar('importtype','1'))){
-                        importrecord.push({type:getMyVar('importtype','1'),url:input});
-                        Juconfig['importrecord'] = importrecord;
-                        writeFile(cfgfile, JSON.stringify(Juconfig));
-                    }
+                let importrecord = Juconfig['importrecord']||[];
+                if(importrecord.length>20){//保留20个记录
+                    importrecord.shift();
                 }
+                if(!importrecord.some(item => item.url==input && item.type==getMyVar('importtype','1'))){
+                    importrecord.push({type:getMyVar('importtype','1'),url:input});
+                    Juconfig['importrecord'] = importrecord;
+                    writeFile(cfgfile, JSON.stringify(Juconfig));
+                }
+                
                 if(input.startsWith('/storage/emulated')){input = "file://" + input}
 
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
