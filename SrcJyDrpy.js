@@ -96,6 +96,7 @@ function createOrGetEnvironment(id, ext) {
 
     if (Object.keys(drpyEnvS).length >= MAX_ENVS) {
         const oldestId = Object.keys(drpyEnvS).sort((a, b) => a - b)[0];
+        log(oldestId+'>drpy删除');
         delete drpyEnvS[oldestId];
     }
 
