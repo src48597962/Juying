@@ -106,9 +106,9 @@ function createOrGetEnvironment(id, ext, drpy2) {
             }
 
             drpyEnvS[id] = (function(id,ext) {
-                //let path = module.modulePath.slice(0, module.modulePath.lastIndexOf("/")) + '/drpy/drpy2.js';
-                let id = $.require(module.modulePath.slice(0, module.modulePath.lastIndexOf("/")) + '/drpy/drpy2.js');
-                //$.require.cache.delete($.require.resolve(path));
+                let path = module.modulePath.slice(0, module.modulePath.lastIndexOf("/")) + '/drpy/drpy2.js';
+                let id = $.require(path);
+                $.require.cache.delete($.require.resolve(path));
                 id.init(ext);
                 return id.DRPY();
             })(id,ext);
