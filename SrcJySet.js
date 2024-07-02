@@ -228,22 +228,6 @@ function SRCSet() {
         })
         if(guanliType=='jk'){
             d.push({
-                title: "禁用所选",
-                url: $('#noLoading#').lazyRule(() => {
-                    let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
-                    if(duoselect.length==0){
-                        return "toast://未选择";
-                    }
-                    return $("确定要禁用选择的"+duoselect.length+"个接口？").confirm((duoselect)=>{
-                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
-                        dataEnable(getMyVar('guanli', 'jk'), duoselect, '禁用');
-                        refreshPage(false);
-                        return 'toast://已禁用选择';
-                    },duoselect)
-                }),
-                col_type: 'scroll_button'
-            })
-            d.push({
                 title: "调整分组",
                 url: $('#noLoading#').lazyRule(()=>{
                         let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
@@ -273,6 +257,38 @@ function SRCSet() {
                     }),
                 col_type: "scroll_button"
             });
+            d.push({
+                title: "禁用所选",
+                url: $('#noLoading#').lazyRule(() => {
+                    let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
+                    if(duoselect.length==0){
+                        return "toast://未选择";
+                    }
+                    return $("确定要禁用选择的"+duoselect.length+"个接口？").confirm((duoselect)=>{
+                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                        dataEnable(getMyVar('guanli', 'jk'), duoselect, '禁用');
+                        refreshPage(false);
+                        return 'toast://已禁用选择';
+                    },duoselect)
+                }),
+                col_type: 'scroll_button'
+            })
+            d.push({
+                title: "启用所选",
+                url: $('#noLoading#').lazyRule(() => {
+                    let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
+                    if(duoselect.length==0){
+                        return "toast://未选择";
+                    }
+                    return $("确定要启用选择的"+duoselect.length+"个接口？").confirm((duoselect)=>{
+                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                        dataEnable(getMyVar('guanli', 'jk'), duoselect, '启用');
+                        refreshPage(false);
+                        return 'toast://已启用选择';
+                    },duoselect)
+                }),
+                col_type: 'scroll_button'
+            })
         }
     }
 
