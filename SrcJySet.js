@@ -1623,24 +1623,24 @@ function resource() {
                 for(let i=0;i<lists.length;i++){
                     d.push({
                         title: lists[i].url,
-                        url: $(["选择","删除"],1,"").select((Juconfig, cfgfile, url)=>{
-                                if(input=="选择"){
-                                    putMyVar('importinput', url);
-                                    back(true);
-                                }else if(input=="删除"){
-                                    let importrecord = Juconfig['importrecord']||[];
-                                    for(let j=0;j<importrecord.length;i++){
-                                        if(importrecord[j].url==url&&importrecord[j].type==getMyVar('importtype','1')){
-                                            importrecord.splice(j,1);
-                                            break;
-                                        }
+                        url: $(["选择","删除"], 1 ,"").select((Juconfig, cfgfile, url)=>{
+                            if(input=="选择"){
+                                putMyVar('importinput', url);
+                                back(true);
+                            }else if(input=="删除"){
+                                let importrecord = Juconfig['importrecord']||[];
+                                for(let j=0;j<importrecord.length;j++){
+                                    if(importrecord[j].url==url&&importrecord[j].type==getMyVar('importtype','1')){
+                                        importrecord.splice(j,1);
+                                        break;
                                     }
-                                    Juconfig['importrecord'] = importrecord; 
-                                    writeFile(cfgfile, JSON.stringify(Juconfig));
-                                    refreshPage(false);
                                 }
-                                return "hiker://empty";
-                            }, Juconfig, cfgfile, lists[i].url),
+                                Juconfig['importrecord'] = importrecord; 
+                                writeFile(cfgfile, JSON.stringify(Juconfig));
+                                refreshPage(false);
+                            }
+                            return "hiker://empty";
+                        }, Juconfig, cfgfile, lists[i].url),
                         col_type: "text_1"
                     });
                 }
