@@ -147,5 +147,6 @@ function clear() {
 }
 $.exports = {
     getDrpy,
-    clear
+    clear,
+    put
 }
