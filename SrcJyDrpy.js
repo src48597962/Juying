@@ -17,8 +17,8 @@ function sync(func, sp) {
     return new org.mozilla.javascript.Synchronizer(func, sp || {});
 }
 
-function createDrpy(key) {
-    JSEngine.getInstance().evalJS(buildJsEnv(MY_TICKET) + "\n!" + $.toString((key, GMkey, MY_TICKET) => {
+function createDrpy(key,path) {
+    JSEngine.getInstance().evalJS(buildJsEnv(MY_TICKET) + "\n!" + $.toString((key, path, GMkey, MY_TICKET) => {
         const localKey = "drpy";
         globalThis.local = {
             set(rulekey, k, v) {
@@ -95,22 +95,22 @@ function createDrpy(key) {
         Function.prototype.toString = function () {
             return $toString.apply(this).trim();
         };
-        let drpy2 = $.require(module.modulePath.slice(0, module.modulePath.lastIndexOf("/")) +'/drpy/drpy2.js');
+        let drpy2 = $.require(path +'drpy/drpy2.js');
         GM.has(GMkey, (DrpyManage) => {
             DrpyManage.put(key, drpy2);
         });
-    }, key, GMkey, MY_TICKET) + ";\n", "", false);
+    }, key, path, GMkey, MY_TICKET) + ";\n", "", false);
 }
 
 function createNewDrpy(source) {
     let key = source.key;
-    createDrpy(key);
+    createDrpy(key,source.path);
     let drpy = drpyMap.get(key);
     drpy.init(source.ext);
     return drpy;
 }
 
-function getDrpy(key,ext) {
+function getDrpy(key,ext,path) {
     return sync(() => {
         //log(drpyMap.size)
         if (drpyMap.has(key)) {
@@ -120,7 +120,7 @@ function getDrpy(key,ext) {
             //log("请求:" + key)
             del(Array.from(drpyMap.keys()).at(0));
         }
-        let source = {key:key,ext:ext};
+        let source = {key:key,ext:ext,path:path};
         let drpy = createNewDrpy(source);
         return drpy;
     }, this).call();
