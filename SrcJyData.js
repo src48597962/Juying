@@ -92,7 +92,7 @@ function getYiData(jkdata) {
             //let env = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
             //let env = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js");
             //var drpy = env.getDrpy(api_name, apifile, config.依赖.match(/http(s)?:\/\/.*\//)[0]);
-            var drpy = $.require(apifile, config.依赖.match(/http(s)?:\/\/.*\//)[0]);
+            var drpy = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js').get(apifile, config.依赖.match(/http(s)?:\/\/.*\//)[0]);
             let rule = drpy.getRule();
             classurl = rule.homeUrl || rule.host;
             listurl = rule.filter_url || rule.host;
