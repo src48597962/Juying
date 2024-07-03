@@ -736,7 +736,7 @@ function getSsData(name, jkdata, page) {
                 if(apifile){
                     //let env = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js");
                     //let drpy = env.getDrpy(api_name, apifile, config.依赖.match(/http(s)?:\/\/.*\//)[0]);
-                    var drpy = $.require(apifile, config.依赖.match(/http(s)?:\/\/.*\//)[0]);
+                    var drpy = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(apifile, config.依赖.match(/http(s)?:\/\/.*\//)[0]);
                     json = JSON.parse(drpy.search(name, 0, page));
                 }else{
                     json = {};
