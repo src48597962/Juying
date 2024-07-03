@@ -81,7 +81,7 @@ function get(ext,path) {
     drpy2.init(ext);
     return drpy2;
 }
-log(module.importParam);
+
 $.exports = {
     get
 }
