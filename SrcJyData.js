@@ -89,9 +89,9 @@ function getYiData(jkdata) {
     } else if (api_type == 'hipy_t3') {
         let apifile = getDrpyFile(jkdata);
         if(apifile){
-            let env = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
-            //let env = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js");
-            var drpy = env.createOrGetEnvironment(api_name, apifile);
+            //let env = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
+            let env = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js");
+            var drpy = env.getDrpy(api_name, apifile);
             let rule = drpy.getRule();
             classurl = rule.homeUrl || rule.host;
             listurl = rule.filter_url || rule.host;
