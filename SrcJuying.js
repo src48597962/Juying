@@ -738,7 +738,7 @@ function dianboyiji() {
                     }else{
                         return 'toast://无结果';
                     }
-                    return 'hikery://empty';
+                    return 'hiker://empty';
                 }
             },jkdata);
             
