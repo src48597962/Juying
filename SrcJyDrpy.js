@@ -1,5 +1,4 @@
 const testPath = module.modulePath.slice(0, module.modulePath.lastIndexOf("/")) + "/";
-log(testPath);
 const JSEngine = com.example.hikerview.service.parser.JSEngine;
 const drpyMap = new Map();
 const GMkey = module.importParam;
@@ -19,7 +18,7 @@ function sync(func, sp) {
     return new org.mozilla.javascript.Synchronizer(func, sp || {});
 }
 
-function createDrpy(key,path) {
+function createDrpy(key) {
     JSEngine.getInstance().evalJS(buildJsEnv(MY_TICKET) + "\n!" + $.toString((key, path, GMkey, MY_TICKET) => {
         const localKey = "drpy";
         globalThis.local = {
@@ -101,7 +100,7 @@ function createDrpy(key,path) {
         GM.has(GMkey, (DrpyManage) => {
             DrpyManage.put(key, drpy2);
         });
-    }, key, path, GMkey, MY_TICKET) + ";\n", "", false);
+    }, key, testPath, GMkey, MY_TICKET) + ";\n", "", false);
 }
 
 function createNewDrpy(source) {
@@ -112,7 +111,7 @@ function createNewDrpy(source) {
     return drpy;
 }
 
-function get(key,ext,path) {
+function get(key,ext) {
     return sync(() => {
         log(drpyMap.size)
         if (drpyMap.has(key)) {
@@ -123,7 +122,7 @@ function get(key,ext,path) {
             log("删除缓存")
             del(Array.from(drpyMap.keys()).at(0));
         }
-        let source = {key:key,ext:ext,path:path};
+        let source = {key:key,ext:ext};
         let drpy = createNewDrpy(source);
         return drpy;
     }, this).call();
