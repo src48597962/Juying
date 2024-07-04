@@ -89,10 +89,7 @@ function getYiData(jkdata) {
     } else if (api_type == 'hipy_t3') {
         let apifile = getDrpyFile(jkdata);
         if(apifile){
-            //let env = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
-            //let env = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js");
-            var drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(api_name, apifile, config.依赖.match(/http(s)?:\/\/.*\//)[0]);
-            //var drpy = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js').get(apifile, config.依赖.match(/http(s)?:\/\/.*\//)[0]);
+            var drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(api_name, apifile);
             let rule = drpy.getRule();
             classurl = rule.homeUrl || rule.host;
             listurl = rule.filter_url || rule.host;
@@ -734,9 +731,7 @@ function getSsData(name, jkdata, page) {
             }else if(api_type=="hipy_t3"){
                 let apifile = getDrpyFile(jkdata);
                 if(apifile){
-                    //let env = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js");
-                    //let drpy = env.getDrpy(api_name, apifile, config.依赖.match(/http(s)?:\/\/.*\//)[0]);
-                    var drpy = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(apifile, config.依赖.match(/http(s)?:\/\/.*\//)[0]);
+                    var drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(api_name, apifile);
                     json = JSON.parse(drpy.search(name, 0, page));
                 }else{
                     json = {};
@@ -1008,8 +1003,7 @@ function getErData(jkdata) {
     } else if (api_type=="hipy_t3") {
         let apifile = getDrpyFile(jkdata);
         if(apifile){
-            let env = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js", false);
-            var drpy = env.createOrGetEnvironment(jkdata.name, apifile);
+            var drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(api_name, apifile);
             html = drpy.detail(MY_PARAMS.url);
             detailtype = drpy.getRule('类型') || (jkdata.name.includes('[书]')?"小说":"");
         }else{
