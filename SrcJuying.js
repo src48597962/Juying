@@ -138,9 +138,7 @@ function erjisousuo(name,group) {
         });
     }
 
-    let ssdatalist = getSearchLists().filter(it=>{
-        return group==(it.group||it.type);
-    });
+    let ssdatalist = getSearchLists(group);
     let nosousuolist = storage0.getMyVar('nosousuolist') || [];
     if (nosousuolist.length>0){
         ssdatalist = ssdatalist.filter(it => {
