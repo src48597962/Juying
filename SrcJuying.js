@@ -84,19 +84,16 @@ function sousuo() {
         extra: {
             delegateOnlySearch: true,
             rules: $.toString((name,jkdata) => {
-                let yxdatalist = [];
+                let ssdatalist = [];
                 if(jkdata){
-                    yxdatalist.push(jkdata);
+                    ssdatalist.push(jkdata);
                 }else{
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
-                    let datalist = getDatas('jk');
-                    yxdatalist = datalist.filter(it=>{
-                        return !it.stop && it.searchable!=0;
-                    });
+                    ssdatalist = getSearchLists();
                 }
 
                 let judata = [];
-                yxdatalist.forEach(it=>{
+                ssdatalist.forEach(it=>{
                     judata.push({
                         "title": it.name,
                         "search_url": "hiker://empty##fypage",
@@ -140,9 +137,9 @@ function erjisousuo(name,group) {
             title: "搜源中..."
         });
     }
-    let datalist = getDatas('jk',1);
-    let ssdatalist = datalist.filter(it=>{
-        return it.searchable!=0 && group==(it.group||it.type);
+
+    let ssdatalist = getSearchLists().filter(it=>{
+        return group==(it.group||it.type);
     });
     let nosousuolist = storage0.getMyVar('nosousuolist') || [];
     if (nosousuolist.length>0){
@@ -621,7 +618,18 @@ function dianboyiji() {
         })
         d.push({
             title: "搜索方式",
-            url: $(["代理聚搜","软件搜索","当前页面"],1).select(()=>{
+            url: $(["代理聚搜","海阔搜索","当前页面","搜索接口"],1).select(()=>{
+                if(input=="搜索接口"){
+                    return $(["优选的接口","排位前50"],1).select(()=>{
+                        if(input=="优选的接口"){
+                            setItem("搜索优选接口","1");
+                            return "toast://聚搜和二级切源时只选取优选的接口"
+                        }else{
+                            clearItem("搜索优选接口");
+                            return "toast://聚搜和二级切源时取自动排序后前50"
+                        }
+                    })
+                }
                 setItem("接口搜索方式",input);
                 return "toast://搜索方式设置为："+input;
             }),
@@ -719,7 +727,7 @@ function dianboyiji() {
                     }, input, data);
                     */
             let searchurl = $('').lazyRule((jkdata) => {
-                if(getItem('接口搜索方式','软件搜索')=="软件搜索"){
+                if(getItem('接口搜索方式','海阔搜索')=="海阔搜索"){
                     if(jkdata){
                         storage0.putMyVar('搜索临时搜索数据', jkdata);
                         return 'hiker://search?s='+input+'  '+'&rule='+MY_RULE.title;
