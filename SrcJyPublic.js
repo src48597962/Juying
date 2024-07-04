@@ -138,6 +138,22 @@ function getGroupLists(datas, k) {
     }
     return datas;
 }
+//获取搜索接口列表
+function getSearchLists() {
+    let datalist = getDatas('jk', 1).filter(it=>{
+        return it.searchable!=0;
+    });
+    datalist.sort((a, b) => {
+        return b.sort - a.sort
+    })
+    if(getItem('SrcJu_PreferrSearch')){
+        return datalist.filter(it=>{
+            return it.preferr;
+        });
+    }else{
+        return datalist.slice(0, 50);
+    }
+}
 //获取接口分组名arry
 function getJiekouGroups(datas) {
     let groupNams = [];
