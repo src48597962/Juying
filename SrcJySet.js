@@ -1953,21 +1953,21 @@ function JYshare(lx,input) {
         var sm = "聚影解析";
     }
     
-    let jkdatalist;
+    let sharelist;
     let sm2 = "聚影分享口令已生成";
     let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
     if(duoselect.length>0){
-        jkdatalist = duoselect;
+        sharelist = duoselect;
         sm2 = "(选定)聚影分享口令已生成";
     }else{
         let datalist = getDatas(lx);
         let group = lx=='jk'?getMyVar("SrcJu_jiekouGroup",""):"";
-        jkdatalist = getGroupLists(datalist, group);
+        sharelist = getGroupLists(datalist, group);
     }
     if(input=='云口令文件'){
-        let sharetxt = base64Encode(JSON.stringify(jkdatalist));
+        let sharetxt = base64Encode(JSON.stringify(sharelist));
         let code = sm + '￥' + aesEncode('Juying', sharetxt) + '￥云口令文件';
-        let sharefile = 'hiker://files/_cache/Juying_'+jkdatalist.length+'_'+$.dateFormat(new Date(),"HHmmss")+'.hiker';
+        let sharefile = 'hiker://files/_cache/Juying_'+sharelist.length+'_'+$.dateFormat(new Date(),"HHmmss")+'.hiker';
         writeFile(sharefile, '云口令：'+code+`@import=js:$.require("hiker://page/import?rule=聚影✓");`);
         if(fileExist(sharefile)){
             return 'share://'+sharefile;
@@ -1976,10 +1976,10 @@ function JYshare(lx,input) {
         }
     }else{
         showLoading('分享生成中，请稍后...');
-        let pasteurl = sharePaste(base64Encode(JSON.stringify(jkdatalist)), input);
+        let pasteurl = sharePaste(base64Encode(JSON.stringify(sharelist)), input);
         hideLoading();
         if(/^http|^云/.test(pasteurl) && pasteurl.includes('/')){
-            let code = sm+'￥'+aesEncode('Juying', pasteurl)+'￥共' + jkdatalist.length + '条('+input+')';
+            let code = sm+'￥'+aesEncode('Juying', pasteurl)+'￥共' + sharelist.length + '条('+input+')';
             copy('云口令：'+code+`@import=js:$.require("hiker://page/import?rule=聚影✓");`);
             return "toast://"+sm2;
         }else{
