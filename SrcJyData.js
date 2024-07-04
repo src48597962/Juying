@@ -1004,7 +1004,7 @@ function getErData(jkdata) {
     } else if (api_type=="hipy_t3") {
         let apifile = getDrpyFile(jkdata);
         if(apifile){
-            var drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(api_name, apifile);
+            let drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(api_name, apifile);
             html = drpy.detail(MY_PARAMS.url);
             detailtype = drpy.getRule('类型') || (jkdata.name.includes('[书]')?"小说":"");
         }else{
