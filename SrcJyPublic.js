@@ -139,14 +139,18 @@ function getGroupLists(datas, k) {
     return datas;
 }
 //获取搜索接口列表
-function getSearchLists() {
+function getSearchLists(group) {
     let datalist = getDatas('jk', 1).filter(it=>{
         return it.searchable!=0;
     });
     datalist.sort((a, b) => {
         return b.sort - a.sort
     })
-    if(getItem('SrcJu_PreferrSearch')){
+    if(group){
+        return datalist.filter(it=>{
+            return group==(it.group||it.type);
+        });
+    }else if(getItem('搜索优选接口')){
         return datalist.filter(it=>{
             return it.preferr;
         });
