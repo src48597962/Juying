@@ -967,6 +967,7 @@ function getSsData(name, jkdata, page) {
 // 获取二级数据
 function getErData(jkdata) {
     let api_type = jkdata.type;
+    let api_name = jkdata.name;
     let api_ua = jkdata.ua || "MOBILE_UA";
     api_ua = api_ua == "MOBILE_UA" ? MOBILE_UA : api_ua == "PC_UA" ? PC_UA : api_ua;
     let headers = { 'User-Agent': api_ua };
