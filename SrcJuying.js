@@ -497,8 +497,7 @@ function dianboerji() {
                     let vipUrl = MY_URL.split('##')[1].split('#')[0];
                     let play;
                     if(dataObj.stype=="hipy_t3"){
-                        let env = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyDrpy.js');
-                        let drpy = env.createOrGetEnvironment(dataObj.sname, dataObj.surl);
+                        let drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(dataObj.sname, dataObj.surl);
                         play = JSON.parse(drpy.play(dataObj.flag, vipUrl, []));
                     }else if(dataObj.stype=="hipy_t4"){
                         play = JSON.parse(request(dataObj.surl+'&flag='+dataObj.sname+"&extend="+dataObj.sext+'&play='+vipUrl));
