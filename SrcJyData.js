@@ -731,7 +731,7 @@ function getSsData(name, jkdata, page) {
             }else if(api_type=="hipy_t3"){
                 let apifile = getDrpyFile(jkdata);
                 if(apifile){
-                    var drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(api_name, apifile);
+                    let drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(api_name, apifile);
                     json = JSON.parse(drpy.search(name, 0, page));
                 }else{
                     json = {};
