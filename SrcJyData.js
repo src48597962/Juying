@@ -1353,6 +1353,7 @@ function getErData(jkdata) {
             lists = json.vod_play_url.split('$$$').map(it => {
                 return it.split('#');
             });
+            log(lists);
         }
 
         if (/XPath|biubiu|XBPQ|XYQ/.test(api_type) && html && (tabs.length == 0 || lists.length == 0) && getMyVar('debug', '0') == "0" && html.indexOf(MY_PARAMS.pageTitle) > -1) {
