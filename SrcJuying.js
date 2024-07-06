@@ -321,13 +321,9 @@ function dianboerji() {
                 cls: "Juloadlist"
             }
         })
-        log(erdata.tabs);
-        if(erdata.tabs.length>erdata.lists.length){
-            erdata.tabs = erdata.tabs.slice(0, erdata.lists.length-1);
-        }
-        log(erdata.tabs);
+
         erdata.tabs.forEach((it,i)=>{
-            if(it){
+            if(it && !/播放错误会自动换源/.test(it)){
                 d.push({
                     title: lineid == i ? getHead(it,Color1,1) : getHead(it,Color2),
                     url: $("#noLoading#").lazyRule((url, nowid, newid, Marksum) => {
