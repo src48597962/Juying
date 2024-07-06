@@ -1494,8 +1494,8 @@ function manageSet(){
                 let nowtime = Date.now();
                 if (parseFloat(newVersion.SrcJuying) > parseFloat(nowVersion)) {
                     confirm({
-                        title:'发现新版本，是否更新？', 
-                        content:nowVersion+'=>'+newVersion.SrcJuying+'\n'+newVersion.SrcJuyingdesc[newVersion.SrcJuying], 
+                        title: '发现新版本，是否更新？', 
+                        content: '现版本V'+nowVersion+'=>新版本V'+newVersion.SrcJuying, 
                         confirm: $.toString((nowtime,newVersion) => {
                             setItem('Version', newVersion);
                             setItem('VersionChecktime', nowtime+'time');
@@ -1519,6 +1519,9 @@ function manageSet(){
         img: 'https://hikerfans.com/tubiao/system/100.png',
         col_type: 'text_icon',
         url: config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'img/pay.jpg'
+    });
+    d.push({
+        col_type: "line_blank"
     });
     d.push({
         title: '免责说明',
