@@ -525,12 +525,12 @@ function dianboerji() {
 
             let playSet = storage0.getItem('playSet') || {};
             let listone = 列表[0].split('$')[0];
-            listone = listone==name?listone:listone.replace(name,"").trim();
+            listone = listone==name?'正片':listone.replace(name,"").trim();
             let len = listone.length;
             let col_type = 列表.length > 4 && len < 7 ? 'text_4' : len > 20 ? 'text_1' :'text_3';
             for(let i=0; i<列表.length; i++) {
                 let playtitle = 列表[i].split('$')[0];
-                playtitle = playtitle==name?playtitle:playtitle.replace(name,"").trim();
+                playtitle = playtitle==name?'正片':playtitle.replace(name,"").trim();
                 let playurl = (novel?"hiker://empty##":"")+列表[i].split('$')[1].trim();
 
                 let extra = {
