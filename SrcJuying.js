@@ -215,13 +215,18 @@ function dianboerji() {
     },getHistory));
 
     let sextra = storage0.getMyVar('二级附加临时对象') || {};//二级换源时临时extra数据
-    let d = [];
-    
+
     MY_URL = sextra.url || MY_PARAMS.url;
     let jkdata = sextra.data || MY_PARAMS.data;
     let name = MY_PARAMS.pageTitle;
     let sgroup = jkdata.group||jkdata.type;
     let sname = jkdata.name;
+    let updateItemid = sgroup + "_" + name + "_loading";
+
+    if(sextra.url){
+        updateItemid = updateItemid + '2';
+        clearMyVar('二级附加临时对象');
+    }
     
     let detailsmark;
     let cacheDataFile = "hiker://files/_cache/SrcJuying_details.json";
@@ -252,6 +257,7 @@ function dianboerji() {
     if(pic && pic!=MY_PARAMS.pic && !/^hiker/.test(pic)){
         setPagePicUrl(pic);
     }
+    let d = [];
     //海报
     d.push({
         title: details1,//详情1
@@ -574,7 +580,7 @@ function dianboerji() {
         url: 'toast://温馨提示：且用且珍惜！',
         col_type: 'text_center_1',
         extra: {
-            id: sgroup + "_" + name + "_loading",
+            id: updateItemid,
             lineVisible: false
         }
     });
