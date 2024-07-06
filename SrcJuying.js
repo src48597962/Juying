@@ -1285,13 +1285,13 @@ function Version() {
     var nowVersion = getItem('Version', "7.9");//现在版本 
     var nowtime = Date.now();
     var oldtime = parseInt(getItem('VersionChecktime','0').replace('time',''));
-    if (nowtime > (oldtime+12*60*60*1000)) {
+    if (nowtime > (oldtime+24*60*60*1000)) {
         try {
             eval(request(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcTmplVersion.js'))
             if (parseFloat(newVersion.SrcJuying) > parseFloat(nowVersion)) {
                 confirm({
                     title:'发现新版本，是否更新？', 
-                    content:nowVersion+'=>'+newVersion.SrcJuying+'\n'+newVersion.SrcJuyingdesc[newVersion.SrcJuying], 
+                    content:'现版本V'+nowVersion+'=>新版本V'+newVersion.SrcJuying, 
                     confirm: $.toString((nowtime,newVersion) => {
                         setItem('Version', newVersion);
                         setItem('VersionChecktime', nowtime+'time');
