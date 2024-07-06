@@ -397,7 +397,13 @@ function jiekousave(urls, mode) {
     if(urls.length==0){return 0;}
     let num = 0;
     try{
-        let datalist = getDatas('jk');
+        let datalist = [];
+        let sourcedata = fetch(jkfile);
+        if(sourcedata != ""){
+            try{
+                eval("datalist=" + sourcedata+ ";");
+            }catch(e){}
+        }
         if(mode==1){//全量模式时，先删除本地
             for(let i=0;i<datalist.length;i++){
                 if(datalist[i].retain!=1){
@@ -450,7 +456,13 @@ function jiexisave(urls, mode) {
     if(urls.length==0){return 0;}
     let num = 0;
     try{
-        let datalist = getDatas('jx');
+        let datalist = [];
+        let sourcedata = fetch(jxfile);
+        if(sourcedata != ""){
+            try{
+                eval("datalist=" + sourcedata+ ";");
+            }catch(e){}
+        }
         if(mode==1){
             for(let i=0;i<datalist.length;i++){
                 if(datalist[i].retain!=1){
