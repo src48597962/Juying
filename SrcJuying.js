@@ -58,6 +58,10 @@ function search(name, sstype, jkdata) {
                 url: "hiker://empty##"+ it.vodurl + $("#noLoading#").lazyRule((extra) => {
                     delete extra['cls'];
                     storage0.putMyVar('二级附加临时对象', extra);
+                    let updateItemid = (extra.data.group||extra.data.type) + "_" +extra.data.name + "_loading";
+                    updateItem(updateItemid, {
+                        extra: {"id":updateItemid+'2',"lineVisible":false}
+                    })
                     refreshPage(false);
                     return "toast://已切换源：" + extra.data.name;
                 }, extra),
@@ -109,6 +113,9 @@ function sousuo() {
 function erjisousuo(name,group) {
     showLoading('搜源中，请稍后...');
     let updateItemid = group + "_" +name + "_loading";
+    updateItem(updateItemid+'2', {
+        extra: {"id":updateItemid,"lineVisible":false}
+    })
     let searchMark = storage0.getMyVar('SrcJu_searchMark') || {};//二级换源缓存
     let markId = group+'_'+name;
     if(searchMark[markId]){
