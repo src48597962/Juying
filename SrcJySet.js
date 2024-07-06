@@ -1451,18 +1451,15 @@ function manageSet(){
         col_type: "line"
     });
     */
+    
     d.push({
-        col_type: "blank_block"
+        col_type: "line_block"
     });
-
     d.push({
-        title: '💝 关于聚影',
-        desc: '这是一个空壳小程序，仅用于个人学习研究！',
-        col_type: 'text_1',
-        url: 'toast://哥就是帅',
-        extra:{
-            lineVisible:false
-        }
+        title: '关于聚影',
+        img: 'hiker://files/cache/src/聚影.png',
+        col_type: 'avatar',
+        url: 'toast://哥就是帅'
     });
     d.push({
         title: '更新日志',
@@ -1480,7 +1477,7 @@ function manageSet(){
         })
     });
     d.push({
-        title: '<br>',
+        title: '这是一个空壳小程序，仅用于个人学习研究！<br>',
         col_type: 'rich_text'
     });
     setResult(d);
