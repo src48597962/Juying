@@ -55,16 +55,16 @@ function search(name, sstype, jkdata) {
                 title: it.voddesc||"正片",
                 desc: jkdata.name,
                 pic_url: it.vodpic,
-                url: "hiker://empty##"+ it.vodurl + $("#noLoading#").lazyRule((extra) => {
+                url: "hiker://empty##"+ it.vodurl + $("#noLoading#").lazyRule((extra,name) => {
                     delete extra['cls'];
                     storage0.putMyVar('二级附加临时对象', extra);
-                    let updateItemid = (extra.data.group||extra.data.type) + "_" +extra.data.name + "_loading";
+                    let updateItemid = (extra.data.group||extra.data.type) + "_" + name + "_loading";
                     updateItem(updateItemid, {
                         extra: {"id":updateItemid+'2',"lineVisible":false}
                     })
                     refreshPage(false);
                     return "toast://已切换源：" + extra.data.name;
-                }, extra),
+                }, extra, name),
                 col_type: 'avatar',
                 extra: extra
             }
