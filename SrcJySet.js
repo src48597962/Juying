@@ -1469,7 +1469,7 @@ function manageSet(){
         img: 'https://hikerfans.com/tubiao/system/72.png',
         col_type: 'text_icon',
         url: $("#noLoading#").lazyRule(() => {
-            let newVersion = eval(fetch(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcTmplVersion.js'));
+            eval(fetch(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcTmplVersion.js'));
             let updateRecords = newVersion.JYUpdateRecords || [];
             updateRecords.reverse();
 
