@@ -1486,7 +1486,7 @@ function manageSet(){
     });
     d.push({
         title: '免责说明',
-        img: 'https://hikerfans.com/tubiao/messy/156.svg',
+        img: 'https://hikerfans.com/tubiao/messy/155.svg',
         col_type: 'avatar',
         url: 'hiker://empty'
     })
