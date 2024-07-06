@@ -1479,6 +1479,12 @@ function manageSet(){
         })
     });
     d.push({
+        title: '支持一下作者',
+        img: 'https://hikerfans.com/tubiao/system/100.png',
+        col_type: 'text_icon',
+        url: config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'img/pay.jpg'
+    });
+    d.push({
         title: '免责说明',
         img: 'https://hikerfans.com/tubiao/messy/156.svg',
         col_type: 'avatar',
@@ -1486,13 +1492,13 @@ function manageSet(){
     })
     d.push({
         title: `<small>
-                1. 这是一个空壳小程序，仅用于个人学习研究，请于导入24小时内删除！
-                2. 本小程序<b>完全免费</b>，如果你是付费购买的恭喜你被骗了。
-                    当然如果有能力想鼓励作者的也可以支持一下。
-                3. 本小程序仅支持部分box源接口，并非所有接口都支持。
-                <b>开始使用本规则即代表遵守规则条例</b>
+                1. 这是一个空壳小程序，仅用于个人学习研究，请于导入24小时内删除！<br>
+                2. 本小程序<b>完全免费</b>，如果你是付费购买的恭喜你被骗了。<br>
+                    当然如果有能力想鼓励作者的也可以支持一下。<br>
+                3. 本小程序仅支持部分box源接口，并非所有接口都支持。<br>
+                <b>开始使用本规则即代表遵守规则条例</b><br>
                 
-        <br></small>`,
+        </small>`,
         col_type: 'rich_text'
     });
     setResult(d);
