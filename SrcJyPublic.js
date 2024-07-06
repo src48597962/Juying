@@ -140,6 +140,7 @@ function getGroupLists(datas, k) {
 }
 //获取搜索接口列表
 function getSearchLists(group) {
+    //group为true则取指定分组接口，为false时先取优选，没有则取前50
     let datalist = getDatas('jk', 1).filter(it=>{
         return it.searchable!=0;
     });
@@ -150,12 +151,15 @@ function getSearchLists(group) {
         return datalist.filter(it=>{
             return group==(it.group||it.type);
         });
-    }else if(getItem('搜索优选接口')){
-        return datalist.filter(it=>{
+    }else{
+        let preferrlist = datalist.filter(it=>{
             return it.preferr;
         });
-    }else{
-        return datalist.slice(0, 50);
+        if(preferrlist.length>0){
+            return preferrlist;
+        }else{
+            return datalist.slice(0, 50);
+        }
     }
 }
 //获取接口分组名arry
