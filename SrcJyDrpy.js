@@ -113,13 +113,13 @@ function createNewDrpy(source) {
 
 function get(key,ext) {
     return sync(() => {
-        log(drpyMap.size)
+        //log(drpyMap.size)
         if (drpyMap.has(key)) {
-            log("取缓存" + key)
+            //log("取缓存" + key)
             return drpyMap.get(key);
         }
         if (drpyMap.size >= 5) {
-            log("删除缓存")
+            //log("删除缓存")
             del(Array.from(drpyMap.keys()).at(0));
         }
         let source = {key:key,ext:ext};
