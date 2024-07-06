@@ -1479,6 +1479,37 @@ function manageSet(){
         })
     });
     d.push({
+        title: '检测版本更新',
+        img: 'https://hikerfans.com/tubiao/system/100.png',
+        col_type: 'text_icon',
+        url: $("#noLoading#").lazyRule(() => {
+            try{
+                eval(request(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcTmplVersion.js'))
+                let nowVersion = getItem('Version', "0.1");//现在版本 
+                let nowtime = Date.now();
+                if (parseFloat(newVersion.SrcJuying) > parseFloat(nowVersion)) {
+                    confirm({
+                        title:'发现新版本，是否更新？', 
+                        content:nowVersion+'=>'+newVersion.SrcJuying+'\n'+newVersion.SrcJuyingdesc[newVersion.SrcJuying], 
+                        confirm: $.toString((nowtime,newVersion) => {
+                            setItem('Version', newVersion);
+                            setItem('VersionChecktime', nowtime+'time');
+                            deleteCache();
+                            refreshPage();
+                        },nowtime, newVersion.SrcJuying),
+                        cancel:''
+                    })
+                    log('检测到新版本！\nV'+newVersion.SrcJuying+'版本》'+newVersion.SrcJuyingdesc[newVersion.SrcJuying]);
+                }else{
+                    toast('已经为最新版本');
+                }
+            }catch(e){
+                toast('获取版本信息异常>'+e.message);
+            }
+            return "hiker://empty";
+        })
+    });
+    d.push({
         title: '支持一下作者',
         img: 'https://hikerfans.com/tubiao/system/100.png',
         col_type: 'text_icon',
