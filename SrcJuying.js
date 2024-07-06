@@ -109,9 +109,6 @@ function sousuo() {
 function erjisousuo(name,group) {
     showLoading('搜源中，请稍后...');
     let updateItemid = group + "_" +name + "_loading";
-    updateItem(updateItemid+'2', {
-        extra: {"id":updateItemid,"lineVisible":false}
-    })
     let searchMark = storage0.getMyVar('SrcJu_searchMark') || {};//二级换源缓存
     let markId = group+'_'+name;
     if(searchMark[markId]){
