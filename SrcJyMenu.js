@@ -115,8 +115,13 @@ function cutSource(name, group) {
             }
         })
     })
+    
     deleteItemByCls('Juloadlist');
-    addItemBefore(group + "_" +name + "_loading", grouparr);// 生成切源分组
+    let updateItemid = group + "_" +name + "_loading";
+    updateItem(updateItemid+'2', {
+        extra: {"id":updateItemid,"lineVisible":false}
+    })
+    addItemBefore(updateItemid, grouparr);// 生成切源分组
     if(group=="云盘"){
         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
         erjiSousuo(name);
