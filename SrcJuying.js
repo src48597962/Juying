@@ -321,10 +321,11 @@ function dianboerji() {
                 cls: "Juloadlist"
             }
         })
-
+        log(erdata.tabs);
         if(erdata.tabs.length>erdata.lists.length){
             erdata.tabs = erdata.tabs.slice(0, erdata.lists.length-1);
         }
+        log(erdata.tabs);
         erdata.tabs.forEach((it,i)=>{
             if(it){
                 d.push({
