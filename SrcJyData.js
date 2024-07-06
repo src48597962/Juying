@@ -1005,13 +1005,13 @@ function getErData(jkdata) {
         let apifile = getDrpyFile(jkdata);
         if(apifile){
             let drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(api_name, apifile);
-            html = drpy.detail(MY_PARAMS.url);
+            html = drpy.detail(MY_URL);
             detailtype = drpy.getRule('类型') || (jkdata.name.includes('[书]')?"小说":"");
         }else{
             html = '{}';
         }
     } else if (api_type=="hipy_t4") {
-        html = getHtml(jkdata.url+"&extend="+jkdata.ext+"&ac=detail&ids="+MY_PARAMS.url, headers);
+        html = getHtml(jkdata.url+"&extend="+jkdata.ext+"&ac=detail&ids="+MY_URL, headers);
         detailtype = JSON.parse(html).type || (jkdata.name.includes('[书]')?"小说":"");
     } else {
         html = getHtml(MY_URL, headers);
@@ -1353,7 +1353,6 @@ function getErData(jkdata) {
             lists = json.vod_play_url.split('$$$').map(it => {
                 return it.split('#');
             });
-            log(lists);
         }
 
         if (/XPath|biubiu|XBPQ|XYQ/.test(api_type) && html && (tabs.length == 0 || lists.length == 0) && getMyVar('debug', '0') == "0" && html.indexOf(MY_PARAMS.pageTitle) > -1) {
