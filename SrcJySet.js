@@ -946,31 +946,34 @@ function manageSet(){
     setPageTitle("♥管理"+getMyVar('SrcJuying-Version', ''));
 
     let d = [];
-    /*
     d.push({
         col_type: "line_blank"
     });
-    */
     d.push({
-        title: '🏠 依赖管理',
-        col_type: "rich_text"
+        title: '依赖管理',
+        img: 'https://hikerfans.com/tubiao/circle/158.png',
+        col_type: 'avatar',
+        url: 'hiker://empty'
     });
     d.push({
         title: 'github代理',
+        img: 'https://hikerfans.com/tubiao/system/100.png',
         url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
             $.require('ghproxy').proxyPage();
         }),
-        col_type: "text_2"
+        desc: '测试',
+        col_type: 'text_icon'
     });
     d.push({
         title: '代码库地址',
+        img: 'https://hikerfans.com/tubiao/system/100.png',
         url: $(getItem('依赖', ''),"手工指定聚影代码库地址").input(()=>{
             return $("确定要指定聚影代码库地址"+input).confirm((input)=>{
                 setItem('依赖', input);
                 return "toast://已设置"
             },input)
         }),
-        col_type: "text_2"
+        col_type: 'text_icon'
     });
     /*
     d.push({
@@ -1463,7 +1466,7 @@ function manageSet(){
     });
     d.push({
         title: '更新日志',
-        img: 'https://hikerfans.com/tubiao/system/72.png',
+        img: 'https://hikerfans.com/tubiao/system/100.png',
         col_type: 'text_icon',
         url: $("#noLoading#").lazyRule(() => {
             eval(fetch(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcTmplVersion.js'));
