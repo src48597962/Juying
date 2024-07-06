@@ -232,6 +232,34 @@ function dataEnable(lx, data, input) {
     clearMyVar('SrcJu_duoselect');
     return sm;
 }
+//接口是否优选
+function preferrEnable(data) {
+    let sourcefile = jkfile;
+    let sourcedata = fetch(sourcefile);
+    eval("let datalist=" + sourcedata + ";");
+
+    let waitlist= [];
+    if($.type(data)=='object'){
+        waitlist.push(data);
+    }else if($.type(data)=='array'){
+        waitlist = data;
+    }
+    let sm;
+    waitlist.forEach(it => {
+        let index = datalist.indexOf(datalist.filter(d => it.url==d.url)[0]);
+        
+        if(datalist[index].preferr){
+            delete datalist[index].preferr;
+            sm = waitlist.length==1?it.name+'取消优选':'已禁用所选的'+waitlist.length+'个';
+        }else{
+            datalist[index].preferr = 1;
+            sm = waitlist.length==1?it.name+'设置优选':'已设置所选的'+waitlist.length+'个';
+        }
+    })
+    writeFile(sourcefile, JSON.stringify(datalist));
+    clearMyVar('SrcJu_duoselect');
+    return sm;
+}
 // 获取接口对应的显示标题
 function getDataTitle(data) {
     if(data.url){
