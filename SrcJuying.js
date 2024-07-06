@@ -323,7 +323,7 @@ function dianboerji() {
         })
 
         if(erdata.tabs.length>erdata.lists.length){
-            erdata.tabs = erdata.tabs.slice(0, erdata.lists.length);
+            erdata.tabs = erdata.tabs.slice(0, erdata.lists.length-1);
         }
         erdata.tabs.forEach((it,i)=>{
             if(it){
