@@ -618,18 +618,7 @@ function dianboyiji() {
         })
         d.push({
             title: "搜索方式",
-            url: $(["代理聚搜","海阔搜索","当前页面","搜索接口"],1).select(()=>{
-                if(input=="搜索接口"){
-                    return $(["优选的接口","排位前50"],1).select(()=>{
-                        if(input=="优选的接口"){
-                            setItem("搜索优选接口","1");
-                            return "toast://聚搜和二级切源时只选取优选的接口"
-                        }else{
-                            clearItem("搜索优选接口");
-                            return "toast://聚搜和二级切源时取自动排序后前50"
-                        }
-                    })
-                }
+            url: $(["代理聚搜","海阔搜索","当前页面"],1).select(()=>{
                 setItem("接口搜索方式",input);
                 return "toast://搜索方式设置为："+input;
             }),
