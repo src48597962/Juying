@@ -1453,7 +1453,7 @@ function manageSet(){
     */
     
     d.push({
-        col_type: "line_block"
+        col_type: "line_blank"
     });
     d.push({
         title: '关于聚影',
@@ -1477,7 +1477,7 @@ function manageSet(){
         })
     });
     d.push({
-        title: '这是一个空壳小程序，仅用于个人学习研究！<br>',
+        title: '<small>这是一个空壳小程序，仅用于个人学习研究！</small><br>',
         col_type: 'rich_text'
     });
     setResult(d);
