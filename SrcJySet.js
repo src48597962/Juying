@@ -1500,6 +1500,7 @@ function manageSet(){
                             setItem('Version', newVersion);
                             setItem('VersionChecktime', nowtime+'time');
                             deleteCache();
+                            putMyVar('SrcJuying-Version', '-V'+newVersion);
                             refreshPage();
                         },nowtime, newVersion.SrcJuying),
                         cancel:''
