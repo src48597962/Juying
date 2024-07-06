@@ -295,9 +295,9 @@ function SRCSet() {
     jkdatalist.forEach(it => {
         let selectmenu,datatitle,datadesc;
         if(guanliType=="jk"){
-            datatitle = it.name + ' ('+it.type+')' + (it.group?' [' + it.group + ']':"");
+            datatitle = it.name + ' ('+it.type+')' + (it.group?' [' + it.group + ']':"") + (it.preferr?" ⭐":"");
             datadesc = it.url;
-            selectmenu = ["分享","编辑", "删除", it.stop?"启用":"禁用"];
+            selectmenu = ["分享","编辑", "删除", it.stop?"启用":"禁用", "优选"];
         }else{
             datatitle = (it.sort||0)+'-'+it.name+'-'+it.url;
             datadesc = it.ext&&it.ext.flag?it.ext.flag.join(','):"";
@@ -347,6 +347,11 @@ function SRCSet() {
                 } else if (input == "禁用" || input == "启用" ) {
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                     let sm = dataEnable(getMyVar('guanli', 'jk'), data, input);
+                    refreshPage(false);
+                    return 'toast://' + sm;
+                } else if (input == "优选" ) {
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                    let sm = preferrEnable(data);
                     refreshPage(false);
                     return 'toast://' + sm;
                 }
