@@ -1450,9 +1450,9 @@ function manageSet(){
     d.push({
         col_type: "line"
     });
-
+    */
     d.push({
-        col_type: "line"
+        col_type: "blank_block"
     });
 
     d.push({
@@ -1461,43 +1461,24 @@ function manageSet(){
         col_type: 'text_1',
         url: 'toast://哥就是帅',
         extra:{
-            lineVisible:false,
-            longClick: [{
-                title: "📑更新日志",
-                js: $.toString(() => {
-                    return $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
-                        setPageTitle("💝 关于聚影");
-                        var d = [];
-                        try{
-                            eval(fetchCache(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcTmplVersion.js', 1, { timeout:2000 }))
-                            var SrcJuyingdesc = newVersion.SrcJuyingdesc;
-                        }catch(e){
-
-                        }
-                        if(SrcJuyingdesc){
-                            d.push({
-                                title: '📑 更新日志',
-                                col_type: "rich_text"
-                            });
-                            d.push({
-                                col_type: "line"
-                            });
-                            var updatedesc = [];
-                            for(let key in SrcJuyingdesc){
-                                updatedesc.push('版本V'+key+(parseFloat(key) > parseFloat(getMyVar('SrcJuying-Version','').replace('-V',''))?"(内测)":"")+'：'+SrcJuyingdesc[key]);
-                            }
-                            d.push({
-                                title: updatedesc.reverse().slice(0,3).join('<br>'),
-                                col_type: "rich_text"
-                            });
-                        }
-                        setHomeResult(d);
-                    })
-                })
-            }]
+            lineVisible:false
         }
     });
-    */
+    d.push({
+        title: '更新日志',
+        img: 'https://hikerfans.com/tubiao/system/72.png',
+        col_type: 'text_icon',
+        url: $("#noLoading#").lazyRule(() => {
+            let newVersion = eval(fetch(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcTmplVersion.js'));
+            let updateRecords = newVersion.JYUpdateRecords || [];
+            updateRecords.reverse();
+
+            const hikerPop = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6966");
+            hikerPop.updateRecordsBottom(updateRecords);
+            
+            return "hiker://empty";
+        })
+    });
     d.push({
         title: '<br>',
         col_type: 'rich_text'
