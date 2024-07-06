@@ -951,21 +951,20 @@ function manageSet(){
     });
     d.push({
         title: '依赖管理',
-        img: 'https://hikerfans.com/tubiao/circle/158.png',
+        img: 'https://hikerfans.com/tubiao/system/23.png',
         col_type: 'avatar',
         url: 'hiker://empty'
     });
     d.push({
-        title: 'github代理',
+        title: 'github加速管理',
         img: 'https://hikerfans.com/tubiao/system/100.png',
         url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
             $.require('ghproxy').proxyPage();
         }),
-        desc: '测试',
         col_type: 'text_icon'
     });
     d.push({
-        title: '代码库地址',
+        title: '指定聚影代码库',
         img: 'https://hikerfans.com/tubiao/system/100.png',
         url: $(getItem('依赖', ''),"手工指定聚影代码库地址").input(()=>{
             return $("确定要指定聚影代码库地址"+input).confirm((input)=>{
@@ -1465,7 +1464,7 @@ function manageSet(){
         url: 'toast://哥就是帅'
     });
     d.push({
-        title: '更新日志',
+        title: '查看更新日志',
         img: 'https://hikerfans.com/tubiao/system/100.png',
         col_type: 'text_icon',
         url: $("#noLoading#").lazyRule(() => {
@@ -1480,7 +1479,20 @@ function manageSet(){
         })
     });
     d.push({
-        title: '<small>这是一个空壳小程序，仅用于个人学习研究！</small><br>',
+        title: '免责说明',
+        img: 'https://hikerfans.com/tubiao/messy/156.svg',
+        col_type: 'avatar',
+        url: 'hiker://empty'
+    })
+    d.push({
+        title: `<small>
+                1. 这是一个空壳小程序，仅用于个人学习研究，请于导入24小时内删除！
+                2. 本小程序<b>完全免费</b>，如果你是付费购买的恭喜你被骗了。
+                    当然如果有能力想鼓励作者的也可以支持一下。
+                3. 本小程序仅支持部分box源接口，并非所有接口都支持。
+                <b>开始使用本规则即代表遵守规则条例</b>
+                
+        <br></small>`,
         col_type: 'rich_text'
     });
     setResult(d);
