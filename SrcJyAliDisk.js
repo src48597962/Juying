@@ -1316,8 +1316,7 @@ function erjiSousuo(name) {
         }
         arr.url = $("#noLoading#").lazyRule((extra) => {
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
-            erjiAliMyDiskSs(extra);
-            return "toast://已切换源：" + extra.data.name;
+            return erjiAliMyDiskSs(extra);
         }, extra);
         diskMark[name] = diskMark[name] || [];
         diskMark[name] = diskMark[name].concat(arr);
@@ -1387,7 +1386,6 @@ function erjiSousuo(name) {
                         }
                         arr.url = $().lazyRule((extra) => {
                             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
-                            
                             return erjiAliShareUrl(extra.url, extra.dataObj);
                         }, extra),
                         searchlist.push(arr);
