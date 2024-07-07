@@ -100,9 +100,9 @@ function getDatas(lx, isyx) {
         }
     }
 
-    if (getItem("sourceListSort") == "名称排序") {
+    if (getItem("sourceListSort") == "接口名称") {
         datalist = sortByPinyin(datalist);
-    }else if (getItem("sourceListSort") == "使用排序") {
+    }else if (getItem("sourceListSort") == "使用频率") {
         let sort = {};
         if(fetch(sortfile)){
             eval("sort = " + fetch(sortfile));
@@ -403,7 +403,7 @@ function selectSource() {
         },
         menuClick(manage) {
             hikerPop.selectCenter({
-                options: ["改变样式", "列表倒序", getItem("sourceListSort", "更新排序")],
+                options: ["改变样式", "列表倒序", getItem("sourceListSort", "更新时间")],
                 columns: 2,
                 title: "请选择",
                 click(s, i) {
@@ -418,9 +418,9 @@ function selectSource() {
                     } else if (i === 2) {
                         showSelectOptions({
                             "title": "选择排序方式", 
-                            "options" : ["更新排序", "名称排序", "使用排序"], 
+                            "options" : ["更新时间","接口名称","使用频率"], 
                             "col": 1, 
-                            "js": `setItem('sourceListSort', input);'toast://下次生效：' + input`
+                            "js": `setItem('sourceListSort', input);'toast://排序方式在下次生效：' + input`
                         })
                     }
                 }
