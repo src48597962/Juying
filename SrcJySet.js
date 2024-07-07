@@ -1521,12 +1521,12 @@ function manageSet(){
         url: $("#noLoading#").lazyRule(() => {
             try{
                 eval(request(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcTmplVersion.js'))
-                let nowVersion = getItem('Version', "0.1");//现在版本 
+                let nowVersion = getItem('Version', "0.1");
                 let nowtime = Date.now();
                 if (parseFloat(newVersion.SrcJuying) > parseFloat(nowVersion)) {
                     confirm({
                         title: '发现新版本，是否更新？', 
-                        content: '现版本V'+nowVersion+'=>新版本V'+newVersion.SrcJuying, 
+                        content: '本地V'+nowVersion+' => 云端V'+newVersion.SrcJuying, 
                         confirm: $.toString((nowtime,newVersion) => {
                             setItem('Version', newVersion);
                             setItem('VersionChecktime', nowtime+'time');
