@@ -1343,16 +1343,18 @@ function getErData(jkdata) {
                 log('XYQ获取选集列表失败>' + e.message);
             }
         } else if (api_type == 'hipy_t3' || api_type == 'hipy_t4') {
-            let json = JSON.parse(html).list[0];
-            actor = json.vod_actor;
-            area = json.vod_area;
-            remarks = json.vod_remarks || json.vod_class || "";
-            desc = json.vod_content || "";
-            pic = json.vod_pic.includes('none.gif')?"":json.vod_pic;
-            tabs = json.vod_play_from.split('$$$');
-            lists = json.vod_play_url.split('$$$').map(it => {
-                return it.split('#');
-            });
+            try{
+                let json = JSON.parse(html).list[0];
+                actor = json.vod_actor;
+                area = json.vod_area;
+                remarks = json.vod_remarks || json.vod_class || "";
+                desc = json.vod_content || "";
+                pic = json.vod_pic;
+                tabs = json.vod_play_from.split('$$$');
+                lists = json.vod_play_url.split('$$$').map(it => {
+                    return it.split('#');
+                });
+            }catch(e){}
         }
 
         if (/XPath|biubiu|XBPQ|XYQ/.test(api_type) && html && (tabs.length == 0 || lists.length == 0) && getMyVar('debug', '0') == "0" && html.indexOf(MY_PARAMS.pageTitle) > -1) {
