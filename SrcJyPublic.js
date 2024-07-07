@@ -100,7 +100,25 @@ function getDatas(lx, isyx) {
         }
     }
 
-    datalist.reverse();
+    if (getItem("sourceListSort") == "名称排序") {
+        datalist = sortByPinyin(datalist);
+    }else if (getItem("sourceListSort") == "使用排序") {
+        let sort = {};
+        if(fetch(sortfile)){
+            eval("sort = " + fetch(sortfile));
+        }
+        datalist.forEach(it=>{
+            it.sort = sort[it.url] || 0;
+        })
+        log(datalist);
+        datalist.sort((a, b) => {
+            return b.sort - a.sort
+        })
+        log(datalist);
+    }else{
+        datalist.reverse();
+    }
+    
     // 禁用的放到最后
     let withoutStop = datalist.filter(item => !item.stop);
     if(isyx){
@@ -134,9 +152,7 @@ function getGroupLists(datas, k) {
         let group = it.group||it.type;
         return !k || (k==group);
     })
-    if(getItem('sourceListSort','name') == 'update'){
-        datas = sortByPinyin(datas);
-    }
+
     return datas;
 }
 //获取搜索接口列表
@@ -145,9 +161,7 @@ function getSearchLists(group) {
     let datalist = getDatas('jk', 1).filter(it=>{
         return it.searchable!=0;
     });
-    datalist.sort((a, b) => {
-        return b.sort - a.sort
-    })
+    
     if(group){
         return datalist.filter(it=>{
             return group==(it.group||it.type);
@@ -391,7 +405,7 @@ function selectSource() {
         },
         menuClick(manage) {
             hikerPop.selectCenter({
-                options: ["改变样式", "列表倒序"],
+                options: ["改变样式", "列表倒序", getItem("sourceListSort", "更新排序")],
                 columns: 2,
                 title: "请选择",
                 click(s, i) {
@@ -403,6 +417,13 @@ function selectSource() {
                         manage.list.reverse();
                         manage.change();
                         manage.scrollToPosition(index, true);
+                    } else if (i === 2) {
+                        showSelectOptions({
+                            "title": "选择排序方式", 
+                            "options" : ["更新排序", "名称排序", "使用排序"], 
+                            "col": 1, 
+                            "js": `setItem('sourceListSort', input);'toast://下次生效：' + input`
+                        })
                     }
                 }
             });
