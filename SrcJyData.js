@@ -1398,7 +1398,12 @@ function getErData(jkdata) {
         "detailtype": detailtype
     };
 }
-
+// 设置收藏更新最新章节
+function setLastChapter(url,jkdata) {
+    log(MY_URL);
+    
+    //setResult(pdfh(getResCode(), 'a&&Text'))
+}
 // 获取网页源码
 function getHtml(url, headers) {
     headers = headers || {};
