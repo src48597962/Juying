@@ -594,7 +594,7 @@ function dianboerji() {
         setLastChapterRule('js:' + $.toString((url,jkdata)=>{
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
             setLastChapter(url,jkdata);
-        }, sextra.url, jkdata))
+        }, MY_URL, jkdata))
     }
     
     //底部说明
