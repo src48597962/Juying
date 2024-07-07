@@ -110,11 +110,9 @@ function getDatas(lx, isyx) {
         datalist.forEach(it=>{
             it.sort = sort[it.url] || 0;
         })
-        log(datalist);
         datalist.sort((a, b) => {
             return b.sort - a.sort
         })
-        log(datalist);
     }else{
         datalist.reverse();
     }
