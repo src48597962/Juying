@@ -1291,6 +1291,38 @@ function erjiSousuo(name) {
             title: "搜源中..."
         });
     }
+    let getlist = myDiskSearch(name);
+    getlist.forEach(item => {
+        let itemTitle = item.title.replace(/<\/?.+?>/g, "");
+        let arr = {
+            title: itemTitle,
+            img: item.pic || "hiker://files/cache/src/文件夹.svg",
+            col_type: "avatar",
+            desc: "我的云盘",
+            extra: {
+                url: item.url,
+                cls: "Juloadlist"
+            }
+        };
+        let extra = {
+            folder_id: item.url,
+            drive_id: item.drive_id,
+            dataObj: {
+                name: name,
+                group: "云盘",
+                updateItemid: "云盘_" +name + "_loading",
+                data: {name: "我的云盘", type: "yundisk", group: "云盘", url: "我的云盘"}
+            }
+        }
+        arr.url = $("#noLoading#").lazyRule((extra) => {
+            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+            erjiAliMyDiskSs(extra);
+            return "toast://已切换源：" + extra.data.name;
+        }, extra);
+        diskMark[name] = diskMark[name] || [];
+        diskMark[name] = diskMark[name].concat(arr);
+        addItemBefore(updateItemid, arr);
+    })
 
     let ssdatalist = [];
     let filepath = "hiker://files/data/"+MY_RULE.title+"/yundisk.json";
@@ -1301,7 +1333,7 @@ function erjiSousuo(name) {
         } catch (e) {}
     }
     ssdatalist = ssdatalist.filter(it=>{
-        return !it.stop;
+        return !it.stop && it.name!="我的云盘";
     });
     let nosousuolist = storage0.getMyVar('nosousuolist_yundisk') || [];
     if (nosousuolist.length>0){
@@ -1315,7 +1347,7 @@ function erjiSousuo(name) {
             let datalist2 = [];
             try {
                 eval('let Parse = ' + obj.parse);
-                datalist2 = obj.name =="我的云盘" ? myDiskSearch(name) : Parse(name);
+                datalist2 = Parse(name);
             } catch (e) {
                 log(obj.name + '>一解出错>' + e.message);
             }
@@ -1333,52 +1365,32 @@ function erjiSousuo(name) {
                     }
                 };
                 
-                
-                if (obj.name == "我的云盘") {
-                    let extra = {
-                        folder_id: item.url,
-                        drive_id: item.drive_id,
-                        dataObj: {
-                            name: name,
-                            group: "云盘",
-                            updateItemid: "云盘_" +name + "_loading",
-                            data: {name: obj.name, type: "yundisk", group: "云盘", url: obj.name}
+                if (itemTitle.toLowerCase().includes(name.toLowerCase())) {//搜索结果包含关键字才行
+                    let surl = item.url;
+                    if (!/www\.aliyundrive\.com|www\.alipan\.com/.test(surl) && obj.erparse) {
+                        try {
+                            eval('let Parse2 = ' + obj.erparse)
+                            surl = Parse2(surl);
+                        } catch (e) {
+                            log(obj.name + '>二解出错>' + e.message);
                         }
                     }
-                    arr.url = $("#noLoading#").lazyRule((extra) => {
-                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
-                        erjiAliMyDiskSs(extra);
-                        return "toast://已切换源：" + extra.data.name;
-                    }, extra);
-                    searchlist.push(arr);
-                } else {
-                    if (itemTitle.toLowerCase().includes(name.toLowerCase())) {//搜索结果包含关键字才行
-                        let surl = item.url;
-                        if (!/www\.aliyundrive\.com|www\.alipan\.com/.test(surl) && obj.erparse) {
-                            try {
-                                eval('let Parse2 = ' + obj.erparse)
-                                surl = Parse2(surl);
-                            } catch (e) {
-                                log(obj.name + '>二解出错>' + e.message);
+                    if (/www\.aliyundrive\.com|www\.alipan\.com/.test(surl)) {
+                        let extra = {
+                            url: surl,
+                            dataObj: {
+                                name: name,
+                                group: "云盘",
+                                updateItemid: "云盘_" +name + "_loading",
+                                data: {name: obj.name, type: "yundisk", group: "云盘", url: obj.name}
                             }
                         }
-                        if (/www\.aliyundrive\.com|www\.alipan\.com/.test(surl)) {
-                            let extra = {
-                                url: surl,
-                                dataObj: {
-                                    name: name,
-                                    group: "云盘",
-                                    updateItemid: "云盘_" +name + "_loading",
-                                    data: {name: obj.name, type: "yundisk", group: "云盘", url: obj.name}
-                                }
-                            }
-                            arr.url = $().lazyRule((extra) => {
-                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
-                                
-                                return erjiAliShareUrl(extra.url, extra.dataObj);
-                            }, extra),
-                            searchlist.push(arr);
-                        }
+                        arr.url = $().lazyRule((extra) => {
+                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+                            
+                            return erjiAliShareUrl(extra.url, extra.dataObj);
+                        }, extra),
+                        searchlist.push(arr);
                     }
                 }
             })
