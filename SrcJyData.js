@@ -1401,7 +1401,9 @@ function getErData(jkdata) {
 // 设置收藏更新最新章节
 function setLastChapter(url,jkdata) {
     MY_URL = url;
+    log(MY_URL);
     let erdate = getErData(jkdata);
+    log(erdate);
     let lists = erdate.lists;
     if(lists.length>0){
         //取线路选集最多的索引
