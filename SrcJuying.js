@@ -162,34 +162,7 @@ function erjisousuo(name,group) {
     });
     let success = 0;
     if (list.length > 0) {
-        be(list, {
-            func: function (obj, id, error, taskResult) {
-                if(getMyVar("SrcJu_停止搜索线程")=="1"){
-                    return "break";
-                }else if(taskResult.success==1){
-                    let data = taskResult.result;
-                    if(data.length>0){
-                        success++;
-                        searchMark[markId] = searchMark[markId] || [];
-                        searchMark[markId] = searchMark[markId].concat(data);
-                        addItemBefore(updateItemid, data);
-                        hideLoading();
-                    }
-                }else if(taskResult.success==0){
-                    nosousuolist.push(id);
-                    storage0.putMyVar('nosousuolist', nosousuolist);
-                }
-            },
-            param: {
-            }
-        });
-        hideLoading();
-        if(getMyVar("SrcJu_停止搜索线程")!="1"){
-            storage0.putMyVar('SrcJu_searchMark', searchMark);
-        }
-        clearMyVar("SrcJu_停止搜索线程");
-        let sousuosm = "‘‘’’<small><font color=#f13b66a>" + success + "</font>/" + list.length + "，搜索完成</small>";
-        updateItem(updateItemid, { title: sousuosm });
+        erjisousuobe(list,searchMark,success,nosousuolist,updateItemid);
     } else {
         hideLoading();
         clearMyVar("SrcJu_停止搜索线程");
@@ -197,6 +170,38 @@ function erjisousuo(name,group) {
         toast("无接口");
     }
 }
+//搜索be
+function erjisousuobe(list,searchMark,success,nosousuolist,updateItemid) {
+    be(list, {
+        func: function (obj, id, error, taskResult) {
+            if(getMyVar("SrcJu_停止搜索线程")=="1"){
+                return "break";
+            }else if(taskResult.success==1){
+                let data = taskResult.result;
+                if(data.length>0){
+                    success++;
+                    searchMark[markId] = searchMark[markId] || [];
+                    searchMark[markId] = searchMark[markId].concat(data);
+                    addItemBefore(updateItemid, data);
+                    hideLoading();
+                }
+            }else if(taskResult.success==0){
+                nosousuolist.push(id);
+                storage0.putMyVar('nosousuolist', nosousuolist);
+            }
+        },
+        param: {
+        }
+    });
+    hideLoading();
+    if(getMyVar("SrcJu_停止搜索线程")!="1"){
+        storage0.putMyVar('SrcJu_searchMark', searchMark);
+    }
+    clearMyVar("SrcJu_停止搜索线程");
+    let sousuosm = "‘‘’’<small><font color=#f13b66a>" + success + "</font>/" + list.length + "，搜索完成</small>";
+    updateItem(updateItemid, { title: sousuosm });
+}
+
 // 点播二级
 function dianboerji() {
     addListener("onClose", $.toString((getHistory) => {
