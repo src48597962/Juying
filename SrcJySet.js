@@ -1478,9 +1478,9 @@ function manageSet(){
     });
     d.push({
         title: '规则日志打印',
-        img: getItem('规则日志打印')?'https://hikerfans.com/tubiao/messy/139.svg':'https://hikerfans.com/tubiao/messy/138.svg',
+        img: getItem('规则日志打印')=="1"?'https://hikerfans.com/tubiao/messy/139.svg':'https://hikerfans.com/tubiao/messy/138.svg',
         url: $("#noLoading#").lazyRule(() => {
-            if(getItem('规则日志打印')){
+            if(getItem('规则日志打印')=="1"){
                 clearItem('规则日志打印');
             }else{
                 setItem('规则日志打印','1');
