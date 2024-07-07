@@ -772,7 +772,7 @@ function getSsData(name, jkdata, page) {
             try {
                 lists = eval(listnode) || json.list || json.data.list || json.data || [];
             } catch (e) {
-                lists = json.list || json.data.list || json.data || [];
+                //lists = json.list || json.data.list || json.data || [];
             }
 
             if (lists.length == 0 && api_type == "iptv") {
