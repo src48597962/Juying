@@ -1319,7 +1319,7 @@ function Version() {
             if (parseFloat(newVersion.SrcJuying) > parseFloat(nowVersion)) {
                 confirm({
                     title:'发现新版本，是否更新？', 
-                    content:'现版本V'+nowVersion+'=>新版本V'+newVersion.SrcJuying, 
+                    content:'本地V'+nowVersion+' => 去端V'+newVersion.SrcJuying, 
                     confirm: $.toString((nowtime,newVersion) => {
                         setItem('Version', newVersion);
                         setItem('VersionChecktime', nowtime+'time');
