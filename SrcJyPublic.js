@@ -534,5 +534,12 @@ function getHistory(){
     })
     return h;
 }
+//重定义打印日志
+var xlog = log;
+log = function (msg) {
+    if (getItem('规则日志打印')=="1") {
+        xlog(msg);
+    }
+}
 
 
