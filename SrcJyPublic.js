@@ -340,12 +340,12 @@ function selectSource() {
                     options: groupnames, 
                     columns: 2, 
                     title: "切换源分组", 
-                    //position: groupnames.indexOf(sourceName), 
+                    //position: groupnames.indexOf(sourceName),/*  */ 
                     click(a) {
                         inputBox.setTitle(a);
                         inputBox.setDefaultValue("");
-                        tmpList = getGroupLists(sourceAllList, a);
-                        names = tmpList.map((v,i) => {
+                        sourceList = getGroupLists(sourceAllList, a);
+                        names = sourceList.map((v,i) => {
                             return v.name;
                         });
                         manage.list.length = 0;
