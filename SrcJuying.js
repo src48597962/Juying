@@ -104,12 +104,11 @@ function sousuo() {
     }])
 }
 //二级切源搜索
-function erjisousuo(name,group) {
-    showLoading('搜源中，请稍后...');
+function erjisousuo(name,group,datas) {
     let updateItemid = group + "_" +name + "_loading";
     let searchMark = storage0.getMyVar('SrcJu_searchMark') || {};//二级换源缓存
     let markId = group+'_'+name;
-    if(searchMark[markId]){
+    if(!datas && searchMark[markId]){
         addItemBefore(updateItemid, searchMark[markId]);
         updateItem(updateItemid, {
             title: "‘‘’’<small>当前搜索为缓存</small>",
@@ -129,79 +128,96 @@ function erjisousuo(name,group) {
         }
         if (i > 30) { delete searchMark[one]; }
         hideLoading();
-        return "hiker://empty";
     }else{
+        showLoading('搜源中，请稍后...');
         updateItem(updateItemid, {
             title: "搜源中..."
         });
-    }
 
-    let ssdatalist = getSearchLists(group);
-    let nosousuolist = storage0.getMyVar('nosousuolist') || [];
-    if (nosousuolist.length>0){
-        ssdatalist = ssdatalist.filter(it => {
-            return nosousuolist.indexOf(it.url) == -1;
-        })
-    }
+        let ssdatalist = datas || getSearchLists(group);
+        let nosousuolist = storage0.getMyVar('nosousuolist') || [];
+        if (nosousuolist.length>0){
+            ssdatalist = ssdatalist.filter(it => {
+                return nosousuolist.indexOf(it.url) == -1;
+            })
+        }
 
-    let task = function (obj) {
-        try {
-            let lists = obj.fun(obj.name, "dianboerji", obj.data);
-            return {result:lists, success:1};
-        } catch (e) {
-            log('✓'+obj.data.name + '>搜索失败>' + e.message);
-            return {result:[], success:0};
-        }
-    }
-    let list = ssdatalist.map((item) => {
-        return {
-            func: task,
-            param: {"data":item,"name":name,"fun":search},
-            id: item.url
-        }
-    });
-    let success = 0;
-    if (list.length > 0) {
-        erjisousuobe(list,searchMark,success,nosousuolist,updateItemid);
-    } else {
-        hideLoading();
-        clearMyVar("SrcJu_停止搜索线程");
-        updateItem(updateItemid, { title: '' });
-        toast("无接口");
-    }
-}
-//搜索be
-function erjisousuobe(list,searchMark,success,nosousuolist,updateItemid) {
-    be(list, {
-        func: function (obj, id, error, taskResult) {
-            if(getMyVar("SrcJu_停止搜索线程")=="1"){
-                return "break";
-            }else if(taskResult.success==1){
-                let data = taskResult.result;
-                if(data.length>0){
-                    success++;
-                    searchMark[markId] = searchMark[markId] || [];
-                    searchMark[markId] = searchMark[markId].concat(data);
-                    log(updateItemid);
-                    log(data);
-                    addItemBefore(updateItemid, data);
-                    hideLoading();
-                }
-            }else if(taskResult.success==0){
-                nosousuolist.push(id);
-                storage0.putMyVar('nosousuolist', nosousuolist);
+        let task = function (obj) {
+            try {
+                let lists = obj.fun(obj.name, "dianboerji", obj.data);
+                return {result:lists, success:1};
+            } catch (e) {
+                log('✓'+obj.data.name + '>搜索失败>' + e.message);
+                return {result:[], success:0};
             }
-        },
-        param: {
         }
-    });
-    hideLoading();
-    if(getMyVar("SrcJu_停止搜索线程")!="1"){
-        storage0.putMyVar('SrcJu_searchMark', searchMark);
+        let list = ssdatalist.map((item) => {
+            return {
+                func: task,
+                param: {"data":item,"name":name,"fun":search},
+                id: item.url
+            }
+        });
+        let beidlist =[];
+        let success = 0;
+        if (list.length > 0) {
+            be(list, {
+                func: function (obj, id, error, taskResult) {
+                    beidlist.push(id);
+                    if(getMyVar("SrcJu_停止搜索线程")=="1"){
+                        return "break";
+                    }else if(taskResult.success==1){
+                        let data = taskResult.result;
+                        if(data.length>0){
+                            success++;
+                            searchMark[markId] = searchMark[markId] || [];
+                            searchMark[markId] = searchMark[markId].concat(data);
+                            addItemBefore(updateItemid, data);
+                            hideLoading();
+                            if(success>=20){
+                                return "break";
+                            }
+                        }
+                    }else if(taskResult.success==0){
+                        nosousuolist.push(id);
+                        storage0.putMyVar('nosousuolist', nosousuolist);
+                    }
+                },
+                param: {
+                }
+            });
+            hideLoading();
+            if(beidlist.length<ssdatalist.length){
+                let pdatalist = ssdatalist.filter(v=>beidlist.indexOf(v.url)==-1);
+                addItemBefore(updateItemid, {
+                    title: (ssdatalist.length-beidlist.length)+"/"+ssdatalist.length+"，点击继续",
+                    url: $("#noLoading#").lazyRule((name,group,datas) => {
+                        deleteItem("erjisousuopage");
+                        require(config.依赖);
+                        erjisousuo(name, group, datas);
+                        return "hiker://empty";
+                    }, name,group,pdatalist),
+                    col_type: 'text_center_1',
+                    extra: {
+                        id: "erjisousuopage",
+                        cls: "Juloadlist grouploadlist",
+                        lineVisible: false
+                    }
+                });
+            }
+            if(getMyVar("SrcJu_停止搜索线程")!="1"){
+                storage0.putMyVar('SrcJu_searchMark', searchMark);
+            }
+            clearMyVar("SrcJu_停止搜索线程");
+            let sousuosm = "‘‘’’<small><font color=#f13b66a>" + success + "</font>/" + list.length + "，搜索完成</small>";
+            updateItem(updateItemid, { title: sousuosm });
+        } else {
+            hideLoading();
+            clearMyVar("SrcJu_停止搜索线程");
+            updateItem(updateItemid, { title: '' });
+            toast("无接口");
+        }
     }
-    clearMyVar("SrcJu_停止搜索线程");
-    let sousuosm = "‘‘’’<small><font color=#f13b66a>" + success + "</font>/" + list.length + "，搜索完成</small>";
-    updateItem(updateItemid, { title: sousuosm });
 }
 
 // 点播二级
