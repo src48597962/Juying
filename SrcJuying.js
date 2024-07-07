@@ -182,6 +182,8 @@ function erjisousuobe(list,searchMark,success,nosousuolist,updateItemid) {
                     success++;
                     searchMark[markId] = searchMark[markId] || [];
                     searchMark[markId] = searchMark[markId].concat(data);
+                    log(updateItemid);
+                    log(data);
                     addItemBefore(updateItemid, data);
                     hideLoading();
                 }
