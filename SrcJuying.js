@@ -71,25 +71,23 @@ function search(name, sstype, jkdata) {
 // 软件搜索
 function sousuo() {
     let k = MY_URL.split('##')[1];
-    let name,jkdata;
-    if(k.includes('  ')){
-        name = k.split('  ')[0].trim();
-        jkdata = storage0.getMyVar('搜索临时搜索数据');
-    }else{
-        name = k.trim();
-    }
+    let name = k.trim();
+
     setResult([{
         title: "视界聚搜",
         url: "hiker://search?s=" + name,
         extra: {
             delegateOnlySearch: true,
-            rules: $.toString((name,jkdata) => {
+            rules: $.toString((name) => {
                 let ssdatalist = [];
-                if(jkdata){
-                    ssdatalist.push(jkdata);
+                if(storage0.getMyVar('搜索临时搜索数据')){
+                    ssdatalist.push(storage0.getMyVar('搜索临时搜索数据'));
+                    clearMyVar('搜索临时搜索数据');
                 }else{
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
-                    ssdatalist = getSearchLists();
+                    let group = getMyVar('搜索临时搜索分组','');
+                    ssdatalist = getSearchLists(group);
+                    clearMyVar('搜索临时搜索分组');
                 }
 
                 let judata = [];
@@ -101,7 +99,7 @@ function sousuo() {
                     });
                 })
                 return JSON.stringify(judata);
-            },name,jkdata)
+            },name)
         }
     }])
 }
@@ -588,7 +586,6 @@ function dianboerji() {
 function dianboyiji() {
     addListener("onClose", $.toString(() => {
         clearMyVar('点播动态加载loading');
-        clearMyVar('搜索临时搜索数据');
     }));
     let d = [];
     let datalist = getDatas('jk');
@@ -625,7 +622,7 @@ function dianboyiji() {
         })
         d.push({
             title: "搜索方式",
-            url: $(["代理聚搜","海阔搜索","当前页面"],1).select(()=>{
+            url: $(["代理聚搜","分组接口","当前接口","当前页面"],1).select(()=>{
                 setItem("接口搜索方式",input);
                 return "toast://搜索方式设置为："+input;
             }),
@@ -723,16 +720,18 @@ function dianboyiji() {
                     }, input, data);
                     */
             let searchurl = $('').lazyRule((jkdata) => {
-                if(getItem('接口搜索方式','海阔搜索')=="海阔搜索"){
+                if(getItem('接口搜索方式','当前接口')=="当前接口"){
                     if(jkdata){
                         storage0.putMyVar('搜索临时搜索数据', jkdata);
-                        return 'hiker://search?s='+input+'  '+'&rule='+MY_RULE.title;
+                        return 'hiker://search?s='+input+'&rule='+MY_RULE.title;
                     }else{
                         return 'toast://未找到接口数据'
                     }
+                }else if(getItem('接口搜索方式')=="分组接口"){
+                    putMyVar('搜索临时搜索分组', jkdata.group||jkdata.type);
+                    return 'hiker://search?s='+input+'&rule='+MY_RULE.title;
                 }else if(getItem('接口搜索方式')=="代理聚搜"){
-                    clearMyVar('搜索临时搜索数据');
-                    return 'hiker://search?s='+input+'  '+'&rule='+MY_RULE.title;
+                    return 'hiker://search?s='+input+'&rule='+MY_RULE.title;
                 }else if(getItem('接口搜索方式')=="当前页面"){
                     require(config.依赖); 
                     let d = search(input, 'dianboyiji' , jkdata);
