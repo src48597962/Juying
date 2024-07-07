@@ -1555,17 +1555,17 @@ function manageSet(){
         col_type: "line_blank"
     });
     d.push({
-        title: '免责说明',
+        title: '免责申明',
         img: 'https://hikerfans.com/tubiao/messy/155.svg',
         col_type: 'avatar',
         url: 'hiker://empty'
     })
     d.push({
         title: `<small>
-                1. 这是一个空壳小程序，仅用于个人学习研究，请于导入24小时内删除！<br>
-                2. 本小程序<b>完全免费</b>，如果你是付费购买的恭喜你被骗了。<br>
-                    当然如果有能力想鼓励作者的也可以支持一下。<br>
-                3. 本小程序仅支持部分box源接口，并非所有接口都支持。<br>
+                1. 本小程序是一个空壳小程序，无任何内置资源<br>
+                2. 本小程序开源<b>完全免费</b>，如果你是付费购买的恭喜你被骗了。<br>
+                3. 本小程序仅用于部分box源接口测试，并非所有接口都支持。<br>
+                4. 本小程序仅用于个人学习研究，请于导入24小时内删除！<br>
                 <b>开始使用本规则即代表遵守规则条例</b><br>
                 
         </small>`,
