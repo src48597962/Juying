@@ -590,6 +590,11 @@ function dianboerji() {
                 });
             }
         }
+        //设置二级收藏更新最新章节
+        setLastChapterRule('js:' + $.toString((url,jkdata)=>{
+            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
+            setLastChapter(url,jkdata);
+        }, sextra.url, jkdata))
     }
     
     //底部说明
