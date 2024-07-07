@@ -659,53 +659,7 @@ function dianboyiji() {
         })
         d.push({
             title: "管理设置",
-            url: $('#noLoading#').lazyRule(() => {
-                const hikerPop = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6966");
-                hikerPop.selectBottomSettingMenu({
-                    options: ["接口管理", "解析管理", "资源导入", "", "站源设置"], 
-                    click(input, i) {
-                        if(input=="接口管理"){
-                            if(getItem("sourceMode")=="2"){
-                                return "toast://订阅文件模式，无法管理本地接口";
-                            }
-                            putMyVar('guanli','jk');
-                            return $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
-                                setPageTitle('接口管理');
-                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
-                                SRCSet();
-                            })
-                        }else if(input=="解析管理"){
-                            if(getItem("sourceMode")=="2"){
-                                return "toast://订阅文件模式，无法管理本地解析";
-                            }
-                            putMyVar('guanli','jx');
-                            return $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
-                                setPageTitle('解析管理');
-                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
-                                SRCSet();
-                            })
-                        }else if(input=="资源导入"){
-                            return $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
-                                setPageTitle('资源管理');
-                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
-                                resource();
-                            })
-                        }else if(input=="站源设置"){
-                            let modes = ["本地接口", "订阅文件"];
-                            return $(modes,2,"设置站源获取位置").select(()=>{
-                                if(input=="本地接口"){
-                                    clearItem("sourceMode");
-                                }else if(input=="订阅文件"){
-                                    setItem("sourceMode","2");
-                                }
-                                return "toast://站源获取设置为"+input;
-                            })
-                        }
-                    }
-                });
-                return "hiker://empty";
-            }),
-            /*$(["接口管理","解析管理","资源管理","站源设置"],1).select(()=>{
+            url: $(["接口管理","解析管理","资源管理","站源设置"],1).select(()=>{
                 if(input=="接口管理"){
                     if(getItem("sourceMode")=="2"){
                         return "toast://订阅文件模式，无法管理本地接口";
@@ -743,7 +697,7 @@ function dianboyiji() {
                         return "toast://站源获取设置为"+input;
                     })
                 }
-            }),*/
+            }),
             pic_url: "https://hikerfans.com/tubiao/more/44.png",
             col_type: "icon_3_round_fill"
         })
