@@ -947,7 +947,7 @@ function getSsData(name, jkdata, page) {
                         vodpic = getHome(list.vodurl) + vodpic;
                     }
                 }
-                if (list.vodname.includes(name)) {
+                if (searchContains(list.vodname, name, true)) {
                     searchs.push({
                         vodname: list.vodname.replace('立刻播放',''),
                         voddesc: list.voddesc,
