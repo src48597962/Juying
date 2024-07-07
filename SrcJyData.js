@@ -1400,9 +1400,30 @@ function getErData(jkdata) {
 }
 // 设置收藏更新最新章节
 function setLastChapter(url,jkdata) {
-    log(MY_URL);
-    
-    //setResult(pdfh(getResCode(), 'a&&Text'))
+    MY_URL = url;
+    let erdate = getErData(jkdata);
+    let lists = erdate.lists;
+    if(lists.length>0){
+        //取线路选集最多的索引
+        let indexOfMax = 0;
+        let tempMax = lists[0].length;
+        for(let i = 0; i < lists.length; i ++){
+            if(lists[i].length > tempMax){
+                tempMax = lists[i].length;
+                indexOfMax = i;
+            }
+        }
+        let list = lists[indexOfMax];
+        try{
+            let list1 = list[0].split('$')[0];
+            let list2 = list[list.length-1].split('$')[0];
+            if(parseInt(list1.match(/(\d+)/)[0])>parseInt(list2.match(/(\d+)/)[0])){
+                list.reverse();
+            }
+        }catch(e){
+        }
+        setResult('更新至：' + list[list.length-1].split('$')[0]);
+    }
 }
 // 获取网页源码
 function getHtml(url, headers) {
