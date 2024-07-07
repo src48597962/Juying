@@ -178,14 +178,10 @@ function SRCSet() {
             if(it == "全部"){
                 obj.extra = {
                     longClick: [{
-                        title: "列表排序：" + getItem("sourceListSort", "update"),
+                        title: "列表排序：" + getItem("sourceListSort", "更新时间"),
                         js: $.toString(() => {
-                            return $(["更新时间","接口名称"], 1).select(() => {
-                                if(input=='接口名称'){
-                                    setItem("sourceListSort","name");
-                                }else{
-                                    clearItem("sourceListSort");
-                                }
+                            return $(["更新时间","接口名称","使用频率"], 1).select(() => {
+                                setItem("sourceListSort", input);
                                 refreshPage(false);
                             })
                         })
