@@ -959,34 +959,7 @@ function manageSet(){
     setPageTitle("♥管理"+getMyVar('SrcJuying-Version', ''));
 
     let d = [];
-    d.push({
-        col_type: "line_blank"
-    });
-    d.push({
-        title: '依赖管理',
-        img: 'https://hikerfans.com/tubiao/system/23.png',
-        col_type: 'avatar',
-        url: 'hiker://empty'
-    });
-    d.push({
-        title: 'github加速管理',
-        img: 'https://hikerfans.com/tubiao/system/100.png',
-        url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
-            $.require('ghproxy').proxyPage();
-        }),
-        col_type: 'text_icon'
-    });
-    d.push({
-        title: '指定聚影代码库',
-        img: 'https://hikerfans.com/tubiao/system/100.png',
-        url: $(getItem('依赖', ''),"手工指定聚影代码库地址").input(()=>{
-            return $("确定要指定聚影代码库地址"+input).confirm((input)=>{
-                setItem('依赖', input);
-                return "toast://已设置"
-            },input)
-        }),
-        col_type: 'text_icon'
-    });
+    
     /*
     d.push({
         title: '🌐 聚影分享',
@@ -1466,7 +1439,57 @@ function manageSet(){
         col_type: "line"
     });
     */
-    
+    d.push({
+        col_type: "line_blank"
+    });
+    d.push({
+        title: '依赖管理',
+        img: 'https://hikerfans.com/tubiao/system/23.png',
+        col_type: 'avatar',
+        url: 'hiker://empty'
+    });
+    d.push({
+        title: 'github加速管理',
+        img: 'https://hikerfans.com/tubiao/system/100.png',
+        url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
+            $.require('ghproxy').proxyPage();
+        }),
+        col_type: 'text_icon'
+    });
+    d.push({
+        title: '指定聚影代码库',
+        img: 'https://hikerfans.com/tubiao/system/100.png',
+        url: $(getItem('依赖', ''),"手工指定聚影代码库地址").input(()=>{
+            return $("确定要指定聚影代码库地址"+input).confirm((input)=>{
+                setItem('依赖', input);
+                return "toast://已设置"
+            },input)
+        }),
+        col_type: 'text_icon'
+    });
+    d.push({
+        col_type: "line_blank"
+    });
+    d.push({
+        title: '配置开关',
+        img: 'https://hikerfans.com/tubiao/system/47.png',
+        col_type: 'avatar',
+        url: 'toast://不清楚，可不动'
+    });
+    d.push({
+        title: '规则日志打印',
+        img: getItem('规则日志打印')?'https://hikerfans.com/tubiao/messy/139.svg':'https://hikerfans.com/tubiao/messy/138.svg',
+        url: $("#noLoading#").lazyRule(() => {
+            if(getItem('规则日志打印')){
+                clearItem('规则日志打印');
+            }else{
+                setItem('规则日志打印','1');
+            }
+            refreshPage();
+            return 'hiker://empty';
+        }),
+        col_type: 'text_icon'
+    });
     d.push({
         col_type: "line_blank"
     });
@@ -1513,7 +1536,6 @@ function manageSet(){
                         },nowtime, newVersion.SrcJuying),
                         cancel:''
                     })
-                    log('检测到新版本！\nV'+newVersion.SrcJuying+'版本》'+newVersion.SrcJuyingdesc[newVersion.SrcJuying]);
                 }else{
                     toast('已经为最新版本');
                 }
