@@ -1348,7 +1348,7 @@ function getErData(jkdata) {
             area = json.vod_area;
             remarks = json.vod_remarks || json.vod_class || "";
             desc = json.vod_content || "";
-            pic = json.vod_pic;
+            pic = json.vod_pic.includes('none.gif')?"":json.vod_pic;
             tabs = json.vod_play_from.split('$$$');
             lists = json.vod_play_url.split('$$$').map(it => {
                 return it.split('#');
