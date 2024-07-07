@@ -373,6 +373,15 @@ function selectSource() {
                 clearMyVar('SrcJu_dianbo$classCache');
                 clearMyVar('SrcJu_dianbo$flCache');
                 clearMyVar('点播动态加载loading');
+
+                let sort = {};
+                if(fetch(sortfile)){
+                    eval("sort = " + fetch(sortfile));
+                }
+                let key = tmpList[i].url;
+                sort[key] = sort[key] || 0;
+                sort[key] = sort[key] + 1;
+                writeFile(sortfile, JSON.stringify(sort));
                 refreshPage(true);
                 return 'toast://' + '主页源已设置为：' + input;
             }else{
