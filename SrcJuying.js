@@ -793,6 +793,8 @@ function dianboyiji() {
                     }
                     if(input == '开启hipy_t3'){
                         setItem('hipy_t3_enable', '1');
+                        refreshPage();
+                        return "toast://已开启";
                     }
                     return input + searchurl;
                 },searchurl),
