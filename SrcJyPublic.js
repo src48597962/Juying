@@ -159,7 +159,18 @@ function getSearchLists(group) {
     let datalist = getDatas('jk', 1).filter(it=>{
         return it.searchable!=0;
     });
-    
+    if (getItem("sourceListSort") != "使用频率") {
+        let sort = {};
+        if(fetch(sortfile)){
+            eval("sort = " + fetch(sortfile));
+        }
+        datalist.forEach(it=>{
+            it.sort = sort[it.url] || 0;
+        })
+        datalist.sort((a, b) => {
+            return b.sort - a.sort
+        })
+    }
     if(group){
         return datalist.filter(it=>{
             return group==(it.group||it.type);
