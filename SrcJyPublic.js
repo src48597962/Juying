@@ -392,6 +392,7 @@ function selectSource() {
                         inputBox.setTitle(a);
                         inputBox.setDefaultValue("");
                         sourceList = getGroupLists(sourceAllList, a);
+                        tmpList = sourceList;
                         names = sourceList.map((v,i) => {
                             return v.name;
                         });
