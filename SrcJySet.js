@@ -1600,7 +1600,7 @@ function resource() {
     d.push({
         title: (importtype=="2"?"👉":"")+"道长hipy库导入",
         col_type: 'scroll_button',
-        url: $('#noLoading#').lazyRule(() => {
+        url: getItem('hipy_t3_enable')!="1"?"toast://请使用DrpyHiker小程序":$('#noLoading#').lazyRule(() => {
             putMyVar('importtype','2');
             refreshPage(false);
             return "hiker://empty";
@@ -1923,7 +1923,7 @@ function Resourceimport(input,importtype,importmode){
                         arr = { "name": obj.name, "type": "XBPQ", "ext": extfile};
                     }else if(/^csp_XYQHiker/.test(obj.api)){
                         arr = { "name": obj.name, "type": "XYQ", "ext": extfile};
-                    }else if(/drpy2/.test(obj.api) && obj.type==3){
+                    }else if(/drpy2/.test(obj.api) && obj.type==3 && getItem('hipy_t3_enable')=="1"){
                         arr = { "name": obj.name, "type": "hipy_t3", "ext": extfile};
                         if(arr.name.includes('[搜]')){
                             arr['onlysearch'] = 1;
