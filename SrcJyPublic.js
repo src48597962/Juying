@@ -309,10 +309,10 @@ function setJkSort(data, k) {
 }
 // 获取接口对应的显示标题
 function getDataTitle(data) {
-    if(data.url){
+    if($.type(data.type)=="string"){
         return data.name + ' ('+data.type+')' + (data.group&&data.group!=data.type?' [' + data.group + ']':"");
     }else{
-        return data.sort+'-'+data.name+'-'+data.parse;
+        return (data.sort||0) + '-'+data.name + '-'+data.parse;
     }
 }
 //接口管理多选方法
@@ -325,13 +325,12 @@ function duoselect(datas){
     }
     let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
     datalist.forEach(data=>{
-        let id = data.url?data.url:data.parse;
-        if(!duoselect.some(item => id==(item.url?item.url:item.parse))){
+        if(!duoselect.some(item => data.url==item.url)){
             duoselect.push(data);
             updateItem(id, {title:'‘‘’’'+colorTitle(getDataTitle(data),'#3CB371')});
         }else{
             for(var i = 0; i < duoselect.length; i++) {
-                if(id == (duoselect[i].url?duoselect[i].url:duoselect[i].parse)) {
+                if(data.url == duoselect[i].url) {
                     duoselect.splice(i, 1);
                     break;
                 }
