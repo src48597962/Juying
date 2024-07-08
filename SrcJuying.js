@@ -787,8 +787,12 @@ function dianboyiji() {
             d.push({
                 title: "搜索",
                 url: $.toString((searchurl) => {
-                    if(input.trim() == ''){
+                    input = input.trim();
+                    if(input == ''){
                         return "hiker://empty"
+                    }
+                    if(input == '开启hipy_t3'){
+                        setItem('hipy_t3_enable', '1');
                     }
                     return input + searchurl;
                 },searchurl),
