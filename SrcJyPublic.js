@@ -284,6 +284,29 @@ function preferrEnable(data) {
     clearMyVar('SrcJu_duoselect');
     return sm;
 }
+// 设置接口顺序
+function setJkSort(data, k) {
+    let waitlist= [];
+    if($.type(data)=='string'){
+        waitlist.push(data);
+    }else if($.type(data)=='array'){
+        waitlist = data;
+    }
+    let sort = {};
+    if(fetch(sortfile)){
+        eval("sort = " + fetch(sortfile));
+    }
+    waitlist.forEach(it=>{
+        sort[it] = sort[it] || 0;
+        if(k){
+             sort[it] = sort[it] + 1;
+        }else{
+             sort[it] = sort[it] - 1;
+        }
+    })
+    
+    writeFile(sortfile, JSON.stringify(sort));
+}
 // 获取接口对应的显示标题
 function getDataTitle(data) {
     if(data.url){
