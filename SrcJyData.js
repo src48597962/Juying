@@ -87,6 +87,14 @@ function getYiData(jkdata) {
             vodhost = getHome(listurl);
         }
     } else if (api_type == 'hipy_t3') {
+        if(getItem('hipy_t3_enable')!="1"){
+            toast("hipy_t3请使用DrpyHiker小程序");
+            return {
+                fllists: [],
+                vodlists: [],
+                error: {}
+            }
+        }
         let apifile = getDrpyFile(jkdata);
         if(apifile){
             var drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(api_name, apifile);
@@ -672,6 +680,10 @@ function getSsData(name, jkdata, page) {
             }
         }
     } else if (api_type=="hipy_t3" || api_type=="hipy_t4") {
+        if(api_type=="hipy_t3" && getItem('hipy_t3_enable')!="1"){
+            log('hipy_t3请使用DrpyHiker小程序');
+            return [];
+        }
         vodurlhead = "";
         listnode = "json.list";
     } else {
