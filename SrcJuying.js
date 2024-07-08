@@ -158,12 +158,14 @@ function erjisousuo(name,group,datas,num) {
                 id: item.url
             }
         });
-        let beidlist =[];
+        let failsort = [];
+        let beidlist = [];
         let success = 0;
         if (list.length > 0) {
             be(list, {
                 func: function (obj, id, error, taskResult) {
                     beidlist.push(id);
+
                     if(getMyVar("SrcJu_停止搜索线程")=="1"){
                         return "break";
                     }else if(taskResult.success==1){
@@ -177,8 +179,11 @@ function erjisousuo(name,group,datas,num) {
                             if(success>=20){
                                 return "break";
                             }
+                        }else{
+                            failsort.push(id);
                         }
                     }else if(taskResult.success==0){
+                        failsort.push(id);
                         nosousuolist.push(id);
                         storage0.putMyVar('nosousuolist', nosousuolist);
                     }
@@ -207,6 +212,7 @@ function erjisousuo(name,group,datas,num) {
             }
             if(getMyVar("SrcJu_停止搜索线程")!="1"){
                 storage0.putMyVar('SrcJu_searchMark', searchMark);
+                setJkSort(failsort);
             }
             clearMyVar("SrcJu_停止搜索线程");
             let sousuosm = "‘‘’’<small><font color=#f13b66a>" + success + "</font>/" + (num || list.length) + "，搜索完成</small>";
