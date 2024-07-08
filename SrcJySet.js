@@ -1505,12 +1505,9 @@ function manageSet(){
         img: 'https://hikerfans.com/tubiao/system/100.png',
         col_type: 'text_icon',
         url: $("#noLoading#").lazyRule(() => {
-            let n = fetch(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcTmplVersion.js');
-            log(n);
-            eval(n);
+            eval(fetch(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcTmplVersion.js'));
             let updateRecords = newVersion.JYUpdateRecords || [];
             updateRecords.reverse();
-            log(updateRecords);
 
             const hikerPop = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6966");
             hikerPop.updateRecordsBottom(updateRecords);
