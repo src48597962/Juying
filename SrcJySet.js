@@ -1775,93 +1775,98 @@ function resource() {
 }
 //hipy库导入
 function HipyImport(input, importmode){
-    if(input.startsWith('http') && !input.includes('github.com')){
-        return "toast://在线只支持github库"
-    }
-    if(input.endsWith('/')){
-        input = input.substring(0, input.length - 1);
-    }
-    showLoading('检测地址有效性');
-    let html = request(input);
-    let json = JSON.parse(html.split(`data-target="react-app.embeddedData">`)[1].split(`</script>`)[0]);
-    let list = json.payload.tree.items;
-    showLoading('执行多线程导入'+list.length);
-    let ghproxy = $.require('ghproxy').getproxy();
-    let jiekous = list.filter(v=>v.contentType=="file").map(it=>{
-        return {
-            name: it.name,
-            url: input.replace('github.com','raw.githubusercontent.com').replace('/tree/','/') + it.path.substr(it.path.lastIndexOf('/')),
-            ghproxy: ghproxy
-        }
-    });
-
-    let urls= [];
-    let datapath = globalMap0.getMyVar('gmParams').datapath + "libs_jk/";
-    //多线程处理
-    var task = function(obj) {
-        function shuffleArray(array) {
-            array.sort(() => Math.random() - 0.5);
-            return array;
-        }
-        let proxys = obj.ghproxy;
-        shuffleArray(proxys)
-        function getcontent() {
-            for(let i=0;i<proxys.length;i++){
-                let content = fetch(proxys[i]+obj.url, {timeout:3000});
-                if (content && !content.trim().startsWith('<!DOCTYPE html>') && !content.startsWith('<html>')) {
-                    return content;
-                }
-            }
-            return fetch(obj.url, {timeout:6000});
-        }
-        let arr = { "name": obj.name.split('.')[0], "type": "hipy_t3", "ext": obj.url}
-        if(arr.name.includes('[搜]')){
-            arr['onlysearch'] = 1;
-        }
-        let urlfile;
-        try{
-            let content = getcontent();
-            if (content) {
-                urlfile = datapath + arr.type + '_' + obj.name;
-                writeFile(urlfile, content);
-            }
-        }catch(e){
-            log(obj.name + '>hipy库文件缓存失败>' + e.message);
-        }
-        
-        if(urlfile){
-            arr['url'] = urlfile;
-        }
-        
-        if(arr.url){
-            urls.push(arr);
-        }
-        return 1;
-    }
-    
-    let jiekoutask = jiekous.map((list)=>{
-        return {
-            func: task,
-            param: list,
-            id: list.name
-        }
-    });
-
-    be(jiekoutask, {
-        func: function(obj, id, error, taskResult) {                            
-        },
-        param: {
-        }
-    });
-    let jknum = 0;
     try{
-        jknum = jiekousave(urls, importmode);
+        if(input.startsWith('http') && !input.includes('github.com')){
+            return "toast://在线只支持github库";
+        }
+        if(input.endsWith('/')){
+            input = input.substring(0, input.length - 1);
+        }
+        showLoading('检测地址有效性');
+        let html = request(input);
+        let json = JSON.parse(html.split(`data-target="react-app.embeddedData">`)[1].split(`</script>`)[0]);
+        let list = json.payload.tree.items;
+        showLoading('执行多线程导入'+list.length);
+        let ghproxy = $.require('ghproxy').getproxy();
+        let jiekous = list.filter(v=>v.contentType=="file").map(it=>{
+            return {
+                name: it.name,
+                url: input.replace('github.com','raw.githubusercontent.com').replace('/tree/','/') + it.path.substr(it.path.lastIndexOf('/')),
+                ghproxy: ghproxy
+            }
+        });
+
+        let urls= [];
+        let datapath = globalMap0.getMyVar('gmParams').datapath + "libs_jk/";
+        //多线程处理
+        var task = function(obj) {
+            function shuffleArray(array) {
+                array.sort(() => Math.random() - 0.5);
+                return array;
+            }
+            let proxys = obj.ghproxy;
+            shuffleArray(proxys)
+            function getcontent() {
+                for(let i=0;i<proxys.length;i++){
+                    let content = fetch(proxys[i]+obj.url, {timeout:3000});
+                    if (content && !content.trim().startsWith('<!DOCTYPE html>') && !content.startsWith('<html>')) {
+                        return content;
+                    }
+                }
+                return fetch(obj.url, {timeout:6000});
+            }
+            let arr = { "name": obj.name.split('.')[0], "type": "hipy_t3", "ext": obj.url}
+            if(arr.name.includes('[搜]')){
+                arr['onlysearch'] = 1;
+            }
+            let urlfile;
+            try{
+                let content = getcontent();
+                if (content) {
+                    urlfile = datapath + arr.type + '_' + obj.name;
+                    writeFile(urlfile, content);
+                }
+            }catch(e){
+                log(obj.name + '>hipy库文件缓存失败>' + e.message);
+            }
+            
+            if(urlfile){
+                arr['url'] = urlfile;
+            }
+            
+            if(arr.url){
+                urls.push(arr);
+            }
+            return 1;
+        }
+        
+        let jiekoutask = jiekous.map((list)=>{
+            return {
+                func: task,
+                param: list,
+                id: list.name
+            }
+        });
+
+        be(jiekoutask, {
+            func: function(obj, id, error, taskResult) {                            
+            },
+            param: {
+            }
+        });
+        let jknum = 0;
+        try{
+            jknum = jiekousave(urls, importmode);
+        }catch(e){
+            jknum =-1;
+            log('TVBox导入接口保存有异常>'+e.message);
+        }
+        hideLoading();
+        return 'toast://hipy库>查询' + jiekous.length + (jknum>-1?' 接口保存'+jknum:' 导入异常');     
     }catch(e){
-        jknum =-1;
-        log('TVBox导入接口保存有异常>'+e.message);
+        toast('链接访问异常，查看网页');
+        return input;;
     }
-    hideLoading();
-    return 'toast://hipy库>查询' + jiekous.length + (jknum>-1?' 接口保存'+jknum:' 导入异常');     
 }
 //资源导入
 function Resourceimport(input,importtype,importmode){
