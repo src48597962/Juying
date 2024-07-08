@@ -291,14 +291,15 @@ function SRCSet() {
     jkdatalist.forEach(it => {
         let selectmenu,datatitle,datadesc;
         if(guanliType=="jk"){
-            datatitle = it.name + ' ('+it.type+')' + (it.group?' [' + it.group + ']':"") + (it.preferr?" ⭐":"");
+            //datatitle = it.name + ' ('+it.type+')' + (it.group?' [' + it.group + ']':"") + (it.preferr?" ⭐":"");
             datadesc = it.url;
             selectmenu = ["分享","编辑", "删除", it.stop?"启用":"禁用", "优选"];
         }else{
-            datatitle = (it.sort||0)+'-'+it.name+'-'+it.url;
+            //datatitle = (it.sort||0)+'-'+it.name+'-'+it.url;
             datadesc = it.ext&&it.ext.flag?it.ext.flag.join(','):"";
             selectmenu = ["分享","编辑", "删除", it.stop?"启用":"禁用"];
         }
+        datatitle = getDataTitle(it);
 
         d.push({
             title: it.stop?'‘‘’’'+colorTitle(datatitle,'#f20c00'):datatitle,
