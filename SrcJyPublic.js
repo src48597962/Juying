@@ -327,7 +327,7 @@ function duoselect(datas){
     datalist.forEach(data=>{
         if(!duoselect.some(item => data.url==item.url)){
             duoselect.push(data);
-            updateItem(id, {title:'‘‘’’'+colorTitle(getDataTitle(data),'#3CB371')});
+            updateItem(data.url, {title:'‘‘’’'+colorTitle(getDataTitle(data),'#3CB371')});
         }else{
             for(var i = 0; i < duoselect.length; i++) {
                 if(data.url == duoselect[i].url) {
@@ -335,7 +335,7 @@ function duoselect(datas){
                     break;
                 }
             }
-            updateItem(id, {title:data.stop?`‘‘’’`+colorTitle(getDataTitle(data),'#f20c00'):getDataTitle(data)});
+            updateItem(data.url, {title:data.stop?`‘‘’’`+colorTitle(getDataTitle(data),'#f20c00'):getDataTitle(data)});
         }
     })
     storage0.putMyVar('SrcJu_duoselect',duoselect);
