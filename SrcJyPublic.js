@@ -77,11 +77,13 @@ function getDatas(lx, isyx) {
                                 if(extfile.startsWith('./')){
                                     extfile = input.substr(0, input.lastIndexOf('/')+1) + extfile.replace("./","");
                                 }
+                                log(extfile);
                                 let urlfile;
                                 if(input.startsWith('file://')){
                                     urlfile = 'hiker://files/' + extfile.split('/files/Documents/')[1];
                                 }else if(input.startsWith('http')){
                                     try{
+                                        log('进来');
                                         let content = fetch(extfile, {timeout:2000});
                                         if (content == '') {
                                             urlfile = '';
@@ -93,6 +95,7 @@ function getDatas(lx, isyx) {
                                         log(obj.name + 'ext文件缓存失败>' + e.message);
                                     }
                                 }
+                                log(urlfile);
                                 if(urlfile){
                                     arr = { "name": obj.name, "url": urlfile, "type": "hipy_t3", "ext": extfile};
                                     if(arr.name.includes('[搜]')){
