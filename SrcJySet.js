@@ -1901,6 +1901,7 @@ function Resourceimport(input,importtype,importmode){
         if((getMyVar('importjiekou','1')=="1")&&jiekous.length>0){
             let urls= [];
             let datapath = globalMap0.getMyVar('gmParams').datapath + "libs_jk/";
+            let hipy_t3_enable = getItem('hipy_t3_enable')=="1"?1:0;
             //多线程处理
             var task = function(obj) {
                 let arr;
@@ -1929,7 +1930,7 @@ function Resourceimport(input,importtype,importmode){
                         arr = { "name": obj.name, "type": "XBPQ", "ext": extfile};
                     }else if(/^csp_XYQHiker/.test(obj.api)){
                         arr = { "name": obj.name, "type": "XYQ", "ext": extfile};
-                    }else if(/drpy2/.test(obj.api) && obj.type==3 && getItem('hipy_t3_enable')=="1"){
+                    }else if(/drpy2/.test(obj.api) && obj.type==3 && hipy_t3_enable){
                         arr = { "name": obj.name, "type": "hipy_t3", "ext": extfile};
                         if(arr.name.includes('[搜]')){
                             arr['onlysearch'] = 1;
