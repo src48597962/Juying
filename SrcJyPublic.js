@@ -39,8 +39,9 @@ function getDatas(lx, isyx) {
         }
     }else if(getItem('sourceMode','1')=='2'){
         if(Juconfig['dySource']){
-            let input = Juconfig['dySource'];
-            if(input.startsWith('http')){
+            let dySource = Juconfig['dySource'];
+            let input;
+            if(dySource.startsWith('http')){
                 let dyJkTmpFile = "hiker://files/_cache/"+md5(Juconfig['dySource'])+".json";
                 if(!fileExist(dyJkTmpFile)){
                     let contnet = getJkContnet(Juconfig['dySource']);
@@ -49,8 +50,10 @@ function getDatas(lx, isyx) {
                     }
                 }
                 input = dyJkTmpFile;
-            }else if(!input.startsWith('file://')){
+            }else if(!dySource.startsWith('file://')){
                 input = '';
+            }else{
+                input = dySource;
             }
             
             if(fileExist(input)){
@@ -75,15 +78,13 @@ function getDatas(lx, isyx) {
                             }else if(/drpy2/.test(obj.api) && obj.type==3){
                                 let extfile = obj.ext;
                                 if(extfile.startsWith('./')){
-                                    extfile = input.substr(0, input.lastIndexOf('/')+1) + extfile.replace("./","");
+                                    extfile = dySource.substr(0, dySource.lastIndexOf('/')+1) + extfile.replace("./","");
                                 }
-                                log(extfile);
                                 let urlfile;
-                                if(input.startsWith('file://')){
+                                if(dySource.startsWith('file://')){
                                     urlfile = 'hiker://files/' + extfile.split('/files/Documents/')[1];
-                                }else if(input.startsWith('http')){
+                                }else if(dySource.startsWith('http')){
                                     try{
-                                        log('进来');
                                         let content = fetch(extfile, {timeout:2000});
                                         if (content == '') {
                                             urlfile = '';
@@ -95,7 +96,6 @@ function getDatas(lx, isyx) {
                                         log(obj.name + 'ext文件缓存失败>' + e.message);
                                     }
                                 }
-                                log(urlfile);
                                 if(urlfile){
                                     arr = { "name": obj.name, "url": urlfile, "type": "hipy_t3", "ext": extfile};
                                     if(arr.name.includes('[搜]')){
