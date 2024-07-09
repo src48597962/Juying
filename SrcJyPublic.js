@@ -84,15 +84,18 @@ function getDatas(lx, isyx) {
                                 if(dySource.startsWith('file://')){
                                     urlfile = 'hiker://files/' + extfile.split('/files/Documents/')[1];
                                 }else if(dySource.startsWith('http')){
+                                    urlfile = 'hiker://files/_cache/hipy_t3' + '_' + extfile.substr(extfile.lastIndexOf('/') + 1);
                                     try{
-                                        let content = fetch(extfile, {timeout:2000});
-                                        if (content == '') {
-                                            urlfile = '';
-                                        }else{
-                                            urlfile = 'hiker://files/_cache/hipy_t3' + '_' + extfile.substr(extfile.lastIndexOf('/') + 1);
-                                            writeFile(urlfile, content);
+                                        if(!fileExist(urlfile)){
+                                            let content = fetch(extfile, {timeout:2000});
+                                            if (content == '') {
+                                                urlfile = '';
+                                            }else{
+                                                writeFile(urlfile, content);
+                                            }
                                         }
                                     }catch(e){
+                                        urlfile = '';
                                         log(obj.name + 'ext文件缓存失败>' + e.message);
                                     }
                                 }
@@ -362,11 +365,12 @@ function duoselect(datas){
 }
 // 点播主页选择源接口
 function selectSource() {
+    showLoading('加载接口列表中.');
     const hikerPop = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6966");
     let sourceAllList = getDatas("jk", 1).filter(x=> !x.onlysearch);
     let sourceList = getGroupLists(sourceAllList, sourceGroup);
     let tmpList = sourceList;
-
+    hideLoading();
     hikerPop.setUseStartActivity(false);
     let index = 0;
     let names = sourceList.map((v,i) => {
