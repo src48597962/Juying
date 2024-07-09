@@ -1595,7 +1595,7 @@ function resource() {
         url: $('#noLoading#').lazyRule(() => {
             putMyVar('importtype','1');
             refreshPage(false);
-            return "hiker://empty";
+            return "toast://支持本地包或在线box配置文件导入";
         })
     });
     d.push({
@@ -1604,7 +1604,7 @@ function resource() {
         url: getItem('hipy_t3_enable')!="1"?"toast://请使用DrpyHiker小程序":$('#noLoading#').lazyRule(() => {
             putMyVar('importtype','2');
             refreshPage(false);
-            return "hiker://empty";
+            return "toast://此项只仅支github库，hipy项目js文件所在的路径";
         })
     });
     d.push({
