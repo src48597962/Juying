@@ -72,15 +72,32 @@ function getDatas(lx, isyx) {
                                 if(arr.name.includes('[搜]')){
                                     arr['onlysearch'] = 1;
                                 }
-                            }else if(/drpy2/.test(obj.api) && obj.type==3 && input.startsWith('file://')){
+                            }else if(/drpy2/.test(obj.api) && obj.type==3){
                                 let extfile = obj.ext;
                                 if(extfile.startsWith('./')){
                                     extfile = input.substr(0, input.lastIndexOf('/')+1) + extfile.replace("./","");
                                 }
-                                let urlfile = 'hiker://files/' + extfile.split('/files/Documents/')[1];
-                                arr = { "name": obj.name, "url": urlfile, "type": "hipy_t3", "ext": extfile};
-                                if(arr.name.includes('[搜]')){
-                                    arr['onlysearch'] = 1;
+                                let urlfile;
+                                if(input.startsWith('file://')){
+                                    urlfile = 'hiker://files/' + extfile.split('/files/Documents/')[1];
+                                }else if(input.startsWith('http')){
+                                    try{
+                                        let content = fetch(extfile, {timeout:2000});
+                                        if (content == '') {
+                                            urlfile = '';
+                                        }else{
+                                            urlfile = 'hiker://files/_cache/hipy_t3' + '_' + extfile.substr(extfile.lastIndexOf('/') + 1);
+                                            writeFile(urlfile, content);
+                                        }
+                                    }catch(e){
+                                        log(obj.name + 'ext文件缓存失败>' + e.message);
+                                    }
+                                }
+                                if(urlfile){
+                                    arr = { "name": obj.name, "url": urlfile, "type": "hipy_t3", "ext": extfile};
+                                    if(arr.name.includes('[搜]')){
+                                        arr['onlysearch'] = 1;
+                                    }
                                 }
                             }
                             if(arr){
