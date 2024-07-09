@@ -365,7 +365,7 @@ function duoselect(datas){
 }
 // 点播主页选择源接口
 function selectSource() {
-    showLoading('加载接口列表中.');
+    showLoading('加载接口列表中...');
     const hikerPop = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6966");
     let sourceAllList = getDatas("jk", 1).filter(x=> !x.onlysearch);
     let sourceList = getGroupLists(sourceAllList, sourceGroup);
