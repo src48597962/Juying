@@ -1751,7 +1751,8 @@ function resource() {
                 }else if(getMyVar('importtype','1')=="3"){
                     Juconfig['dySource'] = input;
                     writeFile(cfgfile, JSON.stringify(Juconfig));
-                    return "toast://已订阅";
+                    back();
+                    return "toast://已订阅，选择主页源时加载新订阅";
                 }
             }, Juconfig, cfgfile),
         col_type: "text_2",
