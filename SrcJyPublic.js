@@ -60,6 +60,7 @@ function getDatas(lx, isyx) {
                 try{
                     let data = JSON.parse(fetch(input));
                     let list = lx=="jk"?data.sites:data.parses || [];
+                    let hipy_t3_enable = getItem('hipy_t3_enable')=="1"?1:0;
                     let task = function(obj) {
                         let arr;
                         if(lx=="jk"){
@@ -75,7 +76,7 @@ function getDatas(lx, isyx) {
                                 if(arr.name.includes('[搜]')){
                                     arr['onlysearch'] = 1;
                                 }
-                            }else if(/drpy2/.test(obj.api) && obj.type==3){
+                            }else if(/drpy2/.test(obj.api) && obj.type==3 && hipy_t3_enable){
                                 let extfile = obj.ext;
                                 if(extfile.startsWith('./')){
                                     extfile = dySource.substr(0, dySource.lastIndexOf('/')+1) + extfile.replace("./","");
