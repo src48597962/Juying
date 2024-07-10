@@ -60,7 +60,7 @@ function getDatas(lx, isyx) {
                 try{
                     let data = JSON.parse(fetch(input));
                     let list = lx=="jk"?data.sites:data.parses || [];
-                    list.forEach(obj=>{
+                    let task = function(obj) {
                         let arr;
                         if(lx=="jk"){
                             if(/^csp_AppYs/.test(obj.api)){
@@ -117,7 +117,21 @@ function getDatas(lx, isyx) {
                         if(arr){
                             datalist.push(arr);
                         }
-                    })
+                    }
+                    let listtask = list.map((obj)=>{
+                        return {
+                            func: task,
+                            param: obj,
+                            id: obj.name
+                        }
+                    });
+
+                    be(listtask, {
+                        func: function(obj, id, error, taskResult) {                            
+                        },
+                        param: {
+                        }
+                    });
                 }catch(e){}
             }
         }
@@ -365,12 +379,11 @@ function duoselect(datas){
 }
 // 点播主页选择源接口
 function selectSource() {
-    showLoading('加载接口列表中...');
     const hikerPop = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6966");
     let sourceAllList = getDatas("jk", 1).filter(x=> !x.onlysearch);
     let sourceList = getGroupLists(sourceAllList, sourceGroup);
     let tmpList = sourceList;
-    hideLoading();
+
     hikerPop.setUseStartActivity(false);
     let index = 0;
     let names = sourceList.map((v,i) => {
