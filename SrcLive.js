@@ -1,5 +1,5 @@
 //本代码仅用于个人学习，请勿用于其他作用，下载后请24小时内删除，代码虽然是公开学习的，但请尊重作者，应留下说明
-let datapath = "hiker://files/data/"+MY_RULE.title+"/";
+let datapath = "hiker://files/data/" + MY_RULE.title + "/";
 putMyVar('JY直播数据路径', datapath);
 function Live() {
     addListener("onClose", $.toString(() => {
@@ -10,58 +10,58 @@ function Live() {
         clearMyVar('JYlivelocal');
         clearMyVar('JY直播数据路径');
     }));
-    
+
     var d = [];
     d.push({
         title: '⚙管理中心⚙',
         img: "hiker://files/cache/src/聚影.png" || "https://i.postimg.cc/9Q0rhbf0/image.png",
         url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
-                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLive.js');
-                LiveSet();
-            }),
+            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLive.js');
+            LiveSet();
+        }),
         col_type: 'avatar'
     });
     let livecfgfile = "hiker://files/rules/Src/Juying2/liveconfig.json";
     let livecfg = fetch(livecfgfile);
-    if(livecfg != ""){
+    if (livecfg != "") {
         eval("var liveconfig = " + livecfg);
-    }else{
+    } else {
         var liveconfig = {};
     }
-    let livedata = liveconfig['data']||[];
+    let livedata = liveconfig['data'] || [];
     livedata = livedata.filter(item => {
-        return item.show!=0;
+        return item.show != 0;
     })
 
     let JYlivefile = datapath + "live.txt";
     let JYlive = "";
-    let JYlivedyurl = getMyVar('JYlivedyurl','juying');
-    if(getMyVar('JYlivelocal','0')=="1"){
-        JYlive=fetch(JYlivefile);
-    }else{
-        if(JYlivedyurl=="juying"){
-            JYlive=fetch(JYlivefile);
-            if(JYlive==""&&livedata.length>0){
-                JYlivedyurl = livedata[0].url?livedata[0].url:JYlivedyurl;
-                putMyVar('JYlivedyurl',JYlivedyurl);
+    let JYlivedyurl = getMyVar('JYlivedyurl', 'juying');
+    if (getMyVar('JYlivelocal', '0') == "1") {
+        JYlive = fetch(JYlivefile);
+    } else {
+        if (JYlivedyurl == "juying") {
+            JYlive = fetch(JYlivefile);
+            if (JYlive == "" && livedata.length > 0) {
+                JYlivedyurl = livedata[0].url ? livedata[0].url : JYlivedyurl;
+                putMyVar('JYlivedyurl', JYlivedyurl);
             }
         }
-        if(JYlivedyurl!="juying"){
-            try{
+        if (JYlivedyurl != "juying") {
+            try {
                 showLoading('发现订阅源，正在初始化');
-                let YChtml = fetchCache(JYlivedyurl,48,{timeout:3000}).replace(/TV-/g,'TV').replace(/\[.*\]/g,'');
-                if(YChtml.indexOf('#genre#')>-1 || YChtml.indexOf('#EXTINF:-1')>-1){
+                let YChtml = fetchCache(JYlivedyurl, 48, { timeout: 3000 }).replace(/TV-/g, 'TV').replace(/\[.*\]/g, '');
+                if (YChtml.indexOf('#genre#') > -1 || YChtml.indexOf('#EXTINF:-1') > -1) {
                     JYlive = YChtml;
                 }
                 hideLoading();
-            }catch(e){
+            } catch (e) {
                 hideLoading();
                 log(e.message);
             }
         }
     }
 
-    if(livedata.length>0){
+    if (livedata.length > 0) {
         d.push({
             col_type: 'line'
         })
@@ -71,30 +71,30 @@ function Live() {
             })
         }
         d.push({
-            title: JYlivedyurl=="juying"?'本地✌':'本地',
+            title: JYlivedyurl == "juying" ? '本地✌' : '本地',
             url: $("#noLoading#").lazyRule(() => {
-                putMyVar('JYlivedyurl','juying');
-                putMyVar('JYlivelocal','1');
+                putMyVar('JYlivedyurl', 'juying');
+                putMyVar('JYlivelocal', '1');
                 refreshPage(false);
                 return "toast://聚影直播本地源数据";
             }),
             col_type: 'scroll_button'
         })
-        for(let i=0;i<livedata.length;i++){
+        for (let i = 0; i < livedata.length; i++) {
             let dyname = livedata[i].name;
             let dyurl = livedata[i].url;
             //if(livedata[i].show!=0){
-                d.push({
-                    title: JYlivedyurl==dyurl?dyname+'✌':dyname,
-                    url: $("#noLoading#").lazyRule((dyname,dyurl) => {
-                        putMyVar('JYlivedyurl',dyurl);
-                        clearMyVar('JYlivelocal');
-                        clearMyVar('editmode');
-                        refreshPage(false);
-                        return "toast://已切换远程订阅："+dyname;
-                    },dyname,dyurl),
-                    col_type: 'scroll_button'
-                })
+            d.push({
+                title: JYlivedyurl == dyurl ? dyname + '✌' : dyname,
+                url: $("#noLoading#").lazyRule((dyname, dyurl) => {
+                    putMyVar('JYlivedyurl', dyurl);
+                    clearMyVar('JYlivelocal');
+                    clearMyVar('editmode');
+                    refreshPage(false);
+                    return "toast://已切换远程订阅：" + dyname;
+                }, dyname, dyurl),
+                col_type: 'scroll_button'
+            })
             //}
         }
         d.push({
@@ -102,57 +102,57 @@ function Live() {
         })
     }
 
-    if(JYlive){
-        if(JYlive.indexOf('#genre#')>-1){
+    if (JYlive) {
+        if (JYlive.indexOf('#genre#') > -1) {
             var JYlives = JYlive.split('\n');
-        }else if(JYlive.indexOf('#EXTINF:-1')>-1){
+        } else if (JYlive.indexOf('#EXTINF:-1') > -1) {
             var JYlives = JYlive.split('#EXTINF:-1 ');
-        }else{
+        } else {
             var JYlives = [];
         }
-    }else{
+    } else {
         var JYlives = [];
     }
-    
-    if(JYlives.length>0){
+
+    if (JYlives.length > 0) {
         let datalist = [];
         let datalist2 = [];
         let group = "";
-        for(let i=0;i<JYlives.length;i++){
-            try{
-                if(JYlive.indexOf('#genre#')>-1){
-                    if(JYlives[i].indexOf('#genre#')>-1){
+        for (let i = 0; i < JYlives.length; i++) {
+            try {
+                if (JYlive.indexOf('#genre#') > -1) {
+                    if (JYlives[i].indexOf('#genre#') > -1) {
                         group = JYlives[i].split(',')[0];
-                    }else if(JYlives[i].indexOf(',')>-1){
-                        datalist.push({group: group, name: JYlives[i].split(',')[0].trim()});
+                    } else if (JYlives[i].indexOf(',') > -1) {
+                        datalist.push({ group: group, name: JYlives[i].split(',')[0].trim() });
                     }
-                }else if(JYlives[i].indexOf('group-title')>-1){
-                    datalist.push({group: JYlives[i].match(/group-title="(.*?)"/)[1], name: JYlives[i].match(/",(.*?)\n/)[1]});
+                } else if (JYlives[i].indexOf('group-title') > -1) {
+                    datalist.push({ group: JYlives[i].match(/group-title="(.*?)"/)[1], name: JYlives[i].match(/",(.*?)\n/)[1] });
                 }
-            }catch(e){
+            } catch (e) {
                 //log(e.message);
             }
         }
 
         let obj = {};
-        if(JYlivedyurl=="juying"){putMyVar('JYlivenum',datalist.length);}
+        if (JYlivedyurl == "juying") { putMyVar('JYlivenum', datalist.length); }
         datalist = datalist.reduce((newArr, next) => {
             obj[next.name] ? "" : (obj[next.name] = true && newArr.push(next));
             return newArr;
         }, []);
         d.push({
             title: "🔍",
-            url: $.toString((guanlidata,datalist) => {
-                    if(datalist.length>0){
-                        deleteItemByCls('livelist');
-                        let lists = datalist.filter(item => {
-                            return item.name.includes(input);
-                        })
-                        let gldatalist = guanlidata(lists);
-                        addItemAfter('liveloading', gldatalist);
-                    }
-                    return "hiker://empty";
-                },guanlidata,datalist),
+            url: $.toString((guanlidata, datalist) => {
+                if (datalist.length > 0) {
+                    deleteItemByCls('livelist');
+                    let lists = datalist.filter(item => {
+                        return item.name.includes(input);
+                    })
+                    let gldatalist = guanlidata(lists);
+                    addItemAfter('liveloading', gldatalist);
+                }
+                return "hiker://empty";
+            }, guanlidata, datalist),
             desc: "搜你想要的...",
             col_type: "input",
             extra: {
@@ -160,60 +160,60 @@ function Live() {
                 titleVisible: true
             }
         });
-        
-        let grouplist = datalist.map((list)=>{
+
+        let grouplist = datalist.map((list) => {
             return list.group;
         })
-        function uniq(array){
-            var temp = []; 
-            for(var i = 0; i < array.length; i++){
-                if(temp.indexOf(array[i]) == -1){
+        function uniq(array) {
+            var temp = [];
+            for (var i = 0; i < array.length; i++) {
+                if (temp.indexOf(array[i]) == -1) {
                     temp.push(array[i]);
                 }
             }
             return temp;
         }
-        
+
         grouplist = uniq(grouplist);
         let index = 0;
-        for(var i in grouplist){
+        for (var i in grouplist) {
             let lists = datalist.filter(item => {
-                return item.group==grouplist[i];
+                return item.group == grouplist[i];
             })
-            if(lists.length>0){
-                let groupname = grouplist[i]?grouplist[i]:"未分组";
-                let longClick = getMyVar('editmode','0')=="1"?[{
+            if (lists.length > 0) {
+                let groupname = grouplist[i] ? grouplist[i] : "未分组";
+                let longClick = getMyVar('editmode', '0') == "1" ? [{
                     title: "删除此分组",
-                    js: $.toString((groupname,lists) => {
+                    js: $.toString((groupname, lists) => {
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLive.js');
-                        return GroupEdit(groupname,'del',lists);
-                    },groupname,lists)
-                },{
+                        return GroupEdit(groupname, 'del', lists);
+                    }, groupname, lists)
+                }, {
                     title: "重命名分组",
                     js: $.toString((groupname) => {
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLive.js');
-                        return GroupEdit(groupname,'rename');
-                    },groupname)
-                }]:[];
-                if(getItem('enabledpush','')=='1'){
+                        return GroupEdit(groupname, 'rename');
+                    }, groupname)
+                }] : [];
+                if (getItem('enabledpush', '') == '1') {
                     longClick.push({
                         title: "推送至TVBOX",
-                        js: $.toString((groupname,lists) => {
+                        js: $.toString((groupname, lists) => {
                             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLive.js');
-                            return GroupEdit(groupname,'pushBox',lists);
-                        },groupname,lists)
+                            return GroupEdit(groupname, 'pushBox', lists);
+                        }, groupname, lists)
                     })
                 }
                 d.push({
-                    title: index==0?'‘‘’’<b><span style="color:#3399cc">'+groupname:groupname,
-                    url: $('#noLoading#').lazyRule((grouplist,groupname,guanlidata,lists) => {
-                        if(getMyVar('selectgroup')!=groupname){
-                            putMyVar('selectgroup',groupname);
-                            for(let i in grouplist){
-                                if(grouplist[i]==groupname){
-                                    updateItem(groupname,{title:'‘‘’’<b><span style="color:#3399cc">'+groupname})
-                                }else{
-                                    updateItem(grouplist[i],{title:grouplist[i]})
+                    title: index == 0 ? '‘‘’’<b><span style="color:#3399cc">' + groupname : groupname,
+                    url: $('#noLoading#').lazyRule((grouplist, groupname, guanlidata, lists) => {
+                        if (getMyVar('selectgroup') != groupname) {
+                            putMyVar('selectgroup', groupname);
+                            for (let i in grouplist) {
+                                if (grouplist[i] == groupname) {
+                                    updateItem(groupname, { title: '‘‘’’<b><span style="color:#3399cc">' + groupname })
+                                } else {
+                                    updateItem(grouplist[i], { title: grouplist[i] })
                                 }
                             }
                             deleteItemByCls('livelist');
@@ -221,14 +221,14 @@ function Live() {
                             addItemAfter('liveloading', gldatalist);
                         }
                         return "hiker://empty";
-                    },grouplist,groupname,guanlidata,lists),
+                    }, grouplist, groupname, guanlidata, lists),
                     col_type: "scroll_button",
                     extra: {
                         id: groupname,
                         longClick: longClick
                     }
                 });
-                if(index==0){
+                if (index == 0) {
                     datalist2 = lists;
                     index = 1;
                 }
@@ -246,7 +246,7 @@ function Live() {
             title: '<br>',
             col_type: 'rich_text'
         });
-    }else{
+    } else {
         d.push({
             title: '没有直播数据源',
             col_type: 'rich_text'
@@ -255,55 +255,55 @@ function Live() {
     setHomeResult(d);
 }
 
-function GroupEdit(groupname,mode,lists) {
-    let JYlivefile= datapath + "live.txt";
-    if(mode=='del'){
-        try{
+function GroupEdit(groupname, mode, lists) {
+    let JYlivefile = datapath + "live.txt";
+    if (mode == 'del') {
+        try {
             showLoading('删除中，请稍候...');
-            let JYlive=fetch(JYlivefile);
+            let JYlive = fetch(JYlivefile);
             let JYlives = JYlive.split('\n');
-            for(let i=0;i<JYlives.length;i++){
-                if(JYlives[i].indexOf('#genre#')>-1&&JYlives[i].indexOf(groupname)>-1){
-                    JYlives.splice(i,1);
+            for (let i = 0; i < JYlives.length; i++) {
+                if (JYlives[i].indexOf('#genre#') > -1 && JYlives[i].indexOf(groupname) > -1) {
+                    JYlives.splice(i, 1);
                     i = i - 1;
-                }else if(JYlives[i].indexOf('#genre#')==-1&&JYlives[i].indexOf(',')>-1&&lists.some(item => item.name==JYlives[i].split(',')[0].trim())){
-                    JYlives.splice(i,1);
+                } else if (JYlives[i].indexOf('#genre#') == -1 && JYlives[i].indexOf(',') > -1 && lists.some(item => item.name == JYlives[i].split(',')[0].trim())) {
+                    JYlives.splice(i, 1);
                     i = i - 1;
                 }
             }
             writeFile(JYlivefile, JYlives.join('\n'));
             deleteItem(groupname);
-            let playlist = lists.map((list)=>{
+            let playlist = lists.map((list) => {
                 return list.name;
             });
             deleteItem(playlist);
             hideLoading();
-            return "toast://已删除分组 <"+groupname+"> 所有地址";
-        }catch(e){
+            return "toast://已删除分组 <" + groupname + "> 所有地址";
+        } catch (e) {
             hideLoading();
             log(e.message);
             return "toast://删除分组失败，详情查看日志";
         }
-    }else if(mode=='rename'){
-        return $("","输入新的分组名").input((JYlivefile,groupname)=>{
-            if(input){
-                let JYlive=fetch(JYlivefile);
+    } else if (mode == 'rename') {
+        return $("", "输入新的分组名").input((JYlivefile, groupname) => {
+            if (input) {
+                let JYlive = fetch(JYlivefile);
                 let JYlives = JYlive.split('\n');
-                for(let i=0;i<JYlives.length;i++){
-                    try{
-                        if(JYlives[i].indexOf('#genre#')>-1&&JYlives[i].indexOf(groupname)>-1){
-                            JYlives[i] = JYlives[i].replace(groupname,input);
+                for (let i = 0; i < JYlives.length; i++) {
+                    try {
+                        if (JYlives[i].indexOf('#genre#') > -1 && JYlives[i].indexOf(groupname) > -1) {
+                            JYlives[i] = JYlives[i].replace(groupname, input);
                         }
-                    }catch(e){}
+                    } catch (e) { }
                 }
                 writeFile(JYlivefile, JYlives.join('\n'));
-                updateItem(groupname,{title:input});
-                return "toast:// <"+groupname+"> 分组改名为 <"+input+">";
-            }else{
+                updateItem(groupname, { title: input });
+                return "toast:// <" + groupname + "> 分组改名为 <" + input + ">";
+            } else {
                 return "toast://输入不能为空"
             }
-        },JYlivefile,groupname)
-    }else if(mode=='pushBox'){
+        }, JYlivefile, groupname)
+    } else if (mode == 'pushBox') {
         let push = {
             "name": groupname,
             "pic": 'https://hikerfans.com/tubiao/ke/156.png',
@@ -312,19 +312,19 @@ function GroupEdit(groupname,mode,lists) {
             "actor": "列表可能有点凌乱"
         };
         let urls = [];
-        let JYlive= fetch(JYlivefile);
+        let JYlive = fetch(JYlivefile);
         let JYlives = JYlive.split('\n');
-        for(let i=0;i<JYlives.length;i++){
-            try{
-                if(JYlives[i].indexOf('#genre#')==-1&&JYlives[i].indexOf(',')>-1&&lists.some(item => item.name==JYlives[i].split(',')[0].trim())){
-                    urls.push(JYlives[i].split(',')[0].trim()+'$'+JYlives[i].split(',')[1].split('#')[0]);
+        for (let i = 0; i < JYlives.length; i++) {
+            try {
+                if (JYlives[i].indexOf('#genre#') == -1 && JYlives[i].indexOf(',') > -1 && lists.some(item => item.name == JYlives[i].split(',')[0].trim())) {
+                    urls.push(JYlives[i].split(',')[0].trim() + '$' + JYlives[i].split(',')[1].split('#')[0]);
                 }
-            }catch(e){
+            } catch (e) {
 
             }
         }
         let tvip = getItem('hikertvboxset', '');
-        if(urls.length>0){
+        if (urls.length > 0) {
             push['from'] = groupname;
             push['url'] = urls.join('#').replace(/\&/g, '＆＆');
             var state = request(tvip + '/action', {
@@ -343,68 +343,36 @@ function GroupEdit(groupname,mode,lists) {
             } else {
                 return 'toast://推送失败';
             }
-        }else{
+        } else {
             return 'toast://播放地址为空';
         }
     }
-} 
+}
 
 function guanlidata(datalist) {
-    /*
-    function compare (attr,rev) {
-        if(rev ==  undefined){
-            rev = 1;
-        }else{
-            rev = (rev) ? 1 : -1;
-        }
-        return (a,b) => {
-            a = a[attr];
-            b = b[attr];
-            if(a.replace(/[^\d]/g, "")&&b.replace(/[^\d]/g, "")){
-                if(parseInt(a.replace(/[^\d]/g, "")) < parseInt(b.replace(/[^\d]/g, ""))){
-                    return rev * -1;
-                }
-                if(parseInt(a.replace(/[^\d]/g, "")) > parseInt(b.replace(/[^\d]/g, ""))){
-                    return rev * 1;
-                }
-                return 0;
-            }else{
-                if(a < b){
-                    return rev * -1;
-                }
-                if(a > b){
-                    return rev * 1;
-                }
-                return 0;
-            }
-        }
-    }
-    datalist = datalist.sort(compare('name',true));  
-    */
-
-    let list = []; 
-    for (let i=0;i<datalist.length;i++) {
+    let list = [];
+    for (let i = 0; i < datalist.length; i++) {
         let name = datalist[i].name;
-        let longClick = getMyVar('editmode','0')=="1"?[{
+        let longClick = getMyVar('editmode', '0') == "1" ? [{
             title: "删除此频道",
             js: $.toString((name) => {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLive.js');
-                return LiveEdit(name,'del');
-            },name)
-        },{
+                return LiveEdit(name, 'del');
+            }, name)
+        }, {
             title: "重命名频道",
             js: $.toString((name) => {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLive.js');
-                return LiveEdit(name,'rename');
-            },name)
-        }]:[];
-        if(getItem('enabledpush','')=='1'){
+                return LiveEdit(name, 'rename');
+            }, name)
+        }] : [];
+        if (getItem('enabledpush', '') == '1') {
             longClick.push({
                 title: "推送至TVBOX",
                 js: $.toString((name) => {
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLive.js');
-                    return LiveEdit(name,'pushBox');
-                },name)
+                    return LiveEdit(name, 'pushBox');
+                }, name)
             })
         }
         list.push({
@@ -414,7 +382,7 @@ function guanlidata(datalist) {
             url: $('#noLoading#').lazyRule((name) => {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLive.js');
                 return LivePlay(name);
-            },name),
+            }, name),
             extra: {
                 id: name,
                 cls: 'livelist',
@@ -425,95 +393,90 @@ function guanlidata(datalist) {
     return list;
 }
 function LivePlay(name) {
-    let JYlive= getMyVar('JYlivedyurl','juying')=="juying"?fetch(datapath + "live.txt"):fetchCache(getMyVar('JYlivedyurl'),24,{timeout:3000});
-    if(JYlive.indexOf('#genre#')>-1){
+    let JYlive = getMyVar('JYlivedyurl', 'juying') == "juying" ? fetch(datapath + "live.txt") : fetchCache(getMyVar('JYlivedyurl'), 24, { timeout: 3000 });
+    if (JYlive.indexOf('#genre#') > -1) {
         var JYlives = JYlive.split('\n');
-    }else if(JYlive.indexOf('#EXTINF:-1')>-1){
+    } else if (JYlive.indexOf('#EXTINF:-1') > -1) {
         var JYlives = JYlive.split('#EXTINF:-1 ');
-    }else{
+    } else {
         var JYlives = [];
     }
     let urls = [];
-            /*
-group-title="玩偶",一日女友的漂亮姐姐 上
-https://ypmnkbb.saejeuj.com/api/app/media/m3u8/av/ph/gr/7v/78/af7b145ecae246b2ac79cecb6f47f6ad.m3u8?
-
-        */
-    for(let i = 0;i<JYlives.length;i++){
-        try{
-            if(JYlive.indexOf('#genre#')>-1){
-                if(JYlives[i].indexOf(',')>-1&&JYlives[i].indexOf('#genre#')==-1&&JYlives[i].split(',')[0].replace(/TV-/g,'TV').replace(/\[.*\]/g,'').trim()==name){
+    for (let i = 0; i < JYlives.length; i++) {
+        try {
+            if (JYlive.indexOf('#genre#') > -1) {
+                if (JYlives[i].indexOf(',') > -1 && JYlives[i].indexOf('#genre#') == -1 && JYlives[i].split(',')[0].replace(/TV-/g, 'TV').replace(/\[.*\]/g, '').trim() == name) {
                     let url = JYlives[i].split(',')[1].trim();
                     let urll = url.split('#');
                     urll.forEach(item => {
-                        if(/\\r^/.test(item)){
+                        if (/\\r^/.test(item)) {
                             item = item.slice(0, item.length - 2);
                         }
-                        if(item){
+                        if (item) {
                             urls.push(item + '#isVideo=true#');
                         }
                     })
                 }
-            }else if(JYlives[i].indexOf('group-title')>-1 && JYlives[i].match(/",(.*?)\n/)[1]==name){
+            } else if (JYlives[i].indexOf('group-title') > -1 && JYlives[i].match(/",(.*?)\n/)[1] == name) {
                 let urll = JYlives[i].split('\n');
                 urll.forEach(item => {
-                    if(item.indexOf('://')>-1){
+                    if (item.indexOf('://') > -1) {
                         urls.push(item + '#isVideo=true#');
                     }
                 })
             }
-        }catch(e){
+        } catch (e) {
             //log(e.message);
         }
     }
-    if(urls.length==0){
+    if (urls.length == 0) {
         return "toast://无播放地址";
-    }else if(urls.length==1){
+    } else if (urls.length == 1) {
         return urls[0];
-    }else{
+    } else {
         return JSON.stringify({
             urls: urls
         });
     }
-} 
-function LiveEdit(name,mode) {
-    let JYlivefile= datapath + "live.txt";
-    if(mode=='del'){
-        let JYlive= fetch(JYlivefile);
+}
+function LiveEdit(name, mode) {
+    let JYlivefile = datapath + "live.txt";
+    if (mode == 'del') {
+        let JYlive = fetch(JYlivefile);
         let JYlives = JYlive.split('\n');
-        for(let i=0;i<JYlives.length;i++){
-            try{
-                if(JYlives[i].indexOf('#genre#')==-1&&JYlives[i].indexOf(',')>-1&&JYlives[i].split(',')[0].replace(/TV-/g,'TV').replace(/\[.*\]/g,'').trim()==name){
-                    JYlives.splice(i,1);
+        for (let i = 0; i < JYlives.length; i++) {
+            try {
+                if (JYlives[i].indexOf('#genre#') == -1 && JYlives[i].indexOf(',') > -1 && JYlives[i].split(',')[0].replace(/TV-/g, 'TV').replace(/\[.*\]/g, '').trim() == name) {
+                    JYlives.splice(i, 1);
                     i = i - 1;
                 }
-            }catch(e){}
+            } catch (e) { }
         }
         writeFile(JYlivefile, JYlives.join('\n'));
         deleteItem(name);
-        return "toast://已删除 <"+name+">";
-    }else if(mode=='rename'){
-        return $("","输入新的地址名").input((name,JYlivefile)=>{
-            if(input){
-                let JYlive=fetch(JYlivefile);
+        return "toast://已删除 <" + name + ">";
+    } else if (mode == 'rename') {
+        return $("", "输入新的地址名").input((name, JYlivefile) => {
+            if (input) {
+                let JYlive = fetch(JYlivefile);
                 let JYlives = JYlive.split('\n');
-                for(let i=0;i<JYlives.length;i++){
-                    try{
-                        if(JYlives[i].indexOf(',')>-1&&JYlives[i].indexOf(name)>-1){
-                            JYlives[i] = JYlives[i].replace(name,input);
+                for (let i = 0; i < JYlives.length; i++) {
+                    try {
+                        if (JYlives[i].indexOf(',') > -1 && JYlives[i].indexOf(name) > -1) {
+                            JYlives[i] = JYlives[i].replace(name, input);
                         }
-                    }catch(e){}
+                    } catch (e) { }
                 }
                 writeFile(JYlivefile, JYlives.join('\n'));
                 updateItem(name, {
                     title: input
                 });
-                return "toast:// <"+name+"> 改名为 <"+input+">";
-            }else{
+                return "toast:// <" + name + "> 改名为 <" + input + ">";
+            } else {
                 return "toast://输入不能为空"
             }
-        },name,JYlivefile)
-    }else if(mode=='pushBox'){
+        }, name, JYlivefile)
+    } else if (mode == 'pushBox') {
         let push = {
             "name": name,
             "pic": 'https://hikerfans.com/tubiao/ke/156.png',
@@ -522,19 +485,19 @@ function LiveEdit(name,mode) {
             "actor": "单个频道所有线路"
         };
         let urls = [];
-        let JYlive= fetch(JYlivefile);
+        let JYlive = fetch(JYlivefile);
         let JYlives = JYlive.split('\n');
-        for(let i=0;i<JYlives.length;i++){
-            try{
-                if(JYlives[i].indexOf('#genre#')==-1&&JYlives[i].indexOf(',')>-1&&JYlives[i].split(',')[0].replace(/TV-/g,'TV').replace(/\[.*\]/g,'').trim()==name){
+        for (let i = 0; i < JYlives.length; i++) {
+            try {
+                if (JYlives[i].indexOf('#genre#') == -1 && JYlives[i].indexOf(',') > -1 && JYlives[i].split(',')[0].replace(/TV-/g, 'TV').replace(/\[.*\]/g, '').trim() == name) {
                     urls.push(JYlives[i].split(',')[1]);
                 }
-            }catch(e){}
+            } catch (e) { }
         }
         let tvip = getItem('hikertvboxset', '');
-        if(urls.length>0){
+        if (urls.length > 0) {
             push['from'] = name;
-            push['url'] = {urls:urls};//urls.join('#').replace(/\&/g, '＆＆');
+            push['url'] = { urls: urls };//urls.join('#').replace(/\&/g, '＆＆');
             var state = request(tvip + '/action', {
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
@@ -551,14 +514,14 @@ function LiveEdit(name,mode) {
             } else {
                 return 'toast://推送失败';
             }
-        }else{
+        } else {
             return 'toast://播放地址为空';
         }
     }
-} 
+}
 function LiveSet() {
     addListener("onClose", $.toString(() => {
-        if(getMyVar('isEdit')=="1"){
+        if (getMyVar('isEdit') == "1") {
             refreshPage(false);
         }
         clearMyVar('isEdit');
@@ -573,59 +536,59 @@ function LiveSet() {
         col_type: "line"
     });
     d.push({
-        title: '📺 订阅源管理',
+        title: "订阅源管理",
+        img: "https://hikerfans.com/juying/img/箭头.svg",
         url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
             addListener("onClose", $.toString(() => {
                 //refreshPage(false);
             }));
-            //setPageTitle("⚙直播设置⚙");
             let livecfgfile = "hiker://files/rules/Src/Juying2/liveconfig.json";
             let livecfg = fetch(livecfgfile);
-            if(livecfg != ""){
+            if (livecfg != "") {
                 eval("var liveconfig = " + livecfg);
-            }else{
+            } else {
                 var liveconfig = {};
             }
             var d = [];
             d.push({
                 title: '‘‘’’<b>📺 订阅源管理</b> &nbsp &nbsp <small>添加自定义链接</small>',
                 img: "https://img.vinua.cn/images/QqyC.png",
-                url: $("","输入通用格式的tv链接地址").input((livecfgfile,liveconfig)=>{
-                    if(input){
-                        if(/\/storage\/emulated\//.test(input)){input = "file://" + input}
-                        let livedata = liveconfig['data']||[];
-                        if(!livedata.some(item => item.url==input)){
+                url: $("", "输入通用格式的tv链接地址").input((livecfgfile, liveconfig) => {
+                    if (input) {
+                        if (/\/storage\/emulated\//.test(input)) { input = "file://" + input }
+                        let livedata = liveconfig['data'] || [];
+                        if (!livedata.some(item => item.url == input)) {
                             showLoading('正在验证链接有效性...');
-                            let YChtml = request(input,{timeout:3000});
-                            if(YChtml.indexOf('#genre#')>-1 || YChtml.indexOf('#EXTINF:-1')>-1){
+                            let YChtml = request(input, { timeout: 3000 });
+                            if (YChtml.indexOf('#genre#') > -1 || YChtml.indexOf('#EXTINF:-1') > -1) {
                                 hideLoading();
-                                return $("","链接有效，起个名字保存").input((livedata,url,livecfgfile,liveconfig)=>{
-                                    if(input){
-                                        livedata.push({name:input,url:url});
+                                return $("", "链接有效，起个名字保存").input((livedata, url, livecfgfile, liveconfig) => {
+                                    if (input) {
+                                        livedata.push({ name: input, url: url });
                                         liveconfig['data'] = livedata;
                                         writeFile(livecfgfile, JSON.stringify(liveconfig));
                                         refreshPage(false);
                                         return "toast://增加自定义tv链接地址成功";
-                                    }else{
+                                    } else {
                                         return "toast://输入不能为空"
                                     }
-                                },livedata,input,livecfgfile,liveconfig)
-                            }else{
+                                }, livedata, input, livecfgfile, liveconfig)
+                            } else {
                                 hideLoading();
                                 return "toast://无法识别，需含#genre#的通用格式";
                             }
-                        }else{
+                        } else {
                             return "toast://已存在";
                         }
-                    }else{
+                    } else {
                         return "toast://地址不能为空";
                     }
-                },livecfgfile,liveconfig),
+                }, livecfgfile, liveconfig),
                 col_type: 'text_1'
             });
-            
-            let livedata = liveconfig['data']||[];
-            if(livedata.length>0){
+
+            let livedata = liveconfig['data'] || [];
+            if (livedata.length > 0) {
                 d.push({
                     title: '点击下方的订阅源条目，进行操作👇',
                     col_type: "rich_text"
@@ -634,41 +597,41 @@ function LiveSet() {
                     col_type: "line"
                 });
                 function getide(is) {
-                    if(is==1){
+                    if (is == 1) {
                         return '‘‘’’<strong><font color="#f13b66a">◉ </front></strong>';
-                    }else{
+                    } else {
                         return '‘‘’’<strong><font color="#F54343">◉ </front></strong>';
                     }
                 }
-                for(let i=0;i<livedata.length;i++){
+                for (let i = 0; i < livedata.length; i++) {
                     d.push({
-                        title: (livedata[i].show!=0?getide(1):getide(0))+livedata[i].name,
+                        title: (livedata[i].show != 0 ? getide(1) : getide(0)) + livedata[i].name,
                         desc: livedata[i].url,
-                        url: $(["复制链接","导入本地","更新缓存","导入聚直播","删除订阅",livedata[i].show!=0?"停用订阅":"启用订阅"],2,"").select((livecfgfile, url)=>{
-                            try{
-                                if(input=="更新缓存"){
+                        url: $(["复制链接", "导入本地", "更新缓存", "导入聚直播", "删除订阅", livedata[i].show != 0 ? "停用订阅" : "启用订阅"], 2, "").select((livecfgfile, url) => {
+                            try {
+                                if (input == "更新缓存") {
                                     showLoading('正在缓存，请稍后.');
-                                    let YChtml = request(url,{timeout:3000});
-                                    if(YChtml.indexOf('#genre#')>-1){
+                                    let YChtml = request(url, { timeout: 3000 });
+                                    if (YChtml.indexOf('#genre#') > -1) {
                                         deleteCache(url);
-                                        let YChtml = fetchCache(url,24,{timeout:3000}).replace(/TV-/g,'TV').replace(/\[.*\]/g,'');
+                                        let YChtml = fetchCache(url, 24, { timeout: 3000 }).replace(/TV-/g, 'TV').replace(/\[.*\]/g, '');
                                         hideLoading();
                                         return "toast://更新文件缓存成功";
-                                    }else{
+                                    } else {
                                         hideLoading();
                                         return "toast://更新失败";
                                     }
-                                }else if(input=="删除订阅"){
-                                    if(/^http/.test(url)){
+                                } else if (input == "删除订阅") {
+                                    if (/^http/.test(url)) {
                                         deleteCache(url);
                                     }
                                     let livecfg = fetch(livecfgfile);
-                                    if(livecfg != ""){
+                                    if (livecfg != "") {
                                         eval("var liveconfig = " + livecfg);
-                                        let livedata = liveconfig['data']||[];
-                                        for(let i=0;i<livedata.length;i++){
-                                            if(livedata[i].url==url){
-                                                livedata.splice(i,1);
+                                        let livedata = liveconfig['data'] || [];
+                                        for (let i = 0; i < livedata.length; i++) {
+                                            if (livedata[i].url == url) {
+                                                livedata.splice(i, 1);
                                                 break;
                                             }
                                         }
@@ -676,92 +639,92 @@ function LiveSet() {
                                         writeFile(livecfgfile, JSON.stringify(liveconfig));
                                         refreshPage(false);
                                     }
-                                }else if(input=="导入聚直播"){
+                                } else if (input == "导入聚直播") {
                                     let Julivefile = "hiker://files/rules/live/config.json";
                                     let Julive = fetch(Julivefile);
-                                    if(Julive != ""){
-                                        try{
-                                            eval("var Judata=" + Julive+ ";");
-                                            let Judatalist = Judata['data']||[];
-                                            if(!Judatalist.some(item => item.url==url)){
-                                                return $("","取个名字保存吧").input((Julivefile,Judata,url)=>{
-                                                    if(input){
-                                                        Judata['data'].push({name:input,url:url});
+                                    if (Julive != "") {
+                                        try {
+                                            eval("var Judata=" + Julive + ";");
+                                            let Judatalist = Judata['data'] || [];
+                                            if (!Judatalist.some(item => item.url == url)) {
+                                                return $("", "取个名字保存吧").input((Julivefile, Judata, url) => {
+                                                    if (input) {
+                                                        Judata['data'].push({ name: input, url: url });
                                                         writeFile(Julivefile, JSON.stringify(Judata));
                                                         return "toast://导入聚直播订阅成功";
-                                                    }else{
+                                                    } else {
                                                         return "toast://名称不能为空";
                                                     }
-                                                },Julivefile,Judata,url)
-                                            }else{
+                                                }, Julivefile, Judata, url)
+                                            } else {
                                                 return "toast://已存在聚直播订阅";
                                             }
-                                        }catch(e){
-                                            log("导入聚直播订阅失败>"+e.message);
+                                        } catch (e) {
+                                            log("导入聚直播订阅失败>" + e.message);
                                             return "toast://导入聚直播订阅失败";
                                         }
-                                    }else{
+                                    } else {
                                         return "toast://仓库先导入聚直播小程序";
                                     }
-                                }else if(input=="导入本地"){
+                                } else if (input == "导入本地") {
                                     showLoading('叠加导入直播，最大万行限制');
-                                    let YChtml = fetchCache(url,24,{timeout:3000}).replace(/TV-/g,'TV').replace(/\[.*\]/g,'');
-                                    if(YChtml.indexOf('#genre#')>-1){
+                                    let YChtml = fetchCache(url, 24, { timeout: 3000 }).replace(/TV-/g, 'TV').replace(/\[.*\]/g, '');
+                                    if (YChtml.indexOf('#genre#') > -1) {
                                         var YClives = YChtml.split('\n');
-                                    }else{
+                                    } else {
                                         var YClives = [];
                                     }
-                                    if(YClives.length>0){
+                                    if (YClives.length > 0) {
                                         let importnum = 0;
                                         let JYlivefile = getMyVar('JY直播数据路径') + "live.txt";
-                                        let JYlive=fetch(JYlivefile);
-                                        if(JYlive){
+                                        let JYlive = fetch(JYlivefile);
+                                        if (JYlive) {
                                             var JYlives = JYlive.split('\n');
                                             let id = 0;
                                             let py = 0;
-                                            for(let i=0;i<YClives.length;i++){
-                                                if(JYlives.length>10000){
+                                            for (let i = 0; i < YClives.length; i++) {
+                                                if (JYlives.length > 10000) {
                                                     log('直播数据源文件已大于10000行，为保证效率停止导入');
                                                     break;
-                                                }else{
-                                                    if(YClives[i].indexOf('#genre#')>-1&&JYlives.indexOf(YClives[i])>-1){
+                                                } else {
+                                                    if (YClives[i].indexOf('#genre#') > -1 && JYlives.indexOf(YClives[i]) > -1) {
                                                         id = JYlives.indexOf(YClives[i]);
                                                         py = 0;
-                                                    }else if(YClives[i].indexOf('#genre#')>-1&&JYlives.indexOf(YClives[i])==-1){
-                                                        id = JYlives.length+1;
+                                                    } else if (YClives[i].indexOf('#genre#') > -1 && JYlives.indexOf(YClives[i]) == -1) {
+                                                        id = JYlives.length + 1;
                                                         py = 0;
-                                                        JYlives.splice(id+1, 0, YClives[i]);
-                                                    }else if(YClives[i].indexOf(',')>-1&&JYlives.indexOf(YClives[i])==-1&&YClives[i].trim()!=""){
-                                                        JYlives.splice(id+1+py, 0, YClives[i]);
+                                                        JYlives.splice(id + 1, 0, YClives[i]);
+                                                    } else if (YClives[i].indexOf(',') > -1 && JYlives.indexOf(YClives[i]) == -1 && YClives[i].trim() != "") {
+                                                        JYlives.splice(id + 1 + py, 0, YClives[i]);
                                                         py++;
                                                         importnum++;
                                                     }
                                                 }
                                             }
-                                        }else{
+                                        } else {
                                             var JYlives = YClives;
                                             importnum = JYlives.length;
                                         }
                                         writeFile(JYlivefile, JYlives.join('\n'));
                                         hideLoading();
-                                        if(importnum>0&&getMyVar('JYlivedyurl','juying')=="juying"){
-                                            putMyVar('isEdit','1');
+                                        if (importnum > 0 && getMyVar('JYlivedyurl', 'juying') == "juying") {
+                                            putMyVar('isEdit', '1');
                                         }
-                                        return "toast://成功导入"+importnum;
-                                    }else{
+                                        return "toast://成功导入" + importnum;
+                                    } else {
                                         hideLoading();
                                         return "toast://文件异常或不支持的格式，导入失败";
                                     }
-                                }else if(input=="复制链接"){
+                                } else if (input == "复制链接") {
                                     copy(url);
-                                }else if(input=="停用订阅"||input=="启用订阅"){
+                                } else if (input == "停用订阅" || input == "启用订阅") {
                                     let livecfg = fetch(livecfgfile);
-                                    if(livecfg != ""){
+                                    if (livecfg != "") {
                                         eval("var liveconfig = " + livecfg);
-                                        let livedata = liveconfig['data']||[];
-                                        for(let i=0;i<livedata.length;i++){
-                                            if(livedata[i].url==url){
-                                                livedata[i].show = input=="停用订阅"?0:1;
+                                        let livedata = liveconfig['data'] || [];
+                                        for (let i = 0; i < livedata.length; i++) {
+                                            if (livedata[i].url == url) {
+                                                livedata[i].show = input == "停用订阅" ? 0 : 1;
                                                 break;
                                             }
                                         }
@@ -771,7 +734,7 @@ function LiveSet() {
                                     }
                                 }
                                 return "hiker://empty";
-                            }catch(e){
+                            } catch (e) {
                                 hideLoading();
                                 log(e.message);
                                 return "toast://操作异常，详情查看日志";
@@ -780,7 +743,7 @@ function LiveSet() {
                         col_type: "text_1"
                     });
                 }
-            }else{
+            } else {
                 d.push({
                     title: '↻无记录',
                     col_type: "rich_text"
@@ -788,29 +751,30 @@ function LiveSet() {
             }
             setHomeResult(d);
         }),
-        col_type: "text_2"
+        col_type: "text_icon"
     });
     d.push({
-        title: '🎦 TVBox订阅',
-        col_type: 'text_2',
+        title: "TVBox订阅",
+        img: "https://hikerfans.com/juying/img/箭头.svg",
+        col_type: "text_icon",
         url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
             addListener("onClose", $.toString(() => {
                 clearMyVar('importinput');
             }));
             let cfgfile = "hiker://files/rules/Src/Juying2/config.json";
-            let Juconfig= {};
-            let Jucfg=fetch(cfgfile);
-            if(Jucfg != ""){
-                eval("Juconfig=" + Jucfg+ ";");
+            let Juconfig = {};
+            let Jucfg = fetch(cfgfile);
+            if (Jucfg != "") {
+                eval("Juconfig=" + Jucfg + ";");
             }
             let d = [];
             d.push({
-                title:'本地',
+                title: '本地',
                 col_type: 'input',
                 desc: '请输入链接地址',
                 url: $.toString(() => {
-                    return `fileSelect://`+$.toString(()=>{
-                        return "toast://"+input;
+                    return `fileSelect://` + $.toString(() => {
+                        return "toast://" + input;
                     })
                 }),
                 extra: {
@@ -822,118 +786,118 @@ function LiveSet() {
             d.push({
                 title: '本地文件',
                 col_type: 'text_2',
-                url: `fileSelect://`+$.toString(()=>{
-                    putMyVar("importinput","file://"+input);
+                url: `fileSelect://` + $.toString(() => {
+                    putMyVar("importinput", "file://" + input);
                     refreshPage();
-                    return "toast://"+input;
+                    return "toast://" + input;
                 })
             })
             d.push({
                 title: '确定导入',
                 col_type: 'text_2',
-                url: $('#noLoading#').lazyRule((Juconfig,cfgfile) => {
+                url: $('#noLoading#').lazyRule((Juconfig, cfgfile) => {
                     let input = getMyVar('importinput', '');
-                    if(input == ""){
+                    if (input == "") {
                         return 'toast://请先输入链接地址'
                     }
 
-                    let importrecord = Juconfig['importrecord']||[];
-                    if(importrecord.length>20){//保留20个记录
+                    let importrecord = Juconfig['importrecord'] || [];
+                    if (importrecord.length > 20) {//保留20个记录
                         importrecord.shift();
                     }
-                    if(!importrecord.some(item => item.url==input && item.type=='1')){
-                        importrecord.push({type:'1',url:input});
+                    if (!importrecord.some(item => item.url == input && item.type == '1')) {
+                        importrecord.push({ type: '1', url: input });
                         Juconfig['importrecord'] = importrecord;
                         writeFile(cfgfile, JSON.stringify(Juconfig));
                     }
 
                     let data;
-                    try{
+                    try {
                         showLoading('检测文件有效性');
-                        if(/\/storage\/emulated\//.test(input)){input = "file://" + input}
-                        let html = request(input,{timeout:2000});
-                        if(html.includes('LuUPraez**')){
+                        if (/\/storage\/emulated\//.test(input)) { input = "file://" + input }
+                        let html = request(input, { timeout: 2000 });
+                        if (html.includes('LuUPraez**')) {
                             html = base64Decode(html.split('LuUPraez**')[1]);
                         }
-                        eval('data = ' + html)                     
+                        eval('data = ' + html)
                     } catch (e) {
                         hideLoading();
-                        log('TVBox文件检测失败>'+e.message); 
+                        log('TVBox文件检测失败>' + e.message);
                         return "toast://TVBox导入失败：链接文件无效或内容有错";
                     }
                     hideLoading();
                     let lives = data.lives || [];
-                    if(lives.length>0){
+                    if (lives.length > 0) {
                         showLoading('正在导入');
-                        try{
+                        try {
                             let urls = [];
-                            for (let i=0;i<lives.length;i++) {
-                                if(lives[i].channels){
+                            for (let i = 0; i < lives.length; i++) {
+                                if (lives[i].channels) {
                                     let channels = lives[i].channels;
-                                    if(channels.length>0){
-                                        for (let j=0;j<channels.length;j++) {
+                                    if (channels.length > 0) {
+                                        for (let j = 0; j < channels.length; j++) {
                                             let live = channels[i].urls;
-                                            for (let k=0;k<live.length;k++) {
-                                                let url = live[i].replace('proxy://do=live&type=txt&ext=','');
-                                                if(!/^http/.test(url)){
+                                            for (let k = 0; k < live.length; k++) {
+                                                let url = live[i].replace('proxy://do=live&type=txt&ext=', '');
+                                                if (!/^http/.test(url)) {
                                                     url = base64Decode(url);
                                                 }
-                                                urls.push({name:url.substr(url.lastIndexOf('/') + 1).split('.')[0], url:url});
+                                                urls.push({ name: url.substr(url.lastIndexOf('/') + 1).split('.')[0], url: url });
                                             }
                                         }
                                     }
-                                }else if(lives[i].url){
+                                } else if (lives[i].url) {
                                     let url = lives[i].url;
-                                    if(/^\./.test(url)){
-                                        url = input.match(/http(s)?:\/\/.*\//)[0] + url.replace("./","");
+                                    if (/^\./.test(url)) {
+                                        url = input.match(/http(s)?:\/\/.*\//)[0] + url.replace("./", "");
                                     }
-                                    urls.push({name:lives[i].name||url.substr(url.lastIndexOf('/') + 1).split('.')[0], url:url});
+                                    urls.push({ name: lives[i].name || url.substr(url.lastIndexOf('/') + 1).split('.')[0], url: url });
                                 }
                             }
-                            if(urls.length>0){
+                            if (urls.length > 0) {
                                 livenum = 0;
                                 let livecfgfile = "hiker://files/rules/Src/Juying2/liveconfig.json";
                                 let livecfg = fetch(livecfgfile);
-                                if(livecfg != ""){
+                                if (livecfg != "") {
                                     eval("var liveconfig = " + livecfg);
-                                }else{
+                                } else {
                                     var liveconfig = {};
                                 }
-                                let livedata = liveconfig['data']||[];
-                                for(let i=0;i<urls.length;i++){
-                                    if(!livedata.some(item => item.url==urls[i].url)){
-                                        let YChtml = request(urls[i].url,{timeout:5000}).replace(/TV-/g,'TV');
-                                        if(YChtml.indexOf('#genre#')>-1){
+                                let livedata = liveconfig['data'] || [];
+                                for (let i = 0; i < urls.length; i++) {
+                                    if (!livedata.some(item => item.url == urls[i].url)) {
+                                        let YChtml = request(urls[i].url, { timeout: 5000 }).replace(/TV-/g, 'TV');
+                                        if (YChtml.indexOf('#genre#') > -1) {
                                             livedata.push(urls[i]);
                                             livenum++;
                                         }
                                     }
                                 }
-                                if(livenum>0){
+                                if (livenum > 0) {
                                     liveconfig['data'] = livedata;
                                     writeFile(livecfgfile, JSON.stringify(liveconfig));
                                 }
                                 hideLoading();
-                                return 'toast://成功订阅：'+livenum;     
+                                return 'toast://成功订阅：' + livenum;
                             }
                         } catch (e) {
-                            log('TVBox导入live保存失败>'+e.message);
+                            log('TVBox导入live保存失败>' + e.message);
                         }
                     }
                     hideLoading();
-                    return 'toast://失败';     
-                },Juconfig,cfgfile)
+                    return 'toast://失败';
+                }, Juconfig, cfgfile)
             })
 
             d.push({
                 title: '🆖 历史记录',
                 col_type: "rich_text"
             });
-            let importrecord = Juconfig['importrecord']||[];
+            let importrecord = Juconfig['importrecord'] || [];
             let lists = importrecord.filter(item => {
-                return item.type=='1';
+                return item.type == '1';
             })
-            if(lists.length>0){
+            if (lists.length > 0) {
                 d.push({
                     title: '点击下方的历史条目，进行操作👇',
                     col_type: "rich_text"
@@ -942,27 +906,27 @@ function LiveSet() {
                     col_type: "line"
                 });
                 lists.reverse();
-                for(let i=0;i<lists.length;i++){
+                for (let i = 0; i < lists.length; i++) {
                     d.push({
                         title: lists[i].url,
-                        url: $(["选择","删除"],1,"").select((Juconfig, cfgfile, url)=>{
-                                if(input=="选择"){
-                                    putMyVar('importinput', url);
-                                    refreshPage(true);
-                                }else if(input=="删除"){
-                                    let importrecord = Juconfig['importrecord']||[];
-                                    for(let i=0;i<importrecord.length;i++){
-                                        if(importrecord[i].url==url&&importrecord[i].type=='1'){
-                                            importrecord.splice(i,1);
-                                            break;
-                                        }
+                        url: $(["选择", "删除"], 1, "").select((Juconfig, cfgfile, url) => {
+                            if (input == "选择") {
+                                putMyVar('importinput', url);
+                                refreshPage(true);
+                            } else if (input == "删除") {
+                                let importrecord = Juconfig['importrecord'] || [];
+                                for (let i = 0; i < importrecord.length; i++) {
+                                    if (importrecord[i].url == url && importrecord[i].type == '1') {
+                                        importrecord.splice(i, 1);
+                                        break;
                                     }
-                                    Juconfig['importrecord'] = importrecord; 
-                                    writeFile(cfgfile, JSON.stringify(Juconfig));
-                                    refreshPage(false);
                                 }
-                                return "hiker://empty";
-                            }, Juconfig, cfgfile, lists[i].url),
+                                Juconfig['importrecord'] = importrecord;
+                                writeFile(cfgfile, JSON.stringify(Juconfig));
+                                refreshPage(false);
+                            }
+                            return "hiker://empty";
+                        }, Juconfig, cfgfile, lists[i].url),
                         col_type: "text_1"
                     });
                 }
@@ -971,105 +935,116 @@ function LiveSet() {
         })
     });
     d.push({
-        col_type: "line"
+        col_type: "line",
     });
     d.push({
-        title: '🛠 编辑本地源',
-        col_type: 'text_2',
-        url: getMyVar('JYlivedyurl','juying')=="juying"?$('#noLoading#').lazyRule(() => {
-            if(getMyVar('JYlivenum','0')=="0"){
-                return "toast://本地数据源为空，无法进入编辑模式";
-            }
-            putMyVar('editmode','1');
-            putMyVar('isEdit','1');
-            return "toast://进入编辑模式，长按分组或频道选择操作";
-        }):"toast://当前为远程订阅源，无法进入编辑模式"
+        title: "编辑本地源",
+        img: "https://hikerfans.com/juying/img/箭头.svg",
+        col_type: "text_icon",
+        url:
+            getMyVar("JYlivedyurl", "juying") == "juying"
+                ? $("#noLoading#").lazyRule(() => {
+                    if (getMyVar("JYlivenum", "0") == "0") {
+                        return "toast://本地数据源为空，无法进入编辑模式";
+                    }
+                    putMyVar("editmode", "1");
+                    putMyVar("isEdit", "1");
+                    return "toast://进入编辑模式，长按分组或频道选择操作";
+                })
+                : "toast://当前为远程订阅源，无法进入编辑模式",
     });
     d.push({
-        title: '♻ 清空直播源',
-        col_type: 'text_2',
-        url: $("确定清空聚影直播本地文件？").confirm(()=>{
-            writeFile(getMyVar('JY直播数据路径') + "live.txt", "");
-            if(getMyVar('JYlivedyurl','juying')=="juying"){
-                putMyVar('isEdit','1');
+        title: "清空直播源",
+        img: "https://hikerfans.com/juying/img/箭头.svg",
+        col_type: "text_icon",
+        url: $("确定清空聚影直播本地文件？").confirm(() => {
+            writeFile(getMyVar("JY直播数据路径") + "live.txt", "");
+            if (getMyVar("JYlivedyurl", "juying") == "juying") {
+                putMyVar("isEdit", "1");
             }
-            clearMyVar('JYlivenum');
+            clearMyVar("JYlivenum");
             refreshPage(false);
             return "toast://已清空";
-        })
+        }),
     });
     d.push({
-        col_type: 'line'
+        col_type: "line_blank",
     });
     d.push({
-        title: '🔎清理失效的直播源地址',
-        desc: '此功能为实验性的，可能存在误删，谨慎操作！\n通过判断地址是否可以访问来甄别有效性\n聚影本地直播源地址有：'+getMyVar('JYlivenum','0'),
+        title: "清理失效",
+        img: "https://hikerfans.com/juying/img/清理.svg",
+        col_type: "avatar",
+        url: "hiker://empty",
+    });
+    d.push({
+        title: "‘‘实验功能可能存在误删，谨慎操作！’’",
+        desc: "通过判断地址是否可以访问来甄别有效性\n聚影本地直播源地址有：" + getMyVar("JYlivenum", "0"),
         col_type: 'text_center_1',
         url: $('#noLoading#').lazyRule(() => {
-            putMyVar('isEdit','1');
+            putMyVar('isEdit', '1');
             let urls = [];
             let JYlivefile = getMyVar('JY直播数据路径') + "live.txt";
             let JYlive = fetch(JYlivefile);
-            if(JYlive!=""){
-                var task = function(obj) {
-                    try{
+            if (JYlive != "") {
+                var task = function (obj) {
+                    try {
                         let url = obj.split(',')[1];
-                        let code = JSON.parse(request(url,{onlyHeaders:true,timeout:1000}));
-                        if(code.statusCode!=200){
+                        let code = JSON.parse(request(url, { onlyHeaders: true, timeout: 1000 }));
+                        if (code.statusCode != 200) {
                             fails.push(obj);
                         }
-                    }catch(e){
+                    } catch (e) {
 
                     }
                     return 1;
                 }
-                
+
                 let JYlives = JYlive.split('\n');
-                for(let i = 0; i < JYlives.length; i++){
-                    try{
-                        if(JYlives[i].indexOf(',')>-1&&JYlives[i].indexOf('#genre#')==-1){
+                for (let i = 0; i < JYlives.length; i++) {
+                    try {
+                        if (JYlives[i].indexOf(',') > -1 && JYlives[i].indexOf('#genre#') == -1) {
                             urls.push(JYlives[i]);
                         }
-                    }catch(e){}
+                    } catch (e) { }
                 }
-                showLoading('检测'+urls.length+'条，保持屏幕亮屏');
+                showLoading('检测' + urls.length + '条，保持屏幕亮屏');
                 let fails = [];
-                for (var i=0;i<urls.length;i++) {
+                for (var i = 0; i < urls.length; i++) {
                     let UrlList = [];
                     let p = i + 799;
-                    for(let s=i;s<p;s++){
+                    for (let s = i; s < p; s++) {
                         UrlList.push(urls[s]);
-                        i=s;
+                        i = s;
                     }
-                    let urlscheck = UrlList.map((list)=>{
+                    let urlscheck = UrlList.map((list) => {
                         return {
                             func: task,
                             param: list,
                             id: list
                         }
-                        
+
                     });
                     be(urlscheck, {
-                        func: function(obj, id, error, taskResult) {                            
+                        func: function (obj, id, error, taskResult) {
                         },
                         param: {
                         }
                     });
                 }
-                
-                for(let i = 0; i < JYlives.length; i++){
-                    if(fails.indexOf(JYlives[i])>-1){
-                        JYlives.splice(i,1);
+
+                for (let i = 0; i < JYlives.length; i++) {
+                    if (fails.indexOf(JYlives[i]) > -1) {
+                        JYlives.splice(i, 1);
                         i = i - 1;
                     }
                 }
                 writeFile(JYlivefile, JYlives.join('\n'));
                 hideLoading();
-                if(fails.length>0&&getMyVar('JYlivedyurl','juying')=="juying"){
-                    putMyVar('isEdit','1');
+                if (fails.length > 0 && getMyVar('JYlivedyurl', 'juying') == "juying") {
+                    putMyVar('isEdit', '1');
                 }
-                return "toast://删除疑似失效源"+fails.length+"条";
-            }else{
+                return "toast://删除疑似失效源" + fails.length + "条";
+            } else {
                 return "toast://没有直播数据源";
             }
         })
