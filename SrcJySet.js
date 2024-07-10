@@ -1463,7 +1463,7 @@ function manageSet(){
         url: $(getItem('依赖', ''),"手工指定聚影代码库地址").input(()=>{
             return $("确定要指定聚影代码库地址"+input).confirm((input)=>{
                 setItem('依赖', input);
-                return "toast://已设置"
+                return "toast://已设置，重启软件后生效"
             },input)
         }),
         col_type: 'text_icon'
