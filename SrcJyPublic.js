@@ -42,6 +42,7 @@ function getDatas(lx, isyx) {
             let dySource = Juconfig['dySource'];
             let input;
             if(dySource.startsWith('http')){
+                showLoading('正在加载中，请稍后...');
                 let dyJkTmpFile = "hiker://files/_cache/"+md5(Juconfig['dySource'])+".json";
                 if(!fileExist(dyJkTmpFile)){
                     let contnet = getJkContnet(Juconfig['dySource']);
@@ -136,6 +137,7 @@ function getDatas(lx, isyx) {
                 }catch(e){}
             }
         }
+        hideLoading();
     }
 
     if (getItem("sourceListSort") == "接口名称") {
