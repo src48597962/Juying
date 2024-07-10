@@ -533,7 +533,13 @@ function LiveSet() {
         col_type: "rich_text"
     });
     d.push({
-        col_type: "line"
+        col_type: "line_blank",
+    });
+    d.push({
+        title: "直播管理",
+        img: "https://hikerfans.com/juying/img/直播管理.svg",
+        col_type: "avatar",
+        url: "hiker://empty",
     });
     d.push({
         title: "订阅源管理",
