@@ -1445,13 +1445,13 @@ function manageSet(){
     });
     d.push({
         title: '依赖管理',
-        img: 'https://hikerfans.com/tubiao/system/23.png',
+        img: getIcon("依赖.svg"),
         col_type: 'avatar',
         url: 'hiker://empty'
     });
     d.push({
         title: 'github加速管理',
-        img: 'https://hikerfans.com/tubiao/system/100.png',
+        img: getIcon("箭头.svg"),
         url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
             $.require('ghproxy').proxyPage();
         }),
@@ -1459,7 +1459,7 @@ function manageSet(){
     });
     d.push({
         title: '指定聚影代码库',
-        img: 'https://hikerfans.com/tubiao/system/100.png',
+        img: getIcon("箭头.svg"),
         url: $(getItem('依赖', ''),"手工指定聚影代码库地址").input(()=>{
             return $("确定要指定聚影代码库地址"+input).confirm((input)=>{
                 setItem('依赖', input);
@@ -1473,13 +1473,13 @@ function manageSet(){
     });
     d.push({
         title: '配置开关',
-        img: 'https://hikerfans.com/tubiao/system/47.png',
+        img: getIcon("配置.svg"),
         col_type: 'avatar',
         url: 'toast://不清楚，可不动'
     });
     d.push({
         title: '规则日志打印',
-        img: getItem('规则日志打印')=="1"?'https://hikerfans.com/tubiao/messy/139.svg':'https://hikerfans.com/tubiao/messy/138.svg',
+        img: getItem('规则日志打印')=="1"?getIcon("开.svg"):getIcon("关.svg"),
         url: $("#noLoading#").lazyRule(() => {
             if(getItem('规则日志打印')=="1"){
                 clearItem('规则日志打印');
@@ -1496,13 +1496,13 @@ function manageSet(){
     });
     d.push({
         title: '关于聚影',
-        img: 'hiker://files/cache/src/聚影.png',
+        img: getIcon("聚影.svg"),
         col_type: 'avatar',
         url: 'toast://哥就是帅'
     });
     d.push({
         title: '查看更新日志',
-        img: 'https://hikerfans.com/tubiao/system/100.png',
+        img: getIcon("箭头.svg"),
         col_type: 'text_icon',
         url: $("#noLoading#").lazyRule(() => {
             eval(fetch(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcTmplVersion.js'));
@@ -1517,7 +1517,7 @@ function manageSet(){
     });
     d.push({
         title: '检测版本更新',
-        img: 'https://hikerfans.com/tubiao/system/100.png',
+        img: getIcon("箭头.svg"),
         col_type: 'text_icon',
         url: $("#noLoading#").lazyRule(() => {
             try{
@@ -1548,7 +1548,7 @@ function manageSet(){
     });
     d.push({
         title: '支持一下作者',
-        img: 'https://hikerfans.com/tubiao/system/100.png',
+        img: getIcon("箭头.svg"),
         col_type: 'text_icon',
         url: config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'img/pay.jpg'
     });
@@ -1557,7 +1557,7 @@ function manageSet(){
     });
     d.push({
         title: '免责申明',
-        img: 'https://hikerfans.com/tubiao/messy/155.svg',
+        img: getIcon("免责.svg"),
         col_type: 'avatar',
         url: 'hiker://empty'
     })
