@@ -547,7 +547,7 @@ function sortByPinyin(arr) {
     }
     return arrNew
 }
-//app类接口类型自动
+// app类接口类型自动
 function getapitype(apiurl) {
     if(apiurl){
         if(apiurl.includes('.vod')){
@@ -567,11 +567,11 @@ function getapitype(apiurl) {
         return "";
     }
 }
-//文字上色
+// 文字上色
 function colorTitle(title, Color) {
     return '<font color="' + Color + '">' + title + '</font>';
 }
-//选中状态标识
+// 选中状态标识
 function getide(is) {
     if(is==1){
         return '‘‘’’<strong><font color="#f13b66a">◉ </front></strong>';
@@ -579,7 +579,7 @@ function getide(is) {
         return '‘‘’’<strong><font color="#F54343">◉ </front></strong>';
     }
 }
-//取前三历史记录
+// 取前三历史记录
 function getHistory(){
     let h = [];
     let ruleTitle = MY_RULE._title || MY_RULE.title;
@@ -602,7 +602,11 @@ function getHistory(){
     })
     return h;
 }
-//重定义打印日志
+// 获取图标地址
+function getIcon(icon) {
+    return "https://www.hikerfans.com/juying/img/" + icon;
+}
+// 重定义打印日志
 var xlog = log;
 log = function (msg) {
     if (getItem('规则日志打印')=="1") {
