@@ -604,7 +604,17 @@ function getHistory(){
 }
 // 获取图标地址
 function getIcon(icon) {
-    return "https://www.hikerfans.com/juying/img/" + icon;
+    return 'https://www.hikerfans.com/juying/img/'+icon+'?s=#FF0099@js=' + $.toString(() => {
+        let javaImport = new JavaImporter();
+        javaImport.importPackage(Packages.com.example.hikerview.utils);
+        with(javaImport) {
+            let bytes = FileUtil.toBytes(input);
+            let str = new java.lang.String(bytes, "UTF-8") + "";
+            str = str.replace(/#FF9900/g, '#FF0099');
+            bytes = new java.lang.String(str).getBytes();
+            return FileUtil.toInputStream(bytes);
+        }
+    })
 }
 // 重定义打印日志
 var xlog = log;
