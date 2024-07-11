@@ -1479,32 +1479,35 @@ function manageSet(){
         url: 'toast://不清楚，可不动'
     });
     let colors = [{
-        titile: "绿意盎然",
+        title: "恢复初始",
+        icon: ""
+    },{
+        title: "绿意盎然",
         icon: "#7FFF00"
     },{
-        titile: "蓝田生玉",
+        title: "蓝田生玉",
         icon: "#00BFA5"
     },{
-        titile: "淡雅深蓝",
+        title: "淡雅深蓝",
         icon: "#001f3f"
     },{
-        titile: "橙黄橘绿",
+        title: "橙黄橘绿",
         icon: "#FFA500"
     },{
-        titile: "泥牛入海",
+        title: "泥牛入海",
         icon: "#4D5B6C"
     },{
-        titile: "热情似火",
+        title: "热情似火",
         icon: "#FF5733"
     },{
-        titile: "粉装玉琢",
+        title: "粉装玉琢",
         icon: "#FADBD8"
     },{
-        titile: "重斤球紫",
+        title: "重斤球紫",
         icon: "#5E3C99"
     }]
     colors.forEach(it=>{
-        if(getItem('主题颜色') == it.title){
+        if(getItem('主题颜色','') == it.title){
             it.title = it.title + '√';
         }
     })
