@@ -1440,28 +1440,7 @@ function manageSet(){
         col_type: "line"
     });
     */
-    d.push({
-        col_type: "line_blank"
-    });
-    d.push({
-        title: '主题设置',
-        img: getIcon("依赖.svg"),
-        col_type: 'avatar',
-        url: 'hiker://empty'
-    });
-    d.push({
-        title: '主题颜色选择',
-        img: getIcon("箭头.svg"),
-        url: $("#noLoading#").lazyRule(() => {
-            const hikerPop = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6966");
-            hikerPop.selectCenterColor(["#fdf000", "#FF0000"], (color) => {
-                setItem('主题颜色', color);
-                refreshPage();
-            });
-            return "hiker://empty";
-        }),
-        col_type: 'text_icon'
-    });
+
     d.push({
         col_type: "line_blank"
     });
@@ -1494,10 +1473,23 @@ function manageSet(){
         col_type: "line_blank"
     });
     d.push({
-        title: '配置开关',
+        title: '规则配置',
         img: getIcon("配置.svg"),
         col_type: 'avatar',
         url: 'toast://不清楚，可不动'
+    });
+    d.push({
+        title: '主题颜色选择',
+        img: getIcon("箭头.svg"),
+        url: $("#noLoading#").lazyRule(() => {
+            const hikerPop = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6966");
+            hikerPop.selectCenterColor(["#fdf000", "#FF0000"], (color) => {
+                setItem('主题颜色', color);
+                refreshPage();
+            });
+            return "hiker://empty";
+        }),
+        col_type: 'text_icon'
     });
     d.push({
         title: '规则日志打印',
