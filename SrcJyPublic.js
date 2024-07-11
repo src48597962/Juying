@@ -605,7 +605,7 @@ function getHistory(){
 // 获取图标地址
 function getIcon(icon) {
     let color = getItem('主题颜色','#FF9900');
-    return 'https://www.hikerfans.com/juying/img/'+icon+'?s='+color+'@js=' + $.toString((color) => {
+    return config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'img/'+icon+'?s='+color+'@js=' + $.toString((color) => {
         let javaImport = new JavaImporter();
         javaImport.importPackage(Packages.com.example.hikerview.utils);
         with(javaImport) {
