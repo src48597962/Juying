@@ -604,17 +604,18 @@ function getHistory(){
 }
 // 获取图标地址
 function getIcon(icon) {
-    return 'https://www.hikerfans.com/juying/img/'+icon+'?s=#FF0099@js=' + $.toString(() => {
+    let color = getItem('主题颜色','#FF9900');
+    return 'https://www.hikerfans.com/juying/img/'+icon+'?s='+color+'@js=' + $.toString((color) => {
         let javaImport = new JavaImporter();
         javaImport.importPackage(Packages.com.example.hikerview.utils);
         with(javaImport) {
             let bytes = FileUtil.toBytes(input);
             let str = new java.lang.String(bytes, "UTF-8") + "";
-            str = str.replace(/#FF9900/g, '#FF0099');
+            str = str.replace(/#FF9900/g, color);
             bytes = new java.lang.String(str).getBytes();
             return FileUtil.toInputStream(bytes);
         }
-    })
+    },color)
 }
 // 重定义打印日志
 var xlog = log;
