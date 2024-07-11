@@ -1455,7 +1455,8 @@ function manageSet(){
         url: $("#noLoading#").lazyRule(() => {
             const hikerPop = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6966");
             hikerPop.selectCenterColor(["#fdf000", "#FF0000"], (color) => {
-                putMyVar('color', color);
+                setItem('主题颜色', color);
+                refreshPage();
             });
             return "hiker://empty";
         }),
