@@ -1444,6 +1444,27 @@ function manageSet(){
         col_type: "line_blank"
     });
     d.push({
+        title: '主题设置',
+        img: getIcon("依赖.svg"),
+        col_type: 'avatar',
+        url: 'hiker://empty'
+    });
+    d.push({
+        title: '主题颜色选择',
+        img: getIcon("箭头.svg"),
+        url: $("#noLoading#").lazyRule(() => {
+            const hikerPop = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6966");
+            hikerPop.selectCenterColor(["#fdf000", "#FF0000"], (color) => {
+                putMyVar('color', color);
+            });
+            return "hiker://empty";
+        }),
+        col_type: 'text_icon'
+    });
+    d.push({
+        col_type: "line_blank"
+    });
+    d.push({
         title: '依赖管理',
         img: getIcon("依赖.svg"),
         col_type: 'avatar',
