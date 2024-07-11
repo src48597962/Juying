@@ -1488,14 +1488,14 @@ function manageSet(){
         title: "蓝田生玉",
         icon: "#00BFA5"
     },{
-        title: "淡雅深蓝",
-        icon: "#001f3f"
+        title: "间宝石绿",
+        icon: "#66CDAA"
     },{
         title: "橙黄橘绿",
         icon: "#FFA500"
     },{
-        title: "泥牛入海",
-        icon: "#4D5B6C"
+        title: "暗黄褐色",
+        icon: "#BDB76B"
     },{
         title: "热情似火",
         icon: "#FF5733"
@@ -1505,6 +1505,9 @@ function manageSet(){
     },{
         title: "重斤球紫",
         icon: "#5E3C99"
+    },{
+        title: "深卡其色",
+        icon: "#BDB76B"
     }]
     colors.forEach(it=>{
         if(getItem('主题颜色','') == it.title){
