@@ -853,7 +853,7 @@ function dianboyiji() {
                         d.push({
                             title: vodname,
                             desc: voddesc.replace(/<\/?.+?\/?>/g,''),
-                            pic_url: vodpic + (/eferer=/.test(vodpic)?"":"@Referer="),
+                            pic_url: (vodpic + (/eferer=/.test(vodpic)?"":"@Referer=")) + `@js=if(input == null){ fetch('hiker://files/cache/src/404.jpg', {inputStream: true}) } else input`,
                             url: /^hiker/.test(list.vod_url)?list.vod_url:list.play?list.play:$("hiker://empty#immersiveTheme##autoCache#").rule(() => {
                                 require(config.依赖);
                                 dianboerji()
