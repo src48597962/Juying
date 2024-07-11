@@ -604,8 +604,8 @@ function getHistory(){
 }
 // 获取图标地址
 function getIcon(icon) {
-    let color = getItem('主题颜色','#FF9900');
-    return config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'img/'+icon+'?s='+color+'@js=' + $.toString((color) => {
+    let color = getItem('主题颜色','');
+    return config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'img/' + icon + (!color?'':'?s='+color+'@js=' + $.toString((color) => {
         let javaImport = new JavaImporter();
         javaImport.importPackage(Packages.com.example.hikerview.utils);
         with(javaImport) {
@@ -615,7 +615,7 @@ function getIcon(icon) {
             bytes = new java.lang.String(str).getBytes();
             return FileUtil.toInputStream(bytes);
         }
-    },color)
+    },color))
 }
 // 重定义打印日志
 var xlog = log;
