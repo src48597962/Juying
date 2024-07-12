@@ -42,6 +42,7 @@ function erjimenu(desc,name,group) {
             title: "观影设置",
             url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyMenu.js');
+                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                 lookset();
             }),
             pic_url: getIcon("点播-观影设置.svg"),
