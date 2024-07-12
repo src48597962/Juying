@@ -99,7 +99,7 @@ function aliShare(share_id, folder_id, share_pwd) {
                     }
                 }, my_params.name || "", my_params.back || 0),
                 col_type: 'icon_5',
-                img: 'https://hikerfans.com/tubiao/grey/175.png',
+                img: getIcon("云盘-换源.svg"),
                 extra: {
                     longClick: [{
                         title: "上级目录",
@@ -125,7 +125,7 @@ function aliShare(share_id, folder_id, share_pwd) {
                     return 'toast://已切换';
                 }),
                 col_type: 'icon_5',
-                img: 'https://hikerfans.com/tubiao/grey/168.png'
+                img: getIcon("云盘-样式.svg"),
             },
             {
                 title: "排序",
@@ -135,7 +135,7 @@ function aliShare(share_id, folder_id, share_pwd) {
                     return 'toast://切换成功';
                 }),
                 col_type: 'icon_5',
-                img: 'https://hikerfans.com/tubiao/grey/76.png'
+                img: getIcon("云盘-排序.svg"),
             },
             {
                 title: getItem('aliyun_playMode', '智能')=="原画"?"原画"+getItem('aliyun_openInt', '1'):getItem('aliyun_playMode', '智能'),
@@ -188,13 +188,13 @@ function aliShare(share_id, folder_id, share_pwd) {
                     }
                 }),
                 col_type: 'icon_5',
-                img: 'https://hikerfans.com/tubiao/grey/100.png'
+                img: getIcon("云盘-转码.svg"),
             },
             {
                 title: '转存',
                 url: `smartdrive://share/browse?shareId=${share_id}&sharePwd=${share_pwd}`,
                 col_type: 'icon_5',
-                img: 'https://hikerfans.com/tubiao/grey/206.png',
+                img: getIcon("云盘-转存.svg"),
                 extra: {
                     longClick: [{
                         title: "💾转存",
@@ -255,7 +255,7 @@ function aliShare(share_id, folder_id, share_pwd) {
                 dirlist.forEach((item) => {
                     d.push({
                         title: item.name,
-                        img: "hiker://files/cache/src/文件夹.svg",//#noRecordHistory##noHistory#
+                        img: getIcon("云盘-文件夹.svg"),
                         url: $("hiker://empty##https://www.aliyundrive.com/s/" + item.share_id + (item.file_id ? "/folder/" + item.file_id : "")).rule((share_id, folder_id, share_pwd) => {
                             require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js');
                             aliShare(share_id, folder_id, share_pwd);
@@ -551,7 +551,7 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
             d = d.concat(mydisk);
             d.push({
                 title: getMyVar("selectDisk", "1") == "1" ? "““””<b>备份盘</b>" : "备份盘",
-                img: "https://hikerfans.com/tubiao/grey/147.png",
+                img: getIcon("云盘-备份盘.svg"),
                 url: $('#noLoading#').lazyRule(() => {
                     putMyVar("selectDisk", "1");
                     refreshPage(false);
@@ -561,7 +561,7 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
             })
             d.push({
                 title: getMyVar("selectDisk", "1") == "2" ? "““””<b>资源库</b>" : "资源库",
-                img: "https://hikerfans.com/tubiao/grey/126.png",
+                img: getIcon("云盘-资源库.svg"),
                 url: $('#noLoading#').lazyRule(() => {
                     putMyVar("selectDisk", "2");
                     refreshPage(false);
@@ -571,7 +571,7 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
             })
             d.push({
                 title: getMyVar("selectDisk", "1") == "3" ? "““””<b>盘搜索</b>" : "盘搜索",
-                img: "https://hikerfans.com/tubiao/grey/85.png",
+                img: getIcon("云盘-盘搜索.svg"),
                 url: $('#noLoading#').lazyRule(() => {
                     putMyVar("selectDisk", "3");
                     refreshPage(false);
@@ -784,7 +784,7 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                                     }
                                 }, headers),
                                 col_type: 'icon_5',
-                                img: 'https://hikerfans.com/tubiao/grey/175.png'
+                                img: getIcon("云盘-探索.svg")
                             },
                             {
                                 title: "样式",
@@ -794,7 +794,7 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                                     return 'toast://已切换';
                                 }),
                                 col_type: 'icon_5',
-                                img: 'https://hikerfans.com/tubiao/grey/168.png'
+                                img: getIcon("云盘-样式.svg")
                             },
                             {
                                 title: "排序",
@@ -804,7 +804,7 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                                     return 'toast://切换成功';
                                 }),
                                 col_type: 'icon_5',
-                                img: 'https://hikerfans.com/tubiao/grey/76.png'
+                                img: getIcon("云盘-排序.svg")
                             },
                             {
                                 title: getItem('aliyun_playMode', '智能')=="原画"?"原画"+getItem('aliyun_openInt', '1'):getItem('aliyun_playMode', '智能'),
@@ -812,7 +812,7 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                                     setItem('aliyun_playMode', input);
                                 }),
                                 col_type: 'icon_5',
-                                img: 'https://hikerfans.com/tubiao/grey/100.png'
+                                img: getIcon("云盘-转码.svg")
                             },
                             {
                                 title: '分享',
@@ -827,7 +827,7 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                                     return "toast://已生成7天有效分享链接"
                                 }, drive_id, folder_id, headers),
                                 col_type: 'icon_5',
-                                img: 'https://hikerfans.com/tubiao/grey/206.png'
+                                img: getIcon("云盘-分享.svg")
                             },
                             {
                                 col_type: 'line_blank'
@@ -1686,7 +1686,7 @@ function erjiAliShareUrl(input, dataObj) {
                         return "hiker://empty";
                     }),
                     col_type: 'icon_5',
-                    img: 'https://hikerfans.com/tubiao/grey/79.png',
+                    img: getIcon("云盘-样式.svg"),
                     extra: {
                         cls: "Juloadlist"
                     }
@@ -1698,7 +1698,7 @@ function erjiAliShareUrl(input, dataObj) {
                         return refreshlist;
                     },refreshlist),
                     col_type: 'icon_5',
-                    img: 'https://hikerfans.com/tubiao/grey/76.png',
+                    img: getIcon("云盘-排序.svg"),
                     extra: {
                         cls: "Juloadlist"
                     }
@@ -1754,7 +1754,7 @@ function erjiAliShareUrl(input, dataObj) {
                         }
                     }),
                     col_type: 'icon_5',
-                    img: 'https://hikerfans.com/tubiao/grey/100.png',
+                    img: getIcon("云盘-转码.svg"),
                     extra: {
                         id: "yundiskplaymode",
                         cls: "Juloadlist"
@@ -1768,7 +1768,7 @@ function erjiAliShareUrl(input, dataObj) {
                         return "hiker://empty";
                     }, dataObj.name, dataObj.group),
                     col_type: 'icon_5',
-                    img: 'https://hikerfans.com/tubiao/grey/175.png',
+                    img: getIcon("点播-切换站源.svg"),
                     extra: {
                         cls: "Juloadlist",
                         longClick: [{
