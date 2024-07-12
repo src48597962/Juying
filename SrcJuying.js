@@ -322,7 +322,7 @@ function dianboerji() {
         //取之前足迹记录，用于自动定位之前的线路和分页
         let smark = {};
         try {
-            eval('SrcMark = ' + fetch(globalMap0.getMyVar('gmParams').rulepath + "Mark.json"));
+            eval('SrcMark = ' + fetch(rulepath + "Mark.json"));
             if (SrcMark[MY_URL]) {
                 smark.line = SrcMark[MY_URL].line;
                 smark.page = SrcMark[MY_URL].page;
