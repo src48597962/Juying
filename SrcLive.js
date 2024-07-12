@@ -376,7 +376,7 @@ function guanlidata(datalist) {
         }
         list.push({
             title: name,
-            img: 'https://hikerfans.com/tubiao/ke/156.png',
+            img: globalMap0.getMyVar('gmParams').getIcon("直播-标志.svg"),
             col_type: 'icon_2_round',
             url: $('#noLoading#').lazyRule((name) => {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLive.js');
@@ -536,18 +536,18 @@ function LiveSet() {
     });
     d.push({
         title: "直播管理",
-        img: "https://hikerfans.com/juying/img/直播管理.svg",
+        img: globalMap0.getMyVar('gmParams').getIcon("直播-管理.svg"),
         col_type: "avatar",
         url: "hiker://empty",
     });
     d.push({
         title: "订阅源管理",
-        img: "https://hikerfans.com/juying/img/箭头.svg",
+        img: globalMap0.getMyVar('gmParams').getIcon("箭头.svg"),
         url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
             addListener("onClose", $.toString(() => {
                 //refreshPage(false);
             }));
-            let livecfgfile = "hiker://files/rules/Src/Juying2/liveconfig.json";
+            let livecfgfile = globalMap0.getMyVar('gmParams').rulepath + "liveconfig.json";
             let livecfg = fetch(livecfgfile);
             if (livecfg != "") {
                 eval("var liveconfig = " + livecfg);
@@ -760,7 +760,7 @@ function LiveSet() {
     });
     d.push({
         title: "TVBox订阅",
-        img: "https://hikerfans.com/juying/img/箭头.svg",
+        img: globalMap0.getMyVar('gmParams').getIcon("箭头.svg"),
         col_type: "text_icon",
         url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
             addListener("onClose", $.toString(() => {
@@ -944,7 +944,7 @@ function LiveSet() {
     });
     d.push({
         title: "编辑本地源",
-        img: "https://hikerfans.com/juying/img/箭头.svg",
+        img: globalMap0.getMyVar('gmParams').getIcon("箭头.svg"),
         col_type: "text_icon",
         url:
             getMyVar("JYlivedyurl", "juying") == "juying"
@@ -960,7 +960,7 @@ function LiveSet() {
     });
     d.push({
         title: "清空直播源",
-        img: "https://hikerfans.com/juying/img/箭头.svg",
+        img: globalMap0.getMyVar('gmParams').getIcon("箭头.svg"),
         col_type: "text_icon",
         url: $("确定清空聚影直播本地文件？").confirm(() => {
             writeFile(globalMap0.getMyVar('gmParams').datapath + "live.txt", "");
@@ -977,7 +977,7 @@ function LiveSet() {
     });
     d.push({
         title: "清理失效",
-        img: "https://hikerfans.com/juying/img/清理.svg",
+        img: globalMap0.getMyVar('gmParams').getIcon("直播-清理.svg"),
         col_type: "avatar",
         url: "hiker://empty",
     });
