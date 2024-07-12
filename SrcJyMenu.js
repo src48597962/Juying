@@ -185,7 +185,7 @@ function lookset() {
     });
     let partpage = storage0.getItem('partpage') || {};
     d.push({
-        title: '选集分页',
+        title: '选集列表分页',
         url: $('#noLoading#').lazyRule((partpage) => {
             if (partpage['ispage'] != 1) {
                 partpage['ispage'] = 1;
