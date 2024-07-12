@@ -18,7 +18,6 @@ let sourceName = homeSource.name;
 let sourceGroup = homeSource.group || homeSource.type;
 let sourceUrl = homeSource.url;
 
-globalMap0.putMyVar('gmParams',{datapath:datapath,rulepath:rulepath,jkfile:jkfile,jxfile:jxfile,cfgfile:cfgfile});
 
 function getFile(lx) {
     let file = lx=='jk'?jkfile:jxfile;
@@ -625,4 +624,13 @@ log = function (msg) {
     }
 }
 
+let gmParams = {
+    datapath:datapath,
+    rulepath:rulepath,
+    jkfile:jkfile,
+    jxfile:jxfile,
+    cfgfile:cfgfile,
+    getIcon:getIcon
+}
+globalMap0.putMyVar('gmParams', gmParams);
 
