@@ -145,7 +145,7 @@ function lookset() {
         url: "hiker://empty"
     });
     d.push({
-        title: '解析日志',
+        title: '解析日志打印',
         url: $('#noLoading#').lazyRule((playSet) => {
             if (playSet['printlog'] != 1) {
                 playSet['printlog'] = 1;
@@ -160,7 +160,7 @@ function lookset() {
         col_type: "text_icon"
     });
     d.push({
-        title: 'm3u8缓存',
+        title: 'm3u8缓存文件',
         url: $('#noLoading#').lazyRule((playSet) => {
             if (playSet['cachem3u8'] != 1) {
                 playSet['cachem3u8'] = 1;
@@ -200,7 +200,7 @@ function lookset() {
         col_type: "text_icon"
     });
     d.push({
-        title: '每页数量'+(partpage['pagenum']||40),
+        title: '每页数量：'+(partpage['pagenum']||40),
         url: $(partpage['pagenum']||"40","每页选集数量").input((partpage) => {
             partpage['pagenum'] = parseInt(input);
             storage0.setItem('partpage',partpage);
@@ -211,7 +211,7 @@ function lookset() {
         col_type: "text_icon"
     });
     d.push({
-        title: '分页阀值'+(partpage['partnum']||100),
+        title: '分页阀值：'+(partpage['partnum']||100),
         url: $(partpage['partnum']||"100","选集数量超过多少才分页").input((partpage) => {
             partpage['partnum'] = parseInt(input);
             storage0.setItem('partpage',partpage);
@@ -231,14 +231,6 @@ function lookset() {
         url: "hiker://empty"
     });
     let parsemode = playSet["parsemode"] || 1;
-    /*
-    d.push({
-        title: '当前解析模式：' + (parsemode == 1 ? '聚影智能' : parsemode == 2 ? '强制嗅探' : parsemode == 3 ? '手动模式' : '异常'),
-        desc: parsemode == 1 ? '上次优先>接口自带+私有解析' : parsemode == 2 ? '使用video将web解析组线路进播放器' : parsemode == 3 ? '使用代理播放模式，在播放页手动选择解析' : '',
-        url: 'hiker://empty',
-        col_type: "text_center_1"
-    });
-    */
     d.push({
         title: '聚影智能',
         url: $('#noLoading#').lazyRule((playSet) => {
@@ -355,17 +347,19 @@ function lookset() {
         col_type: "text_icon"
     });
     d.push({
-        title: (playSet['dmRoute'] ? getide(1) : getide(0)) + 'dm盒子弹幕',
-        desc: "仅针对官网地址有效，dm盒子小程序最新版本",
+        title: '调用dm盒子弹幕',
         url: $('#noLoading#').lazyRule((playSet) => {
+            let sm;
             if (playSet['dmRoute']) {
                 playSet['dmRoute'] = 0;
+                sm = '关闭dm盒子弹幕';
             } else {
                 playSet['dmRoute'] = 1;
+                sm = '仅针对官网地址有效，需要dm盒子小程序';
             }
             storage0.setItem('playSet', playSet);
             refreshPage(false);
-            return 'toast://切换成功';
+            return 'toast://' + sm;
         }, playSet),
         pic_url: playSet['dmRoute']?getIcon("开.svg"):getIcon("关.svg"),
         col_type: "text_icon"
