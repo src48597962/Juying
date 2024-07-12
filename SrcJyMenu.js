@@ -11,14 +11,14 @@ function erjimenu(desc,name,group) {
                 } else {
                     putMyVar('二级简介打开标识', "1");
                     addItemAfter('detailid', [{
-                        title: `<font color="#098AC1">详情简介 </font><small><font color="#f47983"> ></font></small>`,
+                        title: `<font color="#098AC1">详情简介 </font><small><font color="#f47983"> ▼</font></small>`,
                         col_type: "avatar",
                         url: $("#noLoading#").lazyRule(() => {
                             clearMyVar('二级简介打开标识');
                             deleteItemByCls("SrcJudescload");
                             return "hiker://empty";
                         }),
-                        pic_url: "https://hikerfans.com/tubiao/ke/91.png",
+                        pic_url: getIcon("点播-简介.svg"),
                         extra: {
                             cls: "SrcJudescload"
                         }
@@ -32,7 +32,7 @@ function erjimenu(desc,name,group) {
                 }
                 return "hiker://empty";
             }, desc || ""),
-            pic_url: "https://hikerfans.com/tubiao/messy/32.svg",
+            pic_url: getIcon("点播-详情简介.svg"),
             col_type: 'icon_small_3',
             extra: {
                 cls: "Juloadlist"
@@ -44,7 +44,7 @@ function erjimenu(desc,name,group) {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyMenu.js');
                 lookset();
             }),
-            pic_url: 'https://hikerfans.com/tubiao/messy/37.svg',
+            pic_url: getIcon("点播-观影设置.svg"),
             col_type: 'icon_small_3',
             extra: {
                 cls: "Juloadlist"
@@ -57,7 +57,7 @@ function erjimenu(desc,name,group) {
                 cutSource(name,group);
                 return  "hiker://empty";
             },name, group),
-            pic_url: 'https://hikerfans.com/tubiao/messy/20.svg',
+            pic_url: getIcon("点播-切换站源.svg"),
             col_type: 'icon_small_3',
             extra: {
                 cls: "Juloadlist"
@@ -65,14 +65,7 @@ function erjimenu(desc,name,group) {
         }
     ]
 }
-//选中状态标识
-function getide(is) {
-    if(is==1){
-        return '‘‘’’<strong><font color="#f13b66a">◉ </front></strong>';
-    }else{
-        return '‘‘’’<strong><font color="#F54343">◉ </front></strong>';
-    }
-}
+
 //切源事件
 function cutSource(name, group) {
     putMyVar("切源旧分组", group);
@@ -142,11 +135,16 @@ function lookset() {
     let playSet = storage0.getItem('playSet') || {};
     let d = [];
     d.push({
-        title: '功能开关',
-        col_type: "rich_text"
+        col_type: "line_blank"
     });
     d.push({
-        title: (playSet['printlog'] ? getide(1) : getide(0)) + '解析日志',
+        title: '功能开关',
+        pic_url: getIcon("点播-功能开关.svg"),
+        col_type: "avatar",
+        url: "hiker://empty"
+    });
+    d.push({
+        title: '解析日志',
         url: $('#noLoading#').lazyRule((playSet) => {
             if (playSet['printlog'] != 1) {
                 playSet['printlog'] = 1;
@@ -157,10 +155,11 @@ function lookset() {
             refreshPage(false);
             return 'toast://切换成功';
         }, playSet),
-        col_type: "text_2"
+        pic_url: playSet['printlog']?getIcon("开.svg"):getIcon("关.svg"),
+        col_type: "text_icon"
     });
     d.push({
-        title: (playSet['cachem3u8'] ? getide(1) : getide(0)) + 'm3u8缓存',
+        title: 'm3u8缓存',
         url: $('#noLoading#').lazyRule((playSet) => {
             if (playSet['cachem3u8'] != 1) {
                 playSet['cachem3u8'] = 1;
@@ -171,18 +170,20 @@ function lookset() {
             refreshPage(false);
             return 'toast://切换成功';
         }, playSet),
-        col_type: "text_2"
+        pic_url: playSet['cachem3u8']?getIcon("开.svg"):getIcon("关.svg"),
+        col_type: "text_icon"
     });
     d.push({
         col_type: "line_blank"
     });
     d.push({
         title: '分页设置',
-        col_type: "rich_text"
+        col_type: "avatar",
+        url: "hiker://empty"
     });
     let partpage = storage0.getItem('partpage') || {};
     d.push({
-        title: (partpage['ispage'] ? getide(1) : getide(0)) + '选集开启分页设置',
+        title: '选集分页',
         url: $('#noLoading#').lazyRule((partpage) => {
             if (partpage['ispage'] != 1) {
                 partpage['ispage'] = 1;
@@ -193,7 +194,8 @@ function lookset() {
             refreshPage(false);
             return 'toast://切换成功';
         }, partpage),
-        col_type: "text_center_1"
+        pic_url: partpage['ispage']?getIcon("开.svg"):getIcon("关.svg"),
+        col_type: "text_icon"
     });
     d.push({
         title: '每页数量'+(partpage['pagenum']||40),
@@ -203,7 +205,8 @@ function lookset() {
             refreshPage(false);
             return 'hiker://empty'
         },partpage),
-        col_type: "text_2"
+        pic_url: getIcon("箭头.svg"),
+        col_type: "text_icon"
     });
     d.push({
         title: '分页阀值'+(partpage['partnum']||100),
@@ -213,51 +216,58 @@ function lookset() {
             refreshPage(false);
             return 'hiker://empty'
         },partpage),
-        col_type: "text_2"
+        pic_url: getIcon("箭头.svg"),
+        col_type: "text_icon"
     });
     d.push({
         col_type: "line_blank"
     });
     d.push({
         title: '解析设置',
-        col_type: "rich_text"
+        col_type: "avatar",
+        url: "hiker://empty"
     });
     let parsemode = playSet["parsemode"] || 1;
+    /*
     d.push({
         title: '当前解析模式：' + (parsemode == 1 ? '聚影智能' : parsemode == 2 ? '强制嗅探' : parsemode == 3 ? '手动模式' : '异常'),
         desc: parsemode == 1 ? '上次优先>接口自带+私有解析' : parsemode == 2 ? '使用video将web解析组线路进播放器' : parsemode == 3 ? '使用代理播放模式，在播放页手动选择解析' : '',
         url: 'hiker://empty',
         col_type: "text_center_1"
     });
+    */
     d.push({
-        title: (parsemode == 1 ? getide(1) : getide(0)) + '聚影智能',
+        title: '聚影智能',
         url: $('#noLoading#').lazyRule((playSet) => {
             playSet['parsemode'] = 1;
             storage0.setItem('playSet', playSet);
             refreshPage(false);
-            return 'toast://解析模式：聚影智能';
+            return 'toast://聚影智能 | 上次优先>接口自带+私有解析';
         }, playSet),
-        col_type: "text_3"
+        pic_url: parsemode==1?getIcon("开.svg"):getIcon("关.svg"),
+        col_type: "text_icon"
     });
     d.push({
-        title: (parsemode == 2 ? getide(1) : getide(0)) + '强制嗅探',
+        title: '强制嗅探',
         url: $('#noLoading#').lazyRule((playSet) => {
             playSet['parsemode'] = 2;
             storage0.setItem('playSet', playSet);
             refreshPage(false);
-            return 'toast://解析模式：强制嗅探';
+            return 'toast://强制嗅探 | 将web解析组线路进video播放器';
         }, playSet),
-        col_type: "text_3"
+        pic_url: parsemode==2?getIcon("开.svg"):getIcon("关.svg"),
+        col_type: "text_icon"
     });
     d.push({
-        title: (parsemode == 3 ? getide(1) : getide(0)) + '手动切换',
+        title: '手动切换',
         url: $('#noLoading#').lazyRule((playSet) => {
             playSet['parsemode'] = 3;
             storage0.setItem('playSet', playSet);
             refreshPage(false);
-            return 'toast://解析模式：手动切换';
+            return 'toast://手动切换 | 代理播放，在播放页手动选择解析';
         }, playSet),
-        col_type: "text_3"
+        pic_url: parsemode==3?getIcon("开.svg"):getIcon("关.svg"),
+        col_type: "text_icon"
     });
     d.push({
         col_type: "line"
@@ -277,7 +287,8 @@ function lookset() {
             refreshPage(false);
             return 'toast://嗅探内核切换为：'+sm;
         }, playSet),
-        col_type: "text_2"
+        pic_url: getIcon("箭头.svg"),
+        col_type: "text_icon"
     });
     d.push({
         title: '嗅探方式：'+(playSet['video']!=0?"video":"WebRule"),
@@ -291,7 +302,8 @@ function lookset() {
             refreshPage(false);
             return 'toast://已切换';
         }, playSet),
-        col_type: "text_2"
+        pic_url: getIcon("箭头.svg"),
+        col_type: "text_icon"
     });
     d.push({
         col_type: "line"
@@ -307,7 +319,8 @@ function lookset() {
             writeFile(recordfile, JSON.stringify(parseRecord));
             return 'toast://对此播放地址将拦截';
         }, parseRecord, recordfile),
-        col_type: "text_2"
+        pic_url: getIcon("箭头.svg"),
+        col_type: "text_icon"
     });
     d.push({
         title: '清空播放拦截记录',
@@ -316,10 +329,14 @@ function lookset() {
             writeFile(recordfile, JSON.stringify(parseRecord));
             return 'toast://无清空';
         }, parseRecord, recordfile),
-        col_type: "text_2"
+        pic_url: getIcon("箭头.svg"),
+        col_type: "text_icon"
     });
     d.push({
-        title: (playSet['isTest'] ? getide(1) : getide(0)) + '解析结果有效性检测',
+        col_type: "line"
+    });
+    d.push({
+        title: '解析结果有效性检测',
         desc: "除video方式外，其他解析结果是否开启检测",
         url: $('#noLoading#').lazyRule((playSet) => {
             if (playSet['isTest']) {
@@ -331,7 +348,8 @@ function lookset() {
             refreshPage(false);
             return 'toast://切换成功';
         }, playSet),
-        col_type: "text_1"
+        pic_url: playSet['isTest']?getIcon("开.svg"):getIcon("关.svg"),
+        col_type: "text_icon"
     });
     d.push({
         title: (playSet['dmRoute'] ? getide(1) : getide(0)) + 'dm盒子弹幕',
@@ -346,7 +364,8 @@ function lookset() {
             refreshPage(false);
             return 'toast://切换成功';
         }, playSet),
-        col_type: "text_1"
+        pic_url: playSet['dmRoute']?getIcon("开.svg"):getIcon("关.svg"),
+        col_type: "text_icon"
     });
     
     /*
