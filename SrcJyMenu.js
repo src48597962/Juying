@@ -11,7 +11,7 @@ function erjimenu(desc,name,group) {
                 } else {
                     putMyVar('二级简介打开标识', "1");
                     addItemAfter('detailid', [{
-                        title: `<font color="#098AC1">详情简介 </font><small><font color="#f47983"> ▼</font></small>`,
+                        title: `<font color="#098AC1">详情简介 </font><small><font color="#f47983"> ::</font></small>`,
                         col_type: "avatar",
                         url: $("#noLoading#").lazyRule(() => {
                             clearMyVar('二级简介打开标识');
