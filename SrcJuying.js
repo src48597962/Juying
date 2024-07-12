@@ -581,7 +581,7 @@ function dianboerji() {
                     extra.cacheM3u8 = true;
                 }
                 d.push({
-                    title: getHead(playtitle.replace(/第|集|话|期|-|new|最新|新/g, ''), Color3),
+                    title: getHead(playtitle.replace(/第|集|话|期|new|最新|新/g, ''), Color3),
                     url: playurl + lazy,
                     col_type: col_type,
                     extra: extra
