@@ -178,6 +178,7 @@ function lookset() {
     });
     d.push({
         title: '分页设置',
+        pic_url: getIcon("点播-分页设置.svg"),
         col_type: "avatar",
         url: "hiker://empty"
     });
@@ -224,6 +225,7 @@ function lookset() {
     });
     d.push({
         title: '解析设置',
+        pic_url: getIcon("点播-解析设置.svg"),
         col_type: "avatar",
         url: "hiker://empty"
     });
