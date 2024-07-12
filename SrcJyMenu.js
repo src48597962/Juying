@@ -18,7 +18,7 @@ function erjimenu(desc,name,group) {
                             deleteItemByCls("SrcJudescload");
                             return "hiker://empty";
                         }),
-                        pic_url: getIcon("点播-简介.svg"),
+                        pic_url: globalMap0.getMyVar('gmParams').getIcon("点播-简介.svg"),
                         extra: {
                             cls: "SrcJudescload"
                         }
