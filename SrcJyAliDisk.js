@@ -561,7 +561,7 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
             })
             d.push({
                 title: getMyVar("selectDisk", "1") == "2" ? "““””<b>资源库</b>" : "资源库",
-                img: getIcon("云盘-资源库.svg"),
+                img: getIcon("云盘-资源盘.svg"),
                 url: $('#noLoading#').lazyRule(() => {
                     putMyVar("selectDisk", "2");
                     refreshPage(false);
