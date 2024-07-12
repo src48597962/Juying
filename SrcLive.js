@@ -1,6 +1,6 @@
 //本代码仅用于个人学习，请勿用于其他作用，下载后请24小时内删除，代码虽然是公开学习的，但请尊重作者，应留下说明
-let datapath = "hiker://files/data/" + MY_RULE.title + "/";
-putMyVar('JY直播数据路径', datapath);
+require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+
 function Live() {
     addListener("onClose", $.toString(() => {
         clearMyVar('editmode');
@@ -8,13 +8,12 @@ function Live() {
         clearMyVar('JYlivedyurl');
         clearMyVar('selectgroup');
         clearMyVar('JYlivelocal');
-        clearMyVar('JY直播数据路径');
     }));
 
     var d = [];
     d.push({
         title: '⚙管理中心⚙',
-        img: "hiker://files/cache/src/聚影.png" || "https://i.postimg.cc/9Q0rhbf0/image.png",
+        img: getIcon("聚影.svg"),
         url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLive.js');
             LiveSet();
@@ -682,7 +681,7 @@ function LiveSet() {
                                     }
                                     if (YClives.length > 0) {
                                         let importnum = 0;
-                                        let JYlivefile = getMyVar('JY直播数据路径') + "live.txt";
+                                        let JYlivefile = globalMap0.getMyVar('gmParams').datapath + "live.txt";
                                         let JYlive = fetch(JYlivefile);
                                         if (JYlive) {
                                             var JYlives = JYlive.split('\n');
@@ -964,7 +963,7 @@ function LiveSet() {
         img: "https://hikerfans.com/juying/img/箭头.svg",
         col_type: "text_icon",
         url: $("确定清空聚影直播本地文件？").confirm(() => {
-            writeFile(getMyVar("JY直播数据路径") + "live.txt", "");
+            writeFile(globalMap0.getMyVar('gmParams').datapath + "live.txt", "");
             if (getMyVar("JYlivedyurl", "juying") == "juying") {
                 putMyVar("isEdit", "1");
             }
@@ -989,7 +988,7 @@ function LiveSet() {
         url: $('#noLoading#').lazyRule(() => {
             putMyVar('isEdit', '1');
             let urls = [];
-            let JYlivefile = getMyVar('JY直播数据路径') + "live.txt";
+            let JYlivefile = globalMap0.getMyVar('gmParams').datapath + "live.txt";
             let JYlive = fetch(JYlivefile);
             if (JYlive != "") {
                 var task = function (obj) {
