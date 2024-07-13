@@ -1898,9 +1898,9 @@ function HipyImport(input, importmode){
             }
             
             if(arr.url){
-                urls.push(arr);
+                return {data: arr};
             }
-            return 1;
+            return {};
         }
         
         let jiekoutask = jiekous.map((list)=>{
@@ -1912,7 +1912,10 @@ function HipyImport(input, importmode){
         });
 
         be(jiekoutask, {
-            func: function(obj, id, error, taskResult) {                            
+            func: function(obj, id, error, taskResult) {   
+                if(taskResult.data){
+                    urls.push(taskResult.data);
+                }                  
             },
             param: {
             }
@@ -2033,9 +2036,9 @@ function Resourceimport(input,importtype,importmode){
                 }
                 if(arr && arr.url){
                     arr['searchable'] = obj.searchable;
-                    urls.push(arr);
+                    return {data: arr};
                 }
-                return 1;
+                return {};
             }
             
             let jiekoutask = jiekous.map((list)=>{
@@ -2047,7 +2050,10 @@ function Resourceimport(input,importtype,importmode){
             });
 
             be(jiekoutask, {
-                func: function(obj, id, error, taskResult) {                            
+                func: function(obj, id, error, taskResult) {  
+                    if(taskResult.data){
+                        urls.push(taskResult.data);
+                    }
                 },
                 param: {
                 }
