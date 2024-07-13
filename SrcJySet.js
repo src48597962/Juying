@@ -1489,31 +1489,31 @@ function manageSet(){
         title: "恢复初始",
         icon: ""
     },{
-        title: '‘‘’’<span style="color:#7FFF00">绿意盎然</span>',
+        title: '<span style="color:#7FFF00">绿意盎然</span>',
         icon: "#7FFF00"
     },{
-        title: '‘‘’’<span style="color:#00BFA5">蓝田生玉</span>',
+        title: '<span style="color:#00BFA5">蓝田生玉</span>',
         icon: "#00BFA5"
     },{
-        title: '‘‘’’<span style="color:#AFEEEE">苍宝石绿</span>',
+        title: '<span style="color:#AFEEEE">苍宝石绿</span>',
         icon: "#AFEEEE"
     },{
-        title: '‘‘’’<span style="color:#FFA500">橙黄橘绿</span>',
+        title: '<span style="color:#FFA500">橙黄橘绿</span>',
         icon: "#FFA500"
     },{
-        title: '‘‘’’<span style="color:#FF5733">热情似火</span>',
+        title: '<span style="color:#FF5733">热情似火</span>',
         icon: "#FF5733"
     },{
-        title: '‘‘’’<span style="color:#FFC0CB">粉装玉琢</span>',
+        title: '<span style="color:#FFC0CB">粉装玉琢</span>',
         icon: "#FFC0CB"
     },{
-        title: '‘‘’’<span style="color:#5E3C99">重斤球紫</span>',
+        title: '<span style="color:#5E3C99">重斤球紫</span>',
         icon: "#5E3C99"
     },{
-        title: '‘‘’’<span style="color:#BDB76B">深卡其色</span>',
+        title: '<span style="color:#BDB76B">深卡其色</span>',
         icon: "#BDB76B"
     },{
-        title: '‘‘’’<span style="color:#BDB76B">亮天蓝色</span>',
+        title: '<span style="color:#BDB76B">亮天蓝色</span>',
         icon: "#87CEFA"
     }]
     colors.forEach(it=>{
