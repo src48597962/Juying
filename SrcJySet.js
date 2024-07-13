@@ -1517,7 +1517,7 @@ function manageSet(){
         icon: "#BDB76B"
     }]
     colors.forEach(it=>{
-        if(getItem('主题颜色','') == it.title){
+        if(getItem('主题颜色','') == it.icon){
             it.title = it.title + '√';
         }
     })
@@ -1525,15 +1525,12 @@ function manageSet(){
         title: '主题颜色选择',
         img: getIcon("箭头.svg"),
         url: $(colors, 3).select((colors) => {
-            /*
-            const hikerPop = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6966");
-            hikerPop.selectCenterColor(["#fdf000", "#FF0000"], (color) => {
-                setItem('主题颜色', color);
-                refreshPage();
-            });
-            */
             let color = colors.filter(d => d.title == input)[0].icon;
-            setItem('主题颜色', color);
+            if(color){
+                setItem('主题颜色', color);
+            }else{
+                clearItem('主题颜色');
+            }
             refreshPage();
             return "hiker://empty";
         }, colors),
