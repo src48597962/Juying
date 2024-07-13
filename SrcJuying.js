@@ -1297,24 +1297,7 @@ function yiji() {
 // 下载必要图标
 function downloadicon() {
     try{
-        if(!fileExist('hiker://files/cache/src/文件夹.svg')){
-            downloadFile("./img/文件夹.svg", 'hiker://files/cache/src/文件夹.svg');
-        }
-        if(!fileExist('hiker://files/cache/src/影片.svg')){
-            downloadFile("https://hikerfans.com/tubiao/movie/13.svg", 'hiker://files/cache/src/影片.svg');
-        }
-        if(!fileExist('hiker://files/cache/src/音乐.svg')){
-            downloadFile("https://hikerfans.com/tubiao/music/46.svg", 'hiker://files/cache/src/音乐.svg');
-        }
-        if(!fileExist('hiker://files/cache/src/图片.png')){
-            downloadFile("https://hikerfans.com/tubiao/more/38.png", 'hiker://files/cache/src/图片.png');
-        }
-        if(!fileExist('hiker://files/cache/src/聚影.png')){
-            downloadFile(config.依赖.match(/http(s)?:\/\/.*\//)[0] + "img/聚影.png", 'hiker://files/cache/src/聚影.png');
-        }
-        if(!fileExist('hiker://files/cache/src/404.jpg')){
-            downloadFile(config.依赖.match(/http(s)?:\/\/.*\//)[0] + "img/404.jpg", 'hiker://files/cache/src/404.jpg');
-        }
+        requireDownload(config.依赖.match(/http(s)?:\/\/.*\//)[0] + "img/聚影.png", 'hiker://files/cache/src/聚影.png');
     }catch(e){}
 }
 // 版本检测
