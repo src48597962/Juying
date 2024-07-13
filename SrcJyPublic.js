@@ -633,6 +633,7 @@ log = function (msg) {
 let gmParams = {
     datapath:datapath,
     rulepath:rulepath,
+    codepath:codepath,
     jkfile:jkfile,
     jxfile:jxfile,
     cfgfile:cfgfile,
