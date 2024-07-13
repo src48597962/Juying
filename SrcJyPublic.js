@@ -609,8 +609,11 @@ function getHistory(){
 }
 // 获取图标地址
 function getIcon(icon) {
+    if(!icon.includes('.svg')){
+        return codepath + icon;
+    }
     let color = getItem('主题颜色','');
-    return config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'img/' + icon + (!color?'':'?s='+color+'@js=' + $.toString((color) => {
+    return codepath + 'img/' + icon + (!color?'':'?s='+color+'@js=' + $.toString((color) => {
         let javaImport = new JavaImporter();
         javaImport.importPackage(Packages.com.example.hikerview.utils);
         with(javaImport) {
