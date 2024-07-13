@@ -117,10 +117,9 @@ function getDatas(lx, isyx) {
                             }
                         }
                         if(arr){
-                            if(arr==null){
-                                log("空值");
-                            }
-                            datalist.push(arr);
+                            return {data: arr};
+                        }else{
+                            return {};
                         }
                     }
                     let listtask = list.map((obj)=>{
@@ -132,7 +131,10 @@ function getDatas(lx, isyx) {
                     });
 
                     be(listtask, {
-                        func: function(obj, id, error, taskResult) {                            
+                        func: function(obj, id, error, taskResult) {   
+                            if(taskResult.data){
+                                datalist.push(taskResult.data);
+                            }                         
                         },
                         param: {
                         }
