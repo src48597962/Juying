@@ -625,6 +625,7 @@ function getIcon(icon) {
         }
     },color))
 }
+//云盘#B9E8FF|#37AFFA
 // 重定义打印日志
 var xlog = log;
 log = function (msg) {
