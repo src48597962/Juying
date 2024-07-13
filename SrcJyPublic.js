@@ -5,6 +5,7 @@ let jkfile = datapath + "jiekou.json";
 let jxfile = datapath + "jiexi.json";
 let cfgfile = rulepath + "config.json";
 let sortfile = rulepath + "jksort.json";
+let codepath = config.依赖?config.依赖.match(/http(s)?:\/\/.*\//)[0]:module.modulePath.slice(0, module.modulePath.lastIndexOf("/")+1);
 
 let Juconfig= {};
 let Jucfg=fetch(cfgfile);
