@@ -638,7 +638,7 @@ function dianboyiji() {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                 return selectSource();
             }),
-            pic_url: "https://hikerfans.com/tubiao/more/47.png",
+            pic_url: getIcon("点播-主页.svg"),
             col_type: "icon_3_round_fill",
             extra: {
                 longClick: [{
@@ -662,7 +662,7 @@ function dianboyiji() {
                 setItem("接口搜索方式",input);
                 return "toast://搜索方式设置为："+input;
             }),
-            pic_url: "https://hikerfans.com/tubiao/more/103.png",
+            pic_url: getIcon("点播-搜索.svg"),
             col_type: "icon_3_round_fill"
         })
         d.push({
@@ -706,7 +706,7 @@ function dianboyiji() {
                     })
                 }
             }),
-            pic_url: "https://hikerfans.com/tubiao/more/44.png",
+            pic_url: getIcon("点播-设置.svg"),
             col_type: "icon_3_round_fill"
         })
 
