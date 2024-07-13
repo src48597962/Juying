@@ -1662,7 +1662,7 @@ function erjiAliShareUrl(input, dataObj) {
                     title: "刷新",
                     url: refreshlist,
                     col_type: 'icon_5',
-                    img: 'https://hikerfans.com/tubiao/grey/125.png',
+                    img: getIcon("云盘-探索.svg"),
                     extra: {
                         url: "https://www.aliyundrive.com/s/" + share_id,
                         cls: "Juloadlist"
@@ -1768,7 +1768,7 @@ function erjiAliShareUrl(input, dataObj) {
                         return "hiker://empty";
                     }, dataObj.name, dataObj.group),
                     col_type: 'icon_5',
-                    img: getIcon("点播-切换站源.svg"),
+                    img: getIcon("云盘-换源.svg"),
                     extra: {
                         cls: "Juloadlist",
                         longClick: [{
