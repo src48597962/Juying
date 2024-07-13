@@ -294,7 +294,7 @@ function aliShare(share_id, folder_id, share_pwd) {
                     let filesize = item.size / 1024 / 1024;
                     let it = {
                         title: item.name,
-                        img: item.thumbnail || (item.category == "video" ? "hiker://files/cache/src/影片.svg" : item.category == "audio" ? "hiker://files/cache/src/音乐.svg" : item.category == "image" ? "hiker://files/cache/src/图片.png" : "https://img.alicdn.com/imgextra/i1/O1CN01mhaPJ21R0UC8s9oik_!!6000000002049-2-tps-80-80.png"),
+                        img: item.thumbnail || (item.category == "video" ? "https://hikerfans.com/tubiao/movie/13.svg" : item.category == "audio" ? "https://hikerfans.com/tubiao/music/46.svg" : item.category == "image" ? "https://hikerfans.com/tubiao/more/38.png" : "https://img.alicdn.com/imgextra/i1/O1CN01mhaPJ21R0UC8s9oik_!!6000000002049-2-tps-80-80.png"),
                         desc: filesize < 1024 ? filesize.toFixed(2) + 'MB' : (filesize / 1024).toFixed(2) + 'GB',
                         col_type: style,
                         extra: {
@@ -696,7 +696,7 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                 })
             }
             
-            let resoufile = "hiker://files/cache/聚影✓/resou.json";
+            let resoufile = rulepath + "resou.json";
             let Juyingresou = fetch(resoufile);
             let JYresou = {};
             if(Juyingresou != ""){
@@ -864,7 +864,7 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                     dirlist.forEach((item) => {
                         d.push({
                             title: item.name,
-                            img: "hiker://files/cache/src/文件夹.svg",
+                            img: "https://hikerfans.com/tubiao/messy/27.svg",
                             url: $("hiker://empty").rule((folder_id, isSearch, drive_id, copydate) => {
                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js');
                                 aliMyDisk(folder_id, isSearch, drive_id, copydate);
@@ -905,7 +905,7 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                             let filesize = item.size / 1024 / 1024;
                             d.push({
                                 title: item.name,
-                                img: item.thumbnail ? item.thumbnail + "@Referer=https://www.aliyundrive.com/" : item.category == "video" ? "hiker://files/cache/src/影片.svg" : item.category == "audio" ? "hiker://files/cache/src/音乐.svg" : item.category == "image" ? "hiker://files/cache/src/图片.png" : "https://img.alicdn.com/imgextra/i1/O1CN01mhaPJ21R0UC8s9oik_!!6000000002049-2-tps-80-80.png@Referer=",
+                                img: item.thumbnail ? item.thumbnail + "@Referer=https://www.aliyundrive.com/" : item.category == "video" ? "https://hikerfans.com/tubiao/movie/13.svg" : item.category == "audio" ? "https://hikerfans.com/tubiao/music/46.svg" : item.category == "image" ? "https://hikerfans.com/tubiao/more/38.png" : "https://img.alicdn.com/imgextra/i1/O1CN01mhaPJ21R0UC8s9oik_!!6000000002049-2-tps-80-80.png@Referer=",
                                 url: $("hiker://empty##").lazyRule((category, file_id, file_url, sub_file_url,drive_id) => {
                                     if (category == "video") {
                                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliPublic.js');
@@ -1044,7 +1044,7 @@ function aliDiskSearch(input, data) {
                 let itemTitle = item.title.replace(/<\/?.+?>/g, "");
                 let arr = {
                     title: itemTitle,
-                    img: "hiker://files/cache/src/文件夹.svg",
+                    img: "https://hikerfans.com/tubiao/messy/27.svg",
                     col_type: "avatar",
                     desc: obj.name,
                     extra: {
@@ -1296,7 +1296,7 @@ function erjiSousuo(name) {
         let itemTitle = item.title.replace(/<\/?.+?>/g, "");
         let arr = {
             title: itemTitle,
-            img: item.pic || "hiker://files/cache/src/文件夹.svg",
+            img: item.pic || "https://hikerfans.com/tubiao/messy/27.svg",
             col_type: "avatar",
             desc: "我的云盘",
             extra: {
@@ -1359,7 +1359,7 @@ function erjiSousuo(name) {
                 let itemTitle = item.title.replace(/<\/?.+?>/g, "");
                 let arr = {
                     title: itemTitle,
-                    img: item.pic || "hiker://files/cache/src/文件夹.svg",
+                    img: item.pic || "https://hikerfans.com/tubiao/messy/27.svg",
                     col_type: "avatar",
                     desc: obj.name,
                     extra: {
@@ -1493,7 +1493,7 @@ function erjiAliShare(share_id, folder_id, share_pwd) {
                         dirlist.forEach((item) => {
                             d.push({
                                 title: item.name,
-                                img: "hiker://files/cache/src/文件夹.svg",
+                                img: "https://hikerfans.com/tubiao/messy/27.svg",
                                 url: $().lazyRule((share_id, folder_id, share_pwd) => {
                                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
                                     let data = erjiAliShare(share_id, folder_id, share_pwd);
@@ -1537,7 +1537,7 @@ function erjiAliShare(share_id, folder_id, share_pwd) {
                             let filesize = item.size / 1024 / 1024;
                             let it = {
                                 title: item.name,
-                                img: item.thumbnail || "hiker://files/cache/src/影片.svg",
+                                img: item.thumbnail || "https://hikerfans.com/tubiao/movie/13.svg",
                                 desc: filesize < 1024 ? filesize.toFixed(2) + 'MB' : (filesize / 1024).toFixed(2) + 'GB',
                                 col_type: style,
                                 extra: {
@@ -1982,7 +1982,7 @@ function erjiAliMyDisk(folder_id, drive_id) {
                 dirlist.forEach((item) => {
                     d.push({
                         title: item.name,
-                        img: "hiker://files/cache/src/文件夹.svg",
+                        img: "https://hikerfans.com/tubiao/messy/27.svg",
                         url: $().lazyRule((folder_id, drive_id) => {
                             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
                             let data = erjiAliMyDisk(folder_id, drive_id);
@@ -2022,7 +2022,7 @@ function erjiAliMyDisk(folder_id, drive_id) {
                         let filesize = item.size / 1024 / 1024;
                         d.push({
                             title: item.name,
-                            img: item.thumbnail ? item.thumbnail + "@Referer=https://www.aliyundrive.com/" : "hiker://files/cache/src/影片.svg",
+                            img: item.thumbnail ? item.thumbnail + "@Referer=https://www.aliyundrive.com/" : "https://hikerfans.com/tubiao/movie/13.svg",
                             url: $().lazyRule((file_id, sub_file_url,drive_id) => {
                                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliPublic.js');
                                     if (alitoken) {
