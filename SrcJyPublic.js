@@ -116,11 +116,10 @@ function getDatas(lx, isyx) {
                                 arr = obj;
                             }
                         }
-                        if(arr){
+                        if(arr && arr.url){
                             return {data: arr};
-                        }else{
-                            return {};
                         }
+                        return {};
                     }
                     let listtask = list.map((obj)=>{
                         return {
