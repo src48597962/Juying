@@ -1,6 +1,6 @@
 //引入Ali公用文件
 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliPublic.js');
-let folderFilter = new RegExp("优惠券|头像订阅|GT容量|购买年超级会员|买会员享|关注公众号|返佣金|关注QQ|QQ频道|订阅必看|尽快保存", "i");//文件夹过滤
+let folderFilter = new RegExp("优惠券|资源群|头像订阅|GT容量|购买年超级会员|买会员享|关注公众号|返佣金|关注QQ|QQ频道|订阅必看|尽快保存", "i");//文件夹过滤
 let errorCode = {
     'ShareLink.Cancelled': '来晚啦，该分享已失效',
     'ShareLink.Forbidden': '违规资源已被封禁',
@@ -1390,8 +1390,8 @@ function erjiSousuo(name) {
                         }
                         arr.url = $().lazyRule((extra) => {
                             let updateItemid = extra.dataObj.updateItemid;
-                            updateItem(updateItemid, {
-                                extra: {"id":updateItemid+'2',"lineVisible":false}
+                            updateItem(updateItemid+'2', {
+                                extra: {"id":updateItemid,"lineVisible":false}
                             })
                             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
                             return erjiAliShareUrl(extra.url, extra.dataObj);
@@ -1646,7 +1646,6 @@ function erjiAliShareUrl(input, dataObj) {
             if(data.errorStr){
                 return "toast://" + data.errorStr;
             }else{
-                deleteItemByCls('Juloadlist');
                 let refreshlist = $().lazyRule((share_id, folder_id, share_pwd) => {
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
                     let data = erjiAliShare(share_id, folder_id, share_pwd);
@@ -1794,7 +1793,7 @@ function erjiAliShareUrl(input, dataObj) {
                         cls: "Juloadlist"
                     }
                 }]
-
+                deleteItemByCls('Juloadlist');
                 let d = menus.concat(data.lists);
                 addItemBefore(dataObj.updateItemid, d);// 生成切源分组
                 updateItem(dataObj.updateItemid, {
