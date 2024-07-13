@@ -253,7 +253,7 @@ function dianboerji() {
     }
     
     let detailsmark;
-    let cacheDataFile = "hiker://files/_cache/SrcJuying_details.json";
+    let cacheDataFile = cachepath + "SrcJuying_details.json";
     let cacheData = fetch(cacheDataFile);
     if (cacheData != "") {
         try{
