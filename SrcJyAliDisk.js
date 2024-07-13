@@ -864,7 +864,7 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                     dirlist.forEach((item) => {
                         d.push({
                             title: item.name,
-                            img: "https://hikerfans.com/tubiao/messy/27.svg",
+                            img: getIcon("云盘-文件夹.svg"),
                             url: $("hiker://empty").rule((folder_id, isSearch, drive_id, copydate) => {
                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js');
                                 aliMyDisk(folder_id, isSearch, drive_id, copydate);
@@ -1044,7 +1044,7 @@ function aliDiskSearch(input, data) {
                 let itemTitle = item.title.replace(/<\/?.+?>/g, "");
                 let arr = {
                     title: itemTitle,
-                    img: "https://hikerfans.com/tubiao/messy/27.svg",
+                    img: getIcon("云盘-文件夹.svg"),
                     col_type: "avatar",
                     desc: obj.name,
                     extra: {
@@ -1296,7 +1296,7 @@ function erjiSousuo(name) {
         let itemTitle = item.title.replace(/<\/?.+?>/g, "");
         let arr = {
             title: itemTitle,
-            img: item.pic || "https://hikerfans.com/tubiao/messy/27.svg",
+            img: item.pic || getIcon("云盘-文件夹.svg"),
             col_type: "avatar",
             desc: "我的云盘",
             extra: {
@@ -1359,7 +1359,7 @@ function erjiSousuo(name) {
                 let itemTitle = item.title.replace(/<\/?.+?>/g, "");
                 let arr = {
                     title: itemTitle,
-                    img: item.pic || "https://hikerfans.com/tubiao/messy/27.svg",
+                    img: item.pic || getIcon("云盘-文件夹.svg"),
                     col_type: "avatar",
                     desc: obj.name,
                     extra: {
@@ -1493,7 +1493,7 @@ function erjiAliShare(share_id, folder_id, share_pwd) {
                         dirlist.forEach((item) => {
                             d.push({
                                 title: item.name,
-                                img: "https://hikerfans.com/tubiao/messy/27.svg",
+                                img: getIcon("云盘-文件夹.svg"),
                                 url: $().lazyRule((share_id, folder_id, share_pwd) => {
                                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
                                     let data = erjiAliShare(share_id, folder_id, share_pwd);
@@ -1982,7 +1982,7 @@ function erjiAliMyDisk(folder_id, drive_id) {
                 dirlist.forEach((item) => {
                     d.push({
                         title: item.name,
-                        img: "https://hikerfans.com/tubiao/messy/27.svg",
+                        img: getIcon("云盘-文件夹.svg"),
                         url: $().lazyRule((folder_id, drive_id) => {
                             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
                             let data = erjiAliMyDisk(folder_id, drive_id);
