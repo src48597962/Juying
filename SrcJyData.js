@@ -950,7 +950,7 @@ function getSsData(name, jkdata, page) {
     if (lists.length > 0) {
         try {
             lists.forEach((list) => {
-                let vodpic = list.vodpic ? list.vodpic.replace(/http.*\/tu\.php\?tu=|\/img\.php\?url=| |\/tu\.php\?tu=/g, '') : "hiker://files/cache/src/404.jpg";
+                let vodpic = list.vodpic ? list.vodpic.replace(/http.*\/tu\.php\?tu=|\/img\.php\?url=| |\/tu\.php\?tu=/g, '') : getIcon("404.jpg");
                 if(!/^hiker/.test(vodpic)){
                     if (/^\/\//.test(vodpic)) {
                         vodpic = "https:" + vodpic;
@@ -1454,7 +1454,7 @@ function getHtml(url, headers) {
 function getDrpyFile(jkdata) {
     if (/^hiker/.test(jkdata.url)) {
         if (!fileExist(jkdata.url)) {
-            if(!fileExist("hiker://files/data/"+MY_RULE.title+"/jiekou.json")){
+            if(!fileExist(jkfile)){
                 jkdata.url = jkdata.url.replace('/data/','/_cache/');
             }
             if (jkdata.ext && /^http/.test(jkdata.ext)) {
@@ -1488,7 +1488,7 @@ function getDrpyFile(jkdata) {
 function extDataCache(jkdata) {
     if (/^hiker/.test(jkdata.url)) {
         if (!fileExist(jkdata.url)) {
-            if(!fileExist("hiker://files/data/"+MY_RULE.title+"/jiekou.json")){
+            if(!fileExist(jkfile)){
                 jkdata.url = jkdata.url.replace('/data/','/_cache/');
             }
             if (jkdata.ext && /^http/.test(jkdata.ext)) {
