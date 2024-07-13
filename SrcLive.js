@@ -204,13 +204,13 @@ function Live() {
                     })
                 }
                 d.push({
-                    title: index == 0 ? '‘‘’’<b><span style="color:'+getItem('主题颜色','#2EC99D')+'">' + groupname : groupname,
+                    title: index == 0 ? `‘‘’’<b><span style="color:`+getItem("主题颜色", "#2EC99D")+`">` + groupname : groupname,
                     url: $('#noLoading#').lazyRule((grouplist, groupname, guanlidata, lists) => {
                         if (getMyVar('selectgroup') != groupname) {
                             putMyVar('selectgroup', groupname);
                             for (let i in grouplist) {
                                 if (grouplist[i] == groupname) {
-                                    updateItem(groupname, { title: '‘‘’’<b><span style="color:'+getItem('主题颜色','#2EC99D')+'">' + groupname })
+                                    updateItem(groupname, { title: `‘‘’’<b><span style="color:`+getItem("主题颜色", "#2EC99D")+`">` + groupname })
                                 } else {
                                     updateItem(grouplist[i], { title: grouplist[i] })
                                 }
