@@ -404,7 +404,7 @@ function jiekousave(urls, mode) {
         if(mode==1){//全量模式时，先删除本地
             for(let i=0;i<datalist.length;i++){
                 if(datalist[i].retain!=1){
-                    if(datalist[i].url.includes('hiker://files/data')){
+                    if(datalist[i].url.startsWith('hiker://files/data')){
                         deleteFile(datalist[i].url);
                     }
                     datalist.splice(i,1);
@@ -419,12 +419,22 @@ function jiekousave(urls, mode) {
             if(it.oldurl){
                 for(let i=0;i<datalist.length;i++){
                     if(datalist[i].url==it.url||datalist[i].url==it.oldurl){
-                        if(datalist[i].url.includes('hiker://files/data')){
+                        if(datalist[i].url.startsWith('hiker://files/data')){
                             deleteFile(datalist[i].url);
                         }
                         datalist.splice(i,1);
                         break;
                     }
+                }
+            }
+
+            if(it.url.startsWith(cachepath)){
+                if(fileExist(it.url)){
+                    let urlfile = datapath + it.url.substr(it.url.lastIndexOf('/') + 1);
+                    writeFile(urlfile, fetch(it.url));
+                    it.url = urlfile;
+                }else{
+                    delete it['url'];
                 }
             }
 
@@ -437,6 +447,7 @@ function jiekousave(urls, mode) {
                 //    it.group = it.group || "新导入";
                 //}
                 delete it['oldurl'];
+                
                 datalist.push(it);
                 num = num + 1;
             }
@@ -630,19 +641,33 @@ function jiekou(data) {
         title:'保存',
         col_type:'text_2',
         url: $().lazyRule((data)=>{
-            if(!/^http|hiker/.test(getMyVar('apiurl',''))){
+            let apiurl = getMyVar('apiurl','').trim();
+            if(!apiurl.startsWith('http') && !apiurl.startsWith('hiker://') && !apiurl.startsWith('file://')){
                 return "toast://接口地址不正确";
             }
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
             let urls= [];
-            let apiurl = getMyVar('apiurl');
-            let apiname = getMyVar('apiname');
+            
+            let apiname = getMyVar('apiname','').trim();
             if(apiname&&apiurl){
-                let urltype = getMyVar('apitype')||getapitype(apiurl);
-                if(!urltype){
+                let apitype = getMyVar('apitype','');
+                if(apitype.includes('自动')){
+                    apitype = getapitype(apiurl);
+                }
+                if(!apitype){
                     return "toast://无法自动识别接口类型，请检查链接";
                 }
-                let arr = {"name": apiname.trim(), "url": apiurl.trim(), "type": urltype };
+                let urlfile = apiurl;
+                if(apiurl.startsWith('http') && !getapitype(apiurl)){
+                    let contnet = getJkContnet(apiurl);
+                    if(contnet){
+                        urlfile = cachepath+apitype+"_"+apiurl.substr(apiurl.lastIndexOf('/') + 1);
+                        writeFile(urlfile, contnet);
+                    }else{
+                        return "toast://接口地址获取内容失败";
+                    }
+                }
+                let arr = {"name": apiname, "url": urlfile, "type": apitype };
                 let apigroup = getMyVar('apigroup');
                 if(apigroup){
                     arr['group'] = apigroup;
@@ -812,17 +837,17 @@ function jiexi(data) {
                 eval("var urls=" + datafile+ ";");
             }else{
                 var urls = {
-                    "1905": "https://vip.1905.com/m/play/1566444.shtml",
-                    "爱奇艺": "https://m.iqiyi.com/v_sa04mvdzk8.html",
-                    "优酷": "https://v.youku.com/v_show/id_XNDc0MDE1NTk1Mg==.html",
-                    "腾讯": "https://v.qq.com/x/cover/mzc00200frpbpgb/r0042i6x2xp.html",
-                    "芒果": "https://www.mgtv.com/b/349253/10424300.html",
-                    "哔哩哔哩": "https://m.bilibili.com/bangumi/play/ep471494",
-                    "搜狐": "https://m.tv.sohu.com/v/MjAyMjAxMDkvbjYwMTE1MjExMy5zaHRtbA==.html",
-                    "西瓜": "https://www.ixigua.com/6532733952283640333?logTag=fbbfc792d3498d67c0fd",
-                    "PPTV": "https://v.pptv.com/show/zVn3dJXt1xV49l4.html",
-                    "咪咕": "https://m.miguvideo.com/mgs/msite/prd/detail.html?cid=676935232&mgdbid=&channelId=CAAAB000902015500000000",
-                    "乐视": "http://www.le.com/ptv/vplay/26958608.html"
+                    "1905": "https://vip.1905.com/play/1659382.shtml",
+                    "爱奇艺": "https://www.iqiyi.com/v_1e6upn2xiek.html",
+                    "优酷": "https://v.youku.com/v_show/id_XNjQwMzkxNzU1Mg==.html",
+                    "腾讯": "https://v.qq.com/x/cover/mzc002007n0xa7w/j4100ne9iw8.html",
+                    "芒果": "https://www.mgtv.com/b/638338/21190020.html",
+                    "哔哩哔哩": "https://www.bilibili.com/bangumi/play/ep828752",
+                    "搜狐": "https://tv.sohu.com/v/MjAyMzA5MjEvbjYwMTMzNDI0Ni5zaHRtbA==.html",
+                    "西瓜": "https://www.ixigua.com/6915270027096621576",
+                    "PPTV": "https://v.pptv.com/show/UKm0M5sBca8SkPg.html",
+                    "咪咕": "https://m.miguvideo.com/m/detail/919226692",
+                    "乐视": "https://www.le.com/ptv/vplay/24093071.html"
                 }
                 writeFile(filepath, JSON.stringify(urls));
             }
@@ -1393,24 +1418,6 @@ function manageSet(){
         }, Juconfig, cfgfile):'toast://请先订阅聚影资源码',
         col_type: "text_2"
     });
-    d.push({
-        col_type: "line"
-    });
-    d.push({
-        title: '⚙ 个性设置',
-        col_type: "rich_text"
-    });
-
-    d.push({
-        title: '搜索分组',
-        url: $(Juconfig['xunmigroup']?Juconfig['xunmigroup']:"全部","设置搜索时默认分组").input((Juconfig,cfgfile) => {
-                Juconfig['xunmigroup'] = input;
-                writeFile(cfgfile, JSON.stringify(Juconfig));
-                refreshPage(false);
-                return 'toast://默认搜索分组'+(input?'已设置为：'+input:'已清空');
-            }, Juconfig, cfgfile),
-        col_type: "text_3"
-    });
 
     d.push({
         title: '超时时长',
@@ -1956,7 +1963,6 @@ function Resourceimport(input,importtype,importmode){
         showLoading('正在多线程抓取数据中');
         if((getMyVar('importjiekou','1')=="1")&&jiekous.length>0){
             let urls= [];
-            let datapath = globalMap0.getMyVar('gmParams').datapath + "libs_jk/";
             let hipy_t3_enable = getItem('hipy_t3_enable')=="1"?1:0;
             //多线程处理
             var task = function(obj) {
@@ -1996,14 +2002,14 @@ function Resourceimport(input,importtype,importmode){
                     if(arr){
                         let urlfile;
                         if($.type(extfile)=='object'){
-                            urlfile = datapath + arr.type + '_' + arr.name + '.json';
+                            urlfile = datapath + "libs_jk/" + arr.type + '_' + arr.name + '.json';
                             writeFile(urlfile, JSON.stringify(extfile));
                         }else if(/^file/.test(extfile)){
                             urlfile = 'hiker://files/' + extfile.split('/files/Documents/')[1];
                         }else if(/^http/.test(extfile)){
                             try{
-                                let content = fetch(extfile, {timeout:2000});
-                                if (content == '') {
+                                let content = getJkContnet(extfile);
+                                if (!content) {
                                     urlfile = '';
                                 }else{
                                     if(arr.type=="XYQ" && !/分类片单标题/.test(content)){
@@ -2013,7 +2019,7 @@ function Resourceimport(input,importtype,importmode){
                                         obj.searchable = 0;
                                     }
                                     
-                                    urlfile = datapath + arr.type + '_' + extfile.substr(extfile.lastIndexOf('/') + 1);
+                                    urlfile = cachepath + arr.type + '_' + extfile.substr(extfile.lastIndexOf('/') + 1);
                                     writeFile(urlfile, content);
                                 }
                             }catch(e){
