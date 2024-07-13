@@ -619,13 +619,12 @@ function getIcon(icon) {
         with(javaImport) {
             let bytes = FileUtil.toBytes(input);
             let str = new java.lang.String(bytes, "UTF-8") + "";
-            str = str.replace(/#f08534|#B9E8FF|#37AFFA/gi, color);
+            str = str.replace(/#f08534|#37AFFA|#2EC99D/gi, color);
             bytes = new java.lang.String(str).getBytes();
             return FileUtil.toInputStream(bytes);
         }
     },color))
 }
-//云盘#B9E8FF|#37AFFA
 // 重定义打印日志
 var xlog = log;
 log = function (msg) {
