@@ -147,6 +147,7 @@ function getDatas(lx, isyx) {
         if(fetch(sortfile)){
             eval("sort = " + fetch(sortfile));
         }
+        log(datalist);
         datalist.forEach(it=>{
             it.sort = sort[it.url] || 0;
         })
