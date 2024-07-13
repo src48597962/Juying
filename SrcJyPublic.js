@@ -1,5 +1,6 @@
 let datapath = "hiker://files/data/"+MY_RULE.title+"/"; //数据文件路径
-let rulepath = "hiker://files/rules/Src/Juying2/"; //缓存文件路径
+let rulepath = "hiker://files/rules/Src/Juying2/"; //规则文件路径
+let cachepath = "hiker://files/_cache/Juying2/"; //缓存文件路径
 let jkfile = datapath + "jiekou.json";
 let jxfile = datapath + "jiexi.json";
 let cfgfile = rulepath + "config.json";
@@ -42,7 +43,7 @@ function getDatas(lx, isyx) {
             let input;
             if(dySource.startsWith('http')){
                 showLoading('正在加载订阅源，请稍后...');
-                let dyJkTmpFile = "hiker://files/_cache/"+md5(Juconfig['dySource'])+".json";
+                let dyJkTmpFile = cachepath + md5(Juconfig['dySource']) + ".json";
                 if(!fileExist(dyJkTmpFile)){
                     let contnet = getJkContnet(Juconfig['dySource']);
                     if(contnet){
@@ -85,7 +86,7 @@ function getDatas(lx, isyx) {
                                 if(dySource.startsWith('file://')){
                                     urlfile = 'hiker://files/' + extfile.split('/files/Documents/')[1];
                                 }else if(dySource.startsWith('http')){
-                                    urlfile = 'hiker://files/_cache/hipy_t3' + '_' + extfile.substr(extfile.lastIndexOf('/') + 1);
+                                    urlfile = cachepath + '_' + extfile.substr(extfile.lastIndexOf('/') + 1);
                                     try{
                                         if(!fileExist(urlfile)){
                                             let content = fetch(extfile, {timeout:2000});
