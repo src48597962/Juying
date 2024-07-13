@@ -1489,31 +1489,31 @@ function manageSet(){
         title: "恢复初始",
         icon: ""
     },{
-        title: '<span style="color:#7FFF00">绿意盎然</span>',
+        title: '绿意盎然',
         icon: "#7FFF00"
     },{
-        title: '<span style="color:#00BFA5">蓝田生玉</span>',
+        title: '蓝田生玉',
         icon: "#00BFA5"
     },{
-        title: '<span style="color:#AFEEEE">苍宝石绿</span>',
+        title: '苍宝石绿',
         icon: "#AFEEEE"
     },{
-        title: '<span style="color:#FFA500">橙黄橘绿</span>',
+        title: '橙黄橘绿',
         icon: "#FFA500"
     },{
-        title: '<span style="color:#FF5733">热情似火</span>',
+        title: '热情似火',
         icon: "#FF5733"
     },{
-        title: '<span style="color:#FFC0CB">粉装玉琢</span>',
+        title: '粉装玉琢',
         icon: "#FFC0CB"
     },{
-        title: '<span style="color:#5E3C99">重斤球紫</span>',
+        title: '重斤球紫',
         icon: "#5E3C99"
     },{
-        title: '<span style="color:#BDB76B">深卡其色</span>',
+        title: '深卡其色',
         icon: "#BDB76B"
     },{
-        title: '<span style="color:#BDB76B">亮天蓝色</span>',
+        title: '亮天蓝色',
         icon: "#87CEFA"
     }]
     colors.forEach(it=>{
