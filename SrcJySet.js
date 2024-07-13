@@ -1489,32 +1489,32 @@ function manageSet(){
         title: "恢复初始",
         icon: ""
     },{
-        title: "绿意盎然",
+        title: '‘‘’’<span style="color:#7FFF00">绿意盎然</span>',
         icon: "#7FFF00"
     },{
-        title: "蓝田生玉",
+        title: '‘‘’’<span style="color:#00BFA5">蓝田生玉</span>',
         icon: "#00BFA5"
     },{
-        title: "间宝石绿",
-        icon: "#66CDAA"
+        title: '‘‘’’<span style="color:#AFEEEE">苍宝石绿</span>',
+        icon: "#AFEEEE"
     },{
-        title: "橙黄橘绿",
+        title: '‘‘’’<span style="color:#FFA500">橙黄橘绿</span>',
         icon: "#FFA500"
     },{
-        title: "暗黄褐色",
-        icon: "#BDB76B"
-    },{
-        title: "热情似火",
+        title: '‘‘’’<span style="color:#FF5733">热情似火</span>',
         icon: "#FF5733"
     },{
-        title: "粉装玉琢",
-        icon: "#FADBD8"
+        title: '‘‘’’<span style="color:#FFC0CB">粉装玉琢</span>',
+        icon: "#FFC0CB"
     },{
-        title: "重斤球紫",
+        title: '‘‘’’<span style="color:#5E3C99">重斤球紫</span>',
         icon: "#5E3C99"
     },{
-        title: "深卡其色",
+        title: '‘‘’’<span style="color:#BDB76B">深卡其色</span>',
         icon: "#BDB76B"
+    },{
+        title: '‘‘’’<span style="color:#BDB76B">亮天蓝色</span>',
+        icon: "#87CEFA"
     }]
     colors.forEach(it=>{
         if(getItem('主题颜色','') == it.icon){
