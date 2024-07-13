@@ -1298,7 +1298,7 @@ function yiji() {
 function downloadicon() {
     try{
         if(!fileExist('hiker://files/cache/src/文件夹.svg')){
-            downloadFile(config.依赖.match(/http(s)?:\/\/.*\//)[0] + "img/文件夹.svg", 'hiker://files/cache/src/文件夹.svg');
+            downloadFile("./img/文件夹.svg", 'hiker://files/cache/src/文件夹.svg');
         }
         if(!fileExist('hiker://files/cache/src/影片.svg')){
             downloadFile("https://hikerfans.com/tubiao/movie/13.svg", 'hiker://files/cache/src/影片.svg');
