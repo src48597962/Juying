@@ -298,7 +298,7 @@ function arrayAdd(list, isdir, alistapi) {
         if (isdir) {
             d.push({
                 title: item.name,
-                img: item.thumb || "hiker://files/cache/src/文件夹.svg",//#noRecordHistory##noHistory#
+                img: item.thumb || "https://hikerfans.com/tubiao/messy/27.svg",//#noRecordHistory##noHistory#
                 url: $("hiker://empty##" + encodeURI(alistapi.server + path)).rule((alistapi, dirname) => {
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyAlist.js');
                     alistList(alistapi, dirname);
@@ -320,7 +320,7 @@ function arrayAdd(list, isdir, alistapi) {
             })
             d.push({
                 title: item.name,
-                img: item.thumb || (music.test(suffix) ? "hiker://files/cache/src/音乐.svg" : contain.test(suffix) ? "hiker://files/cache/src/影片.svg" : image.test(suffix) ? "hiker://files/cache/src/图片.png" : "hiker://files/cache/src/Alist.svg"),
+                img: item.thumb || (music.test(suffix) ? "https://hikerfans.com/tubiao/music/46.svg" : contain.test(suffix) ? "https://hikerfans.com/tubiao/movie/13.svg" : image.test(suffix) ? "https://hikerfans.com/tubiao/more/38.png" : "hiker://files/cache/src/Alist.svg"),
                 url: $(encodeURI(alistapi.server + path)).lazyRule((alistapi, path, sign, subtitle) => {
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyAlist.js');
                     return alistUrl(alistapi, path, sign, subtitle);
