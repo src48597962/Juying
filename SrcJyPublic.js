@@ -1,4 +1,4 @@
-let datapath = "hiker://files/data/"+MY_RULE.title+"/"; //数据文件路径
+let datapath = "hiker://files/data/"+(MY_RULE._title || MY_RULE.title)+"/"; //数据文件路径
 let rulepath = "hiker://files/rules/Src/Juying2/"; //规则文件路径
 let cachepath = "hiker://files/_cache/Juying2/"; //缓存文件路径
 let jkfile = datapath + "jiekou.json";
