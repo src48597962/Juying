@@ -622,10 +622,7 @@ function dianboyiji() {
         clearMyVar('点播动态加载loading');
     }));
     let d = [];
-    let datalist = getDatas('jk');
-    let yxdatalist = datalist.filter(it=>{
-        return !it.stop;
-    });
+    let yxdatalist = getDatas('jk', 1);
     let index = yxdatalist.indexOf(yxdatalist.filter(d => d.type==sourceType && d.name==sourceName )[0]);
     let jkdata = yxdatalist[index] || {};
     let sgroup = jkdata.group || jkdata.type;
