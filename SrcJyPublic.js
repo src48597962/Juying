@@ -610,7 +610,7 @@ function getHistory(){
 // 获取图标地址
 function getIcon(icon) {
     if(!icon.includes('.svg')){
-        return codepath + icon;
+        return codepath + 'img/' + icon;
     }
     let color = getItem('主题颜色','');
     return codepath + 'img/' + icon + (!color?'':'?s='+color+'@js=' + $.toString((color) => {
