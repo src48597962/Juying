@@ -619,7 +619,7 @@ function getIcon(icon, nochange) {
         with(javaImport) {
             let bytes = FileUtil.toBytes(input);
             let str = new java.lang.String(bytes, "UTF-8") + "";
-            str = str.replace(/#f08534|#37AFFA|#2EC99D/gi, color);
+            str = str.replace(/#feb833|#6dc9ff|#2ec99d|#587bff/gi, color);
             bytes = new java.lang.String(str).getBytes();
             return FileUtil.toInputStream(bytes);
         }
