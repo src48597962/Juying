@@ -172,7 +172,7 @@ function lookset() {
             refreshPage(false);
             return 'toast://切换成功';
         }, playSet),
-        pic_url: playSet['cachem3u8']?getIcon("开.svg"):getIcon("关.svg"),
+        pic_url: playSet['cachem3u8']?getIcon("点播-开.svg"):getIcon("关.svg"),
         col_type: "text_icon"
     });
     d.push({
@@ -197,7 +197,7 @@ function lookset() {
             refreshPage(false);
             return 'toast://切换成功';
         }, partpage),
-        pic_url: partpage['ispage']?getIcon("开.svg"):getIcon("关.svg"),
+        pic_url: partpage['ispage']?getIcon("点播-开.svg"):getIcon("关.svg"),
         col_type: "text_icon"
     });
     d.push({
@@ -240,7 +240,7 @@ function lookset() {
             refreshPage(false);
             return 'toast://聚影智能 | 上次优先>接口自带+私有解析';
         }, playSet),
-        pic_url: parsemode==1?getIcon("开.svg"):getIcon("关.svg"),
+        pic_url: parsemode==1?getIcon("点播-开.svg"):getIcon("关.svg"),
         col_type: "text_icon"
     });
     d.push({
@@ -251,7 +251,7 @@ function lookset() {
             refreshPage(false);
             return 'toast://强制嗅探 | 将web解析组线路进video播放器';
         }, playSet),
-        pic_url: parsemode==2?getIcon("开.svg"):getIcon("关.svg"),
+        pic_url: parsemode==2?getIcon("点播-开.svg"):getIcon("关.svg"),
         col_type: "text_icon"
     });
     d.push({
@@ -262,7 +262,7 @@ function lookset() {
             refreshPage(false);
             return 'toast://手动切换 | 代理播放，在播放页手动选择解析';
         }, playSet),
-        pic_url: parsemode==3?getIcon("开.svg"):getIcon("关.svg"),
+        pic_url: parsemode==3?getIcon("点播-开.svg"):getIcon("关.svg"),
         col_type: "text_icon"
     });
     d.push({
@@ -344,7 +344,7 @@ function lookset() {
             refreshPage(false);
             return 'toast://切换成功';
         }, playSet),
-        pic_url: playSet['isTest']?getIcon("开.svg"):getIcon("关.svg"),
+        pic_url: playSet['isTest']?getIcon("点播-开.svg"):getIcon("关.svg"),
         col_type: "text_icon"
     });
     d.push({
@@ -362,7 +362,7 @@ function lookset() {
             refreshPage(false);
             return 'toast://' + sm;
         }, playSet),
-        pic_url: playSet['dmRoute']?getIcon("开.svg"):getIcon("关.svg"),
+        pic_url: playSet['dmRoute']?getIcon("点播-开.svg"):getIcon("关.svg"),
         col_type: "text_icon"
     });
     
