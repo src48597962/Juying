@@ -296,7 +296,7 @@ function dianboerji() {
     });
 
     //线路部份
-    let Color1 = getItem('SrcJy$linecolor1','#09c11b')||'#09c11b';//#f13b66a
+    let Color1 = getItem("主题颜色", "#6dc9ff")||'#09c11b';//#f13b66a
     let Color2 = getItem('SrcJy$linecolor2','');;//#098AC1
     let Color3 = getItem('SrcJy$playcolor','');
     function getHead(title,Color,strong) {
