@@ -1502,7 +1502,7 @@ function manageSet(){
         icon: "#F5AB34"
     },{
         title: '热情似火',
-        icon: "D64440"
+        icon: "#D64440"
     },{
         title: '粉装玉琢',
         icon: "#F0838D"
