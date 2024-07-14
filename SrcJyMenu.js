@@ -451,7 +451,7 @@ let buttonmenu = {
         })
     },
     "历史": {
-        img: "https://hikerfans.com/tubiao/more/213.png",
+        img: getIcon("主页-历史.svg"),//"https://hikerfans.com/tubiao/more/213.png",
         url: "hiker://history?rule=" + MY_RULE.title
     },
     "收藏": {
@@ -473,7 +473,7 @@ let buttonmenu = {
         })
     },
     "Alist": {
-        img: "https://hikerfans.com/tubiao/more/226.png",//hiker://files/cache/src/Alist.svg
+        img: getIcon("主页-Alist.svg"),//"https://hikerfans.com/tubiao/more/226.png",//hiker://files/cache/src/Alist.svg
         url: $("hiker://empty###noRecordHistory##noHistory#").rule(() => {
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
             alistHome();
