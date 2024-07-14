@@ -444,7 +444,7 @@ function lookset() {
 let menubtns = ["管理", "历史", "收藏", "点播", "直播", "Alist", "云盘"];//"搜索",
 let buttonmenu = {
     "管理": {
-        img: "https://hikerfans.com/tubiao/more/129.png",
+        img: getIcon("主页-管理.svg"),//"https://hikerfans.com/tubiao/more/129.png",
         url: $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
             manageSet();
@@ -455,25 +455,18 @@ let buttonmenu = {
         url: "hiker://history?rule=" + MY_RULE.title
     },
     "收藏": {
-        img: "https://hikerfans.com/tubiao/more/109.png",
+        img: getIcon("主页-收藏.svg"),//"https://hikerfans.com/tubiao/more/109.png",
         url: "hiker://collection?rule=" + MY_RULE.title
     },
-    "搜索": {
-        img: "https://hikerfans.com/tubiao/more/101.png",
-        url: $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
-            require(config.依赖);
-            sousuo2();
-        })
-    },
     "点播": {
-        img: "https://hikerfans.com/tubiao/more/105.png",
+        img: getIcon("主页-点播.svg"),//"https://hikerfans.com/tubiao/more/105.png",
         url: $("hiker://empty##fypage#noRecordHistory##noHistory#").rule(() => {
             require(config.依赖);
             dianboyiji();
         })
     },
     "直播": {
-        img: "https://hikerfans.com/tubiao/more/87.png",
+        img: getIcon("主页-直播.svg"),//"https://hikerfans.com/tubiao/more/87.png",
         url: $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLive.js');
             Live();
@@ -487,7 +480,7 @@ let buttonmenu = {
         })
     },
     "云盘": {
-        img: "https://hikerfans.com/tubiao/more/97.png",
+        img: getIcon("主页-云盘.svg"),//"https://hikerfans.com/tubiao/more/97.png",
         url: $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
             aliMyDisk();
