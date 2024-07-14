@@ -124,7 +124,7 @@ function getYiData(jkdata) {
             let 筛选;
 
             let cate_exclude = ['主页', '求片/留言'];
-            const Color = "#3399cc";
+            const Color = getItem("主题颜色", "#6dc9ff");
             let classCache = storage0.getMyVar('SrcJu_dianbo$classCache');
             if (classCache) {
                 推荐 = classCache.推荐;
