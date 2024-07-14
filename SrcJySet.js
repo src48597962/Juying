@@ -49,7 +49,7 @@ function SRCSet() {
                 jiexi();
             }
         }, guanliType),
-        img: "https://hikerfans.com/tubiao/more/25.png",
+        img: getIcon("接口-增加.svg"),//"https://hikerfans.com/tubiao/more/25.png",
         col_type: "icon_small_4"
     });
     d.push({
@@ -81,7 +81,7 @@ function SRCSet() {
                 })
             }
         }),
-        img: "https://hikerfans.com/tubiao/more/290.png",
+        img: getIcon("接口-操作.svg"),//"https://hikerfans.com/tubiao/more/290.png",
         col_type: "icon_small_4"
     });
     d.push({
@@ -96,7 +96,7 @@ function SRCSet() {
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
             return JYimport(input);
         }),
-        img: "https://hikerfans.com/tubiao/more/43.png",
+        img: getIcon("接口-导入.svg"),//"https://hikerfans.com/tubiao/more/43.png",
         col_type: "icon_small_4"
     });
     let pastes = getPastes();
@@ -121,7 +121,7 @@ function SRCSet() {
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
             return JYshare(lx, input);
         }, guanliType),
-        img: "https://hikerfans.com/tubiao/more/3.png",
+        img: getIcon("接口-分享.svg"),//"https://hikerfans.com/tubiao/more/3.png",
         col_type: "icon_small_4",
         extra: {
             longClick: [{
@@ -2375,7 +2375,7 @@ function yundiskjiekou() {
         url: $('hiker://empty#noRecordHistory##noHistory#').rule((filepath,yundiskapi) => {
             yundiskapi(filepath);
         },filepath,yundiskapi),
-        img: "https://hikerfans.com/tubiao/more/25.png",
+        img: getIcon("接口-增加.svg"),//"https://hikerfans.com/tubiao/more/25.png",
         col_type: "icon_small_3"
     });
     d.push({
@@ -2402,7 +2402,7 @@ function yundiskjiekou() {
                 return "toast://聚影✓：口令有误";
             }
         }),
-        img: "https://hikerfans.com/tubiao/more/43.png",
+        img: getIcon("接口-导入.svg"),//"https://hikerfans.com/tubiao/more/43.png",
         col_type: "icon_small_3"
     });
     d.push({
@@ -2417,7 +2417,7 @@ function yundiskjiekou() {
                 return "toast://分享失败，剪粘板或网络异常";
             }
         }, datalist),
-        img: "https://hikerfans.com/tubiao/more/3.png",
+        img: getIcon("接口-分享.svg"),//"https://hikerfans.com/tubiao/more/3.png",
         col_type: "icon_small_3",
         extra: {
             longClick: [{
