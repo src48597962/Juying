@@ -157,7 +157,7 @@ function lookset() {
             refreshPage(false);
             return 'toast://切换成功';
         }, playSet),
-        pic_url: playSet['printlog']?getIcon("开.svg"):getIcon("关.svg"),
+        pic_url: playSet['printlog']?getIcon("点播-开.svg"):getIcon("关.svg"),
         col_type: "text_icon"
     });
     d.push({
@@ -208,7 +208,7 @@ function lookset() {
             refreshPage(false);
             return 'hiker://empty'
         },partpage),
-        pic_url: getIcon("箭头.svg"),
+        pic_url: getIcon("点播-箭头.svg"),
         col_type: "text_icon"
     });
     d.push({
@@ -219,7 +219,7 @@ function lookset() {
             refreshPage(false);
             return 'hiker://empty'
         },partpage),
-        pic_url: getIcon("箭头.svg"),
+        pic_url: getIcon("点播-箭头.svg"),
         col_type: "text_icon"
     });
     d.push({
@@ -283,7 +283,7 @@ function lookset() {
             refreshPage(false);
             return 'toast://嗅探内核切换为：'+sm;
         }, playSet),
-        pic_url: getIcon("箭头.svg"),
+        pic_url: getIcon("点播-箭头.svg"),
         col_type: "text_icon"
     });
     d.push({
@@ -298,7 +298,7 @@ function lookset() {
             refreshPage(false);
             return 'toast://已切换';
         }, playSet),
-        pic_url: getIcon("箭头.svg"),
+        pic_url: getIcon("点播-箭头.svg"),
         col_type: "text_icon"
     });
     d.push({
@@ -315,7 +315,7 @@ function lookset() {
             writeFile(recordfile, JSON.stringify(parseRecord));
             return 'toast://对此播放地址将拦截';
         }, parseRecord, recordfile),
-        pic_url: getIcon("箭头.svg"),
+        pic_url: getIcon("点播-箭头.svg"),
         col_type: "text_icon"
     });
     d.push({
@@ -325,7 +325,7 @@ function lookset() {
             writeFile(recordfile, JSON.stringify(parseRecord));
             return 'toast://无清空';
         }, parseRecord, recordfile),
-        pic_url: getIcon("箭头.svg"),
+        pic_url: getIcon("点播-箭头.svg"),
         col_type: "text_icon"
     });
     d.push({
