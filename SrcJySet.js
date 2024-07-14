@@ -1490,31 +1490,34 @@ function manageSet(){
         icon: ""
     },{
         title: '绿意盎然',
-        icon: "#7FFF00"
+        icon: "#4EAF7C"
     },{
         title: '蓝田生玉',
-        icon: "#00BFA5"
+        icon: "#3498DB"
     },{
-        title: '苍宝石绿',
-        icon: "#AFEEEE"
+        title: '暗宝石绿',
+        icon: "#00CED1"
     },{
         title: '橙黄橘绿',
         icon: "#FFA500"
     },{
         title: '热情似火',
-        icon: "#FF5733"
+        icon: "#BA5354"
     },{
         title: '粉装玉琢',
-        icon: "#FFC0CB"
+        icon: "#F9B6B8"
     },{
         title: '重斤球紫',
-        icon: "#5E3C99"
+        icon: "#9949CE"
     },{
         title: '深卡其色',
         icon: "#BDB76B"
     },{
         title: '亮天蓝色',
         icon: "#87CEFA"
+    },{
+        title: '泥牛入海',
+        icon: "#BD7F45"
     }]
     colors.forEach(it=>{
         if(getItem('主题颜色','') == it.icon){
