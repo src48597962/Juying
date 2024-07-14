@@ -1499,16 +1499,16 @@ function manageSet(){
         icon: "#00CED1"
     },{
         title: '橙黄橘绿',
-        icon: "#FFA500"
+        icon: "#F5AB34"
     },{
         title: '热情似火',
-        icon: "#BA5354"
+        icon: "D64440"
     },{
         title: '粉装玉琢',
-        icon: "#F9B6B8"
+        icon: "#F0838D"
     },{
         title: '重斤球紫',
-        icon: "#9949CE"
+        icon: "#9B59B5"
     },{
         title: '深卡其色',
         icon: "#BDB76B"
@@ -1518,6 +1518,9 @@ function manageSet(){
     },{
         title: '泥牛入海',
         icon: "#BD7F45"
+    },{
+        title: '青出于黑',
+        icon: "#346E7B"
     }]
     colors.forEach(it=>{
         if(getItem('主题颜色','') == it.icon){
