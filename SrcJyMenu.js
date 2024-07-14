@@ -160,7 +160,7 @@ function lookset() {
         col_type: "text_icon"
     });
     d.push({
-        title: 'm3u8缓存文件',
+        title: 'm3u8索引缓存',
         url: $('#noLoading#').lazyRule((playSet) => {
             if (playSet['cachem3u8'] != 1) {
                 playSet['cachem3u8'] = 1;
