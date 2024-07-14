@@ -1453,13 +1453,13 @@ function manageSet(){
     });
     d.push({
         title: '依赖管理',
-        img: getIcon("依赖.svg"),
+        img: getIcon("管理-依赖.svg"),
         col_type: 'avatar',
         url: 'hiker://empty'
     });
     d.push({
         title: 'github加速管理',
-        img: getIcon("箭头.svg"),
+        img: getIcon("管理-箭头.svg"),
         url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
             $.require('ghproxy').proxyPage();
         }),
@@ -1467,7 +1467,7 @@ function manageSet(){
     });
     d.push({
         title: '指定聚影代码库',
-        img: getIcon("箭头.svg"),
+        img: getIcon("管理-箭头.svg"),
         url: $(getItem('依赖', ''),"手工指定聚影代码库地址").input(()=>{
             return $("确定要指定聚影代码库地址"+input).confirm((input)=>{
                 setItem('依赖', input);
@@ -1481,7 +1481,7 @@ function manageSet(){
     });
     d.push({
         title: '规则配置',
-        img: getIcon("配置.svg"),
+        img: getIcon("管理-配置.svg"),
         col_type: 'avatar',
         url: 'toast://不清楚，可不动'
     });
@@ -1529,7 +1529,7 @@ function manageSet(){
     })
     d.push({
         title: '主题颜色选择',
-        img: getIcon("箭头.svg"),
+        img: getIcon("管理-箭头.svg"),
         url: $(colors, 3).select((colors) => {
             let color = colors.filter(d => d.title == input)[0].icon;
             if(color){
@@ -1567,7 +1567,7 @@ function manageSet(){
     });
     d.push({
         title: '查看更新日志',
-        img: getIcon("箭头.svg"),
+        img: getIcon("管理-箭头.svg"),
         col_type: 'text_icon',
         url: $("#noLoading#").lazyRule(() => {
             eval(fetch(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcTmplVersion.js'));
@@ -1582,7 +1582,7 @@ function manageSet(){
     });
     d.push({
         title: '检测版本更新',
-        img: getIcon("箭头.svg"),
+        img: getIcon("管理-箭头.svg"),
         col_type: 'text_icon',
         url: $("#noLoading#").lazyRule(() => {
             try{
@@ -1613,7 +1613,7 @@ function manageSet(){
     });
     d.push({
         title: '支持一下作者',
-        img: getIcon("箭头.svg"),
+        img: getIcon("管理-箭头.svg"),
         col_type: 'text_icon',
         url: config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'img/pay.jpg'
     });
@@ -1622,7 +1622,7 @@ function manageSet(){
     });
     d.push({
         title: '免责申明',
-        img: getIcon("免责.svg"),
+        img: getIcon("管理-免责.svg"),
         col_type: 'avatar',
         url: 'hiker://empty'
     })
