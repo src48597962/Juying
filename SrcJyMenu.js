@@ -1,4 +1,5 @@
 //本代码仅用于个人学习，请勿用于其他作用，下载后请24小时内删除，代码虽然是公开学习的，但请尊重作者，应留下说明
+require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
 //二级统一菜单
 function erjimenu(desc,name,group) {
     return [
@@ -42,7 +43,6 @@ function erjimenu(desc,name,group) {
             title: "观影设置",
             url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyMenu.js');
-                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                 lookset();
             }),
             pic_url: getIcon("点播-观影设置.svg"),
@@ -74,9 +74,10 @@ function cutSource(name, group) {
     let datalist = getDatas('jk',1);
     let groups = getJiekouGroups(datalist.filter(v=>v.searchable!=0)).concat(['云盘']);
     let grouparr = [];
+    let color = getItem("主题颜色", "#6dc9ff");//#3399cc
     groups.forEach(it=>{
         grouparr.push({
-            title: group==it?`““””<b><span style="color: #3399cc">`+it+`</span></b>`:it,
+            title: group==it?`““””<b><span style="color: `+color+`">`+it+`</span></b>`:it,
             url: $('#noLoading#').lazyRule((name,newgroup) => {
                 let oldgroup = getMyVar("切源旧分组","");
                 if(oldgroup==newgroup){
