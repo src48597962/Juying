@@ -1,5 +1,5 @@
 //本代码仅用于个人学习，请勿用于其他作用，下载后请24小时内删除，代码虽然是公开学习的，但请尊重作者，应留下说明
-require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+
 //二级统一菜单
 function erjimenu(desc,name,group) {
     return [
@@ -43,6 +43,7 @@ function erjimenu(desc,name,group) {
             title: "观影设置",
             url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyMenu.js');
+                let getIcon = globalMap0.getMyVar('gmParams').getIcon;
                 lookset();
             }),
             pic_url: getIcon("点播-观影设置.svg"),
@@ -87,7 +88,7 @@ function cutSource(name, group) {
                     title: oldgroup
                 })
                 updateItem("id_"+newgroup, {
-                    title: `““””<b><span style="color: #3399cc">`+newgroup+`</span></b>`
+                    title: `““””<b><span style="color: `+color+`">`+newgroup+`</span></b>`
                 })
                 updateItem(oldgroup+"_"+name+"_loading", {
                     extra: {"id":newgroup+"_"+name+"_loading","lineVisible":false}
@@ -125,6 +126,7 @@ function cutSource(name, group) {
         erjisousuo(name, group);
     }
 }
+
 function lookset() {
     setPageTitle("♥观影设置");
     let recordfile = globalMap0.getMyVar('gmParams').rulepath + "parse.json";//解析相关记录文件
