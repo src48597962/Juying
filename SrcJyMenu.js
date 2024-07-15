@@ -87,7 +87,7 @@ function cutSource(name, group) {
                     title: oldgroup
                 })
                 updateItem("id_"+newgroup, {
-                    title: `““””<b><span style="color: `+color+`">`+newgroup+`</span></b>`
+                    title: `““””<b><span style="color: `+getItem("主题颜色", "#6dc9ff")+`">`+newgroup+`</span></b>`
                 })
                 updateItem(oldgroup+"_"+name+"_loading", {
                     extra: {"id":newgroup+"_"+name+"_loading","lineVisible":false}
