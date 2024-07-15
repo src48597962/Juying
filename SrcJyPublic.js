@@ -357,7 +357,7 @@ function getDataTitle(data) {
     if($.type(data.type)=="string"){
         return data.name + ' ('+data.type+')' + (data.group&&data.group!=data.type?' [' + data.group + ']':"") + (data.preferr?" ⭐":"");
     }else{
-        return (data.sort||0) + '-'+data.name + '-'+data.parse;
+        return (data.sort||0) + '-'+data.name + '-' + data.url;
     }
 }
 //接口管理多选方法
