@@ -652,13 +652,13 @@ function dianboyiji() {
             }
         })
         let searchModeS = ["代理聚搜","分组接口","当前接口","当前页面"].map(v=>{
-            return v==getItem("接口搜索方式","当前接口")?"‘‘" + v + "’’":v;
+            return v==getItem("接口搜索方式","当前接口")?`‘‘’’<strong><font color="`+getItem('主题颜色','#6dc9ff')+`">`+v+`√</front></strong>`:v;
         });
 
         d.push({
             title: "搜索方式",
             url: $(searchModeS,1).select(()=>{
-                input = input.replace(/[’‘]/g, "");
+                input = input.replace(/[’‘]|<[^>]*>|√/g, "");
                 setItem("接口搜索方式",input);
                 return "toast://搜索方式设置为："+input;
             }),
@@ -1104,8 +1104,13 @@ function yiji() {
     d.push({
         title: "搜索",
         url: $.toString((searchurl) => {
-            if(input.trim() == ''){
+            input = input.trim();
+            if(input == ''){
                 return "hiker://empty"
+            }
+            if(input == '开启hipy_t3'){
+                setItem('hipy_t3_enable', '1');
+                return "toast://已开启";
             }
             if(/www\.aliyundrive\.com|www\.alipan\.com/.test(input)){
                 input = input.replace('http','\nhttp');
