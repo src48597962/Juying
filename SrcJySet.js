@@ -1544,7 +1544,7 @@ function manageSet(){
     });
     d.push({
         title: '规则日志打印',
-        img: getItem('规则日志打印')=="1"?getIcon("开.svg"):getIcon("关.svg"),
+        img: getItem('规则日志打印')=="1"?getIcon("管理-开.svg"):getIcon("关.svg"),
         url: $("#noLoading#").lazyRule(() => {
             if(getItem('规则日志打印')=="1"){
                 clearItem('规则日志打印');
