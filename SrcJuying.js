@@ -1317,7 +1317,7 @@ function Version() {
             if (parseFloat(newVersion.SrcJuying) > parseFloat(nowVersion)) {
                 confirm({
                     title:'发现新版本，是否更新？', 
-                    content:'本地V'+nowVersion+' => 去端V'+newVersion.SrcJuying, 
+                    content:'本地V'+nowVersion+' => 云端V'+newVersion.SrcJuying + '\n可在管理中查询更新日志', 
                     confirm: $.toString((nowtime,newVersion) => {
                         setItem('Version', newVersion);
                         setItem('VersionChecktime', nowtime+'time');
