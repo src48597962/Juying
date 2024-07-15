@@ -59,6 +59,7 @@ function search(name, sstype, jkdata) {
                     delete extra['cls'];
                     storage0.putMyVar('二级附加临时对象', extra);
                     refreshPage(false);
+                    showLoading('换源中，请稍后...');
                     return "toast://已切换源：" + extra.data.name;
                 }, extra),
                 col_type: 'avatar',
