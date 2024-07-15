@@ -272,9 +272,11 @@ function dianboerji() {
     }else{
         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
         erdata = getErData(jkdata);
+        hideLoading();
         let markData = {surl: jkdata.url, url: MY_URL, data: erdata}
         writeFile(cacheDataFile, JSON.stringify(markData));
     }
+
     //log(erdata);
     let details1 = erdata.details1 || "";
     let details2 = erdata.details2 || "";
