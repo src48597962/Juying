@@ -652,7 +652,7 @@ function dianboyiji() {
             }
         })
         let searchModeS = ["代理聚搜","分组接口","当前接口","当前页面"].map(v=>{
-            return v==getItem("接口搜索方式","当前接口")?`‘‘’’<strong><font color="`+getItem('主题颜色','#6dc9ff')+`">`+v+`√</front></strong>`:v+' ';
+            return v==getItem("接口搜索方式","当前接口")?`‘‘’’<strong><font color="`+getItem('主题颜色','#6dc9ff')+`">`+v+`√</front></strong>`:v+'  ';
         });
 
         d.push({
