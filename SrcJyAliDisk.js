@@ -735,12 +735,13 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                     refreshPage(false);
                     return "hiker://empty";
                 },fenlei),
-                pic_url: 'https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=3779990328,1416553241&fm=179&app=35&f=PNG?w=60&h=70&s=E7951B62A4639D153293A4E90300401B',
+                pic_url: getIcon("主页-热搜.svg", 1),//'https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=3779990328,1416553241&fm=179&app=35&f=PNG?w=60&h=70&s=E7951B62A4639D153293A4E90300401B',
                 col_type: 'avatar'
             });
+            let rbcolor = getItem('主题颜色','#587bff');
             list.forEach((item,i)=>{
                 d.push({
-                    title: (i=="0"?'““””<span style="color:#ff3300">' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title:i=="1"?'““””<span style="color:#ff6600">' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title:i=="2"?'““””<span style="color:#ff9900">' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title:'““””<span>' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title)+'\n<small><span style="color:#00ba99">'+item.comment+'</small>',
+                    title: (i=="0"?'““””<span style="color:#ff3300">' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title:i=="1"?'““””<span style="color:#ff6600">' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title:i=="2"?'““””<span style="color:#ff9900">' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title:'““””<span>' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title)+'\n<small><span style="color:'+rbcolor+'">'+item.comment+'</small>',
                     url: item.title + searchurl,
                     pic_url: item.cover,
                     desc: item.description,
@@ -1135,7 +1136,7 @@ function yundiskhistory() {
             refreshPage(false);
             return 'hiker://empty';
         }),
-        img: "https://hikerfans.com/tubiao/grey/89.png",
+        img: getIcon("云盘-本地历史.svg"),//"https://hikerfans.com/tubiao/grey/89.png",
         col_type: "icon_3_fill"
     });
     d.push({
@@ -1145,7 +1146,7 @@ function yundiskhistory() {
             refreshPage(false);
             return 'hiker://empty';
         }),
-        img: "https://hikerfans.com/tubiao/grey/110.png",
+        img: getIcon("云盘-云端历史.svg"),//"https://hikerfans.com/tubiao/grey/110.png",
         col_type: "icon_3_fill"
     });
     d.push({
@@ -1160,7 +1161,7 @@ function yundiskhistory() {
             }
             return 'hiker://empty';
         }),
-        img: "https://hikerfans.com/tubiao/grey/92.png",
+        img: getIcon("云盘-记录上传.svg"),//"https://hikerfans.com/tubiao/grey/92.png",
         col_type: "icon_3_fill"
     });
     if(getMyVar('云盘历史','1')=='1'){
