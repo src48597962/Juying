@@ -398,7 +398,7 @@ function selectSource() {
         let vname = v.name;
         if(v.url == sourceUrl){
             index = i;
-            vname = "‘‘" + v.name + "’’";
+            vname = `‘‘’’<strong><font color="`+getItem('主题颜色','#6dc9ff')+`">`+v.name+`</front></strong>`;
         }
         return vname;
     });
@@ -456,7 +456,7 @@ function selectSource() {
         click(s, i, manage) {
             pop.dismiss();
 
-            let input = s.replace(/[’‘]/g, "");
+            let input = s.replace(/[’‘]|<[^>]*>/g, "");
             if(tmpList[i].name==input){
                 Juconfig["homeSource"] = tmpList[i];
                 writeFile(cfgfile, JSON.stringify(Juconfig));
