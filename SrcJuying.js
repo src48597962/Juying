@@ -1222,7 +1222,7 @@ function yiji() {
         d.push({
             title: '<span style="color:#ff6600"><b>\t观看记录\t\t\t</b></span>',
             url: 'hiker://empty',
-            pic_url: 'https://hikerfans.com/tubiao/red/40.png',
+            pic_url: getIcon("主页-记录.svg", 1),//'https://hikerfans.com/tubiao/red/40.png',
             col_type: 'avatar',
             extra: {
                 id: "historyid"
@@ -1272,16 +1272,16 @@ function yiji() {
             refreshPage(false);
             return "hiker://empty";
         },fenlei),
-        pic_url: 'https://hikerfans.com/tubiao/red/73.png',//'https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=3779990328,1416553241&fm=179&app=35&f=PNG?w=60&h=70&s=E7951B62A4639D153293A4E90300401B',
+        pic_url: getIcon("主页-热搜.svg", 1),//'https://hikerfans.com/tubiao/red/73.png',//'https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=3779990328,1416553241&fm=179&app=35&f=PNG?w=60&h=70&s=E7951B62A4639D153293A4E90300401B',
         col_type: 'avatar',
         extra: {
             id: "rousoubang"
         }
     });
-
+    let rbcolor = getItem('主题颜色','#00ba99');
     list.forEach((item,i)=>{
         d.push({
-            title: (i=="0"?'““””<span style="color:#ff3300">' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title:i=="1"?'““””<span style="color:#ff6600">' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title:i=="2"?'““””<span style="color:#ff9900">' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title:'““””<span>' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title)+'\n<small><span style="color:#00ba99">'+item.comment+'</small>',
+            title: (i=="0"?'““””<span style="color:#ff3300">' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title:i=="1"?'““””<span style="color:#ff6600">' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title:i=="2"?'““””<span style="color:#ff9900">' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title:'““””<span>' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title)+'\n<small><span style="color:'+rbcolor+'">'+item.comment+'</small>',
             url: item.title + searchurl,
             pic_url: item.cover,
             desc: item.description,
