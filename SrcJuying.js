@@ -457,7 +457,7 @@ function dianboerji() {
                     let start = i * 每页数量 + 1;
                     let end = i * 每页数量 + it.length;
                     let title = start + ' - ' + end;
-                    分页名.push(pageid==i?'““””<span style="color: #87CEFA">'+title:title)
+                    分页名.push(pageid==i?'““””<span style="color: ' + Color1 + '">'+title:title);
                 })
                 d.push({
                     col_type: "blank_block",
