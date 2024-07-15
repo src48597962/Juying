@@ -1540,7 +1540,22 @@ function manageSet(){
             refreshPage();
             return "hiker://empty";
         }, colors),
-        col_type: 'text_icon'
+        col_type: 'text_icon',
+        extra: {
+            longClick: [{
+                title: "自定义主题颜色",
+                js: $.toString(() => {
+                    return $(getItem('主题颜色', ''), "输入自定义主题颜色代码").input(()=>{
+                        if(!input.startsWith('#')){
+                            return "toast://颜色代码错误，请以#开头";
+                        }
+                        setItem('主题颜色', input);
+                        refreshPage(false);
+                        return "hiker://empty";
+                    })
+                })
+            }]
+        }
     });
     d.push({
         title: '规则日志打印',
