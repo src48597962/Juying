@@ -1520,7 +1520,7 @@ function manageSet(){
         icon: "#BD7F45"
     },{
         title: '青出于黑',
-        icon: "#346E7B"
+        icon: "#336F7A"
     }]
     colors.forEach(it=>{
         if(getItem('主题颜色','') == it.icon){
