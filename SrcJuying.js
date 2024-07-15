@@ -278,9 +278,8 @@ function dianboerji() {
     let details1 = erdata.details1 || "";
     let details2 = erdata.details2 || "";
     let pic = erdata.pic || sextra.pic || MY_PARAMS.pic;
-    if(pic && pic!=MY_PARAMS.pic && !/^hiker/.test(pic)){
-        setPagePicUrl(pic);
-    }
+    let updateParams = 0;
+
     let d = [];
     //海报
     d.push({
@@ -587,20 +586,8 @@ function dianboerji() {
                     extra: extra
                 });
             }
-            if(sextra.url && sextra.url!=MY_PARAMS.url){
-                setPageParams({
-                    url: sextra.url,
-                    pic: pic,
-                    pageTitle: name,
-                    data: jkdata
-                });
-            }
+            updateParams = 1;
         }
-        //设置二级收藏更新最新章节
-        setLastChapterRule('js:' + $.toString((url,jkdata)=>{
-            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
-            setLastChapter(url,jkdata);
-        }, MY_URL, jkdata))
     }
     
     //底部说明
@@ -614,6 +601,25 @@ function dianboerji() {
         }
     });
     setResult(d);
+    if(pic && pic!=MY_PARAMS.pic && !/^hiker/.test(pic)){
+        setPagePicUrl(pic);
+    }
+    if(updateParams){
+        //保存换源数据进MY_PARAMS
+        if(sextra.url && sextra.url!=MY_PARAMS.url){
+            setPageParams({
+                url: sextra.url,
+                pic: pic,
+                pageTitle: name,
+                data: jkdata
+            });
+        }
+        //设置二级收藏更新最新章节
+        setLastChapterRule('js:' + $.toString((url,jkdata)=>{
+            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
+            setLastChapter(url,jkdata);
+        }, MY_URL, jkdata))
+    }
 }
 
 //点播一级
