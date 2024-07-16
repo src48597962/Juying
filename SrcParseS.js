@@ -55,6 +55,7 @@ var SrcParseS = {
             if(dataObj.stype=="hipy_t3"){
                 let drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(dataObj.sname, dataObj.surl);
                 play = JSON.parse(drpy.play(dataObj.flag, vipUrl, []));
+                log(play);
             }else if(dataObj.stype=="hipy_t4"){
                 play = JSON.parse(fetch(dataObj.surl+'&flag='+dataObj.flag+"&extend="+dataObj.sext+'&play='+vipUrl, {timeout: 10000}));
             }
