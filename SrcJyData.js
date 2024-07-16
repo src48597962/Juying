@@ -484,6 +484,7 @@ function getYiData(jkdata) {
                 })
             }else if (api_type=="hipy_t3") {
                 let vodlist = JSON.parse(drpy.category(fl.cateId, MY_PAGE, true, fl)).list || [];
+                log(vodlist);
                 vodlist.forEach(it=>{
                     vodlists.push({ "vod_url": it.vod_id.toString(), "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic });
                 })
