@@ -61,7 +61,7 @@ var SrcParseS = {
             if(play.url.startsWith("pics://")){
                 return play.url;
             }if(play.url.startsWith("select://")){
-                let selectjson = JSON.parse(play.url.replace("select://"));
+                let selectjson = JSON.parse(play.url.replace("select://", ""));
                 if(selectjson.options.length==1){
                     return selectjson.js();
                 }
