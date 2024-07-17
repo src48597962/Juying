@@ -825,11 +825,11 @@ function dianboyiji() {
     if(sourceName){
         try{
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
-            let objdata = getYiData(jkdata);
-            let fllists = objdata.fllists;
+            let yidata = getYiData(jkdata);
+            let fllists = yidata.fllists;
             if(fllists){
                 d = d.concat(fllists);
-            }else if(objdata.error['fl']){
+            }else if(yidata.error['fl']){
                 d.push({
                     title: "分类获取失败",
                     desc: '无法访问或源失效，点击查看网页',
@@ -838,8 +838,8 @@ function dianboyiji() {
                 }); 
             }
 
-            let vodlists = objdata.vodlists;
-            log(vodlists);
+            let vodlists = yidata.vodlists;
+
             if(vodlists && vodlists.length>0){
                 vodlists.forEach(list=>{
                     let vodname =list.vod_name;
@@ -888,7 +888,7 @@ function dianboyiji() {
                         })
                     }
                 })
-            }else if(objdata.error['vod'] && MY_PAGE==1){
+            }else if(yidata.error['vod'] && MY_PAGE==1){
                 d.push({
                     title: "列表获取失败",
                     desc: '无法访问或源失效，点击查看网页',
