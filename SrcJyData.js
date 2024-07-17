@@ -11,7 +11,7 @@ function getYiData(jkdata) {
     let api_ua = jkdata.ua || "MOBILE_UA";
     api_ua = api_ua == "MOBILE_UA" ? MOBILE_UA : api_ua == "PC_UA" ? PC_UA : api_ua;
     let headers = { 'User-Agent': api_ua };
-    let vodhost, classurl, listurl, detailurl, listnode, extdata;
+    let vodhost, classurl, listurl, detailurl, listnode, extdata, noerji;
     //分类变量
     let fold = getMyVar('SrcJu_dianbo$fold', "0");//是否展开小分类筛选
     let cate_id = getMyVar('SrcJu_dianbo$分类', '');
@@ -101,6 +101,9 @@ function getYiData(jkdata) {
             let rule = drpy.getRule();
             classurl = rule.homeUrl || rule.host;
             listurl = rule.filter_url || rule.host;
+            if(rule.二级=="*"){
+                noerji = 1;
+            }
         }
     } else if (api_type == "hipy_t4") {
         classurl = api_url + "&extend=" + jkdata.ext + "&filter=true";
@@ -485,7 +488,7 @@ function getYiData(jkdata) {
             }else if (api_type=="hipy_t3") {
                 let vodlist = JSON.parse(drpy.category(fl.cateId, MY_PAGE, true, fl)).list || [];
                 vodlist.forEach(it=>{
-                    vodlists.push({ "vod_url": it.vod_id.toString(), "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic });
+                    vodlists.push({ "vod_url": it.vod_id.toString(), "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic, "vod_play": noerji?it.vod_id.toString():"" });
                 })
             }else if (api_type == "XYQ") {
                 let gethtml = getHtml(MY_URL, headers);
@@ -623,7 +626,7 @@ function getSsData(name, jkdata, page) {
     api_ua = api_ua == "MOBILE_UA" ? MOBILE_UA : api_ua == "PC_UA" ? PC_UA : api_ua;
     let headers = { 'User-Agent': api_ua };
 
-    let vodurlhead, ssurl, postdata, listnode, extdata;
+    let vodurlhead, ssurl, postdata, listnode, extdata, noerji;
     if (api_type == "v1") {
         let date = new Date();
         let mm = date.getMonth() + 1;
@@ -745,6 +748,7 @@ function getSsData(name, jkdata, page) {
                 if(apifile){
                     let drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(api_name, apifile);
                     json = JSON.parse(drpy.search(name, 0, page));
+                    noerji = drpy.getRule("二级")=="*"?1:0;
                 }else{
                     json = {};
                 }
@@ -965,7 +969,8 @@ function getSsData(name, jkdata, page) {
                         voddesc: list.voddesc,
                         vodcontent: list.vodcontent,
                         vodpic: vodpic,
-                        vodurl: list.vodurl
+                        vodurl: list.vodurl,
+                        vodplay: noerji?list.vodurl:""
                     })
                 }
             });
