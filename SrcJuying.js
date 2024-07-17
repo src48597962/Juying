@@ -7,18 +7,18 @@ function search(name, sstype, jkdata) {
     if(sstype=='hkjusou'){
         ssdata = getSsData(name, jkdata, MY_PAGE).map(it => {
             return {
-                title: it.vodname,
-                desc: it.voddesc,
-                content: it.vodcontent,
-                pic_url: it.vodpic,
+                title: it.vod_name,
+                desc: it.vod_desc,
+                content: it.vod_content,
+                pic_url: it.vod_pic,
                 url: $("hiker://empty#immersiveTheme##autoCache#").rule(() => {
                     require(config.依赖);
                     dianboerji();
                 }),
                 extra: {
-                    url: it.vodurl,
-                    pic: it.vodpic,
-                    pageTitle: it.vodname,
+                    url: it.vod_url,
+                    pic: it.vod_pic,
+                    pageTitle: it.vod_name,
                     data: jkdata
                 }
             }
@@ -26,9 +26,9 @@ function search(name, sstype, jkdata) {
     }else if(sstype=='dianboyiji'){
         ssdata = getSsData(name, jkdata, 1).map(it => {
             return {
-                title: it.vodname,
-                desc: it.voddesc,
-                pic_url: it.vodpic,
+                title: it.vod_name,
+                desc: it.vod_desc,
+                pic_url: it.vod_pic,
                 url: $("hiker://empty#immersiveTheme##autoCache#").rule(() => {
                     require(config.依赖);
                     dianboerji()
@@ -36,9 +36,9 @@ function search(name, sstype, jkdata) {
                 col_type: 'movie_3',
                 extra: {
                     cls: 'dianbosousuolist',
-                    url: it.vodurl,
-                    pic: it.vodpic,
-                    pageTitle: it.vodname,
+                    url: it.vod_url,
+                    pic: it.vod_pic,
+                    pageTitle: it.vod_name,
                     data: jkdata
                 }
             }
@@ -47,15 +47,15 @@ function search(name, sstype, jkdata) {
         ssdata = getSsData(name, jkdata, 1).map(it => {
             let extra = {
                 cls: "Juloadlist grouploadlist",
-                url: it.vodurl,
-                pic: it.vodpic,
+                url: it.vod_url,
+                pic: it.vod_pic,
                 data: jkdata
             }
             return {
-                title: it.voddesc||"正片",
+                title: it.vod_desc||"正片",
                 desc: jkdata.name,
-                pic_url: it.vodpic,
-                url: "hiker://empty##"+ it.vodurl + $("#noLoading#").lazyRule((extra) => {
+                pic_url: it.vod_pic,
+                url: "hiker://empty##"+ it.vod_url + $("#noLoading#").lazyRule((extra) => {
                     delete extra['cls'];
                     storage0.putMyVar('二级附加临时对象', extra);
                     refreshPage(false);
