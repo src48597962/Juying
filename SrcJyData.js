@@ -262,7 +262,7 @@ function getYiData(jkdata) {
                             })
                             if(api_type=="app"){
                                 try{
-                                    let gettjhtml = getHtml(jkdata.url+'index_video?token=', headers);
+                                    let gettjhtml = getHtml(api_url+'index_video?token=', headers);
                                     let tjlist = JSON.parse(gettjhtml).list;
                                     tjlist.forEach(it=>{
                                         it.vlist.forEach(v=>{
@@ -333,6 +333,13 @@ function getYiData(jkdata) {
                                         }
                                     }
                                 })
+                                try{
+                                    let gettjhtml = getHtml(api_url+'?ac=videolist&pg=1', headers);
+                                    let tjlist = JSON.parse(gettjhtml).list;
+                                    tjlist.forEach(v=>{
+                                        推荐.push({ "vod_url": detailurl + v.vod_id, "vod_name": v.vod_name, "vod_desc": v.vod_remarks, "vod_pic": v.vod_pic });
+                                    })
+                                }catch(e){}
                             }
                         }
                     }
