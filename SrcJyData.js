@@ -146,7 +146,7 @@ function getYiData(jkdata) {
                         }
                         let homeVod = home['list'] || [];
                         homeVod.forEach(it=>{
-                            推荐.push({ "vod_url": it.vod_id, "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic });
+                            推荐.push({ "vod_url": it.vod_id.toString(), "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic });
                         })
                     }else if (api_type == "hipy_t3") {
                         let home = JSON.parse(drpy.home());
@@ -159,7 +159,7 @@ function getYiData(jkdata) {
                         }
                         let homeVod = JSON.parse(drpy.homeVod()).list || [];
                         homeVod.forEach(it=>{
-                            推荐.push({ "vod_url": it.vod_id, "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic });
+                            推荐.push({ "vod_url": it.vod_id.toString(), "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic, "vod_play":noerji?it.vod_id.toString():"" });
                         })
                     } else if (api_type == "XYQ") {
                         if (extdata['是否开启获取首页数据'] && extdata['首页列表数组规则']) {
