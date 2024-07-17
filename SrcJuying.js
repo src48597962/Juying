@@ -796,7 +796,7 @@ function dianboyiji() {
                     if(input == ''){
                         return "hiker://empty"
                     }
-                    if(input == '开启hipy_t3'){
+                    if(/开启hipy_t3|开启t3|芝麻开门|宝塔镇河妖/.test(input)){
                         setItem('hipy_t3_enable', '1');
                         refreshPage();
                         return "toast://已开启";
@@ -1131,7 +1131,7 @@ function yiji() {
             if(input == ''){
                 return "hiker://empty"
             }
-            if(input == '开启hipy_t3'){
+            if(/开启hipy_t3|开启t3|芝麻开门|宝塔镇河妖/.test(input)){
                 setItem('hipy_t3_enable', '1');
                 return "toast://已开启";
             }
