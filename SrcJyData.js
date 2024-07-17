@@ -99,7 +99,6 @@ function getYiData(jkdata) {
         if(apifile){
             var drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(api_name, apifile);
             let rule = drpy.getRule();
-            log(rule);
             classurl = rule.homeUrl || rule.host;
             listurl = rule.filter_url || rule.host;
             if(rule.二级=="*"){
@@ -634,29 +633,29 @@ function getSsData(name, jkdata, page) {
     api_ua = api_ua == "MOBILE_UA" ? MOBILE_UA : api_ua == "PC_UA" ? PC_UA : api_ua;
     let headers = { 'User-Agent': api_ua };
 
-    let vodurlhead, ssurl, postdata, listnode, extdata, noerji;
+    let vodhost, ssurl, detailurl, postdata, listnode, extdata, noerji;
     if (api_type == "v1") {
         let date = new Date();
         let mm = date.getMonth() + 1;
         let dd = date.getDate();
         let key = (mm < 10 ? "0" + mm : mm) + "" + (dd < 10 ? "0" + dd : dd);
-        vodurlhead = api_url + '/detail?&key=' + key + '&vod_id=';
+        detailurl = api_url + '/detail?&key=' + key + '&vod_id=';
         ssurl = api_url + '?ac=videolist&limit=10&wd=' + name + '&key=' + key;
         listnode = "json.data.list";
     } else if (api_type == "app") {
-        vodurlhead = api_url + 'video_detail?id=';
+        detailurl = api_url + 'video_detail?id=';
         ssurl = api_url + 'search?limit=10&text=' + name;
         listnode = "json.list";
     } else if (api_type == "v2") {
-        vodurlhead = api_url + 'video_detail?id=';
+        detailurl = api_url + 'video_detail?id=';
         ssurl = api_url + 'search?limit=10&text=' + name;
         listnode = "json.data";
     } else if (api_type == "iptv") {
-        vodurlhead = api_url + '?ac=detail&ids=';
+        detailurl = api_url + '?ac=detail&ids=';
         ssurl = api_url + '?ac=list&zm=' + name + '&wd=' + name;
         listnode = "json.data";
     } else if (api_type == "cms") {
-        vodurlhead = api_url + '?ac=videolist&ids=';
+        detailurl = api_url + '?ac=videolist&ids=';
         ssurl = api_url + '?ac=videolist&wd=' + name;
         listnode = "json.list";
     } else if (/XPath|biubiu|XBPQ|XYQ/.test(api_type)) {
@@ -666,11 +665,11 @@ function getSsData(name, jkdata, page) {
                 extdata["搜索url"] = extdata["搜索url"] || "/index.php/ajax/suggest?mid=1&wd={wd}&limit=500";
                 ssurl = extdata["搜索url"].replace('{wd}', name).replace('{pg}', page);
                 ssurl = /^http/.test(ssurl) ? ssurl : extdata["主页url"] + ssurl;
-                vodurlhead = getHome(ssurl);
+                vodhost = getHome(ssurl);
             } else if (api_type == "XPath") {
                 ssurl = extdata["searchUrl"].replace('{wd}', name).replace('{pg}', page);
                 ssurl = /^http/.test(ssurl) ? ssurl : extdata["homeUrl"] + ssurl;
-                vodurlhead = getHome(ssurl);
+                vodhost = getHome(ssurl);
             } else if (api_type == "XYQ") {
                 if (extdata["搜索请求头参数"]) {
                     if (extdata["搜索请求头参数"].includes('#') || extdata["搜索请求头参数"].includes('$')) {
@@ -687,7 +686,7 @@ function getSsData(name, jkdata, page) {
                     ssurl = ssurl.split(';')[0];
                     postdata = extdata["POST请求数据"].replace('{wd}', name).replace('{pg}', page);
                 }
-                vodurlhead = getHome(ssurl);
+                vodhost = getHome(ssurl);
             }
         }
     } else if (api_type=="hipy_t3" || api_type=="hipy_t4") {
@@ -695,7 +694,7 @@ function getSsData(name, jkdata, page) {
             log('hipy_t3请使用DrpyHiker小程序');
             return [];
         }
-        vodurlhead = "";
+        detailurl = "";
         listnode = "json.list";
     } else {
         log('api类型错误');
@@ -807,7 +806,7 @@ function getSsData(name, jkdata, page) {
                 let vodname = list.vod_name || list.title;
                 let vodpic = list.vod_pic || list.pic || "";
                 let voddesc = list.vod_remarks || list.state || "";
-                let vodurl = list.vod_id ? vodurlhead + list.vod_id : list.nextlink;
+                let vodurl = list.vod_id ? detailurl + list.vod_id : list.nextlink;
                 let vodcontent = list.vod_content || list.vod_blurb || "";
                 return {
                     name: vodname,
@@ -908,7 +907,7 @@ function getSsData(name, jkdata, page) {
                         let href = getBetweenStr(sslist[i], (extdata["搜索链接"]||extdata["链接"]).replace(`+\"id\":`, '').replace(`,+`, '.'));//sslist[i].split(extdata["搜索链接"].split('&&')[0])[1].split(extdata["搜索链接"].split('&&')[1])[0];
                         let img = getBetweenStr(sslist[i], (extdata["搜索图片"]||extdata["图片"]));//sslist[i].split(extdata["搜索图片"].split('&&')[0])[1].split(extdata["搜索图片"].split('&&')[1])[0];
                         let desc = getBetweenStr(sslist[i], (extdata["搜索副标题"]||extdata["副标题"]));//sslist[i].split(extdata["搜索副标题"].split('&&')[0])[1].split(extdata["搜索副标题"].split('&&')[1])[0];
-                        lists.push({ "id": /^http/.test(href) ? href : vodurlhead + href, "name": title, "pic": img, "desc": desc })
+                        lists.push({ "id": /^http/.test(href) ? href : vodhost + href, "name": title, "pic": img, "desc": desc })
                     }
                 }
             }else if(api_type=="XYQ"){
@@ -1358,7 +1357,6 @@ function getErData(jkdata) {
         } else if (api_type == 'hipy_t3' || api_type == 'hipy_t4') {
             try{
                 let json = JSON.parse(html).list[0];
-                log(json);
                 actor = json.vod_actor;
                 area = json.vod_area;
                 remarks = json.vod_remarks || json.vod_class || "";
@@ -1442,7 +1440,7 @@ function setLastChapter(url,jkdata) {
 // 获取网页源码
 function getHtml(url, headers) {
     headers = headers || {};
-    let html = request(url, { headers: headers, timeout: timeout, withStatusCode: true });
+    let html = request(url, { headers: headers, withStatusCode: true });
     try {
         let json = JSON.parse(html);
         if (json.statusCode == 200) {
