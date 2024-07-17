@@ -61,7 +61,10 @@ var SrcParseS = {
             if(play.url.startsWith("pics://")){
                 return play.url;
             }if(play.url.startsWith("select://")){
-                log(play.url);
+                let selectjson = JSON.parse(play.url.replace("select://"));
+                if(selectjson.options.length==1){
+                    return selectjson.js();
+                }
                 return play.url;
             }else if(/\.mp3|\.mp4|\.m3u8/.test(play.url) && play.header){
                 return JSON.stringify({
