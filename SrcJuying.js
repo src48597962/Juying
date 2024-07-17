@@ -13,7 +13,7 @@ function search(name, sstype, jkdata) {
                 pic_url: it.vodpic,
                 url: $("hiker://empty#immersiveTheme##autoCache#").rule(() => {
                     require(config.依赖);
-                    dianboerji()
+                    dianboerji();
                 }),
                 extra: {
                     url: it.vodurl,
@@ -839,6 +839,7 @@ function dianboyiji() {
             }
 
             let vodlists = objdata.vodlists;
+            log(vodlists);
             if(vodlists && vodlists.length>0){
                 vodlists.forEach(list=>{
                     let vodname =list.vod_name;
