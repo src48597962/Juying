@@ -854,17 +854,31 @@ function dianboyiji() {
                         if(!/^http|hiker/.test(vodpic)){
                             vodpic = getHome(list.vod_url) + '/' + vodpic;
                         }
-                        
+                        let dataObj = {};
+                        if(/hipy_/.test(jkdata.type)){
+                            dataObj.stype = jkdata.type;
+                            dataObj.sname = jkdata.name;
+                            dataObj.surl = jkdata.url.startsWith('hiker://')?getPath(jkdata.url):jkdata.url;
+                            dataObj.sext = jkdata.ext;
+                        }
                         d.push({
                             title: vodname,
                             desc: voddesc.replace(/<\/?.+?\/?>/g,''),
                             pic_url: vodpic + (/eferer=/.test(vodpic)?"":"@Referer="),
-                            url: /^hiker/.test(list.vod_url)?list.vod_url:list.play?list.play:$("hiker://empty#immersiveTheme##autoCache#").rule(() => {
+                            url: /^hiker/.test(list.vod_url)?list.vod_url:list.vod_play?list.vod_play+$("").lazyRule((dataObj) => {
+                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
+                                return SrcParseS.聚影(input, dataObj);
+                            }, dataObj):$("hiker://empty#immersiveTheme##autoCache#").rule(() => {
                                 require(config.依赖);
                                 dianboerji()
                             }),
                             col_type: 'movie_3',
-                            extra: {
+                            extra: list.vod_play?{
+                                id: list.vod_url,
+                                jsLoadingInject: true,
+                                blockRules: ['.m4a', '.mp3', '.gif', '.jpeg', '.jpg', '.ico', '.png', 'hm.baidu.com', '/ads/*.js', 'cnzz.com'],
+                                videoExcludeRule: ['m3u8.js','?url=']
+                            }:{
                                 url: list.vod_url,
                                 pic: vodpic,
                                 pageTitle: vodname,
