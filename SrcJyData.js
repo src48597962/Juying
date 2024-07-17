@@ -737,7 +737,6 @@ function getSsData(name, jkdata, page) {
 
     let lists = [];
     let gethtml = "";
-    let ssvodurl;
     try {
         if (/v1|app|iptv|v2|cms|hipy_/.test(api_type)) {
             let json;
@@ -803,11 +802,11 @@ function getSsData(name, jkdata, page) {
                 let vodurl = list.vod_id ? vodurlhead + list.vod_id : list.nextlink;
                 let vodcontent = list.vod_content || list.vod_blurb || "";
                 return {
-                    vodname: vodname,
-                    vodpic: vodpic.indexOf('ver.txt') > -1 ? "" : vodpic,
-                    voddesc: voddesc,
-                    vodurl: vodurl,
-                    vodcontent: vodcontent
+                    name: vodname,
+                    pic: vodpic,
+                    desc: voddesc,
+                    id: vodurl,
+                    content: vodcontent
                 }
             })
         } else {
@@ -839,10 +838,10 @@ function getSsData(name, jkdata, page) {
                     let img = xpathArray(gethtml, extdata.scVodNode + extdata.scVodImg);
                     let mark = xpathArray(gethtml, extdata.scVodNode + extdata.scVodMark) || "";
                     for (let j in title) {
-                        lists.push({ "id": /^http/.test(href[j]) || /\{vid}$/.test(extdata.dtUrl) ? href[j] : href[j].replace(/\/.*?\/|\.html/g, ''), "name": title[j], "pic": img[j], "desc": mark[j] })
+                        let id = /^http/.test(href[j]) || /\{vid}$/.test(extdata.dtUrl) ? href[j] : href[j].replace(/\/.*?\/|\.html/g, '');
+                        lists.push({ "id": extdata.dtUrl.replace('{vid}', id), "name": title[j], "pic": img[j], "desc": mark[j] })
                     }
                 }
-                ssvodurl = `extdata.dtUrl.replace('{vid}', list.id)`;
             } else if(api_type == "biubiu"){
                 ssurl = extdata.url + extdata.sousuoqian + name + extdata.sousuohou;
                 if (extdata.ssmoshi == "0") {
@@ -868,20 +867,21 @@ function getSsData(name, jkdata, page) {
                     for (let i = 0; i < sslist.length; i++) {
                         sslist[i] = sslist[i].split(extdata.jiequshuzuhou.replace(/\\/g, ""))[0];
                         let title = sslist[i].split(extdata.biaotiqian.replace(/\\/g, ""))[1].split(extdata.biaotihou.replace(/\\/g, ""))[0];
-                        let href = sslist[i].split(extdata.lianjieqian.replace(/\\/g, ""))[1].split(extdata.lianjiehou.replace(/\\/g, ""))[0].replace(extdata.sousuohouzhui.replace(/\\/g, ""), "");//.replace('.html','')
+                        let href = extdata.url+extdata.sousuohouzhui+sslist[i].split(extdata.lianjieqian.replace(/\\/g, ""))[1].split(extdata.lianjiehou.replace(/\\/g, ""))[0].replace(extdata.sousuohouzhui.replace(/\\/g, ""), "");//.replace('.html','')
                         let img = sslist[i].split(extdata.tupianqian.replace(/\\/g, ""))[1].split(extdata.tupianhou.replace(/\\/g, ""))[0];
                         let mark = "";
                         lists.push({ "id": href, "name": title, "pic": img, "desc": mark })
                     }
                     if (extdata.sousuohouzhui == "/vod/") { extdata.sousuohouzhui = "/index.php/vod/detail/id/" }
                 }
-                ssvodurl = `extdata.url+extdata.sousuohouzhui+list.id`;//+'.html'
             }else if (api_type=="XBPQ"){
                 if (extdata["搜索模式"] == "0" && extdata["搜索后缀"]) {
                     gethtml = getHtmlCode(ssurl, headers);
                     let html = JSON.parse(gethtml);
                     lists = html.list || [];
-                    ssvodurl = `extdata["主页url"] + extdata["搜索后缀"] + list.id + '.html'`;
+                    lists.forEach(it=>{
+                        it.id = extdata["主页url"] + extdata["搜索后缀"] + it.id + '.html';
+                    })
                 } else {
                     let sstype = ssurl.indexOf(';post') > -1 ? "post" : "get";
                     if (sstype == "post") {
@@ -902,7 +902,6 @@ function getSsData(name, jkdata, page) {
                         let desc = getBetweenStr(sslist[i], (extdata["搜索副标题"]||extdata["副标题"]));//sslist[i].split(extdata["搜索副标题"].split('&&')[0])[1].split(extdata["搜索副标题"].split('&&')[1])[0];
                         lists.push({ "id": /^http/.test(href) ? href : vodurlhead + href, "name": title, "pic": img, "desc": desc })
                     }
-                    ssvodurl = "";
                 }
             }else if(api_type=="XYQ"){
                 /*
@@ -910,7 +909,9 @@ function getSsData(name, jkdata, page) {
                     gethtml = getHtmlCode(ssurl, headers);
                     let html = JSON.parse(gethtml);
                     lists = html.list || [];
-                    ssvodurl = `extdata["主页url"] + extdata["搜索后缀"] + list.id + '.html'`;
+                    lists.forEach(it=>{
+                        it.id = extdata["主页url"] + extdata["搜索后缀"] + it.id + '.html';
+                    })
                 } else {*/
                     if (postdata) {
                         gethtml = request(ssurl, { headers: headers, timeout: timeout, method: 'POST', body: postdata });
@@ -930,21 +931,8 @@ function getSsData(name, jkdata, page) {
                             lists.push({ "id": href, "name": title, "pic": img, "desc": desc });
                         }
                     }
-                    ssvodurl = "";
                 //}
             }
-            lists = lists.map(list => {
-                let vodname = list.name;
-                let vodpic = list.pic || "";
-                let voddesc = list.desc || "";
-                let vodurl = ssvodurl ? eval(ssvodurl) : list.id;
-                return {
-                    vodname: vodname,
-                    vodpic: vodpic,
-                    voddesc: voddesc,
-                    vodurl: vodurl
-                }
-            })
         }
     } catch (e) {
         log(jkdata.name + ' 搜索数据报错>' + e.message + " 错误行#" + e.lineNumber);
@@ -954,23 +942,23 @@ function getSsData(name, jkdata, page) {
     if (lists.length > 0) {
         try {
             lists.forEach((list) => {
-                let vodpic = list.vodpic ? list.vodpic.replace(/http.*\/tu\.php\?tu=|\/img\.php\?url=| |\/tu\.php\?tu=/g, '') : getIcon("404.jpg");
+                let vodpic = list.pic ? list.pic.replace(/http.*\/tu\.php\?tu=|\/img\.php\?url=| |\/tu\.php\?tu=/g, '') : getIcon("404.jpg");
                 if(!/^hiker/.test(vodpic)){
                     if (/^\/\//.test(vodpic)) {
                         vodpic = "https:" + vodpic;
                     }
-                    if(!/^http/.test(vodpic)){
-                        vodpic = getHome(list.vodurl) + vodpic;
+                    if(!/^http/.test(vodpic) && list.id.startsWith('http')){
+                        vodpic = getHome(list.id) + vodpic;
                     }
                 }
-                if (searchContains(list.vodname, name, true)) {
+                if (searchContains(list.name, name, true)) {
                     searchs.push({
-                        vodname: list.vodname.replace('立刻播放',''),
-                        voddesc: list.voddesc,
-                        vodcontent: list.vodcontent,
-                        vodpic: vodpic,
-                        vodurl: list.vodurl,
-                        vodplay: noerji?list.vodurl:""
+                        vod_name: list.name.replace('立刻播放',''),
+                        vod_desc: list.desc,
+                        vod_content: list.content,
+                        vod_pic: vodpic,
+                        vod_url: list.id,
+                        vod_play: noerji?list.id:""
                     })
                 }
             });
