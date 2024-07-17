@@ -13,7 +13,7 @@ if(Jucfg != ""){
     eval("Juconfig=" + Jucfg+ ";");
 }
 
-let timeout = 30000;
+let timeout = 10000;
 let homeSource = Juconfig['homeSource'] || {};
 let sourceType = homeSource.type;
 let sourceName = homeSource.name;
