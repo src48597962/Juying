@@ -104,8 +104,6 @@ function getYiData(jkdata) {
             if(rule.二级=="*"){
                 noerji = 1;
             }
-            log(rule.二级);
-            log(noerji);
         }
     } else if (api_type == "hipy_t4") {
         classurl = api_url + "&extend=" + jkdata.ext + "&filter=true";
