@@ -109,12 +109,13 @@ function getYiData(jkdata) {
             }
             if(rule.proxy_rule){
                 let proxyUrl = startProxyServer($.toString((drpy) => {
+                    log("进来了");
                     let params = MY_PARAMS;
                     log(params);
                     let result = drpy.proxy(params);
                     log(result);
                 },drpy));
-                putMyVar("proxyUrl", proxyUrl);
+                globalMap0.putMyVar("proxyUrl", proxyUrl);
             }
         }
     } else if (api_type == "hipy_t4") {
