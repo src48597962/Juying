@@ -108,13 +108,14 @@ function getYiData(jkdata) {
                 coltype = rule.hikerClassListCol;
             }
             if(rule.proxy_rule){
-                let proxyUrl = startProxyServer($.toString((drpy) => {
+                let proxyUrl = startProxyServer($.toString(() => {
                     log("进来了");
-                    let params = MY_PARAMS;
-                    log(params);
-                    let result = drpy.proxy(params);
-                    log(result);
-                },drpy));
+                    return '';
+                    //let params = MY_PARAMS;
+                    //log(params);
+                    //let result = drpy.proxy(params);
+                    //log(result);
+                }));
                 globalMap0.putMyVar("proxyUrl", proxyUrl);
             }
         }
