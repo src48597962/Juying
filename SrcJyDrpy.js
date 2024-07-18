@@ -34,6 +34,7 @@ function createDrpy(key) {
         };
         eval(getCryptoJS());
         globalThis.CryptoJS = CryptoJS;
+        log(GMkey);
         globalThis.getProxy = function () {
             return  globalMap0.getMyVar("proxyUrl", "http://127.0.0.1:52020/proxy") + "?do=js";
         }
