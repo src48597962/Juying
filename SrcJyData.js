@@ -95,7 +95,7 @@ function getYiData(jkdata) {
                 error: {}
             }
         }
-        let jk_api_ext = getDrpyFile(jkdata);
+        let jk_api_ext = getDrpyExt(jkdata);
         if(jk_api_ext){
             var drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(api_name, jk_api_ext);
             let rule = drpy.getRule();
@@ -754,7 +754,7 @@ function getSsData(name, jkdata, page) {
             if(api_type=="hipy_t4"){
                 json = JSON.parse(getHtml(jkdata.url+"&wd="+name+"&extend="+jkdata.ext+"&quick=false", headers));
             }else if(api_type=="hipy_t3"){
-                let jk_api_ext = getDrpyFile(jkdata);
+                let jk_api_ext = getDrpyExt(jkdata);
                 if(jk_api_ext){
                     let drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(api_name, jk_api_ext);
                     json = JSON.parse(drpy.search(name, 0, page));
@@ -1018,7 +1018,7 @@ function getErData(jkdata) {
         }
         html = getHtml(MY_URL, headers);
     } else if (api_type=="hipy_t3") {
-        let jk_api_ext = getDrpyFile(jkdata);
+        let jk_api_ext = getDrpyExt(jkdata);
         if(jk_api_ext){
             let drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(api_name, jk_api_ext);
             html = drpy.detail(MY_URL);
