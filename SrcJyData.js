@@ -107,6 +107,7 @@ function getYiData(jkdata) {
             if(rule.hikerClassListCol){
                 coltype = rule.hikerClassListCol;
             }
+            /*
             if(rule.proxy_rule){
                 let proxyUrl = startProxyServer($.toString((api_name, jk_api_ext, gkey, dmurl) => {
                     log("进来了");
@@ -139,6 +140,7 @@ function getYiData(jkdata) {
                 },api_name, jk_api_ext, MY_RULE._title||MY_RULE.title, config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js"));
                 globalMap0.putMyVar("proxyUrl", proxyUrl);
             }
+            */
         }
     } else if (api_type == "hipy_t4") {
         classurl = api_url + "&extend=" + jkdata.ext + "&filter=true";
