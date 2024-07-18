@@ -11,7 +11,7 @@ function getYiData(jkdata) {
     let api_ua = jkdata.ua || "MOBILE_UA";
     api_ua = api_ua == "MOBILE_UA" ? MOBILE_UA : api_ua == "PC_UA" ? PC_UA : api_ua;
     let headers = { 'User-Agent': api_ua };
-    let vodhost, classurl, listurl, detailurl, listnode, extdata, noerji;
+    let vodhost, classurl, listurl, detailurl, listnode, extdata, noerji, coltype;
     //分类变量
     let fold = getMyVar('SrcJu_dianbo$fold', "0");//是否展开小分类筛选
     let cate_id = getMyVar('SrcJu_dianbo$分类', '');
@@ -103,6 +103,9 @@ function getYiData(jkdata) {
             listurl = rule.filter_url || rule.host;
             if(rule.二级=="*"){
                 noerji = 1;
+            }
+            if(rule.hikerClassListCol){
+                coltype = rule.hikerClassListCol;
             }
         }
     } else if (api_type == "hipy_t4") {
@@ -620,7 +623,8 @@ function getYiData(jkdata) {
     return {
         fllists: fllists,
         vodlists: vodlists,
-        error: error
+        error: error,
+        coltype: coltype
     }
 }
 // 获取搜索数据
