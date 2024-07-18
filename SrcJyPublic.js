@@ -81,7 +81,7 @@ function getDatas(lx, isyx) {
                             }else if(/drpy2/.test(obj.api) && obj.type==3 && !obj.ext.includes('drpy.js') && hipy_t3_enable){
                                 let extfile = obj.ext;
                                 if(extfile.startsWith('./')){
-                                    extfile = dySource.substr(0, dySource.lastIndexOf('/')+1) + extfile.replace("./","");
+                                    extfile = dySource.substr(0, dySource.lastIndexOf('/')+1) + extfile.replace("../","").replace("./","").replace("./","");
                                 }
                                 let urlfile;
                                 if(dySource.startsWith('file://')){
