@@ -116,6 +116,7 @@ function getYiData(jkdata) {
                         "url":MY_PARAMS.url.join('')
                     };
                     log(params);
+                    let rule = drpy.getRule();
                     let result = drpy.proxy(params);
                     log(result);
                     return '';
