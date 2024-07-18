@@ -36,7 +36,7 @@ function createDrpy(key, ext) {
         globalThis.CryptoJS = CryptoJS;
         
         globalThis.getProxy = function () {
-            let proxyUrl = startProxyServer($.toString((api_name, jk_api_ext, GMkey, path, title) => {
+            let proxyUrl = startProxyServer($.toString((api_name, jk_api_ext, GMkey, testPath, title) => {
                 log("进来了");
 
                 let {GM} = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6916&auth=1d35e8f0-22e8-5270-a9d1-826f53f177ad");
@@ -129,7 +129,7 @@ function createDrpy(key, ext) {
         Function.prototype.toString = function () {
             return $toString.apply(this).trim();
         };
-        let drpy2 = $.require(path +'drpy/drpy2.js');
+        let drpy2 = $.require(testPath +'drpy/drpy2.js');
         GM.has(GMkey, (DrpyManage) => {
             DrpyManage.put(key, drpy2);
         });
