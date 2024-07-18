@@ -97,7 +97,7 @@ function getYiData(jkdata) {
         }
         let jk_api_ext = getDrpyExt(jkdata);
         if(jk_api_ext){
-            var drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(api_url, jk_api_ext);
+            var drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(api_name, jk_api_ext);
             let rule = drpy.getRule();
             classurl = rule.homeUrl || rule.host;
             listurl = rule.filter_url || rule.host;
@@ -108,24 +108,22 @@ function getYiData(jkdata) {
                 coltype = rule.hikerClassListCol;
             }
             if(rule.proxy_rule){
-                let proxyUrl = startProxyServer($.toString((drpy) => {
+                let proxyUrl = startProxyServer($.toString((api_name, jk_api_ext) => {
                     log("进来了");
-                    log($.type(drpy));
-                    log(drpy.getRule());
+
                     let params = {
                         "do":MY_PARAMS.do.join(''),
                         "url":MY_PARAMS.url.join('')
                     };
-                    //log(params);
+                    log(params);
+                    let drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(api_name, jk_api_ext);
                     
-
-                    
-                    eval("let rule = " + drpy.getRule());
+                    //eval("let rule = " + drpy.getRule());
                     
                     let result = drpy.proxy(params);
                     log(result);
                     return '';
-                },drpy));
+                },api_name, jk_api_ext));
                 globalMap0.putMyVar("proxyUrl", proxyUrl);
             }
         }
