@@ -517,7 +517,7 @@ function dianboerji() {
             if(/hipy_/.test(jkdata.type)){
                 dataObj.stype = jkdata.type;
                 dataObj.sname = jkdata.name;
-                dataObj.surl = jkdata.url.startsWith('hiker://')?getPath(jkdata.url):jkdata.url;
+                dataObj.surl = jkdata.type=="hipy_t3"?getDrpyExt(jkdata):jkdata.url;
                 dataObj.sext = jkdata.ext;
             }
             let novel = erdata.detailtype=="小说";
