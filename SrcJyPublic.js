@@ -88,7 +88,10 @@ function getDatas(lx, isyx) {
                                 if(dySource.startsWith('file://')){
                                     urlfile = 'hiker://files/' + extfile.split('/files/Documents/')[1];
                                 }else if(dySource.startsWith('http')){
+                                    log(extfile.split('?')[0]);
+                                    log(extfile.split('?')[0].substr(extfile.lastIndexOf('/') + 1));
                                     urlfile = cachepath + 'hipy_t3_' + extfile.split('?')[0].substr(extfile.lastIndexOf('/') + 1);
+                                    log(urlfile);
                                     try{
                                         if(!fileExist(urlfile)){
                                             let content = fetch(extfile, {timeout:2000});
@@ -637,7 +640,7 @@ log = function (msg) {
 function getDrpyExt(jkdata) {
     let extp = "";
     if(jkdata.ext && jkdata.ext.includes('?')){
-        extp = jkdata.ext.split('?')[1];
+        extp = '?' + jkdata.ext.split('?')[1];
     }
     if (/^hiker/.test(jkdata.url)) {
         if (!fileExist(jkdata.url)) {
