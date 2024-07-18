@@ -78,7 +78,7 @@ function getDatas(lx, isyx) {
                                 if(arr.name.includes('[搜]')){
                                     arr['onlysearch'] = 1;
                                 }
-                            }else if(/drpy2/.test(obj.api) && obj.type==3 && hipy_t3_enable){
+                            }else if(/drpy2/.test(obj.api) && obj.type==3 && !obj.ext.includes('drpy.js') && hipy_t3_enable){
                                 let extfile = obj.ext;
                                 if(extfile.startsWith('./')){
                                     extfile = dySource.substr(0, dySource.lastIndexOf('/')+1) + extfile.replace("./","");
@@ -103,7 +103,7 @@ function getDatas(lx, isyx) {
                                     }
                                 }
                                 if(urlfile){
-                                    arr = { "name": obj.name, "url": urlfile, "type": "hipy_t3", "ext": extfile};
+                                    arr = { "name": obj.key.startsWith('hipy_js_')?obj.key.replace('hipy_js_',''):obj.name, "url": urlfile, "type": "hipy_t3", "ext": extfile};
                                     if(arr.name.includes('[搜]')){
                                         arr['onlysearch'] = 1;
                                     }
