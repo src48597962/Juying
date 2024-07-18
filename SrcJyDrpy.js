@@ -18,8 +18,8 @@ function sync(func, sp) {
     return new org.mozilla.javascript.Synchronizer(func, sp || {});
 }
 
-function createDrpy(key) {
-    JSEngine.getInstance().evalJS(buildJsEnv(MY_TICKET) + "\n!" + $.toString((key, path, GMkey, MY_TICKET) => {
+function createDrpy(key, ext) {
+    JSEngine.getInstance().evalJS(buildJsEnv(MY_TICKET) + "\n!" + $.toString((key, testPath, GMkey, MY_TICKET) => {
         const localKey = "drpy";
         globalThis.local = {
             set(rulekey, k, v) {
@@ -34,9 +34,38 @@ function createDrpy(key) {
         };
         eval(getCryptoJS());
         globalThis.CryptoJS = CryptoJS;
-        log(GMkey);
+        
         globalThis.getProxy = function () {
-            return  globalMap0.getMyVar("proxyUrl", "http://127.0.0.1:52020/proxy") + "?do=js";
+            let proxyUrl = startProxyServer($.toString((api_name, jk_api_ext, GMkey, path, title) => {
+                log("进来了");
+
+                let {GM} = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6916&auth=1d35e8f0-22e8-5270-a9d1-826f53f177ad");
+                GM.setSelfKey(title);
+                let drpy = GM.defineModule(GMkey, testPath + "SrcJyDrpy.js").get(api_name, jk_api_ext);
+
+                let params = {};
+                for (let key in MY_PARAMS) {
+                    params[key] = String(MY_PARAMS[key][0]);
+                }
+                
+                let result = drpy.proxy(params);
+                let [code, media_type, data, headers, isReturnBytes] = result;
+                headers = Object.assign({}, {
+                    'Content-Type': media_type,
+                }, headers);
+                if(typeof data==="string"&&data.startsWith("data:")&&data.includes("base64,")){
+                    data = data.split("base64,")[1];
+                    const CryptoUtil = $.require("hiker://assets/crypto-java.js");
+                    data = CryptoUtil.Data.parseBase64(data).toBytes();
+                }
+                return {
+                    statusCode: code,
+                    body: data,
+                    headers: headers,
+                };
+            },key, ext, GMkey, testPath, MY_RULE._title||MY_RULE.title));
+
+            return proxyUrl + "?do=js";
         }
 
         let $request = request;
