@@ -320,7 +320,7 @@ function SRCSet() {
                     if (/^http|^云/.test(pasteurl) && pasteurl.includes('/')) {
                         pasteurl = pasteurl.replace('云6oooole', 'https://pasteme.tyrantg.com').replace('云5oooole', 'https://cmd.im').replace('云7oooole', 'https://note.ms').replace('云9oooole', 'https://txtpbbd.cn').replace('云10oooole', 'https://hassdtebin.com');   
                         log('剪贴板地址>'+pasteurl);
-                        let code = '聚影接口￥' + aesEncode('Juying', pasteurl) + '￥' + data.name;
+                        let code = '聚影接口￥' + aesEncode('Juying2', pasteurl) + '￥' + data.name;
                         copy('云口令：'+code+`@import=js:$.require("hiker://page/import?rule=`+MY_RULE.title+`");`);
                         return "toast://(单个)分享口令已生成";
                     } else {
@@ -673,15 +673,15 @@ function jiekou(data) {
                 if(apigroup){
                     arr['group'] = apigroup;
                 }
-
-                if(data.ext){
-                    arr['ext'] = data.ext;
-                }
+                
                 let isretain = getMyVar('isretain')=="1"?1:0;
                 if(isretain){
                     arr['retain'] = 1;
                 }
                 if(data){
+                    if(data.ext){
+                        arr['ext'] = data.ext;
+                    }
                     arr['oldurl'] = data.url;
                 }
                 urls.push(arr);
@@ -1015,7 +1015,7 @@ function manageSet(){
                 let code = '聚影资源码￥'+codeid;
                 copy(code);
                 return "hiker://empty";
-            },aesEncode('Juying', sharecode['note_id'])):$().lazyRule((Juconfig,cfgfile,note_name) => {
+            },aesEncode('Juying2', sharecode['note_id'])):$().lazyRule((Juconfig,cfgfile,note_name) => {
                 try{
                     let pastecreate = JSON.parse(request('https://netcut.txtbin.cn/api/note2/save/', {
                         headers: { 'Referer': 'https://netcut.cn/' },
@@ -1255,7 +1255,7 @@ function manageSet(){
                         }
                         showLoading('正在较验有效性')
                         let codeid = input.split('￥')[1];
-                        let text = parsePaste('https://netcut.cn/p/'+aesDecode('Juying', codeid));
+                        let text = parsePaste('https://netcut.cn/p/'+aesDecode('Juying2', codeid));
                         hideLoading();
                         if(codeid&&!/^error/.test(text)){
                             return $("","当前资源码有效，起个名保存吧").input((Juconfig,cfgfile,codeid) => {
@@ -1331,7 +1331,7 @@ function manageSet(){
                 try{
                     showLoading('请稍候...')
                     let codeid = codedyid;
-                    let text = parsePaste('https://netcut.cn/p/'+aesDecode('Juying', codeid));
+                    let text = parsePaste('https://netcut.cn/p/'+aesDecode('Juying2', codeid));
                     if(codeid&&!/^error/.test(text)){
                         let pastedata = JSON.parse(base64Decode(text));
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
@@ -2129,8 +2129,8 @@ function JYshare(lx,input) {
     }
     if(input=='云口令文件'){
         let sharetxt = base64Encode(JSON.stringify(sharelist));
-        let code = sm + '￥' + aesEncode('Juying', sharetxt) + '￥云口令文件';
-        let sharefile = 'hiker://files/_cache/Juying_'+sharelist.length+'_'+$.dateFormat(new Date(),"HHmmss")+'.hiker';
+        let code = sm + '￥' + aesEncode('Juying2', sharetxt) + '￥云口令文件';
+        let sharefile = 'hiker://files/_cache/Juying2_'+sharelist.length+'_'+$.dateFormat(new Date(),"HHmmss")+'.hiker';
         writeFile(sharefile, '云口令：'+code+`@import=js:$.require("hiker://page/import?rule=聚影✓");`);
         if(fileExist(sharefile)){
             return 'share://'+sharefile;
@@ -2142,7 +2142,7 @@ function JYshare(lx,input) {
         let pasteurl = sharePaste(base64Encode(JSON.stringify(sharelist)), input);
         hideLoading();
         if(/^http|^云/.test(pasteurl) && pasteurl.includes('/')){
-            let code = sm+'￥'+aesEncode('Juying', pasteurl)+'￥共' + sharelist.length + '条('+input+')';
+            let code = sm+'￥'+aesEncode('Juying2', pasteurl)+'￥共' + sharelist.length + '条('+input+')';
             copy('云口令：'+code+`@import=js:$.require("hiker://page/import?rule=聚影✓");`);
             return "toast://"+sm2;
         }else{
@@ -2161,7 +2161,7 @@ function JYimport(input) {
     let inputname;
     let codelx = "share";
     try{
-        pasteurl = aesDecode('Juying', input.split('￥')[1]);
+        pasteurl = aesDecode('Juying2', input.split('￥')[1]);
         inputname = input.split('￥')[0];
         if(inputname=="聚影资源码"){
             codelx = "dingyue";
@@ -2402,7 +2402,7 @@ function yundiskjiekou() {
                 let inputname = input.split('￥')[0];
                 if (inputname == "聚影云盘") {
                     showLoading("正在导入，请稍后...");
-                    let parseurl = aesDecode('Juying', input.split('￥')[1]);
+                    let parseurl = aesDecode('Juying2', input.split('￥')[1]);
                     let content = parsePaste(parseurl);
                     let datalist2 = JSON.parse(base64Decode(content));
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
@@ -2426,7 +2426,7 @@ function yundiskjiekou() {
         url: datalist.length == 0 ? "toast://云盘接口为0，无法分享" : $().lazyRule((datalist) => {
             let pasteurl = sharePaste(base64Encode(JSON.stringify(datalist)), getItem("sharePaste",""));
             if (pasteurl) {
-                let code = '聚影云盘￥' + aesEncode('Juying', pasteurl) + '￥共' + datalist.length + '条';
+                let code = '聚影云盘￥' + aesEncode('Juying2', pasteurl) + '￥共' + datalist.length + '条';
                 copy('云口令：'+code+`@import=js:$.require("hiker://page/import?rule=聚影✓");`);
                 return "toast://(全部)云盘分享口令已生成";
             } else {
@@ -2469,7 +2469,7 @@ function yundiskjiekou() {
                     let pasteurl = sharePaste(base64Encode(JSON.stringify(oneshare)), getItem("sharePaste",""));
                     hideLoading();
                     if(pasteurl){
-                        let code = '聚影云盘￥'+aesEncode('Juying', pasteurl)+'￥'+data.name;
+                        let code = '聚影云盘￥'+aesEncode('Juying2', pasteurl)+'￥'+data.name;
                         copy('云口令：'+code+`@import=js:$.require("hiker://page/import?rule=聚影✓");`);
                         return "toast://(单个)云盘分享口令已生成";
                     }else{
