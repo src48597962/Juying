@@ -88,7 +88,7 @@ function getDatas(lx, isyx) {
                                 if(dySource.startsWith('file://')){
                                     urlfile = 'hiker://files/' + extfile.split('/files/Documents/')[1];
                                 }else if(dySource.startsWith('http')){
-                                    urlfile = cachepath + 'hipy_t3_' + extfile.substr(extfile.lastIndexOf('/') + 1).split('?')[0];
+                                    urlfile = cachepath + 'hipy_t3_' + extfile.split('?')[0].substr(extfile.lastIndexOf('/') + 1);
                                     try{
                                         if(!fileExist(urlfile)){
                                             let content = fetch(extfile, {timeout:2000});
