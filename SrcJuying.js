@@ -286,7 +286,7 @@ function dianboerji() {
     d.push({
         title: details1,//详情1
         desc: "站源："+sgroup+"_"+sname+"\n"+details2,//详情2
-        pic_url: pic?/^http/.test(pic)&&!pic.includes('@Referer=')?pic+'@Referer=':pic:'',//图片
+        pic_url: pic?/^http/.test(pic)&&!pic.includes('@')?pic+'@Referer=':pic:'',//图片
         url: MY_URL + '#noHistory#',//链接
         col_type: 'movie_1_vertical_pic_blur',
         extra: {
@@ -865,7 +865,7 @@ function dianboyiji() {
                         d.push({
                             title: vodname,
                             desc: voddesc.replace(/<\/?.+?\/?>/g,''),
-                            pic_url: vodpic + (/eferer=/.test(vodpic)?"":"@Referer="),
+                            pic_url: vodpic + (vodpic.includes('@')?"":"@Referer="),
                             url: /^hiker/.test(list.vod_url)?list.vod_url:list.vod_play?list.vod_play+$("").lazyRule((dataObj) => {
                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
                                 return SrcParseS.聚影(input, dataObj);
