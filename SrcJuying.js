@@ -873,7 +873,7 @@ function dianboyiji() {
                                 require(config.依赖);
                                 dianboerji()
                             }),
-                            col_type: 'movie_3',
+                            col_type: yidata.coltype || 'movie_3',
                             extra: list.vod_play?{
                                 id: list.vod_url,
                                 jsLoadingInject: true,
