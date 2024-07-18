@@ -122,12 +122,20 @@ function getYiData(jkdata) {
                     
                     
                     let result = drpy.proxy(params);
-                    //let result = DrpyManage.runProxy(drpy, [params]);
-                
-                    //let [code, media_type, data, headers, isReturnBytes] = result;
-
-                    log(result);
-                    return '';
+                    let [code, media_type, data, headers, isReturnBytes] = result;
+                    headers = Object.assign({}, {
+                        'Content-Type': media_type,
+                    }, headers);
+                    if(typeof data==="string"&&data.startsWith("data:")&&data.includes("base64,")){
+                        data = data.split("base64,")[1];
+                        const CryptoUtil = $.require("hiker://assets/crypto-java.js");
+                        data = CryptoUtil.Data.parseBase64(data).toBytes();
+                    }
+                    return {
+                        statusCode: code,
+                        body: data,
+                        headers: headers,
+                    };
                 },api_name, jk_api_ext, MY_RULE._title||MY_RULE.title, config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js"));
                 globalMap0.putMyVar("proxyUrl", proxyUrl);
             }
