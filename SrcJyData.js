@@ -110,13 +110,14 @@ function getYiData(jkdata) {
             if(rule.proxy_rule){
                 let proxyUrl = startProxyServer($.toString((drpy) => {
                     log("进来了");
-                    
+                    log($.type(drpy));
+                    log(drpy.getRule());
                     let params = {
                         "do":MY_PARAMS.do.join(''),
                         "url":MY_PARAMS.url.join('')
                     };
                     //log(params);
-                    log(drpy.getRule());
+                    
 
                     
                     eval("let rule = " + drpy.getRule());
