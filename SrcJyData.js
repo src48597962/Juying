@@ -117,6 +117,7 @@ function getYiData(jkdata) {
                     };
                     log(params);
                     eval("let rule = " + drpy.getRule());
+                    log(rule);
                     let result = drpy.proxy(params);
                     log(result);
                     return '';
