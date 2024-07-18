@@ -86,7 +86,7 @@ function getDatas(lx, isyx) {
                                 }
                                 let urlfile;
                                 if(dySource.startsWith('file://')){
-                                    urlfile = 'hiker://files/' + extfile.split('/files/Documents/')[1];
+                                    urlfile = 'hiker://files/' + extfile.split('?')[0].split('/files/Documents/')[1];
                                 }else if(dySource.startsWith('http')){
                                     urlfile = cachepath + 'hipy_t3_' + extfile.split('?')[0].substr(extfile.split('?')[0].lastIndexOf('/') + 1);
                                     try{
