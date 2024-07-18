@@ -65,7 +65,7 @@ var SrcParseS = {
                 let seljson = JSON.parse(play.url.replace("select://",""));
                 if(seljson.options.length==1){
                     //log(seljson);
-                    return "hiker://empty@lazyRule=.js:"+seljson.js;
+                    return "第1部@lazyRule=.js:"+seljson.js;
                 }
                 
                 return play.url;
