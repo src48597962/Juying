@@ -88,13 +88,7 @@ function getDatas(lx, isyx) {
                                 if(dySource.startsWith('file://')){
                                     urlfile = 'hiker://files/' + extfile.split('/files/Documents/')[1];
                                 }else if(dySource.startsWith('http')){
-                                    urlfile = cachepath + 'hipy_t3_' + extfile.split('?')[0].substr(extfile.lastIndexOf('/') + 1);
-                                    if(obj.key=="hipy_js_采集之王[合]0"){
-                                        log(extfile.split('?')[0]);
-                                        log(extfile.split('?')[0].substr(extfile.lastIndexOf('/') + 1));
-                                        log(urlfile);
-                                    }
-
+                                    urlfile = cachepath + 'hipy_t3_' + extfile.split('?')[0].substr(extfile.split('?')[0].lastIndexOf('/') + 1);
                                     try{
                                         if(!fileExist(urlfile)){
                                             let content = fetch(extfile, {timeout:2000});
