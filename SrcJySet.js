@@ -2014,8 +2014,8 @@ function Resourceimport(input,importtype,importmode){
                         arr = { "name": obj.name, "type": "XBPQ", "ext": extfile};
                     }else if(/^csp_XYQHiker/.test(obj.api)){
                         arr = { "name": obj.name, "type": "XYQ", "ext": extfile};
-                    }else if(/drpy2/.test(obj.api) && obj.type==3 && hipy_t3_enable){
-                        arr = { "name": obj.name, "type": "hipy_t3", "ext": extfile};
+                    }else if(/drpy2/.test(obj.api) && obj.type==3 && !obj.ext.includes('drpy.js') && hipy_t3_enable){
+                        arr = { "name": obj.key.startsWith('hipy_js_')?obj.key.replace('hipy_js_',''):obj.name, "type": "hipy_t3", "ext": extfile};
                         if(arr.name.includes('[搜]')){
                             arr['onlysearch'] = 1;
                         }
