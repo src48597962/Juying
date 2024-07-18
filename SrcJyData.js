@@ -97,7 +97,6 @@ function getYiData(jkdata) {
         }
         let jk_api_ext = getDrpyExt(jkdata);
         if(jk_api_ext){
-            log(jk_api_ext);
             var drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(api_name, jk_api_ext);
             let rule = drpy.getRule();
             classurl = rule.homeUrl || rule.host;
@@ -108,7 +107,6 @@ function getYiData(jkdata) {
             if(rule.hikerClassListCol){
                 coltype = rule.hikerClassListCol;
             }
-            log(listurl);
         }
     } else if (api_type == "hipy_t4") {
         classurl = api_url + "&extend=" + jkdata.ext + "&filter=true";
