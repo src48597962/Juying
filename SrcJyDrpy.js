@@ -34,6 +34,9 @@ function createDrpy(key) {
         };
         eval(getCryptoJS());
         globalThis.CryptoJS = CryptoJS;
+        globalThis.getProxy = function () {
+            return getMyVar("proxyUrl", "http://127.0.0.1:52020/proxy") + "&do=js";
+        }
 
         let $request = request;
         let $post = post;
