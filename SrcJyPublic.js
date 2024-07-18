@@ -88,10 +88,13 @@ function getDatas(lx, isyx) {
                                 if(dySource.startsWith('file://')){
                                     urlfile = 'hiker://files/' + extfile.split('/files/Documents/')[1];
                                 }else if(dySource.startsWith('http')){
-                                    log(extfile.split('?')[0]);
-                                    log(extfile.split('?')[0].substr(extfile.lastIndexOf('/') + 1));
                                     urlfile = cachepath + 'hipy_t3_' + extfile.split('?')[0].substr(extfile.lastIndexOf('/') + 1);
-                                    log(urlfile);
+                                    if(obj.key=="hipy_js_采集之王[合]0"){
+                                        log(extfile.split('?')[0]);
+                                        log(extfile.split('?')[0].substr(extfile.lastIndexOf('/') + 1));
+                                        log(urlfile);
+                                    }
+
                                     try{
                                         if(!fileExist(urlfile)){
                                             let content = fetch(extfile, {timeout:2000});
@@ -137,7 +140,10 @@ function getDatas(lx, isyx) {
                     be(listtask, {
                         func: function(obj, id, error, taskResult) {   
                             if(taskResult.data){
-                                datalist.push(taskResult.data);
+                                let data = taskResult.data;
+                                if(datalist.filter(v=>v.url==data.url).length==0){
+                                    datalist.push(data);
+                                }
                             }                         
                         },
                         param: {
