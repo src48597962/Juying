@@ -111,7 +111,10 @@ function getYiData(jkdata) {
                 let proxyUrl = startProxyServer($.toString((drpy) => {
                     log("进来了");
                     
-                    let params = MY_PARAMS;
+                    let params = {
+                        "do":MY_PARAMS.do,
+                        "url":MY_PARAMS.url
+                    };
                     log(params);
                     //let result = drpy.proxy(params);
                     //log(result);
