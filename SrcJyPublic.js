@@ -134,10 +134,7 @@ function getDatas(lx, isyx) {
                     be(listtask, {
                         func: function(obj, id, error, taskResult) {   
                             if(taskResult.data){
-                                let data = taskResult.data;
-                                if(datalist.filter(v=>v.url==data.url).length==0){
-                                    datalist.push(data);
-                                }
+                                datalist.push(taskResult.data);
                             }                         
                         },
                         param: {
@@ -400,7 +397,7 @@ function selectSource() {
     let index = 0;
     let names = sourceList.map((v,i) => {
         let vname = v.name;
-        if(v.url == sourceUrl){
+        if(v.url == sourceUrl && v.name==sourceName){
             index = i;
             vname = `‘‘’’<strong><font color="`+getItem('主题颜色','#6dc9ff')+`">`+v.name+`</front></strong>`;
         }
