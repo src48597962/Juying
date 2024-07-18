@@ -104,10 +104,11 @@ function getDatas(lx, isyx) {
                                     }
                                 }
                                 if(urlfile){
-                                    arr = { "name": obj.key.startsWith('hipy_js_')?obj.key.replace('hipy_js_',''):obj.name, "url": urlfile, "type": "hipy_t3", "ext": extfile};
+                                    arr = { "name": obj.name.includes('|')?obj.name.split('|')[1]:obj.name, "url": urlfile, "type": "hipy_t3", "ext": extfile};
                                     if(arr.name.includes('[搜]')){
                                         arr['onlysearch'] = 1;
                                     }
+                                    arr.name = arr.name.replace('(drpy_t3)','');
                                 }
                             }
                             if(arr){
