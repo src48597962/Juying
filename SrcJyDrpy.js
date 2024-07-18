@@ -1,4 +1,4 @@
-const testPath = module.modulePath.slice(0, module.modulePath.lastIndexOf("/")) + "/";
+const testPath = module.modulePath.slice(0, module.modulePath.lastIndexOf("/") + 1);
 const JSEngine = com.example.hikerview.service.parser.JSEngine;
 const drpyMap = new Map();
 const GMkey = module.importParam;
@@ -36,12 +36,12 @@ function createDrpy(key, ext) {
         globalThis.CryptoJS = CryptoJS;
         
         globalThis.getProxy = function () {
-            let proxyUrl = startProxyServer($.toString((api_name, jk_api_ext, GMkey, testPath, title) => {
+            let proxyUrl = startProxyServer($.toString((api_name, jk_api_ext, testPath, title) => {
                 log("进来了");
 
                 let {GM} = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6916&auth=1d35e8f0-22e8-5270-a9d1-826f53f177ad");
                 GM.setSelfKey(title);
-                let drpy = GM.defineModule(GMkey, testPath + "SrcJyDrpy.js").get(api_name, jk_api_ext);
+                let drpy = GM.defineModule("SrcJuDrpy", testPath + "SrcJyDrpy.js").get(api_name, jk_api_ext);
 
                 let params = {};
                 for (let key in MY_PARAMS) {
@@ -63,7 +63,7 @@ function createDrpy(key, ext) {
                     body: data,
                     headers: headers,
                 };
-            },key, ext, GMkey, testPath, MY_RULE._title||MY_RULE.title));
+            },key, ext, testPath, MY_RULE._title||MY_RULE.title));
 
             return proxyUrl + "?do=js";
         }
