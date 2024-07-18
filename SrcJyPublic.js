@@ -43,9 +43,9 @@ function getDatas(lx, isyx) {
             let dySource = Juconfig['dySource'];
             let input;
             if(dySource.startsWith('http')){
-                showLoading('正在加载订阅源，请稍后...');
                 let dyJkTmpFile = cachepath + md5(Juconfig['dySource']) + ".json";
                 if(!fileExist(dyJkTmpFile)){
+                    showLoading('正在加载订阅源，请稍后...');
                     let contnet = getJkContnet(Juconfig['dySource']);
                     if(contnet){
                         writeFile(dyJkTmpFile, contnet);
