@@ -97,7 +97,7 @@ function getYiData(jkdata) {
         }
         let jk_api_ext = getDrpyExt(jkdata);
         if(jk_api_ext){
-            var drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(api_name, jk_api_ext);
+            var drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(api_url, jk_api_ext);
             let rule = drpy.getRule();
             classurl = rule.homeUrl || rule.host;
             listurl = rule.filter_url || rule.host;
@@ -115,7 +115,7 @@ function getYiData(jkdata) {
                         "do":MY_PARAMS.do.join(''),
                         "url":MY_PARAMS.url.join('')
                     };
-                    log(params);
+                    //log(params);
                     log(drpy.getRule());
 
                     
