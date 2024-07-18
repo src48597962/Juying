@@ -112,12 +112,12 @@ function getYiData(jkdata) {
                     log("进来了");
                     
                     let params = {
-                        "do":MY_PARAMS.do,
-                        "url":MY_PARAMS.url
+                        "do":MY_PARAMS.do.join(''),
+                        "url":MY_PARAMS.url.join('')
                     };
                     log(params);
-                    //let result = drpy.proxy(params);
-                    //log(result);
+                    let result = drpy.proxy(params);
+                    log(result);
                     return '';
                 },drpy));
                 globalMap0.putMyVar("proxyUrl", proxyUrl);
