@@ -2002,7 +2002,8 @@ function Resourceimport(input,importtype,importmode){
                         if(/^clan:/.test(extfile)){
                             extfile = extfile.replace("clan://TVBox/", input.match(/file.*\//)[0]);
                         }else if(extfile.startsWith('./')){
-                            extfile = input.substr(0, input.lastIndexOf('/')+1) + extfile.replace("./","");//input.match(/http(s)?:\/\/.*\//)[0]
+                            let urlpath = input.substr(0, input.lastIndexOf('/')+1);
+                            extfile = extfile.replace("../", urlpath).replace(/\.\//g, urlpath);
                         }
                     }
 
@@ -2027,7 +2028,7 @@ function Resourceimport(input,importtype,importmode){
                             urlfile = datapath + "libs_jk/" + arr.type + '_' + arr.name + '.json';
                             writeFile(urlfile, JSON.stringify(extfile));
                         }else if(/^file/.test(extfile)){
-                            urlfile = 'hiker://files/' + extfile.split('/files/Documents/')[1];
+                            urlfile = 'hiker://files/' + extfile.split('?')[0].split('/files/Documents/')[1];
                         }else if(/^http/.test(extfile)){
                             try{
                                 let content = getJkContnet(extfile);
@@ -2041,7 +2042,7 @@ function Resourceimport(input,importtype,importmode){
                                         obj.searchable = 0;
                                     }
                                     
-                                    urlfile = cachepath + arr.type + '_' + extfile.substr(extfile.lastIndexOf('/') + 1);
+                                    urlfile = cachepath + arr.type + '_' + extfile.split('?')[0].substr(extfile.split('?')[0].lastIndexOf('/') + 1);
                                     writeFile(urlfile, content);
                                 }
                             }catch(e){
