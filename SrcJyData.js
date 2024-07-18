@@ -107,6 +107,15 @@ function getYiData(jkdata) {
             if(rule.hikerClassListCol){
                 coltype = rule.hikerClassListCol;
             }
+            if(rule.proxy_rule){
+                let proxyUrl = startProxyServer($.toString((drpy) => {
+                    let params = MY_PARAMS;
+                    log(params);
+                    let result = drpy.proxy(params);
+                    log(result);
+                },drpy));
+                putMyVar("proxyUrl", proxyUrl);
+            }
         }
     } else if (api_type == "hipy_t4") {
         classurl = api_url + "&extend=" + jkdata.ext + "&filter=true";
