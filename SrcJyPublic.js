@@ -81,13 +81,14 @@ function getDatas(lx, isyx) {
                             }else if(/drpy2/.test(obj.api) && obj.type==3 && !obj.ext.includes('drpy.js') && hipy_t3_enable){
                                 let extfile = obj.ext;
                                 if(extfile.startsWith('./')){
-                                    extfile = dySource.substr(0, dySource.lastIndexOf('/')+1) + extfile.replace("../","").replace("./","").replace("./","");
+                                    let urlpath = dySource.substr(0, dySource.lastIndexOf('/')+1);
+                                    extfile = extfile.replace("../", urlpath).replace(/\.\//g, urlpath);
                                 }
                                 let urlfile;
                                 if(dySource.startsWith('file://')){
                                     urlfile = 'hiker://files/' + extfile.split('/files/Documents/')[1];
                                 }else if(dySource.startsWith('http')){
-                                    urlfile = cachepath + 'hipy_t3_' + extfile.substr(extfile.lastIndexOf('/') + 1);
+                                    urlfile = cachepath + 'hipy_t3_' + extfile.substr(extfile.lastIndexOf('/') + 1).split('?')[0];
                                     try{
                                         if(!fileExist(urlfile)){
                                             let content = fetch(extfile, {timeout:2000});
