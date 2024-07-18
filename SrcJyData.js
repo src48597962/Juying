@@ -111,16 +111,21 @@ function getYiData(jkdata) {
                 let proxyUrl = startProxyServer($.toString((api_name, jk_api_ext) => {
                     log("进来了");
 
-                    let params = {
-                        "do":MY_PARAMS.do.join(''),
-                        "url":MY_PARAMS.url.join('')
-                    };
-                    log(params);
+                    let {GM} = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6916&auth=1d35e8f0-22e8-5270-a9d1-826f53f177ad");
+                    GM.setSelfKey(gkey);
                     let drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(api_name, jk_api_ext);
+
+                    let params = {};
+                    for (let key in MY_PARAMS) {
+                        params[key] = String(MY_PARAMS[key][0]);
+                    }
                     
-                    //eval("let rule = " + drpy.getRule());
                     
                     let result = drpy.proxy(params);
+                    //let result = DrpyManage.runProxy(drpy, [params]);
+                
+                    //let [code, media_type, data, headers, isReturnBytes] = result;
+
                     log(result);
                     return '';
                 },api_name, jk_api_ext));
