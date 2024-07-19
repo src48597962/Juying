@@ -1316,8 +1316,8 @@ function erjiSousuo(name) {
         }
         arr.url = $("#noLoading#").lazyRule((extra) => {
             let updateItemid = extra.dataObj.updateItemid;
-            updateItem(updateItemid, {
-                extra: {"id":updateItemid+'2',"lineVisible":false}
+            updateItem(updateItemid+'2', {
+                extra: {"id":updateItemid,"lineVisible":false}
             })
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
             return erjiAliMyDiskSs(extra);
