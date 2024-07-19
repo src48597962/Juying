@@ -2626,7 +2626,7 @@ function importConfirm(input) {
     datalist.forEach(it=>{
         let exist = datas.some(v=>v.url==it.url);
         d.push({
-            title: it.name + ("  [" + exist?"已存在":"新增加" + "]"),
+            title: it.name + "-" + (it.group||it.type) + "  [" + (exist?"已存在":"新增加") + "]",
             url: $(["覆盖导入", "改名导入"], 2).select((sourcefile, data) => {
                 data = JSON.parse(base64Decode(data));
                 if (input == "覆盖导入") {
@@ -2677,8 +2677,7 @@ function importConfirm(input) {
                     },sourcefile,data)
                 }
             }, sourcefile, base64Encode(JSON.stringify(it))),
-            desc: (it.group?"["+it.group+"] ":"") + it.type,
-            img: getIcon("点播-箭头"),
+            img: getIcon("点播-箭头.svg"),
             col_type: "text_icon",
             extra: {
                 id: it.url
