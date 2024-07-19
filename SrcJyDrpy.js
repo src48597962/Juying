@@ -1,4 +1,4 @@
-const testPath = module.modulePath.slice(0, module.modulePath.lastIndexOf("/") + 1);
+const codePath = module.modulePath.slice(0, module.modulePath.lastIndexOf("/") + 1);
 const JSEngine = com.example.hikerview.service.parser.JSEngine;
 const drpyMap = new Map();
 const GMkey = module.importParam;
@@ -19,7 +19,7 @@ function sync(func, sp) {
 }
 
 function createDrpy(key, ext) {
-    JSEngine.getInstance().evalJS(buildJsEnv(MY_TICKET) + "\n!" + $.toString((key, testPath, GMkey, MY_TICKET) => {
+    JSEngine.getInstance().evalJS(buildJsEnv(MY_TICKET) + "\n!" + $.toString((key, ext, codePath, GMkey, MY_TICKET) => {
         const localKey = "drpy";
         globalThis.local = {
             set(rulekey, k, v) {
@@ -36,12 +36,14 @@ function createDrpy(key, ext) {
         globalThis.CryptoJS = CryptoJS;
         
         globalThis.getProxy = function () {
-            let proxyUrl = startProxyServer($.toString((api_name, jk_api_ext, testPath, title) => {
+
+            //startProxy(key, ext)
+            let proxyUrl = startProxyServer($.toString((api_name, jk_api_ext, codepath, title) => {
                 log("进来了");
                 
                 let {GM} = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6916&auth=1d35e8f0-22e8-5270-a9d1-826f53f177ad");
                 GM.setSelfKey(title);
-                let drpy = GM.defineModule("SrcJuDrpy", testPath + "SrcJyDrpy.js").get(api_name, jk_api_ext);
+                let drpy = GM.defineModule("SrcJuDrpy", codepath + "SrcJyDrpy.js").get(api_name, jk_api_ext);
 
                 let params = {};
                 for (let key in MY_PARAMS) {
@@ -64,8 +66,7 @@ function createDrpy(key, ext) {
                     headers: headers,
                 };
                 
-            },key, ext, testPath, MY_RULE._title||MY_RULE.title));
-
+            },key, ext, codePath, MY_RULE._title||MY_RULE.title));
             return proxyUrl + "?do=js";
         }
         
@@ -130,16 +131,16 @@ function createDrpy(key, ext) {
         Function.prototype.toString = function () {
             return $toString.apply(this).trim();
         };
-        let drpy2 = $.require(testPath +'drpy/drpy2.js');
+        let drpy2 = $.require(codePath +'drpy/drpy2.js');
         GM.has(GMkey, (DrpyManage) => {
             DrpyManage.put(key, drpy2);
         });
-    }, key, testPath, GMkey, MY_TICKET) + ";\n", "", false);
+    }, key, ext, codePath, GMkey, MY_TICKET) + ";\n", "", false);
 }
 
 function createNewDrpy(source) {
     let key = source.key;
-    createDrpy(key,source.path);
+    createDrpy(key,source.ext);
     let drpy = drpyMap.get(key);
     drpy.init(source.ext);
     return drpy;
