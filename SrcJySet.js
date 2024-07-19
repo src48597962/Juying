@@ -2615,7 +2615,7 @@ function importConfirm(input) {
         }catch(e){}
     }
     datalist = datalist || [];
-    let o, n;
+    let o=0, n;
     datalist.forEach(it=>{
         if(datas.some(v=>v.url==it.url)){
             o++;
