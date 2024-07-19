@@ -2564,15 +2564,15 @@ function importConfirm(input) {
         input = input.replace('云口令：','').trim();
     }
 
-    let code,name,sm,datalist;
+    let code,name,lx,sm,datalist;
     try{
         code = aesDecode('Juying2', input.split('￥')[1]);
         name = input.split('￥')[0];
         if(name=="聚影资源码"){
-            return JYimport(input);
+            toast("聚影✓：资源码不支持导入确认");
         }
     }catch(e){
-        return "toast://聚影✓：口令有误>"+e.message;
+        toast("聚影✓：口令有误>"+e.message);
     }
 
     try{
@@ -2590,44 +2590,44 @@ function importConfirm(input) {
 
         if (name == "聚影云盘") {
             sm = "聚影✓：云盘";
+            lx = "yp";
         }else if(name=="聚影接口"){
             sm = "聚影✓：接口";
+            lx = "jk";
         }else if(name=="聚影解析"){
             sm = "聚影✓：解析";
+            lx = "jx";
         }else{
-            return "toast://聚影✓：无法识别的口令";
+            toast("聚影✓：无法识别的口令");
         }
     } catch (e) {
-        return "toast://聚影✓：无法识别的口令>"+e.message;
+        toast("聚影✓：无法识别的口令>"+e.message);
     }
-
+    datalist = datalist || [];
     let d = [];
     d.push({
-        title: "本次导入共发现"+datalist.length+"个已存在接口",
-        desc: "点击下面接口进行对应操作",
-        url: "hiker://empty",
+        title: sm + "-本次导入共有"+datalist.length,
+        desc: datalist.length==0?"导入有异常":"点此统一处理，或点下面单接口进行对应操作",
+        url: datalist.length==0?"hiker://empty":"",
         col_type: 'text_center_1'
     });
-    /*
-    datalist3.forEach(it=>{
+    //获取现有接口
+    let datas = [];
+    let sourcefile = getFile(lx);
+    let sourcedata = fetch(sourcefile);
+    if(sourcedata != ""){
+        try{
+            eval("datas=" + sourcedata+ ";");
+        }catch(e){}
+    }
+
+    datalist.forEach(it=>{
+        let exist = datas.some(v=v.url==it.url);
         d.push({
-            title: (it.stop?`<font color=#f20c00>`:"") + it.name + (it.parse ? " [主页源]" : "") + (it.erparse ? " [搜索源]" : "") + (it.stop?`</font>`:""),
-            url: $(["查看导入", "查看本地", "覆盖导入", "改名导入"], 2).select((sourcefile, data,ruleTitle) => {
+            title: it.name + "[" + exist?"已存在":"新增加" + "]",
+            url: $(["覆盖导入", "改名导入"], 2).select((sourcefile, data) => {
                 data = JSON.parse(base64Decode(data));
-                if (input == "查看本地") {
-                    return $('hiker://empty#noRecordHistory##noHistory#').rule((sourcefile,dataid,ruleTitle) => {
-                        setPageTitle('查看本地数据');
-                        require($.require("config?rule="+ruleTitle).rely.match(/http(s)?:\/\/.*\//)[0] + 'SrcJuSet.js');
-                        let data = datalist.filter(d => d.name == dataid.name && d.type==dataid.type)[0];
-                        jiekouapi(sourcefile, data, 1);
-                    }, sourcefile, {type:data.type, name:data.name}, ruleTitle)
-                }else if (input == "查看导入") {
-                    return $('hiker://empty#noRecordHistory##noHistory#').rule((sourcefile,data,ruleTitle) => {
-                        setPageTitle('查看导入数据');
-                        require($.require("config?rule="+ruleTitle).rely.match(/http(s)?:\/\/.*\//)[0] + 'SrcJuSet.js');
-                        jiekouapi(sourcefile, data, 1);
-                    }, sourcefile, data, ruleTitle)
-                } else if (input == "覆盖导入") {
+                if (input == "覆盖导入") {
                     return $("将覆盖本地，确认？").confirm((sourcefile,data)=>{
                         let sourcedata = fetch(sourcefile);
                         eval("var datalist=" + sourcedata + ";");
@@ -2674,15 +2674,14 @@ function importConfirm(input) {
                         }
                     },sourcefile,data)
                 }
-            }, sourcefile, base64Encode(JSON.stringify(it)), ruleTitle),
+            }, sourcefile, base64Encode(JSON.stringify(it))),
             desc: (it.group?"["+it.group+"] ":"") + it.type,
             img: it.img || "https://hikerfans.com/tubiao/ke/31.png",
             col_type: "avatar",
             extra: {
-                id: it.type+"_"+it.name
+                id: it.url
             }
         });
     })
-    */
     setResult(d);
 }
