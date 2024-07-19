@@ -2616,6 +2616,7 @@ function importConfirm(input) {
     d.push({
         title: "增量导入",
         url: "hiker://empty",
+        img: getIcon("管理-增量导入.svg"),
         col_type: 'icon_small_3'
     });
     d.push({
@@ -2626,6 +2627,7 @@ function importConfirm(input) {
     d.push({
         title: "全量导入",
         url: "hiker://empty",
+        img: getIcon("管理-全量导入.svg"),
         col_type: 'icon_small_3'
     });
 
@@ -2693,7 +2695,7 @@ function importConfirm(input) {
                     },sourcefile,data)
                 }
             }, sourcefile, base64Encode(JSON.stringify(it))),
-            img: getIcon("点播-箭头.svg"),
+            img: getIcon("管理-箭头.svg"),
             col_type: "text_icon",
             extra: {
                 id: it.url
