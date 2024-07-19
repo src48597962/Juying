@@ -2550,3 +2550,139 @@ function yundisksave(datas){
     writeFile(filepath, JSON.stringify(datalist));
     return num;
 }
+// 云口令导入确认页
+function importConfirm(input) {
+    let importfile = "hiker://files/_cache/juying2/cloudimport.txt";
+    addListener("onClose", $.toString((importfile) => {
+        deleteFile(importfile);
+    },importfile));
+
+    if(fileExist(importfile)){
+        input = input || fetch(importfile);
+    }
+    if(/^云口令：/.test(input)){
+        input = input.replace('云口令：','').trim();
+    }
+
+    let code,name,sm,datalist;
+    try{
+        code = aesDecode('Juying2', input.split('￥')[1]);
+        name = input.split('￥')[0];
+        if(name=="聚影资源码"){
+            return JYimport(input);
+        }
+    }catch(e){
+        return "toast://聚影✓：口令有误>"+e.message;
+    }
+
+    try{
+        let text;
+        if(/http/.test(code)){
+            showLoading('获取数据中，请稍后...');
+            text = parsePaste(code);
+            hideLoading();
+        }else{
+            text = code;
+        }
+        if(text && !/^error/.test(text)){
+            datalist = JSON.parse(base64Decode(text)); 
+        }
+
+        if (name == "聚影云盘") {
+            sm = "聚影✓：云盘";
+        }else if(name=="聚影接口"){
+            sm = "聚影✓：接口";
+        }else if(name=="聚影解析"){
+            sm = "聚影✓：解析";
+        }else{
+            return "toast://聚影✓：无法识别的口令";
+        }
+    } catch (e) {
+        return "toast://聚影✓：无法识别的口令>"+e.message;
+    }
+
+    let d = [];
+    d.push({
+        title: "本次导入共发现"+datalist.length+"个已存在接口",
+        desc: "点击下面接口进行对应操作",
+        url: "hiker://empty",
+        col_type: 'text_center_1'
+    });
+    /*
+    datalist3.forEach(it=>{
+        d.push({
+            title: (it.stop?`<font color=#f20c00>`:"") + it.name + (it.parse ? " [主页源]" : "") + (it.erparse ? " [搜索源]" : "") + (it.stop?`</font>`:""),
+            url: $(["查看导入", "查看本地", "覆盖导入", "改名导入"], 2).select((sourcefile, data,ruleTitle) => {
+                data = JSON.parse(base64Decode(data));
+                if (input == "查看本地") {
+                    return $('hiker://empty#noRecordHistory##noHistory#').rule((sourcefile,dataid,ruleTitle) => {
+                        setPageTitle('查看本地数据');
+                        require($.require("config?rule="+ruleTitle).rely.match(/http(s)?:\/\/.*\//)[0] + 'SrcJuSet.js');
+                        let data = datalist.filter(d => d.name == dataid.name && d.type==dataid.type)[0];
+                        jiekouapi(sourcefile, data, 1);
+                    }, sourcefile, {type:data.type, name:data.name}, ruleTitle)
+                }else if (input == "查看导入") {
+                    return $('hiker://empty#noRecordHistory##noHistory#').rule((sourcefile,data,ruleTitle) => {
+                        setPageTitle('查看导入数据');
+                        require($.require("config?rule="+ruleTitle).rely.match(/http(s)?:\/\/.*\//)[0] + 'SrcJuSet.js');
+                        jiekouapi(sourcefile, data, 1);
+                    }, sourcefile, data, ruleTitle)
+                } else if (input == "覆盖导入") {
+                    return $("将覆盖本地，确认？").confirm((sourcefile,data)=>{
+                        let sourcedata = fetch(sourcefile);
+                        eval("var datalist=" + sourcedata + ";");
+                        let index = datalist.indexOf(datalist.filter(d => d.name==data.name && d.type==data.type)[0]);
+                        datalist.splice(index, 1);
+                        data['updatetime'] = data['updatetime'] || $.dateFormat(new Date(),"yyyy-MM-dd HH:mm:ss");
+                        datalist.push(data);
+                        writeFile(sourcefile, JSON.stringify(datalist));
+                        clearMyVar('SrcJu_searchMark');
+                        let importlist = storage0.getVar('importConfirm', []);
+                        if(importlist.length==1){
+                            back(false);
+                        }else{
+                            let index2 = importlist.indexOf(importlist.filter(d => d.name==data.name && d.type==data.type)[0]);
+                            importlist.splice(index2, 1);
+                            storage0.putVar('importConfirm', importlist);
+                            deleteItem(data.type+"_"+data.name);
+                        }
+                        return 'toast://已覆盖导入';
+                    },sourcefile,data)
+                } else if (input == "改名导入") {
+                    return $(data.name,"输入新名称").input((sourcefile,data)=>{
+                        let sourcedata = fetch(sourcefile);
+                        eval("var datalist=" + sourcedata + ";");
+                        let index = datalist.indexOf(datalist.filter(d => d.name==input && d.type==data.type)[0]);
+                        if(index>-1){
+                            return "toast://名称已存在，未保存";
+                        }else{
+                            data.name = input;
+                            data['updatetime'] = data['updatetime'] || $.dateFormat(new Date(),"yyyy-MM-dd HH:mm:ss");
+                            datalist.push(data);
+                            writeFile(sourcefile, JSON.stringify(datalist));
+                            clearMyVar('SrcJu_searchMark');
+                            let importlist = storage0.getVar('importConfirm', []);
+                            if(importlist.length==1){
+                                back(false);
+                            }else{
+                                let index2 = importlist.indexOf(importlist.filter(d => d.name==data.name && d.type==data.type)[0]);
+                                importlist.splice(index2, 1);
+                                storage0.putVar('importConfirm', importlist);
+                                deleteItem(data.type+"_"+data.name);
+                            }
+                            return 'toast://已保存，新接口名称为：'+input;
+                        }
+                    },sourcefile,data)
+                }
+            }, sourcefile, base64Encode(JSON.stringify(it)), ruleTitle),
+            desc: (it.group?"["+it.group+"] ":"") + it.type,
+            img: it.img || "https://hikerfans.com/tubiao/ke/31.png",
+            col_type: "avatar",
+            extra: {
+                id: it.type+"_"+it.name
+            }
+        });
+    })
+    */
+    setResult(d);
+}
