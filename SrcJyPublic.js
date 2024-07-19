@@ -104,7 +104,7 @@ function getDatas(lx, isyx) {
                                     }
                                 }
                                 if(urlfile){
-                                    arr = { "name": obj.name.includes('|')?obj.name.split('|')[1]:obj.name, "url": urlfile, "type": "hipy_t3", "ext": extfile};
+                                    arr = { "name": obj.name.includes('|')?obj.name.split('|')[1].trim():obj.name, "url": urlfile, "type": "hipy_t3", "ext": extfile};
                                     if(arr.name.includes('[搜]')){
                                         arr['onlysearch'] = 1;
                                     }
