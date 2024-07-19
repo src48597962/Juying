@@ -440,7 +440,7 @@ function jiekousave(urls, mode) {
             it.name = it.name.replace('(drpy_t3)','').replace(/(?:[\u2700-\u27bf]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff]|[\u0023-\u0039]\ufe0f?\u20e3|\u3299|\u3297|\u303d|\u3030|\u24c2|\ud83c[\udd70-\udd71]|\ud83c[\udd7e-\udd7f]|\ud83c\udd8e|\ud83c[\udd91-\udd9a]|\ud83c[\udde6-\uddff]|\ud83c[\ude01-\ude02]|\ud83c\ude1a|\ud83c\ude2f|\ud83c[\ude32-\ude3a]|\ud83c[\ude50-\ude51]|\u203c|\u2049|[\u25aa-\u25ab]|\u25b6|\u25c0|[\u25fb-\u25fe]|\u00a9|\u00ae|\u2122|\u2139|\ud83c\udc04|[\u2600-\u26FF]|\u2b05|\u2b06|\u2b07|\u2b1b|\u2b1c|\u2b50|\u2b55|\u231a|\u231b|\u2328|\u23cf|[\u23e9-\u23f3]|[\u23f8-\u23fa]|\ud83c\udccf|\u2934|\u2935|[\u2190-\u21ff])|\(XPF\)|\(萝卜\)|\(神马\)|\(切\)|\(聚\)|\(优\)|\(神马\)|\(XB\)|\(SP\)|\(XP\)|[\x00-\x1F\x7F]/g,'');
 
             function checkitem(item) {
-                return item.url==it.url && !it.url.includes("[合]");
+                return item.url==it.url;
             }
             
             if(!datalist.some(checkitem)&&it.name&&it.url&&it.type){
@@ -1679,6 +1679,7 @@ function resource() {
             return "toast://支持本地包或在线box配置文件导入";
         })
     });
+    /*
     d.push({
         title: (importtype=="2"?"👉":"")+"道长hipy库导入",
         col_type: 'scroll_button',
@@ -1688,6 +1689,7 @@ function resource() {
             return "toast://此项只仅支github库，hipy项目js文件所在的路径";
         })
     });
+    */
     d.push({
         title: (importtype=="3"?"👉":"")+"配置文件订阅",
         col_type: 'scroll_button',
@@ -2016,7 +2018,7 @@ function Resourceimport(input,importtype,importmode){
                     }else if(/^csp_XYQHiker/.test(obj.api)){
                         arr = { "name": obj.name, "type": "XYQ", "ext": extfile};
                     }else if(/drpy2/.test(obj.api) && obj.type==3 && !obj.ext.includes('drpy.js') && hipy_t3_enable){
-                        arr = { "name": obj.name.includes('|')?obj.name.split('|')[1]:obj.name, "type": "hipy_t3", "ext": extfile};
+                        arr = { "name": obj.name.includes('|')?obj.name.split('|')[1].trim():obj.name, "type": "hipy_t3", "ext": extfile};
                         if(arr.name.includes('[搜]')){
                             arr['onlysearch'] = 1;
                         }
@@ -2042,7 +2044,7 @@ function Resourceimport(input,importtype,importmode){
                                         obj.searchable = 0;
                                     }
                                     
-                                    urlfile = cachepath + arr.type + '_' + extfile.split('?')[0].substr(extfile.split('?')[0].lastIndexOf('/') + 1);
+                                    urlfile = cachepath + arr.type + '_' + (extfile.includes('?')?obj.key:"") + extfile.split('?')[0].substr(extfile.split('?')[0].lastIndexOf('/') + 1);
                                     writeFile(urlfile, content);
                                 }
                             }catch(e){
