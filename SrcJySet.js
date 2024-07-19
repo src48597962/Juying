@@ -2579,16 +2579,14 @@ function importConfirm(input) {
 
     try{
         let text;
-        if(/http/.test(code)){
+        if(/^http|^云/.test(code)){
             showLoading('获取数据中，请稍后...');
             text = parsePaste(code);
             hideLoading();
-            log(text);
         }else{
             text = code;
         }
         if(text && !/^error/.test(text)){
-            log(base64Decode(text));
             datalist = JSON.parse(base64Decode(text)); 
         }
 
