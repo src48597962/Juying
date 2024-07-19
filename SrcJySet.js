@@ -2616,17 +2616,17 @@ function importConfirm(input) {
     d.push({
         title: "增量导入",
         url: "hiker://empty",
-        col_type: 'icon_3_fill'
+        col_type: 'icon_small_3'
     });
     d.push({
         title: "",
         url: "hiker://empty",
-        col_type: 'icon_3_fill'
+        col_type: 'icon_small_3'
     });
     d.push({
         title: "全量导入",
         url: "hiker://empty",
-        col_type: 'icon_3_fill'
+        col_type: 'icon_small_3'
     });
 
     //获取现有接口
