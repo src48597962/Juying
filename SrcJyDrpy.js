@@ -38,7 +38,7 @@ function createDrpy(key, ext) {
         globalThis.getProxy = function () {
             let proxyUrl = startProxyServer($.toString((api_name, jk_api_ext, testPath, title) => {
                 log("进来了");
-                /*
+                
                 let {GM} = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6916&auth=1d35e8f0-22e8-5270-a9d1-826f53f177ad");
                 GM.setSelfKey(title);
                 let drpy = GM.defineModule("SrcJuDrpy", testPath + "SrcJyDrpy.js").get(api_name, jk_api_ext);
@@ -63,7 +63,7 @@ function createDrpy(key, ext) {
                     body: data,
                     headers: headers,
                 };
-                */
+                
             },key, ext, testPath, MY_RULE._title||MY_RULE.title));
 
             return proxyUrl + "?do=js";
