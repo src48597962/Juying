@@ -2609,7 +2609,7 @@ function importConfirm(input) {
     let d = [];
     d.push({
         title: sm + "-本次待导入：" + datalist.length,
-        desc: datalist.length==0?"导入有异常":"点此统一处理，或点下面单接口进行对应操作",
+        desc: datalist.length==0?"导入有异常":"点此统一处理，或对单接口进行对应操作",
         url: datalist.length==0?"hiker://empty":"",
         col_type: 'text_center_1'
     });
@@ -2626,7 +2626,7 @@ function importConfirm(input) {
     datalist.forEach(it=>{
         let exist = datas.some(v=>v.url==it.url);
         d.push({
-            title: it.name + ("[" + exist?"已存在":"新增加" + "]"),
+            title: it.name + ("  [" + exist?"已存在":"新增加" + "]"),
             url: $(["覆盖导入", "改名导入"], 2).select((sourcefile, data) => {
                 data = JSON.parse(base64Decode(data));
                 if (input == "覆盖导入") {
@@ -2678,8 +2678,8 @@ function importConfirm(input) {
                 }
             }, sourcefile, base64Encode(JSON.stringify(it))),
             desc: (it.group?"["+it.group+"] ":"") + it.type,
-            img: it.img || "https://hikerfans.com/tubiao/ke/31.png",
-            col_type: "avatar",
+            img: getIcon("点播-箭头"),
+            col_type: "text_icon",
             extra: {
                 id: it.url
             }
