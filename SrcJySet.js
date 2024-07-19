@@ -2615,17 +2615,17 @@ function importConfirm(input) {
         }catch(e){}
     }
     datalist = datalist || [];
-    let o=0, n;
+    let ndatalist = [];
     datalist.forEach(it=>{
-        if(datas.some(v=>v.url==it.url)){
-            o++;
+        if(!datas.some(v=>v.url==it.url)){
+            ndatalist.push(it);
         }
     })
-    n = datalist.length - o;
+    let oldnum = datalist.length - ndatalist.length;
     let d = [];
     d.push({
         title: "聚影✓云口令导入",
-        desc: (sm||"") + " 共计" + datalist.length + "/新增" + n + "/存在" + o,
+        desc: (sm||"") + " 共计" + datalist.length + "/新增" + ndatalist.length + "/存在" + oldnum ,
         url: "hiker://empty",
         col_type: 'text_center_1'
     });
