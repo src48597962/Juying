@@ -2613,7 +2613,22 @@ function importConfirm(input) {
         url: datalist.length==0?"hiker://empty":"",
         col_type: 'text_center_1'
     });
-    
+    d.push({
+        title: "增量导入",
+        url: "hiker://empty",
+        col_type: 'icon_3_fill'
+    });
+    d.push({
+        title: "",
+        url: "hiker://empty",
+        col_type: 'icon_3_fill'
+    });
+    d.push({
+        title: "全量导入",
+        url: "hiker://empty",
+        col_type: 'icon_3_fill'
+    });
+
     //获取现有接口
     let datas = [];
     let sourcefile = getFile(lx);
