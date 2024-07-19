@@ -2589,13 +2589,13 @@ function importConfirm(input) {
         }
 
         if (name == "聚影云盘") {
-            sm = "聚影✓：云盘";
+            sm = "云盘";
             lx = "yp";
         }else if(name=="聚影接口"){
-            sm = "聚影✓：接口";
+            sm = "接口";
             lx = "jk";
         }else if(name=="聚影解析"){
-            sm = "聚影✓：解析";
+            sm = "解析";
             lx = "jx";
         }else{
             toast("聚影✓：无法识别的口令");
@@ -2606,7 +2606,7 @@ function importConfirm(input) {
     datalist = datalist || [];
     let d = [];
     d.push({
-        title: sm + "-本次导入共有"+datalist.length,
+        title: sm + "-本次待导入：" + datalist.length,
         desc: datalist.length==0?"导入有异常":"点此统一处理，或点下面单接口进行对应操作",
         url: datalist.length==0?"hiker://empty":"",
         col_type: 'text_center_1'
@@ -2624,7 +2624,7 @@ function importConfirm(input) {
     datalist.forEach(it=>{
         let exist = datas.some(v=>v.url==it.url);
         d.push({
-            title: it.name + "[" + exist?"已存在":"新增加" + "]",
+            title: it.name + ("[" + exist?"已存在":"新增加" + "]"),
             url: $(["覆盖导入", "改名导入"], 2).select((sourcefile, data) => {
                 data = JSON.parse(base64Decode(data));
                 if (input == "覆盖导入") {
