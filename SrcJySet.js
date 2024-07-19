@@ -2625,7 +2625,7 @@ function importConfirm(input) {
     let d = [];
     d.push({
         title: "聚影✓云口令导入",
-        desc: `本次待导入-` + (sm||"") + " 共计" + datalist.length + "/新增" + n + "/存在" + o,
+        desc: (sm||"") + " 共计" + datalist.length + "/新增" + n + "/存在" + o,
         url: "hiker://empty",
         col_type: 'text_center_1'
     });
@@ -2646,8 +2646,6 @@ function importConfirm(input) {
         img: getIcon("管理-全量导入.svg"),
         col_type: 'icon_small_3'
     });
-
-    
 
     datalist.forEach(it=>{
         let exist = datas.some(v=>v.url==it.url);
