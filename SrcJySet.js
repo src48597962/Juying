@@ -2558,14 +2558,14 @@ function importConfirm(input) {
     addListener("onClose", $.toString((importfile) => {
         deleteFile(importfile);
     },importfile));
-    log(input);
+
     if(fileExist(importfile)){
         input = input || fetch(importfile);
     }
     if(/^云口令：/.test(input)){
         input = input.replace('云口令：','').trim();
     }
-    log(input);
+
     let code,name,lx,sm,datalist;
     try{
         code = aesDecode('Juying2', input.split('￥')[1]);
@@ -2576,17 +2576,19 @@ function importConfirm(input) {
     }catch(e){
         toast("聚影✓：口令有误>"+e.message);
     }
-    log(code);
+
     try{
         let text;
         if(/http/.test(code)){
             showLoading('获取数据中，请稍后...');
             text = parsePaste(code);
             hideLoading();
+            log(text);
         }else{
             text = code;
         }
         if(text && !/^error/.test(text)){
+            log(base64Decode(text));
             datalist = JSON.parse(base64Decode(text)); 
         }
 
