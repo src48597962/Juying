@@ -34,7 +34,7 @@ function createDrpy(key, ext) {
         };
         eval(getCryptoJS());
         globalThis.CryptoJS = CryptoJS;
-        /*
+        
         globalThis.getProxy = function () {
             let proxyUrl = startProxyServer($.toString((api_name, jk_api_ext, testPath, title) => {
                 log("进来了");
@@ -68,7 +68,7 @@ function createDrpy(key, ext) {
 
             return proxyUrl + "?do=js";
         }
-        */
+        
         let $request = request;
         let $post = post;
         globalThis.req = function (url, cobj) {
