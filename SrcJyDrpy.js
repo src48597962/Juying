@@ -36,8 +36,6 @@ function createDrpy(key, ext) {
         globalThis.CryptoJS = CryptoJS;
         
         globalThis.getProxy = function () {
-
-            //startProxy(key, ext)
             let proxyUrl = startProxyServer($.toString((api_name, jk_api_ext, codepath, title) => {
                 let {GM} = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6916&auth=1d35e8f0-22e8-5270-a9d1-826f53f177ad");
                 GM.setSelfKey(title);
@@ -49,14 +47,12 @@ function createDrpy(key, ext) {
                 }
                 
                 let result = drpy.proxy(params);
+                log(result);
                 let [code, media_type, data, headers, isReturnBytes] = result;
                 headers = Object.assign({}, {
                     'Content-Type': media_type,
                 }, headers);
                 if(typeof data==="string"&&data.startsWith("data:")&&data.includes("base64,")){
-                    //data = data.split("base64,")[1];
-                    //const CryptoUtil = $.require("hiker://assets/crypto-java.js");
-                    //data = CryptoUtil.Data.parseBase64(data).toBytes();
                     data = _base64.decode(data.split("base64,")[1], _base64.NO_WRAP);
                 }
                 return {
@@ -64,7 +60,6 @@ function createDrpy(key, ext) {
                     body: data,
                     headers: headers,
                 };
-                
             },key, ext, codePath, MY_RULE._title||MY_RULE.title));
             return proxyUrl + "?do=js";
         }
