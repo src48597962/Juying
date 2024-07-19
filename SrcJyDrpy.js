@@ -47,7 +47,6 @@ function createDrpy(key, ext) {
                 }
                 
                 let result = drpy.proxy(params);
-                log(result);
                 let [code, media_type, data, headers, isReturnBytes] = result;
                 headers = Object.assign({}, {
                     'Content-Type': media_type,
