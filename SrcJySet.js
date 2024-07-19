@@ -2608,11 +2608,12 @@ function importConfirm(input) {
     datalist = datalist || [];
     let d = [];
     d.push({
-        title: sm + "-本次待导入：" + datalist.length,
+        title: "云口令导入-"+ sm + "：" + datalist.length,
         desc: datalist.length==0?"导入有异常":"点此统一处理，或对单接口进行对应操作",
         url: datalist.length==0?"hiker://empty":"",
         col_type: 'text_center_1'
     });
+    
     //获取现有接口
     let datas = [];
     let sourcefile = getFile(lx);
