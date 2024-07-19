@@ -56,9 +56,10 @@ function createDrpy(key, ext) {
                     'Content-Type': media_type,
                 }, headers);
                 if(typeof data==="string"&&data.startsWith("data:")&&data.includes("base64,")){
-                    data = data.split("base64,")[1];
-                    const CryptoUtil = $.require("hiker://assets/crypto-java.js");
-                    data = CryptoUtil.Data.parseBase64(data).toBytes();
+                    //data = data.split("base64,")[1];
+                    //const CryptoUtil = $.require("hiker://assets/crypto-java.js");
+                    //data = CryptoUtil.Data.parseBase64(data).toBytes();
+                    data = _base64.decode(data.split("base64,")[1], _base64.NO_WRAP);
                 }
                 return {
                     statusCode: code,
