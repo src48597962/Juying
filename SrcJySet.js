@@ -2622,7 +2622,7 @@ function importConfirm(input) {
     }
 
     datalist.forEach(it=>{
-        let exist = datas.some(v=v.url==it.url);
+        let exist = datas.some(v=>v.url==it.url);
         d.push({
             title: it.name + "[" + exist?"已存在":"新增加" + "]",
             url: $(["覆盖导入", "改名导入"], 2).select((sourcefile, data) => {
