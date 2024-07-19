@@ -2605,12 +2605,28 @@ function importConfirm(input) {
     } catch (e) {
         toast("聚影✓：无法识别的口令>"+e.message);
     }
+    //获取现有接口
+    let datas = [];
+    let sourcefile = getFile(lx);
+    let sourcedata = fetch(sourcefile);
+    if(sourcedata != ""){
+        try{
+            eval("datas=" + sourcedata+ ";");
+        }catch(e){}
+    }
     datalist = datalist || [];
+    let o, n;
+    datalist.forEach(it=>{
+        if(datas.some(v=>v.url==it.url)){
+            o++;
+        }
+    })
+    n = datalist.length - o;
     let d = [];
     d.push({
-        title: "云口令导入-"+ sm + "：" + datalist.length,
-        desc: datalist.length==0?"导入有异常":"点此统一处理，或对单接口进行对应操作",
-        url: datalist.length==0?"hiker://empty":"",
+        title: "聚影✓云口令导入",
+        desc: `本次待导入-` + (sm||"") + " 共计" + datalist.length + "/新增" + n + "/存在" + o,
+        url: "hiker://empty",
         col_type: 'text_center_1'
     });
     d.push({
@@ -2631,15 +2647,7 @@ function importConfirm(input) {
         col_type: 'icon_small_3'
     });
 
-    //获取现有接口
-    let datas = [];
-    let sourcefile = getFile(lx);
-    let sourcedata = fetch(sourcefile);
-    if(sourcedata != ""){
-        try{
-            eval("datas=" + sourcedata+ ";");
-        }catch(e){}
-    }
+    
 
     datalist.forEach(it=>{
         let exist = datas.some(v=>v.url==it.url);
