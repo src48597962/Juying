@@ -1438,7 +1438,7 @@ function getErData(jkdata) {
     return {
         "details1": details1,
         "details2": details2,
-        "pic": pic,
+        "pic": pic.includes('Logo')?"":pic,
         "desc": desc,
         "tabs": tabs,
         "lists": lists,
