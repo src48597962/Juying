@@ -160,7 +160,6 @@ function SRCSet() {
             onChange: $.toString(() => {
                 if(input==""){
                     clearMyVar("SrcJu_seacrhJiekou");
-                    refreshPage(false);
                 }
             })
         }
