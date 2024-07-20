@@ -175,6 +175,22 @@ function getDatas(lx, isyx) {
     let result = withoutStop.concat(withStop);
     return result;
 }
+// 获取接口tags
+function getJkTags(datas){
+    datas = datas || getDatas('jk', 1);
+    let tags = [];
+    datas.forEach(it=>{
+        let str = it.name;
+        let regex = /\[(.*?)\]/;
+        let match = str.match(regex);
+        if (match) {
+            if(tags.indexOf(match[1])==-1){
+                tags.push(match[1]);
+            }
+        }
+    })
+    return tags;
+}
 //获取在线文件内容
 function getJkContnet(url) {
     if(!url.startsWith('http')){
