@@ -2127,8 +2127,14 @@ function JYshare(lx,input) {
         sm2 = "(选定)聚影分享口令已生成";
     }else{
         let datalist = getDatas(lx);
-        let group = lx=='jk'?getMyVar("SrcJu_jiekouGroup",""):"";
-        sharelist = getGroupLists(datalist, group);
+        if(getMyVar("SrcJu_seacrhJiekou")){
+            sharelist = datalist.filter(it=>{
+                return it.name.indexOf(getMyVar("SrcJu_seacrhJiekou"))>-1;
+            })
+        }else{
+            let group = lx=='jk'?getMyVar("SrcJu_jiekouGroup",""):"";
+            sharelist = getGroupLists(datalist, group);
+        }
     }
     if(input=='云口令文件'){
         let sharetxt = base64Encode(JSON.stringify(sharelist));
