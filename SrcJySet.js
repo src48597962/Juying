@@ -7,6 +7,8 @@ function SRCSet() {
         clearMyVar('SrcJu_批量选择模式');
         clearMyVar('SrcJu_duoselect');
         clearMyVar('groupmenu');
+        clearMyVar('SrcJu_datalist');
+        clearMyVar('SrcJu_jkdatalist');
     }));
 
     if(getMyVar('guanli','')==""){putMyVar('guanli','jk');}
@@ -101,8 +103,12 @@ function SRCSet() {
     });
     let pastes = getPastes();
     pastes.push('云口令文件');
-
-    let datalist = getDatas(guanliType);
+    
+    let datalist = storage0.getMyVar("SrcJu_datalist", []);
+    if(datalist.length==0){
+        datalist = getDatas(guanliType);
+        storage0.putMyVar("SrcJu_datalist", datalist);
+    }
     let jkdatalist;
     if(getMyVar("SrcJu_seacrhJiekou")){
         jkdatalist = datalist.filter(it=>{
@@ -115,9 +121,10 @@ function SRCSet() {
     let yxdatalist = jkdatalist.filter(it=>{
         return !it.stop;
     });
+    storage0.putMyVar("SrcJu_jkdatalist", jkdatalist);
     d.push({
         title: '分享',
-        url: yxdatalist.length==0?'toast://有效数据为空，无法分享':$(pastes,2).select((lx)=>{
+        url: yxdatalist.length==0?'toast://有效数据为空，只能单个分享':$(pastes,2).select((lx)=>{
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
             return JYshare(lx, input);
         }, guanliType),
@@ -291,6 +298,25 @@ function SRCSet() {
                     },duoselect)
                 }),
                 col_type: 'scroll_button'
+            })
+            d.push({
+                col_type: "blank_block"
+            });
+            d.push({
+                title: "便捷筛选=>",
+                url: "hiker://empty",
+                col_type: 'scroll_button'
+            })
+            let selectkeys = ['优','官','密','资','磁','盘','听','书'];
+            selectkeys.forEach(it=>{
+                d.push({
+                    title: it,
+                    url: $('#noLoading#').lazyRule((it) => {
+                        putMyVar("SrcJu_seacrhJiekou", it);
+                        refreshPage(false);
+                    },it),
+                    col_type: 'scroll_button'
+                })
             })
         }
     }
@@ -2127,11 +2153,14 @@ function JYshare(lx,input) {
     
     let sharelist;
     let sm2 = "聚影分享口令已生成";
+    
     let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
     if(duoselect.length>0){
         sharelist = duoselect;
         sm2 = "(选定)聚影分享口令已生成";
     }else{
+        sharelist = storage0.getMyVar("SrcJu_jkdatalist", []);
+        /*
         let datalist = getDatas(lx);
         if(getMyVar("SrcJu_seacrhJiekou")){
             sharelist = datalist.filter(it=>{
@@ -2141,6 +2170,7 @@ function JYshare(lx,input) {
             let group = lx=='jk'?getMyVar("SrcJu_jiekouGroup",""):"";
             sharelist = getGroupLists(datalist, group);
         }
+        */
     }
     if(input=='云口令文件'){
         let sharetxt = base64Encode(JSON.stringify(sharelist));
