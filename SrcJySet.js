@@ -2539,7 +2539,7 @@ function yundiskjiekou() {
     setResult(d);
 }
 
-function yundisksave(datas){
+function yundisksave(datas, mode){
     let filepath = getFile("yp");
     let datalist2 = datas;
     let datafile = fetch(filepath);
@@ -2549,15 +2549,20 @@ function yundisksave(datas){
             eval("datalist=" + datafile+ ";");
         }catch(e){}
     }
-    
+    mode = mode==0?0:1;
     let num = 0;
     for (let i = 0; i < datalist2.length; i++) {
         if (datalist.some(item => item.name == datalist2[i].name)) {
-            let index = datalist.indexOf(datalist.filter(d => d.name==datalist2[i].name)[0]);
-            datalist.splice(index, 1);
+            if(mode){
+                let index = datalist.indexOf(datalist.filter(d => d.name==datalist2[i].name)[0]);
+                datalist.splice(index, 1);
+                datalist.push(datalist2[i]);
+                num = num + 1;
+            }
+        }else{
+            datalist.push(datalist2[i]);
+            num = num + 1;
         }
-        datalist.push(datalist2[i]);
-        num = num + 1;
     }
     writeFile(filepath, JSON.stringify(datalist));
     return num;
@@ -2567,7 +2572,9 @@ function importConfirm(input) {
     let importfile = "hiker://files/_cache/juying2/cloudimport.txt";
     addListener("onClose", $.toString((importfile) => {
         deleteFile(importfile);
+        clearMyVar('importConfirm');
     },importfile));
+    let code,name,lx,sm,datalist;
 
     if(fileExist(importfile)){
         input = input || fetch(importfile);
@@ -2576,31 +2583,12 @@ function importConfirm(input) {
         input = input.replace('云口令：','').trim();
     }
 
-    let code,name,lx,sm,datalist;
     try{
         code = aesDecode('Juying2', input.split('￥')[1]);
         name = input.split('￥')[0];
         if(name=="聚影资源码"){
             toast("聚影✓：资源码不支持导入确认");
-        }
-    }catch(e){
-        toast("聚影✓：口令有误>"+e.message);
-    }
-
-    try{
-        let text;
-        if(/^http|^云/.test(code)){
-            showLoading('获取数据中，请稍后...');
-            text = parsePaste(code);
-            hideLoading();
-        }else{
-            text = code;
-        }
-        if(text && !/^error/.test(text)){
-            datalist = JSON.parse(base64Decode(text)); 
-        }
-
-        if (name == "聚影云盘") {
+        }else if (name == "聚影云盘") {
             sm = "云盘";
             lx = "yp";
         }else if(name=="聚影接口"){
@@ -2612,9 +2600,29 @@ function importConfirm(input) {
         }else{
             toast("聚影✓：无法识别的口令");
         }
-    } catch (e) {
-        toast("聚影✓：无法识别的口令>"+e.message);
+    }catch(e){
+        toast("聚影✓：口令有误>"+e.message);
     }
+    datalist = storage0.getMyVar('importConfirm', []);
+    if(datalist.length==0){
+        try{
+            let text;
+            if(/^http|^云/.test(code)){
+                showLoading('获取数据中，请稍后...');
+                text = parsePaste(code);
+                hideLoading();
+            }else{
+                text = code;
+            }
+            if(text && !/^error/.test(text)){
+                datalist = JSON.parse(base64Decode(text)); 
+                storage0.putMyVar('importConfirm', datalist);
+            }
+        } catch (e) {
+            toast("聚影✓：无法识别的口令>"+e.message);
+        }
+    }
+    
     //获取现有接口
     let datas = [];
     let sourcefile = getFile(lx);
@@ -2624,7 +2632,6 @@ function importConfirm(input) {
             eval("datas=" + sourcedata+ ";");
         }catch(e){}
     }
-    datalist = datalist || [];
     let ndatalist = [];
     datalist.forEach(it=>{
         if(!datas.some(v=>v.url==it.url)){
@@ -2641,7 +2648,22 @@ function importConfirm(input) {
     });
     d.push({
         title: "增量导入",
-        url: "hiker://empty",
+        url: $("跳过已存在，只导入新增，确认？").confirm((lx)=>{
+            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+            let importlist = storage0.getMyVar('importConfirm', []);
+            if(lx=="jk"){
+                jiekousave(importlist, 0);
+            }else if(lx=="jx"){
+                jiexisave(importlist, 0);
+            }else if(lx=="yp"){
+                yundisksave(importlist, 0);
+            }else{
+                return "toast://类型异常";
+            }
+            clearMyVar('SrcJu_searchMark');
+            back(false);
+            return "toast://增量导入完成";
+        },lx),
         img: getIcon("管理-增量导入.svg"),
         col_type: 'icon_small_3'
     });
@@ -2652,7 +2674,22 @@ function importConfirm(input) {
     });
     d.push({
         title: "全量导入",
-        url: "hiker://empty",
+        url: $("覆盖本地全部导入，确认？").confirm((lx)=>{
+            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+            let importlist = storage0.getMyVar('importConfirm', []);
+            if(lx=="jk"){
+                jiekousave(importlist, 1);
+            }else if(lx=="jx"){
+                jiexisave(importlist, 1);
+            }else if(lx=="yp"){
+                yundisksave(importlist, 1);
+            }else{
+                return "toast://类型异常";
+            }
+            clearMyVar('SrcJu_searchMark');
+            back(false);
+            return "toast://全量导入完成";
+        },lx),
         img: getIcon("管理-全量导入.svg"),
         col_type: 'icon_small_3'
     });
@@ -2661,56 +2698,34 @@ function importConfirm(input) {
         let exist = datas.some(v=>v.url==it.url);
         d.push({
             title: it.name + "-" + (it.group||it.type) + "  [" + (exist?"已存在":"新增加") + "]",
-            url: $(["覆盖导入", "改名导入"], 2).select((sourcefile, data) => {
+            url: $(["覆盖导入"], 2).select((lx, data) => {
                 data = JSON.parse(base64Decode(data));
                 if (input == "覆盖导入") {
-                    return $("将覆盖本地，确认？").confirm((sourcefile,data)=>{
-                        let sourcedata = fetch(sourcefile);
-                        eval("var datalist=" + sourcedata + ";");
-                        let index = datalist.indexOf(datalist.filter(d => d.name==data.name && d.type==data.type)[0]);
-                        datalist.splice(index, 1);
-                        data['updatetime'] = data['updatetime'] || $.dateFormat(new Date(),"yyyy-MM-dd HH:mm:ss");
-                        datalist.push(data);
-                        writeFile(sourcefile, JSON.stringify(datalist));
+                    return $("将覆盖本地，确认？").confirm((lx,data)=>{
+                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                        if(lx=="jk"){
+                            jiekousave([data], 1);
+                        }else if(lx=="jx"){
+                            jiexisave([data], 1);
+                        }else if(lx=="yp"){
+                            yundisksave([data], 1);
+                        }else{
+                            return "toast://类型异常";
+                        }
                         clearMyVar('SrcJu_searchMark');
-                        let importlist = storage0.getVar('importConfirm', []);
+                        let importlist = storage0.getMyVar('importConfirm', []);
                         if(importlist.length==1){
                             back(false);
                         }else{
-                            let index2 = importlist.indexOf(importlist.filter(d => d.name==data.name && d.type==data.type)[0]);
+                            let index2 = importlist.indexOf(importlist.filter(d => d.url==data.url)[0]);
                             importlist.splice(index2, 1);
-                            storage0.putVar('importConfirm', importlist);
-                            deleteItem(data.type+"_"+data.name);
+                            storage0.putMyVar('importConfirm', importlist);
+                            deleteItem(data.url);
                         }
                         return 'toast://已覆盖导入';
-                    },sourcefile,data)
-                } else if (input == "改名导入") {
-                    return $(data.name,"输入新名称").input((sourcefile,data)=>{
-                        let sourcedata = fetch(sourcefile);
-                        eval("var datalist=" + sourcedata + ";");
-                        let index = datalist.indexOf(datalist.filter(d => d.name==input && d.type==data.type)[0]);
-                        if(index>-1){
-                            return "toast://名称已存在，未保存";
-                        }else{
-                            data.name = input;
-                            data['updatetime'] = data['updatetime'] || $.dateFormat(new Date(),"yyyy-MM-dd HH:mm:ss");
-                            datalist.push(data);
-                            writeFile(sourcefile, JSON.stringify(datalist));
-                            clearMyVar('SrcJu_searchMark');
-                            let importlist = storage0.getVar('importConfirm', []);
-                            if(importlist.length==1){
-                                back(false);
-                            }else{
-                                let index2 = importlist.indexOf(importlist.filter(d => d.name==data.name && d.type==data.type)[0]);
-                                importlist.splice(index2, 1);
-                                storage0.putVar('importConfirm', importlist);
-                                deleteItem(data.type+"_"+data.name);
-                            }
-                            return 'toast://已保存，新接口名称为：'+input;
-                        }
-                    },sourcefile,data)
+                    },lx,data);
                 }
-            }, sourcefile, base64Encode(JSON.stringify(it))),
+            }, lx, base64Encode(JSON.stringify(it))),
             img: getIcon("管理-箭头.svg"),
             col_type: "text_icon",
             extra: {
