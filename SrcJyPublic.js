@@ -466,21 +466,25 @@ function selectSource() {
                             inputBox.setTitle('全部');
                             inputBox.setDefaultValue(s);
                             sourceList = getGroupLists(sourceAllList, '全部');
+                            names = getnames(sourceList).names;
                             tmpList = sourceList.filter(x => x.name.toLowerCase().includes(s.toLowerCase()));
-                            names = getnames(tmpList).names;
-                            names = names.filter(x => x.toLowerCase().includes(s.toLowerCase()));
+                            let flist = names.filter(x => x.toLowerCase().includes(s.toLowerCase()));
+                            manage.list.length = 0;
+                            flist.forEach(x => {
+                                manage.list.push(x);
+                            });
                         }else{
                             inputBox.setTitle(s);
                             inputBox.setDefaultValue("");
                             sourceList = getGroupLists(sourceAllList, s);
                             tmpList = sourceList;
                             names = getnames(tmpList).names;
+                            manage.list.length = 0;
+                            names.forEach(x => {
+                                manage.list.push(x);
+                            });
                         }
 
-                        manage.list.length = 0;
-                        names.forEach(x => {
-                            manage.list.push(x);
-                        });
                         manage.change();
                     }
                 });
