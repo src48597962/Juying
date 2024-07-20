@@ -173,6 +173,29 @@ function SRCSet() {
         }
     });
     if(guanliType=='jk' && datalist.length){
+        d.push({
+            title: "清除",
+            url: !getMyVar("SrcJu_seacrhJiekou")?"hiker://empty":$('#noLoading#').lazyRule(() => {
+                clearMyVar("SrcJu_seacrhJiekou");
+                refreshPage(false);
+            }),
+            col_type: 'scroll_button'
+        })
+        let selectkeys = getJkTags(datalist);
+        selectkeys.forEach(it=>{
+            d.push({
+                title: it,
+                url: $('#noLoading#').lazyRule((it) => {
+                    putMyVar("SrcJu_seacrhJiekou", it);
+                    refreshPage(false);
+                },it),
+                col_type: 'scroll_button'
+            })
+        })
+        d.push({    
+            col_type: "blank_block"
+        });
+        
         let groupNames = getJiekouGroups(datalist);
         groupNames.unshift("全部");
         let color = getItem("主题颜色","#6dc9ff");
@@ -301,30 +324,6 @@ function SRCSet() {
                 col_type: 'scroll_button'
             })
         }
-    }
-    if(guanliType=='jk'){
-        d.push({    
-            col_type: "blank_block"
-        });
-        d.push({
-            title: "清除筛选",
-            url: getMyVar("SrcJu_seacrhJiekou")?"hiker://empty":$('#noLoading#').lazyRule(() => {
-                clearMyVar("SrcJu_seacrhJiekou");
-                refreshPage(false);
-            }),
-            col_type: 'scroll_button'
-        })
-        let selectkeys = getJkTags(datalist);
-        selectkeys.forEach(it=>{
-            d.push({
-                title: it,
-                url: $('#noLoading#').lazyRule((it) => {
-                    putMyVar("SrcJu_seacrhJiekou", it);
-                    refreshPage(false);
-                },it),
-                col_type: 'scroll_button'
-            })
-        })
     }
 
     jkdatalist.forEach(it => {
