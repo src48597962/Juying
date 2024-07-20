@@ -462,6 +462,7 @@ function selectSource() {
                     title: "切换源分组", 
                     //position: groupnames.indexOf(sourceName),
                     click(s) {
+                        let flist;
                         if(s.startsWith('[')){
                             inputBox.setTitle('全部');
                             inputBox.setDefaultValue(s);
@@ -476,9 +477,11 @@ function selectSource() {
                             });
                             manage.change();
                             */
+                            tmpList = sourceList.filter(x => x.name.includes(s));
                         }else{
                             inputBox.setTitle(s);
                             inputBox.setDefaultValue("");
+                            /*
                             sourceList = getGroupLists(sourceAllList, s);
                             tmpList = sourceList;
                             names = getnames(tmpList).names;
@@ -487,9 +490,18 @@ function selectSource() {
                                 manage.list.push(x);
                             });
                             manage.change();
+                            */
+                            
+                            tmpList = getGroupLists(sourceAllList, s);
+                            
                         }
 
-                        
+                        flist = getnames(tmpList).names;
+                        manage.list.length = 0;
+                        flist.forEach(x => {
+                            manage.list.push(x);
+                        });
+                        manage.change();
                     }
                 });
             },
