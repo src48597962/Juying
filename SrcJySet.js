@@ -307,8 +307,11 @@ function SRCSet() {
             col_type: "blank_block"
         });
         d.push({
-            title: "便捷筛选>",
-            url: "hiker://empty",
+            title: "清除筛选",
+            url: $('#noLoading#').lazyRule(() => {
+                clearMyVar("SrcJu_seacrhJiekou");
+                refreshPage(false);
+            }),
             col_type: 'scroll_button'
         })
         let selectkeys = getJkTags(jkdatalist);
