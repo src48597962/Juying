@@ -413,15 +413,22 @@ function selectSource() {
     let tmpList = sourceList;
 
     hikerPop.setUseStartActivity(false);
-    let index = 0;
-    let names = sourceList.map((v,i) => {
-        let vname = v.name;
-        if(v.url == sourceUrl && v.name==sourceName){
-            index = i;
-            vname = `‘‘’’<strong><font color="`+getItem('主题颜色','#6dc9ff')+`">`+v.name+`</front></strong>`;
-        }
-        return vname;
-    });
+
+    function getnames(list) {
+        let index = 0;
+        let names = list.map((v,i) => {
+            let vname = v.name;
+            if(v.url == sourceUrl && v.name==sourceName){
+                index = i;
+                vname = `‘‘’’<strong><font color="`+getItem('主题颜色','#6dc9ff')+`">`+v.name+`</front></strong>`;
+            }
+            return vname;
+        });
+        return {names:names,index:index};
+    }
+    let index_names = getnames(sourceList);
+    let index = index_names.index;
+    let names = index_names.names;
     let spen = 3;
     let inputBox;
     let pop = hikerPop.selectBottomRes({
@@ -454,20 +461,22 @@ function selectSource() {
                     columns: 3, 
                     title: "切换源分组", 
                     //position: groupnames.indexOf(sourceName),
-                    click(a) {
-                        if(a.startsWith('[')){
+                    click(s) {
+                        if(s.startsWith('[')){
                             inputBox.setTitle('全部');
-                            inputBox.setDefaultValue(a);
+                            inputBox.setDefaultValue(s);
                             sourceList = getGroupLists(sourceAllList, '全部');
+                            tmpList = sourceList.filter(x => x.name.toLowerCase().includes(s.toLowerCase()));
+                            names = getnames(tmpList).names;
+                            names = names.filter(x => x.toLowerCase().includes(s.toLowerCase()));
                         }else{
-                            inputBox.setTitle(a);
+                            inputBox.setTitle(s);
                             inputBox.setDefaultValue("");
-                            sourceList = getGroupLists(sourceAllList, a);
+                            sourceList = getGroupLists(sourceAllList, s);
+                            tmpList = sourceList;
+                            names = getnames(tmpList).names;
                         }
-                        tmpList = sourceList;
-                        names = sourceList.map((v,i) => {
-                            return v.name;
-                        });
+
                         manage.list.length = 0;
                         names.forEach(x => {
                             manage.list.push(x);
