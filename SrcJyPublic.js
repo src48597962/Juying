@@ -465,6 +465,7 @@ function selectSource() {
                         if(s.startsWith('[')){
                             inputBox.setTitle('全部');
                             inputBox.setDefaultValue(s);
+                            /*
                             sourceList = getGroupLists(sourceAllList, '全部');
                             names = getnames(sourceList).names;
                             tmpList = sourceList.filter(x => x.name.toLowerCase().includes(s.toLowerCase()));
@@ -473,6 +474,8 @@ function selectSource() {
                             flist.forEach(x => {
                                 manage.list.push(x);
                             });
+                            manage.change();
+                            */
                         }else{
                             inputBox.setTitle(s);
                             inputBox.setDefaultValue("");
@@ -483,9 +486,10 @@ function selectSource() {
                             names.forEach(x => {
                                 manage.list.push(x);
                             });
+                            manage.change();
                         }
 
-                        manage.change();
+                        
                     }
                 });
             },
