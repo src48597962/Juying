@@ -561,7 +561,7 @@ function dianboerji() {
             let listone = 列表[0].split('$')[0];
             listone = listone==name?'正片':listone.replace(name,"").trim();
             let len = listone.length;
-            let col_type = 列表.length > 4 && len < 7 ? 'text_4' : len > 20 ? 'text_1' :'text_3';
+            let col_type = 列表.length > 4 && len < 5 ? 'text_4' : len > 9 ? 'text_1' :'text_3';
             for(let i=0; i<列表.length; i++) {
                 let playtitle = 列表[i].split('$')[0];
                 playtitle = playtitle==name?'正片':playtitle.replace(name,"").trim();
