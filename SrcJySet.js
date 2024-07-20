@@ -110,13 +110,14 @@ function SRCSet() {
         storage0.putMyVar("SrcJu_datalist", datalist);
     }
     let jkdatalist;
+    let selectgroup = guanliType=='jk'?getMyVar("SrcJu_jiekouGroup",""):"";
+    if(selectgroup){
+        jkdatalist = getGroupLists(datalist, selectgroup);
+    }
     if(getMyVar("SrcJu_seacrhJiekou")){
         jkdatalist = datalist.filter(it=>{
             return it.name.indexOf(getMyVar("SrcJu_seacrhJiekou"))>-1;
         })
-    }else{
-        let group = guanliType=='jk'?getMyVar("SrcJu_jiekouGroup",""):"";
-        jkdatalist = getGroupLists(datalist, group);
     }
     let yxdatalist = jkdatalist.filter(it=>{
         return !it.stop;
@@ -303,7 +304,7 @@ function SRCSet() {
                 col_type: "blank_block"
             });
             d.push({
-                title: "便捷筛选=>",
+                title: "便捷筛选>",
                 url: "hiker://empty",
                 col_type: 'scroll_button'
             })
