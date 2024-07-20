@@ -408,7 +408,7 @@ function jiekousave(urls, mode) {
                 eval("datalist=" + sourcedata+ ";");
             }catch(e){}
         }
-        if(mode==1){//全量模式时，先删除本地
+        if(mode==2){//全量模式时，先删除本地
             for(let i=0;i<datalist.length;i++){
                 if(datalist[i].retain!=1){
                     if(datalist[i].url.startsWith('hiker://files/data')){
@@ -422,7 +422,7 @@ function jiekousave(urls, mode) {
         let olddatanum = datalist.length;
 
         urls.forEach(it=>{
-            if(it.oldurl){
+            if(it.oldurl || mode==1){
                 for(let i=0;i<datalist.length;i++){
                     if(datalist[i].url==it.url||datalist[i].url==it.oldurl){
                         if(datalist[i].url.startsWith('hiker://files/data')){
@@ -478,7 +478,7 @@ function jiexisave(urls, mode) {
                 eval("datalist=" + sourcedata+ ";");
             }catch(e){}
         }
-        if(mode==1){
+        if(mode==2){
             for(let i=0;i<datalist.length;i++){
                 if(datalist[i].retain!=1){
                     datalist.splice(i,1);
@@ -488,7 +488,7 @@ function jiexisave(urls, mode) {
         }
         
         urls.forEach(it=>{
-            if(it.oldurl){
+            if(it.oldurl || mode==1){
                 for(let i=0;i<datalist.length;i++){
                     if(datalist[i].url==it.url||datalist[i].url==it.oldurl){
                         datalist.splice(i,1);
@@ -1834,9 +1834,9 @@ function resource() {
 
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                 if(getMyVar('importtype','1')=="1"){
-                    return Resourceimport(input,getMyVar('importtype','1'),Juconfig['importmode']?1:0);
+                    return Resourceimport(input,getMyVar('importtype','1'),Juconfig['importmode']?2:0);
                 }else if(getMyVar('importtype','1')=="2"){
-                    return HipyImport(input,Juconfig['importmode']?1:0);
+                    return HipyImport(input,Juconfig['importmode']?2:0);
                 }else if(getMyVar('importtype','1')=="3"){
                     Juconfig['dySource'] = input;
                     writeFile(cfgfile, JSON.stringify(Juconfig));
@@ -2674,7 +2674,7 @@ function importConfirm(input) {
     });
     d.push({
         title: "全量导入",
-        url: $("覆盖本地全部导入，确认？").confirm((lx)=>{
+        url: $("覆盖本地已存在重新导入，确认？").confirm((lx)=>{
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
             let importlist = storage0.getMyVar('importConfirm', []);
             if(lx=="jk"){
@@ -2695,9 +2695,9 @@ function importConfirm(input) {
     });
 
     datalist.forEach(it=>{
-        let exist = datas.some(v=>v.url==it.url);
+        let isnew = ndatalist.some(v=>v.url==it.url);
         d.push({
-            title: it.name + "-" + (it.group||it.type) + "  [" + (exist?"已存在":"新增加") + "]",
+            title: it.name + "-" + (it.group||it.type) + "  [" + (isnew?"新增加":"已存在") + "]",
             url: $(["覆盖导入"], 2).select((lx, data) => {
                 data = JSON.parse(base64Decode(data));
                 if (input == "覆盖导入") {
