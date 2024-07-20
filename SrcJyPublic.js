@@ -447,11 +447,12 @@ function selectSource() {
             click(s, manage) {
                 let groupnames = getJiekouGroups(sourceAllList);
                 let tags = getJkTags(sourceAllList);
-                let selects = ['全部'].concat(groupnames).concat(tags);
+                let fgs = ['-','-'];
+                let selects = ['全部'].concat(fgs).concat(groupnames).concat(fgs).concat(tags);
                 //inputBox.setHint("提示");
                 hikerPop.selectCenter({
                     options: selects, 
-                    columns: 2, 
+                    columns: 3, 
                     title: "切换源分组", 
                     //position: groupnames.indexOf(sourceName),
                     click(a) {
