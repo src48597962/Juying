@@ -9,6 +9,7 @@ function SRCSet() {
         clearMyVar('groupmenu');
         clearMyVar('SrcJu_datalist');
         clearMyVar('SrcJu_jkdatalist');
+        clearMyVar('SrcJu_seacrhJiekou');
     }));
 
     if(getMyVar('guanli','')==""){putMyVar('guanli','jk');}
@@ -299,26 +300,28 @@ function SRCSet() {
                 }),
                 col_type: 'scroll_button'
             })
+        }
+    }
+    if(guanliType=='jk'){
+        d.push({    
+            col_type: "blank_block"
+        });
+        d.push({
+            title: "便捷筛选>",
+            url: "hiker://empty",
+            col_type: 'scroll_button'
+        })
+        let selectkeys = getJkTags(jkdatalist);
+        selectkeys.forEach(it=>{
             d.push({
-                col_type: "blank_block"
-            });
-            d.push({
-                title: "便捷筛选>",
-                url: "hiker://empty",
+                title: it,
+                url: $('#noLoading#').lazyRule((it) => {
+                    putMyVar("SrcJu_seacrhJiekou", it);
+                    refreshPage(false);
+                },it),
                 col_type: 'scroll_button'
             })
-            let selectkeys = getJkTags(jkdatalist);
-            selectkeys.forEach(it=>{
-                d.push({
-                    title: it,
-                    url: $('#noLoading#').lazyRule((it) => {
-                        putMyVar("SrcJu_seacrhJiekou", it);
-                        refreshPage(false);
-                    },it),
-                    col_type: 'scroll_button'
-                })
-            })
-        }
+        })
     }
 
     jkdatalist.forEach(it => {
