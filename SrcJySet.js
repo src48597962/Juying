@@ -109,13 +109,12 @@ function SRCSet() {
         datalist = getDatas(guanliType);
         storage0.putMyVar("SrcJu_datalist", datalist);
     }
-    let jkdatalist;
+    
     let selectgroup = guanliType=='jk'?getMyVar("SrcJu_jiekouGroup",""):"";
-    if(selectgroup){
-        jkdatalist = getGroupLists(datalist, selectgroup);
-    }
+    let jkdatalist = getGroupLists(datalist, selectgroup);
+
     if(getMyVar("SrcJu_seacrhJiekou")){
-        jkdatalist = datalist.filter(it=>{
+        jkdatalist = jkdatalist.filter(it=>{
             return it.name.indexOf(getMyVar("SrcJu_seacrhJiekou"))>-1;
         })
     }
