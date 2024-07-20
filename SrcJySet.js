@@ -174,7 +174,7 @@ function SRCSet() {
     });
     if(guanliType=='jk' && datalist.length){
         d.push({
-            title: "清除",
+            title: "清搜",
             url: !getMyVar("SrcJu_seacrhJiekou")?"hiker://empty":$('#noLoading#').lazyRule(() => {
                 clearMyVar("SrcJu_seacrhJiekou");
                 refreshPage(false);
