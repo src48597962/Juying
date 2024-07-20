@@ -2725,7 +2725,7 @@ function importConfirm(input) {
                             storage0.putMyVar('importConfirm', importlist);
                             deleteItem(data.url);
                         }
-                        return "toast://已覆盖导入"+(num<0?"失败":num);
+                        return "toast://覆盖导入"+(num<0?"失败":num);
                     },lx,data);
                 }
             }, lx, base64Encode(JSON.stringify(it))),
