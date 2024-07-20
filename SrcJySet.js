@@ -308,13 +308,13 @@ function SRCSet() {
         });
         d.push({
             title: "清除筛选",
-            url: $('#noLoading#').lazyRule(() => {
+            url: getMyVar("SrcJu_seacrhJiekou")?"hiker://empty":$('#noLoading#').lazyRule(() => {
                 clearMyVar("SrcJu_seacrhJiekou");
                 refreshPage(false);
             }),
             col_type: 'scroll_button'
         })
-        let selectkeys = getJkTags(jkdatalist);
+        let selectkeys = getJkTags(datalist);
         selectkeys.forEach(it=>{
             d.push({
                 title: it,
