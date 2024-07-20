@@ -160,6 +160,7 @@ function SRCSet() {
             onChange: $.toString(() => {
                 if(input==""){
                     clearMyVar("SrcJu_seacrhJiekou");
+                    refreshPage(false);
                 }
             })
         }
@@ -2651,18 +2652,19 @@ function importConfirm(input) {
         url: $("跳过已存在，只导入新增，确认？").confirm((lx)=>{
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
             let importlist = storage0.getMyVar('importConfirm', []);
+            let num;
             if(lx=="jk"){
-                jiekousave(importlist, 0);
+                num = jiekousave(importlist, 0);
             }else if(lx=="jx"){
-                jiexisave(importlist, 0);
+                num = jiexisave(importlist, 0);
             }else if(lx=="yp"){
-                yundisksave(importlist, 0);
+                num = yundisksave(importlist, 0);
             }else{
                 return "toast://类型异常";
             }
             clearMyVar('SrcJu_searchMark');
             back(false);
-            return "toast://增量导入完成";
+            return "toast://增量导入"+(num<0?"失败":num);
         },lx),
         img: getIcon("管理-增量导入.svg"),
         col_type: 'icon_small_3'
@@ -2678,17 +2680,17 @@ function importConfirm(input) {
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
             let importlist = storage0.getMyVar('importConfirm', []);
             if(lx=="jk"){
-                jiekousave(importlist, 1);
+                num = jiekousave(importlist, 1);
             }else if(lx=="jx"){
-                jiexisave(importlist, 1);
+                num = jiexisave(importlist, 1);
             }else if(lx=="yp"){
-                yundisksave(importlist, 1);
+                num = yundisksave(importlist, 1);
             }else{
                 return "toast://类型异常";
             }
             clearMyVar('SrcJu_searchMark');
             back(false);
-            return "toast://全量导入完成";
+            return "toast://全量导入"+(num<0?"失败":num);
         },lx),
         img: getIcon("管理-全量导入.svg"),
         col_type: 'icon_small_3'
@@ -2703,12 +2705,13 @@ function importConfirm(input) {
                 if (input == "覆盖导入") {
                     return $("将覆盖本地，确认？").confirm((lx,data)=>{
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                        let num;
                         if(lx=="jk"){
-                            jiekousave([data], 1);
+                            num = jiekousave([data], 1);
                         }else if(lx=="jx"){
-                            jiexisave([data], 1);
+                            num = jiexisave([data], 1);
                         }else if(lx=="yp"){
-                            yundisksave([data], 1);
+                            num = yundisksave([data], 1);
                         }else{
                             return "toast://类型异常";
                         }
@@ -2722,7 +2725,7 @@ function importConfirm(input) {
                             storage0.putMyVar('importConfirm', importlist);
                             deleteItem(data.url);
                         }
-                        return 'toast://已覆盖导入';
+                        return "toast://已覆盖导入"+(num<0?"失败":num);
                     },lx,data);
                 }
             }, lx, base64Encode(JSON.stringify(it))),
