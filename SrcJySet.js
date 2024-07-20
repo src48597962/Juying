@@ -307,7 +307,7 @@ function SRCSet() {
                 url: "hiker://empty",
                 col_type: 'scroll_button'
             })
-            let selectkeys = ['优','官','密','资','磁','盘','听','书'];
+            let selectkeys = getJkTags(jkdatalist);
             selectkeys.forEach(it=>{
                 d.push({
                     title: it,
