@@ -156,7 +156,12 @@ function SRCSet() {
         col_type: "input",
         extra: {
             defaultValue: getMyVar('SrcJu_seacrhJiekou',''),
-            titleVisible: true
+            titleVisible: true,
+            onChange: $.toString(() => {
+                if(input==""){
+                    clearMyVar("SrcJu_seacrhJiekou");
+                }
+            })
         }
     });
     if(guanliType=='jk' && datalist.length){
@@ -169,6 +174,7 @@ function SRCSet() {
                 url: $('#noLoading#').lazyRule((it) => {
                     if(getMyVar("SrcJu_jiekouGroup")!=it){
                         putMyVar("SrcJu_jiekouGroup",it);
+                        clearMyVar("SrcJu_seacrhJiekou");
                         refreshPage(false);
                     }
                     return "hiker://empty";
@@ -2534,18 +2540,16 @@ function yundiskjiekou() {
 }
 
 function yundisksave(datas){
-    let filepath = datapath + "yundisk.json";
+    let filepath = getFile("yp");
     let datalist2 = datas;
     let datafile = fetch(filepath);
+    let datalist = [];
     if(datafile != ""){
         try{
-            eval("var datalist=" + datafile+ ";");
-        }catch(e){
-            var datalist = [];
-        }
-    }else{
-        var datalist = [];
+            eval("datalist=" + datafile+ ";");
+        }catch(e){}
     }
+    
     let num = 0;
     for (let i = 0; i < datalist2.length; i++) {
         if (datalist.some(item => item.name == datalist2[i].name)) {
