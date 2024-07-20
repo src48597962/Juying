@@ -184,8 +184,9 @@ function getJkTags(datas){
         let regex = /\[(.*?)\]/;
         let match = str.match(regex);
         if (match) {
-            if(tags.indexOf(match[1])==-1){
-                tags.push(match[1]);
+            let tag = '[' + match[1] + ']';
+            if(tags.indexOf(tag)==-1){
+                tags.push(tag);
             }
         }
     })
