@@ -3,6 +3,7 @@ let rulepath = "hiker://files/rules/Src/Juying2/"; //规则文件路径
 let cachepath = "hiker://files/_cache/Juying2/"; //缓存文件路径
 let jkfile = datapath + "jiekou.json";
 let jxfile = datapath + "jiexi.json";
+let ypfile = datapath + "yundisk.json";
 let cfgfile = rulepath + "config.json";
 let sortfile = rulepath + "jksort.json";
 let codepath = config.依赖?config.依赖.match(/http(s)?:\/\/.*\//)[0]:module.modulePath.slice(0, module.modulePath.lastIndexOf("/")+1);
@@ -22,7 +23,7 @@ let sourceUrl = homeSource.url;
 
 
 function getFile(lx) {
-    let file = lx=='jk'?jkfile:jxfile;
+    let file = lx=='jk'?jkfile:lx=='jx'?jxfile:lx=='yp'?ypfile:'';
     return file;
 }
 //获取所有接口或解析
