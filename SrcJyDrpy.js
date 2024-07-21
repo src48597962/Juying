@@ -18,8 +18,8 @@ function sync(func, sp) {
     return new org.mozilla.javascript.Synchronizer(func, sp || {});
 }
 
-function createDrpy(key, ext) {
-    JSEngine.getInstance().evalJS(buildJsEnv(MY_TICKET) + "\n!" + $.toString((key, ext, codePath, GMkey, MY_TICKET) => {
+function createDrpy(sdata) {
+    JSEngine.getInstance().evalJS(buildJsEnv(MY_TICKET) + "\n!" + $.toString((sdata, codePath, GMkey, MY_TICKET) => {
         const localKey = "drpy";
         globalThis.local = {
             set(rulekey, k, v) {
@@ -36,10 +36,10 @@ function createDrpy(key, ext) {
         globalThis.CryptoJS = CryptoJS;
         
         globalThis.getProxy = function () {
-            let proxyUrl = startProxyServer($.toString((api_name, jk_api_ext, codepath, title) => {
+            let proxyUrl = startProxyServer($.toString((sdata, codepath, title) => {
                 let {GM} = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6916&auth=1d35e8f0-22e8-5270-a9d1-826f53f177ad");
                 GM.setSelfKey(title);
-                let drpy = GM.defineModule("SrcJuDrpy", codepath + "SrcJyDrpy.js").get(api_name, jk_api_ext);
+                let drpy = GM.defineModule("SrcJuDrpy", codepath + "SrcJyDrpy.js").get(sdata);
 
                 let params = {};
                 for (let key in MY_PARAMS) {
@@ -59,7 +59,7 @@ function createDrpy(key, ext) {
                     body: data,
                     headers: headers,
                 };
-            },key, ext, codePath, MY_RULE._title||MY_RULE.title));
+            }, sdata, codePath, MY_RULE._title||MY_RULE.title));
             return proxyUrl + "?do=js";
         }
         
@@ -126,20 +126,48 @@ function createDrpy(key, ext) {
         };
         let drpy2 = $.require(codePath +'drpy/drpy2.js');
         GM.has(GMkey, (DrpyManage) => {
-            DrpyManage.put(key, drpy2);
+            DrpyManage.put(sdata.key, drpy2);
         });
-    }, key, ext, codePath, GMkey, MY_TICKET) + ";\n", "", false);
+    }, sdata, codePath, GMkey, MY_TICKET) + ";\n", "", false);
 }
 
-function createNewDrpy(source) {
-    let key = source.key;
-    createDrpy(key,source.ext);
-    let drpy = drpyMap.get(key);
-    drpy.init(source.ext);
+function createNewDrpy(sdata) {
+    createDrpy(sdata);
+    let drpy = drpyMap.get(sdata.key);
+    drpy.init(sdata.ext);
     return drpy;
 }
 
-function get(key,ext) {
+function getext(jkdata) {
+    let extp = "";
+    if(jkdata.ext && jkdata.ext.includes('?')){
+        extp = '?' + jkdata.ext.split('?')[1];
+    }
+    if (/^hiker/.test(jkdata.url)) {
+        if (!fileExist(jkdata.url)) {
+            if(!fileExist(jkfile)){
+                jkdata.url = jkdata.url.replace('/data/','/_cache/');
+            }
+            if (jkdata.ext && /^http/.test(jkdata.ext)) {
+                let content = getJkContnet(jkdata.ext.split('?')[0]);
+                if (content) {
+                    writeFile(jkdata.url, content);
+                }
+            }
+        }
+        if (fileExist(jkdata.url)) {
+            return getPath(jkdata.url) + extp;
+        }
+    }else if(/^file/.test(jkdata.url)){
+        return jkdata.url + extp;
+    }
+    return '';
+}
+
+function get(jkdata) {
+    let key = jkdata.key || jkdata.name;
+    let ext = jkdata.key?jkdata.ext:getext(jkdata);
+    let sdata = {key:key, ext:ext};
     return sync(() => {
         //log(drpyMap.size)
         if (drpyMap.has(key)) {
@@ -150,8 +178,7 @@ function get(key,ext) {
             //log("删除缓存")
             del(Array.from(drpyMap.keys()).at(0));
         }
-        let source = {key:key,ext:ext};
-        let drpy = createNewDrpy(source);
+        let drpy = createNewDrpy(sdata);
         return drpy;
     }, this).call();
 }
