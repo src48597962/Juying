@@ -563,8 +563,7 @@ function dianboerji() {
             //const longestString = 列表.splice(0,10).reduce((a, b) => a.split('$')[0].replace(name,"").trim().length > b.split('$')[0].replace(name,"").trim().length ? a : b, '');
             //listone = listone==name?'正片':listone.replace(name,"").trim();
             let len = 列表.slice(0, 10).reduce((max, str) => Math.max(max, str.split('$')[0].replace(name,"").trim().length), 0);
-            log(len);
-            let col_type = 列表.length > 4 && len < 5 ? 'text_4' : len > 9 ? 'text_1' :'text_3';
+            let col_type = 列表.length > 4 && len < 5 ? 'text_4' : len > 10 ? 'text_1' : len>4&&len<7 ? 'text_3' :'text_2';
             for(let i=0; i<列表.length; i++) {
                 let playtitle = 列表[i].split('$')[0];
                 playtitle = playtitle==name?'正片':playtitle.replace(name,"").trim();
