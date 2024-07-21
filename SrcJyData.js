@@ -95,52 +95,16 @@ function getYiData(jkdata) {
                 error: {}
             }
         }
-        let jk_api_ext = getDrpyExt(jkdata);
-        if(jk_api_ext){
-            var drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(api_name, jk_api_ext);
-            let rule = drpy.getRule();
-            classurl = rule.homeUrl || rule.host;
-            listurl = rule.filter_url || rule.host;
-            if(rule.二级=="*"){
-                noerji = 1;
-            }
-            if(rule.hikerClassListCol){
-                coltype = rule.hikerClassListCol;
-            }
-            /*
-            if(rule.proxy_rule){
-                let proxyUrl = startProxyServer($.toString((api_name, jk_api_ext, gkey, dmurl) => {
-                    log("进来了");
 
-                    let {GM} = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6916&auth=1d35e8f0-22e8-5270-a9d1-826f53f177ad");
-                    GM.setSelfKey(gkey);
-                    let drpy = GM.defineModule("SrcJuDrpy", dmurl).get(api_name, jk_api_ext);
-
-                    let params = {};
-                    for (let key in MY_PARAMS) {
-                        params[key] = String(MY_PARAMS[key][0]);
-                    }
-                    
-                    
-                    let result = drpy.proxy(params);
-                    let [code, media_type, data, headers, isReturnBytes] = result;
-                    headers = Object.assign({}, {
-                        'Content-Type': media_type,
-                    }, headers);
-                    if(typeof data==="string"&&data.startsWith("data:")&&data.includes("base64,")){
-                        data = data.split("base64,")[1];
-                        const CryptoUtil = $.require("hiker://assets/crypto-java.js");
-                        data = CryptoUtil.Data.parseBase64(data).toBytes();
-                    }
-                    return {
-                        statusCode: code,
-                        body: data,
-                        headers: headers,
-                    };
-                },api_name, jk_api_ext, MY_RULE._title||MY_RULE.title, config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js"));
-                globalMap0.putMyVar("proxyUrl", proxyUrl);
-            }
-            */
+        var drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(jkdata);
+        let rule = drpy.getRule();
+        classurl = rule.homeUrl || rule.host;
+        listurl = rule.filter_url || rule.host;
+        if(rule.二级=="*"){
+            noerji = 1;
+        }
+        if(rule.hikerClassListCol){
+            coltype = rule.hikerClassListCol;
         }
     } else if (api_type == "hipy_t4") {
         classurl = api_url + "&extend=" + jkdata.ext + "&filter=true";
@@ -788,14 +752,9 @@ function getSsData(name, jkdata, page) {
             if(api_type=="hipy_t4"){
                 json = JSON.parse(getHtml(jkdata.url+"&wd="+name+"&extend="+jkdata.ext+"&quick=false", headers));
             }else if(api_type=="hipy_t3"){
-                let jk_api_ext = getDrpyExt(jkdata);
-                if(jk_api_ext){
-                    let drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(api_name, jk_api_ext);
-                    json = JSON.parse(drpy.search(name, 0, page));
-                    noerji = drpy.getRule("二级")=="*"?1:0;
-                }else{
-                    json = {};
-                }
+                let drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(jkdata);
+                json = JSON.parse(drpy.search(name, 0, page));
+                noerji = drpy.getRule("二级")=="*"?1:0;
             }else{
                 gethtml = getHtmlCode(ssurl, headers);
                 if (/cms/.test(api_type)) {
@@ -1052,14 +1011,9 @@ function getErData(jkdata) {
         }
         html = getHtml(MY_URL, headers);
     } else if (api_type=="hipy_t3") {
-        let jk_api_ext = getDrpyExt(jkdata);
-        if(jk_api_ext){
-            let drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(api_name, jk_api_ext);
-            html = drpy.detail(MY_URL);
-            detailtype = drpy.getRule('类型') || (jkdata.name.includes('[书]')?"小说":"");
-        }else{
-            html = '{}';
-        }
+        let drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(jkdata);
+        html = drpy.detail(MY_URL);
+        detailtype = drpy.getRule('类型') || (jkdata.name.includes('[书]')?"小说":"");
     } else if (api_type=="hipy_t4") {
         html = getHtml(jkdata.url+"&extend="+jkdata.ext+"&ac=detail&ids="+MY_URL, headers);
         detailtype = JSON.parse(html).type || (jkdata.name.includes('[书]')?"小说":"");
