@@ -664,32 +664,6 @@ log = function (msg) {
         xlog(msg);
     }
 }
-// hipy_t3接口init入参ext
-function getDrpyExt(jkdata) {
-    let extp = "";
-    if(jkdata.ext && jkdata.ext.includes('?')){
-        extp = '?' + jkdata.ext.split('?')[1];
-    }
-    if (/^hiker/.test(jkdata.url)) {
-        if (!fileExist(jkdata.url)) {
-            if(!fileExist(jkfile)){
-                jkdata.url = jkdata.url.replace('/data/','/_cache/');
-            }
-            if (jkdata.ext && /^http/.test(jkdata.ext)) {
-                let content = getJkContnet(jkdata.ext.split('?')[0]);
-                if (content) {
-                    writeFile(jkdata.url, content);
-                }
-            }
-        }
-        if (fileExist(jkdata.url)) {
-            return getPath(jkdata.url) + extp;
-        }
-    }else if(/^file/.test(jkdata.url)){
-        return jkdata.url + extp;
-    }
-    return '';
-}
 
 let gmParams = {
     datapath:datapath,
