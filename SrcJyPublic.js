@@ -435,7 +435,7 @@ function selectSource() {
     let pop = hikerPop.selectBottomRes({
         options: names,
         columns: spen,
-        title: "当前：" + (sourceName||"") + "合计：" + sourceAllList.length,
+        title: "当前:" + (sourceName||"") + "  合计:" + sourceAllList.length,
         noAutoDismiss: true,
         toPosition: index,
         extraInputBox: (inputBox = new hikerPop.ResExtraInputBox({
