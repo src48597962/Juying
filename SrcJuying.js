@@ -872,10 +872,10 @@ function dianboyiji() {
                             title: vodname,
                             desc: voddesc.replace(/<\/?.+?\/?>/g,''),
                             pic_url: vodpic + (vodpic.includes('@')?"":"@Referer="),
-                            url: list.vod_url=="no_data"?"toast://无数据":/^hiker/.test(list.vod_url)?list.vod_url:list.vod_play?list.vod_play+$("").lazyRule((dataObj) => {
+                            url: list.vod_url=="no_data"?"toast://无数据":/^hiker/.test(list.vod_url)?list.vod_url:list.vod_play?$("hiker://empty").lazyRule((dataObj, vod_play) => {
                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
-                                return SrcParseS.聚影(input, dataObj);
-                            }, dataObj):$("hiker://empty#immersiveTheme##autoCache#").rule(() => {
+                                return SrcParseS.聚影(vod_play, dataObj);
+                            }, dataObj, list.vod_play):$("hiker://empty#immersiveTheme##autoCache#").rule(() => {
                                 require(config.依赖);
                                 dianboerji()
                             }),
