@@ -435,7 +435,7 @@ function selectSource() {
     let pop = hikerPop.selectBottomRes({
         options: names,
         columns: spen,
-        title: "当前源>" + (sourceName?(sourceGroup + "_" + sourceName):""),
+        title: sourceAllList.length+">当前>" + (sourceName?(sourceGroup + "_" + sourceName):""),
         noAutoDismiss: true,
         toPosition: index,
         extraInputBox: (inputBox = new hikerPop.ResExtraInputBox({
@@ -459,31 +459,11 @@ function selectSource() {
                 hikerPop.selectCenter({
                     options: selects, 
                     columns: 3, 
-                    title: "切换源分组", 
+                    title: "切换源分组/TAG快速筛选", 
                     //position: groupnames.indexOf(sourceName),
                     click(s) {
                         if(s.startsWith('[')){
-                            //inputBox.setTitle('全部');
                             inputBox.setDefaultValue(s);
-                            /*
-                            sourceList = getGroupLists(sourceAllList, '全部');
-                            names = getnames(sourceList).names;
-                            tmpList = sourceList.filter(x => x.name.toLowerCase().includes(s.toLowerCase()));
-                            let flist = names.filter(x => x.toLowerCase().includes(s.toLowerCase()));
-                            manage.list.length = 0;
-                            flist.forEach(x => {
-                                manage.list.push(x);
-                            });
-                            manage.change();
-                            
-                            tmpList = sourceList.filter(x => x.name.includes(s));
-                            let flist = getnames(tmpList).names;
-                            manage.list.length = 0;
-                            flist.forEach(x => {
-                                manage.list.push(x);
-                            });
-                            manage.change();
-                            */
                         }else{
                             inputBox.setTitle(s);
                             inputBox.setDefaultValue("");
