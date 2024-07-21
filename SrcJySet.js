@@ -7,7 +7,6 @@ function SRCSet() {
         clearMyVar('SrcJu_批量选择模式');
         clearMyVar('SrcJu_duoselect');
         clearMyVar('groupmenu');
-        clearMyVar('SrcJu_datalist');
         clearMyVar('SrcJu_jkdatalist');
         clearMyVar('SrcJu_seacrhJiekou');
     }));
@@ -105,12 +104,7 @@ function SRCSet() {
     let pastes = getPastes();
     pastes.push('云口令文件');
     
-    let datalist = storage0.getMyVar("SrcJu_datalist", []);
-    if(datalist.length==0){
-        datalist = getDatas(guanliType);
-        storage0.putMyVar("SrcJu_datalist", datalist);
-    }
-    
+    let datalist = getDatas(guanliType);
     let selectgroup = guanliType=='jk'?getMyVar("SrcJu_jiekouGroup",""):"";
     let jkdatalist = getGroupLists(datalist, selectgroup);
 
