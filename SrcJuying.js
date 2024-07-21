@@ -881,12 +881,12 @@ function dianboyiji() {
                             }),
                             col_type: yidata.coltype || 'movie_3',
                             extra: list.vod_play?{
-                                id: list.vod_url,
+                                id: list.vod_url.split("@@")[0],
                                 jsLoadingInject: true,
                                 blockRules: ['.m4a', '.mp3', '.gif', '.jpeg', '.jpg', '.ico', '.png', 'hm.baidu.com', '/ads/*.js', 'cnzz.com'],
                                 videoExcludeRule: ['m3u8.js','?url=']
                             }:{
-                                url: list.vod_url,
+                                url: list.vod_url.split("@@")[0],
                                 pic: vodpic,
                                 pageTitle: vodname,
                                 data: jkdata
