@@ -183,8 +183,8 @@ function getJkTags(datas){
         let str = it.name;
         let regex = /\[(.*?)\]/;
         let match = str.match(regex);
-        if (match) {
-            let tag = '[' + match[1] + ']';
+        if (match && match[1].trim()) {
+            let tag = '[' + match[1].trim() + ']';
             if(tags.indexOf(tag)==-1){
                 tags.push(tag);
             }
