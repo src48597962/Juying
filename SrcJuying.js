@@ -875,7 +875,7 @@ function dianboyiji() {
                             url: list.vod_url=="no_data"?"toast://无数据":/^hiker/.test(list.vod_url)?list.vod_url:list.vod_play?$("hiker://empty").lazyRule((dataObj, vod_play) => {
                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
                                 return SrcParseS.聚影(vod_play, dataObj);
-                            }, dataObj, list.vod_play):$("hiker://empty#immersiveTheme##autoCache#").rule(() => {
+                            }, dataObj, list.vod_play.split("@@")[0]):$("hiker://empty#immersiveTheme##autoCache#").rule(() => {
                                 require(config.依赖);
                                 dianboerji()
                             }),
