@@ -53,7 +53,8 @@ var SrcParseS = {
         if(dataObj.stype && /hipy_/.test(dataObj.stype)){
             let play = {url: ""};
             if(dataObj.stype=="hipy_t3"){
-                let drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(dataObj.sname, dataObj.surl);
+                let sdata = {name: dataObj.sname, url: dataObj.surl, ext: dataObj.sext}
+                let drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(sdata);
                 play = JSON.parse(drpy.play(dataObj.flag, vipUrl, []));
             }else if(dataObj.stype=="hipy_t4"){
                 play = JSON.parse(fetch(dataObj.surl+'&flag='+dataObj.flag+"&extend="+dataObj.sext+'&play='+vipUrl, {timeout: 10000}));
