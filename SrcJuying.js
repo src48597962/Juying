@@ -875,18 +875,18 @@ function dianboyiji() {
                             url: list.vod_url=="no_data"?"toast://无数据":/^hiker/.test(list.vod_url)?list.vod_url:list.vod_play?$("hiker://empty").lazyRule((dataObj, vod_play) => {
                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
                                 return SrcParseS.聚影(vod_play, dataObj);
-                            }, dataObj, list.vod_play.split("@@")[0]):$("hiker://empty#immersiveTheme##autoCache#").rule(() => {
+                            }, dataObj, list.vod_play):$("hiker://empty#immersiveTheme##autoCache#").rule(() => {
                                 require(config.依赖);
                                 dianboerji()
                             }),
                             col_type: yidata.coltype || 'movie_3',
                             extra: list.vod_play?{
-                                id: list.vod_url.split("@@")[0],
+                                id: list.vod_url,
                                 jsLoadingInject: true,
                                 blockRules: ['.m4a', '.mp3', '.gif', '.jpeg', '.jpg', '.ico', '.png', 'hm.baidu.com', '/ads/*.js', 'cnzz.com'],
                                 videoExcludeRule: ['m3u8.js','?url=']
                             }:{
-                                url: list.vod_url.split("@@")[0],
+                                url: list.vod_url,
                                 pic: vodpic,
                                 pageTitle: vodname,
                                 data: jkdata
