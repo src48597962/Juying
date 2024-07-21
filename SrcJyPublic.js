@@ -409,6 +409,7 @@ function duoselect(datas){
 function selectSource() {
     const hikerPop = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6966");
     let sourceAllList = getDatas("jk", 1).filter(x=> !x.onlysearch);
+
     let sourceList = getGroupLists(sourceAllList, sourceGroup);
     let tmpList = sourceList;
 
@@ -462,7 +463,7 @@ function selectSource() {
                     //position: groupnames.indexOf(sourceName),
                     click(s) {
                         if(s.startsWith('[')){
-                            inputBox.setTitle('全部');
+                            //inputBox.setTitle('全部');
                             inputBox.setDefaultValue(s);
                             /*
                             sourceList = getGroupLists(sourceAllList, '全部');
@@ -474,12 +475,19 @@ function selectSource() {
                                 manage.list.push(x);
                             });
                             manage.change();
-                            */
+                            
                             tmpList = sourceList.filter(x => x.name.includes(s));
+                            let flist = getnames(tmpList).names;
+                            manage.list.length = 0;
+                            flist.forEach(x => {
+                                manage.list.push(x);
+                            });
+                            manage.change();
+                            */
                         }else{
                             inputBox.setTitle(s);
                             inputBox.setDefaultValue("");
-                            /*
+
                             sourceList = getGroupLists(sourceAllList, s);
                             tmpList = sourceList;
                             names = getnames(tmpList).names;
@@ -488,18 +496,7 @@ function selectSource() {
                                 manage.list.push(x);
                             });
                             manage.change();
-                            */
-                            
-                            tmpList = getGroupLists(sourceAllList, s);
-                            
                         }
-
-                        let flist = getnames(tmpList).names;
-                        manage.list.length = 0;
-                        flist.forEach(x => {
-                            manage.list.push(x);
-                        });
-                        manage.change();
                     }
                 });
             },
