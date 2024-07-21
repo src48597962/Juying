@@ -560,9 +560,10 @@ function dianboerji() {
 
             let playSet = storage0.getItem('playSet') || {};
             //let listone = 列表[0].split('$')[0];
-            const longestString = 列表.reduce((a, b) => a.split('$')[0].replace(name,"").trim().length > b.split('$')[0].replace(name,"").trim().length ? a : b, '');
+            //const longestString = 列表.splice(0,10).reduce((a, b) => a.split('$')[0].replace(name,"").trim().length > b.split('$')[0].replace(name,"").trim().length ? a : b, '');
             //listone = listone==name?'正片':listone.replace(name,"").trim();
-            let len = longestString.length;
+            let len = 列表.splice(0,10).reduce((max, str) => Math.max(max, str.split('$')[0].length), 0);
+            log(len);
             let col_type = 列表.length > 4 && len < 5 ? 'text_4' : len > 9 ? 'text_1' :'text_3';
             for(let i=0; i<列表.length; i++) {
                 let playtitle = 列表[i].split('$')[0];
