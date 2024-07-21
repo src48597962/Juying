@@ -441,9 +441,8 @@ function selectSource() {
             hint: "源关键字筛选，右边切换分组",
             title: sourceGroup || "全部",
             onChange(s, manage) {
-                //log("onChange:"+s);
-                let flist = names.filter(x => x.toLowerCase().includes(s.toLowerCase()));
                 tmpList = sourceList.filter(x => x.name.toLowerCase().includes(s.toLowerCase()));
+                let flist = getnames(tmpList).names;
                 manage.list.length = 0;
                 flist.forEach(x => {
                     manage.list.push(x);
@@ -462,7 +461,6 @@ function selectSource() {
                     title: "切换源分组", 
                     //position: groupnames.indexOf(sourceName),
                     click(s) {
-                        let flist;
                         if(s.startsWith('[')){
                             inputBox.setTitle('全部');
                             inputBox.setDefaultValue(s);
@@ -496,7 +494,7 @@ function selectSource() {
                             
                         }
 
-                        flist = getnames(tmpList).names;
+                        let flist = getnames(tmpList).names;
                         manage.list.length = 0;
                         flist.forEach(x => {
                             manage.list.push(x);
