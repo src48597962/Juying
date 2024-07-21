@@ -559,9 +559,10 @@ function dianboerji() {
             }
 
             let playSet = storage0.getItem('playSet') || {};
-            let listone = 列表[0].split('$')[0];
-            listone = listone==name?'正片':listone.replace(name,"").trim();
-            let len = listone.length;
+            //let listone = 列表[0].split('$')[0];
+            const longestString = 列表.reduce((a, b) => a.split('$')[0].replace(name,"").trim().length > b.split('$')[0].replace(name,"").trim().length ? a : b, '');
+            //listone = listone==name?'正片':listone.replace(name,"").trim();
+            let len = longestString.length;
             let col_type = 列表.length > 4 && len < 5 ? 'text_4' : len > 9 ? 'text_1' :'text_3';
             for(let i=0; i<列表.length; i++) {
                 let playtitle = 列表[i].split('$')[0];
@@ -834,7 +835,7 @@ function dianboyiji() {
                 d.push({
                     title: "分类获取失败",
                     desc: '无法访问或源失效，点击查看网页',
-                    url: getHome(MY_URL) + '#noHistory#',
+                    url: MY_URL + '#noHistory#',
                     col_type: 'text_center_1'
                 }); 
             }
