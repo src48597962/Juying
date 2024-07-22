@@ -139,50 +139,20 @@ function aliShare(share_id, folder_id, share_pwd) {
             },
             {
                 title: getItem('aliyun_playMode')=="原画"?"原画"+getItem('aliyun_openInt', '1'):getItem('aliyun_playMode', '智能'),
-                url: $(['智能', '转码', '原画', '原画接口']).select(() => {
+                url: $(['智能', '转码', '原画', '原画接口', '极速播放:'+(getItem('fastPlayMode')=="1"?"开":"关")]).select(() => {
                     if(input=='原画接口'){
-                        return $(['接口1(alist)', '接口2(webdav)', '接口3(tv)']).select(() => {
-                            clearMyVar('aliopentoken');
-                            if(input=='接口1(alist)'){
-                                setItem('aliyun_openInt', '1');
-                            }else if(input=='接口2(webdav)'){
-                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliPublic.js');
-                                if(aliOpenTokenObj.refresh_token_2){
-                                    setItem('aliyun_openInt', '2');
-                                }else{
-                                    let loyopentoken2;
-                                    try{
-                                        let loyopen = eval('('+fetch("hiker://files/rules/LoyDgIk/aliOpenToken.json")+')') || {};
-                                        loyopentoken2 = loyopen.isV2?loyopen.RefreshTokenOpen:"";
-                                        aliOpenTokenObj.refresh_token_2 = loyopentoken2;
-                                        aliconfig.opentoken = aliOpenTokenObj;
-                                        writeFile(alicfgfile, JSON.stringify(aliconfig));
-                                    }catch(e){
-                                        log(e.message);
-                                    }
-                                    if(loyopentoken2){
-                                        setItem('aliyun_openInt', '2');
-                                    }else{
-                                        return $('','输入阿里webdav口令，留空打开网页获取').input((alicfgfile,aliconfig) => {
-                                            if(input==''){
-                                                return 'web://https://messense-aliyundrive-webdav-backendrefresh-token-ucs0wn.streamlit.app';
-                                            }else{
-                                                let aliOpenTokenObj = aliconfig.opentoken || {};
-                                                aliOpenTokenObj.refresh_token_2 = input;
-                                                aliconfig.opentoken = aliOpenTokenObj;
-                                                writeFile(alicfgfile, JSON.stringify(aliconfig));
-                                                setItem('aliyun_openInt', '2');
-                                            }
-                                        },alicfgfile,aliconfig)
-                                        
-                                    }
-                                }
-                            }else if(input=='接口3(tv)'){
-                                setItem('aliyun_openInt', '3');
-                            }
-                            refreshPage();
-                            return 'toast://已切换为'+input;
-                        })
+                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+                        return aliOpenInt();
+                    }else if(input.includes('极速播放')){
+                        let sm;
+                        if(getItem('fastPlayMode')=="1"){
+                            clearItem('fastPlayMode');
+                            sm = '已关闭原画极速播放';
+                        }else{
+                            setItem('fastPlayMode', '1');
+                            sm = '已开启原画极速播放';
+                        }
+                        return 'toast://'+sm;
                     }else{
                         setItem('aliyun_playMode', input);
                         refreshPage();
@@ -207,7 +177,7 @@ function aliShare(share_id, folder_id, share_pwd) {
                                     clearMyVar('copydate');
                                 }));
                                 
-                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js');
+                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
                                 aliMyDisk('', 0, '');
                             })
                         },{sharetoken:sharetoken,share_id:share_id,authorization:authorization,file_id:folder_id})
@@ -277,7 +247,7 @@ function aliShare(share_id, folder_id, share_pwd) {
                                             clearMyVar('copydate');
                                         }));
                                         
-                                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js');
+                                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
                                         aliMyDisk('', 0, '');
                                     })
                                 },{sharetoken:sharetoken,share_id:share_id,authorization:authorization,file_id:item.file_id})
@@ -310,7 +280,7 @@ function aliShare(share_id, folder_id, share_pwd) {
                                             clearMyVar('copydate');
                                         }));
                                         
-                                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliDisk.js');
+                                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
                                         aliMyDisk('', 0, '');
                                     })
                                 },{sharetoken:sharetoken,share_id:share_id,authorization:authorization,file_id:item.file_id})
@@ -400,7 +370,50 @@ function aliShare(share_id, folder_id, share_pwd) {
         setResult('');
     }))
 }
-
+function aliOpenInt() {
+    return $(['接口1(alist)', '接口2(webdav)', '接口3(tv)']).select(() => {
+        clearMyVar('aliopentoken');
+        if(input=='接口1(alist)'){
+            setItem('aliyun_openInt', '1');
+        }else if(input=='接口2(webdav)'){
+            require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliPublic.js');
+            if(aliOpenTokenObj.refresh_token_2){
+                setItem('aliyun_openInt', '2');
+            }else{
+                let loyopentoken2;
+                try{
+                    let loyopen = eval('('+fetch("hiker://files/rules/LoyDgIk/aliOpenToken.json")+')') || {};
+                    loyopentoken2 = loyopen.isV2?loyopen.RefreshTokenOpen:"";
+                    aliOpenTokenObj.refresh_token_2 = loyopentoken2;
+                    aliconfig.opentoken = aliOpenTokenObj;
+                    writeFile(alicfgfile, JSON.stringify(aliconfig));
+                }catch(e){
+                    log(e.message);
+                }
+                if(loyopentoken2){
+                    setItem('aliyun_openInt', '2');
+                }else{
+                    return $('','输入阿里webdav口令，留空打开网页获取').input((alicfgfile,aliconfig) => {
+                        if(input==''){
+                            return 'web://https://messense-aliyundrive-webdav-backendrefresh-token-ucs0wn.streamlit.app';
+                        }else{
+                            let aliOpenTokenObj = aliconfig.opentoken || {};
+                            aliOpenTokenObj.refresh_token_2 = input;
+                            aliconfig.opentoken = aliOpenTokenObj;
+                            writeFile(alicfgfile, JSON.stringify(aliconfig));
+                            setItem('aliyun_openInt', '2');
+                        }
+                    },alicfgfile,aliconfig)
+                    
+                }
+            }
+        }else if(input=='接口3(tv)'){
+            setItem('aliyun_openInt', '3');
+        }
+        refreshPage();
+        return 'toast://已切换为'+input;
+    })
+}
 function myDiskMenu(islogin) {
     let setalitoken = $().lazyRule((alitoken) => {
         return $(alitoken || "", "新的refresh_token").input(() => {
@@ -809,9 +822,22 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                                 img: getIcon("云盘-排序.svg")
                             },
                             {
-                                title: getItem('aliyun_playMode', '智能')=="原画"?"原画"+getItem('aliyun_openInt', '1'):getItem('aliyun_playMode', '智能'),
-                                url: $(['智能', '转码', '原画']).select(() => {
-                                    setItem('aliyun_playMode', input);
+                                title: '智能',
+                                url: $(['原画接口', '极速播放:'+(getItem('fastPlayMode')=="1"?"开":"关")]).select(() => {
+                                    if(input=='原画接口'){
+                                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+                                        return aliOpenInt();
+                                    }else if(input.includes('极速播放')){
+                                        let sm;
+                                        if(getItem('fastPlayMode')=="1"){
+                                            clearItem('fastPlayMode');
+                                            sm = '已关闭原画极速播放';
+                                        }else{
+                                            setItem('fastPlayMode', '1');
+                                            sm = '已开启原画极速播放';
+                                        }
+                                        return 'toast://'+sm;
+                                    }
                                 }),
                                 col_type: 'icon_5',
                                 img: getIcon("云盘-转码.svg")
@@ -1706,48 +1732,20 @@ function erjiAliShareUrl(input, dataObj) {
                 },
                 {
                     title: getItem('aliyun_playMode', '智能')=="原画"?"原画"+getItem('aliyun_openInt', '1'):getItem('aliyun_playMode', '智能'),
-                    url: $(['智能', '转码', '原画', '原画接口']).select(() => {
+                    url: $(['智能', '转码', '原画', '原画接口', '极速播放:'+(getItem('fastPlayMode')=="1"?"开":"关")]).select(() => {
                         if(input=='原画接口'){
-                            return $(['接口1(alist)', '接口2(webdav)']).select(() => {
-                                clearMyVar('aliopentoken');
-                                if(input=='接口1(alist)'){
-                                    clearItem('aliyun_openInt');
-                                }else{
-                                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliPublic.js');
-                                    if(aliOpenTokenObj.refresh_token_2){
-                                        setItem('aliyun_openInt', '2');
-                                    }else{
-                                        let loyopentoken2;
-                                        try{
-                                            let loyopen = eval('('+fetch("hiker://files/rules/LoyDgIk/aliOpenToken.json")+')') || {};
-                                            loyopentoken2 = loyopen.isV2?loyopen.RefreshTokenOpen:"";
-                                            aliOpenTokenObj.refresh_token_2 = loyopentoken2;
-                                            aliconfig.opentoken = aliOpenTokenObj;
-                                            writeFile(alicfgfile, JSON.stringify(aliconfig));
-                                        }catch(e){
-                                            log(e.message);
-                                        }
-                                        if(loyopentoken2){
-                                            setItem('aliyun_openInt', '2');
-                                        }else{
-                                            return $('','输入阿里webdav口令，留空打开网页获取').input((alicfgfile,aliconfig) => {
-                                                if(input==''){
-                                                    return 'web://https://messense-aliyundrive-webdav-backendrefresh-token-ucs0wn.streamlit.app';
-                                                }else{
-                                                    let aliOpenTokenObj = aliconfig.opentoken || {};
-                                                    aliOpenTokenObj.refresh_token_2 = input;
-                                                    aliconfig.opentoken = aliOpenTokenObj;
-                                                    writeFile(alicfgfile, JSON.stringify(aliconfig));
-                                                    setItem('aliyun_openInt', '2');
-                                                }
-                                            },alicfgfile,aliconfig)
-                                            
-                                        }
-                                    }
-                                }
-                                updateItem("yundiskplaymode", {title: getItem('aliyun_playMode', '智能')=="原画"?"原画"+getItem('aliyun_openInt', '1'):getItem('aliyun_playMode', '智能')});
-                                return 'toast://已切换为'+input;
-                            })
+                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+                            return aliOpenInt();
+                        }else if(input.includes('极速播放')){
+                            let sm;
+                            if(getItem('fastPlayMode')=="1"){
+                                clearItem('fastPlayMode');
+                                sm = '已关闭原画极速播放';
+                            }else{
+                                setItem('fastPlayMode', '1');
+                                sm = '已开启原画极速播放';
+                            }
+                            return 'toast://'+sm;
                         }else{
                             setItem('aliyun_playMode', input);
                             updateItem("yundiskplaymode", {title: getItem('aliyun_playMode', '智能')=="原画"?"原画"+getItem('aliyun_openInt', '1'):getItem('aliyun_playMode', '智能')});
@@ -1894,15 +1892,26 @@ function erjiAliMyDiskSs(extra){
             }
         },
         {
-            title: getItem('aliyun_playMode', '智能')=="原画"?"原画"+getItem('aliyun_openInt', '1'):getItem('aliyun_playMode', '智能'),
-            url: $(['智能', '转码', '原画']).select(() => {
-                setItem('aliyun_playMode', input);
-                updateItem("yundiskplaymode", {title: getItem('aliyun_playMode', '智能')=="原画"?"原画"+getItem('aliyun_openInt', '1'):getItem('aliyun_playMode', '智能')});
+            title: '智能',
+            url: $(['原画接口', '极速播放:'+(getItem('fastPlayMode')=="1"?"开":"关")]).select(() => {
+                if(input=='原画接口'){
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+                    return aliOpenInt();
+                }else if(input.includes('极速播放')){
+                    let sm;
+                    if(getItem('fastPlayMode')=="1"){
+                        clearItem('fastPlayMode');
+                        sm = '已关闭原画极速播放';
+                    }else{
+                        setItem('fastPlayMode', '1');
+                        sm = '已开启原画极速播放';
+                    }
+                    return 'toast://'+sm;
+                }
             }),
             col_type: 'icon_5',
             img: 'https://hikerfans.com/tubiao/grey/100.png',
             extra: {
-                id: "yundiskplaymode",
                 cls: "Juloadlist"
             }
         },
