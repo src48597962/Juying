@@ -138,14 +138,14 @@ function aliShare(share_id, folder_id, share_pwd) {
                 img: getIcon("云盘-排序.svg"),
             },
             {
-                title: getItem('aliyun_playMode', '智能')=="原画"?"原画"+getItem('aliyun_openInt', '1'):getItem('aliyun_playMode', '智能'),
+                title: getItem('aliyun_playMode')=="原画"?"原画"+getItem('aliyun_openInt', '1'):getItem('aliyun_playMode', '智能'),
                 url: $(['智能', '转码', '原画', '原画接口']).select(() => {
                     if(input=='原画接口'){
-                        return $(['接口1(alist)', '接口2(webdav)']).select(() => {
+                        return $(['接口1(alist)', '接口2(webdav)', '接口3(tv)']).select(() => {
                             clearMyVar('aliopentoken');
                             if(input=='接口1(alist)'){
-                                clearItem('aliyun_openInt');
-                            }else{
+                                setItem('aliyun_openInt', '1');
+                            }else if(input=='接口2(webdav)'){
                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/', '/master/') + 'SrcJyAliPublic.js');
                                 if(aliOpenTokenObj.refresh_token_2){
                                     setItem('aliyun_openInt', '2');
@@ -177,6 +177,8 @@ function aliShare(share_id, folder_id, share_pwd) {
                                         
                                     }
                                 }
+                            }else if(input=='接口3(tv)'){
+                                setItem('aliyun_openInt', '3');
                             }
                             refreshPage();
                             return 'toast://已切换为'+input;
