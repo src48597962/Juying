@@ -823,8 +823,8 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                             },
                             {
                                 title: '智能',
-                                url: $(['原画接口', '极速播放:'+(getItem('fastPlayMode')=="1"?"开":"关")]).select(() => {
-                                    if(input=='原画接口'){
+                                url: $(['原画接口'+getItem('aliyun_openInt', '1'), '极速播放:'+(getItem('fastPlayMode')=="1"?"开":"关")]).select(() => {
+                                    if(input.includes('原画接口')){
                                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
                                         return aliOpenInt();
                                     }else if(input.includes('极速播放')){
@@ -1893,8 +1893,8 @@ function erjiAliMyDiskSs(extra){
         },
         {
             title: '智能',
-            url: $(['原画接口', '极速播放:'+(getItem('fastPlayMode')=="1"?"开":"关")]).select(() => {
-                if(input=='原画接口'){
+            url: $(['原画接口'+getItem('aliyun_openInt', '1'), '极速播放:'+(getItem('fastPlayMode')=="1"?"开":"关")]).select(() => {
+                if(input.includes('原画接口')){
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
                     return aliOpenInt();
                 }else if(input.includes('极速播放')){
