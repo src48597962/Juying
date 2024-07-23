@@ -280,8 +280,7 @@ function deleteData(lx, data){
         if(lx=='jk' && it.url.includes(datapath)){
             deleteFile(it.url);
         }
-        let dataurl = lx=='jk'?it.url:it.parse;
-        let index = datalist.indexOf(datalist.filter(d => dataurl==(lx=='jk'?d.url:d.parse) )[0]);
+        let index = datalist.indexOf(datalist.filter(d => it.url==d.url )[0]);
         datalist.splice(index, 1);
     })
 
