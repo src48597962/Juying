@@ -938,12 +938,12 @@ function yiji() {
         try{
             programversion = $.require("config").version || MY_RULE.version || 0;
         }catch(e){}
-        if(programversion<1){
+        if(programversion<3){
             confirm({
                 title: "温馨提示",
                 content: "发现小程序新版本",
                 confirm: $.toString(() => {
-                    return "海阔视界首页频道规则【聚影✓】￥home_rule_url￥http://hiker.nokia.press/hikerule/rulelist.json?id=6629"
+                    return "海阔视界首页频道规则【聚影✓】￥home_rule_url￥http://hiker.nokia.press/hikerule/rulelist.json?id=6993"
                 }),
                 cancel: $.toString(() => {
                     return "toast://不升级小程序，功能不全或有异常"
