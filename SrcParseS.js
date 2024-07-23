@@ -99,7 +99,7 @@ var SrcParseS = {
             }
             isVip = 1;
         }else if(!needparse.test(vipUrl) && /^http/.test(vipUrl)){
-            log("网页播放地址");
+            log("网页嗅探播放");
             let obj = {
                 vipUrl: vipUrl,
                 isWeb: 1,
@@ -611,7 +611,8 @@ var SrcParseS = {
                         for (var i in urls) {
                             if(music){
                                 if(/\.mp3|\.m4a/.test(urls[i])){
-                                    return urls[i] + '#isMusic=true#';
+                                    fba.log("获取到>"+urls[i]);
+                                    return fy_bridge_app.getHeaderUrl(urls[i]) + '#isMusic=true#';
                                 }
                             }else if (contain.test(urls[i])&&!exclude.test(urls[i])) {
                                 //fba.log("exeweb解析到>"+urls[i]);
