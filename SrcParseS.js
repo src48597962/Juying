@@ -481,8 +481,7 @@ var SrcParseS = {
                     danmu: dm
                 }); 
             }else{
-                log('没有解析，跳转原网页');
-                return vipUrl;
+                return 'toast://解析失败';
             }
         }
     },
