@@ -2187,11 +2187,8 @@ function JYimport(input) {
     let inputname;
     let codelx = "share";
     try{
-        log(input);
         pasteurl = aesDecode('Juying2', input.split('￥')[1]);
         inputname = input.split('￥')[0];
-        log(pasteurl);
-        log(inputname);
         if(inputname=="聚影资源码"){
             codelx = "dingyue";
             pasteurl = 'https://netcut.cn/p/' + pasteurl;
@@ -2219,7 +2216,7 @@ function JYimport(input) {
             return "toast://聚影✓：无法识别的口令";
         }
         let text;
-        if(/http/.test(pasteurl)){
+        if(/^http|^云/.test(pasteurl)){
             showLoading('获取数据中，请稍后...');
             text = parsePaste(pasteurl);
             hideLoading();
