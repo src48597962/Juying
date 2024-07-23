@@ -1270,6 +1270,9 @@ function getErData(jkdata) {
                     for (let j = 0; j < bfline.length; j++) {
                         let contname = extdata["播放标题"] ? bfline[j].split(extdata["播放标题"].split('&&')[0])[1].split(extdata["播放标题"].split('&&')[1])[0] : pdfh(bfline[j], "a&&Text");
                         let conturl = extdata["播放链接"] ? bfline[j].split(extdata["播放链接"].split('&&')[0])[1].split(extdata["播放链接"].split('&&')[1])[0] : pd(bfline[j], "a&&href");
+                        if(!conturl.startsWith('http')){
+                            conturl = extdata["主页url"] + conturl;
+                        }
                         cont.push(contname + "$" + conturl)
                     }
                     lists.push(cont);
