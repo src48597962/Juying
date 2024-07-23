@@ -1339,7 +1339,7 @@ function erjiSousuo(name) {
             desc: "我的云盘",
             extra: {
                 url: item.url,
-                cls: "Juloadlist"
+                cls: "Juloadlist grouploadlist"
             }
         };
         let extra = {
@@ -1402,7 +1402,7 @@ function erjiSousuo(name) {
                     desc: obj.name,
                     extra: {
                         url: item.url,
-                        cls: "Juloadlist"
+                        cls: "Juloadlist grouploadlist"
                     }
                 };
                 
