@@ -91,6 +91,11 @@ var SrcParseS = {
         }else if(vipUrl.indexOf('sa.sogou') != -1) {
             log("优看视频，直接明码解析"); 
             return unescape(request(vipUrl).match(/"url":"([^"]*)"/)[1].replace(/\\u/g, "%u"));
+        }else if(/www\.aliyundrive\.com|www\.alipan\.com/.test(vipUrl)) {
+            return $("hiker://empty#noRecordHistory##noHistory#").rule((input) => {
+                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+                aliShareUrl(input);
+            },vipUrl);
         }else if(vipUrl.startsWith("https://pan.quark.cn/")) {
             return "hiker://page/quarkList?rule=Quark.简&realurl=" + encodeURIComponent(vipUrl) + "&sharePwd=";
         }else if(/qq\.com|iqiyi\.com|youku\.com|mgtv\.com|bilibili\.com|sohu\.com|ixigua\.com|pptv\.com|miguvideo\.com|le\.com|1905\.com|fun\.tv|cctv\.com/.test(vipUrl)){
