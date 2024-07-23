@@ -104,7 +104,7 @@ var SrcParseS = {
                 vipUrl: vipUrl,
                 isWeb: 1,
                 video: playSet.video,
-                music: dataObj.sname.includes("[听]")?1:0
+                music: dataObj.sname&&dataObj.sname.includes("[听]")?1:0
             }
             return this.解析方法(obj);
         }
