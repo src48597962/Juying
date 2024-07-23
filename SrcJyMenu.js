@@ -40,12 +40,12 @@ function erjimenu(desc,name,group) {
             }
         },
         {
-            title: "观影设置",
+            title: "观看设置",
             url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyMenu.js');
                 lookset();
             }),
-            pic_url: getIcon("点播-观影设置.svg"),
+            pic_url: getIcon("点播-观看设置.svg"),
             col_type: 'icon_small_3',
             extra: {
                 cls: "Juloadlist"
@@ -127,7 +127,7 @@ function cutSource(name, group) {
 }
 
 function lookset() {
-    setPageTitle("♥观影设置");
+    setPageTitle("点播二级观看设置");
     let recordfile = globalMap0.getMyVar('gmParams').rulepath + "parse.json";//解析相关记录文件
     let parseRecord = {};
     if(fetch(recordfile)){
@@ -159,21 +159,6 @@ function lookset() {
             return 'toast://切换成功';
         }, playSet),
         pic_url: playSet['printlog']?getIcon("点播-开.svg"):getIcon("关.svg"),
-        col_type: "text_icon"
-    });
-    d.push({
-        title: 'm3u8索引缓存',
-        url: $('#noLoading#').lazyRule((playSet) => {
-            if (playSet['cachem3u8'] != 1) {
-                playSet['cachem3u8'] = 1;
-            } else {
-                playSet['cachem3u8'] = 0;
-            }
-            storage0.setItem('playSet', playSet);
-            refreshPage(false);
-            return 'toast://切换成功';
-        }, playSet),
-        pic_url: playSet['cachem3u8']?getIcon("点播-开.svg"):getIcon("关.svg"),
         col_type: "text_icon"
     });
     d.push({
@@ -331,6 +316,21 @@ function lookset() {
     });
     d.push({
         col_type: "line"
+    });
+    d.push({
+        title: 'm3u8索引文件缓存',
+        url: $('#noLoading#').lazyRule((playSet) => {
+            if (playSet['cachem3u8'] != 1) {
+                playSet['cachem3u8'] = 1;
+            } else {
+                playSet['cachem3u8'] = 0;
+            }
+            storage0.setItem('playSet', playSet);
+            refreshPage(false);
+            return 'toast://切换成功';
+        }, playSet),
+        pic_url: playSet['cachem3u8']?getIcon("点播-开.svg"):getIcon("关.svg"),
+        col_type: "text_icon"
     });
     d.push({
         title: '解析结果有效性检测',
