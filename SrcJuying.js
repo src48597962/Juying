@@ -566,7 +566,7 @@ function dianboerji() {
             let col_type = 列表.length > 4 && len < 5 ? 'text_4' : len > 10 ? 'text_1' : len>4&&len<7 ? 'text_3' :'text_2';
             for(let i=0; i<列表.length; i++) {
                 let playtitle = 列表[i].split('$')[0];
-                playtitle = playtitle==name?'正片':playtitle.replace(name+" - ","").replace(name,"").trim();
+                playtitle = playtitle==name?'正片':playtitle.replace(name+" - ","").replace(name+"_","").replace(name,"").trim();
                 let playurl = (novel?"hiker://empty##":"")+列表[i].split('$')[1].trim();
 
                 let extra = {
