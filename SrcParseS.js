@@ -611,12 +611,11 @@ var SrcParseS = {
                         for (var i in urls) {
                             if(music){
                                 if(/\.mp3|\.m4a/.test(urls[i])){
-                                    fba.log("获取到>"+urls[i]);
                                     return fy_bridge_app.getHeaderUrl(urls[i]) + '#isMusic=true#';
                                 }
                             }else if (contain.test(urls[i])&&!exclude.test(urls[i])) {
                                 //fba.log("exeweb解析到>"+urls[i]);
-                                return urls[i] + '#isVideo=true#';
+                                return fy_bridge_app.getHeaderUrl(urls[i]) + '#isVideo=true#';
                             }
                         }
                     }catch(e){
@@ -626,7 +625,7 @@ var SrcParseS = {
                     blockRules: ['.m4a','.mp3','.gif','.jpg','.jpeg','.png','.ico','hm.baidu.com','/ads/*.js','/klad/*.php','layer.css'],
                     jsLoadingInject: true,
                     checkTime: 100,
-                    timeout: 10000
+                    timeout: 12000
                 }
             )
         }
@@ -634,7 +633,7 @@ var SrcParseS = {
         if(obj.isWeb){
             if(obj.music){
                 return exeWebRule(obj.vipUrl, 1) || "toast://嗅探解析失败";
-            }else if(obj.video){// && getMyVar('pushboxplay')!="1"){
+            }else if(obj.video){
                 return 'video://'+obj.vipUrl;
             }else{
                 return exeWebRule(obj.vipUrl) || "toast://WebRule获取失败，可试试video";
