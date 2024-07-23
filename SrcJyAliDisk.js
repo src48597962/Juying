@@ -138,9 +138,9 @@ function aliShare(share_id, folder_id, share_pwd) {
                 img: getIcon("云盘-排序.svg"),
             },
             {
-                title: getItem('aliyun_playMode')=="原画"?"原画"+getItem('aliyun_openInt', '1'):getItem('aliyun_playMode', '智能'),
-                url: $(['智能', '转码', '原画', '原画接口', '极速播放:'+(getItem('fastPlayMode')=="1"?"开":"关")]).select(() => {
-                    if(input=='原画接口'){
+                title: getItem('aliyun_playMode', '智能'),
+                url: $(['智能', '转码', '原画', '原画接口'+getItem('aliyun_openInt', '1'), '极速播放:'+(getItem('fastPlayMode')=="1"?"开":"关")]).select(() => {
+                    if(input.includes('原画接口')){
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
                         return aliOpenInt();
                     }else if(input.includes('极速播放')){
@@ -155,12 +155,15 @@ function aliShare(share_id, folder_id, share_pwd) {
                         return 'toast://'+sm;
                     }else{
                         setItem('aliyun_playMode', input);
-                        refreshPage();
+                        updateItem("aliyun_playMode", {title: getItem('aliyun_playMode', '智能')});
                         return 'toast://已切换为'+input;
                     }
                 }),
                 col_type: 'icon_5',
                 img: getIcon("云盘-转码.svg"),
+                extra: {
+                    id: "aliyun_playMode"
+                }
             },
             {
                 title: '转存',
@@ -822,8 +825,8 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                                 img: getIcon("云盘-排序.svg")
                             },
                             {
-                                title: '智能',
-                                url: $(['原画接口'+getItem('aliyun_openInt', '1'), '极速播放:'+(getItem('fastPlayMode')=="1"?"开":"关")]).select(() => {
+                                title: getItem('aliyun_playMode', '智能'),
+                                url: $(['智能', '转码', '原画', '原画接口'+getItem('aliyun_openInt', '1'), '极速播放:'+(getItem('fastPlayMode')=="1"?"开":"关")]).select(() => {
                                     if(input.includes('原画接口')){
                                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
                                         return aliOpenInt();
@@ -837,10 +840,17 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                                             sm = '已开启原画极速播放';
                                         }
                                         return 'toast://'+sm;
+                                    }else{
+                                        setItem('aliyun_playMode', input);
+                                        updateItem("aliyun_playMode", {title: getItem('aliyun_playMode', '智能')});
+                                        return 'toast://已切换为'+input;
                                     }
                                 }),
                                 col_type: 'icon_5',
-                                img: getIcon("云盘-转码.svg")
+                                img: getIcon("云盘-转码.svg"),
+                                extra: {
+                                    id: "aliyun_playMode"
+                                }
                             },
                             {
                                 title: '分享',
@@ -1731,9 +1741,9 @@ function erjiAliShareUrl(input, dataObj) {
                     }
                 },
                 {
-                    title: getItem('aliyun_playMode', '智能')=="原画"?"原画"+getItem('aliyun_openInt', '1'):getItem('aliyun_playMode', '智能'),
-                    url: $(['智能', '转码', '原画', '原画接口', '极速播放:'+(getItem('fastPlayMode')=="1"?"开":"关")]).select(() => {
-                        if(input=='原画接口'){
+                    title: getItem('aliyun_playMode', '智能'),
+                    url: $(['智能', '转码', '原画', '原画接口'+getItem('aliyun_openInt', '1'), '极速播放:'+(getItem('fastPlayMode')=="1"?"开":"关")]).select(() => {
+                        if(input.includes('原画接口')){
                             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
                             return aliOpenInt();
                         }else if(input.includes('极速播放')){
@@ -1748,14 +1758,14 @@ function erjiAliShareUrl(input, dataObj) {
                             return 'toast://'+sm;
                         }else{
                             setItem('aliyun_playMode', input);
-                            updateItem("yundiskplaymode", {title: getItem('aliyun_playMode', '智能')=="原画"?"原画"+getItem('aliyun_openInt', '1'):getItem('aliyun_playMode', '智能')});
+                            updateItem("aliyun_playMode", {title: getItem('aliyun_playMode', '智能')});
                             return 'toast://已切换为'+input;
                         }
                     }),
                     col_type: 'icon_5',
                     img: getIcon("云盘-转码.svg"),
                     extra: {
-                        id: "yundiskplaymode",
+                        id: "aliyun_playMode",
                         cls: "Juloadlist"
                     }
                 },
@@ -1852,7 +1862,7 @@ function erjiAliMyDiskSs(extra){
             title: "刷新",
             url: refreshlist,
             col_type: 'icon_5',
-            img: 'https://hikerfans.com/tubiao/grey/125.png',
+            img: getIcon("云盘-探索.svg"),
             extra: {
                 cls: "Juloadlist"
             }
@@ -1874,7 +1884,7 @@ function erjiAliMyDiskSs(extra){
                 return "hiker://empty";
             }),
             col_type: 'icon_5',
-            img: 'https://hikerfans.com/tubiao/grey/168.png',
+            img: getIcon("云盘-样式.svg"),
             extra: {
                 cls: "Juloadlist"
             }
@@ -1886,14 +1896,14 @@ function erjiAliMyDiskSs(extra){
                 return refreshlist;
             },refreshlist),
             col_type: 'icon_5',
-            img: 'https://hikerfans.com/tubiao/grey/76.png',
+            img: getIcon("云盘-排序.svg"),
             extra: {
                 cls: "Juloadlist"
             }
         },
         {
-            title: '智能',
-            url: $(['原画接口'+getItem('aliyun_openInt', '1'), '极速播放:'+(getItem('fastPlayMode')=="1"?"开":"关")]).select(() => {
+            title: getItem('aliyun_playMode', '智能'),
+            url: $(['智能', '转码', '原画', '原画接口'+getItem('aliyun_openInt', '1'), '极速播放:'+(getItem('fastPlayMode')=="1"?"开":"关")]).select(() => {
                 if(input.includes('原画接口')){
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
                     return aliOpenInt();
@@ -1907,11 +1917,16 @@ function erjiAliMyDiskSs(extra){
                         sm = '已开启原画极速播放';
                     }
                     return 'toast://'+sm;
+                }else{
+                    setItem('aliyun_playMode', input);
+                    updateItem("aliyun_playMode", {title: getItem('aliyun_playMode', '智能')});
+                    return 'toast://已切换为'+input;
                 }
             }),
             col_type: 'icon_5',
-            img: 'https://hikerfans.com/tubiao/grey/100.png',
+            img: getIcon("云盘-转码.svg"),
             extra: {
+                id: "aliyun_playMode",
                 cls: "Juloadlist"
             }
         },
@@ -1923,7 +1938,7 @@ function erjiAliMyDiskSs(extra){
                 return "hiker://empty";
             }, dataObj.name, dataObj.group),
             col_type: 'icon_5',
-            img: 'https://hikerfans.com/tubiao/grey/175.png',
+            img: getIcon("云盘-换源.svg"),
             extra: {
                 cls: "Juloadlist"
             }
