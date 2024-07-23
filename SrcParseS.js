@@ -67,7 +67,7 @@ var SrcParseS = {
                     return "第1部@lazyRule=.js:"+seljson.js;
                 }
                 return play.url;
-            }else if(/\.mp3|\.mp4|\.m3u8/.test(play.url) && play.header){
+            }else if(/\.mp3|\.m4a|\.mp4|\.m3u8/.test(play.url) && play.header){
                 return JSON.stringify({
                     urls: [play.url],
                     headers: [play.header]
@@ -85,6 +85,9 @@ var SrcParseS = {
             log("直链视频地址，直接播放"); 
             if(vipUrl.indexOf('app.grelighting.cn')>-1){vipUrl = vipUrl.replace('app.','ht.')}
             return vipUrl + '#isVideo=true#';
+        }else if(/\.mp3|\.m4a/.test(vipUrl)){
+            log("直链音乐地址，直接播放"); 
+            return vipUrl + '#isMusic=true#';
         }else if(vipUrl.indexOf('sa.sogou') != -1) {
             log("优看视频，直接明码解析"); 
             return unescape(request(vipUrl).match(/"url":"([^"]*)"/)[1].replace(/\\u/g, "%u"));
@@ -100,7 +103,8 @@ var SrcParseS = {
             let obj = {
                 vipUrl: vipUrl,
                 isWeb: 1,
-                video: playSet.video
+                video: playSet.video,
+                music: dataObj.sname.includes("[听]")?1:0
             }
             return this.解析方法(obj);
         }
@@ -594,8 +598,8 @@ var SrcParseS = {
             //let rurl = JSON.parse(html).url || JSON.parse(html).data;
             return rurl;
         }
-        function exeWebRule(webUrl) {
-            return executeWebRule(webUrl, $.toString(() => {
+        function exeWebRule(webUrl, music) {
+            return executeWebRule(webUrl, $.toString((music) => {
                     try{
                         if (typeof (request) == 'undefined' || !request) {
                             eval(fba.getInternalJs());
@@ -605,25 +609,31 @@ var SrcParseS = {
                         var exclude = /\/404\.m3u8|\/xiajia\.mp4|\/余额不足\.m3u8|\.css|\.js|\.gif|\.png|\.jpg|\.jpeg|html,http|m3u88.com\/admin|\.php\?v=h|\?url=h|\?vid=h|%253Furl%253Dh|#amp=1|\.t-ui\.cn|ac=dm/;//设置排除地址
                         var contain = /\.mp4|\.m3u8|\.flv|\.avi|\.mpeg|\.wmv|\.mov|\.rmvb|\.dat|qqBFdownload|mime=video%2F|video_mp4|\.ts\?|TG@UosVod|video\/tos\/cn\/tos|m3u8\?pt=m3u8/;//设置符合条件的正确地址
                         for (var i in urls) {
-                            if (contain.test(urls[i])&&!exclude.test(urls[i])) {
+                            if(music){
+                                if(/\.mp3|\.m4a/.test(urls[i])){
+                                    return urls[i] + '#isMusic=true#';
+                                }
+                            }else if (contain.test(urls[i])&&!exclude.test(urls[i])) {
                                 //fba.log("exeweb解析到>"+urls[i]);
-                                return urls[i];
+                                return urls[i] + '#isVideo=true#';
                             }
                         }
                     }catch(e){
                         //fba.log(e.message);
                     }
-                }), {
+                },music), {
                     blockRules: ['.m4a','.mp3','.gif','.jpg','.jpeg','.png','.ico','hm.baidu.com','/ads/*.js','/klad/*.php','layer.css'],
                     jsLoadingInject: true,
                     checkTime: 100,
-                    timeout: 8000
+                    timeout: 10000
                 }
             )
         }
 
         if(obj.isWeb){
-            if(obj.video){// && getMyVar('pushboxplay')!="1"){
+            if(obj.music){
+                return exeWebRule(obj.vipUrl, 1) || "toast://嗅探解析失败";
+            }else if(obj.video){// && getMyVar('pushboxplay')!="1"){
                 return 'video://'+obj.vipUrl;
             }else{
                 return exeWebRule(obj.vipUrl) || "toast://WebRule获取失败，可试试video";
