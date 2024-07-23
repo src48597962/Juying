@@ -168,7 +168,7 @@ function getYiData(jkdata) {
                             let 首页列表数组 = pdfa(gethtml, extdata['首页列表数组规则']);
                             首页列表数组.forEach(it => {
                                 pdfa(it, extdata['首页片单列表数组规则']).forEach(v => {
-                                    if (extdata['首页片单是否Jsoup写法'] == "1") {
+                                    if (extdata['首页片单是否Jsoup写法']=="1"||extdata['首页片单是否Jsoup写法']=="是") {
                                         let vodid = pd(v, extdata['首页片单链接'] || extdata['分类片单链接'], vodhost);
                                         let vodname = pdfh(v, extdata['首页片单标题'] || extdata['分类片单标题']);
                                         let vodpic = pdfh(v, extdata['首页片单图片'] || extdata['分类片单图片']);
@@ -500,7 +500,7 @@ function getYiData(jkdata) {
                 })
             }else if (api_type == "XYQ") {
                 let gethtml = getHtml(MY_URL, headers);
-                if (extdata['分类片单是否Jsoup写法'] == "1" && extdata['分类列表数组规则']) {
+                if ((extdata['分类片单是否Jsoup写法']=="1" || extdata['分类片单是否Jsoup写法']=="是") && extdata['分类列表数组规则']) {
                     pdfa(gethtml, extdata['分类列表数组规则']).forEach(it => {
                         let vodname = pdfh(it, extdata['分类片单标题']);
                         let vodid = pd(it, extdata['分类片单链接'], vodhost);
@@ -925,7 +925,7 @@ function getSsData(name, jkdata, page) {
                     let sslist = pdfa(gethtml, 	extdata["搜索列表数组规则"]);
                     for (let i = 0; i < sslist.length; i++) {
                         let title,href,img,desc;
-                        if(extdata["搜索片单是否Jsoup写法"]=="1"){
+                        if(extdata["搜索片单是否Jsoup写法"]=="1"||extdata["搜索片单是否Jsoup写法"]=="是"){
                             title = pdfh(sslist[i], extdata["搜索片单标题"]);
                             href = (extdata["搜索片单链接加前缀"]||"")+pdfh(sslist[i], extdata["搜索片单链接"])+(extdata["搜索片单链接加后缀"]||"");
                             img = pdfh(sslist[i], extdata["搜索片单图片"]);
@@ -1291,7 +1291,7 @@ function getErData(jkdata) {
             }
         } else if (api_type == "XYQ") {
             try {
-                if (extdata["详情是否Jsoup写法"] == "1") {
+                if (extdata["详情是否Jsoup写法"]=="1"||extdata["详情是否Jsoup写法"]=="是") {
                     remarks = pdfh(html, extdata["类型详情"]);
                     year = pdfh(html, extdata["年代详情"]);
                     area = pdfh(html, extdata["地区详情"]);
@@ -1335,7 +1335,7 @@ function getErData(jkdata) {
                     let cont = [];
                     for (let j = 0; j < bfline.length; j++) {
                         let contname, conturl;
-                        if (extdata["选集标题链接是否Jsoup写法"] == "1") {
+                        if (extdata["选集标题链接是否Jsoup写法"]=="1"||extdata["选集标题链接是否Jsoup写法"]=="是") {
                             contname = pdfh(bfline[j], extdata["选集标题"] || "a&&Text");
                             conturl = (extdata["选集链接加前缀"] || "") + pdfh(bfline[j], extdata["选集链接"] || "a&&href") + (extdata["选集链接加后缀"] || "");
                         }
