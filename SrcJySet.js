@@ -2179,8 +2179,11 @@ function JYimport(input) {
     let inputname;
     let codelx = "share";
     try{
+        log(input);
         pasteurl = aesDecode('Juying2', input.split('￥')[1]);
         inputname = input.split('￥')[0];
+        log(pasteurl);
+        log(inputname);
         if(inputname=="聚影资源码"){
             codelx = "dingyue";
             pasteurl = 'https://netcut.cn/p/' + pasteurl;
