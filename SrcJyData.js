@@ -1448,8 +1448,9 @@ function getHtml(url, headers) {
 
 // extData缓存
 function extDataCache(jkdata) {
-    if (/^hiker/.test(jkdata.url)) {
+    if (jkdata.url.includes('/files/')) {
         if (!fileExist(jkdata.url)) {
+            log("文件不存在?");
             if(!fileExist(jkfile)){
                 jkdata.url = jkdata.url.replace('/data/','/_cache/');
             }
