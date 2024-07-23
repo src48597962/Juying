@@ -14,7 +14,7 @@ if(Jucfg != ""){
     eval("Juconfig=" + Jucfg+ ";");
 }
 
-let timeout = 10000;
+let timeout = 8000;
 let homeSource = Juconfig['homeSource'] || {};
 let sourceType = homeSource.type;
 let sourceName = homeSource.name;
@@ -408,8 +408,8 @@ function duoselect(datas){
 function selectSource() {
     const hikerPop = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6966");
     let sourceAllList = getDatas("jk", 1).filter(x=> !x.onlysearch);
-
-    let sourceList = getGroupLists(sourceAllList, sourceGroup);
+    let sourceListGroup = Juconfig["sourceListGroup"] || sourceGroup || "全部";
+    let sourceList = getGroupLists(sourceAllList, sourceListGroup);
     let tmpList = sourceList;
 
     hikerPop.setUseStartActivity(false);
@@ -439,7 +439,7 @@ function selectSource() {
         toPosition: index,
         extraInputBox: (inputBox = new hikerPop.ResExtraInputBox({
             hint: "源关键字筛选，右边切换分组",
-            title: sourceGroup || "全部",
+            title: sourceListGroup,
             onChange(s, manage) {
                 tmpList = sourceList.filter(x => x.name.toLowerCase().includes(s.toLowerCase()));
                 let flist = getnames(tmpList).names;
@@ -466,7 +466,9 @@ function selectSource() {
                         }else{
                             inputBox.setTitle(s);
                             inputBox.setDefaultValue("");
-
+                            Juconfig["sourceListGroup"] = s;
+                            writeFile(cfgfile, JSON.stringify(Juconfig));
+                            
                             sourceList = getGroupLists(sourceAllList, s);
                             tmpList = sourceList;
                             names = getnames(tmpList).names;
