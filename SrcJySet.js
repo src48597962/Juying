@@ -14,33 +14,7 @@ function SRCSet() {
     if(getMyVar('guanli','')==""){putMyVar('guanli','jk');}
 
     let guanliType = getMyVar('guanli', 'jk');
-    var d = [];
-    /*
-    d.push({
-        title: guanliType=="jk"?colorTitle('接口管理', '#f13b66a'):'接口管理',
-        url: `#noLoading#@lazyRule=.js:putMyVar('guanli','jk');refreshPage(false);'toast://已切换到接口管理';`,
-        img: "https://hikerfans.com/tubiao/movie/98.svg",
-        col_type: "icon_small_3"
-    });
-    d.push({
-        title: guanliType=="jk"?'解析管理':colorTitle('解析管理', '#f13b66a'),
-        url: `#noLoading#@lazyRule=.js:putMyVar('guanli','jx');refreshPage(false);'toast://已切换到解析管理';`,
-        img: "https://hikerfans.com/tubiao/movie/105.svg",
-        col_type: "icon_small_3"
-    });
-    d.push({
-        title: '扩展中心',
-        url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
-            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
-            manageSet();
-        }),
-        img: "https://hikerfans.com/tubiao/ke/156.png",
-        col_type: "icon_small_3"
-    });
-    d.push({
-        col_type: "line_blank"
-    });
-    */
+    let d = [];
     d.push({
         title: '增加',
         url: $('hiker://empty#noRecordHistory##noHistory#').rule((guanliType) => {
