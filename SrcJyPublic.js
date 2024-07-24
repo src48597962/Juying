@@ -47,7 +47,7 @@ function getDatas(lx, isyx) {
                 let dyJkTmpFile = cachepath + md5(Juconfig['dySource']) + ".json";
                 if(!fileExist(dyJkTmpFile)){
                     showLoading('正在加载订阅源，请稍后...');
-                    let contnet = getJkContnet(Juconfig['dySource']);
+                    let contnet = getContnet(Juconfig['dySource']);
                     if(contnet){
                         writeFile(dyJkTmpFile, contnet);
                     }
@@ -198,11 +198,13 @@ function shuffleArray(array) {
     return array;
 }
 //获取在线文件内容
-function getJkContnet(url) {
-    if(!url.startsWith('http')){
+function getContnet(url) {
+    if(url.startsWith('file')){
+        return fetch(url);
+    }else if(!url.startsWith('http')){
         return '';
     }
-    if(url.startsWith('https://raw.github')){
+    if(url.startsWith('https://raw.githubusercontent.com')){
         let proxys = $.require('ghproxy').getproxy();
         shuffleArray(proxys);
         for(let i=0;i<proxys.length;i++){
