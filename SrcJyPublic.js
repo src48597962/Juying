@@ -192,6 +192,11 @@ function getJkTags(datas){
     })
     return tags;
 }
+//乱序方法
+function shuffleArray(array) {
+    array.sort(() => Math.random() - 0.5);
+    return array;
+}
 //获取在线文件内容
 function getJkContnet(url) {
     if(!url.startsWith('http')){
@@ -199,6 +204,7 @@ function getJkContnet(url) {
     }
     if(url.startsWith('https://raw.github')){
         let proxys = $.require('ghproxy').getproxy();
+        shuffleArray(proxys);
         for(let i=0;i<proxys.length;i++){
             let content = fetch(proxys[i]+url, {timeout:5000});
             if (content && !content.trim().startsWith('<!DOCTYPE html>') && !content.startsWith('<html>')) {
