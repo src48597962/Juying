@@ -1847,11 +1847,7 @@ function resource() {
                 }else if(getMyVar('importtype','1')=="2"){
                     return HipyImport(input,Juconfig['importmode']?2:0);
                 }else if(getMyVar('importtype','1')=="3"){
-
-                    Juconfig['dySource'] = input;
-                    writeFile(cfgfile, JSON.stringify(Juconfig));
-                    back();
-                    return "toast://已订阅，选择主页源时加载新订阅";
+                    return Resourceimport(input,'1',3);
                 }
             }, Juconfig, cfgfile),
         col_type: "text_2",
@@ -1958,7 +1954,7 @@ function HipyImport(input, importmode){
 //资源导入
 function Resourceimport(input,importtype,importmode){
     if(importtype=="1"){//tvbox导入
-        let data;
+        let data,jiekous;
         try{
             showLoading('检测文件有效性');
             if(input.startsWith('/storage/emulated')){input = "file://" + input}
@@ -1973,17 +1969,23 @@ function Resourceimport(input,importtype,importmode){
             //}).replace(/^.*#.*$/gm,"").replace(/\,\,/g,',');//.replace(/=\\n\"/g,'="')|[\t\r\n].replace(/\s+/g, "").replace(/<\/?.+?>/g,"").replace(/[\r\n]/g, "")
             //log(html);
             eval('data = ' + html)
-            //data = JSON.parse(html);                        
+            //data = JSON.parse(html);  
+            jiekous = data.sites||[];                      
         } catch (e) {
             hideLoading();
-            log('TVBox文件检测失败>'+e.message); 
-            return "toast://TVBox导入失败：链接文件无效或内容有错";
+            log('Box文件检测失败>'+e.message); 
+            return "toast://失败：链接文件无效或内容有错";
         }
         hideLoading();
+        if(importmode==3){
+            Juconfig['dySource'] = input;
+            writeFile(cfgfile, JSON.stringify(Juconfig));
+            back();
+            return "toast://已设置，订阅模式下生效";
+        }
 
         let jknum = -1;
         let jxnum = -1;
-        let jiekous = data.sites||[];
         showLoading('正在多线程抓取数据中');
         if((getMyVar('importjiekou','1')=="1")&&jiekous.length>0){
             let urls= [];
