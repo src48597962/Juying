@@ -3,13 +3,14 @@ function autoerji(url,html){
     let data = {};
     if(!/http/.test(url)){return data;}
     let html = html||request(url, {headers: {'User-Agent': PC_UA }, timeout: 5000});
-    let urldomian = url.match(/http(s)?:\/\/(.*?)\//)[0];
+    let urldomian = getHome(url);
+	log(urldomian);
 	
     let urltmpl = JSON.parse(getMyVar('Tmpl-'+urldomian,'{}'));
     let tmplidex = erjiTmpl.findIndex(it=>it.id===urltmpl.id);
     if(tmplidex>-1) {
-        let tmpl = erjiTmpl.splice(tmplidex, 1);
-        erjiTmpl.unshift(tmpl[0]);
+        let tmpl = erjiTmpl.splice(tmplidex, 1)[0];
+        erjiTmpl.unshift(tmpl);
     }
 	let detail = {};
 	//线程
@@ -69,52 +70,41 @@ function autoerji(url,html){
 		}
         return {details1:details1,pic:pic,desc:desc,tabs:tabs,lists:lists};
     };
+
 	let setid = 0;
-    for(let i in erjiTmpl){
-		if(setid > 0){
-			break;
+    let Tmpls = erjiTmpl.map((item)=>{
+		return {
+			func: task,
+			param: item,
+			id: item.id
 		}
-        let p = i+10;
-        if(p>erjiTmpl.length){p=erjiTmpl.length}
-        let TmplList = [];
-        for(let s=i;s<p;s++){
-            TmplList.push(erjiTmpl[s]);
-            i=s;
-        }
-		let Tmpls = TmplList.map((item)=>{
-			return {
-				func: task,
-				param: item,
-				id: item.id
+	});
+	let t = {};
+	be(Tmpls, {
+		func: function(obj, id, error, taskResult) {
+			if (taskResult.tabs.length>0&&taskResult.lists.length>0) {
+				setid = id;
+				data = taskResult;
+				o = obj;
+				return "break";
 			}
-        });
-		let t = {};
-		be(Tmpls, {
-            func: function(obj, id, error, taskResult) {
-				if (taskResult.tabs.length>0&&taskResult.lists.length>0) {
-					setid = id;
-					data = taskResult;
-					o = obj;
-					return "break";
-				}
-            },
-            param: {
-				o: t,
-            }
-        });
-        if(setid>0&&data.tabs.length>0&&data.lists.length>0){
-			putMyVar('Tmpl-'+urldomian,JSON.stringify(t));
-			if(data.tabs.length>data.lists.length){
-				data.tabs.splice(data.lists.length-1,data.tabs.length-data.lists.length);
-			}
-			data.details2 = "数据来源：模板匹配";
-			data.details1 = data.details1||detail.details1||"";
-			data.pic = data.pic||detail.pic||"";
-			data.desc = data.desc||detail.desc||"";
-		}else{
-			data = {};
+		},
+		param: {
+			o: t,
 		}
-    }
+	});
+	if(setid>0&&data.tabs.length>0&&data.lists.length>0){
+		putMyVar('Tmpl-'+urldomian, JSON.stringify(t));
+		if(data.tabs.length>data.lists.length){
+			data.tabs.splice(data.lists.length-1, data.tabs.length-data.lists.length);
+		}
+		data.details2 = "数据来源：模板匹配";
+		data.details1 = data.details1||detail.details1||"";
+		data.pic = data.pic||detail.pic||"";
+		data.desc = data.desc||detail.desc||"";
+	}else{
+		data = {};
+	}
 	if(data.lists){
 		return data;
 	}else{
