@@ -1012,8 +1012,11 @@ function getErData(jkdata) {
         html = getHtml(MY_URL, headers);
     } else if (api_type=="hipy_t3") {
         let drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(jkdata);
-        html = drpy.detail(MY_URL);
-        log(html);
+        try{
+            html = drpy.detail(MY_URL);
+        }catch(e){
+            throw new Error("获取二级代码失败");
+        }
         detailtype = drpy.getRule('类型') || (jkdata.name.includes('[书]')?"小说":"");
     } else if (api_type=="hipy_t4") {
         html = getHtml(jkdata.url+"&extend="+jkdata.ext+"&ac=detail&ids="+MY_URL, headers);
@@ -1363,7 +1366,6 @@ function getErData(jkdata) {
                     return it.split('#');
                 });
             }catch(e){}
-            log("没问题");
         }
 
         if (/XPath|biubiu|XBPQ|XYQ/.test(api_type) && html && (tabs.length == 0 || lists.length == 0) && getMyVar('debug', '0') == "0" && html.indexOf(MY_PARAMS.pageTitle) > -1) {
