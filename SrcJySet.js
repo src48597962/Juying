@@ -1747,6 +1747,12 @@ function resource() {
                 return "hiker://empty";
             })
         });
+    }else if(importtype=="3"){
+        d.push({
+            title: '当前订阅地址：' + Juconfig['dySource'],
+            col_type: "rich_text",
+            extra:{textSize:12}
+        });
     }
     d.push({
         title:'本地',
