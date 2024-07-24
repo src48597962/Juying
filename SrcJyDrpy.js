@@ -139,8 +139,10 @@ function createNewDrpy(sdata) {
 }
 
 //获取在线文件内容
-function getJkContnet(url) {
-    if(!url.startsWith('http')){
+function getContnet(url) {
+    if(url.startsWith('file')){
+        return fetch(url);
+    }else if(!url.startsWith('http')){
         return '';
     }
     if(url.startsWith('https://raw.github')){
@@ -164,7 +166,7 @@ function getext(jkdata) {
         if (!fileExist(jkdata.url)) {
             jkdata.url = jkdata.url.replace('/data/','/_cache/');
             if (jkdata.ext && /^http/.test(jkdata.ext)) {
-                let content = getJkContnet(jkdata.ext.split('?')[0]);
+                let content = getContnet(jkdata.ext.split('?')[0]);
                 if (content) {
                     writeFile(jkdata.url, content);
                 }
