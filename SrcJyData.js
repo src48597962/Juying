@@ -496,7 +496,7 @@ function getYiData(jkdata) {
             }else if (api_type=="hipy_t3") {
                 let vodlist = JSON.parse(drpy.category(fl.cateId, MY_PAGE, true, fl)).list || [];
                 vodlist.forEach(it=>{
-                    vodlists.push({ "vod_url": it.vod_id.toString().split("@@")[0], "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic, "vod_play": noerji?it.vod_id.toString():"" });
+                    vodlists.push({ "vod_url": it.vod_id.toString().split("@@")[0], "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic, "vod_play": noerji?it.vod_id.toString().split("@@")[0]:"" });
                 })
             }else if (api_type == "XYQ") {
                 let gethtml = getHtml(MY_URL, headers);
