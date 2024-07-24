@@ -297,11 +297,9 @@ function SRCSet() {
     jkdatalist.forEach(it => {
         let selectmenu,datatitle,datadesc;
         if(guanliType=="jk"){
-            //datatitle = it.name + ' ('+it.type+')' + (it.group?' [' + it.group + ']':"") + (it.preferr?" ⭐":"");
             datadesc = it.url;
             selectmenu = ["分享","编辑", "删除", it.stop?"启用":"禁用", "优选"];
         }else{
-            //datatitle = (it.sort||0)+'-'+it.name+'-'+it.url;
             datadesc = it.ext&&it.ext.flag?it.ext.flag.join(','):"";
             selectmenu = ["分享","编辑", "删除", it.stop?"启用":"禁用"];
         }
@@ -666,7 +664,7 @@ function jiekou(data) {
                 }
                 let urlfile = apiurl;
                 if(apiurl.startsWith('http') && !getapitype(apiurl)){
-                    let contnet = getJkContnet(apiurl);
+                    let contnet = getContnet(apiurl);
                     if(contnet){
                         urlfile = cachepath+apitype+"_"+apiurl.substr(apiurl.lastIndexOf('/') + 1);
                         writeFile(urlfile, contnet);
@@ -816,10 +814,10 @@ function jiexi(data) {
         title:'测试',
         col_type:'text_3',
         url: $().lazyRule(()=>{
-            var dataurl = getMyVar('parseurl');
-            var dataname = getMyVar('parsename')||'测试';
-            var datatype = getMyVar('parsetype','0');
-            var dataext = storage0.getMyVar('parseext') || {};
+            let dataurl = getMyVar('parseurl');
+            let dataname = getMyVar('parsename')||'测试';
+            let datatype = getMyVar('parsetype','0');
+            let dataext = storage0.getMyVar('parseext') || {};
             if(!dataurl||!/^http|^functio/.test(dataurl.trim())){
                 return "toast://获取解析地址失败，无法测试";
             }
@@ -839,8 +837,8 @@ function jiexi(data) {
                     cls: 'jxtest'
                 }
             })
-            var filepath = globalMap0.getMyVar('gmParams').datapath + "testurls.json";
-            var datafile = fetch(filepath);
+            let filepath = globalMap0.getMyVar('gmParams').datapath + "testurls.json";
+            let datafile = fetch(filepath);
             if(datafile != ""){
                 eval("var urls=" + datafile+ ";");
             }else{
@@ -864,7 +862,7 @@ function jiexi(data) {
             dataObj.parse = {name:dataname,url:dataurl,type:parseInt(datatype),ext:dataext};
 
             urls['自定义'] = "";
-            for(var key in urls){
+            for(let key in urls){
                 addItemBefore('jxline2', {
                     title: key,
                     url: key!="自定义"?$('#noRecordHistory##noHistory#').lazyRule((vipUrl,dataObj)=>{
@@ -1885,7 +1883,7 @@ function HipyImport(input, importmode){
             input = input.substring(0, input.length - 1);
         }
         showLoading('检测地址有效性');
-        let html = request(input);
+        let html = getContnet(input);
         let json = JSON.parse(html.split(`data-target="react-app.embeddedData">`)[1].split(`</script>`)[0]);
         let list = json.payload.tree.items;
         showLoading('执行多线程导入'+list.length);
@@ -1898,7 +1896,7 @@ function HipyImport(input, importmode){
         });
 
         let urls= [];
-        let datapath = globalMap0.getMyVar('gmParams').datapath + "libs_jk/";
+        let jkfilepath = datapath + "libs_jk/";
         //多线程处理
         let task = function(obj) {
             let arr = { "name": obj.name.split('.')[0], "type": "hipy_t3", "ext": obj.url}
@@ -1907,9 +1905,9 @@ function HipyImport(input, importmode){
             }
             let urlfile;
             try{
-                let content = getJkContnet(obj.url);
+                let content = getContnet(obj.url);
                 if (content) {
-                    urlfile = datapath + arr.type + '_' + obj.name;
+                    urlfile = jkfilepath + arr.type + '_' + obj.name;
                     writeFile(urlfile, content);
                 }
             }catch(e){
@@ -1964,7 +1962,7 @@ function Resourceimport(input,importtype,importmode){
         try{
             showLoading('检测文件有效性');
             if(input.startsWith('/storage/emulated')){input = "file://" + input}
-            var html = request(input,{timeout:2000});
+            let html = getContnet(input);
             if(html.includes('LuUPraez**')){
                 html = base64Decode(html.split('LuUPraez**')[1]);
             }
@@ -1973,9 +1971,8 @@ function Resourceimport(input,importtype,importmode){
             //html = html.replace(/api\"\:csp/g,'api":"csp').replace(reg, function(word) { 
             //    return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
             //}).replace(/^.*#.*$/gm,"").replace(/\,\,/g,',');//.replace(/=\\n\"/g,'="')|[\t\r\n].replace(/\s+/g, "").replace(/<\/?.+?>/g,"").replace(/[\r\n]/g, "")
-            //log(html);
+
             eval('data = ' + html)
-            //data = JSON.parse(html);  
             jiekous = data.sites||[];                      
         } catch (e) {
             hideLoading();
@@ -1983,7 +1980,7 @@ function Resourceimport(input,importtype,importmode){
             return "toast://失败：链接文件无效或内容有错";
         }
         hideLoading();
-        if(importmode==3){
+        if(importmode==3){//订阅较验完成
             Juconfig['dySource'] = input;
             writeFile(cfgfile, JSON.stringify(Juconfig));
             back();
@@ -2041,7 +2038,7 @@ function Resourceimport(input,importtype,importmode){
                             urlfile = 'hiker://files/' + extfile.split('?')[0].split('/files/Documents/')[1];
                         }else if(/^http/.test(extfile)){
                             try{
-                                let content = getJkContnet(extfile);
+                                let content = getContnet(extfile);
                                 if (!content) {
                                     urlfile = '';
                                 }else{
