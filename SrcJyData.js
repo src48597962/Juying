@@ -1257,7 +1257,7 @@ function getErData(jkdata) {
                     extdata["线路标题"] = extdata["线路标题"].split('+')[1];
                 }
                 for (let i = 0; i < artlist.length; i++) {
-                    let arttitle = artlist[i].split(extdata["线路数组"].split('&&')[0])[1].split(extdata["线路数组"].split('&&')[1])[0].split(extdata["线路标题"].split('&&')[0])[1].split(extdata["线路标题"].split('&&')[1])[0];
+                    let arttitle = getBetweenStr(artlist[i], extdata["线路标题"]);//artlist[i].split(extdata["线路数组"].split('&&')[0])[1].split(extdata["线路数组"].split('&&')[1])[0].split(extdata["线路标题"].split('&&')[0])[1].split(extdata["线路标题"].split('&&')[1])[0];
                     tabs.push(arttitle.replace(/<\/?.+?\/?>/g, ''));
                 }
 
