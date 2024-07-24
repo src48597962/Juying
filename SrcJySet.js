@@ -1886,41 +1886,25 @@ function HipyImport(input, importmode){
         let json = JSON.parse(html.split(`data-target="react-app.embeddedData">`)[1].split(`</script>`)[0]);
         let list = json.payload.tree.items;
         showLoading('执行多线程导入'+list.length);
-        let ghproxy = $.require('ghproxy').getproxy();
+
         let jiekous = list.filter(v=>v.contentType=="file").map(it=>{
             return {
                 name: it.name,
-                url: input.replace('github.com','raw.githubusercontent.com').replace('/tree/','/') + it.path.substr(it.path.lastIndexOf('/')),
-                ghproxy: ghproxy
+                url: input.replace('github.com','raw.githubusercontent.com').replace('/tree/','/') + it.path.substr(it.path.lastIndexOf('/'))
             }
         });
 
         let urls= [];
         let datapath = globalMap0.getMyVar('gmParams').datapath + "libs_jk/";
         //多线程处理
-        var task = function(obj) {
-            function shuffleArray(array) {
-                array.sort(() => Math.random() - 0.5);
-                return array;
-            }
-            let proxys = obj.ghproxy;
-            shuffleArray(proxys)
-            function getcontent() {
-                for(let i=0;i<proxys.length;i++){
-                    let content = fetch(proxys[i]+obj.url, {timeout:3000});
-                    if (content && !content.trim().startsWith('<!DOCTYPE html>') && !content.startsWith('<html>')) {
-                        return content;
-                    }
-                }
-                return fetch(obj.url, {timeout:6000});
-            }
+        let task = function(obj) {
             let arr = { "name": obj.name.split('.')[0], "type": "hipy_t3", "ext": obj.url}
             if(arr.name.includes('[搜]')){
                 arr['onlysearch'] = 1;
             }
             let urlfile;
             try{
-                let content = getcontent();
+                let content = getJkContnet(obj.url);
                 if (content) {
                     urlfile = datapath + arr.type + '_' + obj.name;
                     writeFile(urlfile, content);
