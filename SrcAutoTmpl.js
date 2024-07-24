@@ -23,6 +23,9 @@ function autoerji(url,html){
 				tabs.push(name);
 			}
 		});
+		if(obj.id==35){
+			log(tabs);
+		}
 		let conts = _pdfa(html,'body&&'+obj.lists.split(';')[0]);//全线路影片列表
 		let lists = [];
 		let key = obj.lists.split(';')[1];
@@ -40,6 +43,9 @@ function autoerji(url,html){
 				lists.push(list);
 			}
 		})
+		if(obj.id==35){
+			log(lists);
+		}
 		let details1,pic,desc;
 		try{
 			let details = obj.desc.split(';');
@@ -49,6 +55,9 @@ function autoerji(url,html){
 			}
 			if(details1&&!detail.details1){detail.details1 = details1;}
 		}catch(e){}
+		if(obj.id==35){
+			log(details1);
+		}
 		try{
 			pic = _pdfh(html, obj.img).replace(/http.*\/tu\.php\?tu=|\/img\.php\?url=| |\/tu\.php\?tu=/g,'');
 			if(!/^http/.test(pic)&&pic){
