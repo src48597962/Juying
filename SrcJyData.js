@@ -1015,7 +1015,7 @@ function getErData(jkdata) {
         try{
             html = drpy.detail(MY_URL);
         }catch(e){
-            throw new Error("获取二级代码失败");
+            toast("获取二级详情失败，换源");
         }
         detailtype = drpy.getRule('类型') || (jkdata.name.includes('[书]')?"小说":"");
     } else if (api_type=="hipy_t4") {
