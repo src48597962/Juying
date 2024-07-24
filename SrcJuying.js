@@ -596,7 +596,7 @@ function dianboerji() {
     
     //底部说明
     d.push({
-        desc: '‘‘’’<small><font color=#f20c00>此规则仅限学习交流使用，请于导入后24小时内删除，任何团体或个人不得以任何方式方法传播此规则的整体或部分！</font></small>',
+        desc: '‘‘’’<small><font color=#d0d0d0>此规则仅限学习交流使用，请于导入后24小时内删除，任何团体或个人不得以任何方式方法传播此规则的整体或部分！</font></small>',
         url: 'toast://温馨提示：且用且珍惜！',
         col_type: 'text_center_1',
         extra: {
