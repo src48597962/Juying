@@ -529,6 +529,6 @@ let erjiTmpl = [
 		"desc": ".data&&Text;.data,1&&Text;.data,6&&Text",
 		"content": ".detail-content&&&&Text",
 		"tabs": ".nav-tabs&&li",
-		"lists": ".tab-content;body&&.stui-content__playlis"
+		"lists": ".stui-content__playlist;body&&li"
 	}
 ]
