@@ -525,5 +525,13 @@ let erjiTmpl = [
 		"content": ".module-info-item,5||.module-info-item&&Text",
 		"tabs": "#two1",
 		"lists": ".playlist;body&&.list-title"
+	},
+	{
+        "id": 35,
+		"img": ".lazyload&&data-original||src",
+		"desc": ".data&&Text;.data,1&&Text;.data,6&&Text",
+		"content": ".detail-content&&&&Text",
+		"tabs": ".nav-tabs&&li",
+		"lists": ".tab-content;body&&.stui-content__playlis"
 	}
 ]
