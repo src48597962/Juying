@@ -63,11 +63,7 @@ function autoerji(url, html) {
 			desc = obj.content ? _pdfh(html, obj.content) : "";
 			if (desc && !detail.desc) { detail.desc = desc; }
 		} catch (e) { }
-		if (obj.id == 35) {
-			log(obj.id);
-			log(tabs);
-			log(lists);
-		}
+
 		return { details1: details1, pic: pic, desc: desc, tabs: tabs, lists: lists };
 	};
 
