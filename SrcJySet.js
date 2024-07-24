@@ -1846,6 +1846,7 @@ function resource() {
                 }else if(getMyVar('importtype','1')=="2"){
                     return HipyImport(input,Juconfig['importmode']?2:0);
                 }else if(getMyVar('importtype','1')=="3"){
+
                     Juconfig['dySource'] = input;
                     writeFile(cfgfile, JSON.stringify(Juconfig));
                     back();
@@ -1966,7 +1967,7 @@ function HipyImport(input, importmode){
         return 'toast://hipy库>查询' + jiekous.length + (jknum>-1?' 接口保存'+jknum:' 导入异常');     
     }catch(e){
         toast('链接访问异常，查看网页');
-        return input;;
+        return input;
     }
 }
 //资源导入
