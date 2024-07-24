@@ -567,6 +567,7 @@ function dianboerji() {
             for(let i=0; i<列表.length; i++) {
                 let playtitle = 列表[i].split('$')[0];
                 playtitle = playtitle==name?'正片':playtitle.replace(name+" - ","").replace(name+"_","").replace(name,"").trim();
+                playtitle = decodeURIComponent(playtitle);
                 let playurl = (novel?"hiker://empty##":"")+列表[i].split('$')[1].trim();
 
                 let extra = {
