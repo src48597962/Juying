@@ -1011,9 +1011,10 @@ function getErData(jkdata) {
         }
         html = getHtml(MY_URL, headers);
     } else if (api_type=="hipy_t3") {
+        log("1");
         let drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(jkdata);
+        log("2");
         html = drpy.detail(MY_URL);
-        log(html);
         detailtype = drpy.getRule('类型') || (jkdata.name.includes('[书]')?"小说":"");
     } else if (api_type=="hipy_t4") {
         html = getHtml(jkdata.url+"&extend="+jkdata.ext+"&ac=detail&ids="+MY_URL, headers);
