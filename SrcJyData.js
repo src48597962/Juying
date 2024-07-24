@@ -1014,9 +1014,7 @@ function getErData(jkdata) {
         let drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(jkdata);
         try{
             html = drpy.detail(MY_URL);
-        }catch(e){
-            toast("获取二级详情失败，换源");
-        }
+        }catch(e){}
         detailtype = drpy.getRule('类型') || (jkdata.name.includes('[书]')?"小说":"");
     } else if (api_type=="hipy_t4") {
         html = getHtml(jkdata.url+"&extend="+jkdata.ext+"&ac=detail&ids="+MY_URL, headers);
