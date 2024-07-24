@@ -554,6 +554,7 @@ function jiekou(data) {
         col_type: 'input',
         desc: "接口地址",
         url: $.toString(() => {
+            toast('如果有修改，接口不要点保存');
             return "editFile://"+getMyVar('apiurl','');
         }),
         extra: {
