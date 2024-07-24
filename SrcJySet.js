@@ -766,17 +766,16 @@ function jiexi(data) {
         title: '是否为web嗅探解析：' + (getMyVar('parsetype', data?data.type.toString():'0')=="0"?"是":"否"),
         col_type: 'text_1',
         url:$().lazyRule(()=>{
-            if(/^http/.test(getMyVar('parseurl','')) && /id=|key=/.test(getMyVar('parseurl',''))){
-                if(getMyVar('parsetype')=="1"){
-                    putMyVar('parsetype','0');
-                }else{
-                    putMyVar('parsetype','1');
-                }
-                refreshPage(false);
-                return "hiker://empty";
+            if(/^function/.test(getMyVar('parseurl',''))){
+                putMyVar('parsetype','0');
+            }else if(getMyVar('parsetype')=="1"){
+                putMyVar('parsetype','0');
             }else{
-                return "toast://以http开头的普通解析才能标记"
+                putMyVar('parsetype','1');
             }
+
+            refreshPage(false);
+            return "toast://是否为web解析，只用于判断进入video播放";
         })
     });
     d.push({
@@ -805,7 +804,9 @@ function jiexi(data) {
             height: 3,
             onChange: $.toString(() => {
                 if (/{|}/.test(input)) {
-                    storage0.putMyVar("parseext", JSON.parse(input))
+                    try{
+                        storage0.putMyVar("parseext", JSON.parse(input));
+                    }catch(e){}
                 }
             })
         }
