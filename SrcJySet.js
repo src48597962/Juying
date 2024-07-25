@@ -1758,13 +1758,13 @@ function resource() {
         desc: '请输入链接地址',
         url: $.toString(() => {
             return `fileSelect://`+$.toString(()=>{
-                putMyVar("importinput",input);
+                putMyVar("importinput",MY_PATH);
                 refreshPage();
                 return "hiker://empty";
             })
         }),
         extra: {
-            titleVisible: false,
+            titleVisible: MY_NAME=="海阔视界"&&getAppVersion()>=5100?true:false,
             defaultValue: getMyVar('importinput', ''),
             onChange: 'putMyVar("importinput",input)'
         }
