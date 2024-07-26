@@ -89,6 +89,7 @@ function getYiData(jkdata) {
     } else if (api_type == 'hipy_t3') {
         if(getItem('hipy_t3_enable')!="1"){
             toast("hipy_t3请使用DrpyHiker小程序");
+            log("hipy_t3接口未开启");
             return {
                 fllists: [],
                 vodlists: [],
