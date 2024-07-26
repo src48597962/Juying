@@ -2,11 +2,15 @@ let datapath = "hiker://files/data/"+(MY_RULE._title || MY_RULE.title)+"/"; //�
 let rulepath = "hiker://files/rules/Src/Juying2/"; //规则文件路径
 let cachepath = "hiker://files/_cache/Juying2/"; //缓存文件路径
 let jkfile = datapath + "jiekou.json";
-let jxfile = datapath + "jiexi.json";
+let jxfile = rulepath + "jiexi.json";
 let ypfile = datapath + "yundisk.json";
 let cfgfile = rulepath + "config.json";
 let sortfile = rulepath + "jksort.json";
 let codepath = config.依赖?config.依赖.match(/http(s)?:\/\/.*\//)[0]:module.modulePath.slice(0, module.modulePath.lastIndexOf("/")+1);
+if(fileExist(datapath + "jiexi.json")){
+    writeFile(jxfile, fetch(datapath + "jiexi.json"));
+    deleteFile(datapath + "jiexi.json");
+}
 
 let Juconfig= {};
 let Jucfg=fetch(cfgfile);
