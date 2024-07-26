@@ -271,8 +271,10 @@ function dianboerji() {
     }else{
         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
         erdata = getErData(jkdata);
-        let markData = {surl: jkdata.url, url: MY_URL, data: erdata}
-        writeFile(cacheDataFile, JSON.stringify(markData));
+        if(erdata.lists.length>0){//只有二级选集列表获取到时才缓存
+            let markData = {surl: jkdata.url, url: MY_URL, data: erdata}
+            writeFile(cacheDataFile, JSON.stringify(markData));
+        }
     }
 
     //log(erdata);
@@ -401,9 +403,7 @@ function dianboerji() {
                 //xlog('✓强制修正选集顺序失败>'+e.message)
             }
         }
-        if (getMyVar('shsort') == '1') {
-            列表.reverse();
-        }
+        
         //分页定义
         let partpage = storage0.getItem('partpage') || {};
         if(partpage.ispage){//启用分页
@@ -494,7 +494,9 @@ function dianboerji() {
                 列表 = 分页s[pageid];//取当前分页的选集列表
             }
         }
-        
+        if (getMyVar('shsort') == '1') {
+            列表.reverse();
+        }
         if(列表.length==0){
             d.push({
                 title: '当前无播放选集，可切换站源试试！',
