@@ -1601,7 +1601,6 @@ function manageSet(){
         url: $("#noLoading#").lazyRule(() => {
             eval(fetch(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcTmplVersion.js'));
             let updateRecords = newVersion.JYUpdateRecords || [];
-            updateRecords.reverse();
 
             const hikerPop = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6966");
             hikerPop.updateRecordsBottom(updateRecords);
