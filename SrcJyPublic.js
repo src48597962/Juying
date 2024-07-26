@@ -8,7 +8,9 @@ let cfgfile = rulepath + "config.json";
 let sortfile = rulepath + "jksort.json";
 let codepath = config.依赖?config.依赖.match(/http(s)?:\/\/.*\//)[0]:module.modulePath.slice(0, module.modulePath.lastIndexOf("/")+1);
 if(fileExist(datapath + "jiexi.json")){
-    writeFile(jxfile, fetch(datapath + "jiexi.json"));
+    if(!fileExist(jxfile)){
+        writeFile(jxfile, fetch(datapath + "jiexi.json"));
+    }
     deleteFile(datapath + "jiexi.json");
 }
 
