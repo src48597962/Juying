@@ -433,7 +433,7 @@ function jiekousave(urls, mode) {
 
             if(it.url.startsWith(cachepath)){
                 if(fileExist(it.url)){
-                    let urlfile = datapath + it.url.substr(it.url.lastIndexOf('/') + 1);
+                    let urlfile = it.url.replace(cachepath, datapath);
                     writeFile(urlfile, fetch(it.url));
                     it.url = urlfile;
                 }else{
