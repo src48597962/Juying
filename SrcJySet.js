@@ -1956,155 +1956,38 @@ function HipyImport(input, importmode){
 }
 //资源导入
 function Resourceimport(input,importtype,importmode){
+    //mode:0增量，1覆盖，2全量
     if(importtype=="1"){//tvbox导入
-        let data,jiekous;
-        try{
-            showLoading('检测文件有效性');
-            if(input.startsWith('/storage/emulated')){input = "file://" + input}
-            let html = getContnet(input);
-            if(html.includes('LuUPraez**')){
-                html = base64Decode(html.split('LuUPraez**')[1]);
-            }
-            
-            //var reg = /("([^\\\"]*(\\.)?)*")|('([^\\\']*(\\.)?)*')|(\/{2,}.*?(\r|\n|$))|(\/\*(\n|.)*?\*\/)/g;
-            //html = html.replace(/api\"\:csp/g,'api":"csp').replace(reg, function(word) { 
-            //    return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word; 
-            //}).replace(/^.*#.*$/gm,"").replace(/\,\,/g,',');//.replace(/=\\n\"/g,'="')|[\t\r\n].replace(/\s+/g, "").replace(/<\/?.+?>/g,"").replace(/[\r\n]/g, "")
-
-            eval('data = ' + html)
-            jiekous = data.sites||[];                      
-        } catch (e) {
-            hideLoading();
-            log('Box文件检测失败>'+e.message); 
-            return "toast://失败：链接文件无效或内容有错";
-        }
-        hideLoading();
-        if(importmode==3){//订阅较验完成
-            Juconfig['dySource'] = input;
-            writeFile(cfgfile, JSON.stringify(Juconfig));
-            back();
-            return "toast://已设置，订阅模式下生效";
-        }
-
         let jknum = -1;
         let jxnum = -1;
-        showLoading('正在多线程抓取数据中');
-        if((getMyVar('importjiekou','1')=="1")&&jiekous.length>0){
-            let urls= [];
-            let hipy_t3_enable = getItem('hipy_t3_enable')=="1"?1:0;
-            //多线程处理
-            var task = function(obj) {
-                let arr;
-                if(/^csp_AppYs/.test(obj.api)){
-                    arr = { "name": obj.name, "url": obj.ext, "type": getapitype(obj.ext)};
-                }else if((obj.type==1||obj.type==0)&&obj.api.indexOf('cms.nokia.press')==-1){
-                    arr = { "name": obj.name, "url": obj.api, "type": "cms"};
-                    if(obj.categories){
-                        arr["categories"] = obj.categories;
-                    }
-                }else{
-                    let extfile = obj.ext;
-                    if($.type(extfile)=='string'){
-                        if(/^clan:/.test(extfile)){
-                            extfile = extfile.replace("clan://TVBox/", input.match(/file.*\//)[0]);
-                        }else if(extfile.startsWith('./')){
-                            let urlpath = input.substr(0, input.lastIndexOf('/')+1);
-                            extfile = extfile.replace("../", urlpath).replace(/\.\//g, urlpath);
-                        }
-                    }
 
-                    if(/^csp_XBiubiu/.test(obj.api)){
-                        arr = { "name": obj.name, "type": "biubiu", "ext": extfile};
-                    }else if(/^csp_XPath/.test(obj.api)){
-                        arr = { "name": obj.name, "type": "XPath", "ext": extfile};
-                    }else if(obj.api=="csp_XBPQ"){
-                        arr = { "name": obj.name, "type": "XBPQ", "ext": extfile};
-                    }else if(/^csp_XYQHiker/.test(obj.api)){
-                        arr = { "name": obj.name, "type": "XYQ", "ext": extfile};
-                    }else if(/drpy2/.test(obj.api) && obj.type==3 && !obj.ext.includes('drpy.js') && hipy_t3_enable){
-                        arr = { "name": obj.name.includes('|')?obj.name.split('|')[1].trim():obj.name, "type": "hipy_t3", "ext": extfile};
-                        if(arr.name.includes('[搜]')){
-                            arr['onlysearch'] = 1;
-                        }
-                    }
-
-                    if(arr){
-                        let urlfile;
-                        if($.type(extfile)=='object'){
-                            urlfile = datapath + "libs_jk/" + arr.type + '_' + arr.name + '.json';
-                            writeFile(urlfile, JSON.stringify(extfile));
-                        }else if(/^file/.test(extfile)){
-                            urlfile = 'hiker://files/' + extfile.split('?')[0].split('/files/Documents/')[1];
-                        }else if(/^http/.test(extfile)){
-                            try{
-                                let content = getContnet(extfile);
-                                if (!content) {
-                                    urlfile = '';
-                                }else{
-                                    if(arr.type=="XYQ" && !/分类片单标题/.test(content)){
-                                        arr['onlysearch'] = 1;
-                                    }
-                                    if(arr.type=="XBPQ" && !/搜索url/.test(content)){
-                                        obj.searchable = 0;
-                                    }
-                                    
-                                    urlfile = cachepath + arr.type + '_' + (extfile.includes('?')?obj.key:"") + extfile.split('?')[0].substr(extfile.split('?')[0].lastIndexOf('/') + 1);
-                                    writeFile(urlfile, content);
-                                }
-                            }catch(e){
-                                log(obj.name + 'ext文件缓存失败>' + e.message);
-                            }
-                        }
-                        if(urlfile){
-                            arr['url'] = urlfile;
-                        }
-                    }
-                }
-                if(arr && arr.url){
-                    arr['searchable'] = obj.searchable;
-                    return {data: arr};
-                }
-                return {};
-            }
-            
-            let jiekoutask = jiekous.map((list)=>{
-                return {
-                    func: task,
-                    param: list,
-                    id: list.key
-                }
-            });
-
-            be(jiekoutask, {
-                func: function(obj, id, error, taskResult) {  
-                    if(taskResult.data){
-                        urls.push(taskResult.data);
-                    }
-                },
-                param: {
-                }
-            });
-
-            try{
-                jknum = jiekousave(urls, importmode);
-            }catch(e){
-                jknum =-1;
-                log('TVBox导入接口保存有异常>'+e.message);
-            } 
+        //showLoading('正在多线程抓取数据中');
+        //hideLoading();
+        let imports = {};
+        if(getMyVar('importjiekou','1')=="1"){
+            imports.jk = 1;
         }
-        let jiexis = data.parses||[];
-        if((getMyVar('importjiexi','1')=="1")&&jiexis.length>0){
-            try{
-                let urls = jiexis.filter(it=>{
-                    return /^http/.test(it.url);
-                })
-                jxnum = jiexisave(urls, importmode);
-            } catch (e) {
-                jxnum = -1;
-                log('TVBox导入解析保存失败>'+e.message);
-            }
+        if(getMyVar('importjiexi','1')=="1"){
+            imports.jx = 1;
+        } 
+        let boxSource = getBoxSource(input, 1, imports);
+        if(boxSource.message){
+            return "toast://" + boxSource.message;
         }
-        hideLoading(); 
+        let jiekous = boxSource.jklist || [];
+        try{
+            jknum = jiekousave(jiekous, importmode);
+        }catch(e){
+            jknum =-1;
+            log('TVBox导入接口保存有异常>'+e.message);
+        } 
+        let jiexis = boxSource.jxlist || [];
+        try{
+            jxnum = jiexisave(jiexis, importmode);
+        } catch (e) {
+            jxnum = -1;
+            log('TVBox导入解析保存失败>'+e.message);
+        }
         let sm = (jknum>-1?' 接口保存'+jknum:'')+(jxnum>-1?' 解析保存'+jxnum:'');
         if(jknum>0||jxnum>0){back();}
         if(jknum==-1&&jxnum==-1){
