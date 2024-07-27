@@ -1850,7 +1850,7 @@ function resource() {
                 }else if(getMyVar('importtype','1')=="2"){
                     return HipyImport(input,Juconfig['importmode']?2:0);
                 }else if(getMyVar('importtype','1')=="3"){
-                    return getBoxSource(input, 3);
+                    return getBoxSource(input, 3).message;
                     //return Resourceimport(input,'1',3);
                 }
             }, Juconfig, cfgfile),
