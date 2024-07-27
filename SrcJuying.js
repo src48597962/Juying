@@ -1272,7 +1272,7 @@ function yiji() {
         d = d.concat(items);
     }
 
-    let resoufile = globalMap0.getMyVar('gmParams').rulepath + "resou.json";
+    let resoufile = datapath + "resou.json";
     let Juyingresou = fetch(resoufile);
     let JYresou = {};
     if(Juyingresou != ""){
