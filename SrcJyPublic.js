@@ -176,13 +176,14 @@ function getBoxSource(input, mode, imports){
 
                 if(arr){
                     let urlfile;
+                    let filepath = cachepath + 'libs_jk/' + arr.type;
                     if($.type(extfile)=='object'){
-                        urlfile = cachepath + arr.type + '_' + arr.name + '.json';
+                        urlfile = filepath + '_' + arr.name + '.json';
                         writeFile(urlfile, JSON.stringify(extfile));
                     }else if(/^file/.test(extfile)){
-                        urlfile = mode==1?cachepath + arr.type + '_' + (extfile.includes('?')?obj.key:"")+extfile.split('?')[0].substr(extfile.split('?')[0].lastIndexOf('/')+1):extfile.split('?')[0];
+                        urlfile = mode==1?filepath + '_' + (extfile.includes('?')?obj.key:"")+extfile.split('?')[0].substr(extfile.split('?')[0].lastIndexOf('/')+1):extfile.split('?')[0];
                     }else if(/^http/.test(extfile)){
-                        urlfile = cachepath + arr.type + '_' + (extfile.includes('?')?obj.key:"")+extfile.split('?')[0].substr(extfile.split('?')[0].lastIndexOf('/')+1);
+                        urlfile = filepath + '_' + (extfile.includes('?')?obj.key:"")+extfile.split('?')[0].substr(extfile.split('?')[0].lastIndexOf('/')+1);
                         if(mode==1){
                             try{
                                 let content = getContnet(extfile);
