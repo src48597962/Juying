@@ -1,7 +1,7 @@
 let datapath = "hiker://files/data/"+(MY_RULE._title || MY_RULE.title)+"/"; //数据文件路径
 let rulepath = "hiker://files/rules/Src/Juying2/"; //规则文件路径
 let cachepath = "hiker://files/_cache/Juying2/"; //缓存文件路径
-let jkfile = datapath + "jiekou.json";
+let jkfile = rulepath + "jiekou.json";
 let jxfile = rulepath + "jiexi.json";
 let ypfile = datapath + "yundisk.json";
 let cfgfile = rulepath + "config.json";
@@ -12,6 +12,12 @@ if(fileExist(datapath + "jiexi.json")){
         writeFile(jxfile, fetch(datapath + "jiexi.json"));
     }
     deleteFile(datapath + "jiexi.json");
+}
+if(fileExist(datapath + "jiekou.json")){
+    if(!fileExist(jkfile)){
+        writeFile(jkfile, fetch(datapath + "jiekou.json"));
+    }
+    deleteFile(datapath + "jiekou.json");
 }
 
 let Juconfig= {};
@@ -96,7 +102,7 @@ function getBoxSource(input, mode, imports){
             if(!fileExist(tmpFile)){
                 html = getContnet(input);
                 if(html){
-                    writeFile(tmpFile, tmpFile);
+                    writeFile(tmpFile, html);
                 }
             }else{
                 html = fetch(tmpFile);
