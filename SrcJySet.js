@@ -1826,7 +1826,7 @@ function resource() {
         col_type: "text_2"
     });
     d.push({
-        title: '🆗 确定导入(' + (Juconfig["importmode"]?"全":"增")+')',
+        title: '🆗 '+(getMyVar('importtype','1')=="3"?'确定订阅':'确定导入(' + (Juconfig["importmode"]?"全":"增")+')'),
         url: importtype=="1"&&getMyVar('importjiekou','1')!="1"&&getMyVar('importjiexi','1')!="1"?'toast://请选择导入项目':$('#noLoading#').lazyRule((Juconfig,cfgfile) => {
                 let input = getMyVar('importinput', '');
                 if(input==""){
@@ -1850,7 +1850,8 @@ function resource() {
                 }else if(getMyVar('importtype','1')=="2"){
                     return HipyImport(input,Juconfig['importmode']?2:0);
                 }else if(getMyVar('importtype','1')=="3"){
-                    return Resourceimport(input,'1',3);
+                    return getBoxSource(input, 3);
+                    //return Resourceimport(input,'1',3);
                 }
             }, Juconfig, cfgfile),
         col_type: "text_2",
