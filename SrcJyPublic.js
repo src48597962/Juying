@@ -47,111 +47,13 @@ function getDatas(lx, isyx) {
         }
     }else if(getItem('sourceMode','1')=='2'){
         if(Juconfig['dySource']){
-            let dySource = Juconfig['dySource'];
-            let input;
-            if(dySource.startsWith('http')){
-                let dyJkTmpFile = cachepath + md5(Juconfig['dySource']) + ".json";
-                if(!fileExist(dyJkTmpFile)){
-                    showLoading('正在加载订阅源，请稍后...');
-                    let contnet = getContnet(Juconfig['dySource']);
-                    if(contnet){
-                        writeFile(dyJkTmpFile, contnet);
-                    }
-                }
-                input = dyJkTmpFile;
-            }else if(!dySource.startsWith('file://')){
-                input = '';
+            let boxSource = getBoxSource(Juconfig['dySource'], 2, {jk:lx=="jk"?1:0,jx:lx=="jx"?1:0});
+            if(boxSource.message){
+                toast(boxSource.message);
             }else{
-                input = dySource;
-            }
-            
-            if(fileExist(input)){
-                try{
-                    let data = JSON.parse(fetch(input));
-                    let list = lx=="jk"?data.sites:data.parses || [];
-                    let hipy_t3_enable = getItem('hipy_t3_enable')=="1"?1:0;
-                    let task = function(obj) {
-                        let arr;
-                        if(lx=="jk"){
-                            if(/^csp_AppYs/.test(obj.api)){
-                                arr = { "name": obj.name, "url": obj.ext, "type": getapitype(obj.ext)};
-                            }else if((obj.type==1||obj.type==0)&&obj.api.indexOf('cms.nokia.press')==-1){
-                                arr = { "name": obj.name, "url": obj.api, "type": "cms"};
-                                if(obj.categories){
-                                    arr["categories"] = obj.categories;
-                                }
-                            }else if(obj.type==4 && obj.api.includes('api/v1/vod')){
-                                arr = { "name": obj.name, "url": obj.api, "type": "hipy_t4", "ext": obj.ext};
-                                if(arr.name.includes('[搜]')){
-                                    arr['onlysearch'] = 1;
-                                }
-                            }else if(/drpy2/.test(obj.api) && obj.type==3 && !obj.ext.includes('drpy.js') && hipy_t3_enable){
-                                let extfile = obj.ext;
-                                if(extfile.startsWith('./')){
-                                    let urlpath = dySource.substr(0, dySource.lastIndexOf('/')+1);
-                                    extfile = extfile.replace("../", urlpath).replace(/\.\//g, urlpath);
-                                }
-                                let urlfile;
-                                if(dySource.startsWith('file://')){
-                                    urlfile = 'hiker://files/' + extfile.split('?')[0].split('/files/Documents/')[1];
-                                }else if(dySource.startsWith('http')){
-                                    urlfile = cachepath + obj.key + '.js';
-                                    try{
-                                        if(!fileExist(urlfile)){
-                                            let content = fetch(extfile, {timeout:2000});
-                                            if (content == '') {
-                                                urlfile = '';
-                                            }else{
-                                                writeFile(urlfile, content);
-                                            }
-                                        }
-                                    }catch(e){
-                                        urlfile = '';
-                                        log(obj.name + 'ext文件缓存失败>' + e.message);
-                                    }
-                                }
-                                if(urlfile){
-                                    arr = { "name": obj.name.includes('|')?obj.name.split('|')[1].trim():obj.name, "url": urlfile, "type": "hipy_t3", "ext": extfile};
-                                    if(arr.name.includes('[搜]')){
-                                        arr['onlysearch'] = 1;
-                                    }
-                                    arr.name = arr.name.replace('(drpy_t3)','');
-                                }
-                            }
-                            if(arr){
-                                arr['searchable'] = obj.searchable;
-                            }
-                        }else{
-                            if(obj.url.startsWith('http')){
-                                arr = obj;
-                            }
-                        }
-                        if(arr && arr.url){
-                            return {data: arr};
-                        }
-                        return {};
-                    }
-                    let listtask = list.map((obj)=>{
-                        return {
-                            func: task,
-                            param: obj,
-                            id: obj.name
-                        }
-                    });
-
-                    be(listtask, {
-                        func: function(obj, id, error, taskResult) {   
-                            if(taskResult.data){
-                                datalist.push(taskResult.data);
-                            }                         
-                        },
-                        param: {
-                        }
-                    });
-                }catch(e){}
+                datalist = lx=="jk"?boxSource.jklist:boxSource.jxlist;
             }
         }
-        hideLoading();
     }
 
     if (getItem("sourceListSort") == "接口名称") {
@@ -188,7 +90,20 @@ function getBoxSource(input, mode, imports){
     try{
         showLoading('检测文件有效性');
         if(input.startsWith('/storage/')){input = "file://" + input}
-        html = getContnet(input);
+        
+        if(input.startsWith('http')){
+            let tmpFile = cachepath + md5(input) + ".json";
+            if(!fileExist(tmpFile)){
+                html = getContnet(input);
+                if(html){
+                    writeFile(tmpFile, tmpFile);
+                }
+            }else{
+                html = fetch(tmpFile);
+            }
+        }else{
+            html = fetch(input);
+        }
         if(html.includes('LuUPraez**')){
             html = base64Decode(html.split('LuUPraez**')[1]);
         }
@@ -199,7 +114,6 @@ function getBoxSource(input, mode, imports){
         hideLoading();
         log('Box文件检测失败>'+e.message); 
         return {
-            error: 1,
             message: "失败：链接文件无效或内容有错"
         };
     }
@@ -212,13 +126,15 @@ function getBoxSource(input, mode, imports){
         writeFile(dyJkTmpFile, html);
         back();
         return {
-            error: 0,
             message: "已设置，订阅模式下生效"
         };
     }
 
     let result = {};
-    showLoading(mode==2?'正在加载订阅源，请稍后...':'正在多线程获取数据中...');
+    if(mode==1){
+        showLoading('正在多线程获取数据中...');
+    }
+
     if(imports.jk && jiekous.length>0){
         let urls= [];
         let hipy_t3_enable = getItem('hipy_t3_enable')=="1"?1:0;
@@ -264,9 +180,9 @@ function getBoxSource(input, mode, imports){
                         urlfile = cachepath + arr.type + '_' + arr.name + '.json';
                         writeFile(urlfile, JSON.stringify(extfile));
                     }else if(/^file/.test(extfile)){
-                        urlfile = extfile;
+                        urlfile = mode==1?cachepath + arr.type + '_' + (extfile.includes('?')?obj.key:"")+extfile.split('?')[0].substr(extfile.split('?')[0].lastIndexOf('/')+1):extfile.split('?')[0];
                     }else if(/^http/.test(extfile)){
-                        urlfile = cachepath + arr.type + '_' + (extfile.includes('?')?obj.key:"") + extfile.split('?')[0].substr(extfile.split('?')[0].lastIndexOf('/') + 1);
+                        urlfile = cachepath + arr.type + '_' + (extfile.includes('?')?obj.key:"")+extfile.split('?')[0].substr(extfile.split('?')[0].lastIndexOf('/')+1);
                         if(mode==1){
                             try{
                                 let content = getContnet(extfile);
