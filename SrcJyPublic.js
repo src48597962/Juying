@@ -3,7 +3,7 @@ let rulepath = "hiker://files/rules/Src/Juying2/"; //规则文件路径
 let cachepath = "hiker://files/_cache/Juying2/"; //缓存文件路径
 let jkfile = rulepath + "jiekou.json";
 let jxfile = rulepath + "jiexi.json";
-let ypfile = datapath + "yundisk.json";
+let ypfile = rulepath + "yundisk.json";
 let cfgfile = rulepath + "config.json";
 let sortfile = rulepath + "jksort.json";
 let codepath = config.依赖?config.依赖.match(/http(s)?:\/\/.*\//)[0]:module.modulePath.slice(0, module.modulePath.lastIndexOf("/")+1);
@@ -18,6 +18,18 @@ if(fileExist(datapath + "jiekou.json")){
         writeFile(jkfile, fetch(datapath + "jiekou.json"));
     }
     deleteFile(datapath + "jiekou.json");
+}
+if(fileExist(datapath + "yundisk.json")){
+    if(!fileExist(jkfile)){
+        writeFile(jkfile, fetch(datapath + "yundisk.json"));
+    }
+    deleteFile(datapath + "yundisk.json");
+}
+if(fileExist(datapath + "live.txt")){
+    if(!fileExist(rulepath + "live.txt")){
+        writeFile(rulepath + "live.txt", fetch(datapath + "live.txt"));
+    }
+    deleteFile(datapath + "live.txt");
 }
 
 let Juconfig= {};
