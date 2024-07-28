@@ -138,35 +138,19 @@ function createNewDrpy(sdata) {
     return drpy;
 }
 
-//获取在线文件内容
-function getContnet(url) {
-    if(url.startsWith('file')){
-        return fetch(url);
-    }else if(!url.startsWith('http')){
-        return '';
-    }
-    if(url.startsWith('https://raw.github')){
-        let proxys = $.require('ghproxy').getproxy();
-        for(let i=0;i<proxys.length;i++){
-            let content = fetch(proxys[i]+url, {timeout:5000});
-            if (content && !content.trim().startsWith('<!DOCTYPE html>') && !content.startsWith('<html>')) {
-                return content;
-            }
-        }
-    }
-    return fetch(url, {timeout:20000});
-}
-
 function getext(jkdata) {
     let extp = "";
     if(jkdata.ext && jkdata.ext.includes('?')){
         extp = '?' + jkdata.ext.split('?')[1];
     }
+    let gmParams = GM.get('gmParams');
     if (/^hiker/.test(jkdata.url)) {
         if (!fileExist(jkdata.url)) {
-            jkdata.url = jkdata.url.replace('/data/','/_cache/');
+            if(!fileExist(gmParams.jkfile)){
+                jkdata.url = jkdata.url.replace('/data/','/_cache/');
+            }
             if (jkdata.ext && /^http/.test(jkdata.ext)) {
-                let content = getContnet(jkdata.ext.split('?')[0]);
+                let content = gmParams.getContnet(jkdata.ext.split('?')[0]);
                 if (content) {
                     writeFile(jkdata.url, content);
                 }
@@ -175,7 +159,7 @@ function getext(jkdata) {
         if (fileExist(jkdata.url)) {
             return getPath(jkdata.url) + extp;
         }
-    }else if(/^file/.test(jkdata.url)){
+    }else if(/^file/.test(jkdata.url) && fileExist(jkdata.url)){
         return jkdata.url + extp;
     }
     return '';
