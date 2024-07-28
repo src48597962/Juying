@@ -132,7 +132,7 @@ function getBoxSource(input, mode, imports){
         writeFile(dyJkTmpFile, html);
         back();
         return {
-            message: "已设置，订阅模式下生效"
+            message: "已订阅，站源改为订阅模式下生效"
         };
     }
 
