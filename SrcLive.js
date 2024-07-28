@@ -32,7 +32,7 @@ function Live() {
         return item.show != 0;
     })
 
-    let JYlivefile = datapath + "live.txt";
+    let JYlivefile = rulepath + "live.txt";
     let JYlive = "";
     let JYlivedyurl = getMyVar('JYlivedyurl', 'juying');
     if (getMyVar('JYlivelocal', '0') == "1") {
@@ -255,7 +255,7 @@ function Live() {
 }
 
 function GroupEdit(groupname, mode, lists) {
-    let JYlivefile = datapath + "live.txt";
+    let JYlivefile = rulepath + "live.txt";
     if (mode == 'del') {
         try {
             showLoading('删除中，请稍候...');
@@ -392,7 +392,7 @@ function guanlidata(datalist) {
     return list;
 }
 function LivePlay(name) {
-    let JYlive = getMyVar('JYlivedyurl', 'juying') == "juying" ? fetch(datapath + "live.txt") : fetchCache(getMyVar('JYlivedyurl'), 24, { timeout: 3000 });
+    let JYlive = getMyVar('JYlivedyurl', 'juying') == "juying" ? fetch(rulepath + "live.txt") : fetchCache(getMyVar('JYlivedyurl'), 24, { timeout: 3000 });
     if (JYlive.indexOf('#genre#') > -1) {
         var JYlives = JYlive.split('\n');
     } else if (JYlive.indexOf('#EXTINF:-1') > -1) {
@@ -439,7 +439,7 @@ function LivePlay(name) {
     }
 }
 function LiveEdit(name, mode) {
-    let JYlivefile = datapath + "live.txt";
+    let JYlivefile = rulepath + "live.txt";
     if (mode == 'del') {
         let JYlive = fetch(JYlivefile);
         let JYlives = JYlive.split('\n');
@@ -681,7 +681,7 @@ function LiveSet() {
                                     }
                                     if (YClives.length > 0) {
                                         let importnum = 0;
-                                        let JYlivefile = globalMap0.getMyVar('gmParams').datapath + "live.txt";
+                                        let JYlivefile = globalMap0.getMyVar('gmParams').rulepath + "live.txt";
                                         let JYlive = fetch(JYlivefile);
                                         if (JYlive) {
                                             var JYlives = JYlive.split('\n');
@@ -963,7 +963,7 @@ function LiveSet() {
         img: globalMap0.getMyVar('gmParams').getIcon("直播-箭头.svg"),
         col_type: "text_icon",
         url: $("确定清空聚影直播本地文件？").confirm(() => {
-            writeFile(globalMap0.getMyVar('gmParams').datapath + "live.txt", "");
+            writeFile(globalMap0.getMyVar('gmParams').rulepath + "live.txt", "");
             if (getMyVar("JYlivedyurl", "juying") == "juying") {
                 putMyVar("isEdit", "1");
             }
@@ -988,7 +988,7 @@ function LiveSet() {
         url: $('#noLoading#').lazyRule(() => {
             putMyVar('isEdit', '1');
             let urls = [];
-            let JYlivefile = globalMap0.getMyVar('gmParams').datapath + "live.txt";
+            let JYlivefile = globalMap0.getMyVar('gmParams').rulepath + "live.txt";
             let JYlive = fetch(JYlivefile);
             if (JYlive != "") {
                 var task = function (obj) {
