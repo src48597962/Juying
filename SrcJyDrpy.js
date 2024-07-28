@@ -144,7 +144,7 @@ function getext(jkdata) {
         extp = '?' + jkdata.ext.split('?')[1];
     }
     let gmParams = GM.get('gmParams');
-    log(gmParams.jkfile);
+
     if (/^hiker/.test(jkdata.url)) {
         if (!fileExist(jkdata.url)) {
             if(!fileExist(gmParams.jkfile)){
