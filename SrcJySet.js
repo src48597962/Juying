@@ -1194,7 +1194,7 @@ function manageSet(){
                     text['live'] = liveconfig;
                 }
                 if(getMyVar('uploadyundisk','0')=="1"){
-                    var filepath = datapath + "yundisk.json";
+                    var filepath = rulepath + "yundisk.json";
                     var datafile = fetch(filepath);
                     if(datafile==""){
                         var datalist=[];
@@ -2130,7 +2130,7 @@ function JYimport(input) {
 function yundiskjiekou() {
     setPageTitle('☁️云盘接口 | 聚影✓');
     clearMyVar('duoselect');
-    let filepath = datapath + "yundisk.json";
+    let filepath = rulepath + "yundisk.json";
     let datalist = [];
     let datafile = fetch(filepath);
     if(datafile != ""){
