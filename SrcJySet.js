@@ -1960,10 +1960,8 @@ function Resourceimport(input,importtype,importmode){
     if(importtype=="1"){//tvbox导入
         let jknum = -1;
         let jxnum = -1;
-
-        //showLoading('正在多线程抓取数据中');
-        //hideLoading();
         let imports = {};
+
         if(getMyVar('importjiekou','1')=="1"){
             imports.jk = 1;
         }
@@ -1974,6 +1972,7 @@ function Resourceimport(input,importtype,importmode){
         if(boxSource.message){
             return "toast://" + boxSource.message;
         }
+        showLoading('导入中，请稍后...');
         let jiekous = boxSource.jklist || [];
         try{
             jknum = jiekousave(jiekous, importmode);
@@ -1988,6 +1987,7 @@ function Resourceimport(input,importtype,importmode){
             jxnum = -1;
             log('TVBox导入解析保存失败>'+e.message);
         }
+        hideLoading();
         let sm = (jknum>-1?' 接口保存'+jknum:'')+(jxnum>-1?' 解析保存'+jxnum:'');
         if(jknum>0||jxnum>0){back();}
         if(jknum==-1&&jxnum==-1){
