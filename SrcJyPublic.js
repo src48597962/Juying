@@ -187,7 +187,7 @@ function getBoxSource(input, mode, imports){
                         urlfile = filepath + '_' + arr.name + '.json';
                         writeFile(urlfile, JSON.stringify(extfile));
                     }else if(/^file/.test(extfile)){
-                        urlfile = mode==1?filepath + '_' + (extfile.includes('?')?obj.key:"")+extfile.split('?')[0].substr(extfile.split('?')[0].lastIndexOf('/')+1):extfile.split('?')[0];
+                        urlfile = extfile.split('?')[0];
                     }else if(/^http/.test(extfile)){
                         urlfile = filepath + '_' + (extfile.includes('?')?obj.key:"")+extfile.split('?')[0].substr(extfile.split('?')[0].lastIndexOf('/')+1);
                         if(mode==1){
@@ -331,7 +331,7 @@ function getSearchLists(group) {
         if(preferrlist.length>0){
             return preferrlist;
         }else{
-            return datalist.slice(0, 50);
+            return datalist;//.slice(0, 50);
         }
     }
 }
