@@ -2583,7 +2583,7 @@ function importConfirm(input) {
     datalist.forEach(it=>{
         let isnew = ndatalist.some(v=>v.url==it.url);
         d.push({
-            title: it.name + "-" + (it.group||it.type) + "  [" + (isnew?"新增加":"已存在") + "]",
+            title: it.name + (lx=="yp"?"":"-" + (it.group||it.type)) + "  [" + (isnew?"新增加":"已存在") + "]",
             url: $(["覆盖导入"], 1).select((lx, data) => {
                 data = JSON.parse(base64Decode(data));
                 if (input == "覆盖导入") {
