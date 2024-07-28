@@ -1586,6 +1586,20 @@ function manageSet(){
         col_type: 'text_icon'
     });
     d.push({
+        title: '点播hipy_t3接口',
+        img: getItem('hipy_t3_enable')=="1"?getIcon("管理-开.svg"):getIcon("关.svg"),
+        url: $("#noLoading#").lazyRule(() => {
+            if(getItem('hipy_t3_enable')=="1"){
+                clearItem('hipy_t3_enable');
+            }else{
+                setItem('hipy_t3_enable','1');
+            }
+            refreshPage();
+            return 'toast://感谢L佬提供的独创隔离运行环境代码，更好的体验可使用DrpyHiker小程序';
+        }),
+        col_type: 'text_icon'
+    });
+    d.push({
         col_type: "line_blank"
     });
     d.push({
