@@ -1451,9 +1451,10 @@ function getHtml(url, headers) {
 
 // extData缓存
 function extDataCache(jkdata) {
-    if (jkdata.url.startsWith("file")||jkdata.url.startsWith("hiker")) {
+    if (jkdata.url.startsWith("file") || jkdata.url.startsWith("hiker")) {
         if (!fileExist(jkdata.url)) {
             log("文件不存在?");
+            log(jkfile);
             if(!fileExist(jkfile)){
                 jkdata.url = jkdata.url.replace('/data/','/_cache/');
             }
