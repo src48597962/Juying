@@ -766,13 +766,15 @@ log = function (msg) {
 }
 */
 let gmParams = {
-    datapath:datapath,
-    rulepath:rulepath,
-    codepath:codepath,
-    jkfile:jkfile,
-    jxfile:jxfile,
-    cfgfile:cfgfile,
-    getIcon:getIcon
+    datapath: datapath,
+    rulepath: rulepath,
+    codepath: codepath,
+    jkfile: jkfile,
+    jxfile: jxfile,
+    cfgfile: cfgfile,
+    getIcon: getIcon,
+    getContnet: getContnet
 }
 globalMap0.putMyVar('gmParams', gmParams);
+GM.put('gmParams', gmParams);
 
