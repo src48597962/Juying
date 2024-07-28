@@ -1451,14 +1451,14 @@ function getHtml(url, headers) {
 
 // extData缓存
 function extDataCache(jkdata) {
-    if (jkdata.url.includes('/files/')) {
+    if (jkdata.url.startsWith("file")||jkdata.url.startsWith("hiker")) {
         if (!fileExist(jkdata.url)) {
             log("文件不存在?");
             if(!fileExist(jkfile)){
                 jkdata.url = jkdata.url.replace('/data/','/_cache/');
             }
-            if (jkdata.ext && /^http/.test(jkdata.ext)) {
-                let content = fetch(jkdata.ext, { timeout: 3000 });
+            if (jkdata.ext && jkdata.ext.startsWith("http")) {
+                let content = getContnet(jkdata.ext);
                 if (content) {
                     writeFile(jkdata.url, content);
                 }
@@ -1474,7 +1474,7 @@ function extDataCache(jkdata) {
             return '';
         }
     }
-    toast('此源接口数据有异常');
+    toast('此源接口数据文件有异常');
     return '';
 }
 //截取中间字符
