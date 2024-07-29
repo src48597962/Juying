@@ -1688,6 +1688,7 @@ function resource() {
         clearMyVar('importjiexi');
         clearMyVar('importtype');
         clearMyVar('importinput');
+        clearMyVar('dySourceType');
     }));
     setPageTitle("资源管理");
     let d = [];
@@ -1702,7 +1703,7 @@ function resource() {
         url: $('#noLoading#').lazyRule(() => {
             putMyVar('importtype','1');
             refreshPage(false);
-            return "toast://支持本地包或在线box配置文件导入";
+            return "toast://支持本地包或在线的配置文件导入";
         })
     });
     /*
@@ -1717,7 +1718,7 @@ function resource() {
     });
     */
     d.push({
-        title: (importtype=="3"?"👉":"")+"配置文件订阅",
+        title: (importtype=="3"?"👉":"")+"订阅地址设置",
         col_type: 'scroll_button',
         url: $('#noLoading#').lazyRule(() => {
             putMyVar('importtype','3');
@@ -1734,7 +1735,7 @@ function resource() {
         });
         d.push({
             title:(getMyVar('importjiekou','1')=="1"?getide(1):getide(0))+'影视接口',
-            col_type:'text_3',
+            col_type:'scroll_button',
             url:$('#noLoading#').lazyRule(() => {
                 if(getMyVar('importjiekou')=="0"){
                     putMyVar('importjiekou','1');
@@ -1747,7 +1748,7 @@ function resource() {
         });
         d.push({
             title:(getMyVar('importjiexi','1')=="1"?getide(1):getide(0))+'解析接口',
-            col_type:'text_3',
+            col_type:'scroll_button',
             url:$('#noLoading#').lazyRule(() => {
                 if(getMyVar('importjiexi')=="0"){
                     putMyVar('importjiexi','1');
@@ -1763,6 +1764,35 @@ function resource() {
             title: '当前订阅地址：' + Juconfig['dySource'],
             col_type: "rich_text",
             extra:{textSize:12}
+        });
+        d.push({
+            title:(getMyVar('dySourceType','1')=="1"?getide(1):getide(0))+'box配置文件',
+            col_type:'scroll_button',
+            url:$('#noLoading#').lazyRule(() => {
+                putMyVar('dySourceType','1');
+                refreshPage(false);
+                return "hiker://empty";
+            })
+        });
+        d.push({
+            title:(getMyVar('dySourceType','1')=="2"?getide(1):getide(0))+'drpy/index.js',
+            col_type:'scroll_button',
+            url:$('#noLoading#').lazyRule(() => {
+                eval(fetch('file:///storage/emulated/0/Android/data/com.example.hikerview/files/Documents/cache/drpy_dzlive_0725-1/drpy_dzlive/index.js').replace('async function', 'function'))
+                log(main());
+                //putMyVar('dySourceType','2');
+                //refreshPage(false);
+                //return "hiker://empty";
+            })
+        });
+        d.push({
+            title:(getMyVar('dySourceType','1')=="3"?getide(1):getide(0))+'drpy_js',
+            col_type:'scroll_button',
+            url:$('#noLoading#').lazyRule(() => {
+                putMyVar('dySourceType','3');
+                refreshPage(false);
+                return "hiker://empty";
+            })
         });
     }
     d.push({
@@ -1864,7 +1894,7 @@ function resource() {
                 }else if(getMyVar('importtype','1')=="2"){
                     return HipyImport(input,Juconfig['importmode']?2:0);
                 }else if(getMyVar('importtype','1')=="3"){
-                    return "toast://" + getBoxSource(input, 3).message;
+                    return "toast://" + getBoxSource(input, 3, {dySourceType: getMyVar('dySourceType','1')}).message;
                 }
             }, Juconfig, cfgfile),
         col_type: "text_2",
