@@ -1,5 +1,5 @@
 //本代码仅用于个人学习，请勿用于其他作用，下载后请24小时内删除，代码虽然是公开学习的，但请尊重作者，应留下说明
-let recordfile = globalMap0.getMyVar('gmParams').rulepath + "parse.json";//取解析设置、上次成功、手工屏蔽的
+let recordfile = GM.get('gmParams').rulepath + "parse.json";//取解析设置、上次成功、手工屏蔽的
 let record = fetch(recordfile);
 let parseRecord = {};
 if(record!=""){
@@ -141,10 +141,10 @@ var SrcParseS = {
 
         let parsemode = playSet.parsemode || 1;//解析模式
         let mulnum = playSet.mulnum || 1;//多线程数
-        let jxfile = globalMap0.getMyVar('gmParams').datapath + "jiexi.json";//解析存放文件
+        let jxfile = GM.get('gmParams').jxfile;//解析存放文件
         let parselist = [];//待进线程执行的解析列表
         let jxList= [];//读取解析列表
-
+        log("1");
         if(dataObj.parse){
             //指定解析用于测试
             dataObj.parse["stype"] = "test";
@@ -162,6 +162,7 @@ var SrcParseS = {
                     }
                     log("接口自带的解析数："+appParses.length); 
                 }
+                log("2");
             }
             
             //读取解析，将可用加入备选
@@ -178,10 +179,10 @@ var SrcParseS = {
                         parselist.push(jxList[j]);
                     }
                 }
-                log("可用解析数：" + jxList.length); 
+                log("可用解析数：" + parselist.length); 
             }
         }
-        //log(parselist)
+        log("3");
 
         //修正排序
         parselist.sort((a, b) => {
