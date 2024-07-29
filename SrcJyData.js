@@ -307,7 +307,6 @@ function getYiData(jkdata) {
                             } else {
                                 let typehtml = dealJson(gethtml);
                                 let typelist = typehtml["class"] || [];
-                                log(typelist);
 
                                 if (jkdata.categories) {
                                     for (var i = 0; i < typelist.length; i++) {
@@ -336,6 +335,14 @@ function getYiData(jkdata) {
                                         }
                                     }
                                 })
+                                if(分类.length==0 && typelist.length>0){
+                                    // 针对一些奇怪的网站没有一级分类时，全部显示为一级分类
+                                    typelist.forEach((it) => {
+                                        if(it.type_name && it.type_id){
+                                            分类.push(it.type_name + '$' + it.type_id);
+                                        }
+                                    })
+                                }
                                 try{
                                     let gettjhtml = getHtml(api_url+'?ac=videolist&pg=1', headers);
                                     let tjlist = JSON.parse(gettjhtml).list;
