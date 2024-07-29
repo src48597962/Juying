@@ -379,7 +379,9 @@ var SrcParseS = {
                             log('判断多线路地址对象有错：'+e.message);
                         }
                     }else{
+                        log("111");
                         let MulUrl = this.formatMulUrl(beurls[k].replace(/;{.*}/g,""), urls.length);
+                        log("222");
                         urls.push(MulUrl.url);
                         names.push(beparses[k].name || '线路'+urls.length);
                         headers.push(MulUrl.header);
@@ -464,6 +466,7 @@ var SrcParseS = {
                         danmu: dm 
                     }); 
                 }else{
+                    log("333");
                     return this.formatUrl(playurl);
                 }
             }
