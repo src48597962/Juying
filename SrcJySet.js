@@ -663,7 +663,7 @@ function jiekou(data) {
                     return "toast://无法自动识别接口类型，请检查链接";
                 }
                 let urlfile = apiurl;
-                if(apiurl.startsWith('http') && !getapitype(apiurl)){
+                if(apiurl.startsWith('http') && !/v1|app|v2|iptv|cms/.test(apitype)){
                     let contnet = getContnet(apiurl);
                     if(contnet){
                         urlfile = cachepath+apitype+"_"+apiurl.substr(apiurl.lastIndexOf('/') + 1);
