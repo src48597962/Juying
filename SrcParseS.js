@@ -379,9 +379,7 @@ var SrcParseS = {
                             log('判断多线路地址对象有错：'+e.message);
                         }
                     }else{
-                        log("111");
                         let MulUrl = this.formatMulUrl(beurls[k].replace(/;{.*}/g,""), urls.length);
-                        log("222");
                         urls.push(MulUrl.url);
                         names.push(beparses[k].name || '线路'+urls.length);
                         headers.push(MulUrl.header);
@@ -441,7 +439,6 @@ var SrcParseS = {
         if(playurl){
             let dm;
             if(isVip && playSet.dmRoute==1){
-                log('获取弹幕');
                 dm = this.弹幕(vipUrl);
             }
             if(urls.length>1){
@@ -492,7 +489,8 @@ var SrcParseS = {
     formatMulUrl: function (url,i) {
         try {
             let header = this.mulheader(url);
-            if ((getMyVar('SrcM3U8', '1') == "1"||url.indexOf('vkey=')>-1)&&url.indexOf('.m3u8')>-1) {
+            if ((playSet.cachem3u8 || url.indexOf('vkey=')>-1)&&url.indexOf('.m3u8')>-1) {
+                log("缓存m3u8索引文件");
                 let name = 'video'+parseInt(i)+'.m3u8';
                 url = cacheM3u8(url, {headers: header, timeout: 3000}, name)+'#pre#';
             }
@@ -501,7 +499,7 @@ var SrcParseS = {
             }
             return {url:url, header:header};
         } catch (e) {
-            log("✓错误："+e.message);
+            log("错误："+e.message);
             return url;
         }   
     },
@@ -509,7 +507,7 @@ var SrcParseS = {
     testVideo: function (url,name,times) {
         if(!url){return 0}
         if(!name){name = "解析"}
-        if(!times){times = 120}
+        if(!times){times = 60}
         try {
             if(/vkey=|banyung\.|mgtv\.com|1905\.com|qq\.com/.test(url)){
                 return 1;
@@ -719,7 +717,7 @@ var SrcParseS = {
             }else {
                 if (url[0] == '/') { url = 'https:' + url }
                 if (i == undefined) {
-                    if (getMyVar('SrcM3U8', '1') == "1"&&url.indexOf('.m3u8')>-1) {
+                    if (playSet.cachem3u8 && url.indexOf('.m3u8')>-1) {
                         url = cacheM3u8(url, {timeout: 2000});
                     }
                     if(url.indexOf('User-Agent')==-1){
@@ -734,7 +732,7 @@ var SrcParseS = {
                         }*/
                     }
                 } else {
-                    if ((getMyVar('SrcM3U8', '1') == "1"||url.indexOf('vkey=')>-1)&&url.indexOf('.m3u8')>-1) {
+                    if ((playSet.cachem3u8 || url.indexOf('vkey=')>-1)&&url.indexOf('.m3u8')>-1) {
                         url = cacheM3u8(url, {timeout: 2000}, 'video' + parseInt(i) + '.m3u8') + '#pre#';
                     }
                 }
