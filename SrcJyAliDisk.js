@@ -367,7 +367,7 @@ function aliShare(share_id, folder_id, share_pwd) {
     }
     setResult(d);
     if(typeof (MY_PARAMS) == "undefined" || !MY_PARAMS.pageTitle){
-        setPageTitle(getMyVar('云盘共享链接页面标题', '云盘共享文件') + ' | 聚影✓');
+        setPageTitle(getMyVar('云盘共享链接页面标题', '云盘共享文件') + ' | 聚影');
     }
     setLastChapterRule('js:' + $.toString(() => {
         setResult('');
@@ -611,7 +611,7 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                 storage0.setItem('searchrecord', recordlist);
 
                 return $('hiker://empty#noRecordHistory##noHistory#').rule((name) => {
-                    setPageTitle('云盘搜索 | 聚影✓');
+                    setPageTitle('云盘搜索 | 聚影');
                     let d = [];
                     d.push({
                         title: name+"-云盘聚合搜索",
@@ -1013,7 +1013,7 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
     }
     setResult(d);
     if(typeof (MY_PARAMS) == "undefined" || !MY_PARAMS.pageTitle){
-        setPageTitle('我的云盘 | 聚影✓');
+        setPageTitle('我的云盘 | 聚影');
     }
     setLastChapterRule('js:' + $.toString(() => {
         setResult('');
