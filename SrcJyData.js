@@ -305,9 +305,9 @@ function getYiData(jkdata) {
                                     分类.push(String(xpath(it, `//ty/text()`)).trim() + '$' + String(xpath(it, `//ty/@id`)).trim());
                                 })
                             } else {
-                                log(gethtml);
                                 let typehtml = dealJson(gethtml);
                                 let typelist = typehtml["class"] || [];
+                                log(typelist);
 
                                 if (jkdata.categories) {
                                     for (var i = 0; i < typelist.length; i++) {
