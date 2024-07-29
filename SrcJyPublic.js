@@ -200,7 +200,12 @@ function getBoxSource(input, mode, imports){
                         urlfile = filepath + '_' + arr.name + '.json';
                         writeFile(urlfile, JSON.stringify(extfile));
                     }else if(/^file/.test(extfile)){
-                        urlfile = extfile.split('?')[0];
+                        if(mode==1){
+                            urlfile = filepath + '_' + (extfile.includes('?')?obj.key:"")+extfile.split('?')[0].substr(extfile.split('?')[0].lastIndexOf('/')+1);
+                            writeFile(urlfile, JSON.stringify(extfile));
+                        }else{
+                            urlfile = extfile.split('?')[0];
+                        }
                     }else if(/^http/.test(extfile)){
                         urlfile = filepath + '_' + (extfile.includes('?')?obj.key:"")+extfile.split('?')[0].substr(extfile.split('?')[0].lastIndexOf('/')+1);
                         if(mode==1){
