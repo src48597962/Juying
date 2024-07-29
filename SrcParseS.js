@@ -144,7 +144,7 @@ var SrcParseS = {
         let jxfile = GM.get('gmParams').jxfile;//解析存放文件
         let parselist = [];//待进线程执行的解析列表
         let jxList= [];//读取解析列表
-        log("1");
+
         if(dataObj.parse){
             //指定解析用于测试
             dataObj.parse["stype"] = "test";
@@ -162,7 +162,6 @@ var SrcParseS = {
                     }
                     log("接口自带的解析数："+appParses.length); 
                 }
-                log("2");
             }
             
             //读取解析，将可用加入备选
@@ -182,7 +181,6 @@ var SrcParseS = {
                 log("可用解析数：" + parselist.length); 
             }
         }
-        log("3");
 
         //修正排序
         parselist.sort((a, b) => {
@@ -333,7 +331,7 @@ var SrcParseS = {
                 var parseurl = beparses[k].url;
                 if(beerrors[k]==null&&contain.test(beurls[k])&&!exclude.test(beurls[k])&&excludeurl.indexOf(beurls[k])==-1){
                     if(playurl==""){playurl = beurls[k];}
-                    //记录除断插线程以外最快的，做为下次优先
+                    //记录最快的，做为下次优先
                     if(beparses[k].name==lastparse){
                         log(beparses[k].name+'>优先上次解析成功>'+beurls[k]);
                     }else{
@@ -342,7 +340,7 @@ var SrcParseS = {
                     }
 
                     //私有解析成功的，提升一下排序
-                    for(var j=0;j<jxList.length;j++){
+                    for(let j=0;j<jxList.length;j++){
                         if(parseurl==jxList[j].url){
                             //解析成功的,排序+1
                             jxList[j]['sort'] = jxList[j]['sort']||0;
@@ -364,7 +362,7 @@ var SrcParseS = {
                             let murls = urljson.urls;
                             let mnames = urljson.names||[];
                             let mheaders = urljson.headers;
-                            for(var j=0;j<murls.length;j++){
+                            for(let j=0;j<murls.length;j++){
                                 if(!/yue|480/.test(mnames[j])){//屏蔽全全-优酷的不必要线路
                                     let MulUrl = this.formatMulUrl(murls[j].replace(/;{.*}/g,""), urls.length);
                                     urls.push(MulUrl.url);
@@ -393,11 +391,11 @@ var SrcParseS = {
             }//排队解析结果循环
         }//解析全列表循环
 
-        var failparse = [];
+        let failparse = [];
         //失败的解析，处理
-        for(var p=0;p<dellist.length;p++){
+        for(let p=0;p<dellist.length;p++){
             if(dellist[p].stype=="myjx"){
-                for(var j=0;j<jxList.length;j++){
+                for(let j=0;j<jxList.length;j++){
                     if(dellist[p].url==jxList[j].url){
                         if(dellist[p].x5==1){
                             jxList[j]['type'] = 0;
@@ -441,10 +439,11 @@ var SrcParseS = {
         if(playurl){
             let dm;
             if(isVip && playSet.dmRoute==1){
+                log('获取弹幕');
                 dm = this.弹幕(vipUrl);
             }
             if(urls.length>1){
-                log('解析完成，进入播放2');
+                log('进入多线路播放');
                 return JSON.stringify({
                     urls: urls,
                     names: names,
@@ -452,7 +451,7 @@ var SrcParseS = {
                     danmu: danmu || dm 
                 }); 
             }else{
-                log('解析完成，进入播放1');
+                log('进入单线路播放');
                 if(dm){
                     let MulUrl = this.formatMulUrl(playurl, 0);
                     urls = [];
