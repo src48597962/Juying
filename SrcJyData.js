@@ -1500,7 +1500,7 @@ function dealJson(html) {
     try {
         html = JSON.parse(html);
     } catch (e) {
-        //log("转换为json对象失败>"+e.message);
+        log("dealJson转换为对象失败>"+e.message);
     }
     return html;
 }
