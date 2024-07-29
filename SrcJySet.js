@@ -1778,8 +1778,10 @@ function resource() {
             title:(getMyVar('dySourceType','1')=="2"?getide(1):getide(0))+'drpy/index.js',
             col_type:'scroll_button',
             url:$('#noLoading#').lazyRule(() => {
-                eval(fetch('file:///storage/emulated/0/Android/data/com.example.hikerview/files/Documents/cache/drpy_dzlive_0725-1/drpy_dzlive/index.js').replace('async function', 'function'))
-                log(main());
+                let files =  new java.io.FIle('/storage/emulated/0/Android/data/com.example.hikerview/files/Documents/cache/drpy_dzlive_0725-1/drpy_dzlive/drpy_js').listFiles();
+                log(files);
+                //eval(fetch('file:///storage/emulated/0/Android/data/com.example.hikerview/files/Documents/cache/drpy_dzlive_0725-1/drpy_dzlive/index.js').replace('async function', 'function'))
+                //log(main());
                 //putMyVar('dySourceType','2');
                 //refreshPage(false);
                 //return "hiker://empty";
