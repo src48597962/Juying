@@ -2045,7 +2045,7 @@ function JYshare(lx,input) {
         let sharetxt = base64Encode(JSON.stringify(sharelist));
         let code = sm + '￥' + aesEncode('Juying2', sharetxt) + '￥云口令文件';
         let sharefile = 'hiker://files/_cache/Juying2_'+sharelist.length+'_'+$.dateFormat(new Date(),"HHmmss")+'.hiker';
-        writeFile(sharefile, '云口令：'+code+`@import=js:$.require("hiker://page/import?rule=聚影✓");`);
+        writeFile(sharefile, '云口令：'+code+`@import=js:$.require("hiker://page/import?rule=聚影");`);
         if(fileExist(sharefile)){
             return 'share://'+sharefile;
         }else{
@@ -2057,7 +2057,7 @@ function JYshare(lx,input) {
         hideLoading();
         if(/^http|^云/.test(pasteurl) && pasteurl.includes('/')){
             let code = sm+'￥'+aesEncode('Juying2', pasteurl)+'￥共' + sharelist.length + '条('+input+')';
-            copy('云口令：'+code+`@import=js:$.require("hiker://page/import?rule=聚影✓");`);
+            copy('云口令：'+code+`@import=js:$.require("hiker://page/import?rule=聚影");`);
             return "toast://"+sm2;
         }else{
             return "toast://分享失败，剪粘板或网络异常>"+pasteurl;
@@ -2087,7 +2087,7 @@ function JYimport(input) {
             }
         }
     }catch(e){
-        return "toast://聚影✓：口令有误>"+e.message;
+        return "toast://聚影：口令有误>"+e.message;
     }
     try{
         if (inputname == "聚影云盘") {
@@ -2097,11 +2097,11 @@ function JYimport(input) {
             return "toast://合计" + datalist2.length + "个，导入" + num + "个";
         }
         if(inputname=="聚影接口"){
-            var sm = "聚影✓：接口";
+            var sm = "聚影：接口";
         }else if(inputname=="聚影解析"){
-            var sm = "聚影✓：解析";
+            var sm = "聚影：解析";
         }else{
-            return "toast://聚影✓：无法识别的口令";
+            return "toast://聚影：无法识别的口令";
         }
         let text;
         if(/^http|^云/.test(pasteurl)){
@@ -2134,15 +2134,15 @@ function JYimport(input) {
             }
             return "toast://"+sm+"合计："+pastedatalist.length+"，保存："+urlnum;
         }else{
-            return "toast://聚影✓：口令错误或已失效";
+            return "toast://聚影：口令错误或已失效";
         }
     } catch (e) {
-        return "toast://聚影✓：无法识别的口令>"+e.message;
+        return "toast://聚影：无法识别的口令>"+e.message;
     }
 }
 //云盘的接口方法
 function yundiskjiekou() {
-    setPageTitle('☁️云盘接口 | 聚影✓');
+    setPageTitle('☁️云盘接口 | 聚影');
     clearMyVar('duoselect');
     let filepath = rulepath + "yundisk.json";
     let datalist = [];
@@ -2325,11 +2325,11 @@ function yundiskjiekou() {
                     refreshPage(false);
                     return "toast://合计" + datalist2.length + "个，导入" + num + "个";
                 } else {
-                    return "toast://聚影✓：非云盘口令";
+                    return "toast://聚影：非云盘口令";
                 }
             } catch (e) {
                 log(e.message);
-                return "toast://聚影✓：口令有误";
+                return "toast://聚影：口令有误";
             }
         }),
         img: getIcon("云盘-接口导入.svg"),//"https://hikerfans.com/tubiao/more/43.png",
@@ -2341,7 +2341,7 @@ function yundiskjiekou() {
             let pasteurl = sharePaste(base64Encode(JSON.stringify(datalist)), getItem("sharePaste",""));
             if (pasteurl) {
                 let code = '聚影云盘￥' + aesEncode('Juying2', pasteurl) + '￥共' + datalist.length + '条';
-                copy('云口令：'+code+`@import=js:$.require("hiker://page/import?rule=聚影✓");`);
+                copy('云口令：'+code+`@import=js:$.require("hiker://page/import?rule=聚影");`);
                 return "toast://(全部)云盘分享口令已生成";
             } else {
                 return "toast://分享失败，剪粘板或网络异常";
@@ -2384,7 +2384,7 @@ function yundiskjiekou() {
                     hideLoading();
                     if(pasteurl){
                         let code = '聚影云盘￥'+aesEncode('Juying2', pasteurl)+'￥'+data.name;
-                        copy('云口令：'+code+`@import=js:$.require("hiker://page/import?rule=聚影✓");`);
+                        copy('云口令：'+code+`@import=js:$.require("hiker://page/import?rule=聚影");`);
                         return "toast://(单个)云盘分享口令已生成";
                     }else{
                         return "toast://分享失败，剪粘板或网络异常";
@@ -2486,7 +2486,7 @@ function importConfirm(input) {
         code = aesDecode('Juying2', input.split('￥')[1]);
         name = input.split('￥')[0];
         if(name=="聚影资源码"){
-            toast("聚影✓：资源码不支持导入确认");
+            toast("聚影：资源码不支持导入确认");
         }else if (name == "聚影云盘") {
             sm = "云盘";
             lx = "yp";
@@ -2497,10 +2497,10 @@ function importConfirm(input) {
             sm = "解析";
             lx = "jx";
         }else{
-            toast("聚影✓：无法识别的口令");
+            toast("聚影：无法识别的口令");
         }
     }catch(e){
-        toast("聚影✓：口令有误>"+e.message);
+        toast("聚影：口令有误>"+e.message);
     }
     datalist = storage0.getMyVar('importConfirm', []);
     if(datalist.length==0){
@@ -2518,7 +2518,7 @@ function importConfirm(input) {
                 storage0.putMyVar('importConfirm', datalist);
             }
         } catch (e) {
-            toast("聚影✓：无法识别的口令>"+e.message);
+            toast("聚影：无法识别的口令>"+e.message);
         }
     }
     
@@ -2540,7 +2540,7 @@ function importConfirm(input) {
     let oldnum = datalist.length - ndatalist.length;
     let d = [];
     d.push({
-        title: "聚影✓云口令导入",
+        title: "聚影云口令导入",
         desc: (sm||"") + " 共计" + datalist.length + "/新增" + ndatalist.length + "/存在" + oldnum ,
         url: "hiker://empty",
         col_type: 'text_center_1'
