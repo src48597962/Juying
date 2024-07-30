@@ -1778,52 +1778,19 @@ function resource() {
             title:(getMyVar('dySourceType','1')=="2"?getide(1):getide(0))+'drpy/index.js',
             col_type:'scroll_button',
             url:$('#noLoading#').lazyRule(() => {
+                function readDir(path) {
+                    let names = [];
+                    let file = new java.io.File(path.replace("file://", ""));
 
-                //let files =  new java.io.FIle('/storage/emulated/0/Android/data/com.example.hikerview/files/Documents/cache/drpy_dzlive_0725-1/drpy_dzlive/drpy_js').listFiles();
-                //log(files);
-
-                let pathLib = {
-                    join: joinUrl,
-                        readFile(path) {
-                        path = path.startsWith("file://") ? path : ("file://" + path);
-
-                        return fetch(path);
-                    },
-                    readDir(path) {
-                        let names = [];
-                        let file = new java.io.File(path.replace("file://", ""));
-
-                        if (!(file.exists() && file.isDirectory())) return names;
-                        for (let it of file.listFiles()) {
-                            names.push(String(it.getName()));
-                        }
-                        return names;
-                    },
-                    dirname(pa) {
-                        let path = joinUrl(jsPath, pa);
-                        let names = [];
-                        let file = new java.io.File(path);
-
-                        if (!(file.exists() && file.isDirectory())) return names;
-                        for (let it of dirFile.listFiles()) {
-                            if (it.isDirectory) {
-                                names.push(String(it.getName()));
-                            }
-                        }
-                        return paths;
-                    },
-                    stat() {
-                        return true;
+                    if (!(file.exists() && file.isDirectory())) return names;
+                    for (let it of file.listFiles()) {
+                        names.push(String(it.getName()));
                     }
+                    return names;
                 }
-
-
-
-                eval(fetch('file:///storage/emulated/0/Android/data/com.example.hikerview/files/Documents/cache/drpy_dzlive_0725-1/drpy_dzlive/index.js').replace('async function', 'function'))
-                log(main());
-                //putMyVar('dySourceType','2');
-                //refreshPage(false);
-                //return "hiker://empty";
+                //let files =  new java.io.FIle('/storage/emulated/0/Android/data/com.example.hikerview/files/Documents/cache/drpy_dzlive_0725-1/drpy_dzlive/drpy_js').listFiles();
+                log(readDir('/storage/emulated/0/Android/data/com.example.hikerview/files/Documents/cache/drpy_dzlive_0725-1/drpy_dzlive/drpy_js'));
+                
             })
         });
         d.push({
