@@ -161,7 +161,7 @@ function getYiData(jkdata) {
                         }
                         let homeVod = JSON.parse(drpy.homeVod()).list || [];
                         homeVod.forEach(it=>{
-                            推荐.push({ "vod_url": it.vod_id.toString().split("@@")[0], "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic, "vod_play":noerji?it.vod_id.toString():"" });
+                            推荐.push({ "vod_url": it.vod_id.toString().split("@@")[0], "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic, "vod_play":noerji?it.vod_id.toString().split("@@")[0]:"" });
                         })
                     } else if (api_type == "XYQ") {
                         if (extdata['是否开启获取首页数据'] && extdata['首页列表数组规则']) {
