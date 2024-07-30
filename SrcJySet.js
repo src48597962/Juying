@@ -1869,10 +1869,11 @@ function resource() {
                     Juconfig['importrecord'] = importrecord;
                     writeFile(cfgfile, JSON.stringify(Juconfig));
                 }
-                
                 if(input.startsWith('/storage/emulated')){input = "file://" + input}
+
+                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+
                 function exeImport(input){
-                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                     if(getMyVar('importtype','1')=="1"){
                         return Resourceimport(input,getMyVar('importtype','1'),Juconfig['importmode']?2:0);
                     }else if(getMyVar('importtype','1')=="2"){
@@ -1881,11 +1882,17 @@ function resource() {
                         return "toast://" + getBoxSource(input, 3).message;
                     }
                 }
+                
                 let checkUrl = checkBoxUrl(input);
                 if(checkUrl.message){
                     return "toast://" + checkUrl.message;
                 }else if(checkUrl.urls){
-                    return "toast://" + checkUrl.message;
+                    let urls = checkUrl.urls;
+                    let names = urls.map(v=>v.name);
+                    return $(names, 1).select((urls,exeImport) => {
+                        let url = urls.filter(v=>v.name==input)[0].url;
+                        return exeImport(url);
+                    },urls,exeImport)
                 }
                 return exeImport(input);
             }, Juconfig, cfgfile),
