@@ -762,9 +762,10 @@ function getSsData(name, jkdata, page) {
                 json = JSON.parse(getHtml(jkdata.url+"&wd="+name+"&extend="+jkdata.ext+"&quick=false", headers));
             }else if(api_type=="hipy_t3"){
                 let drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(jkdata);
-                log("1");
-                json = JSON.parse(drpy.search(name, 0, page));
-                log("2");
+                try{
+                    json = JSON.parse(drpy.search(name, 0, page));
+                }catch(e){}
+                log(json);
                 noerji = drpy.getRule("二级")=="*"?1:0;
             }else{
                 gethtml = getHtmlCode(ssurl, headers);
