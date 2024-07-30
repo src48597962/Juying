@@ -1700,7 +1700,11 @@ function resource() {
         clearMyVar('importinput');
     }));
     setPageTitle("资源管理");
+
     let d = [];
+    d.push({
+        col_type: "line_blank"
+    });
     d.push({
         title: '🎁 选择资源类型',
         col_type: "rich_text"
@@ -1732,7 +1736,7 @@ function resource() {
         url: $('#noLoading#').lazyRule(() => {
             putMyVar('importtype','3');
             refreshPage(false);
-            return "toast://支持本地包或在线的配置文件订阅，但无法管理接口";
+            return "toast://订阅本地包或在线的配置文件，但无法管理接口";
         })
     });
 
@@ -1896,7 +1900,7 @@ function resource() {
                                 }catch(e){}
                             }
                         }else{
-                            return "toast://无法获取内容，code:"+json.statusCode;
+                            return "toast://无法访问或获取内容失败，code:"+json.statusCode;
                         }
                     } catch (e) {
                         return "toast://链接地址访问异常";
