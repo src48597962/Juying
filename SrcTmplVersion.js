@@ -1,7 +1,7 @@
 var newVersion = {
-    "SrcJuying":"0.9",
+    "SrcJuying":"1.0",
     "JYUpdateRecords": [{
-        title: "待发布 V1.0",
+        title: "2024/07/30 V1.0",
         records: [
             "新增：点播资源管理box导入订阅支持多仓链接地址",
             "优化：增强点播二级补偿模板匹配、AI识片能力",
