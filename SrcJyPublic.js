@@ -103,7 +103,7 @@ function getDatas(lx, isyx) {
     return result;
 }
 // 较验box配置文件
-function checkBoxFile(input) {
+function checkBoxUrl(input) {
     let html;
     try{
         showLoading('检测文件有效性');
@@ -188,18 +188,17 @@ function getBoxSource(input, mode, imports){
     }
     hideLoading();
     */
-    let check = checkBoxFile(input);
-    if(check.message){
-        return check;
-    }else if(check.html){
-        html = check.html;
-    }else if(check.urls){
+    let checkUrl = checkBoxUrl(input);
+    if(checkUrl.message){
+        return checkUrl;
+    }else if(checkUrl.html){
+        html = checkUrl.html;
+    }else if(checkUrl.urls){
         return {
             message: "失败：此为多仓配置文件"
         };
     }
     
-
     if(mode==3){//订阅较验完成
         Juconfig['dySource'] = input;
         writeFile(cfgfile, JSON.stringify(Juconfig));
