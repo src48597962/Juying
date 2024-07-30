@@ -26,7 +26,7 @@ const cheerio = {
 
 var xlog = console.log;
 console.log = function(msg) {
-    if (getMyVar("SrcJu_调试模式") || getItem("SrcJu_接口日志")) {
+    if (getItem("drpy调试日志")=="1") {
         xlog(msg);
     }
 }
