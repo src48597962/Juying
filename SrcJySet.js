@@ -1476,15 +1476,11 @@ function manageSet(){
         img: getIcon("管理-箭头.svg"),
         url: $(getItem('依赖', ''),"手工指定聚影代码库地址").input(()=>{
             return $("确定要指定聚影代码库地址"+input).confirm((input)=>{
-                if(input){
-                    setItem('依赖', input);
-                    initConfig({
-                        依赖: input
-                    })
-                    deleteCache();
-                }else{
-                    return "toast://不能为空";
-                }
+                setItem('依赖', input);
+                initConfig({
+                    依赖: input
+                })
+                deleteCache();
                 return "toast://已设置，返回主页刷新";
             },input)
         }),
