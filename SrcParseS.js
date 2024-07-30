@@ -78,7 +78,10 @@ var SrcParseS = {
 
         log("请求地址："+vipUrl); 
         
-        if (/magnet|torrent/.test(vipUrl)) {
+        if (vipUrl.startsWith('ftp://')) {
+            log("ftp地址，软件不支持"); 
+            return "toast://ftp地址，软件不支持";
+        }else if (/magnet|torrent/.test(vipUrl)) {
             log("磁力/BT视频地址，由海阔解析"); 
             return vipUrl;
         }else if(contain.test(vipUrl)&&!exclude.test(vipUrl)&&!needparse.test(vipUrl)){
