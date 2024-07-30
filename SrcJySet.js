@@ -1871,6 +1871,7 @@ function resource() {
                 }
                 
                 if(input.startsWith('http')){
+                    showLoading("正在较验在线链接");
                     let html = request(input, { timeout:10000, withStatusCode: true });
                     try {
                         let json = JSON.parse(html);
@@ -1879,8 +1880,8 @@ function resource() {
                                 try{
                                     let urls = JSON.parse(json.body).urls;
                                     let names = urls.map(v=>v.name);
-                                    return $(names, 3).select((urls,exebtn) => {
-                                        let url = urls.filter(v=>v.name==input).url;
+                                    return $(names, 1).select((urls,exebtn) => {
+                                        let url = urls.filter(v=>v.name==input)[0].url;
                                         return exebtn(url);
                                     },urls,exebtn)
                                 }catch(e){}
@@ -1891,6 +1892,7 @@ function resource() {
                     } catch (e) {
                         return "toast://链接地址访问异常";
                     }
+                    hideLoading();
                 }
 
                 return exebtn(input);
