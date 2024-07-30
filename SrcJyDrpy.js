@@ -34,6 +34,13 @@ function createDrpy(sdata) {
         };
         eval(getCryptoJS());
         globalThis.CryptoJS = CryptoJS;
+
+        let xlog = console.log;
+        globalThis.log = function(msg) {
+            if (getItem("drpy调试日志")=="1") {
+                xlog(msg);
+            }
+        }
         
         globalThis.getProxy = function () {
             let proxyUrl = startProxyServer($.toString((sdata, codepath, title) => {
