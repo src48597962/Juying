@@ -1858,6 +1858,7 @@ function resource() {
                 }
                 
                 if(input.startsWith('/storage/emulated')){input = "file://" + input}
+
                 function exebtn(input) {
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                     if(getMyVar('importtype','1')=="1"){
@@ -1868,8 +1869,9 @@ function resource() {
                         return "toast://" + getBoxSource(input, 3).message;
                     }
                 }
+                
                 if(input.startsWith('http')){
-                    let html = request(url, { timeout:10000, withStatusCode: true });
+                    let html = request(input, { timeout:10000, withStatusCode: true });
                     try {
                         let json = JSON.parse(html);
                         if (json.statusCode == 200) {
