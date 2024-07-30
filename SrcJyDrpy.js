@@ -72,12 +72,58 @@ function createDrpy(sdata) {
         
         let $request = request;
         let $post = post;
+        function readFileToString(filePath) {
+            const StringBuilder = java.lang.StringBuilder;
+            const BufferedReader = java.io.BufferedReader;
+            const File = java.io.File;
+            const FileReader = java.io.FileReader;
+
+            let file = new File(filePath);
+            if (!file.exists()) return "";
+            let fileContent = new StringBuilder();
+            let br = null;
+            try {
+                br = new BufferedReader(new FileReader(file));
+                let line;
+                while ((line = br.readLine()) != null) {
+                    fileContent.append(line).append("\n");
+                }
+            } catch (e) {
+                fileContent.append("");
+            } finally {
+                try {
+                    if (br != null) {
+                        br.close();
+                    }
+                } catch (e) { }
+            }
+            return String(fileContent.toString());
+        }
+        function hasPropertyIgnoreCase(obj, propertyName) {
+            return Object.keys(obj).some(key =>
+                key.toLowerCase() === propertyName.toLowerCase()
+            );
+        }
+
+        function valueStartsWith(obj, propertyName, prefix) {
+            const key = Object.keys(obj).find(key =>
+                key.toLowerCase() === propertyName.toLowerCase()
+            );
+            return key !== undefined && obj[key].startsWith(prefix);
+        }
+
         globalThis.req = function (url, cobj) {
             try {
                 let res = {};
                 let obj = Object.assign({}, cobj);
                 if (obj.data) {
                     obj.body = obj.data;
+                    if ((obj.postType && obj.postType == "form") || (hasPropertyIgnoreCase(obj.headers, "Content-Type") && valueStartsWith(obj.headers, "Content-Type", "application/x-www-form-urlencoded"))) {
+                        let temp_obj = obj.data;
+                        obj.body = Object.keys(temp_obj).map(key => {
+                            return `${key}=${temp_obj[key]}`;
+                        }).join('&');
+                    }
                     delete obj.data;
                 }
 
@@ -91,8 +137,8 @@ function createDrpy(sdata) {
                 if (url === "https://api.nn.ci/ocr/b64/text" && obj.headers) {
                     obj.headers["Content-Type"] = "text/plain";
                 }
-
-                if (url.startsWith("file://") && (url.includes("?type=") || url.includes("?params="))) {
+                let isFile = url.startsWith("file://");
+                if (isFile && (url.includes("?type=") || url.includes("?params="))) {
                     url = url.slice(0, url.lastIndexOf("?"));
                 }
                 for (let key in obj.headers) {
@@ -101,7 +147,11 @@ function createDrpy(sdata) {
                     }
                 }
                 let r = "";
-                r = $request(url, obj);
+                if (isFile) {
+                    r = readFileToString(url.replace("file://", ""));
+                } else {
+                    r = $request(url, obj);
+                }
                 if (obj.withHeaders) {
                     r = JSON.parse(r);
                     res.content = r.body;
@@ -113,7 +163,6 @@ function createDrpy(sdata) {
                     res.content = r;
                 }
                 if (obj.buffer === 2) {
-                    const CryptoUtil = $.require("hiker://assets/crypto-java.js");
                     res.content = CryptoUtil.Data.parseHex(res.content).toBase64(_base64.NO_WRAP);
                 }
                 return res;
@@ -121,9 +170,9 @@ function createDrpy(sdata) {
                 log("Error" + e.toString());
             }
         }
-        pdfa = _pdfa;
-        pd = _pd;
-        pdfh = _pdfh;
+        globalThis.pdfa = _pdfa;
+        globalThis.pd = _pd;
+        globalThis.pdfh = _pdfh;
         String.prototype.replaceAll = function (search, replacement) {
             return this.split(search).join(replacement);
         };
@@ -131,6 +180,7 @@ function createDrpy(sdata) {
         Function.prototype.toString = function () {
             return $toString.apply(this).trim();
         };
+
         let drpy2 = $.require(codePath +'drpy/drpy2.js');
         GM.has(GMkey, (DrpyManage) => {
             DrpyManage.put(sdata.key, drpy2);
