@@ -1871,17 +1871,23 @@ function resource() {
                 }
                 
                 if(input.startsWith('/storage/emulated')){input = "file://" + input}
-
-                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
-                if(getMyVar('importtype','1')=="1"){
-                    return Resourceimport(input,getMyVar('importtype','1'),Juconfig['importmode']?2:0);
-                }else if(getMyVar('importtype','1')=="2"){
-                    return HipyImport(input,Juconfig['importmode']?2:0);
-                }else if(getMyVar('importtype','1')=="3"){
-                    return "toast://" + getBoxSource(input, 3).message;
+                function exeImport(input){
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                    if(getMyVar('importtype','1')=="1"){
+                        return Resourceimport(input,getMyVar('importtype','1'),Juconfig['importmode']?2:0);
+                    }else if(getMyVar('importtype','1')=="2"){
+                        return HipyImport(input,Juconfig['importmode']?2:0);
+                    }else if(getMyVar('importtype','1')=="3"){
+                        return "toast://" + getBoxSource(input, 3).message;
+                    }
                 }
-
-                
+                let checkUrl = checkBoxUrl(input);
+                if(checkUrl.message){
+                    return "toast://" + checkUrl.message;
+                }else if(checkUrl.urls){
+                    return "toast://" + checkUrl.message;
+                }
+                return exeImport(input);
             }, Juconfig, cfgfile),
         col_type: "text_2",
         extra: {
