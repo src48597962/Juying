@@ -1793,7 +1793,7 @@ function resource() {
         extra: {
             titleVisible: MY_NAME=="海阔视界"&&getAppVersion()>=5100?true:false,
             defaultValue: getMyVar('importinput', ''),
-            onChange: 'putMyVar("importinput",input)'
+            onChange: 'putMyVar("importinput",input);clearMyVar("duohouse");'
         }
     });
     d.push({
@@ -1880,11 +1880,13 @@ function resource() {
                 }else if(getMyVar('importtype','1')=="3"){
                     return "toast://" + getBoxSource(input, 3).message;
                 }
+
+                
             }, Juconfig, cfgfile),
         col_type: "text_2",
         extra: {
             longClick: [{
-                title: "导入方式",
+                title: "导入方式："+(Juconfig["importmode"]?"全量":"增量"),
                 js: $.toString((cfgfile, Juconfig) => {
                     if(Juconfig["importmode"]){
                         Juconfig["importmode"] = 0;
