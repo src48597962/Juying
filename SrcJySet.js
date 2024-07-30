@@ -1858,15 +1858,40 @@ function resource() {
                 }
                 
                 if(input.startsWith('/storage/emulated')){input = "file://" + input}
-
-                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
-                if(getMyVar('importtype','1')=="1"){
-                    return Resourceimport(input,getMyVar('importtype','1'),Juconfig['importmode']?2:0);
-                }else if(getMyVar('importtype','1')=="2"){
-                    return HipyImport(input,Juconfig['importmode']?2:0);
-                }else if(getMyVar('importtype','1')=="3"){
-                    return "toast://" + getBoxSource(input, 3).message;
+                function exebtn(input) {
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                    if(getMyVar('importtype','1')=="1"){
+                        return Resourceimport(input,getMyVar('importtype','1'),Juconfig['importmode']?2:0);
+                    }else if(getMyVar('importtype','1')=="2"){
+                        return HipyImport(input,Juconfig['importmode']?2:0);
+                    }else if(getMyVar('importtype','1')=="3"){
+                        return "toast://" + getBoxSource(input, 3).message;
+                    }
                 }
+                if(input.startsWith('http')){
+                    let html = request(url, { timeout:10000, withStatusCode: true });
+                    try {
+                        let json = JSON.parse(html);
+                        if (json.statusCode == 200) {
+                            if(json.body.startsWith("{")){
+                                try{
+                                    let urls = JSON.parse(json.body).urls;
+                                    let names = urls.map(v=>v.name);
+                                    return $(names, 3).select((urls,exebtn) => {
+                                        let url = urls.filter(v=>v.name==input).url;
+                                        return exebtn(url);
+                                    },urls,exebtn)
+                                }catch(e){}
+                            }
+                        }else{
+                            return "toast://无法获取内容，code:"+json.statusCode;
+                        }
+                    } catch (e) {
+                        return "toast://链接地址访问异常";
+                    }
+                }
+
+                return exebtn(input);
             }, Juconfig, cfgfile),
         col_type: "text_2",
         extra: {
