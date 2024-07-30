@@ -21,6 +21,7 @@ function sync(func, sp) {
 function createDrpy(sdata) {
     JSEngine.getInstance().evalJS(buildJsEnv(MY_TICKET) + "\n!" + $.toString((sdata, codePath, GMkey, MY_TICKET) => {
         const localKey = "drpy";
+        const CryptoUtil = $.require("hiker://assets/crypto-java.js");
         globalThis.local = {
             set(rulekey, k, v) {
                 storage0.setItem(localKey + "@" + rulekey + "@" + k, v);
