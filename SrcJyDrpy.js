@@ -205,7 +205,7 @@ function getext(jkdata) {
     if (/^hiker/.test(jkdata.url)) {
         if (!fileExist(jkdata.url)) {
             if(!fileExist(gmParams.jkfile)){
-                jkdata.url = jkdata.url.replace('/data/','/_cache/');
+                jkdata.url = jkdata.url.replace('/data/','/_cache/').replace('/聚影✓/','/聚影/');
             }
             if (jkdata.ext && /^http/.test(jkdata.ext)) {
                 let content = gmParams.getContnet(jkdata.ext.split('?')[0]);
