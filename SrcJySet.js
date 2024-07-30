@@ -1688,7 +1688,6 @@ function resource() {
         clearMyVar('importjiexi');
         clearMyVar('importtype');
         clearMyVar('importinput');
-        clearMyVar('dySourceType');
     }));
     setPageTitle("资源管理");
     let d = [];
