@@ -1,6 +1,11 @@
 var newVersion = {
     "SrcJuying":"1.0",
     "JYUpdateRecords": [{
+        title: "待发布 V1.1",
+        records: [
+            "修复：点播本地包导入存在bug导致一级空白"
+        ]
+    },{
         title: "2024/07/30 V1.0",
         records: [
             "新增：点播资源管理box导入订阅支持多仓链接地址",
