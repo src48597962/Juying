@@ -728,9 +728,9 @@ function dianboyiji() {
                 col_type: "line_blank"
             });
             d.push({
-                title: "主页源不存在\n需先选择配置主页源",//\n设置-选择漫画/小说/听书/
-                desc: "点上面分类按钮皆可选择",//设置长按菜单可以开启界面切换开关
-                url: 'toast://点上面分类按钮',
+                title: "主页源不存在\n需先选择配置主页源",
+                desc: "前提是本地有接口或订阅未失效",
+                url: 'toast://点上面换主页源按源',
                 col_type: "text_center_1",
                 extra: {
                     lineVisible: false
