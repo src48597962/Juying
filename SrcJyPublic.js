@@ -102,10 +102,49 @@ function getDatas(lx, isyx) {
     let result = withoutStop.concat(withStop);
     return result;
 }
+// 较验box配置文件
+function checkBoxFile(input) {
+    let html;
+    try{
+        showLoading('检测文件有效性');
+        if(input.startsWith('/storage/')){input = "file://" + input}
+        
+        if(input.startsWith('http')){
+            let tmpFile = cachepath + md5(input) + ".json";
+            if(!fileExist(tmpFile)){
+                html = getContnet(input);
+                if(html){
+                    writeFile(tmpFile, html);
+                }
+            }else{
+                html = fetch(tmpFile);
+            }
+        }else{
+            html = fetch(input);
+        }
+        if(html.includes('LuUPraez**')){
+            html = base64Decode(html.split('LuUPraez**')[1]);
+        }
+        
+        eval('let data = ' + html)
+        if(data.urls){
+            return {urls:urls}     
+        }                  
+    } catch (e) {
+        hideLoading();
+        log('box配置文件检测失败>'+e.message); 
+        return {
+            message: "失败：链接文件无效或内容有错"
+        };
+    }
+    hideLoading();
+    return {html: html}
+}
 // 从box配置文件获取
 function getBoxSource(input, mode, imports){
     //input配置文件地址，mode模式1为导入，2为订阅，3为较验
     let html,data,jiekous;
+    /*
     try{
         showLoading('检测文件有效性');
         if(input.startsWith('/storage/')){input = "file://" + input}
@@ -142,12 +181,24 @@ function getBoxSource(input, mode, imports){
         jiekous = data.sites||[];                      
     } catch (e) {
         hideLoading();
-        log('Box文件检测失败>'+e.message); 
+        log('box配置文件检测失败>'+e.message); 
         return {
             message: "失败：链接文件无效或内容有错"
         };
     }
     hideLoading();
+    */
+    let check = checkBoxFile(input);
+    if(check.message){
+        return check;
+    }else if(check.html){
+        html = check.html;
+    }else if(check.urls){
+        return {
+            message: "失败：此为多仓配置文件"
+        };
+    }
+    
 
     if(mode==3){//订阅较验完成
         Juconfig['dySource'] = input;
