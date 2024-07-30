@@ -202,7 +202,7 @@ function getBoxSource(input, mode, imports){
                     }else if(/^file/.test(extfile)){
                         if(mode==1){
                             urlfile = filepath + '_' + (extfile.includes('?')?obj.key:"")+extfile.split('?')[0].substr(extfile.split('?')[0].lastIndexOf('/')+1);
-                            writeFile(urlfile, JSON.stringify(extfile));
+                            writeFile(urlfile, fetch(extfile));
                         }else{
                             urlfile = extfile.split('?')[0];
                         }
