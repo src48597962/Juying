@@ -153,7 +153,6 @@ function getYiData(jkdata) {
                     }else if (api_type == "hipy_t3") {
                         let home = JSON.parse(drpy.home());
                         let typelist = home['class'] || [];
-                        log(typelist);
                         typelist.forEach(v=>{
                             分类.push(v.type_name + '$' + v.type_id);
                         })
@@ -763,12 +762,7 @@ function getSsData(name, jkdata, page) {
                 json = JSON.parse(getHtml(jkdata.url+"&wd="+name+"&extend="+jkdata.ext+"&quick=false", headers));
             }else if(api_type=="hipy_t3"){
                 let drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(jkdata);
-                /*
-                try{
-                    json = JSON.parse(drpy.search(name, 0, page));
-                }catch(e){}
-                */
-                log(drpy.search(name, 1, 1));
+                json = JSON.parse(drpy.search(name, 0, page));
                 noerji = drpy.getRule("二级")=="*"?1:0;
             }else{
                 gethtml = getHtmlCode(ssurl, headers);
