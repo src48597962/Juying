@@ -128,6 +128,17 @@ function getBoxSource(input, mode, imports){
         }
         
         eval('data = ' + html)
+        if(data.urls){
+            try{
+                let urls = data.urls;
+                let names = urls.map(v=>v.name);
+                return $(names, 1).select((urls, mode, imports) => {
+                    let url = urls.filter(v=>v.name==input)[0].url;
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                    return getBoxSource(url, mode, imports);
+                },urls, mode, imports)
+            }catch(e){}          
+        }
         jiekous = data.sites||[];                      
     } catch (e) {
         hideLoading();
