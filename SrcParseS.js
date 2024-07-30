@@ -72,6 +72,8 @@ var SrcParseS = {
                     urls: [play.url],
                     headers: [play.header]
                 }); 
+            }else if(/do=quark|do=uc/.test(play.url) && /pan\.quark\.cn|drive\.uc\.cn/.test(vipUrl)){
+                play.url = vipUrl;
             }
             vipUrl = play.url || vipUrl;
         }
@@ -99,7 +101,7 @@ var SrcParseS = {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
                 aliShareUrl(input);
             },vipUrl);
-        }else if(vipUrl.startsWith("https://pan.quark.cn/")||vipUrl.startsWith("https://drive.uc.cn/")) {
+        }else if(/pan\.quark\.cn|drive\.uc\.cn/.test(vipUrl)) {
             return "hiker://page/quarkList?rule=Quark.简&realurl=" + encodeURIComponent(vipUrl) + "&sharePwd=";
         }else if(/qq\.com|iqiyi\.com|youku\.com|mgtv\.com|bilibili\.com|sohu\.com|ixigua\.com|pptv\.com|miguvideo\.com|le\.com|1905\.com|fun\.tv|cctv\.com/.test(vipUrl)){
             if(vipUrl.indexOf('html?')>-1){
