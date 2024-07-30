@@ -1718,12 +1718,12 @@ function resource() {
     });
     */
     d.push({
-        title: (importtype=="3"?"👉":"")+"订阅地址设置",
+        title: (importtype=="3"?"👉":"")+"box配置文件订阅",
         col_type: 'scroll_button',
         url: $('#noLoading#').lazyRule(() => {
             putMyVar('importtype','3');
             refreshPage(false);
-            return "toast://订阅只支持app类、cms、hipy_t4，且无法管理接口";
+            return "toast://支持本地包或在线的配置文件订阅，但无法管理接口";
         })
     });
 
@@ -1764,43 +1764,6 @@ function resource() {
             title: '当前订阅地址：' + Juconfig['dySource'],
             col_type: "rich_text",
             extra:{textSize:12}
-        });
-        d.push({
-            title:(getMyVar('dySourceType','1')=="1"?getide(1):getide(0))+'box配置文件',
-            col_type:'scroll_button',
-            url:$('#noLoading#').lazyRule(() => {
-                putMyVar('dySourceType','1');
-                refreshPage(false);
-                return "hiker://empty";
-            })
-        });
-        d.push({
-            title:(getMyVar('dySourceType','1')=="2"?getide(1):getide(0))+'drpy/index.js',
-            col_type:'scroll_button',
-            url:$('#noLoading#').lazyRule(() => {
-                function readDir(path) {
-                    let names = [];
-                    let file = new java.io.File(path.replace("file://", ""));
-
-                    if (!(file.exists() && file.isDirectory())) return names;
-                    for (let it of file.listFiles()) {
-                        names.push(String(it.getName()));
-                    }
-                    return names;
-                }
-                //let files =  new java.io.FIle('/storage/emulated/0/Android/data/com.example.hikerview/files/Documents/cache/drpy_dzlive_0725-1/drpy_dzlive/drpy_js').listFiles();
-                log(readDir('/storage/emulated/0/Android/data/com.example.hikerview/files/Documents/cache/drpy_dzlive_0725-1/drpy_dzlive/drpy_js'));
-                
-            })
-        });
-        d.push({
-            title:(getMyVar('dySourceType','1')=="3"?getide(1):getide(0))+'drpy_js',
-            col_type:'scroll_button',
-            url:$('#noLoading#').lazyRule(() => {
-                putMyVar('dySourceType','3');
-                refreshPage(false);
-                return "hiker://empty";
-            })
         });
     }
     d.push({
