@@ -1596,6 +1596,20 @@ function manageSet(){
         col_type: 'text_icon'
     });
     d.push({
+        title: 'drpy调试日志打印',
+        img: getItem('drpy调试日志')=="1"?getIcon("管理-开.svg"):getIcon("关.svg"),
+        url: $("#noLoading#").lazyRule(() => {
+            if(getItem('drpy调试日志')=="1"){
+                clearItem('drpy调试日志');
+            }else{
+                setItem('drpy调试日志','1');
+            }
+            refreshPage();
+            return 'hiker://empty';
+        }),
+        col_type: 'text_icon'
+    });
+    d.push({
         col_type: "line_blank"
     });
     d.push({
