@@ -153,6 +153,7 @@ function getYiData(jkdata) {
                     }else if (api_type == "hipy_t3") {
                         let home = JSON.parse(drpy.home());
                         let typelist = home['class'] || [];
+                        log(typelist);
                         typelist.forEach(v=>{
                             分类.push(v.type_name + '$' + v.type_id);
                         })
