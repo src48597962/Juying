@@ -191,11 +191,16 @@ function getBoxSource(input, mode, imports){
     let checkUrl = checkBoxUrl(input);
     if(checkUrl.message){
         return checkUrl;
-    }else if(checkUrl.html){
-        html = checkUrl.html;
     }else if(checkUrl.urls){
         return {
             message: "失败：此为多仓配置文件"
+        };
+    }else if(checkUrl.html){
+        html = checkUrl.html;
+        eval('data = ' + html);
+    }else{
+        return {
+            message: "异常：为啥会没有获取到html"
         };
     }
     
@@ -214,7 +219,7 @@ function getBoxSource(input, mode, imports){
     if(mode==1){
         showLoading('正在多线程获取数据中...');
     }
-
+    jiekous = data.sites||[];
     if(imports.jk && jiekous.length>0){
         let urls= [];
         let hipy_t3_enable = getItem('hipy_t3_enable')=="1"?1:0;
