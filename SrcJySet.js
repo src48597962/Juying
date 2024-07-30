@@ -1605,7 +1605,7 @@ function manageSet(){
                 setItem('drpy调试日志','1');
             }
             refreshPage();
-            return 'hiker://empty';
+            return 'toast://重启软件后生效';
         }),
         col_type: 'text_icon'
     });
