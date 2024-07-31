@@ -1466,7 +1466,7 @@ function extDataCache(jkdata) {
                 jkdata.url = jkdata.url.replace('/data/','/_cache/');
             }
             jkdata.url = jkdata.url.replace('/聚影✓/','/聚影/');
-            if (jkdata.ext) {
+            if ($.type(jkdata.ext)=='string' && /^http|^file/.test(jkdata.ext)) {
                 let content = getContnet(jkdata.ext);
                 if (content) {
                     writeFile(jkdata.url, content);
