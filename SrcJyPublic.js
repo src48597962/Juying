@@ -107,7 +107,7 @@ function checkBoxUrl(input) {
     let html;
     try{
         showLoading('检测文件有效性');
-        if(input.startsWith('/storage/')){input = "file://" + input}
+        if(input.startsWith('/')){input = "file://" + input}
         
         if(input.startsWith('http')){
             let tmpFile = cachepath + md5(input) + ".json";
@@ -119,8 +119,10 @@ function checkBoxUrl(input) {
             }else{
                 html = fetch(tmpFile);
             }
-        }else{
+        }else if(input.startsWith('file')){
             html = fetch(input);
+        }else{
+            html = "";
         }
         if(html.includes('LuUPraez**')){
             html = base64Decode(html.split('LuUPraez**')[1]);
@@ -139,6 +141,43 @@ function checkBoxUrl(input) {
     }
     hideLoading();
     return {html: html}
+}
+// urlfile缓存获取逻辑
+function getUrlFile(arr) {
+    let urlfile;
+    let extfile = arr.ext;
+    let filepath = cachepath + 'libs_jk/' + arr.type;
+    if($.type(extfile)=='object'){
+        urlfile = filepath + '_' + arr.name + '.json';
+        writeFile(urlfile, JSON.stringify(extfile));
+    }else if(/^file/.test(extfile)){
+        if(mode==1){
+            urlfile = filepath + '_' + (extfile.includes('?')?obj.key:"")+extfile.split('?')[0].substr(extfile.split('?')[0].lastIndexOf('/')+1);
+            writeFile(urlfile, fetch(extfile));
+        }else{
+            urlfile = extfile.split('?')[0];
+        }
+    }else if(/^http/.test(extfile)){
+        urlfile = filepath + '_' + (extfile.includes('?')?obj.key:"")+extfile.split('?')[0].substr(extfile.split('?')[0].lastIndexOf('/')+1);
+        if(mode==1){
+            try{
+                let content = getContnet(extfile);
+                if (!content) {
+                    urlfile = '';
+                }else{
+                    if(arr.type=="XYQ" && !/分类片单标题/.test(content)){
+                        arr['onlysearch'] = 1;
+                    }
+                    if(arr.type=="XBPQ" && !/搜索url/.test(content)){
+                        obj.searchable = 0;
+                    }
+                    writeFile(urlfile, content);
+                }
+            }catch(e){
+                log(obj.name + 'ext文件缓存失败>' + e.message);
+            }
+        }
+    }
 }
 // 从box配置文件获取
 function getBoxSource(input, mode, imports){
