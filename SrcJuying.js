@@ -1355,13 +1355,16 @@ function Version() {
             if (parseFloat(newVersion.SrcJuying) > parseFloat(nowVersion)) {
                 confirm({
                     title:'发现新版本，是否更新？', 
-                    content:'本地V'+nowVersion+' => 云端V'+newVersion.SrcJuying + '\n可在管理中查询更新日志', 
-                    confirm: $.toString((nowtime,newVersion) => {
-                        setItem('Version', newVersion);
+                    content:'本地V'+nowVersion+' => 云端V'+newVersion.SrcJuying + '\n' + (newVersion.hint||""), 
+                    confirm: $.toString((nowtime,version,updateRecords) => {
+                        setItem('Version', version);
                         setItem('VersionChecktime', nowtime+'time');
                         deleteCache();
                         refreshPage();
-                    },nowtime, newVersion.SrcJuying),
+
+                        const hikerPop = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6966");
+                        hikerPop.updateRecordsBottom(updateRecords);
+                    },nowtime, newVersion.SrcJuying, newVersion.JYUpdateRecords.slice(0, 3)),
                     cancel:''
                 })
                 log('检测到新版本！\nV'+newVersion.SrcJuying+'版本》'+newVersion.SrcJuyingdesc[newVersion.SrcJuying]);
