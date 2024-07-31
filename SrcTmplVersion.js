@@ -1,5 +1,6 @@
 var newVersion = {
     "SrcJuying":"1.0",
+    "hint": "1.0后转正式版，小程序更名为聚影，需清空一次接口",
     "JYUpdateRecords": [{
         title: "待发布 V1.1",
         records: [
