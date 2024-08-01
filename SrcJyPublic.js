@@ -217,10 +217,10 @@ function getBoxSource(input, mode, imports){
             message: "已订阅，站源改为订阅模式下生效"
         };
     }
-
+    showLoading('正在多线程获取数据中...');
     let result = {};
     if(mode==1){
-        showLoading('正在多线程获取数据中...');
+        //showLoading('正在多线程获取数据中...');
     }
     jiekous = data.sites||[];
     if(imports.jk && jiekous.length>0){
