@@ -217,7 +217,7 @@ function getBoxSource(input, mode, imports){
             message: "已订阅，站源改为订阅模式下生效"
         };
     }
-    showLoading('正在多线程获取数据中...');
+    
     let result = {};
     if(mode==1){
         //showLoading('正在多线程获取数据中...');
@@ -315,7 +315,7 @@ function getBoxSource(input, mode, imports){
                 id: list.key
             }
         });
-
+        showLoading('正在多线程获取数据中...');
         be(jiekoutask, {
             func: function(obj, id, error, taskResult) {  
                 if(taskResult.data){
