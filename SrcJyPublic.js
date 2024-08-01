@@ -139,6 +139,7 @@ function checkBoxUrl(input) {
             message: "失败：链接文件无效或内容有错"
         };
     }
+    hideLoading();
     return {html: html}
 }
 
@@ -216,7 +217,9 @@ function getBoxSource(input, mode, imports){
             message: "已订阅，站源改为订阅模式下生效"
         };
     }
-    
+    showLoading('正在多线程获取数据中...');
+    showLoading('正在多线程获取数据中...');
+    showLoading('正在多线程获取数据中...');
     let result = {};
     if(mode==1){
         //showLoading('正在多线程获取数据中...');
