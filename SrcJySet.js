@@ -437,6 +437,14 @@ function jiekousave(urls, mode) {
                 }else{
                     delete it['url'];
                 }
+            }else if(it.ext && it.ext.startsWith('file://')){//本地数据文件转到data目录
+                if(fileExist(it.ext)){
+                    let urlfile = datapath + 'libs_jk/' + it.type + '_' + it.name + '.json';
+                    writeFile(urlfile, fetch(it.ext));
+                    it.url = urlfile;
+                }else{
+                    delete it['url'];
+                }
             }
 
             it.name = it.name.replace('(drpy_t3)','').replace(/(?:[\u2700-\u27bf]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff]|[\u0023-\u0039]\ufe0f?\u20e3|\u3299|\u3297|\u303d|\u3030|\u24c2|\ud83c[\udd70-\udd71]|\ud83c[\udd7e-\udd7f]|\ud83c\udd8e|\ud83c[\udd91-\udd9a]|\ud83c[\udde6-\uddff]|\ud83c[\ude01-\ude02]|\ud83c\ude1a|\ud83c\ude2f|\ud83c[\ude32-\ude3a]|\ud83c[\ude50-\ude51]|\u203c|\u2049|[\u25aa-\u25ab]|\u25b6|\u25c0|[\u25fb-\u25fe]|\u00a9|\u00ae|\u2122|\u2139|\ud83c\udc04|[\u2600-\u26FF]|\u2b05|\u2b06|\u2b07|\u2b1b|\u2b1c|\u2b50|\u2b55|\u231a|\u231b|\u2328|\u23cf|[\u23e9-\u23f3]|[\u23f8-\u23fa]|\ud83c\udccf|\u2934|\u2935|[\u2190-\u21ff])|\(XPF\)|\(萝卜\)|\(神马\)|\(切\)|\(聚\)|\(优\)|\(神马\)|\(XB\)|\(SP\)|\(XP\)|[\x00-\x1F\x7F]/g,'');
@@ -546,20 +554,31 @@ function jiekou(data) {
             onChange: 'putMyVar("apiname",input)'
         }
     });
+    let apitype = getMyVar('apitype', '');
     d.push({
-        title: '查看',
+        title: data?'查看':'本地',
         col_type: 'input',
         desc: "接口地址",
-        url: $.toString(() => {
+        url: data?$.toString(() => {
             toast('如果有修改，接口不要点保存');
             return "editFile://"+getMyVar('apiurl','');
+        }):$.toString(() => {
+            if(MY_NAME=="海阔视界"&&getAppVersion()<5100){
+                return "toast://软件版本过低";
+            }
+            return `fileSelect://`+$.toString(()=>{
+                putMyVar("apiurl", "file://" + MY_PATH);
+                refreshPage();
+                return "hiker://empty";
+            })
         }),
         extra: {
-            titleVisible: /^hiker/.test(getMyVar('apiurl',''))?true:false,
+            titleVisible: (data && /^hiker/.test(getMyVar('apiurl',''))) || (!data && /XPath|biubiu|XBPQ|XYQ|hipy_t3/.test(apitype))?true:false,
             defaultValue: getMyVar('apiurl',''),
-            onChange: 'putMyVar("apiurl",input)'
+            onChange: 'putMyVar("apiurl",input);'
         }
     });
+
     d.push({
         title: '类型：' + getMyVar('apitype', ''),
         col_type:'text_1',
@@ -661,17 +680,21 @@ function jiekou(data) {
                 if(!apitype){
                     return "toast://无法自动识别接口类型，请检查链接";
                 }
+                
                 let urlfile = apiurl;
-                if(apiurl.startsWith('http') && !/v1|app|v2|iptv|cms/.test(apitype)){
-                    let contnet = getContnet(apiurl);
-                    if(contnet){
-                        urlfile = cachepath+apitype+"_"+apiurl.substr(apiurl.lastIndexOf('/') + 1);
-                        writeFile(urlfile, contnet);
-                    }else{
-                        return "toast://接口地址获取内容失败";
+                if(/XPath|biubiu|XBPQ|XYQ|hipy_t3/.test(apitype) && /^http|^file/.test(apiurl)){
+                    let extfile = apiurl;
+                    urlfile = cachepath+apitype+"_"+extfile.substr(extfile.lastIndexOf('/') + 1);
+                    if(apiext){
+                        let contnet = getContnet(apiext);
+                        if(contnet){
+                            writeFile(urlfile, contnet);
+                        }else{
+                            return "toast://接口地址获取内容失败";
+                        }
                     }
                 }
-                let arr = {"name": apiname, "url": urlfile, "type": apitype };
+                let arr = {"name": apiname, "type": apitype, "url": urlfile};
                 let apigroup = getMyVar('apigroup');
                 if(apigroup){
                     arr['group'] = apigroup;
