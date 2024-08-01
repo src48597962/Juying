@@ -139,7 +139,6 @@ function checkBoxUrl(input) {
             message: "失败：链接文件无效或内容有错"
         };
     }
-    hideLoading();
     return {html: html}
 }
 
