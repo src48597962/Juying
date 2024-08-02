@@ -139,7 +139,7 @@ function checkBoxUrl(input) {
             message: "失败：链接文件无效或内容有错"
         };
     }
-    hideLoading();
+    //hideLoading();
     showLoading("正在多线程获取数据中...");
     return {html: html}
 }
@@ -149,7 +149,6 @@ function getBoxSource(input, mode, imports){
     //input配置文件地址，mode模式1为导入，2为订阅，3为较验
     let html,data;
     let checkUrl = checkBoxUrl(input);
-    hideLoading();
     if(checkUrl.message){
         return checkUrl;
     }else if(checkUrl.urls){
