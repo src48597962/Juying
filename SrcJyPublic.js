@@ -130,7 +130,7 @@ function checkBoxUrl(input) {
         
         eval('let data = ' + html)
         if(data.urls){
-            return {urls:urls}     
+            return {urls: data.urls};
         }                  
     } catch (e) {
         hideLoading();
