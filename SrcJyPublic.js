@@ -146,51 +146,7 @@ function checkBoxUrl(input) {
 // 从box配置文件获取
 function getBoxSource(input, mode, imports){
     //input配置文件地址，mode模式1为导入，2为订阅，3为较验
-    let html,data,jiekous;
-    /*
-    try{
-        showLoading('检测文件有效性');
-        if(input.startsWith('/storage/')){input = "file://" + input}
-        
-        if(input.startsWith('http')){
-            let tmpFile = cachepath + md5(input) + ".json";
-            if(!fileExist(tmpFile)){
-                html = getContnet(input);
-                if(html){
-                    writeFile(tmpFile, html);
-                }
-            }else{
-                html = fetch(tmpFile);
-            }
-        }else{
-            html = fetch(input);
-        }
-        if(html.includes('LuUPraez**')){
-            html = base64Decode(html.split('LuUPraez**')[1]);
-        }
-        
-        eval('data = ' + html)
-        if(data.urls){
-            try{
-                let urls = data.urls;
-                let names = urls.map(v=>v.name);
-                return $(names, 1).select((urls, mode, imports) => {
-                    let url = urls.filter(v=>v.name==input)[0].url;
-                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
-                    return getBoxSource(url, mode, imports);
-                },urls, mode, imports)
-            }catch(e){}          
-        }
-        jiekous = data.sites||[];                      
-    } catch (e) {
-        hideLoading();
-        log('box配置文件检测失败>'+e.message); 
-        return {
-            message: "失败：链接文件无效或内容有错"
-        };
-    }
-    hideLoading();
-    */
+    let html,data;
     let checkUrl = checkBoxUrl(input);
     hideLoading();
     if(checkUrl.message){
@@ -218,15 +174,14 @@ function getBoxSource(input, mode, imports){
             message: "已订阅，站源改为订阅模式下生效"
         };
     }
-    
-    showLoading('正在多线程获取数据中...');
-    showLoading('正在多线程获取数据中...');
-    showLoading('正在多线程获取数据中...');
+    log("1");
+    showLoading("正在多线程获取数据中...");
+    log("2");
     let result = {};
     if(mode==1){
         //showLoading('正在多线程获取数据中...');
     }
-    jiekous = data.sites||[];
+    let jiekous = data.sites||[];
     if(imports.jk && jiekous.length>0){
         let urls= [];
         let hipy_t3_enable = getItem('hipy_t3_enable')=="1"?1:0;
@@ -344,8 +299,7 @@ function getBoxSource(input, mode, imports){
         })
         result.jxlist = urls;
     }
-    //hideLoading(); 
-    
+    hideLoading(); 
     return result;     
 }
 // 获取接口tags
