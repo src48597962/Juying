@@ -127,15 +127,15 @@ function checkBoxUrl(input) {
         if(html.includes('LuUPraez**')){
             html = base64Decode(html.split('LuUPraez**')[1]);
         }
-        
+        log(html);
         eval('let data = ' + html)
         if(data.urls){
             hideLoading();
             return {urls: data.urls};
-        }                  
+        }
     } catch (e) {
         hideLoading();
-        log('box配置文件检测失败>'+e.message); 
+        log("box配置文件检测失败>" + e.message + " 错误行#" + e.lineNumber); 
         return {
             message: "失败：链接文件无效或内容有错"
         };
