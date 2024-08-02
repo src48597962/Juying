@@ -230,6 +230,7 @@ function getBoxSource(input, mode, imports){
         let hipy_t3_enable = getItem('hipy_t3_enable')=="1"?1:0;
         //多线程处理
         let task = function(obj) {
+            showLoading('正在多线程获取数据中...');
             let arr;
             if(/^csp_AppYs/.test(obj.api)){
                 arr = { "name": obj.name, "url": obj.ext, "type": getapitype(obj.ext)};
@@ -317,7 +318,7 @@ function getBoxSource(input, mode, imports){
                 id: list.key
             }
         });
-        showLoading('正在多线程获取数据中...');
+
         be(jiekoutask, {
             func: function(obj, id, error, taskResult) {  
                 if(taskResult.data){
@@ -336,7 +337,7 @@ function getBoxSource(input, mode, imports){
         })
         result.jxlist = urls;
     }
-    hideLoading(); 
+    //hideLoading(); 
     
     return result;     
 }
