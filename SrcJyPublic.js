@@ -140,6 +140,7 @@ function checkBoxUrl(input) {
         };
     }
     hideLoading();
+    showLoading("正在多线程获取数据中...");
     return {html: html}
 }
 
