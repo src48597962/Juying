@@ -1913,6 +1913,7 @@ function resource() {
                     let names = urls.map(v=>v.name);
                     return $(names, 1).select((urls,exeImport) => {
                         let url = urls.filter(v=>v.name==input)[0].url;
+                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                         return exeImport(url);
                     },urls,exeImport)
                 }
