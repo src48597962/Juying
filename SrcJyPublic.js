@@ -127,7 +127,6 @@ function checkBoxUrl(input) {
         if(html.includes('LuUPraez**')){
             html = base64Decode(html.split('LuUPraez**')[1]);
         }
-        log(html);
         eval('let data = ' + html)
         if(data.urls){
             hideLoading();
@@ -193,6 +192,7 @@ function getBoxSource(input, mode, imports){
     hideLoading();
     */
     let checkUrl = checkBoxUrl(input);
+    hideLoading();
     if(checkUrl.message){
         return checkUrl;
     }else if(checkUrl.urls){
@@ -218,6 +218,7 @@ function getBoxSource(input, mode, imports){
             message: "已订阅，站源改为订阅模式下生效"
         };
     }
+    
     showLoading('正在多线程获取数据中...');
     showLoading('正在多线程获取数据中...');
     showLoading('正在多线程获取数据中...');
@@ -231,7 +232,6 @@ function getBoxSource(input, mode, imports){
         let hipy_t3_enable = getItem('hipy_t3_enable')=="1"?1:0;
         //多线程处理
         let task = function(obj) {
-            showLoading('正在多线程获取数据中...');
             let arr;
             if(/^csp_AppYs/.test(obj.api)){
                 arr = { "name": obj.name, "url": obj.ext, "type": getapitype(obj.ext)};
@@ -290,10 +290,16 @@ function getBoxSource(input, mode, imports){
                                     if(arr.type=="XYQ" && !/分类片单标题/.test(content)){
                                         arr['onlysearch'] = 1;
                                     }
-                                    if(arr.type=="XBPQ" && !/搜索url/.test(content)){
-                                        obj.searchable = 0;
+                                    if(arr.type=="XBPQ"){
+                                        if(!/数组/.test(content)){
+                                            urlfile = '';
+                                        }else if(!/搜索url/.test(content)){
+                                            obj.searchable = 0;
+                                        }
                                     }
-                                    writeFile(urlfile, content);
+                                    if(urlfile){
+                                        writeFile(urlfile, content);
+                                    }
                                 }
                             }catch(e){
                                 log(obj.name + 'ext文件缓存失败>' + e.message);
