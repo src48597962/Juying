@@ -108,7 +108,6 @@ function checkBoxUrl(input) {
     try{
         showLoading('检测文件有效性');
         if(input.startsWith('/')){input = "file://" + input}
-        
         if(input.startsWith('http')){
             let tmpFile = cachepath + md5(input) + ".json";
             if(!fileExist(tmpFile)){
@@ -132,6 +131,7 @@ function checkBoxUrl(input) {
             hideLoading();
             return {urls: data.urls};
         }
+        java.lang.Thread.sleep(1000);
     } catch (e) {
         hideLoading();
         log("box配置文件检测失败>" + e.message + " 错误行#" + e.lineNumber); 
@@ -140,7 +140,6 @@ function checkBoxUrl(input) {
         };
     }
     hideLoading();
-    //showLoading("正在多线程获取数据中...");
     return {html: html}
 }
 
@@ -149,7 +148,6 @@ function getBoxSource(input, mode, imports){
     //input配置文件地址，mode模式1为导入，2为订阅，3为较验
     let html,data;
     let checkUrl = checkBoxUrl(input);
-    showLoading("123")
     if(checkUrl.message){
         return checkUrl;
     }else if(checkUrl.urls){
@@ -175,12 +173,10 @@ function getBoxSource(input, mode, imports){
             message: "已订阅，站源改为订阅模式下生效"
         };
     }
-    log("1");
-    showLoading("正在多线程获取数据中...");
-    log("2");
+
     let result = {};
     if(mode==1){
-        //showLoading('正在多线程获取数据中...');
+        showLoading('正在多线程获取数据中...');
     }
     let jiekous = data.sites||[];
     if(imports.jk && jiekous.length>0){
