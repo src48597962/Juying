@@ -106,11 +106,11 @@ function getDatas(lx, isyx) {
 function checkBoxUrl(input) {
     let html;
     try{
-        showLoading('检测文件有效性');
         if(input.startsWith('/')){input = "file://" + input}
         if(input.startsWith('http')){
             let tmpFile = cachepath + md5(input) + ".json";
             if(!fileExist(tmpFile)){
+                showLoading('检测在线文件有效性');
                 html = getContnet(input);
                 if(html){
                     writeFile(tmpFile, html);
@@ -131,7 +131,6 @@ function checkBoxUrl(input) {
             hideLoading();
             return {urls: data.urls};
         }
-        java.lang.Thread.sleep(1000);
     } catch (e) {
         hideLoading();
         log("box配置文件检测失败>" + e.message + " 错误行#" + e.lineNumber); 
@@ -176,7 +175,7 @@ function getBoxSource(input, mode, imports){
 
     let result = {};
     if(mode==1){
-        showLoading('正在多线程获取数据中...');
+        showLoading('正在多线程获取数据中');
     }
     let jiekous = data.sites||[];
     if(imports.jk && jiekous.length>0){
