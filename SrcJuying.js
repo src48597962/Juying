@@ -680,7 +680,7 @@ function dianboyiji() {
         })
         d.push({
             title: "管理设置",
-            url: $(["接口管理","解析管理","资源管理","站源设置"],1).select(()=>{
+            url: $(["接口管理","解析管理","资源管理","站源切换"],1).select(()=>{
                 if(input=="接口管理"){
                     if(getItem("sourceMode")=="2"){
                         return "toast://订阅文件模式，无法管理本地接口";
@@ -707,7 +707,7 @@ function dianboyiji() {
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                         resource();
                     })
-                }else if(input=="站源模式"){
+                }else if(input=="站源切换"){
                     let sm;
                     if(getItem("sourceMode")=="2"){
                         clearItem("sourceMode");
