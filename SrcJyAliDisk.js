@@ -374,7 +374,7 @@ function aliShare(share_id, folder_id, share_pwd) {
     }))
 }
 function aliOpenInt() {
-    return $(['接口1(alist)', '接口2(webdav)', '接口3(tv)']).select(() => {
+    return $(['接口1(alist)', '接口2(webdav)']).select(() => {//, '接口3(tv)'
         clearMyVar('aliopentoken');
         if(input=='接口1(alist)'){
             setItem('aliyun_openInt', '1');
