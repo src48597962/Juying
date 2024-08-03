@@ -1842,63 +1842,7 @@ function resource() {
             onChange: 'putMyVar("importinput",input);clearMyVar("duohouse");'
         }
     });
-    d.push({
-        title: '🆖 历史记录',
-        url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
-            addListener("onClose", $.toString(() => {
-                refreshPage(false);
-            }));
-            setPageTitle("🆖资源导入-历史记录");
-            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
-            
-            var d = [];
-            let importrecord = Juconfig['importrecord']||[];
-            let lists = importrecord.filter(item => {
-                return item.type==getMyVar('importtype','1');
-            })
-            if(lists.length>0){
-                d.push({
-                    title: '点击下方的历史条目，进行操作👇',
-                    col_type: "rich_text"
-                });
-                d.push({
-                    col_type: "line"
-                });
-                lists.reverse();
-                for(let i=0;i<lists.length;i++){
-                    d.push({
-                        title: lists[i].url,
-                        url: $(["选择","删除"], 1 ,"").select((Juconfig, cfgfile, url)=>{
-                            if(input=="选择"){
-                                putMyVar('importinput', url);
-                                back(true);
-                            }else if(input=="删除"){
-                                let importrecord = Juconfig['importrecord']||[];
-                                for(let j=0;j<importrecord.length;j++){
-                                    if(importrecord[j].url==url&&importrecord[j].type==getMyVar('importtype','1')){
-                                        importrecord.splice(j,1);
-                                        break;
-                                    }
-                                }
-                                Juconfig['importrecord'] = importrecord; 
-                                writeFile(cfgfile, JSON.stringify(Juconfig));
-                                refreshPage(false);
-                            }
-                            return "hiker://empty";
-                        }, Juconfig, cfgfile, lists[i].url),
-                        col_type: "text_1"
-                    });
-                }
-            }else{
-                d.push({
-                    title: '↻无记录',
-                    col_type: "rich_text"
-                });
-            }
-            setHomeResult(d);
-        }),
-        col_type: "text_2"
-    });
+
     d.push({
         title: '🆗 '+(getMyVar('importtype','1')=="3"?'确定订阅':'确定导入(' + (Juconfig["importmode"]?"全":"增")+')'),
         url: importtype=="1"&&getMyVar('importjiekou','1')!="1"&&getMyVar('importjiexi','1')!="1"?'toast://请选择导入项目':$('#noLoading#').lazyRule((Juconfig,cfgfile) => {
@@ -1943,7 +1887,7 @@ function resource() {
                 }
                 return exeImport(input);
             }, Juconfig, cfgfile),
-        col_type: "text_2",
+        col_type: "text_center_1",
         extra: {
             longClick: [{
                 title: "导入方式："+(Juconfig["importmode"]?"全量":"增量"),
