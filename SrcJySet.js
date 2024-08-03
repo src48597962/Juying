@@ -319,6 +319,10 @@ function SRCSet() {
             },base64Encode(JSON.stringify(it))):$(selectmenu, 2).select((data) => {
                 data = JSON.parse(base64Decode(data));
                 if (input == "分享") {
+                    if(/^hiker|^file/.test(data.url) && $.type(data.ext)=="string" && /^hiker|^file/.test(data.ext)){
+                        return "toast://本地接口，无法分享";
+                    }
+
                     showLoading('分享上传中，请稍后...');
                     let oneshare = []
                     oneshare.push(data);
@@ -2180,12 +2184,16 @@ function JYshare(lx,input) {
         */
     }
     let sharelist2 = sharelist.filter(it=>{
-        return it.url.startsWith("http") || (it.ext && it.ext.startsWith("http"));
+        return it.url.startsWith("http") || $.type(it.ext)=="object" || ($.type(it.ext)=="string" && it.ext.startsWith("http"));
     })
     let nosharenum = sharelist.length-sharelist2.length;
-    if(nosharenum > 0){
-        return "toast://有"+nosharenum+"个本地接口，无法分享";
+    if(nosharenum == sharelist.length){
+        return "toast://剔除本地接口后，剩余0，无法分享";
+    }else if(nosharenum > 0){
+        toast("有本地接口，已剔除分享");
+        sharelist = sharelist2;
     }
+    
     if(input=='云口令文件'){
         let sharetxt = base64Encode(JSON.stringify(sharelist));
         let code = sm + '￥' + aesEncode('Juying2', sharetxt) + '￥云口令文件';
