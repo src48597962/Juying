@@ -1936,6 +1936,57 @@ function resource() {
             }]
         }
     });
+
+    d.push({
+        col_type: "line_blank"
+    });
+    d.push({
+        title: '🆖 历史记录',
+        col_type: "rich_text"
+    });
+    let importrecord = Juconfig['importrecord']||[];
+    let lists = importrecord.filter(item => {
+        return item.type==getMyVar('importtype','1');
+    })
+    if(lists.length>0){
+        d.push({
+            title: '点击下方的历史条目，进行操作👇',
+            col_type: "rich_text"
+        });
+        d.push({
+            col_type: "line"
+        });
+        lists.reverse();
+        for(let i=0;i<lists.length;i++){
+            d.push({
+                title: lists[i].url,
+                url: $(["选择","删除"], 1 ,"").select((Juconfig, cfgfile, url)=>{
+                    if(input=="选择"){
+                        putMyVar('importinput', url);
+                        back(true);
+                    }else if(input=="删除"){
+                        let importrecord = Juconfig['importrecord']||[];
+                        for(let j=0;j<importrecord.length;j++){
+                            if(importrecord[j].url==url&&importrecord[j].type==getMyVar('importtype','1')){
+                                importrecord.splice(j,1);
+                                break;
+                            }
+                        }
+                        Juconfig['importrecord'] = importrecord; 
+                        writeFile(cfgfile, JSON.stringify(Juconfig));
+                        refreshPage(false);
+                    }
+                    return "hiker://empty";
+                }, Juconfig, cfgfile, lists[i].url),
+                col_type: "text_1"
+            });
+        }
+    }else{
+        d.push({
+            title: '↻无记录',
+            col_type: "rich_text"
+        });
+    }
     setResult(d);
 }
 //hipy库导入
