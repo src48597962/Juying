@@ -570,8 +570,13 @@ function jiekou(data) {
         col_type: 'input',
         desc: "接口地址",
         url: data?$.toString(() => {
-            toast('如果有修改，接口不要点保存');
-            return "editFile://"+getMyVar('apiurl','');
+            let file = getMyVar('apiurl','');
+            if(fileExist(file)){
+                toast('如果有修改，接口不要点保存');
+                return "editFile://"+getMyVar('apiurl','');
+            }else{
+                return "toast://不存在，无法查看";
+            }
         }):$.toString(() => {
             if(MY_NAME=="海阔视界"&&getAppVersion()<5100){
                 return "toast://软件版本过低";
