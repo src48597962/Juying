@@ -441,11 +441,13 @@ function jiekousave(urls, mode) {
                 }else{
                     delete it['url'];
                 }
-            }else if(it.ext){
-                if($.type(it.ext)=="string" && it.ext.startsWith('file://') && fileExist(it.ext)){//本地数据文件转到data目录
-                    let urlfile = datapath + 'libs_jk/' + it.type + '_' + it.name + '.json';
-                    writeFile(urlfile, fetch(it.ext));
-                    it.url = urlfile;
+            }else if(/^hiker|^file/.test(it.url) && !fileExist(it.url) && it.ext){
+                if($.type(it.ext)=="string"){//本地数据文件转到data目录
+                    if(it.ext.startsWith('file://') && fileExist(it.ext)){
+                        let urlfile = datapath + 'libs_jk/' + it.type + '_' + it.name + '.json';
+                        writeFile(urlfile, fetch(it.ext));
+                        it.url = urlfile;
+                    }
                 }else if($.type(it.ext)=="object"){//对象数据转存到data目录
                     let urlfile = datapath + 'libs_jk/' + it.type + '_' + it.name + '.json';
                     writeFile(urlfile, JSON.stringify(it.ext));
