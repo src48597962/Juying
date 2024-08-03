@@ -141,17 +141,10 @@ function SRCSet() {
         }
     });
     if(guanliType=='jk' && datalist.length){
-        d.push({
-            title: "清搜",
-            url: !getMyVar("SrcJu_seacrhJiekou")?"hiker://empty":$('#noLoading#').lazyRule(() => {
-                clearMyVar("SrcJu_seacrhJiekou");
-                refreshPage(false);
-            }),
-            col_type: 'scroll_button'
-        })
+        let sx = [];
         let selectkeys = getJkTags(datalist);
         selectkeys.forEach(it=>{
-            d.push({
+            sx.push({
                 title: it,
                 url: $('#noLoading#').lazyRule((it) => {
                     putMyVar("SrcJu_seacrhJiekou", it);
@@ -160,6 +153,17 @@ function SRCSet() {
                 col_type: 'scroll_button'
             })
         })
+        if(sx.length==0){
+            sx.unshift({
+                title: "清搜",
+                url: !getMyVar("SrcJu_seacrhJiekou")?"hiker://empty":$('#noLoading#').lazyRule(() => {
+                    clearMyVar("SrcJu_seacrhJiekou");
+                    refreshPage(false);
+                }),
+                col_type: 'scroll_button'
+            })
+        }
+        d = d.concat(sx);
         d.push({    
             col_type: "blank_block"
         });
@@ -465,7 +469,7 @@ function jiekousave(urls, mode) {
         })
         if(num>0){writeFile(jkfile, JSON.stringify(datalist));}
     } catch (e) {
-        log('导入失败：'+e.message); 
+        log("导入失败：" + e.message + " 错误行#" + e.lineNumber); 
         return -1;
     }
     return num;
@@ -513,7 +517,7 @@ function jiexisave(urls, mode) {
         })
         if(num>0){writeFile(jxfile, JSON.stringify(datalist));}
     } catch (e) {
-        log('导入失败：'+e.message); 
+        log("导入失败：" + e.message + " 错误行#" + e.lineNumber); 
         num = -1;
     }
     return num;
