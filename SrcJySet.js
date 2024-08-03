@@ -1950,8 +1950,16 @@ function resource() {
     })
     if(lists.length>0){
         d.push({
-            title: '点击下方的历史条目，进行操作👇',
-            col_type: "rich_text"
+            title: '点此进行检测配置文件有效性👀',
+            url: $('#noLoading#').lazyRule((lists) => {
+                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                lists.forEach(it=>{
+                    let checkUrl = checkBoxUrl(it.url);
+                    updateItem(it.url, {title: it.url +(checkUrl.message?" ❌":" ✔️")});
+                })
+                return "toast://已检测完成，长按删除坏的";
+            },lists),
+            col_type: "text_center_1"
         });
         d.push({
             col_type: "line"
@@ -1959,26 +1967,31 @@ function resource() {
         lists.reverse();
         for(let i=0;i<lists.length;i++){
             d.push({
-                title: lists[i].url,
-                url: $(["选择","删除"], 1 ,"").select((Juconfig, cfgfile, url)=>{
-                    if(input=="选择"){
-                        putMyVar('importinput', url);
-                        back(true);
-                    }else if(input=="删除"){
-                        let importrecord = Juconfig['importrecord']||[];
-                        for(let j=0;j<importrecord.length;j++){
-                            if(importrecord[j].url==url&&importrecord[j].type==getMyVar('importtype','1')){
-                                importrecord.splice(j,1);
-                                break;
-                            }
-                        }
-                        Juconfig['importrecord'] = importrecord; 
-                        writeFile(cfgfile, JSON.stringify(Juconfig));
-                        refreshPage(false);
-                    }
+                title: lists[i].url + (lists[i].bad?" ❌":" ✔️"),
+                url: $('#noLoading#').lazyRule((url) => {
+                    putMyVar('importinput', url);
                     return "hiker://empty";
-                }, Juconfig, cfgfile, lists[i].url),
-                col_type: "text_1"
+                },lists[i].url),
+                col_type: "text_1",
+                extra: {
+                    id: lists[i].url,
+                    longClick: [{
+                        title: "删除",
+                        js: $.toString((cfgfile, Juconfig, url) => {
+                            let importrecord = Juconfig['importrecord']||[];
+                            for(let j=0;j<importrecord.length;j++){
+                                if(importrecord[j].url==url&&importrecord[j].type==getMyVar('importtype','1')){
+                                    importrecord.splice(j,1);
+                                    break;
+                                }
+                            }
+                            Juconfig['importrecord'] = importrecord; 
+                            writeFile(cfgfile, JSON.stringify(Juconfig));
+                            refreshPage(false);
+                            return "toast://已删除";
+                        },cfgfile, Juconfig, lists[i].url)
+                    }]
+                }
             });
         }
     }else{
