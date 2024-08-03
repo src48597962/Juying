@@ -153,7 +153,7 @@ function SRCSet() {
                 col_type: 'scroll_button'
             })
         })
-        if(sx.length==0){
+        if(sx.length>0){
             sx.unshift({
                 title: "清搜",
                 url: !getMyVar("SrcJu_seacrhJiekou")?"hiker://empty":$('#noLoading#').lazyRule(() => {
@@ -593,7 +593,13 @@ function jiekou(data) {
             onChange: 'putMyVar("apiurl",input);'
         }
     });
-
+    if(data && data.ext){
+        d.push({
+            title: data.ext,
+            col_type: 'text_1',
+            url: "hiker://empty"
+        });
+    }
     d.push({
         title: '类型：' + getMyVar('apitype', ''),
         col_type:'text_1',
