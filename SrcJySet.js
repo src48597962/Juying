@@ -1958,7 +1958,7 @@ function resource() {
                     updateItem(it.url, {title: it.url +(checkUrl.message?" ❌":" ✔️")});
                 })
                 return "toast://已检测完成，长按删除坏的";
-            },lists),
+            }, lists),
             col_type: "text_center_1"
         });
         d.push({
@@ -1967,11 +1967,11 @@ function resource() {
         lists.reverse();
         for(let i=0;i<lists.length;i++){
             d.push({
-                title: lists[i].url + (lists[i].bad?" ❌":" ✔️"),
+                title: lists[i].url,
                 url: $('#noLoading#').lazyRule((url) => {
                     putMyVar('importinput', url);
-                    refreshPage(true);
-                    return "hiker://empty";
+                    refreshPage(false);
+                    return "toast://已选择，需确认";
                 },lists[i].url),
                 col_type: "text_1",
                 extra: {
