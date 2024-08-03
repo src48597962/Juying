@@ -1844,7 +1844,7 @@ function resource() {
     });
 
     d.push({
-        title: '🆗 '+(getMyVar('importtype','1')=="3"?'确定订阅':'确定导入(' + (Juconfig["importmode"]?"全":"增")+')'),
+        title: '🆗 '+(getMyVar('importtype','1')=="3"?'确定订阅':'确定导入(' + (Juconfig["importmode"]?"全量":"增量")+')'),
         url: importtype=="1"&&getMyVar('importjiekou','1')!="1"&&getMyVar('importjiexi','1')!="1"?'toast://请选择导入项目':$('#noLoading#').lazyRule((Juconfig,cfgfile) => {
                 let input = getMyVar('importinput', '');
                 if(input==""){
