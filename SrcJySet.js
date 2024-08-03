@@ -329,7 +329,6 @@ function SRCSet() {
                     let pasteurl = sharePaste(base64Encode(JSON.stringify(oneshare)), getItem("sharePaste",""));
                     hideLoading();
                     if (/^http|^云/.test(pasteurl) && pasteurl.includes('/')) {
-                        pasteurl = pasteurl.replace('云6oooole', 'https://pasteme.tyrantg.com').replace('云5oooole', 'https://cmd.im').replace('云7oooole', 'https://note.ms').replace('云9oooole', 'https://txtpbbd.cn').replace('云10oooole', 'https://hassdtebin.com');   
                         log('剪贴板地址>'+pasteurl);
                         let code = '聚影接口￥' + aesEncode('Juying2', pasteurl) + '￥' + data.name;
                         copy('云口令：'+code+`@import=js:$.require("hiker://page/import?rule=`+MY_RULE.title+`");`);
@@ -2190,7 +2189,7 @@ function JYshare(lx,input) {
     if(nosharenum == sharelist.length){
         return "toast://剔除本地接口后，剩余0，无法分享";
     }else if(nosharenum > 0){
-        toast("有本地接口，已剔除分享");
+        toast("剔除本地接口，剩余分享"+nosharenum);
         sharelist = sharelist2;
     }
     
@@ -2209,6 +2208,7 @@ function JYshare(lx,input) {
         let pasteurl = sharePaste(base64Encode(JSON.stringify(sharelist)), input);
         hideLoading();
         if(/^http|^云/.test(pasteurl) && pasteurl.includes('/')){
+            log('剪贴板地址>'+pasteurl);
             let code = sm+'￥'+aesEncode('Juying2', pasteurl)+'￥共' + sharelist.length + '条('+input+')';
             copy('云口令：'+code+`@import=js:$.require("hiker://page/import?rule=聚影");`);
             return "toast://"+sm2;
