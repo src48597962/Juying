@@ -77,6 +77,7 @@ function SRCSet() {
     });
     let pastes = getPastes();
     pastes.push('云口令文件');
+    pastes.push('含数据文件');
     
     let datalist = getDatas(guanliType);
     let selectgroup = guanliType=='jk'?getMyVar("SrcJu_jiekouGroup",""):"";
@@ -2126,15 +2127,21 @@ function JYshare(lx,input) {
         }
         */
     }
-    let sharelist2 = sharelist.filter(it=>{
-        return it.url.startsWith("http") || $.type(it.ext)=="object" || ($.type(it.ext)=="string" && it.ext.startsWith("http"));
-    })
-    let nosharenum = sharelist.length-sharelist2.length;
-    if(nosharenum == sharelist.length){
-        return "toast://剔除本地接口后，剩余0，无法分享";
-    }else if(nosharenum > 0){
-        toast("剔除本地接口，剩余分享"+nosharenum);
-        sharelist = sharelist2;
+    if(input=="含数据文件"){
+        sharelist.forEach(it=>{
+            //if()
+        })
+    }else{
+        let sharelist2 = sharelist.filter(it=>{
+            return it.url.startsWith("http") || $.type(it.ext)=="object" || ($.type(it.ext)=="string" && it.ext.startsWith("http"));
+        })
+        let nosharenum = sharelist.length-sharelist2.length;
+        if(nosharenum == sharelist.length){
+            return "toast://剔除本地接口后，剩余0，无法分享";
+        }else if(nosharenum > 0){
+            toast("剔除本地接口，剩余分享"+nosharenum);
+            sharelist = sharelist2;
+        }
     }
     
     if(input=='云口令文件'){
@@ -2145,7 +2152,7 @@ function JYshare(lx,input) {
         if(fileExist(sharefile)){
             return 'share://'+sharefile;
         }else{
-            return 'toast://云口令文件生成失败';
+            return 'toast://'+input+'分享生成失败';
         }
     }else{
         showLoading('分享生成中，请稍后...');
