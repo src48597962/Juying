@@ -673,7 +673,7 @@ function dianboyiji() {
                 input = input.replace(/[’‘]|<[^>]*>| |√/g, "");
                 setItem("接口搜索方式",input);
                 refreshPage();
-                return "toast://搜索方式设置为："+input;
+                return "toast://搜索方式设置为："+input+(input=="当前页面"?"，只能搜索1页":"");
             }),
             pic_url: getIcon("点播-搜索.svg"),
             col_type: "icon_3_round_fill"
@@ -707,16 +707,16 @@ function dianboyiji() {
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                         resource();
                     })
-                }else if(input=="站源设置"){
-                    let modes = ["本地接口", "订阅文件"];
-                    return $(modes,2,"设置站源获取位置").select(()=>{
-                        if(input=="本地接口"){
-                            clearItem("sourceMode");
-                        }else if(input=="订阅文件"){
-                            setItem("sourceMode","2");
-                        }
-                        return "toast://站源获取设置为"+input;
-                    })
+                }else if(input=="站源模式"){
+                    let sm;
+                    if(getItem("sourceMode")=="2"){
+                        clearItem("sourceMode");
+                        sm = "本地接口模式";
+                    }else{
+                        setItem("sourceMode","2");
+                        sm = "订阅文件模式";
+                    }
+                    return "toast://站源获取设置为："+sm;
                 }
             }),
             pic_url: getIcon("点播-设置.svg"),
