@@ -1970,6 +1970,7 @@ function resource() {
                 title: lists[i].url + (lists[i].bad?" ❌":" ✔️"),
                 url: $('#noLoading#').lazyRule((url) => {
                     putMyVar('importinput', url);
+                    refreshPage(true);
                     return "hiker://empty";
                 },lists[i].url),
                 col_type: "text_1",
