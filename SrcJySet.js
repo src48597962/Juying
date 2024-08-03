@@ -2173,6 +2173,13 @@ function JYshare(lx,input) {
         }
         */
     }
+    let sharelist2 = sharelist.filter(it=>{
+        return it.url.startsWith("http") || (it.ext && it.ext.startsWith("http"));
+    })
+    let nosharenum = sharelist.length-sharelist2.length;
+    if(nosharenum > 0){
+        return "toast://有"+nosharenum+"个本地接口，无法分享";
+    }
     if(input=='云口令文件'){
         let sharetxt = base64Encode(JSON.stringify(sharelist));
         let code = sm + '￥' + aesEncode('Juying2', sharetxt) + '￥云口令文件';
