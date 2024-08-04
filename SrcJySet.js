@@ -77,7 +77,7 @@ function SRCSet() {
     });
     let pastes = getPastes();
     pastes.push('云口令文件');
-    pastes.push('含数据文件');
+    pastes.push('带数据文件');
     
     let datalist = getDatas(guanliType);
     let selectgroup = guanliType=='jk'?getMyVar("SrcJu_jiekouGroup",""):"";
@@ -445,6 +445,8 @@ function jiekousave(urls, mode) {
                 }else{
                     delete it['url'];
                 }
+            }else if(it.extstr){//带数据内容的保存到data目录
+                writeFile(it.url, it.extstr);
             }else if(/^hiker|^file/.test(it.url) && !fileExist(it.url) && it.ext){
                 if($.type(it.ext)=="string"){//本地数据文件转到data目录
                     if(it.ext.startsWith('file://') && fileExist(it.ext)){
@@ -2127,9 +2129,11 @@ function JYshare(lx,input) {
         }
         */
     }
-    if(input=="含数据文件"){
+    if(input=="带数据文件"){
         sharelist.forEach(it=>{
-            //if()
+            if(it.url.startsWith(datapath) && $.type(it.ext)=="string" && it.ext.startsWith("file")){
+                it.extstr = fetch(it.ext);
+            }
         })
     }else{
         let sharelist2 = sharelist.filter(it=>{
@@ -2144,7 +2148,7 @@ function JYshare(lx,input) {
         }
     }
     
-    if(input=='云口令文件'){
+    if(input=='云口令文件' || input=="带数据文件"){
         let sharetxt = base64Encode(JSON.stringify(sharelist));
         let code = sm + '￥' + aesEncode('Juying2', sharetxt) + '￥云口令文件';
         let sharefile = 'hiker://files/_cache/Juying2_'+sharelist.length+'_'+$.dateFormat(new Date(),"HHmmss")+'.hiker';
