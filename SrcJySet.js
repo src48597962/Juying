@@ -2117,7 +2117,11 @@ function JYshare(lx,input,data) {
     if(input=="带数据文件"){
         sharelist.forEach(it=>{
             if(it.url.startsWith(datapath) && $.type(it.ext)=="string" && it.ext.startsWith("file")){
+                log("带数据")
                 it.extstr = fetch(it.ext);
+            }else{
+                log(it.url);
+                log(it.ext);
             }
         })
     }else{
