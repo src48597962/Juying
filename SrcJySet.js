@@ -303,7 +303,7 @@ function SRCSet() {
         let selectmenu,datatitle,datadesc;
         if(guanliType=="jk"){
             datadesc = it.url;
-            selectmenu = ["分享","编辑", "删除", it.stop?"启用":"禁用", "优选"];
+            selectmenu = ["分享","编辑", "删除", it.stop?"启用":"禁用", "优选", "选择"];
         }else{
             datadesc = it.ext&&it.ext.flag?it.ext.flag.join(','):"";
             selectmenu = ["分享","编辑", "删除", it.stop?"启用":"禁用"];
@@ -319,7 +319,11 @@ function SRCSet() {
                 return "hiker://empty";
             },base64Encode(JSON.stringify(it))):$(selectmenu, 2).select((data) => {
                 data = JSON.parse(base64Decode(data));
-                if (input == "分享") {
+                if (input == "选择") {
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                    duoselect(data);
+                    return "hiker://empty";
+                }else if (input == "分享") {
                     if(/^hiker|^file/.test(data.url) && $.type(data.ext)=="string" && /^hiker|^file/.test(data.ext)){
                         return "toast://本地接口，无法分享";
                     }
@@ -2102,19 +2106,16 @@ function Resourceimport(input,importtype,importmode){
 
 //资源分享
 function JYshare(lx,input) {
+    let sharelist, sm, sm2;
     if(lx=="jk"){
-        var sm = "聚影接口";
+        sm = "聚影接口";
     }else if(lx=="jx"){
-        var sm = "聚影解析";
+        sm = "聚影解析";
     }
-    
-    let sharelist;
-    let sm2 = "聚影分享口令已生成";
     
     let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
     if(duoselect.length>0){
         sharelist = duoselect;
-        sm2 = "(选定)聚影分享口令已生成";
     }else{
         sharelist = storage0.getMyVar("SrcJu_jkdatalist", []);
         /*
@@ -2148,10 +2149,12 @@ function JYshare(lx,input) {
         }
     }
     
+    
     if(input=='云口令文件' || input=="带数据文件"){
+        sm2 = sharelist.length==1?sharelist[0].name:sharelist.length;
         let sharetxt = base64Encode(JSON.stringify(sharelist));
         let code = sm + '￥' + aesEncode('Juying2', sharetxt) + '￥云口令文件';
-        let sharefile = 'hiker://files/_cache/Juying2_'+sharelist.length+'_'+$.dateFormat(new Date(),"HHmmss")+'.hiker';
+        let sharefile = 'hiker://files/_cache/Juying2_'+sm2+'_'+$.dateFormat(new Date(),"HHmmss")+'.hiker';
         writeFile(sharefile, '云口令：'+code+`@import=js:$.require("hiker://page/import?rule=聚影");`);
         if(fileExist(sharefile)){
             return 'share://'+sharefile;
@@ -2160,13 +2163,14 @@ function JYshare(lx,input) {
         }
     }else{
         showLoading('分享生成中，请稍后...');
+        sm2 = sharelist.length==1?sharelist[0].name:'共' + sharelist.length + '条';
         let pasteurl = sharePaste(base64Encode(JSON.stringify(sharelist)), input);
         hideLoading();
         if(/^http|^云/.test(pasteurl) && pasteurl.includes('/')){
             log('剪贴板地址>'+pasteurl);
-            let code = sm+'￥'+aesEncode('Juying2', pasteurl)+'￥共' + sharelist.length + '条('+input+')';
+            let code = sm+'￥'+aesEncode('Juying2', pasteurl)+'￥' + sm2 + '('+input+')';
             copy('云口令：'+code+`@import=js:$.require("hiker://page/import?rule=聚影");`);
-            return "toast://"+sm2;
+            return "toast://聚影分享口令已生成";
         }else{
             return "toast://分享失败，剪粘板或网络异常>"+pasteurl;
         }
