@@ -2119,7 +2119,6 @@ function JYshare(lx,input,data) {
             if(it.url.startsWith(datapath) && $.type(it.ext)=="string" && it.ext.startsWith("file")){
                 log("带数据")
                 it.extstr = fetch(it.ext);
-                log(it);
             }else{
                 log(it.url);
                 log(it.ext);
@@ -2140,6 +2139,7 @@ function JYshare(lx,input,data) {
     
     
     if(input=='云口令文件' || input=="带数据文件"){
+        log(sharelist);
         sm2 = sharelist.length==1?sharelist[0].name:sharelist.length;
         let sharetxt = base64Encode(JSON.stringify(sharelist));
         let code = sm + '￥' + aesEncode('Juying2', sharetxt) + '￥云口令文件';
