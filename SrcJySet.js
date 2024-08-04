@@ -2115,15 +2115,16 @@ function JYshare(lx,input,data) {
     }
     
     if(input=="带数据文件"){
-        sharelist.forEach(it=>{
+        for(let i=0;i<sharelist.length;i++){
+            let it = sharelist[i];
             if(it.url.startsWith(datapath) && $.type(it.ext)=="string" && it.ext.startsWith("file")){
-                log("带数据")
                 it.extstr = fetch(it.ext);
-            }else{
-                log(it.url);
-                log(it.ext);
+                if(!it.extstr){
+                    sharelist.splice(i,1);
+                    i = i - 1;
+                }
             }
-        })
+        }
     }else{
         let sharelist2 = sharelist.filter(it=>{
             return it.url.startsWith("http") || $.type(it.ext)=="object" || ($.type(it.ext)=="string" && it.ext.startsWith("http"));
@@ -2136,10 +2137,11 @@ function JYshare(lx,input,data) {
             sharelist = sharelist2;
         }
     }
-    
+    if(sharelist.length==0){
+        return "toast://有效接口数为0，无法分享";
+    }
     
     if(input=='云口令文件' || input=="带数据文件"){
-        log(sharelist);
         sm2 = sharelist.length==1?sharelist[0].name:sharelist.length;
         let sharetxt = base64Encode(JSON.stringify(sharelist));
         let code = sm + '￥' + aesEncode('Juying2', sharetxt) + '￥云口令文件';
