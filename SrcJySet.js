@@ -76,8 +76,10 @@ function SRCSet() {
         col_type: "icon_small_4"
     });
     let pastes = getPastes();
-    pastes.push('云口令文件');
-    pastes.push('带数据文件');
+    if(guanliType=="jk"){
+        pastes.push('云口令文件');
+        pastes.push('带数据文件');
+    }
     
     let datalist = getDatas(guanliType);
     let selectgroup = guanliType=='jk'?getMyVar("SrcJu_jiekouGroup",""):"";
@@ -303,7 +305,7 @@ function SRCSet() {
         let selectmenu,datatitle,datadesc;
         if(guanliType=="jk"){
             datadesc = it.url;
-            selectmenu = ["分享","编辑", "删除", it.stop?"启用":"禁用", "优选", "选择"];
+            selectmenu = ["分享","编辑", "删除", it.stop?"启用":"禁用", "优选", "分享2"];
         }else{
             datadesc = it.ext&&it.ext.flag?it.ext.flag.join(','):"";
             selectmenu = ["分享","编辑", "删除", it.stop?"启用":"禁用"];
@@ -319,28 +321,16 @@ function SRCSet() {
                 return "hiker://empty";
             },base64Encode(JSON.stringify(it))):$(selectmenu, 2).select((data) => {
                 data = JSON.parse(base64Decode(data));
-                if (input == "选择") {
-                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
-                    duoselect(data);
-                    return "hiker://empty";
+                if (input == "分享2") {
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                    return JYshare(getMyVar('guanli', 'jk'), '带数据文件', data);
                 }else if (input == "分享") {
                     if(/^hiker|^file/.test(data.url) && $.type(data.ext)=="string" && /^hiker|^file/.test(data.ext)){
-                        return "toast://本地接口，无法分享";
+                        return "toast://本地接口无法分享，可用分享2(携带数据)";
                     }
-
-                    showLoading('分享上传中，请稍后...');
-                    let oneshare = []
-                    oneshare.push(data);
-                    let pasteurl = sharePaste(base64Encode(JSON.stringify(oneshare)), getItem("sharePaste",""));
-                    hideLoading();
-                    if (/^http|^云/.test(pasteurl) && pasteurl.includes('/')) {
-                        log('剪贴板地址>'+pasteurl);
-                        let code = '聚影接口￥' + aesEncode('Juying2', pasteurl) + '￥' + data.name;
-                        copy('云口令：'+code+`@import=js:$.require("hiker://page/import?rule=`+MY_RULE.title+`");`);
-                        return "toast://(单个)分享口令已生成";
-                    } else {
-                        return "toast://分享失败，剪粘板或网络异常>"+pasteurl;
-                    }
+                    
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                    return JYshare(getMyVar('guanli', 'jk'), getItem("sharePaste",""), data);
                 } else if (input == "编辑") {
                     return $('hiker://empty#noRecordHistory##noHistory#').rule((data) => {
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
@@ -2105,31 +2095,25 @@ function Resourceimport(input,importtype,importmode){
 }
 
 //资源分享
-function JYshare(lx,input) {
+function JYshare(lx,input,data) {
     let sharelist, sm, sm2;
     if(lx=="jk"){
         sm = "聚影接口";
     }else if(lx=="jx"){
         sm = "聚影解析";
     }
-    
-    let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
-    if(duoselect.length>0){
-        sharelist = duoselect;
+    if(data){
+        sharelist = [];
+        sharelist.push(data);
     }else{
-        sharelist = storage0.getMyVar("SrcJu_jkdatalist", []);
-        /*
-        let datalist = getDatas(lx);
-        if(getMyVar("SrcJu_seacrhJiekou")){
-            sharelist = datalist.filter(it=>{
-                return it.name.indexOf(getMyVar("SrcJu_seacrhJiekou"))>-1;
-            })
+        let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
+        if(duoselect.length>0){
+            sharelist = duoselect;
         }else{
-            let group = lx=='jk'?getMyVar("SrcJu_jiekouGroup",""):"";
-            sharelist = getGroupLists(datalist, group);
+            sharelist = storage0.getMyVar("SrcJu_jkdatalist", []);
         }
-        */
     }
+    
     if(input=="带数据文件"){
         sharelist.forEach(it=>{
             if(it.url.startsWith(datapath) && $.type(it.ext)=="string" && it.ext.startsWith("file")){
