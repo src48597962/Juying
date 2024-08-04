@@ -2119,6 +2119,7 @@ function JYshare(lx,input,data) {
             if(it.url.startsWith(datapath) && $.type(it.ext)=="string" && it.ext.startsWith("file")){
                 log("带数据")
                 it.extstr = fetch(it.ext);
+                log(it);
             }else{
                 log(it.url);
                 log(it.ext);
