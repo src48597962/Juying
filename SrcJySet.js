@@ -2133,6 +2133,7 @@ function JYshare(lx,input,data) {
         return "toast://有效接口数为0，无法分享";
     }
     let teststr = JSON.stringify(sharelist);
+    log("str>"+teststr.length);
     log("base64>"+base64Encode(teststr).length);
     let gzip = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + "plugins/gzip.js");
     log("gzip>"+gzip.zip(teststr).length);
