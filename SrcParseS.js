@@ -1,5 +1,5 @@
 //本代码仅用于个人学习，请勿用于其他作用，下载后请24小时内删除，代码虽然是公开学习的，但请尊重作者，应留下说明
-let recordfile = GM.get('gmParams').rulepath + "parse.json";//取解析设置、上次成功、手工屏蔽的
+let recordfile = "hiker://files/rules/Src/Juying2/parse.json";//取解析设置、上次成功、手工屏蔽的
 let record = fetch(recordfile);
 let parseRecord = {};
 if(record!=""){
@@ -54,6 +54,7 @@ var SrcParseS = {
             let play = {url: ""};
             if(dataObj.stype=="hipy_t3"){
                 let sdata = {name: dataObj.sname, url: dataObj.surl, ext: dataObj.sext}
+                let {GM} = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6916&auth=1d35e8f0-22e8-5270-a9d1-826f53f177ad");
                 let drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(sdata);
                 play = JSON.parse(drpy.play(dataObj.flag, vipUrl, []));
             }else if(dataObj.stype=="hipy_t4"){
@@ -146,7 +147,7 @@ var SrcParseS = {
 
         let parsemode = playSet.parsemode || 1;//解析模式
         let mulnum = playSet.mulnum || 1;//多线程数
-        let jxfile = GM.get('gmParams').jxfile;//解析存放文件
+        let jxfile = "hiker://files/rules/Src/Juying2/jiexi.json";//解析存放文件
         let parselist = [];//待进线程执行的解析列表
         let jxList= [];//读取解析列表
 
