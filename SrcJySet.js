@@ -2106,7 +2106,7 @@ function JYshare(lx,input,data) {
         }
     }
     
-    if(input=="云口令文件" || sharelist.length<100){
+    if(input=="云口令文件" || sharelist.length<1000){
         for(let i=0;i<sharelist.length;i++){
             let it = sharelist[i];
             if(it.url.startsWith(datapath) && $.type(it.ext)=="string" && it.ext.startsWith("file")){
