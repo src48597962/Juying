@@ -78,7 +78,6 @@ function SRCSet() {
     let pastes = getPastes();
     if(guanliType=="jk"){
         pastes.push('云口令文件');
-        pastes.push('带数据文件');
     }
     
     let datalist = getDatas(guanliType);
@@ -305,7 +304,7 @@ function SRCSet() {
         let selectmenu,datatitle,datadesc;
         if(guanliType=="jk"){
             datadesc = it.url;
-            selectmenu = ["分享","编辑", "删除", it.stop?"启用":"禁用", "优选", "分享2"];
+            selectmenu = ["分享","编辑", "删除", it.stop?"启用":"禁用", "优选"];
         }else{
             datadesc = it.ext&&it.ext.flag?it.ext.flag.join(','):"";
             selectmenu = ["分享","编辑", "删除", it.stop?"启用":"禁用"];
@@ -321,14 +320,7 @@ function SRCSet() {
                 return "hiker://empty";
             },base64Encode(JSON.stringify(it))):$(selectmenu, 2).select((data) => {
                 data = JSON.parse(base64Decode(data));
-                if (input == "分享2") {
-                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
-                    return JYshare(getMyVar('guanli', 'jk'), '带数据文件', data);
-                }else if (input == "分享") {
-                    if(/^hiker|^file/.test(data.url) && $.type(data.ext)=="string" && /^hiker|^file/.test(data.ext)){
-                        return "toast://本地接口无法分享，可用分享2(携带数据)";
-                    }
-                    
+                if (input == "分享") {
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                     return JYshare(getMyVar('guanli', 'jk'), getItem("sharePaste",""), data);
                 } else if (input == "编辑") {
@@ -2114,7 +2106,7 @@ function JYshare(lx,input,data) {
         }
     }
     
-    if(input=="带数据文件"){
+    if(input=="云口令文件" || sharelist.length<100){
         for(let i=0;i<sharelist.length;i++){
             let it = sharelist[i];
             if(it.url.startsWith(datapath) && $.type(it.ext)=="string" && it.ext.startsWith("file")){
@@ -2141,7 +2133,7 @@ function JYshare(lx,input,data) {
         return "toast://有效接口数为0，无法分享";
     }
     
-    if(input=='云口令文件' || input=="带数据文件"){
+    if(input=='云口令文件'){
         sm2 = sharelist.length==1?sharelist[0].name:sharelist.length;
         let sharetxt = base64Encode(JSON.stringify(sharelist));
         let code = sm + '￥' + aesEncode('Juying2', sharetxt) + '￥云口令文件';
