@@ -2155,6 +2155,7 @@ function JYshare(lx,input,data) {
             copy('云口令：'+code+`@import=js:$.require("hiker://page/import?rule=聚影");`);
             return "toast://聚影分享口令已生成";
         }else{
+            log('分享失败>'+pasteurl);
             return "toast://分享失败，剪粘板或网络异常>"+pasteurl;
         }
     }
