@@ -2105,21 +2105,19 @@ function JYshare(lx,input,data) {
             sharelist = storage0.getMyVar("SrcJu_jkdatalist", []);
         }
     }
-    let nosharenum = 0;
+
     for(let i=0;i<sharelist.length;i++){
         let it = sharelist[i];
         if(it.url.startsWith(datapath) && $.type(it.ext)=="string" && it.ext.startsWith("file")){
             it.extstr = fetch(it.ext);
             if(!it.extstr){
+                log(it.name+">剔除分享");
                 sharelist.splice(i,1);
                 i = i - 1;
-                nosharenum++;
             }
         }
     }
-    if(nosharenum>0){
-        log("剔除无效接口"+nosharenum);
-    }
+
     if(sharelist.length==0){
         return "toast://有效接口数为0，无法分享";
     }
