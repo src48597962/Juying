@@ -2132,7 +2132,12 @@ function JYshare(lx,input,data) {
     if(sharelist.length==0){
         return "toast://有效接口数为0，无法分享";
     }
-    
+    let teststr = JSON.stringify(sharelist);
+    log("base64>"+base64Encode(teststr).length);
+    let gzip = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + "plugins/gzip.js");
+    log("gzip>"+gzip.zip(teststr).length);
+    return "toast://ok";
+
     if(input=='云口令文件'){
         sm2 = sharelist.length==1?sharelist[0].name:sharelist.length;
         let sharetxt = base64Encode(JSON.stringify(sharelist));
