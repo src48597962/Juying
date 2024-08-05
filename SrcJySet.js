@@ -2132,16 +2132,10 @@ function JYshare(lx,input,data) {
     if(sharelist.length==0){
         return "toast://有效接口数为0，无法分享";
     }
-    let teststr = JSON.stringify(sharelist);
-    log("str>"+teststr.length);
-    log("base64>"+base64Encode(teststr).length);
-    let gzip = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + "plugins/gzip.js");
-    log("gzip>"+gzip.zip(teststr).length);
-    return "toast://ok";
 
+    let sharetxt = gzip.zip(JSON.stringify(sharelist));
     if(input=='云口令文件'){
         sm2 = sharelist.length==1?sharelist[0].name:sharelist.length;
-        let sharetxt = base64Encode(JSON.stringify(sharelist));
         let code = sm + '￥' + aesEncode('Juying2', sharetxt) + '￥云口令文件';
         let sharefile = 'hiker://files/_cache/Juying2_'+sm2+'_'+$.dateFormat(new Date(),"HHmmss")+'.hiker';
         writeFile(sharefile, '云口令：'+code+`@import=js:$.require("hiker://page/import?rule=聚影");`);
@@ -2153,7 +2147,7 @@ function JYshare(lx,input,data) {
     }else{
         showLoading('分享生成中，请稍后...');
         sm2 = sharelist.length==1?sharelist[0].name:'共' + sharelist.length + '条';
-        let pasteurl = sharePaste(base64Encode(JSON.stringify(sharelist)), input);
+        let pasteurl = sharePaste(sharetxt, input);
         hideLoading();
         if(/^http|^云/.test(pasteurl) && pasteurl.includes('/')){
             log('剪贴板地址>'+pasteurl);
@@ -2214,7 +2208,8 @@ function JYimport(input) {
             text = pasteurl;
         }
         if(pasteurl&&!/^error/.test(text)){
-            let pastedata = JSON.parse(base64Decode(text));           
+            let sharetxt = gzip.unzip(text);
+            let pastedata = JSON.parse(sharetxt);           
             let urlnum = 0;
             if(inputname=="聚影接口"){
                 if(codelx=="share"){
@@ -2616,7 +2611,9 @@ function importConfirm(input) {
                 text = code;
             }
             if(text && !/^error/.test(text)){
-                datalist = JSON.parse(base64Decode(text)); 
+                let gzip = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + "plugins/gzip.js");
+                let sharetxt = gzip.unzip(text);
+                datalist = JSON.parse(sharetxt); 
                 storage0.putMyVar('importConfirm', datalist);
             }
         } catch (e) {
