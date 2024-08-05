@@ -1238,7 +1238,7 @@ function manageSet(){
                     }
                     text['yundisk'] = datalist;
                 }
-                let textcontent = base64Encode(JSON.stringify(text));
+                let textcontent = globalMap0.getMyVar('gmParams').zip(JSON.stringify(text));
                 if(textcontent.length>=200000){
                     log('分享失败：字符数超过最大限制，请精简接口，重点减少XPath和biubiu类型'); 
                     return 'toast://分享同步失败，超过最大限制，请精简接口';
@@ -2105,35 +2105,31 @@ function JYshare(lx,input,data) {
             sharelist = storage0.getMyVar("SrcJu_jkdatalist", []);
         }
     }
-    
-    if(input=="云口令文件" || sharelist.length<1000){
-        for(let i=0;i<sharelist.length;i++){
-            let it = sharelist[i];
-            if(it.url.startsWith(datapath) && $.type(it.ext)=="string" && it.ext.startsWith("file")){
-                it.extstr = fetch(it.ext);
-                if(!it.extstr){
-                    sharelist.splice(i,1);
-                    i = i - 1;
-                }
+    let nosharenum = 0;
+    for(let i=0;i<sharelist.length;i++){
+        let it = sharelist[i];
+        if(it.url.startsWith(datapath) && $.type(it.ext)=="string" && it.ext.startsWith("file")){
+            it.extstr = fetch(it.ext);
+            if(!it.extstr){
+                sharelist.splice(i,1);
+                i = i - 1;
+                nosharenum++;
             }
         }
-    }else{
-        let sharelist2 = sharelist.filter(it=>{
-            return it.url.startsWith("http") || $.type(it.ext)=="object" || ($.type(it.ext)=="string" && it.ext.startsWith("http"));
-        })
-        let nosharenum = sharelist.length-sharelist2.length;
-        if(nosharenum == sharelist.length){
-            return "toast://剔除本地接口后，剩余0，无法分享";
-        }else if(nosharenum > 0){
-            toast("剔除本地接口，剩余分享"+nosharenum);
-            sharelist = sharelist2;
-        }
+    }
+    if(nosharenum>0){
+        log("剔除无效接口"+nosharenum);
     }
     if(sharelist.length==0){
         return "toast://有效接口数为0，无法分享";
     }
 
     let sharetxt = gzip.zip(JSON.stringify(sharelist));
+    let sharetxtlength = sharetxt.length;
+    if(sharetxtlength>200000 && input=="云剪贴板2"){
+        return "toast://超出云2字符最大限制";
+    }
+
     if(input=='云口令文件'){
         sm2 = sharelist.length==1?sharelist[0].name:sharelist.length;
         let code = sm + '￥' + aesEncode('Juying2', sharetxt) + '￥云口令文件';
@@ -2415,7 +2411,7 @@ function yundiskjiekou() {
                     showLoading("正在导入，请稍后...");
                     let parseurl = aesDecode('Juying2', input.split('￥')[1]);
                     let content = parsePaste(parseurl);
-                    let datalist2 = JSON.parse(base64Decode(content));
+                    let datalist2 = JSON.parse(globalMap0.getMyVar('gmParams').unzip(content));
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                     let num = yundisksave(datalist2);
                     hideLoading();
@@ -2435,7 +2431,7 @@ function yundiskjiekou() {
     d.push({
         title: '分享',
         url: datalist.length == 0 ? "toast://云盘接口为0，无法分享" : $().lazyRule((datalist) => {
-            let pasteurl = sharePaste(base64Encode(JSON.stringify(datalist)), getItem("sharePaste",""));
+            let pasteurl = sharePaste(globalMap0.getMyVar('gmParams').zip(JSON.stringify(datalist)), getItem("sharePaste",""));
             if (pasteurl) {
                 let code = '聚影云盘￥' + aesEncode('Juying2', pasteurl) + '￥共' + datalist.length + '条';
                 copy('云口令：'+code+`@import=js:$.require("hiker://page/import?rule=聚影");`);
@@ -2477,7 +2473,7 @@ function yundiskjiekou() {
                     showLoading('分享上传中，请稍后...');
                     let oneshare = []
                     oneshare.push(data);
-                    let pasteurl = sharePaste(base64Encode(JSON.stringify(oneshare)), getItem("sharePaste",""));
+                    let pasteurl = sharePaste(globalMap0.getMyVar('gmParams').zip(JSON.stringify(oneshare)), getItem("sharePaste",""));
                     hideLoading();
                     if(pasteurl){
                         let code = '聚影云盘￥'+aesEncode('Juying2', pasteurl)+'￥'+data.name;
@@ -2611,7 +2607,6 @@ function importConfirm(input) {
                 text = code;
             }
             if(text && !/^error/.test(text)){
-                let gzip = $.require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + "plugins/gzip.js");
                 let sharetxt = gzip.unzip(text);
                 datalist = JSON.parse(sharetxt); 
                 storage0.putMyVar('importConfirm', datalist);
