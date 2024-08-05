@@ -2124,8 +2124,8 @@ function JYshare(lx,input,data) {
 
     let sharetxt = gzip.zip(JSON.stringify(sharelist));
     let sharetxtlength = sharetxt.length;
-    if(sharetxtlength>200000 && input=="云剪贴板2"){
-        return "toast://超出云2字符最大限制，请改用其他分享";
+    if(sharetxtlength>200000 && /云剪贴板2|云剪贴板5|云剪贴板9|云剪贴板10/.test(input)){
+        return "toast://超出字符最大限制，建议用云6或文件分享";
     }
 
     if(input=='云口令文件'){
