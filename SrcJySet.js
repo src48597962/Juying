@@ -2108,8 +2108,8 @@ function JYshare(lx,input,data) {
 
     for(let i=0;i<sharelist.length;i++){
         let it = sharelist[i];
-        if(it.url.startsWith(datapath) && $.type(it.ext)=="string" && it.ext.startsWith("file")){
-            it.extstr = fetch(it.ext.split("?")[0]);
+        if(it.url.startsWith(datapath) && (($.type(it.ext)=="string" && it.ext.startsWith("file")) || !it.ext)){
+            it.extstr = fetch(it.url) || fetch(it.ext.split("?")[0]);
             if(!it.extstr){
                 log(it.name+">剔除分享");
                 sharelist.splice(i,1);
