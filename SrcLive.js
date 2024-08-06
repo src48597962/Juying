@@ -70,7 +70,7 @@ function Live() {
             })
         }
         d.push({
-            title: JYlivedyurl == "juying" ? '本地✌' : '本地',
+            title: JYlivedyurl == "juying" ? `‘‘’’<b><span style="color:`+getItem("主题颜色", "#2EC99D")+`">` + '本地' : '本地',
             url: $("#noLoading#").lazyRule(() => {
                 putMyVar('JYlivedyurl', 'juying');
                 putMyVar('JYlivelocal', '1');
@@ -84,7 +84,7 @@ function Live() {
             let dyurl = livedata[i].url;
             //if(livedata[i].show!=0){
             d.push({
-                title: JYlivedyurl == dyurl ? dyname + '✌' : dyname,
+                title: JYlivedyurl == dyurl ? `‘‘’’<b><span style="color:`+getItem("主题颜色", "#2EC99D")+`">` + dyname : dyname, // + '✌'
                 url: $("#noLoading#").lazyRule((dyname, dyurl) => {
                     putMyVar('JYlivedyurl', dyurl);
                     clearMyVar('JYlivelocal');
