@@ -59,7 +59,7 @@ function Live() {
             }
         }
     }
-
+    let color = getItem("主题颜色", "#2EC99D");
     if (livedata.length > 0) {
         d.push({
             col_type: 'line'
@@ -70,21 +70,24 @@ function Live() {
             })
         }
         d.push({
-            title: JYlivedyurl == "juying" ? `‘‘’’<b><span style="color:`+getItem("主题颜色", "#2EC99D")+`">` + '本地' : '本地',
+            title: JYlivedyurl == "juying" ? `‘‘’’<b><span style="color:`+color+`">` + '本地' : '本地',
             url: $("#noLoading#").lazyRule(() => {
                 putMyVar('JYlivedyurl', 'juying');
                 putMyVar('JYlivelocal', '1');
                 refreshPage(false);
                 return "toast://聚影直播本地源数据";
             }),
-            col_type: 'scroll_button'
+            col_type: 'scroll_button',
+            extra: {
+                backgroundColor: JYlivedyur =="juying"?"#30" + color.replace('#',''):""
+            }
         })
         for (let i = 0; i < livedata.length; i++) {
             let dyname = livedata[i].name;
             let dyurl = livedata[i].url;
             //if(livedata[i].show!=0){
             d.push({
-                title: JYlivedyurl == dyurl ? `‘‘’’<b><span style="color:`+getItem("主题颜色", "#2EC99D")+`">` + dyname : dyname,
+                title: JYlivedyurl == dyurl ? `‘‘’’<b><span style="color:`+color+`">` + dyname : dyname,
                 url: $("#noLoading#").lazyRule((dyname, dyurl) => {
                     putMyVar('JYlivedyurl', dyurl);
                     clearMyVar('JYlivelocal');
@@ -92,7 +95,10 @@ function Live() {
                     refreshPage(false);
                     return "toast://已切换远程订阅：" + dyname;
                 }, dyname, dyurl),
-                col_type: 'scroll_button'
+                col_type: 'scroll_button',
+                extra: {
+                    backgroundColor: JYlivedyurl==dyurl?"#30" + color.replace('#',''):""
+                }
             })
             //}
         }
@@ -204,7 +210,7 @@ function Live() {
                     })
                 }
                 d.push({
-                    title: index == 0 ? `‘‘’’<b><span style="color:`+getItem("主题颜色", "#2EC99D")+`">` + groupname : groupname,
+                    title: index == 0 ? `‘‘’’<b><span style="color:`+color+`">` + groupname : groupname,
                     url: $('#noLoading#').lazyRule((grouplist, groupname, guanlidata, lists) => {
                         if (getMyVar('selectgroup') != groupname) {
                             putMyVar('selectgroup', groupname);
