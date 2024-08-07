@@ -376,7 +376,7 @@ function getYiData(jkdata) {
                                 refreshPage(false);
                                 return "hiker://empty";
                             }, fold),
-                            col_type: 'scroll_button',
+                            col_type: 'scroll_button'
                         })
                     }
 
@@ -392,7 +392,10 @@ function getYiData(jkdata) {
                                 refreshPage(true);
                                 return "hiker://empty";
                             }),
-                            col_type: 'scroll_button'
+                            col_type: 'scroll_button',
+                            extra: {
+                                backgroundColor: cate_id=='tj'?"#20" + Color.replace('#',''):""
+                            }
                         });
                     }
 
@@ -407,7 +410,10 @@ function getYiData(jkdata) {
                                 refreshPage(true);
                                 return "hiker://empty";
                             }, itid),
-                            col_type: 'scroll_button'
+                            col_type: 'scroll_button',
+                            extra: {
+                                backgroundColor: cate_id==itid?"#20" + Color.replace('#',''):""
+                            }
                         });
                     })
                     fllists.push({
@@ -431,7 +437,10 @@ function getYiData(jkdata) {
                                                     refreshPage(true);
                                                     return "hiker://empty";
                                                 }, it.key, itit.v),
-                                                col_type: 'scroll_button'
+                                                col_type: 'scroll_button',
+                                                extra: {
+                                                    backgroundColor: fl[it.key]==itit.v?"#20" + Color.replace('#',''):""
+                                                }
                                             });
                                         })
                                         fllists.push({
