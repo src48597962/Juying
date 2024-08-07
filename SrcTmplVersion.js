@@ -2,6 +2,11 @@ var newVersion = {
     "SrcJuying":"1.1",
     "hint": "1.1版本因调整加密方法，和之前版本的口令不通用",
     "JYUpdateRecords": [{
+        title: "待发布 V1.2",
+        records: [
+            "新增：软件新版本支持选中的分类按钮背景色"
+        ]
+    },{
         title: "2024/08/06 V1.1",
         records: [
             "新增：点播接口管理分享时本地接口携带数据",
