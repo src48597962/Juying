@@ -79,7 +79,7 @@ function Live() {
             }),
             col_type: 'scroll_button',
             extra: {
-                backgroundColor: JYlivedyur =="juying"?"#30" + color.replace('#',''):""
+                backgroundColor: JYlivedyurl=="juying"?"#30" + color.replace('#',''):""
             }
         })
         for (let i = 0; i < livedata.length; i++) {
