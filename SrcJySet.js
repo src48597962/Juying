@@ -191,17 +191,15 @@ function SRCSet() {
             }
             
             if(it == "全部"){
-                obj.extra = {
-                    longClick: [{
-                        title: "列表排序：" + getItem("sourceListSort", "更新时间"),
-                        js: $.toString(() => {
-                            return $(["更新时间","接口名称","使用频率"], 1).select(() => {
-                                setItem("sourceListSort", input);
-                                refreshPage(false);
-                            })
+                obj.extra.longClick = [{
+                    title: "列表排序：" + getItem("sourceListSort", "更新时间"),
+                    js: $.toString(() => {
+                        return $(["更新时间","接口名称","使用频率"], 1).select(() => {
+                            setItem("sourceListSort", input);
+                            refreshPage(false);
                         })
-                    }]
-                }
+                    })
+                }]
             }
             
             d.push(obj);
