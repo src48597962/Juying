@@ -184,7 +184,10 @@ function SRCSet() {
                     }
                     return "hiker://empty";
                 },it),
-                col_type: 'scroll_button'
+                col_type: 'scroll_button',
+                extra: {
+                    backgroundColor: getMyVar("SrcJu_jiekouGroup","全部")==it?"#20" + color.replace('#',''):""
+                }
             }
             
             if(it == "全部"){
