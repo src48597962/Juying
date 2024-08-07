@@ -381,7 +381,8 @@ function dianboerji() {
                     }, MY_URL, lineid, i, Marksum),
                     col_type: 'scroll_button',
                     extra: {
-                        cls: "Juloadlist"
+                        cls: "Juloadlist",
+                        backgroundColor: lineid == i?"#20" + Color1.replace('#',''):""
                     }
                 })
             }
