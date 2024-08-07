@@ -79,7 +79,7 @@ function Live() {
             }),
             col_type: 'scroll_button',
             extra: {
-                backgroundColor: JYlivedyurl=="juying"?"#30" + color.replace('#',''):""
+                backgroundColor: JYlivedyurl=="juying"?"#20" + color.replace('#',''):""
             }
         })
         for (let i = 0; i < livedata.length; i++) {
@@ -97,7 +97,7 @@ function Live() {
                 }, dyname, dyurl),
                 col_type: 'scroll_button',
                 extra: {
-                    backgroundColor: JYlivedyurl==dyurl?"#30" + color.replace('#',''):""
+                    backgroundColor: JYlivedyurl==dyurl?"#20" + color.replace('#',''):""
                 }
             })
             //}
