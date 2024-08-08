@@ -320,8 +320,10 @@ function getYiData(jkdata) {
                                 typelist.forEach((it) => {
                                     if(it.type_name && it.type_id){
                                         if(!it.type_pid){
+                                            log(it);
                                             分类.push(it.type_name + '$' + it.type_id);
                                         }else if (it.type_pid==0) {
+                                            log(it.type_pid);
                                             let value = [];
                                             typelist.forEach((itit) => {
                                                 if (itit.type_pid == it.type_id) {
