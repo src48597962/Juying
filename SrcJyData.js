@@ -316,10 +316,10 @@ function getYiData(jkdata) {
                                         }
                                     }
                                 }
-
+                                log(typelist);
                                 typelist.forEach((it) => {
                                     if(it.type_name && it.type_id){
-                                        if(!it.type_pid || it.type_pid==0){
+                                        if(it.type_pid==0){
                                             分类.push(it.type_name + '$' + it.type_id);
                                             let value = [];
                                             typelist.forEach((itit) => {
@@ -327,6 +327,7 @@ function getYiData(jkdata) {
                                                     value.push({ n: itit.type_name, v: itit.type_id });
                                                 }
                                             })
+                                            log(value);
                                             if (value.length > 0) {
                                                 筛选 = 筛选 || {};
                                                 筛选[it.type_id] = [{ "key": "cateId", "name": it.type_name, "value": value }];
