@@ -334,7 +334,7 @@ function getYiData(jkdata) {
                                         }
                                     }
                                 })
-
+                                log(筛选);
                                 if(分类.length==0 && typelist.length>0){
                                     // 针对一些奇怪的网站没有一级分类时，全部显示为一级分类
                                     typelist.forEach((it) => {
