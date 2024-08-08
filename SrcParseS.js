@@ -12,8 +12,15 @@ if(record!=""){
 
 let excludeurl = parseRecord.excludeurl||[];//屏蔽的播放地址
 let excludeparse = parseRecord.excludeparse||[];//屏蔽的解析
-let defaultSet = {printlog:0,cachem3u8:0,parsemode:1,video:1,xiutannh:"web",dmRoute:0,isTest:0,mulnum:1};
-let playSet = Object.assign(defaultSet, storage0.getItem('playSet') || {});
+let playSet = {printlog:0,cachem3u8:0,parsemode:1,video:1,xiutannh:"web",dmRoute:0,isTest:0,mulnum:1};
+let Jucfg = fetch("hiker://files/rules/Src/Juying2/config.json");
+if(Jucfg != ""){
+    try{
+        eval("let Juconfig=" + Jucfg+ ";");
+        playSet = Juconfig['playSet'] || playSet;
+    }catch(e){}
+}
+
 if(!playSet.printlog){
     log = function (msg) {
         //未开启打印解析日志>不打印
