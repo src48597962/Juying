@@ -1,5 +1,5 @@
 //本代码仅用于个人学习，请勿用于其他作用，下载后请24小时内删除，代码虽然是公开学习的，但请尊重作者，应留下说明
-let getIcon = globalMap0.getMyVar('gmParams').getIcon;
+require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
 //二级统一菜单
 function erjimenu(desc,name,group) {
     return [
@@ -127,6 +127,9 @@ function cutSource(name, group) {
 }
 
 function lookset() {
+    addListener("onClose", $.toString(() => {
+        clearMyVar('playSet');
+    }));
     setPageTitle("点播二级观看设置");
     let recordfile = globalMap0.getMyVar('gmParams').rulepath + "parse.json";//解析相关记录文件
     let parseRecord = {};
@@ -135,7 +138,10 @@ function lookset() {
             eval("parseRecord =" + fetch(recordfile) + ";");
         }catch(e){}
     }
-    let playSet = storage0.getItem('playSet') || {};
+
+    let playSet = storage0.getMyVar('playSet') || storage0.getItem('playSet') || Juconfig['playSet'] || {};
+    clearItem('playSet');
+
     let d = [];
     d.push({
         col_type: "line_blank"
@@ -154,7 +160,7 @@ function lookset() {
             } else {
                 playSet['printlog'] = 0;
             }
-            storage0.setItem('playSet', playSet);
+            storage0.putMyVar('playSet', playSet);
             refreshPage(false);
             return 'toast://切换成功';
         }, playSet),
@@ -222,7 +228,7 @@ function lookset() {
         title: '聚影智能',
         url: $('#noLoading#').lazyRule((playSet) => {
             playSet['parsemode'] = 1;
-            storage0.setItem('playSet', playSet);
+            storage0.putMyVar('playSet', playSet);
             refreshPage(false);
             return 'toast://聚影智能 | 上次优先>接口自带+私有解析';
         }, playSet),
@@ -233,7 +239,7 @@ function lookset() {
         title: '强制嗅探',
         url: $('#noLoading#').lazyRule((playSet) => {
             playSet['parsemode'] = 2;
-            storage0.setItem('playSet', playSet);
+            storage0.putMyVar('playSet', playSet);
             refreshPage(false);
             return 'toast://强制嗅探 | 将web解析组线路进video播放器';
         }, playSet),
@@ -244,7 +250,7 @@ function lookset() {
         title: '手动切换',
         url: $('#noLoading#').lazyRule((playSet) => {
             playSet['parsemode'] = 3;
-            storage0.setItem('playSet', playSet);
+            storage0.putMyVar('playSet', playSet);
             refreshPage(false);
             return 'toast://手动切换 | 代理播放，在播放页手动选择解析';
         }, playSet),
@@ -265,7 +271,7 @@ function lookset() {
                 playSet['xiutannh'] = 'x5';
                 sm = 'x5';
             }
-            storage0.setItem('playSet', playSet);
+            storage0.putMyVar('playSet', playSet);
             refreshPage(false);
             return 'toast://嗅探内核切换为：'+sm;
         }, playSet),
@@ -280,7 +286,7 @@ function lookset() {
             } else {
                 playSet['video'] = 1;
             }
-            storage0.setItem('playSet', playSet);
+            storage0.putMyVar('playSet', playSet);
             refreshPage(false);
             return 'toast://已切换';
         }, playSet),
@@ -325,7 +331,7 @@ function lookset() {
             } else {
                 playSet['cachem3u8'] = 0;
             }
-            storage0.setItem('playSet', playSet);
+            storage0.putMyVar('playSet', playSet);
             refreshPage(false);
             return 'toast://切换成功';
         }, playSet),
@@ -341,7 +347,7 @@ function lookset() {
             } else {
                 playSet['isTest'] = 1;
             }
-            storage0.setItem('playSet', playSet);
+            storage0.putMyVar('playSet', playSet);
             refreshPage(false);
             return 'toast://切换成功';
         }, playSet),
@@ -359,7 +365,7 @@ function lookset() {
                 playSet['dmRoute'] = 1;
                 sm = '仅针对官网地址有效，需要dm盒子小程序';
             }
-            storage0.setItem('playSet', playSet);
+            storage0.putMyVar('playSet', playSet);
             refreshPage(false);
             return 'toast://' + sm;
         }, playSet),
@@ -441,6 +447,8 @@ function lookset() {
         col_type: 'rich_text'
     });
     setResult(d);
+    Juconfig['playSet'] = playSet;
+    writeFile(cfgfile, JSON.stringify(Juconfig));
 }
 //主页导航按钮菜单
 let menubtns = ["管理", "历史", "收藏", "点播", "直播", "Alist", "云盘"];//"搜索",
