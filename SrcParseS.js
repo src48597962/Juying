@@ -150,6 +150,9 @@ var SrcParseS = {
                 from = 'other';
             }
         }
+        if(from == "iqiyi"){
+            from = "qiyi";
+        }
         log("片源标识："+from+"，需要解析"); 
 
         let parsemode = playSet.parsemode || 1;//解析模式
@@ -186,6 +189,9 @@ var SrcParseS = {
                 for(let j=0;j<jxList.length;j++){
                     jxList[j].ext = jxList[j].ext||{};
                     let flag = jxList[j].ext.flag || [];
+                    if(flag.indexOf("iqiyi")>-1 && flag.indexOf("qiyi")==-1){
+                        flag.push("qiyi");
+                    }
                     if(flag.length==0 || flag.indexOf(from)>-1){
                         jxList[j].stype = "myjx";
                         parselist.push(jxList[j]);
