@@ -661,6 +661,15 @@ function dianboyiji() {
                         deleteData('jk', homeSource);
                         return "toast://已处理";
                     })
+                },{
+                    title: "分享当前源",
+                    js: $.toString((data) => {
+                        if(!data.url){
+                            return "toast://当前源无效，无法分享";
+                        }
+                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                        return JYshare('jk', getItem("sharePaste",""), data);
+                    },jkdata)
                 }]
             }
         })
