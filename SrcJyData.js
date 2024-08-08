@@ -321,8 +321,6 @@ function getYiData(jkdata) {
                                     if(it.type_name && it.type_id){
                                         if(!it.type_pid || it.type_pid==0){
                                             分类.push(it.type_name + '$' + it.type_id);
-                                        }
-                                        if(it.type_pid && it.type_pid!=0){
                                             let value = [];
                                             typelist.forEach((itit) => {
                                                 if (itit.type_pid == it.type_id) {
@@ -336,6 +334,7 @@ function getYiData(jkdata) {
                                         }
                                     }
                                 })
+
                                 if(分类.length==0 && typelist.length>0){
                                     // 针对一些奇怪的网站没有一级分类时，全部显示为一级分类
                                     typelist.forEach((it) => {
