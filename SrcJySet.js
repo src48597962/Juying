@@ -528,6 +528,7 @@ function jiekou(data) {
         clearMyVar('apiurl');
         clearMyVar('apitype');
         clearMyVar('apigroup');
+        clearMyVar('apicate');
         clearMyVar('isload');
         clearMyVar('isretain');
         clearMyVar('isSaveAs');
@@ -543,6 +544,7 @@ function jiekou(data) {
             putMyVar('apiurl', data.url);
             putMyVar('apitype', data.type);
             putMyVar('apigroup', data.group||"");
+            putMyVar('apicate', data.categories?data.categories.join(","):"");
             putMyVar('isretain', data.retain||"");
             putMyVar('isload', '1');
         }
@@ -614,6 +616,16 @@ function jiekou(data) {
             refreshPage(true);
             return "toast://"+input;
         })
+    });
+    d.push({
+        title: 'apicate',
+        col_type: 'input',
+        desc: "如设置、则仅显示指定分类",
+        extra: {
+            titleVisible: false,
+            defaultValue: getMyVar('apicate',''),
+            onChange: 'putMyVar("apicate",input);'
+        }
     });
     d.push({
         title: getMyVar('isretain')=="1"?'强制保留：是':'强制保留：否',
@@ -713,7 +725,11 @@ function jiekou(data) {
                 if(apigroup){
                     arr['group'] = apigroup;
                 }
-                
+                let apicate = getMyVar('apicate','');
+                if(apicate){
+                    apicate = apicate.replace('，',',');
+                    arr['categories'] = apicate.split(',').filter(v=>v);
+                }
                 let isretain = getMyVar('isretain')=="1"?1:0;
                 if(isretain){
                     arr['retain'] = 1;
