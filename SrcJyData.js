@@ -306,7 +306,6 @@ function getYiData(jkdata) {
                                 })
                             } else {
                                 log(classurl);
-                                log(gethtml);
                                 let typehtml = dealJson(gethtml);
                                 let typelist = typehtml["class"] || [];
                                 log(typelist);
@@ -318,7 +317,7 @@ function getYiData(jkdata) {
                                         }
                                     }
                                 }
-                                
+                                log(typelist);
                                 typelist.forEach((it) => {
                                     if(it.type_name && it.type_id){
                                         if(it.type_pid==0){
@@ -329,7 +328,6 @@ function getYiData(jkdata) {
                                                     value.push({ n: itit.type_name, v: itit.type_id });
                                                 }
                                             })
-                                            log(value);
                                             if (value.length > 0) {
                                                 筛选 = 筛选 || {};
                                                 筛选[it.type_id] = [{ "key": "cateId", "name": it.type_name, "value": value }];
@@ -1519,7 +1517,6 @@ function dealJson(html) {
     } catch (e) { }
     try {
         html = JSON.parse(html);
-        log(html["class"]);
     } catch (e) {
         log("dealJson转换为对象失败>"+e.message);
     }
