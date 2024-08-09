@@ -280,7 +280,7 @@ function dianboerji() {
     //log(erdata);
     let details1 = erdata.details1 || "";
     let details2 = erdata.details2 || "";
-    let pic = erdata.pic || sextra.pic || MY_PARAMS.pic;
+    let pic = sextra.pic || MY_PARAMS.pic || erdata.pic;//优先一级图片
     let updateParams = 0;
 
     let d = [];
