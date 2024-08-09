@@ -305,10 +305,8 @@ function getYiData(jkdata) {
                                     分类.push(String(xpath(it, `//ty/text()`)).trim() + '$' + String(xpath(it, `//ty/@id`)).trim());
                                 })
                             } else {
-                                log(classurl);
                                 let typehtml = dealJson(gethtml);
                                 let typelist = typehtml["class"] || [];
-                                log(typelist);
                                 if (jkdata.categories) {
                                     for (var i = 0; i < typelist.length; i++) {
                                         if (jkdata.categories.indexOf(typelist[i].type_name) == -1 && typelist[i].type_pid!=0) {
@@ -317,7 +315,7 @@ function getYiData(jkdata) {
                                         }
                                     }
                                 }
-                                log(typelist);
+
                                 typelist.forEach((it) => {
                                     if(it.type_name && it.type_id){
                                         if(it.type_pid==0){
@@ -335,7 +333,7 @@ function getYiData(jkdata) {
                                         }
                                     }
                                 })
-                                log(筛选);
+
                                 if(分类.length==0 && typelist.length>0){
                                     // 针对一些奇怪的网站没有一级分类时，全部显示为一级分类
                                     typelist.forEach((it) => {
