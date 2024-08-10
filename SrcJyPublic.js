@@ -620,7 +620,7 @@ function selectSource() {
 
         },
         click(s, i, manage) {
-            //pop.dismiss();
+            pop.dismiss();
 
             let input = s.replace(/[’‘]|<[^>]*>/g, "");
             if(tmpList[i].name==input){
