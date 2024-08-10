@@ -629,6 +629,12 @@ function selectSource() {
             if(tmpList[i].name==input){
                 Juconfig["homeSource"] = tmpList[i];
                 writeFile(cfgfile, JSON.stringify(Juconfig));
+                
+                clearMyVar('SrcJu_dianbo$分类');
+                clearMyVar('SrcJu_dianbo$fold');
+                clearMyVar('SrcJu_dianbo$classCache');
+                clearMyVar('SrcJu_dianbo$flCache');
+                clearMyVar('点播动态加载loading');
             }
             /*
             if(tmpList[i].name==input){
