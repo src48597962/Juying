@@ -622,7 +622,8 @@ function selectSource() {
         click(s, i, manage) {
             pop.dismiss();
             
-            let input = s.replace(/[’‘]|<[^>]*>/g, "");
+            //let input = s.replace(/[’‘]|<[^>]*>/g, "");
+            let input = tmpList[i].name;
             if(tmpList[i].name==input){
                 Juconfig["homeSource"] = tmpList[i];
                 writeFile(cfgfile, JSON.stringify(Juconfig));
