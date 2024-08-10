@@ -627,7 +627,7 @@ function selectSource() {
             log(i);
             log(tmpList[i]);
             if(tmpList[i].name==input){
-
+                Juconfig["homeSource"] = tmpList[i];
             }
             /*
             if(tmpList[i].name==input){
