@@ -507,7 +507,7 @@ var SrcParseS = {
     formatMulUrl: function (url,i) {
         try {
             let header = this.mulheader(url);
-            if ((playSet.cachem3u8 || url.indexOf('vkey=')>-1)&&url.indexOf('.m3u8')>-1) {
+            if ((playSet.cachem3u8)&&url.indexOf('.m3u8')>-1) {// || url.indexOf('vkey=')>-1
                 log("缓存m3u8索引文件");
                 let name = 'video'+parseInt(i)+'.m3u8';
                 url = cacheM3u8(url, {headers: header, timeout: 3000}, name)+'#pre#';
@@ -750,7 +750,7 @@ var SrcParseS = {
                         }*/
                     }
                 } else {
-                    if ((playSet.cachem3u8 || url.indexOf('vkey=')>-1)&&url.indexOf('.m3u8')>-1) {
+                    if ((playSet.cachem3u8)&&url.indexOf('.m3u8')>-1) {// || url.indexOf('vkey=')>-1
                         url = cacheM3u8(url, {timeout: 2000}, 'video' + parseInt(i) + '.m3u8') + '#pre#';
                     }
                 }
