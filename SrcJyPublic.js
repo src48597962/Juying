@@ -621,7 +621,7 @@ function selectSource() {
         },
         click(s, i, manage) {
             pop.dismiss();
-
+            /*
             let input = s.replace(/[’‘]|<[^>]*>/g, "");
             if(tmpList[i].name==input){
                 Juconfig["homeSource"] = tmpList[i];
@@ -639,6 +639,7 @@ function selectSource() {
             }else{
                 return 'toast://源列表索引异常'
             }
+            */
         },
         menuClick(manage) {
             hikerPop.selectCenter({
