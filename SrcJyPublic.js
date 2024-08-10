@@ -539,7 +539,8 @@ function duoselect(datas){
 }
 // 点播主页选择源接口
 function selectSource() {
-    const hikerPop = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6966");
+    //const hikerPop = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6966");
+    const hikerPop = $.require("https://hikerfans.com/weisyr/js/hikerPop.js");
     let sourceAllList = getDatas("jk", 1).filter(x=> !x.onlysearch);
     let sourceListGroup = Juconfig["sourceListGroup"] || sourceGroup || "全部";
     let sourceList = getGroupLists(sourceAllList, sourceListGroup);
