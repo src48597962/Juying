@@ -635,6 +635,12 @@ function selectSource() {
                 clearMyVar('SrcJu_dianbo$classCache');
                 clearMyVar('SrcJu_dianbo$flCache');
                 clearMyVar('点播动态加载loading');
+                
+                let key = tmpList[i].url;
+                setJkSort(key, 1);
+                refreshPage(true);
+                
+                return 'toast://' + '主页源已设置为：' + input;
             }
             /*
             if(tmpList[i].name==input){
