@@ -623,9 +623,6 @@ function selectSource() {
             pop.dismiss();
 
             let input = s.replace(/[’‘]|<[^>]*>/g, "");
-            log(input);
-            log(i);
-            log(tmpList[i]);
             if(tmpList[i].name==input){
                 Juconfig["homeSource"] = tmpList[i];
                 writeFile(cfgfile, JSON.stringify(Juconfig));
@@ -636,23 +633,6 @@ function selectSource() {
                 clearMyVar('SrcJu_dianbo$flCache');
                 clearMyVar('点播动态加载loading');
                 
-                let key = tmpList[i].url;
-                setJkSort(key, 1);
-                refreshPage(true);
-                
-                return 'toast://' + '主页源已设置为：' + input;
-            }
-            /*
-            if(tmpList[i].name==input){
-                Juconfig["homeSource"] = tmpList[i];
-                writeFile(cfgfile, JSON.stringify(Juconfig));
-                
-                clearMyVar('SrcJu_dianbo$分类');
-                clearMyVar('SrcJu_dianbo$fold');
-                clearMyVar('SrcJu_dianbo$classCache');
-                clearMyVar('SrcJu_dianbo$flCache');
-                clearMyVar('点播动态加载loading');
-
                 let key = tmpList[i].url;
                 setJkSort(key, 1);
                 refreshPage(true);
@@ -661,7 +641,6 @@ function selectSource() {
             }else{
                 return 'toast://源列表索引异常'
             }
-            */
         },
         menuClick(manage) {
             hikerPop.selectCenter({
