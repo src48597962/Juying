@@ -622,11 +622,10 @@ function selectSource() {
         click(s, i, manage) {
             pop.dismiss();
             
-            //let input = s.replace(/[’‘]|<[^>]*>/g, "");
-            let input = tmpList[i].name;
+            let input = s.replace(/[’‘]|<[^>]*>/g, "");
             if(tmpList[i].name==input){
-                Juconfig["homeSource"] = tmpList[i];
-                writeFile(cfgfile, JSON.stringify(Juconfig));
+                //Juconfig["homeSource"] = tmpList[i];
+                //writeFile(cfgfile, JSON.stringify(Juconfig));
                 /*
                 clearMyVar('SrcJu_dianbo$分类');
                 clearMyVar('SrcJu_dianbo$fold');
