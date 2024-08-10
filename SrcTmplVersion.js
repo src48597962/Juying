@@ -2,6 +2,12 @@ var newVersion = {
     "SrcJuying":"1.2",
     "hint": "更新优化较多，且用且珍惜",
     "JYUpdateRecords": [{
+        title: "待发布 V1.3",
+        records: [
+            "优化：点播资源管理输入地址去除前后空白",
+            "优化：点播解析缓存m3u8索引逻辑调整"
+        ]
+    },{
         title: "2024/08/09 V1.2",
         records: [
             "新增：软件新版本支持选中的分类按钮背景色",
