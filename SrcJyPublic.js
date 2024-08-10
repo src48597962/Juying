@@ -621,7 +621,7 @@ function selectSource() {
         },
         click(s, i, manage) {
             pop.dismiss();
-            
+            log(manage);
             let input = s.replace(/[’‘]|<[^>]*>/g, "");
             /*
             if(tmpList[i].name==input){
