@@ -628,6 +628,7 @@ function selectSource() {
             log(tmpList[i]);
             if(tmpList[i].name==input){
                 Juconfig["homeSource"] = tmpList[i];
+                writeFile(cfgfile, JSON.stringify(Juconfig));
             }
             /*
             if(tmpList[i].name==input){
