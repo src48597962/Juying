@@ -619,10 +619,13 @@ function selectSource() {
         longClick(s, i, manage) {
 
         },
-        click(s, i, manage) {
+        click(s, i) {
             pop.dismiss();
-            log(manage.list);
+
             let input = s.replace(/[’‘]|<[^>]*>/g, "");
+            log(input);
+            log(i);
+            log(tmpList[i].name);
             /*
             if(tmpList[i].name==input){
                 Juconfig["homeSource"] = tmpList[i];
