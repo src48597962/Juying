@@ -625,7 +625,10 @@ function selectSource() {
             let input = s.replace(/[’‘]|<[^>]*>/g, "");
             log(input);
             log(i);
-            log(tmpList[i].name);
+            log(tmpList[i]);
+            if(tmpList[i].name==input){
+
+            }
             /*
             if(tmpList[i].name==input){
                 Juconfig["homeSource"] = tmpList[i];
