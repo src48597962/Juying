@@ -621,11 +621,12 @@ function selectSource() {
         },
         click(s, i, manage) {
             pop.dismiss();
-            /*
+            
             let input = s.replace(/[’‘]|<[^>]*>/g, "");
             if(tmpList[i].name==input){
                 Juconfig["homeSource"] = tmpList[i];
                 writeFile(cfgfile, JSON.stringify(Juconfig));
+                /*
                 clearMyVar('SrcJu_dianbo$分类');
                 clearMyVar('SrcJu_dianbo$fold');
                 clearMyVar('SrcJu_dianbo$classCache');
@@ -635,11 +636,11 @@ function selectSource() {
                 let key = tmpList[i].url;
                 setJkSort(key, 1);
                 refreshPage(true);
+                */
                 return 'toast://' + '主页源已设置为：' + input;
             }else{
                 return 'toast://源列表索引异常'
             }
-            */
         },
         menuClick(manage) {
             hikerPop.selectCenter({
