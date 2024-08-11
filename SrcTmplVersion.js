@@ -2,6 +2,11 @@ var newVersion = {
     "SrcJuying":"1.3",
     "hint": "祝君帅气",
     "JYUpdateRecords": [{
+        title: "待发布 V1.4",
+        records: [
+            "修复：点播t3源获取分类列表fl传值调整"
+        ]
+    },{
         title: "2024/08/10 V1.3",
         records: [
             "优化：点播资源管理输入地址去除前后空白",
