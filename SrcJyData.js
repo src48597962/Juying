@@ -399,6 +399,7 @@ function getYiData(jkdata) {
                     }
 
                     分类.forEach((it, i) => {
+                        log(it);
                         let itname = it.split('$')[0].replace(/[\u2190-\u21ff]/g, '').trim();
                         let itid = it.split('$')[1];
                         fllists.push({
