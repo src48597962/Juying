@@ -351,7 +351,8 @@ function dianboerji() {
         })
 
         erdata.tabs.forEach((it,i)=>{
-            it = it.replace(/[\u0000-\u001F\u0080-\u009F\u200B\u2060-\u2064\u206A-\u206F\uFEFF\uFFFD\uFDD0-\uFDEF]/g, '').trim();
+            it = it.replace(/|||/g, '').trim();
+            log(it);
             if(it && !/播放错误会自动换源/.test(it)){
                 d.push({
                     title: lineid == i ? getHead(it,Color1,1) : getHead(it,Color2),
