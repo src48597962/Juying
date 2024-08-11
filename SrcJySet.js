@@ -151,6 +151,7 @@ function SRCSet() {
                 url: $('#noLoading#').lazyRule((it) => {
                     putMyVar("SrcJu_seacrhJiekou", it);
                     refreshPage(false);
+                    return "hiker://empty";
                 },it),
                 col_type: 'scroll_button'
             })
