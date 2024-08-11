@@ -399,7 +399,7 @@ function getYiData(jkdata) {
                     }
 
                     分类.forEach((it, i) => {
-                        let itname = it.split('$')[0].replace('', '').trim();
+                        let itname = it.split('$')[0].replace(/[\u0000-\u001F\u0080-\u009F\u200B\u2060-\u2064\u206A-\u206F\uFEFF\uFFFD\uFDD0-\uFDEF]/g, '').trim();
                         let itid = it.split('$')[1];
                         fllists.push({
                             title: cate_id == itid ? '““””<b><span style="color:' + Color + '">' + itname + '</span></b>' : itname,
