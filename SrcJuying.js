@@ -352,7 +352,7 @@ function dianboerji() {
 
         erdata.tabs.forEach((it,i)=>{
             it = it.replace(/|||/g, '').trim();
-            log(it);
+
             if(it && !/播放错误会自动换源/.test(it)){
                 d.push({
                     title: lineid == i ? getHead(it,Color1,1) : getHead(it,Color2),
