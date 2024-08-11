@@ -464,7 +464,8 @@ function getYiData(jkdata) {
             fl.cateId = fl.cateId || cate_id;
             //拼接生成分类页url链接
             if (api_type == 'hipy_t4'){
-                MY_URL = listurl.replace('{cate_id}', fl.cateId).replace('{flb64}', base64Encode(JSON.stringify(fl)));
+                delete fl.cateId;
+                MY_URL = listurl.replace('{cate_id}', cate_id).replace('{flb64}', base64Encode(JSON.stringify(fl)));
             } else if (api_type == "XYQ") {
                 fl.catePg = MY_PAGE;
                 let execStrs = getExecStrs(listurl);
@@ -511,9 +512,8 @@ function getYiData(jkdata) {
                     vodlists.push({ "vod_url": it.vod_id.toString(), "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic });
                 })
             }else if (api_type=="hipy_t3") {
-                log(fl.cateId);
-                log(fl);
-                let vodlist = JSON.parse(drpy.category(fl.cateId, MY_PAGE, true, {})).list || [];
+                delete fl.cateId;
+                let vodlist = JSON.parse(drpy.category(cate_id, MY_PAGE, true, fl)).list || [];
                 vodlist.forEach(it=>{
                     vodlists.push({ "vod_url": it.vod_id.toString(), "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic, "vod_play": noerji?it.vod_id.toString():"" });
                 })
