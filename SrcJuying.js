@@ -286,7 +286,7 @@ function dianboerji() {
     let details2 = erdata.details2 || "";
     let pic = sextra.pic || MY_PARAMS.pic || erdata.pic;//优先一级图片
     let updateParams = 0;
-
+    log('加载海报前');
     let d = [];
     //海报
     d.push({
@@ -316,6 +316,7 @@ function dianboerji() {
             return title;
         }
     }
+    log('加载二级菜单 前');
     //二级统一菜单
     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyMenu.js');
     erjimenu(erdata.desc, name, sgroup).forEach(it=>{
@@ -353,7 +354,7 @@ function dianboerji() {
                 cls: "Juloadlist"
             }
         })
-
+        log('加载线路前');
         erdata.tabs.forEach((it,i)=>{
             it = it.replace(/|||/g, '').trim();
 
@@ -393,6 +394,7 @@ function dianboerji() {
                 })
             }
         })
+        log('取列表');
         //生成选集
         let 列表 = erdata.lists.length>lineid?erdata.lists[lineid].filter(v=>v):[];
         if(列表.length>0){
@@ -410,7 +412,7 @@ function dianboerji() {
                 //xlog('强制修正选集顺序失败>'+e.message)
             }
         }
-        
+        log('分页');
         //分页定义
         let partpage = storage0.getItem('partpage') || {};
         if(partpage.ispage){//启用分页
@@ -514,6 +516,7 @@ function dianboerji() {
                 }
             });
         }else{
+            log('选集');
             let flag = erdata.flags.length>lineid?erdata.flags[lineid]:erdata.tabs.length>lineid?erdata.tabs[lineid]:"";
             let dataObj = {};
             if(erdata.parse_api&&erdata.parse_api.length>0){
@@ -566,13 +569,11 @@ function dianboerji() {
                     return SrcParseS.聚影(input, dataObj);
                 }, dataObj);
             }
-
+            log('选 集2');
             let playSet = storage0.getItem('playSet') || {};
-            //let listone = 列表[0].split('$')[0];
-            //const longestString = 列表.splice(0,10).reduce((a, b) => a.split('$')[0].replace(name,"").trim().length > b.split('$')[0].replace(name,"").trim().length ? a : b, '');
-            //listone = listone==name?'正片':listone.replace(name,"").trim();
             let len = 列表.slice(0, 10).concat(列表.slice(-10)).reduce((max, str) => Math.max(max, str.split('$')[0].replace(name,"").trim().length), 0);
             let col_type = 列表.length > 4 && len < 5 ? 'text_4' : len > 10 ? 'text_1' : len>4&&len<7 ? 'text_3' :'text_2';
+            log('选 集3');
             for(let i=0; i<列表.length; i++) {
                 let playtitle = 列表[i].split('$')[0];
                 playtitle = playtitle==name?'正片':playtitle.replace(name+" - ","").replace(name+"_","").replace(name,"").trim();
@@ -600,6 +601,7 @@ function dianboerji() {
                 });
             }
             updateParams = 1;
+            log('选集4');
         }
     }
     
@@ -614,6 +616,7 @@ function dianboerji() {
         }
     });
     setResult(d);
+    log('结束');
     if(pic && pic!=MY_PARAMS.pic && !/^hiker/.test(pic)){
         setPagePicUrl(pic);
     }
@@ -633,6 +636,7 @@ function dianboerji() {
             setLastChapter(url,jkdata);
         }, MY_URL, jkdata))
     }
+    log('结束2');
 }
 
 //点播一级
