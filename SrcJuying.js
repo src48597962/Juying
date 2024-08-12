@@ -316,16 +316,17 @@ function dianboerji() {
             return title;
         }
     }
-    log('加载二级菜单 前');
+    log('加载二级菜单前');
     //二级统一菜单
     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyMenu.js');
     erjimenu(erdata.desc, name, sgroup).forEach(it=>{
         d.push(it);
     })
-
+    log('加载二级菜单后');
     if(jkdata.type=="yundisk"){
         d = d.concat(erdata.lists);
     }else{
+        log('加载记录前');
         //取之前足迹记录，用于自动定位之前的线路和分页
         let smark = {};
         try {
@@ -340,7 +341,7 @@ function dianboerji() {
         let pageid = parseInt(getMyVar(MY_URL+"_page", (smark.page||0).toString()));//分页index
         //设置记录线路足迹的数量
         let Marksum = 100;
-
+        log('加载记录后');
         //生成线路
         d.push({
             title: getMyVar('shsort') == '1'?'““””<b><span style="color: #FF0000">∨</span></b>' : '““””<b><span style="color: #1aad19">∧</span></b>',
