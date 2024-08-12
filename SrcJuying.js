@@ -143,6 +143,7 @@ function erjisousuo(name,group,datas,num) {
         }
 
         let task = function (obj) {
+            return {result:[], success:0};
             try {
                 let lists = obj.fun(obj.name, "dianboerji", obj.data);
                 return {result:lists, success:1};
@@ -192,7 +193,7 @@ function erjisousuo(name,group,datas,num) {
                 }
             });
             hideLoading();
-            /*
+
             if(beidlist.length<ssdatalist.length){
                 let pdatalist = ssdatalist.filter(v=>beidlist.indexOf(v.url)==-1);
                 addItemBefore(updateItemid, {
@@ -211,7 +212,7 @@ function erjisousuo(name,group,datas,num) {
                     }
                 });
             }
-            */
+
             if(getMyVar("SrcJu_停止搜索线程")!="1"){
                 storage0.putMyVar('SrcJu_searchMark', searchMark);
                 setJkSort(failsort);
