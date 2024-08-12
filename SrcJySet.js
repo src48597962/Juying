@@ -162,6 +162,7 @@ function SRCSet() {
                 url: !getMyVar("SrcJu_seacrhJiekou")?"hiker://empty":$('#noLoading#').lazyRule(() => {
                     clearMyVar("SrcJu_seacrhJiekou");
                     refreshPage(false);
+                    return "hiker://empty";
                 }),
                 col_type: 'scroll_button'
             })
