@@ -318,12 +318,13 @@ function dianboerji() {
     }
     log('加载二级菜单前');
     //二级统一菜单
-    /*
+    
     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyMenu.js');
+    log(erjimenu.length);
     erjimenu(erdata.desc, name, sgroup).forEach(it=>{
         d.push(it);
     })
-    */
+    
     log('加载二级菜单后');
     if(jkdata.type=="yundisk"){
         d = d.concat(erdata.lists);
