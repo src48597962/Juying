@@ -126,7 +126,7 @@ function erjisousuo(name,group,datas,num) {
             i++;
             if (i == 1) { one = k }
         }
-        if (i > 30) { delete searchMark[one]; }
+        if (i > 10) { delete searchMark[one]; }
         hideLoading();
     }else{
         showLoading('搜源中，请稍后...');
