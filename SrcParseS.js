@@ -130,6 +130,9 @@ var SrcParseS = {
         let from;
         if(dataObj.flag && !isVip){
             from = dataObj.flag;
+            if(from=="道长在线"){
+                return "toast://解析失败";
+            }
         }else{
             try{
                 if(vipUrl.indexOf('-yanaifei.html') != -1){
