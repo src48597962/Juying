@@ -192,6 +192,7 @@ function erjisousuo(name,group,datas,num) {
                 }
             });
             hideLoading();
+            /*
             if(beidlist.length<ssdatalist.length){
                 let pdatalist = ssdatalist.filter(v=>beidlist.indexOf(v.url)==-1);
                 addItemBefore(updateItemid, {
@@ -210,6 +211,7 @@ function erjisousuo(name,group,datas,num) {
                     }
                 });
             }
+            */
             if(getMyVar("SrcJu_停止搜索线程")!="1"){
                 storage0.putMyVar('SrcJu_searchMark', searchMark);
                 setJkSort(failsort);
@@ -230,6 +232,7 @@ function erjisousuo(name,group,datas,num) {
 function dianboerji() {
     addListener("onClose", $.toString((getHistory) => {
         clearMyVar('二级附加临时对象');
+        putMyVar('SrcJu_停止搜索线程', '1');
         
         if(getItem('historyEnable')=='1'){
             deleteItemByCls('historylist');
