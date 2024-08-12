@@ -814,6 +814,9 @@ let gmParams = {
     zip: gzip.zip,
     unzip: gzip.unzip
 }
-globalMap0.putMyVar('gmParams', gmParams);
-//let {GM} = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6916&auth=1d35e8f0-22e8-5270-a9d1-826f53f177ad");
-//GM.put('gmParams', gmParams);
+if(!globalMap0.getMyVar('gmParams')){
+    globalMap0.putMyVar('gmParams', gmParams);
+}
+if(getMyVar('gmParams')){
+    log("存在");
+}
