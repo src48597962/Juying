@@ -143,9 +143,9 @@ function erjisousuo(name,group,datas,num) {
         }
 
         let task = function (obj) {
-            return {result:[], success:0};
             try {
-                let lists = obj.fun(obj.name, "dianboerji", obj.data);
+                require(config.依赖);
+                let lists = search(obj.name, "dianboerji", obj.data);//obj.
                 return {result:lists, success:1};
             } catch (e) {
                 log(obj.data.name + '>搜索失败>' + e.message);
@@ -155,7 +155,7 @@ function erjisousuo(name,group,datas,num) {
         let list = ssdatalist.map((item) => {
             return {
                 func: task,
-                param: {"data":item,"name":name,"fun":search},
+                param: {"data":item,"name":name},//,"search":search
                 id: item.url
             }
         });
