@@ -817,6 +817,3 @@ let gmParams = {
 if(!globalMap0.getMyVar('gmParams')){
     globalMap0.putMyVar('gmParams', gmParams);
 }
-if(getMyVar('gmParams')){
-    log("存在");
-}
