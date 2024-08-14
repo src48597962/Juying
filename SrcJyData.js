@@ -962,6 +962,7 @@ function getSsData(name, jkdata, page) {
     }
 
     let searchs = [];
+    /*
     if (lists.length > 0) {
         try {
             lists.forEach((list) => {
@@ -989,6 +990,7 @@ function getSsData(name, jkdata, page) {
             log(jkdata.name + ' 输出结果报错>' + e.message + " 错误行#" + e.lineNumber);
         }
     }
+    */
     return searchs;
 }
 
