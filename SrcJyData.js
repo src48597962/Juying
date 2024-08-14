@@ -780,11 +780,9 @@ function getSsData(name, jkdata, page) {
                 gethtml = getHtmlCode(ssurl, headers);
                 
                 if (api_type=="cms") {
-                    /*
                     if (gethtml && gethtml.indexOf(name) == -1) {
                         gethtml = getHtmlCode(ssurl.replace('videolist', 'list'), headers);
                     }
-                    */
                     if (/<\?xml/.test(gethtml)) {
                         /*
                         gethtml = gethtml.replace(/&lt;!\[CDATA\[|\]\]&gt;|<!\[CDATA\[|\]\]>/g, '');
@@ -800,9 +798,9 @@ function getSsData(name, jkdata, page) {
                         json = { "list": xmllist };
                         */
                     } else {
-                        //json = JSON.parse(gethtml);
+                        json = JSON.parse(gethtml);
                     }
-                }/* else if (!/{|}/.test(gethtml) && gethtml != "") {
+                } else if (!/{|}/.test(gethtml) && gethtml != "") {
                     let decfile = globalMap0.getMyVar('gmParams').datapath + "appdec.js";
                     let Juyingdec = fetch(decfile);
                     if (Juyingdec != "") {
@@ -812,9 +810,9 @@ function getSsData(name, jkdata, page) {
                 } else {
                     json = JSON.parse(gethtml.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, ''));
                 }
-                */
+                
             //}
-            /*
+            
             try {
                 lists = eval(listnode) || json.list || json.data.list || json.data || [];
             } catch (e) {
@@ -841,7 +839,6 @@ function getSsData(name, jkdata, page) {
                     content: vodcontent
                 }
             })
-            */
         }
         /* else {
             if (api_type == "XPath") {
