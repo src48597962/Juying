@@ -134,8 +134,9 @@ function erjisousuo(name,group,datas,num) {
         updateItem(updateItemid, {
             title: "搜源中..."
         });
-
+        */
         let ssdatalist = datas || getSearchLists(group);
+        /*
         let nosousuolist = storage0.getMyVar('nosousuolist') || [];
         if (nosousuolist.length>0){
             ssdatalist = ssdatalist.filter(it => {
