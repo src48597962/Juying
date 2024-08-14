@@ -764,7 +764,7 @@ function getSsData(name, jkdata, page) {
     }
 
     let lists = [];
-    /*
+    
     let gethtml = "";
     try {
         if (/v1|app|iptv|v2|cms|hipy_/.test(api_type)) {
@@ -819,6 +819,7 @@ function getSsData(name, jkdata, page) {
                 json = JSON.parse(getHtmlCode(ssurl, headers));
                 lists = json.data || [];
             }
+            /*
             lists = lists.map(list => {
                 let vodname = list.vod_name || list.title;
                 let vodpic = list.vod_pic || list.pic || "";
@@ -833,7 +834,9 @@ function getSsData(name, jkdata, page) {
                     content: vodcontent
                 }
             })
-        } else {
+            */
+        }
+        /* else {
             if (api_type == "XPath") {
                 if (extdata.scVodNode == "json:list") {
                     gethtml = getHtmlCode(ssurl, headers);
@@ -940,13 +943,12 @@ function getSsData(name, jkdata, page) {
                     }
                 }
             }
-        }
+        }*/
     } catch (e) {
         log(jkdata.name + ' 搜索数据报错>' + e.message + " 错误行#" + e.lineNumber);
     }
-    */
+    
     let searchs = [];
-    /*
     if (lists.length > 0) {
         try {
             lists.forEach((list) => {
@@ -974,7 +976,7 @@ function getSsData(name, jkdata, page) {
             log(jkdata.name + ' 输出结果报错>' + e.message + " 错误行#" + e.lineNumber);
         }
     }
-    */
+    
     return searchs;
 }
 
