@@ -764,6 +764,7 @@ function getSsData(name, jkdata, page) {
     }
 
     let lists = [];
+    /*
     let gethtml = "";
     try {
         if (/v1|app|iptv|v2|cms|hipy_/.test(api_type)) {
@@ -874,14 +875,7 @@ function getSsData(name, jkdata, page) {
                 } else {
                     let sstype = ssurl.indexOf(';post') > -1 ? "post" : "get";
                     if (sstype == "post") {
-                        /*
-                        let ssstr = ssurl.replace(';post','').split('?');
-                        var postcs = ssstr[ssstr.length-1];
-                        if(ssstr.length>2){
-                            ssstr.length = ssstr.length-1;
-                        }
-                        var gethtml = request(ssurl, { headers: headers, timeout:timeout, method: 'POST', body: postcs  });
-                    */
+
                     } else {
                         gethtml = getHtmlCode(ssurl, headers);
                     }
@@ -927,40 +921,30 @@ function getSsData(name, jkdata, page) {
                     }
                 }
             }else if(api_type=="XYQ"){
-                /*
-                if (extdata["搜索后缀"]) {
+                if (postdata) {
+                    gethtml = request(ssurl, { headers: headers, timeout: timeout, method: 'POST', body: postdata });
+                } else {
                     gethtml = getHtmlCode(ssurl, headers);
-                    let html = JSON.parse(gethtml);
-                    lists = html.list || [];
-                    lists.forEach(it=>{
-                        it.id = extdata["主页url"] + extdata["搜索后缀"] + it.id + '.html';
-                    })
-                } else {*/
-                    if (postdata) {
-                        gethtml = request(ssurl, { headers: headers, timeout: timeout, method: 'POST', body: postdata });
-                    } else {
-                        gethtml = getHtmlCode(ssurl, headers);
+                }
+                let sslist = pdfa(gethtml, 	extdata["搜索列表数组规则"]);
+                for (let i = 0; i < sslist.length; i++) {
+                    let title,href,img,desc;
+                    if(extdata["搜索片单是否Jsoup写法"]=="1"||extdata["搜索片单是否Jsoup写法"]=="是"){
+                        title = pdfh(sslist[i], extdata["搜索片单标题"]);
+                        href = (extdata["搜索片单链接加前缀"]||"")+pdfh(sslist[i], extdata["搜索片单链接"])+(extdata["搜索片单链接加后缀"]||"");
+                        img = pdfh(sslist[i], extdata["搜索片单图片"]);
+                        desc = pdfh(sslist[i], extdata["搜索片单副标题"]);
                     }
-                    let sslist = pdfa(gethtml, 	extdata["搜索列表数组规则"]);
-                    for (let i = 0; i < sslist.length; i++) {
-                        let title,href,img,desc;
-                        if(extdata["搜索片单是否Jsoup写法"]=="1"||extdata["搜索片单是否Jsoup写法"]=="是"){
-                            title = pdfh(sslist[i], extdata["搜索片单标题"]);
-                            href = (extdata["搜索片单链接加前缀"]||"")+pdfh(sslist[i], extdata["搜索片单链接"])+(extdata["搜索片单链接加后缀"]||"");
-                            img = pdfh(sslist[i], extdata["搜索片单图片"]);
-                            desc = pdfh(sslist[i], extdata["搜索片单副标题"]);
-                        }
-                        if(href&&title){
-                            lists.push({ "id": href, "name": title, "pic": img, "desc": desc });
-                        }
+                    if(href&&title){
+                        lists.push({ "id": href, "name": title, "pic": img, "desc": desc });
                     }
-                //}
+                }
             }
         }
     } catch (e) {
         log(jkdata.name + ' 搜索数据报错>' + e.message + " 错误行#" + e.lineNumber);
     }
-
+    */
     let searchs = [];
     /*
     if (lists.length > 0) {
