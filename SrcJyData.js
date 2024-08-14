@@ -769,14 +769,16 @@ function getSsData(name, jkdata, page) {
     try {
         if (/v1|app|iptv|v2|cms|hipy_/.test(api_type)) {
             let json;
-            if(api_type=="hipy_t4"){
+            /*if(api_type=="hipy_t4"){
                 json = JSON.parse(getHtml(jkdata.url+"&wd="+name+"&extend="+jkdata.ext+"&quick=false", headers));
             }else if(api_type=="hipy_t3"){
                 let drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(jkdata);
                 json = JSON.parse(drpy.search(name, 0, page));
                 noerji = drpy.getRule("二级")=="*"?1:0;
             }else{
+                */
                 gethtml = getHtmlCode(ssurl, headers);
+                /*
                 if (/cms/.test(api_type)) {
                     if (gethtml && gethtml.indexOf(name) == -1) {
                         gethtml = getHtmlCode(ssurl.replace('videolist', 'list'), headers);
@@ -806,20 +808,21 @@ function getSsData(name, jkdata, page) {
                 } else {
                     json = JSON.parse(gethtml.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, ''));
                 }
-            }
-
+                */
+            //}
+            /*
             try {
                 lists = eval(listnode) || json.list || json.data.list || json.data || [];
             } catch (e) {
                 //lists = json.list || json.data.list || json.data || [];
             }
-
+            
             if (lists.length == 0 && api_type == "iptv") {
                 ssurl = ssurl.replace('&zm=' + name, '');
                 json = JSON.parse(getHtmlCode(ssurl, headers));
                 lists = json.data || [];
             }
-            /*
+            
             lists = lists.map(list => {
                 let vodname = list.vod_name || list.title;
                 let vodpic = list.vod_pic || list.pic || "";
