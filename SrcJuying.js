@@ -145,9 +145,29 @@ function erjisousuo(name,group,datas,num) {
         }
         
         let task = function (obj) {
-            return {result:[], success:1};
             try {
-                let lists = obj.search(obj.name, "dianboerji", obj.data);
+                //let lists = obj.search(obj.name, "dianboerji", obj.data);
+                let lists = getSsData(obj.name, obj.data, 1).map(it => {
+                    let extra = {
+                        cls: "Juloadlist grouploadlist",
+                        url: it.vod_url,
+                        pic: it.vod_pic,
+                        data: obj.data
+                    }
+                    return {
+                        title: it.vod_desc||"正片",
+                        desc: obj.data.name,
+                        pic_url: it.vod_pic,
+                        url: "hiker://empty##"+ it.vod_url + $("#noLoading#").lazyRule((extra) => {
+                            delete extra['cls'];
+                            storage0.putMyVar('二级附加临时对象', extra);
+                            refreshPage(false);
+                            return "toast://已切换源：" + extra.data.name;
+                        }, extra),
+                        col_type: 'avatar',
+                        extra: extra
+                    }
+                })
                 return {result:lists, success:1};
             } catch (e) {
                 log(obj.data.name + '>搜索失败>' + e.message);
