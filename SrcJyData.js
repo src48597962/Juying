@@ -778,7 +778,7 @@ function getSsData(name, jkdata, page) {
             }else{
                 */
                 gethtml = getHtmlCode(ssurl, headers);
-                /*
+                
                 if (/cms/.test(api_type)) {
                     if (gethtml && gethtml.indexOf(name) == -1) {
                         gethtml = getHtmlCode(ssurl.replace('videolist', 'list'), headers);
@@ -798,7 +798,7 @@ function getSsData(name, jkdata, page) {
                     } else {
                         json = JSON.parse(gethtml);
                     }
-                } else if (!/{|}/.test(gethtml) && gethtml != "") {
+                }/* else if (!/{|}/.test(gethtml) && gethtml != "") {
                     let decfile = globalMap0.getMyVar('gmParams').datapath + "appdec.js";
                     let Juyingdec = fetch(decfile);
                     if (Juyingdec != "") {
