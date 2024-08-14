@@ -779,11 +779,14 @@ function getSsData(name, jkdata, page) {
                 */
                 gethtml = getHtmlCode(ssurl, headers);
                 
-                if (/cms/.test(api_type)) {
+                if (api_type=="cms") {
+                    /*
                     if (gethtml && gethtml.indexOf(name) == -1) {
                         gethtml = getHtmlCode(ssurl.replace('videolist', 'list'), headers);
                     }
+                    */
                     if (/<\?xml/.test(gethtml)) {
+                        /*
                         gethtml = gethtml.replace(/&lt;!\[CDATA\[|\]\]&gt;|<!\[CDATA\[|\]\]>/g, '');
                         let xmllist = [];
                         let videos = pdfa(gethtml, 'list&&video');
@@ -795,6 +798,7 @@ function getSsData(name, jkdata, page) {
                             xmllist.push({ "vod_id": id, "vod_name": name, "vod_remarks": note, "vod_pic": pic })
                         }
                         json = { "list": xmllist };
+                        */
                     } else {
                         json = JSON.parse(gethtml);
                     }
