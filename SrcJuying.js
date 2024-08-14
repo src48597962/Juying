@@ -147,6 +147,7 @@ function erjisousuo(name,group,datas,num) {
         let task = function (obj) {
             try {
                 //let lists = obj.search(obj.name, "dianboerji", obj.data);
+                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
                 let lists = getSsData(obj.name, obj.data, 1).map(it => {
                     let extra = {
                         cls: "Juloadlist grouploadlist",
@@ -156,7 +157,7 @@ function erjisousuo(name,group,datas,num) {
                     }
                     return {
                         title: it.vod_desc||"正片",
-                        desc: obj.data.name,
+                        desc: extra.data.name,
                         pic_url: it.vod_pic,
                         url: "hiker://empty##"+ it.vod_url + $("#noLoading#").lazyRule((extra) => {
                             delete extra['cls'];
