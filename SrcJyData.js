@@ -800,7 +800,7 @@ function getSsData(name, jkdata, page) {
                         json = { "list": xmllist };
                         */
                     } else {
-                        json = JSON.parse(gethtml);
+                        //json = JSON.parse(gethtml);
                     }
                 }/* else if (!/{|}/.test(gethtml) && gethtml != "") {
                     let decfile = globalMap0.getMyVar('gmParams').datapath + "appdec.js";
