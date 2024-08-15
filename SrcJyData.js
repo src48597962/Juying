@@ -1446,7 +1446,7 @@ function setLastChapter(url,jkdata) {
             }
         }catch(e){
         }
-        setResult('更新至：' + list[list.length-1].split('$')[0]);
+        setResult(jkdata.name + ' | ' + list[list.length-1].split('$')[0]);
     }
 }
 // 获取网页源码
