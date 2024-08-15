@@ -721,7 +721,7 @@ function getSsData(name, jkdata, page) {
         log('api类型错误');
         return [];
     }
-    return [];
+    
     function getHtmlCode(ssurl, headers) {
         let html = request(ssurl, { headers: headers, timeout: timeout });
         try {
@@ -765,7 +765,7 @@ function getSsData(name, jkdata, page) {
     }
 
     let lists = [];
-    
+    return [];
     let gethtml = "";
     try {
         if (/v1|app|iptv|v2|cms|hipy_/.test(api_type)) {
