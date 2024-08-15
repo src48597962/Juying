@@ -147,7 +147,7 @@ function erjisousuo(name,group,datas,num) {
         let task = function (obj) {
             try {
                 //let lists = obj.search(obj.name, "dianboerji", obj.data);
-                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
+
                 let lists = getSsData(obj.name, obj.data, 1);
                 return {result:[], success:0};
                 return {result:lists, success:1};
@@ -169,6 +169,7 @@ function erjisousuo(name,group,datas,num) {
         if (list.length > 0) {
             be(list, {
                 func: function (obj, id, error, taskResult) {
+                    /*
                     beidlist.push(id);
 
                     if(getMyVar("SrcJu_停止搜索线程")=="1"){
@@ -192,12 +193,13 @@ function erjisousuo(name,group,datas,num) {
                         nosousuolist.push(id);
                         storage0.putMyVar('nosousuolist', nosousuolist);
                     }
+                    */
                 },
                 param: {
                 }
             });
             hideLoading();
-
+            /*
             if(beidlist.length<ssdatalist.length){
                 let pdatalist = ssdatalist.filter(v=>beidlist.indexOf(v.url)==-1);
                 addItemBefore(updateItemid, {
@@ -221,6 +223,7 @@ function erjisousuo(name,group,datas,num) {
                 storage0.putMyVar('SrcJu_searchMark', searchMark);
                 setJkSort(failsort);
             }
+            */
             clearMyVar("SrcJu_停止搜索线程");
             let sousuosm = "‘‘’’<small><font color=#f13b66a>" + success + "</font>/" + (num || list.length) + "，搜索完成</small>";
             updateItem(updateItemid, { title: sousuosm });
