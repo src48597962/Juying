@@ -106,6 +106,7 @@ function sousuo() {
 //二级切源搜索
 function erjisousuo(name,group,datas,num) {
     let updateItemid = group + "_" +name + "_loading";
+    /*
     let searchMark = storage0.getMyVar('SrcJu_searchMark') || {};//二级换源缓存
     let markId = group+'_'+name;
     if(!datas && searchMark[markId]){
@@ -129,6 +130,7 @@ function erjisousuo(name,group,datas,num) {
         if (i > 10) { delete searchMark[one]; }
         hideLoading();
     }else{
+        */
         showLoading('搜源中，请稍后...');
         
         updateItem(updateItemid, {
@@ -136,17 +138,17 @@ function erjisousuo(name,group,datas,num) {
         });
         
         let ssdatalist = datas || getSearchLists(group);
-        
+        /*
         let nosousuolist = storage0.getMyVar('nosousuolist') || [];
         if (nosousuolist.length>0){
             ssdatalist = ssdatalist.filter(it => {
                 return nosousuolist.indexOf(it.url) == -1;
             })
         }
-        
+        */
         let task = function (obj) {
             try {
-                let lists = obj.search(obj.name, "dianboerji", obj.data);
+                let lists = getSsData(obj.name, obj.data, 1);//obj.search(obj.name, "dianboerji", obj.data);
                 return {result:lists, success:1};
             } catch (e) {
                 log(obj.data.name + '>搜索失败>' + e.message);
@@ -156,7 +158,7 @@ function erjisousuo(name,group,datas,num) {
         let list = ssdatalist.map((item) => {
             return {
                 func: task,
-                param: {"data":item,"name":name,"search":search},
+                param: {"data":item,"name":name},//,"search":search
                 id: item.url
             }
         });
@@ -230,7 +232,7 @@ function erjisousuo(name,group,datas,num) {
             updateItem(updateItemid, { title: '' });
             toast("无接口");
         }
-    }
+    //}
 }
 
 // 点播二级
