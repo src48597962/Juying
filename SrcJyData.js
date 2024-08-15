@@ -646,8 +646,6 @@ function getYiData(jkdata) {
 }
 // 获取搜索数据
 function getSsData(name, jkdata, page) {
-    return [];
-    log("不执行搜索");
     name = name.replace(/全集.*|国语.*|粤语.*/g, '');
     let api_name = jkdata.name || "";
     let api_type = jkdata.type || "";
@@ -723,6 +721,7 @@ function getSsData(name, jkdata, page) {
         log('api类型错误');
         return [];
     }
+    return [];
     function getHtmlCode(ssurl, headers) {
         let html = request(ssurl, { headers: headers, timeout: timeout });
         try {
