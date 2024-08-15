@@ -149,7 +149,7 @@ function erjisousuo(name,group,datas,num) {
         let task = function (obj) {
             try {
                 let lists = obj.search(obj.name, "dianboerji", obj.data);
-                return {result:[], success:1};
+                return {result:lists, success:1};
             } catch (e) {
                 log(obj.data.name + '>搜索失败>' + e.message);
                 return {result:[], success:0};
@@ -168,7 +168,6 @@ function erjisousuo(name,group,datas,num) {
         if (list.length > 0) {
             be(list, {
                 func: function (obj, id, error, taskResult) {
-                    /*
                     beidlist.push(id);
 
                     if(getMyVar("SrcJu_停止搜索线程")=="1"){
@@ -192,7 +191,6 @@ function erjisousuo(name,group,datas,num) {
                         nosousuolist.push(id);
                         storage0.putMyVar('nosousuolist', nosousuolist);
                     }
-                    */
                 },
                 param: {
                 }
