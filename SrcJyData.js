@@ -647,6 +647,7 @@ function getYiData(jkdata) {
 // 获取搜索数据
 function getSsData(name, jkdata, page) {
     return [];
+    log("不执行搜索");
     name = name.replace(/全集.*|国语.*|粤语.*/g, '');
     let api_name = jkdata.name || "";
     let api_type = jkdata.type || "";
