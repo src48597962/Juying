@@ -149,6 +149,7 @@ function erjisousuo(name,group,datas,num) {
         let task = function (obj) {
             try {
                 log(obj.name + ">开始搜索线程")
+                return {result:[], success:1};
                 //let lists = obj.search(obj.name, "dianboerji", obj.data);
                 //return {result:lists, success:1};
             } catch (e) {
@@ -159,7 +160,7 @@ function erjisousuo(name,group,datas,num) {
         let list = ssdatalist.map((item) => {
             return {
                 func: task,
-                param: {"data": item, "name": name, "search": search},
+                param: {"data": item, "name": name},//, "search": search
                 id: item.url
             }
         });
