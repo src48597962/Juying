@@ -765,7 +765,7 @@ function getSsData(name, jkdata, page) {
     }
 
     let lists = [];
-    return [];
+    
     let gethtml = "";
     try {
         if (/v1|app|iptv|v2|cms|hipy_/.test(api_type)) {
