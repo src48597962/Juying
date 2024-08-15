@@ -44,7 +44,6 @@ function search(name, sstype, jkdata) {
             }
         })
     }else if(sstype=='dianboerji'){
-        return [];
         ssdata = getSsData(name, jkdata, 1).map(it => {
             let extra = {
                 cls: "Juloadlist grouploadlist",
