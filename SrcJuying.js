@@ -146,10 +146,7 @@ function erjisousuo(name,group,datas,num) {
         
         let task = function (obj) {
             try {
-                //let lists = obj.search(obj.name, "dianboerji", obj.data);
-
-                let lists = getSsData(obj.name, obj.data, 1);
-                return {result:[], success:0};
+                let lists = obj.search(obj.name, "dianboerji", obj.data);
                 return {result:lists, success:1};
             } catch (e) {
                 log(obj.data.name + '>搜索失败>' + e.message);
