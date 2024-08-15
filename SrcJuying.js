@@ -136,7 +136,7 @@ function erjisousuo(name,group,datas,num) {
         updateItem(updateItemid, {
             title: "搜源中..."
         });
-        
+        log("获取源接口数组");
         let ssdatalist = datas || getSearchLists(group);
         /*
         let nosousuolist = storage0.getMyVar('nosousuolist') || [];
@@ -146,6 +146,7 @@ function erjisousuo(name,group,datas,num) {
             })
         }
         */
+        log("生成搜索进程列表");
         let task = function (obj) {
             try {
                 log(obj.name + ">开始搜索线程")
@@ -168,6 +169,7 @@ function erjisousuo(name,group,datas,num) {
         let beidlist = [];
         let success = 0;
         if (list.length > 0) {
+            log("be执行");
             be(list, {
                 func: function (obj, id, error, taskResult) {
                     beidlist.push(id);
@@ -198,6 +200,7 @@ function erjisousuo(name,group,datas,num) {
                 }
             });
             hideLoading();
+            log("执行完成");
             /*
             if(beidlist.length<ssdatalist.length){
                 let pdatalist = ssdatalist.filter(v=>beidlist.indexOf(v.url)==-1);
