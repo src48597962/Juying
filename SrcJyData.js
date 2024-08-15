@@ -781,7 +781,8 @@ function getSsData(name, jkdata, page) {
             }else{
                 */
                 gethtml = getHtmlCode(ssurl, headers);
-                json = JSON.parse(gethtml);
+                log(gethtml.length);
+                //json = JSON.parse(gethtml);
                 /*
                 if (api_type=="cms") {
                     
