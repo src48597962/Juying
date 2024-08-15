@@ -778,15 +778,16 @@ function getSsData(name, jkdata, page) {
             }else{
                 */
                 gethtml = getHtmlCode(ssurl, headers);
-                
+                json = JSON.parse(gethtml);
+                /*
                 if (api_type=="cms") {
-                    /*
+                    
                     if (gethtml && gethtml.indexOf(name) == -1) {
                         gethtml = getHtmlCode(ssurl.replace('videolist', 'list'), headers);
                     }
-                    */
+                    
                     if (/<\?xml/.test(gethtml)) {
-                        /*
+                        
                         gethtml = gethtml.replace(/&lt;!\[CDATA\[|\]\]&gt;|<!\[CDATA\[|\]\]>/g, '');
                         let xmllist = [];
                         let videos = pdfa(gethtml, 'list&&video');
@@ -798,12 +799,11 @@ function getSsData(name, jkdata, page) {
                             xmllist.push({ "vod_id": id, "vod_name": name, "vod_remarks": note, "vod_pic": pic })
                         }
                         json = { "list": xmllist };
-                        */
+                        
                     } else {
-                        //json = JSON.parse(gethtml);
-                        json = dealJson(gethtml);
+                        json = JSON.parse(gethtml);
                     }
-                }/* else if (!/{|}/.test(gethtml) && gethtml != "") {
+                } else if (!/{|}/.test(gethtml) && gethtml != "") {
                     let decfile = globalMap0.getMyVar('gmParams').datapath + "appdec.js";
                     let Juyingdec = fetch(decfile);
                     if (Juyingdec != "") {
