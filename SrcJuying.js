@@ -131,10 +131,10 @@ function erjisousuo(name,group,datas,num) {
         hideLoading();
     }else{
         */
-        showLoading('搜源中，请稍后...');
+        showLoading('搜源中1，请稍后...');
         
         updateItem(updateItemid, {
-            title: "搜源中..."
+            title: "搜源中2..."
         });
         log("获取源接口数组");
         let ssdatalist = datas || getSearchLists(group);
