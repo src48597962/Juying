@@ -724,6 +724,7 @@ function getSsData(name, jkdata, page) {
     
     function getHtmlCode(ssurl, headers) {
         let html = request(ssurl, { headers: headers, timeout: timeout });
+        /*
         try {
             if (html.indexOf('cf-wrapper') != -1) {
                 html = fetchCodeByWebView(ssurl, { headers: headers, 'blockRules': ['.png', '.jpg'],checkJs: $.toString((name)=>{
@@ -761,6 +762,7 @@ function getSsData(name, jkdata, page) {
                 html = request(ssurl, { headers: headers, timeout: timeout });
             }
         } catch (e) { }
+        */
         return html;
     }
 
@@ -779,7 +781,8 @@ function getSsData(name, jkdata, page) {
             }else{
                 */
                 gethtml = getHtmlCode(ssurl, headers);
-                
+                json = JSON.parse(gethtml);
+                /*
                 if (api_type=="cms") {
                     
                     if (gethtml && gethtml.indexOf(name) == -1) {
@@ -812,7 +815,7 @@ function getSsData(name, jkdata, page) {
                 } else {
                     json = JSON.parse(gethtml.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, ''));
                 }
-                
+                */
             //}
             /*
             try {
