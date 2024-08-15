@@ -779,7 +779,7 @@ function getSsData(name, jkdata, page) {
             }else{
                 */
                 gethtml = getHtmlCode(ssurl, headers);
-                /*
+                
                 if (api_type=="cms") {
                     
                     if (gethtml && gethtml.indexOf(name) == -1) {
@@ -799,7 +799,6 @@ function getSsData(name, jkdata, page) {
                             xmllist.push({ "vod_id": id, "vod_name": name, "vod_remarks": note, "vod_pic": pic })
                         }
                         json = { "list": xmllist };
-                        
                     } else {
                         json = JSON.parse(gethtml);
                     }
@@ -813,7 +812,7 @@ function getSsData(name, jkdata, page) {
                 } else {
                     json = JSON.parse(gethtml.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, ''));
                 }
-                */
+                
             //}
             /*
             try {
