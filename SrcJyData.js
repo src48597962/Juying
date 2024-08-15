@@ -777,7 +777,7 @@ function getSsData(name, jkdata, page) {
                 noerji = drpy.getRule("二级")=="*"?1:0;
             }else{
                 */
-                gethtml = getHtmlCode(ssurl, headers);
+                //gethtml = getHtmlCode(ssurl, headers);
                 //eval("json = " + gethtml);
                 /*
                 if (api_type=="cms") {
