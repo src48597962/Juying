@@ -149,7 +149,7 @@ function erjisousuo(name,group,datas,num) {
         let task = function (obj) {
             try {
                 let lists = obj.search(obj.name, "dianboerji", obj.data);
-                return {result:[], success:1};
+                return {result:[], success:0};
             } catch (e) {
                 log(obj.data.name + '>搜索失败>' + e.message);
                 return {result:[], success:0};
