@@ -106,7 +106,6 @@ function sousuo() {
 //二级切源搜索
 function erjisousuo(name,group,datas,num) {
     let updateItemid = group + "_" +name + "_loading";
-    /*
     let searchMark = storage0.getMyVar('SrcJu_searchMark') || {};//二级换源缓存
     let markId = group+'_'+name;
     if(!datas && searchMark[markId]){
@@ -130,13 +129,11 @@ function erjisousuo(name,group,datas,num) {
         if (i > 10) { delete searchMark[one]; }
         hideLoading();
     }else{
-        */
-        showLoading('搜源中1，请稍后...');
-        
+        showLoading('搜源中，请稍后...');
         updateItem(updateItemid, {
-            title: "搜源中2..."
+            title: "搜源中..."
         });
-        log("获取源接口数组");
+
         let ssdatalist = datas || getSearchLists(group);
         /*
         let nosousuolist = storage0.getMyVar('nosousuolist') || [];
@@ -235,7 +232,7 @@ function erjisousuo(name,group,datas,num) {
             updateItem(updateItemid, { title: '' });
             toast("无接口");
         }
-    //}
+    }
 }
 
 // 点播二级
