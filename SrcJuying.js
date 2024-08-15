@@ -126,7 +126,7 @@ function erjisousuo(name,group,datas,num) {
             i++;
             if (i == 1) { one = k }
         }
-        if (i > 10) { delete searchMark[one]; }
+        if (i > 30) { delete searchMark[one]; }
         hideLoading();
     }else{
         showLoading('搜源中，请稍后...');
@@ -135,21 +135,17 @@ function erjisousuo(name,group,datas,num) {
         });
 
         let ssdatalist = datas || getSearchLists(group);
-        /*
         let nosousuolist = storage0.getMyVar('nosousuolist') || [];
         if (nosousuolist.length>0){
             ssdatalist = ssdatalist.filter(it => {
                 return nosousuolist.indexOf(it.url) == -1;
             })
         }
-        */
-        log("生成搜索进程列表");
+
         let task = function (obj) {
             try {
-                log(obj.name + ">开始搜索线程")
-                return {result:[], success:1};
-                //let lists = obj.search(obj.name, "dianboerji", obj.data);
-                //return {result:lists, success:1};
+                let lists = obj.fun(obj.name, "dianboerji", obj.data);
+                return {result:lists, success:1};
             } catch (e) {
                 log(obj.data.name + '>搜索失败>' + e.message);
                 return {result:[], success:0};
@@ -158,7 +154,7 @@ function erjisousuo(name,group,datas,num) {
         let list = ssdatalist.map((item) => {
             return {
                 func: task,
-                param: {"data": item, "name": name},//, "search": search
+                param: {"data":item,"name":name,"fun":search},
                 id: item.url
             }
         });
@@ -166,7 +162,6 @@ function erjisousuo(name,group,datas,num) {
         let beidlist = [];
         let success = 0;
         if (list.length > 0) {
-            log("be执行");
             be(list, {
                 func: function (obj, id, error, taskResult) {
                     beidlist.push(id);
@@ -197,8 +192,6 @@ function erjisousuo(name,group,datas,num) {
                 }
             });
             hideLoading();
-            log("执行完成");
-            /*
             if(beidlist.length<ssdatalist.length){
                 let pdatalist = ssdatalist.filter(v=>beidlist.indexOf(v.url)==-1);
                 addItemBefore(updateItemid, {
@@ -217,12 +210,10 @@ function erjisousuo(name,group,datas,num) {
                     }
                 });
             }
-
             if(getMyVar("SrcJu_停止搜索线程")!="1"){
                 storage0.putMyVar('SrcJu_searchMark', searchMark);
                 setJkSort(failsort);
             }
-            */
             clearMyVar("SrcJu_停止搜索线程");
             let sousuosm = "‘‘’’<small><font color=#f13b66a>" + success + "</font>/" + (num || list.length) + "，搜索完成</small>";
             updateItem(updateItemid, { title: sousuosm });
@@ -234,6 +225,7 @@ function erjisousuo(name,group,datas,num) {
         }
     }
 }
+
 
 // 点播二级
 function dianboerji() {
