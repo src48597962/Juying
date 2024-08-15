@@ -1004,59 +1004,15 @@ function getSsData2(name, jkdata, page) {
     detailurl = api_url + '?ac=videolist&ids=';
     ssurl = api_url + '?ac=videolist&wd=' + name;
     listnode = "json.list";
-    
-    function getHtmlCode(ssurl, headers) {
-        let html = request(ssurl, { headers: headers, timeout: timeout });
-        try {
-            if (html.indexOf('cf-wrapper') != -1) {
-                html = fetchCodeByWebView(ssurl, { headers: headers, 'blockRules': ['.png', '.jpg'],checkJs: $.toString((name)=>{
-                    if(document.body.innerHTML.includes(name)) {
-                        return 1;
-                    }
-                },name) });
-                //log(html);
-            }else if (html.indexOf('检测中') != -1) {
-                html = request(ssurl + '&btwaf' + html.match(/btwaf(.*?)\"/)[1], { headers: headers, timeout: timeout });
-            } else if (/页面已拦截/.test(html)) {
-                html = fetchCodeByWebView(ssurl, { headers: headers, 'blockRules': ['.png', '.jpg', '.gif', '.mp3', '.mp4'], timeout: timeout });
-                html = pdfh(html, 'body&&pre&&Text');
-            } else if (/系统安全验证/.test(html)) {
-                log(api_name + '>' + ssurl + '>页面有验证码拦截');
-                function ocr(codeurl, headers) {
-                    headers = headers || {};
-                    let img = convertBase64Image(codeurl, headers).replace('data:image/jpeg;base64,', '');
-                    let code = request('https://api.xhofe.top/ocr/b64/text', { body: img, method: 'POST', headers: { "Content-Type": "text/html" } });
-                    code = code.replace(/o/g, '0').replace(/u/g, '0').replace(/I/g, '1').replace(/l/g, '1').replace(/g/g, '9');
-                    log('识别验证码：' + code);
-                    return code;
-                }
-                let www = ssurl.split('/');
-                let home = www[0] + '//' + www[2];
-                let codeurl = home + (ssurl.indexOf('search-pg-1-wd-') > -1 ? '/inc/common/code.php?a=search' : '/index.php/verify/index.html?');
-                let cook = fetchCookie(codeurl, { headers: headers });
-                headers.Cookie = JSON.parse(cook || '[]').join(';');
-                let vcode = ocr(codeurl, headers);
-                fetch(home + (ssurl.indexOf('search-pg-1-wd-') > -1 ? '/inc/ajax.php?ac=code_check&type=search&code=' : html.match(/\/index.php.*?verify=/)[0]) + vcode, {
-                    headers: headers,
-                    method: ssurl.indexOf('search-pg-1-wd-') > -1 ? 'GET' : 'POST'
-                })
 
-                html = request(ssurl, { headers: headers, timeout: timeout });
-            }
-        } catch (e) { }
-        return html;
-    }
 
     let lists = [];
     let gethtml = "";
     try {
 
             let json;
-                gethtml = getHtmlCode(ssurl, headers);
+                gethtml = request(ssurl, { headers: headers, timeout: 5000 });
                 if (/cms/.test(api_type)) {
-                    if (gethtml && gethtml.indexOf(name) == -1) {
-                        gethtml = getHtmlCode(ssurl.replace('videolist', 'list'), headers);
-                    }
                     if (/<\?xml/.test(gethtml)) {
                         gethtml = gethtml.replace(/&lt;!\[CDATA\[|\]\]&gt;|<!\[CDATA\[|\]\]>/g, '');
                         let xmllist = [];
@@ -1071,13 +1027,6 @@ function getSsData2(name, jkdata, page) {
                         json = { "list": xmllist };
                     } else {
                         json = JSON.parse(gethtml);
-                    }
-                } else if (!/{|}/.test(gethtml) && gethtml != "") {
-                    let decfile = globalMap0.getMyVar('gmParams').datapath + "appdec.js";
-                    let Juyingdec = fetch(decfile);
-                    if (Juyingdec != "") {
-                        eval(Juyingdec);
-                        json = JSON.parse(xgdec(gethtml));
                     }
                 } else {
                     json = JSON.parse(gethtml.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, ''));
