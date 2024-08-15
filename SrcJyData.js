@@ -646,6 +646,7 @@ function getYiData(jkdata) {
 }
 // 获取搜索数据
 function getSsData(name, jkdata, page) {
+    return [];
     name = name.replace(/全集.*|国语.*|粤语.*/g, '');
     let api_name = jkdata.name || "";
     let api_type = jkdata.type || "";
@@ -777,8 +778,7 @@ function getSsData(name, jkdata, page) {
                 noerji = drpy.getRule("二级")=="*"?1:0;
             }else{
                 */
-                //gethtml = getHtmlCode(ssurl, headers);
-                //eval("json = " + gethtml);
+                gethtml = getHtmlCode(ssurl, headers);
                 /*
                 if (api_type=="cms") {
                     
