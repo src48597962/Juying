@@ -646,7 +646,6 @@ function getYiData(jkdata) {
 }
 // 获取搜索数据
 function getSsData(name, jkdata, page) {
-    log("进搜索");
     name = name.replace(/全集.*|国语.*|粤语.*/g, '');
     let api_name = jkdata.name || "";
     let api_type = jkdata.type || "";
@@ -722,10 +721,8 @@ function getSsData(name, jkdata, page) {
         log('api类型错误');
         return [];
     }
-    
     function getHtmlCode(ssurl, headers) {
         let html = request(ssurl, { headers: headers, timeout: timeout });
-        /*
         try {
             if (html.indexOf('cf-wrapper') != -1) {
                 html = fetchCodeByWebView(ssurl, { headers: headers, 'blockRules': ['.png', '.jpg'],checkJs: $.toString((name)=>{
@@ -763,36 +760,27 @@ function getSsData(name, jkdata, page) {
                 html = request(ssurl, { headers: headers, timeout: timeout });
             }
         } catch (e) { }
-        */
         return html;
     }
 
     let lists = [];
-    
     let gethtml = "";
     try {
         if (/v1|app|iptv|v2|cms|hipy_/.test(api_type)) {
             let json;
-            /*if(api_type=="hipy_t4"){
+            if(api_type=="hipy_t4"){
                 json = JSON.parse(getHtml(jkdata.url+"&wd="+name+"&extend="+jkdata.ext+"&quick=false", headers));
             }else if(api_type=="hipy_t3"){
                 let drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(jkdata);
                 json = JSON.parse(drpy.search(name, 0, page));
                 noerji = drpy.getRule("二级")=="*"?1:0;
             }else{
-                */
                 gethtml = getHtmlCode(ssurl, headers);
-                log(gethtml.length);
-                //json = JSON.parse(gethtml);
-                /*
-                if (api_type=="cms") {
-                    
+                if (/cms/.test(api_type)) {
                     if (gethtml && gethtml.indexOf(name) == -1) {
                         gethtml = getHtmlCode(ssurl.replace('videolist', 'list'), headers);
                     }
-                    
                     if (/<\?xml/.test(gethtml)) {
-                        
                         gethtml = gethtml.replace(/&lt;!\[CDATA\[|\]\]&gt;|<!\[CDATA\[|\]\]>/g, '');
                         let xmllist = [];
                         let videos = pdfa(gethtml, 'list&&video');
@@ -817,21 +805,19 @@ function getSsData(name, jkdata, page) {
                 } else {
                     json = JSON.parse(gethtml.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, ''));
                 }
-                */
-            //}
-            /*
+            }
+
             try {
                 lists = eval(listnode) || json.list || json.data.list || json.data || [];
             } catch (e) {
                 //lists = json.list || json.data.list || json.data || [];
             }
-            
+
             if (lists.length == 0 && api_type == "iptv") {
                 ssurl = ssurl.replace('&zm=' + name, '');
                 json = JSON.parse(getHtmlCode(ssurl, headers));
                 lists = json.data || [];
             }
-            
             lists = lists.map(list => {
                 let vodname = list.vod_name || list.title;
                 let vodpic = list.vod_pic || list.pic || "";
@@ -846,9 +832,7 @@ function getSsData(name, jkdata, page) {
                     content: vodcontent
                 }
             })
-            */
-        }
-        /* else {
+        } else {
             if (api_type == "XPath") {
                 if (extdata.scVodNode == "json:list") {
                     gethtml = getHtmlCode(ssurl, headers);
@@ -890,7 +874,14 @@ function getSsData(name, jkdata, page) {
                 } else {
                     let sstype = ssurl.indexOf(';post') > -1 ? "post" : "get";
                     if (sstype == "post") {
-
+                        /*
+                        let ssstr = ssurl.replace(';post','').split('?');
+                        var postcs = ssstr[ssstr.length-1];
+                        if(ssstr.length>2){
+                            ssstr.length = ssstr.length-1;
+                        }
+                        var gethtml = request(ssurl, { headers: headers, timeout:timeout, method: 'POST', body: postcs  });
+                    */
                     } else {
                         gethtml = getHtmlCode(ssurl, headers);
                     }
@@ -936,30 +927,40 @@ function getSsData(name, jkdata, page) {
                     }
                 }
             }else if(api_type=="XYQ"){
-                if (postdata) {
-                    gethtml = request(ssurl, { headers: headers, timeout: timeout, method: 'POST', body: postdata });
-                } else {
+                /*
+                if (extdata["搜索后缀"]) {
                     gethtml = getHtmlCode(ssurl, headers);
-                }
-                let sslist = pdfa(gethtml, 	extdata["搜索列表数组规则"]);
-                for (let i = 0; i < sslist.length; i++) {
-                    let title,href,img,desc;
-                    if(extdata["搜索片单是否Jsoup写法"]=="1"||extdata["搜索片单是否Jsoup写法"]=="是"){
-                        title = pdfh(sslist[i], extdata["搜索片单标题"]);
-                        href = (extdata["搜索片单链接加前缀"]||"")+pdfh(sslist[i], extdata["搜索片单链接"])+(extdata["搜索片单链接加后缀"]||"");
-                        img = pdfh(sslist[i], extdata["搜索片单图片"]);
-                        desc = pdfh(sslist[i], extdata["搜索片单副标题"]);
+                    let html = JSON.parse(gethtml);
+                    lists = html.list || [];
+                    lists.forEach(it=>{
+                        it.id = extdata["主页url"] + extdata["搜索后缀"] + it.id + '.html';
+                    })
+                } else {*/
+                    if (postdata) {
+                        gethtml = request(ssurl, { headers: headers, timeout: timeout, method: 'POST', body: postdata });
+                    } else {
+                        gethtml = getHtmlCode(ssurl, headers);
                     }
-                    if(href&&title){
-                        lists.push({ "id": href, "name": title, "pic": img, "desc": desc });
+                    let sslist = pdfa(gethtml, 	extdata["搜索列表数组规则"]);
+                    for (let i = 0; i < sslist.length; i++) {
+                        let title,href,img,desc;
+                        if(extdata["搜索片单是否Jsoup写法"]=="1"||extdata["搜索片单是否Jsoup写法"]=="是"){
+                            title = pdfh(sslist[i], extdata["搜索片单标题"]);
+                            href = (extdata["搜索片单链接加前缀"]||"")+pdfh(sslist[i], extdata["搜索片单链接"])+(extdata["搜索片单链接加后缀"]||"");
+                            img = pdfh(sslist[i], extdata["搜索片单图片"]);
+                            desc = pdfh(sslist[i], extdata["搜索片单副标题"]);
+                        }
+                        if(href&&title){
+                            lists.push({ "id": href, "name": title, "pic": img, "desc": desc });
+                        }
                     }
-                }
+                //}
             }
-        }*/
+        }
     } catch (e) {
         log(jkdata.name + ' 搜索数据报错>' + e.message + " 错误行#" + e.lineNumber);
     }
-    
+
     let searchs = [];
     if (lists.length > 0) {
         try {
@@ -988,9 +989,158 @@ function getSsData(name, jkdata, page) {
             log(jkdata.name + ' 输出结果报错>' + e.message + " 错误行#" + e.lineNumber);
         }
     }
-    
     return searchs;
 }
+function getSsData2(name, jkdata, page) {
+    name = name.replace(/全集.*|国语.*|粤语.*/g, '');
+    let api_name = jkdata.name || "";
+    let api_type = jkdata.type || "";
+    let api_url = jkdata.url || "";
+    let api_ua = jkdata.ua || "MOBILE_UA";
+    api_ua = api_ua == "MOBILE_UA" ? MOBILE_UA : api_ua == "PC_UA" ? PC_UA : api_ua;
+    let headers = { 'User-Agent': api_ua };
+
+    let vodhost, ssurl, detailurl, postdata, listnode, extdata, noerji;
+    detailurl = api_url + '?ac=videolist&ids=';
+    ssurl = api_url + '?ac=videolist&wd=' + name;
+    listnode = "json.list";
+    
+    function getHtmlCode(ssurl, headers) {
+        let html = request(ssurl, { headers: headers, timeout: timeout });
+        try {
+            if (html.indexOf('cf-wrapper') != -1) {
+                html = fetchCodeByWebView(ssurl, { headers: headers, 'blockRules': ['.png', '.jpg'],checkJs: $.toString((name)=>{
+                    if(document.body.innerHTML.includes(name)) {
+                        return 1;
+                    }
+                },name) });
+                //log(html);
+            }else if (html.indexOf('检测中') != -1) {
+                html = request(ssurl + '&btwaf' + html.match(/btwaf(.*?)\"/)[1], { headers: headers, timeout: timeout });
+            } else if (/页面已拦截/.test(html)) {
+                html = fetchCodeByWebView(ssurl, { headers: headers, 'blockRules': ['.png', '.jpg', '.gif', '.mp3', '.mp4'], timeout: timeout });
+                html = pdfh(html, 'body&&pre&&Text');
+            } else if (/系统安全验证/.test(html)) {
+                log(api_name + '>' + ssurl + '>页面有验证码拦截');
+                function ocr(codeurl, headers) {
+                    headers = headers || {};
+                    let img = convertBase64Image(codeurl, headers).replace('data:image/jpeg;base64,', '');
+                    let code = request('https://api.xhofe.top/ocr/b64/text', { body: img, method: 'POST', headers: { "Content-Type": "text/html" } });
+                    code = code.replace(/o/g, '0').replace(/u/g, '0').replace(/I/g, '1').replace(/l/g, '1').replace(/g/g, '9');
+                    log('识别验证码：' + code);
+                    return code;
+                }
+                let www = ssurl.split('/');
+                let home = www[0] + '//' + www[2];
+                let codeurl = home + (ssurl.indexOf('search-pg-1-wd-') > -1 ? '/inc/common/code.php?a=search' : '/index.php/verify/index.html?');
+                let cook = fetchCookie(codeurl, { headers: headers });
+                headers.Cookie = JSON.parse(cook || '[]').join(';');
+                let vcode = ocr(codeurl, headers);
+                fetch(home + (ssurl.indexOf('search-pg-1-wd-') > -1 ? '/inc/ajax.php?ac=code_check&type=search&code=' : html.match(/\/index.php.*?verify=/)[0]) + vcode, {
+                    headers: headers,
+                    method: ssurl.indexOf('search-pg-1-wd-') > -1 ? 'GET' : 'POST'
+                })
+
+                html = request(ssurl, { headers: headers, timeout: timeout });
+            }
+        } catch (e) { }
+        return html;
+    }
+
+    let lists = [];
+    let gethtml = "";
+    try {
+
+            let json;
+                gethtml = getHtmlCode(ssurl, headers);
+                if (/cms/.test(api_type)) {
+                    if (gethtml && gethtml.indexOf(name) == -1) {
+                        gethtml = getHtmlCode(ssurl.replace('videolist', 'list'), headers);
+                    }
+                    if (/<\?xml/.test(gethtml)) {
+                        gethtml = gethtml.replace(/&lt;!\[CDATA\[|\]\]&gt;|<!\[CDATA\[|\]\]>/g, '');
+                        let xmllist = [];
+                        let videos = pdfa(gethtml, 'list&&video');
+                        for (let i in videos) {
+                            let id = String(xpath(videos[i], `//video/id/text()`)).trim();
+                            let name = String(xpath(videos[i], `//video/name/text()`)).trim();
+                            let pic = String(xpath(videos[i], `//video/pic/text()`)).trim();
+                            let note = String(xpath(videos[i], `//video/note/text()`)).trim();
+                            xmllist.push({ "vod_id": id, "vod_name": name, "vod_remarks": note, "vod_pic": pic })
+                        }
+                        json = { "list": xmllist };
+                    } else {
+                        json = JSON.parse(gethtml);
+                    }
+                } else if (!/{|}/.test(gethtml) && gethtml != "") {
+                    let decfile = globalMap0.getMyVar('gmParams').datapath + "appdec.js";
+                    let Juyingdec = fetch(decfile);
+                    if (Juyingdec != "") {
+                        eval(Juyingdec);
+                        json = JSON.parse(xgdec(gethtml));
+                    }
+                } else {
+                    json = JSON.parse(gethtml.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, ''));
+                }
+            
+
+            try {
+                lists = eval(listnode) || json.list || json.data.list || json.data || [];
+            } catch (e) {
+                //lists = json.list || json.data.list || json.data || [];
+            }
+
+
+            lists = lists.map(list => {
+                let vodname = list.vod_name || list.title;
+                let vodpic = list.vod_pic || list.pic || "";
+                let voddesc = list.vod_remarks || list.state || "";
+                let vodurl = list.vod_id ? detailurl + list.vod_id : list.nextlink;
+                let vodcontent = list.vod_content || list.vod_blurb || "";
+                return {
+                    name: vodname,
+                    pic: vodpic,
+                    desc: voddesc,
+                    id: vodurl.split("@@")[0],
+                    content: vodcontent
+                }
+            })
+            
+    } catch (e) {
+        log(jkdata.name + ' 搜索数据报错>' + e.message + " 错误行#" + e.lineNumber);
+    }
+
+    let searchs = [];
+    if (lists.length > 0) {
+        try {
+            lists.forEach((list) => {
+                let vodpic = list.pic ? list.pic.replace(/http.*\/tu\.php\?tu=|\/img\.php\?url=| |\/tu\.php\?tu=/g, '') : getIcon("404.jpg");
+                if(!/^hiker/.test(vodpic)){
+                    if (/^\/\//.test(vodpic)) {
+                        vodpic = "https:" + vodpic;
+                    }
+                    if(!/^http/.test(vodpic) && list.id.startsWith('http')){
+                        vodpic = getHome(list.id) + vodpic;
+                    }
+                }
+                if (searchContains(list.name, name, true)) {
+                    searchs.push({
+                        vod_name: list.name.replace('立刻播放',''),
+                        vod_desc: list.desc,
+                        vod_content: list.content,
+                        vod_pic: vodpic,
+                        vod_url: list.id,
+                        vod_play: noerji?list.id:""
+                    })
+                }
+            });
+        } catch (e) {
+            log(jkdata.name + ' 输出结果报错>' + e.message + " 错误行#" + e.lineNumber);
+        }
+    }
+    return searchs;
+}
+
 
 // 获取二级数据
 function getErData(jkdata) {
