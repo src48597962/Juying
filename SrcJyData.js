@@ -991,15 +991,8 @@ function getSsData(name, jkdata, page) {
     }
     return searchs;
 }
-function getSsData2(name, jkdata, page) {
-    name = name.replace(/全集.*|国语.*|粤语.*/g, '');
-    let api_name = jkdata.name || "";
-    let api_type = jkdata.type || "";
+function getSsData2(name, jkdata) {
     let api_url = jkdata.url || "";
-    let api_ua = jkdata.ua || "MOBILE_UA";
-    api_ua = api_ua == "MOBILE_UA" ? MOBILE_UA : api_ua == "PC_UA" ? PC_UA : api_ua;
-    let headers = { 'User-Agent': api_ua };
-
     let vodhost, ssurl, detailurl, postdata, listnode, extdata, noerji;
     detailurl = api_url + '?ac=videolist&ids=';
     ssurl = api_url + '?ac=videolist&wd=' + name;
@@ -1009,36 +1002,15 @@ function getSsData2(name, jkdata, page) {
     let lists = [];
     let gethtml = "";
     try {
-
             let json;
-                gethtml = request(ssurl, { headers: headers, timeout: 5000 });
-                if (/cms/.test(api_type)) {
-                    if (/<\?xml/.test(gethtml)) {
-                        gethtml = gethtml.replace(/&lt;!\[CDATA\[|\]\]&gt;|<!\[CDATA\[|\]\]>/g, '');
-                        let xmllist = [];
-                        let videos = pdfa(gethtml, 'list&&video');
-                        for (let i in videos) {
-                            let id = String(xpath(videos[i], `//video/id/text()`)).trim();
-                            let name = String(xpath(videos[i], `//video/name/text()`)).trim();
-                            let pic = String(xpath(videos[i], `//video/pic/text()`)).trim();
-                            let note = String(xpath(videos[i], `//video/note/text()`)).trim();
-                            xmllist.push({ "vod_id": id, "vod_name": name, "vod_remarks": note, "vod_pic": pic })
-                        }
-                        json = { "list": xmllist };
-                    } else {
-                        json = JSON.parse(gethtml);
-                    }
-                } else {
-                    json = JSON.parse(gethtml.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, ''));
-                }
-            
+            gethtml = request(ssurl);
+            json = JSON.parse(gethtml);
 
             try {
-                lists = eval(listnode) || json.list || json.data.list || json.data || [];
+                lists = json.list || json.data.list || json.data || [];
             } catch (e) {
                 //lists = json.list || json.data.list || json.data || [];
             }
-
 
             lists = lists.map(list => {
                 let vodname = list.vod_name || list.title;
