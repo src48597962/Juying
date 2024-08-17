@@ -1,5 +1,5 @@
 var newVersion = {
-    "SrcJuying":"1.4",
+    "SrcJuying":"1.3",
     "hint": "提升使用体验感",
     "JYUpdateRecords": [{
         title: "2024/08/18 V1.4",
