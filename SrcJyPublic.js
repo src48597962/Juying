@@ -796,11 +796,10 @@ function getIcon(icon, nochange) {
 
 // 重定义打印日志
 let rulelog = getItem('规则日志打印','0');
-let xlog = log;
-log = function (msg) {
-    if (rulelog == "1") {
-        xlog(msg);
-    }
+if (rulelog != "1") {
+    console.log = function () {
+        return;
+    };
 }
 
 let gmParams = {
