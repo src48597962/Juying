@@ -55,7 +55,7 @@ function search(name, sstype, jkdata) {
                 title: it.vod_desc||"正片",
                 desc: jkdata.name,
                 pic_url: it.vod_pic,
-                url: "hiker://empty##"+ it.vod_url + $("#noLoading#").lazyRule((extra) => {
+                url: "hiker://empty##"+ it.vod_url + $().lazyRule((extra) => {
                     delete extra['cls'];
                     storage0.putMyVar('二级附加临时对象', extra);
                     refreshPage(false);
