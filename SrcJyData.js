@@ -1005,7 +1005,7 @@ function getSsData2(name, jkdata) {
             let json;
             gethtml = request(ssurl);
             json = JSON.parse(gethtml);
-            /*
+
             try {
                 lists = json.list || json.data.list || json.data || [];
             } catch (e) {
@@ -1026,9 +1026,8 @@ function getSsData2(name, jkdata) {
                     content: vodcontent
                 }
             })                      
-            */
     } catch (e) {
-        log(jkdata.name + ' 搜索数据报错>' + e.message + " 错误行#" + e.lineNumber);
+        log(jkdata.name + ' 搜索数据报错>' + e.message);
     }
 
     let searchs = [];
