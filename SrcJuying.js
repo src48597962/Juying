@@ -231,7 +231,6 @@ function erjisousuo(name,group,datas,num) {
 function dianboerji() {
     addListener("onClose", $.toString((getHistory) => {
         clearMyVar('二级附加临时对象');
-        putMyVar('SrcJu_停止搜索线程', '1');
         
         if(getItem('historyEnable')=='1'){
             deleteItemByCls('historylist');
