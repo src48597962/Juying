@@ -886,10 +886,10 @@ function dianboyiji() {
                             vodpic = match[1];
                         }
                         
-                        if(/^\/\//.test(vodpic)){
+                        if(vodpic.startsWith("//")){
                             vodpic = "https:" + vodpic;
                         }
-                        if(!/^http|hiker/.test(vodpic)){
+                        if(!/^http|^hiker/.test(vodpic)){
                             vodpic = getHome(list.vod_url) + '/' + vodpic;
                         }
                         let dataObj = {};
