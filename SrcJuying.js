@@ -44,7 +44,7 @@ function search(name, sstype, jkdata) {
             }
         })
     }else if(sstype=='dianboerji'){
-        ssdata = getSsData2(name, jkdata, 1).map(it => {
+        ssdata = getSsData(name, jkdata, 1).map(it => {
             let extra = {
                 cls: "Juloadlist grouploadlist",
                 url: it.vod_url,
