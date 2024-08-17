@@ -1,10 +1,12 @@
 var newVersion = {
-    "SrcJuying":"1.3",
-    "hint": "祝君帅气",
+    "SrcJuying":"1.4",
+    "hint": "提升使用体验感",
     "JYUpdateRecords": [{
-        title: "待发布 V1.4",
+        title: "2024/08/18 V1.4",
         records: [
-            "修复：点播t3源获取分类列表fl传值调整"
+            "修复：点播t3源获取分类列表fl传值调整",
+            "修复：点播二级切源be导致js效率变慢问题",
+            "优化：点播二级切源加载速度提升优化"
         ]
     },{
         title: "2024/08/10 V1.3",
