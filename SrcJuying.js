@@ -147,10 +147,7 @@ function erjisousuo(name,group,datas,num) {
                 //let lists = obj.fun(obj.name, "dianboerji", obj.data);
                 let jkdata = obj.data;
                 let api_url = jkdata.url || "";
-                let ssurl, detailurl, noerji;
-                detailurl = api_url + '?ac=videolist&ids=';
-                ssurl = api_url + '?ac=videolist&wd=' + name;
-                listnode = "json.list";
+                let ssurl = api_url + '?ac=videolist&wd=' + name;
 
                 let lists = [];
                 let gethtml = "";
@@ -164,54 +161,11 @@ function erjisousuo(name,group,datas,num) {
                         } catch (e) {
                             //lists = json.list || json.data.list || json.data || [];
                         }
-
-                        lists = lists.map(list => {
-                            let vodname = list.vod_name || list.title;
-                            let vodpic = list.vod_pic || list.pic || "";
-                            let voddesc = list.vod_remarks || list.state || "";
-                            let vodurl = list.vod_id ? detailurl + list.vod_id : list.nextlink;
-                            let vodcontent = list.vod_content || list.vod_blurb || "";
-                            return {
-                                name: vodname,
-                                pic: vodpic,
-                                desc: voddesc,
-                                id: vodurl.split("@@")[0],
-                                content: vodcontent
-                            }
-                        })                      
+                
                 } catch (e) {
                     log(jkdata.name + ' 搜索数据报错>' + e.message + " 错误行#" + e.lineNumber);
                 }
 
-                let searchs = [];
-                if (lists.length > 0) {
-                    try {
-                        lists.forEach((list) => {
-                            let vodpic = list.pic ? list.pic.replace(/http.*\/tu\.php\?tu=|\/img\.php\?url=| |\/tu\.php\?tu=/g, '') : getIcon("404.jpg");
-                            if(!/^hiker/.test(vodpic)){
-                                if (/^\/\//.test(vodpic)) {
-                                    vodpic = "https:" + vodpic;
-                                }
-                                if(!/^http/.test(vodpic) && list.id.startsWith('http')){
-                                    vodpic = getHome(list.id) + vodpic;
-                                }
-                            }
-                            if (searchContains(list.name, name, true)) {
-                                searchs.push({
-                                    vod_name: list.name.replace('立刻播放',''),
-                                    vod_desc: list.desc,
-                                    vod_content: list.content,
-                                    vod_pic: vodpic,
-                                    vod_url: list.id,
-                                    vod_play: noerji?list.id:""
-                                })
-                            }
-                        });
-                    } catch (e) {
-                        log(jkdata.name + ' 输出结果报错>' + e.message + " 错误行#" + e.lineNumber);
-                    }
-                }
-                lists = searchs;
                 return {result:lists, success:1};
             } catch (e) {
                 log(obj.data.name + '>搜索失败>' + e.message);
