@@ -1027,7 +1027,7 @@ function getSsData2(name, jkdata) {
                 }
             })                      
     } catch (e) {
-        log(jkdata.name + ' 搜索数据报错>' + e.message);
+        //log(jkdata.name + ' 搜索数据报错>' + e.message);
     }
 
     let searchs = [];
@@ -1055,7 +1055,7 @@ function getSsData2(name, jkdata) {
                 }
             });
         } catch (e) {
-            log(jkdata.name + ' 输出结果报错>' + e.message + " 错误行#" + e.lineNumber);
+            //log(jkdata.name + ' 输出结果报错>' + e.message + " 错误行#" + e.lineNumber);
         }
     }
     return searchs;
