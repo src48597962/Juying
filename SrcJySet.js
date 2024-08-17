@@ -1693,7 +1693,7 @@ function manageSet(){
         url: $("#noLoading#").lazyRule(() => {
             try{
                 eval(request(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcTmplVersion.js'))
-                let nowVersion = getItem('Version', "0.1");
+                let nowVersion = getItem('Version', getMyVar('SrcJuying-Version', '0.1').replace('-V',''));
                 let nowtime = Date.now();
                 if (parseFloat(newVersion.SrcJuying) > parseFloat(nowVersion)) {
                     confirm({
