@@ -147,28 +147,19 @@ function erjisousuo(name,group,datas,num) {
                 //let lists = obj.fun(obj.name, "dianboerji", obj.data);
                 let jkdata = obj.data;
                 let api_url = jkdata.url || "";
-                let ssurl = api_url + '?ac=videolist&wd=' + name;
+                let ssurl = api_url + '?ac=videolist&wd=' + obj.name;
 
                 let lists = [];
-                let gethtml = "";
                 try {
-                        let json;
-                        gethtml = request(ssurl);
-                        json = JSON.parse(gethtml);
-
-                        try {
-                            lists = json.list || json.data.list || json.data || [];
-                        } catch (e) {
-                            //lists = json.list || json.data.list || json.data || [];
-                        }
-                
+                    let gethtml = request(ssurl);
+                    let json = JSON.parse(gethtml);
                 } catch (e) {
-                    log(jkdata.name + ' 搜索数据报错>' + e.message + " 错误行#" + e.lineNumber);
+                    //log(jkdata.name + ' 搜索数据报错>' + e.message + " 错误行#" + e.lineNumber);
                 }
 
                 return {result:lists, success:1};
             } catch (e) {
-                log(obj.data.name + '>搜索失败>' + e.message);
+                //log(obj.data.name + '>搜索失败>' + e.message);
                 return {result:[], success:0};
             }
         }
