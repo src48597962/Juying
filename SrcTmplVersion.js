@@ -4,7 +4,8 @@ var newVersion = {
     "JYUpdateRecords": [{
         title: "待发布 V1.5",
         records: [
-            "修复：点播二级观看设置报错问题"
+            "修复：点播二级观看设置报错问题",
+            "修复：管理检测版本更新显示错误"
         ]
     },{
         title: "2024/08/17 V1.4",
