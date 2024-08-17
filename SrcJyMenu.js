@@ -1,5 +1,5 @@
 //本代码仅用于个人学习，请勿用于其他作用，下载后请24小时内删除，代码虽然是公开学习的，但请尊重作者，应留下说明
-let getIcon = globalMap0.getMyVar('gmParams').getIcon;
+require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
 //二级统一菜单
 function erjimenu(desc,name,group) {
     return [
@@ -131,7 +131,7 @@ function lookset() {
         clearMyVar('playSet');
     }));
     setPageTitle("点播二级观看设置");
-    let recordfile = globalMap0.getMyVar('gmParams').rulepath + "parse.json";//解析相关记录文件
+    let recordfile = rulepath + "parse.json";//解析相关记录文件
     let parseRecord = {};
     if(fetch(recordfile)){
         try{
