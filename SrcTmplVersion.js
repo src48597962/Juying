@@ -2,6 +2,11 @@ var newVersion = {
     "SrcJuying":"1.4",
     "hint": "提升使用体验感",
     "JYUpdateRecords": [{
+        title: "待发布 V1.5",
+        records: [
+            "修复：点播二级观看设置报错问题"
+        ]
+    },{
         title: "2024/08/17 V1.4",
         records: [
             "升级：小程序升级版本6",
