@@ -144,22 +144,10 @@ function erjisousuo(name,group,datas,num) {
 
         let task = function (obj) {
             try {
-                //let lists = obj.fun(obj.name, "dianboerji", obj.data);
-                let jkdata = obj.data;
-                let api_url = jkdata.url || "";
-                let ssurl = api_url + '?ac=videolist&wd=' + obj.name;
-
-                let lists = [];
-                try {
-                    let gethtml = request(ssurl);
-                    let json = JSON.parse(gethtml);
-                } catch (e) {
-                    //log(jkdata.name + ' 搜索数据报错>' + e.message + " 错误行#" + e.lineNumber);
-                }
-
+                let lists = obj.fun(obj.name, "dianboerji", obj.data);
                 return {result:lists, success:1};
             } catch (e) {
-                //log(obj.data.name + '>搜索失败>' + e.message);
+                log(obj.data.name + '>搜索失败>' + e.message);
                 return {result:[], success:0};
             }
         }
