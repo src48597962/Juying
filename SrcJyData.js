@@ -966,14 +966,13 @@ function getSsData(name, jkdata, page) {
         try {
             lists.forEach((list) => {
                 let vodpic = list.pic ? list.pic.replace(/http.*\/tu\.php\?tu=|\/img\.php\?url=| |\/tu\.php\?tu=/g, '') : getIcon("404.jpg");
-                if(!/^hiker/.test(vodpic)){
-                    if (/^\/\//.test(vodpic)) {
-                        vodpic = "https:" + vodpic;
-                    }
-                    if(!/^http/.test(vodpic) && list.id.startsWith('http')){
-                        vodpic = getHome(list.id) + vodpic;
-                    }
+                if(vodpic.startsWith("//")){
+                    vodpic = "https:" + vodpic;
                 }
+                if(!/^http|^hiker/.test(vodpic) && list.id.startsWith('http')){
+                    vodpic = getHome(list.id) + '/' + vodpic;
+                }
+
                 if (searchContains(list.name, name, true)) {
                     searchs.push({
                         vod_name: list.name.replace('立刻播放',''),
