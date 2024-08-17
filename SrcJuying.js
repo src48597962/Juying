@@ -195,7 +195,7 @@ function erjisousuo(name,group,datas,num) {
             if(beidlist.length<ssdatalist.length){
                 let pdatalist = ssdatalist.filter(v=>beidlist.indexOf(v.url)==-1);
                 addItemBefore(updateItemid, {
-                    title: beidlist.length+"/"+ssdatalist.length+"，点击继续",
+                    title: "剩余"+(ssdatalist.length-beidlist.length)+"，点击继续",
                     url: $("#noLoading#").lazyRule((name,group,datas,num) => {
                         deleteItem("erjisousuopage");
                         require(config.依赖);
