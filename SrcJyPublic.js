@@ -797,7 +797,7 @@ function getIcon(icon, nochange) {
 // 重定义打印日志
 let rulelog = getItem('规则日志打印','0');
 if (rulelog != "1") {
-    console.log = function () {
+    log = function () {
         return;
     };
 }
