@@ -891,7 +891,7 @@ function jiexi(data) {
                     cls: 'jxtest'
                 }
             })
-            let filepath = globalMap0.getMyVar('gmParams').datapath + "testurls.json";
+            let filepath = globalMap0.getVar('Jy_gmParams').datapath + "testurls.json";
             let datafile = fetch(filepath);
             if(datafile != ""){
                 eval("var urls=" + datafile+ ";");
@@ -943,7 +943,7 @@ function jiexi(data) {
             addItemBefore('jxline2', {
                 title: '编辑测试',
                 url: $('#noRecordHistory##noHistory#').lazyRule(()=>{
-                    return "editFile://" + globalMap0.getMyVar('gmParams').datapath + "testurls.json";
+                    return "editFile://" + globalMap0.getVar('Jy_gmParams').datapath + "testurls.json";
                 }),
                 col_type: "text_3",
                 extra:{
@@ -1216,7 +1216,7 @@ function manageSet(){
             title: '🔝 确定上传',
             url: $().lazyRule((Juconfig,cfgfile) => {
                 let text = {};
-                let datapath = globalMap0.getMyVar('gmParams').datapath;
+                let datapath = globalMap0.getVar('Jy_gmParams').datapath;
                 if(getMyVar('uploadjiekou','0')=="1"){
                     var filepath = datapath + "jiekou.json";
                     var datafile = fetch(filepath);
@@ -1257,7 +1257,7 @@ function manageSet(){
                     }
                     text['yundisk'] = datalist;
                 }
-                let textcontent = globalMap0.getMyVar('gmParams').zip(JSON.stringify(text));
+                let textcontent = globalMap0.getVar('Jy_gmParams').zip(JSON.stringify(text));
                 if(textcontent.length>=200000){
                     log('分享失败：字符数超过最大限制，请精简接口，重点减少XPath和biubiu类型'); 
                     return 'toast://分享同步失败，超过最大限制，请精简接口';
@@ -1406,7 +1406,7 @@ function manageSet(){
                             jxnum = jiexisave(jxdatalist, codedytype||1);
                         }
                         if(pastedata.live){
-                            let livefilepath = globalMap0.getMyVar('gmParams').datapath + "liveconfig.json";
+                            let livefilepath = globalMap0.getVar('Jy_gmParams').datapath + "liveconfig.json";
                             let liveconfig = pastedata.live;
                             writeFile(livefilepath, JSON.stringify(liveconfig));
                             var sm = "，直播订阅已同步"
@@ -2428,7 +2428,7 @@ function yundiskjiekou() {
                     showLoading("正在导入，请稍后...");
                     let parseurl = aesDecode('Juying2', input.split('￥')[1]);
                     let content = parsePaste(parseurl);
-                    let datalist2 = JSON.parse(globalMap0.getMyVar('gmParams').unzip(content));
+                    let datalist2 = JSON.parse(globalMap0.getVar('Jy_gmParams').unzip(content));
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                     let num = yundisksave(datalist2);
                     hideLoading();
@@ -2448,7 +2448,7 @@ function yundiskjiekou() {
     d.push({
         title: '分享',
         url: datalist.length == 0 ? "toast://云盘接口为0，无法分享" : $().lazyRule((datalist) => {
-            let pasteurl = sharePaste(globalMap0.getMyVar('gmParams').zip(JSON.stringify(datalist)), getItem("sharePaste",""));
+            let pasteurl = sharePaste(globalMap0.getVar('Jy_gmParams').zip(JSON.stringify(datalist)), getItem("sharePaste",""));
             if (pasteurl) {
                 let code = '聚影云盘￥' + aesEncode('Juying2', pasteurl) + '￥共' + datalist.length + '条';
                 copy('云口令：'+code+`@import=js:$.require("hiker://page/import?rule=聚影");`);
@@ -2490,7 +2490,7 @@ function yundiskjiekou() {
                     showLoading('分享上传中，请稍后...');
                     let oneshare = []
                     oneshare.push(data);
-                    let pasteurl = sharePaste(globalMap0.getMyVar('gmParams').zip(JSON.stringify(oneshare)), getItem("sharePaste",""));
+                    let pasteurl = sharePaste(globalMap0.getVar('Jy_gmParams').zip(JSON.stringify(oneshare)), getItem("sharePaste",""));
                     hideLoading();
                     if(pasteurl){
                         let code = '聚影云盘￥'+aesEncode('Juying2', pasteurl)+'￥'+data.name;
