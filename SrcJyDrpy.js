@@ -200,8 +200,7 @@ function getext(jkdata) {
     if(jkdata.ext && jkdata.ext.includes('?')){
         extp = '?' + jkdata.ext.split('?')[1];
     }
-    //let gmParams = GM.get('gmParams');
-    let gmParams = globalMap0.getMyVar('gmParams');
+    let gmParams = globalMap0.getVar('Jy_gmParams');
 
     if (/^hiker/.test(jkdata.url)) {
         if (!fileExist(jkdata.url)) {
