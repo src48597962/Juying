@@ -4,7 +4,8 @@ var newVersion = {
     "JYUpdateRecords": [{
         title: "bate V1.6",
         records: [
-            "修复：app、cms类型源搜索无翻页"
+            "修复：app、cms类型源搜索无翻页",
+            "优化：搜索结果内容描述显示完善"
         ]
     },{
         title: "2024/08/17 V1.5",
