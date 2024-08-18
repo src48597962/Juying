@@ -653,6 +653,7 @@ function getSsData(name, jkdata, page) {
     let api_ua = jkdata.ua || "MOBILE_UA";
     api_ua = api_ua == "MOBILE_UA" ? MOBILE_UA : api_ua == "PC_UA" ? PC_UA : api_ua;
     let headers = { 'User-Agent': api_ua };
+    page = page || MY_PAGE;
 
     let vodhost, ssurl, detailurl, postdata, listnode, extdata, noerji;
     if (api_type == "v1") {
@@ -661,23 +662,23 @@ function getSsData(name, jkdata, page) {
         let dd = date.getDate();
         let key = (mm < 10 ? "0" + mm : mm) + "" + (dd < 10 ? "0" + dd : dd);
         detailurl = api_url + '/detail?&key=' + key + '&vod_id=';
-        ssurl = api_url + '?ac=videolist&limit=10&wd=' + name + '&key=' + key;
+        ssurl = api_url + '?ac=videolist&limit=10&wd=' + name + '&key=' + key + '&page=' + page;
         listnode = "json.data.list";
     } else if (api_type == "app") {
         detailurl = api_url + 'video_detail?id=';
-        ssurl = api_url + 'search?limit=10&text=' + name;
+        ssurl = api_url + 'search?limit=10&text=' + name + '&pg=' + page;
         listnode = "json.list";
     } else if (api_type == "v2") {
         detailurl = api_url + 'video_detail?id=';
-        ssurl = api_url + 'search?limit=10&text=' + name;
+        ssurl = api_url + 'search?limit=10&text=' + name + '&pg=' + page;
         listnode = "json.data";
     } else if (api_type == "iptv") {
         detailurl = api_url + '?ac=detail&ids=';
-        ssurl = api_url + '?ac=list&zm=' + name + '&wd=' + name;
+        ssurl = api_url + '?ac=list&zm=' + name + '&wd=' + name + '&page=' + page;
         listnode = "json.data";
     } else if (api_type == "cms") {
         detailurl = api_url + '?ac=videolist&ids=';
-        ssurl = api_url + '?ac=videolist&wd=' + name;
+        ssurl = api_url + '?ac=videolist&wd=' + name + '&pg=' + page;
         listnode = "json.list";
     } else if (/XPath|biubiu|XBPQ|XYQ/.test(api_type)) {
         extdata = extDataCache(jkdata)
