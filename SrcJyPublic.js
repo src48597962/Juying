@@ -814,7 +814,7 @@ let gmParams = {
     zip: gzip.zip,
     unzip: gzip.unzip
 }
-if(!globalMap0.getMyVar('gmParams')){
+if(!globalMap0.getVar('Jy_gmParams')){
     log("写入全局对象变量gmParams");
-    globalMap0.putMyVar('gmParams', gmParams);
+    globalMap0.putVar('Jy_gmParams', gmParams);
 }
