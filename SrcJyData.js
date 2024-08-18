@@ -790,7 +790,10 @@ function getSsData(name, jkdata, page) {
                             let name = String(xpath(videos[i], `//video/name/text()`)).trim();
                             let pic = String(xpath(videos[i], `//video/pic/text()`)).trim();
                             let note = String(xpath(videos[i], `//video/note/text()`)).trim();
-                            xmllist.push({ "vod_id": id, "vod_name": name, "vod_remarks": note, "vod_pic": pic })
+                            let type = String(xpath(videos[i], `//video/type/text()`)).trim();
+                            let year = String(xpath(videos[i], `//video/year/text()`)).trim();
+                            let area = String(xpath(videos[i], `//video/area/text()`)).trim();
+                            xmllist.push({ "vod_id": id, "vod_name": name, "vod_remarks": note, "vod_pic": pic, "vod_content": type+"\n"+area+" "+year })
                         }
                         json = { "list": xmllist };
                     } else {
@@ -824,7 +827,7 @@ function getSsData(name, jkdata, page) {
                 let vodpic = list.vod_pic || list.pic || "";
                 let voddesc = list.vod_remarks || list.state || "";
                 let vodurl = list.vod_id ? detailurl + list.vod_id : list.nextlink;
-                let vodcontent = list.vod_content || list.vod_blurb || "";
+                let vodcontent = list.vod_content || list.vod_blurb || list.type_name ||"";
                 return {
                     name: vodname,
                     pic: vodpic,
