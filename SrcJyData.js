@@ -601,7 +601,7 @@ function getYiData(jkdata) {
                     }
                     json = { "list": xmllist };
                 } else if (!/{|}/.test(gethtml) && gethtml != "") {
-                    let decfile = globalMap0.getMyVar('gmParams').datapath + "appdec.js";
+                    let decfile = globalMap0.getVar('Jy_gmParams').datapath + "appdec.js";
                     let Juyingdec = fetch(decfile);
                     if (Juyingdec != "") {
                         eval(Juyingdec);
@@ -800,7 +800,7 @@ function getSsData(name, jkdata, page) {
                         json = JSON.parse(gethtml);
                     }
                 } else if (!/{|}/.test(gethtml) && gethtml != "") {
-                    let decfile = globalMap0.getMyVar('gmParams').datapath + "appdec.js";
+                    let decfile = globalMap0.getVar('Jy_gmParams').datapath + "appdec.js";
                     let Juyingdec = fetch(decfile);
                     if (Juyingdec != "") {
                         eval(Juyingdec);
