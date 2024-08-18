@@ -360,7 +360,7 @@ function dianboerji() {
                     title: lineid == i ? getHead(it,Color1,1) : getHead(it,Color2),
                     url: $("#noLoading#").lazyRule((url, nowid, newid, Marksum) => {
                         if (nowid != newid) {
-                            let markFile = globalMap0.getMyVar('gmParams').rulepath + "Mark.json";
+                            let markFile = globalMap0.getVar('Jy_gmParams').rulepath + "Mark.json";
                             let SrcMark = "";
                             try {
                                 eval('SrcMark = ' + markFile);
@@ -437,7 +437,7 @@ function dianboerji() {
                 分页s.forEach((it,i)=>{
                     分页链接.push($("#noLoading#").lazyRule((url,nowid,newid,Marksum) => {
                         if(nowid != newid){
-                            let markFile = globalMap0.getMyVar('gmParams').rulepath + "Mark.json";
+                            let markFile = globalMap0.getVar('Jy_gmParams').rulepath + "Mark.json";
                             let SrcMark = "";
                             try {
                                 eval('SrcMark = ' + markFile);
