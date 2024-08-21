@@ -710,11 +710,12 @@ function jiekou(data) {
                 }
                 
                 let urlfile = apiurl;
+                let extfile;
                 if(/XPath|biubiu|XBPQ|XYQ|hipy_t3/.test(apitype) && /^http|^file/.test(apiurl)){
-                    let extfile = apiurl;
+                    extfile = apiurl;
                     urlfile = cachepath+apitype+"_"+extfile.substr(extfile.lastIndexOf('/') + 1);
-                    if(apiext){
-                        let contnet = getContnet(apiext);
+                    if(extfile){
+                        let contnet = getContnet(extfile);
                         if(contnet){
                             writeFile(urlfile, contnet);
                         }else{
@@ -741,6 +742,8 @@ function jiekou(data) {
                         arr['ext'] = data.ext;
                     }
                     arr['oldurl'] = data.url;
+                }else if(extfile){
+                    arr['ext'] = extfile;
                 }
                 urls.push(arr);
             }else{
