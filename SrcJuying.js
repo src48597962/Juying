@@ -286,6 +286,9 @@ function dianboerji() {
     let details1 = erdata.details1 || "";
     let details2 = erdata.details2 || "";
     let pic = sextra.pic || MY_PARAMS.pic || erdata.pic;//优先一级图片
+    if(pic.includes("404.jpg") && erdata.pic){
+        pic = erdata.pic;
+    }
     let updateParams = 0;
     let d = [];
     //海报
