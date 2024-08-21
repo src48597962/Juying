@@ -622,7 +622,7 @@ function jiekou(data) {
     d.push({
         title: 'apicate',
         col_type: 'input',
-        desc: "如设置、则仅显示指定分类",
+        desc: "分类过滤，如设置仅显示指定，逗号分隔",
         extra: {
             titleVisible: false,
             defaultValue: getMyVar('apicate',''),
