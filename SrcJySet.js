@@ -1844,7 +1844,13 @@ function resource() {
         col_type: 'input',
         desc: '请输入链接地址',
         url: $.toString(() => {
+            if(MY_NAME=="海阔视界"&&getAppVersion()<5100){
+                return "toast://软件版本过低";
+            }
             return `fileSelect://`+$.toString(()=>{
+                if(!MY_PATH){
+                    return "toast://获取文件路径失败，可能没有权限";
+                }
                 putMyVar("importinput",MY_PATH);
                 refreshPage();
                 return "hiker://empty";
@@ -2136,10 +2142,14 @@ function JYshare(lx,input,data) {
         if(it.url.startsWith(datapath) && (($.type(it.ext)=="string" && it.ext.startsWith("file")) || !it.ext)){
             it.extstr = fetch(it.url) || fetch(it.ext.split("?")[0]);
             if(!it.extstr){
-                log(it.name+">剔除分享");
+                log(it.name+">未获取到数据文件，剔除分享");
                 sharelist.splice(i,1);
                 i = i - 1;
             }
+        }else if(!it.url.startsWith(datapath) && it.url.startsWith("hiker")){
+            log(it.name+">私有路径的数据文件，剔除分享");
+            sharelist.splice(i,1);
+            i = i - 1;
         }
     }
 
