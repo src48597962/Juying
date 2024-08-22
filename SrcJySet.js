@@ -579,6 +579,9 @@ function jiekou(data) {
                 return "toast://软件版本过低";
             }
             return `fileSelect://`+$.toString(()=>{
+                if(MY_PATH=="null"){
+                    return "toast://获取文件路径失败，可能没有权限";
+                }
                 putMyVar("apiurl", "file://" + MY_PATH);
                 refreshPage();
                 return "hiker://empty";
