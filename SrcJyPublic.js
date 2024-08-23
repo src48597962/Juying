@@ -78,9 +78,9 @@ function getDatas(lx, isyx) {
     }
     if (lx=="jx") {
         datalist.sort((a, b) => {
-            let asort = a.sort||0;
-            let bsort = b.sort||0;
-            return bsort - asort
+            let aa = a.sort||0;
+            let bb = b.sort||0;
+            return aa - bb;
         })
     }else if (getItem("sourceListSort") == "接口名称") {
         datalist = sortByPinyin(datalist);
