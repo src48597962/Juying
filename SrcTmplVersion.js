@@ -2,6 +2,12 @@ var newVersion = {
     "SrcJuying":"1.6",
     "hint": "提升使用体验感",
     "JYUpdateRecords": [{
+        title: "bate V1.7",
+        records: [
+            "优化：点播解析优化、hipy的ali类型",
+            "优化：点播解析管理排序优先级完善"
+        ]
+    },{
         title: "2024/08/23 V1.6",
         records: [
             "修复：app、cms类型源搜索无翻页",
