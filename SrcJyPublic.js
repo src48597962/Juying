@@ -574,6 +574,7 @@ function selectSource() {
             hint: "源关键字筛选，右边切换分组",
             title: sourceListGroup,
             onChange(s, manage) {
+                putMyVar("sourceListFilter", s);
                 tmpList = sourceList.filter(x => x.name.toLowerCase().includes(s.toLowerCase()));
                 let flist = getnames(tmpList).names;
                 manage.list.length = 0;
@@ -582,7 +583,7 @@ function selectSource() {
                 });
                 manage.change();
             },
-            defaultValue: "",
+            defaultValue: getMyVar("sourceListFilter", ""),
             click(s, manage) {
                 let groupnames = getJiekouGroups(sourceAllList);
                 let tags = getJkTags(sourceAllList);
