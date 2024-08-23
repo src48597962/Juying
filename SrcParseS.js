@@ -190,25 +190,29 @@ var SrcParseS = {
                 try{
                     eval("jxList=" + fetch(jxfile)+ ";");
                 }catch(e){}
-                jxList = jxList.filter(v => !v.stop);
-                for(let j=0;j<jxList.length;j++){
-                    jxList[j].ext = jxList[j].ext||{};
-                    let flag = jxList[j].ext.flag || [];
-                    if(flag.indexOf("iqiyi")>-1 && flag.indexOf("qiyi")==-1){
-                        flag.push("qiyi");
+
+                jxList.forEach(it=>{
+                    if(!it.stop){
+                        let ext = it.ext||{};
+                        let flag = ext.flag || [];
+                        if(flag.indexOf("iqiyi")>-1 && flag.indexOf("qiyi")==-1){
+                            flag.push("qiyi");
+                        }
+                        if(flag.length==0 || flag.indexOf(from)>-1){
+                            parselist.push({stype:'myjx',type:it.type,name:it.name,url:it.url,sort:it.sort||0,header:ext.header});
+                        }
                     }
-                    if(flag.length==0 || flag.indexOf(from)>-1){
-                        jxList[j].stype = "myjx";
-                        parselist.push(jxList[j]);
-                    }
-                }
+                })
+
                 log("可用解析数：" + parselist.length); 
             }
         }
 
         //修正排序
         parselist.sort((a, b) => {
-            return b.sort - a.sort
+            let aa = a.sort||0;
+            let bb = b.sort||0;
+            return aa - bb;
         })
         let lastparse = parseRecord.lastparse?(parseRecord.lastparse[from] || ""):"";//对应的片源上次解析
         if(lastparse){
@@ -255,7 +259,7 @@ var SrcParseS = {
                 }
                 if(playUrl){
                     log(parsename+">播放地址>"+playUrl);
-                    let f = cacheM3u8(playUrl, {header: getheader(playUrl), timeout: 2000});
+                    let f = cacheM3u8(playUrl, {header: ulist.header || getheader(playUrl), timeout: 2000});
                     return f?readFile(f.split("##")[0]):playUrl; //'#isVideo=true#';
                 }else{
                     return '';
@@ -277,7 +281,7 @@ var SrcParseS = {
                 urls: urls,
                 names: names
             };
-        }else if(parsemode==2){//强制嗅探走video
+        }else if(parsemode==2){//强制嗅探走video，没法指定header
             let dm;
             if(isVip && playSet.dmRoute==1){
                 dm = this.弹幕(vipUrl);
@@ -367,9 +371,11 @@ var SrcParseS = {
                     for(let j=0;j<jxList.length;j++){
                         if(parseurl==jxList[j].url){
                             //解析成功的,排序+1
-                            jxList[j]['sort'] = jxList[j]['sort']||0;
-                            jxList[j].sort = jxList[j].sort + 1;
-                            myJXchange = 1;
+                            let jxsort = jxList[j].sort||0;
+                            if(jxsort>0){
+                                jxList[j].sort = jxsort - 1;
+                                myJXchange = 1;
+                            }
                             break;
                         }
                     }
@@ -425,7 +431,7 @@ var SrcParseS = {
                             jxList[j]['type'] = 0;
                         }
                         jxList[j]['sort'] = jxList[j]['sort']||0;
-                        jxList[j].sort = jxList[j].sort - 1;
+                        jxList[j].sort = jxList[j].sort + 1;
                         /*
                         //解析失败的,且排序大于5次从私有中排除片源
                         failparse.push(jxList[j].name);//加入提示失败列表，仅提示
@@ -452,7 +458,7 @@ var SrcParseS = {
             //私有解析有排除片源
             if(myJXchange == 1){writeFile(jxfile, JSON.stringify(jxList));}
             //私有解析失败的统一提示
-            if(failparse.length>0&&printlog==1){log(failparse+'<以上私有解析失败，排序-1')}
+            if(failparse.length>0&&printlog==1){log(failparse+'<以上私有解析失败，降序+1')}
             //记录上次优先解析和自带解析有加入黑名单的保存                
             parseRecord['lastparse'] = parseRecord['lastparse']||{};
             parseRecord['lastparse'][from] = lastparse;
