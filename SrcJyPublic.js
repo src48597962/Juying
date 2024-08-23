@@ -76,8 +76,13 @@ function getDatas(lx, isyx) {
             }
         }
     }
-
-    if (getItem("sourceListSort") == "接口名称") {
+    if (lx=="jx") {
+        datalist.sort((a, b) => {
+            let asort = a.sort||0;
+            let bsort = b.sort||0;
+            return bsort - asort
+        })
+    }else if (getItem("sourceListSort") == "接口名称") {
         datalist = sortByPinyin(datalist);
     }else if (getItem("sourceListSort") == "使用频率") {
         let sort = {};
