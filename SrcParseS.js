@@ -82,6 +82,8 @@ var SrcParseS = {
                 }); 
             }else if(/do=quark|do=uc/.test(play.url) && /pan\.quark\.cn|drive\.uc\.cn/.test(vipUrl)){
                 play.url = vipUrl;
+            }else if(/do=ali/.test(play.url) && /alipan\.com|aliyundrive\.com/.test(vipUrl)){
+                play.url = vipUrl;
             }
             vipUrl = play.url || vipUrl;
         }
