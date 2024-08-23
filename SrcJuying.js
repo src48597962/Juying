@@ -544,7 +544,6 @@ function dianboerji() {
                         play = JSON.parse(request(dataObj.surl+'&flag='+dataObj.sname+"&extend="+dataObj.sext+'&play='+vipUrl));
                     }
                     let data = JSON.parse(play.url.replace('novel://',''));
-                    log(data);
                     let d = [];
                     d.push({
                         title: '<big>' + data.title + '</big>',
@@ -554,7 +553,7 @@ function dianboerji() {
                         }
                     });
                     d.push({
-                        title: data.content.replace(/(&nbsp;){1,}/g, '　　'),
+                        title: data.content.replace(/(&nbsp;){1,}/g, '　　').replace(/\\n/g, "<br>"),
                         col_type: "rich_text",
                         extra: {
                             textSize: 18,
