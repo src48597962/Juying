@@ -544,6 +544,7 @@ function dianboerji() {
                         play = JSON.parse(request(dataObj.surl+'&flag='+dataObj.sname+"&extend="+dataObj.sext+'&play='+vipUrl));
                     }
                     let data = JSON.parse(play.url.replace('novel://',''));
+                    log(data);
                     let d = [];
                     d.push({
                         title: '<big>' + data.title + '</big>',
