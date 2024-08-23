@@ -553,7 +553,7 @@ function dianboerji() {
                         }
                     });
                     d.push({
-                        title: data.content.replace(/(&nbsp;){1,}/g, '　　').replace(/\n/g, "<p>"),
+                        title: data.content.replace(/(&nbsp;){1,}/g, '　　').replace(/\n/g, "<p>　　"),
                         col_type: "rich_text",
                         extra: {
                             textSize: 18,
