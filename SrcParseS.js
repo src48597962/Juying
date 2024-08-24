@@ -67,7 +67,9 @@ var SrcParseS = {
                 if(play.parse){
                     let lazy = drpy.getRule("lazy");
                     if(lazy){
-                        eval(lazy.replace(/input/g, "play"));
+                        log(lazy);
+                        return "toast://11";
+                        //eval(lazy.replace(/input/g, "play"));
                     }
                 }
             }else if(dataObj.stype=="hipy_t4"){
