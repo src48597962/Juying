@@ -515,6 +515,7 @@ function getYiData(jkdata) {
             }else if (api_type=="hipy_t3") {
                 delete fl.cateId;
                 let vodlist = JSON.parse(drpy.category(cate_id, MY_PAGE, true, fl)).list || [];
+                log(vodlist[0]);
                 vodlist.forEach(it=>{
                     vodlists.push({ "vod_url": it.vod_id.toString(), "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic, "vod_play": noerji?it.vod_id.toString():"" });
                 })
