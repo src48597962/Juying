@@ -102,7 +102,7 @@ function getYiData(jkdata) {
         classurl = rule.homeUrl || rule.host;
         listurl = rule.filter_url || rule.host;
         if(rule.二级=="*"){
-            //noerji = 1;
+            noerji = 1;
         }
         if(rule.hikerClassListCol){
             coltype = rule.hikerClassListCol;
@@ -160,6 +160,7 @@ function getYiData(jkdata) {
                             筛选 = home['filters'];
                         }
                         let homeVod = JSON.parse(drpy.homeVod()).list || [];
+                        log(homeVod[0]);
                         homeVod.forEach(it=>{
                             推荐.push({ "vod_url": it.vod_id.toString(), "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic, "vod_play":noerji?it.vod_id.toString():"" });
                         })
