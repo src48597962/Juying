@@ -102,7 +102,7 @@ function getYiData(jkdata) {
         classurl = rule.homeUrl || rule.host;
         listurl = rule.filter_url || rule.host;
         if(rule.二级=="*"){
-            noerji = 1;
+            //noerji = 1;
         }
         if(rule.hikerClassListCol){
             coltype = rule.hikerClassListCol;
