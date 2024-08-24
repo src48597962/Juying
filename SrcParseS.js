@@ -66,10 +66,11 @@ var SrcParseS = {
                 play = JSON.parse(drpy.play(dataObj.flag, vipUrl, []));
                 if(play.parse){
                     let lazy = drpy.getRule("lazy");
+                    log(play);
                     if(lazy){
-                        log(lazy.replace(/input/g, "play").replace("js:", "play"));
+                        log(lazy);
                         return "toast://11";
-                        eval(lazy.replace("js:", "play").replace(/input/g, "play"));
+                        eval(lazy.replace(/input/g, "play").replace("js:", ""));
                     }
                 }
             }else if(dataObj.stype=="hipy_t4"){
