@@ -99,6 +99,7 @@ function getYiData(jkdata) {
 
         var drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(jkdata);
         let rule = drpy.getRule();
+        log(rule);
         classurl = rule.homeUrl || rule.host;
         listurl = rule.filter_url || rule.host;
         if(rule.二级=="*"){
