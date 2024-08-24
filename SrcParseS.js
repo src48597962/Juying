@@ -67,8 +67,8 @@ var SrcParseS = {
                 if(play.parse){
                     let lazy = drpy.getRule("lazy");
                     if(lazy){
-                        //log(lazy.replace(/input/g, "play").replace("js:", "play"));
-                        //return "toast://11";
+                        log(lazy.replace(/input/g, "play").replace("js:", "play"));
+                        return "toast://11";
                         eval(lazy.replace("js:", "play").replace(/input/g, "play"));
                     }
                 }
