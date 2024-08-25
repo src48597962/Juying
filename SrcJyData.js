@@ -99,7 +99,7 @@ function getYiData(jkdata) {
 
         var drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(jkdata);
         let rule = drpy.getRule();
-        log(rule);
+        detailurl = rule.detailUrl;
         classurl = rule.homeUrl || rule.host;
         listurl = rule.filter_url || rule.host;
         if(rule.二级=="*"){
@@ -161,9 +161,18 @@ function getYiData(jkdata) {
                             筛选 = home['filters'];
                         }
                         let homeVod = JSON.parse(drpy.homeVod()).list || [];
-                        log(homeVod[0]);
                         homeVod.forEach(it=>{
-                            推荐.push({ "vod_url": it.vod_id.toString(), "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic, "vod_play":noerji?it.vod_id.toString():"" });
+                            let vodid = it.vod_id.toString().split("@@")[0].trim();
+                            if(detailurl && noerji && !vodid.startsWith("http")){
+                                let fyclass = "";
+                                let fyid = vodid;
+                                if(vodid.includes("$")){
+                                    fyclass = vodid.split("$")[0];
+                                    fyid = vodid.split("$")[1];
+                                }
+                                vodid = detailurl.replace(/fyclass/g, fyclass).replace(/fyid/g, fyid);
+                            }
+                            推荐.push({ "vod_url": it.vod_id.toString(), "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic, "vod_play":noerji?vodid:"" });
                         })
                     } else if (api_type == "XYQ") {
                         if (extdata['是否开启获取首页数据'] && extdata['首页列表数组规则']) {
@@ -516,9 +525,18 @@ function getYiData(jkdata) {
             }else if (api_type=="hipy_t3") {
                 delete fl.cateId;
                 let vodlist = JSON.parse(drpy.category(cate_id, MY_PAGE, true, fl)).list || [];
-                log(vodlist[0]);
                 vodlist.forEach(it=>{
-                    vodlists.push({ "vod_url": it.vod_id.toString(), "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic, "vod_play": noerji?it.vod_id.toString():"" });
+                    let vodid = it.vod_id.toString().split("@@")[0].trim();
+                    if(detailurl && noerji && !vodid.startsWith("http")){
+                        let fyclass = "";
+                        let fyid = vodid;
+                        if(vodid.includes("$")){
+                            fyclass = vodid.split("$")[0];
+                            fyid = vodid.split("$")[1];
+                        }
+                        vodid = detailurl.replace(/fyclass/g, fyclass).replace(/fyid/g, fyid);
+                    }
+                    vodlists.push({ "vod_url": it.vod_id.toString(), "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic, "vod_play": noerji?vodid:"" });
                 })
             }else if (api_type == "XYQ") {
                 let gethtml = getHtml(MY_URL, headers);
