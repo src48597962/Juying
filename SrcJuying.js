@@ -887,10 +887,6 @@ function dianboyiji() {
                             dataObj.sname = jkdata.name;
                             dataObj.surl = jkdata.url.startsWith('hiker://')?getPath(jkdata.url):jkdata.url;
                             dataObj.sext = jkdata.ext;
-                            list.vod_url = list.vod_url.split('@@')[0];
-                            if(list.vod_play){
-                                list.vod_play = list.vod_play.split('@@')[0];
-                            }
                         }
                         d.push({
                             title: vodname,
