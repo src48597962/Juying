@@ -310,9 +310,9 @@ function SRCSet() {
                     }
                     return $("确定要重置"+duoselect.length+"个解析的排序？").confirm((duoselect)=>{
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
-                        dataHandle('jx', duoselect, '重置排序');
+                        let sm = dataHandle('jx', duoselect, '重置排序');
                         refreshPage(false);
-                        return 'toast://已处理';
+                        return 'toast://' + sm;
                     },duoselect)
                 }),
                 col_type: 'scroll_button'
@@ -366,7 +366,7 @@ function SRCSet() {
                     return 'toast://' + sm;
                 } else if (input == "优选" ) {
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
-                    let sm = preferrEnable(data);
+                    let sm = dataHandle('jk', data, '接口优选');
                     refreshPage(false);
                     return 'toast://' + sm;
                 }
