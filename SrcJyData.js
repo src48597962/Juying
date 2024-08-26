@@ -99,7 +99,7 @@ function getYiData(jkdata) {
 
         var drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(jkdata);
         let rule = drpy.getRule();
-        detailurl = rule.detailUrl;
+        detailurl = rule.detailUrl || "";
         classurl = rule.homeUrl || rule.host;
         listurl = rule.filter_url || rule.host;
         if(rule.二级=="*"){
@@ -162,17 +162,17 @@ function getYiData(jkdata) {
                         }
                         let homeVod = JSON.parse(drpy.homeVod()).list || [];
                         homeVod.forEach(it=>{
-                            let vodid = it.vod_id.toString().split("@@")[0].trim();
-                            if(detailurl && noerji && !vodid.startsWith("http")){
+                            let playUrl = it.vod_id.toString().split("@@")[0].trim();
+                            if(detailurl && noerji && !playUrl.startsWith("http")){
                                 let fyclass = "";
-                                let fyid = vodid;
-                                if(vodid.includes("$")){
-                                    fyclass = vodid.split("$")[0];
-                                    fyid = vodid.split("$")[1];
+                                let fyid = playUrl;
+                                if(playUrl.includes("$")){
+                                    fyclass = playUrl.split("$")[0];
+                                    fyid = playUrl.split("$")[1];
                                 }
-                                vodid = detailurl.replace(/fyclass/g, fyclass).replace(/fyid/g, fyid);
+                                playUrl = detailurl.replace(/fyclass/g, fyclass).replace(/fyid/g, fyid);
                             }
-                            推荐.push({ "vod_url": it.vod_id.toString(), "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic, "vod_play":noerji?vodid:"" });
+                            推荐.push({ "vod_url": it.vod_id.toString(), "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic, "vod_play":noerji?playUrl:"" });
                         })
                     } else if (api_type == "XYQ") {
                         if (extdata['是否开启获取首页数据'] && extdata['首页列表数组规则']) {
@@ -526,17 +526,17 @@ function getYiData(jkdata) {
                 delete fl.cateId;
                 let vodlist = JSON.parse(drpy.category(cate_id, MY_PAGE, true, fl)).list || [];
                 vodlist.forEach(it=>{
-                    let vodid = it.vod_id.toString().split("@@")[0].trim();
-                    if(detailurl && noerji && !vodid.startsWith("http")){
+                    let playUrl = it.vod_id.toString().split("@@")[0].trim();
+                    if(detailurl && noerji && !playUrl.startsWith("http")){
                         let fyclass = "";
-                        let fyid = vodid;
-                        if(vodid.includes("$")){
-                            fyclass = vodid.split("$")[0];
-                            fyid = vodid.split("$")[1];
+                        let fyid = playUrl;
+                        if(playUrl.includes("$")){
+                            fyclass = playUrl.split("$")[0];
+                            fyid = playUrl.split("$")[1];
                         }
-                        vodid = detailurl.replace(/fyclass/g, fyclass).replace(/fyid/g, fyid);
+                        playUrl = detailurl.replace(/fyclass/g, fyclass).replace(/fyid/g, fyid);
                     }
-                    vodlists.push({ "vod_url": it.vod_id.toString(), "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic, "vod_play": noerji?vodid:"" });
+                    vodlists.push({ "vod_url": it.vod_id.toString(), "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic, "vod_play": noerji?playUrl:"" });
                 })
             }else if (api_type == "XYQ") {
                 let gethtml = getHtml(MY_URL, headers);
@@ -615,7 +615,7 @@ function getYiData(jkdata) {
                         if (plays.length == 1) {
                             let play = plays[0];
                             if (play.indexOf('$') == -1 && play.indexOf('m3u8') > -1) {
-                                arr['play'] = play.trim();
+                                arr['playUrl'] = play.trim();
                             }
                         }
                         xmllist.push(arr)
@@ -641,13 +641,13 @@ function getYiData(jkdata) {
                 vodlist.forEach(it => {
                     if (api_type == 'cms' && it.vod_play_url) {
                         if (it.vod_play_url.indexOf('$') == -1 && it.vod_play_url.indexOf('m3u8') > -1) {
-                            it['play'] = it.vod_play_url;
+                            it['playUrl'] = it.vod_play_url;
                         }
                     }
                     let vodurl = it.vod_id ? detailurl + it.vod_id : it.nextlink;
                     let vodpic = it.vod_pic || it.pic || "";
                     if(vodurl){
-                        let arr = { "vod_url": vodurl, "vod_name": it.vod_name || it.title, "vod_desc": it.vod_remarks || it.state || "", "vod_pic": vodpic, "vod_play": it.play };
+                        let arr = { "vod_url": vodurl, "vod_name": it.vod_name || it.title, "vod_desc": it.vod_remarks || it.state || "", "vod_pic": vodpic, "vod_play": it.playUrl };
                         vodlists.push(arr);
                     }
                 })
@@ -676,7 +676,7 @@ function getSsData(name, jkdata, page) {
     let headers = { 'User-Agent': api_ua };
     page = page || MY_PAGE;
 
-    let vodhost, ssurl, detailurl, postdata, listnode, extdata, noerji;
+    let vodhost, ssurl, detailurl, postdata, listnode, extdata;
     if (api_type == "v1") {
         let date = new Date();
         let mm = date.getMonth() + 1;
@@ -795,7 +795,7 @@ function getSsData(name, jkdata, page) {
             }else if(api_type=="hipy_t3"){
                 let drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(jkdata);
                 json = JSON.parse(drpy.search(name, 0, page));
-                noerji = drpy.getRule("二级")=="*"?1:0;
+                //noerji = drpy.getRule("二级")=="*"?1:0;
             }else{
                 gethtml = getHtmlCode(ssurl, headers);
                 if (/cms/.test(api_type)) {
@@ -853,7 +853,7 @@ function getSsData(name, jkdata, page) {
                     name: vodname,
                     pic: vodpic,
                     desc: voddesc,
-                    id: vodurl.split("@@")[0],
+                    id: vodurl,
                     content: vodcontent
                 }
             })
@@ -1005,7 +1005,7 @@ function getSsData(name, jkdata, page) {
                         vod_content: list.content.replace(/<\/?.+?\/?>/g,''),
                         vod_pic: vodpic,
                         vod_url: list.id,
-                        vod_play: noerji?list.id:""
+                        //vod_play: noerji?list.id:""
                     })
                 }
             });
