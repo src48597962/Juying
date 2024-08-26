@@ -473,12 +473,14 @@ function dataHandle(lx, data, input) {
     
     waitlist.forEach(it => {
         let index = datalist.indexOf(datalist.filter(d => it.url==d.url)[0]);
-        if(input=="接口优选"){
+        if(lx=="jk" && input=="接口优选"){
             if(datalist[index].preferr){
                 delete datalist[index].preferr;
             }else{
                 datalist[index].preferr = 1;
             }
+        }else if(lx=="jx" && input=="重置排序"){
+            datalist[index].sort = 0;
         }
     })
     writeFile(sourcefile, JSON.stringify(datalist));
