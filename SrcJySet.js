@@ -300,6 +300,23 @@ function SRCSet() {
                 }),
                 col_type: 'scroll_button'
             })
+        }else if(guanliType=='jx'){
+            d.push({
+                title: "重置排序",
+                url: $('#noLoading#').lazyRule(() => {
+                    let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
+                    if(duoselect.length==0){
+                        return "toast://未选择";
+                    }
+                    return $("确定要重置"+duoselect.length+"个解析的排序？").confirm((duoselect)=>{
+                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                        dataHandle('jx', duoselect, '重置排序');
+                        refreshPage(false);
+                        return 'toast://已处理';
+                    },duoselect)
+                }),
+                col_type: 'scroll_button'
+            })
         }
     }
 
