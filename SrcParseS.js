@@ -636,6 +636,7 @@ var SrcParseS = {
             //let rurl = JSON.parse(html).url || JSON.parse(html).data;
             return rurl;
         }
+        let head = obj.ulist.header||{};
         function exeWebRule(webUrl, music) {
             return executeWebRule(webUrl, $.toString((music) => {
                     try{
@@ -662,6 +663,7 @@ var SrcParseS = {
                 },music), {
                     blockRules: ['.m4a','.mp3','.gif','.jpg','.jpeg','.png','.ico','hm.baidu.com','/ads/*.js','/klad/*.php','layer.css'],
                     jsLoadingInject: true,
+                    //ua: head['User-Agent'] || PC_UA,
                     checkTime: 100,
                     timeout: 12000
                 }
@@ -694,7 +696,6 @@ var SrcParseS = {
             return {url: rurl,ulist: obj.ulist}; 
         }else{
             let taskheader = {withStatusCode:true,timeout:8000};
-            let head = obj.ulist.header||{};
             if(JSON.stringify(head) != "{}"){
                 taskheader['header'] = head;
             }
@@ -789,120 +790,6 @@ var SrcParseS = {
             var header = {};
         }
         return header;
-    },
-    嗅探: function (vipUrl, excludeurl, getparse) {
-        showLoading('视频解析中，请稍候...');
-        excludeurl = excludeurl||[];
-        clearVar('Srcgetparse');
-        return (getMyVar('SrcXTNH', 'web') == 'x5' ? 'x5Rule://' : 'webRule://') + vipUrl + '@' + $.toString((formatUrl,vipUrl,excludeurl,getparse) => {
-            if (window.c == null) {
-                if (typeof (request) == 'undefined' || !request) {
-                    eval(fba.getInternalJs());
-                };
-                window.c = 0;
-            };
-            window.c++;
-            if (window.c * 250 >= 15 * 1000) {
-                fba.clearVar('Srcgetparse');
-                fba.log("嗅探失败>超过15秒未获取到");
-                fba.hideLoading();
-                try{
-                    let videourl = vipUrl.split('url=')[1];
-                    if(/^http/.test(videourl)){
-                        return videourl;
-                    }
-                }catch(e){ }
-                return "toast://解析超时，建议切换线路或更换解析方式";
-            }
-            //fba.log(fy_bridge_app.getUrls());
-            var urls = _getUrls();
-            var exclude = /\/404\.m3u8|\/xiajia\.mp4|\/余额不足\.m3u8|\.css|\.js|\.gif|\.png|\.jpg|\.jpeg|html,http|m3u88.com\/admin|\.php\?v=h|\?url=h|\?vid=h|%253Furl%253Dh|#amp=1|\.t-ui\.cn/;//设置排除地址
-            var contain = /\.mp4|\.m3u8|\.flv|\.avi|\.mpeg|\.wmv|\.mov|\.rmvb|\.dat|qqBFdownload|mime=video%2F|video_mp4|\.ts\?|TG@UosVod|video\/tos\/cn\/tos|m3u8\?pt=m3u8/;//设置符合条件的正确地址
-            for (var i in urls) {
-                if(getparse&&!fba.getVar('Srcgetparse')&&/url=h|v=h|youku|mgtv|ixigua|qq\.com|iqiyi|migu|bilibili|sohu|pptv|\.le\.|\.1905|cctv/.test(urls[i])&&!/\/bid\?|\.gif\?|ads\?|img\.php|index\/\?|cityjson/.test(urls[i])){
-                    try{
-                        fba.log(urls[i].match(/http.*?=/)[0]);
-                        fba.putVar('Srcgetparse','1');
-                    }catch(e){}
-                }
-                var tc = 1;
-                if(/cdn\.oss-cn-m3u8\.tv-nanjing-chengdu\.myqcloud\.com\.zh188.net/.test(urls[i])&&vipUrl.indexOf("=http")>-1){
-                    var html = request(urls[i],{timeout:1500})||"";
-                    if(html.indexOf("token过期了")>-1){tc = 0;}
-                }
-                if (!exclude.test(urls[i]) && contain.test(urls[i]) && excludeurl.indexOf(urls[i])==-1 && tc==1) {
-                    fba.clearVar('Srcgetparse');
-                    fba.log("嗅探成功>"+urls[i]);
-                    //return urls[i]+'#isVideo=true#';
-                    if(fy_bridge_app.getHeaderUrl&&vipUrl.indexOf("=http")==-1)
-                        return $$$("#noLoading#").lazyRule((url) => {
-                            url = base64Decode(url);
-                            if (getMyVar('SrcM3U8', '1') == "1"&&url.indexOf('.m3u8')>-1) {
-                                return cacheM3u8(url.split(";{")[0], {timeout: 2000})+"#ignoreImg=true##isVideo=true#;{"+url.split(";{")[1];
-                            }else{
-                                return url.replace(";{", "#ignoreImg=true##isVideo=true#;{");
-                            }
-                        }, fy_bridge_app.base64Encode(fy_bridge_app.getHeaderUrl(urls[i])));
-                    else {
-                        return $$$("#noLoading#").lazyRule((url, formatUrl, vipUrl) => {
-                            try{
-                                vipUrl = vipUrl.split("=")[1];
-                            }catch(e){
-                                vipUrl = "";
-                            }
-                            let dm = "";
-                            if(getItem('dmRoute', '0')=="1" && vipUrl.match(/youku|iqiyi|ixigua|migu|sohu|pptv|le|cctv|1905|mgtv|qq.com/)){
-                                try{
-                                    dm = $.require('hiker://page/dmFun?rule=dm盒子').dmRoute(vipUrl);
-                                }catch(e){}
-                            }
-                            if(dm){
-                                let playUrl = formatUrl(url);
-                                let urls = [];
-                                let headers= [{'User-Agent': 'Mozilla/5.0'}];
-                                if(playUrl.indexOf(";{")>-1){
-                                    urls.push(playUrl.split(";{")[0]);
-                                }else{
-                                    urls.push(playUrl);
-                                }
-                                return JSON.stringify({
-                                    urls: urls,
-                                    headers: headers,
-                                    danmu: dm 
-                                }); 
-                            }else{
-                                return formatUrl(url)+"#ignoreImg=true#";
-                            }
-                        }, urls[i], formatUrl, vipUrl);
-                    }
-                }
-            }
-            /*
-            try {
-                document.querySelector("#count-down").click()
-            } catch (e) {}*/
-        }, this.formatUrl, vipUrl, excludeurl, getparse)
-    },
-    聚嗅: function (vipUrl, jxlist, excludeurl) {
-        var jxhtml = config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJiexi.html';
-        fc(jxhtml, 96);
-        let libsjxjs = fetch("hiker://files/libs/" + md5(jxhtml) + ".js");
-        if (jxlist != undefined) {
-            if (jxlist.length > 0) {
-                var a = JSON.parse(libsjxjs.match(/apiArray=(.*?);/)[1]);
-                /*
-                for (var i = 0; i < jxlist.length; i++) {
-                    a.push(jxlist[i]);
-                }
-                a = uniq(a);//去重
-                */
-                a = jxlist;
-                libsjxjs = libsjxjs.replace(libsjxjs.match(/apiArray=(.*?);/)[1], JSON.stringify(a))
-            }
-        }
-        let libsjxhtml = "hiker://files/libs/" + md5(jxhtml) + ".html";
-        writeFile(libsjxhtml, libsjxjs);
-        return this.嗅探(getPath(libsjxhtml) + '?url=' + vipUrl, excludeurl);
     }
 }
 
