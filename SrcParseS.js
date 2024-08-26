@@ -64,15 +64,6 @@ var SrcParseS = {
                 let {GM} = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6916&auth=1d35e8f0-22e8-5270-a9d1-826f53f177ad");
                 let drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(sdata);
                 play = JSON.parse(drpy.play(dataObj.flag, vipUrl, []));
-                if(play.parse){
-                    let lazy = drpy.getRule("lazy");
-                    log(play);
-                    if(lazy){
-                        log(lazy);
-                        return "toast://11";
-                        eval(lazy.replace(/input/g, "play").replace("js:", ""));
-                    }
-                }
             }else if(dataObj.stype=="hipy_t4"){
                 play = JSON.parse(fetch(dataObj.surl+'&flag='+dataObj.flag+"&extend="+dataObj.sext+'&play='+vipUrl, {timeout: 10000}));
             }
