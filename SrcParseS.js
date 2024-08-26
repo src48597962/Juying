@@ -663,7 +663,8 @@ var SrcParseS = {
                 },music), {
                     blockRules: ['.m4a','.mp3','.gif','.jpg','.jpeg','.png','.ico','hm.baidu.com','/ads/*.js','/klad/*.php','layer.css'],
                     jsLoadingInject: true,
-                    //ua: head['User-Agent'] || PC_UA,
+                    //ua: head['User-Agent'] || MOBILE_UA,
+                    //referer: head['referer'] || "",
                     checkTime: 100,
                     timeout: 12000
                 }
