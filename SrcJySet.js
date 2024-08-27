@@ -583,83 +583,26 @@ function jiekou(data) {
         title: data?'查看':'本地',
         col_type: 'input',
         desc: "接口地址",
-        url: data?$.toString(() => {
+        url: data?$.toString((data) => {
             let file = getMyVar('apiurl','');
             if(fileExist(file)){
                 toast('如果有修改，接口不要点保存');
-                function getOriginalJs(js_code) {
-                    let current_match = /var rule|[\u4E00-\u9FA5]+|function|let |var |const |\(|\)|"|'/;
-                    if (current_match.test(js_code)) {
-                        return js_code
-                    }
-                    let rsa_private_key = 'MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCqin/jUpqM6+fgYP/oMqj9zcdHMM0mEZXLeTyixIJWP53lzJV2N2E3OP6BBpUmq2O1a9aLnTIbADBaTulTNiOnVGoNG58umBnupnbmmF8iARbDp2mTzdMMeEgLdrfXS6Y3VvazKYALP8EhEQykQVarexR78vRq7ltY3quXx7cgI0ROfZz5Sw3UOLQJ+VoWmwIxu9AMEZLVzFDQN93hzuzs3tNyHK6xspBGB7zGbwCg+TKi0JeqPDrXxYUpAz1cQ/MO+Da0WgvkXnvrry8NQROHejdLVOAslgr6vYthH9bKbsGyNY3H+P12kcxo9RAcVveONnZbcMyxjtF5dWblaernAgMBAAECggEAGdEHlSEPFmAr5PKqKrtoi6tYDHXdyHKHC5tZy4YV+Pp+a6gxxAiUJejx1hRqBcWSPYeKne35BM9dgn5JofgjI5SKzVsuGL6bxl3ayAOu+xXRHWM9f0t8NHoM5fdd0zC3g88dX3fb01geY2QSVtcxSJpEOpNH3twgZe6naT2pgiq1S4okpkpldJPo5GYWGKMCHSLnKGyhwS76gF8bTPLoay9Jxk70uv6BDUMlA4ICENjmsYtd3oirWwLwYMEJbSFMlyJvB7hjOjR/4RpT4FPnlSsIpuRtkCYXD4jdhxGlvpXREw97UF2wwnEUnfgiZJ2FT/MWmvGGoaV/CfboLsLZuQKBgQDTNZdJrs8dbijynHZuuRwvXvwC03GDpEJO6c1tbZ1s9wjRyOZjBbQFRjDgFeWs9/T1aNBLUrgsQL9c9nzgUziXjr1Nmu52I0Mwxi13Km/q3mT+aQfdgNdu6ojsI5apQQHnN/9yMhF6sNHg63YOpH+b+1bGRCtr1XubuLlumKKscwKBgQDOtQ2lQjMtwsqJmyiyRLiUOChtvQ5XI7B2mhKCGi8kZ+WEAbNQcmThPesVzW+puER6D4Ar4hgsh9gCeuTaOzbRfZ+RLn3Aksu2WJEzfs6UrGvm6DU1INn0z/tPYRAwPX7sxoZZGxqML/z+/yQdf2DREoPdClcDa2Lmf1KpHdB+vQKBgBXFCVHz7a8n4pqXG/HvrIMJdEpKRwH9lUQS/zSPPtGzaLpOzchZFyQQBwuh1imM6Te+VPHeldMh3VeUpGxux39/m+160adlnRBS7O7CdgSsZZZ/dusS06HAFNraFDZf1/VgJTk9BeYygX+AZYu+0tReBKSs9BjKSVJUqPBIVUQXAoGBAJcZ7J6oVMcXxHxwqoAeEhtvLcaCU9BJK36XQ/5M67ceJ72mjJC6/plUbNukMAMNyyi62gO6I9exearecRpB/OGIhjNXm99Ar59dAM9228X8gGfryLFMkWcO/fNZzb6lxXmJ6b2LPY3KqpMwqRLTAU/zy+ax30eFoWdDHYa4X6e1AoGAfa8asVGOJ8GL9dlWufEeFkDEDKO9ww5GdnpN+wqLwePWqeJhWCHad7bge6SnlylJp5aZXl1+YaBTtOskC4Whq9TP2J+dNIgxsaF5EFZQJr8Xv+lY9lu0CruYOh9nTNF9x3nubxJgaSid/7yRPfAGnsJRiknB5bsrCvgsFQFjJVs=';
-                    let decode_content = '';
-                    function aes_decrypt(data) {
-                        let key = CryptoJS.enc.Hex.parse("686A64686E780A0A0A0A0A0A0A0A0A0A");
-                        let iv = CryptoJS.enc.Hex.parse("647A797964730A0A0A0A0A0A0A0A0A0A");
-                        let encrypted = CryptoJS.AES.decrypt({
-                            ciphertext: CryptoJS.enc.Base64.parse(data)
-                        }, key, {
-                            iv: iv,
-                            mode: CryptoJS.mode.CBC,
-                            padding: CryptoJS.pad.Pkcs7
-                        }).toString(CryptoJS.enc.Utf8);
-                        return encrypted;
-                    }
-                    let decode_funcs = [
-                        (text) => {
-                            try {
-                                return ungzip(text)
-                            } catch (e) {
-                                return ''
-                            }
-                        },
-                        (text) => {
-                            try {
-                                return base64Decode(text)
-                            } catch (e) {
-                                return ''
-                            }
-                        },
-                        (text) => {
-                            try {
-                                return aes_decrypt(text)
-                            } catch (e) {
-                                return ''
-                            }
-                        },
-                        (text) => {
-                            try {
-                                return RSA.decode(text, rsa_private_key, null)
-                            } catch (e) {
-                                return ''
-                            }
-                        }
-                    ]
-                    let func_index = 0
-                    while (!current_match.test(decode_content)) {
-                        decode_content = decode_funcs[func_index](js_code);
-                        func_index++;
-                        if (func_index >= decode_funcs.length) {
-                            break;
-                        }
-                    }
-                    return decode_content
-                }
                 let apiurl = getMyVar('apiurl','');
                 let apitype = getMyVar('apitype', '');
                 if(apiurl && apitype=="hipy_t3" && /^hiker|^file/.test(apiurl)){
-                    log(fetch(apiurl));
-                    let code = getOriginalJs(request(apiurl, {'method': 'GET'}));
-                    log(code);
-                    log($.type(code));
+                    let drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(data);
+                    let code = drpy.runMain("let main=" + $.toString((ext) => {
+                        return () => getOriginalJs(request(ext, {
+                            "method": "GET"
+                        }));
+                    }, apiurl));
                     writeFile(apiurl, code);
                 }
-                return "editFile://" + apiurl;// + "@js=back();"
+                return "editFile://" + apiurl + "@js=back();";
             }else{
                 return "toast://不存在，无法查看";
             }
-        }):$.toString(() => {
+        },data):$.toString(() => {
             if(MY_NAME=="海阔视界"&&getAppVersion()<5100){
                 return "toast://软件版本过低";
             }
