@@ -649,10 +649,12 @@ function jiekou(data) {
                 let apiurl = getMyVar('apiurl','');
                 let apitype = getMyVar('apitype', '');
                 if(apiurl && apitype=="hipy_t3" && /^hiker|^file/.test(apiurl)){
-                    let code = fetch(apiurl);
-                    writeFile(apiurl, getOriginalJs(code));
+                    let code = getOriginalJs(fetch(apiurl));
+                    log(code);
+                    log($.type(code));
+                    writeFile(apiurl, code);
                 }
-                return "editFile://" + apiurl + "@js=back();";
+                return "editFile://" + apiurl;// + "@js=back();"
             }else{
                 return "toast://不存在，无法查看";
             }
