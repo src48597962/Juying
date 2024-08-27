@@ -119,6 +119,7 @@ function checkBoxUrl(input) {
             if(!fileExist(tmpFile)){
                 showLoading('检测在线文件有效性');
                 html = getContnet(input);
+                log(html);
                 if(html){
                     writeFile(tmpFile, html);
                 }
