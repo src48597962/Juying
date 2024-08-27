@@ -3151,6 +3151,7 @@ function init(ext) {
                 let js = request(ext, {'method': 'GET'});
                 if (js) {
                     js = getOriginalJs(js);
+                    console.log(js);
                     // eval(js.replace('var rule', 'rule'));
                     // eval("(function(){'use strict';"+js.replace('var rule', 'rule')+"})()");
                     eval("(function(){" + js.replace('var rule', 'rule') + "})()");
@@ -3162,6 +3163,7 @@ function init(ext) {
                 }
             } else {
                 ext = getOriginalJs(ext);
+                console.log(ext);
                 // eval(ext.replace('var rule', 'rule'));
                 // eval("(function(){'use strict';"+ext.replace('var rule', 'rule')+"})()");
                 eval("(function(){" + ext.replace('var rule', 'rule') + "})()");
