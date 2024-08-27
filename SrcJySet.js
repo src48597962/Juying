@@ -733,7 +733,7 @@ function jiekou(data) {
                 let extfile;
                 if(/XPath|biubiu|XBPQ|XYQ|hipy_t3/.test(apitype) && /^http|^file/.test(apiurl)){
                     extfile = apiurl;
-                    urlfile = cachepath+apitype+"_"+extfile.substr(extfile.lastIndexOf('/') + 1);
+                    urlfile = cachepath+'libs_jk/'+apitype+"_"+extfile.substr(extfile.lastIndexOf('/') + 1);
                     if(extfile){
                         let contnet = getContnet(extfile);
                         if(contnet){
