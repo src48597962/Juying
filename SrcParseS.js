@@ -636,7 +636,7 @@ var SrcParseS = {
             //let rurl = JSON.parse(html).url || JSON.parse(html).data;
             return rurl;
         }
-        let head = obj.ulist.header||{};
+        
         function exeWebRule(webUrl, music) {
             return executeWebRule(webUrl, $.toString((music) => {
                     try{
@@ -697,6 +697,7 @@ var SrcParseS = {
             return {url: rurl,ulist: obj.ulist}; 
         }else{
             let taskheader = {withStatusCode:true,timeout:8000};
+            let head = obj.ulist.header||{};
             if(JSON.stringify(head) != "{}"){
                 taskheader['header'] = head;
             }
