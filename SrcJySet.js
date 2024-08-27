@@ -649,6 +649,7 @@ function jiekou(data) {
                 let apiurl = getMyVar('apiurl','');
                 let apitype = getMyVar('apitype', '');
                 if(apiurl && apitype=="hipy_t3" && /^hiker|^file/.test(apiurl)){
+                    log(fetch(apiurl));
                     let code = getOriginalJs(fetch(apiurl));
                     log(code);
                     log($.type(code));
