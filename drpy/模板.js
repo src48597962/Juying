@@ -54,7 +54,7 @@ function getMubans() {
             headers: {//网站的请求头,完整支持所有的,常带ua和cookies
                 'User-Agent': 'MOBILE_UA', // "Cookie": "searchneed=ok"
             },
-            class_parse: '.navbar-items li:gt(2):lt(8);a&&Text;a&&href;/(\\d+).html',
+            class_parse: '.navbar-items li:gt(1):lt(8);a&&Text;a&&href;/(\\d+).html',
             play_parse: true,
             lazy: '',
             limit: 6,
