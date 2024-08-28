@@ -1814,7 +1814,7 @@ function resource() {
         url: getItem('hipy_t3_enable')!="1"?"toast://请使用DrpyHiker小程序":$('#noLoading#').lazyRule(() => {
             putMyVar('importtype','2');
             refreshPage(false);
-            return "toast://此项只仅支github库，hipy项目js文件所在的路径";
+            return "toast://此项仅支github库，hipy项目js文件所在的路径";
         })
     });
     */
@@ -1827,6 +1827,17 @@ function resource() {
             return "toast://订阅本地包或在线的配置文件，但无法管理接口";
         })
     });
+    if(getItem('hipy_t3_enable')=="1"){
+        d.push({
+            title: (importtype=="4"?"👉":"")+"drpy_js文件夹扫描",
+            col_type: 'scroll_button',
+            url: $('#noLoading#').lazyRule(() => {
+                putMyVar('importtype','4');
+                refreshPage(false);
+                return "toast://此项仅支持js文件所在的路径";
+            })
+        });
+    }
 
     if(importtype=="1"){
         d.push({
@@ -1892,18 +1903,19 @@ function resource() {
     });
 
     d.push({
-        title: '🆗 '+(getMyVar('importtype','1')=="3"?'确定订阅':'确定导入(' + (Juconfig["importmode"]?"全量":"增量")+')'),
+        title: '🆗 '+(importtype=="3"?'确定订阅':'确定导入(' + (Juconfig["importmode"]?"全量":"增量")+')'),
         url: importtype=="1"&&getMyVar('importjiekou','1')!="1"&&getMyVar('importjiexi','1')!="1"?'toast://请选择导入项目':$('#noLoading#').lazyRule((Juconfig,cfgfile) => {
                 let input = getMyVar('importinput', '').trim();
                 if(input==""){
                     return 'toast://请先输入链接地址'
                 }
+                let importtype = getMyVar('importtype','1');
                 let importrecord = Juconfig['importrecord']||[];
                 if(importrecord.length>20){//保留20个记录
                     importrecord.shift();
                 }
-                if(!importrecord.some(item => item.url==input && item.type==getMyVar('importtype','1'))){
-                    importrecord.push({type:getMyVar('importtype','1'),url:input});
+                if(!importrecord.some(item => item.url==input && item.type==importtype)){
+                    importrecord.push({type:importtype,url:input});
                     Juconfig['importrecord'] = importrecord;
                     writeFile(cfgfile, JSON.stringify(Juconfig));
                 }
@@ -1911,12 +1923,27 @@ function resource() {
 
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
 
+                if(importtype=="4"){//扫描本地js文件夹
+                    function readDir(path) {
+                        let names = [];
+                        let file = new java.io.File(path.replace("file://", ""));
+
+                        if (!(file.exists() && file.isDirectory())) return names;
+                        for (let it of file.listFiles()) {
+                            names.push(String(it.getName()));
+                        }
+                        return names;
+                    }
+                    log(readDir(input));
+                    return "toast://111";
+                }
                 function exeImport(input){
-                    if(getMyVar('importtype','1')=="1"){
-                        return Resourceimport(input,getMyVar('importtype','1'),Juconfig['importmode']?2:0);
-                    }else if(getMyVar('importtype','1')=="2"){
-                        return HipyImport(input,Juconfig['importmode']?2:0);
-                    }else if(getMyVar('importtype','1')=="3"){
+                    let importtype = getMyVar('importtype','1');
+                    if(importtype=="1"){
+                        return Resourceimport(input, '1', Juconfig['importmode']?2:0);
+                    }else if(importtype=="2"){
+                        return HipyImport(input, Juconfig['importmode']?2:0);
+                    }else if(importtype=="3"){
                         return "toast://" + getBoxSource(input, 3).message;
                     }
                 }
