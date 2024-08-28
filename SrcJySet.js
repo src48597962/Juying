@@ -1907,7 +1907,9 @@ function resource() {
         url: importtype=="1"&&getMyVar('importjiekou','1')!="1"&&getMyVar('importjiexi','1')!="1"?'toast://请选择导入项目':$('#noLoading#').lazyRule((Juconfig,cfgfile) => {
                 let input = getMyVar('importinput', '').trim();
                 if(input==""){
-                    return 'toast://请先输入链接地址'
+                    return 'toast://请先输入链接地址';
+                }else if(importtype=="4" && !input.endsWith('/') && !(input.startsWith('/')||input.startsWith('file')||input.startsWith('hiker'))){
+                    return 'toast://文件夹路径不正确，以/结尾';
                 }
                 let importtype = getMyVar('importtype','1');
                 let importrecord = Juconfig['importrecord']||[];
@@ -1918,6 +1920,9 @@ function resource() {
                     importrecord.push({type:importtype,url:input});
                     Juconfig['importrecord'] = importrecord;
                     writeFile(cfgfile, JSON.stringify(Juconfig));
+                }
+                if(input.startsWith('/')){
+                    input = "file://" + input;
                 }
 
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
@@ -1933,12 +1938,12 @@ function resource() {
                         }
                         return names;
                     }
-                    let files = readDir(input).filter(v=>v.endsWith('.js'));
+                    let files = readDir(input).filter(v=>v.endsWith('.js')).map(v=>input+v);
                     log(files);
                     return "toast://111";
                 }
 
-                if(input.startsWith('/')){input = "file://" + input}
+                
 
                 function exeImport(input){
                     let importtype = getMyVar('importtype','1');
