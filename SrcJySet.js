@@ -1919,7 +1919,6 @@ function resource() {
                     Juconfig['importrecord'] = importrecord;
                     writeFile(cfgfile, JSON.stringify(Juconfig));
                 }
-                if(input.startsWith('/storage/emulated')){input = "file://" + input}
 
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
 
@@ -1934,9 +1933,13 @@ function resource() {
                         }
                         return names;
                     }
-                    log(readDir(input));
+                    let files = readDir(input).filter(v=>v.endsWith('.js'));
+                    log(files);
                     return "toast://111";
                 }
+
+                if(input.startsWith('/')){input = "file://" + input}
+
                 function exeImport(input){
                     let importtype = getMyVar('importtype','1');
                     if(importtype=="1"){
