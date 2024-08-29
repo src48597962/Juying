@@ -1938,10 +1938,9 @@ function resource() {
                         }
                         return names;
                     }
-                    log(getPath(datapath+'libs_jk/'));
+
                     let oldfiles = readDir(getPath(datapath+'libs_jk/'));
-                    log(oldfiles);
-                    let newfiles = readDir(input).filter(v=>v.endsWith('.js') && oldfiles.filter(o=>o.includes(v)).length==0);//.map(v=>input+v)
+                    let newfiles = readDir(input).filter(v=>v.endsWith('.js') && oldfiles.filter(o=>o.includes(v)).length==0).map(v=>input+v);
                     log(newfiles);
                     return "toast://111";
                 }
