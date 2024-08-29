@@ -1938,7 +1938,8 @@ function resource() {
                         }
                         return names;
                     }
-                    let oldfiles = readDir(datapath+'libs_jk/');
+                    log(getPath(datapath+'libs_jk/'));
+                    let oldfiles = readDir(getPath(datapath+'libs_jk/'));
                     log(oldfiles);
                     let newfiles = readDir(input).filter(v=>v.endsWith('.js') && oldfiles.filter(o=>o.includes(v)).length==0);//.map(v=>input+v)
                     log(newfiles);
