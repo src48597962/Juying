@@ -1940,9 +1940,9 @@ function resource() {
                     }
 
                     let oldfiles = getDatas("jk").filter(v=>v.type=="hipy_t3" && v.url.startsWith(datapath)).map(v=>v.url);
-                    log(oldfiles);
-                    //let newfiles = readDir(input).filter(v=>v.endsWith('.js') && oldfiles.filter(o=>o==v).length==0).map(v=>input+v);
-                    //log(newfiles);
+                    log(oldfiles.length);
+                    let newfiles = readDir(input).filter(v=>v.endsWith('.js') && oldfiles.filter(o=>o.includes(v)).length==0).map(v=>input+v);
+                    log(newfiles);
                     return "toast://111";
                 }
 
