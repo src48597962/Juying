@@ -628,7 +628,7 @@ function selectSource() {
         longClick(s, i, manage) {
 
         },
-        click(s, i) {
+        click(s, i, manage) {
             pop.dismiss();
 
             let input = s.replace(/[’‘]|<[^>]*>/g, "");
