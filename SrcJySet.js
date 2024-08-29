@@ -1908,8 +1908,8 @@ function resource() {
                 let input = getMyVar('importinput', '').trim();
                 if(input==""){
                     return 'toast://请先输入链接地址';
-                }else if(importtype=="4" && !input.endsWith('/') && !(input.startsWith('/')||input.startsWith('file')||input.startsWith('hiker'))){
-                    return 'toast://文件夹路径不正确，以/结尾';
+                }else if(importtype=="4" && !input.endsWith('/') && !input.startsWith('/')){
+                    return 'toast://文件夹路径不正确，以/开头结尾';
                 }
                 let importtype = getMyVar('importtype','1');
                 let importrecord = Juconfig['importrecord']||[];
@@ -1939,7 +1939,7 @@ function resource() {
                         return names;
                     }
                     let oldfiles = readDir(datapath+'libs_jk/');
-                    let newfiles = readDir(input).filter(v=>v.endsWith('.js') && oldfiles.filter(o=>o.includes(v).length==0)).map(v=>input+v);
+                    let newfiles = readDir(input).filter(v=>v.endsWith('.js') && oldfiles.filter(o=>o.includes(v)).length==0).map(v=>input+v);
                     log(newfiles);
                     return "toast://111";
                 }
