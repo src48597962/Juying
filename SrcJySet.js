@@ -1940,10 +1940,8 @@ function resource() {
                     }
 
                     let oldfiles = getDatas("jk").filter(v=>v.type=="hipy_t3" && v.url.startsWith(datapath)).map(v=>v.url);
-                    log(oldfiles.length);
                     let newfiles = readDir(input).filter(v=>v.endsWith('.js') && oldfiles.filter(o=>o.includes(v)).length==0).map(v=>input+v);
-                    log(newfiles);
-                    return "toast://111";
+                    return "toast://"+newfiles.length+"个新增js文件";
                 }
 
                 
