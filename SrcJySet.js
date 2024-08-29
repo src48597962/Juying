@@ -1908,7 +1908,7 @@ function resource() {
                 let input = getMyVar('importinput', '').trim();
                 if(input==""){
                     return 'toast://请先输入链接地址';
-                }else if(importtype=="4" && !input.endsWith('/') && !input.startsWith('/')){
+                }else if(importtype=="4" && (!input.endsWith('/') || !input.startsWith('/'))){
                     return 'toast://文件夹路径不正确，以/开头结尾';
                 }
                 let importtype = getMyVar('importtype','1');
@@ -1939,10 +1939,10 @@ function resource() {
                         return names;
                     }
 
-                    let oldfiles = readDir(getPath(datapath+'libs_jk/'));
-                    log(oldfiles.length);
-                    let newfiles = readDir(input).filter(v=>v.endsWith('.js') && oldfiles.filter(o=>o==v).length==0).map(v=>input+v);
-                    log(newfiles);
+                    let oldfiles = getDatas("jk").filter(v=>v.type=="hipy_t3" && v.url.startsWith(datapath)).map(v=>v.url);
+                    log(oldfiles);
+                    //let newfiles = readDir(input).filter(v=>v.endsWith('.js') && oldfiles.filter(o=>o==v).length==0).map(v=>input+v);
+                    //log(newfiles);
                     return "toast://111";
                 }
 
