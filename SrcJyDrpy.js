@@ -3,14 +3,15 @@ const JSEngine = com.example.hikerview.service.parser.JSEngine;
 const drpyMap = new Map();
 const GMkey = module.importParam;
 function buildJsEnv(ticket) {
-    let code = String.raw`
-// const my_rule = '
-const MY_RULE = ${my_rule};
-const my_rule = JSON.stringify(MY_RULE);
-const MY_TICKET = "${ticket || ""}";
-eval(getJsPlugin());
-eval(getJsLazyPlugin());
-`;
+    let my_rule = JSON.stringify(MY_RULE);
+    let code = `
+    let my_rule = '';
+    my_rule = null;
+    const MY_RULE = ${my_rule};
+    const MY_TICKET = "${ticket || ""}";
+    eval(getJsPlugin());
+    eval(getJsLazyPlugin());
+    `;
     return code;
 }
 
