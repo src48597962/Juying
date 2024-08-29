@@ -1939,7 +1939,8 @@ function resource() {
                         return names;
                     }
                     let oldfiles = readDir(datapath+'libs_jk/');
-                    let newfiles = readDir(input).filter(v=>v.endsWith('.js') && oldfiles.filter(o=>o.includes(v)).length==0).map(v=>input+v);
+                    log(oldfiles);
+                    let newfiles = readDir(input).filter(v=>v.endsWith('.js') && oldfiles.filter(o=>o.includes(v)).length==0);//.map(v=>input+v)
                     log(newfiles);
                     return "toast://111";
                 }
