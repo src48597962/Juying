@@ -1945,9 +1945,8 @@ function resource() {
                     if(newfiles.length==0){
                         return "toast://没有新增js"
                     }else{
-                        let addlist = newfiles.map(it=>{
-                            let name = it.split(".")[0];
-                            let extfile = it;
+                        let addlist = newfiles.map(extfile=>{
+                            let name = extfile.substr(extfile.lastIndexOf('/')+1).split(".")[0];
                             let arr = { "name": name, "type": "hipy_t3", "ext": extfile};
                             if(arr.name.includes('[搜]')){
                                 arr['onlysearch'] = 1;
