@@ -1827,7 +1827,7 @@ function resource() {
             return "toast://订阅本地包或在线的配置文件，但无法管理接口";
         })
     });
-    if(getItem('hipy_t3_enable')=="1"){
+    if(getItem('hipy_t3_enable')=="1" && getItem("sourceMode","1")=="1"){
         d.push({
             title: (importtype=="4"?"👉":"")+"drpy_js文件夹",
             col_type: 'scroll_button',
@@ -1903,7 +1903,7 @@ function resource() {
     });
 
     d.push({
-        title: '🆗 '+(importtype=="3"?'确定订阅':'确定导入(' + (Juconfig["importmode"]?"全量":"增量")+')'),
+        title: '🆗 '+(importtype=="4"?'确定扫描':importtype=="3"?'确定订阅':'确定导入(' + (Juconfig["importmode"]?"全量":"增量")+')'),
         url: importtype=="1"&&getMyVar('importjiekou','1')!="1"&&getMyVar('importjiexi','1')!="1"?'toast://请选择导入项目':$('#noLoading#').lazyRule((Juconfig,cfgfile) => {
                 let input = getMyVar('importinput', '').trim();
                 if(input==""){
@@ -2831,6 +2831,7 @@ function importConfirm(input) {
                             let index2 = importlist.indexOf(importlist.filter(d => d.url==data.url)[0]);
                             importlist.splice(index2, 1);
                             storage0.putMyVar('importConfirm', importlist);
+                            log(data.url);
                             deleteItem(data.url);
                         }
                         return "toast://导入"+(num<0?"失败":num);
