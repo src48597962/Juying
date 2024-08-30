@@ -1829,7 +1829,7 @@ function resource() {
     });
     if(getItem('hipy_t3_enable')=="1"){
         d.push({
-            title: (importtype=="4"?"👉":"")+"drpy_js文件夹扫描",
+            title: (importtype=="4"?"👉":"")+"drpy_js文件夹",
             col_type: 'scroll_button',
             url: $('#noLoading#').lazyRule(() => {
                 putMyVar('importtype','4');
@@ -1928,6 +1928,7 @@ function resource() {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
 
                 if(importtype=="4"){//扫描本地js文件夹
+                    showLoading("正在扫描本地文件夹");
                     function readDir(path) {
                         let names = [];
                         let file = new java.io.File(path.replace("file://", ""));
@@ -1940,8 +1941,31 @@ function resource() {
                     }
 
                     let oldfiles = getDatas("jk").filter(v=>v.type=="hipy_t3" && v.url.startsWith(datapath)).map(v=>v.url);
-                    let newfiles = readDir(input).filter(v=>v.endsWith('.js') && oldfiles.filter(o=>o.includes(v)).length==0).map(v=>input+v);
-                    return "toast://"+newfiles.length+"个新增js文件";
+                    let newfiles = readDir(input).filter(v=>v.endsWith('.js') && !v.includes('[合]') && oldfiles.filter(o=>o.includes(v)).length==0).map(v=>input+v);
+                    if(newfiles.length==0){
+                        return "toast://没有新增js"
+                    }else{
+                        let addlist = newfiles.map(it=>{
+                            let name = it.split(".")[0];
+                            let extfile = it;
+                            let arr = { "name": name, "type": "hipy_t3", "ext": extfile};
+                            if(arr.name.includes('[搜]')){
+                                arr['onlysearch'] = 1;
+                            }
+                            let filepath = cachepath + 'libs_jk/' + arr.type;
+                            let urlfile = filepath + '_' + extfile.substr(extfile.lastIndexOf('/')+1);
+                            arr['url'] = urlfile;
+                            writeFile(urlfile, fetch(extfile));
+                            return arr;
+                        })
+                        let sharetxt = gzip.zip(JSON.stringify(addlist));
+                        let code = '聚影接口￥' + aesEncode('Juying2', sharetxt) + '￥新增接口';
+                        writeFile("hiker://files/_cache/juying2/cloudimport.txt", code);
+                        return $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
+                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                            importConfirm();
+                        })
+                    }
                 }
 
                 
@@ -2665,12 +2689,8 @@ function importConfirm(input) {
     },importfile));
     let code,name,lx,sm,datalist;
 
-    if(fileExist(importfile)){
-        input = input || fetch(importfile);
-    }
-    if(/^云口令：/.test(input)){
-        input = input.replace('云口令：','').trim();
-    }
+    input = input || fetch(importfile);
+    input = input.replace('云口令：','').trim();
 
     try{
         code = aesDecode('Juying2', input.split('￥')[1]);
@@ -2789,10 +2809,10 @@ function importConfirm(input) {
         let isnew = ndatalist.some(v=>v.url==it.url);
         d.push({
             title: it.name + (lx=="yp"?"":"-" + (it.group||it.type)) + "  [" + (isnew?"新增加":"已存在") + "]",
-            url: $(["覆盖导入"], 1).select((lx, data) => {
+            url: $(["确定导入"], 1).select((lx, data) => {
                 data = JSON.parse(base64Decode(data));
-                if (input == "覆盖导入") {
-                    return $("将覆盖本地，确认？").confirm((lx,data)=>{
+                if (input == "确定导入") {
+                    return $("如本地存在则将覆盖，确认？").confirm((lx,data)=>{
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                         let num;
                         if(lx=="jk"){
@@ -2814,7 +2834,7 @@ function importConfirm(input) {
                             storage0.putMyVar('importConfirm', importlist);
                             deleteItem(data.url);
                         }
-                        return "toast://覆盖导入"+(num<0?"失败":num);
+                        return "toast://导入"+(num<0?"失败":num);
                     },lx,data);
                 }
             }, lx, base64Encode(JSON.stringify(it))),
