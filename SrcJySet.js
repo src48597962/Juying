@@ -2816,10 +2816,11 @@ function importConfirm(input) {
                 data = JSON.parse(base64Decode(data));
                 if (input == "确定导入") {
                     return $("如本地存在则将覆盖，确认？").confirm((lx,data)=>{
+                        log(data);
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
-                        let num;
                         let datas = [];
                         datas.push(data);
+                        let num;
                         if(lx=="jk"){
                             num = jiekousave(datas, 1);
                         }else if(lx=="jx"){
