@@ -2816,7 +2816,7 @@ function importConfirm(input) {
                 data = JSON.parse(base64Decode(data));
                 if (input == "确定导入") {
                     return $("如本地存在则将覆盖，确认？").confirm((lx,data)=>{
-                        log(data);
+                        let dataurl = data.url;
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                         let datas = [];
                         datas.push(data);
@@ -2835,15 +2835,10 @@ function importConfirm(input) {
                         if(importlist.length==1){
                             back(false);
                         }else{
-                            log(importlist);
-                            log(data);
-                            let index2 = importlist.indexOf(importlist.filter(d => d.url==data.url)[0]);
+                            let index2 = importlist.indexOf(importlist.filter(d => d.url==dataurl)[0]);
                             importlist.splice(index2, 1);
-                            log(data);
                             storage0.putMyVar('importConfirm', importlist);
-                            log(data);
-                            log(data.url);
-                            deleteItem(data.url);
+                            deleteItem(dataurl);
                         }
                         return "toast://导入"+(num<0?"失败":num);
                     },lx,data);
