@@ -2765,12 +2765,10 @@ function importConfirm(jsfile) {
     }
     let ndatalist = [];
     datalist.forEach(it=>{
-        log(it.url);
-        if(!datas.some(v=>v.url==it.url)){
+        if(!datas.some(v=>v.url==it.url || v.url==it.url.replace(cachepath, datapath))){
             ndatalist.push(it);
         }
     })
-    log(ndatalist);
     let oldnum = datalist.length - ndatalist.length;
     let d = [];
     d.push({
