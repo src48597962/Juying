@@ -2722,30 +2722,34 @@ function importConfirm(jsfile) {
         }
     }else{
         //js文件导入
-        let files = [];
-        if($.type(jsfile)=="string"){
-            if(jsfile.startsWith('/')){
-                jsfile = "file://" + jsfile;
+        datalist = storage0.getMyVar('importConfirm', []);
+        if(datalist.length==0){
+            let files = [];
+            if($.type(jsfile)=="string"){
+                if(jsfile.startsWith('/')){
+                    jsfile = "file://" + jsfile;
+                }
+                files.push(jsfile);
+            }else if($.type(jsfile)=="array"){
+                files = jsfile;
             }
-            files.push(jsfile);
-        }else if($.type(jsfile)=="array"){
-            files = jsfile;
+            datalist = files.map(extfile=>{
+                let name = extfile.substr(extfile.lastIndexOf('/')+1).split(".")[0];
+                let arr = { "name": name, "type": "hipy_t3"};
+                if(arr.name.includes('[搜]')){
+                    arr['onlysearch'] = 1;
+                }
+                let filepath = cachepath + 'libs_jk/' + arr.type;
+                let urlfile = filepath + '_' + extfile.substr(extfile.lastIndexOf('/')+1);
+                arr['url'] = urlfile;
+                writeFile(urlfile, fetch(extfile));
+                if(!extfile.includes('/_cache/')){
+                    arr['ext'] = extfile;
+                }
+                return arr;
+            })
+            storage0.putMyVar('importConfirm', datalist);
         }
-        datalist = storage0.getMyVar('importConfirm') || files.map(extfile=>{
-            let name = extfile.substr(extfile.lastIndexOf('/')+1).split(".")[0];
-            let arr = { "name": name, "type": "hipy_t3"};
-            if(arr.name.includes('[搜]')){
-                arr['onlysearch'] = 1;
-            }
-            let filepath = cachepath + 'libs_jk/' + arr.type;
-            let urlfile = filepath + '_' + extfile.substr(extfile.lastIndexOf('/')+1);
-            arr['url'] = urlfile;
-            writeFile(urlfile, fetch(extfile));
-            if(!extfile.includes('/_cache/')){
-                arr['ext'] = extfile;
-            }
-            return arr;
-        })
         sm = "接口";
         lx = "jk";
     }
