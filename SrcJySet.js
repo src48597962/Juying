@@ -1942,6 +1942,7 @@ function resource() {
 
                     let oldfiles = getDatas("jk").filter(v=>v.type=="hipy_t3" && v.url.startsWith(datapath)).map(v=>v.url);
                     let newfiles = readDir(input).filter(v=>v.endsWith('.js') && !v.includes('[合]') && oldfiles.filter(o=>o.includes(v)).length==0).map(v=>input+v);
+                    hideLoading();
                     if(newfiles.length==0){
                         return "toast://没有新增js"
                     }else{
@@ -2721,9 +2722,18 @@ function importConfirm(jsfile) {
         }
     }else{
         //js文件导入
-        datalist = storage0.getMyVar('importConfirm') || jsfile.map(extfile=>{
+        let files = [];
+        if($.type(jsfile)=="string"){
+            if(jsfile.startsWith('/')){
+                jsfile = "file://" + jsfile;
+            }
+            files.push(jsfile);
+        }else if($.type(jsfile)=="array"){
+            files = jsfile;
+        }
+        datalist = storage0.getMyVar('importConfirm') || files.map(extfile=>{
             let name = extfile.substr(extfile.lastIndexOf('/')+1).split(".")[0];
-            let arr = { "name": name, "type": "hipy_t3", "ext": extfile};
+            let arr = { "name": name, "type": "hipy_t3"};
             if(arr.name.includes('[搜]')){
                 arr['onlysearch'] = 1;
             }
@@ -2731,6 +2741,9 @@ function importConfirm(jsfile) {
             let urlfile = filepath + '_' + extfile.substr(extfile.lastIndexOf('/')+1);
             arr['url'] = urlfile;
             writeFile(urlfile, fetch(extfile));
+            if(!extfile.includes('/_cache/')){
+                arr['ext'] = extfile;
+            }
             return arr;
         })
         sm = "接口";
