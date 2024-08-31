@@ -1945,29 +1945,12 @@ function resource() {
                     if(newfiles.length==0){
                         return "toast://没有新增js"
                     }else{
-                        let addlist = newfiles.map(extfile=>{
-                            let name = extfile.substr(extfile.lastIndexOf('/')+1).split(".")[0];
-                            let arr = { "name": name, "type": "hipy_t3", "ext": extfile};
-                            if(arr.name.includes('[搜]')){
-                                arr['onlysearch'] = 1;
-                            }
-                            let filepath = cachepath + 'libs_jk/' + arr.type;
-                            let urlfile = filepath + '_' + extfile.substr(extfile.lastIndexOf('/')+1);
-                            arr['url'] = urlfile;
-                            writeFile(urlfile, fetch(extfile));
-                            return arr;
-                        })
-                        let sharetxt = gzip.zip(JSON.stringify(addlist));
-                        let code = '聚影接口￥' + aesEncode('Juying2', sharetxt) + '￥新增接口';
-                        writeFile("hiker://files/_cache/juying2/cloudimport.txt", code);
-                        return $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
+                        return $('hiker://empty#noRecordHistory##noHistory#').rule((newfiles) => {
                             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
-                            importConfirm();
-                        })
+                            importConfirm(newfiles);
+                        },newfiles)
                     }
                 }
-
-                
 
                 function exeImport(input){
                     let importtype = getMyVar('importtype','1');
@@ -2684,56 +2667,74 @@ function yundisksave(datas, mode){
     return num;
 }
 // 云口令导入确认页
-function importConfirm(input) {
+function importConfirm(jsfile) {
+    let code,name,lx,sm,datalist;
     let importfile = "hiker://files/_cache/juying2/cloudimport.txt";
     addListener("onClose", $.toString((importfile) => {
         deleteFile(importfile);
         clearMyVar('importConfirm');
     },importfile));
-    let code,name,lx,sm,datalist;
-
-    input = input || fetch(importfile);
-    input = input.replace('云口令：','').trim();
-
-    try{
-        code = aesDecode('Juying2', input.split('￥')[1]);
-        name = input.split('￥')[0];
-        if(name=="聚影资源码"){
-            toast("聚影：资源码不支持导入确认");
-        }else if (name == "聚影云盘") {
-            sm = "云盘";
-            lx = "yp";
-        }else if(name=="聚影接口"){
-            sm = "接口";
-            lx = "jk";
-        }else if(name=="聚影解析"){
-            sm = "解析";
-            lx = "jx";
-        }else{
-            toast("聚影：无法识别的口令");
-        }
-    }catch(e){
-        toast("聚影：口令有误>"+e.message);
-    }
-    datalist = storage0.getMyVar('importConfirm', []);
-    if(datalist.length==0){
+    
+    if(!jsfile){
+        //云口令导入
+        let input = fetch(importfile);
+        input = input.replace('云口令：','').trim();
         try{
-            let text;
-            if(/^http|^云/.test(code)){
-                showLoading('获取数据中，请稍后...');
-                text = parsePaste(code);
-                hideLoading();
+            code = aesDecode('Juying2', input.split('￥')[1]);
+            name = input.split('￥')[0];
+            if(name=="聚影资源码"){
+                toast("聚影：资源码不支持导入确认");
+            }else if (name == "聚影云盘") {
+                sm = "云盘";
+                lx = "yp";
+            }else if(name=="聚影接口"){
+                sm = "接口";
+                lx = "jk";
+            }else if(name=="聚影解析"){
+                sm = "解析";
+                lx = "jx";
             }else{
-                text = code;
+                toast("聚影：无法识别的口令");
             }
-            if(text && !/^error/.test(text)){
-                let sharetxt = gzip.unzip(text);
-                datalist = JSON.parse(sharetxt); 
-                storage0.putMyVar('importConfirm', datalist);
-            }
-        } catch (e) {
-            toast("聚影：无法识别的口令>"+e.message);
+        }catch(e){
+            toast("聚影：口令有误>"+e.message);
         }
+        datalist = storage0.getMyVar('importConfirm', []);
+        if(datalist.length==0){
+            try{
+                let text;
+                if(/^http|^云/.test(code)){
+                    showLoading('获取数据中，请稍后...');
+                    text = parsePaste(code);
+                    hideLoading();
+                }else{
+                    text = code;
+                }
+                if(text && !/^error/.test(text)){
+                    let sharetxt = gzip.unzip(text);
+                    datalist = JSON.parse(sharetxt); 
+                    storage0.putMyVar('importConfirm', datalist);
+                }
+            } catch (e) {
+                toast("聚影：无法识别的口令>"+e.message);
+            }
+        }
+    }else{
+        //js文件导入
+        datalist = storage0.getMyVar('importConfirm') || jsfile.map(extfile=>{
+            let name = extfile.substr(extfile.lastIndexOf('/')+1).split(".")[0];
+            let arr = { "name": name, "type": "hipy_t3", "ext": extfile};
+            if(arr.name.includes('[搜]')){
+                arr['onlysearch'] = 1;
+            }
+            let filepath = cachepath + 'libs_jk/' + arr.type;
+            let urlfile = filepath + '_' + extfile.substr(extfile.lastIndexOf('/')+1);
+            arr['url'] = urlfile;
+            writeFile(urlfile, fetch(extfile));
+            return arr;
+        })
+        sm = "接口";
+        lx = "jk";
     }
     
     //获取现有接口
@@ -2742,7 +2743,7 @@ function importConfirm(input) {
     let sourcedata = fetch(sourcefile);
     if(sourcedata != ""){
         try{
-            eval("datas=" + sourcedata+ ";");
+            eval("datas = " + sourcedata+ ";");
         }catch(e){}
     }
     let ndatalist = [];
