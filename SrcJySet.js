@@ -2814,10 +2814,8 @@ function importConfirm(input) {
             title: it.name + (lx=="yp"?"":"-" + (it.group||it.type)) + "  [" + (isnew?"新增加":"已存在") + "]",
             url: $(["确定导入"], 1).select((lx, data) => {
                 data = JSON.parse(base64Decode(data));
-                log(data);
                 if (input == "确定导入") {
                     return $("如本地存在则将覆盖，确认？").confirm((lx,data)=>{
-                        log(data);
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                         let num;
                         if(lx=="jk"){
@@ -2834,9 +2832,12 @@ function importConfirm(input) {
                         if(importlist.length==1){
                             back(false);
                         }else{
+                            log(data);
                             let index2 = importlist.indexOf(importlist.filter(d => d.url==data.url)[0]);
                             importlist.splice(index2, 1);
+                            log(data);
                             storage0.putMyVar('importConfirm', importlist);
+                            log(data);
                             log(data.url);
                             deleteItem(data.url);
                         }
