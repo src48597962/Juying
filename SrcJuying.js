@@ -957,10 +957,10 @@ function yiji() {
         try{
             programversion = $.require("config").version || MY_RULE.version || 0;
         }catch(e){}
-        if(programversion<6){
+        if(programversion<7){
             confirm({
                 title: "温馨提示",
-                content: "发现小程序新版本\ngithub代理管理页优化",
+                content: "发现小程序新版本\n增加js文件导入子页面",
                 confirm: $.toString(() => {
                     return "海阔视界首页频道规则【聚影】￥home_rule_url￥http://hiker.nokia.press/hikerule/rulelist.json?id=6996"
                 }),
