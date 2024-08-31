@@ -4,6 +4,8 @@ var newVersion = {
     "JYUpdateRecords": [{
         title: "bate V1.7",
         records: [
+            "新增：点播资源增加js文件夹扫描添加t3",
+            "新增：小程序增加软件新版本js导入子页面",
             "优化：点播解析优化、hipy的ali类型",
             "优化：点播解析管理排序优先级完善",
             "优化：点播解析管理增加批量重置排序",
