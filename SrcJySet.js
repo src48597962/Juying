@@ -2818,12 +2818,14 @@ function importConfirm(input) {
                     return $("如本地存在则将覆盖，确认？").confirm((lx,data)=>{
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                         let num;
+                        let datas = [];
+                        datas.push(data);
                         if(lx=="jk"){
-                            num = jiekousave([data], 1);
+                            num = jiekousave(datas, 1);
                         }else if(lx=="jx"){
-                            num = jiexisave([data], 1);
+                            num = jiexisave(datas, 1);
                         }else if(lx=="yp"){
-                            num = yundisksave([data], 1);
+                            num = yundisksave(datas, 1);
                         }else{
                             return "toast://类型异常";
                         }
@@ -2832,6 +2834,7 @@ function importConfirm(input) {
                         if(importlist.length==1){
                             back(false);
                         }else{
+                            log(importlist);
                             log(data);
                             let index2 = importlist.indexOf(importlist.filter(d => d.url==data.url)[0]);
                             importlist.splice(index2, 1);
