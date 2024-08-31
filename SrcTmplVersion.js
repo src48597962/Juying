@@ -1,16 +1,16 @@
 var newVersion = {
-    "SrcJuying":"1.6",
-    "hint": "提升使用体验感",
+    "SrcJuying":"1.7",
+    "hint": "小程序需要升级版本6",
     "JYUpdateRecords": [{
-        title: "bate V1.7",
+        title: "2024/09/01 V1.7",
         records: [
             "新增：点播资源增加js文件夹扫描添加t3",
-            "新增：小程序增加软件新版本js导入子页面",
             "优化：点播解析优化、hipy的ali类型",
             "优化：点播解析管理排序优先级完善",
             "优化：点播解析管理增加批量重置排序",
             "优化：点播hipy_t3类型无二级逻辑",
-            "更新：点播hipy_t3类型drpy模板.js"
+            "更新：点播hipy_t3类型drpy模板.js",
+            "小程序：版本7配合软件新版本js导入子页面"
         ]
     },{
         title: "2024/08/23 V1.6",
