@@ -2023,23 +2023,27 @@ function resource() {
     let lists = importrecord.filter(item => {
         return item.type==getMyVar('importtype','1');
     })
+    lists.reverse();
+    
     if(lists.length>0){
-        d.push({
-            title: '点此进行检测配置文件有效性👀',
-            url: $('#noLoading#').lazyRule((lists) => {
-                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
-                lists.forEach(it=>{
-                    let checkUrl = checkBoxUrl(it.url);
-                    updateItem(it.url, {title: it.url +(checkUrl.message?" ❌":" ✔️")});
-                })
-                return "toast://已检测完成，长按删除坏的";
-            }, lists),
-            col_type: "text_center_1"
-        });
-        d.push({
-            col_type: "line"
-        });
-        lists.reverse();
+        if(importtype=="1" || importtype=="2"){
+            d.push({
+                title: '点此进行检测配置文件有效性👀',
+                url: $('#noLoading#').lazyRule((lists) => {
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                    lists.forEach(it=>{
+                        let checkUrl = checkBoxUrl(it.url);
+                        updateItem(it.url, {title: it.url +(checkUrl.message?" ❌":" ✔️")});
+                    })
+                    return "toast://已检测完成，长按删除坏的";
+                }, lists),
+                col_type: "text_center_1"
+            });
+            d.push({
+                col_type: "line"
+            });
+        }
+        
         for(let i=0;i<lists.length;i++){
             d.push({
                 title: lists[i].url,
@@ -2813,6 +2817,7 @@ function importConfirm(input) {
                 log(data);
                 if (input == "确定导入") {
                     return $("如本地存在则将覆盖，确认？").confirm((lx,data)=>{
+                        log(data);
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                         let num;
                         if(lx=="jk"){
