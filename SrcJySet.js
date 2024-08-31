@@ -2765,10 +2765,12 @@ function importConfirm(jsfile) {
     }
     let ndatalist = [];
     datalist.forEach(it=>{
+        log(it.url);
         if(!datas.some(v=>v.url==it.url)){
             ndatalist.push(it);
         }
     })
+    log(ndatalist);
     let oldnum = datalist.length - ndatalist.length;
     let d = [];
     d.push({
@@ -2827,6 +2829,7 @@ function importConfirm(jsfile) {
     });
 
     datalist.forEach(it=>{
+
         let isnew = ndatalist.some(v=>v.url==it.url);
         d.push({
             title: it.name + (lx=="yp"?"":"-" + (it.group||it.type)) + "  [" + (isnew?"新增加":"已存在") + "]",
