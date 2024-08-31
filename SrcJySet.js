@@ -1832,6 +1832,7 @@ function resource() {
             title: (importtype=="4"?"👉":"")+"drpy_js文件夹",
             col_type: 'scroll_button',
             url: $('#noLoading#').lazyRule(() => {
+                clearMyVar('importinput');
                 putMyVar('importtype','4');
                 refreshPage(false);
                 return "toast://此项仅支持js文件所在的路径";
@@ -1890,6 +1891,9 @@ function resource() {
                 if(!MY_PATH){
                     return "toast://获取文件路径失败，可能没有权限";
                 }
+                if(getMyVar('importtype')=='4'){
+                    MY_PATH = MY_PATH.substr(0, MY_PATH.lastIndexOf('/')+1)
+                }
                 putMyVar("importinput",MY_PATH);
                 refreshPage();
                 return "hiker://empty";
@@ -1906,10 +1910,14 @@ function resource() {
         title: '🆗 '+(importtype=="4"?'确定扫描':importtype=="3"?'确定订阅':'确定导入(' + (Juconfig["importmode"]?"全量":"增量")+')'),
         url: importtype=="1"&&getMyVar('importjiekou','1')!="1"&&getMyVar('importjiexi','1')!="1"?'toast://请选择导入项目':$('#noLoading#').lazyRule((Juconfig,cfgfile) => {
                 let input = getMyVar('importinput', '').trim();
-                if(input==""){
-                    return 'toast://请先输入链接地址';
+                if(input=="" || input.endsWith("Juying.js")){
+                    return 'toast://请输入正确的链接地址';
                 }else if(importtype=="4" && (!input.endsWith('/') || !input.startsWith('/'))){
                     return 'toast://文件夹路径不正确，以/开头结尾';
+                }else if(!input.startsWith('/') && !input.startsWith('http') && !input.startsWith('file') && !input.startsWith('hiker')){
+                    return 'toast://请输入正确的链接地址';
+                }else if(importtype!="4" && input.endsWith('/')){
+                    return 'toast://请输入正确的链接地址';
                 }
                 let importtype = getMyVar('importtype','1');
                 let importrecord = Juconfig['importrecord']||[];
