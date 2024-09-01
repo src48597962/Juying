@@ -1,7 +1,12 @@
 var newVersion = {
     "SrcJuying":"1.7",
-    "hint": "小程序需要升级版本6",
+    "hint": "小程序需要升级版本7",
     "JYUpdateRecords": [{
+        title: "beta V1.8",
+        records: [
+            "优化：点播接口编辑，分组快捷选择"
+        ]
+    },{
         title: "2024/09/01 V1.7",
         records: [
             "新增：点播资源增加js文件夹扫描添加t3",
