@@ -2990,10 +2990,15 @@ function importConfirm(jsfile) {
                     let dataurl = data.url;
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                     let groupNames = getGroupNames();
+                    groupNames.unshift("清除");
                     return $(groupNames, 2, "选择分组").select((dataurl) => {
                         let importlist = storage0.getMyVar('importConfirm', []);
                         let index = importlist.indexOf(importlist.filter(d => d.url==dataurl)[0]);
-                        importlist[index].group = input;
+                        if(input=="清除"){
+                            delete importlist[index].group;
+                        }else{
+                            importlist[index].group = input;
+                        }
                         storage0.putMyVar('importConfirm', importlist);
                         refreshPage(false);
                         return 'toast://已设置分组';
