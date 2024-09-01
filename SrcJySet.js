@@ -719,8 +719,8 @@ function jiekou(data) {
     if(data){
         d.push({
             title: getMyVar('isSaveAs', '')!="1"?'保存方式：覆盖':'保存方式：另存',
-            col_type:'text_1',
-            url:$('#noLoading#').lazyRule(()=>{
+            col_type: 'text_1',
+            url: $('#noLoading#').lazyRule(()=>{
                 if(getMyVar('isSaveAs', '')!="1"){
                     putMyVar('isSaveAs', '1');
                 }else{
@@ -844,10 +844,51 @@ function jiekou(data) {
     d.push({
         title:'测试',
         col_type:'text_3',
-        url: $("hiker://empty#noRecordHistory##noHistory#").rule((data) => {
-            setPageTitle(data.name+"-接口测试");
-            require(config.依赖);
-            dianboyiji(data);
+        url: $('#noLoading#').lazyRule((data)=>{
+            if(!data){
+                let apiurl = getMyVar('apiurl','').trim();
+                if(!apiurl.startsWith('http') && !apiurl.startsWith('hiker://') && !apiurl.startsWith('file://')){
+                    return "toast://接口地址不正确";
+                }
+                let apiname = getMyVar('apiname','').trim();
+                if(apiname&&apiurl){
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                    let apitype = getMyVar('apitype','');
+                    if(apitype.includes('自动')){
+                        apitype = getapitype(apiurl);
+                    }
+                    if(!apitype){
+                        return "toast://无法自动识别接口类型，请检查链接";
+                    }
+                    
+                    let urlfile = apiurl;
+                    let extfile;
+                    if(/XPath|biubiu|XBPQ|XYQ|hipy_t3/.test(apitype) && /^http|^file/.test(apiurl)){
+                        extfile = apiurl;
+                        urlfile = cachepath+'libs_jk/'+apitype+"_"+extfile.substr(extfile.lastIndexOf('/') + 1);
+                    }
+                    let arr = {"name": apiname, "type": apitype, "url": urlfile};
+                    let apigroup = getMyVar('apigroup');
+                    if(apigroup){
+                        arr['group'] = apigroup;
+                    }
+                    let apicate = getMyVar('apicate','');
+                    if(apicate){
+                        apicate = apicate.replace('，',',');
+                        arr['categories'] = apicate.split(',').filter(v=>v);
+                    }
+                    arr['ext'] = extfile;
+                    data = arr;
+                }else{
+                    return "toast://无法测试，检查项目填写完整性";
+                }
+            }
+            
+            return $("hiker://empty#noRecordHistory##noHistory#").rule((data) => {
+                setPageTitle(data.name+"-接口测试");
+                require(config.依赖);
+                dianboyiji(data);
+            }, data);
         }, data)
     }); 
     for (let i = 0; i < 10; i++) {
