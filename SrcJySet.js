@@ -2865,7 +2865,7 @@ function importConfirm(jsfile) {
             datamenu.push("接口测试");
         }
         d.push({
-            title: it.name + (lx=="yp"?"":"(" + it.type + ")") + (it.group?" ["+it.group+"]":"") + " <" + (isnew?"新增加":"已存在") + ">",
+            title: it.name + (lx=="yp"?"":"(" + it.type + ")") + (it.group?" ["+it.group+"]":"") + " {" + (isnew?"新增加":"已存在") + "}",
             url: $(datamenu, 1).select((lx, data) => {
                 data = JSON.parse(base64Decode(data));
                 if (input == "确定导入") {
