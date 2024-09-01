@@ -324,7 +324,7 @@ function SRCSet() {
         let selectmenu,datatitle,datadesc;
         if(guanliType=="jk"){
             datadesc = it.url;
-            selectmenu = ["分享","编辑", "删除", it.stop?"启用":"禁用", "优选"];
+            selectmenu = ["分享","编辑", "删除", it.stop?"启用":"禁用", "优选", "测试"];
         }else{
             datadesc = it.ext&&it.ext.flag?it.ext.flag.join(','):"";
             selectmenu = ["分享","编辑", "删除", it.stop?"启用":"禁用"];
@@ -364,11 +364,17 @@ function SRCSet() {
                     let sm = dataEnable(getMyVar('guanli', 'jk'), data, input);
                     refreshPage(false);
                     return 'toast://' + sm;
-                } else if (input == "优选" ) {
+                } else if (input == "优选") {
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                     let sm = dataHandle('jk', data, '接口优选');
                     refreshPage(false);
                     return 'toast://' + sm;
+                } else if (input == "测试") {
+                    return $("hiker://empty#noRecordHistory##noHistory#").rule((data) => {
+                        setPageTitle(data.name+"-接口测试");
+                        require(config.依赖);
+                        dianboyiji(data);
+                    }, data);
                 }
             }, base64Encode(JSON.stringify(it))),
             desc: datadesc,
