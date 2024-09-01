@@ -720,7 +720,7 @@ function jiekou(data) {
     if(data){
         d.push({
             title:'删除',
-            col_type:'text_2',
+            col_type:'text_3',
             url: $("确定删除接口："+data.name).confirm((data)=>{
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                 deleteData('jk', data);
@@ -731,18 +731,18 @@ function jiekou(data) {
     }else{
         d.push({
             title:'清空',
-            col_type:'text_2',
+            col_type:'text_3',
             url:$("确定要清空上面填写的内容？").confirm(()=>{
-                    clearMyVar('apiname');
-                    clearMyVar('apiurl');
-                    clearMyVar('apitype');
-                    return "toast://已清空";
-                })
+                clearMyVar('apiname');
+                clearMyVar('apiurl');
+                clearMyVar('apitype');
+                return "toast://已清空";
+            })
         });
     }
     d.push({
         title:'保存',
-        col_type:'text_2',
+        col_type:'text_3',
         url: $().lazyRule((data)=>{
             let apiurl = getMyVar('apiurl','').trim();
             if(!apiurl.startsWith('http') && !apiurl.startsWith('hiker://') && !apiurl.startsWith('file://')){
@@ -820,6 +820,15 @@ function jiekou(data) {
             } 
         }, data)
     });
+    d.push({
+        title:'测试',
+        col_type:'text_3',
+        url: $("hiker://empty#noRecordHistory##noHistory#").rule((data) => {
+            require(config.依赖);
+            dianboyiji(data);
+            setPageTitle(data.name+"-接口测试");
+        }, data)
+    }); 
     for (let i = 0; i < 10; i++) {
         d.push({
             col_type: "blank_block"
