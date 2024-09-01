@@ -2861,7 +2861,7 @@ function importConfirm(jsfile) {
         let isnew = ndatalist.some(v=>v.url==it.url);
         let datamenu = ["确定导入", "修改名称"];
         if(lx=="jk"){
-            datamenu.push("修改分组");
+            datamenu.push("设定分组");
         }
         d.push({
             title: it.name + (lx=="yp"?"":"-" + (it.group||it.type)) + "  [" + (isnew?"新增加":"已存在") + "]",
@@ -2905,6 +2905,18 @@ function importConfirm(jsfile) {
                         refreshPage(false);
                         return "toast://已修改名称";
                     }, data);
+                }else if (input == "设定分组") {
+                    let dataurl = data.url;
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                    let groupNames = getGroupNames();
+                    return $(groupNames, 2, "选择分组").select((dataurl) => {
+                        let importlist = storage0.getMyVar('importConfirm', []);
+                        let index = importlist.indexOf(importlist.filter(d => d.url==dataurl)[0]);
+                        importlist[index].group = input;
+                        storage0.putMyVar('importConfirm', importlist);
+                        refreshPage(false);
+                        return 'toast://已设置分组';
+                    },dataurl)
                 }
             }, lx, base64Encode(JSON.stringify(it))),
             img: getIcon("管理-箭头.svg"),
