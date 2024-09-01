@@ -635,14 +635,19 @@ function dianboerji() {
 }
 
 //点播一级
-function dianboyiji() {
+function dianboyiji(testdata) {
     addListener("onClose", $.toString(() => {
         clearMyVar('点播动态加载loading');
     }));
     let d = [];
-    let yxdatalist = getDatas('jk', 1);
-    let index = yxdatalist.indexOf(yxdatalist.filter(d => d.type==sourceType && d.name==sourceName )[0]);
-    let jkdata = yxdatalist[index] || {};
+    let jkdata = {};
+    if(testdata){
+        jkdata = testdata;
+    }else{
+        let yxdatalist = getDatas('jk', 1);
+        let index = yxdatalist.indexOf(yxdatalist.filter(d => d.type==sourceType && d.name==sourceName )[0]);
+        jkdata = yxdatalist[index] || {};
+    }
     let sgroup = jkdata.group || jkdata.type;
     let sname = jkdata.name;
     if(!sgroup){
