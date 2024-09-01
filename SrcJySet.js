@@ -2841,9 +2841,9 @@ function importConfirm(jsfile) {
         let isnew = ndatalist.some(v=>v.url==it.url);
         d.push({
             title: it.name + (lx=="yp"?"":"-" + (it.group||it.type)) + "  [" + (isnew?"新增加":"已存在") + "]",
-            url: $(["确定导入"], 1).select((lx, data) => {
+            url: $(["直接导入"], 1).select((lx, data) => {
                 data = JSON.parse(base64Decode(data));
-                if (input == "确定导入") {
+                if (input == "直接导入") {
                     return $("如本地存在则将覆盖，确认？").confirm((lx,data)=>{
                         let dataurl = data.url;
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
