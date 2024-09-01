@@ -686,15 +686,17 @@ function dianboyiji(testSource) {
             },{
                 title: "编辑当前源",
                 js: $.toString((data) => {
-                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
-                    return jiekou(data);
+                    return $('hiker://empty#noRecordHistory##noHistory#').rule((data) => {
+                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                        return jiekou(data);
+                    }, data)
                 },jkdata)
             })
         }
         
         d.push({
             title: "换主页源",
-            url: $('#noLoading#').lazyRule(() => {
+            url: testSource?"toast://测试模式下不能更换主页源":$('#noLoading#').lazyRule(() => {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                 return selectSource();
             }),
@@ -721,7 +723,7 @@ function dianboyiji(testSource) {
         })
         d.push({
             title: "管理设置",
-            url: $(["接口管理","解析管理","资源管理","站源切换"],1).select(()=>{
+            url: testSource?"toast://测试模式下不能更换主页源":$(["接口管理","解析管理","资源管理","站源切换"],1).select(()=>{
                 if(input=="接口管理"){
                     if(getItem("sourceMode")=="2"){
                         return "toast://订阅文件模式，无法管理本地接口";
