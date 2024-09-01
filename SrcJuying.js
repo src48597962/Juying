@@ -655,7 +655,7 @@ function dianboyiji(testdata) {
     let sgroup = jkdata.group || jkdata.type;
     let sname = jkdata.name;
     if(!sgroup){
-        sourceName = '';
+        sname = '';
     }
 
     if(MY_PAGE==1){
@@ -747,7 +747,7 @@ function dianboyiji(testdata) {
             col_type: "icon_3_round_fill"
         })
 
-        if(!sourceName){
+        if(!sname){
             d.push({
                 col_type: "line_blank"
             });
@@ -761,7 +761,7 @@ function dianboyiji(testdata) {
                 }
             })
         }else{
-            setPageTitle(sourceName);
+            setPageTitle(sname);
 
             if (typeof(setPreResult)!="undefined" && getMyVar('点播动态加载loading')!='1') {
                 d.push({
@@ -851,7 +851,7 @@ function dianboyiji(testdata) {
             }
         }
     }
-    if(sourceName){
+    if(sname){
         try{
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
             let yidata = getYiData(jkdata);
