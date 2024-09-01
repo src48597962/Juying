@@ -1915,6 +1915,7 @@ function resource() {
                 }else if(!(input.startsWith('/') || input.startsWith('http') || input.startsWith('file') || input.startsWith('hiker'))){
                     return 'toast://输入不正确，非正常链接';
                 }else if(importtype!="4" && input.endsWith('/')){
+                    log(importtype);
                     return 'toast://输入不正确，不要以/结尾';
                 }else if(importtype=="4" && (!input.endsWith('/') || !input.startsWith('/'))){
                     return 'toast://文件夹路径不正确，以/开头结尾';
