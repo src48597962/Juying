@@ -641,13 +641,33 @@ function jiekou(data) {
             return'toast://已选择类型：' + input;
         })
     });
+    //获取类型名称数组
+    function getGroupNames() {
+        let gnames = [];
+        getDatas("jk", 1).forEach(it => {
+            if (it.group && gnames.indexOf(it.group) == -1) {
+                gnames.push(it.group);
+            }
+        })
+        return gnames;
+    }
+    let groupNames = getGroupNames();
+    groupNames.push("自定义");
     d.push({
-        title:'分组名称：' + getMyVar('apigroup', ''),
+        title: '分组名称：' + getMyVar('apigroup', ''),
         col_type: 'text_1',
-        url:$(getMyVar('apigroup', ''),"输入分组名称，为空则取类型").input(()=>{
-            putMyVar('apigroup', input);
-            refreshPage(true);
-            return "toast://"+input;
+        url: $(groupNames,2,"搜索分组：").select(() => {
+            if(input=="自定义"){
+                return $(getMyVar('apigroup', ''), "输入分组名称，为空则取类型").input(() => {
+                    putMyVar('apigroup', input);
+                    refreshPage(false);
+                    return 'toast://分组已设置为：' + input;
+                })
+            }else{
+                putMyVar('apigroup', input);
+                refreshPage(false);
+            }
+            return 'toast://分组已设置为：' + input;
         })
     });
     d.push({
