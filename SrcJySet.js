@@ -845,10 +845,6 @@ function jiekou(data) {
         title:'测试',
         col_type:'text_3',
         url: $("hiker://empty#noRecordHistory##noHistory#").rule((data) => {
-            clearMyVar('SrcJu_dianbo$分类');
-            clearMyVar('SrcJu_dianbo$fold');
-            clearMyVar('SrcJu_dianbo$classCache');
-            clearMyVar('SrcJu_dianbo$flCache');
             setPageTitle(data.name+"-接口测试");
             require(config.依赖);
             dianboyiji(data);
@@ -2957,10 +2953,6 @@ function importConfirm(jsfile) {
                     },dataurl)
                 }else if (input == "接口测试") {
                     return $("hiker://empty#noRecordHistory##noHistory#").rule((data) => {
-                        clearMyVar('SrcJu_dianbo$分类');
-                        clearMyVar('SrcJu_dianbo$fold');
-                        clearMyVar('SrcJu_dianbo$classCache');
-                        clearMyVar('SrcJu_dianbo$flCache');
                         setPageTitle(data.name+"-接口测试");
                         require(config.依赖);
                         dianboyiji(data);
