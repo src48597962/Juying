@@ -638,11 +638,15 @@ function dianboerji() {
 function dianboyiji(testdata) {
     addListener("onClose", $.toString(() => {
         clearMyVar('点播动态加载loading');
+        clearMyVar('点播一级jkdata');
     }));
     let d = [];
     let jkdata = {};
     if(testdata){
+        log("接口测试模式");
         jkdata = testdata;
+    }else if(storage0.getMyVar('点播一级jkdata')){
+        jkdata = storage0.getMyVar('点播一级jkdata');
     }else{
         let yxdatalist = getDatas('jk', 1);
         let index = yxdatalist.indexOf(yxdatalist.filter(d => d.type==sourceType && d.name==sourceName )[0]);
