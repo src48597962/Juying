@@ -2862,6 +2862,7 @@ function importConfirm(jsfile) {
         let datamenu = ["确定导入", "修改名称"];
         if(lx=="jk"){
             datamenu.push("设定分组");
+            datamenu.push("接口测试");
         }
         d.push({
             title: it.name + (lx=="yp"?"":"(" + it.type + ")") + (it.group?"〔"+it.group+"〕":"") + " [" + (isnew?"新增加":"已存在") + "]",
@@ -2920,6 +2921,11 @@ function importConfirm(jsfile) {
                         refreshPage(false);
                         return 'toast://已设置分组';
                     },dataurl)
+                }else if (input == "接口测试") {
+                    return $("hiker://empty#immersiveTheme##autoCache#").rule((data) => {
+                        require(config.依赖);
+                        dianboyiji(data);
+                    },data)
                 }
             }, lx, base64Encode(JSON.stringify(it))),
             img: getIcon("管理-箭头.svg"),
