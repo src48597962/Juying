@@ -656,7 +656,7 @@ function jiekou(data) {
     d.push({
         title: '分组名称：' + getMyVar('apigroup', ''),
         col_type: 'text_1',
-        url: $(groupNames,2,"搜索分组：").select(() => {
+        url: $(groupNames, 2, "选择分组").select(() => {
             if(input=="自定义"){
                 return $(getMyVar('apigroup', ''), "输入分组名称，为空则取类型").input(() => {
                     putMyVar('apigroup', input);
