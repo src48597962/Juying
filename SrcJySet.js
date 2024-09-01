@@ -540,6 +540,16 @@ function jiexisave(urls, mode) {
     }
     return num;
 }
+//获取接口数组
+function getGroupNames() {
+    let gnames = [];
+    getDatas("jk", 1).forEach(it => {
+        if (it.group && gnames.indexOf(it.group) == -1) {
+            gnames.push(it.group);
+        }
+    })
+    return gnames;
+}
 //接口新增或编辑
 function jiekou(data) {
     addListener("onClose", $.toString(() => {
@@ -641,16 +651,7 @@ function jiekou(data) {
             return'toast://已选择类型：' + input;
         })
     });
-    //获取类型名称数组
-    function getGroupNames() {
-        let gnames = [];
-        getDatas("jk", 1).forEach(it => {
-            if (it.group && gnames.indexOf(it.group) == -1) {
-                gnames.push(it.group);
-            }
-        })
-        return gnames;
-    }
+    
     let groupNames = getGroupNames();
     groupNames.push("自定义");
     d.push({
@@ -2857,13 +2858,16 @@ function importConfirm(jsfile) {
     });
 
     datalist.forEach(it=>{
-
         let isnew = ndatalist.some(v=>v.url==it.url);
+        let datamenu = ["确定导入", "修改名称"];
+        if(lx=="jk"){
+            datamenu.push("修改分组");
+        }
         d.push({
             title: it.name + (lx=="yp"?"":"-" + (it.group||it.type)) + "  [" + (isnew?"新增加":"已存在") + "]",
-            url: $(["直接导入"], 1).select((lx, data) => {
+            url: $(datamenu, 1).select((lx, data) => {
                 data = JSON.parse(base64Decode(data));
-                if (input == "直接导入") {
+                if (input == "确定导入") {
                     return $("如本地存在则将覆盖，确认？").confirm((lx,data)=>{
                         let dataurl = data.url;
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
@@ -2891,6 +2895,16 @@ function importConfirm(jsfile) {
                         }
                         return "toast://导入"+(num<0?"失败":num);
                     },lx,data);
+                }else if (input == "修改名称") {
+                    return $(data.name, "请输入新名称").input((data)=>{
+                        let dataurl = data.url;
+                        let importlist = storage0.getMyVar('importConfirm', []);
+                        let index = importlist.indexOf(importlist.filter(d => d.url==dataurl)[0]);
+                        importlist[index].name = input;
+                        storage0.putMyVar('importConfirm', importlist);
+                        refreshPage(false);
+                        return "toast://已修改名称";
+                    }, data);
                 }
             }, lx, base64Encode(JSON.stringify(it))),
             img: getIcon("管理-箭头.svg"),
