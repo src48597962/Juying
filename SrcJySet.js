@@ -2922,7 +2922,7 @@ function importConfirm(jsfile) {
                         return 'toast://已设置分组';
                     },dataurl)
                 }else if (input == "接口测试") {
-                    return $("hiker://empty#immersiveTheme##autoCache#").rule((data) => {
+                    return $("hiker://empty#noRecordHistory##noHistory#").rule((data) => {
                         require(config.依赖);
                         dianboyiji(data);
                     },data)
