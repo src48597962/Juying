@@ -588,6 +588,22 @@ function jiekou(data) {
             onChange: 'putMyVar("apiname",input)'
         }
     });
+    let keys = ["清除","[优]","[官]","[资]","[密]","[听]","[书]","[漫]","[盘]","[磁]"];
+    keys.forEach(it=>{
+        d.push({
+            title: it,
+            url: $('#noLoading#').lazyRule((it) => {
+                let input = getMyVar('apiname', '').split('[')[0];
+                if(it!="清除"){
+                    input = input + it;
+                }
+                putMyVar("apiname", input);
+                refreshPage(false);
+                return "hiker://empty";
+            },it),
+            col_type: 'scroll_button'
+        })
+    })
     let apitype = getMyVar('apitype', '');
     d.push({
         title: data?'查看':'本地',
@@ -654,6 +670,7 @@ function jiekou(data) {
     
     let groupNames = getGroupNames();
     groupNames.push("自定义");
+    groupNames.unshift("清除");
     d.push({
         title: '分组名称：' + getMyVar('apigroup', ''),
         col_type: 'text_1',
@@ -664,6 +681,10 @@ function jiekou(data) {
                     refreshPage(false);
                     return 'toast://分组已设置为：' + input;
                 })
+            }else if(input=="清除"){
+                putMyVar('apigroup', '');
+                refreshPage(false);
+                return 'toast://已清除分组';
             }else{
                 putMyVar('apigroup', input);
                 refreshPage(false);
