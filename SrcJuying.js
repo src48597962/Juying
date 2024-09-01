@@ -651,12 +651,11 @@ function dianboyiji(testdata) {
         let yxdatalist = getDatas('jk', 1);
         let index = yxdatalist.indexOf(yxdatalist.filter(d => d.type==sourceType && d.name==sourceName )[0]);
         jkdata = yxdatalist[index] || {};
+        if(jkdata.name){
+            setPageTitle(jkdata.name);
+        }
     }
-    let sgroup = jkdata.group || jkdata.type;
     let sname = jkdata.name;
-    if(!sgroup){
-        sname = '';
-    }
 
     if(MY_PAGE==1){
         d.push({
@@ -761,8 +760,6 @@ function dianboyiji(testdata) {
                 }
             })
         }else{
-            setPageTitle(sname);
-
             if (typeof(setPreResult)!="undefined" && getMyVar('点播动态加载loading')!='1') {
                 d.push({
                     title: "",
