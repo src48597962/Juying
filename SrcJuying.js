@@ -635,16 +635,16 @@ function dianboerji() {
 }
 
 //点播一级
-function dianboyiji(testdata) {
+function dianboyiji(testSource) {
     addListener("onClose", $.toString(() => {
         clearMyVar('点播动态加载loading');
         clearMyVar('点播一级jkdata');
     }));
     let d = [];
     let jkdata = {};
-    if(testdata){
+    if(testSource){
         log("接口测试模式");
-        jkdata = testdata;
+        jkdata = testSource;
     }else if(storage0.getMyVar('点播一级jkdata')){
         jkdata = storage0.getMyVar('点播一级jkdata');
     }else{
@@ -656,8 +656,42 @@ function dianboyiji(testdata) {
         }
     }
     let sname = jkdata.name;
+    if(getMyVar('currentSname') != sname){
+        clearMyVar('SrcJu_dianbo$分类');
+        clearMyVar('SrcJu_dianbo$fold');
+        clearMyVar('SrcJu_dianbo$classCache');
+        clearMyVar('SrcJu_dianbo$flCache');
+        putMyVar('currentSname', sname);
+    }
 
     if(MY_PAGE==1){
+        let longClick = [{
+            title: "分享当前源",
+            js: $.toString((data) => {
+                if(!data.url){
+                    return "toast://当前源无效，无法分享";
+                }
+                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                return JYshare('jk', getItem("sharePaste",""), data);
+            },jkdata)
+        }];
+        if(!testSource){
+            longClick.push({
+                title: "删除当前源",
+                js: $.toString(() => {
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                    deleteData('jk', homeSource);
+                    return "toast://已处理";
+                })
+            },{
+                title: "编辑当前源",
+                js: $.toString((data) => {
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                    return jiekou(data);
+                },jkdata)
+            })
+        }
+        
         d.push({
             title: "换主页源",
             url: $('#noLoading#').lazyRule(() => {
@@ -667,23 +701,7 @@ function dianboyiji(testdata) {
             pic_url: getIcon("点播-主页.svg"),
             col_type: "icon_3_round_fill",
             extra: {
-                longClick: [{
-                    title: "删除当前源",
-                    js: $.toString(() => {
-                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
-                        deleteData('jk', homeSource);
-                        return "toast://已处理";
-                    })
-                },{
-                    title: "分享当前源",
-                    js: $.toString((data) => {
-                        if(!data.url){
-                            return "toast://当前源无效，无法分享";
-                        }
-                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
-                        return JYshare('jk', getItem("sharePaste",""), data);
-                    },jkdata)
-                }]
+                longClick: longClick
             }
         })
         let searchModeS = ["代理聚搜","分组接口","当前接口","当前页面"].map(v=>{
