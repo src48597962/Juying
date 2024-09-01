@@ -1909,19 +1909,19 @@ function resource() {
     d.push({
         title: '🆗 '+(importtype=="4"?'确定扫描':importtype=="3"?'确定订阅':'确定导入(' + (Juconfig["importmode"]?"全量":"增量")+')'),
         url: importtype=="1"&&getMyVar('importjiekou','1')!="1"&&getMyVar('importjiexi','1')!="1"?'toast://请选择导入项目':$('#noLoading#').lazyRule((Juconfig,cfgfile) => {
+                let importtype = getMyVar('importtype','1');
+
                 let input = getMyVar('importinput', '').trim();
                 if(input=="" || input.endsWith("Juying.js")){
                     return 'toast://输入不能为空、代码库地址';
                 }else if(!(input.startsWith('/') || input.startsWith('http') || input.startsWith('file') || input.startsWith('hiker'))){
                     return 'toast://输入不正确，非正常链接';
                 }else if(importtype!="4" && input.endsWith('/')){
-                    log(importtype);
                     return 'toast://输入不正确，不要以/结尾';
                 }else if(importtype=="4" && (!input.endsWith('/') || !input.startsWith('/'))){
                     return 'toast://文件夹路径不正确，以/开头结尾';
                 }
                 
-                let importtype = getMyVar('importtype','1');
                 let importrecord = Juconfig['importrecord']||[];
                 if(importrecord.length>20){//保留20个记录
                     importrecord.shift();
