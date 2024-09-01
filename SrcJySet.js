@@ -2864,7 +2864,7 @@ function importConfirm(jsfile) {
             datamenu.push("设定分组");
         }
         d.push({
-            title: it.name + (lx=="yp"?"":"-" + (it.group||it.type)) + "  [" + (isnew?"新增加":"已存在") + "]",
+            title: it.name + (lx=="yp"?"":"(" + it.type + ")") + (it.group?"〔"+it.group+" 〕":"") + "  [" + (isnew?"新增加":"已存在") + "]",
             url: $(datamenu, 1).select((lx, data) => {
                 data = JSON.parse(base64Decode(data));
                 if (input == "确定导入") {
@@ -2897,6 +2897,9 @@ function importConfirm(jsfile) {
                     },lx,data);
                 }else if (input == "修改名称") {
                     return $(data.name, "请输入新名称").input((data)=>{
+                        if(!input.trim()){
+                            return "toast://不能为空";
+                        }
                         let dataurl = data.url;
                         let importlist = storage0.getMyVar('importConfirm', []);
                         let index = importlist.indexOf(importlist.filter(d => d.url==dataurl)[0]);
