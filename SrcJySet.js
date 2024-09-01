@@ -2865,7 +2865,7 @@ function importConfirm(jsfile) {
             datamenu.push("接口测试");
         }
         d.push({
-            title: it.name + (lx=="yp"?"":"(" + it.type + ")") + (it.group?"〔"+it.group+"〕":"") + " [" + (isnew?"新增加":"已存在") + "]",
+            title: it.name + (lx=="yp"?"":"(" + it.type + ")") + (it.group?" ["+it.group+"]":"") + " <" + (isnew?"新增加":"已存在") + ">",
             url: $(datamenu, 1).select((lx, data) => {
                 data = JSON.parse(base64Decode(data));
                 if (input == "确定导入") {
@@ -2925,6 +2925,7 @@ function importConfirm(jsfile) {
                     return $("hiker://empty#noRecordHistory##noHistory#").rule((data) => {
                         require(config.依赖);
                         dianboyiji(data);
+                        setPageTitle(data.name+"-接口测试");
                     },data)
                 }
             }, lx, base64Encode(JSON.stringify(it))),
