@@ -158,7 +158,7 @@ function SRCSet() {
         })
         if(sx.length>0){
             sx.unshift({
-                title: "清搜",
+                title: "清除",
                 url: !getMyVar("SrcJu_seacrhJiekou")?"hiker://empty":$('#noLoading#').lazyRule(() => {
                     clearMyVar("SrcJu_seacrhJiekou");
                     refreshPage(false);
@@ -845,9 +845,13 @@ function jiekou(data) {
         title:'测试',
         col_type:'text_3',
         url: $("hiker://empty#noRecordHistory##noHistory#").rule((data) => {
+            clearMyVar('SrcJu_dianbo$分类');
+            clearMyVar('SrcJu_dianbo$fold');
+            clearMyVar('SrcJu_dianbo$classCache');
+            clearMyVar('SrcJu_dianbo$flCache');
+            setPageTitle(data.name+"-接口测试");
             require(config.依赖);
             dianboyiji(data);
-            setPageTitle(data.name+"-接口测试");
         }, data)
     }); 
     for (let i = 0; i < 10; i++) {
@@ -2953,9 +2957,13 @@ function importConfirm(jsfile) {
                     },dataurl)
                 }else if (input == "接口测试") {
                     return $("hiker://empty#noRecordHistory##noHistory#").rule((data) => {
+                        clearMyVar('SrcJu_dianbo$分类');
+                        clearMyVar('SrcJu_dianbo$fold');
+                        clearMyVar('SrcJu_dianbo$classCache');
+                        clearMyVar('SrcJu_dianbo$flCache');
+                        setPageTitle(data.name+"-接口测试");
                         require(config.依赖);
                         dianboyiji(data);
-                        setPageTitle(data.name+"-接口测试");
                     },data)
                 }
             }, lx, base64Encode(JSON.stringify(it))),
