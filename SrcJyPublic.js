@@ -641,6 +641,7 @@ function selectSource() {
                 clearMyVar('SrcJu_dianbo$classCache');
                 clearMyVar('SrcJu_dianbo$flCache');
                 clearMyVar('点播动态加载loading');
+                clearMyVar('点播一级jkdata');
                 
                 let key = tmpList[i].url;
                 setJkSort(key, 1);
