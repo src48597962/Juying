@@ -192,7 +192,11 @@ function createDrpy(sdata) {
 function createNewDrpy(sdata) {
     createDrpy(sdata);
     let drpy = drpyMap.get(sdata.key);
-    drpy.init(sdata.ext);
+    try{
+        drpy.init(sdata.ext);
+    }catch(e){
+        del(sdata.key);
+    }
     return drpy;
 }
 
