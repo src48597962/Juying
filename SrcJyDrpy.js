@@ -196,7 +196,7 @@ function createNewDrpy(sdata) {
     try{
         drpy.init(sdata.ext);
     }catch(e){
-        del(sdata.key);
+        drpyMap.delete(sdata.key);
         log(e.message);
     }
     log("22");
