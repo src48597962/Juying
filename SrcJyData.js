@@ -98,7 +98,6 @@ function getYiData(jkdata) {
         }
 
         var drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(jkdata);
-        log(Object.keys(drpy).length);
         if(Object.keys(drpy).length == 0){
             log("drpy环境初始化失败，刷新或重启再试");
             toast("drpy环境初始化失败，刷新或重启再试");
@@ -111,6 +110,15 @@ function getYiData(jkdata) {
         }
         log("11");
         let rule = drpy.getRule();
+        if(Object.keys(rule).length == 0){
+            toast("drpy环境初始化失败，刷新或重启再试");
+            $.require.cache.delete($.require.resolve(config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js"));
+            return {
+                fllists: [],
+                vodlists: [],
+                error: {}
+            }
+        }
         log(rule);
         detailurl = rule.detailUrl || "";
         classurl = rule.homeUrl || rule.host;
