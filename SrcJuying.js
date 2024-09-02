@@ -977,7 +977,9 @@ function yiji() {
         clearMyVar('isverifyA');
     }));
     */
-    
+    if(MY_RULE.title=="聚影✓"){
+        toast("此小程序已停用，请重新导入聚影");
+    }
     if(getMyVar('SrcJuying-VersionCheck', '0') == '0'){
         let programversion = 0;
         try{
