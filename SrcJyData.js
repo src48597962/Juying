@@ -108,7 +108,7 @@ function getYiData(jkdata) {
                 error: {}
             }
         }else{
-            log($.type(drpy));
+            log(JSON.stringify(drpy));
         }
         let rule = drpy.getRule();
         detailurl = rule.detailUrl || "";
