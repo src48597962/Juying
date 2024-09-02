@@ -98,6 +98,14 @@ function getYiData(jkdata) {
         }
 
         var drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(jkdata);
+        if(!drpy){
+            toast("drpy环境初始化失败，刷新或重启再试");
+            return {
+                fllists: [],
+                vodlists: [],
+                error: {}
+            }
+        }
         let rule = drpy.getRule();
         detailurl = rule.detailUrl || "";
         classurl = rule.homeUrl || rule.host;
