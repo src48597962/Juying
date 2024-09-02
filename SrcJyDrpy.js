@@ -195,7 +195,8 @@ function createNewDrpy(sdata) {
     try{
         drpy.init(sdata.ext);
     }catch(e){
-        del(sdata.key);
+        //del(sdata.key);
+        clear();
     }
     return drpy;
 }
