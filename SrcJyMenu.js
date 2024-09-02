@@ -148,13 +148,13 @@ function lookset() {
         col_type: "line_blank"
     });
     d.push({
-        title: '功能设置',
+        title: '功能管理',
         pic_url: getIcon("点播-功能开关.svg"),
         col_type: "avatar",
         url: "hiker://empty"
     });
     d.push({
-        title: '解析管理',
+        title: '本地解析管理',
         url: $('#noLoading#').lazyRule(() => {
             if(getItem("sourceMode")=="2"){
                 return "toast://订阅文件模式，无法管理本地解析";
