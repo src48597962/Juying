@@ -1453,6 +1453,7 @@ function getErData(jkdata) {
 // 设置收藏更新最新章节
 function setLastChapter(url,jkdata) {
     MY_URL = url;
+    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
     let erdate = getErData(jkdata);
     let lists = erdate.lists;
     if(lists.length>0){
