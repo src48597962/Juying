@@ -107,6 +107,8 @@ function getYiData(jkdata) {
                 vodlists: [],
                 error: {}
             }
+        }else{
+            log(JSON.stringify(drpy));
         }
 
         let rule = drpy.getRule();
