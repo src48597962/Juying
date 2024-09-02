@@ -109,7 +109,7 @@ function getYiData(jkdata) {
                 error: {}
             }
         }
-
+        log("11");
         let rule = drpy.getRule();
         log(rule);
         detailurl = rule.detailUrl || "";
