@@ -112,7 +112,7 @@ function getYiData(jkdata) {
         let rule = drpy.getRule();
         if(Object.keys(rule).length == 0){
             toast("drpy环境初始化失败，刷新或重启再试");
-            $.require.cache.delete($.require.resolve(config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js"));
+            GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").clear();
             return {
                 fllists: [],
                 vodlists: [],
