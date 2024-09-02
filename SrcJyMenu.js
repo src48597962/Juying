@@ -143,14 +143,31 @@ function lookset() {
     clearItem('playSet');
 
     let d = [];
+    let 箭头图标 = getIcon("点播-箭头.svg");
     d.push({
         col_type: "line_blank"
     });
     d.push({
-        title: '功能开关',
+        title: '功能设置',
         pic_url: getIcon("点播-功能开关.svg"),
         col_type: "avatar",
         url: "hiker://empty"
+    });
+    d.push({
+        title: '解析管理',
+        url: $('#noLoading#').lazyRule(() => {
+            if(getItem("sourceMode")=="2"){
+                return "toast://订阅文件模式，无法管理本地解析";
+            }
+            putMyVar('guanli','jx');
+            return $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
+                setPageTitle('解析管理');
+                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                SRCSet();
+            })
+        }),
+        pic_url: 箭头图标,
+        col_type: "text_icon"
     });
     d.push({
         title: '解析日志打印',
@@ -200,7 +217,7 @@ function lookset() {
             refreshPage(false);
             return 'hiker://empty'
         },partpage),
-        pic_url: getIcon("点播-箭头.svg"),
+        pic_url: 箭头图标,
         col_type: "text_icon"
     });
     d.push({
@@ -211,7 +228,7 @@ function lookset() {
             refreshPage(false);
             return 'hiker://empty'
         },partpage),
-        pic_url: getIcon("点播-箭头.svg"),
+        pic_url: 箭头图标,
         col_type: "text_icon"
     });
     d.push({
@@ -275,7 +292,7 @@ function lookset() {
             refreshPage(false);
             return 'toast://嗅探内核切换为：'+sm;
         }, playSet),
-        pic_url: getIcon("点播-箭头.svg"),
+        pic_url: 箭头图标,
         col_type: "text_icon"
     });
     d.push({
@@ -290,7 +307,7 @@ function lookset() {
             refreshPage(false);
             return 'toast://已切换';
         }, playSet),
-        pic_url: getIcon("点播-箭头.svg"),
+        pic_url: 箭头图标,
         col_type: "text_icon"
     });
     d.push({
@@ -307,7 +324,7 @@ function lookset() {
             writeFile(recordfile, JSON.stringify(parseRecord));
             return 'toast://对此播放地址将拦截';
         }, parseRecord, recordfile),
-        pic_url: getIcon("点播-箭头.svg"),
+        pic_url: 箭头图标,
         col_type: "text_icon"
     });
     d.push({
@@ -317,7 +334,7 @@ function lookset() {
             writeFile(recordfile, JSON.stringify(parseRecord));
             return 'toast://无清空';
         }, parseRecord, recordfile),
-        pic_url: getIcon("点播-箭头.svg"),
+        pic_url: 箭头图标,
         col_type: "text_icon"
     });
     d.push({
