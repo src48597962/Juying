@@ -74,7 +74,7 @@ function sousuo() {
     let name = k.trim();
 
     setResult([{
-        title: "视界聚搜",
+        title: "点我一下，视界聚搜",
         url: "hiker://search?s=" + name,
         extra: {
             delegateOnlySearch: true,
