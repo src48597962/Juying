@@ -888,7 +888,8 @@ function dianboyiji(testSource) {
 
             if(vodlists && vodlists.length>0){
                 vodlists.forEach(list=>{
-                    let vodname =list.vod_name;
+                    let vodname = list.vod_name;
+                    let vodurl = list.vod_url;
                     if(vodname){
                         vodname = vodname.replace(/<\/?.+?\/?>/g,'').replace(/在线观看/g,'').replace('&middot;','·');
                         let voddesc = list.vod_desc || "";
@@ -905,7 +906,7 @@ function dianboyiji(testSource) {
                             vodpic = "https:" + vodpic;
                         }
                         if(!/^http|^hiker/.test(vodpic)){
-                            vodpic = getHome(list.vod_url) + '/' + vodpic;
+                            vodpic = getHome(vodurl) + '/' + vodpic;
                         }
                         let dataObj = {};
                         if(/hipy_/.test(jkdata.type)){
@@ -918,7 +919,7 @@ function dianboyiji(testSource) {
                             title: vodname,
                             desc: voddesc.replace(/<\/?.+?\/?>/g,''),
                             pic_url: vodpic + (vodpic.includes('@')?"":"@Referer="),
-                            url: list.vod_url=="no_data"?"toast://无数据":/^hiker/.test(list.vod_url)?list.vod_url:list.vod_play?$("hiker://empty").lazyRule((dataObj, vod_play) => {
+                            url: vodurl=="no_data"?"toast://无数据":/^hiker/.test(vodurl)?vodurl:list.vod_play?$("hiker://empty").lazyRule((dataObj, vod_play) => {
                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
                                 return SrcParseS.聚影(vod_play, dataObj);
                             }, dataObj, list.vod_play):$("hiker://empty#immersiveTheme##autoCache#").rule(() => {
@@ -927,13 +928,13 @@ function dianboyiji(testSource) {
                             }),
                             col_type: yidata.coltype || 'movie_3',
                             extra: list.vod_play?{
-                                id: list.vod_url,
-                                url: /pan\.quark\.cn|drive\.uc\.cn/.test(list.vod_url)?undefined:list.vod_url,
+                                id: vodurl,
+                                url: /pan\.quark\.cn|drive\.uc\.cn/.test(vodurl)?undefined:vodurl,
                                 jsLoadingInject: true,
                                 blockRules: ['.m4a', '.mp3', '.gif', '.jpeg', '.jpg', '.ico', '.png', 'hm.baidu.com', '/ads/*.js', 'cnzz.com'],
                                 videoExcludeRule: ['m3u8.js','?url=']
                             }:{
-                                url: list.vod_url,
+                                url: vodurl,
                                 pic: vodpic,
                                 pageTitle: vodname,
                                 data: jkdata
