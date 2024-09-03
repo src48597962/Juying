@@ -224,7 +224,7 @@ function getext(jkdata) {
     }
     return '';
 }
-/*
+
 function get(jkdata) {
     let key = jkdata.key || jkdata.name;
     let ext = jkdata.key?jkdata.ext:getext(jkdata);
@@ -248,7 +248,8 @@ function get(jkdata) {
         return drpy;
     }, this).call();
 }
-*/
+
+/*
 const locks = new Map(); // 用于存储每个jkdata的锁
 function get(jkdata) {
     let key = jkdata.key || jkdata.name;
@@ -281,7 +282,7 @@ function get(jkdata) {
         });
     });
 }
-
+*/
 function put(key, drpy) {
     sync(() => drpyMap.set(key, drpy), this).call();
 }
