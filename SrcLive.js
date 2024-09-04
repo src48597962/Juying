@@ -618,7 +618,7 @@ function LiveSet() {
                     d.push({
                         title: (livedata[i].show != 0 ? getide(1) : getide(0)) + livedata[i].name,
                         desc: livedata[i].url,
-                        url: $(["复制链接", "导入本地", "更新缓存", "导入聚直播", "删除订阅", livedata[i].show != 0 ? "停用订阅" : "启用订阅"], 2, "").select((livecfgfile, url) => {
+                        url: $(["复制链接", "导入本地", "更新缓存", "删除订阅", livedata[i].show != 0 ? "停用订阅" : "启用订阅"], 2, "").select((livecfgfile, url) => {
                             try {
                                 if (input == "更新缓存") {
                                     showLoading('正在缓存，请稍后.');
@@ -649,33 +649,6 @@ function LiveSet() {
                                         liveconfig['data'] = livedata;
                                         writeFile(livecfgfile, JSON.stringify(liveconfig));
                                         refreshPage(false);
-                                    }
-                                } else if (input == "导入聚直播") {
-                                    let Julivefile = "hiker://files/rules/live/config.json";
-                                    let Julive = fetch(Julivefile);
-                                    if (Julive != "") {
-                                        try {
-                                            eval("var Judata=" + Julive + ";");
-                                            let Judatalist = Judata['data'] || [];
-                                            if (!Judatalist.some(item => item.url == url)) {
-                                                return $("", "取个名字保存吧").input((Julivefile, Judata, url) => {
-                                                    if (input) {
-                                                        Judata['data'].push({ name: input, url: url });
-                                                        writeFile(Julivefile, JSON.stringify(Judata));
-                                                        return "toast://导入聚直播订阅成功";
-                                                    } else {
-                                                        return "toast://名称不能为空";
-                                                    }
-                                                }, Julivefile, Judata, url)
-                                            } else {
-                                                return "toast://已存在聚直播订阅";
-                                            }
-                                        } catch (e) {
-                                            log("导入聚直播订阅失败>" + e.message);
-                                            return "toast://导入聚直播订阅失败";
-                                        }
-                                    } else {
-                                        return "toast://仓库先导入聚直播小程序";
                                     }
                                 } else if (input == "导入本地") {
                                     showLoading('叠加导入直播，最大万行限制');
@@ -920,25 +893,31 @@ function LiveSet() {
                 for (let i = 0; i < lists.length; i++) {
                     d.push({
                         title: lists[i].url,
-                        url: $(["选择", "删除"], 1, "").select((Juconfig, cfgfile, url) => {
-                            if (input == "选择") {
-                                putMyVar('importinput', url);
-                                refreshPage(true);
-                            } else if (input == "删除") {
-                                let importrecord = Juconfig['importrecord'] || [];
-                                for (let i = 0; i < importrecord.length; i++) {
-                                    if (importrecord[i].url == url && importrecord[i].type == '1') {
-                                        importrecord.splice(i, 1);
-                                        break;
+                        url: $('#noLoading#').lazyRule((url) => {
+                            putMyVar('importinput', url);
+                            refreshPage(false);
+                            return "toast://已选择，需确认";
+                        }, lists[i].url),
+                        col_type: "text_1",
+                        extra: {
+                            id: lists[i].url,
+                            longClick: [{
+                                title: "删除",
+                                js: $.toString((cfgfile, Juconfig, url) => {
+                                    let importrecord = Juconfig['importrecord']||[];
+                                    for(let j=0;j<importrecord.length;j++){
+                                        if(importrecord[j].url==url&&importrecord[j].type=='1'){
+                                            importrecord.splice(j,1);
+                                            break;
+                                        }
                                     }
-                                }
-                                Juconfig['importrecord'] = importrecord;
-                                writeFile(cfgfile, JSON.stringify(Juconfig));
-                                refreshPage(false);
-                            }
-                            return "hiker://empty";
-                        }, Juconfig, cfgfile, lists[i].url),
-                        col_type: "text_1"
+                                    Juconfig['importrecord'] = importrecord; 
+                                    writeFile(cfgfile, JSON.stringify(Juconfig));
+                                    refreshPage(false);
+                                    return "toast://已删除";
+                                },cfgfile, Juconfig, lists[i].url)
+                            }]
+                        }
                     });
                 }
             }
