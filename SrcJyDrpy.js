@@ -2,9 +2,22 @@ const codePath = module.modulePath.slice(0, module.modulePath.lastIndexOf("/") +
 const JSEngine = com.example.hikerview.service.parser.JSEngine;
 const drpyMap = new Map();
 const GMkey = module.importParam;
+function oldbuildJsEnv(ticket) {
+  let code = String.raw`
+    // const my_rule = '
+    const MY_RULE = ${my_rule};
+    const my_rule = JSON.stringify(MY_RULE);
+    const MY_TICKET = "${ticket || ""}";
+    eval(getJsPlugin());
+    eval(getJsLazyPlugin());
+    `;
+  return code;
+}
+
 function buildJsEnv(ticket) {
-    let my_rule = JSON.stringify(MY_RULE);
-    let code = `
+  let my_rule = JSON.stringify(MY_RULE);
+
+  let code = `
     let my_rule = '';
     my_rule = null;
     const MY_RULE = ${my_rule};
@@ -12,7 +25,7 @@ function buildJsEnv(ticket) {
     eval(getJsPlugin());
     eval(getJsLazyPlugin());
     `;
-    return code;
+  return code;
 }
 
 function sync(func, sp) {
@@ -20,7 +33,11 @@ function sync(func, sp) {
 }
 
 function createDrpy(sdata) {
-    JSEngine.getInstance().evalJS(buildJsEnv(MY_TICKET) + "\n!" + $.toString((sdata, codePath, GMkey, MY_TICKET) => {
+    let func = buildJsEnv;
+    if (typeof my_rule != "undefined" && my_rule != null) {
+        func = oldbuildJsEnv;
+    }
+    JSEngine.getInstance().evalJS(func(MY_TICKET) + "\n!" + $.toString((sdata, codePath, GMkey, MY_TICKET) => {
         const localKey = "drpy";
         const CryptoUtil = $.require("hiker://assets/crypto-java.js");
         globalThis.local = {
@@ -193,6 +210,7 @@ function createNewDrpy(sdata) {
     createDrpy(sdata);
     let drpy = drpyMap.get(sdata.key);
     drpy.init(sdata.ext);
+    log(sdata.key + ">init");
     return drpy;
 }
 
