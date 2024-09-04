@@ -267,40 +267,6 @@ function get(jkdata) {
     }, this).call();
 }
 
-/*
-const locks = new Map(); // 用于存储每个jkdata的锁
-function get(jkdata) {
-    let key = jkdata.key || jkdata.name;
-    let ext = jkdata.key ? jkdata.ext : getext(jkdata);
-    let sdata = { key: key, ext: ext };
-
-    // 获取锁
-    let lock = locks.get(key);
-    if (!lock) {
-        lock = Promise.resolve();
-        locks.set(key, lock);
-    }
-
-    return lock.then(() => {
-        // 在这里执行你的逻辑
-        return sync(() => {
-            if (drpyMap.has(key)) {
-                //log("取缓存" + key);
-                return drpyMap.get(key);
-            }
-            if (drpyMap.size >= 5) {
-                //log("只保持最大5个drpy环境");
-                del(Array.from(drpyMap.keys()).at(0));
-            }
-            let drpy = createNewDrpy(sdata);
-            return drpy;
-        }, this).call().finally(() => {
-            // 释放锁
-            locks.delete(key);
-        });
-    });
-}
-*/
 function put(key, drpy) {
     sync(() => drpyMap.set(key, drpy), this).call();
 }
