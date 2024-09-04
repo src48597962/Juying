@@ -618,7 +618,7 @@ function LiveSet() {
                     d.push({
                         title: (livedata[i].show != 0 ? getide(1) : getide(0)) + livedata[i].name,
                         desc: livedata[i].url,
-                        url: $(["复制链接", "导入本地", "更新缓存", "删除订阅", livedata[i].show != 0 ? "停用订阅" : "启用订阅"], 2, "").select((livecfgfile, url) => {
+                        url: $(["复制链接", "修改名称", "导入本地", "更新缓存", "删除订阅", livedata[i].show != 0 ? "停用订阅" : "启用订阅"], 2, "").select((livecfgfile, url) => {
                             try {
                                 if (input == "更新缓存") {
                                     showLoading('正在缓存，请稍后.');
@@ -738,7 +738,7 @@ function LiveSet() {
         col_type: "text_icon"
     });
     d.push({
-        title: "TVBox订阅",
+        title: "box配置订阅",
         img: globalMap0.getVar('Jy_gmParams').getIcon("直播-箭头.svg"),
         col_type: "text_icon",
         url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
@@ -768,7 +768,7 @@ function LiveSet() {
                 }
             });
             d.push({
-                title: '本地文件',
+                title: '⏏️ 本地文件',
                 col_type: 'text_2',
                 url: `fileSelect://` + $.toString(() => {
                     putMyVar("importinput", "file://" + input);
@@ -777,7 +777,7 @@ function LiveSet() {
                 })
             })
             d.push({
-                title: '确定导入',
+                title: '🆗 确定导入',
                 col_type: 'text_2',
                 url: $('#noLoading#').lazyRule((Juconfig, cfgfile) => {
                     let input = getMyVar('importinput', '');
@@ -882,20 +882,13 @@ function LiveSet() {
                 return item.type == '1';
             })
             if (lists.length > 0) {
-                d.push({
-                    title: '点击下方的历史条目，进行操作👇',
-                    col_type: "rich_text"
-                });
-                d.push({
-                    col_type: "line"
-                });
                 lists.reverse();
                 for (let i = 0; i < lists.length; i++) {
                     d.push({
                         title: lists[i].url,
                         url: $('#noLoading#').lazyRule((url) => {
                             putMyVar('importinput', url);
-                            refreshPage(false);
+                            refreshPage(true);
                             return "toast://已选择，需确认";
                         }, lists[i].url),
                         col_type: "text_1",
