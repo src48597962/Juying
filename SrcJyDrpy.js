@@ -210,7 +210,7 @@ function createNewDrpy(sdata) {
     createDrpy(sdata);
     let drpy = drpyMap.get(sdata.key);
     drpy.init(sdata.ext);
-    log(sdata.key + ">init");
+    //log(sdata.key + ">init");
     return drpy;
 }
 
@@ -253,7 +253,7 @@ function get(jkdata) {
             //log("取缓存" + key)
             let drpy = drpyMap.get(key);
             if(Object.keys(drpy.getRule()).length > 0){
-                return drpyMap.get(key);
+                return drpy;
             }else{
                 drpyMap.delete(key);
             }
