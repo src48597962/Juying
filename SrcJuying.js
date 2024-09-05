@@ -398,7 +398,35 @@ function dianboerji() {
         //生成选集
         let 列表 = erdata.lists.length>lineid?erdata.lists[lineid].filter(v=>v):[];
         if(列表.length>0){
+            function checkAndReverseArray(arr) {
+                const numbers = [];
+                arr.slice(0, 50).forEach(it=>{
+                    const digits = it.split('$')[0].match(/\d+/);
+                    if (digits) {
+                        numbers.push(parseInt(digits[0]));
+                    }
+                })
+
+                if (numbers.length < 3) {
+                    return arr;
+                }
+                let increasingCount = 0;
+                let decreasingCount = 0;
+                for (let i = 1; i < numbers.length; i++) {
+                    if (numbers[i] > numbers[i - 1]) {
+                        increasingCount++;
+                    } else if (numbers[i] < numbers[i - 1]) {
+                        decreasingCount++;
+                    }
+                }
+                if (increasingCount > decreasingCount) {
+                    return arr;
+                } else {
+                    return arr.reverse();
+                }
+            }
             try{
+                /*
                 let i1 = parseInt(列表.length / 6);
                 let i2 = parseInt(列表.length / 4);
                 let i3 = parseInt(列表.length / 2);
@@ -408,6 +436,8 @@ function dianboerji() {
                 if(parseInt(list1.match(/(\d+)/)[0])>parseInt(list2.match(/(\d+)/)[0]) && parseInt(list2.match(/(\d+)/)[0])>parseInt(list3.match(/(\d+)/)[0])){
                     列表.reverse();
                 }
+                */
+                列表 = checkAndReverseArray(列表);
             }catch(e){
                 //xlog('强制修正选集顺序失败>'+e.message)
             }
