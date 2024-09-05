@@ -120,11 +120,9 @@ function Live() {
 
     if (JYlives.length > 0) {
         let datalist = storage0.getMyVar('JYlive_datalist') || [];
-        log(datalist.length);
         let datalist2 = [];
 
         if(datalist.length == 0){
-            log("初始化datalist");
             let group = "";
             for (let i = 0; i < JYlives.length; i++) {
                 try {
@@ -152,7 +150,8 @@ function Live() {
 
         d.push({
             title: "🔍",
-            url: $.toString((guanlidata, datalist) => {
+            url: $.toString((guanlidata) => {
+                let datalist = storage0.getMyVar('JYlive_datalist') || [];
                 if (datalist.length > 0) {
                     deleteItemByCls('livelist');
                     let lists = datalist.filter(item => {
@@ -162,7 +161,7 @@ function Live() {
                     addItemAfter('liveloading', gldatalist);
                 }
                 return "hiker://empty";
-            }, guanlidata, datalist),
+            }, guanlidata),
             desc: "搜你想要的...",
             col_type: "input",
             extra: {
