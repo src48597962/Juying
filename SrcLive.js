@@ -131,10 +131,10 @@ function Live() {
                             group = JYlives[i].split(',')[0];
                         } else if (JYlives[i].indexOf(',') > -1) {
                             let one = JYlives[i].split(',');
-                            datalist.push({ group: group, name: one[0].trim(), url: one[1].trim() });
+                            datalist.push({ group: group, name: one[0].trim() });//, url: one[1].trim()
                         }
                     } else if (JYlives[i].indexOf('group-title') > -1) {
-                        datalist.push({ group: JYlives[i].match(/group-title="(.*?)"/)[1], name: JYlives[i].match(/",(.*?)\n/)[1], url: JYlives[i].split("\n")[1] });
+                        datalist.push({ group: JYlives[i].match(/group-title="(.*?)"/)[1], name: JYlives[i].match(/",(.*?)\n/)[1] });//, url: JYlives[i].split("\n")[1]
                     }
                 } catch (e) {
                     //log(e.message);
@@ -147,8 +147,7 @@ function Live() {
                 obj[next.name] ? "" : (obj[next.name] = true && newArr.push(next));
                 return newArr;
             }, []);
-            log(datalist.length);
-            log(datalist[0]);
+
             storage0.putMyVar('JYlive_datalist', datalist);
         }
 
