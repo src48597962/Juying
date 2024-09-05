@@ -120,9 +120,11 @@ function Live() {
 
     if (JYlives.length > 0) {
         let datalist = storage0.getMyVar('JYlive_datalist') || [];
+        log(datalist.length);
         let datalist2 = [];
 
         if(datalist.length == 0){
+            log("初始化datalist");
             let group = "";
             for (let i = 0; i < JYlives.length; i++) {
                 try {
