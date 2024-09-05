@@ -210,7 +210,7 @@ function createNewDrpy(sdata) {
     createDrpy(sdata);
     let drpy = drpyMap.get(sdata.key);
     drpy.init(sdata.ext);
-    log(sdata.key + ">init");
+    //log(sdata.key + ">init");
     return drpy;
 }
 
