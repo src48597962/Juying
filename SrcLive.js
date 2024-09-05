@@ -123,7 +123,7 @@ function Live() {
         let datalist2 = [];
 
         if(datalist.length == 0){
-            let group = "";
+            let group = ""; //先取得分组名再导入频道，所以要定义在循环外面
             for (let i = 0; i < JYlives.length; i++) {
                 try {
                     if (JYlive.indexOf('#genre#') > -1) {
@@ -146,6 +146,7 @@ function Live() {
                 obj[next.name] ? "" : (obj[next.name] = true && newArr.push(next));
                 return newArr;
             }, []);
+            storage0.putMyVar('JYlive_datalist', datalist);
         }
 
         d.push({
@@ -359,6 +360,7 @@ function GroupEdit(groupname, mode, lists) {
 }
 
 function guanlidata(datalist) {
+    let tvimg = globalMap0.getVar('Jy_gmParams').getIcon("直播-tv.svg");
     let list = [];
     for (let i = 0; i < datalist.length; i++) {
         let name = datalist[i].name;
@@ -386,7 +388,7 @@ function guanlidata(datalist) {
         }
         list.push({
             title: name,
-            img: globalMap0.getVar('Jy_gmParams').getIcon("直播-tv.svg"),
+            img: tvimg,
             col_type: 'icon_2_round',
             url: $('#noLoading#').lazyRule((name) => {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLive.js');
