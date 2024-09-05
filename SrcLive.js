@@ -8,6 +8,7 @@ function Live() {
         clearMyVar('JYlivedyurl');
         clearMyVar('selectgroup');
         clearMyVar('JYlivelocal');
+        clearMyVar('JYlive_datalist');
     }));
 
     var d = [];
@@ -74,6 +75,7 @@ function Live() {
             url: $("#noLoading#").lazyRule(() => {
                 putMyVar('JYlivedyurl', 'juying');
                 putMyVar('JYlivelocal', '1');
+                clearMyVar('JYlive_datalist');
                 refreshPage(false);
                 return "toast://聚影直播本地源数据";
             }),
@@ -92,6 +94,7 @@ function Live() {
                     putMyVar('JYlivedyurl', dyurl);
                     clearMyVar('JYlivelocal');
                     clearMyVar('editmode');
+                    clearMyVar('JYlive_datalist');
                     refreshPage(false);
                     return "toast://已切换远程订阅：" + dyname;
                 }, dyname, dyurl),
@@ -106,45 +109,45 @@ function Live() {
             col_type: 'line'
         })
     }
-
+    let JYlives = [];
     if (JYlive) {
         if (JYlive.indexOf('#genre#') > -1) {
-            var JYlives = JYlive.split('\n');
+            JYlives = JYlive.split('\n');
         } else if (JYlive.indexOf('#EXTINF:-1') > -1) {
-            var JYlives = JYlive.split('#EXTINF:-1 ');
-        } else {
-            var JYlives = [];
+            JYlives = JYlive.split('#EXTINF:-1 ');
         }
-    } else {
-        var JYlives = [];
     }
 
     if (JYlives.length > 0) {
-        let datalist = [];
+        let datalist = storage0.getMyVar('JYlive_datalist') || [];
         let datalist2 = [];
-        let group = "";
-        for (let i = 0; i < JYlives.length; i++) {
-            try {
-                if (JYlive.indexOf('#genre#') > -1) {
-                    if (JYlives[i].indexOf('#genre#') > -1) {
-                        group = JYlives[i].split(',')[0];
-                    } else if (JYlives[i].indexOf(',') > -1) {
-                        datalist.push({ group: group, name: JYlives[i].split(',')[0].trim() });
+
+        if(datalist.length == 0){
+            let group = "";
+            for (let i = 0; i < JYlives.length; i++) {
+                try {
+                    if (JYlive.indexOf('#genre#') > -1) {
+                        if (JYlives[i].indexOf('#genre#') > -1) {
+                            group = JYlives[i].split(',')[0];
+                        } else if (JYlives[i].indexOf(',') > -1) {
+                            datalist.push({ group: group, name: JYlives[i].split(',')[0].trim() });
+                        }
+                    } else if (JYlives[i].indexOf('group-title') > -1) {
+                        datalist.push({ group: JYlives[i].match(/group-title="(.*?)"/)[1], name: JYlives[i].match(/",(.*?)\n/)[1] });
                     }
-                } else if (JYlives[i].indexOf('group-title') > -1) {
-                    datalist.push({ group: JYlives[i].match(/group-title="(.*?)"/)[1], name: JYlives[i].match(/",(.*?)\n/)[1] });
+                } catch (e) {
+                    //log(e.message);
                 }
-            } catch (e) {
-                //log(e.message);
             }
+
+            let obj = {};
+            if (JYlivedyurl == "juying") { putMyVar('JYlivenum', datalist.length); }
+            datalist = datalist.reduce((newArr, next) => {
+                obj[next.name] ? "" : (obj[next.name] = true && newArr.push(next));
+                return newArr;
+            }, []);
         }
 
-        let obj = {};
-        if (JYlivedyurl == "juying") { putMyVar('JYlivenum', datalist.length); }
-        datalist = datalist.reduce((newArr, next) => {
-            obj[next.name] ? "" : (obj[next.name] = true && newArr.push(next));
-            return newArr;
-        }, []);
         d.push({
             title: "🔍",
             url: $.toString((guanlidata, datalist) => {
