@@ -8,7 +8,6 @@ function Live() {
         clearMyVar('JYlivedyurl');
         clearMyVar('selectgroup');
         clearMyVar('JYlivelocal');
-        clearMyVar('JYlive_datalist');
     }));
 
     var d = [];
@@ -75,7 +74,6 @@ function Live() {
             url: $("#noLoading#").lazyRule(() => {
                 putMyVar('JYlivedyurl', 'juying');
                 putMyVar('JYlivelocal', '1');
-                clearMyVar('JYlive_datalist');
                 refreshPage(false);
                 return "toast://聚影直播本地源数据";
             }),
@@ -94,7 +92,6 @@ function Live() {
                     putMyVar('JYlivedyurl', dyurl);
                     clearMyVar('JYlivelocal');
                     clearMyVar('editmode');
-                    clearMyVar('JYlive_datalist');
                     refreshPage(false);
                     return "toast://已切换远程订阅：" + dyname;
                 }, dyname, dyurl),
@@ -119,42 +116,34 @@ function Live() {
     }
 
     if (JYlives.length > 0) {
-        let datalist = storage0.getMyVar('JYlive_datalist') || [];
+        let datalist = [];
         let datalist2 = [];
-
-        if(datalist.length == 0){
-            let group = ""; //先取得分组名再导入频道，所以要定义在循环外面
-            for (let i = 0; i < JYlives.length; i++) {
-                try {
-                    if (JYlive.indexOf('#genre#') > -1) {
-                        if (JYlives[i].indexOf('#genre#') > -1) {
-                            group = JYlives[i].split(',')[0];
-                        } else if (JYlives[i].indexOf(',') > -1) {
-                            let one = JYlives[i].split(',');
-                            datalist.push({ group: group, name: one[0].trim() });//, url: one[1].trim()
-                        }
-                    } else if (JYlives[i].indexOf('group-title') > -1) {
-                        datalist.push({ group: JYlives[i].match(/group-title="(.*?)"/)[1], name: JYlives[i].match(/",(.*?)\n/)[1] });//, url: JYlives[i].split("\n")[1]
+        let group = "";
+        for (let i = 0; i < JYlives.length; i++) {
+            try {
+                if (JYlive.indexOf('#genre#') > -1) {
+                    if (JYlives[i].indexOf('#genre#') > -1) {
+                        group = JYlives[i].split(',')[0];
+                    } else if (JYlives[i].indexOf(',') > -1) {
+                        datalist.push({ group: group, name: JYlives[i].split(',')[0].trim() });
                     }
-                } catch (e) {
-                    //log(e.message);
+                } else if (JYlives[i].indexOf('group-title') > -1) {
+                    datalist.push({ group: JYlives[i].match(/group-title="(.*?)"/)[1], name: JYlives[i].match(/",(.*?)\n/)[1] });
                 }
+            } catch (e) {
+                //log(e.message);
             }
-
-            let obj = {};
-            if (JYlivedyurl == "juying") { putMyVar('JYlivenum', datalist.length); }
-            datalist = datalist.reduce((newArr, next) => {
-                obj[next.name] ? "" : (obj[next.name] = true && newArr.push(next));
-                return newArr;
-            }, []);
-
-            storage0.putMyVar('JYlive_datalist', datalist);
         }
 
+        let obj = {};
+        if (JYlivedyurl == "juying") { putMyVar('JYlivenum', datalist.length); }
+        datalist = datalist.reduce((newArr, next) => {
+            obj[next.name] ? "" : (obj[next.name] = true && newArr.push(next));
+            return newArr;
+        }, []);
         d.push({
             title: "🔍",
-            url: $.toString((guanlidata) => {
-                let datalist = storage0.getMyVar('JYlive_datalist') || [];
+            url: $.toString((guanlidata, datalist) => {
                 if (datalist.length > 0) {
                     deleteItemByCls('livelist');
                     let lists = datalist.filter(item => {
@@ -164,7 +153,7 @@ function Live() {
                     addItemAfter('liveloading', gldatalist);
                 }
                 return "hiker://empty";
-            }, guanlidata),
+            }, guanlidata, datalist),
             desc: "搜你想要的...",
             col_type: "input",
             extra: {
@@ -362,7 +351,6 @@ function GroupEdit(groupname, mode, lists) {
 }
 
 function guanlidata(datalist) {
-    let tvimg = globalMap0.getVar('Jy_gmParams').getIcon("直播-tv.svg");
     let list = [];
     for (let i = 0; i < datalist.length; i++) {
         let name = datalist[i].name;
@@ -390,7 +378,7 @@ function guanlidata(datalist) {
         }
         list.push({
             title: name,
-            img: tvimg,
+            img: globalMap0.getVar('Jy_gmParams').getIcon("直播-tv.svg"),
             col_type: 'icon_2_round',
             url: $('#noLoading#').lazyRule((name) => {
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLive.js');
