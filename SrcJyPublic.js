@@ -512,6 +512,20 @@ function setJkSort(data, k) {
     
     writeFile(sortfile, JSON.stringify(sort));
 }
+// 清理接口排序
+function clearJkSort() {
+    let datalist = getDatas("jk");
+    let sort = {};
+    if(fetch(sortfile)){
+        eval("sort = " + fetch(sortfile));
+    }
+    Object.keys(sort).forEach(it=>{
+        if(!datalist.some(item => item.url==it)){
+            delete sort[it];
+        }
+    })
+    writeFile(sortfile, JSON.stringify(sort));
+}
 // 获取接口对应的显示标题
 function getDataTitle(data) {
     if($.type(data.type)=="string"){
