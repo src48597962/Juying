@@ -618,7 +618,7 @@ function LiveSet() {
                     d.push({
                         title: (livedata[i].show != 0 ? getide(1) : getide(0)) + livedata[i].name,
                         desc: livedata[i].url,
-                        url: $(["复制链接", "修改名称", "导入本地", "更新缓存", "删除订阅", livedata[i].show != 0 ? "停用订阅" : "启用订阅"], 2, "").select((livecfgfile, url) => {
+                        url: $(["复制链接", "修改名称", "导入本地", "更新缓存", "删除订阅", livedata[i].show != 0 ? "停用订阅" : "启用订阅"], 2, "").select((livecfgfile, url, name) => {
                             try {
                                 if (input == "更新缓存") {
                                     showLoading('正在缓存，请稍后.');
@@ -650,7 +650,27 @@ function LiveSet() {
                                         writeFile(livecfgfile, JSON.stringify(liveconfig));
                                         refreshPage(false);
                                     }
-                                } else if (input == "导入本地") {
+                                } else if (input == "修改名称") {
+                                    return $(name, "修改新名称").input((livecfgfile,url)=>{
+                                        if(input.trim()==""){
+                                            return "toast://名称不能为空";
+                                        }
+                                        let livecfg = fetch(livecfgfile);
+                                        if (livecfg != "") {
+                                            eval("var liveconfig = " + livecfg);
+                                            let livedata = liveconfig['data'] || [];
+                                            for (let i = 0; i < livedata.length; i++) {
+                                                if (livedata[i].url == url) {
+                                                    livedata[i].name = input;
+                                                    break;
+                                                }
+                                            }
+                                            liveconfig['data'] = livedata;
+                                            writeFile(livecfgfile, JSON.stringify(liveconfig));
+                                            refreshPage(false);
+                                        }
+                                    }, livecfgfile, url)
+                                }  else if (input == "导入本地") {
                                     showLoading('叠加导入直播，最大万行限制');
                                     let YChtml = fetchCache(url, 24, { timeout: 3000 }).replace(/TV-/g, 'TV').replace(/\[.*\]/g, '');
                                     if (YChtml.indexOf('#genre#') > -1) {
@@ -723,7 +743,7 @@ function LiveSet() {
                                 log(e.message);
                                 return "toast://操作异常，详情查看日志";
                             }
-                        }, livecfgfile, livedata[i].url),
+                        }, livecfgfile, livedata[i].url, livedata[i].name),
                         col_type: "text_1"
                     });
                 }
