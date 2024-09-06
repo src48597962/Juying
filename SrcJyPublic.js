@@ -348,6 +348,7 @@ function getContnet(url) {
     let headers = { 'User-Agent': MOBILE_UA };
     if(!url.endsWith('.json')){
         headers['User-Agent'] = 'okhttp/4.12.0';
+        log('使用壳子ua访问');
     }
     return fetch(url, {headers: headers, timeout:20000});
 }
