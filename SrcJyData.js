@@ -1333,8 +1333,11 @@ function getErData(jkdata) {
                     sniffer["contain"] = extdata["嗅探词"].split('#');
                 }
                 if(extdata["过滤词"]){
+                    log("123");
                     sniffer["exclude"] = extdata["过滤词"].split('#');
                 }
+                log(extdata["过滤词"]);
+                log(sniffer);
             } catch (e) {
                 log('失败>' + e.message + " 错误行#" + e.lineNumber)
             }
