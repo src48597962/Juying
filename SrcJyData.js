@@ -50,7 +50,6 @@ function getYiData(jkdata) {
         detailurl = api_url + '?ac=detail&ids=';
         listnode = "json.data";
     } else if (api_type == "cms") {
-        api_url = api_url.replace('?ac=list','');
         classurl = api_url + "?ac=list";
         listurl = api_url + '?ac=videolist&t=${fl.cateId}&pg=' + MY_PAGE;
         detailurl = api_url + '?ac=videolist&ids=';
