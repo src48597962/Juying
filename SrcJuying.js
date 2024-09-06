@@ -602,6 +602,9 @@ function dianboerji() {
             let playSet = storage0.getItem('playSet') || {};
             let len = 列表.slice(0, 10).concat(列表.slice(-10)).reduce((max, str) => Math.max(max, str.split('$')[0].replace(name,"").trim().length), 0);
             let col_type = 列表.length > 4 && len < 5 ? 'text_4' : len > 10 ? 'text_1' : len>4&&len<7 ? 'text_3' :'text_2';
+            let sniffer = erdata["sniffer"] || {};
+            let videocontain = sniffer["contain"] || [];
+            let videoexclude = sniffer["exclude"] || ['m3u8.js','?url='];
             for(let i=0; i<列表.length; i++) {
                 let playtitle = 列表[i].split('$')[0];
                 playtitle = playtitle==name?'正片':playtitle.replace(name+" - ","").replace(name+"_","").replace(name,"").trim();
@@ -612,7 +615,8 @@ function dianboerji() {
                     id: name + "_选集_" + (pageid?pageid+"_":"") + i,
                     jsLoadingInject: true,
                     blockRules: ['.m4a', '.mp3', '.gif', '.jpeg', '.jpg', '.ico', '.png', 'hm.baidu.com', '/ads/*.js', 'cnzz.com'],
-                    videoExcludeRule: ['m3u8.js','?url='],
+                    videoRules: videocontain,
+                    videoExcludeRules: videoexclude,
                     cls: "Juloadlist playlist"
                 }
                 if(!/qq|youku|mgtv|bili|qiyi|sohu|pptv|le/.test(playurl) && /html/.test(playurl)){
