@@ -585,7 +585,7 @@ function getYiData(jkdata) {
                     };
                     if (extdata["图片"] && item.indexOf(extdata["图片"].split("&&")[0]) > -1) {
                         vod_url = getBetweenStr(item, extdata["链接"]);
-                        vod_url = /^http/.test(vod_url) ? vod_url : vodhost + vod_url;
+                        vod_url = /^http/.test(vod_url) ? vod_url : (extdata["链接前缀"]||vodhost) + vod_url;
                         vod_name = getBetweenStr(item, extdata["标题"]);
                         vod_pic = "";
                         try {
