@@ -603,7 +603,7 @@ function dianboerji() {
             let len = 列表.slice(0, 10).concat(列表.slice(-10)).reduce((max, str) => Math.max(max, str.split('$')[0].replace(name,"").trim().length), 0);
             let col_type = 列表.length > 4 && len < 5 ? 'text_4' : len > 10 ? 'text_1' : len>4&&len<7 ? 'text_3' :'text_2';
             let sniffer = erdata["sniffer"] || {};
-            let videocontain = sniffer["contain"] || [];
+            let videocontain = sniffer["contain"] || undefined;
             let videoexclude = sniffer["exclude"] || ['m3u8.js','?url='];
             for(let i=0; i<列表.length; i++) {
                 let playtitle = 列表[i].split('$')[0];
