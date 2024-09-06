@@ -339,13 +339,17 @@ function getContnet(url) {
         let proxys = $.require('ghproxy').getproxy();
         shuffleArray(proxys);
         for(let i=0;i<proxys.length;i++){
-            let content = fetch(proxys[i]+url, {timeout:5000});
+            let content = fetch(proxys[i]+url, {timeout:6000});
             if (content && !content.trim().startsWith('<!DOCTYPE html>') && !content.startsWith('<html>') && !/502 Bad Gateway/.test(content)) {
                 return content;
             }
         }
     }
-    return fetch(url, {timeout:20000});
+    let headers = { 'User-Agent': MOBILE_UA };
+    if(!url.endsWith('.json')){
+        headers['User-Agent'] = 'okhttp/4.12.0';
+    }
+    return fetch(url, {headers: headers, timeout:20000});
 }
 //获取分组接口列表
 function getGroupLists(datas, k) {
