@@ -56,7 +56,6 @@ function getYiData(jkdata) {
         listnode = "json.list";
     } else if (/XBPQ|XPath|XYQ/.test(api_type)) {
         extdata = extDataCache(jkdata);
-        log(extdata);
         if ($.type(extdata) == 'object') {
             if (api_type == "XBPQ") {
                 let host = extdata["主页url"] || '';
@@ -565,7 +564,6 @@ function getYiData(jkdata) {
                     }
                 }
             } else if (api_type == "XBPQ") {
-                log(MY_URL);
                 let gethtml = getHtml(MY_URL, headers);
                 extdata["二次截取"] = extdata["二次截取"] || (gethtml.indexOf(`<ul class="stui-vodlist`) > -1 ? `<ul class="stui-vodlist&&</ul>` : gethtml.indexOf(`<ul class="myui-vodlist`) > -1 ? `<ul class="myui-vodlist&&</ul>` : "");
                 if (extdata["二次截取"]) {
@@ -1298,7 +1296,7 @@ function getErData(jkdata) {
                 extdata["线路数组"] = extdata["线路数组"].split('[')[0];
                 let artlist = arthtml.match(new RegExp(extdata["线路数组"].replace('&&', '((?:.|[\r\n])*?)'), 'g')) || [];
                 if (extdata["线路标题"].includes('+')) {
-                    extdata["线路标题"] = extdata["线路标题"].split('+')[1];
+                    extdata["线路标题"] = extdata["线路标题"].split('+')[0];
                 }
                 for (let i = 0; i < artlist.length; i++) {
                     let arttitle = artlist[i].split(extdata["线路数组"].split('&&')[0])[1].split(extdata["线路数组"].split('&&')[1])[0].split(extdata["线路标题"].split('&&')[0])[1].split(extdata["线路标题"].split('&&')[1])[0];
