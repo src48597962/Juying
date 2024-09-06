@@ -1074,7 +1074,7 @@ function getErData(jkdata) {
     let lists = [];
     let flags = [];//线路标识
     let parse_api = [];//自带解析
-    let sniffer = [];//嗅探词
+    let sniffer = {};//嗅探词:contain包含，exclude排除
 
     if (html) {
         let arts = [];
@@ -1329,7 +1329,12 @@ function getErData(jkdata) {
                 area = getBetweenStr(html, extdata["影片地区"]);
                 extdata["简介"] = extdata["简介"] && extdata["简介"].includes('+') ? extdata["简介"].split('+')[1] : extdata["简介"];
                 desc = getBetweenStr(html, extdata["简介"]);
-                sniffer = extdata["嗅探词"] ? extdata["嗅探词"].split('#') : sniffer;
+                if(extdata["嗅探词"]){
+                    sniffer["contain"] = extdata["嗅探词"].split('#');
+                }
+                if(extdata["过滤词"]){
+                    sniffer["exclude"] = extdata["过滤词"].split('#');
+                }
             } catch (e) {
                 log('失败>' + e.message + " 错误行#" + e.lineNumber)
             }
