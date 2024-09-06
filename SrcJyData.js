@@ -56,6 +56,7 @@ function getYiData(jkdata) {
         listnode = "json.list";
     } else if (/XBPQ|XPath|XYQ/.test(api_type)) {
         extdata = extDataCache(jkdata);
+        log(extdata);
         if ($.type(extdata) == 'object') {
             if (api_type == "XBPQ") {
                 let host = extdata["主页url"] || '';
@@ -564,6 +565,7 @@ function getYiData(jkdata) {
                     }
                 }
             } else if (api_type == "XBPQ") {
+                log(MY_URL);
                 let gethtml = getHtml(MY_URL, headers);
                 extdata["二次截取"] = extdata["二次截取"] || (gethtml.indexOf(`<ul class="stui-vodlist`) > -1 ? `<ul class="stui-vodlist&&</ul>` : gethtml.indexOf(`<ul class="myui-vodlist`) > -1 ? `<ul class="myui-vodlist&&</ul>` : "");
                 if (extdata["二次截取"]) {
