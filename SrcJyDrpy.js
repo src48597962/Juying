@@ -252,11 +252,11 @@ function get(jkdata) {
         if (drpyMap.has(key)) {
             //log("取缓存" + key)
             let drpy = drpyMap.get(key);
-            //if(Object.keys(drpy.getRule()).length > 0){
+            if(Object.keys(drpy.getRule()).length > 0){
                 return drpy;
-            //}else{
-            //    drpyMap.delete(key);
-            //}
+            }else{
+                drpyMap.delete(key);
+            }
         }
         if (drpyMap.size >= 5) {
             //log("删除缓存")
