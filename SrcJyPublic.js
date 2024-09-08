@@ -346,9 +346,8 @@ function getContnet(url) {
         }
     }
     let headers = { 'User-Agent': MOBILE_UA };
-    if(!url.endsWith('.json')){
+    if(!url.endsWith('.json') && !url.endsWith('.js') && !url.endsWith('.txt') && !url.endsWith('.m3u') && !url.endsWith('.m3u8')){
         headers['User-Agent'] = 'okhttp/4.12.0';
-        log('使用壳子ua访问');
     }
     return fetch(url, {headers: headers, timeout:20000});
 }
