@@ -781,10 +781,11 @@ function getide(is) {
     }
 }
 // 取前三历史记录
-function getHistory(){
+function getHistory(i){
     let h = [];
     let ruleTitle = MY_RULE._title || MY_RULE.title;
-    let items = JSON.parse(fetch('hiker://history')).filter(v=> v.type!="网页浏览" && JSON.parse(v.params).title==ruleTitle).slice(0, 3);
+    i = i || 0;
+    let items = JSON.parse(fetch('hiker://history')).filter(v=> v.type!="网页浏览" && JSON.parse(v.params).title==ruleTitle).slice(0*i, 3);
     items.forEach(item=>{
         try{
             let extra = JSON.parse(JSON.parse(item.params).params) || {};
