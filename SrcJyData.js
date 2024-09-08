@@ -1295,9 +1295,7 @@ function getErData(jkdata) {
                 }
                 extdata["线路数组"] = extdata["线路数组"].split('[')[0];
                 let artlist = arthtml.match(new RegExp(extdata["线路数组"].replace('&&', '((?:.|[\r\n])*?)'), 'g')) || [];
-                if (extdata["线路标题"].includes('+')) {
-                    extdata["线路标题"] = extdata["线路标题"].split('+')[0];
-                }
+                extdata["线路标题"] = extdata["线路标题"].split('+')[0];
                 for (let i = 0; i < artlist.length; i++) {
                     let arttitle = artlist[i].split(extdata["线路数组"].split('&&')[0])[1].split(extdata["线路数组"].split('&&')[1])[0].split(extdata["线路标题"].split('&&')[0])[1].split(extdata["线路标题"].split('&&')[1])[0];
                     tabs.push(arttitle.replace(/<\/?.+?\/?>/g, ''));
@@ -1327,7 +1325,7 @@ function getErData(jkdata) {
                 pubdate = getBetweenStr(html, extdata["影片类型"]);
                 year = getBetweenStr(html, extdata["影片年代"]);
                 area = getBetweenStr(html, extdata["影片地区"]);
-                extdata["简介"] = extdata["简介"] && extdata["简介"].includes('+') ? extdata["简介"].split('+')[1] : extdata["简介"];
+                extdata["简介"] = extdata["简介"] && extdata["简介"].includes('+') ? extdata["简介"].split('+')[0] : extdata["简介"];
                 desc = getBetweenStr(html, extdata["简介"]);
                 if(extdata["嗅探词"]){
                     sniffer["contain"] = extdata["嗅探词"].split('#');
