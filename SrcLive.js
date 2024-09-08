@@ -395,13 +395,13 @@ function guanlidata(datalist) {
 }
 function LivePlay(name) {
     let JYlive = getMyVar('JYlivedyurl', 'juying') == "juying" ? fetch(rulepath + "live.txt") : fetchCache(getMyVar('JYlivedyurl'), 24, { timeout: 3000 });
+    let JYlives = [];
     if (JYlive.indexOf('#genre#') > -1) {
-        var JYlives = JYlive.split('\n');
+        JYlives = JYlive.split('\n');
     } else if (JYlive.indexOf('#EXTINF:-1') > -1) {
-        var JYlives = JYlive.split('#EXTINF:-1 ');
-    } else {
-        var JYlives = [];
+        JYlives = JYlive.split('#EXTINF:-1 ');
     }
+
     let urls = [];
     for (let i = 0; i < JYlives.length; i++) {
         try {
@@ -418,7 +418,7 @@ function LivePlay(name) {
                         }
                     })
                 }
-            } else if (JYlives[i].indexOf('group-title') > -1 && JYlives[i].match(/",(.*?)\n/)[1] == name) {
+            } else if (JYlives[i].indexOf('group-title') > -1 && JYlives[i].match(/",(.*?)\n/)[1].replace(/TV-/g, 'TV').replace(/\[.*\]/g, '').trim() == name) {
                 let urll = JYlives[i].split('\n');
                 urll.forEach(item => {
                     if (item.indexOf('://') > -1) {
