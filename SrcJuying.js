@@ -1347,6 +1347,7 @@ function yiji() {
                 deleteItemByCls('historylist');
                 let h = getHistory(i);
                 addItemAfter("historyid", h);
+                putMyVar('SrcJu_homeHistory', i);
                 return "hiker://empty";
             }),
             pic_url: getIcon("主页-记录.svg", 1),//'https://hikerfans.com/tubiao/red/40.png',
