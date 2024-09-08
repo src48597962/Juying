@@ -420,11 +420,7 @@ function LivePlay(name) {
                 }
             } else if (JYlives[i].indexOf('group-title') > -1 && JYlives[i].match(/",(.*?)\n/)[1].replace(/TV-/g, 'TV').replace(/\[.*\]/g, '').trim() == name) {
                 let urll = JYlives[i].split('\n');
-                urll.forEach(item => {
-                    if (item.indexOf('://') > -1) {
-                        urls.push(item + '#isVideo=true#');
-                    }
-                })
+                urls.push(urll[1] + '#isVideo=true#');
             }
         } catch (e) {
             //log(e.message);
