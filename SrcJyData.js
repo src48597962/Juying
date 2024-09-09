@@ -174,6 +174,7 @@ function getYiData(jkdata) {
                             推荐.push({ "vod_url": it.vod_id.toString(), "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic, "vod_play":noerji?playUrl:"" });
                         })
                     } else if (api_type == "XYQ") {
+                        /*
                         if (extdata['是否开启获取首页数据'] && extdata['首页列表数组规则']) {
                             let gethtml = getHtml(classurl, headers);
                             let 首页列表数组 = pdfa(gethtml, extdata['首页列表数组规则']);
@@ -192,6 +193,7 @@ function getYiData(jkdata) {
                             })
                         }
                         log(推荐);
+                        */
                         let typenames = extdata['分类名称'] ? extdata['分类名称'].split('&') : [];
                         let typeids = extdata['分类名称替换词'] ? extdata['分类名称替换词'].split('&') : [];
                         for (let i in typeids) {
