@@ -191,6 +191,7 @@ function getYiData(jkdata) {
                                 })
                             })
                         }
+                        log(推荐);
                         let typenames = extdata['分类名称'] ? extdata['分类名称'].split('&') : [];
                         let typeids = extdata['分类名称替换词'] ? extdata['分类名称替换词'].split('&') : [];
                         for (let i in typeids) {
@@ -198,6 +199,7 @@ function getYiData(jkdata) {
                                 分类.push(typenames[i] + '$' + typeids[i]);
                             }
                         }
+                        log(分类);
                         if ($.type(extdata['筛选数据']) == "string" && extdata['筛选数据'] == "ext") {
                             let 筛选循环 = ["子分类", "类型", "地区", "年份", "语言", "排序"];
                             let 筛选循环id = ["cateId", "class", "area", "year", "lang", "by"];
@@ -231,6 +233,7 @@ function getYiData(jkdata) {
                                 }
                             })
                         }
+                        log(筛选);
                     } else if (api_type == "XPath") {
                         let gethtml = getHtml(classurl, headers);
                         let typenames = xpathArray(gethtml, extdata['cateNode'] + extdata['cateName']);
