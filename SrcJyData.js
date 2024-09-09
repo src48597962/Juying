@@ -178,7 +178,6 @@ function getYiData(jkdata) {
                         if (extdata['是否开启获取首页数据'] && extdata['首页列表数组规则']) {
                             let gethtml = getHtml(classurl, headers);
                             let 首页列表数组 = pdfa(gethtml, extdata['首页列表数组规则']);
-                            log(首页列表数组);
                             首页列表数组.forEach(it => {
                                 pdfa(it, extdata['首页片单列表数组规则']).forEach(v => {
                                     if (extdata['首页片单是否Jsoup写法']=="1"||extdata['首页片单是否Jsoup写法']=="是") {
@@ -193,7 +192,6 @@ function getYiData(jkdata) {
                                 })
                             })
                         }
-                        log(推荐);
                         
                         let typenames = extdata['分类名称'] ? extdata['分类名称'].split('&') : [];
                         let typeids = extdata['分类名称替换词'] ? extdata['分类名称替换词'].split('&') : [];
@@ -211,12 +209,14 @@ function getYiData(jkdata) {
                                     extdata['筛选' + it + '替换词'] = extdata['筛选' + it + '替换词'] == "*" ? extdata['筛选' + it + '名称'] : extdata['筛选' + it + '替换词'];
                                     let catenames = extdata['筛选' + it + '名称'].split('||');
                                     let cateids = extdata['筛选' + it + '替换词'].split('||');
+                                    /*
                                     if (it == "排序") {
                                         for (let i = 0; i < typeids.length; i++) {
                                             catenames = catenames.concat(catenames);
                                             cateids = cateids.concat(cateids);
                                         }
                                     }
+                                    */
                                     cateids.forEach((x, i) => {
                                         let value = [];
                                         let names = catenames[i].split('&');
