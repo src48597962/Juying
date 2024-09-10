@@ -569,10 +569,16 @@ function getYiData(jkdata) {
             }else if (api_type == "XYQ") {
                 let gethtml = getHtml(MY_URL, headers);
                 if ((extdata['分类片单是否Jsoup写法']=="1" || extdata['分类片单是否Jsoup写法']=="是") && extdata['分类列表数组规则']) {
+                    let 图片规则 = extdata['分类片单图片'];
+                    let 图片前缀 = "";
+                    if(图片规则.includes('+')){
+                        图片前缀 = 图片规则.split('+')[0].replace(/'|`|"/g, '');
+                        图片规则 = 图片规则.split('+')[1];
+                    }
                     pdfa(gethtml, extdata['分类列表数组规则']).forEach(it => {
                         let vodname = pdfh(it, extdata['分类片单标题']);
                         let vodid = pd(it, extdata['分类片单链接'], vodhost);
-                        let vodimg = pdfh(it, extdata['分类片单图片']);
+                        let vodimg = 图片前缀 + pdfh(it, 图片规则);
                         let voddesc = pdfh(it, extdata['分类片单副标题']);
                         if (vodname && vodid) {
                             let arr = { "vod_url": vodid, "vod_name": vodname, "vod_desc": voddesc, "vod_pic": vodimg };
@@ -995,12 +1001,18 @@ function getSsData(name, jkdata, page) {
                         gethtml = getHtmlCode(ssurl, headers);
                     }
                     let sslist = pdfa(gethtml, 	extdata["搜索列表数组规则"]);
+                    let 图片规则 = extdata['分类片单图片'];
+                    let 图片前缀 = "";
+                    if(图片规则.includes('+')){
+                        图片前缀 = 图片规则.split('+')[0].replace(/'|`|"/g, '');
+                        图片规则 = 图片规则.split('+')[1];
+                    }
                     for (let i = 0; i < sslist.length; i++) {
                         let title,href,img,desc;
                         if(extdata["搜索片单是否Jsoup写法"]=="1"||extdata["搜索片单是否Jsoup写法"]=="是"){
                             title = pdfh(sslist[i], extdata["搜索片单标题"]);
                             href = (extdata["搜索片单链接加前缀"]||"")+pdfh(sslist[i], extdata["搜索片单链接"])+(extdata["搜索片单链接加后缀"]||"");
-                            img = pdfh(sslist[i], extdata["搜索片单图片"]);
+                            img = 图片前缀 + pdfh(sslist[i], 图片规则);
                             desc = pdfh(sslist[i], extdata["搜索片单副标题"]);
                         }
                         if(href&&title){
