@@ -300,7 +300,6 @@ function SRCSet() {
                 }),
                 col_type: 'scroll_button'
             })
-            /*
             d.push({
                 title: "较验测试",
                 url: $('#noLoading#').lazyRule(() => {
@@ -308,16 +307,19 @@ function SRCSet() {
                     if(duoselect.length==0){
                         return "toast://未选择";
                     }
-                    return $("确定要启用选择的"+duoselect.length+"个接口？").confirm((duoselect)=>{
-                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
-                        dataEnable(getMyVar('guanli', 'jk'), duoselect, '启用');
-                        refreshPage(false);
-                        return 'toast://已启用选择';
-                    },duoselect)
+                    return $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
+                        let d = [];
+                        let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
+                        d.push({
+                            title: "待较验源：" + duoselect.length,
+                            url: "toast://未上线",
+                            col_type : "text_center_1"
+                        })
+                        setResult(d);
+                    })
                 }),
                 col_type: 'scroll_button'
             })
-            */
         }else if(guanliType=='jx'){
             d.push({
                 title: "重置排序",
