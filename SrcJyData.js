@@ -199,8 +199,8 @@ function getYiData(jkdata) {
                             let 图片规则 = extdata['首页片单图片'] || extdata['分类片单图片'];
                             let 图片前缀 = "";
                             if(图片规则.includes('+')){
-                                图片规则 = 图片规则.split('+')[1];
                                 图片前缀 = 图片规则.split('+')[0];
+                                图片规则 = 图片规则.split('+')[1];
                             }
                             首页列表数组.forEach(v => {
                                     if (extdata['首页片单是否Jsoup写法']=="1"||extdata['首页片单是否Jsoup写法']=="是") {
