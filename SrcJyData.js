@@ -223,7 +223,7 @@ function getYiData(jkdata) {
                                 分类.push(typenames[i] + '$' + typeids[i]);
                             }
                         }
-                        log(分类);
+                        //log(分类);
                         if ($.type(extdata['筛选数据']) == "string" && extdata['筛选数据'] == "ext") {
                             let 筛选循环 = ["子分类", "类型", "地区", "年份", "语言", "排序"];
                             let 筛选循环id = ["cateId", "class", "area", "year", "lang", "by"];
@@ -232,6 +232,8 @@ function getYiData(jkdata) {
                                     extdata['筛选' + it + '替换词'] = extdata['筛选' + it + '替换词'] == "*" ? extdata['筛选' + it + '名称'] : extdata['筛选' + it + '替换词'];
                                     let catenames = extdata['筛选' + it + '名称'].split('||');
                                     let cateids = extdata['筛选' + it + '替换词'].split('||');
+                                    log(catenames);
+                                    log(cateids);
                                     /*
                                     if (it == "排序") {
                                         for (let i = 0; i < typeids.length; i++) {
@@ -259,7 +261,7 @@ function getYiData(jkdata) {
                                 }
                             })
                         }
-                        log(筛选);
+                        //log(筛选);
                     } else if (api_type == "XPath") {
                         let gethtml = getHtml(classurl, headers);
                         let typenames = xpathArray(gethtml, extdata['cateNode'] + extdata['cateName']);
@@ -1433,6 +1435,12 @@ function getErData(jkdata) {
                         cont.reverse();
                     }
                     lists.push(cont);
+                }
+                if(extdata["手动嗅探视频链接关键词"]){
+                    sniffer["contain"] = extdata["手动嗅探视频链接关键词"].split('#');
+                }
+                if(extdata["手动嗅探视频链接过滤词"]){
+                    sniffer["exclude"] = extdata["手动嗅探视频链接过滤词"].split('#');
                 }
             } catch (e) {
                 log('XYQ获取选集列表失败>' + e.message);
