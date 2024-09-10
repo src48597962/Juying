@@ -232,16 +232,17 @@ function getYiData(jkdata) {
                                     extdata['筛选' + it + '替换词'] = extdata['筛选' + it + '替换词'] == "*" ? extdata['筛选' + it + '名称'] : extdata['筛选' + it + '替换词'];
                                     let catenames = extdata['筛选' + it + '名称'].split('||');
                                     let cateids = extdata['筛选' + it + '替换词'].split('||');
-                                    log(catenames);
-                                    log(cateids);
-                                    /*
+                                    
+                                    
                                     if (it == "排序") {
                                         for (let i = 0; i < typeids.length; i++) {
                                             catenames = catenames.concat(catenames);
                                             cateids = cateids.concat(cateids);
                                         }
                                     }
-                                    */
+                                    
+                                    log(catenames);
+                                    log(cateids);
                                     cateids.forEach((x, i) => {
                                         let value = [];
                                         let names = catenames[i].split('&');
