@@ -215,7 +215,7 @@ function getYiData(jkdata) {
                                     let cateids = extdata['筛选' + it + '替换词'].split('||');
                                     
                                     if (it == "排序") {
-                                        for (let i = 0; i < typeids.length; i++) {
+                                        for (let i = 0; i < typeids.length-1; i++) {
                                             catenames = catenames.concat(catenames.slice(0, 1));
                                             cateids = cateids.concat(cateids.slice(0, 1));
                                         }
