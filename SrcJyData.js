@@ -216,9 +216,10 @@ function getYiData(jkdata) {
                                     
                                     if (it == "排序") {
                                         for (let i = 0; i < typeids.length; i++) {
-                                            catenames = catenames.concat(catenames[0]);
-                                            cateids = cateids.concat(cateids[0]);
+                                            catenames = catenames.concat(catenames.slice(0, 1));
+                                            cateids = cateids.concat(cateids.slice(0, 1));
                                         }
+                                        log(catenames);
                                     }
 
                                     cateids.forEach((x, i) => {
