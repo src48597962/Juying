@@ -787,7 +787,6 @@ function jiekou(data) {
                 clearMyVar('apigroup');
                 clearMyVar('apicate');
                 clearMyVar('isretain');
-                clearMyVar('isSaveAs');
                 refreshPage(true);
                 return "toast://已清空";
             })
