@@ -1056,7 +1056,7 @@ function getErData(jkdata) {
                 isxml = 0;
             }
         } catch (e) {
-
+            log(e.message);
         }
     } else if (/XPath|biubiu|XBPQ|XYQ/.test(api_type)) {
         extdata = extDataCache(jkdata)
@@ -1085,7 +1085,7 @@ function getErData(jkdata) {
     } else {
         html = getHtml(MY_URL, headers);
     }
-    log(html);
+
     let pic = '';
     let details1 = '';
     let details2 = '';
