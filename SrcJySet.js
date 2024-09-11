@@ -307,16 +307,54 @@ function SRCSet() {
                     if(duoselect.length==0){
                         return "toast://未选择";
                     }
-                    return $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
+                    return $('hiker://empty#noRecordHistory##noHistory#').rule((num) => {
                         let d = [];
-                        let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
                         d.push({
-                            title: "待较验源：" + duoselect.length,
-                            url: "toast://未上线",
-                            col_type : "text_center_1"
+                            title: "待较验源：" + num,
+                            url: $('#noLoading#').lazyRule(() => {
+                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
+                                let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
+                                let task = function (jkdata) {
+                                    try {
+                                        log(getYiData(jkdata));
+                                        log(getErData(jkdata));
+                                        log(getSsData(jkdata));
+                                        return {result:[], success:1};
+                                    } catch (e) {
+                                        log(obj.name + '>测试失败>' + e.message);
+                                        return {result:[], success:0};
+                                    }
+                                }
+                                let list = duoselect.map((item) => {
+                                    return {
+                                        func: task,
+                                        param: item,
+                                        id: item.url
+                                    }
+                                });
+                                be(list, {
+                                    func: function (obj, id, error, taskResult) {
+                                        if(getMyVar("SrcJu_停止搜索线程")=="1"){
+                                            return "break";
+                                        }else if(taskResult.success==1){
+                                            
+                                        }else if(taskResult.success==0){
+                                            
+                                        }
+                                    },
+                                    param: {
+                                    }
+                                })
+                                return "toast://测试结束";
+                            }),
+                            col_type : "text_center_1",
+                            extra: {
+                                id: "testSource"
+                            }
                         })
                         setResult(d);
-                    })
+                    }, duoselect.length)
                 }),
                 col_type: 'scroll_button'
             })
