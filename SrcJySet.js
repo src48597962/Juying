@@ -308,7 +308,7 @@ function SRCSet() {
                         return "toast://未选择";
                     }
                     return $("hiker://empty##fypage#noRecordHistory##noHistory#").rule(() => {
-                        if(MY_PAGE>1){
+                        if(MY_PAGE > 1){
                             setResult([]);
                         }
                         let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
@@ -322,75 +322,76 @@ function SRCSet() {
                             }
                         })
                         setResult(d);
-
-                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
-                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
-                        let task = function (jkdata) {
-                            let error = 0;
-                            let desc = '';
-                            let yidata = getYiData(jkdata);
-                            if(yidata.fllists && yidata.fllists.length>0){
-                                desc = "一级分类获取正常";
-                            }else{
-                                desc = "一级分类获取失败";
-                                error = 1;
-                            }
-                            if(yidata.vodlists){
-                                li = yidata.vodlists.length;
-                                if(li>0){
-                                    desc += " 一级列表获取正常";
-                                    MY_URL = yidata.vodlists[0].vod_url;
-                                    let erdata = getYiData(jkdata);
-                                    let lists = erdata.lists || [];
-                                    if(lists.length>0){
-                                        desc += "\n二级选集获取正常";
-                                    }else{
-                                        desc += "\n二级选集获取失败";
-                                        error = 1;
+                        if(MY_PAGE == 1){
+                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
+                            let task = function (jkdata) {
+                                let error = 0;
+                                let desc = '';
+                                let yidata = getYiData(jkdata);
+                                if(yidata.fllists && yidata.fllists.length>0){
+                                    desc = "一级分类获取正常";
+                                }else{
+                                    desc = "一级分类获取失败";
+                                    error = 1;
+                                }
+                                if(yidata.vodlists){
+                                    li = yidata.vodlists.length;
+                                    if(li>0){
+                                        desc += " 一级列表获取正常";
+                                        MY_URL = yidata.vodlists[0].vod_url;
+                                        let erdata = getYiData(jkdata);
+                                        let lists = erdata.lists || [];
+                                        if(lists.length>0){
+                                            desc += "\n二级选集获取正常";
+                                        }else{
+                                            desc += "\n二级选集获取失败";
+                                            error = 1;
+                                        }
                                     }
+                                }else{
+                                    desc += " 一级列表获取失败";
+                                    error = 1;
                                 }
-                            }else{
-                                desc += " 一级列表获取失败";
-                                error = 1;
+                                let d = {
+                                    title: jkdata.name,
+                                    desc: desc,
+                                    url: "hiker://empty",
+                                    col_type: "text_1"
+                                }
+                                return {error:error, d:d}
+        
+                                    //log(getErData(jkdata));
+                                    //log(getSsData(jkdata));
+                                    //return {result:[], success:1};
                             }
-                            let d = {
-                                title: jkdata.name,
-                                desc: desc,
-                                url: "hiker://empty",
-                                col_type: "text_1"
-                            }
-                            return {error:error, d:d}
-    
-                                //log(getErData(jkdata));
-                                //log(getSsData(jkdata));
-                                //return {result:[], success:1};
+                            let list = duoselect.map((item) => {
+                                return {
+                                    func: task,
+                                    param: item,
+                                    id: item.url
+                                }
+                            });
+
+                            be(list, {
+                                func: function (obj, id, error, taskResult) {
+                                    addItemBefore("testSource", taskResult.d);
+                                    log(id + ">>>" +error);
+
+                                    /*
+                                    if(getMyVar("SrcJu_停止搜索线程")=="1"){
+                                        return "break";
+                                    }else if(taskResult.success==1){
+                                        
+                                    }else if(taskResult.success==0){
+                                        
+                                    }
+                                    */
+                                },
+                                param: {
+                                }
+                            })
                         }
-                        let list = duoselect.map((item) => {
-                            return {
-                                func: task,
-                                param: item,
-                                id: item.url
-                            }
-                        });
-
-                        be(list, {
-                            func: function (obj, id, error, taskResult) {
-                                addItemBefore("testSource", taskResult.d);
-                                //log(id + ">>>" +error);
-
-                                /*
-                                if(getMyVar("SrcJu_停止搜索线程")=="1"){
-                                    return "break";
-                                }else if(taskResult.success==1){
-                                    
-                                }else if(taskResult.success==0){
-                                    
-                                }
-                                */
-                            },
-                            param: {
-                            }
-                        })
                     })
                 }),
                 col_type: 'scroll_button'
