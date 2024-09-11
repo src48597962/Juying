@@ -1056,7 +1056,7 @@ function getErData(jkdata) {
                 isxml = 0;
             }
         } catch (e) {
-            log(e.message);
+            //log(e.message);
         }
     } else if (/XPath|biubiu|XBPQ|XYQ/.test(api_type)) {
         extdata = extDataCache(jkdata)
