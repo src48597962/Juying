@@ -341,6 +341,7 @@ function SRCSet() {
                                         desc += " 一级列表获取正常";
                                         MY_URL = yidata.vodlists[0].vod_url;
                                         let erdata = getErData(jkdata);
+                                        log(erdata);
                                         let lists = erdata.lists || [];
 
                                         if(lists.length>0){
