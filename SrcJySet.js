@@ -340,9 +340,7 @@ function SRCSet() {
                                     if(li>0){
                                         desc += " 一级列表获取正常";
                                         MY_URL = yidata.vodlists[0].vod_url;
-                                        log(MY_URL);
-                                        let erdata = getYiData(jkdata);
-                                        log(erdata);
+                                        let erdata = getErData(jkdata);
                                         let lists = erdata.lists || [];
 
                                         if(lists.length>0){
@@ -379,7 +377,7 @@ function SRCSet() {
                             be(list, {
                                 func: function (obj, id, error, taskResult) {
                                     addItemBefore("testSource", taskResult.d);
-                                    //log(id + ">>>" +error);
+                                    log(id + ">>>" +error);
 
                                     /*
                                     if(getMyVar("SrcJu_停止搜索线程")=="1"){
