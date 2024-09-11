@@ -308,6 +308,9 @@ function SRCSet() {
                         return "toast://未选择";
                     }
                     return $("hiker://empty##fypage#noRecordHistory##noHistory#").rule(() => {
+                        if(MY_PAGE>1){
+                            setResult([]);
+                        }
                         let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
                         let d = [];
                         d.push({
@@ -323,26 +326,40 @@ function SRCSet() {
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
                         let task = function (jkdata) {
-                            let fl,list,url,er,ss;
+                            let error = 0;
+                            let desc = '';
                             let yidata = getYiData(jkdata);
                             if(yidata.fllists && yidata.fllists.length>0){
-                                fl = 1;
+                                desc = "一级分类获取正常";
+                            }else{
+                                desc = "一级分类获取失败";
+                                error = 1;
                             }
                             if(yidata.vodlists){
                                 li = yidata.vodlists.length;
                                 if(li>0){
-                                    url = yidata.vodlists[0].vod_url;
+                                    desc += " 一级列表获取正常";
+                                    MY_URL = yidata.vodlists[0].vod_url;
+                                    let erdata = getYiData(jkdata);
+                                    let lists = erdata.lists || [];
+                                    if(lists.length>0){
+                                        desc += "\n二级选集获取正常";
+                                    }else{
+                                        desc += "\n二级选集获取失败";
+                                        error = 1;
+                                    }
                                 }
                             }else{
-                                li = 0;
+                                desc += " 一级列表获取失败";
+                                error = 1;
                             }
                             let d = {
                                 title: jkdata.name,
-                                desc: (fl?"分类正常":"分类失败") + " " + (li?"列表正常":"列表失败"),
+                                desc: desc,
                                 url: "hiker://empty",
-                                col_type: "text_center_1"
+                                col_type: "text_1"
                             }
-                            return {success:1, d:d}
+                            return {error:error, d:d}
     
                                 //log(getErData(jkdata));
                                 //log(getSsData(jkdata));
@@ -358,7 +375,6 @@ function SRCSet() {
 
                         be(list, {
                             func: function (obj, id, error, taskResult) {
-                                log(obj);
                                 addItemBefore("testSource", taskResult.d);
                                 //log(id + ">>>" +error);
 
