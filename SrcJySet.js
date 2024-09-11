@@ -307,7 +307,7 @@ function SRCSet() {
                     if(duoselect.length==0){
                         return "toast://未选择";
                     }
-                    return $('hiker://empty#noRecordHistory##noHistory#').rule((num) => {
+                    return $('hiker://empty##fypage#noRecordHistory##noHistory#').rule((num) => {
                         let d = [];
                         d.push({
                             title: "待较验源：" + num,
