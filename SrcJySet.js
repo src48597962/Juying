@@ -317,6 +317,7 @@ function SRCSet() {
                                 let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
                                 let task = function (jkdata) {
                                     try {
+                                        log(jkdata);
                                         log(getYiData(jkdata));
                                         log(getErData(jkdata));
                                         log(getSsData(jkdata));
@@ -333,6 +334,7 @@ function SRCSet() {
                                         id: item.url
                                     }
                                 });
+                                log(list.length);
                                 be(list, {
                                     func: function (obj, id, error, taskResult) {
                                         if(getMyVar("SrcJu_停止搜索线程")=="1"){
