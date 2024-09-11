@@ -341,9 +341,7 @@ function SRCSet() {
                                         desc += " 一级列表获取正常";
                                         MY_URL = yidata.vodlists[0].vod_url;
                                         let erdata = getErData(jkdata);
-                                        log(erdata);
                                         let lists = erdata.lists || [];
-
                                         if(lists.length>0){
                                             desc += "\n二级选集获取正常";
                                         }else{
@@ -352,9 +350,11 @@ function SRCSet() {
                                         }
                                     }
                                 }else{
-                                    desc += " 一级列表获取失败";
+                                    desc += " 一级列表获取失败\n";
                                     error = 1;
                                 }
+                                let ssdata = getSsData("我的", jkdata, 1);
+                                desc += " 搜索‘我的’获取到"+ssdata.length;
                                 let d = {
                                     title: jkdata.name,
                                     desc: desc,
