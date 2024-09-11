@@ -316,17 +316,14 @@ function SRCSet() {
                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
                                 let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
                                 let task = function (jkdata) {
-                                    try {
+
                                         let yi = getYiData(jkdata);
                                         log($.type(yi));
                                         log(yi);
                                         //log(getErData(jkdata));
                                         //log(getSsData(jkdata));
-                                        return {result:[], success:1};
-                                    } catch (e) {
-                                        log(obj.name + '>测试失败>' + e.message);
-                                        return {result:[], success:0};
-                                    }
+                                        //return {result:[], success:1};
+
                                 }
                                 let list = duoselect.map((item) => {
                                     return {
@@ -335,9 +332,11 @@ function SRCSet() {
                                         id: item.url
                                     }
                                 });
-                                log(list.length);
+
                                 be(list, {
                                     func: function (obj, id, error, taskResult) {
+                                        log(id + ">>>" +error);
+                                        /*
                                         if(getMyVar("SrcJu_停止搜索线程")=="1"){
                                             return "break";
                                         }else if(taskResult.success==1){
@@ -345,6 +344,7 @@ function SRCSet() {
                                         }else if(taskResult.success==0){
                                             
                                         }
+                                        */
                                     },
                                     param: {
                                     }
