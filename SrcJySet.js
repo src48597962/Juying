@@ -302,62 +302,52 @@ function SRCSet() {
             })
             d.push({
                 title: "较验测试",
-                url: $('#noLoading#').lazyRule(() => {
+                url: duoselect.length==0?"toast://未选择接口":$("hiker://empty##fypage#noRecordHistory##noHistory#").rule(() => {
                     let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
-                    if(duoselect.length==0){
-                        return "toast://未选择";
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
+                    let d = [];
+                    d.push({
+                        title: "待较验源：" + duoselect.length,
+                        url: "hiker://empty",
+                        col_type : "text_center_1",
+                        extra: {
+                            id: "testSource"
+                        }
+                    })
+                    setResult(d);
+                    let task = function (jkdata) {
+                            let yi = getYiData(jkdata);
+                            log($.type(yi));
+                            log(yi);
+                            //log(getErData(jkdata));
+                            //log(getSsData(jkdata));
+                            //return {result:[], success:1};
                     }
-                    return $("hiker://empty#noRecordHistory##noHistory#").rule((num) => {
-                        let d = [];
-                        d.push({
-                            title: "待较验源：" + num,
-                            url: $('#noLoading#').lazyRule(() => {
-                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
-                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
-                                let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
-                                let task = function (jkdata) {
-                                        let MY_PAGE = 1;
-                                        let yi = getYiData(jkdata);
-                                        log($.type(yi));
-                                        log(yi);
-                                        //log(getErData(jkdata));
-                                        //log(getSsData(jkdata));
-                                        //return {result:[], success:1};
+                    let list = duoselect.map((item) => {
+                        return {
+                            func: task,
+                            param: item,
+                            id: item.url
+                        }
+                    });
 
-                                }
-                                let list = duoselect.map((item) => {
-                                    return {
-                                        func: task,
-                                        param: item,
-                                        id: item.url
-                                    }
-                                });
-
-                                be(list, {
-                                    func: function (obj, id, error, taskResult) {
-                                        log(id + ">>>" +error);
-                                        /*
-                                        if(getMyVar("SrcJu_停止搜索线程")=="1"){
-                                            return "break";
-                                        }else if(taskResult.success==1){
-                                            
-                                        }else if(taskResult.success==0){
-                                            
-                                        }
-                                        */
-                                    },
-                                    param: {
-                                    }
-                                })
-                                return "toast://测试结束";
-                            }),
-                            col_type : "text_center_1",
-                            extra: {
-                                id: "testSource"
+                    be(list, {
+                        func: function (obj, id, error, taskResult) {
+                            log(id + ">>>" +error);
+                            /*
+                            if(getMyVar("SrcJu_停止搜索线程")=="1"){
+                                return "break";
+                            }else if(taskResult.success==1){
+                                
+                            }else if(taskResult.success==0){
+                                
                             }
-                        })
-                        setResult(d);
-                    }, duoselect.length)
+                            */
+                        },
+                        param: {
+                        }
+                    })
                 }),
                 col_type: 'scroll_button'
             })
