@@ -312,16 +312,16 @@ function SRCSet() {
                         d.push({
                             title: "待较验源：" + num,
                             url: $('#noLoading#').lazyRule(() => {
-                                
+                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
                                 let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
                                 let task = function (jkdata) {
-                                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
-                                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
                                     try {
-                                        log($.type(getYiData));
-                                        log(getYiData(jkdata));
-                                        log(getErData(jkdata));
-                                        log(getSsData(jkdata));
+                                        let yi = getYiData(jkdata);
+                                        log($.type(yi));
+                                        log(yi);
+                                        //log(getErData(jkdata));
+                                        //log(getSsData(jkdata));
                                         return {result:[], success:1};
                                     } catch (e) {
                                         log(obj.name + '>测试失败>' + e.message);
