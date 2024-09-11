@@ -1085,7 +1085,7 @@ function getErData(jkdata) {
     } else {
         html = getHtml(MY_URL, headers);
     }
-
+    log(html);
     let pic = '';
     let details1 = '';
     let details2 = '';
