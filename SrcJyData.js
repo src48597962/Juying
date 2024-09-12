@@ -123,6 +123,7 @@ function getYiData(jkdata) {
     //一级第1页生成分类数据
     if (MY_PAGE == 1) {
         if (classurl) {
+            MY_URL = classurl;
             let 推荐 = [];
             let 分类 = [];
             let 筛选;
