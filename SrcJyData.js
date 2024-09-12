@@ -1,7 +1,7 @@
 // 本代码仅用于个人学习，请勿用于其他作用，下载后请24小时内删除，代码虽然是公开学习的，但请尊重作者，应留下说明
 
 // 获取一级数据
-function getYiData(jkdata) {
+function getYiData(jkdata, page) {
     let fllists;
     let vodlists;
     let error = {};
@@ -12,11 +12,12 @@ function getYiData(jkdata) {
     api_ua = api_ua == "MOBILE_UA" ? MOBILE_UA : api_ua == "PC_UA" ? PC_UA : api_ua;
     let headers = { 'User-Agent': api_ua };
     let vodhost, classurl, listurl, detailurl, listnode, extdata, noerji, coltype;
+    page = page || MY_PAGE;
     //分类变量
     let fold = getMyVar('SrcJu_dianbo$fold', "0");//是否展开小分类筛选
     let cate_id = getMyVar('SrcJu_dianbo$分类', '');
     let fl = storage0.getMyVar('SrcJu_dianbo$flCache') || {};
-    if(cate_id=="tj" && MY_PAGE>1){
+    if(cate_id=="tj" && page>1){
         return {
             fllists: [],
             vodlists: [],
@@ -31,27 +32,27 @@ function getYiData(jkdata) {
         let dd = date.getDate();
         let key = (mm < 10 ? "0" + mm : mm) + "" + (dd < 10 ? "0" + dd : dd);
         classurl = api_url + "/types";
-        listurl = api_url + '?key=' + key + '&type=${fl.cateId}&page=' + MY_PAGE;
+        listurl = api_url + '?key=' + key + '&type=${fl.cateId}&page=' + page;
         detailurl = api_url + '/detail?&key=' + key + '&vod_id=';
         listnode = "json.data.list";
     } else if (api_type == "app") {
         classurl = api_url + "nav";
-        listurl = api_url + 'video?tid=${fl.cateId}&pg=' + MY_PAGE;
+        listurl = api_url + 'video?tid=${fl.cateId}&pg=' + page;
         detailurl = api_url + 'video_detail?id=';
         listnode = "json.list";
     } else if (api_type == "v2") {
         classurl = api_url + "nav";
-        listurl = api_url + 'video?tid=${fl.cateId}&pg=' + MY_PAGE;
+        listurl = api_url + 'video?tid=${fl.cateId}&pg=' + page;
         detailurl = api_url + 'video_detail?id=';
         listnode = "json.data";
     } else if (api_type == "iptv") {
         classurl = api_url + "?ac=flitter";
-        listurl = api_url + '?ac=list&class=${fl.cateId}&page=' + MY_PAGE;
+        listurl = api_url + '?ac=list&class=${fl.cateId}&page=' + page;
         detailurl = api_url + '?ac=detail&ids=';
         listnode = "json.data";
     } else if (api_type == "cms") {
         classurl = api_url + "?ac=list";
-        listurl = api_url + '?ac=videolist&t=${fl.cateId}&pg=' + MY_PAGE;
+        listurl = api_url + '?ac=videolist&t=${fl.cateId}&pg=' + page;
         detailurl = api_url + '?ac=videolist&ids=';
         listnode = "json.list";
     } else if (/XBPQ|XPath|XYQ/.test(api_type)) {
@@ -80,7 +81,7 @@ function getYiData(jkdata) {
                 headers["User-Agent"] = (headers["User-Agent"] == "电脑" || headers["User-Agent"] == "PC_UA") ? PC_UA : MOBILE_UA;
                 let host = extdata["首页推荐链接"] || '';
                 classurl = host;
-                extdata["分类链接"] = extdata["分类链接"].includes('firstPage=')&&MY_PAGE==1?extdata["分类链接"].split('firstPage=')[1].split(']')[0]:extdata["分类链接"].split('[')[0];
+                extdata["分类链接"] = extdata["分类链接"].includes('firstPage=')&&page==1?extdata["分类链接"].split('firstPage=')[1].split(']')[0]:extdata["分类链接"].split('[')[0];
                 listurl = extdata["分类链接"] ? /^http/.test(extdata["分类链接"]) ? extdata["分类链接"] : host + extdata["分类链接"] : "";
             }
             vodhost = getHome(listurl);
@@ -109,7 +110,7 @@ function getYiData(jkdata) {
         }
     } else if (api_type == "hipy_t4") {
         classurl = api_url + "&extend=" + jkdata.ext + "&filter=true";
-        listurl = api_url + "&t={cate_id}&ac=detail&pg="+MY_PAGE+"&extend="+jkdata.ext+"&ext={flb64}";
+        listurl = api_url + "&t={cate_id}&ac=detail&pg="+page+"&extend="+jkdata.ext+"&ext={flb64}";
         //listnode = "json.list";
     } else {
         log(api_type + '>api类型错误');
@@ -121,7 +122,7 @@ function getYiData(jkdata) {
     }
 
     //一级第1页生成分类数据
-    if (MY_PAGE == 1) {
+    if (page == 1) {
         if (classurl) {
             MY_URL = classurl;
             let 推荐 = [];
@@ -486,34 +487,34 @@ function getYiData(jkdata) {
                 delete fl.cateId;
                 listurl = listurl.replace('{cate_id}', cate_id).replace('{flb64}', base64Encode(JSON.stringify(fl)));
             } else if (api_type == "XYQ") {
-                fl.catePg = MY_PAGE;
+                fl.catePg = page;
                 let execStrs = getExecStrs(listurl);
                 execStrs.forEach(k => {
                     if (!fl[k]) {
                         listurl = listurl.replace('/' + k + '/{' + k + '}', '');
                     }
                 })
-                listurl = listurl.replace('{catePg}', MY_PAGE).replace(/{/g, '${fl.').replace(/}/g, ' || ""}');
+                listurl = listurl.replace('{catePg}', page).replace(/{/g, '${fl.').replace(/}/g, ' || ""}');
                 eval(`listurl = \`${listurl}\`;`);
             } else if (api_type == "XPath") {
-                fl.catePg = MY_PAGE;
+                fl.catePg = page;
                 let execStrs = getExecStrs(listurl);
                 execStrs.forEach(k => {
                     if (!fl[k]) {
                         listurl = listurl.replace('/' + k + '/{' + k + '}', '');
                     }
                 })
-                listurl = listurl.replace('{catePg}', MY_PAGE).replace(/{/g, '${fl.').replace(/}/g, ' || ""}');
+                listurl = listurl.replace('{catePg}', page).replace(/{/g, '${fl.').replace(/}/g, ' || ""}');
                 eval(`listurl = \`${listurl}\`;`);
             } else if (api_type == "XBPQ") {
-                fl.catePg = MY_PAGE;
+                fl.catePg = page;
                 let execStrs = getExecStrs(listurl);
                 execStrs.forEach(k => {
                     if (!fl[k]) {
                         listurl = listurl.replace('/' + k + '/{' + k + '}', '');
                     }
                 })
-                listurl = listurl.replace('{catePg}', extdata["起始页"] ? MY_PAGE > extdata["起始页"] ? MY_PAGE : extdata["起始页"] : MY_PAGE).replace(/{/g, '${fl.').replace(/}/g, ' || ""}');
+                listurl = listurl.replace('{catePg}', extdata["起始页"] ? page > extdata["起始页"] ? page : extdata["起始页"] : page).replace(/{/g, '${fl.').replace(/}/g, ' || ""}');
                 eval(`listurl = \`${listurl}\`;`);
             } else {
                 eval(`listurl = \`${listurl}\`;`);
@@ -528,7 +529,7 @@ function getYiData(jkdata) {
                 })
             }else if (api_type=="hipy_t3") {
                 delete fl.cateId;
-                let vodlist = JSON.parse(drpy.category(cate_id, MY_PAGE, true, fl)).list || [];
+                let vodlist = JSON.parse(drpy.category(cate_id, page, true, fl)).list || [];
                 vodlist.forEach(it=>{
                     let playUrl = it.vod_id.toString().split("@@")[0].trim();
                     if(detailurl && noerji && !playUrl.startsWith("http")){
