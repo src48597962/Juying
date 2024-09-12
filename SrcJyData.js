@@ -1037,17 +1037,18 @@ function getSsData(name, jkdata, page) {
 }
 
 // 获取二级数据
-function getErData(jkdata) {
+function getErData(jkdata, erurl) {
     let api_type = jkdata.type;
     let api_name = jkdata.name;
     let api_ua = jkdata.ua || "MOBILE_UA";
     api_ua = api_ua == "MOBILE_UA" ? MOBILE_UA : api_ua == "PC_UA" ? PC_UA : api_ua;
     let headers = { 'User-Agent': api_ua };
+    erurl = erurl || MY_URL;
 
     let html, isxml, extdata, detailtype;
     if (/v1|app|v2|iptv|cms/.test(api_type)) {
         try {
-            let gethtml = getHtml(MY_URL, headers);
+            let gethtml = getHtml(erurl, headers);
             if (/cms/.test(api_type) && /<\?xml/.test(gethtml)) {
                 html = gethtml;
                 isxml = 1;
@@ -1072,18 +1073,18 @@ function getErData(jkdata) {
             }
             headers["User-Agent"] = (headers["User-Agent"] == "电脑" || headers["User-Agent"] == "PC_UA") ? PC_UA : MOBILE_UA;
         }
-        html = getHtml(MY_URL, headers);
+        html = getHtml(erurl, headers);
     } else if (api_type=="hipy_t3") {
         let drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(jkdata);
         try{
-            html = drpy.detail(MY_URL);
+            html = drpy.detail(erurl);
         }catch(e){}
         detailtype = drpy.getRule('类型') || (jkdata.name.includes('[书]')?"小说":"");
     } else if (api_type=="hipy_t4") {
-        html = getHtml(jkdata.url+"&extend="+jkdata.ext+"&ac=detail&ids="+MY_URL, headers);
+        html = getHtml(jkdata.url+"&extend="+jkdata.ext+"&ac=detail&ids="+erurl, headers);
         detailtype = JSON.parse(html).type || (jkdata.name.includes('[书]')?"小说":"");
     } else {
-        html = getHtml(MY_URL, headers);
+        html = getHtml(erurl, headers);
     }
 
     let pic = '';
@@ -1441,7 +1442,7 @@ function getErData(jkdata) {
         if (/XPath|biubiu|XBPQ|XYQ/.test(api_type) && html && (tabs.length == 0 || lists.length == 0) && getMyVar('debug', '0') == "0" && html.indexOf(MY_PARAMS.pageTitle) > -1) {
             log('开启模板自动匹配、AI识片，获取播放选集');
             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcAutoTmpl.js');
-            let data = autoerji(MY_URL, html);
+            let data = autoerji(erurl, html);
             details1 = data.details1
             details2 = data.details2;
             pic = data.pic || pic;
@@ -1479,6 +1480,7 @@ function getErData(jkdata) {
         "detailtype": detailtype
     };
 }
+
 // 设置收藏更新最新章节
 function setLastChapter(url,jkdata) {
     MY_URL = url;
