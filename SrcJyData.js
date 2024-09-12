@@ -123,7 +123,6 @@ function getYiData(jkdata) {
     //一级第1页生成分类数据
     if (MY_PAGE == 1) {
         if (classurl) {
-            MY_URL = classurl;
             let 推荐 = [];
             let 分类 = [];
             let 筛选;
@@ -484,7 +483,7 @@ function getYiData(jkdata) {
             //拼接生成分类页url链接
             if (api_type == 'hipy_t4'){
                 delete fl.cateId;
-                MY_URL = listurl.replace('{cate_id}', cate_id).replace('{flb64}', base64Encode(JSON.stringify(fl)));
+                listurl = listurl.replace('{cate_id}', cate_id).replace('{flb64}', base64Encode(JSON.stringify(fl)));
             } else if (api_type == "XYQ") {
                 fl.catePg = MY_PAGE;
                 let execStrs = getExecStrs(listurl);
@@ -495,7 +494,6 @@ function getYiData(jkdata) {
                 })
                 listurl = listurl.replace('{catePg}', MY_PAGE).replace(/{/g, '${fl.').replace(/}/g, ' || ""}');
                 eval(`listurl = \`${listurl}\`;`);
-                MY_URL = listurl;
             } else if (api_type == "XPath") {
                 fl.catePg = MY_PAGE;
                 let execStrs = getExecStrs(listurl);
@@ -506,7 +504,6 @@ function getYiData(jkdata) {
                 })
                 listurl = listurl.replace('{catePg}', MY_PAGE).replace(/{/g, '${fl.').replace(/}/g, ' || ""}');
                 eval(`listurl = \`${listurl}\`;`);
-                MY_URL = listurl;
             } else if (api_type == "XBPQ") {
                 fl.catePg = MY_PAGE;
                 let execStrs = getExecStrs(listurl);
@@ -517,16 +514,14 @@ function getYiData(jkdata) {
                 })
                 listurl = listurl.replace('{catePg}', extdata["起始页"] ? MY_PAGE > extdata["起始页"] ? MY_PAGE : extdata["起始页"] : MY_PAGE).replace(/{/g, '${fl.').replace(/}/g, ' || ""}');
                 eval(`listurl = \`${listurl}\`;`);
-                MY_URL = listurl;
             } else {
                 eval(`listurl = \`${listurl}\`;`);
-                MY_URL = listurl;
             }
 
             vodlists = [];
             let vod_name, vod_pic, vod_url, vod_desc;
             if (api_type=="hipy_t4") {
-                let vodlist = JSON.parse(getHtml(MY_URL, headers)).list || [];
+                let vodlist = JSON.parse(getHtml(listurl, headers)).list || [];
                 vodlist.forEach(it=>{
                     vodlists.push({ "vod_url": it.vod_id.toString(), "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic });
                 })
@@ -547,7 +542,7 @@ function getYiData(jkdata) {
                     vodlists.push({ "vod_url": it.vod_id.toString(), "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic, "vod_play": noerji?playUrl:"" });
                 })
             }else if (api_type == "XYQ") {
-                let gethtml = getHtml(MY_URL, headers);
+                let gethtml = getHtml(listurl, headers);
                 if ((extdata['分类片单是否Jsoup写法']=="1" || extdata['分类片单是否Jsoup写法']=="是") && extdata['分类列表数组规则']) {
                     let 图片规则 = extdata['分类片单图片'];
                     let 图片前缀 = "";
@@ -567,7 +562,7 @@ function getYiData(jkdata) {
                     })
                 }
             } else if (api_type == "XPath") {
-                let gethtml = getHtml(MY_URL, headers);
+                let gethtml = getHtml(listurl, headers);
                 let vodnames = xpathArray(gethtml, extdata["homeVodNode"] + extdata["homeVodName"]);
                 let vodids = xpathArray(gethtml, extdata["homeVodNode"] + extdata["homeVodId"]);
                 let vodimgs = xpathArray(gethtml, extdata["homeVodNode"] + extdata["homeVodImg"]);
@@ -579,7 +574,7 @@ function getYiData(jkdata) {
                     }
                 }
             } else if (api_type == "XBPQ") {
-                let gethtml = getHtml(MY_URL, headers);
+                let gethtml = getHtml(listurl, headers);
                 extdata["二次截取"] = extdata["二次截取"] || (gethtml.indexOf(`<ul class="stui-vodlist`) > -1 ? `<ul class="stui-vodlist&&</ul>` : gethtml.indexOf(`<ul class="myui-vodlist`) > -1 ? `<ul class="myui-vodlist&&</ul>` : "");
                 if (extdata["二次截取"]) {
                     gethtml = gethtml.split(extdata["二次截取"].split('&&')[0])[1].split(extdata["二次截取"].split('&&')[1])[0];
@@ -613,7 +608,7 @@ function getYiData(jkdata) {
                     }
                 })
             } else {
-                let gethtml = getHtml(MY_URL, headers);
+                let gethtml = getHtml(listurl, headers);
                 let json;
                 if (api_type=="cms" && /<\?xml/.test(gethtml)) {
                     gethtml = gethtml.replace(/&lt;!\[CDATA\[|\]\]&gt;|<!\[CDATA\[|\]\]>/g, '');
@@ -676,7 +671,8 @@ function getYiData(jkdata) {
         fllists: fllists,
         vodlists: vodlists,
         error: error,
-        coltype: coltype
+        coltype: coltype,
+        listurl: listurl
     }
 }
 // 获取搜索数据
@@ -1483,9 +1479,8 @@ function getErData(jkdata, erurl) {
 
 // 设置收藏更新最新章节
 function setLastChapter(url,jkdata) {
-    MY_URL = url;
     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
-    let erdate = getErData(jkdata);
+    let erdate = getErData(jkdata,url);
     let lists = erdate.lists;
     if(lists.length>0){
         //取线路选集最多的索引
