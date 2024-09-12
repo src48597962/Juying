@@ -301,7 +301,7 @@ function SRCSet() {
                 col_type: 'scroll_button'
             })
             d.push({
-                title: "较验测试",
+                title: "批量较验",
                 url: $('#noLoading#').lazyRule(() => {
                     let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
                     if(duoselect.length==0){
@@ -340,7 +340,9 @@ function SRCSet() {
                                     if(li>0){
                                         desc += " 一级列表获取正常";
                                         MY_URL = yidata.vodlists[0].vod_url;
+                                        log(MY_URL);
                                         let erdata = getErData(jkdata);
+                                        log(erdata);
                                         let lists = erdata.lists || [];
                                         if(lists.length>0){
                                             desc += "\n二级选集获取正常";
