@@ -980,14 +980,14 @@ function dianboyiji(testSource) {
                 d.push({
                     title: "列表获取失败",
                     desc: '无法访问或源失效，点击查看网页',
-                    url: MY_URL + '#noHistory#',
+                    url: (yidata.listurl?yidata.listurl:MY_URL) + '#noHistory#',
                     col_type: 'text_center_1'
                 }); 
             }else if(vodlists && vodlists.length == 0 && MY_PAGE==1){
                 d.push({
                     title: '列表为空',
                     desc: '点击查看网页',
-                    url: MY_URL + '#noHistory#',
+                    url: (yidata.listurl?yidata.listurl:MY_URL) + '#noHistory#',
                     col_type: 'text_center_1'
                 });
             }
