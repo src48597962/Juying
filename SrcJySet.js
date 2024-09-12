@@ -339,9 +339,9 @@ function SRCSet() {
                                     li = yidata.vodlists.length;
                                     if(li>0){
                                         desc += " 一级列表获取正常";
-                                        MY_URL = yidata.vodlists[0].vod_url;
-                                        log(MY_URL);
-                                        let erdata = getErData(jkdata);
+                                        let erurl = yidata.vodlists[0].vod_url;
+                                        log(erurl);
+                                        let erdata = getErData(jkdata,erurl);
                                         log(erdata);
                                         let lists = erdata.lists || [];
                                         if(lists.length>0){
