@@ -315,7 +315,7 @@ function SRCSet() {
                         let d = [];
                         d.push({
                             title: "待较验源：" + duoselect.length,
-                            url: $('#noLoading#').lazyRule((MY_PAGE) => {
+                            url: $('#noLoading#').lazyRule(() => {
                                 let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
@@ -381,7 +381,7 @@ function SRCSet() {
                                     }
                                 })
                                 return "toast://测试结束";
-                            },MY_PAGE),
+                            }),
                             col_type : "text_center_1",
                             extra: {
                                 id: "testSource"
