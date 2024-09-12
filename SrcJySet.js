@@ -322,7 +322,7 @@ function SRCSet() {
                                 let task = function (jkdata) {
                                     let error = 0;
                                     let desc = '';
-                                    let yidata = getYiData(jkdata);
+                                    let yidata = getYiData(jkdata, 1);
                                     if(yidata.fllists && yidata.fllists.length>0){
                                         desc = "一级分类获取正常";
                                     }else{
