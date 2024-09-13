@@ -80,6 +80,9 @@ var SrcParseS = {
                 }
                 return play.url;
             }else if(/\.mp3|\.m4a|\.mp4|\.m3u8/.test(play.url) && play.header){
+                if(/.mp3|\.m4a/.test(play.url)){
+                    play.url = play.url + '#isMusic=true##checkMetadata=false#';
+                }
                 return JSON.stringify({
                     urls: [play.url],
                     headers: [play.header]
@@ -106,7 +109,7 @@ var SrcParseS = {
             return vipUrl + '#isVideo=true#';
         }else if(/\.mp3|\.m4a/.test(vipUrl)){
             log("直链音乐地址，直接播放"); 
-            return vipUrl + '#isMusic=true#';
+            return vipUrl + '#isMusic=true##checkMetadata=false#';
         }else if(vipUrl.indexOf('sa.sogou') != -1) {
             log("优看视频，直接明码解析"); 
             return unescape(request(vipUrl).match(/"url":"([^"]*)"/)[1].replace(/\\u/g, "%u"));
@@ -650,7 +653,7 @@ var SrcParseS = {
                         for (var i in urls) {
                             if(music){
                                 if(/\.mp3|\.m4a/.test(urls[i])){
-                                    return fy_bridge_app.getHeaderUrl(urls[i]) + '#isMusic=true#';
+                                    return fy_bridge_app.getHeaderUrl(urls[i]) + '#isMusic=true##checkMetadata=false#';
                                 }
                             }else if (contain.test(urls[i])&&!exclude.test(urls[i])) {
                                 //fba.log("exeweb解析到>"+urls[i]);
