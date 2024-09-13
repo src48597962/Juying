@@ -307,14 +307,11 @@ function SRCSet() {
                     if(duoselect.length==0){
                         return "toast://未选择";
                     }
-                    return $("hiker://empty##fypage#noRecordHistory##noHistory#").rule(() => {
-                        if(MY_PAGE > 1){
-                            setResult([]);
-                        }
-                        let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
+                    return $("hiker://empty#noRecordHistory##noHistory#").rule((num) => {
                         let d = [];
+                        
                         d.push({
-                            title: "待较验源：" + duoselect.length,
+                            title: "待较验源：" + num,
                             url: $('#noLoading#').lazyRule(() => {
                                 let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
@@ -388,74 +385,7 @@ function SRCSet() {
                             }
                         })
                         setResult(d);
-                        /*
-                        if(MY_PAGE == 1){
-                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
-                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
-                            let task = function (jkdata) {
-                                let error = 0;
-                                let desc = '';
-                                let yidata = getYiData(jkdata);
-                                if(yidata.fllists && yidata.fllists.length>0){
-                                    desc = "一级分类获取正常";
-                                }else{
-                                    desc = "一级分类获取失败";
-                                    error = 1;
-                                }
-                                if(yidata.vodlists && yidata.vodlists.length>0){
-                                    if(yidata.vodlists.length>0){
-                                        desc += " 一级列表获取正常";
-                                        let erurl = yidata.vodlists[0].vod_url;
-                                        let erdata = getErData(jkdata,erurl);
-                                        let lists = erdata.lists || [];
-                                        if(lists.length>0){
-                                            desc += "\n二级选集获取正常";
-                                        }else{
-                                            desc += "\n二级选集获取失败";
-                                            error = 1;
-                                        }
-                                    }
-                                }else{
-                                    desc += " 一级列表获取失败\n";
-                                    error = 1;
-                                }
-                                let ssdata = getSsData("我的", jkdata, 1);
-                                desc += " 搜索‘我的’获取到"+ssdata.length;
-                                let d = {
-                                    title: jkdata.name,
-                                    desc: desc,
-                                    url: "hiker://empty",
-                                    col_type: "text_1"
-                                }
-                                return {error:error, d:d}
-        
-                                    //log(getErData(jkdata));
-                                    //log(getSsData(jkdata));
-                                    //return {result:[], success:1};
-                            }
-                            let list = duoselect.map((item) => {
-                                return {
-                                    func: task,
-                                    param: item,
-                                    id: item.url
-                                }
-                            });
-
-                            be(list, {
-                                func: function (obj, id, error, taskResult) {
-                                    addItemBefore("testSource", taskResult.d);
-                                    log(id + ">>>" +error);
-
-                                    if(getMyVar("SrcJu_停止搜索线程")=="1"){
-                                        return "break";
-                                    }
-                                },
-                                param: {
-                                }
-                            })
-                        }
-                        */
-                    })
+                    },duoselect.length)
                 }),
                 col_type: 'scroll_button'
             })
