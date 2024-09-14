@@ -373,7 +373,7 @@ function SRCSet() {
                         }
                         d.push({
                             title: "待较验源：" + num + "，点击开始",
-                            url: nexttime==0?"toast://选择判定失败的条件":$("下次执行需要等"+nexttime+"小时！", "批量较验源").confirm(() => {
+                            url: nexttime==0?"toast://选择判定失败的条件":$("下次执行需要等"+nexttime+"小时！").confirm(() => {
                                 let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
@@ -387,25 +387,29 @@ function SRCSet() {
                                         desc = "一级分类获取失败";
                                         error = 1;
                                     }
-                                    if(yidata.vodlists && yidata.vodlists.length>0){
-                                        if(yidata.vodlists.length>0){
-                                            desc += " 一级列表获取正常";
-                                            let erurl = yidata.vodlists[0].vod_url;
-                                            let erdata = getErData(jkdata,erurl);
-                                            let lists = erdata.lists || [];
-                                            if(lists.length>0){
-                                                desc += "\n二级选集获取正常";
-                                            }else{
-                                                desc += "\n二级选集获取失败";
-                                                error = 1;
+                                    if(getMyVar('condition_er')=='1'){
+                                        if(yidata.vodlists && yidata.vodlists.length>0){
+                                            if(yidata.vodlists.length>0){
+                                                desc += " 一级列表获取正常";
+                                                let erurl = yidata.vodlists[0].vod_url;
+                                                let erdata = getErData(jkdata,erurl);
+                                                let lists = erdata.lists || [];
+                                                if(lists.length>0){
+                                                    desc += "\n二级选集获取正常";
+                                                }else{
+                                                    desc += "\n二级选集获取失败";
+                                                    error = 1;
+                                                }
                                             }
+                                        }else{
+                                            desc += " 一级列表获取失败\n";
+                                            error = 1;
                                         }
-                                    }else{
-                                        desc += " 一级列表获取失败\n";
-                                        error = 1;
                                     }
-                                    let ssdata = getSsData("我的", jkdata, 1);
-                                    desc += " 搜索‘我的’获取到"+ssdata.length;
+                                    if(getMyVar('condition_ss')=='1'){
+                                        let ssdata = getSsData("我的", jkdata, 1);
+                                        desc += " 搜索‘我的’获取到"+ssdata.length;
+                                    }
                                     let d = {
                                         title: jkdata.name,
                                         desc: desc,
@@ -639,7 +643,7 @@ function jiekousave(urls, mode) {
                 //    it.group = it.group || "新导入";
                 //}
                 delete it['oldurl'];
-
+                delete it['extstr'];
                 datalist.push(it);
                 num = num + 1;
             }
