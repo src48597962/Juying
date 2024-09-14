@@ -308,8 +308,56 @@ function SRCSet() {
                         return "toast://未选择";
                     }
                     return $("hiker://empty#noRecordHistory##noHistory#").rule((num) => {
+                        addListener("onClose", $.toString(() => {
+                            clearMyVar('condition_yi');
+                            clearMyVar('condition_er');
+                            clearMyVar('condition_ss');
+                        }));
                         let d = [];
-                        
+                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                        d.push({
+                            title: "选择判断失败条件",
+                            col_type: "rich_text"
+                        })
+                        d.push({
+                            title:(getMyVar('condition_yi','1')=="1"?getide(1):getide(0))+'一级列表',
+                            col_type:'text_3',
+                            url:$('#noLoading#').lazyRule(() => {
+                                if(getMyVar('condition_yi')=="0"){
+                                    putMyVar('condition_yi','1');
+                                }else{
+                                    putMyVar('condition_yi','0');
+                                }
+                                refreshPage(false);
+                                return "hiker://empty";
+                            })
+                        });
+                        d.push({
+                            title:(getMyVar('condition_er','1')=="1"?getide(1):getide(0))+'二级选集',
+                            col_type:'text_3',
+                            url:$('#noLoading#').lazyRule(() => {
+                                if(getMyVar('condition_er')=="0"){
+                                    putMyVar('condition_er','1');
+                                }else{
+                                    putMyVar('condition_er','0');
+                                }
+                                refreshPage(false);
+                                return "hiker://empty";
+                            })
+                        });
+                        d.push({
+                            title:(getMyVar('condition_ss','1')=="1"?getide(1):getide(0))+'搜索结果',
+                            col_type:'text_3',
+                            url:$('#noLoading#').lazyRule(() => {
+                                if(getMyVar('condition_ss')=="0"){
+                                    putMyVar('condition_ss','1');
+                                }else{
+                                    putMyVar('condition_ss','0');
+                                }
+                                refreshPage(false);
+                                return "hiker://empty";
+                            })
+                        });
                         d.push({
                             title: "待较验源：" + num,
                             url: $('#noLoading#').lazyRule(() => {
