@@ -316,51 +316,64 @@ function SRCSet() {
                         let d = [];
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                         d.push({
-                            title: "选择判断失败条件",
+                            title: "选择判定失败条件",
                             col_type: "rich_text"
                         })
                         d.push({
-                            title:(getMyVar('condition_yi','1')=="1"?getide(1):getide(0))+'一级列表',
+                            title:(getMyVar('condition_yi','0')=="1"?getide(1):getide(0))+'一级列表',
                             col_type:'text_3',
                             url:$('#noLoading#').lazyRule(() => {
-                                if(getMyVar('condition_yi')=="0"){
+                                if(getMyVar('condition_yi')=="1"){
+                                    clearMyVar('condition_yi');
+                                }else{
                                     putMyVar('condition_yi','1');
-                                }else{
-                                    putMyVar('condition_yi','0');
                                 }
                                 refreshPage(false);
                                 return "hiker://empty";
                             })
                         });
                         d.push({
-                            title:(getMyVar('condition_er','1')=="1"?getide(1):getide(0))+'二级选集',
+                            title:(getMyVar('condition_er','0')=="1"?getide(1):getide(0))+'二级选集',
                             col_type:'text_3',
                             url:$('#noLoading#').lazyRule(() => {
-                                if(getMyVar('condition_er')=="0"){
+                                if(getMyVar('condition_er')=="1"){
+                                    clearMyVar('condition_er');
+                                }else{
                                     putMyVar('condition_er','1');
-                                }else{
-                                    putMyVar('condition_er','0');
                                 }
                                 refreshPage(false);
                                 return "hiker://empty";
                             })
                         });
                         d.push({
-                            title:(getMyVar('condition_ss','1')=="1"?getide(1):getide(0))+'搜索结果',
+                            title:(getMyVar('condition_ss','0')=="1"?getide(1):getide(0))+'搜索结果',
                             col_type:'text_3',
                             url:$('#noLoading#').lazyRule(() => {
-                                if(getMyVar('condition_ss')=="0"){
-                                    putMyVar('condition_ss','1');
+                                if(getMyVar('condition_ss')=="1"){
+                                    clearMyVar('condition_ss');
                                 }else{
-                                    putMyVar('condition_ss','0');
+                                    putMyVar('condition_ss','1');
                                 }
                                 refreshPage(false);
                                 return "hiker://empty";
                             })
                         });
                         d.push({
-                            title: "待较验源：" + num,
-                            url: $('#noLoading#').lazyRule(() => {
+                            col_type: "line_blank"
+                        });
+                        let nexttime = 0;
+                        if(getMyVar('condition_yi')=='1'){
+                            nexttime += 12;
+                        }
+                        if(getMyVar('condition_er')=='1'){
+                            nexttime += 12;
+                        }
+                        if(getMyVar('condition_ss')=='1'){
+                            nexttime += 12;
+                        }
+                        d.push({
+                            title: "待较验源：" + num + "，点击开始",
+                            url: nexttime==0?"toast://选择判定失败的条件":$("确定开始批量较验源？下次执行需要等"+nexttime+"小时！").confirm(() => {
                                 let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
