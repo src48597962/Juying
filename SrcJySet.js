@@ -373,7 +373,7 @@ function SRCSet() {
                         }
                         d.push({
                             title: "待较验源：" + num + "，点击开始",
-                            url: nexttime==0?"toast://选择判定失败的条件":$("确定开始批量较验源？下次执行需要等"+nexttime+"小时！").confirm(() => {
+                            url: nexttime==0?"toast://选择判定失败的条件":$("下次执行需要等"+nexttime+"小时！", "批量较验源").confirm(() => {
                                 let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
