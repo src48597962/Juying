@@ -387,7 +387,7 @@ function SRCSet() {
                                     if(getMyVar('condition_yi')=='1' || getMyVar('condition_er')=='1'){
                                         let yidata = getYiData(jkdata, 1);
                                         if(yidata.fllists && yidata.fllists.length>0){
-                                            desc = "一级分类获取正常";
+                                            //desc = "一级分类获取正常";
                                         }else{
                                             desc = "一级分类获取失败";
                                             error = 1;
@@ -407,7 +407,7 @@ function SRCSet() {
                                                     }
                                                 }
                                             }else{
-                                                desc += " 一级列表获取失败\n";
+                                                desc += " 一级列表获取失败";
                                                 error = 1;
                                             }
                                         }
@@ -415,12 +415,16 @@ function SRCSet() {
                                     
                                     if(getMyVar('condition_ss')=='1'){
                                         let ssdata = getSsData("我的", jkdata, 1);
-                                        desc += " 搜索‘我的’获取到"+ssdata.length;
+                                        desc += "\n搜索‘我的’获取到"+ssdata.length;
                                     }
                                     let d = {
                                         title: jkdata.name,
                                         desc: desc,
-                                        url: "hiker://empty",
+                                        url: $("hiker://empty#noRecordHistory##noHistory#").rule((data) => {
+                                            setPageTitle(data.name+"-接口测试");
+                                            require(config.依赖);
+                                            dianboyiji(data);
+                                        }, jkdata),
                                         col_type: "text_1"
                                     }
                                     return {error:error, d:d, jkdata:jkdata}
