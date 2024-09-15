@@ -375,7 +375,7 @@ function SRCSet() {
                         }
                         d.push({
                             title: "待较验源：" + num + "，点击开始",
-                            url: geMyVar("批量较验_执行线程")=="1"?"toast://正在执行中，请等待结束":nexttime==0?"toast://选择判定失败的条件":$("下次执行需要等"+nexttime+"小时！").confirm(() => {
+                            url: getMyVar("批量较验_执行线程")=="1"?"toast://正在执行中，请等待结束":nexttime==0?"toast://选择判定失败的条件":$("下次执行需要等"+nexttime+"小时！").confirm(() => {
                                 clearMyVar("批量较验_停止线程");
                                 putMyVar("批量较验_执行线程","1");
                                 let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
