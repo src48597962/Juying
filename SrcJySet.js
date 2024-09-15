@@ -381,11 +381,11 @@ function SRCSet() {
                                 let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
-                                let task = function (jkdata) {
+                                let task = function (data) {
                                     let error = 0;
                                     let desc = '';
                                     if(getMyVar('condition_yi')=='1' || getMyVar('condition_er')=='1'){
-                                        let yidata = getYiData(jkdata, 1);
+                                        let yidata = getYiData(data, 1);
                                         if(yidata.fllists && yidata.fllists.length>0){
                                             //desc = "一级分类获取正常  ";
                                         }else{
@@ -397,7 +397,7 @@ function SRCSet() {
                                                 if(yidata.vodlists.length>0){
                                                     desc += "一级列表获取正常";
                                                     let erurl = yidata.vodlists[0].vod_url;
-                                                    let erdata = getErData(jkdata,erurl);
+                                                    let erdata = getErData(data,erurl);
                                                     log(erurl);
                                                     log(erdata);
                                                     let lists = erdata.lists || [];
@@ -416,20 +416,20 @@ function SRCSet() {
                                     }
                                     
                                     if(getMyVar('condition_ss')=='1'){
-                                        let ssdata = getSsData("我的", jkdata, 1);
+                                        let ssdata = getSsData("我的", data, 1);
                                         desc += "\n搜索‘我的’获取到"+ssdata.length;
                                     }
                                     let d = {
-                                        title: jkdata.name,
+                                        title: data.name,
                                         desc: desc,
                                         url: $("hiker://empty#noRecordHistory##noHistory#").rule((data) => {
                                             setPageTitle(data.name+"-接口测试");
                                             require(config.依赖);
                                             dianboyiji(data);
-                                        }, jkdata),
+                                        }, data),
                                         col_type: "text_1"
                                     }
-                                    return {error:error, d:d, jkdata:jkdata}
+                                    return {error:error, d:d, data:data}
                                 }
                                 let list = duoselect.map((item) => {
                                     return {
