@@ -375,7 +375,7 @@ function SRCSet() {
                         }
                         d.push({
                             title: "待较验源：" + num + "，点击开始",
-                            url: getMyVar("批量较验_执行线程")=="1"?"toast://正在执行中，请等待结束":nexttime==0?"toast://选择判定失败的条件":$("下次执行需要等"+nexttime+"小时！").confirm(() => {
+                            url: getMyVar("批量较验_执行线程")=="1"?"toast://正在执行中，请等待结束":nexttime==0?"toast://未选择较验项目":$("下次执行需要等"+nexttime+"小时！").confirm(() => {
                                 clearMyVar("批量较验_停止线程");
                                 putMyVar("批量较验_执行线程","1");
                                 let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
@@ -441,7 +441,7 @@ function SRCSet() {
                                             addItemBefore("testSource", taskResult.d);
                                         }else{
                                             success++;
-                                            updateItem("testSource", {desc: "已成功较验，正常源：" + num});
+                                            updateItem("testSource", {desc: "已成功较验，正常源：" + success});
                                         }
                                         //log(id + ">>>" +error);
 
