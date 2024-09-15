@@ -1042,6 +1042,7 @@ function getErData(jkdata, erurl) {
     api_ua = api_ua == "MOBILE_UA" ? MOBILE_UA : api_ua == "PC_UA" ? PC_UA : api_ua;
     let headers = { 'User-Agent': api_ua };
     erurl = erurl || MY_URL;
+    log(erurl);
 
     let html, isxml, extdata, detailtype;
     if (/v1|app|v2|iptv|cms/.test(api_type)) {
@@ -1077,6 +1078,7 @@ function getErData(jkdata, erurl) {
         try{
             html = drpy.detail(erurl);
         }catch(e){}
+        log(html);
         detailtype = drpy.getRule('类型') || (jkdata.name.includes('[书]')?"小说":"");
     } else if (api_type=="hipy_t4") {
         html = getHtml(jkdata.url+"&extend="+jkdata.ext+"&ac=detail&ids="+erurl, headers);
