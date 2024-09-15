@@ -131,7 +131,7 @@ function getYiData(jkdata, batchTest) {
 
             let cate_exclude = ['主页', '求片/留言'];
             const Color = getItem("主题颜色", "#6dc9ff");
-            let classCache = storage0.getMyVar('SrcJu_dianbo$classCache');
+            let classCache = batchTest?undefined:storage0.getMyVar('SrcJu_dianbo$classCache');
             if (classCache) {
                 推荐 = classCache.推荐;
                 分类 = classCache.分类;
