@@ -387,17 +387,19 @@ function SRCSet() {
                                     if(getMyVar('condition_yi')=='1' || getMyVar('condition_er')=='1'){
                                         let yidata = getYiData(jkdata, 1);
                                         if(yidata.fllists && yidata.fllists.length>0){
-                                            //desc = "一级分类获取正常";
+                                            //desc = "一级分类获取正常  ";
                                         }else{
-                                            desc = "一级分类获取失败";
+                                            desc = "一级分类获取失败  ";
                                             error = 1;
                                         }
                                         if(getMyVar('condition_er')=='1'){
                                             if(yidata.vodlists && yidata.vodlists.length>0){
                                                 if(yidata.vodlists.length>0){
-                                                    desc += " 一级列表获取正常";
+                                                    desc += "一级列表获取正常";
                                                     let erurl = yidata.vodlists[0].vod_url;
                                                     let erdata = getErData(jkdata,erurl);
+                                                    log(erurl);
+                                                    log(erdata);
                                                     let lists = erdata.lists || [];
                                                     if(lists.length>0){
                                                         desc += "\n二级选集获取正常";
@@ -407,7 +409,7 @@ function SRCSet() {
                                                     }
                                                 }
                                             }else{
-                                                desc += " 一级列表获取失败";
+                                                desc += "一级列表获取失败";
                                                 error = 1;
                                             }
                                         }
