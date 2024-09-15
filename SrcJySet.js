@@ -312,11 +312,13 @@ function SRCSet() {
                             clearMyVar('condition_yi');
                             clearMyVar('condition_er');
                             clearMyVar('condition_ss');
+                            putMyVar("批量较验_停止线程","1");
+                            clearMyVar("批量较验_执行线程");
                         }));
                         let d = [];
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                         d.push({
-                            title: "选择判定失败条件",
+                            title: "选择较验项目",
                             col_type: "rich_text"
                         })
                         d.push({
@@ -373,39 +375,44 @@ function SRCSet() {
                         }
                         d.push({
                             title: "待较验源：" + num + "，点击开始",
-                            url: nexttime==0?"toast://选择判定失败的条件":$("下次执行需要等"+nexttime+"小时！").confirm(() => {
+                            url: geMyVar("批量较验_执行线程")=="1"?"toast://正在执行中，请等待结束":nexttime==0?"toast://选择判定失败的条件":$("下次执行需要等"+nexttime+"小时！").confirm(() => {
+                                clearMyVar("批量较验_停止线程");
+                                putMyVar("批量较验_执行线程","1");
                                 let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
                                 let task = function (jkdata) {
                                     let error = 0;
                                     let desc = '';
-                                    let yidata = getYiData(jkdata, 1);
-                                    if(yidata.fllists && yidata.fllists.length>0){
-                                        desc = "一级分类获取正常";
-                                    }else{
-                                        desc = "一级分类获取失败";
-                                        error = 1;
-                                    }
-                                    if(getMyVar('condition_er')=='1'){
-                                        if(yidata.vodlists && yidata.vodlists.length>0){
-                                            if(yidata.vodlists.length>0){
-                                                desc += " 一级列表获取正常";
-                                                let erurl = yidata.vodlists[0].vod_url;
-                                                let erdata = getErData(jkdata,erurl);
-                                                let lists = erdata.lists || [];
-                                                if(lists.length>0){
-                                                    desc += "\n二级选集获取正常";
-                                                }else{
-                                                    desc += "\n二级选集获取失败";
-                                                    error = 1;
-                                                }
-                                            }
+                                    if(getMyVar('condition_yi')=='1' || getMyVar('condition_er')=='1'){
+                                        let yidata = getYiData(jkdata, 1);
+                                        if(yidata.fllists && yidata.fllists.length>0){
+                                            desc = "一级分类获取正常";
                                         }else{
-                                            desc += " 一级列表获取失败\n";
+                                            desc = "一级分类获取失败";
                                             error = 1;
                                         }
+                                        if(getMyVar('condition_er')=='1'){
+                                            if(yidata.vodlists && yidata.vodlists.length>0){
+                                                if(yidata.vodlists.length>0){
+                                                    desc += " 一级列表获取正常";
+                                                    let erurl = yidata.vodlists[0].vod_url;
+                                                    let erdata = getErData(jkdata,erurl);
+                                                    let lists = erdata.lists || [];
+                                                    if(lists.length>0){
+                                                        desc += "\n二级选集获取正常";
+                                                    }else{
+                                                        desc += "\n二级选集获取失败";
+                                                        error = 1;
+                                                    }
+                                                }
+                                            }else{
+                                                desc += " 一级列表获取失败\n";
+                                                error = 1;
+                                            }
+                                        }
                                     }
+                                    
                                     if(getMyVar('condition_ss')=='1'){
                                         let ssdata = getSsData("我的", jkdata, 1);
                                         desc += " 搜索‘我的’获取到"+ssdata.length;
@@ -416,11 +423,7 @@ function SRCSet() {
                                         url: "hiker://empty",
                                         col_type: "text_1"
                                     }
-                                    return {error:error, d:d}
-            
-                                        //log(getErData(jkdata));
-                                        //log(getSsData(jkdata));
-                                        //return {result:[], success:1};
+                                    return {error:error, d:d, jkdata:jkdata}
                                 }
                                 let list = duoselect.map((item) => {
                                     return {
@@ -429,21 +432,31 @@ function SRCSet() {
                                         id: item.url
                                     }
                                 });
-
+                                showLoading("批量较验中.");
+                                let success = 0;
+                                let faillist = [];
                                 be(list, {
                                     func: function (obj, id, error, taskResult) {
-                                        addItemBefore("testSource", taskResult.d);
-                                        log(id + ">>>" +error);
+                                        if(taskResult.error){
+                                            addItemBefore("testSource", taskResult.d);
+                                        }else{
+                                            success++;
+                                            updateItem("testSource", {desc: "已成功较验，正常源：" + num});
+                                        }
+                                        //log(id + ">>>" +error);
 
-                                        if(getMyVar("SrcJu_停止搜索线程")=="1"){
+                                        if(getMyVar("批量较验_停止线程")=="1"){
                                             return "break";
                                         }
                                     },
                                     param: {
                                     }
                                 })
+                                hideLoading();
+                                clearMyVar("批量较验_执行线程");
                                 return "toast://测试结束";
                             }),
+                            desc: "",
                             col_type : "text_center_1",
                             extra: {
                                 id: "testSource"
