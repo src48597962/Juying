@@ -1,7 +1,7 @@
 // 本代码仅用于个人学习，请勿用于其他作用，下载后请24小时内删除，代码虽然是公开学习的，但请尊重作者，应留下说明
 
 // 获取一级数据
-function getYiData(jkdata, page) {
+function getYiData(jkdata, batchTest) {
     let fllists;
     let vodlists;
     let error = {};
@@ -12,7 +12,7 @@ function getYiData(jkdata, page) {
     api_ua = api_ua == "MOBILE_UA" ? MOBILE_UA : api_ua == "PC_UA" ? PC_UA : api_ua;
     let headers = { 'User-Agent': api_ua };
     let vodhost, classurl, listurl, detailurl, listnode, extdata, noerji, coltype;
-    page = page || MY_PAGE;
+    let page = batchTest?1:MY_PAGE;
     //分类变量
     let fold = getMyVar('SrcJu_dianbo$fold', "0");//是否展开小分类筛选
     let cate_id = getMyVar('SrcJu_dianbo$分类', '');
@@ -376,7 +376,7 @@ function getYiData(jkdata, page) {
                     error.fl = 1;
                     log(api_name + '>获取分类数据异常>' + e.message + " 错误行#" + e.lineNumber);
                 }
-                if (分类.length > 0) {
+                if (分类.length > 0 && !batchTest) {
                     storage0.putMyVar('SrcJu_dianbo$classCache', { 分类: 分类, 筛选: 筛选, 推荐: 推荐 });
                 }
             }
