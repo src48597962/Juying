@@ -386,6 +386,7 @@ function SRCSet() {
                                     let desc = '';
                                     if(getMyVar('condition_yi')=='1' || getMyVar('condition_er')=='1'){
                                         let yidata = getYiData(data, 1);
+                                        log(yidata);
                                         if(yidata.fllists && yidata.fllists.length>0){
                                             //desc = "一级分类获取正常  ";
                                         }else{
@@ -398,8 +399,8 @@ function SRCSet() {
                                                     desc += "一级列表获取正常";
                                                     let erurl = yidata.vodlists[0].vod_url;
                                                     let erdata = getErData(data,erurl);
-                                                    log(erurl);
-                                                    log(erdata);
+                                                    //log(erurl);
+                                                    //log(erdata);
                                                     let lists = erdata.lists || [];
                                                     if(lists.length>0){
                                                         desc += "\n二级选集获取正常";
