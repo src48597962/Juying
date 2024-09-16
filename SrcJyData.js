@@ -413,7 +413,7 @@ function getYiData(jkdata, batchTest) {
                             }),
                             col_type: 'scroll_button',
                             extra: {
-                                backgroundColor: cate_id=='tj'?"#20" + Color.replace('#',''):""
+                                backgroundColor: cate_id=='tj'?"#20" + Color.replace('#',''):undefined
                             }
                         });
                     }
@@ -431,7 +431,7 @@ function getYiData(jkdata, batchTest) {
                             }, itid),
                             col_type: 'scroll_button',
                             extra: {
-                                backgroundColor: cate_id==itid?"#20" + Color.replace('#',''):""
+                                backgroundColor: cate_id==itid?"#20" + Color.replace('#',''):undefined
                             }
                         });
                     })
