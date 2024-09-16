@@ -303,11 +303,11 @@ function SRCSet() {
             })
             d.push({
                 title: "批量较验",
-                url: $('#noLoading#').lazyRule(() => {
+                url: $('#noLoading#').lazyRule((admin) => {
                     let nowtime = Date.now();
                     let checkSourcetime = getItem('checkSourcetime','0');
                     let oldtime = parseInt(checkSourcetime.split('|')[0]);
-                    let h = checkSourcetime=="0"||getItem('checkSourceAdmin')=="1"?0:parseInt(checkSourcetime.split('|')[1]);
+                    let h = checkSourcetime=="0"||admin=="1"?0:parseInt(checkSourcetime.split('|')[1]);
                     if (nowtime < (oldtime+h*60*60*1000)) {
                         return "toast://下次允许批量较验时间\n" + $.dateFormat(oldtime+h*60*60*1000, "yyyy-MM-dd HH:mm:ss");
                     }
@@ -520,7 +520,7 @@ function SRCSet() {
                         })
                         setResult(d);
                     },duoselect.length)
-                }),
+                }, Juconfig["checkSourceAdmin"] || 0),
                 col_type: 'scroll_button'
             })
         }else if(guanliType=='jx'){
