@@ -309,7 +309,7 @@ function SRCSet() {
                     let oldtime = parseInt(checkSourcetime.split('|')[0]);
                     let h = checkSourcetime=="0"?0:parseInt(checkSourcetime.split('|')[1]);
                     if (nowtime < (oldtime+h*60*60*1000)) {
-                        return "toast://下次允许批量较验时间：" + (nowtime - oldtime) / (1000 * 60 * 60);
+                        return "toast://下次允许批量较验时间：" + $.dateFormat(oldtime+h*60*60*1000, "yyyy-MM-dd HH:mm:ss");
                     }
                     let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
                     duoselect = duoselect.filter(v=>!v.stop);
