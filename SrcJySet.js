@@ -304,6 +304,13 @@ function SRCSet() {
             d.push({
                 title: "批量较验",
                 url: $('#noLoading#').lazyRule(() => {
+                    let nowtime = Date.now();
+                    let checkSourcetime = getItem('checkSourcetime','0');
+                    let oldtime = parseInt(checkSourcetime.split('|')[0]);
+                    let h = checkSourcetime=="0"?0:parseInt(checkSourcetime.split('|')[1]);
+                    if (nowtime < (oldtime+h*60*60*1000)) {
+                        return "toast://下次允许批量较验时间：" + (nowtime - oldtime) / (1000 * 60 * 60);
+                    }
                     let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
                     duoselect = duoselect.filter(v=>!v.stop);
                     if(duoselect.length==0){
@@ -316,6 +323,9 @@ function SRCSet() {
                             clearMyVar('condition_er');
                             clearMyVar('condition_ss');
                             putMyVar("批量较验_停止线程","1");
+                            let nowtime = Date.now();
+                            setItem('checkSourcetime', nowtime+'|'+getMyVar("checkSource_nexttime", "0"));
+                            clearMyVar("checkSource_nexttime");
                         }));
                         let d = [];
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
@@ -380,9 +390,10 @@ function SRCSet() {
                         if(failSource.length>0){
                             num = failSource.length;
                         }
+                        putMyVar("checkSource_nexttime", nexttime);
                         d.push({
                             title: "待较验源：" + num + "，点击开始",
-                            url: nexttime==0?"toast://未选择较验项目":$("下次执行需要等"+nexttime+"小时！").confirm(() => {
+                            url: nexttime==0?"toast://未选择较验项目":$("下次进入较验需等"+nexttime+"小时！").confirm(() => {
                                 clearMyVar("批量较验_停止线程");
                                 updateItem("testSource", {url: "hiker://empty"});
                                 let duoselect = storage0.getMyVar("failSource") || storage0.getMyVar('SrcJu_duoselect') || [];
@@ -412,7 +423,7 @@ function SRCSet() {
                                         let erdata = getErData(data,erurl);
                                         let lists = erdata.lists || [];
                                         if(lists.length>0){
-                                            desc += "\n‘" + ername + "’ 二级选集获取正常";
+                                            desc += "\n‘" + ername + "’ 二级选集获取成功：" + lists.length;
                                         }else{
                                             desc += "\n‘" + ername + "’ 二级选集获取失败";
                                             error = 1;
@@ -487,11 +498,11 @@ function SRCSet() {
                                 if(faillist.length>0){
                                     addItemAfter("testSource", {
                                         title: "批量删除失败的" + faillist.length + "个源",
-                                        desc: "下拉刷新可以针对失败的进行复检",
+                                        desc: "下拉刷新页面，对失败的源进行复检",
                                         url: $("确定将失败的源全部删除").confirm(() => {
                                             let failSource = storage0.getMyVar("failSource") || [];
                                             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
-                                            deleteData(lx, failSource);
+                                            deleteData("jk", failSource);
                                             back(true);
                                             return 'toast://已删除失效源';
                                         }),
