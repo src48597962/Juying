@@ -133,12 +133,10 @@ function getYiData(jkdata, batchTest) {
             const Color = getItem("主题颜色", "#6dc9ff");
             let classCache = batchTest?undefined:storage0.getMyVar('SrcJu_dianbo$classCache');
             if (classCache) {
-                log("aaa");
                 推荐 = classCache.推荐;
                 分类 = classCache.分类;
                 筛选 = classCache.筛选;
             } else {
-                log("bbb");
                 try {
                     if (api_type == "hipy_t4"){
                         let home = JSON.parse(getHtml(classurl, headers));
@@ -176,7 +174,6 @@ function getYiData(jkdata, batchTest) {
                             }
                             推荐.push({ "vod_url": it.vod_id.toString(), "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic, "vod_play":noerji?playUrl:"" });
                         })
-                        log(推荐);
                     } else if (api_type == "XYQ") {
                         if (extdata['是否开启获取首页数据'] && extdata['首页列表数组规则'] && extdata['首页片单列表数组规则']) {
                             let gethtml = getHtml(classurl, headers);
@@ -387,7 +384,7 @@ function getYiData(jkdata, batchTest) {
             if (分类.length > 0) {
                 fllists = [];
                 try {
-                    cate_id = getMyVar('SrcJu_dianbo$分类', 推荐.length > 0 ? 'tj' : 分类[0].split('$')[1]);
+                    cate_id = cate_id || (推荐.length > 0 ? 'tj' : 分类[0].split('$')[1]);
 
                     if ($.type(筛选)=='object' && api_type != 'cms' && cate_id != 'tj') {
                         fllists.push({
