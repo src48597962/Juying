@@ -527,9 +527,9 @@ function SRCSet() {
                         title: "清除",
                         js: $.toString(() => {
                             return $("","口令").input(()=>{
-                                log(globalMap0.zip(input));
+                                log(globalMap0.getVar('Jy_gmParams').zip(input));
                                 function clear(key){
-                                    if(globalMap0.zip(key)==""){
+                                    if(globalMap0.getVar('Jy_gmParams').zip(key)==""){
                                         clearItem('checkSourcetime');
                                         return "toast://已清除";
                                     }else{
