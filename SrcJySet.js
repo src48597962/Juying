@@ -309,11 +309,11 @@ function SRCSet() {
                     }
                     return $("hiker://empty#noRecordHistory##noHistory#").rule((num) => {
                         addListener("onClose", $.toString(() => {
+                            clearMyVar('failSource');
                             clearMyVar('condition_yi');
                             clearMyVar('condition_er');
                             clearMyVar('condition_ss');
                             putMyVar("批量较验_停止线程","1");
-                            clearMyVar("批量较验_执行线程");
                         }));
                         let d = [];
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
@@ -374,12 +374,15 @@ function SRCSet() {
                         if(getMyVar('condition_ss')=='1'){
                             nexttime += 12;
                         }
+                        let failSource = storage0.getMyVar("failSource") || [];
+                        if(failSource.length>0){
+                            num = failSource.length;
+                        }
                         d.push({
                             title: "待较验源：" + num + "，点击开始",
-                            url: getMyVar("批量较验_执行线程")=="1"?"toast://正在执行中，请等待结束":nexttime==0?"toast://未选择较验项目":$("下次执行需要等"+nexttime+"小时！").confirm(() => {
-                                clearMyVar("批量较验_停止线程");
-                                putMyVar("批量较验_执行线程","1");
-                                let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
+                            url: nexttime==0?"toast://未选择较验项目":$("下次执行需要等"+nexttime+"小时！").confirm(() => {
+                                updateItem("testSource", {url: "hiker://empty"});
+                                let duoselect = storage0.getMyVar("failSource") || storage0.getMyVar('SrcJu_duoselect') || [];
                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
                                 let task = function (data) {
@@ -416,7 +419,10 @@ function SRCSet() {
                                     
                                     if(getMyVar('condition_ss')=='1'){
                                         let ssdata = getSsData("我的", data, 1);
-                                        desc += "\n搜索 ‘我的’ 获取到"+ssdata.length;
+                                        desc += "\n搜索关键词 ‘我的’ 获取返回："+ssdata.length;
+                                        if(ssdata.length==0){
+                                            error = 1;
+                                        }
                                     }
                                     let d = {
                                         title: data.name,
@@ -438,20 +444,24 @@ function SRCSet() {
                                     }
                                 });
                                 showLoading("批量较验中.");
+                                let execute = 0;
                                 let success = 0;
                                 let faillist = [];
                                 be(list, {
                                     func: function (obj, id, error, taskResult) {
+                                        execute++;
                                         if(taskResult.error){
                                             addItemBefore("testSource", taskResult.d);
+                                            faillist.push(taskResult.data);
                                         }else{
-                                            addItemAfter("testSource", taskResult.d);
+                                            //addItemAfter("testSource", taskResult.d);
                                             success++;
-                                            updateItem("testSource", {desc: "已成功较验，正常源：" + success});
                                         }
+                                        updateItem("testSource", {desc: "已较验" + execute + "，正常源：" + success});
                                         //log(id + ">>>" +error);
 
                                         if(getMyVar("批量较验_停止线程")=="1"){
+                                            clearMyVar("批量较验_停止线程");
                                             return "break";
                                         }
                                     },
@@ -459,7 +469,17 @@ function SRCSet() {
                                     }
                                 })
                                 hideLoading();
-                                clearMyVar("批量较验_执行线程");
+                                if(faillist.length>0){
+                                    addItemBefore("testSource", {
+                                        title: "批量删除失败的" + faillist.length + "个源",
+                                        desc: "下拉刷新可以针对失败的进行复检",
+                                        url: $("确定将失败的源全部删除").confirm(() => {
+
+                                        }),
+                                        col_type : "text_center_1"
+                                    });
+                                    storage0.putMyVar("failSource", faillist);
+                                }
                                 return "toast://测试结束";
                             }),
                             desc: "",
