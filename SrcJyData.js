@@ -176,7 +176,7 @@ function getYiData(jkdata, batchTest) {
                             }
                             推荐.push({ "vod_url": it.vod_id.toString(), "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic, "vod_play":noerji?playUrl:"" });
                         })
-                        log("推荐");
+                        log(推荐);
                     } else if (api_type == "XYQ") {
                         if (extdata['是否开启获取首页数据'] && extdata['首页列表数组规则'] && extdata['首页片单列表数组规则']) {
                             let gethtml = getHtml(classurl, headers);
