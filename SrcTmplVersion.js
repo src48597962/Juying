@@ -1,8 +1,8 @@
 var newVersion = {
-    "SrcJuying":"1.8",
+    "SrcJuying":"1.9",
     "hint": "",
     "JYUpdateRecords": [{
-        title: "beta V1.9",
+        title: "2024/09/17 V1.9",
         records: [
             "优化：点播接口排序在导入时自动清理",
             "优化：直播订阅管理界面及逻辑调整调优",
