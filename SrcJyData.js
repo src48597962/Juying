@@ -14,9 +14,9 @@ function getYiData(jkdata, batchTest) {
     let vodhost, classurl, listurl, detailurl, listnode, extdata, noerji, coltype;
     let page = batchTest?1:MY_PAGE;
     //分类变量
-    let fold = getMyVar('SrcJu_dianbo$fold', "0");//是否展开小分类筛选
-    let cate_id = getMyVar('SrcJu_dianbo$分类', '');
-    let fl = storage0.getMyVar('SrcJu_dianbo$flCache') || {};
+    let fold = batchTest?"0":getMyVar('SrcJu_dianbo$fold', "0");//是否展开小分类筛选
+    let cate_id = batchTest?"":getMyVar('SrcJu_dianbo$分类', '');
+    let fl = batchTest?{}:storage0.getMyVar('SrcJu_dianbo$flCache') || {};
     if(cate_id=="tj" && page>1){
         return {
             fllists: [],
@@ -398,8 +398,9 @@ function getYiData(jkdata, batchTest) {
                             col_type: 'scroll_button'
                         })
                     }
-
-                    putMyVar('SrcJu_dianbo$分类', cate_id);
+                    if(!batchTest){
+                        putMyVar('SrcJu_dianbo$分类', cate_id);
+                    }
                     if (推荐.length > 0) {
                         if (cate_id == 'tj') {
                             vodlists = 推荐;//当前分类为推荐，取推荐列表
@@ -470,7 +471,9 @@ function getYiData(jkdata, batchTest) {
                             }
                         });
                     }
-                    storage0.putMyVar('SrcJu_dianbo$flCache', fl);
+                    if(!batchTest){
+                        storage0.putMyVar('SrcJu_dianbo$flCache', fl);
+                    }
                 } catch (e) {
                     error.fl = 1;
                     log(api_name + '>生成分类数据异常>' + e.message + " 错误行#" + e.lineNumber);
@@ -478,9 +481,7 @@ function getYiData(jkdata, batchTest) {
             }
         }
     }
-    log(listurl);
-    log(cate_id);
-    
+
     if (listurl && cate_id!="tj" && !error.fl) {
         try {
             fl.cateId = fl.cateId || cate_id;
