@@ -1077,7 +1077,6 @@ function getErData(jkdata, erurl) {
         try{
             html = drpy.detail(erurl);
         }catch(e){}
-        log(html);
         detailtype = drpy.getRule('类型') || (jkdata.name.includes('[书]')?"小说":"");
     } else if (api_type=="hipy_t4") {
         html = getHtml(jkdata.url+"&extend="+jkdata.ext+"&ac=detail&ids="+erurl, headers);
