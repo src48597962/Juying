@@ -36,6 +36,7 @@ function SRCSet() {
                 let sm;
                 if(getMyVar('SrcJu_批量选择模式')){
                     clearMyVar('SrcJu_批量选择模式');
+                    clearMyVar('SrcJu_duoselect');
                     sm = "退出批量选择模式";
                 }else{
                     putMyVar('SrcJu_批量选择模式','1');
@@ -393,9 +394,9 @@ function SRCSet() {
                                     if(getMyVar('condition_yi')=='1'){
                                         let yidata = getYiData(data, 1);
                                         if(yidata.fllists && yidata.fllists.length>0){
-                                            desc = "一级分类获取正常  ";
+                                            desc = "主页分类获取正常  ";
                                         }else{
-                                            desc = "一级分类获取失败  ";
+                                            desc = "主页分类获取失败  ";
                                         }
                                         if(yidata.vodlists && yidata.vodlists.length>0){
                                             desc += "一级列表获取正常";
@@ -417,7 +418,7 @@ function SRCSet() {
                                         }
                                     }
                                     
-                                    if(getMyVar('condition_ss')=='1'){
+                                    if(getMyVar('condition_ss')=='1' && !error){
                                         let ssdata = getSsData("我的", data, 1);
                                         desc += "\n搜索关键词 ‘我的’ 获取返回："+ssdata.length;
                                         if(ssdata.length==0){
@@ -432,7 +433,21 @@ function SRCSet() {
                                             require(config.依赖);
                                             dianboyiji(data);
                                         }, data),
-                                        col_type: "text_1"
+                                        col_type: "text_1",
+                                        extra: {
+                                            id: "failSource-" + data.url,
+                                            longClick: [{
+                                                title: "保留",
+                                                js: $.toString((dataurl) => {
+                                                    let failSource = storage0.getMyVar("failSource") || [];
+                                                    let index = failSource.indexOf(failSource.filter(d => dataurl==d.url )[0]);
+                                                    failSource.splice(index, 1);
+                                                    storage0.putMyVar("failSource",failSource);
+                                                    deleteItem("failSource-" + dataurl);
+                                                    return "toast://已保留，不处理";
+                                                },data.url)
+                                            }]
+                                        }
                                     }
                                     return {error:error, d:d, data:data}
                                 }
@@ -473,7 +488,11 @@ function SRCSet() {
                                         title: "批量删除失败的" + faillist.length + "个源",
                                         desc: "下拉刷新可以针对失败的进行复检",
                                         url: $("确定将失败的源全部删除").confirm(() => {
-
+                                            let failSource = storage0.getMyVar("failSource") || [];
+                                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                                            deleteData(lx, failSource);
+                                            back(true);
+                                            return 'toast://已删除失效源';
                                         }),
                                         col_type : "text_center_1"
                                     });
@@ -581,13 +600,14 @@ function SRCSet() {
         url: 'hiker://empty',
         col_type: 'text_center_1'
     });
-    
     setResult(d);
-    let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
-    if(duoselect.length>0){
-        duoselect.forEach(data=>{
-            updateItem(data.url, {title:'‘‘’’'+colorTitle(getDataTitle(data),'#3CB371')});
-        })
+    if(getMyVar('SrcJu_批量选择模式')){
+        let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
+        if(duoselect.length>0){
+            duoselect.forEach(data=>{
+                updateItem(data.url, {title:'‘‘’’'+colorTitle(getDataTitle(data),'#3CB371')});
+            })
+        }
     }
 }
 
