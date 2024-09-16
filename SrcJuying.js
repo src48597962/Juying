@@ -763,7 +763,7 @@ function dianboyiji(testSource) {
                         return "toast://订阅文件模式，无法管理本地接口";
                     }
                     putMyVar('guanli','jk');
-                    return $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
+                    return $("hiker://empty#noRecordHistory##noHistory##noRefresh#").rule(() => {
                         setPageTitle('接口管理');
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                         SRCSet();
@@ -773,7 +773,7 @@ function dianboyiji(testSource) {
                         return "toast://订阅文件模式，无法管理本地解析";
                     }
                     putMyVar('guanli','jx');
-                    return $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
+                    return $("hiker://empty#noRecordHistory##noHistory##noRefresh#").rule(() => {
                         setPageTitle('解析管理');
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
                         SRCSet();
