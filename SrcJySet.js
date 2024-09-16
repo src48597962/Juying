@@ -305,6 +305,7 @@ function SRCSet() {
                 title: "批量较验",
                 url: $('#noLoading#').lazyRule(() => {
                     let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
+                    duoselect = duoselect.filter(v=>!v.stop);
                     if(duoselect.length==0){
                         return "toast://未选择";
                     }
@@ -451,7 +452,7 @@ function SRCSet() {
                                     }
                                     return {error:error, d:d, data:data}
                                 }
-                                let list = duoselect.map((item) => {
+                                let list = duoselect.filter(v=>!v.stop).map((item) => {
                                     return {
                                         func: task,
                                         param: item,
