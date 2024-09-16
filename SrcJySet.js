@@ -341,6 +341,7 @@ function SRCSet() {
                                 if(getMyVar('condition_er')=="1"){
                                     clearMyVar('condition_er');
                                 }else{
+                                    putMyVar('condition_yi','1');
                                     putMyVar('condition_er','1');
                                 }
                                 refreshPage(false);
@@ -384,41 +385,38 @@ function SRCSet() {
                                 let task = function (data) {
                                     let error = 0;
                                     let desc = '';
-                                    if(getMyVar('condition_yi')=='1' || getMyVar('condition_er')=='1'){
+                                    let ername, erurl;
+                                    if(getMyVar('condition_yi')=='1'){
                                         let yidata = getYiData(data, 1);
-                                        log(yidata);
                                         if(yidata.fllists && yidata.fllists.length>0){
-                                            //desc = "一级分类获取正常  ";
+                                            desc = "一级分类获取正常  ";
                                         }else{
                                             desc = "一级分类获取失败  ";
                                             error = 1;
                                         }
-                                        if(getMyVar('condition_er')=='1'){
-                                            if(yidata.vodlists && yidata.vodlists.length>0){
-                                                if(yidata.vodlists.length>0){
-                                                    desc += "一级列表获取正常";
-                                                    let erurl = yidata.vodlists[0].vod_url;
-                                                    let erdata = getErData(data,erurl);
-                                                    //log(erurl);
-                                                    //log(erdata);
-                                                    let lists = erdata.lists || [];
-                                                    if(lists.length>0){
-                                                        desc += "\n二级选集获取正常";
-                                                    }else{
-                                                        desc += "\n二级选集获取失败";
-                                                        error = 1;
-                                                    }
-                                                }
-                                            }else{
-                                                desc += "一级列表获取失败";
-                                                error = 1;
-                                            }
+                                        if(yidata.vodlists && yidata.vodlists.length>0){
+                                            desc += "一级列表获取正常";
+                                            erurl = yidata.vodlists[0].vod_url;
+                                            ername = yidata.vodlists[0].vod_name;
+                                        }else{
+                                            desc += "一级列表获取失败";
+                                            error = 1;
+                                        }
+                                    }
+                                    if(getMyVar('condition_er')=='1' && erurl){
+                                        let erdata = getErData(data,erurl);
+                                        let lists = erdata.lists || [];
+                                        if(lists.length>0){
+                                            desc += "\n‘" + ername + "’ 二级选集获取正常";
+                                        }else{
+                                            desc += "\n‘" + ername + "’ 二级选集获取失败";
+                                            error = 1;
                                         }
                                     }
                                     
                                     if(getMyVar('condition_ss')=='1'){
                                         let ssdata = getSsData("我的", data, 1);
-                                        desc += "\n搜索‘我的’获取到"+ssdata.length;
+                                        desc += "\n搜索 ‘我的’ 获取到"+ssdata.length;
                                     }
                                     let d = {
                                         title: data.name,
@@ -447,6 +445,7 @@ function SRCSet() {
                                         if(taskResult.error){
                                             addItemBefore("testSource", taskResult.d);
                                         }else{
+                                            addItemAfter("testSource", taskResult.d);
                                             success++;
                                             updateItem("testSource", {desc: "已成功较验，正常源：" + success});
                                         }
