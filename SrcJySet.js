@@ -396,7 +396,6 @@ function SRCSet() {
                                             desc = "一级分类获取正常  ";
                                         }else{
                                             desc = "一级分类获取失败  ";
-                                            error = 1;
                                         }
                                         if(yidata.vodlists && yidata.vodlists.length>0){
                                             desc += "一级列表获取正常";
@@ -470,7 +469,7 @@ function SRCSet() {
                                 })
                                 hideLoading();
                                 if(faillist.length>0){
-                                    addItemBefore("testSource", {
+                                    addItemAfter("testSource", {
                                         title: "批量删除失败的" + faillist.length + "个源",
                                         desc: "下拉刷新可以针对失败的进行复检",
                                         url: $("确定将失败的源全部删除").confirm(() => {
