@@ -583,6 +583,12 @@ function SRCSet() {
     });
     
     setResult(d);
+    let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
+    if(duoselect.length>0){
+        duoselect.forEach(data=>{
+            updateItem(data.url, {title:'‘‘’’'+colorTitle(getDataTitle(data),'#3CB371')});
+        })
+    }
 }
 
 function getapitype(apiurl) {
