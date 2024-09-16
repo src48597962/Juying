@@ -478,7 +478,9 @@ function getYiData(jkdata, batchTest) {
             }
         }
     }
-
+    log(listurl);
+    log(cate_id);
+    
     if (listurl && cate_id!="tj" && !error.fl) {
         try {
             fl.cateId = fl.cateId || cate_id;
