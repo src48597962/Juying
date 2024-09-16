@@ -307,7 +307,7 @@ function SRCSet() {
                     let nowtime = Date.now();
                     let checkSourcetime = getItem('checkSourcetime','0');
                     let oldtime = parseInt(checkSourcetime.split('|')[0]);
-                    let h = checkSourcetime=="0"?0:parseInt(checkSourcetime.split('|')[1]);
+                    let h = checkSourcetime=="0"||getItem('checkSourceAdmin')=="1"?0:parseInt(checkSourcetime.split('|')[1]);
                     if (nowtime < (oldtime+h*60*60*1000)) {
                         return "toast://下次允许批量较验时间\n" + $.dateFormat(oldtime+h*60*60*1000, "yyyy-MM-dd HH:mm:ss");
                     }
@@ -378,13 +378,13 @@ function SRCSet() {
                         });
                         let nexttime = 0;
                         if(getMyVar('condition_yi')=='1'){
-                            nexttime += 12;
+                            nexttime += 3;
                         }
                         if(getMyVar('condition_er')=='1'){
-                            nexttime += 12;
+                            nexttime += 6;
                         }
                         if(getMyVar('condition_ss')=='1'){
-                            nexttime += 12;
+                            nexttime += 9;
                         }
                         let failSource = storage0.getMyVar("failSource") || [];
                         if(failSource.length>0){
@@ -521,26 +521,7 @@ function SRCSet() {
                         setResult(d);
                     },duoselect.length)
                 }),
-                col_type: 'scroll_button',
-                extra: {
-                    longClick: [{
-                        title: "清除",
-                        js: $.toString(() => {
-                            return $("","口令").input(()=>{
-                                log(globalMap0.getVar('Jy_gmParams').zip(input));
-                                function clear(key){
-                                    if(globalMap0.getVar('Jy_gmParams').zip(key)==""){
-                                        clearItem('checkSourcetime');
-                                        return "toast://已清除";
-                                    }else{
-                                        return "toast://口令错";
-                                    }
-                                }
-                                return clear(input);
-                            })
-                        })
-                    }]
-                }
+                col_type: 'scroll_button'
             })
         }else if(guanliType=='jx'){
             d.push({
