@@ -531,10 +531,8 @@ function getYiData(jkdata, batchTest) {
                     vodlists.push({ "vod_url": it.vod_id.toString(), "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic });
                 })
             }else if (api_type=="hipy_t3") {
-                log("111");
                 delete fl.cateId;
                 let vodlist = JSON.parse(drpy.category(cate_id, page, true, fl)).list || [];
-                log(vodlist);
                 vodlist.forEach(it=>{
                     let playUrl = it.vod_id.toString().split("@@")[0].trim();
                     if(detailurl && noerji && !playUrl.startsWith("http")){
