@@ -381,6 +381,7 @@ function SRCSet() {
                         d.push({
                             title: "待较验源：" + num + "，点击开始",
                             url: nexttime==0?"toast://未选择较验项目":$("下次执行需要等"+nexttime+"小时！").confirm(() => {
+                                clearMyVar("批量较验_停止线程");
                                 updateItem("testSource", {url: "hiker://empty"});
                                 let duoselect = storage0.getMyVar("failSource") || storage0.getMyVar('SrcJu_duoselect') || [];
                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
@@ -461,7 +462,6 @@ function SRCSet() {
                                         //log(id + ">>>" +error);
 
                                         if(getMyVar("批量较验_停止线程")=="1"){
-                                            clearMyVar("批量较验_停止线程");
                                             return "break";
                                         }
                                     },
