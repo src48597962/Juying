@@ -259,7 +259,7 @@ function get(jkdata) {
             }
         }
         if (drpyMap.size >= 5) {
-            log("删缓存>"+key)
+            log("删缓存>"+Array.from(drpyMap.keys()).at(0))
             del(Array.from(drpyMap.keys()).at(0));
         }
         let drpy = createNewDrpy(sdata);
