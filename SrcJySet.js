@@ -326,10 +326,13 @@ function SRCSet() {
                                 clearMyVar("checkSource_nexttime");
                             }));
                             function testSource(option) {
-                                return $("下次进入较验需等24小时！").confirm((option) => {
+                                let sm = option=="yi"?"一级列表":option=="er"?"二级选集":"搜索结果"
+                                return $("将对所有待检源的" + sm + "进行较验\n下次进入较验需等24小时！").confirm((option,sm) => {
                                     putMyVar("checkSource_nexttime", "24");
                                     clearMyVar("批量较验_停止线程");
-                                    updateItem("condition_"+option, {url: "hiker://empty"});
+                                    updateItem("condition_yi", {url: "hiker://empty"});
+                                    updateItem("condition_er", {url: "hiker://empty"});
+                                    updateItem("condition_ss", {url: "hiker://empty"});
                                     let duoselect = storage0.getMyVar("failSource") || storage0.getMyVar('SrcJu_duoselect') || [];
                                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
@@ -404,7 +407,12 @@ function SRCSet() {
                                             id: item.url
                                         }
                                     });
-                                    showLoading("批量较验中.");
+                                    
+                                    showLoading(sm + "，批量较验中...");
+                                    updateItem("testSource", {url: $().lazyRule(()=>{
+                                        putMyVar("批量较验_停止线程","1");
+                                        return "hiker://empty";
+                                    })});
                                     let execute = 0;
                                     let success = 0;
                                     let faillist = [];
@@ -417,7 +425,7 @@ function SRCSet() {
                                             }else{
                                                 success++;
                                             }
-                                            updateItem("testSource", {desc: "已较验" + execute + "，正常源：" + success});
+                                            updateItem("testSource", {desc: "已较验：" + execute + "，正常源：" + success});
                                             //log(id + ">>>" +error);
 
                                             if(getMyVar("批量较验_停止线程")=="1"){
@@ -442,13 +450,16 @@ function SRCSet() {
                                         });
                                         addItemAfter("testSource2", {
                                             title: "针对失败的源，进入复检模式",
-                                            url: "refreshPage(true);",
+                                            url: $().lazyRule((failnum)=>{
+                                                refreshPage(true);
+                                                return "toast://进入复检" + failnum;
+                                            }, faillist.length),
                                             col_type : "text_center_1"
                                         });
                                         storage0.putMyVar("failSource", faillist);
                                     }
                                     return "toast://测试结束";
-                                }, option)
+                                }, option,sm)
                             }
                             let d = [];
                             d.push({
