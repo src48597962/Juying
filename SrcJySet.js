@@ -327,7 +327,7 @@ function SRCSet() {
                             }));
                             function testSource(option) {
                                 let sm = option=="yi"?"一级列表":option=="er"?"二级选集":"搜索结果"
-                                return $("将对所有待检源的" + sm + "进行较验\n下次进入较验需等24小时！").confirm((option,sm) => {
+                                return $("对待检源的" + sm + "进行较验，\n下次进入较验需等24小时！").confirm((option,sm) => {
                                     putMyVar("checkSource_nexttime", "24");
                                     clearMyVar("批量较验_停止线程");
                                     updateItem("condition_yi", {url: "hiker://empty"});
