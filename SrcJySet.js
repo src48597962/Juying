@@ -320,83 +320,16 @@ function SRCSet() {
                         return $("hiker://empty#noRecordHistory##noHistory#").rule((num) => {
                             addListener("onClose", $.toString(() => {
                                 clearMyVar('failSource');
-                                clearMyVar('condition_yi');
-                                clearMyVar('condition_er');
-                                clearMyVar('condition_ss');
                                 putMyVar("批量较验_停止线程","1");
                                 let nowtime = Date.now();
                                 setItem('checkSourcetime', nowtime+'|'+getMyVar("checkSource_nexttime", "0"));
                                 clearMyVar("checkSource_nexttime");
                             }));
-                            let d = [];
-                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
-                            d.push({
-                                title: "选择较验项目",
-                                col_type: "rich_text"
-                            })
-                            d.push({
-                                title:(getMyVar('condition_yi','0')=="1"?getide(1):getide(0))+'一级列表',
-                                col_type:'text_3',
-                                url:$('#noLoading#').lazyRule(() => {
-                                    if(getMyVar('condition_yi')=="1"){
-                                        clearMyVar('condition_yi');
-                                    }else{
-                                        putMyVar('condition_yi','1');
-                                    }
-                                    refreshPage(false);
-                                    return "hiker://empty";
-                                })
-                            });
-                            d.push({
-                                title:(getMyVar('condition_er','0')=="1"?getide(1):getide(0))+'二级选集',
-                                col_type:'text_3',
-                                url:$('#noLoading#').lazyRule(() => {
-                                    if(getMyVar('condition_er')=="1"){
-                                        clearMyVar('condition_er');
-                                    }else{
-                                        putMyVar('condition_yi','1');
-                                        putMyVar('condition_er','1');
-                                    }
-                                    refreshPage(false);
-                                    return "hiker://empty";
-                                })
-                            });
-                            d.push({
-                                title:(getMyVar('condition_ss','0')=="1"?getide(1):getide(0))+'搜索结果',
-                                col_type:'text_3',
-                                url:$('#noLoading#').lazyRule(() => {
-                                    if(getMyVar('condition_ss')=="1"){
-                                        clearMyVar('condition_ss');
-                                    }else{
-                                        putMyVar('condition_ss','1');
-                                    }
-                                    refreshPage(false);
-                                    return "hiker://empty";
-                                })
-                            });
-                            d.push({
-                                col_type: "line_blank"
-                            });
-                            let nexttime = 0;
-                            if(getMyVar('condition_yi')=='1'){
-                                nexttime += 3;
-                            }
-                            if(getMyVar('condition_er')=='1'){
-                                nexttime += 6;
-                            }
-                            if(getMyVar('condition_ss')=='1'){
-                                nexttime += 9;
-                            }
-                            let failSource = storage0.getMyVar("failSource") || [];
-                            if(failSource.length>0){
-                                num = failSource.length;
-                            }
-                            putMyVar("checkSource_nexttime", nexttime);
-                            d.push({
-                                title: "待较验源：" + num + "，点击开始",
-                                url: nexttime==0?"toast://未选择较验项目":$("下次进入较验需等"+nexttime+"小时！").confirm(() => {
+                            function testSource(option) {
+                                return $("下次进入较验需等24小时！").confirm((option) => {
+                                    putMyVar("checkSource_nexttime", "24");
                                     clearMyVar("批量较验_停止线程");
-                                    updateItem("testSource", {url: "hiker://empty"});
+                                    updateItem("condition_"+option, {url: "hiker://empty"});
                                     let duoselect = storage0.getMyVar("failSource") || storage0.getMyVar('SrcJu_duoselect') || [];
                                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
@@ -404,7 +337,7 @@ function SRCSet() {
                                         let error = 0;
                                         let desc = '';
                                         let ername, erurl;
-                                        if(getMyVar('condition_yi')=='1'){
+                                        if(option!='ss'){
                                             let yidata = getYiData(data, 1);
                                             if(yidata.fllists && yidata.fllists.length>0){
                                                 desc = "主页分类获取正常  ";
@@ -420,7 +353,7 @@ function SRCSet() {
                                                 error = 1;
                                             }
                                         }
-                                        if(getMyVar('condition_er')=='1' && erurl){
+                                        if(option=='er' && erurl){
                                             let erdata = getErData(data,erurl);
                                             let lists = erdata.lists || [];
                                             if(lists.length>0){
@@ -431,7 +364,7 @@ function SRCSet() {
                                             }
                                         }
                                         
-                                        if(getMyVar('condition_ss')=='1' && !error){
+                                        if(option=='ss' && !error){
                                             let ssdata = getSsData("我的", data, 1);
                                             desc += "\n搜索关键词 ‘我的’ 获取返回："+ssdata.length;
                                             if(ssdata.length==0){
@@ -479,10 +412,9 @@ function SRCSet() {
                                         func: function (obj, id, error, taskResult) {
                                             execute++;
                                             if(taskResult.error){
-                                                addItemBefore("testSource", taskResult.d);
+                                                addItemBefore("testSource2", taskResult.d);
                                                 faillist.push(taskResult.data);
                                             }else{
-                                                //addItemAfter("testSource", taskResult.d);
                                                 success++;
                                             }
                                             updateItem("testSource", {desc: "已较验" + execute + "，正常源：" + success});
@@ -497,9 +429,8 @@ function SRCSet() {
                                     })
                                     hideLoading();
                                     if(faillist.length>0){
-                                        addItemAfter("testSource", {
+                                        addItemAfter("testSource2", {
                                             title: "批量删除失败的" + faillist.length + "个源",
-                                            desc: "下拉刷新页面，对失败的源进行复检",
                                             url: $("确定将失败的源全部删除").confirm(() => {
                                                 let failSource = storage0.getMyVar("failSource") || [];
                                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
@@ -509,16 +440,69 @@ function SRCSet() {
                                             }),
                                             col_type : "text_center_1"
                                         });
+                                        addItemAfter("testSource2", {
+                                            title: "针对失败的源，进入复检模式",
+                                            url: "refreshPage(true);",
+                                            col_type : "text_center_1"
+                                        });
                                         storage0.putMyVar("failSource", faillist);
                                     }
                                     return "toast://测试结束";
-                                }),
+                                }, option)
+                            }
+                            let d = [];
+                            d.push({
+                                title: "选择较验项目",
+                                col_type: "rich_text"
+                            })
+                            d.push({
+                                title: '一级列表',
+                                col_type: 'text_3',
+                                url: testSource('yi'),
+                                extra: {
+                                    id: "condition_yi"
+                                }
+                            });
+                            d.push({
+                                title: '二级选集',
+                                col_type: 'text_3',
+                                url: testSource('er'),
+                                extra: {
+                                    id: "condition_er"
+                                }
+                            });
+                            d.push({
+                                title: '搜索结果',
+                                col_type: 'text_3',
+                                url: testSource('ss'),
+                                extra: {
+                                    id: "condition_ss"
+                                }
+                            });
+                            d.push({
+                                col_type: "line_blank"
+                            });
+
+                            let failSource = storage0.getMyVar("failSource") || [];
+                            if(failSource.length>0){
+                                num = failSource.length;
+                            }
+
+                            d.push({
+                                title: "待较验源：" + num,
+                                url: "hiker://empty",
                                 desc: "",
                                 col_type : "text_center_1",
                                 extra: {
                                     id: "testSource"
                                 }
                             })
+                            d.push({
+                                col_type: "line",
+                                extra: {
+                                    id: "testSource2"
+                                }
+                            });
                             setResult(d);
                         },duoselect.length)
                     }, Juconfig["checkSourceAdmin"] || 0),
@@ -2381,7 +2365,7 @@ function resource() {
                 title: lists[i].url,
                 url: $('#noLoading#').lazyRule((url) => {
                     putMyVar('importinput', url);
-                    refreshPage(false);
+                    refreshPage(true);
                     return "toast://已选择，需确认";
                 },lists[i].url),
                 col_type: "text_1",
