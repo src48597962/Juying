@@ -497,6 +497,7 @@ function SRCSet() {
                                                 title: "针对失败的源，进入复检模式",
                                                 url: $().lazyRule((failnum)=>{
                                                     putMyVar("批量检测_复检模式","1");
+                                                    clearMyVar("executeObj");
                                                     refreshPage(true);
                                                     return "toast://进入复检" + failnum;
                                                 }, faillist.length),
