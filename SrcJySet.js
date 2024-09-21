@@ -2002,20 +2002,6 @@ function manageSet(){
         col_type: 'text_icon'
     });
     d.push({
-        title: '点播hipy_t3接口',
-        img: getItem('hipy_t3_enable')=="1"?getIcon("管理-开.svg"):getIcon("关.svg"),
-        url: $("#noLoading#").lazyRule(() => {
-            if(getItem('hipy_t3_enable')=="1"){
-                clearItem('hipy_t3_enable');
-            }else{
-                setItem('hipy_t3_enable','1');
-            }
-            refreshPage();
-            return 'toast://感谢L佬提供的独创隔离运行环境代码，更好的体验可使用DrpyHiker小程序';
-        }),
-        col_type: 'text_icon'
-    });
-    d.push({
         title: 'drpy调试日志打印',
         img: getItem('drpy调试日志')=="1"?getIcon("管理-开.svg"):getIcon("关.svg"),
         url: $("#noLoading#").lazyRule(() => {
@@ -2143,7 +2129,7 @@ function resource() {
     d.push({
         title: (importtype=="2"?"👉":"")+"道长hipy库导入",
         col_type: 'scroll_button',
-        url: getItem('hipy_t3_enable')!="1"?"toast://请使用DrpyHiker小程序":$('#noLoading#').lazyRule(() => {
+        url: $('#noLoading#').lazyRule(() => {
             putMyVar('importtype','2');
             refreshPage(false);
             return "toast://此项仅支github库，hipy项目js文件所在的路径";
@@ -2159,7 +2145,7 @@ function resource() {
             return "toast://订阅本地包或在线的配置文件，但无法管理接口";
         })
     });
-    if(getItem('hipy_t3_enable')=="1" && getItem("sourceMode","1")=="1"){
+    if(getItem("sourceMode","1")=="1"){
         d.push({
             title: (importtype=="4"?"👉":"")+"drpy_js文件夹",
             col_type: 'scroll_button',
