@@ -67,7 +67,7 @@ var SrcParseS = {
             }else if(dataObj.stype=="hipy_t4"){
                 play = JSON.parse(fetch(dataObj.surl+'&flag='+dataObj.flag+"&extend="+dataObj.sext+'&play='+vipUrl, {timeout: 10000}));
             }
-            
+            log(play);
             if(play.url.startsWith('push://')){
                 play.url = play.url.replace('push://', '');
             }
