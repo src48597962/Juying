@@ -303,40 +303,40 @@ function SRCSet() {
             })
             if(Juconfig["checkSourceAdmin"]){
                 d.push({
-                    title: "批量较验",
+                    title: "批量检测",
                     url: $('#noLoading#').lazyRule((admin) => {
                         let nowtime = Date.now();
                         let checkSourcetime = getItem('checkSourcetime','0');
                         let oldtime = parseInt(checkSourcetime.split('|')[0]);
                         let h = checkSourcetime=="0"||admin=="1"?0:parseInt(checkSourcetime.split('|')[1]);
                         if (nowtime < (oldtime+h*60*60*1000)) {
-                            return "toast://下次允许批量较验时间\n" + $.dateFormat(oldtime+h*60*60*1000, "yyyy-MM-dd HH:mm:ss");
+                            return "toast://下次允许批量检测时间\n" + $.dateFormat(oldtime+h*60*60*1000, "yyyy-MM-dd HH:mm:ss");
                         }
                         let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
                         duoselect = duoselect.filter(v=>!v.stop);
                         if(duoselect.length==0){
                             return "toast://未选择";
                         }
-                        if(getMyVar("批量较验_线程启动")=="1"){
+                        if(getMyVar("批量检测_线程启动")=="1"){
                             return "toast://上一个任务还没有结束，请等待.";
                         }
                         return $("hiker://empty#noRecordHistory##noHistory#").rule((num) => {
                             addListener("onClose", $.toString(() => {
                                 clearMyVar("failSourceList");
-                                putMyVar("批量较验_停止线程","1");
+                                putMyVar("批量检测_停止线程","1");
                                 let nowtime = Date.now();
                                 setItem('checkSourcetime', nowtime+'|'+getMyVar("checkSource_nexttime", "0"));
                                 clearMyVar("checkSource_nexttime");
                             }));
                             function testSource(option) {
                                 let sm = option=="yi"?"一级列表":option=="er"?"二级选集":"搜索结果"
-                                return $("对待检源的" + sm + "进行较验，\n下次进入较验需等24小时！").confirm((option,sm) => {
-                                    if(getMyVar("批量较验_线程启动")=="1"){
+                                return $("对待检源的" + sm + "进行检测，\n下次进入检测需等24小时！").confirm((option,sm) => {
+                                    if(getMyVar("批量检测_线程启动")=="1"){
                                         return "toast://上一个任务还没有结束，请等待.";
                                     }
                                     putMyVar("checkSource_nexttime", "24");
-                                    putMyVar("批量较验_线程启动", "1");
-                                    clearMyVar("批量较验_停止线程");
+                                    putMyVar("批量检测_线程启动", "1");
+                                    clearMyVar("批量检测_停止线程");
                                     let duoselect = storage0.getMyVar("failSourceList") || storage0.getMyVar('SrcJu_duoselect') || [];
                                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
@@ -412,9 +412,9 @@ function SRCSet() {
                                         }
                                     });
                                     
-                                    showLoading(sm + "，批量较验中...");
+                                    showLoading(sm + "，批量检测中...");
                                     updateItem("testSource", {url: $().lazyRule(()=>{
-                                        putMyVar("批量较验_停止线程","1");
+                                        putMyVar("批量检测_停止线程","1");
                                         return "hiker://empty";
                                     })});
                                     addItemAfter("testSource2", {
@@ -440,13 +440,14 @@ function SRCSet() {
                                             if(taskResult.error){
                                                 addItemBefore("testSource2", taskResult.d);
                                                 faillist.push(taskResult.data);
+                                                storage0.putMyVar("failSourceList", faillist);
                                             }else{
                                                 success++;
                                             }
-                                            updateItem("testSource", {desc: "已较验：" + execute + "，正常源：" + success});
+                                            updateItem("testSource", {desc: "已检测：" + execute + "，正常源：" + success});
                                             //log(id + ">>>" +error);
 
-                                            if(getMyVar("批量较验_停止线程")=="1"){
+                                            if(getMyVar("批量检测_停止线程")=="1"){
                                                 return "break";
                                             }
                                         },
@@ -463,17 +464,16 @@ function SRCSet() {
                                             }, faillist.length),
                                             col_type : "text_center_1"
                                         });
-                                        storage0.putMyVar("failSourceList", faillist);
                                     }else{
                                         deleteItem("deletefailSource");
                                     }
-                                    clearMyVar("批量较验_线程启动");
+                                    clearMyVar("批量检测_线程启动");
                                     return "toast://测试结束";
                                 }, option,sm)
                             }
                             let d = [];
                             d.push({
-                                title: "选择较验项目",
+                                title: "选择检测项目",
                                 col_type: "rich_text"
                             })
                             d.push({
@@ -510,7 +510,7 @@ function SRCSet() {
                             }
 
                             d.push({
-                                title: "待较验源：" + num,
+                                title: "待检测源：" + num,
                                 url: "hiker://empty",
                                 desc: "",
                                 col_type : "text_center_1",
@@ -1688,7 +1688,7 @@ function manageSet(){
                         if(input.split('￥')[0]!="聚影资源码"){
                             return 'toast://口令有误';
                         }
-                        showLoading('正在较验有效性')
+                        showLoading('正在校验有效性')
                         let codeid = input.split('￥')[1];
                         let text = parsePaste('https://netcut.cn/p/'+aesDecode('Juying2', codeid));
                         hideLoading();
