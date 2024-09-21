@@ -338,7 +338,6 @@ function SRCSet() {
                                     if(getMyVar("批量检测_线程开始")=="1"){
                                         return "toast://上一个任务还没有结束，请等待.";
                                     }
-                                    clearMyVar("批量检测_复检模式");
                                     putMyVar("checkSource_nexttime", "24");
                                     putMyVar("批量检测_线程开始", "1");
                                     deleteItem("recheckSource");
@@ -411,11 +410,13 @@ function SRCSet() {
                                         return {error:error, d:d, data:data}
                                     }
                                     showLoading(sm + "，批量检测中...");
+                                    clearMyVar("批量检测_复检模式");
                                     let executeList = [];
                                     let success = 0;
                                     let faillist = storage0.getMyVar("failSourceList") || [];
 
                                     if(storage0.getMyVar("executeObj")){
+                                        log("恢复线程");
                                         executeList = storage0.getMyVar("executeObj").list;
                                         success = storage0.getMyVar("executeObj").success;
                                         duoselect = duoselect.filter(v=>executeList.indexOf(v.url)==-1);
