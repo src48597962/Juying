@@ -328,11 +328,12 @@ function SRCSet() {
                             function testSource(option) {
                                 let sm = option=="yi"?"一级列表":option=="er"?"二级选集":"搜索结果"
                                 return $("对待检源的" + sm + "进行较验，\n下次进入较验需等24小时！").confirm((option,sm) => {
+                                    if(getMyVar("批量较验_线程启动")=="1"){
+                                        return "toast://上一个任务还没有结束，请等待.";
+                                    }
                                     putMyVar("checkSource_nexttime", "24");
+                                    putMyVar("批量较验_线程启动", "1");
                                     clearMyVar("批量较验_停止线程");
-                                    updateItem("condition_yi", {url: "hiker://empty"});
-                                    updateItem("condition_er", {url: "hiker://empty"});
-                                    updateItem("condition_ss", {url: "hiker://empty"});
                                     let duoselect = storage0.getMyVar("failSource") || storage0.getMyVar('SrcJu_duoselect') || [];
                                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
@@ -463,6 +464,7 @@ function SRCSet() {
                                     }else{
                                         deleteItem("deletefailSource");
                                     }
+                                    clearMyVar("批量较验_线程启动");
                                     return "toast://测试结束";
                                 }, option,sm)
                             }
