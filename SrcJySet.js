@@ -352,7 +352,7 @@ function SRCSet() {
                                             }else{
                                                 desc = "主页分类获取失败  ";
                                             }
-                                            if(yidata.vodlists && yidata.vodlists.length>0){
+                                            if(yidata.vodlists && yidata.vodlists.length>1){
                                                 desc += "一级列表获取正常";
                                                 erurl = yidata.vodlists[0].vod_url;
                                                 ername = yidata.vodlists[0].vod_name;
