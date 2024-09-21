@@ -317,7 +317,9 @@ function SRCSet() {
                         if(duoselect.length==0){
                             return "toast://未选择";
                         }
-                        
+                        if(getMyVar("批量较验_线程启动")=="1"){
+                            return "toast://上一个任务还没有结束，请等待.";
+                        }
                         return $("hiker://empty#noRecordHistory##noHistory#").rule((num) => {
                             addListener("onClose", $.toString(() => {
                                 clearMyVar("failSourceList");
