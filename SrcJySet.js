@@ -433,6 +433,7 @@ function SRCSet() {
                                             id: "pausetestSource"
                                         }
                                     });
+                                    deleteItem("deletefailSource");
                                     addItemAfter("testSource2", {
                                         title: "批量删除失败的源",
                                         url: $("确定将失败的源全部删除").confirm(() => {
