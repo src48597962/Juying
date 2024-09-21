@@ -413,6 +413,20 @@ function SRCSet() {
                                         putMyVar("批量较验_停止线程","1");
                                         return "hiker://empty";
                                     })});
+                                    addItemAfter("testSource2", {
+                                        title: "批量删除失败的源",
+                                        url: $("确定将失败的源全部删除").confirm(() => {
+                                            let failSource = storage0.getMyVar("failSource") || [];
+                                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                                            deleteData("jk", failSource);
+                                            back(true);
+                                            return 'toast://已删除失效源'+failSource.length;
+                                        }),
+                                        col_type : "text_center_1",
+                                        extra: {
+                                            id: "deletefailSource"
+                                        }
+                                    });
                                     let execute = 0;
                                     let success = 0;
                                     let faillist = [];
@@ -438,17 +452,6 @@ function SRCSet() {
                                     hideLoading();
                                     if(faillist.length>0){
                                         addItemAfter("testSource2", {
-                                            title: "批量删除失败的" + faillist.length + "个源",
-                                            url: $("确定将失败的源全部删除").confirm(() => {
-                                                let failSource = storage0.getMyVar("failSource") || [];
-                                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
-                                                deleteData("jk", failSource);
-                                                back(true);
-                                                return 'toast://已删除失效源';
-                                            }),
-                                            col_type : "text_center_1"
-                                        });
-                                        addItemAfter("testSource2", {
                                             title: "针对失败的源，进入复检模式",
                                             url: $().lazyRule((failnum)=>{
                                                 refreshPage(true);
@@ -457,6 +460,8 @@ function SRCSet() {
                                             col_type : "text_center_1"
                                         });
                                         storage0.putMyVar("failSource", faillist);
+                                    }else{
+                                        deleteItem("deletefailSource");
                                     }
                                     return "toast://测试结束";
                                 }, option,sm)
