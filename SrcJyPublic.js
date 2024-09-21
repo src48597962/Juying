@@ -188,7 +188,6 @@ function getBoxSource(input, mode, imports){
     let jiekous = data.sites||[];
     if(imports.jk && jiekous.length>0){
         let urls= [];
-        let hipy_t3_enable = getItem('hipy_t3_enable')=="1"?1:0;
         //多线程处理
         let task = function(obj) {
             let arr;
@@ -218,7 +217,7 @@ function getBoxSource(input, mode, imports){
                     arr = { "name": obj.name, "type": "XBPQ", "ext": extfile};
                 }else if(/^csp_XYQHiker/.test(obj.api)){
                     arr = { "name": obj.name, "type": "XYQ", "ext": extfile};
-                }else if(/drpy2/.test(obj.api) && obj.type==3 && !obj.ext.includes('drpy.js') && hipy_t3_enable){
+                }else if(/drpy2/.test(obj.api) && obj.type==3 && !obj.ext.includes('drpy.js')){
                     arr = { "name": obj.name.includes('|')?obj.name.split('|')[1].trim():obj.name, "type": "hipy_t3", "ext": extfile};
                     if(arr.name.includes('[搜]')){
                         arr['onlysearch'] = 1;
