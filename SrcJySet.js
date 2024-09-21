@@ -320,14 +320,15 @@ function SRCSet() {
                         if(getMyVar("批量检测_线程启动")=="1"){
                             return "toast://上一个任务还没有结束，请等待.";
                         }
-                        clearMyVar("failSourceList");
-                        return $("hiker://empty#noRecordHistory##noHistory#").rule((num) => {
+                        //clearMyVar("failSourceList");
+                        return $("hiker://empty#noRecordHistory##noHistory##noRefresh#").rule((num) => {
                             addListener("onClose", $.toString(() => {
-                                clearMyVar("failSourceList");
                                 putMyVar("批量检测_停止线程","1");
                                 let nowtime = Date.now();
                                 setItem('checkSourcetime', nowtime+'|'+getMyVar("checkSource_nexttime", "0"));
                                 clearMyVar("checkSource_nexttime");
+                                clearMyVar("failSourceList");
+                                clearMyVar("executeList");
                             }));
                             function testSource(option) {
                                 let sm = option=="yi"?"一级列表":option=="er"?"二级选集":"搜索结果"
@@ -414,10 +415,14 @@ function SRCSet() {
                                     });
                                     
                                     showLoading(sm + "，批量检测中...");
-                                    updateItem("testSource", {url: $().lazyRule(()=>{
-                                        putMyVar("批量检测_停止线程","1");
-                                        return "hiker://empty";
-                                    })});
+                                    addItemAfter("testSource", {
+                                        title: sm + "，批量检测中...",
+                                        desc: "点击中止线程，暂停批量检测",
+                                        url: $().lazyRule(()=>{
+                                            putMyVar("批量检测_暂停检测","1");
+                                            return "hiker://empty";
+                                        })
+                                    });
                                     addItemAfter("testSource2", {
                                         title: "批量删除失败的源",
                                         url: $("确定将失败的源全部删除").confirm(() => {
@@ -432,12 +437,12 @@ function SRCSet() {
                                             id: "deletefailSource"
                                         }
                                     });
-                                    let execute = 0;
+                                    let executeList = [];
                                     let success = 0;
                                     let faillist = [];
                                     be(list, {
                                         func: function (obj, id, error, taskResult) {
-                                            execute++;
+                                            executeList.push(id);
                                             if(taskResult.error){
                                                 addItemBefore("testSource2", taskResult.d);
                                                 faillist.push(taskResult.data);
@@ -445,10 +450,10 @@ function SRCSet() {
                                             }else{
                                                 success++;
                                             }
-                                            updateItem("testSource", {desc: "已检测：" + execute + "，正常源：" + success});
+                                            updateItem("testSource", {desc: "已检测：" + executeList.length + "，正常源：" + success});
                                             //log(id + ">>>" +error);
 
-                                            if(getMyVar("批量检测_停止线程")=="1"){
+                                            if(getMyVar("批量检测_停止线程")=="1" || getMyVar("批量检测_暂停检测")=="1"){
                                                 return "break";
                                             }
                                         },
@@ -469,8 +474,11 @@ function SRCSet() {
                                         deleteItem("deletefailSource");
                                     }
                                     clearMyVar("批量检测_线程启动");
+                                    if(getMyVar("批量检测_暂停检测")=="1"){
+                                        storage0.putMyVar("executeList", executeList);
+                                    }
                                     return "toast://测试结束";
-                                }, option,sm)
+                                }, option, sm)
                             }
                             let d = [];
                             d.push({
