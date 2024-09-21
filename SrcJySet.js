@@ -317,9 +317,10 @@ function SRCSet() {
                         if(duoselect.length==0){
                             return "toast://未选择";
                         }
+                        
                         return $("hiker://empty#noRecordHistory##noHistory#").rule((num) => {
                             addListener("onClose", $.toString(() => {
-                                clearMyVar('failSource');
+                                clearMyVar("failSourceList");
                                 putMyVar("批量较验_停止线程","1");
                                 let nowtime = Date.now();
                                 setItem('checkSourcetime', nowtime+'|'+getMyVar("checkSource_nexttime", "0"));
@@ -334,7 +335,7 @@ function SRCSet() {
                                     putMyVar("checkSource_nexttime", "24");
                                     putMyVar("批量较验_线程启动", "1");
                                     clearMyVar("批量较验_停止线程");
-                                    let duoselect = storage0.getMyVar("failSource") || storage0.getMyVar('SrcJu_duoselect') || [];
+                                    let duoselect = storage0.getMyVar("failSourceList") || storage0.getMyVar('SrcJu_duoselect') || [];
                                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
                                     let task = function (data) {
@@ -389,10 +390,10 @@ function SRCSet() {
                                                 longClick: [{
                                                     title: "保留",
                                                     js: $.toString((dataurl) => {
-                                                        let failSource = storage0.getMyVar("failSource") || [];
+                                                        let failSource = storage0.getMyVar("failSourceList") || [];
                                                         let index = failSource.indexOf(failSource.filter(d => dataurl==d.url )[0]);
                                                         failSource.splice(index, 1);
-                                                        storage0.putMyVar("failSource",failSource);
+                                                        storage0.putMyVar("failSourceList",failSource);
                                                         deleteItem("failSource-" + dataurl);
                                                         return "toast://已保留，不处理";
                                                     },data.url)
@@ -417,7 +418,7 @@ function SRCSet() {
                                     addItemAfter("testSource2", {
                                         title: "批量删除失败的源",
                                         url: $("确定将失败的源全部删除").confirm(() => {
-                                            let failSource = storage0.getMyVar("failSource") || [];
+                                            let failSource = storage0.getMyVar("failSourceList") || [];
                                             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                                             deleteData("jk", failSource);
                                             back(true);
@@ -460,7 +461,7 @@ function SRCSet() {
                                             }, faillist.length),
                                             col_type : "text_center_1"
                                         });
-                                        storage0.putMyVar("failSource", faillist);
+                                        storage0.putMyVar("failSourceList", faillist);
                                     }else{
                                         deleteItem("deletefailSource");
                                     }
@@ -501,7 +502,7 @@ function SRCSet() {
                                 col_type: "line_blank"
                             });
 
-                            let failSource = storage0.getMyVar("failSource") || [];
+                            let failSource = storage0.getMyVar("failSourceList") || [];
                             if(failSource.length>0){
                                 num = failSource.length;
                             }
