@@ -329,7 +329,8 @@ function SRCSet() {
                                 clearMyVar("checkSource_nexttime");
                                 clearMyVar("failSourceList");
                                 clearMyVar("executeList");
-                                clearMyVar("批量检测_暂停检测");  
+                                clearMyVar("批量检测_暂停检测");
+                                clearMyVar("批量检测_复检模式");
                             }));
                             function testSource(option) {
                                 let sm = option=="yi"?"一级列表":option=="er"?"二级选集":"搜索结果"
@@ -337,9 +338,10 @@ function SRCSet() {
                                     if(getMyVar("批量检测_线程开始")=="1"){
                                         return "toast://上一个任务还没有结束，请等待.";
                                     }
+                                    clearMyVar("批量检测_复检模式");
                                     putMyVar("checkSource_nexttime", "24");
                                     putMyVar("批量检测_线程开始", "1");
-                                    let duoselect = storage0.getMyVar("failSourceList") || storage0.getMyVar('SrcJu_duoselect') || [];
+                                    let duoselect = getMyVar("批量检测_复检模式")?storage0.getMyVar("failSourceList"):storage0.getMyVar('SrcJu_duoselect') || [];
                                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
                                     let task = function (data) {
@@ -425,7 +427,6 @@ function SRCSet() {
                                         desc: "点击中止线程，暂停批量检测",
                                         url: $().lazyRule(()=>{
                                             putMyVar("批量检测_暂停检测","1");
-                                            deleteItem("pausetestSource");
                                             return "hiker://empty";
                                         }),
                                         col_type: "text_center_1",
@@ -436,47 +437,50 @@ function SRCSet() {
                                     
                                     let executeList = [];
                                     let success = 0;
-                                    let faillist = [];
+                                    let faillist = storage0.getMyVar("failSourceList") || [];
                                     log("批量检测_线程开始");
-                                    be(list, {
-                                        func: function (obj, id, error, taskResult) {
-                                            executeList.push(id);
-                                            if(taskResult.error){
-                                                addItemBefore("testSource2", taskResult.d);
-                                                faillist.push(taskResult.data);
-                                                if(faillist.length==1){
-                                                    deleteItem("deletefailSource");
-                                                    addItemAfter("testSource2", {
-                                                        title: "批量删除失败的源",
-                                                        url: $("确定将失败的源全部删除").confirm(() => {
-                                                            let failSource = storage0.getMyVar("failSourceList") || [];
-                                                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
-                                                            deleteData("jk", failSource);
-                                                            back(true);
-                                                            return 'toast://已删除失效源'+failSource.length;
-                                                        }),
-                                                        col_type : "text_center_1",
-                                                        extra: {
-                                                            id: "deletefailSource"
-                                                        }
-                                                    });
+                                    if(list.length>0){
+                                        be(list, {
+                                            func: function (obj, id, error, taskResult) {
+                                                executeList.push(id);
+                                                if(taskResult.error){
+                                                    addItemBefore("testSource2", taskResult.d);
+                                                    faillist.push(taskResult.data);
+                                                    if(faillist.length==1){
+                                                        deleteItem("deletefailSource");
+                                                        addItemAfter("testSource2", {
+                                                            title: "批量删除失败的源",
+                                                            url: $("确定将失败的源全部删除").confirm(() => {
+                                                                let failSource = storage0.getMyVar("failSourceList") || [];
+                                                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                                                                deleteData("jk", failSource);
+                                                                back(true);
+                                                                return 'toast://已删除失效源'+failSource.length;
+                                                            }),
+                                                            col_type : "text_center_1",
+                                                            extra: {
+                                                                id: "deletefailSource"
+                                                            }
+                                                        });
+                                                    }
+                                                    storage0.putMyVar("failSourceList", faillist);
+                                                }else{
+                                                    success++;
                                                 }
-                                                storage0.putMyVar("failSourceList", faillist);
-                                            }else{
-                                                success++;
-                                            }
-                                            updateItem("testSource", {desc: "已检测：" + executeList.length + "，正常源：" + success});
-                                            //log(id + ">>>" +error);
+                                                updateItem("testSource", {desc: "已检测：" + executeList.length + "，正常源：" + success});
+                                                //log(id + ">>>" +error);
 
-                                            if(getMyVar("批量检测_停止线程")=="1" || getMyVar("批量检测_暂停检测")=="1"){
-                                                return "break";
+                                                if(getMyVar("批量检测_停止线程")=="1" || getMyVar("批量检测_暂停检测")=="1"){
+                                                    return "break";
+                                                }
+                                            },
+                                            param: {
                                             }
-                                        },
-                                        param: {
-                                        }
-                                    })
+                                        })
+                                    }
                                     log("批量检测_线程结束");
-                                    clearMyVar("批量检测_线程开始");  
+                                    clearMyVar("批量检测_线程开始"); 
+                                    deleteItem("pausetestSource");
                                     hideLoading();
 
                                     if(getMyVar("批量检测_停止线程")=="1"){
@@ -487,6 +491,7 @@ function SRCSet() {
                                             addItemAfter("testSource2", {
                                                 title: "针对失败的源，进入复检模式",
                                                 url: $().lazyRule((failnum)=>{
+                                                    putMyVar("批量检测_复检模式");
                                                     refreshPage(true);
                                                     return "toast://进入复检" + failnum;
                                                 }, faillist.length),
@@ -535,10 +540,11 @@ function SRCSet() {
                             d.push({
                                 col_type: "line_blank"
                             });
-
-                            let failSource = storage0.getMyVar("failSourceList") || [];
-                            if(failSource.length>0){
-                                num = failSource.length;
+                            if(getMyVar("批量检测_复检模式")){
+                                let failSource = storage0.getMyVar("failSourceList") || [];
+                                if(failSource.length>0){
+                                    num = failSource.length;
+                                }
                             }
 
                             d.push({
