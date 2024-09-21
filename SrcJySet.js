@@ -341,6 +341,8 @@ function SRCSet() {
                                     clearMyVar("批量检测_复检模式");
                                     putMyVar("checkSource_nexttime", "24");
                                     putMyVar("批量检测_线程开始", "1");
+                                    deleteItem("recheckSource");
+
                                     let duoselect = getMyVar("批量检测_复检模式")?storage0.getMyVar("failSourceList"):storage0.getMyVar('SrcJu_duoselect') || [];
                                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
@@ -490,11 +492,10 @@ function SRCSet() {
                                         clearMyVar("failSourceList");
                                     }else{
                                         if(faillist.length>0){
-                                            deleteItem("recheckSource");
                                             addItemAfter("testSource2", {
                                                 title: "针对失败的源，进入复检模式",
                                                 url: $().lazyRule((failnum)=>{
-                                                    putMyVar("批量检测_复检模式");
+                                                    putMyVar("批量检测_复检模式","1");
                                                     refreshPage(true);
                                                     return "toast://进入复检" + failnum;
                                                 }, faillist.length),
