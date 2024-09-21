@@ -414,8 +414,8 @@ function SRCSet() {
                                     let faillist = storage0.getMyVar("failSourceList") || [];
 
                                     if(storage0.getMyVar("executeObj")){
-                                        executeList = storage0.getMyVar("executeList").list;
-                                        success = storage0.getMyVar("executeList").success;
+                                        executeList = storage0.getMyVar("executeObj").list;
+                                        success = storage0.getMyVar("executeObj").success;
                                         duoselect = duoselect.filter(v=>executeList.indexOf(v.url)==-1);
                                         clearMyVar("executeObj");
                                     }
