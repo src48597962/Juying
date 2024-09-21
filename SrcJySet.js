@@ -433,7 +433,7 @@ function SRCSet() {
                                             id: "pausetestSource"
                                         }
                                     });
-                                    deleteItem("deletefailSource");
+                                    
                                     let executeList = [];
                                     let success = 0;
                                     let faillist = [];
@@ -445,6 +445,7 @@ function SRCSet() {
                                                 addItemBefore("testSource2", taskResult.d);
                                                 faillist.push(taskResult.data);
                                                 if(faillist.length==1){
+                                                    deleteItem("deletefailSource");
                                                     addItemAfter("testSource2", {
                                                         title: "批量删除失败的源",
                                                         url: $("确定将失败的源全部删除").confirm(() => {
