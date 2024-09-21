@@ -434,20 +434,6 @@ function SRCSet() {
                                         }
                                     });
                                     deleteItem("deletefailSource");
-                                    addItemAfter("testSource2", {
-                                        title: "批量删除失败的源",
-                                        url: $("确定将失败的源全部删除").confirm(() => {
-                                            let failSource = storage0.getMyVar("failSourceList") || [];
-                                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
-                                            deleteData("jk", failSource);
-                                            back(true);
-                                            return 'toast://已删除失效源'+failSource.length;
-                                        }),
-                                        col_type : "text_center_1",
-                                        extra: {
-                                            id: "deletefailSource"
-                                        }
-                                    });
                                     let executeList = [];
                                     let success = 0;
                                     let faillist = [];
@@ -458,6 +444,22 @@ function SRCSet() {
                                             if(taskResult.error){
                                                 addItemBefore("testSource2", taskResult.d);
                                                 faillist.push(taskResult.data);
+                                                if(faillist.length==1){
+                                                    addItemAfter("testSource2", {
+                                                        title: "批量删除失败的源",
+                                                        url: $("确定将失败的源全部删除").confirm(() => {
+                                                            let failSource = storage0.getMyVar("failSourceList") || [];
+                                                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                                                            deleteData("jk", failSource);
+                                                            back(true);
+                                                            return 'toast://已删除失效源'+failSource.length;
+                                                        }),
+                                                        col_type : "text_center_1",
+                                                        extra: {
+                                                            id: "deletefailSource"
+                                                        }
+                                                    });
+                                                }
                                                 storage0.putMyVar("failSourceList", faillist);
                                             }else{
                                                 success++;
