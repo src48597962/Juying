@@ -87,16 +87,6 @@ function getYiData(jkdata, batchTest) {
             vodhost = getHome(listurl);
         }
     } else if (api_type == 'hipy_t3') {
-        if(getItem('hipy_t3_enable')!="1"){
-            toast("hipy_t3请使用DrpyHiker小程序");
-            log("hipy_t3接口未开启");
-            return {
-                fllists: [],
-                vodlists: [],
-                error: {}
-            }
-        }
-
         var drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(jkdata);
         let rule = drpy.getRule();
         detailurl = rule.detailUrl || "";
@@ -748,10 +738,6 @@ function getSsData(name, jkdata, page) {
             }
         }
     } else if (api_type=="hipy_t3" || api_type=="hipy_t4") {
-        if(api_type=="hipy_t3" && getItem('hipy_t3_enable')!="1"){
-            log('hipy_t3请使用DrpyHiker小程序');
-            return [];
-        }
         detailurl = "";
         listnode = "json.list";
     } else {
