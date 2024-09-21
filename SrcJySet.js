@@ -320,6 +320,7 @@ function SRCSet() {
                         if(getMyVar("批量检测_线程启动")=="1"){
                             return "toast://上一个任务还没有结束，请等待.";
                         }
+                        clearMyVar("failSourceList");
                         return $("hiker://empty#noRecordHistory##noHistory#").rule((num) => {
                             addListener("onClose", $.toString(() => {
                                 clearMyVar("failSourceList");
