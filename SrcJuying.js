@@ -876,11 +876,6 @@ function dianboyiji(testSource) {
                     if(input == ''){
                         return "hiker://empty"
                     }
-                    if(/开启hipy_t3|开启t3|宝塔镇河妖/.test(input)){
-                        setItem('hipy_t3_enable', '1');
-                        refreshPage();
-                        return "toast://已开启";
-                    }
                     return input + searchurl;
                 },searchurl),
                 desc: "搜你想看的...",
@@ -1222,10 +1217,6 @@ function yiji() {
             input = input.trim();
             if(input == ''){
                 return "hiker://empty"
-            }
-            if(/开启hipy_t3|开启t3|宝塔镇河妖/.test(input)){
-                setItem('hipy_t3_enable', '1');
-                return "toast://已开启";
             }
             if(/www\.aliyundrive\.com|www\.alipan\.com/.test(input)){
                 input = input.replace('http','\nhttp');
