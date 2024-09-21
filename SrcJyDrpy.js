@@ -210,7 +210,7 @@ function createNewDrpy(sdata) {
     createDrpy(sdata);
     let drpy = drpyMap.get(sdata.key);
     drpy.init(sdata.ext);
-    log(sdata.key + ">init");
+    //log(sdata.key + ">init");
     return drpy;
 }
 
@@ -248,9 +248,9 @@ function get(jkdata) {
     let ext = jkdata.key?jkdata.ext:getext(jkdata);
     let sdata = {key:key, ext:ext};
     return sync(() => {
-        log(drpyMap.size)
+        //log(drpyMap.size)
         if (drpyMap.has(key)) {
-            log("取缓存>" + key)
+            //log("取缓存>" + key)
             let drpy = drpyMap.get(key);
             if(Object.keys(drpy.getRule()).length > 0){
                 return drpy;
@@ -259,7 +259,7 @@ function get(jkdata) {
             }
         }
         if (drpyMap.size >= 5) {
-            log("删缓存>"+Array.from(drpyMap.keys()).at(0))
+            //log("删缓存>"+Array.from(drpyMap.keys()).at(0))
             del(Array.from(drpyMap.keys()).at(0));
         }
         let drpy = createNewDrpy(sdata);
