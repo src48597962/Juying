@@ -258,7 +258,7 @@ function get(jkdata) {
                 drpyMap.delete(key);
             }
         }
-        if (drpyMap.size >= 16) {
+        if (drpyMap.size >= 5) {
             //log("删缓存>"+Array.from(drpyMap.keys()).at(0))
             del(Array.from(drpyMap.keys()).at(0));
         }
