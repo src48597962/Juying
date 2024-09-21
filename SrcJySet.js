@@ -328,12 +328,12 @@ function SRCSet() {
                                 setItem('checkSourcetime', nowtime+'|'+getMyVar("checkSource_nexttime", "0"));
                                 clearMyVar("checkSource_nexttime");
                                 clearMyVar("failSourceList");
-                                clearMyVar("executeList");
+                                clearMyVar("executeObj");
                                 clearMyVar("批量检测_暂停检测");
                                 clearMyVar("批量检测_复检模式");
                             }));
                             function testSource(option) {
-                                let sm = option=="yi"?"一级列表":option=="er"?"二级选集":"搜索结果"
+                                let sm = option=="yi"?"一级列表":option=="er"?"二级选集":"搜索测试"
                                 return $("对待检源的" + sm + "进行检测，\n下次进入检测需等24小时！").confirm((option,sm) => {
                                     if(getMyVar("批量检测_线程开始")=="1"){
                                         return "toast://上一个任务还没有结束，请等待.";
@@ -409,10 +409,15 @@ function SRCSet() {
                                         return {error:error, d:d, data:data}
                                     }
                                     showLoading(sm + "，批量检测中...");
-                                    if(storage0.getMyVar("executeList")){
-                                        let executeList = storage0.getMyVar("executeList");
+                                    let executeList = [];
+                                    let success = 0;
+                                    let faillist = storage0.getMyVar("failSourceList") || [];
+
+                                    if(storage0.getMyVar("executeObj")){
+                                        executeList = storage0.getMyVar("executeList").list;
+                                        success = storage0.getMyVar("executeList").success;
                                         duoselect = duoselect.filter(v=>executeList.indexOf(v.url)==-1);
-                                        clearMyVar("executeList");
+                                        clearMyVar("executeObj");
                                     }
                                     let list = duoselect.filter(v=>!v.stop).map((item) => {
                                         return {
@@ -435,9 +440,6 @@ function SRCSet() {
                                         }
                                     });
                                     
-                                    let executeList = [];
-                                    let success = 0;
-                                    let faillist = storage0.getMyVar("failSourceList") || [];
                                     log("批量检测_线程开始");
                                     if(list.length>0){
                                         be(list, {
@@ -488,6 +490,7 @@ function SRCSet() {
                                         clearMyVar("failSourceList");
                                     }else{
                                         if(faillist.length>0){
+                                            deleteItem("recheckSource");
                                             addItemAfter("testSource2", {
                                                 title: "针对失败的源，进入复检模式",
                                                 url: $().lazyRule((failnum)=>{
@@ -495,13 +498,16 @@ function SRCSet() {
                                                     refreshPage(true);
                                                     return "toast://进入复检" + failnum;
                                                 }, faillist.length),
-                                                col_type : "text_center_1"
+                                                col_type : "text_center_1",
+                                                extra: {
+                                                    id: "recheckSource"
+                                                }
                                             });
                                         }else{
                                             deleteItem("deletefailSource");
                                         }
                                         if(getMyVar("批量检测_暂停检测")=="1"){
-                                            storage0.putMyVar("executeList", executeList);
+                                            storage0.putMyVar("executeObj", {list:executeList,success:success});
                                             clearMyVar("批量检测_暂停检测");
                                         }
                                     }                         
@@ -530,7 +536,7 @@ function SRCSet() {
                                 }
                             });
                             d.push({
-                                title: '搜索结果',
+                                title: '搜索测试',
                                 col_type: 'text_3',
                                 url: testSource('ss'),
                                 extra: {
@@ -557,7 +563,7 @@ function SRCSet() {
                                 }
                             })
                             d.push({
-                                col_type: "line",
+                                col_type: "blank_block",
                                 extra: {
                                     id: "testSource2"
                                 }
