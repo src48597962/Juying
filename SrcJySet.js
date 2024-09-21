@@ -339,7 +339,7 @@ function SRCSet() {
                                     }
                                     putMyVar("checkSource_nexttime", "24");
                                     putMyVar("批量检测_线程开始", "1");
-                                    let duoselect = storage0.getMyVar("executeList") || storage0.getMyVar("failSourceList") || storage0.getMyVar('SrcJu_duoselect') || [];
+                                    let duoselect = storage0.getMyVar("failSourceList") || storage0.getMyVar('SrcJu_duoselect') || [];
                                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
                                     let task = function (data) {
@@ -406,6 +406,12 @@ function SRCSet() {
                                         }
                                         return {error:error, d:d, data:data}
                                     }
+                                    showLoading(sm + "，批量检测中...");
+                                    if(storage0.getMyVar("executeList")){
+                                        let executeList = storage0.getMyVar("executeList");
+                                        duoselect = duoselect.filter(v=>executeList.indexOf(v.url)==-1);
+                                        clearMyVar("executeList");
+                                    }
                                     let list = duoselect.filter(v=>!v.stop).map((item) => {
                                         return {
                                             func: task,
@@ -414,7 +420,6 @@ function SRCSet() {
                                         }
                                     });
                                     
-                                    showLoading(sm + "，批量检测中...");
                                     addItemAfter("testSource", {
                                         title: sm + "，批量检测中...",
                                         desc: "点击中止线程，暂停批量检测",
@@ -423,6 +428,7 @@ function SRCSet() {
                                             deleteItem("pausetestSource");
                                             return "hiker://empty";
                                         }),
+                                        col_type: "text_center_1",
                                         extra: {
                                             id: "pausetestSource"
                                         }
