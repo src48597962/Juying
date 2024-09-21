@@ -317,7 +317,7 @@ function SRCSet() {
                         if(duoselect.length==0){
                             return "toast://未选择";
                         }
-                        if(getMyVar("批量检测_线程启动")=="1"){
+                        if(getMyVar("批量检测_线程开始")=="1"){
                             return "toast://上一个任务还没有结束，请等待.";
                         }
                         //clearMyVar("failSourceList");
@@ -333,11 +333,11 @@ function SRCSet() {
                             function testSource(option) {
                                 let sm = option=="yi"?"一级列表":option=="er"?"二级选集":"搜索结果"
                                 return $("对待检源的" + sm + "进行检测，\n下次进入检测需等24小时！").confirm((option,sm) => {
-                                    if(getMyVar("批量检测_线程启动")=="1"){
+                                    if(getMyVar("批量检测_线程开始")=="1"){
                                         return "toast://上一个任务还没有结束，请等待.";
                                     }
                                     putMyVar("checkSource_nexttime", "24");
-                                    putMyVar("批量检测_线程启动", "1");
+                                    putMyVar("批量检测_线程开始", "1");
                                     clearMyVar("批量检测_停止线程");
                                     let duoselect = storage0.getMyVar("failSourceList") || storage0.getMyVar('SrcJu_duoselect') || [];
                                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
@@ -440,6 +440,7 @@ function SRCSet() {
                                     let executeList = [];
                                     let success = 0;
                                     let faillist = [];
+                                    log("批量检测_线程开始");
                                     be(list, {
                                         func: function (obj, id, error, taskResult) {
                                             executeList.push(id);
@@ -460,6 +461,7 @@ function SRCSet() {
                                         param: {
                                         }
                                     })
+                                    log("批量检测_线程结束");
                                     hideLoading();
                                     if(faillist.length>0){
                                         addItemAfter("testSource2", {
@@ -473,7 +475,7 @@ function SRCSet() {
                                     }else{
                                         deleteItem("deletefailSource");
                                     }
-                                    clearMyVar("批量检测_线程启动");
+                                    clearMyVar("批量检测_线程开始");
                                     if(getMyVar("批量检测_暂停检测")=="1"){
                                         storage0.putMyVar("executeList", executeList);
                                     }
