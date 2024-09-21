@@ -432,7 +432,7 @@ function SRCSet() {
                                         desc: "点击中止线程，暂停批量检测",
                                         url: $().lazyRule(()=>{
                                             putMyVar("批量检测_暂停检测","1");
-                                            return "hiker://empty";
+                                            return "toast://正在拦截线程，暂停批量检测";
                                         }),
                                         col_type: "text_center_1",
                                         extra: {
