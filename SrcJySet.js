@@ -323,13 +323,12 @@ function SRCSet() {
                         clearMyVar("failSourceList");
                         return $("hiker://empty#noRecordHistory##noHistory##noRefresh#").rule((num) => {
                             addListener("onClose", $.toString(() => {
-                                putMyVar("批量检测_停止线程","1");
+                                putMyVar("批量检测_退出页面","1");
                                 let nowtime = Date.now();
                                 setItem('checkSourcetime', nowtime+'|'+getMyVar("checkSource_nexttime", "0"));
                                 clearMyVar("checkSource_nexttime");
                                 clearMyVar("failSourceList");
-                                clearMyVar("executeObj");
-                                clearMyVar("批量检测_暂停检测");
+                                clearMyVar("批量检测_中止线程");
                                 clearMyVar("批量检测_复检模式");
                             }));
                             function testSource(option) {
@@ -415,13 +414,6 @@ function SRCSet() {
                                     let success = 0;
                                     let faillist = storage0.getMyVar("failSourceList") || [];
 
-                                    if(storage0.getMyVar("executeObj")){
-                                        log("恢复线程");
-                                        executeList = storage0.getMyVar("executeObj").list;
-                                        success = storage0.getMyVar("executeObj").success;
-                                        duoselect = duoselect.filter(v=>executeList.indexOf(v.url)==-1);
-                                        clearMyVar("executeObj");
-                                    }
                                     let list = duoselect.filter(v=>!v.stop).map((item) => {
                                         return {
                                             func: task,
@@ -432,10 +424,10 @@ function SRCSet() {
                                     
                                     addItemAfter("testSource", {
                                         title: sm + "，批量检测中...",
-                                        desc: "点击中止线程，暂停批量检测",
+                                        desc: "点击中止线程，停止批量检测",
                                         url: $().lazyRule(()=>{
-                                            putMyVar("批量检测_暂停检测","1");
-                                            return "toast://正在拦截线程，暂停批量检测";
+                                            putMyVar("批量检测_中止线程","1");
+                                            return "toast://正在拦截线程，停止批量检测";
                                         }),
                                         col_type: "text_center_1",
                                         extra: {
@@ -475,7 +467,7 @@ function SRCSet() {
                                                 updateItem("testSource", {desc: "已检测：" + executeList.length + "，正常源：" + success});
                                                 //log(id + ">>>" +error);
 
-                                                if(getMyVar("批量检测_停止线程")=="1" || getMyVar("批量检测_暂停检测")=="1"){
+                                                if(getMyVar("批量检测_退出页面")=="1" || getMyVar("批量检测_中止线程")=="1"){
                                                     return "break";
                                                 }
                                             },
@@ -486,10 +478,11 @@ function SRCSet() {
                                     log("批量检测_线程结束");
                                     clearMyVar("批量检测_线程开始"); 
                                     deleteItem("pausetestSource");
+                                    clearMyVar("批量检测_中止线程");
                                     hideLoading();
 
-                                    if(getMyVar("批量检测_停止线程")=="1"){
-                                        clearMyVar("批量检测_停止线程");
+                                    if(getMyVar("批量检测_退出页面")=="1"){
+                                        clearMyVar("批量检测_退出页面");
                                         clearMyVar("failSourceList");
                                     }else{
                                         if(faillist.length>0){
@@ -497,7 +490,6 @@ function SRCSet() {
                                                 title: "针对失败的源，进入复检模式",
                                                 url: $().lazyRule((failnum)=>{
                                                     putMyVar("批量检测_复检模式","1");
-                                                    clearMyVar("executeObj");
                                                     refreshPage(true);
                                                     return "toast://进入复检" + failnum;
                                                 }, faillist.length),
@@ -508,10 +500,6 @@ function SRCSet() {
                                             });
                                         }else{
                                             deleteItem("deletefailSource");
-                                        }
-                                        if(getMyVar("批量检测_暂停检测")=="1"){
-                                            storage0.putMyVar("executeObj", {list:executeList,success:success});
-                                            clearMyVar("批量检测_暂停检测");
                                         }
                                     }                         
                                     return "toast://测试结束";
