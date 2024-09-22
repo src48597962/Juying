@@ -333,11 +333,11 @@ function SRCSet() {
                             }));
                             function testSource(option) {
                                 let sm = option=="yi"?"一级列表":option=="er"?"二级选集":"搜索测试"
-                                return $("对待检源的" + sm + "进行检测，\n下次进入检测需等24小时！").confirm((option,sm) => {
+                                return $("对待检源的" + sm + "进行检测，\n下次进入检测需等12小时！").confirm((option,sm) => {
                                     if(getMyVar("批量检测_线程开始")=="1"){
                                         return "toast://上一个任务还没有结束，请等待.";
                                     }
-                                    putMyVar("checkSource_nexttime", "24");
+                                    putMyVar("checkSource_nexttime", "12");
                                     putMyVar("批量检测_线程开始", "1");
                                     deleteItem("recheckSource");
 
@@ -427,6 +427,7 @@ function SRCSet() {
                                         desc: "点击中止线程，停止批量检测",
                                         url: $().lazyRule(()=>{
                                             putMyVar("批量检测_中止线程","1");
+                                            showLoading("正在拦截线程");
                                             return "toast://正在拦截线程，停止批量检测";
                                         }),
                                         col_type: "text_center_1",
