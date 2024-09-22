@@ -412,7 +412,7 @@ function SRCSet() {
                                     clearMyVar("批量检测_复检模式");
                                     let executeList = [];
                                     let success = 0;
-                                    let faillist = storage0.getMyVar("failSourceList") || [];
+                                    let faillist = [];
 
                                     let list = duoselect.filter(v=>!v.stop).map((item) => {
                                         return {
