@@ -5,7 +5,7 @@ function search(name, sstype, jkdata) {
     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
     let ssdata;
     if(sstype=='hkjusou'){
-        ssdata = getSsData(name, jkdata, MY_PAGE).map(it => {
+        ssdata = getSsData(name, jkdata, MY_PAGE).vodlists.map(it => {
             return {
                 title: it.vod_name,
                 desc: it.vod_desc,
@@ -24,7 +24,7 @@ function search(name, sstype, jkdata) {
             }
         })
     }else if(sstype=='dianboyiji'){
-        ssdata = getSsData(name, jkdata, 1).map(it => {
+        ssdata = getSsData(name, jkdata, 1).vodlists.map(it => {
             return {
                 title: it.vod_name,
                 desc: it.vod_desc,
@@ -44,7 +44,7 @@ function search(name, sstype, jkdata) {
             }
         })
     }else if(sstype=='dianboerji'){
-        ssdata = getSsData(name, jkdata, 1).map(it => {
+        ssdata = getSsData(name, jkdata, 1).vodlists.map(it => {
             let extra = {
                 cls: "Juloadlist grouploadlist",
                 url: it.vod_url,
@@ -839,7 +839,7 @@ function dianboyiji(testSource) {
 /*
                     return $('hiker://empty#noRecordHistory##noHistory#').rule((name,data) => {
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
-                        let ssdata = getSsData(name,data);
+                        let ssdata = getSsData(name,data).vodlists;
                         setResult(ssdata);
                     }, input, data);
                     */
