@@ -680,6 +680,7 @@ function getSsData(name, jkdata, page) {
     api_ua = api_ua == "MOBILE_UA" ? MOBILE_UA : api_ua == "PC_UA" ? PC_UA : api_ua;
     let headers = { 'User-Agent': api_ua };
     page = page || MY_PAGE;
+    let error = 0;
 
     let vodhost, ssurl, detailurl, postdata, listnode, extdata;
     if (api_type == "v1") {
@@ -742,8 +743,12 @@ function getSsData(name, jkdata, page) {
         listnode = "json.list";
     } else {
         log('api类型错误');
-        return [];
+        return {
+            vodlists: [],
+            error: 1
+        };
     }
+
     function getHtmlCode(ssurl, headers) {
         let html = request(ssurl, { headers: headers, timeout: timeout });
         try {
@@ -990,6 +995,7 @@ function getSsData(name, jkdata, page) {
             }
         }
     } catch (e) {
+        error = 1;
         log(jkdata.name + ' 搜索数据报错>' + e.message + " 错误行#" + e.lineNumber);
     }
 
@@ -1017,10 +1023,14 @@ function getSsData(name, jkdata, page) {
                 }
             });
         } catch (e) {
+            error = 1;
             log(jkdata.name + ' 输出结果报错>' + e.message + " 错误行#" + e.lineNumber);
         }
     }
-    return searchs;
+    return {
+        vodlists: searchs,
+        error: error
+    }
 }
 
 // 获取二级数据
