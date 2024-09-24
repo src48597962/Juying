@@ -332,7 +332,7 @@ function SRCSet() {
                                 clearMyVar("批量检测_复检模式");
                             }));
                             function testSource() {
-                                return $().lazyRule(()=>{
+                                return $('#noLoading#').lazyRule(()=>{
                                     if(getMyVar("批量检测_线程开始")=="1"){
                                         return "toast://上一个任务还没有结束，请等待.";
                                     }
@@ -368,12 +368,12 @@ function SRCSet() {
                                         if(data.searchable!='0'){
                                             let ssdata = getSsData("我的", data, 1);
                                             if(ssdata.error){
-                                                desc += "/n搜索 ‘我的’ 检测出错";
+                                                desc += "\n搜索 ‘我的’ 检测出错";
                                                 error.ss = 1;
                                             }else if(ssdata.vodlists.length>0 && !erurl){
                                                 erurl = ssdata.vodlists[0].vod_url;
                                                 ername = ssdata.vodlists[0].vod_name;
-                                                desc += "/n搜索 ‘我的’ 结果获取到>" + ssdata.vodlists.length;
+                                                desc += "\n搜索 ‘我的’ 结果获取到>" + ssdata.vodlists.length;
                                             }
                                         }else{
                                             desc += "不支持搜索源，跳过搜索检测";
@@ -384,12 +384,12 @@ function SRCSet() {
                                             let lists = erdata.lists || [];
                                             if(lists.length==0){
                                                 error.er = 1;
-                                                desc += "/n获取 ‘"+ername+"’ 选集列表失败";
+                                                desc += "\n获取 ‘"+ername+"’ 选集列表失败";
                                             }else{
-                                                desc += "/n获取 ‘"+ername+"’ 选集列表成功";
+                                                desc += "\n获取 ‘"+ername+"’ 选集列表成功";
                                             }
                                         }else{
-                                            desc += "/n未获取到二级链接，跳过二级选集检测";
+                                            desc += "\n未获取到二级链接，跳过二级选集检测";
                                         }
                                         
                                         let d = {
@@ -429,20 +429,6 @@ function SRCSet() {
                                         }
                                     });
                                     
-                                    addItemAfter("testSource", {
-                                        title: "批量检测中...",
-                                        desc: "点击中止线程，停止批量检测",
-                                        url: $().lazyRule(()=>{
-                                            putMyVar("批量检测_中止线程","1");
-                                            showLoading("正在拦截线程");
-                                            return "toast://正在拦截线程，停止批量检测";
-                                        }),
-                                        col_type: "text_center_1",
-                                        extra: {
-                                            id: "pausetestSource"
-                                        }
-                                    });
-                                    
                                     log("批量检测_线程开始");
                                     clearMyVar("批量检测_复检模式");
                                     let success = 0;
@@ -457,7 +443,8 @@ function SRCSet() {
                                                     error: taskResult.error,
                                                     execute: error?0:1
                                                 })
-
+                                                success++;
+                                                /*
                                                 if(Object.keys(taskResult.error).length>0){
                                                     addItemBefore("testSource2", taskResult.d);
                                                     faillist.push(taskResult.data);
@@ -480,9 +467,17 @@ function SRCSet() {
                                                     }
                                                 }else{
                                                     success++;
-
                                                 }
-                                                updateItem("testSource", {desc: "已检测：" + executed.length + "，正常源：" + success});
+                                                */
+                                                updateItem("testSource", {
+                                                    title: "已检测：" + executed.length + "，正常源：" + success,
+                                                    desc: "点击中止线程，停止批量检测",
+                                                    url: $().lazyRule(()=>{
+                                                        putMyVar("批量检测_中止线程","1");
+                                                        showLoading("正在拦截线程");
+                                                        return "toast://正在拦截线程，停止批量检测";
+                                                    })
+                                                });
                                                 //log(id + ">>>" +error);
 
                                                 if(getMyVar("批量检测_退出页面")=="1" || getMyVar("批量检测_中止线程")=="1"){
@@ -495,7 +490,6 @@ function SRCSet() {
                                     }
                                     log("批量检测_线程结束");
                                     clearMyVar("批量检测_线程开始"); 
-                                    deleteItem("pausetestSource");
                                     clearMyVar("批量检测_中止线程");
                                     hideLoading();
 
