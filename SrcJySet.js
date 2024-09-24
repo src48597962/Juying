@@ -301,6 +301,7 @@ function SRCSet() {
                 }),
                 col_type: 'scroll_button'
             })
+            log(getMyVar("批量检测_退出页面"));
             if(Juconfig["checkSourceAdmin"]){
                 d.push({
                     title: "批量检测",
@@ -498,9 +499,6 @@ function SRCSet() {
                                     }
                                     
                                     log("批量检测_线程结束");
-                                    clearMyVar("批量检测_线程开始"); 
-                                    clearMyVar("批量检测_中止线程");
-                                    clearMyVar("批量检测_退出页面");
                                     if(!getMyVar("批量检测_退出页面")){
                                         storage0.putMyVar("批量检测_执行结果", executed);
                                         updateItem("testSource", {
@@ -508,7 +506,11 @@ function SRCSet() {
                                             url: "hiker://empty"
                                         });
                                     }
-
+                                    clearMyVar("批量检测_线程开始"); 
+                                    clearMyVar("批量检测_中止线程");
+                                    log("a");
+                                    clearMyVar("批量检测_退出页面");
+                                    log("b");
                                     hideLoading();
                                     return "toast://测试结束";
                                 })
