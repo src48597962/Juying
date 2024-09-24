@@ -421,7 +421,7 @@ function SRCSet() {
                                     }
                                     showLoading("批量检测中...");
 
-
+                                    log(checkSourceList.length);
                                     let list = checkSourceList.map((item) => {
                                         return {
                                             func: task,
