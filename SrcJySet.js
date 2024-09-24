@@ -301,7 +301,6 @@ function SRCSet() {
                 }),
                 col_type: 'scroll_button'
             })
-            log(getMyVar("批量检测_退出页面"));
             if(Juconfig["checkSourceAdmin"]){
                 d.push({
                     title: "批量检测",
@@ -322,6 +321,7 @@ function SRCSet() {
                             return "toast://上一个任务还没有结束，请等待.";
                         }
                         storage0.putMyVar('checkSourceList', duoselect);//写入待检测源
+
                         return $("hiker://empty#noRecordHistory##noHistory##noRefresh#").rule(() => {
                             addListener("onClose", $.toString(() => {
                                 putMyVar("批量检测_退出页面","1");
@@ -338,11 +338,7 @@ function SRCSet() {
                                     if(getMyVar("批量检测_线程开始")=="1"){
                                         return "toast://上一个任务还没有结束，请等待.";
                                     }
-                                    
-                                    putMyVar("checkSource_nexttime", "12");
-                                    putMyVar("批量检测_线程开始", "1");
 
-                                    let checkSourceList = storage0.getMyVar("checkSourceList") || [];
                                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
                                     let task = function (data) {
@@ -420,9 +416,9 @@ function SRCSet() {
                                         }
                                         return {error:error, d:d, data:data}
                                     }
-                                    showLoading("批量检测中...");
 
-                                    log(checkSourceList.length);
+                                    showLoading("批量检测中...");
+                                    let checkSourceList = storage0.getMyVar("checkSourceList") || [];
                                     let list = checkSourceList.map((item) => {
                                         return {
                                             func: task,
@@ -430,11 +426,15 @@ function SRCSet() {
                                             id: item.url
                                         }
                                     });
-                                    
+
+                                    clearMyVar("批量检测_退出页面");
+                                    putMyVar("checkSource_nexttime", "12");
+                                    putMyVar("批量检测_线程开始", "1");
                                     log("批量检测_线程开始");
-                                    clearMyVar("批量检测_复检模式");
+
                                     let success = 0;
                                     let executed = storage0.getMyVar("批量检测_执行结果") || [];
+                                    let faillist = [];
 
                                     if(list.length>0){
                                         be(list, {
@@ -445,11 +445,9 @@ function SRCSet() {
                                                     execute: error?0:1
                                                 })
 
-                                                success++;
-                                                /*
                                                 if(Object.keys(taskResult.error).length>0){
                                                     addItemBefore("testSource2", taskResult.d);
-                                                    faillist.push(taskResult.data);
+                                                    faillist.push(id);
                                                     if(faillist.length==1){
                                                         deleteItem("deletefailSource");
                                                         addItemAfter("testSource2", {
@@ -470,9 +468,9 @@ function SRCSet() {
                                                 }else{
                                                     success++;
                                                 }
-                                                */
+                                                
                                                 updateItem("testSource", {
-                                                    title: "待检测源：" + list.length + "，已检/正常/失败：" + executed.length + "/" + success + "/" + (executed.length-success),
+                                                    title: "需检：" + list.length + "，已检/正常/失败：" + executed.length + "/" + success + "/" + (executed.length-success),
                                                     desc: "点击中止线程，停止批量检测",
                                                     url: $().lazyRule(()=>{
                                                         putMyVar("批量检测_中止线程","1");
@@ -483,12 +481,6 @@ function SRCSet() {
                                                 //log(id + ">>>" +error);
 
                                                 if(getMyVar("批量检测_退出页面")=="1" || getMyVar("批量检测_中止线程")=="1"){
-                                                    if(getMyVar("批量检测_退出页面")=="1"){
-                                                        log("批量检测_退出页面");
-                                                    }
-                                                    if(getMyVar("批量检测_中止线程")=="1"){
-                                                        log("批量检测_中止线程");
-                                                    }
                                                     log("批量检测_中止线程");
                                                     return "break";
                                                 }
@@ -508,9 +500,6 @@ function SRCSet() {
                                     }
                                     clearMyVar("批量检测_线程开始"); 
                                     clearMyVar("批量检测_中止线程");
-                                    log("a");
-                                    clearMyVar("批量检测_退出页面");
-                                    log("b");
                                     hideLoading();
                                     return "toast://测试结束";
                                 })
