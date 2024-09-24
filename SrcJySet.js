@@ -489,17 +489,19 @@ function SRCSet() {
                                             }
                                         })
                                     }
-
-                                    storage0.putMyVar("批量检测_执行结果", executed);
+                                    
                                     log("批量检测_线程结束");
                                     clearMyVar("批量检测_线程开始"); 
                                     clearMyVar("批量检测_中止线程");
                                     clearMyVar("批量检测_退出页面");
+                                    if(!getMyVar("批量检测_退出页面")){
+                                        storage0.putMyVar("批量检测_执行结果", executed);
+                                        updateItem("testSource", {
+                                            desc: "",
+                                            url: testSource()
+                                        });
+                                    }
 
-                                    updateItem("testSource", {
-                                        desc: "",
-                                        url: testSource()
-                                    });
                                     hideLoading();
                                     return "toast://测试结束";
                                 })
