@@ -471,7 +471,7 @@ function SRCSet() {
                                                 }
                                                 */
                                                 updateItem("testSource", {
-                                                    title: "已检测：" + executed.length + "，正常源：" + success,
+                                                    title: "待检测源：" + list.length + "，已检/正常/失败：" + executed.length + "/" + success + "/" + (executed.length-success),
                                                     desc: "点击中止线程，停止批量检测",
                                                     url: $().lazyRule(()=>{
                                                         putMyVar("批量检测_中止线程","1");
@@ -495,8 +495,12 @@ function SRCSet() {
                                     clearMyVar("批量检测_线程开始"); 
                                     clearMyVar("批量检测_中止线程");
                                     clearMyVar("批量检测_退出页面");
+
+                                    updateItem("testSource", {
+                                        desc: "",
+                                        url: testSource()
+                                    });
                                     hideLoading();
-               
                                     return "toast://测试结束";
                                 })
                             }
