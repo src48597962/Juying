@@ -481,7 +481,7 @@ function SRCSet() {
                                                 //log(id + ">>>" +error);
 
                                                 if(getMyVar("批量检测_退出页面")=="1" || getMyVar("批量检测_中止线程")=="1"){
-                                                    return "break";
+                                                    //return "break";
                                                 }
                                             },
                                             param: {
@@ -491,12 +491,9 @@ function SRCSet() {
                                     log("批量检测_线程结束");
                                     clearMyVar("批量检测_线程开始"); 
                                     clearMyVar("批量检测_中止线程");
+                                    clearMyVar("批量检测_退出页面");
                                     hideLoading();
-
-                                    if(getMyVar("批量检测_退出页面")=="1"){
-                                        clearMyVar("批量检测_退出页面");
-                                        clearMyVar("failSourceList");
-                                    }                  
+               
                                     return "toast://测试结束";
                                 })
                             }
