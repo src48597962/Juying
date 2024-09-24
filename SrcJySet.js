@@ -507,23 +507,29 @@ function SRCSet() {
                             }
                             let checkSourceList = storage0.getMyVar("checkSourceList") || [];
                             let d = [];
-                            /*
                             d.push({
-                                title: "选择检测项目",
+                                title: "检测项目",
                                 col_type: "rich_text"
                             })
+                            let schedule = getMyVar("批量检测_当前进度","1");
                             d.push({
-                                title: '搜索测试',
+                                title: (schedule=="1"?"👉":"👌") + '一级列表',
                                 col_type: 'text_3',
-                                url: testSource('ss'),
-                                extra: {
-                                    id: "condition_ss"
-                                }
+                                url: "hiker://empty"
+                            });
+                            d.push({
+                                title: (schedule=="2"?"👉":"👌") + '搜索测试',
+                                col_type: 'text_3',
+                                url: "hiker://empty"
+                            });
+                            d.push({
+                                title: (schedule=="3"?"👉":"👌") + '二级选集',
+                                col_type: 'text_3',
+                                url: "hiker://empty"
                             });
                             d.push({
                                 col_type: "line_blank"
                             });
-                            */
                             d.push({
                                 title: "待检测源：" + checkSourceList.length,
                                 url: testSource(),
