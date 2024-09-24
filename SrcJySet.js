@@ -391,31 +391,8 @@ function SRCSet() {
                                             desc += "\n未获取到二级链接，跳过二级选集检测";
                                         }
                                         */
-                                        let d = {
-                                            title: data.name,
-                                            desc: desc,
-                                            url: $("hiker://empty#noRecordHistory##noHistory#").rule((data) => {
-                                                setPageTitle(data.name+"-接口测试");
-                                                require(config.依赖);
-                                                dianboyiji(data);
-                                            }, data),
-                                            col_type: "text_1",
-                                            extra: {
-                                                id: "failSource-" + data.url,
-                                                longClick: [{
-                                                    title: "保留",
-                                                    js: $.toString((dataurl) => {
-                                                        let failSource = storage0.getMyVar("failSourceList") || [];
-                                                        let index = failSource.indexOf(failSource.filter(d => dataurl==d.url )[0]);
-                                                        failSource.splice(index, 1);
-                                                        storage0.putMyVar("failSourceList",failSource);
-                                                        deleteItem("failSource-" + dataurl);
-                                                        return "toast://已保留，不处理";
-                                                    },data.url)
-                                                }]
-                                            }
-                                        }
-                                        return {error:error, d:d, data:data}
+
+                                        return {error:error, data:data}
                                     }
 
                                     showLoading("批量检测中...");
@@ -433,9 +410,57 @@ function SRCSet() {
                                     putMyVar("批量检测_线程开始", "1");
                                     log("批量检测_线程开始");
 
+                                    addItemAfter("testSource2", {
+                                        title: "批量删除失败的源",
+                                        desc: "",
+                                        url: $("#noLoading#").lazyRule(() => {
+                                            let executed = storage0.getMyVar("批量检测_执行结果") || [];
+                                            let faillist = executed.filter(v=>{
+                                                return v.execute && Object.keys(v.error).length>0;
+                                            });
+                                            faillist.forEach(it=>{
+                                                let data = it.data;
+                                                addItemBefore("testSource2", {
+                                                    title: data.name,
+                                                    desc: desc,
+                                                    url: $("hiker://empty#noRecordHistory##noHistory#").rule((data) => {
+                                                        setPageTitle(data.name+"-接口测试");
+                                                        require(config.依赖);
+                                                        dianboyiji(data);
+                                                    }, data),
+                                                    col_type: "text_1",
+                                                    extra: {
+                                                        id: "failSource-" + data.url,
+                                                        longClick: [{
+                                                            title: "保留",
+                                                            js: $.toString((dataurl) => {
+                                                                let failSource = storage0.getMyVar("failSourceList") || [];
+                                                                let index = failSource.indexOf(failSource.filter(d => dataurl==d.url )[0]);
+                                                                failSource.splice(index, 1);
+                                                                storage0.putMyVar("failSourceList",failSource);
+                                                                deleteItem("failSource-" + dataurl);
+                                                                return "toast://已保留，不处理";
+                                                            },data.url)
+                                                        }]
+                                                    }
+                                                });
+                                            })
+
+                                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                                            deleteData("jk", failSource);
+                                            back(true);
+                                            return 'toast://已删除失效源'+failSource.length;
+                                        }),
+                                        col_type : "text_center_1",
+                                        extra: {
+                                            id: "deletefailSource"
+                                        }
+                                    });
+
                                     let success = 0;
+                                    let fail = 0;
                                     let executed = storage0.getMyVar("批量检测_执行结果") || [];
-                                    let faillist = [];
+                                    let checknumber = checkSourceList.length;
 
                                     if(list.length>0){
                                         be(list, {
@@ -446,32 +471,17 @@ function SRCSet() {
                                                     execute: error?0:1
                                                 })
 
-                                                if(Object.keys(taskResult.error).length>0){
-                                                    addItemBefore("testSource2", taskResult.d);
-                                                    faillist.push(id);
-                                                    if(faillist.length==1){
-                                                        deleteItem("deletefailSource");
-                                                        addItemAfter("testSource2", {
-                                                            title: "批量删除失败的源",
-                                                            url: $("确定将失败的源全部删除").confirm(() => {
-                                                                let failSource = storage0.getMyVar("failSourceList") || [];
-                                                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
-                                                                deleteData("jk", failSource);
-                                                                back(true);
-                                                                return 'toast://已删除失效源'+failSource.length;
-                                                            }),
-                                                            col_type : "text_center_1",
-                                                            extra: {
-                                                                id: "deletefailSource"
-                                                            }
-                                                        });
-                                                    }
-                                                }else{
+                                                if(Object.keys(taskResult.error).length==0){
                                                     success++;
+                                                }else{
+                                                    fail++;
+                                                    updateItem("deletefailSource", {
+                                                        desc: "失败：" + fail
+                                                    });
                                                 }
                                                 
                                                 updateItem("testSource", {
-                                                    title: executed.length + "/" + list.length + "，正常/失败：" + success + "/" + (executed.length-success),
+                                                    title: executed.length + "/" + checknumber + "，成功：" + success,
                                                     desc: "点击中止线程，停止批量检测",
                                                     url: $().lazyRule(()=>{
                                                         putMyVar("批量检测_中止线程","1");
@@ -492,6 +502,9 @@ function SRCSet() {
                                     }
                                     
                                     log("批量检测_线程结束");
+                                    clearMyVar("批量检测_线程开始"); 
+                                    clearMyVar("批量检测_中止线程");
+                                    
                                     if(!getMyVar("批量检测_退出页面")){
                                         storage0.putMyVar("批量检测_执行结果", executed);
                                         updateItem("testSource", {
@@ -499,8 +512,7 @@ function SRCSet() {
                                             url: "hiker://empty"
                                         });
                                     }
-                                    clearMyVar("批量检测_线程开始"); 
-                                    clearMyVar("批量检测_中止线程");
+
                                     hideLoading();
                                     return "toast://测试结束";
                                 })
@@ -518,12 +530,12 @@ function SRCSet() {
                                 url: "hiker://empty"
                             });
                             d.push({
-                                title: (schedule=="2"?"👉":"👌") + '搜索测试',
+                                title: (schedule=="1"?"":schedule=="2"?"👉":"👌") + '搜索测试',
                                 col_type: 'text_3',
                                 url: "hiker://empty"
                             });
                             d.push({
-                                title: (schedule=="3"?"👉":"👌") + '二级选集',
+                                title: (schedule=="1"||schedule=="2"?"":schedule=="3"?"👉":"👌") + '二级选集',
                                 col_type: 'text_3',
                                 url: "hiker://empty"
                             });
