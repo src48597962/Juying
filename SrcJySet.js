@@ -363,6 +363,7 @@ function SRCSet() {
                                         }else{
                                             desc += "仅搜索源，跳过一级列表检测";
                                         }
+                                        /*
                                         if(data.searchable!='0'){
                                             let ssdata = getSsData("我的", data, 1);
                                             if(ssdata.error){
@@ -389,7 +390,7 @@ function SRCSet() {
                                         }else{
                                             desc += "\n未获取到二级链接，跳过二级选集检测";
                                         }
-                                        
+                                        */
                                         let d = {
                                             title: data.name,
                                             desc: desc,
