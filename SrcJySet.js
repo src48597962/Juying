@@ -330,6 +330,7 @@ function SRCSet() {
                                 clearMyVar("checkSourceList");
                                 clearMyVar("批量检测_中止线程");
                                 clearMyVar("批量检测_复检模式");
+                                clearMyVar("批量检测_执行结果");
                             }));
                             function testSource() {
                                 return $('#noLoading#').lazyRule(()=>{
@@ -432,17 +433,17 @@ function SRCSet() {
                                     log("批量检测_线程开始");
                                     clearMyVar("批量检测_复检模式");
                                     let success = 0;
-                                    let faillist = [];
+                                    let executed = storage0.getMyVar("批量检测_执行结果") || [];
 
                                     if(list.length>0){
                                         be(list, {
                                             func: function (obj, id, error, taskResult) {
-                                                let executed = storage0.getMyVar("批量检测_执行结果") || [];
                                                 executed.push({
                                                     data: taskResult.data,
                                                     error: taskResult.error,
                                                     execute: error?0:1
                                                 })
+
                                                 success++;
                                                 /*
                                                 if(Object.keys(taskResult.error).length>0){
@@ -481,13 +482,15 @@ function SRCSet() {
                                                 //log(id + ">>>" +error);
 
                                                 if(getMyVar("批量检测_退出页面")=="1" || getMyVar("批量检测_中止线程")=="1"){
-                                                    //return "break";
+                                                    return "break";
                                                 }
                                             },
                                             param: {
                                             }
                                         })
                                     }
+
+                                    storage0.putMyVar("批量检测_执行结果", executed);
                                     log("批量检测_线程结束");
                                     clearMyVar("批量检测_线程开始"); 
                                     clearMyVar("批量检测_中止线程");
