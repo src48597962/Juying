@@ -471,7 +471,7 @@ function SRCSet() {
                                                 }
                                                 
                                                 updateItem("testSource", {
-                                                    title: "需检：" + list.length + "，已检/正常/失败：" + executed.length + "/" + success + "/" + (executed.length-success),
+                                                    title: executed.length + "/" + list.length + "，正常/失败：" + success + "/" + (executed.length-success),
                                                     desc: "点击中止线程，停止批量检测",
                                                     url: $().lazyRule(()=>{
                                                         putMyVar("批量检测_中止线程","1");
