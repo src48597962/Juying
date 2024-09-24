@@ -482,6 +482,13 @@ function SRCSet() {
                                                 //log(id + ">>>" +error);
 
                                                 if(getMyVar("批量检测_退出页面")=="1" || getMyVar("批量检测_中止线程")=="1"){
+                                                    if(getMyVar("批量检测_退出页面")=="1"){
+                                                        log("批量检测_退出页面");
+                                                    }
+                                                    if(getMyVar("批量检测_中止线程")=="1"){
+                                                        log("批量检测_中止线程");
+                                                    }
+                                                    log("批量检测_中止线程");
                                                     return "break";
                                                 }
                                             },
