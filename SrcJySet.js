@@ -421,7 +421,7 @@ function SRCSet() {
                                     showLoading("批量检测中...");
 
 
-                                    let list = checkSource.map((item) => {
+                                    let list = checkSourceList.map((item) => {
                                         return {
                                             func: task,
                                             param: item,
@@ -506,7 +506,7 @@ function SRCSet() {
                                     return "toast://测试结束";
                                 })
                             }
-
+                            let checkSourceList = storage0.getMyVar("checkSourceList") || [];
                             let d = [];
                             /*
                             d.push({
@@ -526,7 +526,7 @@ function SRCSet() {
                             });
                             */
                             d.push({
-                                title: "待检测源：" + duoselect.length,
+                                title: "待检测源：" + checkSourceList.length,
                                 url: testSource(),
                                 desc: "",
                                 col_type : "text_center_1",
