@@ -498,7 +498,7 @@ function SRCSet() {
                                         storage0.putMyVar("批量检测_执行结果", executed);
                                         updateItem("testSource", {
                                             desc: "",
-                                            url: testSource()
+                                            url: "hiker://empty"
                                         });
                                     }
 
