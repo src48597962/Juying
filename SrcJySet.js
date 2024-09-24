@@ -320,201 +320,191 @@ function SRCSet() {
                         if(getMyVar("批量检测_线程开始")=="1"){
                             return "toast://上一个任务还没有结束，请等待.";
                         }
-
-                        return $("hiker://empty#noRecordHistory##noHistory##noRefresh#").rule((duoselect) => {
+                        storage0.putMyVar('checkSourceList', duoselect);//写入待检测源
+                        return $("hiker://empty#noRecordHistory##noHistory##noRefresh#").rule(() => {
                             addListener("onClose", $.toString(() => {
                                 putMyVar("批量检测_退出页面","1");
                                 let nowtime = Date.now();
                                 setItem('checkSourcetime', nowtime+'|'+getMyVar("checkSource_nexttime", "0"));
                                 clearMyVar("checkSource_nexttime");
+                                clearMyVar("checkSourceList");
                                 clearMyVar("批量检测_中止线程");
                                 clearMyVar("批量检测_复检模式");
                             }));
-                            function testSource(checkSource) {
-                                if(getMyVar("批量检测_线程开始")=="1"){
-                                    return "toast://上一个任务还没有结束，请等待.";
-                                }
-                                
-                                putMyVar("checkSource_nexttime", "12");
-                                putMyVar("批量检测_线程开始", "1");
-                                deleteItem("recheckSource");
+                            function testSource() {
+                                return $().lazyRule(()=>{
+                                    if(getMyVar("批量检测_线程开始")=="1"){
+                                        return "toast://上一个任务还没有结束，请等待.";
+                                    }
+                                    
+                                    putMyVar("checkSource_nexttime", "12");
+                                    putMyVar("批量检测_线程开始", "1");
 
-                                //let duoselect = getMyVar("批量检测_复检模式")?storage0.getMyVar("failSourceList"):storage0.getMyVar('SrcJu_duoselect') || [];
-                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
-                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
-                                let task = function (data) {
-                                    let error = {};
-                                    let desc = '';
-                                    let ername, erurl;
-                                    if(!data.onlysearch){
-                                        let yidata = getYiData(data, 1);
-                                        if(yidata.fllists && yidata.fllists.length>0){
-                                            if(yidata.vodlists && yidata.vodlists.length>1){
-                                                erurl = yidata.vodlists[0].vod_url;
-                                                ername = yidata.vodlists[0].vod_name;
-                                                desc += "一级列表检测正常";
+                                    let checkSourceList = storage0.getMyVar("checkSourceList") || [];
+                                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
+                                    let task = function (data) {
+                                        let error = {};
+                                        let desc = '';
+                                        let ername, erurl;
+                                        if(!data.onlysearch){
+                                            let yidata = getYiData(data, 1);
+                                            if(yidata.fllists && yidata.fllists.length>0){
+                                                if(yidata.vodlists && yidata.vodlists.length>1){
+                                                    erurl = yidata.vodlists[0].vod_url;
+                                                    ername = yidata.vodlists[0].vod_name;
+                                                    desc += "一级列表检测正常";
+                                                }else{
+                                                    error.yi = 1;
+                                                    desc += "一级列表检测失败";
+                                                }
                                             }else{
                                                 error.yi = 1;
                                                 desc += "一级列表检测失败";
                                             }
                                         }else{
-                                            error.yi = 1;
-                                            desc += "一级列表检测失败";
+                                            desc += "仅搜索源，跳过一级列表检测";
                                         }
-                                    }else{
-                                        desc += "仅搜索源，跳过一级列表检测";
-                                    }
-                                    if(data.searchable!='0'){
-                                        let ssdata = getSsData("我的", data, 1);
-                                        if(ssdata.error){
-                                            desc += "/n搜索 ‘我的’ 检测出错";
-                                            error.ss = 1;
-                                        }else if(ssdata.vodlists.length>0 && !erurl){
-                                            erurl = ssdata.vodlists[0].vod_url;
-                                            ername = ssdata.vodlists[0].vod_name;
-                                            desc += "/n搜索 ‘我的’ 结果获取到>" + ssdata.vodlists.length;
-                                        }
-                                    }else{
-                                         desc += "不支持搜索源，跳过搜索检测";
-                                    }
-
-                                    if(erurl){
-                                        let erdata = getErData(data,erurl);
-                                        let lists = erdata.lists || [];
-                                        if(lists.length==0){
-                                            error.er = 1;
-                                            desc += "/n获取 ‘"+ername+"’ 选集列表失败";
+                                        if(data.searchable!='0'){
+                                            let ssdata = getSsData("我的", data, 1);
+                                            if(ssdata.error){
+                                                desc += "/n搜索 ‘我的’ 检测出错";
+                                                error.ss = 1;
+                                            }else if(ssdata.vodlists.length>0 && !erurl){
+                                                erurl = ssdata.vodlists[0].vod_url;
+                                                ername = ssdata.vodlists[0].vod_name;
+                                                desc += "/n搜索 ‘我的’ 结果获取到>" + ssdata.vodlists.length;
+                                            }
                                         }else{
-                                            desc += "/n获取 ‘"+ername+"’ 选集列表成功";
+                                            desc += "不支持搜索源，跳过搜索检测";
                                         }
-                                    }else{
-                                        desc += "/n未获取到二级链接，跳过二级选集检测";
-                                    }
-                                    
-                                    let d = {
-                                        title: data.name,
-                                        desc: desc,
-                                        url: $("hiker://empty#noRecordHistory##noHistory#").rule((data) => {
-                                            setPageTitle(data.name+"-接口测试");
-                                            require(config.依赖);
-                                            dianboyiji(data);
-                                        }, data),
-                                        col_type: "text_1",
-                                        extra: {
-                                            id: "failSource-" + data.url,
-                                            longClick: [{
-                                                title: "保留",
-                                                js: $.toString((dataurl) => {
-                                                    let failSource = storage0.getMyVar("failSourceList") || [];
-                                                    let index = failSource.indexOf(failSource.filter(d => dataurl==d.url )[0]);
-                                                    failSource.splice(index, 1);
-                                                    storage0.putMyVar("failSourceList",failSource);
-                                                    deleteItem("failSource-" + dataurl);
-                                                    return "toast://已保留，不处理";
-                                                },data.url)
-                                            }]
-                                        }
-                                    }
-                                    return {error:error, d:d, data:data}
-                                }
-                                showLoading("批量检测中...");
 
-
-                                let list = checkSource.map((item) => {
-                                    return {
-                                        func: task,
-                                        param: item,
-                                        id: item.url
-                                    }
-                                });
-                                
-                                addItemAfter("testSource", {
-                                    title: "批量检测中...",
-                                    desc: "点击中止线程，停止批量检测",
-                                    url: $().lazyRule(()=>{
-                                        putMyVar("批量检测_中止线程","1");
-                                        showLoading("正在拦截线程");
-                                        return "toast://正在拦截线程，停止批量检测";
-                                    }),
-                                    col_type: "text_center_1",
-                                    extra: {
-                                        id: "pausetestSource"
-                                    }
-                                });
-                                
-                                log("批量检测_线程开始");
-                                clearMyVar("批量检测_复检模式");
-                                let executeList = [];
-                                let success = 0;
-                                let faillist = [];
-
-                                if(list.length>0){
-                                    be(list, {
-                                        func: function (obj, id, error, taskResult) {
-                                            executeList.push(id);
-                                            if(Object.keys(taskResult.error).length>0){
-                                                addItemBefore("testSource2", taskResult.d);
-                                                faillist.push(taskResult.data);
-                                                if(faillist.length==1){
-                                                    deleteItem("deletefailSource");
-                                                    addItemAfter("testSource2", {
-                                                        title: "批量删除失败的源",
-                                                        url: $("确定将失败的源全部删除").confirm(() => {
-                                                            let failSource = storage0.getMyVar("failSourceList") || [];
-                                                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
-                                                            deleteData("jk", failSource);
-                                                            back(true);
-                                                            return 'toast://已删除失效源'+failSource.length;
-                                                        }),
-                                                        col_type : "text_center_1",
-                                                        extra: {
-                                                            id: "deletefailSource"
-                                                        }
-                                                    });
-                                                }
-                                                storage0.putMyVar("failSourceList", faillist);
+                                        if(erurl){
+                                            let erdata = getErData(data,erurl);
+                                            let lists = erdata.lists || [];
+                                            if(lists.length==0){
+                                                error.er = 1;
+                                                desc += "/n获取 ‘"+ername+"’ 选集列表失败";
                                             }else{
-                                                success++;
+                                                desc += "/n获取 ‘"+ername+"’ 选集列表成功";
                                             }
-                                            updateItem("testSource", {desc: "已检测：" + executeList.length + "，正常源：" + success});
-                                            //log(id + ">>>" +error);
-
-                                            if(getMyVar("批量检测_退出页面")=="1" || getMyVar("批量检测_中止线程")=="1"){
-                                                return "break";
-                                            }
-                                        },
-                                        param: {
+                                        }else{
+                                            desc += "/n未获取到二级链接，跳过二级选集检测";
                                         }
-                                    })
-                                }
-                                log("批量检测_线程结束");
-                                clearMyVar("批量检测_线程开始"); 
-                                deleteItem("pausetestSource");
-                                clearMyVar("批量检测_中止线程");
-                                hideLoading();
-
-                                if(getMyVar("批量检测_退出页面")=="1"){
-                                    clearMyVar("批量检测_退出页面");
-                                    clearMyVar("failSourceList");
-                                }else{
-                                    if(faillist.length>0){
-                                        addItemAfter("testSource2", {
-                                            title: "针对失败的源，进入复检模式",
-                                            url: $().lazyRule((failnum)=>{
-                                                putMyVar("批量检测_复检模式","1");
-                                                refreshPage(true);
-                                                return "toast://进入复检" + failnum;
-                                            }, faillist.length),
-                                            col_type : "text_center_1",
+                                        
+                                        let d = {
+                                            title: data.name,
+                                            desc: desc,
+                                            url: $("hiker://empty#noRecordHistory##noHistory#").rule((data) => {
+                                                setPageTitle(data.name+"-接口测试");
+                                                require(config.依赖);
+                                                dianboyiji(data);
+                                            }, data),
+                                            col_type: "text_1",
                                             extra: {
-                                                id: "recheckSource"
+                                                id: "failSource-" + data.url,
+                                                longClick: [{
+                                                    title: "保留",
+                                                    js: $.toString((dataurl) => {
+                                                        let failSource = storage0.getMyVar("failSourceList") || [];
+                                                        let index = failSource.indexOf(failSource.filter(d => dataurl==d.url )[0]);
+                                                        failSource.splice(index, 1);
+                                                        storage0.putMyVar("failSourceList",failSource);
+                                                        deleteItem("failSource-" + dataurl);
+                                                        return "toast://已保留，不处理";
+                                                    },data.url)
+                                                }]
                                             }
-                                        });
-                                    }else{
-                                        deleteItem("deletefailSource");
+                                        }
+                                        return {error:error, d:d, data:data}
                                     }
-                                }                         
-                                return "toast://测试结束";
+                                    showLoading("批量检测中...");
+
+
+                                    let list = checkSource.map((item) => {
+                                        return {
+                                            func: task,
+                                            param: item,
+                                            id: item.url
+                                        }
+                                    });
+                                    
+                                    addItemAfter("testSource", {
+                                        title: "批量检测中...",
+                                        desc: "点击中止线程，停止批量检测",
+                                        url: $().lazyRule(()=>{
+                                            putMyVar("批量检测_中止线程","1");
+                                            showLoading("正在拦截线程");
+                                            return "toast://正在拦截线程，停止批量检测";
+                                        }),
+                                        col_type: "text_center_1",
+                                        extra: {
+                                            id: "pausetestSource"
+                                        }
+                                    });
+                                    
+                                    log("批量检测_线程开始");
+                                    clearMyVar("批量检测_复检模式");
+                                    let success = 0;
+                                    let faillist = [];
+
+                                    if(list.length>0){
+                                        be(list, {
+                                            func: function (obj, id, error, taskResult) {
+                                                let executed = storage0.getMyVar("批量检测_执行结果") || [];
+                                                executed.push({
+                                                    data: taskResult.data,
+                                                    error: taskResult.error,
+                                                    execute: error?0:1
+                                                })
+
+                                                if(Object.keys(taskResult.error).length>0){
+                                                    addItemBefore("testSource2", taskResult.d);
+                                                    faillist.push(taskResult.data);
+                                                    if(faillist.length==1){
+                                                        deleteItem("deletefailSource");
+                                                        addItemAfter("testSource2", {
+                                                            title: "批量删除失败的源",
+                                                            url: $("确定将失败的源全部删除").confirm(() => {
+                                                                let failSource = storage0.getMyVar("failSourceList") || [];
+                                                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                                                                deleteData("jk", failSource);
+                                                                back(true);
+                                                                return 'toast://已删除失效源'+failSource.length;
+                                                            }),
+                                                            col_type : "text_center_1",
+                                                            extra: {
+                                                                id: "deletefailSource"
+                                                            }
+                                                        });
+                                                    }
+                                                }else{
+                                                    success++;
+
+                                                }
+                                                updateItem("testSource", {desc: "已检测：" + executed.length + "，正常源：" + success});
+                                                //log(id + ">>>" +error);
+
+                                                if(getMyVar("批量检测_退出页面")=="1" || getMyVar("批量检测_中止线程")=="1"){
+                                                    return "break";
+                                                }
+                                            },
+                                            param: {
+                                            }
+                                        })
+                                    }
+                                    log("批量检测_线程结束");
+                                    clearMyVar("批量检测_线程开始"); 
+                                    deleteItem("pausetestSource");
+                                    clearMyVar("批量检测_中止线程");
+                                    hideLoading();
+
+                                    if(getMyVar("批量检测_退出页面")=="1"){
+                                        clearMyVar("批量检测_退出页面");
+                                        clearMyVar("failSourceList");
+                                    }                  
+                                    return "toast://测试结束";
+                                })
                             }
 
                             let d = [];
@@ -537,7 +527,7 @@ function SRCSet() {
                             */
                             d.push({
                                 title: "待检测源：" + duoselect.length,
-                                url: testSource(duoselect),
+                                url: testSource(),
                                 desc: "",
                                 col_type : "text_center_1",
                                 extra: {
@@ -551,7 +541,7 @@ function SRCSet() {
                                 }
                             });
                             setResult(d);
-                        }, duoselect)
+                        })
                     }, Juconfig["checkSourceAdmin"] || 0),
                     col_type: 'scroll_button'
                 })
