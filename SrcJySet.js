@@ -342,56 +342,57 @@ function SRCSet() {
                                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
                                     let task = function (data) {
-                                        let error = {};
-                                        let desc = '';
-                                        let ername, erurl;
-                                        if(!data.onlysearch){
-                                            let yidata = getYiData(data, 1);
-                                            if(yidata.fllists && yidata.fllists.length>0){
-                                                if(yidata.vodlists && yidata.vodlists.length>1){
-                                                    erurl = yidata.vodlists[0].vod_url;
-                                                    ername = yidata.vodlists[0].vod_name;
-                                                    desc += "一级列表检测正常";
+                                        let desc = data.message || '';
+                                        let error = 0;
+                                        let schedule = getMyVar("批量检测_当前进度","1");
+                                        if(schedule=="1"){
+                                            if(!data.onlysearch){
+                                                let yidata = getYiData(data, 1);
+                                                if(yidata.fllists && yidata.fllists.length>0){
+                                                    if(yidata.vodlists && yidata.vodlists.length>1){
+                                                        data.erurl = yidata.vodlists[0].vod_url;
+                                                        data.ername = yidata.vodlists[0].vod_name;
+                                                        desc += "一级列表检测正常";
+                                                    }else{
+                                                        error = 1;
+                                                        desc += "一级列表检测失败";
+                                                    }
                                                 }else{
-                                                    error.yi = 1;
+                                                    error = 1;
                                                     desc += "一级列表检测失败";
                                                 }
                                             }else{
-                                                error.yi = 1;
-                                                desc += "一级列表检测失败";
+                                                desc += "仅搜索源，跳过一级列表检测";
                                             }
-                                        }else{
-                                            desc += "仅搜索源，跳过一级列表检测";
-                                        }
-                                        /*
-                                        if(data.searchable!='0'){
-                                            let ssdata = getSsData("我的", data, 1);
-                                            if(ssdata.error){
-                                                desc += "\n搜索 ‘我的’ 检测出错";
-                                                error.ss = 1;
-                                            }else if(ssdata.vodlists.length>0 && !erurl){
-                                                erurl = ssdata.vodlists[0].vod_url;
-                                                ername = ssdata.vodlists[0].vod_name;
-                                                desc += "\n搜索 ‘我的’ 结果获取到>" + ssdata.vodlists.length;
-                                            }
-                                        }else{
-                                            desc += "不支持搜索源，跳过搜索检测";
-                                        }
-
-                                        if(erurl){
-                                            let erdata = getErData(data,erurl);
-                                            let lists = erdata.lists || [];
-                                            if(lists.length==0){
-                                                error.er = 1;
-                                                desc += "\n获取 ‘"+ername+"’ 选集列表失败";
+                                        }else if(schedule=="2"){
+                                            if(data.searchable!='0'){
+                                                let ssdata = getSsData("我的", data, 1);
+                                                if(ssdata.error){
+                                                    desc += "\n搜索 ‘我的’ 检测出错";
+                                                    error = 1;
+                                                }else if(ssdata.vodlists.length>0 && !data.erurl){
+                                                    data.erurl = ssdata.vodlists[0].vod_url;
+                                                    data.ername = ssdata.vodlists[0].vod_name;
+                                                    desc += "\n搜索 ‘我的’ 结果获取到>" + ssdata.vodlists.length;
+                                                }
                                             }else{
-                                                desc += "\n获取 ‘"+ername+"’ 选集列表成功";
+                                                desc += "不支持搜索源，跳过搜索检测";
                                             }
-                                        }else{
-                                            desc += "\n未获取到二级链接，跳过二级选集检测";
+                                        }else if(schedule=="3"){
+                                            if(data.erurl){
+                                                let erdata = getErData(data, data.erurl);
+                                                let lists = erdata.lists || [];
+                                                if(lists.length==0){
+                                                    error.er = 1;
+                                                    desc += "\n获取 ‘"+data.ername+"’ 选集列表失败";
+                                                }else{
+                                                    desc += "\n获取 ‘"+data.ername+"’ 选集列表成功";
+                                                }
+                                            }else{
+                                                desc += "\n未获取到二级链接，跳过二级选集检测";
+                                            }
                                         }
-                                        */
-
+                                        data.message = desc;
                                         return {error:error, data:data}
                                     }
 
@@ -416,7 +417,7 @@ function SRCSet() {
                                         url: $("#noLoading#").lazyRule(() => {
                                             let executed = storage0.getMyVar("批量检测_执行结果") || [];
                                             let faillist = executed.filter(v=>{
-                                                return v.execute && Object.keys(v.error).length>0;
+                                                return v.execute && v.error;
                                             });
                                             faillist.forEach(it=>{
                                                 let data = it.data;
@@ -471,7 +472,7 @@ function SRCSet() {
                                                     execute: error?0:1
                                                 })
 
-                                                if(Object.keys(taskResult.error).length==0){
+                                                if(taskResult.error==0){
                                                     success++;
                                                 }else{
                                                     fail++;
