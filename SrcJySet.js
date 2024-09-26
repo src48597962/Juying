@@ -446,11 +446,14 @@ function SRCSet() {
                                                     }
                                                 });
                                             })
+                                            return "hiker://empty";
+                                            /*
 
                                             require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                                             deleteData("jk", failSource);
                                             back(true);
                                             return 'toast://已删除失效源'+failSource.length;
+                                            */
                                         }),
                                         col_type : "text_center_1",
                                         extra: {
