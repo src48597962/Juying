@@ -412,8 +412,7 @@ function SRCSet() {
                                     log("批量检测_线程开始");
 
                                     addItemAfter("testSource2", {
-                                        title: "批量删除失败的源",
-                                        desc: "",
+                                        title: "显示检测失败的源",
                                         url: $("#noLoading#").lazyRule(() => {
                                             let executed = storage0.getMyVar("批量检测_执行结果") || [];
                                             let faillist = executed.filter(v=>{
@@ -423,7 +422,7 @@ function SRCSet() {
                                                 let data = it.data;
                                                 addItemBefore("testSource2", {
                                                     title: data.name,
-                                                    desc: desc,
+                                                    desc: data.message,
                                                     url: $("hiker://empty#noRecordHistory##noHistory#").rule((data) => {
                                                         setPageTitle(data.name+"-接口测试");
                                                         require(config.依赖);
@@ -447,17 +446,30 @@ function SRCSet() {
                                                 });
                                             })
                                             return "hiker://empty";
-                                            /*
-
-                                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
-                                            deleteData("jk", failSource);
-                                            back(true);
-                                            return 'toast://已删除失效源'+failSource.length;
-                                            */
                                         }),
                                         col_type : "text_center_1",
                                         extra: {
-                                            id: "deletefailSource"
+                                            id: "deletefailSource",
+                                            longClick: [{
+                                                title: "批量删除失效",
+                                                js: $.toString(() => {
+                                                    let executed = storage0.getMyVar("批量检测_执行结果") || [];
+                                                    let faillist = executed.filter(v=>{
+                                                        return v.execute && v.error;
+                                                    });
+                                                    let checkSourceList = storage0.getMyVar("checkSourceList") || [];
+                                                    faillist.forEach(it=>{
+                                                        let index = checkSourceList.indexOf(checkSourceList.filter(d => it.url==d.url )[0]);
+                                                        checkSourceList.splice(index, 1);
+                                                        deleteItem("failSource-" + it.url);
+                                                    })
+                                                    storage0.putMyVar("checkSourceList",checkSourceList);
+                                                    
+                                                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                                                    deleteData("jk", faillist);
+                                                    return "toast://已批量删除";
+                                                })
+                                            }]
                                         }
                                     });
 
@@ -479,13 +491,10 @@ function SRCSet() {
                                                     success++;
                                                 }else{
                                                     fail++;
-                                                    updateItem("deletefailSource", {
-                                                        desc: "失败：" + fail
-                                                    });
                                                 }
                                                 
                                                 updateItem("testSource", {
-                                                    title: executed.length + "/" + checknumber + "，成功：" + success,
+                                                    title: executed.length + "/" + checknumber + "，成功：" + success + "，失败：" + fail,
                                                     desc: "点击中止线程，停止批量检测",
                                                     url: $().lazyRule(()=>{
                                                         putMyVar("批量检测_中止线程","1");
