@@ -1,7 +1,7 @@
 const codePath = module.modulePath.slice(0, module.modulePath.lastIndexOf("/") + 1);
 const JSEngine = com.example.hikerview.service.parser.JSEngine;
 const drpyMap = new Map();
-const GMkey = module.importParam;
+const GMkey = "SrcJyDrpy";//module.importParam;
 function oldbuildJsEnv(ticket) {
   let code = String.raw`
     // const my_rule = '
@@ -64,7 +64,7 @@ function createDrpy(sdata) {
             let proxyUrl = startProxyServer($.toString((sdata, codepath, title) => {
                 let {GM} = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6916&auth=1d35e8f0-22e8-5270-a9d1-826f53f177ad");
                 GM.setSelfKey(title);
-                let drpy = GM.defineModule("SrcJuDrpy", codepath + "SrcJyDrpy.js").get(sdata);
+                let drpy = GM.defineModule("SrcJyDrpy", codepath + "SrcJyDrpy.js").get(sdata);
 
                 let params = {};
                 for (let key in MY_PARAMS) {
