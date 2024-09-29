@@ -2,6 +2,7 @@ const codePath = module.modulePath.slice(0, module.modulePath.lastIndexOf("/") +
 const JSEngine = com.example.hikerview.service.parser.JSEngine;
 const drpyMap = new Map();
 const GMkey = module.importParam;
+log(GMkey);
 function oldbuildJsEnv(ticket) {
   let code = String.raw`
     // const my_rule = '
