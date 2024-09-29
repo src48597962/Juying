@@ -800,11 +800,9 @@ function getSsData(name, jkdata, page) {
             if(api_type=="hipy_t4"){
                 json = JSON.parse(getHtml(jkdata.url+"&wd="+name+"&extend="+jkdata.ext+"&quick=false", headers));
             }else if(api_type=="hipy_t3"){
-                log(config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js");
-                let drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(jkdata);
+                let {GA} = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6916&auth=1d35e8f0-22e8-5270-a9d1-826f53f177ad");
+                let drpy = GA.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(jkdata);
                 json = JSON.parse(drpy.search(name, 0, page));
-                
-                return [];
                 //noerji = drpy.getRule("二级")=="*"?1:0;
             }else{
                 gethtml = getHtmlCode(ssurl, headers);
