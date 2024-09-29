@@ -3,7 +3,7 @@ const JSEngine = com.example.hikerview.service.parser.JSEngine;
 const drpyMap = new Map();
 const GMkey = module.importParam;
 function oldbuildJsEnv(ticket) {
-  let code = String.raw`
+    let code = String.raw`
     // const my_rule = '
     const MY_RULE = ${my_rule};
     const my_rule = JSON.stringify(MY_RULE);
@@ -11,13 +11,14 @@ function oldbuildJsEnv(ticket) {
     eval(getJsPlugin());
     eval(getJsLazyPlugin());
     `;
-  return code;
+    return code;
 }
 
 function buildJsEnv(ticket) {
-  let my_rule = JSON.stringify(MY_RULE);
+    MY_RULE.title = MY_RULE._title || MY_RULE.title;
+    let my_rule = JSON.stringify(MY_RULE);
 
-  let code = `
+    let code = `
     let my_rule = '';
     my_rule = null;
     const MY_RULE = ${my_rule};
@@ -25,7 +26,7 @@ function buildJsEnv(ticket) {
     eval(getJsPlugin());
     eval(getJsLazyPlugin());
     `;
-  return code;
+    return code;
 }
 
 function sync(func, sp) {
@@ -199,7 +200,6 @@ function createDrpy(sdata) {
             return $toString.apply(this).trim();
         };
         //$.require.cache.delete($.require.resolve(codePath +'drpy/drpy2.js'));
-        log(MY_RULE.title);
         let drpy2 = $.require(codePath +'drpy/drpy2.js');
         GM.has(GMkey, (DrpyManage) => {
             DrpyManage.put(sdata.key, drpy2);
