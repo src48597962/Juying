@@ -263,6 +263,7 @@ function get(jkdata) {
             del(Array.from(drpyMap.keys()).at(0));
         }
         let drpy = createNewDrpy(sdata);
+        log($.type(drpy));
         return drpy;
     }, this).call();
 }
