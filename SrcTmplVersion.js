@@ -4,7 +4,7 @@ var newVersion = {
     "JYUpdateRecords": [{
         title: "beta V2.0",
         records: [
-            "优化：代码优化"
+            "修复：聚合代理搜索导致GM环境异常问题"
         ]
     },{
         title: "2024/09/17 V1.9",
