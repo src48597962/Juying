@@ -1,7 +1,7 @@
 const codePath = module.modulePath.slice(0, module.modulePath.lastIndexOf("/") + 1);
 const JSEngine = com.example.hikerview.service.parser.JSEngine;
 const drpyMap = new Map();
-const GMkey = "SrcJyDrpy";//module.importParam;
+const GMkey = module.importParam;
 function oldbuildJsEnv(ticket) {
   let code = String.raw`
     // const my_rule = '
@@ -198,7 +198,8 @@ function createDrpy(sdata) {
         Function.prototype.toString = function () {
             return $toString.apply(this).trim();
         };
-        $.require.cache.delete($.require.resolve(codePath +'drpy/drpy2.js'));
+        //$.require.cache.delete($.require.resolve(codePath +'drpy/drpy2.js'));
+        log(MY_RULE.title);
         let drpy2 = $.require(codePath +'drpy/drpy2.js');
         GM.has(GMkey, (DrpyManage) => {
             DrpyManage.put(sdata.key, drpy2);
