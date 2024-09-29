@@ -87,8 +87,8 @@ function getYiData(jkdata, batchTest) {
             vodhost = getHome(listurl);
         }
     } else if (api_type == 'hipy_t3') {
-        GM.clear("SrcJuDrpy");
-        var drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(jkdata);
+        GM.clear("SrcJyDrpy");
+        var drpy = GM.defineModule("SrcJyDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(jkdata);
         let rule = drpy.getRule();
         detailurl = rule.detailUrl || "";
         classurl = rule.homeUrl || rule.host;
@@ -800,8 +800,7 @@ function getSsData(name, jkdata, page) {
             if(api_type=="hipy_t4"){
                 json = JSON.parse(getHtml(jkdata.url+"&wd="+name+"&extend="+jkdata.ext+"&quick=false", headers));
             }else if(api_type=="hipy_t3"){
-                let {GM} = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6916&auth=1d35e8f0-22e8-5270-a9d1-826f53f177ad");
-                let drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(jkdata);
+                let drpy = GM.defineModule("SrcJyDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(jkdata);
                 json = JSON.parse(drpy.search(name, 0, page));
                 //noerji = drpy.getRule("二级")=="*"?1:0;
             }else{
@@ -1074,7 +1073,7 @@ function getErData(jkdata, erurl) {
         }
         html = getHtml(erurl, headers);
     } else if (api_type=="hipy_t3") {
-        let drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(jkdata);
+        let drpy = GM.defineModule("SrcJyDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(jkdata);
         try{
             html = drpy.detail(erurl);
         }catch(e){}
