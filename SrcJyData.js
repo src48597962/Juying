@@ -90,7 +90,7 @@ function getYiData(jkdata, batchTest) {
         //GM.clear("SrcJyDrpy");
         let g = GM.defineModule("SrcJyDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js");
         log($.type(g));
-        log(Object.keys(g).length);
+        log(Object.keys(g));
         var drpy = GM.defineModule("SrcJyDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(jkdata);
         let rule = drpy.getRule();
         detailurl = rule.detailUrl || "";
