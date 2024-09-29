@@ -199,7 +199,7 @@ function createDrpy(sdata) {
             return $toString.apply(this).trim();
         };
         //$.require.cache.delete($.require.resolve(codePath +'drpy/drpy2.js'));
-        let drpy2 = $.require(codePath +'drpy/drpy2.js', sdata.key);
+        let drpy2 = $.require(codePath +'drpy/drpy2.js');
         GM.has(GMkey, (DrpyManage) => {
             DrpyManage.put(sdata.key, drpy2);
         });
