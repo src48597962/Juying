@@ -87,6 +87,7 @@ function getYiData(jkdata, batchTest) {
             vodhost = getHome(listurl);
         }
     } else if (api_type == 'hipy_t3') {
+        GM.clear("SrcJuDrpy");
         var drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(jkdata);
         let rule = drpy.getRule();
         detailurl = rule.detailUrl || "";
