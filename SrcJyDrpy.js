@@ -250,7 +250,7 @@ function get(jkdata) {
     return sync(() => {
         //log(drpyMap.size)
         if (drpyMap.has(key)) {
-            //log("取缓存>" + key)
+            log("取缓存>" + key)
             let drpy = drpyMap.get(key);
             if(Object.keys(drpy.getRule()).length > 0){
                 return drpy;
@@ -259,9 +259,10 @@ function get(jkdata) {
             }
         }
         if (drpyMap.size >= 5) {
-            //log("删缓存>"+Array.from(drpyMap.keys()).at(0))
+            log("删缓存>"+Array.from(drpyMap.keys()).at(0))
             del(Array.from(drpyMap.keys()).at(0));
         }
+        log(sdata);
         let drpy = createNewDrpy(sdata);
         log($.type(drpy));
         return drpy;
