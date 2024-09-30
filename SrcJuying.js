@@ -279,6 +279,8 @@ function dianboerji() {
         if(erdata.lists.length>0){//只有二级选集列表获取到时才缓存
             let markData = {surl: jkdata.url, url: MY_URL, data: erdata}
             writeFile(cacheDataFile, JSON.stringify(markData));
+        }else if(erdata.lists==0 && jkdata.name.includes("老白")){
+            refreshPage(false);
         }
     }
 
