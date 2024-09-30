@@ -61,7 +61,23 @@ function erjimenu(desc,name,group) {
             pic_url: getIcon("点播-切换站源.svg"),
             col_type: 'icon_small_3',
             extra: {
-                cls: "Juloadlist"
+                cls: "Juloadlist",
+                longClick: [{
+                    title: "云盘",
+                    js: $.toString((name) => {
+                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+                        erjiSousuo(name);
+                    }, name)
+                },{
+                    title: "指定源",
+                    js: $.toString(() => {
+                        return $("", "指定源接口名称").input((name) => {
+                            require(config.依赖);
+                            erjisousuo(name, '', input);
+                            return 'hiker://empty';
+                        }, name)
+                    })
+                }]
             }
         }
     ]
