@@ -64,15 +64,11 @@ function erjimenu(desc,name,group) {
                 cls: "Juloadlist",
                 longClick: [{
                     title: "云盘快搜",
-                    js: $.toString((name, group) => {
-                        deleteItemByCls('Juloadlist');
-                        updateItem(group+"_"+name+"_loading", {
-                            extra: {"id": "云盘_"+name+"_loading", "lineVisible": false}
-                        })
-                        putMyVar("切源旧分组", "云盘");
-                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
-                        erjiSousuo(name);
-                    }, name, group)
+                    js: $.toString((name) => {
+                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyMenu.js');
+                        cutSource(name, "云盘");
+                        return  "hiker://empty";
+                    }, name)
                 },{
                     title: "指定接口",
                     js: $.toString((name,group) => {
