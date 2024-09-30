@@ -65,9 +65,31 @@ function erjimenu(desc,name,group) {
                 longClick: [{
                     title: "云盘快搜",
                     js: $.toString((name) => {
-                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyMenu.js');
-                        cutSource(name, "云盘");
-                        return  "hiker://empty";
+                        return $('#noLoading#').lazyRule((name,newgroup) => {
+                            let oldgroup = getMyVar("切源旧分组","");
+                            if(oldgroup==newgroup){
+                                return "hiker://empty";
+                            }
+                            updateItem("id_"+oldgroup, {
+                                title: oldgroup
+                            })
+                            updateItem("id_"+newgroup, {
+                                title: `““””<b><span style="color: `+getItem("主题颜色", "#6dc9ff")+`">`+newgroup+`</span></b>`
+                            })
+                            updateItem(oldgroup+"_"+name+"_loading", {
+                                extra: {"id":newgroup+"_"+name+"_loading","lineVisible":false}
+                            })
+                            deleteItemByCls('grouploadlist');
+                            putMyVar("切源旧分组", newgroup);
+                            if(newgroup=="云盘"){
+                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+                                erjiSousuo(name);
+                            }else{
+                                require(config.依赖);
+                                erjisousuo(name, newgroup);
+                            }
+                            return 'toast://切源分组已切为：' + newgroup;
+                        }, name, "云盘")
                     }, name)
                 },{
                     title: "指定接口",
