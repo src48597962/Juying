@@ -4,7 +4,8 @@ var newVersion = {
     "JYUpdateRecords": [{
         title: "beta V2.0",
         records: [
-            "修复：聚合代理搜索导致GM环境异常问题"
+            "修复：聚合代理搜索导致GM环境异常问题",
+            "功能：点播二级切换站源长按可指定源"
         ]
     },{
         title: "2024/09/17 V1.9",
