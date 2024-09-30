@@ -66,10 +66,10 @@ function erjimenu(desc,name,group) {
                     title: "云盘快搜",
                     js: $.toString((name) => {
                         deleteItemByCls('Juloadlist');
-                        let updateItemid = "云盘_" +name + "_loading";
-                        updateItem(updateItemid+'2', {
-                            extra: {"id":updateItemid,"lineVisible":false}
+                        updateItem(group+"_"+name+"_loading", {
+                            extra: {"id": "云盘_"+name+"_loading", "lineVisible": false}
                         })
+                        putMyVar("切源旧分组", newgroup);
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
                         erjiSousuo(name);
                     }, name)
