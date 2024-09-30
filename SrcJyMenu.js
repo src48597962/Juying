@@ -65,19 +65,29 @@ function erjimenu(desc,name,group) {
                 longClick: [{
                     title: "云盘",
                     js: $.toString((name) => {
+                        deleteItemByCls('Juloadlist');
+                        let updateItemid = "云盘_" +name + "_loading";
+                        updateItem(updateItemid+'2', {
+                            extra: {"id":updateItemid,"lineVisible":false}
+                        })
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
                         erjiSousuo(name);
                     }, name)
                 },{
                     title: "指定源",
-                    js: $.toString(() => {
-                        return $("", "指定源接口名称").input((name) => {
+                    js: $.toString((name,group) => {
+                        return $("", "指定源接口名称").input((name,group) => {
+                            deleteItemByCls('Juloadlist');
+                            let updateItemid = group + "_" +name + "_loading";
+                            updateItem(updateItemid+'2', {
+                                extra: {"id":updateItemid,"lineVisible":false}
+                            })
                             require(config.依赖);
                             let ssdatalist = getSearchLists().filter(v=>v.name.includes(input));
                             erjisousuo(name, '', ssdatalist);
                             return 'hiker://empty';
-                        }, name)
-                    })
+                        }, name, group)
+                    }, name, group)
                 }]
             }
         }
@@ -88,6 +98,7 @@ function erjimenu(desc,name,group) {
 function cutSource(name, group) {
     putMyVar("切源旧分组", group);
     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+
     let datalist = getDatas('jk',1);
     let groups = getJiekouGroups(datalist.filter(v=>v.searchable!=0)).concat(['云盘']);
     let grouparr = [];
