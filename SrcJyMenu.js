@@ -63,49 +63,20 @@ function erjimenu(desc,name,group) {
             extra: {
                 cls: "Juloadlist",
                 longClick: [{
-                    title: "云盘快搜",
-                    js: $.toString((name) => {
-                        return $('#noLoading#').lazyRule((name,newgroup) => {
-                            let oldgroup = getMyVar("切源旧分组","");
-                            if(oldgroup==newgroup){
-                                return "hiker://empty";
-                            }
-                            updateItem("id_"+oldgroup, {
-                                title: oldgroup
-                            })
-                            updateItem("id_"+newgroup, {
-                                title: `““””<b><span style="color: `+getItem("主题颜色", "#6dc9ff")+`">`+newgroup+`</span></b>`
-                            })
-                            updateItem(oldgroup+"_"+name+"_loading", {
-                                extra: {"id":newgroup+"_"+name+"_loading","lineVisible":false}
-                            })
-                            deleteItemByCls('grouploadlist');
-                            putMyVar("切源旧分组", newgroup);
-                            if(newgroup=="云盘"){
-                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
-                                erjiSousuo(name);
-                            }else{
-                                require(config.依赖);
-                                erjisousuo(name, newgroup);
-                            }
-                            return 'toast://切源分组已切为：' + newgroup;
-                        }, name, "云盘")
-                    }, name)
-                },{
                     title: "指定接口",
                     js: $.toString((name,group) => {
-                        return $("", "指定源接口名称").input((name,group) => {
+                        return $("", "输入指定接口").input((name,group)=>{
                             deleteItemByCls('Juloadlist');
                             let updateItemid = group + "_" +name + "_loading";
                             updateItem(updateItemid+'2', {
-                                extra: {"id":updateItemid, "lineVisible":false}
+                                extra: {"id":updateItemid,"lineVisible":false}
                             })
                             require(config.依赖);
                             let ssdatalist = getSearchLists().filter(v=>v.name.includes(input));
-                            erjisousuo(name, '', ssdatalist);
-                            return 'hiker://empty';
-                        }, name, group)
-                    }, name, group)
+                            erjisousuo(name, group, ssdatalist);
+                            return "hiker://empty";
+                        },name,group)
+                    },name,group)
                 }]
             }
         }
@@ -116,8 +87,8 @@ function erjimenu(desc,name,group) {
 function cutSource(name, group) {
     putMyVar("切源旧分组", group);
     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
-    let datalist = getDatas('jk',1);
-    let groups = getJiekouGroups(datalist.filter(v=>v.searchable!=0)).concat(['云盘']);
+    let datalist = getDatas('jk',1).filter(v=>v.searchable!=0);
+    let groups = getJiekouGroups(datalist).concat(['云盘']);
     let grouparr = [];
     let color = getItem("主题颜色", "#6dc9ff");//#3399cc
     groups.forEach(it=>{
