@@ -73,7 +73,8 @@ function erjimenu(desc,name,group) {
                     js: $.toString(() => {
                         return $("", "指定源接口名称").input((name) => {
                             require(config.依赖);
-                            erjisousuo(name, '', input);
+                            let ssdatalist = getSearchLists().filter(v=>v.name.includes(input));
+                            erjisousuo(name, '', ssdatalist);
                             return 'hiker://empty';
                         }, name)
                     })
