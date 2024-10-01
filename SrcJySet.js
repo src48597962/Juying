@@ -401,35 +401,6 @@ function SRCSet() {
                                         }
                                         data.message = desc;
 
-                                        if(error){
-                                            deleteItem("failSource-" + data.url);
-                                            addItemBefore("testSource2", {
-                                                title: data.name,
-                                                desc: data.message,
-                                                url: $("hiker://empty#noRecordHistory##noHistory#").rule((data) => {
-                                                    setPageTitle(data.name+"-接口测试");
-                                                    require(config.依赖);
-                                                    dianboyiji(data);
-                                                }, data),
-                                                col_type: "text_1",
-                                                extra: {
-                                                    id: "failSource-" + data.url,
-                                                    cls: "failSource",
-                                                    longClick: [{
-                                                        title: "保留",
-                                                        js: $.toString((dataurl) => {
-                                                            let failSource = storage0.getMyVar("failSourceList") || [];
-                                                            let index = failSource.indexOf(failSource.filter(d => dataurl==d.url )[0]);
-                                                            failSource.splice(index, 1);
-                                                            storage0.putMyVar("failSourceList",failSource);
-                                                            deleteItem("failSource-" + dataurl);
-                                                            return "toast://已保留，不处理";
-                                                        },data.url)
-                                                    }]
-                                                }
-                                            });
-                                        }
-                                        
                                         return {error:error, data:data}
                                     }
 
@@ -449,22 +420,70 @@ function SRCSet() {
                                     log("批量检测_线程开始");
 
                                     let success = 0;
-                                    let faillist = storage0.getMyVar("批量检测_失败列表") || [];
+                                    let failSourceList = storage0.getMyVar("批量检测_失败列表") || [];
                                     let checknumber = checkSourceList.length;
 
                                     if(list.length>0){
                                         be(list, {
                                             func: function (obj, id, error, taskResult) {
-                                                if(taskResult.error==0){
+                                                if(taskResult.error){
+                                                    let data = taskResult.data;
+                                                    failSourceList.push(data);
+
+                                                    deleteItem("failSource-" + data.url);
+                                                    addItemBefore("testSource2", {
+                                                        title: data.name,
+                                                        desc: data.message,
+                                                        url: $("hiker://empty#noRecordHistory##noHistory#").rule((data) => {
+                                                            setPageTitle(data.name+"-接口测试");
+                                                            require(config.依赖);
+                                                            dianboyiji(data);
+                                                        }, data),
+                                                        col_type: "text_1",
+                                                        extra: {
+                                                            id: "failSource-" + data.url,
+                                                            cls: "failSource",
+                                                            longClick: [{
+                                                                title: "停用",
+                                                                js: $.toString((dataurl) => {
+                                                                    let failSource = storage0.getMyVar("failSourceList") || [];
+                                                                    let index = failSource.indexOf(failSource.filter(d => dataurl==d.url)[0]);
+                                                                    failSource.splice(index, 1);
+                                                                    storage0.putMyVar("failSourceList",failSource);
+                                                                    deleteItem("failSource-" + dataurl);
+                                                                    return "toast://已保留，不处理";
+                                                                },data.url)
+                                                            },{
+                                                                title: "删除",
+                                                                js: $.toString((dataurl) => {
+                                                                    let failSource = storage0.getMyVar("failSourceList") || [];
+                                                                    let index = failSource.indexOf(failSource.filter(d => dataurl==d.url)[0]);
+                                                                    failSource.splice(index, 1);
+                                                                    storage0.putMyVar("failSourceList",failSource);
+                                                                    deleteItem("failSource-" + dataurl);
+                                                                    return "toast://已保留，不处理";
+                                                                },data.url)
+                                                            },{
+                                                                title: "保留",
+                                                                js: $.toString((dataurl) => {
+                                                                    let failSource = storage0.getMyVar("failSourceList") || [];
+                                                                    let index = failSource.indexOf(failSource.filter(d => dataurl==d.url)[0]);
+                                                                    failSource.splice(index, 1);
+                                                                    storage0.putMyVar("failSourceList",failSource);
+                                                                    deleteItem("failSource-" + dataurl);
+                                                                    return "toast://已保留，不处理";
+                                                                },data.url)
+                                                            }]
+                                                        }
+                                                    });
+                                                }else{
                                                     success++;
                                                     let index = checkSourceList.indexOf(checkSourceList.filter(d => taskResult.data.url==d.url )[0]);
                                                     checkSourceList[index] = taskResult.data;
-                                                }else{
-                                                    faillist.push(taskResult.data);
                                                 }
                                                 
                                                 updateItem("testSource", {
-                                                    title: (faillist.length+success) + "/" + checknumber + "，成功：" + success + "，失败：" + faillist.length,
+                                                    title: (failSourceList.length+success) + "/" + checknumber + "，成功：" + success + "，失败：" + failSourceList.length,
                                                     desc: "点击中止线程，停止批量检测",
                                                     url: $().lazyRule(()=>{
                                                         putMyVar("批量检测_中止线程","1");
@@ -492,9 +511,9 @@ function SRCSet() {
                                         addItemAfter("testSource2", {
                                             title: "批量删除失效",
                                             url: $("#noLoading#").lazyRule(() => {
-                                                let faillist = storage0.getMyVar("批量检测_失败列表") || [];
+                                                let failSourceList = storage0.getMyVar("批量检测_失败列表") || [];
                                                 let checkSourceList = storage0.getMyVar("checkSourceList") || [];
-                                                faillist.forEach(it=>{
+                                                failSourceList.forEach(it=>{
                                                     let index = checkSourceList.indexOf(checkSourceList.filter(d => it.url==d.url )[0]);
                                                     checkSourceList.splice(index, 1);
                                                     deleteItem("failSource-" + it.url);
@@ -502,14 +521,14 @@ function SRCSet() {
                                                 storage0.putMyVar("checkSourceList",checkSourceList);
 
                                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
-                                                deleteData("jk", faillist);
+                                                deleteData("jk", failSourceList);
                                                 clearMyVar("批量检测_失败列表");
                                                 return "toast://已批量删除";
                                             }),
                                             col_type : "text_center_1"
                                         })
                                         
-                                        storage0.putMyVar("批量检测_失败列表", faillist);
+                                        storage0.putMyVar("批量检测_失败列表", failSourceList);
                                         storage0.putMyVar("checkSourceList",checkSourceList);
                                         updateItem("testSource", {
                                             desc: "",
