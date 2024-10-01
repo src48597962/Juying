@@ -332,11 +332,15 @@ function SRCSet() {
                                 clearMyVar("批量检测_中止线程");
                                 clearMyVar("批量检测_复检模式");
                                 clearMyVar("批量检测_失败列表");
+                                refreshPage(true);
                             }));
                             function testSource() {
                                 return $('#noLoading#').lazyRule(()=>{
                                     if(getMyVar("批量检测_线程开始")=="1"){
                                         return "toast://上一个任务还没有结束，请等待.";
+                                    }
+                                    if(getMyVar("批量检测_当前进度")=="0"){
+                                        return "toast://检测项目已结束";
                                     }
 
                                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
@@ -561,7 +565,7 @@ function SRCSet() {
                             d.push({
                                 title: "待检测源：" + checkSourceList.length,
                                 url: testSource(),
-                                desc: "",
+                                desc: "点击开始检测",
                                 col_type : "text_center_1",
                                 extra: {
                                     id: "testSource"
