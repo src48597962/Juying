@@ -1300,10 +1300,9 @@ function myDiskSearch(input) {
 }
 
 // 聚影二级切源
-function erjiSousuo(name, group) {
+function erjiSousuo(name) {
     showLoading('搜源中，请稍后...');
-    group = group || "云盘";
-    let updateItemid = group + "_" + name + "_loading";
+    let updateItemid = "云盘_" + name + "_loading";
     let diskMark = storage0.getMyVar('diskMark') || {};//二级换源缓存
     if(diskMark[name]){
         addItemBefore(updateItemid, diskMark[name]);
