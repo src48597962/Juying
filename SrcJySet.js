@@ -331,7 +331,7 @@ function SRCSet() {
                                 clearMyVar("checkSourceList");
                                 clearMyVar("批量检测_中止线程");
                                 clearMyVar("批量检测_复检模式");
-                                clearMyVar("批量检测_执行结果");
+                                clearMyVar("批量检测_失败列表");
                             }));
                             function testSource() {
                                 return $('#noLoading#').lazyRule(()=>{
@@ -437,47 +437,39 @@ function SRCSet() {
                                     });
 
                                     clearMyVar("批量检测_退出页面");
-                                    putMyVar("checkSource_nexttime", "12");
+                                    putMyVar("checkSource_nexttime", "24");
                                     putMyVar("批量检测_线程开始", "1");
                                     log("批量检测_线程开始");
 
                                     let success = 0;
-                                    let fail = 0;
-                                    let executed = storage0.getMyVar("批量检测_执行结果") || [];
                                     let checknumber = checkSourceList.length;
 
                                     if(list.length>0){
                                         be(list, {
                                             func: function (obj, id, error, taskResult) {
-                                                executed.push({
-                                                    data: taskResult.data,
-                                                    error: taskResult.error,
-                                                    execute: error?0:1
-                                                })
-
                                                 if(taskResult.error==0){
                                                     success++;
+                                                    let index = checkSourceList.indexOf(checkSourceList.filter(d => taskResult.data.url==d.url )[0]);
+                                                    checkSourceList[index] = taskResult.data;
                                                 }else{
-                                                    fail++;
-                                                    if(fail==1){
+                                                    let faillist = storage0.getMyVar("批量检测_失败列表") || [];
+                                                    faillist.push(taskResult.data);
+                                                    if(faillist.length==1){
                                                         addItemAfter("testSource2", {
                                                             title: "批量删除失效",
                                                             url: $("#noLoading#").lazyRule(() => {
-                                                                let executed = storage0.getMyVar("批量检测_执行结果") || [];
-                                                                let faillist = executed.filter(v=>{
-                                                                    return v.execute && v.error;
-                                                                });
+                                                                let faillist = storage0.getMyVar("批量检测_失败列表") || [];
                                                                 let checkSourceList = storage0.getMyVar("checkSourceList") || [];
                                                                 faillist.forEach(it=>{
-                                                                    let data = it.data;
-                                                                    let index = checkSourceList.indexOf(checkSourceList.filter(d => data.url==d.url )[0]);
+                                                                    let index = checkSourceList.indexOf(checkSourceList.filter(d => it.url==d.url )[0]);
                                                                     checkSourceList.splice(index, 1);
-                                                                    deleteItem("failSource-" + data.url);
+                                                                    deleteItem("failSource-" + it.url);
                                                                 })
                                                                 storage0.putMyVar("checkSourceList",checkSourceList);
 
                                                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                                                                 deleteData("jk", faillist);
+                                                                clearMyVar("批量检测_失败列表");
                                                                 return "toast://已批量删除";
                                                             }),
                                                             col_type : "text_center_1"
@@ -486,7 +478,7 @@ function SRCSet() {
                                                 }
                                                 
                                                 updateItem("testSource", {
-                                                    title: executed.length + "/" + checknumber + "，成功：" + success + "，失败：" + fail,
+                                                    title: (faillist.length+success) + "/" + checknumber + "，成功：" + success + "，失败：" + faillist.length,
                                                     desc: "点击中止线程，停止批量检测",
                                                     url: $().lazyRule(()=>{
                                                         putMyVar("批量检测_中止线程","1");
@@ -511,11 +503,31 @@ function SRCSet() {
                                     clearMyVar("批量检测_中止线程");
                                     
                                     if(!getMyVar("批量检测_退出页面")){
-                                        storage0.putMyVar("批量检测_执行结果", executed);
+                                        storage0.putMyVar("批量检测_失败列表", faillist);
+                                        storage0.putMyVar("checkSourceList",checkSourceList);
                                         updateItem("testSource", {
                                             desc: "",
                                             url: "hiker://empty"
                                         });
+                                        let schedule = getMyVar("批量检测_当前进度","1");
+                                        if(schedule!="0"){
+                                            addItemAfter("testSource2", {
+                                                title: "进行下一步检测",
+                                                url: $("#noLoading#").lazyRule(() => {
+                                                    let schedule = getMyVar("批量检测_当前进度","1");
+                                                    if(schedule=="1"){
+                                                        putMyVar("批量检测_当前进度","2");
+                                                    }else if(schedule=="2"){
+                                                        putMyVar("批量检测_当前进度","3");
+                                                    }else{
+                                                        putMyVar("批量检测_当前进度","0");
+                                                    }
+                                                    refreshPage(true);
+                                                    return "hiker://empty";
+                                                }),
+                                                col_type : "text_center_1"
+                                            })
+                                        }
                                     }
 
                                     hideLoading();
