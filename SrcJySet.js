@@ -518,7 +518,7 @@ function SRCSet() {
                                         let schedule = getMyVar("批量检测_当前进度","1");
                                         if(schedule!="0"){
                                             addItemAfter("testSource2", {
-                                                title: "进行下一步检测",
+                                                title: "进行下一项检测",
                                                 url: $("#noLoading#").lazyRule(() => {
                                                     let schedule = getMyVar("批量检测_当前进度","1");
                                                     if(schedule=="1"){
@@ -528,6 +528,7 @@ function SRCSet() {
                                                     }else{
                                                         putMyVar("批量检测_当前进度","0");
                                                     }
+                                                    clearMyVar("批量检测_失败列表");
                                                     refreshPage(true);
                                                     return "hiker://empty";
                                                 }),
