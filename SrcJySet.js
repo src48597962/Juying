@@ -333,6 +333,8 @@ function SRCSet() {
                                 clearMyVar("批量检测_复检模式");
                                 clearMyVar("批量检测_失败列表");
                                 clearMyVar("批量检测_当前进度");
+                                clearMyVar('SrcJu_批量选择模式');
+                                clearMyVar('SrcJu_duoselect');
                                 refreshPage(true);
                             }));
                             function testSource() {
