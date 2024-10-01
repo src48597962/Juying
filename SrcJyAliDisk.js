@@ -1350,7 +1350,7 @@ function erjiSousuo(name, group) {
             dataObj: {
                 name: name,
                 group: "云盘",
-                updateItemid: group + "_" + name + "_loading",
+                updateItemid: "云盘_" + name + "_loading",
                 data: {name: "我的云盘", type: "yundisk", group: "云盘", url: "我的云盘"}
             }
         }
@@ -1423,7 +1423,7 @@ function erjiSousuo(name, group) {
                             dataObj: {
                                 name: name,
                                 group: "云盘",
-                                updateItemid: group + "_" + name + "_loading",
+                                updateItemid: "云盘_" + name + "_loading",
                                 data: {name: obj.name, type: "yundisk", group: "云盘", url: obj.name}
                             }
                         }
