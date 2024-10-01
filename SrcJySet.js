@@ -442,6 +442,7 @@ function SRCSet() {
                                     log("批量检测_线程开始");
 
                                     let success = 0;
+                                    let faillist = storage0.getMyVar("批量检测_失败列表") || [];
                                     let checknumber = checkSourceList.length;
 
                                     if(list.length>0){
@@ -452,29 +453,7 @@ function SRCSet() {
                                                     let index = checkSourceList.indexOf(checkSourceList.filter(d => taskResult.data.url==d.url )[0]);
                                                     checkSourceList[index] = taskResult.data;
                                                 }else{
-                                                    let faillist = storage0.getMyVar("批量检测_失败列表") || [];
                                                     faillist.push(taskResult.data);
-                                                    if(faillist.length==1){
-                                                        addItemAfter("testSource2", {
-                                                            title: "批量删除失效",
-                                                            url: $("#noLoading#").lazyRule(() => {
-                                                                let faillist = storage0.getMyVar("批量检测_失败列表") || [];
-                                                                let checkSourceList = storage0.getMyVar("checkSourceList") || [];
-                                                                faillist.forEach(it=>{
-                                                                    let index = checkSourceList.indexOf(checkSourceList.filter(d => it.url==d.url )[0]);
-                                                                    checkSourceList.splice(index, 1);
-                                                                    deleteItem("failSource-" + it.url);
-                                                                })
-                                                                storage0.putMyVar("checkSourceList",checkSourceList);
-
-                                                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
-                                                                deleteData("jk", faillist);
-                                                                clearMyVar("批量检测_失败列表");
-                                                                return "toast://已批量删除";
-                                                            }),
-                                                            col_type : "text_center_1"
-                                                        })
-                                                    }
                                                 }
                                                 
                                                 updateItem("testSource", {
@@ -503,6 +482,26 @@ function SRCSet() {
                                     clearMyVar("批量检测_中止线程");
                                     
                                     if(!getMyVar("批量检测_退出页面")){
+                                        addItemAfter("testSource2", {
+                                            title: "批量删除失效",
+                                            url: $("#noLoading#").lazyRule(() => {
+                                                let faillist = storage0.getMyVar("批量检测_失败列表") || [];
+                                                let checkSourceList = storage0.getMyVar("checkSourceList") || [];
+                                                faillist.forEach(it=>{
+                                                    let index = checkSourceList.indexOf(checkSourceList.filter(d => it.url==d.url )[0]);
+                                                    checkSourceList.splice(index, 1);
+                                                    deleteItem("failSource-" + it.url);
+                                                })
+                                                storage0.putMyVar("checkSourceList",checkSourceList);
+
+                                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                                                deleteData("jk", faillist);
+                                                clearMyVar("批量检测_失败列表");
+                                                return "toast://已批量删除";
+                                            }),
+                                            col_type : "text_center_1"
+                                        })
+                                        
                                         storage0.putMyVar("批量检测_失败列表", faillist);
                                         storage0.putMyVar("checkSourceList",checkSourceList);
                                         updateItem("testSource", {
