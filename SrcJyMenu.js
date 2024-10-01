@@ -80,16 +80,14 @@ function erjimenu(desc,name,group) {
                 },{
                     title: "云盘快搜",
                     js: $.toString((name,group) => {
-                        return $("", "输入指定接口").input((name,group)=>{
-                            deleteItemByCls('Juloadlist');
-                            let updateItemid = group + "_" +name + "_loading";
-                            updateItem(updateItemid+'2', {
-                                extra: {"id":updateItemid,"lineVisible":false}
-                            })
-                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
-                            erjiSousuo(name);
-                            return "hiker://empty";
-                        },name,group)
+                        deleteItemByCls('Juloadlist');
+                        let updateItemid = group + "_" +name + "_loading";
+                        updateItem(updateItemid+'2', {
+                            extra: {"id":updateItemid,"lineVisible":false}
+                        })
+                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+                        erjiSousuo(name);
+                        return "hiker://empty";
                     },name,group)
                 }]
             }
