@@ -1300,9 +1300,10 @@ function myDiskSearch(input) {
 }
 
 // 聚影二级切源
-function erjiSousuo(name) {
+function erjiSousuo(name, group) {
     showLoading('搜源中，请稍后...');
-    let updateItemid = "云盘_" + name + "_loading";
+    group = group || "云盘";
+    let updateItemid = group + "_" + name + "_loading";
     let diskMark = storage0.getMyVar('diskMark') || {};//二级换源缓存
     if(diskMark[name]){
         addItemBefore(updateItemid, diskMark[name]);
@@ -1349,7 +1350,7 @@ function erjiSousuo(name) {
             dataObj: {
                 name: name,
                 group: "云盘",
-                updateItemid: "云盘_" +name + "_loading",
+                updateItemid: group + "_" + name + "_loading",
                 data: {name: "我的云盘", type: "yundisk", group: "云盘", url: "我的云盘"}
             }
         }
@@ -1422,7 +1423,7 @@ function erjiSousuo(name) {
                             dataObj: {
                                 name: name,
                                 group: "云盘",
-                                updateItemid: "云盘_" +name + "_loading",
+                                updateItemid: group + "_" + name + "_loading",
                                 data: {name: obj.name, type: "yundisk", group: "云盘", url: obj.name}
                             }
                         }
