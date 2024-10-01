@@ -86,7 +86,7 @@ function erjimenu(desc,name,group) {
                             extra: {"id":updateItemid,"lineVisible":false}
                         })
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
-                        erjiSousuo(name);
+                        erjiSousuo(name, group);
                         return "hiker://empty";
                     },name,group)
                 }]
