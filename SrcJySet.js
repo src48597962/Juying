@@ -332,6 +332,7 @@ function SRCSet() {
                                 clearMyVar("批量检测_中止线程");
                                 clearMyVar("批量检测_复检模式");
                                 clearMyVar("批量检测_失败列表");
+                                clearMyVar("批量检测_当前进度");
                                 refreshPage(true);
                             }));
                             function testSource() {
