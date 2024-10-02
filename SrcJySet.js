@@ -424,15 +424,14 @@ function SRCSet() {
 
                                 let success = 0;
                                 let checknumber = list.length;
+                                let failSourceList = storage0.getMyVar("批量检测_失败列表") || [];
 
                                 if(list.length>0){
                                     be(list, {
                                         func: function (obj, id, error, taskResult) {
                                             if(taskResult.error){
                                                 let data = taskResult.data;
-                                                let failSourceList = storage0.getMyVar("批量检测_失败列表") || [];                                                
                                                 failSourceList.push(data);
-                                                storage0.putMyVar("批量检测_失败列表", failSourceList);
                                                 
                                                 addItemBefore("testSource2", {
                                                     title: data.name,
@@ -449,6 +448,9 @@ function SRCSet() {
                                                         longClick: [{
                                                             title: "禁用",
                                                             js: $.toString((data) => {
+                                                                if(getMyVar("批量检测_线程开始")=="1"){
+                                                                    return "toast://等待任务结束或中止线程";
+                                                                }
                                                                 let failSource = storage0.getMyVar("批量检测_失败列表") || [];
                                                                 let index = failSource.indexOf(data);
                                                                 if(index>-1){
@@ -463,6 +465,9 @@ function SRCSet() {
                                                         },{
                                                             title: "删除",
                                                             js: $.toString((data) => {
+                                                                if(getMyVar("批量检测_线程开始")=="1"){
+                                                                    return "toast://等待任务结束或中止线程";
+                                                                }
                                                                 let failSource = storage0.getMyVar("批量检测_失败列表") || [];
                                                                 let index = failSource.indexOf(data);
                                                                 if(index>-1){
@@ -477,6 +482,9 @@ function SRCSet() {
                                                         },{
                                                             title: "保留",
                                                             js: $.toString((data) => {
+                                                                if(getMyVar("批量检测_线程开始")=="1"){
+                                                                    return "toast://等待任务结束或中止线程";
+                                                                }
                                                                 let failSource = storage0.getMyVar("批量检测_失败列表") || [];
                                                                 let index = failSource.indexOf(data);
                                                                 if(index>-1){
@@ -544,7 +552,8 @@ function SRCSet() {
                                             id: "deleteAllFail"
                                         }
                                     })
-                                    
+
+                                    storage0.putMyVar("批量检测_失败列表", failSourceList);
                                     storage0.putMyVar("checkSourceList",checkSourceList);
                                     updateItem("testSource", {
                                         desc: "",
