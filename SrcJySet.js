@@ -449,34 +449,34 @@ function SRCSet() {
                                                             longClick: [{
                                                                 title: "禁用",
                                                                 js: $.toString((dataurl) => {
-                                                                    let failSource = storage0.getMyVar("failSourceList") || [];
+                                                                    let failSource = storage0.getMyVar("批量检测_失败列表") || [];
                                                                     let index = failSource.indexOf(failSource.filter(d => dataurl==d.url)[0]);
                                                                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                                                                     let sm = dataEnable('jk', failSource[index], "禁用");
                                                                     failSource.splice(index, 1);
-                                                                    storage0.putMyVar("failSourceList",failSource);
+                                                                    storage0.putMyVar("批量检测_失败列表", failSource);
                                                                     deleteItem("failSource-" + dataurl);
-                                                                    return "toast://已保留，不处理" + sm;
+                                                                    return "toast://" + sm;
                                                                 }, data.url)
                                                             },{
                                                                 title: "删除",
                                                                 js: $.toString((dataurl) => {
-                                                                    let failSource = storage0.getMyVar("failSourceList") || [];
+                                                                    let failSource = storage0.getMyVar("批量检测_失败列表") || [];
                                                                     let index = failSource.indexOf(failSource.filter(d => dataurl==d.url)[0]);
                                                                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                                                                     deleteData('jk', failSource[index]);
                                                                     failSource.splice(index, 1);
-                                                                    storage0.putMyVar("failSourceList",failSource);
+                                                                    storage0.putMyVar("批量检测_失败列表", failSource);
                                                                     deleteItem("failSource-" + dataurl);
                                                                     return "toast://已删除";
                                                                 }, data.url)
                                                             },{
                                                                 title: "保留",
                                                                 js: $.toString((dataurl) => {
-                                                                    let failSource = storage0.getMyVar("failSourceList") || [];
+                                                                    let failSource = storage0.getMyVar("批量检测_失败列表") || [];
                                                                     let index = failSource.indexOf(failSource.filter(d => dataurl==d.url)[0]);
                                                                     failSource.splice(index, 1);
-                                                                    storage0.putMyVar("failSourceList",failSource);
+                                                                    storage0.putMyVar("批量检测_失败列表", failSource);
                                                                     deleteItem("failSource-" + dataurl);
                                                                     return "toast://已保留，不处理";
                                                                 }, data.url)
