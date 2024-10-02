@@ -348,10 +348,11 @@ function SRCSet() {
 
                                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
+                                    let schedule = getMyVar("批量检测_当前进度","1");
+
                                     let task = function (data) {
                                         let desc = data.message || '';
                                         let error = 0;
-                                        let schedule = getMyVar("批量检测_当前进度","1");
                                         if(schedule=="1"){
                                             if(!data.onlysearch){
                                                 let yidata = getYiData(data, 1);
@@ -406,7 +407,9 @@ function SRCSet() {
 
                                     showLoading("批量检测中...");
                                     let checkSourceList = storage0.getMyVar("checkSourceList") || [];
-                                    let list = checkSourceList.map((item) => {
+                                    let list = checkSourceList.filter(v=>{
+                                        return schedule=="3"?v.erurl:v.url;
+                                    }).map((item) => {
                                         return {
                                             func: task,
                                             param: item,
@@ -421,7 +424,7 @@ function SRCSet() {
 
                                     let success = 0;
                                     let failSourceList = storage0.getMyVar("批量检测_失败列表") || [];
-                                    let checknumber = checkSourceList.length;
+                                    let checknumber = list.length;
 
                                     if(list.length>0){
                                         be(list, {
@@ -444,25 +447,29 @@ function SRCSet() {
                                                             id: "failSource-" + data.url,
                                                             cls: "failSource",
                                                             longClick: [{
-                                                                title: "停用",
+                                                                title: "禁用",
                                                                 js: $.toString((dataurl) => {
                                                                     let failSource = storage0.getMyVar("failSourceList") || [];
                                                                     let index = failSource.indexOf(failSource.filter(d => dataurl==d.url)[0]);
+                                                                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                                                                    let sm = dataEnable('jk', failSource[index], "禁用");
                                                                     failSource.splice(index, 1);
                                                                     storage0.putMyVar("failSourceList",failSource);
                                                                     deleteItem("failSource-" + dataurl);
-                                                                    return "toast://已保留，不处理";
-                                                                },data.url)
+                                                                    return "toast://已保留，不处理" + sm;
+                                                                }, data.url)
                                                             },{
                                                                 title: "删除",
                                                                 js: $.toString((dataurl) => {
                                                                     let failSource = storage0.getMyVar("failSourceList") || [];
                                                                     let index = failSource.indexOf(failSource.filter(d => dataurl==d.url)[0]);
+                                                                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                                                                    deleteData('jk', failSource[index]);
                                                                     failSource.splice(index, 1);
                                                                     storage0.putMyVar("failSourceList",failSource);
                                                                     deleteItem("failSource-" + dataurl);
-                                                                    return "toast://已保留，不处理";
-                                                                },data.url)
+                                                                    return "toast://已删除";
+                                                                }, data.url)
                                                             },{
                                                                 title: "保留",
                                                                 js: $.toString((dataurl) => {
@@ -472,7 +479,7 @@ function SRCSet() {
                                                                     storage0.putMyVar("failSourceList",failSource);
                                                                     deleteItem("failSource-" + dataurl);
                                                                     return "toast://已保留，不处理";
-                                                                },data.url)
+                                                                }, data.url)
                                                             }]
                                                         }
                                                     });
