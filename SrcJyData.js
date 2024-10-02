@@ -138,10 +138,12 @@ function getYiData(jkdata, batchTest) {
                         if(home['filters']){
                             筛选 = home['filters'];
                         }
-                        let homeVod = home['list'] || [];
-                        homeVod.forEach(it=>{
-                            推荐.push({ "vod_url": it.vod_id.toString(), "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic });
-                        })
+                        if(!batchTest){
+                            let homeVod = home['list'] || [];
+                            homeVod.forEach(it=>{
+                                推荐.push({ "vod_url": it.vod_id.toString(), "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic });
+                            })
+                        }
                     }else if (api_type == "hipy_t3") {
                         let home = JSON.parse(drpy.home());
                         let typelist = home['class'] || [];
@@ -151,20 +153,22 @@ function getYiData(jkdata, batchTest) {
                         if(home['filters']){
                             筛选 = home['filters'];
                         }
-                        let homeVod = JSON.parse(drpy.homeVod()).list || [];
-                        homeVod.forEach(it=>{
-                            let playUrl = it.vod_id.toString().split("@@")[0].trim();
-                            if(detailurl && noerji && !playUrl.startsWith("http")){
-                                let fyclass = "";
-                                let fyid = playUrl;
-                                if(playUrl.includes("$")){
-                                    fyclass = playUrl.split("$")[0];
-                                    fyid = playUrl.split("$")[1];
+                        if(!batchTest){
+                            let homeVod = JSON.parse(drpy.homeVod()).list || [];
+                            homeVod.forEach(it=>{
+                                let playUrl = it.vod_id.toString().split("@@")[0].trim();
+                                if(detailurl && noerji && !playUrl.startsWith("http")){
+                                    let fyclass = "";
+                                    let fyid = playUrl;
+                                    if(playUrl.includes("$")){
+                                        fyclass = playUrl.split("$")[0];
+                                        fyid = playUrl.split("$")[1];
+                                    }
+                                    playUrl = detailurl.replace(/fyclass/g, fyclass).replace(/fyid/g, fyid);
                                 }
-                                playUrl = detailurl.replace(/fyclass/g, fyclass).replace(/fyid/g, fyid);
-                            }
-                            推荐.push({ "vod_url": it.vod_id.toString(), "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic, "vod_play":noerji?playUrl:"" });
-                        })
+                                推荐.push({ "vod_url": it.vod_id.toString(), "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic, "vod_play":noerji?playUrl:"" });
+                            })
+                        }
                     } else if (api_type == "XYQ") {
                         if (extdata['是否开启获取首页数据'] && extdata['首页列表数组规则'] && extdata['首页片单列表数组规则']) {
                             let gethtml = getHtml(classurl, headers);
@@ -353,13 +357,15 @@ function getYiData(jkdata, batchTest) {
                                         }
                                     })
                                 }
-                                try{
-                                    let gettjhtml = getHtml(api_url+'?ac=videolist&pg=1', headers);
-                                    let tjlist = JSON.parse(gettjhtml).list;
-                                    tjlist.forEach(v=>{
-                                        推荐.push({ "vod_url": detailurl + v.vod_id, "vod_name": v.vod_name, "vod_desc": v.vod_remarks, "vod_pic": v.vod_pic });
-                                    })
-                                }catch(e){}
+                                if(!batchTest){
+                                    try{
+                                        let gettjhtml = getHtml(api_url+'?ac=videolist&pg=1', headers);
+                                        let tjlist = JSON.parse(gettjhtml).list;
+                                        tjlist.forEach(v=>{
+                                            推荐.push({ "vod_url": detailurl + v.vod_id, "vod_name": v.vod_name, "vod_desc": v.vod_remarks, "vod_pic": v.vod_pic });
+                                        })
+                                    }catch(e){}
+                                }
                             }
                         }
                     }
