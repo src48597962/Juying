@@ -523,9 +523,13 @@ function SRCSet() {
                                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                                                 deleteData("jk", failSourceList);
                                                 clearMyVar("批量检测_失败列表");
+                                                deleteItem("deleteAllFail");
                                                 return "toast://已批量删除";
                                             }),
-                                            col_type : "text_center_1"
+                                            col_type : "text_center_1",
+                                            extra: {
+                                                id: "deleteAllFail"
+                                            }
                                         })
                                         
                                         storage0.putMyVar("批量检测_失败列表", failSourceList);
@@ -535,7 +539,10 @@ function SRCSet() {
                                             url: "hiker://empty"
                                         });
                                         let schedule = getMyVar("批量检测_当前进度","1");
-                                        if(schedule!="0"){
+                                        if(schedule=="3"){
+                                            putMyVar("批量检测_当前进度","0");
+                                            updateItem("schedule_er", {title:"👌二级选集"});
+                                        }else{
                                             addItemAfter("testSource2", {
                                                 title: "进行下一项检测",
                                                 url: $("#noLoading#").lazyRule(() => {
@@ -544,8 +551,6 @@ function SRCSet() {
                                                         putMyVar("批量检测_当前进度","2");
                                                     }else if(schedule=="2"){
                                                         putMyVar("批量检测_当前进度","3");
-                                                    }else{
-                                                        putMyVar("批量检测_当前进度","0");
                                                     }
                                                     clearMyVar("批量检测_失败列表");
                                                     refreshPage(true);
@@ -580,7 +585,10 @@ function SRCSet() {
                             d.push({
                                 title: (schedule=="1"||schedule=="2"?"":schedule=="3"?"👉":"👌") + '二级选集',
                                 col_type: 'text_3',
-                                url: "hiker://empty"
+                                url: "hiker://empty",
+                                extra: {
+                                    id: "schedule_er"
+                                }
                             });
                             d.push({
                                 col_type: "line_blank"
