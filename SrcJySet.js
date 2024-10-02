@@ -423,7 +423,6 @@ function SRCSet() {
                                 log("批量检测_线程开始");
 
                                 let success = 0;
-                                let failSourceList = storage0.getMyVar("批量检测_失败列表") || [];
                                 let checknumber = list.length;
 
                                 if(list.length>0){
@@ -431,9 +430,10 @@ function SRCSet() {
                                         func: function (obj, id, error, taskResult) {
                                             if(taskResult.error){
                                                 let data = taskResult.data;
+                                                let failSourceList = storage0.getMyVar("批量检测_失败列表") || [];                                                
                                                 failSourceList.push(data);
-
-                                                deleteItem("failSource-" + data.url);
+                                                storage0.putMyVar("批量检测_失败列表", failSourceList);
+                                                
                                                 addItemBefore("testSource2", {
                                                     title: data.name,
                                                     desc: data.message,
@@ -448,38 +448,44 @@ function SRCSet() {
                                                         cls: "failSource",
                                                         longClick: [{
                                                             title: "禁用",
-                                                            js: $.toString((dataurl) => {
+                                                            js: $.toString((data) => {
                                                                 let failSource = storage0.getMyVar("批量检测_失败列表") || [];
-                                                                let index = failSource.indexOf(failSource.filter(d => dataurl==d.url)[0]);
+                                                                let index = failSource.indexOf(data);
+                                                                if(index>-1){
+                                                                    failSource.splice(index, 1);
+                                                                    storage0.putMyVar("批量检测_失败列表", failSource);
+                                                                }
+                                                                deleteItem("failSource-" + data.url);
                                                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
-                                                                let sm = dataEnable('jk', failSource[index], "禁用");
-                                                                failSource.splice(index, 1);
-                                                                storage0.putMyVar("批量检测_失败列表", failSource);
-                                                                deleteItem("failSource-" + dataurl);
+                                                                let sm = dataEnable('jk', data, "禁用");
                                                                 return "toast://" + sm;
-                                                            }, data.url)
+                                                            }, data)
                                                         },{
                                                             title: "删除",
-                                                            js: $.toString((dataurl) => {
+                                                            js: $.toString((data) => {
                                                                 let failSource = storage0.getMyVar("批量检测_失败列表") || [];
-                                                                let index = failSource.indexOf(failSource.filter(d => dataurl==d.url)[0]);
+                                                                let index = failSource.indexOf(data);
+                                                                if(index>-1){
+                                                                    failSource.splice(index, 1);
+                                                                    storage0.putMyVar("批量检测_失败列表", failSource);
+                                                                }
+                                                                deleteItem("failSource-" + data.url);
                                                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
-                                                                deleteData('jk', failSource[index]);
-                                                                failSource.splice(index, 1);
-                                                                storage0.putMyVar("批量检测_失败列表", failSource);
-                                                                deleteItem("failSource-" + dataurl);
+                                                                deleteData('jk', data);
                                                                 return "toast://已删除";
-                                                            }, data.url)
+                                                            }, data)
                                                         },{
                                                             title: "保留",
-                                                            js: $.toString((dataurl) => {
+                                                            js: $.toString((data) => {
                                                                 let failSource = storage0.getMyVar("批量检测_失败列表") || [];
-                                                                let index = failSource.indexOf(failSource.filter(d => dataurl==d.url)[0]);
-                                                                failSource.splice(index, 1);
-                                                                storage0.putMyVar("批量检测_失败列表", failSource);
-                                                                deleteItem("failSource-" + dataurl);
+                                                                let index = failSource.indexOf(data);
+                                                                if(index>-1){
+                                                                    failSource.splice(index, 1);
+                                                                    storage0.putMyVar("批量检测_失败列表", failSource);
+                                                                }
+                                                                deleteItem("failSource-" + data.url);
                                                                 return "toast://已保留，不处理";
-                                                            }, data.url)
+                                                            }, data)
                                                         }]
                                                     }
                                                 });
@@ -539,7 +545,6 @@ function SRCSet() {
                                         }
                                     })
                                     
-                                    storage0.putMyVar("批量检测_失败列表", failSourceList);
                                     storage0.putMyVar("checkSourceList",checkSourceList);
                                     updateItem("testSource", {
                                         desc: "",
