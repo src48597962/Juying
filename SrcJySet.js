@@ -333,6 +333,7 @@ function SRCSet() {
                             clearMyVar("批量检测_复检模式");
                             clearMyVar("批量检测_失败列表");
                             clearMyVar("批量检测_当前进度");
+                            clearMyVar("批量检测_复检列表");
                             clearMyVar('SrcJu_批量选择模式');
                             clearMyVar('SrcJu_duoselect');
                             refreshPage(true);
@@ -531,22 +532,24 @@ function SRCSet() {
                                 if(!getMyVar("批量检测_退出页面")){
                                     addItemAfter("testSource2", {
                                         title: "批量删除失效",
-                                        url: $("#noLoading#").lazyRule(() => {
-                                            let failSourceList = storage0.getMyVar("批量检测_失败列表") || [];
-                                            let checkSourceList = storage0.getMyVar("checkSourceList") || [];
-                                            failSourceList.forEach(it=>{
-                                                let index = checkSourceList.indexOf(checkSourceList.filter(d => it.url==d.url )[0]);
-                                                checkSourceList.splice(index, 1);
-                                                deleteItem("failSource-" + it.url);
-                                            })
-                                            storage0.putMyVar("checkSourceList",checkSourceList);
+                                        url: $("#noLoading#").lazyRule((failnum) => {
+                                            return $("确认要删除失败"+failnum+"个接口？").confirm(()=>{
+                                                let failSourceList = storage0.getMyVar("批量检测_失败列表") || [];
+                                                let checkSourceList = storage0.getMyVar("checkSourceList") || [];
+                                                failSourceList.forEach(it=>{
+                                                    let index = checkSourceList.indexOf(checkSourceList.filter(d => it.url==d.url )[0]);
+                                                    checkSourceList.splice(index, 1);
+                                                    deleteItem("failSource-" + it.url);
+                                                })
+                                                storage0.putMyVar("checkSourceList",checkSourceList);
 
-                                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
-                                            deleteData("jk", failSourceList);
-                                            clearMyVar("批量检测_失败列表");
-                                            deleteItem("deleteAllFail");
-                                            return "toast://已批量删除";
-                                        }),
+                                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                                                deleteData("jk", failSourceList);
+                                                clearMyVar("批量检测_失败列表");
+                                                deleteItem("deleteAllFail");
+                                                return "toast://已批量删除";
+                                            })
+                                        },failSourceList.length),
                                         col_type : "text_center_1",
                                         extra: {
                                             id: "deleteAllFail"
@@ -563,9 +566,29 @@ function SRCSet() {
                                     if(schedule=="3"){
                                         putMyVar("批量检测_当前进度","0");
                                         updateItem("schedule_er", {title:"👌二级选集"});
+                                        addItemAfter("testSource2", {
+                                            title: "针对失败源进行复检",
+                                            url: $("#noLoading#").lazyRule(() => {
+                                                let recheckList = storage0.getMyVar("批量检测_复检列表") || [];
+                                                let failSourceList = storage0.getMyVar("批量检测_失败列表") || [];
+                                                failSourceList.forEach(it=>{
+                                                    if(recheckList.indexOf(it.url)==-1){
+                                                        recheckList.push(it.url);
+                                                    }
+                                                })
+                                                let checkSourceList = storage0.getMyVar("checkSourceList") || [];
+                                                checkSourceList = checkSourceList.filter(v=recheckList.indexOf(v.url)>-1);
+                                                storage0.putMyVar("checkSourceList", checkSourceList);
+                                                clearMyVar("批量检测_失败列表");
+                                                clearMyVar("批量检测_当前进度");
+                                                refreshPage(true);
+                                                return "hiker://empty";
+                                            }),
+                                            col_type : "text_center_1"
+                                        })
                                     }else{
                                         addItemAfter("testSource2", {
-                                            title: "进行下一项检测",
+                                            title: "先进行下一项检测，最后再进行复检",
                                             url: $("#noLoading#").lazyRule(() => {
                                                 let schedule = getMyVar("批量检测_当前进度","1");
                                                 if(schedule=="1"){
@@ -573,6 +596,14 @@ function SRCSet() {
                                                 }else if(schedule=="2"){
                                                     putMyVar("批量检测_当前进度","3");
                                                 }
+                                                let recheckList = storage0.getMyVar("批量检测_复检列表") || [];
+                                                let failSourceList = storage0.getMyVar("批量检测_失败列表") || [];
+                                                failSourceList.forEach(it=>{
+                                                    if(recheckList.indexOf(it.url)==-1){
+                                                        recheckList.push(it.url);
+                                                    }
+                                                })
+                                                storage0.putMyVar("批量检测_复检列表", recheckList);
                                                 clearMyVar("批量检测_失败列表");
                                                 refreshPage(true);
                                                 return "hiker://empty";
