@@ -963,7 +963,8 @@ function dianboyiji(testSource) {
                                 url: /pan\.quark\.cn|drive\.uc\.cn/.test(vodurl)?undefined:vodurl,
                                 jsLoadingInject: true,
                                 blockRules: ['.m4a', '.mp3', '.gif', '.jpeg', '.jpg', '.ico', '.png', 'hm.baidu.com', '/ads/*.js', 'cnzz.com'],
-                                videoExcludeRule: ['m3u8.js','?url=']
+                                videoExcludeRule: ['m3u8.js','?url='],
+                                videoRules: jkdata["嗅探词"]?jkdata["嗅探词"].split('#'):undefined
                             }:{
                                 url: vodurl,
                                 pic: vodpic,
