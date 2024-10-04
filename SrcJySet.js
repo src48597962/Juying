@@ -588,6 +588,7 @@ function SRCSet() {
                                                 storage0.putMyVar("checkSourceList", checkSourceList);
                                                 clearMyVar("批量检测_失败列表");
                                                 clearMyVar("批量检测_当前进度");
+                                                clearMyVar("批量检测_复检列表");
                                                 refreshPage(true);
                                                 return "hiker://empty";
                                             }),
