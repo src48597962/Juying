@@ -13,6 +13,8 @@ function getYiData(jkdata, batchTest) {
     let headers = { 'User-Agent': api_ua };
     let vodhost, classurl, listurl, detailurl, listnode, extdata, noerji, coltype;
     let page = batchTest?1:MY_PAGE;
+    let sniffer = {};//嗅探词:contain包含，exclude排除
+
     //分类变量
     let fold = batchTest?"0":getMyVar('SrcJu_dianbo$fold', "0");//是否展开小分类筛选
     let cate_id = batchTest?"":getMyVar('SrcJu_dianbo$分类', '');
@@ -65,6 +67,12 @@ function getYiData(jkdata, batchTest) {
                 listurl = extdata["分类url"] ? /^http/.test(extdata["分类url"]) ? extdata["分类url"] : host + extdata["分类url"] : "";
                 if(extdata["直接播放"]){
                     noerji = 1;
+                }
+                if(extdata["嗅探词"]){
+                    sniffer["contain"] = extdata["嗅探词"].split('#');
+                }
+                if(extdata["过滤词"]){
+                    sniffer["exclude"] = extdata["过滤词"].split('#');
                 }
             } else if (api_type == "XPath") {
                 let host = extdata["homeUrl"] || '';
@@ -677,7 +685,8 @@ function getYiData(jkdata, batchTest) {
         vodlists: vodlists,
         error: error,
         coltype: coltype,
-        listurl: listurl
+        listurl: listurl,
+        sniffer: sniffer
     }
 }
 // 获取搜索数据
