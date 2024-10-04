@@ -918,6 +918,9 @@ function dianboyiji(testSource) {
             let vodlists = yidata.vodlists;
 
             if(vodlists && vodlists.length>0){
+                let sniffer = yidata["sniffer"] || {};
+                let videocontain = sniffer["contain"] || undefined;
+                let videoexclude = sniffer["exclude"] || ['m3u8.js','?url='];
                 vodlists.forEach(list=>{
                     let vodname = list.vod_name;
                     let vodurl = list.vod_url;
@@ -946,7 +949,7 @@ function dianboyiji(testSource) {
                             dataObj.surl = jkdata.url.startsWith('hiker://')?getPath(jkdata.url):jkdata.url;
                             dataObj.sext = jkdata.ext;
                         }
-                        log(jkdata);
+
                         d.push({
                             title: vodname,
                             desc: voddesc.replace(/<\/?.+?\/?>/g,''),
@@ -964,8 +967,8 @@ function dianboyiji(testSource) {
                                 url: /pan\.quark\.cn|drive\.uc\.cn/.test(vodurl)?undefined:vodurl,
                                 jsLoadingInject: true,
                                 blockRules: ['.m4a', '.mp3', '.gif', '.jpeg', '.jpg', '.ico', '.png', 'hm.baidu.com', '/ads/*.js', 'cnzz.com'],
-                                videoExcludeRule: ['m3u8.js','?url='],
-                                videoRules: jkdata["嗅探词"]?jkdata["嗅探词"].split('#'):undefined
+                                videoRules: videocontain,
+                                videoExcludeRules: videoexclude
                             }:{
                                 url: vodurl,
                                 pic: vodpic,
