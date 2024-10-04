@@ -63,6 +63,9 @@ function getYiData(jkdata, batchTest) {
                 classurl = extdata["分类"];
                 extdata["分类url"] = extdata["分类url"] ? extdata["分类url"].split(';;')[0].split('[')[0] : "";
                 listurl = extdata["分类url"] ? /^http/.test(extdata["分类url"]) ? extdata["分类url"] : host + extdata["分类url"] : "";
+                if(extdata["直接播放"]){
+                    noerji = 1;
+                }
             } else if (api_type == "XPath") {
                 let host = extdata["homeUrl"] || '';
                 classurl = host;
@@ -605,7 +608,7 @@ function getYiData(jkdata, batchTest) {
                         try {
                             vod_desc = getBetweenStr(item, extdata["副标题"]);
                         } catch (e) { }
-                        let arr = { "vod_url": vod_url, "vod_name": vod_name, "vod_desc": vod_desc, "vod_pic": vod_pic };
+                        let arr = { "vod_url": vod_url, "vod_name": vod_name, "vod_desc": vod_desc, "vod_pic": vod_pic, "vod_play": noerji?vod_url:"" };
                         vodlists.push(arr);
                     }
                 })
