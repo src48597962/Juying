@@ -1297,6 +1297,21 @@ function yiji() {
         }),
         col_type: 'scroll_button'
     });
+    /*
+    d.push({
+        title: "🔍"+(getItem('historyEnable')=='1'?"关":"开")+"观看记录",
+        url: $('#noLoading#').lazyRule(() => {
+            if(getItem('historyEnable')=='1'){
+                clearItem('historyEnable');
+            }else{
+                setItem('historyEnable','1');
+            }
+            refreshPage(false);
+            return "toast://已切换"
+        }),
+        col_type: 'scroll_button'
+    });
+    */
     d.push({
         col_type: "blank_block"
     });
