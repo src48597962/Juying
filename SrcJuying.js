@@ -946,7 +946,7 @@ function dianboyiji(testSource) {
                             dataObj.surl = jkdata.url.startsWith('hiker://')?getPath(jkdata.url):jkdata.url;
                             dataObj.sext = jkdata.ext;
                         }
-                        log(jkdata["嗅探词"]);
+                        log(jkdata);
                         d.push({
                             title: vodname,
                             desc: voddesc.replace(/<\/?.+?\/?>/g,''),
