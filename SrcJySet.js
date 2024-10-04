@@ -530,33 +530,35 @@ function SRCSet() {
                                 clearMyVar("批量检测_中止线程");
                                 
                                 if(!getMyVar("批量检测_退出页面")){
-                                    addItemAfter("testSource2", {
-                                        title: "批量删除失效",
-                                        url: $("#noLoading#").lazyRule((failnum) => {
-                                            return $("确认要删除失败"+failnum+"个接口？").confirm(()=>{
-                                                let failSourceList = storage0.getMyVar("批量检测_失败列表") || [];
-                                                let checkSourceList = storage0.getMyVar("checkSourceList") || [];
-                                                failSourceList.forEach(it=>{
-                                                    let index = checkSourceList.indexOf(checkSourceList.filter(d => it.url==d.url )[0]);
-                                                    checkSourceList.splice(index, 1);
-                                                    deleteItem("failSource-" + it.url);
+                                    if(failSourceList.length>0){
+                                        addItemAfter("testSource2", {
+                                            title: "批量删除失效",
+                                            url: $("#noLoading#").lazyRule((failnum) => {
+                                                return $("确认要删除失败"+failnum+"个接口？").confirm(()=>{
+                                                    let failSourceList = storage0.getMyVar("批量检测_失败列表") || [];
+                                                    let checkSourceList = storage0.getMyVar("checkSourceList") || [];
+                                                    failSourceList.forEach(it=>{
+                                                        let index = checkSourceList.indexOf(checkSourceList.filter(d => it.url==d.url )[0]);
+                                                        checkSourceList.splice(index, 1);
+                                                        deleteItem("failSource-" + it.url);
+                                                    })
+                                                    storage0.putMyVar("checkSourceList",checkSourceList);
+
+                                                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                                                    deleteData("jk", failSourceList);
+                                                    clearMyVar("批量检测_失败列表");
+                                                    deleteItem("deleteAllFail");
+                                                    return "toast://已批量删除";
                                                 })
-                                                storage0.putMyVar("checkSourceList",checkSourceList);
-
-                                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
-                                                deleteData("jk", failSourceList);
-                                                clearMyVar("批量检测_失败列表");
-                                                deleteItem("deleteAllFail");
-                                                return "toast://已批量删除";
-                                            })
-                                        },failSourceList.length),
-                                        col_type : "text_center_1",
-                                        extra: {
-                                            id: "deleteAllFail"
-                                        }
-                                    })
-
-                                    storage0.putMyVar("批量检测_失败列表", failSourceList);
+                                            },failSourceList.length),
+                                            col_type : "text_center_1",
+                                            extra: {
+                                                id: "deleteAllFail"
+                                            }
+                                        })
+                                        storage0.putMyVar("批量检测_失败列表", failSourceList);
+                                    }
+                                    
                                     storage0.putMyVar("checkSourceList",checkSourceList);
                                     updateItem("testSource", {
                                         desc: "",
@@ -566,6 +568,7 @@ function SRCSet() {
                                     if(schedule=="3"){
                                         putMyVar("批量检测_当前进度","0");
                                         updateItem("schedule_er", {title:"👌二级选集"});
+
                                         addItemAfter("testSource2", {
                                             title: "针对失败源进行复检",
                                             url: $("#noLoading#").lazyRule(() => {
@@ -577,18 +580,25 @@ function SRCSet() {
                                                     }
                                                 })
                                                 let checkSourceList = storage0.getMyVar("checkSourceList") || [];
-                                                checkSourceList = checkSourceList.filter(v=recheckList.indexOf(v.url)>-1);
+                                                checkSourceList = checkSourceList.filter(v=>recheckList.indexOf(v.url)>-1);
+                                                if(checkSourceList.length==0){
+                                                    deleteItem("recheckSource");
+                                                    return "toast://没有需复检的源";
+                                                }
                                                 storage0.putMyVar("checkSourceList", checkSourceList);
                                                 clearMyVar("批量检测_失败列表");
                                                 clearMyVar("批量检测_当前进度");
                                                 refreshPage(true);
                                                 return "hiker://empty";
                                             }),
-                                            col_type : "text_center_1"
+                                            col_type : "text_center_1",
+                                            extra: {
+                                                id: "recheckSource"
+                                            }
                                         })
                                     }else{
                                         addItemAfter("testSource2", {
-                                            title: "先进行下一项检测，最后再进行复检",
+                                            title: "进行下一项检测",
                                             url: $("#noLoading#").lazyRule(() => {
                                                 let schedule = getMyVar("批量检测_当前进度","1");
                                                 if(schedule=="1"){
