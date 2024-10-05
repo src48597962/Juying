@@ -384,14 +384,11 @@ function getSearchLists(group) {
         });
     }else{
         let filter = getItem('主页搜索接口范围', '');
-        log(filter);
-        log(datalist.length);
         if(filter){
             datalist = datalist.filter(it=>{
-                return filter.includes('[') ? it.name.includes(it) : filter==(it.group||it.type);
+                return filter.includes('[') ? it.name.includes(filter) : filter==(it.group||it.type);
             })
         }
-        log(datalist.length);
         return datalist;
     }
 }
