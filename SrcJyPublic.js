@@ -525,7 +525,7 @@ function clearJkSort() {
 // 获取接口对应的显示标题
 function getDataTitle(data) {
     if($.type(data.type)=="string"){
-        return data.name + '  ““””<small><font color=grey>('+data.type+')' + (data.group&&data.group!=data.type?' [' + data.group + ']':'') + '</font></small>';
+        return data.name + '  <small><font color=grey>('+data.type+')' + (data.group&&data.group!=data.type?' [' + data.group + ']':'') + '</font></small>';
     }else{
         return (data.sort||0) + '-'+data.name + '-' + data.url;
     }
@@ -542,7 +542,7 @@ function duoselect(datas){
     datalist.forEach(data=>{
         if(!duoselect.some(item => data.url==item.url)){
             duoselect.push(data);
-            updateItem(data.url, {title:'‘‘’’'+colorTitle(getDataTitle(data),'#3CB371')});
+            updateItem(data.url, {title: colorTitle(getDataTitle(data),'#3CB371')});
         }else{
             for(var i = 0; i < duoselect.length; i++) {
                 if(data.url == duoselect[i].url) {
@@ -550,7 +550,7 @@ function duoselect(datas){
                     break;
                 }
             }
-            updateItem(data.url, {title:data.stop?`‘‘’’`+colorTitle(getDataTitle(data),'#f20c00'):getDataTitle(data)});
+            updateItem(data.url, {title:data.stop?colorTitle(getDataTitle(data),'#f20c00'):getDataTitle(data)});
         }
     })
     storage0.putMyVar('SrcJu_duoselect',duoselect);
@@ -762,7 +762,7 @@ function getapitype(apiurl) {
 }
 // 文字上色
 function colorTitle(title, Color) {
-    return '<font color="' + Color + '">' + title + '</font>';
+    return '““””<font color="' + Color + '">' + title + '</font>';
 }
 // 选中状态标识
 function getide(is) {
