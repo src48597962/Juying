@@ -1310,7 +1310,7 @@ function yiji() {
             let groupNames = getJiekouGroups(datalist);
             groupNames.unshift("全部");
             let selectkeys = getJkTags(datalist);
-            groupNames.concat(selectkeys);
+            groupNames = groupNames.concat(selectkeys);
             return $(groupNames, 3).select(() => {
                 if(input=='全部'){
                     clearItem('主页搜索接口范围');
