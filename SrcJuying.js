@@ -1431,9 +1431,18 @@ function yiji() {
         });
     })
 
-
     deleteItemByCls("loading_gif");
     setResult(d);
+
+    //一些自动检查调用在首页加截后，间隔24小时
+    let nowtime = Date.now();
+    let oldtime = parseInt(getItem('startChecktime','0').replace('time',''));
+    if (!getMyVar('startCheck') && nowtime > (oldtime+24*60*60*1000)) {
+        clearJkSort(); //清理历史接口排序信息
+        clearJkFiles(); //清理接口残留文件
+        setItem('startChecktime', nowtime+'time');
+        putMyVar('startCheck', 1);
+    }
 }
 
 // 下载必要图标
@@ -1444,7 +1453,7 @@ function downloadicon() {
 }
 // 版本检测
 function Version() {
-    var nowVersion = getItem('Version', "7.9");//现在版本 
+    var nowVersion = getItem('Version', "0.1");//现在版本 
     var nowtime = Date.now();
     var oldtime = parseInt(getItem('VersionChecktime','0').replace('time',''));
     if (nowtime > (oldtime+24*60*60*1000)) {
