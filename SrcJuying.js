@@ -1302,21 +1302,27 @@ function yiji() {
         }),
         col_type: 'scroll_button'
     });
-    /*
     d.push({
-        title: "🔍"+(getItem('historyEnable')=='1'?"关":"开")+"观看记录",
+        title: "🔍搜索接口",
         url: $('#noLoading#').lazyRule(() => {
-            if(getItem('historyEnable')=='1'){
-                clearItem('historyEnable');
-            }else{
-                setItem('historyEnable','1');
-            }
-            refreshPage(false);
-            return "toast://已切换"
+            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+            let datalist = getDatas("jk", 1);
+            let groupNames = getJiekouGroups(datalist);
+            groupNames.unshift("全部");
+            let selectkeys = getJkTags(datalist);
+            groupNames.concat(selectkeys);
+            return $(groupNames, 3).select(() => {
+                if(input=='全部'){
+                    clearItem('主页搜索接口范围');
+                }else{
+                    setItem('主页搜索接口范围', input);
+                }
+                refreshPage(false);
+                return "toast://已切换"
+            })
         }),
         col_type: 'scroll_button'
     });
-    */
     d.push({
         col_type: "blank_block"
     });
