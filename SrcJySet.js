@@ -2424,17 +2424,6 @@ function resource() {
 
                 if(importtype=="4"){//扫描本地js文件夹
                     showLoading("正在扫描本地文件夹");
-                    function readDir(path) {
-                        let names = [];
-                        let file = new java.io.File(path.replace("file://", ""));
-
-                        if (!(file.exists() && file.isDirectory())) return names;
-                        for (let it of file.listFiles()) {
-                            names.push(String(it.getName()));
-                        }
-                        return names;
-                    }
-
                     let oldfiles = getDatas("jk").filter(v=>v.type=="hipy_t3" && v.url.startsWith(datapath)).map(v=>v.url);
                     let newfiles = readDir(input).filter(v=>v.endsWith('.js') && !v.includes('[合]') && oldfiles.filter(o=>o.includes(v)).length==0).map(v=>input+v);
                     hideLoading();
