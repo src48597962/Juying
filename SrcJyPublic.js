@@ -384,12 +384,15 @@ function getSearchLists(group) {
         });
     }else{
         let filter = getItem('主页搜索接口范围', '');
+        log(filter);
+        log(datalist.length);
         if(filter){
             datalist = datalist.filter(it=>{
                 return filter.includes('[') ? it.name.includes(it) : filter==(it.group||it.type);
             })
         }
-         return datalist;
+        log(datalist.length);
+        return datalist;
     }
 }
 //获取接口分组名arry
