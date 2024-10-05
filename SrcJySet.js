@@ -245,6 +245,14 @@ function SRCSet() {
                         let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
                         if(duoselect.length>0){
                             return $("","选定的"+duoselect.length+"个接口新分组名").input((duoselect)=>{
+                                input = input.trim();
+                                if(input==""){
+                                    return "hiker://empty";
+                                }else if(input=="全部"){
+                                    return "toast://分组名不能为：全部";
+                                }else if(input.includes('[') || input.includes(']')){
+                                    return "toast://分组名不能包含：[]";
+                                }
                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                                 var filepath = getFile(getMyVar('guanli', 'jk'));
                                 var datafile = fetch(filepath);
@@ -1064,6 +1072,14 @@ function jiekou(data) {
         url: $(groupNames, 2, "选择分组").select(() => {
             if(input=="自定义"){
                 return $(getMyVar('apigroup', ''), "输入分组名称，为空则取类型").input(() => {
+                    input = input.trim();
+                    if(input==""){
+                        return "hiker://empty";
+                    }else if(input=="全部"){
+                        return "toast://分组名不能为：全部";
+                    }else if(input.includes('[') || input.includes(']')){
+                        return "toast://分组名不能包含：[]";
+                    }
                     putMyVar('apigroup', input);
                     refreshPage(false);
                     return 'toast://分组已设置为：' + input;
