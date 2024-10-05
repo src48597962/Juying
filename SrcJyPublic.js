@@ -452,7 +452,7 @@ function dataHandle(lx, data, input) {
             datalist[index].stop = 1;
         }else if(input == "启用"){
             delete datalist[index].stop;
-        }else if(lx=="jx" && input == "置顶"){
+        }else if(lx=="jk" && input == "置顶"){
             const [target] = datalist.splice(index, 1);
             datalist.unshift(target);
         }
