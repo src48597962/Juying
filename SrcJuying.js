@@ -1217,7 +1217,7 @@ function yiji() {
         storage0.setItem('searchrecord', recordlist);
         return "hiker://search?rule=" + MY_RULE.title + "&s=" + input;
     });
-
+    let filterJk = getItem('主页搜索接口范围','');
     d.push({
         title: "搜索",
         url: $.toString((searchurl) => {
@@ -1235,7 +1235,7 @@ function yiji() {
                 return input + searchurl;
             }
         },searchurl),
-        desc: "搜你想看的...",
+        desc: "搜索接口范围，" + (filterJk==""?"全部接口":filterJk.includes('[')?"TAG:"+filterJk:"分组："+filterJk),
         col_type: "input",
         extra: {
             titleVisible: true,
