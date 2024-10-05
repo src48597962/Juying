@@ -286,9 +286,9 @@ function SRCSet() {
                     }
                     return $("确定要禁用选择的"+duoselect.length+"个接口？").confirm((duoselect)=>{
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
-                        dataEnable(getMyVar('guanli', 'jk'), duoselect, '禁用');
+                        let sm = dataHandle(getMyVar('guanli', 'jk'), duoselect, '禁用');
                         refreshPage(false);
-                        return 'toast://已禁用选择';
+                        return 'toast://' + sm;
                     },duoselect)
                 }),
                 col_type: 'scroll_button'
@@ -302,9 +302,9 @@ function SRCSet() {
                     }
                     return $("确定要启用选择的"+duoselect.length+"个接口？").confirm((duoselect)=>{
                         require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
-                        dataEnable(getMyVar('guanli', 'jk'), duoselect, '启用');
+                        let sm = dataHandle(getMyVar('guanli', 'jk'), duoselect, '启用');
                         refreshPage(false);
-                        return 'toast://已启用选择';
+                        return 'toast://' + sm;
                     },duoselect)
                 }),
                 col_type: 'scroll_button'
@@ -468,7 +468,7 @@ function SRCSet() {
                                                                 }
                                                                 deleteItem("failSource-" + data.url);
                                                                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
-                                                                let sm = dataEnable('jk', data, "禁用");
+                                                                let sm = dataHandle('jk', data, "禁用");
                                                                 return "toast://" + sm;
                                                             }, data)
                                                         },{
@@ -708,7 +708,7 @@ function SRCSet() {
         let selectmenu,datatitle,datadesc;
         if(guanliType=="jk"){
             datadesc = it.url;
-            selectmenu = ["分享","编辑", "删除", it.stop?"启用":"禁用", "测试"];
+            selectmenu = ["分享","编辑", "删除", it.stop?"启用":"禁用", "置顶", "测试"];
         }else{
             datadesc = it.ext&&it.ext.flag?it.ext.flag.join(','):"";
             selectmenu = ["分享","编辑", "删除", it.stop?"启用":"禁用"];
@@ -743,17 +743,17 @@ function SRCSet() {
                         refreshPage(false);
                         return 'toast://已删除:'+data.name;
                     }, data)
-                } else if (input == "禁用" || input == "启用" ) {
-                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
-                    let sm = dataEnable(getMyVar('guanli', 'jk'), data, input);
-                    refreshPage(false);
-                    return 'toast://' + sm;
                 } else if (input == "测试") {
                     return $("hiker://empty#noRecordHistory##noHistory#").rule((data) => {
                         setPageTitle(data.name+"-接口测试");
                         require(config.依赖);
                         dianboyiji(data);
                     }, data);
+                } else {//置顶、禁用、启用
+                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                    let sm = dataHandle(getMyVar('guanli', 'jk'), data, input);
+                    refreshPage(false);
+                    return 'toast://' + sm;
                 }
             }, base64Encode(JSON.stringify(it))),
             desc: datadesc,
