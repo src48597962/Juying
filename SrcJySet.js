@@ -2421,7 +2421,6 @@ function resource() {
                 }
 
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
-                clearJkSort(); //清理历史接口排序信息
 
                 if(importtype=="4"){//扫描本地js文件夹
                     showLoading("正在扫描本地文件夹");
