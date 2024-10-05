@@ -383,14 +383,13 @@ function getSearchLists(group) {
             return group==(it.group||it.type);
         });
     }else{
-        let preferrlist = datalist.filter(it=>{
-            return it.preferr;
-        });
-        if(preferrlist.length>0){
-            return preferrlist;
-        }else{
-            return datalist;//.slice(0, 50);
+        let filter = getItem('主页搜索接口范围', '');
+        if(filter){
+            datalist = datalist.filter(it=>{
+                return filter.includes('[') ? it.name.includes(it) : filter==(it.group||it.type);
+            })
         }
+         return datalist;
     }
 }
 //获取接口分组名arry
@@ -477,13 +476,7 @@ function dataHandle(lx, data, input) {
     
     waitlist.forEach(it => {
         let index = datalist.indexOf(datalist.filter(d => it.url==d.url)[0]);
-        if(lx=="jk" && input=="接口优选"){
-            if(datalist[index].preferr){
-                delete datalist[index].preferr;
-            }else{
-                datalist[index].preferr = 1;
-            }
-        }else if(lx=="jx" && input=="重置排序"){
+        if(lx=="jx" && input=="重置排序"){
             datalist[index].sort = 0;
         }
     })
@@ -532,7 +525,7 @@ function clearJkSort() {
 // 获取接口对应的显示标题
 function getDataTitle(data) {
     if($.type(data.type)=="string"){
-        return data.name + ' ('+data.type+')' + (data.group&&data.group!=data.type?' [' + data.group + ']':"") + (data.preferr?" ⭐":"");
+        return data.name + ' ('+data.type+')' + (data.group&&data.group!=data.type?' [' + data.group + ']':"");
     }else{
         return (data.sort||0) + '-'+data.name + '-' + data.url;
     }
