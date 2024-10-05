@@ -750,6 +750,9 @@ function SRCSet() {
                         dianboyiji(data);
                     }, data);
                 } else {//置顶、禁用、启用
+                    if(input == "置顶" && getItem("sourceListSort", "更新时间") != "更新时间"){
+                        return "toast://无效操作，接口列表排序方式为：" + getItem("sourceListSort");
+                    }
                     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
                     let sm = dataHandle(getMyVar('guanli', 'jk'), data, input);
                     refreshPage(false);
