@@ -1175,13 +1175,7 @@ function yiji() {
         yijimenu.forEach((item)=>{
             d.push(item);
         })
-        /*
-        for (let i = 0; i < 5; i++) {
-            d.push({
-                col_type: "blank_block"
-            })
-        }
-        */
+
         if (typeof(setPreResult)!="undefined" && getMyVar('动态加载loading')!='1') {
             d.push({
                 title: "",
@@ -1235,7 +1229,7 @@ function yiji() {
                 return input + searchurl;
             }
         },searchurl),
-        desc: "搜索接口范围，" + (filterJk==""?"全部接口":filterJk.includes('[')?"TAG:"+filterJk:"分组："+filterJk),
+        desc: "搜索接口范围，" + (filterJk==""?"全部接口":filterJk.includes('[')?"TAG："+filterJk:"分组："+filterJk),
         col_type: "input",
         extra: {
             titleVisible: true,
