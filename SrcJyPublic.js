@@ -454,7 +454,7 @@ function dataHandle(lx, data, input) {
             delete datalist[index].stop;
         }else if(lx=="jk" && input == "置顶"){
             const [target] = datalist.splice(index, 1);
-            datalist.unshift(target);
+            datalist.push(target);
         }
     })
     writeFile(sourcefile, JSON.stringify(datalist));
