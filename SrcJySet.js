@@ -716,7 +716,7 @@ function SRCSet() {
         datatitle = getDataTitle(it);
 
         d.push({
-            title: it.stop?'‘‘’’'+colorTitle(datatitle,'#f20c00'):datatitle,
+            title: it.stop?colorTitle(datatitle, '#f20c00'):datatitle,
             url: getMyVar('SrcJu_批量选择模式')?$('#noLoading#').lazyRule((data) => {
                 data = JSON.parse(base64Decode(data));
                 require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
@@ -773,8 +773,8 @@ function SRCSet() {
         let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
         if(duoselect.length>0){
             duoselect.forEach(data=>{
-                updateItem(data.url, {title:'‘‘’’'+colorTitle(getDataTitle(data),'#3CB371')});
-            })
+                updateItem(data.url, {title: colorTitle(getDataTitle(data), '#3CB371')});
+            }) 
         }
     }
 }
