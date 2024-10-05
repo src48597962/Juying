@@ -525,7 +525,7 @@ function clearJkSort() {
 // 获取接口对应的显示标题
 function getDataTitle(data) {
     if($.type(data.type)=="string"){
-        return data.name + ' ('+data.type+')' + (data.group&&data.group!=data.type?' [' + data.group + ']':"");
+        return data.name + '  ““””<small><font color=grey>('+data.type+')' + (data.group&&data.group!=data.type?' [' + data.group + ']':'') + '</font></small>';
     }else{
         return (data.sort||0) + '-'+data.name + '-' + data.url;
     }
