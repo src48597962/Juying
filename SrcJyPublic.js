@@ -522,6 +522,30 @@ function clearJkSort() {
     })
     writeFile(sortfile, JSON.stringify(sort));
 }
+// 读取目录路径下文件输入数组
+function readDir(path) {
+    let names = [];
+    let file = new java.io.File(path.replace("file://", ""));
+
+    if (!(file.exists() && file.isDirectory())) return names;
+    for (let it of file.listFiles()) {
+        names.push(String(it.getName()));
+    }
+    return names;
+}
+// 清理接口残留过期文件
+function clearJkFiles() {
+    /*
+    let datalist = getDatas("jk");
+    readDir("libs_jk/")
+    Object.keys(sort).forEach(it=>{
+        if(!datalist.some(item => item.url==it)){
+            delete sort[it];
+        }
+    })
+    writeFile(sortfile, JSON.stringify(sort));
+    */
+}
 // 获取接口对应的显示标题
 function getDataTitle(data) {
     if($.type(data.type)=="string"){
