@@ -431,36 +431,6 @@ function deleteData(lx, data){
     }
     clearMyVar('SrcJu_duoselect');
 }
-//接口禁用启用
-function dataEnable(lx, data, input) {
-    let sourcefile = getFile(lx);
-    let sourcedata = fetch(sourcefile);
-    eval("let datalist=" + sourcedata + ";");
-
-    let waitlist= [];
-    if($.type(data)=='object'){
-        waitlist.push(data);
-    }else if($.type(data)=='array'){
-        waitlist = data;
-    }
-    let sm;
-    waitlist.forEach(it => {
-        let index = datalist.indexOf(datalist.filter(d => it.url==d.url)[0]);
-        if(input == "禁用"){
-            datalist[index].stop = 1;
-            sm = waitlist.length==1?'已禁用：'+it.name:'已禁用所选的'+waitlist.length+'个';
-        }else{
-            delete datalist[index].stop;
-            sm = waitlist.length==1?'已启用：'+it.name:'已启用所选的'+waitlist.length+'个';
-        }
-    })
-    writeFile(sourcefile, JSON.stringify(datalist));
-    if(lx='jk'){
-        clearMyVar('SrcJu_searchMark');
-    }
-    clearMyVar('SrcJu_duoselect');
-    return sm;
-}
 // 接口/解析处理公共方法
 function dataHandle(lx, data, input) {
     let sourcefile = getFile(lx);
@@ -475,12 +445,22 @@ function dataHandle(lx, data, input) {
     }
     
     waitlist.forEach(it => {
-        let index = datalist.indexOf(datalist.filter(d => it.url==d.url)[0]);
+        let index = datalist.findIndex(item => item.url === it.url);
         if(lx=="jx" && input=="重置排序"){
             datalist[index].sort = 0;
+        }else if(input == "禁用"){
+            datalist[index].stop = 1;
+        }else if(input == "启用"){
+            delete datalist[index].stop;
+        }else if(lx=="jx" && input == "置顶"){
+            const [target] = datalist.splice(index, 1);
+            datalist.unshift(target);
         }
     })
     writeFile(sourcefile, JSON.stringify(datalist));
+    if(lx='jk'){
+        clearMyVar('SrcJu_searchMark');
+    }
     clearMyVar('SrcJu_duoselect');
     return input + '：已处理' + waitlist.length + '个';
 }
