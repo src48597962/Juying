@@ -36,8 +36,12 @@ if(fileExist(datapath + "live.txt")){
 }
 if(fileExist(datapath+"libs_jk")){
     log("目录存在：" + datapath+"libs_jk");
+}else{
+    log("目录不存在：" + datapath+"libs_jk");
 }
 if(fileExist(datapath+"libs")){
+    log("目录存在：" + datapath+"libs");
+}else{
     log("目录不存在：" + datapath+"libs");
 }
 
