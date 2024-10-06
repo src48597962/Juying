@@ -9,7 +9,7 @@ let cfgfile = rulepath + "config.json";
 let sortfile = rulepath + "jksort.json";
 let codepath = config.依赖?config.依赖.match(/http(s)?:\/\/.*\//)[0]:module.modulePath.slice(0, module.modulePath.lastIndexOf("/")+1);
 let gzip = $.require(codepath + "plugins/gzip.js");
-
+//临时处理将相关文件转换位置，以后可以删除
 if(fileExist(datapath + "jiexi.json")){
     if(!fileExist(jxfile)){
         writeFile(jxfile, fetch(datapath + "jiexi.json"));
@@ -33,6 +33,12 @@ if(fileExist(datapath + "live.txt")){
         writeFile(tvfile, fetch(datapath + "live.txt"));
     }
     deleteFile(datapath + "live.txt");
+}
+if(fileExist(datapath+"libs_jk")){
+    log("目录存在：" + datapath+"libs_jk");
+}
+if(fileExist(datapath+"libs")){
+    log("目录不存在：" + datapath+"libs");
 }
 
 let Juconfig= {};
