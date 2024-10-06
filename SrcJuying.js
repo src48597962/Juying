@@ -799,7 +799,24 @@ function dianboyiji(testSource) {
                 }
             }),
             pic_url: getIcon("点播-设置.svg"),
-            col_type: "icon_3_round_fill"
+            col_type: "icon_3_round_fill",
+            extra: {
+                longClick: [{
+                    title: "切换列表样式",
+                    js: $.toString(() => {
+                        let sm;
+                        if(getItem("点播一级样式")){
+                            clearItem("点播一级样式");
+                            sm = "movie_3";
+                        }else{
+                            setItem("点播一级样式", "movie_3_marquee");
+                            sm = "movie_3_marquee";
+                        }
+                        refreshPage(false);
+                        return "toast://已切换为" + sm;
+                    })
+                }]
+            }
         })
 
         if(!sname){
@@ -921,6 +938,7 @@ function dianboyiji(testSource) {
                 let sniffer = yidata["sniffer"] || {};
                 let videocontain = sniffer["contain"] || undefined;
                 let videoexclude = sniffer["exclude"] || ['m3u8.js','?url='];
+                let video_col_type = getItem("点播一级样式", "movie_3");
                 vodlists.forEach(list=>{
                     let vodname = list.vod_name;
                     let vodurl = list.vod_url;
@@ -961,7 +979,7 @@ function dianboyiji(testSource) {
                                 require(config.依赖);
                                 dianboerji()
                             }),
-                            col_type: yidata.coltype || 'movie_3',
+                            col_type: yidata.coltype || video_col_type,
                             extra: list.vod_play?{
                                 id: vodurl,
                                 url: /pan\.quark\.cn|drive\.uc\.cn/.test(vodurl)?undefined:vodurl,
