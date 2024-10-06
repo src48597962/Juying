@@ -121,8 +121,8 @@ if(fileExist(datapath+"libs_jk")){
     })
 }
 */
-let java = new com.example.hikerview.utils.FileUtil;
-java.deleteDirs(getPath(rulepath+"data/").replace("file://", ""));
+//let java = new com.example.hikerview.utils.FileUtil;
+//java.deleteDirs(getPath(rulepath+"data/").replace("file://", ""));
 
 // 较验box配置文件
 function checkBoxUrl(input) {
