@@ -147,7 +147,7 @@ function lookset() {
         clearMyVar('playSet');
     }));
     setPageTitle("点播二级观看设置");
-    let recordfile = rulepath + "parse.json";//解析相关记录文件
+    let recordfile = globalMap0.getVar('Jy_gmParams').rulepath + "parse.json";//解析相关记录文件
     let parseRecord = {};
     if(fetch(recordfile)){
         try{
