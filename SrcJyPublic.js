@@ -34,16 +34,6 @@ if(fileExist(datapath + "live.txt")){
     }
     deleteFile(datapath + "live.txt");
 }
-if(fileExist(datapath+"libs_jk")){
-    log("目录存在：" + datapath+"libs_jk");
-}else{
-    log("目录不存在：" + datapath+"libs_jk");
-}
-if(fileExist(datapath+"libs")){
-    log("目录存在：" + datapath+"libs");
-}else{
-    log("目录不存在：" + datapath+"libs");
-}
 
 let Juconfig= {};
 let Jucfg=fetch(cfgfile);
@@ -119,6 +109,17 @@ function getDatas(lx, isyx) {
     let result = withoutStop.concat(withStop);
     return result;
 }
+//临时处理将相关文件转换位置，以后可以删除
+if(fileExist(datapath+"libs_jk")){
+    log("接口数据目录存在旧目录，执行转移");
+    let datalist = getDatas("jk");
+    datalist.forEach(it=>{
+        if(it.url.startsWith(datapath)){
+            writeFile(rulepath+"data/" + it.url.substr(it.url.lastIndexOf('/')+1), fetch(it.url));
+        }
+    })
+}
+
 // 较验box配置文件
 function checkBoxUrl(input) {
     let html;
