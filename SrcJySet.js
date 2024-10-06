@@ -759,7 +759,7 @@ function SRCSet() {
                     return 'toast://' + sm;
                 }
             }, base64Encode(JSON.stringify(it))),
-            desc: datadesc,
+            desc: '““””<small><font color=grey>'+datadesc+'</font></small>',
             col_type: "text_1",
             extra: {
                 id: it.url
