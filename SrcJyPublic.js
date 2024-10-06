@@ -110,7 +110,7 @@ function getDatas(lx, isyx) {
     return result;
 }
 //临时处理将相关文件转换位置，以后可以删除
-
+/*
 if(fileExist(datapath+"libs_jk")){
     log("接口数据目录存在旧目录，执行转移");
     let datalist = getDatas("jk");
@@ -120,9 +120,9 @@ if(fileExist(datapath+"libs_jk")){
         }
     })
 }
-
-//let java = new com.example.hikerview.utils.FileUtil;
-//java.deleteDirs(getPath(rulepath+"data/").replace("file://", ""));
+*/
+let java = new com.example.hikerview.utils.FileUtil;
+java.deleteDirs(getPath(rulepath+"data/").replace("file://", ""));
 
 // 较验box配置文件
 function checkBoxUrl(input) {
