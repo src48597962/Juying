@@ -121,7 +121,7 @@ if(fileExist(datapath+"libs_jk")){
     })
 }
 */
-let java = com.example.hikerview.utils.FileUtil;
+let java = new com.example.hikerview.utils.FileUtil;
 java.deleteDirs(getPath(rulepath+"data/").replace("file://", ""));
 
 // 较验box配置文件
