@@ -110,6 +110,7 @@ function getDatas(lx, isyx) {
     return result;
 }
 //临时处理将相关文件转换位置，以后可以删除
+/*
 if(fileExist(datapath+"libs_jk")){
     log("接口数据目录存在旧目录，执行转移");
     let datalist = getDatas("jk");
@@ -119,6 +120,8 @@ if(fileExist(datapath+"libs_jk")){
         }
     })
 }
+*/
+deleteFile(rulepath+"data/");
 
 // 较验box配置文件
 function checkBoxUrl(input) {
