@@ -146,8 +146,9 @@ function lookset() {
     addListener("onClose", $.toString(() => {
         clearMyVar('playSet');
     }));
+    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
     setPageTitle("点播二级观看设置");
-    let recordfile = globalMap0.getVar('Jy_gmParams').rulepath + "parse.json";//解析相关记录文件
+    let recordfile = rulepath + "parse.json";//解析相关记录文件
     let parseRecord = {};
     if(fetch(recordfile)){
         try{
