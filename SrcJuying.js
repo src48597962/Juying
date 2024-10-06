@@ -805,12 +805,13 @@ function dianboyiji(testSource) {
                     title: "切换列表样式",
                     js: $.toString(() => {
                         let sm;
-                        if(getItem("点播一级样式")){
-                            clearItem("点播一级样式");
-                            sm = "movie_3";
-                        }else{
+                        if(getItem("点播一级样式","")==""){
                             setItem("点播一级样式", "movie_3_marquee");
                             sm = "movie_3_marquee";
+                            
+                        }else{
+                            clearItem("点播一级样式");
+                            sm = "movie_3";
                         }
                         refreshPage(false);
                         return "toast://已切换为" + sm;
