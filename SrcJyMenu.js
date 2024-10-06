@@ -1,5 +1,5 @@
 //本代码仅用于个人学习，请勿用于其他作用，下载后请24小时内删除，代码虽然是公开学习的，但请尊重作者，应留下说明
-require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+let getIcon = globalMap0.getVar('Jy_gmParams').getIcon;
 //二级统一菜单
 function erjimenu(desc,name,group) {
     return [
@@ -405,76 +405,6 @@ function lookset() {
         pic_url: playSet['dmRoute']?getIcon("点播-开.svg"):getIcon("关.svg"),
         col_type: "text_icon"
     });
-    
-    /*
-    d.push({
-        title: (getItem('enabledpush', '') == '1' ? getide(1) : getide(0)) + 'TVBOX推送',
-        url: $('#noLoading#').lazyRule(() => {
-            refreshPage(false);
-            if (getItem('enabledpush', '') == '1') {
-                clearItem('enabledpush');
-                return 'toast://已关闭按钮';
-            } else {
-                setItem('enabledpush', '1');
-                return 'toast://已开启，仅对接口二级有效，非需要请关闭';
-            }
-        }),
-        col_type: "text_1",
-        extra: {
-            lineVisible: false
-        }
-    });
-
-    if (getItem('enabledpush', '') == '1') {
-        try {
-            var boxip = getIP();
-        } catch (e) {
-            var boxip = '0.0.0.0';
-        }
-        d.push({
-            title: getItem('hikertvboxset') ? '参照频道香佬教程，需自行研究' : '推送选集列表，设置接收端ip地址',
-            desc: getItem('hikertvboxset') ? '接收端ip地址：' + getItem('hikertvboxset', '') : '还未设置接收端ip地址',
-            url: "input://" + (getItem('hikertvboxset', '') == '' ? ('http://' + boxip + ':9978') : getItem('hikertvboxset')) + "////TVBOX接收端ip地址.js:setItem('hikertvboxset',input);refreshPage()",
-            col_type: "text_center_1"
-        });
-    }
-    d.push({
-        col_type: "line_blank"
-    });
-    
-    d.push({
-        title: '颜色设置',
-        col_type: "rich_text"
-    });
-    d.push({
-        title: getItem('SrcJy$linecolor1', '') == '' ? '线路选中' : '‘‘’’<font color=' + getItem('SrcJy$linecolor1', '') + '>' + '线路选中' + '</font>',
-        url: $("", "选中的线路名颜色设置").input(() => {
-            setItem('SrcJy$linecolor1', input);
-            refreshPage(false);
-            return "hiker://empty";
-        }),
-        col_type: "text_3"
-    })
-    d.push({
-        title: getItem('SrcJy$linecolor2', '') == '' ? '线路未选' : '‘‘’’<font color=' + getItem('SrcJy$linecolor2', '') + '>' + '线路未选' + '</font>',
-        url: $("", "未选中的线路名颜色设置").input(() => {
-            setItem('SrcJy$linecolor2', input);
-            refreshPage(false);
-            return "hiker://empty";
-        }),
-        col_type: "text_3"
-    })
-    d.push({
-        title: getItem('SrcJy$playcolor', '') == '' ? '选集颜色' : '‘‘’’<font color=' + getItem('SrcJy$playcolor', '') + '>' + '选集颜色' + '</font>',
-        url: $("", "选集列表名称的颜色设置").input(() => {
-            setItem('SrcJy$playcolor', input);
-            refreshPage(false);
-            return "hiker://empty";
-        }),
-        col_type: "text_3"
-    })
-    */
-    
     d.push({
         title: '<br>',
         col_type: 'rich_text'
