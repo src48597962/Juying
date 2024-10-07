@@ -714,7 +714,7 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                 })
             }
             
-            let resoufile = datapath + "resou.json";
+            let resoufile = libspath + "resou.json";
             let Juyingresou = fetch(resoufile);
             let JYresou = {};
             if(Juyingresou != ""){
