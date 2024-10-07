@@ -100,7 +100,7 @@ if(fileExist(libspath+"libs_jk")){
             it.url = newfile;
         }
     })
-    writeFile(sourcefile, JSON.stringify(datalist));
+    writeFile(jkfile, JSON.stringify(datalist));
     let FileUtil = new com.example.hikerview.utils.FileUtil;
     FileUtil.deleteDirs(getPath(libspath+"libs_jk/").replace("file://", ""));
 }
