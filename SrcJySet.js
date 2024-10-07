@@ -840,7 +840,7 @@ function jiekousave(urls, mode) {
 
             if(it.url.startsWith(cachepath)){//缓存的数据文件转到data目录
                 if(fileExist(it.url)){
-                    let urlfile = it.url.replace(cachepath, datapath);
+                    let urlfile = jkfilespath + it.url.substr(it.url.lastIndexOf('/')+1);
                     writeFile(urlfile, fetch(it.url));
                     it.url = urlfile;
                 }else{
@@ -851,12 +851,12 @@ function jiekousave(urls, mode) {
             }else if(/^hiker|^file/.test(it.url) && !fileExist(it.url) && it.ext){
                 if($.type(it.ext)=="string"){//本地数据文件转到data目录
                     if(it.ext.startsWith('file://') && fileExist(it.ext)){
-                        let urlfile = datapath + 'libs_jk/' + it.type + '_' + it.name + '.json';
+                        let urlfile = jkfilespath + it.type + '_' + it.name + '.json';
                         writeFile(urlfile, fetch(it.ext));
                         it.url = urlfile;
                     }
                 }else if($.type(it.ext)=="object"){//对象数据转存到data目录
-                    let urlfile = datapath + 'libs_jk/' + it.type + '_' + it.name + '.json';
+                    let urlfile = jkfilespath + it.type + '_' + it.name + '.json';
                     writeFile(urlfile, JSON.stringify(it.ext));
                     it.url = urlfile;
                 }else{
@@ -1427,7 +1427,7 @@ function jiexi(data) {
                     cls: 'jxtest'
                 }
             })
-            let filepath = globalMap0.getVar('Jy_gmParams').datapath + "testurls.json";
+            let filepath = globalMap0.getVar('Jy_gmParams').libspath + "testurls.json";
             let datafile = fetch(filepath);
             if(datafile != ""){
                 eval("var urls=" + datafile+ ";");
@@ -1479,7 +1479,7 @@ function jiexi(data) {
             addItemBefore('jxline2', {
                 title: '编辑测试',
                 url: $('#noRecordHistory##noHistory#').lazyRule(()=>{
-                    return "editFile://" + globalMap0.getVar('Jy_gmParams').datapath + "testurls.json";
+                    return "editFile://" + globalMap0.getVar('Jy_gmParams').libspath + "testurls.json";
                 }),
                 col_type: "text_3",
                 extra:{
@@ -1752,9 +1752,9 @@ function manageSet(){
             title: '🔝 确定上传',
             url: $().lazyRule((Juconfig,cfgfile) => {
                 let text = {};
-                let datapath = globalMap0.getVar('Jy_gmParams').datapath;
+                let libspath = globalMap0.getVar('Jy_gmParams').libspath;
                 if(getMyVar('uploadjiekou','0')=="1"){
-                    var filepath = datapath + "jiekou.json";
+                    var filepath = libspath + "jiekou.json";
                     var datafile = fetch(filepath);
                     if(datafile==""){
                         var datalist = [];
@@ -2427,7 +2427,7 @@ function resource() {
 
                 if(importtype=="4"){//扫描本地js文件夹
                     showLoading("正在扫描本地文件夹");
-                    let oldfiles = getDatas("jk").filter(v=>v.type=="hipy_t3" && v.url.startsWith(datapath)).map(v=>v.url);
+                    let oldfiles = getDatas("jk").filter(v=>v.type=="hipy_t3" && v.url.startsWith(jkfilespath)).map(v=>v.url);
                     let newfiles = readDir(input).filter(v=>v.endsWith('.js') && !v.includes('[合]') && oldfiles.filter(o=>o.includes(v)).length==0).map(v=>input+v);
                     hideLoading();
                     if(newfiles.length==0){
@@ -2582,7 +2582,6 @@ function HipyImport(input, importmode){
         });
 
         let urls= [];
-        let jkfilepath = datapath + "libs_jk/";
         //多线程处理
         let task = function(obj) {
             let arr = { "name": obj.name.split('.')[0], "type": "hipy_t3", "ext": obj.url}
@@ -2593,7 +2592,7 @@ function HipyImport(input, importmode){
             try{
                 let content = getContnet(obj.url);
                 if (content) {
-                    urlfile = jkfilepath + arr.type + '_' + obj.name;
+                    urlfile = jkfilespath + arr.type + '_' + obj.name;
                     writeFile(urlfile, content);
                 }
             }catch(e){
@@ -2707,14 +2706,14 @@ function JYshare(lx,input,data) {
 
     for(let i=0;i<sharelist.length;i++){
         let it = sharelist[i];
-        if(it.url.startsWith(datapath) && (($.type(it.ext)=="string" && it.ext.startsWith("file")) || !it.ext)){
+        if(it.url.startsWith(jkfilespath) && (($.type(it.ext)=="string" && it.ext.startsWith("file")) || !it.ext)){
             it.extstr = fetch(it.url) || fetch(it.ext.split("?")[0]);
             if(!it.extstr){
                 log(it.name+">未获取到数据文件，剔除分享");
                 sharelist.splice(i,1);
                 i = i - 1;
             }
-        }else if(!it.url.startsWith(datapath) && it.url.startsWith("hiker")){
+        }else if(!it.url.startsWith(jkfilespath) && it.url.startsWith("hiker")){
             log(it.name+">私有路径的数据文件，剔除分享");
             sharelist.splice(i,1);
             i = i - 1;
@@ -3162,7 +3161,7 @@ function yundisksave(datas, mode){
 }
 // 云口令导入确认页
 function importConfirm(jsfile) {
-    let code,name,lx,sm,datalist;
+    let code,name,lx,sm,importdatas,datalist;
     let importfile = "hiker://files/_cache/juying2/cloudimport.txt";
     addListener("onClose", $.toString((importfile) => {
         deleteFile(importfile);
@@ -3193,8 +3192,8 @@ function importConfirm(jsfile) {
         }catch(e){
             toast("聚影：口令有误>"+e.message);
         }
-        datalist = storage0.getMyVar('importConfirm', []);
-        if(datalist.length==0){
+        importdatas = storage0.getMyVar('importConfirm', []);
+        if(importdatas.length==0){
             try{
                 let text;
                 if(/^http|^云/.test(code)){
@@ -3206,8 +3205,8 @@ function importConfirm(jsfile) {
                 }
                 if(text && !/^error/.test(text)){
                     let sharetxt = gzip.unzip(text);
-                    datalist = JSON.parse(sharetxt); 
-                    storage0.putMyVar('importConfirm', datalist);
+                    importdatas = JSON.parse(sharetxt); 
+                    storage0.putMyVar('importConfirm', importdatas);
                 }
             } catch (e) {
                 toast("聚影：无法识别的口令>"+e.message);
@@ -3215,8 +3214,8 @@ function importConfirm(jsfile) {
         }
     }else{
         //js文件导入
-        datalist = storage0.getMyVar('importConfirm', []);
-        if(datalist.length==0){
+        importdatas = storage0.getMyVar('importConfirm', []);
+        if(importdatas.length==0){
             let files = [];
             if($.type(jsfile)=="string"){
                 if(jsfile.startsWith('/')){
@@ -3226,7 +3225,7 @@ function importConfirm(jsfile) {
             }else if($.type(jsfile)=="array"){
                 files = jsfile;
             }
-            datalist = files.map(extfile=>{
+            importdatas = files.map(extfile=>{
                 let name = extfile.substr(extfile.lastIndexOf('/')+1).split(".")[0];
                 let arr = { "name": name, "type": "hipy_t3"};
                 if(arr.name.includes('[搜]')){
@@ -3241,32 +3240,32 @@ function importConfirm(jsfile) {
                 }
                 return arr;
             })
-            storage0.putMyVar('importConfirm', datalist);
+            storage0.putMyVar('importConfirm', importdatas);
         }
         sm = "接口";
         lx = "jk";
     }
     
     //获取现有接口
-    let datas = [];
+    datalist = [];
     let sourcefile = getFile(lx);
     let sourcedata = fetch(sourcefile);
     if(sourcedata != ""){
         try{
-            eval("datas = " + sourcedata+ ";");
+            eval("datalist = " + sourcedata+ ";");
         }catch(e){}
     }
-    let ndatalist = [];
-    datalist.forEach(it=>{
-        if(!datas.some(v=>v.url==it.url || v.url==it.url.replace(cachepath, datapath))){
-            ndatalist.push(it);
+    let newdatas = [];
+    importdatas.forEach(it=>{
+        if(!datalist.some(v=>v.url==it.url)){// || v.url==jkfilespath+it.url.substr(it.url.lastIndexOf('/')+1)
+            newdatas.push(it);
         }
     })
-    let oldnum = datalist.length - ndatalist.length;
+    let oldnum = importdatas.length - newdatas.length;
     let d = [];
     d.push({
         title: "聚影云口令导入",
-        desc: (sm||"") + " 共计" + datalist.length + "/新增" + ndatalist.length + "/存在" + oldnum ,
+        desc: (sm||"") + " 共计" + importdatas.length + "/新增" + newdatas.length + "/存在" + oldnum ,
         url: "hiker://empty",
         col_type: 'text_center_1'
     });
@@ -3319,8 +3318,8 @@ function importConfirm(jsfile) {
         col_type: 'icon_small_3'
     });
 
-    datalist.forEach(it=>{
-        let isnew = ndatalist.some(v=>v.url==it.url);
+    importdatas.forEach(it=>{
+        let isnew = newdatas.some(v=>v.url==it.url);
         let datamenu = ["确定导入", "修改名称"];
         if(lx=="jk"){
             datamenu.push("设定分组");
