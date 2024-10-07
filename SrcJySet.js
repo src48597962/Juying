@@ -609,7 +609,7 @@ function SRCSet() {
                                     }else{
                                         addItemAfter("testSource2", {
                                             title: "进行下一项检测",
-                                            url: $("#noLoading#").lazyRule((checkFailSource) => {
+                                            url: $("#noLoading#").lazyRule(() => {
                                                 let schedule = getMyVar("批量检测_当前进度","1");
                                                 if(schedule=="1"){
                                                     putMyVar("批量检测_当前进度","2");
@@ -625,17 +625,9 @@ function SRCSet() {
                                                 })
                                                 storage0.putMyVar("批量检测_复检列表", recheckList);
                                                 clearMyVar("批量检测_失败列表");
-                                                let checkSourceList = storage0.getMyVar("checkSourceList") || [];
-                                                checkSourceList = checkSourceList.filter(v=>recheckList.indexOf(v.url)==-1);
-                                                storage0.putMyVar("checkSourceList", checkSourceList);
-                                                if(checkSourceList.length==0){
-                                                    addItemAfter("testSource2", checkFailSource);
-                                                    deleteItem("nextCheck");
-                                                    return "toast://全部失败，无法下一步";
-                                                }
                                                 refreshPage(true);
                                                 return "hiker://empty";
-                                            }, checkFailSource),
+                                            }),
                                             col_type : "text_center_1",
                                             extra: {
                                                 id: "nextCheck"
