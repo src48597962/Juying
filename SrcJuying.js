@@ -654,7 +654,7 @@ function dianboerji() {
     }
     if(updateParams){
         //保存换源数据进MY_PARAMS
-        if(sextra.url && sextra.url!=MY_PARAMS.url){
+        if(sextra.url && (sextra.url!=MY_PARAMS.url || MY_PARAMS.data.url!=jkdata.url)){
             setPageParams({
                 url: sextra.url,
                 pic: pic,
