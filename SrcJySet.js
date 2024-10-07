@@ -1201,7 +1201,7 @@ function jiekou(data) {
                 let extfile;
                 if(/XPath|biubiu|XBPQ|XYQ|hipy_t3/.test(apitype) && /^http|^file/.test(apiurl)){
                     extfile = apiurl;
-                    urlfile = cachepath+'libs_jk/'+apitype+"_"+extfile.substr(extfile.lastIndexOf('/') + 1);
+                    urlfile = cachepath+apitype+"_"+extfile.substr(extfile.lastIndexOf('/') + 1);
                     if(extfile){
                         let contnet = getContnet(extfile);
                         if(contnet){
@@ -1280,7 +1280,7 @@ function jiekou(data) {
                     let extfile;
                     if(/XPath|biubiu|XBPQ|XYQ|hipy_t3/.test(apitype) && /^http|^file/.test(apiurl)){
                         extfile = apiurl;
-                        urlfile = cachepath+'libs_jk/'+apitype+"_"+extfile.substr(extfile.lastIndexOf('/') + 1);
+                        urlfile = cachepath+apitype+"_"+extfile.substr(extfile.lastIndexOf('/') + 1);
                     }
                     let arr = {"name": apiname, "type": apitype, "url": urlfile};
                     let apigroup = getMyVar('apigroup');
@@ -3236,7 +3236,7 @@ function importConfirm(jsfile) {
                 if(arr.name.includes('[搜]')){
                     arr['onlysearch'] = 1;
                 }
-                let filepath = cachepath + 'libs_jk/' + arr.type;
+                let filepath = cachepath + arr.type;
                 let urlfile = filepath + '_' + extfile.substr(extfile.lastIndexOf('/')+1);
                 arr['url'] = urlfile;
                 writeFile(urlfile, fetch(extfile));
