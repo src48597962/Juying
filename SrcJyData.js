@@ -1545,6 +1545,8 @@ function extDataCache(jkdata) {
             //log("数据文件不存在?");
             if(!fileExist(jkfile)){
                 jkdata.url = cachepath + "jiekou/" + jkdata.url.substr(jkdata.url.lastIndexOf('/')+1);
+            }else if(jkdata.url.startsWith(libspath)){
+                jkdata.url = jkfilespath + jkdata.url.substr(jkdata.url.lastIndexOf('/')+1);
             }
             if ($.type(jkdata.ext)=='string' && /^http|^file/.test(jkdata.ext)) {
                 let content = getContnet(jkdata.ext);
