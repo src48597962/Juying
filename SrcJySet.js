@@ -3267,7 +3267,7 @@ function importConfirm(jsfile) {
     }
     let newdatas = [];
     importdatas.forEach(it=>{
-        if(!datalist.some(v=>v.url==it.url)){// || v.url==jkfilespath+it.url.substr(it.url.lastIndexOf('/')+1)
+        if(!datalist.some(v=>v.url==it.url || v.url==jkfilespath+it.url.substr(it.url.lastIndexOf('/')+1))){
             newdatas.push(it);
         }
     })
