@@ -216,7 +216,6 @@ function createNewDrpy(sdata) {
 }
 
 function getext(jkdata) {
-    log(jkdata);
     let extp = "";
     if(jkdata.ext && jkdata.ext.includes('?')){
         extp = '?' + jkdata.ext.split('?')[1];
