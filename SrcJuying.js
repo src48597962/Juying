@@ -428,17 +428,6 @@ function dianboerji() {
                 }
             }
             try{
-                /*
-                let i1 = parseInt(列表.length / 6);
-                let i2 = parseInt(列表.length / 4);
-                let i3 = parseInt(列表.length / 2);
-                let list1 = 列表[i1].split('$')[0];
-                let list2 = 列表[i2].split('$')[0];
-                let list3 = 列表[i3].split('$')[0];
-                if(parseInt(list1.match(/(\d+)/)[0])>parseInt(list2.match(/(\d+)/)[0]) && parseInt(list2.match(/(\d+)/)[0])>parseInt(list3.match(/(\d+)/)[0])){
-                    列表.reverse();
-                }
-                */
                 列表 = checkAndReverseArray(列表);
             }catch(e){
                 //xlog('强制修正选集顺序失败>'+e.message)
@@ -654,7 +643,7 @@ function dianboerji() {
     }
     if(updateParams){
         //保存换源数据进MY_PARAMS
-        if(sextra.url && (sextra.url!=MY_PARAMS.url || MY_PARAMS.data.url!=jkdata.url)){
+        if(sextra.url && sextra.url!=MY_PARAMS.url){
             setPageParams({
                 url: sextra.url,
                 pic: pic,
