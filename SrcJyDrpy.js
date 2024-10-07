@@ -221,13 +221,13 @@ function getext(jkdata) {
         extp = '?' + jkdata.ext.split('?')[1];
     }
     let gmParams = globalMap0.getVar('Jy_gmParams');
-
     if (/^hiker/.test(jkdata.url)) {
+        if(jkdata.url.startsWith(gmParams.libspath)){
+            jkdata.url = gmParams.jkfilespath + jkdata.url.substr(jkdata.url.lastIndexOf('/')+1);
+        }
         if (!fileExist(jkdata.url)) {
             if(!fileExist(gmParams.jkfile)){
-                jkdata.url = gmParams.cachepath + "jiekou/" + jkdata.url.substr(jkdata.url.lastIndexOf('/')+1);
-            }else if(jkdata.url.startsWith(gmParams.libspath)){
-                jkdata.url = gmParams.jkfilespath + jkdata.url.substr(jkdata.url.lastIndexOf('/')+1);
+                jkdata.url = gmParams.cachepath + jkdata.url.substr(jkdata.url.lastIndexOf('/')+1);
             }
             if (jkdata.ext) {
                 let content = gmParams.getContnet(jkdata.ext.split('?')[0]);
