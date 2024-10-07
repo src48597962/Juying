@@ -1394,7 +1394,7 @@ function yiji() {
         d = d.concat(items);
     }
 
-    let resoufile = datapath + "resou.json";
+    let resoufile = libspath + "resou.json";
     let Juyingresou = fetch(resoufile);
     let JYresou = {};
     if(Juyingresou != ""){
