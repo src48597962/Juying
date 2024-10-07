@@ -222,7 +222,7 @@ function getBoxSource(input, mode, imports){
 
                 if(arr){
                     let urlfile;
-                    let filepath = cachepath + 'libs_jk/' + arr.type;
+                    let filepath = cachepath + arr.type;
                     if($.type(extfile)=='object'){
                         urlfile = filepath + '_' + arr.name + '.json';
                         writeFile(urlfile, JSON.stringify(extfile));
@@ -513,7 +513,7 @@ function readDir(path) {
 function clearJkFiles() {
     /*
     let datalist = getDatas("jk");
-    readDir("libs_jk/")
+    readDir(jkfilespath)
     Object.keys(sort).forEach(it=>{
         if(!datalist.some(item => item.url==it)){
             delete sort[it];
