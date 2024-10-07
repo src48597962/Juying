@@ -879,6 +879,11 @@ function jiekousave(urls, mode) {
                 //}
                 delete it['oldurl'];
                 delete it['extstr'];
+                if(it.ext && $.type(it.ext)=="string" && /^hiker|^file/.test(it.ext)){
+                    if(!fileExist(it.ext)){
+                        delete it['ext'];
+                    }
+                }
                 datalist.push(it);
                 num = num + 1;
             }
