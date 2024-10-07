@@ -1,6 +1,7 @@
 let datapath = "hiker://files/data/"+(MY_RULE._title || MY_RULE.title)+"/"; //数据文件路径
 let rulepath = "hiker://files/rules/Src/Juying2/"; //规则文件路径
 let cachepath = "hiker://files/_cache/Juying2/"; //缓存文件路径
+let jkfilespath = rulepath + "jiekou/"; //接口数据文件路径
 let jkfile = rulepath + "jiekou.json";
 let jxfile = rulepath + "jiexi.json";
 let ypfile = rulepath + "yundisk.json";
@@ -9,31 +10,6 @@ let cfgfile = rulepath + "config.json";
 let sortfile = rulepath + "jksort.json";
 let codepath = config.依赖?config.依赖.match(/http(s)?:\/\/.*\//)[0]:module.modulePath.slice(0, module.modulePath.lastIndexOf("/")+1);
 let gzip = $.require(codepath + "plugins/gzip.js");
-//临时处理将相关文件转换位置，以后可以删除
-if(fileExist(datapath + "jiexi.json")){
-    if(!fileExist(jxfile)){
-        writeFile(jxfile, fetch(datapath + "jiexi.json"));
-    }
-    deleteFile(datapath + "jiexi.json");
-}
-if(fileExist(datapath + "jiekou.json")){
-    if(!fileExist(jkfile)){
-        writeFile(jkfile, fetch(datapath + "jiekou.json"));
-    }
-    deleteFile(datapath + "jiekou.json");
-}
-if(fileExist(datapath + "yundisk.json")){
-    if(!fileExist(ypfile)){
-        writeFile(ypfile, fetch(datapath + "yundisk.json"));
-    }
-    deleteFile(datapath + "yundisk.json");
-}
-if(fileExist(datapath + "live.txt")){
-    if(!fileExist(tvfile)){
-        writeFile(tvfile, fetch(datapath + "live.txt"));
-    }
-    deleteFile(datapath + "live.txt");
-}
 
 let Juconfig= {};
 let Jucfg=fetch(cfgfile);
@@ -110,19 +86,24 @@ function getDatas(lx, isyx) {
     return result;
 }
 //临时处理将相关文件转换位置，以后可以删除
-/*
 if(fileExist(datapath+"libs_jk")){
     log("接口数据目录存在旧目录，执行转移");
-    let datalist = getDatas("jk");
+    let datalist = [];
+    let sourcedata = fetch(jkfile);
+    if(sourcedata){
+        eval("datalist=" + sourcedata + ";");
+    }
     datalist.forEach(it=>{
         if(it.url.startsWith(datapath)){
-            writeFile(rulepath+"data/" + it.url.substr(it.url.lastIndexOf('/')+1), fetch(it.url));
+            let newfile = jkfilespath + it.url.substr(it.url.lastIndexOf('/')+1);
+            writeFile(newfile, fetch(it.url));
+            it.url = newfile;
         }
     })
+    writeFile(sourcefile, JSON.stringify(datalist));
+    let FileUtil = new com.example.hikerview.utils.FileUtil;
+    FileUtil.deleteDirs(getPath(datapath+"libs_jk/").replace("file://", ""));
 }
-*/
-//let java = new com.example.hikerview.utils.FileUtil;
-//java.deleteDirs(getPath(rulepath+"data/").replace("file://", ""));
 
 // 较验box配置文件
 function checkBoxUrl(input) {
@@ -433,7 +414,7 @@ function deleteData(lx, data){
     }
 
     dellist.forEach(it => {
-        if(lx=='jk' && it.url.includes(datapath)){
+        if(lx=='jk' && it.url.includes(jkfilespath)){
             deleteFile(it.url);
         }
         let index = datalist.indexOf(datalist.filter(d => it.url==d.url )[0]);
@@ -710,34 +691,6 @@ function selectSource() {
     return 'hiker://empty';
 
 }
-/*
-function selectSource(group, k) {
-    let datalist = getDatas('jk');
-    let yxdatalist = datalist.filter(it=>{
-        return !it.stop;
-    });
-    let jkdatalist = getGroupLists(yxdatalist, group);
-    let sitenames = jkdatalist.map(it=>{
-        return it.name;
-    })
-    if(k){
-        sitenames = sitenames.filter(it => {
-            return it.indexOf(k)>-1;
-        })
-    }
-
-    return $(sitenames, 2, "选择主页源").select((group, cfgfile, Juconfig) => {
-        Juconfig['indexSource'] = group+'_'+input;
-        writeFile(cfgfile, JSON.stringify(Juconfig));
-        clearMyVar('SrcJu_dianbo$分类');
-        clearMyVar('SrcJu_dianbo$fold');
-        clearMyVar('SrcJu_dianbo$classCache');
-        clearMyVar('SrcJu_dianbo$flCache');
-        refreshPage(true);
-        return 'toast://' + input;
-    }, group, cfgfile, Juconfig)
-}
-*/
 // 按拼音排序
 function sortByPinyin(arr) {
     var arrNew = arr.sort((a, b) => a.name.localeCompare(b.name));
@@ -850,6 +803,7 @@ let gmParams = {
     datapath: datapath,
     rulepath: rulepath,
     codepath: codepath,
+    jkfilespath: jkfilespath,
     jkfile: jkfile,
     jxfile: jxfile,
     cfgfile: cfgfile,
