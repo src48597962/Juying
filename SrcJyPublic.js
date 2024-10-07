@@ -1,4 +1,4 @@
-let datapath = "hiker://files/data/"+(MY_RULE._title || MY_RULE.title)+"/"; //数据文件路径
+let libspath = "hiker://files/data/"+(MY_RULE._title || MY_RULE.title)+"/"; //依赖文件路径
 let rulepath = "hiker://files/rules/Src/Juying2/"; //规则文件路径
 let cachepath = "hiker://files/_cache/Juying2/"; //缓存文件路径
 let jkfilespath = rulepath + "jiekou/"; //接口数据文件路径
@@ -86,7 +86,7 @@ function getDatas(lx, isyx) {
     return result;
 }
 //临时处理将相关文件转换位置，以后可以删除
-if(fileExist(datapath+"libs_jk")){
+if(fileExist(libspath+"libs_jk")){
     log("接口数据目录存在旧目录，执行转移");
     let datalist = [];
     let sourcedata = fetch(jkfile);
@@ -94,7 +94,7 @@ if(fileExist(datapath+"libs_jk")){
         eval("datalist=" + sourcedata + ";");
     }
     datalist.forEach(it=>{
-        if(it.url.startsWith(datapath)){
+        if(it.url.startsWith(libspath)){
             let newfile = jkfilespath + it.url.substr(it.url.lastIndexOf('/')+1);
             writeFile(newfile, fetch(it.url));
             it.url = newfile;
@@ -102,7 +102,7 @@ if(fileExist(datapath+"libs_jk")){
     })
     writeFile(sourcefile, JSON.stringify(datalist));
     let FileUtil = new com.example.hikerview.utils.FileUtil;
-    FileUtil.deleteDirs(getPath(datapath+"libs_jk/").replace("file://", ""));
+    FileUtil.deleteDirs(getPath(libspath+"libs_jk/").replace("file://", ""));
 }
 
 // 较验box配置文件
@@ -800,7 +800,7 @@ if (rulelog != "1") {
 }
 
 let gmParams = {
-    datapath: datapath,
+    libspath: libspath,
     rulepath: rulepath,
     codepath: codepath,
     jkfilespath: jkfilespath,
