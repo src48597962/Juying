@@ -226,6 +226,8 @@ function getext(jkdata) {
         if (!fileExist(jkdata.url)) {
             if(!fileExist(gmParams.jkfile)){
                 jkdata.url = gmParams.cachepath + "jiekou/" + jkdata.url.substr(jkdata.url.lastIndexOf('/')+1);
+            }else if(jkdata.url.startsWith(gmParams.libspath)){
+                jkdata.url = gmParams.jkfilespath + jkdata.url.substr(jkdata.url.lastIndexOf('/')+1);
             }
             if (jkdata.ext) {
                 let content = gmParams.getContnet(jkdata.ext.split('?')[0]);
