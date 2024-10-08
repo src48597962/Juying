@@ -1,5 +1,5 @@
 ////本代码仅用于个人学习，请勿用于其他作用，下载后请24小时内删除，代码虽然是公开学习的，但请尊重作者，应留下说明
-require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');//加载公共文件
+require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');//加载公共文件
 
 function SRCSet() {
     addListener("onClose", $.toString(() => {
@@ -18,7 +18,7 @@ function SRCSet() {
     d.push({
         title: '增加',
         url: $('hiker://empty#noRecordHistory##noHistory#').rule((guanliType) => {
-            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+            require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
             if(guanliType=="jk"){
                 jiekou();
             }else{
@@ -51,7 +51,7 @@ function SRCSet() {
                     var sm = "解析";
                 }
                 return $("确定要删除本地所有的"+sm+"吗？").confirm(()=>{
-                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                    require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
                     deleteData(getMyVar('guanli', 'jk'));
                     refreshPage(false);
                     return 'toast://已全部清空';
@@ -70,7 +70,7 @@ function SRCSet() {
             if(input.indexOf('@import=js:')>-1){
                 input = input.split('@import=js:')[0].replace('云口令：','').trim();
             }
-            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+            require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
             return JYimport(input);
         }),
         img: getIcon("点播-接口导入.svg"),//"https://hikerfans.com/tubiao/more/43.png",
@@ -97,7 +97,7 @@ function SRCSet() {
     d.push({
         title: '分享',
         url: yxdatalist.length==0?'toast://有效数据为空，只能单个分享':$(pastes,2).select((lx)=>{
-            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+            require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
             return JYshare(lx, input);
         }, guanliType),
         img: getIcon("点播-接口分享.svg"),//"https://hikerfans.com/tubiao/more/3.png",
@@ -216,7 +216,7 @@ function SRCSet() {
             title: "反向选择",
             url: $('#noLoading#').lazyRule((jkdatalist) => {
                 jkdatalist = JSON.parse(base64Decode(jkdatalist));
-                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
                 duoselect(jkdatalist);
                 return "toast://已反选";
             },base64Encode(JSON.stringify(jkdatalist))),
@@ -230,7 +230,7 @@ function SRCSet() {
                     return "toast://未选择";
                 }
                 return $("确定要删除选择的"+duoselect.length+"个接口？").confirm((duoselect)=>{
-                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                    require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
                     deleteData(getMyVar('guanli', 'jk'), duoselect);
                     refreshPage(false);
                     return 'toast://已删除选择';
@@ -253,7 +253,7 @@ function SRCSet() {
                                 }else if(input.includes('[') || input.includes(']')){
                                     return "toast://分组名不能包含：[]";
                                 }
-                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                                require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
                                 var filepath = getFile(getMyVar('guanli', 'jk'));
                                 var datafile = fetch(filepath);
                                 eval("var datalist=" + datafile+ ";");
@@ -285,7 +285,7 @@ function SRCSet() {
                         return "toast://未选择";
                     }
                     return $("确定要禁用选择的"+duoselect.length+"个接口？").confirm((duoselect)=>{
-                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                        require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
                         let sm = dataHandle(getMyVar('guanli', 'jk'), duoselect, '禁用');
                         refreshPage(false);
                         return 'toast://' + sm;
@@ -301,7 +301,7 @@ function SRCSet() {
                         return "toast://未选择";
                     }
                     return $("确定要启用选择的"+duoselect.length+"个接口？").confirm((duoselect)=>{
-                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                        require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
                         let sm = dataHandle(getMyVar('guanli', 'jk'), duoselect, '启用');
                         refreshPage(false);
                         return 'toast://' + sm;
@@ -355,8 +355,8 @@ function SRCSet() {
                                     return "toast://检测项目已结束";
                                 }
 
-                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
-                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
+                                require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
+                                require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyData.js');
                                 let schedule = getMyVar("批量检测_当前进度","1");
 
                                 let task = function (data) {
@@ -467,7 +467,7 @@ function SRCSet() {
                                                                     storage0.putMyVar("批量检测_失败列表", failSource);
                                                                 }
                                                                 deleteItem("failSource-" + data.url);
-                                                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                                                                require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
                                                                 let sm = dataHandle('jk', data, "禁用");
                                                                 return "toast://" + sm;
                                                             }, data)
@@ -484,7 +484,7 @@ function SRCSet() {
                                                                     storage0.putMyVar("批量检测_失败列表", failSource);
                                                                 }
                                                                 deleteItem("failSource-" + data.url);
-                                                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                                                                require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
                                                                 deleteData('jk', data);
                                                                 return "toast://已删除";
                                                             }, data)
@@ -552,7 +552,7 @@ function SRCSet() {
                                                     })
                                                     storage0.putMyVar("checkSourceList",checkSourceList);
 
-                                                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                                                    require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
                                                     deleteData("jk", failSourceList);
                                                     clearMyVar("批量检测_失败列表");
                                                     deleteItem("deleteAllFail");
@@ -698,7 +698,7 @@ function SRCSet() {
                         return "toast://未选择";
                     }
                     return $("确定要重置"+duoselect.length+"个解析的排序？").confirm((duoselect)=>{
-                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                        require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
                         let sm = dataHandle('jx', duoselect, '重置排序');
                         refreshPage(false);
                         return 'toast://' + sm;
@@ -724,17 +724,17 @@ function SRCSet() {
             title: it.stop?colorTitle(datatitle, '#f20c00'):datatitle,
             url: getMyVar('SrcJu_批量选择模式')?$('#noLoading#').lazyRule((data) => {
                 data = JSON.parse(base64Decode(data));
-                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
                 duoselect(data);
                 return "hiker://empty";
             },base64Encode(JSON.stringify(it))):$(selectmenu, 2).select((data) => {
                 data = JSON.parse(base64Decode(data));
                 if (input == "分享") {
-                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                    require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
                     return JYshare(getMyVar('guanli', 'jk'), getItem("sharePaste",""), data);
                 } else if (input == "编辑") {
                     return $('hiker://empty#noRecordHistory##noHistory#').rule((data) => {
-                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                        require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
                         if(getMyVar('guanli', 'jk')=="jk"){
                             jiekou(data);
                         }else{
@@ -743,7 +743,7 @@ function SRCSet() {
                     }, data)
                 } else if (input == "删除") {
                     return $("确定删除："+data.name).confirm((data)=>{
-                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                        require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
                         deleteData(getMyVar('guanli', 'jk'), data);
                         refreshPage(false);
                         return 'toast://已删除:'+data.name;
@@ -758,7 +758,7 @@ function SRCSet() {
                     if(input == "置顶" && getItem("sourceListSort", "更新时间") != "更新时间"){
                         return "toast://无效操作，接口列表排序方式为：" + getItem("sourceListSort");
                     }
-                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                    require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
                     let sm = dataHandle(getMyVar('guanli', 'jk'), data, input);
                     refreshPage(false);
                     return 'toast://' + sm;
@@ -1024,7 +1024,7 @@ function jiekou(data) {
                 let apiurl = getMyVar('apiurl','');
                 let apitype = getMyVar('apitype', '');
                 if(apiurl && apitype=="hipy_t3" && /^hiker|^file/.test(apiurl)){
-                    let drpy = GM.defineModule("SrcJuDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(data);
+                    let drpy = GM.defineModule("SrcJuDrpy", config.依赖.replace(/[^/]*$/,'') + "SrcJyDrpy.js").get(data);
                     let code = drpy.runMain("let main=" + $.toString((ext) => {
                         return () => getOriginalJs(request(ext, {
                             "method": "GET"
@@ -1159,7 +1159,7 @@ function jiekou(data) {
             title:'删除',
             col_type:'text_3',
             url: $("确定删除接口："+data.name).confirm((data)=>{
-                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
                 deleteData('jk', data);
                 back(true);
                 return "toast://已删除";
@@ -1189,7 +1189,7 @@ function jiekou(data) {
             if(!apiurl.startsWith('http') && !apiurl.startsWith('hiker://') && !apiurl.startsWith('file://')){
                 return "toast://接口地址不正确";
             }
-            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+            require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
             let urls= [];
             
             let apiname = getMyVar('apiname','').trim();
@@ -1272,7 +1272,7 @@ function jiekou(data) {
                 }
                 let apiname = getMyVar('apiname','').trim();
                 if(apiname&&apiurl){
-                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                    require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
                     let apitype = getMyVar('apitype','');
                     if(apitype.includes('自动')){
                         apitype = getapitype(apiurl);
@@ -1466,14 +1466,14 @@ function jiexi(data) {
                 addItemBefore('jxline2', {
                     title: key,
                     url: key!="自定义"?$('#noRecordHistory##noHistory#').lazyRule((vipUrl,dataObj)=>{
-                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
+                        require(config.依赖.replace(/[^/]*$/,'') + 'SrcParseS.js');
                         return SrcParseS.聚影(vipUrl, dataObj);
                     },urls[key],dataObj):$("","输入自定义播放地址").input((dataObj) => {
                         if(input==""){
                             return "toast://未输入自定义地址，无法测试";
                         }else{
                             return $().lazyRule((vipUrl,dataObj)=>{
-                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
+                                require(config.依赖.replace(/[^/]*$/,'') + 'SrcParseS.js');
                                 return SrcParseS.聚影(vipUrl, dataObj);
                             }, input, dataObj)
                         }
@@ -1510,7 +1510,7 @@ function jiexi(data) {
             title:'删除',
             col_type:'text_3',
             url: $("确定删除解析："+getMyVar('parsename',data.name)).confirm((data)=>{
-                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
                 deleteData('jx', data);
                 back(true);
                 return "toast://已删除";
@@ -1540,7 +1540,7 @@ function jiexi(data) {
             if(parseext && $.type(parseext)!="object"){
                 return "toast://ext对象数据不正确"
             }
-            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+            require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
             let urls= [];
             let parseurl = getMyVar('parseurl');
             let parsename = getMyVar('parsename');
@@ -1939,7 +1939,7 @@ function manageSet(){
                     let text = parsePaste('https://netcut.cn/p/'+aesDecode('Juying2', codeid));
                     if(codeid&&!/^error/.test(text)){
                         let pastedata = JSON.parse(base64Decode(text));
-                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                        require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
                         let jknum = 0;
                         let jxnum = 0;
                         let ypnum = 0;
@@ -2209,7 +2209,7 @@ function manageSet(){
         img: getIcon("管理-箭头.svg"),
         col_type: 'text_icon',
         url: $("#noLoading#").lazyRule(() => {
-            eval(fetch(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcTmplVersion.js'));
+            eval(fetch(config.依赖.replace(/[^/]*$/,'') + 'SrcTmplVersion.js'));
             let updateRecords = newVersion.JYUpdateRecords || [];
 
             const hikerPop = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6966");
@@ -2224,7 +2224,7 @@ function manageSet(){
         col_type: 'text_icon',
         url: $("#noLoading#").lazyRule(() => {
             try{
-                eval(request(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcTmplVersion.js'))
+                eval(request(config.依赖.replace(/[^/]*$/,'') + 'SrcTmplVersion.js'))
                 let nowVersion = getItem('Version', getMyVar('SrcJuying-Version', '0.1').replace('-V',''));
                 let nowtime = Date.now();
                 if (parseFloat(newVersion.SrcJuying) > parseFloat(nowVersion)) {
@@ -2253,7 +2253,7 @@ function manageSet(){
         title: '支持一下作者',
         img: getIcon("管理-箭头.svg"),
         col_type: 'text_icon',
-        url: config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'img/pay.jpg'
+        url: config.依赖.replace(/[^/]*$/,'') + 'img/pay.jpg'
     });
     d.push({
         col_type: "line_blank"
@@ -2433,7 +2433,7 @@ function resource() {
                     input = "file://" + input;
                 }
 
-                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
 
                 if(importtype=="4"){//扫描本地js文件夹
                     showLoading("正在扫描本地文件夹");
@@ -2444,7 +2444,7 @@ function resource() {
                         return "toast://没有新增js"
                     }else{
                         return $('hiker://empty#noRecordHistory##noHistory#').rule((newfiles) => {
-                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                            require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
                             importConfirm(newfiles);
                         },newfiles)
                     }
@@ -2469,7 +2469,7 @@ function resource() {
                     let names = urls.map(v=>v.name);
                     return $(names, 1).select((urls,exeImport) => {
                         let url = urls.filter(v=>v.name==input)[0].url;
-                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                        require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
                         return exeImport(url);
                     },urls,exeImport)
                 }
@@ -2511,7 +2511,7 @@ function resource() {
             d.push({
                 title: '点此进行检测配置文件有效性👀',
                 url: $('#noLoading#').lazyRule((lists) => {
-                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                    require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
                     lists.forEach(it=>{
                         let checkUrl = checkBoxUrl(it.url);
                         updateItem(it.url, {title: it.url +(checkUrl.message?" ❌":" ✔️")});
@@ -2945,7 +2945,7 @@ function yundiskjiekou() {
                                 }
                             });
                             setResult(d);
-                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+                            require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyAliDisk.js');
                             aliDiskSearch(name,data);
                         },input,data)
                     },newapi)
@@ -3022,7 +3022,7 @@ function yundiskjiekou() {
                     let parseurl = aesDecode('Juying2', input.split('￥')[1]);
                     let content = parsePaste(parseurl);
                     let datalist2 = JSON.parse(globalMap0.getVar('Jy_gmParams').unzip(content));
-                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                    require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
                     let num = yundisksave(datalist2);
                     hideLoading();
                     refreshPage(false);
@@ -3127,7 +3127,7 @@ function yundiskjiekou() {
                                 }
                             });
                             setResult(d);
-                            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+                            require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyAliDisk.js');
                             aliDiskSearch(name,data);
                         },input,data)
                     },data)
@@ -3282,7 +3282,7 @@ function importConfirm(jsfile) {
     d.push({
         title: "增量导入",
         url: $("跳过已存在，只导入新增，确认？").confirm((lx)=>{
-            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+            require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
             let importlist = storage0.getMyVar('importConfirm', []);
             let num;
             if(lx=="jk"){
@@ -3309,7 +3309,7 @@ function importConfirm(jsfile) {
     d.push({
         title: "全量导入",
         url: $("覆盖本地已存在重新导入，确认？").confirm((lx)=>{
-            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+            require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
             let importlist = storage0.getMyVar('importConfirm', []);
             if(lx=="jk"){
                 num = jiekousave(importlist, 1);
@@ -3342,7 +3342,7 @@ function importConfirm(jsfile) {
                 if (input == "确定导入") {
                     return $("如本地存在则将覆盖，确认？").confirm((lx,data)=>{
                         let dataurl = data.url;
-                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                        require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
                         let datas = [];
                         datas.push(data);
                         let num;
@@ -3382,7 +3382,7 @@ function importConfirm(jsfile) {
                     }, data);
                 }else if (input == "设定分组") {
                     let dataurl = data.url;
-                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                    require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
                     let groupNames = getGroupNames();
                     groupNames.unshift("清除");
                     return $(groupNames, 2, "选择分组").select((dataurl) => {
