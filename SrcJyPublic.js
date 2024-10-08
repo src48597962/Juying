@@ -8,7 +8,7 @@ let ypfile = rulepath + "yundisk.json";
 let tvfile = rulepath + "live.txt";
 let cfgfile = rulepath + "config.json";
 let sortfile = rulepath + "jksort.json";
-let codepath = config.依赖.slice(0, config.依赖.lastIndexOf("/")+1);
+let codepath = config.依赖.replace(/[^/]*$/,'');
 let gzip = $.require(codepath + "plugins/gzip.js");
 
 let Juconfig= {};
@@ -815,8 +815,4 @@ let gmParams = {
 if(!globalMap0.getVar('Jy_gmParams')){
     log("写入全局对象变量gmParams");
     globalMap0.putVar('Jy_gmParams', gmParams);
-}
-if(!config.路径){
-    log("写入config代码路径>" + codepath);
-    initConfig({"路径": codepath});
 }
