@@ -240,7 +240,7 @@ function dianboerji() {
     },getHistory));
 
     let sextra = storage0.getMyVar('二级附加临时对象') || {};//二级换源时临时extra数据
-
+    log(isFromHistoryPage());
     MY_URL = sextra.url || MY_PARAMS.url;
     let jkdata = sextra.data || MY_PARAMS.data;
     let name = MY_PARAMS.pageTitle;
