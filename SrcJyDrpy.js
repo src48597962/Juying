@@ -222,7 +222,7 @@ function getext(jkdata) {
     }
     let gmParams = globalMap0.getVar('Jy_gmParams');
     if (/^hiker/.test(jkdata.url)) {
-        if(jkdata.url.startsWith(gmParams.libspath)){
+        if(jkdata.url.startsWith(gmParams.libspath)){//收藏、历史进入的，旧的data需要修正url地址
             jkdata.url = gmParams.jkfilespath + jkdata.url.substr(jkdata.url.lastIndexOf('/')+1);
         }
         if (!fileExist(jkdata.url)) {
