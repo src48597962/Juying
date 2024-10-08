@@ -240,7 +240,7 @@ function dianboerji() {
     },getHistory));
 
     let sextra = storage0.getMyVar('二级附加临时对象') || {};//二级换源时临时extra数据
-    log(isFromHistoryPage());
+
     MY_URL = sextra.url || MY_PARAMS.url;
     let jkdata = sextra.data || MY_PARAMS.data;
     let name = MY_PARAMS.pageTitle;
@@ -294,11 +294,14 @@ function dianboerji() {
     let updateParams = 0;
     let d = [];
     //海报
+    log(isFromHistoryPage());
+    log($.type(isFromHistoryPage));
+    let detailpic = pic?/^http/.test(pic)&&!pic.includes('@')?pic+'@Referer=':pic:'';
     d.push({
         title: details1,//详情1
         desc: "站源："+sgroup+"_"+sname+"\n"+details2,//详情2
-        pic_url: pic?/^http/.test(pic)&&!pic.includes('@')?pic+'@Referer=':pic:'',//图片
-        url: MY_URL + '#noHistory#',//链接
+        pic_url: detailpic,//图片
+        url: MY_URL.startsWith("http")?MY_URL + '#noHistory#':detailpic,//链接
         col_type: 'movie_1_vertical_pic_blur',
         extra: {
             gradient: true,
