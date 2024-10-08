@@ -816,3 +816,7 @@ if(!globalMap0.getVar('Jy_gmParams')){
     log("写入全局对象变量gmParams");
     globalMap0.putVar('Jy_gmParams', gmParams);
 }
+if(!config["codepath"]){
+    log("写入config代码路径>" + codepath);
+    initConfig({"codepath": codepath});
+}
