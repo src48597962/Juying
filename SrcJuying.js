@@ -284,11 +284,7 @@ function dianboerji() {
             refreshPage(false);
         }
     }
-    /*
-    if($.type(isFromHistoryPage)=="function" && isFromHistoryPage()){
-        //用法判断是否从收藏或历史进入二级
-    }
-    */
+
     //log(erdata);
     let details1 = erdata.details1 || "";
     let details2 = erdata.details2 || "";
@@ -648,8 +644,12 @@ function dianboerji() {
         setPagePicUrl(pic);
     }
     if(updateParams){
+        //判断是否从收藏或历史进入二级，且接口文件还在data目录的，更新到rule目录
+        if($.type(isFromHistoryPage)=="function" && isFromHistoryPage() && jkdata.url.startsWith(libspath)){
+            jkdata.url = jkfilespath + jkdata.url.substr(jkdata.url.lastIndexOf('/')+1);            
+        }
         //保存换源数据进MY_PARAMS
-        if(sextra.url && sextra.url!=MY_PARAMS.url){
+        if(sextra.url && (sextra.url!=MY_PARAMS.url || MY_PARAMS.data.url!=jkdata.url)){
             setPageParams({
                 url: sextra.url,
                 pic: pic,
