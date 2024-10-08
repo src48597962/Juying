@@ -1,5 +1,8 @@
 // 本代码仅用于个人学习，请勿用于其他作用，下载后请24小时内删除，代码虽然是公开学习的，但请尊重作者，应留下说明
-require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');//加载公共文件
+
+//require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');//加载公共文件
+require(module.modulePath.slice(0, module.modulePath.lastIndexOf("/")+1) + 'SrcJyPublic.js');//加载公共文件
+
 // 搜索逻辑代码
 function search(name, sstype, jkdata) {
     require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
