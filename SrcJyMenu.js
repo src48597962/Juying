@@ -42,7 +42,7 @@ function erjimenu(desc,name,group) {
         {
             title: "观看设置",
             url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
-                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyMenu.js');
+                require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyMenu.js');
                 lookset();
             }),
             pic_url: getIcon("点播-观看设置.svg"),
@@ -54,7 +54,7 @@ function erjimenu(desc,name,group) {
         {
             title: "切换站源",
             url: !fileExist(jkfile) ? "toast://聚搜、分享页面，无法扩展更多片源" : $("#noLoading#").lazyRule((name,group) => {
-                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyMenu.js');
+                require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyMenu.js');
                 cutSource(name,group);
                 return  "hiker://empty";
             },name, group),
@@ -86,7 +86,7 @@ function erjimenu(desc,name,group) {
 //切源事件
 function cutSource(name, group) {
     putMyVar("切源旧分组", group);
-    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+    require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
     let datalist = getDatas('jk',1).filter(v=>v.searchable!=0);
     let groups = getJiekouGroups(datalist).concat(['云盘']);
     let grouparr = [];
@@ -111,7 +111,7 @@ function cutSource(name, group) {
                 deleteItemByCls('grouploadlist');
                 putMyVar("切源旧分组", newgroup);
                 if(newgroup=="云盘"){
-                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+                    require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyAliDisk.js');
                     erjiSousuo(name);
                 }else{
                     require(config.依赖);
@@ -134,7 +134,7 @@ function cutSource(name, group) {
     })
     addItemBefore(updateItemid, grouparr);// 生成切源分组
     if(group=="云盘"){
-        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+        require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyAliDisk.js');
         erjiSousuo(name);
     }else{
         require(config.依赖);
@@ -146,7 +146,7 @@ function lookset() {
     addListener("onClose", $.toString(() => {
         clearMyVar('playSet');
     }));
-    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+    require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
     setPageTitle("点播二级观看设置");
     let recordfile = rulepath + "parse.json";//解析相关记录文件
     let parseRecord = {};
@@ -179,7 +179,7 @@ function lookset() {
             putMyVar('guanli','jx');
             return $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
                 setPageTitle('解析管理');
-                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
                 SRCSet();
             })
         }),
@@ -420,7 +420,7 @@ let buttonmenu = {
     "管理": {
         img: getIcon("主页-管理.svg"),//"https://hikerfans.com/tubiao/more/129.png",
         url: $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
-            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+            require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
             manageSet();
         })
     },
@@ -442,21 +442,21 @@ let buttonmenu = {
     "直播": {
         img: getIcon("主页-直播.svg"),//"https://hikerfans.com/tubiao/more/87.png",
         url: $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
-            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcLive.js');
+            require(config.依赖.replace(/[^/]*$/,'') + 'SrcLive.js');
             Live();
         })
     },
     "Alist": {
         img: getIcon("主页-Alist.svg"),//"https://hikerfans.com/tubiao/more/226.png",//hiker://files/cache/src/Alist.svg
         url: $("hiker://empty###noRecordHistory##noHistory#").rule(() => {
-            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAlist.js');
+            require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyAlist.js');
             alistHome();
         })
     },
     "云盘": {
         img: getIcon("主页-云盘.svg"),//"https://hikerfans.com/tubiao/more/97.png",
         url: $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
-            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+            require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyAliDisk.js');
             aliMyDisk();
         })
     }
