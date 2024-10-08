@@ -1,4 +1,3 @@
-log(module.modulePath.slice(0, module.modulePath.lastIndexOf("/")+1));
 let libspath = "hiker://files/data/"+(MY_RULE._title || MY_RULE.title)+"/"; //依赖文件路径
 let rulepath = "hiker://files/rules/Src/Juying2/"; //规则文件路径
 let cachepath = "hiker://files/_cache/Juying2/"; //缓存文件路径
@@ -9,7 +8,7 @@ let ypfile = rulepath + "yundisk.json";
 let tvfile = rulepath + "live.txt";
 let cfgfile = rulepath + "config.json";
 let sortfile = rulepath + "jksort.json";
-let codepath = config.路径 || module.modulePath.slice(0, module.modulePath.lastIndexOf("/")+1);
+let codepath = config.依赖.slice(0, config.依赖.lastIndexOf("/")+1);
 let gzip = $.require(codepath + "plugins/gzip.js");
 
 let Juconfig= {};
