@@ -8,7 +8,7 @@ let ypfile = rulepath + "yundisk.json";
 let tvfile = rulepath + "live.txt";
 let cfgfile = rulepath + "config.json";
 let sortfile = rulepath + "jksort.json";
-let codepath = config.依赖?config.依赖.match(/http(s)?:\/\/.*\//)[0]:module.modulePath.slice(0, module.modulePath.lastIndexOf("/")+1);
+let codepath = module.modulePath.slice(0, module.modulePath.lastIndexOf("/")+1);
 let gzip = $.require(codepath + "plugins/gzip.js");
 
 let Juconfig= {};
