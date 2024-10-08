@@ -280,10 +280,15 @@ function dianboerji() {
             let markData = {surl: jkdata.url, url: MY_URL, data: erdata}
             writeFile(cacheDataFile, JSON.stringify(markData));
         }else if(erdata.lists==0 && jkdata.name.includes("老白")){
+            log("老白获取选集失败，自动刷新");
             refreshPage(false);
         }
     }
-
+    /*
+    if($.type(isFromHistoryPage)=="function" && isFromHistoryPage()){
+        //用法判断是否从收藏或历史进入二级
+    }
+    */
     //log(erdata);
     let details1 = erdata.details1 || "";
     let details2 = erdata.details2 || "";
@@ -294,8 +299,6 @@ function dianboerji() {
     let updateParams = 0;
     let d = [];
     //海报
-    log(isFromHistoryPage());
-    log($.type(isFromHistoryPage));
     let detailpic = pic?/^http/.test(pic)&&!pic.includes('@')?pic+'@Referer=':pic:'';
     d.push({
         title: details1,//详情1
