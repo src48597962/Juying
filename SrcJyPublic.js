@@ -818,5 +818,5 @@ if(!globalMap0.getVar('Jy_gmParams')){
 }
 if(!config["codepath"]){
     log("写入config代码路径>" + codepath);
-    initConfig({"codepath": codepath});
+    initConfig({"路径": codepath});
 }
