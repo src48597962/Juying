@@ -2,6 +2,12 @@ var newVersion = {
     "SrcJuying":"2.0",
     "hint": "可能需要重进一次软件",
     "JYUpdateRecords": [{
+        title: "beta V2.1",
+        records: [
+            "优化：点播接口文件从data目录转移至rule目录",
+            "计划：管理增加切换本地代码模式，拉取代码仓到本地"
+        ]
+    },{
         title: "2024/10/06 V2.0",
         records: [
             "修复：聚合代理搜索导致GM环境异常问题",
