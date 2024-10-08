@@ -1,9 +1,9 @@
 // 本代码仅用于个人学习，请勿用于其他作用，下载后请24小时内删除，代码虽然是公开学习的，但请尊重作者，应留下说明
-require(config.依赖.slice(0, config.依赖.lastIndexOf("/")+1) + 'SrcJyPublic.js');//加载公共文件
-log(config.依赖.replace(/[^/]*$/,''));
+require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');//加载公共文件
+
 // 搜索逻辑代码
 function search(name, sstype, jkdata) {
-    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
+    require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyData.js');
     let ssdata;
     if(sstype=='hkjusou'){
         ssdata = getSsData(name, jkdata, MY_PAGE).vodlists.map(it => {
@@ -85,7 +85,7 @@ function sousuo() {
                     ssdatalist.push(storage0.getMyVar('搜索临时搜索数据'));
                     clearMyVar('搜索临时搜索数据');
                 }else{
-                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                    require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
                     let group = getMyVar('搜索临时搜索分组','');
                     ssdatalist = getSearchLists(group);
                     clearMyVar('搜索临时搜索分组');
@@ -271,7 +271,7 @@ function dianboerji() {
     }else if(detailsmark){
         erdata = detailsmark;
     }else{
-        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
+        require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyData.js');
         log('开始获取二级数据');
         let t1 = new Date().getTime();
         erdata = getErData(jkdata);
@@ -325,7 +325,7 @@ function dianboerji() {
         }
     }
     //二级统一菜单
-    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyMenu.js');
+    require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyMenu.js');
     erjimenu(erdata.desc, name, sgroup).forEach(it=>{
         d.push(it);
     })
@@ -562,7 +562,7 @@ function dianboerji() {
                     let play;
                     if(dataObj.stype=="hipy_t3"){
                         let sdata = {name: dataObj.sname, url: dataObj.surl, ext: dataObj.sext}
-                        let drpy = GM.defineModule("SrcJyDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(sdata);
+                        let drpy = GM.defineModule("SrcJyDrpy", config.依赖.replace(/[^/]*$/,'') + "SrcJyDrpy.js").get(sdata);
                         play = JSON.parse(drpy.play(dataObj.flag, vipUrl, []));
                     }else if(dataObj.stype=="hipy_t4"){
                         play = JSON.parse(request(dataObj.surl+'&flag='+dataObj.sname+"&extend="+dataObj.sext+'&play='+vipUrl));
@@ -588,7 +588,7 @@ function dianboerji() {
                 }, dataObj);
             }else{
                 lazy = $("").lazyRule((dataObj) => {
-                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
+                    require(config.依赖.replace(/[^/]*$/,'') + 'SrcParseS.js');
                     return SrcParseS.聚影(input, dataObj);
                 }, dataObj);
             }
@@ -660,7 +660,7 @@ function dianboerji() {
         }
         //设置二级收藏更新最新章节
         setLastChapterRule('js:' + $.toString((url,jkdata)=>{
-            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
+            require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyData.js');
             setLastChapter(url,jkdata);
         }, MY_URL, jkdata))
     }
@@ -703,7 +703,7 @@ function dianboyiji(testSource) {
                 if(!data.url){
                     return "toast://当前源无效，无法分享";
                 }
-                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
                 return JYshare('jk', getItem("sharePaste",""), data);
             },jkdata)
         }];
@@ -711,7 +711,7 @@ function dianboyiji(testSource) {
             longClick.push({
                 title: "删除当前源",
                 js: $.toString(() => {
-                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                    require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
                     deleteData('jk', homeSource);
                     return "toast://已处理";
                 })
@@ -719,7 +719,7 @@ function dianboyiji(testSource) {
                 title: "编辑当前源",
                 js: $.toString((data) => {
                     return $('hiker://empty#noRecordHistory##noHistory#').rule((data) => {
-                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                        require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
                         return jiekou(data);
                     }, data)
                 },jkdata)
@@ -729,7 +729,7 @@ function dianboyiji(testSource) {
         d.push({
             title: "换主页源",
             url: testSource?"toast://测试模式下不能更换主页源":$('#noLoading#').lazyRule(() => {
-                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
                 return selectSource();
             }),
             pic_url: getIcon("点播-主页.svg"),
@@ -763,7 +763,7 @@ function dianboyiji(testSource) {
                     putMyVar('guanli','jk');
                     return $("hiker://empty#noRecordHistory##noHistory##noRefresh#").rule(() => {
                         setPageTitle('接口管理');
-                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                        require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
                         SRCSet();
                     })
                 }else if(input=="解析管理"){
@@ -773,13 +773,13 @@ function dianboyiji(testSource) {
                     putMyVar('guanli','jx');
                     return $("hiker://empty#noRecordHistory##noHistory##noRefresh#").rule(() => {
                         setPageTitle('解析管理');
-                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                        require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
                         SRCSet();
                     })
                 }else if(input=="资源管理"){
                     return $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
                         setPageTitle('资源管理');
-                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJySet.js');
+                        require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
                         resource();
                     })
                 }else if(input=="站源切换"){
@@ -854,7 +854,7 @@ function dianboyiji(testSource) {
             }
 /*
                     return $('hiker://empty#noRecordHistory##noHistory#').rule((name,data) => {
-                        require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
+                        require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyData.js');
                         let ssdata = getSsData(name,data).vodlists;
                         setResult(ssdata);
                     }, input, data);
@@ -915,7 +915,7 @@ function dianboyiji(testSource) {
     }
     if(sname){
         try{
-            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyData.js');
+            require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyData.js');
             let yidata = getYiData(jkdata);
             let fllists = yidata.fllists;
             if(fllists){
@@ -970,7 +970,7 @@ function dianboyiji(testSource) {
                             desc: voddesc.replace(/<\/?.+?\/?>/g,''),
                             pic_url: vodpic + (vodpic.includes('@')?"":"@Referer="),
                             url: vodurl=="no_data"?"toast://无数据":/^hiker/.test(vodurl)?vodurl:list.vod_play?$("hiker://empty").lazyRule((dataObj, vod_play) => {
-                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcParseS.js');
+                                require(config.依赖.replace(/[^/]*$/,'') + 'SrcParseS.js');
                                 return SrcParseS.聚影(vod_play, dataObj);
                             }, dataObj, list.vod_play):$("hiker://empty#immersiveTheme##autoCache#").rule(() => {
                                 require(config.依赖);
@@ -1058,7 +1058,7 @@ function yiji() {
 
     let d = [];
     if(MY_PAGE==1){
-        require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJyMenu.js');
+        require(config.依赖.replace(/[^/]*$/,'').replace('/Ju/','/master/') + 'SrcJyMenu.js');
         if($.type(storage0.getItem('buttonmenu1'))=="object"){
             setItem('buttonmenu1',storage0.getItem('buttonmenu1').name);
         }
@@ -1091,7 +1091,7 @@ function yiji() {
                         title: "♥️管理",
                         js: $.toString(() => {
                             return $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
-                                require(config.依赖.match(/http(s)?:\/\/.*\//)[0].replace('/Ju/','/master/') + 'SrcJySet.js');
+                                require(config.依赖.replace(/[^/]*$/,'').replace('/Ju/','/master/') + 'SrcJySet.js');
                                 manageSet();
                             })
                         })
@@ -1237,7 +1237,7 @@ function yiji() {
             if(/www\.aliyundrive\.com|www\.alipan\.com/.test(input)){
                 input = input.replace('http','\nhttp');
                 return $("hiker://empty#noRecordHistory##noHistory#").rule((input) => {
-                    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyAliDisk.js');
+                    require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyAliDisk.js');
                     aliShareUrl(input);
                 },input);
             }else{
@@ -1314,7 +1314,7 @@ function yiji() {
     d.push({
         title: "🔍搜索接口",
         url: $('#noLoading#').lazyRule(() => {
-            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+            require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
             let datalist = getDatas("jk", 1);
             let groupNames = getJiekouGroups(datalist);
             groupNames.unshift("全部");
@@ -1371,7 +1371,7 @@ function yiji() {
             title: '<span style="color:#ff6600"><b>\t观看记录\t\t\t</b></span>',
             url: $('#noLoading#').lazyRule(() => {
                 let i = parseInt(getMyVar('SrcJu_homeHistory','0')) + 1;
-                require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+                require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
                 putMyVar('SrcJu_homeHistory', i);
                 
                 deleteItemByCls('historylist');
@@ -1460,7 +1460,7 @@ function yiji() {
 // 下载必要图标
 function downloadicon() {
     try{
-        requireDownload(config.依赖.match(/http(s)?:\/\/.*\//)[0] + "img/聚影.png", 'hiker://files/cache/src/聚影.png');
+        requireDownload(config.依赖.replace(/[^/]*$/,'') + "img/聚影.png", 'hiker://files/cache/src/聚影.png');
     }catch(e){}
 }
 // 版本检测
@@ -1470,7 +1470,7 @@ function Version() {
     var oldtime = parseInt(getItem('VersionChecktime','0').replace('time',''));
     if (nowtime > (oldtime+24*60*60*1000)) {
         try {
-            eval(request(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcTmplVersion.js'))
+            eval(request(config.依赖.replace(/[^/]*$/,'') + 'SrcTmplVersion.js'))
             if (parseFloat(newVersion.SrcJuying) > parseFloat(nowVersion)) {
                 confirm({
                     title:'发现新版本，是否更新？', 
