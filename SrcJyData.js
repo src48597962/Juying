@@ -99,7 +99,7 @@ function getYiData(jkdata, batchTest) {
         }
     } else if (api_type == 'hipy_t3') {
         //GM.clear("SrcJyDrpy");
-        var drpy = GM.defineModule("SrcJyDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(jkdata);
+        var drpy = GM.defineModule("SrcJyDrpy", config.依赖.replace(/[^/]*$/,'') + "SrcJyDrpy.js").get(jkdata);
         let rule = drpy.getRule();
         detailurl = rule.detailUrl || "";
         classurl = rule.homeUrl || rule.host;
@@ -818,7 +818,7 @@ function getSsData(name, jkdata, page) {
             if(api_type=="hipy_t4"){
                 json = JSON.parse(getHtml(jkdata.url+"&wd="+name+"&extend="+jkdata.ext+"&quick=false", headers));
             }else if(api_type=="hipy_t3"){
-                let drpy = GM.defineModule("SrcJyDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(jkdata);
+                let drpy = GM.defineModule("SrcJyDrpy", config.依赖.replace(/[^/]*$/,'') + "SrcJyDrpy.js").get(jkdata);
                 json = JSON.parse(drpy.search(name, 0, page));
                 //noerji = drpy.getRule("二级")=="*"?1:0;
             }else{
@@ -1091,7 +1091,7 @@ function getErData(jkdata, erurl) {
         }
         html = getHtml(erurl, headers);
     } else if (api_type=="hipy_t3") {
-        let drpy = GM.defineModule("SrcJyDrpy", config.依赖.match(/http(s)?:\/\/.*\//)[0] + "SrcJyDrpy.js").get(jkdata);
+        let drpy = GM.defineModule("SrcJyDrpy", config.依赖.replace(/[^/]*$/,'') + "SrcJyDrpy.js").get(jkdata);
         try{
             html = drpy.detail(erurl);
         }catch(e){}
@@ -1457,7 +1457,7 @@ function getErData(jkdata, erurl) {
 
         if (/XPath|biubiu|XBPQ|XYQ/.test(api_type) && html && (tabs.length == 0 || lists.length == 0) && getMyVar('debug', '0') == "0" && html.indexOf(MY_PARAMS.pageTitle) > -1) {
             log('开启模板自动匹配、AI识片，获取播放选集');
-            require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcAutoTmpl.js');
+            require(config.依赖.replace(/[^/]*$/,'') + 'SrcAutoTmpl.js');
             let data = autoerji(erurl, html);
             details1 = data.details1
             details2 = data.details2;
@@ -1499,7 +1499,7 @@ function getErData(jkdata, erurl) {
 
 // 设置收藏更新最新章节
 function setLastChapter(url,jkdata) {
-    require(config.依赖.match(/http(s)?:\/\/.*\//)[0] + 'SrcJyPublic.js');
+    require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
     let erdate = getErData(jkdata,url);
     let lists = erdate.lists;
     if(lists.length>0){
