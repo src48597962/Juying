@@ -1,7 +1,7 @@
 var newVersion = {
     "SrcJuying":"2.0",
     "hint": "可能需要重进一次软件",
-    "codeDownload": "https://src48597962.lanzouo.com/iIJfL2c3jrpe",
+    "codeDownload": "https://src48597962.lanzouo.com/iecuU2c3nkhi",
     "JYUpdateRecords": [{
         title: "beta V2.1",
         records: [
