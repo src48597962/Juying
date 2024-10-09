@@ -2092,6 +2092,9 @@ function manageSet(){
         url: $("#noLoading#").lazyRule(() => {
             if(getItem('本地包运行模式')=="1"){
                 clearItem('本地包运行模式');
+                initConfig({
+                    依赖: getItem("依赖","")
+                })
                 refreshPage();
             }else{
                 if(fileExist("hiker://files/data/"+MY_RULE.title+"/code/SrcJuying.js")){
