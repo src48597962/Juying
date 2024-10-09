@@ -2099,7 +2099,7 @@ function manageSet(){
                     refreshPage();
                 }else{
                     toast("本地依赖文件不存在，需要先下载");
-                    
+                    return "https://src48597962.lanzouo.com/ihUfC2c2z6ra";
                 }
             }
             return 'hiker://empty';
