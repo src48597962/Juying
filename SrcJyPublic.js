@@ -823,4 +823,5 @@ let gmParams = {
 if(!globalMap0.getVar('Jy_gmParams')){
     log("写入全局对象变量gmParams");
     globalMap0.putVar('Jy_gmParams', gmParams);
+    log("当前依赖库>" + config.依赖);
 }
