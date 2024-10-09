@@ -2096,10 +2096,13 @@ function manageSet(){
             }else{
                 if(fileExist("hiker://files/data/"+MY_RULE.title+"/code/SrcJuying.js")){
                     setItem('本地包运行模式','1');
+                    initConfig({
+                        依赖: "hiker://files/data/"+MY_RULE.title+"/code/SrcJuying.js"
+                    })
                     refreshPage();
                 }else{
                     toast("本地包依赖不存在，下载后再来启用");
-                    return "https://src48597962.lanzouo.com/i4lH22c30rmh";
+                    return "https://src48597962.lanzouo.com/iIJfL2c3jrpe";
                 }
             }
             return 'hiker://empty';
