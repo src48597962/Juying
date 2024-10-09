@@ -2090,9 +2090,7 @@ function manageSet(){
         title: '本地包运行模式',
         img: getItem('本地包运行模式')=="1"?getIcon("管理-开.svg"):getIcon("关.svg"),
         url: $("#noLoading#").lazyRule(() => {
-            log(getItem('本地包运行模式'));
             if(getItem('本地包运行模式')=="1"){
-                log("取消本地");
                 clearItem('本地包运行模式');
                 initConfig({
                     依赖: getItem("依赖","")
@@ -2100,8 +2098,6 @@ function manageSet(){
                 refreshPage();
             }else{
                 let loaclcode = "hiker://files/data/"+MY_RULE.title+"/code/SrcJuying.js";
-                log(loaclcode);
-                log(fileExist(loaclcode));
                 if(fileExist(loaclcode)){
                     setItem('本地包运行模式','1');
                     initConfig({
