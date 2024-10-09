@@ -1052,7 +1052,7 @@ function yiji() {
             });
         }
         Version();
-        downloadicon();//下载图标
+        downloadFiles();//下载必要的依赖文件
         putMyVar('SrcJuying-VersionCheck', '1');
     }
 
@@ -1457,12 +1457,6 @@ function yiji() {
     }
 }
 
-// 下载必要图标
-function downloadicon() {
-    try{
-        requireDownload(config.依赖.replace(/[^/]*$/,'') + "img/聚影.png", 'hiker://files/cache/src/聚影.png');
-    }catch(e){}
-}
 // 版本检测
 function Version() {
     var nowVersion = getItem('Version', "0.1");//现在版本 
