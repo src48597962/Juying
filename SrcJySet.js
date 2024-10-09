@@ -2087,19 +2087,19 @@ function manageSet(){
         col_type: 'text_icon'
     });
     d.push({
-        title: '本地代码运行',
-        img: getItem('本地代码运行')=="1"?getIcon("管理-开.svg"):getIcon("关.svg"),
+        title: '本地代码库运行',
+        img: getItem('本地代码库运行')=="1"?getIcon("管理-开.svg"):getIcon("关.svg"),
         url: $("#noLoading#").lazyRule(() => {
-            if(getItem('本地代码运行')=="1"){
-                clearItem('本地代码运行');
+            if(getItem('本地代码库运行')=="1"){
+                clearItem('本地代码库运行');
                 refreshPage();
             }else{
                 if(fileExist("hiker://files/data/"+MY_RULE.title+"/libs/SrcJuying.js")){
-                    setItem('本地代码运行','1');
+                    setItem('本地代码库运行','1');
                     refreshPage();
                 }else{
-                    toast("本地依赖文件不存在，需要先下载");
-                    return "https://src48597962.lanzouo.com/ihUfC2c2z6ra";
+                    toast("本地代码库文件不存在，下载后再来启用");
+                    return "https://src48597962.lanzouo.com/i8wpT2c3025a";
                 }
             }
             return 'hiker://empty';
