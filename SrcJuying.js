@@ -1,11 +1,4 @@
 // 本代码仅用于个人学习，请勿用于其他作用，下载后请24小时内删除，代码虽然是公开学习的，但请尊重作者，应留下说明
-globalThis.require = function (param0, param1, param2, param3, param4) {
-    if (param0 != null && param0.indexOf("://") < 0) {
-        return requirejs(param0);
-    }
-    log("require>"+param0)
-    return require0(param0, param1, param2, param3, param4);
-}
 require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');//加载公共文件
 
 // 搜索逻辑代码
