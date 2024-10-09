@@ -2087,19 +2087,19 @@ function manageSet(){
         col_type: 'text_icon'
     });
     d.push({
-        title: '本地代码库运行',
-        img: getItem('本地代码库运行')=="1"?getIcon("管理-开.svg"):getIcon("关.svg"),
+        title: '本地包运行模式',
+        img: getItem('本地包运行模式')=="1"?getIcon("管理-开.svg"):getIcon("关.svg"),
         url: $("#noLoading#").lazyRule(() => {
-            if(getItem('本地代码库运行')=="1"){
-                clearItem('本地代码库运行');
+            if(getItem('本地包运行模式')=="1"){
+                clearItem('本地包运行模式');
                 refreshPage();
             }else{
-                if(fileExist("hiker://files/data/"+MY_RULE.title+"/libs/SrcJuying.js")){
-                    setItem('本地代码库运行','1');
+                if(fileExist("hiker://files/data/"+MY_RULE.title+"/code/SrcJuying.js")){
+                    setItem('本地包运行模式','1');
                     refreshPage();
                 }else{
-                    toast("本地代码库文件不存在，下载后再来启用");
-                    return "https://src48597962.lanzouo.com/i8wpT2c3025a";
+                    toast("本地包依赖不存在，下载后再来启用");
+                    return "https://src48597962.lanzouo.com/i4lH22c30rmh";
                 }
             }
             return 'hiker://empty';
@@ -2243,15 +2243,21 @@ function manageSet(){
         img: getIcon("管理-箭头.svg"),
         col_type: 'text_icon',
         url: $("#noLoading#").lazyRule(() => {
+            if(!getItem("依赖","")){
+                return "toast://代码库获取异常，无法更新！";
+            }
+            if(!getItem("依赖","").startsWith("http")){
+                return "toast://非在线代码库，无法更新！";
+            }
             try{
-                eval(request(config.依赖.replace(/[^/]*$/,'') + 'SrcTmplVersion.js'))
+                eval(request(getItem("依赖","").replace(/[^/]*$/,'') + 'SrcTmplVersion.js'))
                 let nowVersion = getItem('Version', getMyVar('SrcJuying-Version', '0.1').replace('-V',''));
                 let nowtime = Date.now();
                 if (parseFloat(newVersion.SrcJuying) > parseFloat(nowVersion)) {
                     confirm({
                         title: '发现新版本，是否更新？', 
                         content: '本地V'+nowVersion+' => 云端V'+newVersion.SrcJuying, 
-                        confirm: $.toString((nowtime,newVersion) => {
+                        confirm: getItem('本地包运行模式')=="1"?newVersion.codeDownload||"toast://暂未发布本地包":$.toString((nowtime,newVersion) => {
                             setItem('Version', newVersion);
                             setItem('VersionChecktime', nowtime+'time');
                             deleteCache();
