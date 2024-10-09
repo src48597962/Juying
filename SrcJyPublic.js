@@ -797,6 +797,15 @@ if (rulelog != "1") {
         return;
     };
 }
+// 下载必要的依赖文件
+function downloadFiles() {
+    let 代码仓 = getItem("依赖","").replace(/[^/]*$/,'');
+    if(代码仓){
+        try{
+            requireDownload(代码仓 + "img/聚影.png", 'hiker://files/cache/src/聚影.png');
+        }catch(e){}
+    }
+}
 // 全局对象变量gmParams
 let gmParams = {
     libspath: libspath,
