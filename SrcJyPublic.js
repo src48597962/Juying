@@ -790,7 +790,6 @@ function getIcon(icon, nochange) {
         }
     },color))
 }
-
 // 重定义打印日志
 let rulelog = getItem('规则日志打印','0');
 if (rulelog != "1") {
@@ -798,7 +797,7 @@ if (rulelog != "1") {
         return;
     };
 }
-
+// 全局对象变量gmParams
 let gmParams = {
     libspath: libspath,
     rulepath: rulepath,
