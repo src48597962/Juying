@@ -1462,9 +1462,9 @@ function Version() {
     var nowVersion = getItem('Version', "0.1");//现在版本 
     var nowtime = Date.now();
     var oldtime = parseInt(getItem('VersionChecktime','0').replace('time',''));
-    if (nowtime > (oldtime+24*60*60*1000)) {
+    if (nowtime > (oldtime+24*60*60*1000) && getItem("依赖","").startsWith("http")) {
         try {
-            eval(request(config.依赖.replace(/[^/]*$/,'') + 'SrcTmplVersion.js'))
+            eval(request(getItem("依赖","").replace(/[^/]*$/,'') + 'SrcTmplVersion.js'))
             if (parseFloat(newVersion.SrcJuying) > parseFloat(nowVersion)) {
                 confirm({
                     title:'发现新版本，是否更新？', 
