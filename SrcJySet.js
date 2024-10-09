@@ -2099,10 +2099,13 @@ function manageSet(){
                 })
                 refreshPage();
             }else{
-                if(fileExist("hiker://files/data/"+MY_RULE.title+"/code/SrcJuying.js")){
+                let loaclcode = "hiker://files/data/"+MY_RULE.title+"/code/SrcJuying.js";
+                log(loaclcode);
+                log(fileExist(loaclcode));
+                if(fileExist(loaclcode)){
                     setItem('本地包运行模式','1');
                     initConfig({
-                        依赖: "hiker://files/data/"+MY_RULE.title+"/code/SrcJuying.js"
+                        依赖: loaclcode
                     })
                     refreshPage();
                 }else{
