@@ -2091,11 +2091,11 @@ function manageSet(){
         col_type: 'text_icon'
     });
     d.push({
-        title: '本地包运行模式',
-        img: getItem('本地包运行模式')=="1"?getIcon("管理-开.svg"):getIcon("关.svg"),
+        title: '本地依赖代码库',
+        img: getItem('本地依赖库')=="1"?getIcon("管理-开.svg"):getIcon("关.svg"),
         url: $("#noLoading#").lazyRule(() => {
-            if(getItem('本地包运行模式')=="1"){
-                clearItem('本地包运行模式');
+            if(getItem('本地依赖库')=="1"){
+                clearItem('本地依赖库');
                 initConfig({
                     依赖: getItem("依赖","")
                 })
@@ -2103,16 +2103,16 @@ function manageSet(){
             }else{
                 let loaclcode = "hiker://files/data/"+MY_RULE.title+"/code/SrcJuying.js";
                 if(fileExist(loaclcode)){
-                    setItem('本地包运行模式','1');
+                    setItem('本地依赖库','1');
                     initConfig({
                         依赖: loaclcode
                     })
                     refreshPage();
                 }else{
-                    toast("本地包依赖不存在，下载后再来启用");
+                    toast("本地依赖不存在，下载后再来启用");
                     try{
                         eval(request(getItem("依赖","").replace(/[^/]*$/,'') + 'SrcTmplVersion.js'))
-                        return newVersion.codeDownload||"toast://暂未发布本地包"
+                        return newVersion.codeDownload||"toast://暂未发布"
                     }catch(e){
                         return "toast://无法在线下载";
                     }
@@ -2273,7 +2273,7 @@ function manageSet(){
                     confirm({
                         title: '发现新版本，是否更新？', 
                         content: '本地V'+nowVersion+' => 云端V'+newVersion.SrcJuying, 
-                        confirm: getItem('本地包运行模式')=="1"?newVersion.codeDownload||"toast://暂未发布本地包":$.toString((nowtime,newVersion) => {
+                        confirm: getItem('本地依赖库')=="1"?newVersion.codeDownload||"toast://暂未发布":$.toString((nowtime,newVersion) => {
                             setItem('Version', newVersion);
                             setItem('VersionChecktime', nowtime+'time');
                             deleteCache();
