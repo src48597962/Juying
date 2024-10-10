@@ -282,6 +282,7 @@ function dianboerji() {
             writeFile(cacheDataFile, JSON.stringify(markData));
         }else if(erdata.lists==0 && jkdata.name.includes("老白")){
             log("老白获取选集失败，自动刷新");
+            java.lang.Thread.sleep(1000);
             refreshPage(false);
         }
     }
