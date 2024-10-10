@@ -1460,7 +1460,7 @@ function yiji() {
 
 // 版本检测
 function Version() {
-    if(getItem('本地包运行模式')=="1"){
+    if(getItem('本地依赖库')=="1"){
         let loaclfile = "hiker://files/data/"+MY_RULE.title+"/code/SrcTmplVersion.js";
         if(fileExist(loaclfile)){
             eval(fetch(loaclfile));
@@ -1477,7 +1477,7 @@ function Version() {
                 confirm({
                     title:'发现新版本，是否更新？', 
                     content:'本地V'+nowVersion+' => 云端V'+newVersion.SrcJuying + '\n' + (newVersion.hint||""), 
-                    confirm: getItem('本地包运行模式')=="1"?"toast://管理中手工检查更新":$.toString((nowtime,version,updateRecords) => {
+                    confirm: getItem('本地依赖库')=="1"?"toast://管理中手工检查更新":$.toString((nowtime,version,updateRecords) => {
                         setItem('Version', version);
                         setItem('VersionChecktime', nowtime+'time');
                         deleteCache();
