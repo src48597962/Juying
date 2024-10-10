@@ -647,8 +647,10 @@ function dianboerji() {
     }
     if(updateParams){
         //判断是否从收藏或历史进入二级，且接口文件还在data目录的，更新到rule目录
-        if($.type(isFromHistoryPage)=="function" && isFromHistoryPage() && jkdata.url.startsWith(libspath)){
-            jkdata.url = jkfilespath + jkdata.url.substr(jkdata.url.lastIndexOf('/')+1);            
+        if($.type(isFromHistoryPage)=="function"){
+            if(isFromHistoryPage() && jkdata.url.startsWith(libspath)){
+                jkdata.url = jkfilespath + jkdata.url.substr(jkdata.url.lastIndexOf('/')+1);         
+            } 
         }
         //保存换源数据进MY_PARAMS
         if(sextra.url && (sextra.url!=MY_PARAMS.url || MY_PARAMS.data.url!=jkdata.url)){
