@@ -1,9 +1,9 @@
 var newVersion = {
-    "SrcJuying":"2.0",
+    "SrcJuying":"2.1",
     "hint": "可能需要重进一次软件",
     "codeDownload": "https://src48597962.lanzouo.com/iaO1p2c6buyb",
     "JYUpdateRecords": [{
-        title: "beta V2.1",
+        title: "2024/10/13 V2.1",
         records: [
             "优化：点播接口文件从data目录转移至rule目录",
             "升级：增加切换本地依赖代码库，留接口随时转本地",
