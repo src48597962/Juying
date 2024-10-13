@@ -2025,34 +2025,16 @@ function manageSet(){
         col_type: "text_2"
     });
 
-    d.push({
-        title: '超时时长',
-        url: $(Juconfig['xunmitimeout']?Juconfig['xunmitimeout']:"5","设置接口搜索超时时长(秒)").input((Juconfig,cfgfile) => {
-                if(!parseInt(input)||parseInt(input)<1||parseInt(input)>10){return 'toast://输入有误，请输入1-10数字'}else{
-                    Juconfig['xunmitimeout'] = parseInt(input);
-                    writeFile(cfgfile, JSON.stringify(Juconfig));
-                    refreshPage(false);
-                    return 'toast://接口搜索超时时长已设置为：'+input+'秒';
-                }
-            }, Juconfig, cfgfile),
-        col_type: "text_3"
-    });
-    d.push({
-        title: '失败次数',
-        url: $(Juconfig['failnum']?Juconfig['failnum']:"10","搜索无法访问的接口达到多少失败次数，转移到失败待处理分组").input((Juconfig,cfgfile) => {
-                if(!parseInt(input)||parseInt(input)<1||parseInt(input)>100){return 'toast://输入有误，请输入1-100数字'}else{
-                    Juconfig['failnum'] = parseInt(input);
-                    writeFile(cfgfile, JSON.stringify(Juconfig));
-                    refreshPage(false);
-                    return 'toast://搜索接口无法访问'+input+'次，自动转移到失败待处理分组';
-                }
-            }, Juconfig, cfgfile),
-        col_type: "text_3"
-    });
-    d.push({
-        col_type: "line"
-    });
     */
+    d.push({
+        col_type: "line_blank"
+    });
+    d.push({
+        title: '资源码',
+        img: getIcon("管理-依赖.svg"),
+        col_type: 'avatar',
+        url: 'hiker://empty'
+    });
 
     d.push({
         col_type: "line_blank"
@@ -2834,12 +2816,6 @@ function JYimport(input) {
         return "toast://聚影：口令有误>"+e.message;
     }
     try{
-        if (inputname == "聚影云盘") {
-            let content = parsePaste(pasteurl);
-            let datalist2 = JSON.parse(base64Decode(content));
-            let num = yundisksave(datalist2);
-            return "toast://合计" + datalist2.length + "个，导入" + num + "个";
-        }
         if(inputname=="聚影接口"){
             var sm = "聚影：接口";
         }else if(inputname=="聚影解析"){
