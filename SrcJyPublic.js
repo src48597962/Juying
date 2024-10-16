@@ -816,9 +816,7 @@ function shareResource() {
         col_type: "rich_text"
     });
     let resources = Juconfig['shareResource'] || [];
-    if(!storage0.getMyVar('Juconfig')){
-        storage0.putMyVar('Juconfig', Juconfig);
-    }
+    storage0.putMyVar('Juconfig', Juconfig);
     
     d.push({
         title: '申请分享资源码，当前共有'+resources.length+'个',
