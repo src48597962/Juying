@@ -791,8 +791,7 @@ function getIcon(icon, nochange) {
     },color))
 }
 // 重定义打印日志
-let rulelog = getItem('规则日志打印','0');
-if (rulelog != "1") {
+if (getItem('规则日志打印','0') != "1") {
     log = function () {
         return;
     };
@@ -806,6 +805,487 @@ function downloadFiles() {
         }catch(e){}
     }
 }
+// 分源资源码
+function shareResource() {
+    addListener("onClose", $.toString(() => {
+        clearMyVar('Juconfig');
+        clearMyVar('shareResourceCode');
+    }));
+    let d = [];
+    d.push({
+        title: '🌐 聚影分享',
+        col_type: "rich_text"
+    });
+    let resources = Juconfig['shareResource'] || [];
+    if(!storage0.getMyVar('Juconfig')){
+        storage0.putMyVar('Juconfig', Juconfig);
+    }
+    
+    d.push({
+        title: '当前共有'+resources.length+'个分享资源码',
+        desc: '感谢TyrantGenesis大佬提供的云6剪贴板',
+        url: resources.length>=3?"分享资源码不能超过3个":$().lazyRule((cfgfile) => {
+                try{
+                    let pastecreate = JSON.parse(request('https://pasteme.tyrantg.com/api/create', {
+                        body: 'content=juying&password=juying',
+                        method: 'POST'
+                    }));
+                    if(pastecreate.result_code=="SUCCESS"){
+                        let data = pastecreate.data;
+                        return $("", "申请成功，输入名称保存").input((path,cfgfile)=>{
+                            input = input.trim();
+                            if(input){
+                                let Juconfig = storage0.getMyVar('Juconfig');
+                                let resources = Juconfig['shareResource'] || [];
+                                resources.push({
+                                    name: input,
+                                    path: path
+                                })
+                                Juconfig['shareResource'] = resources;
+                                writeFile(cfgfile, JSON.stringify(Juconfig));
+                                refreshPage(false);
+                                return 'toast://申请成功';
+                            }else{
+                                return "toast://不能为空";
+                            }
+                        }, data.path, cfgfile)
+                    }else{
+                        return 'toast://申请失败：'+pastecreate.message;
+                    }
+                } catch (e) {
+                    log('申请失败：'+e.message); 
+                    return 'toast://申请失败，请重新再试';
+                }
+            }, cfgfile),
+        col_type: "text_center_1"
+    });
+    resources.forEach(it=>{
+        d.push({
+            title: it.name + (getMyVar("shareResourceCode")==it.path?"👈":""),
+            desc: it.time,
+            url: $(["复制","删除","改名","上传"], 2, "选择操作功能项").select((path,cfgfile)=>{
+                let Juconfig = storage0.getMyVar('Juconfig');
+                let codeid = aesEncode('Juying2', path);
+                if(input=="复制"){
+                    copy('资源码￥'+codeid+'￥聚影');
+                    return "hiker://empty";
+                }else if(input=="删除"){
+                    let resources = Juconfig['shareResource'] || [];
+                    const index = resources.findIndex(item => item.path === path);
+                    if (index !== -1) {
+                        resources.splice(index, 1);
+                    }
+                    Juconfig['shareResource'] = resources;
+                    writeFile(cfgfile, JSON.stringify(Juconfig));
+                }else if(input=="改名"){
+                    return $("","输入新名称").input((Juconfig,path,cfgfile)=>{
+                        input = input.trim();
+                        if(input){
+                            let resources = Juconfig['shareResource'] || [];
+                            const index = resources.findIndex(item => item.path === path);
+                            if (index !== -1) {
+                                resources[index].name = input;
+                            }
+                            Juconfig['shareResource'] = resources;
+                            writeFile(cfgfile, JSON.stringify(Juconfig));
+                            refreshPage(false);
+                        }
+                        return "hiker://empty";
+                    },Juconfig,path,cfgfile)
+                }else if(input=="上传"){
+                    putMyVar("shareResourceCode", path);
+                }
+                refreshPage(false);
+                return "hiker://empty";
+            }, it.path, cfgfile),
+            col_type: "text_1"
+        });
+    })
+    setResult(d);
+}
+/*
+    d.push({
+        title: '✅ 分享同步',
+        url: noteinfo.status==1&&sharecode['note_id']?$('#noLoading#').lazyRule(()=>{
+            putMyVar('uploads','1');
+            putMyVar('uploadjiekou','1');
+            putMyVar('uploadjiexi','0');
+            putMyVar('uploadlive','0');
+            putMyVar('uploadyundisk','0');
+            refreshPage(false);
+            return 'toast://选择上传同步云端的项';
+        }):'toast://请先申请聚影资源码',
+        col_type: "text_2"
+    });
+    d.push({
+        title: '❎ 删除云端',
+        url: sharecode['note_id']?$("确定要删除吗，删除后无法找回？").confirm((Juconfig,cfgfile)=>{
+                try{
+                    let sharecode = Juconfig['sharecode'] || {};
+                    var pastedelete = JSON.parse(request('https://netcut.txtbin.cn/api/note2/deleteNote/', {
+                        headers: { 'Referer': 'https://netcut.cn/' },
+                        body: 'note_id='+sharecode.note_id+'&note_toke='+sharecode.note_toke+'&note_name='+sharecode.note_name,
+                        method: 'POST'
+                    }));
+                    var status = pastedelete.status
+
+                    delete Juconfig['sharecode'];
+                    writeFile(cfgfile, JSON.stringify(Juconfig));
+                    refreshPage(false);
+                    
+                    if(status==1){
+                        return "toast://聚影资源码云端已删除";
+                    }else{
+                        return 'toast://无需删除，云端已不存在';
+                    }
+                } catch (e) {
+                    log('删除失败：'+e.message); 
+                    return 'toast://删除资源失败，云端异常';
+                }
+            }, Juconfig, cfgfile):'toast://请先申请聚影资源码',
+        col_type: "text_2"
+    });
+    if(getMyVar('uploads','0')=="1"){
+        d.push({
+            title: '选择分享同步云端的项目',
+            col_type: "rich_text",
+            extra:{textSize:12}
+        });
+        d.push({
+            title:(getMyVar('uploadjiekou','0')=="1"?getide(1):getide(0))+'接口',
+            col_type:'text_4',
+            url:$('#noLoading#').lazyRule(() => {
+                if(getMyVar('uploadjiekou')=="1"){
+                    putMyVar('uploadjiekou','0');
+                }else{
+                    putMyVar('uploadjiekou','1');
+                }
+                refreshPage(false);
+                return "hiker://empty";
+            })
+        });
+        d.push({
+            title:(getMyVar('uploadjiexi','0')=="1"?getide(1):getide(0))+'解析',
+            col_type:'text_4',
+            url:$('#noLoading#').lazyRule(() => {
+                if(getMyVar('uploadjiexi')=="1"){
+                    putMyVar('uploadjiexi','0');
+                    var sm = "hiker://empty";
+                }else{
+                    putMyVar('uploadjiexi','1');
+                    var sm = "toast://友情提醒：公开分享的解析容易失效";
+                }
+                refreshPage(false);
+                return sm;
+            })
+        });
+        d.push({
+            title:(getMyVar('uploadlive','0')=="1"?getide(1):getide(0))+'直播',
+            col_type:'text_4',
+            url:$('#noLoading#').lazyRule(() => {
+                if(getMyVar('uploadlive')=="1"){
+                    putMyVar('uploadlive','0');
+                }else{
+                    putMyVar('uploadlive','1');
+                }
+                refreshPage(false);
+                return "hiker://empty";
+            })
+        });
+        d.push({
+            title:(getMyVar('uploadyundisk','0')=="1"?getide(1):getide(0))+'云盘',
+            col_type:'text_4',
+            url:$('#noLoading#').lazyRule(() => {
+                if(getMyVar('uploadyundisk')=="1"){
+                    putMyVar('uploadyundisk','0');
+                }else{
+                    putMyVar('uploadyundisk','1');
+                }
+                refreshPage(false);
+                return "hiker://empty";
+            })
+        });
+        d.push({
+            title: '🔙 取消上传',
+            url: $('#noLoading#').lazyRule(() => {
+                clearMyVar('uploads');
+                clearMyVar('uploadjiekou');
+                clearMyVar('uploadjiexi');
+                clearMyVar('uploadlive');
+                clearMyVar('uploadyundisk');
+                refreshPage(false);
+                return "hiker://empty";
+            }),
+            col_type: "text_2"
+        });
+        d.push({
+            title: '🔝 确定上传',
+            url: $().lazyRule((Juconfig,cfgfile) => {
+                let text = {};
+                let libspath = globalMap0.getVar('Jy_gmParams').libspath;
+                if(getMyVar('uploadjiekou','0')=="1"){
+                    var filepath = libspath + "jiekou.json";
+                    var datafile = fetch(filepath);
+                    if(datafile==""){
+                        var datalist = [];
+                    }else{
+                        eval("var datalist=" + datafile+ ";");
+                    }
+                    text['jiekou'] = datalist;
+                }
+                if(getMyVar('uploadjiexi','0')=="1"){
+                    var filepath = datapath + "jiexi.json";
+                    var datafile = fetch(filepath);
+                    if(datafile==""){
+                        var datalist = [];
+                    }else{
+                        eval("var datalist=" + datafile+ ";");
+                    }
+                    text['jiexi'] = datalist;
+                }
+                if(getMyVar('uploadlive','0')=="1"){
+                    var filepath = datapath + "liveconfig.json";
+                    var datafile = fetch(filepath);
+                    if(datafile==""){
+                        var liveconfig={};
+                    }else{
+                        eval("var liveconfig=" + datafile+ ";");
+                    }
+                    text['live'] = liveconfig;
+                }
+                if(getMyVar('uploadyundisk','0')=="1"){
+                    var filepath = rulepath + "yundisk.json";
+                    var datafile = fetch(filepath);
+                    if(datafile==""){
+                        var datalist=[];
+                    }else{
+                        eval("var datalist=" + datafile+ ";");
+                    }
+                    text['yundisk'] = datalist;
+                }
+                let textcontent = globalMap0.getVar('Jy_gmParams').zip(JSON.stringify(text));
+                if(textcontent.length>=200000){
+                    log('分享失败：字符数超过最大限制，请精简接口，重点减少XPath和biubiu类型'); 
+                    return 'toast://分享同步失败，超过最大限制，请精简接口';
+                }
+                try{
+                    let sharecode = Juconfig['sharecode'] || {};
+                    var pasteupdate = JSON.parse(request('https://netcut.txtbin.cn/api/note2/save/', {
+                        headers: { 'Referer': 'https://netcut.cn/' },
+                        body: 'note_name='+sharecode.note_name+'&note_id='+sharecode.note_id+'&note_content='+textcontent+'&note_token='+sharecode.note_token+'&note_pwd=&expire_time=94608000',
+                        method: 'POST'
+                    }));
+                    var status = pasteupdate.status
+                    
+                    clearMyVar('uploads');
+                    clearMyVar('uploadjiekou');
+                    clearMyVar('uploadjiexi');
+                    clearMyVar('uploadlive');
+                    clearMyVar('uploadyundisk');
+                    refreshPage(false);
+                    if(status==1){
+                        let pastedata = pasteupdate.data || {};
+                        pastedata['note_name'] = sharecode.note_name;
+                        Juconfig['sharecode'] = pastedata;
+                        writeFile(cfgfile, JSON.stringify(Juconfig));
+                        refreshPage(false);
+                        return "toast://分享同步云端数据成功";
+                    }else{
+                        return 'toast://分享同步失败，资源码应该不存在';
+                    }
+                } catch (e) {
+                    log('分享失败：'+e.message); 
+                    return 'toast://分享同步失败，请重新再试';
+                }
+            }, Juconfig, cfgfile),
+            col_type: "text_2"
+        });
+    }
+    d.push({
+        col_type: "line"
+    });
+    d.push({
+        title: '⚡ 订阅管理',
+        col_type: "rich_text"
+    });
+    
+    d.push({
+        title: Juconfig['codedyid']?'已订阅聚影资源码':'订阅聚影资源码',
+        desc: Juconfig['codedyid']?'点击订阅、复制、切换资源码'+(Juconfig['codedyname']?'\n当前订阅的资源码为：'+Juconfig['codedyname']:""):'订阅后将与分享者云端数据保持同步',
+        url: $(["订阅","复制","切换"],3).select((Juconfig,cfgfile)=>{
+                if(input=="订阅"){
+                    return $("","输入聚影资源码口令\n订阅会自动和云端同步，覆盖本地非保留接口").input((Juconfig,cfgfile) => {
+                        if(input.split('￥')[0]!="聚影资源码"){
+                            return 'toast://口令有误';
+                        }
+                        showLoading('正在校验有效性')
+                        let codeid = input.split('￥')[1];
+                        let text = parsePaste('https://netcut.cn/p/'+aesDecode('Juying2', codeid));
+                        hideLoading();
+                        if(codeid&&!/^error/.test(text)){
+                            return $("","当前资源码有效，起个名保存吧").input((Juconfig,cfgfile,codeid) => {
+                                let dydatalist = Juconfig.dingyue||[];
+                                if(dydatalist.some(item => item.name ==input)){
+                                    return 'toast://名称重复，无法保存';
+                                }else if(input!=""){
+                                    if(!dydatalist.some(item => item.url ==codeid)){
+                                        Juconfig['codedyid'] = codeid;
+                                        Juconfig['codedyname'] = input;
+                                        dydatalist.push({name:input, url:codeid})
+                                        Juconfig['dingyue'] = dydatalist;
+                                        writeFile(cfgfile, JSON.stringify(Juconfig));
+                                        refreshPage(false);
+                                        return 'toast://已保存，订阅成功';
+                                    }else{
+                                        return 'toast://已存在，订阅未成功';
+                                    }
+                                }else{
+                                    return 'toast://名称为空，无法保存';
+                                }
+                            }, Juconfig, cfgfile, codeid);
+                        }else{
+                            return "toast://口令错误或资源码已失效";
+                        }
+                    }, Juconfig, cfgfile)
+                }else if(input=="复制"){
+                    let codeid = Juconfig['codedyid'];
+                    return codeid?$().lazyRule((codeid)=>{
+                        let code = '聚影资源码￥'+codeid;
+                        copy(code);
+                        return "hiker://empty";
+                    },codeid):'toast://请先订阅'
+                }else if(input=="切换"){
+                    let codeid = Juconfig['codedyid'];
+                    let dydatalist = Juconfig.dingyue||[];
+                    let list = dydatalist.map((list)=>{
+                        if(list.url !=codeid){
+                            return list.name;
+                        }
+                    })
+                    list = list.filter(n => n);
+                    if(list.length>0){
+                        return $(list,3,"选择需切换的订阅源").select((dydatalist,Juconfig,cfgfile)=>{
+                            var url = "";
+                            for (var i in dydatalist) {
+                                if(dydatalist[i].name==input){
+                                    url = dydatalist[i].url;
+                                    break;
+                                }
+                            }
+                            if(url){
+                                Juconfig['codedyid'] = url;
+                                Juconfig['codedyname'] = input;
+                                writeFile(cfgfile, JSON.stringify(Juconfig));
+                                refreshPage(false);
+                                return 'toast://订阅已切换为：'+input+'，更新资源立即生效';
+                            }else{
+                                return 'toast://本地订阅记录文件异常，是不是干了坏事？';
+                            }
+                        },dydatalist,Juconfig,cfgfile)
+                    }else{
+                        return 'toast://未找到可切换的历史订阅';
+                    }
+                }
+            },Juconfig,cfgfile),
+        col_type: "text_center_1"
+    });
+
+    d.push({
+        title: '✅ 更新资源',
+        url: Juconfig['codedyid']?$("确定要从云端更新数据？\n"+(Juconfig['codedytype']=="2"?"当前为增量订阅模式，只增不删":"当前为全量订阅模式，覆盖本地")).confirm((codedyid,codedytype)=>{
+                try{
+                    showLoading('请稍候...')
+                    let codeid = codedyid;
+                    let text = parsePaste('https://netcut.cn/p/'+aesDecode('Juying2', codeid));
+                    if(codeid&&!/^error/.test(text)){
+                        let pastedata = JSON.parse(base64Decode(text));
+                        require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
+                        let jknum = 0;
+                        let jxnum = 0;
+                        let ypnum = 0;
+                        let jkdatalist = pastedata.jiekou||[];
+                        if(jkdatalist.length>0){
+                            jknum = jiekousave(jkdatalist, codedytype||1);
+                        }
+                        let jxdatalist = pastedata.jiexi||[];
+                        if(jxdatalist.length>0){
+                            jxnum = jiexisave(jxdatalist, codedytype||1);
+                        }
+                        if(pastedata.live){
+                            let livefilepath = globalMap0.getVar('Jy_gmParams').datapath + "liveconfig.json";
+                            let liveconfig = pastedata.live;
+                            writeFile(livefilepath, JSON.stringify(liveconfig));
+                            var sm = "，直播订阅已同步"
+                        }
+                        let ypdatalist = pastedata.yundisk||[];
+                        if(ypdatalist.length>0){
+                            ypnum = yundisksave(ypdatalist);
+                        }
+                        hideLoading();
+                        return "toast://同步完成，接口："+jknum+"，解析："+jxnum+(sm?sm:"")+"，云盘："+ypnum;
+                    }else{
+                        hideLoading();
+                        return "toast://口令错误或资源码已失效";
+                    }
+                } catch (e) {
+                    hideLoading();
+                    log('更新失败：'+e.message); 
+                    return "toast://无法识别的口令";
+                }
+            }, Juconfig['codedyid'], Juconfig['codedytype']):'toast://请先订阅聚影资源码',
+        col_type: "text_2",
+        extra: {
+            longClick: [{
+                title: "订阅类型改为："+(Juconfig['codedytype']=="2"?"全量":"增量"),
+                js: $.toString((Juconfig,cfgfile) => {
+                    if(Juconfig['codedytype']=="2"){
+                        Juconfig['codedytype'] = "1";
+                        var sm = "切换为全量订阅，除强制保留的接口/接口，均会被清空";
+                    }else{
+                        Juconfig['codedytype'] = "2";
+                        var sm = "切换为增量订阅，接口/接口只会累加，不会删除";
+                    }
+                    writeFile(cfgfile, JSON.stringify(Juconfig));
+                    refreshPage(false);
+                    return "toast://"+sm;
+                },Juconfig,cfgfile)
+            }]
+        }
+    });
+    d.push({
+        title: '❎ 删除订阅',
+        url: Juconfig['codedyid']?$(["仅删订阅源，保留历史","册除订阅及历史，不再切换"],1).select((Juconfig,cfgfile)=>{
+            if(input=="仅删订阅源，保留历史"){
+                return $().lazyRule((Juconfig,cfgfile) => {
+                    delete Juconfig['codedyid'];
+                    delete Juconfig['codedyname'];
+                    writeFile(cfgfile, JSON.stringify(Juconfig));
+                    refreshPage(false);
+                    return 'toast://已删除订阅源，历史记录可用于切换';
+                }, Juconfig, cfgfile)
+            }else if(input=="册除订阅及历史，不再切换"){
+                return $().lazyRule((Juconfig,cfgfile) => {
+                    let codeid = Juconfig['codedyid'];
+                    delete Juconfig['codedyid'];
+                    delete Juconfig['codedyname'];
+                    let dydatalist = Juconfig.dingyue||[];
+                    for (var i in dydatalist) {
+                        if(dydatalist[i].url==codeid){
+                            dydatalist.splice(i,1);
+                            break;
+                        }
+                    }
+                    Juconfig['dingyue'] = dydatalist;
+                    writeFile(cfgfile, JSON.stringify(Juconfig));
+                    refreshPage(false);
+                    return 'toast://已删除订阅源和历史记录';
+                }, Juconfig, cfgfile)
+            }                    
+        }, Juconfig, cfgfile):'toast://请先订阅聚影资源码',
+        col_type: "text_2"
+    });
+
+    */
 // 全局对象变量gmParams
 let gmParams = {
     libspath: libspath,
