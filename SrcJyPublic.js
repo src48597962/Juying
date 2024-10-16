@@ -809,7 +809,6 @@ function downloadFiles() {
 function shareResource() {
     addListener("onClose", $.toString(() => {
         clearMyVar('Juconfig');
-        clearMyVar('shareResourceCode');
     }));
     let d = [];
     d.push({
@@ -822,7 +821,7 @@ function shareResource() {
     }
     
     d.push({
-        title: '当前共有'+resources.length+'个分享资源码',
+        title: '申请分享资源码，当前共有'+resources.length+'个',
         desc: '感谢TyrantGenesis大佬提供的云6剪贴板',
         url: resources.length>=3?"分享资源码不能超过3个":$().lazyRule((cfgfile) => {
                 try{
@@ -832,14 +831,15 @@ function shareResource() {
                     }));
                     if(pastecreate.result_code=="SUCCESS"){
                         let data = pastecreate.data;
-                        return $("", "申请成功，输入名称保存").input((path,cfgfile)=>{
+                        return $("", "申请成功，输入名称保存").input((path,token,cfgfile)=>{
                             input = input.trim();
                             if(input){
                                 let Juconfig = storage0.getMyVar('Juconfig');
                                 let resources = Juconfig['shareResource'] || [];
                                 resources.push({
                                     name: input,
-                                    path: path
+                                    path: path,
+                                    token: token
                                 })
                                 Juconfig['shareResource'] = resources;
                                 writeFile(cfgfile, JSON.stringify(Juconfig));
@@ -848,7 +848,7 @@ function shareResource() {
                             }else{
                                 return "toast://不能为空";
                             }
-                        }, data.path, cfgfile)
+                        }, data.path, data.auth_code, cfgfile)
                     }else{
                         return 'toast://申请失败：'+pastecreate.message;
                     }
@@ -861,24 +861,39 @@ function shareResource() {
     });
     resources.forEach(it=>{
         d.push({
-            title: it.name + (getMyVar("shareResourceCode")==it.path?"👈":""),
-            desc: it.time,
-            url: $(["复制","删除","改名","上传"], 2, "选择操作功能项").select((path,cfgfile)=>{
+            title: it.name + "-" + it.path,
+            desc: "最后上传同步时间：" + it.time,
+            url: $(["复制","删除","改名","上传"], 2, "选择操作功能项").select((name,path,cfgfile)=>{
                 let Juconfig = storage0.getMyVar('Juconfig');
                 let codeid = aesEncode('Juying2', path);
                 if(input=="复制"){
                     copy('资源码￥'+codeid+'￥聚影');
                     return "hiker://empty";
                 }else if(input=="删除"){
-                    let resources = Juconfig['shareResource'] || [];
-                    const index = resources.findIndex(item => item.path === path);
-                    if (index !== -1) {
-                        resources.splice(index, 1);
-                    }
-                    Juconfig['shareResource'] = resources;
-                    writeFile(cfgfile, JSON.stringify(Juconfig));
+                    return $("确定要删除云端分享："+name+"？删除后无法找回！").confirm((Juconfig,path,cfgfile)=>{
+                        try{
+                            let pastecreate = JSON.parse(request('https://pasteme.tyrantg.com/api/update', {
+                                body: 'content=juying&password=juying',
+                                method: 'POST'
+                            }));
+                            if(pastecreate.result_code=="SUCCESS"){
+                                let resources = Juconfig['shareResource'] || [];
+                                const index = resources.findIndex(item => item.path === path);
+                                if (index !== -1) {
+                                    resources.splice(index, 1);
+                                }
+                                Juconfig['shareResource'] = resources;
+                                writeFile(cfgfile, JSON.stringify(Juconfig));
+                            }
+                            refreshPage(false);
+                            return 'toast://删除成功';
+                        } catch (e) {
+                            log('删除失败：'+e.message); 
+                            return 'toast://删除失败，请重新再试';
+                        }
+                    },Juconfig,path,cfgfile)
                 }else if(input=="改名"){
-                    return $("","输入新名称").input((Juconfig,path,cfgfile)=>{
+                    return $(name, "输入新名称").input((Juconfig,path,cfgfile)=>{
                         input = input.trim();
                         if(input){
                             let resources = Juconfig['shareResource'] || [];
@@ -893,131 +908,37 @@ function shareResource() {
                         return "hiker://empty";
                     },Juconfig,path,cfgfile)
                 }else if(input=="上传"){
-                    putMyVar("shareResourceCode", path);
+                    const hikerPop = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6966");
+                    let fruit = ["接口", "解析", "云盘", "直播"];
+                    let checkedName = [];
+                    hikerPop.multiChoice({
+                        title: "选择要上传分享同步的项", 
+                        options: fruit, 
+                        checkedIndexs: [0], 
+                        onChoice(i, isChecked) {
+                            log(i + ":" + isChecked);
+                        }, 
+                        rightTitle: "确认上传", 
+                        rightClick(options, checked) {
+                            log(options);
+                            log(checked);
+                            //toast("\u4f60\u9009\u4e86\uff1a" + options.filter((v, i) => checked[i]).join(","));
+                        }, 
+                        centerTitle: "取消"
+                    });
+
+                    //refreshPage(false);
+                    return "hiker://empty";
                 }
-                refreshPage(false);
-                return "hiker://empty";
-            }, it.path, cfgfile),
+            }, it.name, it.path, cfgfile),
             col_type: "text_1"
         });
     })
+
     setResult(d);
 }
-/*
-    d.push({
-        title: '✅ 分享同步',
-        url: noteinfo.status==1&&sharecode['note_id']?$('#noLoading#').lazyRule(()=>{
-            putMyVar('uploads','1');
-            putMyVar('uploadjiekou','1');
-            putMyVar('uploadjiexi','0');
-            putMyVar('uploadlive','0');
-            putMyVar('uploadyundisk','0');
-            refreshPage(false);
-            return 'toast://选择上传同步云端的项';
-        }):'toast://请先申请聚影资源码',
-        col_type: "text_2"
-    });
-    d.push({
-        title: '❎ 删除云端',
-        url: sharecode['note_id']?$("确定要删除吗，删除后无法找回？").confirm((Juconfig,cfgfile)=>{
-                try{
-                    let sharecode = Juconfig['sharecode'] || {};
-                    var pastedelete = JSON.parse(request('https://netcut.txtbin.cn/api/note2/deleteNote/', {
-                        headers: { 'Referer': 'https://netcut.cn/' },
-                        body: 'note_id='+sharecode.note_id+'&note_toke='+sharecode.note_toke+'&note_name='+sharecode.note_name,
-                        method: 'POST'
-                    }));
-                    var status = pastedelete.status
 
-                    delete Juconfig['sharecode'];
-                    writeFile(cfgfile, JSON.stringify(Juconfig));
-                    refreshPage(false);
-                    
-                    if(status==1){
-                        return "toast://聚影资源码云端已删除";
-                    }else{
-                        return 'toast://无需删除，云端已不存在';
-                    }
-                } catch (e) {
-                    log('删除失败：'+e.message); 
-                    return 'toast://删除资源失败，云端异常';
-                }
-            }, Juconfig, cfgfile):'toast://请先申请聚影资源码',
-        col_type: "text_2"
-    });
-    if(getMyVar('uploads','0')=="1"){
-        d.push({
-            title: '选择分享同步云端的项目',
-            col_type: "rich_text",
-            extra:{textSize:12}
-        });
-        d.push({
-            title:(getMyVar('uploadjiekou','0')=="1"?getide(1):getide(0))+'接口',
-            col_type:'text_4',
-            url:$('#noLoading#').lazyRule(() => {
-                if(getMyVar('uploadjiekou')=="1"){
-                    putMyVar('uploadjiekou','0');
-                }else{
-                    putMyVar('uploadjiekou','1');
-                }
-                refreshPage(false);
-                return "hiker://empty";
-            })
-        });
-        d.push({
-            title:(getMyVar('uploadjiexi','0')=="1"?getide(1):getide(0))+'解析',
-            col_type:'text_4',
-            url:$('#noLoading#').lazyRule(() => {
-                if(getMyVar('uploadjiexi')=="1"){
-                    putMyVar('uploadjiexi','0');
-                    var sm = "hiker://empty";
-                }else{
-                    putMyVar('uploadjiexi','1');
-                    var sm = "toast://友情提醒：公开分享的解析容易失效";
-                }
-                refreshPage(false);
-                return sm;
-            })
-        });
-        d.push({
-            title:(getMyVar('uploadlive','0')=="1"?getide(1):getide(0))+'直播',
-            col_type:'text_4',
-            url:$('#noLoading#').lazyRule(() => {
-                if(getMyVar('uploadlive')=="1"){
-                    putMyVar('uploadlive','0');
-                }else{
-                    putMyVar('uploadlive','1');
-                }
-                refreshPage(false);
-                return "hiker://empty";
-            })
-        });
-        d.push({
-            title:(getMyVar('uploadyundisk','0')=="1"?getide(1):getide(0))+'云盘',
-            col_type:'text_4',
-            url:$('#noLoading#').lazyRule(() => {
-                if(getMyVar('uploadyundisk')=="1"){
-                    putMyVar('uploadyundisk','0');
-                }else{
-                    putMyVar('uploadyundisk','1');
-                }
-                refreshPage(false);
-                return "hiker://empty";
-            })
-        });
-        d.push({
-            title: '🔙 取消上传',
-            url: $('#noLoading#').lazyRule(() => {
-                clearMyVar('uploads');
-                clearMyVar('uploadjiekou');
-                clearMyVar('uploadjiexi');
-                clearMyVar('uploadlive');
-                clearMyVar('uploadyundisk');
-                refreshPage(false);
-                return "hiker://empty";
-            }),
-            col_type: "text_2"
-        });
+/*
         d.push({
             title: '🔝 确定上传',
             url: $().lazyRule((Juconfig,cfgfile) => {
