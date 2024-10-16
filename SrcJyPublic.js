@@ -870,7 +870,7 @@ function shareResource() {
                     copy('资源码￥'+codeid+'￥聚影');
                     return "hiker://empty";
                 }else if(input=="删除"){
-                    return $("确定要删除云端分享："+it.name+"？删除后无法找回！").confirm((Juconfig,it,cfgfile)=>{
+                    return $("确定要删除云端分享："+it.name+"\n删除后无法找回").confirm((Juconfig,it,cfgfile)=>{
                         try{
                             let pastecreate = JSON.parse(request('https://pasteme.tyrantg.com/api/update', {
                                 body: 'content=juying&path='+it.path+'@juying'+'&auth_code='+it.token,
@@ -884,6 +884,8 @@ function shareResource() {
                                 }
                                 Juconfig['shareResource'] = resources;
                                 writeFile(cfgfile, JSON.stringify(Juconfig));
+                            }else{
+                                return 'toast://'+pastecreate.message;
                             }
                             refreshPage(false);
                             return 'toast://删除成功';
@@ -923,7 +925,6 @@ function shareResource() {
                             if(options.filter((v, i) => checked[i]).length==0){
                                 return "toast://没有选择上传项";
                             }
-                            log("11111");
 
                             let text = {};
                             options.forEach((option,i)=>{
