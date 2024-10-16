@@ -821,7 +821,7 @@ function shareResource() {
     d.push({
         title: '申请分享资源码，当前共有'+resources.length+'个',
         desc: '感谢TyrantGenesis大佬提供的云6剪贴板',
-        url: resources.length>=3?"分享资源码不能超过3个":$().lazyRule(() => {
+        url: resources.length>=3?"toast://分享资源码不能超过3个":$().lazyRule(() => {
                 try{
                     let pastecreate = JSON.parse(request('https://pasteme.tyrantg.com/api/create', {
                         body: 'content=juying&password=juying',
@@ -893,7 +893,7 @@ function shareResource() {
                             log('删除失败：'+e.message); 
                             return 'toast://删除失败，请重新再试';
                         }
-                    }, Juconfig, cfgfile)
+                    }, Juconfig, it, cfgfile)
                 }else if(input=="改名"){
                     return $(it.name, "输入新名称").input((Juconfig,path,cfgfile)=>{
                         input = input.trim();
