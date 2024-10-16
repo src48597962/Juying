@@ -821,7 +821,7 @@ function shareResource() {
     d.push({
         title: '申请分享资源码，当前共有'+resources.length+'个',
         desc: '感谢TyrantGenesis大佬提供的云6剪贴板',
-        url: resources.length>=3?"分享资源码不能超过3个":$().lazyRule((cfgfile) => {
+        url: resources.length>=3?"分享资源码不能超过3个":$().lazyRule(() => {
                 try{
                     let pastecreate = JSON.parse(request('https://pasteme.tyrantg.com/api/create', {
                         body: 'content=juying&password=juying',
@@ -829,7 +829,7 @@ function shareResource() {
                     }));
                     if(pastecreate.result_code=="SUCCESS"){
                         let data = pastecreate.data;
-                        return $("", "申请成功，输入名称保存").input((path,token,cfgfile)=>{
+                        return $("", "申请成功，输入名称保存").input((path,token,)=>{
                             input = input.trim();
                             if(input){
                                 let Juconfig = storage0.getMyVar('Juconfig');
@@ -840,13 +840,14 @@ function shareResource() {
                                     token: token
                                 })
                                 Juconfig['shareResource'] = resources;
+                                let cfgfile = globalMap0.getVar('Jy_gmParams').cfgfile;
                                 writeFile(cfgfile, JSON.stringify(Juconfig));
                                 refreshPage(false);
                                 return 'toast://申请成功';
                             }else{
                                 return "toast://不能为空";
                             }
-                        }, data.path, data.auth_code, cfgfile)
+                        }, data.path, data.auth_code)
                     }else{
                         return 'toast://申请失败：'+pastecreate.message;
                     }
@@ -854,15 +855,16 @@ function shareResource() {
                     log('申请失败：'+e.message); 
                     return 'toast://申请失败，请重新再试';
                 }
-            }, cfgfile),
+            }),
         col_type: "text_center_1"
     });
     resources.forEach(it=>{
         d.push({
             title: it.name + "-" + it.path,
             desc: "最后上传同步时间：" + (it.time||""),
-            url: $(["复制","删除","改名","上传"], 2, "选择操作功能项").select((it,cfgfile)=>{
+            url: $(["复制","删除","改名","上传"], 2, "选择操作功能项").select((it)=>{
                 let Juconfig = storage0.getMyVar('Juconfig');
+                let cfgfile = globalMap0.getVar('Jy_gmParams').cfgfile;
                 let codeid = aesEncode('Juying2', it.path);
                 if(input=="复制"){
                     copy('资源码￥'+codeid+'￥聚影');
@@ -910,7 +912,6 @@ function shareResource() {
                 }else if(input=="上传"){
                     const hikerPop = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6966");
                     let fruit = ["接口", "解析", "云盘", "直播"];
-                    let checkedName = [];
                     hikerPop.multiChoice({
                         title: "选择要上传分享同步的项", 
                         options: fruit, 
@@ -979,13 +980,11 @@ function shareResource() {
                     });
                     return "hiker://empty";
                 }
-            }, it, cfgfile),
+            }, it),
             col_type: "text_1"
         });
     })
-    d.push({
-        col_type: "line"
-    });
+
     setResult(d);
 }
 
@@ -1184,6 +1183,7 @@ let gmParams = {
     jkfilespath: jkfilespath,
     jkfile: jkfile,
     jxfile: jxfile,
+    ypfile: ypfile,
     cfgfile: cfgfile,
     getIcon: getIcon,
     getContnet: getContnet,
