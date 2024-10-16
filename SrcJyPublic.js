@@ -823,10 +823,12 @@ function shareResource() {
         desc: '感谢TyrantGenesis大佬提供的云6剪贴板',
         url: resources.length>=3?"toast://分享资源码不能超过3个":$().lazyRule(() => {
                 try{
+                    showLoading("执行中，请稍后");
                     let pastecreate = JSON.parse(request('https://pasteme.tyrantg.com/api/create', {
                         body: 'content=juying&password=juying',
                         method: 'POST'
                     }));
+                    hideLoading();
                     if(pastecreate.result_code=="SUCCESS"){
                         let data = pastecreate.data;
                         return $("", "申请成功，输入名称保存").input((path,token,)=>{
@@ -872,6 +874,7 @@ function shareResource() {
                 }else if(input=="删除"){
                     return $("确定要删除云端分享："+it.name+"\n删除后无法找回").confirm((Juconfig,it,cfgfile)=>{
                         try{
+                            showLoading("执行中，请稍后");
                             let pastecreate = JSON.parse(request('https://pasteme.tyrantg.com/api/update', {
                                 body: 'content=juying&path='+it.path+'@juying'+'&auth_code='+it.token,
                                 method: 'POST'
@@ -887,6 +890,7 @@ function shareResource() {
                             }else{
                                 return 'toast://'+pastecreate.message;
                             }
+                            hideLoading();
                             refreshPage(false);
                             return 'toast://删除成功';
                         } catch (e) {
@@ -908,7 +912,7 @@ function shareResource() {
                             refreshPage(false);
                         }
                         return "hiker://empty";
-                    },Juconfig,it.path,cfgfile)
+                    }, Juconfig, it.path, cfgfile)
                 }else if(input=="上传"){
                     const hikerPop = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6966");
                     let fruit = ["接口", "解析", "云盘", "直播"];
@@ -951,13 +955,14 @@ function shareResource() {
                                     }
                                 }
                             })
+                            showLoading("执行中，请稍后");
                             let textcontent = globalMap0.getVar('Jy_gmParams').zip(JSON.stringify(text));
-
                             try{
                                 let pasteupdate = JSON.parse(request('https://pasteme.tyrantg.com/api/update', {
                                     body: 'content='+textcontent+'&path='+it.path+'@juying'+'&auth_code='+it.token,
                                     method: 'POST'
                                 }));
+                                hideLoading();
                                 if(pasteupdate.result_code=="SUCCESS"){
                                     let resources = Juconfig['shareResource'] || [];
                                     const index = resources.findIndex(item => item.path === it.path);
