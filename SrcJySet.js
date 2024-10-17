@@ -1595,33 +1595,6 @@ function manageSet(){
         col_type: "line_blank"
     });
     d.push({
-        title: '资源码',
-        img: getIcon("管理-依赖.svg"),
-        col_type: 'avatar',
-        url: 'hiker://empty'
-    });
-    d.push({
-        title: '分享资源',
-        img: getIcon("管理-箭头.svg"),
-        url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
-            require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
-            shareResource();
-        }),
-        col_type: 'text_icon'
-    });
-    d.push({
-        title: '订阅资源',
-        img: getIcon("管理-箭头.svg"),
-        url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
-            require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
-            subResource();
-        }),
-        col_type: 'text_icon'
-    });
-    d.push({
-        col_type: "line_blank"
-    });
-    d.push({
         title: '依赖管理',
         img: getIcon("管理-依赖.svg"),
         col_type: 'avatar',
@@ -1694,6 +1667,24 @@ function manageSet(){
         img: getIcon("管理-配置.svg"),
         col_type: 'avatar',
         url: 'toast://不清楚，可不动'
+    });
+    d.push({
+        title: '资源码分享',
+        img: getIcon("管理-箭头.svg"),
+        url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
+            require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
+            shareResource();
+        }),
+        col_type: 'text_icon'
+    });
+    d.push({
+        title: '资源码订阅',
+        img: getIcon("管理-箭头.svg"),
+        url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
+            require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
+            subResource();
+        }),
+        col_type: 'text_icon'
     });
     let colors = [{
         title: "恢复初始",
