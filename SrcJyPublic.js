@@ -1105,7 +1105,7 @@ function subResource() {
                     }, Juconfig, it.path, cfgfile)
                 }else if(input=="下载"){
                     try{
-                        let pasteget = JSON.parse(request('https://pasteme.tyrantg.com/api/getContent/'+codeid+'@juying',{
+                        let pasteget = JSON.parse(request('https://pasteme.tyrantg.com/api/getContent/'+it.path+'@juying',{
                             "content-type": "application/json;charset=UTF-8"
                         }));
                         if(pasteget.result_code=="SUCCESS"){
