@@ -948,9 +948,13 @@ function shareResource() {
                                             eval("let tvconfig=" + datafile+ ";");
                                             text[option] = tvconfig;
                                         }else{
-                                            eval("datalist=" + datafile+ ";");
+                                            try{
+                                                eval("datalist=" + datafile+ ";");
+                                            }catch(e){}
                                             if(datalist.length>600){
-                                                return "toast://接口超过600，建议先精简";
+                                                toast(option+"超过600，建议先精简");
+                                            }else if(datalist.length==0){
+                                                toast(option+"数量为0");
                                             }
                                             if(option=="接口"){
                                                 for(let i=0;i<datalist.length;i++){
@@ -996,7 +1000,7 @@ function shareResource() {
                                 }
                             } catch (e) {
                                 log('分享上传云端失败：'+e.message); 
-                                return 'toast://分享上传云端失败，可能是网络问题';
+                                return 'toast://分享上传云端失败，网络或内容出错';
                             }
                         }, 
                         centerTitle: "取消"
