@@ -948,6 +948,9 @@ function shareResource() {
                                             text[option] = tvconfig;
                                         }else{
                                             eval("datalist=" + datafile+ ";");
+                                            if(datalist.length>600){
+                                                return "toast://接口超过600，建议先精简";
+                                            }
                                             if(option=="接口"){
                                                 for(let i=0;i<datalist.length;i++){
                                                     let data = datalist[i];
