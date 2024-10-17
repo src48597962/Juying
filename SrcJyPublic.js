@@ -1110,6 +1110,7 @@ function subResource() {
                         }));
                         if(pasteget.result_code=="SUCCESS"){
                             let textcontent = globalMap0.getVar('Jy_gmParams').unzip(pasteget.data);
+                            log(textcontent);
                             let pastedata = JSON.parse(textcontent);
                             require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
                             let jknum = 0;
