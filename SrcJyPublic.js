@@ -1051,7 +1051,7 @@ function subResource() {
     resources.forEach(it=>{
         d.push({
             title: it.name + "-" + it.path,
-            desc: "下载同步时间：" + (it.time||"") + "\n自动同步：" + (it.auto?"是":"否") + "  导入模式：" + (it.mode==2?"全量":"增量"),
+            desc: "最后同步时间：" + (it.time||"") + "\n是否自动同步：" + (it.auto?"是":"否") + "    下载导入模式：" + (it.mode==2?"全量":"增量"),
             url: $(["复制","删除","改名","下载","自动",it.mode=="2"?"增量":"全量"], 2, "选择操作功能项").select((it)=>{
                 let Juconfig = storage0.getMyVar('Juconfig');
                 let cfgfile = globalMap0.getVar('Jy_gmParams').cfgfile;
@@ -1062,10 +1062,10 @@ function subResource() {
                 }else if(input=="自动"){
                     let resources = Juconfig['subResource'] || [];
                     resources.forEach(its=>{
-                        if(its.path==it.path){
-                            its.auto = 1;
-                        }else{
+                        if(its.path!=it.path || its.auto){
                             delete its.auto;
+                        }else{
+                            its.auto = 1;
                         }
                     })
                     writeFile(cfgfile, JSON.stringify(Juconfig));
@@ -1084,7 +1084,7 @@ function subResource() {
                     })
                     writeFile(cfgfile, JSON.stringify(Juconfig));
                     refreshPage(false);
-                    return 'toast://设置成功'+(input=="全量"?"：先删除本地所有再导入":"");
+                    return 'toast://设置成功'+(input=="全量"?"：会先删除本地所有再导入":"");
                 }else if(input=="删除"){
                     return $("确定要删除资源码："+it.name+"\n删除后无法找回").confirm((Juconfig,it,cfgfile)=>{
                         try{
@@ -1147,6 +1147,13 @@ function subResource() {
                             if(ypdatalist.length>0){
                                 ypnum = yundisksave(ypdatalist, 1);
                             }
+                            let resources = Juconfig['subResource'] || [];
+                            const index = resources.findIndex(item => item.path === it.path);
+                            if (index !== -1) {
+                                resources[index].time = $.dateFormat(new Date(), "yyyy-MM-dd HH:mm:ss");
+                            }
+                            Juconfig['subResource'] = resources;
+                            writeFile(cfgfile, JSON.stringify(Juconfig));
                             hideLoading();
                             return "toast://同步完成，接口："+jknum+"，解析："+jxnum+(sm?sm:"")+"，云盘："+ypnum;
                         }else{
@@ -1164,105 +1171,6 @@ function subResource() {
     })
     setResult(d);
 }
-
-/*
-
-    d.push({
-        title: '✅ 更新资源',
-        url: Juconfig['codedyid']?$("确定要从云端更新数据？\n"+(Juconfig['codedytype']=="2"?"当前为增量订阅模式，只增不删":"当前为全量订阅模式，覆盖本地")).confirm((codedyid,codedytype)=>{
-                try{
-                    showLoading('请稍候...')
-                    let codeid = codedyid;
-                    let text = parsePaste('https://netcut.cn/p/'+aesDecode('Juying2', codeid));
-                    if(codeid&&!/^error/.test(text)){
-                        let pastedata = JSON.parse(base64Decode(text));
-                        require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
-                        let jknum = 0;
-                        let jxnum = 0;
-                        let ypnum = 0;
-                        let jkdatalist = pastedata.jiekou||[];
-                        if(jkdatalist.length>0){
-                            jknum = jiekousave(jkdatalist, codedytype||1);
-                        }
-                        let jxdatalist = pastedata.jiexi||[];
-                        if(jxdatalist.length>0){
-                            jxnum = jiexisave(jxdatalist, codedytype||1);
-                        }
-                        if(pastedata.live){
-                            let livefilepath = globalMap0.getVar('Jy_gmParams').datapath + "liveconfig.json";
-                            let liveconfig = pastedata.live;
-                            writeFile(livefilepath, JSON.stringify(liveconfig));
-                            var sm = "，直播订阅已同步"
-                        }
-                        let ypdatalist = pastedata.yundisk||[];
-                        if(ypdatalist.length>0){
-                            ypnum = yundisksave(ypdatalist);
-                        }
-                        hideLoading();
-                        return "toast://同步完成，接口："+jknum+"，解析："+jxnum+(sm?sm:"")+"，云盘："+ypnum;
-                    }else{
-                        hideLoading();
-                        return "toast://口令错误或资源码已失效";
-                    }
-                } catch (e) {
-                    hideLoading();
-                    log('更新失败：'+e.message); 
-                    return "toast://无法识别的口令";
-                }
-            }, Juconfig['codedyid'], Juconfig['codedytype']):'toast://请先订阅聚影资源码',
-        col_type: "text_2",
-        extra: {
-            longClick: [{
-                title: "订阅类型改为："+(Juconfig['codedytype']=="2"?"全量":"增量"),
-                js: $.toString((Juconfig,cfgfile) => {
-                    if(Juconfig['codedytype']=="2"){
-                        Juconfig['codedytype'] = "1";
-                        var sm = "切换为全量订阅，除强制保留的接口/接口，均会被清空";
-                    }else{
-                        Juconfig['codedytype'] = "2";
-                        var sm = "切换为增量订阅，接口/接口只会累加，不会删除";
-                    }
-                    writeFile(cfgfile, JSON.stringify(Juconfig));
-                    refreshPage(false);
-                    return "toast://"+sm;
-                },Juconfig,cfgfile)
-            }]
-        }
-    });
-    d.push({
-        title: '❎ 删除订阅',
-        url: Juconfig['codedyid']?$(["仅删订阅源，保留历史","册除订阅及历史，不再切换"],1).select((Juconfig,cfgfile)=>{
-            if(input=="仅删订阅源，保留历史"){
-                return $().lazyRule((Juconfig,cfgfile) => {
-                    delete Juconfig['codedyid'];
-                    delete Juconfig['codedyname'];
-                    writeFile(cfgfile, JSON.stringify(Juconfig));
-                    refreshPage(false);
-                    return 'toast://已删除订阅源，历史记录可用于切换';
-                }, Juconfig, cfgfile)
-            }else if(input=="册除订阅及历史，不再切换"){
-                return $().lazyRule((Juconfig,cfgfile) => {
-                    let codeid = Juconfig['codedyid'];
-                    delete Juconfig['codedyid'];
-                    delete Juconfig['codedyname'];
-                    let dydatalist = Juconfig.dingyue||[];
-                    for (var i in dydatalist) {
-                        if(dydatalist[i].url==codeid){
-                            dydatalist.splice(i,1);
-                            break;
-                        }
-                    }
-                    Juconfig['dingyue'] = dydatalist;
-                    writeFile(cfgfile, JSON.stringify(Juconfig));
-                    refreshPage(false);
-                    return 'toast://已删除订阅源和历史记录';
-                }, Juconfig, cfgfile)
-            }                    
-        }, Juconfig, cfgfile):'toast://请先订阅聚影资源码',
-        col_type: "text_2"
-    });
-
-    */
 // 全局对象变量gmParams
 let gmParams = {
     libspath: libspath,
