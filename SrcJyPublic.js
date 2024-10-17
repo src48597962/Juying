@@ -1118,58 +1118,72 @@ function subResource() {
                         return "hiker://empty";
                     }, Juconfig, it.path, cfgfile)
                 }else if(input=="下载"){
-                    try{
-                        let pasteget = JSON.parse(request('https://pasteme.tyrantg.com/api/getContent/'+it.path+'@juying',{
-                            "content-type": "application/json;charset=UTF-8"
-                        }));
-                        if(pasteget.result_code=="SUCCESS"){
-                            let textcontent = globalMap0.getVar('Jy_gmParams').unzip(pasteget.data);
-                            let pastedata = JSON.parse(textcontent);
-                            require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
-                            let jknum = 0;
-                            let jxnum = 0;
-                            let ypnum = 0;
-                            let jkdatalist = pastedata.接口||[];
-                            if(jkdatalist.length>0){
-                                jknum = jiekousave(jkdatalist, it.mode==2?2:1);
-                            }
-                            let jxdatalist = pastedata.解析||[];
-                            if(jxdatalist.length>0){
-                                jxnum = jiexisave(jxdatalist, it.mode==2?2:1);
-                            }
-                            if(pastedata.直播){
-                                let livefilepath = globalMap0.getVar('Jy_gmParams').datapath + "liveconfig.json";
-                                let liveconfig = pastedata.直播;
-                                writeFile(livefilepath, JSON.stringify(liveconfig));
-                                var sm = "，直播订阅已同步"
-                            }
-                            let ypdatalist = pastedata.云盘||[];
-                            if(ypdatalist.length>0){
-                                ypnum = yundisksave(ypdatalist, 1);
-                            }
-                            let resources = Juconfig['subResource'] || [];
-                            const index = resources.findIndex(item => item.path === it.path);
-                            if (index !== -1) {
-                                resources[index].time = $.dateFormat(new Date(), "yyyy-MM-dd HH:mm:ss");
-                            }
-                            Juconfig['subResource'] = resources;
-                            writeFile(cfgfile, JSON.stringify(Juconfig));
-                            hideLoading();
-                            return "toast://同步完成，接口："+jknum+"，解析："+jxnum+(sm?sm:"")+"，云盘："+ypnum;
-                        }else{
-                            hideLoading();
-                            return "toast://网络错误或资源码已失效";
-                        }
-                    }catch(e){
-                        log('下载更新失败：'+e.message); 
-                        return 'toast://更新失败，请重新再试';
-                    }
+                    return updateResource(it);
                 }
             }, it),
             col_type: "text_1"
         });
     })
     setResult(d);
+}
+// 更新同步订阅资源
+function updateResource(it) {
+    if(!it){
+        let resources = Juconfig['subResource'] || [];
+        resources.forEach(item=>{
+            if(item.auto){
+                it = item;
+                break;
+            }
+        })
+    }
+    try{
+        let pasteget = JSON.parse(request('https://pasteme.tyrantg.com/api/getContent/'+it.path+'@juying',{
+            "content-type": "application/json;charset=UTF-8"
+        }));
+        if(pasteget.result_code=="SUCCESS"){
+            let textcontent = globalMap0.getVar('Jy_gmParams').unzip(pasteget.data);
+            let pastedata = JSON.parse(textcontent);
+            require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
+            let jknum = 0;
+            let jxnum = 0;
+            let ypnum = 0;
+            let jkdatalist = pastedata.接口||[];
+            if(jkdatalist.length>0){
+                jknum = jiekousave(jkdatalist, it.mode==2?2:1);
+            }
+            let jxdatalist = pastedata.解析||[];
+            if(jxdatalist.length>0){
+                jxnum = jiexisave(jxdatalist, it.mode==2?2:1);
+            }
+            if(pastedata.直播){
+                let livefilepath = globalMap0.getVar('Jy_gmParams').datapath + "liveconfig.json";
+                let liveconfig = pastedata.直播;
+                writeFile(livefilepath, JSON.stringify(liveconfig));
+                var sm = "，直播订阅已同步"
+            }
+            let ypdatalist = pastedata.云盘||[];
+            if(ypdatalist.length>0){
+                ypnum = yundisksave(ypdatalist, 1);
+            }
+            let resources = Juconfig['subResource'] || [];
+            const index = resources.findIndex(item => item.path === it.path);
+            if (index !== -1) {
+                resources[index].time = $.dateFormat(new Date(), "yyyy-MM-dd HH:mm:ss");
+            }
+            Juconfig['subResource'] = resources;
+            writeFile(cfgfile, JSON.stringify(Juconfig));
+            hideLoading();
+            log("更新同步订阅资源完成；接口："+jknum+"，解析："+jxnum+(sm?sm:"")+"，云盘："+ypnum);
+            return "toast://更新同步订阅资源完成";
+        }else{
+            hideLoading();
+            return "toast://订阅资源网络错误或资源码已失效";
+        }
+    }catch(e){
+        log('更新同步订阅资源失败：'+e.message); 
+        return 'toast://更新同步订阅资源失败';
+    }
 }
 // 全局对象变量gmParams
 let gmParams = {
