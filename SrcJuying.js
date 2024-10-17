@@ -855,13 +855,13 @@ function dianboyiji(testSource) {
                 d = [];
                 putMyVar('点播动态加载loading', '1');
             }
-/*
+            /*
                     return $('hiker://empty#noRecordHistory##noHistory#').rule((name,data) => {
                         require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyData.js');
                         let ssdata = getSsData(name,data).vodlists;
                         setResult(ssdata);
                     }, input, data);
-                    */
+            */
             let searchurl = $('').lazyRule((jkdata) => {
                 if(getItem('接口搜索方式','当前接口')=="当前接口"){
                     if(jkdata){
@@ -1456,6 +1456,7 @@ function yiji() {
     if (!getMyVar('startCheck') && nowtime > (oldtime+24*60*60*1000)) {
         clearJkSort(); //清理历史接口排序信息
         clearJkFiles(); //清理接口残留文件
+        updateResource(); //检查更新订阅资源码
         putMyVar('startCheck', 1);
     }
 }
