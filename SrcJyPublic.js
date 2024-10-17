@@ -988,11 +988,11 @@ function shareResource() {
                                     refreshPage(false);
                                     return "toast://分享同步云端数据成功";
                                 }else{
-                                    return 'toast://分享同步失败，'+pasteupdate.message;
+                                    return 'toast://分享同步云端失败，'+pasteupdate.message;
                                 }
                             } catch (e) {
-                                log('分享失败：'+e.message); 
-                                return 'toast://分享同步失败，请重新再试';
+                                log('分享上传云端失败：'+e.message); 
+                                return 'toast://分享上传云端失败';
                             }
                         }, 
                         centerTitle: "取消"
