@@ -1133,6 +1133,7 @@ function subResource() {
                         return "hiker://empty";
                     }, Juconfig, it.path, cfgfile)
                 }else if(input=="下载"){
+                    require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
                     return updateResource(it);
                 }
             }, it),
