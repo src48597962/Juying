@@ -971,12 +971,16 @@ function shareResource() {
                                                     }
                                                 }
                                             }
-                                            text[option] = datalist;
+                                            if(datalist.length>0){
+                                                text[option] = datalist;
+                                            }  
                                         }
                                     }
                                 }
                             })
-
+                            if(Object.keys(text).length==0){
+                                return "toast://无内容分享";
+                            }
                             let textcontent = globalMap0.getVar('Jy_gmParams').zip(JSON.stringify(text));
                             try{
                                 let pasteupdate = JSON.parse(request('https://pasteme.tyrantg.com/api/update', {
