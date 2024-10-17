@@ -984,10 +984,13 @@ function shareResource() {
                             let textcontent = globalMap0.getVar('Jy_gmParams').zip(JSON.stringify(text));
                             try{
                                 log('1');
-                                let pasteupdate = JSON.parse(request('https://pasteme.tyrantg.com/api/update', {
-                                    body: 'content='+textcontent+'&path='+it.path+'&auth_code='+it.token,
-                                    method: 'POST'
-                                }));
+                                let json = request('https://pasteme.tyrantg.com/api/update', {
+                                    "content-type": "application/x-www-form-urlencoded",
+                                    "body": 'content='+textcontent+'&path='+it.path+'&auth_code='+it.token,
+                                    "method": 'POST'
+                                })
+                                log(json);
+                                let pasteupdate = JSON.parse(json);
                                 log('2');
                                 if(pasteupdate.result_code=="SUCCESS"){
                                     let resources = Juconfig['shareResource'] || [];
