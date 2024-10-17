@@ -824,7 +824,7 @@ function shareResource() {
         url: resources.length>=3?"toast://分享资源码不能超过3个":$().lazyRule(() => {
                 try{
                     let pastecreate = JSON.parse(request('https://pasteme.tyrantg.com/api/create', {
-                        body: 'content=juying&auto_password=1',
+                        body: 'content=juying&password=juying',
                         method: 'POST'
                     }));
                     if(pastecreate.result_code=="SUCCESS"){
@@ -847,7 +847,7 @@ function shareResource() {
                             }else{
                                 return "toast://不能为空";
                             }
-                        }, data.path+'@'+data.password, data.auth_code)
+                        }, data.path, data.auth_code)
                     }else{
                         return 'toast://申请失败：'+pastecreate.message;
                     }
@@ -860,7 +860,7 @@ function shareResource() {
     });
     resources.forEach(it=>{
         d.push({
-            title: it.name + "-" + it.path.split('@')[0],
+            title: it.name + "-" + it.path,
             desc: "上传同步时间：" + (it.time||"") + "\n上次同步项目：" + (it.options||""),
             url: $(["复制","删除","改名","上传"], 2, "选择操作功能项").select((it)=>{
                 let Juconfig = storage0.getMyVar('Juconfig');
@@ -872,15 +872,14 @@ function shareResource() {
                 }else if(input=="删除"){
                     return $("确定要删除云端分享："+it.name+"\n删除后无法找回").confirm((Juconfig,it,cfgfile)=>{
                         try{
-                            it.path = it.path + (it.path.includes('@')?'':'@juying');
                             showLoading("执行中，请稍后");
                             let pastecreate = JSON.parse(request('https://pasteme.tyrantg.com/api/update', {
-                                body: 'content=juying&path='+it.path+'&auth_code='+it.token,
+                                body: 'content=juying&path='+it.path+'@juying'+'&auth_code='+it.token,
                                 method: 'POST'
                             }));
                             if(pastecreate.result_code=="SUCCESS"){
                                 let resources = Juconfig['shareResource'] || [];
-                                const index = resources.findIndex(item => item.path.split('@')[0] === it.path.split('@')[0]);
+                                const index = resources.findIndex(item => item.path === it.path);
                                 if (index !== -1) {
                                     resources.splice(index, 1);
                                 }
@@ -948,13 +947,9 @@ function shareResource() {
                                             eval("let tvconfig=" + datafile+ ";");
                                             text[option] = tvconfig;
                                         }else{
-                                            try{
-                                                eval("datalist=" + datafile+ ";");
-                                            }catch(e){}
+                                            eval("datalist=" + datafile+ ";");
                                             if(datalist.length>600){
-                                                toast(option+"超过600，建议先精简");
-                                            }else if(datalist.length==0){
-                                                toast(option+"数量为0");
+                                                return "toast://接口超过600，建议先精简";
                                             }
                                             if(option=="接口"){
                                                 for(let i=0;i<datalist.length;i++){
@@ -971,22 +966,19 @@ function shareResource() {
                                                     }
                                                 }
                                             }
-                                            if(datalist.length>0){
-                                                text[option] = datalist;
-                                            }  
+                                            text[option] = datalist;
                                         }
                                     }
                                 }
                             })
-                            if(Object.keys(text).length==0){
-                                return "toast://无内容分享";
-                            }
+
                             let textcontent = globalMap0.getVar('Jy_gmParams').zip(JSON.stringify(text));
                             try{
                                 let pasteupdate = JSON.parse(request('https://pasteme.tyrantg.com/api/update', {
                                     body: 'content='+textcontent+'&path='+it.path+'@juying'+'&auth_code='+it.token,
                                     method: 'POST'
                                 }));
+
                                 if(pasteupdate.result_code=="SUCCESS"){
                                     let resources = Juconfig['shareResource'] || [];
                                     const index = resources.findIndex(item => item.path === it.path);
@@ -1002,8 +994,8 @@ function shareResource() {
                                     return 'toast://分享同步云端失败，'+pasteupdate.message;
                                 }
                             } catch (e) {
-                                log('分享上传云端失败：'+e.message + " 错误行#" + e.lineNumber); 
-                                return 'toast://分享上传云端失败，网络或内容出错';
+                                log('分享上传云端失败：'+e.message); 
+                                return 'toast://分享上传云端失败，可能是网络问题';
                             }
                         }, 
                         centerTitle: "取消"
@@ -1038,8 +1030,8 @@ function subResource() {
                 return "toast://输入不正确";
             }
             try{
-                let path = aesDecode('Juying2', input.split('￥')[1]);
-                let pasteget = JSON.parse(request('https://pasteme.tyrantg.com/api/getContent/'+path));
+                let codeid = aesDecode('Juying2', input.split('￥')[1]);
+                let pasteget = JSON.parse(request('https://pasteme.tyrantg.com/api/getContent/'+codeid+'@juying'));
                 if(pasteget.result_code=="SUCCESS"){
                     let data = pasteget.data;
                     if(data=="juying"){
@@ -1062,7 +1054,7 @@ function subResource() {
                         }else{
                             return "toast://不能为空";
                         }
-                    }, path)
+                    }, codeid)
                 }else{
                     return 'toast://获取失败：'+pasteget.message;
                 }
@@ -1076,7 +1068,7 @@ function subResource() {
 
     resources.forEach(it=>{
         d.push({
-            title: it.name + "-" + it.path.split('@')[0],
+            title: it.name + "-" + it.path,
             desc: "最后同步时间：" + (it.time||"") + "\n是否自动同步：" + (it.auto?"是":"否") + "    下载导入模式：" + (it.mode==2?"全量":"增量"),
             url: $(["复制","删除","改名","下载","自动",it.mode=="2"?"增量":"全量"], 2, "选择操作功能项").select((it)=>{
                 let Juconfig = storage0.getMyVar('Juconfig');
@@ -1165,7 +1157,7 @@ function updateResource(it) {
         }
     }
     try{
-        let pasteget = JSON.parse(request('https://pasteme.tyrantg.com/api/getContent/'+it.path,{
+        let pasteget = JSON.parse(request('https://pasteme.tyrantg.com/api/getContent/'+it.path+'@juying',{
             "content-type": "application/json;charset=UTF-8"
         }));
         if(pasteget.result_code=="SUCCESS"){
