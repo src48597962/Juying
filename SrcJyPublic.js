@@ -1051,8 +1051,8 @@ function subResource() {
     resources.forEach(it=>{
         d.push({
             title: it.name + "-" + it.path,
-            desc: "下载同步时间：" + (it.time||"") + "\n自动同步：" + (it.auto?"是":"否"),
-            url: $(["复制","删除","改名","下载","自动"], 2, "选择操作功能项").select((it)=>{
+            desc: "下载同步时间：" + (it.time||"") + "\n自动同步：" + (it.auto?"是":"否") + "  导入模式：" + (it.mode==2?"全量":"增量"),
+            url: $(["复制","删除","改名","下载","自动",it.mode=="2"?"增量":"全量"], 2, "选择操作功能项").select((it)=>{
                 let Juconfig = storage0.getMyVar('Juconfig');
                 let cfgfile = globalMap0.getVar('Jy_gmParams').cfgfile;
                 let codeid = aesEncode('Juying2', it.path);
@@ -1061,16 +1061,30 @@ function subResource() {
                     return "hiker://empty";
                 }else if(input=="自动"){
                     let resources = Juconfig['subResource'] || [];
-                    resources.forEach(it=>{
-                        if(it.path==codeid){
-                            it.auto = 1;
+                    resources.forEach(its=>{
+                        if(its.path==it.path){
+                            its.auto = 1;
                         }else{
-                            delete it.auto;
+                            delete its.auto;
                         }
                     })
                     writeFile(cfgfile, JSON.stringify(Juconfig));
                     refreshPage(false);
                     return 'toast://设置成功';
+                }else if(input=="增量"||input=="全量"){
+                    let resources = Juconfig['subResource'] || [];
+                    resources.forEach(its=>{
+                        if(its.path==it.path){
+                            if(input=="全量"){
+                                its.mode = 2;
+                            }else{
+                                delete its.mode;
+                            }
+                        }
+                    })
+                    writeFile(cfgfile, JSON.stringify(Juconfig));
+                    refreshPage(false);
+                    return 'toast://设置成功'+(input=="全量"?"：先删除本地所有再导入":"");
                 }else if(input=="删除"){
                     return $("确定要删除资源码："+it.name+"\n删除后无法找回").confirm((Juconfig,it,cfgfile)=>{
                         try{
@@ -1110,7 +1124,6 @@ function subResource() {
                         }));
                         if(pasteget.result_code=="SUCCESS"){
                             let textcontent = globalMap0.getVar('Jy_gmParams').unzip(pasteget.data);
-                            log(textcontent);
                             let pastedata = JSON.parse(textcontent);
                             require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
                             let jknum = 0;
@@ -1118,11 +1131,11 @@ function subResource() {
                             let ypnum = 0;
                             let jkdatalist = pastedata.接口||[];
                             if(jkdatalist.length>0){
-                                jknum = jiekousave(jkdatalist, 0);
+                                jknum = jiekousave(jkdatalist, it.mode==2?2:1);
                             }
                             let jxdatalist = pastedata.解析||[];
                             if(jxdatalist.length>0){
-                                jxnum = jiexisave(jxdatalist, 0);
+                                jxnum = jiexisave(jxdatalist, it.mode==2?2:1);
                             }
                             if(pastedata.直播){
                                 let livefilepath = globalMap0.getVar('Jy_gmParams').datapath + "liveconfig.json";
@@ -1132,7 +1145,7 @@ function subResource() {
                             }
                             let ypdatalist = pastedata.云盘||[];
                             if(ypdatalist.length>0){
-                                ypnum = yundisksave(ypdatalist, 0);
+                                ypnum = yundisksave(ypdatalist, 1);
                             }
                             hideLoading();
                             return "toast://同步完成，接口："+jknum+"，解析："+jxnum+(sm?sm:"")+"，云盘："+ypnum;
