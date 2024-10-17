@@ -984,9 +984,9 @@ function shareResource() {
                             let textcontent = globalMap0.getVar('Jy_gmParams').zip(JSON.stringify(text));
                             try{
                                 log('1');
-                                let json = request('https://pasteme.tyrantg.com/api/update', {
-                                    "body": 'content='+JSON.stringify(text)+'&path='+it.path+'&auth_code='+it.token,
-                                    "method": 'POST'
+                                let json = fetchPC('https://pasteme.tyrantg.com/api/update', {
+                                    "body": "content="+textcontent+"&path="+it.path+"&auth_code="+it.token,
+                                    "method": "POST"
                                 })
                                 log(json);
                                 let pasteupdate = JSON.parse(json);
