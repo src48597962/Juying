@@ -1130,11 +1130,12 @@ function subResource() {
 function updateResource(it) {
     if(!it){
         let resources = Juconfig['subResource'] || [];
-        resources.forEach(item=>{
-            if(item.auto){
+        for (let i = 0; i < resources.length; i++) {
+            if (resources[i].auto) {
                 it = item;
+                break;
             }
-        })
+        }
     }
     try{
         let pasteget = JSON.parse(request('https://pasteme.tyrantg.com/api/getContent/'+it.path+'@juying',{
