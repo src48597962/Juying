@@ -948,6 +948,21 @@ function shareResource() {
                                             text[option] = tvconfig;
                                         }else{
                                             eval("datalist=" + datafile+ ";");
+                                            if(option=="接口"){
+                                                for(let i=0;i<datalist.length;i++){
+                                                    let data = datalist[i];
+                                                    if(data.url.startsWith(globalMap0.getVar('Jy_gmParams').jkfilespath) && (($.type(data.ext)=="string" && data.ext.startsWith("file")) || !data.ext)){
+                                                        data.extstr = fetch(data.url) || fetch(data.ext.split("?")[0]);
+                                                        if(!data.extstr){
+                                                            datalist.splice(i,1);
+                                                            i = i - 1;
+                                                        }
+                                                    }else if(!data.url.startsWith(globalMap0.getVar('Jy_gmParams').jkfilespath) && data.url.startsWith("hiker")){
+                                                        datalist.splice(i,1);
+                                                        i = i - 1;
+                                                    }
+                                                }
+                                            }
                                             text[option] = datalist;
                                         }
                                     }
