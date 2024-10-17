@@ -985,8 +985,7 @@ function shareResource() {
                             try{
                                 log('1');
                                 let json = request('https://pasteme.tyrantg.com/api/update', {
-                                    "content-type": "application/x-www-form-urlencoded",
-                                    "body": 'content='+textcontent+'&path='+it.path+'&auth_code='+it.token,
+                                    "body": 'content='+JSON.stringify(text)+'&path='+it.path+'&auth_code='+it.token,
                                     "method": 'POST'
                                 })
                                 log(json);
