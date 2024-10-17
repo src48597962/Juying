@@ -983,12 +983,12 @@ function shareResource() {
                             }
                             let textcontent = globalMap0.getVar('Jy_gmParams').zip(JSON.stringify(text));
                             try{
-                                log('content='+textcontent+'&path='+it.path+'&auth_code='+it.token);
+                                log('1');
                                 let pasteupdate = JSON.parse(request('https://pasteme.tyrantg.com/api/update', {
                                     body: 'content='+textcontent+'&path='+it.path+'&auth_code='+it.token,
                                     method: 'POST'
                                 }));
-
+                                log('2');
                                 if(pasteupdate.result_code=="SUCCESS"){
                                     let resources = Juconfig['shareResource'] || [];
                                     const index = resources.findIndex(item => item.path === it.path);
@@ -1004,7 +1004,7 @@ function shareResource() {
                                     return 'toast://分享同步云端失败，'+pasteupdate.message;
                                 }
                             } catch (e) {
-                                log('分享上传云端失败：'+e.message); 
+                                log('分享上传云端失败：'+e.message + " 错误行#" + e.lineNumber); 
                                 return 'toast://分享上传云端失败，网络或内容出错';
                             }
                         }, 
