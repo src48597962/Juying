@@ -3,6 +3,11 @@ var newVersion = {
     "hint": "可能需要重进一次软件",
     "codeDownload": "https://src48597962.lanzouo.com/iXwqG2cgbtbc",
     "JYUpdateRecords": [{
+        title: "beta V2.2",
+        records: [
+            "新增：管理中增加资源码分享/订阅功能"
+        ]
+    },{
         title: "2024/10/13 V2.1",
         records: [
             "优化：点播接口文件从data目录转移至rule目录",
