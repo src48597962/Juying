@@ -1133,7 +1133,6 @@ function updateResource(it) {
         resources.forEach(item=>{
             if(item.auto){
                 it = item;
-                break;
             }
         })
     }
