@@ -992,7 +992,7 @@ function shareResource() {
                                 }
                             } catch (e) {
                                 log('分享上传云端失败：'+e.message); 
-                                return 'toast://分享上传云端失败';
+                                return 'toast://分享上传云端失败，可能是网络问题';
                             }
                         }, 
                         centerTitle: "取消"
