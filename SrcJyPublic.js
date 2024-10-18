@@ -824,8 +824,9 @@ function shareResource() {
         url: resources.length>=3?"toast://分享资源码不能超过3个":$().lazyRule(() => {
                 try{
                     let pastecreate = JSON.parse(request('https://pasteme.tyrantg.com/api/create', {
-                        body: 'content=juying&auto_password=1',
-                        method: 'POST'
+                        "content-type": "application/json;charset=UTF-8",
+                        "body": "content=juying&auto_password=1",
+                        "method": "POST"
                     }));
                     if(pastecreate.result_code=="SUCCESS"){
                         let data = pastecreate.data;
@@ -875,8 +876,9 @@ function shareResource() {
                             it.path = it.path + (it.path.includes('@')?'':'@juying');
                             showLoading("执行中，请稍后");
                             let pastecreate = JSON.parse(request('https://pasteme.tyrantg.com/api/update', {
-                                body: 'content=juying&path='+it.path+'&auth_code='+it.token,
-                                method: 'POST'
+                                "content-type": "application/json;charset=UTF-8",
+                                "body": "content=juying&path="+it.path+"&auth_code="+it.token,
+                                "method": "POST"
                             }));
                             if(pastecreate.result_code=="SUCCESS"){
                                 let resources = Juconfig['shareResource'] || [];
@@ -984,8 +986,9 @@ function shareResource() {
                             let textcontent = globalMap0.getVar('Jy_gmParams').zip(JSON.stringify(text));
                             try{
                                 let pasteupdate = JSON.parse(request('https://pasteme.tyrantg.com/api/update', {
-                                    body: 'content='+textcontent+'&path='+it.path+'&auth_code='+it.token,
-                                    method: 'POST'
+                                    "content-type": "application/json;charset=UTF-8",
+                                    "body": "content="+textcontent+"&path="+it.path+"&auth_code="+it.token,
+                                    "method": "POST"
                                 }));
                                 if(pasteupdate.result_code=="SUCCESS"){
                                     let resources = Juconfig['shareResource'] || [];
