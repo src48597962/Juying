@@ -986,9 +986,9 @@ function shareResource() {
                             let textcontent = globalMap0.getVar('Jy_gmParams').zip(JSON.stringify(text));
                             log(textcontent);
                             try{
-                                let pasteupdate = JSON.parse(request('https://pasteme.tyrantg.com/api/update', {
-                                    body: 'content='+textcontent+'&path='+it.path+'&auth_code='+it.token,
-                                    method: 'POST'
+                                let pasteupdate = JSON.parse(request("https://pasteme.tyrantg.com/api/update", {
+                                    body: "content="+textcontent+"&path="+it.path+"&auth_code="+it.token,
+                                    method: "POST"
                                 }));
                                 if(pasteupdate.result_code=="SUCCESS"){
                                     let resources = Juconfig['shareResource'] || [];
