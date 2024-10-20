@@ -2378,7 +2378,7 @@ function JYimport(input) {
         inputname = input.split('￥')[0];
         if(inputname=="聚影资源码"){
             codelx = "dingyue";
-            pasteurl = 'https://netcut.cn/p/' + pasteurl;
+            pasteurl = '云6oooole/xxxxxx/' + pasteurl;
             if(getMyVar('guanli')=="jk"){
                 inputname = "聚影接口";
             }else if(getMyVar('guanli')=="jx"){
@@ -2412,14 +2412,14 @@ function JYimport(input) {
                 if(codelx=="share"){
                     var pastedatalist = pastedata;
                 }else if(codelx=="dingyue"){
-                    var pastedatalist = pastedata.jiekou;
+                    var pastedatalist = pastedata.接口;
                 }
                 urlnum = jiekousave(pastedatalist);
             }else if(inputname=="聚影解析"){
                 if(codelx=="share"){
                     var pastedatalist = pastedata;
                 }else if(codelx=="dingyue"){
-                    var pastedatalist = pastedata.jiexi;
+                    var pastedatalist = pastedata.解析;
                 }
                 urlnum = jiexisave(pastedatalist);
             }
