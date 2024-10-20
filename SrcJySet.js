@@ -655,7 +655,11 @@ function SRCSet() {
                         d.push({
                             title: (schedule=="1"?"":schedule=="2"?"👉":"👌") + '搜索测试',
                             col_type: 'text_3',
-                            url: "hiker://empty"
+                            url: $().lazyRule(()=>{
+                                putMyVar("批量检测_当前进度","2");
+                                refreshPage();
+                                return "toast://跳过一级检测";
+                            })
                         });
                         d.push({
                             title: (schedule=="1"||schedule=="2"?"":schedule=="3"?"👉":"👌") + '二级选集',
