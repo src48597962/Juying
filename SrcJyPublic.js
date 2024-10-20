@@ -1016,7 +1016,7 @@ function shareResource() {
                     });
                     return "hiker://empty";
                     */
-                    return $().lazyRule(()=>{
+                    return $().lazyRule((it)=>{
                         let text = {};
                         let filepath = globalMap0.getVar('Jy_gmParams').jkfile;
                         let datafile = fetch(filepath);
@@ -1044,7 +1044,7 @@ function shareResource() {
                             log('分享上传云端失败：'+e.message + " 错误行#" + e.lineNumber); 
                             return 'toast://分享上传云端失败，网络或内容出错';
                         }
-                    })
+                    },it)
                     
                 }
             }, it),
