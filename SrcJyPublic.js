@@ -984,7 +984,7 @@ function shareResource() {
                                 return "toast://无内容分享";
                             }
                             let textcontent = globalMap0.getVar('Jy_gmParams').zip(JSON.stringify(text));
-                            log(textcontent);
+                            log("content="+textcontent+"&path="+it.path+"&auth_code="+it.token);
                             try{
                                 let pasteupdate = JSON.parse(request("https://pasteme.tyrantg.com/api/update", {
                                     body: "content="+textcontent+"&path="+it.path+"&auth_code="+it.token,
