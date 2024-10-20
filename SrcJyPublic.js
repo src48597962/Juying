@@ -929,7 +929,7 @@ function shareResource() {
                             if(options.filter((v, i) => checked[i]).length==0){
                                 return "toast://没有选择上传项";
                             }
-                            hikerPop.runOnNewThread((options, checked) => {
+                            hikerPop.runOnNewThread(() => {
                                 let text = {};
                                 options.forEach((option,i)=>{
                                     if(checked[i]){
@@ -1008,7 +1008,7 @@ function shareResource() {
                                     log('分享上传云端失败：'+e.message + " 错误行#" + e.lineNumber); 
                                     return 'toast://分享上传云端失败，网络或内容出错';
                                 }
-                            }, options, checked)
+                            })
                         }, 
                         centerTitle: "取消"
                     });
