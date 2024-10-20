@@ -868,7 +868,7 @@ function shareResource() {
                 let cfgfile = globalMap0.getVar('Jy_gmParams').cfgfile;
                 let codeid = aesEncode('Juying2', it.path);
                 if(input=="复制"){
-                    copy('资源码￥'+codeid+'￥聚影');
+                    copy('聚影资源码￥'+codeid+'￥'+it.name);
                     return "hiker://empty";
                 }else if(input=="删除"){
                     return $("确定要删除云端分享："+it.name+"\n删除后无法找回").confirm((Juconfig,it,cfgfile)=>{
@@ -1038,7 +1038,7 @@ function subResource() {
         desc: '感谢TyrantGenesis大佬提供的云6剪贴板',
         url: $("", "输入聚影资源码").input(()=>{
             input = input.trim();
-            if(!input || !input.includes('资源码￥') || !input.includes('￥聚影')){
+            if(!input || !input.includes('聚影资源码￥')){
                 return "toast://输入不正确";
             }
             try{
@@ -1049,7 +1049,11 @@ function subResource() {
                     if(data=="juying"){
                         return "toast://资源码为空";
                     }
-                    return $("", "获取成功，输入名称保存").input((path)=>{
+                    let newname = "";
+                    try{
+                         newname = input.split('￥')[2];
+                    }catch(e){}
+                    return $(newname, "获取成功，输入名称保存").input((path)=>{
                         input = input.trim();
                         if(input){
                             let Juconfig = storage0.getMyVar('Juconfig');
@@ -1087,7 +1091,7 @@ function subResource() {
                 let cfgfile = globalMap0.getVar('Jy_gmParams').cfgfile;
                 let codeid = aesEncode('Juying2', it.path);
                 if(input=="复制"){
-                    copy('资源码￥'+codeid+'￥聚影');
+                    copy('聚影资源码￥'+codeid+'￥'+it.name);
                     return "hiker://empty";
                 }else if(input=="自动"){
                     let resources = Juconfig['subResource'] || [];
