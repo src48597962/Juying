@@ -929,89 +929,90 @@ function shareResource() {
                             if(options.filter((v, i) => checked[i]).length==0){
                                 return "toast://没有选择上传项";
                             }
-
-                            let text = {};
-                            options.forEach((option,i)=>{
-                                if(checked[i]){
-                                    let filepath;
-                                    if(option=="接口"){
-                                        filepath = globalMap0.getVar('Jy_gmParams').jkfile;
-                                    }else if(option=="解析"){
-                                        filepath = globalMap0.getVar('Jy_gmParams').jxfile;
-                                    }else if(option=="云盘"){
-                                        filepath = globalMap0.getVar('Jy_gmParams').ypfile;
-                                    }else if(option=="直播"){
-                                        filepath = globalMap0.getVar('Jy_gmParams').rulepath + "liveconfig.json";
-                                    }
-                                    let datafile = fetch(filepath);
-                                    let datalist = [];
-                                    if(datafile){
-                                        if(option=="直播"){
-                                            eval("let tvconfig=" + datafile+ ";");
-                                            text[option] = tvconfig;
-                                        }else{
-                                            try{
-                                                eval("datalist=" + datafile+ ";");
-                                            }catch(e){}
-                                            if(datalist.length>600){
-                                                toast(option+"超过600，建议先精简");
-                                            }else if(datalist.length==0){
-                                                toast(option+"数量为0");
-                                            }
-                                            if(option=="接口"){
-                                                for(let i=0;i<datalist.length;i++){
-                                                    let data = datalist[i];
-                                                    if(data.url.startsWith(globalMap0.getVar('Jy_gmParams').jkfilespath) && (($.type(data.ext)=="string" && data.ext.startsWith("file")) || !data.ext)){
-                                                        data.extstr = fetch(data.url) || fetch(data.ext.split("?")[0]);
-                                                        if(!data.extstr){
+                            return $().lazyRule((options, checked)=>{
+                                let text = {};
+                                options.forEach((option,i)=>{
+                                    if(checked[i]){
+                                        let filepath;
+                                        if(option=="接口"){
+                                            filepath = globalMap0.getVar('Jy_gmParams').jkfile;
+                                        }else if(option=="解析"){
+                                            filepath = globalMap0.getVar('Jy_gmParams').jxfile;
+                                        }else if(option=="云盘"){
+                                            filepath = globalMap0.getVar('Jy_gmParams').ypfile;
+                                        }else if(option=="直播"){
+                                            filepath = globalMap0.getVar('Jy_gmParams').rulepath + "liveconfig.json";
+                                        }
+                                        let datafile = fetch(filepath);
+                                        let datalist = [];
+                                        if(datafile){
+                                            if(option=="直播"){
+                                                eval("let tvconfig=" + datafile+ ";");
+                                                text[option] = tvconfig;
+                                            }else{
+                                                try{
+                                                    eval("datalist=" + datafile+ ";");
+                                                }catch(e){}
+                                                if(datalist.length>600){
+                                                    toast(option+"超过600，建议先精简");
+                                                }else if(datalist.length==0){
+                                                    toast(option+"数量为0");
+                                                }
+                                                if(option=="接口"){
+                                                    for(let i=0;i<datalist.length;i++){
+                                                        let data = datalist[i];
+                                                        if(data.url.startsWith(globalMap0.getVar('Jy_gmParams').jkfilespath) && (($.type(data.ext)=="string" && data.ext.startsWith("file")) || !data.ext)){
+                                                            data.extstr = fetch(data.url) || fetch(data.ext.split("?")[0]);
+                                                            if(!data.extstr){
+                                                                datalist.splice(i,1);
+                                                                i = i - 1;
+                                                            }
+                                                        }else if(!data.url.startsWith(globalMap0.getVar('Jy_gmParams').jkfilespath) && data.url.startsWith("hiker")){
                                                             datalist.splice(i,1);
                                                             i = i - 1;
                                                         }
-                                                    }else if(!data.url.startsWith(globalMap0.getVar('Jy_gmParams').jkfilespath) && data.url.startsWith("hiker")){
-                                                        datalist.splice(i,1);
-                                                        i = i - 1;
                                                     }
                                                 }
+                                                if(datalist.length>0){
+                                                    text[option] = datalist;
+                                                }  
                                             }
-                                            if(datalist.length>0){
-                                                text[option] = datalist;
-                                            }  
                                         }
                                     }
+                                })
+                                if(Object.keys(text).length==0){
+                                    return "toast://无内容分享";
                                 }
-                            })
-                            if(Object.keys(text).length==0){
-                                return "toast://无内容分享";
-                            }
-                            let textcontent = globalMap0.getVar('Jy_gmParams').zip(JSON.stringify(text));
-                            log("content="+textcontent+"&path="+it.path+"&auth_code="+it.token);
-                            //try{
-                                let pasteupdate = JSON.parse(request("https://pasteme.tyrantg.com/api/update",{
-                                    body: "content="+textcontent+"&path="+it.path+"&auth_code="+it.token,
-                                    method: "POST"
-                                }));
-                                log(pasteupdate);
-                                return "toast://"+pasteupdate.message;
-                                /*
-                                if(pasteupdate.result_code=="SUCCESS"){
-                                    let resources = Juconfig['shareResource'] || [];
-                                    const index = resources.findIndex(item => item.path === it.path);
-                                    if (index !== -1) {
-                                        resources[index].time = $.dateFormat(new Date(), "yyyy-MM-dd HH:mm:ss");
-                                        resources[index].options = options.filter((v, i) => checked[i]).join(",");
+                                let textcontent = globalMap0.getVar('Jy_gmParams').zip(JSON.stringify(text));
+                                log("content="+textcontent+"&path="+it.path+"&auth_code="+it.token);
+                                try{
+                                    let pasteupdate = JSON.parse(request("https://pasteme.tyrantg.com/api/update",{
+                                        body: "content="+textcontent+"&path="+it.path+"&auth_code="+it.token,
+                                        method: "POST"
+                                    }));
+                                    log(pasteupdate);
+                                    return "toast://"+pasteupdate.message;
+                                    /*
+                                    if(pasteupdate.result_code=="SUCCESS"){
+                                        let resources = Juconfig['shareResource'] || [];
+                                        const index = resources.findIndex(item => item.path === it.path);
+                                        if (index !== -1) {
+                                            resources[index].time = $.dateFormat(new Date(), "yyyy-MM-dd HH:mm:ss");
+                                            resources[index].options = options.filter((v, i) => checked[i]).join(",");
+                                        }
+                                        Juconfig['shareResource'] = resources;
+                                        writeFile(cfgfile, JSON.stringify(Juconfig));
+                                        refreshPage(false);
+                                        return "toast://分享同步云端数据成功";
+                                    }else{
+                                        return 'toast://分享同步云端失败，'+pasteupdate.message;
                                     }
-                                    Juconfig['shareResource'] = resources;
-                                    writeFile(cfgfile, JSON.stringify(Juconfig));
-                                    refreshPage(false);
-                                    return "toast://分享同步云端数据成功";
-                                }else{
-                                    return 'toast://分享同步云端失败，'+pasteupdate.message;
+                                    */
+                                } catch (e) {
+                                    log('分享上传云端失败：'+e.message + " 错误行#" + e.lineNumber); 
+                                    return 'toast://分享上传云端失败，网络或内容出错';
                                 }
-                                */
-                            //} catch (e) {
-                            //    log('分享上传云端失败：'+e.message + " 错误行#" + e.lineNumber); 
-                            //    return 'toast://分享上传云端失败，网络或内容出错';
-                            //}
+                            }, options, checked)
                         }, 
                         centerTitle: "取消"
                     });
