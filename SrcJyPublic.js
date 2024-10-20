@@ -915,7 +915,6 @@ function shareResource() {
                         return "hiker://empty";
                     }, Juconfig, it.path, cfgfile)
                 }else if(input=="上传"){
-                    /*
                     const hikerPop = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6966");
                     let fruit = ["接口", "解析", "云盘", "直播"];
                     hikerPop.multiChoice({
@@ -930,7 +929,7 @@ function shareResource() {
                             if(options.filter((v, i) => checked[i]).length==0){
                                 return "toast://没有选择上传项";
                             }
-                            return $().lazyRule((options, checked)=>{
+                            hikerPop.runOnNewThread((options, checked) => {
                                 let text = {};
                                 options.forEach((option,i)=>{
                                     if(checked[i]){
@@ -985,7 +984,6 @@ function shareResource() {
                                     return "toast://无内容分享";
                                 }
                                 let textcontent = globalMap0.getVar('Jy_gmParams').zip(JSON.stringify(text));
-                                log("content="+textcontent+"&path="+it.path+"&auth_code="+it.token);
                                 try{
                                     let pasteupdate = JSON.parse(request("https://pasteme.tyrantg.com/api/update",{
                                         body: "content="+textcontent+"&path="+it.path+"&auth_code="+it.token,
@@ -1015,37 +1013,6 @@ function shareResource() {
                         centerTitle: "取消"
                     });
                     return "hiker://empty";
-                    */
-                    return $().lazyRule((it)=>{
-                        let text = {};
-                        let filepath = globalMap0.getVar('Jy_gmParams').jkfile;
-                        let datafile = fetch(filepath);
-                        let datalist = [];
-                        try{
-                            eval("datalist=" + datafile+ ";");
-                        }catch(e){}
-                        if(datalist.length>600){
-                            toast(option+"超过600，建议先精简");
-                        }else if(datalist.length==0){
-                            toast(option+"数量为0");
-                        }
-                        if(datalist.length>0){
-                            text["接口"] = datalist;
-                        }  
-                        let textcontent = globalMap0.getVar('Jy_gmParams').zip(JSON.stringify(text));
-                        log("content="+textcontent+"&path="+it.path+"&auth_code="+it.token);
-                        try{
-                            let pasteupdate = JSON.parse(request("https://pasteme.tyrantg.com/api/update",{
-                                body: "content="+textcontent+"&path="+it.path+"&auth_code="+it.token,
-                                method: "POST"
-                            }));
-                            return "toast://"+pasteupdate.message;
-                        } catch (e) {
-                            log('分享上传云端失败：'+e.message + " 错误行#" + e.lineNumber); 
-                            return 'toast://分享上传云端失败，网络或内容出错';
-                        }
-                    },it)
-                    
                 }
             }, it),
             col_type: "text_1"
