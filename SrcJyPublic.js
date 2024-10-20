@@ -985,11 +985,14 @@ function shareResource() {
                             }
                             let textcontent = globalMap0.getVar('Jy_gmParams').zip(JSON.stringify(text));
                             log("content="+textcontent+"&path="+it.path+"&auth_code="+it.token);
-                            try{
-                                let pasteupdate = JSON.parse(request("https://pasteme.tyrantg.com/api/update", {
+                            //try{
+                                let pasteupdate = JSON.parse(request("https://pasteme.tyrantg.com/api/update",{
                                     body: "content="+textcontent+"&path="+it.path+"&auth_code="+it.token,
                                     method: "POST"
                                 }));
+                                log(pasteupdate);
+                                return "toast://"+pasteupdate.message;
+                                /*
                                 if(pasteupdate.result_code=="SUCCESS"){
                                     let resources = Juconfig['shareResource'] || [];
                                     const index = resources.findIndex(item => item.path === it.path);
@@ -1004,10 +1007,11 @@ function shareResource() {
                                 }else{
                                     return 'toast://分享同步云端失败，'+pasteupdate.message;
                                 }
-                            } catch (e) {
-                                log('分享上传云端失败：'+e.message + " 错误行#" + e.lineNumber); 
-                                return 'toast://分享上传云端失败，网络或内容出错';
-                            }
+                                */
+                            //} catch (e) {
+                            //    log('分享上传云端失败：'+e.message + " 错误行#" + e.lineNumber); 
+                            //    return 'toast://分享上传云端失败，网络或内容出错';
+                            //}
                         }, 
                         centerTitle: "取消"
                     });
