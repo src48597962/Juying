@@ -7,6 +7,7 @@ d.push({
     pic_url: "",
     extra: {
         js: $.toString(() => {
+            fy_bridge_app.log(location.href);
             function check() {
                 fy_bridge_app.log("check");
                 let src = document.querySelectorAll("iframe")[1];
