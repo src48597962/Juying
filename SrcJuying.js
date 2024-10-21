@@ -300,7 +300,7 @@ function dianboerji() {
     let detailpic = pic?/^http/.test(pic)&&!pic.includes('@')?pic+'@Referer=':pic:'';
     d.push({
         title: details1,//详情1
-        desc: "站源："+sgroup+"_"+sname+"\n"+details2,//详情2
+        desc: "站源："+sname+"  ““””<small><font color=grey>("+sgroup+")</font></small>\n"+details2,//详情2
         pic_url: detailpic,//图片
         url: MY_URL.startsWith("http")?MY_URL + '#noHistory#':detailpic,//链接
         col_type: 'movie_1_vertical_pic_blur',
@@ -621,7 +621,7 @@ function dianboerji() {
                     extra.cacheM3u8 = true;
                 }
                 d.push({
-                    title: getHead(playtitle.replace(/第|集|话|期|new|最新|新/g, ''), Color3),
+                    title: "““””<small>"+playtitle.replace(/第|集|话|期|new|最新|新/g, '')+"</small>",
                     url: playurl + lazy,
                     col_type: col_type,
                     extra: extra
@@ -633,7 +633,7 @@ function dianboerji() {
     
     //底部说明
     d.push({
-        desc: '‘‘’’<small><font color=#bfbfbf>此规则仅限学习交流使用，请于导入后24小时内删除，任何团体或个人不得以任何方式方法传播此规则的整体或部分！</font></small>',
+        desc: '‘‘’’<small><small><small><font color=#bfbfbf>此规则仅限学习交流使用，任何团体或个人不得以任何方式方法传播此规则的整体或部分！</font></small></small></small>',
         url: 'toast://温馨提示：且用且珍惜！',
         col_type: 'text_center_1',
         extra: {
