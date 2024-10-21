@@ -29,6 +29,7 @@ d.push({
             }
             function check2() {
                 fy_bridge_app.log("check2");
+                fy_bridge_app.log(document.body);
                 let a = document.querySelector("#start");
                 if(a) {
                     fy_bridge_app.log("click");
