@@ -593,7 +593,24 @@ function dianboerji() {
                     return SrcParseS.聚影(input, dataObj);
                 }, dataObj);
             }
-
+            function extraJS(playUrl) {
+                if(/jqqzx\.me\/play/.test(playUrl)){
+                    return $.toString(() => {
+                        function check() {
+                            try {
+                                let iframe = document.querySelector('#playleft iframe');
+                                let iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+                                iframeDocument.querySelector("#start").click();
+                            } catch (e) {
+                                setTimeout(check, 200);
+                            }
+                        }
+                        check();
+                    })
+                }else{
+                    return undefined;
+                }
+            }
             let playSet = storage0.getItem('playSet') || {};
             let len = 列表.slice(0, 10).concat(列表.slice(-10)).reduce((max, str) => Math.max(max, str.split('$')[0].replace(name,"").trim().length), 0);
             let col_type = 列表.length > 4 && len < 5 ? 'text_4' : len > 10 ? 'text_1' : len>4&&len<7 ? 'text_3' :'text_2';
@@ -609,6 +626,7 @@ function dianboerji() {
                 let extra = {
                     id: name + "_选集_" + (pageid?pageid+"_":"") + i,
                     jsLoadingInject: true,
+                    js: extraJS(playurl),
                     blockRules: ['.m4a', '.mp3', '.gif', '.jpeg', '.jpg', '.ico', '.png', 'hm.baidu.com', '/ads/*.js', 'cnzz.com'],
                     videoRules: videocontain,
                     videoExcludeRules: videoexclude,
