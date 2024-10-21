@@ -594,7 +594,7 @@ function dianboerji() {
                 }, dataObj);
             }
             function extraJS(playUrl) {
-                if(/jqqzx\.me\/play/.test(playUrl)){
+                if(/jqqzx\.me|dadazhu\.me/.test(playUrl)){
                     return $.toString(() => {
                         function check() {
                             try {
