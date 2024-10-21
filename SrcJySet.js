@@ -1673,7 +1673,7 @@ function manageSet(){
         url: 'toast://不清楚，可不动'
     });
     d.push({
-        title: '资源码分享',
+        title: '资源码分享管理',
         img: getIcon("管理-箭头.svg"),
         url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
             require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
@@ -1682,7 +1682,7 @@ function manageSet(){
         col_type: 'text_icon'
     });
     d.push({
-        title: '资源码订阅',
+        title: '资源码订阅管理',
         img: getIcon("管理-箭头.svg"),
         url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
             require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
