@@ -798,6 +798,7 @@ function dianboyiji(testSource) {
                 }else if(input=="资源码订阅"){
                     return $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
                         require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
+                        setPageTitle("资源码订阅管理");
                         subResource();
                     })
                 }
