@@ -1,11 +1,13 @@
 var newVersion = {
     "SrcJuying":"2.1",
-    "hint": "可能需要重进一次软件",
+    "hint": "",
     "codeDownload": "https://src48597962.lanzouo.com/iXwqG2cgbtbc",
     "JYUpdateRecords": [{
         title: "beta V2.2",
         records: [
-            "新增：管理中增加资源码分享/订阅功能"
+            "新增：管理中增加资源码分享/订阅功能",
+            "新增：点播管理设置菜单增加资源订阅入口",
+            "优化：点播接口管理批量测试支持跳过一级"
         ]
     },{
         title: "2024/10/13 V2.1",
