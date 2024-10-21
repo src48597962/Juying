@@ -10,12 +10,16 @@ d.push({
             //fy_bridge_app.log(location.href);
             function check() {
                 fy_bridge_app.log("check");
+                let src = "";
                 let iframes = document.querySelectorAll("iframe");
                 for(var i = 0; i < iframes.length; i++) {
-                    fy_bridge_app.log(iframes[i].src);
+                    if(iframes[i].src != location.href){
+                        fy_bridge_app.log(iframes[i].src);
+                        src = iframes[i].src;
+                    }
                 }
-                if (iframes[1]) {
-                    location.href = iframes.src;
+                if (src) {
+                    location.href = src;
                 } else {
                     setTimeout(check, 200);
                 }
