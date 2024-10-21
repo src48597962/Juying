@@ -633,7 +633,7 @@ function dianboerji() {
     
     //底部说明
     d.push({
-        desc: '‘‘’’<small><small><font color=#bfbfbf>本规则仅供学习交流使用，任何团体或个人不得以任何形式传播、复制或分发其整体或部分内容。</font></small></small>',
+        desc: '‘‘’’<small><small><font color=#bfbfbf>本规则仅供学习交流使用，任何团体或个人不得以任何形式传播其整体或部分内容。</font></small></small>',
         url: 'toast://温馨提示：且用且珍惜！',
         col_type: 'text_center_1',
         extra: {
