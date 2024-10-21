@@ -1183,28 +1183,53 @@ function updateResource(it) {
             let jknum = 0;
             let jxnum = 0;
             let ypnum = 0;
+            let options = [];
             let jkdatalist = pastedata.接口||[];
             if(jkdatalist.length>0){
                 jknum = jiekousave(jkdatalist, it.mode==2?2:1);
+                options.push('接口');
             }
             let jxdatalist = pastedata.解析||[];
             if(jxdatalist.length>0){
                 jxnum = jiexisave(jxdatalist, it.mode==2?2:1);
+                options.push('解析');
             }
             if(pastedata.直播){
                 let livefilepath = globalMap0.getVar('Jy_gmParams').datapath + "liveconfig.json";
-                let liveconfig = pastedata.直播;
-                writeFile(livefilepath, JSON.stringify(liveconfig));
-                var sm = "，直播订阅已同步"
+                let liveconfig = pastedata.直播 || {};
+                if(it.mode!=2){
+                    let livefile = fetch(livefilepath);
+                    if(livefile){
+                        try{
+                            let olddata = JSON.parse(livefile).data;
+                            let newdata = liveconfig.data;
+                            newdata.forEach(tv=>{
+                                if(!olddata.some(item => tv.url==item.url)){
+                                    olddata.push(tv);
+                                }
+                            })
+                            liveconfig.data = olddata;
+                            options.push('直播');
+                            writeFile(livefilepath, JSON.stringify(liveconfig));
+                            var sm = "，直播订阅已同步"
+                        }catch(e){}
+                    }
+                }else if(liveconfig.data){
+                    options.push('直播');
+                    writeFile(livefilepath, JSON.stringify(liveconfig));
+                    var sm = "，直播订阅已同步"
+                }
             }
             let ypdatalist = pastedata.云盘||[];
             if(ypdatalist.length>0){
                 ypnum = yundisksave(ypdatalist, 1);
+                options.push('云盘');
             }
             let resources = Juconfig['subResource'] || [];
             const index = resources.findIndex(item => item.path === it.path);
             if (index !== -1) {
                 resources[index].time = $.dateFormat(new Date(), "yyyy-MM-dd HH:mm:ss");
+                resources[index].options = options.join(",");
             }
             Juconfig['subResource'] = resources;
             writeFile(cfgfile, JSON.stringify(Juconfig));
