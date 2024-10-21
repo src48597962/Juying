@@ -16,13 +16,12 @@ d.push({
                     setTimeout(check, 200);
                 }
             }
-            if (location.href.includes(".xiangdao.me/")) {
+            if (location.href.includes("jqqzx.me/play/")) {
                 check();
             }
             function check2() {
-                //let src = document.querySelectorAll("iframe")[1];
-                //fy_bridge_app.log(src);
-                let a = document.querySelector(".player-box-main");
+                fy_bridge_app.log("check2");
+                let a = document.querySelector("#start");
                 if(a) {
                     fy_bridge_app.log("click");
                     a.click();
@@ -30,7 +29,9 @@ d.push({
                     setTimeout(check2, 200);
                 }
             }
-            check2();
+            if (!location.href.includes("jqqzx.me/play/")) {
+                check2();
+            }
         })
     }
 });
