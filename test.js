@@ -7,12 +7,15 @@ d.push({
     pic_url: "",
     extra: {
         js: $.toString(() => {
-            fy_bridge_app.log(location.href);
+            //fy_bridge_app.log(location.href);
             function check() {
                 fy_bridge_app.log("check");
-                let src = document.querySelectorAll("iframe")[1];
-                if (src) {
-                    location.href = src.src;
+                let iframes = document.querySelectorAll("iframe");
+                for(var i = 0; i < iframes.length; i++) {
+                    fy_bridge_app.log(iframes[i].src);
+                }
+                if (iframes[1]) {
+                    location.href = iframes.src;
                 } else {
                     setTimeout(check, 200);
                 }
