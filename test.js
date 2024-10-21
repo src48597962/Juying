@@ -20,9 +20,9 @@ d.push({
                 check();
             }
             function check2() {
-                let src = document.querySelectorAll("iframe")[1];
-                fy_bridge_app.log(src);
-                let a = document.querySelector("#start");
+                //let src = document.querySelectorAll("iframe")[1];
+                //fy_bridge_app.log(src);
+                let a = document.querySelector(".player-box-main");
                 if(a) {
                     fy_bridge_app.log("click");
                     a.click();
