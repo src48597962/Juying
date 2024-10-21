@@ -1085,7 +1085,7 @@ function subResource() {
     resources.forEach(it=>{
         d.push({
             title: it.name + "-" + it.path.split('@')[0],
-            desc: "自动同步：" + (it.auto?"是":"否") + "     同步时间：" + (it.time||"") + "\n导入模式：" + (it.mode==2?"全量":"增量") + "   导入项目："+(it.options||""),
+            desc: "自动同步：" + (it.auto?"是":"否") + "       同步时间：" + (it.time||"") + "\n导入模式：" + (it.mode==2?"全量":"增量") + "   导入项目："+(it.options||""),
             url: $(["复制","删除","改名","下载","自动",it.mode=="2"?"增量":"全量"], 2, "选择操作功能项").select((it)=>{
                 let Juconfig = storage0.getMyVar('Juconfig');
                 let cfgfile = globalMap0.getVar('Jy_gmParams').cfgfile;
