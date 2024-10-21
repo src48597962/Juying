@@ -758,7 +758,7 @@ function dianboyiji(testSource) {
         })
         d.push({
             title: "管理设置",
-            url: testSource?"toast://测试模式下不能更换主页源":$(["接口管理","解析管理","资源管理","站源切换"],1).select(()=>{
+            url: testSource?"toast://测试模式下不能更换主页源":$(["接口管理","解析管理","资源管理","站源切换","资源码订阅"],1).select(()=>{
                 if(input=="接口管理"){
                     if(getItem("sourceMode")=="2"){
                         return "toast://订阅文件模式，无法管理本地接口";
@@ -795,6 +795,11 @@ function dianboyiji(testSource) {
                         sm = "订阅文件模式";
                     }
                     return "toast://站源获取设置为："+sm;
+                }else if(input=="资源码订阅"){
+                    return $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
+                        require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
+                        subResource();
+                    })
                 }
             }),
             pic_url: getIcon("点播-设置.svg"),
