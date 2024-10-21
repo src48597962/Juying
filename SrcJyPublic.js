@@ -1085,7 +1085,7 @@ function subResource() {
     resources.forEach(it=>{
         d.push({
             title: it.name + "-" + it.path.split('@')[0],
-            desc: "自动同步：" + (it.auto?"是":"否") + "   同步时间：" + (it.time||"") + "\n导入模式：" + (it.mode==2?"全量":"增量") + "   导入项目："+(it.options||""),
+            desc: "自动同步：" + (it.auto?"是":"否") + "     同步时间：" + (it.time||"") + "\n导入模式：" + (it.mode==2?"全量":"增量") + "   导入项目："+(it.options||""),
             url: $(["复制","删除","改名","下载","自动",it.mode=="2"?"增量":"全量"], 2, "选择操作功能项").select((it)=>{
                 let Juconfig = storage0.getMyVar('Juconfig');
                 let cfgfile = globalMap0.getVar('Jy_gmParams').cfgfile;
@@ -1153,7 +1153,7 @@ function subResource() {
                     }, Juconfig, it.path, cfgfile)
                 }else if(input=="下载"){
                     require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
-                    return updateResource(it);
+                    return updateResource(it,1);
                 }
             }, it),
             col_type: "text_1"
@@ -1162,7 +1162,7 @@ function subResource() {
     setResult(d);
 }
 // 更新同步订阅资源
-function updateResource(it) {
+function updateResource(it,refresh) {
     if(!it){
         let resources = Juconfig['subResource'] || [];
         for (let i = 0; i < resources.length; i++) {
@@ -1233,11 +1233,12 @@ function updateResource(it) {
             }
             Juconfig['subResource'] = resources;
             writeFile(cfgfile, JSON.stringify(Juconfig));
-            hideLoading();
             log("更新同步订阅资源完成；接口："+jknum+"，解析："+jxnum+(sm?sm:"")+"，云盘："+ypnum);
+            if(refresh){
+                refreshPage(false);
+            }
             return "toast://更新同步订阅资源完成";
         }else{
-            hideLoading();
             return "toast://订阅资源网络错误或资源码已失效";
         }
     }catch(e){
