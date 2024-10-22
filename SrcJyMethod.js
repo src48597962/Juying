@@ -19,3 +19,25 @@ function extraJS(playUrl) {
         return undefined;
     }
 }
+// 获取选集对应extra
+function getPlayExtra(obj){
+    let sniffer = obj.sniffer || {};
+    let videocontain = sniffer["contain"] || undefined;
+    let videoexclude = sniffer["exclude"] || ['m3u8.js','?url='];
+    let extra = {
+        id: obj.id,
+        jsLoadingInject: true,
+        js: obj.js || extraJS(obj.playUrl),
+        blockRules: ['.m4a', '.mp3', '.gif', '.jpeg', '.jpg', '.ico', '.png', 'hm.baidu.com', '/ads/*.js', 'cnzz.com'],
+        videoRules: videocontain,
+        videoExcludeRules: videoexclude,
+        cls: "Juloadlist playlist"
+    }
+    if(!/qq|youku|mgtv|bili|qiyi|sohu|pptv|le/.test(obj.playUrl) && /html/.test(obj.playUrl)){
+        extra.referer = obj.playUrl;
+    }
+    if(obj.cachem3u8){
+        extra.cacheM3u8 = true;
+    }
+    return extra;
+}
