@@ -639,7 +639,24 @@ var SrcParseS = {
             //let rurl = JSON.parse(html).url || JSON.parse(html).data;
             return rurl;
         }
-        
+        function extraJS(playUrl) {
+            if(/jqqzx\.me|dadazhu\.me/.test(playUrl)){
+                return $.toString(() => {
+                    function check() {
+                        try {
+                            let iframe = document.querySelector('#playleft iframe');
+                            let iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+                            iframeDocument.querySelector("#start").click();
+                        } catch (e) {
+                            setTimeout(check, 200);
+                        }
+                    }
+                    check();
+                })
+            }else{
+                return undefined;
+            }
+        }
         function exeWebRule(webUrl, music) {
             return executeWebRule(webUrl, $.toString((music) => {
                     try{
@@ -666,6 +683,7 @@ var SrcParseS = {
                 },music), {
                     blockRules: ['.m4a','.mp3','.gif','.jpg','.jpeg','.png','.ico','hm.baidu.com','/ads/*.js','/klad/*.php','layer.css'],
                     jsLoadingInject: true,
+                    js: extraJS(webUrl),
                     //ua: head['User-Agent'] || MOBILE_UA,
                     //referer: head['referer'] || "",
                     checkTime: 100,
