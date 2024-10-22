@@ -610,7 +610,7 @@ function dianboerji() {
                 let extra = {
                     id: name + "_选集_" + (pageid?pageid+"_":"") + i,
                     jsLoadingInject: true,
-                    js: jsClick(playurl),
+                    js: extraJS(playurl),
                     blockRules: ['.m4a', '.mp3', '.gif', '.jpeg', '.jpg', '.ico', '.png', 'hm.baidu.com', '/ads/*.js', 'cnzz.com'],
                     videoRules: videocontain,
                     videoExcludeRules: videoexclude,
