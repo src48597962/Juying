@@ -1,5 +1,5 @@
 var newVersion = {
-    "SrcJuying":"2.1",
+    "SrcJuying":"2.2",
     "hint": "",
     "codeDownload": "https://src48597962.lanzouo.com/iXwqG2cgbtbc",
     "JYUpdateRecords": [{
@@ -8,7 +8,8 @@ var newVersion = {
             "新增：管理中增加资源码分享/订阅功能",
             "新增：点播管理设置菜单增加资源订阅入口",
             "优化：点播接口管理批量测试支持跳过一级",
-            "优化：点播适配drpy解析js注入和自定义逻辑"
+            "优化：点播适配hipy_t3/t4解析输出js自动注入",
+            "优化：点播封装选集extra获取，增加js注入方法"
         ]
     },{
         title: "2024/10/13 V2.1",
