@@ -1387,7 +1387,7 @@ function yiji() {
                 let h = getHistory(i);
                 addItemAfter("historyid", h);
                 let j = parseInt(getMyVar('SrcJu_homeHistory','0'));
-                updateItem("historyid", {desc: (i*3+1) + "-" + (i*3+3)});
+                updateItem("historyid", {desc: (j*3+1) + "-" + (j*3+3)});
                 return "hiker://empty";
             }),
             pic_url: getIcon("主页-记录.svg", 1),//'https://hikerfans.com/tubiao/red/40.png',
