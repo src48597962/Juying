@@ -10,7 +10,7 @@ function jsClick(playUrl) {
                     let iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
                     iframeDocument.querySelector("#start").click();
                 } catch (e) {
-                    setTimeout(check, 200);
+                    setTimeout(check, 100);
                 }
             }
             check();
