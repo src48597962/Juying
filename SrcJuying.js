@@ -1387,6 +1387,7 @@ function yiji() {
                 deleteItemByCls('historylist');
                 let h = getHistory(i);
                 addItemAfter("historyid", h);
+                updateItem("historyid", {desc: (i*3+1) + "-" + (i*3+3)});
                 return "hiker://empty";
             },i),
             pic_url: getIcon("主页-记录.svg", 1),//'https://hikerfans.com/tubiao/red/40.png',
