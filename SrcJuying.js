@@ -591,7 +591,9 @@ function dianboerji() {
             }else{
                 */
                 lazy = $("").lazyRule((dataObj) => {
+                    log(input);
                     return input + $("#readTheme##autoPage#").rule((dataObj)=>{
+                        log(MY_URL);
                         let vipUrl = MY_URL.split('##')[1].split('#')[0];
                         let play;
                         if(dataObj.stype=="hipy_t3"){
