@@ -2,7 +2,7 @@
 // 一些多处会调用但不用默认加载的方法
 // extra.js，可用于注入js模似点击
 function extraJS(playUrl) {
-    if(/jqqzx\.me/.test(playUrl)){//|dadazhu\.me
+    if(/jqqzx\.me|dadazhu\.me/.test(playUrl)){
         return $.toString(() => {
             function check() {
                 try {
