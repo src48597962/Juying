@@ -55,6 +55,7 @@ var SrcParseS = {
         //聚影采用新的、独立的解析逻辑
         vipUrl = vipUrl.startsWith('tvbox-xg:')?vipUrl.replace('tvbox-xg:',''):vipUrl.startsWith('push://')?vipUrl.replace('push://',''):vipUrl
         let isVip = 0;
+        let extrajs;
         dataObj = dataObj || {};
 
         if(dataObj.stype && /hipy_/.test(dataObj.stype)){
@@ -68,6 +69,9 @@ var SrcParseS = {
                 play = JSON.parse(fetch(dataObj.surl+'&flag='+dataObj.flag+"&extend="+dataObj.sext+'&play='+vipUrl, {timeout: 10000}));
             }
             //log(play);
+            if(play.js){
+                extrajs = play.js;
+            }
             if(play.url.startsWith('push://')){
                 play.url = play.url.replace('push://', '');
             }
@@ -131,7 +135,8 @@ var SrcParseS = {
                 vipUrl: vipUrl,
                 isWeb: 1,
                 video: playSet.video,
-                music: dataObj.sname&&dataObj.sname.includes("[听]")?1:0
+                music: dataObj.sname&&dataObj.sname.includes("[听]")?1:0,
+                js: extrajs
             }
             return this.解析方法(obj);
         }
@@ -640,9 +645,9 @@ var SrcParseS = {
             return rurl;
         }
 
-        function exeWebRule(webUrl, music) {
+        function exeWebRule(obj, music) {
             require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyMethod.js');
-            return executeWebRule(webUrl, $.toString((music) => {
+            return executeWebRule(obj.vipUrl, $.toString((music) => {
                     try{
                         if (typeof (request) == 'undefined' || !request) {
                             eval(fba.getInternalJs());
@@ -667,7 +672,7 @@ var SrcParseS = {
                 },music), {
                     blockRules: ['.m4a','.mp3','.gif','.jpg','.jpeg','.png','.ico','hm.baidu.com','/ads/*.js','/klad/*.php','layer.css'],
                     jsLoadingInject: true,
-                    js: jsClick(webUrl),
+                    js: obj.js || jsClick(obj.vipUrl),
                     //ua: head['User-Agent'] || MOBILE_UA,
                     //referer: head['referer'] || "",
                     checkTime: 100,
@@ -678,11 +683,11 @@ var SrcParseS = {
 
         if(obj.isWeb){
             if(obj.music){
-                return exeWebRule(obj.vipUrl, 1) || "toast://嗅探解析失败";
+                return exeWebRule(obj, 1) || "toast://嗅探解析失败";
             }else if(obj.video){
                 return 'video://'+obj.vipUrl;
             }else{
-                return exeWebRule(obj.vipUrl) || "toast://WebRule获取失败，可试试video";
+                return exeWebRule(obj) || "toast://WebRule获取失败，可试试video";
             }
         }else if(/^function/.test(obj.ulist.url.trim())){
             obj.ulist['x5'] = 0;
@@ -728,7 +733,7 @@ var SrcParseS = {
                     }else if(/\.m3u8|\.mp4|\.flv/.test(gethtml) && geturl(gethtml)){
                         rurl = geturl(gethtml);
                     }else if((MY_NAME=="海阔视界"&&getAppVersion()>=4094)||(MY_NAME=="嗅觉浏览器"&&getAppVersion()>=1359)){
-                        rurl = exeWebRule(obj.ulist.url+obj.vipUrl) || "";
+                        rurl = exeWebRule({vipUrl:obj.ulist.url+obj.vipUrl}) || "";
                     }
                 }
                 var x5 = 0;
