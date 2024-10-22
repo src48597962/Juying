@@ -645,9 +645,9 @@ var SrcParseS = {
             return rurl;
         }
 
-        function exeWebRule(obj, music) {
+        function exeWebRule(webUrl, music, js) {
             require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyMethod.js');
-            return executeWebRule(obj.vipUrl, $.toString((music) => {
+            return executeWebRule(webUrl, $.toString((music) => {
                     try{
                         if (typeof (request) == 'undefined' || !request) {
                             eval(fba.getInternalJs());
@@ -672,7 +672,7 @@ var SrcParseS = {
                 },music), {
                     blockRules: ['.m4a','.mp3','.gif','.jpg','.jpeg','.png','.ico','hm.baidu.com','/ads/*.js','/klad/*.php','layer.css'],
                     jsLoadingInject: true,
-                    js: obj.js || jsClick(obj.vipUrl),
+                    js: js || extraJS(webUrl),
                     //ua: head['User-Agent'] || MOBILE_UA,
                     //referer: head['referer'] || "",
                     checkTime: 100,
@@ -683,11 +683,11 @@ var SrcParseS = {
 
         if(obj.isWeb){
             if(obj.music){
-                return exeWebRule(obj, 1) || "toast://嗅探解析失败";
+                return exeWebRule(obj.vipUrl, 1, obj.js) || "toast://嗅探解析失败";
             }else if(obj.video){
                 return 'video://'+obj.vipUrl;
             }else{
-                return exeWebRule(obj) || "toast://WebRule获取失败，可试试video";
+                return exeWebRule(obj.vipUrl, 0, obj.js) || "toast://WebRule获取失败，可试试video";
             }
         }else if(/^function/.test(obj.ulist.url.trim())){
             obj.ulist['x5'] = 0;
@@ -733,7 +733,7 @@ var SrcParseS = {
                     }else if(/\.m3u8|\.mp4|\.flv/.test(gethtml) && geturl(gethtml)){
                         rurl = geturl(gethtml);
                     }else if((MY_NAME=="海阔视界"&&getAppVersion()>=4094)||(MY_NAME=="嗅觉浏览器"&&getAppVersion()>=1359)){
-                        rurl = exeWebRule({vipUrl:obj.ulist.url+obj.vipUrl}) || "";
+                        rurl = exeWebRule(obj.ulist.url+obj.vipUrl) || "";
                     }
                 }
                 var x5 = 0;
