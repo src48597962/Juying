@@ -557,6 +557,7 @@ function dianboerji() {
                 dataObj.sext = jkdata.ext;
             }
             let novel = erdata.detailtype=="小说";
+            /*
             if(novel){
                 lazy = $("#readTheme##autoPage#").rule((dataObj)=>{
                     let vipUrl = MY_URL.split('##')[1].split('#')[0];
@@ -588,11 +589,41 @@ function dianboerji() {
                     setResult(d)
                 }, dataObj);
             }else{
+                */
                 lazy = $("").lazyRule((dataObj) => {
-                    require(config.依赖.replace(/[^/]*$/,'') + 'SrcParseS.js');
-                    return SrcParseS.聚影(input, dataObj);
+                    return $("#readTheme##autoPage#").rule((dataObj)=>{
+                        let vipUrl = MY_URL.split('##')[1].split('#')[0];
+                        let play;
+                        if(dataObj.stype=="hipy_t3"){
+                            let sdata = {name: dataObj.sname, url: dataObj.surl, ext: dataObj.sext}
+                            let drpy = GM.defineModule("SrcJyDrpy", config.依赖.replace(/[^/]*$/,'') + "SrcJyDrpy.js").get(sdata);
+                            play = JSON.parse(drpy.play(dataObj.flag, vipUrl, []));
+                        }else if(dataObj.stype=="hipy_t4"){
+                            play = JSON.parse(request(dataObj.surl+'&flag='+dataObj.sname+"&extend="+dataObj.sext+'&play='+vipUrl));
+                        }
+                        let data = JSON.parse(play.url.replace('novel://',''));
+                        let d = [];
+                        d.push({
+                            title: '<big>' + data.title + '</big>',
+                            col_type: 'rich_text',
+                            extra: {
+                                click: true
+                            }
+                        });
+                        d.push({
+                            title: "　　" + data.content.replace(/(&nbsp;){1,}/g, '　　').replace(/\n/g, "<p>　　"),
+                            col_type: "rich_text",
+                            extra: {
+                                textSize: 18,
+                                click: true
+                            }
+                        });
+                        setResult(d)
+                    }, dataObj);
+                    //require(config.依赖.replace(/[^/]*$/,'') + 'SrcParseS.js');
+                    //return SrcParseS.聚影(input, dataObj);
                 }, dataObj);
-            }
+            //}
             
             let playSet = storage0.getItem('playSet') || {};
             let len = 列表.slice(0, 10).concat(列表.slice(-10)).reduce((max, str) => Math.max(max, str.split('$')[0].replace(name,"").trim().length), 0);
