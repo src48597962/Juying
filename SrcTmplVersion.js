@@ -3,7 +3,7 @@ var newVersion = {
     "hint": "",
     "codeDownload": "https://src48597962.lanzouo.com/iXwqG2cgbtbc",
     "JYUpdateRecords": [{
-        title: "beta V2.2",
+        title: "2024/10/22 V2.2",
         records: [
             "新增：管理中增加资源码分享/订阅功能",
             "新增：点播管理设置菜单增加资源订阅入口",
