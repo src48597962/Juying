@@ -136,7 +136,13 @@ var SrcParseS = {
                 isWeb: 1,
                 video: playSet.video,
                 music: dataObj.sname&&dataObj.sname.includes("[听]")?1:0,
-                js: extrajs
+                js: extrajs,
+                extra: {
+                    id: dataObj.id,
+                    playUrl: vipUrl,
+                    sniffer: dataObj.sniffer,
+                    cachem3u8: playSet.cachem3u8
+                }
             }
             return this.解析方法(obj);
         }
@@ -644,9 +650,8 @@ var SrcParseS = {
             //let rurl = JSON.parse(html).url || JSON.parse(html).data;
             return rurl;
         }
-
+        
         function exeWebRule(webUrl, music, js) {
-            require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyMethod.js');
             return executeWebRule(webUrl, $.toString((music) => {
                     try{
                         if (typeof (request) == 'undefined' || !request) {
@@ -672,7 +677,7 @@ var SrcParseS = {
                 },music), {
                     blockRules: ['.m4a','.mp3','.gif','.jpg','.jpeg','.png','.ico','hm.baidu.com','/ads/*.js','/klad/*.php','layer.css'],
                     jsLoadingInject: true,
-                    js: js || extraJS(webUrl),
+                    js: js,
                     //ua: head['User-Agent'] || MOBILE_UA,
                     //referer: head['referer'] || "",
                     checkTime: 100,
@@ -682,12 +687,18 @@ var SrcParseS = {
         }
 
         if(obj.isWeb){
+            require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyMethod.js');
             if(obj.music){
                 return exeWebRule(obj.vipUrl, 1, obj.js) || "toast://嗅探解析失败";
             }else if(obj.video){
+                let extra = obj.extra || {};
+                let js =  obj.js||extraJS(obj.vipUrl);
+                if(js && extra.id){
+                    updateItem(extra.id, { extra: getPlayExtra(extra) });
+                }
                 return 'video://'+obj.vipUrl;
             }else{
-                return exeWebRule(obj.vipUrl, 0, obj.js) || "toast://WebRule获取失败，可试试video";
+                return exeWebRule(obj.vipUrl, 0, obj.js||extraJS(obj.vipUrl)) || "toast://WebRule获取失败，可试试video";
             }
         }else if(/^function/.test(obj.ulist.url.trim())){
             obj.ulist['x5'] = 0;
