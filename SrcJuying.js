@@ -1386,6 +1386,7 @@ function yiji() {
                 deleteItemByCls('historylist');
                 let h = getHistory(i);
                 addItemAfter("historyid", h);
+                let i = parseInt(getMyVar('SrcJu_homeHistory','0')) + 1;
                 updateItem("historyid", {desc: (i*3+1) + "-" + (i*3+3)});
                 return "hiker://empty";
             }),
