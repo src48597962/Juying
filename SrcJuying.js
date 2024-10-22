@@ -1375,10 +1375,11 @@ function yiji() {
     }
     
     if(getItem('historyEnable')=='1'){
+        let i = parseInt(getMyVar('SrcJu_homeHistory','0')) + 1;
         d.push({
             title: '<span style="color:#ff6600"><b>\t观看记录\t\t\t</b></span>',
-            url: $('#noLoading#').lazyRule(() => {
-                let i = parseInt(getMyVar('SrcJu_homeHistory','0')) + 1;
+            desc: "““””<small>" + (i*3) + "-" + (i*3+3) + "</small>",
+            url: $('#noLoading#').lazyRule((i) => {
                 require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
                 putMyVar('SrcJu_homeHistory', i);
                 
@@ -1386,7 +1387,7 @@ function yiji() {
                 let h = getHistory(i);
                 addItemAfter("historyid", h);
                 return "hiker://empty";
-            }),
+            },i),
             pic_url: getIcon("主页-记录.svg", 1),//'https://hikerfans.com/tubiao/red/40.png',
             col_type: 'avatar',
             extra: {
