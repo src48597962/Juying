@@ -597,9 +597,8 @@ function dianboerji() {
             let playSet = storage0.getItem('playSet') || {};
             let len = 列表.slice(0, 10).concat(列表.slice(-10)).reduce((max, str) => Math.max(max, str.split('$')[0].replace(name,"").trim().length), 0);
             let col_type = 列表.length > 4 && len < 5 ? 'text_4' : len > 10 ? 'text_1' : len>4&&len<7 ? 'text_3' :'text_2';
-            let sniffer = erdata["sniffer"] || {};
-            let videocontain = sniffer["contain"] || undefined;
-            let videoexclude = sniffer["exclude"] || ['m3u8.js','?url='];
+            let sniffer = erdata["sniffer"];
+
             require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyMethod.js');
             for(let i=0; i<列表.length; i++) {
                 let playtitle = 列表[i].split('$')[0];
@@ -607,21 +606,14 @@ function dianboerji() {
                 playtitle = decodeURIComponent(playtitle);
                 let playurl = (novel?"hiker://empty##":"")+列表[i].split('$')[1].trim();
 
-                let extra = {
+                let obj = {
                     id: name + "_选集_" + (pageid?pageid+"_":"") + i,
-                    jsLoadingInject: true,
-                    js: extraJS(playurl),
-                    blockRules: ['.m4a', '.mp3', '.gif', '.jpeg', '.jpg', '.ico', '.png', 'hm.baidu.com', '/ads/*.js', 'cnzz.com'],
-                    videoRules: videocontain,
-                    videoExcludeRules: videoexclude,
-                    cls: "Juloadlist playlist"
+                    playUrl: playurl,
+                    sniffer: sniffer,
+                    cachem3u8: playSet.cachem3u8
                 }
-                if(!/qq|youku|mgtv|bili|qiyi|sohu|pptv|le/.test(playurl) && /html/.test(playurl)){
-                    extra.referer = playurl;
-                }
-                if(playSet.cachem3u8){
-                    extra.cacheM3u8 = true;
-                }
+                let extra = getPlayExtra(obj);
+
                 d.push({
                     title: "““””<small>"+playtitle.replace(/第|集|话|期|new|最新|新/g, '')+"</small>",
                     url: playurl + lazy,
