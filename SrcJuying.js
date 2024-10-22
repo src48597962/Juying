@@ -1375,11 +1375,12 @@ function yiji() {
     }
     
     if(getItem('historyEnable')=='1'){
-        let i = parseInt(getMyVar('SrcJu_homeHistory','0')) + 1;
+        let i = parseInt(getMyVar('SrcJu_homeHistory','0'));
         d.push({
             title: '<span style="color:#ff6600"><b>\t观看记录\t\t\t</b></span>',
-            desc: "““””<small>" + (i*3) + "-" + (i*3+3) + "</small>",
+            desc: "<small>" + (i*3+1) + "-" + (i*3+3) + "</small>",
             url: $('#noLoading#').lazyRule((i) => {
+                i = i + 1;
                 require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
                 putMyVar('SrcJu_homeHistory', i);
                 
