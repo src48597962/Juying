@@ -691,12 +691,9 @@ var SrcParseS = {
             if(obj.music){
                 return exeWebRule(obj.vipUrl, 1, obj.js) || "toast://嗅探解析失败";
             }else if(obj.video){
-                log(obj.js);
                 let extra = obj.extra || {};
-                log(extra);
-                let js =  obj.js||extraJS(obj.vipUrl);
-                if(js && extra.id){
-                    log("更新id");
+                if(obj.js && extra.id){
+                    extra.js = obj.js;
                     updateItem(extra.id, { extra: getPlayExtra(extra) });
                 }
                 return 'video://'+obj.vipUrl;
