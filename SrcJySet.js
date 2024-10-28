@@ -1653,7 +1653,7 @@ function manageSet(){
                     toast("本地依赖不存在，下载后再来启用");
                     try{
                         eval(request(getItem("依赖","").replace(/[^/]*$/,'') + 'SrcTmplVersion.js'))
-                        return newVersion.codeDownload||"toast://暂未发布"
+                        return newVersion.codeDownload?"web://"+newVersion.codeDownload:"toast://暂未发布";
                     }catch(e){
                         return "toast://无法在线下载";
                     }
