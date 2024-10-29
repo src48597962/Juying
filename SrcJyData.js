@@ -135,6 +135,10 @@ function getYiData(jkdata, batchTest) {
             if(jkdata.hidecate && jkdata.categories){
                 cate_exclude = cate_exclude.concat(jkdata.categories);
             }
+            let cate_onlyshow = [];
+            if(!jkdata.hidecate && jkdata.categories){
+                cate_onlyshow = jkdata.categories;
+            }
             const Color = getItem("主题颜色", "#6dc9ff");
             let classCache = batchTest?undefined:storage0.getMyVar('SrcJu_dianbo$classCache');
             if (classCache) {
@@ -147,9 +151,7 @@ function getYiData(jkdata, batchTest) {
                         let home = JSON.parse(getHtml(classurl, headers));
                         let typelist = home['class'] || [];
                         typelist.forEach(v=>{
-                            if(cate_exclude.indexOf(v.type_name) == -1){
-                                分类.push(v.type_name + '$' + v.type_id);
-                            }
+                            分类.push(v.type_name + '$' + v.type_id);
                         })
                         if(home['filters']){
                             筛选 = home['filters'];
@@ -164,9 +166,7 @@ function getYiData(jkdata, batchTest) {
                         let home = JSON.parse(drpy.home());
                         let typelist = home['class'] || [];
                         typelist.forEach(v=>{
-                            if(cate_exclude.indexOf(v.type_name) == -1){
-                                分类.push(v.type_name + '$' + v.type_id);
-                            }
+                            分类.push(v.type_name + '$' + v.type_id);
                         })
                         if(home['filters']){
                             筛选 = home['filters'];
@@ -214,9 +214,7 @@ function getYiData(jkdata, batchTest) {
                         let typenames = extdata['分类名称'] ? extdata['分类名称'].split('&') : [];
                         let typeids = extdata['分类名称替换词'] ? extdata['分类名称替换词'].split('&') : [];
                         for (let i in typeids) {
-                            if (cate_exclude.indexOf(typenames[i]) == -1) {
-                                分类.push(typenames[i] + '$' + typeids[i]);
-                            }
+                            分类.push(typenames[i] + '$' + typeids[i]);
                         }
 
                         if ($.type(extdata['筛选数据']) == "string" && extdata['筛选数据'] == "ext") {
@@ -264,27 +262,18 @@ function getYiData(jkdata, batchTest) {
                             })
                         }
                         for (let i in typeids) {
-                            if (cate_exclude.indexOf(typenames[i]) == -1) {
-                                分类.push(typenames[i] + '$' + typeids[i]);
-                            }
+                            分类.push(typenames[i] + '$' + typeids[i]);
                         }
                     } else if (api_type == "XBPQ") {
-                        let types = [];
                         if (extdata["分类"].indexOf('$') > -1) {
-                            types = extdata["分类"].split('#');
+                            分类 = extdata["分类"].split('#');
                         } else if (extdata["分类"].indexOf('&') > -1 && extdata["分类值"]) {
                             let typenames = extdata["分类"].split('&');
                             let typeids = extdata["分类值"].split('&');
                             for (let i in typeids) {
-                                types.push(typenames[i] + '$' + typeids[i]);
+                                分类.push(typenames[i] + '$' + typeids[i]);
                             }
                         }
-                        types.forEach(it=>{
-                            if(cate_exclude.indexOf(it.split('$')[0]) == -1){
-                                分类.push(it);
-                            }
-                        })
-
                         筛选 = extdata["筛选"];
                     } else {
                         let gethtml = getHtml(classurl, headers);
@@ -292,17 +281,13 @@ function getYiData(jkdata, batchTest) {
                             let typehtml = JSON.parse(gethtml);
                             let typelist = typehtml.data.list || typehtml.data.typelist;
                             typelist.map((it) => {
-                                if(cate_exclude.indexOf(it.type_name) == -1){
-                                    分类.push(it.type_name + '$' + it.type_id);
-                                }
+                                分类.push(it.type_name + '$' + it.type_id);
                             })
                         } else if (/app|v2/.test(api_type)) {
                             let typehtml = JSON.parse(gethtml);
                             let typelist = typehtml.list || typehtml.data;
                             typelist.forEach(it => {
-                                if(cate_exclude.indexOf(it.type_name) == -1){
-                                    分类.push(it.type_name + '$' + it.type_id);
-                                }
+                                分类.push(it.type_name + '$' + it.type_id);
                             })
                             if(api_type=="app"){
                                 try{
@@ -335,43 +320,12 @@ function getYiData(jkdata, batchTest) {
                         } else if (api_type == "cms") {
                             if (/<\?xml/.test(gethtml)) {
                                 let typelist = pdfa(gethtml, 'class&&ty');
-                                if (jkdata.categories) {
-                                    for (var i = 0; i < typelist.length; i++) {
-                                        if(jkdata.hidecate){//隐藏设置的分类
-                                            if (cate_exclude.indexOf(String(xpath(typelist[i], `//ty/text()`)).trim()) > -1) {
-                                                typelist.splice(i, 1);
-                                                i = i - 1;
-                                            }
-                                        }else{//仅显示设置的分类
-                                            if (jkdata.categories.indexOf(String(xpath(typelist[i], `//ty/text()`)).trim()) == -1) {
-                                                typelist.splice(i, 1);
-                                                i = i - 1;
-                                            }
-                                        }
-                                    }
-                                }
                                 typelist.forEach((it) => {
                                     分类.push(String(xpath(it, `//ty/text()`)).trim() + '$' + String(xpath(it, `//ty/@id`)).trim());
                                 })
                             } else {
                                 let typehtml = dealJson(gethtml);
                                 let typelist = typehtml["class"] || [];
-                                if (jkdata.categories) {
-                                    for (var i = 0; i < typelist.length; i++) {
-                                        if(jkdata.hidecate){//隐藏设置的分类
-                                            if (cate_exclude.indexOf(typelist[i].type_name) > -1) {
-                                                typelist.splice(i, 1);
-                                                i = i - 1;
-                                            }
-                                        }else{//仅显示设置的分类
-                                            if (jkdata.categories.indexOf(typelist[i].type_name) == -1 && typelist[i].type_pid!=0) {
-                                                typelist.splice(i, 1);
-                                                i = i - 1;
-                                            }
-                                        }
-                                    }
-                                }
-
                                 typelist.forEach((it) => {
                                     if(it.type_name && it.type_id){
                                         if(it.type_pid==0){
@@ -407,6 +361,19 @@ function getYiData(jkdata, batchTest) {
                                         })
                                     }catch(e){}
                                 }
+                            }
+                        }
+                    }
+                    for (let i = 0; i < 分类.length; i++) {
+                        //去除隐藏/排除的分类
+                        if (cate_exclude.indexOf(分类[i].split('$')[0]) > -1) {
+                            分类.splice(i, 1);
+                            i = i - 1;
+                        }
+                        if(cate_onlyshow.length>0){
+                            if (cate_onlyshow.indexOf(分类[i].split('$')[0]) == -1) {
+                                分类.splice(i, 1);
+                                i = i - 1;
                             }
                         }
                     }
