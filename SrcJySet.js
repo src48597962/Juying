@@ -1116,7 +1116,6 @@ function jiekou(data) {
     });
     d.push({
         title: getMyVar('ishidecate')=="1"?'隐藏分类：是':'隐藏分类：否',
-        desc: getMyVar('ishidecate')=="1"?'设置的分类是否为隐藏，默认是仅显示':'',
         col_type:'text_1',
         url:$('#noLoading#').lazyRule(()=>{
             if(getMyVar('ishidecate', '')!="1"){
@@ -1320,6 +1319,10 @@ function jiekou(data) {
                     if(apicate){
                         apicate = apicate.replace('，',',');
                         arr['categories'] = apicate.split(',').filter(v=>v);
+                    }
+                    let ishidecate = getMyVar('ishidecate')=="1"?1:0;
+                    if(ishidecate){
+                        arr['hidecate'] = 1;
                     }
                     arr['ext'] = extfile;
                     data = arr;
