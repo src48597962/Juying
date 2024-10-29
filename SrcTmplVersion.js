@@ -3,6 +3,11 @@ var newVersion = {
     "hint": "",
     "codeDownload": "https://src48597962.lanzouo.com/ivnQ62d4502h",
     "JYUpdateRecords": [{
+        title: "beta V2.3",
+        records: [
+            "优化：点播源编辑支持设置分类是隐藏或只显示"
+        ]
+    },{
         title: "2024/10/22 V2.2",
         records: [
             "新增：管理中增加资源码分享/订阅功能",
