@@ -50,6 +50,7 @@ function getDatas(lx, isyx) {
                 toast(boxSource.message);
             }else{
                 datalist = lx=="jk"?boxSource.jklist:boxSource.jxlist;
+                datalist = datalist || [];
             }
         }
     }
