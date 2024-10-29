@@ -970,6 +970,7 @@ function jiekou(data) {
         clearMyVar('apitype');
         clearMyVar('apigroup');
         clearMyVar('apicate');
+        clearMyVar('ishidecate');
         clearMyVar('isload');
         clearMyVar('isretain');
         clearMyVar('isSaveAs');
@@ -987,6 +988,7 @@ function jiekou(data) {
             putMyVar('apigroup', data.group||"");
             putMyVar('apicate', data.categories?data.categories.join(","):"");
             putMyVar('isretain', data.retain||"");
+            putMyVar('ishidecate', data.hidecate||"");
             putMyVar('isload', '1');
         }
     }
@@ -1113,9 +1115,23 @@ function jiekou(data) {
         })
     });
     d.push({
+        title: getMyVar('ishidecate')=="1"?'隐藏分类：是':'隐藏分类：否',
+        desc: getMyVar('ishidecate')=="1"?'设置的分类是否为隐藏，默认是仅显示':'',
+        col_type:'text_1',
+        url:$('#noLoading#').lazyRule(()=>{
+            if(getMyVar('ishidecate', '')!="1"){
+                putMyVar('ishidecate', '1');
+            }else{
+                clearMyVar('ishidecate');
+            }
+            refreshPage(false);
+            return 'toast://已切换';
+        })
+    });
+    d.push({
         title: 'apicate',
         col_type: 'input',
-        desc: "设置仅显示的类型，逗号分隔",
+        desc: getMyVar('ishidecate')=="1"?"设置需隐藏的分类名称，逗号分隔":"设置仅显示的分类名称，逗号分隔",
         extra: {
             titleVisible: false,
             defaultValue: getMyVar('apicate',''),
@@ -1233,6 +1249,10 @@ function jiekou(data) {
                 let isretain = getMyVar('isretain')=="1"?1:0;
                 if(isretain){
                     arr['retain'] = 1;
+                }
+                let ishidecate = getMyVar('ishidecate')=="1"?1:0;
+                if(ishidecate){
+                    arr['hidecate'] = 1;
                 }
                 if(data){
                     if(data.ext){
