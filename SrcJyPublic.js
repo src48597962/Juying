@@ -50,7 +50,10 @@ function getDatas(lx, isyx) {
                 toast(boxSource.message);
             }else{
                 datalist = lx=="jk"?boxSource.jklist:boxSource.jxlist;
-                datalist = datalist || [];
+                if(!datalist){
+                    toast("订阅源异常，获取失败，更换订阅或切换模式");
+                    datalist = [];
+                }
             }
         }
     }
