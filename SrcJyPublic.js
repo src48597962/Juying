@@ -1204,7 +1204,7 @@ function updateResource(it,refresh) {
                 options.push('解析');
             }
             if(pastedata.直播){
-                let livefilepath = globalMap0.getVar('Jy_gmParams').datapath + "liveconfig.json";
+                let livefilepath = globalMap0.getVar('Jy_gmParams').rulepath + "liveconfig.json";
                 let liveconfig = pastedata.直播;
                 if(it.mode!=2){
                     log(livefilepath);
