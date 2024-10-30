@@ -1207,7 +1207,9 @@ function updateResource(it,refresh) {
                 let livefilepath = globalMap0.getVar('Jy_gmParams').datapath + "liveconfig.json";
                 let liveconfig = pastedata.直播;
                 if(it.mode!=2){
+                    log(livefilepath);
                     let livefile = fetch(livefilepath);
+                    log(livefile);
                     if(livefile){
                         try{
                             let olddata = JSON.parse(livefile).data;
