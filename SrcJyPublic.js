@@ -939,7 +939,8 @@ function shareResource() {
                                 options.forEach((option,i)=>{
                                     if(checked[i]){
                                         if(option=="ghproxy"){
-                                            let ghproxy = $.require('ghproxy').getproxy();
+                                            let ghproxy = Juconfig['ghproxy'] || [];
+                                            ghproxy = ghproxy.filter(v=>!v.stop);
                                             if(ghproxy.length>0){
                                                 text["ghproxy"] = ghproxy;
                                             }
