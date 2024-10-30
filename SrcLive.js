@@ -789,7 +789,7 @@ function LiveSet() {
                 })
             })
             d.push({
-                title: '🆗 确定导入',
+                title: '🆗 确定订阅',
                 col_type: 'text_2',
                 url: $('#noLoading#').lazyRule((Juconfig, cfgfile) => {
                     let input = getMyVar('importinput', '');
