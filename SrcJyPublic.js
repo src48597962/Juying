@@ -1177,6 +1177,10 @@ function updateResource(it,refresh) {
             }
         }
     }
+    if(!it){
+        log("自动同步取消，没有可执行的订阅源");
+        return "hiker://empty";
+    }
     try{
         let pasteget = JSON.parse(request('https://pasteme.tyrantg.com/api/getContent/'+it.path,{
             "content-type": "application/json;charset=UTF-8"
@@ -1202,9 +1206,7 @@ function updateResource(it,refresh) {
             if(pastedata.直播){
                 let livefilepath = globalMap0.getVar('Jy_gmParams').datapath + "liveconfig.json";
                 let liveconfig = pastedata.直播;
-                log(liveconfig);
                 if(it.mode!=2){
-                    log("aaa");
                     let livefile = fetch(livefilepath);
                     if(livefile){
                         try{
@@ -1219,10 +1221,11 @@ function updateResource(it,refresh) {
                             options.push('直播');
                             writeFile(livefilepath, JSON.stringify(liveconfig));
                             var sm = "，直播订阅已同步"
-                        }catch(e){}
+                        }catch(e){
+                            log("增量导入直播失败>"+e.message);
+                        }
                     }
                 }else if(liveconfig.data){
-                    log("bbb");
                     options.push('直播');
                     writeFile(livefilepath, JSON.stringify(liveconfig));
                     var sm = "，直播订阅已同步"
