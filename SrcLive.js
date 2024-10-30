@@ -863,7 +863,7 @@ function LiveSet() {
                                 for (let i = 0; i < urls.length; i++) {
                                     if (!livedata.some(item => item.url == urls[i].url)) {
                                         let YChtml = request(urls[i].url, { timeout: 5000 }).replace(/TV-/g, 'TV');
-                                        if (YChtml.indexOf('#genre#') > -1) {
+                                        if (YChtml.indexOf('#genre#') > -1 || YChtml.indexOf('#EXTINF:-1') > -1) {
                                             livedata.push(urls[i]);
                                             livenum++;
                                         }
