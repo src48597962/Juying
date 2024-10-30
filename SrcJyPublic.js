@@ -1201,8 +1201,10 @@ function updateResource(it,refresh) {
             }
             if(pastedata.直播){
                 let livefilepath = globalMap0.getVar('Jy_gmParams').datapath + "liveconfig.json";
-                let liveconfig = pastedata.直播 || {};
+                let liveconfig = pastedata.直播;
+                log(liveconfig);
                 if(it.mode!=2){
+                    log("aaa");
                     let livefile = fetch(livefilepath);
                     if(livefile){
                         try{
@@ -1220,6 +1222,7 @@ function updateResource(it,refresh) {
                         }catch(e){}
                     }
                 }else if(liveconfig.data){
+                    log("bbb");
                     options.push('直播');
                     writeFile(livefilepath, JSON.stringify(liveconfig));
                     var sm = "，直播订阅已同步"
