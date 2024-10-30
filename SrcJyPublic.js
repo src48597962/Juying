@@ -921,7 +921,7 @@ function shareResource() {
                     }, Juconfig, it.path, cfgfile)
                 }else if(input=="上传"){
                     const hikerPop = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6966");
-                    let fruit = ["接口", "解析", "云盘", "直播"];
+                    let fruit = ["接口", "解析", "云盘", "直播", "ghproxy"];
                     hikerPop.multiChoice({
                         title: "选择要上传分享同步的项", 
                         options: fruit, 
@@ -938,49 +938,56 @@ function shareResource() {
                                 let text = {};
                                 options.forEach((option,i)=>{
                                     if(checked[i]){
-                                        let filepath;
-                                        if(option=="接口"){
-                                            filepath = globalMap0.getVar('Jy_gmParams').jkfile;
-                                        }else if(option=="解析"){
-                                            filepath = globalMap0.getVar('Jy_gmParams').jxfile;
-                                        }else if(option=="云盘"){
-                                            filepath = globalMap0.getVar('Jy_gmParams').ypfile;
-                                        }else if(option=="直播"){
-                                            filepath = globalMap0.getVar('Jy_gmParams').rulepath + "liveconfig.json";
-                                        }
-                                        let datafile = fetch(filepath);
-                                        let datalist = [];
-                                        if(datafile){
-                                            if(option=="直播"){
-                                                eval("let tvconfig=" + datafile+ ";");
-                                                text[option] = tvconfig;
-                                            }else{
-                                                try{
-                                                    eval("datalist=" + datafile+ ";");
-                                                }catch(e){}
-                                                if(datalist.length>600){
-                                                    toast(option+"超过600，建议先精简");
-                                                }else if(datalist.length==0){
-                                                    toast(option+"数量为0");
-                                                }
-                                                if(option=="接口"){
-                                                    for(let i=0;i<datalist.length;i++){
-                                                        let data = datalist[i];
-                                                        if(data.url.startsWith(globalMap0.getVar('Jy_gmParams').jkfilespath) && (($.type(data.ext)=="string" && data.ext.startsWith("file")) || !data.ext)){
-                                                            data.extstr = fetch(data.url) || fetch(data.ext.split("?")[0]);
-                                                            if(!data.extstr){
+                                        if(option=="ghproxy"){
+                                            let ghproxy = $.require('ghproxy').getproxy();
+                                            if(ghproxy.length>0){
+                                                text["ghproxy"] = ghproxy;
+                                            }
+                                        }else{
+                                            let filepath;
+                                            if(option=="接口"){
+                                                filepath = globalMap0.getVar('Jy_gmParams').jkfile;
+                                            }else if(option=="解析"){
+                                                filepath = globalMap0.getVar('Jy_gmParams').jxfile;
+                                            }else if(option=="云盘"){
+                                                filepath = globalMap0.getVar('Jy_gmParams').ypfile;
+                                            }else if(option=="直播"){
+                                                filepath = globalMap0.getVar('Jy_gmParams').rulepath + "liveconfig.json";
+                                            }
+                                            let datafile = fetch(filepath);
+                                            let datalist = [];
+                                            if(datafile){
+                                                if(option=="直播"){
+                                                    eval("let tvconfig=" + datafile+ ";");
+                                                    text[option] = tvconfig;
+                                                }else{
+                                                    try{
+                                                        eval("datalist=" + datafile+ ";");
+                                                    }catch(e){}
+                                                    if(datalist.length>600){
+                                                        toast(option+"超过600，建议先精简");
+                                                    }else if(datalist.length==0){
+                                                        toast(option+"数量为0");
+                                                    }
+                                                    if(option=="接口"){
+                                                        for(let i=0;i<datalist.length;i++){
+                                                            let data = datalist[i];
+                                                            if(data.url.startsWith(globalMap0.getVar('Jy_gmParams').jkfilespath) && (($.type(data.ext)=="string" && data.ext.startsWith("file")) || !data.ext)){
+                                                                data.extstr = fetch(data.url) || fetch(data.ext.split("?")[0]);
+                                                                if(!data.extstr){
+                                                                    datalist.splice(i,1);
+                                                                    i = i - 1;
+                                                                }
+                                                            }else if(!data.url.startsWith(globalMap0.getVar('Jy_gmParams').jkfilespath) && data.url.startsWith("hiker")){
                                                                 datalist.splice(i,1);
                                                                 i = i - 1;
                                                             }
-                                                        }else if(!data.url.startsWith(globalMap0.getVar('Jy_gmParams').jkfilespath) && data.url.startsWith("hiker")){
-                                                            datalist.splice(i,1);
-                                                            i = i - 1;
                                                         }
                                                     }
+                                                    if(datalist.length>0){
+                                                        text[option] = datalist;
+                                                    }  
                                                 }
-                                                if(datalist.length>0){
-                                                    text[option] = datalist;
-                                                }  
                                             }
                                         }
                                     }
@@ -1207,9 +1214,7 @@ function updateResource(it,refresh) {
                 let livefilepath = globalMap0.getVar('Jy_gmParams').rulepath + "liveconfig.json";
                 let liveconfig = pastedata.直播;
                 if(it.mode!=2){
-                    log(livefilepath);
                     let livefile = fetch(livefilepath);
-                    log(livefile);
                     if(livefile){
                         try{
                             let olddata = JSON.parse(livefile).data;
@@ -1224,7 +1229,7 @@ function updateResource(it,refresh) {
                             writeFile(livefilepath, JSON.stringify(liveconfig));
                             var sm = "，直播订阅已同步"
                         }catch(e){
-                            log("增量导入直播失败>"+e.message);
+                            //log("增量导入直播失败>"+e.message);
                         }
                     }
                 }else if(liveconfig.data){
@@ -1238,6 +1243,22 @@ function updateResource(it,refresh) {
                 ypnum = yundisksave(ypdatalist, 1);
                 options.push('云盘');
             }
+            let ghproxy = pastedata.ghproxy||[];
+            if(ghproxy.length>0){
+                if(it.mode!=2){
+                    oldproxy = Juconfig['ghproxy'] || [];
+                    ghproxy.forEach(gh=>{
+                        if(!oldproxy.some(item => gh.url==item.url)){
+                            oldproxy.push(gh);
+                        }
+                    })
+                    Juconfig['ghproxy'] = oldproxy;
+                }else{
+                    Juconfig['ghproxy'] = ghproxy;
+                }
+                options.push('ghproxy');
+            }
+
             let resources = Juconfig['subResource'] || [];
             const index = resources.findIndex(item => item.path === it.path);
             if (index !== -1) {
