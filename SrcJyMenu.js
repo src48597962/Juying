@@ -410,7 +410,7 @@ function lookset() {
         col_type: "line"
     });
     d.push({
-        title: '开启清除m3u8广告',
+        title: '开启清除M3U8广告',
         url: $('#noLoading#').lazyRule((playSet) => {
             let sm;
             if (playSet['clearM3u8Ad']) {
@@ -428,14 +428,25 @@ function lookset() {
         col_type: "text_icon"
     });
     d.push({
-        title: '查看m3u8广告规则',
+        title: '查看M3U8广告规则',
         url: $('#noLoading#').lazyRule(() => {
             let m3u8Ad_file = globalMap0.getVar('Jy_gmParams').rulepath + "m3u8_ad_rule.json";
             return "editFile://" + m3u8Ad_file;
         }),
         pic_url: 箭头图标,
-        col_type: "text_icon"
+        col_type: "text_icon",
+        extra: {
+            longClick: [{
+                title: "替换软件的M3U8广告清除规则",
+                js: $.toString(() => {
+                    let m3u8Ad_file = globalMap0.getVar('Jy_gmParams').rulepath + "m3u8_ad_rule.json";
+                    writeFile("hiker://files/rules/m3u8_ad_rule.json", fetch(m3u8Ad_file));
+                    return "toast://已替换软件播放器的M3U8广告清除规则";
+                })
+            }]
+        }
     });
+
     d.push({
         title: '<br>',
         col_type: 'rich_text'
