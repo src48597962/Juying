@@ -303,6 +303,9 @@ function getBoxSource(input, mode, imports){
         })
         result.jxlist = urls;
     }
+    if(imports.ad && data.rules){
+        result.adRule = data.rules;
+    }
     hideLoading(); 
     return result;     
 }
