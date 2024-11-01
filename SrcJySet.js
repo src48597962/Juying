@@ -2333,7 +2333,8 @@ function Resourceimport(input,importtype,importmode){
         }
         if(boxSource.adRule){
             let m3u8Ad_file = globalMap0.getVar('Jy_gmParams').rulepath + "m3u8_ad_rule.json";
-            writeFile(m3u8Ad_file, boxSource.adRule);
+            log(m3u8Ad_file);
+            writeFile(m3u8Ad_file, JSON.stringify(boxSource.adRule));
         }
         return 'toast://TVBox导入：'+(sm?sm:'导入异常，详情查看日志');     
     }
