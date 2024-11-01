@@ -407,6 +407,36 @@ function lookset() {
         col_type: "text_icon"
     });
     d.push({
+        col_type: "line"
+    });
+    d.push({
+        title: '开启清除m3u8广告',
+        url: $('#noLoading#').lazyRule((playSet) => {
+            let sm;
+            if (playSet['clearM3u8Ad']) {
+                playSet['clearM3u8Ad'] = 0;
+                sm = '关闭小程序主动清除m3u8广告';
+            } else {
+                playSet['clearM3u8Ad'] = 1;
+                sm = '开启小程序主动清除m3u8广告';
+            }
+            storage0.putMyVar('playSet', playSet);
+            refreshPage(false);
+            return 'toast://' + sm;
+        }, playSet),
+        pic_url: playSet['clearM3u8Ad']?getIcon("点播-开.svg"):getIcon("关.svg"),
+        col_type: "text_icon"
+    });
+    d.push({
+        title: '查看m3u8广告规则',
+        url: $('#noLoading#').lazyRule(() => {
+            let m3u8Ad_file = globalMap0.getVar('Jy_gmParams').rulepath + "m3u8_ad_rule.json";
+            return "editFile://" + m3u8Ad_file;
+        }),
+        pic_url: 箭头图标,
+        col_type: "text_icon"
+    });
+    d.push({
         title: '<br>',
         col_type: 'rich_text'
     });
