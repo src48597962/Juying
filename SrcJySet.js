@@ -2333,8 +2333,14 @@ function Resourceimport(input,importtype,importmode){
         }
         if(boxSource.adRule){
             let m3u8Ad_file = globalMap0.getVar('Jy_gmParams').rulepath + "m3u8_ad_rule.json";
-            log(m3u8Ad_file);
-            writeFile(m3u8Ad_file, JSON.stringify(boxSource.adRule));
+            let m3u8Ad = fetch(m3u8Ad_file);
+            let adRule = m3u8Ad?JSON.parse(m3u8Ad):[];
+            boxSource.adRule.forEach(it=>{
+                if(it.regex && !adRule.some(item => it.name==item.name)){
+                    adRule.push(it);
+                }
+            })
+            writeFile(m3u8Ad_file, JSON.stringify(adRule));
         }
         return 'toast://TVBox导入：'+(sm?sm:'导入异常，详情查看日志');     
     }
