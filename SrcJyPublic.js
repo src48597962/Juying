@@ -303,6 +303,8 @@ function getBoxSource(input, mode, imports){
         })
         result.jxlist = urls;
     }
+    log(data.rules);
+    log(imports.ad);
     if(imports.ad && data.rules){
         result.adRule = data.rules;
     }
