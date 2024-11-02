@@ -326,6 +326,14 @@ function getYiData(jkdata, batchTest) {
                             } else {
                                 let typehtml = dealJson(gethtml);
                                 let typelist = typehtml["class"] || [];
+                                if (cate_onlyshow) {
+                                    for (var i = 0; i < typelist.length; i++) {
+                                        if (cate_onlyshow.indexOf(typelist[i].type_name) == -1 && typelist[i].type_pid!=0) {
+                                            typelist.splice(i, 1);
+                                            i = i - 1;
+                                        }
+                                    }
+                                }
                                 typelist.forEach((it) => {
                                     if(it.type_name && it.type_id){
                                         if(it.type_pid==0){
@@ -370,7 +378,8 @@ function getYiData(jkdata, batchTest) {
                             分类.splice(i, 1);
                             i = i - 1;
                         }
-                        if(cate_onlyshow.length>0){
+
+                        if(cate_onlyshow.length>0 && api_type!="cms"){
                             if (cate_onlyshow.indexOf(分类[i].split('$')[0]) == -1) {
                                 分类.splice(i, 1);
                                 i = i - 1;
