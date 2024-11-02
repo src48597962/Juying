@@ -421,7 +421,7 @@ function lookset() {
                 return $("确认要从聚影订阅M3U8广告清除规则来覆盖软件的？").confirm((playSet)=>{
                     playSet['clearM3u8Ad'] = 1;
                     storage0.putMyVar('playSet', playSet);
-                    let m3u8Ad_file = config.依赖.replace(/[^/]*$/,'') + "m3u8_ad_rule.json";
+                    let m3u8Ad_file = config.依赖.replace(/[^/]*$/,'') + "plugins/m3u8_ad_rule.json";
                     let m3u8Ad = fetch(m3u8Ad_file);
                     if(m3u8Ad){
                         writeFile("hiker://files/rules/m3u8_ad_rule.json", fetch(m3u8Ad_file));
