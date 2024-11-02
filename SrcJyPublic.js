@@ -1187,6 +1187,13 @@ function updateResource(it,refresh) {
                 break;
             }
         }
+        let playSet = Juconfig['playSet'] || {};
+        if(playSet['clearM3u8Ad']){
+            let m3u8Ad = fc(config.依赖.replace(/[^/]*$/,'') + "plugins/m3u8_ad_rule.json", 72);
+            if(m3u8Ad){
+                writeFile("hiker://files/rules/m3u8_ad_rule.json", m3u8Ad);
+            }
+        }
     }
     if(!it){
         log("自动同步取消，没有可执行的订阅源");
