@@ -1906,7 +1906,6 @@ function resource() {
     addListener("onClose", $.toString(() => {
         clearMyVar('importjiekou');
         clearMyVar('importjiexi');
-        clearMyVar('importAdRule');
         clearMyVar('importtype');
         clearMyVar('importinput');
     }));
@@ -1995,19 +1994,6 @@ function resource() {
                 return "hiker://empty";
             })
         });
-        d.push({
-            title:(getMyVar('importAdRule','1')=="1"?getide(1):getide(0))+'广告规则',
-            col_type:'scroll_button',
-            url:$('#noLoading#').lazyRule(() => {
-                if(getMyVar('importAdRule')=="0"){
-                    putMyVar('importAdRule','1');
-                }else{
-                    putMyVar('importAdRule','0');
-                }
-                refreshPage(false);
-                return "hiker://empty";
-            })
-        });
     }else if(importtype=="3"){
         d.push({
             title: '当前订阅地址：' + Juconfig['dySource'],
@@ -2044,7 +2030,7 @@ function resource() {
 
     d.push({
         title: '🆗 '+(importtype=="4"?'确定扫描':importtype=="3"?'确定订阅':'确定导入(' + (Juconfig["importmode"]?"全量":"增量")+')'),
-        url: importtype=="1"&&getMyVar('importjiekou','1')!="1"&&getMyVar('importjiexi','1')!="1"&&getMyVar('importAdRule','1')!="1"?'toast://请选择导入项目':$('#noLoading#').lazyRule((Juconfig,cfgfile) => {
+        url: importtype=="1"&&getMyVar('importjiekou','1')!="1"&&getMyVar('importjiexi','1')!="1"?'toast://请选择导入项目':$('#noLoading#').lazyRule((Juconfig,cfgfile) => {
                 let importtype = getMyVar('importtype','1');
 
                 let input = getMyVar('importinput', '').trim();
@@ -2302,9 +2288,6 @@ function Resourceimport(input,importtype,importmode){
         if(getMyVar('importjiexi','1')=="1"){
             imports.jx = 1;
         }
-        if(getMyVar('importAdRule','1')=="1"){
-            imports.ad = 1;
-        } 
         let boxSource = getBoxSource(input, 1, imports);
         if(boxSource.message){
             return "toast://" + boxSource.message;
@@ -2330,17 +2313,6 @@ function Resourceimport(input,importtype,importmode){
         if(jknum==-1&&jxnum==-1){
             clearMyVar('importinput');
             refreshPage(false);
-        }
-        if(boxSource.adRule){
-            let m3u8Ad_file = globalMap0.getVar('Jy_gmParams').rulepath + "m3u8_ad_rule.json";
-            let m3u8Ad = fetch(m3u8Ad_file);
-            let adRule = m3u8Ad?JSON.parse(m3u8Ad):[];
-            boxSource.adRule.forEach(it=>{
-                if(it.regex && !adRule.some(item => it.name==item.name)){
-                    adRule.push(it);
-                }
-            })
-            writeFile(m3u8Ad_file, JSON.stringify(adRule));
         }
         return 'toast://TVBox导入：'+(sm?sm:'导入异常，详情查看日志');     
     }
