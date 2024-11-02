@@ -424,7 +424,7 @@ function lookset() {
                     let m3u8Ad_file = config.依赖.replace(/[^/]*$/,'') + "plugins/m3u8_ad_rule.json";
                     let m3u8Ad = fetch(m3u8Ad_file);
                     if(m3u8Ad){
-                        writeFile("hiker://files/rules/m3u8_ad_rule.json", fetch(m3u8Ad_file));
+                        writeFile("hiker://files/rules/m3u8_ad_rule.json", m3u8Ad);
                         refreshPage(false);
                         return "toast://开启订阅并已替换软件播放器的M3U8广告清除规则，重启软件生效";
                     }else{
