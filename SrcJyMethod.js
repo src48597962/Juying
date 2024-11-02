@@ -19,6 +19,7 @@ function extraJS(playUrl) {
         return undefined;
     }
 }
+//"document.getElementsByClassName('swal-button swal-button--confirm')[0].click()"
 // 获取选集对应extra
 function getPlayExtra(obj){
     let sniffer = obj.sniffer || {};
