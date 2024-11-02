@@ -27,7 +27,7 @@
     {
         "name": "暴風",
         "hosts": [
-            "bfzy"
+            "bfzy","ddbbffcdn","rrcdnbf","bbffvip"
         ],
         "regex": [
             "#EXT-X-DISCONTINUITY\\r*\\n*#EXTINF:3,[\\s\\S]*?#EXT-X-DISCONTINUITY"
