@@ -410,43 +410,33 @@ function lookset() {
         col_type: "line"
     });
     d.push({
-        title: '开启清除M3U8广告',
+        title: 'M3U8广告清除规则',
         url: $('#noLoading#').lazyRule((playSet) => {
-            let sm;
             if (playSet['clearM3u8Ad']) {
-                playSet['clearM3u8Ad'] = 0;
-                sm = '关闭小程序主动清除m3u8广告';
+                delete playSet['clearM3u8Ad'];
+                storage0.putMyVar('playSet', playSet);
+                refreshPage(false);
+                return 'toast://关闭订阅M3U8广告清除规则';
             } else {
-                playSet['clearM3u8Ad'] = 1;
-                sm = '开启小程序主动清除m3u8广告';
+                return $("确认要从聚影订阅M3U8广告清除规则来覆盖软件的？").confirm((playSet)=>{
+                    playSet['clearM3u8Ad'] = 1;
+                    storage0.putMyVar('playSet', playSet);
+                    let m3u8Ad_file = config.依赖.replace(/[^/]*$/,'') + "m3u8_ad_rule.json";
+                    let m3u8Ad = fetch(m3u8Ad_file);
+                    if(m3u8Ad){
+                        writeFile("hiker://files/rules/m3u8_ad_rule.json", fetch(m3u8Ad_file));
+                        refreshPage(false);
+                        return "toast://开启订阅并已替换软件播放器的M3U8广告清除规则，重启软件生效";
+                    }else{
+                        refreshPage(false);
+                        return "toast://开启订阅";
+                    }
+                },playSet)
             }
-            storage0.putMyVar('playSet', playSet);
-            refreshPage(false);
-            return 'toast://' + sm;
         }, playSet),
         pic_url: playSet['clearM3u8Ad']?getIcon("点播-开.svg"):getIcon("关.svg"),
         col_type: "text_icon"
     });
-    d.push({
-        title: '查看M3U8广告规则',
-        url: $('#noLoading#').lazyRule(() => {
-            let m3u8Ad_file = globalMap0.getVar('Jy_gmParams').rulepath + "m3u8_ad_rule.json";
-            return "editFile://" + m3u8Ad_file;
-        }),
-        pic_url: 箭头图标,
-        col_type: "text_icon",
-        extra: {
-            longClick: [{
-                title: "替换软件的M3U8广告清除规则",
-                js: $.toString(() => {
-                    let m3u8Ad_file = globalMap0.getVar('Jy_gmParams').rulepath + "m3u8_ad_rule.json";
-                    writeFile("hiker://files/rules/m3u8_ad_rule.json", fetch(m3u8Ad_file));
-                    return "toast://已替换软件播放器的M3U8广告清除规则";
-                })
-            }]
-        }
-    });
-
     d.push({
         title: '<br>',
         col_type: 'rich_text'
