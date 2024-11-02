@@ -435,7 +435,16 @@ function lookset() {
             }
         }, playSet),
         pic_url: playSet['clearM3u8Ad']?getIcon("点播-开.svg"):getIcon("关.svg"),
-        col_type: "text_icon"
+        col_type: "text_icon",
+        extra: {
+            longClick: [{
+                title: "清除播放器规则",
+                js: $.toString(() => {
+                    writeFile("hiker://files/rules/m3u8_ad_rule.json", "");
+                    return "toast://已清除软件播放器的M3U8广告清除规则，重启软件生效";
+                })
+            }]
+        }
     });
     d.push({
         title: '<br>',
