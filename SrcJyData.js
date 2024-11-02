@@ -326,7 +326,7 @@ function getYiData(jkdata, batchTest) {
                             } else {
                                 let typehtml = dealJson(gethtml);
                                 let typelist = typehtml["class"] || [];
-                                if (cate_onlyshow) {
+                                if (cate_onlyshow.length>0) {
                                     for (var i = 0; i < typelist.length; i++) {
                                         if (cate_onlyshow.indexOf(typelist[i].type_name) == -1 && typelist[i].type_pid!=0) {
                                             typelist.splice(i, 1);
