@@ -237,6 +237,7 @@ function dianboerji() {
             deleteItemByCls('historylist');
             let h = getHistory();
             addItemAfter("historyid", h);
+            updateItem("historyid", {desc: "1-3"});
         }
     },getHistory));
 
