@@ -171,6 +171,7 @@ function getYiData(jkdata, batchTest) {
                         if(home['filters']){
                             筛选 = home['filters'];
                         }
+                        log(batchTest);
                         if(!batchTest){
                             log("nobatchTest");
                             let homeVod = JSON.parse(drpy.homeVod()).list || [];
