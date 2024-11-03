@@ -387,8 +387,8 @@ function getYiData(jkdata, batchTest) {
                                 i = i - 1;
                             }
                         }
-                        let typesx = 筛选[分类[i].split('$')[1]];
-                        if($.type(筛选)=='object' && typesx){
+                        let typesx = $.type(筛选)=='object'?筛选[分类[i].split('$')[1]]:undefined;
+                        if(typesx){
                             typesx.forEach(it=>{
                                 if(it.key == "cateId"){
                                     let values = it.value || [];
