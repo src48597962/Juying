@@ -403,7 +403,7 @@ function getYiData(jkdata, batchTest) {
                                             j = j - 1;
                                         }
                                         if(cate_onlyshow.length>0){
-                                            if (cate_onlyshow.indexOf(values[j].n) == -1) {
+                                            if (cate_onlyshow.indexOf(values[j].n) == -1 && cate_onlyshow.indexOf(分类[i].split('$')[0]) == -1) {
                                                 values.splice(j, 1);
                                                 j = j - 1;
                                             }
