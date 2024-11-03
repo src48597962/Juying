@@ -172,6 +172,7 @@ function getYiData(jkdata, batchTest) {
                             筛选 = home['filters'];
                         }
                         if(!batchTest){
+                            log("nobatchTest");
                             let homeVod = JSON.parse(drpy.homeVod()).list || [];
                             homeVod.forEach(it=>{
                                 let playUrl = it.vod_id.toString().split("@@")[0].trim();
