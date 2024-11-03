@@ -1274,6 +1274,7 @@ function jiekou(data) {
                 }else if(jknum==0&&urls.length==1){
                     return'toast://已存在';
                 }else{
+                    clearMyVar('SrcJu_dianbo$classCache');
                     back(true);
                     if(urls.length==1){
                         return "toast://保存成功";
@@ -1330,7 +1331,7 @@ function jiekou(data) {
                     return "toast://无法测试，检查项目填写完整性";
                 }
             }
-            
+            clearMyVar('SrcJu_dianbo$classCache');
             return $("hiker://empty#noRecordHistory##noHistory#").rule((data) => {
                 setPageTitle(data.name+"-接口测试");
                 require(config.依赖);
