@@ -372,6 +372,8 @@ function getYiData(jkdata, batchTest) {
                             }
                         }
                     }
+                    log(cate_exclude);
+                    log(cate_onlyshow);
                     for (let i = 0; i < 分类.length; i++) {
                         //去除隐藏/排除的分类
                         if (cate_exclude.indexOf(分类[i].split('$')[0]) > -1) {
@@ -412,6 +414,7 @@ function getYiData(jkdata, batchTest) {
                     error.fl = 1;
                     log(api_name + '>获取分类数据异常>' + e.message + " 错误行#" + e.lineNumber);
                 }
+                log(分类);
                 if (分类.length > 0 && !batchTest) {
                     storage0.putMyVar('SrcJu_dianbo$classCache', { 分类: 分类, 筛选: 筛选, 推荐: 推荐 });
                 }
