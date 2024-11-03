@@ -404,9 +404,7 @@ function getYiData(jkdata, batchTest) {
                                         }
                                         if(cate_onlyshow.length>0){
                                             if (cate_onlyshow.indexOf(values[j].n) == -1) {
-                                                log(cate_onlyshow);
-                                                log(values[j].n);
-                                                values.splice(i, 1);
+                                                values.splice(j, 1);
                                                 j = j - 1;
                                             }
                                         }
