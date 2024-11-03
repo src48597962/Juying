@@ -1,5 +1,26 @@
 [
     {
+        "name": "量子",
+        "hosts": [
+            "vip.lz",
+            "hd.lz",
+            "v.cdnlz"
+        ],
+        "regex": [
+            "18.5333","23.466666"
+        ]
+    },
+    {
+        "name": "非凡",
+        "hosts": [
+            "vip.ffzy",
+            "hd.ffzy"
+        ],
+        "regex": [
+            "25.1","18.266"
+        ]
+    },
+    {
         "name": "海外看",
         "hosts": [
             "haiwaikan"
@@ -40,27 +61,6 @@
         ],
         "regex": [
             "#EXT-X-DISCONTINUITY\\r*\\n*#EXTINF:8,[\\s\\S]*?#EXT-X-DISCONTINUITY"
-        ]
-    },
-    {
-        "name": "量子",
-        "hosts": [
-            "vip.lz",
-            "hd.lz",
-            "v.cdnlz"
-        ],
-        "regex": [
-            "18.5333","23.466666"
-        ]
-    },
-    {
-        "name": "非凡",
-        "hosts": [
-            "vip.ffzy",
-            "hd.ffzy"
-        ],
-        "regex": [
-            "25.1"
         ]
     }
 ]
