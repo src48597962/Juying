@@ -385,6 +385,28 @@ function getYiData(jkdata, batchTest) {
                                 i = i - 1;
                             }
                         }
+                        let typesx = 筛选[分类[i].split('$')[1]];
+                        if($.type(筛选)=='object' && typesx){
+                            typesx.forEach(it=>{
+                                if(it.key == "cateId"){
+                                    let values = it.value || [];
+                                    for (let j = 0; j < values.length; j++) {
+                                        if (cate_exclude.indexOf(values[j].n) > -1) {
+                                            values.splice(j, 1);
+                                            j = j - 1;
+                                        }
+                                        if(cate_onlyshow.length>0 && api_type!="cms"){
+                                            if (cate_onlyshow.indexOf(values[j].n) == -1) {
+                                                values.splice(i, 1);
+                                                j = j - 1;
+                                            }
+                                        }
+                                    }
+                                    it.value = values;
+                                }
+                            })
+                            筛选[分类[i].split('$')[1]] = typesx;
+                        }
                     }
                 } catch (e) {
                     error.fl = 1;
