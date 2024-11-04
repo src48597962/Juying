@@ -1472,24 +1472,25 @@ function yiji() {
 
 // 版本检测
 function Version() {
+    let loaclversion;
     if(getItem('本地依赖库')=="1"){
         let loaclfile = "hiker://files/data/"+MY_RULE.title+"/code/SrcTmplVersion.js";
         if(fileExist(loaclfile)){
             eval(fetch(loaclfile));
-            setItem('Version', newVersion.SrcJuying);
+            loaclversion = newVersion.SrcJuying;
         }
     }
-    var nowVersion = getItem('Version', "0.1");//现在版本 
+    var nowVersion = loaclversion || getItem('Version', "0.1");//现在版本 
     var nowtime = Date.now();
     var oldtime = parseInt(getItem('VersionChecktime','0').replace('time',''));
-    if (nowtime > (oldtime+24*60*60*1000) && getItem("依赖","").startsWith("http")) {
+    if (nowtime > (oldtime+24*60*60*1000) && getItem("依赖","").startsWith("http") && getItem('本地依赖库','0')!="1") {
         try {
             eval(request(getItem("依赖","").replace(/[^/]*$/,'') + 'SrcTmplVersion.js'))
             if (parseFloat(newVersion.SrcJuying) > parseFloat(nowVersion)) {
                 confirm({
                     title:'发现新版本，是否更新？', 
                     content:'本地V'+nowVersion+' => 云端V'+newVersion.SrcJuying + '\n' + (newVersion.hint||""), 
-                    confirm: getItem('本地依赖库')=="1"?"toast://管理中手工检查更新":$.toString((nowtime,version,updateRecords) => {
+                    confirm: $.toString((nowtime,version,updateRecords) => {
                         setItem('Version', version);
                         setItem('VersionChecktime', nowtime+'time');
                         deleteCache();
