@@ -1469,6 +1469,14 @@ function yiji() {
         putMyVar('startCheck', 1);
     }
 }
+// 新搜索页
+function newSearch() {
+    let d = [];
+    let sourceAllList = getDatas("jk", 1).filter(x=> !x.onlysearch);
+    let groupnames = getJiekouGroups(sourceAllList);
+    
+    setResult(d);
+}
 
 // 版本检测
 function Version() {
