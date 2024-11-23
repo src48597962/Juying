@@ -105,7 +105,7 @@ function sousuo() {
     }])
 }
 //二级切源搜索
-function erjisousuo(name,group,datas,num) {
+function erjisousuo(name,group,datas) {
     let updateItemid = group + "_" +name + "_loading";
     let searchMark = storage0.getMyVar('SrcJu_searchMark') || {};//二级换源缓存
     let markId = group+'_'+name;
@@ -197,12 +197,12 @@ function erjisousuo(name,group,datas,num) {
                 let pdatalist = ssdatalist.filter(v=>beidlist.indexOf(v.url)==-1);
                 addItemBefore(updateItemid, {
                     title: "剩余"+(ssdatalist.length-beidlist.length)+"，点击继续",
-                    url: $("#noLoading#").lazyRule((name,group,datas,num) => {
+                    url: $("#noLoading#").lazyRule((name,group,datas) => {
                         deleteItem("erjisousuopage");
                         require(config.依赖);
-                        erjisousuo(name, group, datas, num);
+                        erjisousuo(name, group, datas);
                         return "hiker://empty";
-                    }, name,group,pdatalist,list.length),
+                    }, name,group,pdatalist),
                     col_type: 'text_center_1',
                     extra: {
                         id: "erjisousuopage",
@@ -216,7 +216,7 @@ function erjisousuo(name,group,datas,num) {
                 setJkSort(failsort);
             }
             clearMyVar("SrcJu_停止搜索线程");
-            let sousuosm = "‘‘’’<small><font color=#f13b66a>" + success + "</font>/" + (num || list.length) + "，搜索完成</small>";
+            let sousuosm = "‘‘’’<small><font color=#f13b66a>" + success + "</font>/" + list.length + "，搜索完成</small>";
             updateItem(updateItemid, { title: sousuosm });
         } else {
             hideLoading();
