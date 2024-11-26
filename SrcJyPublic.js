@@ -824,7 +824,103 @@ function shareResource() {
     storage0.putMyVar('Juconfig', Juconfig);
     
     d.push({
-        title: '申请分享资源码，当前共有'+resources.length+'个',
+        title: '通过文件分享资源',
+        url: $().lazyRule(() => {
+            const hikerPop = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6966");
+            let fruit = ["接口", "解析", "云盘", "直播", "ghproxy"];
+            hikerPop.multiChoice({
+                title: "选择要上传分享同步的项", 
+                options: fruit, 
+                checkedIndexs: [0], 
+                onChoice(i, isChecked) {
+                    //log(i + ":" + isChecked);
+                }, 
+                rightTitle: "确认上传", 
+                rightClick(options, checked) {
+                    if(options.filter((v, i) => checked[i]).length==0){
+                        return "toast://没有选择上传项";
+                    }
+                    hikerPop.runOnNewThread(() => {
+                        let text = {};
+                        options.forEach((option,i)=>{
+                            if(checked[i]){
+                                if(option=="ghproxy"){
+                                    let ghproxy = Juconfig['ghproxy'] || [];
+                                    ghproxy = ghproxy.filter(v=>!v.stop);
+                                    if(ghproxy.length>0){
+                                        text["ghproxy"] = ghproxy;
+                                    }
+                                }else{
+                                    let filepath;
+                                    if(option=="接口"){
+                                        filepath = globalMap0.getVar('Jy_gmParams').jkfile;
+                                    }else if(option=="解析"){
+                                        filepath = globalMap0.getVar('Jy_gmParams').jxfile;
+                                    }else if(option=="云盘"){
+                                        filepath = globalMap0.getVar('Jy_gmParams').ypfile;
+                                    }else if(option=="直播"){
+                                        filepath = globalMap0.getVar('Jy_gmParams').rulepath + "liveconfig.json";
+                                    }
+                                    let datafile = fetch(filepath);
+                                    let datalist = [];
+                                    if(datafile){
+                                        if(option=="直播"){
+                                            eval("let tvconfig=" + datafile+ ";");
+                                            text[option] = tvconfig;
+                                        }else{
+                                            try{
+                                                eval("datalist=" + datafile+ ";");
+                                            }catch(e){}
+                                            if(datalist.length>600){
+                                                toast(option+"超过600，建议先精简");
+                                            }else if(datalist.length==0){
+                                                toast(option+"数量为0");
+                                            }
+                                            if(option=="接口"){
+                                                for(let i=0;i<datalist.length;i++){
+                                                    let data = datalist[i];
+                                                    if(data.url.startsWith(globalMap0.getVar('Jy_gmParams').jkfilespath) && (($.type(data.ext)=="string" && data.ext.startsWith("file")) || !data.ext)){
+                                                        data.extstr = fetch(data.url) || fetch(data.ext.split("?")[0]);
+                                                        if(!data.extstr){
+                                                            datalist.splice(i,1);
+                                                            i = i - 1;
+                                                        }
+                                                    }else if(!data.url.startsWith(globalMap0.getVar('Jy_gmParams').jkfilespath) && data.url.startsWith("hiker")){
+                                                        datalist.splice(i,1);
+                                                        i = i - 1;
+                                                    }
+                                                }
+                                            }
+                                            if(datalist.length>0){
+                                                text[option] = datalist;
+                                            }  
+                                        }
+                                    }
+                                }
+                            }
+                        })
+                        if(Object.keys(text).length==0){
+                            return "toast://无内容分享";
+                        }
+                        let textcontent = globalMap0.getVar('Jy_gmParams').zip(JSON.stringify(text));
+                        let code = '聚影资源码￥' + textcontent + '￥文件分享';
+                        let sharefile = 'hiker://files/_cache/聚影资源码_'+$.dateFormat(new Date(),"HHmmss")+'.hiker';
+                        writeFile(sharefile, code+`@import=js:$.require("hiker://page/import?rule=聚影");`);
+                        if(fileExist(sharefile)){
+                            return 'share://'+sharefile;
+                        }else{
+                            return 'toast://'+input+'分享生成失败';
+                        }
+                    })
+                }, 
+                centerTitle: "取消"
+            });
+            return "hiker://empty";
+        })
+    })
+
+    d.push({
+        title: '申请云分享资源码，当前共有'+resources.length+'个',
         desc: '感谢TyrantGenesis大佬提供的云6剪贴板',
         url: resources.length>=3?"toast://分享资源码不能超过3个":$().lazyRule(() => {
                 try{
@@ -1031,6 +1127,7 @@ function shareResource() {
             col_type: "text_1"
         });
     })
+
     setResult(d);
 }
 // 资源订阅管理
