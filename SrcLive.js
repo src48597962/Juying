@@ -196,15 +196,7 @@ function Live() {
                         return GroupEdit(groupname, 'rename');
                     }, groupname)
                 }] : [];
-                if (getItem('enabledpush', '') == '1') {
-                    longClick.push({
-                        title: "推送至TVBOX",
-                        js: $.toString((groupname, lists) => {
-                            require(config.依赖.replace(/[^/]*$/,'') + 'SrcLive.js');
-                            return GroupEdit(groupname, 'pushBox', lists);
-                        }, groupname, lists)
-                    })
-                }
+                
                 d.push({
                     title: index == 0 ? `‘‘’’<b><span style="color:`+color+`">` + groupname : groupname,
                     url: $('#noLoading#').lazyRule((grouplist, groupname, guanlidata, lists) => {
@@ -304,49 +296,6 @@ function GroupEdit(groupname, mode, lists) {
                 return "toast://输入不能为空"
             }
         }, JYlivefile, groupname)
-    } else if (mode == 'pushBox') {
-        let push = {
-            "name": groupname,
-            "pic": 'https://hikerfans.com/tubiao/ke/156.png',
-            "content": '聚影直播推送',
-            "director": "分组推送",
-            "actor": "列表可能有点凌乱"
-        };
-        let urls = [];
-        let JYlive = fetch(JYlivefile);
-        let JYlives = JYlive.split('\n');
-        for (let i = 0; i < JYlives.length; i++) {
-            try {
-                if (JYlives[i].indexOf('#genre#') == -1 && JYlives[i].indexOf(',') > -1 && lists.some(item => item.name == JYlives[i].split(',')[0].trim())) {
-                    urls.push(JYlives[i].split(',')[0].trim() + '$' + JYlives[i].split(',')[1].split('#')[0]);
-                }
-            } catch (e) {
-
-            }
-        }
-        let tvip = getItem('hikertvboxset', '');
-        if (urls.length > 0) {
-            push['from'] = groupname;
-            push['url'] = urls.join('#').replace(/\&/g, '＆＆');
-            var state = request(tvip + '/action', {
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    //'X-Requested-With': 'XMLHttpRequest',
-                    'Referer': tvip
-                },
-                timeout: 2000,
-                body: 'do=push&url=' + JSON.stringify(push),
-                method: 'POST'
-            });
-
-            if (state == 'ok') {
-                return 'toast://推送成功，如果不能播放则TVBOX版本不支持，分组推送完成。';
-            } else {
-                return 'toast://推送失败';
-            }
-        } else {
-            return 'toast://播放地址为空';
-        }
     }
 }
 
@@ -367,15 +316,7 @@ function guanlidata(datalist) {
                 return LiveEdit(name, 'rename');
             }, name)
         }] : [];
-        if (getItem('enabledpush', '') == '1') {
-            longClick.push({
-                title: "推送至TVBOX",
-                js: $.toString((name) => {
-                    require(config.依赖.replace(/[^/]*$/,'') + 'SrcLive.js');
-                    return LiveEdit(name, 'pushBox');
-                }, name)
-            })
-        }
+
         list.push({
             title: name,
             img: globalMap0.getVar('Jy_gmParams').getIcon("直播-tv.svg"),
@@ -414,7 +355,7 @@ function LivePlay(name) {
                             item = item.slice(0, item.length - 2);
                         }
                         if (item) {
-                            urls.push(item + '#isVideo=true#');
+                            urls.push(item.split('$')[0] + '#isVideo=true#');
                         }
                     })
                 }
@@ -473,47 +414,6 @@ function LiveEdit(name, mode) {
                 return "toast://输入不能为空"
             }
         }, name, JYlivefile)
-    } else if (mode == 'pushBox') {
-        let push = {
-            "name": name,
-            "pic": 'https://hikerfans.com/tubiao/ke/156.png',
-            "content": '聚影直播推送',
-            "director": "频道推送",
-            "actor": "单个频道所有线路"
-        };
-        let urls = [];
-        let JYlive = fetch(JYlivefile);
-        let JYlives = JYlive.split('\n');
-        for (let i = 0; i < JYlives.length; i++) {
-            try {
-                if (JYlives[i].indexOf('#genre#') == -1 && JYlives[i].indexOf(',') > -1 && JYlives[i].split(',')[0].replace(/TV-/g, 'TV').replace(/\[.*\]/g, '').trim() == name) {
-                    urls.push(JYlives[i].split(',')[1]);
-                }
-            } catch (e) { }
-        }
-        let tvip = getItem('hikertvboxset', '');
-        if (urls.length > 0) {
-            push['from'] = name;
-            push['url'] = { urls: urls };//urls.join('#').replace(/\&/g, '＆＆');
-            var state = request(tvip + '/action', {
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    //'X-Requested-With': 'XMLHttpRequest',
-                    'Referer': tvip
-                },
-                timeout: 2000,
-                body: 'do=push&url=' + JSON.stringify(push),
-                method: 'POST'
-            });
-
-            if (state == 'ok') {
-                return 'toast://推送成功，如果不能播放则TVBOX版本不支持，单频道推送完成。';
-            } else {
-                return 'toast://推送失败';
-            }
-        } else {
-            return 'toast://播放地址为空';
-        }
     }
 }
 function LiveSet() {
