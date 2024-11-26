@@ -2407,7 +2407,9 @@ function JYimport(input) {
         inputname = input.split('￥')[0];
         if(inputname=="聚影资源码"){
             codelx = "dingyue";
-            pasteurl = '云6oooole/xxxxxx/' + pasteurl;
+            if(input.split('￥')[2] != "文件分享"){
+                pasteurl = '云6oooole/xxxxxx/' + pasteurl;
+            }
             if(getMyVar('guanli')=="jk"){
                 inputname = "聚影接口";
             }else if(getMyVar('guanli')=="jx"){
@@ -2805,42 +2807,119 @@ function importConfirm(jsfile) {
         try{
             code = aesDecode('Juying2', input.split('￥')[1]);
             name = input.split('￥')[0];
-            if(name=="聚影资源码"){
-                toast("聚影：资源码不支持导入确认");
-            }else if (name == "聚影云盘") {
-                sm = "云盘";
-                lx = "yp";
-            }else if(name=="聚影接口"){
-                sm = "接口";
-                lx = "jk";
-            }else if(name=="聚影解析"){
-                sm = "解析";
-                lx = "jx";
+            if(name=="聚影资源码" && input.split('￥')[2]=="文件分享"){
+                let textcontent = globalMap0.getVar('Jy_gmParams').unzip(code);
+                let pastedata = JSON.parse(textcontent);
+                d.push({
+                    title: '包含资源：'+Object.keys(pastedata).join(','),
+                    desc: "点击选择导入的项",
+                    url: $().lazyRule((pastedata) => {
+                        const hikerPop = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6966");
+                        let fruit = Object.keys(pastedata);
+                        hikerPop.multiChoice({
+                            title: "选择要导入本地的项", 
+                            options: fruit, 
+                            checkedIndexs: Array.from(fruit.keys()), 
+                            onChoice(i, isChecked) {
+                                //log(i + ":" + isChecked);
+                            }, 
+                            rightTitle: "确认导入", 
+                            rightClick(options, checked) {
+                                if(options.filter((v, i) => checked[i]).length==0){
+                                    return "toast://没有选择导入项";
+                                }
+                                require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
+                                hikerPop.runOnNewThread(() => {
+                                    options.forEach((option,i)=>{
+                                        if(checked[i]){
+                                            if(option=="ghproxy"){
+                                                let ghproxy = pastedata.ghproxy||[];
+                                                if(ghproxy.length>0){
+                                                    oldproxy = Juconfig['ghproxy'] || [];
+                                                    ghproxy.forEach(gh=>{
+                                                        if(!oldproxy.some(item => gh.url==item.url)){
+                                                            oldproxy.push(gh);
+                                                        }
+                                                    })
+                                                    Juconfig['ghproxy'] = oldproxy;
+                                                }
+                                            }else if(option=="接口"){
+                                                let jkdatalist = pastedata.接口||[];
+                                                jiekousave(jkdatalist, 1);
+                                            }else if(option=="解析"){
+                                                let jxdatalist = pastedata.解析||[];
+                                                jiexisave(jxdatalist, 1);
+                                            }else if(option=="云盘"){
+                                                let ypdatalist = pastedata.云盘||[];
+                                                yundisksave(ypdatalist, 1);
+                                            }else if(option=="直播"){
+                                                let livefilepath = globalMap0.getVar('Jy_gmParams').rulepath + "liveconfig.json";
+                                                let liveconfig = pastedata.直播;
+                                                let livefile = fetch(livefilepath);
+                                                if(livefile){
+                                                    try{
+                                                        let olddata = JSON.parse(livefile).data;
+                                                        let newdata = liveconfig.data;
+                                                        newdata.forEach(tv=>{
+                                                            if(!olddata.some(item => tv.url==item.url)){
+                                                                olddata.push(tv);
+                                                            }
+                                                        })
+                                                        liveconfig.data = olddata;
+                                                        writeFile(livefilepath, JSON.stringify(liveconfig));
+                                                    }catch(e){
+                                                        //log("增量导入直播失败>"+e.message);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    })
+                                    writeFile(cfgfile, JSON.stringify(Juconfig));
+                                    return "toast://下载同步文件资源码数据成功";
+                                })
+                            }, 
+                            centerTitle: "取消"
+                        });
+                        return "hiker://empty";
+                    },pastedata),
+                    col_type: "text_center_1"
+                })
             }else{
-                toast("聚影：无法识别的口令");
+                if (name == "聚影云盘") {
+                    sm = "云盘";
+                    lx = "yp";
+                }else if(name=="聚影接口"){
+                    sm = "接口";
+                    lx = "jk";
+                }else if(name=="聚影解析"){
+                    sm = "解析";
+                    lx = "jx";
+                }else{
+                    toast("聚影：无法识别的口令");
+                }
+                importdatas = storage0.getMyVar('importConfirm', []);
+                if(importdatas.length==0){
+                    try{
+                        let text;
+                        if(/^http|^云/.test(code)){
+                            showLoading('获取数据中，请稍后...');
+                            text = parsePaste(code);
+                            hideLoading();
+                        }else{
+                            text = code;
+                        }
+                        if(text && !/^error/.test(text)){
+                            let sharetxt = gzip.unzip(text);
+                            importdatas = JSON.parse(sharetxt); 
+                            storage0.putMyVar('importConfirm', importdatas);
+                        }
+                    } catch (e) {
+                        toast("聚影：无法识别的口令>"+e.message);
+                    }
+                }
             }
         }catch(e){
             toast("聚影：口令有误>"+e.message);
-        }
-        importdatas = storage0.getMyVar('importConfirm', []);
-        if(importdatas.length==0){
-            try{
-                let text;
-                if(/^http|^云/.test(code)){
-                    showLoading('获取数据中，请稍后...');
-                    text = parsePaste(code);
-                    hideLoading();
-                }else{
-                    text = code;
-                }
-                if(text && !/^error/.test(text)){
-                    let sharetxt = gzip.unzip(text);
-                    importdatas = JSON.parse(sharetxt); 
-                    storage0.putMyVar('importConfirm', importdatas);
-                }
-            } catch (e) {
-                toast("聚影：无法识别的口令>"+e.message);
-            }
         }
     }else{
         //js文件导入
@@ -2875,162 +2954,163 @@ function importConfirm(jsfile) {
         sm = "接口";
         lx = "jk";
     }
-    
-    //获取现有接口
-    datalist = [];
-    let sourcefile = getFile(lx);
-    let sourcedata = fetch(sourcefile);
-    if(sourcedata != ""){
-        try{
-            eval("datalist = " + sourcedata+ ";");
-        }catch(e){}
-    }
-    let newdatas = [];
-    importdatas.forEach(it=>{
-        if(!datalist.some(v=>v.url==it.url || v.url==jkfilespath+it.url.substr(it.url.lastIndexOf('/')+1))){
-            newdatas.push(it);
+    if(name!="聚影资源码"){
+        //获取现有接口
+        datalist = [];
+        let sourcefile = getFile(lx);
+        let sourcedata = fetch(sourcefile);
+        if(sourcedata != ""){
+            try{
+                eval("datalist = " + sourcedata+ ";");
+            }catch(e){}
         }
-    })
-    let oldnum = importdatas.length - newdatas.length;
-    let d = [];
-    d.push({
-        title: "聚影云口令导入",
-        desc: (sm||"") + " 共计" + importdatas.length + "/新增" + newdatas.length + "/存在" + oldnum ,
-        url: "hiker://empty",
-        col_type: 'text_center_1'
-    });
-    d.push({
-        title: "增量导入",
-        url: $("跳过已存在，只导入新增，确认？").confirm((lx)=>{
-            require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
-            let importlist = storage0.getMyVar('importConfirm', []);
-            let num;
-            if(lx=="jk"){
-                num = jiekousave(importlist, 0);
-            }else if(lx=="jx"){
-                num = jiexisave(importlist, 0);
-            }else if(lx=="yp"){
-                num = yundisksave(importlist, 0);
-            }else{
-                return "toast://类型异常";
+        let newdatas = [];
+        importdatas.forEach(it=>{
+            if(!datalist.some(v=>v.url==it.url || v.url==jkfilespath+it.url.substr(it.url.lastIndexOf('/')+1))){
+                newdatas.push(it);
             }
-            clearMyVar('SrcJu_searchMark');
-            back(false);
-            return "toast://增量导入"+(num<0?"失败":num);
-        },lx),
-        img: getIcon("管理-增量导入.svg"),
-        col_type: 'icon_small_3'
-    });
-    d.push({
-        title: "",
-        url: "hiker://empty",
-        col_type: 'icon_small_3'
-    });
-    d.push({
-        title: "全量导入",
-        url: $("覆盖本地已存在重新导入，确认？").confirm((lx)=>{
-            require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
-            let importlist = storage0.getMyVar('importConfirm', []);
-            if(lx=="jk"){
-                num = jiekousave(importlist, 1);
-            }else if(lx=="jx"){
-                num = jiexisave(importlist, 1);
-            }else if(lx=="yp"){
-                num = yundisksave(importlist, 1);
-            }else{
-                return "toast://类型异常";
-            }
-            clearMyVar('SrcJu_searchMark');
-            back(false);
-            return "toast://全量导入"+(num<0?"失败":num);
-        },lx),
-        img: getIcon("管理-全量导入.svg"),
-        col_type: 'icon_small_3'
-    });
-
-    importdatas.forEach(it=>{
-        let isnew = newdatas.some(v=>v.url==it.url);
-        let datamenu = ["确定导入", "修改名称"];
-        if(lx=="jk"){
-            datamenu.push("设定分组");
-            datamenu.push("接口测试");
-        }
+        })
+        let oldnum = importdatas.length - newdatas.length;
+        let d = [];
         d.push({
-            title: it.name + (lx=="yp"?"":"   (" + it.type + ")") + (it.group?"  ["+it.group+"]":"") + "  {" + (isnew?"新增加":"已存在") + "}",
-            url: $(datamenu, 1).select((lx, data) => {
-                data = JSON.parse(base64Decode(data));
-                if (input == "确定导入") {
-                    return $("如本地存在则将覆盖，确认？").confirm((lx,data)=>{
+            title: "聚影云口令导入",
+            desc: (sm||"") + " 共计" + importdatas.length + "/新增" + newdatas.length + "/存在" + oldnum ,
+            url: "hiker://empty",
+            col_type: 'text_center_1'
+        });
+        d.push({
+            title: "增量导入",
+            url: $("跳过已存在，只导入新增，确认？").confirm((lx)=>{
+                require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
+                let importlist = storage0.getMyVar('importConfirm', []);
+                let num;
+                if(lx=="jk"){
+                    num = jiekousave(importlist, 0);
+                }else if(lx=="jx"){
+                    num = jiexisave(importlist, 0);
+                }else if(lx=="yp"){
+                    num = yundisksave(importlist, 0);
+                }else{
+                    return "toast://类型异常";
+                }
+                clearMyVar('SrcJu_searchMark');
+                back(false);
+                return "toast://增量导入"+(num<0?"失败":num);
+            },lx),
+            img: getIcon("管理-增量导入.svg"),
+            col_type: 'icon_small_3'
+        });
+        d.push({
+            title: "",
+            url: "hiker://empty",
+            col_type: 'icon_small_3'
+        });
+        d.push({
+            title: "全量导入",
+            url: $("覆盖本地已存在重新导入，确认？").confirm((lx)=>{
+                require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
+                let importlist = storage0.getMyVar('importConfirm', []);
+                if(lx=="jk"){
+                    num = jiekousave(importlist, 1);
+                }else if(lx=="jx"){
+                    num = jiexisave(importlist, 1);
+                }else if(lx=="yp"){
+                    num = yundisksave(importlist, 1);
+                }else{
+                    return "toast://类型异常";
+                }
+                clearMyVar('SrcJu_searchMark');
+                back(false);
+                return "toast://全量导入"+(num<0?"失败":num);
+            },lx),
+            img: getIcon("管理-全量导入.svg"),
+            col_type: 'icon_small_3'
+        });
+
+        importdatas.forEach(it=>{
+            let isnew = newdatas.some(v=>v.url==it.url);
+            let datamenu = ["确定导入", "修改名称"];
+            if(lx=="jk"){
+                datamenu.push("设定分组");
+                datamenu.push("接口测试");
+            }
+            d.push({
+                title: it.name + (lx=="yp"?"":"   (" + it.type + ")") + (it.group?"  ["+it.group+"]":"") + "  {" + (isnew?"新增加":"已存在") + "}",
+                url: $(datamenu, 1).select((lx, data) => {
+                    data = JSON.parse(base64Decode(data));
+                    if (input == "确定导入") {
+                        return $("如本地存在则将覆盖，确认？").confirm((lx,data)=>{
+                            let dataurl = data.url;
+                            require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
+                            let datas = [];
+                            datas.push(data);
+                            let num;
+                            if(lx=="jk"){
+                                num = jiekousave(datas, 1);
+                            }else if(lx=="jx"){
+                                num = jiexisave(datas, 1);
+                            }else if(lx=="yp"){
+                                num = yundisksave(datas, 1);
+                            }else{
+                                return "toast://类型异常";
+                            }
+                            clearMyVar('SrcJu_searchMark');
+                            let importlist = storage0.getMyVar('importConfirm', []);
+                            if(importlist.length==1){
+                                back(false);
+                            }else{
+                                let index2 = importlist.indexOf(importlist.filter(d => d.url==dataurl)[0]);
+                                importlist.splice(index2, 1);
+                                storage0.putMyVar('importConfirm', importlist);
+                                deleteItem(dataurl);
+                            }
+                            return "toast://导入"+(num<0?"失败":num);
+                        },lx,data);
+                    }else if (input == "修改名称") {
+                        return $(data.name, "请输入新名称").input((data)=>{
+                            if(!input.trim()){
+                                return "toast://不能为空";
+                            }
+                            let dataurl = data.url;
+                            let importlist = storage0.getMyVar('importConfirm', []);
+                            let index = importlist.indexOf(importlist.filter(d => d.url==dataurl)[0]);
+                            importlist[index].name = input;
+                            storage0.putMyVar('importConfirm', importlist);
+                            refreshPage(false);
+                            return "toast://已修改名称";
+                        }, data);
+                    }else if (input == "设定分组") {
                         let dataurl = data.url;
                         require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
-                        let datas = [];
-                        datas.push(data);
-                        let num;
-                        if(lx=="jk"){
-                            num = jiekousave(datas, 1);
-                        }else if(lx=="jx"){
-                            num = jiexisave(datas, 1);
-                        }else if(lx=="yp"){
-                            num = yundisksave(datas, 1);
-                        }else{
-                            return "toast://类型异常";
-                        }
-                        clearMyVar('SrcJu_searchMark');
-                        let importlist = storage0.getMyVar('importConfirm', []);
-                        if(importlist.length==1){
-                            back(false);
-                        }else{
-                            let index2 = importlist.indexOf(importlist.filter(d => d.url==dataurl)[0]);
-                            importlist.splice(index2, 1);
+                        let groupNames = getGroupNames();
+                        groupNames.unshift("清除");
+                        return $(groupNames, 2, "选择分组").select((dataurl) => {
+                            let importlist = storage0.getMyVar('importConfirm', []);
+                            let index = importlist.indexOf(importlist.filter(d => d.url==dataurl)[0]);
+                            if(input=="清除"){
+                                delete importlist[index].group;
+                            }else{
+                                importlist[index].group = input;
+                            }
                             storage0.putMyVar('importConfirm', importlist);
-                            deleteItem(dataurl);
-                        }
-                        return "toast://导入"+(num<0?"失败":num);
-                    },lx,data);
-                }else if (input == "修改名称") {
-                    return $(data.name, "请输入新名称").input((data)=>{
-                        if(!input.trim()){
-                            return "toast://不能为空";
-                        }
-                        let dataurl = data.url;
-                        let importlist = storage0.getMyVar('importConfirm', []);
-                        let index = importlist.indexOf(importlist.filter(d => d.url==dataurl)[0]);
-                        importlist[index].name = input;
-                        storage0.putMyVar('importConfirm', importlist);
-                        refreshPage(false);
-                        return "toast://已修改名称";
-                    }, data);
-                }else if (input == "设定分组") {
-                    let dataurl = data.url;
-                    require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
-                    let groupNames = getGroupNames();
-                    groupNames.unshift("清除");
-                    return $(groupNames, 2, "选择分组").select((dataurl) => {
-                        let importlist = storage0.getMyVar('importConfirm', []);
-                        let index = importlist.indexOf(importlist.filter(d => d.url==dataurl)[0]);
-                        if(input=="清除"){
-                            delete importlist[index].group;
-                        }else{
-                            importlist[index].group = input;
-                        }
-                        storage0.putMyVar('importConfirm', importlist);
-                        refreshPage(false);
-                        return 'toast://已设置分组';
-                    },dataurl)
-                }else if (input == "接口测试") {
-                    return $("hiker://empty#noRecordHistory##noHistory#").rule((data) => {
-                        setPageTitle(data.name+"-接口测试");
-                        require(config.依赖);
-                        dianboyiji(data);
-                    },data)
+                            refreshPage(false);
+                            return 'toast://已设置分组';
+                        },dataurl)
+                    }else if (input == "接口测试") {
+                        return $("hiker://empty#noRecordHistory##noHistory#").rule((data) => {
+                            setPageTitle(data.name+"-接口测试");
+                            require(config.依赖);
+                            dianboyiji(data);
+                        },data)
+                    }
+                }, lx, base64Encode(JSON.stringify(it))),
+                img: getIcon("管理-箭头.svg"),
+                col_type: "text_icon",
+                extra: {
+                    id: it.url
                 }
-            }, lx, base64Encode(JSON.stringify(it))),
-            img: getIcon("管理-箭头.svg"),
-            col_type: "text_icon",
-            extra: {
-                id: it.url
-            }
-        });
-    })
+            });
+        })
+    }
     setResult(d);
 }
