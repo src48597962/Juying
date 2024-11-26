@@ -794,6 +794,7 @@ function dianboyiji(testSource) {
                         setItem("sourceMode","2");
                         sm = "远程订阅模式";
                     }
+                    refreshPage(true);
                     return "toast://站源获取模式为："+sm;
                 }else if(input=="聚影资源码订阅"){
                     return $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
