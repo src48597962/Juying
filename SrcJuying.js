@@ -761,9 +761,6 @@ function dianboyiji(testSource) {
             title: "管理设置",
             url: testSource?"toast://测试模式下不能更换主页源":$(getItem("sourceMode")=="2"?["外部资源导入","远程订阅模式√"]:["本地接口管理","本地解析管理","外部资源导入","聚影资源码订阅","本地接口模式√"],1).select(()=>{
                 if(input=="本地接口管理"){
-                    if(getItem("sourceMode")=="2"){
-                        return "toast://订阅文件模式，无法管理本地接口";
-                    }
                     putMyVar('guanli','jk');
                     return $("hiker://empty#noRecordHistory##noHistory##noRefresh#").rule(() => {
                         setPageTitle('本地接口管理');
@@ -771,9 +768,6 @@ function dianboyiji(testSource) {
                         SRCSet();
                     })
                 }else if(input=="本地解析管理"){
-                    if(getItem("sourceMode")=="2"){
-                        return "toast://订阅文件模式，无法管理本地解析";
-                    }
                     putMyVar('guanli','jx');
                     return $("hiker://empty#noRecordHistory##noHistory##noRefresh#").rule(() => {
                         setPageTitle('本地解析管理');
@@ -852,7 +846,7 @@ function dianboyiji(testSource) {
                     }
                 })
                 d.push({
-                    pic_url: "https://hikerfans.com/weisyr/img/Loading1.gif",
+                    pic_url: config.依赖.replace(/[^/]*$/,'') + "/img/Loading.gif",
                     col_type: "pic_1_center",
                     url: "hiker://empty",
                     extra: {
@@ -1213,7 +1207,7 @@ function yiji() {
                 }
             })
             d.push({
-                pic_url: "https://hikerfans.com/weisyr/img/Loading1.gif",
+                pic_url: config.依赖.replace(/[^/]*$/,'') + "/img/Loading.gif",
                 col_type: "pic_1_center",
                 url: "hiker://empty",
                 extra: {
@@ -1393,7 +1387,7 @@ function yiji() {
                 updateItem("historyid", {desc: (j*3+1) + "-" + (j*3+3)});
                 return "hiker://empty";
             }),
-            pic_url: getIcon("主页-记录.svg", 1),//'https://hikerfans.com/tubiao/red/40.png',
+            pic_url: getIcon("主页-记录.svg", 1),
             col_type: 'avatar',
             extra: {
                 id: "historyid"
@@ -1443,7 +1437,7 @@ function yiji() {
             refreshPage(false);
             return "hiker://empty";
         },fenlei),
-        pic_url: getIcon("主页-热搜.svg", 1),//'https://hikerfans.com/tubiao/red/73.png',//'https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=3779990328,1416553241&fm=179&app=35&f=PNG?w=60&h=70&s=E7951B62A4639D153293A4E90300401B',
+        pic_url: getIcon("主页-热搜.svg", 1),
         col_type: 'avatar',
         extra: {
             id: "rousoubang"
