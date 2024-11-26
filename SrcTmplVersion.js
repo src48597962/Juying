@@ -3,6 +3,11 @@ var newVersion = {
     "hint": "",
     "codeDownload": "https://src48597962.lanzouo.com/i4Ti12e60lsh",
     "JYUpdateRecords": [{
+        title: "beta V2.4",
+        records: [
+            "优化：直播去除box推送、增强tv播放链接支持"
+        ]
+    },{
         title: "2024/11/03 V2.3",
         records: [
             "优化：点播源编辑支持设置分类是隐藏或只显示",
