@@ -1922,12 +1922,12 @@ function resource() {
     });
     let importtype = getMyVar('importtype','1');
     d.push({
-        title: (importtype=="1"?"👉":"")+"box配置文件导入",
+        title: (importtype=="1"?"👉":"")+"tvBox接口配置",
         col_type: 'scroll_button',
         url: $('#noLoading#').lazyRule(() => {
             putMyVar('importtype','1');
             refreshPage(false);
-            return "toast://支持本地包或在线的配置文件导入";
+            return "toast://支持本地包或在线的tvBox接口配置地址";
         })
     });
     /*
@@ -1940,7 +1940,7 @@ function resource() {
             return "toast://此项仅支github库，hipy项目js文件所在的路径";
         })
     });
-    */
+    //订阅和导入进行合并,importtype=="3"作废
     d.push({
         title: (importtype=="3"?"👉":"")+"box配置文件订阅",
         col_type: 'scroll_button',
@@ -1950,6 +1950,7 @@ function resource() {
             return "toast://订阅本地包或在线的配置文件，但无法管理接口";
         })
     });
+    */
     if(getItem("sourceMode","1")=="1"){
         d.push({
             title: (importtype=="4"?"👉":"")+"drpy_js文件夹",
@@ -1964,52 +1965,51 @@ function resource() {
     }
 
     if(importtype=="1"){
-        d.push({
-            title: '选择需要的导入项目',
-            col_type: "rich_text",
-            extra:{textSize:12}
-        });
-        d.push({
-            title:(getMyVar('importjiekou','1')=="1"?getide(1):getide(0))+'影视接口',
-            col_type:'scroll_button',
-            url:$('#noLoading#').lazyRule(() => {
-                if(getMyVar('importjiekou')=="0"){
-                    putMyVar('importjiekou','1');
-                }else{
-                    putMyVar('importjiekou','0');
-                }
-                refreshPage(false);
-                return "hiker://empty";
-            })
-        });
-        d.push({
-            title:(getMyVar('importjiexi','1')=="1"?getide(1):getide(0))+'解析接口',
-            col_type:'scroll_button',
-            url:$('#noLoading#').lazyRule(() => {
-                if(getMyVar('importjiexi')=="0"){
-                    putMyVar('importjiexi','1');
-                }else{
-                    putMyVar('importjiexi','0');
-                }
-                refreshPage(false);
-                return "hiker://empty";
-            })
-        });
-    }else if(importtype=="3"){
-        d.push({
-            title: '当前订阅地址：' + Juconfig['dySource'],
-            col_type: "rich_text",
-            extra:{textSize:12}
-        });
+        if(getItem("sourceMode")=="2"){
+            d.push({
+                title: '当前订阅地址：' + Juconfig['dySource'],
+                col_type: "rich_text",
+                extra:{textSize:12}
+            });
+        }else{
+            d.push({
+                title: '选择需要的导入项目',
+                col_type: "rich_text",
+                extra:{textSize:12}
+            });
+            d.push({
+                title:(getMyVar('importjiekou','1')=="1"?getide(1):getide(0))+'影视接口',
+                col_type:'scroll_button',
+                url:$('#noLoading#').lazyRule(() => {
+                    if(getMyVar('importjiekou')=="0"){
+                        putMyVar('importjiekou','1');
+                    }else{
+                        putMyVar('importjiekou','0');
+                    }
+                    refreshPage(false);
+                    return "hiker://empty";
+                })
+            });
+            d.push({
+                title:(getMyVar('importjiexi','1')=="1"?getide(1):getide(0))+'解析接口',
+                col_type:'scroll_button',
+                url:$('#noLoading#').lazyRule(() => {
+                    if(getMyVar('importjiexi')=="0"){
+                        putMyVar('importjiexi','1');
+                    }else{
+                        putMyVar('importjiexi','0');
+                    }
+                    refreshPage(false);
+                    return "hiker://empty";
+                })
+            });
+        }
     }
     d.push({
         title:'本地',
         col_type: 'input',
         desc: '请输入链接地址',
         url: $.toString(() => {
-            if(MY_NAME=="海阔视界"&&getAppVersion()<5100){
-                return "toast://软件版本过低";
-            }
             return `fileSelect://`+$.toString(()=>{
                 if(!MY_PATH){
                     return "toast://获取文件路径失败，可能没有权限";
@@ -2023,15 +2023,15 @@ function resource() {
             })
         }),
         extra: {
-            titleVisible: MY_NAME=="海阔视界"&&getAppVersion()>=5100?true:false,
+            titleVisible: true,
             defaultValue: getMyVar('importinput', ''),
             onChange: 'putMyVar("importinput",input);clearMyVar("duohouse");'
         }
     });
 
     d.push({
-        title: '🆗 '+(importtype=="4"?'确定扫描':importtype=="3"?'确定订阅':'确定导入(' + (Juconfig["importmode"]?"全量":"增量")+')'),
-        url: importtype=="1"&&getMyVar('importjiekou','1')!="1"&&getMyVar('importjiexi','1')!="1"?'toast://请选择导入项目':$('#noLoading#').lazyRule((Juconfig,cfgfile) => {
+        title: '🆗 '+(importtype=="4"?'确定扫描':getItem("sourceMode")=="2"?'确定订阅':'确定导入(' + (Juconfig["importmode"]?"全量":"增量")+')'),
+        url: importtype=="1"&&getItem("sourceMode","1")=="1"&&getMyVar('importjiekou','1')!="1"&&getMyVar('importjiexi','1')!="1"?'toast://请选择导入项目':$('#noLoading#').lazyRule((Juconfig,cfgfile) => {
                 let importtype = getMyVar('importtype','1');
 
                 let input = getMyVar('importinput', '').trim();
@@ -2078,11 +2078,13 @@ function resource() {
                 function exeImport(input){
                     let importtype = getMyVar('importtype','1');
                     if(importtype=="1"){
-                        return Resourceimport(input, '1', Juconfig['importmode']?2:0);
+                        if(getItem("sourceMode")=="2"){
+                            return "toast://" + getBoxSource(input, 3).message;
+                        }else{
+                            return Resourceimport(input, '1', Juconfig['importmode']?2:0);
+                        }
                     }else if(importtype=="2"){
                         return HipyImport(input, Juconfig['importmode']?2:0);
-                    }else if(importtype=="3"){
-                        return "toast://" + getBoxSource(input, 3).message;
                     }
                 }
                 
