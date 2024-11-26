@@ -1951,23 +1951,22 @@ function resource() {
         })
     });
     */
-    if(getItem("sourceMode","1")=="1"){
-        d.push({
-            title: (importtype=="4"?"👉":"")+"drpy_js文件夹",
-            col_type: 'scroll_button',
-            url: $('#noLoading#').lazyRule(() => {
-                clearMyVar('importinput');
-                putMyVar('importtype','4');
-                refreshPage(false);
-                return "toast://此项仅支持js文件所在的路径";
-            })
-        });
-    }
+
+    d.push({
+        title: (importtype=="4"?"👉":"")+"drpy_js文件夹",
+        col_type: 'scroll_button',
+        url: $('#noLoading#').lazyRule(() => {
+            clearMyVar('importinput');
+            putMyVar('importtype','4');
+            refreshPage(false);
+            return "toast://此项仅支持js文件所在的路径";
+        })
+    });
 
     if(importtype=="1"){
         if(getItem("sourceMode")=="2"){
             d.push({
-                title: '当前订阅地址：' + Juconfig['dySource'],
+                title: '当前订阅地址：' + (Juconfig['dySource'] || "无"),
                 col_type: "rich_text",
                 extra:{textSize:12}
             });
