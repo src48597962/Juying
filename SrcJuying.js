@@ -758,47 +758,47 @@ function dianboyiji(testSource) {
         })
         d.push({
             title: "管理设置",
-            url: testSource?"toast://测试模式下不能更换主页源":$(["接口管理","解析管理","资源管理","站源切换","资源码订阅"],1).select(()=>{
-                if(input=="接口管理"){
+            url: testSource?"toast://测试模式下不能更换主页源":$(["本地接口管理","本地解析管理","外部资源导入",getItem("sourceMode")=="2"?"远程订阅模式√":"本地接口模式√","聚影资源码订阅"],1).select(()=>{
+                if(input=="本地接口管理"){
                     if(getItem("sourceMode")=="2"){
                         return "toast://订阅文件模式，无法管理本地接口";
                     }
                     putMyVar('guanli','jk');
                     return $("hiker://empty#noRecordHistory##noHistory##noRefresh#").rule(() => {
-                        setPageTitle('接口管理');
+                        setPageTitle('本地接口管理');
                         require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
                         SRCSet();
                     })
-                }else if(input=="解析管理"){
+                }else if(input=="本地解析管理"){
                     if(getItem("sourceMode")=="2"){
                         return "toast://订阅文件模式，无法管理本地解析";
                     }
                     putMyVar('guanli','jx');
                     return $("hiker://empty#noRecordHistory##noHistory##noRefresh#").rule(() => {
-                        setPageTitle('解析管理');
+                        setPageTitle('本地解析管理');
                         require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
                         SRCSet();
                     })
-                }else if(input=="资源管理"){
+                }else if(input=="外部资源导入"){
                     return $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
-                        setPageTitle('资源管理');
+                        setPageTitle('外部资源导入');
                         require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
                         resource();
                     })
-                }else if(input=="站源切换"){
+                }else if(input=="本地接口模式√"||input=="远程订阅模式√"){
                     let sm;
                     if(getItem("sourceMode")=="2"){
                         clearItem("sourceMode");
                         sm = "本地接口模式";
                     }else{
                         setItem("sourceMode","2");
-                        sm = "订阅文件模式";
+                        sm = "远程订阅模式";
                     }
-                    return "toast://站源获取设置为："+sm;
-                }else if(input=="资源码订阅"){
+                    return "toast://站源获取模式为："+sm;
+                }else if(input=="聚影资源码订阅"){
                     return $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
                         require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
-                        setPageTitle("资源码订阅管理");
+                        setPageTitle("聚影资源码订阅管理");
                         subResource();
                     })
                 }
@@ -1321,7 +1321,7 @@ function yiji() {
         col_type: 'scroll_button'
     });
     d.push({
-        title: "🔍搜索接口",
+        title: "🔍搜索范围",
         url: $('#noLoading#').lazyRule(() => {
             require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
             let datalist = getDatas("jk", 1);
