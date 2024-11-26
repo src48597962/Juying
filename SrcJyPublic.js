@@ -1272,7 +1272,8 @@ function subResource() {
     setResult(d);
 }
 // 执行导入资源码内容
-function importResource(textcontent) {
+function importResource(pdata, mode) {
+    let textcontent = globalMap0.getVar('Jy_gmParams').unzip(pdata);
     let pastedata = JSON.parse(textcontent);
     let jknum = 0;
     let jxnum = 0;
@@ -1280,18 +1281,18 @@ function importResource(textcontent) {
     let options = [];
     let jkdatalist = pastedata.接口||[];
     if(jkdatalist.length>0){
-        jknum = jiekousave(jkdatalist, it.mode==2?2:1);
+        jknum = jiekousave(jkdatalist, mode==2?2:1);
         options.push('接口');
     }
     let jxdatalist = pastedata.解析||[];
     if(jxdatalist.length>0){
-        jxnum = jiexisave(jxdatalist, it.mode==2?2:1);
+        jxnum = jiexisave(jxdatalist, mode==2?2:1);
         options.push('解析');
     }
     if(pastedata.直播){
         let livefilepath = globalMap0.getVar('Jy_gmParams').rulepath + "liveconfig.json";
         let liveconfig = pastedata.直播;
-        if(it.mode!=2){
+        if(mode!=2){
             let livefile = fetch(livefilepath);
             if(livefile){
                 try{
@@ -1323,7 +1324,7 @@ function importResource(textcontent) {
     }
     let ghproxy = pastedata.ghproxy||[];
     if(ghproxy.length>0){
-        if(it.mode!=2){
+        if(mode!=2){
             oldproxy = Juconfig['ghproxy'] || [];
             ghproxy.forEach(gh=>{
                 if(!oldproxy.some(item => gh.url==item.url)){
@@ -1374,10 +1375,9 @@ function updateResource(it,refresh) {
             "content-type": "application/json;charset=UTF-8"
         }));
         if(pasteget.result_code=="SUCCESS"){
-            let textcontent = globalMap0.getVar('Jy_gmParams').unzip(pasteget.data);
             require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
 
-            importResource(textcontent);
+            importResource(pasteget.data,it.mode);
             if(refresh){
                 refreshPage(false);
             }
