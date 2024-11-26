@@ -90,11 +90,8 @@ function sousuo() {
                     ssdatalist = getSearchLists(group);
                     clearMyVar('搜索临时搜索分组');
                 }
-                toast(group);
+
                 let judata = [];
-                if(ssdatalist.length==0){
-                    return "toast://未获取到源接口";
-                }
                 ssdatalist.forEach(it=>{
                     judata.push({
                         "title": it.name,
