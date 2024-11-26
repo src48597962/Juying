@@ -298,7 +298,7 @@ function arrayAdd(list, isdir, alistapi) {
         if (isdir) {
             d.push({
                 title: item.name,
-                img: item.thumb || "https://hikerfans.com/tubiao/messy/27.svg",//#noRecordHistory##noHistory#
+                img: item.thumb || "http://123.56.105.145/tubiao/messy/27.svg",//#noRecordHistory##noHistory#
                 url: $("hiker://empty##" + encodeURI(alistapi.server + path)).rule((alistapi, dirname) => {
                     require(config.依赖.replace(/[^/]*$/,'').replace('/Ju/','/master/') + 'SrcJyAlist.js');
                     alistList(alistapi, dirname);
@@ -320,7 +320,7 @@ function arrayAdd(list, isdir, alistapi) {
             })
             d.push({
                 title: item.name,
-                img: item.thumb || (music.test(suffix) ? "https://hikerfans.com/tubiao/music/46.svg" : contain.test(suffix) ? "https://hikerfans.com/tubiao/movie/13.svg" : image.test(suffix) ? "https://hikerfans.com/tubiao/more/38.png" : "hiker://files/cache/src/Alist.svg"),
+                img: item.thumb || (music.test(suffix) ? "http://123.56.105.145/tubiao/music/46.svg" : contain.test(suffix) ? "http://123.56.105.145/tubiao/movie/13.svg" : image.test(suffix) ? "http://123.56.105.145/tubiao/more/38.png" : "hiker://files/cache/src/Alist.svg"),
                 url: $(encodeURI(alistapi.server + path)).lazyRule((alistapi, path, sign, subtitle) => {
                     require(config.依赖.replace(/[^/]*$/,'').replace('/Ju/','/master/') + 'SrcJyAlist.js');
                     return alistUrl(alistapi, path, sign, subtitle);
@@ -622,7 +622,7 @@ function alistSet() {
             refreshPage(false);
             return 'toast://' + sm;
         }, fileFilter, aliconfig, alicfgfile),
-        img: fileFilter ? "https://hikerfans.com/tubiao/messy/55.svg" : "https://hikerfans.com/tubiao/messy/56.svg",
+        img: fileFilter ? "http://123.56.105.145/tubiao/messy/55.svg" : "http://123.56.105.145/tubiao/messy/56.svg",
         col_type: "icon_2"
     });
     d.push({
@@ -637,7 +637,7 @@ function alistSet() {
             refreshPage(false);
             return 'toast://已设置音视频文件格式后缀';
         }, aliconfig, alicfgfile),
-        img: "https://hikerfans.com/tubiao/messy/145.svg",
+        img: "http://123.56.105.145/tubiao/messy/145.svg",
         col_type: "icon_2"
     });
     d.push({
@@ -688,7 +688,7 @@ function alistSet() {
                 return 'toast://链接无效';
             }
         }, alistfile),
-        img: "https://hikerfans.com/tubiao/more/25.png",
+        img: "http://123.56.105.145/tubiao/more/25.png",
         col_type: "icon_small_3"
     });
     d.push({
@@ -728,7 +728,7 @@ function alistSet() {
                 return "toast://聚影：口令有误";
             }
         }, alistfile),
-        img: "https://hikerfans.com/tubiao/more/43.png",
+        img: "http://123.56.105.145/tubiao/more/43.png",
         col_type: "icon_small_3"
     });
     d.push({
@@ -743,7 +743,7 @@ function alistSet() {
                 return "toast://分享失败，剪粘板或网络异常";
             }
         }, datalist),
-        img: "https://hikerfans.com/tubiao/more/3.png",
+        img: "http://123.56.105.145/tubiao/more/3.png",
         col_type: "icon_small_3"
     });
     d.push({
@@ -886,7 +886,7 @@ function alistSet() {
                                         return "hiker://empty";
                                     }, input, api, alistData, alistfile)
                                 }, item.server, alistData, alistfile),
-                                img: "https://hikerfans.com/tubiao/movie/98.svg",
+                                img: "http://123.56.105.145/tubiao/movie/98.svg",
                                 col_type: "text_center_1"
                             });
                             for (let i = 0; i < datalist.length; i++) {
