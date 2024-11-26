@@ -269,7 +269,7 @@ function aliShare(share_id, folder_id, share_pwd) {
                     let filesize = item.size / 1024 / 1024;
                     let it = {
                         title: item.name,
-                        img: item.thumbnail || (item.category == "video" ? "https://hikerfans.com/tubiao/movie/13.svg" : item.category == "audio" ? "https://hikerfans.com/tubiao/music/46.svg" : item.category == "image" ? "https://hikerfans.com/tubiao/more/38.png" : "https://img.alicdn.com/imgextra/i1/O1CN01mhaPJ21R0UC8s9oik_!!6000000002049-2-tps-80-80.png"),
+                        img: item.thumbnail || (item.category == "video" ? "http://123.56.105.145/tubiao/movie/13.svg" : item.category == "audio" ? "http://123.56.105.145/tubiao/music/46.svg" : item.category == "image" ? "http://123.56.105.145/tubiao/more/38.png" : "https://img.alicdn.com/imgextra/i1/O1CN01mhaPJ21R0UC8s9oik_!!6000000002049-2-tps-80-80.png"),
                         desc: filesize < 1024 ? filesize.toFixed(2) + 'MB' : (filesize / 1024).toFixed(2) + 'GB',
                         col_type: style,
                         extra: {
@@ -943,7 +943,7 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                             let filesize = item.size / 1024 / 1024;
                             d.push({
                                 title: item.name,
-                                img: item.thumbnail ? item.thumbnail + "@Referer=https://www.aliyundrive.com/" : item.category == "video" ? "https://hikerfans.com/tubiao/movie/13.svg" : item.category == "audio" ? "https://hikerfans.com/tubiao/music/46.svg" : item.category == "image" ? "https://hikerfans.com/tubiao/more/38.png" : "https://img.alicdn.com/imgextra/i1/O1CN01mhaPJ21R0UC8s9oik_!!6000000002049-2-tps-80-80.png@Referer=",
+                                img: item.thumbnail ? item.thumbnail + "@Referer=https://www.aliyundrive.com/" : item.category == "video" ? "http://123.56.105.145/tubiao/movie/13.svg" : item.category == "audio" ? "http://123.56.105.145/tubiao/music/46.svg" : item.category == "image" ? "http://123.56.105.145/tubiao/more/38.png" : "https://img.alicdn.com/imgextra/i1/O1CN01mhaPJ21R0UC8s9oik_!!6000000002049-2-tps-80-80.png@Referer=",
                                 url: $("hiker://empty##").lazyRule((category, file_id, sub_file_url,drive_id) => {
                                     require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyAliPublic.js');
                                     if(!alitoken){
@@ -1175,7 +1175,7 @@ function yundiskhistory() {
             refreshPage(false);
             return 'hiker://empty';
         }),
-        img: getIcon("云盘-本地历史.svg"),//"https://hikerfans.com/tubiao/grey/89.png",
+        img: getIcon("云盘-本地历史.svg"),
         col_type: "icon_3_fill"
     });
     d.push({
@@ -1185,7 +1185,7 @@ function yundiskhistory() {
             refreshPage(false);
             return 'hiker://empty';
         }),
-        img: getIcon("云盘-云端历史.svg"),//"https://hikerfans.com/tubiao/grey/110.png",
+        img: getIcon("云盘-云端历史.svg"),
         col_type: "icon_3_fill"
     });
     d.push({
@@ -1200,7 +1200,7 @@ function yundiskhistory() {
             }
             return 'hiker://empty';
         }),
-        img: getIcon("云盘-记录上传.svg"),//"https://hikerfans.com/tubiao/grey/92.png",
+        img: getIcon("云盘-记录上传.svg"),
         col_type: "icon_3_fill"
     });
     if(getMyVar('云盘历史','1')=='1'){
@@ -1575,7 +1575,7 @@ function erjiAliShare(share_id, folder_id, share_pwd) {
                             let filesize = item.size / 1024 / 1024;
                             let it = {
                                 title: item.name,
-                                img: item.thumbnail || "https://hikerfans.com/tubiao/movie/13.svg",
+                                img: item.thumbnail || "http://123.56.105.145/tubiao/movie/13.svg",
                                 desc: filesize < 1024 ? filesize.toFixed(2) + 'MB' : (filesize / 1024).toFixed(2) + 'GB',
                                 col_type: style,
                                 extra: {
@@ -2047,7 +2047,7 @@ function erjiAliMyDisk(folder_id, drive_id) {
                         let filesize = item.size / 1024 / 1024;
                         d.push({
                             title: item.name,
-                            img: item.thumbnail ? item.thumbnail + "@Referer=https://www.aliyundrive.com/" : "https://hikerfans.com/tubiao/movie/13.svg",
+                            img: item.thumbnail ? item.thumbnail + "@Referer=https://www.aliyundrive.com/" : "http://123.56.105.145/tubiao/movie/13.svg",
                             url: $().lazyRule((file_id, sub_file_url,drive_id) => {
                                     require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyAliPublic.js');
                                     if (alitoken) {
