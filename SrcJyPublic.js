@@ -903,7 +903,7 @@ function shareResource() {
                             return "toast://无内容分享";
                         }
                         let textcontent = globalMap0.getVar('Jy_gmParams').zip(JSON.stringify(text));
-                        let code = '聚影资源码￥' + textcontent + '￥文件分享';
+                        let code = '聚影资源码￥' + aesEncode('Juying2', textcontent) + '￥文件分享';
                         let sharefile = 'hiker://files/_cache/聚影资源码_'+$.dateFormat(new Date(),"HHmmss")+'.hiker';
                         writeFile(sharefile, code+`@import=js:$.require("hiker://page/import?rule=聚影");`);
                         if(fileExist(sharefile)){
@@ -1271,6 +1271,82 @@ function subResource() {
     })
     setResult(d);
 }
+// 执行导入资源码内容
+function importResource(textcontent) {
+    let pastedata = JSON.parse(textcontent);
+    let jknum = 0;
+    let jxnum = 0;
+    let ypnum = 0;
+    let options = [];
+    let jkdatalist = pastedata.接口||[];
+    if(jkdatalist.length>0){
+        jknum = jiekousave(jkdatalist, it.mode==2?2:1);
+        options.push('接口');
+    }
+    let jxdatalist = pastedata.解析||[];
+    if(jxdatalist.length>0){
+        jxnum = jiexisave(jxdatalist, it.mode==2?2:1);
+        options.push('解析');
+    }
+    if(pastedata.直播){
+        let livefilepath = globalMap0.getVar('Jy_gmParams').rulepath + "liveconfig.json";
+        let liveconfig = pastedata.直播;
+        if(it.mode!=2){
+            let livefile = fetch(livefilepath);
+            if(livefile){
+                try{
+                    let olddata = JSON.parse(livefile).data;
+                    let newdata = liveconfig.data;
+                    newdata.forEach(tv=>{
+                        if(!olddata.some(item => tv.url==item.url)){
+                            olddata.push(tv);
+                        }
+                    })
+                    liveconfig.data = olddata;
+                    options.push('直播');
+                    writeFile(livefilepath, JSON.stringify(liveconfig));
+                    var sm = "，直播订阅已同步"
+                }catch(e){
+                    //log("增量导入直播失败>"+e.message);
+                }
+            }
+        }else if(liveconfig.data){
+            options.push('直播');
+            writeFile(livefilepath, JSON.stringify(liveconfig));
+            var sm = "，直播订阅已同步"
+        }
+    }
+    let ypdatalist = pastedata.云盘||[];
+    if(ypdatalist.length>0){
+        ypnum = yundisksave(ypdatalist, 1);
+        options.push('云盘');
+    }
+    let ghproxy = pastedata.ghproxy||[];
+    if(ghproxy.length>0){
+        if(it.mode!=2){
+            oldproxy = Juconfig['ghproxy'] || [];
+            ghproxy.forEach(gh=>{
+                if(!oldproxy.some(item => gh.url==item.url)){
+                    oldproxy.push(gh);
+                }
+            })
+            Juconfig['ghproxy'] = oldproxy;
+        }else{
+            Juconfig['ghproxy'] = ghproxy;
+        }
+        options.push('ghproxy');
+    }
+
+    let resources = Juconfig['subResource'] || [];
+    const index = resources.findIndex(item => item.path === it.path);
+    if (index !== -1) {
+        resources[index].time = $.dateFormat(new Date(), "yyyy-MM-dd HH:mm:ss");
+        resources[index].options = options.join(",");
+    }
+    Juconfig['subResource'] = resources;
+    writeFile(cfgfile, JSON.stringify(Juconfig));
+    log("更新同步订阅资源完成；接口："+jknum+"，解析："+jxnum+(sm?sm:"")+"，云盘："+ypnum);
+}
 // 更新同步订阅资源
 function updateResource(it,refresh) {
     if(!it){
@@ -1299,80 +1375,9 @@ function updateResource(it,refresh) {
         }));
         if(pasteget.result_code=="SUCCESS"){
             let textcontent = globalMap0.getVar('Jy_gmParams').unzip(pasteget.data);
-            let pastedata = JSON.parse(textcontent);
             require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
-            let jknum = 0;
-            let jxnum = 0;
-            let ypnum = 0;
-            let options = [];
-            let jkdatalist = pastedata.接口||[];
-            if(jkdatalist.length>0){
-                jknum = jiekousave(jkdatalist, it.mode==2?2:1);
-                options.push('接口');
-            }
-            let jxdatalist = pastedata.解析||[];
-            if(jxdatalist.length>0){
-                jxnum = jiexisave(jxdatalist, it.mode==2?2:1);
-                options.push('解析');
-            }
-            if(pastedata.直播){
-                let livefilepath = globalMap0.getVar('Jy_gmParams').rulepath + "liveconfig.json";
-                let liveconfig = pastedata.直播;
-                if(it.mode!=2){
-                    let livefile = fetch(livefilepath);
-                    if(livefile){
-                        try{
-                            let olddata = JSON.parse(livefile).data;
-                            let newdata = liveconfig.data;
-                            newdata.forEach(tv=>{
-                                if(!olddata.some(item => tv.url==item.url)){
-                                    olddata.push(tv);
-                                }
-                            })
-                            liveconfig.data = olddata;
-                            options.push('直播');
-                            writeFile(livefilepath, JSON.stringify(liveconfig));
-                            var sm = "，直播订阅已同步"
-                        }catch(e){
-                            //log("增量导入直播失败>"+e.message);
-                        }
-                    }
-                }else if(liveconfig.data){
-                    options.push('直播');
-                    writeFile(livefilepath, JSON.stringify(liveconfig));
-                    var sm = "，直播订阅已同步"
-                }
-            }
-            let ypdatalist = pastedata.云盘||[];
-            if(ypdatalist.length>0){
-                ypnum = yundisksave(ypdatalist, 1);
-                options.push('云盘');
-            }
-            let ghproxy = pastedata.ghproxy||[];
-            if(ghproxy.length>0){
-                if(it.mode!=2){
-                    oldproxy = Juconfig['ghproxy'] || [];
-                    ghproxy.forEach(gh=>{
-                        if(!oldproxy.some(item => gh.url==item.url)){
-                            oldproxy.push(gh);
-                        }
-                    })
-                    Juconfig['ghproxy'] = oldproxy;
-                }else{
-                    Juconfig['ghproxy'] = ghproxy;
-                }
-                options.push('ghproxy');
-            }
 
-            let resources = Juconfig['subResource'] || [];
-            const index = resources.findIndex(item => item.path === it.path);
-            if (index !== -1) {
-                resources[index].time = $.dateFormat(new Date(), "yyyy-MM-dd HH:mm:ss");
-                resources[index].options = options.join(",");
-            }
-            Juconfig['subResource'] = resources;
-            writeFile(cfgfile, JSON.stringify(Juconfig));
-            log("更新同步订阅资源完成；接口："+jknum+"，解析："+jxnum+(sm?sm:"")+"，云盘："+ypnum);
+            importResource(textcontent);
             if(refresh){
                 refreshPage(false);
             }
