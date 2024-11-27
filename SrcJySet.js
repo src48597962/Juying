@@ -2883,6 +2883,7 @@ function importConfirm(jsfile) {
                             })
                             writeFile(cfgfile, JSON.stringify(Juconfig));
                             log("更新同步订阅资源完成；新增接口："+jknum+"，解析："+jxnum+"，直播"+tvnum+"，云盘："+ypnum+"，ghproxy："+ghnum);
+                            back(false);
                             return "toast://更新同步文件资源完成；";
                         })
                     }, 
