@@ -2812,12 +2812,87 @@ function importConfirm(jsfile) {
                 let textcontent = globalMap0.getVar('Jy_gmParams').unzip(code);
                 let pastedata = JSON.parse(textcontent);
                 d.push({
-                    col_type: "line_blank"
-                });
-                d.push({
                     title: '聚影资源码',
                     col_type: "rich_text"
                 });
+
+                const hikerPop = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6966");
+                        let fruit = Object.keys(pastedata);
+                        hikerPop.multiChoice({
+                            title: "选择要导入本地的项", 
+                            options: fruit, 
+                            checkedIndexs: Array.from(fruit.keys()), 
+                            onChoice(i, isChecked) {
+                                //log(i + ":" + isChecked);
+                            }, 
+                            rightTitle: "确认导入", 
+                            rightClick(options, checked) {
+                                if(options.filter((v, i) => checked[i]).length==0){
+                                    return "toast://没有选择导入项";
+                                }
+                                require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
+                                let jknum = 0, jxnum = 0, ypnum = 0, tvnum = 0, ghnum = 0;
+                                hikerPop.runOnNewThread(() => {
+                                    options.forEach((option,i)=>{
+                                        if(checked[i]){
+                                            if(option=="ghproxy"){
+                                                let ghproxy = pastedata.ghproxy||[];
+                                                if(ghproxy.length>0){
+                                                    oldproxy = Juconfig['ghproxy'] || [];
+                                                    ghproxy.forEach(gh=>{
+                                                        if(!oldproxy.some(item => gh.url==item.url)){
+                                                            oldproxy.push(gh);
+                                                            ghnum++;
+                                                        }
+                                                    })
+                                                    Juconfig['ghproxy'] = oldproxy;
+                                                }
+                                            }else if(option=="接口"){
+                                                let jkdatalist = pastedata.接口||[];
+                                                jknum = jiekousave(jkdatalist, 1);
+                                            }else if(option=="解析"){
+                                                let jxdatalist = pastedata.解析||[];
+                                                jxnum = jiexisave(jxdatalist, 1);
+                                            }else if(option=="云盘"){
+                                                let ypdatalist = pastedata.云盘||[];
+                                                ypnum = yundisksave(ypdatalist, 1);
+                                            }else if(option=="直播"){
+                                                let livefilepath = globalMap0.getVar('Jy_gmParams').rulepath + "liveconfig.json";
+                                                let liveconfig = pastedata.直播;
+                                                let livefile = fetch(livefilepath);
+                                                if(livefile){
+                                                    try{
+                                                        let olddata = JSON.parse(livefile).data;
+                                                        let newdata = liveconfig.data;
+                                                        newdata.forEach(tv=>{
+                                                            if(!olddata.some(item => tv.url==item.url)){
+                                                                olddata.push(tv);
+                                                                tvnum++;
+                                                            }
+                                                        })
+                                                        liveconfig.data = olddata;
+                                                        writeFile(livefilepath, JSON.stringify(liveconfig));
+                                                    }catch(e){
+                                                        //log("增量导入直播失败>"+e.message);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    })
+                                    writeFile(cfgfile, JSON.stringify(Juconfig));
+                                    return "toast://更新同步订阅资源完成；\n新增接口："+jknum+"，解析："+jxnum+"，直播"+tvnum+"，云盘："+ypnum+"，ghproxy："+ghnum;
+                                })
+                            }, 
+                            centerTitle: "取消"
+                        });
+
+
+
+
+
+
+
+
                 d.push({
                     title: '以增量方式导入，不会清除原有的',
                     col_type: "rich_text",
