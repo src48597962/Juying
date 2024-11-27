@@ -2829,6 +2829,7 @@ function importConfirm(jsfile) {
                                     return "toast://没有选择导入项";
                                 }
                                 require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
+                                let jknum = 0, jxnum = 0, ypnum = 0, tvnum = 0, ghnum = 0;
                                 hikerPop.runOnNewThread(() => {
                                     options.forEach((option,i)=>{
                                         if(checked[i]){
@@ -2839,19 +2840,20 @@ function importConfirm(jsfile) {
                                                     ghproxy.forEach(gh=>{
                                                         if(!oldproxy.some(item => gh.url==item.url)){
                                                             oldproxy.push(gh);
+                                                            ghnum++;
                                                         }
                                                     })
                                                     Juconfig['ghproxy'] = oldproxy;
                                                 }
                                             }else if(option=="接口"){
                                                 let jkdatalist = pastedata.接口||[];
-                                                jiekousave(jkdatalist, 1);
+                                                jknum = jiekousave(jkdatalist, 1);
                                             }else if(option=="解析"){
                                                 let jxdatalist = pastedata.解析||[];
-                                                jiexisave(jxdatalist, 1);
+                                                jxnum = jiexisave(jxdatalist, 1);
                                             }else if(option=="云盘"){
                                                 let ypdatalist = pastedata.云盘||[];
-                                                yundisksave(ypdatalist, 1);
+                                                ypnum = yundisksave(ypdatalist, 1);
                                             }else if(option=="直播"){
                                                 let livefilepath = globalMap0.getVar('Jy_gmParams').rulepath + "liveconfig.json";
                                                 let liveconfig = pastedata.直播;
@@ -2863,6 +2865,7 @@ function importConfirm(jsfile) {
                                                         newdata.forEach(tv=>{
                                                             if(!olddata.some(item => tv.url==item.url)){
                                                                 olddata.push(tv);
+                                                                tvnum++;
                                                             }
                                                         })
                                                         liveconfig.data = olddata;
@@ -2875,7 +2878,7 @@ function importConfirm(jsfile) {
                                         }
                                     })
                                     writeFile(cfgfile, JSON.stringify(Juconfig));
-                                    return "toast://下载同步文件资源码数据成功";
+                                    return "toast://更新同步订阅资源完成；\n新增接口："+jknum+"，解析："+jxnum+"，直播"+tvnum+"，云盘："+ypnum+"，ghproxy："+ghnum;
                                 })
                             }, 
                             centerTitle: "取消"
