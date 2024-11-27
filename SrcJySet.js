@@ -2812,6 +2812,12 @@ function importConfirm(jsfile) {
                 let textcontent = globalMap0.getVar('Jy_gmParams').unzip(code);
                 let pastedata = JSON.parse(textcontent);
                 d.push({
+                    title: "聚影资源码&文件分享导入",
+                    desc: "增量方式导入，不清除原有的" ,
+                    url: "hiker://empty",
+                    col_type: 'text_center_1'
+                });
+                d.push({
                     title: '包含资源：'+Object.keys(pastedata).join(','),
                     desc: "点击选择导入的项",
                     url: $().lazyRule((pastedata) => {
