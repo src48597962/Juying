@@ -825,6 +825,7 @@ function shareResource() {
     
     d.push({
         title: '通过文件分享资源',
+        col_type: 'text_center_1',
         url: $().lazyRule(() => {
             const hikerPop = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6966");
             let fruit = ["接口", "解析", "云盘", "直播", "ghproxy"];
