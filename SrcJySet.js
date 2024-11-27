@@ -2812,14 +2812,20 @@ function importConfirm(jsfile) {
                 let textcontent = globalMap0.getVar('Jy_gmParams').unzip(code);
                 let pastedata = JSON.parse(textcontent);
                 d.push({
-                    title: "聚影资源码&文件分享导入",
-                    desc: "增量方式导入，不清除原有的" ,
-                    url: "hiker://empty",
-                    col_type: 'text_center_1'
+                    title: '聚影资源码&文件分享导入',
+                    col_type: "rich_text"
                 });
                 d.push({
-                    title: '包含资源：'+Object.keys(pastedata).join(','),
-                    desc: "点击选择导入的项",
+                    title: '以增量方式导入，不会清除原有的',
+                    col_type: "rich_text",
+                    extra:{textSize:12}
+                });
+                d.push({
+                    col_type: "line_blank"
+                });
+                d.push({
+                    title: "点击选择导入的项",
+                    desc: "包含资源：" + Object.keys(pastedata).join(','),
                     url: $().lazyRule((pastedata) => {
                         const hikerPop = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6966");
                         let fruit = Object.keys(pastedata);
