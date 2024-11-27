@@ -1272,9 +1272,7 @@ function subResource() {
     setResult(d);
 }
 // 执行导入资源码内容
-function importResource(pdata, mode) {
-    let textcontent = globalMap0.getVar('Jy_gmParams').unzip(pdata);
-    let pastedata = JSON.parse(textcontent);
+function importResource(pastedata, mode) {
     let jknum = 0;
     let jxnum = 0;
     let ypnum = 0;
@@ -1376,8 +1374,9 @@ function updateResource(it,refresh) {
         }));
         if(pasteget.result_code=="SUCCESS"){
             require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
-
-            importResource(pasteget.data,it.mode);
+            let textcontent = globalMap0.getVar('Jy_gmParams').unzip(pdata);
+            let pastedata = JSON.parse(textcontent);
+            importResource(pastedata,it.mode);
             if(refresh){
                 refreshPage(false);
             }
