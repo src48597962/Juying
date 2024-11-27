@@ -2812,7 +2812,10 @@ function importConfirm(jsfile) {
                 let textcontent = globalMap0.getVar('Jy_gmParams').unzip(code);
                 let pastedata = JSON.parse(textcontent);
                 d.push({
-                    title: '聚影资源码&文件分享导入',
+                    col_type: "line_blank"
+                });
+                d.push({
+                    title: '聚影资源码',
                     col_type: "rich_text"
                 });
                 d.push({
@@ -2821,7 +2824,7 @@ function importConfirm(jsfile) {
                     extra:{textSize:12}
                 });
                 d.push({
-                    col_type: "line_blank"
+                    col_type: "line"
                 });
                 d.push({
                     title: "点击选择导入的项",
