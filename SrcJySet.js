@@ -2793,12 +2793,13 @@ function yundisksave(datas, mode){
 }
 // 云口令导入确认页
 function importConfirm(jsfile) {
-    let code,name,lx,sm,importdatas,datalist;
-    let importfile = "hiker://files/_cache/juying2/cloudimport.txt";
     addListener("onClose", $.toString((importfile) => {
         deleteFile(importfile);
         clearMyVar('importConfirm');
     },importfile));
+    let code,name,lx,sm,importdatas,datalist;
+    let importfile = "hiker://files/_cache/juying2/cloudimport.txt";
+    let d = [];
     
     if(!jsfile){
         //云口令导入
@@ -2974,7 +2975,6 @@ function importConfirm(jsfile) {
             }
         })
         let oldnum = importdatas.length - newdatas.length;
-        let d = [];
         d.push({
             title: "聚影云口令导入",
             desc: (sm||"") + " 共计" + importdatas.length + "/新增" + newdatas.length + "/存在" + oldnum ,
