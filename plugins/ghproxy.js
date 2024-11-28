@@ -1,4 +1,3 @@
-let ghproxy;
 let proxys = [
     "https://ghproxy.net/",
     "https://ghproxy.cc/",
@@ -15,6 +14,7 @@ function shuffleArray(array) {
 }
 
 function getproxy(proxys) {
+    showLoading("查找中...");
     shuffleArray(proxys);
     let url = 'https://raw.githubusercontent.com/src48597962/hk/refs/heads/master/require.js';
     for(let i=0;i<proxys.length;i++){
@@ -23,7 +23,6 @@ function getproxy(proxys) {
             return proxys[i];
         }
     }
+    hideLoading();
     return '';
 }
-
-ghproxy = getproxy(proxys);
