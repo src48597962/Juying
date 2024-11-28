@@ -20,6 +20,7 @@ function getproxy(proxys) {
     for(let i=0;i<proxys.length;i++){
         let content = fetch(proxys[i]+url, {timeout:5000});
         if (content && content.includes('relyfile')) {
+            hideLoading();
             return proxys[i];
         }
     }
