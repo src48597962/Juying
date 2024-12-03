@@ -651,7 +651,12 @@ var SrcParseS = {
             return rurl;
         }
         
-        function exeWebRule(webUrl, music, js) {
+        function exeWebRule(webObj, music, js) {
+            let head = webObj.head || {};
+            let webUrl = webObj.webUrl;
+            if(webUrl.includes('=http')){
+                
+            }
             return executeWebRule(webUrl, $.toString((music) => {
                     try{
                         if (typeof (request) == 'undefined' || !request) {
@@ -678,8 +683,8 @@ var SrcParseS = {
                     blockRules: ['.m4a','.mp3','.gif','.jpg','.jpeg','.png','.ico','hm.baidu.com','/ads/*.js','/klad/*.php','layer.css'],
                     jsLoadingInject: true,
                     js: js,
-                    //ua: head['User-Agent'] || MOBILE_UA,
-                    //referer: head['referer'] || "",
+                    ua: head['User-Agent'] || MOBILE_UA,
+                    referer: head['referer'] || undefined,
                     checkTime: 100,
                     timeout: 12000
                 }
@@ -689,7 +694,7 @@ var SrcParseS = {
         if(obj.isWeb){
             require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyMethod.js');
             if(obj.music){
-                return exeWebRule(obj.vipUrl, 1, obj.js) || "toast://嗅探解析失败";
+                return exeWebRule({webUrl:obj.vipUrl}, 1, obj.js) || "toast://嗅探解析失败";
             }else if(obj.video){
                 let extra = obj.extra || {};
                 if(obj.js && extra.id){
@@ -698,7 +703,7 @@ var SrcParseS = {
                 }
                 return 'video://'+obj.vipUrl;
             }else{
-                return exeWebRule(obj.vipUrl, 0, obj.js||extraJS(obj.vipUrl)) || "toast://WebRule获取失败，可试试video";
+                return exeWebRule({webUrl:obj.vipUrl}, 0, obj.js||extraJS(obj.vipUrl)) || "toast://WebRule获取失败，可试试video";
             }
         }else if(/^function/.test(obj.ulist.url.trim())){
             obj.ulist['x5'] = 0;
@@ -744,9 +749,8 @@ var SrcParseS = {
                     }else if(/\.m3u8|\.mp4|\.flv/.test(gethtml) && geturl(gethtml)){
                         rurl = geturl(gethtml);
                     }else if((MY_NAME=="海阔视界"&&getAppVersion()>=4094)||(MY_NAME=="嗅觉浏览器"&&getAppVersion()>=1359)){
-                        require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyMethod.js');
-                        log(extraJS(obj.ulist.url));
-                        rurl = exeWebRule(obj.ulist.url+obj.vipUrl, 0, extraJS(obj.ulist.url)) || "";
+                        let purl = obj.ulist.url+obj.vipUrl;
+                        rurl = exeWebRule({webUrl:purl,head:head}, 0, extraJS(purl)) || "";
                     }
                 }
                 var x5 = 0;
