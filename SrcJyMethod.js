@@ -18,8 +18,6 @@ function extraJS(playUrl) {
     }
     if(/jqqzx\.me|dadazhu\.me/.test(playUrl)){
         return click1('#playleft iframe','#start');
-    }else if(/playerjy\.com/.test(playUrl)){
-        return click1('body iframe','#nxrwn');
     }else{
         return undefined;
     }
