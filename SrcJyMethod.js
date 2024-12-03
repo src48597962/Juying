@@ -6,7 +6,7 @@ function extraJS(playUrl) {
         return $.toString((p1,p2) => {
             function check() {
                 try {
-                    log(p1);
+                    fba.log(p1);
                     let iframe = document.querySelector(p1);
                     let iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
                     iframeDocument.querySelector(p2).click();
