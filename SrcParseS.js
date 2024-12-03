@@ -722,6 +722,7 @@ var SrcParseS = {
             }
             return {url: rurl,ulist: obj.ulist}; 
         }else{
+            log("111")
             let taskheader = {withStatusCode:true,timeout:8000};
             let uext = obj.ulist.ext || {};
             let head = uext.header || {};
@@ -735,7 +736,7 @@ var SrcParseS = {
                 getjson = {};
                 log(obj.ulist.name+'>解析地址访问失败');
             }
-            //log(getjson);
+            log(getjson);
             if (getjson.body&&getjson.statusCode==200){
                 var gethtml = getjson.body;
                 var rurl = "";
