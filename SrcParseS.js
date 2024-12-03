@@ -700,6 +700,8 @@ var SrcParseS = {
                 }
                 return 'video://'+obj.vipUrl;
             }else{
+                log("321");
+                log(obj.vipUrl);
                 return exeWebRule(obj.vipUrl, 0, obj.js||extraJS(obj.vipUrl)) || "toast://WebRule获取失败，可试试video";
             }
         }else if(/^function/.test(obj.ulist.url.trim())){
