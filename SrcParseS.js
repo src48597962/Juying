@@ -725,6 +725,9 @@ var SrcParseS = {
             let taskheader = {withStatusCode:true,timeout:8000};
             let uext = obj.ulist.ext || {};
             let head = uext.header || {};
+            if(JSON.stringify(head) != "{}"){
+                taskheader['header'] = head;
+            }
             let getjson;
             try{
                 getjson = JSON.parse(request(obj.ulist.url+obj.vipUrl,taskheader));
