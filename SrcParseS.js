@@ -745,6 +745,7 @@ var SrcParseS = {
                         rurl = geturl(gethtml);
                     }else if((MY_NAME=="海阔视界"&&getAppVersion()>=4094)||(MY_NAME=="嗅觉浏览器"&&getAppVersion()>=1359)){
                         require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyMethod.js');
+                        log(extraJS(obj.ulist.url));
                         rurl = exeWebRule(obj.ulist.url+obj.vipUrl, 0, extraJS(obj.ulist.url)) || "";
                     }
                 }
