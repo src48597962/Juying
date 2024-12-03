@@ -744,14 +744,18 @@ var SrcParseS = {
                     let json =JSON.parse(gethtml);
                     isjson = 1;
                     rurl = json.url||json.urll||json.data.url||json.data;
+                    log("1>"+rurl);
                 } catch (e) {
                     if(/\.m3u8|\.mp4/.test(getjson.url)&&getjson.url.indexOf('=http')==-1){
                         rurl = getjson.url;
+                        log("2>"+rurl);
                     }else if(/\.m3u8|\.mp4|\.flv/.test(gethtml) && geturl(gethtml)){
                         rurl = geturl(gethtml);
+                        log("3>"+rurl);
                     }else if((MY_NAME=="海阔视界"&&getAppVersion()>=4094)||(MY_NAME=="嗅觉浏览器"&&getAppVersion()>=1359)){
                         let purl = obj.ulist.url+obj.vipUrl;
                         rurl = exeWebRule({webUrl:purl,head:head}, 0, extraJS(purl)) || "";
+                        log("4>"+rurl);
                     }
                 }
                 var x5 = 0;
