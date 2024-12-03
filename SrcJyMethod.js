@@ -3,7 +3,7 @@
 // extra.js，可用于注入js模似点击
 function extraJS(playUrl) {
     function click1(p1,p2) {
-        return $.toString(() => {
+        return $.toString((p1,p2) => {
             function check() {
                 try {
                     let iframe = document.querySelector(p1);
@@ -14,7 +14,7 @@ function extraJS(playUrl) {
                 }
             }
             check();
-        })
+        },p1,p2)
     }
     if(/jqqzx\.me|dadazhu\.me/.test(playUrl)){
         return click1('#playleft iframe','#start');
