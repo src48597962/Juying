@@ -652,8 +652,6 @@ var SrcParseS = {
         }
         
         function exeWebRule(webUrl, music, js) {
-            log("123");
-            log(js);
             return executeWebRule(webUrl, $.toString((music) => {
                     try{
                         if (typeof (request) == 'undefined' || !request) {
@@ -700,8 +698,6 @@ var SrcParseS = {
                 }
                 return 'video://'+obj.vipUrl;
             }else{
-                log("321");
-                log(obj.vipUrl);
                 return exeWebRule(obj.vipUrl, 0, obj.js||extraJS(obj.vipUrl)) || "toast://WebRule获取失败，可试试video";
             }
         }else if(/^function/.test(obj.ulist.url.trim())){
@@ -748,7 +744,8 @@ var SrcParseS = {
                     }else if(/\.m3u8|\.mp4|\.flv/.test(gethtml) && geturl(gethtml)){
                         rurl = geturl(gethtml);
                     }else if((MY_NAME=="海阔视界"&&getAppVersion()>=4094)||(MY_NAME=="嗅觉浏览器"&&getAppVersion()>=1359)){
-                        rurl = exeWebRule(obj.ulist.url+obj.vipUrl) || "";
+                        require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyMethod.js');
+                        rurl = exeWebRule(obj.ulist.url+obj.vipUrl, 0, extraJS(obj.ulist.url)) || "";
                     }
                 }
                 var x5 = 0;
