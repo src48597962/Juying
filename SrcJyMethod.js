@@ -2,19 +2,24 @@
 // 一些多处会调用但不用默认加载的方法
 // extra.js，可用于注入js模似点击
 function extraJS(playUrl) {
-    if(/jqqzx\.me|dadazhu\.me/.test(playUrl)){
+    function click1(p1,p2) {
         return $.toString(() => {
             function check() {
                 try {
-                    let iframe = document.querySelector('#playleft iframe');
+                    let iframe = document.querySelector(p1);
                     let iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
-                    iframeDocument.querySelector("#start").click();
+                    iframeDocument.querySelector(p2).click();
                 } catch (e) {
                     setTimeout(check, 100);
                 }
             }
             check();
         })
+    }
+    if(/jqqzx\.me|dadazhu\.me/.test(playUrl)){
+        return click1('#playleft iframe','#start');
+    }else if(/playerjy\.com/.test(playUrl)){
+        return click1('body iframe','#nxrwn');
     }else{
         return undefined;
     }
