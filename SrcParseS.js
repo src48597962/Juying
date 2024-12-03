@@ -652,6 +652,8 @@ var SrcParseS = {
         }
         
         function exeWebRule(webUrl, music, js) {
+            log("123");
+            log(js);
             return executeWebRule(webUrl, $.toString((music) => {
                     try{
                         if (typeof (request) == 'undefined' || !request) {
