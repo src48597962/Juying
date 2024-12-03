@@ -657,6 +657,8 @@ var SrcParseS = {
             if(webUrl.includes('=http')){
                 
             }
+            log(head);
+            log(webUrl);
             return executeWebRule(webUrl, $.toString((music) => {
                     try{
                         if (typeof (request) == 'undefined' || !request) {
@@ -683,8 +685,8 @@ var SrcParseS = {
                     blockRules: ['.m4a','.mp3','.gif','.jpg','.jpeg','.png','.ico','hm.baidu.com','/ads/*.js','/klad/*.php','layer.css'],
                     jsLoadingInject: true,
                     js: js,
-                    ua: head['user-agent'] || MOBILE_UA,
-                    referer: head['referer'] || undefined,
+                    //ua: head['user-agent'] || MOBILE_UA,
+                    //referer: head['referer'] || undefined,
                     checkTime: 100,
                     timeout: 12000
                 }
@@ -741,20 +743,17 @@ var SrcParseS = {
                 var rurl = "";
                 var isjson = 0;
                 try {
-                    log("123");
                     let json =JSON.parse(gethtml);
                     isjson = 1;
                     rurl = json.url||json.urll||json.data.url||json.data;
-                    log("1>"+rurl);
                 } catch (e) {
                     if(/\.m3u8|\.mp4/.test(getjson.url)&&getjson.url.indexOf('=http')==-1){
                         rurl = getjson.url;
-                        log("2>"+rurl);
                     }else if(/\.m3u8|\.mp4|\.flv/.test(gethtml) && geturl(gethtml)){
                         rurl = geturl(gethtml);
-                        log("3>"+rurl);
                     }else if((MY_NAME=="海阔视界"&&getAppVersion()>=4094)||(MY_NAME=="嗅觉浏览器"&&getAppVersion()>=1359)){
                         let purl = obj.ulist.url+obj.vipUrl;
+                        log(purl);
                         rurl = exeWebRule({webUrl:purl,head:head}, 0, extraJS(purl)) || "";
                         log("4>"+rurl);
                     }
