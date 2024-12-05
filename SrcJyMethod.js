@@ -22,7 +22,6 @@ function extraJS(playUrl) {
                 try {
                     // 获取所有具有 id 属性的元素
                     var elementsWithId = document.querySelectorAll('[id]');
-
                     // 遍历每个元素，检查文本内容并触发点击事件
                     elementsWithId.forEach(function(element) {
                         // 检查元素的文本内容是否包含 "点击播放"
@@ -39,19 +38,7 @@ function extraJS(playUrl) {
     }
     if(/jqqzx\.me|dadazhu\.me/.test(playUrl)){
         return click1('#playleft iframe','#start');
-    }else if(/playerjy\.com/.test(playUrl)){
-        log(playUrl);
-        let burl = pd(fetch(playUrl),"iframe&&src");
-        let curl = pd(fetch(burl),"iframe&&src");
-        log(curl);
-        addWebProxyRule({
-            name: "test123",
-            match: ".*\.playerjy\.com.*",
-            replace: 'input.replace("'+playUrl+'","'+curl+'")',
-            requestHeaders: {
-                "Referer": playUrl
-            }
-        });
+    }else if(/media\.staticfile\.link/.test(playUrl)){
         return click2();
     }else{
         return undefined;
