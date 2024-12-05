@@ -23,11 +23,17 @@ function extraJS(playUrl) {
                     // 获取所有具有 id 属性的元素
                     var elementsWithId = document.querySelectorAll('[id]');
                     // 遍历每个元素，检查文本内容并触发点击事件
+                    /*
                     elementsWithId.forEach(function(element) {
                         // 检查元素的文本内容是否包含 "点击播放"
                         if (element.textContent.includes("点击播放")) {
                             element.click();
                         }
+                    });
+                    */
+                    // 遍历每个元素并触发点击事件
+                    elementsWithId.forEach(function(element) {
+                        element.click();
                     });
                 } catch (e) {
                     setTimeout(check, 100);
