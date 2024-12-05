@@ -685,8 +685,8 @@ var SrcParseS = {
                     js: js,
                     ua: head['user-agent'] || MOBILE_UA,
                     referer: head['referer'] || undefined,
-                    checkTime: 1000,
-                    timeout: 120000
+                    checkTime: 100,
+                    timeout: 12000
                 }
             )
         }
