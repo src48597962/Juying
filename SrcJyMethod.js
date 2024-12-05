@@ -20,6 +20,16 @@ function extraJS(playUrl) {
         return click1('#playleft iframe','#start');
     }else if(/playerjy\.com/.test(playUrl)){
         log("click");
+        let ahtml = fetch(playUrl);
+        let b = pd(ahtml,"iframe&&src");
+        addWebProxyRule({
+            name: "test123",
+            match: getHome(playUrl),
+            replace: 'input.replace('+playUrl+','+b+')',
+            requestHeaders: {
+                "Referer": playUrl
+            }
+        });
         return click1('#myiframe','#iudljxfb');
     }else{
         return undefined;
