@@ -752,6 +752,12 @@ var SrcParseS = {
                     }else if((MY_NAME=="海阔视界"&&getAppVersion()>=4094)||(MY_NAME=="嗅觉浏览器"&&getAppVersion()>=1359)){
                         require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyMethod.js');
                         let purl = obj.ulist.url+obj.vipUrl;
+                        if(/jx\.playerjy\.com/.test(purl)){
+                            head['referer'] = purl;
+                            let burl = pd(fetch(purl),"iframe&&src");
+                            purl = pd(fetch(burl),"iframe&&src");
+                        }
+                        log(purl);
                         rurl = exeWebRule({webUrl:purl,head:head}, 0, extraJS(purl)) || "";
                     }
                 }
