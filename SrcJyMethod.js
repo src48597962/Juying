@@ -19,13 +19,14 @@ function extraJS(playUrl) {
     if(/jqqzx\.me|dadazhu\.me/.test(playUrl)){
         return click1('#playleft iframe','#start');
     }else if(/playerjy\.com/.test(playUrl)){
-        log("click2");
+        log(playUrl);
         let ahtml = fetch(playUrl);
-        let b = pd(ahtml,"iframe&&src");
+        let burl = pd(ahtml,"iframe&&src");
+        log(burl);
         addWebProxyRule({
             name: "test123",
             match: ".*\.playerjy\.com.*",
-            replace: 'input.replace('+playUrl+','+b+')',
+            replace: 'input.replace('+playUrl+','+burl+')',
             requestHeaders: {
                 "Referer": playUrl
             }
