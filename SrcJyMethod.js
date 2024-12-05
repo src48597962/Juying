@@ -16,6 +16,18 @@ function extraJS(playUrl) {
             check();
         },p1,p2)
     }
+    function click2(p1) {
+        return $.toString((p1) => {
+            function check() {
+                try {
+                    document.querySelector(p1).click();
+                } catch (e) {
+                    setTimeout(check, 100);
+                }
+            }
+            check();
+        },p1)
+    }
     if(/jqqzx\.me|dadazhu\.me/.test(playUrl)){
         return click1('#playleft iframe','#start');
     }else if(/playerjy\.com/.test(playUrl)){
@@ -31,7 +43,7 @@ function extraJS(playUrl) {
                 "Referer": playUrl
             }
         });
-        return click1('#myiframe','#iudljxfb');
+        return click2('#iudljxfb');
     }else{
         return undefined;
     }
