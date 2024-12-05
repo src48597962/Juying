@@ -16,17 +16,26 @@ function extraJS(playUrl) {
             check();
         },p1,p2)
     }
-    function click2(p1) {
-        return $.toString((p1) => {
+    function click2() {
+        return $.toString(() => {
             function check() {
                 try {
-                    document.querySelector(p1).click();
+                    // 获取所有具有 id 属性的元素
+                    var elementsWithId = document.querySelectorAll('[id]');
+
+                    // 遍历每个元素，检查文本内容并触发点击事件
+                    elementsWithId.forEach(function(element) {
+                        // 检查元素的文本内容是否包含 "点击播放"
+                        if (element.textContent.includes("点击播放")) {
+                            element.click();
+                        }
+                    });
                 } catch (e) {
                     setTimeout(check, 100);
                 }
             }
             check();
-        },p1)
+        })
     }
     if(/jqqzx\.me|dadazhu\.me/.test(playUrl)){
         return click1('#playleft iframe','#start');
@@ -43,7 +52,7 @@ function extraJS(playUrl) {
                 "Referer": playUrl
             }
         });
-        return click2('#iudljxfb');
+        return click2();
     }else{
         return undefined;
     }
