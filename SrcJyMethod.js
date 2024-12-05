@@ -26,7 +26,7 @@ function extraJS(playUrl) {
         addWebProxyRule({
             name: "test123",
             match: ".*\.playerjy\.com.*",
-            replace: 'input.replace('+playUrl+','+burl+')',
+            replace: 'input.replace("'+playUrl+'","'+burl+'")',
             requestHeaders: {
                 "Referer": playUrl
             }
