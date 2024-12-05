@@ -22,7 +22,8 @@ function extraJS(playUrl) {
                 try {
                     // 获取所有具有 id 属性的元素
                     var elementsWithId = document.querySelectorAll('[id]');
-                    fba.log(elementsWithId);
+                    fba.log(document);
+                    //fba.log(elementsWithId);
                     // 遍历每个元素，检查文本内容并触发点击事件
                     /*
                     elementsWithId.forEach(function(element) {
