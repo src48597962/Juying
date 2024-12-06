@@ -1,13 +1,14 @@
 var newVersion = {
-    "SrcJuying":"2.3",
+    "SrcJuying":"2.4",
     "hint": "",
     "codeDownload": "https://src48597962.lanzouo.com/i4Ti12e60lsh",
     "JYUpdateRecords": [{
-        title: "beta V2.4",
+        title: "2024/12/06 V2.4",
         records: [
             "优化：直播去除box推送、增强tv播放链接支持",
             "优化：点播界面设置菜单优化，整合资源导入页面",
             "优化：管理github代理页功能优化，增加获取示例",
+            "优化：点播官网解析逻辑微调小增强",
             "修复：替换部份彩佬图标服务器地址",
             "新增：资源码分享支持文件分享及文件导入",
             "升级：小程序配合升级到版本9"
