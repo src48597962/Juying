@@ -73,7 +73,7 @@ function erjimenu(desc,name,group) {
                             })
                             require(config.依赖);
                             let ssdatalist = getSearchLists().filter(v=>v.name.includes(input));
-                            sousuoFun(name, group, ssdatalist, "dianboerji");
+                            erjisousuo(name, group, ssdatalist);
                             return "hiker://empty";
                         },name,group)
                     },name,group)
@@ -115,7 +115,7 @@ function cutSource(name, group) {
                     erjiSousuo(name);
                 }else{
                     require(config.依赖);
-                    sousuoFun(name, newgroup, undefined, "dianboerji");
+                    erjisousuo(name, newgroup, undefined);
                 }
                 return 'toast://切源分组已切为：' + newgroup;
             }, name, it),
@@ -138,7 +138,7 @@ function cutSource(name, group) {
         erjiSousuo(name);
     }else{
         require(config.依赖);
-        sousuoFun(name, group, undefined, "dianboerji");
+        erjisousuo(name, group, undefined);
     }
 }
 
