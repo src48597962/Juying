@@ -1,7 +1,7 @@
 var newVersion = {
     "SrcJuying":"2.4",
     "hint": "",
-    "codeDownload": "https://src48597962.lanzouo.com/i4Ti12e60lsh",
+    "codeDownload": "https://src48597962.lanzouo.com/iUHaf2hd2zkf",
     "JYUpdateRecords": [{
         title: "2024/12/06 V2.4",
         records: [
