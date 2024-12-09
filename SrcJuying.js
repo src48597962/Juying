@@ -24,7 +24,7 @@ function search(name, sstype, jkdata) {
                 }
             }
         })
-    }else if(sstype=='dianboyiji'){
+    }else if(sstype=='dianboyiji'||sstype=='newSearch'){
         ssdata = getSsData(name, jkdata, 1).vodlists.map(it => {
             return {
                 title: it.vod_name,
@@ -34,7 +34,7 @@ function search(name, sstype, jkdata) {
                     require(config.依赖);
                     dianboerji()
                 }),
-                col_type: 'movie_3',
+                col_type: sstype=='newSearch'?'movie_1_vertical_pic':'movie_3',
                 extra: {
                     cls: 'dianbosousuolist',
                     url: it.vod_url,
@@ -106,7 +106,8 @@ function sousuo() {
 }
 //二级切源搜索
 function erjisousuo(name,group,datas,sstype) {
-    let updateItemid = sstype?("newSearch_loading"):(group + "_" +name + "_loading");
+    sstype = sstype || "dianboerji";
+    let updateItemid = sstype=="dianboerji"?(group + "_" +name + "_loading"):"newSearch_loading";
     let searchMark = storage0.getMyVar('SrcJu_searchMark') || {};//二级换源缓存
     let markId = group+'_'+name;
     if(!datas && searchMark[markId]){
@@ -134,7 +135,7 @@ function erjisousuo(name,group,datas,sstype) {
         updateItem(updateItemid, {
             title: "搜源中..."
         });
-        sstype = sstype || "dianboerji";
+        
         let ssdatalist = datas || getSearchLists(group);
         let nosousuolist = storage0.getMyVar('nosousuolist') || [];
         if (nosousuolist.length>0){
@@ -1233,7 +1234,14 @@ function yiji() {
             recordlist.splice(recordlist.length-1,1);
         }
         storage0.setItem('searchrecord', recordlist);
-        return "hiker://search?rule=" + MY_RULE.title + "&s=" + input;
+        if(MY_NAME=="海阔视界"){
+            return "hiker://search?rule=" + MY_RULE.title + "&s=" + input;
+        }else{
+            return $('hiker://empty#noRecordHistory##noHistory##noRefresh#').rule((input) => {
+                require(config.依赖);
+                newSearch(input);
+            },input)
+        }
     });
     let filterJk = getItem('主页搜索接口范围','');
     d.push({
@@ -1470,12 +1478,11 @@ function yiji() {
     }
 }
 // 新搜索页
-function newSearch() {
+function newSearch(name) {
     let d = [];
-    
     d.push({
-        desc: '‘‘’’<small><small><font color=#bfbfbf>本规则为空壳小程序，仅供学习交流使用，不提供任何内容。</font></small></small>',
-        url: 'toast://温馨提示：且用且珍惜！',
+        desc: '',
+        url: 'hiker://empty',
         col_type: 'text_center_1',
         extra: {
             id: "newSearch_loading",
@@ -1483,6 +1490,7 @@ function newSearch() {
         }
     });
     setResult(d);
+    erjisousuo(name,'',undefined,'newSearch');
 }
 
 // 版本检测
