@@ -105,8 +105,8 @@ function sousuo() {
     }])
 }
 //二级切源搜索
-function erjisousuo(name,group,datas) {
-    let updateItemid = group + "_" +name + "_loading";
+function erjisousuo(name,group,datas,sstype) {
+    let updateItemid = sstype?("newSearch_loading"):(group + "_" +name + "_loading");
     let searchMark = storage0.getMyVar('SrcJu_searchMark') || {};//二级换源缓存
     let markId = group+'_'+name;
     if(!datas && searchMark[markId]){
@@ -134,7 +134,7 @@ function erjisousuo(name,group,datas) {
         updateItem(updateItemid, {
             title: "搜源中..."
         });
-
+        sstype = sstype || "dianboerji";
         let ssdatalist = datas || getSearchLists(group);
         let nosousuolist = storage0.getMyVar('nosousuolist') || [];
         if (nosousuolist.length>0){
@@ -145,7 +145,7 @@ function erjisousuo(name,group,datas) {
 
         let task = function (obj) {
             try {
-                let lists = obj.fun(obj.name, "dianboerji", obj.data);
+                let lists = obj.fun(obj.name, obj.type, obj.data);
                 return {result:lists, success:1};
             } catch (e) {
                 log(obj.data.name + '>搜索失败>' + e.message);
@@ -155,7 +155,7 @@ function erjisousuo(name,group,datas) {
         let list = ssdatalist.map((item) => {
             return {
                 func: task,
-                param: {"data":item,"name":name,"fun":search},
+                param: {"data":item,"name":name,"fun":search,"type":sstype},
                 id: item.url
             }
         });
@@ -197,15 +197,15 @@ function erjisousuo(name,group,datas) {
                 let pdatalist = ssdatalist.filter(v=>beidlist.indexOf(v.url)==-1);
                 addItemBefore(updateItemid, {
                     title: "剩余"+(ssdatalist.length-beidlist.length)+"，点击继续",
-                    url: $("#noLoading#").lazyRule((name,group,datas) => {
-                        deleteItem("erjisousuopage");
+                    url: $("#noLoading#").lazyRule((updateItemid,name,group,datas,sstype) => {
+                        deleteItem(updateItemid + "_start");
                         require(config.依赖);
-                        erjisousuo(name, group, datas);
+                        erjisousuo(name, group, datas, sstype);
                         return "hiker://empty";
-                    }, name,group,pdatalist),
+                    }, updateItemid, name, group, pdatalist, sstype),
                     col_type: 'text_center_1',
                     extra: {
-                        id: "erjisousuopage",
+                        id: updateItemid + "_start",
                         cls: "Juloadlist grouploadlist",
                         lineVisible: false
                     }
@@ -1472,9 +1472,16 @@ function yiji() {
 // 新搜索页
 function newSearch() {
     let d = [];
-    let sourceAllList = getDatas("jk", 1).filter(x=> !x.onlysearch);
-    let groupnames = getJiekouGroups(sourceAllList);
     
+    d.push({
+        desc: '‘‘’’<small><small><font color=#bfbfbf>本规则为空壳小程序，仅供学习交流使用，不提供任何内容。</font></small></small>',
+        url: 'toast://温馨提示：且用且珍惜！',
+        col_type: 'text_center_1',
+        extra: {
+            id: "newSearch_loading",
+            lineVisible: false
+        }
+    });
     setResult(d);
 }
 
