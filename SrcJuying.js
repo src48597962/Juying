@@ -567,7 +567,7 @@ function dianboerji() {
                         let drpy = GM.defineModule("SrcJyDrpy", config.依赖.replace(/[^/]*$/,'') + "SrcJyDrpy.js").get(sdata);
                         play = JSON.parse(drpy.play(dataObj.flag, vipUrl, []));
                     }else if(dataObj.stype=="hipy_t4"){
-                        play = JSON.parse(request(dataObj.surl+'&flag='+dataObj.sname+"&extend="+dataObj.sext+'&play='+vipUrl));
+                        play = JSON.parse(request(dataObj.surl+(dataObj.surl.includes("?")?"&":"?")+'flag='+dataObj.sname+"&extend="+dataObj.sext+'&play='+vipUrl));
                     }
                     let data = JSON.parse(play.url.replace('novel://',''));
                     let d = [];
