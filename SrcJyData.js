@@ -111,8 +111,8 @@ function getYiData(jkdata, batchTest) {
             coltype = rule.hikerClassListCol;
         }
     } else if (api_type == "hipy_t4") {
-        classurl = api_url + "&extend=" + jkdata.ext + "&filter=true";
-        listurl = api_url + "&t={cate_id}&ac=detail&pg="+page+"&extend="+jkdata.ext+"&ext={flb64}";
+        classurl = api_url + (api_url.includes("?")?"&":"?") + "extend=" + jkdata.ext + "&filter=true";
+        listurl = api_url + (api_url.includes("?")?"&":"?") + "t={cate_id}&ac=detail&pg="+page+"&extend="+jkdata.ext+"&ext={flb64}";
         //listnode = "json.list";
     } else {
         log(api_type + '>api类型错误');
@@ -862,7 +862,7 @@ function getSsData(name, jkdata, page) {
         if (/v1|app|iptv|v2|cms|hipy_/.test(api_type)) {
             let json;
             if(api_type=="hipy_t4"){
-                json = JSON.parse(getHtml(jkdata.url+"&wd="+name+"&extend="+jkdata.ext+"&quick=false", headers));
+                json = JSON.parse(getHtml(jkdata.url + (jkdata.url.includes("?")?"&":"?") +"wd="+name+"&extend="+jkdata.ext+"&quick=false", headers));
             }else if(api_type=="hipy_t3"){
                 let drpy = GM.defineModule("SrcJyDrpy", config.依赖.replace(/[^/]*$/,'') + "SrcJyDrpy.js").get(jkdata);
                 json = JSON.parse(drpy.search(name, 0, page));
@@ -1143,7 +1143,7 @@ function getErData(jkdata, erurl) {
         }catch(e){}
         detailtype = drpy.getRule('类型') || (jkdata.name.includes('[书]')?"小说":"");
     } else if (api_type=="hipy_t4") {
-        html = getHtml(jkdata.url+"&extend="+jkdata.ext+"&ac=detail&ids="+erurl, headers);
+        html = getHtml(jkdata.url + (jkdata.url.includes("?")?"&":"?") +"extend="+jkdata.ext+"&ac=detail&ids="+erurl, headers);
         detailtype = JSON.parse(html).type || (jkdata.name.includes('[书]')?"小说":"");
     } else {
         html = getHtml(erurl, headers);
