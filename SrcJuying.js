@@ -730,8 +730,8 @@ function dianboyiji(testSource) {
         }
         
         d.push({
-            title: "换主页源",
-            url: testSource?"toast://测试模式下不能更换主页源":$('#noLoading#').lazyRule(() => {
+            title: "切换站源",
+            url: testSource?"toast://测试模式下不能更换站源":$('#noLoading#').lazyRule(() => {
                 require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
                 return selectSource();
             }),
@@ -759,7 +759,7 @@ function dianboyiji(testSource) {
 
         d.push({
             title: "管理设置",
-            url: testSource?"toast://测试模式下不能更换主页源":$(getItem("sourceMode")=="2"?["外部资源导入","远程订阅模式√"]:["本地接口管理","本地解析管理","外部资源导入","聚影资源码订阅","本地接口模式√"],1).select(()=>{
+            url: testSource?"toast://测试模式下不能进入设置菜单":$(getItem("sourceMode")=="2"?["外部资源导入","远程订阅模式√"]:["本地接口管理","本地解析管理","外部资源导入","聚影资源码订阅","本地接口模式√"],1).select(()=>{
                 if(input=="本地接口管理"){
                     putMyVar('guanli','jk');
                     return $("hiker://empty#noRecordHistory##noHistory##noRefresh#").rule(() => {
