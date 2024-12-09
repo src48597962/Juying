@@ -3,6 +3,11 @@ var newVersion = {
     "hint": "",
     "codeDownload": "https://src48597962.lanzouo.com/iddm22he5gni",
     "JYUpdateRecords": [{
+        title: "beta V2.5",
+        records: [
+            "优化：点播hipy_t4类型优化增强升级"
+        ]
+    },{
         title: "2024/12/06 V2.4",
         records: [
             "优化：直播去除box推送、增强tv播放链接支持",
