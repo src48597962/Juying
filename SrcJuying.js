@@ -28,7 +28,7 @@ function search(name, sstype, jkdata) {
         ssdata = getSsData(name, jkdata, 1).vodlists.map(it => {
             return {
                 title: it.vod_name,
-                desc: it.vod_desc,
+                desc: it.vod_desc + (sstype=='newSearch'?"\n站源：" + jkdata.name:""),
                 pic_url: it.vod_pic,
                 url: $("hiker://empty#immersiveTheme##autoCache#").rule(() => {
                     require(config.依赖);
@@ -233,6 +233,7 @@ function erjisousuo(name,group,datas,sstype) {
 function dianboerji() {
     addListener("onClose", $.toString((getHistory) => {
         clearMyVar('二级附加临时对象');
+        putMyVar("SrcJu_停止搜索线程","1");
         
         if(getItem('historyEnable')=='1'){
             deleteItemByCls('historylist');
@@ -746,7 +747,7 @@ function dianboyiji(testSource) {
                 longClick: longClick
             }
         })
-        let searchModeS = ["代理聚搜","分组接口","当前接口","当前页面"].map(v=>{
+        let searchModeS = (MY_NAME=="海阔视界"?["代理聚搜","分组接口","当前接口","当前页面"]:["聚合搜索","当前页面"]).map(v=>{
             return v==getItem("接口搜索方式","当前接口")?`‘‘’’<strong><font color="`+getItem('主题颜色','#6dc9ff')+`">`+v+`√</front></strong>`:v+'  ';
         });
 
@@ -882,7 +883,12 @@ function dianboyiji(testSource) {
                     return 'hiker://search?s='+input+'&rule='+MY_RULE.title;
                 }else if(getItem('接口搜索方式')=="代理聚搜"){
                     return 'hiker://search?s='+input+'&rule='+MY_RULE.title;
-                }else if(getItem('接口搜索方式')=="当前页面"){
+                }else if(getItem('接口搜索方式')=="聚合搜索"){
+                    return $('hiker://empty#noRecordHistory##noHistory##noRefresh#').rule((input) => {
+                        require(config.依赖);
+                        newSearch(input);
+                    },input);
+                }else{
                     require(config.依赖); 
                     let d = search(input, 'dianboyiji' , jkdata);
                     if(d.length>0){
@@ -1479,6 +1485,10 @@ function yiji() {
 }
 // 新搜索页
 function newSearch(name) {
+    addListener("onClose", $.toString(() => {
+        putMyVar("SrcJu_停止搜索线程","1");
+    }));
+    setPageTitle("聚搜>" + name);
     let d = [];
     d.push({
         desc: '',
