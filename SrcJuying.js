@@ -28,7 +28,7 @@ function search(name, sstype, jkdata) {
         ssdata = getSsData(name, jkdata, 1).vodlists.map(it => {
             return {
                 title: it.vod_name,
-                desc: it.vod_desc + (sstype=='newSearch'?"\n站源：" + jkdata.name:""),
+                desc: it.vod_desc + (sstype=='newSearch'?"\n\n站源：" + jkdata.name+"  ““””<small><font color=grey>("+(jkdata.group||jkdata.type)+")</font></small>":""),
                 pic_url: it.vod_pic,
                 url: $("hiker://empty#immersiveTheme##autoCache#").rule(() => {
                     require(config.依赖);
@@ -110,7 +110,7 @@ function erjisousuo(name,group,datas,sstype) {
     let updateItemid = sstype=="dianboerji"?(group + "_" +name + "_loading"):"newSearch_loading";
     let searchMark = storage0.getMyVar('SrcJu_searchMark') || {};//二级换源缓存
     let markId = group+'_'+name;
-    if(!datas && searchMark[markId]){
+    if(!datas && searchMark[markId] && sstype=="dianboerji"){
         addItemBefore(updateItemid, searchMark[markId]);
         updateItem(updateItemid, {
             title: "‘‘’’<small>当前搜索为缓存</small>",
