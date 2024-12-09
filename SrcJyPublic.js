@@ -199,6 +199,11 @@ function getBoxSource(input, mode, imports){
                 if(obj.categories){
                     arr["categories"] = obj.categories;
                 }
+            }else if(obj.type==4 && obj.api.includes('/api/')){
+                arr = { "name": obj.name, "url": obj.api, "type": "hipy_t4", "ext": obj.ext};
+                if(arr.name.includes('[搜]')){
+                    arr['onlysearch'] = 1;
+                }
             }else{
                 let extfile = obj.ext;
                 if($.type(extfile)=='string'){
