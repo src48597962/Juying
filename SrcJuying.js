@@ -233,7 +233,7 @@ function erjisousuo(name,group,datas,sstype) {
 function dianboerji() {
     addListener("onClose", $.toString((getHistory) => {
         clearMyVar('二级附加临时对象');
-        putMyVar("SrcJu_停止搜索线程","1");
+        //putMyVar("SrcJu_停止搜索线程","1");
         
         if(getItem('historyEnable')=='1'){
             deleteItemByCls('historylist');
@@ -1486,7 +1486,7 @@ function yiji() {
 // 新搜索页
 function newSearch(name) {
     addListener("onClose", $.toString(() => {
-        putMyVar("SrcJu_停止搜索线程","1");
+        //putMyVar("SrcJu_停止搜索线程","1");
     }));
     setPageTitle("聚搜>" + name);
     let d = [];
