@@ -51,7 +51,7 @@ function getDatas(lx, isyx) {
             }else{
                 datalist = lx=="jk"?boxSource.jklist:boxSource.jxlist;
                 if(!datalist){
-                    toast("订阅源异常，获取失败，更换订阅或切换模式");
+                    toast("订阅源异常，获取失败，可更换订阅或切换模式");
                     datalist = [];
                 }
             }
@@ -178,7 +178,7 @@ function getBoxSource(input, mode, imports){
         writeFile(dyJkTmpFile, html);
         back();
         return {
-            message: "已订阅，站源改为订阅模式下生效"
+            message: "已订阅，站源获取模式为订阅模式下生效"
         };
     }
 
