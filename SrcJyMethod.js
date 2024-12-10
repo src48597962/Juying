@@ -25,7 +25,7 @@ function extraJS(playUrl) {
                     fba.log("" + elementsWithId2.length);
                     //var elementsWithId = document.querySelectorAll('[id]');
                     // 遍历每个元素，检查文本内容并触发点击事件
-                    elementsWithId2.forEach(function(element) {
+                    elementsWithId2.forEach(element => {
                         fba.log(element);
                         fba.log(element.textContent);
                         // 检查元素的文本内容是否包含 "点击播放"
