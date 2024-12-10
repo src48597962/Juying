@@ -42,6 +42,7 @@ function extraJS(playUrl) {
     if(/jqqzx\.me|dadazhu\.me/.test(playUrl)){
         return click1('#playleft iframe','#start');
     }else if(/media\.staticfile\.link/.test(playUrl)){
+        log("进来了");
         return click2();
     }else{
         return undefined;
