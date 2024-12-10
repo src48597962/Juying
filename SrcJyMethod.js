@@ -23,7 +23,13 @@ function extraJS(playUrl) {
                     // 获取所有具有 id 属性的元素
                     var elementsWithId2 = Array.from(document.querySelectorAll('[id]'));
                     fba.log("" + elementsWithId2.length);
-                    fba.log(Array.from(elementsWithId2));
+                    if(elementsWithId2.length>0){
+                        fba.log(elementsWithId2[0].outerHTML);
+                        fba.log(elementsWithId2[1].outerHTML);
+                        fba.log(elementsWithId2[2].outerHTML);
+                        fba.log(elementsWithId2[3].outerHTML);
+                    }
+                    
                     //var elementsWithId = document.querySelectorAll('[id]');
                     // 遍历每个元素，检查文本内容并触发点击事件
                     elementsWithId2.forEach(element => {
