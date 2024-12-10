@@ -26,8 +26,6 @@ function extraJS(playUrl) {
                 elementsWithId.forEach(element => {
                     // 检查元素的文本内容是否包含 "点击播放"
                     if (element.outerHTML.includes("播放")) {
-                        fba.log(element.outerHTML);
-                        fba.log("点击");
                         element.click();
                         is = 1;
                     }
@@ -42,7 +40,6 @@ function extraJS(playUrl) {
     if(/jqqzx\.me|dadazhu\.me/.test(playUrl)){
         return click1('#playleft iframe','#start');
     }else if(/media\.staticfile\.link/.test(playUrl)){
-        log("进来了");
         return click2();
     }else{
         return undefined;
