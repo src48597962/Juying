@@ -16,9 +16,33 @@ function extraJS(playUrl) {
             check();
         },p1,p2)
     }
-
+    function click2() {
+        return $.toString(() => {
+            function check() {
+                try {
+                    // 获取所有具有 id 属性的元素
+                    var elementsWithId2 = Array.from(document.querySelectorAll('[id]'));
+                    fba.log("" + elementsWithId2.length);
+                    var elementsWithId = document.querySelectorAll('[id]');
+                    // 遍历每个元素，检查文本内容并触发点击事件
+                    elementsWithId.forEach(function(element) {
+                        // 检查元素的文本内容是否包含 "点击播放"
+                        if (element.textContent.includes("播放")) {
+                            fba.log("点击");
+                            element.click();
+                        }
+                    });
+                } catch (e) {
+                    setTimeout(check, 100);
+                }
+            }
+            check();
+        })
+    }
     if(/jqqzx\.me|dadazhu\.me/.test(playUrl)){
         return click1('#playleft iframe','#start');
+    }else if(/media\.staticfile\.link/.test(playUrl)){
+        return click2();
     }else{
         return undefined;
     }
