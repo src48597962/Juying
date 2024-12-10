@@ -5,7 +5,8 @@ var newVersion = {
     "JYUpdateRecords": [{
         title: "beta V2.5",
         records: [
-            "优化：点播hipy_t4类型优化增强升级"
+            "优化：点播hipy_t4类型优化增强升级",
+            "新增：嗅觉无搜索，单独增加聚合搜索页"
         ]
     },{
         title: "2024/12/06 V2.4",
