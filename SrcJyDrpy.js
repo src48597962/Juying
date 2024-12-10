@@ -229,9 +229,11 @@ function getext(jkdata) {
             if(!fileExist(gmParams.jkfile)){
                 jkdata.url = gmParams.cachepath + jkdata.url.substr(jkdata.url.lastIndexOf('/')+1);
             }
+            log(jkdata.ext);
             if (jkdata.ext) {
                 let content = gmParams.getContnet(jkdata.ext.split('?')[0]);
                 if (content) {
+                    log(jkdata.url);
                     writeFile(jkdata.url, content);
                 }
             }
