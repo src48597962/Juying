@@ -1396,6 +1396,7 @@ let gmParams = {
     libspath: libspath,
     rulepath: rulepath,
     codepath: codepath,
+    cachepath: cachepath,
     jkfilespath: jkfilespath,
     jkfile: jkfile,
     jxfile: jxfile,
