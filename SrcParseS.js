@@ -756,8 +756,8 @@ var SrcParseS = {
                             head['referer'] = purl;
                             let burl = pd(fetch(purl),"iframe&&src");
                             purl = pd(fetch(burl),"iframe&&src");
+                            log("获取到iframe地址>" + purl);
                         }
-                        log(purl);
                         rurl = exeWebRule({webUrl:purl,head:head}, 0, extraJS(purl)) || "";
                     }
                 }
