@@ -29,12 +29,11 @@ function extraJS(playUrl) {
                         fba.log(elementsWithId2[2].outerHTML);
                         fba.log(elementsWithId2[3].outerHTML);
                     }
-                    
+                    setTimeout(check, 100);
                     //var elementsWithId = document.querySelectorAll('[id]');
                     // 遍历每个元素，检查文本内容并触发点击事件
                     elementsWithId2.forEach(element => {
-                        fba.log(element);
-                        fba.log(element.textContent);
+                        fba.log(element.outerHTML);
                         // 检查元素的文本内容是否包含 "点击播放"
                         if (element.textContent.includes("播放")) {
                             fba.log("点击");
