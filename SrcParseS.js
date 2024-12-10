@@ -642,7 +642,7 @@ var SrcParseS = {
                 }else if(gethtml.indexOf('url: "') != -1){
                     rurl = gethtml.match(/url: "(.*?)"/)[1];
                 }else{
-                    log('将日志提交给作者，帮助完善解析逻辑>>>'+gethtml);
+                    //log('将日志提交给作者，帮助完善解析逻辑>>>'+gethtml);
                 }
             } catch (e) {
                 log('明码获取错误：'+e.message);
@@ -747,7 +747,7 @@ var SrcParseS = {
                 } catch (e) {
                     if(/\.m3u8|\.mp4/.test(getjson.url)&&getjson.url.indexOf('=http')==-1){
                         rurl = getjson.url;
-                    }else if(/\.m3u8|\.mp4|\.flv/.test(gethtml) && geturl(gethtml)){
+                    }else if(/\.m3u8|\.mp4/.test(gethtml) && geturl(gethtml)){
                         rurl = geturl(gethtml);
                     }else if((MY_NAME=="海阔视界"&&getAppVersion()>=4094)||(MY_NAME=="嗅觉浏览器"&&getAppVersion()>=1359)){
                         require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyMethod.js');
