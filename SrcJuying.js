@@ -247,6 +247,7 @@ function dianboerji() {
 
     MY_URL = sextra.url || MY_PARAMS.url;
     let jkdata = sextra.data || MY_PARAMS.data;
+    log(jkdata);
     let name = MY_PARAMS.pageTitle;
     let sgroup = jkdata.group||jkdata.type;
     let sname = jkdata.name;
