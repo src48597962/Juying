@@ -179,7 +179,7 @@ function SRCSet() {
         let lockgroups = Juconfig["lockgroups"] || [];
         groupNames.forEach(it =>{
             let obj = {
-                title: (getMyVar("SrcJu_jiekouGroup","全部")==it?`““””<b><span style="color: `+color+`">`+it+`</span></b>`:it) + lockgroups.indexOf(it)>-1?"🔒":"",
+                title: (getMyVar("SrcJu_jiekouGroup","全部")==it?`““””<b><span style="color: `+color+`">`+it+`</span></b>`:it) + (lockgroups.indexOf(it)>-1?"🔒":""),
                 url: $('#noLoading#').lazyRule((it) => {
                     if(getMyVar("SrcJu_jiekouGroup")!=it){
                         putMyVar("SrcJu_jiekouGroup",it);
