@@ -206,14 +206,14 @@ function SRCSet() {
                 }]
             }else{
                 obj.extra.longClick = [{
-                    title: lockgroups.indexOf(it)>-1?"下锁":"上锁",
+                    title: lockgroups.indexOf(it)>-1?"解锁":"加锁",
                     js: $.toString((it) => {
                         require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
                         let lockgroups = Juconfig["lockgroups"] || [];
                         if(lockgroups.indexOf(it)>-1){
                             const hikerPop = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6966");
                             if (hikerPop.canBiometric() !== 0) {
-                                return "toast://暂时无法使用";
+                                return "toast://无法调用生物学验证";
                             }
                             let pop = hikerPop.checkByBiometric(() => {
                                 toast("通过");
