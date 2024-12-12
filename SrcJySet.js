@@ -176,9 +176,10 @@ function SRCSet() {
         let groupNames = getJiekouGroups(datalist);
         groupNames.unshift("全部");
         let color = getItem("主题颜色","#6dc9ff");
+        let lockgroups = Juconfig["lockgroups"] || [];
         groupNames.forEach(it =>{
             let obj = {
-                title: getMyVar("SrcJu_jiekouGroup","全部")==it?`““””<b><span style="color: `+color+`">`+it+`</span></b>`:it,
+                title: (getMyVar("SrcJu_jiekouGroup","全部")==it?`““””<b><span style="color: `+color+`">`+it+`</span></b>`:it) + lockgroups.indexOf(it)>-1?"🔒":"",
                 url: $('#noLoading#').lazyRule((it) => {
                     if(getMyVar("SrcJu_jiekouGroup")!=it){
                         putMyVar("SrcJu_jiekouGroup",it);
@@ -202,6 +203,22 @@ function SRCSet() {
                             refreshPage(false);
                         })
                     })
+                }]
+            }else{
+                obj.extra.longClick = [{
+                    title: lockgroups.indexOf(it)>-1?"下锁":"上锁",
+                    js: $.toString((it) => {
+                        require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
+                        let lockgroups = Juconfig["lockgroups"] || [];
+                        if(lockgroups.indexOf(it)>-1){
+                            lockgroups = lockgroups.filter(item => item !== it);
+                        }else{
+                            lockgroups.push(it);
+                        }
+                        Juconfig["lockgroups"] = lockgroups;
+                        writeFile(cfgfile, JSON.stringify(Juconfig));
+                        refreshPage(false);
+                    },it)
                 }]
             }
             
