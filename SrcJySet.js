@@ -211,7 +211,15 @@ function SRCSet() {
                         require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
                         let lockgroups = Juconfig["lockgroups"] || [];
                         if(lockgroups.indexOf(it)>-1){
-                            lockgroups = lockgroups.filter(item => item !== it);
+                            const hikerPop = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6966");
+                            if (hikerPop.canBiometric() !== 0) {
+                                return "toast://暂时无法使用";
+                            }
+                            let pop = hikerPop.checkByBiometric(() => {
+                                toast("通过");
+                                lockgroups = lockgroups.filter(item => item !== it);
+                            });
+                            
                         }else{
                             lockgroups.push(it);
                         }
