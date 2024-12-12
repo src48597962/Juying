@@ -219,7 +219,7 @@ function SRCSet() {
                                 toast("通过");
                                 lockgroups = lockgroups.filter(item => item !== it);
                             });
-                            
+                            log($.type(pop));
                         }else{
                             lockgroups.push(it);
                         }
