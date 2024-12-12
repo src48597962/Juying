@@ -215,17 +215,18 @@ function SRCSet() {
                             if (hikerPop.canBiometric() !== 0) {
                                 return "toast://无法调用生物学验证";
                             }
-                            let pop = hikerPop.checkByBiometric(() => {
-                                toast("通过");
-                                lockgroups = lockgroups.filter(item => item !== it);
-                            });
-                            log($.type(pop));
+                            lockgroups = lockgroups.filter(item => item !== it);
+                            hikerPop.checkByBiometric((Juconfig,cfgfile,lockgroups) => {
+                                Juconfig["lockgroups"] = lockgroups;
+                                writeFile(cfgfile, JSON.stringify(Juconfig));
+                                refreshPage(false);
+                            },Juconfig,cfgfile,lockgroups);
                         }else{
                             lockgroups.push(it);
+                            Juconfig["lockgroups"] = lockgroups;
+                            writeFile(cfgfile, JSON.stringify(Juconfig));
+                            refreshPage(false);
                         }
-                        Juconfig["lockgroups"] = lockgroups;
-                        writeFile(cfgfile, JSON.stringify(Juconfig));
-                        refreshPage(false);
                     },it)
                 }]
             }
