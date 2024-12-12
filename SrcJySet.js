@@ -216,13 +216,11 @@ function SRCSet() {
                                 return "toast://无法调用生物学验证";
                             }
                             lockgroups = lockgroups.filter(item => item !== it);
-                            let pop = hikerPop.checkByBiometric((Juconfig,cfgfile,lockgroups) => {
-                                log(cfgfile);
-                                //Juconfig["lockgroups"] = lockgroups;
-                                //writeFile(cfgfile, JSON.stringify(Juconfig));
+                            let pop = hikerPop.checkByBiometric(() => {
+                                Juconfig["lockgroups"] = lockgroups;
+                                writeFile(cfgfile, JSON.stringify(Juconfig));
                                 refreshPage(false);
-                            },Juconfig,cfgfile,lockgroups);
-                            log('abc');
+                            });
                         }else{
                             lockgroups.push(it);
                             Juconfig["lockgroups"] = lockgroups;
