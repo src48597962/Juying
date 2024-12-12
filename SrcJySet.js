@@ -217,10 +217,12 @@ function SRCSet() {
                             }
                             lockgroups = lockgroups.filter(item => item !== it);
                             let pop = hikerPop.checkByBiometric((Juconfig,cfgfile,lockgroups) => {
-                                Juconfig["lockgroups"] = lockgroups;
-                                writeFile(cfgfile, JSON.stringify(Juconfig));
+                                log(cfgfile);
+                                //Juconfig["lockgroups"] = lockgroups;
+                                //writeFile(cfgfile, JSON.stringify(Juconfig));
                                 refreshPage(false);
                             },Juconfig,cfgfile,lockgroups);
+                            log('abc');
                         }else{
                             lockgroups.push(it);
                             Juconfig["lockgroups"] = lockgroups;
