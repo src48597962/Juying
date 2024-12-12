@@ -216,7 +216,7 @@ function SRCSet() {
                                 return "toast://无法调用生物学验证";
                             }
                             lockgroups = lockgroups.filter(item => item !== it);
-                            hikerPop.checkByBiometric((Juconfig,cfgfile,lockgroups) => {
+                            let pop = hikerPop.checkByBiometric((Juconfig,cfgfile,lockgroups) => {
                                 Juconfig["lockgroups"] = lockgroups;
                                 writeFile(cfgfile, JSON.stringify(Juconfig));
                                 refreshPage(false);
