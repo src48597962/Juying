@@ -529,21 +529,17 @@ function readDir(path) {
     }
     return names;
 }
-log(readDir(jkfilespath));
 // 清理接口残留过期文件
 function clearJkFiles() {
-
-    /*
+    let names = readDir(jkfilespath);
     let datalist = getDatas("jk");
-    readDir(jkfilespath)
-    Object.keys(sort).forEach(it=>{
-        if(!datalist.some(item => item.url==it)){
-            delete sort[it];
+    names.forEach(it=>{
+        if(!datalist.some(item => item.url==jkfilespath+it)){
+            deleteFile(jkfilespath+it);
         }
     })
-    writeFile(sortfile, JSON.stringify(sort));
-    */
 }
+clearJkFiles();
 // 获取接口对应的显示标题
 function getDataTitle(data) {
     if($.type(data.type)=="string"){
