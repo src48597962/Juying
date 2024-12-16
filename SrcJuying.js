@@ -931,7 +931,7 @@ function dianboyiji(testSource) {
     }
     if(sname){
         try{
-            let yidata = {fllists:[], vodlists:[]}
+            let yidata = {fllists:[], vodlists:[], error:{}}
 
             let lockgroups = Juconfig["lockgroups"] || [];
             if(lockgroups.indexOf(sourceGroup)>-1 && getMyVar('已验证指纹')!='1'){
