@@ -516,11 +516,16 @@ function clearJkSort() {
 // 读取目录路径下文件输入数组
 function readDir(path) {
     let names = [];
-    let file = new java.io.File(path.replace("file://", ""));
+    if(path){
+        if(path.startsWith('hiker://')){
+            path = getPath(path);
+        }
+        let file = new java.io.File(path.replace("file://", ""));
 
-    if (!(file.exists() && file.isDirectory())) return names;
-    for (let it of file.listFiles()) {
-        names.push(String(it.getName()));
+        if (!(file.exists() && file.isDirectory())) return names;
+        for (let it of file.listFiles()) {
+            names.push(String(it.getName()));
+        }
     }
     return names;
 }
