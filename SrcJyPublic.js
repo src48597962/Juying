@@ -394,6 +394,11 @@ function getSearchLists(group) {
             datalist = datalist.filter(it=>{
                 return filter.includes('[') ? it.name.includes(filter) : filter==(it.group||it.type);
             })
+        }else{
+            let lockgroups = Juconfig["lockgroups"] || [];
+            datalist = datalist.filter(it=>{
+                return lockgroups.indexOf(it.group||it.type)==-1 && !it.name.includes('[密]');
+            })
         }
         return datalist;
     }
@@ -519,8 +524,10 @@ function readDir(path) {
     }
     return names;
 }
+log(readDir(jkfilespath));
 // 清理接口残留过期文件
 function clearJkFiles() {
+
     /*
     let datalist = getDatas("jk");
     readDir(jkfilespath)
