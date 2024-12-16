@@ -931,8 +931,23 @@ function dianboyiji(testSource) {
     }
     if(sname){
         try{
-            require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyData.js');
-            let yidata = getYiData(jkdata);
+            let yidata = {fllists:[], vodlists:[]}
+
+            let lockgroups = Juconfig["lockgroups"] || [];
+            if(lockgroups.indexOf(sourceGroup)>-1 && getMyVar('已验证指纹')!='1'){
+                const hikerPop = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6966");
+                if (hikerPop.canBiometric() !== 0) {
+                    return "toast://调用生物学验证出错";
+                }
+                let pop = hikerPop.checkByBiometric(() => {
+                    putMyVar('已验证指纹','1'),
+                    refreshPage(false);
+                });
+            }else{
+                require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyData.js');
+                yidata = getYiData(jkdata);
+            }
+
             let fllists = yidata.fllists;
             if(fllists){
                 d = d.concat(fllists);
