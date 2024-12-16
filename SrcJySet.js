@@ -220,7 +220,9 @@ function SRCSet() {
                                 Juconfig["lockgroups"] = lockgroups;
                                 writeFile(cfgfile, JSON.stringify(Juconfig));
                                 refreshPage(false);
+                                log("1");
                             });
+                            log("2");
                         }else{
                             lockgroups.push(it);
                             Juconfig["lockgroups"] = lockgroups;
