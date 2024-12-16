@@ -532,6 +532,7 @@ function readDir(path) {
 // 清理接口残留过期文件
 function clearJkFiles() {
     let names = readDir(jkfilespath);
+    log(names);
     let datalist = getDatas("jk");
     names.forEach(it=>{
         if(!datalist.some(item => item.url==jkfilespath+it)){
