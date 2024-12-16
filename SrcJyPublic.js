@@ -531,6 +531,7 @@ function readDir(path) {
 }
 // 清理接口残留过期文件
 function clearJkFiles() {
+    /*
     let names = readDir(jkfilespath);
     let datalist = getDatas("jk");
     names.forEach(it=>{
@@ -538,6 +539,7 @@ function clearJkFiles() {
             deleteFile(jkfilespath+it);
         }
     })
+    */
 }
 // 获取接口对应的显示标题
 function getDataTitle(data) {
