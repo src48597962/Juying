@@ -688,6 +688,10 @@ function selectSource() {
             }
         },
         menuClick(manage) {
+            let menuarr = ["改变列表样式", "列表倒序排列", "选择排序方式"];
+            if(lockgroups.length>0){
+                menuarr.push("显示加锁分组");
+            }
             hikerPop.selectCenter({
                 options: ["改变列表样式", "列表倒序排列", "选择排序方式", "显示加锁分组"],
                 columns: 2,
