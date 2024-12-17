@@ -578,6 +578,12 @@ function duoselect(datas){
 function selectSource() {
     const hikerPop = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6966");
     let sourceAllList = getDatas("jk", 1).filter(x=> !x.onlysearch);
+    let lockgroups = Juconfig["lockgroups"] || [];
+    if(getMyVar('已验证指纹')!='1'){
+        sourceAllList = sourceAllList.filter(it=>{
+            return lockgroups.indexOf(it.group||it.type)==-1;
+        })
+    }
     let sourceListGroup = Juconfig["sourceListGroup"] || sourceGroup || "全部";
     let sourceList = getGroupLists(sourceAllList, sourceListGroup);
     let tmpList = sourceList;
@@ -683,7 +689,7 @@ function selectSource() {
         },
         menuClick(manage) {
             hikerPop.selectCenter({
-                options: ["改变样式", "列表倒序", getItem("sourceListSort", "更新时间")],
+                options: ["改变列表样式", "列表倒序排列", "选择排序方式", "显示加锁分组"],
                 columns: 2,
                 title: "请选择",
                 click(s, i) {
@@ -702,6 +708,14 @@ function selectSource() {
                             "col": 1, 
                             "js": `setItem('sourceListSort', input);'toast://排序方式在下次生效：' + input`
                         })
+                    } else if (i === 3) {
+                        if (hikerPop.canBiometric() !== 0) {
+                            return "toast://调用生物学验证出错";
+                        }
+                        let pop = hikerPop.checkByBiometric(() => {
+                            putMyVar('已验证指纹','1');
+                            return "toast://验证成功，重新点切换站源吧";
+                        });
                     }
                 }
             });
