@@ -702,7 +702,7 @@ function selectSource() {
                         manage.change();
                         manage.scrollToPosition(index, true);
                     } else if (i === 2) {
-                        let sorttype = ["更新时间","接口名称","使用频率"].forEach(v=>v==getItem('sourceListSort',更新时间)?v+"√":v);
+                        let sorttype = ["更新时间","接口名称","使用频率"].forEach(v=>v==getItem('sourceListSort','更新时间')?v+"√":v);
                         showSelectOptions({
                             "title": "选择排序方式", 
                             "options" : sorttype, 
