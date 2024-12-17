@@ -947,7 +947,9 @@ function dianboyiji(testSource) {
                 let pop = hikerPop.checkByBiometric(() => {
                     putMyVar('已验证指纹','1');
                     refreshPage(false);
-                    selectSource();
+                    if(parseInt(getMyVar('点播下滑num','0'))>1){
+                        selectSource();
+                    }
                 });
             }else{
                 require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyData.js');
