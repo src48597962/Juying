@@ -703,7 +703,6 @@ function selectSource() {
                         manage.scrollToPosition(index, true);
                     } else if (i === 2) {
                         let sorttype = ["更新时间","接口名称","使用频率"].map(v=>v==getItem('sourceListSort','更新时间')?v+"√":v);
-                        log(sorttype);
                         showSelectOptions({
                             "title": "选择排序方式", 
                             "options" : sorttype, 
