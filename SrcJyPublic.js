@@ -714,7 +714,7 @@ function selectSource() {
                         }
                         let pop = hikerPop.checkByBiometric(() => {
                             putMyVar('已验证指纹','1');
-                            return "toast://验证成功，重新点切换站源吧";
+                            toast("验证成功，重新点切换站源吧");
                         });
                     }
                 }
