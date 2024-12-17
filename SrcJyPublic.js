@@ -702,11 +702,12 @@ function selectSource() {
                         manage.change();
                         manage.scrollToPosition(index, true);
                     } else if (i === 2) {
+                        let sorttype = ["更新时间","接口名称","使用频率"].forEach(v=>v==getItem('sourceListSort',更新时间)?v+"√":v);
                         showSelectOptions({
                             "title": "选择排序方式", 
-                            "options" : ["更新时间","接口名称","使用频率"], 
+                            "options" : sorttype, 
                             "col": 1, 
-                            "js": `setItem('sourceListSort', input);'toast://排序方式在下次生效：' + input`
+                            "js": `setItem('sourceListSort', input.replace("√",""));'toast://排序方式在下次生效：' + input.replace("√","")`
                         })
                     } else if (i === 3) {
                         if (hikerPop.canBiometric() !== 0) {
