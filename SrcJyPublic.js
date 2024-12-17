@@ -689,12 +689,11 @@ function selectSource() {
         },
         menuClick(manage) {
             let menuarr = ["改变列表样式", "列表倒序排列", "选择排序方式"];
-            log(lockgroups);
             if(lockgroups.length>0){
                 menuarr.push("显示加锁分组");
             }
             hikerPop.selectCenter({
-                options: ["改变列表样式", "列表倒序排列", "选择排序方式", "显示加锁分组"],
+                options: menuarr,
                 columns: 2,
                 title: "请选择",
                 click(s, i) {
