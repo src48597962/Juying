@@ -940,7 +940,7 @@ function dianboyiji(testSource) {
                     return "toast://调用生物学验证出错";
                 }
                 let pop = hikerPop.checkByBiometric(() => {
-                    putMyVar('已验证指纹','1'),
+                    putMyVar('已验证指纹','1');
                     refreshPage(false);
                 });
             }else{
