@@ -126,7 +126,8 @@ function checkBoxUrl(input) {
                     java.lang.Thread.sleep(1000);
                     c++;
                     if($.require('hiker://page/thirdstart?rule=nodejs').isRunning(nodejsID)){
-                        java.lang.Thread.sleep(8000);
+                        java.lang.Thread.sleep(6000);
+                        toast('启动完成，如加载失败，刷新下');
                         c = 30;
                     }
                 }
