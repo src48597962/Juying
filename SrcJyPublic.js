@@ -121,11 +121,12 @@ function checkBoxUrl(input) {
             if(!isRunning){
                 $.require('hiker://page/thirdstart?rule=nodejs').start(nodejsID);
                 let c = 0;
-                while (c<10) {
+                while (c<30) {
                     java.lang.Thread.sleep(1000);
                     c++;
                     if($.require('hiker://page/thirdstart?rule=nodejs').isRunning(nodejsID)){
-                        c = 10;
+                        log('服务启动了');
+                        c = 30;
                     }
                 }
             }
