@@ -120,12 +120,13 @@ function checkBoxUrl(input) {
             let isRunning = $.require('hiker://page/thirdstart?rule=nodejs').isRunning(nodejsID);
             if(!isRunning){
                 $.require('hiker://page/thirdstart?rule=nodejs').start(nodejsID);
+                tosat('正在启动notejs服务中');
                 let c = 0;
                 while (c<20) {
                     java.lang.Thread.sleep(1000);
                     c++;
                     if($.require('hiker://page/thirdstart?rule=nodejs').isRunning(nodejsID)){
-                        java.lang.Thread.sleep(3000);
+                        java.lang.Thread.sleep(5000);
                         c = 30;
                     }
                 }
