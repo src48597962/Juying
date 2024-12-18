@@ -1,13 +1,14 @@
 var newVersion = {
-    "SrcJuying":"2.4",
+    "SrcJuying":"2.5",
     "hint": "",
     "codeDownload": "https://src48597962.lanzouo.com/iddm22he5gni",
     "JYUpdateRecords": [{
-        title: "beta V2.5",
+        title: "2024/12/18 V2.5",
         records: [
             "新增：嗅觉无搜索，单独增加聚合搜索页",
             "修复：点播二级分享对端无接口时无选集问题",
             "优化：点播hipy_t4类型优化增强升级",
+            "优化：点播本地订阅支持调用notejs自启动",
             "优化：搜索点播接口未指定范围时排除加锁带密",
             "优化：点播切换站源列表隐藏加锁分组，菜单里显示"
         ]
