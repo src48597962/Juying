@@ -115,6 +115,10 @@ function checkBoxUrl(input) {
     let html;
     try{
         if(input.startsWith('/')){input = "file://" + input}
+        if(input.includes('#nodejsID=')){
+            $.require('hiker://page/thirdstart?rule=nodejs').start(input.split('#nodejsID=')[1]);
+            input = input.split('#nodejsID=')[0];
+        }
         if(input.startsWith('http')){
             let tmpFile = cachepath + md5(input) + ".json";
             if(!fileExist(tmpFile)){
