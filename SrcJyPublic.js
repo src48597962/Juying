@@ -118,7 +118,7 @@ function checkBoxUrl(input) {
         if(input.includes('#nodejsID=')){
             $.require('hiker://page/thirdstart?rule=nodejs').start(input.split('#nodejsID=')[1]);
             input = input.split('#nodejsID=')[0];
-            java.lang.Thread.sleep(1000);
+            java.lang.Thread.sleep(3000);
         }
         if(input.startsWith('http')){
             let tmpFile = cachepath + md5(input) + ".json";
