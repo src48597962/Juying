@@ -1882,7 +1882,9 @@ function manageSet(){
                     confirm({
                         title: '发现新版本，是否更新？', 
                         content: '本地V'+nowVersion+' => 云端V'+newVersion.SrcJuying, 
-                        confirm: getItem('本地依赖库')=="1"?"web://"+newVersion.codeDownload:$.toString((nowtime,newVersion) => {
+                        confirm: getItem('本地依赖库')=="1"?$.toString((codeDownload) => {
+                            return "web://" + codeDownload;
+                        },newVersion.codeDownload):$.toString((nowtime,newVersion) => {
                             setItem('Version', newVersion);
                             setItem('VersionChecktime', nowtime+'time');
                             deleteCache();
