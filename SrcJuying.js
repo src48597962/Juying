@@ -939,7 +939,7 @@ function dianboyiji(testSource) {
             let yidata = {fllists:[], vodlists:[], error:{}}
 
             let lockgroups = Juconfig["lockgroups"] || [];
-            if((lockgroups.indexOf(sourceGroup)>-1 || parseInt(getMyVar('点播下滑num','0'))>1) && getMyVar('已验证指纹')!='1'){
+            if((lockgroups.indexOf(sourceGroup)>-1 || (parseInt(getMyVar('点播下滑num','0'))>1&&lockgroups.length>0)) && getMyVar('已验证指纹')!='1'){
                 const hikerPop = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6966");
                 if (hikerPop.canBiometric() !== 0) {
                     return "toast://调用生物学验证出错";
