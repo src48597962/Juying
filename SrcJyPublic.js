@@ -117,11 +117,19 @@ function checkBoxUrl(input) {
         if(input.startsWith('/')){input = "file://" + input}
         if(input.includes('#nodejsID=')){
             let nodejsID = input.split('#nodejsID=')[1];
-            log($.require('hiker://page/thirdstart?rule=nodejs').isRunning(nodejsID));
-            
-            $.require('hiker://page/thirdstart?rule=nodejs').start(nodejsID);
+            let isRunning = $.require('hiker://page/thirdstart?rule=nodejs').isRunning(nodejsID);
+            if(!isRunning){
+                $.require('hiker://page/thirdstart?rule=nodejs').start(nodejsID);
+                let c = 0;
+                while (c<10) {
+                    java.lang.Thread.sleep(1000);
+                    c++;
+                    if($.require('hiker://page/thirdstart?rule=nodejs').isRunning(nodejsID)){
+                        c = 10;
+                    }
+                }
+            }
             input = input.split('#nodejsID=')[0];
-            //java.lang.Thread.sleep(3000);
         }
         if(input.startsWith('http')){
             let tmpFile = cachepath + md5(input) + ".json";
