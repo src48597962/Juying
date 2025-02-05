@@ -3,6 +3,11 @@ var newVersion = {
     "hint": "",
     "codeDownload": "https://src48597962.lanzouo.com/i3chw2if45gb",
     "JYUpdateRecords": [{
+        title: "beta V2.6",
+        records: [
+            "修复：云盘原画接口1失效无法获取的问题"
+        ]
+    },{
         title: "2024/12/18 V2.5",
         records: [
             "新增：嗅觉无搜索，单独增加聚合搜索页",
