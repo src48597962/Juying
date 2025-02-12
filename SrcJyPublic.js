@@ -859,6 +859,9 @@ function downloadFiles() {
     if(代码仓){
         try{
             requireDownload(代码仓 + "img/聚影.png", 'hiker://files/cache/src/聚影.png');
+            // 下载libs必要的gm和pop插件缓件文件缓存
+            requireDownload('hiker://files/data/Llibs/ca2f926cdf12ab6e104649908a90486a.js', 'hiker://files/libs/ca2f926cdf12ab6e104649908a90486a.js');//codepath+'plugins/hikerPop.js'
+            requireDownload('hiker://files/data/Llibs/f594b5f0c94f8f8a6b5894ab4a3ed933.js', 'hiker://files/libs/f594b5f0c94f8f8a6b5894ab4a3ed933.js');//'plugins/globalmap.js'
         }catch(e){}
     }
 }
