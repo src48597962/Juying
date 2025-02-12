@@ -518,8 +518,9 @@ function setJkSort(data, k) {
     
     writeFile(sortfile, JSON.stringify(sort));
 }
-// 清理接口排序
-function clearJkSort() {
+// 执行一些主页加载后的事项
+function excludeLoadingItems() {
+    // 清理接口排序
     let datalist = getDatas("jk");
     let sort = {};
     if(fetch(sortfile)){
@@ -531,6 +532,16 @@ function clearJkSort() {
         }
     })
     writeFile(sortfile, JSON.stringify(sort));
+    // 清理接口残留过期文件
+    /*
+    let names = readDir(jkfilespath);
+    let datalist = getDatas("jk");
+    names.forEach(it=>{
+        if(!datalist.some(item => item.url==jkfilespath+it)){
+            deleteFile(jkfilespath+it);
+        }
+    })
+    */
 }
 // 读取目录路径下文件输入数组
 function readDir(path) {
@@ -548,18 +559,7 @@ function readDir(path) {
     }
     return names;
 }
-// 清理接口残留过期文件
-function clearJkFiles() {
-    /*
-    let names = readDir(jkfilespath);
-    let datalist = getDatas("jk");
-    names.forEach(it=>{
-        if(!datalist.some(item => item.url==jkfilespath+it)){
-            deleteFile(jkfilespath+it);
-        }
-    })
-    */
-}
+
 // 获取接口对应的显示标题
 function getDataTitle(data) {
     if($.type(data.type)=="string"){
