@@ -742,6 +742,7 @@ var SrcParseS = {
                 var isjson = 0;
                 try {
                     let json =JSON.parse(gethtml);
+                    log(json);
                     isjson = 1;
                     rurl = json.url||json.urll||json.data.url||json.data;
                 } catch (e) {
