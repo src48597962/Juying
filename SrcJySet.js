@@ -1056,6 +1056,7 @@ function jiekou(data) {
                 let apiurl = getMyVar('apiurl','');
                 let apitype = getMyVar('apitype', '');
                 if(apiurl && apitype=="hipy_t3" && /^hiker|^file/.test(apiurl)){
+                    let {GM} = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6916&auth=1d35e8f0-22e8-5270-a9d1-826f53f177ad");
                     let drpy = GM.defineModule("SrcJuDrpy", config.依赖.replace(/[^/]*$/,'') + "SrcJyDrpy.js").get(data);
                     let code = drpy.runMain("let main=" + $.toString((ext) => {
                         return () => getOriginalJs(request(ext, {
