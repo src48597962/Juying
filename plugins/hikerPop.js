@@ -814,7 +814,7 @@ function selectBottomSettingMenu({
     let arrayList = new ArrayList();
     options.forEach(v => arrayList.add(v));
 
-    let custom = new SettingMenuPopup(getActivityContext(), "设置", arrayList, onItemClickListener);
+    let custom = new SettingMenuPopup(getActivityContext(), "设置", arrayList, null, onItemClickListener);
     let pop = builderXPopup()
         .moveUpToKeyboard(false)
         .setPopupCallback(newSimpleCallback({
@@ -826,7 +826,9 @@ function selectBottomSettingMenu({
     showOnUI(pop);
     return pop;
 }
+ 
 selectBottomSettingMenu.SettingItem = SettingItem;
+
 
 function ResExtraInputBox({
     hint,
@@ -919,7 +921,8 @@ function selectBottomResIcon({
     noAutoDismiss,
     extraInputBox,
     position,
-    toPosition
+    toPosition,
+    beforeShow
 }) {
     let clickListener = new CustomCenterRecyclerViewPopup.ClickListener({
         onLongClick(value, index) {},
@@ -1018,6 +1021,7 @@ function selectBottomResIcon({
     pop.setPopupCallback(newSimpleCallback({
         beforeShow(basePopupView) {
             scrollToPosition(toPosition);
+            tryCallBack(getDefaultValue(beforeShow, "function", null), [pop, resOptionsManage]);
         }
     }));
     pop = pop.moveUpToKeyboard(false).asCustom(custom);
@@ -1035,7 +1039,8 @@ function selectBottomRes({
     height,
     noAutoDismiss,
     extraInputBox,
-    toPosition
+    toPosition,
+    beforeShow
 }) {
     let clickListener = new CustomCenterRecyclerViewPopup.ClickListener({
         onLongClick(value, index) {
@@ -1107,6 +1112,7 @@ function selectBottomRes({
     pop.setPopupCallback(newSimpleCallback({
         beforeShow(basePopupView) {
             scrollToPosition(toPosition);
+            tryCallBack(getDefaultValue(beforeShow, "function", null), [pop, resOptionsManage]);
         }
     }));
     pop = pop.moveUpToKeyboard(false).asCustom(custom);
