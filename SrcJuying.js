@@ -1501,8 +1501,7 @@ function yiji() {
 
     //一些自动检查调用在首页加截后，间隔24小时
     if (!getMyVar('startCheck') && nowtime > (oldtime+24*60*60*1000)) {
-        clearJkSort(); //清理历史接口排序信息
-        clearJkFiles(); //清理接口残留文件
+        excludeLoadingItems(); //执行一些加载后的事项
         updateResource(); //检查更新订阅资源码
         putMyVar('startCheck', 1);
     }
