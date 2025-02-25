@@ -269,13 +269,7 @@ function getYiData(jkdata, batchTest) {
                             分类 = extdata["分类"].split('#');
                         } else if (extdata["分类"].indexOf('&') > -1 && extdata["分类值"]) {
                             let typenames = extdata["分类"].split('&');
-                            let typeids = extdata["分类值"].split('&');
-                            for (let i in typeids) {
-                                分类.push(typenames[i] + '$' + typeids[i]);
-                            }
-                        } else if (extdata["分类值"] == "*") {
-                            let typenames = extdata["分类"].split('&');
-                            let typeids = extdata["分类"].split('&');
+                            let typeids = extdata["分类值"] == "*" ? extdata["分类"].split('&') : extdata["分类值"].split('&');
                             for (let i in typeids) {
                                 分类.push(typenames[i] + '$' + typeids[i]);
                             }
