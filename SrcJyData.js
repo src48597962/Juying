@@ -61,7 +61,7 @@ function getYiData(jkdata, batchTest) {
         extdata = extDataCache(jkdata);
         if ($.type(extdata) == 'object') {
             if (api_type == "XBPQ") {
-                let host = extdata["主页url"] || '';
+                let host = getHome(extdata["主页url"]) || '';
                 classurl = extdata["分类"];
                 extdata["分类url"] = extdata["分类url"] ? extdata["分类url"].split(';;')[0].split('[')[0] : "";
                 listurl = extdata["分类url"] ? /^http/.test(extdata["分类url"]) ? extdata["分类url"] : host + extdata["分类url"] : "";
