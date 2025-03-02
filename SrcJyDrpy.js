@@ -1,9 +1,9 @@
-const codePath = module.modulePath.slice(0, module.modulePath.lastIndexOf("/") + 1);
 /*<$>
 @include start
-codepath + "plugins/globalmap.js"
+http://124.221.241.174:13000/src48597962/Juying/raw/branch/master/plugins/globalmap.js
 @include end
 <$>*/
+const codePath = module.modulePath.slice(0, module.modulePath.lastIndexOf("/") + 1);
 const JSEngine = com.example.hikerview.service.parser.JSEngine;
 const drpyMap = new Map();
 const GMkey = module.importParam;
