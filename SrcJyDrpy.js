@@ -203,6 +203,7 @@ function createDrpy(sdata) {
         let {GM} = $.require(codepath + "plugins/globalmap.js");
         //$.require.cache.delete($.require.resolve(codePath +'drpy/drpy2.js'));
         let drpy2 = $.require(codePath +'drpy/drpy2.js');
+        let DrpyManage = GM.defineModule("SrcJyDrpy", drpy2);
         GM.has(GMkey, (DrpyManage) => {
             DrpyManage.put(sdata.key, drpy2);
         });
@@ -210,8 +211,8 @@ function createDrpy(sdata) {
 }
 
 function createNewDrpy(sdata) {
-    createDrpy(sdata);
     try{
+        createDrpy(sdata);
         let drpy = drpyMap.get(sdata.key);
         drpy.init(sdata.ext);
         //log(sdata.key + ">init");
