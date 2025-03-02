@@ -1,4 +1,4 @@
-const codePath = module.modulePath.slice(0, module.modulePath.lastIndexOf("/") + 1);
+const codepath = module.modulePath.slice(0, module.modulePath.lastIndexOf("/") + 1);
 const JSEngine = com.example.hikerview.service.parser.JSEngine;
 const drpyMap = new Map();
 const GMkey = module.importParam;
@@ -38,7 +38,7 @@ function createDrpy(sdata) {
     if (typeof my_rule != "undefined" && my_rule != null) {
         func = oldbuildJsEnv;
     }
-    JSEngine.getInstance().evalJS(func(MY_TICKET) + "\n!" + $.toString((sdata, codePath, GMkey, MY_TICKET) => {
+    JSEngine.getInstance().evalJS(func(MY_TICKET) + "\n!" + $.toString((sdata, codepath, GMkey, MY_TICKET) => {
         const localKey = "drpy";
         const CryptoUtil = $.require("hiker://assets/crypto-java.js");
         globalThis.local = {
@@ -85,7 +85,7 @@ function createDrpy(sdata) {
                     body: data,
                     headers: headers,
                 };
-            }, sdata, codePath, MY_RULE._title||MY_RULE.title));
+            }, sdata, codepath, MY_RULE._title||MY_RULE.title));
             return proxyUrl + "?do=js";
         }
         
@@ -201,13 +201,13 @@ function createDrpy(sdata) {
         };
 
         let {GM} = $.require(codepath + "plugins/globalmap.js");
-        //$.require.cache.delete($.require.resolve(codePath +'drpy/drpy2.js'));
-        let drpy2 = $.require(codePath +'drpy/drpy2.js');
-        let DrpyManage = GM.defineModule("SrcJyDrpy", codePath +'SrcJyDrpy.js');
+        //$.require.cache.delete($.require.resolve(codepath +'drpy/drpy2.js'));
+        let drpy2 = $.require(codepath +'drpy/drpy2.js');
+        let DrpyManage = GM.defineModule("SrcJyDrpy", codepath +'SrcJyDrpy.js');
         GM.has(GMkey, () => {
             DrpyManage.put(sdata.key, drpy2);
         });
-    }, sdata, codePath, GMkey, MY_TICKET) + ";\n", "", false);
+    }, sdata, codepath, GMkey, MY_TICKET) + ";\n", "", false);
 }
 
 function createNewDrpy(sdata) {
