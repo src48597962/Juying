@@ -211,7 +211,7 @@ function SRCSet() {
                         require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
                         let lockgroups = Juconfig["lockgroups"] || [];
                         if(lockgroups.indexOf(it)>-1){
-                            const hikerPop = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6966");
+                            const hikerPop = $.require(config.依赖.replace(/[^/]*$/,'') + 'plugins/hikerPop.js');
                             if (hikerPop.canBiometric() !== 0) {
                                 return "toast://无法调用生物学验证";
                             }
@@ -1056,7 +1056,7 @@ function jiekou(data) {
                 let apiurl = getMyVar('apiurl','');
                 let apitype = getMyVar('apitype', '');
                 if(apiurl && apitype=="hipy_t3" && /^hiker|^file/.test(apiurl)){
-                    let {GM} = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6916&auth=1d35e8f0-22e8-5270-a9d1-826f53f177ad");
+                    let {GM} = $.require(config.依赖.replace(/[^/]*$/,'') + 'plugins/globalmap.js');
                     let drpy = GM.defineModule("SrcJuDrpy", config.依赖.replace(/[^/]*$/,'') + "SrcJyDrpy.js").get(data);
                     let code = drpy.runMain("let main=" + $.toString((ext) => {
                         return () => getOriginalJs(request(ext, {
@@ -1858,7 +1858,7 @@ function manageSet(){
             eval(fetch(config.依赖.replace(/[^/]*$/,'') + 'SrcTmplVersion.js'));
             let updateRecords = newVersion.JYUpdateRecords || [];
 
-            const hikerPop = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6966");
+            const hikerPop = $.require(config.依赖.replace(/[^/]*$/,'') + 'plugins/hikerPop.js');
             hikerPop.updateRecordsBottom(updateRecords);
             
             return "hiker://empty";
@@ -2847,7 +2847,7 @@ function importConfirm(jsfile) {
                     url: "hiker://empty",
                     col_type: "text_center_1"
                 });
-                const hikerPop = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6966");
+                const hikerPop = $.require(config.依赖.replace(/[^/]*$/,'') + 'plugins/hikerPop.js');
                 let fruit = Object.keys(pastedata);
                 hikerPop.multiChoice({
                     title: "选择要导入本地的项", 
