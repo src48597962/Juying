@@ -199,7 +199,9 @@ function createDrpy(sdata) {
         Function.prototype.toString = function () {
             return $toString.apply(this).trim();
         };
-        let {GM} = $.require(codepath + "plugins/globalmap.js");
+        require(codepath + "plugins/globalmap.js");
+        let GM = new GlobalVar(GlobalMap, RuleGlobalMapKey);
+        //let {GM} = $.require(codepath + "plugins/globalmap.js");
         //$.require.cache.delete($.require.resolve(codePath +'drpy/drpy2.js'));
         let drpy2 = $.require(codePath +'drpy/drpy2.js');
         GM.has(GMkey, (DrpyManage) => {
