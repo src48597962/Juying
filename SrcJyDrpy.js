@@ -203,23 +203,19 @@ function createDrpy(sdata) {
         let {GM} = $.require(codepath + "plugins/globalmap.js");
         //$.require.cache.delete($.require.resolve(codePath +'drpy/drpy2.js'));
         let drpy2 = $.require(codePath +'drpy/drpy2.js');
-        let DrpyManage = GM.defineModule("SrcJyDrpy", drpy2);
-        GM.has(GMkey, (DrpyManage) => {
+        GM.has(GMkey, () => {
+            let DrpyManage = GM.defineModule("SrcJyDrpy", drpy2);
             DrpyManage.put(sdata.key, drpy2);
         });
     }, sdata, codePath, GMkey, MY_TICKET) + ";\n", "", false);
 }
 
 function createNewDrpy(sdata) {
-    try{
-        createDrpy(sdata);
-        let drpy = drpyMap.get(sdata.key);
-        drpy.init(sdata.ext);
-        //log(sdata.key + ">init");
-        return drpy;
-    }catch(e){
-        log(sdata.key + ' createNewDrpy报错>' + e.message + " 错误行#" + e.lineNumber);
-    }
+    createDrpy(sdata);
+    let drpy = drpyMap.get(sdata.key);
+    drpy.init(sdata.ext);
+    //log(sdata.key + ">init");
+    return drpy;
 }
 
 function getext(jkdata) {
