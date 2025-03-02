@@ -595,7 +595,7 @@ function duoselect(datas){
 }
 // 点播主页选择源接口
 function selectSource() {
-    const hikerPop = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6966");
+    const hikerPop = $.require(config.依赖.replace(/[^/]*$/,'') + 'plugins/hikerPop.js');
     let sourceAllList = getDatas("jk", 1).filter(x=> !x.onlysearch);
     let lockgroups = Juconfig["lockgroups"] || [];
     if(getMyVar('已验证指纹')!='1'){
@@ -859,9 +859,6 @@ function downloadFiles() {
     if(代码仓){
         try{
             requireDownload(代码仓 + "img/聚影.png", 'hiker://files/cache/src/聚影.png');
-            // 下载libs必要的gm和pop插件缓件文件缓存
-            requireDownload(代码仓 + 'plugins/hikerPop.js', 'hiker://files/libs/ca2f926cdf12ab6e104649908a90486a.js');
-            requireDownload(代码仓 + 'plugins/globalmap.js', 'hiker://files/libs/f594b5f0c94f8f8a6b5894ab4a3ed933.js');
         }catch(e){}
     }
 }
@@ -883,7 +880,7 @@ function shareResource() {
         col_type: 'text_center_1',
         url: $().lazyRule(() => {
             require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
-            const hikerPop = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6966");
+            const hikerPop = $.require(config.依赖.replace(/[^/]*$/,'') + 'plugins/hikerPop.js');
             let fruit = ["接口", "解析", "云盘", "直播", "ghproxy"];
             hikerPop.multiChoice({
                 title: "选择要上传分享同步的项", 
@@ -1073,7 +1070,7 @@ function shareResource() {
                         return "hiker://empty";
                     }, Juconfig, it.path, cfgfile)
                 }else if(input=="上传"){
-                    const hikerPop = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6966");
+                    const hikerPop = $.require(config.依赖.replace(/[^/]*$/,'') + 'plugins/hikerPop.js');
                     let fruit = ["接口", "解析", "云盘", "直播", "ghproxy"];
                     hikerPop.multiChoice({
                         title: "选择要上传分享同步的项", 
