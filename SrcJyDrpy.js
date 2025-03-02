@@ -205,6 +205,7 @@ function createDrpy(sdata) {
         let drpy2 = $.require(codepath +'drpy/drpy2.js');
         GM.has(GMkey, (DrpyManage) => {
             //DrpyManage.put(sdata.key, drpy2);
+            let {GM} = $.require(codepath + "plugins/globalmap.js");
             GM.defineModule("SrcJyDrpy", config.依赖.replace(/[^/]*$/,'') + "SrcJyDrpy.js").put(sdata.key, drpy2);
         });
     }, sdata, codepath, GMkey, MY_TICKET) + ";\n", "", false);
