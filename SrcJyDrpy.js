@@ -265,7 +265,7 @@ function get(jkdata) {
             //log("删缓存>"+Array.from(drpyMap.keys()).at(0))
             del(Array.from(drpyMap.keys()).at(0));
         }
-        log(sdata);
+        //log(sdata);
         let drpy = createNewDrpy(sdata);
         return drpy;
     }, this).call();
