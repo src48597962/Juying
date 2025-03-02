@@ -204,7 +204,8 @@ function createDrpy(sdata) {
         //$.require.cache.delete($.require.resolve(codepath +'drpy/drpy2.js'));
         let drpy2 = $.require(codepath +'drpy/drpy2.js');
         GM.has(GMkey, (DrpyManage) => {
-            DrpyManage.put(sdata.key, drpy2);
+            //DrpyManage.put(sdata.key, drpy2);
+            GM.defineModule("SrcJyDrpy", config.依赖.replace(/[^/]*$/,'') + "SrcJyDrpy.js").put(sdata.key, drpy2);
         });
     }, sdata, codepath, GMkey, MY_TICKET) + ";\n", "", false);
 }
@@ -212,8 +213,7 @@ function createDrpy(sdata) {
 function createNewDrpy(sdata) {
     createDrpy(sdata);
     let drpy = drpyMap.get(sdata.key);
-    log($.type(drpy));
-    log(drpyMap.size)
+
     drpy.init(sdata.ext);
     //log(sdata.key + ">init");
     return drpy;
