@@ -941,7 +941,7 @@ function dianboyiji(testSource) {
 
             let lockgroups = Juconfig["lockgroups"] || [];
             if((lockgroups.indexOf(sourceGroup)>-1 || (parseInt(getMyVar('点播下滑num','0'))>1&&lockgroups.length>0)) && getMyVar('已验证指纹')!='1'){
-                const hikerPop = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6966");
+                const hikerPop = $.require(config.依赖.replace(/[^/]*$/,'') + 'plugins/hikerPop.js');
                 if (hikerPop.canBiometric() !== 0) {
                     return "toast://调用生物学验证出错";
                 }
@@ -1552,7 +1552,7 @@ function Version() {
                         deleteCache();
                         refreshPage();
 
-                        const hikerPop = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6966");
+                        const hikerPop = $.require(config.依赖.replace(/[^/]*$/,'') + 'plugins/hikerPop.js');
                         hikerPop.updateRecordsBottom(updateRecords);
                     },nowtime, newVersion.SrcJuying, newVersion.JYUpdateRecords.slice(0, 3)),
                     cancel:''
