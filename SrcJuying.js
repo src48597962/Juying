@@ -566,7 +566,7 @@ function dianboerji() {
                     let play;
                     if(dataObj.stype=="hipy_t3"){
                         let sdata = {name: dataObj.sname, url: dataObj.surl, ext: dataObj.sext}
-                        let {GM} = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6916&auth=1d35e8f0-22e8-5270-a9d1-826f53f177ad");
+                        let {GM} = $.require(config.依赖.replace(/[^/]*$/,'') + "plugins/globalmap.js");
                         let drpy = GM.defineModule("SrcJyDrpy", config.依赖.replace(/[^/]*$/,'') + "SrcJyDrpy.js").get(sdata);
                         play = JSON.parse(drpy.play(dataObj.flag, vipUrl, []));
                     }else if(dataObj.stype=="hipy_t4"){
