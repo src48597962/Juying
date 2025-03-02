@@ -1,4 +1,5 @@
 const codePath = module.modulePath.slice(0, module.modulePath.lastIndexOf("/") + 1);
+require(codepath + "plugins/globalmap.js");
 const JSEngine = com.example.hikerview.service.parser.JSEngine;
 const drpyMap = new Map();
 const GMkey = module.importParam;
