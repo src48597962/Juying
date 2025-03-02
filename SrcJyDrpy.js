@@ -39,7 +39,6 @@ function createDrpy(sdata) {
         func = oldbuildJsEnv;
     }
     JSEngine.getInstance().evalJS(func(MY_TICKET) + "\n!" + $.toString((sdata, codePath, GMkey, MY_TICKET) => {
-        require(codepath + "plugins/globalmap.js");
         const localKey = "drpy";
         const CryptoUtil = $.require("hiker://assets/crypto-java.js");
         globalThis.local = {
@@ -201,8 +200,7 @@ function createDrpy(sdata) {
             return $toString.apply(this).trim();
         };
 
-        let GM = new GlobalVar(GlobalMap, RuleGlobalMapKey);
-        //let {GM} = $.require(codepath + "plugins/globalmap.js");
+        let {GM} = $.require(codepath + "plugins/globalmap.js");
         //$.require.cache.delete($.require.resolve(codePath +'drpy/drpy2.js'));
         let drpy2 = $.require(codePath +'drpy/drpy2.js');
         GM.has(GMkey, (DrpyManage) => {
