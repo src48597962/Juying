@@ -204,7 +204,7 @@ function createDrpy(sdata) {
         //$.require.cache.delete($.require.resolve(codePath +'drpy/drpy2.js'));
         let drpy2 = $.require(codePath +'drpy/drpy2.js');
         GM.has(GMkey, () => {
-            let DrpyManage = GM.defineModule("SrcJyDrpy", drpy2);
+            let DrpyManage = GM.defineModule("SrcJyDrpy", codePath +'SrcJyDrpy.js');
             DrpyManage.put(sdata.key, drpy2);
         });
     }, sdata, codePath, GMkey, MY_TICKET) + ";\n", "", false);
