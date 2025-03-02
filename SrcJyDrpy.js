@@ -211,10 +211,14 @@ function createDrpy(sdata) {
 
 function createNewDrpy(sdata) {
     createDrpy(sdata);
-    let drpy = drpyMap.get(sdata.key);
-    drpy.init(sdata.ext);
-    //log(sdata.key + ">init");
-    return drpy;
+    try{
+        let drpy = drpyMap.get(sdata.key);
+        drpy.init(sdata.ext);
+        //log(sdata.key + ">init");
+        return drpy;
+    }catch(e){
+        log(sdata.key + ' createNewDrpy报错>' + e.message + " 错误行#" + e.lineNumber);
+    }
 }
 
 function getext(jkdata) {
