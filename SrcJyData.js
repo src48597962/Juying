@@ -98,6 +98,7 @@ function getYiData(jkdata, batchTest) {
             vodhost = getHome(listurl);
         }
     } else if (api_type == 'hipy_t3') {
+        let {GM} = $.require(codepath + "plugins/globalmap.js");
         //GM.clear("SrcJyDrpy");
         var drpy = GM.defineModule("SrcJyDrpy", config.依赖.replace(/[^/]*$/,'') + "SrcJyDrpy.js").get(jkdata);
         let rule = drpy.getRule();
@@ -864,6 +865,7 @@ function getSsData(name, jkdata, page) {
             if(api_type=="hipy_t4"){
                 json = JSON.parse(getHtml(jkdata.url + (jkdata.url.includes("?")?"&":"?") +"wd="+name+"&extend="+jkdata.ext+"&quick=false", headers));
             }else if(api_type=="hipy_t3"){
+                let {GM} = $.require(codepath + "plugins/globalmap.js");
                 let drpy = GM.defineModule("SrcJyDrpy", config.依赖.replace(/[^/]*$/,'') + "SrcJyDrpy.js").get(jkdata);
                 json = JSON.parse(drpy.search(name, 0, page));
                 //noerji = drpy.getRule("二级")=="*"?1:0;
@@ -1137,6 +1139,7 @@ function getErData(jkdata, erurl) {
         }
         html = getHtml(erurl, headers);
     } else if (api_type=="hipy_t3") {
+        let {GM} = $.require(codepath + "plugins/globalmap.js");
         let drpy = GM.defineModule("SrcJyDrpy", config.依赖.replace(/[^/]*$/,'') + "SrcJyDrpy.js").get(jkdata);
         try{
             html = drpy.detail(erurl);
