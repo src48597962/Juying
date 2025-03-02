@@ -1,4 +1,5 @@
 const testPath = module.modulePath.slice(0, module.modulePath.lastIndexOf("/")) + "/";
+let {GM} = $.require(testPath + "plugins/globalmap.js");
 const {
     gbkTool
 } = $.require(testPath + 'gbk.js');
