@@ -199,7 +199,7 @@ function createDrpy(sdata) {
         Function.prototype.toString = function () {
             return $toString.apply(this).trim();
         };
-
+        $.importRequire(codepath + "plugins/globalmap.js");
         let {GM} = $.require(codepath + "plugins/globalmap.js");
         //$.require.cache.delete($.require.resolve(codepath +'drpy/drpy2.js'));
         let drpy2 = $.require(codepath +'drpy/drpy2.js');
