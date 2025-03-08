@@ -280,11 +280,19 @@ var SrcParseS = {
                     if($.type(playUrl)=="object"){
                         ulist.header = playUrl.headers && playUrl.headers.length>0?playUrl.headers[0]:ulist.header;
                         playUrl = playUrl.urls[0];
-                        return JSON.stringify({urls:[playUrl],headers:[ulist.header]});
                     }
                     log(parsename+">播放地址>"+playUrl)
-                    let f = cacheM3u8(playUrl, {header: ulist.header || getheader(playUrl), timeout: 2000});
-                    return f?readFile(f.split("##")[0]):playUrl; //'#isVideo=true#';
+                    if(playUrl.includes(".m3u8")){
+                        let f = cacheM3u8(playUrl, {header: ulist.header || getheader(playUrl), timeout: 2000});
+                        return f?readFile(f.split("##")[0]):playUrl; //'#isVideo=true#';
+                    }else{
+                        let h = ulist.header || getheader(playUrl);
+                        h["Location"] = playUrl;
+                        return JSON.stringify({
+                            statusCode: 302,
+                            headers: h
+                        });
+                    }
                 }else{
                     return '';
                 }
