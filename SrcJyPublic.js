@@ -859,6 +859,7 @@ function downloadFiles() {
     if(代码仓){
         try{
             requireDownload(代码仓 + "img/聚影.png", 'hiker://files/cache/src/聚影.png');
+            requireDownload(代码仓 + "plugins/globalmap.js", 'hiker://files/data/聚影/code/plugins/globalmap.js');
         }catch(e){}
     }
 }
