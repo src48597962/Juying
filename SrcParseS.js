@@ -712,22 +712,38 @@ var SrcParseS = {
             }
         }else if(/^function/.test(obj.ulist.url.trim())){
             obj.ulist['x5'] = 0;
-            let rurl = "";
+            let rurl;
             try{
                 eval('var JSparse = '+obj.ulist.url)
                 rurl = JSparse(obj.vipUrl);
-                log($.type(rurl));
                 //log(rurl);
             }catch(e){
                 //log("解析有错误"+e.message);
             }
-            if(/^toast/.test(rurl)){
-                log(obj.ulist.name+'>提示：'+rurl.replace('toast://',''));
-                rurl = "";
-            }else if(obj.isTest && /^http/.test(rurl) && obj.testVideo(rurl,obj.ulist.name)==0){
-                rurl = "";
+            if(rurl){
+                let turl = '';
+                if($.type(rurl)=="string"){
+                    if(rurl.includes('{names:')){
+                        try{
+                            rurl = JSON.parse(rurl);
+                        }catch(e){
+                            rurl = '';
+                        }
+                    }
+                }
+                if($.type(rurl)=="object"){
+                    turl = rurl.urls[0];
+                }else{
+                    turl = rurl;
+                }
+                if(/^toast/.test(turl)){
+                    log(obj.ulist.name+'>提示：'+turl.replace('toast://',''));
+                    rurl = "";
+                }else if(obj.isTest && /^http/.test(turl) && obj.testVideo(turl,obj.ulist.name)==0){
+                    rurl = "";
+                }
             }
-            return {url: rurl,ulist: obj.ulist}; 
+            return {url: rurl || "", ulist: obj.ulist}; 
         }else{
             let taskheader = {withStatusCode:true,timeout:8000};
             let uext = obj.ulist.ext || {};
