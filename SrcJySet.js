@@ -1419,6 +1419,7 @@ function jiexi(data) {
         title: '是否为web嗅探解析：' + (getMyVar('parsetype', data?data.type.toString():'0')=="0"?"是":"否"),
         col_type: 'text_1',
         url:$().lazyRule(()=>{
+            log(getMyVar('parseurl',''));
             if(/^function/.test(getMyVar('parseurl',''))){
                 putMyVar('parsetype','0');
             }else if(getMyVar('parsetype')=="1"){
