@@ -1056,7 +1056,7 @@ function jiekou(data) {
                 let apiurl = getMyVar('apiurl','');
                 let apitype = getMyVar('apitype', '');
                 if(apiurl && apitype=="hipy_t3" && /^hiker|^file/.test(apiurl)){
-                    let {GM} = $.require(config.依赖.replace(/[^/]*$/,'') + 'plugins/globalmap.js');
+                    //let {GM} = $.require(config.依赖.replace(/[^/]*$/,'') + 'plugins/globalmap.js');
                     let drpy = GM.defineModule("SrcJuDrpy", config.依赖.replace(/[^/]*$/,'') + "SrcJyDrpy.js").get(data);
                     let code = drpy.runMain("let main=" + $.toString((ext) => {
                         return () => getOriginalJs(request(ext, {
