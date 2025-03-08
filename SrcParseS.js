@@ -279,7 +279,9 @@ var SrcParseS = {
                     log($.type(playUrl));
                     if($.type(playUrl)=="object"){
                         ulist.header = playUrl.headers && playUrl.headers.length>0?playUrl.headers[0]:ulist.header;
+                        log(ulist.header);
                         playUrl = playUrl.urls[0];
+                        log(playUrl);
                     }
                     log(parsename+">播放地址>"+playUrl);
                     let f = cacheM3u8(playUrl, {header: ulist.header || getheader(playUrl), timeout: 2000});
