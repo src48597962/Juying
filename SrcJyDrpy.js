@@ -1,4 +1,4 @@
-const codepath = module.modulePath.slice(0, module.modulePath.lastIndexOf("/") + 1);
+const codePath = module.modulePath.slice(0, module.modulePath.lastIndexOf("/") + 1);
 const JSEngine = com.example.hikerview.service.parser.JSEngine;
 const drpyMap = new Map();
 const GMkey = module.importParam;
@@ -38,7 +38,7 @@ function createDrpy(sdata) {
     if (typeof my_rule != "undefined" && my_rule != null) {
         func = oldbuildJsEnv;
     }
-    JSEngine.getInstance().evalJS(func(MY_TICKET) + "\n!" + $.toString((sdata, codepath, GMkey, MY_TICKET) => {
+    JSEngine.getInstance().evalJS(func(MY_TICKET) + "\n!" + $.toString((sdata, codePath, GMkey, MY_TICKET) => {
         const localKey = "drpy";
         const CryptoUtil = $.require("hiker://assets/crypto-java.js");
         globalThis.local = {
@@ -63,7 +63,7 @@ function createDrpy(sdata) {
         
         globalThis.getProxy = function () {
             let proxyUrl = startProxyServer($.toString((sdata, codepath, title) => {
-                let {GM} = $.require(codepath + "plugins/globalmap.js");
+                let {GM} = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6916&auth=1d35e8f0-22e8-5270-a9d1-826f53f177ad");
                 GM.setSelfKey(title);
                 let drpy = GM.defineModule("SrcJyDrpy", codepath + "SrcJyDrpy.js").get(sdata);
 
@@ -85,7 +85,7 @@ function createDrpy(sdata) {
                     body: data,
                     headers: headers,
                 };
-            }, sdata, codepath, MY_RULE._title||MY_RULE.title));
+            }, sdata, codePath, MY_RULE._title||MY_RULE.title));
             return proxyUrl + "?do=js";
         }
         
@@ -199,14 +199,13 @@ function createDrpy(sdata) {
         Function.prototype.toString = function () {
             return $toString.apply(this).trim();
         };
-
-        let {GM} = $.require(codepath + "plugins/globalmap.js");
-        //$.require.cache.delete($.require.resolve(codepath +'drpy/drpy2.js'));
-        let drpy2 = $.require(codepath +'drpy/drpy2.js');
+        //let {GM} = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6916&auth=1d35e8f0-22e8-5270-a9d1-826f53f177ad");
+        //$.require.cache.delete($.require.resolve(codePath +'drpy/drpy2.js'));
+        let drpy2 = $.require(codePath +'drpy/drpy2.js');
         GM.has(GMkey, (DrpyManage) => {
             DrpyManage.put(sdata.key, drpy2);
         });
-    }, sdata, codepath, GMkey, MY_TICKET) + ";\n", "", false);
+    }, sdata, codePath, GMkey, MY_TICKET) + ";\n", "", false);
 }
 
 function createNewDrpy(sdata) {
