@@ -249,6 +249,7 @@ var SrcParseS = {
         var urls = [];//多线路地址
         var names = [];//多线路名称
         var headers = [];//多线路头信息
+        var audioUrls = [];//多线路音频分离地址
         var danmu = "";//多线路弹幕
         var dellist = [];//需从本地解析中删除列表
         var myJXchange = 0;//私有解析是否有变化需要保存
@@ -277,9 +278,17 @@ var SrcParseS = {
                     log(parsename+">解析错误>" + e.message + " 错误行#" + e.lineNumber);
                 }
                 if(playUrl){
-                    if($.type(playUrl)=="object"){
-                        ulist.header = playUrl.headers && playUrl.headers.length>0?playUrl.headers[0]:ulist.header;
-                        playUrl = playUrl.urls[0];
+                    let urltype;
+                    let urljson;
+                    try{
+                        eval('urljson = '+ playUrl);
+                        urltype = $.type(urljson);
+                    }catch(e){
+                        urltype = "string";
+                    }
+                    if(urltype=="object"){
+                        ulist.header = urljson.headers && urljson.headers.length>0?urljson.headers[0]:ulist.header;
+                        playUrl = urljson.urls[0];
                     }
                     log(parsename+">播放地址>"+playUrl)
                     if(playUrl.includes(".m3u8")){
@@ -308,8 +317,7 @@ var SrcParseS = {
             parselist.forEach((item) => {
                 urls.push(u + "?name=" + item.name + "#.m3u8#pre#");
                 names.push(item.name);
-                headers.push({"Referer": "https://www.bilibili.com", "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"});
-                //headers.push(item.header || this.mulheader(vipUrl));
+                headers.push(item.header || this.mulheader(vipUrl));
             })
             return {
                 urls: urls,
@@ -366,14 +374,14 @@ var SrcParseS = {
             be(UrlParses, {
                 func: function(obj, id, error, taskResult) {
                     let beurl = taskResult.url;
-                    if(beurl!=""&&needparse.test(beurl)){//&&beurl.indexOf('?')==-1
+                    if(beurl && needparse.test(beurl)){//&&beurl.indexOf('?')==-1
                         beurl = "";
                     }
 
                     obj.results.push(beurl);
                     obj.parses.push(taskResult.ulist);
                     obj.errors.push(error);
-                    if (contain.test(beurl)&&!exclude.test(beurl)&&excludeurl.indexOf(beurl)==-1) {
+                    if (beurl&&((beurl.startsWith('http')&&contain.test(beurl)&&!exclude.test(beurl)&&excludeurl.indexOf(beurl)==-1)||beurl.startsWith('{'))) {
                         sccess = sccess + 1;
                         if(sccess>=mulnum){
                             log("线程中止，已捕获视频");
@@ -416,17 +424,20 @@ var SrcParseS = {
                     }
                     
                     //组一个多线路播放地址备用，log($.type(beurls[k]));
+                    let urljson;
+                    let urltype;
                     try{
-                        eval('var urljson = '+ beurls[k]);
-                        var urltype = $.type(urljson);
+                        eval('urljson = '+ beurls[k]);
+                        urltype = $.type(urljson);
                     }catch(e){
-                        var urltype = "string";
+                        urltype = "string";
                     }
                     if(urltype == "object"){
                         try {
                             let murls = urljson.urls;
-                            let mnames = urljson.names||[];
-                            let mheaders = urljson.headers;
+                            let mnames = urljson.names || [];
+                            let mheaders = urljson.headers || [];
+                            let maudioUrls = urljson.audioUrls || [];
                             for(let j=0;j<murls.length;j++){
                                 if(!/yue|480/.test(mnames[j])){//屏蔽全全-优酷的不必要线路
                                     let MulUrl = this.formatMulUrl(murls[j].replace(/;{.*}/g,""), urls.length);
@@ -436,7 +447,14 @@ var SrcParseS = {
                                     }else{
                                         names.push(beparses[k].name || '线路'+urls.length);
                                     }
-                                    headers.push(mheaders[j]);
+                                    if(mheaders.length>0){
+                                        headers.push(mheaders[j]);
+                                    }else{
+                                        headers.push(MulUrl.header);
+                                    }
+                                    if(maudioUrls.length>0){
+                                        audioUrls.push(maudioUrls[j]);
+                                    }
                                 }
                             }
                             if(urljson.danmu){danmu = urljson.danmu;}
@@ -512,7 +530,8 @@ var SrcParseS = {
                     urls: urls,
                     names: names,
                     headers: headers,
-                    danmu: danmu || dm 
+                    danmu: danmu || dm,
+                    audioUrls: audioUrls
                 }); 
             }else{
                 log('进入单线路播放');
@@ -733,25 +752,10 @@ var SrcParseS = {
                 //log("解析有错误"+e.message);
             }
             if(rurl){
-                let turl = '';
-                if($.type(rurl)=="string"){
-                    if(rurl.includes('{"names":')){
-                        try{
-                            rurl = JSON.parse(rurl);
-                        }catch(e){
-                            rurl = '';
-                        }
-                    }
-                }
-                if($.type(rurl)=="object"){
-                    turl = rurl.urls[0];
-                }else{
-                    turl = rurl;
-                }
-                if(/^toast/.test(turl)){
-                    log(obj.ulist.name+'>提示：'+turl.replace('toast://',''));
+                if(/^toast/.test(rurl)){
+                    log(obj.ulist.name+'>提示：'+rurl.replace('toast://',''));
                     rurl = "";
-                }else if(obj.isTest && /^http/.test(turl) && obj.testVideo(turl,obj.ulist.name)==0){
+                }else if(obj.isTest && /^http/.test(rurl) && obj.testVideo(rurl,obj.ulist.name)==0){
                     rurl = "";
                 }
             }
