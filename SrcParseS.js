@@ -276,6 +276,7 @@ var SrcParseS = {
                     log(parsename+">解析错误>" + e.message + " 错误行#" + e.lineNumber);
                 }
                 if(playUrl){
+                    log($.type(playUrl));
                     if($.type(playUrl)=="object"){
                         ulist.header = playUrl.headers && playUrl.headers.length>0?playUrl.headers[0]:ulist.header;
                         playUrl = playUrl.urls[0];
