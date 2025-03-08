@@ -257,7 +257,7 @@ var SrcParseS = {
 
         //模式3手工解析使用代理播放
         if(parsemode==3){
-            let u = startProxyServer($.toString((parselist,vipUrl,task,getheader,log) => {
+            let u = startProxyServer($.toString((parselist,vipUrl,解析方法,getheader,log) => {
                 let parsename = MY_PARAMS.name.join("");
                 log("我在代理解析>" + parsename);
                 let playUrl = "";
@@ -270,7 +270,7 @@ var SrcParseS = {
                         vipUrl: vipUrl,
                         parsemode: 3
                     }
-                    let getUrl = task(obj);
+                    let getUrl = 解析方法(obj);
                     playUrl = getUrl.url;
                 }catch(e){
                     log(parsename+">解析错误>" + e.message + " 错误行#" + e.lineNumber);
@@ -723,7 +723,7 @@ var SrcParseS = {
             if(rurl){
                 let turl = '';
                 if($.type(rurl)=="string"){
-                    if(rurl.includes('{names:')){
+                    if(rurl.includes('{"names":')){
                         try{
                             rurl = JSON.parse(rurl);
                         }catch(e){
