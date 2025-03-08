@@ -308,7 +308,8 @@ var SrcParseS = {
             parselist.forEach((item) => {
                 urls.push(u + "?name=" + item.name + "#.m3u8#pre#");
                 names.push(item.name);
-                headers.push(item.header || this.mulheader(vipUrl));
+                headers.push({"Referer": "https://www.bilibili.com", "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"});
+                //headers.push(item.header || this.mulheader(vipUrl));
             })
             return {
                 urls: urls,
