@@ -261,8 +261,9 @@ var SrcParseS = {
                 let parsename = MY_PARAMS.name.join("");
                 log("我在代理解析>" + parsename);
                 let playUrl = "";
+                let ulist = {};
                 try{
-                    let ulist = parselist.filter(item => {
+                    ulist = parselist.filter(item => {
                         return item.name==parsename;
                     })[0];
                     let obj = {
