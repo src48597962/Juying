@@ -277,14 +277,12 @@ var SrcParseS = {
                     log(parsename+">解析错误>" + e.message + " 错误行#" + e.lineNumber);
                 }
                 if(playUrl){
-                    log($.type(playUrl));
                     if($.type(playUrl)=="object"){
                         ulist.header = playUrl.headers && playUrl.headers.length>0?playUrl.headers[0]:ulist.header;
-                        log(ulist.header);
                         playUrl = playUrl.urls[0];
-                        log(playUrl);
+                        return JSON.stringify({urls:[playUrl],headers:[ulist.header]});
                     }
-                    log(parsename+">播放地址>"+playUrl);
+                    log(parsename+">播放地址>"+playUrl)
                     let f = cacheM3u8(playUrl, {header: ulist.header || getheader(playUrl), timeout: 2000});
                     return f?readFile(f.split("##")[0]):playUrl; //'#isVideo=true#';
                 }else{
