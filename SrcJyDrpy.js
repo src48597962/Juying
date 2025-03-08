@@ -63,7 +63,7 @@ function createDrpy(sdata) {
         
         globalThis.getProxy = function () {
             let proxyUrl = startProxyServer($.toString((sdata, codepath, title) => {
-                let {GM} = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6916&auth=1d35e8f0-22e8-5270-a9d1-826f53f177ad");
+                //let {GM} = $.require("http://hiker.nokia.press/hikerule/rulelist.json?id=6916&auth=1d35e8f0-22e8-5270-a9d1-826f53f177ad");
                 GM.setSelfKey(title);
                 let drpy = GM.defineModule("SrcJyDrpy", codepath + "SrcJyDrpy.js").get(sdata);
 
