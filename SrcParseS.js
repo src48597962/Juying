@@ -374,7 +374,7 @@ var SrcParseS = {
             be(UrlParses, {
                 func: function(obj, id, error, taskResult) {
                     let beurl = taskResult.url;
-                    if(beurl && (needparse.test(beurl)||)){//&&beurl.indexOf('?')==-1
+                    if(beurl && (needparse.test(beurl))){//&&beurl.indexOf('?')==-1
                         beurl = "";
                     }
 
