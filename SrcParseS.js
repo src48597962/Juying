@@ -374,7 +374,7 @@ var SrcParseS = {
             be(UrlParses, {
                 func: function(obj, id, error, taskResult) {
                     let beurl = taskResult.url;
-                    if(beurl && (needparse.test(beurl)||!contain.test(beurl)||exclude.test(beurl)||excludeurl.indexOf(beurl)>-1)){//&&beurl.indexOf('?')==-1
+                    if(beurl && beurl.startsWith('http') && (needparse.test(beurl)||!contain.test(beurl)||exclude.test(beurl)||excludeurl.indexOf(beurl)>-1)){//&&beurl.indexOf('?')==-1
                         beurl = "";
                     }
 
@@ -439,7 +439,7 @@ var SrcParseS = {
                             let mheaders = urljson.headers || [];
                             let maudioUrls = urljson.audioUrls || [];
                             for(let j=0;j<murls.length;j++){
-                                if(!/yue|480/.test(mnames[j])){//屏蔽全全-优酷的不必要线路
+                                if(!/yue|480|360/.test(mnames[j])){//屏蔽全全-优酷的不必要线路
                                     let MulUrl = this.formatMulUrl(murls[j].replace(/;{.*}/g,""), urls.length);
                                     urls.push(MulUrl.url);
                                     if(mnames.length>0){
