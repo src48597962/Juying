@@ -374,14 +374,14 @@ var SrcParseS = {
             be(UrlParses, {
                 func: function(obj, id, error, taskResult) {
                     let beurl = taskResult.url;
-                    if(beurl && (needparse.test(beurl))){//&&beurl.indexOf('?')==-1
+                    if(beurl && (needparse.test(beurl)||!contain.test(beurl)||exclude.test(beurl)||excludeurl.indexOf(beurl)>-1)){//&&beurl.indexOf('?')==-1
                         beurl = "";
                     }
 
                     obj.results.push(beurl);
                     obj.parses.push(taskResult.ulist);
                     obj.errors.push(error);
-                    if (beurl&&((beurl.startsWith('http')&&contain.test(beurl)&&!exclude.test(beurl)&&excludeurl.indexOf(beurl)==-1)||beurl.startsWith('{'))) {
+                    if (beurl) {
                         sccess = sccess + 1;
                         if(sccess>=mulnum){
                             log("线程中止，已捕获视频");
@@ -400,7 +400,7 @@ var SrcParseS = {
 
             for(let k in beparses){
                 var parseurl = beparses[k].url;
-                if(beerrors[k]==null){//&&contain.test(beurls[k])&&!exclude.test(beurls[k])&&excludeurl.indexOf(beurls[k])==-1
+                if(beerrors[k]==null&&parseurl){//&&contain.test(beurls[k])&&!exclude.test(beurls[k])&&excludeurl.indexOf(beurls[k])==-1
                     if(playurl==""){playurl = beurls[k];}
                     //记录最快的，做为下次优先
                     if(beparses[k].name==lastparse){
