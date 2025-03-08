@@ -276,6 +276,10 @@ var SrcParseS = {
                     log(parsename+">解析错误>" + e.message + " 错误行#" + e.lineNumber);
                 }
                 if(playUrl){
+                    if($.type(playUrl)=="object"){
+                        ulist.header = playUrl.headers && playUrl.headers.length>0?playUrl.headers[0]:ulist.header;
+                        playUrl = playUrl.urls[0];
+                    }
                     log(parsename+">播放地址>"+playUrl);
                     let f = cacheM3u8(playUrl, {header: ulist.header || getheader(playUrl), timeout: 2000});
                     return f?readFile(f.split("##")[0]):playUrl; //'#isVideo=true#';
@@ -711,9 +715,9 @@ var SrcParseS = {
             try{
                 eval('var JSparse = '+obj.ulist.url)
                 rurl = JSparse(obj.vipUrl);
-                log(rurl);
+                //log(rurl);
             }catch(e){
-                log("解析有错误"+e.message);
+                //log("解析有错误"+e.message);
             }
             if(/^toast/.test(rurl)){
                 log(obj.ulist.name+'>提示：'+rurl.replace('toast://',''));
