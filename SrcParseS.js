@@ -286,11 +286,11 @@ var SrcParseS = {
                         let f = cacheM3u8(playUrl, {header: ulist.header || getheader(playUrl), timeout: 2000});
                         return f?readFile(f.split("##")[0]):playUrl; //'#isVideo=true#';
                     }else{
-                        let h = ulist.header || getheader(playUrl);
-                        h["Location"] = playUrl;
                         return JSON.stringify({
                             statusCode: 302,
-                            headers: h
+                            headers: {
+                                "Location": playUrl
+                            }
                         });
                     }
                 }else{
@@ -308,10 +308,12 @@ var SrcParseS = {
             parselist.forEach((item) => {
                 urls.push(u + "?name=" + item.name + "#.m3u8#pre#");
                 names.push(item.name);
+                headers.push(item.header || this.mulheader(vipUrl));
             })
             return {
                 urls: urls,
-                names: names
+                names: names,
+                headers: headers
             };
         }else if(parsemode==2){//强制嗅探走video，没法指定header
             let dm;
@@ -850,14 +852,13 @@ var SrcParseS = {
         }
     },
     mulheader: function (url) {
+        let header = {};
         if (/mgtv/.test(url)) {
-            var header = { 'User-Agent': 'Mozilla/5.0', 'Referer': 'www.mgtv.com' };
+            header = { 'User-Agent': 'Mozilla/5.0', 'Referer': 'www.mgtv.com' };
         } else if (/bilibili|bilivideo/.test(url)) {
-            var header = { 'User-Agent': 'bili2021', 'Referer': 'www.bilibili.com' };
+            header = { 'User-Agent': 'bili2021', 'Referer': 'www.bilibili.com' };
         } else if (/wkfile/.test(url)) {
-            var header = { 'User-Agent': 'Mozilla/5.0', 'Referer': 'fantuan.tv' };
-        } else {
-            var header = {};
+            header = { 'User-Agent': 'Mozilla/5.0', 'Referer': 'fantuan.tv' };
         }
         return header;
     }
