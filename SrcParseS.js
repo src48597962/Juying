@@ -716,6 +716,7 @@ var SrcParseS = {
             try{
                 eval('var JSparse = '+obj.ulist.url)
                 rurl = JSparse(obj.vipUrl);
+                log($.type(rurl));
                 //log(rurl);
             }catch(e){
                 //log("解析有错误"+e.message);
