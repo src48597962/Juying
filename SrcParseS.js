@@ -462,10 +462,13 @@ var SrcParseS = {
                             log('判断多线路地址对象有错：'+e.message);
                         }
                     }else{
+                        log('进来了');
                         let MulUrl = this.formatMulUrl(beurls[k].replace(/;{.*}/g,""), urls.length);
                         urls.push(MulUrl.url);
+                        log(MulUrl.url);
                         names.push(beparses[k].name || '线路'+urls.length);
                         headers.push(MulUrl.header);
+                        log(MulUrl.header);
                     }
                     //if(ismul==0){break;}
                 }else{
