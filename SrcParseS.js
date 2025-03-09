@@ -65,6 +65,9 @@ function headerStrToObj(str) {
 
 // 头信息对象转字符串
 function headerObjToStr(obj) {
+    if (!obj || typeof obj !== 'object') {
+        return '{}'; // 或者根据需求返回其他默认值
+    }
     const pairs = [];
     for (const [key, value] of Object.entries(obj)) {
         pairs.push(`${key}@${value}`);
