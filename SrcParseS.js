@@ -201,7 +201,7 @@ var SrcParseS = {
         log("片源标识："+from+"，需要解析"); 
 
         let parsemode = playSet.parsemode || 1;//解析模式
-        let mulnum = playSet.mulnum || 1;//多线程数
+        let mulnum = playSet.mulnum || 2;//多线程数
         let jxfile = "hiker://files/rules/Src/Juying2/jiexi.json";//解析存放文件
         let parselist = [];//待进线程执行的解析列表
         let jxList= [];//读取解析列表
