@@ -49,6 +49,28 @@ function removeByValue(arr, val) {
         }
     }
 }
+// 头信息字符串转对象
+function headerStrToObj(str) {
+    if (!str.startsWith('{') ||!str.endsWith('}')) {
+        throw new Error('Invalid input string format');
+    }
+    const pairs = str.slice(1, -1).split('&&');
+    const obj = {};
+    pairs.forEach(pair => {
+        const [key, value] = pair.split('@');
+        obj[key] = value;
+    });
+    return obj;
+}
+
+// 头信息对象转字符串
+function headerObjToStr(obj) {
+    const pairs = [];
+    for (const [key, value] of Object.entries(obj)) {
+        pairs.push(`${key}@${value}`);
+    }
+    return `{${pairs.join('&&')}}`;
+}
 
 var SrcParseS = {
     聚影: function (vipUrl, dataObj) {
@@ -440,7 +462,7 @@ var SrcParseS = {
                             let maudioUrls = urljson.audioUrls || [];
                             for(let j=0;j<murls.length;j++){
                                 if(!/yue|480|360/.test(mnames[j])){//屏蔽全全-优酷的不必要线路
-                                    let MulUrl = this.formatMulUrl(murls[j].replace(/;{.*}/g,""), urls.length);
+                                    let MulUrl = this.formatMulUrl(murls[j], urls.length);
                                     urls.push(MulUrl.url);
                                     if(mnames.length>0){
                                         names.push(mnames[j]);
@@ -463,7 +485,7 @@ var SrcParseS = {
                         }
                     }else{
                         log('进来了');
-                        let MulUrl = this.formatMulUrl(beurls[k].replace(/;{.*}/g,""), urls.length);
+                        let MulUrl = this.formatMulUrl(beurls[k], urls.length);
                         urls.push(MulUrl.url);
                         log(MulUrl.url);
                         names.push(beparses[k].name || '线路'+urls.length);
@@ -575,6 +597,7 @@ var SrcParseS = {
     formatMulUrl: function (url,i) {
         try {
             let header = this.mulheader(url);
+            url = url.split(';{')[0];
             if ((playSet.cachem3u8)&&url.indexOf('.m3u8')>-1) {// || url.indexOf('vkey=')>-1
                 log("缓存m3u8索引文件");
                 let name = 'video'+parseInt(i)+'.m3u8';
@@ -861,7 +884,9 @@ var SrcParseS = {
     },
     mulheader: function (url) {
         let header = {};
-        if (/mgtv/.test(url)) {
+        if(url.includes(';{')){
+            header = headerStrToObj('{'+url.split(';{')[1])
+        }else if (/mgtv/.test(url)) {
             header = { 'User-Agent': 'Mozilla/5.0', 'Referer': 'www.mgtv.com' };
         } else if (/bilibili|bilivideo/.test(url)) {
             header = { 'User-Agent': 'bili2021', 'Referer': 'www.bilibili.com' };
