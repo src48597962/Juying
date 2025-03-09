@@ -52,13 +52,13 @@ function removeByValue(arr, val) {
 // 头信息字符串转对象
 function headerStrToObj(str) {
     if (!str.startsWith('{') ||!str.endsWith('}')) {
-        throw new Error('Invalid input string format');
+        log('组多线路传入的头信息字符串不正确');
     }
     const pairs = str.slice(1, -1).split('&&');
     const obj = {};
     pairs.forEach(pair => {
         const [key, value] = pair.split('@');
-        obj[key] = value;
+        obj[key] = value.replace(/；；/g,'; ');
     });
     return obj;
 }
@@ -68,7 +68,7 @@ function headerObjToStr(obj) {
     if (!obj || typeof obj !== 'object') {
         return '{}'; // 如果 obj 不是对象，返回空对象字符串
     }
-    const pairs = Object.keys(obj).map(key => `${key}@${obj[key]}`);
+    const pairs = Object.keys(obj).map(key => `${key}@${obj[key].replace(/;/g,'；；')}`);
     return `{${pairs.join('&&')}}`;
 }
 
@@ -882,7 +882,7 @@ var SrcParseS = {
     mulheader: function (url) {
         let header = {};
         if(url.includes(';{')){
-            header = headerStrToObj('{'+url.split(';{')[1])
+            header = headerStrToObj('{'+url.split(';{')[1].replace('#isVideo=true#',''))
         }else if (/mgtv/.test(url)) {
             header = { 'User-Agent': 'Mozilla/5.0', 'Referer': 'www.mgtv.com' };
         } else if (/bilibili|bilivideo/.test(url)) {
