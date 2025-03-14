@@ -1668,7 +1668,7 @@ function manageSet(){
         img: getIcon("管理-箭头.svg"),
         url: $(getItem('依赖', ''),"手工指定聚影代码库地址").input(()=>{
             return $("确定要指定聚影代码库地址"+input).confirm((input)=>{
-                if(input && !input.startsWith("http")){
+                if(input && (!input.startsWith("http") || !input.endsWith("SrcJuying.js"))){
                     return "toast://输入有误"
                 }
                 input = input.trim();
