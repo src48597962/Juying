@@ -84,8 +84,8 @@ var SrcParseS = {
             let play = {url: ""};
             if(dataObj.stype=="hipy_t3"){
                 let sdata = {name: dataObj.sname, url: dataObj.surl, ext: dataObj.sext}
-                let {GM} = $.require(config.依赖.replace(/[^/]*$/,'') + "plugins/globalmap.js");
-                let drpy = GM.defineModule("SrcJyDrpy", config.依赖.replace(/[^/]*$/,'') + "SrcJyDrpy.js").get(sdata);
+                let {GM} = $.require((config.聚影||config.依赖).replace(/[^/]*$/,'') + "plugins/globalmap.js");
+                let drpy = GM.defineModule("SrcJyDrpy", (config.聚影||config.依赖).replace(/[^/]*$/,'') + "SrcJyDrpy.js").get(sdata);
                 play = JSON.parse(drpy.play(dataObj.flag, vipUrl, []));
             }else if(dataObj.stype=="hipy_t4"){
                 play = JSON.parse(fetch(dataObj.surl+(dataObj.surl.includes("?")?"&":"?")+'flag='+dataObj.flag+"&extend="+dataObj.sext+'&play='+vipUrl, {timeout: 10000}));
@@ -141,7 +141,7 @@ var SrcParseS = {
             return unescape(request(vipUrl).match(/"url":"([^"]*)"/)[1].replace(/\\u/g, "%u"));
         }else if(/www\.aliyundrive\.com|www\.alipan\.com/.test(vipUrl)) {
             return $("hiker://empty#noRecordHistory##noHistory#").rule((input) => {
-                require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyAliDisk.js');
+                require((config.聚影||config.依赖).replace(/[^/]*$/,'') + 'SrcJyAliDisk.js');
                 aliShareUrl(input);
             },vipUrl);
         }else if(/pan\.quark\.cn|drive\.uc\.cn/.test(vipUrl)) {
@@ -751,7 +751,7 @@ var SrcParseS = {
         }
 
         if(obj.isWeb){
-            require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyMethod.js');
+            require((config.聚影||config.依赖).replace(/[^/]*$/,'') + 'SrcJyMethod.js');
             if(obj.music){
                 return exeWebRule({webUrl:obj.vipUrl}, 1, obj.js) || "toast://嗅探解析失败";
             }else if(obj.video){
@@ -813,7 +813,7 @@ var SrcParseS = {
                     }else if(/\.m3u8|\.mp4/.test(gethtml) && geturl(gethtml)){
                         rurl = geturl(gethtml);
                     }else if((MY_NAME=="海阔视界"&&getAppVersion()>=4094)||(MY_NAME=="嗅觉浏览器"&&getAppVersion()>=1359)){
-                        require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyMethod.js');
+                        require((config.聚影||config.依赖).replace(/[^/]*$/,'') + 'SrcJyMethod.js');
                         let purl = obj.ulist.url+obj.vipUrl;
                         if(/jx\.playerjy\.com/.test(purl)){
                             head['referer'] = purl;
