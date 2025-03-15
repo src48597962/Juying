@@ -1,5 +1,5 @@
 //本代码仅用于个人学习，请勿用于其他作用，下载后请24小时内删除，代码虽然是公开学习的，但请尊重作者，应留下说明
-require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
+require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
 
 function Live() {
     addListener("onClose", $.toString(() => {
@@ -15,7 +15,7 @@ function Live() {
         title: '⚙管理中心⚙',
         img: getIcon("聚影.svg"),
         url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
-            require(config.依赖.replace(/[^/]*$/,'') + 'SrcLive.js');
+            require(config.聚影.replace(/[^/]*$/,'') + 'SrcLive.js');
             LiveSet();
         }),
         col_type: 'avatar'
@@ -186,13 +186,13 @@ function Live() {
                 let longClick = getMyVar('editmode', '0') == "1" ? [{
                     title: "删除此分组",
                     js: $.toString((groupname, lists) => {
-                        require(config.依赖.replace(/[^/]*$/,'') + 'SrcLive.js');
+                        require(config.聚影.replace(/[^/]*$/,'') + 'SrcLive.js');
                         return GroupEdit(groupname, 'del', lists);
                     }, groupname, lists)
                 }, {
                     title: "重命名分组",
                     js: $.toString((groupname) => {
-                        require(config.依赖.replace(/[^/]*$/,'') + 'SrcLive.js');
+                        require(config.聚影.replace(/[^/]*$/,'') + 'SrcLive.js');
                         return GroupEdit(groupname, 'rename');
                     }, groupname)
                 }] : [];
@@ -306,13 +306,13 @@ function guanlidata(datalist) {
         let longClick = getMyVar('editmode', '0') == "1" ? [{
             title: "删除此频道",
             js: $.toString((name) => {
-                require(config.依赖.replace(/[^/]*$/,'') + 'SrcLive.js');
+                require(config.聚影.replace(/[^/]*$/,'') + 'SrcLive.js');
                 return LiveEdit(name, 'del');
             }, name)
         }, {
             title: "重命名频道",
             js: $.toString((name) => {
-                require(config.依赖.replace(/[^/]*$/,'') + 'SrcLive.js');
+                require(config.聚影.replace(/[^/]*$/,'') + 'SrcLive.js');
                 return LiveEdit(name, 'rename');
             }, name)
         }] : [];
@@ -322,7 +322,7 @@ function guanlidata(datalist) {
             img: globalMap0.getVar('Jy_gmParams').getIcon("直播-tv.svg"),
             col_type: 'icon_2_round',
             url: $('#noLoading#').lazyRule((name) => {
-                require(config.依赖.replace(/[^/]*$/,'') + 'SrcLive.js');
+                require(config.聚影.replace(/[^/]*$/,'') + 'SrcLive.js');
                 return LivePlay(name);
             }, name),
             extra: {
