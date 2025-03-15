@@ -1,5 +1,5 @@
 ////本代码仅用于个人学习，请勿用于其他作用，下载后请24小时内删除，代码虽然是公开学习的，但请尊重作者，应留下说明
-require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');//加载公共文件
+require((config.聚影||config.依赖||getPublicItem('聚影','')).replace(/[^/]*$/,'') + 'SrcJyPublic.js');//加载公共文件
 
 function SRCSet() {
     addListener("onClose", $.toString(() => {
@@ -18,7 +18,7 @@ function SRCSet() {
     d.push({
         title: '增加',
         url: $('hiker://empty#noRecordHistory##noHistory#').rule((guanliType) => {
-            require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
+            require(globalMap0.getVar('Jy_gmParams').codepath + 'SrcJySet.js');
             if(guanliType=="jk"){
                 jiekou();
             }else{
@@ -51,7 +51,7 @@ function SRCSet() {
                     var sm = "解析";
                 }
                 return $("确定要删除本地所有的"+sm+"吗？").confirm(()=>{
-                    require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
+                    require(globalMap0.getVar('Jy_gmParams').codepath + 'SrcJyPublic.js');
                     deleteData(getMyVar('guanli', 'jk'));
                     refreshPage(false);
                     return 'toast://已全部清空';
@@ -70,7 +70,7 @@ function SRCSet() {
             if(input.indexOf('@import=js:')>-1){
                 input = input.split('@import=js:')[0].replace('云口令：','').trim();
             }
-            require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
+            require(globalMap0.getVar('Jy_gmParams').codepath + 'SrcJySet.js');
             return JYimport(input);
         }),
         img: getIcon("点播-接口导入.svg"),//"https://hikerfans.com/tubiao/more/43.png",
@@ -97,7 +97,7 @@ function SRCSet() {
     d.push({
         title: '分享',
         url: yxdatalist.length==0?'toast://有效数据为空，只能单个分享':$(pastes,2).select((lx)=>{
-            require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
+            require(globalMap0.getVar('Jy_gmParams').codepath + 'SrcJySet.js');
             return JYshare(lx, input);
         }, guanliType),
         img: getIcon("点播-接口分享.svg"),//"https://hikerfans.com/tubiao/more/3.png",
@@ -208,10 +208,10 @@ function SRCSet() {
                 obj.extra.longClick = [{
                     title: lockgroups.indexOf(it)>-1?"解锁":"加锁",
                     js: $.toString((it) => {
-                        require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
+                        require(globalMap0.getVar('Jy_gmParams').codepath + 'SrcJyPublic.js');
                         let lockgroups = Juconfig["lockgroups"] || [];
                         if(lockgroups.indexOf(it)>-1){
-                            const hikerPop = $.require(config.依赖.replace(/[^/]*$/,'') + 'plugins/hikerPop.js');
+                            const hikerPop = $.require(globalMap0.getVar('Jy_gmParams').codepath + 'plugins/hikerPop.js');
                             if (hikerPop.canBiometric() !== 0) {
                                 return "toast://无法调用生物学验证";
                             }
@@ -242,7 +242,7 @@ function SRCSet() {
             title: "反向选择",
             url: $('#noLoading#').lazyRule((jkdatalist) => {
                 jkdatalist = JSON.parse(base64Decode(jkdatalist));
-                require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
+                require(globalMap0.getVar('Jy_gmParams').codepath + 'SrcJyPublic.js');
                 duoselect(jkdatalist);
                 return "toast://已反选";
             },base64Encode(JSON.stringify(jkdatalist))),
@@ -256,7 +256,7 @@ function SRCSet() {
                     return "toast://未选择";
                 }
                 return $("确定要删除选择的"+duoselect.length+"个接口？").confirm((duoselect)=>{
-                    require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
+                    require(globalMap0.getVar('Jy_gmParams').codepath + 'SrcJyPublic.js');
                     deleteData(getMyVar('guanli', 'jk'), duoselect);
                     refreshPage(false);
                     return 'toast://已删除选择';
@@ -279,7 +279,7 @@ function SRCSet() {
                                 }else if(input.includes('[') || input.includes(']')){
                                     return "toast://分组名不能包含：[]";
                                 }
-                                require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
+                                require(globalMap0.getVar('Jy_gmParams').codepath + 'SrcJyPublic.js');
                                 var filepath = getFile(getMyVar('guanli', 'jk'));
                                 var datafile = fetch(filepath);
                                 eval("var datalist=" + datafile+ ";");
@@ -311,7 +311,7 @@ function SRCSet() {
                         return "toast://未选择";
                     }
                     return $("确定要禁用选择的"+duoselect.length+"个接口？").confirm((duoselect)=>{
-                        require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
+                        require(globalMap0.getVar('Jy_gmParams').codepath + 'SrcJyPublic.js');
                         let sm = dataHandle(getMyVar('guanli', 'jk'), duoselect, '禁用');
                         refreshPage(false);
                         return 'toast://' + sm;
@@ -327,7 +327,7 @@ function SRCSet() {
                         return "toast://未选择";
                     }
                     return $("确定要启用选择的"+duoselect.length+"个接口？").confirm((duoselect)=>{
-                        require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
+                        require(globalMap0.getVar('Jy_gmParams').codepath + 'SrcJyPublic.js');
                         let sm = dataHandle(getMyVar('guanli', 'jk'), duoselect, '启用');
                         refreshPage(false);
                         return 'toast://' + sm;
@@ -381,8 +381,8 @@ function SRCSet() {
                                     return "toast://检测项目已结束";
                                 }
 
-                                require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
-                                require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyData.js');
+                                require(globalMap0.getVar('Jy_gmParams').codepath + 'SrcJyPublic.js');
+                                require(globalMap0.getVar('Jy_gmParams').codepath + 'SrcJyData.js');
                                 let schedule = getMyVar("批量检测_当前进度","1");
 
                                 let task = function (data) {
@@ -473,7 +473,7 @@ function SRCSet() {
                                                     desc: data.message,
                                                     url: $("hiker://empty#noRecordHistory##noHistory#").rule((data) => {
                                                         setPageTitle(data.name+"-接口测试");
-                                                        require(config.依赖);
+                                                        require(globalMap0.getVar('Jy_gmParams').codepath + 'SrcJuying.js');
                                                         dianboyiji(data);
                                                     }, data),
                                                     col_type: "text_1",
@@ -493,7 +493,7 @@ function SRCSet() {
                                                                     storage0.putMyVar("批量检测_失败列表", failSource);
                                                                 }
                                                                 deleteItem("failSource-" + data.url);
-                                                                require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
+                                                                require(globalMap0.getVar('Jy_gmParams').codepath + 'SrcJyPublic.js');
                                                                 let sm = dataHandle('jk', data, "禁用");
                                                                 return "toast://" + sm;
                                                             }, data)
@@ -510,7 +510,7 @@ function SRCSet() {
                                                                     storage0.putMyVar("批量检测_失败列表", failSource);
                                                                 }
                                                                 deleteItem("failSource-" + data.url);
-                                                                require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
+                                                                require(globalMap0.getVar('Jy_gmParams').codepath + 'SrcJyPublic.js');
                                                                 deleteData('jk', data);
                                                                 return "toast://已删除";
                                                             }, data)
@@ -578,7 +578,7 @@ function SRCSet() {
                                                     })
                                                     storage0.putMyVar("checkSourceList",checkSourceList);
 
-                                                    require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
+                                                    require(globalMap0.getVar('Jy_gmParams').codepath + 'SrcJyPublic.js');
                                                     deleteData("jk", failSourceList);
                                                     clearMyVar("批量检测_失败列表");
                                                     deleteItem("deleteAllFail");
@@ -728,7 +728,7 @@ function SRCSet() {
                         return "toast://未选择";
                     }
                     return $("确定要重置"+duoselect.length+"个解析的排序？").confirm((duoselect)=>{
-                        require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
+                        require(globalMap0.getVar('Jy_gmParams').codepath + 'SrcJyPublic.js');
                         let sm = dataHandle('jx', duoselect, '重置排序');
                         refreshPage(false);
                         return 'toast://' + sm;
@@ -754,17 +754,17 @@ function SRCSet() {
             title: it.stop?colorTitle(datatitle, '#f20c00'):datatitle,
             url: getMyVar('SrcJu_批量选择模式')?$('#noLoading#').lazyRule((data) => {
                 data = JSON.parse(base64Decode(data));
-                require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
+                require(globalMap0.getVar('Jy_gmParams').codepath + 'SrcJyPublic.js');
                 duoselect(data);
                 return "hiker://empty";
             },base64Encode(JSON.stringify(it))):$(selectmenu, 2).select((data) => {
                 data = JSON.parse(base64Decode(data));
                 if (input == "分享") {
-                    require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
+                    require(globalMap0.getVar('Jy_gmParams').codepath + 'SrcJySet.js');
                     return JYshare(getMyVar('guanli', 'jk'), getItem("sharePaste",""), data);
                 } else if (input == "编辑") {
                     return $('hiker://empty#noRecordHistory##noHistory#').rule((data) => {
-                        require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
+                        require(globalMap0.getVar('Jy_gmParams').codepath + 'SrcJySet.js');
                         if(getMyVar('guanli', 'jk')=="jk"){
                             jiekou(data);
                         }else{
@@ -773,7 +773,7 @@ function SRCSet() {
                     }, data)
                 } else if (input == "删除") {
                     return $("确定删除："+data.name).confirm((data)=>{
-                        require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
+                        require(globalMap0.getVar('Jy_gmParams').codepath + 'SrcJyPublic.js');
                         deleteData(getMyVar('guanli', 'jk'), data);
                         refreshPage(false);
                         return 'toast://已删除:'+data.name;
@@ -781,14 +781,14 @@ function SRCSet() {
                 } else if (input == "测试") {
                     return $("hiker://empty#noRecordHistory##noHistory#").rule((data) => {
                         setPageTitle(data.name+"-接口测试");
-                        require(config.依赖);
+                        require(globalMap0.getVar('Jy_gmParams').codepath + 'SrcJuying.js');
                         dianboyiji(data);
                     }, data);
                 } else {//置顶、禁用、启用
                     if(input == "置顶" && getItem("sourceListSort", "更新时间") != "更新时间"){
                         return "toast://无效操作，接口列表排序方式为：" + getItem("sourceListSort");
                     }
-                    require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
+                    require(globalMap0.getVar('Jy_gmParams').codepath + 'SrcJyPublic.js');
                     let sm = dataHandle(getMyVar('guanli', 'jk'), data, input);
                     refreshPage(false);
                     return 'toast://' + sm;
@@ -1056,8 +1056,8 @@ function jiekou(data) {
                 let apiurl = getMyVar('apiurl','');
                 let apitype = getMyVar('apitype', '');
                 if(apiurl && apitype=="hipy_t3" && /^hiker|^file/.test(apiurl)){
-                    //let {GM} = $.require(config.依赖.replace(/[^/]*$/,'') + 'plugins/globalmap.js');
-                    let drpy = GM.defineModule("SrcJuDrpy", config.依赖.replace(/[^/]*$/,'') + "SrcJyDrpy.js").get(data);
+                    //let {GM} = $.require(globalMap0.getVar('Jy_gmParams').codepath + 'plugins/globalmap.js');
+                    let drpy = GM.defineModule("SrcJuDrpy", globalMap0.getVar('Jy_gmParams').codepath + "SrcJyDrpy.js").get(data);
                     let code = drpy.runMain("let main=" + $.toString((ext) => {
                         return () => getOriginalJs(request(ext, {
                             "method": "GET"
@@ -1205,7 +1205,7 @@ function jiekou(data) {
             title:'删除',
             col_type:'text_3',
             url: $("确定删除接口："+data.name).confirm((data)=>{
-                require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
+                require(globalMap0.getVar('Jy_gmParams').codepath + 'SrcJyPublic.js');
                 deleteData('jk', data);
                 back(true);
                 return "toast://已删除";
@@ -1235,7 +1235,7 @@ function jiekou(data) {
             if(!apiurl.startsWith('http') && !apiurl.startsWith('hiker://') && !apiurl.startsWith('file://')){
                 return "toast://接口地址不正确";
             }
-            require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
+            require(globalMap0.getVar('Jy_gmParams').codepath + 'SrcJySet.js');
             let urls= [];
             
             let apiname = getMyVar('apiname','').trim();
@@ -1323,7 +1323,7 @@ function jiekou(data) {
                 }
                 let apiname = getMyVar('apiname','').trim();
                 if(apiname&&apiurl){
-                    require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
+                    require(globalMap0.getVar('Jy_gmParams').codepath + 'SrcJySet.js');
                     let apitype = getMyVar('apitype','');
                     if(apitype.includes('自动')){
                         apitype = getapitype(apiurl);
@@ -1361,7 +1361,7 @@ function jiekou(data) {
             clearMyVar('SrcJu_dianbo$classCache');
             return $("hiker://empty#noRecordHistory##noHistory#").rule((data) => {
                 setPageTitle(data.name+"-接口测试");
-                require(config.依赖);
+                require(globalMap0.getVar('Jy_gmParams').codepath + 'SrcJuying.js');
                 dianboyiji(data);
             }, data);
         }, data)
@@ -1521,14 +1521,14 @@ function jiexi(data) {
                 addItemBefore('jxline2', {
                     title: key,
                     url: key!="自定义"?$('#noRecordHistory##noHistory#').lazyRule((vipUrl,dataObj)=>{
-                        require(config.依赖.replace(/[^/]*$/,'') + 'SrcParseS.js');
+                        require(globalMap0.getVar('Jy_gmParams').codepath + 'SrcParseS.js');
                         return SrcParseS.聚影(vipUrl, dataObj);
                     },urls[key],dataObj):$("","输入自定义播放地址").input((dataObj) => {
                         if(input==""){
                             return "toast://未输入自定义地址，无法测试";
                         }else{
                             return $().lazyRule((vipUrl,dataObj)=>{
-                                require(config.依赖.replace(/[^/]*$/,'') + 'SrcParseS.js');
+                                require(globalMap0.getVar('Jy_gmParams').codepath + 'SrcParseS.js');
                                 return SrcParseS.聚影(vipUrl, dataObj);
                             }, input, dataObj)
                         }
@@ -1565,7 +1565,7 @@ function jiexi(data) {
             title:'删除',
             col_type:'text_3',
             url: $("确定删除解析："+getMyVar('parsename',data.name)).confirm((data)=>{
-                require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
+                require(globalMap0.getVar('Jy_gmParams').codepath + 'SrcJyPublic.js');
                 deleteData('jx', data);
                 back(true);
                 return "toast://已删除";
@@ -1595,7 +1595,7 @@ function jiexi(data) {
             if(parseext && $.type(parseext)!="object"){
                 return "toast://ext对象数据不正确"
             }
-            require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
+            require(globalMap0.getVar('Jy_gmParams').codepath + 'SrcJySet.js');
             let urls= [];
             let parseurl = getMyVar('parseurl');
             let parsename = getMyVar('parsename');
@@ -1727,7 +1727,7 @@ function manageSet(){
         title: '资源码分享管理',
         img: getIcon("管理-箭头.svg"),
         url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
-            require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
+            require(globalMap0.getVar('Jy_gmParams').codepath + 'SrcJyPublic.js');
             shareResource();
         }),
         col_type: 'text_icon'
@@ -1736,7 +1736,7 @@ function manageSet(){
         title: '资源码订阅管理',
         img: getIcon("管理-箭头.svg"),
         url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
-            require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
+            require(globalMap0.getVar('Jy_gmParams').codepath + 'SrcJyPublic.js');
             subResource();
         }),
         col_type: 'text_icon'
@@ -1855,10 +1855,10 @@ function manageSet(){
         img: getIcon("管理-箭头.svg"),
         col_type: 'text_icon',
         url: $("#noLoading#").lazyRule(() => {
-            eval(fetch(config.依赖.replace(/[^/]*$/,'') + 'SrcTmplVersion.js'));
+            eval(fetch(globalMap0.getVar('Jy_gmParams').codepath + 'SrcTmplVersion.js'));
             let updateRecords = newVersion.JYUpdateRecords || [];
 
-            const hikerPop = $.require(config.依赖.replace(/[^/]*$/,'') + 'plugins/hikerPop.js');
+            const hikerPop = $.require(globalMap0.getVar('Jy_gmParams').codepath + 'plugins/hikerPop.js');
             hikerPop.updateRecordsBottom(updateRecords);
             
             return "hiker://empty";
@@ -1907,7 +1907,7 @@ function manageSet(){
         title: '支持一下作者',
         img: getIcon("管理-箭头.svg"),
         col_type: 'text_icon',
-        url: config.依赖.replace(/[^/]*$/,'') + 'img/pay.jpg'
+        url: globalMap0.getVar('Jy_gmParams').codepath + 'img/pay.jpg'
     });
     d.push({
         col_type: "line_blank"
@@ -2086,7 +2086,7 @@ function resource() {
                     input = "file://" + input;
                 }
 
-                require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
+                require(globalMap0.getVar('Jy_gmParams').codepath + 'SrcJySet.js');
 
                 if(importtype=="4"){//扫描本地js文件夹
                     showLoading("正在扫描本地文件夹");
@@ -2097,7 +2097,7 @@ function resource() {
                         return "toast://没有新增js"
                     }else{
                         return $('hiker://empty#noRecordHistory##noHistory#').rule((newfiles) => {
-                            require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
+                            require(globalMap0.getVar('Jy_gmParams').codepath + 'SrcJySet.js');
                             importConfirm(newfiles);
                         },newfiles)
                     }
@@ -2124,7 +2124,7 @@ function resource() {
                     let names = urls.map(v=>v.name);
                     return $(names, 1).select((urls,exeImport) => {
                         let url = urls.filter(v=>v.name==input)[0].url;
-                        require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
+                        require(globalMap0.getVar('Jy_gmParams').codepath + 'SrcJySet.js');
                         return exeImport(url);
                     },urls,exeImport)
                 }
@@ -2166,7 +2166,7 @@ function resource() {
             d.push({
                 title: '点此进行检测配置文件有效性👀',
                 url: $('#noLoading#').lazyRule((lists) => {
-                    require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
+                    require(globalMap0.getVar('Jy_gmParams').codepath + 'SrcJyPublic.js');
                     lists.forEach(it=>{
                         let checkUrl = checkBoxUrl(it.url);
                         updateItem(it.url, {title: it.url +(checkUrl.message?" ❌":" ✔️")});
@@ -2596,7 +2596,7 @@ function yundiskjiekou() {
                                 }
                             });
                             setResult(d);
-                            require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyAliDisk.js');
+                            require(globalMap0.getVar('Jy_gmParams').codepath + 'SrcJyAliDisk.js');
                             aliDiskSearch(name,data);
                         },input,data)
                     },newapi)
@@ -2673,7 +2673,7 @@ function yundiskjiekou() {
                     let parseurl = aesDecode('Juying2', input.split('￥')[1]);
                     let content = parsePaste(parseurl);
                     let datalist2 = JSON.parse(globalMap0.getVar('Jy_gmParams').unzip(content));
-                    require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
+                    require(globalMap0.getVar('Jy_gmParams').codepath + 'SrcJySet.js');
                     let num = yundisksave(datalist2);
                     hideLoading();
                     refreshPage(false);
@@ -2778,7 +2778,7 @@ function yundiskjiekou() {
                                 }
                             });
                             setResult(d);
-                            require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyAliDisk.js');
+                            require(globalMap0.getVar('Jy_gmParams').codepath + 'SrcJyAliDisk.js');
                             aliDiskSearch(name,data);
                         },input,data)
                     },data)
@@ -2847,7 +2847,7 @@ function importConfirm(jsfile) {
                     url: "hiker://empty",
                     col_type: "text_center_1"
                 });
-                const hikerPop = $.require(config.依赖.replace(/[^/]*$/,'') + 'plugins/hikerPop.js');
+                const hikerPop = $.require(globalMap0.getVar('Jy_gmParams').codepath + 'plugins/hikerPop.js');
                 let fruit = Object.keys(pastedata);
                 hikerPop.multiChoice({
                     title: "选择要导入本地的项", 
@@ -2861,7 +2861,7 @@ function importConfirm(jsfile) {
                         if(options.filter((v, i) => checked[i]).length==0){
                             return "toast://没有选择导入项";
                         }
-                        require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
+                        require(globalMap0.getVar('Jy_gmParams').codepath + 'SrcJySet.js');
                         let jknum = 0, jxnum = 0, ypnum = 0, tvnum = 0, ghnum = 0;
                         hikerPop.runOnNewThread(() => {
                             options.forEach((option,i)=>{
@@ -3017,7 +3017,7 @@ function importConfirm(jsfile) {
         d.push({
             title: "增量导入",
             url: $("跳过已存在，只导入新增，确认？").confirm((lx)=>{
-                require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
+                require(globalMap0.getVar('Jy_gmParams').codepath + 'SrcJySet.js');
                 let importlist = storage0.getMyVar('importConfirm', []);
                 let num;
                 if(lx=="jk"){
@@ -3044,7 +3044,7 @@ function importConfirm(jsfile) {
         d.push({
             title: "全量导入",
             url: $("覆盖本地已存在重新导入，确认？").confirm((lx)=>{
-                require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
+                require(globalMap0.getVar('Jy_gmParams').codepath + 'SrcJySet.js');
                 let importlist = storage0.getMyVar('importConfirm', []);
                 if(lx=="jk"){
                     num = jiekousave(importlist, 1);
@@ -3077,7 +3077,7 @@ function importConfirm(jsfile) {
                     if (input == "确定导入") {
                         return $("如本地存在则将覆盖，确认？").confirm((lx,data)=>{
                             let dataurl = data.url;
-                            require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
+                            require(globalMap0.getVar('Jy_gmParams').codepath + 'SrcJySet.js');
                             let datas = [];
                             datas.push(data);
                             let num;
@@ -3117,7 +3117,7 @@ function importConfirm(jsfile) {
                         }, data);
                     }else if (input == "设定分组") {
                         let dataurl = data.url;
-                        require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
+                        require(globalMap0.getVar('Jy_gmParams').codepath + 'SrcJySet.js');
                         let groupNames = getGroupNames();
                         groupNames.unshift("清除");
                         return $(groupNames, 2, "选择分组").select((dataurl) => {
@@ -3135,7 +3135,7 @@ function importConfirm(jsfile) {
                     }else if (input == "接口测试") {
                         return $("hiker://empty#noRecordHistory##noHistory#").rule((data) => {
                             setPageTitle(data.name+"-接口测试");
-                            require(config.依赖);
+                            require(globalMap0.getVar('Jy_gmParams').codepath + 'SrcJuying.js');
                             dianboyiji(data);
                         },data)
                     }
