@@ -1,5 +1,5 @@
 //引入Ali公用文件
-require((config.云盘||config.依赖.replace(/[^/]*$/,'')) + 'SrcJyAliPublic.js');
+require((config.云盘||(config.聚影||config.依赖||getPublicItem('聚影','')).replace(/[^/]*$/,'')) + 'SrcJyAliPublic.js');
 let folderFilter = new RegExp("优惠券|资源群|头像订阅|GT容量|购买年超级会员|买会员享|关注公众号|返佣金|关注QQ|QQ频道|订阅必看|尽快保存|qq群号", "i");//文件夹过滤
 let errorCode = {
     'ShareLink.Cancelled': '来晚啦，该分享已失效',
