@@ -1,5 +1,5 @@
 //引入Ali公用文件
-require((config.云盘||(config.聚影||config.依赖||getPublicItem('聚影','')).replace(/[^/]*$/,'')) + 'SrcJyAliPublic.js');
+require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyAliPublic.js');
 let folderFilter = new RegExp("优惠券|资源群|头像订阅|GT容量|购买年超级会员|买会员享|关注公众号|返佣金|关注QQ|QQ频道|订阅必看|尽快保存|qq群号", "i");//文件夹过滤
 let errorCode = {
     'ShareLink.Cancelled': '来晚啦，该分享已失效',
@@ -91,7 +91,7 @@ function aliShare(share_id, folder_id, share_pwd) {
                                 }
                             })
                             setResult(d);
-                            require((config.云盘||globalMap0.getVar('Jy_gmParams').codepath) + 'SrcJyAliDisk.js');
+                            require((config.云盘||config.聚影.replace(/[^/]*$/,'')) + 'SrcJyAliDisk.js');
                             aliDiskSearch(name);
                         }, name)
                     } else {
@@ -109,7 +109,7 @@ function aliShare(share_id, folder_id, share_pwd) {
                             } else {
                                 let ids = id.split;
                                 return $("").rule((ids) => {
-                                    require((config.云盘||globalMap0.getVar('Jy_gmParams').codepath) + 'SrcJyAliDisk.js');
+                                    require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyAliDisk.js');
                                     aliShare(ids[0], ids[1], ids[2]);
                                 }, ids);
                             }
@@ -141,7 +141,7 @@ function aliShare(share_id, folder_id, share_pwd) {
                 title: getItem('aliyun_playMode', '智能'),
                 url: $(['智能', '转码', '原画', '原画接口'+getItem('aliyun_openInt', '1'), '极速播放:'+(getItem('fastPlayMode')=="1"?"开":"关")]).select(() => {
                     if(input.includes('原画接口')){
-                        require((config.云盘||globalMap0.getVar('Jy_gmParams').codepath) + 'SrcJyAliDisk.js');
+                        require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyAliDisk.js');
                         return aliOpenInt();
                     }else if(input.includes('极速播放')){
                         let sm;
@@ -180,7 +180,7 @@ function aliShare(share_id, folder_id, share_pwd) {
                                     clearMyVar('copydate');
                                 }));
                                 
-                                require((config.云盘||globalMap0.getVar('Jy_gmParams').codepath) + 'SrcJyAliDisk.js');
+                                require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyAliDisk.js');
                                 aliMyDisk('', 0, '');
                             })
                         },{sharetoken:sharetoken,share_id:share_id,authorization:authorization,file_id:folder_id})
@@ -232,7 +232,7 @@ function aliShare(share_id, folder_id, share_pwd) {
                         title: item.name,
                         img: getIcon("云盘-文件夹.svg"),
                         url: $("hiker://empty##https://www.aliyundrive.com/s/" + item.share_id + (item.file_id ? "/folder/" + item.file_id : "")).rule((share_id, folder_id, share_pwd) => {
-                            require((config.云盘||globalMap0.getVar('Jy_gmParams').codepath) + 'SrcJyAliDisk.js');
+                            require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyAliDisk.js');
                             aliShare(share_id, folder_id, share_pwd);
                         }, item.share_id, item.file_id, share_pwd),
                         col_type: style,
@@ -250,7 +250,7 @@ function aliShare(share_id, folder_id, share_pwd) {
                                             clearMyVar('copydate');
                                         }));
                                         
-                                        require((config.云盘||globalMap0.getVar('Jy_gmParams').codepath) + 'SrcJyAliDisk.js');
+                                        require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyAliDisk.js');
                                         aliMyDisk('', 0, '');
                                     })
                                 },{sharetoken:sharetoken,share_id:share_id,authorization:authorization,file_id:item.file_id})
@@ -283,7 +283,7 @@ function aliShare(share_id, folder_id, share_pwd) {
                                             clearMyVar('copydate');
                                         }));
                                         
-                                        require((config.云盘||globalMap0.getVar('Jy_gmParams').codepath) + 'SrcJyAliDisk.js');
+                                        require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyAliDisk.js');
                                         aliMyDisk('', 0, '');
                                     })
                                 },{sharetoken:sharetoken,share_id:share_id,authorization:authorization,file_id:item.file_id})
@@ -306,7 +306,7 @@ function aliShare(share_id, folder_id, share_pwd) {
                             }
                         }
                         it.url = $("").lazyRule((share_id, file_id, sub_file_id, share_pwd) => {
-                            require((config.云盘||globalMap0.getVar('Jy_gmParams').codepath) + 'SrcJyAliPublic.js');
+                            require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyAliPublic.js');
                             let play = getAliUrl(share_id, file_id, share_pwd);
                             if (play.urls && play.urls.length > 0) {
                                 let subtitle;
@@ -324,7 +324,7 @@ function aliShare(share_id, folder_id, share_pwd) {
                         d.push(it);
                     } else {
                         it.url = $("").lazyRule((category, file_id, sharedata) => {
-                            require((config.云盘||globalMap0.getVar('Jy_gmParams').codepath) + 'SrcJyAliPublic.js');
+                            require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyAliPublic.js');
                             let file_url = aliOpenPlayUrl(file_id, sharedata);
                             if (category == "audio") {
                                 return file_url + ";{Referer@https://www.aliyundrive.com/}#isMusic=true#";
@@ -379,7 +379,7 @@ function aliOpenInt() {
         if(input=='接口1(alist)'){
             setItem('aliyun_openInt', '1');
         }else if(input=='接口2(webdav)'){
-            require((config.云盘||globalMap0.getVar('Jy_gmParams').codepath) + 'SrcJyAliPublic.js');
+            require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyAliPublic.js');
             if(aliOpenTokenObj.refresh_token_2){
                 setItem('aliyun_openInt', '2');
             }else{
@@ -421,7 +421,7 @@ function myDiskMenu(islogin) {
     let setalitoken = $().lazyRule((alitoken) => {
         return $(alitoken || "", "新的refresh_token").input(() => {
             if(input){
-                require((config.云盘||globalMap0.getVar('Jy_gmParams').codepath) + 'SrcJyAliPublic.js');
+                require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyAliPublic.js');
                 let account = getUserInfo(input);
                 if(account.refresh_token){
                     refreshPage(false);
@@ -437,19 +437,19 @@ function myDiskMenu(islogin) {
         url: $(['云盘接口', '更换token','观看历史','退出登录'], 2).select((setalitoken) => {
             if (input == '云盘接口') {
                 return $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
-                    require((config.云盘||globalMap0.getVar('Jy_gmParams').codepath) + 'SrcJySet.js');
+                    require(config.聚影.replace(/[^/]*$/,'') + 'SrcJySet.js');
                     yundiskjiekou();
                 })
             } else if (input == '更换token') {
                 return setalitoken;
             } else if (input == '退出登录') {
-                require((config.云盘||globalMap0.getVar('Jy_gmParams').codepath) + 'SrcJyAliPublic.js');
+                require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyAliPublic.js');
                 getUserInfo("");
                 refreshPage(false);
                 return "toast://已退出登录";
             } else if (input == '观看历史') {
                 return $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
-                    require((config.云盘||globalMap0.getVar('Jy_gmParams').codepath) + 'SrcJyAliDisk.js');
+                    require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyAliDisk.js');
                     yundiskhistory();
                 })
             }
@@ -536,7 +536,7 @@ function myDiskMenu(islogin) {
                 }
 
                 if (alitoken) {
-                    require((config.云盘||globalMap0.getVar('Jy_gmParams').codepath) + 'SrcJyAliPublic.js');
+                    require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyAliPublic.js');
                     let account = getUserInfo(alitoken);
                     if(account.refresh_token){
                         refreshPage(false);
@@ -623,7 +623,7 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                         }
                     })
                     setResult(d);
-                    require((config.云盘||globalMap0.getVar('Jy_gmParams').codepath) + 'SrcJyAliDisk.js');
+                    require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyAliDisk.js');
                     aliDiskSearch(name);
                 }, input)
             });
@@ -634,7 +634,7 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                         if(/www\.aliyundrive\.com|www\.alipan\.com/.test(input)){
                             input = input.replace('http','\nhttp');
                             return $("hiker://empty#noRecordHistory##noHistory#").rule((input) => {
-                                require((config.云盘||globalMap0.getVar('Jy_gmParams').codepath) + 'SrcJyAliDisk.js');
+                                require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyAliDisk.js');
                                 aliShareUrl(input);
                             },input);
                         }else{
@@ -795,7 +795,7 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                                         let share_id = result.shareId;
                                         return $(share_name+"\n是否查看","探索发现到").confirm((input)=>{
                                             return $('https://www.alipan.com/s/'+input).rule((input)=>{
-                                                require((config.云盘||globalMap0.getVar('Jy_gmParams').codepath) + 'SrcJyAliDisk.js');
+                                                require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyAliDisk.js');
                                                 aliShare(input);
                                             }, input)
                                         }, share_id)
@@ -828,7 +828,7 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                                 title: getItem('aliyun_playMode', '智能'),
                                 url: $(['智能', '转码', '原画', '原画接口'+getItem('aliyun_openInt', '1'), '极速播放:'+(getItem('fastPlayMode')=="1"?"开":"关")]).select(() => {
                                     if(input.includes('原画接口')){
-                                        require((config.云盘||globalMap0.getVar('Jy_gmParams').codepath) + 'SrcJyAliDisk.js');
+                                        require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyAliDisk.js');
                                         return aliOpenInt();
                                     }else if(input.includes('极速播放')){
                                         let sm;
@@ -904,7 +904,7 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                             title: item.name,
                             img: getIcon("云盘-文件夹.svg"),
                             url: $("hiker://empty").rule((folder_id, isSearch, drive_id, copydate) => {
-                                require((config.云盘||globalMap0.getVar('Jy_gmParams').codepath) + 'SrcJyAliDisk.js');
+                                require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyAliDisk.js');
                                 aliMyDisk(folder_id, isSearch, drive_id, copydate);
                             }, item.file_id, isSearch, drive_id, copydate),
                             col_type: style,
@@ -945,7 +945,7 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                                 title: item.name,
                                 img: item.thumbnail ? item.thumbnail + "@Referer=https://www.aliyundrive.com/" : item.category == "video" ? "http://123.56.105.145/tubiao/movie/13.svg" : item.category == "audio" ? "http://123.56.105.145/tubiao/music/46.svg" : item.category == "image" ? "http://123.56.105.145/tubiao/more/38.png" : "https://img.alicdn.com/imgextra/i1/O1CN01mhaPJ21R0UC8s9oik_!!6000000002049-2-tps-80-80.png@Referer=",
                                 url: $("hiker://empty##").lazyRule((category, file_id, sub_file_url,drive_id) => {
-                                    require((config.云盘||globalMap0.getVar('Jy_gmParams').codepath) + 'SrcJyAliPublic.js');
+                                    require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyAliPublic.js');
                                     if(!alitoken){
                                         return "toast://未获取到阿里token，重新登录偿试";
                                     }
@@ -1096,7 +1096,7 @@ function aliDiskSearch(input, data) {
 
                 if (obj.name == "我的云盘") {
                     arr.url = $('hiker://empty').rule((input,drive_id) => {
-                        require((config.云盘||globalMap0.getVar('Jy_gmParams').codepath) + 'SrcJyAliDisk.js');
+                        require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyAliDisk.js');
                         aliMyDisk(input,1,drive_id);
                     }, item.url, item.drive_id);
                     searchlist.push(arr);
@@ -1113,7 +1113,7 @@ function aliDiskSearch(input, data) {
                         }
                         if (/www\.aliyundrive\.com|www\.alipan\.com/.test(surl)) {
                             arr.url = $(surl.split('\n')[0]).rule((input) => {
-                                require((config.云盘||globalMap0.getVar('Jy_gmParams').codepath) + 'SrcJyAliDisk.js');
+                                require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyAliDisk.js');
                                 aliShareUrl(input);
                             }, surl);
                             searchlist.push(arr);
@@ -1247,7 +1247,7 @@ function yundiskhistory() {
                                 }));
                             }
 
-                            require((config.云盘||globalMap0.getVar('Jy_gmParams').codepath) + 'SrcJyAliDisk.js');
+                            require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyAliDisk.js');
                             aliMyDisk(folder_id, isSearch, drive_id);
                             if(MY_PARAMS.lastClick){
                                 toast('上次观看足迹：' + MY_PARAMS.lastClick);
@@ -1358,7 +1358,7 @@ function erjiSousuo(name) {
             updateItem(updateItemid+'2', {
                 extra: {"id":updateItemid,"lineVisible":false}
             })
-            require((config.云盘||globalMap0.getVar('Jy_gmParams').codepath) + 'SrcJyAliDisk.js');
+            require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyAliDisk.js');
             return erjiAliMyDiskSs(extra);
         }, extra);
         diskMark[name] = diskMark[name] || [];
@@ -1431,7 +1431,7 @@ function erjiSousuo(name) {
                             updateItem(updateItemid+'2', {
                                 extra: {"id":updateItemid,"lineVisible":false}
                             })
-                            require((config.云盘||globalMap0.getVar('Jy_gmParams').codepath) + 'SrcJyAliDisk.js');
+                            require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyAliDisk.js');
                             return erjiAliShareUrl(extra.url, extra.dataObj);
                         }, extra),
                         searchlist.push(arr);
@@ -1533,7 +1533,7 @@ function erjiAliShare(share_id, folder_id, share_pwd) {
                                 title: item.name,
                                 img: getIcon("云盘-文件夹.svg"),
                                 url: $().lazyRule((share_id, folder_id, share_pwd) => {
-                                    require((config.云盘||globalMap0.getVar('Jy_gmParams').codepath) + 'SrcJyAliDisk.js');
+                                    require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyAliDisk.js');
                                     let data = erjiAliShare(share_id, folder_id, share_pwd);
                                     if(data.errorStr){
                                         return "toast://" + data.errorStr;
@@ -1556,7 +1556,7 @@ function erjiAliShare(share_id, folder_id, share_pwd) {
                                                     clearMyVar('copydate');
                                                 }));
                                                 
-                                                require((config.云盘||globalMap0.getVar('Jy_gmParams').codepath) + 'SrcJyAliDisk.js');
+                                                require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyAliDisk.js');
                                                 aliMyDisk('', 0, '');
                                             })
                                         },{sharetoken:sharetoken,share_id:share_id,authorization:authorization,file_id:item.file_id})
@@ -1590,7 +1590,7 @@ function erjiAliShare(share_id, folder_id, share_pwd) {
                                                     clearMyVar('copydate');
                                                 }));
                                                 
-                                                require((config.云盘||globalMap0.getVar('Jy_gmParams').codepath) + 'SrcJyAliDisk.js');
+                                                require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyAliDisk.js');
                                                 aliMyDisk('', 0, '');
                                             })
                                         },{sharetoken:sharetoken,share_id:share_id,authorization:authorization,file_id:item.file_id})
@@ -1613,7 +1613,7 @@ function erjiAliShare(share_id, folder_id, share_pwd) {
                                     }
                                 }
                                 it.url = $("").lazyRule((share_id, file_id, sub_file_id, share_pwd) => {
-                                    require((config.云盘||globalMap0.getVar('Jy_gmParams').codepath) + 'SrcJyAliPublic.js');
+                                    require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyAliPublic.js');
                                     let play = getAliUrl(share_id, file_id, share_pwd);
                                     if (play.urls && play.urls.length > 0) {
                                         let subtitle;
@@ -1685,7 +1685,7 @@ function erjiAliShareUrl(input, dataObj) {
                 return "toast://" + data.errorStr;
             }else{
                 let refreshlist = $().lazyRule((share_id, folder_id, share_pwd) => {
-                    require((config.云盘||globalMap0.getVar('Jy_gmParams').codepath) + 'SrcJyAliDisk.js');
+                    require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyAliDisk.js');
                     let data = erjiAliShare(share_id, folder_id, share_pwd);
                     if(data.errorStr){
                         return "toast://" + data.errorStr;
@@ -1744,7 +1744,7 @@ function erjiAliShareUrl(input, dataObj) {
                     title: getItem('aliyun_playMode', '智能'),
                     url: $(['智能', '转码', '原画', '原画接口'+getItem('aliyun_openInt', '1'), '极速播放:'+(getItem('fastPlayMode')=="1"?"开":"关")]).select(() => {
                         if(input.includes('原画接口')){
-                            require((config.云盘||globalMap0.getVar('Jy_gmParams').codepath) + 'SrcJyAliDisk.js');
+                            require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyAliDisk.js');
                             return aliOpenInt();
                         }else if(input.includes('极速播放')){
                             let sm;
@@ -1772,7 +1772,7 @@ function erjiAliShareUrl(input, dataObj) {
                 {
                     title: '切源',
                     url: $().lazyRule((name,group) => {
-                        require((config.云盘||globalMap0.getVar('Jy_gmParams').codepath) + 'SrcJyMenu.js');
+                        require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyMenu.js');
                         cutSource(name, group);
                         return "hiker://empty";
                     }, dataObj.name, dataObj.group),
@@ -1789,7 +1789,7 @@ function erjiAliShareUrl(input, dataObj) {
                                         clearMyVar('copydate');
                                     }));
                                     
-                                    require((config.云盘||globalMap0.getVar('Jy_gmParams').codepath) + 'SrcJyAliDisk.js');
+                                    require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyAliDisk.js');
                                     aliMyDisk('', 0, '');
                                 })
                             }, data.saveinfo)
@@ -1814,7 +1814,7 @@ function erjiAliShareUrl(input, dataObj) {
                     let list = [{
                         title: "共享云盘资源",
                         url: $().lazyRule((input,dataObj) => {
-                            require((config.云盘||globalMap0.getVar('Jy_gmParams').codepath) + 'SrcJyAliDisk.js');
+                            require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyAliDisk.js');
                             return erjiAliShareUrl(input, dataObj);
                         },input, dataObj),
                         col_type: "text_2",
@@ -1848,7 +1848,7 @@ function erjiAliMyDiskSs(extra){
     }else{
         deleteItemByCls('Juloadlist');
         let refreshlist = $().lazyRule((folder_id, drive_id) => {
-            require((config.云盘||globalMap0.getVar('Jy_gmParams').codepath) + 'SrcJyAliDisk.js');
+            require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyAliDisk.js');
             let data = erjiAliMyDisk(folder_id, drive_id);
             if(data.errorStr){
                 return "toast://" + data.errorStr;
@@ -1905,7 +1905,7 @@ function erjiAliMyDiskSs(extra){
             title: getItem('aliyun_playMode', '智能'),
             url: $(['智能', '转码', '原画', '原画接口'+getItem('aliyun_openInt', '1'), '极速播放:'+(getItem('fastPlayMode')=="1"?"开":"关")]).select(() => {
                 if(input.includes('原画接口')){
-                    require((config.云盘||globalMap0.getVar('Jy_gmParams').codepath) + 'SrcJyAliDisk.js');
+                    require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyAliDisk.js');
                     return aliOpenInt();
                 }else if(input.includes('极速播放')){
                     let sm;
@@ -1933,7 +1933,7 @@ function erjiAliMyDiskSs(extra){
         {
             title: '切源',
             url: $().lazyRule((name,group) => {
-                require((config.云盘||globalMap0.getVar('Jy_gmParams').codepath) + 'SrcJyMenu.js');
+                require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyMenu.js');
                 cutSource(name, group);
                 return "hiker://empty";
             }, dataObj.name, dataObj.group),
@@ -1960,7 +1960,7 @@ function erjiAliMyDiskSs(extra){
             let list = [{
                 title: "我的云盘资源",
                 url: $().lazyRule((extra) => {
-                    require((config.云盘||globalMap0.getVar('Jy_gmParams').codepath) + 'SrcJyAliDisk.js');
+                    require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyAliDisk.js');
                     return erjiAliMyDiskSs(extra);
                 },extra),
                 col_type: "text_2",
@@ -2009,7 +2009,7 @@ function erjiAliMyDisk(folder_id, drive_id) {
                         title: item.name,
                         img: getIcon("云盘-文件夹.svg"),
                         url: $().lazyRule((folder_id, drive_id) => {
-                            require((config.云盘||globalMap0.getVar('Jy_gmParams').codepath) + 'SrcJyAliDisk.js');
+                            require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyAliDisk.js');
                             let data = erjiAliMyDisk(folder_id, drive_id);
                             if(data.errorStr){
                                 return "toast://" + data.errorStr;
@@ -2049,7 +2049,7 @@ function erjiAliMyDisk(folder_id, drive_id) {
                             title: item.name,
                             img: item.thumbnail ? item.thumbnail + "@Referer=https://www.aliyundrive.com/" : "http://123.56.105.145/tubiao/movie/13.svg",
                             url: $().lazyRule((file_id, sub_file_url,drive_id) => {
-                                    require((config.云盘||globalMap0.getVar('Jy_gmParams').codepath) + 'SrcJyAliPublic.js');
+                                    require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyAliPublic.js');
                                     if (alitoken) {
                                         let play = aliMyPlayUrl(file_id,drive_id);
                                         if (play.urls) {
