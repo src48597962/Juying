@@ -1,6 +1,6 @@
 //本代码仅用于个人学习，请勿用于其他作用，下载后请24小时内删除，代码虽然是公开学习的，但请尊重作者，应留下说明
 //引入Ali公用文件
-require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyAliPublic.js');
+require((config.聚影||config.依赖||getPublicItem('聚影','')).replace(/[^/]*$/,'') + 'SrcJyAliPublic.js');
 let alistfile = "hiker://files/rules/Src/Juying2/Alist.json";
 let alistData = {};
 if (fetch(alistfile)) {
@@ -80,7 +80,7 @@ function alistHome() {
     d.push({
         title: '⚙设置',
         url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
-            require(config.依赖.replace(/[^/]*$/,'').replace('/Ju/','/master/') + 'SrcJyAlist.js');
+            require(globalMap0.getVar('Jy_gmParams').codepath + 'SrcJyAlist.js');
             alistSet();
         }),
         col_type: 'scroll_button'
@@ -89,7 +89,7 @@ function alistHome() {
         title: '🔍搜索',
         url: $(getItem('searchtestkey', ''), "搜索关键字").input((alistapi) => {
             setItem("searchtestkey", input);
-            require(config.依赖.replace(/[^/]*$/,'').replace('/Ju/','/master/') + 'SrcJyAlist.js');
+            require(globalMap0.getVar('Jy_gmParams').codepath + 'SrcJyAlist.js');
             showLoading('搜索中，请稍后...');
             deleteItemByCls('loadlist');
             let searchlist = alistSearch(alistapi, input);
@@ -114,7 +114,7 @@ function alistHome() {
         title: '🔎聚合',
         url: $(getItem('searchtestkey', ''), "搜索关键字").input(() => {
             setItem("searchtestkey", input);
-            require(config.依赖.replace(/[^/]*$/,'').replace('/Ju/','/master/') + 'SrcJyAlist.js');
+            require(globalMap0.getVar('Jy_gmParams').codepath + 'SrcJyAlist.js');
             showLoading('搜索中，请稍后...');
             alistSearch2(input);
             hideLoading();
@@ -300,7 +300,7 @@ function arrayAdd(list, isdir, alistapi) {
                 title: item.name,
                 img: item.thumb || "http://123.56.105.145/tubiao/messy/27.svg",//#noRecordHistory##noHistory#
                 url: $("hiker://empty##" + encodeURI(alistapi.server + path)).rule((alistapi, dirname) => {
-                    require(config.依赖.replace(/[^/]*$/,'').replace('/Ju/','/master/') + 'SrcJyAlist.js');
+                    require(globalMap0.getVar('Jy_gmParams').codepath + 'SrcJyAlist.js');
                     alistList(alistapi, dirname);
                 }, alistapi, item.name),
                 col_type: 'avatar',
@@ -322,7 +322,7 @@ function arrayAdd(list, isdir, alistapi) {
                 title: item.name,
                 img: item.thumb || (music.test(suffix) ? "http://123.56.105.145/tubiao/music/46.svg" : contain.test(suffix) ? "http://123.56.105.145/tubiao/movie/13.svg" : image.test(suffix) ? "http://123.56.105.145/tubiao/more/38.png" : "hiker://files/cache/src/Alist.svg"),
                 url: $(encodeURI(alistapi.server + path)).lazyRule((alistapi, path, sign, subtitle) => {
-                    require(config.依赖.replace(/[^/]*$/,'').replace('/Ju/','/master/') + 'SrcJyAlist.js');
+                    require(globalMap0.getVar('Jy_gmParams').codepath + 'SrcJyAlist.js');
                     return alistUrl(alistapi, path, sign, subtitle);
                 }, alistapi, path, item.sign || "", subtitles.length > 0 ? subtitles[0] : ""),
                 col_type: 'avatar',
