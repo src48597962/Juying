@@ -9,7 +9,7 @@ let ypfile = rulepath + "yundisk.json";
 let tvfile = rulepath + "live.txt";
 let cfgfile = rulepath + "config.json";
 let sortfile = rulepath + "jksort.json";
-let codepath = config.云盘 || config.依赖.replace(/[^/]*$/,'');
+let codepath = config.云盘 || (config.聚影||config.依赖).replace(/[^/]*$/,'');
 let gzip = $.require(codepath + "plugins/gzip.js");
 
 let Juconfig= {};
