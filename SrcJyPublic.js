@@ -9,7 +9,7 @@ let ypfile = rulepath + "yundisk.json";
 let tvfile = rulepath + "live.txt";
 let cfgfile = rulepath + "config.json";
 let sortfile = rulepath + "jksort.json";
-let codepath = config.云盘 || (config.聚影||config.依赖||getPublicItem('聚影','https://raw.gitcode.com/src48597962/juying/raw/master/SrcJuying.js')).replace(/[^/]*$/,'');
+let codepath = (config.聚影||config.依赖||getPublicItem('聚影','https://raw.gitcode.com/src48597962/juying/raw/master/SrcJuying.js')).replace(/[^/]*$/,'');
 let gzip = $.require(codepath + "plugins/gzip.js");
 
 let Juconfig= {};
@@ -595,7 +595,7 @@ function duoselect(datas){
 }
 // 点播主页选择源接口
 function selectSource() {
-    const hikerPop = $.require(config.依赖.replace(/[^/]*$/,'') + 'plugins/hikerPop.js');
+    const hikerPop = $.require(config.聚影.replace(/[^/]*$/,'') + 'plugins/hikerPop.js');
     let sourceAllList = getDatas("jk", 1).filter(x=> !x.onlysearch);
     let lockgroups = Juconfig["lockgroups"] || [];
     if(getMyVar('已验证指纹')!='1'){
@@ -879,8 +879,8 @@ function shareResource() {
         title: '通过文件分享资源',
         col_type: 'text_center_1',
         url: $().lazyRule(() => {
-            require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
-            const hikerPop = $.require(config.依赖.replace(/[^/]*$/,'') + 'plugins/hikerPop.js');
+            require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
+            const hikerPop = $.require(config.聚影.replace(/[^/]*$/,'') + 'plugins/hikerPop.js');
             let fruit = ["接口", "解析", "云盘", "直播", "ghproxy"];
             hikerPop.multiChoice({
                 title: "选择要上传分享同步的项", 
@@ -1070,7 +1070,7 @@ function shareResource() {
                         return "hiker://empty";
                     }, Juconfig, it.path, cfgfile)
                 }else if(input=="上传"){
-                    const hikerPop = $.require(config.依赖.replace(/[^/]*$/,'') + 'plugins/hikerPop.js');
+                    const hikerPop = $.require(config.聚影.replace(/[^/]*$/,'') + 'plugins/hikerPop.js');
                     let fruit = ["接口", "解析", "云盘", "直播", "ghproxy"];
                     hikerPop.multiChoice({
                         title: "选择要上传分享同步的项", 
@@ -1316,7 +1316,7 @@ function subResource() {
                         return "hiker://empty";
                     }, Juconfig, it.path, cfgfile)
                 }else if(input=="下载"){
-                    require(config.依赖.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
+                    require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
                     return updateResource(it,1);
                 }
             }, it),
@@ -1338,7 +1338,7 @@ function updateResource(it,refresh) {
         }
         let playSet = Juconfig['playSet'] || {};
         if(playSet['clearM3u8Ad']){
-            let m3u8Ad = fc(config.依赖.replace(/[^/]*$/,'') + "plugins/m3u8_ad_rule.json", 72);
+            let m3u8Ad = fc(config.聚影.replace(/[^/]*$/,'') + "plugins/m3u8_ad_rule.json", 72);
             if(m3u8Ad){
                 writeFile("hiker://files/rules/m3u8_ad_rule.json", m3u8Ad);
             }
@@ -1353,7 +1353,7 @@ function updateResource(it,refresh) {
             "content-type": "application/json;charset=UTF-8"
         }));
         if(pasteget.result_code=="SUCCESS"){
-            require(config.依赖.replace(/[^/]*$/,'') + 'SrcJySet.js');
+            require(config.聚影.replace(/[^/]*$/,'') + 'SrcJySet.js');
             let textcontent = globalMap0.getVar('Jy_gmParams').unzip(pasteget.data);
             let pastedata = JSON.parse(textcontent);
             let jknum = 0, jxnum = 0, ypnum = 0, tvnum = 0, sm = '';
@@ -1457,5 +1457,5 @@ let gmParams = {
 if(!globalMap0.getVar('Jy_gmParams')){
     log("写入全局对象变量gmParams");
     globalMap0.putVar('Jy_gmParams', gmParams);
-    log("当前依赖库>" + config.依赖);
+    log("当前依赖库>" + config.聚影);
 }
