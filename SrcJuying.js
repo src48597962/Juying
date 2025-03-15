@@ -670,7 +670,7 @@ function dianboerji() {
         }
         //设置二级收藏更新最新章节
         setLastChapterRule('js:' + $.toString((url,jkdata)=>{
-            require(globalMap0.getVar('Jy_gmParams').codepath + 'SrcJyData.js');
+            require((config.聚影||config.依赖).replace(/[^/]*$/,'') + 'SrcJyData.js');
             setLastChapter(url,jkdata);
         }, MY_URL, jkdata))
     }
