@@ -1079,7 +1079,7 @@ function yiji() {
         try{
             programversion = $.require("config").version || MY_RULE.version || 0;
         }catch(e){}
-        if(programversion<10){
+        if(programversion<11){
             confirm({
                 title: "温馨提示",
                 content: "发现小程序新版本\n预留本地库依赖切换逻辑",
