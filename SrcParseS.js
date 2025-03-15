@@ -74,7 +74,7 @@ function headerObjToStr(obj) {
 
 if(!config.聚影 && getPublicItem('聚影','')){
     initConfig({
-        聚影: srcHome
+        聚影: getPublicItem('聚影','')
     });
 }
 
