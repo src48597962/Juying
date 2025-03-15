@@ -1457,5 +1457,11 @@ let gmParams = {
 if(!globalMap0.getVar('Jy_gmParams')){
     log("写入全局对象变量gmParams");
     globalMap0.putVar('Jy_gmParams', gmParams);
+    
+    if(!config.聚影 && getPublicItem('聚影','')){
+        initConfig({
+            聚影: getPublicItem('聚影','')
+        });
+    }
     log("当前依赖库>" + config.聚影);
 }
