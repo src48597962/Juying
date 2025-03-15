@@ -1545,7 +1545,7 @@ function getErData(jkdata, erurl) {
 
 // 设置收藏更新最新章节
 function setLastChapter(url,jkdata) {
-    require(globalMap0.getVar('Jy_gmParams').codepath + 'SrcJyPublic.js');
+    require((config.聚影||config.依赖).replace(/[^/]*$/,'') + 'SrcJyPublic.js');
     let erdate = getErData(jkdata,url);
     let lists = erdate.lists;
     if(lists.length>0){
