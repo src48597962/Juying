@@ -1855,10 +1855,10 @@ function manageSet(){
         img: getIcon("管理-箭头.svg"),
         col_type: 'text_icon',
         url: $("#noLoading#").lazyRule(() => {
-            eval(fetch(config.聚影.replace(/[^/]*$/,'') + 'SrcTmplVersion.js'));
+            eval(fetch(getItem("依赖","").replace(/[^/]*$/,'') + 'SrcTmplVersion.js'));
             let updateRecords = newVersion.JYUpdateRecords || [];
 
-            const hikerPop = $.require(config.聚影.replace(/[^/]*$/,'') + 'plugins/hikerPop.js');
+            const hikerPop = $.require(getItem("依赖","").replace(/[^/]*$/,'') + 'plugins/hikerPop.js');
             hikerPop.updateRecordsBottom(updateRecords);
             
             return "hiker://empty";
