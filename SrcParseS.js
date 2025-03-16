@@ -134,8 +134,10 @@ var SrcParseS = {
                 //let s = loadJavaClass("hiker://files/cache/bidi.dex", "com.rule.jianpian", "hiker://files/cache/libp2p.so");
                 //let cache = getPath("hiker://files/_cache").replace("file://", "");
                 //s.init(cache);
-                try {
+                try{
                     let s = loadJavaClass("hiker://files/cache/bidi.dex", "com.rule.jianpian", "hiker://files/cache/libp2p.so");
+                    let cache = getPath("hiker://files/_cache").replace("file://", "");
+                    s.init(cache);
                     let url = s.JPUrlDec(vipUrl) + "#isVideo=true#";
                     s.finish();
                     return url;
