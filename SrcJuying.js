@@ -1084,7 +1084,7 @@ function yiji() {
                 title: "温馨提示",
                 content: "发现小程序新版本\n本次不升级将无法使用",
                 confirm: $.toString(() => {
-                    return config.聚影.replace(/[^/]*$/,'') + "聚影.hiker";
+                    return fetch(config.聚影.replace(/[^/]*$/,'') + "聚影.hiker");
                 }),
                 cancel: $.toString(() => {
                     return "toast://不升级小程序，功能不全或有异常"
