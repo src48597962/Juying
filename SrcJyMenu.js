@@ -201,53 +201,55 @@ function lookset() {
         pic_url: playSet['printlog']?getIcon("点播-开.svg"):getIcon("关.svg"),
         col_type: "text_icon"
     });
-    d.push({
-        col_type: "line_blank"
-    });
-    d.push({
-        title: '分页设置',
-        pic_url: getIcon("点播-分页设置.svg"),
-        col_type: "avatar",
-        url: "hiker://empty"
-    });
-    let partpage = storage0.getItem('partpage') || {};
-    d.push({
-        title: '选集列表分页',
-        url: $('#noLoading#').lazyRule((partpage) => {
-            if (partpage['ispage'] != 1) {
-                partpage['ispage'] = 1;
-            } else {
-                partpage['ispage'] = 0;
-            }
-            storage0.setItem('partpage', partpage);
-            refreshPage(false);
-            return 'toast://切换成功';
-        }, partpage),
-        pic_url: partpage['ispage']?getIcon("点播-开.svg"):getIcon("关.svg"),
-        col_type: "text_icon"
-    });
-    d.push({
-        title: '每页数量：'+(partpage['pagenum']||40),
-        url: $(partpage['pagenum']||"40","每页选集数量").input((partpage) => {
-            partpage['pagenum'] = parseInt(input);
-            storage0.setItem('partpage',partpage);
-            refreshPage(false);
-            return 'hiker://empty'
-        },partpage),
-        pic_url: 箭头图标,
-        col_type: "text_icon"
-    });
-    d.push({
-        title: '分页阀值：'+(partpage['partnum']||100),
-        url: $(partpage['partnum']||"100","选集数量超过多少才分页").input((partpage) => {
-            partpage['partnum'] = parseInt(input);
-            storage0.setItem('partpage',partpage);
-            refreshPage(false);
-            return 'hiker://empty'
-        },partpage),
-        pic_url: 箭头图标,
-        col_type: "text_icon"
-    });
+    if(MY_RULE.title=="聚影"){
+        d.push({
+            col_type: "line_blank"
+        });
+        d.push({
+            title: '分页设置',
+            pic_url: getIcon("点播-分页设置.svg"),
+            col_type: "avatar",
+            url: "hiker://empty"
+        });
+        let partpage = storage0.getItem('partpage') || {};
+        d.push({
+            title: '选集列表分页',
+            url: $('#noLoading#').lazyRule((partpage) => {
+                if (partpage['ispage'] != 1) {
+                    partpage['ispage'] = 1;
+                } else {
+                    partpage['ispage'] = 0;
+                }
+                storage0.setItem('partpage', partpage);
+                refreshPage(false);
+                return 'toast://切换成功';
+            }, partpage),
+            pic_url: partpage['ispage']?getIcon("点播-开.svg"):getIcon("关.svg"),
+            col_type: "text_icon"
+        });
+        d.push({
+            title: '每页数量：'+(partpage['pagenum']||40),
+            url: $(partpage['pagenum']||"40","每页选集数量").input((partpage) => {
+                partpage['pagenum'] = parseInt(input);
+                storage0.setItem('partpage',partpage);
+                refreshPage(false);
+                return 'hiker://empty'
+            },partpage),
+            pic_url: 箭头图标,
+            col_type: "text_icon"
+        });
+        d.push({
+            title: '分页阀值：'+(partpage['partnum']||100),
+            url: $(partpage['partnum']||"100","选集数量超过多少才分页").input((partpage) => {
+                partpage['partnum'] = parseInt(input);
+                storage0.setItem('partpage',partpage);
+                refreshPage(false);
+                return 'hiker://empty'
+            },partpage),
+            pic_url: 箭头图标,
+            col_type: "text_icon"
+        });
+    }
     d.push({
         col_type: "line_blank"
     });
