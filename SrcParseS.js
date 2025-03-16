@@ -130,6 +130,7 @@ var SrcParseS = {
         log("请求地址："+vipUrl); 
         
         if (vipUrl.startsWith('ftp://')) {
+            log(dataObj);
             log("ftp地址，软件不支持"); 
             return "toast://ftp地址，软件不支持";
         }else if (/magnet|torrent/.test(vipUrl)) {
