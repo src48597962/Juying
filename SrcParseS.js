@@ -134,15 +134,20 @@ var SrcParseS = {
                 //let s = loadJavaClass("hiker://files/cache/bidi.dex", "com.rule.jianpian", "hiker://files/cache/libp2p.so");
                 //let cache = getPath("hiker://files/_cache").replace("file://", "");
                 //s.init(cache);
-                try{
-                    let s = loadJavaClass("hiker://files/cache/bidi.dex", "com.rule.jianpian", "hiker://files/cache/libp2p.so");
-                    let cache = getPath("hiker://files/_cache").replace("file://", "");
-                    s.init(cache);
-                    let url = s.JPUrlDec(vipUrl) + "#isVideo=true#";
-                    s.finish();
-                    return url;
-                } catch (e) {
-                    return "荐片播放失败";
+                if(fileExist("hiker://files/cache/bidi.dex") && fileExist("hiker://files/cache/libp2p.so")){
+                    try{
+                        let s = loadJavaClass("hiker://files/cache/bidi.dex", "com.rule.jianpian", "hiker://files/cache/libp2p.so");
+                        let cache = getPath("hiker://files/_cache").replace("file://", "");
+                        s.init(cache);
+                        let url = s.JPUrlDec(vipUrl) + "#isVideo=true#";
+                        //s = loadJavaClass("hiker://files/cache/bidi.dex", "com.rule.jianpian");
+                        //s.finish();
+                        return url;
+                    } catch (e) {
+                        return "toast://荐片播放失败";
+                    }
+                }else{
+                    return "toast://荐片播放失败，缺失插件";
                 }
             }else{
                 log("ftp地址，软件不支持"); 
