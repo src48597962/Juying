@@ -1082,9 +1082,9 @@ function yiji() {
         if(programversion<11){
             confirm({
                 title: "温馨提示",
-                content: "发现小程序新版本\n预留本地库依赖切换逻辑",
+                content: "发现小程序新版本\n本次不升级将无法使用",
                 confirm: $.toString(() => {
-                    return "海阔视界首页频道规则【聚影】￥home_rule_url￥http://hiker.nokia.press/hikerule/rulelist.json?id=6996"
+                    return config.聚影.replace(/[^/]*$/,'') + "聚影.hiker";
                 }),
                 cancel: $.toString(() => {
                     return "toast://不升级小程序，功能不全或有异常"
