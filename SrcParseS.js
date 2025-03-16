@@ -130,9 +130,22 @@ var SrcParseS = {
         log("请求地址："+vipUrl); 
         
         if (vipUrl.startsWith('ftp://')) {
-            log(dataObj);
-            log("ftp地址，软件不支持"); 
-            return "toast://ftp地址，软件不支持";
+            if(vipUrl.includes('114s.com')){
+                //let s = loadJavaClass("hiker://files/cache/bidi.dex", "com.rule.jianpian", "hiker://files/cache/libp2p.so");
+                //let cache = getPath("hiker://files/_cache").replace("file://", "");
+                //s.init(cache);
+                try {
+                    let s = loadJavaClass("hiker://files/cache/bidi.dex", "com.rule.jianpian", "hiker://files/cache/libp2p.so");
+                    let url = s.JPUrlDec(vipUrl) + "#isVideo=true#";
+                    s.finish();
+                    return url;
+                } catch (e) {
+                    return "荐片播放失败";
+                }
+            }else{
+                log("ftp地址，软件不支持"); 
+                return "toast://ftp地址，软件不支持";
+            }
         }else if (/magnet|torrent/.test(vipUrl)) {
             log("磁力/BT视频地址，由海阔解析"); 
             return vipUrl;
