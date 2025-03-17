@@ -137,7 +137,7 @@ var SrcParseS = {
                 if(fileExist("hiker://files/cache/bidi.dex") && fileExist("hiker://files/cache/libp2p.so")){
                     try{
                         let s = loadJavaClass("hiker://files/cache/bidi.dex", "com.rule.jianpian", "hiker://files/cache/libp2p.so");
-                        let cache = getPath("hiker://files/_cache").replace("file://", "");
+                        let cache = getPath("hiker://files/cache").replace("file://", "");
                         s.init(cache);
                         let url = s.JPUrlDec(vipUrl) + "#isVideo=true#";
                         //s = loadJavaClass("hiker://files/cache/bidi.dex", "com.rule.jianpian");
