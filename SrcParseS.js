@@ -137,7 +137,7 @@ var SrcParseS = {
                         s.init(getPath("hiker://files/_cache").replace("file://", ""));
                         let url = s.JPUrlDec(vipUrl) + "#isVideo=true#";
                         //s = loadJavaClass("hiker://files/cache/bidi.dex", "com.rule.jianpian");
-                        //s.finish();
+                        s.finish();
                         return url;
                     } catch (e) {
                         return "toast://荐片播放失败";
