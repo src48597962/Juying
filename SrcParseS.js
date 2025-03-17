@@ -139,9 +139,11 @@ var SrcParseS = {
                         let s = loadJavaClass("hiker://files/cache/bidi.dex", "com.rule.jianpian", "hiker://files/cache/libp2p.so");
                         let cache = getPath("hiker://files/cache").replace("file://", "");
                         s.init(cache);
+                        log(vipUrl);
                         let url = s.JPUrlDec(vipUrl) + "#isVideo=true#";
+                        log(url);
                         //s = loadJavaClass("hiker://files/cache/bidi.dex", "com.rule.jianpian");
-                        s.finish();
+                        //s.finish();
                         return url;
                     } catch (e) {
                         return "toast://荐片播放失败";
