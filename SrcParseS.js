@@ -130,6 +130,15 @@ var SrcParseS = {
         log("请求地址："+vipUrl); 
         
         if (vipUrl.startsWith('ftp://')) {
+            function importClass(clsname) {
+                return new org.mozilla.javascript.NativeJavaClass(this, findJavaClass(clsname));
+            }
+            loadJavaClass("hiker://files/data/DrpyHiker/plug/jianpian/bidi.dex", "com.rule.jianpian", "hiker://files/data/DrpyHiker/plug/jianpian/arm64-v8a/libp2p.so");
+            const JianPian=importClass("com.rule.jianpian");
+
+            JianPian.init(getPath("hiker://files/_cache").replace("file://", ""));
+            return JianPian.JPUrlDec(vipUrl);
+            /*
             if(vipUrl.includes('114s.com')){
                 //let s = loadJavaClass("hiker://files/cache/bidi.dex", "com.rule.jianpian", "hiker://files/cache/libp2p.so");
                 //let cache = getPath("hiker://files/_cache").replace("file://", "");
@@ -155,6 +164,7 @@ var SrcParseS = {
                 log("ftp地址，软件不支持"); 
                 return "toast://ftp地址，软件不支持";
             }
+            */
         }else if (/magnet|torrent/.test(vipUrl)) {
             log("磁力/BT视频地址，由海阔解析"); 
             return vipUrl;
