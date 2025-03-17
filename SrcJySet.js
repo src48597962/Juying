@@ -2827,7 +2827,7 @@ function importConfirm(jsfile) {
         clearMyVar('importConfirm');
     },importfile));
     let code,name,lx,sm,importdatas,datalist;
-    let importfile = "hiker://files/_cache/juying2/cloudimport.txt";
+    let importfile = "hiker://files/_cache/Juying2/cloudimport.txt";
     let d = [];
     
     if(!jsfile){
