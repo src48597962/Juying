@@ -241,6 +241,7 @@ function dianboerji() {
             addItemAfter("historyid", h);
             updateItem("historyid", {desc: "1-3"});
         }
+        log("111");
     },getHistory));
 
     let sextra = storage0.getMyVar('二级附加临时对象') || {};//二级换源时临时extra数据
@@ -251,6 +252,13 @@ function dianboerji() {
     let sgroup = jkdata.group||jkdata.type;
     let sname = jkdata.name;
     let updateItemid = sgroup + "_" + name + "_loading";
+    if(sname.includes('荐片')){
+        addListener("onClose", $.toString(() => {
+            let s = loadJavaClass("hiker://files/cache/bidi.dex", "com.rule.jianpian");
+            s.finish();
+            log("222");
+        }))
+    }
 
     if(sextra.url){
         updateItemid = updateItemid + '2';
