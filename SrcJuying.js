@@ -1085,7 +1085,7 @@ function yiji() {
         try{
             programversion = $.require("config").version || MY_RULE.version || 0;
         }catch(e){}
-        if(programversion<12){
+        if(programversion<13){
             confirm({
                 title: "温馨提示",
                 content: "发现小程序新版本\n本次不升级将无法使用",
