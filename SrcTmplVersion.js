@@ -1,7 +1,7 @@
 var newVersion = {
     "SrcJuying":"2.6",
     "hint": "小程序版本需要升级到11以上",
-    "codeDownload": "https://src48597962.lanzouo.com/i3chw2if45gb",
+    "codeDownload": "https://src48597962.lanzouo.com/iO76o2qy41ra",
     "JYUpdateRecords": [{
         title: "2025/03/18 V2.6",
         records: [
