@@ -1,14 +1,15 @@
 var newVersion = {
-    "SrcJuying":"2.5",
-    "hint": "",
+    "SrcJuying":"2.6",
+    "hint": "小程序版本需要升级到11以上",
     "codeDownload": "https://src48597962.lanzouo.com/i3chw2if45gb",
     "JYUpdateRecords": [{
-        title: "beta V2.6",
+        title: "2025/03/18 V2.6",
         records: [
             "修复：云盘原画接口1失效无法获取的问题",
             "修复：解析接口返回多线路判断错误的问题",
             "升级：升级小程序版本支持动态获取gm插件",
-            "升级：小程序版本升级11，支持外部调用解析"
+            "升级：支持从外部小程序调用聚影解析",
+            "升级：小程序版本升级到13，增强功能"
         ]
     },{
         title: "2024/12/18 V2.5",
