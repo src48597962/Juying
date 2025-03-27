@@ -339,7 +339,18 @@ function guanlidata(datalist) {
     return list;
 }
 function LivePlay(name) {
-    let JYlive = getMyVar('JYlivedyurl', 'juying') == "juying" ? fetch(rulepath + "live.txt") : fetchCache(getMyVar('JYlivedyurl'), 24, { timeout: 3000 });
+    let JYlive = '';
+    if(getMyVar('JYlivedyurl', 'juying') == "juying"){
+        JYlive = fetch(rulepath + "live.txt");
+    }else{
+        let YChtml = fetchCache(getMyVar('JYlivedyurl'), 24, { timeout: 3000 });
+        let shstr = YChtml.substr(0, YChtml.indexOf('\n'));
+        if(shstr.includes(',http')){
+            YChtml = "未分组,#genre#\n" + YChtml;
+        }
+        JYlive = YChtml;
+    }
+    
     let JYlives = [];
     if (JYlive.indexOf('#genre#') > -1) {
         JYlives = JYlive.split('\n');
