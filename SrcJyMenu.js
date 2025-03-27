@@ -146,6 +146,11 @@ function lookset() {
     addListener("onClose", $.toString(() => {
         clearMyVar('playSet');
     }));
+    if(!config.聚影 && getPublicItem('聚影','')){
+        initConfig({
+            聚影: getPublicItem('聚影','')
+        });
+    }
     require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
     setPageTitle("点播二级观看设置");
     let recordfile = rulepath + "parse.json";//解析相关记录文件
