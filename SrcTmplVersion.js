@@ -3,6 +3,11 @@ var newVersion = {
     "hint": "小程序版本需要升级到11以上",
     "codeDownload": "https://src48597962.lanzouo.com/iO76o2qy41ra",
     "JYUpdateRecords": [{
+        title: "beta V2.7",
+        records: [
+            "优化：直播源兼容性提升"
+        ]
+    },{
         title: "2025/03/18 V2.6",
         records: [
             "修复：云盘原画接口1失效无法获取的问题",
