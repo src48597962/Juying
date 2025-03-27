@@ -49,6 +49,10 @@ function Live() {
             try {
                 showLoading('发现订阅源，正在初始化');
                 let YChtml = fetchCache(JYlivedyurl, 48, { timeout: 3000 }).replace(/TV-/g, 'TV').replace(/\[.*\]/g, '');
+                let shstr = YChtml.substr(0, YChtml.indexOf('\n'));
+                if(shstr.includes(',http')){
+                    YChtml = "未分组,#genre#\n" + YChtml;
+                }
                 if (YChtml.indexOf('#genre#') > -1 || YChtml.indexOf('#EXTINF:-1') > -1) {
                     JYlive = YChtml;
                 }
@@ -463,6 +467,10 @@ function LiveSet() {
                         if (!livedata.some(item => item.url == input)) {
                             showLoading('正在验证链接有效性...');
                             let YChtml = request(input, { timeout: 3000 });
+                            let shstr = YChtml.substr(0, YChtml.indexOf('\n'));
+                            if(shstr.includes(',http')){
+                                YChtml = "未分组,#genre#\n" + YChtml;
+                            }
                             if (YChtml.indexOf('#genre#') > -1 || YChtml.indexOf('#EXTINF:-1') > -1) {
                                 hideLoading();
                                 return $("", "链接有效，起个名字保存").input((livedata, url, livecfgfile, liveconfig) => {
@@ -478,7 +486,7 @@ function LiveSet() {
                                 }, livedata, input, livecfgfile, liveconfig)
                             } else {
                                 hideLoading();
-                                return "toast://无法识别，需含#genre#的通用格式";
+                                return "toast://无法识别";
                             }
                         } else {
                             return "toast://已存在";
@@ -515,6 +523,10 @@ function LiveSet() {
                                 if (input == "更新缓存") {
                                     showLoading('正在缓存，请稍后.');
                                     let YChtml = request(url, { timeout: 3000 });
+                                    let shstr = YChtml.substr(0, YChtml.indexOf('\n'));
+                                    if(shstr.includes(',http')){
+                                        YChtml = "未分组,#genre#\n" + YChtml;
+                                    }
                                     if (YChtml.indexOf('#genre#') > -1) {
                                         deleteCache(url);
                                         let YChtml = fetchCache(url, 24, { timeout: 3000 }).replace(/TV-/g, 'TV').replace(/\[.*\]/g, '');
@@ -565,6 +577,10 @@ function LiveSet() {
                                 }  else if (input == "导入本地") {
                                     showLoading('叠加导入直播，最大万行限制');
                                     let YChtml = fetchCache(url, 24, { timeout: 3000 }).replace(/TV-/g, 'TV').replace(/\[.*\]/g, '');
+                                    let shstr = YChtml.substr(0, YChtml.indexOf('\n'));
+                                    if(shstr.includes(',http')){
+                                        YChtml = "未分组,#genre#\n" + YChtml;
+                                    }
                                     if (YChtml.indexOf('#genre#') > -1) {
                                         var YClives = YChtml.split('\n');
                                     } else {
@@ -763,6 +779,10 @@ function LiveSet() {
                                 for (let i = 0; i < urls.length; i++) {
                                     if (!livedata.some(item => item.url == urls[i].url)) {
                                         let YChtml = request(urls[i].url, { timeout: 5000 }).replace(/TV-/g, 'TV');
+                                        let shstr = YChtml.substr(0, YChtml.indexOf('\n'));
+                                        if(shstr.includes(',http')){
+                                            YChtml = "未分组,#genre#\n" + YChtml;
+                                        }
                                         if (YChtml.indexOf('#genre#') > -1 || YChtml.indexOf('#EXTINF:-1') > -1) {
                                             livedata.push(urls[i]);
                                             livenum++;
