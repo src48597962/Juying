@@ -131,17 +131,19 @@ var SrcParseS = {
         
         if (vipUrl.startsWith('ftp://')) {
             if(vipUrl.includes('114s.com')){
-                if(fileExist("hiker://files/cache/bidi.dex") && fileExist("hiker://files/cache/libp2p.so")){
-                    try{
-                        let s = loadJavaClass("hiker://files/cache/bidi.dex", "com.rule.jianpian", "hiker://files/cache/libp2p.so");
-                        s.init(getPath("hiker://files/_cache").replace("file://", ""));
-                        let url = s.JPUrlDec(vipUrl) + "#isVideo=true#";
-                        return url;
-                    } catch (e) {
-                        return "toast://荐片播放失败";
-                    }
-                }else{
-                    return "toast://荐片播放失败，缺失插件";
+                if(!fileExist("hiker://files/cache/bidi.dex") || !fileExist("hiker://files/cache/libp2p.so")){
+                    log("荐片插件本地不存在，偿试下载中...");
+                    requireDownload(config.聚影.replace(/[^/]*$/,'') + "plugins/bidi.dex", 'hiker://files/cache/bidi.dex');
+                    requireDownload(config.聚影.replace(/[^/]*$/,'') + "plugins/libp2p.so", 'hiker://files/cache/libp2p.so');
+                    log("荐片插件下载完成");
+                }
+                try{
+                    let s = loadJavaClass("hiker://files/cache/bidi.dex", "com.rule.jianpian", "hiker://files/cache/libp2p.so");
+                    s.init(getPath("hiker://files/_cache").replace("file://", ""));
+                    let url = s.JPUrlDec(vipUrl) + "#isVideo=true#";
+                    return url;
+                } catch (e) {
+                    return "toast://荐片播放失败";
                 }
             }else{
                 log("ftp地址，软件不支持"); 
