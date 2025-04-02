@@ -1390,6 +1390,7 @@ function getErData(jkdata, erurl) {
                     conthtml = conthtml.split(extdata["播放二次截取"].split('&&')[0])[1].split(extdata["播放二次截取"].split('&&')[1])[0];
                 }
                 let contlist = conthtml.match(new RegExp(extdata["播放数组"].replace('&&', '((?:.|[\r\n])*?)'), 'g')) || [];
+                let homeUrl = getHome(extdata["主页url"]);
                 for (let i = 0; i < contlist.length; i++) {
                     let bfline = extdata["播放列表"] ? (contlist[i].match(new RegExp(extdata["播放列表"].replace('&&', '((?:.|[\r\n])*?)'), 'g')) || []) : pdfa(contlist[i], "body&&a");
                     let cont = [];
@@ -1397,7 +1398,7 @@ function getErData(jkdata, erurl) {
                         let contname = extdata["播放标题"] ? bfline[j].split(extdata["播放标题"].split('&&')[0])[1].split(extdata["播放标题"].split('&&')[1])[0] : pdfh(bfline[j], "a&&Text");
                         let conturl = extdata["播放链接"] ? bfline[j].split(extdata["播放链接"].split('&&')[0])[1].split(extdata["播放链接"].split('&&')[1])[0] : pd(bfline[j], "a&&href");
                         if(!conturl.startsWith('http')){
-                            conturl = extdata["主页url"] + conturl;
+                            conturl = homeUrl + conturl;
                         }
                         cont.push(contname + "$" + conturl)
                     }
