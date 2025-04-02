@@ -1373,7 +1373,7 @@ function getErData(jkdata, erurl) {
             }
         } else if (api_type == "XBPQ") {
             try {
-                let arthtml = getBetweenStr(html, extdata["线路二次截取"], '');
+                let arthtml = getBetweenStr(html, extdata["线路二次截取"], 1);
                 //if (extdata["线路二次截取"]) {
                 //   arthtml = arthtml.split(extdata["线路二次截取"].split('&&')[0])[1].split(extdata["线路二次截取"].split('&&')[1])[0];
                 //}
