@@ -1373,7 +1373,7 @@ function getErData(jkdata, erurl) {
             }
         } else if (api_type == "XBPQ") {
             try {
-                let arthtml = getBetweenStr(html, extdata["线路二次截取"]);
+                let arthtml = getBetweenStr(html, extdata["线路二次截取"], '');
                 //if (extdata["线路二次截取"]) {
                 //   arthtml = arthtml.split(extdata["线路二次截取"].split('&&')[0])[1].split(extdata["线路二次截取"].split('&&')[1])[0];
                 //}
@@ -1616,9 +1616,9 @@ function extDataCache(jkdata) {
     return '';
 }
 //截取中间字符
-function getBetweenStr(str, key) {
+function getBetweenStr(str, key, old) {
     if (!str || !key) {
-        return str||"";
+        return old?str||"":"";
     }
     const prefix = key.split('&&')[0];
     const suffix = key.split('&&')[1];
