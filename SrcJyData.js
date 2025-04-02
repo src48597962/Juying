@@ -1373,13 +1373,13 @@ function getErData(jkdata, erurl) {
             }
         } else if (api_type == "XBPQ") {
             try {
-                let arthtml = html;
-                if (extdata["线路二次截取"]) {
-                    arthtml = arthtml.split(extdata["线路二次截取"].split('&&')[0])[1].split(extdata["线路二次截取"].split('&&')[1])[0];
-                }
+                let arthtml = getBetweenStr(html, extdata["线路二次截取"]);
+                //if (extdata["线路二次截取"]) {
+                //   arthtml = arthtml.split(extdata["线路二次截取"].split('&&')[0])[1].split(extdata["线路二次截取"].split('&&')[1])[0];
+                //}
                 extdata["线路数组"] = extdata["线路数组"].split('[')[0];
                 let artlist = arthtml.match(new RegExp(extdata["线路数组"].replace('&&', '((?:.|[\r\n])*?)'), 'g')) || [];
-                extdata["线路标题"] = extdata["线路标题"].split('+')[0];
+                extdata["线路标题"] = extdata["线路标题"].includes('+')?extdata["线路标题"].split('+')[1]:extdata["线路标题"];
                 for (let i = 0; i < artlist.length; i++) {
                     let arttitle = artlist[i].split(extdata["线路数组"].split('&&')[0])[1].split(extdata["线路数组"].split('&&')[1])[0].split(extdata["线路标题"].split('&&')[0])[1].split(extdata["线路标题"].split('&&')[1])[0];
                     tabs.push(arttitle.replace(/<\/?.+?\/?>/g, ''));
@@ -1618,7 +1618,7 @@ function extDataCache(jkdata) {
 //截取中间字符
 function getBetweenStr(str, key) {
     if (!str || !key) {
-        return '';
+        return str||"";
     }
     const prefix = key.split('&&')[0];
     const suffix = key.split('&&')[1];
