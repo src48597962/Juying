@@ -65,7 +65,7 @@ function getYiData(jkdata, batchTest) {
                 classurl = extdata["分类"];
                 extdata["分类url"] = extdata["分类url"] ? extdata["分类url"].split(';;')[0].split('[')[0] : "";
                 listurl = extdata["分类url"] ? /^http/.test(extdata["分类url"]) ? extdata["分类url"] : host + extdata["分类url"] : "";
-                if(extdata["直接播放"]){
+                if(extdata["直接播放"]=="1"){
                     noerji = 1;
                 }
                 if(extdata["嗅探词"]){
