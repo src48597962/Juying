@@ -1401,6 +1401,8 @@ function getErData(jkdata, erurl) {
                 }
 
                 let conthtml = html;
+                log(obj["播放二次截取"]);
+                log($.type(obj["播放二次截取"]));
                 if (extdata["播放二次截取"]) {
                     conthtml = conthtml.split(extdata["播放二次截取"].split('&&')[0])[1].split(extdata["播放二次截取"].split('&&')[1])[0];
                 }
