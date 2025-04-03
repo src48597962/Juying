@@ -1398,6 +1398,7 @@ function getErData(jkdata, erurl) {
                 log($.type(extdata["播放二次截取"]));
                 //extdata = erjsondata;
                 extdata["线路数组"] = extdata["线路数组"].split('[')[0];
+                extdata["线路标题"] = extdata["线路标题"].includes('+')?extdata["线路标题"].split('+')[1]:extdata["线路标题"];
                 let artlist = arthtml.match(new RegExp(extdata["线路数组"].replace('&&', '((?:.|[\r\n])*?)'), 'g')) || [];
                 for (let i = 0; i < artlist.length; i++) {
                     let arttitle = artlist[i].split(extdata["线路数组"].split('&&')[0])[1].split(extdata["线路数组"].split('&&')[1])[0].split(extdata["线路标题"].split('&&')[0])[1].split(extdata["线路标题"].split('&&')[1])[0];
@@ -1407,6 +1408,7 @@ function getErData(jkdata, erurl) {
                 let conthtml = html;
 
                 if (extdata["播放二次截取"]) {
+                    log("进来了");
                     conthtml = conthtml.split(extdata["播放二次截取"].split('&&')[0])[1].split(extdata["播放二次截取"].split('&&')[1])[0];
                 }
                 let contlist = conthtml.match(new RegExp(extdata["播放数组"].replace('&&', '((?:.|[\r\n])*?)'), 'g')) || [];
