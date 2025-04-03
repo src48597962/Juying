@@ -1374,10 +1374,9 @@ function getErData(jkdata, erurl) {
                 extdata["线路数组"] = extdata["线路数组"].split('[')[0];
                 let artlist = arthtml.match(new RegExp(extdata["线路数组"].replace('&&', '((?:.|[\r\n])*?)'), 'g')) || [];
                 for (let i = 0; i < artlist.length; i++) {
-                    //let arttitle = artlist[i].split(extdata["线路数组"].split('&&')[0])[1].split(extdata["线路数组"].split('&&')[1])[0].split(extdata["线路标题"].split('&&')[0])[1].split(extdata["线路标题"].split('&&')[1])[0];
                     let arttitle = getBetweenStr(getBetweenStr(artlist[i], extdata["线路数组"], 1), extdata["线路标题"]).replace(/<\/?.+?\/?>/g, '');
                     if(arttitle){
-                        tabs.push(arttitle.replace(/<\/?.+?\/?>/g, ''));
+                        tabs.push(arttitle);
                     }
                 }
 
@@ -1409,6 +1408,9 @@ function getErData(jkdata, erurl) {
                 }
                 if(extdata["过滤词"]){
                     sniffer["exclude"] = extdata["过滤词"].split('#');
+                }
+                if(extdata["播放请求头信息"]){
+                    sniffer["headers"] = extdata["播放请求头信息"];
                 }
             } catch (e) {
                 log('失败>' + e.message + " 错误行#" + e.lineNumber)
