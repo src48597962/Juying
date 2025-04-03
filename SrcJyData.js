@@ -1379,7 +1379,7 @@ function getErData(jkdata, erurl) {
                 //}
                 function processObjectProperties(obj) {
                     const result = {};
-                    for (const key in obj) {
+                    for (let key in obj) {
                         if (obj.hasOwnProperty(key)) {
                         const value = obj[key];
                         
