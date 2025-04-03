@@ -1131,7 +1131,7 @@ function getErData(jkdata, erurl) {
             }
             headers["User-Agent"] = (headers["User-Agent"] == "电脑" || headers["User-Agent"] == "PC_UA") ? PC_UA : MOBILE_UA;
         } else if (api_type == "XBPQ") {
-            extdata = processXBPQobject(extdata);
+            //extdata = processXBPQobject(extdata);
             headers = Object.assign(headers, extdata["请求头信息"] || {});
         }
         html = getHtml(erurl, headers);
@@ -1599,6 +1599,67 @@ function extDataCache(jkdata) {
         }
         if (fileExist(jkdata.url)) {
             eval("let extdata = " + fetch(jkdata.url));
+            if(jkdata.type=="XBPQ" && $.type(extdata)=="object"){
+                for (let key in extdata) {
+                    // 只处理对象自身的属性（跳过继承的）
+                    if (!Object.prototype.hasOwnProperty.call(extdata, key)) continue;
+                    let value = extdata[key];
+                    // 仅当值是字符串时才处理
+                    if (typeof value === "string") {
+                        // 如果包含 '+'，则尝试分割
+                        if (value.indexOf("+") !== -1 && key != "搜索链接") {
+                            let parts = value.split("+");
+                            // 取第2部分（如果存在且非空），否则保留原值
+                            extdata[key] = (parts[1] && parts[1].trim() !== "") ? parts[1].trim() : value;
+                        }
+                    }
+                }
+                let headlist = ['请求头', '播放请求头', '搜索请求头'];
+                headlist.forEach(it=>{
+                    if(extdata[it]){
+                        let head = {};
+                        extdata[it].split('#').forEach(pair => {
+                            const [key, value] = pair.split('$');
+                            head[key] = value;
+                        });
+                        extdata[it+'信息'] = head;
+                    }
+                })
+            }
+
+            /*
+//处理XBPQ对象数据
+function processXBPQobject(obj) {
+    let result = Object.assign({}, obj);
+    for (let key in result) {
+        // 只处理对象自身的属性（跳过继承的）
+        if (!Object.prototype.hasOwnProperty.call(result, key)) continue;
+        let value = result[key];
+        // 仅当值是字符串时才处理
+        if (typeof value === "string") {
+            // 如果包含 '+'，则尝试分割
+            if (value.indexOf("+") !== -1 && key != "搜索链接") {
+                let parts = value.split("+");
+                // 取第2部分（如果存在且非空），否则保留原值
+                result[key] = (parts[1] && parts[1].trim() !== "") ? parts[1].trim() : value;
+            }
+        }
+    }
+    let headlist = ['请求头', '播放请求头', '搜索请求头'];
+    headlist.forEach(it=>{
+        if(result[it]){
+            let head = {};
+            result[it].split('#').forEach(pair => {
+                const [key, value] = pair.split('$');
+                head[key] = value;
+            });
+            result[it+'信息'] = head;
+        }
+    })
+    return result;
+}
+*/
+
             return extdata;
         } else {
             toast('数据文件获取失败');
@@ -1665,35 +1726,4 @@ function getExecStrs(str) {
         result && list.push(result[1])
     } while (result)
     return list
-}
-//处理XBPQ对象数据
-function processXBPQobject(obj) {
-    let result = Object.assign({}, obj);
-    for (let key in result) {
-        // 只处理对象自身的属性（跳过继承的）
-        if (!Object.prototype.hasOwnProperty.call(result, key)) continue;
-        let value = result[key];
-        // 仅当值是字符串时才处理
-        if (typeof value === "string") {
-            // 如果包含 '+'，则尝试分割
-            if (value.indexOf("+") !== -1 && key != "搜索链接") {
-                let parts = value.split("+");
-                // 取第2部分（如果存在且非空），否则保留原值
-                result[key] = (parts[1] && parts[1].trim() !== "") ? parts[1].trim() : value;
-            }
-        }
-    }
-    let headlist = ['请求头', '播放请求头', '搜索请求头'];
-    headlist.forEach(it=>{
-        if(result[it]){
-            let head = {};
-            result[it].split('#').forEach(pair => {
-                const [key, value] = pair.split('$');
-                head[key] = value;
-            });
-            result[it+'信息'] = head;
-            log(head);
-        }
-    })
-    return result;
 }
