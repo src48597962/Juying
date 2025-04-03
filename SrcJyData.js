@@ -1377,28 +1377,31 @@ function getErData(jkdata, erurl) {
                 //if (extdata["线路二次截取"]) {
                 //   arthtml = arthtml.split(extdata["线路二次截取"].split('&&')[0])[1].split(extdata["线路二次截取"].split('&&')[1])[0];
                 //}
-                /*
-                let erjsondata = {};
-                for (let key in extdata) {
-                    if (extdata.hasOwnProperty(key)) {
-                        const value = extdata[key];
+                function processObjectProperties(obj) {
+                    const result = {};
+                    for (const key in obj) {
+                        if (obj.hasOwnProperty(key)) {
+                        const value = obj[key];
+                        
                         // 检查值是否为字符串且包含 '+'
                         if (typeof value === 'string' && value.includes('+')) {
                             const parts = value.split('+');
                             // 取 split 后的第二部分，如果存在的话
-                            erjsondata[key] = parts.length > 1 ? parts[1].trim() : value;
+                            result[key] = parts.length > 1 ? parts[1].trim() : value;
                         } else {
                             // 不包含 '+' 或不是字符串，保留原值
-                            erjsondata[key] = value;
+                            result[key] = value;
+                        }
                         }
                     }
+                    return result;
                 }
-                */
+                extdata = processObjectProperties(extdata);
                 log(extdata["播放二次截取"]);
                 log($.type(extdata["播放二次截取"]));
                 //extdata = erjsondata;
                 extdata["线路数组"] = extdata["线路数组"].split('[')[0];
-                extdata["线路标题"] = extdata["线路标题"].includes('+')?extdata["线路标题"].split('+')[1]:extdata["线路标题"];
+                //extdata["线路标题"] = extdata["线路标题"].includes('+')?extdata["线路标题"].split('+')[1]:extdata["线路标题"];
                 let artlist = arthtml.match(new RegExp(extdata["线路数组"].replace('&&', '((?:.|[\r\n])*?)'), 'g')) || [];
                 for (let i = 0; i < artlist.length; i++) {
                     let arttitle = artlist[i].split(extdata["线路数组"].split('&&')[0])[1].split(extdata["线路数组"].split('&&')[1])[0].split(extdata["线路标题"].split('&&')[0])[1].split(extdata["线路标题"].split('&&')[1])[0];
