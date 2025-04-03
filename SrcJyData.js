@@ -61,10 +61,9 @@ function getYiData(jkdata, batchTest) {
         extdata = extDataCache(jkdata);
         if ($.type(extdata) == 'object') {
             if (api_type == "XBPQ") {
-                let host = getHome(extdata["主页url"]) || '';
                 classurl = extdata["分类"];
                 extdata["分类url"] = extdata["分类url"] ? extdata["分类url"].split(';;')[0].split('[')[0] : "";
-                listurl = extdata["分类url"] ? /^http/.test(extdata["分类url"]) ? extdata["分类url"] : host + extdata["分类url"] : "";
+                listurl = extdata["分类url"] ? /^http/.test(extdata["分类url"]) ? extdata["分类url"] : extdata["主页"] + extdata["分类url"] : "";
                 if(extdata["直接播放"]=="1"){
                     noerji = 1;
                 }
@@ -776,7 +775,7 @@ function getSsData(name, jkdata, page) {
             if (api_type == "XBPQ") {
                 extdata["搜索url"] = extdata["搜索url"] || "/index.php/ajax/suggest?mid=1&wd={wd}&limit=500";
                 ssurl = extdata["搜索url"].replace('{wd}', name).replace('{pg}', page);
-                ssurl = /^http/.test(ssurl) ? ssurl : extdata["主页url"] + ssurl;
+                ssurl = /^http/.test(ssurl) ? ssurl : extdata["主页"] + ssurl;
                 vodhost = getHome(ssurl);
             } else if (api_type == "XPath") {
                 ssurl = extdata["searchUrl"].replace('{wd}', name).replace('{pg}', page);
@@ -997,7 +996,7 @@ function getSsData(name, jkdata, page) {
                     let html = JSON.parse(gethtml);
                     lists = html.list || [];
                     lists.forEach(it=>{
-                        it.id = extdata["主页url"] + extdata["搜索后缀"] + it.id + '.html';
+                        it.id = extdata["主页"] + extdata["搜索后缀"] + it.id + '.html';
                     })
                 } else {
                     let sstype = ssurl.indexOf(';post') > -1 ? "post" : "get";
@@ -1131,7 +1130,6 @@ function getErData(jkdata, erurl) {
             }
             headers["User-Agent"] = (headers["User-Agent"] == "电脑" || headers["User-Agent"] == "PC_UA") ? PC_UA : MOBILE_UA;
         } else if (api_type == "XBPQ") {
-            //extdata = processXBPQobject(extdata);
             headers = Object.assign(headers, extdata["请求头信息"] || {});
         }
         html = getHtml(erurl, headers);
@@ -1376,13 +1374,15 @@ function getErData(jkdata, erurl) {
                 extdata["线路数组"] = extdata["线路数组"].split('[')[0];
                 let artlist = arthtml.match(new RegExp(extdata["线路数组"].replace('&&', '((?:.|[\r\n])*?)'), 'g')) || [];
                 for (let i = 0; i < artlist.length; i++) {
-                    let arttitle = artlist[i].split(extdata["线路数组"].split('&&')[0])[1].split(extdata["线路数组"].split('&&')[1])[0].split(extdata["线路标题"].split('&&')[0])[1].split(extdata["线路标题"].split('&&')[1])[0];
-                    tabs.push(arttitle.replace(/<\/?.+?\/?>/g, ''));
+                    //let arttitle = artlist[i].split(extdata["线路数组"].split('&&')[0])[1].split(extdata["线路数组"].split('&&')[1])[0].split(extdata["线路标题"].split('&&')[0])[1].split(extdata["线路标题"].split('&&')[1])[0];
+                    let arttitle = getBetweenStr(getBetweenStr(artlist[i], extdata["线路数组"], 1), extdata["线路标题"]).replace(/<\/?.+?\/?>/g, '');
+                    if(arttitle){
+                        tabs.push(arttitle.replace(/<\/?.+?\/?>/g, ''));
+                    }
                 }
 
                 let conthtml = getBetweenStr(html, extdata["播放二次截取"], 1);
                 let contlist = conthtml.match(new RegExp(extdata["播放数组"].replace('&&', '((?:.|[\r\n])*?)'), 'g')) || [];
-                let homeUrl = getHome(extdata["主页url"]);
                 for (let i = 0; i < contlist.length; i++) {
                     let bfline = extdata["播放列表"] ? (contlist[i].match(new RegExp(extdata["播放列表"].replace('&&', '((?:.|[\r\n])*?)'), 'g')) || []) : pdfa(contlist[i], "body&&a");
                     let cont = [];
@@ -1390,7 +1390,7 @@ function getErData(jkdata, erurl) {
                         let contname = extdata["播放标题"] ? bfline[j].split(extdata["播放标题"].split('&&')[0])[1].split(extdata["播放标题"].split('&&')[1])[0] : pdfh(bfline[j], "a&&Text");
                         let conturl = extdata["播放链接"] ? bfline[j].split(extdata["播放链接"].split('&&')[0])[1].split(extdata["播放链接"].split('&&')[1])[0] : pd(bfline[j], "a&&href");
                         if(!conturl.startsWith('http')){
-                            conturl = homeUrl + conturl;
+                            conturl = extdata["主页"] + conturl;
                         }
                         cont.push(contname + "$" + conturl)
                     }
@@ -1620,46 +1620,13 @@ function extDataCache(jkdata) {
                         let head = {};
                         extdata[it].split('#').forEach(pair => {
                             const [key, value] = pair.split('$');
-                            head[key] = value;
+                            head[key] = value=="MOBILE_UA"?MOBILE_UA:value=="PC_UA"?PC_UA:value;
                         });
                         extdata[it+'信息'] = head;
                     }
                 })
+                extdata["主页"] = getHome(extdata["主页url"]);
             }
-
-            /*
-//处理XBPQ对象数据
-function processXBPQobject(obj) {
-    let result = Object.assign({}, obj);
-    for (let key in result) {
-        // 只处理对象自身的属性（跳过继承的）
-        if (!Object.prototype.hasOwnProperty.call(result, key)) continue;
-        let value = result[key];
-        // 仅当值是字符串时才处理
-        if (typeof value === "string") {
-            // 如果包含 '+'，则尝试分割
-            if (value.indexOf("+") !== -1 && key != "搜索链接") {
-                let parts = value.split("+");
-                // 取第2部分（如果存在且非空），否则保留原值
-                result[key] = (parts[1] && parts[1].trim() !== "") ? parts[1].trim() : value;
-            }
-        }
-    }
-    let headlist = ['请求头', '播放请求头', '搜索请求头'];
-    headlist.forEach(it=>{
-        if(result[it]){
-            let head = {};
-            result[it].split('#').forEach(pair => {
-                const [key, value] = pair.split('$');
-                head[key] = value;
-            });
-            result[it+'信息'] = head;
-        }
-    })
-    return result;
-}
-*/
-
             return extdata;
         } else {
             toast('数据文件获取失败');
