@@ -62,6 +62,8 @@ function getPlayExtra(obj){
     }
     if(!/qq|youku|mgtv|bili|qiyi|sohu|pptv|le/.test(obj.playUrl) && /html/.test(obj.playUrl)){
         extra.referer = obj.playUrl;
+    }else if(sniffer['headers']){
+        extra = Object.assign(extra, sniffer['headers']);
     }
     if(obj.cachem3u8){
         extra.cacheM3u8 = true;
