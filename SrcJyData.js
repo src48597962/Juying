@@ -635,9 +635,7 @@ function getYiData(jkdata, batchTest) {
             } else if (api_type == "XBPQ") {
                 let gethtml = getHtml(listurl, headers);
                 extdata["二次截取"] = extdata["二次截取"] || (gethtml.indexOf(`<ul class="stui-vodlist`) > -1 ? `<ul class="stui-vodlist&&</ul>` : gethtml.indexOf(`<ul class="myui-vodlist`) > -1 ? `<ul class="myui-vodlist&&</ul>` : "");
-                if (extdata["二次截取"]) {
-                    gethtml = gethtml.split(extdata["二次截取"].split('&&')[0])[1].split(extdata["二次截取"].split('&&')[1])[0];
-                }
+                gethtml = getBetweenStr(gethtml, extdata["二次截取"], 1);
                 extdata["链接"] = extdata["链接"] || `href="&&"`;
                 extdata["标题"] = extdata["标题"] || `title="&&"`;
                 extdata["数组"] = extdata["数组"] || `<a &&</a>`;
@@ -1010,15 +1008,13 @@ function getSsData(name, jkdata, page) {
                     } else {
                         gethtml = getHtmlCode(ssurl, headers);
                     }
-                    if (extdata["搜索二次截取"]) {
-                        gethtml = gethtml.split(extdata["搜索二次截取"].split('&&')[0])[1].split(extdata["搜索二次截取"].split('&&')[1])[0];
-                    }
+                    gethtml = getBetweenStr(gethtml, extdata["搜索二次截取"], 1);
                     let sslist = gethtml.match(new RegExp((extdata["搜索数组"]||extdata["数组"]).replace('&&', '((?:.|[\r\n])*?)'), 'g')) || [];
                     for (let i = 0; i < sslist.length; i++) {
-                        let title = getBetweenStr(sslist[i], (extdata["搜索标题"]||extdata["标题"]));//sslist[i].split(extdata["搜索标题"].split('&&')[0])[1].split(extdata["搜索标题"].split('&&')[1])[0];
-                        let href = getBetweenStr(sslist[i], (extdata["搜索链接"]||extdata["链接"]).replace(`+\"id\":`, '').replace(`,+`, '.'));//sslist[i].split(extdata["搜索链接"].split('&&')[0])[1].split(extdata["搜索链接"].split('&&')[1])[0];
-                        let img = getBetweenStr(sslist[i], (extdata["搜索图片"]||extdata["图片"]));//sslist[i].split(extdata["搜索图片"].split('&&')[0])[1].split(extdata["搜索图片"].split('&&')[1])[0];
-                        let desc = getBetweenStr(sslist[i], (extdata["搜索副标题"]||extdata["副标题"]));//sslist[i].split(extdata["搜索副标题"].split('&&')[0])[1].split(extdata["搜索副标题"].split('&&')[1])[0];
+                        let title = getBetweenStr(sslist[i], (extdata["搜索标题"]||extdata["标题"]));
+                        let href = getBetweenStr(sslist[i], (extdata["搜索链接"]||extdata["链接"]).replace(`+\"id\":`, '').replace(`,+`, '.'));
+                        let img = getBetweenStr(sslist[i], (extdata["搜索图片"]||extdata["图片"]));
+                        let desc = getBetweenStr(sslist[i], (extdata["搜索副标题"]||extdata["副标题"]));
                         lists.push({ "id": /^http/.test(href) ? href : vodhost + href, "name": title, "pic": img, "desc": desc })
                     }
                 }
@@ -1134,6 +1130,9 @@ function getErData(jkdata, erurl) {
                 }
             }
             headers["User-Agent"] = (headers["User-Agent"] == "电脑" || headers["User-Agent"] == "PC_UA") ? PC_UA : MOBILE_UA;
+        } else if (api_type == "XBPQ") {
+            extdata = processXBPQobject(extdata);
+            headers = Object.assign(headers, extdata["请求头信息"] || {});
         }
         html = getHtml(erurl, headers);
     } else if (api_type=="hipy_t3") {
@@ -1374,45 +1373,14 @@ function getErData(jkdata, erurl) {
         } else if (api_type == "XBPQ") {
             try {
                 let arthtml = getBetweenStr(html, extdata["线路二次截取"], 1);
-                //if (extdata["线路二次截取"]) {
-                //   arthtml = arthtml.split(extdata["线路二次截取"].split('&&')[0])[1].split(extdata["线路二次截取"].split('&&')[1])[0];
-                //}
-                function processObjectProperties(obj) {
-                    var result = Object.assign({}, obj);
-                    for (var key in result) {
-                        // 只处理对象自身的属性（跳过继承的）
-                        if (!Object.prototype.hasOwnProperty.call(result, key)) continue;
-                        var value = result[key];
-                        // 仅当值是字符串时才处理
-                        if (typeof value === "string") {
-                            // 如果包含 '+'，则尝试分割
-                            if (value.indexOf("+") !== -1) {
-                                var parts = value.split("+");
-                                // 取第2部分（如果存在且非空），否则保留原值
-                                result[key] = (parts[1] && parts[1].trim() !== "") ? parts[1].trim() : value;
-                            }
-                        }
-                    }
-                    return result;
-                }
-                extdata = processObjectProperties(extdata);
-                log(extdata["播放二次截取"]);
-                log($.type(extdata["播放二次截取"]));
-                //extdata = erjsondata;
                 extdata["线路数组"] = extdata["线路数组"].split('[')[0];
-                //extdata["线路标题"] = extdata["线路标题"].includes('+')?extdata["线路标题"].split('+')[1]:extdata["线路标题"];
                 let artlist = arthtml.match(new RegExp(extdata["线路数组"].replace('&&', '((?:.|[\r\n])*?)'), 'g')) || [];
                 for (let i = 0; i < artlist.length; i++) {
                     let arttitle = artlist[i].split(extdata["线路数组"].split('&&')[0])[1].split(extdata["线路数组"].split('&&')[1])[0].split(extdata["线路标题"].split('&&')[0])[1].split(extdata["线路标题"].split('&&')[1])[0];
                     tabs.push(arttitle.replace(/<\/?.+?\/?>/g, ''));
                 }
 
-                let conthtml = html;
-
-                if (extdata["播放二次截取"]) {
-                    log("进来了");
-                    conthtml = conthtml.split(extdata["播放二次截取"].split('&&')[0])[1].split(extdata["播放二次截取"].split('&&')[1])[0];
-                }
+                let conthtml = getBetweenStr(html, extdata["播放二次截取"], 1);
                 let contlist = conthtml.match(new RegExp(extdata["播放数组"].replace('&&', '((?:.|[\r\n])*?)'), 'g')) || [];
                 let homeUrl = getHome(extdata["主页url"]);
                 for (let i = 0; i < contlist.length; i++) {
@@ -1687,7 +1655,7 @@ function encodeUrl(str) {
         return encodeURIComponent(str).replace(/%2F/g, '/').replace(/%3F/g, '?').replace(/%3A/g, ':').replace(/%40/g, '@').replace(/%3D/g, '=').replace(/%3A/g, ':').replace(/%2C/g, ',').replace(/%2B/g, '+').replace(/%24/g, '$');
     }
 }
-//正则获取{}中间的所有值返回数组
+//正则获取所有{}中间的值返回数组
 function getExecStrs(str) {
     var reg = /\{(.+?)\}/g
     var list = []
@@ -1697,4 +1665,35 @@ function getExecStrs(str) {
         result && list.push(result[1])
     } while (result)
     return list
+}
+//处理XBPQ对象数据
+function processXBPQobject(obj) {
+    let result = Object.assign({}, obj);
+    for (let key in result) {
+        // 只处理对象自身的属性（跳过继承的）
+        if (!Object.prototype.hasOwnProperty.call(result, key)) continue;
+        let value = result[key];
+        // 仅当值是字符串时才处理
+        if (typeof value === "string") {
+            // 如果包含 '+'，则尝试分割
+            if (value.indexOf("+") !== -1 && key != "搜索链接") {
+                let parts = value.split("+");
+                // 取第2部分（如果存在且非空），否则保留原值
+                result[key] = (parts[1] && parts[1].trim() !== "") ? parts[1].trim() : value;
+            }
+        }
+    }
+    let headlist = ['请求头', '播放请求头', '搜索请求头'];
+    headlist.forEach(it=>{
+        if(result[it]){
+            let head = {};
+            result[it].split('#').forEach(pair => {
+                const [key, value] = pair.split('$');
+                head[key] = value;
+            });
+            result[it+'信息'] = head;
+            log(head);
+        }
+    })
+    return result;
 }
