@@ -1377,7 +1377,7 @@ function getErData(jkdata, erurl) {
                 //if (extdata["线路二次截取"]) {
                 //   arthtml = arthtml.split(extdata["线路二次截取"].split('&&')[0])[1].split(extdata["线路二次截取"].split('&&')[1])[0];
                 //}
-
+                let erjsondata = {};
                 for (let key in extdata) {
                     if (extdata.hasOwnProperty(key)) {
                         const value = extdata[key];
@@ -1385,14 +1385,14 @@ function getErData(jkdata, erurl) {
                         if (typeof value === 'string' && value.includes('+')) {
                             const parts = value.split('+');
                             // 取 split 后的第二部分，如果存在的话
-                            extdata[key] = parts.length > 1 ? parts[1].trim() : value;
+                            erjsondata[key] = parts.length > 1 ? parts[1].trim() : value;
                         } else {
                             // 不包含 '+' 或不是字符串，保留原值
-                            extdata[key] = value;
+                            erjsondata[key] = value;
                         }
                     }
                 }
-
+                extdata = erjsondata;
                 extdata["线路数组"] = extdata["线路数组"].split('[')[0];
                 let artlist = arthtml.match(new RegExp(extdata["线路数组"].replace('&&', '((?:.|[\r\n])*?)'), 'g')) || [];
                 for (let i = 0; i < artlist.length; i++) {
