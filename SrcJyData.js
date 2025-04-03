@@ -1378,7 +1378,7 @@ function getErData(jkdata, erurl) {
                 //   arthtml = arthtml.split(extdata["线路二次截取"].split('&&')[0])[1].split(extdata["线路二次截取"].split('&&')[1])[0];
                 //}
 
-                for (const key in extdata) {
+                for (let key in extdata) {
                     if (extdata.hasOwnProperty(key)) {
                         const value = extdata[key];
                         // 检查值是否为字符串且包含 '+'
