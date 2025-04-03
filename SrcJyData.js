@@ -1627,6 +1627,9 @@ function extDataCache(jkdata) {
                     }
                 })
                 extdata["主页"] = getHome(extdata["主页url"]);
+                extdata["线路数组"] = (extdata["线路数组"] || "").split('[')[0];
+                extdata["播放二次截取"] = (extdata["播放二次截取"] || "").split('[')[0];
+                extdata["搜索链接"] = (extdata["搜索链接"] || "").split('[')[0];
             }
             return extdata;
         } else {
