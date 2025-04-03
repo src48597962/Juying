@@ -62,7 +62,6 @@ function getYiData(jkdata, batchTest) {
         if ($.type(extdata) == 'object') {
             if (api_type == "XBPQ") {
                 classurl = extdata["分类"];
-                extdata["分类url"] = extdata["分类url"] ? extdata["分类url"].split(';;')[0].split('[')[0] : "";
                 listurl = extdata["分类url"] ? /^http/.test(extdata["分类url"]) ? extdata["分类url"] : extdata["主页"] + extdata["分类url"] : "";
                 if(extdata["直接播放"]=="1"){
                     noerji = 1;
@@ -73,6 +72,10 @@ function getYiData(jkdata, batchTest) {
                 if(extdata["过滤词"]){
                     sniffer["exclude"] = extdata["过滤词"].split('#');
                 }
+                if(extdata["播放请求头信息"]){
+                    sniffer["headers"] = extdata["播放请求头信息"];
+                }
+                headers = Object.assign(headers, extdata["请求头信息"] || {});
             } else if (api_type == "XPath") {
                 let host = extdata["homeUrl"] || '';
                 classurl = host;
@@ -648,7 +651,22 @@ function getYiData(jkdata, batchTest) {
                         }
                     };
                     if (extdata["图片"] && item.indexOf(extdata["图片"].split("&&")[0]) > -1) {
-                        vod_url = getBetweenStr(item, extdata["链接"]);
+                        vod_url = getBetweenStr(item, extdata["链接"].split('[')[0]);
+                        if(extdata["链接"].includes('[')){
+                            try{
+                                let a = extdata["链接"].split('[')[1]?.split(']')[0].split(':');
+                                if(a[0]=="替换"){
+                                    vod_url = vod_url.replace(a[1].split('>>')[0],a[1].split('>>')[1]);
+                                }
+                            }catch(e){}
+                        }
+                        if(extdata["链接"].includes('+')){
+                            vod_url = extdata["链接"].split('+').forEach(v=>{
+                                if(v.includes('&&')){
+                                    v = vod_url;
+                                }
+                            }).join('');
+                        }
                         vod_url = /^http/.test(vod_url) ? vod_url : (extdata["链接前缀"]||vodhost) + vod_url;
                         vod_name = getBetweenStr(item, extdata["标题"]);
                         vod_pic = "";
@@ -776,7 +794,8 @@ function getSsData(name, jkdata, page) {
                 extdata["搜索url"] = extdata["搜索url"] || "/index.php/ajax/suggest?mid=1&wd={wd}&limit=500";
                 ssurl = extdata["搜索url"].replace('{wd}', name).replace('{pg}', page);
                 ssurl = /^http/.test(ssurl) ? ssurl : extdata["主页"] + ssurl;
-                vodhost = getHome(ssurl);
+                vodhost = extdata["主页"];
+                headers = Object.assign(headers, extdata["搜索请求头信息"] || {});
             } else if (api_type == "XPath") {
                 ssurl = extdata["searchUrl"].replace('{wd}', name).replace('{pg}', page);
                 ssurl = /^http/.test(ssurl) ? ssurl : extdata["homeUrl"] + ssurl;
@@ -1007,14 +1026,16 @@ function getSsData(name, jkdata, page) {
                     } else {
                         gethtml = getHtmlCode(ssurl, headers);
                     }
-                    gethtml = getBetweenStr(gethtml, extdata["搜索二次截取"], 1);
-                    let sslist = gethtml.match(new RegExp((extdata["搜索数组"]||extdata["数组"]).replace('&&', '((?:.|[\r\n])*?)'), 'g')) || [];
-                    for (let i = 0; i < sslist.length; i++) {
-                        let title = getBetweenStr(sslist[i], (extdata["搜索标题"]||extdata["标题"]));
-                        let href = getBetweenStr(sslist[i], (extdata["搜索链接"]||extdata["链接"]).replace(`+\"id\":`, '').replace(`,+`, '.'));
-                        let img = getBetweenStr(sslist[i], (extdata["搜索图片"]||extdata["图片"]));
-                        let desc = getBetweenStr(sslist[i], (extdata["搜索副标题"]||extdata["副标题"]));
-                        lists.push({ "id": /^http/.test(href) ? href : vodhost + href, "name": title, "pic": img, "desc": desc })
+                    if(extdata["搜索数组"].includes('&&')){
+                        gethtml = getBetweenStr(gethtml, extdata["搜索二次截取"], 1);
+                        let sslist = gethtml.match(new RegExp((extdata["搜索数组"]||extdata["数组"]).replace('&&', '((?:.|[\r\n])*?)'), 'g')) || [];
+                        for (let i = 0; i < sslist.length; i++) {
+                            let title = getBetweenStr(sslist[i], (extdata["搜索标题"]||extdata["标题"]));
+                            let href = getBetweenStr(sslist[i], (extdata["搜索链接"]||extdata["链接"]).replace(`+\"id\":`, '').replace(`,+.`, '.'));
+                            let img = getBetweenStr(sslist[i], (extdata["搜索图片"]||extdata["图片"]));
+                            let desc = getBetweenStr(sslist[i], (extdata["搜索副标题"]||extdata["副标题"]));
+                            lists.push({ "id": /^http/.test(href) ? href : vodhost + href, "name": title, "pic": img, "desc": desc })
+                        }
                     }
                 }
             }else if(api_type=="XYQ"){
@@ -1627,9 +1648,9 @@ function extDataCache(jkdata) {
                     }
                 })
                 extdata["主页"] = getHome(extdata["主页url"]);
+                extdata["分类url"] = (extdata["分类url"] || "").split(';;')[0].split('[')[0];
                 extdata["线路数组"] = (extdata["线路数组"] || "").split('[')[0];
                 extdata["播放二次截取"] = (extdata["播放二次截取"] || "").split('[')[0];
-                extdata["搜索链接"] = (extdata["搜索链接"] || "").split('[')[0];
             }
             return extdata;
         } else {
