@@ -1378,22 +1378,27 @@ function getErData(jkdata, erurl) {
                 //   arthtml = arthtml.split(extdata["线路二次截取"].split('&&')[0])[1].split(extdata["线路二次截取"].split('&&')[1])[0];
                 //}
                 function processObjectProperties(obj) {
-                    const result = {};
-                    for (let key in obj) {
-                        if (obj.hasOwnProperty(key)) {
-                        const value = obj[key];
+                    const result = { ...obj }; // 创建副本，避免直接修改原对象
+
+                    for (let key in result) {
+                        // 只处理对象自身的属性（跳过继承的）
+                        if (!Object.hasOwn(result, key)) continue;
+
+                        const value = result[key];
                         
-                        // 检查值是否为字符串且包含 '+'
-                        if (typeof value === 'string' && value.includes('+')) {
-                            const parts = value.split('+');
-                            // 取 split 后的第二部分，如果存在的话
-                            result[key] = parts.length > 1 ? parts[1].trim() : value;
-                        } else {
-                            // 不包含 '+' 或不是字符串，保留原值
-                            result[key] = value;
+                        // 仅当值是字符串时才处理
+                        if (typeof value === "string") {
+                        // 如果包含 '+'，则尝试分割
+                        if (value.includes("+")) {
+                            const parts = value.split("+");
+                            // 取第2部分（如果存在且非空），否则保留原值
+                            result[key] = (parts[1]?.trim() !== "") ? parts[1].trim() : value;
                         }
+                        // 如果不含 '+'，则保留原值
                         }
+                        // 非字符串属性（如数字、布尔值）保持不变
                     }
+
                     return result;
                 }
                 extdata = processObjectProperties(extdata);
