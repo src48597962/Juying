@@ -654,7 +654,7 @@ function getYiData(jkdata, batchTest) {
                         vod_url = getBetweenStr(item, extdata["链接"].split('[')[0]);
                         if(extdata["链接"].includes('[')){
                             try{
-                                let a = extdata["链接"].split('[')[1]?.split(']')[0].split(':');
+                                let a = extdata["链接"].split('[')[1].split(']')[0].split(':');
                                 if(a[0]=="替换"){
                                     vod_url = vod_url.replace(a[1].split('>>')[0],a[1].split('>>')[1]);
                                 }
