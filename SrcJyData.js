@@ -1392,7 +1392,9 @@ function getErData(jkdata, erurl) {
                         }
                     }
                 }
-                extdata = erjsondata;
+                log(erjsondata["播放二次截取"]);
+                log($.type(erjsondata["播放二次截取"]));
+                //extdata = erjsondata;
                 extdata["线路数组"] = extdata["线路数组"].split('[')[0];
                 let artlist = arthtml.match(new RegExp(extdata["线路数组"].replace('&&', '((?:.|[\r\n])*?)'), 'g')) || [];
                 for (let i = 0; i < artlist.length; i++) {
@@ -1401,8 +1403,7 @@ function getErData(jkdata, erurl) {
                 }
 
                 let conthtml = html;
-                log(extdata["播放二次截取"]);
-                log($.type(extdata["播放二次截取"]));
+
                 if (extdata["播放二次截取"]) {
                     conthtml = conthtml.split(extdata["播放二次截取"].split('&&')[0])[1].split(extdata["播放二次截取"].split('&&')[1])[0];
                 }
