@@ -1366,13 +1366,13 @@ function getErData(jkdata, erurl) {
         } else if (api_type == "XBPQ") {
             try {
                 let arthtml = getBetweenStr(html, extdata["线路二次截取"], 1);
-                log(arthtml);
                 let artlist = arthtml.match(new RegExp(extdata["线路数组"].replace('&&', '((?:.|[\r\n])*?)'), 'g')) || [];
                 log(artlist);
                 for (let i = 0; i < artlist.length; i++) {
-                    let arttitle = getBetweenStr(getBetweenStr(artlist[i], extdata["线路数组"], 1), extdata["线路标题"]).replace(/<\/?.+?\/?>/g, '');
+                    log(getBetweenStr(artlist[i], extdata["线路数组"], 1));
+                    let arttitle = getBetweenStr(getBetweenStr(artlist[i], extdata["线路数组"], 1), extdata["线路标题"]);
                     if(arttitle){
-                        tabs.push(arttitle);
+                        tabs.push(arttitle);//.replace(/<\/?.+?\/?>/g, '')
                     }
                 }
                 log(tabs);
