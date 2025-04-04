@@ -651,22 +651,7 @@ function getYiData(jkdata, batchTest) {
                         }
                     };
                     if (extdata["图片"] && item.indexOf(extdata["图片"].split("&&")[0]) > -1) {
-                        vod_url = getBetweenStr(item, extdata["链接"].split('[')[0]);
-                        if(extdata["链接"].includes('[')){
-                            try{
-                                let a = extdata["链接"].split('[')[1].split(']')[0].split(':');
-                                if(a[0]=="替换"){
-                                    vod_url = vod_url.replace(a[1].split('>>')[0],a[1].split('>>')[1]);
-                                }
-                            }catch(e){}
-                        }
-                        if(extdata["链接"].includes('+')){
-                            vod_url = extdata["链接"].split('+').forEach(v=>{
-                                if(v.includes('&&')){
-                                    v = vod_url;
-                                }
-                            }).join('');
-                        }
+                        vod_url = getBetweenStr(item, extdata["链接"]);
                         vod_url = /^http/.test(vod_url) ? vod_url : (extdata["链接前缀"]||vodhost) + vod_url;
                         vod_name = getBetweenStr(item, extdata["标题"]);
                         vod_pic = "";
