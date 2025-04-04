@@ -1366,20 +1366,20 @@ function getErData(jkdata, erurl) {
         } else if (api_type == "XBPQ") {
             try {
                 let arthtml = getBetweenStr(html, extdata["线路二次截取"], 1);
-                let artlist = arthtml.match(new RegExp(extdata["线路数组"].replace('&&', '((?:.|[\r\n])*?)'), 'g')) || [];
-                //let artlist = getBetweenStrS(arthtml, extdata["线路数组"]);
+                //let artlist = arthtml.match(new RegExp(extdata["线路数组"].replace('&&', '((?:.|[\r\n])*?)'), 'g')) || [];
+                let artlist = getBetweenStrS(arthtml, extdata["线路数组"]);
                 for (let i = 0; i < artlist.length; i++) {
-                    //let arttitle = getBetweenStr(getBetweenStr(artlist[i], extdata["线路数组"], 1), extdata["线路标题"]);
                     let arttitle = getBetweenStr(artlist[i], extdata["线路标题"]);
-                    log(arttitle);
                     if(arttitle){
                         tabs.push(arttitle);//.replace(/<\/?.+?\/?>/g, '')
                     }
                 }
-                log(tabs);
+
                 let conthtml = getBetweenStr(html, extdata["播放二次截取"], 1);
-                let contlist = conthtml.match(new RegExp(extdata["播放数组"].replace('&&', '((?:.|[\r\n])*?)'), 'g')) || [];
+                //let contlist = conthtml.match(new RegExp(extdata["播放数组"].replace('&&', '((?:.|[\r\n])*?)'), 'g')) || [];
+                let contlist = getBetweenStrS(arthtml, extdata["播放数组"]);
                 for (let i = 0; i < contlist.length; i++) {
+                    log(getBetweenStrS(contlist[i], extdata["播放列表"]));
                     let bfline = extdata["播放列表"] ? (contlist[i].match(new RegExp(extdata["播放列表"].replace('&&', '((?:.|[\r\n])*?)'), 'g')) || []) : pdfa(contlist[i], "body&&a");
                     let cont = [];
                     for (let j = 0; j < bfline.length; j++) {
@@ -1623,21 +1623,13 @@ function extDataCache(jkdata) {
     return '';
 }
 //获取中间字符数组
-function getBetweenStrS(html, patternStr) {
-    // 安全分割起始和结束标记
-    const [start, end] = patternStr.split('&&');
-    
-    // 构建更可靠的正则表达式
-    const pattern = new RegExp(
+function getBetweenStrS(html, pattern) {
+    const [start, end] = pattern.split('&&');
+    const regex = new RegExp(
         `${escapeRegExp(start)}([\\s\\S]*?)${escapeRegExp(end)}`,
         'g'
     );
-    
-    // 执行匹配并提取结果
-    const matches = html.match(pattern) || [];
-    
-    // 提取纯内容（去掉起始和结束标记）
-    return matches.map(match => 
+    return (html.match(regex) || []).map(match => 
         match.replace(new RegExp(`^${escapeRegExp(start)}|${escapeRegExp(end)}$`, 'g'), '')
     );
 }
