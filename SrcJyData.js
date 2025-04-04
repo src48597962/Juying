@@ -1635,7 +1635,7 @@ function getBetweenStrS(html, pattern) {
     );
     if(pattern.includes('[') && pattern.includes(']')){
         let m = pattern.split(']')[0].split('[')[1];
-        m.forEach(item => {
+        m.split('$$$').forEach(item => {
             const [k, v] = item.split(':');
             if(k=="不包含"){
                 lists = lists.filter(li=>!li.includes(v));
@@ -1671,7 +1671,7 @@ function getBetweenStr(str, key, old) {
             }
             if(it.includes('[') && it.includes(']') && !it.includes('\\]')){
                 let m = it.split(']')[0].split('[')[1];
-                m.forEach(item => {
+                m.split('$$$').forEach(item => {
                     const [k, v] = item.split(':');
                     if(k=="替换"){
                         z = z.replace(v.split('>>')[0], v.split('>>')[1]=="空"?"":v.split('>>')[1]);
