@@ -1663,7 +1663,7 @@ function getBetweenStr(str, key, old) {
             const regex = new RegExp(prefix + '(.*?)' + suffix, 's'); // 's' 使 . 匹配换行符
             const match = str.match(regex);
             let z = match ? match[1].replace(/<\/?.+?\/?>/g, '') : '';
-            if(is){
+            if(z){
                 is = 1;
             }
             if(it.includes('[') && it.includes(']') && !it.includes('\\]')){
