@@ -1651,6 +1651,7 @@ function getBetweenStr(str, key, old) {
         return old?str||"":"";
     }
     let strs = [];
+    let is;
     key.split('+').forEach(it=>{
         if(it.includes('&&')){
             let kk = it;
@@ -1662,6 +1663,9 @@ function getBetweenStr(str, key, old) {
             const regex = new RegExp(prefix + '(.*?)' + suffix, 's'); // 's' 使 . 匹配换行符
             const match = str.match(regex);
             let z = match ? match[1].replace(/<\/?.+?\/?>/g, '') : '';
+            if(is){
+                is = 1;
+            }
             if(it.includes('[') && it.includes(']') && !it.includes('\\]')){
                 let m = it.split(']')[0].split('[')[1];
                 m.split('#').forEach(item => {
@@ -1677,7 +1681,7 @@ function getBetweenStr(str, key, old) {
             strs.push(it);
         }
     });
-    return strs.join('');
+    return is?strs.join(''):"";
 }
 
 //归整转为json对象
