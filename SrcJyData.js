@@ -636,9 +636,9 @@ function getYiData(jkdata, batchTest) {
                 }
             } else if (api_type == "XBPQ") {
                 let gethtml = getHtml(listurl, headers);
-                extdata["二次截取"] = extdata["二次截取"] || (gethtml.indexOf(`<ul class="stui-vodlist`) > -1 ? `<ul class="stui-vodlist&&</ul>` : gethtml.indexOf(`<ul class="myui-vodlist`) > -1 ? `<ul class="myui-vodlist&&</ul>` : "");
+                //extdata["二次截取"] = extdata["二次截取"] || (gethtml.indexOf(`<ul class="stui-vodlist`) > -1 ? `<ul class="stui-vodlist&&</ul>` : gethtml.indexOf(`<ul class="myui-vodlist`) > -1 ? `<ul class="myui-vodlist&&</ul>` : "");
                 gethtml = getBetweenStr(gethtml, extdata["二次截取"], 1);
-                log(gethtml);
+                //log(gethtml);
                 extdata["链接"] = extdata["链接"] || `href="&&"`;
                 extdata["标题"] = extdata["标题"] || `title="&&"`;
                 extdata["数组"] = extdata["数组"] || `<a &&</a>`;
