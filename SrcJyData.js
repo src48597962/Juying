@@ -1622,20 +1622,6 @@ function extDataCache(jkdata) {
         if (fileExist(jkdata.url)) {
             eval("let extdata = " + fetch(jkdata.url));
             if(jkdata.type=="XBPQ" && $.type(extdata)=="object"){
-                for (let key in extdata) {
-                    // 只处理对象自身的属性（跳过继承的）
-                    if (!Object.prototype.hasOwnProperty.call(extdata, key)) continue;
-                    let value = extdata[key];
-                    // 仅当值是字符串时才处理
-                    if (typeof value === "string") {
-                        // 如果包含 '+'，则尝试分割
-                        if (value.indexOf("+") !== -1 && key != "搜索链接") {
-                            let parts = value.split("+");
-                            // 取第2部分（如果存在且非空），否则保留原值
-                            extdata[key] = (parts[1] && parts[1].trim() !== "") ? parts[1].trim() : value;
-                        }
-                    }
-                }
                 let headlist = ['请求头', '播放请求头', '搜索请求头'];
                 headlist.forEach(it=>{
                     if(extdata[it]){
@@ -1649,8 +1635,6 @@ function extDataCache(jkdata) {
                 })
                 extdata["主页"] = getHome(extdata["主页url"]);
                 extdata["分类url"] = (extdata["分类url"] || "").split(';;')[0].split('[')[0];
-                extdata["线路数组"] = (extdata["线路数组"] || "").split('[')[0];
-                extdata["播放二次截取"] = (extdata["播放二次截取"] || "").split('[')[0];
             }
             return extdata;
         } else {
@@ -1666,12 +1650,36 @@ function getBetweenStr(str, key, old) {
     if (!str || !key) {
         return old?str||"":"";
     }
-    const prefix = key.split('&&')[0];
-    const suffix = key.split('&&')[1];
-    const regex = new RegExp(prefix + '(.*?)' + suffix, 's'); // 's' 使 . 匹配换行符
-    const match = str.match(regex);
-    return match ? match[1].replace(/<\/?.+?\/?>/g, '') : '';
+    let strs = [];
+    key.split('+').forEach(it=>{
+        if(it.includes('&&')){
+            let kk = it;
+            if(!kk.includes('\\]')){
+                kk = kk.split('[')[0];
+            }
+            const prefix = kk.split('&&')[0];
+            const suffix = kk.split('&&')[1];
+            const regex = new RegExp(prefix + '(.*?)' + suffix, 's'); // 's' 使 . 匹配换行符
+            const match = str.match(regex);
+            let z = match ? match[1].replace(/<\/?.+?\/?>/g, '') : '';
+            if(it.includes('[') && it.includes(']') && !it.includes('\\]')){
+                let m = it.split(']')[0].split('[')[1];
+                m.split('#').forEach(item => {
+                    const [k, v] = item.split(':');
+                    if(k=="替换"){
+                        z = z.replace(v.split('>>')[0], v.split('>>')[1]);
+                    }
+                });
+            }
+            it = z;
+        }
+        if(it){
+            strs.push(it);
+        }
+    });
+    return strs.join('');
 }
+
 //归整转为json对象
 function dealJson(html) {
     try {
