@@ -1666,7 +1666,7 @@ function getBetweenStr(str, key, old) {
             const regex = new RegExp(prefix + '(.*?)' + suffix, 's'); // 's' 使 . 匹配换行符
             const match = str.match(regex);
             let z = match ? match[1].replace(/<\/?.+?\/?>/g, '') : '';
-            log("z>>>"+z.join(',,'));
+            log("z>>>"+z);
             if(z){
                 is = 1;
             }
