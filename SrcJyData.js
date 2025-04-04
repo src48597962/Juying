@@ -537,11 +537,8 @@ function getYiData(jkdata, batchTest) {
             }
         }
     }
-    log(listurl);
-    log(cate_id);
-    log(error.fl);
+
     if (listurl && cate_id!="tj" && !error.fl) {
-        log("进来了");
         try {
             fl.cateId = fl.cateId || cate_id;
             //拼接生成分类页url链接
@@ -646,28 +643,18 @@ function getYiData(jkdata, batchTest) {
                 extdata["标题"] = extdata["标题"] || `title="&&"`;
                 extdata["数组"] = extdata["数组"] || `<a &&</a>`;
                 let vodlist = gethtml.match(new RegExp(extdata["数组"].split('[')[0].replace('&&', '((?:.|[\r\n])*?)'), 'g')) || [];
-                log(vodlist);
                 vodlist.forEach(item => {
-                    if (!extdata["图片"]) {
-                        if (item.indexOf('original=') > -1) {
-                            extdata["图片"] = `original="&&"`;
-                        } else if (item.indexOf('<img src=') > -1) {
-                            extdata["图片"] = `<img src="&&"`;
-                        }
-                    };
+                    log("qqq");
+                    extdata["图片"] = extdata["图片"] || (item.indexOf('original=')>-1?`original="&&"`:item.indexOf('<img src=')>-1?`<img src="&&"`:"");
+
                     if (extdata["图片"] && item.indexOf(extdata["图片"].split("&&")[0]) > -1) {
                         vod_url = getBetweenStr(item, extdata["链接"]);
                         vod_url = /^http/.test(vod_url) ? vod_url : (extdata["链接前缀"]||vodhost) + vod_url;
                         vod_name = getBetweenStr(item, extdata["标题"]);
-                        vod_pic = "";
-                        try {
-                            vod_pic = getBetweenStr(item, extdata["图片"]);
-                        } catch (e) { }
-                        vod_desc = "";
-                        try {
-                            vod_desc = getBetweenStr(item, extdata["副标题"]);
-                        } catch (e) { }
+                        vod_pic = getBetweenStr(item, extdata["图片"]);
+                        vod_desc = getBetweenStr(item, extdata["副标题"]);
                         let arr = { "vod_url": vod_url, "vod_name": vod_name, "vod_desc": vod_desc, "vod_pic": vod_pic, "vod_play": noerji?vod_url:"" };
+                        log(arr);
                         vodlists.push(arr);
                     }
                 })
