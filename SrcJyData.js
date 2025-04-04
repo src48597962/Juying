@@ -1380,7 +1380,7 @@ function getErData(jkdata, erurl) {
                 let contlist = getBetweenStrS(conthtml, extdata["播放数组"]);
                 log(contlist);
                 for (let i = 0; i < contlist.length; i++) {
-                    let bfline = extdata["播放列表"] ? (contlist[i].match(new RegExp(extdata["播放列表"].split('[')[0].replace('&&', '((?:.|[\r\n])*?)'), 'g')) || []) : pdfa(contlist[i], "body&&a");
+                    let bfline = extdata["播放列表"] ? getBetweenStrS(contlist[i], extdata["播放列表"]) : pdfa(contlist[i], "body&&a");
                     log(bfline);
                     let cont = [];
                     for (let j = 0; j < bfline.length; j++) {
@@ -1625,14 +1625,30 @@ function extDataCache(jkdata) {
 }
 //获取中间字符数组
 function getBetweenStrS(html, pattern) {
-    const [start, end] = pattern.split('&&');
+    let kk = pattern.split('[')[0];
+    const [start, end] = kk.split('&&');
     const regex = new RegExp(
         `${escapeRegExp(start)}([\\s\\S]*?)${escapeRegExp(end)}`,
         'g'
     );
-    return (html.match(regex) || []).map(match => 
+    let ls = (html.match(regex) || []).map(match => 
         match.replace(new RegExp(`^${escapeRegExp(start)}|${escapeRegExp(end)}$`, 'g'), '')
     );
+    let lists = [];
+    if(pattern.includes('[') && pattern.includes(']')){
+        let m = pattern.split(']')[0].split('[')[1];
+        ls.forEach(it=>{
+            m.split('#').forEach(item => {
+                const [k, v] = item.split(':');
+                if(k=="不包含"){
+                    if(!it.includes(v)){
+                        lists.push(it);
+                    }
+                }
+            });
+        })
+    }
+    return lists;
 }
 // 转义正则特殊字符
 function escapeRegExp(string) {
