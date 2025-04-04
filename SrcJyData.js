@@ -1366,17 +1366,15 @@ function getErData(jkdata, erurl) {
         } else if (api_type == "XBPQ") {
             try {
                 let arthtml = getBetweenStr(html, extdata["线路二次截取"], 1);
-                log(arthtml);
                 //let artlist = arthtml.match(new RegExp(extdata["线路数组"].replace('&&', '((?:.|[\r\n])*?)'), 'g')) || [];
                 let artlist = getBetweenStrS(arthtml, extdata["线路数组"]);
-                log(artlist);
                 for (let i = 0; i < artlist.length; i++) {
                     let arttitle = getBetweenStr(artlist[i], extdata["线路标题"]);
                     if(arttitle){
                         tabs.push(arttitle);//.replace(/<\/?.+?\/?>/g, '')
                     }
                 }
-
+                log(tabs);
                 let conthtml = getBetweenStr(html, extdata["播放二次截取"], 1);
                 log(conthtml);
                 //let contlist = conthtml.match(new RegExp(extdata["播放数组"].replace('&&', '((?:.|[\r\n])*?)'), 'g')) || [];
@@ -1637,7 +1635,7 @@ function getBetweenStrS(html, pattern) {
     );
     if(pattern.includes('[') && pattern.includes(']')){
         let m = pattern.split(']')[0].split('[')[1];
-        m.split('#').forEach(item => {
+        m.forEach(item => {
             const [k, v] = item.split(':');
             if(k=="不包含"){
                 lists = lists.filter(li=>!li.includes(v));
@@ -1673,7 +1671,7 @@ function getBetweenStr(str, key, old) {
             }
             if(it.includes('[') && it.includes(']') && !it.includes('\\]')){
                 let m = it.split(']')[0].split('[')[1];
-                m.split('#').forEach(item => {
+                m.forEach(item => {
                     const [k, v] = item.split(':');
                     if(k=="替换"){
                         z = z.replace(v.split('>>')[0], v.split('>>')[1]=="空"?"":v.split('>>')[1]);
