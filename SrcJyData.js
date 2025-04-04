@@ -1366,7 +1366,8 @@ function getErData(jkdata, erurl) {
         } else if (api_type == "XBPQ") {
             try {
                 let arthtml = getBetweenStr(html, extdata["线路二次截取"], 1);
-                let artlist = arthtml.match(new RegExp(extdata["线路数组"].replace('&&', '((?:.|[\r\n])*?)'), 'g')) || [];
+                //let artlist = arthtml.match(new RegExp(extdata["线路数组"].replace('&&', '((?:.|[\r\n])*?)'), 'g')) || [];
+                let artlist = getBetweenStrS(arthtml, extdata["线路数组"]);
                 log(artlist);
                 for (let i = 0; i < artlist.length; i++) {
                     log(getBetweenStr(artlist[i], extdata["线路数组"], 1));
@@ -1620,6 +1621,29 @@ function extDataCache(jkdata) {
     }
     toast('此源接口数据文件有异常');
     return '';
+}
+//获取中间字符数组
+function getBetweenStrS(html, patternStr) {
+    // 安全分割起始和结束标记
+    const [start, end] = patternStr.split('&&');
+    
+    // 构建更可靠的正则表达式
+    const pattern = new RegExp(
+        `${escapeRegExp(start)}([\\s\\S]*?)${escapeRegExp(end)}`,
+        'g'
+    );
+    
+    // 执行匹配并提取结果
+    const matches = html.match(pattern) || [];
+    
+    // 提取纯内容（去掉起始和结束标记）
+    return matches.map(match => 
+        match.replace(new RegExp(`^${escapeRegExp(start)}|${escapeRegExp(end)}$`, 'g'), '')
+    );
+}
+// 转义正则特殊字符
+function escapeRegExp(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 //截取中间字符
 function getBetweenStr(str, key, old) {
