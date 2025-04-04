@@ -1652,7 +1652,7 @@ function getBetweenStr(str, key, old) {
                 m.split('#').forEach(item => {
                     const [k, v] = item.split(':');
                     if(k=="替换"){
-                        z = z.replace(v.split('>>')[0], v.split('>>')[1]);
+                        z = z.replace(v.split('>>')[0], v.split('>>')[1]=="空"?"":v.split('>>')[1]);
                     }
                 });
             }
