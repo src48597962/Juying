@@ -1376,13 +1376,12 @@ function getErData(jkdata, erurl) {
                 }
 
                 let conthtml = getBetweenStr(html, extdata["播放二次截取"], 1);
-                log(conthtml);
                 //let contlist = conthtml.match(new RegExp(extdata["播放数组"].replace('&&', '((?:.|[\r\n])*?)'), 'g')) || [];
                 let contlist = getBetweenStrS(conthtml, extdata["播放数组"]);
                 log(contlist);
                 for (let i = 0; i < contlist.length; i++) {
-                    log(getBetweenStrS(contlist[i], extdata["播放列表"]));
-                    let bfline = extdata["播放列表"] ? (contlist[i].match(new RegExp(extdata["播放列表"].replace('&&', '((?:.|[\r\n])*?)'), 'g')) || []) : pdfa(contlist[i], "body&&a");
+                    let bfline = extdata["播放列表"] ? (contlist[i].match(new RegExp(extdata["播放列表"].split('[')[0].replace('&&', '((?:.|[\r\n])*?)'), 'g')) || []) : pdfa(contlist[i], "body&&a");
+                    log(bfline);
                     let cont = [];
                     for (let j = 0; j < bfline.length; j++) {
                         let contname = extdata["播放标题"] ? bfline[j].split(extdata["播放标题"].split('&&')[0])[1].split(extdata["播放标题"].split('&&')[1])[0] : pdfh(bfline[j], "a&&Text");
@@ -1666,8 +1665,6 @@ function getBetweenStr(str, key, old) {
                     const [k, v] = item.split(':');
                     if(k=="替换"){
                         z = z.replace(v.split('>>')[0], v.split('>>')[1]=="空"?"":v.split('>>')[1]);
-                    }else if(k=="不包含"){
-                        log(z);
                     }
                 });
             }
