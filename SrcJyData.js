@@ -638,10 +638,12 @@ function getYiData(jkdata, batchTest) {
                 let gethtml = getHtml(listurl, headers);
                 extdata["二次截取"] = extdata["二次截取"] || (gethtml.indexOf(`<ul class="stui-vodlist`) > -1 ? `<ul class="stui-vodlist&&</ul>` : gethtml.indexOf(`<ul class="myui-vodlist`) > -1 ? `<ul class="myui-vodlist&&</ul>` : "");
                 gethtml = getBetweenStr(gethtml, extdata["二次截取"], 1);
+                log(gethtml);
                 extdata["链接"] = extdata["链接"] || `href="&&"`;
                 extdata["标题"] = extdata["标题"] || `title="&&"`;
                 extdata["数组"] = extdata["数组"] || `<a &&</a>`;
                 let vodlist = gethtml.match(new RegExp(extdata["数组"].split('[')[0].replace('&&', '((?:.|[\r\n])*?)'), 'g')) || [];
+                log(vodlist);
                 vodlist.forEach(item => {
                     if (!extdata["图片"]) {
                         if (item.indexOf('original=') > -1) {
