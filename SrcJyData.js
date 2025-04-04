@@ -537,8 +537,11 @@ function getYiData(jkdata, batchTest) {
             }
         }
     }
-
+    log(listurl);
+    log(cate_id);
+    log(error.fl);
     if (listurl && cate_id!="tj" && !error.fl) {
+        log("进来了");
         try {
             fl.cateId = fl.cateId || cate_id;
             //拼接生成分类页url链接
