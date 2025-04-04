@@ -1631,22 +1631,17 @@ function getBetweenStrS(html, pattern) {
         `${escapeRegExp(start)}([\\s\\S]*?)${escapeRegExp(end)}`,
         'g'
     );
-    let ls = (html.match(regex) || []).map(match => 
+    let lists = (html.match(regex) || []).map(match => 
         match.replace(new RegExp(`^${escapeRegExp(start)}|${escapeRegExp(end)}$`, 'g'), '')
     );
-    let lists = [];
     if(pattern.includes('[') && pattern.includes(']')){
         let m = pattern.split(']')[0].split('[')[1];
-        ls.forEach(it=>{
-            m.split('#').forEach(item => {
-                const [k, v] = item.split(':');
-                if(k=="不包含"){
-                    if(!it.includes(v)){
-                        lists.push(it);
-                    }
-                }
-            });
-        })
+        m.split('#').forEach(item => {
+            const [k, v] = item.split(':');
+            if(k=="不包含"){
+                lists = lists.filters(li=>!li.includes(v));
+            }
+        });
     }
     return lists;
 }
