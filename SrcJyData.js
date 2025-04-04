@@ -1661,11 +1661,12 @@ function getBetweenStr(str, key, old) {
             if(!kk.includes('\\]')){
                 kk = kk.split('[')[0];
             }
+
             const prefix = kk.split('&&')[0];
             const suffix = kk.split('&&')[1];
             const regex = new RegExp(prefix + '(.*?)' + suffix, 's'); // 's' 使 . 匹配换行符
             const match = str.match(regex);
-            let z = match ? match[1].replace(/<\/?.+?\/?>/g, '') : '';
+            let z = match ? match[1].replace(/<\/?.+?\/?>/g, '') : old?str:'';
             if(z){
                 is = 1;
             }
