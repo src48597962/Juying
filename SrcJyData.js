@@ -1378,14 +1378,12 @@ function getErData(jkdata, erurl) {
                 let conthtml = getBetweenStr(html, extdata["播放二次截取"], 1);
                 //let contlist = conthtml.match(new RegExp(extdata["播放数组"].replace('&&', '((?:.|[\r\n])*?)'), 'g')) || [];
                 let contlist = getBetweenStrS(conthtml, extdata["播放数组"]);
-                log(contlist);
                 for (let i = 0; i < contlist.length; i++) {
                     let bfline = extdata["播放列表"] ? getBetweenStrS(contlist[i], extdata["播放列表"]) : pdfa(contlist[i], "body&&a");
-                    log(bfline);
                     let cont = [];
                     for (let j = 0; j < bfline.length; j++) {
-                        let contname = extdata["播放标题"] ? bfline[j].split(extdata["播放标题"].split('&&')[0])[1].split(extdata["播放标题"].split('&&')[1])[0] : pdfh(bfline[j], "a&&Text");
-                        let conturl = extdata["播放链接"] ? bfline[j].split(extdata["播放链接"].split('&&')[0])[1].split(extdata["播放链接"].split('&&')[1])[0] : pd(bfline[j], "a&&href");
+                        let contname = extdata["播放标题"] ? getBetweenStr(bfline[j], extdata["播放标题"]) : pdfh(bfline[j], "a&&Text");
+                        let conturl = extdata["播放链接"] ? getBetweenStr(bfline[j], extdata["播放链接"]) : pd(bfline[j], "a&&href");
                         if(!conturl.startsWith('http')){
                             conturl = extdata["主页"] + conturl;
                         }
@@ -1399,7 +1397,6 @@ function getErData(jkdata, erurl) {
                 pubdate = getBetweenStr(html, extdata["影片类型"]);
                 year = getBetweenStr(html, extdata["影片年代"]);
                 area = getBetweenStr(html, extdata["影片地区"]);
-                extdata["简介"] = extdata["简介"] && extdata["简介"].includes('+') ? extdata["简介"].split('+')[0] : extdata["简介"];
                 desc = getBetweenStr(html, extdata["简介"]);
                 if(extdata["嗅探词"]){
                     sniffer["contain"] = extdata["嗅探词"].split('#');
