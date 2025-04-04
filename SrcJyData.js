@@ -1366,8 +1366,10 @@ function getErData(jkdata, erurl) {
         } else if (api_type == "XBPQ") {
             try {
                 let arthtml = getBetweenStr(html, extdata["线路二次截取"], 1);
+                log(arthtml);
                 //let artlist = arthtml.match(new RegExp(extdata["线路数组"].replace('&&', '((?:.|[\r\n])*?)'), 'g')) || [];
                 let artlist = getBetweenStrS(arthtml, extdata["线路数组"]);
+                log(artlist);
                 for (let i = 0; i < artlist.length; i++) {
                     let arttitle = getBetweenStr(artlist[i], extdata["线路标题"]);
                     if(arttitle){
@@ -1376,8 +1378,10 @@ function getErData(jkdata, erurl) {
                 }
 
                 let conthtml = getBetweenStr(html, extdata["播放二次截取"], 1);
+                log(conthtml);
                 //let contlist = conthtml.match(new RegExp(extdata["播放数组"].replace('&&', '((?:.|[\r\n])*?)'), 'g')) || [];
                 let contlist = getBetweenStrS(conthtml, extdata["播放数组"]);
+                log(contlist);
                 for (let i = 0; i < contlist.length; i++) {
                     let bfline = extdata["播放列表"] ? getBetweenStrS(contlist[i], extdata["播放列表"]) : pdfa(contlist[i], "body&&a");
                     let cont = [];
