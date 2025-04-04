@@ -1639,7 +1639,7 @@ function getBetweenStrS(html, pattern) {
         m.split('#').forEach(item => {
             const [k, v] = item.split(':');
             if(k=="不包含"){
-                lists = lists.filters(li=>!li.includes(v));
+                lists = lists.filter(li=>!li.includes(v));
             }
         });
     }
