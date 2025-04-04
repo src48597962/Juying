@@ -1375,7 +1375,7 @@ function getErData(jkdata, erurl) {
                     }
                 }
 
-                let conthtml = getBetweenStr(html, extdata["播放二次截取"], 1);
+                let conthtml = getBetweenStr(html, extdata["播放二次截取"].split('[')[0], 1);
                 log(conthtml);
                 //let contlist = conthtml.match(new RegExp(extdata["播放数组"].replace('&&', '((?:.|[\r\n])*?)'), 'g')) || [];
                 let contlist = getBetweenStrS(conthtml, extdata["播放数组"]);
@@ -1666,7 +1666,6 @@ function getBetweenStr(str, key, old) {
             const regex = new RegExp(prefix + '(.*?)' + suffix, 's'); // 's' 使 . 匹配换行符
             const match = str.match(regex);
             let z = match ? match[1].replace(/<\/?.+?\/?>/g, '') : '';
-            log("z>>>"+z);
             if(z){
                 is = 1;
             }
@@ -1680,7 +1679,6 @@ function getBetweenStr(str, key, old) {
                 });
             }
             it = z;
-            log("it>>>"+it);
         }
         if(it){
             strs.push(it);
