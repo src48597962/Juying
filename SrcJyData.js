@@ -1655,8 +1655,9 @@ function getBetweenStr(str, key, old) {
     let is;
     key.split('+').forEach(it=>{
         if(it.includes('&&')){
-            it.split("||").forEach(itit=>{
-                let kk = itit;
+            let its = it.split("||");
+            for(let i = 0; i < its.length; i ++){
+                let kk = its[i];
                 if(!kk.includes('\\]')){
                     kk = kk.split('[')[0];
                 }
@@ -1668,8 +1669,8 @@ function getBetweenStr(str, key, old) {
                 let z = match ? match[1].replace(/<\/?.+?\/?>/g, '') : old?str:'';
                 if(z){
                     is = 1;
-                    if(itit.includes('[') && itit.includes(']') && !itit.includes('\\]')){
-                        let m = itit.split(']')[0].split('[')[1];
+                    if(its[i].includes('[') && its[i].includes(']') && !its[i].includes('\\]')){
+                        let m = its[i].split(']')[0].split('[')[1];
                         m.split('$$$').forEach(item => {
                             const [k, v] = item.split(':');
                             if(k=="替换"){
@@ -1680,7 +1681,7 @@ function getBetweenStr(str, key, old) {
                     it = z;
                     break;
                 }
-            })
+            }
         }
         strs.push(it);
     });
