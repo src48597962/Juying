@@ -1620,12 +1620,13 @@ function extDataCache(jkdata) {
 }
 //获取中间字符数组
 function getBetweenStrS(html, pattern) {
-    log(pattern);
     pattern = pattern.replace(/默认--|搜索--/g,'');
+    log(pattern);
     let lists = [];
     let its = pattern.split("||");
     for(let i = 0; i < its.length; i ++){
         let kk = its[i].split('[')[0];
+        log(kk);
         const [start, end] = kk.split('&&');
         const regex = new RegExp(
             `${escapeRegExp(start)}([\\s\\S]*?)${escapeRegExp(end)}`,
