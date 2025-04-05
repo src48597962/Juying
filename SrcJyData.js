@@ -1676,6 +1676,8 @@ function getBetweenStr(str, key, old) {
                 // 提取内容并清理HTML标签
                 const match = str.match(regex);
                 let z = match ? match[1].replace(/<\/?.+?\/?>/g, '') : old ? str : '';
+                log(key);
+                log(z);
                 if(z){
                     is = 1;
                     if(its[i].includes('[') && its[i].includes(']') && !its[i].includes('\\]')){
