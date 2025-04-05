@@ -1620,7 +1620,6 @@ function extDataCache(jkdata) {
 }
 //获取中间字符数组
 function getBetweenStrS(html, pattern) {
-    log(html);
     log(pattern);
     let lists = [];
     let its = pattern.split("||");
@@ -1634,6 +1633,7 @@ function getBetweenStrS(html, pattern) {
         lists = (html.match(regex) || []).map(match => 
             match.replace(new RegExp(`^${escapeRegExp(start)}|${escapeRegExp(end)}$`, 'g'), '')
         );
+        log(lists);
         if(pattern.includes('[') && pattern.includes(']')){
             let m = pattern.split(']')[0].split('[')[1];
             m.split('$$$').forEach(item => {
