@@ -1672,8 +1672,8 @@ function getBetweenStr(str, key, old) {
                 const suffix = kk.split('&&')[1];
 
                 // 将通配符*转换为正则表达式.*?
-                const regexPrefix = prefix.replace(/\*/g, '.*?').replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
-                const regexSuffix = suffix.replace(/\*/g, '.*?').replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+                const regexPrefix = prefix.replace(/\*/g, '.*?');
+                const regexSuffix = suffix.replace(/\*/g, '.*?');
 
                 // 使用s标志使.匹配换行符
                 const regex = new RegExp(regexPrefix + '(.*?)' + regexSuffix, 's');
