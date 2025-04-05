@@ -1375,11 +1375,9 @@ function getErData(jkdata, erurl) {
                     }
                 }
 
-                let conthtml = getBetweenStr(html, extdata["播放二次截取"].split('[')[0], 1);
-                log(conthtml);
+                let conthtml = getBetweenStr(html, extdata["播放二次截取"], 1);
                 //let contlist = conthtml.match(new RegExp(extdata["播放数组"].replace('&&', '((?:.|[\r\n])*?)'), 'g')) || [];
                 let contlist = getBetweenStrS(conthtml, extdata["播放数组"]);
-                log(contlist);
                 for (let i = 0; i < contlist.length; i++) {
                     let bfline = extdata["播放列表"] ? getBetweenStrS(contlist[i], extdata["播放列表"]) : pdfa(contlist[i], "body&&a");
                     let cont = [];
