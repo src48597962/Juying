@@ -640,7 +640,7 @@ function getYiData(jkdata, batchTest) {
                 extdata["链接"] = extdata["链接"] || `href="&&"`;
                 extdata["标题"] = extdata["标题"] || `title="&&"`;
                 extdata["数组"] = extdata["数组"] || `<a &&</a>`;
-                let vodlist = gethtml.match(new RegExp(extdata["数组"].split('[')[0].replace('&&', '((?:.|[\r\n])*?)'), 'g')) || [];
+                let vodlist = getBetweenStrS(gethtml, extdata["数组"]);
                 vodlist.forEach(item => {
                     extdata["图片"] = extdata["图片"] || (item.indexOf('original=')>-1?`original="&&"`:item.indexOf('<img src=')>-1?`<img src="&&"`:"");
 
@@ -1001,7 +1001,7 @@ function getSsData(name, jkdata, page) {
                     }
                     if(extdata["搜索数组"].includes('&&')){
                         gethtml = getBetweenStr(gethtml, extdata["搜索二次截取"], 1);
-                        let sslist = gethtml.match(new RegExp((extdata["搜索数组"]||extdata["数组"]).replace('&&', '((?:.|[\r\n])*?)'), 'g')) || [];
+                        let sslist = getBetweenStrS(gethtml, extdata["搜索数组"]||extdata["数组"]);
                         for (let i = 0; i < sslist.length; i++) {
                             let title = getBetweenStr(sslist[i], (extdata["搜索标题"]||extdata["标题"]));
                             let href = getBetweenStr(sslist[i], (extdata["搜索链接"]||extdata["链接"]).replace(`+\"id\":`, '').replace(`,+.`, '.'));
@@ -1375,7 +1375,6 @@ function getErData(jkdata, erurl) {
                 }
 
                 let conthtml = getBetweenStr(html, extdata["播放二次截取"], 1);
-                //let contlist = conthtml.match(new RegExp(extdata["播放数组"].replace('&&', '((?:.|[\r\n])*?)'), 'g')) || [];
                 let contlist = getBetweenStrS(conthtml, extdata["播放数组"]);
                 for (let i = 0; i < contlist.length; i++) {
                     let bfline = extdata["播放列表"] ? getBetweenStrS(contlist[i], extdata["播放列表"]) : pdfa(contlist[i], "body&&a");
