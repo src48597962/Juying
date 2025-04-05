@@ -1620,6 +1620,8 @@ function extDataCache(jkdata) {
 }
 //获取中间字符数组
 function getBetweenStrS(html, pattern) {
+    log(html);
+    log(pattern);
     let lists = [];
     let its = pattern.split("||");
     for(let i = 0; i < its.length; i ++){
