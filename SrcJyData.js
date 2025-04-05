@@ -1621,6 +1621,7 @@ function extDataCache(jkdata) {
 //获取中间字符数组
 function getBetweenStrS(html, pattern) {
     log(pattern);
+    pattern = pattern.replace(/默认--|搜索--/g,'');
     let lists = [];
     let its = pattern.split("||");
     for(let i = 0; i < its.length; i ++){
@@ -1658,6 +1659,7 @@ function getBetweenStr(str, key, old) {
     if (!str || !key) {
         return old?str||"":"";
     }
+    key = key.replace(/默认--|搜索--/g,'');
     let strs = [];
     let is;
     key.split('+').forEach(it=>{
