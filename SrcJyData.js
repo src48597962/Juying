@@ -641,6 +641,7 @@ function getYiData(jkdata, batchTest) {
                 extdata["标题"] = extdata["标题"] || `title="&&"`;
                 extdata["数组"] = extdata["数组"] || `<a &&</a>`;
                 let vodlist = getBetweenStrS(gethtml, extdata["数组"]);
+                log(vodlist.length);
                 vodlist.forEach(item => {
                     extdata["图片"] = extdata["图片"] || (item.indexOf('original=')>-1?`original="&&"`:item.indexOf('<img src=')>-1?`<img src="&&"`:"");
                     vod_url = getBetweenStr(item, extdata["链接"]);
@@ -649,6 +650,7 @@ function getYiData(jkdata, batchTest) {
                     vod_pic = getBetweenStr(item, extdata["图片"]);
                     vod_desc = getBetweenStr(item, extdata["副标题"]);
                     let arr = { "vod_url": vod_url, "vod_name": vod_name, "vod_desc": vod_desc, "vod_pic": vod_pic, "vod_play": noerji?vod_url:"" };
+                    log(arr);
                     vodlists.push(arr);
                 })
             } else {
@@ -1675,13 +1677,10 @@ function getBetweenStr(str, key, old) {
 
                 // 使用s标志使.匹配换行符
                 const regex = new RegExp(regexPrefix + '(.*?)' + regexSuffix, 's');
-                //const regex = new RegExp(prefix + '(.*?)' + suffix, 's'); // 's' 使 . 匹配换行符
 
                 // 提取内容并清理HTML标签
                 const match = str.match(regex);
                 let z = match ? match[1].replace(/<\/?.+?\/?>/g, '') : old ? str : '';
-                log(key);
-                log(z);
                 if(z){
                     is = 1;
                     if(its[i].includes('[') && its[i].includes(']') && !its[i].includes('\\]')){
