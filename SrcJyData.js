@@ -1655,33 +1655,34 @@ function getBetweenStr(str, key, old) {
     let is;
     key.split('+').forEach(it=>{
         if(it.includes('&&')){
-            let kk = it;
-            if(!kk.includes('\\]')){
-                kk = kk.split('[')[0];
-            }
+            it.split("||").forEach(itit=>{
+                let kk = itit;
+                if(!kk.includes('\\]')){
+                    kk = kk.split('[')[0];
+                }
 
-            const prefix = kk.split('&&')[0];
-            const suffix = kk.split('&&')[1];
-            const regex = new RegExp(prefix + '(.*?)' + suffix, 's'); // 's' 使 . 匹配换行符
-            const match = str.match(regex);
-            let z = match ? match[1].replace(/<\/?.+?\/?>/g, '') : old?str:'';
-            if(z){
-                is = 1;
-            }
-            if(it.includes('[') && it.includes(']') && !it.includes('\\]')){
-                let m = it.split(']')[0].split('[')[1];
-                m.split('$$$').forEach(item => {
-                    const [k, v] = item.split(':');
-                    if(k=="替换"){
-                        z = z.replace(v.split('>>')[0], v.split('>>')[1]=="空"?"":v.split('>>')[1]);
+                const prefix = kk.split('&&')[0];
+                const suffix = kk.split('&&')[1];
+                const regex = new RegExp(prefix + '(.*?)' + suffix, 's'); // 's' 使 . 匹配换行符
+                const match = str.match(regex);
+                let z = match ? match[1].replace(/<\/?.+?\/?>/g, '') : old?str:'';
+                if(z){
+                    is = 1;
+                    if(itit.includes('[') && itit.includes(']') && !itit.includes('\\]')){
+                        let m = itit.split(']')[0].split('[')[1];
+                        m.split('$$$').forEach(item => {
+                            const [k, v] = item.split(':');
+                            if(k=="替换"){
+                                z = z.replace(v.split('>>')[0], v.split('>>')[1]=="空"?"":v.split('>>')[1]);
+                            }
+                        });
                     }
-                });
-            }
-            it = z;
+                    it = z;
+                    break;
+                }
+            })
         }
-        if(it){
-            strs.push(it);
-        }
+        strs.push(it);
     });
     return is?strs.join(''):"";
 }
