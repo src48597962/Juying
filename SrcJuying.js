@@ -286,6 +286,7 @@ function dianboerji() {
         erdata = getErData(jkdata);
         let t2 = new Date().getTime();
         log('获取二级数据完成，耗时：' + (t2-t1) + 'ms');
+        erdata.lists = erdata.lists || [];
         if(erdata.lists.length>0){//只有二级选集列表获取到时才缓存
             let markData = {surl: jkdata.url, url: MY_URL, data: erdata}
             writeFile(cacheDataFile, JSON.stringify(markData));
