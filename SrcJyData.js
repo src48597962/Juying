@@ -1680,7 +1680,7 @@ function getBetweenStr(str, key, old) {
 
                 // 提取内容并清理HTML标签
                 const match = str.match(regex);
-                if(prefix = '</div>*title\">'){
+                if(prefix == '</div>*title\">'){
                     log('进来了');
                     log(prefix);
                     log(regexPrefix);
