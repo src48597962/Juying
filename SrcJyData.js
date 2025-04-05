@@ -578,7 +578,6 @@ function getYiData(jkdata, batchTest) {
             } else {
                 eval(`listurl = \`${listurl}\`;`);
             }
-
             vodlists = [];
             let vod_name, vod_pic, vod_url, vod_desc;
             if (api_type=="hipy_t4") {
@@ -1622,23 +1621,30 @@ function extDataCache(jkdata) {
 }
 //获取中间字符数组
 function getBetweenStrS(html, pattern) {
-    let kk = pattern.split('[')[0];
-    const [start, end] = kk.split('&&');
-    const regex = new RegExp(
-        `${escapeRegExp(start)}([\\s\\S]*?)${escapeRegExp(end)}`,
-        'g'
-    );
-    let lists = (html.match(regex) || []).map(match => 
-        match.replace(new RegExp(`^${escapeRegExp(start)}|${escapeRegExp(end)}$`, 'g'), '')
-    );
-    if(pattern.includes('[') && pattern.includes(']')){
-        let m = pattern.split(']')[0].split('[')[1];
-        m.split('$$$').forEach(item => {
-            const [k, v] = item.split(':');
-            if(k=="不包含"){
-                lists = lists.filter(li=>!li.includes(v));
-            }
-        });
+    let lists = [];
+    let its = pattern.split("||");
+    for(let i = 0; i < its.length; i ++){
+        let kk = its[i].split('[')[0];
+        const [start, end] = kk.split('&&');
+        const regex = new RegExp(
+            `${escapeRegExp(start)}([\\s\\S]*?)${escapeRegExp(end)}`,
+            'g'
+        );
+        lists = (html.match(regex) || []).map(match => 
+            match.replace(new RegExp(`^${escapeRegExp(start)}|${escapeRegExp(end)}$`, 'g'), '')
+        );
+        if(pattern.includes('[') && pattern.includes(']')){
+            let m = pattern.split(']')[0].split('[')[1];
+            m.split('$$$').forEach(item => {
+                const [k, v] = item.split(':');
+                if(k=="不包含"){
+                    lists = lists.filter(li=>!li.includes(v));
+                }
+            });
+        }
+        if(lists.length>0){
+            break;
+        }
     }
     return lists;
 }
