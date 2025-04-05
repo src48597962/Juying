@@ -643,16 +643,13 @@ function getYiData(jkdata, batchTest) {
                 let vodlist = getBetweenStrS(gethtml, extdata["数组"]);
                 vodlist.forEach(item => {
                     extdata["图片"] = extdata["图片"] || (item.indexOf('original=')>-1?`original="&&"`:item.indexOf('<img src=')>-1?`<img src="&&"`:"");
-
-                    if (extdata["图片"] && item.indexOf(extdata["图片"].split("&&")[0]) > -1) {
-                        vod_url = getBetweenStr(item, extdata["链接"]);
-                        vod_url = /^http/.test(vod_url) ? vod_url : vodhost + vod_url;
-                        vod_name = getBetweenStr(item, extdata["标题"]);
-                        vod_pic = getBetweenStr(item, extdata["图片"]);
-                        vod_desc = getBetweenStr(item, extdata["副标题"]);
-                        let arr = { "vod_url": vod_url, "vod_name": vod_name, "vod_desc": vod_desc, "vod_pic": vod_pic, "vod_play": noerji?vod_url:"" };
-                        vodlists.push(arr);
-                    }
+                    vod_url = getBetweenStr(item, extdata["链接"]);
+                    vod_url = /^http/.test(vod_url) ? vod_url : vodhost + vod_url;
+                    vod_name = getBetweenStr(item, extdata["标题"]);
+                    vod_pic = getBetweenStr(item, extdata["图片"]);
+                    vod_desc = getBetweenStr(item, extdata["副标题"]);
+                    let arr = { "vod_url": vod_url, "vod_name": vod_name, "vod_desc": vod_desc, "vod_pic": vod_pic, "vod_play": noerji?vod_url:"" };
+                    vodlists.push(arr);
                 })
             } else {
                 let gethtml = getHtml(listurl, headers);
@@ -1621,12 +1618,10 @@ function extDataCache(jkdata) {
 //获取中间字符数组
 function getBetweenStrS(html, pattern) {
     pattern = pattern.replace(/默认--|搜索--/g,'');
-    log(pattern);
     let lists = [];
     let its = pattern.split("||");
     for(let i = 0; i < its.length; i ++){
         let kk = its[i].split('[')[0];
-        log(kk);
         const [start, end] = kk.split('&&');
         const regex = new RegExp(
             `${escapeRegExp(start)}([\\s\\S]*?)${escapeRegExp(end)}`,
@@ -1635,7 +1630,6 @@ function getBetweenStrS(html, pattern) {
         lists = (html.match(regex) || []).map(match => 
             match.replace(new RegExp(`^${escapeRegExp(start)}|${escapeRegExp(end)}$`, 'g'), '')
         );
-        log(lists);
         if(pattern.includes('[') && pattern.includes(']')){
             let m = pattern.split(']')[0].split('[')[1];
             m.split('$$$').forEach(item => {
