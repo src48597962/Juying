@@ -1703,15 +1703,15 @@ function getBetweenStrS(html, pattern) {
     pattern = pattern.replace(/默认--|搜索--/g, '');
     
     for (let it of pattern.split("||")) {
-        const kk = it.split('[')[0];
-        const [start, end] = kk.split('&&');
+        let kk = it.split('[')[0];
+        let [start, end] = kk.split('&&');
         lists = extractAllBetween(html, start, end);
         
         // 处理过滤条件
         if (it.includes('[') && it.includes(']')) {
-            const filterStr = it.split(']')[0].split('[')[1];
+            let filterStr = it.split(']')[0].split('[')[1];
             for (let item of filterStr.split('$$$')) {
-                const [k, v] = item.split(':');
+                let [k, v] = item.split(':');
                 if (k === "不包含") {
                     lists = lists.filter(li => !li.includes(v));
                 }
@@ -1740,7 +1740,6 @@ function getBetweenStr(str, key, old) {
             for (let kk of it.split("||")) {
                 let cleanKk = kk.includes('\\]') ? kk : kk.split('[')[0];
                 let [start, end] = cleanKk.split('&&');
-                log(`当前迭代: kk=${kk}, cleanKk=${cleanKk}`);
 
                 let content = extractBetween(str, start, end, old?false:true);
                 if(!content){
@@ -1755,11 +1754,11 @@ function getBetweenStr(str, key, old) {
                     }
                     // 处理替换规则
                     if (kk.includes('[') && kk.includes(']') && !kk.includes('\\]')) {
-                        const rulesStr = kk.split(']')[0].split('[')[1];
+                        let rulesStr = kk.split(']')[0].split('[')[1];
                         for (let rule of rulesStr.split('$$$')) {
-                            const [k, v] = rule.split(':');
+                            let [k, v] = rule.split(':');
                             if (k === "替换") {
-                                const [from, to] = v.split('>>');
+                                let [from, to] = v.split('>>');
                                 content = content.replace(
                                     from, 
                                     to === "空" ? "" : to
@@ -1767,17 +1766,9 @@ function getBetweenStr(str, key, old) {
                             }
                         }
                     }
-                    //"线路标题": "✨+png\">&&<+【共+5px; \">&&</+】",
-                    if(kk=="png\">&&<"){
-                        log(it);
-                        log("1>>>" + content);
-                    }
+
                     if(kk=="5px; \">&&</"){
-                        
-                        log(str);
-                        log(start);
-                        log(end);
-                        log("2>>>" + extractBetween(str, start, end, old?false:true));
+                        log("2>>>" + extractBetween(str, "5px;  \">", end, old?false:true));
                     }
                     strs.push(content);
                     break;
