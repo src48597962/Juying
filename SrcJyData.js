@@ -1665,10 +1665,9 @@ function extractBetween(str, start, end, cleanHtml) {
  * @param {string} str 源字符串
  * @param {string} start 起始标记
  * @param {string} end 结束标记
- * @param {boolean} cleanHtml 是否清理HTML标签
  * @returns {string[]}
  */
-function extractAllBetween(str, start, end, cleanHtml) {
+function extractAllBetween(str, start, end) {
     if (!str || !start || !end) return [];
     
     const regex = buildWildcardRegex(escapeRegExp(start), escapeRegExp(end), true);
@@ -1679,10 +1678,6 @@ function extractAllBetween(str, start, end, cleanHtml) {
         let content = match
             .replace(new RegExp(`^${escapeRegExp(start)}`), '')
             .replace(new RegExp(`${escapeRegExp(end)}$`), '');
-        
-        if (cleanHtml) {
-            content = content.replace(/<\/?.+?\/?>/g, '');
-        }
         
         return content;
     });
@@ -1736,9 +1731,9 @@ function getBetweenStr(str, key, old) {
                 const cleanKk = kk.includes('\\]') ? kk : kk.split('[')[0];
                 const [start, end] = cleanKk.split('&&');
                 
-                let content = extractBetween(str, start, end, true);
+                let content = extractBetween(str, start, end, old?false:true);
                 if(!content && end==="</span>"){
-                    content = extractBetween(str, "<span*>", end, true);
+                    content = extractBetween(str, "<span*>", end, old?false:true);
                 }
                 if (content) {
                     found = true;
