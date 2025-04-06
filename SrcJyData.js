@@ -190,7 +190,7 @@ function getYiData(jkdata, batchTest) {
                             })
                         }
                     } else if (api_type == "XYQ") {
-                        if (extdata['是否开启获取首页数据'] && extdata['首页列表数组规则'] && extdata['首页片单列表数组规则']) {
+                        if (!batchTest && extdata['是否开启获取首页数据'] && extdata['首页列表数组规则'] && extdata['首页片单列表数组规则']) {
                             let gethtml = getHtml(classurl, headers);
                             let 首页列表数组 = pdfa(gethtml, extdata['首页列表数组规则'] + '&&' + extdata['首页片单列表数组规则']);
                             let 图片规则 = extdata['首页片单图片'] || extdata['分类片单图片'];
@@ -199,6 +199,7 @@ function getYiData(jkdata, batchTest) {
                                 图片前缀 = 图片规则.split('+')[0].replace(/'|`|"/g, '');
                                 图片规则 = 图片规则.split('+')[1];
                             }
+
                             首页列表数组.forEach(v => {
                                     if (extdata['首页片单是否Jsoup写法']=="1"||extdata['首页片单是否Jsoup写法']=="是") {
                                         let vodid = pd(v, extdata['首页片单链接'] || extdata['分类片单链接'], vodhost);
@@ -279,6 +280,25 @@ function getYiData(jkdata, batchTest) {
                             }
                         }
                         筛选 = extdata["筛选"];
+                        if(!batchTest){
+                            let gethtml = getHtml(extdata["主页url"], headers);
+                            gethtml = getBetweenStr(gethtml, extdata["二次截取"], 1);
+
+                            extdata["链接"] = extdata["链接"] || `href="&&"`;
+                            extdata["标题"] = extdata["标题"] || `title="&&"`;
+                            extdata["数组"] = extdata["数组"] || `<a &&</a>`;
+                            let vodlist = getBetweenStrS(gethtml, extdata["数组"]);
+                            vodlist.forEach(item => {
+                                extdata["图片"] = extdata["图片"] || (item.indexOf('original=')>-1?`original="&&"`:item.indexOf('<img src=')>-1?`<img src="&&"`:"");
+                                vod_url = getBetweenStr(item, extdata["链接"]);
+                                vod_url = /^http/.test(vod_url) ? vod_url : vodhost + vod_url;
+                                vod_name = getBetweenStr(item, extdata["标题"]);
+                                vod_pic = getBetweenStr(item, extdata["图片"]);
+                                vod_desc = getBetweenStr(item, extdata["副标题"]);
+                                let arr = { "vod_url": vod_url, "vod_name": vod_name, "vod_desc": vod_desc, "vod_pic": vod_pic, "vod_play": noerji?vod_url:"" };
+                                推荐.push(arr);
+                            })
+                        }
                     } else {
                         let gethtml = getHtml(classurl, headers);
                         if (api_type == "v1") {
@@ -1767,9 +1787,6 @@ function getBetweenStr(str, key, old) {
                         }
                     }
 
-                    if(kk=="5px; \">&&</"){
-                        log("2>>>" + extractBetween(str, "5px;  \">", end, old?false:true));
-                    }
                     strs.push(content);
                     break;
                 }
