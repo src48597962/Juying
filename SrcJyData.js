@@ -1813,18 +1813,40 @@ function getExecStrs(str) {
     } while (result)
     return list
 }
-//Unicode转码
+/**
+ * 解码包含 &#十进制; 和 \u十六进制 的字符串
+ * @param {string} str 需要解码的字符串
+ * @returns {string} 解码后的字符串
+ */
 function deUnicode(str) {
-    return str.replace(/&#(\d+);?/g, (match, code) => {
+    // 先处理 \u 开头的Unicode转义（4位或6位十六进制）
+    str = str.replace(/\\u([\da-fA-F]{4})|\\u\{([\da-fA-F]{1,6})\}/g, (match, hex4, hex6) => {
         try {
-            const charCode = parseInt(code, 10);
-            // 检查是否是有效的Unicode码点（0 ~ 0x10FFFF）
-            if (charCode >= 0 && charCode <= 0x10FFFF) {
-                return String.fromCharCode(charCode);
+            const hex = hex4 || hex6;
+            const codePoint = parseInt(hex, 16);
+            // 检查是否是有效的Unicode码点
+            if (codePoint >= 0 && codePoint <= 0x10FFFF) {
+                return String.fromCodePoint(codePoint);
             }
         } catch (e) {
             // 解析失败，保留原字符
         }
-        return match; // 如果转换失败，返回原字符（如 &#999999999;）
+        return match;
     });
+
+    // 再处理 &# 开头的HTML实体（十进制或十六进制）
+    str = str.replace(/&#(\d+);?|&#x([\da-fA-F]+);?/gi, (match, dec, hex) => {
+        try {
+            const codePoint = dec ? parseInt(dec, 10) : parseInt(hex, 16);
+            // 检查是否是有效的Unicode码点
+            if (codePoint >= 0 && codePoint <= 0x10FFFF) {
+                return String.fromCodePoint(codePoint);
+            }
+        } catch (e) {
+            // 解析失败，保留原字符
+        }
+        return match;
+    });
+
+    return str;
 }
