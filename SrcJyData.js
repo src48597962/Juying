@@ -1735,7 +1735,7 @@ function getBetweenStr(str, key, old) {
                 }
                 if (content) {
                     found = true;
-                    if(content.startsWith('&#') || content.startsWith('\u')){
+                    if(content.startsWith('&#') || /^\u/.test(content)){
                         content = decodeNCR(content);
                     }
                     // 处理替换规则
