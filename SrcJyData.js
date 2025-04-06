@@ -1364,15 +1364,13 @@ function getErData(jkdata, erurl) {
                 let arthtml = getBetweenStr(html, extdata["线路二次截取"], 1);
                 //let artlist = arthtml.match(new RegExp(extdata["线路数组"].replace('&&', '((?:.|[\r\n])*?)'), 'g')) || [];
                 let artlist = getBetweenStrS(arthtml, extdata["线路数组"]);
-                log(arthtml);
-                log(artlist);
                 for (let i = 0; i < artlist.length; i++) {
                     let arttitle = getBetweenStr(artlist[i], extdata["线路标题"]);
                     if(arttitle){
                         tabs.push(arttitle);//.replace(/<\/?.+?\/?>/g, '')
                     }
                 }
-                log(tabs);
+
                 let conthtml = getBetweenStr(html, extdata["播放二次截取"], 1);
                 let contlist = getBetweenStrS(conthtml, extdata["播放数组"]);
                 for (let i = 0; i < contlist.length; i++) {
@@ -1388,7 +1386,7 @@ function getErData(jkdata, erurl) {
                     }
                     lists.push(cont);
                 }
-                log(lists);
+
                 actor = getBetweenStr(html, extdata["主演"]);
                 remarks = getBetweenStr(html, extdata["影片状态"]||extdata["状态"]);
                 pubdate = getBetweenStr(html, extdata["影片类型"]);
@@ -1737,7 +1735,7 @@ function getBetweenStr(str, key, old) {
                 }
                 if (content) {
                     found = true;
-                    if(content.startsWith('&#')){
+                    if(content.startsWith('&#') || content.startsWith('/u')){
                         content = decodeNCR(content);
                     }
                     // 处理替换规则
@@ -1828,4 +1826,3 @@ function decodeNCR(str) {
         return match; // 如果转换失败，返回原字符（如 &#999999999;）
     });
 }
-log(decodeNCR("\u5168100\u96c6  \u56fd\u4ea7\u5267"));
