@@ -4,7 +4,7 @@ function autoerji(url, html) {
 	if (!/http/.test(url)) { return data; }
 	let html = html || request(url, { headers: { 'User-Agent': PC_UA }, timeout: 5000 });
 	let urldomian = getHome(url);
-	log(urldomian);
+	//log(urldomian);
 
 	let urltmpl = JSON.parse(getMyVar('Tmpl-' + urldomian, '{}'));
 	let tmplidex = erjiTmpl.findIndex(it => it.id === urltmpl.id);
