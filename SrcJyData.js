@@ -1607,7 +1607,7 @@ function extDataCache(jkdata) {
                 })
                 extdata["主页"] = getHome(extdata["主页url"]);
                 extdata["分类url"] = (extdata["分类url"] || "").split(';;')[0].split('[')[0];
-                extdata["图片"] = extdata["图片"]=="< img src=\"&&\""?"< img src=\"&&\||<img src=\"&&\"||<IMG* src=\"&&\"":extdata["图片"];
+                extdata["图片"] = extdata["图片"]===`< img src="&&"`?`img src="&&"||<IMG* src="&&"||original="&&"`:extdata["图片"];
             }
             return extdata;
         } else {
@@ -1736,7 +1736,6 @@ function getBetweenStr(str, key, old) {
                 if(!content){
                     //一些兼容处理
                     if (end==="</span>") {end = "<span*>";}
-                    //if (start==="< img src=\"") {start = "<img src=\"";}
                     content = extractBetween(str, start, end, old?false:true);
                 }
                 if (content) {
