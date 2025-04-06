@@ -1364,14 +1364,14 @@ function getErData(jkdata, erurl) {
                 let arthtml = getBetweenStr(html, extdata["线路二次截取"], 1);
                 //let artlist = arthtml.match(new RegExp(extdata["线路数组"].replace('&&', '((?:.|[\r\n])*?)'), 'g')) || [];
                 let artlist = getBetweenStrS(arthtml, extdata["线路数组"]);
-                log(artlist);
+                //log(artlist);
                 for (let i = 0; i < artlist.length; i++) {
                     let arttitle = getBetweenStr(artlist[i], extdata["线路标题"]);
                     if(arttitle){
                         tabs.push(arttitle);//.replace(/<\/?.+?\/?>/g, '')
                     }
                 }
-                log(tabs);
+                //log(tabs);
                 let conthtml = getBetweenStr(html, extdata["播放二次截取"], 1);
                 let contlist = getBetweenStrS(conthtml, extdata["播放数组"]);
                 for (let i = 0; i < contlist.length; i++) {
@@ -1387,9 +1387,9 @@ function getErData(jkdata, erurl) {
                     }
                     lists.push(cont);
                 }
-                log(lists);
+                //log(lists);
                 actor = getBetweenStr(html, extdata["主演"]);
-                remarks = getBetweenStr(html, extdata["影片状态"]);
+                remarks = getBetweenStr(html, extdata["影片状态"]||extdata["状态"]);
                 pubdate = getBetweenStr(html, extdata["影片类型"]);
                 year = getBetweenStr(html, extdata["影片年代"]);
                 area = getBetweenStr(html, extdata["影片地区"]);
