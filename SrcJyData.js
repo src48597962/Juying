@@ -1346,7 +1346,9 @@ function getErData(jkdata, erurl) {
                     for (let j = 0; j < bfline.length; j++) {
                         let contname = pdfh(bfline[j], "a&&Text");
                         let conturl = pd(bfline[j], "a&&href");
-                        cont.push(contname + "$" + conturl)
+                        if(contname){
+                            cont.push(contname + "$" + conturl);
+                        }
                     }
                     lists.push(cont);
                 }
@@ -1374,7 +1376,7 @@ function getErData(jkdata, erurl) {
                 }
 
                 let conthtml = getBetweenStr(html, extdata["播放二次截取"], 1);
-                let contlist = getBetweenStrS(conthtml, extdata["播放数组"]||"<dd*<ul&&</dd>");
+                let contlist = getBetweenStrS(conthtml, extdata["播放数组"]||"id=\"playList&&</dd>");
                 for (let i = 0; i < contlist.length; i++) {
                     let bfline = extdata["播放列表"] ? getBetweenStrS(contlist[i], extdata["播放列表"]) : pdfa(contlist[i], "body&&a");
                     let cont = [];
@@ -1459,7 +1461,9 @@ function getErData(jkdata, erurl) {
                             contname = pdfh(bfline[j], extdata["选集标题"] || "a&&Text");
                             conturl = (extdata["选集链接加前缀"] || "") + pdfh(bfline[j], extdata["选集链接"] || "a&&href") + (extdata["选集链接加后缀"] || "");
                         }
-                        cont.push(contname + "$" + conturl)
+                        if(contname){
+                            cont.push(contname + "$" + conturl);
+                        }
                     }
                     if (extdata["是否反转选集序列"] == "1") {
                         cont.reverse();
