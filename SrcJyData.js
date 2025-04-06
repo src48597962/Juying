@@ -1668,7 +1668,7 @@ function extractBetween(str, start, end, cleanHtml) {
  * @param {boolean} cleanHtml 是否清理HTML标签
  * @returns {string[]}
  */
-function extractAllBetween(str, start, end, cleanHtml = false) {
+function extractAllBetween(str, start, end, cleanHtml) {
     if (!str || !start || !end) return [];
     
     const regex = buildWildcardRegex(escapeRegExp(start), escapeRegExp(end), true);
