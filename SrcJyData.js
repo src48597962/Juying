@@ -1766,12 +1766,19 @@ function getBetweenStr(str, key, old) {
                             }
                         }
                     }
-                    
+                    //"线路标题": "✨+png\">&&<+【共+5px; \">&&</+】",
+                    if(kk=="png\">&&<"){
+                        log("1>>>" + content);
+                    }
+                    if(kk=="5px; \">&&</"){
+                        log("2>>>" + content);
+                    }
                     strs.push(content);
                     break;
                 }
             }
         } else {
+            log("3>>>" + it);
             strs.push(it);
         }
     }
