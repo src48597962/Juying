@@ -1737,6 +1737,7 @@ function getBetweenStr(str, key, old) {
     
     for (let it of key.split('+')) {
         if (it.includes('&&')) {
+            log(it);
             for (let kk of it.split("||")) {
                 const cleanKk = kk.includes('\\]') ? kk : kk.split('[')[0];
                 const [start, end] = cleanKk.split('&&');
@@ -1781,7 +1782,6 @@ function getBetweenStr(str, key, old) {
                 }
             }
         } else {
-            log("3>>>" + it);
             strs.push(it);
         }
     }
