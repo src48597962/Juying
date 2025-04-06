@@ -1690,8 +1690,11 @@ function extractAllBetween(str, start, end) {
  * @returns {string[]}
  */
 function getBetweenStrS(html, pattern) {
-    pattern = pattern.replace(/默认--|搜索--/g, '');
     let lists = [];
+    if(!html) return lists;
+    if(!pattern) return [html];
+
+    pattern = pattern.replace(/默认--|搜索--/g, '');
     
     for (let it of pattern.split("||")) {
         const kk = it.split('[')[0];
