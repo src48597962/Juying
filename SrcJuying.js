@@ -371,7 +371,7 @@ function dianboerji() {
                 cls: "Juloadlist"
             }
         })
-        log(erdata.tabs);
+
         erdata.tabs.forEach((it,i)=>{
             it = it.replace(/|||/g, '').trim();
             if(it && !/播放错误会自动换源/.test(it)){
