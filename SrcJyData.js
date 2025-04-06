@@ -1828,3 +1828,4 @@ function decodeNCR(str) {
         return match; // 如果转换失败，返回原字符（如 &#999999999;）
     });
 }
+log(decodeNCR("\u5168100\u96c6  \u56fd\u4ea7\u5267"));
