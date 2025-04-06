@@ -1736,9 +1736,7 @@ function getBetweenStr(str, key, old) {
                 if (content) {
                     found = true;
                     if(content.startsWith('&#') || /^\\u/.test(content)){
-                        log(content);
                         content = deUnicode(content);
-                        log(content);
                     }
                     // 处理替换规则
                     if (kk.includes('[') && kk.includes(']') && !kk.includes('\\]')) {
