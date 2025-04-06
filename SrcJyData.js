@@ -1735,7 +1735,11 @@ function getBetweenStr(str, key, old) {
                 if(!content){
                     //一些兼容处理
                     if (end==="</span>") {end = "<span*>";}
-                    if (start==="< img src=\"") {start = "<IMG * src=\"";}
+                    log(start);
+                    if (start==="< img src=\"") {
+                        log("进来了");
+                        start = "<IMG*src=\"";
+                    }
                     content = extractBetween(str, start, end, old?false:true);
                 }
                 if (content) {
