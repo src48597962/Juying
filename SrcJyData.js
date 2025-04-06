@@ -1771,6 +1771,9 @@ function getBetweenStr(str, key, old) {
                         log("1>>>" + content);
                     }
                     if(kk=="5px; \">&&</"){
+                        log(str);
+                        log(start);
+                        log(end);
                         log("2>>>" + extractBetween(str, start, end, old?false:true));
                     }
                     strs.push(content);
