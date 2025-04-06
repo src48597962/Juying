@@ -645,9 +645,9 @@ function getYiData(jkdata, batchTest) {
                     extdata["图片"] = extdata["图片"] || (item.indexOf('original=')>-1?`original="&&"`:item.indexOf('<img src=')>-1?`<img src="&&"`:"");
                     vod_url = getBetweenStr(item, extdata["链接"]);
                     vod_url = /^http/.test(vod_url) ? vod_url : vodhost + vod_url;
-                    vod_name = getBetweenStr(item, extdata["标题"], 0, extdata["编码"]);
+                    vod_name = getBetweenStr(item, extdata["标题"]);
                     vod_pic = getBetweenStr(item, extdata["图片"]);
-                    vod_desc = getBetweenStr(item, extdata["副标题"], 0, extdata["编码"]);
+                    vod_desc = getBetweenStr(item, extdata["副标题"]);
                     let arr = { "vod_url": vod_url, "vod_name": vod_name, "vod_desc": vod_desc, "vod_pic": vod_pic, "vod_play": noerji?vod_url:"" };
                     vodlists.push(arr);
                 })
@@ -1388,12 +1388,12 @@ function getErData(jkdata, erurl) {
                     lists.push(cont);
                 }
                 //log(lists);
-                actor = getBetweenStr(html, extdata["主演"], 0, extdata["编码"]);
-                remarks = getBetweenStr(html, extdata["影片状态"]||extdata["状态"], 0, extdata["编码"]);
-                pubdate = getBetweenStr(html, extdata["影片类型"], 0, extdata["编码"]);
+                actor = getBetweenStr(html, extdata["主演"]);
+                remarks = getBetweenStr(html, extdata["影片状态"]||extdata["状态"]);
+                pubdate = getBetweenStr(html, extdata["影片类型"]);
                 year = getBetweenStr(html, extdata["影片年代"]);
-                area = getBetweenStr(html, extdata["影片地区"]), 0, extdata["编码"];
-                desc = getBetweenStr(html, extdata["简介"], 0, extdata["编码"]);
+                area = getBetweenStr(html, extdata["影片地区"]);
+                desc = getBetweenStr(html, extdata["简介"]);
                 if(extdata["嗅探词"]){
                     sniffer["contain"] = extdata["嗅探词"].split('#');
                 }
@@ -1720,10 +1720,9 @@ function getBetweenStrS(html, pattern) {
  * @param {string} str 源字符串
  * @param {string} key 匹配键
  * @param {boolean} old 是否返回原字符串
- * @param {string} code 是否需要转换成指定编码
  * @returns {string}
  */
-function getBetweenStr(str, key, old, code) {
+function getBetweenStr(str, key, old) {
     if (!str || !key) return old ? str || "" : "";
     
     key = key.replace(/默认--|搜索--/g, '');
@@ -1742,10 +1741,7 @@ function getBetweenStr(str, key, old, code) {
                 }
                 if (content) {
                     found = true;
-                    //是否需要编码
-                    if (code) {
-                        content = decodeStr(content, code);
-                    }
+
                     // 处理替换规则
                     if (kk.includes('[') && kk.includes(']') && !kk.includes('\\]')) {
                         const rulesStr = kk.split(']')[0].split('[')[1];
@@ -1819,3 +1815,21 @@ function getExecStrs(str) {
     } while (result)
     return list
 }
+
+function decode(str) {
+    // 把字符串按 &# 分割成数组
+    const parts = str.split('&#').filter(Boolean);
+    
+    // 将每个数字转换为对应的字符
+    let result = '';
+    for (let part of parts) {
+        const code = parseInt(part, 10);
+        result += String.fromCharCode(code);
+    }
+    
+    return result;
+}
+
+const encodedStr = "&#21322&#29976&#33510&#36935&#35265";
+const decodedStr = decode(encodedStr);
+log(decodedStr); // 输出: 半生甘苦遇见
