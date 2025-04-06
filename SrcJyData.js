@@ -1617,95 +1617,154 @@ function extDataCache(jkdata) {
     toast('此源接口数据文件有异常');
     return '';
 }
-//获取中间字符数组
-function getBetweenStrS(html, pattern) {
-    pattern = pattern.replace(/默认--|搜索--/g,'');
-    let lists = [];
-    let its = pattern.split("||");
-    for(let i = 0; i < its.length; i ++){
-        let kk = its[i].split('[')[0];
-        const [start, end] = kk.split('&&');
-        const regex = new RegExp(
-            `${escapeRegExp(start)}([\\s\\S]*?)${escapeRegExp(end)}`,
-            'g'
-        );
-        lists = (html.match(regex) || []).map(match => 
-            match.replace(new RegExp(`^${escapeRegExp(start)}|${escapeRegExp(end)}$`, 'g'), '')
-        );
-        if(pattern.includes('[') && pattern.includes(']')){
-            let m = pattern.split(']')[0].split('[')[1];
-            m.split('$$$').forEach(item => {
-                const [k, v] = item.split(':');
-                if(k=="不包含"){
-                    lists = lists.filter(li=>!li.includes(v));
-                }
-            });
-        }
-        if(lists.length>0){
-            break;
-        }
-    }
-    return lists;
-}
-// 转义正则特殊字符
+/**
+ * 转义正则特殊字符（保留通配符*）
+ * @param {string} string 
+ * @returns {string}
+ */
 function escapeRegExp(string) {
-    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    return string.replace(/[.+?^${}()|[\]\\]/g, '\\$&');
 }
-//截取中间字符
-function getBetweenStr(str, key, old) {
-    if (!str || !key) {
-        return old?str||"":"";
+/**
+ * 构建支持通配符的正则表达式
+ * @param {string} start 起始标记
+ * @param {string} end 结束标记
+ * @param {boolean} global 是否全局匹配
+ * @returns {RegExp}
+ */
+function buildWildcardRegex(start, end, global = false) {
+    const flags = global ? 'gs' : 's'; // s标志使.匹配换行符，g标志全局匹配
+    return new RegExp(
+        `${start.replace(/\*/g, '.*?')}(.*?)${end.replace(/\*/g, '.*?')}`,
+        flags
+    );
+}
+/**
+ * 提取标记之间的内容
+ * @param {string} str 源字符串
+ * @param {string} start 起始标记
+ * @param {string} end 结束标记
+ * @param {boolean} cleanHtml 是否清理HTML标签
+ * @returns {string}
+ */
+function extractBetween(str, start, end, cleanHtml = false) {
+    if (!str || !start || !end) return '';
+    
+    const regex = buildWildcardRegex(escapeRegExp(start), escapeRegExp(end));
+    const match = str.match(regex);
+    let result = match ? match[1] : '';
+    
+    if (cleanHtml) {
+        result = result.replace(/<\/?.+?\/?>/g, '');
     }
-    key = key.replace(/默认--|搜索--/g,'');
-    let strs = [];
-    let is;
-    key.split('+').forEach(it=>{
-        if(it.includes('&&')){
-            let its = it.split("||");
-            for(let i = 0; i < its.length; i ++){
-                let kk = its[i];
-                if(!kk.includes('\\]')){
-                    kk = kk.split('[')[0];
-                }
-
-                const prefix = kk.split('&&')[0];
-                const suffix = kk.split('&&')[1];
-
-                // 将通配符*转换为正则表达式.*?
-                const regexPrefix = prefix.replace(/\*/g, '.*?');
-                const regexSuffix = suffix.replace(/\*/g, '.*?');
-
-                // 使用s标志使.匹配换行符
-                const regex = new RegExp(regexPrefix + '(.*?)' + regexSuffix, 's');
-
-                // 提取内容并清理HTML标签
-                const match = str.match(regex);
-                if(prefix == '</div>*title\">'){
-                    log('进来了');
-                    log(prefix);
-                    log(regexPrefix);
-                    log(match);
-                }
-                let z = match ? match[1].replace(/<\/?.+?\/?>/g, '') : old ? str : '';
-                if(z){
-                    is = 1;
-                    if(its[i].includes('[') && its[i].includes(']') && !its[i].includes('\\]')){
-                        let m = its[i].split(']')[0].split('[')[1];
-                        m.split('$$$').forEach(item => {
-                            const [k, v] = item.split(':');
-                            if(k=="替换"){
-                                z = z.replace(v.split('>>')[0], v.split('>>')[1]=="空"?"":v.split('>>')[1]);
-                            }
-                        });
-                    }
-                    it = z;
-                    break;
+    
+    return result;
+}
+/**
+ * 提取所有匹配的标记间内容
+ * @param {string} str 源字符串
+ * @param {string} start 起始标记
+ * @param {string} end 结束标记
+ * @param {boolean} cleanHtml 是否清理HTML标签
+ * @returns {string[]}
+ */
+function extractAllBetween(str, start, end, cleanHtml = false) {
+    if (!str || !start || !end) return [];
+    
+    const regex = buildWildcardRegex(escapeRegExp(start), escapeRegExp(end), true);
+    const matches = str.match(regex) || [];
+    
+    return matches.map(match => {
+        // 移除起始和结束标记
+        let content = match
+            .replace(new RegExp(`^${escapeRegExp(start)}`), '')
+            .replace(new RegExp(`${escapeRegExp(end)}$`), '');
+        
+        if (cleanHtml) {
+            content = content.replace(/<\/?.+?\/?>/g, '');
+        }
+        
+        return content;
+    });
+}
+/**
+ * 获取中间字符数组（优化版）
+ * @param {string} html 源HTML
+ * @param {string} pattern 匹配模式
+ * @returns {string[]}
+ */
+function getBetweenStrS(html, pattern) {
+    pattern = pattern.replace(/默认--|搜索--/g, '');
+    let lists = [];
+    
+    for (let it of pattern.split("||")) {
+        const kk = it.split('[')[0];
+        const [start, end] = kk.split('&&');
+        lists = extractAllBetween(html, start, end);
+        
+        // 处理过滤条件
+        if (it.includes('[') && it.includes(']')) {
+            const filterStr = it.split(']')[0].split('[')[1];
+            for (let item of filterStr.split('$$$')) {
+                const [k, v] = item.split(':');
+                if (k === "不包含") {
+                    lists = lists.filter(li => !li.includes(v));
                 }
             }
         }
-        strs.push(it);
-    });
-    return is?strs.join(''):"";
+        if (lists.length > 0) break;
+    }
+    return lists;
+}
+/**
+ * 截取中间字符（优化版）
+ * @param {string} str 源字符串
+ * @param {string} key 匹配键
+ * @param {boolean} old 是否返回原字符串
+ * @returns {string}
+ */
+function getBetweenStr(str, key, old) {
+    if (!str || !key) return old ? str || "" : "";
+    
+    key = key.replace(/默认--|搜索--/g, '');
+    const strs = [];
+    let found = false;
+    
+    for (let it of key.split('+')) {
+        if (it.includes('&&')) {
+            for (const kk of it.split("||")) {
+                const cleanKk = kk.includes('\\]') ? kk : kk.split('[')[0];
+                const [start, end] = cleanKk.split('&&');
+                
+                let content = extractBetween(str, start, end, true);
+                
+                if (content) {
+                    found = true;
+                    
+                    // 处理替换规则
+                    if (kk.includes('[') && kk.includes(']') && !kk.includes('\\]')) {
+                        const rulesStr = kk.split(']')[0].split('[')[1];
+                        for (let rule of rulesStr.split('$$$')) {
+                            const [k, v] = rule.split(':');
+                            if (k === "替换") {
+                                const [from, to] = v.split('>>');
+                                content = content.replace(
+                                    from, 
+                                    to === "空" ? "" : to
+                                );
+                            }
+                        }
+                    }
+                    
+                    strs.push(content);
+                    break;
+                }
+            }
+        } else {
+            strs.push(it);
+        }
+    }
+    return found ? strs.join('') : "";
 }
 
 //归整转为json对象
