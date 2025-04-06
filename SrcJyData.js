@@ -1822,6 +1822,6 @@ function decodeRobust(str) {
     );
 }
 
-const encodedStr = "&#21322&#29976&#33510&#36935&#35265";
+const encodedStr = "&#21322&#29983&#29976&#33510&#36935&#35265";
 const decodedStr = decodeRobust(encodedStr);
 log(decodedStr); // 输出: 半生甘苦遇见
