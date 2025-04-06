@@ -1741,7 +1741,9 @@ function getBetweenStr(str, key, old) {
                 }
                 if (content) {
                     found = true;
-
+                    if(content.startsWith('&#')){
+                        content = decodeNCR(content);
+                    }
                     // 处理替换规则
                     if (kk.includes('[') && kk.includes(']') && !kk.includes('\\]')) {
                         const rulesStr = kk.split(']')[0].split('[')[1];
@@ -1815,13 +1817,18 @@ function getExecStrs(str) {
     } while (result)
     return list
 }
-
-function decodeRobust(str) {
-    return str.replace(/&#(\d+);?/g, (_, code) => 
-        String.fromCharCode(parseInt(code, 10))
-    );
+//以&#开头，后面跟着数字代码。这是HTML/XML中的数字字符引用（Numeric Character Reference）。
+function decodeNCR(str) {
+    return str.replace(/&#(\d+);?/g, (match, code) => {
+        try {
+            const charCode = parseInt(code, 10);
+            // 检查是否是有效的Unicode码点（0 ~ 0x10FFFF）
+            if (charCode >= 0 && charCode <= 0x10FFFF) {
+                return String.fromCharCode(charCode);
+            }
+        } catch (e) {
+            // 解析失败，保留原字符
+        }
+        return match; // 如果转换失败，返回原字符（如 &#999999999;）
+    });
 }
-
-const encodedStr = "&#21322&#29983&#29976&#33510&#36935&#35265";
-const decodedStr = decodeRobust(encodedStr);
-log(decodedStr); // 输出: 半生甘苦遇见
