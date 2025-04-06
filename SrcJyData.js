@@ -1736,7 +1736,9 @@ function getBetweenStr(str, key, old) {
                 if (content) {
                     found = true;
                     if(content.startsWith('&#') || /^\\u/.test(content)){
-                        content = decodeNCR(content);
+                        log(content);
+                        content = deUnicode(content);
+                        log(content);
                     }
                     // 处理替换规则
                     if (kk.includes('[') && kk.includes(']') && !kk.includes('\\]')) {
@@ -1811,8 +1813,8 @@ function getExecStrs(str) {
     } while (result)
     return list
 }
-//以&#开头，后面跟着数字代码。这是HTML/XML中的数字字符引用（Numeric Character Reference）。
-function decodeNCR(str) {
+//Unicode转码
+function deUnicode(str) {
     return str.replace(/&#(\d+);?/g, (match, code) => {
         try {
             const charCode = parseInt(code, 10);
