@@ -1736,7 +1736,9 @@ function getBetweenStr(str, key, old) {
                 const [start, end] = cleanKk.split('&&');
                 
                 let content = extractBetween(str, start, end, true);
-                
+                if(!content && end=="</span>"){
+                    content = extractBetween(str, "<span *>", end, true);
+                }
                 if (content) {
                     found = true;
                     
