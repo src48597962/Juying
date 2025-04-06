@@ -1738,10 +1738,10 @@ function getBetweenStr(str, key, old) {
     for (let it of key.split('+')) {
         if (it.includes('&&')) {
             for (let kk of it.split("||")) {
-                const cleanKk = kk.includes('\\]') ? kk : kk.split('[')[0];
-                const [start, end] = cleanKk.split('&&');
+                let cleanKk = kk.includes('\\]') ? kk : kk.split('[')[0];
+                let [start, end] = cleanKk.split('&&');
                 log(`当前迭代: kk=${kk}, cleanKk=${cleanKk}`);
-                log(`start=${start}, end=${end}`);
+
                 let content = extractBetween(str, start, end, old?false:true);
                 if(!content){
                     //一些兼容处理
