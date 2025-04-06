@@ -1740,7 +1740,8 @@ function getBetweenStr(str, key, old) {
             for (let kk of it.split("||")) {
                 const cleanKk = kk.includes('\\]') ? kk : kk.split('[')[0];
                 const [start, end] = cleanKk.split('&&');
-                
+                log(`当前迭代: kk=${kk}, cleanKk=${cleanKk}`);
+                log(`start=${start}, end=${end}`);
                 let content = extractBetween(str, start, end, old?false:true);
                 if(!content){
                     //一些兼容处理
@@ -1772,7 +1773,7 @@ function getBetweenStr(str, key, old) {
                         log("1>>>" + content);
                     }
                     if(kk=="5px; \">&&</"){
-                        log(it);
+                        
                         log(str);
                         log(start);
                         log(end);
