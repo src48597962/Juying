@@ -243,7 +243,7 @@ function aierji(html, url, detail) {
 		if (lists.length == 0) { tabs = []; }
 		return { details2: "数据来源：AI识片", details1: detail.details1 || "", pic: detail.pic, desc: detail.desc, tabs: tabs, lists: lists };
 	}
-	return { details2: "二级加载失败", details1: "", tabs: [], lists: [] };
+	return { details2: "", details1: "二级加载失败", tabs: [], lists: [] };
 }
 
 let erjiTmpl = [
