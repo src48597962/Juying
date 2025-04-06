@@ -1816,20 +1816,12 @@ function getExecStrs(str) {
     return list
 }
 
-function decode(str) {
-    // 把字符串按 &# 分割成数组
-    const parts = str.split('&#').filter(Boolean);
-    
-    // 将每个数字转换为对应的字符
-    let result = '';
-    for (let part of parts) {
-        const code = parseInt(part, 10);
-        result += String.fromCharCode(code);
-    }
-    
-    return result;
+function decodeRobust(str) {
+    return str.replace(/&#(\d+);?/g, (_, code) => 
+        String.fromCharCode(parseInt(code, 10))
+    );
 }
 
 const encodedStr = "&#21322&#29976&#33510&#36935&#35265";
-const decodedStr = decode(encodedStr);
+const decodedStr = decodeRobust(encodedStr);
 log(decodedStr); // 输出: 半生甘苦遇见
