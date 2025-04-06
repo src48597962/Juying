@@ -1374,7 +1374,7 @@ function getErData(jkdata, erurl) {
                 }
 
                 let conthtml = getBetweenStr(html, extdata["播放二次截取"], 1);
-                let contlist = getBetweenStrS(conthtml, extdata["播放数组"]||"<li&&</li>");
+                let contlist = getBetweenStrS(conthtml, extdata["播放数组"]||"<dd&&</dd>");
                 for (let i = 0; i < contlist.length; i++) {
                     let bfline = extdata["播放列表"] ? getBetweenStrS(contlist[i], extdata["播放列表"]) : pdfa(contlist[i], "body&&a");
                     let cont = [];
