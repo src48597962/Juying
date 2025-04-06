@@ -1737,7 +1737,6 @@ function getBetweenStr(str, key, old) {
     
     for (let it of key.split('+')) {
         if (it.includes('&&')) {
-            log(it);
             for (let kk of it.split("||")) {
                 const cleanKk = kk.includes('\\]') ? kk : kk.split('[')[0];
                 const [start, end] = cleanKk.split('&&');
@@ -1769,9 +1768,11 @@ function getBetweenStr(str, key, old) {
                     }
                     //"线路标题": "✨+png\">&&<+【共+5px; \">&&</+】",
                     if(kk=="png\">&&<"){
+                        log(it);
                         log("1>>>" + content);
                     }
                     if(kk=="5px; \">&&</"){
+                        log(it);
                         log(str);
                         log(start);
                         log(end);
