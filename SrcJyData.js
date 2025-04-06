@@ -273,7 +273,9 @@ function getYiData(jkdata, batchTest) {
                             let typenames = extdata["分类"].split('&');
                             let typeids = extdata["分类值"] == "*" ? extdata["分类"].split('&') : extdata["分类值"].split('&');
                             for (let i in typeids) {
-                                分类.push(typenames[i] + '$' + typeids[i]);
+                                if(typenames[i]){
+                                    分类.push(typenames[i] + '$' + typeids[i]);
+                                }
                             }
                         }
                         筛选 = extdata["筛选"];
@@ -1730,8 +1732,11 @@ function getBetweenStr(str, key, old) {
                 const [start, end] = cleanKk.split('&&');
                 
                 let content = extractBetween(str, start, end, old?false:true);
-                if(!content && end==="</span>"){
-                    content = extractBetween(str, "<span*>", end, old?false:true);
+                if(!content){
+                    //一些兼容处理
+                    if (end==="</span>") end = "<span*>";
+                    if (start==="< img src=\"") start = "<*img *src=\"";
+                    content = extractBetween(str, start, end, old?false:true);
                 }
                 if (content) {
                     found = true;
