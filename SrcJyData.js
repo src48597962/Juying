@@ -1632,7 +1632,7 @@ function escapeRegExp(string) {
  * @param {boolean} global 是否全局匹配
  * @returns {RegExp}
  */
-function buildWildcardRegex(start, end, global = false) {
+function buildWildcardRegex(start, end, global) {
     const flags = global ? 'gs' : 's'; // s标志使.匹配换行符，g标志全局匹配
     return new RegExp(
         `${start.replace(/\*/g, '.*?')}(.*?)${end.replace(/\*/g, '.*?')}`,
@@ -1647,7 +1647,7 @@ function buildWildcardRegex(start, end, global = false) {
  * @param {boolean} cleanHtml 是否清理HTML标签
  * @returns {string}
  */
-function extractBetween(str, start, end, cleanHtml = false) {
+function extractBetween(str, start, end, cleanHtml) {
     if (!str || !start || !end) return '';
     
     const regex = buildWildcardRegex(escapeRegExp(start), escapeRegExp(end));
@@ -1764,7 +1764,7 @@ function getBetweenStr(str, key, old) {
             strs.push(it);
         }
     }
-    return found ? strs.join('') : "";
+    return found ? strs.join('') : old ? str : "";
 }
 
 //归整转为json对象
