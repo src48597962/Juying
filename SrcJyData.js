@@ -1027,7 +1027,9 @@ function getSsData(name, jkdata, page) {
                             let href = getBetweenStr(sslist[i], (extdata["搜索链接"]||extdata["链接"]).replace(`+\"id\":`, '').replace(`,+.`, '.'));
                             let img = getBetweenStr(sslist[i], (extdata["搜索图片"]||extdata["图片"]));
                             let desc = getBetweenStr(sslist[i], (extdata["搜索副标题"]||extdata["副标题"]));
-                            lists.push({ "id": /^http/.test(href) ? href : vodhost + href, "name": title, "pic": img, "desc": desc })
+                            if(title&&href){
+                                lists.push({ "id": /^http/.test(href) ? href : vodhost + href, "name": title, "pic": img, "desc": desc })
+                            }
                         }
                     }else if (extdata["搜索数组"]){
                         let ssjosn = dealJson(gethtml);
@@ -1044,10 +1046,11 @@ function getSsData(name, jkdata, page) {
                             let img = 图片.includes('&&')?getBetweenStr(sslist[i], 图片):getJsonValue(sslist[i],图片);
                             let desc = 副标.includes('&&')?getBetweenStr(sslist[i], 副标):getJsonValue(sslist[i],副标);
                             let href = 链接.includes('&&')?getBetweenStr(sslist[i], 链接):eval(链接);
-                            lists.push({ "id": /^http/.test(href) ? href : vodhost + href, "name": title, "pic": img, "desc": desc })
+                            if(title&&href){
+                                lists.push({ "id": /^http/.test(href) ? href : vodhost + href, "name": title, "pic": img, "desc": desc })
+                            }
                         }
                     }
-                    log(lists);
                 }
             }else if(api_type=="XYQ"){
                 /*
