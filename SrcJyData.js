@@ -1502,6 +1502,7 @@ function getErData(jkdata, erurl) {
         } else if (api_type == 'hipy_t3' || api_type == 'hipy_t4') {
             try{
                 let json = JSON.parse(html).list[0];
+                log(json);
                 actor = json.vod_actor;
                 area = json.vod_area;
                 remarks = json.vod_remarks || json.vod_class || "";
