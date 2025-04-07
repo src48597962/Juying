@@ -1511,7 +1511,9 @@ function getErData(jkdata, erurl) {
                 lists = json.vod_play_url.split('$$$').map(it => {
                     return it.split('#');
                 });
-            }catch(e){}
+            }catch(e){
+                log(api_type + '获取数据失败>' + e.message + " 错误行#" + e.lineNumber);
+            }
         }
 
         if (/XPath|biubiu|XBPQ|XYQ/.test(api_type) && html && (tabs.length == 0 || lists.length == 0) && getMyVar('debug', '0') == "0" && html.indexOf(MY_PARAMS.pageTitle) > -1) {
