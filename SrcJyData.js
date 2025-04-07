@@ -1028,7 +1028,25 @@ function getSsData(name, jkdata, page) {
                             let desc = getBetweenStr(sslist[i], (extdata["搜索副标题"]||extdata["副标题"]));
                             lists.push({ "id": /^http/.test(href) ? href : vodhost + href, "name": title, "pic": img, "desc": desc })
                         }
+                    }else{
+                        let ssjosn = dealJson(gethtml);
+                        let sslist = getJsonValue(ssjosn, extdata["搜索数组"]);
+                        for (let i = 0; i < sslist.length; i++) {
+                            let 标题 = (extdata["搜索标题"]||extdata["标题"]);
+                            let 链接 = (extdata["搜索链接"]||extdata["链接"]);
+                            let 图片 = (extdata["搜索图片"]||extdata["图片"]);
+                            let 副标 = (extdata["搜索副标题"]||extdata["副标题"]);
+                            let id = getJsonValue(sslist[i],'id');
+                            let en = getJsonValue(sslist[i],副标);
+
+                            let title = 标题.includes('&&')?getBetweenStr(sslist[i], 标题):getJsonValue(sslist[i],标题);
+                            let img = 图片.includes('&&')?getBetweenStr(sslist[i], 图片):getJsonValue(sslist[i],图片);
+                            let desc = 副标.includes('&&')?getBetweenStr(sslist[i], 副标):getJsonValue(sslist[i],副标);
+                            let href = 链接.includes('&&')?getBetweenStr(sslist[i], 链接):eval(链接);
+                            lists.push({ "id": /^http/.test(href) ? href : vodhost + href, "name": title, "pic": img, "desc": desc })
+                        }
                     }
+                    log(lists);
                 }
             }else if(api_type=="XYQ"){
                 /*
@@ -1504,7 +1522,7 @@ function getErData(jkdata, erurl) {
                 let json = JSON.parse(html).list[0];
                 actor = jkdata.name.includes('荐片')? getBetweenStrS(json.vod_actor, "name\":\"&&\"").join(',') : json.vod_actor;
                 area = json.vod_area;
-                remarks = jkdata.name.includes('荐片')? ("类型："+json.type_name+"  年份："+json.vod_year) : (json.vod_remarks || json.vod_class || "");
+                remarks = jkdata.name.includes('荐片')? ("类型："+json.type_name+"    年份："+json.vod_year) : (json.vod_remarks || json.vod_class || "");
                 desc = json.vod_content || "";
                 pic = json.vod_pic;
                 tabs = json.vod_play_from.split('$$$');
