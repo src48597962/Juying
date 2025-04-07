@@ -1650,7 +1650,7 @@ function extDataCache(jkdata) {
                         let head = {};
                         extdata[it].split('#').forEach(pair => {
                             const [key, value] = pair.split('$');
-                            head[key] = value=="MOBILE_UA"?MOBILE_UA:value=="PC_UA"?PC_UA:value;
+                            head[key] = (value=="MOBILE_UA"||value=="手机")?MOBILE_UA:(value=="PC_UA"||value=="电脑")?PC_UA:value;
                         });
                         extdata[it+'信息'] = head;
                     }
