@@ -1425,7 +1425,8 @@ function getErData(jkdata, erurl) {
                     for (let j = 0; j < bfline.length; j++) {
                         let contname = extdata["播放标题"] ? getBetweenStr(bfline[j], extdata["播放标题"]) : pdfh(bfline[j], "a&&Text");
                         let conturl = extdata["播放链接"] ? getBetweenStr(bfline[j], extdata["播放链接"]) : pd(bfline[j], "a&&href");
-                        if(!conturl.startsWith('http')){
+                        log(conturl);
+                        if(conturl.startsWith('/')){
                             conturl = extdata["主页"] + conturl;
                         }
                         if(contname){
