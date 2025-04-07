@@ -1110,7 +1110,7 @@ function getSsData(name, jkdata, page) {
                     searchs.push({
                         vod_name: list.name.replace('立刻播放','').replace(/<[^>]+>/g, ''),
                         vod_desc: list.desc,
-                        vod_content: list.content.replace(/<[^>]+>/g, ''),
+                        vod_content: (list.content||"").replace(/<[^>]+>/g, ''),
                         vod_pic: vodpic,
                         vod_url: list.id,
                         //vod_play: noerji?list.id:""
