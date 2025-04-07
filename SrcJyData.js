@@ -280,7 +280,7 @@ function getYiData(jkdata, batchTest) {
                             }
                         }
                         筛选 = extdata["筛选"];
-                        if(!batchTest){
+                        if(!batchTest && extdata["主页url"]){
                             let gethtml = getHtml(extdata["主页url"], headers);
                             gethtml = getBetweenStr(gethtml, extdata["二次截取"], 1);
 
@@ -1411,7 +1411,7 @@ function getErData(jkdata, erurl) {
                 //let artlist = arthtml.match(new RegExp(extdata["线路数组"].replace('&&', '((?:.|[\r\n])*?)'), 'g')) || [];
                 let artlist = getBetweenStrS(arthtml, extdata["线路数组"]);
                 for (let i = 0; i < artlist.length; i++) {
-                    let arttitle = getBetweenStr(artlist[i], extdata["线路标题"]);
+                    let arttitle = getBetweenStr(artlist[i], extdata["线路标题"]||">&&</");
                     if(arttitle){
                         tabs.push(arttitle);//.replace(/<\/?.+?\/?>/g, '')
                     }
@@ -1425,7 +1425,6 @@ function getErData(jkdata, erurl) {
                     for (let j = 0; j < bfline.length; j++) {
                         let contname = extdata["播放标题"] ? getBetweenStr(bfline[j], extdata["播放标题"]) : pdfh(bfline[j], "a&&Text");
                         let conturl = extdata["播放链接"] ? getBetweenStr(bfline[j], extdata["播放链接"]) : pd(bfline[j], "a&&href");
-                        log(conturl);
                         if(conturl.startsWith('/')){
                             conturl = extdata["主页"] + conturl;
                         }
@@ -1651,12 +1650,12 @@ function extDataCache(jkdata) {
                         let head = {};
                         extdata[it].split('#').forEach(pair => {
                             const [key, value] = pair.split('$');
-                            head[key] = (value=="MOBILE_UA"||value=="手机")?MOBILE_UA:(value=="PC_UA"||value=="电脑")?PC_UA:value;
+                            head[key] = value=="MOBILE_UA"?MOBILE_UA:value=="PC_UA"?PC_UA:value;
                         });
                         extdata[it+'信息'] = head;
                     }
                 })
-                extdata["主页"] = getHome(extdata["主页url"]);
+                extdata["主页"] = getHome(extdata["主页url"]||extdata["分类url"]);
                 extdata["分类url"] = (extdata["分类url"] || "").split(';;')[0].split('[')[0];
                 extdata["图片"] = extdata["图片"]===`< img src="&&"`?`img src="&&"||<IMG* src="&&"||original="&&"`:extdata["图片"];
             }
