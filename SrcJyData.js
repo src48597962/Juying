@@ -1041,8 +1041,6 @@ function getSsData(name, jkdata, page) {
                             let 副标 = (extdata["搜索副标题"]||extdata["副标题"]);
                             let id = getJsonValue(sslist[i],'id');
                             let en = getJsonValue(sslist[i],'en');
-                            log(id);
-                            log(en);
 
                             let title = 标题.includes('&&')?getBetweenStr(JSON.stringify(sslist[i]), 标题):getJsonValue(sslist[i],标题);
                             let img = 图片.includes('&&')?getBetweenStr(JSON.stringify(sslist[i]), 图片):getJsonValue(sslist[i],图片);
