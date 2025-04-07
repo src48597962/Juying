@@ -1042,10 +1042,10 @@ function getSsData(name, jkdata, page) {
                             let id = getJsonValue(sslist[i],'id');
                             let en = getJsonValue(sslist[i],副标);
 
-                            let title = 标题.includes('&&')?getBetweenStr(sslist[i], 标题):getJsonValue(sslist[i],标题);
-                            let img = 图片.includes('&&')?getBetweenStr(sslist[i], 图片):getJsonValue(sslist[i],图片);
-                            let desc = 副标.includes('&&')?getBetweenStr(sslist[i], 副标):getJsonValue(sslist[i],副标);
-                            let href = 链接.includes('&&')?getBetweenStr(sslist[i], 链接):eval(链接);
+                            let title = 标题.includes('&&')?getBetweenStr(JSON.stringify(sslist[i]), 标题):getJsonValue(sslist[i],标题);
+                            let img = 图片.includes('&&')?getBetweenStr(JSON.stringify(sslist[i]), 图片):getJsonValue(sslist[i],图片);
+                            let desc = 副标.includes('&&')?getBetweenStr(JSON.stringify(sslist[i]), 副标):getJsonValue(sslist[i],副标);
+                            let href = 链接.includes('&&')?getBetweenStr(JSON.stringify(sslist[i]), 链接):eval(链接);
                             if(title&&href){
                                 lists.push({ "id": /^http/.test(href) ? href : vodhost + href, "name": title, "pic": img, "desc": desc })
                             }
