@@ -1018,6 +1018,7 @@ function getSsData(name, jkdata, page) {
                     } else {
                         gethtml = getHtmlCode(ssurl, headers);
                     }
+                    extdata["搜索数组"] = extdata["搜索数组"] || extdata["数组"] || "";
                     if(extdata["搜索数组"].includes('&&')){
                         gethtml = getBetweenStr(gethtml, extdata["搜索二次截取"], 1);
                         let sslist = getBetweenStrS(gethtml, extdata["搜索数组"]||extdata["数组"]);
@@ -1028,7 +1029,7 @@ function getSsData(name, jkdata, page) {
                             let desc = getBetweenStr(sslist[i], (extdata["搜索副标题"]||extdata["副标题"]));
                             lists.push({ "id": /^http/.test(href) ? href : vodhost + href, "name": title, "pic": img, "desc": desc })
                         }
-                    }else{
+                    }else if (extdata["搜索数组"]){
                         let ssjosn = dealJson(gethtml);
                         let sslist = getJsonValue(ssjosn, extdata["搜索数组"]);
                         for (let i = 0; i < sslist.length; i++) {
