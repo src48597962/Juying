@@ -1040,7 +1040,7 @@ function getSsData(name, jkdata, page) {
                             let 图片 = (extdata["搜索图片"]||extdata["图片"]);
                             let 副标 = (extdata["搜索副标题"]||extdata["副标题"]);
                             let id = getJsonValue(sslist[i],'id');
-                            let en = getJsonValue(sslist[i],副标);
+                            let en = getJsonValue(sslist[i],'en');
                             log(id);
                             log(en);
 
