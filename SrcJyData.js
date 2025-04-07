@@ -1502,10 +1502,9 @@ function getErData(jkdata, erurl) {
         } else if (api_type == 'hipy_t3' || api_type == 'hipy_t4') {
             try{
                 let json = JSON.parse(html).list[0];
-                log(json);
-                actor = json.vod_actor;
+                actor = jkdata.name.includes('荐片')? getBetweenStrS(json.vod_actor, "}/]&&[/a]").join(',') : json.vod_actor;
                 area = json.vod_area;
-                remarks = json.vod_remarks || json.vod_class || "";
+                remarks = jkdata.name.includes('荐片')? ("类型："+json.type_name+"  年份："+json.vod_year) : (json.vod_remarks || json.vod_class || "");
                 desc = json.vod_content || "";
                 pic = json.vod_pic;
                 tabs = json.vod_play_from.split('$$$');
