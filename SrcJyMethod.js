@@ -37,10 +37,24 @@ function extraJS(playUrl) {
             check();
         })
     }
-    if(/jqqzx\.me|dadazhu\.me/.test(playUrl)){
+    function click3(p1) {
+        return $.toString((p1) => {
+            function check() {
+                try {
+                    document.getElementsByClassName(p1)[0].click();
+                } catch (e) {
+                    setTimeout(check, 100);
+                }
+            }
+            check();
+        },p1)
+    }
+    if(/jqqzx\.me|dadazhu\.me|dadagui|freeok|dadagui/.test(playUrl)){
         return click1('#playleft iframe','#start');
     }else if(/media\.staticfile\.link/.test(playUrl)){
         return click2();
+    }else if(/maolvys\.com/.test(playUrl)){
+        return click3();
     }else{
         return undefined;
     }
