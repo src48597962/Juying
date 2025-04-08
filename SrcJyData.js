@@ -285,12 +285,8 @@ function getYiData(jkdata, batchTest) {
                             let gethtml = getHtml(extdata["主页url"], headers);
                             gethtml = getBetweenStr(gethtml, extdata["二次截取"], 1);
 
-                            extdata["链接"] = extdata["链接"] || `href="&&"`;
-                            extdata["标题"] = extdata["标题"] || `title="&&"`;
-                            extdata["数组"] = extdata["数组"] || `<a &&</a>`;
                             let vodlist = getBetweenStrS(gethtml, extdata["数组"]);
                             vodlist.forEach(item => {
-                                extdata["图片"] = extdata["图片"] || (item.indexOf('original=')>-1?`original="&&"`:item.indexOf('<img src=')>-1?`<img src="&&"`:"");
                                 vod_url = getBetweenStr(item, extdata["链接"]);
                                 vod_url = /^http/.test(vod_url) ? vod_url : vodhost + vod_url;
                                 vod_name = getBetweenStr(item, extdata["标题"]);
@@ -663,7 +659,6 @@ function getYiData(jkdata, batchTest) {
 
                 let vodlist = getBetweenStrS(gethtml, extdata["数组"]);
                 vodlist.forEach(item => {
-                    extdata["图片"] = extdata["图片"] || (item.indexOf('original=')>-1?`original="&&"`:item.indexOf('<img src=')>-1?`<img src="&&"`:"");
                     vod_url = getBetweenStr(item, extdata["链接"]);
                     vod_url = /^http/.test(vod_url) ? vod_url : vodhost + vod_url;
                     vod_name = getBetweenStr(item, extdata["标题"]);
@@ -1409,17 +1404,17 @@ function getErData(jkdata, erurl) {
                 let arthtml = getBetweenStr(html, extdata["线路二次截取"], 1);
                 //let artlist = arthtml.match(new RegExp(extdata["线路数组"].replace('&&', '((?:.|[\r\n])*?)'), 'g')) || [];
                 let artlist = getBetweenStrS(arthtml, extdata["线路数组"]||"</span><h3&&</div>");
-                log(artlist);
+
                 for (let i = 0; i < artlist.length; i++) {
                     let arttitle = getBetweenStr(artlist[i], extdata["线路标题"]||">&&</");
                     if(arttitle){
                         tabs.push(arttitle);//.replace(/<\/?.+?\/?>/g, '')
                     }
                 }
-                log(tabs);
+
                 let conthtml = getBetweenStr(html, extdata["播放二次截取"], 1);
                 let contlist = getBetweenStrS(conthtml, extdata["播放数组"]||"id=\"playList&&</dd>||<ul class=\"stui-content__playlist&&</ul>");
-                log(contlist);
+
                 for (let i = 0; i < contlist.length; i++) {
                     let bfline = extdata["播放列表"] ? getBetweenStrS(contlist[i], extdata["播放列表"]) : pdfa(contlist[i], "body&&a");
                     let cont = [];
@@ -1658,7 +1653,7 @@ function extDataCache(jkdata) {
                 })
                 extdata["主页"] = getHome(extdata["主页url"]||extdata["分类url"]);
                 extdata["分类url"] = (extdata["分类url"] || "").split(';;')[0].split('[')[0];
-                extdata["图片"] = extdata["图片"]===`< img src="&&"`?`img src="&&"||<IMG* src="&&"||original="&&"`:extdata["图片"];
+                extdata["图片"] = extdata["图片"] || `original="&&"||img src="&&"||<IMG* src="&&"`;
                 extdata["链接"] = extdata["链接"] || `href="&&"`;
                 extdata["标题"] = extdata["标题"] || `title="&&"`;
                 extdata["数组"] = extdata["数组"] || `<a &&</a>`;
