@@ -1656,7 +1656,7 @@ function extDataCache(jkdata) {
                 extdata["图片"] = extdata["图片"] || `original="&&"||img src="&&"||<IMG* src="&&"`;
                 extdata["链接"] = extdata["链接"] || `href="&&"`;
                 extdata["标题"] = extdata["标题"] || `title="&&"`;
-                extdata["数组"] = extdata["数组"] || `<a &&</a>`;
+                extdata["数组"] = extdata["数组"] || `<li&&</li>||<a &&</a>`;
             }
             return extdata;
         } else {
