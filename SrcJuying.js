@@ -961,7 +961,11 @@ function dianboyiji(testSource) {
                 });
             }else{
                 require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyData.js');
+                log('开始获取一级数据');
+                let t1 = new Date().getTime();
                 yidata = getYiData(jkdata);
+                let t2 = new Date().getTime();
+                log('获取一级数据完成，耗时：' + (t2-t1) + 'ms');
             }
 
             let fllists = yidata.fllists;
