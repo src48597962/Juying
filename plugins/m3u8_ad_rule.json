@@ -1,23 +1,31 @@
 [
     {
-        "name": "量子",
+        "name": "量非",
         "hosts": [
             "vip.lz",
             "hd.lz",
-            "v.cdnlz"
-        ],
-        "regex": [
-            "18.5333","23.466666"
-        ]
-    },
-    {
-        "name": "非凡",
-        "hosts": [
+            "v.cdnlz",
             "vip.ffzy",
-            "hd.ffzy"
+            "hd.ffzy",
+            "super.ffzy"
         ],
         "regex": [
-            "25.1","18.266"
+            "25.1","18.266",
+            "18.5333","23.466666",
+            "#EXT-X-DISCONTINUITY\r*\n*#EXTINF:6.666667,[\\s\\S]*?#EXT-X-DISCONTINUITY",
+            "#EXT-X-DISCONTINUITY\r*\n*#EXTINF:6.600000,[\\s\\S]*?#EXT-X-DISCONTINUITY",
+            "#EXTINF.*?\\s+.*?1o.*?\\.ts\\s+",
+            "#EXTINF.*?\\s+.*?11697777.*?\\.ts\\s+",
+            "#EXTINF.*?\\s+.*?p1ayer.*?\\.ts\\s+",
+            "#EXT-X-DISCONTINUITY\\r*\\n*#EXTINF:7\\.166667,[\\s\\S]*?#EXT-X-DISCONTINUITY",
+            "#EXT-X-DISCONTINUITY\\r*\\n*#EXTINF:4\\.066667,[\\s\\S]*?#EXT-X-DISCONTINUITY",
+            "17.19",
+            "#EXT-X-DISCONTINUITY\\r*\\n*#EXTINF:6\\.400000,[\\s\\S]*?#EXT-X-DISCONTINUITY",
+            "#EXTINF.*?\\s+.*?1171(057).*?\\.ts",
+            "#EXTINF.*?\\s+.*?6d7b(077).*?\\.ts",
+            "#EXTINF.*?\\s+.*?6718a(403).*?\\.ts",
+            "17.99",
+            "14.45"
         ]
     },
     {
@@ -32,7 +40,8 @@
             "10.3333",
             "10.85",
             "12.33",
-            "16.0599"
+            "16.0599",
+            "10.0099"
         ]
     },
     {
@@ -42,16 +51,20 @@
         ],
         "regex": [
             "15.1666",
-            "15.2666"
+            "15.2666",
+            "#EXT-X-DISCONTINUITY\\r*\\n*#EXTINF:7.680000,[\\s\\S]*?#EXT-X-DISCONTINUITY",
+            "#EXTINF.*?\\s+.*?1o.*?\\.ts\\s+"
         ]
     },
     {
         "name": "暴風",
         "hosts": [
-            "bfzy","ddbbffcdn","rrcdnbf","bbffvip"
+            "bfengbf.com","bfzy","ddbbffcdn","rrcdnbf","bbffvip"
         ],
         "regex": [
-            "#EXT-X-DISCONTINUITY\\r*\\n*#EXTINF:3,[\\s\\S]*?#EXT-X-DISCONTINUITY"
+            "#EXTINF.*?\\s+.*?adjump.*?\\.ts\\s+",
+            "#EXT-X-DISCONTINUITY\r*\n*#EXTINF:3,[\\s\\S]*?#EXT-X-DISCONTINUITY",
+            "#EXTINF.*?\\s+.*?1o.*?\\.ts\\s+"
         ]
     },
     {
@@ -61,6 +74,30 @@
         ],
         "regex": [
             "#EXT-X-DISCONTINUITY\\r*\\n*#EXTINF:8,[\\s\\S]*?#EXT-X-DISCONTINUITY"
+        ]
+    },
+    {
+        "name": "开源棋牌",
+        "hosts": [
+            "askzycdn",
+            "jkunbf",
+            "bfikuncdn",
+            "bfaskcdn"
+        ],
+        "regex": [
+            "#EXT-X-KEY:METHOD=NONE\r*\n*#EXTINF:5,[\\s\\S]*?#EXT-X-DISCONTINUITY",
+            "#EXT-X-KEY:METHOD=AES-128,URI=\"[^\"]+\"\r*\n*#EXTINF:3.333,[\\s\\S]*?#EXT-X-DISCONTINUITY"
+        ]
+    },
+    {
+        "name": "快看",
+        "hosts": [
+            "kuaikan"
+        ],
+        "regex": [
+            "#EXT-X-KEY:METHOD=NONE\\r*\\n*#EXTINF:5,[\\s\\S]*?#EXT-X-DISCONTINUITY",
+            "#EXT-X-KEY:METHOD=NONE\\r*\\n*#EXTINF:2\\.4,[\\s\\S]*?#EXT-X-DISCONTINUITY",
+            "#EXT-X-KEY:METHOD=NONE\\r*\\n*#EXTINF:1\\.467,[\\s\\S]*?#EXT-X-DISCONTINUITY"
         ]
     }
 ]
