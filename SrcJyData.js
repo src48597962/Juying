@@ -1408,7 +1408,7 @@ function getErData(jkdata, erurl) {
             try {
                 let arthtml = getBetweenStr(html, extdata["线路二次截取"], 1);
                 //let artlist = arthtml.match(new RegExp(extdata["线路数组"].replace('&&', '((?:.|[\r\n])*?)'), 'g')) || [];
-                let artlist = getBetweenStrS(arthtml, extdata["线路数组"]);
+                let artlist = getBetweenStrS(arthtml, extdata["线路数组"]||"</span><h3&&</h3>");
                 for (let i = 0; i < artlist.length; i++) {
                     let arttitle = getBetweenStr(artlist[i], extdata["线路标题"]||">&&</");
                     if(arttitle){
@@ -1417,7 +1417,7 @@ function getErData(jkdata, erurl) {
                 }
 
                 let conthtml = getBetweenStr(html, extdata["播放二次截取"], 1);
-                let contlist = getBetweenStrS(conthtml, extdata["播放数组"]||"id=\"playList&&</dd>");
+                let contlist = getBetweenStrS(conthtml, extdata["播放数组"]||"id=\"playList&&</dd>||<ul&&</ul>");
                 for (let i = 0; i < contlist.length; i++) {
                     let bfline = extdata["播放列表"] ? getBetweenStrS(contlist[i], extdata["播放列表"]) : pdfa(contlist[i], "body&&a");
                     let cont = [];
