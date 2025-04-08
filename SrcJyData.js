@@ -14,6 +14,7 @@ function getYiData(jkdata, batchTest) {
     let vodhost, classurl, listurl, detailurl, listnode, extdata, noerji, coltype;
     let page = batchTest?1:MY_PAGE;
     let sniffer = {};//嗅探词:contain包含，exclude排除
+    log('当前源接口：['+api_type+'] '+api_name);
 
     //分类变量
     let fold = batchTest?"0":getMyVar('SrcJu_dianbo$fold', "0");//是否展开小分类筛选
@@ -559,7 +560,7 @@ function getYiData(jkdata, batchTest) {
             }
         }
     }
-
+    log('分类&推荐>生成结束');
     if (listurl && cate_id!="tj" && !error.fl) {
         try {
             fl.cateId = fl.cateId || cate_id;
@@ -600,6 +601,7 @@ function getYiData(jkdata, batchTest) {
             } else {
                 eval(`listurl = \`${listurl}\`;`);
             }
+            log('分类请求url>'+listurl);
             vodlists = [];
             let vod_name, vod_pic, vod_url, vod_desc;
             if (api_type=="hipy_t4") {
@@ -659,9 +661,6 @@ function getYiData(jkdata, batchTest) {
                 let gethtml = getHtml(listurl, headers);
                 gethtml = getBetweenStr(gethtml, extdata["二次截取"], 1);
 
-                extdata["链接"] = extdata["链接"] || `href="&&"`;
-                extdata["标题"] = extdata["标题"] || `title="&&"`;
-                extdata["数组"] = extdata["数组"] || `<a &&</a>`;
                 let vodlist = getBetweenStrS(gethtml, extdata["数组"]);
                 vodlist.forEach(item => {
                     extdata["图片"] = extdata["图片"] || (item.indexOf('original=')>-1?`original="&&"`:item.indexOf('<img src=')>-1?`<img src="&&"`:"");
@@ -1026,7 +1025,7 @@ function getSsData(name, jkdata, page) {
                             let title = getBetweenStr(sslist[i], (extdata["搜索标题"]||extdata["标题"]));
                             let href = getBetweenStr(sslist[i], (extdata["搜索链接"]||extdata["链接"]).replace(`+\"id\":`, '').replace(`,+.`, '.'));
                             let img = getBetweenStr(sslist[i], (extdata["搜索图片"]||extdata["图片"]));
-                            let desc = getBetweenStr(sslist[i], (extdata["搜索副标题"]||extdata["副标题"]));
+                            let desc = getBetweenStr(sslist[i], (extdata["搜索副标题"]||extdata["副标题"]||""));
                             if(title&&href){
                                 lists.push({ "id": /^http/.test(href) ? href : vodhost + href, "name": title, "pic": img, "desc": desc })
                             }
@@ -1035,10 +1034,10 @@ function getSsData(name, jkdata, page) {
                         let ssjosn = dealJson(gethtml);
                         let sslist = getJsonValue(ssjosn, extdata["搜索数组"]);
                         for (let i = 0; i < sslist.length; i++) {
-                            let 标题 = (extdata["搜索标题"]||extdata["标题"]);
-                            let 链接 = (extdata["搜索链接"]||extdata["链接"]);
-                            let 图片 = (extdata["搜索图片"]||extdata["图片"]);
-                            let 副标 = (extdata["搜索副标题"]||extdata["副标题"]);
+                            let 标题 = extdata["搜索标题"]||extdata["标题"];
+                            let 链接 = extdata["搜索链接"]||extdata["链接"];
+                            let 图片 = extdata["搜索图片"]||extdata["图片"];
+                            let 副标 = extdata["搜索副标题"]||extdata["副标题"]||"";
                             let id = getJsonValue(sslist[i],'id');
                             let en = getJsonValue(sslist[i],'en');
 
@@ -1658,6 +1657,9 @@ function extDataCache(jkdata) {
                 extdata["主页"] = getHome(extdata["主页url"]||extdata["分类url"]);
                 extdata["分类url"] = (extdata["分类url"] || "").split(';;')[0].split('[')[0];
                 extdata["图片"] = extdata["图片"]===`< img src="&&"`?`img src="&&"||<IMG* src="&&"||original="&&"`:extdata["图片"];
+                extdata["链接"] = extdata["链接"] || `href="&&"`;
+                extdata["标题"] = extdata["标题"] || `title="&&"`;
+                extdata["数组"] = extdata["数组"] || `<a &&</a>`;
             }
             return extdata;
         } else {
