@@ -1408,7 +1408,7 @@ function getErData(jkdata, erurl) {
             try {
                 let arthtml = getBetweenStr(html, extdata["线路二次截取"], 1);
                 //let artlist = arthtml.match(new RegExp(extdata["线路数组"].replace('&&', '((?:.|[\r\n])*?)'), 'g')) || [];
-                let artlist = getBetweenStrS(arthtml, extdata["线路数组"]||"</span><h3&&</h3>");
+                let artlist = getBetweenStrS(arthtml, extdata["线路数组"]||"</span><h3&&</div>");
                 log(artlist);
                 for (let i = 0; i < artlist.length; i++) {
                     let arttitle = getBetweenStr(artlist[i], extdata["线路标题"]||">&&</");
