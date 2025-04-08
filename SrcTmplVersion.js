@@ -5,7 +5,9 @@ var newVersion = {
     "JYUpdateRecords": [{
         title: "beta V2.7",
         records: [
-            "优化：直播源兼容性提升"
+            "优化：直播源兼容性提升",
+            "优化：XBPQ源兼容性提升",
+            "优化：广告及点击播放完善"
         ]
     },{
         title: "2025/03/18 V2.6",
