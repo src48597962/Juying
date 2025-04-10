@@ -608,6 +608,8 @@ var SrcParseS = {
                     names: x5namelist,
                     danmu: dm
                 }); 
+            }else if(dataObj.parse["stype"]=="test"){
+                return "video://"+dataObj.parse["url"]+vipUrl;
             }else{
                 return 'toast://解析失败';
             }
@@ -828,8 +830,6 @@ var SrcParseS = {
                 var gethtml = getjson.body;
                 var rurl = "";
                 var isjson = 0;
-                log(obj.video);
-                log(obj.ulist.stype);
                 try {
                     let json =JSON.parse(gethtml);
                     //log(json);
@@ -840,9 +840,6 @@ var SrcParseS = {
                         rurl = getjson.url;
                     }else if(/\.m3u8|\.mp4/.test(gethtml) && geturl(gethtml)){
                         rurl = geturl(gethtml);
-                    }else if(obj.video && obj.ulist.stype=="test"){
-                        log("video来了");
-                        return "video://"+obj.ulist.url+obj.vipUrl;
                     }else if((MY_NAME=="海阔视界"&&getAppVersion()>=4094)||(MY_NAME=="嗅觉浏览器"&&getAppVersion()>=1359)){
                         require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyMethod.js');
                         let purl = obj.ulist.url+obj.vipUrl;
