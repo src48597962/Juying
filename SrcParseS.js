@@ -774,6 +774,7 @@ var SrcParseS = {
         }
 
         if(obj.isWeb){
+            log("1");
             require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyMethod.js');
             if(obj.music){
                 return exeWebRule({webUrl:obj.vipUrl}, 1, obj.js) || "toast://嗅探解析失败";
@@ -785,6 +786,7 @@ var SrcParseS = {
                 }
                 return 'video://'+obj.vipUrl;
             }else{
+                log("2");
                 return exeWebRule({webUrl:obj.vipUrl}, 0, obj.js||extraJS(obj.vipUrl)) || "toast://WebRule获取失败，可试试video";
             }
         }else if(/^function/.test(obj.ulist.url.trim())){
@@ -807,6 +809,7 @@ var SrcParseS = {
             }
             return {url: rurl || "", ulist: obj.ulist}; 
         }else{
+            log("3");
             let taskheader = {withStatusCode:true,timeout:8000};
             let uext = obj.ulist.ext || {};
             let head = uext.header || {};
