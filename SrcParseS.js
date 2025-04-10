@@ -768,8 +768,8 @@ var SrcParseS = {
                     //js: js,
                     //ua: head['user-agent'] || MOBILE_UA,
                     //referer: head['referer'] || undefined,
-                    checkTime: 100,
-                    timeout: 12000
+                    checkTime: 300,
+                    timeout: 120000
                 }
             )
         }
