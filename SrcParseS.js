@@ -764,10 +764,10 @@ var SrcParseS = {
                     }
                 },music), {
                     //blockRules: ['.m4a','.mp3','.gif','.jpg','.jpeg','.png','.ico','hm.baidu.com','/ads/*.js','/klad/*.php','layer.css'],
-                    jsLoadingInject: true,
-                    js: js,
-                    ua: head['user-agent'] || MOBILE_UA,
-                    referer: head['referer'] || undefined,
+                    //jsLoadingInject: true,
+                    //js: js,
+                    //ua: head['user-agent'] || MOBILE_UA,
+                    //referer: head['referer'] || undefined,
                     checkTime: 100,
                     timeout: 12000
                 }
