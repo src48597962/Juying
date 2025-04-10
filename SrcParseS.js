@@ -810,7 +810,6 @@ var SrcParseS = {
             return {url: rurl || "", ulist: obj.ulist}; 
         }else{
             //url解析
-            
             let taskheader = {withStatusCode:true,timeout:8000};
             let uext = obj.ulist.ext || {};
             let head = uext.header || {};
@@ -829,6 +828,8 @@ var SrcParseS = {
                 var gethtml = getjson.body;
                 var rurl = "";
                 var isjson = 0;
+                log(obj.video);
+                log(obj.ulist.stype);
                 try {
                     let json =JSON.parse(gethtml);
                     //log(json);
@@ -840,6 +841,7 @@ var SrcParseS = {
                     }else if(/\.m3u8|\.mp4/.test(gethtml) && geturl(gethtml)){
                         rurl = geturl(gethtml);
                     }else if(obj.video && obj.ulist.stype=="test"){
+                        log("video来了");
                         return "video://"+obj.ulist.url+obj.vipUrl;
                     }else if((MY_NAME=="海阔视界"&&getAppVersion()>=4094)||(MY_NAME=="嗅觉浏览器"&&getAppVersion()>=1359)){
                         require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyMethod.js');
