@@ -408,6 +408,7 @@ var SrcParseS = {
                     param: {
                         ulist: list,
                         vipUrl: vipUrl,
+                        video: playSet.video,
                         isTest: playSet.isTest || 0,
                         testVideo: this.testVideo,
                         parsemode: 1
@@ -759,10 +760,10 @@ var SrcParseS = {
                             }
                         }
                     }catch(e){
-                        //fba.log(e.message);
+                        fba.log(e.message);
                     }
                 },music), {
-                    blockRules: ['.m4a','.mp3','.gif','.jpg','.jpeg','.png','.ico','hm.baidu.com','/ads/*.js','/klad/*.php','layer.css'],
+                    //blockRules: ['.m4a','.mp3','.gif','.jpg','.jpeg','.png','.ico','hm.baidu.com','/ads/*.js','/klad/*.php','layer.css'],
                     jsLoadingInject: true,
                     js: js,
                     ua: head['user-agent'] || MOBILE_UA,
@@ -774,7 +775,7 @@ var SrcParseS = {
         }
 
         if(obj.isWeb){
-            log("1");
+            //网页播放页，非官源解析
             require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyMethod.js');
             if(obj.music){
                 return exeWebRule({webUrl:obj.vipUrl}, 1, obj.js) || "toast://嗅探解析失败";
@@ -786,10 +787,10 @@ var SrcParseS = {
                 }
                 return 'video://'+obj.vipUrl;
             }else{
-                log("2");
                 return exeWebRule({webUrl:obj.vipUrl}, 0, obj.js||extraJS(obj.vipUrl)) || "toast://WebRule获取失败，可试试video";
             }
         }else if(/^function/.test(obj.ulist.url.trim())){
+            //js解析
             obj.ulist['x5'] = 0;
             let rurl;
             try{
@@ -809,7 +810,8 @@ var SrcParseS = {
             }
             return {url: rurl || "", ulist: obj.ulist}; 
         }else{
-            log("3");
+            //url解析
+            
             let taskheader = {withStatusCode:true,timeout:8000};
             let uext = obj.ulist.ext || {};
             let head = uext.header || {};
@@ -838,6 +840,8 @@ var SrcParseS = {
                         rurl = getjson.url;
                     }else if(/\.m3u8|\.mp4/.test(gethtml) && geturl(gethtml)){
                         rurl = geturl(gethtml);
+                    }else if(obj.video && obj.isTest){
+                        return "video://"+obj.ulist.url+obj.vipUrl;
                     }else if((MY_NAME=="海阔视界"&&getAppVersion()>=4094)||(MY_NAME=="嗅觉浏览器"&&getAppVersion()>=1359)){
                         require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyMethod.js');
                         let purl = obj.ulist.url+obj.vipUrl;
