@@ -409,8 +409,7 @@ var SrcParseS = {
                         ulist: list,
                         vipUrl: vipUrl,
                         video: playSet.video,
-                        isTest: playSet.isTest || 0,
-                        testVideo: this.testVideo,
+                        testVideo: playSet.isTest?this.testVideo:undefined,
                         parsemode: 1
                     },
                     id: list.parse
@@ -804,7 +803,7 @@ var SrcParseS = {
                 if(/^toast/.test(rurl)){
                     log(obj.ulist.name+'>提示：'+rurl.replace('toast://',''));
                     rurl = "";
-                }else if(obj.isTest && /^http/.test(rurl) && obj.testVideo(rurl,obj.ulist.name)==0){
+                }else if(obj.testVideo && /^http/.test(rurl) && obj.testVideo(rurl,obj.ulist.name)==0){
                     rurl = "";
                 }
             }
@@ -840,7 +839,7 @@ var SrcParseS = {
                         rurl = getjson.url;
                     }else if(/\.m3u8|\.mp4/.test(gethtml) && geturl(gethtml)){
                         rurl = geturl(gethtml);
-                    }else if(obj.video && obj.isTest){
+                    }else if(obj.video && obj.ulist.stype=="test"){
                         return "video://"+obj.ulist.url+obj.vipUrl;
                     }else if((MY_NAME=="海阔视界"&&getAppVersion()>=4094)||(MY_NAME=="嗅觉浏览器"&&getAppVersion()>=1359)){
                         require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyMethod.js');
@@ -861,7 +860,7 @@ var SrcParseS = {
                         x5 = 1;
                     }
                 }else{
-                    if(obj.isTest && /^http/.test(rurl) && obj.testVideo(rurl,obj.ulist.name)==0){
+                    if(obj.testVideo && /^http/.test(rurl) && obj.testVideo(rurl,obj.ulist.name)==0){
                         rurl = "";
                     }
                 }
