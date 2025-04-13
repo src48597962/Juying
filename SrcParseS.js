@@ -78,7 +78,7 @@ if(!config.聚影 && getPublicItem('聚影','')){
     });
 }
 function decodeURI(input){
-    if(input && input.includes("%2F%2F")){
+    if($.type(input)=="string" && input.includes("%2F%2F")){
         return decodeURIComponent(input);
     }
     return input;
@@ -131,7 +131,7 @@ var SrcParseS = {
             }else if(/do=ali/.test(play.url) && /alipan\.com|aliyundrive\.com/.test(vipUrl)){
                 play.url = vipUrl;
             }
-            vipUrl = play.url || vipUrl;
+            vipUrl = decodeURI(play.url) || vipUrl;
         }
 
         log("请求地址："+vipUrl); 
