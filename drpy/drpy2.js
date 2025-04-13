@@ -8,7 +8,8 @@ const NODERSA = $.require(testPath + "node-rsa.js");
 const JSEncrypt = $.require(testPath + "jsencrypt.js");
 const JINJA = $.require(testPath+"jinja.min.js");
 const JP = $.require(testPath+"jsonpathplus.min.js");
-
+const JSON5=$.require(testPath+"json5.js");
+require(testPath+"external.js");
 const cheerio = {
     jinja2(template, obj) {
         return JINJA.render(template, obj);
