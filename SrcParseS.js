@@ -751,6 +751,11 @@ var SrcParseS = {
                         var exclude = /\/404\.m3u8|\/xiajia\.mp4|\/余额不足\.m3u8|\.avif|\.css|\.js|\.gif|\.png|\.jpg|\.jpeg|html,http|m3u88.com\/admin|\.php\?v=h|\?url=h|\?vid=h|%253Furl%253Dh|#amp=1|\.t-ui\.cn|ac=dm/;//设置排除地址
                         var contain = /\.mp4|\.m3u8|\.flv|\.avi|\.mpeg|\.wmv|\.mov|\.rmvb|\.dat|qqBFdownload|mime=video%2F|video_mp4|\.ts\?|TG@UosVod|video\/tos\/|m3u8\?pt=m3u8/;//设置符合条件的正确地址
                         for (var i in urls) {
+                            if(/url=h|v=h|youku|mgtv|ixigua|qq\.com|iqiyi|migu|bilibili|sohu|pptv|\.le\.|\.1905|cctv/.test(urls[i])&&!/\/bid\?|\.gif\?|ads\?|img\.php|index\/\?|cityjson/.test(urls[i])){
+                                try{
+                                    fba.log("获取解析>"+urls[i].match(/http.*?=/)[0]);
+                                }catch(e){}
+                            }
                             if(music){
                                 if(/\.mp3|\.m4a/.test(urls[i])){
                                     return fy_bridge_app.getHeaderUrl(urls[i]) + '#isMusic=true##checkMetadata=false#';
