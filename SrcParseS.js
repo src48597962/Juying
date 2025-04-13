@@ -608,7 +608,7 @@ var SrcParseS = {
                     names: x5namelist,
                     danmu: dm
                 }); 
-            }else if(dataObj.parse["stype"]=="test"){
+            }else if(dataObj.parse["stype"]=="test" && !dataObj.parse["url"].includes('key=')){
                 return "video://"+dataObj.parse["url"]+vipUrl;
             }else{
                 return 'toast://解析失败';
