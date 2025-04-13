@@ -77,10 +77,17 @@ if(!config.聚影 && getPublicItem('聚影','')){
         聚影: getPublicItem('聚影','')
     });
 }
+function decodeURI(input){
+    if(input && input.includes("%2F%2F")){
+        return decodeURIComponent(input);
+    }
+    return input;
+}
 
 var SrcParseS = {
     聚影: function (vipUrl, dataObj) {
         //聚影采用新的、独立的解析逻辑
+        vipUrl = decodeURI(vipUrl);
         vipUrl = vipUrl.startsWith('tvbox-xg:')?vipUrl.replace('tvbox-xg:',''):vipUrl.startsWith('push://')?vipUrl.replace('push://',''):vipUrl
         let isVip = 0;
         let extrajs;
