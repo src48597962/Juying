@@ -49,7 +49,7 @@ function extraJS(playUrl) {
             check();
         },p1)
     }
-    if(/jqqzx\.me|dadazhu\.me|dadagui|freeok|dadagui/.test(playUrl)){
+    if(/jqqzx\.|dadazhu\.|dadagui|freeok/.test(playUrl)){
         return click1('#playleft iframe','#start');
     }else if(/media\.staticfile\.link/.test(playUrl)){
         return click2();
