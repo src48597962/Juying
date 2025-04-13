@@ -741,8 +741,7 @@ var SrcParseS = {
             if(webUrl.includes('=http')){
                 
             }
-            return executeWebRule(webUrl, $.toString((music) => {
-                fba.log(input);
+            return executeWebRule(webUrl, $.toString((music,webUrl) => {
                 try{
                     if (typeof (request) == 'undefined' || !request) {
                         eval(fba.getInternalJs());
@@ -752,7 +751,7 @@ var SrcParseS = {
                     var exclude = /\/404\.m3u8|\/xiajia\.mp4|\/余额不足\.m3u8|\.avif|\.css|\.js|\.gif|\.png|\.jpg|\.jpeg|html,http|m3u88.com\/admin|\.php\?v=h|\?url=h|\?vid=h|%253Furl%253Dh|#amp=1|\.t-ui\.cn|ac=dm/;//设置排除地址
                     var contain = /\.mp4|\.m3u8|\.flv|\.avi|\.mpeg|\.wmv|\.mov|\.rmvb|\.dat|qqBFdownload|mime=video%2F|video_mp4|\.ts\?|TG@UosVod|video\/tos\/|m3u8\?pt=m3u8/;//设置符合条件的正确地址
                     for (var i in urls) {
-                        if(!fba.putVar("getParse") && /url=h|v=h|youku|mgtv|ixigua|qq\.com|iqiyi|migu|bilibili|sohu|pptv|\.le\.|\.1905|cctv/.test(urls[i])&&!/\/bid\?|\.gif\?|ads\?|img\.php|index\/\?|cityjson/.test(urls[i])){
+                        if(!fba.getVar("getParse") && !webUrl.includes("=http") && /url=h|v=h|youku|mgtv|ixigua|qq\.com|iqiyi|migu|bilibili|sohu|pptv|\.le\.|\.1905|cctv/.test(urls[i])&&!/\/bid\?|\.gif\?|ads\?|img\.php|index\/\?|cityjson/.test(urls[i])){
                             try{
                                 fba.log("获取解析>"+urls[i].match(/http.*?=/)[0]);
                                 fba.putVar("getParse","1");
@@ -771,7 +770,7 @@ var SrcParseS = {
                 }catch(e){
                     fba.log("exeWebRule失败>"+e.message);
                 }
-            },music), {
+            },music,webUrl), {
                 blockRules: ['.m4a','.mp3','.gif','.jpg','.jpeg','.png','.ico','hm.baidu.com','/ads/*.js','/klad/*.php','layer.css'],
                 jsLoadingInject: true,
                 js: js,
