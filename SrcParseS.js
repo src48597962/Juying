@@ -742,42 +742,44 @@ var SrcParseS = {
                 
             }
             return executeWebRule(webUrl, $.toString((music) => {
-                    try{
-                        if (typeof (request) == 'undefined' || !request) {
-                            eval(fba.getInternalJs());
-                        };
-                        var urls = _getUrls();
-                        //fba.log(fy_bridge_app.getUrls());
-                        var exclude = /\/404\.m3u8|\/xiajia\.mp4|\/余额不足\.m3u8|\.avif|\.css|\.js|\.gif|\.png|\.jpg|\.jpeg|html,http|m3u88.com\/admin|\.php\?v=h|\?url=h|\?vid=h|%253Furl%253Dh|#amp=1|\.t-ui\.cn|ac=dm/;//设置排除地址
-                        var contain = /\.mp4|\.m3u8|\.flv|\.avi|\.mpeg|\.wmv|\.mov|\.rmvb|\.dat|qqBFdownload|mime=video%2F|video_mp4|\.ts\?|TG@UosVod|video\/tos\/|m3u8\?pt=m3u8/;//设置符合条件的正确地址
-                        for (var i in urls) {
-                            if(/url=h|v=h|youku|mgtv|ixigua|qq\.com|iqiyi|migu|bilibili|sohu|pptv|\.le\.|\.1905|cctv/.test(urls[i])&&!/\/bid\?|\.gif\?|ads\?|img\.php|index\/\?|cityjson/.test(urls[i])){
-                                try{
-                                    fba.log("获取解析>"+urls[i].match(/http.*?=/)[0]);
-                                }catch(e){}
-                            }
-                            if(music){
-                                if(/\.mp3|\.m4a/.test(urls[i])){
-                                    return fy_bridge_app.getHeaderUrl(urls[i]) + '#isMusic=true##checkMetadata=false#';
-                                }
-                            }else if (contain.test(urls[i])&&!exclude.test(urls[i])) {
-                                //fba.log("exeWebRule解析到>"+urls[i]);
-                                return fy_bridge_app.getHeaderUrl(urls[i]) + '#isVideo=true#';
-                            }
+                fba.log(input);
+                try{
+                    if (typeof (request) == 'undefined' || !request) {
+                        eval(fba.getInternalJs());
+                    };
+                    var urls = _getUrls();
+                    //fba.log(fy_bridge_app.getUrls());
+                    var exclude = /\/404\.m3u8|\/xiajia\.mp4|\/余额不足\.m3u8|\.avif|\.css|\.js|\.gif|\.png|\.jpg|\.jpeg|html,http|m3u88.com\/admin|\.php\?v=h|\?url=h|\?vid=h|%253Furl%253Dh|#amp=1|\.t-ui\.cn|ac=dm/;//设置排除地址
+                    var contain = /\.mp4|\.m3u8|\.flv|\.avi|\.mpeg|\.wmv|\.mov|\.rmvb|\.dat|qqBFdownload|mime=video%2F|video_mp4|\.ts\?|TG@UosVod|video\/tos\/|m3u8\?pt=m3u8/;//设置符合条件的正确地址
+                    for (var i in urls) {
+                        if(!fba.putVar("getParse") && /url=h|v=h|youku|mgtv|ixigua|qq\.com|iqiyi|migu|bilibili|sohu|pptv|\.le\.|\.1905|cctv/.test(urls[i])&&!/\/bid\?|\.gif\?|ads\?|img\.php|index\/\?|cityjson/.test(urls[i])){
+                            try{
+                                fba.log("获取解析>"+urls[i].match(/http.*?=/)[0]);
+                                fba.putVar("getParse","1");
+                            }catch(e){}
                         }
-                    }catch(e){
-                        fba.log("exeWebRule失败>"+e.message);
+                        if(music){
+                            if(/\.mp3|\.m4a/.test(urls[i])){
+                                return fy_bridge_app.getHeaderUrl(urls[i]) + '#isMusic=true##checkMetadata=false#';
+                            }
+                        }else if (contain.test(urls[i])&&!exclude.test(urls[i])) {
+                            fba.clearVar('getParse');
+                            //fba.log("exeWebRule解析到>"+urls[i]);
+                            return fy_bridge_app.getHeaderUrl(urls[i]) + '#isVideo=true#';
+                        }
                     }
-                },music), {
-                    blockRules: ['.m4a','.mp3','.gif','.jpg','.jpeg','.png','.ico','hm.baidu.com','/ads/*.js','/klad/*.php','layer.css'],
-                    jsLoadingInject: true,
-                    js: js,
-                    ua: head['user-agent'] || MOBILE_UA,
-                    referer: head['referer'] || undefined,
-                    checkTime: 100,
-                    timeout: 12000
+                }catch(e){
+                    fba.log("exeWebRule失败>"+e.message);
                 }
-            )
+            },music), {
+                blockRules: ['.m4a','.mp3','.gif','.jpg','.jpeg','.png','.ico','hm.baidu.com','/ads/*.js','/klad/*.php','layer.css'],
+                jsLoadingInject: true,
+                js: js,
+                ua: head['user-agent'] || MOBILE_UA,
+                referer: head['referer'] || undefined,
+                checkTime: 100,
+                timeout: 12000
+            })
         }
 
         if(obj.isWeb){
