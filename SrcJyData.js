@@ -121,8 +121,8 @@ function getYiData(jkdata, batchTest) {
         var PythonHiker = $.require("hiker://files/plugins/chaquopy/PythonHiker.js");
         var pyModule = PythonHiker.runPy(api_url).callAttr("Spider");
         PythonHiker.callFunc(pyModule, "init", []);
-        classurl = "1";
-        listurl = "1";
+        classurl = "hiker://empty";
+        listurl = "hiker://empty";
     } else {
         log(api_type + '>api类型错误');
         return {
@@ -630,13 +630,10 @@ function getYiData(jkdata, batchTest) {
             let vod_name, vod_pic, vod_url, vod_desc;
             if (api_type=="py") {
                 let formatJo = PythonHiker.callFunc(pyModule, "categoryContent", cate_id, 1, true, {});
-                log(formatJo);
-                /*
-                let vodlist = JSON.parse(getHtml(listurl, headers)).list || [];
+                let vodlist = formatJo.list || [];
                 vodlist.forEach(it=>{
                     vodlists.push({ "vod_url": it.vod_id.toString(), "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic });
                 })
-                */
             }else if (api_type=="hipy_t4") {
                 let vodlist = JSON.parse(getHtml(listurl, headers)).list || [];
                 vodlist.forEach(it=>{
