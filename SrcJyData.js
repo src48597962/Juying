@@ -541,6 +541,9 @@ function getYiData(jkdata, batchTest) {
                         Object.entries(筛选).forEach(([key, value]) => {
                             //console.log(`Key: ${key}, Value: ${value}`);
                             if (key == cate_id) {
+                                if($.type(value)=="object"){
+                                    value = [value];
+                                }
                                 value.forEach(it => {
                                     if (it.value.length > 0) {
                                         fl[it.key] = fl[it.key] || it.value[0].v;
