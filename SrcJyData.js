@@ -839,7 +839,7 @@ function getSsData(name, jkdata, page) {
                 vodhost = getHome(ssurl);
             }
         }
-    } else if (api_type=="hipy_t3" || api_type=="hipy_t4") {
+    } else if (api_type=="hipy_t3" || api_type=="hipy_t4" || api_type=="py") {
         detailurl = "";
         listnode = "json.list";
     } else {
@@ -895,9 +895,15 @@ function getSsData(name, jkdata, page) {
     let lists = [];
     let gethtml = "";
     try {
-        if (/v1|app|iptv|v2|cms|hipy_/.test(api_type)) {
+        if (/v1|app|iptv|v2|cms|hipy_|py/.test(api_type)) {
             let json;
-            if(api_type=="hipy_t4"){
+            if(api_type=="py"){
+                const PythonHiker = $.require("hiker://files/plugins/chaquopy/PythonHiker.js");
+                let pyModule = PythonHiker.runPy(api_url).callAttr("Spider");
+                PythonHiker.callFunc(pyModule, "init", []);
+                json = PythonHiker.callFunc(pyModule, "searchContent", name, false, PythonHiker.toInt(page));
+                log(json);
+            }else if(api_type=="hipy_t4"){
                 json = JSON.parse(getHtml(jkdata.url + (jkdata.url.includes("?")?"&":"?") +"wd="+name+"&extend="+jkdata.ext+"&quick=false", headers));
             }else if(api_type=="hipy_t3"){
                 let drpy = GM.defineModule("SrcJyDrpy", config.聚影.replace(/[^/]*$/,'') + "SrcJyDrpy.js").get(jkdata);
@@ -1572,7 +1578,6 @@ function getErData(jkdata, erurl) {
                 log(api_type + '获取数据失败>' + e.message + " 错误行#" + e.lineNumber);
             }
         } else if (api_type == 'py') {
-            log(html);
             try{
                 let json = html.list[0];
                 actor = json.vod_actor;
