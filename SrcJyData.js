@@ -1209,10 +1209,7 @@ function getErData(jkdata, erurl) {
         var PythonHiker = $.require("hiker://files/plugins/chaquopy/PythonHiker.js");
         var pyModule = PythonHiker.runPy(jkdata.url).callAttr("Spider");
         PythonHiker.callFunc(pyModule, "init", []);
-        let formatJo = PythonHiker.callFunc(pyModule, "detailContent", [erurl]);
-        log(formatJo);
-        //html = getHtml(jkdata.url + (jkdata.url.includes("?")?"&":"?") +"extend="+jkdata.ext+"&ac=detail&ids="+erurl, headers);
-        //detailtype = JSON.parse(html).type || (jkdata.name.includes('[书]')?"小说":"");
+        html = PythonHiker.callFunc(pyModule, "detailContent", [erurl]);
     } else {
         html = getHtml(erurl, headers);
     }
@@ -1571,6 +1568,24 @@ function getErData(jkdata, erurl) {
                 lists = json.vod_play_url.split('$$$').map(it => {
                     return it.split('#');
                 });
+            }catch(e){
+                log(api_type + '获取数据失败>' + e.message + " 错误行#" + e.lineNumber);
+            }
+        } else if (api_type == 'py') {
+            log($.type(html));
+            try{
+                /*
+                let json = JSON.parse(html).list[0];
+                actor = jkdata.name.includes('荐片')? getBetweenStrS(json.vod_actor, "name\":\"&&\"").join(',') : json.vod_actor;
+                area = json.vod_area;
+                remarks = jkdata.name.includes('荐片')? ("类型："+json.type_name+"    年份："+json.vod_year) : (json.vod_remarks || json.vod_class || "");
+                desc = json.vod_content || "";
+                pic = json.vod_pic;
+                tabs = json.vod_play_from.split('$$$');
+                lists = json.vod_play_url.split('$$$').map(it => {
+                    return it.split('#');
+                });
+                */
             }catch(e){
                 log(api_type + '获取数据失败>' + e.message + " 错误行#" + e.lineNumber);
             }
