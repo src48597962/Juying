@@ -902,7 +902,6 @@ function getSsData(name, jkdata, page) {
                 let pyModule = PythonHiker.runPy(api_url).callAttr("Spider");
                 PythonHiker.callFunc(pyModule, "init", []);
                 json = PythonHiker.callFunc(pyModule, "searchContent", name, false, PythonHiker.toInt(page));
-                log(json);
             }else if(api_type=="hipy_t4"){
                 json = JSON.parse(getHtml(jkdata.url + (jkdata.url.includes("?")?"&":"?") +"wd="+name+"&extend="+jkdata.ext+"&quick=false", headers));
             }else if(api_type=="hipy_t3"){
