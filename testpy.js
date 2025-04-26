@@ -28,7 +28,7 @@ setResult(d);
 //其他小程序调用请用"hiker://files/plugins/chaquopy/PythonHiker.js"
 const PythonHiker = $.require("hiker://files/plugins/chaquopy/PythonHiker.js");
 const pyfile = "https://ghproxy.net/https://raw.githubusercontent.com/JJBJJ/PyramidStore/refs/heads/main/plugin/app/%E5%A5%87%E8%BF%B9APP.py";
-let testModule = PythonHiker.runPy(pyfile).callAttr(Spider);
+let testModule = PythonHiker.runPy(pyfile).callAttr("Spider");
 //let sp = testModule.Spider();
 //let formatJo = sp.init([]);
 //PythonHiker.callFunc(testModule, "init", [])
