@@ -30,9 +30,9 @@ const PythonHiker = $.require("hiker://files/plugins/chaquopy/PythonHiker.js");
 const pyfile = "https://ghproxy.net/https://raw.githubusercontent.com/JJBJJ/PyramidStore/refs/heads/main/plugin/app/%E5%A5%87%E8%BF%B9APP.py";
 let testModule = PythonHiker.runPy(pyfile).callAttr("Spider");
 //let sp = testModule.Spider();
-//let formatJo = sp.init([]);
+let formatJo = PythonHiker.callFunc(testModule, "init", []);
 //PythonHiker.callFunc(testModule, "init", [])
-let formatJo = testModule.homeContent(False);
+let formatJo = PythonHiker.callFunc(testModule, "homeContent", False);
 log(formatJo);
 //从指定路径加载py模块并返回模块句柄
 /*let testModule = PythonHiker.runPy(getPath("hiker://files/plugins/chaquopy/libs_py/test.py").slice(7), "__main__");
@@ -82,16 +82,84 @@ dc={"name":"LoyDgIk"}
 //log(PythonHiker.toJson(dict.asMap().get("dc")));
 log(PythonHiker.pyToJs(dict).dc)
 let phModule = PythonHiker.runPy("/storage/emulated/0/easybox/drpy_dzlive/drpy_py/胖虎.py", "__main__");
-setResult([{
-    title:"详细请查看代码",
-    col_type:"text_center_1"
-}])
+
 */
 /*
-PythonHiker.execCode(String.raw `
-from base.hiker import *
 
-setHomeResult([{"title":"ok", "col_type":"text_center_1"}])
-`)
 
+
+
+const PythonHiker = $.require("hiker://files/plugins/chaquopy/PythonHiker.js");
+
+let moduleInstances = new Map();
+
+function PyAdapter(source, pyurl, proxyUrl) {
+    this.api = source.api;
+    this.ext = source.ext || "";
+    this.redirect = !!source.redirect;
+    pyurl = pyurl.replace(/^(file\:\/\/)/, "");
+    
+    this.PySpider = PythonHiker.runPy(pyurl, source.key, true).callAttr("Spider");
+    this.PySpider.put("_HikerProxyUrl", String(proxyUrl + "?do=js&hikerSkey=" + source.key))
+    this.pyurl = pyurl;
+    this.rule = {
+        name: source.name,
+        host: source.ext,
+        一级: "true",
+        推荐: "true",
+        类型: "影视",
+        //模板: "自动"
+    };
+}
+Object.assign(PyAdapter.prototype, {
+    init() {
+        PythonHiker.callFunc(this.PySpider, "setExtendInfo", this.ext || "");
+        let mo = [];
+        try {
+            let depence = PythonHiker.callFunc(this.PySpider, "getDependence");
+            for (let de of depence) {
+                let url = de;
+                if (!url.startsWith("http")) {
+                    url = this.pyurl.replace(/([^\/]*?)$/, de + ".py");
+                }
+                if (!moduleInstances.has(de)) {
+                    moduleInstances.set(de, PythonHiker.runPy(url).callAttr("Spider"));
+                }
+                mo.push(moduleInstances.get(de))
+            }
+        } catch (e) {
+            log("py依赖加载失败:" + e.toString());
+        }
+
+        PythonHiker.callFunc(this.PySpider, "init", mo);
+    },
+    homeVod() {
+        return $.log(JSON.stringify(PythonHiker.callFunc(this.PySpider, "homeVideoContent") || {}));
+    },
+    home() {
+        return JSON.stringify(PythonHiker.callFunc(this.PySpider, "homeContent", true));
+    },
+    category(tid, pg, filter, extend) {
+        return JSON.stringify(PythonHiker.callFunc(this.PySpider, "categoryContent", tid, PythonHiker.toInt(pg), filter, PythonHiker.toPyJson(extend || {})));
+    },
+    detail(vod_url) {
+        return JSON.stringify(PythonHiker.callFunc(this.PySpider, "detailContent", PythonHiker.toPyJson([vod_url])));
+    },
+    play(flag, id) {
+        return JSON.stringify(PythonHiker.callFunc(this.PySpider, "playerContent", flag, id, PythonHiker.toPyJson([])));
+    },
+    search(wd, quick, pg) {
+        return JSON.stringify(PythonHiker.callFunc(this.PySpider, "searchContent", wd, false, PythonHiker.toInt(pg)));
+    },
+    proxy(param) {
+        return PythonHiker.callFunc(this.PySpider, "localProxy", param || {});
+    },
+    getRule(key) {
+        return key ? this.rule[key] : this.rule;
+    },
+    runMain() {
+        return "";
+    }
+});
+$.exports = PyAdapter;
 */
