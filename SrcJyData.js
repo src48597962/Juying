@@ -156,10 +156,19 @@ function getYiData(jkdata, batchTest) {
             } else {
                 try {
                     if (api_type == "py"){
-                        let formatJo = PythonHiker.callFunc(pyModule, "homeContent", false);
-                        log(formatJo);
-
-                        
+                        let home = PythonHiker.callFunc(pyModule, "homeContent", false);
+                        log(home);
+                        let typelist = home['class'] || [];
+                        typelist.forEach(v=>{
+                            分类.push(v.type_name + '$' + v.type_id);
+                        })
+                        筛选 = home['filters'];
+                        if(!batchTest){
+                            let homeVod = home['list'] || [];
+                            homeVod.forEach(it=>{
+                                推荐.push({ "vod_url": it.vod_id.toString(), "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic });
+                            })
+                        }
                     }else if (api_type == "hipy_t4"){
                         let home = JSON.parse(getHtml(classurl, headers));
                         let typelist = home['class'] || [];
