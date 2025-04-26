@@ -122,6 +122,7 @@ function getYiData(jkdata, batchTest) {
         var pyModule = PythonHiker.runPy(api_url).callAttr("Spider");
         PythonHiker.callFunc(pyModule, "init", []);
         classurl = "1";
+        listurl = "1";
     } else {
         log(api_type + '>api类型错误');
         return {
@@ -586,7 +587,9 @@ function getYiData(jkdata, batchTest) {
         try {
             fl.cateId = fl.cateId || cate_id;
             //拼接生成分类页url链接
-            if (api_type == 'hipy_t4'){
+            if (api_type == 'py'){
+                delete fl.cateId;
+            } else if (api_type == 'hipy_t4'){
                 delete fl.cateId;
                 listurl = listurl.replace('{cate_id}', cate_id).replace('{flb64}', base64Encode(JSON.stringify(fl)));
             } else if (api_type == "XYQ") {
@@ -625,7 +628,16 @@ function getYiData(jkdata, batchTest) {
             log('分类请求url>'+listurl);
             vodlists = [];
             let vod_name, vod_pic, vod_url, vod_desc;
-            if (api_type=="hipy_t4") {
+            if (api_type=="py") {
+                let formatJo = PythonHiker.callFunc(pyModule, "categoryContent", cate_id, 1, True, {});
+                log(formatJo);
+                /*
+                let vodlist = JSON.parse(getHtml(listurl, headers)).list || [];
+                vodlist.forEach(it=>{
+                    vodlists.push({ "vod_url": it.vod_id.toString(), "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic });
+                })
+                */
+            }else if (api_type=="hipy_t4") {
                 let vodlist = JSON.parse(getHtml(listurl, headers)).list || [];
                 vodlist.forEach(it=>{
                     vodlists.push({ "vod_url": it.vod_id.toString(), "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic });
