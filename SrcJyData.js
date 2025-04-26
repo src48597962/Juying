@@ -119,7 +119,7 @@ function getYiData(jkdata, batchTest) {
         //listnode = "json.list";
     } else if (api_type == "py") {
         var PythonHiker = $.require("hiker://files/plugins/chaquopy/PythonHiker.js");
-        let pyModule = PythonHiker.runPy(api_url).callAttr("Spider");
+        var pyModule = PythonHiker.runPy(api_url).callAttr("Spider");
         PythonHiker.callFunc(pyModule, "init", []);
         classurl = "1";
     } else {
