@@ -629,7 +629,7 @@ function getYiData(jkdata, batchTest) {
             vodlists = [];
             let vod_name, vod_pic, vod_url, vod_desc;
             if (api_type=="py") {
-                let formatJo = PythonHiker.callFunc(pyModule, "categoryContent", cate_id, 1, True, {});
+                let formatJo = PythonHiker.callFunc(pyModule, "categoryContent", cate_id, 1, true, {});
                 log(formatJo);
                 /*
                 let vodlist = JSON.parse(getHtml(listurl, headers)).list || [];
