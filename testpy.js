@@ -30,7 +30,7 @@ const PythonHiker = $.require("hiker://files/plugins/chaquopy/PythonHiker.js");
 const pyfile = "https://ghproxy.net/https://raw.githubusercontent.com/JJBJJ/PyramidStore/refs/heads/main/plugin/app/%E5%A5%87%E8%BF%B9APP.py";
 let testModule = PythonHiker.runPy(pyfile).callAttr("Spider");
 //let sp = testModule.Spider();
-PythonHiker.callFunc(testModule, "init", []);
+//PythonHiker.callFunc(testModule, "init", []);
 //PythonHiker.callFunc(testModule, "init", [])
 let formatJo = PythonHiker.callFunc(testModule, "homeContent", False);
 log(formatJo);
