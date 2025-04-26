@@ -560,7 +560,7 @@ function dianboerji() {
                 dataObj.flag = flag;
             }
             let lazy;
-            if(/hipy_/.test(jkdata.type)){
+            if(/hipy_|py/.test(jkdata.type)){
                 dataObj.stype = jkdata.type;
                 dataObj.sname = jkdata.name;
                 dataObj.surl = jkdata.url;
