@@ -629,7 +629,7 @@ function getYiData(jkdata, batchTest) {
             vodlists = [];
             let vod_name, vod_pic, vod_url, vod_desc;
             if (api_type=="py") {
-                let formatJo = PythonHiker.callFunc(pyModule, "categoryContent", fl.tid, page, true, PythonHiker.toPyJson(fl || {}));
+                let formatJo = PythonHiker.callFunc(pyModule, "categoryContent", fl.tid, PythonHiker.toInt(page), true, PythonHiker.toPyJson(fl || {}));
                 let vodlist = formatJo.list || [];
                 vodlist.forEach(it=>{
                     vodlists.push({ "vod_url": it.vod_id.toString(), "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic });
@@ -1205,6 +1205,14 @@ function getErData(jkdata, erurl) {
     } else if (api_type=="hipy_t4") {
         html = getHtml(jkdata.url + (jkdata.url.includes("?")?"&":"?") +"extend="+jkdata.ext+"&ac=detail&ids="+erurl, headers);
         detailtype = JSON.parse(html).type || (jkdata.name.includes('[书]')?"小说":"");
+    } else if (api_type=="py") {
+        var PythonHiker = $.require("hiker://files/plugins/chaquopy/PythonHiker.js");
+        var pyModule = PythonHiker.runPy(jkdata.url).callAttr("Spider");
+        PythonHiker.callFunc(pyModule, "init", []);
+        let formatJo = PythonHiker.callFunc(pyModule, "detailContent", [erurl]);
+        log(formatJo);
+        //html = getHtml(jkdata.url + (jkdata.url.includes("?")?"&":"?") +"extend="+jkdata.ext+"&ac=detail&ids="+erurl, headers);
+        //detailtype = JSON.parse(html).type || (jkdata.name.includes('[书]')?"小说":"");
     } else {
         html = getHtml(erurl, headers);
     }
