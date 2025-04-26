@@ -117,6 +117,11 @@ function getYiData(jkdata, batchTest) {
         classurl = api_url + (api_url.includes("?")?"&":"?") + "extend=" + jkdata.ext + "&filter=true";
         listurl = api_url + (api_url.includes("?")?"&":"?") + "t={cate_id}&ac=detail&pg="+page+"&extend="+jkdata.ext+"&ext={flb64}";
         //listnode = "json.list";
+    } else if (api_type == "hipy_t4") {
+        var PythonHiker = $.require("hiker://files/plugins/chaquopy/PythonHiker.js");
+        let pyModule = PythonHiker.runPy(api_url).callAttr("Spider");
+        PythonHiker.callFunc(pyModule, "init", []);
+        classurl = "1";
     } else {
         log(api_type + '>api类型错误');
         return {
@@ -150,7 +155,12 @@ function getYiData(jkdata, batchTest) {
                 筛选 = classCache.筛选;
             } else {
                 try {
-                    if (api_type == "hipy_t4"){
+                    if (api_type == "py"){
+                        let formatJo = PythonHiker.callFunc(pyModule, "homeContent", false);
+                        log(formatJo);
+
+                        
+                    }else if (api_type == "hipy_t4"){
                         let home = JSON.parse(getHtml(classurl, headers));
                         let typelist = home['class'] || [];
                         typelist.forEach(v=>{
