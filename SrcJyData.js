@@ -117,7 +117,7 @@ function getYiData(jkdata, batchTest) {
         classurl = api_url + (api_url.includes("?")?"&":"?") + "extend=" + jkdata.ext + "&filter=true";
         listurl = api_url + (api_url.includes("?")?"&":"?") + "t={cate_id}&ac=detail&pg="+page+"&extend="+jkdata.ext+"&ext={flb64}";
         //listnode = "json.list";
-    } else if (api_type == "hipy_t4") {
+    } else if (api_type == "py") {
         var PythonHiker = $.require("hiker://files/plugins/chaquopy/PythonHiker.js");
         let pyModule = PythonHiker.runPy(api_url).callAttr("Spider");
         PythonHiker.callFunc(pyModule, "init", []);
