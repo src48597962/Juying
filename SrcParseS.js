@@ -93,7 +93,7 @@ var SrcParseS = {
         let extrajs;
         dataObj = dataObj || {};
 
-        if(dataObj.stype && /hipy_/.test(dataObj.stype)){
+        if(dataObj.stype && /hipy_|py/.test(dataObj.stype)){
             let play = {url: ""};
             if(dataObj.stype=="hipy_t3"){
                 let sdata = {name: dataObj.sname, url: dataObj.surl, ext: dataObj.sext}
@@ -102,6 +102,11 @@ var SrcParseS = {
                 play = JSON.parse(drpy.play(dataObj.flag, vipUrl, []));
             }else if(dataObj.stype=="hipy_t4"){
                 play = JSON.parse(fetch(dataObj.surl+(dataObj.surl.includes("?")?"&":"?")+'flag='+dataObj.flag+"&extend="+dataObj.sext+'&play='+vipUrl, {timeout: 10000}));
+            }else if(dataObj.stype=="py"){
+                const PythonHiker = $.require("hiker://files/plugins/chaquopy/PythonHiker.js");
+                let pyModule = PythonHiker.runPy(dataObj.surl).callAttr("Spider");
+                PythonHiker.callFunc(pyModule, "init", []);
+                play = PythonHiker.callFunc(pyModule, "playerContent", dataObj.flag, vipUrl, []);
             }
             //log(play);
             if(play.js){
@@ -112,7 +117,8 @@ var SrcParseS = {
             }
             if(play.url.startsWith("pics://")){
                 return play.url;
-            }if(play.url.startsWith("select://")){
+            }
+            if(play.url.startsWith("select://")){
                 let seljson = JSON.parse(play.url.replace("select://",""));
                 if(seljson.options.length==1){
                     return "第1部@lazyRule=.js:"+seljson.js;
@@ -132,12 +138,6 @@ var SrcParseS = {
                 play.url = vipUrl;
             }
             vipUrl = decodeURI(play.url) || vipUrl;
-        }else if(dataObj.stype && dataObj.stype=="py"){
-            const PythonHiker = $.require("hiker://files/plugins/chaquopy/PythonHiker.js");
-            let pyModule = PythonHiker.runPy(dataObj.surl).callAttr("Spider");
-            PythonHiker.callFunc(pyModule, "init", []);
-            let play = PythonHiker.callFunc(pyModule, "playerContent", dataObj.flag, vipUrl, []);
-            log(play);
         }
 
         log("请求地址："+vipUrl); 
