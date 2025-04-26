@@ -588,7 +588,8 @@ function getYiData(jkdata, batchTest) {
             fl.cateId = fl.cateId || cate_id;
             //拼接生成分类页url链接
             if (api_type == 'py'){
-                delete fl.cateId;
+                //delete fl.cateId;
+                fl.cateId = fl.tid || fl.cateId;
             } else if (api_type == 'hipy_t4'){
                 delete fl.cateId;
                 listurl = listurl.replace('{cate_id}', cate_id).replace('{flb64}', base64Encode(JSON.stringify(fl)));
@@ -629,7 +630,8 @@ function getYiData(jkdata, batchTest) {
             vodlists = [];
             let vod_name, vod_pic, vod_url, vod_desc;
             if (api_type=="py") {
-                let formatJo = PythonHiker.callFunc(pyModule, "categoryContent", cate_id, 1, true, {});
+                log(fl);
+                let formatJo = PythonHiker.callFunc(pyModule, "categoryContent", fl.cateId, 1, true, {});
                 let vodlist = formatJo.list || [];
                 vodlist.forEach(it=>{
                     vodlists.push({ "vod_url": it.vod_id.toString(), "vod_name": it.vod_name, "vod_desc": it.vod_remarks, "vod_pic": it.vod_pic });
