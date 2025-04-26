@@ -132,6 +132,12 @@ var SrcParseS = {
                 play.url = vipUrl;
             }
             vipUrl = decodeURI(play.url) || vipUrl;
+        }else if(dataObj.stype && dataObj.stype=="py"){
+            const PythonHiker = $.require("hiker://files/plugins/chaquopy/PythonHiker.js");
+            let pyModule = PythonHiker.runPy(dataObj.surl).callAttr("Spider");
+            PythonHiker.callFunc(pyModule, "init", []);
+            let play = PythonHiker.callFunc(testModule, "playerContent", dataObj.flag, vipUrl, []);
+            log(play);
         }
 
         log("请求地址："+vipUrl); 
