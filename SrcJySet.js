@@ -1232,7 +1232,7 @@ function jiekou(data) {
         col_type:'text_3',
         url: $().lazyRule((data)=>{
             let apiurl = getMyVar('apiurl','').trim();
-            if(!apiurl.startsWith('http') && !apiurl.startsWith('hiker://') && !apiurl.startsWith('file://') && !apiurl.startsWith('/storage/')){
+            if(!apiurl.startsWith('http') && !apiurl.startsWith('hiker://') && !apiurl.startsWith('file://')){
                 return "toast://接口地址不正确";
             }
             require(config.聚影.replace(/[^/]*$/,'') + 'SrcJySet.js');
