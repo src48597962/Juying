@@ -1232,7 +1232,7 @@ function jiekou(data) {
         col_type:'text_3',
         url: $().lazyRule((data)=>{
             let apiurl = getMyVar('apiurl','').trim();
-            if(!apiurl.startsWith('http') && !apiurl.startsWith('hiker://') && !apiurl.startsWith('file://')){
+            if(!apiurl.startsWith('http') && !apiurl.startsWith('hiker://') && !apiurl.startsWith('file://') && !apiurl.startsWith('/storage/')){
                 return "toast://接口地址不正确";
             }
             require(config.聚影.replace(/[^/]*$/,'') + 'SrcJySet.js');
@@ -1261,6 +1261,10 @@ function jiekou(data) {
                             return "toast://接口地址获取内容失败";
                         }
                     }
+                }else if(apitype=="py" && apiurl.startsWith('hiker')){
+                    apiurl = getPath(apiurl).slice(7);
+                }else if(apitype=="py" && apiurl.startsWith('file://')){
+                    apiurl = apiurl.slice(7);
                 }
                 let arr = {"name": apiname, "type": apitype, "url": urlfile};
                 let apigroup = getMyVar('apigroup');
