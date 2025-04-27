@@ -103,6 +103,11 @@ var SrcParseS = {
             }else if(dataObj.stype=="hipy_t4"){
                 play = JSON.parse(fetch(dataObj.surl+(dataObj.surl.includes("?")?"&":"?")+'flag='+dataObj.flag+"&extend="+dataObj.sext+'&play='+vipUrl, {timeout: 10000}));
             }else if(dataObj.stype=="py"){
+                if(dataObj.surl.startsWith('hiker')){
+                    dataObj.surl = getPath(dataObj.surl).slice(7);
+                }else if(dataObj.surl.startsWith('file://')){
+                    dataObj.surl = dataObj.surl.slice(7);
+                }
                 const PythonHiker = $.require("hiker://files/plugins/chaquopy/PythonHiker.js");
                 let pyModule = PythonHiker.runPy(dataObj.surl).callAttr("Spider");
                 PythonHiker.callFunc(pyModule, "init", []);
