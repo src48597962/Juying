@@ -1261,10 +1261,6 @@ function jiekou(data) {
                             return "toast://接口地址获取内容失败";
                         }
                     }
-                }else if(apitype=="py" && apiurl.startsWith('hiker')){
-                    apiurl = getPath(apiurl).slice(7);
-                }else if(apitype=="py" && apiurl.startsWith('file://')){
-                    apiurl = apiurl.slice(7);
                 }
                 let arr = {"name": apiname, "type": apitype, "url": urlfile};
                 let apigroup = getMyVar('apigroup');
