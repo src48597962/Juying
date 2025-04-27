@@ -1083,7 +1083,7 @@ function jiekou(data) {
             })
         }),
         extra: {
-            titleVisible: (data && /^hiker/.test(getMyVar('apiurl',''))) || (!data && /XPath|biubiu|XBPQ|XYQ|hipy_t3/.test(apitype))?true:false,
+            titleVisible: (data && /^hiker/.test(getMyVar('apiurl',''))) || (!data && /XPath|biubiu|XBPQ|XYQ|hipy_t3|py/.test(apitype))?true:false,
             defaultValue: getMyVar('apiurl',''),
             onChange: 'putMyVar("apiurl",input);'
         }
@@ -1098,7 +1098,7 @@ function jiekou(data) {
     d.push({
         title: '类型：' + getMyVar('apitype', ''),
         col_type:'text_1',
-        url:$(["v1","app","v2","iptv","cms","XPath","biubiu","XBPQ","XYQ","hipy_t3","hipy_t3","py","app类自动"],3).select(()=>{
+        url:$(["v1","app","v2","iptv","cms","XPath","biubiu","XBPQ","XYQ","hipy_t3","hipy_t4","py","app类自动"],3).select(()=>{
             if(input=="app类自动"){
                 clearMyVar('apitype');
             }else{
