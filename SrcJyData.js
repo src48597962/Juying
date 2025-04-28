@@ -902,8 +902,10 @@ function getSsData(name, jkdata, page) {
         if (/v1|app|iptv|v2|cms|hipy_|py/.test(api_type)) {
             let json;
             if(api_type=="py"){
-                const PythonHiker = $.require("hiker://files/plugins/chaquopy/PythonHiker.js");
-                let pyModule = PythonHiker.runPy(getPyFile(jkdata.url)).callAttr("Spider");
+                //const PythonHiker = $.require("hiker://files/plugins/chaquopy/PythonHiker.js");
+                //let pyModule = PythonHiker.runPy(getPyFile(jkdata.url)).callAttr("Spider");
+                require(codepath + "plugins/pyDriver.js");
+                let pyModule = initPyModule(jkdata.url);
                 PythonHiker.callFunc(pyModule, "init", []);
                 json = PythonHiker.callFunc(pyModule, "searchContent", name, false, PythonHiker.toInt(page));
             }else if(api_type=="hipy_t4"){
@@ -1215,8 +1217,10 @@ function getErData(jkdata, erurl) {
         html = getHtml(jkdata.url + (jkdata.url.includes("?")?"&":"?") +"extend="+jkdata.ext+"&ac=detail&ids="+erurl, headers);
         detailtype = JSON.parse(html).type || (jkdata.name.includes('[书]')?"小说":"");
     } else if (api_type=="py") {
-        var PythonHiker = $.require("hiker://files/plugins/chaquopy/PythonHiker.js");
-        var pyModule = PythonHiker.runPy(getPyFile(jkdata.url)).callAttr("Spider");
+        //var PythonHiker = $.require("hiker://files/plugins/chaquopy/PythonHiker.js");
+        //var pyModule = PythonHiker.runPy(getPyFile(jkdata.url)).callAttr("Spider");
+        require(codepath + "plugins/pyDriver.js");
+        var pyModule = initPyModule(jkdata.url);
         PythonHiker.callFunc(pyModule, "init", []);
         html = PythonHiker.callFunc(pyModule, "detailContent", [erurl]);
     } else {
