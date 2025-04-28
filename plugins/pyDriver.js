@@ -29,8 +29,6 @@ function initPyModule(api_url) {
     }
     if(!pyModule.get("getCache")){
         // 注入 getCache 方法
-        const Context = java.lang.Class.forName("android.content.Context");
-        const activity = getCurrentActivity();
         pyModule.put("getCache", PythonHiker.wrapperJsFunc(function(key){
             const prefs = activity.getSharedPreferences("py_cache", Context.MODE_PRIVATE);
             const value = prefs.getString(key, null);
