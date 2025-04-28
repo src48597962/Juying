@@ -120,7 +120,7 @@ function getYiData(jkdata, batchTest) {
     } else if (api_type == "py") {
         var PythonHiker = $.require("hiker://files/plugins/chaquopy/PythonHiker.js");
         var pyModule = PythonHiker.runPy(getPyFile(jkdata.url)).callAttr("Spider");
-        log($.type(pyModule));
+        pyModule = initPyModule(pyModule);
         PythonHiker.callFunc(pyModule, "init", []);
         classurl = "hiker://empty";
         listurl = "hiker://empty";
