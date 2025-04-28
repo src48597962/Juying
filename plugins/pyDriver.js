@@ -17,21 +17,22 @@ function initPyModule(api_url) {
         }));
     }
     if(!pyModule.get("setCache")){
+        var Python = java.import("com.chaquo.python.Python");
+        var platform = Python.getPlatform.getApplication();
         // 注入 setCache 方法
-        pyModule.put("setCache", PythonHiker.wrapperJsFunc(function(key, value) {
-            var context = com.chaquo.python.Python.getPlatform().getApplication();
-            var prefs = context.getSharedPreferences("py_cache", 0);
+        pyModule.put("setCache", function(key, value) {
+            var prefs = platform.getSharedPreferences("py_cache", 0);
             prefs.edit().putString(key, value).apply();
-            return true;
-        }));
+        });
     }
     if(!pyModule.get("getCache")){
+        var Python = java.import("com.chaquo.python.Python");
+        var platform = Python.getPlatform.getApplication();
         // 注入 getCache 方法
-        pyModule.put("getCache", PythonHiker.wrapperJsFunc(function(key) {
-            var context = com.chaquo.python.Python.getPlatform().getApplication();
-            var prefs = context.getSharedPreferences("py_cache", 0);
+        pyModule.put("getCache", function(key) {
+            var prefs = platform.getSharedPreferences("py_cache", 0);
             return prefs.getString(key, null);
-        }));
+        });
     }
     return pyModule;
 }
