@@ -19,18 +19,18 @@ function initPyModule(api_url) {
     if(!pyModule.get("setCache")){
         // 注入 setCache 方法
         pyModule.put("setCache", PythonHiker.wrapperJsFunc(function(key, value) {
-            // 这里可以用 Android 的 SharedPreferences 或其他方式存储缓存
-            // 例如：
-            var prefs = com.chaquo.python.Python.getPlatform().getApplication().getSharedPreferences("py_cache", 0);
+            var context = com.chaquo.python.Python.getPlatform().getApplication();
+            var prefs = context.getSharedPreferences("py_cache", 0);
             prefs.edit().putString(key, value).apply();
-            return true; // 返回是否成功
+            return true;
         }));
     }
     if(!pyModule.get("getCache")){
         // 注入 getCache 方法
         pyModule.put("getCache", PythonHiker.wrapperJsFunc(function(key) {
-            var prefs = com.chaquo.python.Python.getPlatform().getApplication().getSharedPreferences("py_cache", 0);
-            return prefs.getString(key, null); // 如果 key 不存在，返回 null
+            var context = com.chaquo.python.Python.getPlatform().getApplication();
+            var prefs = context.getSharedPreferences("py_cache", 0);
+            return prefs.getString(key, null);
         }));
     }
     return pyModule;
