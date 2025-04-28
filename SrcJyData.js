@@ -118,9 +118,11 @@ function getYiData(jkdata, batchTest) {
         listurl = api_url + (api_url.includes("?")?"&":"?") + "t={cate_id}&ac=detail&pg="+page+"&extend="+jkdata.ext+"&ext={flb64}";
         //listnode = "json.list";
     } else if (api_type == "py") {
+        /*
         var PythonHiker = $.require("hiker://files/plugins/chaquopy/PythonHiker.js");
         var pyModule = PythonHiker.runPy(getPyFile(jkdata.url)).callAttr("Spider");
-        pyModule = initPyModule(pyModule);
+        */
+        require(codepath + "plugins/pyDriver.js");
         PythonHiker.callFunc(pyModule, "init", []);
         classurl = "hiker://empty";
         listurl = "hiker://empty";
@@ -1676,7 +1678,7 @@ function getHtml(url, headers) {
     } catch (e) { }
     return '';
 }
-require(codepath + "SrcJyMethod.js");
+
 // extData缓存
 function extDataCache(jkdata) {
     if (jkdata.url.startsWith("file") || jkdata.url.startsWith("hiker")) {
