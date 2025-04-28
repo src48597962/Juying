@@ -119,7 +119,7 @@ function getYiData(jkdata, batchTest) {
         //listnode = "json.list";
     } else if (api_type == "py") {
         var PythonHiker = $.require("hiker://files/plugins/chaquopy/PythonHiker.js");
-        var pyModule = PythonHiker.runPy(getPyFile(jkdata)).callAttr("Spider");
+        var pyModule = PythonHiker.runPy(getPyFile(jkdata.url)).callAttr("Spider");
         log($.type(pyModule));
         PythonHiker.callFunc(pyModule, "init", []);
         classurl = "hiker://empty";
@@ -900,7 +900,7 @@ function getSsData(name, jkdata, page) {
             let json;
             if(api_type=="py"){
                 const PythonHiker = $.require("hiker://files/plugins/chaquopy/PythonHiker.js");
-                let pyModule = PythonHiker.runPy(getPyFile(jkdata)).callAttr("Spider");
+                let pyModule = PythonHiker.runPy(getPyFile(jkdata.url)).callAttr("Spider");
                 PythonHiker.callFunc(pyModule, "init", []);
                 json = PythonHiker.callFunc(pyModule, "searchContent", name, false, PythonHiker.toInt(page));
             }else if(api_type=="hipy_t4"){
