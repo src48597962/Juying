@@ -16,23 +16,27 @@ function initPyModule(api_url) {
             return "";
         }));
     }
+    
     if(!pyModule.get("setCache")){
+        // 注入 setCache 方法
         const Context = java.lang.Class.forName("android.content.Context");
         const activity = getCurrentActivity();
-        // 注入 setCache 方法
         pyModule.put("setCache", PythonHiker.wrapperJsFunc(function(key, vaule){
             const prefs = activity.getSharedPreferences("py_cache", Context.MODE_PRIVATE);
             prefs.edit().putString(key, JSON.stringify(value)).apply();
             return true;
         }));
     }
-    /*
     if(!pyModule.get("getCache")){
         // 注入 getCache 方法
+        const Context = java.lang.Class.forName("android.content.Context");
+        const activity = getCurrentActivity();
         pyModule.put("getCache", PythonHiker.wrapperJsFunc(function(key){
-            return getMyVar(key, "");
+            const prefs = activity.getSharedPreferences("py_cache", Context.MODE_PRIVATE);
+            const value = prefs.getString(key, null);
+            return value ? JSON.parse(value) : null;
         }));
     }
-    */
+
     return pyModule;
 }
