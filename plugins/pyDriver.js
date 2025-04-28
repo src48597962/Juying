@@ -16,21 +16,18 @@ function initPyModule(api_url) {
             return "";
         }));
     }
+    var context = PythonHiker.getAndroidContext();
     if(!pyModule.get("setCache")){
-        var Python = java.import("com.chaquo.python.Python");
-        var platform = Python.getPlatform.getApplication();
         // 注入 setCache 方法
         pyModule.put("setCache", function(key, value) {
-            var prefs = platform.getSharedPreferences("py_cache", 0);
+            var prefs = context.getSharedPreferences("py_cache", 0);
             prefs.edit().putString(key, value).apply();
         });
     }
     if(!pyModule.get("getCache")){
-        var Python = java.import("com.chaquo.python.Python");
-        var platform = Python.getPlatform.getApplication();
         // 注入 getCache 方法
         pyModule.put("getCache", function(key) {
-            var prefs = platform.getSharedPreferences("py_cache", 0);
+            var prefs = context.getSharedPreferences("py_cache", 0);
             return prefs.getString(key, null);
         });
     }
