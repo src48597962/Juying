@@ -19,20 +19,35 @@ function initPyModule(api_url) {
     
     if(!pyModule.get("setCache")){
         // 注入 setCache 方法
-        const Context = java.lang.Class.forName("android.content.Context");
-        const activity = getCurrentActivity();
+        // 1. 获取必要的Java类
+        var Integer = java.lang.Integer;
+        var Context = java.lang.Class.forName("android.content.Context");
+        var activity = getCurrentActivity();
+
+        // 2. 转换模式常量
+        var MODE_PRIVATE = Integer.valueOf(Context.MODE_PRIVATE);
         pyModule.put("setCache", PythonHiker.wrapperJsFunc(function(key, vaule){
-            const prefs = activity.getSharedPreferences("py_cache", Context.MODE_PRIVATE);
-            prefs.edit().putString(key, JSON.stringify(value)).apply();
-            return true;
+            try {
+                var prefs = activity.getSharedPreferences("py_cache", MODE_PRIVATE);
+                prefs.edit().putString(key, JSON.stringify(value)).apply();
+                return true;
+            } catch(e) {
+                console.error("Cache write failed:", e);
+                return false;
+            }
         }));
     }
     if(!pyModule.get("getCache")){
         // 注入 getCache 方法
         pyModule.put("getCache", PythonHiker.wrapperJsFunc(function(key){
-            const prefs = activity.getSharedPreferences("py_cache", Context.MODE_PRIVATE);
-            const value = prefs.getString(key, null);
-            return value ? JSON.parse(value) : null;
+            try {
+                var prefs = activity.getSharedPreferences("py_cache", MODE_PRIVATE);
+                var value = prefs.getString(key, null);
+                return value ? JSON.parse(value) : null;
+            } catch(e) {
+                console.error("Cache read failed:", e);
+                return null;
+            }
         }));
     }
 
