@@ -84,12 +84,3 @@ function getPlayExtra(obj){
     }
     return extra;
 }
-// py源获取本地文件路径
-function getPyFile(url) {
-    if(url.startsWith('hiker')){
-        url = getPath(url).slice(7);
-    }else if(url.startsWith('file://')){
-        url = url.slice(7);
-    }
-    return url;
-}
