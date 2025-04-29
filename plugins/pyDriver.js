@@ -20,14 +20,15 @@ function initPyModule(api_url) {
     if(!pyModule.get("setCache")){
         // 注入 setCache 方法
         pyModule.put("setCache", PythonHiker.wrapperJsFunc(function(key, value){
-            storage0.putVar(key, value);
+            putVar(key, value);
             return true;
         }));
     }
+
     if(!pyModule.get("getCache")){
         // 注入 getCache 方法
         pyModule.put("getCache", PythonHiker.wrapperJsFunc(function(key){
-            return storage0.getVar(key, "");
+            return getVar(key, "");
         }));
     }
 
