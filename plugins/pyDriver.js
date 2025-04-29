@@ -20,18 +20,13 @@ function initPyModule(api_url) {
     if(!pyModule.get("setCache")){
         // 注入 setCache 方法
         pyModule.put("setCache", PythonHiker.wrapperJsFunc(function(key, value){
-            setCache(key, JSON.stringify(value));
+            putVar(key, value);
         }));
     }
     if(!pyModule.get("getCache")){
         // 注入 getCache 方法
         pyModule.put("getCache", PythonHiker.wrapperJsFunc(function(key){
-            let cached = getCache(key);
-            try {
-                return cached ? JSON.parse(cached) : (defaultValue !== undefined ? defaultValue : null);
-            } catch(e) {
-                return cached || (defaultValue !== undefined ? defaultValue : null);
-            }
+            return getVar(key, "");
         }));
     }
 
