@@ -876,7 +876,11 @@ function jiekousave(urls, mode) {
             if(it.url.startsWith(cachepath)){//缓存的数据文件转到data目录
                 if(fileExist(it.url)){
                     let urlfile = jkfilespath + it.url.substr(it.url.lastIndexOf('/')+1);
-                    writeFile(urlfile, fetch(it.url));
+                    let urlcontent = fetch(it.url);
+                    if(it.type=="py"){
+                        urlcontent = urlcontent.replace(/Cryptodome/g, "Crypto");
+                    }
+                    writeFile(urlfile, urlcontent);
                     it.url = urlfile;
                 }else{
                     delete it['url'];
