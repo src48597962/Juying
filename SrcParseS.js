@@ -281,7 +281,7 @@ var SrcParseS = {
                         if(flag.indexOf("iqiyi")>-1 && flag.indexOf("qiyi")==-1){
                             flag.push("qiyi");
                         }
-                        if(flag.length==0 || flag.indexOf(from)>-1){
+                        if((flag.length==0 && isVip) || flag.indexOf(from)>-1){
                             parselist.push({stype:'myjx',type:it.type,name:it.name,url:it.url,sort:it.sort||0,header:ext.header});
                         }
                     }
