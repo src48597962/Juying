@@ -123,7 +123,7 @@ function getYiData(jkdata, batchTest) {
         var pyModule = PythonHiker.runPy(getPyFile(jkdata.url)).callAttr("Spider");
         */
         require(codepath + "plugins/pyDriver.js");
-        var pyModule = initPyModule(jkdata);
+        var pyModule = initPyModule(jkdata.url);
         PythonHiker.callFunc(pyModule, "init", []);
         classurl = "hiker://empty";
         listurl = "hiker://empty";
@@ -905,7 +905,7 @@ function getSsData(name, jkdata, page) {
                 //const PythonHiker = $.require("hiker://files/plugins/chaquopy/PythonHiker.js");
                 //let pyModule = PythonHiker.runPy(getPyFile(jkdata.url)).callAttr("Spider");
                 require(codepath + "plugins/pyDriver.js");
-                let pyModule = initPyModule(jkdata);
+                let pyModule = initPyModule(jkdata.url);
                 PythonHiker.callFunc(pyModule, "init", []);
                 json = PythonHiker.callFunc(pyModule, "searchContent", name, false, PythonHiker.toInt(page));
             }else if(api_type=="hipy_t4"){
@@ -1220,7 +1220,7 @@ function getErData(jkdata, erurl) {
         //var PythonHiker = $.require("hiker://files/plugins/chaquopy/PythonHiker.js");
         //var pyModule = PythonHiker.runPy(getPyFile(jkdata.url)).callAttr("Spider");
         require(codepath + "plugins/pyDriver.js");
-        var pyModule = initPyModule(jkdata);
+        var pyModule = initPyModule(jkdata.url);
         PythonHiker.callFunc(pyModule, "init", []);
         html = PythonHiker.callFunc(pyModule, "detailContent", [erurl]);
     } else {
