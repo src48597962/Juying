@@ -543,7 +543,7 @@ function excludeLoadingItems() {
     })
     */
 }
-// 读取目录路径下文件输入数组
+// 读取目录路径下文件输出数组
 function readDir(path) {
     let names = [];
     if(path){
