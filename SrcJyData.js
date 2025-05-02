@@ -592,6 +592,7 @@ function getYiData(jkdata, batchTest) {
             //拼接生成分类页url链接
             if (api_type == 'py'){
                 fl.tid = fl.tid || fl.cateId;
+                fl.pg = page;
                 delete fl.cateId;
             } else if (api_type == 'hipy_t4'){
                 delete fl.cateId;
