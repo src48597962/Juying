@@ -161,7 +161,7 @@ function getYiData(jkdata, batchTest) {
             } else {
                 try {
                     if (api_type == "py"){
-                        let home = PythonHiker.callFunc(pyModule, "homeContent", false);
+                        let home = PythonHiker.callFunc(pyModule, "homeContent", true);
                         let typelist = home['class'] || [];
                         typelist.forEach(v=>{
                             分类.push(v.type_name + '$' + v.type_id);
