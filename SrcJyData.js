@@ -593,6 +593,7 @@ function getYiData(jkdata, batchTest) {
             if (api_type == 'py'){
                 fl.tid = fl.tid || fl.cateId;
                 fl.pg = page;
+                log(fl);
                 delete fl.cateId;
             } else if (api_type == 'hipy_t4'){
                 delete fl.cateId;
