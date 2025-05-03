@@ -71,8 +71,12 @@ function getDatas(lx, isyx) {
             eval("sort = " + fetch(sortfile));
         }
         datalist.forEach(it=>{
-            let jksort = sort[it.name] || {};
-            it.sort = jksort.use || 0;
+            try{
+                let jksort = sort[it.url] || {};
+                it.sort = jksort.use || 0;
+            }catch(e){
+                it.sort = 0;
+            }
         })
         datalist.sort((a, b) => {
             return b.sort - a.sort
@@ -398,8 +402,12 @@ function getSearchLists(group) {
         eval("sort = " + fetch(sortfile));
     }
     datalist.forEach(it=>{
-        let jksort = sort[it.name] || {};
-        it.sort = jksort.fail || 0;
+        try{
+            let jksort = sort[it.url] || {};
+            it.sort = jksort.fail || 0;
+        }catch(e){
+            it.sort = 0;
+        }
     })
     datalist.sort((a, b) => {
         return a.sort - b.sort
@@ -512,12 +520,14 @@ function setJkSort(data, so) {
     waitlist.forEach(it=>{
         let key;
         if($.type(it)=="object"){
-            key = it.name;
+            key = it.url;
         }else if($.type(it)=="string"){
             key = it;
         }
         let jksort = sort[key] || {};
-
+        if($.type(jksort) != "object"){
+            jksort = {};
+        }
         if(so.use==0){
             jksort.use = 0;
         }else if(so.fail==0){
@@ -542,7 +552,10 @@ function excludeLoadingItems() {
         eval("sort = " + fetch(sortfile));
     }
     Object.keys(sort).forEach(it=>{
-        if(!datalist.some(item => item.name==it)){
+        if(!datalist.some(item => item.url==it)){
+            delete sort[it];
+        }
+        if($.type(sort[it]) != "object"){
             delete sort[it];
         }
     })
@@ -712,7 +725,7 @@ function selectSource() {
                 clearMyVar('点播动态加载loading');
                 clearMyVar('点播一级jkdata');
                 
-                let key = tmpList[i].name;
+                let key = tmpList[i].url;
                 setJkSort(key, {use: 1});
                 refreshPage(true);
                 
