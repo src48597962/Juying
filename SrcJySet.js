@@ -918,17 +918,17 @@ function jiekousave(urls, mode) {
                 //}
                 delete it['oldurl'];
                 delete it['extstr'];
-                delete it['use'];
-                delete it['fail'];
                 if(it.ext && $.type(it.ext)=="string" && /^hiker|^file/.test(it.ext)){
                     if(!fileExist(it.ext)){
                         delete it['ext'];
                     }
                 }
+
                 datalist.push(it);
                 num = num + 1;
             }
         })
+        setJkSort(datalist, {fail: 0});
         if(num>0){writeFile(jkfile, JSON.stringify(datalist));}
     } catch (e) {
         log("导入失败：" + e.message + " 错误行#" + e.lineNumber); 
