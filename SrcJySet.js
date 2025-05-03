@@ -918,6 +918,8 @@ function jiekousave(urls, mode) {
                 //}
                 delete it['oldurl'];
                 delete it['extstr'];
+                delete it['use'];
+                delete it['fail'];
                 if(it.ext && $.type(it.ext)=="string" && /^hiker|^file/.test(it.ext)){
                     if(!fileExist(it.ext)){
                         delete it['ext'];
