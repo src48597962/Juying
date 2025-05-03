@@ -498,7 +498,7 @@ function dataHandle(lx, data, input) {
 }
 
 // 设置接口顺序
-function setJkSort(data, use, del) {
+function setJkSort(data, so) {
     let waitlist= [];
     if($.type(data)=='string'){
         waitlist.push(data);
@@ -510,18 +510,26 @@ function setJkSort(data, use, del) {
         eval("sort = " + fetch(sortfile));
     }
     waitlist.forEach(it=>{
-        let jksort = sort[it] || {};
-        if(del){
-            delete sort[it];
-        }else if(use){
+        let key;
+        if($.type(it)=="object"){
+            key = it.name;
+        }else if($.type(it)=="string"){
+            key = it;
+        }
+        let jksort = sort[key] || {};
+
+        if(so.use==0){
+            jksort.use = 0;
+        }else if(so.fail==0){
+            jksort.fail = 0;
+        }else if(so.use){
             jksort.use = jksort.use || 0;
             jksort.use++;
-            sort[it] = jksort;
-        }else{
+        }else if(so.fail){
             jksort.fail = jksort.fail || 0;
             jksort.fail++;
-            sort[it] = jksort;
         }
+        sort[key] = jksort;
     })
     writeFile(sortfile, JSON.stringify(sort));
 }
@@ -705,7 +713,7 @@ function selectSource() {
                 clearMyVar('点播一级jkdata');
                 
                 let key = tmpList[i].name;
-                setJkSort(key, 1);
+                setJkSort(key, {use: 1});
                 refreshPage(true);
                 
                 return 'toast://' + '主页源已设置为：' + input;
