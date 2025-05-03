@@ -214,7 +214,7 @@ function erjisousuo(name,group,datas,sstype) {
             }
             if(getMyVar("SrcJu_停止搜索线程")!="1"){
                 storage0.putMyVar('SrcJu_searchMark', searchMark);
-                setJkSort(failsort);
+                setJkSort(failsort, {fail: 1});
             }
             clearMyVar("SrcJu_停止搜索线程");
             let sousuosm = "‘‘’’<small><font color=#f13b66a>" + success + "</font>/" + list.length + "，搜索完成</small>";
