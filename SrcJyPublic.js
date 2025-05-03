@@ -71,7 +71,8 @@ function getDatas(lx, isyx) {
             eval("sort = " + fetch(sortfile));
         }
         datalist.forEach(it=>{
-            it.sort = sort[it.url] || 0;
+            let jksort = sort[it.name] || {};
+            it.sort = jksort.use || 0;
         })
         datalist.sort((a, b) => {
             return b.sort - a.sort
@@ -391,18 +392,19 @@ function getSearchLists(group) {
     let datalist = getDatas('jk', 1).filter(it=>{
         return it.searchable!=0;
     });
-    if (getItem("sourceListSort") != "使用频率") {
-        let sort = {};
-        if(fetch(sortfile)){
-            eval("sort = " + fetch(sortfile));
-        }
-        datalist.forEach(it=>{
-            it.sort = sort[it.url] || 0;
-        })
-        datalist.sort((a, b) => {
-            return b.sort - a.sort
-        })
+
+    let sort = {};
+    if(fetch(sortfile)){
+        eval("sort = " + fetch(sortfile));
     }
+    datalist.forEach(it=>{
+        let jksort = sort[it.name] || {};
+        it.sort = jksort.fail || 0;
+    })
+    datalist.sort((a, b) => {
+        return a.sort - b.sort
+    })
+
     if(group){
         return datalist.filter(it=>{
             return group==(it.group||it.type);
@@ -496,7 +498,7 @@ function dataHandle(lx, data, input) {
 }
 
 // 设置接口顺序
-function setJkSort(data, k) {
+function setJkSort(data, use, del) {
     let waitlist= [];
     if($.type(data)=='string'){
         waitlist.push(data);
@@ -508,14 +510,19 @@ function setJkSort(data, k) {
         eval("sort = " + fetch(sortfile));
     }
     waitlist.forEach(it=>{
-        sort[it] = sort[it] || 0;
-        if(k){
-             sort[it] = sort[it] + 1;
+        let jksort = sort[it] || {};
+        if(del){
+            delete sort[it];
+        }else if(use){
+            jksort.use = jksort.use || 0;
+            jksort.use++;
+            sort[it] = jksort;
         }else{
-             sort[it] = sort[it] - 1;
+            jksort.fail = jksort.fail || 0;
+            jksort.fail++;
+            sort[it] = jksort;
         }
     })
-    
     writeFile(sortfile, JSON.stringify(sort));
 }
 // 执行一些主页加载后的事项
@@ -527,7 +534,7 @@ function excludeLoadingItems() {
         eval("sort = " + fetch(sortfile));
     }
     Object.keys(sort).forEach(it=>{
-        if(!datalist.some(item => item.url==it)){
+        if(!datalist.some(item => item.name==it)){
             delete sort[it];
         }
     })
@@ -697,7 +704,7 @@ function selectSource() {
                 clearMyVar('点播动态加载loading');
                 clearMyVar('点播一级jkdata');
                 
-                let key = tmpList[i].url;
+                let key = tmpList[i].name;
                 setJkSort(key, 1);
                 refreshPage(true);
                 
