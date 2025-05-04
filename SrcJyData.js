@@ -765,7 +765,9 @@ function getYiData(jkdata, batchTest) {
             log(api_name + '>获取列表异常>' + e.message + ' 错误行#' + e.lineNumber);
         }
     }
-
+    if(Object.keys(error).length){
+        setJkSort(jkdata.url, {fail: 1})
+    }
     return {
         fllists: fllists,
         vodlists: vodlists,
@@ -1161,6 +1163,9 @@ function getSsData(name, jkdata, page) {
             error = 1;
             log(jkdata.name + ' 输出结果报错>' + e.message + " 错误行#" + e.lineNumber);
         }
+    }
+    if(error){
+        setJkSort(jkdata.url, {fail: 1});
     }
     return {
         vodlists: searchs,
@@ -1629,7 +1634,9 @@ function getErData(jkdata, erurl) {
         desc = desc || '...';
         desc = desc.replace(/&ldquo;/g, '“').replace(/&rdquo;/g, '”').replace(/&middot;/g, '·').replace(/&hellip;/g, '…').replace(/&nbsp;|♥/g, ' ');
     }
-
+    if(!lists.some(subArray => subArray.length > 0)){
+        setJkSort(jkdata.url, {fail: 1});
+    }
     return {
         "details1": details1,
         "details2": details2,
