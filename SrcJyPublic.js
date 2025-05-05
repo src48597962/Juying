@@ -563,13 +563,15 @@ function excludeLoadingItems() {
     writeFile(sortfile, JSON.stringify(sort));
     // 失败10以上的接口自动禁用
     datalist.forEach(it=>{
-        try{
-            let jksort = sort[it.url] || {};
-            let fail = jksort.fail || 0;
-            if(fail>=10){
-                it.stop = 1;
-            }
-        }catch(e){}
+        if(!it.stop){
+            try{
+                let jksort = sort[it.url] || {};
+                let fail = jksort.fail || 0;
+                if(fail>=10){
+                    it.stop = 1;
+                }
+            }catch(e){}
+        }
     })
     writeFile(jkfile, JSON.stringify(datalist));
     // 清理接口残留过期文件
