@@ -9,6 +9,10 @@ function SRCSet() {
         clearMyVar('groupmenu');
         clearMyVar('SrcJu_jkdatalist');
         clearMyVar('SrcJu_seacrhJiekou');
+        clearMyVar('SrcJu_onlyStopJk');
+    }));
+    addListener("onRefresh", $.toString(() => {
+        clearMyVar('SrcJu_onlyStopJk');
     }));
 
     if(getMyVar('guanli','')==""){putMyVar('guanli','jk');}
@@ -30,7 +34,7 @@ function SRCSet() {
     });
     d.push({
         title: '操作',
-        url: $(["批量选择","清空所有"],2,"选择操作功能项").select(()=>{
+        url: $(["显示停用","批量选择","清空所有"],2,"选择操作功能项").select(()=>{
             clearMyVar('groupmenu');
             if(input=="批量选择"){
                 let sm;
@@ -56,6 +60,17 @@ function SRCSet() {
                     refreshPage(false);
                     return 'toast://已全部清空';
                 })
+            }else if(input=="显示停用"){
+                let sm;
+                if(getMyVar('SrcJu_onlyStopJk')){
+                    clearMyVar('SrcJu_onlyStopJk');
+                    sm = "退出仅显示停用列表";
+                }else{
+                    putMyVar('SrcJu_onlyStopJk','1');
+                    sm = "进入仅显示停用列表";
+                }
+                refreshPage(false);
+                return "toast://"+sm;
             }
         }),
         img: getIcon("点播-接口操作.svg"),//"https://hikerfans.com/tubiao/more/290.png",
@@ -82,6 +97,9 @@ function SRCSet() {
     }
     
     let datalist = getDatas(guanliType);
+    if(getMyVar('SrcJu_onlyStopJk')){
+        datalist = datalist.filter(item => item.stop);
+    }
     let selectgroup = guanliType=='jk'?getMyVar("SrcJu_jiekouGroup",""):"";
     let jkdatalist = getGroupLists(datalist, selectgroup);
 
