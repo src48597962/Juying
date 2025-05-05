@@ -61,10 +61,10 @@ function SRCSet() {
                 let sm;
                 if(getMyVar('SrcJu_onlyStopJk')){
                     clearMyVar('SrcJu_onlyStopJk');
-                    sm = "退出仅显示停用列表";
+                    sm = "退出仅显示禁用列表";
                 }else{
                     putMyVar('SrcJu_onlyStopJk','1');
-                    sm = "进入仅显示停用列表";
+                    sm = "进入仅显示禁用列表";
                 }
                 refreshPage(false);
                 return "toast://"+sm;
