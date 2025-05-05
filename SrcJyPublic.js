@@ -848,6 +848,7 @@ function getHistory(i){
     let h = [];
     let ruleTitle = MY_RULE._title || MY_RULE.title;
     i = i ? i*3 : 0;
+    log(JSON.parse(fetch('hiker://history')));
     let items = JSON.parse(fetch('hiker://history')).filter(v=> v.type!="网页浏览" && JSON.parse(v.params).title==ruleTitle);
     if(i+3 > items.length){
         i = 0;
