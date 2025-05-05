@@ -11,9 +11,6 @@ function SRCSet() {
         clearMyVar('SrcJu_seacrhJiekou');
         clearMyVar('SrcJu_onlyStopJk');
     }));
-    addListener("onRefresh", $.toString(() => {
-        clearMyVar('SrcJu_onlyStopJk');
-    }));
 
     if(getMyVar('guanli','')==""){putMyVar('guanli','jk');}
 
@@ -34,7 +31,7 @@ function SRCSet() {
     });
     d.push({
         title: '操作',
-        url: $(["显示停用","批量选择","清空所有"],2,"选择操作功能项").select(()=>{
+        url: $(["查看禁用","批量选择","清空所有"],2,"选择操作功能项").select(()=>{
             clearMyVar('groupmenu');
             if(input=="批量选择"){
                 let sm;
