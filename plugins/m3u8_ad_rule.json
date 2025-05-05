@@ -40,8 +40,7 @@
             "10.3333",
             "10.85",
             "12.33",
-            "16.0599",
-            "10.0099"
+            "16.0599"
         ]
     },
     {
@@ -63,8 +62,8 @@
         ],
         "regex": [
             "#EXTINF.*?\\s+.*?adjump.*?\\.ts\\s+",
-            "#EXT-X-DISCONTINUITY\r*\n*#EXTINF:3,[\\s\\S]*?#EXT-X-DISCONTINUITY",
-            "#EXTINF.*?\\s+.*?1o.*?\\.ts\\s+"
+            "#EXTINF.*?\\s+.*?1o.*?\\.ts\\s+",
+            "#EXT-X-DISCONTINUITY\\r*\\n*#EXTINF:3,[\\s\\S]*?#EXT-X-DISCONTINUITY"
         ]
     },
     {
