@@ -57,7 +57,7 @@ function SRCSet() {
                     refreshPage(false);
                     return 'toast://已全部清空';
                 })
-            }else if(input=="显示停用"){
+            }else if(input=="查看禁用"){
                 let sm;
                 if(getMyVar('SrcJu_onlyStopJk')){
                     clearMyVar('SrcJu_onlyStopJk');
