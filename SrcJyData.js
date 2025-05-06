@@ -162,7 +162,6 @@ function getYiData(jkdata, batchTest) {
                 try {
                     if (api_type == "py"){
                         let home = PythonHiker.callFunc(pyModule, "homeContent", true);
-                        log(home);
                         let typelist = home['class'] || [];
                         typelist.forEach(v=>{
                             分类.push(v.type_name + '$' + v.type_id);
@@ -551,7 +550,7 @@ function getYiData(jkdata, batchTest) {
                                 }
                                 value.forEach(it => {
                                     if (it.value.length > 0) {
-                                        fl[it.key] = fl[it.key] || it.value[0].v;
+                                        fl[it.key] = fl[it.key] || (it.value[0].v=="全部"?it.value[0].v:"");
                                         it.value.forEach((itit) => {
                                             fllists.push({
                                                 title: fl[it.key] == itit.v ? '““””<b><span style="color:' + Color + '">' + itit.n + '</span></b>' : itit.n,
