@@ -550,7 +550,7 @@ function getYiData(jkdata, batchTest) {
                                 }
                                 value.forEach(it => {
                                     if (it.value.length > 0) {
-                                        fl[it.key] = fl[it.key] || (it.value[0].v=="全部"?it.value[0].v:"");
+                                        fl[it.key] = fl[it.key] || (it.value[0].v=="全部"?it.value[0].v:undefined);
                                         it.value.forEach((itit) => {
                                             fllists.push({
                                                 title: fl[it.key] == itit.v ? '““””<b><span style="color:' + Color + '">' + itit.n + '</span></b>' : itit.n,
