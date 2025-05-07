@@ -1522,6 +1522,7 @@ function yiji() {
         let importrecord = Juconfig['importrecord']||[];
         for(let j=0;j<importrecord.length;j++){
             if(importrecord[j].scan==1&&importrecord[j].type=='4'){
+                log("开始扫描本地文件夹新增接口文件，目录>"+importrecord[j].url);
                 return scanFolder(importrecord[j].url, 1);
             }
         }
