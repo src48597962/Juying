@@ -755,6 +755,7 @@ function dianboyiji(testSource) {
 
                 if (!getMyVar('startCheck2')){
                     // 扫描开启了自动扫描的文件夹，获取新增的接口文件
+                    putMyVar('startCheck2', 1);
                     let newfiles = [];
                     let importrecord = Juconfig['importrecord']||[];
                     for(let j=0;j<importrecord.length;j++){
@@ -768,12 +769,12 @@ function dianboyiji(testSource) {
                         log("发现"+newfiles.length+"个本地接口文件");
                         return $("发现"+newfiles.length+"个本地接口文件，去添加？").confirm((newfiles)=>{
                             return $('hiker://empty#noRecordHistory##noHistory#').rule((newfiles) => {
+                                setPageTitle("自动扫描新增文件");
                                 require(config.聚影.replace(/[^/]*$/,'') + 'SrcJySet.js');
                                 importConfirm(newfiles);
                             },newfiles)
                         },newfiles)
                     }
-                    putMyVar('startCheck2', 1);
                 }
                 
                 return selectSource();
