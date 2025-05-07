@@ -1533,15 +1533,21 @@ function yiji() {
             confirm({
                 title: '自动扫描发现新接口', 
                 content: newfiles.length+'个本地接口文件，去添加？', 
-                confirm: $.toString((newfiles) => {
+                confirm: $('hiker://empty#noRecordHistory##noHistory#').rule((newfiles) => {
+                    require(config.聚影.replace(/[^/]*$/,'') + 'SrcJySet.js');
+                    importConfirm(newfiles);
+                },newfiles),
+                cancel:''
+            })
+        }
+        /*
+$.toString((newfiles) => {
                     return $('hiker://empty#noRecordHistory##noHistory#').rule((newfiles) => {
                         require(config.聚影.replace(/[^/]*$/,'') + 'SrcJySet.js');
                         importConfirm(newfiles);
                     },newfiles)
                 },newfiles),
-                cancel:''
-            })
-        }
+        */
         putMyVar('startCheck2', 1);
     }
 }
