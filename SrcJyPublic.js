@@ -1482,7 +1482,7 @@ function updateResource(it,refresh) {
     }
 }
 // 扫描本地文件夹，是否有新增接口文件
-function scanFolder(start) {
+function scanFolder(input,start) {
     if(!start){
         showLoading("正在扫描本地文件夹");
     }
