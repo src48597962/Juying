@@ -1814,17 +1814,7 @@ function resource() {
 
                 if(importtype=="4"){//扫描本地js/py文件夹
                     showLoading("正在扫描本地文件夹");
-                    let oldfiles = getDatas("jk").filter(v=>(v.type=="hipy_t3"||v.type=="py") && v.url.startsWith(jkfilespath)).map(v=>v.url);
-                    let newfiles = readDir(input).filter(v=>(v.endsWith('.js')||v.endsWith('.py')) && !v.includes('[合]') && oldfiles.filter(o=>o.includes(v)).length==0).map(v=>input+v);
-                    hideLoading();
-                    if(newfiles.length==0){
-                        return "toast://没有新增的js/py文件"
-                    }else{
-                        return $('hiker://empty#noRecordHistory##noHistory#').rule((newfiles) => {
-                            require(config.聚影.replace(/[^/]*$/,'') + 'SrcJySet.js');
-                            importConfirm(newfiles);
-                        },newfiles)
-                    }
+                    return scanfolder();
                 }
 
                 function exeImport(input){
