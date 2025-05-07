@@ -2700,11 +2700,18 @@ function importConfirm(jsfile) {
         if(importdatas.length==0){
             let files = [];
             if($.type(jsfile)=="string"){
-                if(jsfile.startsWith('/')){
-                    jsfile = "file://" + jsfile;
+                if(jsfile.endsWith('.js')){//js单文件导入
+                    if(jsfile.startsWith('/')){
+                        jsfile = "file://" + jsfile;
+                    }
+                    files.push(jsfile);
+                }else if(jsfile==importfile){//文件夹文件名数组写入文件导入
+                    eval("let fileconet = " + fetch(jsfile));
+                    if(typeof fileconet == "array"){
+                        files = fileconet;
+                    }
                 }
-                files.push(jsfile);
-            }else if($.type(jsfile)=="array"){
+            }else if($.type(jsfile)=="array"){//文件夹文件名数组传递导入
                 files = jsfile;
             }
             importdatas = files.map(extfile=>{
