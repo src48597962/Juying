@@ -543,7 +543,7 @@ function setJkSort(data, so) {
     })
     writeFile(sortfile, JSON.stringify(sort));
 }
-// 执行一些主页加载后的事项
+// 执行一些主页加载后的事项，间隔24小时
 function excludeLoadingItems() {
     // 清理接口排序
     let datalist = getDatas("jk");
@@ -574,6 +574,7 @@ function excludeLoadingItems() {
         }
     })
     writeFile(jkfile, JSON.stringify(datalist));
+    
     // 清理接口残留过期文件
     /*
     let names = readDir(jkfilespath);
@@ -1482,9 +1483,14 @@ function updateResource(it,refresh) {
 }
 // 扫描本地文件夹，是否有新增接口文件
 function scanFolder(start) {
+    if(!start){
+        showLoading("正在扫描本地文件夹");
+    }
     let oldfiles = getDatas("jk").filter(v=>(v.type=="hipy_t3"||v.type=="py") && v.url.startsWith(jkfilespath)).map(v=>v.url);
     let newfiles = readDir(input).filter(v=>(v.endsWith('.js')||v.endsWith('.py')) && !v.includes('[合]') && oldfiles.filter(o=>o.includes(v)).length==0).map(v=>input+v);
-    hideLoading();
+    if(!start){
+        hideLoading();
+    }
     
     if(newfiles.length==0){
         log("扫描本地文件夹,未发现新增的js/py文件");
