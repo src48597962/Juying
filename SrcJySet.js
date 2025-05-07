@@ -1706,13 +1706,13 @@ function resource() {
     */
 
     d.push({
-        title: (importtype=="4"?"👉":"")+"drpy_js文件夹",
+        title: (importtype=="4"?"👉":"")+"js/py文件夹",
         col_type: 'scroll_button',
         url: $('#noLoading#').lazyRule(() => {
             clearMyVar('importinput');
             putMyVar('importtype','4');
             refreshPage(false);
-            return "toast://此项仅支持js文件所在的路径";
+            return "toast://此项仅支持js/py文件所在目录";
         })
     });
 
@@ -1812,13 +1812,13 @@ function resource() {
 
                 require(config.聚影.replace(/[^/]*$/,'') + 'SrcJySet.js');
 
-                if(importtype=="4"){//扫描本地js文件夹
+                if(importtype=="4"){//扫描本地js/py文件夹
                     showLoading("正在扫描本地文件夹");
-                    let oldfiles = getDatas("jk").filter(v=>v.type=="hipy_t3" && v.url.startsWith(jkfilespath)).map(v=>v.url);
-                    let newfiles = readDir(input).filter(v=>v.endsWith('.js') && !v.includes('[合]') && oldfiles.filter(o=>o.includes(v)).length==0).map(v=>input+v);
+                    let oldfiles = getDatas("jk").filter(v=>(v.type=="hipy_t3"||v.type=="py") && v.url.startsWith(jkfilespath)).map(v=>v.url);
+                    let newfiles = readDir(input).filter(v=>(v.endsWith('.js')||v.endsWith('.py')) && !v.includes('[合]') && oldfiles.filter(o=>o.includes(v)).length==0).map(v=>input+v);
                     hideLoading();
                     if(newfiles.length==0){
-                        return "toast://没有新增js"
+                        return "toast://没有新增的js/py文件"
                     }else{
                         return $('hiker://empty#noRecordHistory##noHistory#').rule((newfiles) => {
                             require(config.聚影.replace(/[^/]*$/,'') + 'SrcJySet.js');
@@ -2683,7 +2683,7 @@ function importConfirm(jsfile) {
             toast("聚影：口令有误>"+e.message);
         }
     }else{
-        //js文件导入
+        //js/py文件导入
         importdatas = storage0.getMyVar('importConfirm', []);
         if(importdatas.length==0){
             let files = [];
@@ -2697,7 +2697,12 @@ function importConfirm(jsfile) {
             }
             importdatas = files.map(extfile=>{
                 let name = extfile.substr(extfile.lastIndexOf('/')+1).split(".")[0];
-                let arr = { "name": name, "type": "hipy_t3"};
+                let arr = { "name": name};
+                if(extfile.endsWith(".js")){
+                    arr['type'] = "hipy_t3";
+                }else if(extfile.endsWith(".py")){
+                    arr['type'] = "py";
+                }
                 if(arr.name.includes('[搜]')){
                     arr['onlysearch'] = 1;
                 }
