@@ -1922,9 +1922,10 @@ function resource() {
                     js: $.toString((cfgfile, Juconfig, url) => {
                         let importrecord = Juconfig['importrecord']||[];
                         for(let j=0;j<importrecord.length;j++){
-                            if(importrecord[j].url==url&&importrecord[j].type==getMyVar('importtype','4')){
+                            if(importrecord[j].url==url&&importrecord[j].type=='4'){
                                 importrecord[j].scan = 1;
-                                break;
+                            }else{
+                                delete importrecord[j].scan;
                             }
                         }
                         Juconfig['importrecord'] = importrecord; 
