@@ -1522,8 +1522,8 @@ function yiji() {
         log("发现"+newfiles.length+"个本地接口文件，是否去添加？");
         if(newfiles.length>0){
             confirm({
-                title: "发现"+newfiles.length+"个本地接口文件，是否去添加？", 
-                content:'', 
+                title: "发现"+newfiles.length+"个本地接口文件", 
+                content:'是否去添加？', 
                 confirm: $.toString((newfiles) => {
                     return $('hiker://empty#noRecordHistory##noHistory#').rule((newfiles) => {
                         require(config.聚影.replace(/[^/]*$/,'') + 'SrcJySet.js');
