@@ -1508,19 +1508,6 @@ function yiji() {
     })
 
     deleteItemByCls("loading_gif");
-    // 一些需要调用在首页加载后，重进软件就执行
-    if (!getMyVar('startCheck2')){
-        // 扫描开启了自动扫描的文件夹，获取新增的接口文件
-        let importrecord = Juconfig['importrecord']||[];
-        for(let j=0;j<importrecord.length;j++){
-            if(importrecord[j].scan==1&&importrecord[j].type=='4'){
-                log("开始扫描本地文件夹新增接口文件，目录>"+importrecord[j].url);
-                scanFolder(importrecord[j].url, 1);
-                break;
-            }
-        }
-        putMyVar('startCheck2', 1);
-    }
     setResult(d);
 
     // 一些自动检查调用在首页加载后，间隔24小时
@@ -1529,7 +1516,33 @@ function yiji() {
         updateResource(); //检查更新订阅资源码
         putMyVar('startCheck', 1);
     }
-    
+    // 一些需要调用在首页加载后，重进软件就执行
+    if (!getMyVar('startCheck2')){
+        // 扫描开启了自动扫描的文件夹，获取新增的接口文件
+        let newfiles = [];
+        let importrecord = Juconfig['importrecord']||[];
+        for(let j=0;j<importrecord.length;j++){
+            if(importrecord[j].scan==1&&importrecord[j].type=='4'){
+                log("开始扫描本地文件夹新增接口文件，目录>"+importrecord[j].url);
+                newfiles = newfiles.concat(scanFolder(importrecord[j].url, 1));
+                break;
+            }
+        }
+        if(newfiles.length>0){
+            confirm({
+                title: "发现"+newfiles.length+"个本地接口文件，是否去添加？", 
+                content:'', 
+                confirm: $.toString((newfiles) => {
+                    return $('hiker://empty#noRecordHistory##noHistory#').rule((newfiles) => {
+                        require(config.聚影.replace(/[^/]*$/,'') + 'SrcJySet.js');
+                        importConfirm(newfiles);
+                    },newfiles)
+                },newfiles),
+                cancel:''
+            })
+        }
+        putMyVar('startCheck2', 1);
+    }
 }
 // 新搜索页
 function newSearch(name) {
