@@ -2558,12 +2558,12 @@ function yundisksave(datas, mode){
 }
 // 云口令导入确认页
 function importConfirm(jsfile) {
+    let importfile = "hiker://files/_cache/Juying2/cloudimport.txt";
     addListener("onClose", $.toString((importfile) => {
         deleteFile(importfile);
         clearMyVar('importConfirm');
     },importfile));
     let code,name,lx,sm,importdatas,datalist;
-    let importfile = "hiker://files/_cache/Juying2/cloudimport.txt";
     let d = [];
     
     if(!jsfile){
@@ -2695,6 +2695,7 @@ function importConfirm(jsfile) {
             toast("聚影：口令有误>"+e.message);
         }
     }else{
+        log(jsfile);
         //js/py文件导入
         importdatas = storage0.getMyVar('importConfirm', []);
         if(importdatas.length==0){
@@ -2707,7 +2708,9 @@ function importConfirm(jsfile) {
                     files.push(jsfile);
                 }else if(jsfile==importfile){//文件夹文件名数组写入文件导入
                     eval("let fileconet = " + fetch(jsfile));
+                    log($.type(fileconet));
                     if(typeof fileconet == "array"){
+                        log("11111");
                         files = fileconet;
                     }
                 }
