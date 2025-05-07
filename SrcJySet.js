@@ -1894,8 +1894,48 @@ function resource() {
         }
         
         for(let i=0;i<lists.length;i++){
+            let long = [{
+                title: "删除",
+                js: $.toString((cfgfile, Juconfig, url) => {
+                    let importrecord = Juconfig['importrecord']||[];
+                    for(let j=0;j<importrecord.length;j++){
+                        if(importrecord[j].url==url&&importrecord[j].type==getMyVar('importtype','1')){
+                            importrecord.splice(j,1);
+                            break;
+                        }
+                    }
+                    Juconfig['importrecord'] = importrecord; 
+                    writeFile(cfgfile, JSON.stringify(Juconfig));
+                    refreshPage(false);
+                    return "toast://已删除";
+                },cfgfile, Juconfig, lists[i].url)
+            },{
+                title: "复制",
+                js: $.toString((url) => {
+                    copy(url);
+                    return "hiker://empty";
+                }, lists[i].url)
+            }]
+            if(importtype=="4"){
+                long.push({
+                    title: "自动",
+                    js: $.toString((cfgfile, Juconfig, url) => {
+                        let importrecord = Juconfig['importrecord']||[];
+                        for(let j=0;j<importrecord.length;j++){
+                            if(importrecord[j].url==url&&importrecord[j].type==getMyVar('importtype','4')){
+                                importrecord[j].scan = 1;
+                                break;
+                            }
+                        }
+                        Juconfig['importrecord'] = importrecord; 
+                        writeFile(cfgfile, JSON.stringify(Juconfig));
+                        refreshPage(false);
+                        return "toast://已设置为自动扫描";
+                    },cfgfile, Juconfig, lists[i].url)
+                });
+            }
             d.push({
-                title: lists[i].url,
+                title: lists[i].url + (lists[i].scan?"  [自动扫描]":""),
                 url: $('#noLoading#').lazyRule((url) => {
                     putMyVar('importinput', url);
                     refreshPage(true);
@@ -1904,28 +1944,7 @@ function resource() {
                 col_type: "text_1",
                 extra: {
                     id: lists[i].url,
-                    longClick: [{
-                        title: "删除",
-                        js: $.toString((cfgfile, Juconfig, url) => {
-                            let importrecord = Juconfig['importrecord']||[];
-                            for(let j=0;j<importrecord.length;j++){
-                                if(importrecord[j].url==url&&importrecord[j].type==getMyVar('importtype','1')){
-                                    importrecord.splice(j,1);
-                                    break;
-                                }
-                            }
-                            Juconfig['importrecord'] = importrecord; 
-                            writeFile(cfgfile, JSON.stringify(Juconfig));
-                            refreshPage(false);
-                            return "toast://已删除";
-                        },cfgfile, Juconfig, lists[i].url)
-                    },{
-                        title: "复制",
-                        js: $.toString((url) => {
-                            copy(url);
-                            return "hiker://empty";
-                        }, lists[i].url)
-                    }]
+                    longClick: long
                 }
             });
         }
