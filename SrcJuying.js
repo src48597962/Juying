@@ -1508,14 +1508,6 @@ function yiji() {
     })
 
     deleteItemByCls("loading_gif");
-    setResult(d);
-
-    // 一些自动检查调用在首页加载后，间隔24小时
-    if (!getMyVar('startCheck') && nowtime > (oldtime+24*60*60*1000)) {
-        excludeLoadingItems(); //执行一些加载后的事项
-        updateResource(); //检查更新订阅资源码
-        putMyVar('startCheck', 1);
-    }
     // 一些需要调用在首页加载后，重进软件就执行
     if (!getMyVar('startCheck2')){
         // 扫描开启了自动扫描的文件夹，获取新增的接口文件
@@ -1543,6 +1535,15 @@ function yiji() {
         }
         putMyVar('startCheck2', 1);
     }
+    setResult(d);
+
+    // 一些自动检查调用在首页加载后，间隔24小时
+    if (!getMyVar('startCheck') && nowtime > (oldtime+24*60*60*1000)) {
+        excludeLoadingItems(); //执行一些加载后的事项
+        updateResource(); //检查更新订阅资源码
+        putMyVar('startCheck', 1);
+    }
+    
 }
 // 新搜索页
 function newSearch(name) {
