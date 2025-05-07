@@ -1510,7 +1510,6 @@ function scanFolder(input,start) {
             },newfiles),
             cancel:''
         })
-        return "hiker://empty";
     }else{
         return $('hiker://empty#noRecordHistory##noHistory#').rule((newfiles) => {
             require(config.聚影.replace(/[^/]*$/,'') + 'SrcJySet.js');
