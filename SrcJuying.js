@@ -1525,9 +1525,9 @@ function yiji() {
             if(importrecord[j].scan==1&&importrecord[j].type=='4'){
                 log("开始扫描本地文件夹新增接口文件，目录>"+importrecord[j].url);
                 newfiles = newfiles.concat(scanFolder(importrecord[j].url, 1));
-                break;
             }
         }
+        log("发现"+newfiles.length+"个本地接口文件，是否去添加？");
         if(newfiles.length>0){
             confirm({
                 title: "发现"+newfiles.length+"个本地接口文件，是否去添加？", 
