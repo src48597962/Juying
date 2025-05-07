@@ -1530,15 +1530,13 @@ function yiji() {
         
         if(newfiles.length>0){
             log("发现"+newfiles.length+"个本地接口文件");
+            let importfile = "hiker://files/_cache/Juying2/cloudimport.txt";
+            writeFile(importfile, JSON.stringify(newfiles));
             confirm({
                 title: '自动扫描发现新接口', 
                 content: newfiles.length+'个本地接口文件，去添加？', 
-                confirm: $.toString((newfiles) => {
-                    let importfile = "hiker://files/_cache/Juying2/cloudimport.txt";
-                    writeFile(importfile, JSON.stringify(newfiles));
-                    return "hiker://page/importConfirm#fullTheme##noRecordHistory##noHistory#?extfile=" + importfile;
-                },newfiles),
-                cancel:''
+                confirm: "hiker://page/importConfirm#fullTheme##noRecordHistory##noHistory#?extfile=" + importfile,
+                cancel: ''
             })
         }
         /*
