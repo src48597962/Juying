@@ -1486,6 +1486,9 @@ function scanFolder(input,start) {
     if(!start){
         showLoading("正在扫描本地文件夹");
     }
+    if(input.startsWith('/')){
+        input = "file://" + input;
+    }
     let oldfiles = getDatas("jk").filter(v=>(v.type=="hipy_t3"||v.type=="py") && v.url.startsWith(jkfilespath)).map(v=>v.url);
     let newfiles = readDir(input).filter(v=>(v.endsWith('.js')||v.endsWith('.py')) && !v.includes('[合]') && oldfiles.filter(o=>o.includes(v)).length==0).map(v=>input+v);
     if(!start){
