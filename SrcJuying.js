@@ -1519,7 +1519,12 @@ function yiji() {
     // 一些需要调用在首页加载后，重进软件就执行
     if (!getMyVar('startCheck2')){
         // 扫描开启了自动扫描的文件夹，获取新增的接口文件
-        scanFolder(input,1);
+        let importrecord = Juconfig['importrecord']||[];
+        for(let j=0;j<importrecord.length;j++){
+            if(importrecord[j].scan==1&&importrecord[j].type=='4'){
+                return scanFolder(importrecord[j].url, 1);
+            }
+        }
         putMyVar('startCheck2', 1);
     }
 }
