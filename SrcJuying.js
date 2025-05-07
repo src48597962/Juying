@@ -752,6 +752,30 @@ function dianboyiji(testSource) {
             title: "切换站源",
             url: testSource?"toast://测试模式下不能更换站源":$('#noLoading#').lazyRule(() => {
                 require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
+
+                if (!getMyVar('startCheck2')){
+                    // 扫描开启了自动扫描的文件夹，获取新增的接口文件
+                    let newfiles = [];
+                    let importrecord = Juconfig['importrecord']||[];
+                    for(let j=0;j<importrecord.length;j++){
+                        if(importrecord[j].scan==1&&importrecord[j].type=='4'){
+                            log("开始扫描本地文件夹新增接口文件，目录>"+importrecord[j].url);
+                            newfiles = newfiles.concat(scanFolder(importrecord[j].url, 1));
+                        }
+                    }
+                    
+                    if(newfiles.length>0){
+                        log("发现"+newfiles.length+"个本地接口文件");
+                        return $("发现"+newfiles.length+"个本地接口文件，去添加？").confirm((newfiles)=>{
+                            return $('hiker://empty#noRecordHistory##noHistory#').rule((newfiles) => {
+                                require(config.聚影.replace(/[^/]*$/,'') + 'SrcJySet.js');
+                                importConfirm(newfiles);
+                            },newfiles)
+                        },newfiles)
+                    }
+                    putMyVar('startCheck2', 1);
+                }
+                
                 return selectSource();
             }),
             pic_url: getIcon("点播-主页.svg"),
@@ -1515,39 +1539,6 @@ function yiji() {
         excludeLoadingItems(); //执行一些加载后的事项
         updateResource(); //检查更新订阅资源码
         putMyVar('startCheck', 1);
-    }
-    // 一些需要调用在首页加载后，重进软件就执行
-    if (!getMyVar('startCheck2')){
-        // 扫描开启了自动扫描的文件夹，获取新增的接口文件
-        let newfiles = [];
-        let importrecord = Juconfig['importrecord']||[];
-        for(let j=0;j<importrecord.length;j++){
-            if(importrecord[j].scan==1&&importrecord[j].type=='4'){
-                log("开始扫描本地文件夹新增接口文件，目录>"+importrecord[j].url);
-                newfiles = newfiles.concat(scanFolder(importrecord[j].url, 1));
-            }
-        }
-        
-        if(newfiles.length>0){
-            log("发现"+newfiles.length+"个本地接口文件");
-            let importfile = "hiker://files/_cache/Juying2/cloudimport.txt";
-            writeFile(importfile, JSON.stringify(newfiles));
-            confirm({
-                title: '自动扫描发现新接口', 
-                content: newfiles.length+'个本地接口文件，去添加？', 
-                confirm: "hiker://page/importConfirm#fullTheme##noRecordHistory##noHistory#?extfile=" + importfile,
-                cancel: ''
-            })
-        }
-        /*
-$.toString((newfiles) => {
-                    return $('hiker://empty#noRecordHistory##noHistory#').rule((newfiles) => {
-                        require(config.聚影.replace(/[^/]*$/,'') + 'SrcJySet.js');
-                        importConfirm(newfiles);
-                    },newfiles)
-                },newfiles),
-        */
-        putMyVar('startCheck2', 1);
     }
 }
 // 新搜索页
