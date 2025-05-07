@@ -1499,12 +1499,18 @@ function scanFolder(input,start) {
         log("扫描本地文件夹,未发现新增的js/py文件");
         return start?"hiker://empty":"toast://没有新增的js/py文件"
     }else if(start){
-        return $("发现"+newfiles.length+"个本地接口文件，是否去添加？").confirm((newfiles)=>{
-            return $('hiker://empty#noRecordHistory##noHistory#').rule((newfiles) => {
-                require(config.聚影.replace(/[^/]*$/,'') + 'SrcJySet.js');
-                importConfirm(newfiles);
-            },newfiles)
-        },newfiles)
+        confirm({
+            title: "发现"+newfiles.length+"个本地接口文件，是否去添加？", 
+            content:'', 
+            confirm: $.toString((newfiles) => {
+                return $('hiker://empty#noRecordHistory##noHistory#').rule((newfiles) => {
+                    require(config.聚影.replace(/[^/]*$/,'') + 'SrcJySet.js');
+                    importConfirm(newfiles);
+                },newfiles)
+            },newfiles),
+            cancel:''
+        })
+        return "hiker://empty";
     }else{
         return $('hiker://empty#noRecordHistory##noHistory#').rule((newfiles) => {
             require(config.聚影.replace(/[^/]*$/,'') + 'SrcJySet.js');
