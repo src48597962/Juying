@@ -2695,7 +2695,6 @@ function importConfirm(jsfile) {
             toast("聚影：口令有误>"+e.message);
         }
     }else{
-        log(jsfile);
         //js/py文件导入
         importdatas = storage0.getMyVar('importConfirm', []);
         if(importdatas.length==0){
@@ -2708,9 +2707,7 @@ function importConfirm(jsfile) {
                     files.push(jsfile);
                 }else if(jsfile==importfile){//文件夹文件名数组写入文件导入
                     eval("let fileconet = " + fetch(jsfile));
-                    log($.type(fileconet));
                     if(typeof fileconet == "array"){
-                        log("11111");
                         files = fileconet;
                     }
                 }
