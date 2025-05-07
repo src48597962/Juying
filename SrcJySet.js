@@ -1923,9 +1923,12 @@ function resource() {
                         let importrecord = Juconfig['importrecord']||[];
                         for(let j=0;j<importrecord.length;j++){
                             if(importrecord[j].url==url&&importrecord[j].type=='4'){
-                                importrecord[j].scan = 1;
-                            }else{
-                                delete importrecord[j].scan;
+                                if(importrecord[j].scan){
+                                    delete importrecord[j].scan;
+                                }else{
+                                    importrecord[j].scan = 1;
+                                }
+                                break;
                             }
                         }
                         Juconfig['importrecord'] = importrecord; 
