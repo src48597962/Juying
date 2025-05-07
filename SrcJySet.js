@@ -1813,8 +1813,7 @@ function resource() {
                 require(config.聚影.replace(/[^/]*$/,'') + 'SrcJySet.js');
 
                 if(importtype=="4"){//扫描本地js/py文件夹
-                    showLoading("正在扫描本地文件夹");
-                    return scanfolder();
+                    return scanFolder();
                 }
 
                 function exeImport(input){
