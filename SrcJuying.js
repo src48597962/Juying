@@ -1508,6 +1508,14 @@ function yiji() {
     })
 
     deleteItemByCls("loading_gif");
+    setResult(d);
+
+    // 一些自动检查调用在首页加载后，间隔24小时
+    if (!getMyVar('startCheck') && nowtime > (oldtime+24*60*60*1000)) {
+        excludeLoadingItems(); //执行一些加载后的事项
+        updateResource(); //检查更新订阅资源码
+        putMyVar('startCheck', 1);
+    }
     // 一些需要调用在首页加载后，重进软件就执行
     if (!getMyVar('startCheck2')){
         // 扫描开启了自动扫描的文件夹，获取新增的接口文件
@@ -1519,11 +1527,12 @@ function yiji() {
                 newfiles = newfiles.concat(scanFolder(importrecord[j].url, 1));
             }
         }
-        log("发现"+newfiles.length+"个本地接口文件，是否去添加？");
+        
         if(newfiles.length>0){
+            log("发现"+newfiles.length+"个本地接口文件");
             confirm({
-                title: "发现"+newfiles.length+"个本地接口文件", 
-                content:'是否去添加？', 
+                title: '自动扫描发现新接口', 
+                content: newfiles.length+'个本地接口文件，去添加？', 
                 confirm: $.toString((newfiles) => {
                     return $('hiker://empty#noRecordHistory##noHistory#').rule((newfiles) => {
                         require(config.聚影.replace(/[^/]*$/,'') + 'SrcJySet.js');
@@ -1535,15 +1544,6 @@ function yiji() {
         }
         putMyVar('startCheck2', 1);
     }
-    setResult(d);
-
-    // 一些自动检查调用在首页加载后，间隔24小时
-    if (!getMyVar('startCheck') && nowtime > (oldtime+24*60*60*1000)) {
-        excludeLoadingItems(); //执行一些加载后的事项
-        updateResource(); //检查更新订阅资源码
-        putMyVar('startCheck', 1);
-    }
-    
 }
 // 新搜索页
 function newSearch(name) {
