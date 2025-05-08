@@ -2817,7 +2817,12 @@ function importConfirm(jsfile) {
             if(lx=="jk"){
                 datamenu.push("设定分组");
                 datamenu.push("接口测试");
+                if(!it.url.startsWith('http')){
+                    datamenu.push("查看文件");
+                    datamenu.push("删除文件");
+                }
             }
+            
             d.push({
                 title: it.name + (lx=="yp"?"":"   (" + it.type + ")") + (it.group?"  ["+it.group+"]":"") + "  {" + (isnew?"新增加":"已存在") + "}",
                 url: $(datamenu, 1).select((lx, data) => {
@@ -2886,6 +2891,13 @@ function importConfirm(jsfile) {
                             require(config.聚影.replace(/[^/]*$/,'') + 'SrcJuying.js');
                             dianboyiji(data);
                         },data)
+                    }else if (input == "查看文件") {
+                        return "editFile://" + data.url;
+                    }else if (input == "删除文件") {
+                        return $("删除"+data.url+"，确认？").confirm((data)=>{
+                            deleteFile(data.url);
+                            return "toast://已删除";
+                        }, data)
                     }
                 }, lx, base64Encode(JSON.stringify(it))),
                 img: getIcon("管理-箭头.svg"),
