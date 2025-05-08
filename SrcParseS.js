@@ -123,22 +123,22 @@ var SrcParseS = {
                 play.url = play.url.replace('push://', '');
             }
             if(play.url.startsWith("pics://")){
-                log(dataObj.stype + "-自解析完成，进入漫画模式");
+                log(dataObj.stype + "自解析完成，进入漫画模式");
                 return play.url;
             }
             if(play.url.startsWith("select://")){
                 let seljson = JSON.parse(play.url.replace("select://",""));
                 if(seljson.options.length==1){
-                    log(dataObj.stype + "-自解析完成，进入直接播放");
+                    log(dataObj.stype + "自解析完成，进入直接播放");
                     return "第1部@lazyRule=.js:"+seljson.js;
                 }
-                log(dataObj.stype + "-自解析完成，进入选择播放");
+                log(dataObj.stype + "自解析完成，进入选择播放");
                 return play.url;
             }else if(/\.mp3|\.m4a|\.mp4|\.m3u8/.test(play.url) && play.header){
                 if(/.mp3|\.m4a/.test(play.url)){
                     play.url = play.url + '#isMusic=true##checkMetadata=false#';
                 }
-                log(dataObj.stype + "-自解析完成，进入带headers播放");
+                log(dataObj.stype + "自解析完成，进入带headers播放");
                 return JSON.stringify({
                     urls: [play.url],
                     headers: [play.header]
