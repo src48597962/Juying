@@ -2892,10 +2892,20 @@ function importConfirm(jsfile) {
                             dianboyiji(data);
                         },data)
                     }else if (input == "查看文件") {
-                        return "editFile://" + data.url;
+                        return "editFile://" + data.exf;
                     }else if (input == "删除文件") {
-                        return $("删除"+data.url+"，确认？").confirm((data)=>{
-                            deleteFile(data.url);
+                        return $("删除"+data.exf+"，确认？").confirm((data)=>{
+                            deleteFile(data.exf);
+                            clearMyVar('SrcJu_searchMark');
+                            let importlist = storage0.getMyVar('importConfirm', []);
+                            if(importlist.length==1){
+                                back(false);
+                            }else{
+                                let index2 = importlist.indexOf(importlist.filter(d => d.url==data.url)[0]);
+                                importlist.splice(index2, 1);
+                                storage0.putMyVar('importConfirm', importlist);
+                                deleteItem(data.url);
+                            }
                             return "toast://已删除";
                         }, data)
                     }
