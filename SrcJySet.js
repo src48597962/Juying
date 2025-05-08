@@ -2827,7 +2827,7 @@ function importConfirm(jsfile) {
                 title: it.name + (lx=="yp"?"":"   (" + it.type + ")") + (it.group?"  ["+it.group+"]":"") + "  {" + (isnew?"新增加":"已存在") + "}",
                 url: $(datamenu, 2).select((lx, data) => {
                     data = JSON.parse(base64Decode(data));
-                    log(data);
+
                     if (input == "确定导入") {
                         return $("如本地存在则将覆盖，确认？").confirm((lx,data)=>{
                             let dataurl = data.url;
@@ -2893,10 +2893,10 @@ function importConfirm(jsfile) {
                             dianboyiji(data);
                         },data)
                     }else if (input == "查看文件") {
-                        return "editFile://" + data.exf;
+                        return "editFile://" + data.ext;
                     }else if (input == "删除文件") {
-                        return $("删除"+data.exf+"，确认？").confirm((data)=>{
-                            deleteFile(data.exf);
+                        return $("删除"+data.ext+"，确认？").confirm((data)=>{
+                            deleteFile(data.ext);
                             clearMyVar('SrcJu_searchMark');
                             let importlist = storage0.getMyVar('importConfirm', []);
                             if(importlist.length==1){
