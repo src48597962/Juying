@@ -2825,8 +2825,9 @@ function importConfirm(jsfile) {
             
             d.push({
                 title: it.name + (lx=="yp"?"":"   (" + it.type + ")") + (it.group?"  ["+it.group+"]":"") + "  {" + (isnew?"新增加":"已存在") + "}",
-                url: $(datamenu, 1).select((lx, data) => {
+                url: $(datamenu, 2).select((lx, data) => {
                     data = JSON.parse(base64Decode(data));
+                    log(data);
                     if (input == "确定导入") {
                         return $("如本地存在则将覆盖，确认？").confirm((lx,data)=>{
                             let dataurl = data.url;
