@@ -223,8 +223,15 @@ function getBoxSource(input, mode, imports){
                 if(obj.categories){
                     arr["categories"] = obj.categories;
                 }
-            }else if(obj.type==4 && obj.api.includes('/api/')){
-                arr = { "name": obj.name, "url": obj.api, "type": "hipy_t4", "ext": obj.ext};
+            }else if(obj.type==4 && (obj.api.includes('/api/')||obj.api.includes('/drpys/'))){
+                let extfile = obj.ext;
+                if($.type(extfile)=='string'){
+                    if(extfile.startsWith('./')){
+                        let urlpath = input.substr(0, input.lastIndexOf('/')+1);
+                        extfile = extfile.replace("../", urlpath).replace(/\.\//g, urlpath);
+                    }
+                }
+                arr = { "name": obj.name, "url": obj.api, "type": "hipy_t4", "ext": extfile};
                 if(arr.name.includes('[搜]')){
                     arr['onlysearch'] = 1;
                 }
