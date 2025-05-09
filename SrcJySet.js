@@ -1305,7 +1305,9 @@ function jiekou(data) {
                     if(data.ext){
                         arr['ext'] = data.ext;
                     }
-                    arr['oldurl'] = data.url;
+                    if(getMyVar('isSaveAs', '')!="1"){
+                        arr['oldurl'] = data.url;
+                    }
                 }else if(extfile){
                     arr['ext'] = extfile;
                 }
