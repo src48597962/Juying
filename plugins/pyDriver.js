@@ -12,7 +12,7 @@ function getPyFile(url) {
 function initPyModule(api_url) {
     log("aaa");
     log($.type(PythonHiker.Builtins.get("getName")));
-    log($.type(PythonHiker.Builtins.get("homeContent")));
+    log($.type(PythonHiker.Builtins.callAttr("Spider").get("homeContent")));
     var pyModule = PythonHiker.runPy(getPyFile(api_url)).callAttr("Spider");
     log("bbb");
     
