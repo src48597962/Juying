@@ -114,10 +114,7 @@ var SrcParseS = {
                 let pyModule = initPyModule(dataObj.surl);
                 PythonHiker.callFunc(pyModule, "init", []);
                 play = PythonHiker.callFunc(pyModule, "playerContent", dataObj.flag, vipUrl, []);
-                log($.type(play.url));
-                log(typeof play.url);
                 if($.type(play.url) == "array"){
-                    log(play.url[1]);
                     play.url = play.url[1];
                 }
             }
@@ -141,7 +138,7 @@ var SrcParseS = {
                 }
                 log(dataObj.stype + "自解析完成，进入选择播放");
                 return play.url;
-            }else if(/\.mp3|\.m4a|\.mp4|\.m3u8/.test(play.url) && play.header){
+            }else if(/\.mp3|\.m4a|\.mp4|\.m3u8|\.flv/.test(play.url) && play.header){
                 if(/.mp3|\.m4a/.test(play.url)){
                     play.url = play.url + '#isMusic=true##checkMetadata=false#';
                 }
