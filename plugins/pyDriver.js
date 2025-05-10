@@ -11,10 +11,8 @@ function getPyFile(url) {
 // 初始化py源修正相关模块方法
 function initPyModule(api_url) {
     log("aaa");
-    log(Object.keys(PythonHiker.runPy(getPyFile(api_url))));
-    log($.type(PythonHiker.runPy(getPyFile(api_url)).get()));
-    log($.type(PythonHiker.runPy(getPyFile(api_url)).get("detailContent")));
-    log($.type(PythonHiker.runPy(getPyFile(api_url)).getClass().getName()));
+    log(Object.keys(PythonHiker.runPy(getPyFile(api_url)).getClass()));
+
     var pyModule = PythonHiker.runPy(getPyFile(api_url)).callAttr("Spider");
     log("bbb");
     
