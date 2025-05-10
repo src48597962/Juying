@@ -12,6 +12,7 @@ function initPyModule(api_url) {
     }
     // 初始化py源修正相关模块方法
     if(!pyModule.get("getName")){
+        log("add getName");
         pyModule.put("getName", PythonHiker.wrapperJsFunc(function(){
             return "";
         }));
