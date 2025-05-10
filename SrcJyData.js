@@ -123,9 +123,7 @@ function getYiData(jkdata, batchTest) {
         var pyModule = PythonHiker.runPy(getPyFile(jkdata.url)).callAttr("Spider");
         */
         require(codepath + "plugins/pyDriver.js");
-        log("来了老弟");
         var pyModule = initPyModule(jkdata.url);
-        log("完了");
         PythonHiker.callFunc(pyModule, "init", []);
         classurl = "hiker://empty";
         listurl = "hiker://empty";
