@@ -1,6 +1,8 @@
 var PythonHiker = $.require("hiker://files/plugins/chaquopy/PythonHiker.js");
+log("aaa");
 function initPyModule(api_url) {
     var pyModule = PythonHiker.runPy(getPyFile(api_url)).callAttr("Spider");
+    log("bbb");
     // py源获取本地文件路径
     function getPyFile(url) {
         if(url.startsWith('hiker')){
