@@ -114,7 +114,10 @@ var SrcParseS = {
                 let pyModule = initPyModule(dataObj.surl);
                 PythonHiker.callFunc(pyModule, "init", []);
                 play = PythonHiker.callFunc(pyModule, "playerContent", dataObj.flag, vipUrl, []);
-                if(typeof play.url == "array"){
+                log($.type(play.url));
+                log(typeof play.url);
+                if($.type(play.url) == "array"){
+                    log(play.url[1]);
                     play.url = play.url[1];
                 }
             }
