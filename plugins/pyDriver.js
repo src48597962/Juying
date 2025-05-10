@@ -14,7 +14,7 @@ function initPyModule(api_url) {
     log(Object.keys(PythonHiker.runPy(getPyFile(api_url))));
     log($.type(PythonHiker.runPy(getPyFile(api_url)).get("getName")));
     log($.type(PythonHiker.runPy(getPyFile(api_url)).get("detailContent")));
-    log(PythonHiker.runPy(getPyFile(api_url)).containsKey("getName"));
+    log(PythonHiker.runPy(getPyFile(api_url)).asList());
     log($.type(PythonHiker.runPy(getPyFile(api_url)).getClass().getName()));
     var pyModule = PythonHiker.runPy(getPyFile(api_url)).callAttr("Spider");
     log("bbb");
