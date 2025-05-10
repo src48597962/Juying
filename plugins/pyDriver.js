@@ -10,20 +10,22 @@ function getPyFile(url) {
 }
 // 初始化py源修正相关模块方法
 function initPyModule(api_url) {
-    log("aaa");
-    //log(Object.keys(PythonHiker.runPy(getPyFile(api_url)).getClass()));
-    PythonHiker.evalCode(`def getName(self):
-        return "`);
-    var pyModule = PythonHiker.runPy(getPyFile(api_url)).callAttr("Spider");
-    log("bbb");
+    try{
+        var pyModule = PythonHiker.runPy(getPyFile(api_url)).callAttr("Spider");
+    }catch(e){
+        if(e.message.includes('getName')){
+            PythonHiker.evalCode(`def getName(self):
+                return "`);
+            var pyModule = PythonHiker.runPy(getPyFile(api_url)).callAttr("Spider");
+        }
+    }
     
     if(!pyModule.get("getName")){
-        log("add getName");
         pyModule.put("getName", PythonHiker.wrapperJsFunc(function(){
             return "";
         }));
     }
-    
+
     if(!pyModule.get("setCache")){
         // 注入 setCache 方法
         pyModule.put("setCache", PythonHiker.wrapperJsFunc(function(key, value){
