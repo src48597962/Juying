@@ -12,7 +12,8 @@ function getPyFile(url) {
 function initPyModule(api_url) {
     log("aaa");
     //log(Object.keys(PythonHiker.runPy(getPyFile(api_url)).getClass()));
-    PythonHiker.Builtins.callAttr("getName");
+    PythonHiker.evalCode(`def getName(self):
+        return "`);
     var pyModule = PythonHiker.runPy(getPyFile(api_url)).callAttr("Spider");
     log("bbb");
     
