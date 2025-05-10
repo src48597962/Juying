@@ -115,7 +115,7 @@ var SrcParseS = {
                 PythonHiker.callFunc(pyModule, "init", []);
                 play = PythonHiker.callFunc(pyModule, "playerContent", dataObj.flag, vipUrl, []);
             }
-            //log(play);
+            log(play);
             if(play.js){
                 extrajs = play.js;
             }
