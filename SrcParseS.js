@@ -138,7 +138,7 @@ var SrcParseS = {
                 }
                 log(dataObj.stype + "自解析完成，进入选择播放");
                 return play.url;
-            }else if(/\.mp3|\.m4a|\.mp4|\.m3u8|\.flv/.test(play.url) && play.header){
+            }else if(/\.mp3|\.m4a|\.mp4|\.m3u8/.test(play.url) && play.header){
                 if(/.mp3|\.m4a/.test(play.url)){
                     play.url = play.url + '#isMusic=true##checkMetadata=false#';
                 }
