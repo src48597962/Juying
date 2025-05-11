@@ -31,8 +31,8 @@ let nowtime = Date.now();
 function getUserInfo(token) {
     if(token){
         let account = {};
-        let oldtime = parseInt(getMyVar('userinfoChecktime', '0').replace('time', ''));
-        let aliuserinfo = storage0.getMyVar('aliuserinfo');
+        let oldtime = parseInt(getMyVar('Src_Jy_userinfoChecktime', '0').replace('time', ''));
+        let aliuserinfo = storage0.getMyVar('Src_Jy_aliuserinfo');
         if (aliuserinfo && aliuserinfo.user_id && nowtime < (oldtime + 2 * 60 * 60 * 1000)) {
             account = aliuserinfo;
         }else{
@@ -44,8 +44,8 @@ function getUserInfo(token) {
                     delete headers['authorization'];
                     account.resource_drive_id = user.resource_drive_id;
                     account.backup_drive_id = user.backup_drive_id;
-                    storage0.putMyVar('aliuserinfo', account);
-                    putMyVar('userinfoChecktime', nowtime + 'time');
+                    storage0.putMyVar('Src_Jy_aliuserinfo', account);
+                    putMyVar('Src_Jy_userinfoChecktime', nowtime + 'time');
                     aliaccount.refresh_token = account.refresh_token;
                     aliconfig.account = aliaccount;
                     aliOpenTokenObj.refresh_token_1 = "";
@@ -60,7 +60,7 @@ function getUserInfo(token) {
         }
         return account;
     }else{
-        clearMyVar('aliuserinfo');
+        clearMyVar('Src_Jy_aliuserinfo');
         delete aliaccount.refresh_token;
         aliconfig.account = aliaccount;
         writeFile(alicfgfile, JSON.stringify(aliconfig));
@@ -72,7 +72,7 @@ if (alitoken) {
     userinfo = getUserInfo(alitoken);
 }
 let backup_drive_id = userinfo.backup_drive_id || userinfo.default_drive_id;
-let alidrive_id = getMyVar("selectDisk", "1") == "1" ? backup_drive_id : userinfo.resource_drive_id || userinfo.default_drive_id;
+let alidrive_id = getMyVar("Src_Jy_selectDisk", "1") == "1" ? backup_drive_id : userinfo.resource_drive_id || userinfo.default_drive_id;
 let authorization = 'Bearer ' + userinfo.access_token;
 
 function getShareToken(share_id, share_pwd) {
