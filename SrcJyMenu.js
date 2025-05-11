@@ -1,25 +1,25 @@
 //本代码仅用于个人学习，请勿用于其他作用，下载后请24小时内删除，代码虽然是公开学习的，但请尊重作者，应留下说明
-let getIcon = globalMap0.getVar('Jy_gmParams').getIcon;
+let getIcon = globalMap0.getVar('Src_Jy_gmParams').getIcon;
 //二级统一菜单
 function erjimenu(desc,name,group) {
     return [
         {
             title: "详情简介",
             url: $("#noLoading#").lazyRule((desc) => {
-                if (getMyVar('二级简介打开标识') == "1") {
-                    clearMyVar('二级简介打开标识');
+                if (getMyVar('Src_Jy_二级简介打开标识') == "1") {
+                    clearMyVar('Src_Jy_二级简介打开标识');
                     deleteItemByCls("SrcJudescload");
                 } else {
-                    putMyVar('二级简介打开标识', "1");
+                    putMyVar('Src_Jy_二级简介打开标识', "1");
                     addItemAfter('detailid', [{
                         title: `<font color="#098AC1">详情简介 </font><small><font color="#f47983"> ::</font></small>`,
                         col_type: "avatar",
                         url: $("#noLoading#").lazyRule(() => {
-                            clearMyVar('二级简介打开标识');
+                            clearMyVar('Src_Jy_二级简介打开标识');
                             deleteItemByCls("SrcJudescload");
                             return "hiker://empty";
                         }),
-                        pic_url: globalMap0.getVar('Jy_gmParams').getIcon("点播-简介.svg"),
+                        pic_url: globalMap0.getVar('Src_Jy_gmParams').getIcon("点播-简介.svg"),
                         extra: {
                             cls: "SrcJudescload"
                         }
@@ -85,7 +85,7 @@ function erjimenu(desc,name,group) {
 
 //切源事件
 function cutSource(name, group) {
-    putMyVar("切源旧分组", group);
+    putMyVar("Src_Jy_切源旧分组", group);
     require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
     let datalist = getDatas('jk',1).filter(v=>v.searchable!=0);
     let groups = getJiekouGroups(datalist).concat(['云盘']);
@@ -95,7 +95,7 @@ function cutSource(name, group) {
         grouparr.push({
             title: group==it?`““””<b><span style="color: `+color+`">`+it+`</span></b>`:it,
             url: $('#noLoading#').lazyRule((name,newgroup) => {
-                let oldgroup = getMyVar("切源旧分组","");
+                let oldgroup = getMyVar("Src_Jy_切源旧分组","");
                 if(oldgroup==newgroup){
                     return "hiker://empty";
                 }
@@ -109,7 +109,7 @@ function cutSource(name, group) {
                     extra: {"id":newgroup+"_"+name+"_loading","lineVisible":false}
                 })
                 deleteItemByCls('grouploadlist');
-                putMyVar("切源旧分组", newgroup);
+                putMyVar("Src_Jy_切源旧分组", newgroup);
                 if(newgroup=="云盘"){
                     require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyAliDisk.js');
                     erjiSousuo(name);
@@ -144,7 +144,7 @@ function cutSource(name, group) {
 
 function lookset() {
     addListener("onClose", $.toString(() => {
-        clearMyVar('playSet');
+        clearMyVar('Src_Jy_playSet');
     }));
     if(!config.聚影 && getPublicItem('聚影','')){
         initConfig({
@@ -161,7 +161,7 @@ function lookset() {
         }catch(e){}
     }
 
-    let playSet = storage0.getMyVar('playSet') || storage0.getItem('playSet') || Juconfig['playSet'] || {};
+    let playSet = storage0.getMyVar('Src_Jy_playSet') || storage0.getItem('playSet') || Juconfig['playSet'] || {};
     clearItem('playSet');
 
     let d = [];
@@ -181,7 +181,7 @@ function lookset() {
             if(getItem("sourceMode")=="2"){
                 return "toast://订阅文件模式，无法管理本地解析";
             }
-            putMyVar('guanli','jx');
+            putMyVar('Src_Jy_guanli','jx');
             return $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
                 setPageTitle('解析管理');
                 require(config.聚影.replace(/[^/]*$/,'') + 'SrcJySet.js');
@@ -199,7 +199,7 @@ function lookset() {
             } else {
                 playSet['printlog'] = 0;
             }
-            storage0.putMyVar('playSet', playSet);
+            storage0.putMyVar('Src_Jy_playSet', playSet);
             refreshPage(false);
             return 'toast://切换成功';
         }, playSet),
@@ -269,7 +269,7 @@ function lookset() {
         title: '聚影智能',
         url: $('#noLoading#').lazyRule((playSet) => {
             playSet['parsemode'] = 1;
-            storage0.putMyVar('playSet', playSet);
+            storage0.putMyVar('Src_Jy_playSet', playSet);
             refreshPage(false);
             return 'toast://聚影智能 | 上次优先>接口自带+私有解析';
         }, playSet),
@@ -280,7 +280,7 @@ function lookset() {
         title: '强制嗅探',
         url: $('#noLoading#').lazyRule((playSet) => {
             playSet['parsemode'] = 2;
-            storage0.putMyVar('playSet', playSet);
+            storage0.putMyVar('Src_Jy_playSet', playSet);
             refreshPage(false);
             return 'toast://强制嗅探 | 将web解析组线路进video播放器';
         }, playSet),
@@ -291,7 +291,7 @@ function lookset() {
         title: '手动切换',
         url: $('#noLoading#').lazyRule((playSet) => {
             playSet['parsemode'] = 3;
-            storage0.putMyVar('playSet', playSet);
+            storage0.putMyVar('Src_Jy_playSet', playSet);
             refreshPage(false);
             return 'toast://手动切换 | 代理播放，在播放页手动选择解析';
         }, playSet),
@@ -312,7 +312,7 @@ function lookset() {
                 playSet['xiutannh'] = 'x5';
                 sm = 'x5';
             }
-            storage0.putMyVar('playSet', playSet);
+            storage0.putMyVar('Src_Jy_playSet', playSet);
             refreshPage(false);
             return 'toast://嗅探内核切换为：'+sm;
         }, playSet),
@@ -327,7 +327,7 @@ function lookset() {
             } else {
                 playSet['video'] = 1;
             }
-            storage0.putMyVar('playSet', playSet);
+            storage0.putMyVar('Src_Jy_playSet', playSet);
             refreshPage(false);
             return 'toast://已切换';
         }, playSet),
@@ -372,7 +372,7 @@ function lookset() {
             } else {
                 playSet['cachem3u8'] = 0;
             }
-            storage0.putMyVar('playSet', playSet);
+            storage0.putMyVar('Src_Jy_playSet', playSet);
             refreshPage(false);
             return 'toast://切换成功';
         }, playSet),
@@ -388,7 +388,7 @@ function lookset() {
             } else {
                 playSet['isTest'] = 1;
             }
-            storage0.putMyVar('playSet', playSet);
+            storage0.putMyVar('Src_Jy_playSet', playSet);
             refreshPage(false);
             return 'toast://切换成功';
         }, playSet),
@@ -406,7 +406,7 @@ function lookset() {
                 playSet['dmRoute'] = 1;
                 sm = '仅针对官网地址有效，需要dm盒子小程序';
             }
-            storage0.putMyVar('playSet', playSet);
+            storage0.putMyVar('Src_Jy_playSet', playSet);
             refreshPage(false);
             return 'toast://' + sm;
         }, playSet),
@@ -421,13 +421,13 @@ function lookset() {
         url: $('#noLoading#').lazyRule((playSet) => {
             if (playSet['clearM3u8Ad']) {
                 delete playSet['clearM3u8Ad'];
-                storage0.putMyVar('playSet', playSet);
+                storage0.putMyVar('Src_Jy_playSet', playSet);
                 refreshPage(false);
                 return 'toast://关闭订阅M3U8广告清除规则';
             } else {
                 return $("确认要从聚影订阅M3U8广告清除规则来覆盖软件的？").confirm((playSet)=>{
                     playSet['clearM3u8Ad'] = 1;
-                    storage0.putMyVar('playSet', playSet);
+                    storage0.putMyVar('Src_Jy_playSet', playSet);
                     let m3u8Ad_file = config.聚影.replace(/[^/]*$/,'') + "plugins/m3u8_ad_rule.json";
                     let m3u8Ad = fetch(m3u8Ad_file);
                     if(m3u8Ad){
@@ -511,14 +511,14 @@ let buttonmenu = {
 //管理中心
 function manageSet(){
     addListener("onClose", $.toString(() => {
-        clearMyVar('uploads');
-        clearMyVar('uploadjiekou');
-        clearMyVar('uploadjiexi');
-        clearMyVar('uploadlive');
-        clearMyVar('uploadyundisk');
+        clearMyVar('Src_Jy_uploads');
+        clearMyVar('Src_Jy_uploadjiekou');
+        clearMyVar('Src_Jy_uploadjiexi');
+        clearMyVar('Src_Jy_uploadlive');
+        clearMyVar('Src_Jy_uploadyundisk');
         //refreshPage(false);
     }));
-    setPageTitle("♥管理"+getMyVar('SrcJuying-Version', ''));
+    setPageTitle("♥管理"+getMyVar('Src_Jy_Version', ''));
 
     let d = [];
     d.push({
@@ -752,7 +752,7 @@ function manageSet(){
             }
             try{
                 eval(request(getItem("依赖","").replace(/[^/]*$/,'') + 'SrcTmplVersion.js'))
-                let nowVersion = getItem('Version', getMyVar('SrcJuying-Version', '0.1').replace('-V',''));
+                let nowVersion = getItem('Version', getMyVar('Src_Jy_Version', '0.1').replace('-V',''));
                 let nowtime = Date.now();
                 if (parseFloat(newVersion.SrcJuying) > parseFloat(nowVersion)) {
                     confirm({
@@ -764,7 +764,7 @@ function manageSet(){
                             setItem('Version', newVersion);
                             setItem('VersionChecktime', nowtime+'time');
                             deleteCache();
-                            putMyVar('SrcJuying-Version', '-V'+newVersion);
+                            putMyVar('Src_Jy_Version', '-V'+newVersion);
                             refreshPage();
                         },nowtime, newVersion.SrcJuying),
                         cancel:''
