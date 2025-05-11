@@ -730,7 +730,16 @@ function SRCSet() {
                         setResult(d);
                     })
                 }, Juconfig["checkSourceAdmin"] || 0),
-                col_type: 'scroll_button'
+                col_type: 'scroll_button',
+                extra: {
+                    longClick: [{
+                        title: "清除",
+                        js: $.toString(() => {
+                            clearItem('checkSourcetime');
+                            return "toast://可以了"
+                        })
+                    }]
+                }
             })
         }else if(guanliType=='jx'){
             d.push({
