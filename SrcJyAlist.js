@@ -528,7 +528,7 @@ function alistSearch(alistapi, input, notoast) {
 
 function alistSearch2(input, notoast) {
     showLoading('搜索中，请稍后...');
-    let alistMark = storage0.getMyVar('alistMark') || {};
+    let alistMark = storage0.getMyVar('Src_Jy_alistMark') || {};
     let i = 0;
     let one = "";
     for (var k in alistMark) {
@@ -575,15 +575,15 @@ function alistSearch2(input, notoast) {
     });
     if (list.length > 0) {
         deleteItemByCls('loadlist');
-        putMyVar('diskSearch', '1');
+        putMyVar('Src_Jy_diskSearch', '1');
         be(list, {
             func: function (obj, id, error, taskResult) {
             },
             param: {
             }
         });
-        storage0.putMyVar('alistMark', alistMark);
-        clearMyVar('diskSearch');
+        storage0.putMyVar('Src_Jy_alistMark', alistMark);
+        clearMyVar('Src_Jy_diskSearch');
         toast('搜索完成');
     } else {
         toast('无接口，无法搜索');
