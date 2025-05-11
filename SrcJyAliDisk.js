@@ -55,7 +55,7 @@ function aliShare(share_id, folder_id, share_pwd) {
         if (getMyVar('Src_Jy_聚影云盘自动返回') && isback == 1) {
             back(false);
         }
-        clearMyVar('Src_Jy_云盘共享链接页面标题');
+        clearMyVar('云盘共享链接页面标题');
     }, my_params.back || 0));
     clearMyVar('Src_Jy_聚影云盘自动返回');
 
@@ -217,7 +217,7 @@ function aliShare(share_id, folder_id, share_pwd) {
                 return item.type == "file" || (item.type == "folder" && !folderFilter.test(item.name));
             })
             if (sharelist.length == 1 && sharelist[0].type == "folder") {
-                putMyVar('Src_Jy_云盘共享链接页面标题', sharelist[0].name);
+                putMyVar('云盘共享链接页面标题', sharelist[0].name);
                 java.lang.Thread.sleep(1000);
                 aliShare(share_id, sharelist[0].file_id, share_pwd);
             } else if (sharelist.length > 0) {
@@ -367,7 +367,7 @@ function aliShare(share_id, folder_id, share_pwd) {
     }
     setResult(d);
     if(typeof (MY_PARAMS) == "undefined" || !MY_PARAMS.pageTitle){
-        setPageTitle(getMyVar('Src_Jy_云盘共享链接页面标题', '云盘共享文件') + ' | 聚影');
+        setPageTitle(getMyVar('云盘共享链接页面标题', '云盘共享文件') + ' | 聚影');
     }
     setLastChapterRule('js:' + $.toString(() => {
         setResult('');
