@@ -174,10 +174,10 @@ function aliShare(share_id, folder_id, share_pwd) {
                     longClick: [{
                         title: "💾转存",
                         js: $.toString((obj) => {
-                            storage0.putMyVar('Src_Jy_copydate', obj);
+                            storage0.putMyVar('copydate', obj);
                             return $("hiker://empty").rule(() => {
                                 addListener("onClose", $.toString(() => {
-                                    clearMyVar('Src_Jy_copydate');
+                                    clearMyVar('copydate');
                                 }));
                                 
                                 require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyAliDisk.js');
@@ -244,10 +244,10 @@ function aliShare(share_id, folder_id, share_pwd) {
                             longClick: [{
                                 title: "💾转存",
                                 js: $.toString((obj) => {
-                                    storage0.putMyVar('Src_Jy_copydate', obj);
+                                    storage0.putMyVar('copydate', obj);
                                     return $("hiker://empty").rule(() => {
                                         addListener("onClose", $.toString(() => {
-                                            clearMyVar('Src_Jy_copydate');
+                                            clearMyVar('copydate');
                                         }));
                                         
                                         require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyAliDisk.js');
@@ -277,10 +277,10 @@ function aliShare(share_id, folder_id, share_pwd) {
                             longClick: [{
                                 title: "💾转存",
                                 js: $.toString((obj) => {
-                                    storage0.putMyVar('Src_Jy_copydate', obj);
+                                    storage0.putMyVar('copydate', obj);
                                     return $("hiker://empty").rule(() => {
                                         addListener("onClose", $.toString(() => {
-                                            clearMyVar('Src_Jy_copydate');
+                                            clearMyVar('copydate');
                                         }));
                                         
                                         require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyAliDisk.js');
@@ -375,7 +375,7 @@ function aliShare(share_id, folder_id, share_pwd) {
 }
 function aliOpenInt() {
     return $(['接口1(alist)', '接口2(webdav)']).select(() => {//, '接口3(tv)'
-        clearMyVar('Src_Jy_aliopentoken');
+        clearMyVar('aliopentoken');
         if(input=='接口1(alist)'){
             setItem('aliyun_openInt', '1');
         }else if(input=='接口2(webdav)'){
@@ -649,8 +649,8 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                     onChange: $.toString((searchurl) => {
                         if(input.indexOf('https://www.aliyundrive.com/s/')==-1){
                             if(input.length==1){deleteItemByCls('suggest');}
-                            if(input.length>1&&input!=getMyVar('Src_Jy_sousuo$input', '')){
-                                putMyVar('Src_Jy_sousuo$input', input);
+                            if(input.length>1&&input!=getMyVar('sousuo$input', '')){
+                                putMyVar('sousuo$input', input);
                                 deleteItemByCls('suggest');
                                 var html = request("https://movie.douban.com/j/subject_suggest?q=" + input, {timeout: 3000});
                                 var list = JSON.parse(html)||[];
@@ -878,7 +878,7 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                     let dirlist = myfilelist.filter((item) => {
                         return item.type == "folder" && !folderFilter.test(item.name);
                     })
-                    let copydate = storage0.getMyVar('Src_Jy_copydate');
+                    let copydate = storage0.getMyVar('copydate');
                     if(copydate){
                         copydate.folder_id = folder_id;
                         copydate.drive_id = drive_id;
@@ -887,7 +887,7 @@ function aliMyDisk(folder_id, isSearch, drive_id) {
                             col_type: 'text_center_1',
                             url: $().lazyRule((fcopy,copydate) => {
                                 if(fcopy(copydate)){
-                                    clearMyVar('Src_Jy_copydate');
+                                    clearMyVar('copydate');
                                     deleteItem('yundisksharecopy');
                                     refreshPage(false);
                                     return 'toast://转存成功';
@@ -1550,10 +1550,10 @@ function erjiAliShare(share_id, folder_id, share_pwd) {
                                     longClick: [{
                                         title: "💾转存",
                                         js: $.toString((obj) => {
-                                            storage0.putMyVar('Src_Jy_copydate', obj);
+                                            storage0.putMyVar('copydate', obj);
                                             return $("hiker://empty").rule(() => {
                                                 addListener("onClose", $.toString(() => {
-                                                    clearMyVar('Src_Jy_copydate');
+                                                    clearMyVar('copydate');
                                                 }));
                                                 
                                                 require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyAliDisk.js');
@@ -1584,10 +1584,10 @@ function erjiAliShare(share_id, folder_id, share_pwd) {
                                     longClick: [{
                                         title: "💾转存",
                                         js: $.toString((obj) => {
-                                            storage0.putMyVar('Src_Jy_copydate', obj);
+                                            storage0.putMyVar('copydate', obj);
                                             return $("hiker://empty").rule(() => {
                                                 addListener("onClose", $.toString(() => {
-                                                    clearMyVar('Src_Jy_copydate');
+                                                    clearMyVar('copydate');
                                                 }));
                                                 
                                                 require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyAliDisk.js');
@@ -1783,10 +1783,10 @@ function erjiAliShareUrl(input, dataObj) {
                         longClick: [{
                             title: "💾转存",
                             js: $.toString((obj) => {
-                                storage0.putMyVar('Src_Jy_copydate', obj);
+                                storage0.putMyVar('copydate', obj);
                                 return $("hiker://empty").rule(() => {
                                     addListener("onClose", $.toString(() => {
-                                        clearMyVar('Src_Jy_copydate');
+                                        clearMyVar('copydate');
                                     }));
                                     
                                     require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyAliDisk.js');
