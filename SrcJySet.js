@@ -4,12 +4,11 @@ require((config.聚影||config.依赖).replace(/[^/]*$/,'') + 'SrcJyPublic.js');
 function SRCSet() {
     addListener("onClose", $.toString(() => {
         clearMyVar('guanli');
-        clearMyVar('SrcJu_批量选择模式');
-        clearMyVar('SrcJu_duoselect');
-        clearMyVar('groupmenu');
-        clearMyVar('SrcJu_jkdatalist');
-        clearMyVar('SrcJu_seacrhJiekou');
-        clearMyVar('SrcJu_onlyStopJk');
+        clearMyVar('批量选择模式');
+        clearMyVar('duoselect');
+        clearMyVar('jkdatalist');
+        clearMyVar('seacrhJiekou');
+        clearMyVar('onlyStopJk');
     }));
 
     if(getMyVar('guanli','')==""){putMyVar('guanli','jk');}
@@ -31,16 +30,15 @@ function SRCSet() {
     });
     d.push({
         title: '操作',
-        url: $(["查看禁用","批量选择","清空所有"],2,"选择操作功能项").select(()=>{
-            clearMyVar('groupmenu');
+        url: $(["批量选择","查看禁用","清空所有"],2,"选择操作功能项").select(()=>{
             if(input=="批量选择"){
                 let sm;
-                if(getMyVar('SrcJu_批量选择模式')){
-                    clearMyVar('SrcJu_批量选择模式');
-                    clearMyVar('SrcJu_duoselect');
+                if(getMyVar('批量选择模式')){
+                    clearMyVar('批量选择模式');
+                    clearMyVar('duoselect');
                     sm = "退出批量选择模式";
                 }else{
-                    putMyVar('SrcJu_批量选择模式','1');
+                    putMyVar('批量选择模式','1');
                     sm = "进入批量选择模式";
                 }
                 refreshPage(false);
@@ -59,11 +57,11 @@ function SRCSet() {
                 })
             }else if(input=="查看禁用"){
                 let sm;
-                if(getMyVar('SrcJu_onlyStopJk')){
-                    clearMyVar('SrcJu_onlyStopJk');
+                if(getMyVar('onlyStopJk')){
+                    clearMyVar('onlyStopJk');
                     sm = "退出仅显示禁用列表";
                 }else{
-                    putMyVar('SrcJu_onlyStopJk','1');
+                    putMyVar('onlyStopJk','1');
                     sm = "进入仅显示禁用列表";
                 }
                 refreshPage(false);
@@ -94,21 +92,21 @@ function SRCSet() {
     }
     
     let datalist = getDatas(guanliType);
-    if(getMyVar('SrcJu_onlyStopJk')){
+    if(getMyVar('onlyStopJk')){
         datalist = datalist.filter(item => item.stop);
     }
-    let selectgroup = guanliType=='jk'?getMyVar("SrcJu_jiekouGroup",""):"";
+    let selectgroup = guanliType=='jk'?getMyVar("Src_Jy_jiekouGroup",""):"";
     let jkdatalist = getGroupLists(datalist, selectgroup);
 
-    if(getMyVar("SrcJu_seacrhJiekou")){
+    if(getMyVar("seacrhJiekou")){
         jkdatalist = jkdatalist.filter(it=>{
-            return it.name.indexOf(getMyVar("SrcJu_seacrhJiekou"))>-1;
+            return it.name.indexOf(getMyVar("seacrhJiekou"))>-1;
         })
     }
     let yxdatalist = jkdatalist.filter(it=>{
         return !it.stop;
     });
-    storage0.putMyVar("SrcJu_jkdatalist", jkdatalist);
+    storage0.putMyVar("jkdatalist", jkdatalist);
     d.push({
         title: '分享',
         url: yxdatalist.length==0?'toast://有效数据为空，只能单个分享':$(pastes,2).select((lx)=>{
@@ -143,17 +141,17 @@ function SRCSet() {
     d.push({
         title: "🔍",
         url: $.toString(() => {
-            putMyVar("SrcJu_seacrhJiekou",input);
+            putMyVar("seacrhJiekou",input);
             refreshPage(false);
         }),
         desc: "搜你想要的...",
         col_type: "input",
         extra: {
-            defaultValue: getMyVar('SrcJu_seacrhJiekou',''),
+            defaultValue: getMyVar('seacrhJiekou',''),
             titleVisible: true,
             onChange: $.toString(() => {
                 if(input==""){
-                    clearMyVar("SrcJu_seacrhJiekou");
+                    clearMyVar("seacrhJiekou");
                 }
             })
         }
@@ -165,7 +163,7 @@ function SRCSet() {
             sx.push({
                 title: it,
                 url: $('#noLoading#').lazyRule((it) => {
-                    putMyVar("SrcJu_seacrhJiekou", it);
+                    putMyVar("seacrhJiekou", it);
                     refreshPage(false);
                     return "hiker://empty";
                 },it),
@@ -175,8 +173,8 @@ function SRCSet() {
         if(sx.length>0){
             sx.unshift({
                 title: "清除",
-                url: !getMyVar("SrcJu_seacrhJiekou")?"hiker://empty":$('#noLoading#').lazyRule(() => {
-                    clearMyVar("SrcJu_seacrhJiekou");
+                url: !getMyVar("seacrhJiekou")?"hiker://empty":$('#noLoading#').lazyRule(() => {
+                    clearMyVar("seacrhJiekou");
                     refreshPage(false);
                     return "hiker://empty";
                 }),
@@ -194,18 +192,18 @@ function SRCSet() {
         let lockgroups = Juconfig["lockgroups"] || [];
         groupNames.forEach(it =>{
             let obj = {
-                title: (getMyVar("SrcJu_jiekouGroup","全部")==it?`““””<b><span style="color: `+color+`">`+it+`</span></b>`:it) + (lockgroups.indexOf(it)>-1?"🔒":""),
+                title: (getMyVar("Src_Jy_jiekouGroup","全部")==it?`““””<b><span style="color: `+color+`">`+it+`</span></b>`:it) + (lockgroups.indexOf(it)>-1?"🔒":""),
                 url: $('#noLoading#').lazyRule((it) => {
-                    if(getMyVar("SrcJu_jiekouGroup")!=it){
-                        putMyVar("SrcJu_jiekouGroup",it);
-                        clearMyVar("SrcJu_seacrhJiekou");
+                    if(getMyVar("Src_Jy_jiekouGroup")!=it){
+                        putMyVar("Src_Jy_jiekouGroup",it);
+                        clearMyVar("seacrhJiekou");
                         refreshPage(false);
                     }
                     return "hiker://empty";
                 },it),
                 col_type: 'scroll_button',
                 extra: {
-                    backgroundColor: getMyVar("SrcJu_jiekouGroup","全部")==it?"#20" + color.replace('#',''):""
+                    backgroundColor: getMyVar("Src_Jy_jiekouGroup","全部")==it?"#20" + color.replace('#',''):""
                 }
             }
             
@@ -249,7 +247,7 @@ function SRCSet() {
             d.push(obj);
         })
     }
-    if(getMyVar('SrcJu_批量选择模式')){
+    if(getMyVar('批量选择模式')){
         d.push({
             col_type: "blank_block"
         });
@@ -266,7 +264,7 @@ function SRCSet() {
         d.push({
             title: "删除所选",
             url: $('#noLoading#').lazyRule(() => {
-                let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
+                let duoselect = storage0.getMyVar('duoselect') || [];
                 if(duoselect.length==0){
                     return "toast://未选择";
                 }
@@ -283,7 +281,7 @@ function SRCSet() {
             d.push({
                 title: "调整分组",
                 url: $('#noLoading#').lazyRule(()=>{
-                        let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
+                        let duoselect = storage0.getMyVar('duoselect') || [];
                         if(duoselect.length>0){
                             return $("","选定的"+duoselect.length+"个接口新分组名").input((duoselect)=>{
                                 input = input.trim();
@@ -308,7 +306,7 @@ function SRCSet() {
                                     }
                                 })
                                 writeFile(filepath, JSON.stringify(datalist));
-                                clearMyVar('SrcJu_duoselect');
+                                clearMyVar('duoselect');
                                 refreshPage(false);
                                 return "toast://已批量调整接口分组";
                             }, duoselect)
@@ -321,7 +319,7 @@ function SRCSet() {
             d.push({
                 title: "禁用所选",
                 url: $('#noLoading#').lazyRule(() => {
-                    let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
+                    let duoselect = storage0.getMyVar('duoselect') || [];
                     if(duoselect.length==0){
                         return "toast://未选择";
                     }
@@ -337,7 +335,7 @@ function SRCSet() {
             d.push({
                 title: "启用所选",
                 url: $('#noLoading#').lazyRule(() => {
-                    let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
+                    let duoselect = storage0.getMyVar('duoselect') || [];
                     if(duoselect.length==0){
                         return "toast://未选择";
                     }
@@ -361,7 +359,7 @@ function SRCSet() {
                     if (nowtime < (oldtime+h*60*60*1000)) {
                         return "toast://下次允许批量检测时间\n" + $.dateFormat(oldtime+h*60*60*1000, "yyyy-MM-dd HH:mm:ss");
                     }
-                    let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
+                    let duoselect = storage0.getMyVar('duoselect') || [];
                     duoselect = duoselect.filter(v=>!v.stop);
                     if(duoselect.length==0){
                         return "toast://未选择";
@@ -369,22 +367,22 @@ function SRCSet() {
                     if(getMyVar("批量检测_线程开始")=="1"){
                         return "toast://上一个任务还没有结束，请等待.";
                     }
-                    storage0.putMyVar('checkSourceList', duoselect);//写入待检测源
+                    storage0.putMyVar('批量检测_待检列表', duoselect);//写入待检测源
 
                     return $("hiker://empty#noRecordHistory##noHistory##noRefresh#").rule(() => {
                         addListener("onClose", $.toString(() => {
                             putMyVar("批量检测_退出页面","1");
                             let nowtime = Date.now();
-                            setItem('checkSourcetime', nowtime+'|'+getMyVar("checkSource_nexttime", "0"));
-                            clearMyVar("checkSource_nexttime");
-                            clearMyVar("checkSourceList");
+                            setItem('checkSourcetime', nowtime+'|'+getMyVar("批量检测_下次时间", "0"));
+                            clearMyVar("批量检测_下次时间");
+                            clearMyVar("批量检测_待检列表");
                             clearMyVar("批量检测_中止线程");
                             clearMyVar("批量检测_复检模式");
                             clearMyVar("批量检测_失败列表");
                             clearMyVar("批量检测_当前进度");
                             clearMyVar("批量检测_复检列表");
-                            clearMyVar('SrcJu_批量选择模式');
-                            clearMyVar('SrcJu_duoselect');
+                            clearMyVar('批量选择模式');
+                            clearMyVar('duoselect');
                             refreshPage(true);
                         }));
                         function testSource() {
@@ -456,7 +454,7 @@ function SRCSet() {
                                 }
 
                                 showLoading("批量检测中...");
-                                let checkSourceList = storage0.getMyVar("checkSourceList") || [];
+                                let checkSourceList = storage0.getMyVar("批量检测_待检列表") || [];
                                 let list = checkSourceList.filter(v=>{
                                     return schedule=="3"?v.erurl:v.url;
                                 }).map((item) => {
@@ -468,7 +466,7 @@ function SRCSet() {
                                 });
 
                                 clearMyVar("批量检测_退出页面");
-                                putMyVar("checkSource_nexttime", "24");
+                                putMyVar("批量检测_下次时间", "24");
                                 putMyVar("批量检测_线程开始", "1");
                                 log("批量检测_线程开始");
 
@@ -585,13 +583,13 @@ function SRCSet() {
                                             url: $("#noLoading#").lazyRule((failnum) => {
                                                 return $("确认要删除失败"+failnum+"个接口？").confirm(()=>{
                                                     let failSourceList = storage0.getMyVar("批量检测_失败列表") || [];
-                                                    let checkSourceList = storage0.getMyVar("checkSourceList") || [];
+                                                    let checkSourceList = storage0.getMyVar("批量检测_待检列表") || [];
                                                     failSourceList.forEach(it=>{
                                                         let index = checkSourceList.indexOf(checkSourceList.filter(d => it.url==d.url )[0]);
                                                         checkSourceList.splice(index, 1);
                                                         deleteItem("failSource-" + it.url);
                                                     })
-                                                    storage0.putMyVar("checkSourceList",checkSourceList);
+                                                    storage0.putMyVar("批量检测_待检列表",checkSourceList);
 
                                                     require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
                                                     deleteData("jk", failSourceList);
@@ -608,7 +606,7 @@ function SRCSet() {
                                         storage0.putMyVar("批量检测_失败列表", failSourceList);
                                     }
                                     
-                                    storage0.putMyVar("checkSourceList",checkSourceList);
+                                    storage0.putMyVar("批量检测_待检列表",checkSourceList);
                                     updateItem("testSource", {
                                         desc: "",
                                         url: "hiker://empty"
@@ -623,13 +621,13 @@ function SRCSet() {
                                                     recheckList.push(it.url);
                                                 }
                                             })
-                                            let checkSourceList = storage0.getMyVar("checkSourceList") || [];
+                                            let checkSourceList = storage0.getMyVar("批量检测_待检列表") || [];
                                             checkSourceList = checkSourceList.filter(v=>recheckList.indexOf(v.url)>-1);
                                             if(checkSourceList.length==0){
                                                 deleteItem("recheckSource");
                                                 return "toast://没有需复检的源";
                                             }
-                                            storage0.putMyVar("checkSourceList", checkSourceList);
+                                            storage0.putMyVar("批量检测_待检列表", checkSourceList);
                                             clearMyVar("批量检测_失败列表");
                                             clearMyVar("批量检测_当前进度");
                                             clearMyVar("批量检测_复检列表");
@@ -681,7 +679,7 @@ function SRCSet() {
                                 return "toast://测试结束";
                             })
                         }
-                        let checkSourceList = storage0.getMyVar("checkSourceList") || [];
+                        let checkSourceList = storage0.getMyVar("批量检测_待检列表") || [];
                         let d = [];
                         d.push({
                             title: "检测项目",
@@ -738,7 +736,7 @@ function SRCSet() {
             d.push({
                 title: "重置排序",
                 url: $('#noLoading#').lazyRule(() => {
-                    let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
+                    let duoselect = storage0.getMyVar('duoselect') || [];
                     if(duoselect.length==0){
                         return "toast://未选择";
                     }
@@ -767,7 +765,7 @@ function SRCSet() {
 
         d.push({
             title: it.stop?colorTitle(datatitle, '#f20c00'):datatitle,
-            url: getMyVar('SrcJu_批量选择模式')?$('#noLoading#').lazyRule((data) => {
+            url: getMyVar('批量选择模式')?$('#noLoading#').lazyRule((data) => {
                 data = JSON.parse(base64Decode(data));
                 require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
                 duoselect(data);
@@ -822,8 +820,8 @@ function SRCSet() {
         col_type: 'text_center_1'
     });
     setResult(d);
-    if(getMyVar('SrcJu_批量选择模式')){
-        let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
+    if(getMyVar('批量选择模式')){
+        let duoselect = storage0.getMyVar('duoselect') || [];
         if(duoselect.length>0){
             duoselect.forEach(data=>{
                 updateItem(data.url, {title: colorTitle(getDataTitle(data), '#3CB371')});
@@ -1324,7 +1322,7 @@ function jiekou(data) {
                 }else if(jknum==0&&urls.length==1){
                     return'toast://已存在';
                 }else{
-                    clearMyVar('SrcJu_dianbo$classCache');
+                    clearMyVar('Src_Jy_dianbo$classCache');
                     back(true);
                     if(urls.length==1){
                         return "toast://保存成功";
@@ -1381,7 +1379,7 @@ function jiekou(data) {
                     return "toast://无法测试，检查项目填写完整性";
                 }
             }
-            clearMyVar('SrcJu_dianbo$classCache');
+            clearMyVar('Src_Jy_dianbo$classCache');
             return $("hiker://empty#noRecordHistory##noHistory#").rule((data) => {
                 setPageTitle(data.name+"-接口测试");
                 require(config.聚影.replace(/[^/]*$/,'') + 'SrcJuying.js');
@@ -1515,7 +1513,7 @@ function jiexi(data) {
                     cls: 'jxtest'
                 }
             })
-            let filepath = globalMap0.getVar('Jy_gmParams').libspath + "testurls.json";
+            let filepath = globalMap0.getVar('Src_Jy_gmParams').libspath + "testurls.json";
             let datafile = fetch(filepath);
             if(datafile != ""){
                 eval("var urls=" + datafile+ ";");
@@ -1567,7 +1565,7 @@ function jiexi(data) {
             addItemBefore('jxline2', {
                 title: '编辑测试',
                 url: $('#noRecordHistory##noHistory#').lazyRule(()=>{
-                    return "editFile://" + globalMap0.getVar('Jy_gmParams').libspath + "testurls.json";
+                    return "editFile://" + globalMap0.getVar('Src_Jy_gmParams').libspath + "testurls.json";
                 }),
                 col_type: "text_3",
                 extra:{
@@ -1779,7 +1777,7 @@ function resource() {
         extra: {
             titleVisible: true,
             defaultValue: getMyVar('importinput', ''),
-            onChange: 'putMyVar("importinput",input);clearMyVar("duohouse");'
+            onChange: 'putMyVar("importinput",input);'
         }
     });
 
@@ -2099,11 +2097,11 @@ function JYshare(lx,input,data) {
         sharelist = [];
         sharelist.push(data);
     }else{
-        let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
+        let duoselect = storage0.getMyVar('duoselect') || [];
         if(duoselect.length>0){
             sharelist = duoselect;
         }else{
-            sharelist = storage0.getMyVar("SrcJu_jkdatalist", []);
+            sharelist = storage0.getMyVar("jkdatalist", []);
         }
     }
 
@@ -2410,7 +2408,7 @@ function yundiskjiekou() {
                     showLoading("正在导入，请稍后...");
                     let parseurl = aesDecode('Juying2', input.split('￥')[1]);
                     let content = parsePaste(parseurl);
-                    let datalist2 = JSON.parse(globalMap0.getVar('Jy_gmParams').unzip(content));
+                    let datalist2 = JSON.parse(globalMap0.getVar('Src_Jy_gmParams').unzip(content));
                     require(config.聚影.replace(/[^/]*$/,'') + 'SrcJySet.js');
                     let num = yundisksave(datalist2);
                     hideLoading();
@@ -2430,7 +2428,7 @@ function yundiskjiekou() {
     d.push({
         title: '分享',
         url: datalist.length == 0 ? "toast://云盘接口为0，无法分享" : $().lazyRule((datalist) => {
-            let pasteurl = sharePaste(globalMap0.getVar('Jy_gmParams').zip(JSON.stringify(datalist)), getItem("sharePaste",""));
+            let pasteurl = sharePaste(globalMap0.getVar('Src_Jy_gmParams').zip(JSON.stringify(datalist)), getItem("sharePaste",""));
             if (pasteurl) {
                 let code = '聚影云盘￥' + aesEncode('Juying2', pasteurl) + '￥共' + datalist.length + '条';
                 copy('云口令：'+code+`@import=js:$.require("hiker://page/import?rule=聚影");`);
@@ -2472,7 +2470,7 @@ function yundiskjiekou() {
                     showLoading('分享上传中，请稍后...');
                     let oneshare = []
                     oneshare.push(data);
-                    let pasteurl = sharePaste(globalMap0.getVar('Jy_gmParams').zip(JSON.stringify(oneshare)), getItem("sharePaste",""));
+                    let pasteurl = sharePaste(globalMap0.getVar('Src_Jy_gmParams').zip(JSON.stringify(oneshare)), getItem("sharePaste",""));
                     hideLoading();
                     if(pasteurl){
                         let code = '聚影云盘￥'+aesEncode('Juying2', pasteurl)+'￥'+data.name;
@@ -2576,7 +2574,7 @@ function importConfirm(jsfile) {
             code = aesDecode('Juying2', input.split('￥')[1]);
             name = input.split('￥')[0];
             if(name=="聚影资源码" && input.split('￥')[2]=="文件分享"){
-                let textcontent = globalMap0.getVar('Jy_gmParams').unzip(code);
+                let textcontent = globalMap0.getVar('Src_Jy_gmParams').unzip(code);
                 let pastedata = JSON.parse(textcontent);
 
                 d.push({
@@ -2626,7 +2624,7 @@ function importConfirm(jsfile) {
                                         let ypdatalist = pastedata.云盘||[];
                                         ypnum = yundisksave(ypdatalist, 1);
                                     }else if(option=="直播"){
-                                        let livefilepath = globalMap0.getVar('Jy_gmParams').rulepath + "liveconfig.json";
+                                        let livefilepath = globalMap0.getVar('Src_Jy_gmParams').rulepath + "liveconfig.json";
                                         let liveconfig = pastedata.直播;
                                         let livefile = fetch(livefilepath);
                                         if(livefile){
@@ -2779,7 +2777,7 @@ function importConfirm(jsfile) {
                 }else{
                     return "toast://类型异常";
                 }
-                clearMyVar('SrcJu_searchMark');
+                clearMyVar('Src_Jy_searchMark');
                 back(false);
                 return "toast://增量导入"+(num<0?"失败":num);
             },lx),
@@ -2805,7 +2803,7 @@ function importConfirm(jsfile) {
                 }else{
                     return "toast://类型异常";
                 }
-                clearMyVar('SrcJu_searchMark');
+                clearMyVar('Src_Jy_searchMark');
                 back(false);
                 return "toast://全量导入"+(num<0?"失败":num);
             },lx),
@@ -2846,7 +2844,7 @@ function importConfirm(jsfile) {
                             }else{
                                 return "toast://类型异常";
                             }
-                            clearMyVar('SrcJu_searchMark');
+                            clearMyVar('Src_Jy_searchMark');
                             let importlist = storage0.getMyVar('importConfirm', []);
                             if(importlist.length==1){
                                 back(false);
@@ -2899,7 +2897,7 @@ function importConfirm(jsfile) {
                     }else if (input == "删除文件") {
                         return $("删除"+data.ext+"，确认？").confirm((data)=>{
                             deleteFile(data.ext);
-                            clearMyVar('SrcJu_searchMark');
+                            clearMyVar('Src_Jy_searchMark');
                             let importlist = storage0.getMyVar('importConfirm', []);
                             if(importlist.length==1){
                                 back(false);
