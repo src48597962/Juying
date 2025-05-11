@@ -17,9 +17,9 @@ function getYiData(jkdata, batchTest) {
     log('当前源接口：['+api_type+'] '+api_name);
 
     //分类变量
-    let fold = batchTest?"0":getMyVar('Src_Jy_dianbo$fold', "0");//是否展开小分类筛选
-    let cate_id = batchTest?"":getMyVar('Src_Jy_dianbo$分类', '');
-    let fl = batchTest?{}:storage0.getMyVar('Src_Jy_dianbo$flCache') || {};
+    let fold = batchTest?"0":getMyVar('dianbo$fold', "0");//是否展开小分类筛选
+    let cate_id = batchTest?"":getMyVar('dianbo$分类', '');
+    let fl = batchTest?{}:storage0.getMyVar('dianbo$flCache') || {};
     if(cate_id=="tj" && page>1){
         return {
             fllists: [],
@@ -153,7 +153,7 @@ function getYiData(jkdata, batchTest) {
                 cate_onlyshow = jkdata.categories;
             }
             const Color = getItem("主题颜色", "#6dc9ff");
-            let classCache = batchTest?undefined:storage0.getMyVar('Src_Jy_dianbo$classCache');
+            let classCache = batchTest?undefined:storage0.getMyVar('dianbo$classCache');
             if (classCache) {
                 推荐 = classCache.推荐;
                 分类 = classCache.分类;
@@ -478,7 +478,7 @@ function getYiData(jkdata, batchTest) {
                 }
 
                 if (分类.length > 0 && !batchTest) {
-                    storage0.putMyVar('Src_Jy_dianbo$classCache', { 分类: 分类, 筛选: 筛选, 推荐: 推荐 });
+                    storage0.putMyVar('dianbo$classCache', { 分类: 分类, 筛选: 筛选, 推荐: 推荐 });
                 }
             }
 
@@ -491,8 +491,8 @@ function getYiData(jkdata, batchTest) {
                         fllists.push({
                             title: fold === '1' ? '““””<b><span style="color: #F54343">∨</span></b>' : '““””<b><span style="color:' + Color + '">∧</span></b>',
                             url: $('#noLoading#').lazyRule((fold) => {
-                                putMyVar('Src_Jy_dianbo$fold', fold === '1' ? '0' : '1');
-                                clearMyVar('Src_Jy_dianbo$flCache');
+                                putMyVar('dianbo$fold', fold === '1' ? '0' : '1');
+                                clearMyVar('dianbo$flCache');
                                 refreshPage(false);
                                 return "hiker://empty";
                             }, fold),
@@ -500,7 +500,7 @@ function getYiData(jkdata, batchTest) {
                         })
                     }
                     if(!batchTest){
-                        putMyVar('Src_Jy_dianbo$分类', cate_id);
+                        putMyVar('dianbo$分类', cate_id);
                     }
                     if (推荐.length > 0) {
                         if (cate_id == 'tj') {
@@ -509,7 +509,7 @@ function getYiData(jkdata, batchTest) {
                         fllists.push({
                             title: cate_id == 'tj' ? '““””<b><span style="color:' + Color + '">' + '推荐' + '</span></b>' : '推荐',
                             url: $('#noLoading#').lazyRule(() => {
-                                putMyVar('Src_Jy_dianbo$分类', 'tj');
+                                putMyVar('dianbo$分类', 'tj');
                                 refreshPage(true);
                                 return "hiker://empty";
                             }),
@@ -526,8 +526,8 @@ function getYiData(jkdata, batchTest) {
                         fllists.push({
                             title: cate_id == itid ? '““””<b><span style="color:' + Color + '">' + itname + '</span></b>' : itname,
                             url: $('#noLoading#').lazyRule((itid) => {
-                                putMyVar('Src_Jy_dianbo$分类', itid);
-                                clearMyVar('Src_Jy_dianbo$flCache');
+                                putMyVar('dianbo$分类', itid);
+                                clearMyVar('dianbo$flCache');
                                 refreshPage(true);
                                 return "hiker://empty";
                             }, itid),
@@ -555,9 +555,9 @@ function getYiData(jkdata, batchTest) {
                                             fllists.push({
                                                 title: fl[it.key] == itit.v ? '““””<b><span style="color:' + Color + '">' + itit.n + '</span></b>' : itit.n,
                                                 url: $('#noLoading#').lazyRule((flkey, itid) => {
-                                                    let fl = storage0.getMyVar('Src_Jy_dianbo$flCache') || {};
+                                                    let fl = storage0.getMyVar('dianbo$flCache') || {};
                                                     fl[flkey] = itid;
-                                                    storage0.putMyVar('Src_Jy_dianbo$flCache', fl);
+                                                    storage0.putMyVar('dianbo$flCache', fl);
                                                     refreshPage(true);
                                                     return "hiker://empty";
                                                 }, it.key, itit.v),
@@ -576,7 +576,7 @@ function getYiData(jkdata, batchTest) {
                         });
                     }
                     if(!batchTest){
-                        storage0.putMyVar('Src_Jy_dianbo$flCache', fl);
+                        storage0.putMyVar('dianbo$flCache', fl);
                     }
                 } catch (e) {
                     error.fl = 1;
