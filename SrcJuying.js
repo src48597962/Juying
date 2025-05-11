@@ -58,7 +58,7 @@ function search(name, sstype, jkdata) {
                 pic_url: it.vod_pic,
                 url: "hiker://empty##"+ it.vod_url + $().lazyRule((extra) => {
                     delete extra['cls'];
-                    storage0.putMyVar('二级附加临时对象', extra);
+                    storage0.putMyVar('Src_Jy_二级附加临时对象', extra);
                     refreshPage(false);
                     return "toast://已切换源：" + extra.data.name;
                 }, extra),
@@ -81,14 +81,14 @@ function sousuo() {
             delegateOnlySearch: true,
             rules: $.toString((name) => {
                 let ssdatalist = [];
-                if(storage0.getMyVar('搜索临时搜索数据')){
-                    ssdatalist.push(storage0.getMyVar('搜索临时搜索数据'));
-                    clearMyVar('搜索临时搜索数据');
+                if(storage0.getMyVar('Src_Jy_搜索临时搜索数据')){
+                    ssdatalist.push(storage0.getMyVar('Src_Jy_搜索临时搜索数据'));
+                    clearMyVar('Src_Jy_搜索临时搜索数据');
                 }else{
                     require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
-                    let group = getMyVar('搜索临时搜索分组','');
+                    let group = getMyVar('Src_Jy_搜索临时搜索分组','');
                     ssdatalist = getSearchLists(group);
-                    clearMyVar('搜索临时搜索分组');
+                    clearMyVar('Src_Jy_搜索临时搜索分组');
                 }
 
                 let judata = [];
@@ -108,16 +108,16 @@ function sousuo() {
 function erjisousuo(name,group,datas,sstype) {
     sstype = sstype || "dianboerji";
     let updateItemid = sstype=="dianboerji"?(group + "_" +name + "_loading"):"newSearch_loading";
-    let searchMark = storage0.getMyVar('SrcJu_searchMark') || {};//二级换源缓存
+    let searchMark = storage0.getMyVar('Src_Jy_searchMark') || {};//二级换源缓存
     let markId = group+'_'+name;
     if(!datas && searchMark[markId] && sstype=="dianboerji"){
         addItemBefore(updateItemid, searchMark[markId]);
         updateItem(updateItemid, {
             title: "‘‘’’<small>当前搜索为缓存</small>",
             url: $("确定删除“"+name+"”搜索缓存吗？").confirm((markId)=>{
-                let searchMark = storage0.getMyVar('SrcJu_searchMark') || {};
+                let searchMark = storage0.getMyVar('Src_Jy_searchMark') || {};
                 delete searchMark[markId];
-                storage0.putMyVar('SrcJu_searchMark', searchMark);
+                storage0.putMyVar('Src_Jy_searchMark', searchMark);
                 refreshPage(true);
                 return "toast://已清除";
             },markId)
@@ -137,7 +137,7 @@ function erjisousuo(name,group,datas,sstype) {
         });
         
         let ssdatalist = datas || getSearchLists(group);
-        let nosousuolist = storage0.getMyVar('nosousuolist') || [];
+        let nosousuolist = storage0.getMyVar('Src_Jy_nosousuolist') || [];
         if (nosousuolist.length>0){
             ssdatalist = ssdatalist.filter(it => {
                 return nosousuolist.indexOf(it.url) == -1;
@@ -168,7 +168,7 @@ function erjisousuo(name,group,datas,sstype) {
                 func: function (obj, id, error, taskResult) {
                     beidlist.push(id);
 
-                    if(getMyVar("SrcJu_停止搜索线程")=="1"){
+                    if(getMyVar("Src_Jy_停止搜索线程")=="1"){
                         return "break";
                     }else if(taskResult.success==1){
                         let data = taskResult.result;
@@ -187,7 +187,7 @@ function erjisousuo(name,group,datas,sstype) {
                     }else if(taskResult.success==0){
                         failsort.push(id);
                         nosousuolist.push(id);
-                        storage0.putMyVar('nosousuolist', nosousuolist);
+                        storage0.putMyVar('Src_Jy_nosousuolist', nosousuolist);
                     }
                 },
                 param: {
@@ -212,16 +212,16 @@ function erjisousuo(name,group,datas,sstype) {
                     }
                 });
             }
-            if(getMyVar("SrcJu_停止搜索线程")!="1"){
-                storage0.putMyVar('SrcJu_searchMark', searchMark);
+            if(getMyVar("Src_Jy_停止搜索线程")!="1"){
+                storage0.putMyVar('Src_Jy_searchMark', searchMark);
                 //setJkSort(failsort, {fail: 1});
             }
-            clearMyVar("SrcJu_停止搜索线程");
+            clearMyVar("Src_Jy_停止搜索线程");
             let sousuosm = "‘‘’’<small><font color=#f13b66a>" + success + "</font>/" + list.length + "，搜索完成</small>";
             updateItem(updateItemid, { title: sousuosm });
         } else {
             hideLoading();
-            clearMyVar("SrcJu_停止搜索线程");
+            clearMyVar("Src_Jy_停止搜索线程");
             updateItem(updateItemid, { title: '' });
             toast("无接口");
         }
@@ -232,8 +232,8 @@ function erjisousuo(name,group,datas,sstype) {
 // 点播二级
 function dianboerji() {
     addListener("onClose", $.toString((getHistory) => {
-        clearMyVar('二级附加临时对象');
-        //putMyVar("SrcJu_停止搜索线程","1");
+        clearMyVar('Src_Jy_二级附加临时对象');
+        //putMyVar("Src_Jy_停止搜索线程","1");
         
         if(getItem('historyEnable')=='1'){
             deleteItemByCls('historylist');
@@ -243,7 +243,7 @@ function dianboerji() {
         }
     },getHistory));
 
-    let sextra = storage0.getMyVar('二级附加临时对象') || {};//二级换源时临时extra数据
+    let sextra = storage0.getMyVar('Src_Jy_二级附加临时对象') || {};//二级换源时临时extra数据
 
     MY_URL = sextra.url || MY_PARAMS.url;
     let jkdata = sextra.data || MY_PARAMS.data;
@@ -260,7 +260,7 @@ function dianboerji() {
 
     if(sextra.url){
         updateItemid = updateItemid + '2';
-        clearMyVar('二级附加临时对象');
+        clearMyVar('Src_Jy_二级附加临时对象');
     }
     
     let detailsmark;
@@ -379,7 +379,7 @@ function dianboerji() {
                     title: lineid == i ? getHead(it,Color1,1) : getHead(it,Color2),
                     url: $("#noLoading#").lazyRule((url, nowid, newid, Marksum) => {
                         if (nowid != newid) {
-                            let markFile = globalMap0.getVar('Jy_gmParams').rulepath + "Mark.json";
+                            let markFile = globalMap0.getVar('Src_Jy_gmParams').rulepath + "Mark.json";
                             let SrcMark = "";
                             try {
                                 eval('SrcMark = ' + markFile);
@@ -475,7 +475,7 @@ function dianboerji() {
                 分页s.forEach((it,i)=>{
                     分页链接.push($("#noLoading#").lazyRule((url,nowid,newid,Marksum) => {
                         if(nowid != newid){
-                            let markFile = globalMap0.getVar('Jy_gmParams').rulepath + "Mark.json";
+                            let markFile = globalMap0.getVar('Src_Jy_gmParams').rulepath + "Mark.json";
                             let SrcMark = "";
                             try {
                                 eval('SrcMark = ' + markFile);
@@ -686,21 +686,21 @@ function dianboerji() {
 //点播一级
 function dianboyiji(testSource) {
     addListener("onClose", $.toString(() => {
-        clearMyVar('点播动态加载loading');
-        clearMyVar('点播一级jkdata');
-        clearMyVar('点播下滑num');
+        clearMyVar('Src_Jy_点播动态加载loading');
+        clearMyVar('Src_Jy_点播一级jkdata');
+        clearMyVar('Src_Jy_点播下滑num');
     }));
     addListener("onRefresh", $.toString(() => {
-        let num = parseInt(getMyVar('点播下滑num','0')) + 1;
-        putMyVar('点播下滑num', num);
+        let num = parseInt(getMyVar('Src_Jy_点播下滑num','0')) + 1;
+        putMyVar('Src_Jy_点播下滑num', num);
     }));
     let d = [];
     let jkdata = {};
     if(testSource){
         log("接口测试模式");
         jkdata = testSource;
-    }else if(storage0.getMyVar('点播一级jkdata')){
-        jkdata = storage0.getMyVar('点播一级jkdata');
+    }else if(storage0.getMyVar('Src_Jy_点播一级jkdata')){
+        jkdata = storage0.getMyVar('Src_Jy_点播一级jkdata');
     }else{
         let yxdatalist = getDatas('jk', 1);
         let index = yxdatalist.indexOf(yxdatalist.filter(d => d.type==sourceType && d.name==sourceName )[0]);
@@ -710,12 +710,12 @@ function dianboyiji(testSource) {
         }
     }
     let sname = jkdata.name;
-    if(getMyVar('currentSname') != sname){
-        clearMyVar('SrcJu_dianbo$分类');
-        clearMyVar('SrcJu_dianbo$fold');
-        clearMyVar('SrcJu_dianbo$classCache');
-        clearMyVar('SrcJu_dianbo$flCache');
-        putMyVar('currentSname', sname);
+    if(getMyVar('Src_Jy_currentSname') != sname){
+        clearMyVar('Src_Jy_dianbo$分类');
+        clearMyVar('Src_Jy_dianbo$fold');
+        clearMyVar('Src_Jy_dianbo$classCache');
+        clearMyVar('Src_Jy_dianbo$flCache');
+        putMyVar('Src_Jy_currentSname', sname);
     }
 
     if(MY_PAGE==1){
@@ -753,9 +753,9 @@ function dianboyiji(testSource) {
             url: testSource?"toast://测试模式下不能更换站源":$('#noLoading#').lazyRule(() => {
                 require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
 
-                if (!getMyVar('startCheck2')){
+                if (!getMyVar('Src_Jy_startCheck2')){
                     // 扫描开启了自动扫描的文件夹，获取新增的接口文件
-                    putMyVar('startCheck2', 1);
+                    putMyVar('Src_Jy_startCheck2', 1);
                     let newfiles = [];
                     let importrecord = Juconfig['importrecord']||[];
                     for(let j=0;j<importrecord.length;j++){
@@ -805,14 +805,14 @@ function dianboyiji(testSource) {
             title: "管理设置",
             url: testSource?"toast://测试模式下不能进入设置菜单":$(getItem("sourceMode")=="2"?["外部资源导入","远程订阅模式√"]:["本地接口管理","本地解析管理","外部资源导入","聚影资源码订阅","本地接口模式√"],1).select(()=>{
                 if(input=="本地接口管理"){
-                    putMyVar('guanli','jk');
+                    putMyVar('Src_Jy_guanli','jk');
                     return $("hiker://empty#noRecordHistory##noHistory##noRefresh#").rule(() => {
                         setPageTitle('本地接口管理');
                         require(config.聚影.replace(/[^/]*$/,'') + 'SrcJySet.js');
                         SRCSet();
                     })
                 }else if(input=="本地解析管理"){
-                    putMyVar('guanli','jx');
+                    putMyVar('Src_Jy_guanli','jx');
                     return $("hiker://empty#noRecordHistory##noHistory##noRefresh#").rule(() => {
                         setPageTitle('本地解析管理');
                         require(config.聚影.replace(/[^/]*$/,'') + 'SrcJySet.js');
@@ -879,7 +879,7 @@ function dianboyiji(testSource) {
                 }
             })
         }else{
-            if (typeof(setPreResult)!="undefined" && getMyVar('点播动态加载loading')!='1') {
+            if (typeof(setPreResult)!="undefined" && getMyVar('Src_Jy_点播动态加载loading')!='1') {
                 d.push({
                     title: "",
                     url: "hiker://empty",
@@ -899,7 +899,7 @@ function dianboyiji(testSource) {
                 })
                 setPreResult(d);
                 d = [];
-                putMyVar('点播动态加载loading', '1');
+                putMyVar('Src_Jy_点播动态加载loading', '1');
             }
             /*
                     return $('hiker://empty#noRecordHistory##noHistory#').rule((name,data) => {
@@ -911,13 +911,13 @@ function dianboyiji(testSource) {
             let searchurl = $('').lazyRule((jkdata) => {
                 if(getItem('接口搜索方式','当前接口')=="当前接口"){
                     if(jkdata){
-                        storage0.putMyVar('搜索临时搜索数据', jkdata);
+                        storage0.putMyVar('Src_Jy_搜索临时搜索数据', jkdata);
                         return 'hiker://search?s='+input+'&rule='+MY_RULE.title;
                     }else{
                         return 'toast://未找到接口数据'
                     }
                 }else if(getItem('接口搜索方式')=="分组接口"){
-                    putMyVar('搜索临时搜索分组', jkdata.group||jkdata.type);
+                    putMyVar('Src_Jy_搜索临时搜索分组', jkdata.group||jkdata.type);
                     return 'hiker://search?s='+input+'&rule='+MY_RULE.title;
                 }else if(getItem('接口搜索方式')=="代理聚搜"){
                     return 'hiker://search?s='+input+'&rule='+MY_RULE.title;
@@ -972,15 +972,15 @@ function dianboyiji(testSource) {
             let yidata = {fllists:[], vodlists:[], error:{}}
 
             let lockgroups = Juconfig["lockgroups"] || [];
-            if((lockgroups.indexOf(sourceGroup)>-1 || (parseInt(getMyVar('点播下滑num','0'))>1&&lockgroups.length>0)) && getMyVar('已验证指纹')!='1'){
+            if((lockgroups.indexOf(sourceGroup)>-1 || (parseInt(getMyVar('Src_Jy_点播下滑num','0'))>1&&lockgroups.length>0)) && getMyVar('Src_Jy_已验证指纹')!='1'){
                 const hikerPop = $.require(config.聚影.replace(/[^/]*$/,'') + 'plugins/hikerPop.js');
                 if (hikerPop.canBiometric() !== 0) {
                     return "toast://调用生物学验证出错";
                 }
                 let pop = hikerPop.checkByBiometric(() => {
-                    putMyVar('已验证指纹','1');
+                    putMyVar('Src_Jy_已验证指纹','1');
                     refreshPage(false);
-                    if(parseInt(getMyVar('点播下滑num','0'))>1){
+                    if(parseInt(getMyVar('Src_Jy_点播下滑num','0'))>1){
                         selectSource();
                     }
                 });
@@ -1101,16 +1101,16 @@ function dianboyiji(testSource) {
 //一级
 function yiji() {
     addListener("onClose", $.toString(() => {
-        clearMyVar('SrcJu_homeHistory');
+        clearMyVar('Src_Jy_homeHistory');
     }));
     addListener('onRefresh', $.toString(() => {
-        clearMyVar('SrcJu_homeHistory');
+        clearMyVar('Src_Jy_homeHistory');
     }));
 
     if(MY_RULE.title=="聚影✓"){
         toast("此小程序已停用，请重新导入聚影");
     }
-    if(getMyVar('SrcJuying-VersionCheck', '0') == '0'){
+    if(getMyVar('Src_Jy_VersionCheck', '0') == '0'){
         let programversion = 0;
         try{
             programversion = $.require("config").version || MY_RULE.version || 0;
@@ -1129,7 +1129,7 @@ function yiji() {
         }
         Version();
         downloadFiles();//下载必要的依赖文件
-        putMyVar('SrcJuying-VersionCheck', '1');
+        putMyVar('Src_Jy_VersionCheck', '1');
     }
 
     let d = [];
@@ -1267,7 +1267,7 @@ function yiji() {
             d.push(item);
         })
 
-        if (typeof(setPreResult)!="undefined" && getMyVar('动态加载loading')!='1') {
+        if (typeof(setPreResult)!="undefined" && getMyVar('Src_Jy_动态加载loading')!='1') {
             d.push({
                 title: "",
                 url: "hiker://empty",
@@ -1287,7 +1287,7 @@ function yiji() {
             })
             setPreResult(d);
             d = [];
-            putMyVar('动态加载loading', '1');
+            putMyVar('Src_Jy_动态加载loading', '1');
         }
     }
     var searchurl = $('').lazyRule(() => {
@@ -1335,8 +1335,8 @@ function yiji() {
             onChange: $.toString((searchurl) => {
                 if(input.indexOf('https://www.aliyundrive.com/s/')==-1){
                     if(input.length==0){deleteItemByCls('suggest');}
-                    if(input.length>1&&input!=getMyVar('sousuo$input', '')){
-                        putMyVar('sousuo$input', input);
+                    if(input.length>1&&input!=getMyVar('Src_Jy_sousuo$input', '')){
+                        putMyVar('Src_Jy_sousuo$input', input);
                         deleteItemByCls('suggest');
                         var html = request("https://movie.douban.com/j/subject_suggest?q=" + input, {timeout: 3000});
                         var list = JSON.parse(html)||[];
@@ -1454,14 +1454,14 @@ function yiji() {
             title: '<span style="color:#ff6600"><b>\t观看记录\t\t\t</b></span>',
             desc: "1-3",
             url: $('#noLoading#').lazyRule(() => {
-                let i = parseInt(getMyVar('SrcJu_homeHistory','0')) + 1;
+                let i = parseInt(getMyVar('Src_Jy_homeHistory','0')) + 1;
                 require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
-                putMyVar('SrcJu_homeHistory', i);
+                putMyVar('Src_Jy_homeHistory', i);
                 
                 deleteItemByCls('historylist');
                 let h = getHistory(i);
                 addItemAfter("historyid", h);
-                let j = parseInt(getMyVar('SrcJu_homeHistory','0'));
+                let j = parseInt(getMyVar('Src_Jy_homeHistory','0'));
                 updateItem("historyid", {desc: (j*3+1) + "-" + (j*3+3)});
                 return "hiker://empty";
             }),
@@ -1490,7 +1490,7 @@ function yiji() {
     let resoudata = JYresou['data'] || {};
     let fenlei = ["电视剧","电影","动漫","综艺"];
     let fenleiid = ["3","2","5","4"];
-    let ids = getMyVar("热榜分类","0");
+    let ids = getMyVar("Src_Jy_热榜分类","0");
     let list = resoudata[fenlei[ids]] || [];
 
     let nowtime = Date.now();
@@ -1511,7 +1511,7 @@ function yiji() {
         title: '<span style="color:#ff6600"><b>\t热搜榜单\t\t\t</b></span>',
         desc: '✅'+fenlei[ids],
         url: $(fenlei, 2, '选择热榜分类').select((fenlei) => {
-            putMyVar("热榜分类",fenlei.indexOf(input));
+            putMyVar("Src_Jy_热榜分类",fenlei.indexOf(input));
             refreshPage(false);
             return "hiker://empty";
         },fenlei),
@@ -1536,16 +1536,16 @@ function yiji() {
     setResult(d);
 
     // 一些自动检查调用在首页加载后，间隔24小时
-    if (!getMyVar('startCheck') && nowtime > (oldtime+24*60*60*1000)) {
+    if (!getMyVar('Src_Jy_startCheck') && nowtime > (oldtime+24*60*60*1000)) {
         excludeLoadingItems(); //执行一些加载后的事项
         updateResource(); //检查更新订阅资源码
-        putMyVar('startCheck', 1);
+        putMyVar('Src_Jy_startCheck', 1);
     }
 }
 // 新搜索页
 function newSearch(name) {
     addListener("onClose", $.toString(() => {
-        //putMyVar("SrcJu_停止搜索线程","1");
+        //putMyVar("Src_Jy_停止搜索线程","1");
     }));
     setPageTitle("聚搜>" + name);
     let d = [];
@@ -1595,9 +1595,9 @@ function Version() {
                 })
                 log('检测到新版本！\nV'+newVersion.SrcJuying+'版本》'+newVersion.SrcJuyingdesc[newVersion.SrcJuying]);
             }
-            putMyVar('SrcJuying-Version', '-V'+newVersion.SrcJuying);
+            putMyVar('Src_Jy_Version', '-V'+newVersion.SrcJuying);
         } catch (e) { }
     }else{
-        putMyVar('SrcJuying-Version', '-V'+nowVersion);
+        putMyVar('Src_Jy_Version', '-V'+nowVersion);
     }
 }
