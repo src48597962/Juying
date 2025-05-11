@@ -474,9 +474,9 @@ function deleteData(lx, data){
 
     writeFile(sourcefile, JSON.stringify(datalist));
     if(lx=='jk'){
-        clearMyVar('SrcJu_searchMark');
+        clearMyVar('Src_Jy_searchMark');
     }
-    clearMyVar('SrcJu_duoselect');
+    clearMyVar('Src_Jy_duoselect');
 }
 // 接口/解析处理公共方法
 function dataHandle(lx, data, input) {
@@ -506,9 +506,9 @@ function dataHandle(lx, data, input) {
     })
     writeFile(sourcefile, JSON.stringify(datalist));
     if(lx='jk'){
-        clearMyVar('SrcJu_searchMark');
+        clearMyVar('Src_Jy_searchMark');
     }
-    clearMyVar('SrcJu_duoselect');
+    clearMyVar('Src_Jy_duoselect');
     return input + '：已处理' + waitlist.length + '个';
 }
 
@@ -626,7 +626,7 @@ function duoselect(datas){
     }else if($.type(datas)=="object"){
         datalist.push(datas);
     }
-    let duoselect = storage0.getMyVar('SrcJu_duoselect') || [];
+    let duoselect = storage0.getMyVar('Src_Jy_duoselect') || [];
     datalist.forEach(data=>{
         if(!duoselect.some(item => data.url==item.url)){
             duoselect.push(data);
@@ -641,14 +641,14 @@ function duoselect(datas){
             updateItem(data.url, {title:data.stop?colorTitle(getDataTitle(data),'#f20c00'):getDataTitle(data)});
         }
     })
-    storage0.putMyVar('SrcJu_duoselect',duoselect);
+    storage0.putMyVar('Src_Jy_duoselect',duoselect);
 }
 // 点播主页选择源接口
 function selectSource() {
     const hikerPop = $.require(config.聚影.replace(/[^/]*$/,'') + 'plugins/hikerPop.js');
     let sourceAllList = getDatas("jk", 1).filter(x=> !x.onlysearch);
     let lockgroups = Juconfig["lockgroups"] || [];
-    if(getMyVar('已验证指纹')!='1'){
+    if(getMyVar('Src_Jy_已验证指纹')!='1'){
         sourceAllList = sourceAllList.filter(it=>{
             return lockgroups.indexOf(it.group||it.type)==-1;
         })
@@ -686,7 +686,7 @@ function selectSource() {
             hint: "源关键字筛选，右边切换分组",
             title: sourceListGroup,
             onChange(s, manage) {
-                putMyVar("sourceListFilter", s);
+                putMyVar("Src_Jy_sourceListFilter", s);
                 tmpList = sourceList.filter(x => x.name.toLowerCase().includes(s.toLowerCase()));
                 let flist = getnames(tmpList).names;
                 manage.list.length = 0;
@@ -695,7 +695,7 @@ function selectSource() {
                 });
                 manage.change();
             },
-            defaultValue: getMyVar("sourceListFilter", ""),
+            defaultValue: getMyVar("Src_Jy_sourceListFilter", ""),
             click(s, manage) {
                 let groupnames = getJiekouGroups(sourceAllList);
                 let tags = getJkTags(sourceAllList);
@@ -740,12 +740,12 @@ function selectSource() {
                 Juconfig["homeSource"] = tmpList[i];
                 writeFile(cfgfile, JSON.stringify(Juconfig));
                 
-                clearMyVar('SrcJu_dianbo$分类');
-                clearMyVar('SrcJu_dianbo$fold');
-                clearMyVar('SrcJu_dianbo$classCache');
-                clearMyVar('SrcJu_dianbo$flCache');
-                clearMyVar('点播动态加载loading');
-                clearMyVar('点播一级jkdata');
+                clearMyVar('Src_Jy_dianbo$分类');
+                clearMyVar('Src_Jy_dianbo$fold');
+                clearMyVar('Src_Jy_dianbo$classCache');
+                clearMyVar('Src_Jy_dianbo$flCache');
+                clearMyVar('Src_Jy_点播动态加载loading');
+                clearMyVar('Src_Jy_点播一级jkdata');
                 
                 let key = tmpList[i].url;
                 setJkSort(key, {use: 1});
@@ -787,7 +787,7 @@ function selectSource() {
                             return "toast://调用生物学验证出错";
                         }
                         let pop = hikerPop.checkByBiometric(() => {
-                            putMyVar('已验证指纹','1');
+                            putMyVar('Src_Jy_已验证指纹','1');
                             toast("验证成功，重新点切换站源吧");
                         });
                     }
@@ -859,7 +859,7 @@ function getHistory(i){
     let items = JSON.parse(fetch('hiker://history')).filter(v=> v.type!="网页浏览" && JSON.parse(v.params).title==ruleTitle);
     if(i+3 > items.length){
         i = 0;
-        clearMyVar('SrcJu_homeHistory');
+        clearMyVar('Src_Jy_homeHistory');
     }
     items.slice(i, i+3).forEach(item=>{
         try{
@@ -915,7 +915,7 @@ function downloadFiles() {
 // 分源资源码
 function shareResource() {
     addListener("onClose", $.toString(() => {
-        clearMyVar('Juconfig');
+        clearMyVar('Src_Jy_Juconfig');
     }));
     let d = [];
     d.push({
@@ -923,7 +923,7 @@ function shareResource() {
         col_type: "rich_text"
     });
     let resources = Juconfig['shareResource'] || [];
-    storage0.putMyVar('Juconfig', Juconfig);
+    storage0.putMyVar('Src_Jy_Juconfig', Juconfig);
     
     d.push({
         title: '通过文件分享资源',
@@ -957,13 +957,13 @@ function shareResource() {
                                 }else{
                                     let filepath;
                                     if(option=="接口"){
-                                        filepath = globalMap0.getVar('Jy_gmParams').jkfile;
+                                        filepath = globalMap0.getVar('Src_Jy_gmParams').jkfile;
                                     }else if(option=="解析"){
-                                        filepath = globalMap0.getVar('Jy_gmParams').jxfile;
+                                        filepath = globalMap0.getVar('Src_Jy_gmParams').jxfile;
                                     }else if(option=="云盘"){
-                                        filepath = globalMap0.getVar('Jy_gmParams').ypfile;
+                                        filepath = globalMap0.getVar('Src_Jy_gmParams').ypfile;
                                     }else if(option=="直播"){
-                                        filepath = globalMap0.getVar('Jy_gmParams').rulepath + "liveconfig.json";
+                                        filepath = globalMap0.getVar('Src_Jy_gmParams').rulepath + "liveconfig.json";
                                     }
                                     let datafile = fetch(filepath);
                                     let datalist = [];
@@ -983,13 +983,13 @@ function shareResource() {
                                             if(option=="接口"){
                                                 for(let i=0;i<datalist.length;i++){
                                                     let data = datalist[i];
-                                                    if(data.url.startsWith(globalMap0.getVar('Jy_gmParams').jkfilespath) && (($.type(data.ext)=="string" && data.ext.startsWith("file")) || !data.ext)){
+                                                    if(data.url.startsWith(globalMap0.getVar('Src_Jy_gmParams').jkfilespath) && (($.type(data.ext)=="string" && data.ext.startsWith("file")) || !data.ext)){
                                                         data.extstr = fetch(data.url) || fetch(data.ext.split("?")[0]);
                                                         if(!data.extstr){
                                                             datalist.splice(i,1);
                                                             i = i - 1;
                                                         }
-                                                    }else if(!data.url.startsWith(globalMap0.getVar('Jy_gmParams').jkfilespath) && data.url.startsWith("hiker")){
+                                                    }else if(!data.url.startsWith(globalMap0.getVar('Src_Jy_gmParams').jkfilespath) && data.url.startsWith("hiker")){
                                                         datalist.splice(i,1);
                                                         i = i - 1;
                                                     }
@@ -1006,7 +1006,7 @@ function shareResource() {
                         if(Object.keys(text).length==0){
                             return "toast://无内容分享";
                         }
-                        let textcontent = globalMap0.getVar('Jy_gmParams').zip(JSON.stringify(text));
+                        let textcontent = globalMap0.getVar('Src_Jy_gmParams').zip(JSON.stringify(text));
                         let code = '聚影资源码￥' + aesEncode('Juying2', textcontent) + '￥文件分享';
                         let sharefile = 'hiker://files/_cache/聚影资源码_'+$.dateFormat(new Date(),"HHmmss")+'.hiker';
                         writeFile(sharefile, code+`@import=js:$.require("hiker://page/import?rule=聚影");`);
@@ -1038,7 +1038,7 @@ function shareResource() {
                         return $("", "申请成功，输入名称保存").input((path,token)=>{
                             input = input.trim();
                             if(input){
-                                let Juconfig = storage0.getMyVar('Juconfig');
+                                let Juconfig = storage0.getMyVar('Src_Jy_Juconfig');
                                 let resources = Juconfig['shareResource'] || [];
                                 resources.push({
                                     name: input,
@@ -1046,7 +1046,7 @@ function shareResource() {
                                     token: token
                                 })
                                 Juconfig['shareResource'] = resources;
-                                let cfgfile = globalMap0.getVar('Jy_gmParams').cfgfile;
+                                let cfgfile = globalMap0.getVar('Src_Jy_gmParams').cfgfile;
                                 writeFile(cfgfile, JSON.stringify(Juconfig));
                                 refreshPage(false);
                                 return 'toast://申请成功';
@@ -1069,8 +1069,8 @@ function shareResource() {
             title: it.name + "-" + it.path.split('@')[0],
             desc: "上传同步时间：" + (it.time||"") + "\n上次同步项目：" + (it.options||""),
             url: $(["复制","删除","改名","上传"], 2, "选择操作功能项").select((it)=>{
-                let Juconfig = storage0.getMyVar('Juconfig');
-                let cfgfile = globalMap0.getVar('Jy_gmParams').cfgfile;
+                let Juconfig = storage0.getMyVar('Src_Jy_Juconfig');
+                let cfgfile = globalMap0.getVar('Src_Jy_gmParams').cfgfile;
                 let codeid = aesEncode('Juying2', it.path);
                 if(input=="复制"){
                     copy('聚影资源码￥'+codeid+'￥'+it.name);
@@ -1147,13 +1147,13 @@ function shareResource() {
                                         }else{
                                             let filepath;
                                             if(option=="接口"){
-                                                filepath = globalMap0.getVar('Jy_gmParams').jkfile;
+                                                filepath = globalMap0.getVar('Src_Jy_gmParams').jkfile;
                                             }else if(option=="解析"){
-                                                filepath = globalMap0.getVar('Jy_gmParams').jxfile;
+                                                filepath = globalMap0.getVar('Src_Jy_gmParams').jxfile;
                                             }else if(option=="云盘"){
-                                                filepath = globalMap0.getVar('Jy_gmParams').ypfile;
+                                                filepath = globalMap0.getVar('Src_Jy_gmParams').ypfile;
                                             }else if(option=="直播"){
-                                                filepath = globalMap0.getVar('Jy_gmParams').rulepath + "liveconfig.json";
+                                                filepath = globalMap0.getVar('Src_Jy_gmParams').rulepath + "liveconfig.json";
                                             }
                                             let datafile = fetch(filepath);
                                             let datalist = [];
@@ -1173,13 +1173,13 @@ function shareResource() {
                                                     if(option=="接口"){
                                                         for(let i=0;i<datalist.length;i++){
                                                             let data = datalist[i];
-                                                            if(data.url.startsWith(globalMap0.getVar('Jy_gmParams').jkfilespath) && (($.type(data.ext)=="string" && data.ext.startsWith("file")) || !data.ext)){
+                                                            if(data.url.startsWith(globalMap0.getVar('Src_Jy_gmParams').jkfilespath) && (($.type(data.ext)=="string" && data.ext.startsWith("file")) || !data.ext)){
                                                                 data.extstr = fetch(data.url) || fetch(data.ext.split("?")[0]);
                                                                 if(!data.extstr){
                                                                     datalist.splice(i,1);
                                                                     i = i - 1;
                                                                 }
-                                                            }else if(!data.url.startsWith(globalMap0.getVar('Jy_gmParams').jkfilespath) && data.url.startsWith("hiker")){
+                                                            }else if(!data.url.startsWith(globalMap0.getVar('Src_Jy_gmParams').jkfilespath) && data.url.startsWith("hiker")){
                                                                 datalist.splice(i,1);
                                                                 i = i - 1;
                                                             }
@@ -1196,7 +1196,7 @@ function shareResource() {
                                 if(Object.keys(text).length==0){
                                     return "toast://无内容分享";
                                 }
-                                let textcontent = globalMap0.getVar('Jy_gmParams').zip(JSON.stringify(text));
+                                let textcontent = globalMap0.getVar('Src_Jy_gmParams').zip(JSON.stringify(text));
                                 try{
                                     let pasteupdate = JSON.parse(request("https://pasteme.tyrantg.com/api/update",{
                                         body: "content="+textcontent+"&path="+it.path+"&auth_code="+it.token,
@@ -1237,7 +1237,7 @@ function shareResource() {
 // 资源订阅管理
 function subResource() {
     addListener("onClose", $.toString(() => {
-        clearMyVar('Juconfig');
+        clearMyVar('Src_Jy_Juconfig');
     }));
     let d = [];
     d.push({
@@ -1245,7 +1245,7 @@ function subResource() {
         col_type: "rich_text"
     });
     let resources = Juconfig['subResource'] || [];
-    storage0.putMyVar('Juconfig', Juconfig);
+    storage0.putMyVar('Src_Jy_Juconfig', Juconfig);
     
     d.push({
         title: '订阅聚影资源码，当前共有'+resources.length+'个',
@@ -1270,14 +1270,14 @@ function subResource() {
                     return $(newname, "获取成功，输入名称保存").input((path)=>{
                         input = input.trim();
                         if(input){
-                            let Juconfig = storage0.getMyVar('Juconfig');
+                            let Juconfig = storage0.getMyVar('Src_Jy_Juconfig');
                             let resources = Juconfig['subResource'] || [];
                             resources.push({
                                 name: input,
                                 path: path
                             })
                             Juconfig['subResource'] = resources;
-                            let cfgfile = globalMap0.getVar('Jy_gmParams').cfgfile;
+                            let cfgfile = globalMap0.getVar('Src_Jy_gmParams').cfgfile;
                             writeFile(cfgfile, JSON.stringify(Juconfig));
                             refreshPage(false);
                             return 'toast://保存成功';
@@ -1301,8 +1301,8 @@ function subResource() {
             title: it.name + "-" + it.path.split('@')[0],
             desc: "自动：" + (it.auto?"是":"否") + "       同步时间：" + (it.time||"") + "\n模式：" + (it.mode==2?"全量":"增量") + "   导入项目："+(it.options||""),
             url: $(["复制","删除","改名","下载","自动",it.mode=="2"?"增量":"全量"], 2, "选择操作功能项").select((it)=>{
-                let Juconfig = storage0.getMyVar('Juconfig');
-                let cfgfile = globalMap0.getVar('Jy_gmParams').cfgfile;
+                let Juconfig = storage0.getMyVar('Src_Jy_Juconfig');
+                let cfgfile = globalMap0.getVar('Src_Jy_gmParams').cfgfile;
                 let codeid = aesEncode('Juying2', it.path);
                 if(input=="复制"){
                     copy('聚影资源码￥'+codeid+'￥'+it.name);
@@ -1404,7 +1404,7 @@ function updateResource(it,refresh) {
         }));
         if(pasteget.result_code=="SUCCESS"){
             require(config.聚影.replace(/[^/]*$/,'') + 'SrcJySet.js');
-            let textcontent = globalMap0.getVar('Jy_gmParams').unzip(pasteget.data);
+            let textcontent = globalMap0.getVar('Src_Jy_gmParams').unzip(pasteget.data);
             let pastedata = JSON.parse(textcontent);
             let jknum = 0, jxnum = 0, ypnum = 0, tvnum = 0, sm = '';
             let options = [];
@@ -1419,7 +1419,7 @@ function updateResource(it,refresh) {
                 options.push('解析');
             }
             if(pastedata.直播){
-                let livefilepath = globalMap0.getVar('Jy_gmParams').rulepath + "liveconfig.json";
+                let livefilepath = globalMap0.getVar('Src_Jy_gmParams').rulepath + "liveconfig.json";
                 let liveconfig = pastedata.直播;
                 if(it.mode!=2){
                     let livefile = fetch(livefilepath);
@@ -1530,9 +1530,9 @@ let gmParams = {
     zip: gzip.zip,
     unzip: gzip.unzip
 }
-if(!globalMap0.getVar('Jy_gmParams')){
+if(!globalMap0.getVar('Src_Jy_gmParams')){
     log("写入全局对象变量gmParams");
-    globalMap0.putVar('Jy_gmParams', gmParams);
+    globalMap0.putVar('Src_Jy_gmParams', gmParams);
     
     if(!config.聚影 && getPublicItem('聚影','')){
         initConfig({
