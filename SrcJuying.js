@@ -805,14 +805,14 @@ function dianboyiji(testSource) {
             title: "管理设置",
             url: testSource?"toast://测试模式下不能进入设置菜单":$(getItem("sourceMode")=="2"?["外部资源导入","远程订阅模式√"]:["本地接口管理","本地解析管理","外部资源导入","聚影资源码订阅","本地接口模式√"],1).select(()=>{
                 if(input=="本地接口管理"){
-                    putMyVar('Src_Jy_guanli','jk');
+                    putMyVar('guanli','jk');
                     return $("hiker://empty#noRecordHistory##noHistory##noRefresh#").rule(() => {
                         setPageTitle('本地接口管理');
                         require(config.聚影.replace(/[^/]*$/,'') + 'SrcJySet.js');
                         SRCSet();
                     })
                 }else if(input=="本地解析管理"){
-                    putMyVar('Src_Jy_guanli','jx');
+                    putMyVar('guanli','jx');
                     return $("hiker://empty#noRecordHistory##noHistory##noRefresh#").rule(() => {
                         setPageTitle('本地解析管理');
                         require(config.聚影.replace(/[^/]*$/,'') + 'SrcJySet.js');
