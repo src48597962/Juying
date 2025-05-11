@@ -476,7 +476,7 @@ function deleteData(lx, data){
     if(lx=='jk'){
         clearMyVar('Src_Jy_searchMark');
     }
-    clearMyVar('Src_Jy_duoselect');
+    clearMyVar('duoselect');
 }
 // 接口/解析处理公共方法
 function dataHandle(lx, data, input) {
@@ -508,7 +508,7 @@ function dataHandle(lx, data, input) {
     if(lx='jk'){
         clearMyVar('Src_Jy_searchMark');
     }
-    clearMyVar('Src_Jy_duoselect');
+    clearMyVar('duoselect');
     return input + '：已处理' + waitlist.length + '个';
 }
 
@@ -626,7 +626,7 @@ function duoselect(datas){
     }else if($.type(datas)=="object"){
         datalist.push(datas);
     }
-    let duoselect = storage0.getMyVar('Src_Jy_duoselect') || [];
+    let duoselect = storage0.getMyVar('duoselect') || [];
     datalist.forEach(data=>{
         if(!duoselect.some(item => data.url==item.url)){
             duoselect.push(data);
@@ -641,7 +641,7 @@ function duoselect(datas){
             updateItem(data.url, {title:data.stop?colorTitle(getDataTitle(data),'#f20c00'):getDataTitle(data)});
         }
     })
-    storage0.putMyVar('Src_Jy_duoselect',duoselect);
+    storage0.putMyVar('duoselect',duoselect);
 }
 // 点播主页选择源接口
 function selectSource() {
@@ -740,12 +740,12 @@ function selectSource() {
                 Juconfig["homeSource"] = tmpList[i];
                 writeFile(cfgfile, JSON.stringify(Juconfig));
                 
-                clearMyVar('Src_Jy_dianbo$分类');
-                clearMyVar('Src_Jy_dianbo$fold');
-                clearMyVar('Src_Jy_dianbo$classCache');
-                clearMyVar('Src_Jy_dianbo$flCache');
-                clearMyVar('Src_Jy_点播动态加载loading');
-                clearMyVar('Src_Jy_点播一级jkdata');
+                clearMyVar('dianbo$分类');
+                clearMyVar('dianbo$fold');
+                clearMyVar('dianbo$classCache');
+                clearMyVar('dianbo$flCache');
+                clearMyVar('点播动态加载loading');
+                clearMyVar('点播一级jkdata');
                 
                 let key = tmpList[i].url;
                 setJkSort(key, {use: 1});
@@ -915,7 +915,7 @@ function downloadFiles() {
 // 分源资源码
 function shareResource() {
     addListener("onClose", $.toString(() => {
-        clearMyVar('Src_Jy_Juconfig');
+        clearMyVar('Juconfig');
     }));
     let d = [];
     d.push({
@@ -923,7 +923,7 @@ function shareResource() {
         col_type: "rich_text"
     });
     let resources = Juconfig['shareResource'] || [];
-    storage0.putMyVar('Src_Jy_Juconfig', Juconfig);
+    storage0.putMyVar('Juconfig', Juconfig);
     
     d.push({
         title: '通过文件分享资源',
@@ -1038,7 +1038,7 @@ function shareResource() {
                         return $("", "申请成功，输入名称保存").input((path,token)=>{
                             input = input.trim();
                             if(input){
-                                let Juconfig = storage0.getMyVar('Src_Jy_Juconfig');
+                                let Juconfig = storage0.getMyVar('Juconfig');
                                 let resources = Juconfig['shareResource'] || [];
                                 resources.push({
                                     name: input,
@@ -1069,7 +1069,7 @@ function shareResource() {
             title: it.name + "-" + it.path.split('@')[0],
             desc: "上传同步时间：" + (it.time||"") + "\n上次同步项目：" + (it.options||""),
             url: $(["复制","删除","改名","上传"], 2, "选择操作功能项").select((it)=>{
-                let Juconfig = storage0.getMyVar('Src_Jy_Juconfig');
+                let Juconfig = storage0.getMyVar('Juconfig');
                 let cfgfile = globalMap0.getVar('Src_Jy_gmParams').cfgfile;
                 let codeid = aesEncode('Juying2', it.path);
                 if(input=="复制"){
@@ -1237,7 +1237,7 @@ function shareResource() {
 // 资源订阅管理
 function subResource() {
     addListener("onClose", $.toString(() => {
-        clearMyVar('Src_Jy_Juconfig');
+        clearMyVar('Juconfig');
     }));
     let d = [];
     d.push({
@@ -1245,7 +1245,7 @@ function subResource() {
         col_type: "rich_text"
     });
     let resources = Juconfig['subResource'] || [];
-    storage0.putMyVar('Src_Jy_Juconfig', Juconfig);
+    storage0.putMyVar('Juconfig', Juconfig);
     
     d.push({
         title: '订阅聚影资源码，当前共有'+resources.length+'个',
@@ -1270,7 +1270,7 @@ function subResource() {
                     return $(newname, "获取成功，输入名称保存").input((path)=>{
                         input = input.trim();
                         if(input){
-                            let Juconfig = storage0.getMyVar('Src_Jy_Juconfig');
+                            let Juconfig = storage0.getMyVar('Juconfig');
                             let resources = Juconfig['subResource'] || [];
                             resources.push({
                                 name: input,
@@ -1301,7 +1301,7 @@ function subResource() {
             title: it.name + "-" + it.path.split('@')[0],
             desc: "自动：" + (it.auto?"是":"否") + "       同步时间：" + (it.time||"") + "\n模式：" + (it.mode==2?"全量":"增量") + "   导入项目："+(it.options||""),
             url: $(["复制","删除","改名","下载","自动",it.mode=="2"?"增量":"全量"], 2, "选择操作功能项").select((it)=>{
-                let Juconfig = storage0.getMyVar('Src_Jy_Juconfig');
+                let Juconfig = storage0.getMyVar('Juconfig');
                 let cfgfile = globalMap0.getVar('Src_Jy_gmParams').cfgfile;
                 let codeid = aesEncode('Juying2', it.path);
                 if(input=="复制"){
