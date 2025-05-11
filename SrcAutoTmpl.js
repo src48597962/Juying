@@ -6,7 +6,7 @@ function autoerji(url, html) {
 	let urldomian = getHome(url);
 	//log(urldomian);
 
-	let urltmpl = JSON.parse(getMyVar('SrcTmpl-' + urldomian, '{}'));
+	let urltmpl = JSON.parse(getMyVar('Src_Jy_Tmpl-' + urldomian, '{}'));
 	let tmplidex = erjiTmpl.findIndex(it => it.id === urltmpl.id);
 	if (tmplidex > -1) {
 		let tmpl = erjiTmpl.splice(tmplidex, 1)[0];
@@ -90,7 +90,7 @@ function autoerji(url, html) {
 		}
 	});
 	if (setid > 0 && data.tabs.length > 0 && data.lists.length > 0) {
-		putMyVar('SrcTmpl-' + urldomian, JSON.stringify(t));
+		putMyVar('Src_Jy_Tmpl-' + urldomian, JSON.stringify(t));
 		if (data.tabs.length > data.lists.length) {
 			data.tabs.splice(data.lists.length - 1, data.tabs.length - data.lists.length);
 		}
