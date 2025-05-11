@@ -58,7 +58,7 @@ function search(name, sstype, jkdata) {
                 pic_url: it.vod_pic,
                 url: "hiker://empty##"+ it.vod_url + $().lazyRule((extra) => {
                     delete extra['cls'];
-                    storage0.putMyVar('Src_Jy_二级附加临时对象', extra);
+                    storage0.putMyVar('二级附加临时对象', extra);
                     refreshPage(false);
                     return "toast://已切换源：" + extra.data.name;
                 }, extra),
@@ -232,7 +232,7 @@ function erjisousuo(name,group,datas,sstype) {
 // 点播二级
 function dianboerji() {
     addListener("onClose", $.toString((getHistory) => {
-        clearMyVar('Src_Jy_二级附加临时对象');
+        clearMyVar('二级附加临时对象');
         //putMyVar("Src_Jy_停止搜索线程","1");
         
         if(getItem('historyEnable')=='1'){
@@ -243,7 +243,7 @@ function dianboerji() {
         }
     },getHistory));
 
-    let sextra = storage0.getMyVar('Src_Jy_二级附加临时对象') || {};//二级换源时临时extra数据
+    let sextra = storage0.getMyVar('二级附加临时对象') || {};//二级换源时临时extra数据
 
     MY_URL = sextra.url || MY_PARAMS.url;
     let jkdata = sextra.data || MY_PARAMS.data;
@@ -260,7 +260,7 @@ function dianboerji() {
 
     if(sextra.url){
         updateItemid = updateItemid + '2';
-        clearMyVar('Src_Jy_二级附加临时对象');
+        clearMyVar('二级附加临时对象');
     }
     
     let detailsmark;
@@ -686,21 +686,21 @@ function dianboerji() {
 //点播一级
 function dianboyiji(testSource) {
     addListener("onClose", $.toString(() => {
-        clearMyVar('Src_Jy_点播动态加载loading');
-        clearMyVar('Src_Jy_点播一级jkdata');
-        clearMyVar('Src_Jy_点播下滑num');
+        clearMyVar('点播动态加载loading');
+        clearMyVar('点播一级jkdata');
+        clearMyVar('点播下滑num');
     }));
     addListener("onRefresh", $.toString(() => {
-        let num = parseInt(getMyVar('Src_Jy_点播下滑num','0')) + 1;
-        putMyVar('Src_Jy_点播下滑num', num);
+        let num = parseInt(getMyVar('点播下滑num','0')) + 1;
+        putMyVar('点播下滑num', num);
     }));
     let d = [];
     let jkdata = {};
     if(testSource){
         log("接口测试模式");
         jkdata = testSource;
-    }else if(storage0.getMyVar('Src_Jy_点播一级jkdata')){
-        jkdata = storage0.getMyVar('Src_Jy_点播一级jkdata');
+    }else if(storage0.getMyVar('点播一级jkdata')){
+        jkdata = storage0.getMyVar('点播一级jkdata');
     }else{
         let yxdatalist = getDatas('jk', 1);
         let index = yxdatalist.indexOf(yxdatalist.filter(d => d.type==sourceType && d.name==sourceName )[0]);
@@ -710,12 +710,12 @@ function dianboyiji(testSource) {
         }
     }
     let sname = jkdata.name;
-    if(getMyVar('Src_Jy_currentSname') != sname){
-        clearMyVar('Src_Jy_dianbo$分类');
-        clearMyVar('Src_Jy_dianbo$fold');
-        clearMyVar('Src_Jy_dianbo$classCache');
-        clearMyVar('Src_Jy_dianbo$flCache');
-        putMyVar('Src_Jy_currentSname', sname);
+    if(getMyVar('currentSname') != sname){
+        clearMyVar('dianbo$分类');
+        clearMyVar('dianbo$fold');
+        clearMyVar('dianbo$classCache');
+        clearMyVar('dianbo$flCache');
+        putMyVar('currentSname', sname);
     }
 
     if(MY_PAGE==1){
@@ -879,7 +879,7 @@ function dianboyiji(testSource) {
                 }
             })
         }else{
-            if (typeof(setPreResult)!="undefined" && getMyVar('Src_Jy_点播动态加载loading')!='1') {
+            if (typeof(setPreResult)!="undefined" && getMyVar('点播动态加载loading')!='1') {
                 d.push({
                     title: "",
                     url: "hiker://empty",
@@ -899,7 +899,7 @@ function dianboyiji(testSource) {
                 })
                 setPreResult(d);
                 d = [];
-                putMyVar('Src_Jy_点播动态加载loading', '1');
+                putMyVar('点播动态加载loading', '1');
             }
             /*
                     return $('hiker://empty#noRecordHistory##noHistory#').rule((name,data) => {
@@ -972,7 +972,7 @@ function dianboyiji(testSource) {
             let yidata = {fllists:[], vodlists:[], error:{}}
 
             let lockgroups = Juconfig["lockgroups"] || [];
-            if((lockgroups.indexOf(sourceGroup)>-1 || (parseInt(getMyVar('Src_Jy_点播下滑num','0'))>1&&lockgroups.length>0)) && getMyVar('Src_Jy_已验证指纹')!='1'){
+            if((lockgroups.indexOf(sourceGroup)>-1 || (parseInt(getMyVar('点播下滑num','0'))>1&&lockgroups.length>0)) && getMyVar('Src_Jy_已验证指纹')!='1'){
                 const hikerPop = $.require(config.聚影.replace(/[^/]*$/,'') + 'plugins/hikerPop.js');
                 if (hikerPop.canBiometric() !== 0) {
                     return "toast://调用生物学验证出错";
@@ -980,7 +980,7 @@ function dianboyiji(testSource) {
                 let pop = hikerPop.checkByBiometric(() => {
                     putMyVar('Src_Jy_已验证指纹','1');
                     refreshPage(false);
-                    if(parseInt(getMyVar('Src_Jy_点播下滑num','0'))>1){
+                    if(parseInt(getMyVar('点播下滑num','0'))>1){
                         selectSource();
                     }
                 });
