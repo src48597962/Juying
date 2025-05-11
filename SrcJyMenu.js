@@ -144,7 +144,7 @@ function cutSource(name, group) {
 
 function lookset() {
     addListener("onClose", $.toString(() => {
-        clearMyVar('Src_Jy_playSet');
+        clearMyVar('playSet');
     }));
     if(!config.聚影 && getPublicItem('聚影','')){
         initConfig({
@@ -161,7 +161,7 @@ function lookset() {
         }catch(e){}
     }
 
-    let playSet = storage0.getMyVar('Src_Jy_playSet') || storage0.getItem('playSet') || Juconfig['playSet'] || {};
+    let playSet = storage0.getMyVar('playSet') || storage0.getItem('playSet') || Juconfig['playSet'] || {};
     clearItem('playSet');
 
     let d = [];
@@ -199,7 +199,7 @@ function lookset() {
             } else {
                 playSet['printlog'] = 0;
             }
-            storage0.putMyVar('Src_Jy_playSet', playSet);
+            storage0.putMyVar('playSet', playSet);
             refreshPage(false);
             return 'toast://切换成功';
         }, playSet),
@@ -269,7 +269,7 @@ function lookset() {
         title: '聚影智能',
         url: $('#noLoading#').lazyRule((playSet) => {
             playSet['parsemode'] = 1;
-            storage0.putMyVar('Src_Jy_playSet', playSet);
+            storage0.putMyVar('playSet', playSet);
             refreshPage(false);
             return 'toast://聚影智能 | 上次优先>接口自带+私有解析';
         }, playSet),
@@ -280,7 +280,7 @@ function lookset() {
         title: '强制嗅探',
         url: $('#noLoading#').lazyRule((playSet) => {
             playSet['parsemode'] = 2;
-            storage0.putMyVar('Src_Jy_playSet', playSet);
+            storage0.putMyVar('playSet', playSet);
             refreshPage(false);
             return 'toast://强制嗅探 | 将web解析组线路进video播放器';
         }, playSet),
@@ -291,7 +291,7 @@ function lookset() {
         title: '手动切换',
         url: $('#noLoading#').lazyRule((playSet) => {
             playSet['parsemode'] = 3;
-            storage0.putMyVar('Src_Jy_playSet', playSet);
+            storage0.putMyVar('playSet', playSet);
             refreshPage(false);
             return 'toast://手动切换 | 代理播放，在播放页手动选择解析';
         }, playSet),
@@ -312,7 +312,7 @@ function lookset() {
                 playSet['xiutannh'] = 'x5';
                 sm = 'x5';
             }
-            storage0.putMyVar('Src_Jy_playSet', playSet);
+            storage0.putMyVar('playSet', playSet);
             refreshPage(false);
             return 'toast://嗅探内核切换为：'+sm;
         }, playSet),
@@ -327,7 +327,7 @@ function lookset() {
             } else {
                 playSet['video'] = 1;
             }
-            storage0.putMyVar('Src_Jy_playSet', playSet);
+            storage0.putMyVar('playSet', playSet);
             refreshPage(false);
             return 'toast://已切换';
         }, playSet),
@@ -372,7 +372,7 @@ function lookset() {
             } else {
                 playSet['cachem3u8'] = 0;
             }
-            storage0.putMyVar('Src_Jy_playSet', playSet);
+            storage0.putMyVar('playSet', playSet);
             refreshPage(false);
             return 'toast://切换成功';
         }, playSet),
@@ -388,7 +388,7 @@ function lookset() {
             } else {
                 playSet['isTest'] = 1;
             }
-            storage0.putMyVar('Src_Jy_playSet', playSet);
+            storage0.putMyVar('playSet', playSet);
             refreshPage(false);
             return 'toast://切换成功';
         }, playSet),
@@ -406,7 +406,7 @@ function lookset() {
                 playSet['dmRoute'] = 1;
                 sm = '仅针对官网地址有效，需要dm盒子小程序';
             }
-            storage0.putMyVar('Src_Jy_playSet', playSet);
+            storage0.putMyVar('playSet', playSet);
             refreshPage(false);
             return 'toast://' + sm;
         }, playSet),
@@ -421,13 +421,13 @@ function lookset() {
         url: $('#noLoading#').lazyRule((playSet) => {
             if (playSet['clearM3u8Ad']) {
                 delete playSet['clearM3u8Ad'];
-                storage0.putMyVar('Src_Jy_playSet', playSet);
+                storage0.putMyVar('playSet', playSet);
                 refreshPage(false);
                 return 'toast://关闭订阅M3U8广告清除规则';
             } else {
                 return $("确认要从聚影订阅M3U8广告清除规则来覆盖软件的？").confirm((playSet)=>{
                     playSet['clearM3u8Ad'] = 1;
-                    storage0.putMyVar('Src_Jy_playSet', playSet);
+                    storage0.putMyVar('playSet', playSet);
                     let m3u8Ad_file = config.聚影.replace(/[^/]*$/,'') + "plugins/m3u8_ad_rule.json";
                     let m3u8Ad = fetch(m3u8Ad_file);
                     if(m3u8Ad){
@@ -511,11 +511,6 @@ let buttonmenu = {
 //管理中心
 function manageSet(){
     addListener("onClose", $.toString(() => {
-        clearMyVar('Src_Jy_uploads');
-        clearMyVar('Src_Jy_uploadjiekou');
-        clearMyVar('Src_Jy_uploadjiexi');
-        clearMyVar('Src_Jy_uploadlive');
-        clearMyVar('Src_Jy_uploadyundisk');
         //refreshPage(false);
     }));
     setPageTitle("♥管理"+getMyVar('Src_Jy_Version', ''));
