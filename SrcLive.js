@@ -323,7 +323,7 @@ function guanlidata(datalist) {
 
         list.push({
             title: name,
-            img: globalMap0.getVar('Jy_gmParams').getIcon("直播-tv.svg"),
+            img: globalMap0.getVar('Src_Jy_gmParams').getIcon("直播-tv.svg"),
             col_type: 'icon_2_round',
             url: $('#noLoading#').lazyRule((name) => {
                 require(config.聚影.replace(/[^/]*$/,'') + 'SrcLive.js');
@@ -449,18 +449,18 @@ function LiveSet() {
     });
     d.push({
         title: "直播管理",
-        img: globalMap0.getVar('Jy_gmParams').getIcon("直播-管理.svg"),
+        img: globalMap0.getVar('Src_Jy_gmParams').getIcon("直播-管理.svg"),
         col_type: "avatar",
         url: "hiker://empty",
     });
     d.push({
         title: "订阅源管理",
-        img: globalMap0.getVar('Jy_gmParams').getIcon("直播-箭头.svg"),
+        img: globalMap0.getVar('Src_Jy_gmParams').getIcon("直播-箭头.svg"),
         url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
             addListener("onClose", $.toString(() => {
                 //refreshPage(false);
             }));
-            let livecfgfile = globalMap0.getVar('Jy_gmParams').rulepath + "liveconfig.json";
+            let livecfgfile = globalMap0.getVar('Src_Jy_gmParams').rulepath + "liveconfig.json";
             let livecfg = fetch(livecfgfile);
             if (livecfg != "") {
                 eval("var liveconfig = " + livecfg);
@@ -599,7 +599,7 @@ function LiveSet() {
                                     }
                                     if (YClives.length > 0) {
                                         let importnum = 0;
-                                        let JYlivefile = globalMap0.getVar('Jy_gmParams').rulepath + "live.txt";
+                                        let JYlivefile = globalMap0.getVar('Src_Jy_gmParams').rulepath + "live.txt";
                                         let JYlive = fetch(JYlivefile);
                                         if (JYlive) {
                                             var JYlives = JYlive.split('\n');
@@ -678,7 +678,7 @@ function LiveSet() {
     });
     d.push({
         title: "box配置订阅",
-        img: globalMap0.getVar('Jy_gmParams').getIcon("直播-箭头.svg"),
+        img: globalMap0.getVar('Src_Jy_gmParams').getIcon("直播-箭头.svg"),
         col_type: "text_icon",
         url: $('hiker://empty#noRecordHistory##noHistory#').rule(() => {
             addListener("onClose", $.toString(() => {
@@ -865,7 +865,7 @@ function LiveSet() {
     });
     d.push({
         title: "编辑本地源",
-        img: globalMap0.getVar('Jy_gmParams').getIcon("直播-箭头.svg"),
+        img: globalMap0.getVar('Src_Jy_gmParams').getIcon("直播-箭头.svg"),
         col_type: "text_icon",
         url:
             getMyVar("JYlivedyurl", "juying") == "juying"
@@ -881,10 +881,10 @@ function LiveSet() {
     });
     d.push({
         title: "清空直播源",
-        img: globalMap0.getVar('Jy_gmParams').getIcon("直播-箭头.svg"),
+        img: globalMap0.getVar('Src_Jy_gmParams').getIcon("直播-箭头.svg"),
         col_type: "text_icon",
         url: $("确定清空聚影直播本地文件？").confirm(() => {
-            writeFile(globalMap0.getVar('Jy_gmParams').rulepath + "live.txt", "");
+            writeFile(globalMap0.getVar('Src_Jy_gmParams').rulepath + "live.txt", "");
             if (getMyVar("JYlivedyurl", "juying") == "juying") {
                 putMyVar("isEdit", "1");
             }
@@ -898,7 +898,7 @@ function LiveSet() {
     });
     d.push({
         title: "清理失效",
-        img: globalMap0.getVar('Jy_gmParams').getIcon("直播-清理.svg"),
+        img: globalMap0.getVar('Src_Jy_gmParams').getIcon("直播-清理.svg"),
         col_type: "avatar",
         url: "hiker://empty",
     });
@@ -909,7 +909,7 @@ function LiveSet() {
         url: $('#noLoading#').lazyRule(() => {
             putMyVar('isEdit', '1');
             let urls = [];
-            let JYlivefile = globalMap0.getVar('Jy_gmParams').rulepath + "live.txt";
+            let JYlivefile = globalMap0.getVar('Src_Jy_gmParams').rulepath + "live.txt";
             let JYlive = fetch(JYlivefile);
             if (JYlive != "") {
                 var task = function (obj) {
