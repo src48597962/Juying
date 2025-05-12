@@ -1,9 +1,9 @@
 var newVersion = {
-    "SrcJuying":"2.6",
-    "hint": "小程序版本需要升级到11以上",
+    "SrcJuying":"2.7",
+    "hint": "",
     "codeDownload": "https://src48597962.lanzouo.com/iO76o2qy41ra",
     "JYUpdateRecords": [{
-        title: "beta V2.7",
+        title: "2025/05/12 V2.7",
         records: [
             "优化：直播源兼容性提升",
             "优化：XBPQ源兼容性提升",
