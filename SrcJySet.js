@@ -1126,15 +1126,17 @@ function jiekou(data) {
     d.push({
         title: '类型：' + getMyVar('apitype', ''),
         col_type:'text_1',
-        url:$(["v1","app","v2","iptv","cms","XPath","biubiu","XBPQ","XYQ","hipy_t3","hipy_t4","py","app类自动"],3).select(()=>{
-            if(input=="app类自动"){
+        url:$(["v1","app","v2","iptv","cms","XPath","biubiu","XBPQ","XYQ","hipy_t3","hipy_t4","py","app类自动","zdy"],3).select((isnew)=>{
+            if(isnew && input=="zdy"){
+                return `editFile://hiker://files/_cache/Juying2/zdy.json@js=putMyVar("apiurl",input);`;
+            }else if(input=="app类自动"){
                 clearMyVar('apitype');
             }else{
                 putMyVar('apitype', input);
             }
             refreshPage(false);
             return'toast://已选择类型：' + input;
-        })
+        }, data?0:1)
     });
     
     let groupNames = getGroupNames();
