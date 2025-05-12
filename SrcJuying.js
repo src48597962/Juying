@@ -687,7 +687,6 @@ function dianboerji() {
 function dianboyiji(testSource) {
     addListener("onClose", $.toString(() => {
         clearMyVar('点播动态加载loading');
-        clearMyVar('点播一级jkdata');
         clearMyVar('点播下滑num');
     }));
     addListener("onRefresh", $.toString(() => {
@@ -699,8 +698,6 @@ function dianboyiji(testSource) {
     if(testSource){
         log("接口测试模式");
         jkdata = testSource;
-    }else if(storage0.getMyVar('点播一级jkdata')){
-        jkdata = storage0.getMyVar('点播一级jkdata');
     }else{
         let yxdatalist = getDatas('jk', 1);
         let index = yxdatalist.indexOf(yxdatalist.filter(d => d.type==sourceType && d.name==sourceName )[0]);
@@ -1092,6 +1089,9 @@ function dianboyiji(testSource) {
                 col_type: 'text_center_1'
             });
             log(jkdata.name+'>调用一级数据异常>' + e.message + ' 错误行#' + e.lineNumber);
+            if(e.message.includes(`PythonHiker.js" cannot be found`)){
+                toast("开发手册搜索python，安装扩展插件包");
+            }
         }
     }
     deleteItemByCls("loading_gif");
