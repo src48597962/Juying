@@ -1292,251 +1292,250 @@ function yiji() {
     }
     
     if(getItem('主页显示点播', '0')=='0'){
-        if(MY_PAGE>1){
-            return [];
-        }
-        var searchurl = $('').lazyRule(() => {
-            let recordlist = storage0.getItem('searchrecord') || [];
-            if(recordlist.indexOf(input)>-1){
-                recordlist = recordlist.filter((item) => item !== input);
-            }
-            recordlist.unshift(input);
-            if(recordlist.length>20){
-                recordlist.splice(recordlist.length-1,1);
-            }
-            storage0.setItem('searchrecord', recordlist);
-            if(MY_NAME=="海阔视界"){
-                return "hiker://search?rule=" + MY_RULE.title + "&s=" + input;
-            }else{
-                return $('hiker://empty#noRecordHistory##noHistory##noRefresh#').rule((input) => {
-                    require(config.聚影);
-                    newSearch(input);
-                },input)
-            }
-        });
-        let filterJk = getItem('主页搜索接口范围','');
-        d.push({
-            title: "搜索",
-            url: $.toString((searchurl) => {
-                input = input.trim();
-                if(input == ''){
-                    return "hiker://empty"
+        if(MY_PAGE==1){
+            var searchurl = $('').lazyRule(() => {
+                let recordlist = storage0.getItem('searchrecord') || [];
+                if(recordlist.indexOf(input)>-1){
+                    recordlist = recordlist.filter((item) => item !== input);
                 }
-                if(/www\.aliyundrive\.com|www\.alipan\.com/.test(input)){
-                    input = input.replace('http','\nhttp');
-                    return $("hiker://empty#noRecordHistory##noHistory#").rule((input) => {
-                        require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyAliDisk.js');
-                        aliShareUrl(input);
-                    },input);
+                recordlist.unshift(input);
+                if(recordlist.length>20){
+                    recordlist.splice(recordlist.length-1,1);
+                }
+                storage0.setItem('searchrecord', recordlist);
+                if(MY_NAME=="海阔视界"){
+                    return "hiker://search?rule=" + MY_RULE.title + "&s=" + input;
                 }else{
-                    return input + searchurl;
+                    return $('hiker://empty#noRecordHistory##noHistory##noRefresh#').rule((input) => {
+                        require(config.聚影);
+                        newSearch(input);
+                    },input)
                 }
-            },searchurl),
-            desc: "搜索接口范围，" + (filterJk==""?"全部接口":filterJk.includes('[')?"TAG："+filterJk:"分组："+filterJk),
-            col_type: "input",
-            extra: {
-                titleVisible: true,
-                id: "searchinput",
-                onChange: $.toString((searchurl) => {
-                    if(input.indexOf('https://www.aliyundrive.com/s/')==-1){
-                        if(input.length==0){deleteItemByCls('suggest');}
-                        if(input.length>1&&input!=getMyVar('Src_Jy_sousuo$input', '')){
-                            putMyVar('Src_Jy_sousuo$input', input);
-                            deleteItemByCls('suggest');
-                            var html = request("https://movie.douban.com/j/subject_suggest?q=" + input, {timeout: 3000});
-                            var list = JSON.parse(html)||[];
-                            let suggest = list.map((sug)=>{
-                                try {
-                                    let sugitem = {
-                                        url: sug.title + searchurl,
-                                        extra: {
-                                            cls: 'suggest'
+            });
+            let filterJk = getItem('主页搜索接口范围','');
+            d.push({
+                title: "搜索",
+                url: $.toString((searchurl) => {
+                    input = input.trim();
+                    if(input == ''){
+                        return "hiker://empty"
+                    }
+                    if(/www\.aliyundrive\.com|www\.alipan\.com/.test(input)){
+                        input = input.replace('http','\nhttp');
+                        return $("hiker://empty#noRecordHistory##noHistory#").rule((input) => {
+                            require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyAliDisk.js');
+                            aliShareUrl(input);
+                        },input);
+                    }else{
+                        return input + searchurl;
+                    }
+                },searchurl),
+                desc: "搜索接口范围，" + (filterJk==""?"全部接口":filterJk.includes('[')?"TAG："+filterJk:"分组："+filterJk),
+                col_type: "input",
+                extra: {
+                    titleVisible: true,
+                    id: "searchinput",
+                    onChange: $.toString((searchurl) => {
+                        if(input.indexOf('https://www.aliyundrive.com/s/')==-1){
+                            if(input.length==0){deleteItemByCls('suggest');}
+                            if(input.length>1&&input!=getMyVar('Src_Jy_sousuo$input', '')){
+                                putMyVar('Src_Jy_sousuo$input', input);
+                                deleteItemByCls('suggest');
+                                var html = request("https://movie.douban.com/j/subject_suggest?q=" + input, {timeout: 3000});
+                                var list = JSON.parse(html)||[];
+                                let suggest = list.map((sug)=>{
+                                    try {
+                                        let sugitem = {
+                                            url: sug.title + searchurl,
+                                            extra: {
+                                                cls: 'suggest'
+                                            }
                                         }
-                                    }
-                                    if(sug.img!=""){
-                                        sugitem.title = sug.title;
-                                        sugitem.img = sug.img + '@Referer=https://www.douban.com';
-                                        sugitem.desc = "年份：" + sug.year;
-                                        sugitem.col_type = "movie_1_vertical_pic";
-                                    }else{
-                                        sugitem.title = "⚡" + sug.title;
-                                        sugitem.col_type = "text_1";
-                                    }
-                                    return sugitem;
-                                } catch (e) {  }
-                            });
-                            if(suggest.length>0){
-                                addItemAfter('searchinput', suggest);
+                                        if(sug.img!=""){
+                                            sugitem.title = sug.title;
+                                            sugitem.img = sug.img + '@Referer=https://www.douban.com';
+                                            sugitem.desc = "年份：" + sug.year;
+                                            sugitem.col_type = "movie_1_vertical_pic";
+                                        }else{
+                                            sugitem.title = "⚡" + sug.title;
+                                            sugitem.col_type = "text_1";
+                                        }
+                                        return sugitem;
+                                    } catch (e) {  }
+                                });
+                                if(suggest.length>0){
+                                    addItemAfter('searchinput', suggest);
+                                }
                             }
                         }
-                    }
-                }, searchurl)
-            }
-        });
-        d.push({
-            title: "📑"+(getItem('searchrecordide')=='1'?"关":"开")+"搜索记录",
-            url: $('#noLoading#').lazyRule(() => {
-                if(getItem('searchrecordide')=='1'){
-                    clearItem('searchrecordide');
-                }else{
-                    setItem('searchrecordide','1');
+                    }, searchurl)
                 }
-                refreshPage(false);
-                return "toast://已切换"
-            }),
-            col_type: 'scroll_button'
-        });
-        d.push({
-            title: "🎥"+(getItem('historyEnable')=='1'?"关":"开")+"观看记录",
-            url: $('#noLoading#').lazyRule(() => {
-                if(getItem('historyEnable')=='1'){
-                    clearItem('historyEnable');
-                }else{
-                    setItem('historyEnable','1');
-                }
-                refreshPage(false);
-                return "toast://已切换"
-            }),
-            col_type: 'scroll_button'
-        });
-        d.push({
-            title: "🔍搜索范围",
-            url: $('#noLoading#').lazyRule(() => {
-                require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
-                let datalist = getDatas("jk", 1);
-                let groupNames = getJiekouGroups(datalist);
-                groupNames.unshift("全部");
-                let selectkeys = getJkTags(datalist);
-                groupNames = groupNames.concat(selectkeys);
-                return $(groupNames, 3).select(() => {
-                    if(input=='全部'){
-                        clearItem('主页搜索接口范围');
+            });
+            d.push({
+                title: "📑"+(getItem('searchrecordide')=='1'?"关":"开")+"搜索记录",
+                url: $('#noLoading#').lazyRule(() => {
+                    if(getItem('searchrecordide')=='1'){
+                        clearItem('searchrecordide');
                     }else{
-                        setItem('主页搜索接口范围', input);
+                        setItem('searchrecordide','1');
                     }
                     refreshPage(false);
                     return "toast://已切换"
+                }),
+                col_type: 'scroll_button'
+            });
+            d.push({
+                title: "🎥"+(getItem('historyEnable')=='1'?"关":"开")+"观看记录",
+                url: $('#noLoading#').lazyRule(() => {
+                    if(getItem('historyEnable')=='1'){
+                        clearItem('historyEnable');
+                    }else{
+                        setItem('historyEnable','1');
+                    }
+                    refreshPage(false);
+                    return "toast://已切换"
+                }),
+                col_type: 'scroll_button'
+            });
+            d.push({
+                title: "🔍搜索范围",
+                url: $('#noLoading#').lazyRule(() => {
+                    require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
+                    let datalist = getDatas("jk", 1);
+                    let groupNames = getJiekouGroups(datalist);
+                    groupNames.unshift("全部");
+                    let selectkeys = getJkTags(datalist);
+                    groupNames = groupNames.concat(selectkeys);
+                    return $(groupNames, 3).select(() => {
+                        if(input=='全部'){
+                            clearItem('主页搜索接口范围');
+                        }else{
+                            setItem('主页搜索接口范围', input);
+                        }
+                        refreshPage(false);
+                        return "toast://已切换"
+                    })
+                }),
+                col_type: 'scroll_button'
+            });
+            d.push({
+                col_type: "blank_block"
+            });
+            if(getItem('searchrecordide','0')=='1'){
+                let recordlist = storage0.getItem('searchrecord') || [];
+                if(recordlist.length>0){
+                    d.push({
+                        title: '🗑清空',
+                        url: $('#noLoading#').lazyRule(() => {
+                            clearItem('searchrecord');
+                            deleteItemByCls('searchrecord');
+                            return "toast://已清空";
+                        }),
+                        col_type: 'scroll_button'
+                    });
+                }else{
+                    d.push({
+                        title: '↻无记录',
+                        url: "hiker://empty",
+                        col_type: 'scroll_button'
+                    });
+                }
+                recordlist.forEach(item=>{
+                    d.push({
+                        title: item,
+                        url: item + searchurl,
+                        col_type: 'scroll_button',
+                        extra: {
+                            cls: 'searchrecord'
+                        }
+                    });
                 })
-            }),
-            col_type: 'scroll_button'
-        });
-        d.push({
-            col_type: "blank_block"
-        });
-        if(getItem('searchrecordide','0')=='1'){
-            let recordlist = storage0.getItem('searchrecord') || [];
-            if(recordlist.length>0){
-                d.push({
-                    title: '🗑清空',
-                    url: $('#noLoading#').lazyRule(() => {
-                        clearItem('searchrecord');
-                        deleteItemByCls('searchrecord');
-                        return "toast://已清空";
-                    }),
-                    col_type: 'scroll_button'
-                });
-            }else{
-                d.push({
-                    title: '↻无记录',
-                    url: "hiker://empty",
-                    col_type: 'scroll_button'
-                });
             }
-            recordlist.forEach(item=>{
+            
+            if(getItem('historyEnable')=='1'){
                 d.push({
-                    title: item,
-                    url: item + searchurl,
-                    col_type: 'scroll_button',
+                    title: '<span style="color:#ff6600"><b>\t观看记录\t\t\t</b></span>',
+                    desc: "1-3",
+                    url: $('#noLoading#').lazyRule(() => {
+                        let i = parseInt(getMyVar('Src_Jy_homeHistory','0')) + 1;
+                        require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
+                        putMyVar('Src_Jy_homeHistory', i);
+                        
+                        deleteItemByCls('historylist');
+                        let h = getHistory(i);
+                        addItemAfter("historyid", h);
+                        let j = parseInt(getMyVar('Src_Jy_homeHistory','0'));
+                        updateItem("historyid", {desc: (j*3+1) + "-" + (j*3+3)});
+                        return "hiker://empty";
+                    }),
+                    pic_url: getIcon("主页-记录.svg", 1),
+                    col_type: 'avatar',
                     extra: {
-                        cls: 'searchrecord'
+                        id: "historyid"
                     }
                 });
-            })
-        }
-        
-        if(getItem('historyEnable')=='1'){
+
+                let items = getHistory();
+                d = d.concat(items);
+            }
+
+            let resoufile = libspath + "resou.json";
+            let Juyingresou = fetch(resoufile);
+            let JYresou = {};
+            if(Juyingresou != ""){
+                try{
+                    eval("JYresou=" + Juyingresou+ ";");
+                    delete JYresou['resoulist'];
+                }catch(e){
+                    log("加载热搜缓存出错>"+e.message);
+                }
+            }
+            let resoudata = JYresou['data'] || {};
+            let fenlei = ["电视剧","电影","动漫","综艺"];
+            let fenleiid = ["3","2","5","4"];
+            let ids = getMyVar("Src_Jy_热榜分类","0");
+            let list = resoudata[fenlei[ids]] || [];
+            let nowtime = Date.now();
+            let oldtime = JYresou.updatetime || 0;
+            if(list.length==0 || nowtime > (oldtime+24*60*60*1000)){
+                try{
+                    let html = request("https://api.web.360kan.com/v1/rank?cat="+fenleiid[ids], {timeout: 3000});
+                    list = JSON.parse(html).data;
+                    resoudata[fenlei[ids]] = list;
+                    JYresou['data'] = resoudata;
+                    JYresou['updatetime'] = nowtime;
+                    writeFile(resoufile, JSON.stringify(JYresou));
+                }catch(e){
+                    log("获取热搜榜出错>"+e.message);
+                }
+            }
             d.push({
-                title: '<span style="color:#ff6600"><b>\t观看记录\t\t\t</b></span>',
-                desc: "1-3",
-                url: $('#noLoading#').lazyRule(() => {
-                    let i = parseInt(getMyVar('Src_Jy_homeHistory','0')) + 1;
-                    require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
-                    putMyVar('Src_Jy_homeHistory', i);
-                    
-                    deleteItemByCls('historylist');
-                    let h = getHistory(i);
-                    addItemAfter("historyid", h);
-                    let j = parseInt(getMyVar('Src_Jy_homeHistory','0'));
-                    updateItem("historyid", {desc: (j*3+1) + "-" + (j*3+3)});
+                title: '<span style="color:#ff6600"><b>\t热搜榜单\t\t\t</b></span>',
+                desc: '✅'+fenlei[ids],
+                url: $(fenlei, 2, '选择热榜分类').select((fenlei) => {
+                    putMyVar("Src_Jy_热榜分类",fenlei.indexOf(input));
+                    refreshPage(false);
                     return "hiker://empty";
-                }),
-                pic_url: getIcon("主页-记录.svg", 1),
+                },fenlei),
+                pic_url: getIcon("主页-热搜.svg", 1),
                 col_type: 'avatar',
                 extra: {
-                    id: "historyid"
+                    id: "rousoubang"
                 }
             });
+            let rbcolor = getItem('主题颜色','#00ba99');
+            list.forEach((item,i)=>{
+                d.push({
+                    title: (i=="0"?'““””<span style="color:#ff3300">' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title:i=="1"?'““””<span style="color:#ff6600">' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title:i=="2"?'““””<span style="color:#ff9900">' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title:'““””<span>' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title)+'\n<small><span style="color:'+rbcolor+'">'+item.comment+'</small>',
+                    url: item.title + searchurl,
+                    pic_url: item.cover,
+                    desc: item.description,
+                    col_type: "movie_1_vertical_pic"
+                });
+            })
 
-            let items = getHistory();
-            d = d.concat(items);
+            deleteItemByCls("loading_gif");
         }
-
-        let resoufile = libspath + "resou.json";
-        let Juyingresou = fetch(resoufile);
-        let JYresou = {};
-        if(Juyingresou != ""){
-            try{
-                eval("JYresou=" + Juyingresou+ ";");
-                delete JYresou['resoulist'];
-            }catch(e){
-                log("加载热搜缓存出错>"+e.message);
-            }
-        }
-        let resoudata = JYresou['data'] || {};
-        let fenlei = ["电视剧","电影","动漫","综艺"];
-        let fenleiid = ["3","2","5","4"];
-        let ids = getMyVar("Src_Jy_热榜分类","0");
-        let list = resoudata[fenlei[ids]] || [];
-        let nowtime = Date.now();
-        let oldtime = JYresou.updatetime || 0;
-        if(list.length==0 || nowtime > (oldtime+24*60*60*1000)){
-            try{
-                let html = request("https://api.web.360kan.com/v1/rank?cat="+fenleiid[ids], {timeout: 3000});
-                list = JSON.parse(html).data;
-                resoudata[fenlei[ids]] = list;
-                JYresou['data'] = resoudata;
-                JYresou['updatetime'] = nowtime;
-                writeFile(resoufile, JSON.stringify(JYresou));
-            }catch(e){
-                log("获取热搜榜出错>"+e.message);
-            }
-        }
-        d.push({
-            title: '<span style="color:#ff6600"><b>\t热搜榜单\t\t\t</b></span>',
-            desc: '✅'+fenlei[ids],
-            url: $(fenlei, 2, '选择热榜分类').select((fenlei) => {
-                putMyVar("Src_Jy_热榜分类",fenlei.indexOf(input));
-                refreshPage(false);
-                return "hiker://empty";
-            },fenlei),
-            pic_url: getIcon("主页-热搜.svg", 1),
-            col_type: 'avatar',
-            extra: {
-                id: "rousoubang"
-            }
-        });
-        let rbcolor = getItem('主题颜色','#00ba99');
-        list.forEach((item,i)=>{
-            d.push({
-                title: (i=="0"?'““””<span style="color:#ff3300">' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title:i=="1"?'““””<span style="color:#ff6600">' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title:i=="2"?'““””<span style="color:#ff9900">' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title:'““””<span>' + (parseInt(i)+1).toString() + '</span>\t\t' + item.title)+'\n<small><span style="color:'+rbcolor+'">'+item.comment+'</small>',
-                url: item.title + searchurl,
-                pic_url: item.cover,
-                desc: item.description,
-                col_type: "movie_1_vertical_pic"
-            });
-        })
-
-        deleteItemByCls("loading_gif");
         setResult(d);
     }else{
         dianboyiji(null, d);
@@ -1550,6 +1549,7 @@ function yiji() {
         excludeLoadingItems(); //执行一些加载后的事项
         updateResource(); //检查更新订阅资源码
         putMyVar('Src_Jy_startCheck', 1);
+        log('执行首页加载后事项');
     }
 }
 // 新搜索页
