@@ -3,6 +3,12 @@ var newVersion = {
     "hint": "",
     "codeDownload": "https://src48597962.lanzouo.com/iNIjE2w1tyuj",
     "JYUpdateRecords": [{
+        title: "beta V2.8",
+        records: [
+            "升级：小程序版本升级15，支持主页设置为点播",
+            "功能：管理界面微调，增加主页显示点播开关"
+        ]
+    },{
         title: "2025/05/12 V2.7",
         records: [
             "优化：直播源兼容性提升",
