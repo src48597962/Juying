@@ -1267,7 +1267,7 @@ function yiji() {
             d.push(item);
         })
 
-        if (getItem('dianboyiji-yiji', '0')=='0' && typeof(setPreResult)!="undefined" && getMyVar('Src_Jy_动态加载loading')!='1') {
+        if (getItem('主页显示点播', '0')=='0' && typeof(setPreResult)!="undefined" && getMyVar('Src_Jy_动态加载loading')!='1') {
             d.push({
                 title: "",
                 url: "hiker://empty",
@@ -1291,7 +1291,7 @@ function yiji() {
         }
     }
     
-    if(getItem('dianboyiji-yiji', '0')=='0'){
+    if(getItem('主页显示点播', '0')=='0'){
         if(MY_PAGE>1){
             return [];
         }
