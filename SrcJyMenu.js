@@ -611,6 +611,57 @@ function manageSet(){
         }),
         col_type: 'text_icon'
     });
+    d.push({
+        title: '规则日志打印',
+        img: getItem('规则日志打印')=="1"?getIcon("管理-开.svg"):getIcon("关.svg"),
+        url: $("#noLoading#").lazyRule(() => {
+            if(getItem('规则日志打印')=="1"){
+                clearItem('规则日志打印');
+            }else{
+                setItem('规则日志打印','1');
+            }
+            refreshPage();
+            return 'hiker://empty';
+        }),
+        col_type: 'text_icon'
+    });
+    d.push({
+        title: 'drpy调试日志打印',
+        img: getItem('drpy调试日志')=="1"?getIcon("管理-开.svg"):getIcon("关.svg"),
+        url: $("#noLoading#").lazyRule(() => {
+            if(getItem('drpy调试日志')=="1"){
+                clearItem('drpy调试日志');
+            }else{
+                setItem('drpy调试日志','1');
+            }
+            refreshPage();
+            return 'toast://重启软件后生效';
+        }),
+        col_type: 'text_icon'
+    });
+    d.push({
+        col_type: "line_blank"
+    });
+    d.push({
+        title: '关于聚影',
+        img: getIcon("聚影.svg"),
+        col_type: 'avatar',
+        url: 'toast://哥就是帅'
+    });
+    d.push({
+        title: '主页显示点播',
+        img: getItem('主页显示点播')=="1"?getIcon("管理-开.svg"):getIcon("关.svg"),
+        url: $("#noLoading#").lazyRule(() => {
+            if(getItem('主页显示点播')=="1"){
+                clearItem('主页显示点播');
+            }else{
+                setItem('主页显示点播','1');
+            }
+            refreshPage();
+            return 'toast://设置成功，返回主页刷新';
+        }),
+        col_type: 'text_icon'
+    });
     let colors = [{
         title: "恢复初始",
         icon: ""
@@ -682,43 +733,6 @@ function manageSet(){
                 })
             }]
         }
-    });
-    d.push({
-        title: '规则日志打印',
-        img: getItem('规则日志打印')=="1"?getIcon("管理-开.svg"):getIcon("关.svg"),
-        url: $("#noLoading#").lazyRule(() => {
-            if(getItem('规则日志打印')=="1"){
-                clearItem('规则日志打印');
-            }else{
-                setItem('规则日志打印','1');
-            }
-            refreshPage();
-            return 'hiker://empty';
-        }),
-        col_type: 'text_icon'
-    });
-    d.push({
-        title: 'drpy调试日志打印',
-        img: getItem('drpy调试日志')=="1"?getIcon("管理-开.svg"):getIcon("关.svg"),
-        url: $("#noLoading#").lazyRule(() => {
-            if(getItem('drpy调试日志')=="1"){
-                clearItem('drpy调试日志');
-            }else{
-                setItem('drpy调试日志','1');
-            }
-            refreshPage();
-            return 'toast://重启软件后生效';
-        }),
-        col_type: 'text_icon'
-    });
-    d.push({
-        col_type: "line_blank"
-    });
-    d.push({
-        title: '关于聚影',
-        img: getIcon("聚影.svg"),
-        col_type: 'avatar',
-        url: 'toast://哥就是帅'
     });
     d.push({
         title: '查看更新日志',
