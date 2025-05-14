@@ -1115,10 +1115,10 @@ function yiji() {
         try{
             programversion = $.require("config").version || MY_RULE.version || 0;
         }catch(e){}
-        if(programversion<13){
+        if(programversion<15){
             confirm({
                 title: "温馨提示",
-                content: "发现小程序新版本\n本次不升级将无法使用",
+                content: "发现小程序新版本",
                 confirm: $.toString(() => {
                     return fetch((config.聚影||config.依赖).replace(/[^/]*$/,'') + "聚影.hiker");
                 }),
