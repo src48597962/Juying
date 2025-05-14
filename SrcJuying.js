@@ -1267,7 +1267,7 @@ function yiji() {
             d.push(item);
         })
 
-        if (getItem('dianboyiji-yiji', '1')=='0' && typeof(setPreResult)!="undefined" && getMyVar('Src_Jy_动态加载loading')!='1') {
+        if (getItem('dianboyiji-yiji', '0')=='0' && typeof(setPreResult)!="undefined" && getMyVar('Src_Jy_动态加载loading')!='1') {
             d.push({
                 title: "",
                 url: "hiker://empty",
@@ -1290,10 +1290,11 @@ function yiji() {
             putMyVar('Src_Jy_动态加载loading', '1');
         }
     }
-    dianboyiji(null, d);
     
-    let nowtime = Date.now();
-    if(getItem('dianboyiji-yiji', '1')=='1'){
+    if(getItem('dianboyiji-yiji', '0')=='0'){
+        if(MY_PAGE>1){
+            return [];
+        }
         var searchurl = $('').lazyRule(() => {
             let recordlist = storage0.getItem('searchrecord') || [];
             if(recordlist.indexOf(input)>-1){
@@ -1496,6 +1497,7 @@ function yiji() {
         let fenleiid = ["3","2","5","4"];
         let ids = getMyVar("Src_Jy_热榜分类","0");
         let list = resoudata[fenlei[ids]] || [];
+        let nowtime = Date.now();
         let oldtime = JYresou.updatetime || 0;
         if(list.length==0 || nowtime > (oldtime+24*60*60*1000)){
             try{
@@ -1536,9 +1538,12 @@ function yiji() {
 
         deleteItemByCls("loading_gif");
         setResult(d);
+    }else{
+        dianboyiji(null, d);
     }
 
     // 一些自动检查调用在首页加载后，间隔24小时
+    let nowtime = Date.now();
     let oldstartChecktime = parseInt(getItem('startChecktime','0').replace('time',''));
     if (!getMyVar('Src_Jy_startCheck') && nowtime > (oldstartChecktime+24*60*60*1000)) {
         setItem('startChecktime', nowtime+'time');//保存检查时间
