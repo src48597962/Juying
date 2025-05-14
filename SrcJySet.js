@@ -1773,7 +1773,7 @@ function resource() {
         url: $.toString(() => {
             return `fileSelect://`+$.toString(()=>{
                 if(!MY_PATH){
-                    return "toast://获取文件路径失败，可能没有权限";
+                    return "toast://获取文件真实路径失败，手工填写目录路径吧";
                 }
                 if(getMyVar('importtype')=='4'){
                     MY_PATH = MY_PATH.substr(0, MY_PATH.lastIndexOf('/')+1)
