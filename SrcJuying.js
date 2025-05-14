@@ -1539,7 +1539,9 @@ function yiji() {
     }
 
     // 一些自动检查调用在首页加载后，间隔24小时
-    if (!getMyVar('Src_Jy_startCheck') && nowtime > (oldtime+24*60*60*1000)) {
+    let oldstartChecktime = parseInt(getItem('startChecktime','0').replace('time',''));
+    if (!getMyVar('Src_Jy_startCheck') && nowtime > (oldstartChecktime+24*60*60*1000)) {
+        setItem('startChecktime', nowtime+'time');//保存检查时间
         excludeLoadingItems(); //执行一些加载后的事项
         updateResource(); //检查更新订阅资源码
         putMyVar('Src_Jy_startCheck', 1);
