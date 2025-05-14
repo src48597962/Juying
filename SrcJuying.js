@@ -1291,7 +1291,9 @@ function yiji() {
         }
     }
     dianboyiji(null, d);
-
+    
+    let nowtime = Date.now();
+    let oldtime = JYresou.updatetime || 0;
     if(getItem('dianboyiji-yiji', '1')=='1'){
         var searchurl = $('').lazyRule(() => {
             let recordlist = storage0.getItem('searchrecord') || [];
@@ -1496,8 +1498,6 @@ function yiji() {
         let ids = getMyVar("Src_Jy_热榜分类","0");
         let list = resoudata[fenlei[ids]] || [];
 
-        let nowtime = Date.now();
-        let oldtime = JYresou.updatetime || 0;
         if(list.length==0 || nowtime > (oldtime+24*60*60*1000)){
             try{
                 let html = request("https://api.web.360kan.com/v1/rank?cat="+fenleiid[ids], {timeout: 3000});
