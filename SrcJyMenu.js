@@ -462,46 +462,47 @@ function lookset() {
     writeFile(cfgfile, JSON.stringify(Juconfig));
 }
 //主页导航按钮菜单
-let menubtns = ["管理", "历史", "收藏", "点播", "直播", "Alist", "云盘"];//"搜索",
+let menubtns = ["管理", "历史", "收藏", "点播", "直播", "Alist", "云盘"];
+let ischange = getItem('主页大图标不变化','0');
 let buttonmenu = {
     "管理": {
-        img: getIcon("主页-管理.svg"),//"https://hikerfans.com/tubiao/more/129.png",
+        img: getIcon("主页-管理.svg", ischange),//"https://hikerfans.com/tubiao/more/129.png",
         url: $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
             require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyMenu.js');
             manageSet();
         })
     },
     "历史": {
-        img: getIcon("主页-历史.svg"),//"https://hikerfans.com/tubiao/more/213.png",
+        img: getIcon("主页-历史.svg", ischange),//"https://hikerfans.com/tubiao/more/213.png",
         url: "hiker://history?rule=" + MY_RULE.title
     },
     "收藏": {
-        img: getIcon("主页-收藏.svg"),//"https://hikerfans.com/tubiao/more/109.png",
+        img: getIcon("主页-收藏.svg", ischange),//"https://hikerfans.com/tubiao/more/109.png",
         url: "hiker://collection?rule=" + MY_RULE.title
     },
     "点播": {
-        img: getIcon("主页-点播.svg"),//"https://hikerfans.com/tubiao/more/105.png",
+        img: getIcon("主页-点播.svg", ischange),//"https://hikerfans.com/tubiao/more/105.png",
         url: $("hiker://empty##fypage#noRecordHistory##noHistory#").rule(() => {
             require(config.聚影.replace(/[^/]*$/,'') + 'SrcJuying.js');
             dianboyiji();
         })
     },
     "直播": {
-        img: getIcon("主页-直播.svg"),//"https://hikerfans.com/tubiao/more/87.png",
+        img: getIcon("主页-直播.svg", ischange),//"https://hikerfans.com/tubiao/more/87.png",
         url: $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
             require(config.聚影.replace(/[^/]*$/,'') + 'SrcLive.js');
             Live();
         })
     },
     "Alist": {
-        img: getIcon("主页-Alist.svg"),//"https://hikerfans.com/tubiao/more/226.png",//hiker://files/cache/src/Alist.svg
+        img: getIcon("主页-Alist.svg", ischange),//"https://hikerfans.com/tubiao/more/226.png",//hiker://files/cache/src/Alist.svg
         url: $("hiker://empty###noRecordHistory##noHistory#").rule(() => {
             require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyAlist.js');
             alistHome();
         })
     },
     "云盘": {
-        img: getIcon("主页-云盘.svg"),//"https://hikerfans.com/tubiao/more/97.png",
+        img: getIcon("主页-云盘.svg", ischange),//"https://hikerfans.com/tubiao/more/97.png",
         url: $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
             require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyAliDisk.js');
             aliMyDisk();
@@ -713,7 +714,7 @@ function manageSet(){
         img: getIcon("管理-箭头.svg"),
         url: $(colors, 3).select((colors) => {
             if(input=="自定义色"){
-                return $(getItem('主题颜色', ''), "输入自定义主题颜色代码").input(()=>{
+                return $(getItem('自定义色', ''), "输入自定义主题颜色代码").input(()=>{
                     if(!input.startsWith('#')){
                         return "toast://颜色代码错误，请以#开头";
                     }
@@ -736,15 +737,15 @@ function manageSet(){
         col_type: 'text_icon',
         extra: {
             longClick: [{
-                title: "自定义主题颜色",
+                title: "主页大图标不变化",
                 js: $.toString(() => {
-                    return $(getItem('主题颜色', ''), "输入自定义主题颜色代码").input(()=>{
-                        if(!input.startsWith('#')){
-                            return "toast://颜色代码错误，请以#开头";
+                    return $("#noLoading#").lazyRule(() => {
+                        if(getItem('主页大图标不变化')=="1"){
+                            clearItem('主页大图标不变化');
+                        }else{
+                            setItem('主页大图标不变化','1');
                         }
-                        setItem('主题颜色', input);
-                        refreshPage(false);
-                        return "hiker://empty";
+                        return 'toast://切换成功，返回主页刷新';
                     })
                 })
             }]
