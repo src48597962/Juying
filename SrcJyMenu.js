@@ -663,9 +663,6 @@ function manageSet(){
         col_type: 'text_icon'
     });
     let colors = [{
-        title: "恢复初始",
-        icon: ""
-    },{
         title: '绿意盎然',
         icon: "#4EAF7C"
     },{
@@ -698,7 +695,14 @@ function manageSet(){
     },{
         title: '青出于黑',
         icon: "#336F7A"
+    },{
+        title: "自定义色",
+        icon: getItem('自定义色', '1')
+    },{
+        title: "恢复初始",
+        icon: ""
     }]
+    
     colors.forEach(it=>{
         if(getItem('主题颜色','') == it.icon){
             it.title = it.title + '√';
@@ -708,14 +712,25 @@ function manageSet(){
         title: '主题颜色选择',
         img: getIcon("管理-箭头.svg"),
         url: $(colors, 3).select((colors) => {
-            let color = colors.filter(d => d.title == input)[0].icon;
-            if(color){
-                setItem('主题颜色', color);
+            if(input=="自定义色"){
+                return $(getItem('主题颜色', ''), "输入自定义主题颜色代码").input(()=>{
+                    if(!input.startsWith('#')){
+                        return "toast://颜色代码错误，请以#开头";
+                    }
+                    setItem('主题颜色', input);
+                    refreshPage(false);
+                    return "hiker://empty";
+                })
             }else{
-                clearItem('主题颜色');
-            }
-            refreshPage();
-            return "hiker://empty";
+                let color = colors.filter(d => d.title == input)[0].icon;
+                if(color){
+                    setItem('主题颜色', color);
+                }else{
+                    clearItem('主题颜色');
+                }
+                refreshPage();
+                return "hiker://empty";
+            } 
         }, colors),
         col_type: 'text_icon',
         extra: {
