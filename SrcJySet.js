@@ -1770,22 +1770,7 @@ function resource() {
         title:'本地',
         col_type: 'input',
         desc: '请输入链接地址',
-        url: Juconfig["selectfileL"]?`
-            let requireUrl = "https://gitee.com/mistywater/hiker_info/raw/master/fileSelect.json";
-            let fileSelect = $.require(requireUrl);
-            fileSelect.fileSelectionUri({
-                callback: $.toString(() => {
-                    if(getMyVar('importtype')=='4'){
-                        PATH = PATH.substr(0, PATH.lastIndexOf('/')+1)
-                    }
-                    putMyVar("importinput",PATH);
-                    return "hiker://empty";
-                }),
-                fileType: ".py|.js",
-                pattern: 0,
-                initialPath: getPath("hiker://files/").slice(7),
-                rootDirPath: "/storage/emulated/0/",
-            })`:$.toString(() => {
+        url: $.toString(() => {
             return `fileSelect://`+$.toString(()=>{
                 if(!MY_PATH){
                     return "toast://获取文件真实路径失败：不支持通过文件管理器获取，可手工填写目录路径";
@@ -1880,18 +1865,6 @@ function resource() {
                     writeFile(cfgfile, JSON.stringify(Juconfig));
                     refreshPage(false);
                     return 'toast://导入方式设置为：' + (Juconfig["importmode"]?"全":"增") + "量导入";
-                },cfgfile, Juconfig)
-            },{
-                title: "选择方式："+(Juconfig["selectfileL"]?"L佬插件":"海阔方法"),
-                js: $.toString((cfgfile, Juconfig) => {
-                    if(Juconfig["selectfileL"]){
-                        Juconfig["selectfileL"] = 0;
-                    }else{
-                        Juconfig["selectfileL"] = 1;
-                    }
-                    writeFile(cfgfile, JSON.stringify(Juconfig));
-                    refreshPage(false);
-                    return 'toast://选择文件方式设置为：' + (Juconfig["selectfileL"]?"L佬插件":"海阔方法");
                 },cfgfile, Juconfig)
             }]
         }
