@@ -1775,29 +1775,21 @@ function resource() {
             let fileSelect = $.require(requireUrl);
             fileSelect.fileSelectionUri({
                 callback: $.toString(() => {
-                    log(PATH);
-                    return "" ;
+                    if(getMyVar('importtype')=='4'){
+                        PATH = PATH.substr(0, PATH.lastIndexOf('/')+1)
+                    }
+                    putMyVar("importinput",PATH);
+                    refreshPage();
+                    return "hiker://empty";
                 }),
-                fileType: ".json|.hiker|.txt|.js",
+                fileType: ".py|.js",
                 pattern: 0,
-                initialPath: "/storage/emulated/0/",
+                initialPath: getPath("hiker://files/").slice(7),
                 rootDirPath: "/storage/emulated/0/",
             })`:$.toString(() => {
             return `fileSelect://`+$.toString(()=>{
                 if(!MY_PATH){
-                    let requireUrl = "https://gitee.com/mistywater/hiker_info/raw/master/fileSelect.json";
-                    let fileSelect = $.require(requireUrl);
-                    fileSelect.fileSelectionUri({
-                        callback: $.toString(() => {
-                            log(PATH);
-                            return "" ;
-                        }),
-                        fileType: ".json|.hiker|.txt|.js",
-                        pattern: 0,
-                        initialPath: "/storage/emulated/0/",
-                        rootDirPath: "/storage/emulated/0/",
-                    })
-                    return "toast://获取文件真实路径失败，手工填写目录路径吧";
+                    return "toast://获取文件真实路径失败：不支持通过文件管理器获取，可手工填写目录路径";
                 }
                 if(getMyVar('importtype')=='4'){
                     MY_PATH = MY_PATH.substr(0, MY_PATH.lastIndexOf('/')+1)
