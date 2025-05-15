@@ -787,7 +787,7 @@ function dianboyiji(testSource, dd) {
         });
 
         d.push({
-            title: "搜索方式",
+            title: getItem("接口搜索方式","当前接口"),
             url: $(searchModeS,1).select(()=>{
                 input = input.replace(/[’‘]|<[^>]*>| |√/g, "");
                 setItem("接口搜索方式",input);
@@ -945,7 +945,7 @@ function dianboyiji(testSource, dd) {
                     }
                     return input + searchurl;
                 },searchurl),
-                desc: "["+getItem('接口搜索方式','当前接口')+"]搜你想看的...",
+                desc: "搜你想看的...",
                 col_type: "input",
                 extra: {
                     id: 'dianbosousuoid',
