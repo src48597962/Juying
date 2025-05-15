@@ -183,12 +183,12 @@ var SrcParseS = {
             return vipUrl;
         }else if(contain.test(vipUrl)&&!exclude.test(vipUrl)&&!needparse.test(vipUrl)){
             log("直链视频地址，直接播放"); 
-            if(vipUrl.indexOf('app.grelighting.cn')>-1){vipUrl = vipUrl.replace('app.','ht.')}
+            if(vipUrl.includes('app.grelighting.cn')){vipUrl = vipUrl.replace('app.','ht.')}
             return vipUrl + '#isVideo=true#';
         }else if(/\.mp3|\.m4a/.test(vipUrl)){
             log("直链音乐地址，直接播放"); 
             return vipUrl + '#isMusic=true##checkMetadata=false#';
-        }else if(vipUrl.indexOf('sa.sogou') != -1) {
+        }else if(vipUrl.includes('sa.sogou')) {
             log("优看视频，直接明码解析"); 
             return unescape(request(vipUrl).match(/"url":"([^"]*)"/)[1].replace(/\\u/g, "%u"));
         }else if(/www\.aliyundrive\.com|www\.alipan\.com/.test(vipUrl)) {
@@ -198,9 +198,11 @@ var SrcParseS = {
             },vipUrl);
         }else if(/pan\.quark\.cn|drive\.uc\.cn/.test(vipUrl)) {
             return "hiker://page/quarkList?rule=Quark.简&realurl=" + encodeURIComponent(vipUrl) + "&sharePwd=";
-        }else if (/baidu/.test(vipUrl)) {
+        }else if(vipUrl.includes('baidu.com')) {
             putVar('urlBaidu', vipUrl);
             return "hiker://page/list?rule=百度网盘&realurl=" + vipUrl;
+        }else if(vipUrl.includes('123684.com')) {
+            return "toast://暂不支持123盘";
         }else if(/qq\.com|iqiyi\.com|youku\.com|mgtv\.com|bilibili\.com|sohu\.com|ixigua\.com|pptv\.com|miguvideo\.com|le\.com|1905\.com|fun\.tv|cctv\.com/.test(vipUrl)){
             if(vipUrl.indexOf('html?')>-1){
                 vipUrl = vipUrl.split('html?')[0]+'html';
