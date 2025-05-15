@@ -1103,7 +1103,7 @@ function jiekou(data) {
             }
             return `fileSelect://`+$.toString(()=>{
                 if(!MY_PATH){
-                    return "toast://获取文件路径失败，可能没有权限";
+                    return "toast://获取文件真实路径失败：不支持通过文件管理器获取，可手工填写文件路径";
                 }
                 putMyVar("apiurl", "file://" + MY_PATH);
                 refreshPage();
@@ -1779,7 +1779,6 @@ function resource() {
                         PATH = PATH.substr(0, PATH.lastIndexOf('/')+1)
                     }
                     putMyVar("importinput",PATH);
-                    refreshPage();
                     return "hiker://empty";
                 }),
                 fileType: ".py|.js",
