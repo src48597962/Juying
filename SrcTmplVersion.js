@@ -1,7 +1,7 @@
 var newVersion = {
     "SrcJuying":"2.7",
     "hint": "",
-    "codeDownload": "https://src48597962.lanzouo.com/iNIjE2w1tyuj",
+    "codeDownload": "https://src48597962.lanzouo.com/ilaDP2wbexng",
     "JYUpdateRecords": [{
         title: "beta V2.8",
         records: [
