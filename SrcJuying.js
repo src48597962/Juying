@@ -945,7 +945,7 @@ function dianboyiji(testSource, dd) {
                     }
                     return input + searchurl;
                 },searchurl),
-                desc: getItem('接口搜索方式','当前接口')+"|搜你想看的...",
+                desc: "["+getItem('接口搜索方式','当前接口')+"]搜你想看的...",
                 col_type: "input",
                 extra: {
                     id: 'dianbosousuoid',
