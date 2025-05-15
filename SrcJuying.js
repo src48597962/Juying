@@ -746,7 +746,7 @@ function dianboyiji(testSource, dd) {
         }
         
         d.push({
-            title: "切换站源",
+            title: getItem('主页显示点播')=="1"?sname:"切换站源",
             url: testSource?"toast://测试模式下不能更换站源":$('#noLoading#').lazyRule(() => {
                 require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
 
@@ -945,7 +945,7 @@ function dianboyiji(testSource, dd) {
                     }
                     return input + searchurl;
                 },searchurl),
-                desc: sname+"，搜你想看的...",
+                desc: getItem('接口搜索方式','当前接口')+"|搜你想看的...",
                 col_type: "input",
                 extra: {
                     id: 'dianbosousuoid',
