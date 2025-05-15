@@ -463,46 +463,46 @@ function lookset() {
 }
 //主页导航按钮菜单
 let menubtns = ["管理", "历史", "收藏", "点播", "直播", "Alist", "云盘"];
-let ischange = getItem('主页大图标不变化','0');
+let nochange = getItem('主页大图标不变化','0');
 let buttonmenu = {
     "管理": {
-        img: getIcon("主页-管理.svg", ischange),//"https://hikerfans.com/tubiao/more/129.png",
+        img: getIcon("主页-管理.svg", nochange),//"https://hikerfans.com/tubiao/more/129.png",
         url: $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
             require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyMenu.js');
             manageSet();
         })
     },
     "历史": {
-        img: getIcon("主页-历史.svg", ischange),//"https://hikerfans.com/tubiao/more/213.png",
+        img: getIcon("主页-历史.svg", nochange),//"https://hikerfans.com/tubiao/more/213.png",
         url: "hiker://history?rule=" + MY_RULE.title
     },
     "收藏": {
-        img: getIcon("主页-收藏.svg", ischange),//"https://hikerfans.com/tubiao/more/109.png",
+        img: getIcon("主页-收藏.svg", nochange),//"https://hikerfans.com/tubiao/more/109.png",
         url: "hiker://collection?rule=" + MY_RULE.title
     },
     "点播": {
-        img: getIcon("主页-点播.svg", ischange),//"https://hikerfans.com/tubiao/more/105.png",
+        img: getIcon("主页-点播.svg", nochange),//"https://hikerfans.com/tubiao/more/105.png",
         url: $("hiker://empty##fypage#noRecordHistory##noHistory#").rule(() => {
             require(config.聚影.replace(/[^/]*$/,'') + 'SrcJuying.js');
             dianboyiji();
         })
     },
     "直播": {
-        img: getIcon("主页-直播.svg", ischange),//"https://hikerfans.com/tubiao/more/87.png",
+        img: getIcon("主页-直播.svg", nochange),//"https://hikerfans.com/tubiao/more/87.png",
         url: $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
             require(config.聚影.replace(/[^/]*$/,'') + 'SrcLive.js');
             Live();
         })
     },
     "Alist": {
-        img: getIcon("主页-Alist.svg", ischange),//"https://hikerfans.com/tubiao/more/226.png",//hiker://files/cache/src/Alist.svg
+        img: getIcon("主页-Alist.svg", nochange),//"https://hikerfans.com/tubiao/more/226.png",//hiker://files/cache/src/Alist.svg
         url: $("hiker://empty###noRecordHistory##noHistory#").rule(() => {
             require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyAlist.js');
             alistHome();
         })
     },
     "云盘": {
-        img: getIcon("主页-云盘.svg", ischange),//"https://hikerfans.com/tubiao/more/97.png",
+        img: getIcon("主页-云盘.svg", nochange),//"https://hikerfans.com/tubiao/more/97.png",
         url: $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
             require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyAliDisk.js');
             aliMyDisk();
