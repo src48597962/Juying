@@ -1773,6 +1773,18 @@ function resource() {
         url: $.toString(() => {
             return `fileSelect://`+$.toString(()=>{
                 if(!MY_PATH){
+                    let requireUrl = "https://gitee.com/mistywater/hiker_info/raw/master/fileSelect.json";
+                    let fileSelect = $.require(requireUrl);
+                    fileSelect.fileSelectionUri({
+                        callback: $.toString(() => {
+                            log(PATH);
+                            return "" ;
+                        }),
+                        fileType: ".json|.hiker|.txt|.js",
+                        pattern: 0,
+                        initialPath: "/storage/emulated/0/",
+                        rootDirPath: "/storage/emulated/0/",
+                    })
                     return "toast://获取文件真实路径失败，手工填写目录路径吧";
                 }
                 if(getMyVar('importtype')=='4'){
