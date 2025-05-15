@@ -718,6 +718,7 @@ function manageSet(){
                         return "toast://颜色代码错误，请以#开头";
                     }
                     setItem('主题颜色', input);
+                    setItem('自定义色', input);
                     refreshPage(false);
                     return "hiker://empty";
                 })
