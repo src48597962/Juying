@@ -1167,7 +1167,7 @@ function yiji() {
                         title: "♥️管理",
                         js: $.toString(() => {
                             return $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
-                                require(config.聚影.replace(/[^/]*$/,'') + 'SrcJySet.js');
+                                require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyMenu.js');
                                 manageSet();
                             })
                         })
