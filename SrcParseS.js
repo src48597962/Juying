@@ -198,10 +198,10 @@ var SrcParseS = {
             },vipUrl);
         }else if(/pan\.quark\.cn|drive\.uc\.cn/.test(vipUrl)) {
             return "hiker://page/quarkList?rule=Quark.简&realurl=" + encodeURIComponent(vipUrl) + "&sharePwd=";
-        }else if(vipUrl.includes('baidu.com')) {
+        }else if(vipUrl.includes('pan.baidu.com')) {
             putVar('urlBaidu', vipUrl);
             return "hiker://page/list?rule=百度网盘&realurl=" + vipUrl;
-        }else if(vipUrl.includes('123684.com')) {
+        }else if(vipUrl.includes('.123684.com')) {
             return "toast://暂不支持123盘";
         }else if(/qq\.com|iqiyi\.com|youku\.com|mgtv\.com|bilibili\.com|sohu\.com|ixigua\.com|pptv\.com|miguvideo\.com|le\.com|1905\.com|fun\.tv|cctv\.com/.test(vipUrl)){
             if(vipUrl.indexOf('html?')>-1){
