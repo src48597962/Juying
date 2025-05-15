@@ -1770,10 +1770,22 @@ function resource() {
         title:'本地',
         col_type: 'input',
         desc: '请输入链接地址',
-        url: $.toString(() => {
+        url: Juconfig["selectfileL"]?`
+            let requireUrl = "https://gitee.com/mistywater/hiker_info/raw/master/fileSelect.json";
+            let fileSelect = $.require(requireUrl);
+            fileSelect.fileSelectionUri({
+                callback: $.toString(() => {
+                    log(PATH);
+                    return "" ;
+                }),
+                fileType: ".json|.hiker|.txt|.js",
+                pattern: 0,
+                initialPath: "/storage/emulated/0/",
+                rootDirPath: "/storage/emulated/0/",
+            })`:$.toString(() => {
             return `fileSelect://`+$.toString(()=>{
                 if(!MY_PATH){
-                    return `let requireUrl = "https://gitee.com/mistywater/hiker_info/raw/master/fileSelect.json";
+                    let requireUrl = "https://gitee.com/mistywater/hiker_info/raw/master/fileSelect.json";
                     let fileSelect = $.require(requireUrl);
                     fileSelect.fileSelectionUri({
                         callback: $.toString(() => {
@@ -1784,8 +1796,8 @@ function resource() {
                         pattern: 0,
                         initialPath: "/storage/emulated/0/",
                         rootDirPath: "/storage/emulated/0/",
-                    })`
-                    //return "toast://获取文件真实路径失败，手工填写目录路径吧";
+                    })
+                    return "toast://获取文件真实路径失败，手工填写目录路径吧";
                 }
                 if(getMyVar('importtype')=='4'){
                     MY_PATH = MY_PATH.substr(0, MY_PATH.lastIndexOf('/')+1)
@@ -1877,6 +1889,18 @@ function resource() {
                     writeFile(cfgfile, JSON.stringify(Juconfig));
                     refreshPage(false);
                     return 'toast://导入方式设置为：' + (Juconfig["importmode"]?"全":"增") + "量导入";
+                },cfgfile, Juconfig)
+            },{
+                title: "选择方式："+(Juconfig["selectfileL"]?"L佬插件":"海阔方法"),
+                js: $.toString((cfgfile, Juconfig) => {
+                    if(Juconfig["selectfileL"]){
+                        Juconfig["selectfileL"] = 0;
+                    }else{
+                        Juconfig["selectfileL"] = 1;
+                    }
+                    writeFile(cfgfile, JSON.stringify(Juconfig));
+                    refreshPage(false);
+                    return 'toast://选择文件方式设置为：' + (Juconfig["selectfileL"]?"L佬插件":"海阔方法");
                 },cfgfile, Juconfig)
             }]
         }
