@@ -198,6 +198,9 @@ var SrcParseS = {
             },vipUrl);
         }else if(/pan\.quark\.cn|drive\.uc\.cn/.test(vipUrl)) {
             return "hiker://page/quarkList?rule=Quark.简&realurl=" + encodeURIComponent(vipUrl) + "&sharePwd=";
+        }else if (/baidu/.test(vipUrl)) {
+            //putVar('urlBaidu', url);
+            return "hiker://page/list?rule=百度网盘&realurl=" + vipUrl;
         }else if(/qq\.com|iqiyi\.com|youku\.com|mgtv\.com|bilibili\.com|sohu\.com|ixigua\.com|pptv\.com|miguvideo\.com|le\.com|1905\.com|fun\.tv|cctv\.com/.test(vipUrl)){
             if(vipUrl.indexOf('html?')>-1){
                 vipUrl = vipUrl.split('html?')[0]+'html';
