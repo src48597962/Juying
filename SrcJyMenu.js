@@ -181,7 +181,7 @@ function lookset() {
             if(getItem("sourceMode")=="2"){
                 return "toast://订阅文件模式，无法管理本地解析";
             }
-            putMyVar('Src_Jy_guanli','jx');
+            putMyVar('guanli','jx');
             return $("hiker://empty#noRecordHistory##noHistory#").rule(() => {
                 setPageTitle('解析管理');
                 require(config.聚影.replace(/[^/]*$/,'') + 'SrcJySet.js');
