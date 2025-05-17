@@ -377,7 +377,8 @@ function getContnet(url) {
         proxys.push('');
         for(let i=0;i<proxys.length;i++){
             let content = fetch(proxys[i]+url, {timeout:6000});
-            if (content && !content.trim().startsWith('<!DOCTYPE html>') && !content.startsWith('<html>') && !/502 Bad Gateway/.test(content)) {
+            if (content && !content.startsWith('<!DOCTYPE html>') && !content.startsWith('<html>') && !/502 Bad Gateway/.test(content)) {
+                log(content);
                 return content;
             }
         }
