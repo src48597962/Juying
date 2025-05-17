@@ -374,18 +374,21 @@ function getContnet(url) {
     if(url.startsWith('https://raw.githubusercontent.com')){
         let proxys = $.require('ghproxy').getproxy();
         shuffleArray(proxys);
+        proxys.push('');
         for(let i=0;i<proxys.length;i++){
             let content = fetch(proxys[i]+url, {timeout:6000});
             if (content && !content.trim().startsWith('<!DOCTYPE html>') && !content.startsWith('<html>') && !/502 Bad Gateway/.test(content)) {
                 return content;
             }
         }
+        return '';
+    }else{
+        let headers = { 'User-Agent': MOBILE_UA };
+        if(!url.endsWith('.json') && !url.endsWith('.js') && !url.endsWith('.txt') && !url.endsWith('.m3u') && !url.endsWith('.m3u8')){
+            headers['User-Agent'] = 'okhttp/4.12.0';
+        }
+        return fetch(url, {headers: headers, timeout:20000});
     }
-    let headers = { 'User-Agent': MOBILE_UA };
-    if(!url.endsWith('.json') && !url.endsWith('.js') && !url.endsWith('.txt') && !url.endsWith('.m3u') && !url.endsWith('.m3u8')){
-        headers['User-Agent'] = 'okhttp/4.12.0';
-    }
-    return fetch(url, {headers: headers, timeout:20000});
 }
 //获取分组接口列表
 function getGroupLists(datas, k) {
