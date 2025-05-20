@@ -987,10 +987,14 @@ function shareResource() {
                                                 for(let i=0;i<datalist.length;i++){
                                                     let data = datalist[i];
                                                     if(data.url.startsWith(globalMap0.getVar('Src_Jy_gmParams').jkfilespath) && (($.type(data.ext)=="string" && data.ext.startsWith("file")) || !data.ext)){
-                                                        data.extstr = fetch(data.url) || (data.ext?fetch(data.ext.split("?")[0]):"");
-                                                        if(!data.extstr){
-                                                            datalist.splice(i,1);
-                                                            i = i - 1;
+                                                        try{
+                                                            data.extstr = fetch(data.url) || (data.ext?fetch(data.ext.split("?")[0]):"");
+                                                            if(!data.extstr){
+                                                                datalist.splice(i,1);
+                                                                i = i - 1;
+                                                            }
+                                                        }catch(e){
+                                                            log(data.name + '>分享时处理extstr时异常');
                                                         }
                                                     }else if(!data.url.startsWith(globalMap0.getVar('Src_Jy_gmParams').jkfilespath) && data.url.startsWith("hiker")){
                                                         datalist.splice(i,1);
