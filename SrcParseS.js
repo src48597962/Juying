@@ -157,30 +157,35 @@ var SrcParseS = {
 
         log("请求地址："+vipUrl); 
         
-        if (vipUrl.startsWith('ftp://')) {
-            if(vipUrl.includes('114s.com')){
-                if(!fileExist("hiker://files/cache/bidi.dex") || !fileExist("hiker://files/cache/libp2p.so")){
-                    return "toast://缺少荐片插件，播放失败";
-                    //log("荐片插件本地不存在，偿试下载中...");
-                    //requireDownload(config.聚影.replace(/[^/]*$/,'') + "plugins/bidi.dex", 'hiker://files/cache/bidi.dex');
-                    //requireDownload(config.聚影.replace(/[^/]*$/,'') + "plugins/libp2p.so", 'hiker://files/cache/libp2p.so');
-                    //log("荐片插件下载完成");
-                }
-                try{
-                    let s = loadJavaClass("hiker://files/cache/bidi.dex", "com.rule.jianpian", "hiker://files/cache/libp2p.so");
-                    s.init(getPath("hiker://files/_cache").replace("file://", ""));
-                    let url = s.JPUrlDec(vipUrl) + "#isVideo=true#";
-                    return url;
-                } catch (e) {
-                    return "toast://荐片播放失败";
-                }
-            }else{
-                log("ftp地址，软件不支持"); 
-                return "toast://ftp地址，软件不支持";
+        if (vipUrl.startsWith('ftp://') && vipUrl.includes('114s.com')) {
+            if(!fileExist("hiker://files/cache/bidi.dex") || !fileExist("hiker://files/cache/libp2p.so")){
+                return "toast://缺少荐片插件，播放失败";
+                //log("荐片插件本地不存在，偿试下载中...");
+                //requireDownload(config.聚影.replace(/[^/]*$/,'') + "plugins/bidi.dex", 'hiker://files/cache/bidi.dex');
+                //requireDownload(config.聚影.replace(/[^/]*$/,'') + "plugins/libp2p.so", 'hiker://files/cache/libp2p.so');
+                //log("荐片插件下载完成");
             }
-        }else if (/magnet|torrent/.test(vipUrl)) {
-            log("磁力/BT视频地址，由海阔解析"); 
-            return vipUrl;
+            try{
+                let s = loadJavaClass("hiker://files/cache/bidi.dex", "com.rule.jianpian", "hiker://files/cache/libp2p.so");
+                s.init(getPath("hiker://files/_cache").replace("file://", ""));
+                let url = s.JPUrlDec(vipUrl) + "#isVideo=true#";
+                return url;
+            } catch (e) {
+                return "toast://荐片播放失败";
+            }
+        }else if (/(xunlei|magnet:|ed2k:|bt:|ftp:|\.torrent)/.test(vipUrl)) {
+            try{
+                log("优先偿试调用迅雷小程序解析"); 
+                return "hiker://page/diaoyong?rule=迅雷&page=fypage#" + vipUrl
+            }catch(e){
+                if (/magnet|torrent/.test(vipUrl)) {
+                    log("磁力/BT视频地址，由海阔解析"); 
+                    return vipUrl;
+                }else{
+                    log("暂不支持的播放链接"); 
+                    return "toast://暂不支持的播放链接"
+                }
+            }
         }else if(contain.test(vipUrl)&&!exclude.test(vipUrl)&&!needparse.test(vipUrl)){
             log("直链视频地址，直接播放"); 
             if(vipUrl.includes('app.grelighting.cn')){vipUrl = vipUrl.replace('app.','ht.')}
