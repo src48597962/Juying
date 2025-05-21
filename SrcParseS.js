@@ -174,18 +174,15 @@ var SrcParseS = {
                 return "toast://荐片播放失败";
             }
         }else if (/(xunlei|magnet:|ed2k:|bt:|ftp:|\.torrent)/.test(vipUrl)) {
-            try{
-                log(fetch("hiker://page/diaoyong?rule=迅雷"));
+            if(fetch("hiker://page/diaoyong?rule=迅雷")){
                 log("优先偿试调用迅雷小程序解析"); 
                 return "hiker://page/diaoyong?rule=迅雷&page=fypage#" + vipUrl
-            }catch(e){
-                if (/magnet|torrent/.test(vipUrl)) {
-                    log("磁力/BT视频地址，由海阔解析"); 
-                    return vipUrl;
-                }else{
-                    log("暂不支持的播放链接"); 
-                    return "toast://暂不支持的播放链接"
-                }
+            }else if (/magnet|torrent/.test(vipUrl)) {
+                log("磁力/BT视频地址，由海阔解析"); 
+                return vipUrl;
+            }else{
+                log("暂不支持的播放链接"); 
+                return "toast://暂不支持的播放链接"
             }
         }else if(contain.test(vipUrl)&&!exclude.test(vipUrl)&&!needparse.test(vipUrl)){
             log("直链视频地址，直接播放"); 
