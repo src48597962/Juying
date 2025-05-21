@@ -175,6 +175,7 @@ var SrcParseS = {
             }
         }else if (/(xunlei|magnet:|ed2k:|bt:|ftp:|\.torrent)/.test(vipUrl)) {
             try{
+                log(fetch("hiker://page/diaoyong?rule=迅雷"));
                 log("优先偿试调用迅雷小程序解析"); 
                 return "hiker://page/diaoyong?rule=迅雷&page=fypage#" + vipUrl
             }catch(e){
