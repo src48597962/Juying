@@ -1692,38 +1692,40 @@ function resource() {
             return "toast://支持本地包或在线的tvBox接口配置地址";
         })
     });
-    /*
-    d.push({
-        title: (importtype=="2"?"👉":"")+"道长hipy库导入",
-        col_type: 'scroll_button',
-        url: $('#noLoading#').lazyRule(() => {
-            putMyVar('importtype','2');
-            refreshPage(false);
-            return "toast://此项仅支github库，hipy项目js文件所在的路径";
-        })
-    });
-    //订阅和导入进行合并,importtype=="3"作废
-    d.push({
-        title: (importtype=="3"?"👉":"")+"box配置文件订阅",
-        col_type: 'scroll_button',
-        url: $('#noLoading#').lazyRule(() => {
-            putMyVar('importtype','3');
-            refreshPage(false);
-            return "toast://订阅本地包或在线的配置文件，但无法管理接口";
-        })
-    });
-    */
+    if(getItem("sourceMode","1")=="1"){
+        /*
+        d.push({
+            title: (importtype=="2"?"👉":"")+"道长hipy库导入",
+            col_type: 'scroll_button',
+            url: $('#noLoading#').lazyRule(() => {
+                putMyVar('importtype','2');
+                refreshPage(false);
+                return "toast://此项仅支github库，hipy项目js文件所在的路径";
+            })
+        });
+        //订阅和导入进行合并,importtype=="3"作废
+        d.push({
+            title: (importtype=="3"?"👉":"")+"box配置文件订阅",
+            col_type: 'scroll_button',
+            url: $('#noLoading#').lazyRule(() => {
+                putMyVar('importtype','3');
+                refreshPage(false);
+                return "toast://订阅本地包或在线的配置文件，但无法管理接口";
+            })
+        });
+        */
 
-    d.push({
-        title: (importtype=="4"?"👉":"")+"js/py文件夹",
-        col_type: 'scroll_button',
-        url: $('#noLoading#').lazyRule(() => {
-            clearMyVar('importinput');
-            putMyVar('importtype','4');
-            refreshPage(false);
-            return "toast://此项仅支持js/py文件所在目录";
-        })
-    });
+        d.push({
+            title: (importtype=="4"?"👉":"")+"js/py文件夹",
+            col_type: 'scroll_button',
+            url: $('#noLoading#').lazyRule(() => {
+                clearMyVar('importinput');
+                putMyVar('importtype','4');
+                refreshPage(false);
+                return "toast://此项仅支持js/py文件所在目录";
+            })
+        });
+    }
 
     if(importtype=="1"){
         if(getItem("sourceMode")=="2"){
