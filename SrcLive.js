@@ -122,7 +122,6 @@ function Live() {
         let datalist2 = [];
         let group = "";
         for (let i = 0; i < JYlives.length; i++) {
-            log(JYlives[i]);
             try {
                 if (JYlive.indexOf('#genre#') > -1) {
                     if (JYlives[i].indexOf('#genre#') > -1) {
@@ -134,17 +133,17 @@ function Live() {
                     datalist.push({ group: JYlives[i].match(/group-title="(.*?)"/)[1], name: JYlives[i].match(/",(.*?)\n/)[1].trim() });
                 }
             } catch (e) {
-                log(e.message);
+                //log(e.message);
             }
         }
-        log(datalist);
+
         let obj = {};
         if (JYlivedyurl == "juying") { putMyVar('JYlivenum', datalist.length); }
         datalist = datalist.reduce((newArr, next) => {
             obj[next.name] ? "" : (obj[next.name] = true && newArr.push(next));
             return newArr;
         }, []);
-        log(datalist);
+
         d.push({
             title: "🔍",
             url: $.toString((guanlidata, datalist) => {
