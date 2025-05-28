@@ -145,6 +145,7 @@ function Live() {
             obj[next.name] ? "" : (obj[next.name] = true && newArr.push(next));
             return newArr;
         }, []);
+        log(datalist);
         d.push({
             title: "🔍",
             url: $.toString((guanlidata, datalist) => {
