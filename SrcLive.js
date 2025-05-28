@@ -5,8 +5,6 @@ function Live() {
     addListener("onClose", $.toString(() => {
         clearMyVar('editmode');
         clearMyVar('JYlivenum');
-        clearMyVar('JYlivedyurl');
-        clearMyVar('selectgroup');
         clearMyVar('JYlivelocal');
     }));
 
@@ -135,7 +133,7 @@ function Live() {
                     datalist.push({ group: JYlives[i].match(/group-title="(.*?)"/)[1], name: JYlives[i].match(/",(.*?)\n/)[1].trim() });
                 }
             } catch (e) {
-                //log(e.message);
+                log(e.message);
             }
         }
         log(datalist);
