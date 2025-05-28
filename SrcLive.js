@@ -122,6 +122,7 @@ function Live() {
         let datalist2 = [];
         let group = "";
         for (let i = 0; i < JYlives.length; i++) {
+            log(JYlives[i]);
             try {
                 if (JYlive.indexOf('#genre#') > -1) {
                     if (JYlives[i].indexOf('#genre#') > -1) {
