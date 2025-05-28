@@ -113,7 +113,7 @@ function Live() {
         if (JYlive.indexOf('#genre#') > -1) {
             JYlives = JYlive.split('\n');
         } else if (JYlive.indexOf('#EXTINF:-1') > -1) {
-            JYlives = JYlive.split('#EXTINF:-1 ');
+            JYlives = JYlive.split('#EXTINF:-1');
         }
     }
 
@@ -355,7 +355,7 @@ function LivePlay(name) {
     if (JYlive.indexOf('#genre#') > -1) {
         JYlives = JYlive.split('\n');
     } else if (JYlive.indexOf('#EXTINF:-1') > -1) {
-        JYlives = JYlive.split('#EXTINF:-1 ');
+        JYlives = JYlive.split('#EXTINF:-1');
     }
 
     let urls = [];
