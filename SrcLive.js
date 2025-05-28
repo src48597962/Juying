@@ -138,7 +138,7 @@ function Live() {
                 //log(e.message);
             }
         }
-
+        log(datalist);
         let obj = {};
         if (JYlivedyurl == "juying") { putMyVar('JYlivenum', datalist.length); }
         datalist = datalist.reduce((newArr, next) => {
