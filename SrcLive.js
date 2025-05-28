@@ -528,7 +528,7 @@ function LiveSet() {
                     d.push({
                         title: (livedata[i].show != 0 ? getide(1) : getide(0)) + livedata[i].name,
                         desc: livedata[i].url,
-                        url: $(["复制链接", "修改名称", "导入本地", "更新缓存", "删除订阅", livedata[i].show != 0 ? "停用订阅" : "启用订阅"], 2, "").select((livecfgfile, url, name) => {
+                        url: $(["复制链接", "修改名称", "导入本地", "更新缓存", "删除订阅", livedata[i].show != 0 ? "停用订阅" : "启用订阅", "列表置顶", "列表置底"], 2, "").select((livecfgfile, url, name) => {
                             try {
                                 if (input == "更新缓存") {
                                     showLoading('正在缓存，请稍后.');
@@ -651,6 +651,27 @@ function LiveSet() {
                                             }
                                         }
                                         liveconfig['data'] = livedata;
+                                        writeFile(livecfgfile, JSON.stringify(liveconfig));
+                                        refreshPage(false);
+                                    }
+                                } else if (input == "列表置顶" || input == "列表置底") {
+                                    let livecfg = fetch(livecfgfile);
+                                    if (livecfg != "") {
+                                        eval("var liveconfig = " + livecfg);
+                                        let datalist = liveconfig['data'] || [];
+                                        let index = datalist.findIndex(item => item.url === url);
+                                        if ((index == 0 && input == "列表置顶") || (index == datalist.length - 1 && input == "列表置底")) {
+                                            return 'toast://位置移动无效';
+                                        } else {
+                                            let data = datalist[index];
+                                            datalist.splice(index, 1);
+                                            if (input == "列表置顶") {
+                                                datalist.unshift(data);
+                                            } else {
+                                                datalist.push(data);
+                                            }
+                                        }
+                                        liveconfig['data'] = datalist;
                                         writeFile(livecfgfile, JSON.stringify(liveconfig));
                                         refreshPage(false);
                                     }
