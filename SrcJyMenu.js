@@ -560,7 +560,7 @@ function manageSet(){
             if(getItem('本地依赖库')=="1"){
                 clearItem('本地依赖库');
                 initConfig({
-                    依赖: getItem("依赖","")
+                    聚影: getItem("依赖","")
                 })
                 refreshPage();
             }else{
