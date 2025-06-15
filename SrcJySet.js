@@ -1512,7 +1512,73 @@ function jiexi(data) {
             })
         }
     });
-    
+    if(data){
+        d.push({
+            title:'删除',
+            col_type:'text_3',
+            url: $("确定删除解析："+getMyVar('parsename',data.name)).confirm((data)=>{
+                require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
+                deleteData('jx', data);
+                back(true);
+                return "toast://已删除";
+            }, data)
+        });    
+    }else{
+        d.push({
+            title:'清空',
+            col_type:'text_3',
+            url:$("确定要清空上面填写的内容？").confirm(()=>{
+                clearMyVar('parsename');
+                clearMyVar('parseurl');
+                clearMyVar('parseext');
+                refreshPage(false);
+                return "toast://已清空";
+            })
+        });
+    } 
+    d.push({
+        title:'保存',
+        col_type:'text_3',
+        url: $().lazyRule((data)=>{
+            if(!/^http|^functio/.test(getMyVar('parseurl',''))){
+                return "toast://解析地址不正确"
+            }
+            let parseext = storage0.getMyVar('parseext');
+            if(parseext && $.type(parseext)!="object"){
+                return "toast://ext对象数据不正确"
+            }
+            require(config.聚影.replace(/[^/]*$/,'') + 'SrcJySet.js');
+            let urls= [];
+            let parseurl = getMyVar('parseurl');
+            let parsename = getMyVar('parsename');
+            let parsetype = getMyVar('parsetype','0');
+            
+            if(parseurl&&parsename){
+                let arr  = { "name": parsename.trim(), "type": parseInt(parsetype),"url": parseurl.trim()};
+                if(parseext){
+                    arr['ext']=  parseext;
+                }
+                let isretain = getMyVar('isretain')=="1"?1:0;
+                if(isretain){arr['retain'] = 1;}
+                if(data){
+                    arr['oldurl'] = data.url;
+                }
+                urls.push(arr);
+                let num = jiexisave(urls);
+                if(num==1){
+                    back(true);
+                    return "toast://已保存";
+                }else if(num==0){
+                    return "toast://已存在";
+                }else{
+                    return "toast://保存出错";
+                }
+            }else{
+                return "toast://无法保存，检查项目填写完整性";
+            }
+                
+        },data)
+    });
     d.push({
         title:'测试',
         col_type:'text_3',
@@ -1608,73 +1674,7 @@ function jiexi(data) {
             id: 'jxtest'
         }
     });
-    if(data){
-        d.push({
-            title:'删除',
-            col_type:'text_3',
-            url: $("确定删除解析："+getMyVar('parsename',data.name)).confirm((data)=>{
-                require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyPublic.js');
-                deleteData('jx', data);
-                back(true);
-                return "toast://已删除";
-            }, data)
-        });    
-    }else{
-        d.push({
-            title:'清空',
-            col_type:'text_3',
-            url:$("确定要清空上面填写的内容？").confirm(()=>{
-                clearMyVar('parsename');
-                clearMyVar('parseurl');
-                clearMyVar('parseext');
-                refreshPage(false);
-                return "toast://已清空";
-            })
-        });
-    } 
-    d.push({
-        title:'保存',
-        col_type:'text_3',
-        url: $().lazyRule((data)=>{
-            if(!/^http|^functio/.test(getMyVar('parseurl',''))){
-                return "toast://解析地址不正确"
-            }
-            let parseext = storage0.getMyVar('parseext');
-            if(parseext && $.type(parseext)!="object"){
-                return "toast://ext对象数据不正确"
-            }
-            require(config.聚影.replace(/[^/]*$/,'') + 'SrcJySet.js');
-            let urls= [];
-            let parseurl = getMyVar('parseurl');
-            let parsename = getMyVar('parsename');
-            let parsetype = getMyVar('parsetype','0');
-            
-            if(parseurl&&parsename){
-                let arr  = { "name": parsename.trim(), "type": parseInt(parsetype),"url": parseurl.trim()};
-                if(parseext){
-                    arr['ext']=  parseext;
-                }
-                let isretain = getMyVar('isretain')=="1"?1:0;
-                if(isretain){arr['retain'] = 1;}
-                if(data){
-                    arr['oldurl'] = data.url;
-                }
-                urls.push(arr);
-                let num = jiexisave(urls);
-                if(num==1){
-                    back(true);
-                    return "toast://已保存";
-                }else if(num==0){
-                    return "toast://已存在";
-                }else{
-                    return "toast://保存出错";
-                }
-            }else{
-                return "toast://无法保存，检查项目填写完整性";
-            }
-                
-        },data)
-    });
+    
     d.push({
         col_type: "line",
         extra:{id:'jxline'}
