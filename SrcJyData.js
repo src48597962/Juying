@@ -328,10 +328,10 @@ function getYiData(jkdata, batchTest) {
                                 分类.push(it.type_name + '$' + it.type_id);
                             })
                         } else if (/app|v2/.test(api_type)) {
-                            let typehtml = JSON.parse(gethtml);
                             if(jkdata.decrypt){
-                                typehtml = appDecrypt(typehtml, jkdata.decrypt);
+                                gethtml = appDecrypt(gethtml, jkdata.decrypt);
                             }
+                            let typehtml = JSON.parse(gethtml);
                             let typelist = typehtml.list || typehtml.data;
                             typelist.forEach(it => {
                                 分类.push(it.type_name + '$' + it.type_id);
