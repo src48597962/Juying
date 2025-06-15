@@ -818,6 +818,35 @@ var SrcParseS = {
             })
         }
 
+        // app类解密方法
+        function appDecrypt(ciphertext, decryptstr) {
+            function padArray(arr, targetLength, defaultValue) {
+                if (arr.length >= targetLength) {
+                    return arr.slice(0, targetLength); // 如果超出，可以截断（可选）
+                }
+                return arr.concat(Array(targetLength - arr.length).fill(defaultValue));
+            }
+            let decs = decryptstr.split('|');
+            padArray(decs, 4, '');
+            let key = decs[0];
+            let iv = decs[1];
+            let mode = decs[2];
+            let padding = decs[3];
+
+            eval(getCryptoJS());
+
+            key = CryptoJS.enc.Utf8.parse(key);
+
+            function decrypt(ciphertext) {
+                let decrypted = CryptoJS.AES.decrypt(ciphertext, key, {
+                    mode: CryptoJS.mode.ECB,
+                    padding: CryptoJS.pad.Pkcs7
+                });
+                return decrypted.toString(CryptoJS.enc.Utf8);
+            }
+            return decrypt(ciphertext);
+        }
+
         if(obj.isWeb){
             //网页播放页，非官源解析
             require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyMethod.js');
@@ -870,10 +899,13 @@ var SrcParseS = {
             }
             //log(getjson);
             if (getjson.body&&getjson.statusCode==200){
-                var gethtml = getjson.body;
+                var c = getjson.body;
                 var rurl = "";
                 var isjson = 0;
                 try {
+                    if(uext.decrypt){
+                        gethtml = appDecrypt(gethtml, uext.decrypt);
+                    }
                     let json =JSON.parse(gethtml);
                     //log(json);
                     isjson = 1;
