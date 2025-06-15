@@ -329,6 +329,9 @@ function getYiData(jkdata, batchTest) {
                             })
                         } else if (/app|v2/.test(api_type)) {
                             let typehtml = JSON.parse(gethtml);
+                            if(jkdata.decrypt){
+                                typehtml = appDecrypt(typehtml, jkdata.decrypt);
+                            }
                             let typelist = typehtml.list || typehtml.data;
                             typelist.forEach(it => {
                                 分类.push(it.type_name + '$' + it.type_id);
@@ -730,11 +733,16 @@ function getYiData(jkdata, batchTest) {
                     }
                     json = { "list": xmllist };
                 } else if (!/{|}/.test(gethtml) && gethtml != "") {
-                    let decfile = globalMap0.getVar('Src_Jy_gmParams').libspath + "appdec.js";
-                    let Juyingdec = fetch(decfile);
-                    if (Juyingdec != "") {
-                        eval(Juyingdec);
-                        json = JSON.parse(xgdec(gethtml));
+                    if(jkdata.decrypt){
+                        gethtml = appDecrypt(gethtml, jkdata.decrypt);
+                        json = JSON.parse(gethtml);
+                    }else{
+                        let decfile = globalMap0.getVar('Src_Jy_gmParams').libspath + "appdec.js";
+                        let Juyingdec = fetch(decfile);
+                        if (Juyingdec != "") {
+                            eval(Juyingdec);
+                            json = JSON.parse(xgdec(gethtml));
+                        }
                     }
                 } else {
                     json = JSON.parse(gethtml);
@@ -942,11 +950,16 @@ function getSsData(name, jkdata, page) {
                         json = JSON.parse(gethtml);
                     }
                 } else if (!/{|}/.test(gethtml) && gethtml != "") {
-                    let decfile = globalMap0.getVar('Src_Jy_gmParams').libspath + "appdec.js";
-                    let Juyingdec = fetch(decfile);
-                    if (Juyingdec != "") {
-                        eval(Juyingdec);
-                        json = JSON.parse(xgdec(gethtml));
+                    if(jkdata.decrypt){
+                        gethtml = appDecrypt(gethtml, jkdata.decrypt);
+                        json = JSON.parse(gethtml);
+                    }else{
+                        let decfile = globalMap0.getVar('Src_Jy_gmParams').libspath + "appdec.js";
+                        let Juyingdec = fetch(decfile);
+                        if (Juyingdec != "") {
+                            eval(Juyingdec);
+                            json = JSON.parse(xgdec(gethtml));
+                        }
                     }
                 } else {
                     json = JSON.parse(gethtml.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, ''));
@@ -1190,6 +1203,9 @@ function getErData(jkdata, erurl) {
                 html = gethtml;
                 isxml = 1;
             } else {
+                if(jkdata.decrypt){
+                    gethtml = appDecrypt(gethtml, jkdata.decrypt);
+                }
                 html = JSON.parse(gethtml.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, ''));
                 isxml = 0;
             }
