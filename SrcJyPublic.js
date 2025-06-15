@@ -1522,14 +1522,14 @@ function scanFolder(input,start) {
     }
 }
 // app类解密方法
-function appDecrypt(ciphertext, decrypt) {
+function appDecrypt(ciphertext, decryptstr) {
     function padArray(arr, targetLength, defaultValue) {
         if (arr.length >= targetLength) {
             return arr.slice(0, targetLength); // 如果超出，可以截断（可选）
         }
         return arr.concat(Array(targetLength - arr.length).fill(defaultValue));
     }
-    let decs = decrypt.split('|');
+    let decs = decryptstr.split('|');
     padArray(decs, 4, '');
     let key = decs[0];
     let iv = decs[1];
