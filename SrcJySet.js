@@ -1024,6 +1024,7 @@ function jiekou(data) {
         clearMyVar('apitype');
         clearMyVar('apigroup');
         clearMyVar('apicate');
+        clearMyVar('apidecrypt');
         clearMyVar('ishidecate');
         clearMyVar('isload');
         clearMyVar('isretain');
@@ -1041,6 +1042,7 @@ function jiekou(data) {
             putMyVar('apitype', data.type);
             putMyVar('apigroup', data.group||"");
             putMyVar('apicate', data.categories?data.categories.join(","):"");
+            putMyVar('apidecrypt', data.decrypt||"");
             putMyVar('isretain', data.retain||"");
             putMyVar('ishidecate', data.hidecate||"");
             putMyVar('isload', '1');
@@ -1192,6 +1194,18 @@ function jiekou(data) {
             onChange: 'putMyVar("apicate",input);'
         }
     });
+    if(getMyVar('apitype', '')=='app'){
+        d.push({
+            title: 'decrypt',
+            col_type: 'input',
+            desc: "解密参数：key|iv|mode|padding",
+            extra: {
+                titleVisible: false,
+                defaultValue: getMyVar('apidecrypt',''),
+                onChange: 'putMyVar("apidecrypt",input);'
+            }
+        });
+    }
     d.push({
         title: getMyVar('isretain')=="1"?'强制保留：是':'强制保留：否',
         desc: getMyVar('isretain')=="1"?'全量同步时保留此接口':'',
@@ -1299,6 +1313,10 @@ function jiekou(data) {
                 if(apicate){
                     apicate = apicate.replace('，',',');
                     arr['categories'] = apicate.split(',').filter(v=>v);
+                }
+                let apidecrypt = getMyVar('apidecrypt','');
+                if(apidecrypt){
+                    arr['decrypt'] = apidecrypt;
                 }
                 let isretain = getMyVar('isretain')=="1"?1:0;
                 if(isretain){
