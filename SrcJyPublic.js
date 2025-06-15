@@ -1538,7 +1538,7 @@ function appDecrypt(ciphertext, decrypt) {
 
     eval(getCryptoJS());
 
-    let key = CryptoJS.enc.Utf8.parse(key);
+    key = CryptoJS.enc.Utf8.parse(key);
 
     function decrypt(ciphertext) {
         let decrypted = CryptoJS.AES.decrypt(ciphertext, key, {
