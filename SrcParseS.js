@@ -899,7 +899,7 @@ var SrcParseS = {
             }
             //log(getjson);
             if (getjson.body&&getjson.statusCode==200){
-                var c = getjson.body;
+                var gethtml = getjson.body;
                 var rurl = "";
                 var isjson = 0;
                 try {
