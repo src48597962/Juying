@@ -818,35 +818,6 @@ var SrcParseS = {
             })
         }
 
-        // app类解密方法
-        function appDecrypt(ciphertext, decryptstr) {
-            function padArray(arr, targetLength, defaultValue) {
-                if (arr.length >= targetLength) {
-                    return arr.slice(0, targetLength); // 如果超出，可以截断（可选）
-                }
-                return arr.concat(Array(targetLength - arr.length).fill(defaultValue));
-            }
-            let decs = decryptstr.split('|');
-            padArray(decs, 4, '');
-            let key = decs[0];
-            let iv = decs[1];
-            let mode = decs[2];
-            let padding = decs[3];
-
-            eval(getCryptoJS());
-
-            key = CryptoJS.enc.Utf8.parse(key);
-
-            function decrypt(ciphertext) {
-                let decrypted = CryptoJS.AES.decrypt(ciphertext, key, {
-                    mode: CryptoJS.mode.ECB,
-                    padding: CryptoJS.pad.Pkcs7
-                });
-                return decrypted.toString(CryptoJS.enc.Utf8);
-            }
-            return decrypt(ciphertext);
-        }
-
         if(obj.isWeb){
             //网页播放页，非官源解析
             require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyMethod.js');
@@ -904,13 +875,16 @@ var SrcParseS = {
                 var isjson = 0;
                 try {
                     if(uext.decrypt){
+                        require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyMethod.js');
                         gethtml = appDecrypt(gethtml, uext.decrypt);
                     }
+                    log(gethtml);
                     let json =JSON.parse(gethtml);
                     //log(json);
                     isjson = 1;
                     rurl = json.url||json.urll||json.data.url||json.data;
                 } catch (e) {
+                    log("非json>"+e.message);
                     if(/\.m3u8|\.mp4/.test(getjson.url)&&getjson.url.indexOf('=http')==-1){
                         rurl = getjson.url;
                     }else if(/\.m3u8|\.mp4/.test(gethtml) && geturl(gethtml)){
