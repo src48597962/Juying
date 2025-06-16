@@ -299,7 +299,7 @@ var SrcParseS = {
                             flag.push("qiyi");
                         }
                         if((flag.length==0 && isVip) || flag.indexOf(from)>-1){
-                            parselist.push({stype:'myjx',type:it.type,name:it.name,url:it.url,sort:it.sort||0,header:ext.header});
+                            parselist.push({stype:'myjx',type:it.type,name:it.name,url:it.url,sort:it.sort||0,header:ext.header,ext:ext});
                         }
                     }
                 })
@@ -856,8 +856,8 @@ var SrcParseS = {
         }else{
             //url解析
             let taskheader = {withStatusCode:true,timeout:8000};
-            let uext = obj.ulist.ext || {};
-            let head = uext.header || {};
+            let ext = obj.ulist.ext || {};
+            let head = obj.ulist.header || {};
             if(JSON.stringify(head) != "{}"){
                 taskheader['header'] = head;
             }
@@ -874,19 +874,16 @@ var SrcParseS = {
                 var rurl = "";
                 var isjson = 0;
                 try {
-                    log(obj.ulist);
-                    log(uext);
-                    if(uext.decrypt){
+                    if(ext.decrypt){
                         require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyMethod.js');
-                        gethtml = appDecrypt(gethtml, uext.decrypt);
+                        gethtml = appDecrypt(gethtml, ext.decrypt);
                     }
-                    log(gethtml);
                     let json =JSON.parse(gethtml);
                     //log(json);
                     isjson = 1;
                     rurl = json.url||json.urll||json.data.url||json.data;
                 } catch (e) {
-                    log("非json>"+e.message);
+                    //log("非json>"+e.message);
                     if(/\.m3u8|\.mp4/.test(getjson.url)&&getjson.url.indexOf('=http')==-1){
                         rurl = getjson.url;
                     }else if(/\.m3u8|\.mp4/.test(gethtml) && geturl(gethtml)){
