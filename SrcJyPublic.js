@@ -1521,34 +1521,7 @@ function scanFolder(input,start) {
         },newfiles)
     }
 }
-// app类解密方法
-function appDecrypt(ciphertext, decryptstr) {
-    function padArray(arr, targetLength, defaultValue) {
-        if (arr.length >= targetLength) {
-            return arr.slice(0, targetLength); // 如果超出，可以截断（可选）
-        }
-        return arr.concat(Array(targetLength - arr.length).fill(defaultValue));
-    }
-    let decs = decryptstr.split('|');
-    padArray(decs, 4, '');
-    let key = decs[0];
-    let iv = decs[1];
-    let mode = decs[2];
-    let padding = decs[3];
 
-    eval(getCryptoJS());
-
-    key = CryptoJS.enc.Utf8.parse(key);
-
-    function decrypt(ciphertext) {
-        let decrypted = CryptoJS.AES.decrypt(ciphertext, key, {
-            mode: CryptoJS.mode.ECB,
-            padding: CryptoJS.pad.Pkcs7
-        });
-        return decrypted.toString(CryptoJS.enc.Utf8);
-    }
-    return decrypt(ciphertext);
-}
 // 全局对象变量gmParams
 let gmParams = {
     libspath: libspath,
