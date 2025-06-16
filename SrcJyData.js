@@ -329,6 +329,7 @@ function getYiData(jkdata, batchTest) {
                             })
                         } else if (/app|v2/.test(api_type)) {
                             if(jkdata.decrypt){
+                                require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyMethod.js');
                                 gethtml = appDecrypt(gethtml, jkdata.decrypt);
                             }
                             let typehtml = JSON.parse(gethtml);
@@ -734,6 +735,7 @@ function getYiData(jkdata, batchTest) {
                     json = { "list": xmllist };
                 } else if (!/{|}/.test(gethtml) && gethtml != "") {
                     if(jkdata.decrypt){
+                        require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyMethod.js');
                         gethtml = appDecrypt(gethtml, jkdata.decrypt);
                         json = JSON.parse(gethtml);
                     }else{
@@ -951,6 +953,7 @@ function getSsData(name, jkdata, page) {
                     }
                 } else if (!/{|}/.test(gethtml) && gethtml != "") {
                     if(jkdata.decrypt){
+                        require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyMethod.js');
                         gethtml = appDecrypt(gethtml, jkdata.decrypt);
                         json = JSON.parse(gethtml);
                     }else{
@@ -1204,6 +1207,7 @@ function getErData(jkdata, erurl) {
                 isxml = 1;
             } else {
                 if(jkdata.decrypt){
+                    require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyMethod.js');
                     gethtml = appDecrypt(gethtml, jkdata.decrypt);
                 }
                 html = JSON.parse(gethtml.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, ''));
