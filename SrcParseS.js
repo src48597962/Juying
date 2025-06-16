@@ -874,6 +874,8 @@ var SrcParseS = {
                 var rurl = "";
                 var isjson = 0;
                 try {
+                    log(obj.ulist);
+                    log(uext);
                     if(uext.decrypt){
                         require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyMethod.js');
                         gethtml = appDecrypt(gethtml, uext.decrypt);
