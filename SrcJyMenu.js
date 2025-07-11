@@ -554,38 +554,6 @@ function manageSet(){
         col_type: 'text_icon'
     });
     d.push({
-        title: '本地依赖代码库',
-        img: getItem('本地依赖库')=="1"?getIcon("管理-开.svg"):getIcon("关.svg"),
-        url: $("#noLoading#").lazyRule(() => {
-            if(getItem('本地依赖库')=="1"){
-                clearItem('本地依赖库');
-                initConfig({
-                    聚影: getItem("依赖","")
-                })
-                refreshPage();
-            }else{
-                let loaclcode = "hiker://files/data/"+MY_RULE.title+"/code/SrcJuying.js";
-                if(fileExist(loaclcode)){
-                    setItem('本地依赖库','1');
-                    initConfig({
-                        依赖: loaclcode
-                    })
-                    refreshPage();
-                }else{
-                    toast("本地依赖不存在，下载后再来启用");
-                    try{
-                        eval(request(getItem("依赖","").replace(/[^/]*$/,'') + 'SrcTmplVersion.js'))
-                        return newVersion.codeDownload?"web://"+newVersion.codeDownload:"toast://暂未发布";
-                    }catch(e){
-                        return "toast://无法在线下载";
-                    }
-                }
-            }
-            return 'hiker://empty';
-        }),
-        col_type: 'text_icon'
-    });
-    d.push({
         col_type: "line_blank"
     });
     d.push({
