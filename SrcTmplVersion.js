@@ -1,14 +1,16 @@
 var newVersion = {
-    "SrcJuying":"2.7",
+    "SrcJuying":"2.8",
     "hint": "",
     "codeDownload": "https://src48597962.lanzouo.com/ilaDP2wbexng",
     "JYUpdateRecords": [{
-        title: "beta V2.8",
+        title: "2025/07/11 V2.8",
         records: [
             "升级：小程序版本升级15，支持主页设置为点播",
+            "升级：小程序版本升级16，优化启动逻辑，避免出错",
             "功能：管理界面微调，增加主页显示点播开关",
             "优化：点播界面微调，主页管理按钮修小bug",
-            "优化：解析逻辑优化，支持调用迅雷小程序和mpd视频链接"
+            "优化：解析逻辑优化，支持调用迅雷小程序和mpd视频链接",
+            "优化：删除本地依赖包的设置选项"
         ]
     },{
         title: "2025/05/12 V2.7",
