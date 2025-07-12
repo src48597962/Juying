@@ -649,9 +649,7 @@ function dianboerji() {
     //底部说明
     d.push({
         desc: '‘‘’’<small><small><font color=#bfbfbf>本规则为空壳小程序，仅供学习交流使用，不提供任何内容。</font></small></small>',
-        url: $('#noLoading#').lazyRule(()=>{
-            return 'toast://温馨提示：且用且珍惜！';
-        }),
+        url: 'hiker://empty',
         col_type: 'text_center_1',
         extra: {
             id: updateItemid,
