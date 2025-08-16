@@ -820,7 +820,7 @@ var SrcParseS = {
 
         if(obj.isWeb){
             //网页播放页，非官源解析
-            require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyMethod.js');
+            require((config.聚影||getPublicItem('聚影','')).replace(/[^/]*$/,'') + 'SrcJyMethod.js');
             if(obj.music){
                 return exeWebRule({webUrl:obj.vipUrl}, 1, obj.js) || "toast://嗅探解析失败";
             }else if(obj.video){
@@ -875,7 +875,7 @@ var SrcParseS = {
                 var isjson = 0;
                 try {
                     if(ext.decrypt){
-                        require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyMethod.js');
+                        require((config.聚影||getPublicItem('聚影','')).replace(/[^/]*$/,'') + 'SrcJyMethod.js');
                         gethtml = appDecrypt(gethtml, ext.decrypt);
                     }
                     let json =JSON.parse(gethtml);
@@ -889,7 +889,7 @@ var SrcParseS = {
                     }else if(/\.m3u8|\.mp4/.test(gethtml) && geturl(gethtml)){
                         rurl = geturl(gethtml);
                     }else if((MY_NAME=="海阔视界"&&getAppVersion()>=4094)||(MY_NAME=="嗅觉浏览器"&&getAppVersion()>=1359)){
-                        require(config.聚影.replace(/[^/]*$/,'') + 'SrcJyMethod.js');
+                        require((config.聚影||getPublicItem('聚影','')).replace(/[^/]*$/,'') + 'SrcJyMethod.js');
                         let purl = obj.ulist.url+obj.vipUrl;
                         if(/jx\.playerjy\.com/.test(purl)){
                             head['referer'] = purl;
