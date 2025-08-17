@@ -10,7 +10,6 @@ let tvfile = rulepath + "live.txt";
 let cfgfile = rulepath + "config.json";
 let sortfile = rulepath + "jksort.json";
 let codepath = (config.聚影||config.依赖||getPublicItem('聚影','https://raw.gitcode.com/src48597962/juying/raw/master/SrcJuying.js')).replace(/[^/]*$/,'');
-let gzip = $.require(codepath + "plugins/gzip.js");
 
 let Juconfig= {};
 let Jucfg=fetch(cfgfile);
@@ -1534,9 +1533,7 @@ let gmParams = {
     ypfile: ypfile,
     cfgfile: cfgfile,
     getIcon: getIcon,
-    getContnet: getContnet,
-    zip: gzip.zip,
-    unzip: gzip.unzip
+    getContnet: getContnet
 }
 if(!globalMap0.getVar('Src_Jy_gmParams')){
     log("写入全局对象变量gmParams");
