@@ -2153,7 +2153,7 @@ function JYshare(lx,input,data) {
     if(sharelist.length==0){
         return "toast://有效接口数为0，无法分享";
     }
-
+    let gzip = $.require(codepath + "plugins/gzip.js");
     let sharetxt = gzip.zip(JSON.stringify(sharelist));
     let sharetxtlength = sharetxt.length;
     if(sharetxtlength>200000 && /云剪贴板2|云剪贴板5|云剪贴板9|云剪贴板10/.test(input)){
@@ -2230,6 +2230,7 @@ function JYimport(input) {
             text = pasteurl;
         }
         if(pasteurl&&!/^error/.test(text)){
+            let gzip = $.require(codepath + "plugins/gzip.js");
             let sharetxt = gzip.unzip(text);
             let pastedata = JSON.parse(sharetxt);           
             let urlnum = 0;
@@ -2437,7 +2438,8 @@ function yundiskjiekou() {
                     showLoading("正在导入，请稍后...");
                     let parseurl = aesDecode('Juying2', input.split('￥')[1]);
                     let content = parsePaste(parseurl);
-                    let datalist2 = JSON.parse(globalMap0.getVar('Src_Jy_gmParams').unzip(content));
+                    let gzip = $.require(codepath + "plugins/gzip.js");
+                    let datalist2 = JSON.parse(gzip.unzip(content));
                     require(config.聚影.replace(/[^/]*$/,'') + 'SrcJySet.js');
                     let num = yundisksave(datalist2);
                     hideLoading();
@@ -2457,7 +2459,8 @@ function yundiskjiekou() {
     d.push({
         title: '分享',
         url: datalist.length == 0 ? "toast://云盘接口为0，无法分享" : $().lazyRule((datalist) => {
-            let pasteurl = sharePaste(globalMap0.getVar('Src_Jy_gmParams').zip(JSON.stringify(datalist)), getItem("sharePaste",""));
+            let gzip = $.require(codepath + "plugins/gzip.js");
+            let pasteurl = sharePaste(gzip.zip(JSON.stringify(datalist)), getItem("sharePaste",""));
             if (pasteurl) {
                 let code = '聚影云盘￥' + aesEncode('Juying2', pasteurl) + '￥共' + datalist.length + '条';
                 copy('云口令：'+code+`@import=js:$.require("hiker://page/import?rule=聚影");`);
@@ -2499,7 +2502,8 @@ function yundiskjiekou() {
                     showLoading('分享上传中，请稍后...');
                     let oneshare = []
                     oneshare.push(data);
-                    let pasteurl = sharePaste(globalMap0.getVar('Src_Jy_gmParams').zip(JSON.stringify(oneshare)), getItem("sharePaste",""));
+                    let gzip = $.require(codepath + "plugins/gzip.js");
+                    let pasteurl = sharePaste(gzip.zip(JSON.stringify(oneshare)), getItem("sharePaste",""));
                     hideLoading();
                     if(pasteurl){
                         let code = '聚影云盘￥'+aesEncode('Juying2', pasteurl)+'￥'+data.name;
@@ -2603,7 +2607,8 @@ function importConfirm(jsfile) {
             code = aesDecode('Juying2', input.split('￥')[1]);
             name = input.split('￥')[0];
             if(name=="聚影资源码" && input.split('￥')[2]=="文件分享"){
-                let textcontent = globalMap0.getVar('Src_Jy_gmParams').unzip(code);
+                let gzip = $.require(codepath + "plugins/gzip.js");
+                let textcontent = gzip.unzip(code);
                 let pastedata = JSON.parse(textcontent);
 
                 d.push({
@@ -2711,6 +2716,7 @@ function importConfirm(jsfile) {
                             text = code;
                         }
                         if(text && !/^error/.test(text)){
+                            let gzip = $.require(codepath + "plugins/gzip.js");
                             let sharetxt = gzip.unzip(text);
                             importdatas = JSON.parse(sharetxt); 
                             storage0.putMyVar('importConfirm', importdatas);
