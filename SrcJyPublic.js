@@ -1012,7 +1012,8 @@ function shareResource() {
                         if(Object.keys(text).length==0){
                             return "toast://无内容分享";
                         }
-                        let textcontent = globalMap0.getVar('Src_Jy_gmParams').zip(JSON.stringify(text));
+                        let gzip = $.require(codepath + "plugins/gzip.js");
+                        let textcontent = gzip.zip(JSON.stringify(text));
                         let code = '聚影资源码￥' + aesEncode('Juying2', textcontent) + '￥文件分享';
                         let sharefile = 'hiker://files/_cache/聚影资源码_'+$.dateFormat(new Date(),"HHmmss")+'.hiker';
                         writeFile(sharefile, code+`@import=js:$.require("hiker://page/import?rule=聚影");`);
@@ -1202,7 +1203,8 @@ function shareResource() {
                                 if(Object.keys(text).length==0){
                                     return "toast://无内容分享";
                                 }
-                                let textcontent = globalMap0.getVar('Src_Jy_gmParams').zip(JSON.stringify(text));
+                                let gzip = $.require(codepath + "plugins/gzip.js");
+                                let textcontent = gzip.zip(JSON.stringify(text));
                                 try{
                                     let pasteupdate = JSON.parse(request("https://pasteme.tyrantg.com/api/update",{
                                         body: "content="+textcontent+"&path="+it.path+"&auth_code="+it.token,
@@ -1410,7 +1412,8 @@ function updateResource(it,refresh) {
         }));
         if(pasteget.result_code=="SUCCESS"){
             require(config.聚影.replace(/[^/]*$/,'') + 'SrcJySet.js');
-            let textcontent = globalMap0.getVar('Src_Jy_gmParams').unzip(pasteget.data);
+            let gzip = $.require(codepath + "plugins/gzip.js");
+            let textcontent = gzip.unzip(pasteget.data);
             let pastedata = JSON.parse(textcontent);
             let jknum = 0, jxnum = 0, ypnum = 0, tvnum = 0, sm = '';
             let options = [];
