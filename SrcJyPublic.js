@@ -1390,7 +1390,7 @@ function updateResource(it,refresh) {
         let resources = Juconfig['subResource'] || [];
         for (let i = 0; i < resources.length; i++) {
             if (resources[i].auto) {
-                it = item;
+                it = resources[i];
                 break;
             }
         }
