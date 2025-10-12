@@ -702,12 +702,12 @@ var SrcParseS = {
                     }else{
                         var urlts = urltss[0];
                         if(/^http/.test(urlts)&&!urlts.match(/youku|iqiyi|ixigua|migu|sohu|pptv|le|cctv|1905|mgtv|qq\.com|M3U8\.TV/)){
-                            var tscode = JSON.parse(request(urlts,{headers:{'Referer':url},onlyHeaders:true,timeout:2000}));//,redirect:false
-                            log(name+'ts访问状态码：'+tscode.statusCode);
+                            var tscode = JSON.parse(request(urlts,{headers:{'Referer':url},onlyHeaders:true,redirect:false,timeout:2000}));
+                            //log(name+'ts访问状态码：'+tscode.statusCode);
                             if(tscode.statusCode==-1){
                                 log(name+'>ts段探测超时未拦载，结果未知');
                                 return 1;
-                            }else if(tscode.statusCode!=200 && tscode.statusCode!=403){
+                            }else if(tscode.statusCode!=200 && tscode.statusCode!=403 && tscode.statusCode!=0){
                                 log(name+'>ts段地址疑似失效或网络无法访问，不信去验证一下>'+url);
                                 return 0;
                             }
